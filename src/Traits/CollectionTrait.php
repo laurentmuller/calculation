@@ -23,29 +23,6 @@ trait CollectionTrait
     use ComparableSortTrait;
 
     /**
-     * Returns the first element of the given collection that satisfies the given predicate.
-     *
-     * @template TKey of array-key
-     * @template TValue
-     *
-     * @param Collection<TKey, TValue>     $collection
-     * @param \Closure(TKey, TValue): bool $p
-     *
-     * @return TValue|null
-     *
-     * @psalm-suppress InvalidArgument
-     */
-    public function findFirst(Collection $collection, \Closure $p): mixed
-    {
-        if ($collection->isEmpty()) {
-            return null;
-        }
-
-        /** @psalm-var TValue|null */
-        return $collection->findFirst($p);
-    }
-
-    /**
      * Sort the given collection of comparable.
      *
      * @template TKey of array-key

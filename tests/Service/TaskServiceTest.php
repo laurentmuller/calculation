@@ -56,7 +56,7 @@ class TaskServiceTest extends TestCase
      */
     public function testComputeQueryNoTask(): void
     {
-        $repository = $this->createRepository(null);
+        $repository = $this->createRepository();
         $service = new TaskService($repository);
         $query = new TaskComputeQuery(1, 1.0, []);
         self::assertSame(1, $query->id);
@@ -125,7 +125,7 @@ class TaskServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    private function createRepository(?Task $task): TaskRepository
+    private function createRepository(?Task $task = null): TaskRepository
     {
         $tasks = $task instanceof Task ? [$task] : [];
         $repository = $this->createMock(TaskRepository::class);

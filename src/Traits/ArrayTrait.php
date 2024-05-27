@@ -20,6 +20,32 @@ trait ArrayTrait
     use ComparableSortTrait;
 
     /**
+     * Returns the first element of the given array that satisfies the given predicate.
+     *
+     * @template TKey of array-key
+     * @template TValue
+     *
+     * @param array<TKey, TValue>          $array
+     * @param \Closure(TKey, TValue): bool $p
+     *
+     * @return TValue|null
+     */
+    public function findFirst(array $array, \Closure $p): mixed
+    {
+        if ([] === $array) {
+            return null;
+        }
+
+        foreach ($array as $key => $value) {
+            if ($p($key, $value)) {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Gets values from a single column in the input array.
      */
     public function getColumn(array $values, string|int $key): array

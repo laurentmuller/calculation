@@ -49,6 +49,15 @@ class FixedFloatTypeTest extends TestCase
     /**
      * @psalm-suppress InternalMethod
      */
+    public function testName(): void
+    {
+        $type = new FixedFloatType();
+        self::assertSame('fixed_float', $type->getName());
+    }
+
+    /**
+     * @psalm-suppress InternalMethod
+     */
     public function testSQLDeclaration(): void
     {
         $platform = new MySQLPlatform();

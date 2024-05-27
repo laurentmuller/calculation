@@ -12,27 +12,20 @@ declare(strict_types=1);
 
 namespace App\Tests\Twig;
 
+use App\Tests\KernelServiceTestCase;
 use App\Twig\ConstantExtension;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Cache\InvalidArgumentException;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 #[CoversClass(ConstantExtension::class)]
-class ConstantExtensionTest extends KernelTestCase
+class ConstantExtensionTest extends KernelServiceTestCase
 {
-    private ?ConstantExtension $extension = null;
+    private ConstantExtension $extension;
 
-    /**
-     * @throws \Exception
-     *
-     * @psalm-suppress RedundantCondition
-     */
     protected function setUp(): void
     {
-        $extension = self::getContainer()->get(ConstantExtension::class);
-        if ($extension instanceof ConstantExtension) {
-            $this->extension = $extension;
-        }
+        parent::setUp();
+        $this->extension = $this->getService(ConstantExtension::class);
     }
 
     public static function getCalculationServiceConstants(): \Iterator
@@ -72,7 +65,6 @@ class ConstantExtensionTest extends KernelTestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getCalculationServiceConstants')]
     public function testCalculationService(string $key, int $value): void
     {
-        self::assertNotNull($this->extension);
         $globals = $this->extension->getGlobals();
         self::assertArrayHasKey($key, $globals);
         self::assertIsInt($globals[$key]);
@@ -85,15 +77,9 @@ class ConstantExtensionTest extends KernelTestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getEntityVoterConstants')]
     public function testEntityVoter(string $key, string $value): void
     {
-        self::assertNotNull($this->extension);
         $globals = $this->extension->getGlobals();
         self::assertArrayHasKey($key, $globals);
         self::assertIsString($globals[$key]);
         self::assertSame($value, $globals[$key]);
-    }
-
-    public function testExtensionNotNull(): void
-    {
-        self::assertNotNull($this->extension);
     }
 }

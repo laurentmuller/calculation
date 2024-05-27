@@ -16,6 +16,7 @@ use App\Interfaces\ComparableInterface;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Repository\GroupRepository;
+use App\Traits\CollectionTrait;
 use App\Traits\TimestampableTrait;
 use App\Traits\ValidateMarginsTrait;
 use App\Utils\StringUtils;
@@ -36,6 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(fields: 'code', message: 'group.unique_code')]
 class Group extends AbstractEntity implements ComparableInterface, TimestampableInterface
 {
+    use CollectionTrait;
     use TimestampableTrait;
     use ValidateMarginsTrait;
 
@@ -199,16 +201,19 @@ class Group extends AbstractEntity implements ComparableInterface, Timestampable
      * @param float $amount the amount to get group margin for
      *
      * @return GroupMargin|null the group margin, if found; null otherwise
+     *
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function findMargin(float $amount): ?GroupMargin
     {
-        foreach ($this->margins as $margin) {
-            if ($margin->contains($amount)) {
-                return $margin;
-            }
+        if ($this->margins->isEmpty()) {
+            return null;
         }
 
-        return null;
+        /** @psalm-var GroupMargin|null */
+        return $this->margins->findFirst(
+            fn (int $key, GroupMargin $margin): bool => $margin->contains($amount)
+        );
     }
 
     /**
@@ -294,13 +299,10 @@ class Group extends AbstractEntity implements ComparableInterface, Timestampable
         if (!$this->hasCategories()) {
             return false;
         }
-        foreach ($this->categories as $category) {
-            if ($category->hasProducts()) {
-                return true;
-            }
-        }
 
-        return false;
+        return $this->categories->exists(
+            static fn (int $key, Category $category): bool => $category->hasProducts()
+        );
     }
 
     /**
@@ -313,13 +315,10 @@ class Group extends AbstractEntity implements ComparableInterface, Timestampable
         if (!$this->hasCategories()) {
             return false;
         }
-        foreach ($this->categories as $category) {
-            if ($category->hasTasks()) {
-                return true;
-            }
-        }
 
-        return false;
+        return $this->categories->exists(
+            static fn (int $key, Category $category): bool => $category->hasTasks()
+        );
     }
 
     /**

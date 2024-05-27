@@ -97,8 +97,8 @@ class PivotTableFactory
                 $keys[] = $key;
             }
             $value = $dataField?->getValue($row);
-            $currentCol = $this->setNodeValue($columnFields, $row, $table->getColumn(), $value);
-            $currentRow = $this->setNodeValue($rowFields, $row, $table->getRow(), $value);
+            $currentCol = $this->setNodeValue($columnFields, $row, $table->getRootColumn(), $value);
+            $currentRow = $this->setNodeValue($rowFields, $row, $table->getRootRow(), $value);
             $cell = $table->findCellByNode($currentCol, $currentRow);
             if ($cell instanceof PivotCell) {
                 $cell->addValue($value);
@@ -112,8 +112,8 @@ class PivotTableFactory
             ->updateDataField($table, $dataField)
             ->updateRowFields($table, $rowFields)
             ->updateColumnFields($table, $columnFields);
-        $table->getColumn()->setTitle($this->buildFieldsTitle($columnFields));
-        $table->getRow()->setTitle($this->buildFieldsTitle($rowFields));
+        $table->getRootColumn()->setTitle($this->buildFieldsTitle($columnFields));
+        $table->getRootRow()->setTitle($this->buildFieldsTitle($rowFields));
 
         return $table;
     }

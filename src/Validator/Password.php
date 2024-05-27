@@ -22,13 +22,13 @@ class Password extends Constraint
 {
     final public const CASE_DIFF_ERROR = '4c725240-da48-42df-ba9a-ce09a16ab1b5';
 
+    final public const COMPROMISED_ERROR = 'd042c39d-b2d3-4ef3-97b8-10948aed2988';
+
     final public const EMAIL_ERROR = '85386dde-1b29-42d4-9b7c-de03693fb963';
 
     final public const LETTERS_ERROR = 'cc369ec9-ea3d-4d27-8f96-6e03bfb63323';
 
     final public const NUMBERS_ERROR = '902a620e-8cf9-42bd-9219-3938c3fea0c5';
-
-    final public const PWNED_ERROR = 'd042c39d-b2d3-4ef3-97b8-10948aed2988';
 
     final public const SPECIAL_CHAR_ERROR = '5c5998ca-d67b-45ed-b210-dda950c8ea09';
 
@@ -37,8 +37,8 @@ class Password extends Constraint
         self::EMAIL_ERROR => 'EMAIL_ERROR',
         self::LETTERS_ERROR => 'LETTERS_ERROR',
         self::NUMBERS_ERROR => 'NUMBERS_ERROR',
-        self::PWNED_ERROR => 'PWNED_ERROR',
         self::SPECIAL_CHAR_ERROR => 'SPECIAL_CHAR_ERROR',
+        self::COMPROMISED_ERROR => 'COMPROMISED_ERROR',
     ];
 
     /**
@@ -55,6 +55,16 @@ class Password extends Constraint
      * Case diff error message.
      */
     public string $case_diff_message = 'password.case_diff';
+
+    /**
+     * Checks if the password is compromised.
+     */
+    public bool $compromised = false;
+
+    /**
+     *  Password comprise error message.
+     */
+    public string $compromised_message = 'password.compromised';
 
     /**
      * Checks if the password is an e-mail.
@@ -85,16 +95,6 @@ class Password extends Constraint
      * Numbers error message.
      */
     public string $numbers_message = 'password.numbers';
-
-    /**
-     * Checks if the password is compromised.
-     */
-    public bool $pwned = false;
-
-    /**
-     *  Password comprise error message.
-     */
-    public string $pwned_message = 'password.pwned';
 
     /**
      * Checks if the password contains special characters.

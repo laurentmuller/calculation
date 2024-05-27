@@ -191,6 +191,40 @@ class ArrayTraitTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testFindFirstWithKey(): void
+    {
+        $array = [];
+        $closure = fn (int $key): bool => 2 === $key;
+        $actual = $this->findFirst($array, $closure);
+        self::assertNull($actual);
+
+        $array = $this->getFindFirstArray();
+        $closure = fn (int $key): bool => 10 === $key;
+        $actual = $this->findFirst($array, $closure);
+        self::assertSame('B', $actual);
+
+        $closure = fn (int $key): bool => 40 === $key;
+        $actual = $this->findFirst($array, $closure);
+        self::assertNull($actual);
+    }
+
+    public function testFindFirstWithValue(): void
+    {
+        $array = [];
+        $closure = fn (int $key, string $value): bool => 'A' === $value;
+        $actual = $this->findFirst($array, $closure);
+        self::assertNull($actual);
+
+        $array = $this->getFindFirstArray();
+        $closure = fn (int $key, string $value): bool => 'B' === $value;
+        $actual = $this->findFirst($array, $closure);
+        self::assertSame('B', $actual);
+
+        $closure = fn (int $key, string $value): bool => '4' === $value;
+        $actual = $this->findFirst($array, $closure);
+        self::assertNull($actual);
+    }
+
     public function testSorted(): void
     {
         $array = [];
@@ -221,5 +255,13 @@ class ArrayTraitTest extends TestCase
         $expectedCount = \count($expected);
         self::assertCount($expectedCount, $actual);
         self::assertSame($expected, $actual);
+    }
+
+    /**
+     * @psalm-return array<int, string>
+     */
+    private function getFindFirstArray(): array
+    {
+        return [0 => 'A', 10 => 'B', 20 => 'C'];
     }
 }

@@ -106,16 +106,15 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
 
     /**
      * Gets the margin for the given quantity.
+     *
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function findMargin(float $quantity): ?TaskItemMargin
     {
-        foreach ($this->margins as $margin) {
-            if ($margin->contains($quantity)) {
-                return $margin;
-            }
-        }
-
-        return null;
+        /** @psalm-var TaskItemMargin|null */
+        return $this->margins->findFirst(
+            fn (int $key, TaskItemMargin $margin): bool => $margin->contains($quantity)
+        );
     }
 
     /**

@@ -20,7 +20,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 class OpenWeatherServiceTest extends KernelServiceTestCase
 {
     private const CITY_INVALID = 0;
-
     private const CITY_VALID = 2_660_718;
 
     private OpenWeatherService $service;

@@ -15,7 +15,6 @@ namespace App\Tests\Service;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Service\CalculationUpdateService;
-use App\Tests\ContainerServiceTrait;
 use App\Tests\DatabaseTrait;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
 use App\Utils\DateUtils;
@@ -30,7 +29,6 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 #[CoversClass(CalculationUpdateService::class)]
 class CalculationUpdateServiceTest extends AbstractAuthenticateWebTestCase
 {
-    use ContainerServiceTrait;
     use DatabaseTrait;
 
     /**
@@ -151,8 +149,7 @@ class CalculationUpdateServiceTest extends AbstractAuthenticateWebTestCase
         $session = new Session(new MockArraySessionStorage());
         $request = new Request();
         $request->setSession($session);
-        /** @psalm-var RequestStack $requestStack */
-        $requestStack = static::getContainer()->get('request_stack');
+        $requestStack = $this->getService(RequestStack::class);
         $requestStack->push($request);
 
         return $requestStack;

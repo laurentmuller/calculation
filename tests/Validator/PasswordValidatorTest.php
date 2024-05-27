@@ -30,7 +30,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         yield ['letters'];
         yield ['numbers'];
         yield ['special_char'];
-        yield ['pwned'];
+        yield ['compromised'];
     }
 
     public static function getInvalidValues(): \Iterator
@@ -55,7 +55,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         yield ['test', ['email' => true]];
         yield ['abc', ['letters' => true]];
         yield ['123', ['numbers' => true]];
-        yield ['123*9-*55sA', ['pwned' => true]];
+        yield ['123*9-*55sA', ['compromised' => true]];
         yield ['123@', ['special_char' => true]];
     }
 
@@ -66,6 +66,24 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('getPasswords')]
+    public function testCompromised(string $value, bool $violation): void
+    {
+        $options = ['compromised' => true];
+        $constraint = $this->createPassword($options);
+        $this->validator->validate($value, $constraint);
+        if ($violation) {
+            $violations = $this->context->getViolations();
+            self::assertCount(1, $violations);
+            $first = $violations[0];
+            self::assertNotNull($first);
+            self::assertSame('password.compromised', $first->getMessageTemplate());
+            self::assertSame($value, $first->getInvalidValue());
+        } else {
+            self::assertNoViolation();
+        }
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('getConstraints')]
     public function testEmptyIsValid(string $constraint): void
     {
@@ -74,9 +92,6 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
-    /**
-     * @param mixed $value the value to be tested
-     */
     #[\PHPUnit\Framework\Attributes\DataProvider('getInvalidValues')]
     public function testInvalid(mixed $value, array $options, string $message, string $code, array $parameters = []): void
     {
@@ -97,27 +112,6 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getPasswords')]
-    public function testPwned(string $value, bool $violation): void
-    {
-        $options = ['pwned' => true];
-        $constraint = $this->createPassword($options);
-        $this->validator->validate($value, $constraint);
-        if ($violation) {
-            $violations = $this->context->getViolations();
-            self::assertCount(1, $violations);
-            $first = $violations[0];
-            self::assertNotNull($first);
-            self::assertSame('password.pwned', $first->getMessageTemplate());
-            self::assertSame($value, $first->getInvalidValue());
-        } else {
-            self::assertNoViolation();
-        }
-    }
-
-    /**
-     * @param mixed $value the value to be tested
-     */
     #[\PHPUnit\Framework\Attributes\DataProvider('getValidValues')]
     public function testValid(mixed $value, array $options): void
     {
@@ -139,7 +133,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
             'email' => false,
             'letters' => false,
             'numbers' => false,
-            'pwned' => false,
+            'compromised' => false,
             'special_char' => false,
         ], $options);
 

@@ -236,13 +236,13 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
      */
     public function isSortable(): bool
     {
-        foreach ($this->categories as $category) {
-            if ($category->isSortable()) {
-                return true;
-            }
+        if ($this->isEmpty()) {
+            return false;
         }
 
-        return false;
+        return $this->categories->exists(
+            static fn (int $key, CalculationCategory $category): bool => $category->isSortable()
+        );
     }
 
     /**

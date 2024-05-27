@@ -22,6 +22,8 @@ use Symfony\Component\Validator\Constraint;
  */
 class PasswordValidator extends AbstractConstraintValidator
 {
+    private const API_ENDPOINT = 'https://api.pwnedpasswords.com/range/%s';
+
     public function __construct()
     {
         parent::__construct(Password::class);
@@ -65,7 +67,7 @@ class PasswordValidator extends AbstractConstraintValidator
         $this->checkNumber($constraint, $value);
         $this->checkSpecialChar($constraint, $value);
         $this->checkEmail($constraint, $value);
-        $this->checkPwned($constraint, $value);
+        $this->checkCompromised($constraint, $value);
     }
 
     /**
@@ -78,7 +80,7 @@ class PasswordValidator extends AbstractConstraintValidator
             || $this->checkNumber($constraint, $value)
             || $this->checkSpecialChar($constraint, $value)
             || $this->checkEmail($constraint, $value))) {
-            $this->checkPwned($constraint, $value);
+            $this->checkCompromised($constraint, $value);
         }
     }
 
@@ -87,7 +89,32 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkCaseDiff(Password $constraint, string $value): bool
     {
-        return $this->validateRegex($constraint->case_diff, '/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/u', $value, $constraint->case_diff_message, Password::CASE_DIFF_ERROR);
+        return $this->validateRegex(
+            $constraint->case_diff,
+            '/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/u',
+            $value,
+            $constraint->case_diff_message,
+            Password::CASE_DIFF_ERROR
+        );
+    }
+
+    /**
+     * Check if the password is compromised.
+     */
+    private function checkCompromised(Password $constraint, string $value): bool
+    {
+        if (!$constraint->compromised) {
+            return false;
+        }
+
+        $count = $this->getPasswordCount($value);
+        if (0 === $count) {
+            return false;
+        }
+
+        $parameters = ['{{count}}' => FormatUtils::formatInt($count)];
+
+        return $this->addViolation($constraint->compromised_message, $value, $parameters, Password::COMPROMISED_ERROR);
     }
 
     /**
@@ -107,7 +134,13 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkLetters(Password $constraint, string $value): bool
     {
-        return $this->validateRegex($constraint->letters, '/\pL/u', $value, $constraint->letters_message, Password::LETTERS_ERROR);
+        return $this->validateRegex(
+            $constraint->letters,
+            '/\pL/u',
+            $value,
+            $constraint->letters_message,
+            Password::LETTERS_ERROR
+        );
     }
 
     /**
@@ -115,26 +148,13 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkNumber(Password $constraint, string $value): bool
     {
-        return $this->validateRegex($constraint->numbers, '/\pN/u', $value, $constraint->numbers_message, Password::NUMBERS_ERROR);
-    }
-
-    /**
-     * Check if the password is compromised.
-     */
-    private function checkPwned(Password $constraint, string $value): bool
-    {
-        if (!$constraint->pwned) {
-            return false;
-        }
-
-        $count = $this->getPasswordCount($value);
-        if (0 === $count) {
-            return false;
-        }
-
-        $parameters = ['{{count}}' => FormatUtils::formatInt($count)];
-
-        return $this->addViolation($constraint->pwned_message, $value, $parameters, Password::PWNED_ERROR);
+        return $this->validateRegex(
+            $constraint->numbers,
+            '/\pN/u',
+            $value,
+            $constraint->numbers_message,
+            Password::NUMBERS_ERROR
+        );
     }
 
     /**
@@ -142,7 +162,13 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkSpecialChar(Password $constraint, string $value): bool
     {
-        return $this->validateRegex($constraint->special_char, '/[^p{Ll}\p{Lu}\pL\pN]/u', $value, $constraint->special_char_message, Password::SPECIAL_CHAR_ERROR);
+        return $this->validateRegex(
+            $constraint->special_char,
+            '/[^p{Ll}\p{Lu}\pL\pN]/u',
+            $value,
+            $constraint->special_char_message,
+            Password::SPECIAL_CHAR_ERROR
+        );
     }
 
     /**
@@ -155,7 +181,7 @@ class PasswordValidator extends AbstractConstraintValidator
         $hashPrefix = \substr($hash, 0, 5);
 
         // load
-        $url = \sprintf('https://api.pwnedpasswords.com/range/%s', $hashPrefix);
+        $url = \sprintf(self::API_ENDPOINT, $hashPrefix);
         $lines = \file($url, \FILE_IGNORE_NEW_LINES | \FILE_SKIP_EMPTY_LINES);
         if (false === $lines || [] === $lines) {
             return 0;
@@ -179,9 +205,9 @@ class PasswordValidator extends AbstractConstraintValidator
     /**
      * @psalm-param non-empty-string $pattern
      */
-    private function validateRegex(bool $apply, string $pattern, string $value, string $message, string $code): bool
+    private function validateRegex(bool $enabled, string $pattern, string $value, string $message, string $code): bool
     {
-        if ($apply && 1 !== \preg_match($pattern, $value)) {
+        if ($enabled && 1 !== \preg_match($pattern, $value)) {
             return $this->addViolation($message, $value, [], $code);
         }
 

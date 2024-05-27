@@ -14,6 +14,7 @@ namespace App\Pivot;
 
 use App\Pivot\Aggregator\AbstractAggregator;
 use App\Pivot\Field\PivotField;
+use App\Traits\ArrayTrait;
 use App\Utils\StringUtils;
 
 /**
@@ -21,6 +22,8 @@ use App\Utils\StringUtils;
  */
 class PivotTable extends AbstractPivotAggregator
 {
+    use ArrayTrait;
+
     /**
      * The default path separator.
      */
@@ -29,7 +32,7 @@ class PivotTable extends AbstractPivotAggregator
     /**
      * The cell data.
      *
-     * @var PivotCell[]
+     * @var array<int, PivotCell>
      */
     private array $cells = [];
 
@@ -53,7 +56,7 @@ class PivotTable extends AbstractPivotAggregator
     /**
      * The root column.
      */
-    private readonly PivotNode $rootCol;
+    private readonly PivotNode $rootColumn;
 
     /**
      * The root row.
@@ -79,7 +82,7 @@ class PivotTable extends AbstractPivotAggregator
     public function __construct(AbstractAggregator $aggregator, private ?string $title = null)
     {
         parent::__construct($aggregator);
-        $this->rootCol = new PivotNode(clone $aggregator);
+        $this->rootColumn = new PivotNode(clone $aggregator);
         $this->rootRow = new PivotNode(clone $aggregator);
     }
 
@@ -123,13 +126,10 @@ class PivotTable extends AbstractPivotAggregator
      */
     public function findCellByKey(mixed $columnKey, mixed $rowKey): ?PivotCell
     {
-        foreach ($this->cells as $cell) {
-            if ($cell->equalsKey($columnKey, $rowKey)) {
-                return $cell;
-            }
-        }
-
-        return null;
+        return $this->findFirst(
+            $this->cells,
+            fn (int $key, PivotCell $cell): bool => $cell->equalsKey($columnKey, $rowKey)
+        );
     }
 
     /**
@@ -142,13 +142,10 @@ class PivotTable extends AbstractPivotAggregator
      */
     public function findCellByNode(PivotNode $column, PivotNode $row): ?PivotCell
     {
-        foreach ($this->cells as $cell) {
-            if ($cell->equalsNode($column, $row)) {
-                return $cell;
-            }
-        }
-
-        return null;
+        return $this->findFirst(
+            $this->cells,
+            fn (int $key, PivotCell $cell): bool => $cell->equalsNode($column, $row)
+        );
     }
 
     /**
@@ -163,13 +160,10 @@ class PivotTable extends AbstractPivotAggregator
      */
     public function findCellByPath(string $columnPath, string $rowPath): ?PivotCell
     {
-        foreach ($this->cells as $cell) {
-            if ($cell->equalsPath($columnPath, $rowPath)) {
-                return $cell;
-            }
-        }
-
-        return null;
+        return $this->findFirst(
+            $this->cells,
+            fn (int $key, PivotCell $cell): bool => $cell->equalsPath($columnPath, $rowPath)
+        );
     }
 
     /**
@@ -182,14 +176,6 @@ class PivotTable extends AbstractPivotAggregator
     public function getCells(): array
     {
         return $this->cells;
-    }
-
-    /**
-     * Gets the root column.
-     */
-    public function getColumn(): PivotNode
-    {
-        return $this->rootCol;
     }
 
     /**
@@ -225,9 +211,17 @@ class PivotTable extends AbstractPivotAggregator
     }
 
     /**
+     * Gets the root column.
+     */
+    public function getRootColumn(): PivotNode
+    {
+        return $this->rootColumn;
+    }
+
+    /**
      * Gets the root row.
      */
-    public function getRow(): PivotNode
+    public function getRootRow(): PivotNode
     {
         return $this->rootRow;
     }
@@ -272,7 +266,7 @@ class PivotTable extends AbstractPivotAggregator
             'dataField' => $this->dataField,
             'columnFields' => $this->columnFields,
             'rowFields' => $this->rowFields,
-            'column' => $this->rootCol,
+            'column' => $this->rootColumn,
             'row' => $this->rootRow,
             'cells' => $this->cells,
         ]);

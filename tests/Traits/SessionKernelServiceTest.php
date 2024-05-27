@@ -15,7 +15,6 @@ namespace App\Tests\Traits;
 use App\Tests\KernelServiceTestCase;
 use App\Traits\SessionAwareTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Psr\Container\ContainerExceptionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -25,9 +24,6 @@ class SessionKernelServiceTest extends KernelServiceTestCase
 {
     use SessionAwareTrait;
 
-    /**
-     * @throws ContainerExceptionInterface
-     */
     protected function setUp(): void
     {
         parent::setUp();

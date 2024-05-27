@@ -188,6 +188,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * Finds or create a calculation category for the given category.
      *
      * @param Category $category the category to find
+     *
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function findCategory(Category $category): CalculationCategory
     {
@@ -198,8 +200,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
         // find category
         $code = $category->getCode();
-        $first = $this->findFirst(
-            $group->getCategories(),
+        /** @psalm-var CalculationCategory|null $first */
+        $first = $group->getCategories()->findFirst(
             fn (int $key, CalculationCategory $category): bool => $code === $category->getCode()
         );
         if ($first instanceof CalculationCategory) {
@@ -217,13 +219,15 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * Finds or create a calculation group for the given group.
      *
      * @param Group $group the group to find
+     *
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function findGroup(Group $group): CalculationGroup
     {
         // find the group
         $code = $group->getCode();
-        $first = $this->findFirst(
-            $this->groups,
+        /** @psalm-var CalculationGroup|null $first */
+        $first = $this->groups->findFirst(
             fn (int $key, CalculationGroup $group): bool => $code === $group->getCode()
         );
         if ($first instanceof CalculationGroup) {
@@ -671,13 +675,9 @@ class Calculation extends AbstractEntity implements TimestampableInterface
             return false;
         }
 
-        foreach ($this->groups as $group) {
-            if ($group->isSortable()) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->groups->exists(
+            static fn (int $key, CalculationGroup $group): bool => $group->isSortable()
+        );
     }
 
     /**

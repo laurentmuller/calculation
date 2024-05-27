@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Traits\ArrayTrait;
 use App\Traits\CacheAwareTrait;
 use App\Utils\StringUtils;
 use Doctrine\DBAL\Connection;
@@ -64,6 +65,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
  */
 class SchemaService implements ServiceSubscriberInterface
 {
+    use ArrayTrait;
     use CacheAwareTrait;
     use ServiceMethodsSubscriberTrait;
 
@@ -352,13 +354,10 @@ class SchemaService implements ServiceSubscriberInterface
      */
     private function getTargetMetaData(string $name): ?ClassMetadata
     {
-        foreach ($this->getMetaDatas() as $data) {
-            if ($data->getName() === $name) {
-                return $data;
-            }
-        }
-
-        return null;
+        return $this->findFirst(
+            $this->getMetaDatas(),
+            fn (string $key, ClassMetadata $data): bool => $data->getName() === $name
+        );
     }
 
     /**

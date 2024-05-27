@@ -15,6 +15,7 @@ namespace App\Table;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
+use App\Traits\ArrayTrait;
 use App\Utils\FormatUtils;
 
 /**
@@ -24,10 +25,12 @@ use App\Utils\FormatUtils;
  */
 abstract class AbstractTable implements SortModeInterface
 {
+    use ArrayTrait;
+
     /**
      * The column definitions.
      *
-     * @var ?Column[]
+     * @var Column[]|null
      */
     private ?array $columns = null;
 
@@ -63,13 +66,16 @@ abstract class AbstractTable implements SortModeInterface
      * Gets the column definitions.
      *
      * @return Column[]
+     *
+     * @psalm-return array<int, Column>
      */
     public function getColumns(): array
     {
         if (null === $this->columns) {
-            return $this->columns = $this->createColumns();
+            $this->columns = $this->createColumns();
         }
 
+        /** @psalm-var array<int, Column> */
         return $this->columns;
     }
 
@@ -135,18 +141,12 @@ abstract class AbstractTable implements SortModeInterface
     protected function getDefaultColumn(): ?Column
     {
         $columns = $this->getColumns();
-        foreach ($columns as $column) {
-            if ($column->isDefault()) {
-                return $column;
-            }
-        }
-        foreach ($columns as $column) {
-            if ($column->isVisible()) {
-                return $column;
-            }
+        $column = $this->findFirst($columns, static fn (int $key, Column $column): bool => $column->isDefault());
+        if ($column instanceof Column) {
+            return $column;
         }
 
-        return null;
+        return $this->findFirst($columns, static fn (int $key, Column $column): bool => $column->isVisible());
     }
 
     /**
@@ -214,6 +214,8 @@ abstract class AbstractTable implements SortModeInterface
      * Create the columns.
      *
      * @return Column[] the columns
+     *
+     * @psalm-return non-empty-array<int, Column>
      */
     private function createColumns(): array
     {
@@ -221,6 +223,7 @@ abstract class AbstractTable implements SortModeInterface
         $columns = Column::fromJson($this, $path);
         $columns[] = Column::createColumnAction();
 
+        /** @psalm-var non-empty-array<int, Column> */
         return $columns;
     }
 

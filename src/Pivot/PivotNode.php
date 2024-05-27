@@ -14,6 +14,7 @@ namespace App\Pivot;
 
 use App\Interfaces\SortModeInterface;
 use App\Pivot\Aggregator\AbstractAggregator;
+use App\Traits\ArrayTrait;
 use App\Utils\StringUtils;
 
 /**
@@ -21,10 +22,12 @@ use App\Utils\StringUtils;
  */
 class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringable, SortModeInterface
 {
+    use ArrayTrait;
+
     /**
      * The children.
      *
-     * @var PivotNode[]
+     * @var array<int, PivotNode>
      */
     private array $children = [];
 
@@ -147,13 +150,10 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      */
     public function find(mixed $key): ?self
     {
-        foreach ($this->children as $child) {
-            if ($child->equalsKey($key)) {
-                return $child;
-            }
-        }
-
-        return null;
+        return $this->findFirst(
+            $this->children,
+            fn (int $key, PivotNode $child): bool => $child->equalsKey($key)
+        );
     }
 
     /**

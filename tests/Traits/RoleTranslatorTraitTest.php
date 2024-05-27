@@ -25,7 +25,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class RoleTranslatorTraitTest extends TestCase
 {
     use RoleTranslatorTrait;
-
     use TranslatorMockTrait;
 
     private TranslatorInterface $translator;

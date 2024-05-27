@@ -97,11 +97,10 @@ class ThemeServiceTest extends TestCase
 
     private static function createRequest(Theme|string|null $value = null): Request
     {
+        if ($value instanceof Theme) {
+            $value = $value->value;
+        }
         if (null !== $value) {
-            if ($value instanceof Theme) {
-                $value = $value->value;
-            }
-
             return new Request(cookies: ['THEME' => $value]);
         }
 

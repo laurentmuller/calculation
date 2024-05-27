@@ -23,17 +23,19 @@ trait EnumDefaultTrait
 {
     use EnumExtrasTrait;
 
+    /**
+     * Gets the default case enumeration.
+     *
+     * @throws \LogicException if no default case enumeration is found
+     */
     public static function getDefault(): self
     {
-        /** @var self[] $values */
-        $values = static::cases();
-        foreach ($values as $value) {
+        foreach (static::cases() as $value) {
             if ($value->isDefault()) {
                 return $value;
             }
         }
-
-        throw new \LogicException('Unable to find the default value.');
+        throw new \LogicException(\sprintf('No default value found for "%s" enumeration.', __CLASS__));
     }
 
     public function isDefault(): bool

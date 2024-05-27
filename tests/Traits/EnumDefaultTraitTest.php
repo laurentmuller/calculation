@@ -30,6 +30,7 @@ class EnumDefaultTraitTest extends TestCase
     public function testNoDefault(): void
     {
         self::expectException(\LogicException::class);
+        self::expectExceptionMessage('No default value found for "App\Tests\Data\NoDefaultEnum" enumeration.');
         NoDefaultEnum::getDefault();
     }
 }

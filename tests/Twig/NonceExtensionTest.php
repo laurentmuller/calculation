@@ -12,31 +12,19 @@ declare(strict_types=1);
 
 namespace App\Tests\Twig;
 
+use App\Tests\KernelServiceTestCase;
 use App\Twig\NonceExtension;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 #[CoversClass(NonceExtension::class)]
-class NonceExtensionTest extends KernelTestCase
+class NonceExtensionTest extends KernelServiceTestCase
 {
-    private ?NonceExtension $extension = null;
+    private NonceExtension $extension;
 
-    /**
-     * @throws \Exception
-     *
-     * @psalm-suppress RedundantCondition
-     */
     protected function setUp(): void
     {
-        $extension = self::getContainer()->get(NonceExtension::class);
-        if ($extension instanceof NonceExtension) {
-            $this->extension = $extension;
-        }
-    }
-
-    public function testExtensionNotNull(): void
-    {
-        self::assertNotNull($this->extension);
+        parent::setUp();
+        $this->extension = $this->getService(NonceExtension::class);
     }
 
     /**
@@ -44,7 +32,6 @@ class NonceExtensionTest extends KernelTestCase
      */
     public function testLength32(): void
     {
-        self::assertNotNull($this->extension);
         $nonce = $this->extension->getNonce(32);
         self::assertSame(64, \strlen($nonce));
     }
@@ -54,7 +41,6 @@ class NonceExtensionTest extends KernelTestCase
      */
     public function testLengthDefault(): void
     {
-        self::assertNotNull($this->extension);
         $nonce = $this->extension->getNonce();
         self::assertSame(32, \strlen($nonce));
     }

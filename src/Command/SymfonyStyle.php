@@ -62,6 +62,16 @@ class SymfonyStyle extends BaseSymfonyStyle
     }
 
     /**
+     * Returns the option value, as integer, for a given option name.
+     *
+     * @throws InvalidArgumentException When option given doesn't exist
+     */
+    public function getIntOption(string $name): int
+    {
+        return (int) $this->getOption($name);
+    }
+
+    /**
      * Returns the option value for a given option name.
      *
      * @throws InvalidArgumentException When option given doesn't exist

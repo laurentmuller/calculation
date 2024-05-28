@@ -209,7 +209,7 @@ class PdfLabelDocument extends PdfDocument
      */
     private function getAveryFormat(string $format): array
     {
-        $averyFormats = self::getAveryFormats();
+        $averyFormats = $this->getAveryFormats();
         if (isset($averyFormats[$format])) {
             return $averyFormats[$format];
         }
@@ -221,10 +221,10 @@ class PdfLabelDocument extends PdfDocument
     /**
      * @psalm-return array<string, LabelType>
      */
-    private static function getAveryFormats(): array
+    private function getAveryFormats(): array
     {
-        static $formats = [];
-        if ([] === $formats) {
+        static $formats = null;
+        if (null === $formats) {
             $file = __DIR__ . '/../../resources/data/avery.json';
             $formats = FileUtils::decodeJson($file);
         }

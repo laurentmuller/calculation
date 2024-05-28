@@ -74,7 +74,9 @@ class HeaderNameCommandTest extends AbstractCommandTestCase
         $expected = [
             'Invalid patterns:',
             'Allowed values:',
-            '"css", "js", "twig"',
+            '"css"',
+            '"js"',
+            '"twig"',
             '"css_invalid"',
             '"js_invalid"',
         ];
@@ -92,7 +94,9 @@ class HeaderNameCommandTest extends AbstractCommandTestCase
         $expected = [
             'No pattern defined.',
             'Allowed values:',
-            '"css", "js", "twig"',
+            '"css"',
+            '"js"',
+            '"twig"',
         ];
         $input = [
             '--pattern' => [],

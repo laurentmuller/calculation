@@ -41,8 +41,7 @@ class CaptchaControllerTest extends AbstractControllerTestCase
     }
 
     /**
-     * @throws \Exception
-     * @throws Exception
+     * @throws \Exception|Exception
      */
     public function testInvalidImage(): void
     {
@@ -120,9 +119,6 @@ class CaptchaControllerTest extends AbstractControllerTestCase
         return $service;
     }
 
-    /**
-     * @throws Exception
-     */
     private function getController(): CaptchaController
     {
         $controller = $this->getService(CaptchaController::class);

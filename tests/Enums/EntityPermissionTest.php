@@ -17,7 +17,6 @@ use App\Tests\TranslatorMockTrait;
 use Elao\Enum\FlagBag;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(EntityPermission::class)]
@@ -159,9 +158,6 @@ class EntityPermissionTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     #[DataProvider('getLabel')]
     public function testTranslate(EntityPermission $permission, string $expected): void
     {

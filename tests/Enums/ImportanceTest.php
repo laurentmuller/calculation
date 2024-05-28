@@ -16,7 +16,6 @@ use App\Enums\Importance;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Importance::class)]
@@ -87,9 +86,6 @@ class ImportanceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     #[DataProvider('getLabels')]
     public function testTranslate(string $expected, Importance $importance): void
     {

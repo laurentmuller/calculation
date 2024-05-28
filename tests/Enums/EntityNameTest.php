@@ -27,7 +27,6 @@ use App\Model\Role;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(EntityName::class)]
@@ -207,9 +206,6 @@ class EntityNameTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     #[DataProvider('getLabel')]
     public function testTranslate(string $expected, EntityName $entity): void
     {

@@ -17,7 +17,6 @@ use App\Mime\CspViolationEmail;
 use App\Mime\NotificationEmail;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -63,9 +62,6 @@ class NotificationEmailTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testPreparedHeaders(): void
     {
         $mail = new NotificationEmail();
@@ -81,9 +77,6 @@ class NotificationEmailTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdate(): void
     {
         $mail = new NotificationEmail();

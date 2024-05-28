@@ -66,7 +66,7 @@ trait PdfMemoryImageTrait
         $result = \imagepng($image);
         $data = \ob_get_clean();
         if (!$result || !\is_string($data)) {
-            throw new PdfException('Unable to convert the GD image to portable network graphics format.');
+            throw PdfException::instance('Unable to convert the GD image to portable network graphics format.');
         }
         $this->imageMemory($data, $x, $y, $width, $height, $link);
     }
@@ -130,7 +130,7 @@ trait PdfMemoryImageTrait
         $info = new \finfo(\FILEINFO_MIME_TYPE);
         $mime = $info->buffer($data);
         if (!\is_string($mime) || !\str_contains($mime, '/')) {
-            throw new PdfException(\sprintf('Empty or incorrect mime type: "%s".', $mime));
+            throw PdfException::format('Empty or incorrect mime type: "%s".', (string) $mime);
         }
 
         return $mime;

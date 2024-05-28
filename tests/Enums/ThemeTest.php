@@ -16,7 +16,6 @@ use App\Enums\Theme;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Theme::class)]
@@ -160,9 +159,6 @@ class ThemeTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     #[DataProvider('getTranslates')]
     public function testTranslate(Theme $theme, string $expected): void
     {

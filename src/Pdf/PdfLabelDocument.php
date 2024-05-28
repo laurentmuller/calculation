@@ -16,6 +16,7 @@ use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Events\PdfLabelTextEvent;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\Traits\PdfDashLineTrait;
+use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use fpdf\PdfException;
 use fpdf\PdfFontName;
@@ -27,7 +28,7 @@ use fpdf\PdfUnit;
  * PDF document to output labels.
  *
  * @psalm-type LabelType = array{
- *     pageSize: 'A3'|'A4'|'A5'|'Legal'|'Letter',
+ *     pageSize: string,
  *     unit: 'in'|'mm',
  *     marginLeft: float,
  *     marginTop: float,
@@ -42,20 +43,6 @@ use fpdf\PdfUnit;
 class PdfLabelDocument extends PdfDocument
 {
     use PdfDashLineTrait;
-
-    /**
-     * Avery formats.
-     */
-    public const AVERY_FORMATS = [
-        '3422' => ['pageSize' => 'A4',      'unit' => 'mm', 'marginLeft' => 0,      'marginTop' => 8.5,     'cols' => 3, 'rows' => 8,   'spaceX' => 0,      'spaceY' => 0,   'width' => 70,      'height' => 35,    'fontSize' => 9],
-        '5160' => ['pageSize' => 'Letter',  'unit' => 'mm', 'marginLeft' => 1.762,  'marginTop' => 10.7,    'cols' => 3, 'rows' => 10,  'spaceX' => 3.175,  'spaceY' => 0,   'width' => 66.675,  'height' => 25.4,  'fontSize' => 8],
-        '5161' => ['pageSize' => 'Letter',  'unit' => 'mm', 'marginLeft' => 6.4,    'marginTop' => 12.7,    'cols' => 2, 'rows' => 10,  'spaceX' => 4.8,    'spaceY' => 0,   'width' => 101.6,   'height' => 25.4,  'fontSize' => 8],
-        '5162' => ['pageSize' => 'Letter',  'unit' => 'mm', 'marginLeft' => 0.97,   'marginTop' => 20.224,  'cols' => 2, 'rows' => 7,   'spaceX' => 4.762,  'spaceY' => 0,   'width' => 100.807, 'height' => 35.72, 'fontSize' => 8],
-        '5163' => ['pageSize' => 'Letter',  'unit' => 'mm', 'marginLeft' => 1.762,  'marginTop' => 10.7,    'cols' => 2, 'rows' => 5,   'spaceX' => 3.175,  'spaceY' => 0,   'width' => 101.6,   'height' => 50.8,  'fontSize' => 8],
-        '5164' => ['pageSize' => 'Letter',  'unit' => 'in', 'marginLeft' => 0.148,  'marginTop' => 0.5,     'cols' => 2, 'rows' => 3,   'spaceX' => 0.2031, 'spaceY' => 0,   'width' => 4.0,     'height' => 3.33,  'fontSize' => 12],
-        '8600' => ['pageSize' => 'Letter',  'unit' => 'mm', 'marginLeft' => 7.1,    'marginTop' => 19,      'cols' => 3, 'rows' => 10,  'spaceX' => 9.5,    'spaceY' => 3.1, 'width' => 66.6,    'height' => 25.4,  'fontSize' => 8],
-        'L7163' => ['pageSize' => 'A4',     'unit' => 'mm', 'marginLeft' => 5,      'marginTop' => 15,      'cols' => 2, 'rows' => 7,   'spaceX' => 25,     'spaceY' => 0,   'width' => 99.1,    'height' => 38.1,  'fontSize' => 9],
-    ];
 
     private const FONT_CONVERSION = [
         6 => 2.0,
@@ -119,11 +106,7 @@ class PdfLabelDocument extends PdfDocument
     public function __construct(array|string $format, PdfUnit $unit = PdfUnit::MILLIMETER, int $startIndex = 0)
     {
         if (\is_string($format)) {
-            if (!isset(self::AVERY_FORMATS[$format])) {
-                $formats = \implode(', ', \array_keys(self::AVERY_FORMATS));
-                throw new PdfException(\sprintf('Unknown label format: %s. Allowed formats: %s.', $format, $formats));
-            }
-            $format = self::AVERY_FORMATS[$format];
+            $format = $this->getAveryFormat($format);
         }
         parent::__construct(unit: $unit, size: $this->getDocumentSize($format));
 
@@ -136,11 +119,11 @@ class PdfLabelDocument extends PdfDocument
 
         $col = 1 + $startIndex % $this->cols;
         if ($col > $this->cols) {
-            throw new PdfException(\sprintf('Invalid starting column: %d. Maximum allowed: %d.', $col, $this->cols));
+            throw PdfException::format('Invalid starting column: %d. Maximum allowed: %d.', $col, $this->cols);
         }
         $row = 1 + \intdiv($startIndex, $this->cols);
         if ($row > $this->rows) {
-            throw new PdfException(\sprintf('Invalid starting row: %d. Maximum allowed: %d.', $row, $this->rows));
+            throw PdfException::format('Invalid starting row: %d. Maximum allowed: %d.', $row, $this->rows);
         }
         $this->currentCol = $col - 1;
         $this->currentRow = $row - 1;
@@ -220,19 +203,50 @@ class PdfLabelDocument extends PdfDocument
     }
 
     /**
+     * @psalm-return LabelType
+     *
+     * @throws PdfException if the format is invalid
+     */
+    private function getAveryFormat(string $format): array
+    {
+        $averyFormats = self::getAveryFormats();
+        if (isset($averyFormats[$format])) {
+            return $averyFormats[$format];
+        }
+
+        $keys = \implode(', ', \array_keys($averyFormats));
+        throw PdfException::format('Unknown label format: %s. Allowed formats: %s.', $format, $keys);
+    }
+
+    /**
+     * @psalm-return array<string, LabelType>
+     */
+    private static function getAveryFormats(): array
+    {
+        static $formats = [];
+        if ([] === $formats) {
+            $file = __DIR__ . '/../../resources/data/avery.json';
+            $formats = FileUtils::decodeJson($file);
+        }
+
+        /** @psalm-var array<string, LabelType> */
+        return $formats;
+    }
+
+    /**
      * @psalm-param LabelType $format
      *
      * @throws PdfException if the page size is invalid
      */
     private function getDocumentSize(array $format): PdfPageSize
     {
-        $pageSize = \strtoupper($format['pageSize']);
-
-        try {
-            return PdfPageSize::from($pageSize);
-        } catch (\ValueError $e) {
-            throw new PdfException(\sprintf('Invalid page size: %s.', $pageSize), $e->getCode(), $e);
+        $value = \strtoupper($format['pageSize']);
+        $size = PdfPageSize::tryFrom($value);
+        if ($size instanceof PdfPageSize) {
+            return $size;
         }
+
+        throw PdfException::format('Invalid page size: %s.', $value);
     }
 
     /**
@@ -244,7 +258,7 @@ class PdfLabelDocument extends PdfDocument
     {
         if (!isset(self::FONT_CONVERSION[$pt])) {
             $sizes = \implode(', ', \array_keys(self::FONT_CONVERSION));
-            throw new PdfException(\sprintf('Invalid font size: %d. Allowed sizes: %s', $pt, $sizes));
+            throw PdfException::format('Invalid font size: %d. Allowed sizes: %s', $pt, $sizes);
         }
 
         return $this->convertUnit(self::FONT_CONVERSION[$pt], 'mm');

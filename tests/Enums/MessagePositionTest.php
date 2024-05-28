@@ -17,7 +17,6 @@ use App\Interfaces\PropertyServiceInterface;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(MessagePosition::class)]
@@ -137,9 +136,6 @@ class MessagePositionTest extends TestCase
         self::assertSame($expected, $sorted);
     }
 
-    /**
-     * @throws Exception
-     */
     #[DataProvider('getTranslation')]
     public function testTranslate(MessagePosition $position, string $expected): void
     {

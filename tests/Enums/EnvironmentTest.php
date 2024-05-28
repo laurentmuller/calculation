@@ -16,7 +16,6 @@ use App\Enums\Environment;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Environment::class)]
@@ -94,9 +93,6 @@ class EnvironmentTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     #[DataProvider('getLabels')]
     public function testTranslate(Environment $environment, string $expected): void
     {

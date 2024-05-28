@@ -52,6 +52,19 @@ class SymfonyStyle extends BaseSymfonyStyle
     }
 
     /**
+     * Returns the option value, as an array of strings, for a given option name.
+     *
+     * @return string[]
+     *
+     * @throws InvalidArgumentException When option given doesn't exist
+     */
+    public function getArrayOption(string $name): array
+    {
+        /** @psalm-var string[] */
+        return (array) $this->input->getOption($name);
+    }
+
+    /**
      * Returns the option value, as bool, for a given option name.
      *
      * @throws InvalidArgumentException When option given doesn't exist

@@ -87,9 +87,6 @@ class StrengthLevelTranslatorTraitTest extends TestCase
         self::assertStringContainsString('password.strength_invalid', $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     #[DataProvider('getTranslateLevels')]
     public function testTranslateLevel(int $value, string $message): void
     {

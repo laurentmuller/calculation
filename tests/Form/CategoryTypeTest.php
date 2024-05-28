@@ -49,8 +49,7 @@ class CategoryTypeTest extends AbstractEntityTypeTestCase
     }
 
     /**
-     * @throws Exception
-     * @throws \ReflectionException
+     * @throws Exception|\ReflectionException
      */
     protected function getExtensions(): array
     {

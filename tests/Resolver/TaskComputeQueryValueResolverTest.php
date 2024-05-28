@@ -58,8 +58,7 @@ class TaskComputeQueryValueResolverTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     * @throws \JsonException
+     * @throws Exception|\JsonException
      */
     public function testValid(): void
     {

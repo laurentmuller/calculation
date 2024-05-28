@@ -16,7 +16,6 @@ use App\Service\PositionService;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(PositionService::class)]
@@ -83,9 +82,6 @@ class PositionServiceTest extends TestCase
         yield [0, +181, '', true];
     }
 
-    /**
-     * @throws Exception
-     */
     #[DataProvider('getFormatDirections')]
     public function testFormatDirection(int $deg, string $expected): void
     {
@@ -94,9 +90,6 @@ class PositionServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     #[DataProvider('getLatitudes')]
     public function testFormatLatitude(float $lat, string $expected, bool $exception = false): void
     {
@@ -108,9 +101,6 @@ class PositionServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     #[DataProvider('getLongitudes')]
     public function testFormatLongitude(float $lng, string $expected, bool $exception = false): void
     {
@@ -122,9 +112,6 @@ class PositionServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     #[DataProvider('getPositions')]
     public function testFormatPosition(float $lat, float $lng, string $expected, bool $exception = false): void
     {
@@ -136,9 +123,6 @@ class PositionServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     #[DataProvider('getDirections')]
     public function testGetDirection(float $deg, string $expected): void
     {
@@ -147,9 +131,6 @@ class PositionServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createService(): PositionService
     {
         $translator = $this->createTranslator();

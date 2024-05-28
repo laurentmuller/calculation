@@ -15,14 +15,14 @@ namespace App\Tests\Entity;
 use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Repository\UserPropertyRepository;
-use Doctrine\ORM\Exception\NotSupported;
+use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(UserProperty::class)]
 class UserPropertyTest extends AbstractEntityValidatorTestCase
 {
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function testDuplicate(): void
     {
@@ -43,7 +43,7 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function testFindByName(): void
     {
@@ -66,7 +66,7 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function testFindByUser(): void
     {
@@ -87,9 +87,6 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
         }
     }
 
-    /**
-     * @throws NotSupported
-     */
     public function testInstance(): void
     {
         $user = $this->getUser();
@@ -107,9 +104,6 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
         $this->validatePaths($results, 'user', 'name', 'value');
     }
 
-    /**
-     * @throws NotSupported
-     */
     public function testInvalidName(): void
     {
         $object = new UserProperty();
@@ -127,9 +121,6 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
         $this->validatePaths($results, 'user');
     }
 
-    /**
-     * @throws NotSupported
-     */
     public function testInvalidValue(): void
     {
         $object = new UserProperty('name');
@@ -139,7 +130,7 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function testNotDuplicate(): void
     {
@@ -159,9 +150,6 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
         }
     }
 
-    /**
-     * @throws NotSupported
-     */
     public function testValid(): void
     {
         $object = new UserProperty('name');
@@ -170,9 +158,6 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
         $this->validate($object);
     }
 
-    /**
-     * @throws NotSupported
-     */
     private function getRepository(): UserPropertyRepository
     {
         /** @psalm-var UserPropertyRepository $repository */
@@ -181,9 +166,6 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
         return $repository;
     }
 
-    /**
-     * @throws NotSupported
-     */
     private function getUser(): ?User
     {
         return $this->getManager()->getRepository(User::class)->find(1);

@@ -143,7 +143,7 @@ class PdfTable
     public function addCell(?PdfCell $cell): static
     {
         if (!$this->isRowStarted()) {
-            throw new PdfException('No row started.');
+            throw PdfException::instance('No row started.');
         }
         if ($cell instanceof PdfCell) {
             $this->cells[] = $cell;
@@ -352,7 +352,7 @@ class PdfTable
     public function completeRow(bool $endRow = true): static
     {
         if (!$this->isRowStarted()) {
-            throw new PdfException('No row started.');
+            throw PdfException::instance('No row started.');
         }
         $remaining = $this->getColumnsCount() - $this->getCellsSpan();
         for ($i = 0; $i < $remaining; ++$i) {
@@ -843,7 +843,7 @@ class PdfTable
     private function checkRowStarted(): void
     {
         if ($this->isRowStarted()) {
-            throw new PdfException('Row already started.');
+            throw PdfException::instance('Row already started.');
         }
     }
 

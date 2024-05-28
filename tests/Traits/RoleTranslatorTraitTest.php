@@ -18,7 +18,6 @@ use App\Tests\TranslatorMockTrait;
 use App\Traits\RoleTranslatorTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -67,11 +66,6 @@ class RoleTranslatorTraitTest extends TestCase
         self::assertSame($actual, $expected);
     }
 
-    /**
-     * @param string|RoleInterface $role the role to translate
-     *
-     * @throws Exception
-     */
     #[DataProvider('getTranslateRoles')]
     public function testTranslateRole(RoleInterface|string $role, string $expected): void
     {

@@ -17,9 +17,9 @@ use App\Entity\Calculation;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfMemoryImageTrait;
-use App\Report\Table\TableGroups;
-use App\Report\Table\TableItems;
-use App\Report\Table\TableOverall;
+use App\Report\Table\GroupsTable;
+use App\Report\Table\ItemsTable;
+use App\Report\Table\OverallTable;
 use App\Traits\LoggerTrait;
 use App\Utils\StringUtils;
 use Endroid\QrCode\Builder\Builder;
@@ -90,10 +90,10 @@ class CalculationReport extends AbstractReport
             return true;
         }
 
-        TableItems::render($this);
+        ItemsTable::render($this);
         $this->checkEndHeight($calculation);
-        TableGroups::render($this);
-        TableOverall::render($this);
+        GroupsTable::render($this);
+        OverallTable::render($this);
         $this->renderTimestampable($calculation);
         $this->renderQrCode();
 

@@ -21,7 +21,7 @@ use fpdf\PdfBorder;
 /**
  * Table to render the overall totals of a calculation.
  */
-class TableOverall extends ReportTable
+class OverallTable extends ReportTable
 {
     private readonly Calculation $calculation;
     private readonly float $minMargin;

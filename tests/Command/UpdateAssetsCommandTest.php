@@ -14,17 +14,15 @@ namespace App\Tests\Command;
 
 use App\Command\UpdateAssetsCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Tester\CommandTester;
 
 #[CoversClass(UpdateAssetsCommand::class)]
-class UpdateAssetsCommandTest extends KernelTestCase
+class UpdateAssetsCommandTest extends AbstractCommandTestCase
 {
+    private const COMMAND_NAME = 'app:update-assets';
+
     public function testExecuteDryRun(): void
     {
-        $output = $this->execute(['--dry-run' => true]);
+        $output = $this->execute(self::COMMAND_NAME, ['--dry-run' => true]);
         $expected = [
             'Check versions:',
             'jquery',
@@ -48,7 +46,7 @@ class UpdateAssetsCommandTest extends KernelTestCase
 
     public function testExecuteUpdate(): void
     {
-        $output = $this->execute();
+        $output = $this->execute(self::COMMAND_NAME);
         $expected = [
             '[OK]',
             'Installed',
@@ -58,30 +56,5 @@ class UpdateAssetsCommandTest extends KernelTestCase
             '/public/vendor',
         ];
         $this->validate($output, $expected);
-    }
-
-    private function execute(array $input = []): string
-    {
-        $kernel = self::bootKernel();
-        $application = new Application($kernel);
-        $command = $application->find('app:update-assets');
-
-        $tester = new CommandTester($command);
-        $result = $tester->execute($input);
-        self::assertSame(Command::SUCCESS, $result);
-
-        $tester->assertCommandIsSuccessful();
-
-        return $tester->getDisplay();
-    }
-
-    /**
-     * @psalm-param string[] $expected
-     */
-    private function validate(string $output, array $expected): void
-    {
-        foreach ($expected as $value) {
-            self::assertStringContainsString($value, $output);
-        }
     }
 }

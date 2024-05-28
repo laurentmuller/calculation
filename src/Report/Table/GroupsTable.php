@@ -22,7 +22,7 @@ use fpdf\PdfTextAlignment;
 /**
  * Table to render the totals by calculation's group.
  */
-class TableGroups extends ReportTable
+class GroupsTable extends ReportTable
 {
     private readonly Calculation $calculation;
 

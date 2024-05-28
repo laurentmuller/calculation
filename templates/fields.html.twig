@@ -233,12 +233,17 @@
     </div>
 {%- endblock -%}
 
+{% block recaptcha_widget %}
+    {{ block('hidden_widget') }}
+    <script nonce="{{ csp_nonce() }}" src="{{ recaptcha_url }}" async defer></script>
+{%- endblock -%}
+
 {%- block form_errors -%}
     {%- if errors|length > 0 -%}
         {%- if form is rootform -%}
             <hr class="mt-2 mb-1">
             <p class="mb-1">{{ 'error_page.description'|trans }}</p>
-            <ul class="my-1 text-danger">
+            <ul class="my-1">
                 {%- for error in errors -%}
                     <li>{{ error.message }}</li>
                 {%- endfor -%}
@@ -249,9 +254,4 @@
             {%- endfor -%}
         {%- endif %}
     {%- endif %}
-{%- endblock -%}
-
-{% block recaptcha_widget %}
-    {{ block('hidden_widget') }}
-    <script nonce="{{ csp_nonce() }}" src="{{ recaptcha_url }}" async defer></script>
 {%- endblock -%}

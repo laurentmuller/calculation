@@ -256,7 +256,8 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     /**
      * Gets the week for the given key.
      *
-     * @param \DateTimeInterface|int|string $key the week key. Can be an integer (1-53), a date time interface or a formatted date ('Y.W').
+     * @param \DateTimeInterface|int|string $key the week key. Can be an integer (1-53), a date time interface
+     *                                           or a formatted date ('Y.W').
      *
      * @return Week|null the week, if found, null otherwise
      *

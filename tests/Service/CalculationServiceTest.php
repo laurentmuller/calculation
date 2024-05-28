@@ -101,8 +101,7 @@ class CalculationServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws ORMException
-     * @throws Exception
+     * @throws ORMException|Exception
      */
     public function testCreateGroupsFromCalculation(): void
     {
@@ -137,9 +136,7 @@ class CalculationServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws Exception
-     * @throws ORMException
-     * @throws \ReflectionException
+     * @throws Exception|ORMException|\ReflectionException
      */
     public function testCreateGroupsFromData(): void
     {
@@ -186,8 +183,7 @@ class CalculationServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws Exception
-     * @throws ORMException
+     * @throws Exception|ORMException
      */
     public function testCreateGroupsFromDataEmpty(): void
     {
@@ -230,8 +226,7 @@ class CalculationServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws ORMException
-     * @throws Exception
+     * @throws ORMException|Exception
      */
     public function testService(): void
     {

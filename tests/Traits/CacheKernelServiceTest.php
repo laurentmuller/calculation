@@ -16,16 +16,12 @@ use App\Tests\KernelServiceTestCase;
 use App\Traits\CacheAwareTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\Container\ContainerExceptionInterface;
 
 #[CoversClass(CacheAwareTrait::class)]
 class CacheKernelServiceTest extends KernelServiceTestCase
 {
     use CacheAwareTrait;
 
-    /**
-     * @throws ContainerExceptionInterface
-     */
     protected function setUp(): void
     {
         parent::setUp();

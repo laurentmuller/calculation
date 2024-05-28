@@ -89,8 +89,7 @@ class CalculationUpdateQueryTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     * @throws \Exception
+     * @throws Exception|\Exception
      */
     public function testValidateAfter(): void
     {
@@ -115,8 +114,7 @@ class CalculationUpdateQueryTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     * @throws \Exception
+     * @throws Exception|\Exception
      */
     public function testValidateDateTo(): void
     {
@@ -138,8 +136,7 @@ class CalculationUpdateQueryTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     * @throws \Exception
+     * @throws Exception|\Exception
      */
     public function testValidateMonth(): void
     {
@@ -164,8 +161,7 @@ class CalculationUpdateQueryTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     * @throws \Exception
+     * @throws Exception|\Exception
      */
     public function testValidateValid(): void
     {

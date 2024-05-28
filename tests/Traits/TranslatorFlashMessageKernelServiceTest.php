@@ -17,7 +17,6 @@ use App\Tests\TranslatorMockTrait;
 use App\Traits\FlashMessageAwareTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Psr\Container\ContainerExceptionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -29,9 +28,6 @@ class TranslatorFlashMessageKernelServiceTest extends KernelServiceTestCase
     use TranslatorFlashMessageAwareTrait;
     use TranslatorMockTrait;
 
-    /**
-     * @throws ContainerExceptionInterface
-     */
     protected function setUp(): void
     {
         parent::setUp();

@@ -16,7 +16,6 @@ use App\Enums\FlashType;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(FlashType::class)]
@@ -82,9 +81,6 @@ class FlashTypeTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     #[DataProvider('getLabels')]
     public function testTranslate(FlashType $type, string $expected): void
     {

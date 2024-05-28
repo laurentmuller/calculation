@@ -51,7 +51,7 @@ trait CacheAwareTrait
     /**
      * Removes the item from the cache pool.
      *
-     * @throws \LogicException if an exception occur
+     * @throws \LogicException if an exception occurs
      */
     public function deleteCacheItem(string $key): bool
     {
@@ -65,7 +65,7 @@ trait CacheAwareTrait
     /**
      * Gets the cache item for the given key.
      *
-     * @throws \LogicException if an exception occur
+     * @throws \LogicException if an exception occurs
      */
     public function getCacheItem(string $key): CacheItemInterface
     {

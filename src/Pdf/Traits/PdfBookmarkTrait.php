@@ -353,7 +353,7 @@ trait PdfBookmarkTrait
         if ($level < 0 || $level > $maxLevel) {
             $allowed = \implode('...', \array_unique([0, $maxLevel]));
             $message = \sprintf('Invalid bookmark level: %d. Allowed value: %s.', $level, $allowed);
-            throw new PdfException($message);
+            throw PdfException::instance($message);
         }
     }
 }

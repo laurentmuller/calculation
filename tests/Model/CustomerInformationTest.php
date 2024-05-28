@@ -15,7 +15,6 @@ namespace App\Tests\Model;
 use App\Model\CustomerInformation;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(CustomerInformation::class)]
@@ -58,9 +57,6 @@ class CustomerInformationTest extends TestCase
         self::assertTrue($info->isPrintAddress());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testTranslatedFax(): void
     {
         $info = new CustomerInformation();
@@ -75,9 +71,6 @@ class CustomerInformationTest extends TestCase
         self::assertSame('report.fax', $info->getTranslatedFax($this));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testTranslatedPhone(): void
     {
         $info = new CustomerInformation();

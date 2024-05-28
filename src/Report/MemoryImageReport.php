@@ -44,7 +44,7 @@ class MemoryImageReport extends AbstractReport
     {
         $service = ImageService::fromTrueColor(200, 150);
         if (!$service instanceof ImageService) {
-            throw new PdfException('Unable to create image.');
+            throw PdfException::instance('Unable to create image.');
         }
 
         $service->fill((int) $service->allocateWhite());
@@ -59,12 +59,12 @@ class MemoryImageReport extends AbstractReport
     private function addImageMemory(): void
     {
         if (!\file_exists($this->image)) {
-            throw new PdfException('Unable to get image.');
+            throw PdfException::instance('Unable to get image.');
         }
 
         $data = \file_get_contents($this->image);
         if (!\is_string($data)) {
-            throw new PdfException('Unable to get image content.');
+            throw PdfException::instance('Unable to get image content.');
         }
 
         $this->imageMemory($data, 10, 20, 30);

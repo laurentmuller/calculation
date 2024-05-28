@@ -32,8 +32,7 @@ class TaskServiceTest extends TestCase
     use IdTrait;
 
     /**
-     * @throws Exception
-     * @throws \ReflectionException
+     * @throws Exception|\ReflectionException
      */
     public function testComputeQueryEmpty(): void
     {
@@ -68,8 +67,7 @@ class TaskServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     * @throws \ReflectionException
+     * @throws Exception|\ReflectionException
      */
     public function testComputeQueryOneItem(): void
     {
@@ -88,8 +86,7 @@ class TaskServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     * @throws \ReflectionException
+     * @throws Exception|\ReflectionException
      */
     public function testGetSortedTasks(): void
     {

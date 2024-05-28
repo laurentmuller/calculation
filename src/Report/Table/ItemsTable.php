@@ -27,7 +27,7 @@ use fpdf\PdfDocument;
 /**
  * Table to render the groups, categories and items of a calculation.
  */
-class TableItems extends ReportGroupTable
+class ItemsTable extends ReportGroupTable
 {
     /**
      * The categories and items indent.
@@ -175,7 +175,7 @@ class TableItems extends ReportGroupTable
     private function createListener(): PdfGroupListenerInterface
     {
         return new class($this, $this->getGroupStyle()) implements PdfGroupListenerInterface {
-            public function __construct(private readonly TableItems $parent, private readonly PdfStyle $style)
+            public function __construct(private readonly ItemsTable $parent, private readonly PdfStyle $style)
             {
             }
 

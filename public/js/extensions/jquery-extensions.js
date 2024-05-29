@@ -135,7 +135,23 @@
          * Hide the drop-down menus.
          */
         hideDropDownMenus: function () {
+            // document.querySelectorAll('.show[data-bs-toggle="dropdown"], .dropdown-menu.show').forEach((element) => {
+            //     element.classList.remove('show');
+            // });
             $('.show[data-bs-toggle="dropdown"], .dropdown-menu.show').removeClass('show');
+        },
+
+        /**
+         * Hide the tooltips.
+         */
+        hideTooltips: function () {
+            // document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((element) => {
+            //     const tooltip = bootstrap.Tooltip.getInstance(element);
+            //     if (tooltip) {
+            //         tooltip.hide();
+            //     }
+            // });
+            $('.show[data-bs-toggle="tooltip"]').removeClass('show');
         }
     });
 

@@ -195,6 +195,7 @@
             if (e) {
                 e.preventDefault();
             }
+            $.hideTooltips();
             $.hideDropDownMenus();
             const that = this;
             that.$element.add(that.$pageContent).toggleClass('sidebar-show').promise().done(() => {
@@ -349,20 +350,31 @@
     // -----------------------------------
     Sidebar.DEFAULTS = {
         // the sidebar key used to save state
-        menuShow: 'MENU_SIDEBAR_SHOW', // the menus prefix used to save state
-        menuPrefix: 'MENU_SIDEBAR_', // show sidebar button selector
-        showSidebarSelector: '.show-sidebar', // hide sidebar button selector
-        hideSidebarSelector: '.hide-sidebar', // horizontal navigation bar selector
-        horizontalNavbarSelector: '.navbar-horizontal', // page content selector
-        pageContentSelector: '.page-content', // the timeout to display/hide sidebar automatically (0 = disabled)
-        timeout: 1500, // the duration to show / hide menus
-        duration: 350, // the minimum client width to hide sidebar
-        minWidth: 1200, // texts
+        menuShow: 'MENU_SIDEBAR_SHOW',
+        // the menu prefix used to save state
+        menuPrefix: 'MENU_SIDEBAR_',
+        // show sidebar button selector
+        showSidebarSelector: '.show-sidebar',
+        // hide sidebar button selector
+        hideSidebarSelector: '.hide-sidebar',
+        // horizontal navigation bar selector
+        horizontalNavbarSelector: '.navbar-horizontal',
+        // page content selector
+        pageContentSelector: '.page-content',
+        // the timeout to display/hide sidebar automatically (0 = disabled)
+        timeout: 1500,
+        // the duration to show / hide menus
+        duration: 350,
+        // the minimum client width to hide sidebar
+        minWidth: 1200,
+        // texts
         showSidebar: 'Show sidebar',
         hideSidebar: 'Hide sidebar',
         showMenu: 'Expand menu',
-        hideMenu: 'Collapse menu', // the path name to search in query parameters to highlight URL
-        pathname: null, // collapse siblings menus
+        hideMenu: 'Collapse menu',
+        // the path name to search in query parameters to highlight URL
+        pathname: null,
+        // collapse sibling's menus
         collapseSiblingMenus: true
     };
 

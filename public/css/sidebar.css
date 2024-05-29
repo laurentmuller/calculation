@@ -151,3 +151,13 @@ html[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
     color: var(--bs-navbar-hover-color);
     background: none;
 }
+
+/**
+ * Show / Hide buttons
+ */
+@media (max-width: 1200px) {
+    .show-sidebar,
+    .hide-sidebar {
+        display: none;
+    }
+}

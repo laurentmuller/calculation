@@ -16,34 +16,19 @@ use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Events\PdfLabelTextEvent;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\Traits\PdfDashLineTrait;
-use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use fpdf\PdfException;
 use fpdf\PdfFontName;
-use fpdf\PdfPageSize;
 use fpdf\PdfTextAlignment;
-use fpdf\PdfUnit;
 
 /**
  * PDF document to output labels.
- *
- * @psalm-type LabelType = array{
- *     pageSize: string,
- *     unit: 'in'|'mm',
- *     marginLeft: float,
- *     marginTop: float,
- *     cols: positive-int,
- *     rows: positive-int,
- *     spaceX: float,
- *     spaceY: float,
- *     width: float,
- *     height: float,
- *     fontSize: int<6, 15>}
  **/
 class PdfLabelDocument extends PdfDocument
 {
     use PdfDashLineTrait;
 
+    // the font mapping
     private const FONT_CONVERSION = [
         6 => 2.0,
         7 => 2.5,
@@ -57,76 +42,46 @@ class PdfLabelDocument extends PdfDocument
         15 => 10.0,
     ];
 
-    private const UNIT_CONVERSION = [
-        'in' => 39.37008,
-        'mm' => 1000.0,
-    ];
+    // the padding inside labels
+    private const PADDING = 3.0;
 
-    // the number of horizontal labels
-    private int $cols = 0;
     // the current column (0 based index)
     private int $currentCol;
     // the current row (0 based index)
     private int $currentRow;
+    // the Avery format
+    private PdfAveryFormat $format;
     // the draw border around labels
     private bool $labelBorder = false;
-    // the height of label
-    private float $labelHeight = 0;
     // the label listener
     private ?PdfLabelTextListenerInterface $labelTextListener = null;
-    // the width of label
-    private float $labelWidth = 0;
     // the line height
-    private float $lineHeight = 0;
-    // the left margin of labels
-    private float $marginLeft = 0;
-    // the top margin of labels
-    private float $marginTop = 0;
-    // the padding inside labels
-    private float $padding = 0;
-    // the number of vertical labels
-    private int $rows = 0;
-    // the horizontal space between 2 labels
-    private float $spaceX = 0;
-    // the vertical space between 2 labels
-    private float $spaceY = 0;
-    // the document unit
-    private string $unit;
+    private float $lineHeight;
 
     /**
-     * @param array|string $format     a label type or one of the predefined format names
-     * @param PdfUnit      $unit       the user unit
-     * @param int          $startIndex the zero-based index of the first label
+     * @param PdfAveryFormat|string $format     an Avery format or one of the predefined format names
+     * @param int                   $startIndex the zero-based index of the first label
      *
-     * @psalm-param LabelType|string $format
      * @psalm-param non-negative-int $startIndex
      *
-     * @throws PdfException if the format name is unknown, or if the format array contains invalid value
+     * @throws PdfException if the format name is unknown
      */
-    public function __construct(array|string $format, PdfUnit $unit = PdfUnit::MILLIMETER, int $startIndex = 0)
+    public function __construct(PdfAveryFormat|string $format, int $startIndex = 0)
     {
         if (\is_string($format)) {
             $format = $this->getAveryFormat($format);
         }
-        parent::__construct(unit: $unit, size: $this->getDocumentSize($format));
+        parent::__construct(size: $format->pageSize);
 
-        $this->unit = $unit->value;
-        $this->setFormat($format);
-        $this->setMargins(0, 0);
-        $this->setFont(PdfFontName::ARIAL);
-        $this->setAutoPageBreak(false);
-        $this->setCellMargin(0);
+        $this->format = $format->updateLayout();
+        $this->updateFontSize($format->fontSize)
+            ->setFont(PdfFontName::ARIAL)
+            ->setAutoPageBreak(false)
+            ->setMargins(0, 0)
+            ->setCellMargin(0);
 
-        $col = 1 + $startIndex % $this->cols;
-        if ($col > $this->cols) {
-            throw PdfException::format('Invalid starting column: %d. Maximum allowed: %d.', $col, $this->cols);
-        }
-        $row = 1 + \intdiv($startIndex, $this->cols);
-        if ($row > $this->rows) {
-            throw PdfException::format('Invalid starting row: %d. Maximum allowed: %d.', $row, $this->rows);
-        }
-        $this->currentCol = $col - 1;
-        $this->currentRow = $row - 1;
+        $this->currentCol = $startIndex % $this->format->cols;
+        $this->currentRow = \intdiv($startIndex % $this->format->size(), $this->format->cols);
     }
 
     /**
@@ -136,13 +91,13 @@ class PdfLabelDocument extends PdfDocument
     {
         if (0 === $this->page) {
             $this->addPage();
-        } elseif ($this->currentRow === $this->rows) {
+        } elseif ($this->currentRow === $this->format->rows) {
             $this->currentRow = 0;
             $this->addPage();
         }
         $this->outputLabelText($text);
         $this->outputLabelBorder();
-        if (++$this->currentCol === $this->cols) {
+        if (++$this->currentCol === $this->format->cols) {
             $this->currentCol = 0;
             ++$this->currentRow;
         }
@@ -153,14 +108,14 @@ class PdfLabelDocument extends PdfDocument
     /**
      * This implementation skip output footer.
      */
-    public function footer(): void
+    final public function footer(): void
     {
     }
 
     /**
      * This implementation skip output header.
      */
-    public function header(): void
+    final public function header(): void
     {
     }
 
@@ -191,77 +146,33 @@ class PdfLabelDocument extends PdfDocument
     }
 
     /**
-     * @psalm-param 'in'|'mm' $src
-     */
-    private function convertUnit(float $value, string $src): float
-    {
-        if ($src !== $this->unit) {
-            return $value * self::UNIT_CONVERSION[$this->unit] / self::UNIT_CONVERSION[$src];
-        }
-
-        return $value;
-    }
-
-    /**
-     * @psalm-return LabelType
+     * Gets the Avery format for the given name.
      *
      * @throws PdfException if the format is invalid
      */
-    private function getAveryFormat(string $format): array
+    private function getAveryFormat(string $name): PdfAveryFormat
     {
-        $averyFormats = $this->getAveryFormats();
-        if (isset($averyFormats[$format])) {
-            return $averyFormats[$format];
+        $formats = $this->getAveryFormats();
+        if (isset($formats[$name])) {
+            return $formats[$name];
         }
 
-        $keys = \implode(', ', \array_keys($averyFormats));
-        throw PdfException::format('Unknown label format: %s. Allowed formats: %s.', $format, $keys);
+        $keys = \implode(', ', \array_keys($formats));
+        throw PdfException::format('Unknown label format: %s. Allowed formats: %s.', $name, $keys);
     }
 
     /**
-     * @psalm-return array<string, LabelType>
+     * @psalm-return array<string, PdfAveryFormat>
      */
     private function getAveryFormats(): array
     {
+        /** @psalm-var array<string, PdfAveryFormat>|null $formats */
         static $formats = null;
         if (null === $formats) {
-            $file = __DIR__ . '/../../resources/data/avery.json';
-            $formats = FileUtils::decodeJson($file);
+            $formats = PdfAveryFormat::loadFormats();
         }
 
-        /** @psalm-var array<string, LabelType> */
         return $formats;
-    }
-
-    /**
-     * @psalm-param LabelType $format
-     *
-     * @throws PdfException if the page size is invalid
-     */
-    private function getDocumentSize(array $format): PdfPageSize
-    {
-        $value = \strtoupper($format['pageSize']);
-        $size = PdfPageSize::tryFrom($value);
-        if ($size instanceof PdfPageSize) {
-            return $size;
-        }
-
-        throw PdfException::format('Invalid page size: %s.', $value);
-    }
-
-    /**
-     * Give the line height for a given font size.
-     *
-     * @throws PdfException if the font size is invalid
-     */
-    private function getHeightChars(int $pt): float
-    {
-        if (!isset(self::FONT_CONVERSION[$pt])) {
-            $sizes = \implode(', ', \array_keys(self::FONT_CONVERSION));
-            throw PdfException::format('Invalid font size: %d. Allowed sizes: %s', $pt, $sizes);
-        }
-
-        return $this->convertUnit(self::FONT_CONVERSION[$pt], 'mm');
     }
 
     /**
@@ -269,7 +180,7 @@ class PdfLabelDocument extends PdfDocument
      */
     private function getLabelX(): float
     {
-        return $this->getOffsetX() + $this->padding;
+        return $this->format->getOffsetX($this->currentCol) + self::PADDING;
     }
 
     /**
@@ -277,41 +188,29 @@ class PdfLabelDocument extends PdfDocument
      */
     private function getLabelY(string $text): float
     {
-        $height = (float) $this->getLinesCount($text, $this->labelWidth - 2.0 * $this->padding) * $this->lineHeight;
+        $y = $this->format->getOffsetY($this->currentRow);
+        $height = (float) $this->getLinesCount($text, $this->format->width - 2.0 * self::PADDING) * $this->lineHeight;
 
-        return $this->getOffsetY() + ($this->labelHeight - $height) / 2.0;
+        return $y + ($this->format->height - $height) / 2.0;
     }
 
     /**
-     * Gets the horizontal offset.
-     */
-    private function getOffsetX(): float
-    {
-        return $this->marginLeft + (float) $this->currentCol * ($this->labelWidth + $this->spaceX);
-    }
-
-    /**
-     * Gets the vertical offset.
-     */
-    private function getOffsetY(): float
-    {
-        return $this->marginTop + (float) $this->currentRow * ($this->labelHeight + $this->spaceY);
-    }
-
-    /**
-     * Output border if applicable.
+     * Output the label's border if applicable.
      */
     private function outputLabelBorder(): void
     {
         if (!$this->labelBorder) {
             return;
         }
+
         PdfDrawColor::cellBorder()->apply($this);
-        $this->dashedRect($this->getOffsetX(), $this->getOffsetY(), $this->labelWidth, $this->labelHeight);
+        $x = $this->format->getOffsetX($this->currentCol);
+        $y = $this->format->getOffsetY($this->currentRow);
+        $this->dashedRect($x, $y, $this->format->width, $this->format->height);
     }
 
     /**
-     * Output label's text.
+     * Output the label's text if applicable.
      */
     private function outputLabelText(string $text): void
     {
@@ -322,7 +221,7 @@ class PdfLabelDocument extends PdfDocument
         $x = $this->getLabelX();
         $y = $this->getLabelY($text);
         $height = $this->lineHeight;
-        $width = $this->labelWidth - $this->padding;
+        $width = $this->format->width - self::PADDING;
 
         // listener?
         if ($this->labelTextListener instanceof PdfLabelTextListenerInterface) {
@@ -346,26 +245,20 @@ class PdfLabelDocument extends PdfDocument
     }
 
     /**
-     * @psalm-param LabelType $format
+     * Update font size and line height.
+     *
+     * @throws PdfException if the given size in points is not set
      */
-    private function setFormat(array $format): void
+    private function updateFontSize(int $pt): static
     {
-        $unit = $format['unit'];
-        $this->cols = $format['cols'];
-        $this->rows = $format['rows'];
-        $this->marginLeft = $this->convertUnit($format['marginLeft'], $unit);
-        $this->marginTop = $this->convertUnit($format['marginTop'], $unit);
-        $this->spaceX = $this->convertUnit($format['spaceX'], $unit);
-        $this->spaceY = $this->convertUnit($format['spaceY'], $unit);
-        $this->labelWidth = $this->convertUnit($format['width'], $unit);
-        $this->labelHeight = $this->convertUnit($format['height'], $unit);
-        $this->padding = $this->convertUnit(3, 'mm');
-        $this->updateFontSize($format['fontSize']);
-    }
+        if (!isset(self::FONT_CONVERSION[$pt])) {
+            $sizes = \implode(', ', \array_keys(self::FONT_CONVERSION));
+            throw PdfException::format('Invalid font size: %d. Allowed sizes: [%s]', $pt, $sizes);
+        }
 
-    private function updateFontSize(int $pt): void
-    {
-        $this->lineHeight = $this->getHeightChars($pt);
+        $this->lineHeight = self::FONT_CONVERSION[$pt];
         $this->setFontSizeInPoint($pt);
+
+        return $this;
     }
 }

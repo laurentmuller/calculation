@@ -185,7 +185,7 @@ class TestController extends AbstractController
         /** @psalm-var \App\Entity\Customer[] $customers */
         $customers = $repository->createDefaultQueryBuilder()
             ->orderBy($sortField, SortModeInterface::SORT_ASC)
-            ->setMaxResults(40)
+            ->setMaxResults(29)
             ->getQuery()
             ->getResult();
 
@@ -200,13 +200,6 @@ class TestController extends AbstractController
             $text = \implode(StringUtils::NEW_LINE, $values);
             $report->addLabel($text);
         }
-
-        $report->addPage();
-        $report->setLineWidth(0.25);
-        $report->dashedRect(55, 30, 100, 50);
-        $report->setDashPattern(5, 3);
-        $report->rect(55, 100, 100, 50);
-        $report->setDashPattern();
 
         return $this->renderPdfDocument($report);
     }

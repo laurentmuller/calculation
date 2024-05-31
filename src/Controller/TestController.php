@@ -46,6 +46,7 @@ use App\Response\WordResponse;
 use App\Service\AbstractHttpClientService;
 use App\Service\CaptchaImageService;
 use App\Service\MailerService;
+use App\Service\PdfLabelService;
 use App\Service\RecaptchaResponseService;
 use App\Service\RecaptchaService;
 use App\Service\SearchService;
@@ -156,7 +157,7 @@ class TestController extends AbstractController
      * Export a report label.
      */
     #[Get(path: '/label', name: '_label')]
-    public function exportLabel(CustomerRepository $repository): PdfResponse
+    public function exportLabel(CustomerRepository $repository, PdfLabelService $service): PdfResponse
     {
         $listener = new class() implements PdfLabelTextListenerInterface {
             public function drawLabelText(PdfLabelTextEvent $event): bool
@@ -175,11 +176,11 @@ class TestController extends AbstractController
             }
         };
 
-        $format = '5161';
-        $report = new PdfLabelDocument($format);
-        $report->setTitle("Etiquette - Format Avery $format");
-        $report->setLabelTextListener($listener);
-        $report->setLabelBorder(true);
+        $label = $service->get('5161');
+        $report = new PdfLabelDocument($label);
+        $report->setLabelBorder(true)
+            ->setLabelTextListener($listener)
+            ->setTitle(\sprintf('Etiquette - Avery %s', $label->name));
 
         $sortField = $repository->getSortField(CustomerRepository::NAME_COMPANY_FIELD);
         /** @psalm-var \App\Entity\Customer[] $customers */

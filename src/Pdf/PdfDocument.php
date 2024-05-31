@@ -15,7 +15,6 @@ namespace App\Pdf;
 use App\Pdf\Traits\PdfBookmarkTrait;
 use App\Traits\MathTrait;
 use App\Utils\StringUtils;
-use fpdf\PdfDocument as BaseDocument;
 use fpdf\PdfFontName;
 use fpdf\PdfLayout;
 use fpdf\PdfOrientation;
@@ -27,7 +26,7 @@ use fpdf\PdfZoom;
 /**
  * PDF document with default header, footer, bookmarks and page index capabilities.
  */
-class PdfDocument extends BaseDocument
+class PdfDocument extends \fpdf\PdfDocument
 {
     use MathTrait;
     use PdfBookmarkTrait;

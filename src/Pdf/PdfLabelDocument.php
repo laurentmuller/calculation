@@ -19,6 +19,7 @@ use App\Pdf\Traits\PdfDashLineTrait;
 use App\Utils\StringUtils;
 use fpdf\PdfException;
 use fpdf\PdfFontName;
+use fpdf\PdfScaling;
 use fpdf\PdfTextAlignment;
 
 /**
@@ -50,7 +51,7 @@ class PdfLabelDocument extends PdfDocument
     // the current row (0 based index)
     private int $currentRow;
     // the Avery format
-    private PdfAveryFormat $format;
+    private PdfLabel $label;
     // the draw border around labels
     private bool $labelBorder = false;
     // the label listener
@@ -59,29 +60,29 @@ class PdfLabelDocument extends PdfDocument
     private float $lineHeight;
 
     /**
-     * @param PdfAveryFormat|string $format     an Avery format or one of the predefined format names
-     * @param int                   $startIndex the zero-based index of the first label
+     * @param PdfLabel $label      the label to output
+     * @param int      $startIndex the zero-based index of the first label
+     *
+     * @throws PdfException if the label's font size is invalid
      *
      * @psalm-param non-negative-int $startIndex
-     *
-     * @throws PdfException if the format name is unknown
      */
-    public function __construct(PdfAveryFormat|string $format, int $startIndex = 0)
+    public function __construct(PdfLabel $label, int $startIndex = 0)
     {
-        if (\is_string($format)) {
-            $format = $this->getAveryFormat($format);
-        }
-        parent::__construct(size: $format->pageSize);
+        parent::__construct(size: $label->pageSize);
 
-        $this->format = $format->updateLayout();
-        $this->updateFontSize($format->fontSize)
+        $this->getViewerPreferences()
+            ->setScaling(PdfScaling::NONE);
+
+        $this->label = $label->scaleToMillimeters();
+        $this->updateFontSize($label->fontSize)
             ->setFont(PdfFontName::ARIAL)
             ->setAutoPageBreak(false)
             ->setMargins(0, 0)
             ->setCellMargin(0);
 
-        $this->currentCol = $startIndex % $this->format->cols;
-        $this->currentRow = \intdiv($startIndex % $this->format->size(), $this->format->cols);
+        $this->currentCol = $startIndex % $this->label->cols;
+        $this->currentRow = \intdiv($startIndex % $this->label->size(), $this->label->cols);
     }
 
     /**
@@ -91,13 +92,13 @@ class PdfLabelDocument extends PdfDocument
     {
         if (0 === $this->page) {
             $this->addPage();
-        } elseif ($this->currentRow === $this->format->rows) {
+        } elseif ($this->currentRow === $this->label->rows) {
             $this->currentRow = 0;
             $this->addPage();
         }
         $this->outputLabelText($text);
         $this->outputLabelBorder();
-        if (++$this->currentCol === $this->format->cols) {
+        if (++$this->currentCol === $this->label->cols) {
             $this->currentCol = 0;
             ++$this->currentRow;
         }
@@ -139,48 +140,12 @@ class PdfLabelDocument extends PdfDocument
         return $this;
     }
 
-    protected function putCatalog(): void
-    {
-        parent::putCatalog();
-        $this->put('/ViewerPreferences <</PrintScaling /None>>');
-    }
-
-    /**
-     * Gets the Avery format for the given name.
-     *
-     * @throws PdfException if the format is invalid
-     */
-    private function getAveryFormat(string $name): PdfAveryFormat
-    {
-        $formats = $this->getAveryFormats();
-        if (isset($formats[$name])) {
-            return $formats[$name];
-        }
-
-        $keys = \implode(', ', \array_keys($formats));
-        throw PdfException::format('Unknown label format: %s. Allowed formats: %s.', $name, $keys);
-    }
-
-    /**
-     * @psalm-return array<string, PdfAveryFormat>
-     */
-    private function getAveryFormats(): array
-    {
-        /** @psalm-var array<string, PdfAveryFormat>|null $formats */
-        static $formats = null;
-        if (null === $formats) {
-            $formats = PdfAveryFormat::loadFormats();
-        }
-
-        return $formats;
-    }
-
     /**
      * Gets the horizontal label offset.
      */
     private function getLabelX(): float
     {
-        return $this->format->getOffsetX($this->currentCol) + self::PADDING;
+        return $this->label->getOffsetX($this->currentCol) + self::PADDING;
     }
 
     /**
@@ -188,10 +153,10 @@ class PdfLabelDocument extends PdfDocument
      */
     private function getLabelY(string $text): float
     {
-        $y = $this->format->getOffsetY($this->currentRow);
-        $height = (float) $this->getLinesCount($text, $this->format->width - 2.0 * self::PADDING) * $this->lineHeight;
+        $y = $this->label->getOffsetY($this->currentRow);
+        $height = (float) $this->getLinesCount($text, $this->label->width - 2.0 * self::PADDING) * $this->lineHeight;
 
-        return $y + ($this->format->height - $height) / 2.0;
+        return $y + ($this->label->height - $height) / 2.0;
     }
 
     /**
@@ -204,9 +169,9 @@ class PdfLabelDocument extends PdfDocument
         }
 
         PdfDrawColor::cellBorder()->apply($this);
-        $x = $this->format->getOffsetX($this->currentCol);
-        $y = $this->format->getOffsetY($this->currentRow);
-        $this->dashedRect($x, $y, $this->format->width, $this->format->height);
+        $x = $this->label->getOffsetX($this->currentCol);
+        $y = $this->label->getOffsetY($this->currentRow);
+        $this->dashedRect($x, $y, $this->label->width, $this->label->height);
     }
 
     /**
@@ -221,7 +186,7 @@ class PdfLabelDocument extends PdfDocument
         $x = $this->getLabelX();
         $y = $this->getLabelY($text);
         $height = $this->lineHeight;
-        $width = $this->format->width - self::PADDING;
+        $width = $this->label->width - self::PADDING;
 
         // listener?
         if ($this->labelTextListener instanceof PdfLabelTextListenerInterface) {

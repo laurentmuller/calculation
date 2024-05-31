@@ -160,10 +160,8 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
 
     private function getRepository(): UserPropertyRepository
     {
-        /** @psalm-var UserPropertyRepository $repository */
-        $repository = $this->getManager()->getRepository(UserProperty::class);
-
-        return $repository;
+        /** @psalm-var UserPropertyRepository  */
+        return $this->getManager()->getRepository(UserProperty::class);
     }
 
     private function getUser(): ?User

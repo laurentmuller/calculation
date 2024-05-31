@@ -44,7 +44,6 @@ class ThemeController extends AbstractController
     #[Get(path: '/save', name: '_save')]
     public function saveTheme(Request $request, ThemeService $service): JsonResponse
     {
-        /** @psalm-var Theme $theme */
         $theme = $request->query->getEnum('theme', Theme::class, $service->getTheme($request));
 
         $response = $this->jsonTrue(

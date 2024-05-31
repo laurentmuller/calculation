@@ -91,9 +91,11 @@ abstract class AbstractHttpClientService
     {
         $locale = \Locale::getDefault();
         if ($languageOnly) {
+            /** @phpstan-var string */
             return \Locale::getPrimaryLanguage($locale);
         }
 
+        /** @phpstan-var string */
         return \Locale::canonicalize($locale);
     }
 

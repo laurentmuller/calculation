@@ -143,6 +143,10 @@ td.user {
     content: '\f11c';
 }
 
+.icon-channel.deprecation:before {
+    content: '\f188';
+}
+
 /* PHP array */
 pre.highlight-php {
     background-color: initial !important;

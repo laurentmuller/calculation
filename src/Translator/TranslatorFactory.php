@@ -14,7 +14,7 @@ namespace App\Translator;
 
 use App\Traits\SessionAwareTrait;
 use App\Utils\StringUtils;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -43,7 +43,7 @@ class TranslatorFactory implements ServiceSubscriberInterface
      * @param iterable<TranslatorServiceInterface> $translators
      */
     public function __construct(
-        #[TaggedIterator(TranslatorServiceInterface::class)]
+        #[AutowireIterator(TranslatorServiceInterface::class)]
         private readonly iterable $translators
     ) {
     }

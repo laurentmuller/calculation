@@ -12,10 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\ComparableInterface;
-use App\Interfaces\TimestampableInterface;
 use App\Repository\CategoryRepository;
-use App\Traits\TimestampableTrait;
 use App\Utils\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -25,32 +22,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a category of products and tasks.
- *
- * @implements ComparableInterface<Category>
  */
 #[ORM\Table(name: 'sy_Category')]
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_category_code', columns: ['code'])]
 #[UniqueEntity(fields: 'code', message: 'category.unique_code')]
-class Category extends AbstractEntity implements ComparableInterface, TimestampableInterface
+class Category extends AbstractCodeEntity
 {
-    use TimestampableTrait;
-
-    /**
-     * The unique code.
-     */
-    #[Assert\NotBlank]
-    #[Assert\Length(max: self::MAX_CODE_LENGTH)]
-    #[ORM\Column(length: self::MAX_CODE_LENGTH, unique: true)]
-    private ?string $code = null;
-
-    /**
-     * The description.
-     */
-    #[Assert\Length(max: self::MAX_STRING_LENGTH)]
-    #[ORM\Column(nullable: true)]
-    private ?string $description = null;
-
     /**
      * The parent group.
      */
@@ -122,11 +100,6 @@ class Category extends AbstractEntity implements ComparableInterface, Timestampa
         return $copy;
     }
 
-    public function compare(ComparableInterface $other): int
-    {
-        return \strnatcasecmp((string) $this->getCode(), (string) $other->getCode());
-    }
-
     /**
      * Gets the number of products and tasks.
      */
@@ -152,37 +125,16 @@ class Category extends AbstractEntity implements ComparableInterface, Timestampa
     }
 
     /**
-     * Get code.
-     */
-    public function getCode(): ?string
-    {
-        return $this->code;
-    }
-
-    /**
-     * Get description.
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function getDisplay(): string
-    {
-        return (string) $this->getCode();
-    }
-
-    /**
-     * Gets the code and the group code.
+     * Gets this code and the group code (if any).
      *
      * @psalm-api
      */
     public function getFullCode(): ?string
     {
         $code = $this->code;
-        $parent = $this->getGroupCode();
-        if (null !== $parent) {
-            return \sprintf('%s - %s', (string) $code, $parent);
+        $groupCode = $this->getGroupCode();
+        if (null !== $groupCode) {
+            return \sprintf('%s - %s', (string) $code, $groupCode);
         }
 
         return $code;
@@ -274,26 +226,6 @@ class Category extends AbstractEntity implements ComparableInterface, Timestampa
         if ($this->tasks->removeElement($task) && $task->getCategory() === $this) {
             $task->setCategory(null);
         }
-
-        return $this;
-    }
-
-    /**
-     * Set code.
-     */
-    public function setCode(?string $code): self
-    {
-        $this->code = $this->trim($code);
-
-        return $this;
-    }
-
-    /**
-     * Set description.
-     */
-    public function setDescription(?string $description): self
-    {
-        $this->description = $this->trim($description);
 
         return $this;
     }

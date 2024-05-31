@@ -12,12 +12,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\ComparableInterface;
 use App\Interfaces\SortModeInterface;
-use App\Interfaces\TimestampableInterface;
 use App\Repository\GroupRepository;
-use App\Traits\CollectionTrait;
-use App\Traits\TimestampableTrait;
 use App\Traits\ValidateMarginsTrait;
 use App\Utils\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -28,17 +24,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a group of categories.
- *
- * @implements ComparableInterface<Group>
  */
 #[ORM\Table(name: 'sy_Group')]
 #[ORM\Entity(repositoryClass: GroupRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_group_code', columns: ['code'])]
 #[UniqueEntity(fields: 'code', message: 'group.unique_code')]
-class Group extends AbstractEntity implements ComparableInterface, TimestampableInterface
+class Group extends AbstractCodeEntity
 {
-    use CollectionTrait;
-    use TimestampableTrait;
     use ValidateMarginsTrait;
 
     /**
@@ -55,21 +47,6 @@ class Group extends AbstractEntity implements ComparableInterface, Timestampable
     )]
     #[ORM\OrderBy(['code' => SortModeInterface::SORT_ASC])]
     private Collection $categories;
-
-    /**
-     * The unique code.
-     */
-    #[Assert\NotBlank]
-    #[Assert\Length(max: self::MAX_CODE_LENGTH)]
-    #[ORM\Column(length: self::MAX_CODE_LENGTH, unique: true)]
-    private ?string $code = null;
-
-    /**
-     * The description.
-     */
-    #[Assert\Length(max: self::MAX_STRING_LENGTH)]
-    #[ORM\Column(nullable: true)]
-    private ?string $description = null;
 
     /**
      * The children margins.
@@ -142,11 +119,6 @@ class Group extends AbstractEntity implements ComparableInterface, Timestampable
         }
 
         return $copy;
-    }
-
-    public function compare(ComparableInterface $other): int
-    {
-        return \strnatcasecmp((string) $this->getCode(), (string) $other->getCode());
     }
 
     /**
@@ -243,27 +215,6 @@ class Group extends AbstractEntity implements ComparableInterface, Timestampable
     }
 
     /**
-     * Get code.
-     */
-    public function getCode(): ?string
-    {
-        return $this->code;
-    }
-
-    /**
-     * Get description.
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function getDisplay(): string
-    {
-        return (string) $this->getCode();
-    }
-
-    /**
      * Get margins.
      *
      * @return Collection<int, GroupMargin>
@@ -345,26 +296,6 @@ class Group extends AbstractEntity implements ComparableInterface, Timestampable
         if ($this->margins->removeElement($margin) && $margin->getParentEntity() === $this) {
             $margin->setGroup(null);
         }
-
-        return $this;
-    }
-
-    /**
-     * Set code.
-     */
-    public function setCode(string $code): self
-    {
-        $this->code = $code;
-
-        return $this;
-    }
-
-    /**
-     * Set description.
-     */
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
 
         return $this;
     }

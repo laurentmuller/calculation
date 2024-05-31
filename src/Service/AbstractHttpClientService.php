@@ -91,10 +91,12 @@ abstract class AbstractHttpClientService
     {
         $locale = \Locale::getDefault();
         if ($languageOnly) {
-            return (string) \Locale::getPrimaryLanguage($locale);
+            /** @phpstan-var string */
+            return \Locale::getPrimaryLanguage($locale);
         }
 
-        return (string) \Locale::canonicalize($locale);
+        /** @phpstan-var string */
+        return \Locale::canonicalize($locale);
     }
 
     abstract public function getCacheTimeout(): int;

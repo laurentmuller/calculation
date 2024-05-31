@@ -54,7 +54,8 @@ class CountryFlagService
      */
     public static function getDefaultCode(): string
     {
-        return (string) \Locale::getRegion(\Locale::getDefault());
+        /** @phpstan-var string */
+        return \Locale::getRegion(\Locale::getDefault());
     }
 
     /**

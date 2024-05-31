@@ -44,7 +44,7 @@ readonly class PdfLabelService
     public function all(?string $file = null): array
     {
         try {
-            return $this->cache->get('service.labels', fn () => $this->loadFile($file));
+            return $this->cache->get('service.labels', fn (): array => $this->loadFile($file));
         } catch (InvalidArgumentException $e) {
             throw PdfException::instance('Unable to load labels.', $e);
         }

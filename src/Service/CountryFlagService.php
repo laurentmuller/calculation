@@ -54,7 +54,7 @@ class CountryFlagService
      */
     public static function getDefaultCode(): string
     {
-        return \Locale::getRegion(\Locale::getDefault());
+        return (string) \Locale::getRegion(\Locale::getDefault());
     }
 
     /**

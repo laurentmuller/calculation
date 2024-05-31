@@ -41,7 +41,7 @@ trait CookieTrait
         \BackedEnum $default,
         string $prefix = ''
     ): \BackedEnum {
-        return $request->cookies->getEnum($this->getCookieName($key, $prefix), $default::class, $default) ?? $default;
+        return $request->cookies->getEnum($this->getCookieName($key, $prefix), $default::class, $default);
     }
 
     protected function getCookieFloat(

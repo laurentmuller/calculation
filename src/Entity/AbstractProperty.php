@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 abstract class AbstractProperty extends AbstractEntity
 {
     /**
-     * The value used for FALSE or 0 value.
+     * The value used for FALSE value.
      */
     final public const FALSE_VALUE = 0;
 
@@ -39,7 +39,7 @@ abstract class AbstractProperty extends AbstractEntity
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
     #[ORM\Column(length: 50)]
-    private ?string $name;
+    protected ?string $name;
 
     /**
      * The property value.
@@ -47,7 +47,7 @@ abstract class AbstractProperty extends AbstractEntity
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
-    private ?string $value = null;
+    protected ?string $value = null;
 
     /**
      * @param ?string $name the optional name

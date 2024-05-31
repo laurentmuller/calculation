@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Interfaces\DisableListenerInterface;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 /**
  * Service to enable or disable listeners. Only listeners implementing
@@ -32,7 +32,7 @@ class SuspendEventListenerService
      * @param iterable<DisableListenerInterface> $listeners
      */
     public function __construct(
-        #[TaggedIterator(DisableListenerInterface::class)]
+        #[AutowireIterator(DisableListenerInterface::class)]
         private readonly iterable $listeners
     ) {
     }

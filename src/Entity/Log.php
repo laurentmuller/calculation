@@ -132,6 +132,7 @@ class Log extends AbstractEntity implements ComparableInterface
             'php' => 'fa-fw fa-solid fa-code',
             'request' => 'fa-fw fa-solid fa-code-pull-request',
             'security' => 'fa-fw fa-solid fa-key',
+            'deprecation' => 'fa-solid fa-bug',
             default => 'fa-fw fa-solid fa-file',
         };
     }

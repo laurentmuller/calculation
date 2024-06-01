@@ -32,7 +32,10 @@
 <container>
     <row>
         <columns>
-            <b>Remarque :</b> Ce lien expirera dans {{ expires_life_time }} (à {{ expires_date|locale_time('short') }}).
+            <b>Remarque :</b>
+            <ul>
+                <li>Ce lien expire dans {{ expires_life_time }} (à {{ expires_date|locale_time('short') }}).</li>
+            </ul>
         </columns>
     </row>
 </container>

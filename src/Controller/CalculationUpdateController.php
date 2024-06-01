@@ -31,14 +31,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to update the overall total of calculations.
  */
 #[AsController]
-#[Route(path: '/admin', name: 'admin')]
+#[Route(path: '/admin', name: 'admin_')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationUpdateController extends AbstractController
 {
     /**
      * @throws ORMException
      */
-    #[GetPost(path: '/update', name: '_update')]
+    #[GetPost(path: '/update', name: 'update')]
     public function update(Request $request, CalculationUpdateService $service): Response
     {
         $query = $service->createQuery();

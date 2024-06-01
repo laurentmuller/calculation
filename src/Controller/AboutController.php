@@ -29,11 +29,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller for application information.
  */
 #[AsController]
-#[Route(path: '/about', name: 'about')]
+#[Route(path: '/about', name: 'about_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class AboutController extends AbstractController
 {
-    #[Get(path: '', name: '')]
+    #[Get(path: '', name: 'index')]
     public function index(
         #[Autowire('%kernel.environment%')]
         string $app_env,
@@ -46,7 +46,7 @@ class AboutController extends AbstractController
         ]);
     }
 
-    #[Get(path: '/pdf', name: '_pdf')]
+    #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(#[Autowire('%app_name%')] string $appName): PdfResponse
     {
         $parameters = [
@@ -67,7 +67,7 @@ class AboutController extends AbstractController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \PhpOffice\PhpWord\Exception\Exception
      */
-    #[Get(path: '/word', name: '_word')]
+    #[Get(path: '/word', name: 'word')]
     public function word(#[Autowire('%app_name%')] string $appName): WordResponse
     {
         $parameters = [

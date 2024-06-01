@@ -28,11 +28,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to output symfony information.
  */
 #[AsController]
-#[Route(path: '/about/symfony', name: 'about_symfony')]
+#[Route(path: '/about/symfony', name: 'about_symfony_')]
 class AboutSymfonyController extends AbstractController
 {
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[Get(path: '/content', name: '_content')]
+    #[Get(path: '/content', name: 'content')]
     public function content(SymfonyInfoService $service): JsonResponse
     {
         $content = $this->renderView('about/symfony_content.html.twig', ['service' => $service]);
@@ -44,7 +44,7 @@ class AboutSymfonyController extends AbstractController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[Get(path: '/excel', name: '_excel')]
+    #[Get(path: '/excel', name: 'excel')]
     public function excel(SymfonyInfoService $service): SpreadsheetResponse
     {
         $doc = new SymfonyDocument($this, $service);
@@ -53,7 +53,7 @@ class AboutSymfonyController extends AbstractController
     }
 
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[Get(path: '/pdf', name: '_pdf')]
+    #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(SymfonyInfoService $service): PdfResponse
     {
         $doc = new SymfonyReport($this, $service);

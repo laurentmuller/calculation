@@ -30,13 +30,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to output PHP information.
  */
 #[AsController]
-#[Route(path: '/about/php', name: 'about_php')]
+#[Route(path: '/about/php', name: 'about_php_')]
 class AboutPhpController extends AbstractController
 {
     use ArrayTrait;
 
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[Get(path: '/content', name: '_content')]
+    #[Get(path: '/content', name: 'content')]
     public function content(Request $request, PhpInfoService $service): JsonResponse
     {
         $parameters = [
@@ -54,7 +54,7 @@ class AboutPhpController extends AbstractController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[Get(path: '/excel', name: '_excel')]
+    #[Get(path: '/excel', name: 'excel')]
     public function excel(PhpInfoService $service): SpreadsheetResponse
     {
         $doc = new PhpIniDocument($this, $service);
@@ -63,7 +63,7 @@ class AboutPhpController extends AbstractController
     }
 
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[Get(path: '/pdf', name: '_pdf')]
+    #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(PhpInfoService $service): PdfResponse
     {
         $report = new PhpIniReport($this, $service);

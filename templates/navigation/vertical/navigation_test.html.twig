@@ -60,7 +60,7 @@
                 </button>
                 <div class="collapse{{ collapse_class }}" id="{{ id }}">
                     <ul class="dropdown-menu d-block border-0 pt-0">
-                        {{ dropdownItem(path('schema'), 'schema.index.title', 'table') }}
+                        {{ dropdownItem(path('schema_index'), 'schema.index.title', 'table') }}
                         {{ dropdownItem(path('admin_dump_sql'), 'admin.dump_sql.title', 'database') }}
                         {{ dropdownItem(path('command_all'), 'command.list.title', 'code') }}
                         {{ dropdownItem(path('admin_import'), 'swisspost.title', 'download') }}
@@ -80,8 +80,8 @@
                 </button>
                 <div class="collapse{{ collapse_class }}" id="{{ id }}">
                     <ul class="dropdown-menu d-block border-0 pt-0">
-                        {{ dropdownItem(path('calculation_pivot'), 'pivot.title', 'table') }}
-                        {{ dropdownItem(path('timeline'), 'timeline.title', 'stream') }}
+                        {{ dropdownItem(path('calculation_pivot_index'), 'pivot.title', 'table') }}
+                        {{ dropdownItem(path('timeline_index'), 'timeline.title', 'stream') }}
                         {{ dropdownItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', {'%year%': 'now'|date('Y')}) }}
                     </ul>
                 </div>

@@ -31,6 +31,8 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Abstract controller for entities management.
@@ -73,7 +75,7 @@ abstract class AbstractEntityController extends AbstractController
      * Throws an exception unless the given attribute is granted against
      * the current authentication token and this entity class name.
      *
-     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
+     * @throws AccessDeniedException
      */
     protected function checkPermission(EntityPermission ...$permissions): void
     {
@@ -250,7 +252,7 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws AccessDeniedException
      */
     protected function renderPdfDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
     {
@@ -260,7 +262,7 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws AccessDeniedException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function renderSpreadsheetDocument(
@@ -274,8 +276,8 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws AccessDeniedException
+     * @throws NotFoundHttpException
      * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     protected function renderWordDocument(WordDocument $doc, bool $inline = true, string $name = ''): WordResponse
@@ -304,7 +306,7 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Show properties of an entity.
      *
-     * @throws \Symfony\Component\Finder\Exception\AccessDeniedException if the access is denied
+     * @throws AccessDeniedException
      *
      * @psalm-param TEntity $item
      */

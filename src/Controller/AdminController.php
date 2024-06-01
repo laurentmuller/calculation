@@ -41,7 +41,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller for administration tasks.
  */
 #[AsController]
-#[Route(path: '/admin', name: 'admin')]
+#[Route(path: '/admin', name: 'admin_')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class AdminController extends AbstractController
 {
@@ -52,7 +52,7 @@ class AdminController extends AbstractController
      *
      * @throws InvalidArgumentException
      */
-    #[GetPost(path: '/clear', name: '_clear')]
+    #[GetPost(path: '/clear', name: 'clear')]
     public function clearCache(
         Request $request,
         KernelInterface $kernel,
@@ -95,7 +95,7 @@ class AdminController extends AbstractController
      * @throws \Exception
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
-    #[Get(path: '/dump-sql', name: '_dump_sql')]
+    #[Get(path: '/dump-sql', name: 'dump_sql')]
     public function dumpSql(CommandService $service): Response
     {
         $result = $service->execute('doctrine:schema:update', ['--dump-sql' => true]);
@@ -116,7 +116,7 @@ class AdminController extends AbstractController
     /**
      * Edit the application parameters.
      */
-    #[GetPost(path: '/parameters', name: '_parameters')]
+    #[GetPost(path: '/parameters', name: 'parameters')]
     public function parameters(Request $request): Response
     {
         $application = $this->getApplicationService();
@@ -142,7 +142,7 @@ class AdminController extends AbstractController
      * Edit rights for the administrator role (@see RoleInterface::ROLE_ADMIN).
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
-    #[GetPost(path: '/rights/admin', name: '_rights_admin')]
+    #[GetPost(path: '/rights/admin', name: 'rights_admin')]
     public function rightsAdmin(Request $request, RoleBuilderService $service): Response
     {
         $application = $this->getApplicationService();
@@ -157,7 +157,7 @@ class AdminController extends AbstractController
     /**
      * Edit rights for the user role (@see RoleInterface::ROLE_USER).
      */
-    #[GetPost(path: '/rights/user', name: '_rights_user')]
+    #[GetPost(path: '/rights/user', name: 'rights_user')]
     public function rightsUser(Request $request, RoleBuilderService $service): Response
     {
         $application = $this->getApplicationService();

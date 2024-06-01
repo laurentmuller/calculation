@@ -44,7 +44,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @template-extends AbstractEntityController<Category, CategoryRepository>
  */
 #[AsController]
-#[Route(path: '/category', name: 'category')]
+#[Route(path: '/category', name: 'category_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CategoryController extends AbstractEntityController
 {
@@ -56,7 +56,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Add a category.
      */
-    #[GetPost(path: '/add', name: '_add')]
+    #[GetPost(path: '/add', name: 'add')]
     public function add(Request $request): Response
     {
         return $this->editEntity($request, new Category());
@@ -65,7 +65,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Clone (copy) a category.
      */
-    #[GetPost(path: '/clone/{id}', name: '_clone', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: '/clone/{id}', name: 'clone', requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, Category $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -83,7 +83,7 @@ class CategoryController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[GetDelete(path: '/delete/{id}', name: '_delete', requirements: self::ID_REQUIREMENT)]
+    #[GetDelete(path: '/delete/{id}', name: 'delete', requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, Category $item, TaskRepository $taskRepository, ProductRepository $productRepository, CalculationCategoryRepository $categoryRepository, LoggerInterface $logger): Response
     {
         $tasks = $taskRepository->countCategoryReferences($item);
@@ -120,7 +120,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Edit a category.
      */
-    #[GetPost(path: '/edit/{id}', name: '_edit', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: '/edit/{id}', name: 'edit', requirements: self::ID_REQUIREMENT)]
     public function edit(Request $request, Category $item): Response
     {
         return $this->editEntity($request, $item);
@@ -133,7 +133,7 @@ class CategoryController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: '_excel')]
+    #[Get(path: '/excel', name: 'excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('code');
@@ -149,7 +149,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: '_index')]
+    #[Get(path: '', name: 'index')]
     public function index(
         CategoryTable $table,
         LoggerInterface $logger,
@@ -165,7 +165,7 @@ class CategoryController extends AbstractEntityController
      * @throws NotFoundHttpException                if no category is found
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Get(path: '/pdf', name: '_pdf')]
+    #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('code');
@@ -181,7 +181,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Show properties of a category.
      */
-    #[Get(path: '/show/{id}', name: '_show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: '/show/{id}', name: 'show', requirements: self::ID_REQUIREMENT)]
     public function show(Category $item): Response
     {
         return $this->showEntity($item);

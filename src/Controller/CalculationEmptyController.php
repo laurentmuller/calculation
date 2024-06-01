@@ -36,7 +36,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @psalm-import-type CalculationItemType from CalculationRepository
  */
 #[AsController]
-#[Route(path: '/calculation/empty', name: 'calculation_empty')]
+#[Route(path: '/calculation/empty', name: 'calculation_empty_')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationEmptyController extends AbstractController
 {
@@ -48,7 +48,7 @@ class CalculationEmptyController extends AbstractController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Get(path: '/excel', name: '_excel')]
+    #[Get(path: '/excel', name: 'excel')]
     public function excel(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);
@@ -64,7 +64,7 @@ class CalculationEmptyController extends AbstractController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: '_index')]
+    #[Get(path: '', name: 'index')]
     public function index(
         CalculationEmptyTable $table,
         LoggerInterface $logger,
@@ -79,7 +79,7 @@ class CalculationEmptyController extends AbstractController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Get(path: '/pdf', name: '_pdf')]
+    #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);

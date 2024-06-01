@@ -29,7 +29,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @see https://mermaid.js.org/
  */
 #[AsController]
-#[Route(path: '/diagram', name: 'diagram')]
+#[Route(path: '/diagram', name: 'diagram_')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class DiagramController extends AbstractController
 {
@@ -44,7 +44,7 @@ class DiagramController extends AbstractController
      *
      * @throws InvalidArgumentException
      */
-    #[Get(path: '', name: '_index')]
+    #[Get(path: '', name: 'index')]
     public function index(#[MapQueryParameter] string $name = self::DEFAULT_DIAGRAM): Response
     {
         $file = $this->getFile($name);
@@ -63,7 +63,7 @@ class DiagramController extends AbstractController
      *
      * @throws InvalidArgumentException
      */
-    #[Get(path: '/load', name: '_load')]
+    #[Get(path: '/load', name: 'load')]
     public function load(#[MapQueryParameter] string $name = self::DEFAULT_DIAGRAM): JsonResponse
     {
         $file = $this->getFile($name);

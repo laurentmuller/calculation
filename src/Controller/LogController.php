@@ -40,7 +40,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * The log controller.
  */
 #[AsController]
-#[Route(path: '/log', name: 'log')]
+#[Route(path: '/log', name: 'log_')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class LogController extends AbstractController
 {
@@ -49,7 +49,7 @@ class LogController extends AbstractController
     /**
      * Delete the content of the log file (if any).
      */
-    #[GetPost(path: '/delete', name: '_delete')]
+    #[GetPost(path: '/delete', name: 'delete')]
     public function delete(Request $request, LogService $service, LoggerInterface $logger): Response
     {
         $file = $this->getLogFile($service)?->getFile();
@@ -82,7 +82,7 @@ class LogController extends AbstractController
     /**
      * Download the file.
      */
-    #[Get(path: '/download', name: '_download')]
+    #[Get(path: '/download', name: 'download')]
     public function download(LogService $service): Response
     {
         if (!$service->isFileValid()) {
@@ -97,7 +97,7 @@ class LogController extends AbstractController
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: '_excel')]
+    #[Get(path: '/excel', name: 'excel')]
     public function excel(LogService $service): Response
     {
         $logFile = $this->getLogFile($service);
@@ -112,7 +112,7 @@ class LogController extends AbstractController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: '_index')]
+    #[Get(path: '', name: 'index')]
     public function index(
         LogTable $table,
         LoggerInterface $logger,
@@ -125,7 +125,7 @@ class LogController extends AbstractController
     /**
      * Export to PDF the content of the log file.
      */
-    #[Get(path: '/pdf', name: '_pdf')]
+    #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(LogService $service): Response
     {
         $logFile = $this->getLogFile($service);
@@ -140,7 +140,7 @@ class LogController extends AbstractController
     /**
      * Clear the log file cache.
      */
-    #[Get(path: '/refresh', name: '_refresh')]
+    #[Get(path: '/refresh', name: 'refresh')]
     public function refresh(Request $request, LogService $service): Response
     {
         $service->clearCache();
@@ -152,7 +152,7 @@ class LogController extends AbstractController
     /**
      * Show properties of a log entry.
      */
-    #[Get(path: '/show/{id}', name: '_show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: '/show/{id}', name: 'show', requirements: self::ID_REQUIREMENT)]
     public function show(Request $request, int $id, LogService $service): Response
     {
         $item = $service->getLog($id);

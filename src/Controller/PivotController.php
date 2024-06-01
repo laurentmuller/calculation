@@ -31,7 +31,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to display the pivot table.
  */
 #[AsController]
-#[Route(path: '/pivot', name: 'calculation_pivot')]
+#[Route(path: '/pivot', name: 'calculation_pivot_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class PivotController extends AbstractController
 {
@@ -42,7 +42,7 @@ class PivotController extends AbstractController
     /**
      * Show the pivot data table.
      */
-    #[Get(path: '', name: '')]
+    #[Get(path: '', name: 'index')]
     public function index(): Response
     {
         return $this->render('calculation/calculation_pivot.html.twig', [
@@ -55,7 +55,7 @@ class PivotController extends AbstractController
     /**
      * Export pivot data to CSV.
      */
-    #[Get(path: '/csv', name: '_csv')]
+    #[Get(path: '/csv', name: 'csv')]
     public function toCsv(): CsvResponse
     {
         $dataset = $this->getDataset();
@@ -81,7 +81,7 @@ class PivotController extends AbstractController
     /**
      * Export pivot data to JSON.
      */
-    #[Get(path: '/json', name: '_json')]
+    #[Get(path: '/json', name: 'json')]
     public function toJson(): JsonResponse
     {
         $table = $this->getTable();

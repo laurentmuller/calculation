@@ -36,7 +36,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller for calculations where margins are below the minimum.
  */
 #[AsController]
-#[Route(path: '/calculation/below', name: 'calculation_below')]
+#[Route(path: '/calculation/below', name: 'calculation_below_')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationBelowController extends AbstractController
 {
@@ -49,7 +49,7 @@ class CalculationBelowController extends AbstractController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: '_excel')]
+    #[Get(path: '/excel', name: 'excel')]
     public function excel(CalculationRepository $repository): Response
     {
         $minMargin = $this->getMinMargin();
@@ -68,7 +68,7 @@ class CalculationBelowController extends AbstractController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: '_index')]
+    #[Get(path: '', name: 'index')]
     public function index(
         CalculationBelowTable $table,
         LoggerInterface $logger,
@@ -83,7 +83,7 @@ class CalculationBelowController extends AbstractController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Get(path: '/pdf', name: '_pdf')]
+    #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(CalculationRepository $repository): Response
     {
         $minMargin = $this->getMinMargin();

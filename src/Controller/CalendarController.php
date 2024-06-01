@@ -35,7 +35,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to display calendar.
  */
 #[AsController]
-#[Route(path: '/calendar', name: 'calendar')]
+#[Route(path: '/calendar', name: 'calendar_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CalendarController extends AbstractController
 {
@@ -51,7 +51,7 @@ class CalendarController extends AbstractController
      *
      * @throws \App\Calendar\CalendarException
      */
-    #[Get(path: '/month/{year}/{month}', name: '_month', requirements: ['year' => Requirement::POSITIVE_INT, 'month' => Requirement::POSITIVE_INT])]
+    #[Get(path: '/month/{year}/{month}', name: 'month', requirements: ['year' => Requirement::POSITIVE_INT, 'month' => Requirement::POSITIVE_INT])]
     public function month(?int $year = null, ?int $month = null): Response
     {
         $year = $this->validateYear($year);
@@ -87,7 +87,7 @@ class CalendarController extends AbstractController
      *
      * @throws \App\Calendar\CalendarException
      */
-    #[Get(path: '/week/{year}/{week}', name: '_week', requirements: ['year' => Requirement::POSITIVE_INT, 'week' => Requirement::POSITIVE_INT])]
+    #[Get(path: '/week/{year}/{week}', name: 'week', requirements: ['year' => Requirement::POSITIVE_INT, 'week' => Requirement::POSITIVE_INT])]
     public function week(?int $year = null, ?int $week = null): Response
     {
         $year = $this->validateYear($year);
@@ -128,7 +128,7 @@ class CalendarController extends AbstractController
      *
      * @throws \App\Calendar\CalendarException
      */
-    #[Get(path: '/year/{year}', name: '_year', requirements: ['year' => Requirement::POSITIVE_INT])]
+    #[Get(path: '/year/{year}', name: 'year', requirements: ['year' => Requirement::POSITIVE_INT])]
     public function year(?int $year = null): Response
     {
         $year = $this->validateYear($year);

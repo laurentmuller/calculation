@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Entity;
 
+use App\Entity\AbstractCodeEntity;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
@@ -19,6 +20,7 @@ use App\Entity\Task;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(Category::class)]
+#[CoversClass(AbstractCodeEntity::class)]
 class CategoryTest extends AbstractEntityValidatorTestCase
 {
     public function testClone(): void

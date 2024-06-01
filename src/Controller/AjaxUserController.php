@@ -29,11 +29,30 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller for user XMLHttpRequest (Ajax) calls.
  */
 #[AsController]
-#[Route(path: '/ajax/check/user', name: 'ajax_check_user')]
+#[Route(path: '/ajax/check/user', name: 'ajax_check_user_')]
 class AjaxUserController extends AbstractController
 {
     public function __construct(private readonly UserRepository $repository)
     {
+    }
+
+    /**
+     * Check if a username or user e-mail exist.
+     *
+     * @psalm-api
+     */
+    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
+    #[Get(path: '', name: 'both')]
+    public function checkBoth(#[MapQueryParameter] ?string $user = null): JsonResponse
+    {
+        $message = null;
+        if (!StringUtils::isString($user)) {
+            $message = 'username.blank';
+        } elseif (!$this->findByUsernameOrEmail($user) instanceof User) {
+            $message = 'username.not_found';
+        }
+
+        return $this->getJsonResponse($message);
     }
 
     /**
@@ -42,7 +61,7 @@ class AjaxUserController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/email', name: '_email')]
+    #[Get(path: '/email', name: 'email')]
     public function checkEmail(
         #[MapQueryParameter]
         ?string $email = null,
@@ -72,8 +91,8 @@ class AjaxUserController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/name', name: '_name')]
-    public function checkName(
+    #[Get(path: '/name', name: 'name')]
+    public function checkUsername(
         #[MapQueryParameter]
         ?string $username = null,
         #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
@@ -91,25 +110,6 @@ class AjaxUserController extends AbstractController
             if ($user instanceof User && $id !== $user->getId()) {
                 $message = 'username.already_used';
             }
-        }
-
-        return $this->getJsonResponse($message);
-    }
-
-    /**
-     * Check if a username or user e-mail exist.
-     *
-     * @psalm-api
-     */
-    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Get(path: '', name: '')]
-    public function checkUser(#[MapQueryParameter] ?string $user = null): JsonResponse
-    {
-        $message = null;
-        if (!StringUtils::isString($user)) {
-            $message = 'username.blank';
-        } elseif (!$this->findByUsernameOrEmail($user) instanceof User) {
-            $message = 'username.not_found';
         }
 
         return $this->getJsonResponse($message);

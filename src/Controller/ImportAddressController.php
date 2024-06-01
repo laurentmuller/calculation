@@ -26,7 +26,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to import Switzerland address.
  */
 #[AsController]
-#[Route(path: '/admin', name: 'admin')]
+#[Route(path: '/admin', name: 'admin_')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class ImportAddressController extends AbstractController
 {
@@ -35,7 +35,7 @@ class ImportAddressController extends AbstractController
      */
     private const DATA_URL = 'https://www.post.ch/fr/espace-clients/services-en-ligne/zopa/adress-und-geodaten/info';
 
-    #[GetPost(path: '/import', name: '_import')]
+    #[GetPost(path: '/import', name: 'import')]
     public function invoke(Request $request, SwissPostUpdater $updater): Response
     {
         $form = $updater->createForm();

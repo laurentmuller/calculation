@@ -26,7 +26,7 @@
     {% endif %}
     {{ sitemap() }}
     {% set caller = app.request.query.string('caller')|default %}
-    {{ link(path('about_licence', {caller: caller}), 'about.licence', 'btn btn-form btn-secondary') }}
+    {{ link(path('about_licence_index', {caller: caller}), 'about.licence', 'btn btn-form btn-secondary') }}
     {{ button_pdf('about_policy_pdf') }}
     {{ button_word('about_policy_word') }}
 {% endblock %}

@@ -23,10 +23,10 @@
     {% endif %}
     {{ dropdownItem(path('user_comment'), 'user.comment.title', 'envelope far') }}
     {% if is_env_dev %}
-        {{ dropdownItem(path('help'), 'help.title', 'question-circle') }}
+        {{ dropdownItem(path('help_index'), 'help.title', 'question-circle') }}
     {% endif %}
     {% if not status_bar %}
         {{ dropdownSeparator() }}
-        {{ dropdownItem(path('about'), 'index.menu_info', 'info-circle', {'%app_name%': app_name}) }}
+        {{ dropdownItem(path('about_index'), 'index.menu_info', 'info-circle', {'%app_name%': app_name}) }}
     {% endif %}
 </ul>

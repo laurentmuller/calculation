@@ -65,7 +65,7 @@
 
 {% macro home_button() -%}
     {% from 'macros/_icons.html.twig' import link %}
-    {{ link(path('help'), null, 'btn btn-outline-secondary', 'home', 'help.home_menu') }}
+    {{ link(path('help_index'), null, 'btn btn-outline-secondary', 'home', 'help.home_menu') }}
 {%- endmacro %}
 
 {% macro export_button() %}

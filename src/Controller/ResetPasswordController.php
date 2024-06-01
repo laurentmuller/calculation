@@ -62,10 +62,7 @@ class ResetPasswordController extends AbstractController
     #[Get(path: '/check-email', name: self::ROUTE_CHECK)]
     public function checkEmail(): Response
     {
-        $token = $this->getTokenObjectFromSession();
-        if (!$token instanceof ResetPasswordToken) {
-            $token = $this->service->generateFakeResetToken();
-        }
+        $token = $this->getTokenObjectFromSession() ?? $this->service->generateFakeResetToken();
 
         return $this->render('reset_password/check_email.html.twig', [
             'expires_date' => $token->getExpiresAt(),

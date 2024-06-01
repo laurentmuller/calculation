@@ -292,17 +292,17 @@
             ]
         },
         {
-            "route": "about",
+            "route": "about_index",
             "text": "about.title",
             "icon": "info-circle",
             "entries": [
                 {
-                    "route": "about_licence",
+                    "route": "about_licence_index",
                     "text": "about.licence",
                     "icon": "info-circle"
                 },
                 {
-                    "route": "about_policy",
+                    "route": "about_policy_index",
                     "text": "about.policy",
                     "icon": "info-circle"
                 },

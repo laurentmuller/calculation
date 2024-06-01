@@ -41,7 +41,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @template-extends AbstractEntityController<Product, ProductRepository>
  */
 #[AsController]
-#[Route(path: '/product', name: 'product')]
+#[Route(path: '/product', name: 'product_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class ProductController extends AbstractEntityController
 {
@@ -53,7 +53,7 @@ class ProductController extends AbstractEntityController
     /**
      * Add a product.
      */
-    #[GetPost(path: '/add', name: '_add')]
+    #[GetPost(path: '/add', name: 'add')]
     public function add(Request $request): Response
     {
         $item = new Product();
@@ -68,7 +68,7 @@ class ProductController extends AbstractEntityController
     /**
      * Clone (copy) a product.
      */
-    #[GetPost(path: '/clone/{id}', name: '_clone', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: '/clone/{id}', name: 'clone', requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, Product $item): Response
     {
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
@@ -84,7 +84,7 @@ class ProductController extends AbstractEntityController
     /**
      * Delete a product.
      */
-    #[GetDelete(path: '/delete/{id}', name: '_delete', requirements: self::ID_REQUIREMENT)]
+    #[GetDelete(path: '/delete/{id}', name: 'delete', requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, Product $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -93,7 +93,7 @@ class ProductController extends AbstractEntityController
     /**
      * Edit a product.
      */
-    #[GetPost(path: '/edit/{id}', name: '_edit', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: '/edit/{id}', name: 'edit', requirements: self::ID_REQUIREMENT)]
     public function edit(Request $request, Product $item): Response
     {
         return $this->editEntity($request, $item);
@@ -105,7 +105,7 @@ class ProductController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: '_excel')]
+    #[Get(path: '/excel', name: 'excel')]
     public function excel(ProductRepository $repository): SpreadsheetResponse
     {
         $entities = $repository->findByDescription();
@@ -121,7 +121,7 @@ class ProductController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: '_index')]
+    #[Get(path: '', name: 'index')]
     public function index(
         ProductTable $table,
         LoggerInterface $logger,
@@ -136,7 +136,7 @@ class ProductController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no product is found
      */
-    #[Get(path: '/pdf', name: '_pdf')]
+    #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(ProductRepository $repository): PdfResponse
     {
         $entities = $repository->findByGroup();
@@ -152,7 +152,7 @@ class ProductController extends AbstractEntityController
     /**
      * Show properties of a product.
      */
-    #[Get(path: '/show/{id}', name: '_show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: '/show/{id}', name: 'show', requirements: self::ID_REQUIREMENT)]
     public function show(Product $item): Response
     {
         return $this->showEntity($item);

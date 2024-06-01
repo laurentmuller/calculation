@@ -30,14 +30,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to archive calculations.
  */
 #[AsController]
-#[Route(path: '/admin', name: 'admin')]
+#[Route(path: '/admin', name: 'admin_')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationArchiveController extends AbstractController
 {
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[GetPost(path: '/archive', name: '_archive')]
+    #[GetPost(path: '/archive', name: 'archive')]
     public function invoke(Request $request, CalculationArchiveService $service): Response
     {
         if (!$service->isEditableStates()) {

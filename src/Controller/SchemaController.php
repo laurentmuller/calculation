@@ -26,14 +26,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to display the database schema.
  */
 #[AsController]
-#[Route(path: '/schema', name: 'schema')]
+#[Route(path: '/schema', name: 'schema_')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class SchemaController extends AbstractController
 {
     /**
      * Display information for tables.
      */
-    #[Get(path: '', name: '')]
+    #[Get(path: '', name: 'index')]
     public function index(SchemaService $service): Response
     {
         return $this->render('schema/index.html.twig', [
@@ -44,7 +44,7 @@ class SchemaController extends AbstractController
     /**
      * Export the schema to a PDF document.
      */
-    #[Get(path: '/pdf', name: '_pdf')]
+    #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(SchemaService $service): PdfResponse
     {
         $report = new SchemaReport($this, $service);
@@ -57,7 +57,7 @@ class SchemaController extends AbstractController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    #[Get(path: '/{name}', name: '_table')]
+    #[Get(path: '/{name}', name: 'table')]
     public function table(string $name, SchemaService $service): Response
     {
         try {

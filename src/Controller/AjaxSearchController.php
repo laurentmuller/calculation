@@ -33,7 +33,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller for search XMLHttpRequest (Ajax) calls.
  */
 #[AsController]
-#[Route(path: '/ajax/search', name: 'ajax_search')]
+#[Route(path: '/ajax/search', name: 'ajax_search_')]
 class AjaxSearchController extends AbstractController
 {
     /**
@@ -42,7 +42,7 @@ class AjaxSearchController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/address', name: '_address')]
+    #[Get(path: '/address', name: 'address')]
     public function searchAddress(
         SwissPostService $service,
         #[MapQueryParameter]
@@ -74,7 +74,7 @@ class AjaxSearchController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/customer', name: '_customer')]
+    #[Get(path: '/customer', name: 'customer')]
     public function searchCustomer(
         CalculationRepository $repository,
         #[MapQueryParameter]
@@ -91,7 +91,7 @@ class AjaxSearchController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/product', name: '_product')]
+    #[Get(path: '/product', name: 'product')]
     public function searchProduct(
         ProductRepository $repository,
         #[MapQueryParameter]
@@ -112,7 +112,7 @@ class AjaxSearchController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/supplier', name: '_supplier')]
+    #[Get(path: '/supplier', name: 'supplier')]
     public function searchSupplier(
         EntityManagerInterface $manager,
         #[MapQueryParameter]
@@ -129,7 +129,7 @@ class AjaxSearchController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/title', name: '_title')]
+    #[Get(path: '/title', name: 'title')]
     public function searchTitle(
         CustomerRepository $repository,
         #[MapQueryParameter]
@@ -146,7 +146,7 @@ class AjaxSearchController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/unit', name: '_unit')]
+    #[Get(path: '/unit', name: 'unit')]
     public function searchUnit(
         EntityManagerInterface $manager,
         #[MapQueryParameter]

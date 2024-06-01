@@ -28,7 +28,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @psalm-import-type ParametersType from TimelineService
  */
 #[AsController]
-#[Route(path: '/timeline', name: 'timeline')]
+#[Route(path: '/timeline', name: 'timeline_')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class TimelineController extends AbstractController
 {
@@ -38,7 +38,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Get(path: '/content', name: '_content')]
+    #[Get(path: '/content', name: 'content')]
     public function content(
         TimelineService $service,
         #[MapQueryParameter]
@@ -54,7 +54,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Get(path: '/first', name: '_first')]
+    #[Get(path: '/first', name: 'first')]
     public function first(
         TimelineService $service,
         #[MapQueryParameter]
@@ -68,7 +68,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Get(path: '', name: '')]
+    #[Get(path: '', name: 'index')]
     public function index(
         TimelineService $service,
         #[MapQueryParameter]
@@ -88,7 +88,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Get(path: '/last', name: '_last')]
+    #[Get(path: '/last', name: 'last')]
     public function last(
         TimelineService $service,
         #[MapQueryParameter]
@@ -102,7 +102,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Get(path: '/today', name: '_today')]
+    #[Get(path: '/today', name: 'today')]
     public function today(
         TimelineService $service,
         #[MapQueryParameter]

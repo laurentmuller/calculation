@@ -48,7 +48,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @template-extends AbstractEntityController<Calculation, CalculationRepository>
  */
 #[AsController]
-#[Route(path: '/calculation', name: 'calculation')]
+#[Route(path: '/calculation', name: 'calculation_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CalculationController extends AbstractEntityController
 {
@@ -62,7 +62,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[GetPost(path: '/add', name: '_add')]
+    #[GetPost(path: '/add', name: 'add')]
     public function add(Request $request): Response
     {
         $item = new Calculation();
@@ -85,7 +85,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[GetPost(path: '/clone/{id}', name: '_clone', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: '/clone/{id}', name: 'clone', requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, Calculation $item): Response
     {
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
@@ -103,7 +103,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Delete a calculation.
      */
-    #[GetDelete(path: '/delete/{id}', name: '_delete', requirements: self::ID_REQUIREMENT)]
+    #[GetDelete(path: '/delete/{id}', name: 'delete', requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, Calculation $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -114,7 +114,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[GetPost(path: '/edit/{id}', name: '_edit', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: '/edit/{id}', name: 'edit', requirements: self::ID_REQUIREMENT)]
     public function edit(Request $request, Calculation $item): Response
     {
         return $this->editEntity($request, $item);
@@ -127,7 +127,7 @@ class CalculationController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: '_excel')]
+    #[Get(path: '/excel', name: 'excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities(['id' => SortModeInterface::SORT_DESC]);
@@ -145,7 +145,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel/{id}', name: '_excel_id', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: '/excel/{id}', name: 'excel_id', requirements: self::ID_REQUIREMENT)]
     public function excelOne(Calculation $calculation): SpreadsheetResponse
     {
         $doc = new CalculationDocument($this, $calculation);
@@ -156,7 +156,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: '_index')]
+    #[Get(path: '', name: 'index')]
     public function index(
         CalculationTable $table,
         LoggerInterface $logger,
@@ -172,7 +172,7 @@ class CalculationController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Get(path: '/pdf', name: '_pdf')]
+    #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities([
@@ -192,7 +192,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Export a single calculation to a PDF document.
      */
-    #[Get(path: '/pdf/{id}', name: '_pdf_id', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: '/pdf/{id}', name: 'pdf_id', requirements: self::ID_REQUIREMENT)]
     public function pdfOne(
         Calculation $calculation,
         UrlGeneratorInterface $generator,
@@ -208,7 +208,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Show properties of a calculation.
      */
-    #[Get(path: '/show/{id}', name: '_show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: '/show/{id}', name: 'show', requirements: self::ID_REQUIREMENT)]
     public function show(Calculation $item): Response
     {
         $parameters = [
@@ -223,7 +223,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit the state of a calculation.
      */
-    #[GetPost(path: '/state/{id}', name: '_state', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: '/state/{id}', name: 'state', requirements: self::ID_REQUIREMENT)]
     public function state(Request $request, Calculation $item): Response
     {
         $form = $this->createForm(CalculationEditStateType::class, $item);

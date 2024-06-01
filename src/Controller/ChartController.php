@@ -38,7 +38,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @psalm-import-type QueryCalculationType from CalculationStateRepository
  */
 #[AsController]
-#[Route(path: '/chart', name: 'chart')]
+#[Route(path: '/chart', name: 'chart_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class ChartController extends AbstractController
 {
@@ -50,7 +50,7 @@ class ChartController extends AbstractController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws BadRequestHttpException
      */
-    #[Get(path: '/month', name: '_month')]
+    #[Get(path: '/month', name: 'month')]
     public function month(Request $request, MonthChart $chart): Response
     {
         $this->checkAccess();
@@ -66,7 +66,7 @@ class ChartController extends AbstractController
      * @throws BadRequestHttpException
      * @throws \Exception
      */
-    #[Get(path: '/month/pdf', name: '_month_pdf')]
+    #[Get(path: '/month/pdf', name: 'month_pdf')]
     public function monthPdf(
         Request $request,
         CalculationRepository $repository,
@@ -83,7 +83,7 @@ class ChartController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Get(path: '/state', name: '_state')]
+    #[Get(path: '/state', name: 'state')]
     public function state(StateChart $chart): Response
     {
         $this->checkAccess();
@@ -92,7 +92,7 @@ class ChartController extends AbstractController
         return $this->render('chart/chart_state.html.twig', $parameters);
     }
 
-    #[Get(path: '/state/pdf', name: '_state_pdf')]
+    #[Get(path: '/state/pdf', name: 'state_pdf')]
     public function statePdf(CalculationStateRepository $repository, UrlGeneratorInterface $generator): PdfResponse
     {
         $this->checkAccess(EntityPermission::EXPORT);

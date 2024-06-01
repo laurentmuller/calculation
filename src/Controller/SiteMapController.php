@@ -39,7 +39,7 @@ class SiteMapController extends AbstractController
     }
 
     #[Get(path: '/sitemap', name: 'site_map')]
-    public function invoke(): Response
+    public function index(): Response
     {
         $missingRoutes = $this->getMissingRoutes();
         if ([] !== $missingRoutes) {

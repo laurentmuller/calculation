@@ -16,7 +16,7 @@
         showModification: false,
         rules: {
             'user': {
-                remote: {
+                    remote: {
                     url: url,
                     data: {
                         user: function () {

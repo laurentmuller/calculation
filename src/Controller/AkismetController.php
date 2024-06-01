@@ -25,7 +25,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller for the Askimet service.
  */
 #[AsController]
-#[Route(path: '/akismet', name: 'akismet')]
+#[Route(path: '/akismet', name: 'akismet_')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class AkismetController extends AbstractController
 {
@@ -34,7 +34,7 @@ class AkismetController extends AbstractController
      *
      * @psalm-api
      */
-    #[Get(path: '/spam', name: '_spam')]
+    #[Get(path: '/spam', name: 'spam')]
     public function spam(AkismetService $service, FakerService $faker): JsonResponse
     {
         $comment = $faker->getGenerator()->realText(145);
@@ -52,7 +52,7 @@ class AkismetController extends AbstractController
     /**
      * @psalm-api
      */
-    #[Get(path: '/verify', name: '_verify')]
+    #[Get(path: '/verify', name: 'verify')]
     public function verify(AkismetService $service): JsonResponse
     {
         $results = $service->verifyKey();

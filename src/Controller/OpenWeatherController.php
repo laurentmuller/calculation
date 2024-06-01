@@ -44,7 +44,7 @@ use Symfony\Component\Validator\Constraints\Length;
  * @psalm-import-type OpenWeatherCityType from \App\Database\OpenWeatherDatabase
  */
 #[AsController]
-#[Route(path: '/openweather', name: 'openweather')]
+#[Route(path: '/openweather', name: 'openweather_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class OpenWeatherController extends AbstractController
 {
@@ -102,7 +102,7 @@ class OpenWeatherController extends AbstractController
      *
      * @psalm-api
      */
-    #[Get(path: '/api/current', name: '_api_current')]
+    #[Get(path: '/api/current', name: 'api_current')]
     public function apiCurrent(Request $request): JsonResponse
     {
         try {
@@ -124,7 +124,7 @@ class OpenWeatherController extends AbstractController
      *
      * @psalm-api
      */
-    #[Get(path: '/api/daily', name: '_api_daily')]
+    #[Get(path: '/api/daily', name: 'api_daily')]
     public function apiDaily(Request $request): JsonResponse
     {
         try {
@@ -147,7 +147,7 @@ class OpenWeatherController extends AbstractController
      *
      * @psalm-api
      */
-    #[Get(path: '/api/forecast', name: '_api_forecast')]
+    #[Get(path: '/api/forecast', name: 'api_forecast')]
     public function apiForecast(Request $request): JsonResponse
     {
         try {
@@ -170,7 +170,7 @@ class OpenWeatherController extends AbstractController
      *
      * @psalm-api
      */
-    #[Get(path: '/api/onecall', name: '_api_onecall')]
+    #[Get(path: '/api/onecall', name: 'api_onecall')]
     public function apiOneCall(Request $request): JsonResponse
     {
         try {
@@ -195,7 +195,7 @@ class OpenWeatherController extends AbstractController
      *
      * @psalm-api
      */
-    #[Get(path: '/api/search', name: '_api_search')]
+    #[Get(path: '/api/search', name: 'api_search')]
     public function apiSearch(Request $request, UrlGeneratorInterface $generator): JsonResponse
     {
         try {
@@ -235,7 +235,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns the current conditions data for a specific location.
      */
-    #[Get(path: '/current', name: '_current')]
+    #[Get(path: '/current', name: 'current')]
     public function current(Request $request): Response
     {
         $id = $this->getRequestId($request);
@@ -261,7 +261,7 @@ class OpenWeatherController extends AbstractController
      * Data can be downloaded from the <a href="https://bulk.openweathermap.org/sample/">sample directory</a>.
      */
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[GetPost(path: '/import', name: '_import')]
+    #[GetPost(path: '/import', name: 'import')]
     public function import(Request $request, OpenWeatherCityUpdater $updater): Response
     {
         $form = $updater->createForm();
@@ -283,7 +283,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Shows the search city view.
      */
-    #[GetPost(path: '/search', name: '_search')]
+    #[GetPost(path: '/search', name: 'search')]
     public function search(Request $request): Response
     {
         $data = [
@@ -350,7 +350,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Shows the current weather, if applicable, the search cities otherwise.
      */
-    #[Get(path: '', name: '_weather')]
+    #[Get(path: '', name: 'weather')]
     public function weather(Request $request): Response
     {
         $id = $this->getSessionId($request);

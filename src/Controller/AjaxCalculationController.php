@@ -30,7 +30,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller for calculation XMLHttpRequest (Ajax) calls.
  */
 #[AsController]
-#[Route(path: '/ajax', name: 'ajax')]
+#[Route(path: '/ajax', name: 'ajax_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class AjaxCalculationController extends AbstractController
 {
@@ -39,7 +39,7 @@ class AjaxCalculationController extends AbstractController
      *
      * @psalm-api
      */
-    #[Get(path: '/dialog/item', name: '_dialog_item')]
+    #[Get(path: '/dialog/item', name: 'dialog_item')]
     public function renderItemDialog(): JsonResponse
     {
         $parameters = [
@@ -54,7 +54,7 @@ class AjaxCalculationController extends AbstractController
      *
      * @psalm-api
      */
-    #[Get(path: '/dialog/task', name: '_dialog_task')]
+    #[Get(path: '/dialog/task', name: 'dialog_task')]
     public function renderTaskDialog(TaskRepository $repository): JsonResponse
     {
         $parameters = [
@@ -70,7 +70,7 @@ class AjaxCalculationController extends AbstractController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Post(path: '/update', name: '_update')]
+    #[Post(path: '/update', name: 'update')]
     public function update(Request $request, CalculationService $service, LoggerInterface $logger): JsonResponse
     {
         try {

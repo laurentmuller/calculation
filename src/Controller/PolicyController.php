@@ -24,7 +24,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to handle the license agreement.
  */
 #[AsController]
-#[Route(path: '/policy', name: 'policy')]
+#[Route(path: '/policy', name: 'policy_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class PolicyController extends AbstractController
 {
@@ -35,7 +35,7 @@ class PolicyController extends AbstractController
     /**
      * Accept the license agreement.
      */
-    #[Get(path: '/accept', name: '_accept')]
+    #[Get(path: '/accept', name: 'accept')]
     public function accept(): RedirectResponse
     {
         $path = $this->getCookiePath();

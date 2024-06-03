@@ -15,6 +15,7 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Pdf\Traits\PdfMemoryImageTrait;
 use App\Service\ImageService;
+use App\Utils\FileUtils;
 use fpdf\PdfException;
 
 /**
@@ -58,12 +59,8 @@ class MemoryImageReport extends AbstractReport
 
     private function addImageMemory(): void
     {
-        if (!\file_exists($this->image)) {
-            throw PdfException::instance('Unable to get image.');
-        }
-
-        $data = \file_get_contents($this->image);
-        if (!\is_string($data)) {
+        $data = FileUtils::readFile($this->image);
+        if ('' === $data) {
             throw PdfException::instance('Unable to get image content.');
         }
 

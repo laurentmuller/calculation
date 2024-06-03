@@ -475,14 +475,9 @@ class UpdateAssetsCommand extends Command
     private function readFile(string $filename): string|false
     {
         $this->writeVeryVerbose(\sprintf('Load "%s".', $filename));
-        $content = \file_get_contents($filename);
-        if (!\is_string($content)) {
-            $this->writeError(\sprintf('Unable to get content of "%s".', $filename));
-
-            return false;
-        }
+        $content = FileUtils::readFile($filename);
         if ('' === $content) {
-            $this->writeError(\sprintf('The content of "%s" is empty.', $filename));
+            $this->writeError(\sprintf('Unable to get content of "%s".', $filename));
 
             return false;
         }

@@ -101,14 +101,22 @@ class FileUtilsTest extends TestCase
         self::assertSame('test.bmp', $new_name);
     }
 
-    public function testDecodeJson(): void
+    public function testDecodeJsonEmptyFile(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        FileUtils::decodeJson($this->getEmptyFile());
+    }
+
+    public function testDecodeJsonInvalidFile(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        FileUtils::decodeJson($this->getFakeFile());
+    }
+
+    public function testDecodeJsonValid(): void
     {
         $actual = FileUtils::decodeJson($this->getJsonFile());
         self::assertCount(10, $actual);
-
-        self::expectException(\InvalidArgumentException::class);
-        FileUtils::decodeJson($this->getFakeFile());
-        self::fail('An invalid argument exception must be raised.');
     }
 
     public function testDumFile(): void
@@ -178,6 +186,18 @@ class FileUtilsTest extends TestCase
     {
         $actual = FileUtils::normalizeDirectory('C:\\Temp');
         self::assertSame('C:' . \DIRECTORY_SEPARATOR . 'Temp', $actual);
+    }
+
+    public function testReadFileInvalid(): void
+    {
+        $content = FileUtils::readFile(__DIR__);
+        self::assertSame('', $content);
+    }
+
+    public function testReadFileValid(): void
+    {
+        $content = FileUtils::readFile($this->getJsonFile());
+        self::assertNotEmpty($content);
     }
 
     #[DataProvider('getRealPath')]

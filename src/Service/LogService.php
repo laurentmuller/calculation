@@ -165,12 +165,11 @@ class LogService implements ServiceSubscriberInterface
      * Decode the given JSON string.
      *
      * @psalm-return array<string, string>|null
-     *
-     * @psalm-suppress MixedReturnTypeCoercion
      */
     private function parseJson(string $value): ?array
     {
         try {
+            /** @psalm-var array<string, string> */
             return StringUtils::decodeJson($value);
         } catch (\InvalidArgumentException) {
             return null;

@@ -127,20 +127,14 @@ readonly class OpenWeatherCityUpdater
 
     /**
      * @psalm-return OpenWeatherCityType[]|false
-     *
-     * @psalm-suppress MixedReturnTypeCoercion
      */
     private function getFileContent(UploadedFile $file): array|false
     {
         if (!$file->isValid()) {
             return false;
         }
-        $filename = $file->getRealPath();
-        if (false === $filename) {
-            return false;
-        }
-        $content = \file_get_contents($filename);
-        if (false === $content) {
+        $content = FileUtils::readFile($file);
+        if ('' === $content) {
             return false;
         }
         $content = \gzdecode($content);
@@ -149,6 +143,7 @@ readonly class OpenWeatherCityUpdater
         }
 
         try {
+            /** @psalm-var OpenWeatherCityType[] */
             return StringUtils::decodeJson($content);
         } catch (\InvalidArgumentException) {
             return false;

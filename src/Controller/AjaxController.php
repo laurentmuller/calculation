@@ -91,8 +91,8 @@ class AjaxController extends AbstractController
         if (!FileUtils::exists($file)) {
             return $this->jsonFalse(['message' => $this->trans('about.dialog.not_found')]);
         }
-        $content = \file_get_contents($file);
-        if (!\is_string($content)) {
+        $content = FileUtils::readFile($file);
+        if ('' === $content) {
             return $this->jsonFalse(['message' => $this->trans('about.dialog.not_loaded')]);
         }
 

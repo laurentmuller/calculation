@@ -110,11 +110,15 @@ class ResponseListener
             return '';
         }
 
-        $this->replaceNonce($csp);
+        $values = ['nonce' => $this->service->getCspNonce()];
+        $result = \array_map(
+            static fn (array $subject): array => StringUtils::replace($values, $subject),
+            $csp
+        );
 
         return \array_reduce(
-            \array_keys($csp),
-            fn (string $carry, string $key): string => \sprintf('%s%s %s;', $carry, $key, \implode(' ', $csp[$key])),
+            \array_keys($result),
+            fn (string $carry, string $key): string => \sprintf('%s%s %s;', $carry, $key, \implode(' ', $result[$key])),
             ''
         );
     }
@@ -168,24 +172,6 @@ class ResponseListener
         return \array_map(
             static fn (string|array $value): array => (array) $value,
             $content
-        );
-    }
-
-    /**
-     * @param-out array<string, string[]> $csp
-     *
-     * @psalm-suppress ReferenceConstraintViolation
-     */
-    private function replaceNonce(array &$csp): void
-    {
-        $nonce = $this->service->getCspNonce();
-        \array_walk_recursive(
-            $csp,
-            function (string &$value) use ($nonce): void {
-                if ('nonce' === $value) {
-                    $value = $nonce;
-                }
-            }
         );
     }
 }

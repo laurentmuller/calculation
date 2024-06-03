@@ -35,6 +35,10 @@ class FileTypeExtension extends AbstractFileTypeExtension
     }
 
     /**
+     * @psalm-param array<array-key, mixed> $options
+     *
+     * @psalm-return array<array-key, mixed>
+     *
      * @psalm-suppress MixedAssignment
      */
     protected function updateOptions(FormInterface $form, array $options): array

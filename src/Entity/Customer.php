@@ -215,7 +215,7 @@ class Customer extends AbstractEntity
     /**
      * Gets the title, the last name and the first name separate by a space character.
      */
-    public function getTitleAndFullName(): ?string
+    public function getTitleAndFullName(): string
     {
         return $this->concat($this->title, $this->getFullName());
     }

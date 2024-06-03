@@ -96,11 +96,11 @@ final class FileUtils
         $file = self::realPath($file);
 
         // file or url?
-        if (!self::isFile($file) && false === \filter_var($file, \FILTER_VALIDATE_URL)) {
+        if (!self::isFile($file) && !self::validateURL($file)) {
             throw new \InvalidArgumentException(\sprintf("The file '%s' cannot be found.", $file));
         }
-        $content = \file_get_contents($file);
-        if (false === $content) {
+        $content = self::readFile($file);
+        if ('' === $content) {
             throw new \InvalidArgumentException(\sprintf("Unable to get content of the file '%s'.", $file));
         }
 
@@ -274,6 +274,25 @@ final class FileUtils
     }
 
     /**
+     * Returns the content of a file as a string.
+     *
+     * @return string the content of the file; an empty string ("") on error
+     */
+    public static function readFile(string|\SplFileInfo $file): string
+    {
+        $file = self::realPath($file);
+        if (!self::isFile($file) && !self::validateURL($file)) {
+            return '';
+        }
+
+        try {
+            return self::getFilesystem()->readFile($file);
+        } catch (IOException) {
+            return '';
+        }
+    }
+
+    /**
      * Gets the real path of the given file.
      */
     public static function realPath(string|\SplFileInfo $file): string
@@ -404,5 +423,10 @@ final class FileUtils
         } catch (IOException) {
             return null;
         }
+    }
+
+    private static function validateURL(string $file): bool
+    {
+        return false !== \filter_var($file, \FILTER_VALIDATE_URL);
     }
 }

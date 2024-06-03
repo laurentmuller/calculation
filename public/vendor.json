@@ -94,7 +94,7 @@
         },
         {
             "name": "html5sortable",
-            "version": "0.13.3",
+            "version": "0.14.0",
             "source": "cdnjs",
             "files": [
                 "html5sortable.js"

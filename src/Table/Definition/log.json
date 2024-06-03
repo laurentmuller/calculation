@@ -32,10 +32,5 @@
         "field": "user",
         "title": "log.fields.user",
         "class": "user"
-    },
-    {
-        "field": "levelColor",
-        "alias": "color",
-        "visible": false
     }
 ]

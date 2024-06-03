@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Pdf\PdfLabel;
+use App\Utils\FileUtils;
 use fpdf\PdfException;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
@@ -94,8 +95,8 @@ readonly class PdfLabelService
             throw PdfException::format('Unable to find the file "%s".', $file);
         }
 
-        $content = \file_get_contents($file);
-        if (!\is_string($content)) {
+        $content = FileUtils::readFile($file);
+        if ('' === $content) {
             throw PdfException::format('Unable to get content of the file "%s".', $file);
         }
 

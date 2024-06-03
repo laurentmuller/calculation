@@ -382,8 +382,8 @@ class PdfTable
             throw new \OutOfRangeException(\sprintf('Invalid spanned cells: expected %d, %d given.', $count, $span));
         }
 
-        $cells = $this->cells;
         $parent = $this->parent;
+        $cells = $this->cells;
         $columns = $this->columns;
 
         // compute
@@ -848,10 +848,10 @@ class PdfTable
     }
 
     /**
-     * @param PdfCell[]   $cells
-     * @param PdfColumn[] $columns
+     * @psalm-param PdfCell[]   $cells
+     * @psalm-param PdfColumn[] $columns
      *
-     * @return array{
+     * @psalm-return array{
      *     0: string[],
      *     1: PdfStyle[],
      *     2: PdfTextAlignment[],

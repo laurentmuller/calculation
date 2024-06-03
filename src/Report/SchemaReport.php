@@ -45,9 +45,10 @@ class SchemaReport extends AbstractReport
     {
         parent::__construct($controller);
         $this->setTitleTrans('schema.name', [], true);
-        $this->setDescription($this->trans('schema.description'));
+        $this->getHeader()->setDescription('schema.description');
     }
 
+    #[\Override]
     public function render(): bool
     {
         $tables = $this->service->getTables();
@@ -145,7 +146,7 @@ class SchemaReport extends AbstractReport
                 ->add($association['name'])
                 ->add($name, link: $link)
                 ->add($this->formatInverse($association['inverse']))
-                ->completeRow();
+                ->endRow();
         }
     }
 
@@ -171,7 +172,7 @@ class SchemaReport extends AbstractReport
                 ->add($this->formatType($column))
                 ->add($this->formatBool($column['required']), style: $this->booleanStyle)
                 ->add($column['default'])
-                ->completeRow();
+                ->endRow();
         }
         $this->lineBreak();
     }
@@ -197,7 +198,7 @@ class SchemaReport extends AbstractReport
                 ->add(\implode(', ', $index['columns']))
                 ->add($this->formatBool($index['primary']), style: $this->booleanStyle)
                 ->add($this->formatBool($index['unique']), style: $this->booleanStyle)
-                ->completeRow();
+                ->endRow();
         }
         $this->lineBreak();
     }
@@ -244,7 +245,7 @@ class SchemaReport extends AbstractReport
                 ->addCellAmount($table['size'])
                 ->addCellInt($table['indexes'])
                 ->addCellInt($table['associations'])
-                ->completeRow();
+                ->endRow();
         }
     }
 
@@ -253,7 +254,7 @@ class SchemaReport extends AbstractReport
         $text = $this->trans($id, $parameters);
         PdfStyle::default()->setFontBold()->apply($this);
         $this->addBookmark(text: $text, currentY: false);
-        $this->useCellMargin(fn (): \fpdf\PdfDocument => $this->cell(text: $text, move: PdfMove::NEW_LINE));
+        $this->useCellMargin(fn (): static => $this->cell(text: $text, move: PdfMove::NEW_LINE));
         $this->lineBreak($this->getCellMargin());
         $this->resetStyle();
     }

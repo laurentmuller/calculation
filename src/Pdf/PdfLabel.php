@@ -93,7 +93,8 @@ class PdfLabel
 
     /**
      * Clone this instance and convert values to millimeters.
-     * Returns this instance if unit is already set as millimeters.
+     *
+     * Returns this instance if this unit is already set as millimeter.
      *
      * The returned instance has unit set to the millimeter.
      */

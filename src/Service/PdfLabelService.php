@@ -45,7 +45,7 @@ readonly class PdfLabelService
     public function all(?string $file = null): array
     {
         try {
-            return $this->cache->get('service.labels', fn (): array => $this->loadFile($file));
+            return $this->cache->get('service.labels', fn (): array => $this->loadLabels($file));
         } catch (InvalidArgumentException $e) {
             throw PdfException::instance('Unable to load labels.', $e);
         }
@@ -54,7 +54,7 @@ readonly class PdfLabelService
     /**
      * Gets the label for the given name.
      *
-     * @throws PdfException if the label does not exist
+     * @throws PdfException if labels cannot be loaded or if the label does not exist
      */
     public function get(string $name): PdfLabel
     {
@@ -63,6 +63,8 @@ readonly class PdfLabelService
 
     /**
      * Return a value indicating if the given label's name exists.
+     *
+     * @throws PdfException if labels cannot be loaded
      */
     public function has(string $name): bool
     {
@@ -88,10 +90,10 @@ readonly class PdfLabelService
      *
      * @throws PdfException
      */
-    private function loadFile(?string $file = null): array
+    private function loadLabels(?string $file = null): array
     {
-        $file ??= __DIR__ . '/../../resources/data/avery.json';
-        if (!\file_exists($file)) {
+        $file ??= __DIR__ . '/../../resources/data/labels.json';
+        if (!FileUtils::exists($file)) {
             throw PdfException::format('Unable to find the file "%s".', $file);
         }
 

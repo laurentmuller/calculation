@@ -14,6 +14,7 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfTextColor;
+use App\Pdf\PdfDocument;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Utils\FormatUtils;
@@ -71,7 +72,7 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
             '%items%' => $this->computeItemsCount($entities),
         ];
         $text = $this->transCount($parameters);
-        $this->useCellMargin(fn (): \fpdf\PdfDocument => $this->cell(text: $text, move: PdfMove::NEW_LINE));
+        $this->useCellMargin(fn (): PdfDocument => $this->cell(text: $text, move: PdfMove::NEW_LINE));
 
         return true;
     }

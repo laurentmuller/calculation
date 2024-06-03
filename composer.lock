@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bd91ea432d2cb74cf6a07df7786e0b3a",
+    "content-hash": "9c314566059f42f5b49724305b6c04f3",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1876,16 +1876,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "1.9.0.5",
+            "version": "1.9.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "3b4a2c9332c67969a4816e200f4908fac6d7e372"
+                "reference": "6dbeea1c165dc1a46a06025612ba2d90371ee5b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/3b4a2c9332c67969a4816e200f4908fac6d7e372",
-                "reference": "3b4a2c9332c67969a4816e200f4908fac6d7e372",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/6dbeea1c165dc1a46a06025612ba2d90371ee5b6",
+                "reference": "6dbeea1c165dc1a46a06025612ba2d90371ee5b6",
                 "shasum": ""
             },
             "require": {
@@ -1934,7 +1934,7 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2024-05-31T09:02:41+00:00"
+            "time": "2024-06-03T07:25:02+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",
@@ -6024,76 +6024,6 @@
                 }
             ],
             "time": "2024-05-30T12:09:55+00:00"
-        },
-        {
-            "name": "symfony/rate-limiter",
-            "version": "v7.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/rate-limiter.git",
-                "reference": "fd298169c176c306339df3a67cca416611949b43"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/rate-limiter/zipball/fd298169c176c306339df3a67cca416611949b43",
-                "reference": "fd298169c176c306339df3a67cca416611949b43",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.2",
-                "symfony/options-resolver": "^6.4|^7.0"
-            },
-            "require-dev": {
-                "psr/cache": "^1.0|^2.0|^3.0",
-                "symfony/lock": "^6.4|^7.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\RateLimiter\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Wouter de Jong",
-                    "email": "wouter@wouterj.nl"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Provides a Token Bucket implementation to rate limit input and output in your application",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "limiter",
-                "rate-limiter"
-            ],
-            "support": {
-                "source": "https://github.com/symfony/rate-limiter/tree/v7.1.0"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2024-04-18T09:32:20+00:00"
         },
         {
             "name": "symfony/routing",

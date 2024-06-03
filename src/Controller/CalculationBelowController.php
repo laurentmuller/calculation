@@ -93,8 +93,8 @@ class CalculationBelowController extends AbstractController
         }
         $items = $this->getItems($repository, $minMargin);
         $doc = new CalculationsBelowReport($this, $items);
-        $doc->setTitleTrans('below.title')
-            ->setDescription($this->getDescription($minMargin));
+        $doc->setTitleTrans('below.title');
+        $doc->getHeader()->setDescription($this->getDescription($minMargin));
 
         return $this->renderPdfDocument($doc);
     }

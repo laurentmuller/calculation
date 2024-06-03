@@ -973,3 +973,10 @@ span.bottom-border-gradient {
 body.status-bar .grecaptcha-badge {
     bottom: 35px !important;
 }
+
+/*
+ * Card header error
+ */
+.card-header.text-bg-danger .text-danger {
+    color: unset !important;
+}

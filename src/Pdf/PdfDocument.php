@@ -95,6 +95,7 @@ class PdfDocument extends \fpdf\PdfDocument
         return $oldFont;
     }
 
+    #[\Override]
     public function footer(): void
     {
         $this->footer->output();
@@ -126,6 +127,7 @@ class PdfDocument extends \fpdf\PdfDocument
         return $this->header;
     }
 
+    #[\Override]
     public function header(): void
     {
         $this->header->output();
@@ -141,18 +143,7 @@ class PdfDocument extends \fpdf\PdfDocument
         return $this;
     }
 
-    /**
-     * Set the document description.
-     *
-     * @see PdfHeader::setDescription()
-     */
-    public function setDescription(?string $description): static
-    {
-        $this->header->setDescription($description);
-
-        return $this;
-    }
-
+    #[\Override]
     protected function cleanText(string $str): string
     {
         $str = parent::cleanText($str);

@@ -29,6 +29,43 @@ class PdfLabelServiceTest extends TestCase
         self::assertNotEmpty($actual);
     }
 
+    public function testAllWithDefaultFile(): void
+    {
+        $service = $this->createService();
+        $actual = $service->all();
+        self::assertNotEmpty($actual);
+    }
+
+    public function testAllWithEmptyFile(): void
+    {
+        $file = __DIR__ . '/../Data/empty.txt';
+        self::expectException(PdfException::class);
+        $service = $this->createService();
+        $service->all($file);
+    }
+
+    public function testAllWithGivenFile(): void
+    {
+        $file = __DIR__ . '/../../resources/data/labels.json';
+        $service = $this->createService();
+        $actual = $service->all($file);
+        self::assertNotEmpty($actual);
+    }
+
+    public function testAllWithInvalidFile(): void
+    {
+        self::expectException(PdfException::class);
+        $service = $this->createService();
+        $service->all(__FILE__);
+    }
+
+    public function testAllWithNotExistFile(): void
+    {
+        self::expectException(PdfException::class);
+        $service = $this->createService();
+        $service->all('fake');
+    }
+
     public function testGetInvalid(): void
     {
         self::expectException(PdfException::class);
@@ -48,35 +85,6 @@ class PdfLabelServiceTest extends TestCase
         $service = $this->createService();
         self::assertTrue($service->has('3422'));
         self::assertFalse($service->has('fake'));
-    }
-
-    public function testInvalidFile(): void
-    {
-        self::expectException(PdfException::class);
-        $service = $this->createService();
-        $service->all(__FILE__);
-    }
-
-    public function testNotExistFile(): void
-    {
-        self::expectException(PdfException::class);
-        $service = $this->createService();
-        $service->all('fake');
-    }
-
-    public function testValidWithDefaultFile(): void
-    {
-        $service = $this->createService();
-        $actual = $service->all();
-        self::assertNotEmpty($actual);
-    }
-
-    public function testValidWithGivenFile(): void
-    {
-        $file = __DIR__ . '/../../resources/data/avery.json';
-        $service = $this->createService();
-        $actual = $service->all($file);
-        self::assertNotEmpty($actual);
     }
 
     private function createService(): PdfLabelService

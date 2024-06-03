@@ -52,14 +52,16 @@ return static function (SecurityConfig $config): void {
     $firewall->formLogin()
         ->loginPath(SecurityController::LOGIN_ROUTE)
         ->checkPath(SecurityController::LOGIN_ROUTE)
-        ->enableCsrf(true)
         ->usernameParameter('username')
-        ->passwordParameter('password');
+        ->passwordParameter('password')
+        ->csrfParameter('login_token')
+        ->enableCsrf(true);
 
     // logout
     $firewall->logout()
         ->path(SecurityController::LOGOUT_ROUTE)
         ->target(SecurityController::SUCCESS_ROUTE)
+        ->csrfParameter('logout_token')
         ->enableCsrf(true);
 
     // remember me
@@ -91,10 +93,11 @@ return static function (SecurityConfig $config): void {
             '^/',
         ],
     ];
+    $channel = '%env(string:CHANNEL)%';
     foreach ($access as $role => $paths) {
         foreach ($paths as $path) {
             $config->accessControl()
-                ->requiresChannel('%env(string:SECURE_SCHEME)%')
+                ->requiresChannel($channel)
                 ->roles($role)
                 ->path($path);
         }

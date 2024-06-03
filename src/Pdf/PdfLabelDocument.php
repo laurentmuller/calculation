@@ -75,8 +75,7 @@ class PdfLabelDocument extends PdfDocument
             ->setScaling(PdfScaling::NONE);
 
         $this->label = $label->scaleToMillimeters();
-        $this->updateFontSize($label->fontSize)
-            ->setFont(PdfFontName::ARIAL)
+        $this->updateFont($label->fontSize)
             ->setAutoPageBreak(false)
             ->setMargins(0, 0)
             ->setCellMargin(0);
@@ -131,7 +130,7 @@ class PdfLabelDocument extends PdfDocument
     }
 
     /**
-     * Sets the draw label texts listener.
+     * Sets the draw label listener.
      */
     public function setLabelTextListener(?PdfLabelTextListenerInterface $labelTextListener): static
     {
@@ -154,7 +153,8 @@ class PdfLabelDocument extends PdfDocument
     private function getLabelY(string $text): float
     {
         $y = $this->label->getOffsetY($this->currentRow);
-        $height = (float) $this->getLinesCount($text, $this->label->width - 2.0 * self::PADDING) * $this->lineHeight;
+        $lines = \count(\explode(StringUtils::NEW_LINE, $text));
+        $height = (float) $lines * $this->lineHeight;
 
         return $y + ($this->label->height - $height) / 2.0;
     }
@@ -187,43 +187,37 @@ class PdfLabelDocument extends PdfDocument
         $y = $this->getLabelY($text);
         $height = $this->lineHeight;
         $width = $this->label->width - self::PADDING;
-
-        // listener?
-        if ($this->labelTextListener instanceof PdfLabelTextListenerInterface) {
-            $texts = \explode(StringUtils::NEW_LINE, $text);
-            $lines = \count($texts);
-            foreach ($texts as $index => $value) {
-                $this->setXY($x, $y);
-                $event = new PdfLabelTextEvent($this, $value, $index, $lines, $width, $height);
-                if (!$this->labelTextListener->drawLabelText($event)) {
-                    $this->cell($width, $height, $value);
-                }
-                $y += $this->lastHeight;
-            }
+        if (!$this->labelTextListener instanceof PdfLabelTextListenerInterface) {
+            $this->setXY($x, $y);
+            $this->multiCell(width: $width, height: $height, text: $text, align: PdfTextAlignment::LEFT);
 
             return;
         }
 
-        // default
-        $this->setXY($x, $y);
-        $this->multiCell(width: $width, height: $height, text: $text, align: PdfTextAlignment::LEFT);
+        $texts = \explode(StringUtils::NEW_LINE, $text);
+        $lines = \count($texts);
+        foreach ($texts as $index => $value) {
+            $this->setXY($x, $y);
+            $event = new PdfLabelTextEvent($this, $value, $index, $lines, $width, $height);
+            if (!$this->labelTextListener->drawLabelText($event)) {
+                $this->cell($width, $height, $value);
+            }
+            $y += $this->lastHeight;
+        }
     }
 
     /**
      * Update font size and line height.
-     *
-     * @throws PdfException if the given size in points is not set
      */
-    private function updateFontSize(int $pt): static
+    private function updateFont(int $pt): static
     {
         if (!isset(self::FONT_CONVERSION[$pt])) {
             $sizes = \implode(', ', \array_keys(self::FONT_CONVERSION));
             throw PdfException::format('Invalid font size: %d. Allowed sizes: [%s]', $pt, $sizes);
         }
-
         $this->lineHeight = self::FONT_CONVERSION[$pt];
-        $this->setFontSizeInPoint($pt);
 
-        return $this;
+        return $this->setFontSizeInPoint($pt)
+            ->setFont(PdfFontName::ARIAL);
     }
 }

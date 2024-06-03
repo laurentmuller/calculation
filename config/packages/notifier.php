@@ -14,11 +14,9 @@ use Symfony\Config\FrameworkConfig;
 
 return static function (FrameworkConfig $config): void {
     $notifier = $config->notifier();
-    foreach (Importance::cases() as $importance
-    ) {
+    foreach (Importance::cases() as $importance) {
         $notifier->channelPolicy($importance->value, 'email');
     }
-
     $notifier->adminRecipient()
         ->email('%mailer_user_email%');
 };

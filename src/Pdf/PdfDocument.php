@@ -14,7 +14,6 @@ namespace App\Pdf;
 
 use App\Pdf\Traits\PdfBookmarkTrait;
 use App\Traits\MathTrait;
-use App\Utils\StringUtils;
 use fpdf\PdfFontName;
 use fpdf\PdfLayout;
 use fpdf\PdfOrientation;
@@ -95,7 +94,6 @@ class PdfDocument extends \fpdf\PdfDocument
         return $oldFont;
     }
 
-    #[\Override]
     public function footer(): void
     {
         $this->footer->output();
@@ -127,7 +125,6 @@ class PdfDocument extends \fpdf\PdfDocument
         return $this->header;
     }
 
-    #[\Override]
     public function header(): void
     {
         $this->header->output();
@@ -143,17 +140,16 @@ class PdfDocument extends \fpdf\PdfDocument
         return $this;
     }
 
-    #[\Override]
     protected function cleanText(string $str): string
     {
         $str = parent::cleanText($str);
-        if (!StringUtils::isString($str)) {
+        if ('' === $str) {
             return $str;
         }
 
         try {
-            return \mb_convert_encoding($str, self::ENCODING_TO, self::ENCODING_FROM);
-        } catch (\Exception) {
+            return parent::convertEncoding($str, self::ENCODING_TO, self::ENCODING_FROM);
+        } catch (\ValueError) {
             return $str;
         }
     }

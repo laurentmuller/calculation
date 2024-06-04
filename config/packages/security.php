@@ -13,6 +13,7 @@ declare(strict_types=1);
 use App\Controller\SecurityController;
 use App\Entity\User;
 use App\Interfaces\RoleInterface;
+use App\Listener\ResponseListener;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -36,13 +37,16 @@ return static function (SecurityConfig $config): void {
         ->property('username');
 
     // dev firewall
-    $config->firewall('dev')
+    $config->firewall(ResponseListener::FIREWALL_DEV)
         ->pattern('^/(_(profiler|wdt)|css|images|js)/')
         ->security(false);
 
     // main firewall
-    $firewall = $config->firewall('main')
+    $firewall = $config->firewall(ResponseListener::FIREWALL_MAIN)
         ->lazy(true);
+
+    // allows 5 login attempts per minute
+    $firewall->loginThrottling();
 
     // switch user
     $firewall->switchUser()

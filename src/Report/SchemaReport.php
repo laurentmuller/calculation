@@ -48,7 +48,6 @@ class SchemaReport extends AbstractReport
         $this->getHeader()->setDescription('schema.description');
     }
 
-    #[\Override]
     public function render(): bool
     {
         $tables = $this->service->getTables();

@@ -132,14 +132,15 @@ class EditTaskDialog extends EditDialog {
          * @param {Object} response
          * @param {boolean} response.result
          * @param {string} response.message
-         * @param {string} response.unit
          * @param {number} response.categoryId
+         * @param {string} response.unit
          * @param {number} response.overall
+         * @param {Array.<{id: Number, value: number, amount: number}>} response.items
          */
         that.jqXHR = $.post(url, data, function (response) {
             if (response.result) {
                 // update
-                response.results.forEach(function (item) {
+                response.items.forEach(function (item) {
                     that._updateValue('task_value_' + item.id, item.value);
                     that._updateValue('task_total_' + item.id, item.amount);
                 });

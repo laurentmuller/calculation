@@ -31,7 +31,7 @@ class PdfHeader
     /**
      * The default line height.
      */
-    private const LINE_HEIGHT = PdfDocument::LINE_HEIGHT;
+    private const LINE_HEIGHT = \fpdf\PdfDocument::LINE_HEIGHT;
 
     /**
      * The line height for customer address.

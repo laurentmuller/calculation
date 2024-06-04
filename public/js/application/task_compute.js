@@ -70,17 +70,16 @@ function isSameValues($form, data) {
  */
 function getData() {
     'use strict';
-    const $task = $('#task');
-    const id = $task.intVal();
+    const id = $('#task').intVal();
     const selector = `#table-task-edit .task-item-row[data-id="${id}"] .item-input:checked`;
     const items = $(selector).map(function () {
         return $(this).intVal();
     }).get();
 
     return {
-        'id': id,
-        'quantity': $('#quantity').floatVal(),
-        'items': items
+        id: id,
+        items: items,
+        quantity: $('#quantity').floatVal()
     };
 }
 
@@ -224,5 +223,5 @@ function onTaskChanged() {
     $('#edit-form').initValidator(options);
 
     // update
-   onInputChanged();
+    onInputChanged();
 }(jQuery));

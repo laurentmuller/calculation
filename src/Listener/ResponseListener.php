@@ -17,6 +17,7 @@ use App\Service\NonceService;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Psr\Cache\InvalidArgumentException;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -27,12 +28,24 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
- * Response subscriber to add content security policy (CSP).
+ * Listener to add content security policy (CSP) to response.
  *
- * For CSP violation see https://mathiasbynens.be/notes/csp-reports.
+ * Processing Content Security Policy violation reports:
+ *
+ * @see https://mathiasbynens.be/notes/csp-reports.
  */
 class ResponseListener
 {
+    /**
+     * The development firewall name.
+     */
+    public const FIREWALL_DEV = 'dev';
+
+    /**
+     * The main firewall name.
+     */
+    public const FIREWALL_MAIN = 'main';
+
     /**
      * The header keys for CSP value.
      */
@@ -56,25 +69,21 @@ class ResponseListener
         'x-permitted-cross-domain-policies' => 'none',
     ];
 
-    /**
-     * The debug firewall pattern.
-     */
-    private const DEV_PATTERN = '/^\/(_(profiler|wdt)|css|images|js)\//mi';
-
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/data/csp.%kernel.environment%.json')]
         private readonly string $file,
-        private readonly UrlGeneratorInterface $generator,
-        private readonly NonceService $service,
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
         #[Target('calculation.service.response')]
         private readonly CacheInterface $cache,
+        private readonly UrlGeneratorInterface $generator,
+        private readonly NonceService $service,
+        private readonly Security $security
     ) {
     }
 
     /**
-     * @throws \Exception|InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     #[AsEventListener(event: KernelEvents::RESPONSE)]
     public function onKernelResponse(ResponseEvent $event): void
@@ -110,21 +119,14 @@ class ResponseListener
             return '';
         }
 
-        $values = ['nonce' => $this->service->getCspNonce()];
-        $result = \array_map(
-            static fn (array $subject): array => StringUtils::replace($values, $subject),
-            $csp
-        );
+        $csp = $this->replaceNonce($csp);
+        $csp = $this->reduceValues($csp);
 
-        return \array_reduce(
-            \array_keys($result),
-            fn (string $carry, string $key): string => \sprintf('%s%s %s;', $carry, $key, \implode(' ', $result[$key])),
-            ''
-        );
+        return \implode('', $csp);
     }
 
     /**
-     * @return array<string, string[]>
+     * @psalm-return array<string, string[]>
      *
      * @throws InvalidArgumentException
      */
@@ -136,17 +138,8 @@ class ResponseListener
             }
 
             $content = $this->loadFile();
-            $values = [
-                'none' => "'none'",
-                'self' => "'self'",
-                'unsafe-inline' => "'unsafe-inline'",
-                'report' => $this->getReportURL(),
-            ];
 
-            return \array_map(
-                static fn (array $subject): array => StringUtils::replace($values, $subject),
-                $content
-            );
+            return $this->replaceValues($content);
         });
     }
 
@@ -157,7 +150,7 @@ class ResponseListener
 
     private function isDevRequest(Request $request): bool
     {
-        return 1 === \preg_match(self::DEV_PATTERN, $request->getRequestUri());
+        return self::FIREWALL_DEV === $this->security->getFirewallConfig($request)?->getName();
     }
 
     /**
@@ -169,9 +162,49 @@ class ResponseListener
         $content = FileUtils::decodeJson($this->file);
 
         /** @psalm-var array<string, string[]> */
+        return \array_map(static fn (string|array $value): array => (array) $value, $content);
+    }
+
+    /**
+     * @psalm-param array<string, string[]> $array
+     *
+     * @psalm-return string[]
+     */
+    private function reduceValues(array $array): array
+    {
         return \array_map(
-            static fn (string|array $value): array => (array) $value,
-            $content
+            static fn (string $key, array $values): string => \sprintf('%s %s;', $key, \implode(' ', $values)),
+            \array_keys($array),
+            \array_values($array)
         );
+    }
+
+    /**
+     * @psalm-param array<string, string[]> $array
+     *
+     * @psalm-return array<string, string[]>
+     */
+    private function replaceNonce(array $array): array
+    {
+        $nonce = $this->service->getCspNonce();
+
+        return \array_map(fn (array $subject): array => \str_replace('nonce', $nonce, $subject), $array);
+    }
+
+    /**
+     * @psalm-param array<string, string[]> $array
+     *
+     * @psalm-return array<string, string[]>
+     */
+    private function replaceValues(array $array): array
+    {
+        $values = [
+            'none' => "'none'",
+            'self' => "'self'",
+            'unsafe-inline' => "'unsafe-inline'",
+            'report' => $this->getReportURL(),
+        ];
+
+        return \array_map(fn (array $subject): array => StringUtils::replace($values, $subject), $array);
     }
 }

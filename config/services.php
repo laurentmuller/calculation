@@ -63,21 +63,22 @@ return static function (ContainerConfigurator $config): void {
         ->bind('Twig\Extra\Markdown\MarkdownInterface $markdown', service('twig.markdown.default'));
 
     // make classes in src available to be used as services
-    $services->load('App\\', __DIR__ . '/../src/*')
+    $path = __DIR__ . '/../src/';
+    $services->load('App\\', $path . '*')
         ->exclude([
-            __DIR__ . '/../src/Kernel.php',
-            __DIR__ . '/../src/Calendar',
-            __DIR__ . '/../src/Entity',
-            __DIR__ . '/../src/Enums',
-            __DIR__ . '/../src/Faker',
-            __DIR__ . '/../src/Migrations',
-            __DIR__ . '/../src/Model',
-            __DIR__ . '/../src/Pdf',
-            __DIR__ . '/../src/Report',
-            __DIR__ . '/../src/Spreadsheet',
-            __DIR__ . '/../src/Traits',
-            __DIR__ . '/../src/Util',
-            __DIR__ . '/../src/Word',
+            $path . 'Kernel.php',
+            $path . 'Calendar',
+            $path . 'Entity',
+            $path . 'Enums',
+            $path . 'Faker',
+            $path . 'Migrations',
+            $path . 'Model',
+            $path . 'Pdf',
+            $path . 'Report',
+            $path . 'Spreadsheet',
+            $path . 'Traits',
+            $path . 'Util',
+            $path . 'Word',
         ]);
 
     // custom line and date formatter for monolog

@@ -263,6 +263,11 @@ class CalculationTest extends AbstractEntityValidatorTestCase
 
         $calculation->removeEmptyItems();
         self::assertFalse($calculation->hasEmptyItems());
+
+        $product->setPrice(10.0);
+        $calculation = new Calculation();
+        $calculation->addProduct($product, 10.0);
+        self::assertFalse($calculation->hasEmptyItems());
     }
 
     public function testEmptySortedGroup(): void
@@ -514,6 +519,33 @@ class CalculationTest extends AbstractEntityValidatorTestCase
         $calculation->addGroup($group);
         self::assertFalse($calculation->isSortable());
         $calculation->sort();
+    }
+
+    public function testSortCategories(): void
+    {
+        $group = new CalculationGroup();
+        $category1 = new CalculationCategory();
+        $category1->setCode('category1');
+
+        $item1 = new CalculationItem();
+        $item1->setDescription('description1');
+        $category1->addItem($item1);
+
+        $item2 = new CalculationItem();
+        $item2->setDescription('description2');
+        $category1->addItem($item2);
+
+        $category2 = new CalculationCategory();
+        $category2->setCode('category2');
+
+        $group->addCategory($category1);
+        $group->addCategory($category2);
+
+        $category1->setPosition(-1);
+        $category2->setPosition(-1);
+
+        $actual = $group->sort();
+        self::assertTrue($actual);
     }
 
     public function testState(): void

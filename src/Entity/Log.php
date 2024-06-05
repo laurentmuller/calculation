@@ -13,12 +13,13 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\ComparableInterface;
+use App\Traits\LogChannelTrait;
+use App\Traits\LogLevelTrait;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\SqlFormatter\SqlFormatter;
-use Psr\Log\LogLevel;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -28,34 +29,23 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Log extends AbstractEntity implements ComparableInterface
 {
+    use LogChannelTrait;
+    use LogLevelTrait;
+
     /**
      * The user extra field name.
      */
     final public const USER_FIELD = 'user';
 
     /**
-     * The long application channel name.
-     */
-    private const APP_CHANNEL_LONG = 'application';
-
-    /**
-     * The short application channel name.
-     */
-    private const APP_CHANNEL_SHORT = 'app';
-
-    /**
      * The doctrine channel name.
      */
     private const DOCTRINE_CHANNEL = 'doctrine';
 
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 50)]
-    #[ORM\Column(length: 50)]
-    private string $channel = self::APP_CHANNEL_LONG;
-
     #[ORM\Column(nullable: true)]
     private ?array $context = null;
 
+    #[Assert\NotNull]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeInterface $createdAt;
 
@@ -66,11 +56,6 @@ class Log extends AbstractEntity implements ComparableInterface
     private ?array $extra = null;
 
     private ?string $formattedDate = null;
-
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 50)]
-    #[ORM\Column(length: 50)]
-    private string $level = LogLevel::INFO;
 
     #[ORM\Column(type: Types::TEXT)]
     private string $message = '';
@@ -111,32 +96,6 @@ class Log extends AbstractEntity implements ComparableInterface
         return $message;
     }
 
-    public function getChannel(bool $capitalize = false): string
-    {
-        return $capitalize ? StringUtils::capitalize($this->channel) : $this->channel;
-    }
-
-    /**
-     * Gets the channel's icon.
-     *
-     * @psalm-api
-     */
-    public function getChannelIcon(): string
-    {
-        return match ($this->channel) {
-            'application' => 'fa-fw fa-solid fa-laptop-code',
-            'cache' => 'fa-fw fa-solid fa-hard-drive',
-            'console' => 'fa-fw fa-regular fa-keyboard',
-            'doctrine' => 'fa-fw fa-solid fa-database',
-            'mailer' => 'fa-fw fa-regular fa-envelope',
-            'php' => 'fa-fw fa-solid fa-code',
-            'request' => 'fa-fw fa-solid fa-code-pull-request',
-            'security' => 'fa-fw fa-solid fa-key',
-            'deprecation' => 'fa-solid fa-bug',
-            default => 'fa-fw fa-solid fa-file',
-        };
-    }
-
     public function getContext(): ?array
     {
         return $this->context;
@@ -164,42 +123,6 @@ class Log extends AbstractEntity implements ComparableInterface
         }
 
         return $this->formattedDate;
-    }
-
-    public function getLevel(bool $capitalize = false): string
-    {
-        return $capitalize ? StringUtils::capitalize($this->level) : $this->level;
-    }
-
-    /**
-     * @psalm-api
-     */
-    public function getLevelColor(): string
-    {
-        return match ($this->level) {
-            LogLevel::ALERT,
-            LogLevel::CRITICAL,
-            LogLevel::EMERGENCY,
-            LogLevel::ERROR => 'danger',
-            LogLevel::WARNING => 'warning',
-            LogLevel::DEBUG => 'secondary',
-            default => 'info'
-        };
-    }
-
-    /**
-     * @psalm-api
-     */
-    public function getLevelIcon(): string
-    {
-        return match ($this->level) {
-            LogLevel::ALERT,
-            LogLevel::CRITICAL,
-            LogLevel::EMERGENCY,
-            LogLevel::ERROR => 'fa-fw fa-solid fa-circle-exclamation',
-            LogLevel::WARNING => 'fa-fw fa-solid fa-triangle-exclamation',
-            default => 'fa-fw fa-solid fa-circle-info',
-        };
     }
 
     public function getMessage(): string
@@ -233,24 +156,6 @@ class Log extends AbstractEntity implements ComparableInterface
         return $log;
     }
 
-    public function isChannel(): bool
-    {
-        return StringUtils::isString($this->channel);
-    }
-
-    public function isLevel(): bool
-    {
-        return StringUtils::isString($this->level);
-    }
-
-    public function setChannel(string $channel): self
-    {
-        $channel = \strtolower($channel);
-        $this->channel = self::APP_CHANNEL_SHORT === $channel ? self::APP_CHANNEL_LONG : $channel;
-
-        return $this;
-    }
-
     public function setContext(?array $context): self
     {
         $this->context = $context;
@@ -271,13 +176,6 @@ class Log extends AbstractEntity implements ComparableInterface
     public function setExtra(?array $extra): self
     {
         $this->extra = $extra;
-
-        return $this;
-    }
-
-    public function setLevel(string $level): self
-    {
-        $this->level = \strtolower($level);
 
         return $this;
     }

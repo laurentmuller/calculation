@@ -37,9 +37,9 @@ enum HtmlBootstrapColor: string implements PdfColorInterface
     case WARNING = '#FFC107';
 
     /**
-     * Gets the border color for the given class name.
+     * Gets the draw color for the given class name.
      */
-    public static function parseBorderColor(string $class): ?PdfDrawColor
+    public static function parseDrawColor(string $class): ?PdfDrawColor
     {
         return HtmlBootstrapColor::parseClass($class)?->getDrawColor();
     }

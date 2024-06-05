@@ -13,11 +13,15 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\GroupController;
+use App\Report\GroupsReport;
+use App\Spreadsheet\GroupsDocument;
 use App\Tests\EntityTrait\GroupTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(GroupController::class)]
+#[CoversClass(GroupsReport::class)]
+#[CoversClass(GroupsDocument::class)]
 class GroupControllerTest extends AbstractControllerTestCase
 {
     use GroupTrait;

@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\ChartController;
+use App\Report\CalculationByMonthReport;
+use App\Report\CalculationByStateReport;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\GlobalMarginTrait;
 use App\Tests\EntityTrait\ProductTrait;
@@ -20,6 +22,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(ChartController::class)]
+#[CoversClass(CalculationByMonthReport::class)]
+#[CoversClass(CalculationByStateReport::class)]
 class ChartControllerTest extends AbstractControllerTestCase
 {
     use CalculationTrait;

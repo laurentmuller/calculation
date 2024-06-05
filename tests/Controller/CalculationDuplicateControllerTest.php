@@ -14,12 +14,16 @@ namespace App\Tests\Controller;
 
 use App\Controller\CalculationDuplicateController;
 use App\Entity\Product;
+use App\Report\CalculationsDuplicateReport;
+use App\Spreadsheet\CalculationsDuplicateDocument;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(CalculationDuplicateController::class)]
+#[CoversClass(CalculationsDuplicateReport::class)]
+#[CoversClass(CalculationsDuplicateDocument::class)]
 class CalculationDuplicateControllerTest extends AbstractControllerTestCase
 {
     use CalculationTrait;

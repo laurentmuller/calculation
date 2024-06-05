@@ -20,12 +20,12 @@ use App\Entity\Log;
 class LogFile implements \Countable
 {
     /**
-     * @var array<string, int>
+     * @var array<string, LogChannel>
      */
     private array $channels = [];
 
     /**
-     * @var array<string, int>
+     * @var array<string, LogLevel>
      */
     private array $levels = [];
 
@@ -44,8 +44,8 @@ class LogFile implements \Countable
     public function addLog(Log $log): self
     {
         $this->logs[(int) $log->getId()] = $log;
-        $this->updateCounter($this->levels, $log->getLevel());
-        $this->updateCounter($this->channels, $log->getChannel());
+        $this->updateLevels($log->getLevel());
+        $this->updateChannels($log->getChannel());
 
         return $this;
     }
@@ -56,7 +56,7 @@ class LogFile implements \Countable
     }
 
     /**
-     * @return array<string, int>
+     * @return array<string, LogChannel>
      */
     public function getChannels(): array
     {
@@ -69,7 +69,7 @@ class LogFile implements \Countable
     }
 
     /**
-     * @return array<string, int>
+     * @return array<string, LogLevel>
      */
     public function getLevels(): array
     {
@@ -108,11 +108,20 @@ class LogFile implements \Countable
         return $this;
     }
 
-    /**
-     * @param array<string, int> $counter
-     */
-    private function updateCounter(array &$counter, string $key): void
+    private function updateChannels(string $name): void
     {
-        $counter[$key] = 1 + ($counter[$key] ?? 0);
+        if (!\array_key_exists($name, $this->channels)) {
+            $this->channels[$name] = LogChannel::instance($name);
+        }
+        $this->channels[$name]->increment();
+    }
+
+    private function updateLevels(string $name): void
+    {
+        if (!\array_key_exists($name, $this->levels)) {
+            $this->levels[$name] = LogLevel::instance($name);
+        }
+
+        $this->levels[$name]->increment();
     }
 }

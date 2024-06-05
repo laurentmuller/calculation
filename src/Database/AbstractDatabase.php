@@ -75,7 +75,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      */
     public function __toString(): string
     {
-        return $this->filename;
+        return $this->getFilename();
     }
 
     /**
@@ -97,6 +97,12 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
         return false;
     }
 
+    /**
+     * Closes the database connection.
+     *
+     * All opened statements are also closed.
+     * If a transaction is active, then it is canceled (rollback).
+     */
     public function close(): bool
     {
         // close statements
@@ -251,14 +257,16 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      */
     protected function executeAndFetch(\SQLite3Stmt $stmt, int $mode = \SQLITE3_ASSOC): array
     {
-        $rows = [];
         $result = $stmt->execute();
-        if ($result instanceof \SQLite3Result) {
-            while ($row = $result->fetchArray($mode)) {
-                $rows[] = $row;
-            }
-            $result->finalize();
+        if (!$result instanceof \SQLite3Result) {
+            return [];
         }
+
+        $rows = [];
+        while ($row = $result->fetchArray($mode)) {
+            $rows[] = $row;
+        }
+        $result->finalize();
 
         return $rows;
     }
@@ -276,18 +284,16 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      */
     protected function getStatement(string $query): ?\SQLite3Stmt
     {
-        if (!isset($this->statements[$query])) {
-            $statement = $this->prepare($query);
-            if (false !== $statement) {
-                $this->statements[$query] = $statement;
+        if (isset($this->statements[$query])) {
+            return $this->statements[$query];
+        }
 
-                return $statement;
-            }
-
+        $statement = $this->prepare($query);
+        if (false === $statement) {
             return null;
         }
 
-        return $this->statements[$query];
+        return $this->statements[$query] = $statement;
     }
 
     /**

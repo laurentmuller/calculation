@@ -33,6 +33,11 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(PdfTable::class)]
+#[CoversClass(PdfImageCell::class)]
+#[CoversClass(PdfCellBackgroundEvent::class)]
+#[CoversClass(PdfCellBorderEvent::class)]
+#[CoversClass(PdfCellTextEvent::class)]
+#[CoversClass(PdfPdfDrawHeadersEvent::class)]
 class PdfTableTest extends TestCase
 {
     public function testAdd(): void
@@ -118,6 +123,24 @@ class PdfTableTest extends TestCase
         self::assertSame(1, $table->getColumnsCount());
     }
 
+    public function testAdjustCellWidths(): void
+    {
+        $table = $this->createTable();
+        $table->getParent()->addPage();
+        $table->addColumns(
+            PdfColumn::left('left', 25.0, true),
+            PdfColumn::left('left', 25.0),
+            PdfColumn::right('left', 25.0)
+        );
+        $table->addRow('left', 'left', 'right');
+        $table->startRow()
+            ->add('left', 2)
+            ->add('right')
+            ->endRow();
+
+        self::assertSame(3, $table->getColumnsCount());
+    }
+
     public function testAlignment(): void
     {
         $table = $this->createTable(false)
@@ -140,6 +163,8 @@ class PdfTableTest extends TestCase
         $listener = new class() implements PdfDrawCellBackgroundInterface {
             public function drawCellBackground(PdfCellBackgroundEvent $event): bool
             {
+                TestCase::assertNotNull($event->getDocument());
+
                 return true;
             }
         };
@@ -164,6 +189,8 @@ class PdfTableTest extends TestCase
         $listener = new class() implements PdfDrawCellBorderInterface {
             public function drawCellBorder(PdfCellBorderEvent $event): bool
             {
+                TestCase::assertNotNull($event->getDocument());
+
                 return true;
             }
         };
@@ -302,11 +329,54 @@ class PdfTableTest extends TestCase
         $listener = new class() implements PdfDrawHeadersInterface {
             public function drawHeaders(PdfPdfDrawHeadersEvent $event): bool
             {
+                $columns = $event->getColumns();
+                TestCase::assertCount(1, $columns);
+                TestCase::assertNotNull($event->getDocument());
+
                 return true;
             }
         };
         $table->setHeadersListener($listener);
         $table->outputHeaders();
+        self::assertSame(1, $table->getColumnsCount());
+    }
+
+    public function testImageCellInvalid(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        new PdfImageCell('fake');
+    }
+
+    public function testImageCellValid(): void
+    {
+        $path = __DIR__ . '/../Data/images/example.png';
+
+        $table = $this->createTable()
+            ->addColumn(new PdfColumn(''));
+        $cell = new PdfImageCell($path);
+        self::assertSame($path, $cell->getPath());
+
+        $expected = \getimagesize($path);
+        self::assertIsArray($expected);
+        self::assertSame($expected[0], $cell->getWidth());
+        self::assertSame($expected[1], $cell->getHeight());
+
+        $actual = $cell->getSize();
+        self::assertSame($expected[0], $actual[0]);
+        self::assertSame($expected[1], $actual[1]);
+
+        $cell->resize();
+        $cell->resize(248);
+        $cell->resize(0, 294);
+
+        $actual = $cell->getOriginalSize();
+        self::assertSame($expected[0], $actual[0]);
+        self::assertSame($expected[1], $actual[1]);
+
+        $table->getParent()->addPage();
+        $table->startRow()
+            ->addCell($cell)
+            ->endRow();
         self::assertSame(1, $table->getColumnsCount());
     }
 
@@ -360,6 +430,8 @@ class PdfTableTest extends TestCase
         $listener = new class() implements PdfDrawCellTextInterface {
             public function drawCellText(PdfCellTextEvent $event): bool
             {
+                TestCase::assertNotNull($event->getDocument());
+
                 return true;
             }
         };

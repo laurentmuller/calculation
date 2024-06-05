@@ -274,7 +274,7 @@ class HtmlStyle extends PdfStyle
             $this->setFillColor($color);
         }
         // border
-        $color = HtmlBootstrapColor::parseBorderColor($class);
+        $color = HtmlBootstrapColor::parseDrawColor($class);
         if ($color instanceof PdfDrawColor) {
             $this->setDrawColor($color);
         }

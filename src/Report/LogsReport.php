@@ -14,7 +14,9 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Log;
+use App\Model\LogChannel;
 use App\Model\LogFile;
+use App\Model\LogLevel;
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Events\PdfCellBorderEvent;
 use App\Pdf\Html\HtmlBootstrapColor;
@@ -30,7 +32,6 @@ use fpdf\PdfBorder;
 use fpdf\PdfMove;
 use fpdf\PdfOrientation;
 use fpdf\PdfTextAlignment;
-use Psr\Log\LogLevel;
 
 /**
  * Report for the log.
@@ -157,17 +158,9 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
             return $this->colors[$level];
         }
 
-        return $this->colors[$level] = match ($level) {
-            LogLevel::ALERT,
-            LogLevel::CRITICAL,
-            LogLevel::EMERGENCY,
-            LogLevel::ERROR => HtmlBootstrapColor::DANGER->getDrawColor(),
-            LogLevel::WARNING => HtmlBootstrapColor::WARNING->getDrawColor(),
-            LogLevel::DEBUG => HtmlBootstrapColor::SECONDARY->getDrawColor(),
-            LogLevel::INFO,
-            LogLevel::NOTICE => HtmlBootstrapColor::INFO->getDrawColor(),
-            default => null
-        };
+        $levelColor = LogLevel::instance($level)->getLevelColor();
+
+        return $this->colors[$level] = HtmlBootstrapColor::parseDrawColor($levelColor);
     }
 
     private function getRoundedDate(Log $log): int
@@ -182,8 +175,8 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
     }
 
     /**
-     * @psalm-param array<string, int> $levels
-     * @psalm-param array<string, int> $channels
+     * @psalm-param array<string, LogLevel> $levels
+     * @psalm-param array<string, LogChannel> $channels
      */
     private function outputCards(array $levels, array $channels, int $count): void
     {
@@ -272,7 +265,7 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
     }
 
     /**
-     * @psalm-param array<string, int> $values
+     * @psalm-param array<string, \Countable> $values
      * @psalm-param PdfColumn[]        $columns
      * @psalm-param PdfCell[]          $textCells
      * @psalm-param PdfCell[]          $valueCells
@@ -289,7 +282,7 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         foreach ($values as $key => $value) {
             $columns[] = PdfColumn::center($key, 30);
             $textCells[] = new PdfCell(StringUtils::capitalize($key));
-            $valueCells[] = new PdfCell(FormatUtils::formatInt($value));
+            $valueCells[] = new PdfCell(FormatUtils::formatInt($value->count()));
             if ($index-- > 0) {
                 $columns[] = $emptyCol;
                 $textCells[] = $emptyCell;

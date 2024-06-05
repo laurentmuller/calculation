@@ -24,6 +24,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 #[CoversClass(PdfLabelDocument::class)]
+#[CoversClass(PdfLabelTextEvent::class)]
 class PdfLabelDocumentTest extends TestCase
 {
     public function testAddLabels(): void

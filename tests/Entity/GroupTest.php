@@ -168,6 +168,7 @@ class GroupTest extends AbstractEntityValidatorTestCase
     public function testFindMargin(): void
     {
         $group = new Group();
+        self::assertNull($group->findMargin(0));
         $group->addMargin($this->createMargin());
         self::assertNotNull($group->findMargin(0));
         self::assertNull($group->findMargin(100));

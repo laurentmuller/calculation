@@ -35,7 +35,7 @@ class HtmlBootstrapColorTest extends TestCase
         yield [HtmlBootstrapColor::WARNING, '#FFC107'];
     }
 
-    public static function getParseBorderColors(): \Generator
+    public static function getParseDrawColors(): \Generator
     {
         yield ['border-primary', HtmlBootstrapColor::PRIMARY];
         yield ['border-secondary', HtmlBootstrapColor::SECONDARY];
@@ -117,10 +117,10 @@ class HtmlBootstrapColorTest extends TestCase
         $this->handleColors(static fn (HtmlBootstrapColor $color): PdfFillColor => $color->getFillColor());
     }
 
-    #[DataProvider('getParseBorderColors')]
-    public function testParseBorderColor(string $class, ?HtmlBootstrapColor $color): void
+    #[DataProvider('getParseDrawColors')]
+    public function testParseDrawColor(string $class, ?HtmlBootstrapColor $color): void
     {
-        $actual = HtmlBootstrapColor::parseBorderColor($class);
+        $actual = HtmlBootstrapColor::parseDrawColor($class);
         if ($color instanceof HtmlBootstrapColor) {
             $expected = $color->getDrawColor();
             self::assertEqualsCanonicalizing($expected, $actual);

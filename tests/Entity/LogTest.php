@@ -25,13 +25,13 @@ use Psr\Log\LogLevel;
 #[CoversClass(Log::class)]
 class LogTest extends TestCase
 {
-    public static function ChannelIcons(): \Generator
+    public static function getChannelIcons(): \Generator
     {
         yield ['application', 'fa-fw fa-solid fa-laptop-code'];
         yield ['cache', 'fa-fw fa-solid fa-hard-drive'];
-        yield ['console', 'fa-fw fa-regular fa-keyboard'];
+        yield ['console', 'fa-fw fa-solid fa-keyboard'];
         yield ['doctrine', 'fa-fw fa-solid fa-database'];
-        yield ['mailer', 'fa-fw fa-regular fa-envelope'];
+        yield ['mailer', 'fa-fw fa-solid fa-envelope'];
         yield ['php', 'fa-fw fa-solid fa-code'];
         yield ['request', 'fa-fw fa-solid fa-code-pull-request'];
         yield ['security', 'fa-fw fa-solid fa-key'];
@@ -41,14 +41,14 @@ class LogTest extends TestCase
 
     public static function getLevelColors(): \Generator
     {
-        yield [LogLevel::ALERT, 'danger'];
-        yield [LogLevel::CRITICAL, 'danger'];
-        yield [LogLevel::EMERGENCY, 'danger'];
-        yield [LogLevel::ERROR, 'danger'];
-        yield [LogLevel::WARNING, 'warning'];
-        yield [LogLevel::DEBUG, 'secondary'];
-        yield ['fake', 'info'];
-        yield ['', 'info'];
+        yield [LogLevel::ALERT, 'text-danger'];
+        yield [LogLevel::CRITICAL, 'text-danger'];
+        yield [LogLevel::EMERGENCY, 'text-danger'];
+        yield [LogLevel::ERROR, 'text-danger'];
+        yield [LogLevel::WARNING, 'text-warning'];
+        yield [LogLevel::DEBUG, 'text-secondary'];
+        yield ['fake', 'text-info'];
+        yield ['', 'text-info'];
     }
 
     public static function getLevelIcons(): \Generator
@@ -84,7 +84,7 @@ class LogTest extends TestCase
         self::assertSame('application', $log->getChannel());
     }
 
-    #[DataProvider('ChannelIcons')]
+    #[DataProvider('getChannelIcons')]
     public function testChannelIcon(string $channel, string $expected): void
     {
         $log = new Log();
@@ -93,6 +93,9 @@ class LogTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testCompare(): void
     {
         $date = new \DateTime();

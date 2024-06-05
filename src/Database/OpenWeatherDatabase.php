@@ -22,7 +22,7 @@ namespace App\Database;
  *      latitude: float,
  *      longitude: float}
  */
-class OpenWeatherDatabase extends AbstractDatabase
+class OpenWeatherDatabase extends AbstractDatabase implements \Countable
 {
     /**
      * SQL statement to create the city table.
@@ -83,6 +83,11 @@ class OpenWeatherDatabase extends AbstractDatabase
             name
         LIMIT :limit
         SQL;
+
+    public function count(): int
+    {
+        return $this->getRecordsCount('city');
+    }
 
     /**
      * Delete all cities.

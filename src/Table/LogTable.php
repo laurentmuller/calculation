@@ -13,7 +13,9 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\Log;
+use App\Model\LogChannel;
 use App\Model\LogFile;
+use App\Model\LogLevel;
 use App\Service\LogService;
 use App\Utils\FileUtils;
 use App\Utils\LogFilter;
@@ -114,8 +116,8 @@ class LogTable extends AbstractTable implements \Countable
             $results->customData = [
                 'level' => $level,
                 'channel' => $channel,
-                'levels' => \array_keys($logFile->getLevels()),
-                'channels' => \array_keys($logFile->getChannels()),
+                'levels' => $this->mapLevels($logFile->getLevels()),
+                'channels' => $this->mapChannels($logFile->getChannels()),
                 'file' => $logFile->getFile(),
             ];
         }
@@ -142,6 +144,35 @@ class LogTable extends AbstractTable implements \Countable
         }
 
         return $entities;
+    }
+
+    /**
+     * @param array<string, LogChannel> $channels
+     */
+    private function mapChannels(array $channels): array
+    {
+        foreach ($channels as &$channel) {
+            $channel = $this->replaceIcon($channel->getChannelIcon());
+        }
+
+        return $channels;
+    }
+
+    /**
+     * @psalm-param array<string, LogLevel> $levels
+     */
+    private function mapLevels(array $levels): array
+    {
+        foreach ($levels as &$level) {
+            $level = $this->replaceIcon($level->getLevelIcon()) . ' ' . $level->getLevelColor();
+        }
+
+        return $levels;
+    }
+
+    private function replaceIcon(string $icon): string
+    {
+        return \str_replace('fa-fw fa-solid fa-', '', $icon) . ' fa-fw';
     }
 
     /**

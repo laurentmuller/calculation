@@ -10726,23 +10726,23 @@
         },
         {
             "name": "psalm/plugin-symfony",
-            "version": "v5.1.0",
+            "version": "v5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-symfony.git",
-                "reference": "f23ec3439743fb24f5c1101e52d032f23d5befa6"
+                "reference": "179db305f49f2b2737c65d42c1f9f9c61a722fa2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/f23ec3439743fb24f5c1101e52d032f23d5befa6",
-                "reference": "f23ec3439743fb24f5c1101e52d032f23d5befa6",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/179db305f49f2b2737c65d42c1f9f9c61a722fa2",
+                "reference": "179db305f49f2b2737c65d42c1f9f9c61a722fa2",
                 "shasum": ""
             },
             "require": {
                 "ext-simplexml": "*",
-                "php": "^7.4 || ^8.0",
+                "php": "^8.1",
                 "symfony/framework-bundle": "^5.0 || ^6.0 || ^7.0",
-                "vimeo/psalm": "^5.1"
+                "vimeo/psalm": "^5.24"
             },
             "require-dev": {
                 "doctrine/annotations": "^1.8|^2",
@@ -10752,7 +10752,7 @@
                 "symfony/console": "*",
                 "symfony/form": "^5.0 || ^6.0 || ^7.0",
                 "symfony/messenger": "^5.0 || ^6.0 || ^7.0",
-                "symfony/security-guard": "*",
+                "symfony/security-core": "*",
                 "symfony/serializer": "^5.0 || ^6.0 || ^7.0",
                 "symfony/validator": "*",
                 "twig/twig": "^2.10 || ^3.0",
@@ -10785,9 +10785,9 @@
             "description": "Psalm Plugin for Symfony",
             "support": {
                 "issues": "https://github.com/psalm/psalm-plugin-symfony/issues",
-                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.1.0"
+                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.2.0"
             },
-            "time": "2023-11-12T10:04:27+00:00"
+            "time": "2024-06-05T17:01:18+00:00"
         },
         {
             "name": "react/cache",

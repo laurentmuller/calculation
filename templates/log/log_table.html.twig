@@ -22,8 +22,8 @@
     <ul class="dropdown-menu" aria-labelledby="level">
         {{ _self.output_dropdown('level', '', level, 'log.list.level_all'|trans, false, 'filter-circle-xmark') }}
         {{ _self.item_separator() }}
-        {% for key in customData.levels %}
-            {{ _self.output_dropdown('level', key, level, key|capitalize, {}, ' icon-level ' ~ key) }}
+        {% for key, icon in customData.levels %}
+            {{ _self.output_dropdown('level', key, level, key|capitalize, {}, icon) }}
         {% endfor %}
     </ul>
 {% endif %}
@@ -35,8 +35,8 @@
     <ul class="dropdown-menu" aria-labelledby="channel">
         {{ _self.output_dropdown('channel', '', channel, 'log.list.channel_all'|trans, false, 'filter-circle-xmark') }}
         {{ _self.item_separator() }}
-        {% for key in customData.channels %}
-            {{ _self.output_dropdown('channel', key, channel, key|capitalize, {}, ' icon-channel ' ~ key) }}
+        {% for key, icon in customData.channels %}
+            {{ _self.output_dropdown('channel', key, channel, key|capitalize, {}, icon) }}
         {% endfor %}
     </ul>
 {% endif %}

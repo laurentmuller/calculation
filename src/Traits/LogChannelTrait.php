@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\Utils\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -43,7 +42,7 @@ trait LogChannelTrait
      */
     public function getChannel(bool $capitalize = false): string
     {
-        return $capitalize ? StringUtils::capitalize($this->channel) : $this->channel;
+        return $capitalize ? \ucfirst($this->channel) : $this->channel;
     }
 
     /**

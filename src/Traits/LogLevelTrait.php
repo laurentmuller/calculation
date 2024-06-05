@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\Utils\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Psr\Log\LogLevel as PsrLevel;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -34,7 +33,7 @@ trait LogLevelTrait
      */
     public function getLevel(bool $capitalize = false): string
     {
-        return $capitalize ? StringUtils::capitalize($this->level) : $this->level;
+        return $capitalize ? \ucfirst($this->level) : $this->level;
     }
 
     /**

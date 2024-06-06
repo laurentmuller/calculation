@@ -16,7 +16,6 @@ use App\Model\LogFile;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\RequiresSetting;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(FormatUtils::class)]
@@ -308,9 +307,12 @@ class FormatUtilsTest extends TestCase
     }
 
     #[DataProvider('getIntegers')]
-    #[RequiresSetting('date.timezone', FormatUtils::DEFAULT_TIME_ZONE)]
     public function testFormatInteger(\Countable|array|int|float|string|null $number, string $expected): void
     {
+        if (!$this->updateLocale()) {
+            self::markTestSkipped('Unable to set locale to "fr_CH".');
+        }
+
         $actual = FormatUtils::formatInt($number);
         self::assertSame($expected, $actual);
     }
@@ -376,5 +378,12 @@ class FormatUtilsTest extends TestCase
     private static function createDate(): \DateTimeInterface
     {
         return new \DateTime(self::DATE_TIME, new \DateTimeZone(FormatUtils::DEFAULT_TIME_ZONE));
+    }
+
+    private function updateLocale(): bool
+    {
+        $value = \setlocale(\LC_ALL, FormatUtils::DEFAULT_LOCALE);
+
+        return false !== $value && FormatUtils::DEFAULT_LOCALE === $value;
     }
 }

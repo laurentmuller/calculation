@@ -33,7 +33,7 @@ final class FormatUtils
     public const DEFAULT_LOCALE = 'fr_CH';
 
     /**
-     * The default timezone.
+     * The default timezone (Europe/Zurich).
      */
     public const DEFAULT_TIME_ZONE = 'Europe/Zurich';
 

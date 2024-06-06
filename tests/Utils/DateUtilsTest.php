@@ -16,7 +16,6 @@ use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\RequiresSetting;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(DateUtils::class)]
@@ -255,9 +254,12 @@ class DateUtilsTest extends TestCase
     }
 
     #[DataProvider('getMonthNames')]
-    #[RequiresSetting('date.timezone', FormatUtils::DEFAULT_TIME_ZONE)]
     public function testMonthNames(string $name, int $index): void
     {
+        if (!$this->updateLocale()) {
+            self::markTestSkipped('Unable to set locale to "fr_CH".');
+        }
+
         $values = DateUtils::getMonths();
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
@@ -277,9 +279,12 @@ class DateUtilsTest extends TestCase
     }
 
     #[DataProvider('getShortMonthNames')]
-    #[RequiresSetting('date.timezone', FormatUtils::DEFAULT_TIME_ZONE)]
     public function testShortMonthNames(string $name, int $index): void
     {
+        if (!$this->updateLocale()) {
+            self::markTestSkipped('Unable to set locale to "fr_CH".');
+        }
+
         $values = DateUtils::getShortMonths();
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
@@ -292,9 +297,12 @@ class DateUtilsTest extends TestCase
     }
 
     #[DataProvider('getShortWeekdayNames')]
-    #[RequiresSetting('date.timezone', FormatUtils::DEFAULT_TIME_ZONE)]
     public function testShortWeekdayNames(string $name, int $index, string $firstDay = 'sunday'): void
     {
+        if (!$this->updateLocale()) {
+            self::markTestSkipped('Unable to set locale to "fr_CH".');
+        }
+
         $values = DateUtils::getShortWeekdays($firstDay);
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
@@ -328,9 +336,12 @@ class DateUtilsTest extends TestCase
     }
 
     #[DataProvider('getWeekdayNames')]
-    #[RequiresSetting('date.timezone', FormatUtils::DEFAULT_TIME_ZONE)]
     public function testWeekdayNames(string $name, int $index, string $firstDay = 'sunday'): void
     {
+        if (!$this->updateLocale()) {
+            self::markTestSkipped('Unable to set locale to "fr_CH".');
+        }
+
         $values = DateUtils::getWeekdays($firstDay);
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
@@ -340,5 +351,12 @@ class DateUtilsTest extends TestCase
     {
         $values = DateUtils::getWeekdays();
         self::assertCount(7, $values);
+    }
+
+    private function updateLocale(): bool
+    {
+        $value = \setlocale(\LC_ALL, FormatUtils::DEFAULT_LOCALE);
+
+        return false !== $value && FormatUtils::DEFAULT_LOCALE === $value;
     }
 }

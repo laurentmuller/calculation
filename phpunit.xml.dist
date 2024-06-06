@@ -8,6 +8,7 @@
     <php>
         <ini name="display_errors" value="1"/>
         <ini name="error_reporting" value="-1"/>
+        <ini name="date.timezone" value="Europe/Zurich" force="true"/>
         <server name="APP_ENV" value="test" force="true"/>
         <server name="APP_DEBUG" value="false"/>
         <server name="SHELL_VERBOSITY" value="-1"/>

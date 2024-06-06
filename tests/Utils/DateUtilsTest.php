@@ -21,15 +21,6 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(DateUtils::class)]
 class DateUtilsTest extends TestCase
 {
-    private const TIME_ZONE = 'Europe/Zurich';
-
-    protected function setUp(): void
-    {
-        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
-        \setlocale(\LC_ALL, FormatUtils::DEFAULT_LOCALE);
-        \date_default_timezone_set(self::TIME_ZONE);
-    }
-
     public static function getCompletYears(): \Iterator
     {
         yield [29, 2029];
@@ -259,6 +250,9 @@ class DateUtilsTest extends TestCase
     #[DataProvider('getMonthNames')]
     public function testMonthNames(string $name, int $index): void
     {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
+        \setlocale(\LC_ALL, FormatUtils::DEFAULT_LOCALE);
+
         $values = DateUtils::getMonths();
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
@@ -280,6 +274,9 @@ class DateUtilsTest extends TestCase
     #[DataProvider('getShortMonthNames')]
     public function testShortMonthNames(string $name, int $index): void
     {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
+        \setlocale(\LC_ALL, FormatUtils::DEFAULT_LOCALE);
+
         $values = DateUtils::getShortMonths();
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
@@ -294,6 +291,9 @@ class DateUtilsTest extends TestCase
     #[DataProvider('getShortWeekdayNames')]
     public function testShortWeekdayNames(string $name, int $index, string $firstDay = 'sunday'): void
     {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
+        \setlocale(\LC_ALL, FormatUtils::DEFAULT_LOCALE);
+
         $values = DateUtils::getShortWeekdays($firstDay);
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
@@ -326,15 +326,12 @@ class DateUtilsTest extends TestCase
         self::assertSame('2020-01-03', $add->format('Y-m-d'));
     }
 
-    public function testTimeZone(): void
-    {
-        $actual = \date_default_timezone_get();
-        self::assertSame(self::TIME_ZONE, $actual);
-    }
-
     #[DataProvider('getWeekdayNames')]
     public function testWeekdayNames(string $name, int $index, string $firstDay = 'sunday'): void
     {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
+        \setlocale(\LC_ALL, FormatUtils::DEFAULT_LOCALE);
+
         $values = DateUtils::getWeekdays($firstDay);
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);

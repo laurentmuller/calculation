@@ -33,6 +33,11 @@ final class FormatUtils
     public const DEFAULT_LOCALE = 'fr_CH';
 
     /**
+     * The default timezone.
+     */
+    public const DEFAULT_TIME_ZONE = 'Europe/Zurich';
+
+    /**
      * The fraction digits.
      */
     public const FRACTION_DIGITS = 2;

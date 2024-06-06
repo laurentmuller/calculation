@@ -24,7 +24,12 @@ class FormatUtilsTest extends TestCase
     private const DATE_TIME = '2022-02-20 12:59:59';
     private const PERCENT_SYMBOL = '%';
     private const TIME_STAMP = 1_645_358_399;
-    private const TIME_ZONE = 'Europe/Zurich';
+
+    protected function setUp(): void
+    {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
+        \setlocale(\LC_ALL, FormatUtils::DEFAULT_LOCALE);
+    }
 
     public static function getAmounts(): \Iterator
     {
@@ -233,7 +238,7 @@ class FormatUtilsTest extends TestCase
         ?int $dateType = null,
         ?int $timeType = null
     ): void {
-        $actual = FormatUtils::getDateFormatter($dateType, $timeType, $pattern, self::TIME_ZONE);
+        $actual = FormatUtils::getDateFormatter($dateType, $timeType, $pattern, FormatUtils::DEFAULT_TIME_ZONE);
         self::assertSame($expected, $actual->getPattern());
     }
 
@@ -250,6 +255,11 @@ class FormatUtilsTest extends TestCase
     public function testDefaultLocale(): void
     {
         self::assertSame('fr_CH', FormatUtils::DEFAULT_LOCALE);
+    }
+
+    public function testDefaultTimezone(): void
+    {
+        self::assertSame('Europe/Zurich', FormatUtils::DEFAULT_TIME_ZONE);
     }
 
     #[DataProvider('getAmounts')]
@@ -269,7 +279,7 @@ class FormatUtilsTest extends TestCase
         ?int $dateType = null,
         ?string $pattern = null
     ): void {
-        $actual = FormatUtils::formatDate($date, $dateType, $pattern, self::TIME_ZONE);
+        $actual = FormatUtils::formatDate($date, $dateType, $pattern, FormatUtils::DEFAULT_TIME_ZONE);
         self::assertSame($expected, $actual);
     }
 
@@ -285,7 +295,7 @@ class FormatUtilsTest extends TestCase
         ?int $timeType = null,
         ?string $pattern = null
     ): void {
-        $actual = FormatUtils::formatDateTime($date, $dateType, $timeType, $pattern, self::TIME_ZONE);
+        $actual = FormatUtils::formatDateTime($date, $dateType, $timeType, $pattern, FormatUtils::DEFAULT_TIME_ZONE);
         self::assertSame($expected, $actual);
     }
 
@@ -299,8 +309,9 @@ class FormatUtilsTest extends TestCase
     #[DataProvider('getIntegers')]
     public function testFormatInteger(\Countable|array|int|float|string|null $number, string $expected): void
     {
-        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
-        \setlocale(\LC_ALL, FormatUtils::DEFAULT_LOCALE);
+        if (FormatUtils::DEFAULT_LOCALE !== \Locale::getDefault()) {
+            self::markTestSkipped('The default locale is not set to "fr_CH".');
+        }
 
         $actual = FormatUtils::formatInt($number);
         self::assertSame($expected, $actual);
@@ -337,7 +348,7 @@ class FormatUtilsTest extends TestCase
         ?int $timeType = null,
         ?string $pattern = null
     ): void {
-        $actual = FormatUtils::formatTime($date, $timeType, $pattern, self::TIME_ZONE);
+        $actual = FormatUtils::formatTime($date, $timeType, $pattern, FormatUtils::DEFAULT_TIME_ZONE);
         self::assertSame($expected, $actual);
     }
 
@@ -366,6 +377,6 @@ class FormatUtilsTest extends TestCase
      */
     private static function createDate(): \DateTimeInterface
     {
-        return new \DateTime(self::DATE_TIME, new \DateTimeZone(self::TIME_ZONE));
+        return new \DateTime(self::DATE_TIME, new \DateTimeZone(FormatUtils::DEFAULT_TIME_ZONE));
     }
 }

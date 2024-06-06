@@ -21,10 +21,13 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(DateUtils::class)]
 class DateUtilsTest extends TestCase
 {
+    private const TIME_ZONE = 'Europe/Zurich';
+
     protected function setUp(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         \setlocale(\LC_ALL, FormatUtils::DEFAULT_LOCALE);
+        \date_default_timezone_set(self::TIME_ZONE);
     }
 
     public static function getCompletYears(): \Iterator
@@ -321,6 +324,12 @@ class DateUtilsTest extends TestCase
         $date = new \DateTime('2020-01-10');
         $add = DateUtils::sub($date, 'P1W');
         self::assertSame('2020-01-03', $add->format('Y-m-d'));
+    }
+
+    public function testTimeZone(): void
+    {
+        $actual = \date_default_timezone_get();
+        self::assertSame(self::TIME_ZONE, $actual);
     }
 
     #[DataProvider('getWeekdayNames')]

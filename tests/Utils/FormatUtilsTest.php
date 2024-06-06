@@ -22,17 +22,15 @@ use PHPUnit\Framework\TestCase;
 class FormatUtilsTest extends TestCase
 {
     private const DATE_TIME = '2022-02-20 12:59:59';
-
     private const PERCENT_SYMBOL = '%';
-
     private const TIME_STAMP = 1_645_358_399;
-
     private const TIME_ZONE = 'Europe/Zurich';
 
     protected function setUp(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
-        \setlocale(\LC_TIME, FormatUtils::DEFAULT_LOCALE);
+        \setlocale(\LC_ALL, FormatUtils::DEFAULT_LOCALE);
+        \date_default_timezone_set(self::TIME_ZONE);
     }
 
     public static function getAmounts(): \Iterator
@@ -365,6 +363,12 @@ class FormatUtilsTest extends TestCase
     public function testTimeType(): void
     {
         self::assertSame(\IntlDateFormatter::SHORT, FormatUtils::TIME_TYPE);
+    }
+
+    public function testTimeZone(): void
+    {
+        $actual = \date_default_timezone_get();
+        self::assertSame(self::TIME_ZONE, $actual);
     }
 
     /**

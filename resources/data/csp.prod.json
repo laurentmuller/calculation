@@ -1,12 +1,28 @@
 {
-    "base-uri": "none",
-    "media-src": "none",
-    "object-src": "none",
-    "default-src": "self",
-    "form-action": "self",
-    "manifest-src": "self",
-    "frame-ancestors": "self",
-    "script-src": "nonce",
+    "base-uri": [
+        "none"
+    ],
+    "media-src": [
+        "none"
+    ],
+    "object-src": [
+        "none"
+    ],
+    "default-src": [
+        "self"
+    ],
+    "form-action": [
+        "self"
+    ],
+    "manifest-src": [
+        "self"
+    ],
+    "frame-ancestors": [
+        "self"
+    ],
+    "script-src": [
+        "nonce"
+    ],
     "script-src-elem": [
         "nonce",
         "https://www.google.com",
@@ -41,5 +57,7 @@
         "https://robohash.org",
         "https://openweathermap.org"
     ],
-    "report-uri": "report"
+    "report-uri": [
+        "report"
+    ]
 }

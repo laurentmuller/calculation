@@ -30,9 +30,10 @@ use Symfony\Contracts\Cache\CacheInterface;
 /**
  * Listener to add content security policy (CSP) to response.
  *
- * Processing Content Security Policy violation reports:
- *
- * @see https://mathiasbynens.be/notes/csp-reports.
+ * @see https://mathiasbynens.be/notes/csp-reports
+ * @see https://securityheaders.com/
+ * @see https://github.com/aidantwoods/SecureHeaders
+ * @see https://www.sentrium.co.uk/labs/application-security-101-http-headers
  */
 class ResponseListener
 {
@@ -57,10 +58,6 @@ class ResponseListener
 
     /**
      * The default headers to add.
-     *
-     * @see https://securityheaders.com/
-     * @see https://github.com/aidantwoods/SecureHeaders
-     * @see https://www.sentrium.co.uk/labs/application-security-101-http-headers
      */
     private const DEFAULT_HEADERS = [
         'referrer-policy' => 'same-origin',
@@ -92,7 +89,7 @@ class ResponseListener
             return;
         }
 
-        if ($this->debug && $this->isDevRequest($event->getRequest())) {
+        if ($this->debug && $this->isDevFirewall($event->getRequest())) {
             return;
         }
 
@@ -129,6 +126,8 @@ class ResponseListener
      * @psalm-return array<string, string[]>
      *
      * @throws InvalidArgumentException
+     *
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
     private function getCSP(): array
     {
@@ -137,9 +136,14 @@ class ResponseListener
                 return [];
             }
 
-            $content = $this->loadFile();
+            try {
+                /* @psalm-var array<string, string[]> $content */
+                $content = FileUtils::decodeJson($this->file);
 
-            return $this->replaceValues($content);
+                return $this->replaceValues($content);
+            } catch (\InvalidArgumentException) {
+                return [];
+            }
         });
     }
 
@@ -148,21 +152,9 @@ class ResponseListener
         return $this->generator->generate(CspReportController::ROUTE_NAME, [], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
-    private function isDevRequest(Request $request): bool
+    private function isDevFirewall(Request $request): bool
     {
         return self::FIREWALL_DEV === $this->security->getFirewallConfig($request)?->getName();
-    }
-
-    /**
-     * @psalm-return array<string, string[]>
-     */
-    private function loadFile(): array
-    {
-        /* @psalm-var array<string, string|string[]> $content */
-        $content = FileUtils::decodeJson($this->file);
-
-        /** @psalm-var array<string, string[]> */
-        return \array_map(static fn (string|array $value): array => (array) $value, $content);
     }
 
     /**

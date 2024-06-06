@@ -16,6 +16,7 @@ use App\Model\LogFile;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RequiresSetting;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(FormatUtils::class)]
@@ -307,12 +308,9 @@ class FormatUtilsTest extends TestCase
     }
 
     #[DataProvider('getIntegers')]
+    #[RequiresSetting('date.timezone', FormatUtils::DEFAULT_TIME_ZONE)]
     public function testFormatInteger(\Countable|array|int|float|string|null $number, string $expected): void
     {
-        if (FormatUtils::DEFAULT_LOCALE !== \Locale::getDefault()) {
-            self::markTestSkipped('The default locale is not set to "fr_CH".');
-        }
-
         $actual = FormatUtils::formatInt($number);
         self::assertSame($expected, $actual);
     }

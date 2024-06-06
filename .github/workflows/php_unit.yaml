@@ -14,11 +14,17 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: '8.2'
-                    ini-values: date.timezone=Europe/Zurich
                     coverage: xdebug
 
             -   name: Install dependencies
                 run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+            -   name: Set time zone
+                uses: szenius/set-timezone@v2.0
+                with:
+                  timezoneLinux: "Europe/Zurich"
+                  timezoneMacos: "Europe/Zurich"
+                  timezoneWindows: "Europe/Zurich"
 
             -   name: Run PHPUnit
                 run: vendor/bin/phpunit --display-skipped --no-progress --coverage-clover ./clover.xml

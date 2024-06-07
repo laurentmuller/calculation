@@ -12,16 +12,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Controller\AbstractController;
+use App\Controller\AbstractEntityController;
 use App\Controller\GlobalMarginController;
-use App\Report\GlobalMarginsReport;
-use App\Spreadsheet\GlobalMarginsDocument;
 use App\Tests\EntityTrait\GlobalMarginTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
+#[CoversClass(AbstractController::class)]
+#[CoversClass(AbstractEntityController::class)]
 #[CoversClass(GlobalMarginController::class)]
-#[CoversClass(GlobalMarginsReport::class)]
-#[CoversClass(GlobalMarginsDocument::class)]
 class GlobalMarginControllerTest extends AbstractControllerTestCase
 {
     use GlobalMarginTrait;

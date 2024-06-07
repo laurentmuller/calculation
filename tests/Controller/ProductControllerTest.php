@@ -12,16 +12,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Controller\AbstractController;
+use App\Controller\AbstractEntityController;
 use App\Controller\ProductController;
-use App\Report\ProductsReport;
-use App\Spreadsheet\ProductsDocument;
 use App\Tests\EntityTrait\ProductTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
+#[CoversClass(AbstractController::class)]
+#[CoversClass(AbstractEntityController::class)]
 #[CoversClass(ProductController::class)]
-#[CoversClass(ProductsReport::class)]
-#[CoversClass(ProductsDocument::class)]
 class ProductControllerTest extends AbstractControllerTestCase
 {
     use ProductTrait;

@@ -12,16 +12,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Controller\AbstractController;
+use App\Controller\AbstractEntityController;
 use App\Controller\CustomerController;
 use App\Entity\Customer;
-use App\Report\CustomersReport;
-use App\Spreadsheet\CustomersDocument;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
+#[CoversClass(AbstractController::class)]
+#[CoversClass(AbstractEntityController::class)]
 #[CoversClass(CustomerController::class)]
-#[CoversClass(CustomersReport::class)]
-#[CoversClass(CustomersDocument::class)]
 class CustomerControllerTest extends AbstractControllerTestCase
 {
     private ?Customer $entity = null;

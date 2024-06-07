@@ -13,12 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\SchemaController;
-use App\Report\SchemaReport;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(SchemaController::class)]
-#[CoversClass(SchemaReport::class)]
 class SchemaControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): \Iterator
@@ -26,6 +24,11 @@ class SchemaControllerTest extends AbstractControllerTestCase
         yield ['/schema', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/schema', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
         yield ['/schema', self::ROLE_SUPER_ADMIN];
+
+        yield ['/schema/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/schema/pdf', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
+        yield ['/schema/pdf', self::ROLE_SUPER_ADMIN];
+
         yield ['/schema/sy_Calculation', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/schema/sy_Calculation', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
         yield ['/schema/sy_Calculation', self::ROLE_SUPER_ADMIN];

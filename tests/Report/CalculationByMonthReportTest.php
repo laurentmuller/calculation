@@ -1,0 +1,77 @@
+<?php
+/*
+ * This file is part of the Calculation package.
+ *
+ * (c) bibi.nu <bibi@bibi.nu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace App\Tests\Report;
+
+use App\Controller\AbstractController;
+use App\Report\CalculationByMonthReport;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
+#[CoversClass(CalculationByMonthReport::class)]
+class CalculationByMonthReportTest extends TestCase
+{
+    /**
+     * @throws Exception
+     */
+    public function testRender(): void
+    {
+        $controller = $this->createMock(AbstractController::class);
+        $generator = $this->createMock(UrlGeneratorInterface::class);
+        $data1 = [
+            'count' => 1,
+            'items' => 10.0,
+            'total' => 20.0,
+            'year' => 2024,
+            'month' => 1,
+            'margin_percent' => 0.1,
+            'margin_amount' => 5.0,
+            'date' => new \DateTime(),
+        ];
+        $data2 = [
+            'count' => 10,
+            'items' => 20.0,
+            'total' => 40.0,
+            'year' => 2024,
+            'month' => 2,
+            'margin_percent' => 0.2,
+            'margin_amount' => 10.0,
+            'date' => new \DateTime(),
+        ];
+        $data3 = [
+            'count' => 5,
+            'items' => 15.0,
+            'total' => 35.0,
+            'year' => 2024,
+            'month' => 3,
+            'margin_percent' => 0.15,
+            'margin_amount' => 7.0,
+            'date' => new \DateTime(),
+        ];
+        $data4 = [
+            'count' => 5,
+            'items' => 15.0,
+            'total' => 35.0,
+            'year' => 2024,
+            'month' => 3,
+            'margin_percent' => 0.15,
+            'margin_amount' => 7.0,
+            'date' => new \DateTime(),
+        ];
+        $entities = [$data1, $data2, $data3, $data4];
+        $report = new CalculationByMonthReport($controller, $entities, $generator);
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+}

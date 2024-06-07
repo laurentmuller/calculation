@@ -217,9 +217,6 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      */
     private function outputUsers(array $users, PdfGroupTable $table): void
     {
-        if ([] === $users) {
-            return;
-        }
         foreach ($users as $user) {
             if (!$user->isOverwrite()) {
                 $rights = $this->builder->getRole($user)->getRights();

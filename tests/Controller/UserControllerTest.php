@@ -12,19 +12,15 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Controller\AbstractController;
+use App\Controller\AbstractEntityController;
 use App\Controller\UserController;
-use App\Report\UsersReport;
-use App\Report\UsersRightsReport;
-use App\Spreadsheet\UserRightsDocument;
-use App\Spreadsheet\UsersDocument;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
+#[CoversClass(AbstractController::class)]
+#[CoversClass(AbstractEntityController::class)]
 #[CoversClass(UserController::class)]
-#[CoversClass(UsersReport::class)]
-#[CoversClass(UsersRightsReport::class)]
-#[CoversClass(UsersDocument::class)]
-#[CoversClass(UserRightsDocument::class)]
 class UserControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): \Iterator

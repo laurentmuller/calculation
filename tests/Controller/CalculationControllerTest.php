@@ -12,20 +12,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Controller\AbstractController;
+use App\Controller\AbstractEntityController;
 use App\Controller\CalculationController;
-use App\Report\CalculationReport;
-use App\Report\CalculationsReport;
-use App\Spreadsheet\CalculationDocument;
-use App\Spreadsheet\CalculationsDocument;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 
+#[CoversClass(AbstractController::class)]
+#[CoversClass(AbstractEntityController::class)]
 #[CoversClass(CalculationController::class)]
-#[CoversClass(CalculationReport::class)]
-#[CoversClass(CalculationsReport::class)]
-#[CoversClass(CalculationDocument::class)]
-#[CoversClass(CalculationsDocument::class)]
 class CalculationControllerTest extends AbstractControllerTestCase
 {
     use CalculationTrait;

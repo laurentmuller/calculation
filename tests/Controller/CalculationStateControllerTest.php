@@ -12,16 +12,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Controller\AbstractController;
+use App\Controller\AbstractEntityController;
 use App\Controller\CalculationStateController;
-use App\Report\CalculationStatesReport;
-use App\Spreadsheet\CalculationStatesDocument;
 use App\Tests\EntityTrait\CalculationStateTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
+#[CoversClass(AbstractController::class)]
+#[CoversClass(AbstractEntityController::class)]
 #[CoversClass(CalculationStateController::class)]
-#[CoversClass(CalculationStatesReport::class)]
-#[CoversClass(CalculationStatesDocument::class)]
 class CalculationStateControllerTest extends AbstractControllerTestCase
 {
     use CalculationStateTrait;

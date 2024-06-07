@@ -13,14 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\TestController;
-use App\Report\HtmlColorNameReport;
-use App\Report\HtmlReport;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(TestController::class)]
-#[CoversClass(HtmlColorNameReport::class)]
-#[CoversClass(HtmlReport::class)]
 class TestControllerTest extends AbstractControllerTestCase
 {
     private const ROUTES = [

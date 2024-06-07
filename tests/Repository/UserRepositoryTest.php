@@ -41,9 +41,6 @@ class UserRepositoryTest extends KernelServiceTestCase
      */
     public function testCreateResetPasswordRequest(): void
     {
-        // ('id', 'email', 'username', 'enabled', 'password', 'role')
-        // (3, 'ROLE_USER@TEST.COM',        'ROLE_USER',        1, 'ROLE_USER',        null),
-
         $user = $this->getUser();
         $actual = $this->repository->createResetPasswordRequest(
             $user,

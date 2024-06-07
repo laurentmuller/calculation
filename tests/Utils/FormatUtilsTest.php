@@ -28,7 +28,6 @@ class FormatUtilsTest extends TestCase
     protected function setUp(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
-        \setlocale(\LC_ALL, FormatUtils::DEFAULT_LOCALE);
     }
 
     public static function getAmounts(): \Iterator
@@ -382,8 +381,6 @@ class FormatUtilsTest extends TestCase
 
     private function updateLocale(): bool
     {
-        $value = \setlocale(\LC_ALL, FormatUtils::DEFAULT_LOCALE);
-
-        return false !== $value && FormatUtils::DEFAULT_LOCALE === $value;
+        return false !== \ini_set('intl.default_locale', FormatUtils::DEFAULT_LOCALE);
     }
 }

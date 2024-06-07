@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Data;
 
 use App\Database\AbstractDatabase;
+use App\Utils\FileUtils;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -61,7 +62,7 @@ class Database extends AbstractDatabase
     {
         // load script
         $file = __DIR__ . '/db_test.sql';
-        $sql = (string) \file_get_contents($file);
+        $sql = FileUtils::readFile($file);
 
         // execute
         $this->exec($sql);

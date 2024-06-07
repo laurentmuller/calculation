@@ -40,7 +40,7 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
      *
      * @param Category $category the category to search for
      *
-     * @return int the number of products
+     * @return int the number of entities
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */

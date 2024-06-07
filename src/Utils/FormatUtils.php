@@ -232,9 +232,6 @@ final class FormatUtils
         ?string $pattern = null,
         \DateTimeZone|string|null $timezone = null
     ): \IntlDateFormatter {
-        if (self::DEFAULT_LOCALE !== \Locale::getDefault()) {
-            \Locale::setDefault(self::DEFAULT_LOCALE);
-        }
         $locale = \Locale::getDefault();
         $dateType ??= self::DATE_TYPE;
         $timeType ??= self::TIME_TYPE;

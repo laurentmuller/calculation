@@ -237,6 +237,7 @@ class FormatUtilsTest extends TestCase
         ?int $dateType = null,
         ?int $timeType = null
     ): void {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $actual = FormatUtils::getDateFormatter($dateType, $timeType, $pattern, FormatUtils::DEFAULT_TIME_ZONE);
         self::assertSame($expected, $actual->getPattern());
     }
@@ -264,6 +265,7 @@ class FormatUtilsTest extends TestCase
     #[DataProvider('getAmounts')]
     public function testFormatAmount(string|int|float|null $number, string $expected): void
     {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $actual = FormatUtils::formatAmount($number);
         self::assertSame($expected, $actual);
     }
@@ -278,6 +280,7 @@ class FormatUtilsTest extends TestCase
         ?int $dateType = null,
         ?string $pattern = null
     ): void {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $actual = FormatUtils::formatDate($date, $dateType, $pattern, FormatUtils::DEFAULT_TIME_ZONE);
         self::assertSame($expected, $actual);
     }
@@ -294,6 +297,7 @@ class FormatUtilsTest extends TestCase
         ?int $timeType = null,
         ?string $pattern = null
     ): void {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $actual = FormatUtils::formatDateTime($date, $dateType, $timeType, $pattern, FormatUtils::DEFAULT_TIME_ZONE);
         self::assertSame($expected, $actual);
     }
@@ -324,6 +328,7 @@ class FormatUtilsTest extends TestCase
         int $decimals = 0,
         int $roundingMode = \NumberFormatter::ROUND_DOWN
     ): void {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $actual = FormatUtils::formatPercent($number, $includeSign, $decimals, $roundingMode);
         self::assertSame($expected, $actual);
 
@@ -344,6 +349,7 @@ class FormatUtilsTest extends TestCase
         ?int $timeType = null,
         ?string $pattern = null
     ): void {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $actual = FormatUtils::formatTime($date, $timeType, $pattern, FormatUtils::DEFAULT_TIME_ZONE);
         self::assertSame($expected, $actual);
     }

@@ -220,6 +220,7 @@ class DateUtilsTest extends TestCase
     #[DataProvider('getFormatFormDate')]
     public function testFormatFormDate(?\DateTimeInterface $date, ?string $expected): void
     {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $actual = DateUtils::formatFormDate($date);
         self::assertSame($expected, $actual);
     }
@@ -255,6 +256,7 @@ class DateUtilsTest extends TestCase
     #[DataProvider('getMonthNames')]
     public function testMonthNames(string $name, int $index): void
     {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $values = DateUtils::getMonths();
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
@@ -276,6 +278,7 @@ class DateUtilsTest extends TestCase
     #[DataProvider('getShortMonthNames')]
     public function testShortMonthNames(string $name, int $index): void
     {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $values = DateUtils::getShortMonths();
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
@@ -290,6 +293,7 @@ class DateUtilsTest extends TestCase
     #[DataProvider('getShortWeekdayNames')]
     public function testShortWeekdayNames(string $name, int $index, string $firstDay = 'sunday'): void
     {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $values = DateUtils::getShortWeekdays($firstDay);
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
@@ -325,6 +329,7 @@ class DateUtilsTest extends TestCase
     #[DataProvider('getWeekdayNames')]
     public function testWeekdayNames(string $name, int $index, string $firstDay = 'sunday'): void
     {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $values = DateUtils::getWeekdays($firstDay);
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);

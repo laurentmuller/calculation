@@ -308,10 +308,6 @@ class FormatUtilsTest extends TestCase
     #[DataProvider('getIntegers')]
     public function testFormatInteger(\Countable|array|int|float|string|null $number, string $expected): void
     {
-        if (!$this->updateLocale()) {
-            self::markTestSkipped('Unable to set locale to "fr_CH".');
-        }
-
         $actual = FormatUtils::formatInt($number);
         self::assertSame($expected, $actual);
     }
@@ -377,10 +373,5 @@ class FormatUtilsTest extends TestCase
     private static function createDate(): \DateTimeInterface
     {
         return new \DateTime(self::DATE_TIME, new \DateTimeZone(FormatUtils::DEFAULT_TIME_ZONE));
-    }
-
-    private function updateLocale(): bool
-    {
-        return false !== \ini_set('intl.default_locale', FormatUtils::DEFAULT_LOCALE);
     }
 }

@@ -268,6 +268,7 @@ final class FormatUtils
     ): \NumberFormatter {
         $hash = self::hashCode($style, $digits, $roundingMode, $percentSymbol);
         if (!isset(self::$numberFormatters[$hash])) {
+            \Locale::setDefault(self::DEFAULT_LOCALE);
             $formatter = new \NumberFormatter(\Locale::getDefault(), $style);
             $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $digits);
             $formatter->setAttribute(\NumberFormatter::ROUNDING_MODE, $roundingMode);

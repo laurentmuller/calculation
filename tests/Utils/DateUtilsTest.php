@@ -255,10 +255,6 @@ class DateUtilsTest extends TestCase
     #[DataProvider('getMonthNames')]
     public function testMonthNames(string $name, int $index): void
     {
-        if (!$this->updateLocale()) {
-            self::markTestSkipped('Unable to set locale to "fr_CH".');
-        }
-
         $values = DateUtils::getMonths();
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
@@ -280,10 +276,6 @@ class DateUtilsTest extends TestCase
     #[DataProvider('getShortMonthNames')]
     public function testShortMonthNames(string $name, int $index): void
     {
-        if (!$this->updateLocale()) {
-            self::markTestSkipped('Unable to set locale to "fr_CH".');
-        }
-
         $values = DateUtils::getShortMonths();
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
@@ -298,10 +290,6 @@ class DateUtilsTest extends TestCase
     #[DataProvider('getShortWeekdayNames')]
     public function testShortWeekdayNames(string $name, int $index, string $firstDay = 'sunday'): void
     {
-        if (!$this->updateLocale()) {
-            self::markTestSkipped('Unable to set locale to "fr_CH".');
-        }
-
         $values = DateUtils::getShortWeekdays($firstDay);
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
@@ -346,12 +334,5 @@ class DateUtilsTest extends TestCase
     {
         $values = DateUtils::getWeekdays();
         self::assertCount(7, $values);
-    }
-
-    private function updateLocale(): bool
-    {
-        $value = \setlocale(\LC_ALL, FormatUtils::DEFAULT_LOCALE);
-
-        return false !== $value && FormatUtils::DEFAULT_LOCALE === $value;
     }
 }

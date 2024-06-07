@@ -308,6 +308,7 @@ class FormatUtilsTest extends TestCase
     #[DataProvider('getIntegers')]
     public function testFormatInteger(\Countable|array|int|float|string|null $number, string $expected): void
     {
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $actual = FormatUtils::formatInt($number);
         self::assertSame($expected, $actual);
     }

@@ -232,6 +232,9 @@ final class FormatUtils
         ?string $pattern = null,
         \DateTimeZone|string|null $timezone = null
     ): \IntlDateFormatter {
+        if (self::DEFAULT_LOCALE !== \Locale::getDefault()) {
+            \Locale::setDefault(self::DEFAULT_LOCALE);
+        }
         $locale = \Locale::getDefault();
         $dateType ??= self::DATE_TYPE;
         $timeType ??= self::TIME_TYPE;
@@ -268,7 +271,9 @@ final class FormatUtils
     ): \NumberFormatter {
         $hash = self::hashCode($style, $digits, $roundingMode, $percentSymbol);
         if (!isset(self::$numberFormatters[$hash])) {
-            \Locale::setDefault(self::DEFAULT_LOCALE);
+            if (self::DEFAULT_LOCALE !== \Locale::getDefault()) {
+                \Locale::setDefault(self::DEFAULT_LOCALE);
+            }
             $formatter = new \NumberFormatter(\Locale::getDefault(), $style);
             $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $digits);
             $formatter->setAttribute(\NumberFormatter::ROUNDING_MODE, $roundingMode);

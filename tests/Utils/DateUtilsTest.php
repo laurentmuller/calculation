@@ -24,7 +24,6 @@ class DateUtilsTest extends TestCase
     protected function setUp(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
-        \setlocale(\LC_ALL, FormatUtils::DEFAULT_LOCALE);
     }
 
     public static function getCompletYears(): \Iterator
@@ -338,10 +337,6 @@ class DateUtilsTest extends TestCase
     #[DataProvider('getWeekdayNames')]
     public function testWeekdayNames(string $name, int $index, string $firstDay = 'sunday'): void
     {
-        if (!$this->updateLocale()) {
-            self::markTestSkipped('Unable to set locale to "fr_CH".');
-        }
-
         $values = DateUtils::getWeekdays($firstDay);
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);

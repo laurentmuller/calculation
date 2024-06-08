@@ -18,6 +18,13 @@ use App\Controller\AboutMySqlController;
 use App\Controller\AboutPhpController;
 use App\Controller\AboutPolicyController;
 use App\Controller\AboutSymfonyController;
+use App\Report\HtmlReport;
+use App\Report\MySqlReport;
+use App\Report\PhpIniReport;
+use App\Report\SymfonyReport;
+use App\Spreadsheet\MySqlDocument;
+use App\Spreadsheet\PhpIniDocument;
+use App\Spreadsheet\SymfonyDocument;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,6 +34,13 @@ use Symfony\Component\HttpFoundation\Response;
 #[CoversClass(AboutPhpController::class)]
 #[CoversClass(AboutPolicyController::class)]
 #[CoversClass(AboutSymfonyController::class)]
+#[CoversClass(MySqlReport::class)]
+#[CoversClass(MySqlDocument::class)]
+#[CoversClass(PhpIniReport::class)]
+#[CoversClass(PhpIniDocument::class)]
+#[CoversClass(SymfonyReport::class)]
+#[CoversClass(SymfonyDocument::class)]
+#[CoversClass(HtmlReport::class)]
 class AboutControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): \Iterator

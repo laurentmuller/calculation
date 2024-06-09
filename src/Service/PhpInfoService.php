@@ -17,7 +17,7 @@ use App\Utils\StringUtils;
 /**
  * Utility class to get PHP information.
  */
-final class PhpInfoService
+class PhpInfoService
 {
     /**
      * The replaced string for sensitive parameters.

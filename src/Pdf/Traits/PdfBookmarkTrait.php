@@ -234,7 +234,7 @@ trait PdfBookmarkTrait
         float $height,
         ?int $link
     ): void {
-        $count = (int) ($width / $this->getStringWidth($separator));
+        $count = (int) \floor($width / $this->getStringWidth($separator));
         $width += self::SPACE;
         if ($count > 0) {
             $text = \str_repeat($separator, $count);

@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Pdf;
+namespace App\Tests\Pdf\Html;
 
 use App\Pdf\Html\HtmlListType;
 use PHPUnit\Framework\Attributes\CoversClass;

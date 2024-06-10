@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Pdf;
+namespace App\Tests\Pdf\Colors;
 
 use App\Pdf\Colors\AbstractPdfColor;
 use App\Pdf\Colors\PdfDrawColor;

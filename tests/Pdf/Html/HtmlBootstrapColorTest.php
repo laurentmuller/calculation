@@ -10,17 +10,20 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Enums;
+namespace App\Tests\Pdf\Html;
 
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Html\HtmlBootstrapColor;
+use App\Pdf\PdfDocument;
+use App\Pdf\Traits\PdfColorTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(HtmlBootstrapColor::class)]
+#[CoversClass(PdfColorTrait::class)]
 class HtmlBootstrapColorTest extends TestCase
 {
     public static function getColorValues(): \Iterator
@@ -99,6 +102,46 @@ class HtmlBootstrapColorTest extends TestCase
         yield [HtmlBootstrapColor::SECONDARY, '6C757D'];
         yield [HtmlBootstrapColor::SUCCESS, '28A745'];
         yield [HtmlBootstrapColor::WARNING, 'FFC107'];
+    }
+
+    public function testApplyDrawColor(): void
+    {
+        $color = HtmlBootstrapColor::DANGER;
+        $document = new PdfDocument();
+        $color->applyDrawColor($document);
+        self::assertSame(0, $document->getPage());
+    }
+
+    public function testApplyFillColor(): void
+    {
+        $color = HtmlBootstrapColor::DANGER;
+        $document = new PdfDocument();
+        $color->applyFillColor($document);
+        self::assertSame(0, $document->getPage());
+    }
+
+    public function testApplyTextColor(): void
+    {
+        $color = HtmlBootstrapColor::DANGER;
+        $document = new PdfDocument();
+        $color->applyTextColor($document);
+        self::assertSame(0, $document->getPage());
+    }
+
+    public function testAsInt(): void
+    {
+        $expected = \hexdec('DC3545');
+        $color = HtmlBootstrapColor::DANGER;
+        $actual = $color->asInt();
+        self::assertSame($expected, $actual);
+    }
+
+    public function testAsRGB(): void
+    {
+        $expected = [0xDC, 0x35, 0x45];
+        $color = HtmlBootstrapColor::DANGER;
+        $actual = $color->asRGB();
+        self::assertSame($expected, $actual);
     }
 
     public function testCount(): void

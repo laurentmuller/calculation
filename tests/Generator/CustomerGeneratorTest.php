@@ -27,21 +27,21 @@ class CustomerGeneratorTest extends GeneratorTestCase
     {
         $generator = $this->createGenerator();
         $actual = $generator->generate(-1, true);
-        self::assertValidateResults($actual, false, 0);
+        self::assertValidateResponse($actual, false, 0);
     }
 
     public function testNotSimulate(): void
     {
         $generator = $this->createGenerator();
         $actual = $generator->generate(1, false);
-        self::assertValidateResults($actual, true, 1);
+        self::assertValidateResponse($actual, true, 1);
     }
 
     public function testOne(): void
     {
         $generator = $this->createGenerator();
         $actual = $generator->generate(1, true);
-        self::assertValidateResults($actual, true, 1);
+        self::assertValidateResponse($actual, true, 1);
     }
 
     protected function createGenerator(): CustomerGenerator

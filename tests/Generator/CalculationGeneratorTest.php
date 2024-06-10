@@ -44,7 +44,7 @@ class CalculationGeneratorTest extends GeneratorTestCase
     {
         $generator = $this->createGenerator();
         $actual = $generator->generate(-1, true);
-        self::assertValidateResults($actual, false, 0);
+        self::assertValidateResponse($actual, false, 0);
     }
 
     /**
@@ -59,7 +59,7 @@ class CalculationGeneratorTest extends GeneratorTestCase
 
         $generator = $this->createGenerator();
         $actual = $generator->generate(1, false);
-        self::assertValidateResults($actual, true, 1);
+        self::assertValidateResponse($actual, true, 1);
     }
 
     /**
@@ -70,14 +70,24 @@ class CalculationGeneratorTest extends GeneratorTestCase
         $this->deleteCalculationState();
         $generator = $this->createGenerator();
         $actual = $generator->generate(1, false);
-        self::assertValidateResults($actual, false, 0);
+        $actual = self::assertValidateResponse($actual, false, 0);
+        self::assertArrayHasKey('exception', $actual);
+        self::assertIsArray($actual['exception']);
+
+        $actual = $actual['exception'];
+        self::assertArrayHasKey('message', $actual);
+        self::assertArrayHasKey('code', $actual);
+        self::assertArrayHasKey('file', $actual);
+        self::assertArrayHasKey('line', $actual);
+        self::assertArrayHasKey('class', $actual);
+        self::assertArrayHasKey('trace', $actual);
     }
 
     public function testOne(): void
     {
         $generator = $this->createGenerator();
         $actual = $generator->generate(1, true);
-        self::assertValidateResults($actual, true, 1);
+        self::assertValidateResponse($actual, true, 1);
     }
 
     protected function createGenerator(): CalculationGenerator

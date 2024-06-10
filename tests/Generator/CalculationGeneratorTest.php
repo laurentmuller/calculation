@@ -1,0 +1,99 @@
+<?php
+/*
+ * This file is part of the Calculation package.
+ *
+ * (c) bibi.nu <bibi@bibi.nu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace App\Tests\Generator;
+
+use App\Entity\CalculationState;
+use App\Generator\AbstractEntityGenerator;
+use App\Generator\CalculationGenerator;
+use App\Service\CalculationService;
+use App\Tests\EntityTrait\CalculationStateTrait;
+use App\Tests\EntityTrait\ProductTrait;
+use Doctrine\ORM\Exception\ORMException;
+use PHPUnit\Framework\Attributes\CoversClass;
+
+/**
+ * @extends GeneratorTestCase<CalculationGenerator>
+ */
+#[CoversClass(AbstractEntityGenerator::class)]
+#[CoversClass(CalculationGenerator::class)]
+class CalculationGeneratorTest extends GeneratorTestCase
+{
+    use CalculationStateTrait;
+    use ProductTrait;
+
+    private CalculationService $service;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->service = $this->getService(CalculationService::class);
+        $this->service->setTranslator($this->translator);
+    }
+
+    public function testNegativeCount(): void
+    {
+        $generator = $this->createGenerator();
+        $actual = $generator->generate(-1, true);
+        self::assertValidateResults($actual, false, 0);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testNotSimulate(): void
+    {
+        $this->getCalculationState();
+        $product = $this->getProduct();
+        $product->setPrice(0.0);
+        $this->manager->flush();
+
+        $generator = $this->createGenerator();
+        $actual = $generator->generate(1, false);
+        self::assertValidateResults($actual, true, 1);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testNotSimulateError(): void
+    {
+        $this->deleteCalculationState();
+        $generator = $this->createGenerator();
+        $actual = $generator->generate(1, false);
+        self::assertValidateResults($actual, false, 0);
+    }
+
+    public function testOne(): void
+    {
+        $generator = $this->createGenerator();
+        $actual = $generator->generate(1, true);
+        self::assertValidateResults($actual, true, 1);
+    }
+
+    protected function createGenerator(): CalculationGenerator
+    {
+        $generator = new CalculationGenerator($this->manager, $this->fakerService, $this->service);
+
+        return $this->updateGenerator($generator);
+    }
+
+    private function deleteCalculationState(): void
+    {
+        $repository = $this->manager->getRepository(CalculationState::class);
+        $entities = $repository->findAll();
+        foreach ($entities as $entity) {
+            $repository->remove($entity);
+        }
+        $this->manager->flush();
+    }
+}

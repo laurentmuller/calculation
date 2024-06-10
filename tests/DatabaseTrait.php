@@ -85,12 +85,10 @@ trait DatabaseTrait
      */
     protected function getManager(): EntityManager
     {
-        /** @var ManagerRegistry $registry */
+        /** @psalm-var ManagerRegistry $registry */
         $registry = static::getContainer()->get('doctrine');
 
-        /** @var EntityManager $manager */
-        $manager = $registry->getManager();
-
-        return $manager;
+        /** @psalm-var EntityManager */
+        return $registry->getManager();
     }
 }

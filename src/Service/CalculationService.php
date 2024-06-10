@@ -43,7 +43,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
  *     user_margin: float,
  *     groups: ServiceGroupType[]}
  */
-final class CalculationService implements ServiceSubscriberInterface
+class CalculationService implements ServiceSubscriberInterface
 {
     use MathTrait;
     use ServiceMethodsSubscriberTrait;

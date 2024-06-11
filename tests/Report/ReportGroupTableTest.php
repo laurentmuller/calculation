@@ -15,6 +15,7 @@ namespace App\Tests\Report;
 use App\Controller\AbstractController;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfDocument;
+use App\Pdf\Traits\PdfCellTranslatorTrait;
 use App\Report\AbstractReport;
 use App\Report\Table\ReportGroupTable;
 use App\Tests\TranslatorMockTrait;
@@ -24,9 +25,23 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[CoversClass(ReportGroupTable::class)]
+#[CoversClass(PdfCellTranslatorTrait::class)]
 class ReportGroupTableTest extends TestCase
 {
     use TranslatorMockTrait;
+
+    public function testAddCellTrans(): void
+    {
+        $document = new PdfDocument();
+        $document->resetStyle()
+            ->addPage();
+        $table = new ReportGroupTable($document, $this->createTranslator());
+        $table->addColumns(PdfColumn::left('', 10.0));
+        $table->startRow()
+            ->addCellTrans('id')
+            ->endRow();
+        self::assertSame(1, $document->getPage());
+    }
 
     /**
      * @throws Exception

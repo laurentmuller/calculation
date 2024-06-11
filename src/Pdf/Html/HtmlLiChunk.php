@@ -64,14 +64,8 @@ class HtmlLiChunk extends HtmlParentChunk
         while ($chunk instanceof AbstractHtmlChunk && !$chunk->hasStyle()) {
             $chunk = $chunk->getParent();
         }
-        if ($chunk instanceof AbstractHtmlChunk) {
-            $style = $chunk->getStyle();
-            if ($style instanceof HtmlStyle) {
-                return $style->getFont();
-            }
-        }
 
-        return null;
+        return $chunk?->getStyle()?->getFont();
     }
 
     /**

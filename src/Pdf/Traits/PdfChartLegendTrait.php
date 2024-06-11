@@ -14,16 +14,17 @@ namespace App\Pdf\Traits;
 
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
+use App\Pdf\Interfaces\PdfChartInterface;
 use fpdf\PdfRectangleStyle;
 
 /**
  * Trait to draw chart legends.
  *
- * @psalm-import-type ColorStringType from \App\Pdf\Interfaces\PdfChartInterface
+ * @psalm-import-type ColorStringType from PdfChartInterface
  *
  * @psalm-require-extends \App\Pdf\PdfDocument
  *
- * @psalm-require-implements \App\Pdf\Interfaces\PdfChartInterface
+ * @psalm-require-implements PdfChartInterface
  */
 trait PdfChartLegendTrait
 {

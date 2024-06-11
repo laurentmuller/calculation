@@ -142,10 +142,13 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
      */
     public function remove(AbstractHtmlChunk $child): static
     {
-        if (\in_array($child, $this->children, true)) {
-            $child->setParent(null);
-            $this->children = \array_diff($this->children, [$child]);
+        $index = $this->indexOf($child);
+        if (-1 === $index) {
+            return $this;
         }
+
+        $child->setParent(null);
+        unset($this->children[$index]);
 
         return $this;
     }

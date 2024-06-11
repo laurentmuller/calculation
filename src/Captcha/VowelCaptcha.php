@@ -26,14 +26,6 @@ class VowelCaptcha extends AbstractAlphaCaptcha
 
     private const VOWEL = 'AEIOUY';
 
-    /**
-     * Gets the default index name.
-     */
-    public static function getDefaultIndexName(): string
-    {
-        return 'VowelCaptcha';
-    }
-
     protected function getAnswer(string $word, int $letterIndex): string
     {
         return $this->findAnswer($word, $letterIndex, self::VOWEL);
@@ -46,12 +38,12 @@ class VowelCaptcha extends AbstractAlphaCaptcha
 
     protected function getQuestion(string $word, int $letterIndex): string
     {
-        $params = [
-            '%index%' => $this->trans(self::INDEX_MAPPING[$letterIndex], [], 'captcha'),
-            '%letter%' => $this->trans('vowel', [], 'captcha'),
+        $parameters = [
+            '%index%' => $this->transCaptcha(self::INDEX_MAPPING[$letterIndex]),
+            '%letter%' => $this->transCaptcha('vowel'),
             '%word%' => $word,
         ];
 
-        return $this->trans('sentence', $params, 'captcha');
+        return $this->transCaptcha('sentence', $parameters);
     }
 }

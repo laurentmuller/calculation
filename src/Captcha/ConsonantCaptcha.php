@@ -26,14 +26,6 @@ class ConsonantCaptcha extends AbstractAlphaCaptcha
         '-1' => 'last',
     ];
 
-    /**
-     * Gets the default index name.
-     */
-    public static function getDefaultIndexName(): string
-    {
-        return 'ConsonantCaptcha';
-    }
-
     protected function getAnswer(string $word, int $letterIndex): string
     {
         return $this->findAnswer($word, $letterIndex, self::CONSONANT);
@@ -46,12 +38,12 @@ class ConsonantCaptcha extends AbstractAlphaCaptcha
 
     protected function getQuestion(string $word, int $letterIndex): string
     {
-        $params = [
-            '%index%' => $this->trans(self::INDEX_MAPPING[$letterIndex], [], 'captcha'),
-            '%letter%' => $this->trans('consonant', [], 'captcha'),
+        $parameters = [
+            '%index%' => $this->transCaptcha(self::INDEX_MAPPING[$letterIndex]),
+            '%letter%' => $this->transCaptcha('consonant'),
             '%word%' => $word,
         ];
 
-        return $this->trans('sentence', $params, 'captcha');
+        return $this->transCaptcha('sentence', $parameters);
     }
 }

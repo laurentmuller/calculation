@@ -26,14 +26,6 @@ class LetterCaptcha extends AbstractAlphaCaptcha
         '-1' => 'last',
     ];
 
-    /**
-     * Gets the default index name.
-     */
-    public static function getDefaultIndexName(): string
-    {
-        return 'LetterCaptcha';
-    }
-
     protected function getAnswer(string $word, int $letterIndex): string
     {
         if (0 > $letterIndex) {
@@ -51,12 +43,12 @@ class LetterCaptcha extends AbstractAlphaCaptcha
 
     protected function getQuestion(string $word, int $letterIndex): string
     {
-        $params = [
-            '%index%' => $this->trans(self::INDEX_MAPPING[$letterIndex], [], 'captcha'),
-            '%letter%' => $this->trans('letter', [], 'captcha'),
+        $parameters = [
+            '%index%' => $this->transCaptcha(self::INDEX_MAPPING[$letterIndex]),
+            '%letter%' => $this->transCaptcha('letter'),
             '%word%' => $word,
         ];
 
-        return $this->trans('sentence', $params, 'captcha');
+        return $this->transCaptcha('sentence', $parameters);
     }
 }

@@ -65,6 +65,7 @@ readonly class HtmlParser
     private function createOlChunk(string $name, HtmlParentChunk $parent, ?string $className, \DOMNode $node): HtmlOlChunk
     {
         $type = HtmlAttribute::LIST_TYPE->getEnumValue($node, HtmlListType::NUMBER);
+        /** @psalm-var positive-int $start */
         $start = HtmlAttribute::LIST_START->getIntValue($node, 1);
         $chunk = new HtmlOlChunk($name, $parent, $className);
 

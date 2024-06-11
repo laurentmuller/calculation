@@ -88,4 +88,12 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface, ServiceSub
     {
         return $this->dictionary->getRandomWord();
     }
+
+    /**
+     * Translates the given message with the 'captcha' domain.
+     */
+    protected function transCaptcha(string $id, array $parameters = []): string
+    {
+        return $this->trans($id, $parameters, 'captcha');
+    }
 }

@@ -47,11 +47,14 @@ trait PdfColorTrait
 
     /**
      * @return array{0: int, 1: int, 2: int}
+     *
+     * @psalm-return array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}
      */
     public function asRGB(): array
     {
         $hex = $this->getPhpOfficeColor();
 
+        /** @psalm-var array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>} */
         return [
             $this->hex2Dec(\substr($hex, 0, 2)),
             $this->hex2Dec(\substr($hex, 2, 2)),

@@ -57,6 +57,8 @@ class HtmlOlChunk extends AbstractHtmlListChunk
 
     /**
      * Sets the start counting (must be positive).
+     *
+     * @psalm-param positive-int $start
      */
     public function setStart(int $start): self
     {

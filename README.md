@@ -16,7 +16,7 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une
 [![PHP](https://img.shields.io/badge/PHP-8.2.19-informational?logo=php)](https://www.php.net)
 [![MySQL](https://img.shields.io/badge/MySQL-5.7.32-informational?logo=mysql)](https://www.mysql.com)
 [![Apache](https://img.shields.io/badge/Apache-2.4.51-informational?logo=apache)](https://httpd.apache.org)
-[![PhpStorm](https://img.shields.io/badge/PhpStorm-2024.1.2-informational?logo=phpstorm)](https://www.jetbrains.com/phpstorm)
+[![PhpStorm](https://img.shields.io/badge/PhpStorm-2024.1.3-informational?logo=phpstorm)](https://www.jetbrains.com/phpstorm)
 
 ## Qualité du code
 

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Pdf\Html;
 
+use App\Pdf\Html\AbstractHtmlChunk;
 use App\Pdf\Html\HtmlBrChunk;
 use App\Pdf\Html\HtmlLiChunk;
 use App\Pdf\Html\HtmlOlChunk;
@@ -30,11 +31,7 @@ class HtmlParserTest extends TestCase
     {
         $parser = new HtmlParser('<body><br></body>');
         $actual = $parser->parse();
-        self::assertInstanceOf(HtmlParentChunk::class, $actual);
-        self::assertNotEmpty($actual->getChildren());
-        self::assertCount(1, $actual);
-        $actual = $actual->getChildren()[0];
-        self::assertInstanceOf(HtmlBrChunk::class, $actual);
+        self::assertChunks($actual, HtmlParentChunk::class, HtmlBrChunk::class);
     }
 
     public function testEmpty(): void
@@ -55,11 +52,7 @@ class HtmlParserTest extends TestCase
     {
         $parser = new HtmlParser('<body><li></li></body>');
         $actual = $parser->parse();
-        self::assertInstanceOf(HtmlParentChunk::class, $actual);
-        self::assertNotEmpty($actual->getChildren());
-        self::assertCount(1, $actual);
-        $actual = $actual->getChildren()[0];
-        self::assertInstanceOf(HtmlLiChunk::class, $actual);
+        self::assertChunks($actual, HtmlParentChunk::class, HtmlLiChunk::class);
     }
 
     public function testNoBody(): void
@@ -73,49 +66,45 @@ class HtmlParserTest extends TestCase
     {
         $parser = new HtmlParser('<body><ol></ol></body>');
         $actual = $parser->parse();
-        self::assertInstanceOf(HtmlParentChunk::class, $actual);
-        self::assertNotEmpty($actual->getChildren());
-        self::assertCount(1, $actual);
-        $actual = $actual->getChildren()[0];
-        self::assertInstanceOf(HtmlOlChunk::class, $actual);
+        self::assertChunks($actual, HtmlParentChunk::class, HtmlOlChunk::class);
     }
 
     public function testPageBreakChunk(): void
     {
         $parser = new HtmlParser('<body><div class="page-break"></div></body>');
         $actual = $parser->parse();
-        self::assertInstanceOf(HtmlParentChunk::class, $actual);
-        self::assertNotEmpty($actual->getChildren());
-        self::assertCount(1, $actual);
-        $actual = $actual->getChildren()[0];
-        self::assertInstanceOf(HtmlPageBreakChunk::class, $actual);
+        self::assertChunks($actual, HtmlParentChunk::class, HtmlPageBreakChunk::class);
     }
 
     public function testTextChunk(): void
     {
         $parser = new HtmlParser('<body><p>My Text</p></body>');
         $actual = $parser->parse();
-        self::assertInstanceOf(HtmlParentChunk::class, $actual);
-        self::assertNotEmpty($actual->getChildren());
-        self::assertCount(1, $actual);
-
-        $actual = $actual->getChildren()[0];
-        self::assertInstanceOf(HtmlParentChunk::class, $actual);
-        self::assertNotEmpty($actual->getChildren());
-        self::assertCount(1, $actual);
-
-        $actual = $actual->getChildren()[0];
-        self::assertInstanceOf(HtmlTextChunk::class, $actual);
+        self::assertChunks($actual, HtmlParentChunk::class, HtmlParentChunk::class, HtmlTextChunk::class);
     }
 
     public function testUlChunk(): void
     {
         $parser = new HtmlParser('<body><ul></ul></body>');
         $actual = $parser->parse();
-        self::assertInstanceOf(HtmlParentChunk::class, $actual);
-        self::assertNotEmpty($actual->getChildren());
-        self::assertCount(1, $actual);
-        $actual = $actual->getChildren()[0];
-        self::assertInstanceOf(HtmlUlChunk::class, $actual);
+        self::assertChunks($actual, HtmlParentChunk::class, HtmlUlChunk::class);
+    }
+
+    /**
+     * @psalm-param class-string<AbstractHtmlChunk> ...$classes
+     */
+    protected static function assertChunks(mixed $actual, string ...$classes): void
+    {
+        $index = 0;
+        $last = \count($classes) - 1;
+        foreach ($classes as $class) {
+            self::assertInstanceOf($class, $actual);
+            if ($index < $last && $actual instanceof HtmlParentChunk) {
+                self::assertNotEmpty($actual->getChildren());
+                self::assertCount(1, $actual->getChildren());
+                $actual = $actual->getChildren()[0];
+            }
+            ++$index;
+        }
     }
 }

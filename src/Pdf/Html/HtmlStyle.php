@@ -62,6 +62,25 @@ class HtmlStyle extends PdfStyle
     }
 
     /**
+     * Gets the default style.
+     *
+     * The style has the following properties:
+     *
+     * - Font: Arial 9 points Regular.
+     * - Line width: 0.2 mm.
+     * - Fill color: White.
+     * - Draw color: Black.
+     * - Text color: Black.
+     * - Border: None.
+     * - Text Alignment: Left
+     * - Margins: 0.0
+     */
+    public static function default(): self
+    {
+        return new self();
+    }
+
+    /**
      * Gets the alignment.
      */
     public function getAlignment(): PdfTextAlignment

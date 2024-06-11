@@ -43,6 +43,8 @@ class PdfChartLegendTraitTest extends TestCase
 
             /**
              * @psalm-param ColorStringType[] $legends
+             *
+             * @phpstan-param array<array{color: PdfFillColor|string, label: string, ...}> $legends
              */
             public function outputLegends(array $legends, bool $horizontal, bool $circle = true): static
             {
@@ -79,6 +81,8 @@ class PdfChartLegendTraitTest extends TestCase
 
             /**
              * @psalm-param ColorStringType[] $legends
+             *
+             * @phpstan-param array<array{color: PdfFillColor|string, label: string, ...}> $legends
              */
             public function computeHeights(array $legends, bool $horizontal): float
             {
@@ -115,6 +119,8 @@ class PdfChartLegendTraitTest extends TestCase
 
             /**
              * @psalm-param ColorStringType[] $legends
+             *
+             * @phpstan-param array<array{color: PdfFillColor|string, label: string, ...}> $legends
              */
             public function outputLegendsHorizontal(array $legends, bool $circle = true): static
             {
@@ -149,6 +155,8 @@ class PdfChartLegendTraitTest extends TestCase
 
             /**
              * @psalm-param ColorStringType[] $legends
+             *
+             * @phpstan-param array<array{color: PdfFillColor|string, label: string, ...}> $legends
              */
             public function outputLegendsVertical(array $legends, bool $circle = true): static
             {
@@ -183,6 +191,8 @@ class PdfChartLegendTraitTest extends TestCase
 
             /**
              * @psalm-param ColorStringType[] $legends
+             *
+             * @phpstan-param array<array{color: PdfFillColor|string, label: string, ...}> $legends
              */
             public function computeWidths(array $legends, bool $horizontal): float
             {
@@ -206,6 +216,8 @@ class PdfChartLegendTraitTest extends TestCase
 
     /**
      * @psalm-return ColorStringType[]
+     *
+     * @phpstan-return array<array{color: PdfFillColor|string, label: string, ...}>
      */
     private function getLegends(): array
     {

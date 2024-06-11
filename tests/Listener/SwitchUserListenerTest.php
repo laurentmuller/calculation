@@ -1,0 +1,143 @@
+<?php
+/*
+ * This file is part of the Calculation package.
+ *
+ * (c) bibi.nu <bibi@bibi.nu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace App\Tests\Listener;
+
+use App\Entity\User;
+use App\Listener\SwitchUserListener;
+use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\InputBag;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Http\Event\SwitchUserEvent;
+
+#[CoversClass(SwitchUserListener::class)]
+class SwitchUserListenerTest extends TestCase
+{
+    use TranslatorMockTrait;
+
+    /**
+     * @throws Exception
+     */
+    public function testSwitchUserDefault(): void
+    {
+        $request = $this->createRequest();
+        $token = $this->createUsernamePasswordToken();
+        /** @psalm-var User $user */
+        $user = $token->getUser();
+        $event = new SwitchUserEvent($request, $user);
+
+        $listener = $this->createListener();
+        $listener->onSwitchUser($event);
+        self::assertTrue($request->query->has('_switch_user'));
+        self::assertSame('', $request->query->get('_switch_user'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSwitchUserExit(): void
+    {
+        $request = $this->createRequest('_exit');
+        $token = $this->createSwitchUserToken();
+        /** @psalm-var User $user */
+        $user = $token->getUser();
+        $event = new SwitchUserEvent($request, $user, $token);
+
+        $listener = $this->createListener();
+        $listener->onSwitchUser($event);
+        self::assertTrue($request->query->has('_switch_user'));
+        self::assertSame('_exit', $request->query->get('_switch_user'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSwitchUserOriginal(): void
+    {
+        $request = $this->createRequest('fake');
+        $token = $this->createSwitchUserToken();
+        /** @psalm-var User $user */
+        $user = $token->getUser();
+        $event = new SwitchUserEvent($request, $user, $token);
+
+        $listener = $this->createListener();
+        $listener->onSwitchUser($event);
+        self::assertTrue($request->query->has('_switch_user'));
+        self::assertSame('fake', $request->query->get('_switch_user'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createListener(): SwitchUserListener
+    {
+        $listener = new SwitchUserListener();
+        $listener->setTranslator($this->createTranslator());
+        $listener->setRequestStack($this->createRequestStack());
+
+        return $listener;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createRequest(string $action = ''): MockObject&Request
+    {
+        $query = new InputBag(['_switch_user' => $action]);
+        $request = $this->createMock(Request::class);
+        // @phpstan-ignore assign.propertyType
+        $request->query = $query;
+
+        return $request;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createRequestStack(): MockObject&RequestStack
+    {
+        $session = $this->createMock(SessionInterface::class);
+        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack->expects(self::once())
+            ->method('getSession')
+            ->willReturn($session);
+
+        return $requestStack;
+    }
+
+    private function createSwitchUserToken(): SwitchUserToken
+    {
+        $user = new User();
+        $user->setUsername('target');
+        $roles = $user->getRoles();
+        $token = $this->createUsernamePasswordToken();
+
+        return new SwitchUserToken($user, 'main', $roles, $token);
+    }
+
+    private function createUsernamePasswordToken(): UsernamePasswordToken
+    {
+        $user = new User();
+        $user->setUsername('source');
+        $roles = $user->getRoles();
+
+        return new UsernamePasswordToken($user, 'main', $roles);
+    }
+}

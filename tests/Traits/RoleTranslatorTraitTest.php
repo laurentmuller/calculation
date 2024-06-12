@@ -31,7 +31,7 @@ class RoleTranslatorTraitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->translator = $this->createTranslator();
+        $this->translator = $this->createMockTranslator();
     }
 
     public static function getRoleIcons(): \Iterator
@@ -69,7 +69,7 @@ class RoleTranslatorTraitTest extends TestCase
     #[DataProvider('getTranslateRoles')]
     public function testTranslateRole(RoleInterface|string $role, string $expected): void
     {
-        $this->translator = $this->createTranslator($expected);
+        $this->translator = $this->createMockTranslator($expected);
         $actual = $this->translateRole($role);
         self::assertSame($actual, $expected);
     }

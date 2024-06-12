@@ -78,7 +78,7 @@ class EntityActionTest extends TestCase
     #[DataProvider('getLabel')]
     public function testTranslate(string $expected, EntityAction $action): void
     {
-        $translator = $this->createTranslator();
+        $translator = $this->createMockTranslator();
         $actual = $action->trans($translator);
         self::assertSame($expected, $actual);
     }

@@ -56,7 +56,7 @@ class PasswordServiceTest extends KernelServiceTestCase
      */
     public function testCustom(): void
     {
-        $translator = $this->createTranslator();
+        $translator = $this->createMockTranslator();
         $zxcvbn = $this->createMock(Zxcvbn::class);
         $zxcvbn->expects(self::any())
             ->method('passwordStrength')

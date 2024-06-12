@@ -122,7 +122,7 @@ class CaptchaControllerTest extends AbstractControllerTestCase
     private function getController(): CaptchaController
     {
         $controller = $this->getService(CaptchaController::class);
-        $controller->setTranslator($this->createTranslator());
+        $controller->setTranslator($this->createMockTranslator());
 
         return $controller;
     }

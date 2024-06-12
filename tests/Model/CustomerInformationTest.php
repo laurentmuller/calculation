@@ -66,7 +66,7 @@ class CustomerInformationTest extends TestCase
         self::assertSame('Fax: 0', $info->getTranslatedFax());
 
         $info->setFax('0');
-        $translator = $this->createTranslator();
+        $translator = $this->createMockTranslator();
         self::assertSame('report.fax', $info->getTranslatedFax($translator));
         self::assertSame('report.fax', $info->getTranslatedFax($this));
     }
@@ -80,7 +80,7 @@ class CustomerInformationTest extends TestCase
         self::assertSame('Phone: 0', $info->getTranslatedPhone());
 
         $info->setFax('0');
-        $translator = $this->createTranslator();
+        $translator = $this->createMockTranslator();
         self::assertSame('report.phone', $info->getTranslatedPhone($translator));
         self::assertSame('report.phone', $info->getTranslatedPhone($this));
     }

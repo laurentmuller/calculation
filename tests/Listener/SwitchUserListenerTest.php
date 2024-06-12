@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Listener;
 
 use App\Entity\User;
+use App\Listener\ResponseListener;
 use App\Listener\SwitchUserListener;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -89,7 +90,7 @@ class SwitchUserListenerTest extends TestCase
     private function createListener(): SwitchUserListener
     {
         $listener = new SwitchUserListener();
-        $listener->setTranslator($this->createTranslator());
+        $listener->setTranslator($this->createMockTranslator());
         $listener->setRequestStack($this->createRequestStack());
 
         return $listener;
@@ -126,18 +127,16 @@ class SwitchUserListenerTest extends TestCase
     {
         $user = new User();
         $user->setUsername('target');
-        $roles = $user->getRoles();
         $token = $this->createUsernamePasswordToken();
 
-        return new SwitchUserToken($user, 'main', $roles, $token);
+        return new SwitchUserToken($user, ResponseListener::FIREWALL_MAIN, [], $token);
     }
 
     private function createUsernamePasswordToken(): UsernamePasswordToken
     {
         $user = new User();
         $user->setUsername('source');
-        $roles = $user->getRoles();
 
-        return new UsernamePasswordToken($user, 'main', $roles);
+        return new UsernamePasswordToken($user, ResponseListener::FIREWALL_MAIN);
     }
 }

@@ -38,7 +38,7 @@ class TimestampableTraitTest extends TestCase implements TimestampableInterface
         $this->createdBy = null;
         $this->updatedAt = null;
         $this->updatedBy = null;
-        $this->translator = $this->createTranslator();
+        $this->translator = $this->createMockTranslator();
     }
 
     public function getDisplay(): string

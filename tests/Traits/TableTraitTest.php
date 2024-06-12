@@ -51,7 +51,7 @@ class TableTraitTest extends TestCase
     {
         $this->denyException = false;
         $this->throwException = false;
-        $this->translator = $this->createTranslator();
+        $this->translator = $this->createMockTranslator();
     }
 
     public function denyAccessUnlessGranted(mixed $attribute, mixed $subject = null): void

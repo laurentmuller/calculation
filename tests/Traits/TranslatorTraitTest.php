@@ -32,7 +32,7 @@ class TranslatorTraitTest extends TestCase
     public function getTranslator(): TranslatorInterface
     {
         if ($this->useInterface) {
-            return $this->createTranslator();
+            return $this->createMockTranslator();
         }
 
         try {

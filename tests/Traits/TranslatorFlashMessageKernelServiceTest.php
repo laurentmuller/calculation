@@ -40,7 +40,7 @@ class TranslatorFlashMessageKernelServiceTest extends KernelServiceTestCase
         $requestStack->push($request);
         $this->setRequestStack($requestStack);
 
-        $translator = $this->createTranslator();
+        $translator = $this->createMockTranslator();
         $this->setTranslator($translator);
     }
 

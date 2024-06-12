@@ -89,7 +89,7 @@ class ImportanceTest extends TestCase
     #[DataProvider('getLabels')]
     public function testTranslate(string $expected, Importance $importance): void
     {
-        $translator = $this->createTranslator();
+        $translator = $this->createMockTranslator();
         $actual = $importance->trans($translator);
         self::assertSame($expected, $actual);
     }

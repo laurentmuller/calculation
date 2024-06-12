@@ -49,7 +49,7 @@ class StateChartTest extends TestCase
         $this->repository = $this->createMock(CalculationStateRepository::class);
         $this->generator = $this->createMock(UrlGeneratorInterface::class);
         $this->twig = $this->createMock(Environment::class);
-        $this->translator = $this->createTranslator();
+        $this->translator = $this->createMockTranslator();
     }
 
     public function testWithoutData(): void

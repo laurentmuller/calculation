@@ -34,7 +34,7 @@ class StrengthLevelTranslatorTraitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->translator = $this->createTranslator();
+        $this->translator = $this->createMockTranslator();
     }
 
     public static function getTranslateLevels(): \Iterator
@@ -91,7 +91,7 @@ class StrengthLevelTranslatorTraitTest extends TestCase
     public function testTranslateLevel(int $value, string $message): void
     {
         $expected = "strength_level.$message";
-        $this->translator = $this->createTranslator($expected);
+        $this->translator = $this->createMockTranslator($expected);
         $level = StrengthLevel::tryFrom($value) ?? StrengthLevel::NONE;
         $actual = $this->translateLevel($level);
         self::assertSame($actual, $expected);

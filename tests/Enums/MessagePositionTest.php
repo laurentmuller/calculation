@@ -139,7 +139,7 @@ class MessagePositionTest extends TestCase
     #[DataProvider('getTranslation')]
     public function testTranslate(MessagePosition $position, string $expected): void
     {
-        $translator = $this->createTranslator();
+        $translator = $this->createMockTranslator();
         $actual = $position->trans($translator);
         self::assertSame($expected, $actual);
     }

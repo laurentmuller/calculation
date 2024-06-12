@@ -50,7 +50,7 @@ class LoginListenerTest extends TestCase
     {
         $repository = $this->createMock(UserRepository::class);
         $listener = new LoginListener($repository, 'Calculation');
-        $listener->setTranslator($this->createTranslator());
+        $listener->setTranslator($this->createMockTranslator());
         $listener->setRequestStack($this->createRequestStack());
 
         return $listener;

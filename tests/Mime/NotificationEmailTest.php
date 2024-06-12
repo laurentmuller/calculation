@@ -65,7 +65,7 @@ class NotificationEmailTest extends TestCase
     public function testPreparedHeaders(): void
     {
         $mail = new NotificationEmail();
-        $translator = $this->createTranslator();
+        $translator = $this->createMockTranslator();
         $mail->subject('subject')
             ->from('fake@fake.com')
             ->to('fake@fake.com');
@@ -80,7 +80,7 @@ class NotificationEmailTest extends TestCase
     public function testUpdate(): void
     {
         $mail = new NotificationEmail();
-        $translator = $this->createTranslator();
+        $translator = $this->createMockTranslator();
         $mail->update(Importance::MEDIUM, $translator);
         $context = $mail->getContext();
 

@@ -18,7 +18,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 trait TranslatorMockTrait
 {
-    private function createTranslator(?string $message = null): MockObject&TranslatorInterface
+    private function createMockTranslator(?string $message = null): MockObject&TranslatorInterface
     {
         try {
             $translator = $this->createMock(TranslatorInterface::class);

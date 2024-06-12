@@ -84,7 +84,7 @@ class FlashTypeTest extends TestCase
     #[DataProvider('getLabels')]
     public function testTranslate(FlashType $type, string $expected): void
     {
-        $translator = $this->createTranslator();
+        $translator = $this->createMockTranslator();
         $actual = $type->trans($translator);
         self::assertSame($expected, $actual);
     }

@@ -301,7 +301,7 @@ class CalculationServiceTest extends KernelServiceTestCase
         }
         $application = $this->getService(ApplicationService::class);
         $service = new CalculationService($globalRepository, $marginRepository, $groupRepository, $application);
-        $service->setTranslator($this->createTranslator());
+        $service->setTranslator($this->createMockTranslator());
 
         return $service;
     }

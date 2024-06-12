@@ -133,7 +133,7 @@ class PositionServiceTest extends TestCase
 
     private function createService(): PositionService
     {
-        $translator = $this->createTranslator();
+        $translator = $this->createMockTranslator();
 
         return new PositionService($translator);
     }

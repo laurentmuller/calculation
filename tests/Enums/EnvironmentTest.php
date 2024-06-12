@@ -96,7 +96,7 @@ class EnvironmentTest extends TestCase
     #[DataProvider('getLabels')]
     public function testTranslate(Environment $environment, string $expected): void
     {
-        $translator = $this->createTranslator();
+        $translator = $this->createMockTranslator();
         $actual = $environment->trans($translator);
         self::assertSame($expected, $actual);
     }

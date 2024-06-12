@@ -36,7 +36,7 @@ abstract class AlphaCaptchaTestCase extends TestCase
     protected function setUp(): void
     {
         $letters = \implode('', \range('A', 'Z'));
-        $this->translator = $this->createTranslator();
+        $this->translator = $this->createMockTranslator();
         $this->service = $this->createMock(DictionaryService::class);
         $this->service->expects(self::any())
             ->method('getRandomWord')

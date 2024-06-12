@@ -35,7 +35,7 @@ class ReportTableTest extends TestCase
         $document = new PdfDocument();
         $document->resetStyle()
             ->addPage();
-        $table = new ReportTable($document, $this->createTranslator());
+        $table = new ReportTable($document, $this->createMockTranslator());
         $table->addColumns(PdfColumn::left('', 10.0));
         $table->startRow()
             ->addCellTrans('id')
@@ -62,7 +62,7 @@ class ReportTableTest extends TestCase
     public function testRender(): void
     {
         $document = new PdfDocument();
-        $table = new ReportTable($document, $this->createTranslator());
+        $table = new ReportTable($document, $this->createMockTranslator());
         $table->addColumns(PdfColumn::left('', 10.0));
         self::assertSame(0, $document->getPage());
         self::assertInstanceOf(TranslatorInterface::class, $table->getTranslator());

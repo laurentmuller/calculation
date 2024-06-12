@@ -209,7 +209,7 @@ class EntityNameTest extends TestCase
     #[DataProvider('getLabel')]
     public function testTranslate(string $expected, EntityName $entity): void
     {
-        $translator = $this->createTranslator();
+        $translator = $this->createMockTranslator();
         $actual = $entity->trans($translator);
         self::assertSame($expected, $actual);
     }

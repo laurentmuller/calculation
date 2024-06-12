@@ -328,7 +328,7 @@ class ProductUpdateServiceTest extends TestCase
             $security,
         );
         $productService->setRequestStack($this->createRequestStack());
-        $productService->setTranslator($this->createTranslator());
+        $productService->setTranslator($this->createMockTranslator());
         $productService->setLogger($logger);
 
         $class = new \ReflectionClass(ProductUpdateService::class);

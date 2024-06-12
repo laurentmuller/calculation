@@ -162,7 +162,7 @@ class ThemeTest extends TestCase
     #[DataProvider('getTranslates')]
     public function testTranslate(Theme $theme, string $expected): void
     {
-        $translator = $this->createTranslator();
+        $translator = $this->createMockTranslator();
         $actual = $theme->trans($translator);
         self::assertSame($expected, $actual);
     }

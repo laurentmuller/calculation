@@ -50,7 +50,7 @@ class MonthChartTest extends TestCase
         $this->repository = $this->createMock(CalculationRepository::class);
         $this->generator = $this->createMock(UrlGeneratorInterface::class);
         $this->twig = $this->createMock(Environment::class);
-        $this->translator = $this->createTranslator();
+        $this->translator = $this->createMockTranslator();
     }
 
     /**

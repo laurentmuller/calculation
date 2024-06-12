@@ -116,7 +116,7 @@ class StrengthLevelTest extends TestCase
     #[DataProvider('getLabels')]
     public function testTranslate(string $expected, StrengthLevel $level): void
     {
-        $translator = $this->createTranslator();
+        $translator = $this->createMockTranslator();
         $actual = $level->trans($translator);
         self::assertSame($expected, $actual);
     }

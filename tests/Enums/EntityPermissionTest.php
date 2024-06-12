@@ -161,7 +161,7 @@ class EntityPermissionTest extends TestCase
     #[DataProvider('getLabel')]
     public function testTranslate(EntityPermission $permission, string $expected): void
     {
-        $translator = $this->createTranslator();
+        $translator = $this->createMockTranslator();
         $actual = $permission->trans($translator);
         self::assertSame($expected, $actual);
     }

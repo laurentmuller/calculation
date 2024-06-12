@@ -73,7 +73,7 @@ class TableViewTest extends TestCase
 
     public function testTranslate(): void
     {
-        $translator = $this->createTranslator();
+        $translator = $this->createMockTranslator();
         self::assertSame('table_view.custom', TableView::CUSTOM->trans($translator));
         self::assertSame('table_view.table', TableView::TABLE->trans($translator));
     }

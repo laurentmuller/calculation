@@ -22,6 +22,7 @@ use App\Utils\StringUtils;
 class HtmlWordParser
 {
     use ArrayTrait;
+
     /**
      * The pattern to extract classes.
      */
@@ -63,6 +64,10 @@ class HtmlWordParser
     {
         // trim spaces
         $content = (string) \preg_replace('/\s+/', ' ', $content);
+
+        if ('' === $content) {
+            return $content;
+        }
 
         // replace classes by styles
         return (string) \preg_replace_callback(

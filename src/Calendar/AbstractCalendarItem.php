@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Calendar;
 
-use App\Utils\StringUtils;
-
 /**
  * Base class for calendar objects.
  */
@@ -28,12 +26,7 @@ abstract class AbstractCalendarItem implements \JsonSerializable, \Stringable
         $this->reset();
     }
 
-    public function __toString(): string
-    {
-        $name = StringUtils::getShortName($this);
-
-        return \sprintf('%s(%d)', $name, $this->getNumber());
-    }
+    abstract public function __toString(): string;
 
     /**
      * Gets the parent's calendar.

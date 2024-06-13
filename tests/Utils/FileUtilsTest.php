@@ -133,6 +133,34 @@ class FileUtilsTest extends TestCase
         self::assertTrue(FileUtils::exists(__FILE__));
     }
 
+    public function testFileCopyFail(): void
+    {
+        $originFile = $this->getFakeFile();
+        $targetFile = $originFile . '.copy';
+
+        try {
+            $actual = FileUtils::copy($originFile, $targetFile);
+            self::assertFalse($actual);
+        } finally {
+            FileUtils::remove($originFile);
+        }
+    }
+
+    public function testFileCopySuccess(): void
+    {
+        $originFile = FileUtils::tempFile();
+        self::assertIsString($originFile);
+        $targetFile = $originFile . '.copy';
+
+        try {
+            $actual = FileUtils::copy($originFile, $targetFile);
+            self::assertTrue($actual);
+        } finally {
+            FileUtils::remove($originFile);
+            FileUtils::remove($targetFile);
+        }
+    }
+
     #[DataProvider('getFormatSize')]
     public function testFormatSize(string|\SplFileInfo|int $path, string $expected): void
     {

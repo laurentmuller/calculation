@@ -80,6 +80,26 @@ final class FileUtils
     }
 
     /**
+     * Copies a file.
+     *
+     * If the target file is older than the origin file, it is always overwritten.
+     * If the target file is newer, it is overwritten only when the
+     * $overwriteNewerFiles option is set to true.
+     *
+     * @return bool true on success, false on failure
+     */
+    public static function copy(string $originFile, string $targetFile, bool $overwriteNewerFiles = false): bool
+    {
+        try {
+            self::getFilesystem()->copy($originFile, $targetFile, $overwriteNewerFiles);
+
+            return true;
+        } catch (IOException) {
+            return false;
+        }
+    }
+
+    /**
      * Decode the given file as JSON.
      *
      * @param string|\SplFileInfo $file  the path or URL to the file

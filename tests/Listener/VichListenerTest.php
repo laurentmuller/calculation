@@ -17,12 +17,12 @@ use App\Listener\VichListener;
 use App\Service\ImageResizer;
 use App\Service\UserNamer;
 use App\Tests\TranslatorMockTrait;
+use App\Utils\FileUtils;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Event\Event;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
@@ -49,19 +49,18 @@ class VichListenerTest extends TestCase
      */
     public function testPostUploadNewFile(): void
     {
-        $fs = new Filesystem();
         $path = $this->getImagesPath();
 
         try {
             $name = 'user_new_000000.jpg';
-            $fs->copy($path . 'user_example.jpg', $path . $name, true);
+            FileUtils::copy($path . 'user_example.jpg', $path . $name, true);
             $file = $this->createUploadedFile($name);
             $event = $this->createEvent($file);
             $listener = $this->createListener();
             $listener->onPostUpload($event);
             self::assertInstanceOf(Event::class, $event);
         } finally {
-            $fs->remove($path . 'USER_000000_192.jpg');
+            FileUtils::remove($path . 'USER_000000_192.jpg');
         }
     }
 

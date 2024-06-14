@@ -1,0 +1,128 @@
+<?php
+/*
+ * This file is part of the Calculation package.
+ *
+ * (c) bibi.nu <bibi@bibi.nu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace App\Tests\Table;
+
+use App\Entity\Calculation;
+use App\Repository\AbstractRepository;
+use App\Repository\CalculationRepository;
+use App\Repository\CalculationStateRepository;
+use App\Service\ApplicationService;
+use App\Table\AbstractEntityTable;
+use App\Table\AbstractTable;
+use App\Table\CalculationBelowTable;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\QueryBuilder;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
+use Twig\Environment;
+
+/**
+ * @extends EntityTableTestCase<Calculation, CalculationRepository, CalculationBelowTable>
+ */
+#[CoversClass(AbstractTable::class)]
+#[CoversClass(AbstractEntityTable::class)]
+#[CoversClass(CalculationBelowTable::class)]
+class CalculationBelowTableTest extends EntityTableTestCase
+{
+    private int $countItemsBelow;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->countItemsBelow = 10;
+    }
+
+    /**
+     * @throws Exception|\ReflectionException|ORMException
+     */
+    public function testWithCountItemsBelow(): void
+    {
+        $this->processCountItemsBelow(10, null);
+        $this->processCountItemsBelow(0, 'below.empty');
+    }
+
+    protected function createEntities(): array
+    {
+        $entityEditable = [
+            'id' => 1,
+            'date' => new \DateTime('2024-11-10'),
+            'customer' => 'customer',
+            'description' => 'description',
+            'overallTotal' => 1000.0,
+            'overallMargin' => 1.0,
+            'stateCode' => 'stateCode',
+            'stateColor' => 'stateColor',
+            'editable' => true,
+        ];
+        $entityNotEditable = [
+            'id' => 2,
+            'date' => new \DateTime('2024-11-10'),
+            'customer' => 'customer',
+            'description' => 'description',
+            'overallTotal' => 1000.0,
+            'overallMargin' => 1.0,
+            'stateCode' => 'stateCode',
+            'stateColor' => 'stateColor',
+            'editable' => false,
+        ];
+
+        return [$entityEditable, $entityNotEditable];
+    }
+
+    protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CalculationRepository
+    {
+        $repository = $this->createMock(CalculationRepository::class);
+        $repository->expects(self::any())
+            ->method('getTableQueryBuilder')
+            ->willReturn($queryBuilder);
+
+        $repository->expects(self::any())
+            ->method('countItemsBelow')
+            ->willReturn($this->countItemsBelow);
+
+        return $repository;
+    }
+
+    /**
+     * @psalm-param  CalculationRepository $repository
+     *
+     * @throws Exception
+     */
+    protected function createTable(AbstractRepository $repository): CalculationBelowTable
+    {
+        $stateRepository = $this->createMock(CalculationStateRepository::class);
+        $twig = $this->createMock(Environment::class);
+        $service = $this->createMock(ApplicationService::class);
+        $service->expects(self::any())
+            ->method('getMinMargin')
+            ->willReturn(1.1);
+
+        return new CalculationBelowTable($repository, $stateRepository, $twig, $service);
+    }
+
+    /**
+     * @throws Exception|\ReflectionException|ORMException
+     */
+    private function processCountItemsBelow(int $count, mixed $expected): void
+    {
+        $this->countItemsBelow = $count;
+        $entities = $this->updateIds($this->createEntities());
+        $query = $this->createMockQuery($entities);
+        $queryBuilder = $this->createMockQueryBuilder($query);
+        $repository = $this->createRepository($queryBuilder);
+        $table = $this->createTable($repository);
+        $actual = $table->getEmptyMessage();
+        self::assertSame($expected, $actual);
+    }
+}

@@ -55,7 +55,7 @@ class CalculationRepositoryTest extends KernelServiceTestCase
     public function testAddBelowFilter(): void
     {
         $builder = $this->repository->createDefaultQueryBuilder();
-        $actual = $this->repository->addBelowFilter($builder, 1.1);
+        $actual = CalculationRepository::addBelowFilter($builder, 1.1);
         self::assertInstanceOf(QueryBuilder::class, $actual);
     }
 

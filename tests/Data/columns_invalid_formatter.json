@@ -1,0 +1,11 @@
+[
+    {
+        "field": "id",
+        "visible": false
+    },
+    {
+        "field": "minimum",
+        "title": "globalmargin.fields.minimum",
+        "fieldFormatter": "fake"
+    }
+]

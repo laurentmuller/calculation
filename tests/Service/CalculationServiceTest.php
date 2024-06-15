@@ -196,7 +196,7 @@ class CalculationServiceTest extends KernelServiceTestCase
 
     public function testGetConstants(): void
     {
-        $constants = CalculationService::getConstants();
+        $constants = CalculationService::constants();
         self::assertCount(7, $constants);
 
         self::assertArrayHasKey('ROW_EMPTY', $constants);

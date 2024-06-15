@@ -1,0 +1,295 @@
+<?php
+/*
+ * This file is part of the Calculation package.
+ *
+ * (c) bibi.nu <bibi@bibi.nu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace App\Tests\Translator;
+
+use App\Model\TranslateQuery;
+use App\Translator\AbstractTranslatorService;
+use App\Translator\GoogleTranslatorService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\JsonMockResponse;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
+
+#[CoversClass(AbstractTranslatorService::class)]
+#[CoversClass(GoogleTranslatorService::class)]
+class GoogleTranslatorServiceTest extends TestCase
+{
+    /**
+     * @throws Exception
+     * @throws ExceptionInterface
+     */
+    public function testDetectFalse(): void
+    {
+        $response = new JsonMockResponse(
+            [
+                'error' => [
+                    'code' => 404,
+                    'message' => 'Error Message',
+                ],
+            ],
+        );
+        $translator = $this->createTranslator($response);
+        $actual = $translator->detect('Bonjour');
+        self::assertFalse($actual);
+    }
+
+    /**
+     * @throws Exception
+     * @throws ExceptionInterface
+     */
+    public function testDetectNotString(): void
+    {
+        $response = new JsonMockResponse(
+            [
+                'data' => [
+                    'detections' => [],
+                ],
+            ]
+        );
+        $translator = $this->createTranslator($response);
+        $actual = $translator->detect('Bonjour');
+        self::assertFalse($actual);
+    }
+
+    /**
+     * @throws Exception
+     * @throws ExceptionInterface
+     */
+    public function testDetectSuccess(): void
+    {
+        $response = new JsonMockResponse(
+            [
+                'data' => [
+                    'detections' => [
+                        [
+                            [
+                                'language' => 'fr',
+                                'confidence' => 1.0,
+                            ],
+                        ],
+                    ],
+                ],
+            ]
+        );
+        $translator = $this->createTranslator($response, $this->getLanguagesResponse());
+        $actual = $translator->detect('Bonjour');
+        self::assertIsArray($actual);
+        self::assertArrayHasKey('tag', $actual);
+        self::assertArrayHasKey('name', $actual);
+        self::assertSame('fr', $actual['tag']);
+        self::assertSame('French', $actual['name']);
+    }
+
+    public function testGetApiURL(): void
+    {
+        $actual = GoogleTranslatorService::getApiUrl();
+        self::assertSame('https://cloud.google.com/translate/docs/translating-text', $actual);
+    }
+
+    /**
+     * @throws Exception
+     * @throws \ReflectionException
+     *
+     * @psalm-suppress UnusedMethodCall
+     */
+    public function testGetDefaultOptions(): void
+    {
+        $client = new MockHttpClient();
+        $translator = $this->createTranslator();
+        $translator->setClient($client);
+        $class = new \ReflectionClass($translator);
+        $method = $class->getMethod('getDefaultOptions');
+        $method->setAccessible(true);
+        $actual = $method->invoke($translator);
+        self::assertIsArray($actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetLanguagesInvalidArray(): void
+    {
+        $translator = $this->createTranslator(new JsonMockResponse());
+        $actual = $translator->getLanguages();
+        self::assertFalse($actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetLanguagesInvalidCode(): void
+    {
+        $expected_code = 404;
+        $expected_message = 'Error Message';
+        $response = new JsonMockResponse(
+            [
+                'error' => [
+                    'code' => $expected_code,
+                    'message' => $expected_message,
+                ],
+            ],
+            ['http_code' => $expected_code]
+        );
+        $translator = $this->createTranslator($response);
+        $actual = $translator->getLanguages();
+        self::assertFalse($actual);
+        $actual = $translator->getLastError();
+        self::assertNotNull($actual);
+        self::assertSame($expected_code, $actual->getCode());
+        self::assertSame($expected_message, $actual->getMessage());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetLanguagesInvalidMessage(): void
+    {
+        $expected_code = 404;
+        $expected_message = 'Error Message';
+        $response = new JsonMockResponse(
+            [
+                'error' => [
+                    'code' => $expected_code,
+                    'message' => $expected_message,
+                ],
+            ],
+        );
+        $translator = $this->createTranslator($response);
+        $actual = $translator->getLanguages();
+        self::assertFalse($actual);
+        $actual = $translator->getLastError();
+        self::assertNotNull($actual);
+        self::assertSame($expected_code, $actual->getCode());
+        self::assertSame($expected_message, $actual->getMessage());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetLanguagesSuccess(): void
+    {
+        $response = $this->getLanguagesResponse();
+        $translator = $this->createTranslator($response);
+        $actual = $translator->getLanguages();
+        self::assertSame(['French' => 'fr'], $actual);
+    }
+
+    public function testGetName(): void
+    {
+        $actual = GoogleTranslatorService::getName();
+        self::assertSame('Google', $actual);
+    }
+
+    /**
+     * @throws Exception
+     * @throws ExceptionInterface
+     */
+    public function testTranslateFalse(): void
+    {
+        $response = new JsonMockResponse(
+            [
+                'error' => [
+                    'code' => 404,
+                    'message' => 'Error Message',
+                ],
+            ],
+        );
+        $translator = $this->createTranslator($response);
+        $query = new TranslateQuery('en', 'fr', 'text');
+        $actual = $translator->translate($query);
+        self::assertFalse($actual);
+    }
+
+    /**
+     * @throws Exception
+     * @throws ExceptionInterface
+     */
+    public function testTranslateNotString(): void
+    {
+        $response = new JsonMockResponse(
+            [
+                'data' => [
+                    'translations' => [
+                        [],
+                    ],
+                ],
+            ]
+        );
+        $translator = $this->createTranslator($response);
+        $query = new TranslateQuery('en', 'fr', 'text');
+        $actual = $translator->translate($query);
+        self::assertFalse($actual);
+    }
+
+    /**
+     * @throws Exception
+     * @throws ExceptionInterface
+     */
+    public function testTranslateSuccess(): void
+    {
+        $response = new JsonMockResponse(
+            [
+                'data' => [
+                    'translations' => [
+                        [
+                            'translatedText' => 'Text',
+                            'detectedSourceLanguage' => 'fr',
+                        ],
+                    ],
+                ],
+            ]
+        );
+        $translator = $this->createTranslator($response, $this->getLanguagesResponse());
+        $query = new TranslateQuery('en', 'fr', 'text');
+        $actual = $translator->translate($query);
+        self::assertIsArray($actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createTranslator(JsonMockResponse ...$responses): GoogleTranslatorService
+    {
+        $key = 'fake';
+        $cache = new ArrayAdapter();
+        $logger = $this->createMock(LoggerInterface::class);
+
+        $service = new GoogleTranslatorService($key, $cache, $logger);
+        if ([] !== $responses) {
+            $client = new MockHttpClient($responses);
+            $service->setClient($client);
+        }
+
+        return $service;
+    }
+
+    private function getLanguagesResponse(): JsonMockResponse
+    {
+        return new JsonMockResponse(
+            [
+                'data' => [
+                    'languages' => [
+                        'language' => [
+                            'language' => 'fr',
+                            'name' => 'French',
+                        ],
+                    ],
+                ],
+            ]
+        );
+    }
+}

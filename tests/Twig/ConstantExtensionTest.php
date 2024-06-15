@@ -12,23 +12,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Twig;
 
-use App\Tests\KernelServiceTestCase;
 use App\Twig\ConstantExtension;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 
 #[CoversClass(ConstantExtension::class)]
-class ConstantExtensionTest extends KernelServiceTestCase
+class ConstantExtensionTest extends TestCase
 {
-    private ConstantExtension $extension;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->extension = $this->getService(ConstantExtension::class);
-    }
-
     public static function getCalculationServiceConstants(): \Iterator
     {
         yield ['ROW_EMPTY', 0];
@@ -64,23 +57,25 @@ class ConstantExtensionTest extends KernelServiceTestCase
      * @throws InvalidArgumentException
      */
     #[DataProvider('getCalculationServiceConstants')]
-    public function testCalculationService(string $key, int $value): void
+    public function testCalculationService(string $key, int $expected): void
     {
-        $globals = $this->extension->getGlobals();
+        $extension = new ConstantExtension(new NullAdapter());
+        $globals = $extension->getGlobals();
         self::assertArrayHasKey($key, $globals);
         self::assertIsInt($globals[$key]);
-        self::assertSame($value, $globals[$key]);
+        self::assertSame($expected, $globals[$key]);
     }
 
     /**
      * @throws InvalidArgumentException
      */
     #[DataProvider('getEntityVoterConstants')]
-    public function testEntityVoter(string $key, string $value): void
+    public function testEntityVoter(string $key, string $expected): void
     {
-        $globals = $this->extension->getGlobals();
+        $extension = new ConstantExtension(new NullAdapter());
+        $globals = $extension->getGlobals();
         self::assertArrayHasKey($key, $globals);
         self::assertIsString($globals[$key]);
-        self::assertSame($value, $globals[$key]);
+        self::assertSame($expected, $globals[$key]);
     }
 }

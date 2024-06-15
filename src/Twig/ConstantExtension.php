@@ -82,7 +82,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
             $this->getIcons(),
             EntityName::constants(),
             EntityPermission::constants(),
-            CalculationService::getConstants()
+            CalculationService::constants()
         );
     }
 }

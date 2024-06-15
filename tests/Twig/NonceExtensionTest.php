@@ -27,6 +27,15 @@ class NonceExtensionTest extends KernelServiceTestCase
         $this->extension = $this->getService(NonceExtension::class);
     }
 
+    public function testFunctions(): void
+    {
+        $functions = $this->extension->getFunctions();
+        self::assertCount(1, $functions);
+        $function = $functions[0];
+        self::assertSame('csp_nonce', $function
+            ->getName());
+    }
+
     /**
      * @throws \Exception
      */

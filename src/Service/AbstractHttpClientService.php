@@ -125,6 +125,16 @@ abstract class AbstractHttpClientService
     }
 
     /**
+     * Sets the client.
+     */
+    public function setClient(?HttpClientInterface $client): static
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    /**
      * Create the HTTP client.
      *
      * @see AbstractHttpClientService::getDefaultOptions()

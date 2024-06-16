@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Report;
+namespace App\Tests\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Entity\Category;
@@ -18,21 +18,19 @@ use App\Entity\Group;
 use App\Entity\Task;
 use App\Entity\TaskItem;
 use App\Entity\TaskItemMargin;
-use App\Report\TasksReport;
+use App\Spreadsheet\TasksDocument;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(TasksReport::class)]
-class TasksReportTest extends TestCase
+#[CoversClass(TasksDocument::class)]
+class TasksDocumentTest extends TestCase
 {
     /**
      * @throws Exception
      */
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-
         $group = new Group();
         $group->setCode('Group');
 
@@ -72,8 +70,9 @@ class TasksReportTest extends TestCase
         $task3->setName('Task3');
         $category->addTask($task3);
 
-        $report = new TasksReport($controller, [$task1, $task2, $task3]);
-        $actual = $report->render();
+        $controller = $this->createMock(AbstractController::class);
+        $document = new TasksDocument($controller, [$task1, $task2, $task3]);
+        $actual = $document->render();
         self::assertTrue($actual);
     }
 }

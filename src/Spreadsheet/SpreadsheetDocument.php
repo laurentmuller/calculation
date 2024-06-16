@@ -139,10 +139,8 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function getAllSheets(): array
     {
-        /** @psalm-var WorksheetDocument[] $sheets */
-        $sheets = parent::getAllSheets();
-
-        return $sheets;
+        /** @psalm-var WorksheetDocument[] */
+        return parent::getAllSheets();
     }
 
     /**
@@ -154,10 +152,8 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function getSheet(int $sheetIndex): WorksheetDocument
     {
-        /** @psalm-var WorksheetDocument $sheet */
-        $sheet = parent::getSheet($sheetIndex);
-
-        return $sheet;
+        /** @psalm-var WorksheetDocument */
+        return parent::getSheet($sheetIndex);
     }
 
     /**
@@ -167,10 +163,8 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function getSheetByName(string $worksheetName): ?WorksheetDocument
     {
-        /** @psalm-var WorksheetDocument|null $sheet */
-        $sheet = parent::getSheetByName($worksheetName);
-
-        return $sheet;
+        /** @psalm-var WorksheetDocument|null */
+        return parent::getSheetByName($worksheetName);
     }
 
     /**
@@ -180,10 +174,8 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function getSheetByNameOrThrow(string $worksheetName): WorksheetDocument
     {
-        /** @psalm-var WorksheetDocument $sheet */
-        $sheet = parent::getSheetByNameOrThrow($worksheetName);
-
-        return $sheet;
+        /** @psalm-var WorksheetDocument */
+        return parent::getSheetByNameOrThrow($worksheetName);
     }
 
     /**

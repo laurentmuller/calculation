@@ -109,6 +109,42 @@ class CalculationReportTest extends TestCase
         $calculation->addGroup($group);
 
         $report = new CalculationReport($controller, $calculation, 2.0, 'qrcode', $logger);
+        self::assertInstanceOf(LoggerInterface::class, $report->getLogger());
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testRenderWithoutQrCode(): void
+    {
+        $controller = $this->createMock(AbstractController::class);
+        $logger = $this->createMock(LoggerInterface::class);
+
+        $calculation = new Calculation();
+        $calculation->setDescription('description')
+            ->setCustomer('customer')
+            ->setOverallTotal(1000.0)
+            ->setGlobalMargin(1.2)
+            ->setItemsTotal(800.0)
+            ->setUserMargin(0.1);
+
+        $group = new CalculationGroup();
+        $group->setCode('Group');
+
+        $category = new CalculationCategory();
+        $category->setCode('Category');
+
+        $item = new CalculationItem();
+        $item->setDescription('Description')
+            ->setPrice(100.0)
+            ->setQuantity(0.0);
+        $category->addItem($item);
+        $group->addCategory($category);
+        $calculation->addGroup($group);
+
+        $report = new CalculationReport($controller, $calculation, 2.0, '', $logger);
         $actual = $report->render();
         self::assertTrue($actual);
     }

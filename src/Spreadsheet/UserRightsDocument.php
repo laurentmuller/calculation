@@ -36,8 +36,11 @@ class UserRightsDocument extends AbstractArrayDocument
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    public function __construct(AbstractController $controller, private readonly RoleBuilderService $service, array $entities)
-    {
+    public function __construct(
+        AbstractController $controller,
+        array $entities,
+        private readonly RoleBuilderService $service
+    ) {
         parent::__construct($controller, $entities);
     }
 

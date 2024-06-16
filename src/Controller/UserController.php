@@ -329,7 +329,7 @@ class UserController extends AbstractEntityController
             $message = $this->trans('user.list.empty');
             throw $this->createNotFoundException($message);
         }
-        $doc = new UserRightsDocument($this, $builder, $entities);
+        $doc = new UserRightsDocument($this, $entities, $builder);
 
         return $this->renderSpreadsheetDocument($doc);
     }

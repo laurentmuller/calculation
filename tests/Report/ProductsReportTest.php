@@ -33,11 +33,12 @@ class ProductsReportTest extends TestCase
         $group = new Group();
         $group->setCode('Group');
         $category = new Category();
-        $category->setCode('Category')
-            ->setGroup($group);
+        $category->setCode('Category');
         $product = new Product();
-        $product->setDescription('description')
-            ->setCategory($category);
+        $product->setDescription('description');
+
+        $group->addCategory($category);
+        $category->addProduct($product);
 
         $report = new ProductsReport($controller, [$product]);
         $actual = $report->render();

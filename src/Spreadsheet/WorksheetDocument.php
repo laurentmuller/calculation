@@ -97,10 +97,8 @@ class WorksheetDocument extends Worksheet
      */
     public function getParent(): ?SpreadsheetDocument
     {
-        /** @psalm-var SpreadsheetDocument|null $parent */
-        $parent = parent::getParent();
-
-        return $parent;
+        /** @psalm-var SpreadsheetDocument|null */
+        return parent::getParent();
     }
 
     /**

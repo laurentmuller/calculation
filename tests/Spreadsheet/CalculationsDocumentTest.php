@@ -10,33 +10,35 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Report;
+namespace App\Tests\Spreadsheet;
 
 use App\Controller\AbstractController;
-use App\Entity\Category;
-use App\Entity\Group;
-use App\Report\CategoriesReport;
+use App\Entity\Calculation;
+use App\Spreadsheet\CalculationsDocument;
+use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CategoriesReport::class)]
-class CategoriesReportTest extends TestCase
+#[CoversClass(CalculationsDocument::class)]
+class CalculationsDocumentTest extends TestCase
 {
+    use IdTrait;
+
     /**
      * @throws Exception
+     * @throws \ReflectionException
      */
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $group = new Group();
-        $group->setCode('Group');
-        $category = new Category();
-        $category->setCode('Category');
-        $group->addCategory($category);
+        $calculation = new Calculation();
+        $calculation->setCustomer('Customer')
+            ->setDescription('Description');
+        self::setId($calculation);
 
-        $report = new CategoriesReport($controller, [$category]);
-        $actual = $report->render();
+        $controller = $this->createMock(AbstractController::class);
+        $document = new CalculationsDocument($controller, [$calculation]);
+        $actual = $document->render();
         self::assertTrue($actual);
     }
 }

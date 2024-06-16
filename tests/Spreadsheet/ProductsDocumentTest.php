@@ -10,33 +10,40 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Report;
+namespace App\Tests\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Entity\Category;
 use App\Entity\Group;
-use App\Report\CategoriesReport;
+use App\Entity\Product;
+use App\Spreadsheet\ProductsDocument;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CategoriesReport::class)]
-class CategoriesReportTest extends TestCase
+#[CoversClass(ProductsDocument::class)]
+class ProductsDocumentTest extends TestCase
 {
     /**
      * @throws Exception
      */
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
         $group = new Group();
         $group->setCode('Group');
+
         $category = new Category();
         $category->setCode('Category');
-        $group->addCategory($category);
 
-        $report = new CategoriesReport($controller, [$category]);
-        $actual = $report->render();
+        $product = new Product();
+        $product->setDescription('Description');
+
+        $group->addCategory($category);
+        $category->addProduct($product);
+
+        $controller = $this->createMock(AbstractController::class);
+        $document = new ProductsDocument($controller, [$product]);
+        $actual = $document->render();
         self::assertTrue($actual);
     }
 }

@@ -14,6 +14,7 @@ namespace App\Tests\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Model\CustomerInformation;
+use App\Spreadsheet\HeaderFooter;
 use App\Spreadsheet\HeaderFormat;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Spreadsheet\WorksheetDocument;
@@ -29,6 +30,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(WorksheetDocument::class)]
+#[CoversClass(HeaderFooter::class)]
 class WorksheetDocumentTest extends TestCase
 {
     use TranslatorMockTrait;

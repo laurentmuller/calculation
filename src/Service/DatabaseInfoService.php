@@ -20,7 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * Service to get database information.
  */
-final class DatabaseInfoService
+class DatabaseInfoService
 {
     /** @var array<string, string>|null */
     private ?array $configuration = null;

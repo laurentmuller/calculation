@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
+use App\Command\LoggerTrait;
 use App\Command\UpdateAssetsCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(UpdateAssetsCommand::class)]
+#[CoversClass(LoggerTrait::class)]
 class UpdateAssetsCommandTest extends AbstractCommandTestCase
 {
     private const COMMAND_NAME = 'app:update-assets';

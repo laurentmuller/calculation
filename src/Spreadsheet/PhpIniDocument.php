@@ -28,8 +28,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
  */
 class PhpIniDocument extends AbstractDocument
 {
-    private ?string $key = null;
-
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
@@ -61,9 +59,7 @@ class PhpIniDocument extends AbstractDocument
 
         /**  @psalm-var array<string, EntriesType> $entries */
         foreach ($content as $key => $entries) {
-            if ($this->outputGroup($sheet, $row, $key)) {
-                ++$row;
-            }
+            $row = $this->outputGroup($sheet, $row, $key);
             $row = $this->outputEntries($sheet, $row, $entries);
         }
 
@@ -149,23 +145,18 @@ class PhpIniDocument extends AbstractDocument
     }
 
     /**
-     * @throws \PhpOffice\PhpSpreadsheet\Exception if an error occurs
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    private function outputGroup(WorksheetDocument $sheet, int $row, string $group): bool
+    private function outputGroup(WorksheetDocument $sheet, int $row, string $group): int
     {
-        if ($this->key !== $group) {
-            $sheet->setRowValues($row, [$group]);
-            $sheet->mergeContent(1, 3, $row);
-            $style = $sheet->getStyle("A$row");
-            $style->getFill()->setFillType(Fill::FILL_SOLID)
-                ->getStartColor()->setARGB('F5F5F5');
-            $style->getFont()->setBold(true);
-            $this->key = $group;
+        $sheet->setRowValues($row, [$group]);
+        $sheet->mergeContent(1, 3, $row);
+        $style = $sheet->getStyle("A$row");
+        $style->getFill()->setFillType(Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('F5F5F5');
+        $style->getFont()->setBold(true);
 
-            return true;
-        }
-
-        return false;
+        return $row + 1;
     }
 
     /**

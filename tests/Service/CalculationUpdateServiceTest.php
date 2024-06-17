@@ -16,6 +16,7 @@ use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Service\CalculationUpdateService;
 use App\Tests\DatabaseTrait;
+use App\Tests\DateAssertTrait;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
@@ -30,6 +31,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 class CalculationUpdateServiceTest extends AbstractAuthenticateWebTestCase
 {
     use DatabaseTrait;
+    use DateAssertTrait;
 
     /**
      * @throws \Exception
@@ -44,7 +46,7 @@ class CalculationUpdateServiceTest extends AbstractAuthenticateWebTestCase
 
         $expected = $this->getDateFrom();
         $actual = $query->getDateFrom();
-        self::assertSame($expected->getTimestamp(), $actual->getTimestamp());
+        self::assertSameDate($expected, $actual);
 
         $expected = FormatUtils::formatDate($actual);
         $actual = $query->getDateFromFormatted();
@@ -52,7 +54,7 @@ class CalculationUpdateServiceTest extends AbstractAuthenticateWebTestCase
 
         $expected = $this->getDateTo();
         $actual = $query->getDateTo();
-        self::assertSame($expected->getTimestamp(), $actual->getTimestamp());
+        self::assertSameDate($expected, $actual);
 
         $expected = FormatUtils::formatDate($actual);
         $actual = $query->getDateToFormatted();
@@ -76,13 +78,13 @@ class CalculationUpdateServiceTest extends AbstractAuthenticateWebTestCase
         $expected = $this->getDateFrom();
         $actual = $session->get('calculation.update.date_from');
         self::assertInstanceOf(\DateTimeInterface::class, $actual);
-        self::assertSame($expected->getTimestamp(), $actual->getTimestamp());
+        self::assertSameDate($expected, $actual);
 
         $expected = $this->getDateTo();
         /** @psalm-var \DateTimeInterface $actual */
         $actual = $session->get('calculation.update.date_to');
         self::assertInstanceOf(\DateTimeInterface::class, $actual);
-        self::assertSame($expected->getTimestamp(), $actual->getTimestamp());
+        self::assertSameDate($expected, $actual);
     }
 
     /**

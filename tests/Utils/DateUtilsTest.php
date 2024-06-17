@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Utils;
 
+use App\Tests\DateAssertTrait;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -21,6 +22,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(DateUtils::class)]
 class DateUtilsTest extends TestCase
 {
+    use DateAssertTrait;
+
     protected function setUp(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
@@ -271,8 +274,8 @@ class DateUtilsTest extends TestCase
     #[DataProvider('getRemoveTimes')]
     public function testRemoveTime(\DateTime|\DateTimeImmutable $date, \DateTimeInterface $expected): void
     {
-        $value = DateUtils::removeTime($date);
-        self::assertSame($expected->getTimestamp(), $value->getTimestamp());
+        $actual = DateUtils::removeTime($date);
+        self::assertSameDate($expected, $actual);
     }
 
     #[DataProvider('getShortMonthNames')]

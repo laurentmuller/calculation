@@ -17,6 +17,7 @@ use App\Entity\User;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Tests\DatabaseTrait;
+use App\Tests\DateAssertTrait;
 use App\Tests\Entity\IdTrait;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
@@ -31,6 +32,7 @@ class CalculationRepositoryTest extends KernelServiceTestCase
 {
     use CalculationTrait;
     use DatabaseTrait;
+    use DateAssertTrait;
     use IdTrait;
     use ProductTrait;
 
@@ -252,12 +254,12 @@ class CalculationRepositoryTest extends KernelServiceTestCase
         $calculation->setDate($date);
         $this->addEntity($calculation);
 
-        $expected = $calculation->getDate()->getTimestamp();
+        $expected = $calculation->getDate();
 
         $actual = $this->repository->getMinMaxDates();
         self::assertCount(2, $actual);
-        self::assertSame($expected, $actual[0]?->getTimestamp());
-        self::assertSame($expected, $actual[1]?->getTimestamp());
+        self::assertSameDate($expected, $actual[0]);
+        self::assertSameDate($expected, $actual[1]);
     }
 
     public function testGetPivot(): void

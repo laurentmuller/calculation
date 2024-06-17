@@ -16,12 +16,14 @@ use App\Entity\AbstractProperty;
 use App\Entity\Category;
 use App\Enums\EntityPermission;
 use App\Enums\Theme;
+use App\Tests\DateAssertTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(AbstractProperty::class)]
 class AbstractPropertyTest extends TestCase
 {
+    use DateAssertTrait;
     use IdTrait;
 
     /**
@@ -85,7 +87,7 @@ class AbstractPropertyTest extends TestCase
         $actual = $entity->getDate();
         // @phpstan-ignore staticMethod.impossibleType
         self::assertNotNull($actual);
-        self::assertSame($date->getTimestamp(), $actual->getTimestamp());
+        self::assertSameDate($date, $actual);
     }
 
     /**
@@ -133,7 +135,7 @@ class AbstractPropertyTest extends TestCase
         $entity->setValue($date);
         $actual = $entity->getDate();
         self::assertNotNull($actual);
-        self::assertSame($date->getTimestamp(), $actual->getTimestamp());
+        self::assertSameDate($date, $actual);
 
         $category = new Category();
         self::setId($category, 10);

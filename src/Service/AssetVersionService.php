@@ -71,9 +71,9 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
      *
      * @throws InvalidArgumentException
      */
-    public function deleteCache(): void
+    public function deleteCache(): bool
     {
-        $this->cache->delete(self::KEY_IMAGES);
+        return $this->cache->delete(self::KEY_IMAGES);
     }
 
     /**

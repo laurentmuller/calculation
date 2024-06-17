@@ -71,7 +71,7 @@ class AkismetService extends AbstractHttpClientService
         CacheInterface $cache,
         LoggerInterface $logger,
         private readonly Security $security,
-        private readonly RequestStack $stack,
+        private readonly RequestStack $requestStack,
         private readonly TranslatorInterface $translator
     ) {
         parent::__construct($key, $cache, $logger);
@@ -142,7 +142,7 @@ class AkismetService extends AbstractHttpClientService
             self::BODY => $body,
         ]);
         if (Response::HTTP_OK !== $response->getStatusCode() || !$this->checkError($response)) {
-            return true;
+            return false;
         }
 
         return match ($response->getContent()) {
@@ -176,11 +176,11 @@ class AkismetService extends AbstractHttpClientService
     private function checkError(ResponseInterface $response): bool
     {
         $headers = $response->getHeaders();
-        $code = (int) ($headers['X-akismet-alert-code'][0] ?? 0);
+        $code = (int) ($headers['x-akismet-alert-code'][0] ?? 0);
         if (0 !== $code) {
             $message = $this->trans((string) $code);
             if ($message === (string) $code) {
-                $message = $headers['X-akismet-alert-msg'][0] ?? $this->trans('unknown');
+                $message = $headers['x-akismet-alert-msg'][0] ?? $this->trans('unknown');
             }
 
             return $this->setLastError($code, $message);
@@ -214,7 +214,7 @@ class AkismetService extends AbstractHttpClientService
 
     private function getCurrentRequest(): ?Request
     {
-        return $this->stack->getCurrentRequest();
+        return $this->requestStack->getCurrentRequest();
     }
 
     private function getVerifyParameters(Request $request, string $content, array $options): array

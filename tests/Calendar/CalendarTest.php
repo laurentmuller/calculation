@@ -127,7 +127,7 @@ class CalendarTest extends CalendarTestCase
 
         $expected = new \DateTime('today');
         $actual = $calendar->getToday();
-        self::assertSame($expected->getTimestamp(), $actual->getTimestamp());
+        self::assertSameDate($expected, $actual->getDate());
     }
 
     public function testGetWeek(): void

@@ -35,7 +35,7 @@ class DayTest extends CalendarTestCase
         $expected = new \DateTime('2024-01-01');
         $day = $this->createDay();
         $actual = $day->getDate();
-        self::assertSame($expected->getTimestamp(), $actual->getTimestamp());
+        self::assertSameDate($expected, $actual);
     }
 
     public function testGetDayOfYear(): void
@@ -84,7 +84,7 @@ class DayTest extends CalendarTestCase
         $day = $this->createDay();
         $actual = $day->getTimestamp();
         $expected = new \DateTime('2024-01-01');
-        self::assertSame($expected->getTimestamp(), $actual);
+        self::assertSameDate($expected, $actual);
     }
 
     public function testGetWeek(): void

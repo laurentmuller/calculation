@@ -14,12 +14,16 @@ namespace App\Tests\Service;
 
 use App\Service\LogService;
 use App\Tests\KernelServiceTestCase;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 #[CoversClass(LogService::class)]
 class LogServiceTest extends KernelServiceTestCase
 {
+    use TranslatorMockTrait;
+
     private LogService $service;
 
     protected function setUp(): void
@@ -67,6 +71,40 @@ class LogServiceTest extends KernelServiceTestCase
         $this->logDebug();
         $actual = $this->service->isFileValid();
         self::assertTrue($actual);
+    }
+
+    public function testParseFileInvalid(): void
+    {
+        $service = new LogService('fake');
+        $service->setTranslator($this->createMockTranslator());
+        $service->setLogger($this->createMock(LoggerInterface::class));
+        $service->setCacheItemPool(new ArrayAdapter());
+        $actual = $service->getLogFile();
+        self::assertNull($actual);
+    }
+
+    public function testParseInvalidCSV(): void
+    {
+        $fileName = __DIR__ . '/../Data/log_invalid_csv.txt';
+        $service = new LogService($fileName);
+        $service->setTranslator($this->createMockTranslator());
+        $service->setLogger($this->createMock(LoggerInterface::class));
+        $service->setCacheItemPool(new ArrayAdapter());
+        $actual = $service->getLogFile();
+        self::assertNotNull($actual);
+        self::assertCount(0, $actual);
+    }
+
+    public function testParseInvalidJSON(): void
+    {
+        $fileName = __DIR__ . '/../Data/log_invalid_json.txt';
+        $service = new LogService($fileName);
+        $service->setTranslator($this->createMockTranslator());
+        $service->setLogger($this->createMock(LoggerInterface::class));
+        $service->setCacheItemPool(new ArrayAdapter());
+        $actual = $service->getLogFile();
+        self::assertNotNull($actual);
+        self::assertCount(1, $actual);
     }
 
     private function logDebug(): void

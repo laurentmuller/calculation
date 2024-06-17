@@ -14,6 +14,7 @@ namespace App\Tests\Model;
 
 use App\Entity\CalculationState;
 use App\Model\CalculationUpdateQuery;
+use App\Tests\DateAssertTrait;
 use App\Tests\Entity\IdTrait;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
@@ -26,6 +27,7 @@ use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 #[CoversClass(CalculationUpdateQuery::class)]
 class CalculationUpdateQueryTest extends TestCase
 {
+    use DateAssertTrait;
     use IdTrait;
 
     /**
@@ -37,7 +39,7 @@ class CalculationUpdateQueryTest extends TestCase
 
         $expected = $this->getDateFrom();
         $actual = $query->getDateFrom();
-        self::assertSame($expected->getTimestamp(), $actual->getTimestamp());
+        self::assertSameDate($expected, $actual);
 
         $expected = FormatUtils::formatDate($actual);
         $actual = $query->getDateFromFormatted();
@@ -45,7 +47,7 @@ class CalculationUpdateQueryTest extends TestCase
 
         $expected = $this->getDateTo();
         $actual = $query->getDateTo();
-        self::assertSame($expected->getTimestamp(), $actual->getTimestamp());
+        self::assertSameDate($expected, $actual);
 
         $expected = FormatUtils::formatDate($actual);
         $actual = $query->getDateToFormatted();
@@ -62,12 +64,12 @@ class CalculationUpdateQueryTest extends TestCase
         $expected = $this->getDateFrom();
         $query->setDateFrom($expected);
         $actual = $query->getDateFrom();
-        self::assertSame($expected->getTimestamp(), $actual->getTimestamp());
+        self::assertSameDate($expected, $actual);
 
         $expected = $this->getDateTo();
         $query->setDateTo($expected);
         $actual = $query->getDateTo();
-        self::assertSame($expected->getTimestamp(), $actual->getTimestamp());
+        self::assertSameDate($expected, $actual);
     }
 
     /**

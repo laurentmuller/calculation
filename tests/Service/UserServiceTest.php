@@ -12,14 +12,20 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
+use App\Entity\User;
 use App\Enums\EntityAction;
 use App\Enums\MessagePosition;
 use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
+use App\Repository\UserPropertyRepository;
+use App\Repository\UserRepository;
+use App\Service\ApplicationService;
 use App\Service\UserService;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 #[CoversClass(UserService::class)]
 class UserServiceTest extends KernelServiceTestCase
@@ -100,11 +106,40 @@ class UserServiceTest extends KernelServiceTestCase
         self::assertSame(12, $service->getPanelCalculation());
     }
 
+    public function testSetPropertiesAndRemove(): void
+    {
+        $user = $this->getUser(1);
+        $service = $this->getUserService($user);
+
+        try {
+            $service->setProperties(['qr_code' => true]);
+            $actual = $service->setProperties(['qr_code' => false]);
+            self::assertTrue($actual);
+        } finally {
+            $service->setProperties(['qr_code' => null]);
+        }
+    }
+
     public function testSetPropertiesEmpty(): void
     {
         $service = $this->getUserService();
         $actual = $service->setProperties([]);
         self::assertFalse($actual);
+    }
+
+    public function testSetPropertiesNoUser(): void
+    {
+        $service = $this->getUserService();
+
+        try {
+            $actual = $service->setProperties([
+                'fake' => 'value',
+            ]);
+
+            self::assertFalse($actual);
+        } finally {
+            $service->setProperties(['fake' => null]);
+        }
     }
 
     public function testSetPropertiesSame(): void
@@ -115,8 +150,39 @@ class UserServiceTest extends KernelServiceTestCase
         self::assertFalse($actual);
     }
 
-    private function getUserService(): UserService
+    public function testSetPropertiesWithUser(): void
     {
-        return $this->getService(UserService::class);
+        $user = $this->getUser(1);
+        $service = $this->getUserService($user);
+
+        try {
+            $actual = $service->setProperties(['fake' => 'value']);
+
+            self::assertTrue($actual);
+        } finally {
+            $service->setProperties(['fake' => null]);
+        }
+    }
+
+    private function getUser(int $id): ?User
+    {
+        $repository = $this->getService(UserRepository::class);
+
+        return $repository->find($id);
+    }
+
+    private function getUserService(?User $user = null): UserService
+    {
+        $repository = $this->getService(UserPropertyRepository::class);
+        $application = $this->getService(ApplicationService::class);
+        $security = $this->createMock(Security::class);
+        if ($user instanceof User) {
+            $security->expects(self::any())
+                ->method('getUser')
+                ->willReturn($user);
+        }
+        $cacheItemPool = new ArrayAdapter();
+
+        return new UserService($repository, $application, $security, $cacheItemPool);
     }
 }

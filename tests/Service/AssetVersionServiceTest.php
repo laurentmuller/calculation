@@ -66,6 +66,15 @@ class AssetVersionServiceTest extends TestCase
     /**
      * @throws InvalidArgumentException
      */
+    public function testDeleteCache(): void
+    {
+        $actual = $this->service->deleteCache();
+        self::assertTrue($actual);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
     #[DataProvider('getPaths')]
     public function testPath(string $path, bool $isImage = false): void
     {

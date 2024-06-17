@@ -25,6 +25,7 @@ use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -275,7 +276,7 @@ class ProductUpdateServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    private function createRequestStack(): RequestStack
+    private function createRequestStack(): MockObject&RequestStack
     {
         $request = new Request();
         $request->setSession($this->session);

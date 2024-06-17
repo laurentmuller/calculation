@@ -25,6 +25,7 @@ use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
 use App\Service\ApplicationService;
 use App\Tests\DatabaseTrait;
+use App\Tests\DateAssertTrait;
 use App\Tests\KernelServiceTestCase;
 use App\Utils\StringUtils;
 use Doctrine\ORM\Exception\ORMException;
@@ -34,6 +35,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 class ApplicationServiceTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
+    use DateAssertTrait;
 
     public function testActions(): void
     {
@@ -119,7 +121,7 @@ class ApplicationServiceTest extends KernelServiceTestCase
         $actual = $service->getLastArchiveCalculations();
         // @phpstan-ignore staticMethod.impossibleType
         self::assertNotNull($actual);
-        self::assertSame($expected->getTimestamp(), $actual->getTimestamp());
+        self::assertSameDate($expected, $actual);
     }
 
     public function testLastUpdateCalculations(): void
@@ -131,7 +133,7 @@ class ApplicationServiceTest extends KernelServiceTestCase
         $actual = $service->getLastUpdateCalculations();
         // @phpstan-ignore staticMethod.impossibleType
         self::assertNotNull($actual);
-        self::assertSame($expected->getTimestamp(), $actual->getTimestamp());
+        self::assertSameDate($expected, $actual);
     }
 
     public function testLastUpdateProducts(): void
@@ -143,7 +145,7 @@ class ApplicationServiceTest extends KernelServiceTestCase
         $actual = $service->getLastUpdateProducts();
         // @phpstan-ignore staticMethod.impossibleType
         self::assertNotNull($actual);
-        self::assertSame($expected->getTimestamp(), $actual->getTimestamp());
+        self::assertSameDate($expected, $actual);
     }
 
     public function testMessage(): void

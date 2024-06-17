@@ -13,12 +13,15 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\SwissPostUpdateResult;
+use App\Tests\DateAssertTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(SwissPostUpdateResult::class)]
 class SwissPostUpdateResultTest extends TestCase
 {
+    use DateAssertTrait;
+
     public function testAdd(): void
     {
         $result = new SwissPostUpdateResult();
@@ -104,6 +107,6 @@ class SwissPostUpdateResultTest extends TestCase
         $expected = new \DateTime();
         $result = new SwissPostUpdateResult();
         $result->setValidity($expected);
-        self::assertSame($expected->getTimestamp(), $result->getValidity()?->getTimestamp());
+        self::assertSameDate($expected, $result->getValidity());
     }
 }

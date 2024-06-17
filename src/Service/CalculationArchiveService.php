@@ -256,7 +256,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
      */
     private function getSources(bool $useSession): array
     {
-        /** @var CalculationState[] $sources */
+        /** @psalm-var CalculationState[] $sources */
         $sources = $this->stateRepository
             ->getEditableQueryBuilder()
             ->getQuery()
@@ -266,7 +266,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
             return $sources;
         }
 
-        /** @var int[] $ids */
+        /** @psalm-var int[] $ids */
         $ids = $this->getSessionValue(self::KEY_SOURCES, []);
         if ([] === $ids) {
             return $sources;

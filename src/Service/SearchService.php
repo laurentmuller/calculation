@@ -156,7 +156,6 @@ class SearchService implements ServiceSubscriberInterface
         }
         $result = $this->getArrayResult($search, $entity);
 
-        // count
         return \count($result);
     }
 

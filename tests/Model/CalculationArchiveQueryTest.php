@@ -15,6 +15,7 @@ namespace App\Tests\Model;
 use App\Entity\CalculationState;
 use App\Model\AbstractSimulateQuery;
 use App\Model\CalculationArchiveQuery;
+use App\Tests\DateAssertTrait;
 use App\Tests\Entity\IdTrait;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
@@ -25,6 +26,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(CalculationArchiveQuery::class)]
 class CalculationArchiveQueryTest extends TestCase
 {
+    use DateAssertTrait;
     use IdTrait;
 
     public function testConstruct(): void
@@ -45,11 +47,11 @@ class CalculationArchiveQueryTest extends TestCase
     {
         $date = DateUtils::sub(DateUtils::removeTime(), 'P6M');
         $query = new CalculationArchiveQuery();
-        self::assertSame($date->getTimestamp(), $query->getDate()->getTimestamp());
+        self::assertSameDate($date, $query->getDate());
 
         $date = DateUtils::sub(DateUtils::removeTime(), 'P6D');
         $query->setDate($date);
-        self::assertSame($date->getTimestamp(), $query->getDate()->getTimestamp());
+        self::assertSame($date, $query->getDate());
 
         $expected = FormatUtils::formatDate($date);
         self::assertSame($expected, $query->getDateFormatted());

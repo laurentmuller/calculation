@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Entity;
 
 use App\Entity\Log;
+use App\Tests\DateAssertTrait;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use Doctrine\SqlFormatter\NullHighlighter;
@@ -25,6 +26,8 @@ use Psr\Log\LogLevel;
 #[CoversClass(Log::class)]
 class LogTest extends TestCase
 {
+    use DateAssertTrait;
+
     public static function getChannelIcons(): \Generator
     {
         yield ['application', 'fa-fw fa-solid fa-laptop-code'];
@@ -226,12 +229,11 @@ class LogTest extends TestCase
 
     public function testTimestamp(): void
     {
-        $date = new \DateTime();
+        $expected = new \DateTime();
         $log = new Log();
-        $log->setCreatedAt($date);
-        $expected = $date->getTimestamp();
+        $log->setCreatedAt($expected);
         $actual = $log->getTimestamp();
-        self::assertSame($expected, $actual);
+        self::assertSameDate($expected, $actual);
     }
 
     public function testUser(): void

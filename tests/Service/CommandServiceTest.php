@@ -34,7 +34,7 @@ class CommandServiceTest extends KernelServiceTestCase
     /**
      * @throws \Exception
      */
-    public function testExecute(): void
+    public function testExecuteSuccess(): void
     {
         $service = $this->getCommandService();
         $actual = $service->execute('about');
@@ -44,6 +44,17 @@ class CommandServiceTest extends KernelServiceTestCase
         self::assertStringContainsString(Kernel::VERSION, $actual->content);
         self::assertStringContainsString(Kernel::END_OF_LIFE, $actual->content);
         self::assertStringContainsString(Kernel::END_OF_MAINTENANCE, $actual->content);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExecuteSuccessFail(): void
+    {
+        $service = $this->getCommandService();
+        $actual = $service->execute('fake_command_name');
+        self::assertFalse($actual->isSuccess());
+        self::assertSame(Command::FAILURE, $actual->status);
     }
 
     /**

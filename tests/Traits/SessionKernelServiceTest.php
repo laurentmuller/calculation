@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
+use App\Tests\DateAssertTrait;
 use App\Tests\KernelServiceTestCase;
 use App\Traits\SessionAwareTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -22,6 +23,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[CoversClass(SessionAwareTrait::class)]
 class SessionKernelServiceTest extends KernelServiceTestCase
 {
+    use DateAssertTrait;
     use SessionAwareTrait;
 
     protected function setUp(): void
@@ -96,23 +98,22 @@ class SessionKernelServiceTest extends KernelServiceTestCase
         $actual = $this->getSessionDate($key);
         self::assertNull($actual);
 
-        $default = new \DateTime('2015-09-31');
-        $actual = $this->getSessionDate($key, $default);
-        self::assertSame($default, $actual);
+        $expected = new \DateTime('2015-09-31');
+        $actual = $this->getSessionDate($key, $expected);
+        self::assertSameDate($expected, $actual);
 
-        $value = new \DateTime('2001-01-01');
-        $this->setSessionValue($key, $value);
+        $expected = new \DateTime('2001-01-01');
+        $this->setSessionValue($key, $expected);
         $actual = $this->getSessionDate($key);
-        self::assertSame($value, $actual);
+        self::assertSameDate($expected, $actual);
 
-        $actual = $this->getSessionDate($key, $default);
-        self::assertSame($value, $actual);
+        $actual = $this->getSessionDate($key, $expected);
+        self::assertSameDate($expected, $actual);
 
-        $timestamp = $value->getTimestamp();
-        $this->setSessionValue($key, $timestamp);
+        $this->setSessionValue($key, $expected->getTimestamp());
         $actual = $this->getSessionDate($key);
         self::assertNotNull($actual);
-        self::assertSame($timestamp, $actual->getTimestamp());
+        self::assertSameDate($expected, $actual);
     }
 
     public function testSessionFloat(): void

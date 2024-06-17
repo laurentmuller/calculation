@@ -18,7 +18,6 @@ use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
 use App\Utils\StringUtils;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\MockObject\Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -35,9 +34,6 @@ abstract class GeneratorTestCase extends KernelServiceTestCase
     protected EntityManagerInterface $manager;
     protected TranslatorInterface $translator;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         parent::setUp();

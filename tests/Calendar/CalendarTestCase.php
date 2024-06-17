@@ -17,10 +17,13 @@ use App\Calendar\CalendarException;
 use App\Calendar\Day;
 use App\Calendar\Month;
 use App\Calendar\Week;
+use App\Tests\DateAssertTrait;
 use PHPUnit\Framework\TestCase;
 
 abstract class CalendarTestCase extends TestCase
 {
+    use DateAssertTrait;
+
     protected function createCalendar(int $year = 2024): Calendar
     {
         try {

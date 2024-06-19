@@ -12,8 +12,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
+use App\Entity\User;
 use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
+use App\Model\Role;
 use App\Service\RoleBuilderService;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -28,11 +30,67 @@ class RoleBuilderServiceTest extends TestCase
         $this->service = new RoleBuilderService();
     }
 
+    public function testGetRoleAdmin(): void
+    {
+        $user = new User();
+        $user->setRole(RoleInterface::ROLE_ADMIN);
+        $role = $this->service->getRole($user);
+        self::assertRoleAdmin($role);
+    }
+
+    public function testGetRoleDisabled(): void
+    {
+        $user = new User();
+        $user->setEnabled(false);
+        $role = $this->service->getRole($user);
+        self::assertRoleDisabled($role);
+    }
+
+    public function testGetRoleSuperAdmin(): void
+    {
+        $user = new User();
+        $user->setRole(RoleInterface::ROLE_SUPER_ADMIN);
+        $role = $this->service->getRole($user);
+        self::assertRoleSuperAdmin($role);
+    }
+
+    public function testGetRoleUser(): void
+    {
+        $user = new User();
+        $user->setRole(RoleInterface::ROLE_USER);
+        $role = $this->service->getRole($user);
+        self::assertRoleUser($role);
+    }
+
     public function testRoleAdmin(): void
+    {
+        $role = $this->service->getRoleAdmin();
+        self::assertRoleAdmin($role);
+    }
+
+    public function testRoleDisabled(): void
+    {
+        $role = $this->service->getRoleDisabled();
+        self::assertRoleDisabled($role);
+    }
+
+    public function testRoleSuperAdmin(): void
+    {
+        $role = $this->service->getRoleSuperAdmin();
+        self::assertRoleSuperAdmin($role);
+    }
+
+    public function testRoleUser(): void
+    {
+        $role = $this->service->getRoleUser();
+        self::assertRoleUser($role);
+    }
+
+    protected static function assertRoleAdmin(Role $role): void
     {
         $permission = EntityPermission::getAllPermission();
 
-        $role = $this->service->getRoleAdmin();
+        self::assertFalse($role->isOverwrite());
         self::assertSame(RoleInterface::ROLE_ADMIN, $role->getName());
         self::assertEqualsCanonicalizing($permission, $role->CalculationRights);
         self::assertEqualsCanonicalizing($permission, $role->CalculationStateRights);
@@ -46,11 +104,10 @@ class RoleBuilderServiceTest extends TestCase
         self::assertEqualsCanonicalizing($permission, $role->UserRights);
     }
 
-    public function testRoleDisabled(): void
+    protected static function assertRoleDisabled(Role $role): void
     {
         $permission = EntityPermission::getNonePermission();
 
-        $role = $this->service->getRoleDisabled();
         self::assertTrue($role->isOverwrite());
         self::assertSame(RoleInterface::ROLE_USER, $role->getName());
         self::assertEqualsCanonicalizing($permission, $role->CalculationRights);
@@ -65,11 +122,10 @@ class RoleBuilderServiceTest extends TestCase
         self::assertEqualsCanonicalizing($permission, $role->CustomerRights);
     }
 
-    public function testRoleSuperAdmin(): void
+    protected static function assertRoleSuperAdmin(Role $role): void
     {
         $permission = EntityPermission::getAllPermission();
 
-        $role = $this->service->getRoleSuperAdmin();
         self::assertFalse($role->isOverwrite());
         self::assertSame(RoleInterface::ROLE_SUPER_ADMIN, $role->getName());
         self::assertEqualsCanonicalizing($permission, $role->CalculationRights);
@@ -84,13 +140,12 @@ class RoleBuilderServiceTest extends TestCase
         self::assertEqualsCanonicalizing($permission, $role->CustomerRights);
     }
 
-    public function testRoleUser(): void
+    protected static function assertRoleUser(Role $role): void
     {
         $all = EntityPermission::getAllPermission();
         $none = EntityPermission::getNonePermission();
         $default = EntityPermission::getDefaultPermission();
 
-        $role = $this->service->getRoleUser();
         self::assertFalse($role->isOverwrite());
         self::assertSame(RoleInterface::ROLE_USER, $role->getName());
         self::assertEqualsCanonicalizing($all, $role->CalculationRights);

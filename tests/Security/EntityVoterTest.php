@@ -14,6 +14,8 @@ namespace App\Tests\Security;
 
 use App\Entity\Calculation;
 use App\Entity\User;
+use App\Enums\EntityName;
+use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Security\EntityVoter;
 use App\Service\ApplicationService;
@@ -35,7 +37,14 @@ class EntityVoterTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->voter = new EntityVoter($this->createMock(ApplicationService::class));
+        $builder = new RoleBuilderService();
+        $service = $this->createMock(ApplicationService::class);
+        $service->method('getAdminRights')
+            ->willReturn($builder->getRoleAdmin()->getRights());
+        $service->method('getUserRights')
+            ->willReturn($builder->getRoleUser()->getRights());
+
+        $this->voter = new EntityVoter($service);
     }
 
     public static function getSupportsAttribute(): \Iterator
@@ -69,6 +78,19 @@ class EntityVoterTest extends TestCase
         $builder = new RoleBuilderService();
         $role = $builder->getRoleAdmin();
         $user = $this->getAdminUser()
+            ->setRights($role->getRights());
+
+        $attribute = 'ADD';
+        $subject = User::class;
+        $expected = VoterInterface::ACCESS_GRANTED;
+        $this->assertVote($user, $subject, $attribute, $expected);
+    }
+
+    public function testAdminOverwrite(): void
+    {
+        $builder = new RoleBuilderService();
+        $role = $builder->getRoleAdmin();
+        $user = $this->getAdminUser()
             ->setRights($role->getRights())
             ->setOverwrite(true);
 
@@ -87,6 +109,20 @@ class EntityVoterTest extends TestCase
         $this->assertVote($user, $subject, $attribute, $expected);
     }
 
+    public function testEntityName(): void
+    {
+        $user = $this->getAdminUser();
+        $expected = VoterInterface::ACCESS_ABSTAIN;
+        $this->assertVote($user, EntityName::CALCULATION, 'fake', $expected);
+    }
+
+    public function testEntityPermission(): void
+    {
+        $user = $this->getAdminUser();
+        $expected = VoterInterface::ACCESS_ABSTAIN;
+        $this->assertVote($user, 'fake', EntityPermission::ADD, $expected);
+    }
+
     public function testSuperAdmin(): void
     {
         $user = $this->getSuperAdminUser();
@@ -101,6 +137,55 @@ class EntityVoterTest extends TestCase
     {
         $actual = $this->voter->supportsAttribute($value);
         self::assertSame($expected, $actual);
+    }
+
+    public function testUser(): void
+    {
+        $builder = new RoleBuilderService();
+        $role = $builder->getRoleUser();
+        $user = $this->getDefaultUser()
+            ->setRights($role->getRights());
+
+        $attribute = 'ADD';
+        $subject = Calculation::class;
+        $expected = VoterInterface::ACCESS_GRANTED;
+        $this->assertVote($user, $subject, $attribute, $expected);
+    }
+
+    /**
+     * @throws \ReflectionException
+     *
+     * @psalm-suppress UnusedMethodCall
+     */
+    public function testVoteOnAttribute(): void
+    {
+        $class = new \ReflectionClass($this->voter);
+        $method = $class->getMethod('voteOnAttribute');
+        $method->setAccessible(true);
+
+        $builder = new RoleBuilderService();
+        $role = $builder->getRoleUser();
+        $user = $this->getDefaultUser()
+            ->setRights($role->getRights());
+        $token = $this->getUserToken($user);
+
+        $args = [
+            'fake',
+            EntityName::CALCULATION->name,
+            $token,
+        ];
+        /** @psalm-var bool $actual */
+        $actual = $method->invoke($this->voter, ...$args);
+        self::assertFalse($actual);
+
+        $args = [
+            EntityPermission::ADD->name,
+            'fake',
+            $token,
+        ];
+        /** @psalm-var bool $actual */
+        $actual = $method->invoke($this->voter, ...$args);
+        self::assertFalse($actual);
     }
 
     private function assertVote(User $user, mixed $subject, mixed $attribute, mixed $expected): void

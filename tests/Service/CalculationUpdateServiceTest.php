@@ -12,11 +12,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
-use App\Entity\Calculation;
-use App\Entity\CalculationState;
 use App\Service\CalculationUpdateService;
 use App\Tests\DatabaseTrait;
 use App\Tests\DateAssertTrait;
+use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
@@ -30,8 +29,18 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 #[CoversClass(CalculationUpdateService::class)]
 class CalculationUpdateServiceTest extends AbstractAuthenticateWebTestCase
 {
+    use CalculationTrait;
     use DatabaseTrait;
     use DateAssertTrait;
+
+    /**
+     * @throws ORMException
+     */
+    protected function tearDown(): void
+    {
+        $this->deleteCalculation();
+        parent::tearDown();
+    }
 
     /**
      * @throws \Exception
@@ -104,20 +113,35 @@ class CalculationUpdateServiceTest extends AbstractAuthenticateWebTestCase
     /**
      * @throws ORMException
      */
+    public function testUpdateNoCalculation(): void
+    {
+        $date = $this->getDateTo();
+        $state = $this->getCalculationState();
+        $calculation = $this->getCalculation($state);
+        $calculation->setDate($date)
+            ->setOverallTotal(0.0);
+        $this->addEntity($calculation);
+
+        $this->loginUsername(self::ROLE_ADMIN);
+        $service = $this->getService(CalculationUpdateService::class);
+        $query = $service->createQuery();
+
+        $result = $service->update($query);
+        self::assertCount(0, $result);
+        self::assertCount(0, $result->getResults());
+        self::assertFalse($result->isValid());
+    }
+
+    /**
+     * @throws ORMException
+     */
     public function testUpdateOne(): void
     {
-        $this->loginUsername(self::ROLE_ADMIN);
-        $state = new CalculationState();
-        $state->setCode('code');
-        $this->addEntity($state);
-
         $date = $this->getDateTo();
-        $calculation = new Calculation();
-        $calculation->setState($state)
-            ->setCustomer('customer')
-            ->setDescription('description')
-            ->setOverallTotal(100.0)
-            ->setDate($date);
+        $state = $this->getCalculationState();
+        $calculation = $this->getCalculation($state);
+        $calculation->setDate($date)
+            ->setOverallTotal(100.0);
         $this->addEntity($calculation);
 
         $this->loginUsername(self::ROLE_ADMIN);
@@ -128,9 +152,29 @@ class CalculationUpdateServiceTest extends AbstractAuthenticateWebTestCase
         self::assertCount(1, $result);
         self::assertCount(1, $result->getResults());
         self::assertTrue($result->isValid());
+    }
 
-        $this->deleteEntity($calculation);
-        $this->deleteEntity($state);
+    /**
+     * @throws ORMException
+     */
+    public function testUpdateOneNoSimulate(): void
+    {
+        $date = $this->getDateTo();
+        $state = $this->getCalculationState();
+        $calculation = $this->getCalculation($state);
+        $calculation->setDate($date)
+            ->setOverallTotal(100.0);
+        $this->addEntity($calculation);
+
+        $this->loginUsername(self::ROLE_ADMIN);
+        $service = $this->getService(CalculationUpdateService::class);
+        $query = $service->createQuery();
+        $query->setSimulate(false);
+
+        $result = $service->update($query);
+        self::assertCount(1, $result);
+        self::assertCount(1, $result->getResults());
+        self::assertTrue($result->isValid());
     }
 
     /**

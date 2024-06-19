@@ -116,16 +116,13 @@ class SearchTableTest extends TestCase
         $entities = ['key' => 'value'];
 
         $service = $this->createMock(SearchService::class);
-        $service->expects(self::any())
-            ->method('search')
+        $service->method('search')
             ->willReturn($data);
 
-        $service->expects(self::any())
-            ->method('formatContent')
+        $service->method('formatContent')
             ->willReturnArgument(1);
 
-        $service->expects(self::any())
-            ->method('getEntities')
+        $service->method('getEntities')
             ->willReturn($entities);
 
         return $service;

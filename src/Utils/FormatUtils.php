@@ -239,7 +239,7 @@ final class FormatUtils
         $hash = self::hashCode($dateType, $timeType, $timezone, $pattern);
         if (!isset(self::$dateFormatters[$hash])) {
             $formatter = new \IntlDateFormatter($locale, $dateType, $timeType, $timezone, pattern: $pattern);
-            $pattern = $formatter->getPattern();
+            $pattern = (string) $formatter->getPattern();
             if (self::DEFAULT_LOCALE === $locale && !\str_contains($pattern, 'yyyy') && \str_contains($pattern, 'yy')) {
                 $pattern = \str_replace('yy', 'yyyy', $pattern);
                 $formatter->setPattern($pattern);

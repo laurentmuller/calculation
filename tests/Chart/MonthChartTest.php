@@ -58,8 +58,7 @@ class MonthChartTest extends TestCase
      */
     public function testWithElevenMonths(): void
     {
-        $this->repository->expects(self::any())
-            ->method('countDistinctMonths')
+        $this->repository->method('countDistinctMonths')
             ->willReturn(11);
 
         $chart = $this->createChart();
@@ -72,8 +71,7 @@ class MonthChartTest extends TestCase
      */
     public function testWithOneMonth(): void
     {
-        $this->repository->expects(self::any())
-            ->method('countDistinctMonths')
+        $this->repository->method('countDistinctMonths')
             ->willReturn(1);
 
         $chart = $this->createChart();
@@ -86,11 +84,9 @@ class MonthChartTest extends TestCase
      */
     public function testWithSeries(): void
     {
-        $this->repository->expects(self::any())
-            ->method('countDistinctMonths')
+        $this->repository->method('countDistinctMonths')
             ->willReturn(6);
-        $this->repository->expects(self::any())
-            ->method('getByMonth')
+        $this->repository->method('getByMonth')
             ->willReturn($this->createSeries());
 
         $chart = $this->createChart();

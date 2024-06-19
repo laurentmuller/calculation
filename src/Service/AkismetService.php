@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -37,17 +38,27 @@ class AkismetService extends AbstractHttpClientService
     /**
      * The host name.
      */
-    private const HOST_NAME = 'https://%s.rest.akismet.com/1.1/';
+    private const HOST_NAME = 'https://rest.akismet.com';
 
     /**
-     * The comment check URI.
+     * The activity key URI.
      */
-    private const URI_COMMENT_CHECK = 'comment-check';
+    private const URI_ACTIVITY = '1.2/key-sites';
+
+    /**
+     * The spam check URI.
+     */
+    private const URI_SPAM = '1.1/comment-check';
+
+    /**
+     * The usage key URI.
+     */
+    private const URI_USAGE = '1.2/usage-limit';
 
     /**
      * The verify key URI.
      */
-    private const URI_VERIFY = 'verify-key';
+    private const URI_VERIFY = '1.1/verify-key';
 
     /**
      * The value returned when the comment is not a spam.
@@ -58,8 +69,6 @@ class AkismetService extends AbstractHttpClientService
      * The value returned when the API key is valid.
      */
     private const VALUE_VALID = 'valid';
-
-    private readonly string $endpoint;
 
     /**
      * @throws \InvalidArgumentException if the API key is not defined, is null or empty
@@ -75,7 +84,35 @@ class AkismetService extends AbstractHttpClientService
         private readonly TranslatorInterface $translator
     ) {
         parent::__construct($key, $cache, $logger);
-        $this->endpoint = \sprintf(self::HOST_NAME, $key);
+    }
+
+    /**
+     * Gets activity for the given year and month.
+     *
+     * @param ?int $year  the year or <code>null</code> for the current year
+     * @param ?int $month the month or <code>null</code> for the current month
+     *
+     * @throws ExceptionInterface
+     */
+    public function activity(?int $year = null, ?int $month = null): array|false
+    {
+        $date = new \DateTime('today');
+        $year ??= (int) $date->format('Y');
+        $month ??= (int) $date->format('m');
+        $body = [
+            'api_key' => $this->key,
+            'month' => \sprintf('%04d-%02d', $year, $month),
+        ];
+        $response = $this->requestPost(self::URI_ACTIVITY, [self::BODY => $body]);
+        if (!$this->checkError($response)) {
+            return false;
+        }
+
+        try {
+            return $response->toArray();
+        } catch (ExceptionInterface $e) {
+            return $this->setLastError($e->getCode(), $this->trans('unknown'), $e);
+        }
     }
 
     public function getCacheTimeout(): int
@@ -123,25 +160,23 @@ class AkismetService extends AbstractHttpClientService
      * <li><b>is_test</b>: This is an optional parameter. You can use it when submitting test queries.</li>
      * </ul>.
      *
-     * @param string $content the content to validate
+     * @param string $comment the comment to validate
      * @param array  $options the parameter options to override
      *
-     * @return bool true if the comment is a spam; false otherwise
+     * @return bool <code>true</code> if the given comment is a spam; <code>false</code> otherwise
      *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
-    public function verifyComment(string $content, array $options = []): bool
+    public function isSpam(string $comment, array $options = [], ?Request $request = null): bool
     {
-        $request = $this->getCurrentRequest();
+        $request ??= $this->getCurrentRequest();
         if (!$request instanceof Request) {
             return true;
         }
 
-        $body = $this->getVerifyParameters($request, $content, $options);
-        $response = $this->requestPost(self::URI_COMMENT_CHECK, [
-            self::BODY => $body,
-        ]);
-        if (Response::HTTP_OK !== $response->getStatusCode() || !$this->checkError($response)) {
+        $body = $this->getVerifyParameters($request, $comment, $options);
+        $response = $this->requestPost(self::URI_SPAM, [self::BODY => $body]);
+        if (!$this->checkError($response)) {
             return false;
         }
 
@@ -152,18 +187,53 @@ class AkismetService extends AbstractHttpClientService
     }
 
     /**
-     * Verify that API key is valid.
+     * Verify if the API key is valid.
      *
-     * @return bool true if valid; false otherwise
+     * @return bool <code>true</code>> if valid; <code>false</code> otherwise
      */
-    public function verifyKey(): bool
+    public function isValidKey(?Request $request = null): bool
     {
-        return $this->getUrlCacheValue(self::URI_VERIFY, fn (): bool => $this->doVerifyKey());
+        return $this->getUrlCacheValue(self::URI_VERIFY, function () use ($request): bool {
+            $request ??= $this->getCurrentRequest();
+            if (!$request instanceof Request) {
+                return false;
+            }
+            $body = [
+                'api_key' => $this->key,
+                'blog' => $request->getSchemeAndHttpHost(),
+            ];
+            $response = $this->requestPost(self::URI_VERIFY, [self::BODY => $body]);
+            if (!$this->checkError($response)) {
+                return false;
+            }
+
+            return self::VALUE_VALID === $response->getContent();
+        });
+    }
+
+    /**
+     * Gets the report track usage for the current month.
+     *
+     * @throws ExceptionInterface
+     */
+    public function usage(): array|false
+    {
+        $body = ['api_key' => $this->key];
+        $response = $this->requestPost(self::URI_USAGE, [self::BODY => $body]);
+        if (!$this->checkError($response)) {
+            return false;
+        }
+
+        try {
+            return $response->toArray();
+        } catch (ExceptionInterface $e) {
+            return $this->setLastError($e->getCode(), $this->trans('unknown'), $e);
+        }
     }
 
     protected function getDefaultOptions(): array
     {
-        return [self::BASE_URI => $this->endpoint];
+        return [self::BASE_URI => self::HOST_NAME];
     }
 
     /**
@@ -171,10 +241,15 @@ class AkismetService extends AbstractHttpClientService
      *
      * @return bool false if an error is found; true otherwise
      *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
     private function checkError(ResponseInterface $response): bool
     {
+        $code = $response->getStatusCode();
+        if (Response::HTTP_OK !== $code) {
+            return $this->setLastError($code, $this->trans('unknown'));
+        }
+
         $headers = $response->getHeaders();
         $code = (int) ($headers['x-akismet-alert-code'][0] ?? 0);
         if (0 !== $code) {
@@ -189,29 +264,6 @@ class AkismetService extends AbstractHttpClientService
         return true;
     }
 
-    /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     */
-    private function doVerifyKey(): bool
-    {
-        $request = $this->getCurrentRequest();
-        if (!$request instanceof Request) {
-            return false;
-        }
-        $body = [
-            'key' => $this->key,
-            'blog' => $request->getSchemeAndHttpHost(),
-        ];
-        $response = $this->requestPost(self::URI_VERIFY, [
-            self::BODY => $body,
-        ]);
-        if (Response::HTTP_OK !== $response->getStatusCode() || !$this->checkError($response)) {
-            return false;
-        }
-
-        return self::VALUE_VALID === $response->getContent();
-    }
-
     private function getCurrentRequest(): ?Request
     {
         return $this->requestStack->getCurrentRequest();
@@ -224,6 +276,7 @@ class AkismetService extends AbstractHttpClientService
         $headers = $request->headers;
 
         return \array_filter(\array_merge([
+            'api_key' => $this->key,
             'user_ip' => $request->getClientIp(),
             'user_agent' => $headers->get('User-Agent'),
             'referrer' => $headers->get('referer'),

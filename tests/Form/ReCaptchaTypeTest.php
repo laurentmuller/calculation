@@ -76,8 +76,7 @@ class ReCaptchaTypeTest extends TypeTestCase
         $error = 'action-mismatch';
         $this->setRequest($this->request);
         $this->setResponse($error);
-        $this->service->expects(self::any())
-            ->method('translateErrors')
+        $this->service->method('translateErrors')
             ->willReturn([$error]);
 
         $form = $this->factory->create(ReCaptchaType::class, $data);
@@ -96,8 +95,7 @@ class ReCaptchaTypeTest extends TypeTestCase
         $this->setRequest(null);
         $this->setResponse();
 
-        $this->service->expects(self::any())
-            ->method('translateError')
+        $this->service->method('translateError')
             ->willReturnArgument(0);
 
         $form = $this->factory->create(ReCaptchaType::class, $data);
@@ -146,8 +144,7 @@ class ReCaptchaTypeTest extends TypeTestCase
     private function createService(): MockObject&RecaptchaService
     {
         $service = $this->createMock(RecaptchaService::class);
-        $service->expects(self::any())
-            ->method('getExpectedAction')
+        $service->method('getExpectedAction')
             ->willReturn('login');
 
         return $service;
@@ -155,9 +152,7 @@ class ReCaptchaTypeTest extends TypeTestCase
 
     private function setRequest(?Request $request): void
     {
-        $this->requestStack
-            ->expects(self::any())
-            ->method('getCurrentRequest')
+        $this->requestStack->method('getCurrentRequest')
             ->willReturn($request);
     }
 
@@ -166,8 +161,7 @@ class ReCaptchaTypeTest extends TypeTestCase
         $success = '' === $code;
         $errorCodes = $success ? [] : [$code];
         $response = new Response($success, $errorCodes);
-        $this->service->expects(self::any())
-            ->method('verify')
+        $this->service->method('verify')
             ->willReturn($response);
     }
 }

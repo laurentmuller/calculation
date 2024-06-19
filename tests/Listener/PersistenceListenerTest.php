@@ -308,26 +308,22 @@ class PersistenceListenerTest extends TestCase
     ): MockObject&EntityManagerInterface {
         $unitOfWork = $this->createMock(UnitOfWork::class);
         foreach ($events as $method => $entity) {
-            $unitOfWork->expects(self::any())
-                ->method($method)
+            $unitOfWork->method($method)
                 ->willReturn([$entity]);
         }
         $index = 0;
         foreach ($collections as $method => $entity) {
-            $unitOfWork->expects(self::any())
-                ->method($method)
+            $unitOfWork->method($method)
                 ->willReturn([$index++ => new ArrayCollection([$entity])]);
         }
 
         foreach ($changeSets as $key => $value) {
-            $unitOfWork->expects(self::any())
-                ->method('getEntityChangeSet')
+            $unitOfWork->method('getEntityChangeSet')
                 ->willReturn([$key => $value]);
         }
 
         $manager = $this->createMock(EntityManagerInterface::class);
-        $manager->expects(self::any())
-            ->method('getUnitOfWork')
+        $manager->method('getUnitOfWork')
             ->willReturn($unitOfWork);
 
         return $manager;
@@ -339,8 +335,7 @@ class PersistenceListenerTest extends TestCase
     private function createMockSecurity(): MockObject&Security
     {
         $security = $this->createMock(Security::class);
-        $security->expects(self::any())
-            ->method('getUser')
+        $security->method('getUser')
             ->willReturn($this->user);
 
         return $security;
@@ -353,8 +348,7 @@ class PersistenceListenerTest extends TestCase
     {
         $session = $this->createMock(SessionInterface::class);
         $requestStack = $this->createMock(RequestStack::class);
-        $requestStack->expects(self::any())
-            ->method('getSession')
+        $requestStack->method('getSession')
             ->willReturn($session);
 
         return $requestStack;

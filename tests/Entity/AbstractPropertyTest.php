@@ -38,7 +38,9 @@ class AbstractPropertyTest extends TestCase
         $actual = $entity->getArray();
         // @phpstan-ignore staticMethod.impossibleType
         self::assertIsArray($actual);
+        // @phpstan-ignore staticMethod.impossibleType
         self::assertCount(3, $actual);
+        // @phpstan-ignore staticMethod.impossibleType
         self::assertSame($expected, $actual);
 
         $entity->setValue('{invalidJson');

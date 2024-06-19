@@ -67,8 +67,7 @@ class RecaptchaValidatorTest extends ConstraintValidatorTestCase
     {
         $service = $this->createService();
         $requestStack = $this->createMock(RequestStack::class);
-        $requestStack->expects(self::any())
-            ->method('getCurrentRequest')
+        $requestStack->method('getCurrentRequest')
             ->willReturn(null);
         $validator = new RecaptchaValidator($service, $requestStack);
         $validator->initialize($this->context);
@@ -123,8 +122,7 @@ class RecaptchaValidatorTest extends ConstraintValidatorTestCase
     {
         $request = $this->createMock(Request::class);
         $requestStack = $this->createMock(RequestStack::class);
-        $requestStack->expects(self::any())
-            ->method('getCurrentRequest')
+        $requestStack->method('getCurrentRequest')
             ->willReturn($request);
 
         return $requestStack;
@@ -140,8 +138,7 @@ class RecaptchaValidatorTest extends ConstraintValidatorTestCase
         $response = new Response($success, $errorCodes);
 
         $service = $this->createMock(RecaptchaService::class);
-        $service->expects(self::any())
-            ->method('verify')
+        $service->method('verify')
             ->willReturn($response);
 
         return $service;

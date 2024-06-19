@@ -108,8 +108,7 @@ class ProductTableTest extends EntityTableTestCase
     protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&ProductRepository
     {
         $repository = $this->createMock(ProductRepository::class);
-        $repository->expects(self::any())
-            ->method('getTableQueryBuilder')
+        $repository->method('getTableQueryBuilder')
             ->willReturn($queryBuilder);
 
         return $repository;
@@ -127,8 +126,7 @@ class ProductTableTest extends EntityTableTestCase
             $category = new Category();
             $category->setCode('code');
             self::setId($category);
-            $categoryRepository->expects(self::any())
-                ->method('find')
+            $categoryRepository->method('find')
                 ->willReturn($category);
         }
 
@@ -137,8 +135,7 @@ class ProductTableTest extends EntityTableTestCase
             $category = new Group();
             $category->setCode('code');
             self::setId($category);
-            $groupRepository->expects(self::any())
-                ->method('find')
+            $groupRepository->method('find')
                 ->willReturn($category);
         }
 

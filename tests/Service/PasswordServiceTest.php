@@ -58,8 +58,7 @@ class PasswordServiceTest extends KernelServiceTestCase
     {
         $translator = $this->createMockTranslator();
         $zxcvbn = $this->createMock(Zxcvbn::class);
-        $zxcvbn->expects(self::any())
-            ->method('passwordStrength')
+        $zxcvbn->method('passwordStrength')
             ->willReturn([
                 'score' => -10,
                 'feedback' => [
@@ -68,8 +67,7 @@ class PasswordServiceTest extends KernelServiceTestCase
                 ],
             ]);
         $factory = $this->createMock(ZxcvbnFactoryInterface::class);
-        $factory->expects(self::any())
-            ->method('createZxcvbn')
+        $factory->method('createZxcvbn')
             ->willReturn($zxcvbn);
 
         $service = new PasswordService($factory, $translator);

@@ -281,11 +281,9 @@ class ProductUpdateServiceTest extends TestCase
         $request = new Request();
         $request->setSession($this->session);
         $requestStack = $this->createMock(RequestStack::class);
-        $requestStack->expects(self::any())
-            ->method('getCurrentRequest')
+        $requestStack->method('getCurrentRequest')
             ->willReturn($request);
-        $requestStack->expects(self::any())
-            ->method('getSession')
+        $requestStack->method('getSession')
             ->willReturn($this->session);
 
         return $requestStack;
@@ -297,27 +295,22 @@ class ProductUpdateServiceTest extends TestCase
     private function createService(): ProductUpdateService
     {
         $productRepository = $this->createMock(ProductRepository::class);
-        $productRepository->expects(self::any())
-            ->method('findByCategory')
+        $productRepository->method('findByCategory')
             ->willReturn([$this->product]);
 
-        $productRepository->expects(self::any())
-            ->method('findByDescription')
+        $productRepository->method('findByDescription')
             ->willReturn([$this->product]);
 
         $categoryRepository = $this->createMock(CategoryRepository::class);
-        $categoryRepository->expects(self::any())
-            ->method('find')
+        $categoryRepository->method('find')
             ->willReturn($this->category);
 
         $security = $this->createMock(Security::class);
-        $security->expects(self::any())
-            ->method('getUser')
+        $security->method('getUser')
             ->willReturn($this->user);
 
         $container = $this->createMock(ContainerInterface::class);
-        $container->expects(self::any())
-            ->method('has')
+        $container->method('has')
             ->willReturn(false);
 
         $logger = $this->createMock(LoggerInterface::class);

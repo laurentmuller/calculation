@@ -64,8 +64,7 @@ abstract class EntityTableTestCase extends TestCase
     protected function createMockQuery(array $entities): MockObject&Query
     {
         $query = $this->createMock(Query::class);
-        $query->expects(self::any())
-            ->method('getResult')
+        $query->method('getResult')
             ->willReturn($entities);
 
         return $query;
@@ -77,14 +76,11 @@ abstract class EntityTableTestCase extends TestCase
     protected function createMockQueryBuilder(MockObject&Query $query): MockObject&QueryBuilder
     {
         $queryBuilder = $this->createMock(QueryBuilder::class);
-        $queryBuilder->expects(self::any())
-            ->method('getQuery')
+        $queryBuilder->method('getQuery')
             ->willReturn($query);
-        $queryBuilder->expects(self::any())
-            ->method('getRootAliases')
+        $queryBuilder->method('getRootAliases')
             ->willReturn([AbstractRepository::DEFAULT_ALIAS]);
-        $queryBuilder->expects(self::any())
-            ->method('expr')
+        $queryBuilder->method('expr')
             ->willReturn(new Expr());
 
         return $queryBuilder;

@@ -106,14 +106,11 @@ class CaptchaControllerTest extends AbstractControllerTestCase
         bool $validateToken
     ): MockObject&CaptchaImageService {
         $service = $this->createMock(CaptchaImageService::class);
-        $service->expects(self::any())
-            ->method('generateImage')
+        $service->method('generateImage')
             ->willReturn($generateImage);
-        $service->expects(self::any())
-            ->method('validateTimeout')
+        $service->method('validateTimeout')
             ->willReturn($validateTimeout);
-        $service->expects(self::any())
-            ->method('validateToken')
+        $service->method('validateToken')
             ->willReturn($validateToken);
 
         return $service;

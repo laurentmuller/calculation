@@ -71,11 +71,9 @@ class CalculationDuplicateTableTest extends TestCase
     private function createMockRepository(array $entities = []): MockObject&CalculationRepository
     {
         $repository = $this->createMock(CalculationRepository::class);
-        $repository->expects(self::any())
-            ->method('getClassName')
+        $repository->method('getClassName')
             ->willReturn(Calculation::class);
-        $repository->expects(self::any())
-            ->method('getItemsDuplicate')
+        $repository->method('getItemsDuplicate')
             ->willReturn($entities);
 
         return $repository;

@@ -83,12 +83,10 @@ class CalculationBelowTableTest extends EntityTableTestCase
     protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CalculationRepository
     {
         $repository = $this->createMock(CalculationRepository::class);
-        $repository->expects(self::any())
-            ->method('getTableQueryBuilder')
+        $repository->method('getTableQueryBuilder')
             ->willReturn($queryBuilder);
 
-        $repository->expects(self::any())
-            ->method('countItemsBelow')
+        $repository->method('countItemsBelow')
             ->willReturn($this->countItemsBelow);
 
         return $repository;
@@ -104,8 +102,7 @@ class CalculationBelowTableTest extends EntityTableTestCase
         $stateRepository = $this->createMock(CalculationStateRepository::class);
         $twig = $this->createMock(Environment::class);
         $service = $this->createMock(ApplicationService::class);
-        $service->expects(self::any())
-            ->method('getMinMargin')
+        $service->method('getMinMargin')
             ->willReturn(1.1);
 
         return new CalculationBelowTable($repository, $stateRepository, $twig, $service);

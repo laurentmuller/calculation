@@ -70,8 +70,7 @@ class CategoryTableTest extends EntityTableTestCase
     protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CategoryRepository
     {
         $repository = $this->createMock(CategoryRepository::class);
-        $repository->expects(self::any())
-            ->method('getTableQueryBuilder')
+        $repository->method('getTableQueryBuilder')
             ->willReturn($queryBuilder);
 
         return $repository;

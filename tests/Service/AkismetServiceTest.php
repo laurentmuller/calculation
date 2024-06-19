@@ -36,6 +36,9 @@ class AkismetServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 
+    private const ERROR_CODE = 1000;
+    private const ERROR_MESSAGE = 'Error Message';
+
     private MockObject&RequestStack $requestStack;
 
     /**
@@ -48,212 +51,266 @@ class AkismetServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     * @throws ExceptionInterface
+     * @throws ExceptionInterface|Exception
      */
-    public function testVerifyCommentInvalidCode(): void
+    public function testActivityException(): void
     {
-        $expected_code = 404;
-        $expected_message = 'Error Message';
-        $response = new JsonMockResponse(
-            [
-                'error' => [
-                    'code' => $expected_code,
-                    'message' => $expected_message,
-                ],
-            ],
-            ['http_code' => $expected_code]
-        );
-
-        $request = new Request();
-        $this->requestStack
-            ->expects(self::any())
-            ->method('getCurrentRequest')
-            ->willReturn($request);
-
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient();
         $service = $this->createService();
         $service->setClient($client);
-        $actual = $service->verifyComment('content');
+        $actual = $service->activity();
+        self::assertFalse($actual);
+        self::assertInstanceOf(HttpClientError::class, $service->getLastError());
+    }
+
+    /**
+     * @throws ExceptionInterface|Exception
+     */
+    public function testActivityInvalidCode(): void
+    {
+        $client = new MockHttpClient([$this->getInvalidCodeResponse()]);
+        $service = $this->createService();
+        $service->setClient($client);
+        $actual = $service->activity();
         self::assertFalse($actual);
     }
 
     /**
-     * @throws Exception
-     * @throws ExceptionInterface
+     * @throws ExceptionInterface|Exception
      */
-    public function testVerifyCommentNoRequest(): void
+    public function testActivityLastError(): void
     {
-        $this->requestStack
-            ->expects(self::any())
-            ->method('getCurrentRequest')
-            ->willReturn(null);
-
-        $service = $this->createService();
-        $actual = $service->verifyComment('content');
-        self::assertTrue($actual);
-    }
-
-    /**
-     * @throws Exception
-     * @throws ExceptionInterface
-     */
-    public function testVerifyCommentSuccess(): void
-    {
-        $request = new Request();
-        $this->requestStack
-            ->expects(self::any())
-            ->method('getCurrentRequest')
-            ->willReturn($request);
-
-        $service = $this->createService();
-        $actual = $service->verifyComment('content');
-        self::assertTrue($actual);
-    }
-
-    /**
-     * @throws Exception
-     * @throws ExceptionInterface
-     */
-    public function testVerifyKeyInvalidCode(): void
-    {
-        $expected_code = 404;
-        $expected_message = 'Error Message';
-        $response = new JsonMockResponse(
-            [
-                'error' => [
-                    'code' => $expected_code,
-                    'message' => $expected_message,
-                ],
-            ],
-            ['http_code' => $expected_code]
-        );
-
-        $request = new Request();
-        $this->requestStack
-            ->expects(self::any())
-            ->method('getCurrentRequest')
-            ->willReturn($request);
-
-        $client = new MockHttpClient([$response]);
+        $client = new MockHttpClient([$this->getLastErrorResponse()]);
         $service = $this->createService();
         $service->setClient($client);
-        $actual = $service->verifyKey();
-        self::assertFalse($actual);
-    }
-
-    /**
-     * @throws Exception
-     * @throws ExceptionInterface
-     */
-    public function testVerifyKeyLastError(): void
-    {
-        $expected_code = 100;
-        $expected_message = 'Error Message';
-        $response = new JsonMockResponse(
-            [
-                'error' => [
-                    'code' => $expected_code,
-                    'message' => $expected_message,
-                ],
-            ],
-            [
-                'response_headers' => [
-                    'x-akismet-alert-code' => $expected_code,
-                    'x-akismet-alert-msg' => $expected_message,
-                ],
-            ]
-        );
-
-        $request = new Request();
-        $this->requestStack
-            ->expects(self::any())
-            ->method('getCurrentRequest')
-            ->willReturn($request);
-
-        $client = new MockHttpClient([$response]);
-        $service = $this->createService();
-        $service->setClient($client);
-        $actual = $service->verifyKey();
+        $actual = $service->activity();
         self::assertFalse($actual);
         $actual = $service->getLastError();
         self::assertInstanceOf(HttpClientError::class, $actual);
-        self::assertSame($expected_code, $actual->getCode());
-        self::assertSame($expected_message, $actual->getMessage());
+        self::assertSame(self::ERROR_CODE, $actual->getCode());
+        self::assertSame(self::ERROR_MESSAGE, $actual->getMessage());
+    }
+
+    /**
+     * @throws ExceptionInterface|Exception
+     */
+    public function testActivitySuccess(): void
+    {
+        $response = new JsonMockResponse(
+            [
+                '2024-06' => [
+                    [
+                        'site' => '127.0.0.1:8000',
+                        'api_calls' => '2',
+                        'spam' => '0',
+                        'ham' => '2',
+                        'missed_spam' => '0',
+                        'false_positives' => '0',
+                        'is_revoked' => false,
+                    ],
+                ],
+                'limit' => 500,
+                'offset' => 0,
+                'total' => 1,
+            ]
+        );
+
+        $client = new MockHttpClient([$response]);
+        $service = $this->createService();
+        $service->setClient($client);
+        $actual = $service->activity();
+        self::assertIsArray($actual);
+    }
+
+    /**
+     * @throws ExceptionInterface|Exception
+     */
+    public function testIsSpamInvalidCode(): void
+    {
+        $request = new Request();
+        $this->requestStack->method('getCurrentRequest')
+            ->willReturn($request);
+
+        $client = new MockHttpClient([$this->getInvalidCodeResponse()]);
+        $service = $this->createService();
+        $service->setClient($client);
+        $actual = $service->isSpam('content');
+        self::assertFalse($actual);
+    }
+
+    /**
+     * @throws ExceptionInterface|Exception
+     */
+    public function testIsSpamNoRequest(): void
+    {
+        $this->requestStack->method('getCurrentRequest')
+            ->willReturn(null);
+
+        $service = $this->createService();
+        $actual = $service->isSpam('content');
+        self::assertTrue($actual);
+    }
+
+    /**
+     * @throws ExceptionInterface|Exception
+     */
+    public function testIsSpamSuccess(): void
+    {
+        $request = new Request();
+        $this->requestStack->method('getCurrentRequest')
+            ->willReturn($request);
+
+        $service = $this->createService();
+        $actual = $service->isSpam('content');
+        self::assertTrue($actual);
     }
 
     /**
      * @throws Exception
      */
-    public function testVerifyKeyNoRequest(): void
+    public function testIsValidKeyInvalidCode(): void
     {
-        $this->requestStack
-            ->expects(self::any())
-            ->method('getCurrentRequest')
-            ->willReturn(null);
+        $request = new Request();
+        $this->requestStack->method('getCurrentRequest')
+            ->willReturn($request);
 
+        $client = new MockHttpClient([$this->getInvalidCodeResponse()]);
         $service = $this->createService();
-        $actual = $service->verifyKey();
+        $service->setClient($client);
+        $actual = $service->isValidKey();
         self::assertFalse($actual);
     }
 
     /**
      * @throws Exception
      */
-    public function testVerifyKeySuccess(): void
+    public function testIsValidKeyLastError(): void
     {
         $request = new Request();
-        $this->requestStack
-            ->expects(self::any())
-            ->method('getCurrentRequest')
+        $this->requestStack->method('getCurrentRequest')
+            ->willReturn($request);
+
+        $client = new MockHttpClient([$this->getLastErrorResponse()]);
+        $service = $this->createService();
+        $service->setClient($client);
+        $actual = $service->isValidKey();
+        self::assertFalse($actual);
+        $actual = $service->getLastError();
+        self::assertInstanceOf(HttpClientError::class, $actual);
+        self::assertSame(self::ERROR_CODE, $actual->getCode());
+        self::assertSame(self::ERROR_MESSAGE, $actual->getMessage());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testIsValidKeyNoRequest(): void
+    {
+        $this->requestStack->method('getCurrentRequest')
+            ->willReturn(null);
+
+        $service = $this->createService();
+        $actual = $service->isValidKey();
+        self::assertFalse($actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testIsValidKeySuccess(): void
+    {
+        $request = new Request();
+        $this->requestStack->method('getCurrentRequest')
             ->willReturn($request);
 
         $response = new MockResponse('valid');
         $client = new MockHttpClient([$response]);
         $service = $this->createService();
         $service->setClient($client);
-        $actual = $service->verifyKey();
+        $actual = $service->isValidKey();
         self::assertTrue($actual);
     }
 
     /**
-     * @throws Exception
-     * @throws ExceptionInterface
+     * @throws ExceptionInterface|Exception
      */
-    public function testVerifyLastError(): void
+    public function testUsageException(): void
     {
-        $expected_code = 100;
-        $expected_message = 'Error Message';
+        $client = new MockHttpClient();
+        $service = $this->createService();
+        $service->setClient($client);
+        $actual = $service->usage();
+        self::assertFalse($actual);
+        self::assertInstanceOf(HttpClientError::class, $service->getLastError());
+    }
+
+    /**
+     * @throws ExceptionInterface|Exception
+     */
+    public function testUsageInvalidCode(): void
+    {
+        $client = new MockHttpClient([$this->getInvalidCodeResponse()]);
+        $service = $this->createService();
+        $service->setClient($client);
+        $actual = $service->usage();
+        self::assertFalse($actual);
+    }
+
+    /**
+     * @throws ExceptionInterface|Exception
+     */
+    public function testUsageLastError(): void
+    {
+        $client = new MockHttpClient([$this->getLastErrorResponse()]);
+        $service = $this->createService();
+        $service->setClient($client);
+        $actual = $service->usage();
+        self::assertFalse($actual);
+        $actual = $service->getLastError();
+        self::assertInstanceOf(HttpClientError::class, $actual);
+        self::assertSame(self::ERROR_CODE, $actual->getCode());
+        self::assertSame(self::ERROR_MESSAGE, $actual->getMessage());
+    }
+
+    /**
+     * @throws ExceptionInterface|Exception
+     */
+    public function testUsageSuccess(): void
+    {
         $response = new JsonMockResponse(
             [
-                'error' => [
-                    'code' => $expected_code,
-                    'message' => $expected_message,
-                ],
-            ],
-            [
-                'response_headers' => [
-                    'x-akismet-alert-code' => $expected_code,
-                    'x-akismet-alert-msg' => $expected_message,
-                ],
+                'limit' => 'none',
+                'usage' => 8,
+                'percentage' => 0.2,
+                'throttled' => false,
             ]
         );
-
-        $request = new Request();
-        $this->requestStack
-            ->expects(self::any())
-            ->method('getCurrentRequest')
-            ->willReturn($request);
 
         $client = new MockHttpClient([$response]);
         $service = $this->createService();
         $service->setClient($client);
-        $actual = $service->verifyComment('content');
+        $actual = $service->usage();
+        self::assertIsArray($actual);
+    }
+
+    /**
+     * @throws ExceptionInterface|Exception
+     */
+    public function testVerifyLastError(): void
+    {
+        $request = new Request();
+        $this->requestStack->method('getCurrentRequest')
+            ->willReturn($request);
+
+        $client = new MockHttpClient([$this->getLastErrorResponse()]);
+        $service = $this->createService();
+        $service->setClient($client);
+        $actual = $service->isSpam('content');
         self::assertFalse($actual);
         $actual = $service->getLastError();
         self::assertInstanceOf(HttpClientError::class, $actual);
-        self::assertSame($expected_code, $actual->getCode());
-        self::assertSame($expected_message, $actual->getMessage());
+        self::assertSame(self::ERROR_CODE, $actual->getCode());
+        self::assertSame(self::ERROR_MESSAGE, $actual->getMessage());
     }
 
     /**
@@ -274,6 +331,37 @@ class AkismetServiceTest extends TestCase
             $security,
             $this->requestStack,
             $translator
+        );
+    }
+
+    private function getInvalidCodeResponse(): JsonMockResponse
+    {
+        return new JsonMockResponse(
+            [
+                'error' => [
+                    'code' => self::ERROR_CODE,
+                    'message' => self::ERROR_MESSAGE,
+                ],
+            ],
+            ['http_code' => self::ERROR_CODE]
+        );
+    }
+
+    private function getLastErrorResponse(): JsonMockResponse
+    {
+        return new JsonMockResponse(
+            [
+                'error' => [
+                    'code' => self::ERROR_CODE,
+                    'message' => self::ERROR_MESSAGE,
+                ],
+            ],
+            [
+                'response_headers' => [
+                    'x-akismet-alert-code' => self::ERROR_CODE,
+                    'x-akismet-alert-msg' => self::ERROR_MESSAGE,
+                ],
+            ]
         );
     }
 }

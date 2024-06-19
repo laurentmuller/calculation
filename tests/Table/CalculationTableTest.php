@@ -105,8 +105,7 @@ class CalculationTableTest extends EntityTableTestCase
     protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CalculationRepository
     {
         $repository = $this->createMock(CalculationRepository::class);
-        $repository->expects(self::any())
-            ->method('getTableQueryBuilder')
+        $repository->method('getTableQueryBuilder')
             ->willReturn($queryBuilder);
 
         return $repository;
@@ -124,8 +123,7 @@ class CalculationTableTest extends EntityTableTestCase
             $state = new CalculationState();
             $state->setCode('code');
             self::setId($state);
-            $stateRepository->expects(self::any())
-                ->method('find')
+            $stateRepository->method('find')
                 ->willReturn($state);
         }
         $twig = $this->createMock(Environment::class);

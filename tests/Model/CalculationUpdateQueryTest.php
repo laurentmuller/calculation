@@ -106,8 +106,7 @@ class CalculationUpdateQueryTest extends TestCase
             ->method('getValue')
             ->willReturn($query);
         $violation = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
-        $violation->expects(self::any())
-            ->method('setParameter')
+        $violation->method('setParameter')
             ->willReturn($violation);
         $context->expects(self::once())
             ->method('buildViolation')
@@ -128,8 +127,7 @@ class CalculationUpdateQueryTest extends TestCase
             ->method('getValue')
             ->willReturn($query);
         $violation = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
-        $violation->expects(self::any())
-            ->method('setParameter')
+        $violation->method('setParameter')
             ->willReturn($violation);
         $context->expects(self::once())
             ->method('buildViolation')
@@ -153,8 +151,7 @@ class CalculationUpdateQueryTest extends TestCase
             ->method('getValue')
             ->willReturn($query);
         $violation = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
-        $violation->expects(self::any())
-            ->method('setParameter')
+        $violation->method('setParameter')
             ->willReturn($violation);
         $context->expects(self::once())
             ->method('buildViolation')
@@ -169,8 +166,7 @@ class CalculationUpdateQueryTest extends TestCase
     {
         $query = new CalculationUpdateQuery();
         $context = $this->createMock(ExecutionContextInterface::class);
-        $context->expects(self::once())
-            ->method('getValue')
+        $context->method('getValue')
             ->willReturn($query);
         $query->validate($context);
         self::assertCount(0, $context->getViolations());

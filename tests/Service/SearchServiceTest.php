@@ -146,8 +146,7 @@ class SearchServiceTest extends KernelServiceTestCase
     private function getSearchService(bool $debug = false): SearchService
     {
         $checker = $this->createMock(AuthorizationCheckerInterface::class);
-        $checker->expects(self::any())
-            ->method('isGranted')
+        $checker->method('isGranted')
             ->willReturn(true);
 
         $manager = $this->getService(EntityManagerInterface::class);

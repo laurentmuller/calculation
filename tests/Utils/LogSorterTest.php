@@ -76,4 +76,17 @@ class LogSorterTest extends TestCase
         $sorter->sort($logs);
         self::assertSame([], $logs);
     }
+
+    public function testWithoutFieldSorter(): void
+    {
+        $log1 = Log::instance(1)
+            ->setCreatedAt(new \DateTime('2024-02-02'));
+        $log2 = Log::instance(1)
+            ->setCreatedAt(new \DateTime('2024-01-01'));
+        $logs = [$log1, $log2];
+
+        $sorter = new LogSorter('fake', true);
+        $sorter->sort($logs);
+        self::assertSame([$log1, $log2], $logs);
+    }
 }

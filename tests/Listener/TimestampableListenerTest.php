@@ -177,14 +177,12 @@ class TimestampableListenerTest extends TestCase
     {
         $unitOfWork = $this->createMock(UnitOfWork::class);
         foreach ($events as $method => $entity) {
-            $unitOfWork->expects(self::any())
-                ->method($method)
+            $unitOfWork->method($method)
                 ->willReturn([$entity]);
         }
 
         $manager = $this->createMock(EntityManagerInterface::class);
-        $manager->expects(self::any())
-            ->method('getUnitOfWork')
+        $manager->method('getUnitOfWork')
             ->willReturn($unitOfWork);
 
         return $manager;
@@ -199,8 +197,7 @@ class TimestampableListenerTest extends TestCase
         if ($createUser) {
             $user = new User();
             $user->setUsername(self::USER_NAME);
-            $security->expects(self::any())
-                ->method('getUser')
+            $security->method('getUser')
                 ->willReturn($user);
         }
 

@@ -159,25 +159,20 @@ class ProductProviderTest extends TestCase
         ): string => (string) $product->getDescription(), $entities);
 
         $repository = $this->createMock(ProductRepository::class);
-        $repository->expects(self::any())
-            ->method('findBy')
+        $repository->method('findBy')
             ->willReturn($entities);
 
-        $repository->expects(self::any())
-            ->method('findOneBy')
+        $repository->method('findOneBy')
             ->willReturn($entity);
 
-        $repository->expects(self::any())
-            ->method('findAll')
+        $repository->method('findAll')
             ->willReturn($entities);
 
-        $repository->expects(self::any())
-            ->method('getDistinctValues')
+        $repository->method('getDistinctValues')
             ->willReturn($values);
 
         $manager = $this->createMock(EntityManagerInterface::class);
-        $manager->expects(self::any())
-            ->method('getRepository')
+        $manager->method('getRepository')
             ->willReturn($repository);
 
         $generator = Factory::create(FormatUtils::DEFAULT_LOCALE);

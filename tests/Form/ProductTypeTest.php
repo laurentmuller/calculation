@@ -96,16 +96,13 @@ class ProductTypeTest extends AbstractEntityTypeTestCase
         $repository = $this->createRepository(CategoryRepository::class);
         $registry = $this->createRegistry($manager);
 
-        $query->expects(self::any())
-            ->method('execute')
+        $query->method('execute')
             ->willReturn([$this->getCategory()]);
 
-        $repository->expects(self::any())
-            ->method('getQueryBuilderByGroup')
+        $repository->method('getQueryBuilderByGroup')
             ->willReturn($builder);
 
-        $manager->expects(self::any())
-            ->method('getRepository')
+        $manager->method('getRepository')
             ->willReturn($repository);
 
         return $registry;

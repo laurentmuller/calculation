@@ -293,8 +293,7 @@ class CalculationServiceTest extends KernelServiceTestCase
         $marginRepository = $this->getService(GroupMarginRepository::class);
         if ($group instanceof Group) {
             $groupRepository = $this->createMock(GroupRepository::class);
-            $groupRepository->expects(self::any())
-                ->method('find')
+            $groupRepository->method('find')
                 ->willReturn($group);
         } else {
             $groupRepository = $this->getService(GroupRepository::class);

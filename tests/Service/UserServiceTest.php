@@ -177,8 +177,7 @@ class UserServiceTest extends KernelServiceTestCase
         $application = $this->getService(ApplicationService::class);
         $security = $this->createMock(Security::class);
         if ($user instanceof User) {
-            $security->expects(self::any())
-                ->method('getUser')
+            $security->method('getUser')
                 ->willReturn($user);
         }
         $cacheItemPool = new ArrayAdapter();

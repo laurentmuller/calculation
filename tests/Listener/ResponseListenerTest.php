@@ -175,8 +175,7 @@ class ResponseListenerTest extends TestCase
     private function createMockGenerator(): MockObject&UrlGeneratorInterface
     {
         $generator = $this->createMock(UrlGeneratorInterface::class);
-        $generator->expects(self::any())
-            ->method('generate')
+        $generator->method('generate')
             ->willReturnArgument(0);
 
         return $generator;
@@ -189,8 +188,7 @@ class ResponseListenerTest extends TestCase
     {
         $config = new FirewallConfig($name, '');
         $security = $this->createMock(Security::class);
-        $security->expects(self::any())
-            ->method('getFirewallConfig')
+        $security->method('getFirewallConfig')
             ->willReturn($config);
 
         return $security;

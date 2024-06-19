@@ -71,17 +71,14 @@ class UserProviderTest extends TestCase
     {
         $entities = $entity instanceof User ? [$entity] : [];
         $repository = $this->createMock(UserRepository::class);
-        $repository->expects(self::any())
-            ->method('findBy')
+        $repository->method('findBy')
             ->willReturn($entities);
 
-        $repository->expects(self::any())
-            ->method('findAll')
+        $repository->method('findAll')
             ->willReturn($entities);
 
         $manager = $this->createMock(EntityManagerInterface::class);
-        $manager->expects(self::any())
-            ->method('getRepository')
+        $manager->method('getRepository')
             ->willReturn($repository);
 
         $generator = Factory::create(FormatUtils::DEFAULT_LOCALE);

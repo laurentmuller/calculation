@@ -63,11 +63,9 @@ class PhpIniDocumentTest extends TestCase
     {
         $controller = $this->createMock(AbstractController::class);
         $service = $this->createMock(PhpInfoService::class);
-        $service->expects(self::any())
-            ->method('getVersion')
+        $service->method('getVersion')
             ->willReturn(\PHP_VERSION);
-        $service->expects(self::any())
-            ->method('asArray')
+        $service->method('asArray')
             ->willReturn($data);
 
         return new PhpIniDocument($controller, $service);

@@ -147,8 +147,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
     protected function createValidator(): StrengthValidator
     {
         $factory = $this->createMock(ZxcvbnFactoryInterface::class);
-        $factory->expects(self::any())
-            ->method('createZxcvbn')
+        $factory->method('createZxcvbn')
             ->willReturn(new Zxcvbn());
         $translator = $this->createMockTranslator(self::EMPTY_MESSAGE);
 

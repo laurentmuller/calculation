@@ -37,8 +37,7 @@ class TranslatorTraitTest extends TestCase
 
         try {
             $translator = $this->createMock(Translator::class);
-            $translator->expects(self::any())
-                ->method('trans')
+            $translator->method('trans')
                 ->willReturnArgument(0);
 
             return $translator;

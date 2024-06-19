@@ -138,12 +138,12 @@ html[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
 .navbar-vertical ul:not(.dropdown-menu-default) .dropdown-item {
     color: var(--bs-navbar-color);
     white-space: normal;
-    padding: 0.3rem 0;
+    padding: 0.3rem;
     width: 100%;
 }
-
 .navbar-vertical ul:not(.dropdown-menu-default) .dropdown-item.active {
     color: var(--bs-emphasis-color);
+
 }
 
 .navbar-vertical .dropdown-menu:not(.dropdown-menu-default) .dropdown-item:hover,

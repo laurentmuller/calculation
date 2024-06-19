@@ -101,8 +101,7 @@ class UserTableTest extends EntityTableTestCase
     protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&UserRepository
     {
         $repository = $this->createMock(UserRepository::class);
-        $repository->expects(self::any())
-            ->method('getTableQueryBuilder')
+        $repository->method('getTableQueryBuilder')
             ->willReturn($queryBuilder);
 
         return $repository;
@@ -123,7 +122,7 @@ class UserTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws Exception
      */
     private function createMockSecurity(): MockObject&Security
     {
@@ -138,17 +137,14 @@ class UserTableTest extends EntityTableTestCase
         }
 
         $originalToken = $this->createMock(TokenInterface::class);
-        $originalToken->expects(self::any())
-            ->method('getUser')
+        $originalToken->method('getUser')
             ->willReturn($user);
 
         $token = $this->createMock(SwitchUserToken::class);
-        $token->expects(self::any())
-            ->method('getOriginalToken')
+        $token->method('getOriginalToken')
             ->willReturn($originalToken);
 
-        $security->expects(self::any())
-            ->method('getToken')
+        $security->method('getToken')
             ->willReturn($token);
 
         return $security;

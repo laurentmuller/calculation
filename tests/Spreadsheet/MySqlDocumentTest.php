@@ -71,11 +71,9 @@ class MySqlDocumentTest extends TestCase
     {
         $controller = $this->createMock(AbstractController::class);
         $service = $this->createMock(DatabaseInfoService::class);
-        $service->expects(self::any())
-            ->method('getDatabase')
+        $service->method('getDatabase')
             ->willReturn($database);
-        $service->expects(self::any())
-            ->method('getConfiguration')
+        $service->method('getConfiguration')
             ->willReturn($configuration);
 
         return new MySqlDocument($controller, $service);

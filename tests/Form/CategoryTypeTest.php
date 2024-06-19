@@ -94,16 +94,13 @@ class CategoryTypeTest extends AbstractEntityTypeTestCase
         $repository = $this->createRepository(GroupRepository::class);
         $registry = $this->createRegistry($manager);
 
-        $query->expects(self::any())
-            ->method('execute')
+        $query->method('execute')
             ->willReturn([$this->getGroup()]);
 
-        $repository->expects(self::any())
-            ->method('getSortedBuilder')
+        $repository->method('getSortedBuilder')
             ->willReturn($builder);
 
-        $manager->expects(self::any())
-            ->method('getRepository')
+        $manager->method('getRepository')
             ->willReturn($repository);
 
         return $registry;

@@ -271,10 +271,10 @@ abstract class AbstractHttpClientService
     /**
      * Sets the last error and log it.
      */
-    protected function setLastError(int $code, string $message, ?\Exception $exception = null): false
+    protected function setLastError(int $code, string $message, ?\Throwable $exception = null): false
     {
         $this->lastError = new HttpClientError($code, $message, $exception);
-        if ($exception instanceof \Exception) {
+        if ($exception instanceof \Throwable) {
             $this->logException($exception, $message);
         } else {
             $this->logError($message);

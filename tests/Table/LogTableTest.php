@@ -183,29 +183,23 @@ class LogTableTest extends TestCase
     private function createTableWithData(): LogTable
     {
         $file = $this->createMock(LogFile::class);
-        $file->expects(self::any())
-            ->method('getFile')
+        $file->method('getFile')
             ->willReturn(__FILE__);
 
-        $file->expects(self::any())
-            ->method('count')
+        $file->method('count')
             ->willReturn(2);
 
-        $file->expects(self::any())
-            ->method('getLogs')
+        $file->method('getLogs')
             ->willReturn($this->createLogs());
 
-        $file->expects(self::any())
-            ->method('getChannels')
+        $file->method('getChannels')
             ->willReturn($this->createChannels());
 
-        $file->expects(self::any())
-            ->method('getLevels')
+        $file->method('getLevels')
             ->willReturn($this->createLevels());
 
         $service = $this->createMock(LogService::class);
-        $service->expects(self::any())
-            ->method('getLogFile')
+        $service->method('getLogFile')
             ->willReturn($file);
 
         $twig = $this->createMock(Environment::class);
@@ -219,13 +213,11 @@ class LogTableTest extends TestCase
     private function processEmptyMessage(int $count, mixed $expected): void
     {
         $file = $this->createMock(LogFile::class);
-        $file->expects(self::any())
-            ->method('count')
+        $file->method('count')
             ->willReturn($count);
 
         $service = $this->createMock(LogService::class);
-        $service->expects(self::any())
-            ->method('getLogFile')
+        $service->method('getLogFile')
             ->willReturn($file);
 
         $twig = $this->createMock(Environment::class);

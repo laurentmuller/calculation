@@ -28,8 +28,7 @@ class CalculationDocumentMarginTraitTest extends TestCase
     public function testMarginFormat(): void
     {
         $controller = $this->createMock(AbstractController::class);
-        $controller->expects(self::once())
-            ->method('getMinMargin')
+        $controller->method('getMinMargin')
             ->willReturn(1.1);
 
         $document = new class($controller) extends AbstractDocument {

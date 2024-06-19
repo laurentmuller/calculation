@@ -76,8 +76,7 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
     protected function createEntityManager(): MockObject&EntityManager
     {
         $manager = $this->createMock(EntityManager::class);
-        $manager->expects(self::any())
-            ->method('getClassMetadata')
+        $manager->method('getClassMetadata')
             ->willReturn(new ClassMetadata($this->getEntityClass()));
 
         return $manager;
@@ -89,8 +88,7 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
     protected function createQuery(): MockObject&Query
     {
         $query = $this->createMock(Query::class);
-        $query->expects(self::any())
-            ->method('getSQL')
+        $query->method('getSQL')
             ->willReturn('FakeSQL');
 
         return $query;
@@ -103,11 +101,9 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
     {
         $parameters = new ArrayCollection();
         $builder = $this->createMock(QueryBuilder::class);
-        $builder->expects(self::any())
-            ->method('getParameters')
+        $builder->method('getParameters')
             ->willReturn($parameters);
-        $builder->expects(self::any())
-            ->method('getQuery')
+        $builder->method('getQuery')
             ->willReturn($query);
 
         return $builder;
@@ -119,8 +115,7 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
     protected function createRegistry(MockObject&EntityManager $manager): MockObject&ManagerRegistry
     {
         $registry = $this->createMock(ManagerRegistry::class);
-        $registry->expects(self::any())
-            ->method('getManagerForClass')
+        $registry->method('getManagerForClass')
             ->willReturn($manager);
 
         return $registry;

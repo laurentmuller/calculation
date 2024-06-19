@@ -38,8 +38,7 @@ class TranslatorFactoryTest extends TestCase
     {
         $session = new Session(new MockArraySessionStorage());
         $this->requestStack = $this->createMock(RequestStack::class);
-        $this->requestStack->expects(self::any())
-            ->method('getSession')
+        $this->requestStack->method('getSession')
             ->willReturn($session);
     }
 

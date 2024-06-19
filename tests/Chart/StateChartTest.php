@@ -61,8 +61,7 @@ class StateChartTest extends TestCase
 
     public function testWithSeries(): void
     {
-        $this->repository->expects(self::any())
-            ->method('getCalculations')
+        $this->repository->method('getCalculations')
             ->willReturn($this->createSeries());
 
         $chart = $this->createChart();

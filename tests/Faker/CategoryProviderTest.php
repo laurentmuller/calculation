@@ -64,17 +64,14 @@ class CategoryProviderTest extends TestCase
     {
         $entities = $entity instanceof Category ? [$entity] : [];
         $repository = $this->createMock(CategoryRepository::class);
-        $repository->expects(self::any())
-            ->method('findBy')
+        $repository->method('findBy')
             ->willReturn($entities);
 
-        $repository->expects(self::any())
-            ->method('findAll')
+        $repository->method('findAll')
             ->willReturn($entities);
 
         $manager = $this->createMock(EntityManagerInterface::class);
-        $manager->expects(self::any())
-            ->method('getRepository')
+        $manager->method('getRepository')
             ->willReturn($repository);
 
         $generator = Factory::create(FormatUtils::DEFAULT_LOCALE);

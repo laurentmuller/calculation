@@ -150,11 +150,9 @@ class CaptchaImageServiceTest extends TestCase
         $request = new Request();
         $request->setSession($this->session);
         $requestStack = $this->createMock(RequestStack::class);
-        $requestStack->expects(self::any())
-            ->method('getCurrentRequest')
+        $requestStack->method('getCurrentRequest')
             ->willReturn($request);
-        $requestStack->expects(self::any())
-            ->method('getSession')
+        $requestStack->method('getSession')
             ->willReturn($this->session);
 
         return $requestStack;

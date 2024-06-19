@@ -129,11 +129,9 @@ class EntityTransformerTest extends TestCase
     private function createRepository(?Group $group = null): GroupRepository
     {
         $repository = $this->createMock(GroupRepository::class);
-        $repository->expects(self::any())
-            ->method('find')
+        $repository->method('find')
             ->willReturn($group);
-        $repository->expects(self::any())
-            ->method('getClassName')
+        $repository->method('getClassName')
             ->willReturn(Group::class);
 
         return $repository;

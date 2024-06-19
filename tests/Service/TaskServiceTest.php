@@ -126,12 +126,10 @@ class TaskServiceTest extends TestCase
     {
         $tasks = $task instanceof Task ? [$task] : [];
         $repository = $this->createMock(TaskRepository::class);
-        $repository->expects(self::any())
-            ->method('getSortedTask')
+        $repository->method('getSortedTask')
             ->willReturn($tasks);
 
-        $repository->expects(self::any())
-            ->method('find')
+        $repository->method('find')
             ->willReturn($task);
 
         return $repository;

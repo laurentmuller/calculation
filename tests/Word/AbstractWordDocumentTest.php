@@ -164,33 +164,25 @@ class AbstractWordDocumentTest extends TestCase
     private function createMockController(CustomerInformation $cs): MockObject&AbstractController
     {
         $application = $this->createMock(ApplicationService::class);
-        $application->expects(self::any())
-            ->method('getCustomerName')
+        $application->method('getCustomerName')
             ->willReturn('Customer');
-        $application->expects(self::any())
-            ->method('getCustomer')
+        $application->method('getCustomer')
             ->willReturn($cs);
 
         $service = $this->createMock(UserService::class);
-        $service->expects(self::any())
-            ->method('isPrintAddress')
+        $service->method('isPrintAddress')
             ->willReturn(true);
 
         $controller = $this->createMock(AbstractController::class);
-        $controller->expects(self::any())
-            ->method('getUserIdentifier')
+        $controller->method('getUserIdentifier')
             ->willReturn('User');
-        $controller->expects(self::any())
-            ->method('getApplicationOwnerUrl')
+        $controller->method('getApplicationOwnerUrl')
             ->willReturn('https://www.example.com');
-        $controller->expects(self::any())
-            ->method('getApplicationName')
+        $controller->method('getApplicationName')
             ->willReturn('Calculation');
-        $controller->expects(self::any())
-            ->method('getApplicationService')
+        $controller->method('getApplicationService')
             ->willReturn($application);
-        $controller->expects(self::any())
-            ->method('getUserService')
+        $controller->method('getUserService')
             ->willReturn($service);
 
         return $controller;

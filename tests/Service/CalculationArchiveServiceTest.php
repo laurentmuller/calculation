@@ -132,8 +132,7 @@ class CalculationArchiveServiceTest extends TestCase
         self::setId($expected);
         $this->setCalculationStates([$expected]);
 
-        $this->stateRepository->expects(self::any())
-            ->method('find')
+        $this->stateRepository->method('find')
             ->willReturn($expected);
 
         $this->session->set('archive.target', 1);
@@ -242,9 +241,7 @@ class CalculationArchiveServiceTest extends TestCase
      */
     public function testIsEditableCount(): void
     {
-        $this->stateRepository
-            ->expects(self::any())
-            ->method('getEditableCount')
+        $this->stateRepository->method('getEditableCount')
             ->willReturn(0);
         $service = $this->createService();
         $actual = $service->isEditableStates();
@@ -257,9 +254,7 @@ class CalculationArchiveServiceTest extends TestCase
      */
     public function testIsNotEditableCount(): void
     {
-        $this->stateRepository
-            ->expects(self::any())
-            ->method('getNotEditableCount')
+        $this->stateRepository->method('getNotEditableCount')
             ->willReturn(0);
         $service = $this->createService();
         $actual = $service->isNotEditableStates();
@@ -351,11 +346,9 @@ class CalculationArchiveServiceTest extends TestCase
         $request = new Request();
         $request->setSession($this->session);
         $requestStack = $this->createMock(RequestStack::class);
-        $requestStack->expects(self::any())
-            ->method('getCurrentRequest')
+        $requestStack->method('getCurrentRequest')
             ->willReturn($request);
-        $requestStack->expects(self::any())
-            ->method('getSession')
+        $requestStack->method('getSession')
             ->willReturn($this->session);
 
         return $requestStack;
@@ -385,22 +378,17 @@ class CalculationArchiveServiceTest extends TestCase
     private function setCalculationDate(mixed $value = null): void
     {
         $query = $this->createMock(Query::class);
-        $query->expects(self::any())
-            ->method('getSingleScalarResult')
+        $query->method('getSingleScalarResult')
             ->willReturn($value);
 
         $queryBuilder = $this->createMock(QueryBuilder::class);
-        $queryBuilder->expects(self::any())
-            ->method('getQuery')
+        $queryBuilder->method('getQuery')
             ->willReturn($query);
 
-        $queryBuilder->expects(self::any())
-            ->method('select')
+        $queryBuilder->method('select')
             ->willReturn($queryBuilder);
 
-        $this->calculationRepository
-            ->expects(self::any())
-            ->method('createQueryBuilder')
+        $this->calculationRepository->method('createQueryBuilder')
             ->willReturn($queryBuilder);
     }
 
@@ -410,22 +398,17 @@ class CalculationArchiveServiceTest extends TestCase
     private function setCalculations(array $calculations = []): void
     {
         $query = $this->createMock(Query::class);
-        $query->expects(self::any())
-            ->method('getResult')
+        $query->method('getResult')
             ->willReturn($calculations);
 
         $queryBuilder = $this->createMock(QueryBuilder::class);
-        $queryBuilder->expects(self::any())
-            ->method('getQuery')
+        $queryBuilder->method('getQuery')
             ->willReturn($query);
 
-        $queryBuilder->expects(self::any())
-            ->method('select')
+        $queryBuilder->method('select')
             ->willReturn($queryBuilder);
 
-        $this->calculationRepository
-            ->expects(self::any())
-            ->method('createQueryBuilder')
+        $this->calculationRepository->method('createQueryBuilder')
             ->willReturn($queryBuilder);
     }
 
@@ -435,22 +418,17 @@ class CalculationArchiveServiceTest extends TestCase
     private function setCalculationsException(): void
     {
         $query = $this->createMock(Query::class);
-        $query->expects(self::any())
-            ->method('getSingleScalarResult')
+        $query->method('getSingleScalarResult')
             ->willThrowException(new \Exception());
 
         $queryBuilder = $this->createMock(QueryBuilder::class);
-        $queryBuilder->expects(self::any())
-            ->method('getQuery')
+        $queryBuilder->method('getQuery')
             ->willReturn($query);
 
-        $queryBuilder->expects(self::any())
-            ->method('select')
+        $queryBuilder->method('select')
             ->willReturn($queryBuilder);
 
-        $this->calculationRepository
-            ->expects(self::any())
-            ->method('createQueryBuilder')
+        $this->calculationRepository->method('createQueryBuilder')
             ->willReturn($queryBuilder);
     }
 
@@ -460,18 +438,14 @@ class CalculationArchiveServiceTest extends TestCase
     private function setCalculationStates(array $calculationStates = []): void
     {
         $query = $this->createMock(Query::class);
-        $query->expects(self::any())
-            ->method('getResult')
+        $query->method('getResult')
             ->willReturn($calculationStates);
 
         $queryBuilder = $this->createMock(QueryBuilder::class);
-        $queryBuilder->expects(self::any())
-            ->method('getQuery')
+        $queryBuilder->method('getQuery')
             ->willReturn($query);
 
-        $this->stateRepository
-            ->expects(self::any())
-            ->method('getEditableQueryBuilder')
+        $this->stateRepository->method('getEditableQueryBuilder')
             ->willReturn($queryBuilder);
     }
 }

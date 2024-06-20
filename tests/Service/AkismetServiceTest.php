@@ -123,6 +123,28 @@ class AkismetServiceTest extends TestCase
     }
 
     /**
+     * @throws Exception
+     */
+    public function testEmptyKey(): void
+    {
+        $key = '';
+        $cache = new ArrayAdapter();
+        $logger = $this->createMock(LoggerInterface::class);
+        $security = $this->createMock(Security::class);
+        $translator = $this->createMockTranslator();
+
+        self::expectException(\InvalidArgumentException::class);
+        new AkismetService(
+            $key,
+            $cache,
+            $logger,
+            $security,
+            $this->requestStack,
+            $translator
+        );
+    }
+
+    /**
      * @throws ExceptionInterface|Exception
      */
     public function testIsSpamInvalidCode(): void

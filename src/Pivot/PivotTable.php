@@ -104,7 +104,7 @@ class PivotTable extends AbstractPivotAggregator
      * @param PivotNode          $row        the parent row
      * @param mixed|null         $value      the initial value
      *
-     * @return PivotCell the newly created cell-
+     * @return PivotCell the newly created cell
      */
     public function addCellValue(AbstractAggregator $aggregator, PivotNode $column, PivotNode $row, mixed $value = null): PivotCell
     {

@@ -20,35 +20,35 @@ class PivotFieldFactory
     /**
      * Creates a new instance.
      *
-     * @param string  $name   the field name
-     * @param ?string $title  the field title
-     * @param int     $method the field method (one of the <code></code>PivotField::METHOD_XX</code>)
+     * @param string      $name   the field name
+     * @param ?string     $title  the field title
+     * @param PivotMethod $method the field method (one of the <code></code>PivotField::METHOD_XX</code>)
      */
-    public static function default(string $name, ?string $title = null, int $method = PivotField::METHOD_STRING): PivotField
+    public static function default(string $name, ?string $title = null, PivotMethod $method = PivotMethod::STRING): PivotField
     {
         return (new PivotField($name, $title))->setMethod($method);
     }
 
     /**
-     * Creates a new instance with the <code>METHOD_FLOAT</code>.
+     * Creates a new instance with the <code>PivotMethod::FLOAT</code>.
      *
      * @param string  $name  the field name
      * @param ?string $title the field title
      */
     public static function float(string $name, ?string $title = null): PivotField
     {
-        return self::default($name, $title, PivotField::METHOD_FLOAT);
+        return self::default($name, $title, PivotMethod::FLOAT);
     }
 
     /**
-     * Creates a new instance with the <code>METHOD_INTEGER</code>.
+     * Creates a new instance with the <code>PivotMethod::INTEGER</code>.
      *
      * @param string  $name  the field name
      * @param ?string $title the field title
      */
     public static function integer(string $name, ?string $title = null): PivotField
     {
-        return self::default($name, $title, PivotField::METHOD_INTEGER);
+        return self::default($name, $title, PivotMethod::INTEGER);
     }
 
     /**

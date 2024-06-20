@@ -98,7 +98,7 @@
     <tbody>
         <tr class="skip">
             <td class="not-hover fw-bold">{{ table.title|default('&nbsp;')|raw }}</td>
-            <td class="not-hover text-end">{% if table.column.title %}{{ table.column.title }} <i class="fa-solid fa-fw fa-arrow-right"></i>{% else %}&nbsp;{% endif %}</td>
+            <td class="not-hover text-end">{% if table.rootColumn.title %}{{ table.rootColumn.title }} <i class="fa-solid fa-fw fa-arrow-right"></i>{% else %}&nbsp;{% endif %}</td>
         </tr>
         {%- for i in 2..col_level - 1 -%}
         <tr class="skip">
@@ -106,7 +106,7 @@
         </tr>
         {%- endfor -%}
         <tr class="skip">
-            <td class="not-hover" colspan="2">{% if table.row.title %}<i class="fa-solid fa-fw fa-arrow-down"></i> {{ table.row.title }}{% else %}&nbsp;{% endif %}</td>
+            <td class="not-hover" colspan="2">{% if table.rootRow.title %}<i class="fa-solid fa-fw fa-arrow-down"></i> {{ table.rootRow.title }}{% else %}&nbsp;{% endif %}</td>
         </tr>
     </tbody>
 </table>
@@ -114,8 +114,8 @@
 {# parameters #}
 {%- set title = 'pivot.title' -%}
 {%- set title_icon = 'table' -%}
-{%- set row_level = table.row.maxLevel -%}
-{%- set col_level = table.column.maxLevel -%}
+{%- set row_level = table.rootRow.maxLevel -%}
+{%- set col_level = table.rootColumn.maxLevel -%}
 {%- set total_title = table.totalTitle|default('calculation.fields.total'|trans) -%}
 {%- set icon = '<i class="fa-solid fa-caret-right"></i>' -%}
 {%- set separator = separator|default('&nbsp;&nbsp;' ~ icon ~ '&nbsp;&nbsp;') -%}
@@ -133,27 +133,27 @@
         <label class="form-check-label" for="highlight">{{ 'pivot.highlight'|trans }}</label>
     </div>
 </div>
-<div class="table-responsive small-scrollbar">
+<div class="table-responsive">
     <table id="pivot" class="table table-bordered table-sm popover-w-100 mb-0" data-session="{{ url('ajax_session_set') }}">
         <thead>
             {%- for i in 1..col_level -%}
             <tr>
                 {%- if i == 1 -%}<td class="text-nowrap not-hover p-0"{{ _self.rowspan(col_level) }}{{ _self.colspan(row_level) }}>{{ _self.outputTitle(table, col_level) }}</td>{%- endif -%}
-                {{ _self.outputHeaders(table.column.childrenAtLevel(i), separator) }}
+                {{ _self.outputHeaders(table.rootColumn.childrenAtLevel(i), separator) }}
                 {%- if i == 1 -%}<td{{ _self.rowspan(col_level) }} class="text-currency text-bg-success not-hover align-bottom">{{ total_title }}</td>{%- endif -%}
             </tr>
             {%- endfor -%}
         </thead>
         <tbody>
-            {%- set columns = table.column.lastChildren -%}
-            {%- for row in table.row.children %}
+            {%- set columns = table.rootColumn.lastChildren -%}
+            {%- for row in table.rootRow.children %}
                 {{ _self.outputRow(table, columns, row, separator) }}
             {%- endfor -%}
         </tbody>
         <tfoot>
             <tr>
                 <td class="text-nowrap not-hover text-bg-success"{{ _self.colspan(row_level) }}>{{ total_title }}</td>
-                {%- for cell in table.column.childrenAtLevel(col_level) -%}
+                {%- for cell in table.rootColumn.childrenAtLevel(col_level) -%}
                     {{ _self.outputPopoverTotal(cell, separator) }}
                 {%- endfor -%}
                 {{ _self.outputPopoverTotal(table, separator) }}

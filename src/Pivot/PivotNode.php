@@ -152,7 +152,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     {
         return $this->findFirst(
             $this->children,
-            fn (int $key, PivotNode $child): bool => $child->equalsKey($key)
+            fn (int $index, PivotNode $child): bool => $child->equalsKey($key)
         );
     }
 
@@ -362,13 +362,13 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      */
     public function getPath(string $separator = PivotTable::PATH_SEPARATOR): string
     {
-        if (!$this->isRoot()) {
-            $keys = \array_map(fn (mixed $value): string => (string) $value, $this->getKeys());
-
-            return \implode($separator, $keys);
+        if ($this->isRoot()) {
+            return '';
         }
 
-        return '';
+        $keys = \array_map(fn (mixed $value): string => (string) $value, $this->getKeys());
+
+        return \implode($separator, $keys);
     }
 
     /**
@@ -496,6 +496,9 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      */
     public function setParent(?self $parent): self
     {
+        if ($parent === $this) {
+            throw new \InvalidArgumentException('The parent is invalid (same instance).');
+        }
         $this->parent = $parent;
 
         return $this;
@@ -508,18 +511,13 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      */
     public function setSortMode(string $sortMode): self
     {
-        switch ($sortMode) {
-            case self::SORT_ASC:
-            case self::SORT_DESC:
-                if ($this->sortMode !== $sortMode) {
-                    $this->sortMode = $sortMode;
-
-                    return $this->sort();
-                }
-                break;
+        if ($this->sortMode === $sortMode || (self::SORT_ASC !== $sortMode && self::SORT_DESC !== $sortMode)) {
+            return $this;
         }
 
-        return $this;
+        $this->sortMode = $sortMode;
+
+        return $this->sort();
     }
 
     /**

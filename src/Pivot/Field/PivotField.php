@@ -18,26 +18,14 @@ namespace App\Pivot\Field;
 class PivotField implements \JsonSerializable
 {
     /**
-     * Parse value as float.
-     */
-    final public const METHOD_FLOAT = 2;
-
-    /**
-     * Parse value as integer.
-     */
-    final public const METHOD_INTEGER = 1;
-
-    /**
-     * Parse value as string.
-     */
-    final public const METHOD_STRING = 0;
-
-    /**
      * @param string  $name  the field name
      * @param ?string $title the field title
      */
-    public function __construct(protected string $name, protected ?string $title = null, protected int $method = self::METHOD_STRING)
-    {
+    public function __construct(
+        protected string $name,
+        protected ?string $title = null,
+        protected PivotMethod $method = PivotMethod::STRING
+    ) {
     }
 
     /**
@@ -55,11 +43,9 @@ class PivotField implements \JsonSerializable
     }
 
     /**
-     * Gets the value method.
-     *
-     * @return int one of the <code>METHOD_XX</code> constants
+     * Gets the conversion value method.
      */
-    public function getMethod(): int
+    public function getMethod(): PivotMethod
     {
         return $this->method;
     }
@@ -89,12 +75,9 @@ class PivotField implements \JsonSerializable
     {
         /** @psalm-var mixed $value */
         $value = $this->getRowValue($row);
+
         if (\is_scalar($value)) {
-            return match ($this->method) {
-                self::METHOD_FLOAT => (float) $value,
-                self::METHOD_INTEGER => (int) $value,
-                default => (string) $value,
-            };
+            return $this->method->convert($value);
         }
 
         return null;
@@ -109,18 +92,11 @@ class PivotField implements \JsonSerializable
     }
 
     /**
-     * Sets the value method.
-     *
-     * @param int $method one of the <code>METHOD_XX</code> constants
+     * Sets the conversion value method.
      */
-    public function setMethod(int $method): self
+    public function setMethod(PivotMethod $method): self
     {
-        $this->method = match ($method) {
-            self::METHOD_FLOAT,
-            self::METHOD_INTEGER,
-            self::METHOD_STRING => $method,
-            default => $this->method,
-        };
+        $this->method = $method;
 
         return $this;
     }

@@ -366,9 +366,10 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
             return '';
         }
 
-        $keys = \array_map(fn (mixed $value): string => (string) $value, $this->getKeys());
-
-        return \implode($separator, $keys);
+        return \implode(
+            $separator,
+            \array_map(fn (mixed $value): string => (string) $value, $this->getKeys())
+        );
     }
 
     /**

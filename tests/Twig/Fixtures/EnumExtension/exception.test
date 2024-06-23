@@ -1,0 +1,10 @@
+--TEST--
+"enum" exception test
+--TEMPLATE--
+{% set position = enum('Fake') %}
+--DATA--
+return [
+    'bottom' => App\Enums\MessagePosition::BOTTOM_CENTER,
+]
+--EXCEPTION--
+Twig\Error\RuntimeError: An exception has been thrown during the rendering of a template (""Fake" is not an enum.") in "index.twig" at line 2.

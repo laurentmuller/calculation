@@ -1,0 +1,10 @@
+--TEST--
+"var_export_sql" filter test
+--TEMPLATE--
+{{ 'SELECT'|var_export_sql() }}
+{{ ''|var_export_sql() }}
+{{ null|var_export_sql() }}
+--DATA--
+return []
+--EXPECT--
+<pre class="highlight highlight-sql"><span class="highlight-sql-keyword">SELECT</span></pre>

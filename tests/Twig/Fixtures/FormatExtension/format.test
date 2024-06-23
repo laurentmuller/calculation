@@ -1,0 +1,31 @@
+--TEST--
+"format" filter test
+--TEMPLATE--
+{{ 10|identifier }}
+{{ 10|integer }}
+{{ 10|amount }}
+{{ 0.1|percent }}
+{{ true|boolean }}
+{{ false|boolean }}
+{{ true|boolean('OK', 'KO') }}
+{{ false|boolean('OK', 'KO') }}
+{{ date_time|locale_datetime }}
+{{ date_time|locale_date }}
+{{ date_time|locale_time }}
+{{ date_time|locale_datetime('none', 'none', '') }}
+--DATA--
+return [
+    'date_time' => new \DateTime('2010-10-04 13:45'),
+]
+--EXPECT--
+000010
+10
+10.00
+10%
+common.value_true
+common.value_false
+OK
+KO
+04.10.2010 13:45
+04.10.2010
+13:45

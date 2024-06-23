@@ -26,9 +26,17 @@ class PivotControllerTest extends AbstractControllerTestCase
 
     public static function getRoutes(): \Iterator
     {
+        yield ['/pivot', self::ROLE_USER];
+        yield ['/pivot', self::ROLE_ADMIN];
+        yield ['/pivot', self::ROLE_SUPER_ADMIN];
+
         yield ['/pivot/csv', self::ROLE_USER];
         yield ['/pivot/csv', self::ROLE_ADMIN];
         yield ['/pivot/csv', self::ROLE_SUPER_ADMIN];
+
+        yield ['/pivot/json', self::ROLE_USER];
+        yield ['/pivot/json', self::ROLE_ADMIN];
+        yield ['/pivot/json', self::ROLE_SUPER_ADMIN];
     }
 
     /**
@@ -51,6 +59,7 @@ class PivotControllerTest extends AbstractControllerTestCase
 
         $calculation = $this->getCalculation()
             ->addProduct($product, 10.0);
+        $this->updateCalculation();
         $this->addEntity($calculation);
     }
 

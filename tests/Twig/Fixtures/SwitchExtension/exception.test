@@ -1,0 +1,11 @@
+--TEST--
+"switch" exception test
+--TEMPLATE--
+{% switch id %}
+{% case_invalid %}
+--DATA--
+return [
+    'id' => 1,
+]
+--EXCEPTION--
+Twig\Error\SyntaxError: Unexpected end of template. Twig was looking for the following tags "case", "default", or "endswitch" to close the "switch" block started at line 2) in "index.twig".

@@ -1,0 +1,12 @@
+--TEST--
+"cancel_url" and "route_params"  function test
+--TEMPLATE--
+{{ cancel_url(request) }}
+{{ route_params(request)|length }}
+--DATA--
+return [
+    'request' => new Symfony\Component\HttpFoundation\Request(),
+]
+--EXPECT--
+cancelUrl
+0

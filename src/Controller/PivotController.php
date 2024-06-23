@@ -29,6 +29,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display the pivot table.
+ *
+ * @psalm-import-type PivotType from CalculationRepository
  */
 #[AsController]
 #[Route(path: '/pivot', name: 'calculation_pivot_')]
@@ -48,7 +50,7 @@ class PivotController extends AbstractController
         return $this->render('calculation/calculation_pivot.html.twig', [
             'highlight' => $this->isSessionBool('highlight'),
             'popover' => $this->isSessionBool('popover', true),
-            'table' => $this->getTable(),
+            'table' => $this->createTable(),
         ]);
     }
 
@@ -58,7 +60,7 @@ class PivotController extends AbstractController
     #[Get(path: '/csv', name: 'csv')]
     public function toCsv(): CsvResponse
     {
-        $dataset = $this->getDataset();
+        $dataset = $this->createDataset();
         $callback = function () use ($dataset): void {
             if ([] !== $dataset) {
                 /** @var resource $handle */
@@ -84,7 +86,7 @@ class PivotController extends AbstractController
     #[Get(path: '/json', name: 'json')]
     public function toJson(): JsonResponse
     {
-        $table = $this->getTable();
+        $table = $this->createTable();
 
         return $this->json($table);
     }
@@ -92,20 +94,9 @@ class PivotController extends AbstractController
     /**
      * Gets the pivot dataset.
      *
-     * @psalm-return array<array{
-     *      calculation_id: int,
-     *      calculation_date: \DateTimeInterface,
-     *      calculation_overall_margin: float,
-     *      calculation_overall_total: float,
-     *      calculation_state: string,
-     *      item_group: string,
-     *      item_category: string,
-     *      item_description: string,
-     *      item_price: float,
-     *      item_quantity: float,
-     *      item_total: float}>
+     * @psalm-return PivotType[]
      */
-    private function getDataset(): array
+    private function createDataset(): array
     {
         return $this->repository->getPivot();
     }
@@ -113,12 +104,11 @@ class PivotController extends AbstractController
     /**
      * Gets the pivot table.
      */
-    private function getTable(): ?PivotTable
+    private function createTable(): ?PivotTable
     {
         $semesterFormatter = fn (int $semestre): string => $this->trans("pivot.semester.$semestre");
         $quarterFormatter = fn (int $quarter): string => $this->trans("pivot.quarter.$quarter");
-        $key = PivotFieldFactory::integer('calculation_id', $this->trans('calculation.fields.id'));
-        $data = PivotFieldFactory::float('calculation_overall_total', $this->trans('calculation.fields.overallTotal'));
+        $data = PivotFieldFactory::float('item_overall', $this->trans('calculation.fields.overallTotal'));
         $rows = [
             PivotFieldFactory::default('calculation_state', $this->trans('calculationstate.name')),
             PivotFieldFactory::default('item_group', $this->trans('group.name')),
@@ -132,14 +122,13 @@ class PivotController extends AbstractController
                 ->setFormatter($quarterFormatter),
             PivotFieldFactory::month('calculation_date', $this->trans('pivot.fields.month')),
         ];
-        $dataset = $this->getDataset();
+        $dataset = $this->createDataset();
         $title = $this->trans('calculation.list.title');
 
-        return PivotTableFactory::instance($dataset, $title, SumAggregator::class)
+        return PivotTableFactory::instance($dataset, SumAggregator::class, $title)
             ->setColumnFields($columns)
             ->setRowFields($rows)
             ->setDataField($data)
-            ->setKeyField($key)
             ->create();
     }
 }

@@ -35,7 +35,7 @@ enum PivotMethod
     /**
      * Convert the given value.
      *
-     * @psalm-param scalar $value
+     * @psalm-param scalar|null $value
      */
     public function convert(mixed $value): float|int|string
     {

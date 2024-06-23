@@ -81,7 +81,7 @@ class HighlightExtension extends AbstractExtension
         }
         $content = StringUtils::pregReplace(self::PHP_PATTERNS, $content);
         if ('' !== $id) {
-            $content = (string) \preg_replace('/highlight-php-\d+/', $id, $content);
+            $content = (string) \preg_replace('/highlight-php-(\d+)/', $id, $content, 1);
         }
 
         return \trim($content);

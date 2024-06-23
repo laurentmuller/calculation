@@ -83,7 +83,7 @@ final class SwitchTokenParser extends AbstractTokenParser
                     break;
 
                 default:
-                    throw new SyntaxError(\sprintf('Unexpected end of template. Twig was looking for the following tags "case", "default", or "endswitch" to close the "switch" block started at line %d)', $lineno), -1);
+                    throw new SyntaxError(\sprintf('Unexpected end of template. Twig was looking for the following tags "case", "default", or "endswitch" to close the "switch" block started at line %d).', $lineno), -1);
             }
         }
         $nodes['cases'] = new Node($cases);

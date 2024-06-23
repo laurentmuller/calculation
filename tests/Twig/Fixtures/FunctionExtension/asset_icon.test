@@ -1,0 +1,8 @@
+--TEST--
+"asset_css" function test
+--TEMPLATE--
+{{ asset_icon(32) }}
+--DATA--
+return []
+--EXPECT--
+url

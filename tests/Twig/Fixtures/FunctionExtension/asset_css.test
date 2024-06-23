@@ -1,0 +1,8 @@
+--TEST--
+"asset_css" function test
+--TEMPLATE--
+{{ asset_css('fake') }}
+--DATA--
+return []
+--EXPECT--
+<link href="url" nonce="nonce" rel="stylesheet">

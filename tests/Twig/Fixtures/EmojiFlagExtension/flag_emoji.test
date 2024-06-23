@@ -1,0 +1,9 @@
+--TEST--
+"flag_emoji" filter test
+--TEMPLATE--
+{{ 'US'|flag_emoji }}
+{{ 'FAKE'|flag_emoji(false) }}
+--DATA--
+return []
+--EXPECT--
+🇺🇸

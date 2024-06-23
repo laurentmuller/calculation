@@ -27,6 +27,9 @@ class NonceExtensionTest extends KernelServiceTestCase
         $this->extension = $this->getService(NonceExtension::class);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testFunctions(): void
     {
         $functions = $this->extension->getFunctions();

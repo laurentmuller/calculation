@@ -44,8 +44,12 @@ class PregExtension extends AbstractExtension
      *
      * @psalm-param array<array-key, non-empty-string>|non-empty-string $pattern
      */
-    protected function pregFilter(string|array|null $subject, string|array $pattern, string|array $replacement, int $limit = -1): string|array|null
-    {
+    protected function pregFilter(
+        string|array|null $subject,
+        string|array $pattern,
+        string|array $replacement,
+        int $limit = -1
+    ): string|array|null {
         if (null === $subject) {
             return null;
         }
@@ -112,8 +116,12 @@ class PregExtension extends AbstractExtension
      *
      * @psalm-param array<array-key, non-empty-string>|non-empty-string $pattern
      */
-    protected function pregReplace(array|string|null $subject, array|string $pattern, array|string $replacement, int $limit = -1): array|string|null
-    {
+    protected function pregReplace(
+        array|string|null $subject,
+        array|string $pattern,
+        array|string $replacement,
+        int $limit = -1
+    ): array|string|null {
         if (null === $subject) {
             return null;
         }

@@ -1,0 +1,10 @@
+--TEST--
+"asset_exists" function test
+--TEMPLATE--
+{{ asset_exists('fake') ? 'ok' : 'ko' }}
+{{ asset_exists('favicon.ico') ? 'ok' : 'ko' }}
+--DATA--
+return []
+--EXPECT--
+ko
+ok

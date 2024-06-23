@@ -1,0 +1,16 @@
+--TEST--
+"switch" token parser
+--TEMPLATE--
+{% switch id %}
+{% case 1 %}
+<div>1</div>
+{% case 2 %}
+{% default %}
+<div>default</div>
+{% endswitch %}
+--DATA--
+return [
+    'id' => 1,
+]
+--EXPECT--
+<div>1</div>

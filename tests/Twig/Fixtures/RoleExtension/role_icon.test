@@ -1,0 +1,16 @@
+--TEST--
+"role_icon" filter test
+--TEMPLATE--
+{{ super_admin|role_icon }}
+{{ admin|role_icon }}
+{{ user|role_icon }}
+--DATA--
+return [
+    'super_admin' => 'ROLE_SUPER_ADMIN',
+    'admin' => 'ROLE_ADMIN',
+    'user' => 'ROLE_USER'
+]
+--EXPECT--
+fa-solid fa-user-gear
+fa-solid fa-user-shield
+fa-solid fa-user

@@ -16,7 +16,6 @@ use App\Pivot\Aggregator\AbstractAggregator;
 use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotField;
 use App\Traits\CheckSubClassTrait;
-use Symfony\Component\Intl\Exception\UnexpectedTypeException;
 
 /**
  * Factory to create a pivot table.
@@ -65,13 +64,12 @@ class PivotTableFactory
 
     /**
      * @psalm-param array<array<array-key, mixed>> $dataset
-     * @psalm-param class-string<T>|null $aggregatorClass
+     * @psalm-param class-string<T> $aggregatorClass
      *
      * @throws \InvalidArgumentException if the given aggregator class name is not a subclass of the AbstractAggregator class
      */
-    public function __construct(private readonly array $dataset, private ?string $title = null, ?string $aggregatorClass = null)
+    public function __construct(private readonly array $dataset, string $aggregatorClass = SumAggregator::class, private ?string $title = null)
     {
-        $aggregatorClass ??= SumAggregator::class;
         $this->checkSubClass($aggregatorClass, AbstractAggregator::class);
         $this->aggregatorClass = $aggregatorClass;
     }
@@ -206,13 +204,13 @@ class PivotTableFactory
      * @psalm-template E of AbstractAggregator
      *
      * @psalm-param array<array<array-key, mixed>> $dataset
-     * @psalm-param class-string<E>|null $aggregatorClass
+     * @psalm-param class-string<E> $aggregatorClass
      *
      * @psalm-return PivotTableFactory<E>
      */
-    public static function instance(array $dataset, ?string $title = null, ?string $aggregatorClass = null): self
+    public static function instance(array $dataset, string $aggregatorClass = SumAggregator::class, ?string $title = null): self
     {
-        return new self($dataset, $title, $aggregatorClass);
+        return new self($dataset, $aggregatorClass, $title);
     }
 
     /**
@@ -224,30 +222,11 @@ class PivotTableFactory
     }
 
     /**
-     * Sets the aggregator class name.
-     *
-     * @param string $aggregatorClass the aggregator class name to set
-     *
-     * @throws \InvalidArgumentException if the given class name is not a subclass of the AbstractAggregator class
-     *
-     * @psalm-param class-string<T> $aggregatorClass
-     *
-     * @psalm-api
-     */
-    public function setAggregatorClass(string $aggregatorClass): static
-    {
-        $this->checkSubClass($aggregatorClass, AbstractAggregator::class);
-        $this->aggregatorClass = $aggregatorClass;
-
-        return $this;
-    }
-
-    /**
      * Sets the column fields.
      *
      * @param PivotField|PivotField[] $fields the fields to set
      *
-     * @throws UnexpectedTypeException if one of the given fields is not an instanceof of the PivotField class
+     * @throws \InvalidArgumentException if one of the given fields is not an instanceof of the PivotField class
      */
     public function setColumnFields(array|PivotField $fields): static
     {
@@ -283,7 +262,7 @@ class PivotTableFactory
      *
      * @param PivotField|PivotField[] $fields the fields to set
      *
-     * @throws UnexpectedTypeException if one of the given fields is not an instanceof of the PivotField class
+     * @throws \InvalidArgumentException if one of the given fields is not an instanceof of the PivotField class
      */
     public function setRowFields(array|PivotField $fields): static
     {
@@ -313,7 +292,7 @@ class PivotTableFactory
     {
         return \implode(
             self::SEPARATOR,
-            \array_map(fn (PivotField $field): string => (string) $field->getTitle(), $fields)
+            \array_map(static fn (PivotField $field): string => (string) $field->getTitle(), $fields)
         );
     }
 
@@ -324,7 +303,7 @@ class PivotTableFactory
      *
      * @return PivotField[] the pivot fields
      *
-     * @throws UnexpectedTypeException if one of the given fields is not an instanceof of the PivotField class
+     * @throws \InvalidArgumentException if one of the given fields is not an instanceof of the PivotField class
      */
     private function checkFields(mixed $fields): array
     {
@@ -336,7 +315,9 @@ class PivotTableFactory
         $result = [];
         foreach ($fields as $field) {
             if (!$field instanceof PivotField) {
-                throw new UnexpectedTypeException($field, PivotField::class);
+                $expected = PivotField::class;
+                $given = \get_debug_type($field);
+                throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given', $expected, $given));
             }
             $result[] = $field;
         }

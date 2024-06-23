@@ -1,0 +1,17 @@
+--TEST--
+"theme_extension" filter test
+--TEMPLATE--
+{{ themes(request)|length }}
+{{ theme(request).value }}
+{{ theme_value(request) }}
+{{ is_dark_theme(request) ? 'ok' : 'ko' }}
+
+--DATA--
+return [
+    'request' => new Symfony\Component\HttpFoundation\Request(),
+]
+--EXPECT--
+0
+auto
+auto
+ko

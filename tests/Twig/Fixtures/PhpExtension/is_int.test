@@ -1,0 +1,13 @@
+--TEST--
+"is_int" function test
+--TEMPLATE--
+{{ is_int(value_integer) ? 'ok' : 'ko' }}
+{{ is_int(value_string) ? 'ok' : 'ko' }}
+--DATA--
+return [
+    'value_integer' => 1,
+    'value_string' => 'fake',
+]
+--EXPECT--
+ok
+ko

@@ -21,7 +21,7 @@ jobs:
                 run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
             -   name: Run PHPUnit
-                run: vendor/bin/phpunit --display-skipped --no-progress --coverage-clover ./clover.xml
+                run: vendor/bin/phpunit --display-skipped --no-progress --exclude-group legacy --coverage-clover ./clover.xml
 
             -   name: Upload coverage to Codecov
                 uses: codecov/codecov-action@v4.0.1

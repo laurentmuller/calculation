@@ -34,10 +34,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *        margin_amount: float,
  *        date: \DateTimeInterface}
  * @psalm-type CalculationItemEntry = array{
- *             description: string,
- *             quantity: float,
- *             price: float,
- *             count: int}
+ *        description: string,
+ *        quantity: float,
+ *        price: float,
+ *        count: int}
  * @psalm-type CalculationItemType = array{
  *        id: int,
  *        date: \DateTimeInterface,
@@ -45,6 +45,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *        customer: string,
  *        description: string,
  *        items: CalculationItemEntry[]}
+ * @psalm-type PivotType = array{
+ *        calculation_id: int,
+ *        calculation_date: \DateTimeInterface,
+ *        calculation_overall_margin: float,
+ *        calculation_overall_total: float,
+ *        calculation_state: string,
+ *        item_group: string,
+ *        item_category: string,
+ *        item_description: string,
+ *        item_price: float,
+ *        item_quantity: float,
+ *        item_total: float,
+ *        item_overall: float}
  */
 class CalculationRepository extends AbstractRepository
 {
@@ -572,18 +585,7 @@ class CalculationRepository extends AbstractRepository
     /**
      * Gets data for the pivot table.
      *
-     * @psalm-return array<array{
-     *      calculation_id: int,
-     *      calculation_date: \DateTimeInterface,
-     *      calculation_overall_margin: float,
-     *      calculation_overall_total: float,
-     *      calculation_state: string,
-     *      item_group: string,
-     *      item_category: string,
-     *      item_description: string,
-     *      item_price: float,
-     *      item_quantity: float,
-     *      item_total: float}>
+     * @psalm-return PivotType[]
      */
     public function getPivot(): array
     {
@@ -604,6 +606,7 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('i.price                             AS item_price')
             ->addSelect('i.quantity                          AS item_quantity')
             ->addSelect('i.price * i.quantity                AS item_total')
+            ->addSelect('i.price * i.quantity * g.margin     AS item_overall')
 
             // tables
             ->innerJoin('e.state', 's')
@@ -612,7 +615,8 @@ class CalculationRepository extends AbstractRepository
             ->innerJoin('c.items', 'i')
 
             // not empty
-            ->where('e.itemsTotal != 0');
+            ->where('i.quantity != 0')
+            ->andWhere('i.price != 0');
 
         return $builder->getQuery()->getArrayResult();
     }

@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Pdf;
+namespace App\Tests\Pdf\Traits;
 
 use App\Pdf\PdfDocument;
 use App\Pdf\Traits\PdfEllipseTrait;

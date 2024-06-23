@@ -78,17 +78,17 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
         string $method = Request::METHOD_GET,
         bool $xmlHttpRequest = false
     ): void {
-        $officeDocument = $this->isOfficeDocument($url);
+        $outputBuffer = $this->isOutputBuffer($url);
         if ($this->mustLogin($username)) {
             $this->loginUsername($username);
         }
-        if ($officeDocument) {
+        if ($outputBuffer) {
             \ob_start();
         }
 
         $server = $xmlHttpRequest ? ['HTTP_X-Requested-With' => 'XMLHttpRequest'] : [];
         $this->client->request(method: $method, uri: $url, server: $server);
-        if ($officeDocument) {
+        if ($outputBuffer) {
             \ob_get_clean();
         }
         $this->checkResponse($url, $username, $expected);
@@ -101,9 +101,11 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
     {
     }
 
-    protected function isOfficeDocument(string $url): bool
+    protected function isOutputBuffer(string $url): bool
     {
-        return false !== \stripos($url, '/excel') || false !== \stripos($url, '/word');
+        return false !== \stripos($url, '/excel')
+            || false !== \stripos($url, '/word')
+            || false !== \stripos($url, '/csv');
     }
 
     protected function mustDeleteEntities(): bool

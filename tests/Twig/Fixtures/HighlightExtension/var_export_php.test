@@ -1,0 +1,11 @@
+--TEST--
+"var_export_php" filter test
+--TEMPLATE--
+{{ 1|var_export_php('id') }}
+{{ ''|var_export_php() }}
+{{ null|var_export_php() }}
+--DATA--
+return []
+--EXPECT--
+<pre class=highlight-php id=id "><span class=highlight-php-num>1</span>
+</pre>

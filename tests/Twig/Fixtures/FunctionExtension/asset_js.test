@@ -1,0 +1,8 @@
+--TEST--
+"asset_js" function test
+--TEMPLATE--
+{{ asset_js('fake') }}
+--DATA--
+return []
+--EXPECT--
+<script src="url" nonce="nonce"></script>

@@ -107,6 +107,13 @@ class PivotCellTest extends TestCase
         self::assertArrayHasKey('value', $actual);
     }
 
+    public function testToString(): void
+    {
+        $node = $this->createNode();
+        $actual = (string) $node;
+        self::assertSame('PivotCell(0)', $actual);
+    }
+
     private function createNode(?AbstractAggregator $aggregator = null): PivotCell
     {
         $aggregator ??= new CountAggregator();

@@ -1,0 +1,8 @@
+--TEST--
+"flag_emoji" exception test
+--TEMPLATE--
+{{ 'FAKE'|flag_emoji }}
+--DATA--
+return []
+--EXCEPTION--
+Twig\Error\RuntimeError: An exception has been thrown during the rendering of a template ("Invalid country code: 'FAKE'.") in "index.twig" at line 2.

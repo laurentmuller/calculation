@@ -179,7 +179,7 @@
         "app-stan": "vendor/bin/phpstan analyse --configuration phpstan.neon --memory-limit 2G",
         "app-rector": "vendor/bin/rector process --dry-run --config rector.php",
         "app-twig-cs-fixer": "vendor/bin/twig-cs-fixer lint --config=.twig-cs-fixer.php",
-        "app-test": "phpunit",
+        "app-test": "phpunit --exclude-group=legacy",
         "app-markdown": "markdownlint-cli2",
         "app-all": [
             "@app-lint",

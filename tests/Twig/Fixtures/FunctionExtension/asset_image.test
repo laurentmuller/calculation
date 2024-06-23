@@ -1,0 +1,8 @@
+--TEST--
+"asset_image" function test
+--TEMPLATE--
+{{ asset_image('images/avatar.png') }}
+--DATA--
+return []
+--EXPECT--
+<image src="url" height="170" width="190">

@@ -68,8 +68,13 @@ readonly class MailerService
      *
      * @throws TransportExceptionInterface if an exception occurs while sending the notification
      */
-    public function sendNotification(string $fromEmail, User $toUser, string $message, Importance $importance = Importance::LOW, array $attachments = []): void
-    {
+    public function sendNotification(
+        string $fromEmail,
+        User $toUser,
+        string $message,
+        Importance $importance = Importance::LOW,
+        array $attachments = []
+    ): void {
         $notification = $this->createNotification($importance)
             ->from($fromEmail)
             ->to($toUser->getEmailAddress())

@@ -16,6 +16,7 @@ use App\Tests\TranslatorMockTrait;
 use App\Twig\FormatExtension;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Twig\Error\Error;
 use Twig\Test\IntegrationTestCase;
 
 #[CoversClass(FormatExtension::class)]
@@ -25,6 +26,8 @@ class FormatExtensionTest extends IntegrationTestCase
 
     /**
      * @psalm-suppress MissingParamType
+     *
+     * @throws Error
      */
     protected function doIntegrationTest(// @phpstan-ignore-line
         $file,

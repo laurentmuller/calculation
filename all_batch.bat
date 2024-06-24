@@ -19,6 +19,6 @@ ECHO ----- PHP-RECTOR ------------------------------------------------- && ^
 ECHO ----- PHP-TWIG-CS-FIXER ------------------------------------------ && ^
 .\vendor\bin\twig-cs-fixer.bat lint --config=.twig-cs-fixer.php         && ^
 ECHO ----- PHP-UNIT --------------------------------------------------- && ^
-.\vendor\bin\phpunit.bat --exclude-group legacy
+.\vendor\bin\phpunit.bat
 SET STA__TIME=%TIME: =0%
 ECHO ----- END BATCH %STA__TIME% --------------------------------------

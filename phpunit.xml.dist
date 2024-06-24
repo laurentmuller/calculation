@@ -14,6 +14,7 @@
         <server name="SHELL_VERBOSITY" value="-1"/>
         <server name="SYMFONY_PHPUNIT_REMOVE" value=""/>
         <server name="SYMFONY_PHPUNIT_VERSION" value="10.1"/>
+        <env name="SYMFONY_PHPUNIT_LOCALE" value="fr_CH"/>
     </php>
 
     <testsuites>
@@ -22,14 +23,17 @@
         </testsuite>
     </testsuites>
 
-    <source>
+    <source restrictDeprecations="true" restrictWarnings="true" restrictNotices="true">
         <include>
-            <directory suffix=".php">./src</directory>
+            <directory>./src</directory>
         </include>
-        <exclude>
-            <file>.php-cs-fixer.dist.php</file>
-            <file>rector.php</file>
-        </exclude>
     </source>
-    <coverage />
+
+    <groups>
+        <exclude>
+            <group>legacy</group>
+        </exclude>
+    </groups>
+
+    <coverage/>
 </phpunit>

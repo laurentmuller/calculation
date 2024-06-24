@@ -101,9 +101,9 @@ class SwitchUserListenerTest extends TestCase
      */
     private function createRequest(string $action = ''): MockObject&Request
     {
+        /** @psalm-var InputBag<string> $query */
         $query = new InputBag(['_switch_user' => $action]);
         $request = $this->createMock(Request::class);
-        // @phpstan-ignore assign.propertyType
         $request->query = $query;
 
         return $request;

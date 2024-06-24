@@ -80,16 +80,18 @@ readonly class OpenWeatherCityUpdater
         $db = null;
 
         try {
-            $temp_name = FileUtils::tempFile('sql');
-            if (null === $temp_name) {
-                return $this->falseResult('swisspost.error.temp_file');
-            }
             $cities = $this->getFileContent($file);
             if (false === $cities) {
                 return $this->falseResult('swisspost.error.open_archive', [
                     '%name%' => $file->getClientOriginalName(),
                 ]);
             }
+
+            $temp_name = FileUtils::tempFile('sql');
+            if (null === $temp_name) {
+                return $this->falseResult('swisspost.error.temp_file');
+            }
+
             $db = new OpenWeatherDatabase($temp_name);
             [$valid, $error] = $this->insertCities($db, $cities);
             $db->close();

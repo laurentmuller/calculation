@@ -28,6 +28,7 @@ use App\Word\WordDocument;
 use Doctrine\Common\Collections\Criteria;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -180,9 +181,12 @@ abstract class AbstractEntityController extends AbstractController
 
     /**
      * Gets the form type class name used to edit an entity.
+     *
+     * @psalm-return class-string<FormTypeInterface>
      */
     protected function getEditFormType(): string
     {
+        /** @psalm-var class-string<FormTypeInterface> */
         return \sprintf('App\\Form\\%1$s\\%1$sType', $this->shortName);
     }
 

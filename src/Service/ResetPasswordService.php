@@ -147,7 +147,9 @@ readonly class ResetPasswordService
 
             return $token;
         } catch (TransportExceptionInterface $e) {
-            $this->helper->removeResetRequest($token->getToken());
+            if ('' !== $token->getToken()) {
+                $this->helper->removeResetRequest($token->getToken());
+            }
             $this->handleException($request, $e);
 
             return null;

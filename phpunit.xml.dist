@@ -14,7 +14,6 @@
         <server name="SHELL_VERBOSITY" value="-1"/>
         <server name="SYMFONY_PHPUNIT_REMOVE" value=""/>
         <server name="SYMFONY_PHPUNIT_VERSION" value="10.1"/>
-        <env name="SYMFONY_PHPUNIT_LOCALE" value="fr_CH"/>
     </php>
 
     <testsuites>
@@ -23,7 +22,7 @@
         </testsuite>
     </testsuites>
 
-    <source restrictDeprecations="true" restrictWarnings="true" restrictNotices="true">
+    <source>
         <include>
             <directory>./src</directory>
         </include>

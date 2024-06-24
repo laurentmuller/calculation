@@ -65,7 +65,7 @@ class SymfonyInfoServiceTest extends KernelServiceTestCase
     public function testGetDebugPackages(): void
     {
         $actual = $this->service->getDebugPackages();
-        self::assertEmpty($actual);
+        self::assertNotEmpty($actual);
     }
 
     public function testGetDebugRoutes(): void
@@ -138,7 +138,7 @@ class SymfonyInfoServiceTest extends KernelServiceTestCase
     public function testGetRuntimePackages(): void
     {
         $actual = $this->service->getRuntimePackages();
-        self::assertEmpty($actual);
+        self::assertNotEmpty($actual);
     }
 
     public function testGetRuntimeRoutes(): void

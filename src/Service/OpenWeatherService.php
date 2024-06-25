@@ -13,13 +13,10 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Database\OpenWeatherDatabase;
-use App\Utils\FormatUtils;
 use phpDocumentor\Reflection\DocBlock\Tags\See;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Intl\Countries;
-use Symfony\Component\Intl\Exception\MissingResourceException;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -108,24 +105,9 @@ class OpenWeatherService extends AbstractHttpClientService
     private const CACHE_TIMEOUT = 60 * 15;
 
     /**
-     * The country flag URL.
-     */
-    private const COUNTRY_URL = 'https://openweathermap.org/images/flags/{0}.png';
-
-    /**
      * The host name.
      */
     private const HOST_NAME = 'https://api.openweathermap.org/data/2.5/';
-
-    /**
-     * The big icon URL.
-     */
-    private const ICON_BIG_URL = 'https://openweathermap.org/img/wn/{0}@4x.png';
-
-    /**
-     * The small icon URL.
-     */
-    private const ICON_SMALL_URL = 'https://openweathermap.org/img/wn/{0}@2x.png';
 
     /**
      * Current condition URI.
@@ -161,7 +143,7 @@ class OpenWeatherService extends AbstractHttpClientService
         string $key,
         CacheInterface $cache,
         LoggerInterface $logger,
-        private readonly PositionService $service
+        private readonly OpenWeatherFormatter $formatter
     ) {
         parent::__construct($key, $cache, $logger);
     }
@@ -383,7 +365,7 @@ class OpenWeatherService extends AbstractHttpClientService
         }
         $offset = $this->findTimezone($results);
         $timezone = $this->offsetToTimZone($offset);
-        $this->updateResults($results, $timezone);
+        $this->formatter->update($results, $timezone);
         $this->addUnits($results, (string) $query['units']);
         $this->sortResults($results);
 
@@ -439,18 +421,6 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * Gets the country name from the alpha2 code.
-     */
-    private function getCountryName(string $country): ?string
-    {
-        try {
-            return Countries::getName($country);
-        } catch (MissingResourceException) {
-            return null;
-        }
-    }
-
-    /**
      * Converts the given offset to a time zone.
      *
      * @throws \Exception
@@ -463,11 +433,6 @@ class OpenWeatherService extends AbstractHttpClientService
         $timezone = \sprintf('%+03d%02d', $hours, $minutes);
 
         return new \DateTimeZone($timezone);
-    }
-
-    private function replaceUrl(string $url, string $value): string
-    {
-        return \str_replace('{0}', $value, $url);
     }
 
     /**
@@ -493,141 +458,6 @@ class OpenWeatherService extends AbstractHttpClientService
             if (\is_array($value)) {
                 $this->sortResults($value);
             }
-        }
-    }
-
-    private function updateCoordinate(array &$results): void
-    {
-        if (!isset($results['lat']) || !isset($results['lon'])) {
-            return;
-        }
-        $lat = (float) $results['lat'];
-        $lon = (float) $results['lon'];
-        $results['lat_lon_dms'] = $this->service->formatPosition($lat, $lon);
-        $results['lat_lon_url'] = $this->service->getGoogleMapUrl($lat, $lon);
-    }
-
-    private function updateCountry(array &$results, string $country): void
-    {
-        $results['country_name'] = $this->getCountryName($country) ?? '';
-        $results['country_flag'] = $this->replaceUrl(self::COUNTRY_URL, \strtolower($country));
-    }
-
-    private function updateDate(array &$result, int $value, ?\DateTimeZone $timezone = null): void
-    {
-        $result['dt_date'] = FormatUtils::formatDate($value, \IntlDateFormatter::SHORT);
-        $result['dt_date_locale'] = FormatUtils::formatDate($value, \IntlDateFormatter::SHORT, timezone: $timezone);
-        $result['dt_time'] = FormatUtils::formatTime($value, \IntlDateFormatter::SHORT);
-        $result['dt_time_locale'] = FormatUtils::formatTime($value, \IntlDateFormatter::SHORT, timezone: $timezone);
-        $result['dt_date_time'] = FormatUtils::formatDateTime($value, \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT);
-        $result['dt_date_time_locale'] = FormatUtils::formatDateTime($value, \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT, timezone: $timezone);
-        $result['dt_date_time_medium'] = FormatUtils::formatDateTime($value, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT);
-        $result['dt_date_time_medium_locale'] = FormatUtils::formatDateTime($value, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT, timezone: $timezone);
-        $result['dt_date_time_long'] = FormatUtils::formatDateTime($value, \IntlDateFormatter::LONG, \IntlDateFormatter::SHORT);
-        $result['dt_date_time_long_locale'] = FormatUtils::formatDateTime($value, \IntlDateFormatter::LONG, \IntlDateFormatter::SHORT, timezone: $timezone);
-        unset($result['dt_txt']);
-    }
-
-    private function updateDegree(array &$results, int $value): void
-    {
-        $results['deg_direction'] = $this->service->getDirection($value);
-        $results['deg_description'] = $this->service->formatDirection($value);
-    }
-
-    private function updateDescription(mixed &$value): void
-    {
-        if (\is_string($value)) {
-            $value = \ucfirst($value);
-        }
-    }
-
-    private function updateIcon(array &$results, string $value): void
-    {
-        $results['icon_big'] = $this->replaceUrl(self::ICON_BIG_URL, $value);
-        $results['icon_small'] = $this->replaceUrl(self::ICON_SMALL_URL, $value);
-    }
-
-    private function updateLatitude(array &$results, float $value): void
-    {
-        $results['lat_dms'] = $this->service->formatLatitude($value);
-    }
-
-    private function updateLongitude(array &$results, float $value): void
-    {
-        $results['lon_dms'] = $this->service->formatLongitude($value);
-    }
-
-    /**
-     * @psalm-param array<array-key, mixed> $results
-     */
-    private function updateResults(array &$results, ?\DateTimeZone $timezone = null): void
-    {
-        /** @psalm-var mixed $value */
-        foreach ($results as $key => &$value) {
-            if (\is_array($value)) {
-                $this->updateResults($value, $timezone);
-                $this->updateCoordinate($value);
-            }
-
-            switch ((string) $key) {
-                case 'icon':
-                    $this->updateIcon($results, (string) $value);
-                    break;
-                case 'description':
-                    $this->updateDescription($value);
-                    break;
-                case 'country':
-                    $this->updateCountry($results, (string) $value);
-                    break;
-                case 'dt':
-                    $this->updateDate($results, (int) $value, $timezone);
-                    break;
-                case 'sunrise':
-                    $this->updateSunrise($results, (int) $value, $timezone);
-                    break;
-                case 'sunset':
-                    $this->updateSunset($results, (int) $value, $timezone);
-                    break;
-                case 'weather':
-                    $this->updateWeather($value);
-                    break;
-                case 'lat':
-                    $this->updateLatitude($results, (float) $value);
-                    break;
-                case 'lon':
-                    $this->updateLongitude($results, (float) $value);
-                    break;
-                case 'deg':
-                    $this->updateDegree($results, (int) $value);
-                    break;
-                case 'timezone':
-                    $this->updateTimezone($results, $timezone);
-                    break;
-            }
-        }
-    }
-
-    private function updateSunrise(array &$results, int $value, ?\DateTimeZone $timezone = null): void
-    {
-        $results['sunrise_formatted'] = FormatUtils::formatTime($value, \IntlDateFormatter::SHORT, timezone: $timezone);
-    }
-
-    private function updateSunset(array &$results, int $value, ?\DateTimeZone $timezone = null): void
-    {
-        $results['sunset_formatted'] = FormatUtils::formatTime($value, \IntlDateFormatter::SHORT, timezone: $timezone);
-    }
-
-    private function updateTimezone(array &$results, ?\DateTimeZone $timezone = null): void
-    {
-        if ($timezone instanceof \DateTimeZone) {
-            $results['timezone_name'] = $timezone->getName();
-        }
-    }
-
-    private function updateWeather(mixed &$value): void
-    {
-        if (\is_array($value)) {
-            $value = (array) \reset($value);
         }
     }
 }

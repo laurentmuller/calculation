@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
+use App\Service\OpenWeatherFormatter;
 use App\Service\OpenWeatherSearchService;
 use App\Service\PositionService;
 use App\Tests\TranslatorMockTrait;
@@ -31,8 +32,9 @@ class OpenWeatherSearchServiceTest extends TestCase
     {
         $this->databaseName = __DIR__ . '/../Data/openweather_test.sqlite';
         $service = new PositionService($this->createMockTranslator());
+        $formatter = new OpenWeatherFormatter($service);
         $cache = new ArrayAdapter();
-        $this->service = new OpenWeatherSearchService($this->databaseName, $service, $cache);
+        $this->service = new OpenWeatherSearchService($this->databaseName, $formatter, $cache);
     }
 
     public function testGetDatabaseName(): void

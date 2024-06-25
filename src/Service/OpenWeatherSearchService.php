@@ -15,8 +15,6 @@ namespace App\Service;
 use App\Database\OpenWeatherDatabase;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\Intl\Countries;
-use Symfony\Component\Intl\Exception\MissingResourceException;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -31,15 +29,10 @@ class OpenWeatherSearchService
      */
     final public const DEFAULT_LIMIT = 15;
 
-    /**
-     * The country flag URL.
-     */
-    private const COUNTRY_URL = 'https://openweathermap.org/images/flags/{0}.png';
-
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/data/openweather.sqlite')]
         private readonly string $databaseName,
-        private readonly PositionService $service,
+        private readonly OpenWeatherFormatter $formatter,
         private readonly CacheInterface $cache,
     ) {
     }
@@ -81,66 +74,17 @@ class OpenWeatherSearchService
         try {
             $db = new OpenWeatherDatabase($this->databaseName, true);
 
-            /** @psalm-var array<int, OpenWeatherCityType> $result */
-            $result = $db->findCity($name, $limit);
-            if ([] === $result) {
+            /** @psalm-var array<int, OpenWeatherCityType> $results */
+            $results = $db->findCity($name, $limit);
+            if ([] === $results) {
                 return [];
             }
 
-            $this->updateValues($result);
+            $this->formatter->update($results);
 
-            return $result;
+            return $results;
         } finally {
             $db?->close();
-        }
-    }
-
-    /**
-     * Gets the country name from the alpha2 code.
-     */
-    private function getCountryName(string $country): string
-    {
-        try {
-            return Countries::getName($country);
-        } catch (MissingResourceException) {
-            return '';
-        }
-    }
-
-    private function replaceUrl(string $country): string
-    {
-        return \str_replace('{0}', $country, self::COUNTRY_URL);
-    }
-
-    private function updateCoordinate(array &$value): void
-    {
-        /** @psalm-var float $lat */
-        $lat = $value['latitude'];
-        /** @psalm-var float $lon */
-        $lon = $value['longitude'];
-        $value['lat_dms'] = $this->service->formatLatitude($lat);
-        $value['lon_dms'] = $this->service->formatLongitude($lon);
-        $value['lat_lon_dms'] = $this->service->formatPosition($lat, $lon);
-        $value['lat_lon_url'] = $this->service->getGoogleMapUrl($lat, $lon);
-    }
-
-    private function updateCountry(array &$value): void
-    {
-        /** @psalm-var string $country */
-        $country = $value['country'];
-        $value['country_name'] = $this->getCountryName($country);
-        $value['country_flag'] = $this->replaceUrl(\strtolower($country));
-    }
-
-    /**
-     * @psalm-param array<int, OpenWeatherCityType> $results
-     */
-    private function updateValues(array &$results): void
-    {
-        /** @psalm-var array $value */
-        foreach ($results as &$value) {
-            $this->updateCoordinate($value);
-            $this->updateCountry($value);
         }
     }
 }

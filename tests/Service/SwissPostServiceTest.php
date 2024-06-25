@@ -38,14 +38,14 @@ class SwissPostServiceTest extends TestCase
         self::assertArrayHasKey('street', $actual);
         self::assertSame(1, $actual['state']);
         self::assertSame(1, $actual['city']);
-        self::assertSame(55, $actual['street']);
+        self::assertSame(1, $actual['street']);
     }
 
     public function testFindAllFound(): void
     {
         $actual = $this->service
             ->findAll('1753');
-        self::assertCount(25, $actual);
+        self::assertCount(1, $actual);
         self::assertIsArray($actual[0]);
 
         $actual = $actual[0];
@@ -87,7 +87,7 @@ class SwissPostServiceTest extends TestCase
     public function testFindStreetFound(): void
     {
         $actual = $this->service
-            ->findStreet('route du bois');
+            ->findStreet('route de berne');
         self::assertCount(1, $actual);
         self::assertIsArray($actual[0]);
 

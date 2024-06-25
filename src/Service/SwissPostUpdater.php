@@ -148,9 +148,6 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             if (!$this->processReader($result, $database, $reader)) {
                 return $result;
             }
-            if (0 === $result->getValidEntriesCount()) {
-                return $this->setError($result, 'archive_empty', ['%name%' => $result->getSourceName()]);
-            }
         } finally {
             $this->closeReader($result, $reader);
             $this->closeArchive($result, $archive);
@@ -172,7 +169,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     {
         try {
             $archive?->close();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logResult($result, 'archive_close', $e);
         }
     }
@@ -181,7 +178,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     {
         try {
             $database?->close();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logResult($result, 'database_close', $e);
         }
     }
@@ -190,7 +187,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     {
         try {
             $reader?->close();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logResult($result, 'reader_close', $e);
         }
     }
@@ -201,7 +198,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             if ($result->isValid()) {
                 $database?->compact();
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logResult($result, 'database_compact', $e);
         }
     }
@@ -230,7 +227,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         return $this->service->getTablesCount();
     }
 
-    private function logResult(SwissPostUpdateResult $result, string $id, \Exception $e): void
+    private function logResult(SwissPostUpdateResult $result, string $id, \Throwable $e): void
     {
         $this->setError($result, $id);
         $this->logException($e, $result->getError());
@@ -325,6 +322,14 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             $this->toggleTransaction($result, $database);
         }
         $database->commitTransaction();
+
+        // city or street imported?
+        $entries = $result->getValidEntries();
+        if (0 === $entries['city'] || 0 === $entries['street']) {
+            $this->setError($result, 'archive_empty', ['%name%' => $result->getSourceName()]);
+
+            return false;
+        }
 
         return true;
     }
@@ -451,6 +456,12 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             return false;
         }
         if ($sourceFile instanceof UploadedFile) {
+            if (!$sourceFile->isValid()) {
+                $this->setError($result, 'file_empty');
+
+                return false;
+            }
+
             $result->setSourceName($sourceFile->getClientOriginalName());
             $sourceFile = $sourceFile->getPathname();
         } else {

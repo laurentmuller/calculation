@@ -17,6 +17,7 @@ use App\Form\FormHelper;
 use App\Traits\TranslatorTrait;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -44,7 +45,8 @@ readonly class OpenWeatherCityUpdater
     private const FILE_EXTENSION = 'gz';
 
     public function __construct(
-        private OpenWeatherService $service,
+        #[Autowire('%kernel.project_dir%/resources/data/openweather.sqlite')]
+        private readonly string $databaseName,
         private FormFactoryInterface $factory,
         private TranslatorInterface $translator,
     ) {
@@ -98,7 +100,7 @@ readonly class OpenWeatherCityUpdater
             if (0 === $valid) {
                 return $this->falseResult('openweather.error.empty_city');
             }
-            if (!FileUtils::rename($temp_name, $this->service->getDatabaseName(), true)) {
+            if (!FileUtils::rename($temp_name, $this->databaseName, true)) {
                 return $this->falseResult('swisspost.error.rename_database');
             }
 

@@ -14,11 +14,14 @@ namespace App\Tests\Service;
 
 use App\Service\OpenWeatherService;
 use App\Tests\KernelServiceTestCase;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(OpenWeatherService::class)]
 class OpenWeatherServiceTest extends KernelServiceTestCase
 {
+    use TranslatorMockTrait;
+
     private const CITY_INVALID = 0;
     private const CITY_VALID = 2_660_718;
 
@@ -28,6 +31,31 @@ class OpenWeatherServiceTest extends KernelServiceTestCase
     {
         parent::setUp();
         $this->service = $this->getService(OpenWeatherService::class);
+    }
+
+    public function testAll(): void
+    {
+        $actual = $this->service->all(self::CITY_VALID);
+        self::assertArrayHasKey('current', $actual);
+        self::assertArrayHasKey('forecast', $actual);
+        self::assertArrayHasKey('daily', $actual);
+
+        $current = $actual['current'];
+        self::assertIsArray($current);
+        self::assertSame(self::CITY_VALID, $current['id']);
+        self::assertIsArray($current['units']);
+        $this->validateResult($current, true);
+    }
+
+    public function testAllInvalid(): void
+    {
+        $actual = $this->service->all(self::CITY_INVALID);
+        self::assertArrayHasKey('current', $actual);
+        self::assertArrayHasKey('forecast', $actual);
+        self::assertArrayHasKey('daily', $actual);
+        self::assertFalse($actual['current']);
+        self::assertFalse($actual['forecast']);
+        self::assertFalse($actual['daily']);
     }
 
     public function testCurrent(): void
@@ -79,6 +107,18 @@ class OpenWeatherServiceTest extends KernelServiceTestCase
         self::assertFalse($result);
     }
 
+    public function testForecast(): void
+    {
+        $actual = $this->service->forecast(self::CITY_VALID);
+        self::assertIsArray($actual);
+    }
+
+    public function testForecastInvalid(): void
+    {
+        $result = $this->service->forecast(self::CITY_INVALID);
+        self::assertFalse($result);
+    }
+
     public function testGroup(): void
     {
         $cityIds = [self::CITY_VALID];
@@ -107,6 +147,14 @@ class OpenWeatherServiceTest extends KernelServiceTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->service->group(\range(0, 25));
+    }
+
+    public function testOneCall(): void
+    {
+        $actual = $this->service->oneCall(0.00, 0.00, exclude: 'daily');
+        self::assertIsArray($actual);
+        self::assertArrayHasKey('current', $actual);
+        self::assertArrayNotHasKey('daily', $actual);
     }
 
     private function validateCoord(array $data): void

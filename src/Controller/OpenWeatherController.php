@@ -16,6 +16,7 @@ use App\Attribute\Get;
 use App\Attribute\GetPost;
 use App\Interfaces\RoleInterface;
 use App\Service\OpenWeatherCityUpdater;
+use App\Service\OpenWeatherSearchService;
 use App\Service\OpenWeatherService;
 use Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
@@ -178,8 +179,9 @@ class OpenWeatherController extends AbstractController
             $latitude = $this->getRequestFloat($request, self::KEY_LATITUDE);
             $longitude = $this->getRequestFloat($request, self::KEY_LONGITUDE);
             $exclude = $this->getRequestString($request, self::KEY_EXCLUDE);
+            /** @psalm-var OpenWeatherService::EXCLUDE_*[] $exclude */
             $exclude = \explode(',', $exclude);
-            $response = $this->service->oneCall($latitude, $longitude, $units, $exclude);
+            $response = $this->service->oneCall($latitude, $longitude, $units, ...$exclude);
             if (false === $response) {
                 return $this->json($this->service->getLastError());
             }
@@ -196,15 +198,12 @@ class OpenWeatherController extends AbstractController
      * @psalm-api
      */
     #[Get(path: '/api/search', name: 'api_search')]
-    public function apiSearch(Request $request, UrlGeneratorInterface $generator): JsonResponse
+    public function apiSearch(Request $request, OpenWeatherSearchService $service, UrlGeneratorInterface $generator): JsonResponse
     {
         try {
             $query = $this->getRequestQuery($request);
             $units = $this->getRequestUnits($request);
-            $cities = $this->service->search($query, $units);
-            if ($this->service->hasLastError()) {
-                return $this->json($this->service->getLastError());
-            }
+            $cities = $service->search($query);
             if ([] === $cities) {
                 return $this->jsonFalse();
             }
@@ -284,7 +283,7 @@ class OpenWeatherController extends AbstractController
      * Shows the search city view.
      */
     #[GetPost(path: '/search', name: 'search')]
-    public function search(Request $request): Response
+    public function search(Request $request, OpenWeatherSearchService $service): Response
     {
         $data = [
             self::KEY_QUERY => $this->getSessionQuery($request),
@@ -301,7 +300,7 @@ class OpenWeatherController extends AbstractController
             $limit = $data[self::KEY_LIMIT];
             $count = $data[self::KEY_COUNT];
             /** @psalm-var array<int, OpenWeatherCityType> $cities */
-            $cities = $this->service->search($query, $units, $limit);
+            $cities = $service->search($query, $limit);
             if ([] !== $cities) {
                 // save
                 $this->setSessionValues([

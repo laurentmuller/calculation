@@ -161,8 +161,6 @@ class OpenWeatherService extends AbstractHttpClientService
         string $key,
         CacheInterface $cache,
         LoggerInterface $logger,
-        #[Autowire('%kernel.project_dir%/resources/data/openweather.sqlite')]
-        private readonly string $databaseName,
         private readonly PositionService $service
     ) {
         parent::__construct($key, $cache, $logger);
@@ -255,26 +253,6 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * Gets the database.
-     *
-     * @param bool $readonly true open the database for reading only
-     *
-     * @return OpenWeatherDatabase the database
-     */
-    public function getDatabase(bool $readonly = false): OpenWeatherDatabase
-    {
-        return new OpenWeatherDatabase($this->getDatabaseName(), $readonly);
-    }
-
-    /**
-     * Gets the database file name.
-     */
-    public function getDatabaseName(): string
-    {
-        return $this->databaseName;
-    }
-
-    /**
      * Gets the degree units.
      */
     public function getDegreeUnit(string $units): string
@@ -317,20 +295,22 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * Returns all essential weather data for a specific location.
      *
-     * @param float    $latitude  the latitude
-     * @param float    $longitude the longitude
-     * @param string[] $exclude   the parts to exclude from the response. Available values:
-     *                            <ul>
-     *                            <li>'current'</li>
-     *                            <li>'minutely'</li>
-     *                            <li>'hourly'</li>
-     *                            <li>'daily'</li>
-     *                            </ul>
-     * @param string   $units     the units to use
+     * @param float  $latitude   the latitude
+     * @param float  $longitude  the longitude
+     * @param string ...$exclude the parts to exclude from the response. Available values:
+     *                           <ul>
+     *                           <li>'current'</li>
+     *                           <li>'minutely'</li>
+     *                           <li>'hourly'</li>
+     *                           <li>'daily'</li>
+     *                           </ul>
+     * @param string $units      the units to use
      *
      * @return array|false the essential conditions if success; false on error
+     *
+     * @psalm-param self::EXCLUDE_* ...$exclude
      */
-    public function oneCall(float $latitude, float $longitude, string $units = self::UNIT_METRIC, array $exclude = []): array|false
+    public function oneCall(float $latitude, float $longitude, string $units = self::UNIT_METRIC, string ...$exclude): array|false
     {
         $query = [
             'lat' => $latitude,
@@ -342,22 +322,6 @@ class OpenWeatherService extends AbstractHttpClientService
         }
 
         return $this->get(self::URI_ONECALL, $query);
-    }
-
-    /**
-     * Search cities.
-     *
-     * @param string $name  the name of the city to search for
-     * @param string $units the units to use
-     * @param int    $limit the maximum number of cities to return
-     *
-     * @pslam-return array<int, OpenWeatherCityType>
-     */
-    public function search(string $name, string $units = self::UNIT_METRIC, int $limit = self::DEFAULT_LIMIT): array
-    {
-        $key = $this->getCacheKey('search', ['name' => $name, 'units' => $units, 'limit' => $limit]);
-
-        return $this->getCacheValue($key, fn (): array => $this->doSearch($name, $limit));
     }
 
     protected function getDefaultOptions(): array
@@ -424,25 +388,6 @@ class OpenWeatherService extends AbstractHttpClientService
         $this->sortResults($results);
 
         return $results;
-    }
-
-    private function doSearch(string $name, int $limit): array
-    {
-        $db = null;
-
-        try {
-            $db = $this->getDatabase(true);
-            /** @psalm-var array<int, mixed> $result */
-            $result = $db->findCity($name, $limit);
-            if ([] === $result) {
-                return [];
-            }
-            $this->updateResults($result);
-
-            return $result;
-        } finally {
-            $db?->close();
-        }
     }
 
     /**
@@ -562,10 +507,10 @@ class OpenWeatherService extends AbstractHttpClientService
         $results['lat_lon_url'] = $this->service->getGoogleMapUrl($lat, $lon);
     }
 
-    private function updateCountry(array &$results, string $value): void
+    private function updateCountry(array &$results, string $country): void
     {
-        $results['country_name'] = $this->getCountryName($value) ?? '';
-        $results['country_flag'] = $this->replaceUrl(self::COUNTRY_URL, \strtolower($value));
+        $results['country_name'] = $this->getCountryName($country) ?? '';
+        $results['country_flag'] = $this->replaceUrl(self::COUNTRY_URL, \strtolower($country));
     }
 
     private function updateDate(array &$result, int $value, ?\DateTimeZone $timezone = null): void

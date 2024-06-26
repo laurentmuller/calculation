@@ -50,6 +50,7 @@ abstract class CommandTestCase extends KernelTestCase
     {
         $expected = (array) $expected;
         $output = (string) \preg_replace('/\r|\n/', '', $output);
+        $output = (string) \preg_replace('/\s+/', ' ', $output);
         foreach ($expected as $value) {
             self::assertStringContainsString($value, $output);
         }

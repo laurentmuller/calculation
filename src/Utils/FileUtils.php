@@ -395,16 +395,18 @@ final class FileUtils
     /**
      * Create the temporary directory in the given directory with a unique name.
      *
-     * @param string $dir          The directory where the temporary directory will be created
-     * @param string $prefix       The prefix of the generated temporary directory
-     * @param bool   $deleteOnExit if true, the directory is deleted at the end of the script
+     * @param ?string $dir          the directory where the temporary directory will be created or null to use
+     *                              the directory path used for temporary files
+     * @param string  $prefix       The prefix of the generated temporary directory
+     * @param bool    $deleteOnExit if true, the directory is deleted at the end of the script
      *
      * @return string|null the new temporary directory; null on failure
      */
-    public static function tempDir(string $dir, string $prefix = 'tmp', bool $deleteOnExit = true): ?string
+    public static function tempDir(?string $dir = null, string $prefix = 'tmp', bool $deleteOnExit = true): ?string
     {
         try {
-            $base = "$dir/$prefix";
+            $dir ??= \sys_get_temp_dir();
+            $base = self::buildPath($dir, $prefix);
             for ($i = 0; $i < 10; ++$i) {
                 $result = $base . \uniqid((string) \mt_rand(), true);
                 if (!self::exists($result) && self::mkdir($result)) {

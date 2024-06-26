@@ -18,6 +18,7 @@ use App\Interfaces\RoleInterface;
 use App\Service\OpenWeatherCityUpdater;
 use App\Service\OpenWeatherSearchService;
 use App\Service\OpenWeatherService;
+use App\Utils\FileUtils;
 use Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormInterface;
@@ -268,6 +269,7 @@ class OpenWeatherController extends AbstractController
             /** @var UploadedFile $file */
             $file = $form->get('file')->getData();
             $results = $updater->import($file);
+            FileUtils::remove($file);
 
             return $this->render('openweather/import_result.html.twig', $results);
         }

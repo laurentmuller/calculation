@@ -46,7 +46,7 @@ readonly class OpenWeatherCityUpdater
 
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/data/openweather.sqlite')]
-        private readonly string $databaseName,
+        private string $databaseName,
         private FormFactoryInterface $factory,
         private TranslatorInterface $translator,
     ) {
@@ -111,7 +111,6 @@ readonly class OpenWeatherCityUpdater
                 'message' => $this->trans('openweather.result.success'),
             ];
         } finally {
-            FileUtils::remove($file);
             $db?->close();
         }
     }
@@ -155,7 +154,7 @@ readonly class OpenWeatherCityUpdater
     }
 
     /**
-     * @param OpenWeatherCityType[] $cities
+     * @psalm-param OpenWeatherCityType[] $cities
      *
      * @psalm-return array{0: int, 1: int}
      */

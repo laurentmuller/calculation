@@ -20,7 +20,7 @@ use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(UcFirstCommand::class)]
-class UcFirstCommandTest extends AbstractCommandTestCase
+class UcFirstCommandTest extends CommandTestCase
 {
     use CalculationTrait;
     use DatabaseTrait;

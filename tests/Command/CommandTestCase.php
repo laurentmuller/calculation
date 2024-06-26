@@ -18,7 +18,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\MissingInputException;
 use Symfony\Component\Console\Tester\CommandTester;
 
-abstract class AbstractCommandTestCase extends KernelTestCase
+abstract class CommandTestCase extends KernelTestCase
 {
     protected function execute(
         string $name,
@@ -49,6 +49,7 @@ abstract class AbstractCommandTestCase extends KernelTestCase
     protected function validate(string $output, string|array $expected): void
     {
         $expected = (array) $expected;
+        $output = (string) \preg_replace('/\r|\n/', '', $output);
         foreach ($expected as $value) {
             self::assertStringContainsString($value, $output);
         }

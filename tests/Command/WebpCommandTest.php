@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Console\Command\Command;
 
 #[CoversClass(WebpCommand::class)]
-class WebpCommandTest extends AbstractCommandTestCase
+class WebpCommandTest extends CommandTestCase
 {
     private const COMMAND_NAME = 'app:update-images';
 

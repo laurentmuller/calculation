@@ -16,7 +16,7 @@ use App\Command\UpdateAssetsCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(UpdateAssetsCommand::class)]
-class UpdateAssetsCommandTest extends AbstractCommandTestCase
+class UpdateAssetsCommandTest extends CommandTestCase
 {
     private const COMMAND_NAME = 'app:update-assets';
 

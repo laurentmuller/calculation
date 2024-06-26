@@ -20,7 +20,7 @@ use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(AnonymousCommand::class)]
-class AnonymousCommandTest extends AbstractCommandTestCase
+class AnonymousCommandTest extends CommandTestCase
 {
     use CalculationTrait;
     use DatabaseTrait;

@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Console\Command\Command;
 
 #[CoversClass(HeaderNameCommand::class)]
-class HeaderNameCommandTest extends AbstractCommandTestCase
+class HeaderNameCommandTest extends CommandTestCase
 {
     private const COMMAND_NAME = 'app:header:name';
     private const DATA_PATH = '/tests/Data/css';

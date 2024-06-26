@@ -12,20 +12,20 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Command\AnonymousCommand;
+use App\Command\UcFirstCommand;
 use App\Entity\Calculation;
 use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\CalculationTrait;
 use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(AnonymousCommand::class)]
-class AnonymousCommandTest extends AbstractCommandTestCase
+#[CoversClass(UcFirstCommand::class)]
+class UcFirstCommandTest extends AbstractCommandTestCase
 {
     use CalculationTrait;
     use DatabaseTrait;
 
-    private const COMMAND_NAME = 'app:anonymous';
+    private const COMMAND_NAME = 'app:uc-first';
 
     /**
      * @throws ORMException
@@ -41,17 +41,14 @@ class AnonymousCommandTest extends AbstractCommandTestCase
      */
     public function testExecute(): void
     {
-        $this->getCalculation();
+        $this->getCalculation(customer: 'customer');
 
-        $expected = [
-            'Start update calculations',
-            'End update calculations.',
-            'Save change to database.',
-            'Updated',
-            'successfully',
-            'Duration',
+        $expected = 'Updated 1 values successfully.';
+        $input = [
+            '--class' => Calculation::class,
+            '--field' => 'customer',
         ];
-        $output = $this->execute(self::COMMAND_NAME);
+        $output = $this->execute(self::COMMAND_NAME, $input);
         $this->validate($output, $expected);
     }
 
@@ -60,15 +57,15 @@ class AnonymousCommandTest extends AbstractCommandTestCase
      */
     public function testExecuteDryRun(): void
     {
-        $this->getCalculation();
+        $this->getCalculation(customer: 'customer');
 
         $expected = [
-            'Start update calculations',
-            'End update calculations.',
-            'Simulate updated',
-            'Duration',
+            'Updated 1 values successfully.',
+            'No change saved to database.',
         ];
         $input = [
+            '--class' => Calculation::class,
+            '--field' => 'customer',
             '--dry-run' => true,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input);
@@ -77,8 +74,10 @@ class AnonymousCommandTest extends AbstractCommandTestCase
 
     public function testExecuteDryRunEmpty(): void
     {
-        $expected = 'No calculation to update.';
+        $expected = 'No value updated.';
         $input = [
+            '--class' => Calculation::class,
+            '--field' => 'customer',
             '--dry-run' => true,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input);
@@ -87,8 +86,20 @@ class AnonymousCommandTest extends AbstractCommandTestCase
 
     public function testExecuteEmpty(): void
     {
-        $expected = 'No calculation to update.';
-        $output = $this->execute(self::COMMAND_NAME);
+        $expected = 'No value updated.';
+        $input = [
+            '--class' => Calculation::class,
+            '--field' => 'customer',
+        ];
+        $output = $this->execute(self::COMMAND_NAME, $input);
         $this->validate($output, $expected);
+    }
+
+    public function testExecuteMissingClass(): void
+    {
+        $input = [
+            '--field' => 'customer',
+        ];
+        $this->executeMissingInput(self::COMMAND_NAME, $input);
     }
 }

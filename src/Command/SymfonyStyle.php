@@ -23,11 +23,10 @@ use Symfony\Component\Console\Style\SymfonyStyle as BaseSymfonyStyle;
  */
 class SymfonyStyle extends BaseSymfonyStyle
 {
-    private InputInterface $input;
-
-    public function __construct(InputInterface $input, OutputInterface $output)
-    {
-        $this->input = $input;
+    public function __construct(
+        private readonly InputInterface $input,
+        private readonly OutputInterface $output
+    ) {
         parent::__construct($input, $output);
     }
 
@@ -74,6 +73,11 @@ class SymfonyStyle extends BaseSymfonyStyle
         return (bool) $this->getOption($name);
     }
 
+    public function getInput(): InputInterface
+    {
+        return $this->input;
+    }
+
     /**
      * Returns the option value, as integer, for a given option name.
      *
@@ -92,6 +96,11 @@ class SymfonyStyle extends BaseSymfonyStyle
     public function getOption(string $name): mixed
     {
         return $this->input->getOption($name);
+    }
+
+    public function getOutput(): OutputInterface
+    {
+        return $this->output;
     }
 
     /**

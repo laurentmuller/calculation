@@ -15,12 +15,17 @@ namespace App\Tests\Command;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\MissingInputException;
 use Symfony\Component\Console\Tester\CommandTester;
 
 abstract class AbstractCommandTestCase extends KernelTestCase
 {
-    protected function execute(string $name, array $input = [], array $options = [], int $statusCode = Command::SUCCESS): string
-    {
+    protected function execute(
+        string $name,
+        array $input = [],
+        array $options = [],
+        int $statusCode = Command::SUCCESS
+    ): string {
         $kernel = self::bootKernel();
         $application = new Application($kernel);
         $command = $application->find($name);
@@ -32,11 +37,18 @@ abstract class AbstractCommandTestCase extends KernelTestCase
         return $tester->getDisplay();
     }
 
-    /**
-     * @psalm-param string[] $expected
-     */
-    protected function validate(string $output, array $expected): void
+    protected function executeMissingInput(string $name, array $input = []): void
     {
+        self::expectException(MissingInputException::class);
+        $this->execute($name, $input);
+    }
+
+    /**
+     * @psalm-param string|string[] $expected
+     */
+    protected function validate(string $output, string|array $expected): void
+    {
+        $expected = (array) $expected;
         foreach ($expected as $value) {
             self::assertStringContainsString($value, $output);
         }

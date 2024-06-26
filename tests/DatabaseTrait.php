@@ -63,6 +63,28 @@ trait DatabaseTrait
     }
 
     /**
+     * Delete all entities, for the given class, from the database.
+     *
+     * @psalm-param class-string $className
+     *
+     * @throws ORMException
+     */
+    protected function deleteEntitiesByClass(string $className): void
+    {
+        $manager = $this->getManager();
+        $entities = $manager->getRepository($className)
+            ->findAll();
+        if ([] === $entities) {
+            return;
+        }
+
+        foreach ($entities as $entity) {
+            $manager->remove($entity);
+        }
+        $manager->flush();
+    }
+
+    /**
      * Delete an entity from the database.
      *
      * @return null this function returns always null

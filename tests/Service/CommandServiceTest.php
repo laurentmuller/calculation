@@ -16,8 +16,10 @@ use App\Service\CommandService;
 use App\Tests\KernelServiceTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 #[CoversClass(CommandService::class)]
 class CommandServiceTest extends KernelServiceTestCase
@@ -27,8 +29,8 @@ class CommandServiceTest extends KernelServiceTestCase
      */
     public function testCount(): void
     {
-        $count = $this->getCommandService()->count();
-        self::assertGreaterThan(0, $count);
+        $actual = $this->getCommandService()->count();
+        self::assertGreaterThan(0, $actual);
     }
 
     /**
@@ -138,6 +140,9 @@ class CommandServiceTest extends KernelServiceTestCase
 
     private function getCommandService(): CommandService
     {
-        return $this->getService(CommandService::class);
+        $kernel = $this->getService(KernelInterface::class);
+        $cache = new ArrayAdapter();
+
+        return new CommandService($kernel, $cache);
     }
 }

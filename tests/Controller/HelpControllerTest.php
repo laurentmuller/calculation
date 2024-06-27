@@ -35,18 +35,18 @@ class HelpControllerTest extends AbstractControllerTestCase
 
     public static function getRoutes(): \Iterator
     {
-        yield ['/help', self::ROLE_USER];
-        yield ['/help', self::ROLE_ADMIN];
-        yield ['/help', self::ROLE_SUPER_ADMIN];
-        yield ['/help/pdf', self::ROLE_USER];
-        yield ['/help/pdf', self::ROLE_ADMIN];
-        yield ['/help/pdf', self::ROLE_SUPER_ADMIN];
-        yield ['/help/entity/product', self::ROLE_USER];
-        yield ['/help/entity/product', self::ROLE_ADMIN];
-        yield ['/help/entity/product', self::ROLE_SUPER_ADMIN];
-        yield ['/help/dialog/product.list.title', self::ROLE_USER];
-        yield ['/help/dialog/product.list.title', self::ROLE_ADMIN];
-        yield ['/help/dialog/product.list.title', self::ROLE_SUPER_ADMIN];
+        $routes = [
+            '/help',
+            '/help/dialogs',
+            '/help/dialog/index.title',
+            '/help/entities',
+            '/help/entity/category',
+            '/help/pdf',
+        ];
+
+        foreach ($routes as $route) {
+            yield [$route, self::ROLE_USER];
+        }
     }
 
     public function testDialogs(): void

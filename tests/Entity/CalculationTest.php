@@ -28,7 +28,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(CalculationGroup::class)]
 #[CoversClass(CalculationCategory::class)]
 #[CoversClass(CalculationItem::class)]
-class CalculationTest extends AbstractEntityValidatorTestCase
+class CalculationTest extends EntityValidatorTestCase
 {
     use IdTrait;
 

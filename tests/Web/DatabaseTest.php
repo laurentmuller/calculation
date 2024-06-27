@@ -72,10 +72,10 @@ class DatabaseTest extends KernelServiceTestCase
 
     public static function getUsers(): \Iterator
     {
-        yield [AbstractAuthenticateWebTestCase::ROLE_USER, RoleInterface::ROLE_USER];
-        yield [AbstractAuthenticateWebTestCase::ROLE_ADMIN, RoleInterface::ROLE_ADMIN];
-        yield [AbstractAuthenticateWebTestCase::ROLE_SUPER_ADMIN, RoleInterface::ROLE_SUPER_ADMIN];
-        yield [AbstractAuthenticateWebTestCase::ROLE_DISABLED, RoleInterface::ROLE_USER];
+        yield [AuthenticateWebTestCase::ROLE_USER, RoleInterface::ROLE_USER];
+        yield [AuthenticateWebTestCase::ROLE_ADMIN, RoleInterface::ROLE_ADMIN];
+        yield [AuthenticateWebTestCase::ROLE_SUPER_ADMIN, RoleInterface::ROLE_SUPER_ADMIN];
+        yield [AuthenticateWebTestCase::ROLE_DISABLED, RoleInterface::ROLE_USER];
     }
 
     /**

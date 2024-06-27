@@ -22,7 +22,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(AbstractController::class)]
 #[CoversClass(AbstractEntityController::class)]
 #[CoversClass(CalculationController::class)]
-class CalculationControllerTest extends AbstractControllerTestCase
+class CalculationControllerTest extends ControllerTestCase
 {
     use CalculationTrait;
     use ProductTrait;

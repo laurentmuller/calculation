@@ -35,7 +35,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  * @template TEntity of EntityInterface
  * @template TForm of \App\Form\AbstractEntityType<TEntity>
  */
-abstract class AbstractEntityTypeTestCase extends TypeTestCase
+abstract class EntityTypeTestCase extends TypeTestCase
 {
     /**
      * Test.

@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 #[CoversClass(AbstractController::class)]
 #[CoversClass(AbstractEntityController::class)]
 #[CoversClass(CategoryController::class)]
-class CategoryControllerTest extends AbstractControllerTestCase
+class CategoryControllerTest extends ControllerTestCase
 {
     use CategoryTrait;
 

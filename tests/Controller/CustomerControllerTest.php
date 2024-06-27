@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 #[CoversClass(AbstractController::class)]
 #[CoversClass(AbstractEntityController::class)]
 #[CoversClass(CustomerController::class)]
-class CustomerControllerTest extends AbstractControllerTestCase
+class CustomerControllerTest extends ControllerTestCase
 {
     private ?Customer $entity = null;
 

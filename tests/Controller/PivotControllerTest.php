@@ -19,7 +19,7 @@ use App\Tests\EntityTrait\ProductTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(PivotController::class)]
-class PivotControllerTest extends AbstractControllerTestCase
+class PivotControllerTest extends ControllerTestCase
 {
     use CalculationTrait;
     use ProductTrait;

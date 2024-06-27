@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(CspReportController::class)]
-class CspReportControllerTest extends AbstractControllerTestCase
+class CspReportControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

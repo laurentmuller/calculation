@@ -16,7 +16,7 @@ use App\Controller\UserParametersController;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(UserParametersController::class)]
-class UserParametersControllerTest extends AbstractControllerTestCase
+class UserParametersControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

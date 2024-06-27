@@ -17,12 +17,14 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(AkismetController::class)]
-class AkismetControllerTest extends AbstractControllerTestCase
+class AkismetControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Generator
     {
         $routes = [
+            'activity',
             'spam',
+            'usage',
             'verify',
         ];
         foreach ($routes as $route) {

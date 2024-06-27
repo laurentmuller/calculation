@@ -21,7 +21,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(Category::class)]
 #[CoversClass(AbstractCodeEntity::class)]
-class CategoryTest extends AbstractEntityValidatorTestCase
+class CategoryTest extends EntityValidatorTestCase
 {
     public function testClone(): void
     {

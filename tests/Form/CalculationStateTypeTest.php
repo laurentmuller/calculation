@@ -17,10 +17,10 @@ use App\Form\CalculationState\CalculationStateType;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
- * @extends AbstractEntityTypeTestCase<CalculationState, CalculationStateType>
+ * @extends EntityTypeTestCase<CalculationState, CalculationStateType>
  */
 #[CoversClass(CalculationStateType::class)]
-class CalculationStateTypeTest extends AbstractEntityTypeTestCase
+class CalculationStateTypeTest extends EntityTypeTestCase
 {
     protected function getData(): array
     {

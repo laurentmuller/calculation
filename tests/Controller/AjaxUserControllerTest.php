@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\AjaxUserController;
-use App\Tests\Web\AbstractAuthenticateWebTestCase;
+use App\Tests\Web\AuthenticateWebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[CoversClass(AjaxUserController::class)]
-class AjaxUserControllerTest extends AbstractAuthenticateWebTestCase
+class AjaxUserControllerTest extends AuthenticateWebTestCase
 {
     private ?TranslatorInterface $translator = null;
 

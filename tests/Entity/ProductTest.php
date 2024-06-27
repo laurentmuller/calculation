@@ -19,7 +19,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 #[CoversClass(Product::class)]
-class ProductTest extends AbstractEntityValidatorTestCase
+class ProductTest extends EntityValidatorTestCase
 {
     public static function getPrices(): \Generator
     {

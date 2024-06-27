@@ -18,7 +18,7 @@ use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(AjaxSearchController::class)]
-class AjaxSearchControllerTest extends AbstractControllerTestCase
+class AjaxSearchControllerTest extends ControllerTestCase
 {
     use ProductTrait;
 

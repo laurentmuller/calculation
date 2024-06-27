@@ -20,7 +20,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(ChartController::class)]
-class ChartControllerTest extends AbstractControllerTestCase
+class ChartControllerTest extends ControllerTestCase
 {
     use CalculationTrait;
     use GlobalMarginTrait;

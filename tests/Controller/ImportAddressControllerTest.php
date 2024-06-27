@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(ImportAddressController::class)]
-class ImportAddressControllerTest extends AbstractControllerTestCase
+class ImportAddressControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

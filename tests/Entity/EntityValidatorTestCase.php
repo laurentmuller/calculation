@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * Unit test for validate {@link EntityInterface} class.
  */
-abstract class AbstractEntityValidatorTestCase extends KernelServiceTestCase
+abstract class EntityValidatorTestCase extends KernelServiceTestCase
 {
     use DatabaseTrait;
 

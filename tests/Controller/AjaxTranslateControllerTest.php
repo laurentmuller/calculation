@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
 
 #[CoversClass(AjaxTranslateController::class)]
-class AjaxTranslateControllerTest extends AbstractControllerTestCase
+class AjaxTranslateControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

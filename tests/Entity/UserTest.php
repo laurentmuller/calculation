@@ -21,7 +21,7 @@ use Vich\UploaderBundle\Exception\MappingNotFoundException;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 #[CoversClass(User::class)]
-class UserTest extends AbstractEntityValidatorTestCase
+class UserTest extends EntityValidatorTestCase
 {
     public function testAddProperty(): void
     {

@@ -38,15 +38,16 @@ trait TaskItemTrait
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    protected function getTaskItem(Task $task, string $name = 'Test Task Item'): TaskItem
+    protected function getTaskItem(?Task $task = null, string $name = 'Test Task Item'): TaskItem
     {
         if ($this->taskItem instanceof TaskItem) {
             return $this->taskItem;
         }
 
+        $task ??= $this->getTask();
         $this->taskItem = new TaskItem();
-        $this->taskItem->setTask($task)
-            ->setName($name);
+        $this->taskItem->setName($name);
+        $task->addItem($this->taskItem);
 
         return $this->addEntity($this->taskItem);
     }

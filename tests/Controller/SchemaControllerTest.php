@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(SchemaController::class)]
 #[CoversClass(SchemaReport::class)]
-class SchemaControllerTest extends AbstractControllerTestCase
+class SchemaControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

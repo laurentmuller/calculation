@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 #[CoversClass(AbstractController::class)]
 #[CoversClass(AbstractEntityController::class)]
 #[CoversClass(TaskController::class)]
-class TaskControllerTest extends AbstractControllerTestCase
+class TaskControllerTest extends ControllerTestCase
 {
     use TaskItemTrait;
 
@@ -65,8 +65,7 @@ class TaskControllerTest extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        $task = $this->getTask();
-        $this->getTaskItem($task);
+        $this->getTaskItem();
     }
 
     /**

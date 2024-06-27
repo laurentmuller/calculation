@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(ThemeController::class)]
-class ThemeControllerTest extends AbstractControllerTestCase
+class ThemeControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Generator
     {

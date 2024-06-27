@@ -25,10 +25,10 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\PreloadedExtension;
 
 /**
- * @extends AbstractEntityTypeTestCase<Category, CategoryType>
+ * @extends EntityTypeTestCase<Category, CategoryType>
  */
 #[CoversClass(CategoryType::class)]
-class CategoryTypeTest extends AbstractEntityTypeTestCase
+class CategoryTypeTest extends EntityTypeTestCase
 {
     use IdTrait;
 

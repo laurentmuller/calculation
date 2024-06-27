@@ -21,7 +21,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(GeneratorController::class)]
-class GeneratorControllerTest extends AbstractControllerTestCase
+class GeneratorControllerTest extends ControllerTestCase
 {
     private static ?Category $category = null;
     private static ?Group $group = null;

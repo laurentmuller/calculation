@@ -16,7 +16,7 @@ use App\Service\CalculationUpdateService;
 use App\Tests\DatabaseTrait;
 use App\Tests\DateAssertTrait;
 use App\Tests\EntityTrait\CalculationTrait;
-use App\Tests\Web\AbstractAuthenticateWebTestCase;
+use App\Tests\Web\AuthenticateWebTestCase;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\Exception\ORMException;
@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 #[CoversClass(CalculationUpdateService::class)]
-class CalculationUpdateServiceTest extends AbstractAuthenticateWebTestCase
+class CalculationUpdateServiceTest extends AuthenticateWebTestCase
 {
     use CalculationTrait;
     use DatabaseTrait;

@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 #[CoversClass(AbstractController::class)]
 #[CoversClass(AbstractEntityController::class)]
 #[CoversClass(CalculationStateController::class)]
-class CalculationStateControllerTest extends AbstractControllerTestCase
+class CalculationStateControllerTest extends ControllerTestCase
 {
     use CalculationStateTrait;
 

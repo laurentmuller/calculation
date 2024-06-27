@@ -16,7 +16,7 @@ use App\Controller\CommentController;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(CommentController::class)]
-class CommentControllerTest extends AbstractControllerTestCase
+class CommentControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(AbstractController::class)]
 #[CoversClass(AjaxCalculationController::class)]
-class AjaxCalculationControllerTest extends AbstractControllerTestCase
+class AjaxCalculationControllerTest extends ControllerTestCase
 {
     use CalculationTrait;
 

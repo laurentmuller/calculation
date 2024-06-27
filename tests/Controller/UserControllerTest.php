@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 #[CoversClass(AbstractController::class)]
 #[CoversClass(AbstractEntityController::class)]
 #[CoversClass(UserController::class)]
-class UserControllerTest extends AbstractControllerTestCase
+class UserControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

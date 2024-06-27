@@ -27,7 +27,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 /**
  * Abstract class for authenticated user.
  */
-abstract class AbstractAuthenticateWebTestCase extends WebTestCase
+abstract class AuthenticateWebTestCase extends WebTestCase
 {
     use ContainerServiceTrait;
     use DatabaseTrait;

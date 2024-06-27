@@ -22,7 +22,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(Group::class)]
 #[CoversClass(AbstractCodeEntity::class)]
-class GroupTest extends AbstractEntityValidatorTestCase
+class GroupTest extends EntityValidatorTestCase
 {
     use IdTrait;
 

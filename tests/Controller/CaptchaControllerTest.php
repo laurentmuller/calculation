@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
 #[CoversClass(CaptchaController::class)]
-class CaptchaControllerTest extends AbstractControllerTestCase
+class CaptchaControllerTest extends ControllerTestCase
 {
     use TranslatorMockTrait;
 

@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(LogController::class)]
-class LogControllerTest extends AbstractControllerTestCase
+class LogControllerTest extends ControllerTestCase
 {
     use ContainerServiceTrait;
 

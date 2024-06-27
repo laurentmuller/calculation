@@ -41,7 +41,7 @@ use Symfony\Component\HttpFoundation\Response;
 #[CoversClass(SymfonyReport::class)]
 #[CoversClass(SymfonyDocument::class)]
 #[CoversClass(HtmlReport::class)]
-class AboutControllerTest extends AbstractControllerTestCase
+class AboutControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

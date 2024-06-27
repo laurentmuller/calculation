@@ -20,10 +20,10 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Form\PreloadedExtension;
 
 /**
- * @extends AbstractEntityTypeTestCase<Customer, CustomerType>
+ * @extends EntityTypeTestCase<Customer, CustomerType>
  */
 #[CoversClass(CustomerType::class)]
-class CustomerTypeTest extends AbstractEntityTypeTestCase
+class CustomerTypeTest extends EntityTypeTestCase
 {
     protected function getData(): array
     {

@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(TestController::class)]
 #[CoversClass(HtmlReport::class)]
-class TestControllerTest extends AbstractControllerTestCase
+class TestControllerTest extends ControllerTestCase
 {
     private const ROUTES = [
         'editor',

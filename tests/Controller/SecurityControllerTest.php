@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
 #[CoversClass(SecurityController::class)]
-class SecurityControllerTest extends AbstractControllerTestCase
+class SecurityControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

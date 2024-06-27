@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Unit test for users and routes.
  */
 #[\PHPUnit\Framework\Attributes\CoversNothing]
-class RoutesTest extends AbstractAuthenticateWebTestCase
+class RoutesTest extends AuthenticateWebTestCase
 {
     public static function getRoutes(): \Iterator
     {

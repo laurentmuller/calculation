@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(HelpController::class)]
 #[CoversClass(HelpReport::class)]
-class HelpControllerTest extends AbstractControllerTestCase
+class HelpControllerTest extends ControllerTestCase
 {
     private const IMAGES_PATH = 'public/help/images';
 

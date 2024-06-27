@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(ResetPasswordController::class)]
-class ResetPasswordControllerTest extends AbstractControllerTestCase
+class ResetPasswordControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

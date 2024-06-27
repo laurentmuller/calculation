@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  * Test class for user's roles.
  */
 #[\PHPUnit\Framework\Attributes\CoversNothing]
-class UsersTest extends AbstractAuthenticateWebTestCase
+class UsersTest extends AuthenticateWebTestCase
 {
     public static function getUserExist(): \Iterator
     {

@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(ExchangeRateController::class)]
-class ExchangeRateControllerTest extends AbstractControllerTestCase
+class ExchangeRateControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

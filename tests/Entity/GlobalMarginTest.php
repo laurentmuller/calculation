@@ -16,7 +16,7 @@ use App\Entity\GlobalMargin;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(GlobalMargin::class)]
-class GlobalMarginTest extends AbstractEntityValidatorTestCase
+class GlobalMarginTest extends EntityValidatorTestCase
 {
     public function testAllLessZero(): void
     {

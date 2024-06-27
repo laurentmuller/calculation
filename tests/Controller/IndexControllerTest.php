@@ -16,7 +16,7 @@ use App\Controller\IndexController;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(IndexController::class)]
-class IndexControllerTest extends AbstractControllerTestCase
+class IndexControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

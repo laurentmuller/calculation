@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 #[CoversClass(AbstractController::class)]
 #[CoversClass(AbstractEntityController::class)]
 #[CoversClass(GroupController::class)]
-class GroupControllerTest extends AbstractControllerTestCase
+class GroupControllerTest extends ControllerTestCase
 {
     use GroupTrait;
 

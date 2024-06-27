@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(CommandController::class)]
-class CommandControllerTest extends AbstractControllerTestCase
+class CommandControllerTest extends ControllerTestCase
 {
     private const ROUTES = [
         '/command',

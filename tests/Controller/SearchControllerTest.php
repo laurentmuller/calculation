@@ -16,7 +16,7 @@ use App\Controller\SearchController;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(SearchController::class)]
-class SearchControllerTest extends AbstractControllerTestCase
+class SearchControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

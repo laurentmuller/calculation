@@ -16,7 +16,7 @@ use App\Entity\CalculationState;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(CalculationState::class)]
-class CalculationStateTest extends AbstractEntityValidatorTestCase
+class CalculationStateTest extends EntityValidatorTestCase
 {
     public function testCalculations(): void
     {

@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(IpStackController::class)]
-class IpStackControllerTest extends AbstractControllerTestCase
+class IpStackControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

@@ -16,7 +16,7 @@ use App\Controller\SiteMapController;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(SiteMapController::class)]
-class SiteMapControllerTest extends AbstractControllerTestCase
+class SiteMapControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

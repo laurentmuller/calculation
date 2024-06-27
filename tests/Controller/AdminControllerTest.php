@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(AdminController::class)]
-class AdminControllerTest extends AbstractControllerTestCase
+class AdminControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

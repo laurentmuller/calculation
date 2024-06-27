@@ -16,7 +16,7 @@ use App\Controller\ProfileController;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ProfileController::class)]
-class ProfileControllerTest extends AbstractControllerTestCase
+class ProfileControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

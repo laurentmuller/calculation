@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 #[CoversClass(AbstractController::class)]
 #[CoversClass(AbstractEntityController::class)]
 #[CoversClass(ProductController::class)]
-class ProductControllerTest extends AbstractControllerTestCase
+class ProductControllerTest extends ControllerTestCase
 {
     use ProductTrait;
 

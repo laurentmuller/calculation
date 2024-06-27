@@ -18,10 +18,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
- * @extends AbstractEntityTypeTestCase<Group, GroupType>
+ * @extends EntityTypeTestCase<Group, GroupType>
  */
 #[CoversClass(GroupType::class)]
-class GroupTypeTest extends AbstractEntityTypeTestCase
+class GroupTypeTest extends EntityTypeTestCase
 {
     protected function getData(): array
     {

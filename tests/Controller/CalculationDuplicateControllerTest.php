@@ -20,7 +20,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(CalculationDuplicateController::class)]
-class CalculationDuplicateControllerTest extends AbstractControllerTestCase
+class CalculationDuplicateControllerTest extends ControllerTestCase
 {
     use CalculationTrait;
     use ProductTrait;

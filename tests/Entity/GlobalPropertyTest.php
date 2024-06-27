@@ -16,7 +16,7 @@ use App\Entity\GlobalProperty;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(GlobalProperty::class)]
-class GlobalPropertyTest extends AbstractEntityValidatorTestCase
+class GlobalPropertyTest extends EntityValidatorTestCase
 {
     /**
      * @throws \Doctrine\ORM\Exception\ORMException

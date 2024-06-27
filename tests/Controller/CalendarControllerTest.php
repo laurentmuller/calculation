@@ -16,7 +16,7 @@ use App\Controller\CalendarController;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(CalendarController::class)]
-class CalendarControllerTest extends AbstractControllerTestCase
+class CalendarControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

@@ -19,7 +19,7 @@ use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(UserProperty::class)]
-class UserPropertyTest extends AbstractEntityValidatorTestCase
+class UserPropertyTest extends EntityValidatorTestCase
 {
     /**
      * @throws ORMException

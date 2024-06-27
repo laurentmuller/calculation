@@ -19,7 +19,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(TimelineController::class)]
-class TimelineControllerTest extends AbstractControllerTestCase
+class TimelineControllerTest extends ControllerTestCase
 {
     use CalculationTrait;
     use ProductTrait;

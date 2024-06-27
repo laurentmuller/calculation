@@ -20,7 +20,7 @@ use App\Entity\TaskItemMargin;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(TaskItem::class)]
-class TaskItemTest extends AbstractEntityValidatorTestCase
+class TaskItemTest extends EntityValidatorTestCase
 {
     use IdTrait;
 

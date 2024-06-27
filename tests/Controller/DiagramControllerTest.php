@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(DiagramController::class)]
-class DiagramControllerTest extends AbstractControllerTestCase
+class DiagramControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {

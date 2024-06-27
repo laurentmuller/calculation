@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\AbstractController;
-use App\Tests\Web\AbstractAuthenticateWebTestCase;
+use App\Tests\Web\AuthenticateWebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Abstract unit test for controllers.
  */
 #[CoversClass(AbstractController::class)]
-abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCase
+abstract class ControllerTestCase extends AuthenticateWebTestCase
 {
     /**
      * Gets the routes to test.
@@ -48,10 +48,13 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
         string $method = Request::METHOD_GET,
         bool $xmlHttpRequest = false
     ): void {
-        $this->addEntities();
-        $this->checkRoute($url, $username, $expected, $method, $xmlHttpRequest);
-        if ($this->mustDeleteEntities()) {
-            $this->deleteEntities();
+        try {
+            $this->addEntities();
+            $this->checkRoute($url, $username, $expected, $method, $xmlHttpRequest);
+        } finally {
+            if ($this->mustDeleteEntities()) {
+                $this->deleteEntities();
+            }
         }
     }
 
@@ -77,7 +80,8 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
         int $expected = Response::HTTP_OK,
         string $method = Request::METHOD_GET,
         bool $xmlHttpRequest = false,
-        array $parameters = []
+        array $parameters = [],
+        ?string $content = null
     ): void {
         if ($this->mustLogin($username)) {
             $this->loginUsername($username);
@@ -92,7 +96,8 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
             method: $method,
             uri: $url,
             parameters: $parameters,
-            server: $server
+            server: $server,
+            content: $content
         );
         if ($outputBuffer) {
             \ob_get_clean();

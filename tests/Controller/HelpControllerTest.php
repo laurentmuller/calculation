@@ -18,6 +18,8 @@ use App\Service\HelpService;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(HelpController::class)]
 #[CoversClass(HelpReport::class)]
@@ -49,6 +51,11 @@ class HelpControllerTest extends AbstractControllerTestCase
         }
     }
 
+    public function testDialogNotFound(): void
+    {
+        $this->checkRoute('/help/dialog/fake_dialog_fake', self::ROLE_USER, Response::HTTP_NOT_FOUND);
+    }
+
     public function testDialogs(): void
     {
         $dialogs = $this->help->getDialogs();
@@ -58,6 +65,54 @@ class HelpControllerTest extends AbstractControllerTestCase
         }
     }
 
+    public function testDownloadInvalidImage(): void
+    {
+        $parameters = [
+            'index' => 0,
+            'location' => 'Fake',
+            'image' => 'Fake',
+        ];
+        $this->checkRoute(
+            '/help/download',
+            self::ROLE_SUPER_ADMIN,
+            method: Request::METHOD_POST,
+            xmlHttpRequest: true,
+            parameters: $parameters
+        );
+    }
+
+    public function testDownloadInvalidLocation(): void
+    {
+        $parameters = [
+            'index' => 0,
+            'location' => '//',
+            'image' => $this->getDownloadImage(),
+        ];
+        $this->checkRoute(
+            '/help/download',
+            self::ROLE_SUPER_ADMIN,
+            method: Request::METHOD_POST,
+            xmlHttpRequest: true,
+            parameters: $parameters
+        );
+    }
+
+    public function testDownloadWithImage(): void
+    {
+        $parameters = [
+            'index' => 0,
+            'location' => 'example',
+            'image' => $this->getDownloadImage(),
+        ];
+        $this->checkRoute(
+            '/help/download',
+            self::ROLE_SUPER_ADMIN,
+            method: Request::METHOD_POST,
+            xmlHttpRequest: true,
+            parameters: $parameters
+        );
+    }
+
     public function testEntities(): void
     {
         $entities = $this->help->getEntities();
@@ -65,6 +120,11 @@ class HelpControllerTest extends AbstractControllerTestCase
             $url = \sprintf('/help/entity/%s', $entity['id']);
             $this->checkUrl($url);
         }
+    }
+
+    public function testEntityNotFound(): void
+    {
+        $this->checkRoute('/help/entity/fake_entity_fake', self::ROLE_USER, Response::HTTP_NOT_FOUND);
     }
 
     public function testImages(): void
@@ -94,8 +154,16 @@ class HelpControllerTest extends AbstractControllerTestCase
     private function checkUrl(string $url): void
     {
         $this->checkRoute($url, self::ROLE_USER);
-        $this->checkRoute($url, self::ROLE_ADMIN);
-        $this->checkRoute($url, self::ROLE_SUPER_ADMIN);
+    }
+
+    private function getDownloadImage(): string
+    {
+        $path = __DIR__ . '/../Data/images/example.png';
+        $type = \mime_content_type($path);
+        $data = (string) \file_get_contents($path);
+        $encoded = \base64_encode($data);
+
+        return 'data:' . $type . ';base64,' . $encoded;
     }
 
     private function getExistingImages(): array

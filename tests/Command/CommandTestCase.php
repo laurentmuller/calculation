@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
+use App\Utils\StringUtils;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
@@ -20,6 +21,11 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 abstract class CommandTestCase extends KernelTestCase
 {
+    private const OUTPUT_REPLACE = [
+        '/\r|\n/' => '',
+        '/\s+/' => ' ',
+    ];
+
     protected function execute(
         string $name,
         array $input = [],
@@ -49,8 +55,7 @@ abstract class CommandTestCase extends KernelTestCase
     protected function validate(string $output, string|array $expected): void
     {
         $expected = (array) $expected;
-        $output = (string) \preg_replace('/\r|\n/', '', $output);
-        $output = (string) \preg_replace('/\s+/', ' ', $output);
+        $output = StringUtils::pregReplace(self::OUTPUT_REPLACE, $output);
         foreach ($expected as $value) {
             self::assertStringContainsString($value, $output);
         }

@@ -68,9 +68,7 @@ class AnonymousCommandTest extends CommandTestCase
             'Simulate updated',
             'Duration',
         ];
-        $input = [
-            '--dry-run' => true,
-        ];
+        $input = ['--dry-run' => true];
         $output = $this->execute(self::COMMAND_NAME, $input);
         $this->validate($output, $expected);
     }
@@ -78,9 +76,7 @@ class AnonymousCommandTest extends CommandTestCase
     public function testExecuteDryRunEmpty(): void
     {
         $expected = 'No calculation to update.';
-        $input = [
-            '--dry-run' => true,
-        ];
+        $input = ['--dry-run' => true];
         $output = $this->execute(self::COMMAND_NAME, $input);
         $this->validate($output, $expected);
     }

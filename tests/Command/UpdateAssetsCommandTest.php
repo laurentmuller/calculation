@@ -22,7 +22,6 @@ class UpdateAssetsCommandTest extends CommandTestCase
 
     public function testExecuteDryRun(): void
     {
-        $output = $this->execute(self::COMMAND_NAME, ['--dry-run' => true]);
         $expected = [
             'Check versions:',
             'jquery',
@@ -41,12 +40,13 @@ class UpdateAssetsCommandTest extends CommandTestCase
             'currency-flags',
             'font-mfizz',
         ];
+        $input = ['--dry-run' => true];
+        $output = $this->execute(self::COMMAND_NAME, $input);
         $this->validate($output, $expected);
     }
 
     public function testExecuteUpdate(): void
     {
-        $output = $this->execute(self::COMMAND_NAME);
         $expected = [
             '[OK]',
             'Installed',
@@ -55,6 +55,7 @@ class UpdateAssetsCommandTest extends CommandTestCase
             'directory',
             '/public/vendor',
         ];
+        $output = $this->execute(self::COMMAND_NAME);
         $this->validate($output, $expected);
     }
 }

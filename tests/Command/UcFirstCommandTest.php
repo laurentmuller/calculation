@@ -97,9 +97,7 @@ class UcFirstCommandTest extends CommandTestCase
 
     public function testExecuteMissingClass(): void
     {
-        $input = [
-            '--field' => 'customer',
-        ];
+        $input = ['--field' => 'customer'];
         $this->executeMissingInput(self::COMMAND_NAME, $input);
     }
 }

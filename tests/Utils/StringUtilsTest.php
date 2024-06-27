@@ -147,7 +147,6 @@ class StringUtilsTest extends TestCase
     {
         self::expectException(\InvalidArgumentException::class);
         StringUtils::decodeJson('{"key":}');
-        self::fail("An \InvalidArgumentException must be throw.");
     }
 
     public function testEncodeJson(): void
@@ -164,7 +163,6 @@ class StringUtilsTest extends TestCase
         self::expectException(\InvalidArgumentException::class);
         $input = \mb_convert_encoding('ø, æ, å', 'ISO-8859-1');
         StringUtils::encodeJson($input);
-        self::fail("An \InvalidArgumentException must be throw.");
     }
 
     #[DataProvider('getEndWith')]

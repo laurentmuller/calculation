@@ -104,7 +104,7 @@ final class StringUtils
             /** @psalm-var array|\stdClass */
             return \json_decode(json: $value, associative: $assoc, flags: $flags | \JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
-            throw new \InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
+            throw new \InvalidArgumentException('Unable to decode value.', $e->getCode(), $e);
         }
     }
 
@@ -125,7 +125,8 @@ final class StringUtils
         try {
             return \json_encode($value, $flags | \JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
-            throw new \InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
+            $message = \sprintf("Unable to encode value '%s'.", \get_debug_type($value));
+            throw new \InvalidArgumentException($message, $e->getCode(), $e);
         }
     }
 
@@ -224,7 +225,7 @@ final class StringUtils
      */
     public static function pregReplace(array $values, string|array $subject): string|array
     {
-        // @phpstan-ignore return.type
+        /** @psalm-var string|string[] */
         return \preg_replace(\array_keys($values), \array_values($values), $subject);
     }
 

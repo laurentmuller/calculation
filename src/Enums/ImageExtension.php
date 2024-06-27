@@ -164,6 +164,8 @@ enum ImageExtension: string implements EnumDefaultInterface
      *
      * @return bool true on success or false on failure
      *
+     * @throw \InvalidArgumentException if one of the given options is invalid
+     *
      * @psalm-param SaveOptionsType $options
      */
     public function saveImage(\GdImage|ImageService $image, mixed $file = null, array $options = []): bool
@@ -176,7 +178,7 @@ enum ImageExtension: string implements EnumDefaultInterface
         $keys = \array_keys($allowed);
         $diff = \array_diff(\array_keys($options), $keys);
         if ([] !== $diff) {
-            throw new \RuntimeException(\sprintf('Invalid options: %s, allowed options: %s.', \implode(', ', $diff), \implode(', ', $keys)));
+            throw new \InvalidArgumentException(\sprintf('Invalid options: %s, allowed options: %s.', \implode(', ', $diff), \implode(', ', $keys)));
         }
 
         /** @psalm-var array{compressed: bool, quality: int, filters: int, foreground_color: int|null} $options */

@@ -41,16 +41,18 @@ class CspReportController extends AbstractController
     public function invoke(LoggerInterface $logger, MailerInterface $mailer): Response
     {
         $context = $this->getContext();
-        if (false !== $context) {
-            try {
-                $message = $this->trans('notification.csp_title');
-                $logger->error($message, $context);
-                $this->sendNotification($message, $context, $mailer);
-            } catch (TransportExceptionInterface $e) {
-                $message = $this->trans('notification.csp_error');
-                $context = $this->getExceptionContext($e);
-                $logger->error($message, $context);
-            }
+        if (false === $context) {
+            return new Response('', Response::HTTP_NO_CONTENT);
+        }
+
+        try {
+            $message = $this->trans('notification.csp_title');
+            $logger->error($message, $context);
+            $this->sendNotification($message, $context, $mailer);
+        } catch (TransportExceptionInterface $e) {
+            $message = $this->trans('notification.csp_error');
+            $context = $this->getExceptionContext($e);
+            $logger->error($message, $context);
         }
 
         return new Response('', Response::HTTP_NO_CONTENT);
@@ -84,7 +86,11 @@ class CspReportController extends AbstractController
     private function getContext(): array|false
     {
         try {
-            $content = (string) \file_get_contents('php://input');
+            $content = \file_get_contents('php://input');
+            if (false === $content || '' === $content) {
+                return false;
+            }
+
             /** @psalm-var array{csp-report: string[]} $data */
             $data = StringUtils::decodeJson($content);
             $context = \array_filter($data['csp-report']);

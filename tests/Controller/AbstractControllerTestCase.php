@@ -76,18 +76,24 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
         string $username = '',
         int $expected = Response::HTTP_OK,
         string $method = Request::METHOD_GET,
-        bool $xmlHttpRequest = false
+        bool $xmlHttpRequest = false,
+        array $parameters = []
     ): void {
-        $outputBuffer = $this->isOutputBuffer($url);
         if ($this->mustLogin($username)) {
             $this->loginUsername($username);
         }
+        $outputBuffer = $this->isOutputBuffer($url);
         if ($outputBuffer) {
             \ob_start();
         }
 
         $server = $xmlHttpRequest ? ['HTTP_X-Requested-With' => 'XMLHttpRequest'] : [];
-        $this->client->request(method: $method, uri: $url, server: $server);
+        $this->client->request(
+            method: $method,
+            uri: $url,
+            parameters: $parameters,
+            server: $server
+        );
         if ($outputBuffer) {
             \ob_get_clean();
         }

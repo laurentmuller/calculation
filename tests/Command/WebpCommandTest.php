@@ -63,9 +63,7 @@ class WebpCommandTest extends CommandTestCase
             'Error: 0',
             'Skip: 0',
         ];
-        $input = [
-            'source' => $source,
-        ];
+        $input = ['source' => $source];
         $output = $this->execute(self::COMMAND_NAME, $input);
         $this->validate($output, $expected);
     }
@@ -85,9 +83,7 @@ class WebpCommandTest extends CommandTestCase
     public function testExecuteInvalidPath(): void
     {
         $expected = 'Unable to find the source directory';
-        $input = [
-            'source' => '/fake/fake/fake',
-        ];
+        $input = ['source' => '/fake/fake/fake'];
         $output = $this->execute(self::COMMAND_NAME, $input, statusCode: Command::INVALID);
         $this->validate($output, $expected);
     }
@@ -98,10 +94,7 @@ class WebpCommandTest extends CommandTestCase
             'The source',
             'is not a directory',
         ];
-
-        $input = [
-            'source' => '/tests/bootstrap.php',
-        ];
+        $input = ['source' => '/tests/bootstrap.php'];
         $output = $this->execute(self::COMMAND_NAME, $input, statusCode: Command::INVALID);
         $this->validate($output, $expected);
     }
@@ -140,9 +133,7 @@ class WebpCommandTest extends CommandTestCase
             'Error: 0',
             'Skip: 0',
         ];
-        $input = [
-            'source' => $source,
-        ];
+        $input = ['source' => $source];
         $output = $this->execute(self::COMMAND_NAME, $input);
         $this->validate($output, $expected);
     }

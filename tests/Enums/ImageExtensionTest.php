@@ -177,7 +177,7 @@ class ImageExtensionTest extends TestCase
     #[DataProvider('getInvalidOptions')]
     public function testInvalidOptions(ImageExtension $extension, array $options): void
     {
-        self::expectException(\RuntimeException::class);
+        self::expectException(\InvalidArgumentException::class);
         $image = \imagecreatetruecolor(100, 100);
         self::assertInstanceOf(\GdImage::class, $image);
 

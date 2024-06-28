@@ -132,7 +132,13 @@ class TestController extends AbstractController
         $form = $helper->createForm();
 
         if ($this->handleRequestForm($request, $form)) {
-            /** @psalm-var array{email: string, message: string, importance: Importance, attachments: UploadedFile[]}  $data */
+            /**
+             * @psalm-var array{
+             *     email: string,
+             *     message: string,
+             *     importance: Importance,
+             *     attachments: UploadedFile[]}  $data
+             */
             $data = $form->getData();
             $email = $data['email'];
             $message = $data['message'];
@@ -300,11 +306,16 @@ class TestController extends AbstractController
         $helper->field('input')
             ->widgetClass('password-strength')
             ->updateAttribute('data-strength', StrengthLevel::MEDIUM->value)
-            ->updateAttribute('data-url', $this->generateUrl(route: 'ajax_password', referenceType: UrlGeneratorInterface::ABSOLUTE_URL))
-            ->minLength(UserInterface::MIN_PASSWORD_LENGTH)
+            ->updateAttribute(
+                'data-url',
+                $this->generateUrl(route: 'ajax_password', referenceType: UrlGeneratorInterface::ABSOLUTE_URL)
+            )->minLength(UserInterface::MIN_PASSWORD_LENGTH)
             ->maxLength(UserInterface::MAX_USERNAME_LENGTH)
-            ->constraints(new Length(min: UserInterface::MIN_PASSWORD_LENGTH, max: UserInterface::MAX_USERNAME_LENGTH), $passwordConstraint, $strengthConstraint)
-            ->addTextType();
+            ->constraints(
+                new Length(min: UserInterface::MIN_PASSWORD_LENGTH, max: UserInterface::MAX_USERNAME_LENGTH),
+                $passwordConstraint,
+                $strengthConstraint
+            )->addTextType();
         foreach ($options as $option) {
             $helper->field($option)
                 ->addCheckboxType();
@@ -564,7 +575,10 @@ class TestController extends AbstractController
                 'name' => "$name - $symbol",
             ];
         }, Currencies::getCurrencyCodes());
-        $currencies = \array_filter($currencies, static fn (array $currency): bool => 0 === \preg_match('/\d|\(/', $currency['name']));
+        $currencies = \array_filter(
+            $currencies,
+            static fn (array $currency): bool => 0 === \preg_match('/\d|\(/', $currency['name'])
+        );
         \usort(
             $currencies,
             /**
@@ -597,7 +611,9 @@ class TestController extends AbstractController
             ->getQueryBuilderByEditable()
             ->getQuery()
             ->getResult();
-        $fn = static fn (CalculationState $state): string => $state->isEditable() ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable';
+        $fn = static fn (CalculationState $state): string => $state->isEditable()
+            ? 'calculationstate.list.editable'
+            : 'calculationstate.list.not_editable';
 
         return $this->groupBy($states, $fn);
     }

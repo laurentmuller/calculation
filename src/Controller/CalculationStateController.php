@@ -80,8 +80,12 @@ class CalculationStateController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[GetDelete(path: '/delete/{id}', name: 'delete', requirements: self::ID_REQUIREMENT)]
-    public function delete(Request $request, CalculationState $item, CalculationRepository $repository, LoggerInterface $logger): Response
-    {
+    public function delete(
+        Request $request,
+        CalculationState $item,
+        CalculationRepository $repository,
+        LoggerInterface $logger
+    ): Response {
         $count = $repository->countStateReferences($item);
         if (0 !== $count) {
             $display = $item->getDisplay();
@@ -125,8 +129,7 @@ class CalculationStateController extends AbstractEntityController
     {
         $entities = $this->getEntities('code');
         if ([] === $entities) {
-            $message = $this->trans('calculationstate.list.empty');
-            throw $this->createNotFoundException($message);
+            throw $this->createNotFoundException($this->trans('calculationstate.list.empty'));
         }
         $doc = new CalculationStatesDocument($this, $entities);
 
@@ -157,8 +160,7 @@ class CalculationStateController extends AbstractEntityController
     {
         $entities = $this->getEntities('code');
         if ([] === $entities) {
-            $message = $this->trans('calculationstate.list.empty');
-            throw $this->createNotFoundException($message);
+            throw $this->createNotFoundException($this->trans('calculationstate.list.empty'));
         }
         $doc = new CalculationStatesReport($this, $entities);
 

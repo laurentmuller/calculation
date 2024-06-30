@@ -25,7 +25,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
 /**
- * Abstract class for authenticated user.
+ * Abstract web test case for authenticated user.
  */
 abstract class AuthenticateWebTestCase extends WebTestCase
 {
@@ -60,7 +60,6 @@ abstract class AuthenticateWebTestCase extends WebTestCase
             PropertyServiceInterface::P_USER_RIGHTS => $userRight,
             PropertyServiceInterface::P_ADMIN_RIGHTS => $adminRight,
             PropertyServiceInterface::P_DISPLAY_CAPTCHA => false,
-            PropertyServiceInterface::P_QR_CODE => true,
         ]);
     }
 
@@ -78,12 +77,6 @@ abstract class AuthenticateWebTestCase extends WebTestCase
         $response = $this->client->getResponse();
         $statusCode = $response->getStatusCode();
         self::assertSame($expected, $statusCode, "Invalid status code for '$url' and '$username'.");
-    }
-
-    protected function doEcho(string $name, mixed $value, bool $newLine = false): void
-    {
-        $format = "\n%-15s: %s" . ($newLine ? "\n" : '');
-        \printf($format, \htmlspecialchars($name), (string) $value);
     }
 
     /**

@@ -34,8 +34,9 @@ trait CategoryTrait
         }
 
         $this->category = new Category();
-        $this->category->setGroup($group ?? $this->getGroup())
-            ->setCode($code);
+        $this->category->setCode($code);
+        $group ??= $this->getGroup();
+        $group->addCategory($this->category);
 
         return $this->addEntity($this->category);
     }

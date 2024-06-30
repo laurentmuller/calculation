@@ -45,8 +45,10 @@ trait TaskTrait
         }
 
         $this->task = new Task();
-        $this->task->setCategory($category ?? $this->getCategory())
-            ->setName($name);
+        $this->task->setName($name);
+
+        $category ??= $this->getCategory();
+        $category->addTask($this->task);
 
         return $this->addEntity($this->task);
     }

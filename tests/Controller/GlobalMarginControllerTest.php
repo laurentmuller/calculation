@@ -15,14 +15,16 @@ namespace App\Tests\Controller;
 use App\Controller\AbstractController;
 use App\Controller\AbstractEntityController;
 use App\Controller\GlobalMarginController;
+use App\Entity\GlobalMargin;
 use App\Tests\EntityTrait\GlobalMarginTrait;
+use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(AbstractController::class)]
 #[CoversClass(AbstractEntityController::class)]
 #[CoversClass(GlobalMarginController::class)]
-class GlobalMarginControllerTest extends ControllerTestCase
+class GlobalMarginControllerTest extends EntityControllerTestCase
 {
     use GlobalMarginTrait;
 
@@ -31,22 +33,53 @@ class GlobalMarginControllerTest extends ControllerTestCase
         yield ['/globalmargin', self::ROLE_USER];
         yield ['/globalmargin', self::ROLE_ADMIN];
         yield ['/globalmargin', self::ROLE_SUPER_ADMIN];
+
         yield ['/globalmargin/edit', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/globalmargin/edit', self::ROLE_ADMIN];
         yield ['/globalmargin/edit', self::ROLE_SUPER_ADMIN];
+
         yield ['/globalmargin/show/1', self::ROLE_USER];
         yield ['/globalmargin/show/1', self::ROLE_ADMIN];
         yield ['/globalmargin/show/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/globalmargin/pdf', self::ROLE_USER];
         yield ['/globalmargin/pdf', self::ROLE_ADMIN];
         yield ['/globalmargin/pdf', self::ROLE_SUPER_ADMIN];
+
         yield ['/globalmargin/excel', self::ROLE_USER];
         yield ['/globalmargin/excel', self::ROLE_ADMIN];
         yield ['/globalmargin/excel', self::ROLE_SUPER_ADMIN];
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
+     */
+    public function testEdit(): void
+    {
+        $this->deleteEntitiesByClass(GlobalMargin::class);
+        $this->addEntities();
+        $uri = '/globalmargin/edit';
+        $this->checkEditEntity($uri, id: 'common.button_ok');
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testExcelEmpty(): void
+    {
+        $this->checkUriWithEmptyEntity('/globalmargin/excel', GlobalMargin::class);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testPdfEmpty(): void
+    {
+        $this->checkUriWithEmptyEntity('/globalmargin/pdf', GlobalMargin::class);
+    }
+
+    /**
+     * @throws ORMException
      */
     protected function addEntities(): void
     {
@@ -54,7 +87,7 @@ class GlobalMarginControllerTest extends ControllerTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     protected function deleteEntities(): void
     {

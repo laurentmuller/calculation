@@ -84,8 +84,14 @@ class CategoryController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[GetDelete(path: '/delete/{id}', name: 'delete', requirements: self::ID_REQUIREMENT)]
-    public function delete(Request $request, Category $item, TaskRepository $taskRepository, ProductRepository $productRepository, CalculationCategoryRepository $categoryRepository, LoggerInterface $logger): Response
-    {
+    public function delete(
+        Request $request,
+        Category $item,
+        TaskRepository $taskRepository,
+        ProductRepository $productRepository,
+        CalculationCategoryRepository $categoryRepository,
+        LoggerInterface $logger
+    ): Response {
         $tasks = $taskRepository->countCategoryReferences($item);
         $products = $productRepository->countCategoryReferences($item);
         $calculations = $categoryRepository->countCategoryReferences($item);

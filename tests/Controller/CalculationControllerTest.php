@@ -15,14 +15,18 @@ namespace App\Tests\Controller;
 use App\Controller\AbstractController;
 use App\Controller\AbstractEntityController;
 use App\Controller\CalculationController;
+use App\Entity\Calculation;
+use App\Interfaces\PropertyServiceInterface;
+use App\Service\ApplicationService;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
+use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(AbstractController::class)]
 #[CoversClass(AbstractEntityController::class)]
 #[CoversClass(CalculationController::class)]
-class CalculationControllerTest extends ControllerTestCase
+class CalculationControllerTest extends EntityControllerTestCase
 {
     use CalculationTrait;
     use ProductTrait;
@@ -32,43 +36,125 @@ class CalculationControllerTest extends ControllerTestCase
         yield ['/calculation', self::ROLE_USER];
         yield ['/calculation', self::ROLE_ADMIN];
         yield ['/calculation', self::ROLE_SUPER_ADMIN];
+
         yield ['/calculation/add', self::ROLE_USER];
         yield ['/calculation/add', self::ROLE_ADMIN];
         yield ['/calculation/add', self::ROLE_SUPER_ADMIN];
+
         yield ['/calculation/edit/1', self::ROLE_USER];
         yield ['/calculation/edit/1', self::ROLE_ADMIN];
         yield ['/calculation/edit/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/calculation/state/1', self::ROLE_USER];
         yield ['/calculation/state/1', self::ROLE_ADMIN];
         yield ['/calculation/state/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/calculation/delete/1', self::ROLE_USER];
         yield ['/calculation/delete/1', self::ROLE_ADMIN];
         yield ['/calculation/delete/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/calculation/clone/1', self::ROLE_USER];
         yield ['/calculation/clone/1', self::ROLE_ADMIN];
         yield ['/calculation/clone/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/calculation/show/1', self::ROLE_USER];
         yield ['/calculation/show/1', self::ROLE_ADMIN];
         yield ['/calculation/show/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/calculation/pdf/1', self::ROLE_USER];
         yield ['/calculation/pdf/1', self::ROLE_ADMIN];
         yield ['/calculation/pdf/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/calculation/pdf', self::ROLE_USER];
         yield ['/calculation/pdf', self::ROLE_ADMIN];
         yield ['/calculation/pdf', self::ROLE_SUPER_ADMIN];
+
         yield ['/calculation/excel', self::ROLE_USER];
         yield ['/calculation/excel', self::ROLE_ADMIN];
         yield ['/calculation/excel', self::ROLE_SUPER_ADMIN];
+
         yield ['/calculation/excel/1', self::ROLE_USER];
         yield ['/calculation/excel/1', self::ROLE_ADMIN];
         yield ['/calculation/excel/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/calculation?search=22', self::ROLE_USER];
         yield ['/calculation?search=22', self::ROLE_ADMIN];
         yield ['/calculation?search=22', self::ROLE_SUPER_ADMIN];
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
+     */
+    public function testAdd(): void
+    {
+        $state = $this->getCalculationState();
+        $service = $this->getService(ApplicationService::class);
+        $service->setProperties([
+            PropertyServiceInterface::P_DEFAULT_STATE => $state,
+            PropertyServiceInterface::P_PRODUCT_DEFAULT => $this->getProduct(),
+        ]);
+
+        $data = [
+            'calculation[customer]' => 'Customer',
+            'calculation[description]' => 'Description',
+        ];
+        $this->checkAddEntity('/calculation/add', $data);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testEditState(): void
+    {
+        $this->addEntities();
+        $uri = \sprintf('/calculation/state/%d', (int) $this->getCalculation()->getId());
+        $data = [
+            'calculation_edit_state[state]' => $this->getCalculationState()->getId(),
+        ];
+        $this->checkEditEntity($uri, $data);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testExcelEmpty(): void
+    {
+        $this->checkUriWithEmptyEntity('/calculation/excel', Calculation::class);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testPdfEmpty(): void
+    {
+        $this->checkUriWithEmptyEntity('/calculation/pdf', Calculation::class);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testWithQrCode(): void
+    {
+        $service = $this->getService(ApplicationService::class);
+        $service->setProperties([
+            PropertyServiceInterface::P_QR_CODE => true,
+        ]);
+
+        $this->addEntities();
+
+        try {
+            $calculation = $this->getCalculation();
+            $uri = \sprintf('/calculation/pdf/%d', (int) $calculation->getId());
+            $this->checkRoute($uri, self::ROLE_USER);
+        } finally {
+            $service->setProperties([
+                PropertyServiceInterface::P_QR_CODE => false,
+            ]);
+        }
+    }
+
+    /**
+     * @throws ORMException
      */
     protected function addEntities(): void
     {
@@ -79,10 +165,11 @@ class CalculationControllerTest extends ControllerTestCase
             ->setGlobalMargin(1.1)
             ->setUserMargin(0.1)
             ->addProduct($product);
+        $this->addEntity($this->getCalculation());
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     protected function deleteEntities(): void
     {

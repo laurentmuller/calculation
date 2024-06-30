@@ -15,47 +15,144 @@ namespace App\Tests\Controller;
 use App\Controller\AbstractController;
 use App\Controller\AbstractEntityController;
 use App\Controller\CategoryController;
+use App\Entity\Category;
+use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\CategoryTrait;
+use App\Tests\EntityTrait\ProductTrait;
+use App\Tests\EntityTrait\TaskTrait;
+use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[CoversClass(AbstractController::class)]
 #[CoversClass(AbstractEntityController::class)]
 #[CoversClass(CategoryController::class)]
-class CategoryControllerTest extends ControllerTestCase
+class CategoryControllerTest extends EntityControllerTestCase
 {
+    use CalculationTrait;
     use CategoryTrait;
+    use ProductTrait;
+    use TaskTrait;
 
     public static function getRoutes(): \Iterator
     {
         yield ['/category', self::ROLE_USER];
         yield ['/category', self::ROLE_ADMIN];
         yield ['/category', self::ROLE_SUPER_ADMIN];
+
         yield ['/category/add', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/category/add', self::ROLE_ADMIN];
         yield ['/category/add', self::ROLE_SUPER_ADMIN];
+
         yield ['/category/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/category/edit/1', self::ROLE_ADMIN];
         yield ['/category/edit/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/category/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/category/clone/1', self::ROLE_ADMIN];
         yield ['/category/clone/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/category/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/category/delete/1', self::ROLE_ADMIN];
         yield ['/category/delete/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/category/show/1', self::ROLE_USER];
         yield ['/category/show/1', self::ROLE_ADMIN];
         yield ['/category/show/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/category/pdf', self::ROLE_USER];
         yield ['/category/pdf', self::ROLE_ADMIN];
         yield ['/category/pdf', self::ROLE_SUPER_ADMIN];
+
         yield ['/category/excel', self::ROLE_USER];
         yield ['/category/excel', self::ROLE_ADMIN];
         yield ['/category/excel', self::ROLE_SUPER_ADMIN];
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
+     */
+    public function testAdd(): void
+    {
+        $data = [
+            'category[code]' => 'Code',
+            'category[description]' => 'Description',
+            'category[group]' => $this->getGroup()->getId(),
+        ];
+        $this->checkAddEntity('/category/add', $data);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testDelete(): void
+    {
+        $this->addEntities();
+        $uri = \sprintf('/category/delete/%d', (int) $this->getCategory()->getId());
+        $this->checkDeleteEntity($uri);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testDeleteWithDependencies(): void
+    {
+        $this->getTask();
+        $this->getProduct();
+        $category = $this->getCategory();
+        $calculation = $this->getCalculation();
+        $calculation->findCategory($category);
+        $this->addEntity($calculation);
+
+        $userName = self::ROLE_ADMIN;
+        $uri = \sprintf('/category/delete/%d', (int) $category->getId());
+
+        $this->loginUsername($userName);
+        $crawler = $this->client->request(Request::METHOD_GET, $uri);
+        $this->assertResponseIsSuccessful();
+
+        $text = $this->getService(TranslatorInterface::class)
+            ->trans('common.button_back_list');
+        $button = $crawler->filter('.btn.btn-form.btn-primary');
+        self::assertCount(1, $button);
+        self::assertSame($text, $button->text());
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testEdit(): void
+    {
+        $this->addEntities();
+        $uri = \sprintf('/category/edit/%d', (int) $this->getCategory()->getId());
+        $data = [
+            'category[code]' => 'New Code',
+            'category[description]' => 'New Description',
+            'category[group]' => $this->getGroup()->getId(),
+        ];
+        $this->checkEditEntity($uri, $data);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testExcelEmpty(): void
+    {
+        $this->checkUriWithEmptyEntity('/category/excel', Category::class);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testPdfEmpty(): void
+    {
+        $this->checkUriWithEmptyEntity('/category/pdf', Category::class);
+    }
+
+    /**
+     * @throws ORMException
      */
     protected function addEntities(): void
     {
@@ -63,7 +160,7 @@ class CategoryControllerTest extends ControllerTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     protected function deleteEntities(): void
     {

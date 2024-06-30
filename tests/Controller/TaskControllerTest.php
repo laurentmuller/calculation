@@ -15,14 +15,18 @@ namespace App\Tests\Controller;
 use App\Controller\AbstractController;
 use App\Controller\AbstractEntityController;
 use App\Controller\TaskController;
+use App\Entity\Task;
+use App\Interfaces\PropertyServiceInterface;
+use App\Service\ApplicationService;
 use App\Tests\EntityTrait\TaskItemTrait;
+use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(AbstractController::class)]
 #[CoversClass(AbstractEntityController::class)]
 #[CoversClass(TaskController::class)]
-class TaskControllerTest extends ControllerTestCase
+class TaskControllerTest extends EntityControllerTestCase
 {
     use TaskItemTrait;
 
@@ -31,37 +35,116 @@ class TaskControllerTest extends ControllerTestCase
         yield ['/task', self::ROLE_USER];
         yield ['/task', self::ROLE_ADMIN];
         yield ['/task', self::ROLE_SUPER_ADMIN];
+
         yield ['/task/add', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/task/add', self::ROLE_ADMIN];
         yield ['/task/add', self::ROLE_SUPER_ADMIN];
+
         yield ['/task/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/task/edit/1', self::ROLE_ADMIN];
         yield ['/task/edit/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/task/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/task/clone/1', self::ROLE_ADMIN];
         yield ['/task/clone/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/task/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/task/delete/1', self::ROLE_ADMIN];
         yield ['/task/delete/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/task/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/task/clone/1', self::ROLE_ADMIN];
         yield ['/task/clone/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/task/show/1', self::ROLE_USER];
         yield ['/task/show/1', self::ROLE_ADMIN];
         yield ['/task/show/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/task/pdf', self::ROLE_USER];
         yield ['/task/pdf', self::ROLE_ADMIN];
         yield ['/task/pdf', self::ROLE_SUPER_ADMIN];
+
         yield ['/task/excel', self::ROLE_USER];
         yield ['/task/excel', self::ROLE_ADMIN];
         yield ['/task/excel', self::ROLE_SUPER_ADMIN];
+
         yield ['/task/compute/1', self::ROLE_USER];
         yield ['/task/compute/1', self::ROLE_ADMIN];
         yield ['/task/compute/1', self::ROLE_SUPER_ADMIN];
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
+     */
+    public function testAdd(): void
+    {
+        $category = $this->getCategory();
+        $service = $this->getService(ApplicationService::class);
+        $service->setProperties([
+            PropertyServiceInterface::P_DEFAULT_CATEGORY => $category,
+        ]);
+        $data = [
+            'task[name]' => 'Name',
+            'task[category]' => $category->getId(),
+            'task[unit]' => 'm2',
+            'task[supplier]' => 'Supplier',
+        ];
+        $this->checkAddEntity('/task/add', $data);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testComputeEmpty(): void
+    {
+        $uri = '/task/compute/1';
+        $this->checkUriWithEmptyEntity($uri, Task::class, expected: Response::HTTP_FOUND);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testDelete(): void
+    {
+        $this->addEntities();
+        $uri = \sprintf('/task/delete/%d', (int) $this->getTask()->getId());
+        $this->checkDeleteEntity($uri);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testEdit(): void
+    {
+        $this->addEntities();
+        $uri = \sprintf('/task/edit/%d', (int) $this->getTask()->getId());
+        $data = [
+            'task[name]' => 'New Name',
+            'task[category]' => $this->getCategory()->getId(),
+            'task[unit]' => 'km',
+            'task[supplier]' => 'New Supplier',
+        ];
+        $this->checkEditEntity($uri, $data);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testExcelEmpty(): void
+    {
+        $this->checkUriWithEmptyEntity('/task/excel', Task::class);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testPdfEmpty(): void
+    {
+        $this->checkUriWithEmptyEntity('/task/pdf', Task::class);
+    }
+
+    /**
+     * @throws ORMException
      */
     protected function addEntities(): void
     {
@@ -69,7 +152,7 @@ class TaskControllerTest extends ControllerTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     protected function deleteEntities(): void
     {

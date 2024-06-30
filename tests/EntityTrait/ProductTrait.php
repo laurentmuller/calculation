@@ -34,9 +34,10 @@ trait ProductTrait
         }
 
         $this->product = new Product();
-        $this->product->setCategory($category ?? $this->getCategory())
-            ->setPrice($price)
+        $this->product->setPrice($price)
             ->setDescription($description);
+        $category ??= $this->getCategory();
+        $category->addProduct($this->product);
 
         return $this->addEntity($this->product);
     }

@@ -63,7 +63,7 @@ trait DatabaseTrait
     }
 
     /**
-     * Delete all entities, for the given class, from the database.
+     * Delete all entities for the given class.
      *
      * @psalm-param class-string $className
      *

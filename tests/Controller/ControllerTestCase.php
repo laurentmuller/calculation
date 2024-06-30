@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Abstract unit test for controllers.
+ * Abstract unit test case for controllers.
  */
 #[CoversClass(AbstractController::class)]
 abstract class ControllerTestCase extends AuthenticateWebTestCase
@@ -91,14 +91,21 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
             \ob_start();
         }
 
-        $server = $xmlHttpRequest ? ['HTTP_X-Requested-With' => 'XMLHttpRequest'] : [];
-        $this->client->request(
-            method: $method,
-            uri: $url,
-            parameters: $parameters,
-            server: $server,
-            content: $content
-        );
+        if ($xmlHttpRequest) {
+            $this->client->xmlHttpRequest(
+                method: $method,
+                uri: $url,
+                parameters: $parameters,
+                content: $content
+            );
+        } else {
+            $this->client->request(
+                method: $method,
+                uri: $url,
+                parameters: $parameters,
+                content: $content
+            );
+        }
         if ($outputBuffer) {
             \ob_get_clean();
         }

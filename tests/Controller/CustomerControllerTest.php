@@ -16,58 +16,125 @@ use App\Controller\AbstractController;
 use App\Controller\AbstractEntityController;
 use App\Controller\CustomerController;
 use App\Entity\Customer;
+use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(AbstractController::class)]
 #[CoversClass(AbstractEntityController::class)]
 #[CoversClass(CustomerController::class)]
-class CustomerControllerTest extends ControllerTestCase
+class CustomerControllerTest extends EntityControllerTestCase
 {
-    private ?Customer $entity = null;
+    private ?Customer $customer = null;
 
     public static function getRoutes(): \Iterator
     {
         yield ['/customer', self::ROLE_USER];
         yield ['/customer', self::ROLE_ADMIN];
         yield ['/customer', self::ROLE_SUPER_ADMIN];
+
         yield ['/customer/add', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/customer/add', self::ROLE_ADMIN];
         yield ['/customer/add', self::ROLE_SUPER_ADMIN];
+
         yield ['/customer/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/customer/edit/1', self::ROLE_ADMIN];
         yield ['/customer/edit/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/customer/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/customer/delete/1', self::ROLE_ADMIN];
         yield ['/customer/delete/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/customer/show/1', self::ROLE_USER];
         yield ['/customer/show/1', self::ROLE_ADMIN];
         yield ['/customer/show/1', self::ROLE_SUPER_ADMIN];
+
         yield ['/customer/pdf', self::ROLE_USER];
         yield ['/customer/pdf', self::ROLE_ADMIN];
         yield ['/customer/pdf', self::ROLE_SUPER_ADMIN];
+
         yield ['/customer/excel', self::ROLE_USER];
         yield ['/customer/excel', self::ROLE_ADMIN];
         yield ['/customer/excel', self::ROLE_SUPER_ADMIN];
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
-    protected function addEntities(): void
+    public function testAdd(): void
     {
-        if (!$this->entity instanceof Customer) {
-            $this->entity = new Customer();
-            $this->entity->setCompany('Test Company');
-            $this->addEntity($this->entity);
-        }
+        $data = [
+            'customer[company]' => 'Company',
+            'customer[firstName]' => 'First Name',
+            'customer[lastName]' => 'Last Name',
+        ];
+        $this->checkAddEntity('/customer/add', $data);
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
+     */
+    public function testDelete(): void
+    {
+        $uri = \sprintf('/customer/delete/%d', (int) $this->getCustomer()->getId());
+        $this->checkDeleteEntity($uri);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testEdit(): void
+    {
+        $uri = \sprintf('/customer/edit/%d', (int) $this->getCustomer()->getId());
+        $data = [
+            'customer[company]' => 'New Company',
+            'customer[firstName]' => 'New First Name',
+            'customer[lastName]' => 'New Last Name',
+        ];
+        $this->checkEditEntity($uri, $data);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testExcelEmpty(): void
+    {
+        $this->checkUriWithEmptyEntity('/customer/excel', Customer::class);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testPdfEmpty(): void
+    {
+        $this->checkUriWithEmptyEntity('/customer/pdf', Customer::class);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    protected function addEntities(): void
+    {
+        $this->getCustomer();
+    }
+
+    /**
+     * @throws ORMException
      */
     protected function deleteEntities(): void
     {
-        $this->entity = $this->deleteEntity($this->entity);
+        $this->customer = $this->deleteEntity($this->customer);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    private function getCustomer(): Customer
+    {
+        if ($this->customer instanceof Customer) {
+            return $this->customer;
+        }
+
+        $this->customer = new Customer();
+        $this->customer->setCompany('Test Company');
+
+        return $this->addEntity($this->customer);
     }
 }

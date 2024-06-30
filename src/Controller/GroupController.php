@@ -81,8 +81,12 @@ class GroupController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[GetDelete(path: '/delete/{id}', name: 'delete', requirements: self::ID_REQUIREMENT)]
-    public function delete(Request $request, Group $item, CalculationGroupRepository $groupRepository, LoggerInterface $logger): Response
-    {
+    public function delete(
+        Request $request,
+        Group $item,
+        CalculationGroupRepository $groupRepository,
+        LoggerInterface $logger
+    ): Response {
         // external references?
         $categories = $item->countCategories();
         $calculations = $groupRepository->countGroupReferences($item);

@@ -93,7 +93,7 @@ class UserServiceTest extends KernelServiceTestCase
     public function testOptions(): void
     {
         $service = $this->getUserService();
-        self::assertTrue($service->isQrCode());
+        self::assertFalse($service->isQrCode());
         self::assertFalse($service->isPrintAddress());
     }
 

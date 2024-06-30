@@ -20,7 +20,6 @@ use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[CoversClass(AbstractController::class)]
 #[CoversClass(AbstractEntityController::class)]

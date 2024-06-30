@@ -68,7 +68,7 @@ class Customer extends AbstractEntity
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $title = null;
 
-    #[Assert\Url]
+    #[Assert\Url(requireTld: false)]
     #[Assert\Length(max: 100)]
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $webSite = null;

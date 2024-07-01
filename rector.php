@@ -29,9 +29,8 @@ return RectorConfig::configure()
         __DIR__ . '/tests',
         __DIR__ . '/public',
     ])->withSkip([
-        AddSeeTestAnnotationRector::class,
-        DisallowedEmptyRuleFixerRector::class,
         PreferPHPUnitThisCallRector::class,
+        DisallowedEmptyRuleFixerRector::class,
         FlipTypeControlToUseExclusiveTypeRector::class => [
             __DIR__ . '/src/Form/DataTransformer/EntityTransformer.php',
         ],
@@ -53,7 +52,7 @@ return RectorConfig::configure()
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
         PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES,
         // Symfony
-        SymfonySetList::SYMFONY_64,
+        SymfonySetList::SYMFONY_71,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,

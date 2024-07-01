@@ -85,9 +85,6 @@ class AdminControllerTest extends ControllerTestCase
 
     public function testRightUser(): void
     {
-        $this->checkForm(
-            'admin/rights/user',
-            'common.button_ok',
-        );
+        $this->checkForm('admin/rights/user');
     }
 }

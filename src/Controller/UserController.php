@@ -281,8 +281,13 @@ class UserController extends AbstractEntityController
      * Edit user access rights.
      */
     #[GetPost(path: '/rights/{id}', name: 'rights', requirements: self::ID_REQUIREMENT)]
-    public function rights(Request $request, User $item, RoleBuilderService $builder, RoleHierarchyService $service, EntityManagerInterface $manager): Response
-    {
+    public function rights(
+        Request $request,
+        User $item,
+        RoleBuilderService $builder,
+        RoleHierarchyService $service,
+        EntityManagerInterface $manager
+    ): Response {
         if ($this->isConnectedUser($item) && !$service->hasRole($item, RoleInterface::ROLE_SUPER_ADMIN)) {
             $this->warningTrans('user.rights.connected');
 
@@ -393,8 +398,11 @@ class UserController extends AbstractEntityController
         return $this->showEntity($item);
     }
 
-    protected function getEntities(array|string $sortedFields = [], array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
-    {
+    protected function getEntities(
+        array|string $sortedFields = [],
+        array $criteria = [],
+        string $alias = AbstractRepository::DEFAULT_ALIAS
+    ): array {
         if (!$this->isGranted(RoleInterface::ROLE_SUPER_ADMIN)) {
             $criteria[] = $this->getRepository()->getSuperAdminFilter($alias);
         }

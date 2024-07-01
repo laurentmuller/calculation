@@ -27,7 +27,6 @@ use App\Repository\GroupRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserPropertyRepository;
 use App\Repository\UserRepository;
-use App\Tests\ContainerServiceTrait;
 use App\Tests\Data\Database;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
@@ -37,7 +36,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 #[CoversClass(Database::class)]
 class DatabaseTest extends KernelServiceTestCase
 {
-    use ContainerServiceTrait;
     use DatabaseTrait;
 
     public static function getRepositories(): \Iterator

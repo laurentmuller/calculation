@@ -29,8 +29,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ResetAllPasswordType extends AbstractType
 {
-    public function __construct(private readonly UserRepository $repository, private readonly TranslatorInterface $translator)
-    {
+    public function __construct(
+        private readonly UserRepository $repository,
+        private readonly TranslatorInterface $translator
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void

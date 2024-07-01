@@ -25,8 +25,12 @@ class DiagramControllerTest extends ControllerTestCase
         yield ['/diagram', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
         yield ['/diagram', self::ROLE_SUPER_ADMIN];
 
+        yield ['/diagram?name=fake_file_name', self::ROLE_SUPER_ADMIN, Response::HTTP_NOT_FOUND];
+
         yield ['/diagram/load', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/diagram/load', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
         yield ['/diagram/load', self::ROLE_SUPER_ADMIN];
+
+        yield ['/diagram/load?name=fake_file_name', self::ROLE_SUPER_ADMIN];
     }
 }

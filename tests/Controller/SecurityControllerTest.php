@@ -26,5 +26,8 @@ class SecurityControllerTest extends ControllerTestCase
         yield ['/login', self::ROLE_USER, Response::HTTP_FOUND];
         yield ['/login', self::ROLE_ADMIN, Response::HTTP_FOUND];
         yield ['/login', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
+
+        yield ['/logout', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/logout/success', self::ROLE_USER, Response::HTTP_FOUND];
     }
 }

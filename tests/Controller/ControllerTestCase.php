@@ -68,7 +68,7 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
 
     protected function checkForm(
         string $uri,
-        string $id,
+        string $id = 'common.button_ok',
         array $data = [],
         string $userName = self::ROLE_ADMIN,
         string $method = Request::METHOD_POST,

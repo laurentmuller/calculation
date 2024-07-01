@@ -15,6 +15,7 @@ namespace App\Tests\Controller;
 use App\Controller\CalculationUpdateController;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
+use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -28,5 +29,27 @@ class CalculationUpdateControllerTest extends ControllerTestCase
     {
         yield ['/admin/update', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/admin/update', self::ROLE_ADMIN];
+    }
+
+    /**
+     * @throws ORMException
+     * @throws \Exception
+     */
+    public function testUpdate(): void
+    {
+        $calculation = $this->getCalculation();
+        $data = [
+            'form[dateFrom]' => '2024-06-01',
+            'form[dateTo]' => '2024-07-01',
+            'form[states][0]' => $calculation->getState()?->getId(),
+            'form[simulate]' => '1',
+            'form[confirm]' => '1',
+        ];
+        $this->checkForm(
+            '/admin/update',
+            'calculation.update.submit',
+            $data,
+            followRedirect: false
+        );
     }
 }

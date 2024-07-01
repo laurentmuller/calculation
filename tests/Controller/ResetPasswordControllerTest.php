@@ -14,6 +14,7 @@ namespace App\Tests\Controller;
 
 use App\Controller\ResetPasswordController;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(ResetPasswordController::class)]
@@ -33,5 +34,23 @@ class ResetPasswordControllerTest extends ControllerTestCase
         yield ['/reset-password/reset/fake', self::ROLE_USER, Response::HTTP_FOUND];
         yield ['/reset-password/reset/fake', self::ROLE_ADMIN, Response::HTTP_FOUND];
         yield ['/reset-password/reset/fake', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
+    }
+
+    public function testRequest(): void
+    {
+        $data = ['user' => self::ROLE_USER];
+        $this->checkForm(
+            '/reset-password',
+            'resetting.request.submit',
+            $data,
+            self::ROLE_USER
+        );
+    }
+
+    public function testResetWithTokenNull(): void
+    {
+        $url = '/reset-password/reset';
+        $this->client->request(Request::METHOD_GET, $url);
+        $this->checkResponse($url, self::ROLE_USER, Response::HTTP_NOT_FOUND);
     }
 }

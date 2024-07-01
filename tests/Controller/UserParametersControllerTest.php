@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\UserParametersController;
+use App\Enums\MessagePosition;
+use App\Interfaces\PropertyServiceInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(UserParametersController::class)]
@@ -23,5 +25,21 @@ class UserParametersControllerTest extends ControllerTestCase
         yield ['/user/parameters', self::ROLE_USER];
         yield ['/user/parameters', self::ROLE_ADMIN];
         yield ['/user/parameters', self::ROLE_SUPER_ADMIN];
+    }
+
+    public function testParametersNoChange(): void
+    {
+        $this->checkForm(
+            'user/parameters'
+        );
+    }
+
+    public function testParametersWithChanges(): void
+    {
+        $data = [PropertyServiceInterface::P_MESSAGE_POSITION => MessagePosition::TOP_LEFT->value];
+        $this->checkForm(
+            'user/parameters',
+            data: $data
+        );
     }
 }

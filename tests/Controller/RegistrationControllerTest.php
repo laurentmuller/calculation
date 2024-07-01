@@ -28,4 +28,21 @@ class RegistrationControllerTest extends ControllerTestCase
         yield ['/register/verify', self::ROLE_ADMIN, Response::HTTP_FOUND];
         yield ['/register/verify', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
     }
+
+    public function testRegister(): void
+    {
+        $data = [
+            'username' => 'user_name',
+            'email' => 'email@email.com',
+            'plainPassword[first]' => '12345@#POA457az',
+            'plainPassword[second]' => '12345@#POA457az',
+            'agreeTerms' => 1,
+        ];
+        $this->checkForm(
+            '/register',
+            'registration.register.submit',
+            $data,
+            self::ROLE_SUPER_ADMIN
+        );
+    }
 }

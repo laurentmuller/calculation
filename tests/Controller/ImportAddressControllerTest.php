@@ -25,4 +25,15 @@ class ImportAddressControllerTest extends ControllerTestCase
         yield ['/admin/import', self::ROLE_ADMIN];
         yield ['/admin/import', self::ROLE_SUPER_ADMIN];
     }
+
+    public function testImport(): void
+    {
+        $this->checkForm(
+            'admin/import',
+            'common.button_ok',
+            [],
+            self::ROLE_SUPER_ADMIN,
+            followRedirect: false
+        );
+    }
 }

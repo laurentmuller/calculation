@@ -14,6 +14,8 @@ namespace App\Tests\Controller;
 
 use App\Controller\IndexController;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(IndexController::class)]
 class IndexControllerTest extends ControllerTestCase
@@ -24,5 +26,21 @@ class IndexControllerTest extends ControllerTestCase
         yield ['/', self::ROLE_USER];
         yield ['/', self::ROLE_ADMIN];
         yield ['/', self::ROLE_SUPER_ADMIN];
+
+        yield ['/?custom=1&restrict=1', self::ROLE_USER];
+
+        yield ['/hide/catalog', self::ROLE_USER, Response::HTTP_OK,  Request::METHOD_POST, true];
+        yield ['/hide/month', self::ROLE_USER, Response::HTTP_OK,  Request::METHOD_POST, true];
+        yield ['/hide/state', self::ROLE_USER, Response::HTTP_OK,  Request::METHOD_POST, true];
+
+        yield ['/update/count?count=8', self::ROLE_USER, Response::HTTP_OK,  Request::METHOD_POST, true];
+    }
+
+    public function testInvalidRequest(): void
+    {
+        $this->loginUsername(self::ROLE_USER);
+        $this->client->request(Request::METHOD_POST, '/hide/catalog');
+        $actual = $this->client->getResponse()->getStatusCode();
+        self::assertSame(Response::HTTP_BAD_REQUEST, $actual);
     }
 }

@@ -15,7 +15,6 @@ namespace App\Tests\Controller;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Abstract unit test case for entity controllers.
@@ -28,11 +27,13 @@ abstract class EntityControllerTestCase extends ControllerTestCase
         string $userName = self::ROLE_ADMIN,
         string $method = Request::METHOD_POST,
     ): void {
-        $this->loginUsername($userName);
-        $this->client->request($method, $uri);
-        $name = $this->getService(TranslatorInterface::class)
-            ->trans('common.button_submit_add');
-        $this->submitForm($name, $data);
+        $this->checkForm(
+            $uri,
+            'common.button_submit_add',
+            $data,
+            $userName,
+            $method
+        );
     }
 
     protected function checkDeleteEntity(
@@ -40,11 +41,13 @@ abstract class EntityControllerTestCase extends ControllerTestCase
         string $userName = self::ROLE_ADMIN,
         string $method = Request::METHOD_GET,
     ): void {
-        $this->loginUsername($userName);
-        $this->client->request($method, $uri);
-        $name = $this->getService(TranslatorInterface::class)
-            ->trans('common.button_delete');
-        $this->submitForm($name);
+        $this->checkForm(
+            $uri,
+            'common.button_delete',
+            [],
+            $userName,
+            $method
+        );
     }
 
     protected function checkEditEntity(
@@ -54,11 +57,13 @@ abstract class EntityControllerTestCase extends ControllerTestCase
         string $method = Request::METHOD_POST,
         string $id = 'common.button_submit_edit',
     ): void {
-        $this->loginUsername($userName);
-        $this->client->request($method, $uri);
-        $name = $this->getService(TranslatorInterface::class)
-            ->trans($id);
-        $this->submitForm($name, $data);
+        $this->checkForm(
+            $uri,
+            $id,
+            $data,
+            $userName,
+            $method
+        );
     }
 
     /**
@@ -77,12 +82,5 @@ abstract class EntityControllerTestCase extends ControllerTestCase
         $this->deleteEntitiesByClass($className);
         $this->client->request($method, $uri);
         $this->checkResponse($uri, $userName, $expected);
-    }
-
-    private function submitForm(string $name, array $data = []): void
-    {
-        $this->client->submitForm($name, $data);
-        $this->client->followRedirect();
-        $this->assertResponseIsSuccessful();
     }
 }

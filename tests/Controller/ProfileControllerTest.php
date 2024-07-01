@@ -28,4 +28,37 @@ class ProfileControllerTest extends ControllerTestCase
         yield ['/user/profile/edit', self::ROLE_ADMIN];
         yield ['/user/profile/edit', self::ROLE_SUPER_ADMIN];
     }
+
+    public function testEdit(): void
+    {
+        $user = $this->loadUser(self::ROLE_USER);
+        $data = [
+            'username' => $user->getUsername(),
+            'email' => $user->getEmail(),
+            'currentPassword' => $user->getPassword(),
+        ];
+        $this->checkForm(
+            '/user/profile/edit',
+            'common.button_ok',
+            $data,
+            self::ROLE_USER
+        );
+    }
+
+    public function testPassword(): void
+    {
+        $password = $this->loadUser(self::ROLE_USER)
+            ->getPassword();
+        $data = [
+            'currentPassword' => $password,
+            'plainPassword[first]' => $password,
+            'plainPassword[second]' => $password,
+        ];
+        $this->checkForm(
+            '/user/profile/password',
+            'common.button_ok',
+            $data,
+            self::ROLE_USER
+        );
+    }
 }

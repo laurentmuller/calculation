@@ -11,9 +11,12 @@
 declare(strict_types=1);
 
 use App\Entity\User;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Config\SecurityConfig;
 
-return static function (SecurityConfig $securityConfig): void {
-    $securityConfig->passwordHasher(User::class)
+return static function (SecurityConfig $config): void {
+    $config->passwordHasher(PasswordAuthenticatedUserInterface::class)
+        ->algorithm('plaintext');
+    $config->passwordHasher(User::class)
         ->algorithm('plaintext');
 };

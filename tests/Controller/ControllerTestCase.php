@@ -18,6 +18,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Abstract unit test case for controllers.
@@ -63,6 +64,26 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
      */
     protected function addEntities(): void
     {
+    }
+
+    protected function checkForm(
+        string $uri,
+        string $id,
+        array $data = [],
+        string $userName = self::ROLE_ADMIN,
+        string $method = Request::METHOD_POST,
+        bool $followRedirect = true,
+    ): void {
+        $this->loginUsername($userName);
+        $this->client->request($method, $uri);
+
+        $name = $this->getService(TranslatorInterface::class)
+            ->trans($id);
+        $this->client->submitForm($name, $data);
+        if ($followRedirect) {
+            $this->client->followRedirect();
+        }
+        $this->assertResponseIsSuccessful();
     }
 
     /**

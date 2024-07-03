@@ -24,7 +24,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * The Simple editor type.
  *
- * @psalm-type SimpleEditorActionType = array{
+ * @psalm-type ActionType = array{
  *      title?: string|false,
  *      group?: string,
  *      icon?: string,
@@ -74,20 +74,22 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param SimpleEditorActionType $action
+     * @psalm-param ActionType $action
      */
     private function filterAction(array $action): bool
     {
-        return (isset($action['exec']) && '' !== $action['exec'])
-            || (isset($action['actions']) && [] !== $action['actions']);
+        return ($action['exec'] ?? '') !== '' || $this->isActions($action);
     }
 
     /**
      * Gets the definition of the default actions.
+     *
+     * @psalm-return ActionType[]
      */
     private function getDefaultActions(): array
     {
         try {
+            /** @psalm-var ActionType[]  */
             return FileUtils::decodeJson($this->actionsPath);
         } catch (\InvalidArgumentException) {
             return [];
@@ -101,15 +103,15 @@ class SimpleEditorType extends AbstractType
      */
     private function getGroupedActions(array $options): array
     {
-        /** @psalm-var SimpleEditorActionType[] $actions */
-        $actions = $options['actions'] ?? [];
-        if ([] === $actions) {
+        if (!$this->isActions($options)) {
             return [];
         }
 
+        /** @psalm-var ActionType[] $actions */
+        $actions = $options['actions'] ?? [];
         $actions = \array_filter(
             $actions,
-            /** @psalm-param SimpleEditorActionType $action */
+            /** @psalm-param ActionType $action */
             fn (array $action): bool => $this->filterAction($action)
         );
         $this->updateActions($actions);
@@ -131,9 +133,19 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param SimpleEditorActionType[] $actions
+     * @psalm-param array{actions?: array, ...} $action
      *
-     * @psalm-return SimpleEditorActionType[]
+     * @psalm-assert-if-true ActionType[] $action['actions']
+     */
+    private function isActions(array $action): bool
+    {
+        return isset($action['actions']) && [] !== $action['actions'];
+    }
+
+    /**
+     * @psalm-param ActionType[] $actions
+     *
+     * @psalm-return ActionType[]
      */
     private function updateActions(array &$actions, string $class = 'btn btn-outline-secondary'): array
     {
@@ -153,7 +165,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param SimpleEditorActionType $action
+     * @psalm-param ActionType $action
      */
     private function updateAttribute(array &$action, string $key): self
     {
@@ -165,37 +177,38 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param SimpleEditorActionType $action
+     * @psalm-param ActionType $action
      */
     private function updateClass(array &$action, string $class): self
     {
-        if (isset($action['actions']) && [] !== $action['actions']) {
+        if ($this->isActions($action)) {
             $class .= ' dropdown-toggle';
         }
         if (isset($action['class'])) {
             $class .= ' ' . $action['class'];
         }
-        $action['attributes']['class'] = $class;
+        $action['attributes']['class'] = \trim($class);
 
         return $this;
     }
 
     /**
-     * @psalm-param SimpleEditorActionType $action
+     * @psalm-param ActionType $action
      */
     private function updateDropDown(array &$action): void
     {
-        /** @psalm-var SimpleEditorActionType[] $actions */
-        $actions = $action['actions'] ?? [];
-        if ([] !== $actions) {
-            $action['attributes']['aria-expanded'] = 'false';
-            $action['attributes']['data-bs-toggle'] = 'dropdown';
-            $action['actions'] = $this->updateActions($actions, 'dropdown-item');
+        if (!$this->isActions($action)) {
+            return;
         }
+
+        $actions = $action['actions'] ?? [];
+        $action['attributes']['aria-expanded'] = 'false';
+        $action['attributes']['data-bs-toggle'] = 'dropdown';
+        $action['actions'] = $this->updateActions($actions, 'dropdown-item');
     }
 
     /**
-     * @psalm-param SimpleEditorActionType $action
+     * @psalm-param ActionType $action
      */
     private function updateEnabled(array &$action): self
     {
@@ -203,7 +216,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param SimpleEditorActionType $action
+     * @psalm-param ActionType $action
      */
     private function updateExec(array &$action): self
     {
@@ -211,7 +224,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param SimpleEditorActionType $action
+     * @psalm-param ActionType $action
      */
     private function updateIcon(array &$action): self
     {
@@ -223,7 +236,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param SimpleEditorActionType $action
+     * @psalm-param ActionType $action
      */
     private function updateParameter(array &$action): self
     {
@@ -231,7 +244,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param SimpleEditorActionType $action
+     * @psalm-param ActionType $action
      */
     private function updateState(array &$action): self
     {
@@ -239,7 +252,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param SimpleEditorActionType $action
+     * @psalm-param ActionType $action
      */
     private function updateText(array &$action): self
     {
@@ -251,7 +264,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param SimpleEditorActionType $action
+     * @psalm-param ActionType $action
      */
     private function updateTitle(array &$action): self
     {

@@ -1,0 +1,100 @@
+<?php
+/*
+ * This file is part of the Calculation package.
+ *
+ * (c) bibi.nu <bibi@bibi.nu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace App\Tests\Form\Calculation;
+
+use App\Entity\Calculation;
+use App\Form\Calculation\CalculationCategoryType;
+use App\Form\Calculation\CalculationEditStateType;
+use App\Form\Calculation\CalculationGroupType;
+use App\Form\CalculationState\CalculationStateListType;
+use App\Form\Type\PlainType;
+use App\Repository\CategoryRepository;
+use App\Repository\GroupRepository;
+use App\Service\ApplicationService;
+use App\Tests\Form\CalculationStateTrait;
+use App\Tests\Form\EntityTypeTestCase;
+use App\Utils\DateUtils;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\PreloadedExtension;
+
+/**
+ * @extends EntityTypeTestCase<Calculation, CalculationEditStateType>
+ */
+#[CoversClass(CalculationEditStateType::class)]
+class CalculationEditStateTypeTest extends EntityTypeTestCase
+{
+    use CalculationStateTrait;
+
+    private MockObject&ApplicationService $application;
+    private bool $marginBelow = false;
+
+    /**
+     * @throws Exception
+     */
+    protected function setUp(): void
+    {
+        $this->application = $this->createMock(ApplicationService::class);
+        parent::setUp();
+    }
+
+    public function testSubmitValidDataNotMarginBelow(): void
+    {
+        $this->marginBelow = true;
+        $this->submitValidData();
+    }
+
+    protected function getData(): array
+    {
+        return [
+            'date' => DateUtils::removeTime(),
+            'state' => null,
+        ];
+    }
+
+    protected function getEntityClass(): string
+    {
+        return Calculation::class;
+    }
+
+    /**
+     * @throws Exception|\ReflectionException
+     */
+    protected function getExtensions(): array
+    {
+        $translator = $this->createMockTranslator();
+        $this->application->method('isMarginBelow')
+            ->willReturnCallback(fn (): bool => $this->marginBelow);
+
+        /** @psalm-var array $extensions */
+        $extensions = parent::getExtensions();
+        $types = [
+            new PlainType($translator),
+            new EntityType($this->getRegistry()),
+            new CalculationStateListType($translator),
+            new CalculationGroupType($this->createMock(GroupRepository::class)),
+            new CalculationCategoryType($this->createMock(CategoryRepository::class)),
+            new CalculationEditStateType($this->application, $translator),
+        ];
+        $extensions[] = new PreloadedExtension($types, []);
+
+        return $extensions;
+    }
+
+    protected function getFormTypeClass(): string
+    {
+        return CalculationEditStateType::class;
+    }
+}

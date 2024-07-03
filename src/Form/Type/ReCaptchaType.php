@@ -28,6 +28,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
+ * The Google reCaptcha type.
+ *
  * @extends AbstractType<HiddenType>
  */
 class ReCaptchaType extends AbstractType implements EventSubscriberInterface

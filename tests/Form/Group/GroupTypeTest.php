@@ -10,10 +10,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Form;
+namespace App\Tests\Form\Group;
 
 use App\Entity\Group;
 use App\Form\Group\GroupType;
+use App\Tests\Form\EntityTypeTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\Attributes\CoversClass;
 

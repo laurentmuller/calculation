@@ -10,35 +10,37 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Form;
+namespace App\Tests\Form\Calculation;
 
-use App\Entity\CalculationState;
-use App\Form\CalculationState\CalculationStateType;
+use App\Entity\CalculationItem;
+use App\Form\Calculation\CalculationItemType;
+use App\Tests\Form\EntityTypeTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
- * @extends EntityTypeTestCase<CalculationState, CalculationStateType>
+ * @extends EntityTypeTestCase<CalculationItem, CalculationItemType>
  */
-#[CoversClass(CalculationStateType::class)]
-class CalculationStateTypeTest extends EntityTypeTestCase
+#[CoversClass(CalculationItemType::class)]
+class CalculationItemTypeTest extends EntityTypeTestCase
 {
     protected function getData(): array
     {
         return [
-            'code' => 'code',
-            'color' => 'black',
             'description' => 'description',
-            'editable' => true,
+            'unit' => 'unit',
+            'price' => 1.0,
+            'quantity' => 1.0,
+            'position' => 0,
         ];
     }
 
     protected function getEntityClass(): string
     {
-        return CalculationState::class;
+        return CalculationItem::class;
     }
 
     protected function getFormTypeClass(): string
     {
-        return CalculationStateType::class;
+        return CalculationItemType::class;
     }
 }

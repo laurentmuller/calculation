@@ -17,15 +17,6 @@ use App\Form\Extension\TextTypeExtension;
 use App\Form\Extension\UrlTypeExtension;
 use App\Form\Extension\VichImageTypeExtension;
 use App\Interfaces\EntityInterface;
-use App\Repository\AbstractRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\Persistence\ManagerRegistry;
-use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -42,97 +33,12 @@ abstract class EntityTypeTestCase extends TypeTestCase
      */
     public function testSubmitValidData(): void
     {
-        $entityClass = $this->getEntityClass();
-        $formTypeClass = $this->getFormTypeClass();
-
-        // create model and form
-        $model = new $entityClass();
-        $form = $this->factory->create($formTypeClass, $model);
-
-        // populate form data
-        $data = $this->getData();
-        $expected = $this->populate($entityClass, $data);
-
-        // submit the data to the form directly
-        $form->submit($data);
-
-        // check form
-        self::assertTrue($form->isSynchronized());
-
-        // check data
-        self::assertEqualsCanonicalizing($expected, $model);
-
-        // check view
-        $view = $form->createView();
-        $children = $view->children;
-        foreach (\array_keys($data) as $key) {
-            self::assertArrayHasKey($key, $children);
-        }
+        $this->submitValidData();
     }
 
-    /**
-     * @throws Exception
-     */
-    protected function createEntityManager(): MockObject&EntityManager
+    protected static function assertDateEquals(\DateTimeInterface $expected, \DateTimeInterface $actual): void
     {
-        $manager = $this->createMock(EntityManager::class);
-        $manager->method('getClassMetadata')
-            ->willReturn(new ClassMetadata($this->getEntityClass()));
-
-        return $manager;
-    }
-
-    /**
-     * @throws Exception
-     */
-    protected function createQuery(): MockObject&Query
-    {
-        $query = $this->createMock(Query::class);
-        $query->method('getSQL')
-            ->willReturn('FakeSQL');
-
-        return $query;
-    }
-
-    /**
-     * @throws Exception
-     */
-    protected function createQueryBuilder(MockObject&Query $query): MockObject&QueryBuilder
-    {
-        $parameters = new ArrayCollection();
-        $builder = $this->createMock(QueryBuilder::class);
-        $builder->method('getParameters')
-            ->willReturn($parameters);
-        $builder->method('getQuery')
-            ->willReturn($query);
-
-        return $builder;
-    }
-
-    /**
-     * @throws Exception
-     */
-    protected function createRegistry(MockObject&EntityManager $manager): MockObject&ManagerRegistry
-    {
-        $registry = $this->createMock(ManagerRegistry::class);
-        $registry->method('getManagerForClass')
-            ->willReturn($manager);
-
-        return $registry;
-    }
-
-    /**
-     * @template TRepository of AbstractRepository
-     *
-     * @psalm-param class-string<TRepository> $repositoryClass
-     *
-     * @psalm-return MockObject&TRepository
-     *
-     * @throws Exception
-     */
-    protected function createRepository(string $repositoryClass): MockObject&AbstractRepository
-    {
-        return $this->createMock($repositoryClass);
+        self::assertSame($expected->format('Y-m-d'), $actual->format('Y-m-d'));
     }
 
     /**
@@ -184,5 +90,54 @@ abstract class EntityTypeTestCase extends TypeTestCase
         }
 
         return $entity;
+    }
+
+    /**
+     * Test.
+     */
+    protected function submitValidData(): void
+    {
+        $entityClass = $this->getEntityClass();
+        $formTypeClass = $this->getFormTypeClass();
+
+        // create model and form
+        $model = new $entityClass();
+        $form = $this->factory->create($formTypeClass, $model);
+
+        // populate entity
+        $data = $this->getData();
+        $entity = $this->populate($entityClass, $data);
+
+        // submit the data to the form directly
+        $form->submit($data);
+
+        // check form
+        self::assertTrue($form->isSynchronized());
+
+        // check data
+        $keys = \array_keys($data);
+        $accessor = PropertyAccess::createPropertyAccessor();
+        foreach ($keys as $field) {
+            /** @psalm-var mixed $expected */
+            $expected = $accessor->getValue($entity, $field);
+            /** @psalm-var mixed $actual */
+            $actual = $accessor->getValue($model, $field);
+            $this->validate($expected, $actual);
+        }
+
+        // check view
+        $children = $form->createView()->children;
+        foreach ($keys as $key) {
+            self::assertArrayHasKey($key, $children);
+        }
+    }
+
+    protected function validate(mixed $expected, mixed $actual): void
+    {
+        if ($expected instanceof \DateTimeInterface && $actual instanceof \DateTimeInterface) {
+            self::assertDateEquals($expected, $actual);
+        } else {
+            self::assertEqualsCanonicalizing($expected, $actual);
+        }
     }
 }

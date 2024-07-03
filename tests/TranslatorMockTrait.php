@@ -14,8 +14,12 @@ namespace App\Tests;
 
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @psalm-require-extends TestCase
+ */
 trait TranslatorMockTrait
 {
     private function createMockTranslator(?string $message = null): MockObject&TranslatorInterface

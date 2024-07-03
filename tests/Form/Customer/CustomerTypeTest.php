@@ -10,12 +10,13 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Form;
+namespace App\Tests\Form\Customer;
 
 use App\Entity\Customer;
 use App\Form\Customer\CustomerType;
 use App\Form\Type\CountryFlagType;
 use App\Service\CountryFlagService;
+use App\Tests\Form\EntityTypeTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Form\PreloadedExtension;
 
@@ -47,10 +48,12 @@ class CustomerTypeTest extends EntityTypeTestCase
 
     protected function getExtensions(): array
     {
-        /** @psalm-var \Symfony\Component\Form\FormExtensionInterface[] $extensions */
+        /** @psalm-var array $extensions */
         $extensions = parent::getExtensions();
-        $type = new CountryFlagType(new CountryFlagService());
-        $extensions[] = new PreloadedExtension([$type], []);
+        $types = [
+            new CountryFlagType(new CountryFlagService()),
+        ];
+        $extensions[] = new PreloadedExtension($types, []);
 
         return $extensions;
     }

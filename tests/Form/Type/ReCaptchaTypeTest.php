@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Form;
+namespace App\Tests\Form\Type;
 
 use App\Form\Type\ReCaptchaType;
 use App\Service\RecaptchaService;

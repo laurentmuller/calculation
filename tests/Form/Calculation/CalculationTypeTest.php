@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Form\Calculation;
 
 use App\Entity\Calculation;
+use App\Form\AbstractEntityType;
+use App\Form\AbstractHelperType;
 use App\Form\Calculation\CalculationCategoryType;
 use App\Form\Calculation\CalculationGroupType;
 use App\Form\Calculation\CalculationType;
@@ -30,6 +32,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 /**
  * @extends EntityTypeTestCase<Calculation, CalculationType>
  */
+#[CoversClass(AbstractHelperType::class)]
+#[CoversClass(AbstractEntityType::class)]
 #[CoversClass(CalculationType::class)]
 class CalculationTypeTest extends EntityTypeTestCase
 {

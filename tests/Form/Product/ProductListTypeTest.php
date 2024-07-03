@@ -12,29 +12,20 @@ declare(strict_types=1);
 
 namespace App\Tests\Form\Product;
 
-use App\Entity\Product;
 use App\Form\Product\ProductListType;
-use App\Repository\ProductRepository;
 use App\Tests\Data\DataForm;
-use App\Tests\Entity\IdTrait;
-use App\Tests\Form\ManagerRegistryTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Tests\Form\ProductTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 #[CoversClass(ProductListType::class)]
 class ProductListTypeTest extends TypeTestCase
 {
-    use IdTrait;
-    use ManagerRegistryTrait;
     use PreloadedExtensionsTrait;
-
-    private ?Product $product = null;
+    use ProductTrait;
 
     /**
      * @throws \ReflectionException
@@ -78,35 +69,7 @@ class ProductListTypeTest extends TypeTestCase
     protected function getPreloadedExtensions(): array
     {
         return [
-            new EntityType($this->getProductRegistry()),
+            $this->getProductEntityType(),
         ];
-    }
-
-    /**
-     * @throws Exception|\ReflectionException
-     */
-    protected function getProductRegistry(): MockObject&ManagerRegistry
-    {
-        return $this->createManagerRegistry(
-            Product::class,
-            ProductRepository::class,
-            'getQueryBuilderByCategory',
-            [$this->getProduct()]
-        );
-    }
-
-    /**
-     * @throws \ReflectionException
-     */
-    private function getProduct(): Product
-    {
-        if (!$this->product instanceof Product) {
-            $this->product = new Product();
-            $this->product->setDescription('Description');
-
-            return $this->setId($this->product);
-        }
-
-        return $this->product;
     }
 }

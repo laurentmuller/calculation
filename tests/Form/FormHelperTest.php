@@ -55,7 +55,7 @@ class FormHelperTest extends TypeTestCase
 {
     use PasswordHasherExtensionTrait;
     use PreloadedExtensionsTrait {
-        getExtensions as preloadedGetExtensions;
+        getExtensions as getExtensionsFromTrait;
     }
     use TranslatorMockTrait;
     use ValidatorExtensionTrait;
@@ -585,7 +585,7 @@ class FormHelperTest extends TypeTestCase
      */
     protected function getExtensions(): array
     {
-        $extensions = $this->preloadedGetExtensions();
+        $extensions = $this->getExtensionsFromTrait();
         $extensions[] = $this->getPasswordHasherExtension();
 
         return $extensions;

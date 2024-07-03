@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Form\GlobalMargin;
 
 use App\Entity\GlobalMargin;
+use App\Form\AbstractMarginType;
 use App\Form\GlobalMargin\GlobalMarginType;
 use App\Tests\Form\EntityTypeTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -21,6 +22,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
  * @extends EntityTypeTestCase<GlobalMargin, GlobalMarginType>
  */
 #[CoversClass(GlobalMarginType::class)]
+#[CoversClass(AbstractMarginType::class)]
 class GlobalMarginTypeTest extends EntityTypeTestCase
 {
     protected function getData(): array

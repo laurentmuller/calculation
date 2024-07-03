@@ -544,10 +544,8 @@ class TestController extends AbstractController
 
     private function getCategories(EntityManagerInterface $manager): array
     {
-        $repository = $manager->getRepository(Category::class);
-
         /** @psalm-var array<int, Category> $categories */
-        $categories = $repository
+        $categories = $manager->getRepository(Category::class)
             ->getQueryBuilderByGroup()
             ->getQuery()
             ->getResult();
@@ -589,8 +587,8 @@ class TestController extends AbstractController
 
     private function getProducts(EntityManagerInterface $manager): array
     {
-        $repository = $manager->getRepository(Product::class);
-        $products = $repository->findByGroup();
+        $products = $manager->getRepository(Product::class)
+            ->findByGroup();
         $fn = static fn (Product $p): string => \sprintf('%s - %s', $p->getGroupCode(), $p->getCategoryCode());
 
         return $this->groupBy($products, $fn);
@@ -598,10 +596,8 @@ class TestController extends AbstractController
 
     private function getStates(EntityManagerInterface $manager): array
     {
-        $repository = $manager->getRepository(CalculationState::class);
-
         /** @psalm-var CalculationState[] $states */
-        $states = $repository
+        $states = $manager->getRepository(CalculationState::class)
             ->getQueryBuilderByEditable()
             ->getQuery()
             ->getResult();

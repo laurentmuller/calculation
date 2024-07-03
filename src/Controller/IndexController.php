@@ -197,9 +197,8 @@ class IndexController extends AbstractController
 
     private function getCalculations(int $maxResults, ?UserInterface $user): array
     {
-        $repository = $this->manager->getRepository(Calculation::class);
-
-        return $repository->getLastCalculations($maxResults, $user);
+        return $this->manager->getRepository(Calculation::class)
+            ->getLastCalculations($maxResults, $user);
     }
 
     /**
@@ -207,16 +206,14 @@ class IndexController extends AbstractController
      */
     private function getMonths(): array
     {
-        $repository = $this->manager->getRepository(Calculation::class);
-
-        return $repository->getByMonth();
+        return $this->manager->getRepository(Calculation::class)
+            ->getByMonth();
     }
 
     private function getStates(): array
     {
-        $repository = $this->manager->getRepository(CalculationState::class);
-
-        $results = $repository->getCalculations();
+        $results = $this->manager->getRepository(CalculationState::class)
+            ->getCalculations();
         $count = $this->getColumnSum($results, 'count');
         $total = $this->getColumnSum($results, 'total');
         $items = $this->getColumnSum($results, 'items');

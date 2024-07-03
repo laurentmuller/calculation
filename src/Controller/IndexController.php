@@ -26,8 +26,6 @@ use App\Form\Parameters\AbstractParametersType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
-use App\Repository\CalculationRepository;
-use App\Repository\CalculationStateRepository;
 use App\Traits\ArrayTrait;
 use App\Traits\MathTrait;
 use App\Traits\ParameterTrait;
@@ -199,7 +197,6 @@ class IndexController extends AbstractController
 
     private function getCalculations(int $maxResults, ?UserInterface $user): array
     {
-        /** @psalm-var CalculationRepository $repository */
         $repository = $this->manager->getRepository(Calculation::class);
 
         return $repository->getLastCalculations($maxResults, $user);
@@ -210,7 +207,6 @@ class IndexController extends AbstractController
      */
     private function getMonths(): array
     {
-        /** @psalm-var CalculationRepository $repository */
         $repository = $this->manager->getRepository(Calculation::class);
 
         return $repository->getByMonth();
@@ -218,7 +214,6 @@ class IndexController extends AbstractController
 
     private function getStates(): array
     {
-        /** @psalm-var CalculationStateRepository $repository */
         $repository = $this->manager->getRepository(CalculationState::class);
 
         $results = $repository->getCalculations();

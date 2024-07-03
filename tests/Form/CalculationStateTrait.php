@@ -35,6 +35,32 @@ trait CalculationStateTrait
     private ?CalculationState $notEditableState = null;
 
     /**
+     * @throws Exception|\ReflectionException
+     */
+    protected function getCalculationStateEntityType(): EntityType
+    {
+        return new EntityType($this->getCalculationStateRegistry());
+    }
+
+    /**
+     * @throws Exception|\ReflectionException
+     */
+    protected function getCalculationStateRegistry(): MockObject&ManagerRegistry
+    {
+        $results = [
+            $this->getEditableState(),
+            $this->getNotEditableState(),
+        ];
+
+        return $this->createManagerRegistry(
+            CalculationState::class,
+            CalculationStateRepository::class,
+            'getQueryBuilderByEditable',
+            $results
+        );
+    }
+
+    /**
      * @throws \ReflectionException
      */
     protected function getEditableState(): CalculationState
@@ -44,18 +70,10 @@ trait CalculationStateTrait
             $this->editableState->setCode('Editable')
                 ->setEditable(true);
 
-            return self::setId($this->editableState);
+            return self::setId($this->editableState, 11);
         }
 
         return $this->editableState;
-    }
-
-    /**
-     * @throws Exception|\ReflectionException
-     */
-    protected function getEntityType(): EntityType
-    {
-        return new EntityType($this->getRegistry());
     }
 
     /**
@@ -72,29 +90,5 @@ trait CalculationStateTrait
         }
 
         return $this->notEditableState;
-    }
-
-    /**
-     * @throws Exception|\ReflectionException
-     */
-    protected function getRegistry(): MockObject&ManagerRegistry
-    {
-        $results = [
-            $this->getEditableState(),
-            $this->getNotEditableState(),
-        ];
-        $query = $this->createQuery($results);
-        $builder = $this->createQueryBuilder($query);
-        $manager = $this->createEntityManager(CalculationState::class);
-        $repository = $this->createRepository(CalculationStateRepository::class);
-        $registry = $this->createRegistry($manager);
-
-        $repository->method('getQueryBuilderByEditable')
-            ->willReturn($builder);
-
-        $manager->method('getRepository')
-            ->willReturn($repository);
-
-        return $registry;
     }
 }

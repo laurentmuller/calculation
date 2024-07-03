@@ -13,51 +13,66 @@ declare(strict_types=1);
 namespace App\Tests\Form\CalculationState;
 
 use App\Form\CalculationState\CalculationStateListType;
+use App\Tests\Data\DataForm;
 use App\Tests\Form\CalculationStateTrait;
+use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 #[CoversClass(CalculationStateListType::class)]
 class CalculationStateListTypeTest extends TypeTestCase
 {
     use CalculationStateTrait;
+    use PreloadedExtensionsTrait;
     use TranslatorMockTrait;
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testFormView(): void
+    {
+        $state = $this->getNotEditableState();
+        $formData = DataForm::instance($state);
+
+        $view = $this->factory->createBuilder(FormType::class, $formData)
+            ->add('value', CalculationStateListType::class)
+            ->getForm()
+            ->createView();
+
+        self::assertArrayHasKey('value', $view->vars);
+        self::assertEqualsCanonicalizing($formData, $view->vars['value']);
+    }
 
     /**
      * @throws \ReflectionException
      */
     public function testSubmitValidData(): void
     {
-        $state = $this->getEditableState();
-        $data = [
-            'state' => $state,
+        $state = $this->getNotEditableState();
+        $formData = [
+            'value' => $state->getId(),
         ];
-        $form = $this->factory->createBuilder(FormType::class, $data)
-            ->add('state', CalculationStateListType::class)
+        $model = DataForm::instance($state);
+        $form = $this->factory->createBuilder(FormType::class, $model)
+            ->add('value', CalculationStateListType::class)
             ->getForm();
-        $form->submit(['state' => $state->getId()]);
-        self::assertTrue($form->isValid());
-        self::assertSame($data['state'], $state);
+        $expected = DataForm::instance($state);
+        $form->submit($formData);
+        self::assertTrue($form->isSynchronized());
+        self::assertEqualsCanonicalizing($expected, $model);
     }
 
     /**
      * @throws Exception|\ReflectionException
      */
-    protected function getExtensions(): array
+    protected function getPreloadedExtensions(): array
     {
-        /** @psalm-var array $extensions */
-        $extensions = parent::getExtensions();
-
-        $types = [
-            $this->getEntityType(),
+        return [
+            $this->getCalculationStateEntityType(),
             new CalculationStateListType($this->createMockTranslator()),
         ];
-        $extensions[] = new PreloadedExtension($types, []);
-
-        return $extensions;
     }
 }

@@ -36,11 +36,8 @@ use App\Pdf\PdfLabelDocument;
 use App\Report\HtmlColorNameReport;
 use App\Report\HtmlReport;
 use App\Report\MemoryImageReport;
-use App\Repository\CalculationStateRepository;
-use App\Repository\CategoryRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\GroupRepository;
-use App\Repository\ProductRepository;
 use App\Response\PdfResponse;
 use App\Response\WordResponse;
 use App\Service\AbstractHttpClientService;
@@ -547,7 +544,6 @@ class TestController extends AbstractController
 
     private function getCategories(EntityManagerInterface $manager): array
     {
-        /** @psalm-var CategoryRepository $repository */
         $repository = $manager->getRepository(Category::class);
 
         /** @psalm-var array<int, Category> $categories */
@@ -593,7 +589,6 @@ class TestController extends AbstractController
 
     private function getProducts(EntityManagerInterface $manager): array
     {
-        /** @psalm-var ProductRepository $repository */
         $repository = $manager->getRepository(Product::class);
         $products = $repository->findByGroup();
         $fn = static fn (Product $p): string => \sprintf('%s - %s', $p->getGroupCode(), $p->getCategoryCode());
@@ -603,10 +598,9 @@ class TestController extends AbstractController
 
     private function getStates(EntityManagerInterface $manager): array
     {
-        /** @psalm-var CalculationStateRepository $repository */
         $repository = $manager->getRepository(CalculationState::class);
 
-        /** @psalm-var array<int, CalculationState> $states */
+        /** @psalm-var CalculationState[] $states */
         $states = $repository
             ->getQueryBuilderByEditable()
             ->getQuery()

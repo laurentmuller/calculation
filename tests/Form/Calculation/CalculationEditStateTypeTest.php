@@ -28,7 +28,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\PreloadedExtension;
 
 /**
  * @extends EntityTypeTestCase<Calculation, CalculationEditStateType>
@@ -69,32 +68,27 @@ class CalculationEditStateTypeTest extends EntityTypeTestCase
         return Calculation::class;
     }
 
+    protected function getFormTypeClass(): string
+    {
+        return CalculationEditStateType::class;
+    }
+
     /**
      * @throws Exception|\ReflectionException
      */
-    protected function getExtensions(): array
+    protected function getPreloadedExtensions(): array
     {
         $translator = $this->createMockTranslator();
         $this->application->method('isMarginBelow')
             ->willReturnCallback(fn (): bool => $this->marginBelow);
 
-        /** @psalm-var array $extensions */
-        $extensions = parent::getExtensions();
-        $types = [
+        return [
             new PlainType($translator),
-            new EntityType($this->getRegistry()),
+            new EntityType($this->getCalculationStateRegistry()),
             new CalculationStateListType($translator),
             new CalculationGroupType($this->createMock(GroupRepository::class)),
             new CalculationCategoryType($this->createMock(CategoryRepository::class)),
             new CalculationEditStateType($this->application, $translator),
         ];
-        $extensions[] = new PreloadedExtension($types, []);
-
-        return $extensions;
-    }
-
-    protected function getFormTypeClass(): string
-    {
-        return CalculationEditStateType::class;
     }
 }

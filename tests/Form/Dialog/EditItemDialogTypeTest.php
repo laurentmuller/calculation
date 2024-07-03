@@ -10,38 +10,37 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Form\Category;
+namespace App\Tests\Form\Dialog;
 
-use App\Form\Category\CategoryListType;
-use App\Tests\Data\DataForm;
+use App\Form\Dialog\EditItemDialogType;
 use App\Tests\Form\CategoryTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(CategoryListType::class)]
-class CategoryListTypeTest extends TypeTestCase
+#[CoversClass(EditItemDialogType::class)]
+class EditItemDialogTypeTest extends TypeTestCase
 {
     use CategoryTrait;
     use PreloadedExtensionsTrait;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testFormView(): void
     {
-        $category = $this->getCategory();
-        $formData = DataForm::instance($category);
-
-        $view = $this->factory->createBuilder(FormType::class, $formData)
-            ->add('value', CategoryListType::class)
-            ->getForm()
+        $formData = [
+            'description' => 'Description',
+            'unit' => 'Unit',
+            'category' => null,
+            'price' => 1.0,
+            'quantity' => 1.0,
+        ];
+        $view = $this->factory->create(EditItemDialogType::class, $formData)
             ->createView();
 
-        self::assertArrayHasKey('value', $view->vars);
-        self::assertEqualsCanonicalizing($formData, $view->vars['value']);
+        foreach (\array_keys($formData) as $key) {
+            self::assertArrayHasKey($key, $view);
+            self::assertSame((string) $formData[$key], $view->children[$key]->vars['value']);
+        }
     }
 
     /**
@@ -51,16 +50,22 @@ class CategoryListTypeTest extends TypeTestCase
     {
         $category = $this->getCategory();
         $formData = [
-            'value' => $category->getId(),
+            'description' => 'Description',
+            'unit' => 'Unit',
+            'category' => $category->getId(),
+            'price' => 1.0,
+            'quantity' => 1.0,
         ];
-        $model = DataForm::instance($category);
-        $form = $this->factory->createBuilder(FormType::class, $model)
-            ->add('value', CategoryListType::class)
-            ->getForm();
-        $expected = DataForm::instance($category);
+        $model = [
+            'description' => null,
+            'unit' => null,
+            'category' => null,
+            'price' => 0.0,
+            'quantity' => 0.0,
+        ];
+        $form = $this->factory->create(EditItemDialogType::class, $model);
         $form->submit($formData);
         self::assertTrue($form->isSynchronized());
-        self::assertEqualsCanonicalizing($expected, $model);
     }
 
     /**
@@ -70,7 +75,6 @@ class CategoryListTypeTest extends TypeTestCase
     {
         return [
             $this->getCategoryEntityType(),
-            new CategoryListType(),
         ];
     }
 }

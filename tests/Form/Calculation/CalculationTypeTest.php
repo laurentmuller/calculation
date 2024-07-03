@@ -26,7 +26,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\PreloadedExtension;
 
 /**
  * @extends EntityTypeTestCase<Calculation, CalculationType>
@@ -53,26 +52,21 @@ class CalculationTypeTest extends EntityTypeTestCase
         return Calculation::class;
     }
 
+    protected function getFormTypeClass(): string
+    {
+        return CalculationType::class;
+    }
+
     /**
      * @throws Exception|\ReflectionException
      */
-    protected function getExtensions(): array
+    protected function getPreloadedExtensions(): array
     {
-        /** @psalm-var array $extensions */
-        $extensions = parent::getExtensions();
-        $types = [
-            new EntityType($this->getRegistry()),
+        return [
+            new EntityType($this->getCalculationStateRegistry()),
             new CalculationStateListType($this->createMockTranslator()),
             new CalculationGroupType($this->createMock(GroupRepository::class)),
             new CalculationCategoryType($this->createMock(CategoryRepository::class)),
         ];
-        $extensions[] = new PreloadedExtension($types, []);
-
-        return $extensions;
-    }
-
-    protected function getFormTypeClass(): string
-    {
-        return CalculationType::class;
     }
 }

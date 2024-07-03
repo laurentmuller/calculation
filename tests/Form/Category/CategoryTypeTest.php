@@ -19,7 +19,6 @@ use App\Tests\Form\GroupTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\PreloadedExtension;
 
 /**
  * @extends EntityTypeTestCase<Category, CategoryType>
@@ -43,23 +42,18 @@ class CategoryTypeTest extends EntityTypeTestCase
         return Category::class;
     }
 
-    /**
-     * @throws Exception|\ReflectionException
-     */
-    protected function getExtensions(): array
-    {
-        /** @psalm-var array $extensions */
-        $extensions = parent::getExtensions();
-        $types = [
-            new EntityType($this->getRegistry()),
-        ];
-        $extensions[] = new PreloadedExtension($types, []);
-
-        return $extensions;
-    }
-
     protected function getFormTypeClass(): string
     {
         return CategoryType::class;
+    }
+
+    /**
+     * @throws Exception|\ReflectionException
+     */
+    protected function getPreloadedExtensions(): array
+    {
+        return [
+            new EntityType($this->getGroupRegistry()),
+        ];
     }
 }

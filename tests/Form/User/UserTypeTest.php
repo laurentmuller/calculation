@@ -23,7 +23,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Form\PreloadedExtension;
 
 /**
  * @extends EntityTypeTestCase<User, UserType>
@@ -52,26 +51,28 @@ class UserTypeTest extends EntityTypeTestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\ReflectionException
      */
     protected function getExtensions(): array
     {
-        /** @psalm-var array $extensions */
-        $extensions = parent::getExtensions();
-        $types = [
-            new PlainType($this->createMockTranslator()),
-            new RoleChoiceType($this->createMockSecurity()),
-            $this->createVichImageType(),
-        ];
-        $extensions[] = new PreloadedExtension($types, []);
-        $extensions[] = $this->getPasswordHasherExtension();
-
-        return $extensions;
+        return \array_merge(parent::getExtensions(), [$this->getPasswordHasherExtension()]);
     }
 
     protected function getFormTypeClass(): string
     {
         return UserType::class;
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function getPreloadedExtensions(): array
+    {
+        return [
+            $this->createVichImageType(),
+            new PlainType($this->createMockTranslator()),
+            new RoleChoiceType($this->createMockSecurity()),
+        ];
     }
 
     /**

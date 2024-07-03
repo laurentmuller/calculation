@@ -18,7 +18,6 @@ use App\Tests\Form\CategoryTrait;
 use App\Tests\Form\EntityTypeTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
-use Symfony\Component\Form\PreloadedExtension;
 
 /**
  * @extends EntityTypeTestCase<Product, ProductType>
@@ -44,23 +43,18 @@ class ProductTypeTest extends EntityTypeTestCase
         return Product::class;
     }
 
-    /**
-     * @throws Exception|\ReflectionException
-     */
-    protected function getExtensions(): array
-    {
-        /** @psalm-var array $extensions */
-        $extensions = parent::getExtensions();
-        $types = [
-            $this->getEntityType(),
-        ];
-        $extensions[] = new PreloadedExtension($types, []);
-
-        return $extensions;
-    }
-
     protected function getFormTypeClass(): string
     {
         return ProductType::class;
+    }
+
+    /**
+     * @throws Exception|\ReflectionException
+     */
+    protected function getPreloadedExtensions(): array
+    {
+        return [
+            $this->getCategoryEntityType(),
+        ];
     }
 }

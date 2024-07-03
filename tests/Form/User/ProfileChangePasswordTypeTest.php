@@ -39,15 +39,11 @@ class ProfileChangePasswordTypeTest extends EntityTypeTestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\ReflectionException
      */
     protected function getExtensions(): array
     {
-        /** @psalm-var array $extensions */
-        $extensions = parent::getExtensions();
-        $extensions[] = $this->getPasswordHasherExtension();
-
-        return $extensions;
+        return \array_merge(parent::getExtensions(), [$this->getPasswordHasherExtension()]);
     }
 
     protected function getFormTypeClass(): string

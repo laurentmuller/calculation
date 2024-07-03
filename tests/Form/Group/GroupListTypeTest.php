@@ -10,21 +10,21 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Form\Category;
+namespace App\Tests\Form\Group;
 
-use App\Form\Category\CategoryListType;
+use App\Form\Group\GroupListType;
 use App\Tests\Data\DataForm;
-use App\Tests\Form\CategoryTrait;
+use App\Tests\Form\GroupTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(CategoryListType::class)]
-class CategoryListTypeTest extends TypeTestCase
+#[CoversClass(GroupListType::class)]
+class GroupListTypeTest extends TypeTestCase
 {
-    use CategoryTrait;
+    use GroupTrait;
     use PreloadedExtensionsTrait;
 
     /**
@@ -32,11 +32,11 @@ class CategoryListTypeTest extends TypeTestCase
      */
     public function testFormView(): void
     {
-        $category = $this->getCategory();
-        $formData = DataForm::instance($category);
+        $group = $this->getGroup();
+        $formData = DataForm::instance($group);
 
         $view = $this->factory->createBuilder(FormType::class, $formData)
-            ->add('value', CategoryListType::class)
+            ->add('value', GroupListType::class)
             ->getForm()
             ->createView();
 
@@ -49,15 +49,15 @@ class CategoryListTypeTest extends TypeTestCase
      */
     public function testSubmitValidData(): void
     {
-        $category = $this->getCategory();
+        $group = $this->getGroup();
         $formData = [
-            'value' => $category->getId(),
+            'value' => $group->getId(),
         ];
-        $model = DataForm::instance($category);
+        $model = DataForm::instance($group);
         $form = $this->factory->createBuilder(FormType::class, $model)
-            ->add('value', CategoryListType::class)
+            ->add('value', GroupListType::class)
             ->getForm();
-        $expected = DataForm::instance($category);
+        $expected = DataForm::instance($group);
         $form->submit($formData);
         self::assertTrue($form->isSynchronized());
         self::assertEqualsCanonicalizing($expected, $model);
@@ -69,8 +69,7 @@ class CategoryListTypeTest extends TypeTestCase
     protected function getPreloadedExtensions(): array
     {
         return [
-            $this->getCategoryEntityType(),
-            new CategoryListType(),
+            $this->getGroupEntityType(),
         ];
     }
 }

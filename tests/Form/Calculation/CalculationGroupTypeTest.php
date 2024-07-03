@@ -21,7 +21,6 @@ use App\Tests\Form\EntityTypeTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
-use Symfony\Component\Form\PreloadedExtension;
 
 /**
  * @extends EntityTypeTestCase<CalculationGroup, CalculationGroupType>
@@ -43,24 +42,19 @@ class CalculationGroupTypeTest extends EntityTypeTestCase
         return CalculationGroup::class;
     }
 
-    /**
-     * @throws Exception
-     */
-    protected function getExtensions(): array
-    {
-        /** @psalm-var array $extensions */
-        $extensions = parent::getExtensions();
-        $types = [
-            new CalculationGroupType($this->createMock(GroupRepository::class)),
-            new CalculationCategoryType($this->createMock(CategoryRepository::class)),
-        ];
-        $extensions[] = new PreloadedExtension($types, []);
-
-        return $extensions;
-    }
-
     protected function getFormTypeClass(): string
     {
         return CalculationGroupType::class;
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function getPreloadedExtensions(): array
+    {
+        return [
+            new CalculationGroupType($this->createMock(GroupRepository::class)),
+            new CalculationCategoryType($this->createMock(CategoryRepository::class)),
+        ];
     }
 }

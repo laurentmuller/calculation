@@ -28,6 +28,8 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  */
 abstract class EntityTypeTestCase extends TypeTestCase
 {
+    use PreloadedExtensionsTrait;
+
     /**
      * Test.
      */

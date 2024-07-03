@@ -12,10 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Form;
 
-use App\Repository\AbstractRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -28,24 +26,34 @@ use PHPUnit\Framework\TestCase;
  */
 trait ManagerRegistryTrait
 {
+    private (EntityManager&MockObject)|null $entityManager = null;
+    private (ManagerRegistry&MockObject)|null $managerRegistry = null;
+    /** @psalm-var array<string, mixed */
+    private array $repositories = [];
+
     /**
-     * @psalm-param class-string $entityClassName
+     * @psalm-param class-string $entityClass
+     * @psalm-param class-string $repositoryClass
      *
      * @throws Exception
      */
-    protected function createEntityManager($entityClassName): MockObject&EntityManager
-    {
-        $manager = $this->createMock(EntityManager::class);
-        $manager->method('getClassMetadata')
-            ->willReturn(new ClassMetadata($entityClassName));
+    protected function createManagerRegistry(
+        string $entityClass,
+        string $repositoryClass,
+        string $queryMethod,
+        array $results
+    ): MockObject&ManagerRegistry {
+        $query = $this->createQuery($results);
+        $builder = $this->createQueryBuilder($query);
+        $this->repositories[$entityClass] = $this->createRepository($repositoryClass, $queryMethod, $builder);
 
-        return $manager;
+        return $this->getManagerRegistry();
     }
 
     /**
      * @throws Exception
      */
-    protected function createQuery(array $results): MockObject&Query
+    private function createQuery(array $results): MockObject&Query
     {
         $query = $this->createMock(Query::class);
         $query->method('execute')
@@ -57,7 +65,7 @@ trait ManagerRegistryTrait
     /**
      * @throws Exception
      */
-    protected function createQueryBuilder(MockObject&Query $query): MockObject&QueryBuilder
+    private function createQueryBuilder(MockObject&Query $query): MockObject&QueryBuilder
     {
         $parameters = new ArrayCollection();
         $builder = $this->createMock(QueryBuilder::class);
@@ -70,28 +78,47 @@ trait ManagerRegistryTrait
     }
 
     /**
+     * @psalm-param class-string $repositoryClass
+     *
      * @throws Exception
      */
-    protected function createRegistry(MockObject&EntityManager $manager): MockObject&ManagerRegistry
-    {
-        $registry = $this->createMock(ManagerRegistry::class);
-        $registry->method('getManagerForClass')
-            ->willReturn($manager);
+    private function createRepository(
+        string $repositoryClass,
+        string $queryMethod,
+        MockObject&QueryBuilder $builder
+    ): MockObject {
+        $repository = $this->createMock($repositoryClass);
+        $repository->method($queryMethod)
+            ->willReturn($builder);
 
-        return $registry;
+        return $repository;
     }
 
     /**
-     * @template TRepository of AbstractRepository
-     *
-     * @psalm-param class-string<TRepository> $repositoryClass
-     *
-     * @psalm-return MockObject&TRepository
-     *
      * @throws Exception
      */
-    protected function createRepository(string $repositoryClass): MockObject&AbstractRepository
+    private function getEntityManager(): MockObject&EntityManager
     {
-        return $this->createMock($repositoryClass);
+        if (null === $this->entityManager) {
+            $this->entityManager = $this->createMock(EntityManager::class);
+            $this->entityManager->method('getRepository')
+                ->willReturnCallback(fn (string $className): mixed => $this->repositories[$className] ?? null);
+        }
+
+        return $this->entityManager;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getManagerRegistry(): MockObject&ManagerRegistry
+    {
+        if (null === $this->managerRegistry) {
+            $this->managerRegistry = $this->createMock(ManagerRegistry::class);
+            $this->managerRegistry->method('getManagerForClass')
+                ->willReturn($this->getEntityManager());
+        }
+
+        return $this->managerRegistry;
     }
 }

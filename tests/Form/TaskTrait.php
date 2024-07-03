@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Form;
 
-use App\Entity\Category;
-use App\Repository\CategoryRepository;
+use App\Entity\Task;
+use App\Repository\TaskRepository;
 use App\Tests\Entity\IdTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\MockObject\Exception;
@@ -24,48 +24,48 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 /**
  * @psalm-require-extends TestCase
  */
-trait CategoryTrait
+trait TaskTrait
 {
-    use GroupTrait;
+    use CategoryTrait;
     use IdTrait;
     use ManagerRegistryTrait;
 
-    private ?Category $category = null;
+    private ?Task $task = null;
 
     /**
      * @throws \ReflectionException
      */
-    protected function getCategory(): Category
+    protected function getTask(): Task
     {
-        if (!$this->category instanceof Category) {
-            $this->category = new Category();
-            $this->category->setCode('category');
-            $this->getGroup()->addCategory($this->category);
+        if (!$this->task instanceof Task) {
+            $this->task = new Task();
+            $this->task->setName('task');
+            $this->getCategory()->addTask($this->task);
 
-            return self::setId($this->category);
+            return self::setId($this->task);
         }
 
-        return $this->category;
+        return $this->task;
     }
 
     /**
      * @throws Exception|\ReflectionException
      */
-    protected function getCategoryEntityType(): EntityType
+    protected function getTaskEntityType(): EntityType
     {
-        return new EntityType($this->getCategoryRegistry());
+        return new EntityType($this->getTaskRegistry());
     }
 
     /**
      * @throws Exception|\ReflectionException
      */
-    protected function getCategoryRegistry(): MockObject&ManagerRegistry
+    protected function getTaskRegistry(): MockObject&ManagerRegistry
     {
         return $this->createManagerRegistry(
-            Category::class,
-            CategoryRepository::class,
-            'getQueryBuilderByGroup',
-            [$this->getCategory()]
+            Task::class,
+            TaskRepository::class,
+            'getSortedBuilder',
+            [$this->getTask()]
         );
     }
 }

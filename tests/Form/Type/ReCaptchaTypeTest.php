@@ -14,12 +14,12 @@ namespace App\Tests\Form\Type;
 
 use App\Form\Type\ReCaptchaType;
 use App\Service\RecaptchaService;
+use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReCaptcha\Response;
-use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -27,7 +27,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 #[CoversClass(ReCaptchaType::class)]
 class ReCaptchaTypeTest extends TypeTestCase
 {
+    use PreloadedExtensionsTrait;
     use TranslatorMockTrait;
+
     private ?Request $request = null;
     private MockObject&RequestStack $requestStack;
     private MockObject&RecaptchaService $service;
@@ -121,12 +123,10 @@ class ReCaptchaTypeTest extends TypeTestCase
         self::assertSame($data, $form->getData());
     }
 
-    protected function getExtensions(): array
+    protected function getPreloadedExtensions(): array
     {
-        $type = new ReCaptchaType($this->service, $this->requestStack);
-
         return [
-            new PreloadedExtension([$type], []),
+            new ReCaptchaType($this->service, $this->requestStack),
         ];
     }
 

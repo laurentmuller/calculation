@@ -18,7 +18,6 @@ use App\Form\Type\CountryFlagType;
 use App\Service\CountryFlagService;
 use App\Tests\Form\EntityTypeTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Symfony\Component\Form\PreloadedExtension;
 
 /**
  * @extends EntityTypeTestCase<Customer, CustomerType>
@@ -46,20 +45,15 @@ class CustomerTypeTest extends EntityTypeTestCase
         return Customer::class;
     }
 
-    protected function getExtensions(): array
-    {
-        /** @psalm-var array $extensions */
-        $extensions = parent::getExtensions();
-        $types = [
-            new CountryFlagType(new CountryFlagService()),
-        ];
-        $extensions[] = new PreloadedExtension($types, []);
-
-        return $extensions;
-    }
-
     protected function getFormTypeClass(): string
     {
         return CustomerType::class;
+    }
+
+    protected function getPreloadedExtensions(): array
+    {
+        return [
+            new CountryFlagType(new CountryFlagService()),
+        ];
     }
 }

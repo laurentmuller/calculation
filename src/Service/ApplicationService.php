@@ -604,10 +604,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     private function getPropertyRepository(): GlobalPropertyRepository
     {
-        /** @psalm-var GlobalPropertyRepository $repository */
-        $repository = $this->manager->getRepository(GlobalProperty::class);
-
-        return $repository;
+        return $this->manager->getRepository(GlobalProperty::class);
     }
 
     /**

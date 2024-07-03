@@ -32,14 +32,6 @@ trait GroupTrait
     private ?Group $group = null;
 
     /**
-     * @throws Exception|\ReflectionException
-     */
-    protected function getEntityType(): EntityType
-    {
-        return new EntityType($this->getRegistry());
-    }
-
-    /**
      * @throws \ReflectionException
      */
     protected function getGroup(): Group
@@ -57,20 +49,21 @@ trait GroupTrait
     /**
      * @throws Exception|\ReflectionException
      */
-    protected function getRegistry(): MockObject&ManagerRegistry
+    protected function getGroupEntityType(): EntityType
     {
-        $query = $this->createQuery([$this->getGroup()]);
-        $builder = $this->createQueryBuilder($query);
-        $manager = $this->createEntityManager(Group::class);
-        $repository = $this->createRepository(GroupRepository::class);
-        $registry = $this->createRegistry($manager);
+        return new EntityType($this->getGroupRegistry());
+    }
 
-        $repository->method('getSortedBuilder')
-            ->willReturn($builder);
-
-        $manager->method('getRepository')
-            ->willReturn($repository);
-
-        return $registry;
+    /**
+     * @throws Exception|\ReflectionException
+     */
+    protected function getGroupRegistry(): MockObject&ManagerRegistry
+    {
+        return $this->createManagerRegistry(
+            Group::class,
+            GroupRepository::class,
+            'getSortedBuilder',
+            [$this->getGroup()]
+        );
     }
 }

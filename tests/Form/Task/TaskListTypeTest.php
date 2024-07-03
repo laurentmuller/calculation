@@ -10,33 +10,35 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Form\Category;
+namespace App\Tests\Form\Task;
 
-use App\Form\Category\CategoryListType;
+use App\Form\Task\TaskListType;
 use App\Tests\Data\DataForm;
-use App\Tests\Form\CategoryTrait;
+use App\Tests\Entity\IdTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
+use App\Tests\Form\TaskTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(CategoryListType::class)]
-class CategoryListTypeTest extends TypeTestCase
+#[CoversClass(TaskListType::class)]
+class TaskListTypeTest extends TypeTestCase
 {
-    use CategoryTrait;
+    use IdTrait;
     use PreloadedExtensionsTrait;
+    use TaskTrait;
 
     /**
      * @throws \ReflectionException
      */
     public function testFormView(): void
     {
-        $category = $this->getCategory();
-        $formData = DataForm::instance($category);
+        $task = $this->getTask();
+        $formData = DataForm::instance($task);
 
         $view = $this->factory->createBuilder(FormType::class, $formData)
-            ->add('value', CategoryListType::class)
+            ->add('value', TaskListType::class)
             ->getForm()
             ->createView();
 
@@ -49,15 +51,15 @@ class CategoryListTypeTest extends TypeTestCase
      */
     public function testSubmitValidData(): void
     {
-        $category = $this->getCategory();
+        $task = $this->getTask();
         $formData = [
-            'value' => $category->getId(),
+            'value' => $task->getId(),
         ];
-        $model = DataForm::instance($category);
+        $model = DataForm::instance($task);
         $form = $this->factory->createBuilder(FormType::class, $model)
-            ->add('value', CategoryListType::class)
+            ->add('value', TaskListType::class)
             ->getForm();
-        $expected = DataForm::instance($category);
+        $expected = DataForm::instance($task);
         $form->submit($formData);
         self::assertTrue($form->isSynchronized());
         self::assertEqualsCanonicalizing($expected, $model);
@@ -69,8 +71,7 @@ class CategoryListTypeTest extends TypeTestCase
     protected function getPreloadedExtensions(): array
     {
         return [
-            $this->getCategoryEntityType(),
-            new CategoryListType(),
+            $this->getTaskEntityType(),
         ];
     }
 }

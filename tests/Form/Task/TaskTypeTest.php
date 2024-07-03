@@ -19,7 +19,6 @@ use App\Tests\Form\EntityTypeTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
-use Symfony\Component\Form\PreloadedExtension;
 
 /**
  * @extends EntityTypeTestCase<Task, TaskType>
@@ -45,23 +44,18 @@ class TaskTypeTest extends EntityTypeTestCase
         return Task::class;
     }
 
-    /**
-     * @throws Exception|\ReflectionException
-     */
-    protected function getExtensions(): array
-    {
-        /** @psalm-var array $extensions */
-        $extensions = parent::getExtensions();
-        $types = [
-            $this->getEntityType(),
-        ];
-        $extensions[] = new PreloadedExtension($types, []);
-
-        return $extensions;
-    }
-
     protected function getFormTypeClass(): string
     {
         return TaskType::class;
+    }
+
+    /**
+     * @throws Exception|\ReflectionException
+     */
+    protected function getPreloadedExtensions(): array
+    {
+        return [
+            $this->getCategoryEntityType(),
+        ];
     }
 }

@@ -19,7 +19,6 @@ use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
-use Symfony\Component\Form\PreloadedExtension;
 
 /**
  * @extends EntityTypeTestCase<User, UserChangePasswordType>
@@ -43,23 +42,22 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\ReflectionException
      */
     protected function getExtensions(): array
     {
-        /** @psalm-var array $extensions */
-        $extensions = parent::getExtensions();
-        $types = [
-            new PlainType($this->createMockTranslator()),
-        ];
-        $extensions[] = new PreloadedExtension($types, []);
-        $extensions[] = $this->getPasswordHasherExtension();
-
-        return $extensions;
+        return \array_merge(parent::getExtensions(), [$this->getPasswordHasherExtension()]);
     }
 
     protected function getFormTypeClass(): string
     {
         return UserChangePasswordType::class;
+    }
+
+    protected function getPreloadedExtensions(): array
+    {
+        return [
+            new PlainType($this->createMockTranslator()),
+        ];
     }
 }

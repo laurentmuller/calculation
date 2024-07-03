@@ -18,7 +18,6 @@ use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
-use Symfony\Component\Form\PreloadedExtension;
 
 /**
  * @extends EntityTypeTestCase<User, ProfileEditType>
@@ -43,23 +42,18 @@ class ProfileEditTypeTest extends EntityTypeTestCase
         return User::class;
     }
 
-    /**
-     * @throws Exception
-     */
-    protected function getExtensions(): array
-    {
-        /** @psalm-var array $extensions */
-        $extensions = parent::getExtensions();
-        $types = [
-            $this->createVichImageType(),
-        ];
-        $extensions[] = new PreloadedExtension($types, []);
-
-        return $extensions;
-    }
-
     protected function getFormTypeClass(): string
     {
         return ProfileEditType::class;
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function getPreloadedExtensions(): array
+    {
+        return [
+            $this->createVichImageType(),
+        ];
     }
 }

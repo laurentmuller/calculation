@@ -15,7 +15,6 @@ namespace App\Tests\Form\CalculationState;
 use App\Form\AbstractListEntityType;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Tests\Data\DataForm;
-use App\Tests\Form\CalculationStateTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;

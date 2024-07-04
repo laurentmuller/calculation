@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Form\Dialog;
 
 use App\Form\Dialog\EditItemDialogType;
-use App\Tests\Form\CategoryTrait;
+use App\Tests\Form\Category\CategoryTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;

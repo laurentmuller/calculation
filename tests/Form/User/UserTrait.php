@@ -10,60 +10,59 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Form;
+namespace App\Tests\Form\User;
 
-use App\Entity\Group;
-use App\Repository\GroupRepository;
+use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Tests\Entity\IdTrait;
+use App\Tests\Form\ManagerRegistryTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-/**
- * @psalm-require-extends TestCase
- */
-trait GroupTrait
+trait UserTrait
 {
     use IdTrait;
     use ManagerRegistryTrait;
 
-    private ?Group $group = null;
+    private ?User $user = null;
 
     /**
      * @throws \ReflectionException
      */
-    protected function getGroup(): Group
+    protected function getUser(): User
     {
-        if (!$this->group instanceof Group) {
-            $this->group = new Group();
-            $this->group->setCode('group');
+        if (!$this->user instanceof User) {
+            $this->user = new User();
+            $this->user->setUsername('username')
+                ->setEmail('email@email.com')
+                ->setPassword('password');
 
-            return self::setId($this->group);
+            return self::setId($this->user);
         }
 
-        return $this->group;
+        return $this->user;
     }
 
     /**
      * @throws Exception|\ReflectionException
      */
-    protected function getGroupEntityType(): EntityType
+    protected function getUserEntityType(): EntityType
     {
-        return new EntityType($this->getGroupRegistry());
+        return new EntityType($this->getUserRegistry());
     }
 
     /**
      * @throws Exception|\ReflectionException
      */
-    protected function getGroupRegistry(): MockObject&ManagerRegistry
+    protected function getUserRegistry(): MockObject&ManagerRegistry
     {
         return $this->createManagerRegistry(
-            Group::class,
-            GroupRepository::class,
+            User::class,
+            UserRepository::class,
             'getSortedBuilder',
-            [$this->getGroup()]
+            [$this->getUser()]
         );
     }
 }

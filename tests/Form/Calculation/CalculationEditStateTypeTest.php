@@ -21,7 +21,7 @@ use App\Form\Type\PlainType;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use App\Service\ApplicationService;
-use App\Tests\Form\CalculationStateTrait;
+use App\Tests\Form\CalculationState\CalculationStateTrait;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Utils\DateUtils;
 use PHPUnit\Framework\Attributes\CoversClass;

@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Form\Dialog;
 
 use App\Form\Dialog\EditTaskDialogType;
-use App\Tests\Form\CategoryTrait;
+use App\Tests\Form\Category\CategoryTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use App\Tests\Form\TaskTrait;
+use App\Tests\Form\Task\TaskTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;

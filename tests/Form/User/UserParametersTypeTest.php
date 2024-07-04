@@ -28,7 +28,7 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 #[CoversClass(AbstractParametersType::class)]
 #[CoversClass(UserParametersType::class)]
-class UserParametersTypeClass extends TypeTestCase
+class UserParametersTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
     use TranslatorMockTrait;
@@ -65,7 +65,7 @@ class UserParametersTypeClass extends TypeTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws Exception
      */
     protected function getPreloadedExtensions(): array
     {

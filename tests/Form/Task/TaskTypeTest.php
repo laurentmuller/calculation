@@ -14,7 +14,7 @@ namespace App\Tests\Form\Task;
 
 use App\Entity\Task;
 use App\Form\Task\TaskType;
-use App\Tests\Form\CategoryTrait;
+use App\Tests\Form\Category\CategoryTrait;
 use App\Tests\Form\EntityTypeTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\Attributes\CoversClass;

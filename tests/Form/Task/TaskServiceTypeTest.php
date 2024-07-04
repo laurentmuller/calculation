@@ -15,7 +15,6 @@ namespace App\Tests\Form\Task;
 use App\Form\Task\TaskServiceType;
 use App\Form\Type\PlainType;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use App\Tests\Form\TaskTrait;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;

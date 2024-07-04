@@ -14,7 +14,6 @@ namespace App\Tests\Form\Group;
 
 use App\Form\Group\GroupListType;
 use App\Tests\Data\DataForm;
-use App\Tests\Form\GroupTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;

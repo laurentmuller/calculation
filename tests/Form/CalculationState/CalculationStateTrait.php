@@ -10,11 +10,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Form;
+namespace App\Tests\Form\CalculationState;
 
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
 use App\Tests\Entity\IdTrait;
+use App\Tests\Form\ManagerRegistryTrait;
 use App\Tests\TranslatorMockTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\MockObject\Exception;

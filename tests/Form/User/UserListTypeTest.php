@@ -10,9 +10,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Form\Task;
+namespace App\Tests\Form\User;
 
-use App\Form\Task\TaskListType;
+use App\Form\User\UserListType;
 use App\Tests\Data\DataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,22 +20,22 @@ use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(TaskListType::class)]
-class TaskListTypeTest extends TypeTestCase
+#[CoversClass(UserListType::class)]
+class UserListTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
-    use TaskTrait;
+    use UserTrait;
 
     /**
      * @throws \ReflectionException
      */
     public function testFormView(): void
     {
-        $task = $this->getTask();
-        $formData = DataForm::instance($task);
+        $user = $this->getUser();
+        $formData = DataForm::instance($user);
 
         $view = $this->factory->createBuilder(FormType::class, $formData)
-            ->add('value', TaskListType::class)
+            ->add('value', UserListType::class)
             ->getForm()
             ->createView();
 
@@ -48,27 +48,27 @@ class TaskListTypeTest extends TypeTestCase
      */
     public function testSubmitValidData(): void
     {
-        $task = $this->getTask();
+        $user = $this->getUser();
         $formData = [
-            'value' => $task->getId(),
+            'value' => $user->getId(),
         ];
-        $model = DataForm::instance($task);
+        $model = DataForm::instance($user);
         $form = $this->factory->createBuilder(FormType::class, $model)
-            ->add('value', TaskListType::class)
+            ->add('value', UserListType::class)
             ->getForm();
-        $expected = DataForm::instance($task);
+        $expected = DataForm::instance($user);
         $form->submit($formData);
         self::assertTrue($form->isSynchronized());
         self::assertEqualsCanonicalizing($expected, $model);
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException|Exception
      */
     protected function getPreloadedExtensions(): array
     {
         return [
-            $this->getTaskEntityType(),
+            $this->getUserEntityType(),
         ];
     }
 }

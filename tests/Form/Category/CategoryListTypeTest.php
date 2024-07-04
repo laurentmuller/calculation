@@ -14,7 +14,6 @@ namespace App\Tests\Form\Category;
 
 use App\Form\Category\CategoryListType;
 use App\Tests\Data\DataForm;
-use App\Tests\Form\CategoryTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;

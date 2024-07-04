@@ -15,7 +15,6 @@ namespace App\Tests\Form\Product;
 use App\Form\Product\ProductListType;
 use App\Tests\Data\DataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use App\Tests\Form\ProductTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Extension\Core\Type\FormType;

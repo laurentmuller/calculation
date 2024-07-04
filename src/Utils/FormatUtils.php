@@ -232,7 +232,7 @@ final class FormatUtils
         ?string $pattern = null,
         \DateTimeZone|string|null $timezone = null
     ): \IntlDateFormatter {
-        $locale = \Locale::getDefault();
+        $locale = self::DEFAULT_LOCALE;
         $dateType ??= self::DATE_TYPE;
         $timeType ??= self::TIME_TYPE;
         $pattern ??= '';
@@ -240,7 +240,7 @@ final class FormatUtils
         if (!isset(self::$dateFormatters[$hash])) {
             $formatter = new \IntlDateFormatter($locale, $dateType, $timeType, $timezone, pattern: $pattern);
             $pattern = (string) $formatter->getPattern();
-            if (self::DEFAULT_LOCALE === $locale && !\str_contains($pattern, 'yyyy') && \str_contains($pattern, 'yy')) {
+            if (!\str_contains($pattern, 'yyyy') && \str_contains($pattern, 'yy')) {
                 $pattern = \str_replace('yy', 'yyyy', $pattern);
                 $formatter->setPattern($pattern);
             }
@@ -268,7 +268,7 @@ final class FormatUtils
     ): \NumberFormatter {
         $hash = self::hashCode($style, $digits, $roundingMode, $percentSymbol);
         if (!isset(self::$numberFormatters[$hash])) {
-            $formatter = new \NumberFormatter(\Locale::getDefault(), $style);
+            $formatter = new \NumberFormatter(self::DEFAULT_LOCALE, $style);
             $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $digits);
             $formatter->setAttribute(\NumberFormatter::ROUNDING_MODE, $roundingMode);
             $formatter->setSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL, self::THOUSANDS_SEP);

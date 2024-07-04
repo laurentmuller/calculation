@@ -21,7 +21,7 @@ use App\Form\Calculation\CalculationType;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
-use App\Tests\Form\CalculationStateTrait;
+use App\Tests\Form\CalculationState\CalculationStateTrait;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Utils\DateUtils;
 use Doctrine\Common\Collections\ArrayCollection;

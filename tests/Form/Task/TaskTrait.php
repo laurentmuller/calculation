@@ -10,11 +10,13 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Form;
+namespace App\Tests\Form\Task;
 
 use App\Entity\Task;
 use App\Repository\TaskRepository;
 use App\Tests\Entity\IdTrait;
+use App\Tests\Form\Category\CategoryTrait;
+use App\Tests\Form\ManagerRegistryTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;

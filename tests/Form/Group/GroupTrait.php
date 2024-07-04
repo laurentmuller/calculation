@@ -10,11 +10,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Form;
+namespace App\Tests\Form\Group;
 
-use App\Entity\Category;
-use App\Repository\CategoryRepository;
+use App\Entity\Group;
+use App\Repository\GroupRepository;
 use App\Tests\Entity\IdTrait;
+use App\Tests\Form\ManagerRegistryTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -24,48 +25,46 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 /**
  * @psalm-require-extends TestCase
  */
-trait CategoryTrait
+trait GroupTrait
 {
-    use GroupTrait;
     use IdTrait;
     use ManagerRegistryTrait;
 
-    private ?Category $category = null;
+    private ?Group $group = null;
 
     /**
      * @throws \ReflectionException
      */
-    protected function getCategory(): Category
+    protected function getGroup(): Group
     {
-        if (!$this->category instanceof Category) {
-            $this->category = new Category();
-            $this->category->setCode('category');
-            $this->getGroup()->addCategory($this->category);
+        if (!$this->group instanceof Group) {
+            $this->group = new Group();
+            $this->group->setCode('group');
 
-            return self::setId($this->category);
+            return self::setId($this->group);
         }
 
-        return $this->category;
+        return $this->group;
     }
 
     /**
      * @throws Exception|\ReflectionException
      */
-    protected function getCategoryEntityType(): EntityType
+    protected function getGroupEntityType(): EntityType
     {
-        return new EntityType($this->getCategoryRegistry());
+        return new EntityType($this->getGroupRegistry());
     }
 
     /**
      * @throws Exception|\ReflectionException
      */
-    protected function getCategoryRegistry(): MockObject&ManagerRegistry
+    protected function getGroupRegistry(): MockObject&ManagerRegistry
     {
         return $this->createManagerRegistry(
-            Category::class,
-            CategoryRepository::class,
-            'getQueryBuilderByGroup',
-            [$this->getCategory()]
+            Group::class,
+            GroupRepository::class,
+            'getSortedBuilder',
+            [$this->getGroup()]
         );
     }
 }

@@ -14,7 +14,7 @@ namespace App\Tests\Form\Product;
 
 use App\Entity\Product;
 use App\Form\Product\ProductType;
-use App\Tests\Form\CategoryTrait;
+use App\Tests\Form\Category\CategoryTrait;
 use App\Tests\Form\EntityTypeTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;

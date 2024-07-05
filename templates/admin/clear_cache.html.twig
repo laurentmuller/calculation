@@ -5,46 +5,56 @@
 {%- set submit_text = 'clear_cache.submit' -%}
 {%- set message = 'clear_cache.message' %}
 {%- set message_parameters = {'%size%': size} -%}
-{%- set pools_length = pools|length -%}
+{%- set pools_length = 0 -%}
 {% block card_container_class ' col-md-8 offset-md-2 col-xl-6 offset-xl-3' %}
 {# message #}
 {% block message %}
-{{ parent() }}
-<p class="my-2">{{ 'clear_cache.note'|trans|raw }}</p>
+    {{ parent() }}
+    <p class="my-2">{{ 'clear_cache.note'|trans|raw }}</p>
 {% endblock %}
 {# body #}
 {% block body -%}
-{{ parent() }}
-{% if pools_length %}
-    <div class="modal fade" id="modal-cache-list" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ 'clear_cache.list'|trans }}</h5>
-                    {{ button_close_modal(true) }}
-                </div>
-                <div class="modal-body">
-                    <ul class="mb-0">
-                    {% for pool in pools %}
-                        <li>{{ pool }}</li>
-                    {% endfor %}
-                    </ul>
-                </div>
-                <div class="modal-footer">
-                    {{- button_close_modal(false) -}}
-                    <span class="ms-auto">{{ 'clear_cache.count'|trans({'%count%': pools_length|integer}) }}</span>
+    {{ parent() }}
+    {% if pools|length %}
+        <div class="modal fade" id="modal-cache-list" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ 'clear_cache.list'|trans }}</h5>
+                        {{ button_close_modal(true) }}
+                    </div>
+                    <div class="modal-body">
+                        {% for key, pool in pools %}
+                            {%- set pools_length = pools_length + pool|length -%}
+                            <p class="fw-bold mb-1 pb-2 border-bottom d-flex-wrap-center">
+                                <span class="me-auto">{{- key|title -}}</span>
+                                <small class="fw-normal">{{ pool|length|integer }}</small>
+                            </p>
+                            <ul{% if loop.last %} class="mb-0"{% endif %}>
+                                {% for line in pool %}
+                                    <li class="text-break">{{ line }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        {{- button_close_modal(false) -}}
+                        {% if pools_length %}
+                            <small class="ms-auto">{{ 'clear_cache.count'|trans({'%count%': pools_length|integer}) }}</small>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-{% endif %}
+    {% endif %}
 {% endblock %}
 {# actions #}
 {% block actions_form -%}
-{{ parent() }}
-{% if pools_length %}
-    <button type="button" class="btn btn-form btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal-cache-list">
-        {{- 'clear_cache.list'|trans -}}
-    </button>
-{% endif %}
+    {{ parent() }}
+    {% if pools|length %}
+        <button type="button" class="btn btn-form btn-outline-success" data-bs-toggle="modal"
+                data-bs-target="#modal-cache-list">
+            {{- 'clear_cache.list'|trans -}}
+        </button>
+    {% endif %}
 {% endblock %}

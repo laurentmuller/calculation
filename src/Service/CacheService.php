@@ -47,7 +47,7 @@ class CacheService
     /**
      * Gets all available cache pools.
      *
-     * @return string[]
+     * @return array<string, string[]>
      *
      * @throws InvalidArgumentException
      */
@@ -64,7 +64,7 @@ class CacheService
     }
 
     /**
-     * @return string[]
+     * @return array<string, string[]>
      */
     private function parseContent(string $content): array
     {
@@ -73,6 +73,15 @@ class CacheService
         $callback = static fn (string $line): bool => !\str_starts_with($line, '-')
             && !\str_starts_with($line, 'Pool name');
 
-        return $this->getSorted($this->getFiltered(\array_map('trim', $lines), $callback));
+        $lines = $this->getSorted($this->getFiltered(\array_map('trim', $lines), $callback));
+
+        $results = [];
+        foreach ($lines as $line) {
+            /** @psalm-var array{0: string, 1: string} $values */
+            $values = \explode('.', $line, 2);
+            $results[$values[0]][] = $values[1];
+        }
+
+        return $results;
     }
 }

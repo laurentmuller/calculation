@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Form\User;
 
+use App\Form\AbstractHelperType;
 use App\Form\Type\PlainType;
 use App\Form\User\AttributeRightType;
 use App\Form\User\RightsType;
@@ -25,6 +26,7 @@ use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
+#[CoversClass(AbstractHelperType::class)]
 #[CoversClass(RoleRightsType::class)]
 #[CoversClass(AttributeRightType::class)]
 #[CoversClass(RightsType::class)]

@@ -28,42 +28,37 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(HtmlStyle::class)]
 class HtmlStyleTest extends TestCase
 {
-    public static function getAlignments(): array
+    public static function getAlignments(): \Iterator
     {
-        return [
-            ['text-start', PdfTextAlignment::LEFT],
-            ['text-end', PdfTextAlignment::RIGHT],
-            ['text-center', PdfTextAlignment::CENTER],
-            ['text-justify', PdfTextAlignment::JUSTIFIED],
-        ];
+
+        yield ['text-start', PdfTextAlignment::LEFT];
+        yield ['text-end', PdfTextAlignment::RIGHT];
+        yield ['text-center', PdfTextAlignment::CENTER];
+        yield ['text-justify', PdfTextAlignment::JUSTIFIED];
     }
 
-    public static function getBorders(): array
+    public static function getBorders(): \Iterator
     {
-        return [
-            ['border-top', PdfBorder::top()],
-            ['border-bottom', PdfBorder::bottom()],
-            ['border-start', PdfBorder::left()],
-            ['border-end', PdfBorder::right()],
-            ['border-0', PdfBorder::none()],
-            ['border-top-0', PdfBorder::all()->setTop(false)],
-            ['border-start-0', PdfBorder::all()->setLeft(false)],
-            ['border-end-0', PdfBorder::all()->setRight(false)],
-            ['border-bottom-0', PdfBorder::all()->setBottom(false)],
-        ];
+        yield ['border-top', PdfBorder::top()];
+        yield ['border-bottom', PdfBorder::bottom()];
+        yield ['border-start', PdfBorder::left()];
+        yield ['border-end', PdfBorder::right()];
+        yield ['border-0', PdfBorder::none()];
+        yield ['border-top-0', PdfBorder::all()->setTop(false)];
+        yield ['border-start-0', PdfBorder::all()->setLeft(false)];
+        yield ['border-end-0', PdfBorder::all()->setRight(false)];
+        yield ['border-bottom-0', PdfBorder::all()->setBottom(false)];
     }
 
-    public static function getMargins(): array
+    public static function getMargins(): \Iterator
     {
-        return [
-            ['mt-1', 0.0, 0.0, 1.0, 0.0],
-            ['mb-1', 0.0, 0.0, 0.0, 1.0],
-            ['ms-1', 1.0, 0.0, 0.0, 0.0],
-            ['me-1', 0.0, 1.0, 0.0, 0.0],
-            ['mx-1', 1.0, 1.0, 0.0, 0.0],
-            ['my-1', 0.0, 0.0, 1.0, 1.0],
-            ['m-1', 1.0, 1.0, 1.0, 1.0],
-        ];
+        yield ['mt-1', 0.0, 0.0, 1.0, 0.0];
+        yield ['mb-1', 0.0, 0.0, 0.0, 1.0];
+        yield ['ms-1', 1.0, 0.0, 0.0, 0.0];
+        yield ['me-1', 0.0, 1.0, 0.0, 0.0];
+        yield ['mx-1', 1.0, 1.0, 0.0, 0.0];
+        yield ['my-1', 0.0, 0.0, 1.0, 1.0];
+        yield ['m-1', 1.0, 1.0, 1.0, 1.0];
     }
 
     #[DataProvider('getAlignments')]

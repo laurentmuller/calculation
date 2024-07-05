@@ -350,6 +350,7 @@ abstract class AbstractHtmlChunk
             /** @psalm-var non-negative-int $level */
             $level = (int) $matches[1];
             $this->bookmarkLevel = $level;
+            $this->bookmark = true;
         }
     }
 

@@ -12,11 +12,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Pdf\Html;
 
+use App\Pdf\Html\AbstractHtmlChunk;
 use App\Pdf\Html\HtmlBrChunk;
 use App\Pdf\Html\HtmlTag;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(AbstractHtmlChunk::class)]
 #[CoversClass(HtmlBrChunk::class)]
 class HtmlBrChunkTest extends TestCase
 {

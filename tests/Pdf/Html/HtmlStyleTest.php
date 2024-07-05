@@ -22,11 +22,66 @@ use fpdf\PdfFontName;
 use fpdf\PdfFontStyle;
 use fpdf\PdfTextAlignment;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(HtmlStyle::class)]
 class HtmlStyleTest extends TestCase
 {
+    public static function getAlignments(): array
+    {
+        return [
+            ['text-start', PdfTextAlignment::LEFT],
+            ['text-end', PdfTextAlignment::RIGHT],
+            ['text-center', PdfTextAlignment::CENTER],
+            ['text-justify', PdfTextAlignment::JUSTIFIED],
+        ];
+    }
+
+    public static function getBorders(): array
+    {
+        return [
+            ['border-top', PdfBorder::top()],
+            ['border-bottom', PdfBorder::bottom()],
+            ['border-start', PdfBorder::left()],
+            ['border-end', PdfBorder::right()],
+            ['border-0', PdfBorder::none()],
+            ['border-top-0', PdfBorder::all()->setTop(false)],
+            ['border-start-0', PdfBorder::all()->setLeft(false)],
+            ['border-end-0', PdfBorder::all()->setRight(false)],
+            ['border-bottom-0', PdfBorder::all()->setBottom(false)],
+        ];
+    }
+
+    public static function getMargins(): array
+    {
+        return [
+            ['mt-1', 0.0, 0.0, 1.0, 0.0],
+            ['mb-1', 0.0, 0.0, 0.0, 1.0],
+            ['ms-1', 1.0, 0.0, 0.0, 0.0],
+            ['me-1', 0.0, 1.0, 0.0, 0.0],
+            ['mx-1', 1.0, 1.0, 0.0, 0.0],
+            ['my-1', 0.0, 0.0, 1.0, 1.0],
+            ['m-1', 1.0, 1.0, 1.0, 1.0],
+        ];
+    }
+
+    #[DataProvider('getAlignments')]
+    public function testAlignment(string $class, PdfTextAlignment $expected): void
+    {
+        $actual = HtmlStyle::default();
+        $actual->update($class);
+        self::assertSame($expected, $actual->getAlignment());
+    }
+
+    #[DataProvider('getBorders')]
+    public function testBorder(string $class, PdfBorder $expected): void
+    {
+        $actual = HtmlStyle::default();
+        $actual->update($class);
+        self::assertEqualsCanonicalizing($expected, $actual->getBorder());
+    }
+
     public function testMargins(): void
     {
         $expected = 5.0;
@@ -38,6 +93,22 @@ class HtmlStyleTest extends TestCase
         $expected = 15.0;
         $actual->setMargins($expected);
         self::assertSameMargins($actual, $expected);
+    }
+
+    #[DataProvider('getMargins')]
+    public function testMarginsWithClass(
+        string $class,
+        float $left,
+        float $right,
+        float $top,
+        float $bottom,
+    ): void {
+        $actual = HtmlStyle::default();
+        $actual->update($class);
+        self::assertSame($left, $actual->getLeftMargin());
+        self::assertSame($right, $actual->getRightMargin());
+        self::assertSame($top, $actual->getTopMargin());
+        self::assertSame($bottom, $actual->getBottomMargin());
     }
 
     public function testProperties(): void

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Pdf\Html;
 
+use App\Pdf\Html\AbstractHtmlChunk;
 use App\Pdf\Html\HtmlLiChunk;
 use App\Pdf\Html\HtmlParentChunk;
 use App\Pdf\Html\HtmlTag;
@@ -19,6 +20,7 @@ use App\Pdf\Html\HtmlTextChunk;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(AbstractHtmlChunk::class)]
 #[CoversClass(HtmlTextChunk::class)]
 class HtmlTextChunkTest extends TestCase
 {

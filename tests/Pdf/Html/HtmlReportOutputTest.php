@@ -19,10 +19,12 @@ use App\Pdf\Html\HtmlOlChunk;
 use App\Pdf\Html\HtmlPageBreakChunk;
 use App\Pdf\Html\HtmlParentChunk;
 use App\Pdf\Html\HtmlStyle;
+use App\Pdf\Html\HtmlTag;
 use App\Pdf\Html\HtmlTextChunk;
 use App\Pdf\Html\HtmlUlChunk;
 use App\Report\HtmlReport;
 use App\Tests\TranslatorMockTrait;
+use fpdf\PdfBorder;
 use fpdf\PdfTextAlignment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
@@ -58,11 +60,13 @@ class HtmlReportOutputTest extends TestCase
         $report = $this->createReport();
         $textChunk = new HtmlTextChunk('#text');
         $textChunk->setText('Text');
-        $textChunk->setStyle(HtmlStyle::default());
+        $textChunk->setStyle(HtmlStyle::default()->setFontBold());
         $liChunk = new HtmlLiChunk('li');
         $liChunk->add($textChunk);
-        $parent = new HtmlParentChunk('div');
+        $parent = new HtmlOlChunk('ol');
         $parent->add($liChunk);
+        $parent->setStyle(HtmlStyle::default()->setLeftMargin(10)
+            ->setRightMargin(10));
         $parent->output($report);
         self::assertSame(1, $report->getPage());
     }
@@ -124,6 +128,26 @@ class HtmlReportOutputTest extends TestCase
         $chunk->add(new HtmlLiChunk('li'));
         $chunk->output($report);
         self::assertSame(1, $report->getPage());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testOuputWithBorder(): void
+    {
+        $report = $this->createReport();
+        $chunk = new HtmlParentChunk('div');
+        $chunk->setStyle(HtmlStyle::default()->setBorder(PdfBorder::all()));
+        $text = new HtmlTextChunk(HtmlTag::TEXT->value);
+        $text->setText('Text');
+        $chunk->add($text);
+        $chunk->output($report);
+
+        $report->setX(200);
+        $text->setText('Very long text to use multi-cell function in the report.');
+        $chunk->output($report);
+
+        self::assertSame(2, $report->getPage());
     }
 
     /**

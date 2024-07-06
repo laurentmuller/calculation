@@ -15,6 +15,7 @@ namespace App\Tests\Pdf\Html;
 use App\Pdf\Html\AbstractHtmlChunk;
 use App\Pdf\Html\HtmlLiChunk;
 use App\Pdf\Html\HtmlParentChunk;
+use App\Pdf\Html\HtmlStyle;
 use App\Pdf\Html\HtmlTag;
 use App\Pdf\Html\HtmlTextChunk;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -24,6 +25,14 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(HtmlTextChunk::class)]
 class HtmlTextChunkTest extends TestCase
 {
+    public function testHtmlBookmark(): void
+    {
+        $chunk = new HtmlTextChunk('#text');
+        self::assertFalse($chunk->isBookmark());
+        $chunk->setClassName('bookmark');
+        self::assertTrue($chunk->isBookmark());
+    }
+
     public function testIsNewLine(): void
     {
         $chunk = new HtmlTextChunk(HtmlTag::TEXT->value);
@@ -46,5 +55,16 @@ class HtmlTextChunkTest extends TestCase
 
         $actual = $chunk->isNewLine();
         self::assertTrue($actual);
+    }
+
+    public function testStyle(): void
+    {
+        $chunk = new HtmlTextChunk(HtmlTag::TEXT->value);
+        $chunk->setText('Text');
+        self::assertNull($chunk->getStyle());
+        self::assertFalse($chunk->hasStyle());
+        $chunk->setStyle(HtmlStyle::default());
+        self::assertNotNull($chunk->getStyle());
+        self::assertTrue($chunk->hasStyle());
     }
 }

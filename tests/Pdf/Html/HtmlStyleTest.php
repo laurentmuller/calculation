@@ -30,7 +30,6 @@ class HtmlStyleTest extends TestCase
 {
     public static function getAlignments(): \Iterator
     {
-
         yield ['text-start', PdfTextAlignment::LEFT];
         yield ['text-end', PdfTextAlignment::RIGHT];
         yield ['text-center', PdfTextAlignment::CENTER];

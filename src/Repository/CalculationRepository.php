@@ -87,8 +87,7 @@ class CalculationRepository extends AbstractRepository
         $itemsField = "$alias.itemsTotal";
         $overallField = "$alias.overallTotal";
 
-        return $builder
-            ->andWhere("$itemsField != 0")
+        return $builder->andWhere("$itemsField != 0")
             ->andWhere("($overallField / $itemsField) < :$param")
             ->setParameter($param, $minMargin, Types::FLOAT);
     }

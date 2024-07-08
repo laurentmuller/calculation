@@ -21,6 +21,7 @@ use App\Table\AbstractEntityTable;
 use App\Table\AbstractTable;
 use App\Table\CalculationBelowTable;
 use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
@@ -78,6 +79,17 @@ class CalculationBelowTableTest extends EntityTableTestCase
         ];
 
         return [$entityEditable, $entityNotEditable];
+    }
+
+    protected function createMockQueryBuilder(MockObject&Query $query): MockObject&QueryBuilder
+    {
+        $queryBuilder = parent::createMockQueryBuilder($query);
+        $queryBuilder->method('andWhere')
+            ->willReturn($queryBuilder);
+        $queryBuilder->method('setParameter')
+            ->willReturn($queryBuilder);
+
+        return $queryBuilder;
     }
 
     protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CalculationRepository

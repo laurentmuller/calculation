@@ -33,6 +33,23 @@ class SearchTableTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testWithAllItems(): void
+    {
+        $query = new DataQuery();
+        $query->search = 'fake';
+        $query->sort = 'entityName';
+        $query->limit = 100;
+
+        $service = $this->createMockService();
+        $table = $this->createTable($service);
+        $results = $table->processDataQuery($query);
+        self::assertSame(Response::HTTP_OK, $results->status);
+        self::assertCount(7, $results->rows);
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testWithCallback(): void
     {
         $query = new DataQuery();
@@ -130,32 +147,63 @@ class SearchTableTest extends TestCase
 
     private function createSearchResults(): array
     {
-        $result1 = [
-            'id' => 1,
-            'type' => 'type',
-            'field' => 'field',
-            'content' => 'content1',
-            'entityName' => 'entityName',
-            'fieldName' => 'fieldName',
+        return [
+            [
+                'id' => 1,
+                'type' => 'calculation',
+                'field' => 'field',
+                'content' => 'content1',
+                'entityName' => 'calculation',
+                'fieldName' => 'fieldName',
+            ],
+            [
+                'id' => 2,
+                'type' => 'calculationstate',
+                'field' => 'field',
+                'content' => 'content2',
+                'entityName' => 'calculationstate',
+                'fieldName' => 'fieldName',
+            ],
+            [
+                'id' => 2,
+                'type' => 'category',
+                'field' => 'field',
+                'content' => 'content2',
+                'entityName' => 'entityName',
+                'fieldName' => 'fieldName',
+            ], [
+                'id' => 3,
+                'type' => 'customer',
+                'field' => 'createdBy',
+                'content' => 'content2',
+                'entityName' => 'entityName',
+                'fieldName' => 'fieldName',
+            ],
+            [
+                'id' => 4,
+                'type' => 'task',
+                'field' => 'updatedBy',
+                'content' => 'content2',
+                'entityName' => 'entityName',
+                'fieldName' => 'fieldName',
+            ],
+            [
+                'id' => 4,
+                'type' => 'group',
+                'field' => 'updatedBy',
+                'content' => 'content2',
+                'entityName' => 'entityName',
+                'fieldName' => 'fieldName',
+            ],
+            [
+                'id' => 4,
+                'type' => 'product',
+                'field' => 'updatedBy',
+                'content' => 'content2',
+                'entityName' => 'entityName',
+                'fieldName' => 'fieldName',
+            ],
         ];
-        $result2 = [
-            'id' => 2,
-            'type' => 'type',
-            'field' => 'field',
-            'content' => 'content2',
-            'entityName' => 'entityName',
-            'fieldName' => 'fieldName',
-        ];
-        $result3 = [
-            'id' => 2,
-            'type' => 'type',
-            'field' => 'field',
-            'content' => 'content2',
-            'entityName' => 'entityName',
-            'fieldName' => 'fieldName',
-        ];
-
-        return [$result1, $result2, $result3];
     }
 
     /**
@@ -163,13 +211,11 @@ class SearchTableTest extends TestCase
      */
     private function createTable(SearchService $service): SearchTable
     {
-        $translator = $this->createMockTranslator();
         $checker = $this->createMock(AuthorizationCheckerInterface::class);
-
+        $translator = $this->createMockTranslator();
         $table = new SearchTable($service);
-        $table->setChecker($checker);
-        $table->setTranslator($translator);
 
-        return $table;
+        return $table->setTranslator($translator)
+            ->setChecker($checker);
     }
 }

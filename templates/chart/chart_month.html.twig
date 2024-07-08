@@ -56,13 +56,13 @@
         <th class="text-currency">{{ 'calculation.list.title'|trans }}</th>
         <th class="text-center">
             <div class="d-inline-flex align-items-baseline justify-content-center">
-                <span class="border me-1" style="width: 1.25rem; height: 0.75rem; background: darkgreen;"></span>
+                <span class="border me-1" style="width: 1.25rem; height: 0.75rem; background: {{ color_amount }};"></span>
                 <span class="ms-auto">{{ 'calculationgroup.fields.amount'|trans }}</span>
             </div>
         </th>
         <th class="text-center" colspan="2">
             <div class="d-inline-flex align-items-baseline justify-content-center">
-                <span class="border me-1" style="width: 1.25rem; height: 0.75rem; background: darkred;"></span>
+                <span class="border me-1" style="width: 1.25rem; height: 0.75rem; background: {{ color_margin }};"></span>
                 <span>{{ 'calculation.fields.margin'|trans }}</span>
             </div>
         </th>

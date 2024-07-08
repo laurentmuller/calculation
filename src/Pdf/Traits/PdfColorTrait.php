@@ -42,7 +42,7 @@ trait PdfColorTrait
 
     public function asInt(): int
     {
-        return $this->hex2Dec($this->getPhpOfficeColor());
+        return $this->hex2int($this->getPhpOfficeColor());
     }
 
     /**
@@ -56,9 +56,9 @@ trait PdfColorTrait
 
         /** @psalm-var array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>} */
         return [
-            $this->hex2Dec(\substr($hex, 0, 2)),
-            $this->hex2Dec(\substr($hex, 2, 2)),
-            $this->hex2Dec(\substr($hex, 4, 2)),
+            $this->hex2int(\substr($hex, 0, 2)),
+            $this->hex2int(\substr($hex, 2, 2)),
+            $this->hex2int(\substr($hex, 4, 2)),
         ];
     }
 
@@ -97,7 +97,7 @@ trait PdfColorTrait
         return $color;
     }
 
-    private function hex2Dec(string $hex): int
+    private function hex2int(string $hex): int
     {
         return (int) \hexdec($hex);
     }

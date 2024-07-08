@@ -96,7 +96,7 @@ class MonthChartTest extends TestCase
 
     private function createChart(): MonthChart
     {
-        $chart = new MonthChart($this->application, $this->repository, $this->generator, $this->twig);
+        $chart = new MonthChart($this->application, $this->generator, $this->twig, $this->repository);
         $chart->setTranslator($this->translator);
 
         return $chart;

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
+use App\Chart\MonthChart;
 use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
@@ -55,8 +56,6 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     private const ARROW_DOWN = 116;
     private const ARROW_RIGHT = 116; // same as down but with 90 degrees rotation
     private const ARROW_UP = 115;
-    private const COLOR_ITEM = '#006400';
-    private const COLOR_MARGIN = '#8B0000';
     private const PATTERN_CHART = 'MMM Y';
     private const PATTERN_TABLE = 'MMMM Y';
     private const RECT_MARGIN = 1.25;
@@ -107,8 +106,8 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         }
 
         return match ($event->index) {
-            2 => $this->drawHeaderCell($event, self::COLOR_ITEM),
-            3 => $this->drawHeaderCell($event, self::COLOR_MARGIN),
+            2 => $this->drawHeaderCell($event, MonthChart::COLOR_AMOUNT->value),
+            3 => $this->drawHeaderCell($event, MonthChart::COLOR_MARGIN->value),
             default => false,
         };
     }
@@ -282,8 +281,8 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             'label' => $this->getDateCell($entity['date'], false),
             'link' => $this->getURL($entity['date']),
             'values' => [
-                ['color' => self::COLOR_ITEM, 'value' => $entity['items']],
-                ['color' => self::COLOR_MARGIN, 'value' => $entity['margin_amount']],
+                ['color' => MonthChart::COLOR_AMOUNT->value, 'value' => $entity['items']],
+                ['color' => MonthChart::COLOR_MARGIN->value, 'value' => $entity['margin_amount']],
             ],
         ], $entities);
         $axis = [

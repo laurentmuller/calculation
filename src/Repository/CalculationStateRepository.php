@@ -122,8 +122,11 @@ class CalculationStateRepository extends AbstractRepository
      */
     public function getDropDownBelow(float $minMargin): array
     {
-        $builder = $this->getDropDownQuery();
-        $builder = CalculationRepository::addBelowFilter($builder, $minMargin, 'c');
+        $builder = CalculationRepository::addBelowFilter(
+            $this->getDropDownQuery(),
+            $minMargin,
+            self::CALCULATION_ALIAS
+        );
 
         return $this->mergeDropDown($builder);
     }

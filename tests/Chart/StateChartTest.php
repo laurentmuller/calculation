@@ -71,7 +71,7 @@ class StateChartTest extends TestCase
 
     private function createChart(): StateChart
     {
-        $chart = new StateChart($this->application, $this->repository, $this->generator, $this->twig);
+        $chart = new StateChart($this->application, $this->generator, $this->twig, $this->repository);
         $chart->setTranslator($this->translator);
 
         return $chart;

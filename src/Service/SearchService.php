@@ -28,7 +28,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -419,38 +418,34 @@ class SearchService implements ServiceSubscriberInterface
      */
     private function getQueries(): array
     {
-        try {
-            return $this->cache->get('queries', function () {
-                $queries = [];
-                $this->createEntityQueries($queries, Calculation::class, 'id', 'customer', 'description', 'overallTotal');
-                $this->createEntityQueries($queries, CalculationState::class, 'code', 'description');
-                $this->createEntityQueries($queries, Product::class, 'description', 'supplier', 'price');
-                $this->createEntityQueries($queries, Task::class, 'name');
-                $this->createEntityQueries($queries, Category::class, 'code', 'description');
-                $this->createEntityQueries($queries, Group::class, 'code', 'description');
-                $this->createCalculationDatesQuery($queries);
-                $this->createCalculationStateQuery($queries);
-                $this->createCalculationItemQuery($queries);
-                if ($this->debug) {
-                    $this->createEntityQueries(
-                        $queries,
-                        Customer::class,
-                        'firstName',
-                        'lastName',
-                        'company',
-                        'address',
-                        'zipCode',
-                        'city'
-                    );
-                    $this->createCalculationGroupQuery($queries);
-                }
-                $this->updateSQL($queries);
+        return $this->cache->get('queries', function () {
+            $queries = [];
+            $this->createEntityQueries($queries, Calculation::class, 'id', 'customer', 'description', 'overallTotal');
+            $this->createEntityQueries($queries, CalculationState::class, 'code', 'description');
+            $this->createEntityQueries($queries, Product::class, 'description', 'supplier', 'price');
+            $this->createEntityQueries($queries, Task::class, 'name');
+            $this->createEntityQueries($queries, Category::class, 'code', 'description');
+            $this->createEntityQueries($queries, Group::class, 'code', 'description');
+            $this->createCalculationDatesQuery($queries);
+            $this->createCalculationStateQuery($queries);
+            $this->createCalculationItemQuery($queries);
+            if ($this->debug) {
+                $this->createEntityQueries(
+                    $queries,
+                    Customer::class,
+                    'firstName',
+                    'lastName',
+                    'company',
+                    'address',
+                    'zipCode',
+                    'city'
+                );
+                $this->createCalculationGroupQuery($queries);
+            }
+            $this->updateSQL($queries);
 
-                return $queries;
-            });
-        } catch (InvalidArgumentException) {
-            return [];
-        }
+            return $queries;
+        });
     }
 
     /**

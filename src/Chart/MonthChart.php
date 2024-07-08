@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Chart;
 
+use App\Pdf\Html\HtmlColorName;
 use App\Repository\CalculationRepository;
 use App\Service\ApplicationService;
 use App\Traits\ArrayTrait;
@@ -29,15 +30,25 @@ class MonthChart extends AbstractHighchart
 {
     use ArrayTrait;
 
+    /**
+     * The HTML color name for amounts.
+     */
+    public const COLOR_AMOUNT = HtmlColorName::MEDIUM_SEA_GREEN;
+
+    /**
+     * The HTML color name for margins.
+     */
+    public const COLOR_MARGIN = HtmlColorName::INDIAN_RED;
+
     private const TEMPLATE_NAME = 'chart/_month_tooltip.js.twig';
 
     public function __construct(
         ApplicationService $application,
-        private readonly CalculationRepository $repository,
-        private readonly UrlGeneratorInterface $generator,
-        private readonly Environment $twig,
+        UrlGeneratorInterface $generator,
+        Environment $twig,
+        private readonly CalculationRepository $repository
     ) {
-        parent::__construct($application);
+        parent::__construct($application, $generator, $twig);
     }
 
     /**
@@ -69,16 +80,23 @@ class MonthChart extends AbstractHighchart
             'totals' => $this->getTotals($series),
             'allowed_months' => $allowedMonths,
             'min_margin' => $this->getMinMargin(),
+            'color_amount' => self::COLOR_AMOUNT->value,
+            'color_margin' => self::COLOR_MARGIN->value,
         ];
     }
 
     protected function setTooltipOptions(): static
     {
         parent::setTooltipOptions();
+
+        $context = [
+            'color_amount' => self::COLOR_AMOUNT->value,
+            'color_margin' => self::COLOR_MARGIN->value,
+        ];
         $this->tooltip->merge([
             'shared' => true,
             'useHTML' => true,
-            'formatter' => $this->createTemplateExpression($this->twig, self::TEMPLATE_NAME),
+            'formatter' => $this->createTemplateExpression($this->twig, self::TEMPLATE_NAME, $context),
         ]);
 
         return $this;
@@ -264,12 +282,12 @@ class MonthChart extends AbstractHighchart
             [
                 'name' => $this->trans('calculation.fields.margin'),
                 'data' => $this->getMarginsSeries($series),
-                'color' => 'darkred',
+                'color' => self::COLOR_MARGIN->value,
             ],
             [
                 'name' => $this->trans('calculationgroup.fields.amount'),
                 'data' => $this->getItemsSeries($series),
-                'color' => 'darkgreen',
+                'color' => self::COLOR_AMOUNT->value,
             ],
         ]);
     }

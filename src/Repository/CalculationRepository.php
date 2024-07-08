@@ -396,9 +396,10 @@ class CalculationRepository extends AbstractRepository
     {
         $builder = $this->createQueryBuilder('c')
             ->addOrderBy('c.id', self::SORT_DESC);
-        $builder = self::addBelowFilter($builder, $minMargin);
 
-        return $builder->getQuery()->getResult();
+        return self::addBelowFilter($builder, $minMargin)
+            ->getQuery()
+            ->getResult();
     }
 
     /**

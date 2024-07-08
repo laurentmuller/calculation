@@ -19,6 +19,7 @@ use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use HighchartsBundle\Highcharts\Highchart;
 use Laminas\Json\Expr;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Twig\Environment;
@@ -59,11 +60,11 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
 
     private const COMMENT_REGEX = '/\/\*(.|[\r\n])*?\*\//m';
 
-    /**
-     * @psalm-suppress TooManyArguments
-     */
-    public function __construct(protected readonly ApplicationService $application)
-    {
+    public function __construct(
+        protected readonly ApplicationService $application,
+        protected readonly UrlGeneratorInterface $generator,
+        protected readonly Environment $twig
+    ) {
         parent::__construct();
         $this->initializeOptions();
     }
@@ -103,16 +104,26 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     /**
      * Render the given template and create an expression from the content.
      */
-    protected function createTemplateExpression(Environment $twig, string $template): ?Expr
+    protected function createTemplateExpression(Environment $twig, string $template, array $context = []): ?Expr
     {
         try {
-            $content = $twig->render($template);
+            $content = $twig->render($template, $context);
             $content = (string) \preg_replace(self::COMMENT_REGEX, '', $content);
 
             return self::createExpression($content);
         } catch (\Twig\Error\Error) {
             return null;
         }
+    }
+
+    protected function getAxisOptions(): array
+    {
+        return [
+            'labels' => [
+                'style' => $this->getColorFontStyle('0.875rem'),
+            ],
+            'gridLineColor' => $this->getBorderColor(),
+        ];
     }
 
     /**
@@ -156,9 +167,9 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     protected function getFontStyle(?string $fontSize = null): array
     {
         return [
-            'fontSize' => $fontSize ?? 'var(--bs-body-font-size)',
-            'fontWeight' => 'var(--bs-body-font-weight)',
             'fontFamily' => 'var(--bs-body-font-family)',
+            'fontWeight' => 'var(--bs-body-font-weight)',
+            'fontSize' => $fontSize ?? 'var(--bs-body-font-size)',
         ];
     }
 
@@ -181,36 +192,9 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     }
 
     /**
-     * Sets the tooltip options.
-     */
-    protected function setTooltipOptions(): static
-    {
-        $this->tooltip->merge([
-            'borderRadius' => 5,
-            'backgroundColor' => 'var(--bs-light)',
-            'style' => $this->getFontStyle('0.75rem'),
-            'borderColor' => $this->getBorderColor(),
-        ]);
-
-        return $this;
-    }
-
-    private function getAxisOptions(): array
-    {
-        return [
-            'labels' => [
-                'style' => $this->getColorFontStyle('0.875rem'),
-            ],
-            'gridLineColor' => $this->getBorderColor(),
-        ];
-    }
-
-    /**
      * Initialize the chart options.
-     *
-     * @psalm-suppress TooManyArguments
      */
-    private function initializeOptions(): void
+    protected function initializeOptions(): void
     {
         $this->chart->merge([
             'backgroundColor' => 'var(--bs-body-bg)',
@@ -223,9 +207,9 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
             'itemStyle' => $this->getColorFontStyle(),
         ]);
 
-        $axisOptions = $this->getAxisOptions();
-        $this->xAxis->merge($axisOptions);
-        $this->yAxis->merge($axisOptions);
+        $options = $this->getAxisOptions();
+        $this->xAxis->merge($options);
+        $this->yAxis->merge($options);
 
         $this->accessibility['enabled'] = false;
         $this->credits['enabled'] = false;
@@ -238,5 +222,19 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
             'shortMonths' => \array_values(DateUtils::getShortMonths()),
             'shortWeekdays' => \array_values(DateUtils::getShortWeekdays()),
         ]);
+    }
+
+    /**
+     * Sets the tooltip options.
+     */
+    protected function setTooltipOptions(): static
+    {
+        $this->tooltip->merge([
+            'backgroundColor' => 'var(--bs-light)',
+            'style' => $this->getFontStyle('0.75rem'),
+            'borderColor' => $this->getBorderColor(),
+        ]);
+
+        return $this;
     }
 }

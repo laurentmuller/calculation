@@ -34,12 +34,11 @@ class StateChart extends AbstractHighchart
 
     public function __construct(
         ApplicationService $application,
+        UrlGeneratorInterface $generator,
+        Environment $twig,
         private readonly CalculationStateRepository $repository,
-        private readonly UrlGeneratorInterface $generator,
-        private readonly Environment $twig
     ) {
-        parent::__construct($application);
-        $this->chart['height'] = 550;
+        parent::__construct($application, $generator, $twig);
     }
 
     /**

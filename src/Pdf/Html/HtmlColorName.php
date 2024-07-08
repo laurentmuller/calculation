@@ -63,7 +63,7 @@ enum HtmlColorName: string implements PdfColorInterface
     case DEEP_SKY_BLUE = '#00BFFF';
     case DIM_GRAY = '#696969';
     case DODGER_BLUE = '#1E90FF';
-    case FIREBRICK = '#B22222';
+    case FIRE_BRICK = '#B22222';
     case FLORAL_WHITE = '#FFFAF0';
     case FOREST_GREEN = '#228B22';
     case FUCHSIA = '#FF00FF';

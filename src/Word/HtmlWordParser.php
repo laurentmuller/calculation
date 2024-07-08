@@ -151,23 +151,23 @@ class HtmlWordParser
                 "border-start:$borderSolid",
                 "border-end:$borderSolid",
             ],
-            'border-left-0' => [
+            'border-start-0' => [
                 "border-top:$borderSolid",
                 "border-bottom:$borderSolid",
-                "border-start:$borderNone",
-                "border-end:$borderSolid",
+                "border-left:$borderNone",
+                "border-right:$borderSolid",
             ],
-            'border-right-0' => [
+            'border-end-0' => [
                 "border-top:$borderSolid",
                 "border-bottom:$borderSolid",
-                "border-start:$borderSolid",
-                "border-end:$borderNone",
+                "border-left:$borderSolid",
+                "border-right:$borderNone",
             ],
             'border-bottom-0' => [
                 "border-top:$borderSolid",
                 "border-bottom:$borderNone",
-                "border-start:$borderSolid",
-                "border-end:$borderSolid",
+                "border-left:$borderSolid",
+                "border-right:$borderSolid",
             ],
             default => []
         };

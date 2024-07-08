@@ -20,6 +20,7 @@ use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
 use App\Interfaces\EntityInterface;
+use App\Interfaces\TimestampableInterface;
 use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
@@ -27,7 +28,10 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
@@ -120,22 +124,12 @@ class SearchService implements ServiceSubscriberInterface
      */
     private const SEARCH_PARAM = 'search';
 
-    /**
-     * The result set mapping.
-     */
-    private ?ResultSetMapping $mapping = null;
-
-    /**
-     * The SQL queries.
-     *
-     * @var array<string, string>
-     */
-    private array $queries = [];
-
     public function __construct(
         private readonly EntityManagerInterface $manager,
         #[Autowire('%kernel.debug%')]
-        private readonly bool $debug
+        private readonly bool $debug,
+        #[Target('calculation.service.search')]
+        private readonly CacheInterface $cache,
     ) {
     }
 
@@ -216,23 +210,28 @@ class SearchService implements ServiceSubscriberInterface
         if (self::NO_LIMIT === $limit) {
             $limit = \PHP_INT_MAX;
         }
-        $extra = " LIMIT $limit OFFSET $offset";
+        $extra = \sprintf(' LIMIT %d OFFSET %d', $limit, $offset);
 
         return $this->getArrayResult($search, $entity, $extra);
     }
 
-    private function addQuery(string $key, QueryBuilder $builder): void
+    /**
+     * @param array<string, string> $queries
+     */
+    private function addQuery(array &$queries, string $key, QueryBuilder $builder): void
     {
         $sql = $builder->getQuery()->getSQL();
         if (\is_string($sql)) {
-            $this->queries[$key] = $sql;
+            $queries[$key] = $sql;
         }
     }
 
     /**
      * Create the SQL query for the calculation dates.
+     *
+     * @param array<string, string> $queries
      */
-    private function createCalculationDatesQuery(): self
+    private function createCalculationDatesQuery(array &$queries): void
     {
         $class = Calculation::class;
         if ($this->isGrantedSearch($class)) {
@@ -241,17 +240,17 @@ class SearchService implements ServiceSubscriberInterface
                 $content = "date_format(e.$field, '%d.%m.%Y')";
                 $key = $this->getKey($class, $field);
                 $builder = $this->createQueryBuilder($class, $field, $content);
-                $this->addQuery($key, $builder);
+                $this->addQuery($queries, $key, $builder);
             }
         }
-
-        return $this;
     }
 
     /**
      * Create the SQL query for the calculation groups.
+     *
+     * @param array<string, string> $queries
      */
-    private function createCalculationGroupQuery(): self
+    private function createCalculationGroupQuery(array &$queries): void
     {
         $class = Calculation::class;
         if ($this->isGrantedSearch($class)) {
@@ -260,16 +259,16 @@ class SearchService implements ServiceSubscriberInterface
             $key = $this->getKey($class, $field);
             $builder = $this->createQueryBuilder($class, $field, $content)
                 ->join('e.groups', 'g');
-            $this->addQuery($key, $builder);
+            $this->addQuery($queries, $key, $builder);
         }
-
-        return $this;
     }
 
     /**
      * Create the SQL query for the calculation items.
+     *
+     * @param array<string, string> $queries
      */
-    private function createCalculationItemQuery(): self
+    private function createCalculationItemQuery(array &$queries): void
     {
         $class = Calculation::class;
         if ($this->isGrantedSearch($class)) {
@@ -280,16 +279,16 @@ class SearchService implements ServiceSubscriberInterface
                 ->join('e.groups', 'g')
                 ->join('g.categories', 'c')
                 ->join('c.items', 'i');
-            $this->addQuery($key, $builder);
+            $this->addQuery($queries, $key, $builder);
         }
-
-        return $this;
     }
 
     /**
      * Create the SQL query for the calculation state.
+     *
+     * @param array<string, string> $queries
      */
-    private function createCalculationStateQuery(): self
+    private function createCalculationStateQuery(array &$queries): void
     {
         $class = Calculation::class;
         if ($this->isGrantedSearch($class)) {
@@ -298,10 +297,8 @@ class SearchService implements ServiceSubscriberInterface
             $key = $this->getKey($class, $field);
             $builder = $this->createQueryBuilder($class, $field, $content)
                 ->join('e.state', 's');
-            $this->addQuery($key, $builder);
+            $this->addQuery($queries, $key, $builder);
         }
-
-        return $this;
     }
 
     /**
@@ -309,22 +306,25 @@ class SearchService implements ServiceSubscriberInterface
      *
      * @template TEntity of EntityInterface
      *
-     * @param string   $class  the entity class
-     * @param string[] $fields the entity fields to search in
+     * @param array<string, string> $queries
+     * @param string                $class     the entity class
+     * @param string                ...$fields the entity fields to search in
      *
      * @psalm-param class-string<TEntity> $class
      */
-    private function createEntityQueries(string $class, array $fields): self
+    private function createEntityQueries(array &$queries, string $class, string ...$fields): void
     {
         if ($this->isGrantedSearch($class)) {
+            $interfaces = \class_implements($class);
+            if (\is_array($interfaces) && \in_array(TimestampableInterface::class, $interfaces, true)) {
+                $fields = \array_unique(\array_merge($fields, ['createdBy', 'updatedBy']));
+            }
             foreach ($fields as $field) {
                 $key = $this->getKey($class, $field);
                 $builder = $this->createQueryBuilder($class, $field);
-                $this->addQuery($key, $builder);
+                $this->addQuery($queries, $key, $builder);
             }
         }
-
-        return $this;
     }
 
     /**
@@ -332,9 +332,9 @@ class SearchService implements ServiceSubscriberInterface
      *
      * @template TEntity of EntityInterface
      *
-     * @param string  $class   the entity class
-     * @param string  $field   the field name
-     * @param ?string $content the field content to search in or null to use the field name
+     * @param class-string $class   the entity class
+     * @param string       $field   the field name
+     * @param ?string      $content the field content to search in or null to use the field name
      *
      * @psalm-param class-string<TEntity> $class
      */
@@ -373,8 +373,10 @@ class SearchService implements ServiceSubscriberInterface
         if ([] === $queries) {
             return [];
         }
+
         $sql = \implode(' UNION ', $queries) . $extra;
-        $query = $this->manager->createNativeQuery($sql, $this->getResultSetMapping());
+        $mapping = $this->getResultSetMapping();
+        $query = $this->manager->createNativeQuery($sql, $mapping);
         $query->setParameter(self::SEARCH_PARAM, "%$search%", Types::STRING);
 
         /** @psalm-var SearchType[] */
@@ -407,9 +409,7 @@ class SearchService implements ServiceSubscriberInterface
      */
     private function getKey(string $class, string $field): string
     {
-        $shortName = \strtolower(StringUtils::getShortName($class));
-
-        return "$shortName.$field";
+        return \sprintf('%s.%s', $this->getEntityName($class), $field);
     }
 
     /**
@@ -419,25 +419,38 @@ class SearchService implements ServiceSubscriberInterface
      */
     private function getQueries(): array
     {
-        if ([] !== $this->queries) {
-            return $this->queries;
-        }
-        $this->createEntityQueries(Calculation::class, ['id', 'customer', 'description', 'overallTotal', 'createdBy', 'updatedBy'])
-            ->createEntityQueries(CalculationState::class, ['code', 'description'])
-            ->createEntityQueries(Product::class, ['description', 'supplier', 'price'])
-            ->createEntityQueries(Task::class, ['name'])
-            ->createEntityQueries(Category::class, ['code', 'description'])
-            ->createEntityQueries(Group::class, ['code', 'description']);
-        $this->createCalculationDatesQuery()
-            ->createCalculationStateQuery()
-            ->createCalculationItemQuery();
-        if ($this->debug) {
-            $this->createEntityQueries(Customer::class, ['firstName', 'lastName', 'company', 'address', 'zipCode', 'city'])
-                ->createCalculationGroupQuery();
-        }
-        $this->updateSQL();
+        try {
+            return $this->cache->get('queries', function () {
+                $queries = [];
+                $this->createEntityQueries($queries, Calculation::class, 'id', 'customer', 'description', 'overallTotal');
+                $this->createEntityQueries($queries, CalculationState::class, 'code', 'description');
+                $this->createEntityQueries($queries, Product::class, 'description', 'supplier', 'price');
+                $this->createEntityQueries($queries, Task::class, 'name');
+                $this->createEntityQueries($queries, Category::class, 'code', 'description');
+                $this->createEntityQueries($queries, Group::class, 'code', 'description');
+                $this->createCalculationDatesQuery($queries);
+                $this->createCalculationStateQuery($queries);
+                $this->createCalculationItemQuery($queries);
+                if ($this->debug) {
+                    $this->createEntityQueries(
+                        $queries,
+                        Customer::class,
+                        'firstName',
+                        'lastName',
+                        'company',
+                        'address',
+                        'zipCode',
+                        'city'
+                    );
+                    $this->createCalculationGroupQuery($queries);
+                }
+                $this->updateSQL($queries);
 
-        return $this->queries;
+                return $queries;
+            });
+        } catch (InvalidArgumentException) {
+            return [];
+        }
     }
 
     /**
@@ -445,14 +458,14 @@ class SearchService implements ServiceSubscriberInterface
      */
     private function getResultSetMapping(): ResultSetMapping
     {
-        if (!$this->mapping instanceof ResultSetMapping) {
-            $this->mapping = new ResultSetMapping();
+        return $this->cache->get('mapping', function (): ResultSetMapping {
+            $mapping = new ResultSetMapping();
             foreach (self::COLUMNS as $name => $type) {
-                $this->mapping->addScalarResult($name, $name, $type);
+                $mapping->addScalarResult($name, $name, $type);
             }
-        }
 
-        return $this->mapping;
+            return $mapping;
+        });
     }
 
     /**
@@ -465,8 +478,10 @@ class SearchService implements ServiceSubscriberInterface
 
     /**
      * Update the SQL content of queries.
+     *
+     * @param array<string, string> $queries
      */
-    private function updateSQL(): void
+    private function updateSQL(array &$queries): void
     {
         $values = [];
         $columns = \array_keys(self::COLUMNS);
@@ -474,7 +489,7 @@ class SearchService implements ServiceSubscriberInterface
             $values["/AS \\w+[$index]/i"] = "AS $name";
         }
         $param = ':' . self::SEARCH_PARAM;
-        foreach ($this->queries as &$query) {
+        foreach ($queries as &$query) {
             $query = \str_replace('?', $param, $query);
             $query = StringUtils::pregReplace($values, $query);
         }

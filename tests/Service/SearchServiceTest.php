@@ -20,6 +20,8 @@ use App\Utils\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Exception;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 #[CoversClass(SearchService::class)]
@@ -38,7 +40,7 @@ class SearchServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws ORMException
+     * @throws ORMException|Exception
      */
     public function testCount(): void
     {
@@ -60,6 +62,9 @@ class SearchServiceTest extends KernelServiceTestCase
         self::assertSame(0, $actual);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testFormatContent(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
@@ -78,6 +83,9 @@ class SearchServiceTest extends KernelServiceTestCase
         self::assertSame('value', $actual);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetEntities(): void
     {
         $service = $this->getSearchService();
@@ -98,6 +106,9 @@ class SearchServiceTest extends KernelServiceTestCase
         self::assertSame('calculationstate.name', $actual['calculationstate']);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetEntitiesDebug(): void
     {
         $service = $this->getSearchService(true);
@@ -107,7 +118,7 @@ class SearchServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws ORMException
+     * @throws ORMException|Exception
      */
     public function testSearch(): void
     {
@@ -133,7 +144,7 @@ class SearchServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws ORMException
+     * @throws ORMException|Exception
      */
     public function testSearchDebug(): void
     {
@@ -143,14 +154,18 @@ class SearchServiceTest extends KernelServiceTestCase
         self::assertCount(1, $actual);
     }
 
+    /**
+     * @throws Exception
+     */
     private function getSearchService(bool $debug = false): SearchService
     {
         $checker = $this->createMock(AuthorizationCheckerInterface::class);
         $checker->method('isGranted')
             ->willReturn(true);
-
+        $cache = new ArrayAdapter();
         $manager = $this->getService(EntityManagerInterface::class);
-        $service = new SearchService($manager, $debug);
+
+        $service = new SearchService($manager, $debug, $cache);
         $service->setChecker($checker);
 
         return $service;

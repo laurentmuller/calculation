@@ -61,4 +61,9 @@ return static function (FrameworkConfig $config): void {
     $config->cache()->pool('calculation.service.response')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
+
+    // used by the SearchService
+    $config->cache()->pool('calculation.service.search')
+        ->adapters('cache.adapter.filesystem')
+        ->defaultLifetime($one_day);
 };

@@ -98,6 +98,15 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
         return $results;
     }
 
+    private function getFieldNameId(string $field, string $lowerType): string
+    {
+        return match ($field) {
+            'createdBy' => 'calculation.fields.createdBy',
+            'updatedBy' => 'calculation.fields.updatedBy',
+            default => "$lowerType.fields.$field",
+        };
+    }
+
     /**
      * Gets icon for the given entity type.
      */
@@ -129,7 +138,7 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
 
             $item[SearchService::COLUMN_ACTION] = $item['id'];
             $item[SearchService::COLUMN_ENTITY_NAME] = $this->trans("$lowerType.name");
-            $item[SearchService::COLUMN_FIELD_NAME] = $this->trans("$lowerType.fields.$field");
+            $item[SearchService::COLUMN_FIELD_NAME] = $this->trans($this->getFieldNameId($field, $lowerType));
             $item[SearchService::COLUMN_CONTENT] = $this->service->formatContent("$type.$field", $item[SearchService::COLUMN_CONTENT]);
 
             $item[SearchService::COLUMN_GRANTED_SHOW] = $this->isGrantedShow($type);

@@ -44,6 +44,13 @@ class CustomerGeneratorTest extends GeneratorTestCase
         self::assertValidateResponse($actual, true, 1);
     }
 
+    public function testType(): void
+    {
+        $generator = $this->createGenerator();
+        $actual = $generator->generate(10, true);
+        self::assertValidateResponse($actual, true, 10);
+    }
+
     protected function createGenerator(): CustomerGenerator
     {
         $generator = new CustomerGenerator($this->manager, $this->fakerService);

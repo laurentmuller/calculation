@@ -22,6 +22,7 @@ use App\Traits\LoggerAwareTrait;
 use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -49,6 +50,8 @@ class CalculationArchiveService implements ServiceSubscriberInterface
 
     /**
      * Create the archive query.
+     *
+     * @throws ORMException
      */
     public function createQuery(): CalculationArchiveQuery
     {
@@ -62,6 +65,8 @@ class CalculationArchiveService implements ServiceSubscriberInterface
 
     /**
      * Gets the maximum allowed date or null if none.
+     *
+     * @throws ORMException
      */
     public function getDateMaxConstraint(): ?string
     {
@@ -73,6 +78,8 @@ class CalculationArchiveService implements ServiceSubscriberInterface
 
     /**
      * Gets the minimum allowed date or null if none.
+     *
+     * @throws ORMException
      */
     public function getDateMinConstraint(): ?string
     {
@@ -85,7 +92,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     /**
      * Returns a value indicating if one or more calculation states are editable.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function isEditableStates(): bool
     {
@@ -95,7 +102,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     /**
      * Returns a value indicating if one or more calculation states are not editable.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function isNotEditableStates(): bool
     {
@@ -188,6 +195,9 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         return $query->getResult();
     }
 
+    /**
+     * @throws ORMException
+     */
     private function getDate(): \DateTimeInterface
     {
         $date = $this->getSessionDate(self::KEY_DATE);
@@ -253,6 +263,8 @@ class CalculationArchiveService implements ServiceSubscriberInterface
 
     /**
      * @psalm-return CalculationState[]
+     *
+     * @throws ORMException
      */
     private function getSources(bool $useSession): array
     {

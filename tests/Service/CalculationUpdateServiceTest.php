@@ -18,7 +18,6 @@ use App\Tests\DateAssertTrait;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\Web\AuthenticateWebTestCase;
 use App\Utils\DateUtils;
-use App\Utils\FormatUtils;
 use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,16 +56,12 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         $actual = $query->getDateFrom();
         self::assertSameDate($expected, $actual);
 
-        $expected = FormatUtils::formatDate($actual);
-        $actual = $query->getDateFromFormatted();
-        self::assertSame($expected, $actual);
-
-        $expected = $this->getDateTo();
-        $actual = $query->getDateTo();
+        $expected = $this->getDate();
+        $actual = $query->getDate();
         self::assertSameDate($expected, $actual);
 
-        $expected = FormatUtils::formatDate($actual);
-        $actual = $query->getDateToFormatted();
+        $expected = $this->getInterval();
+        $actual = $query->getInterval();
         self::assertSame($expected, $actual);
     }
 
@@ -77,23 +72,28 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
     {
         $this->loginUsername(self::ROLE_ADMIN);
         $requestStack = $this->getRequestStack();
+        $session = $requestStack->getSession();
+
         $service = $this->getService(CalculationUpdateService::class);
         $query = $service->createQuery();
         $service->saveQuery($query);
 
-        $session = $requestStack->getSession();
-        self::assertSame([], $session->get('calculation.update.states'));
+        $expected = [];
+        $actual = $session->get('calculation.update.states');
+        self::assertIsArray($actual);
+        self::assertSame($expected, $actual);
 
-        $expected = $this->getDateFrom();
-        $actual = $session->get('calculation.update.date_from');
+        $expected = $this->getDate();
+        /** @psalm-var mixed $actual */
+        $actual = $session->get('calculation.update.date');
         self::assertInstanceOf(\DateTimeInterface::class, $actual);
         self::assertSameDate($expected, $actual);
 
-        $expected = $this->getDateTo();
-        /** @psalm-var \DateTimeInterface $actual */
-        $actual = $session->get('calculation.update.date_to');
-        self::assertInstanceOf(\DateTimeInterface::class, $actual);
-        self::assertSameDate($expected, $actual);
+        $expected = $this->getInterval();
+        /** @psalm-var mixed $actual */
+        $actual = $session->get('calculation.update.interval');
+        self::assertIsString($actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -115,7 +115,7 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
      */
     public function testUpdateNoCalculation(): void
     {
-        $date = $this->getDateTo();
+        $date = $this->getDate();
         $state = $this->getCalculationState();
         $calculation = $this->getCalculation($state);
         $calculation->setDate($date)
@@ -137,7 +137,7 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
      */
     public function testUpdateOne(): void
     {
-        $date = $this->getDateTo();
+        $date = $this->getDate();
         $state = $this->getCalculationState();
         $calculation = $this->getCalculation($state);
         $calculation->setDate($date)
@@ -159,7 +159,7 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
      */
     public function testUpdateOneNoSimulate(): void
     {
-        $date = $this->getDateTo();
+        $date = $this->getDate();
         $state = $this->getCalculationState();
         $calculation = $this->getCalculation($state);
         $calculation->setDate($date)
@@ -177,17 +177,22 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertTrue($result->isValid());
     }
 
+    private function getDate(): \DateTimeInterface
+    {
+        return DateUtils::removeTime();
+    }
+
     /**
      * @throws \Exception
      */
     private function getDateFrom(): \DateTimeInterface
     {
-        return DateUtils::sub(DateUtils::removeTime(), 'P1M');
+        return DateUtils::sub(DateUtils::removeTime(), $this->getInterval());
     }
 
-    private function getDateTo(): \DateTimeInterface
+    private function getInterval(): string
     {
-        return DateUtils::removeTime();
+        return 'P1M';
     }
 
     private function getRequestStack(): RequestStack

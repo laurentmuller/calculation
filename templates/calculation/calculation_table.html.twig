@@ -20,7 +20,7 @@
     {% if state_id %}
         {% set text = customData.state.code %}
     {% elseif state_editable %}
-        {% set text = (state_editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable')|trans %}
+        {% set text = (state_editable ? 'calculationstate.list.editable_1' : 'calculationstate.list.editable_0')|trans %}
     {% endif %}
     {{ _self.output_dropdown_menu('state', ICON_CALCULATION_STATE, text, 'calculation.list.state_help', input_value, data_default) }}
     <ul class="dropdown-menu" aria-labelledby="state">

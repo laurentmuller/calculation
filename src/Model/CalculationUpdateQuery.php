@@ -14,7 +14,6 @@ namespace App\Model;
 
 use App\Entity\CalculationState;
 use App\Utils\DateUtils;
-use App\Utils\FormatUtils;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
@@ -23,8 +22,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 class CalculationUpdateQuery extends AbstractSimulateQuery
 {
-    private \DateTimeInterface $dateFrom;
-    private \DateTimeInterface $dateTo;
+    private \DateTimeInterface $date;
+    private string $interval = 'P1M';
     /** @var CalculationState[] */
     #[Assert\Count(min: 1)]
     private array $states = [];
@@ -34,28 +33,25 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
      */
     public function __construct()
     {
-        $this->dateFrom = DateUtils::sub(DateUtils::removeTime(), 'P1M');
-        $this->dateTo = DateUtils::removeTime();
+        $this->date = DateUtils::removeTime();
     }
 
+    public function getDate(): \DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function getDateFrom(): \DateTimeInterface
     {
-        return $this->dateFrom;
+        return DateUtils::sub($this->date, $this->interval);
     }
 
-    public function getDateFromFormatted(): string
+    public function getInterval(): string
     {
-        return FormatUtils::formatDate($this->dateFrom);
-    }
-
-    public function getDateTo(): \DateTimeInterface
-    {
-        return $this->dateTo;
-    }
-
-    public function getDateToFormatted(): string
-    {
-        return FormatUtils::formatDate($this->dateTo);
+        return $this->interval;
     }
 
     /**
@@ -68,9 +64,10 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
 
     public function getStatesCode(): string
     {
-        $sources = \array_map(static fn (CalculationState $state): string => (string) $state->getCode(), $this->states);
-
-        return \implode(', ', $sources);
+        return \implode(
+            ', ',
+            $this->mapStates(static fn (CalculationState $state): string => (string) $state->getCode())
+        );
     }
 
     /**
@@ -78,19 +75,19 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
      */
     public function getStatesId(): array
     {
-        return \array_map(static fn (CalculationState $state): int => (int) $state->getId(), $this->states);
+        return $this->mapStates(static fn (CalculationState $state): int => (int) $state->getId());
     }
 
-    public function setDateFrom(\DateTimeInterface $dateFrom): self
+    public function setDate(\DateTimeInterface $date): self
     {
-        $this->dateFrom = $dateFrom;
+        $this->date = $date;
 
         return $this;
     }
 
-    public function setDateTo(\DateTimeInterface $dateTo): self
+    public function setInterval(string $interval): self
     {
-        $this->dateTo = $dateTo;
+        $this->interval = $interval;
 
         return $this;
     }
@@ -111,35 +108,25 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
     #[Assert\Callback]
     public function validate(ExecutionContextInterface $context): void
     {
-        /** @var CalculationUpdateQuery $query */
-        $query = $context->getValue();
-
-        // after today?
-        $to = $query->getDateTo();
-        if ($to > DateUtils::removeTime()) {
-            $context->buildViolation('date_less_today')
-                ->atPath('dateTo')
-                ->addViolation();
-
+        // before or equal as today?
+        if ($this->date <= DateUtils::removeTime()) {
             return;
         }
 
-        // after to date
-        $from = $query->getDateFrom();
-        if ($from > $to) {
-            $context->buildViolation('date_less_to')
-                ->atPath('dateFrom')
-                ->addViolation();
+        $context->buildViolation('date_less_today')
+            ->atPath('date')
+            ->addViolation();
+    }
 
-            return;
-        }
-
-        // more than 1 month
-        $to = DateUtils::sub($to, 'P1M');
-        if ($from < $to) {
-            $context->buildViolation('date_less_one_month')
-                ->atPath('dateFrom')
-                ->addViolation();
-        }
+    /**
+     * @template TResult
+     *
+     * @psalm-param callable(CalculationState): TResult $callback
+     *
+     * @psalm-return TResult[]
+     */
+    private function mapStates(callable $callback): array
+    {
+        return \array_map($callback, $this->states);
     }
 }

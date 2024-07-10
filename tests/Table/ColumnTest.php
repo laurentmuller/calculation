@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Table;
 
+use App\Interfaces\SortModeInterface;
 use App\Repository\GlobalMarginRepository;
 use App\Table\Column;
 use App\Table\GlobalMarginTable;
@@ -130,6 +131,14 @@ class ColumnTest extends TestCase
         self::assertNull($column->getTitle());
     }
 
+    public function testInvalidSort(): void
+    {
+        $column = new Column();
+        self::assertSame(SortModeInterface::SORT_ASC, $column->getOrder());
+        $column->setOrder('fake');
+        self::assertSame(SortModeInterface::SORT_ASC, $column->getOrder());
+    }
+
     public function testMapValueBool(): void
     {
         $column = new Column();
@@ -146,6 +155,8 @@ class ColumnTest extends TestCase
             'id' => 1,
             'field' => false,
         ];
+        $actual = $column->mapValue($data);
+        self::assertSame('0', $actual);
         $actual = $column->mapValue($data);
         self::assertSame('0', $actual);
     }

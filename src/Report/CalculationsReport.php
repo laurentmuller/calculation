@@ -160,6 +160,6 @@ class CalculationsReport extends AbstractArrayReport
 
     private function transEditable(bool $editable): string
     {
-        return $this->trans($editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable');
+        return $this->trans(\sprintf('calculationstate.list.editable_%d', (int) $editable));
     }
 }

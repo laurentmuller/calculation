@@ -273,10 +273,13 @@ abstract class AbstractEntityTable extends AbstractTable
      */
     private function getSearchFields(): array
     {
-        $mapCallback = static fn (Column $c): string => $c->getField();
-        $filterCallback = static fn (Column $c): bool => $c->isSearchable();
-
-        return \array_map($mapCallback, \array_filter($this->getColumns(), $filterCallback));
+        return \array_map(
+            static fn (Column $c): string => $c->getField(),
+            \array_filter(
+                $this->getColumns(),
+                static fn (Column $c): bool => $c->isSearchable()
+            )
+        );
     }
 
     /**

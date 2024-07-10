@@ -22,7 +22,9 @@ use App\Traits\LoggerAwareTrait;
 use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
-use Doctrine\ORM\Query;
+use App\Utils\FormatUtils;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Exception\ORMException;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
@@ -35,9 +37,8 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     use ServiceMethodsSubscriberTrait;
     use SessionAwareTrait;
     use TranslatorAwareTrait;
-
-    private const KEY_DATE_FROM = 'calculation.update.date_from';
-    private const KEY_DATE_TO = 'calculation.update.date_to';
+    private const KEY_DATE = 'calculation.update.date';
+    private const KEY_INTERVAL = 'calculation.update.interval';
     private const KEY_STATES = 'calculation.update.states';
 
     public function __construct(
@@ -48,11 +49,14 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     ) {
     }
 
+    /**
+     * @throws ORMException
+     */
     public function createQuery(): CalculationUpdateQuery
     {
         $query = new CalculationUpdateQuery();
-        $query->setDateFrom($this->getDate(self::KEY_DATE_FROM, $query->getDateFrom()))
-            ->setDateTo($this->getDate(self::KEY_DATE_TO, $query->getDateTo()))
+        $query->setDate($this->getDate($query->getDate()))
+            ->setInterval($this->getInterval($query->getInterval()))
             ->setStates($this->getStates(true));
 
         return $query;
@@ -61,14 +65,14 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     public function saveQuery(CalculationUpdateQuery $query): void
     {
         $this->setSessionValues([
-            self::KEY_DATE_FROM => $query->getDateFrom(),
-            self::KEY_DATE_TO => $query->getDateTo(),
+            self::KEY_DATE => $query->getDate(),
+            self::KEY_INTERVAL => $query->getInterval(),
             self::KEY_STATES => $query->getStatesId(),
         ]);
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException|\Exception
      */
     public function update(CalculationUpdateQuery $query): CalculationUpdateResult
     {
@@ -102,31 +106,27 @@ class CalculationUpdateService implements ServiceSubscriberInterface
 
     /**
      * @psalm-return Calculation[]
+     *
+     * @throws \Exception
      */
     private function getCalculations(CalculationUpdateQuery $query): array
     {
-        $from = $query->getDateFrom();
-        $to = $query->getDateTo();
-        $fromType = $this->calculationRepository->getDateTimeType($from);
-        $toType = $this->calculationRepository->getDateTimeType($to);
+        $criteria = Criteria::create()
+            ->andWhere(Criteria::expr()->in('state', $query->getStates()))
+            ->andWhere(Criteria::expr()->gte('date', $query->getDateFrom()))
+            ->andWhere(Criteria::expr()->lte('date', $query->getDate()));
 
-        /** @psalm-var Query<int, Calculation> $q */
-        $q = $this->calculationRepository
+        /** @psalm-var Calculation[] */
+        return $this->calculationRepository
             ->createQueryBuilder('c')
-            ->where('c.state in (:states)')
-            ->andWhere('c.date >= :from')
-            ->andWhere('c.date <= :to')
-            ->setParameter('states', $query->getStates())
-            ->setParameter('from', $from, $fromType)
-            ->setParameter('to', $to, $toType)
-            ->getQuery();
-
-        return $q->getResult();
+            ->addCriteria($criteria)
+            ->getQuery()
+            ->getResult();
     }
 
-    private function getDate(string $key, \DateTimeInterface $default): \DateTimeInterface
+    private function getDate(\DateTimeInterface $default): \DateTimeInterface
     {
-        $date = $this->getSessionDate($key, $default);
+        $date = $this->getSessionDate(self::KEY_DATE, $default);
         if ($date instanceof \DateTime) {
             return DateUtils::removeTime($date);
         }
@@ -134,8 +134,15 @@ class CalculationUpdateService implements ServiceSubscriberInterface
         return $date;
     }
 
+    private function getInterval(string $default): string
+    {
+        return $this->getSessionString(self::KEY_INTERVAL, $default);
+    }
+
     /**
      * @return CalculationState[]
+     *
+     * @throws ORMException
      */
     private function getStates(bool $useSession): array
     {
@@ -155,11 +162,14 @@ class CalculationUpdateService implements ServiceSubscriberInterface
         return $sources;
     }
 
+    /**
+     * @throws \Exception
+     */
     private function logResult(CalculationUpdateQuery $query, CalculationUpdateResult $result): void
     {
         $context = [
-            $this->trans('calculation.update.dateFrom') => $query->getDateFromFormatted(),
-            $this->trans('calculation.update.dateTo') => $query->getDateToFormatted(),
+            $this->trans('calculation.update.dateFrom') => FormatUtils::formatDate($query->getDateFrom()),
+            $this->trans('calculation.update.dateTo') => FormatUtils::formatDate($query->getDate()),
             $this->trans('calculation.update.states') => $query->getStatesCode(),
             $this->trans('calculation.list.title') => $result->count(),
         ];

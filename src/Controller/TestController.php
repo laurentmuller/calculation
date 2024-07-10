@@ -602,8 +602,8 @@ class TestController extends AbstractController
             ->getQuery()
             ->getResult();
         $fn = static fn (CalculationState $state): string => $state->isEditable()
-            ? 'calculationstate.list.editable'
-            : 'calculationstate.list.not_editable';
+            ? 'calculationstate.list.editable_1'
+            : 'calculationstate.list.editable_0';
 
         return $this->groupBy($states, $fn);
     }

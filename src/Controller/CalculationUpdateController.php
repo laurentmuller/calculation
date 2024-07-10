@@ -18,6 +18,7 @@ use App\Interfaces\RoleInterface;
 use App\Model\CalculationUpdateQuery;
 use App\Repository\CalculationStateRepository;
 use App\Service\CalculationUpdateService;
+use App\Utils\DateUtils;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
@@ -36,7 +37,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class CalculationUpdateController extends AbstractController
 {
     /**
-     * @throws ORMException
+     * @throws ORMException|\Exception
      */
     #[GetPost(path: '/update', name: 'update')]
     public function update(Request $request, CalculationUpdateService $service): Response
@@ -63,15 +64,19 @@ class CalculationUpdateController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \Exception
+     */
     private function createQueryForm(CalculationUpdateQuery $query): FormInterface
     {
         $helper = $this->createFormHelper('calculation.update.', $query);
-
-        $helper->field('dateFrom')
+        $helper->field('date')
+            ->updateAttribute('max', DateUtils::formatFormDate(DateUtils::removeTime()))
             ->addDateType();
 
-        $helper->field('dateTo')
-            ->addDateType();
+        $helper->field('interval')
+            ->updateOption('choice_translation_domain', false)
+            ->addChoiceType($this->getIntervalChoices());
 
         $helper->field('states')
             ->updateOptions([
@@ -86,5 +91,17 @@ class CalculationUpdateController extends AbstractController
         $helper->addSimulateAndConfirmType($this->getTranslator(), $query->isSimulate());
 
         return $helper->createForm();
+    }
+
+    private function getIntervalChoices(): array
+    {
+        return [
+            $this->trans('counters.weeks', ['count' => 1]) => 'P1W',
+            $this->trans('counters.weeks', ['count' => 2]) => 'P2W',
+            $this->trans('counters.weeks', ['count' => 3]) => 'P3W',
+            $this->trans('counters.months', ['count' => 1]) => 'P1M',
+            $this->trans('counters.months', ['count' => 2]) => 'P2M',
+            $this->trans('counters.months', ['count' => 3]) => 'P3M',
+        ];
     }
 }

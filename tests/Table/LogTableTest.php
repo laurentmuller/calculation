@@ -82,6 +82,18 @@ class LogTableTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testWithoutData(): void
+    {
+        $query = $this->createDataQuery();
+        $table = $this->createTableWithoutData();
+        $results = $table->processDataQuery($query);
+        self::assertSame(Response::HTTP_OK, $results->status);
+        self::assertCount(0, $results->rows);
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testWitSearchChannel(): void
     {
         $query = $this->createDataQuery();
@@ -197,6 +209,36 @@ class LogTableTest extends TestCase
 
         $file->method('getLevels')
             ->willReturn($this->createLevels());
+
+        $service = $this->createMock(LogService::class);
+        $service->method('getLogFile')
+            ->willReturn($file);
+
+        $twig = $this->createMock(Environment::class);
+
+        return new LogTable($service, $twig);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createTableWithoutData(): LogTable
+    {
+        $file = $this->createMock(LogFile::class);
+        $file->method('getFile')
+            ->willReturn(__FILE__);
+
+        $file->method('count')
+            ->willReturn(0);
+
+        $file->method('getLogs')
+            ->willReturn([]);
+
+        $file->method('getChannels')
+            ->willReturn([]);
+
+        $file->method('getLevels')
+            ->willReturn([]);
 
         $service = $this->createMock(LogService::class);
         $service->method('getLogFile')

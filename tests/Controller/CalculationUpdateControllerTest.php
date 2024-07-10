@@ -39,8 +39,8 @@ class CalculationUpdateControllerTest extends ControllerTestCase
     {
         $calculation = $this->getCalculation();
         $data = [
-            'form[dateFrom]' => '2024-06-01',
-            'form[dateTo]' => '2024-07-01',
+            'form[date]' => '2024-06-01',
+            'form[interval]' => 'P1M',
             'form[states][0]' => $calculation->getState()?->getId(),
             'form[simulate]' => '1',
             'form[confirm]' => '1',

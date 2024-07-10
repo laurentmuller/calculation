@@ -16,6 +16,8 @@ use App\Entity\CalculationState;
 use App\Traits\ArrayTrait;
 use App\Traits\GroupByTrait;
 use App\Traits\MathTrait;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -134,47 +136,47 @@ class CalculationStateRepository extends AbstractRepository
     /**
      * Get the number of calculation states where editable is true.
      *
-     * @param literal-string $alias the entity alias
-     *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
-    public function getEditableCount(string $alias = self::DEFAULT_ALIAS): int
+    public function getEditableCount(): int
     {
-        return $this->countStates($this->getEditableQueryBuilder($alias), $alias);
+        return $this->countStates(true);
     }
 
     /**
      * Gets query builder for state where editable is true.
      *
      * @param literal-string $alias the entity alias
+     *
+     * @throws ORMException
      */
     public function getEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->getSortedBuilder($alias)
-            ->where("$alias.editable = 1");
+            ->addCriteria($this->getEditableCriteria(true));
     }
 
     /**
      * Get the number of calculation states where editable is false.
      *
-     * @param literal-string $alias the entity alias
-     *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
-    public function getNotEditableCount(string $alias = self::DEFAULT_ALIAS): int
+    public function getNotEditableCount(): int
     {
-        return $this->countStates($this->getNotEditableQueryBuilder($alias), $alias);
+        return $this->countStates(false);
     }
 
     /**
      * Gets query builder for state where editable is false.
      *
      * @param literal-string $alias the entity alias
+     *
+     * @throws ORMException
      */
     public function getNotEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->getSortedBuilder($alias)
-            ->where("$alias.editable = 0");
+            ->addCriteria($this->getEditableCriteria(false));
     }
 
     /**
@@ -232,14 +234,15 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
-     * @param literal-string $alias the entity alias
+     * Get the number of calculation states for the given editable value.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
-    private function countStates(QueryBuilder $builder, string $alias): int
+    private function countStates(bool $editable): int
     {
-        return (int) $builder->select("count($alias.id)")
-            ->resetDQLPart('orderBy')
+        return (int) $this->createQueryBuilder('e')
+            ->select('count(e.id)')
+            ->addCriteria($this->getEditableCriteria($editable))
             ->getQuery()
             ->getSingleScalarResult();
     }
@@ -254,6 +257,12 @@ class CalculationStateRepository extends AbstractRepository
             ->groupBy('s.id')
             ->orderBy('s.editable', self::SORT_DESC)
             ->addOrderBy('s.code', self::SORT_ASC);
+    }
+
+    private function getEditableCriteria(bool $editable): Criteria
+    {
+        return Criteria::create()
+            ->where(Criteria::expr()->eq('editable', $editable));
     }
 
     /**
@@ -280,7 +289,7 @@ class CalculationStateRepository extends AbstractRepository
                 $result[$key] = [
                     'id' => $key,
                     'icon' => 1 === $key ? 'circle-check fa-lg far' : 'circle-xmark fa-lg far',
-                    'text' => 1 === $key ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable',
+                    'text' => 1 === $key ? 'calculationstate.list.editable_1' : 'calculationstate.list.editable_0',
                     'states' => [],
                 ];
             }

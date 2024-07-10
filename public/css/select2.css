@@ -57,7 +57,8 @@ html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection__cho
     display: inline-flex;
     padding-left: 0.35rem;
     padding-right: 0.35rem;
-    margin-bottom: 0.2rem !important;
+    margin-top: 0.2rem !important;
+    margin-bottom: 0.1rem !important;
     margin-right: 0.2rem !important;
 }
 

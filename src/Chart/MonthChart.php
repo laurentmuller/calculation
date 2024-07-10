@@ -33,7 +33,7 @@ class MonthChart extends AbstractHighchart
     /**
      * The HTML color name for amounts.
      */
-    public const COLOR_AMOUNT = HtmlColorName::MEDIUM_SEA_GREEN;
+    public const COLOR_AMOUNT = HtmlColorName::SEA_GREEN;
 
     /**
      * The HTML color name for margins.

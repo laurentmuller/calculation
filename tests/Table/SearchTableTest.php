@@ -33,6 +33,26 @@ class SearchTableTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testEmptyMessage(): void
+    {
+        $service = $this->createMock(SearchService::class);
+        $table = $this->createTable($service);
+        self::assertNull($table->getEmptyMessage());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testEntityClassName(): void
+    {
+        $service = $this->createMock(SearchService::class);
+        $table = $this->createTable($service);
+        self::assertNull($table->getEntityClassName());
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testWithAllItems(): void
     {
         $query = new DataQuery();
@@ -44,7 +64,7 @@ class SearchTableTest extends TestCase
         $table = $this->createTable($service);
         $results = $table->processDataQuery($query);
         self::assertSame(Response::HTTP_OK, $results->status);
-        self::assertCount(7, $results->rows);
+        self::assertCount(8, $results->rows);
     }
 
     /**
@@ -148,6 +168,14 @@ class SearchTableTest extends TestCase
     private function createSearchResults(): array
     {
         return [
+            [
+                'id' => 1,
+                'type' => 'calculation',
+                'field' => 'field',
+                'content' => 'content1',
+                'entityName' => 'calculation',
+                'fieldName' => 'fieldName',
+            ],
             [
                 'id' => 1,
                 'type' => 'calculation',

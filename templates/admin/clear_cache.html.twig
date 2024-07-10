@@ -52,8 +52,7 @@
 {% block actions_form -%}
     {{ parent() }}
     {% if pools|length %}
-        <button type="button" class="btn btn-form btn-outline-success" data-bs-toggle="modal"
-                data-bs-target="#modal-cache-list">
+        <button type="button" class="btn btn-form btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal-cache-list">
             {{- 'clear_cache.list'|trans -}}
         </button>
     {% endif %}

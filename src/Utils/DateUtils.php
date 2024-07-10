@@ -95,7 +95,7 @@ final class DateUtils
     }
 
     /**
-     * Format the given date (if any) to use within a form.
+     * Format the given date (if any) to use within a date type in forms.
      */
     public static function formatFormDate(?\DateTimeInterface $date): ?string
     {

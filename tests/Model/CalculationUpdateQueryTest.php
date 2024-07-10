@@ -17,9 +17,8 @@ use App\Model\CalculationUpdateQuery;
 use App\Tests\DateAssertTrait;
 use App\Tests\Entity\IdTrait;
 use App\Utils\DateUtils;
-use App\Utils\FormatUtils;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
@@ -37,22 +36,19 @@ class CalculationUpdateQueryTest extends TestCase
     {
         $query = new CalculationUpdateQuery();
 
+        $expected = $this->getDate();
+        $actual = $query->getDate();
+        self::assertSameDate($expected, $actual);
+
+        self::assertTrue($query->isSimulate());
+
+        $expected = $this->getInterval();
+        $actual = $query->getInterval();
+        self::assertSame($expected, $actual);
+
         $expected = $this->getDateFrom();
         $actual = $query->getDateFrom();
         self::assertSameDate($expected, $actual);
-
-        $expected = FormatUtils::formatDate($actual);
-        $actual = $query->getDateFromFormatted();
-        self::assertSame($expected, $actual);
-
-        $expected = $this->getDateTo();
-        $actual = $query->getDateTo();
-        self::assertSameDate($expected, $actual);
-
-        $expected = FormatUtils::formatDate($actual);
-        $actual = $query->getDateToFormatted();
-        self::assertSame($expected, $actual);
-        self::assertTrue($query->isSimulate());
     }
 
     /**
@@ -61,14 +57,18 @@ class CalculationUpdateQueryTest extends TestCase
     public function testSetDates(): void
     {
         $query = new CalculationUpdateQuery();
+
+        $expected = $this->getInterval();
+        $query->setInterval($expected);
+        self::assertSame($expected, $query->getInterval());
+
         $expected = $this->getDateFrom();
-        $query->setDateFrom($expected);
         $actual = $query->getDateFrom();
         self::assertSameDate($expected, $actual);
 
-        $expected = $this->getDateTo();
-        $query->setDateTo($expected);
-        $actual = $query->getDateTo();
+        $expected = $this->getDate();
+        $query->setDate($expected);
+        $actual = $query->getDate();
         self::assertSameDate($expected, $actual);
     }
 
@@ -91,85 +91,57 @@ class CalculationUpdateQueryTest extends TestCase
     }
 
     /**
-     * @throws Exception|\Exception
+     * @throws \Exception
      */
-    public function testValidateAfter(): void
+    public function testValidationInvalidDate(): void
     {
-        $to = DateUtils::removeTime();
-        $from = DateUtils::add($to, 'P1M');
+        $date = DateUtils::add(DateUtils::removeTime(), 'P1D');
         $query = new CalculationUpdateQuery();
-        $query->setDateTo($to)
-            ->setDateFrom($from);
+        $query->setDate($date);
 
-        $context = $this->createMock(ExecutionContextInterface::class);
-        $context->expects(self::once())
-            ->method('getValue')
-            ->willReturn($query);
-        $violation = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
-        $violation->method('setParameter')
-            ->willReturn($violation);
-        $context->expects(self::once())
-            ->method('buildViolation')
-            ->willReturn($violation);
+        $context = $this->getContext(true);
         $query->validate($context);
     }
 
     /**
-     * @throws Exception|\Exception
+     * @throws \Exception
      */
-    public function testValidateDateTo(): void
+    public function testValidationSuccess(): void
     {
-        $date = DateUtils::add(DateUtils::removeTime(), 'P1M');
         $query = new CalculationUpdateQuery();
-        $query->setDateTo($date);
-        $context = $this->createMock(ExecutionContextInterface::class);
-        $context->expects(self::once())
-            ->method('getValue')
-            ->willReturn($query);
-        $violation = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
-        $violation->method('setParameter')
-            ->willReturn($violation);
-        $context->expects(self::once())
-            ->method('buildViolation')
-            ->willReturn($violation);
+        $context = $this->getContext(false);
         $query->validate($context);
     }
 
-    /**
-     * @throws Exception|\Exception
-     */
-    public function testValidateMonth(): void
+    private function getContext(bool $expectedViolation): MockObject&ExecutionContextInterface
     {
-        $to = DateUtils::removeTime();
-        $from = DateUtils::sub($to, 'P3M');
-        $query = new CalculationUpdateQuery();
-        $query->setDateTo($to)
-            ->setDateFrom($from);
+        $context = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
+        if ($expectedViolation) {
+            $violation = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)
+                ->getMock();
+            $violation->expects(self::any())
+                ->method('setParameter')
+                ->willReturn($violation);
+            $violation->expects(self::any())
+                ->method('atPath')
+                ->willReturn($violation);
+            $violation->expects(self::once())
+                ->method('addViolation');
+            $context->expects(self::once())
+                ->method('buildViolation')
+                ->willReturn($violation);
+        } else {
+            $context
+                ->expects(self::never())
+                ->method('buildViolation');
+        }
 
-        $context = $this->createMock(ExecutionContextInterface::class);
-        $context->expects(self::once())
-            ->method('getValue')
-            ->willReturn($query);
-        $violation = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
-        $violation->method('setParameter')
-            ->willReturn($violation);
-        $context->expects(self::once())
-            ->method('buildViolation')
-            ->willReturn($violation);
-        $query->validate($context);
+        return $context;
     }
 
-    /**
-     * @throws Exception|\Exception
-     */
-    public function testValidateValid(): void
+    private function getDate(): \DateTimeInterface
     {
-        $query = new CalculationUpdateQuery();
-        $context = $this->createMock(ExecutionContextInterface::class);
-        $context->method('getValue')
-            ->willReturn($query);
-        $query->validate($context);
-        self::assertCount(0, $context->getViolations());
+        return DateUtils::removeTime();
     }
 
     /**
@@ -177,12 +149,12 @@ class CalculationUpdateQueryTest extends TestCase
      */
     private function getDateFrom(): \DateTimeInterface
     {
-        return DateUtils::sub(DateUtils::removeTime(), 'P1M');
+        return DateUtils::sub(DateUtils::removeTime(), $this->getInterval());
     }
 
-    private function getDateTo(): \DateTimeInterface
+    private function getInterval(): string
     {
-        return DateUtils::removeTime();
+        return 'P1M';
     }
 
     /**

@@ -32,8 +32,7 @@ class CalculationUpdateControllerTest extends ControllerTestCase
     }
 
     /**
-     * @throws ORMException
-     * @throws \Exception
+     * @throws ORMException|\Exception
      */
     public function testUpdate(): void
     {

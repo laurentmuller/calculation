@@ -28,6 +28,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -141,6 +142,8 @@ class SearchService implements ServiceSubscriberInterface
      * @return int the number of rows
      *
      * @psalm-return non-negative-int
+     *
+     * @throws InvalidArgumentException
      */
     public function count(?string $search, ?string $entity = null): int
     {
@@ -200,6 +203,8 @@ class SearchService implements ServiceSubscriberInterface
      * @return array the array of results for the given search (can be empty)
      *
      * @psalm-return SearchType[]
+     *
+     * @throws InvalidArgumentException
      */
     public function search(?string $search, ?string $entity = null, int $limit = 25, int $offset = 0): array
     {
@@ -306,16 +311,13 @@ class SearchService implements ServiceSubscriberInterface
      * @template TEntity of EntityInterface
      *
      * @param array<string, string> $queries
-     * @param string                $class     the entity class
+     * @param class-string<TEntity> $class     the entity class
      * @param string                ...$fields the entity fields to search in
-     *
-     * @psalm-param class-string<TEntity> $class
      */
     private function createEntityQueries(array &$queries, string $class, string ...$fields): void
     {
         if ($this->isGrantedSearch($class)) {
-            $interfaces = \class_implements($class);
-            if (\is_array($interfaces) && \in_array(TimestampableInterface::class, $interfaces, true)) {
+            if ($this->isTimestampable($class)) {
                 $fields = \array_unique(\array_merge($fields, ['createdBy', 'updatedBy']));
             }
             foreach ($fields as $field) {
@@ -362,6 +364,8 @@ class SearchService implements ServiceSubscriberInterface
      * @param string  $extra  a SQL statement to add to the default native SELECT SQL statement
      *
      * @psalm-return SearchType[]
+     *
+     * @throws InvalidArgumentException
      */
     private function getArrayResult(string $search, ?string $entity = null, string $extra = ''): array
     {
@@ -415,6 +419,8 @@ class SearchService implements ServiceSubscriberInterface
      * Gets the SQL queries.
      *
      * @return array<string, string> the SQL queries
+     *
+     * @throws InvalidArgumentException
      */
     private function getQueries(): array
     {
@@ -450,6 +456,8 @@ class SearchService implements ServiceSubscriberInterface
 
     /**
      * Gets the result set mapping.
+     *
+     * @throws InvalidArgumentException
      */
     private function getResultSetMapping(): ResultSetMapping
     {
@@ -469,6 +477,13 @@ class SearchService implements ServiceSubscriberInterface
     private function isGrantedSearch(string $subject): bool
     {
         return $this->isGrantedList($subject) && $this->isGrantedShow($subject);
+    }
+
+    private function isTimestampable(string $class): bool
+    {
+        $interfaces = \class_implements($class);
+
+        return \is_array($interfaces) && \in_array(TimestampableInterface::class, $interfaces, true);
     }
 
     /**

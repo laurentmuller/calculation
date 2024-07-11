@@ -17,6 +17,7 @@ use App\Service\SearchService;
 use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\FileUtils;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
@@ -59,6 +60,9 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
         return FileUtils::buildPath(__DIR__, 'Definition', 'search.json');
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     protected function handleQuery(DataQuery $query): DataResults
     {
         $items = [];

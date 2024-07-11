@@ -59,6 +59,7 @@ use App\Validator\Strength;
 use App\Word\HtmlDocument;
 use Doctrine\ORM\EntityManagerInterface;
 use fpdf\PdfFontStyle;
+use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use ReCaptcha\Response as ReCaptchaResponse;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -390,6 +391,9 @@ class TestController extends AbstractController
         return $this->render('test/recaptcha.html.twig', ['form' => $form]);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     #[Get(path: '/search', name: 'search')]
     public function search(Request $request, SearchService $service): JsonResponse
     {

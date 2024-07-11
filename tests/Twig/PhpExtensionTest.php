@@ -14,7 +14,6 @@ namespace App\Tests\Twig;
 
 use App\Twig\PhpExtension;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Twig\Test\IntegrationTestCase;
 
 #[CoversClass(PhpExtension::class)]
 class PhpExtensionTest extends IntegrationTestCase

@@ -16,7 +16,6 @@ use App\Twig\Node\SwitchNode;
 use App\Twig\SwitchExtension;
 use App\Twig\TokenParser\SwitchTokenParser;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Twig\Test\IntegrationTestCase;
 
 #[CoversClass(SwitchExtension::class)]
 #[CoversClass(SwitchTokenParser::class)]

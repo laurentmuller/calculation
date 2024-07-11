@@ -15,7 +15,6 @@ namespace App\Tests\Twig;
 use App\Service\CountryFlagService;
 use App\Twig\EmojiFlagExtension;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Twig\Test\IntegrationTestCase;
 
 #[CoversClass(EmojiFlagExtension::class)]
 class EmojiFlagExtensionTest extends IntegrationTestCase

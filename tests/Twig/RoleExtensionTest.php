@@ -15,7 +15,6 @@ namespace App\Tests\Twig;
 use App\Tests\TranslatorMockTrait;
 use App\Twig\RoleExtension;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Twig\Test\IntegrationTestCase;
 
 #[CoversClass(RoleExtension::class)]
 class RoleExtensionTest extends IntegrationTestCase

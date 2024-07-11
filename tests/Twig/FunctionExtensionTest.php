@@ -20,7 +20,6 @@ use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Component\Asset\Packages;
-use Twig\Test\IntegrationTestCase;
 use Vich\UploaderBundle\Storage\StorageInterface;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 

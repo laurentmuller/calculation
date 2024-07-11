@@ -14,7 +14,6 @@ namespace App\Tests\Twig;
 
 use App\Twig\PregExtension;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Twig\Test\IntegrationTestCase;
 
 #[CoversClass(PregExtension::class)]
 class PregExtensionTest extends IntegrationTestCase

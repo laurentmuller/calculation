@@ -14,7 +14,6 @@ namespace App\Tests\Twig;
 
 use App\Twig\EnumExtension;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Twig\Test\IntegrationTestCase;
 
 #[CoversClass(EnumExtension::class)]
 class EnumExtensionTest extends IntegrationTestCase

@@ -17,7 +17,6 @@ use App\Service\ThemeService;
 use App\Twig\ThemeExtension;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
-use Twig\Test\IntegrationTestCase;
 
 #[CoversClass(ThemeExtension::class)]
 class ThemeExtensionTest extends IntegrationTestCase

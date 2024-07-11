@@ -1,0 +1,8 @@
+--TEST--
+"nonce" function test
+--TEMPLATE--
+{{ csp_nonce() }}
+--DATA--
+return []
+--EXPECT--
+nonce

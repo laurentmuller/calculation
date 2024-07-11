@@ -14,7 +14,6 @@ namespace App\Tests\Twig;
 
 use App\Twig\HighlightExtension;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Twig\Test\IntegrationTestCase;
 
 #[CoversClass(HighlightExtension::class)]
 class HighlightExtensionTest extends IntegrationTestCase

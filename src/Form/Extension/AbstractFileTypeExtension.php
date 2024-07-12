@@ -58,9 +58,7 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
     protected function updateAttributes(array $options, array $attributes): array
     {
         if (isset($options['placeholder'])) {
-            /** @var string $placeholder */
-            $placeholder = $options['placeholder'];
-            $attributes['placeholder'] = $placeholder;
+            $attributes['placeholder'] = (string) $options['placeholder'];
         }
         if (isset($options['maxfiles'])) {
             $value = (int) $options['maxfiles'];
@@ -69,14 +67,20 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
             }
         }
         if (isset($options['maxsize'])) {
-            /** @var string|int $maxsize */
+            /** @psalm-var string|int $maxsize */
             $maxsize = $options['maxsize'];
-            $attributes['maxsize'] = $this->normalizeSize($maxsize);
+            $normalizedSize = $this->normalizeSize($maxsize);
+            if (null !== $normalizedSize) {
+                $attributes['maxsize'] = $this->normalizeSize($maxsize);
+            }
         }
         if (isset($options['maxsizetotal'])) {
-            /** @var string|int $maxsizetotal */
+            /** @psalm-var string|int $maxsizetotal */
             $maxsizetotal = $options['maxsizetotal'];
-            $attributes['maxsizetotal'] = $this->normalizeSize($maxsizetotal);
+            $normalizedSize = $this->normalizeSize($maxsizetotal);
+            if (null !== $normalizedSize) {
+                $attributes['maxsizetotal'] = $normalizedSize;
+            }
         }
 
         return $attributes;

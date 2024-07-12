@@ -16,6 +16,8 @@ use App\Form\Extension\AbstractFileTypeExtension;
 use App\Form\Extension\FileTypeExtension;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
@@ -26,8 +28,7 @@ class FileTypeExtensionTest extends TypeTestCase
     public function testFormViewWithMaxFiles(): void
     {
         $options = ['maxfiles' => 10];
-        $view = $this->factory->create(FileType::class, null, $options)
-            ->createView();
+        $view = $this->createView($options);
         $attributes = $view->vars['attr'];
         self::assertArrayHasKey('maxfiles', $attributes);
         self::assertSame(10, $attributes['maxfiles']);
@@ -36,8 +37,15 @@ class FileTypeExtensionTest extends TypeTestCase
     public function testFormViewWithMaxFilesOne(): void
     {
         $options = ['maxfiles' => 1];
-        $view = $this->factory->create(FileType::class, null, $options)
-            ->createView();
+        $view = $this->createView($options);
+        $attributes = $view->vars['attr'];
+        self::assertArrayNotHasKey('maxfiles', $attributes);
+    }
+
+    public function testFormViewWithMaxFilesZero(): void
+    {
+        $options = ['maxfiles' => 0];
+        $view = $this->createView($options);
         $attributes = $view->vars['attr'];
         self::assertArrayNotHasKey('maxfiles', $attributes);
     }
@@ -45,18 +53,24 @@ class FileTypeExtensionTest extends TypeTestCase
     public function testFormViewWithMaxSize(): void
     {
         $options = ['maxsize' => '10'];
-        $view = $this->factory->create(FileType::class, null, $options)
-            ->createView();
+        $view = $this->createView($options);
         $attributes = $view->vars['attr'];
         self::assertArrayHasKey('maxsize', $attributes);
         self::assertSame(10, $attributes['maxsize']);
     }
 
+    public function testFormViewWithMaxSizeEmpty(): void
+    {
+        $options = ['maxsize' => ''];
+        $view = $this->createView($options);
+        $attributes = $view->vars['attr'];
+        self::assertArrayNotHasKey('maxsize', $attributes);
+    }
+
     public function testFormViewWithMaxSizeInKb(): void
     {
         $options = ['maxsize' => '1k'];
-        $view = $this->factory->create(FileType::class, null, $options)
-            ->createView();
+        $view = $this->createView($options);
         $attributes = $view->vars['attr'];
         self::assertArrayHasKey('maxsize', $attributes);
         self::assertSame(1_000, $attributes['maxsize']);
@@ -66,41 +80,74 @@ class FileTypeExtensionTest extends TypeTestCase
     {
         self::expectException(InvalidOptionsException::class);
         $options = ['maxsize' => 'fake'];
-        $this->factory->create(FileType::class, null, $options)
-            ->createView();
+        $this->createView($options);
     }
 
     public function testFormViewWithMaxSizeTotal(): void
     {
         $options = ['maxsizetotal' => '10'];
-        $view = $this->factory->create(FileType::class, null, $options)
-            ->createView();
+        $view = $this->createView($options);
         $attributes = $view->vars['attr'];
         self::assertArrayHasKey('maxsizetotal', $attributes);
         self::assertSame(10, $attributes['maxsizetotal']);
     }
 
+    public function testFormViewWithMaxSizeTotalEmpty(): void
+    {
+        $options = ['maxsizetotal' => ''];
+        $view = $this->createView($options);
+        $attributes = $view->vars['attr'];
+        self::assertArrayNotHasKey('maxsizetotal', $attributes);
+    }
+
+    public function testFormViewWithMaxSizeTotalInKb(): void
+    {
+        $options = ['maxsizetotal' => '1k'];
+        $view = $this->createView($options);
+        $attributes = $view->vars['attr'];
+        self::assertArrayHasKey('maxsizetotal', $attributes);
+        self::assertSame(1_000, $attributes['maxsizetotal']);
+    }
+
+    public function testFormViewWithMaxSizeTotalZero(): void
+    {
+        $options = ['maxsizetotal' => 0];
+        $view = $this->createView($options);
+        $attributes = $view->vars['attr'];
+        self::assertArrayNotHasKey('maxsizetotal', $attributes);
+    }
+
     public function testFormViewWithMaxSizeZero(): void
     {
         $options = ['maxsize' => 0];
-        $view = $this->factory->create(FileType::class, null, $options)
-            ->createView();
+        $view = $this->createView($options);
         $attributes = $view->vars['attr'];
-        self::assertArrayHasKey('maxsize', $attributes);
-        self::assertNull($attributes['maxfiles']);
+        self::assertArrayNotHasKey('maxsize', $attributes);
+    }
+
+    public function testFormViewWithNoOption(): void
+    {
+        $view = $this->createView();
+        $attributes = $view->vars['attr'];
+        self::assertArrayNotHasKey('maxfiles', $attributes);
+        self::assertArrayNotHasKey('maxsize', $attributes);
+        self::assertArrayNotHasKey('maxsizetotal', $attributes);
+        self::assertArrayHasKey('placeholder', $attributes);
+        self::assertSame('filetype.placeholder', $attributes['placeholder']);
     }
 
     public function testFormWithMaxFile(): void
     {
-        $form = $this->factory->create(FileType::class, null, ['maxfiles' => 1]);
+        $form = $this->createForm(['maxfiles' => 1]);
         $options = $form->getConfig()
             ->getOptions();
         self::assertArrayHasKey('maxfiles', $options);
+        self::assertSame(1, $options['maxfiles']);
     }
 
     public function testFormWithMaxSize(): void
     {
-        $form = $this->factory->create(FileType::class, null, ['maxsize' => 1]);
+        $form = $this->createForm(['maxsize' => 1]);
         $options = $form->getConfig()
             ->getOptions();
         self::assertArrayHasKey('maxsize', $options);
@@ -108,7 +155,7 @@ class FileTypeExtensionTest extends TypeTestCase
 
     public function testFormWithMaxSizeTotal(): void
     {
-        $form = $this->factory->create(FileType::class, null, ['maxsizetotal' => 1]);
+        $form = $this->createForm(['maxsizetotal' => 1]);
         $options = $form->getConfig()
             ->getOptions();
         self::assertArrayHasKey('maxsizetotal', $options);
@@ -116,13 +163,12 @@ class FileTypeExtensionTest extends TypeTestCase
 
     public function testFormWithNoOption(): void
     {
-        $form = $this->factory->create(FileType::class);
+        $form = $this->createForm();
         $options = $form->getConfig()
             ->getOptions();
         self::assertArrayNotHasKey('maxfiles', $options);
         self::assertArrayNotHasKey('maxsize', $options);
         self::assertArrayNotHasKey('maxsizetotal', $options);
-
         self::assertArrayHasKey('placeholder', $options);
         self::assertSame('filetype.placeholder', $options['placeholder']);
     }
@@ -134,6 +180,17 @@ class FileTypeExtensionTest extends TypeTestCase
             ->getForm()
             ->createView();
         self::assertNotNull($view['file']);
+    }
+
+    protected function createForm(array $options = []): FormInterface
+    {
+        return $this->factory->create(FileType::class, null, $options);
+    }
+
+    protected function createView(array $options = []): FormView
+    {
+        return $this->createForm($options)
+            ->createView();
     }
 
     protected function getTypeExtensions(): array

@@ -4,7 +4,7 @@
 {# attributes #}
 {%- set sidebar_attributes = {
     'show-menu': 'index.menu_show'|trans,
-    'hide-menu': 'index.menu_hide'|trans
+    'hide-menu': 'index.menu_hide'|trans,
 } -%}
 {# sidebar #}
 <div id="sidebar" class="navbar navbar-vertical bg-body-tertiary d-print-none{{ sidebar_class }}"{{ attributes(sidebar_attributes, 'data-') }}{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>

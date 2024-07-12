@@ -3,6 +3,9 @@
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.4/phpunit.xsd"
          bootstrap="tests/bootstrap.php"
          requireCoverageMetadata="true"
+         displayDetailsOnTestsThatTriggerNotices="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
          colors="true">
 
     <php>
@@ -28,12 +31,6 @@
             <directory>./src</directory>
         </include>
     </source>
-
-    <groups>
-        <exclude>
-            <group>legacy</group>
-        </exclude>
-    </groups>
 
     <coverage/>
 </phpunit>

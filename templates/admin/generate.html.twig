@@ -7,7 +7,7 @@
 {%- set submit_text = 'generate.submit_text' -%}
 {%- set form_attr = form_attr|default({})|merge({
     'data-empty': 'generate.error.empty'|trans,
-    'data-error': 'generate.error.failed'|trans
+    'data-error': 'generate.error.failed'|trans,
 }) -%}
 {# body #}
 {% block card_body %}

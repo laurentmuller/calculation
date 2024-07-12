@@ -4,13 +4,13 @@
 {% set search_button_attributes = {
     id: 'search-button-horizontal',
     class: 'nav-link',
-    title: 'search.title'|trans
+    title: 'search.title'|trans,
 } %}
 {% set search_div_attributes = {
     id: 'search-div-horizontal',
     class: 'my-auto mx-lg-2 py-1 py-lg-0',
     role: 'search',
-    style: 'display: none; width: 0;'
+    style: 'display: none; width: 0;',
 } %}
 {% set search_input_attributes = {
     type: 'text',
@@ -26,7 +26,7 @@
     'data-bs-toggle': 'tooltip',
     'data-bs-trigger': 'manual',
     'data-bs-custom-class': 'tooltip-danger',
-    'data-bs-title': 'search.minimum'|trans
+    'data-bs-title': 'search.minimum'|trans,
 } %}
 <li class="nav-item my-auto">
     <button{{ attributes(search_button_attributes) }}>{{- icon('search fa-fw') -}}</button>

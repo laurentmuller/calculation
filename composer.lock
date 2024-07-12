@@ -13114,16 +13114,16 @@
         },
         {
             "name": "vincentlanglet/twig-cs-fixer",
-            "version": "2.11.0",
+            "version": "2.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/VincentLanglet/Twig-CS-Fixer.git",
-                "reference": "f0dbee1b0362f86c0e3440ddef0f447f739a326a"
+                "reference": "2af4cd3bf926b7dcea5e90a3307d340cec38744f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/f0dbee1b0362f86c0e3440ddef0f447f739a326a",
-                "reference": "f0dbee1b0362f86c0e3440ddef0f447f739a326a",
+                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/2af4cd3bf926b7dcea5e90a3307d340cec38744f",
+                "reference": "2af4cd3bf926b7dcea5e90a3307d340cec38744f",
                 "shasum": ""
             },
             "require": {
@@ -13135,7 +13135,7 @@
                 "symfony/filesystem": "^5.4 || ^6.0 || ^7.0",
                 "symfony/finder": "^5.4 || ^6.0 || ^7.0",
                 "symfony/string": "^5.4 || ^6.0 || ^7.0",
-                "twig/twig": "^2.14.0 || ^3.0.5",
+                "twig/twig": "^3.10",
                 "webmozart/assert": "^1.10"
             },
             "require-dev": {
@@ -13182,7 +13182,7 @@
             "homepage": "https://github.com/VincentLanglet/Twig-CS-Fixer",
             "support": {
                 "issues": "https://github.com/VincentLanglet/Twig-CS-Fixer/issues",
-                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/2.11.0"
+                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/2.12.0"
             },
             "funding": [
                 {
@@ -13190,7 +13190,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-06-16T12:30:18+00:00"
+            "time": "2024-07-11T21:37:18+00:00"
         },
         {
             "name": "webmozart/assert",

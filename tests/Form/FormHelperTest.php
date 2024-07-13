@@ -26,7 +26,6 @@ use App\Pdf\Html\HtmlAttribute;
 use App\Tests\Form\User\PasswordHasherExtensionTrait;
 use App\Tests\Form\User\VichImageTypeTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -50,7 +49,6 @@ use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
-#[CoversClass(FormHelper::class)]
 class FormHelperTest extends TypeTestCase
 {
     use PasswordHasherExtensionTrait;

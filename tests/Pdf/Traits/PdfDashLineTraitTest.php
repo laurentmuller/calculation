@@ -17,10 +17,8 @@ use App\Pdf\PdfLine;
 use App\Pdf\Traits\PdfDashLineTrait;
 use fpdf\PdfDestination;
 use fpdf\PdfRectangle;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PdfDashLineTrait::class)]
 class PdfDashLineTraitTest extends TestCase
 {
     public function testRender(): void

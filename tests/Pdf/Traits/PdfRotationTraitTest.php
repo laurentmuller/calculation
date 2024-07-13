@@ -16,10 +16,8 @@ use App\Pdf\PdfDocument;
 use App\Pdf\Traits\PdfRotationTrait;
 use fpdf\PdfDestination;
 use fpdf\PdfRectangle;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PdfRotationTrait::class)]
 class PdfRotationTraitTest extends TestCase
 {
     public function testRender(): void

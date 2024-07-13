@@ -12,12 +12,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Command\WebpCommand;
 use App\Utils\FileUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Console\Command\Command;
 
-#[CoversClass(WebpCommand::class)]
 class WebpCommandTest extends CommandTestCase
 {
     private const COMMAND_NAME = 'app:update-images';

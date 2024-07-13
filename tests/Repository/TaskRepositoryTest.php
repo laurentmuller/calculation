@@ -12,19 +12,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Repository;
 
-use App\Repository\AbstractCategoryItemRepository;
-use App\Repository\AbstractRepository;
 use App\Repository\TaskRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\TaskTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(AbstractRepository::class)]
-#[CoversClass(AbstractCategoryItemRepository::class)]
-#[CoversClass(TaskRepository::class)]
 class TaskRepositoryTest extends KernelServiceTestCase
 {
     use DatabaseTrait;

@@ -18,7 +18,6 @@ use App\Service\ImageResizer;
 use App\Service\UserNamer;
 use App\Tests\TranslatorMockTrait;
 use App\Utils\FileUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +27,6 @@ use Vich\UploaderBundle\Event\Event;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
 use Vich\UploaderBundle\Naming\NamerInterface;
 
-#[CoversClass(VichListener::class)]
 class VichListenerTest extends TestCase
 {
     use TranslatorMockTrait;

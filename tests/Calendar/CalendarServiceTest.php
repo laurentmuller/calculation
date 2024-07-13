@@ -15,13 +15,9 @@ namespace App\Tests\Calendar;
 use App\Calendar\Calendar;
 use App\Calendar\CalendarException;
 use App\Calendar\CalendarService;
-use App\Calendar\ModelTrait;
 use App\Entity\Calculation;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CalendarService::class)]
-#[CoversClass(ModelTrait::class)]
 class CalendarServiceTest extends TestCase
 {
     /**

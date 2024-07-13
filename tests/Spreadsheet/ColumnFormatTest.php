@@ -17,11 +17,9 @@ use App\Spreadsheet\SpreadsheetDocument;
 use App\Tests\TranslatorMockTrait;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(ColumnFormat::class)]
 class ColumnFormatTest extends TestCase
 {
     use TranslatorMockTrait;

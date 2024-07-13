@@ -21,10 +21,8 @@ use App\Pdf\Html\HtmlParentChunk;
 use App\Pdf\Html\HtmlParser;
 use App\Pdf\Html\HtmlTextChunk;
 use App\Pdf\Html\HtmlUlChunk;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(HtmlParser::class)]
 class HtmlParserTest extends TestCase
 {
     public function testBrChunk(): void

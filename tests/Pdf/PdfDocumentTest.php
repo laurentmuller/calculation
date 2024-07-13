@@ -16,20 +16,14 @@ use App\Controller\AbstractController;
 use App\Model\CustomerInformation;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfFont;
-use App\Pdf\PdfFooter;
-use App\Pdf\PdfHeader;
 use App\Report\AbstractReport;
 use App\Tests\TranslatorMockTrait;
 use fpdf\PdfDestination;
 use fpdf\PdfPageSize;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatableInterface;
 
-#[CoversClass(PdfFooter::class)]
-#[CoversClass(PdfHeader::class)]
-#[CoversClass(PdfDocument::class)]
 class PdfDocumentTest extends TestCase
 {
     use TranslatorMockTrait;

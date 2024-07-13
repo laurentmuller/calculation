@@ -14,14 +14,12 @@ namespace App\Tests\Resolver;
 
 use App\Model\TaskComputeQuery;
 use App\Resolver\TaskComputeQueryValueResolver;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
-#[CoversClass(TaskComputeQueryValueResolver::class)]
 class TaskComputeQueryValueResolverTest extends TestCase
 {
     /**

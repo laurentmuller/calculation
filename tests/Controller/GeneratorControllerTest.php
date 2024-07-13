@@ -12,15 +12,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\GeneratorController;
 use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(GeneratorController::class)]
 class GeneratorControllerTest extends ControllerTestCase
 {
     private static ?Category $category = null;

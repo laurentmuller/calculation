@@ -20,14 +20,12 @@ use App\Interfaces\RoleInterface;
 use App\Security\EntityVoter;
 use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
-#[CoversClass(EntityVoter::class)]
 class EntityVoterTest extends TestCase
 {
     private EntityVoter $voter;

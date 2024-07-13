@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Tests\Pdf\Html;
 
 use App\Controller\AbstractController;
-use App\Pdf\Html\AbstractHtmlChunk;
 use App\Pdf\Html\HtmlLiChunk;
 use App\Pdf\Html\HtmlOlChunk;
 use App\Pdf\Html\HtmlPageBreakChunk;
@@ -26,17 +25,9 @@ use App\Report\HtmlReport;
 use App\Tests\TranslatorMockTrait;
 use fpdf\PdfBorder;
 use fpdf\PdfTextAlignment;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractHtmlChunk::class)]
-#[CoversClass(HtmlPageBreakChunk::class)]
-#[CoversClass(HtmlOlChunk::class)]
-#[CoversClass(HtmlUlChunk::class)]
-#[CoversClass(HtmlLiChunk::class)]
-#[CoversClass(HtmlTextChunk::class)]
-#[CoversClass(HtmlParentChunk::class)]
 class HtmlReportOutputTest extends TestCase
 {
     use TranslatorMockTrait;

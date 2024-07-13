@@ -15,12 +15,10 @@ namespace App\Tests\Service;
 use App\Entity\Calculation;
 use App\Repository\CalculationRepository;
 use App\Service\TimelineService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(TimelineService::class)]
 class TimelineServiceTest extends TestCase
 {
     /**

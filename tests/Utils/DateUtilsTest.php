@@ -15,11 +15,9 @@ namespace App\Tests\Utils;
 use App\Tests\DateAssertTrait;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(DateUtils::class)]
 class DateUtilsTest extends TestCase
 {
     use DateAssertTrait;

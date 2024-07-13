@@ -13,10 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Traits\DuplicateItemsTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(DuplicateItemsTrait::class)]
 class DuplicateItemsTraitTest extends TestCase
 {
     use DuplicateItemsTrait;

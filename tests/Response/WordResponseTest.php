@@ -12,14 +12,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Response;
 
-use App\Response\AbstractStreamedResponse;
 use App\Response\WordResponse;
 use App\Word\WordDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(WordResponse::class)]
-#[CoversClass(AbstractStreamedResponse::class)]
 class WordResponseTest extends TestCase
 {
     public function testGetFileExtension(): void

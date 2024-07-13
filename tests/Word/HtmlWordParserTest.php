@@ -13,11 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Word;
 
 use App\Word\HtmlWordParser;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(HtmlWordParser::class)]
 class HtmlWordParserTest extends TestCase
 {
     public static function getBorders(): \Iterator

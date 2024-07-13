@@ -14,10 +14,8 @@ namespace App\Tests\Traits;
 
 use App\Entity\Product;
 use App\Traits\ComparableSortTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(ComparableSortTrait::class)]
 class ComparableSortTraitTest extends TestCase
 {
     use ComparableSortTrait;

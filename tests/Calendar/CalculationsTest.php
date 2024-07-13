@@ -14,17 +14,11 @@ namespace App\Tests\Calendar;
 
 use App\Calendar\CalculationsDay;
 use App\Calendar\CalculationsMonth;
-use App\Calendar\CalculationsTrait;
 use App\Calendar\CalculationsWeek;
 use App\Calendar\Calendar;
 use App\Calendar\CalendarException;
 use App\Entity\Calculation;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(CalculationsDay::class)]
-#[CoversClass(CalculationsWeek::class)]
-#[CoversClass(CalculationsMonth::class)]
-#[CoversClass(CalculationsTrait::class)]
 class CalculationsTest extends CalendarTestCase
 {
     private Calendar $calendar;

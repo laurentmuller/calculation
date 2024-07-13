@@ -14,16 +14,12 @@ namespace App\Tests\Repository;
 
 use App\Entity\User;
 use App\Entity\UserProperty;
-use App\Repository\AbstractRepository;
 use App\Repository\UserPropertyRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\Entity\IdTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(AbstractRepository::class)]
-#[CoversClass(UserPropertyRepository::class)]
 class UserPropertyRepositoryTest extends KernelServiceTestCase
 {
     use DatabaseTrait;

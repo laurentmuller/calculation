@@ -12,11 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\CspReportController;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(CspReportController::class)]
 class CspReportControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator

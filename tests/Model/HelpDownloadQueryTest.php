@@ -13,10 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\HelpDownloadQuery;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(HelpDownloadQuery::class)]
 class HelpDownloadQueryTest extends TestCase
 {
     public function testProperties(): void

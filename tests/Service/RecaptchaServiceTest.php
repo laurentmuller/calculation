@@ -14,12 +14,10 @@ namespace App\Tests\Service;
 
 use App\Service\RecaptchaService;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReCaptcha\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-#[CoversClass(RecaptchaService::class)]
 class RecaptchaServiceTest extends TestCase
 {
     use TranslatorMockTrait;

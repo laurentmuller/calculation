@@ -15,10 +15,8 @@ namespace App\Tests\Traits;
 use App\Entity\Product;
 use App\Traits\CollectionTrait;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CollectionTrait::class)]
 class CollectionTraitTest extends TestCase
 {
     use CollectionTrait;

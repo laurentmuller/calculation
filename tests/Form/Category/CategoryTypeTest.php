@@ -16,14 +16,12 @@ use App\Entity\Category;
 use App\Form\Category\CategoryType;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\Form\Group\GroupTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
  * @extends EntityTypeTestCase<Category, CategoryType>
  */
-#[CoversClass(CategoryType::class)]
 class CategoryTypeTest extends EntityTypeTestCase
 {
     use GroupTrait;

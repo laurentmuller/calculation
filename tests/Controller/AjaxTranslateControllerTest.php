@@ -12,11 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\AjaxTranslateController;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
 
-#[CoversClass(AjaxTranslateController::class)]
 class AjaxTranslateControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator

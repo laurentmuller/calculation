@@ -16,12 +16,10 @@ use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Service\RoleHierarchyService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
-#[CoversClass(RoleHierarchyService::class)]
 class RoleHierarchyServiceTest extends TestCase
 {
     /**

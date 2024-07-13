@@ -16,10 +16,8 @@ use App\Controller\AbstractController;
 use App\Service\SymfonyInfoService;
 use App\Spreadsheet\SymfonyDocument;
 use App\Tests\KernelServiceTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 
-#[CoversClass(SymfonyDocument::class)]
 class SymfonyDocumentTest extends KernelServiceTestCase
 {
     /**

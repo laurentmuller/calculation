@@ -14,12 +14,10 @@ namespace App\Tests\Service;
 
 use App\Service\HelpService;
 use App\Tests\KernelServiceTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[CoversClass(HelpService::class)]
 class HelpServiceTest extends KernelServiceTestCase
 {
     private HelpService $service;

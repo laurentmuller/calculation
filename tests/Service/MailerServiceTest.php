@@ -17,7 +17,6 @@ use App\Enums\Importance;
 use App\Model\Comment;
 use App\Service\MailerService;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -26,7 +25,6 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extra\Markdown\MarkdownInterface;
 
-#[CoversClass(MailerService::class)]
 class MailerServiceTest extends TestCase
 {
     use TranslatorMockTrait;

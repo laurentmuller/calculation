@@ -14,10 +14,8 @@ namespace App\Tests\Model;
 
 use App\Model\SwissPostUpdateResult;
 use App\Tests\DateAssertTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(SwissPostUpdateResult::class)]
 class SwissPostUpdateResultTest extends TestCase
 {
     use DateAssertTrait;

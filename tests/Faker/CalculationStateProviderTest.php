@@ -14,17 +14,13 @@ namespace App\Tests\Faker;
 
 use App\Entity\CalculationState;
 use App\Faker\CalculationStateProvider;
-use App\Faker\EntityProvider;
 use App\Faker\Factory;
 use App\Repository\UserRepository;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(EntityProvider::class)]
-#[CoversClass(CalculationStateProvider::class)]
 class CalculationStateProviderTest extends TestCase
 {
     /**

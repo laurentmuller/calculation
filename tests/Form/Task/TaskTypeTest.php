@@ -17,13 +17,11 @@ use App\Form\Task\TaskType;
 use App\Tests\Form\Category\CategoryTrait;
 use App\Tests\Form\EntityTypeTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 
 /**
  * @extends EntityTypeTestCase<Task, TaskType>
  */
-#[CoversClass(TaskType::class)]
 class TaskTypeTest extends EntityTypeTestCase
 {
     use CategoryTrait;

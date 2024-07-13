@@ -16,7 +16,6 @@ use App\Entity\User;
 use App\Listener\ResponseListener;
 use App\Listener\SwitchUserListener;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +27,6 @@ use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
 
-#[CoversClass(SwitchUserListener::class)]
 class SwitchUserListenerTest extends TestCase
 {
     use TranslatorMockTrait;

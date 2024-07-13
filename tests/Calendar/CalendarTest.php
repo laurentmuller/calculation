@@ -12,16 +12,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Calendar;
 
-use App\Calendar\AbstractCalendarItem;
 use App\Calendar\Calendar;
 use App\Calendar\CalendarException;
 use App\Calendar\Month;
 use App\Calendar\Week;
 use App\Utils\FormatUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(Calendar::class)]
-#[CoversClass(AbstractCalendarItem::class)]
 class CalendarTest extends CalendarTestCase
 {
     public function testConstructorEmpty(): void

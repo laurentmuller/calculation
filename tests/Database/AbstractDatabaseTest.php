@@ -14,10 +14,8 @@ namespace App\Tests\Database;
 
 use App\Database\AbstractDatabase;
 use App\Tests\Data\Database;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractDatabase::class)]
 class AbstractDatabaseTest extends TestCase
 {
     private Database $database;

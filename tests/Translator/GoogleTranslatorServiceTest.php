@@ -13,10 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Translator;
 
 use App\Model\TranslateQuery;
-use App\Service\AbstractHttpClientService;
-use App\Translator\AbstractTranslatorService;
 use App\Translator\GoogleTranslatorService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -25,9 +22,6 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
-#[CoversClass(AbstractHttpClientService::class)]
-#[CoversClass(AbstractTranslatorService::class)]
-#[CoversClass(GoogleTranslatorService::class)]
 class GoogleTranslatorServiceTest extends TestCase
 {
     /**

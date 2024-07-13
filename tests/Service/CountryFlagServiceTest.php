@@ -13,12 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\CountryFlagService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Intl\Countries;
 
-#[CoversClass(CountryFlagService::class)]
 class CountryFlagServiceTest extends TestCase
 {
     private CountryFlagService $service;

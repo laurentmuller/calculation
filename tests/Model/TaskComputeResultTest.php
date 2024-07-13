@@ -17,10 +17,8 @@ use App\Entity\TaskItem;
 use App\Entity\TaskItemMargin;
 use App\Model\TaskComputeResult;
 use App\Tests\Entity\IdTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(TaskComputeResult::class)]
 class TaskComputeResultTest extends TestCase
 {
     use IdTrait;

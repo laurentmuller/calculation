@@ -12,17 +12,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\HelpController;
-use App\Report\HelpReport;
 use App\Service\HelpService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(HelpController::class)]
-#[CoversClass(HelpReport::class)]
 class HelpControllerTest extends ControllerTestCase
 {
     private const IMAGES_PATH = 'public/help/images';

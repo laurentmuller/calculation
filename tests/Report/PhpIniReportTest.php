@@ -15,11 +15,9 @@ namespace App\Tests\Report;
 use App\Controller\AbstractController;
 use App\Report\PhpIniReport;
 use App\Service\PhpInfoService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PhpIniReport::class)]
 class PhpIniReportTest extends TestCase
 {
     /**

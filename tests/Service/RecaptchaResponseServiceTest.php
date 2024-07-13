@@ -13,11 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\RecaptchaResponseService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReCaptcha\Response;
 
-#[CoversClass(RecaptchaResponseService::class)]
 class RecaptchaResponseServiceTest extends TestCase
 {
     public function testFormatSuccess(): void

@@ -25,14 +25,7 @@ use App\Tests\DatabaseTrait;
 use App\Tests\Entity\IdTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(AbstractRepository::class)]
-#[CoversClass(CalculationGroupRepository::class)]
-#[CoversClass(CalculationCategoryRepository::class)]
-#[CoversClass(CalculationItemRepository::class)]
-#[CoversClass(TaskItemRepository::class)]
-#[CoversClass(TaskItemMarginRepository::class)]
 class OtherRepositoriesTest extends KernelServiceTestCase
 {
     use DatabaseTrait;

@@ -17,14 +17,9 @@ use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractPdfColor::class)]
-#[CoversClass(PdfDrawColor::class)]
-#[CoversClass(PdfFillColor::class)]
-#[CoversClass(PdfTextColor::class)]
 class PdfColorTest extends TestCase
 {
     public static function getHexColors(): \Generator

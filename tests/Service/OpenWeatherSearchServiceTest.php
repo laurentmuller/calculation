@@ -16,11 +16,9 @@ use App\Service\OpenWeatherFormatter;
 use App\Service\OpenWeatherSearchService;
 use App\Service\PositionService;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-#[CoversClass(OpenWeatherSearchService::class)]
 class OpenWeatherSearchServiceTest extends TestCase
 {
     use TranslatorMockTrait;

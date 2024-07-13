@@ -16,11 +16,9 @@ use App\Interfaces\SortModeInterface;
 use App\Repository\GlobalMarginRepository;
 use App\Table\Column;
 use App\Table\GlobalMarginTable;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(Column::class)]
 class ColumnTest extends TestCase
 {
     public function testCreateColumnAction(): void

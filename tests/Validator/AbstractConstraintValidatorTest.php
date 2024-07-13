@@ -15,7 +15,6 @@ namespace App\Tests\Validator;
 use App\Validator\AbstractConstraintValidator;
 use App\Validator\Password;
 use App\Validator\Strength;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
@@ -23,7 +22,6 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 /**
  * @extends ConstraintValidatorTestCase<AbstractConstraintValidator>
  */
-#[CoversClass(AbstractConstraintValidator::class)]
 class AbstractConstraintValidatorTest extends ConstraintValidatorTestCase
 {
     public function testEmptyIsValid(): void

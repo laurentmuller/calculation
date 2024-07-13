@@ -14,11 +14,9 @@ namespace App\Tests\Enums;
 
 use App\Enums\Environment;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(Environment::class)]
 class EnvironmentTest extends TestCase
 {
     use TranslatorMockTrait;

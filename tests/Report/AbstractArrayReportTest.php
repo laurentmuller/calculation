@@ -14,11 +14,9 @@ namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
 use App\Report\AbstractArrayReport;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractArrayReport::class)]
 class AbstractArrayReportTest extends TestCase
 {
     /**

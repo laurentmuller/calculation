@@ -16,11 +16,9 @@ use App\Controller\AbstractController;
 use App\Entity\Group;
 use App\Entity\GroupMargin;
 use App\Report\GroupsReport;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(GroupsReport::class)]
 class GroupsReportTest extends TestCase
 {
     /**

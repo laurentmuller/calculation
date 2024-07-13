@@ -15,12 +15,8 @@ namespace App\Tests\Service;
 use App\Enums\ImageSize;
 use App\Service\ImageResizer;
 use App\Tests\KernelServiceTestCase;
-use App\Traits\AwareTrait;
 use App\Utils\FileUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(AwareTrait::class)]
-#[CoversClass(ImageResizer::class)]
 class ImageResizerTest extends KernelServiceTestCase
 {
     private ImageResizer $service;

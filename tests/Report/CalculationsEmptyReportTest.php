@@ -13,14 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
-use App\Report\AbstractCalculationItemsReport;
 use App\Report\CalculationsEmptyReport;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractCalculationItemsReport::class)]
-#[CoversClass(CalculationsEmptyReport::class)]
 class CalculationsEmptyReportTest extends TestCase
 {
     /**

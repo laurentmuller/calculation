@@ -14,11 +14,9 @@ namespace App\Tests\Traits;
 
 use App\Enums\Theme;
 use App\Traits\RequestTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-#[CoversClass(RequestTrait::class)]
 class RequestTraitTest extends TestCase
 {
     use RequestTrait;

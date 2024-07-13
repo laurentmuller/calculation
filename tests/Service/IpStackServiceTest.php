@@ -16,7 +16,6 @@ use App\Model\HttpClientError;
 use App\Service\IpStackService;
 use App\Service\PositionService;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -26,7 +25,6 @@ use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-#[CoversClass(IpStackService::class)]
 class IpStackServiceTest extends TestCase
 {
     use TranslatorMockTrait;

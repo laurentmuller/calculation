@@ -14,10 +14,8 @@ namespace App\Tests\Pivot\Field;
 
 use App\Pivot\Field\PivotFieldFactory;
 use App\Pivot\Field\PivotMethod;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PivotFieldFactory::class)]
 class PivotFieldFactoryTest extends TestCase
 {
     public function testDefault(): void

@@ -14,12 +14,10 @@ namespace App\Tests\Form\Type;
 
 use App\Form\Type\CaptchaImageType;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-#[CoversClass(CaptchaImageType::class)]
 class CaptchaImageTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

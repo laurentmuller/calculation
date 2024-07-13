@@ -17,10 +17,8 @@ use App\Entity\Category;
 use App\Enums\EntityPermission;
 use App\Enums\Theme;
 use App\Tests\DateAssertTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractProperty::class)]
 class AbstractPropertyTest extends TestCase
 {
     use DateAssertTrait;

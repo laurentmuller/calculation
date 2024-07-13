@@ -12,11 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Command\HeaderNameCommand;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Console\Command\Command;
 
-#[CoversClass(HeaderNameCommand::class)]
 class HeaderNameCommandTest extends CommandTestCase
 {
     private const COMMAND_NAME = 'app:header:name';

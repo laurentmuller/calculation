@@ -13,17 +13,13 @@ declare(strict_types=1);
 namespace App\Tests\Repository;
 
 use App\Entity\User;
-use App\Repository\AbstractRepository;
 use App\Repository\UserRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\Attributes\CoversClass;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 
-#[CoversClass(AbstractRepository::class)]
-#[CoversClass(UserRepository::class)]
 class UserRepositoryTest extends KernelServiceTestCase
 {
     use DatabaseTrait;

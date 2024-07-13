@@ -21,11 +21,9 @@ use fpdf\PdfBorder;
 use fpdf\PdfFontName;
 use fpdf\PdfFontStyle;
 use fpdf\PdfTextAlignment;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(HtmlStyle::class)]
 class HtmlStyleTest extends TestCase
 {
     public static function getAlignments(): \Iterator

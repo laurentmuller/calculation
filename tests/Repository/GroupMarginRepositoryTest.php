@@ -12,16 +12,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Repository;
 
-use App\Repository\AbstractRepository;
 use App\Repository\GroupMarginRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\GroupTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(AbstractRepository::class)]
-#[CoversClass(GroupMarginRepository::class)]
 class GroupMarginRepositoryTest extends KernelServiceTestCase
 {
     use DatabaseTrait;

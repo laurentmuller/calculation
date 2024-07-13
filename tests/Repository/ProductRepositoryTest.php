@@ -12,19 +12,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Repository;
 
-use App\Repository\AbstractCategoryItemRepository;
-use App\Repository\AbstractRepository;
 use App\Repository\ProductRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Query\Expr\OrderBy;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(AbstractRepository::class)]
-#[CoversClass(AbstractCategoryItemRepository::class)]
-#[CoversClass(ProductRepository::class)]
 class ProductRepositoryTest extends KernelServiceTestCase
 {
     use DatabaseTrait;

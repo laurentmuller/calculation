@@ -14,14 +14,12 @@ namespace App\Tests\Service;
 
 use App\Service\AssetVersionService;
 use App\Service\EnvironmentService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Filesystem\Path;
 
-#[CoversClass(AssetVersionService::class)]
 class AssetVersionServiceTest extends TestCase
 {
     private string $defaultVersion;

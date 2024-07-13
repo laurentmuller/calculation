@@ -19,12 +19,10 @@ use App\Interfaces\RoleInterface;
 use App\Service\RoleHierarchyService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
-#[CoversClass(UserRightsType::class)]
 class UserRightsTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

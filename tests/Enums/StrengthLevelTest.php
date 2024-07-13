@@ -15,11 +15,9 @@ namespace App\Tests\Enums;
 use App\Enums\StrengthLevel;
 use App\Interfaces\PropertyServiceInterface;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(StrengthLevel::class)]
 class StrengthLevelTest extends TestCase
 {
     use TranslatorMockTrait;

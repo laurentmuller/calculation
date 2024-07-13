@@ -12,20 +12,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\AbstractController;
-use App\Controller\AbstractEntityController;
-use App\Controller\CalculationController;
 use App\Entity\Calculation;
 use App\Interfaces\PropertyServiceInterface;
 use App\Service\ApplicationService;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(AbstractController::class)]
-#[CoversClass(AbstractEntityController::class)]
-#[CoversClass(CalculationController::class)]
 class CalculationControllerTest extends EntityControllerTestCase
 {
     use CalculationTrait;

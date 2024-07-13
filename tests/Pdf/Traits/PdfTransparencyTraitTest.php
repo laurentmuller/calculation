@@ -15,10 +15,8 @@ namespace App\Tests\Pdf\Traits;
 use App\Pdf\PdfDocument;
 use App\Pdf\Traits\PdfTransparencyTrait;
 use fpdf\PdfDestination;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PdfTransparencyTrait::class)]
 class PdfTransparencyTraitTest extends TestCase
 {
     public function testRender(): void

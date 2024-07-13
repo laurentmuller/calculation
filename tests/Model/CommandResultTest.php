@@ -13,11 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\CommandResult;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 
-#[CoversClass(CommandResult::class)]
 class CommandResultTest extends TestCase
 {
     public function testProperties(): void

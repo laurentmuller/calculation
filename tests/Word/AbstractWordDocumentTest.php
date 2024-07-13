@@ -17,20 +17,12 @@ use App\Model\CustomerInformation;
 use App\Service\ApplicationService;
 use App\Service\UserService;
 use App\Tests\TranslatorMockTrait;
-use App\Word\AbstractHeaderFooter;
 use App\Word\AbstractWordDocument;
 use App\Word\HtmlDocument;
-use App\Word\WordFooter;
-use App\Word\WordHeader;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractWordDocument::class)]
-#[CoversClass(AbstractHeaderFooter::class)]
-#[CoversClass(WordHeader::class)]
-#[CoversClass(WordFooter::class)]
 class AbstractWordDocumentTest extends TestCase
 {
     use TranslatorMockTrait;

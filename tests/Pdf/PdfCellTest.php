@@ -14,10 +14,8 @@ namespace App\Tests\Pdf;
 
 use App\Pdf\PdfCell;
 use App\Pdf\PdfStyle;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PdfCell::class)]
 class PdfCellTest extends TestCase
 {
     public function testClone(): void

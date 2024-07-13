@@ -12,15 +12,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\CalculationArchiveController;
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(CalculationArchiveController::class)]
 class CalculationArchiveControllerTest extends ControllerTestCase
 {
     private ?CalculationState $editState = null;

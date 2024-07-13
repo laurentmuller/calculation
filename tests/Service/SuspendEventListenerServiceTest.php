@@ -15,11 +15,8 @@ namespace App\Tests\Service;
 use App\Interfaces\DisableListenerInterface;
 use App\Service\SuspendEventListenerService;
 use App\Traits\DisableListenerTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(SuspendEventListenerService::class)]
-#[CoversClass(DisableListenerTrait::class)]
 class SuspendEventListenerServiceTest extends TestCase implements DisableListenerInterface
 {
     use DisableListenerTrait;

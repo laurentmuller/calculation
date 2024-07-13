@@ -16,13 +16,11 @@ use App\Entity\User;
 use App\Logger\UserRequestProcessor;
 use Monolog\Level;
 use Monolog\LogRecord;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 
-#[CoversClass(UserRequestProcessor::class)]
 class UserRequestProcessorTest extends TestCase
 {
     /**

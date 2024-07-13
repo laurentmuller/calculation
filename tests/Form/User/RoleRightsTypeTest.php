@@ -12,24 +12,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Form\User;
 
-use App\Form\AbstractHelperType;
 use App\Form\Type\PlainType;
-use App\Form\User\AttributeRightType;
-use App\Form\User\RightsType;
 use App\Form\User\RoleRightsType;
 use App\Interfaces\RoleInterface;
 use App\Service\RoleHierarchyService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
-#[CoversClass(AbstractHelperType::class)]
-#[CoversClass(RoleRightsType::class)]
-#[CoversClass(AttributeRightType::class)]
-#[CoversClass(RightsType::class)]
 class RoleRightsTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

@@ -14,7 +14,6 @@ namespace App\Tests\Repository;
 
 use App\Entity\CalculationState;
 use App\Entity\User;
-use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\DateAssertTrait;
@@ -24,10 +23,7 @@ use App\Tests\EntityTrait\ProductTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(AbstractRepository::class)]
-#[CoversClass(CalculationRepository::class)]
 class CalculationRepositoryTest extends KernelServiceTestCase
 {
     use CalculationTrait;

@@ -15,13 +15,11 @@ namespace App\Tests\Traits;
 use App\Tests\Data\Translatable;
 use App\Tests\TranslatorMockTrait;
 use App\Traits\TranslatorTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Translator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[CoversClass(TranslatorTrait::class)]
 class TranslatorTraitTest extends TestCase
 {
     use TranslatorMockTrait;

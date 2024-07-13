@@ -17,7 +17,6 @@ use App\Enums\TableView;
 use App\Form\Admin\ApplicationParametersType;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Form\Extension\TextTypeExtension;
-use App\Form\Parameters\AbstractParametersType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Service\ApplicationService;
@@ -26,14 +25,11 @@ use App\Tests\Form\Category\CategoryTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\Form\Product\ProductTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(AbstractParametersType::class)]
-#[CoversClass(ApplicationParametersType::class)]
 class ApplicationParametersTypeTest extends TypeTestCase
 {
     use CalculationStateTrait;

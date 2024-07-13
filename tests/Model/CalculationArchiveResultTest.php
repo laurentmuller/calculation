@@ -16,10 +16,8 @@ use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Model\CalculationArchiveResult;
 use App\Tests\Entity\IdTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CalculationArchiveResult::class)]
 class CalculationArchiveResultTest extends TestCase
 {
     use IdTrait;

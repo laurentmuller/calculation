@@ -15,13 +15,10 @@ namespace App\Tests\Pdf\Traits;
 use App\Controller\AbstractController;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
-use App\Pdf\Traits\PdfColumnTranslatorTrait;
 use App\Report\AbstractReport;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PdfColumnTranslatorTrait::class)]
 class PdfColumnTranslatorTraitTest extends TestCase
 {
     /**

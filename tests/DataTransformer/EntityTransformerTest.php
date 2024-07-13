@@ -17,13 +17,11 @@ use App\Form\DataTransformer\EntityTransformer;
 use App\Interfaces\EntityInterface;
 use App\Repository\GroupRepository;
 use App\Tests\Entity\IdTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-#[CoversClass(EntityTransformer::class)]
 class EntityTransformerTest extends TestCase
 {
     use IdTrait;

@@ -15,10 +15,8 @@ namespace App\Tests\Faker;
 use App\Faker\CustomAddress;
 use App\Faker\Factory;
 use App\Utils\FormatUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CustomAddress::class)]
 class CustomAddressTest extends TestCase
 {
     public function testCustomAddress(): void

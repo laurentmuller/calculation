@@ -16,11 +16,9 @@ use App\Controller\AbstractController;
 use App\Entity\Group;
 use App\Entity\GroupMargin;
 use App\Spreadsheet\GroupsDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(GroupsDocument::class)]
 class GroupsDocumentTest extends TestCase
 {
     /**

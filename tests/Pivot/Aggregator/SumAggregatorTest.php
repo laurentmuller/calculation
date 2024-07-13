@@ -12,13 +12,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Pivot\Aggregator;
 
-use App\Pivot\Aggregator\AbstractAggregator;
 use App\Pivot\Aggregator\SumAggregator;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractAggregator::class)]
-#[CoversClass(SumAggregator::class)]
 class SumAggregatorTest extends TestCase
 {
     public function testAdd(): void

@@ -12,12 +12,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Chart;
 
-use App\Chart\AbstractHighchart;
 use App\Chart\StateChart;
 use App\Repository\CalculationStateRepository;
 use App\Service\ApplicationService;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -28,8 +26,6 @@ use Twig\Environment;
 /**
  * @psalm-import-type QueryCalculationType from CalculationStateRepository
  */
-#[CoversClass(StateChart::class)]
-#[CoversClass(AbstractHighchart::class)]
 class StateChartTest extends TestCase
 {
     use TranslatorMockTrait;

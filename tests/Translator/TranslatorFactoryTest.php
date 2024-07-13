@@ -15,7 +15,6 @@ namespace App\Tests\Translator;
 use App\Translator\BingTranslatorService;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -26,7 +25,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Contracts\Cache\CacheInterface;
 
-#[CoversClass(TranslatorFactory::class)]
 class TranslatorFactoryTest extends TestCase
 {
     private MockObject&RequestStack $requestStack;

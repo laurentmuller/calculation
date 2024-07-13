@@ -17,10 +17,8 @@ use App\Entity\Group;
 use App\Entity\Product;
 use App\Model\ProductUpdateQuery;
 use App\Tests\Entity\IdTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(ProductUpdateQuery::class)]
 class ProductUpdateQueryTest extends TestCase
 {
     use IdTrait;

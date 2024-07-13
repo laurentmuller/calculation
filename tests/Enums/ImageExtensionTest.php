@@ -15,11 +15,9 @@ namespace App\Tests\Enums;
 use App\Enums\ImageExtension;
 use App\Service\ImageService;
 use App\Utils\FileUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(ImageExtension::class)]
 class ImageExtensionTest extends TestCase
 {
     public static function getCreateImages(): \Iterator

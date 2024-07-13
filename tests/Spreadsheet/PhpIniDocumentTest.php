@@ -15,11 +15,9 @@ namespace App\Tests\Spreadsheet;
 use App\Controller\AbstractController;
 use App\Service\PhpInfoService;
 use App\Spreadsheet\PhpIniDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PhpIniDocument::class)]
 class PhpIniDocumentTest extends TestCase
 {
     /**

@@ -17,18 +17,14 @@ use App\Model\LogChannel;
 use App\Model\LogFile;
 use App\Model\LogLevel;
 use App\Service\LogService;
-use App\Table\AbstractTable;
 use App\Table\DataQuery;
 use App\Table\LogTable;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
-#[CoversClass(AbstractTable::class)]
-#[CoversClass(LogTable::class)]
 class LogTableTest extends TestCase
 {
     /**

@@ -19,12 +19,9 @@ use App\Pdf\PdfLabelDocument;
 use App\Service\PdfLabelService;
 use fpdf\PdfException;
 use fpdf\PdfScaling;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-#[CoversClass(PdfLabelDocument::class)]
-#[CoversClass(PdfLabelTextEvent::class)]
 class PdfLabelDocumentTest extends TestCase
 {
     public function testAddLabels(): void

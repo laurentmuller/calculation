@@ -15,10 +15,8 @@ namespace App\Tests\Pdf\Traits;
 use App\Pdf\PdfDocument;
 use App\Pdf\Traits\PdfEllipseTrait;
 use fpdf\PdfDestination;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PdfEllipseTrait::class)]
 class PdfEllipseTraitTest extends TestCase
 {
     public function testRender(): void

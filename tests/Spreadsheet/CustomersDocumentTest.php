@@ -15,11 +15,9 @@ namespace App\Tests\Spreadsheet;
 use App\Controller\AbstractController;
 use App\Entity\Customer;
 use App\Spreadsheet\CustomersDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CustomersDocument::class)]
 class CustomersDocumentTest extends TestCase
 {
     /**

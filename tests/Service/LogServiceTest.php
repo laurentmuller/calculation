@@ -15,11 +15,9 @@ namespace App\Tests\Service;
 use App\Service\LogService;
 use App\Tests\KernelServiceTestCase;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-#[CoversClass(LogService::class)]
 class LogServiceTest extends KernelServiceTestCase
 {
     use TranslatorMockTrait;

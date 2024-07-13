@@ -14,10 +14,8 @@ namespace App\Tests\Faker;
 
 use App\Faker\Factory;
 use App\Utils\FormatUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(Factory::class)]
 class FactoryTest extends TestCase
 {
     public function testCreate(): void

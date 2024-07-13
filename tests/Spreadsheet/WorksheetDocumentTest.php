@@ -14,7 +14,6 @@ namespace App\Tests\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Model\CustomerInformation;
-use App\Spreadsheet\HeaderFooter;
 use App\Spreadsheet\HeaderFormat;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Spreadsheet\WorksheetDocument;
@@ -26,11 +25,8 @@ use PhpOffice\PhpSpreadsheet\Style\Conditional;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(WorksheetDocument::class)]
-#[CoversClass(HeaderFooter::class)]
 class WorksheetDocumentTest extends TestCase
 {
     use TranslatorMockTrait;

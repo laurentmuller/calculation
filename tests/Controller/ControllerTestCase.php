@@ -12,9 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\AbstractController;
 use App\Tests\Web\AuthenticateWebTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +21,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Abstract unit test case for controllers.
  */
-#[CoversClass(AbstractController::class)]
 abstract class ControllerTestCase extends AuthenticateWebTestCase
 {
     /**

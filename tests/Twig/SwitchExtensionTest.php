@@ -12,14 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Twig;
 
-use App\Twig\Node\SwitchNode;
 use App\Twig\SwitchExtension;
-use App\Twig\TokenParser\SwitchTokenParser;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(SwitchExtension::class)]
-#[CoversClass(SwitchTokenParser::class)]
-#[CoversClass(SwitchNode::class)]
 class SwitchExtensionTest extends IntegrationTestCase
 {
     protected function getExtensions(): array

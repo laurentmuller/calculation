@@ -17,14 +17,12 @@ use App\Service\SwissPostService;
 use App\Service\SwissPostUpdater;
 use App\Tests\KernelServiceTestCase;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-#[CoversClass(SwissPostUpdater::class)]
 class SwissPostUpdaterTest extends KernelServiceTestCase
 {
     use TranslatorMockTrait;

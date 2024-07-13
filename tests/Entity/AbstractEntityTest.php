@@ -13,11 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Entity;
 
 use App\Entity\AbstractEntity;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractEntity::class)]
 class AbstractEntityTest extends TestCase
 {
     use IdTrait;

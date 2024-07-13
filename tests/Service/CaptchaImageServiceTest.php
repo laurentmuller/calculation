@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\CaptchaImageService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +21,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
-#[CoversClass(CaptchaImageService::class)]
 class CaptchaImageServiceTest extends TestCase
 {
     private Session $session;

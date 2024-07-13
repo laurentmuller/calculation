@@ -12,14 +12,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Repository;
 
-use App\Repository\AbstractRepository;
 use App\Repository\CustomerRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(AbstractRepository::class)]
-#[CoversClass(CustomerRepository::class)]
 class CustomerRepositoryTest extends KernelServiceTestCase
 {
     use DatabaseTrait;

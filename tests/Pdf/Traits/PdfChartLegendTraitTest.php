@@ -17,14 +17,12 @@ use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Interfaces\PdfChartInterface;
 use App\Pdf\Traits\PdfChartLegendTrait;
 use App\Report\AbstractReport;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @psalm-import-type ColorStringType from PdfChartInterface
  */
-#[CoversClass(PdfChartLegendTrait::class)]
 class PdfChartLegendTraitTest extends TestCase
 {
     /**

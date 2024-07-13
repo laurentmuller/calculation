@@ -15,11 +15,9 @@ namespace App\Tests\Enums;
 use App\Enums\MessagePosition;
 use App\Interfaces\PropertyServiceInterface;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(MessagePosition::class)]
 class MessagePositionTest extends TestCase
 {
     use TranslatorMockTrait;

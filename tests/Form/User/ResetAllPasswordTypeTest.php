@@ -18,11 +18,9 @@ use App\Repository\UserRepository;
 use App\Tests\Entity\IdTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(ResetAllPasswordType::class)]
 class ResetAllPasswordTypeTest extends TypeTestCase
 {
     use IdTrait;

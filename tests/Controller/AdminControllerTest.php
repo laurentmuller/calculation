@@ -12,13 +12,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\AdminController;
 use App\Interfaces\PropertyServiceInterface;
 use App\Service\DictionaryService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(AdminController::class)]
 class AdminControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator

@@ -13,10 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Pdf\Enums;
 
 use App\Pdf\Enums\PdfImageType;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PdfImageType::class)]
 class PdfImageTypeTest extends TestCase
 {
     public function testCount(): void

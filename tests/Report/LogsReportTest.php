@@ -19,12 +19,10 @@ use App\Model\LogFile;
 use App\Model\LogLevel;
 use App\Report\LogsReport;
 use App\Utils\DateUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
 
-#[CoversClass(LogsReport::class)]
 class LogsReportTest extends TestCase
 {
     /**

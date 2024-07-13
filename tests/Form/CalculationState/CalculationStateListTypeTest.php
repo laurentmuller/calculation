@@ -12,18 +12,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Form\CalculationState;
 
-use App\Form\AbstractListEntityType;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Tests\Data\DataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(CalculationStateListType::class)]
-#[CoversClass(AbstractListEntityType::class)]
 class CalculationStateListTypeTest extends TypeTestCase
 {
     use CalculationStateTrait;

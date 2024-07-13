@@ -16,11 +16,9 @@ use App\Controller\AbstractController;
 use App\Entity\Calculation;
 use App\Spreadsheet\CalculationsDocument;
 use App\Tests\Entity\IdTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CalculationsDocument::class)]
 class CalculationsDocumentTest extends TestCase
 {
     use IdTrait;

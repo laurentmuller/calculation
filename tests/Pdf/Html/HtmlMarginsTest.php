@@ -13,10 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Pdf\Html;
 
 use App\Pdf\Html\HtmlMargins;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(HtmlMargins::class)]
 class HtmlMarginsTest extends TestCase
 {
     public function testDefault(): void

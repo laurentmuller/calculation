@@ -17,13 +17,10 @@ use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Service\ApplicationService;
-use App\Table\AbstractEntityTable;
-use App\Table\AbstractTable;
 use App\Table\CalculationBelowTable;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Twig\Environment;
@@ -31,9 +28,6 @@ use Twig\Environment;
 /**
  * @extends EntityTableTestCase<Calculation, CalculationRepository, CalculationBelowTable>
  */
-#[CoversClass(AbstractTable::class)]
-#[CoversClass(AbstractEntityTable::class)]
-#[CoversClass(CalculationBelowTable::class)]
 class CalculationBelowTableTest extends EntityTableTestCase
 {
     private int $countItemsBelow;

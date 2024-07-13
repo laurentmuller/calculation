@@ -16,10 +16,8 @@ use App\Pdf\PdfDocument;
 use App\Pdf\PdfFont;
 use fpdf\PdfFontName;
 use fpdf\PdfFontStyle;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PdfFont::class)]
 class PdfFontTest extends TestCase
 {
     public function testApply(): void

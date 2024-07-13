@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Tests\Repository;
 
 use App\Entity\GlobalMargin;
-use App\Repository\AbstractRepository;
 use App\Repository\GlobalMarginRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\GlobalMarginTrait;
@@ -23,10 +22,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\ORM\Query;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(AbstractRepository::class)]
-#[CoversClass(GlobalMarginRepository::class)]
 class GlobalMarginRepositoryTest extends KernelServiceTestCase
 {
     use DatabaseTrait;

@@ -13,10 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Mime;
 
 use App\Mime\ResetPasswordEmail;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(ResetPasswordEmail::class)]
 class ResetPasswordEmailTest extends TestCase
 {
     public function testConstructor(): void

@@ -24,7 +24,6 @@ use App\Service\ApplicationService;
 use App\Tests\Form\CalculationState\CalculationStateTrait;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Utils\DateUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -32,7 +31,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 /**
  * @extends EntityTypeTestCase<Calculation, CalculationEditStateType>
  */
-#[CoversClass(CalculationEditStateType::class)]
 class CalculationEditStateTypeTest extends EntityTypeTestCase
 {
     use CalculationStateTrait;

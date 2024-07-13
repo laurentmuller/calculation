@@ -16,11 +16,9 @@ use App\Controller\AbstractController;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfTable;
 use App\Report\AbstractReport;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractReport::class)]
 class AbstractReportTest extends TestCase
 {
     /**

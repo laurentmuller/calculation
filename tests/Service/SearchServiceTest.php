@@ -19,13 +19,11 @@ use App\Tests\KernelServiceTestCase;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-#[CoversClass(SearchService::class)]
 class SearchServiceTest extends KernelServiceTestCase
 {
     use CalculationTrait;

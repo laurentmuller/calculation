@@ -13,19 +13,15 @@ declare(strict_types=1);
 namespace App\Tests\Table;
 
 use App\Service\SearchService;
-use App\Table\AbstractTable;
 use App\Table\DataQuery;
 use App\Table\SearchTable;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-#[CoversClass(AbstractTable::class)]
-#[CoversClass(SearchTable::class)]
 class SearchTableTest extends TestCase
 {
     use TranslatorMockTrait;

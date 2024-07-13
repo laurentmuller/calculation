@@ -16,10 +16,8 @@ use App\Enums\TableView;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Table\DataQuery;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(DataQuery::class)]
 class DataQueryTest extends TestCase
 {
     public function testAttributes(): void

@@ -15,12 +15,10 @@ namespace App\Tests\Form\Group;
 use App\Entity\GroupMargin;
 use App\Form\Group\GroupMarginType;
 use App\Tests\Form\EntityTypeTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * @extends EntityTypeTestCase<GroupMargin, GroupMarginType>
  */
-#[CoversClass(GroupMarginType::class)]
 class GroupMarginTypeTest extends EntityTypeTestCase
 {
     protected function getData(): array

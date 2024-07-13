@@ -15,11 +15,9 @@ namespace App\Tests\Report;
 use App\Controller\AbstractController;
 use App\Entity\GlobalMargin;
 use App\Report\GlobalMarginsReport;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(GlobalMarginsReport::class)]
 class GlobalMarginsReportTest extends TestCase
 {
     /**

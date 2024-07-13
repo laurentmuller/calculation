@@ -19,13 +19,11 @@ use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\Web\AuthenticateWebTestCase;
 use App\Utils\DateUtils;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
-#[CoversClass(CalculationUpdateService::class)]
 class CalculationUpdateServiceTest extends AuthenticateWebTestCase
 {
     use CalculationTrait;

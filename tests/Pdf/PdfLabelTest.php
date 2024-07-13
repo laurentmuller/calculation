@@ -15,11 +15,9 @@ namespace App\Tests\Pdf;
 use App\Pdf\PdfLabel;
 use App\Service\PdfLabelService;
 use fpdf\PdfUnit;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-#[CoversClass(PdfLabel::class)]
 class PdfLabelTest extends TestCase
 {
     public function testOffsetX(): void

@@ -16,7 +16,6 @@ use App\Captcha\AlphaCaptchaInterface;
 use App\Form\Type\AlphaCaptchaType;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -24,7 +23,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
-#[CoversClass(AlphaCaptchaType::class)]
 class AlphaCaptchaTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

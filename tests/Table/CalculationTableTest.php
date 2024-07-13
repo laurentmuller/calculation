@@ -17,12 +17,9 @@ use App\Entity\CalculationState;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
-use App\Table\AbstractEntityTable;
-use App\Table\AbstractTable;
 use App\Table\CalculationTable;
 use App\Table\DataQuery;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Twig\Environment;
@@ -30,9 +27,6 @@ use Twig\Environment;
 /**
  * @extends EntityTableTestCase<Calculation, CalculationRepository, CalculationTable>
  */
-#[CoversClass(AbstractTable::class)]
-#[CoversClass(AbstractEntityTable::class)]
-#[CoversClass(CalculationTable::class)]
 class CalculationTableTest extends EntityTableTestCase
 {
     private int $stateId;

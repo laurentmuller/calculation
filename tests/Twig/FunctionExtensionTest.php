@@ -15,7 +15,6 @@ namespace App\Tests\Twig;
 use App\Service\NonceService;
 use App\Service\UrlGeneratorService;
 use App\Twig\FunctionExtension;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
@@ -23,7 +22,6 @@ use Symfony\Component\Asset\Packages;
 use Vich\UploaderBundle\Storage\StorageInterface;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
-#[CoversClass(FunctionExtension::class)]
 class FunctionExtensionTest extends IntegrationTestCase
 {
     /**

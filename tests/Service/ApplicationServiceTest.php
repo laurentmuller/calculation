@@ -29,9 +29,7 @@ use App\Tests\DateAssertTrait;
 use App\Tests\KernelServiceTestCase;
 use App\Utils\StringUtils;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(ApplicationService::class)]
 class ApplicationServiceTest extends KernelServiceTestCase
 {
     use DatabaseTrait;

@@ -14,10 +14,8 @@ namespace App\Tests\Pdf;
 
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfLine;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PdfLine::class)]
 class PdfLineTest extends TestCase
 {
     public function testApply(): void

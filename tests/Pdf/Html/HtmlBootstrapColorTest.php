@@ -17,13 +17,9 @@ use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\PdfDocument;
-use App\Pdf\Traits\PdfColorTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(HtmlBootstrapColor::class)]
-#[CoversClass(PdfColorTrait::class)]
 class HtmlBootstrapColorTest extends TestCase
 {
     public static function getColorValues(): \Iterator

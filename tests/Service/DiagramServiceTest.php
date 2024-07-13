@@ -13,12 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\DiagramService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-#[CoversClass(DiagramService::class)]
 class DiagramServiceTest extends TestCase
 {
     private DiagramService $service;

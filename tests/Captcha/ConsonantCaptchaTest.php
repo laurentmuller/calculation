@@ -12,16 +12,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Captcha;
 
-use App\Captcha\AbstractAlphaCaptcha;
 use App\Captcha\ConsonantCaptcha;
 use App\Service\DictionaryService;
-use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * @extends AlphaCaptchaTestCase<ConsonantCaptcha>
  */
-#[CoversClass(ConsonantCaptcha::class)]
-#[CoversClass(AbstractAlphaCaptcha::class)]
 class ConsonantCaptchaTest extends AlphaCaptchaTestCase
 {
     protected function createCaptcha(DictionaryService $service): ConsonantCaptcha

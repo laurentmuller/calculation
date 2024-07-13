@@ -21,10 +21,8 @@ use App\Form\User\UserCommentType;
 use App\Model\Comment;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(UserCommentType::class)]
 class UserCommentTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

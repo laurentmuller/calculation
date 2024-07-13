@@ -13,10 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Word;
 
 use App\Word\WordDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(WordDocument::class)]
 class WordDocumentTest extends TestCase
 {
     public function testWordDocument(): void

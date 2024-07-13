@@ -13,13 +13,11 @@ declare(strict_types=1);
 namespace App\Tests\Twig;
 
 use App\Twig\ConstantExtension;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\NullAdapter;
 
-#[CoversClass(ConstantExtension::class)]
 class ConstantExtensionTest extends TestCase
 {
     public static function getCalculationServiceConstants(): \Iterator

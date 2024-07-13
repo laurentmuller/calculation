@@ -14,11 +14,9 @@ namespace App\Tests\Form\Type;
 
 use App\Form\Type\RepeatPasswordType;
 use App\Tests\Form\User\PasswordHasherExtensionTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(RepeatPasswordType::class)]
 class RepeatPasswordTypeTest extends TypeTestCase
 {
     use PasswordHasherExtensionTrait;

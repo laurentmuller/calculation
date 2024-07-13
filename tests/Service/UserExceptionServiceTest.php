@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\UserExceptionService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +28,6 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\ExpiredSignatureException;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\InvalidSignatureException;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\WrongEmailVerifyException;
 
-#[CoversClass(UserExceptionService::class)]
 class UserExceptionServiceTest extends TestCase
 {
     private Request $request;

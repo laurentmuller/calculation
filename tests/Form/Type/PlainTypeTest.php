@@ -17,12 +17,10 @@ use App\Form\Type\PlainType;
 use App\Tests\Data\DataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(PlainType::class)]
 class PlainTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

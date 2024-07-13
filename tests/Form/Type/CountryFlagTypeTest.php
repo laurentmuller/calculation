@@ -15,11 +15,9 @@ namespace App\Tests\Form\Type;
 use App\Form\Type\CountryFlagType;
 use App\Service\CountryFlagService;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(CountryFlagType::class)]
 class CountryFlagTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

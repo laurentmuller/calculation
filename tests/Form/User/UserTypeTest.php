@@ -19,7 +19,6 @@ use App\Form\User\UserType;
 use App\Interfaces\RoleInterface;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -27,7 +26,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 /**
  * @extends EntityTypeTestCase<User, UserType>
  */
-#[CoversClass(UserType::class)]
 class UserTypeTest extends EntityTypeTestCase
 {
     use PasswordHasherExtensionTrait;

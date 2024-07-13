@@ -14,12 +14,10 @@ namespace App\Tests\Traits;
 
 use App\Enums\Theme;
 use App\Traits\CookieTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(CookieTrait::class)]
 class CookieTraitTest extends TestCase
 {
     use CookieTrait;

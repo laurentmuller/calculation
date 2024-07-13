@@ -13,9 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Twig;
 
 use App\Twig\PregExtension;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(PregExtension::class)]
 class PregExtensionTest extends IntegrationTestCase
 {
     protected function getExtensions(): array

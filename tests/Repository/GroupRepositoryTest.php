@@ -14,17 +14,13 @@ namespace App\Tests\Repository;
 
 use App\Entity\Category;
 use App\Entity\Group;
-use App\Repository\AbstractRepository;
 use App\Repository\GroupRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\CategoryTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(AbstractRepository::class)]
-#[CoversClass(GroupRepository::class)]
 class GroupRepositoryTest extends KernelServiceTestCase
 {
     use CategoryTrait;

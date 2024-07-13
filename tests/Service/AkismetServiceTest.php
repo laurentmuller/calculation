@@ -13,10 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Model\HttpClientError;
-use App\Service\AbstractHttpClientService;
 use App\Service\AkismetService;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -30,8 +28,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
-#[CoversClass(AbstractHttpClientService::class)]
-#[CoversClass(AkismetService::class)]
 class AkismetServiceTest extends TestCase
 {
     use TranslatorMockTrait;

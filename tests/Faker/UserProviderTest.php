@@ -13,18 +13,14 @@ declare(strict_types=1);
 namespace App\Tests\Faker;
 
 use App\Entity\User;
-use App\Faker\EntityProvider;
 use App\Faker\Factory;
 use App\Faker\UserProvider;
 use App\Repository\UserRepository;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(EntityProvider::class)]
-#[CoversClass(UserProvider::class)]
 class UserProviderTest extends TestCase
 {
     /**

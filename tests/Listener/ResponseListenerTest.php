@@ -15,7 +15,6 @@ namespace App\Tests\Listener;
 use App\Controller\CspReportController;
 use App\Listener\ResponseListener;
 use App\Service\NonceService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -29,7 +28,6 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-#[CoversClass(ResponseListener::class)]
 class ResponseListenerTest extends TestCase
 {
     /**

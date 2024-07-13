@@ -15,10 +15,8 @@ namespace App\Tests\Twig;
 use App\Enums\Theme;
 use App\Service\ThemeService;
 use App\Twig\ThemeExtension;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 
-#[CoversClass(ThemeExtension::class)]
 class ThemeExtensionTest extends IntegrationTestCase
 {
     /**

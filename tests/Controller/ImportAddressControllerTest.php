@@ -12,11 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\ImportAddressController;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(ImportAddressController::class)]
 class ImportAddressControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator

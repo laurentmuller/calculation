@@ -18,12 +18,10 @@ use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 
-#[CoversClass(Log::class)]
 class LogTest extends TestCase
 {
     use DateAssertTrait;

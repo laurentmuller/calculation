@@ -14,7 +14,6 @@ namespace App\Tests\Entity;
 
 use App\Entity\Customer;
 use App\Utils\DateUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Validator\Constraints\IsNullValidator;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
@@ -22,7 +21,6 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 /**
  * @extends ConstraintValidatorTestCase<IsNullValidator>
  */
-#[CoversClass(Customer::class)]
 class CustomerTest extends ConstraintValidatorTestCase
 {
     use IdTrait;

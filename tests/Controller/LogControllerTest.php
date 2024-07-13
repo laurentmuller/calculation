@@ -12,15 +12,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\LogController;
 use App\Service\LogService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\MockObject\Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(LogController::class)]
 class LogControllerTest extends ControllerTestCase
 {
     protected function setUp(): void

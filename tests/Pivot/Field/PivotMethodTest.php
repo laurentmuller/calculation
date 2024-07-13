@@ -13,10 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Pivot\Field;
 
 use App\Pivot\Field\PivotMethod;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PivotMethod::class)]
 class PivotMethodTest extends TestCase
 {
     public function testConvertFloat(): void

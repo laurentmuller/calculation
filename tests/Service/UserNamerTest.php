@@ -16,12 +16,10 @@ use App\Entity\User;
 use App\Enums\ImageExtension;
 use App\Enums\ImageSize;
 use App\Service\UserNamer;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
 
-#[CoversClass(UserNamer::class)]
 class UserNamerTest extends TestCase
 {
     public static function getBaseNames(): \Iterator

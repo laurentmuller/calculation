@@ -13,10 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\PhpInfoService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PhpInfoService::class)]
 class PhpInfoServiceTest extends TestCase
 {
     public function testAsArray(): void

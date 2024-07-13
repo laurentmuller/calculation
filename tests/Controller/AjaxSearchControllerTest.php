@@ -12,12 +12,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\AjaxSearchController;
 use App\Tests\EntityTrait\ProductTrait;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(AjaxSearchController::class)]
 class AjaxSearchControllerTest extends ControllerTestCase
 {
     use ProductTrait;

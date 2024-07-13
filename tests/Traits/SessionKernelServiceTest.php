@@ -15,12 +15,10 @@ namespace App\Tests\Traits;
 use App\Tests\DateAssertTrait;
 use App\Tests\KernelServiceTestCase;
 use App\Traits\SessionAwareTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 
-#[CoversClass(SessionAwareTrait::class)]
 class SessionKernelServiceTest extends KernelServiceTestCase
 {
     use DateAssertTrait;

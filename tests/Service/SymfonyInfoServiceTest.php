@@ -16,10 +16,8 @@ use App\Enums\Environment;
 use App\Service\SymfonyInfoService;
 use App\Tests\KernelServiceTestCase;
 use App\Utils\FormatUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpKernel\Kernel;
 
-#[CoversClass(SymfonyInfoService::class)]
 class SymfonyInfoServiceTest extends KernelServiceTestCase
 {
     private SymfonyInfoService $service;

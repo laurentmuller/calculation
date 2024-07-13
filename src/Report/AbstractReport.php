@@ -21,6 +21,7 @@ use fpdf\PdfOrientation;
 use fpdf\PdfPageSize;
 use fpdf\PdfTextAlignment;
 use fpdf\PdfUnit;
+use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -99,17 +100,35 @@ abstract class AbstractReport extends PdfDocument
     }
 
     /**
-     * Sets the title to be translated.
+     * Sets the description to be translated.
      *
-     * @param string $id     the title identifier (may also be an object that can be cast to string)
-     * @param bool   $isUTF8 indicates if the title is encoded in ISO-8859-1 (false) or UTF-8 (true)
+     * @param string|\Stringable|TranslatableInterface $id         the description identifier
+     *                                                             (may also be an object that can be cast to string)
+     * @param array                                    $parameters an array of parameters for the message
      */
-    public function setTitleTrans(string $id, array $parameters = [], bool $isUTF8 = false): static
+    public function setDescriptionTrans(string|\Stringable|TranslatableInterface $id, array $parameters = []): static
     {
-        $title = $this->trans($id, $parameters);
-        $this->setTitle($title, $isUTF8);
+        $description = $this->trans($id, $parameters);
+        $this->getHeader()->setDescription($description);
 
         return $this;
+    }
+
+    /**
+     * Sets the title to be translated.
+     *
+     * @param string|\Stringable|TranslatableInterface $id         the title identifier
+     *                                                             (may also be an object that can be cast to string)
+     * @param array                                    $parameters an array of parameters for the message
+     * @param bool                                     $isUTF8     indicates if the title is encoded in
+     *                                                             ISO-8859-1 (false) or UTF-8 (true)
+     */
+    public function setTitleTrans(
+        string|\Stringable|TranslatableInterface $id,
+        array $parameters = [],
+        bool $isUTF8 = false
+    ): static {
+        return $this->setTitle($this->trans($id, $parameters), $isUTF8);
     }
 
     /**

@@ -74,10 +74,9 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
     {
         parent::__construct($controller, PdfOrientation::LANDSCAPE);
         $this->setTitleTrans('log.title');
-        $description = $this->trans('log.list.file', [
+        $this->setDescriptionTrans('log.list.file', [
             '%file%' => $this->logFile->getFile(),
         ]);
-        $this->getHeader()->setDescription($description);
     }
 
     public function drawCellBorder(PdfCellBorderEvent $event): bool

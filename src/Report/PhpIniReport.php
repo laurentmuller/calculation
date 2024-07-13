@@ -33,8 +33,7 @@ class PhpIniReport extends AbstractReport
         parent::__construct($controller);
         $file = \php_ini_loaded_file();
         if (\is_string($file)) {
-            $description = $this->trans('log.list.file', ['%file%' => $file]);
-            $this->getHeader()->setDescription($description);
+            $this->setDescriptionTrans('log.list.file', ['%file%' => $file]);
         }
         $version = $this->service->getVersion();
         $this->setTitleTrans('about.php_version', ['%version%' => $version]);

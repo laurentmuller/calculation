@@ -37,6 +37,17 @@ class AbstractReportTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testDescriptionTrans(): void
+    {
+        $report = $this->createReport();
+        $report->setDescriptionTrans('id');
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testRenderCount(): void
     {
         $controller = $this->createMock(AbstractController::class);

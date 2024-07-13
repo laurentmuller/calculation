@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Tests\Spreadsheet;
 
 use App\Controller\AbstractController;
-use App\Spreadsheet\HeaderFooter;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Spreadsheet\WorksheetDocument;
 use App\Tests\TranslatorMockTrait;
@@ -25,7 +24,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[CoversClass(SpreadsheetDocument::class)]
 #[CoversClass(WorksheetDocument::class)]
-#[CoversClass(HeaderFooter::class)]
 class SpreadsheetDocumentTest extends TestCase
 {
     use TranslatorMockTrait;
@@ -142,6 +140,22 @@ class SpreadsheetDocumentTest extends TestCase
         $doc->setActiveTitle($expected, $controller);
         $actual = $doc->getActiveSheet()->getTitle();
         self::assertSame($expected, $actual);
+    }
+
+    public function testSetDescriptionTrans(): void
+    {
+        $doc = $this->createDocument();
+        $doc->setDescriptionTrans('id');
+        $actual = $doc->getProperties()->getDescription();
+        self::assertSame('id', $actual);
+    }
+
+    public function testSetTitleTrans(): void
+    {
+        $doc = $this->createDocument();
+        $doc->setTitleTrans('id');
+        $actual = $doc->getTitle();
+        self::assertSame('id', $actual);
     }
 
     private function createDocument(): SpreadsheetDocument

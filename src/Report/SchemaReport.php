@@ -45,7 +45,7 @@ class SchemaReport extends AbstractReport
     {
         parent::__construct($controller);
         $this->setTitleTrans('schema.name', [], true);
-        $this->getHeader()->setDescription('schema.description');
+        $this->setDescriptionTrans('schema.description');
     }
 
     public function render(): bool

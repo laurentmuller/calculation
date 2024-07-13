@@ -8783,16 +8783,16 @@
         },
         {
             "name": "composer/semver",
-            "version": "3.4.0",
+            "version": "3.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/semver.git",
-                "reference": "35e8d0af4486141bc745f23a29cc2091eb624a32"
+                "reference": "c51258e759afdb17f1fd1fe83bc12baaef6309d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/semver/zipball/35e8d0af4486141bc745f23a29cc2091eb624a32",
-                "reference": "35e8d0af4486141bc745f23a29cc2091eb624a32",
+                "url": "https://api.github.com/repos/composer/semver/zipball/c51258e759afdb17f1fd1fe83bc12baaef6309d6",
+                "reference": "c51258e759afdb17f1fd1fe83bc12baaef6309d6",
                 "shasum": ""
             },
             "require": {
@@ -8844,7 +8844,7 @@
             "support": {
                 "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/semver/issues",
-                "source": "https://github.com/composer/semver/tree/3.4.0"
+                "source": "https://github.com/composer/semver/tree/3.4.2"
             },
             "funding": [
                 {
@@ -8860,7 +8860,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-31T09:50:34+00:00"
+            "time": "2024-07-12T11:35:52+00:00"
         },
         {
             "name": "composer/xdebug-handler",
@@ -10002,16 +10002,16 @@
         },
         {
             "name": "phpstan/phpstan-doctrine",
-            "version": "1.4.5",
+            "version": "1.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-doctrine.git",
-                "reference": "c87ee295de7573d9c015c492693e7af7f8cd85dc"
+                "reference": "3f2cb3d364851e54080277499a9a7c150364538d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-doctrine/zipball/c87ee295de7573d9c015c492693e7af7f8cd85dc",
-                "reference": "c87ee295de7573d9c015c492693e7af7f8cd85dc",
+                "url": "https://api.github.com/repos/phpstan/phpstan-doctrine/zipball/3f2cb3d364851e54080277499a9a7c150364538d",
+                "reference": "3f2cb3d364851e54080277499a9a7c150364538d",
                 "shasum": ""
             },
             "require": {
@@ -10068,9 +10068,9 @@
             "description": "Doctrine extensions for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-doctrine/issues",
-                "source": "https://github.com/phpstan/phpstan-doctrine/tree/1.4.5"
+                "source": "https://github.com/phpstan/phpstan-doctrine/tree/1.4.7"
             },
-            "time": "2024-07-02T17:02:12+00:00"
+            "time": "2024-07-12T20:28:45+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -13114,16 +13114,16 @@
         },
         {
             "name": "vincentlanglet/twig-cs-fixer",
-            "version": "2.12.0",
+            "version": "2.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/VincentLanglet/Twig-CS-Fixer.git",
-                "reference": "2af4cd3bf926b7dcea5e90a3307d340cec38744f"
+                "reference": "2daadf3dc01cd8bd507ec75f3fa4904df37bb6be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/2af4cd3bf926b7dcea5e90a3307d340cec38744f",
-                "reference": "2af4cd3bf926b7dcea5e90a3307d340cec38744f",
+                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/2daadf3dc01cd8bd507ec75f3fa4904df37bb6be",
+                "reference": "2daadf3dc01cd8bd507ec75f3fa4904df37bb6be",
                 "shasum": ""
             },
             "require": {
@@ -13182,7 +13182,7 @@
             "homepage": "https://github.com/VincentLanglet/Twig-CS-Fixer",
             "support": {
                 "issues": "https://github.com/VincentLanglet/Twig-CS-Fixer/issues",
-                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/2.12.0"
+                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/2.12.1"
             },
             "funding": [
                 {
@@ -13190,7 +13190,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-07-11T21:37:18+00:00"
+            "time": "2024-07-12T10:35:51+00:00"
         },
         {
             "name": "webmozart/assert",

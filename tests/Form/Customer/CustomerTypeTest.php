@@ -17,12 +17,10 @@ use App\Form\Customer\CustomerType;
 use App\Form\Type\CountryFlagType;
 use App\Service\CountryFlagService;
 use App\Tests\Form\EntityTypeTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * @extends EntityTypeTestCase<Customer, CustomerType>
  */
-#[CoversClass(CustomerType::class)]
 class CustomerTypeTest extends EntityTypeTestCase
 {
     protected function getData(): array

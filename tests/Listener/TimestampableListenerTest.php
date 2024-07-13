@@ -23,13 +23,11 @@ use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 
-#[CoversClass(TimestampableListener::class)]
 class TimestampableListenerTest extends TestCase
 {
     use TranslatorMockTrait;

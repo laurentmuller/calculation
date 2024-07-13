@@ -16,7 +16,6 @@ use App\Entity\User;
 use App\Listener\LoginListener;
 use App\Repository\UserRepository;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +23,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
-#[CoversClass(LoginListener::class)]
 class LoginListenerTest extends TestCase
 {
     use TranslatorMockTrait;

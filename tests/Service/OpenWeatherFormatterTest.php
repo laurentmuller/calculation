@@ -16,10 +16,8 @@ use App\Service\OpenWeatherFormatter;
 use App\Service\PositionService;
 use App\Tests\TranslatorMockTrait;
 use App\Utils\FormatUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(OpenWeatherFormatter::class)]
 class OpenWeatherFormatterTest extends TestCase
 {
     use TranslatorMockTrait;

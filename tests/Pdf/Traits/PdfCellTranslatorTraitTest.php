@@ -16,12 +16,10 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfCellTranslatorTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[CoversClass(PdfCellTranslatorTrait::class)]
 class PdfCellTranslatorTraitTest extends TestCase
 {
     /**

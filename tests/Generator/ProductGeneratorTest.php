@@ -12,17 +12,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Generator;
 
-use App\Generator\AbstractEntityGenerator;
 use App\Generator\ProductGenerator;
 use App\Tests\EntityTrait\CategoryTrait;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * @extends GeneratorTestCase<ProductGenerator>
  */
-#[CoversClass(AbstractEntityGenerator::class)]
-#[CoversClass(ProductGenerator::class)]
 class ProductGeneratorTest extends GeneratorTestCase
 {
     use CategoryTrait;

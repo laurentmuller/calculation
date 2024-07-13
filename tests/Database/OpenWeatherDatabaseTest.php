@@ -14,11 +14,8 @@ namespace App\Tests\Database;
 
 use App\Database\AbstractDatabase;
 use App\Database\OpenWeatherDatabase;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractDatabase::class)]
-#[CoversClass(OpenWeatherDatabase::class)]
 class OpenWeatherDatabaseTest extends TestCase
 {
     private const COUNTRY = 'USA';

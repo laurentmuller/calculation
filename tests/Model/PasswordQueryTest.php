@@ -14,10 +14,8 @@ namespace App\Tests\Model;
 
 use App\Enums\StrengthLevel;
 use App\Model\PasswordQuery;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PasswordQuery::class)]
 class PasswordQueryTest extends TestCase
 {
     public function testConstruct(): void

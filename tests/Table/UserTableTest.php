@@ -16,13 +16,10 @@ use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\UserRepository;
-use App\Table\AbstractEntityTable;
-use App\Table\AbstractTable;
 use App\Table\DataQuery;
 use App\Table\UserTable;
 use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -33,9 +30,6 @@ use Twig\Environment;
 /**
  * @extends EntityTableTestCase<User, UserRepository, UserTable>
  */
-#[CoversClass(AbstractTable::class)]
-#[CoversClass(AbstractEntityTable::class)]
-#[CoversClass(UserTable::class)]
 class UserTableTest extends EntityTableTestCase
 {
     use TranslatorMockTrait;

@@ -15,21 +15,15 @@ namespace App\Tests\Table;
 use App\Entity\GlobalMargin;
 use App\Repository\AbstractRepository;
 use App\Repository\GlobalMarginRepository;
-use App\Table\AbstractEntityTable;
-use App\Table\AbstractTable;
 use App\Table\DataQuery;
 use App\Table\GlobalMarginTable;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @extends EntityTableTestCase<GlobalMargin, GlobalMarginRepository, GlobalMarginTable>
  */
-#[CoversClass(AbstractTable::class)]
-#[CoversClass(AbstractEntityTable::class)]
-#[CoversClass(GlobalMarginTable::class)]
 class GlobalMarginTableTest extends EntityTableTestCase
 {
     /**

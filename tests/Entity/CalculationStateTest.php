@@ -13,9 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Entity;
 
 use App\Entity\CalculationState;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(CalculationState::class)]
 class CalculationStateTest extends EntityValidatorTestCase
 {
     public function testCalculations(): void

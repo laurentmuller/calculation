@@ -23,11 +23,9 @@ use App\Service\ApplicationService;
 use App\Service\UserService;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-#[CoversClass(UserService::class)]
 class UserServiceTest extends KernelServiceTestCase
 {
     use DatabaseTrait;

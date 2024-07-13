@@ -15,14 +15,12 @@ namespace App\Tests\Controller;
 use App\Controller\CaptchaController;
 use App\Service\CaptchaImageService;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
-#[CoversClass(CaptchaController::class)]
 class CaptchaControllerTest extends ControllerTestCase
 {
     use TranslatorMockTrait;

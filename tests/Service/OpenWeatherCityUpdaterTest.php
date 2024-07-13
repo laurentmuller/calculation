@@ -15,13 +15,11 @@ namespace App\Tests\Service;
 use App\Service\OpenWeatherCityUpdater;
 use App\Tests\TranslatorMockTrait;
 use App\Utils\FileUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-#[CoversClass(OpenWeatherCityUpdater::class)]
 class OpenWeatherCityUpdaterTest extends TestCase
 {
     use TranslatorMockTrait;

@@ -14,14 +14,12 @@ namespace App\Tests\Validator;
 
 use App\Validator\Password;
 use App\Validator\PasswordValidator;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 /**
  * @extends ConstraintValidatorTestCase<PasswordValidator>
  */
-#[CoversClass(PasswordValidator::class)]
 class PasswordValidatorTest extends ConstraintValidatorTestCase
 {
     public static function getConstraints(): \Iterator

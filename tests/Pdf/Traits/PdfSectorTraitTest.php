@@ -14,10 +14,8 @@ namespace App\Tests\Pdf\Traits;
 
 use App\Pdf\PdfDocument;
 use App\Pdf\Traits\PdfSectorTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PdfSectorTrait::class)]
 class PdfSectorTraitTest extends TestCase
 {
     public function testEmpty(): void

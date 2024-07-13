@@ -15,9 +15,7 @@ namespace App\Tests\Service;
 use App\Service\OpenWeatherService;
 use App\Tests\KernelServiceTestCase;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(OpenWeatherService::class)]
 class OpenWeatherServiceTest extends KernelServiceTestCase
 {
     use TranslatorMockTrait;

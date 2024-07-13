@@ -12,14 +12,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\CalculationDuplicateController;
 use App\Entity\Product;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(CalculationDuplicateController::class)]
 class CalculationDuplicateControllerTest extends ControllerTestCase
 {
     use CalculationTrait;

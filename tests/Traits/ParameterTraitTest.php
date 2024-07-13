@@ -14,11 +14,9 @@ namespace App\Tests\Traits;
 
 use App\Enums\Theme;
 use App\Traits\ParameterTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-#[CoversClass(ParameterTrait::class)]
 class ParameterTraitTest extends TestCase
 {
     use ParameterTrait;

@@ -13,14 +13,12 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Traits\LoggerTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
-#[CoversClass(LoggerTrait::class)]
 class LoggerTraitTest extends TestCase
 {
     use LoggerTrait;

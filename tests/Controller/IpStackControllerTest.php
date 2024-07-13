@@ -12,13 +12,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\IpStackController;
 use App\Service\IpStackService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(IpStackController::class)]
 class IpStackControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator

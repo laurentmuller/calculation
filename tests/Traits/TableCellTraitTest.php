@@ -14,11 +14,9 @@ namespace App\Tests\Traits;
 
 use App\Tests\KernelServiceTestCase;
 use App\Traits\TableCellTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Twig\Environment;
 use Twig\Error\Error;
 
-#[CoversClass(TableCellTrait::class)]
 class TableCellTraitTest extends KernelServiceTestCase
 {
     use TableCellTrait;

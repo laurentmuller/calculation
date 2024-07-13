@@ -12,15 +12,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Generator;
 
-use App\Generator\AbstractEntityGenerator;
 use App\Generator\CustomerGenerator;
-use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * @extends GeneratorTestCase<CustomerGenerator>
  */
-#[CoversClass(AbstractEntityGenerator::class)]
-#[CoversClass(CustomerGenerator::class)]
 class CustomerGeneratorTest extends GeneratorTestCase
 {
     public function testNegativeCount(): void

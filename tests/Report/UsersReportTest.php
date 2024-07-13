@@ -15,12 +15,10 @@ namespace App\Tests\Report;
 use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Report\UsersReport;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
-#[CoversClass(UsersReport::class)]
 class UsersReportTest extends TestCase
 {
     /**

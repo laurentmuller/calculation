@@ -21,7 +21,6 @@ use App\Tests\TranslatorMockTrait;
 use App\Traits\ExceptionContextTrait;
 use App\Traits\TableTrait;
 use App\Traits\TranslatorTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -35,7 +34,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @phpstan-ignore class.missingExtends
  */
-#[CoversClass(TableTrait::class)]
 class TableTraitTest extends TestCase
 {
     use ExceptionContextTrait;

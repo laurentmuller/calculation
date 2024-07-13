@@ -15,7 +15,6 @@ namespace App\Tests\Validator;
 use App\Service\RecaptchaService;
 use App\Validator\Recaptcha;
 use App\Validator\RecaptchaValidator;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use ReCaptcha\Response;
@@ -26,7 +25,6 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 /**
  * @extends ConstraintValidatorTestCase<RecaptchaValidator>
  */
-#[CoversClass(RecaptchaValidator::class)]
 class RecaptchaValidatorTest extends ConstraintValidatorTestCase
 {
     public static function getErrorCodes(): \Iterator

@@ -12,10 +12,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Command\UpdateAssetsCommand;
-use PHPUnit\Framework\Attributes\CoversClass;
-
-#[CoversClass(UpdateAssetsCommand::class)]
 class UpdateAssetsCommandTest extends CommandTestCase
 {
     private const COMMAND_NAME = 'app:update-assets';

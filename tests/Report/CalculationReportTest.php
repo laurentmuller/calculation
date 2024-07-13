@@ -18,18 +18,10 @@ use App\Entity\CalculationCategory;
 use App\Entity\CalculationGroup;
 use App\Entity\CalculationItem;
 use App\Report\CalculationReport;
-use App\Report\Table\GroupsTable;
-use App\Report\Table\ItemsTable;
-use App\Report\Table\OverallTable;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-#[CoversClass(CalculationReport::class)]
-#[CoversClass(ItemsTable::class)]
-#[CoversClass(GroupsTable::class)]
-#[CoversClass(OverallTable::class)]
 class CalculationReportTest extends TestCase
 {
     /**

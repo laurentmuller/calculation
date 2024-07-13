@@ -18,7 +18,6 @@ use App\Service\ResetPasswordService;
 use App\Service\UserExceptionService;
 use App\Tests\Entity\IdTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -36,7 +35,6 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 use SymfonyCasts\Bundle\ResetPassword\Util\ResetPasswordCleaner;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\ExpiredSignatureException;
 
-#[CoversClass(ResetPasswordService::class)]
 class ResetPasswordServiceTest extends TestCase
 {
     use IdTrait;

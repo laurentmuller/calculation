@@ -12,17 +12,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\AbstractController;
-use App\Controller\AbstractEntityController;
-use App\Controller\CustomerController;
 use App\Entity\Customer;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(AbstractController::class)]
-#[CoversClass(AbstractEntityController::class)]
-#[CoversClass(CustomerController::class)]
 class CustomerControllerTest extends EntityControllerTestCase
 {
     private ?Customer $customer = null;

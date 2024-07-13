@@ -18,11 +18,9 @@ use App\Interfaces\RoleInterface;
 use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
 use App\Spreadsheet\UserRightsDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(UserRightsDocument::class)]
 class UserRightsDocumentTest extends TestCase
 {
     /**

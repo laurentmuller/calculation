@@ -16,11 +16,9 @@ use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
 use App\Interfaces\EntityInterface;
 use App\Traits\CheckSubClassTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CheckSubClassTrait::class)]
 class CheckSubClassTraitTest extends TestCase
 {
     use CheckSubClassTrait;

@@ -15,10 +15,8 @@ namespace App\Tests\Entity;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-#[CoversClass(Product::class)]
 class ProductTest extends EntityValidatorTestCase
 {
     public static function getPrices(): \Generator

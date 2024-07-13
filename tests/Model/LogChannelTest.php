@@ -13,11 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\LogChannel;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(LogChannel::class)]
 class LogChannelTest extends TestCase
 {
     public static function getChannelIcons(): \Generator

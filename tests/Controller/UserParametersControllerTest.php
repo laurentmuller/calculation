@@ -12,12 +12,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\UserParametersController;
 use App\Enums\MessagePosition;
 use App\Interfaces\PropertyServiceInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(UserParametersController::class)]
 class UserParametersControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator

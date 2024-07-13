@@ -15,12 +15,10 @@ namespace App\Tests\Model;
 use App\Entity\User;
 use App\Enums\Importance;
 use App\Model\Comment;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Address;
 
-#[CoversClass(Comment::class)]
 class CommentTest extends TestCase
 {
     public function testConstructor(): void

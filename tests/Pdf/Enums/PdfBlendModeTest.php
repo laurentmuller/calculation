@@ -13,11 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Pdf\Enums;
 
 use App\Pdf\Enums\PdfBlendMode;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PdfBlendMode::class)]
 class PdfBlendModeTest extends TestCase
 {
     public static function getModes(): \Generator

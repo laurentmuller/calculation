@@ -14,10 +14,8 @@ namespace App\Tests\Attribute;
 
 use App\Attribute\SortableField;
 use App\Interfaces\SortModeInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(SortableField::class)]
 class SortableFieldTest extends TestCase
 {
     /**

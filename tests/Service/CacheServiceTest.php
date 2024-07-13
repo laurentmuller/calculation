@@ -14,10 +14,8 @@ namespace App\Tests\Service;
 
 use App\Service\CacheService;
 use App\Tests\KernelServiceTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Cache\InvalidArgumentException;
 
-#[CoversClass(CacheService::class)]
 class CacheServiceTest extends KernelServiceTestCase
 {
     private CacheService $service;

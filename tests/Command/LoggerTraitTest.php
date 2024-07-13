@@ -14,13 +14,11 @@ namespace App\Tests\Command;
 
 use App\Command\LoggerTrait;
 use App\Command\SymfonyStyle;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[CoversClass(LoggerTrait::class)]
 class LoggerTraitTest extends TestCase
 {
     use LoggerTrait;

@@ -13,18 +13,14 @@ declare(strict_types=1);
 namespace App\Tests\Form\User;
 
 use App\Entity\User;
-use App\Form\AbstractChoiceType;
 use App\Form\User\RoleChoiceType;
 use App\Interfaces\RoleInterface;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(AbstractChoiceType::class)]
-#[CoversClass(RoleChoiceType::class)]
 class RoleChoiceTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

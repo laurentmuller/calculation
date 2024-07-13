@@ -16,13 +16,11 @@ use App\Entity\User;
 use App\Form\User\ProfileEditType;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 
 /**
  * @extends EntityTypeTestCase<User, ProfileEditType>
  */
-#[CoversClass(ProfileEditType::class)]
 class ProfileEditTypeTest extends EntityTypeTestCase
 {
     use TranslatorMockTrait;

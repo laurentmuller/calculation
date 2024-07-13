@@ -20,12 +20,8 @@ use App\Pdf\PdfGroup;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use fpdf\PdfTextAlignment;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PdfGroup::class)]
-#[CoversClass(PdfGroupEvent::class)]
-#[CoversClass(PdfGroupTable::class)]
 class PdfGroupTableTest extends TestCase
 {
     public function testCheckNewPage(): void

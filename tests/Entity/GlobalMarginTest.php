@@ -13,9 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Entity;
 
 use App\Entity\GlobalMargin;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(GlobalMargin::class)]
 class GlobalMarginTest extends EntityValidatorTestCase
 {
     public function testAllLessZero(): void

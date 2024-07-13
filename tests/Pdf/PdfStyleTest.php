@@ -22,10 +22,8 @@ use App\Pdf\PdfStyle;
 use fpdf\PdfBorder;
 use fpdf\PdfFontName;
 use fpdf\PdfFontStyle;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PdfStyle::class)]
 class PdfStyleTest extends TestCase
 {
     public function testApply(): void

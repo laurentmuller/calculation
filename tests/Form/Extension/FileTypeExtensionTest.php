@@ -12,17 +12,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Form\Extension;
 
-use App\Form\Extension\AbstractFileTypeExtension;
 use App\Form\Extension\FileTypeExtension;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
-#[CoversClass(AbstractFileTypeExtension::class)]
-#[CoversClass(FileTypeExtension::class)]
 class FileTypeExtensionTest extends TypeTestCase
 {
     public function testFormViewWithMaxFiles(): void

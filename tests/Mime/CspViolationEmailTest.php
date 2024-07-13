@@ -13,10 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Mime;
 
 use App\Mime\CspViolationEmail;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CspViolationEmail::class)]
 class CspViolationEmailTest extends TestCase
 {
     public function testConstructor(): void

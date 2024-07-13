@@ -15,14 +15,12 @@ namespace App\Tests\Form\User;
 use App\Entity\User;
 use App\Form\User\ProfileChangePasswordType;
 use App\Tests\Form\EntityTypeTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 
 /**
  * @extends EntityTypeTestCase<User, ProfileChangePasswordType>
  */
-#[CoversClass(ProfileChangePasswordType::class)]
 class ProfileChangePasswordTypeTest extends EntityTypeTestCase
 {
     use PasswordHasherExtensionTrait;

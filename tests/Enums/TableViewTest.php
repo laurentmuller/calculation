@@ -15,11 +15,9 @@ namespace App\Tests\Enums;
 use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(TableView::class)]
 class TableViewTest extends TestCase
 {
     use TranslatorMockTrait;

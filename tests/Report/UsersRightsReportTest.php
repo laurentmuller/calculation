@@ -18,11 +18,9 @@ use App\Interfaces\RoleInterface;
 use App\Report\UsersRightsReport;
 use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(UsersRightsReport::class)]
 class UsersRightsReportTest extends TestCase
 {
     /**

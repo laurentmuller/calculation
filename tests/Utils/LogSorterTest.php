@@ -14,10 +14,8 @@ namespace App\Tests\Utils;
 
 use App\Entity\Log;
 use App\Utils\LogSorter;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(LogSorter::class)]
 class LogSorterTest extends TestCase
 {
     public function testIsDefaultSort(): void

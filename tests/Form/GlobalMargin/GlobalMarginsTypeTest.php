@@ -15,10 +15,8 @@ namespace App\Tests\Form\GlobalMargin;
 use App\Form\GlobalMargin\GlobalMarginsType;
 use App\Model\GlobalMargins;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(GlobalMarginsType::class)]
 class GlobalMarginsTypeTest extends TypeTestCase
 {
     public function testFormView(): void

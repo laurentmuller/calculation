@@ -22,12 +22,7 @@ use App\Entity\Group;
 use App\Entity\GroupMargin;
 use App\Entity\Product;
 use App\Utils\FormatUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(Calculation::class)]
-#[CoversClass(CalculationGroup::class)]
-#[CoversClass(CalculationCategory::class)]
-#[CoversClass(CalculationItem::class)]
 class CalculationTest extends EntityValidatorTestCase
 {
     use IdTrait;

@@ -20,13 +20,9 @@ use App\Model\TaskComputeResult;
 use App\Repository\TaskRepository;
 use App\Service\TaskService;
 use App\Tests\Entity\IdTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(TaskService::class)]
-#[CoversClass(TaskComputeResult::class)]
-#[CoversClass(TaskComputeQuery::class)]
 class TaskServiceTest extends TestCase
 {
     use IdTrait;

@@ -15,7 +15,6 @@ namespace App\Tests\Service;
 use App\Model\HttpClientError;
 use App\Service\ExchangeRateService;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -24,7 +23,6 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
-#[CoversClass(ExchangeRateService::class)]
 class ExchangeRateServiceTest extends TestCase
 {
     use TranslatorMockTrait;

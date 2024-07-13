@@ -12,17 +12,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Pdf\Html;
 
-use App\Pdf\Html\AbstractHtmlChunk;
-use App\Pdf\Html\AbstractHtmlListChunk;
 use App\Pdf\Html\HtmlLiChunk;
 use App\Pdf\Html\HtmlListType;
 use App\Pdf\Html\HtmlOlChunk;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractHtmlChunk::class)]
-#[CoversClass(HtmlOlChunk::class)]
-#[CoversClass(AbstractHtmlListChunk::class)]
 class HtmlOlChunkTest extends TestCase
 {
     public function testGetBulletLast(): void

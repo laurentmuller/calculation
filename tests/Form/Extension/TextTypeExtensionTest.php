@@ -13,11 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Form\Extension;
 
 use App\Form\Extension\TextTypeExtension;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(TextTypeExtension::class)]
 class TextTypeExtensionTest extends TypeTestCase
 {
     public function testFormViewWithAllValues(): void

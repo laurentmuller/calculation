@@ -13,14 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Spreadsheet;
 
 use App\Controller\AbstractController;
-use App\Spreadsheet\AbstractCalculationItemsDocument;
 use App\Spreadsheet\CalculationsEmptyDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractCalculationItemsDocument::class)]
-#[CoversClass(CalculationsEmptyDocument::class)]
 class CalculationEmptyDocumentTest extends TestCase
 {
     /**

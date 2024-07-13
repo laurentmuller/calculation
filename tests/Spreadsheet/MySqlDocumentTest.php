@@ -15,11 +15,9 @@ namespace App\Tests\Spreadsheet;
 use App\Controller\AbstractController;
 use App\Service\DatabaseInfoService;
 use App\Spreadsheet\MySqlDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(MySqlDocument::class)]
 class MySqlDocumentTest extends TestCase
 {
     /**

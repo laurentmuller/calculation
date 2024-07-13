@@ -17,7 +17,6 @@ use App\Tests\TranslatorMockTrait;
 use App\Validator\Strength;
 use App\Validator\StrengthValidator;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
@@ -27,7 +26,6 @@ use ZxcvbnPhp\Zxcvbn;
 /**
  * @extends ConstraintValidatorTestCase<StrengthValidator>
  */
-#[CoversClass(StrengthValidator::class)]
 class StrengthValidatorTest extends ConstraintValidatorTestCase
 {
     use TranslatorMockTrait;

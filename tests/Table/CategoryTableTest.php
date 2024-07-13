@@ -16,12 +16,9 @@ use App\Entity\Category;
 use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
-use App\Table\AbstractEntityTable;
-use App\Table\AbstractTable;
 use App\Table\CategoryTable;
 use App\Table\DataQuery;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -30,9 +27,6 @@ use Twig\Environment;
 /**
  * @extends EntityTableTestCase<Category, CategoryRepository, CategoryTable>
  */
-#[CoversClass(AbstractTable::class)]
-#[CoversClass(AbstractEntityTable::class)]
-#[CoversClass(CategoryTable::class)]
 class CategoryTableTest extends EntityTableTestCase
 {
     /**

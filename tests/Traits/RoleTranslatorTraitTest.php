@@ -16,12 +16,10 @@ use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Tests\TranslatorMockTrait;
 use App\Traits\RoleTranslatorTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[CoversClass(RoleTranslatorTrait::class)]
 class RoleTranslatorTraitTest extends TestCase
 {
     use RoleTranslatorTrait;

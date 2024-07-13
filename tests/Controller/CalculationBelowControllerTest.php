@@ -12,14 +12,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\CalculationBelowController;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(CalculationBelowController::class)]
 class CalculationBelowControllerTest extends ControllerTestCase
 {
     use CalculationTrait;

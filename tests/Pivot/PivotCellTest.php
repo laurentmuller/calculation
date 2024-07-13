@@ -12,16 +12,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Pivot;
 
-use App\Pivot\AbstractPivotAggregator;
 use App\Pivot\Aggregator\AbstractAggregator;
 use App\Pivot\Aggregator\CountAggregator;
 use App\Pivot\PivotCell;
 use App\Pivot\PivotNode;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractPivotAggregator::class)]
-#[CoversClass(PivotCell::class)]
 class PivotCellTest extends TestCase
 {
     public function testConstructor(): void

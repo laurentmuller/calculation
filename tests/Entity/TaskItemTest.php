@@ -17,9 +17,7 @@ use App\Entity\Group;
 use App\Entity\Task;
 use App\Entity\TaskItem;
 use App\Entity\TaskItemMargin;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(TaskItem::class)]
 class TaskItemTest extends EntityValidatorTestCase
 {
     use IdTrait;

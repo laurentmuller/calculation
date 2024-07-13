@@ -17,10 +17,8 @@ use App\Pivot\Field\PivotField;
 use App\Pivot\PivotCell;
 use App\Pivot\PivotNode;
 use App\Pivot\PivotTable;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PivotTable::class)]
 class PivotTableTest extends TestCase
 {
     public function testAddCell(): void

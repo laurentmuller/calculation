@@ -15,7 +15,6 @@ namespace App\Tests\Resolver;
 use App\Enums\TableView;
 use App\Resolver\DataQueryValueResolver;
 use App\Table\DataQuery;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +23,6 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
-#[CoversClass(DataQueryValueResolver::class)]
 class DataQueryValueResolverTest extends TestCase
 {
     /**

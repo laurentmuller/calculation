@@ -15,7 +15,6 @@ namespace App\Tests\Repository;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\Task;
-use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\CategoryTrait;
@@ -24,10 +23,7 @@ use App\Tests\EntityTrait\TaskTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(AbstractRepository::class)]
-#[CoversClass(CategoryRepository::class)]
 class CategoryRepositoryTest extends KernelServiceTestCase
 {
     use CategoryTrait;

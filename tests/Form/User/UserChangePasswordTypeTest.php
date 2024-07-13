@@ -17,13 +17,11 @@ use App\Form\Type\PlainType;
 use App\Form\User\UserChangePasswordType;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 
 /**
  * @extends EntityTypeTestCase<User, UserChangePasswordType>
  */
-#[CoversClass(UserChangePasswordType::class)]
 class UserChangePasswordTypeTest extends EntityTypeTestCase
 {
     use PasswordHasherExtensionTrait;

@@ -16,9 +16,7 @@ use App\Service\SchemaService;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\DBAL\Exception;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(SchemaService::class)]
 class SchemaServiceTest extends KernelServiceTestCase
 {
     use DatabaseTrait;

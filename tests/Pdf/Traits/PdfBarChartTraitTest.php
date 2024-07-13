@@ -17,11 +17,9 @@ use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Interfaces\PdfChartInterface;
 use App\Pdf\Traits\PdfBarChartTrait;
 use App\Report\AbstractReport;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PdfBarChartTrait::class)]
 class PdfBarChartTraitTest extends TestCase
 {
     /**

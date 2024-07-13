@@ -13,10 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Form\Type;
 
 use App\Form\Type\CurrentPasswordType;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(CurrentPasswordType::class)]
 class CurrentPasswordTypeTest extends TypeTestCase
 {
     public function testFormView(): void

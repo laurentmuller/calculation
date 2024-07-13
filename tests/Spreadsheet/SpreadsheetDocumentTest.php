@@ -18,12 +18,9 @@ use App\Spreadsheet\WorksheetDocument;
 use App\Tests\TranslatorMockTrait;
 use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[CoversClass(SpreadsheetDocument::class)]
-#[CoversClass(WorksheetDocument::class)]
 class SpreadsheetDocumentTest extends TestCase
 {
     use TranslatorMockTrait;

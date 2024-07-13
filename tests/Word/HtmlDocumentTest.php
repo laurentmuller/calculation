@@ -13,22 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Word;
 
 use App\Controller\AbstractController;
-use App\Word\AbstractHeaderFooter;
-use App\Word\AbstractWordDocument;
 use App\Word\HtmlDocument;
-use App\Word\HtmlWordParser;
-use App\Word\WordFooter;
-use App\Word\WordHeader;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(HtmlDocument::class)]
-#[CoversClass(AbstractWordDocument::class)]
-#[CoversClass(AbstractHeaderFooter::class)]
-#[CoversClass(WordHeader::class)]
-#[CoversClass(WordFooter::class)]
-#[CoversClass(HtmlWordParser::class)]
 class HtmlDocumentTest extends TestCase
 {
     /**

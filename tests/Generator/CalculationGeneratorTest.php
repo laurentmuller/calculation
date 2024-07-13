@@ -13,19 +13,15 @@ declare(strict_types=1);
 namespace App\Tests\Generator;
 
 use App\Entity\CalculationState;
-use App\Generator\AbstractEntityGenerator;
 use App\Generator\CalculationGenerator;
 use App\Service\CalculationService;
 use App\Tests\EntityTrait\CalculationStateTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * @extends GeneratorTestCase<CalculationGenerator>
  */
-#[CoversClass(AbstractEntityGenerator::class)]
-#[CoversClass(CalculationGenerator::class)]
 class CalculationGeneratorTest extends GeneratorTestCase
 {
     use CalculationStateTrait;

@@ -13,10 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\TranslateQuery;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(TranslateQuery::class)]
 class TranslateQueryTest extends TestCase
 {
     public function testWithDefaultValues(): void

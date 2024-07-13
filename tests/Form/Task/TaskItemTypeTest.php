@@ -16,12 +16,10 @@ use App\Entity\TaskItem;
 use App\Form\Task\TaskItemType;
 use App\Tests\Form\EntityTypeTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * @extends EntityTypeTestCase<TaskItem, TaskItemType>
  */
-#[CoversClass(TaskItemType::class)]
 class TaskItemTypeTest extends EntityTypeTestCase
 {
     protected function getData(): array

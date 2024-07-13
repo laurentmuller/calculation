@@ -15,11 +15,9 @@ namespace App\Tests\Traits;
 use App\Controller\AbstractController;
 use App\Spreadsheet\AbstractDocument;
 use App\Traits\CalculationDocumentMarginTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CalculationDocumentMarginTrait::class)]
 class CalculationDocumentMarginTraitTest extends TestCase
 {
     /**

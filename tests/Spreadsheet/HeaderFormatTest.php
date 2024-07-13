@@ -18,10 +18,8 @@ use App\Spreadsheet\WorksheetDocument;
 use App\Tests\TranslatorMockTrait;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Style;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(HeaderFormat::class)]
 class HeaderFormatTest extends TestCase
 {
     use TranslatorMockTrait;

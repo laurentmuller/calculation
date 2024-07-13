@@ -12,13 +12,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Chart;
 
-use App\Chart\AbstractHighchart;
 use App\Chart\MonthChart;
 use App\Repository\CalculationRepository;
 use App\Service\ApplicationService;
 use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -29,8 +27,6 @@ use Twig\Environment;
 /**
  * @psalm-import-type CalculationByMonthType from CalculationRepository
  */
-#[CoversClass(MonthChart::class)]
-#[CoversClass(AbstractHighchart::class)]
 class MonthChartTest extends TestCase
 {
     use TranslatorMockTrait;

@@ -12,14 +12,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Command\AnonymousCommand;
 use App\Entity\Calculation;
 use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\CalculationTrait;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(AnonymousCommand::class)]
 class AnonymousCommandTest extends CommandTestCase
 {
     use CalculationTrait;

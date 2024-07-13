@@ -12,11 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\AkismetController;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(AkismetController::class)]
 class AkismetControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Generator

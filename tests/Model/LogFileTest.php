@@ -15,11 +15,9 @@ namespace App\Tests\Model;
 use App\Entity\Log;
 use App\Model\LogFile;
 use App\Tests\Entity\IdTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 
-#[CoversClass(LogFile::class)]
 class LogFileTest extends TestCase
 {
     use IdTrait;

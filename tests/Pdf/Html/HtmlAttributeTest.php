@@ -15,10 +15,8 @@ namespace App\Tests\Pdf\Html;
 use App\Enums\MessagePosition;
 use App\Enums\StrengthLevel;
 use App\Pdf\Html\HtmlAttribute;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(HtmlAttribute::class)]
 class HtmlAttributeTest extends TestCase
 {
     /**

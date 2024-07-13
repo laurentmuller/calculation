@@ -17,11 +17,9 @@ use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Spreadsheet\ProductsDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(ProductsDocument::class)]
 class ProductsDocumentTest extends TestCase
 {
     /**

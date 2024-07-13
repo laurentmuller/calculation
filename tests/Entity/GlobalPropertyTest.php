@@ -13,9 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Entity;
 
 use App\Entity\GlobalProperty;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(GlobalProperty::class)]
 class GlobalPropertyTest extends EntityValidatorTestCase
 {
     /**

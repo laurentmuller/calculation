@@ -12,13 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\SchemaController;
-use App\Report\SchemaReport;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(SchemaController::class)]
-#[CoversClass(SchemaReport::class)]
 class SchemaControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator

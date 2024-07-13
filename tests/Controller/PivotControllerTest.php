@@ -12,13 +12,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\PivotController;
 use App\Entity\GroupMargin;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(PivotController::class)]
 class PivotControllerTest extends ControllerTestCase
 {
     use CalculationTrait;

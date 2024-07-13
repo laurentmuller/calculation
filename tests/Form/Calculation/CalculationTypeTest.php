@@ -13,8 +13,6 @@ declare(strict_types=1);
 namespace App\Tests\Form\Calculation;
 
 use App\Entity\Calculation;
-use App\Form\AbstractEntityType;
-use App\Form\AbstractHelperType;
 use App\Form\Calculation\CalculationCategoryType;
 use App\Form\Calculation\CalculationGroupType;
 use App\Form\Calculation\CalculationType;
@@ -25,16 +23,12 @@ use App\Tests\Form\CalculationState\CalculationStateTrait;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Utils\DateUtils;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
  * @extends EntityTypeTestCase<Calculation, CalculationType>
  */
-#[CoversClass(AbstractHelperType::class)]
-#[CoversClass(AbstractEntityType::class)]
-#[CoversClass(CalculationType::class)]
 class CalculationTypeTest extends EntityTypeTestCase
 {
     use CalculationStateTrait;

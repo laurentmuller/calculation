@@ -15,12 +15,10 @@ namespace App\Tests\Form\Calculation;
 use App\Entity\CalculationItem;
 use App\Form\Calculation\CalculationItemType;
 use App\Tests\Form\EntityTypeTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * @extends EntityTypeTestCase<CalculationItem, CalculationItemType>
  */
-#[CoversClass(CalculationItemType::class)]
 class CalculationItemTypeTest extends EntityTypeTestCase
 {
     protected function getData(): array

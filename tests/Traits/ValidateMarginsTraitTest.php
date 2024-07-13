@@ -14,15 +14,12 @@ namespace App\Tests\Traits;
 
 use App\Entity\GlobalMargin;
 use App\Model\GlobalMargins;
-use App\Traits\ValidateMarginsTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Validator\Constraints\LengthValidator;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 /**
  * @extends ConstraintValidatorTestCase<LengthValidator>
  */
-#[CoversClass(ValidateMarginsTrait::class)]
 class ValidateMarginsTraitTest extends ConstraintValidatorTestCase
 {
     public function testMaximumGreaterMinimum(): void

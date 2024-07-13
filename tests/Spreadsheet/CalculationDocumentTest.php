@@ -18,11 +18,9 @@ use App\Entity\CalculationCategory;
 use App\Entity\CalculationGroup;
 use App\Entity\CalculationItem;
 use App\Spreadsheet\CalculationDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CalculationDocument::class)]
 class CalculationDocumentTest extends TestCase
 {
     /**

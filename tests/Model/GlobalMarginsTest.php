@@ -15,10 +15,8 @@ namespace App\Tests\Model;
 use App\Entity\GlobalMargin;
 use App\Model\GlobalMargins;
 use App\Tests\Entity\IdTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(GlobalMargins::class)]
 class GlobalMarginsTest extends TestCase
 {
     use IdTrait;

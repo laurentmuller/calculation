@@ -14,11 +14,8 @@ namespace App\Tests\Database;
 
 use App\Database\AbstractDatabase;
 use App\Database\SwissDatabase;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractDatabase::class)]
-#[CoversClass(SwissDatabase::class)]
 class SwissDatabaseTest extends TestCase
 {
     private const CITY_ID = 1;

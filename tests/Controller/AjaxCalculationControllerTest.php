@@ -12,18 +12,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\AbstractController;
-use App\Controller\AjaxCalculationController;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Utils\StringUtils;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(AbstractController::class)]
-#[CoversClass(AjaxCalculationController::class)]
 class AjaxCalculationControllerTest extends ControllerTestCase
 {
     use CalculationTrait;

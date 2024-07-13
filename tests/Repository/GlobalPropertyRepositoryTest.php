@@ -13,14 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Repository;
 
 use App\Entity\GlobalProperty;
-use App\Repository\AbstractRepository;
 use App\Repository\GlobalPropertyRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(AbstractRepository::class)]
-#[CoversClass(GlobalPropertyRepository::class)]
 class GlobalPropertyRepositoryTest extends KernelServiceTestCase
 {
     use DatabaseTrait;

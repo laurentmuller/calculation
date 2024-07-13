@@ -16,10 +16,8 @@ use App\Spreadsheet\HeaderFooter;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Spreadsheet\WorksheetDocument;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(HeaderFooter::class)]
 class HeaderFooterTest extends TestCase
 {
     use TranslatorMockTrait;

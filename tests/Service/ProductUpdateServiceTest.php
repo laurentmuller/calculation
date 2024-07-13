@@ -22,7 +22,6 @@ use App\Service\ProductUpdateService;
 use App\Service\SuspendEventListenerService;
 use App\Tests\Entity\IdTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -35,7 +34,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
-#[CoversClass(ProductUpdateService::class)]
 class ProductUpdateServiceTest extends TestCase
 {
     use IdTrait;

@@ -14,17 +14,13 @@ namespace App\Tests\Table;
 
 use App\Entity\Calculation;
 use App\Repository\CalculationRepository;
-use App\Table\AbstractCalculationItemsTable;
 use App\Table\CalculationDuplicateTable;
 use App\Table\DataQuery;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractCalculationItemsTable::class)]
-#[CoversClass(CalculationDuplicateTable::class)]
 class CalculationDuplicateTableTest extends TestCase
 {
     /**

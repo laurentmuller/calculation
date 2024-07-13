@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use App\Command\SymfonyStyle;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
@@ -21,7 +20,6 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\NullOutput;
 
-#[CoversClass(SymfonyStyle::class)]
 class SymfonyStyleTest extends TestCase
 {
     private ArrayInput $input;

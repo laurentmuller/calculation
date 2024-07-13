@@ -15,12 +15,10 @@ namespace App\Tests\Form\Group;
 use App\Form\Group\GroupListType;
 use App\Tests\Data\DataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(GroupListType::class)]
 class GroupListTypeTest extends TypeTestCase
 {
     use GroupTrait;

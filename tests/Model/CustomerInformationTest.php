@@ -14,10 +14,8 @@ namespace App\Tests\Model;
 
 use App\Model\CustomerInformation;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CustomerInformation::class)]
 class CustomerInformationTest extends TestCase
 {
     use TranslatorMockTrait;

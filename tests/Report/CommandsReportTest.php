@@ -15,14 +15,12 @@ namespace App\Tests\Report;
 use App\Controller\AbstractController;
 use App\Report\CommandsReport;
 use App\Service\CommandService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @psalm-import-type CommandType from CommandService
  */
-#[CoversClass(CommandsReport::class)]
 class CommandsReportTest extends TestCase
 {
     /**

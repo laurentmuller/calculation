@@ -13,9 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Twig;
 
 use App\Twig\EnumExtension;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(EnumExtension::class)]
 class EnumExtensionTest extends IntegrationTestCase
 {
     protected function getExtensions(): array

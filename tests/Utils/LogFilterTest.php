@@ -14,11 +14,9 @@ namespace App\Tests\Utils;
 
 use App\Entity\Log;
 use App\Utils\LogFilter;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
 
-#[CoversClass(LogFilter::class)]
 class LogFilterTest extends TestCase
 {
     public function testFilterByChannel(): void

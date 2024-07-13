@@ -12,23 +12,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\AbstractController;
-use App\Controller\AbstractEntityController;
-use App\Controller\CategoryController;
 use App\Entity\Category;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\CategoryTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use App\Tests\EntityTrait\TaskTrait;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[CoversClass(AbstractController::class)]
-#[CoversClass(AbstractEntityController::class)]
-#[CoversClass(CategoryController::class)]
 class CategoryControllerTest extends EntityControllerTestCase
 {
     use CalculationTrait;

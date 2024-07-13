@@ -13,11 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Form\Extension;
 
 use App\Form\Extension\UrlTypeExtension;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(UrlTypeExtension::class)]
 class UrlTypeExtensionTest extends TypeTestCase
 {
     public function testFormViewWithDefaultProtocol(): void

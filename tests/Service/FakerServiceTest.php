@@ -22,9 +22,7 @@ use App\Faker\ProductProvider;
 use App\Faker\UserProvider;
 use App\Service\FakerService;
 use App\Tests\KernelServiceTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(FakerService::class)]
 class FakerServiceTest extends KernelServiceTestCase
 {
     public function testProviders(): void

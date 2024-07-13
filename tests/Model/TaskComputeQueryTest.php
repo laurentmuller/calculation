@@ -15,10 +15,8 @@ namespace App\Tests\Model;
 use App\Entity\Task;
 use App\Model\TaskComputeQuery;
 use App\Tests\Entity\IdTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(TaskComputeQuery::class)]
 class TaskComputeQueryTest extends TestCase
 {
     use IdTrait;

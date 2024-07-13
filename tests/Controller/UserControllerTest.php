@@ -12,19 +12,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\AbstractController;
-use App\Controller\AbstractEntityController;
-use App\Controller\UserController;
 use App\Entity\User;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[CoversClass(AbstractController::class)]
-#[CoversClass(AbstractEntityController::class)]
-#[CoversClass(UserController::class)]
 class UserControllerTest extends EntityControllerTestCase
 {
     public static function getRoutes(): \Iterator

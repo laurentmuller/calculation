@@ -13,10 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\SessionQuery;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(SessionQuery::class)]
 class SessionQueryTest extends TestCase
 {
     /**

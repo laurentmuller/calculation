@@ -13,13 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Response;
 
 use App\Pdf\PdfDocument;
-use App\Response\AbstractStreamedResponse;
 use App\Response\PdfResponse;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PdfResponse::class)]
-#[CoversClass(AbstractStreamedResponse::class)]
 class PdfResponseTest extends TestCase
 {
     public function testGetAttachmentMimeType(): void

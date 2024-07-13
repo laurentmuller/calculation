@@ -15,12 +15,9 @@ namespace App\Tests\Table;
 use App\Entity\CalculationState;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationStateRepository;
-use App\Table\AbstractEntityTable;
-use App\Table\AbstractTable;
 use App\Table\CalculationStateTable;
 use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -29,9 +26,6 @@ use Twig\Environment;
 /**
  * @extends EntityTableTestCase<CalculationState, CalculationStateRepository, CalculationStateTable>
  */
-#[CoversClass(AbstractTable::class)]
-#[CoversClass(AbstractEntityTable::class)]
-#[CoversClass(CalculationStateTable::class)]
 class CalculationStateTableTest extends EntityTableTestCase
 {
     use TranslatorMockTrait;

@@ -16,11 +16,9 @@ use App\Controller\AbstractController;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Report\CategoriesReport;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CategoriesReport::class)]
 class CategoriesReportTest extends TestCase
 {
     /**

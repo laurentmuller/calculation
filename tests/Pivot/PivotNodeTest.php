@@ -13,15 +13,11 @@ declare(strict_types=1);
 namespace App\Tests\Pivot;
 
 use App\Interfaces\SortModeInterface;
-use App\Pivot\AbstractPivotAggregator;
 use App\Pivot\Aggregator\AbstractAggregator;
 use App\Pivot\Aggregator\CountAggregator;
 use App\Pivot\PivotNode;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractPivotAggregator::class)]
-#[CoversClass(PivotNode::class)]
 class PivotNodeTest extends TestCase
 {
     public function testAdd(): void

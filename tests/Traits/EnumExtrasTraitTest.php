@@ -14,12 +14,9 @@ namespace App\Tests\Traits;
 
 use App\Enums\TableView;
 use App\Pdf\Html\HtmlTag;
-use App\Traits\EnumExtrasTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(EnumExtrasTrait::class)]
 class EnumExtrasTraitTest extends TestCase
 {
     public static function getExtraBool(): \Iterator

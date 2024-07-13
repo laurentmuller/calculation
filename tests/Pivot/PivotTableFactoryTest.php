@@ -18,10 +18,8 @@ use App\Pivot\Field\PivotField;
 use App\Pivot\Field\PivotFieldFactory;
 use App\Pivot\PivotTable;
 use App\Pivot\PivotTableFactory;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PivotTableFactory::class)]
 class PivotTableFactoryTest extends TestCase
 {
     /**

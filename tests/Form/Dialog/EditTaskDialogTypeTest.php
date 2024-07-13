@@ -16,11 +16,9 @@ use App\Form\Dialog\EditTaskDialogType;
 use App\Tests\Form\Category\CategoryTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\Form\Task\TaskTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(EditTaskDialogType::class)]
 class EditTaskDialogTypeTest extends TypeTestCase
 {
     use CategoryTrait;

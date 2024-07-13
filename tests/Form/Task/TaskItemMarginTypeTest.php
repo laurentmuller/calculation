@@ -15,12 +15,10 @@ namespace App\Tests\Form\Task;
 use App\Entity\TaskItemMargin;
 use App\Form\Task\TaskItemMarginType;
 use App\Tests\Form\EntityTypeTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * @extends EntityTypeTestCase<TaskItemMargin, TaskItemMarginType>
  */
-#[CoversClass(TaskItemMarginType::class)]
 class TaskItemMarginTypeTest extends EntityTypeTestCase
 {
     protected function getData(): array

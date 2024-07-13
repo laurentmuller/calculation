@@ -14,10 +14,8 @@ namespace App\Tests\Pdf;
 
 use App\Pdf\PdfColumn;
 use fpdf\PdfTextAlignment;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PdfColumn::class)]
 class PdfColumnTest extends TestCase
 {
     public function testAlignment(): void

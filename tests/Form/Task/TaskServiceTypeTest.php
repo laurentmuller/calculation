@@ -16,11 +16,9 @@ use App\Form\Task\TaskServiceType;
 use App\Form\Type\PlainType;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(TaskServiceType::class)]
 class TaskServiceTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

@@ -14,11 +14,9 @@ namespace App\Tests\Controller;
 
 use App\Controller\AbstractController;
 use App\Report\HtmlReport;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(HtmlReport::class)]
 class HtmlReportTest extends TestCase
 {
     /**

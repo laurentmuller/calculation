@@ -12,20 +12,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\AbstractController;
-use App\Controller\AbstractEntityController;
-use App\Controller\TaskController;
 use App\Entity\Task;
 use App\Interfaces\PropertyServiceInterface;
 use App\Service\ApplicationService;
 use App\Tests\EntityTrait\TaskItemTrait;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(AbstractController::class)]
-#[CoversClass(AbstractEntityController::class)]
-#[CoversClass(TaskController::class)]
 class TaskControllerTest extends EntityControllerTestCase
 {
     use TaskItemTrait;

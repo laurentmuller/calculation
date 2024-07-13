@@ -19,11 +19,9 @@ use App\Entity\Task;
 use App\Entity\TaskItem;
 use App\Entity\TaskItemMargin;
 use App\Spreadsheet\TasksDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(TasksDocument::class)]
 class TasksDocumentTest extends TestCase
 {
     /**

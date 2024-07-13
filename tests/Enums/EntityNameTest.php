@@ -25,11 +25,9 @@ use App\Entity\User;
 use App\Enums\EntityName;
 use App\Model\Role;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(EntityName::class)]
 class EntityNameTest extends TestCase
 {
     use TranslatorMockTrait;

@@ -13,11 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Pdf\Html;
 
 use App\Pdf\Html\HtmlListType;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(HtmlListType::class)]
 class HtmlListTypeTest extends TestCase
 {
     public static function getLetterValues(): \Iterator

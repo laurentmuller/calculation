@@ -19,13 +19,11 @@ use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use App\Tests\Form\EntityTypeTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 
 /**
  * @extends EntityTypeTestCase<CalculationGroup, CalculationGroupType>
  */
-#[CoversClass(CalculationGroupType::class)]
 class CalculationGroupTypeTest extends EntityTypeTestCase
 {
     protected function getData(): array

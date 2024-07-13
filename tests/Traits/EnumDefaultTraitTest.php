@@ -14,11 +14,8 @@ namespace App\Tests\Traits;
 
 use App\Enums\Theme;
 use App\Tests\Data\NoDefaultEnum;
-use App\Traits\EnumDefaultTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(EnumDefaultTrait::class)]
 class EnumDefaultTraitTest extends TestCase
 {
     public function testDefault(): void

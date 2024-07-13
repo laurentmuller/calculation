@@ -12,11 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\PolicyController;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(PolicyController::class)]
 class PolicyControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator

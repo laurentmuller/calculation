@@ -14,10 +14,8 @@ namespace App\Tests\Twig;
 
 use App\Service\NonceService;
 use App\Twig\NonceExtension;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 
-#[CoversClass(NonceExtension::class)]
 class NonceExtensionTest extends IntegrationTestCase
 {
     /**

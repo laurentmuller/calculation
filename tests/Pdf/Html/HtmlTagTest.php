@@ -16,11 +16,9 @@ use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Html\HtmlStyle;
 use App\Pdf\Html\HtmlTag;
 use fpdf\PdfFontName;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(HtmlTag::class)]
 class HtmlTagTest extends TestCase
 {
     public static function getMatches(): \Iterator

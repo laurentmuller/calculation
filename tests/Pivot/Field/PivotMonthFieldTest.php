@@ -15,10 +15,8 @@ namespace App\Tests\Pivot\Field;
 use App\Pivot\Field\PivotDateField;
 use App\Pivot\Field\PivotMonthField;
 use App\Utils\FormatUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PivotMonthField::class)]
 class PivotMonthFieldTest extends TestCase
 {
     public function testConstructor(): void

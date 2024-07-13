@@ -14,18 +14,10 @@ namespace App\Tests\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Entity\GlobalMargin;
-use App\Spreadsheet\AbstractArrayDocument;
-use App\Spreadsheet\AbstractDocument;
 use App\Spreadsheet\GlobalMarginsDocument;
-use App\Spreadsheet\SpreadsheetDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(SpreadsheetDocument::class)]
-#[CoversClass(AbstractDocument::class)]
-#[CoversClass(AbstractArrayDocument::class)]
-#[CoversClass(GlobalMarginsDocument::class)]
 class GlobalMarginsDocumentTest extends TestCase
 {
     /**

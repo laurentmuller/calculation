@@ -15,11 +15,9 @@ namespace App\Tests\Service;
 use App\Pdf\PdfLabel;
 use App\Service\PdfLabelService;
 use fpdf\PdfException;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-#[CoversClass(PdfLabelService::class)]
 class PdfLabelServiceTest extends TestCase
 {
     public function testAll(): void

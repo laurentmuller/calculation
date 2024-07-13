@@ -17,13 +17,11 @@ use App\Form\Calculation\CalculationCategoryType;
 use App\Repository\CategoryRepository;
 use App\Tests\Form\EntityTypeTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 
 /**
  * @extends EntityTypeTestCase<CalculationCategory, CalculationCategoryType>
  */
-#[CoversClass(CalculationCategoryType::class)]
 class CalculationCategoryTypeTest extends EntityTypeTestCase
 {
     protected function getData(): array

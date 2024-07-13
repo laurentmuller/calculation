@@ -13,12 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\LogLevel;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
 
-#[CoversClass(LogLevel::class)]
 class LogLevelTest extends TestCase
 {
     public static function getLevelColors(): \Generator

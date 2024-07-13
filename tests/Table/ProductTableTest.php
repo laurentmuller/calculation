@@ -19,23 +19,15 @@ use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use App\Repository\ProductRepository;
-use App\Table\AbstractCategoryItemTable;
-use App\Table\AbstractEntityTable;
-use App\Table\AbstractTable;
 use App\Table\DataQuery;
 use App\Table\ProductTable;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @extends EntityTableTestCase<Product, ProductRepository, ProductTable>
  */
-#[CoversClass(AbstractTable::class)]
-#[CoversClass(AbstractEntityTable::class)]
-#[CoversClass(AbstractCategoryItemTable::class)]
-#[CoversClass(ProductTable::class)]
 class ProductTableTest extends EntityTableTestCase
 {
     private int $categoryId;

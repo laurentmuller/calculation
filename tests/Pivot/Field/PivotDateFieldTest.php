@@ -13,10 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Pivot\Field;
 
 use App\Pivot\Field\PivotDateField;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PivotDateField::class)]
 class PivotDateFieldTest extends TestCase
 {
     public function testConstructor(): void

@@ -12,10 +12,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\ProfileController;
-use PHPUnit\Framework\Attributes\CoversClass;
-
-#[CoversClass(ProfileController::class)]
 class ProfileControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator

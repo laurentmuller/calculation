@@ -16,9 +16,7 @@ use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Repository\UserPropertyRepository;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(UserProperty::class)]
 class UserPropertyTest extends EntityValidatorTestCase
 {
     /**

@@ -12,13 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Calendar;
 
-use App\Calendar\AbstractCalendarItem;
-use App\Calendar\Day;
 use App\Utils\FormatUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(Day::class)]
-#[CoversClass(AbstractCalendarItem::class)]
 class DayTest extends CalendarTestCase
 {
     public function testFormat(): void

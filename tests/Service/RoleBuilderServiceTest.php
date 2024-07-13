@@ -17,10 +17,8 @@ use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Service\RoleBuilderService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(RoleBuilderService::class)]
 class RoleBuilderServiceTest extends TestCase
 {
     private RoleBuilderService $service;

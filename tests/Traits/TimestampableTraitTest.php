@@ -15,11 +15,9 @@ namespace App\Tests\Traits;
 use App\Interfaces\TimestampableInterface;
 use App\Tests\TranslatorMockTrait;
 use App\Traits\TimestampableTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[CoversClass(TimestampableTrait::class)]
 class TimestampableTraitTest extends TestCase implements TimestampableInterface
 {
     use TimestampableTrait;

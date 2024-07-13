@@ -14,10 +14,8 @@ namespace App\Tests\Pivot\Field;
 
 use App\Pivot\Field\PivotWeekdayField;
 use App\Utils\FormatUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PivotWeekdayField::class)]
 class PivotWeekdayFieldTest extends TestCase
 {
     public function testConstructor(): void

@@ -15,11 +15,8 @@ namespace App\Tests\Database;
 use App\Database\AbstractDatabase;
 use App\Database\LogDatabase;
 use App\Entity\Log;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractDatabase::class)]
-#[CoversClass(LogDatabase::class)]
 class LogDatabaseTest extends TestCase
 {
     public function testInsertLog(): void

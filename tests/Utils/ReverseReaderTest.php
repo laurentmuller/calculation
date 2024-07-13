@@ -13,10 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Utils;
 
 use App\Utils\ReverseReader;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(ReverseReader::class)]
 class ReverseReaderTest extends TestCase
 {
     public function testFileExist(): void

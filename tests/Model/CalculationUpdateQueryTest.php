@@ -17,13 +17,11 @@ use App\Model\CalculationUpdateQuery;
 use App\Tests\DateAssertTrait;
 use App\Tests\Entity\IdTrait;
 use App\Utils\DateUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
-#[CoversClass(CalculationUpdateQuery::class)]
 class CalculationUpdateQueryTest extends TestCase
 {
     use DateAssertTrait;

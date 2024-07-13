@@ -12,18 +12,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\AbstractController;
-use App\Controller\AjaxController;
 use App\Enums\StrengthLevel;
 use App\Tests\EntityTrait\TaskItemTrait;
 use App\Utils\StringUtils;
 use Doctrine\ORM\Exception\ORMException;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(AbstractController::class)]
-#[CoversClass(AjaxController::class)]
 class AjaxControllerTest extends ControllerTestCase
 {
     use TaskItemTrait;

@@ -12,13 +12,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Response;
 
-use App\Response\AbstractStreamedResponse;
 use App\Response\CsvResponse;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CsvResponse::class)]
-#[CoversClass(AbstractStreamedResponse::class)]
 class CsvResponseTest extends TestCase
 {
     public function testGetFileExtension(): void

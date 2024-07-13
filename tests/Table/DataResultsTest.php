@@ -14,11 +14,9 @@ namespace App\Tests\Table;
 
 use App\Interfaces\TableInterface;
 use App\Table\DataResults;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(DataResults::class)]
 class DataResultsTest extends TestCase
 {
     public function testAttribute(): void

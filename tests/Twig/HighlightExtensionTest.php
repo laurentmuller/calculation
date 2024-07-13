@@ -13,9 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Twig;
 
 use App\Twig\HighlightExtension;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(HighlightExtension::class)]
 class HighlightExtensionTest extends IntegrationTestCase
 {
     protected function getExtensions(): array

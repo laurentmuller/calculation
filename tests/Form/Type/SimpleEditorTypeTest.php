@@ -14,10 +14,8 @@ namespace App\Tests\Form\Type;
 
 use App\Form\Type\SimpleEditorType;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-#[CoversClass(SimpleEditorType::class)]
 class SimpleEditorTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;

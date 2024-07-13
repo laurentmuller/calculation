@@ -14,10 +14,8 @@ namespace App\Tests\Model;
 
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(Role::class)]
 class RoleTest extends TestCase
 {
     public function testGetName(): void

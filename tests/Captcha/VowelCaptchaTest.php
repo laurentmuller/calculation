@@ -12,16 +12,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Captcha;
 
-use App\Captcha\AbstractAlphaCaptcha;
 use App\Captcha\VowelCaptcha;
 use App\Service\DictionaryService;
-use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * @extends AlphaCaptchaTestCase<VowelCaptcha>
  */
-#[CoversClass(VowelCaptcha::class)]
-#[CoversClass(AbstractAlphaCaptcha::class)]
 class VowelCaptchaTest extends AlphaCaptchaTestCase
 {
     protected function createCaptcha(DictionaryService $service): VowelCaptcha

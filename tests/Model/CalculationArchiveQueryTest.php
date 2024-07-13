@@ -13,17 +13,13 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Entity\CalculationState;
-use App\Model\AbstractSimulateQuery;
 use App\Model\CalculationArchiveQuery;
 use App\Tests\DateAssertTrait;
 use App\Tests\Entity\IdTrait;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(AbstractSimulateQuery::class)]
-#[CoversClass(CalculationArchiveQuery::class)]
 class CalculationArchiveQueryTest extends TestCase
 {
     use DateAssertTrait;

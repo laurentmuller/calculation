@@ -14,11 +14,9 @@ namespace App\Tests\Service;
 
 use App\Enums\Environment;
 use App\Service\EnvironmentService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(EnvironmentService::class)]
 class EnvironmentServiceTest extends TestCase
 {
     public static function getEnvironment(): \Iterator

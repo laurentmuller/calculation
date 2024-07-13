@@ -14,12 +14,10 @@ namespace App\Tests\Attribute;
 
 use App\Attribute\SortableEntity;
 use App\Interfaces\SortModeInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 #[SortableEntity(name: 'descending', order: SortModeInterface::SORT_DESC)]
 #[SortableEntity(name: 'ascending')]
-#[CoversClass(SortableEntity::class)]
 class SortableEntityTest extends TestCase
 {
     public string $ascending = '';

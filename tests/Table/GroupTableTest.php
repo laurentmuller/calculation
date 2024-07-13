@@ -15,11 +15,8 @@ namespace App\Tests\Table;
 use App\Entity\Group;
 use App\Repository\AbstractRepository;
 use App\Repository\GroupRepository;
-use App\Table\AbstractEntityTable;
-use App\Table\AbstractTable;
 use App\Table\GroupTable;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -28,9 +25,6 @@ use Twig\Environment;
 /**
  * @extends EntityTableTestCase<Group, GroupRepository, GroupTable>
  */
-#[CoversClass(AbstractTable::class)]
-#[CoversClass(AbstractEntityTable::class)]
-#[CoversClass(GroupTable::class)]
 class GroupTableTest extends EntityTableTestCase
 {
     protected function createEntities(): array

@@ -12,15 +12,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Response;
 
-use App\Response\AbstractStreamedResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(SpreadsheetResponse::class)]
-#[CoversClass(AbstractStreamedResponse::class)]
 class SpreadsheetResponseTest extends TestCase
 {
     use TranslatorMockTrait;

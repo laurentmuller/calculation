@@ -15,20 +15,16 @@ namespace App\Tests\Form\User;
 use App\Entity\User;
 use App\Form\Extension\TextTypeExtension;
 use App\Form\Type\CaptchaImageType;
-use App\Form\User\AbstractUserCaptchaType;
 use App\Form\User\UserRegistrationType;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-#[CoversClass(AbstractUserCaptchaType::class)]
-#[CoversClass(UserRegistrationType::class)]
 class UserRegistrationTypeTest extends TypeTestCase
 {
     use PasswordHasherExtensionTrait;

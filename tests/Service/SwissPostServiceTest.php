@@ -13,10 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\SwissPostService;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(SwissPostService::class)]
 class SwissPostServiceTest extends TestCase
 {
     private string $databaseName;

@@ -15,20 +15,14 @@ namespace App\Tests\Table;
 use App\Entity\Customer;
 use App\Repository\AbstractRepository;
 use App\Repository\CustomerRepository;
-use App\Table\AbstractEntityTable;
-use App\Table\AbstractTable;
 use App\Table\CustomerTable;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @extends EntityTableTestCase<Customer, CustomerRepository, CustomerTable>
  */
-#[CoversClass(AbstractTable::class)]
-#[CoversClass(AbstractEntityTable::class)]
-#[CoversClass(CustomerTable::class)]
 class CustomerTableTest extends EntityTableTestCase
 {
     protected function createEntities(): array

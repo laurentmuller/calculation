@@ -19,7 +19,6 @@ use App\Service\ApplicationService;
 use App\Service\UrlGeneratorService;
 use App\Service\UserService;
 use Faker\Container\ContainerException;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -29,7 +28,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mime\Address;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[CoversClass(AbstractController::class)]
 class AbstractControllerTest extends KernelTestCase
 {
     public function testGetAddressFrom(): void

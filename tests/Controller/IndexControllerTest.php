@@ -12,12 +12,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\IndexController;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-#[CoversClass(IndexController::class)]
 class IndexControllerTest extends ControllerTestCase
 {
     public static function getRoutes(): \Iterator

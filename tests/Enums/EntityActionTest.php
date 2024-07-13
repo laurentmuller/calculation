@@ -15,11 +15,9 @@ namespace App\Tests\Enums;
 use App\Enums\EntityAction;
 use App\Interfaces\PropertyServiceInterface;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(EntityAction::class)]
 class EntityActionTest extends TestCase
 {
     use TranslatorMockTrait;

@@ -14,18 +14,14 @@ namespace App\Tests\Faker;
 
 use App\Entity\Category;
 use App\Entity\Product;
-use App\Faker\EntityProvider;
 use App\Faker\Factory;
 use App\Faker\ProductProvider;
 use App\Repository\ProductRepository;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(EntityProvider::class)]
-#[CoversClass(ProductProvider::class)]
 class ProductProviderTest extends TestCase
 {
     /**

@@ -14,13 +14,10 @@ namespace App\Tests\Pdf\Traits;
 
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfFont;
-use App\Pdf\Traits\PdfBookmarkTrait;
 use fpdf\PdfDestination;
 use fpdf\PdfException;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(PdfBookmarkTrait::class)]
 class PdfBookmarkTraitTest extends TestCase
 {
     public function testBookmarkEmpty(): void

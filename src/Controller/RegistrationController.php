@@ -110,11 +110,11 @@ class RegistrationController extends AbstractController
 
     private function createEmail(User $user): RegistrationEmail
     {
-        return (new RegistrationEmail())
+        return RegistrationEmail::create()
             ->to($user->getEmailAddress())
             ->from($this->getAddressFrom())
             ->subject($this->trans('registration.subject'))
-            ->update(Importance::MEDIUM, $this->getTranslator());
+            ->updateImportance(Importance::MEDIUM, $this->getTranslator());
     }
 
     private function findUser(Request $request): ?User

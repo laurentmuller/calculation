@@ -42,7 +42,7 @@ class CspReportController extends AbstractController
     {
         $context = $this->getContext();
         if (false === $context) {
-            return new Response('', Response::HTTP_NO_CONTENT);
+            return new Response(status: Response::HTTP_NO_CONTENT);
         }
 
         try {
@@ -55,7 +55,7 @@ class CspReportController extends AbstractController
             $logger->error($message, $context);
         }
 
-        return new Response('', Response::HTTP_NO_CONTENT);
+        return new Response(status: Response::HTTP_NO_CONTENT);
     }
 
     private function explodeOriginalPolicy(string $value): array
@@ -109,13 +109,13 @@ class CspReportController extends AbstractController
      */
     private function sendNotification(string $subject, array $context, MailerInterface $mailer): void
     {
-        $notification = (new CspViolationEmail())
+        $notification = CspViolationEmail::create()
             ->subject($subject)
             ->to($this->getAddressFrom())
             ->from($this->getAddressFrom())
             ->context(['context' => $context])
             ->action($this->trans('index.title'), $this->getActionUrl())
-            ->update(Importance::HIGH, $this->getTranslator());
+            ->updateImportance(Importance::HIGH, $this->getTranslator());
 
         $mailer->send($notification);
     }

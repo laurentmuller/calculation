@@ -158,23 +158,20 @@ readonly class ResetPasswordService
 
     private function createEmail(User $user, ResetPasswordToken $token): ResetPasswordEmail
     {
-        $parameters = [
-            'token' => $token->getToken(),
-            'username' => $user->getUserIdentifier(),
-            'expires_date' => $token->getExpiresAt(),
-            'expires_life_time' => $this->getExpiresLifeTime($token),
-            'throttle_date' => $this->getThrottleAt($token),
-            'throttle_life_time' => $this->getThrottleLifeTime(),
-        ];
-        $email = new ResetPasswordEmail();
-
-        return $email
+        return ResetPasswordEmail::create()
             ->to($user->getEmailAddress())
             ->from($this->getAddressFrom())
             ->subject($this->trans('resetting.request.title'))
-            ->update(Importance::HIGH, $this->translator)
+            ->updateImportance(Importance::HIGH, $this->translator)
             ->action($this->trans('resetting.request.submit'), $this->getResetAction($token))
-            ->context(\array_merge($email->getContext(), $parameters));
+            ->context([
+                'token' => $token->getToken(),
+                'username' => $user->getUserIdentifier(),
+                'expires_date' => $token->getExpiresAt(),
+                'expires_life_time' => $this->getExpiresLifeTime($token),
+                'throttle_date' => $this->getThrottleAt($token),
+                'throttle_life_time' => $this->getThrottleLifeTime(),
+            ]);
     }
 
     private function getAddressFrom(): Address

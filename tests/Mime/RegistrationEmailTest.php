@@ -19,8 +19,8 @@ class RegistrationEmailTest extends TestCase
 {
     public function testConstructor(): void
     {
-        $mail = new RegistrationEmail();
-        $actual = $mail->getHtmlTemplate();
+        $actual = RegistrationEmail::create()
+            ->getHtmlTemplate();
         $expected = 'notification/registration.html.twig';
         self::assertSame($expected, $actual);
     }

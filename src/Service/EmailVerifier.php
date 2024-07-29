@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Model\VerifyEmailSignatureComponents;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
@@ -38,8 +37,6 @@ readonly class EmailVerifier
 
     /**
      * Handle email confirmation.
-     *
-     * @throws VerifyEmailExceptionInterface
      */
     public function handleEmail(Request $request, User $user): void
     {
@@ -56,12 +53,12 @@ readonly class EmailVerifier
     public function sendEmail(string $routeName, User $user, RegistrationEmail $email): void
     {
         $signature = $this->generateSignature($routeName, $user);
-        $email->action($this->trans('registration.action'), $signature->getSignedUrl());
-        $context = $email->getContext();
-        $context['username'] = $user->getUserIdentifier();
-        $context['expires_date'] = $signature->getExpiresAt();
-        $context['expires_life_time'] = $this->getExpiresLifeTime($signature);
-        $email->context($context);
+        $email->context([
+            'username' => $user->getUserIdentifier(),
+            'expires_date' => $signature->getExpiresAt(),
+            'expires_life_time' => $this->getExpiresLifeTime($signature),
+        ])->action($this->trans('registration.action'), $signature->getSignedUrl());
+
         $this->mailer->send($email);
     }
 
@@ -88,9 +85,6 @@ readonly class EmailVerifier
         return $this->translator->trans($id, $parameters, $domain);
     }
 
-    /**
-     * @throws VerifyEmailExceptionInterface
-     */
     private function validateEmail(Request $request, User $user): void
     {
         $id = (string) $user->getId();

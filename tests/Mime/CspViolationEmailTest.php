@@ -19,8 +19,8 @@ class CspViolationEmailTest extends TestCase
 {
     public function testConstructor(): void
     {
-        $mail = new CspViolationEmail();
-        $actual = $mail->getHtmlTemplate();
+        $actual = CspViolationEmail::create()
+            ->getHtmlTemplate();
         $expected = 'notification/csp_violation.html.twig';
         self::assertSame($expected, $actual);
     }

@@ -59,5 +59,8 @@
     ],
     "report-uri": [
         "report"
+    ],
+    "report-to": [
+        "report"
     ]
 }

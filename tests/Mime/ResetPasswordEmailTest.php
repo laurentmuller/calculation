@@ -19,8 +19,8 @@ class ResetPasswordEmailTest extends TestCase
 {
     public function testConstructor(): void
     {
-        $mail = new ResetPasswordEmail();
-        $actual = $mail->getHtmlTemplate();
+        $actual = ResetPasswordEmail::create()
+            ->getHtmlTemplate();
         $expected = 'notification/reset_password.html.twig';
         self::assertSame($expected, $actual);
     }

@@ -22,6 +22,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Extends the NotificationEmail class with the translated subject and custom footer.
+ *
+ * @psalm-consistent-constructor
  */
 class NotificationEmail extends BaseNotificationEmail
 {
@@ -65,6 +67,11 @@ class NotificationEmail extends BaseNotificationEmail
         return $this;
     }
 
+    public static function create(?Headers $headers = null, ?AbstractPart $body = null): static
+    {
+        return new static($headers, $body);
+    }
+
     public function getContext(): array
     {
         $context = parent::getContext();
@@ -93,9 +100,9 @@ class NotificationEmail extends BaseNotificationEmail
     }
 
     /**
-     * Update the importance and footer text.
+     * Set translated importance.
      */
-    public function update(Importance $importance, TranslatorInterface $translator): static
+    public function updateImportance(Importance $importance, TranslatorInterface $translator): static
     {
         $this->importance = $translator->trans($importance->getReadableFull());
 

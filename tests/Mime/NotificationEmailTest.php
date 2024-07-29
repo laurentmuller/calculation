@@ -25,7 +25,7 @@ class NotificationEmailTest extends TestCase
 
     public function testAttachFromUploadedFile(): void
     {
-        $mail = new CspViolationEmail();
+        $mail = CspViolationEmail::create();
         $mail->attachFromUploadedFile(null);
         self::assertCount(0, $mail->getAttachments());
 
@@ -40,7 +40,7 @@ class NotificationEmailTest extends TestCase
 
     public function testAttachFromUploadedFiles(): void
     {
-        $mail = new CspViolationEmail();
+        $mail = CspViolationEmail::create();
         self::assertCount(0, $mail->getAttachments());
 
         $file = new UploadedFile(
@@ -54,20 +54,20 @@ class NotificationEmailTest extends TestCase
 
     public function testConstructor(): void
     {
-        $mail = new NotificationEmail();
-        $actual = $mail->getHtmlTemplate();
+        $actual = NotificationEmail::create()
+            ->getHtmlTemplate();
         $expected = 'notification/notification.html.twig';
         self::assertSame($expected, $actual);
     }
 
     public function testPreparedHeaders(): void
     {
-        $mail = new NotificationEmail();
+        $mail = NotificationEmail::create();
         $translator = $this->createMockTranslator();
         $mail->subject('subject')
             ->from('fake@fake.com')
             ->to('fake@fake.com');
-        $mail->update(Importance::MEDIUM, $translator);
+        $mail->updateImportance(Importance::MEDIUM, $translator);
         $headers = $mail->getPreparedHeaders();
 
         $actual = $headers->getHeaderBody('Subject');
@@ -77,9 +77,9 @@ class NotificationEmailTest extends TestCase
 
     public function testUpdate(): void
     {
-        $mail = new NotificationEmail();
+        $mail = NotificationEmail::create();
         $translator = $this->createMockTranslator();
-        $mail->update(Importance::MEDIUM, $translator);
+        $mail->updateImportance(Importance::MEDIUM, $translator);
         $context = $mail->getContext();
 
         self::assertArrayHasKey('importance', $context);

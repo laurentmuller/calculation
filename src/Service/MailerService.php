@@ -94,9 +94,9 @@ readonly class MailerService
 
     private function createNotification(Importance $importance): NotificationEmail
     {
-        return (new NotificationEmail())
+        return NotificationEmail::create()
             ->action($this->trans('index.title'), $this->getHomeUrl())
-            ->update($importance, $this->translator);
+            ->updateImportance($importance, $this->translator);
     }
 
     private function getHomeUrl(): string

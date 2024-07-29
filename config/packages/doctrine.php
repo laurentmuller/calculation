@@ -37,8 +37,6 @@ return static function (DoctrineConfig $config): void {
 
     $manager->mapping('App')
         ->alias('App')
-        ->isBundle(false)
-        ->type('attribute')
         ->prefix('App\Entity')
         ->dir('%kernel.project_dir%/src/Entity');
 };

@@ -50,7 +50,7 @@
         },
         {
             "name": "font-awesome",
-            "version": "6.5.2",
+            "version": "6.6.0",
             "source": "cdnjs",
             "files": [
                 "css/all.css",
@@ -66,7 +66,7 @@
         },
         {
             "name": "jquery-validate",
-            "version": "1.20.0",
+            "version": "1.21.0",
             "source": "cdnjs",
             "remark": "use jquery-validation and jquery-validate target for jsdelivr.",
             "files": [
@@ -77,7 +77,7 @@
         {
             "name": "jquery-validate",
             "display": "jquery-validate:localization",
-            "version": "1.20.0",
+            "version": "1.21.0",
             "source": "cdnjs",
             "prefix": "localization/",
             "files": [
@@ -86,7 +86,7 @@
         },
         {
             "name": "highcharts",
-            "version": "11.4.5",
+            "version": "11.4.6",
             "source": "cdnjs",
             "files": [
                 "highcharts.js"
@@ -141,7 +141,7 @@
         },
         {
             "name": "bootstrap-table",
-            "version": "1.23.0",
+            "version": "1.23.1",
             "source": "cdnjs",
             "files": [
                 "bootstrap-table.js",
@@ -151,7 +151,7 @@
         {
             "name": "bootstrap-table",
             "display": "bootstrap-table:defer-url",
-            "version": "1.23.0",
+            "version": "1.23.1",
             "source": "cdnjs",
             "prefix": "extensions/defer-url/",
             "files": [
@@ -161,7 +161,7 @@
         {
             "name": "bootstrap-table",
             "display": "bootstrap-table:custom-view",
-            "version": "1.23.0",
+            "version": "1.23.1",
             "source": "cdnjs",
             "prefix": "extensions/custom-view/",
             "files": [

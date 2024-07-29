@@ -20,7 +20,7 @@ trait GroupByTrait
     /**
      * Groups an array by the given key.
      *
-     * Any additional keys will be used for grouping the next set of subarrays.
+     * Any additional keys will be used for grouping the next set of sub-arrays.
      *
      * @psalm-template T of array|object
      *

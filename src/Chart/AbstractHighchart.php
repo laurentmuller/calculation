@@ -104,10 +104,10 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     /**
      * Render the given template and create an expression from the content.
      */
-    protected function createTemplateExpression(Environment $twig, string $template, array $context = []): ?Expr
+    protected function createTemplateExpression(string $template, array $context = []): ?Expr
     {
         try {
-            $content = $twig->render($template, $context);
+            $content = $this->twig->render($template, $context);
             $content = (string) \preg_replace(self::COMMENT_REGEX, '', $content);
 
             return self::createExpression($content);

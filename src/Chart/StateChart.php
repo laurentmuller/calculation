@@ -69,7 +69,7 @@ class StateChart extends AbstractHighchart
         $this->tooltip->merge([
             'shared' => true,
             'useHTML' => true,
-            'formatter' => $this->createTemplateExpression($this->twig, self::TEMPLATE_NAME),
+            'formatter' => $this->createTemplateExpression(self::TEMPLATE_NAME),
         ]);
 
         return $this;

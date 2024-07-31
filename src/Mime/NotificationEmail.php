@@ -86,14 +86,14 @@ class NotificationEmail extends BaseNotificationEmail
     {
         $subject = $this->getSubject();
         $headers = parent::getPreparedHeaders();
-        if (null !== $subject && null !== $this->importance) {
-            $header = $headers->get('Subject');
+        if (null === $subject || null === $this->importance) {
+            return $headers;
+        }
+
+        $header = $headers->get('Subject');
+        if ($header instanceof HeaderInterface) {
             $content = \sprintf('%s - %s', $subject, $this->importance);
-            if ($header instanceof HeaderInterface) {
-                $header->setBody($content);
-            } else {
-                $headers->addTextHeader('Subject', $content);
-            }
+            $header->setBody($content);
         }
 
         return $headers;

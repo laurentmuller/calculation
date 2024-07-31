@@ -50,10 +50,6 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
 
         /** @psalm-var string|int $value */
         foreach ($request->query as $key => $value) {
-            if (!$this->accessor->isWritable($query, $key)) {
-                continue;
-            }
-
             // special case for view
             if (TableInterface::PARAM_VIEW === $key) {
                 $value = TableView::tryFrom((string) $value) ?? $query->view;

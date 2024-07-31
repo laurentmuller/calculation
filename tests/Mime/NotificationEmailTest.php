@@ -75,6 +75,18 @@ class NotificationEmailTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testPreparedHeadersNoSubject(): void
+    {
+        $mail = NotificationEmail::create();
+        $mail->from('fake@fake.com')
+            ->to('fake@fake.com');
+        $headers = $mail->getPreparedHeaders();
+
+        $actual = $headers->getHeaderBody('Subject');
+        $expected = '[LOW] ';
+        self::assertSame($expected, $actual);
+    }
+
     public function testUpdate(): void
     {
         $mail = NotificationEmail::create();

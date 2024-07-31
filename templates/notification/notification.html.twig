@@ -1,4 +1,5 @@
 {% extends '@email/default/notification/body.html.twig' %}
+{% set footer_text = 'notification.footer'|trans({'%app_name_version%': app_name_version}) %}
 {# style #}
 {% block style %}
     {{ parent() }}
@@ -22,14 +23,10 @@
         </row>
     </container>
 {% endblock %}
-{# footer #}
-{% block footer_content %}
-    <p><small class="footer-text">{{ 'notification.footer'|trans({'%app_name_version%': app_name_version}) }}</small></p>
-{% endblock %}
 {# exception #}
 {% block exception %}
-{% if exception %}
-    <spacer size="16"></spacer>
-    <p><em>{{ 'notification.exception'|trans }}</em></p>
-{% endif %}
+    {% if exception %}
+        <spacer size="16"></spacer>
+        <p><em>{{ 'notification.exception'|trans }}</em></p>
+    {% endif %}
 {% endblock %}

@@ -163,17 +163,15 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
 
     /**
      * Returns if one or more users have reset password requested.
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function isResettableUsers(): bool
     {
-        try {
-            return 0 !== $this->createResettableQueryBuilder()
-                ->select('COUNT(e.id)')
-                ->getQuery()
-                ->getSingleScalarResult();
-        } catch (\Doctrine\ORM\Exception\ORMException) {
-            return false;
-        }
+        return 0 !== $this->createResettableQueryBuilder()
+            ->select('COUNT(e.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**

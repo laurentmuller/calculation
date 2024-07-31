@@ -117,6 +117,23 @@ class ProductRepositoryTest extends KernelServiceTestCase
         self::assertSame('e.description ASC', (string) $part);
     }
 
+    public function testGetSearchField(): void
+    {
+        $actual = $this->repository->getSearchFields('group.id');
+        self::assertSame('g.id', $actual);
+        $actual = $this->repository->getSearchFields('groupCode');
+        self::assertSame('g.code', $actual);
+        $actual = $this->repository->getSearchFields('group.code');
+        self::assertSame('g.code', $actual);
+
+        $actual = $this->repository->getSearchFields('category.id');
+        self::assertSame('c.id', $actual);
+        $actual = $this->repository->getSearchFields('categoryCode');
+        self::assertSame('c.code', $actual);
+        $actual = $this->repository->getSearchFields('category.code');
+        self::assertSame('c.code', $actual);
+    }
+
     public function testGetSortFields(): void
     {
         $actual = $this->repository->getSortField('group.id');

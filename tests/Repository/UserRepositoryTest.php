@@ -32,9 +32,6 @@ class UserRepositoryTest extends KernelServiceTestCase
         $this->repository = $this->getService(UserRepository::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testCreateResetPasswordRequest(): void
     {
         $user = $this->getUser();
@@ -47,9 +44,6 @@ class UserRepositoryTest extends KernelServiceTestCase
         self::assertInstanceOf(ResetPasswordRequestInterface::class, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testFindByEmail(): void
     {
         $actual = $this->repository->findByEmail('email@email.com');
@@ -121,6 +115,9 @@ class UserRepositoryTest extends KernelServiceTestCase
         self::assertInstanceOf(QueryBuilder::class, $actual);
     }
 
+    /**
+     * @throws ORMException
+     */
     public function testIsResettableUsers(): void
     {
         $actual = $this->repository->isResettableUsers();

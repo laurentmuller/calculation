@@ -206,16 +206,15 @@ class TaskController extends AbstractEntityController
      */
     private function getTasks(TaskService $service, ?Task $task): array
     {
-        if (!$task instanceof Task || $task->isEmpty()) {
-            $tasks = $service->getSortedTasks();
-            if ([] === $tasks) {
-                return [[], null];
-            }
-            $task = $tasks[0];
-        } else {
-            $tasks = [$task];
+        if ($task instanceof Task && !$task->isEmpty()) {
+            return [[$task], $task];
         }
 
-        return [$tasks, $task];
+        $tasks = $service->getSortedTasks();
+        if ([] === $tasks) {
+            return [[], null];
+        }
+
+        return [$tasks, $tasks[0]];
     }
 }

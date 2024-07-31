@@ -49,35 +49,45 @@ class LogsDocumentTest extends TestCase
         $controller = $this->createMock(AbstractController::class);
 
         $log1 = Log::instance(1);
-        $logLevel1 = new LogLevel($log1->getLevel());
-        $logChannel1 = new LogChannel($log1->getChannel());
+        $level1 = new LogLevel($log1->getLevel());
+        $channel1 = new LogChannel($log1->getChannel());
 
         $log2 = Log::instance(2);
         $log2->setCreatedAt(DateUtils::add($log1->getCreatedAt(), 'P7D'))
             ->setLevel(PsrLevel::ALERT)
             ->setChannel('doctrine');
-        $logLevel2 = new LogLevel($log2->getLevel());
-        $logChannel2 = new LogChannel($log2->getChannel());
+        $level2 = new LogLevel($log2->getLevel());
+        $channel2 = new LogChannel($log2->getChannel());
 
         $log3 = Log::instance(2);
         $log3->setCreatedAt(DateUtils::add($log2->getCreatedAt(), 'P7D'))
             ->setLevel(PsrLevel::ALERT)
             ->setChannel('doctrine');
 
+        $log4 = Log::instance(4);
+        $log4->setCreatedAt(DateUtils::add($log1->getCreatedAt(), 'P7D'))
+            ->setLevel(PsrLevel::WARNING)
+            ->setChannel('doctrine');
+
+        $log5 = Log::instance(5);
+        $log5->setCreatedAt(DateUtils::add($log1->getCreatedAt(), 'P7D'))
+            ->setLevel(PsrLevel::DEBUG)
+            ->setChannel('doctrine');
+
         $logFile = $this->createMock(LogFile::class);
         $logFile->method('isEmpty')
             ->willReturn(false);
         $logFile->method('getLogs')
-            ->willReturn([$log1, $log2, $log3]);
+            ->willReturn([$log1, $log2, $log3, $log4, $log5]);
         $logFile->method('getLevels')
             ->willReturn([
-                $log1->getLevel() => $logLevel1,
-                $log2->getLevel() => $logLevel2,
+                $log1->getLevel() => $level1,
+                $log2->getLevel() => $level2,
             ]);
         $logFile->method('getChannels')
             ->willReturn([
-                $log1->getChannel() => $logChannel1,
-                $log2->getChannel() => $logChannel2,
+                $log1->getChannel() => $channel1,
+                $log2->getChannel() => $channel2,
             ]);
 
         $report = new LogsDocument($controller, $logFile);

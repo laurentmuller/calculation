@@ -107,9 +107,21 @@ class CategoryRepositoryTest extends KernelServiceTestCase
         }
     }
 
-    public function testGetQueryBuilderByGroup(): void
+    public function testGetQueryBuilderByGroupFilterNone(): void
     {
         $actual = $this->repository->getQueryBuilderByGroup();
+        self::assertInstanceOf(QueryBuilder::class, $actual);
+    }
+
+    public function testGetQueryBuilderByGroupFilterProduct(): void
+    {
+        $actual = $this->repository->getQueryBuilderByGroup(CategoryRepository::FILTER_PRODUCTS);
+        self::assertInstanceOf(QueryBuilder::class, $actual);
+    }
+
+    public function testGetQueryBuilderByGroupFilterTask(): void
+    {
+        $actual = $this->repository->getQueryBuilderByGroup(CategoryRepository::FILTER_TASKS);
         self::assertInstanceOf(QueryBuilder::class, $actual);
     }
 

@@ -136,18 +136,14 @@ class PdfTable
     /**
      * Adds the given cell to the list of cells.
      *
-     * Do nothing if the cell is null.
-     *
      * @throws PdfException if no current row is started
      */
-    public function addCell(?PdfCell $cell): static
+    public function addCell(PdfCell $cell): static
     {
         if (!$this->isRowStarted()) {
             throw PdfException::instance('No row started.');
         }
-        if ($cell instanceof PdfCell) {
-            $this->cells[] = $cell;
-        }
+        $this->cells[] = $cell;
 
         return $this;
     }

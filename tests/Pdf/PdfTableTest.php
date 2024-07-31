@@ -33,14 +33,6 @@ use PHPUnit\Framework\TestCase;
 
 class PdfTableTest extends TestCase
 {
-    public function testAdd(): void
-    {
-        $table = $this->createTable()
-            ->startRow()
-            ->add();
-        self::assertSame(0, $table->getColumnsCount());
-    }
-
     public function testAddCellAmount(): void
     {
         $table = $this->createTable()
@@ -54,6 +46,14 @@ class PdfTableTest extends TestCase
         $table = $this->createTable()
             ->startRow()
             ->addCellInt(23);
+        self::assertSame(0, $table->getColumnsCount());
+    }
+
+    public function testAddCellNone(): void
+    {
+        $table = $this->createTable()
+            ->startRow()
+            ->add();
         self::assertSame(0, $table->getColumnsCount());
     }
 

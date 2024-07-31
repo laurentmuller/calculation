@@ -122,6 +122,8 @@ class PdfTable
      * @param string|int|null   $link      the cell link. A URL or identifier returned by AddLink().
      *
      * @psalm-param positive-int $cols
+     *
+     * @throws PdfException if no current row is started
      */
     public function add(
         ?string $text = null,
@@ -157,6 +159,8 @@ class PdfTable
      * @param string|int|null       $link   the cell link. A URL or identifier returned by AddLink().
      *
      * @psalm-param positive-int $cols
+     *
+     * @throws PdfException if no current row is started
      */
     public function addCellAmount(
         float|int|string|null $number,
@@ -179,6 +183,8 @@ class PdfTable
      * @param string|int|null                        $link   the cell link. A URL or identifier returned by AddLink().
      *
      * @psalm-param positive-int $cols
+     *
+     * @throws PdfException if no current row is started
      */
     public function addCellInt(
         \Countable|array|int|float|string|null $number,
@@ -201,6 +207,8 @@ class PdfTable
      * @param string|int|null       $link   the cell link. A URL or identifier returned by AddLink().
      *
      * @psalm-param positive-int $cols
+     *
+     * @throws PdfException if no current row is started
      */
     public function addCellPercent(
         float|int|string|null $number,
@@ -217,15 +225,11 @@ class PdfTable
     /**
      * Adds the given column to the list of columns.
      *
-     * Do nothing if the column is null.
-     *
      * @see PdfTable::addColumns()
      */
-    public function addColumn(?PdfColumn $column): static
+    public function addColumn(PdfColumn $column): static
     {
-        if ($column instanceof PdfColumn) {
-            $this->columns[] = $column;
-        }
+        $this->columns[] = $column;
 
         return $this;
     }

@@ -62,8 +62,11 @@ class ItemsTable extends ReportGroupTable
         $groups = $calculation->getGroups();
         $duplicateItems = $calculation->getDuplicateItems();
 
-        $defaultStyle = PdfStyle::getCellStyle()->setIndent(self::INDENT)->setBorder(PdfBorder::leftRight());
-        $errorStyle = (clone $defaultStyle)->setTextColor(PdfTextColor::red());
+        $defaultStyle = PdfStyle::getCellStyle()
+            ->setIndent(self::INDENT)
+            ->setBorder(PdfBorder::leftRight());
+        $errorStyle = (clone $defaultStyle)
+            ->setTextColor(PdfTextColor::red());
         $listener = $this->createListener();
 
         $this->createColumns();

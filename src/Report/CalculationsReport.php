@@ -15,8 +15,8 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
+use App\Report\Table\ReportGroupTable;
 use App\Traits\MathTrait;
 use fpdf\PdfOrientation;
 use fpdf\PdfTextAlignment;
@@ -71,9 +71,9 @@ class CalculationsReport extends AbstractArrayReport
         return true;
     }
 
-    private function createTable(): PdfGroupTable
+    private function createTable(): ReportGroupTable
     {
-        return PdfGroupTable::instance($this)
+        return ReportGroupTable::fromReport($this)
             ->addColumns(
                 $this->centerColumn('calculation.fields.id', 17, true),
                 $this->centerColumn('calculation.fields.date', 20, true),
@@ -100,7 +100,7 @@ class CalculationsReport extends AbstractArrayReport
     /**
      * @psalm-param Calculation[] $entities
      */
-    private function outputEntities(PdfGroupTable $table, array $entities): void
+    private function outputEntities(ReportGroupTable $table, array $entities): void
     {
         $editable = null;
         $stateCode = null;
@@ -119,7 +119,7 @@ class CalculationsReport extends AbstractArrayReport
         }
     }
 
-    private function outputEntity(PdfGroupTable $table, Calculation $entity): void
+    private function outputEntity(ReportGroupTable $table, Calculation $entity): void
     {
         $items = $entity->getItemsTotal();
         $overall = $entity->getOverallTotal();
@@ -137,7 +137,7 @@ class CalculationsReport extends AbstractArrayReport
         $this->overall += $overall;
     }
 
-    private function outputTotal(PdfGroupTable $table, array $entities): void
+    private function outputTotal(ReportGroupTable $table, array $entities): void
     {
         $style = null;
         $margins = $this->safeDivide($this->overall, $this->items);

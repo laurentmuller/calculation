@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
+use App\Report\Table\ReportGroupTable;
 
 /**
  * Report for the list of products.
@@ -68,9 +68,9 @@ class ProductsReport extends AbstractArrayReport
     /**
      * Creates the table.
      */
-    private function createTable(): PdfGroupTable
+    private function createTable(): ReportGroupTable
     {
-        return PdfGroupTable::instance($this)
+        return ReportGroupTable::fromReport($this)
             ->addColumns(
                 $this->leftColumn('product.fields.description', 90),
                 $this->rightColumn('product.fields.price', 20, true),

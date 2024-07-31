@@ -16,7 +16,7 @@ use App\Controller\AbstractController;
 use App\Entity\Calculation;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTable;
+use App\Report\Table\ReportTable;
 use App\Traits\MathTrait;
 use fpdf\PdfOrientation;
 use fpdf\PdfTextAlignment;
@@ -59,9 +59,9 @@ class CalculationsBelowReport extends AbstractArrayReport
         return true;
     }
 
-    private function createTable(): PdfTable
+    private function createTable(): ReportTable
     {
-        return PdfTable::instance($this)
+        return ReportTable::fromReport($this)
             ->addColumns(
                 $this->centerColumn('calculation.fields.id', 17, true),
                 $this->centerColumn('calculation.fields.date', 20, true),
@@ -77,7 +77,7 @@ class CalculationsBelowReport extends AbstractArrayReport
     /**
      * @psalm-param Calculation[] $entities
      */
-    private function outputEntities(PdfTable $table, array $entities): void
+    private function outputEntities(ReportTable $table, array $entities): void
     {
         $this->items = $this->overall = 0.0;
         $style = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::red());
@@ -86,7 +86,7 @@ class CalculationsBelowReport extends AbstractArrayReport
         }
     }
 
-    private function outputEntity(PdfTable $table, Calculation $entity, PdfStyle $style): void
+    private function outputEntity(ReportTable $table, Calculation $entity, PdfStyle $style): void
     {
         $items = $entity->getItemsTotal();
         $overall = $entity->getOverallTotal();
@@ -105,7 +105,7 @@ class CalculationsBelowReport extends AbstractArrayReport
         $this->overall += $overall;
     }
 
-    private function outputTotal(PdfTable $table, array $entities): void
+    private function outputTotal(ReportTable $table, array $entities): void
     {
         $margins = $this->safeDivide($this->overall, $this->items);
         $text = $this->translateCount($entities, 'counters.calculations');

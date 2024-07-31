@@ -14,10 +14,22 @@ namespace App\Tests\Pdf;
 
 use App\Pdf\PdfCell;
 use App\Pdf\PdfStyle;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class PdfCellTest extends TestCase
 {
+    public static function getHasLinks(): \Generator
+    {
+        yield [null, false];
+        yield ['', false];
+        yield [0, false];
+        yield [-1, false];
+
+        yield ['link', true];
+        yield [1, true];
+    }
+
     public function testClone(): void
     {
         $style = PdfStyle::getCellStyle();
@@ -36,6 +48,13 @@ class PdfCellTest extends TestCase
         self::assertNull($cell->getStyle());
         self::assertNull($cell->getAlignment());
         self::assertNull($cell->getLink());
-        self::assertFalse($cell->isLink());
+        self::assertFalse($cell->hasLink());
+    }
+
+    #[DataProvider('getHasLinks')]
+    public function testHasLink(string|int|null $link, bool $expected): void
+    {
+        $cell = new PdfCell(link: $link);
+        self::assertSame($expected, $cell->hasLink());
     }
 }

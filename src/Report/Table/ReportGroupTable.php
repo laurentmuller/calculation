@@ -14,16 +14,18 @@ namespace App\Report\Table;
 
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfGroupTable;
+use App\Pdf\Traits\PdfCellFormatTrait;
 use App\Pdf\Traits\PdfCellTranslatorTrait;
 use App\Pdf\Traits\PdfColumnTranslatorTrait;
 use App\Report\AbstractReport;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Extends the PdfGroupTable with translatable cell.
+ * Extends the PdfGroupTable with format and translation capabilities.
  */
 class ReportGroupTable extends PdfGroupTable
 {
+    use PdfCellFormatTrait;
     use PdfCellTranslatorTrait;
     use PdfColumnTranslatorTrait;
 

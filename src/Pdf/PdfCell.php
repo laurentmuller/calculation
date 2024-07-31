@@ -24,7 +24,8 @@ class PdfCell
      * @param int               $cols      the cell columns span
      * @param ?PdfStyle         $style     the cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
-     * @param string|int|null   $link      the cell link. A URL or identifier returned by AddLink().
+     * @param string|int|null   $link      the cell link.
+     *                                     A URL or identifier returned by the <code>addLink()</code> function.
      *
      * @psalm-param positive-int $cols
      */
@@ -89,7 +90,7 @@ class PdfCell
     /**
      * Return a value indicating if this link is valid.
      */
-    public function isLink(): bool
+    public function hasLink(): bool
     {
         return PdfDocument::isLink($this->link);
     }

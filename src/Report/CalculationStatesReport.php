@@ -17,7 +17,7 @@ use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Events\PdfCellBackgroundEvent;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTable;
+use App\Report\Table\ReportTable;
 use fpdf\PdfRectangleStyle;
 
 /**
@@ -73,9 +73,9 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
         return true;
     }
 
-    private function createTable(): PdfTable
+    private function createTable(): ReportTable
     {
-        return PdfTable::instance($this)
+        return ReportTable::fromReport($this)
             ->setBackgroundListener($this)
             ->addColumns(
                 $this->leftColumn('calculationstate.fields.code', 20),

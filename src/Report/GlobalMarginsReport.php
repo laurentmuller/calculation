@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Pdf\PdfTable;
+use App\Report\Table\ReportTable;
 
 /**
  * Report for the list of global margins.
@@ -26,14 +26,7 @@ class GlobalMarginsReport extends AbstractArrayReport
         $this->setTitleTrans('globalmargin.list.title');
         $this->addPage();
 
-        $table = PdfTable::instance($this)
-            ->addColumns(
-                $this->rightColumn('globalmargin.fields.minimum', 50),
-                $this->rightColumn('globalmargin.fields.maximum', 50),
-                $this->rightColumn('globalmargin.fields.delta', 50),
-                $this->rightColumn('globalmargin.fields.margin', 50)
-            )->outputHeaders();
-
+        $table = $this->createTable();
         foreach ($entities as $entity) {
             $table->startRow()
                 ->addCellAmount($entity->getMinimum())
@@ -44,5 +37,16 @@ class GlobalMarginsReport extends AbstractArrayReport
         }
 
         return $this->renderCount($table, $entities, 'counters.margins');
+    }
+
+    private function createTable(): ReportTable
+    {
+        return ReportTable::fromReport($this)
+            ->addColumns(
+                $this->rightColumn('globalmargin.fields.minimum', 50),
+                $this->rightColumn('globalmargin.fields.maximum', 50),
+                $this->rightColumn('globalmargin.fields.delta', 50),
+                $this->rightColumn('globalmargin.fields.margin', 50)
+            )->outputHeaders();
     }
 }

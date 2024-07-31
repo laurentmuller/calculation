@@ -15,6 +15,7 @@ namespace App\Pdf;
 use App\Traits\ImageSizeTrait;
 use App\Traits\MathTrait;
 use App\Utils\FileUtils;
+use fpdf\PdfException;
 use fpdf\PdfRectangle;
 use fpdf\PdfTextAlignment;
 
@@ -47,13 +48,15 @@ class PdfImageCell extends PdfCell
     private int $width;
 
     /**
-     * @param string            $path      the full image path
+     * @param string            $path      the image path
      * @param int               $cols      the cell columns span
      * @param ?PdfStyle         $style     the cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
      * @param string|int|null   $link      the cell link. A URL or identifier returned by AddLink().
      *
      * @psalm-param positive-int $cols
+     *
+     * @throws PdfException if the given image path does not exist
      */
     public function __construct(
         private readonly string $path,
@@ -63,7 +66,7 @@ class PdfImageCell extends PdfCell
         string|int|null $link = null
     ) {
         if (!FileUtils::exists($path)) {
-            throw new \InvalidArgumentException("The image '$path' does not exist.");
+            throw PdfException::instance("The image '$path' does not exist.");
         }
 
         parent::__construct(cols: $cols, style: $style, alignment: $alignment, link: $link);

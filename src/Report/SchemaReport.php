@@ -225,7 +225,7 @@ class SchemaReport extends AbstractReport
     private function outputTables(array $tables): void
     {
         $this->outputTitle('schema.index.title');
-        $instance = PdfTable::instance($this)
+        $instance = ReportTable::fromReport($this)
             ->addColumns(
                 $this->leftColumn('schema.fields.name', 100),
                 $this->rightColumn('schema.fields.columns', 19, true),

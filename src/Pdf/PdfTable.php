@@ -21,13 +21,10 @@ use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfDrawHeadersInterface;
 use App\Traits\MathTrait;
-use App\Utils\FormatUtils;
-use App\Utils\StringUtils;
 use fpdf\PdfBorder;
 use fpdf\PdfException;
 use fpdf\PdfRectangle;
 use fpdf\PdfRectangleStyle;
-use fpdf\PdfSize;
 use fpdf\PdfTextAlignment;
 
 /**
@@ -50,7 +47,7 @@ class PdfTable
     private ?PdfDrawCellBackgroundInterface $backgroundListener = null;
 
     /**
-     * The border style.
+     * The default cell border.
      */
     private PdfBorder $border;
 
@@ -67,6 +64,11 @@ class PdfTable
     private array $cells = [];
 
     /**
+     * The default cell style.
+     */
+    private ?PdfStyle $cellStyle = null;
+
+    /**
      * The columns.
      *
      * @var PdfColumn[]
@@ -79,7 +81,7 @@ class PdfTable
     private ?PdfDrawHeadersInterface $headersListener = null;
 
     /**
-     * The header style.
+     * The default header style.
      */
     private ?PdfStyle $headerStyle = null;
 
@@ -117,13 +119,14 @@ class PdfTable
      *
      * @param ?string           $text      the text of the cell
      * @param int               $cols      the number of columns to span
-     * @param ?PdfStyle         $style     the cell style to use or null to use the default cell style
-     * @param ?PdfTextAlignment $alignment the cell alignment
-     * @param string|int|null   $link      the cell link. A URL or identifier returned by AddLink().
-     *
-     * @psalm-param positive-int $cols
+     * @param ?PdfStyle         $style     the cell style or null to use the default cell style
+     * @param ?PdfTextAlignment $alignment the text alignment or null to use the column alignment
+     * @param string|int|null   $link      the cell link. A URL or identifier returned by
+     *                                     the <code>addLink()</code> function.
      *
      * @throws PdfException if no current row is started
+     *
+     * @psalm-param positive-int $cols
      */
     public function add(
         ?string $text = null,
@@ -151,78 +154,6 @@ class PdfTable
     }
 
     /**
-     * Adds a right aligned cell, with formatted value as amount, to the current row.
-     *
-     * @param float|int|string|null $number the number to format
-     * @param int                   $cols   the number of columns to span
-     * @param ?PdfStyle             $style  the cell style to use or null to use the default cell style
-     * @param string|int|null       $link   the cell link. A URL or identifier returned by AddLink().
-     *
-     * @psalm-param positive-int $cols
-     *
-     * @throws PdfException if no current row is started
-     */
-    public function addCellAmount(
-        float|int|string|null $number,
-        int $cols = 1,
-        ?PdfStyle $style = null,
-        ?PdfTextAlignment $alignment = PdfTextAlignment::RIGHT,
-        string|int|null $link = null
-    ): static {
-        return $this->addCell(
-            new PdfCell(FormatUtils::formatAmount($number), $cols, $style, $alignment, $link)
-        );
-    }
-
-    /**
-     * Adds a right aligned cell, with formatted value as integer, to the current row.
-     *
-     * @param \Countable|array|int|float|string|null $number the number to format
-     * @param int                                    $cols   the number of columns to span
-     * @param ?PdfStyle                              $style  the cell style to use or null to use the default cell style
-     * @param string|int|null                        $link   the cell link. A URL or identifier returned by AddLink().
-     *
-     * @psalm-param positive-int $cols
-     *
-     * @throws PdfException if no current row is started
-     */
-    public function addCellInt(
-        \Countable|array|int|float|string|null $number,
-        int $cols = 1,
-        ?PdfStyle $style = null,
-        ?PdfTextAlignment $alignment = PdfTextAlignment::RIGHT,
-        string|int|null $link = null
-    ): static {
-        return $this->addCell(
-            new PdfCell(FormatUtils::formatInt($number), $cols, $style, $alignment, $link)
-        );
-    }
-
-    /**
-     * Adds a right aligned cell, with formatted value as percent, to the current row.
-     *
-     * @param float|int|string|null $number the number to format
-     * @param int                   $cols   the number of columns to span
-     * @param ?PdfStyle             $style  the cell style to use or null to use the default cell style
-     * @param string|int|null       $link   the cell link. A URL or identifier returned by AddLink().
-     *
-     * @psalm-param positive-int $cols
-     *
-     * @throws PdfException if no current row is started
-     */
-    public function addCellPercent(
-        float|int|string|null $number,
-        int $cols = 1,
-        ?PdfStyle $style = null,
-        ?PdfTextAlignment $alignment = PdfTextAlignment::RIGHT,
-        string|int|null $link = null
-    ): static {
-        return $this->addCell(
-            new PdfCell(FormatUtils::formatPercent($number), $cols, $style, $alignment, $link)
-        );
-    }
-
-    /**
      * Adds the given column to the list of columns.
      *
      * @see PdfTable::addColumns()
@@ -237,15 +168,11 @@ class PdfTable
     /**
      * Adds the given columns to the list of columns.
      *
-     * The null columns are not added.
-     *
      * @see PdfTable::addColumn()
      */
     public function addColumns(PdfColumn ...$columns): static
     {
-        foreach ($columns as $column) {
-            $this->addColumn($column);
-        }
+        $this->columns = \array_merge($this->columns, $columns);
 
         return $this;
     }
@@ -253,9 +180,8 @@ class PdfTable
     /**
      * Create and add a header row with the given values.
      *
-     * @throws PdfException         if the row is already started
-     * @throws \LengthException     if values parameter is empty
-     * @throws \OutOfRangeException if the number of spanned cells is greater than the number of columns
+     * @throws PdfException if the row is already started, if values parameter is empty or if
+     *                      the number of values is greater than the number of columns
      */
     public function addHeaderRow(PdfCell|string|null ...$values): static
     {
@@ -269,9 +195,8 @@ class PdfTable
     /**
      * Create and add a row with the given values.
      *
-     * @throws PdfException         if the row is already started
-     * @throws \LengthException     if values parameter is empty
-     * @throws \OutOfRangeException if the number of spanned cells is greater than the number of columns
+     * @throws PdfException if the row is already started, if values parameter is empty or if
+     *                      the number of values is greater than the number of columns
      *
      * @see PdfTable::addStyledRow()
      */
@@ -288,9 +213,8 @@ class PdfTable
      * @param array<PdfCell|string|null> $cells the cells to output
      * @param ?PdfStyle                  $style the row style or null for default cell style
      *
-     * @throws PdfException         if a row is already started
-     * @throws \LengthException     if the cells are empty
-     * @throws \OutOfRangeException if the number of spanned cells is greater than the number of columns
+     * @throws PdfException if a row is already started, if the cells are empty or if
+     *                      the number of spanned cells is greater than the number of columns
      *
      * @see PdfTable::addRow()
      */
@@ -345,11 +269,9 @@ class PdfTable
     /**
      * Completes the current row with empty cells.
      *
-     * @param bool $endRow true to ending the row after completed
-     *
      * @throws PdfException if no current row is started
      */
-    public function completeRow(bool $endRow = true): static
+    public function completeRow(): static
     {
         if (!$this->isRowStarted()) {
             throw PdfException::instance('No row started.');
@@ -359,7 +281,7 @@ class PdfTable
             $this->add('');
         }
 
-        return $endRow ? $this->endRow() : $this;
+        return $this->endRow();
     }
 
     /**
@@ -367,26 +289,24 @@ class PdfTable
      *
      * After this call, no more cell is defined.
      *
-     * @throws \LengthException     if no cell is defined
-     * @throws \OutOfRangeException if the number of spanned cells is not equal to the number of columns
+     * @throws PdfException if no cell is defined or if the number of spanned cells is not equal to the number of
+     *                      columns
      */
     public function endRow(): static
     {
         // check
         if ([] === $this->cells) {
-            throw new \LengthException('No cell defined.');
+            throw PdfException::instance('No cell defined.');
         }
         $span = $this->getCellsSpan();
         $count = $this->getColumnsCount();
         if ($span !== $count) {
-            throw new \OutOfRangeException(\sprintf('Invalid spanned cells: expected %d, %d given.', $count, $span));
+            throw PdfException::format('Invalid spanned cells: expected %d, %d given.', $count, $span);
         }
 
-        $parent = $this->parent;
+        // compute
         $cells = $this->cells;
         $columns = $this->columns;
-
-        // compute
         [$texts, $styles, $aligns, $widths, $fixeds] = $this->computeCells($cells, $columns);
 
         // update widths
@@ -403,18 +323,32 @@ class PdfTable
         $this->checkNewPage($height);
 
         // output
-        $this->drawRow($parent, $height, $texts, $widths, $styles, $aligns, $cells);
+        $this->drawRow($this->parent, $height, $texts, $widths, $styles, $aligns, $cells);
         $this->isHeaders = false;
 
         return $this;
     }
 
     /**
-     * Gets the border.
+     * Gets the default cell border.
+     *
+     * By default, all borders are drawn.
      */
     public function getBorder(): PdfBorder
     {
         return $this->border;
+    }
+
+    /**
+     * Gets the default cell style.
+     *
+     * @return PdfStyle the cell style, if set, the default style otherwise
+     *
+     * @see PdfStyle::getCellStyle()
+     */
+    public function getCellStyle(): PdfStyle
+    {
+        return $this->cellStyle ?? PdfStyle::getCellStyle();
     }
 
     /**
@@ -436,9 +370,9 @@ class PdfTable
     }
 
     /**
-     * Gets the header style.
+     * Gets the default header style.
      *
-     * @return PdfStyle the custom header style, if set, the default header style otherwise
+     * @return PdfStyle the header style, if set, the default header style otherwise
      *
      * @see PdfStyle::getHeaderStyle()
      */
@@ -503,12 +437,12 @@ class PdfTable
     /**
      * Output a row with the header style and the column's texts.
      *
-     * @throws \LengthException if no column is defined
+     * @throws PdfException if no column is defined
      */
     public function outputHeaders(): static
     {
         if ([] === $this->columns) {
-            throw new \LengthException('No column defined.');
+            throw PdfException::instance('No column defined.');
         }
 
         if ($this->headersListener instanceof PdfDrawHeadersInterface) {
@@ -549,7 +483,7 @@ class PdfTable
     }
 
     /**
-     * Sets the border.
+     * Sets the default cell border.
      */
     public function setBorder(PdfBorder $border): static
     {
@@ -569,6 +503,20 @@ class PdfTable
     }
 
     /**
+     * Sets the default cell style.
+     *
+     * @param ?PdfStyle $cellStyle the style to set or null to use the default cell style
+     *
+     * @see PdfStyle::getCellStyle()
+     */
+    public function setCellStyle(?PdfStyle $cellStyle): static
+    {
+        $this->cellStyle = $cellStyle;
+
+        return $this;
+    }
+
+    /**
      * Sets the draw header listener.
      */
     public function setHeadersListener(?PdfDrawHeadersInterface $headersListener): static
@@ -579,13 +527,11 @@ class PdfTable
     }
 
     /**
-     * Sets the header style.
+     * Sets the default header style.
      *
-     * @param ?PdfStyle $headerStyle the style to set or <code>null</code> to use the default header style
+     * @param ?PdfStyle $headerStyle the style to set or null to use the default header style
      *
      * @see PdfStyle::getHeaderStyle()
-     *
-     * @psalm-api
      */
     public function setHeaderStyle(?PdfStyle $headerStyle = null): static
     {
@@ -598,8 +544,6 @@ class PdfTable
      * Sets a value indicating if the header row is printed when a new page is added.
      *
      * @param bool $repeatHeader true to print the header on each new page
-     *
-     * @psalm-api
      */
     public function setRepeatHeader(bool $repeatHeader): static
     {
@@ -610,8 +554,6 @@ class PdfTable
 
     /**
      * Sets the draw cell text listener.
-     *
-     * @psalm-api
      */
     public function setTextListener(?PdfDrawCellTextInterface $textListener): static
     {
@@ -627,12 +569,9 @@ class PdfTable
      * @param ?PdfStyle         $style     the row style to use or null to use the default cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
      *
-     * @throws PdfException     if a row is already started
-     * @throws \LengthException if no column is defined
+     * @throws PdfException if a row is already started or if no column is defined
      *
      * @see PdfTable::add()
-     *
-     * @psalm-api
      */
     public function singleLine(
         ?string $text = null,
@@ -648,11 +587,10 @@ class PdfTable
     }
 
     /**
-     * Starts a new row with the custom header style, if set; with the default header style otherwise.
+     * Starts a new header row with the default header style.
      *
      * @throws PdfException if a row is already started
      *
-     * @see PdfStyle::getHeaderStyle()
      * @see PdfTable::getHeaderStyle()
      */
     public function startHeaderRow(): static
@@ -664,141 +602,20 @@ class PdfTable
     }
 
     /**
-     * Starts a new row.
+     * Starts a new row with the given optional style.
      *
      * @param ?PdfStyle $style the row style to use or null to use the default cell style
      *
      * @throws PdfException if the row is already started
+     *
+     * @see PdfTable::getCellStyle()
      */
     public function startRow(?PdfStyle $style = null): static
     {
         $this->checkRowStarted();
-        $this->rowStyle = $style ?? PdfStyle::getCellStyle();
+        $this->rowStyle = $style ?? $this->getCellStyle();
 
         return $this;
-    }
-
-    /**
-     * Draws the cell link.
-     *
-     * @param PdfDocument  $parent the parent document
-     * @param PdfRectangle $bounds the link bounds
-     * @param string|int   $link   the link URL
-     */
-    protected function drawCellLink(PdfDocument $parent, PdfRectangle $bounds, string|int $link): void
-    {
-        $parent->link($bounds->x, $bounds->y, $bounds->width, $bounds->height, $link);
-    }
-
-    /**
-     * Output a row.
-     *
-     * @param PdfDocument        $parent the parent document
-     * @param float              $height the row height
-     * @param string[]           $texts  the cell texts
-     * @param float[]            $widths the cell widths
-     * @param PdfStyle[]         $styles the cell styles
-     * @param PdfTextAlignment[] $aligns the cell alignments
-     * @param PdfCell[]          $cells  the cells
-     */
-    protected function drawRow(
-        PdfDocument $parent,
-        float $height,
-        array $texts,
-        array $widths,
-        array $styles,
-        array $aligns,
-        array $cells
-    ): void {
-        // horizontal alignment
-        if (!$this->fullWidth) {
-            switch ($this->alignment) {
-                case PdfTextAlignment::CENTER:
-                case PdfTextAlignment::JUSTIFIED:
-                    $w = (float) \array_sum($widths);
-                    $x = $parent->getLeftMargin() + ($parent->getPrintableWidth() - $w) / 2.0;
-                    $parent->setX($x);
-                    break;
-                case PdfTextAlignment::RIGHT:
-                    $w = (float) \array_sum($widths);
-                    $x = $parent->getPageWidth() - $parent->getRightMargin() - $w;
-                    $parent->setX($x);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        // output cells
-        for ($i = 0, $len = \count($texts); $i < $len; ++$i) {
-            $this->drawCell($parent, $i, $widths[$i], $height, $texts[$i], $aligns[$i], $styles[$i], $cells[$i]);
-        }
-
-        // next line
-        $parent->lineBreak($height);
-    }
-
-    /**
-     * Gets the cell height.
-     *
-     * @param ?string  $text  the cell text
-     * @param float    $width the cell width
-     * @param PdfStyle $style the cell style
-     * @param PdfCell  $cell  the cell
-     *
-     * @return float the cell height
-     */
-    protected function getCellHeight(?string $text, float $width, PdfStyle $style, PdfCell $cell): float
-    {
-        $parent = $this->parent;
-        if ($cell instanceof PdfImageCell) {
-            $height = $parent->pixels2UserUnit($cell->getHeight());
-            $margins = 2.0 * $parent->getCellMargin();
-
-            return $height + $margins;
-        }
-
-        $style->apply($parent);
-        $width = \max(0, $width - $style->getIndent());
-        $lines = (float) $parent->getLinesCount($text, $width);
-        $height = \fpdf\PdfDocument::LINE_HEIGHT;
-        if (!$style->getFont()->isDefaultSize()) {
-            $fontSize = $style->getFont()->getSize();
-            $margins = 2.0 * $parent->getCellMargin();
-            $height = $parent->points2UserUnit($fontSize) + $margins;
-        }
-
-        return $lines * $height;
-    }
-
-    /**
-     * Gets the total columns span.
-     *
-     * @see PdfCell::getCols()
-     */
-    protected function getCellsSpan(): int
-    {
-        return \array_reduce($this->cells, static fn (int $carry, PdfCell $cell): int => $carry + $cell->getCols(), 0);
-    }
-
-    /**
-     * Gets the row height.
-     *
-     * @param string[]   $texts  the cell texts
-     * @param float[]    $widths the cell widths
-     * @param PdfStyle[] $styles the cell styles
-     * @param PdfCell[]  $cells  the cells
-     *
-     * @see PdfTable::getCellHeight()
-     */
-    protected function getRowHeight(array $texts, array $widths, array $styles, array $cells): float
-    {
-        $height = 0;
-        foreach ($texts as $index => $text) {
-            $height = \max($height, $this->getCellHeight($text, $widths[$index], $styles[$index], $cells[$index]));
-        }
-
-        return $height;
     }
 
     /**
@@ -809,18 +626,18 @@ class PdfTable
     private function adjustCellWidths(array $cells, array $fixeds, array &$widths): void
     {
         $count = \count($cells);
-        $parent = $this->parent;
+        $printableWidth = $this->parent->getPrintableWidth();
 
         // only 1 cell?
         if (1 === $count) {
-            $widths[0] = $parent->getPrintableWidth();
+            $widths[0] = $printableWidth;
 
             return;
         }
 
         // compute widths and check values
-        [$fixedWidth, $resizableWidth] = $this->computeCellWidths($fixeds, $widths);
-        $remainingWidth = $parent->getPrintableWidth() - $fixedWidth;
+        [$resizableWidth, $fixedWidth] = $this->computeCellWidths($fixeds, $widths);
+        $remainingWidth = $printableWidth - $fixedWidth;
         if ($this->isFloatZero($resizableWidth) || $this->isFloatZero($remainingWidth)
             || $resizableWidth === $remainingWidth) {
             return;
@@ -838,7 +655,7 @@ class PdfTable
     /**
      * Check if the output row is already started.
      *
-     * @throws PdfException
+     * @throws PdfException if the output row is already started
      */
     private function checkRowStarted(): void
     {
@@ -871,7 +688,7 @@ class PdfTable
         $index = 0;
         foreach ($cells as $cell) {
             $texts[] = $cell->getText() ?? '';
-            $styles[] = $cell->getStyle() ?? $this->rowStyle ?? PdfStyle::getCellStyle();
+            $styles[] = $cell->getStyle() ?? $this->rowStyle ?? $this->getCellStyle();
             $aligns[] = $cell->getAlignment() ?? $columns[$index]->getAlignment() ?? PdfTextAlignment::LEFT;
 
             $width = 0.0;
@@ -898,7 +715,7 @@ class PdfTable
     }
 
     /**
-     * Compute fixed and resizable widths.
+     * Get the sum of resizable and fixed widths.
      *
      * @param bool[]  $fixeds
      * @param float[] $widths
@@ -907,17 +724,12 @@ class PdfTable
      */
     private function computeCellWidths(array $fixeds, array $widths): array
     {
-        $fixedWidth = 0.0;
-        $resizableWidth = 0.0;
+        $result = [0.0, 0.0];
         foreach ($fixeds as $index => $fixed) {
-            if ($fixed) {
-                $fixedWidth += $widths[$index];
-            } else {
-                $resizableWidth += $widths[$index];
-            }
+            $result[(int) $fixed] += $widths[$index];
         }
 
-        return [$fixedWidth, $resizableWidth];
+        return $result;
     }
 
     /**
@@ -930,8 +742,8 @@ class PdfTable
      * @param float            $width     the cell width
      * @param float            $height    the cell height
      * @param string           $text      the cell text
-     * @param PdfTextAlignment $alignment the cell alignment
-     * @param PdfStyle         $style     the cell style
+     * @param PdfTextAlignment $alignment the text alignment
+     * @param PdfStyle         $style     the style
      * @param PdfCell          $cell      the cell
      */
     private function drawCell(
@@ -964,9 +776,8 @@ class PdfTable
         $textBounds = clone $bounds;
         $line_height = \fpdf\PdfDocument::LINE_HEIGHT;
         if ($cell instanceof PdfImageCell) {
-            $textBounds->inflate(-$margin);
-            $cell->drawImage($parent, clone $textBounds, $alignment);
-            $textBounds->inflate($margin);
+            $imageBounds = (clone $textBounds)->inflate(-$margin);
+            $cell->drawImage($parent, $imageBounds, $alignment);
         } else {
             if (!$style->getFont()->isDefaultSize()) {
                 $line_height = $parent->getFontSize() + 2.0 * $margin;
@@ -979,15 +790,14 @@ class PdfTable
             $this->drawCellText($parent, $index, $textBounds, $text, $alignment, $line_height);
         }
 
-        if ($cell->isLink()) {
+        if ($cell->hasLink()) {
             /** @psalm-var string|int $link */
             $link = $cell->getLink();
-            $textBounds->inflate(-$margin);
-            $linkWidth = $parent->getStringWidth($text);
-            $linesCount = \max(1, $parent->getLinesCount($text, $textBounds->width));
-            $linkHeight = (float) $linesCount * $line_height - 2.0 * $margin;
-            $textBounds->setSize(PdfSize::instance($linkWidth, $linkHeight));
-            $this->drawCellLink($parent, $textBounds, $link);
+            $linkBounds = (clone $textBounds)->inflate(-$margin);
+            $linesCount = \max(1, $parent->getLinesCount($text, $linkBounds->width));
+            $linkBounds->width = \min($linkBounds->width, $parent->getStringWidth($text));
+            $linkBounds->height = \min($linkBounds->height, (float) $linesCount * $line_height - 2.0 * $margin);
+            $parent->link($linkBounds->x, $linkBounds->y, $linkBounds->width, $linkBounds->height, $link);
         }
 
         $position->x += $width;
@@ -1084,8 +894,119 @@ class PdfTable
                 return;
             }
         }
-        if (StringUtils::isString($text)) {
+        if ('' !== $text) {
             $parent->multiCell(width: $bounds->width, height: $height, text: $text, align: $alignment);
         }
+    }
+
+    /**
+     * Output a row.
+     *
+     * @param PdfDocument        $parent the parent document
+     * @param float              $height the row height
+     * @param string[]           $texts  the cell texts
+     * @param float[]            $widths the cell widths
+     * @param PdfStyle[]         $styles the cell styles
+     * @param PdfTextAlignment[] $aligns the cell alignments
+     * @param PdfCell[]          $cells  the cells
+     */
+    private function drawRow(
+        PdfDocument $parent,
+        float $height,
+        array $texts,
+        array $widths,
+        array $styles,
+        array $aligns,
+        array $cells
+    ): void {
+        // horizontal alignment
+        if (!$this->fullWidth) {
+            switch ($this->alignment) {
+                case PdfTextAlignment::CENTER:
+                case PdfTextAlignment::JUSTIFIED:
+                    $w = (float) \array_sum($widths);
+                    $x = $parent->getLeftMargin() + ($parent->getPrintableWidth() - $w) / 2.0;
+                    $parent->setX($x);
+                    break;
+                case PdfTextAlignment::RIGHT:
+                    $w = (float) \array_sum($widths);
+                    $x = $parent->getPageWidth() - $parent->getRightMargin() - $w;
+                    $parent->setX($x);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // output cells
+        for ($i = 0, $len = \count($texts); $i < $len; ++$i) {
+            $this->drawCell($parent, $i, $widths[$i], $height, $texts[$i], $aligns[$i], $styles[$i], $cells[$i]);
+        }
+
+        // next line
+        $parent->lineBreak($height);
+    }
+
+    /**
+     * Gets the cell height.
+     *
+     * @param ?string  $text  the cell text
+     * @param float    $width the cell width
+     * @param PdfStyle $style the cell style
+     * @param PdfCell  $cell  the cell
+     *
+     * @return float the cell height
+     */
+    private function getCellHeight(?string $text, float $width, PdfStyle $style, PdfCell $cell): float
+    {
+        $parent = $this->parent;
+        if ($cell instanceof PdfImageCell) {
+            $height = $parent->pixels2UserUnit($cell->getHeight());
+            $margins = 2.0 * $parent->getCellMargin();
+
+            return $height + $margins;
+        }
+
+        $style->apply($parent);
+        $width = \max(0, $width - $style->getIndent());
+        $lines = (float) $parent->getLinesCount($text, $width);
+        $height = \fpdf\PdfDocument::LINE_HEIGHT;
+        if (!$style->getFont()->isDefaultSize()) {
+            $fontSize = $style->getFont()->getSize();
+            $margins = 2.0 * $parent->getCellMargin();
+            $height = $parent->points2UserUnit($fontSize) + $margins;
+        }
+
+        return $lines * $height;
+    }
+
+    /**
+     * Gets the total columns span.
+     *
+     * @see PdfCell::getCols()
+     */
+    private function getCellsSpan(): int
+    {
+        return \array_reduce($this->cells, static fn (int $carry, PdfCell $cell): int => $carry + $cell->getCols(), 0);
+    }
+
+    /**
+     * Gets the row height.
+     *
+     * @param string[]   $texts  the cell texts
+     * @param float[]    $widths the cell widths
+     * @param PdfStyle[] $styles the cell styles
+     * @param PdfCell[]  $cells  the cells
+     *
+     * @see PdfTable::getCellHeight()
+     */
+    private function getRowHeight(array $texts, array $widths, array $styles, array $cells): float
+    {
+        $height = 0;
+        foreach ($texts as $index => $text) {
+            $height = \max($height, $this->getCellHeight($text, $widths[$index], $styles[$index], $cells[$index]));
+        }
+
+        return $height;
     }
 }

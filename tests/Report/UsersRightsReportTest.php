@@ -40,13 +40,11 @@ class UsersRightsReportTest extends TestCase
         $controller->method('getApplicationService')
             ->willReturn($application);
 
-        $builder = $this->createMock(RoleBuilderService::class);
-
         $user = new User();
         $user->setUsername('UserName')
-            ->setRole(RoleInterface::ROLE_ADMIN);
+            ->setRole(RoleInterface::ROLE_SUPER_ADMIN);
 
-        $report = new UsersRightsReport($controller, [$user], $builder);
+        $report = new UsersRightsReport($controller, [$user], $service);
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -57,9 +55,9 @@ class UsersRightsReportTest extends TestCase
     public function testRenderEmpty(): void
     {
         $controller = $this->createMock(AbstractController::class);
-        $builder = $this->createMock(RoleBuilderService::class);
+        $service = $this->createMock(RoleBuilderService::class);
 
-        $report = new UsersRightsReport($controller, [], $builder);
+        $report = new UsersRightsReport($controller, [], $service);
         $actual = $report->render();
         self::assertFalse($actual);
     }

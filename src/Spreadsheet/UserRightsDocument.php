@@ -31,6 +31,8 @@ class UserRightsDocument extends AbstractArrayDocument
 {
     use RoleTranslatorTrait;
 
+    private bool $superAdmin = false;
+
     /**
      * @param User[] $entities
      *
@@ -42,6 +44,12 @@ class UserRightsDocument extends AbstractArrayDocument
         private readonly RoleBuilderService $service
     ) {
         parent::__construct($controller, $entities);
+        foreach ($this->entities as $entity) {
+            if ($entity->isSuperAdmin()) {
+                $this->superAdmin = true;
+                break;
+            }
+        }
     }
 
     /**
@@ -59,12 +67,8 @@ class UserRightsDocument extends AbstractArrayDocument
         }
         $row = $sheet->setHeaders($headers);
 
-        $service = $this->controller->getApplicationService();
-        $this->outputRole($sheet, $service->getAdminRole(), $row);
-        $this->outputRole($sheet, $service->getUserRole(), $row);
-        foreach ($entities as $entity) {
-            $this->outputUser($sheet, $entity, $row);
-        }
+        $this->outputRoles($sheet, $row);
+        $this->outputUsers($sheet, $entities, $row);
 
         foreach (\range(2, \count($headers)) as $column) {
             $sheet->getColumnDimensionByColumn($column)
@@ -77,8 +81,6 @@ class UserRightsDocument extends AbstractArrayDocument
     }
 
     /**
-     * Gets the cell text for the given rights and attribute.
-     *
      * @psalm-param FlagBag<EntityPermission> $rights
      */
     private function getRightText(FlagBag $rights, EntityPermission $permission): ?string
@@ -94,18 +96,15 @@ class UserRightsDocument extends AbstractArrayDocument
             $description = $entity->isEnabled() ? $role : $this->trans('common.value_disabled');
             $richText = new RichText();
             $richText->createTextRun($text)->getFont()?->setBold(true);
-            $richText->createTextRun(' - ' . $description)->getFont()?->setItalic(true);
+            $richText->createTextRun(' - ' . $description)->getFont()?->setBold(false);
             $sheet->setCellContent(1, $row, $richText);
         } else {
-            $role = $this->trans('user.fields.role') . ' ' . $role;
             $sheet->setCellContent(1, $row, $role);
             $sheet->getStyle([1, $row])->getFont()->setBold(true);
         }
     }
 
     /**
-     * Output the rights.
-     *
      * @psalm-param FlagBag<EntityPermission> $rights
      */
     private function outputRights(WorksheetDocument $sheet, EntityName $entity, FlagBag $rights, int $row): void
@@ -120,9 +119,6 @@ class UserRightsDocument extends AbstractArrayDocument
         }
     }
 
-    /**
-     * Output the rights for the given role.
-     */
     private function outputRole(WorksheetDocument $sheet, Role|User $entity, int &$row): void
     {
         $names = EntityName::sorted();
@@ -138,12 +134,16 @@ class UserRightsDocument extends AbstractArrayDocument
         }
     }
 
-    /**
-     * Output the rights for the given user.
-     *
-     * @param User $user the user to output
-     * @param int  $row  the current row
-     */
+    private function outputRoles(WorksheetDocument $sheet, int &$row): void
+    {
+        if ($this->superAdmin) {
+            $this->outputRole($sheet, $this->service->getRoleSuperAdmin(), $row);
+        }
+        $service = $this->controller->getApplicationService();
+        $this->outputRole($sheet, $service->getAdminRole(), $row);
+        $this->outputRole($sheet, $service->getUserRole(), $row);
+    }
+
     private function outputUser(WorksheetDocument $sheet, User $user, int &$row): void
     {
         if (!$user->isOverwrite()) {
@@ -151,5 +151,15 @@ class UserRightsDocument extends AbstractArrayDocument
             $user->setRights($rights);
         }
         $this->outputRole($sheet, $user, $row);
+    }
+
+    /**
+     * @param User[] $users
+     */
+    private function outputUsers(WorksheetDocument $sheet, array $users, int &$row): void
+    {
+        foreach ($users as $user) {
+            $this->outputUser($sheet, $user, $row);
+        }
     }
 }

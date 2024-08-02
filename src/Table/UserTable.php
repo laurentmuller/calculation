@@ -86,6 +86,8 @@ class UserTable extends AbstractEntityTable
     }
 
     /**
+     * Format the user's role.
+     *
      * @throws \Twig\Error\Error
      *
      * @psalm-api

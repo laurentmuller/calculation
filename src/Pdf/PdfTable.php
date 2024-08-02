@@ -595,7 +595,9 @@ class PdfTable
      */
     public function startHeaderRow(): static
     {
-        $this->checkRowStarted();
+        if ($this->isRowStarted()) {
+            throw PdfException::instance('Row already started.');
+        }
         $this->isHeaders = true;
 
         return $this->startRow($this->getHeaderStyle());
@@ -612,7 +614,9 @@ class PdfTable
      */
     public function startRow(?PdfStyle $style = null): static
     {
-        $this->checkRowStarted();
+        if ($this->isRowStarted()) {
+            throw PdfException::instance('Row already started.');
+        }
         $this->rowStyle = $style ?? $this->getCellStyle();
 
         return $this;
@@ -639,7 +643,7 @@ class PdfTable
         [$resizableWidth, $fixedWidth] = $this->computeCellWidths($fixeds, $widths);
         $remainingWidth = $printableWidth - $fixedWidth;
         if ($this->isFloatZero($resizableWidth) || $this->isFloatZero($remainingWidth)
-            || $resizableWidth === $remainingWidth) {
+            || $this->isFloatEquals($resizableWidth, $remainingWidth)) {
             return;
         }
 
@@ -649,18 +653,6 @@ class PdfTable
             if (!$fixeds[$i]) {
                 $widths[$i] *= $factor;
             }
-        }
-    }
-
-    /**
-     * Check if the output row is already started.
-     *
-     * @throws PdfException if the output row is already started
-     */
-    private function checkRowStarted(): void
-    {
-        if ($this->isRowStarted()) {
-            throw PdfException::instance('Row already started.');
         }
     }
 
@@ -694,7 +686,6 @@ class PdfTable
             $width = 0.0;
             $fixed = $columns[$index]->isFixed();
             for ($i = 0, $count = $cell->getCols(); $i < $count; ++$i) {
-                // check if one of the columns is not fixed
                 if ($fixed && !$columns[$index]->isFixed()) {
                     $fixed = false;
                 }
@@ -742,8 +733,8 @@ class PdfTable
      * @param float            $width     the cell width
      * @param float            $height    the cell height
      * @param string           $text      the cell text
-     * @param PdfTextAlignment $alignment the text alignment
-     * @param PdfStyle         $style     the style
+     * @param PdfTextAlignment $alignment the cell text alignment
+     * @param PdfStyle         $style     the cell style
      * @param PdfCell          $cell      the cell
      */
     private function drawCell(
@@ -810,6 +801,7 @@ class PdfTable
      * @param PdfDocument  $parent the parent document
      * @param int          $index  the column index
      * @param PdfRectangle $bounds the cell bounds
+     * @param PdfStyle     $style  the cell style
      */
     private function drawCellBackground(PdfDocument $parent, int $index, PdfRectangle $bounds, PdfStyle $style): void
     {
@@ -841,32 +833,8 @@ class PdfTable
             }
         }
 
-        if ($border->isNone()) {
-            return;
-        }
-
-        if ($border->isAll()) {
-            $parent->rectangle($bounds);
-
-            return;
-        }
-
-        // draw each applicable border side
-        $x = $bounds->x;
-        $y = $bounds->y;
-        $right = $bounds->right();
-        $bottom = $bounds->bottom();
-        if ($border->isLeft()) {
-            $parent->line($x, $y, $x, $bottom);
-        }
-        if ($border->isRight()) {
-            $parent->line($right, $y, $right, $bottom);
-        }
-        if ($border->isTop()) {
-            $parent->line($x, $y, $right, $y);
-        }
-        if ($border->isBottom()) {
-            $parent->line($x, $bottom, $right, $bottom);
+        if (!$border->isNone()) {
+            $border->draw($parent, $bounds);
         }
     }
 

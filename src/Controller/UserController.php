@@ -242,7 +242,7 @@ class UserController extends AbstractEntityController
             /** @var User[] $users */
             $users = $form->get($name)->getData();
             $repository->resetPasswordRequest($users);
-            $this->successResetPassword($users);
+            $this->successTrans('user.reset_all.success', ['%count%' => \count($users)]);
 
             return $this->redirectToDefaultRoute($request);
         }
@@ -256,13 +256,13 @@ class UserController extends AbstractEntityController
     #[GetPost(path: '/reset/{id}', name: 'reset', requirements: self::ID_REQUIREMENT)]
     public function resetPasswordRequest(Request $request, User $item): Response
     {
+        $parameters = ['%name%' => $item];
         $form = $this->createForm(FormType::class);
         if ($this->handleRequestForm($request, $form)) {
-            if ($item->isResetPassword()) {
-                $this->getRepository()->removeResetPasswordRequest($item);
-                $this->successResetPassword([$item]);
+            if ($this->removeResetPasswordRequest($item)) {
+                $this->successTrans('user.reset.success', $parameters);
             } else {
-                $this->warningTrans('user.reset.error', ['%name%' => $item]);
+                $this->warningTrans('user.reset.error', $parameters);
             }
 
             return $this->redirectToDefaultRoute($request, $item);
@@ -273,7 +273,7 @@ class UserController extends AbstractEntityController
             'title' => 'user.reset.title',
             'title_icon' => 'eraser',
             'message' => 'user.reset.confirmation',
-            'message_parameters' => ['%name%' => $item],
+            'message_parameters' => $parameters,
         ]);
     }
 
@@ -364,10 +364,11 @@ class UserController extends AbstractEntityController
     #[GetPost(path: '/reset/send/{id}', name: 'reset_send', requirements: self::ID_REQUIREMENT)]
     public function sendPasswordRequest(Request $request, User $item, ResetPasswordService $service): Response
     {
+        $parameters = ['%name%' => $item];
         $form = $this->createForm(FormType::class);
         if ($this->handleRequestForm($request, $form)) {
+            $this->removeResetPasswordRequest($item);
             $result = $service->sendEmail($request, $item);
-            $parameters = ['%name%' => $item];
             if (false === $result) {
                 $this->warningTrans('reset_user_not_found', $parameters, 'security');
             } elseif (!$result instanceof ResetPasswordToken) {
@@ -384,7 +385,7 @@ class UserController extends AbstractEntityController
             'title' => 'user.send.title',
             'title_icon' => 'envelope-circle-check fas',
             'message' => 'user.send.message',
-            'message_parameters' => ['%name%' => $item],
+            'message_parameters' => $parameters,
             'submit_text' => 'user.send.submit',
         ]);
     }
@@ -440,20 +441,15 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * @param User[] $users
+     * Remove the reset password request for the given user.
      */
-    private function successResetPassword(array $users): void
+    private function removeResetPasswordRequest(User $user): bool
     {
-        $count = \count($users);
-        if (1 === $count) {
-            $user = \reset($users);
-            if (false !== $user) {
-                $this->successTrans('user.reset.success', ['%name%' => $user->getUserIdentifier()]);
-
-                return;
-            }
+        if (!$user->isResetPassword()) {
+            return false;
         }
+        $this->getRepository()->removeResetPasswordRequest($user);
 
-        $this->successTrans('user.reset_all.success', ['%count%' => $count]);
+        return true;
     }
 }

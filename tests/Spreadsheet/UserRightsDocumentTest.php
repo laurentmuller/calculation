@@ -40,15 +40,26 @@ class UserRightsDocumentTest extends TestCase
         $controller->method('getApplicationService')
             ->willReturn($application);
 
-        $builder = $this->createMock(RoleBuilderService::class);
-
         $user = new User();
         $user->setUsername('UserName')
-            ->setRole(RoleInterface::ROLE_ADMIN);
+            ->setRole(RoleInterface::ROLE_SUPER_ADMIN);
 
         $controller = $this->createMock(AbstractController::class);
-        $document = new UserRightsDocument($controller, [$user], $builder);
+        $document = new UserRightsDocument($controller, [$user], $service);
         $actual = $document->render();
         self::assertTrue($actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testRenderEmpty(): void
+    {
+        $controller = $this->createMock(AbstractController::class);
+        $service = $this->createMock(RoleBuilderService::class);
+
+        $report = new UserRightsDocument($controller, [], $service);
+        $actual = $report->render();
+        self::assertFalse($actual);
     }
 }

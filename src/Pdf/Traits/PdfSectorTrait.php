@@ -17,7 +17,7 @@ use fpdf\PdfRectangleStyle;
 /**
  * Trait to draw sector.
  *
- * @psalm-require-extends \App\Pdf\PdfDocument
+ * @psalm-require-extends \fpdf\PdfDocument
  */
 trait PdfSectorTrait
 {
@@ -132,6 +132,8 @@ trait PdfSectorTrait
 
     /**
      * Compute and output arc.
+     *
+     * @psalm-suppress InvalidOperand
      */
     private function sectorOutputArc(
         float $centerX,
@@ -142,12 +144,10 @@ trait PdfSectorTrait
         float $arc
     ): void {
         // compute
-        /** @psalm-var float $half_pi */
-        $half_pi = self::HALF_PI;
-        $x1 = $centerX + $radius * \cos($startAngle) + $arc * \cos($half_pi + $startAngle);
-        $y1 = $centerY - $radius * \sin($startAngle) - $arc * \sin($half_pi + $startAngle);
-        $x2 = $centerX + $radius * \cos($endAngle) + $arc * \cos($endAngle - $half_pi);
-        $y2 = $centerY - $radius * \sin($endAngle) - $arc * \sin($endAngle - $half_pi);
+        $x1 = $centerX + $radius * \cos($startAngle) + $arc * \cos(self::HALF_PI + $startAngle);
+        $y1 = $centerY - $radius * \sin($startAngle) - $arc * \sin(self::HALF_PI + $startAngle);
+        $x2 = $centerX + $radius * \cos($endAngle) + $arc * \cos($endAngle - self::HALF_PI);
+        $y2 = $centerY - $radius * \sin($endAngle) - $arc * \sin($endAngle - self::HALF_PI);
         $x3 = $centerX + $radius * \cos($endAngle);
         $y3 = $centerY - $radius * \sin($endAngle);
 

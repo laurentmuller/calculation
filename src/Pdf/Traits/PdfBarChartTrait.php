@@ -42,7 +42,7 @@ use fpdf\PdfTextAlignment;
  *     label: string,
  *     width: float}
  *
- * @psalm-require-extends \App\Pdf\PdfDocument
+ * @psalm-require-extends \fpdf\PdfDocument
  *
  * @psalm-require-implements \App\Pdf\Interfaces\PdfChartInterface
  */
@@ -59,12 +59,12 @@ trait PdfBarChartTrait
      *
      * Does nothing if rows are empty.
      *
-     * @param array      $rows the data to draw
-     * @param array      $axis the Y axis definition
-     * @param float|null $x    the abscissa position or null to use the left margin
-     * @param float|null $y    the ordinate position or null to use the current position
-     * @param float|null $w    the width or null to use all the printable width
-     * @param float|null $h    the height or null to use the default value (200)
+     * @param array      $rows   the data to draw
+     * @param array      $axis   the Y axis definition
+     * @param float|null $x      the abscissa position or null to use the left margin
+     * @param float|null $y      the ordinate position or null to use the current position
+     * @param float|null $width  the width or null to use all the printable width
+     * @param float|null $height the height or null to use the default value (200)
      *
      * @psalm-param BarChartRowType[] $rows
      * @psalm-param BarChartAxisType $axis
@@ -74,8 +74,8 @@ trait PdfBarChartTrait
         array $axis,
         ?float $x = null,
         ?float $y = null,
-        ?float $w = null,
-        ?float $h = null
+        ?float $width = null,
+        ?float $height = null
     ): void {
         if ([] === $rows) {
             return;
@@ -84,15 +84,15 @@ trait PdfBarChartTrait
         // get values
         $x ??= $this->getLeftMargin();
         $y ??= $this->getY();
-        $w ??= $this->getPrintableWidth();
-        $h ??= 200.0;
-        $endY = $y + $h;
+        $width ??= $this->getPrintableWidth();
+        $height ??= 200.0;
+        $endY = $y + $height;
 
         // check the new page
-        if (!$this->isPrintable($h, $y)) {
+        if (!$this->isPrintable($height, $y)) {
             $this->addPage();
             $y = $this->getY();
-            $endY = $y + $h;
+            $endY = $y + $height;
         }
 
         // init
@@ -113,25 +113,25 @@ trait PdfBarChartTrait
         // x axis
         $labelsX = $this->barGetLabelsX($rows);
         $widthX = $this->getColumnMax($labelsX, 'width');
-        $barWidth = $this->barGetBarWidth($rows, $w - $widthY - 1.0);
+        $barWidth = $this->barGetBarWidth($rows, $width - $widthY - 1.0);
         $rotation = $barWidth < $widthX;
 
         // draw Y axis
-        $h -= self::LINE_HEIGHT;
+        $height -= self::LINE_HEIGHT;
         if ($rotation) {
-            $h -= \sin(self::TEXT_ANGLE) * $widthX - 1.0;
+            $height -= \sin(self::TEXT_ANGLE) * $widthX - 1.0;
         } else {
-            $h -= self::LINE_HEIGHT;
+            $height -= self::LINE_HEIGHT;
         }
-        $this->barDrawAxisY($labelsY, $widthY, $x, $y, $w, $h);
+        $this->barDrawAxisY($labelsY, $widthY, $x, $y, $width, $height);
 
         // restrict axis x area
         $x += $widthY + 1.0 + self::SEP_BARS;
         $y += self::LINE_HEIGHT / 2.0;
 
         // draw axis X and data
-        $data = $this->barComputeData($rows, $barWidth, $x, $y, $h, $scale);
-        $this->barDrawAxisX($labelsX, $barWidth, $rotation, $x, $y + $h);
+        $data = $this->barComputeData($rows, $barWidth, $x, $y, $height, $scale);
+        $this->barDrawAxisX($labelsX, $barWidth, $rotation, $x, $y + $height);
         $this->barDrawData($data);
 
         // reset
@@ -275,11 +275,11 @@ trait PdfBarChartTrait
         }
     }
 
-    private function barGetBarWidth(array $rows, float $w): float
+    private function barGetBarWidth(array $rows, float $width): float
     {
         $countRows = (float) \count($rows);
 
-        return ($w - ($countRows + 1.0) * self::SEP_BARS) / $countRows;
+        return ($width - ($countRows + 1.0) * self::SEP_BARS) / $countRows;
     }
 
     /**

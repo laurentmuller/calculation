@@ -10,17 +10,16 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf\Interfaces;
+namespace App\Tests\Data;
 
+use App\Pdf\Traits\PdfBookmarkTrait;
+use App\Pdf\Traits\PdfStyleTrait;
+use App\Traits\MathTrait;
 use fpdf\PdfDocument;
 
-/**
- * Class implementing this interface applies properties to a PdfDocument.
- */
-interface PdfDocumentUpdaterInterface
+class PdfDocumentBookmark extends PdfDocument
 {
-    /**
-     * Apply changes to the given document.
-     */
-    public function apply(PdfDocument $doc): void;
+    use MathTrait;
+    use PdfBookmarkTrait;
+    use PdfStyleTrait;
 }

@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Pdf\Events;
 
 use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
-use App\Pdf\PdfDocument;
 use App\Pdf\PdfTable;
 use fpdf\PdfBorder;
+use fpdf\PdfDocument;
 use fpdf\PdfRectangle;
 
 /**

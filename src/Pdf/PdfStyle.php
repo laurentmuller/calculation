@@ -17,6 +17,7 @@ use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
 use fpdf\PdfBorder;
+use fpdf\PdfDocument;
 use fpdf\PdfFontName;
 use fpdf\PdfFontStyle;
 

@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Data;
 
-use App\Pdf\PdfDocument;
 use App\Pdf\Traits\PdfTransparencyTrait;
+use fpdf\PdfDocument;
 
 /**
  * Document for testing transparency.

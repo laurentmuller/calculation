@@ -13,24 +13,60 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
-use App\Pdf\PdfDocument;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
+use App\Pdf\Traits\PdfBookmarkTrait;
 use App\Pdf\Traits\PdfColumnTranslatorTrait;
+use App\Pdf\Traits\PdfStyleTrait;
+use App\Traits\MathTrait;
+use fpdf\PdfDocument;
+use fpdf\PdfLayout;
 use fpdf\PdfOrientation;
 use fpdf\PdfPageSize;
 use fpdf\PdfTextAlignment;
 use fpdf\PdfUnit;
+use fpdf\PdfZoom;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Abstract report.
+ * Abstract report with default header, footer, bookmarks, style and page index capabilities.
  */
 abstract class AbstractReport extends PdfDocument
 {
+    use MathTrait;
+    use PdfBookmarkTrait;
     use PdfColumnTranslatorTrait;
+    use PdfStyleTrait;
 
+    /**
+     * The encoding source.
+     */
+    private const ENCODING_FROM = [
+        'ASCII',
+        'UTF-8',
+        'CP1252',
+        'ISO-8859-1',
+    ];
+
+    /**
+     * The encoding target.
+     */
+    private const ENCODING_TO = 'CP1252';
+
+    /**
+     * The footer.
+     */
+    private readonly ReportFooter $footer;
+
+    /**
+     * The header.
+     */
+    private readonly ReportHeader $header;
+
+    /**
+     * The translator.
+     */
     private readonly TranslatorInterface $translator;
 
     public function __construct(
@@ -40,6 +76,9 @@ abstract class AbstractReport extends PdfDocument
         PdfPageSize $size = PdfPageSize::A4
     ) {
         parent::__construct($orientation, $unit, $size);
+        $this->setDisplayMode(PdfZoom::FULL_PAGE, PdfLayout::SINGLE);
+        $this->setAutoPageBreak(true, $this->bottomMargin - self::LINE_HEIGHT);
+
         $this->translator = $this->controller->getTranslator();
         $appName = $controller->getApplicationName();
         $this->setCreator($appName);
@@ -47,15 +86,18 @@ abstract class AbstractReport extends PdfDocument
         if (null !== $userName) {
             $this->setAuthor($userName);
         }
+
         $service = $this->controller->getUserService();
-        $this->getHeader()->setCustomer($service->getCustomer());
-        $this->getFooter()->setContent($appName, $controller->getApplicationOwnerUrl());
+        $this->header = new ReportHeader($this);
+        $this->header->setCustomer($service->getCustomer());
+        $this->footer = new ReportFooter($this);
+        $this->footer->setContent($appName, $controller->getApplicationOwnerUrl());
     }
 
     /**
      * {@inheritdoc}
      *
-     * Override the default behavior by adding a translated title if null and the page index to the bookmarks.
+     * Override the default behavior by adding the translated title.
      */
     public function addPageIndex(
         ?string $title = null,
@@ -65,14 +107,39 @@ abstract class AbstractReport extends PdfDocument
         string $separator = '.'
     ): self {
         $title ??= $this->trans('report.index');
-        parent::addPageIndex($title, $titleStyle, $contentStyle, $addBookmark, $separator);
 
-        return $this;
+        return $this->addPageIndex($title, $titleStyle, $contentStyle, $addBookmark, $separator);
+    }
+
+    public function footer(): void
+    {
+        $this->footer->output();
+    }
+
+    /**
+     * Gets the footer.
+     */
+    public function getFooter(): ReportFooter
+    {
+        return $this->footer;
+    }
+
+    /**
+     * Gets the header.
+     */
+    public function getHeader(): ReportHeader
+    {
+        return $this->header;
     }
 
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
+    }
+
+    public function header(): void
+    {
+        $this->header->output();
     }
 
     /**
@@ -129,6 +196,20 @@ abstract class AbstractReport extends PdfDocument
         bool $isUTF8 = false
     ): static {
         return $this->setTitle($this->trans($id, $parameters), $isUTF8);
+    }
+
+    protected function cleanText(string $str): string
+    {
+        $str = parent::cleanText($str);
+        if ('' === $str) {
+            return $str;
+        }
+
+        try {
+            return parent::convertEncoding($str, self::ENCODING_TO, self::ENCODING_FROM);
+        } catch (\ValueError) {
+            return $str;
+        }
     }
 
     /**

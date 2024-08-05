@@ -20,11 +20,11 @@ use App\Pdf\Events\PdfGroupEvent;
 interface PdfGroupListenerInterface
 {
     /**
-     * Called when a group must be rendered.
+     * Called when a group must be drawn.
      *
      * @param PdfGroupEvent $event the event
      *
      * @return bool true if the listener handles the output; false to use the default output
      */
-    public function outputGroup(PdfGroupEvent $event): bool;
+    public function drawGroup(PdfGroupEvent $event): bool;
 }

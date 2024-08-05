@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Pdf\Traits;
 
-use App\Pdf\PdfDocument;
 use App\Pdf\PdfFont;
+use App\Tests\Data\PdfDocumentBookmark;
 use fpdf\PdfDestination;
 use fpdf\PdfException;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +22,7 @@ class PdfBookmarkTraitTest extends TestCase
 {
     public function testBookmarkEmpty(): void
     {
-        $doc = new PdfDocument();
+        $doc = new PdfDocumentBookmark();
         $doc->applyFont(PdfFont::default());
         $doc->addPage();
         $doc->addPageIndex();
@@ -32,7 +32,7 @@ class PdfBookmarkTraitTest extends TestCase
 
     public function testBookmarks(): void
     {
-        $doc = new PdfDocument();
+        $doc = new PdfDocumentBookmark();
         $doc->applyFont(PdfFont::default());
         $doc->addPage();
         $doc->addBookmark('Level 0');
@@ -44,7 +44,7 @@ class PdfBookmarkTraitTest extends TestCase
 
     public function testBookmarksWithSeparator(): void
     {
-        $doc = new PdfDocument();
+        $doc = new PdfDocumentBookmark();
         $doc->applyFont(PdfFont::default());
         $doc->addPage();
         $doc->addBookmark('Level 0');
@@ -57,7 +57,7 @@ class PdfBookmarkTraitTest extends TestCase
     public function testInvalidLevel(): void
     {
         self::expectException(PdfException::class);
-        $doc = new PdfDocument();
+        $doc = new PdfDocumentBookmark();
         $doc->applyFont(PdfFont::default());
         $doc->addBookmark('Invalid Level', level: 3);
     }
@@ -65,7 +65,7 @@ class PdfBookmarkTraitTest extends TestCase
     public function testLongBookmark(): void
     {
         $bookmark = \str_repeat('Bookmark', 30);
-        $doc = new PdfDocument();
+        $doc = new PdfDocumentBookmark();
         $doc->applyFont(PdfFont::default());
         $doc->setRightMargin(100);
         $doc->addPage();
@@ -78,7 +78,7 @@ class PdfBookmarkTraitTest extends TestCase
     public function testLongSeparator(): void
     {
         $separator = \str_repeat('Separator', 30);
-        $doc = new PdfDocument();
+        $doc = new PdfDocumentBookmark();
         $doc->applyFont(PdfFont::default());
         $doc->setRightMargin(100);
         $doc->addPage();

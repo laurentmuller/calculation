@@ -10,18 +10,21 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf;
+namespace App\Report;
 
 use App\Model\CustomerInformation;
+use App\Pdf\PdfFont;
+use App\Pdf\PdfStyle;
 use App\Utils\StringUtils;
 use fpdf\PdfBorder;
+use fpdf\PdfDocument;
 use fpdf\PdfMove;
 use fpdf\PdfTextAlignment;
 
 /**
  * Class to output header in PDF documents.
  */
-class PdfHeader
+class ReportHeader
 {
     /**
      *  The default font size.
@@ -31,12 +34,12 @@ class PdfHeader
     /**
      * The default line height.
      */
-    private const LINE_HEIGHT = \fpdf\PdfDocument::LINE_HEIGHT;
+    private const LINE_HEIGHT = PdfDocument::LINE_HEIGHT;
 
     /**
      * The line height for customer address.
      */
-    private const SMALL_HEIGHT = \fpdf\PdfDocument::LINE_HEIGHT - 1.0;
+    private const SMALL_HEIGHT = PdfDocument::LINE_HEIGHT - 1.0;
 
     /**
      * The title font size.
@@ -68,7 +71,7 @@ class PdfHeader
      */
     private ?PdfStyle $titleStyle = null;
 
-    public function __construct(private readonly PdfDocument $parent)
+    public function __construct(private readonly AbstractReport $parent)
     {
     }
 

@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Response;
 
-use App\Pdf\PdfDocument;
 use App\Response\PdfResponse;
+use fpdf\PdfDocument;
 use PHPUnit\Framework\TestCase;
 
 class PdfResponseTest extends TestCase

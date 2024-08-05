@@ -14,6 +14,7 @@ namespace App\Pdf;
 
 use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
 use App\Utils\StringUtils;
+use fpdf\PdfDocument;
 use fpdf\PdfTextAlignment;
 
 /**

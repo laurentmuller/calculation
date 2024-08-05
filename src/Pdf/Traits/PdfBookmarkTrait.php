@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Pdf\Traits;
 
-use App\Pdf\PdfDocument;
 use App\Pdf\PdfStyle;
 use App\Utils\FormatUtils;
+use fpdf\PdfDocument;
 use fpdf\PdfException;
 use fpdf\PdfMove;
 use fpdf\PdfTextAlignment;

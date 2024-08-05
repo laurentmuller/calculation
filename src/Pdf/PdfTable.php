@@ -22,6 +22,7 @@ use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfDrawHeadersInterface;
 use App\Traits\MathTrait;
 use fpdf\PdfBorder;
+use fpdf\PdfDocument;
 use fpdf\PdfException;
 use fpdf\PdfRectangle;
 use fpdf\PdfRectangleStyle;
@@ -765,7 +766,7 @@ class PdfTable
         $parent->setPosition($position);
         $margin = $parent->getCellMargin();
         $textBounds = clone $bounds;
-        $line_height = \fpdf\PdfDocument::LINE_HEIGHT;
+        $line_height = PdfDocument::LINE_HEIGHT;
         if ($cell instanceof PdfImageCell) {
             $imageBounds = (clone $textBounds)->inflate(-$margin);
             $cell->drawImage($parent, $imageBounds, $alignment);
@@ -938,7 +939,7 @@ class PdfTable
         $style->apply($parent);
         $width = \max(0, $width - $style->getIndent());
         $lines = (float) $parent->getLinesCount($text, $width);
-        $height = \fpdf\PdfDocument::LINE_HEIGHT;
+        $height = PdfDocument::LINE_HEIGHT;
         if (!$style->getFont()->isDefaultSize()) {
             $fontSize = $style->getFont()->getSize();
             $margins = 2.0 * $parent->getCellMargin();

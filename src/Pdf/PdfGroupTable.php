@@ -14,6 +14,7 @@ namespace App\Pdf;
 
 use App\Pdf\Events\PdfGroupEvent;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
+use fpdf\PdfDocument;
 
 /**
  * Extends the PDF table by adding a group row when headers and/or new pages are output.
@@ -127,7 +128,7 @@ class PdfGroupTable extends PdfTable
             $this->setInProgress(true);
             if ($this->groupListener instanceof PdfGroupListenerInterface) {
                 $event = new PdfGroupEvent($this, $this->group);
-                $output = $this->groupListener->outputGroup($event);
+                $output = $this->groupListener->drawGroup($event);
             }
             if (!$output) {
                 $this->group->output($this);

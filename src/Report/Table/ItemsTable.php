@@ -182,7 +182,7 @@ class ItemsTable extends ReportGroupTable
             {
             }
 
-            public function outputGroup(PdfGroupEvent $event): bool
+            public function drawGroup(PdfGroupEvent $event): bool
             {
                 /** @psalm-var mixed $key */
                 $key = $event->getGroupKey();

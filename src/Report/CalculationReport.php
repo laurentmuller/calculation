@@ -196,7 +196,7 @@ class CalculationReport extends AbstractReport
 
             $image = $result->getImage();
             $x = $this->getPageWidth() - $this->getRightMargin() - self::QR_CODE_SIZE;
-            $y = $this->getPageHeight() - self::FOOTER_OFFSET - self::QR_CODE_SIZE;
+            $y = $this->getPageHeight() - ReportFooter::FOOTER_OFFSET - self::QR_CODE_SIZE;
             $this->imageGD($image, $x, $y, self::QR_CODE_SIZE, self::QR_CODE_SIZE, $this->qrcode);
         } catch (\Exception $e) {
             $this->logException($e, $this->trans('report.calculation.error_qr_code'));

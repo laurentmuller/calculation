@@ -27,7 +27,7 @@ use App\Report\Table\ReportGroupTable;
  */
 class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterface
 {
-    public function outputGroup(PdfGroupEvent $event): bool
+    public function drawGroup(PdfGroupEvent $event): bool
     {
         /** @var ReportGroupTable $table */
         $table = $event->table;

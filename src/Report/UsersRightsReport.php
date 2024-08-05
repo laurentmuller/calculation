@@ -61,7 +61,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         }
     }
 
-    public function outputGroup(PdfGroupEvent $event): bool
+    public function drawGroup(PdfGroupEvent $event): bool
     {
         /** @var User|string $key */
         $key = $event->getGroupKey();

@@ -14,11 +14,11 @@ namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfDocument;
-use App\Report\AbstractReport;
 use App\Report\Table\ReportGroupTable;
+use App\Tests\Data\TestReport;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -26,17 +26,28 @@ class ReportGroupTableTest extends TestCase
 {
     use TranslatorMockTrait;
 
+    private MockObject&TranslatorInterface $translator;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->translator = $this->createMockTranslator();
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testAddCellTrans(): void
     {
-        $document = new PdfDocument();
-        $document->resetStyle()
+        $report = $this->createReport();
+        $report->resetStyle()
             ->addPage();
-        $table = new ReportGroupTable($document, $this->createMockTranslator());
+        $table = new ReportGroupTable($report, $this->createMockTranslator());
         $table->addColumns(PdfColumn::left('', 10.0));
         $table->startRow()
             ->addCellTrans('id')
             ->endRow();
-        self::assertSame(1, $document->getPage());
+        self::assertSame(1, $report->getPage());
     }
 
     /**
@@ -44,23 +55,32 @@ class ReportGroupTableTest extends TestCase
      */
     public function testFromReport(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $report = new class($controller) extends AbstractReport {
-            public function render(): bool
-            {
-                return true;
-            }
-        };
+        $report = $this->createReport();
         $table = ReportGroupTable::fromReport($report);
         self::assertSame(0, $table->getColumnsCount());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testRender(): void
     {
-        $document = new PdfDocument();
-        $table = new ReportGroupTable($document, $this->createMockTranslator());
+        $report = $this->createReport();
+        $table = new ReportGroupTable($report, $this->translator);
         $table->addColumns(PdfColumn::left('', 10.0));
-        self::assertSame(0, $document->getPage());
+        self::assertSame(0, $report->getPage());
         self::assertInstanceOf(TranslatorInterface::class, $table->getTranslator());
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createReport(): TestReport
+    {
+        $controller = $this->createMock(AbstractController::class);
+        $controller->method('getTranslator')
+            ->willReturn($this->translator);
+
+        return new TestReport($controller);
     }
 }

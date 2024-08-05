@@ -21,7 +21,7 @@ use fpdf\PdfRectangleStyle;
  * The rotation affects all elements, which are printed after the method call (except clickable areas). Rotation is not
  * kept from page to page. Each page begins with no rotation.
  *
- * @psalm-require-extends \App\Pdf\PdfDocument
+ * @psalm-require-extends \fpdf\PdfDocument
  */
 trait PdfRotationTrait
 {
@@ -32,10 +32,11 @@ trait PdfRotationTrait
      */
     public function endRotate(): void
     {
-        if (!$this->isFloatZero($this->angle)) {
-            $this->out('Q');
-            $this->angle = 0.0;
+        if (!$this->isAngle($this->angle)) {
+            return;
         }
+        $this->out('Q');
+        $this->angle = 0.0;
     }
 
     /**
@@ -49,7 +50,7 @@ trait PdfRotationTrait
     {
         $this->endRotate();
         $angle = \fmod($angle, 360.0);
-        if ($this->isFloatZero($angle)) {
+        if (!$this->isAngle($angle)) {
             return;
         }
         $this->angle = $angle;
@@ -93,7 +94,7 @@ trait PdfRotationTrait
         float $angle,
         PdfRectangleStyle $style = PdfRectangleStyle::BORDER
     ): void {
-        if ($this->isFloatZero($angle)) {
+        if (!$this->isAngle($angle)) {
             return;
         }
         $this->rotate($angle, $x, $y);
@@ -130,20 +131,20 @@ trait PdfRotationTrait
      *
      * Do nothing if the text is empty or if the angle is equal to 0.0.
      *
-     * @param string     $txt   the text to rotate
+     * @param string     $text  the text to rotate
      * @param float      $angle the rotation angle
      * @param float|null $x     the abscissa position or <code>null</code> to use the current abscissa
      * @param float|null $y     the ordinate position or <code>null</code> to use the current ordinate
      */
-    public function rotateText(string $txt, float $angle, ?float $x = null, ?float $y = null): void
+    public function rotateText(string $text, float $angle, ?float $x = null, ?float $y = null): void
     {
-        if ('' === $txt || $this->isFloatZero($angle)) {
+        if ('' === $text || !$this->isAngle($angle)) {
             return;
         }
         $x ??= $this->getX();
         $y ??= $this->getY();
         $this->rotate($angle, $x, $y);
-        $this->text($x, $y, $txt);
+        $this->text($x, $y, $text);
         $this->endRotate();
     }
 
@@ -151,5 +152,10 @@ trait PdfRotationTrait
     {
         $this->endRotate();
         parent::endPage();
+    }
+
+    private function isAngle(float $angle): bool
+    {
+        return 0.0 !== \round($angle, 2);
     }
 }

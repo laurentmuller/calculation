@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Colors;
 
-use App\Pdf\PdfDocument;
+use fpdf\PdfDocument;
 
 /**
  * Color used color for filling operations (filled rectangles and cell backgrounds).

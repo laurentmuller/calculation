@@ -16,7 +16,7 @@ use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Interfaces\PdfColorInterface;
-use App\Pdf\PdfDocument;
+use fpdf\PdfDocument;
 
 /**
  * Trait for class implementing the color interface.

@@ -10,9 +10,10 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf;
+namespace App\Report;
 
-use App\Report\AbstractReport;
+use App\Pdf\PdfFont;
+use App\Pdf\PdfStyle;
 use App\Utils\FormatUtils;
 use fpdf\PdfBorder;
 use fpdf\PdfTextAlignment;
@@ -22,8 +23,13 @@ use fpdf\PdfTextAlignment;
  *
  * The page and total pages are output to the left, the content (if any) to the center and the date and time to the right.
  */
-class PdfFooter
+class ReportFooter
 {
+    /**
+     * The footer offset in millimeters.
+     */
+    final public const FOOTER_OFFSET = 15.0;
+
     /**
      * The content text.
      */
@@ -39,7 +45,7 @@ class PdfFooter
      */
     private ?string $url = null;
 
-    public function __construct(private readonly PdfDocument $parent)
+    public function __construct(private readonly AbstractReport $parent)
     {
     }
 
@@ -79,11 +85,8 @@ class PdfFooter
     {
         $parent = $this->parent;
         $page = $parent->getPage();
-        if ($parent instanceof AbstractReport) {
-            return $parent->trans('report.page', ['{0}' => $page, '{1}' => '{nb}']);
-        }
 
-        return "Page $page / {nb}";
+        return $parent->trans('report.page', ['{0}' => $page, '{1}' => '{nb}']);
     }
 
     /**
@@ -105,7 +108,7 @@ class PdfFooter
     private function outputTexts(): void
     {
         $parent = $this->parent;
-        $parent->setY(-PdfDocument::FOOTER_OFFSET);
+        $parent->setY(-self::FOOTER_OFFSET);
         $width = $parent->getPrintableWidth() / 3.0;
         PdfStyle::default()->setFontSize(PdfFont::DEFAULT_SIZE - 1.0)->apply($parent);
         $this->outputText($this->getPage(), $width, PdfTextAlignment::LEFT)

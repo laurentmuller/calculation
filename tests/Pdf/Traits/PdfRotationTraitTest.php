@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Pdf\Traits;
 
-use App\Pdf\PdfDocument;
 use App\Pdf\Traits\PdfRotationTrait;
 use fpdf\PdfDestination;
+use fpdf\PdfDocument;
 use fpdf\PdfRectangle;
 use PHPUnit\Framework\TestCase;
 

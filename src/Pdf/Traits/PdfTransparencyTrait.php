@@ -26,7 +26,7 @@ use App\Pdf\Enums\PdfBlendMode;
  *      alpha: float,
  *      blend_mode: string}
  *
- * @psalm-require-extends \App\Pdf\PdfDocument
+ * @psalm-require-extends \fpdf\PdfDocument
  */
 trait PdfTransparencyTrait
 {
@@ -50,11 +50,12 @@ trait PdfTransparencyTrait
     public function setAlpha(float $alpha, PdfBlendMode $blendMode = PdfBlendMode::NORMAL): void
     {
         $key = \count($this->gStates) + 1;
+        $alpha = \max(0.0, \min($alpha, 1.0));
         $gState = [
             'key' => $key,
             'object' => 0,
+            'alpha' => $alpha,
             'blend_mode' => $blendMode->camel(),
-            'alpha' => $this->validateRange($alpha, 0.0, 1.0),
         ];
         $this->gStates[] = $gState;
         $this->outf('/GS%d gs', $key);

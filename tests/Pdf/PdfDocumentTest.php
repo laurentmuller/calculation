@@ -14,31 +14,45 @@ namespace App\Tests\Pdf;
 
 use App\Controller\AbstractController;
 use App\Model\CustomerInformation;
-use App\Pdf\PdfDocument;
 use App\Pdf\PdfFont;
-use App\Report\AbstractReport;
+use App\Tests\Data\TestReport;
 use App\Tests\TranslatorMockTrait;
 use fpdf\PdfDestination;
 use fpdf\PdfPageSize;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\Translation\TranslatableInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PdfDocumentTest extends TestCase
 {
     use TranslatorMockTrait;
 
+    private MockObject&TranslatorInterface $translator;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->translator = $this->createMockTranslator();
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testApplyFont(): void
     {
-        $doc = new PdfDocument();
+        $doc = $this->createReport();
         $font = PdfFont::default();
         $oldFont = $doc->applyFont($font);
         self::assertEqualsCanonicalizing($font, $oldFont);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testConstructor(): void
     {
-        $doc = new PdfDocument();
+        $doc = $this->createReport();
         $expected = PdfPageSize::A4->getWidth();
         $actual = $doc->getPageWidth();
         self::assertEqualsWithDelta($expected, $actual, 0.01);
@@ -49,18 +63,24 @@ class PdfDocumentTest extends TestCase
         self::assertNotEmpty($content);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCurrentFont(): void
     {
-        $doc = new PdfDocument();
+        $doc = $this->createReport();
         $font = $doc->getCurrentFont();
         self::assertSame(PdfFont::DEFAULT_SIZE, $font->getSize());
         self::assertSame(PdfFont::DEFAULT_NAME, $font->getName());
         self::assertSame(PdfFont::DEFAULT_STYLE, $font->getStyle());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testFooter(): void
     {
-        $doc = new PdfDocument();
+        $doc = $this->createReport();
         $footer = $doc->getFooter();
         $footer->setContent('content', 'https:///www.example.com');
         $doc->output(PdfDestination::STRING);
@@ -72,53 +92,39 @@ class PdfDocumentTest extends TestCase
      */
     public function testFooterWithReport(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $report = new class($controller) extends AbstractReport {
-            public function __construct(AbstractController $controller)
-            {
-                parent::__construct($controller);
-            }
-
-            public function render(): bool
-            {
-                $this->addPage();
-
-                return true;
-            }
-
-            public function trans(
-                TranslatableInterface|\Stringable|string $id,
-                array $parameters = [],
-                ?string $domain = null,
-                ?string $locale = null
-            ): string {
-                return 'id';
-            }
-        };
-        $doc = new $report($controller);
+        $doc = $this->createReport();
         $doc->output(PdfDestination::STRING);
         self::assertSame(1, $doc->getPage());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testHeaderDefault(): void
     {
-        $doc = new PdfDocument();
+        $doc = $this->createReport();
         $header = $doc->getHeader();
         self::assertSame(5.0, $header->getHeight());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testHeaderWithDescription(): void
     {
-        $doc = new PdfDocument();
+        $doc = $this->createReport();
         $doc->applyFont(PdfFont::default());
         $header = $doc->getHeader();
         $header->setDescription('description');
         self::assertSame(9.0, $header->getHeight());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testHeaderWithPrintAddress(): void
     {
-        $doc = new PdfDocument();
+        $doc = $this->createReport();
         $doc->applyFont(PdfFont::default());
         $header = $doc->getHeader();
         $info = new CustomerInformation();
@@ -128,5 +134,17 @@ class PdfDocumentTest extends TestCase
         $header->setDescription('description');
         $doc->output(PdfDestination::STRING);
         self::assertSame(1, $doc->getPage());
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createReport(): TestReport
+    {
+        $controller = $this->createMock(AbstractController::class);
+        $controller->method('getTranslator')
+            ->willReturn($this->translator);
+
+        return new TestReport($controller);
     }
 }

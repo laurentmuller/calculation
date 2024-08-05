@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Pdf\Events;
 
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
-use App\Pdf\PdfDocument;
 use App\Pdf\PdfTable;
+use fpdf\PdfDocument;
 use fpdf\PdfRectangle;
 use fpdf\PdfTextAlignment;
 

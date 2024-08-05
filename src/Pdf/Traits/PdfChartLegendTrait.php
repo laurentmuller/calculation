@@ -22,7 +22,7 @@ use fpdf\PdfRectangleStyle;
  *
  * @psalm-import-type ColorStringType from PdfChartInterface
  *
- * @psalm-require-extends \App\Pdf\PdfDocument
+ * @psalm-require-extends \App\Report\AbstractReport
  *
  * @psalm-require-implements PdfChartInterface
  */

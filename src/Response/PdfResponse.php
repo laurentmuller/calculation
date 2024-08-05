@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Response;
 
-use App\Pdf\PdfDocument;
 use fpdf\PdfDestination;
+use fpdf\PdfDocument;
 
 /**
  * The PdfResponse represents an HTTP response within a PDF document.

@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Pdf\Events;
 
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
-use App\Pdf\PdfDocument;
 use App\Pdf\PdfGroup;
 use App\Pdf\PdfGroupTable;
+use fpdf\PdfDocument;
 
 /**
  * The event raised when a group must be rendered.

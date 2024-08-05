@@ -17,7 +17,7 @@ use fpdf\PdfRectangleStyle;
 /**
  * Trait to draw circles and ellipses.
  *
- * @psalm-require-extends \App\Pdf\PdfDocument
+ * @psalm-require-extends \fpdf\PdfDocument
  */
 trait PdfEllipseTrait
 {

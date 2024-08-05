@@ -15,10 +15,10 @@ namespace App\Tests\Pdf;
 use App\Pdf\Events\PdfGroupEvent;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfDocument;
 use App\Pdf\PdfGroup;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
+use fpdf\PdfDocument;
 use fpdf\PdfTextAlignment;
 use PHPUnit\Framework\TestCase;
 
@@ -49,7 +49,7 @@ class PdfGroupTableTest extends TestCase
         $table = $this->createTable();
         $table->getParent()->addPage();
         $listener = new class() implements PdfGroupListenerInterface {
-            public function outputGroup(PdfGroupEvent $event): bool
+            public function drawGroup(PdfGroupEvent $event): bool
             {
                 TestCase::assertNotNull($event->getDocument());
                 TestCase::assertNotNull($event->getGroupKey());

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
+use fpdf\PdfDocument;
 use fpdf\PdfFontName;
 use fpdf\PdfFontStyle;
 

@@ -16,7 +16,9 @@ use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Events\PdfLabelTextEvent;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\Traits\PdfDashLineTrait;
+use App\Pdf\Traits\PdfStyleTrait;
 use App\Utils\StringUtils;
+use fpdf\PdfDocument;
 use fpdf\PdfException;
 use fpdf\PdfFontName;
 use fpdf\PdfScaling;
@@ -28,6 +30,7 @@ use fpdf\PdfTextAlignment;
 class PdfLabelDocument extends PdfDocument
 {
     use PdfDashLineTrait;
+    use PdfStyleTrait;
 
     // the font mapping
     private const FONT_CONVERSION = [

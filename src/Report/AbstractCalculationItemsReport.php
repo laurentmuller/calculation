@@ -14,10 +14,10 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\PdfDocument;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Utils\FormatUtils;
+use fpdf\PdfDocument;
 use fpdf\PdfMove;
 use fpdf\PdfOrientation;
 

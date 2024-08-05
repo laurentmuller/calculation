@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace App\Report\Table;
 
-use App\Pdf\PdfDocument;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfCellFormatTrait;
 use App\Pdf\Traits\PdfCellTranslatorTrait;
 use App\Pdf\Traits\PdfColumnTranslatorTrait;
 use App\Report\AbstractReport;
+use fpdf\PdfDocument;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**

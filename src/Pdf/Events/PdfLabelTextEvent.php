@@ -28,7 +28,7 @@ class PdfLabelTextEvent
      * @param int              $index  the text index (zero-based line index)
      * @param int              $lines  the number of lines
      * @param float            $width  the output width
-     * @param float            $height the output height (line height)
+     * @param float            $height the output line height
      */
     public function __construct(
         public PdfLabelDocument $parent,

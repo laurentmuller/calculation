@@ -12,25 +12,37 @@ declare(strict_types=1);
 
 namespace App\Tests\Pdf\Traits;
 
+use App\Controller\AbstractController;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfDocument;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfCellTranslatorTrait;
+use App\Tests\Data\TestReport;
+use App\Tests\TranslatorMockTrait;
+use fpdf\PdfDocument;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PdfCellTranslatorTraitTest extends TestCase
 {
+    use TranslatorMockTrait;
+
+    private MockObject&TranslatorInterface $translator;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->translator = $this->createMockTranslator();
+    }
+
     /**
      * @throws Exception
      */
     public function testRender(): void
     {
-        $document = new PdfDocument();
-        $translator = $this->createMock(TranslatorInterface::class);
-
-        $table = new class($document, $translator) extends PdfTable {
+        $document = $this->createReport();
+        $table = new class($document, $this->translator) extends PdfTable {
             use PdfCellTranslatorTrait;
 
             public function __construct(PdfDocument $parent, private readonly TranslatorInterface $translator)
@@ -57,5 +69,17 @@ class PdfCellTranslatorTraitTest extends TestCase
             ->addPage();
         $actual = $table->render();
         self::assertTrue($actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createReport(): TestReport
+    {
+        $controller = $this->createMock(AbstractController::class);
+        $controller->method('getTranslator')
+            ->willReturn($this->translator);
+
+        return new TestReport($controller);
     }
 }

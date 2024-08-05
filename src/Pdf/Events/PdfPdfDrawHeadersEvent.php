@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Pdf\Events;
 
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfDocument;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
+use fpdf\PdfDocument;
 
 /**
  * The event raised when headers must be drawn.

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Pdf\Traits;
 
+use App\Pdf\PdfStyle;
 use App\Pdf\Traits\PdfRotationTrait;
 use fpdf\PdfDestination;
 use fpdf\PdfDocument;
@@ -26,6 +27,7 @@ class PdfRotationTraitTest extends TestCase
             use PdfRotationTrait;
         };
         $document->addPage();
+        PdfStyle::default()->apply($document);
 
         $document->rotate(0);
         $document->rotate(45);

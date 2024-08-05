@@ -35,7 +35,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 abstract class AbstractReport extends PdfDocument
 {
     use MathTrait;
-    use PdfBookmarkTrait;
+    use PdfBookmarkTrait {
+        addPageIndex as renderPageIndex;
+    }
     use PdfColumnTranslatorTrait;
     use PdfStyleTrait;
 
@@ -105,10 +107,10 @@ abstract class AbstractReport extends PdfDocument
         ?PdfStyle $contentStyle = null,
         bool $addBookmark = true,
         string $separator = '.'
-    ): self {
+    ): static {
         $title ??= $this->trans('report.index');
 
-        return $this->addPageIndex($title, $titleStyle, $contentStyle, $addBookmark, $separator);
+        return $this->renderPageIndex($title, $titleStyle, $contentStyle, $addBookmark, $separator);
     }
 
     public function footer(): void
@@ -150,16 +152,13 @@ abstract class AbstractReport extends PdfDocument
     abstract public function render(): bool;
 
     /**
-     * Renders a single line with the given number of elements.
+     * Renders a single line with the header style for the given number of elements.
      *
      * @return bool <code>true</code> if the given number of elements is greater than 0
      */
     public function renderCount(PdfTable $table, \Countable|array|int $count, string $message = 'common.count'): bool
     {
         $this->resetStyle();
-        if (!\is_int($count)) {
-            $count = \count($count);
-        }
         $text = $this->translateCount($count, $message);
         $table->singleLine($text, PdfStyle::getHeaderStyle(), PdfTextAlignment::LEFT);
 

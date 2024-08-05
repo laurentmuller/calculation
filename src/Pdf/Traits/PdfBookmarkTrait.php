@@ -127,7 +127,7 @@ trait PdfBookmarkTrait
         ?PdfStyle $contentStyle = null,
         bool $addBookmark = true,
         string $separator = '.'
-    ): PdfDocument {
+    ): static {
         // empty?
         if ([] === $this->bookmarks) {
             return $this;

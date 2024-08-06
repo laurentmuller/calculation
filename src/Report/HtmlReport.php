@@ -19,7 +19,6 @@ use fpdf\PdfOrientation;
 use fpdf\PdfPageSize;
 use fpdf\PdfRotation;
 use fpdf\PdfSize;
-use fpdf\PdfUnit;
 
 /**
  * Report to output HTML content.
@@ -32,11 +31,9 @@ class HtmlReport extends AbstractReport
     public function __construct(
         AbstractController $controller,
         private readonly string $html,
-        PdfOrientation $orientation = PdfOrientation::PORTRAIT,
-        PdfUnit $unit = PdfUnit::MILLIMETER,
-        PdfPageSize $size = PdfPageSize::A4
+        PdfOrientation $orientation = PdfOrientation::PORTRAIT
     ) {
-        parent::__construct($controller, $orientation, $unit, $size);
+        parent::__construct($controller, $orientation);
     }
 
     public function footer(): void

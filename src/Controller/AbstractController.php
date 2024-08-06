@@ -355,7 +355,7 @@ abstract class AbstractController extends BaseController
      * @param bool        $inline <code>true</code> to send the file inline to the browser. The PDF viewer is used if
      *                            available. <code>false</code> to send to the browser and force a file download with
      *                            the name given.
-     * @param string      $name   the name of the PDF file or null to use default ('document.pdf')
+     * @param string      $name   the name of the file (without an extension) or '' to use default ('document')
      *
      * @throws NotFoundHttpException
      */
@@ -364,7 +364,7 @@ abstract class AbstractController extends BaseController
         if ($doc instanceof AbstractReport && !$doc->render()) {
             throw $this->createNotFoundException($this->trans('errors.render_document'));
         }
-        if ('' === $name && StringUtils::isString($doc->getTitle())) {
+        if (!StringUtils::isString($name) && StringUtils::isString($doc->getTitle())) {
             $name = $doc->getTitle();
         }
 
@@ -378,7 +378,7 @@ abstract class AbstractController extends BaseController
      * @param bool                $inline <code>true</code> to send the file inline to the browser. The Spreadsheet
      *                                    viewer is used if available.
      *                                    <code>false</code> to send to the browser and force a file download.
-     * @param string              $name   the name of the Spreadsheet file or null to use default ('document.xlsx')
+     * @param string              $name   the name of the file (without an extension) or '' to use default ('document')
      *
      * @throws NotFoundHttpException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
@@ -391,7 +391,7 @@ abstract class AbstractController extends BaseController
         if ($doc instanceof AbstractDocument && !$doc->render()) {
             throw $this->createNotFoundException($this->trans('errors.render_document'));
         }
-        if ('' === $name && StringUtils::isString($doc->getTitle())) {
+        if (!StringUtils::isString($name) && StringUtils::isString($doc->getTitle())) {
             /** @psalm-var string $name */
             $name = $doc->getTitle();
         }
@@ -406,7 +406,7 @@ abstract class AbstractController extends BaseController
      * @param bool         $inline <code>true</code> to send the file inline to the browser. The PDF viewer is used
      *                             if available. <code>false</code> to send to the browser and force a file download
      *                             with the name given.
-     * @param string       $name   the name of the PDF file or null to use default ('document.pdf')
+     * @param string       $name   the name of the file (without an extension) or '' to use default ('document')
      *
      * @throws NotFoundHttpException
      * @throws \PhpOffice\PhpWord\Exception\Exception
@@ -416,7 +416,7 @@ abstract class AbstractController extends BaseController
         if ($doc instanceof AbstractWordDocument && !$doc->render()) {
             throw $this->createNotFoundException($this->trans('errors.render_document'));
         }
-        if ('' === $name && StringUtils::isString($doc->getTitle())) {
+        if (!StringUtils::isString($name) && StringUtils::isString($doc->getTitle())) {
             /** @psalm-var string $name */
             $name = $doc->getTitle();
         }

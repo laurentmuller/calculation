@@ -123,11 +123,12 @@ trait PdfSectorTrait
 
     private function sectorComputeArc(float $deltaAngle, float $radius): float
     {
-        if (0.0 !== \sin($deltaAngle / 2.0)) {
-            return 4.0 / 3.0 * (1.0 - \cos($deltaAngle / 2.0)) / \sin($deltaAngle / 2.0) * $radius;
+        $sin = \sin($deltaAngle / 2.0);
+        if (0.0 === $sin) {
+            return $sin;
         }
 
-        return 0.0;
+        return 4.0 / 3.0 * (1.0 - \cos($deltaAngle / 2.0)) / $sin * $radius;
     }
 
     /**

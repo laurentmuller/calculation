@@ -53,7 +53,8 @@ class PdfImageCell extends PdfCell
      * @param int               $cols      the cell columns span
      * @param ?PdfStyle         $style     the cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
-     * @param string|int|null   $link      the cell link. A URL or identifier returned by AddLink().
+     * @param string|int|null   $link      the optional cell link.
+     *                                     A URL or an identifier returned by the <code>addLink()</code> function.
      *
      * @psalm-param positive-int $cols
      *
@@ -67,7 +68,7 @@ class PdfImageCell extends PdfCell
         string|int|null $link = null
     ) {
         if (!FileUtils::exists($path)) {
-            throw PdfException::instance("The image '$path' does not exist.");
+            throw PdfException::format("The image '%s' does not exist.", $path);
         }
 
         parent::__construct(cols: $cols, style: $style, alignment: $alignment, link: $link);

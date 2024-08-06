@@ -36,8 +36,8 @@ trait PdfCellTranslatorTrait
      * @param ?PdfStyle                                $style     the cell style to use or null to use the default
      *                                                            cell style
      * @param ?PdfTextAlignment                        $alignment the cell alignment
-     * @param string|int|null                          $link      the cell link. A URL or an identifier returned
-     *                                                            by AddLink().
+     * @param string|int|null                          $link      the optional cell link. A URL or identifier
+     *                                                            returned by the <code>addLink()</code> function.
      *
      * @psalm-param positive-int $cols
      */

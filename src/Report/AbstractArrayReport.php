@@ -14,8 +14,6 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use fpdf\PdfOrientation;
-use fpdf\PdfPageSize;
-use fpdf\PdfUnit;
 
 /**
  * Abstract report rendering an array of objects.
@@ -30,11 +28,9 @@ abstract class AbstractArrayReport extends AbstractReport
     public function __construct(
         AbstractController $controller,
         protected array $entities,
-        PdfOrientation $orientation = PdfOrientation::PORTRAIT,
-        PdfUnit $unit = PdfUnit::MILLIMETER,
-        PdfPageSize $size = PdfPageSize::A4
+        PdfOrientation $orientation = PdfOrientation::PORTRAIT
     ) {
-        parent::__construct($controller, $orientation, $unit, $size);
+        parent::__construct($controller, $orientation);
     }
 
     public function render(): bool

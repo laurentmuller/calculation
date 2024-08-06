@@ -17,7 +17,6 @@ use App\Pdf\Traits\PdfCellFormatTrait;
 use App\Pdf\Traits\PdfCellTranslatorTrait;
 use App\Pdf\Traits\PdfColumnTranslatorTrait;
 use App\Report\AbstractReport;
-use fpdf\PdfDocument;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -29,17 +28,16 @@ class ReportGroupTable extends PdfGroupTable
     use PdfCellTranslatorTrait;
     use PdfColumnTranslatorTrait;
 
+    private readonly TranslatorInterface $translator;
+
     /**
-     * @param PdfDocument         $parent     the parent document to print in
-     * @param TranslatorInterface $translator the translator used to translate cells
-     * @param bool                $fullWidth  a value indicating if the table takes all the printable width
+     * @param AbstractReport $parent    the parent report to print in
+     * @param bool           $fullWidth a value indicating if the table takes all the printable width
      */
-    public function __construct(
-        PdfDocument $parent,
-        private readonly TranslatorInterface $translator,
-        bool $fullWidth = true
-    ) {
+    public function __construct(AbstractReport $parent, bool $fullWidth = true)
+    {
         parent::__construct($parent, $fullWidth);
+        $this->translator = $parent->getTranslator();
     }
 
     /**
@@ -48,11 +46,9 @@ class ReportGroupTable extends PdfGroupTable
      * @param AbstractReport $parent    the parent report to print in
      * @param bool           $fullWidth a value indicating if the table takes all the printable width
      */
-    public static function fromReport(
-        AbstractReport $parent,
-        bool $fullWidth = true
-    ): self {
-        return new self($parent, $parent->getTranslator(), $fullWidth);
+    public static function fromReport(AbstractReport $parent, bool $fullWidth = true): self
+    {
+        return new self($parent, $fullWidth);
     }
 
     public function getTranslator(): TranslatorInterface

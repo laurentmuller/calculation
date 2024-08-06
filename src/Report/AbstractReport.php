@@ -22,22 +22,18 @@ use App\Traits\MathTrait;
 use fpdf\PdfDocument;
 use fpdf\PdfLayout;
 use fpdf\PdfOrientation;
-use fpdf\PdfPageSize;
 use fpdf\PdfTextAlignment;
-use fpdf\PdfUnit;
 use fpdf\PdfZoom;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Abstract report with default header, footer, bookmarks, style and page index capabilities.
+ * Abstract report with a default header, a default footer, bookmarks, styles and bookmarks.
  */
 abstract class AbstractReport extends PdfDocument
 {
     use MathTrait;
-    use PdfBookmarkTrait {
-        addPageIndex as renderPageIndex;
-    }
+    use PdfBookmarkTrait;
     use PdfColumnTranslatorTrait;
     use PdfStyleTrait;
 
@@ -73,44 +69,26 @@ abstract class AbstractReport extends PdfDocument
 
     public function __construct(
         protected readonly AbstractController $controller,
-        PdfOrientation $orientation = PdfOrientation::PORTRAIT,
-        PdfUnit $unit = PdfUnit::MILLIMETER,
-        PdfPageSize $size = PdfPageSize::A4
+        PdfOrientation $orientation = PdfOrientation::PORTRAIT
     ) {
-        parent::__construct($orientation, $unit, $size);
+        parent::__construct($orientation);
         $this->setDisplayMode(PdfZoom::FULL_PAGE, PdfLayout::SINGLE);
         $this->setAutoPageBreak(true, $this->bottomMargin - self::LINE_HEIGHT);
 
         $this->translator = $this->controller->getTranslator();
-        $appName = $controller->getApplicationName();
-        $this->setCreator($appName);
+        $this->header = new ReportHeader($this);
+        $this->footer = new ReportFooter($this);
+
+        $applicationName = $controller->getApplicationName();
+        $this->setCreator($applicationName);
         $userName = $controller->getUserIdentifier();
         if (null !== $userName) {
             $this->setAuthor($userName);
         }
 
         $service = $this->controller->getUserService();
-        $this->header = new ReportHeader($this);
         $this->header->setCustomer($service->getCustomer());
-        $this->footer = new ReportFooter($this);
-        $this->footer->setContent($appName, $controller->getApplicationOwnerUrl());
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * Override the default behavior by adding the translated title.
-     */
-    public function addPageIndex(
-        ?string $title = null,
-        ?PdfStyle $titleStyle = null,
-        ?PdfStyle $contentStyle = null,
-        bool $addBookmark = true,
-        string $separator = '.'
-    ): static {
-        $title ??= $this->trans('report.index');
-
-        return $this->renderPageIndex($title, $titleStyle, $contentStyle, $addBookmark, $separator);
+        $this->footer->setContent($applicationName, $controller->getApplicationOwnerUrl());
     }
 
     public function footer(): void
@@ -204,11 +182,7 @@ abstract class AbstractReport extends PdfDocument
             return $str;
         }
 
-        try {
-            return parent::convertEncoding($str, self::ENCODING_TO, self::ENCODING_FROM);
-        } catch (\ValueError) {
-            return $str;
-        }
+        return parent::convertEncoding($str, self::ENCODING_TO, self::ENCODING_FROM);
     }
 
     /**

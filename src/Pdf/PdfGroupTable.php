@@ -27,7 +27,7 @@ class PdfGroupTable extends PdfTable
     private PdfGroup $group;
 
     /*
-     * The output the group before header.
+     * The output the group before table header.
      */
     private bool $groupBeforeHeader = false;
 
@@ -111,7 +111,7 @@ class PdfGroupTable extends PdfTable
     }
 
     /**
-     * Gets a value indicating if the group is output before header.
+     * Gets a value indicating if the group is output before the table header.
      */
     public function isGroupBeforeHeader(): bool
     {
@@ -123,18 +123,20 @@ class PdfGroupTable extends PdfTable
      */
     public function outputGroup(): static
     {
-        if ($this->group->hasKey() && !$this->isInProgress()) {
-            $output = false;
-            $this->setInProgress(true);
-            if ($this->groupListener instanceof PdfGroupListenerInterface) {
-                $event = new PdfGroupEvent($this, $this->group);
-                $output = $this->groupListener->drawGroup($event);
-            }
-            if (!$output) {
-                $this->group->output($this);
-            }
-            $this->setInProgress(false);
+        if (!$this->group->hasKey() || $this->isInProgress()) {
+            return $this;
         }
+
+        $output = false;
+        $this->setInProgress(true);
+        if ($this->groupListener instanceof PdfGroupListenerInterface) {
+            $event = new PdfGroupEvent($this, $this->group);
+            $output = $this->groupListener->drawGroup($event);
+        }
+        if (!$output) {
+            $this->group->output($this);
+        }
+        $this->setInProgress(false);
 
         return $this;
     }
@@ -160,7 +162,7 @@ class PdfGroupTable extends PdfTable
     }
 
     /**
-     * Sets a value indicating if the group is output before header.
+     * Sets a value indicating if the group is output before the table header.
      */
     public function setGroupBeforeHeader(bool $groupBeforeHeader): static
     {

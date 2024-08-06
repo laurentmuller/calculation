@@ -14,7 +14,6 @@ namespace App\Pdf\Traits;
 
 use App\Pdf\PdfStyle;
 use App\Utils\FormatUtils;
-use fpdf\PdfDocument;
 use fpdf\PdfException;
 use fpdf\PdfMove;
 use fpdf\PdfTextAlignment;
@@ -71,8 +70,6 @@ trait PdfBookmarkTrait
      *                      bookmark is 2, the allowed values are 0..3.</li>
      *                      </ul>
      *
-     * @see PdfDocument::addPageIndex()
-     *
      * @psalm-param non-negative-int $level
      */
     public function addBookmark(
@@ -81,7 +78,7 @@ trait PdfBookmarkTrait
         int $level = 0,
         bool $currentY = true,
         bool $createLink = true
-    ): self {
+    ): static {
         // validate
         $this->validateLevel($level);
         // convert
@@ -118,8 +115,6 @@ trait PdfBookmarkTrait
      * @param ?PdfStyle $contentStyle the content style or null to use the default style (Font Arial 9-point Regular)
      * @param bool      $addBookmark  true to add the index page itself in the list of the bookmarks
      * @param string    $separator    the separator character used between the text and the page
-     *
-     * @see PdfDocument::addBookmark()
      */
     public function addPageIndex(
         ?string $title = null,
@@ -162,7 +157,7 @@ trait PdfBookmarkTrait
             // text
             $link = $bookmark['link'];
             $width = $printable_width - $offset - $page_size - self::SPACE;
-            $text_size = $this->outputIndexText($bookmark['text'], $width, $height, $link);
+            $text_size = $this->outputIndexText($this->cleanText($bookmark['text']), $width, $height, $link);
             // separator
             $width -= $text_size + self::SPACE;
             $this->outputIndexSeparator($separator, $width, $height, $link);
@@ -203,37 +198,29 @@ trait PdfBookmarkTrait
 
     private function outputIndexLevel(int $level): float
     {
-        $offset = 0;
-        if ($level > 0) {
-            $offset = (float) $level * 2.0 * self::SPACE;
-            $this->x += $offset;
+        if (0 === $level) {
+            return 0.0;
         }
+        $offset = (float) $level * 2.0 * self::SPACE;
+        $this->x += $offset;
 
         return $offset;
     }
 
-    private function outputIndexPage(
-        string $page,
-        float $width,
-        float $height,
-        ?int $link
-    ): void {
+    private function outputIndexPage(string $text, float $width, float $height, ?int $link): void
+    {
         $this->cell(
             width: $width,
             height: $height,
-            text: $page,
+            text: $text,
             move: PdfMove::NEW_LINE,
             align: PdfTextAlignment::RIGHT,
             link: $link
         );
     }
 
-    private function outputIndexSeparator(
-        string $separator,
-        float $width,
-        float $height,
-        ?int $link
-    ): void {
+    private function outputIndexSeparator(string $separator, float $width, float $height, ?int $link): void
+    {
         $count = (int) \floor($width / $this->getStringWidth($separator));
         $width += self::SPACE;
         if ($count > 0) {
@@ -256,7 +243,6 @@ trait PdfBookmarkTrait
         float $height,
         ?int $link
     ): float {
-        $text = $this->cleanText($text);
         $text_width = $this->getStringWidth($text);
         while ($text_width > $width) {
             $text = \substr($text, 0, -1);
@@ -282,11 +268,8 @@ trait PdfBookmarkTrait
 
         $result = false;
         if ($addBookmark) {
-            try {
-                $this->addBookmark($title, currentY: false);
-                $result = \end($this->bookmarks);
-            } catch (PdfException) {
-            }
+            $this->addBookmark($title, currentY: false);
+            $result = \end($this->bookmarks);
         }
         $titleStyle->apply($this);
         $this->cell(text: $title, move: PdfMove::NEW_LINE, align: PdfTextAlignment::CENTER);
@@ -352,8 +335,7 @@ trait PdfBookmarkTrait
         }
         if ($level < 0 || $level > $maxLevel) {
             $allowed = \implode('...', \array_unique([0, $maxLevel]));
-            $message = \sprintf('Invalid bookmark level: %d. Allowed value: %s.', $level, $allowed);
-            throw PdfException::instance($message);
+            throw PdfException::format('Invalid bookmark level: %d. Allowed value: %s.', $level, $allowed);
         }
     }
 }

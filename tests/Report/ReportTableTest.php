@@ -42,7 +42,7 @@ class ReportTableTest extends TestCase
         $report = $this->createReport();
         $report->resetStyle()
             ->addPage();
-        $table = new ReportTable($report, $this->translator);
+        $table = new ReportTable($report);
         $table->addColumns(PdfColumn::left('', 10.0));
         $table->startRow()
             ->addCellTrans('id')

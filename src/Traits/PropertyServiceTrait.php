@@ -27,12 +27,12 @@ use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 trait PropertyServiceTrait
 {
     use CacheAwareTrait {
-        clearCache as private doClearCache;
-        saveDeferredCacheValue as private doSaveDeferredCacheValue;
+        clearCache as private clearCacheFromTrait;
+        saveDeferredCacheValue as private saveDeferredCacheValueFromTrait;
     }
     use LoggerAwareTrait;
     use ServiceMethodsSubscriberTrait {
-        ServiceMethodsSubscriberTrait::setContainer as doSetContainer;
+        ServiceMethodsSubscriberTrait::setContainer as setContainerFromTrait;
     }
     use TranslatorAwareTrait;
 
@@ -41,7 +41,7 @@ trait PropertyServiceTrait
      */
     public function clearCache(): bool
     {
-        if (!$this->doClearCache()) {
+        if (!$this->clearCacheFromTrait()) {
             $this->logWarning($this->trans('application_service.clear_error'));
 
             return false;
@@ -72,7 +72,7 @@ trait PropertyServiceTrait
 
     public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
-        if (!$this->doSaveDeferredCacheValue($key, $value, $time)) {
+        if (!$this->saveDeferredCacheValueFromTrait($key, $value, $time)) {
             $this->logWarning($this->trans('application_service.deferred_error', ['%key%' => $key]));
 
             return false;
@@ -87,7 +87,7 @@ trait PropertyServiceTrait
     #[Required]
     public function setContainer(ContainerInterface $container): ?ContainerInterface
     {
-        $result = $this->doSetContainer($container);
+        $result = $this->setContainerFromTrait($container);
 
         try {
             if (!$this->getPropertyBoolean(self::P_CACHE_SAVED)) {

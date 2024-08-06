@@ -122,7 +122,7 @@ class PdfTable
      * @param int               $cols      the number of columns to span
      * @param ?PdfStyle         $style     the cell style or null to use the default cell style
      * @param ?PdfTextAlignment $alignment the text alignment or null to use the column alignment
-     * @param string|int|null   $link      the cell link. A URL or identifier returned by
+     * @param string|int|null   $link      the optional cell link. A URL or identifier returned by
      *                                     the <code>addLink()</code> function.
      *
      * @throws PdfException if no current row is started

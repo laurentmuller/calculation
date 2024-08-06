@@ -53,6 +53,7 @@ trait PdfPieChartTrait
         bool $clockwise = true,
         float $origin = 90
     ): void {
+        // check parameters
         if ($radius <= 0 || [] === $rows) {
             return;
         }

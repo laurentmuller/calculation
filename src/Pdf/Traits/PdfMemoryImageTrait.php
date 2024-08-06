@@ -50,7 +50,7 @@ trait PdfMemoryImageTrait
      *                                <li>If the value is not specified or equal to zero, it is automatically
      *                                calculated.</li>
      *                                </ul>
-     * @param string|int|null $link   the URL or an identifier returned by <code>addLink()</code>
+     * @param string|int|null $link   the URL or an identifier returned by the <code>addLink()</code> function
      *
      * @throws PdfException if the image cannot be converted
      */
@@ -97,7 +97,7 @@ trait PdfMemoryImageTrait
      *                                <li>If the value is not specified or equal to zero, it is automatically
      *                                calculated.</li>
      *                                </ul>
-     * @param string|int|null $link   the URL or an identifier returned by <code>addLink()</code>
+     * @param string|int|null $link   the URL or an identifier returned by the <code>addLink()</code> function
      *
      * @throws PdfException if the image data is invalid
      */

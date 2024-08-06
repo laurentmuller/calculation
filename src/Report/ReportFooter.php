@@ -79,14 +79,13 @@ class ReportFooter
     }
 
     /**
-     * Gets the formatted current and total pages.
+     * Gets the formatted pages.
      */
-    private function getPage(): string
+    private function getPages(): string
     {
         $parent = $this->parent;
-        $page = $parent->getPage();
 
-        return $parent->trans('report.page', ['{0}' => $page, '{1}' => '{nb}']);
+        return $parent->trans('report.page', ['{0}' => $parent->getPage(), '{1}' => '{nb}']);
     }
 
     /**
@@ -111,7 +110,7 @@ class ReportFooter
         $parent->setY(-self::FOOTER_OFFSET);
         $width = $parent->getPrintableWidth() / 3.0;
         PdfStyle::default()->setFontSize(PdfFont::DEFAULT_SIZE - 1.0)->apply($parent);
-        $this->outputText($this->getPage(), $width, PdfTextAlignment::LEFT)
+        $this->outputText($this->getPages(), $width, PdfTextAlignment::LEFT)
             ->outputText($this->content ?? '', $width, PdfTextAlignment::CENTER, $this->url)
             ->outputText($this->getDate(), $width, PdfTextAlignment::RIGHT);
         $parent->resetStyle();

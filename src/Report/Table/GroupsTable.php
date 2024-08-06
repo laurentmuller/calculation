@@ -28,7 +28,7 @@ class GroupsTable extends ReportTable
 
     public function __construct(CalculationReport $parent)
     {
-        parent::__construct($parent, $parent->getTranslator());
+        parent::__construct($parent);
         $this->calculation = $parent->getCalculation();
     }
 

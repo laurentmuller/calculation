@@ -16,8 +16,11 @@ use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
+use App\Interfaces\RoleInterface;
 use App\Model\Role;
+use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
+use App\Traits\ArrayTrait;
 use App\Traits\RoleTranslatorTrait;
 use Elao\Enum\FlagBag;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
@@ -29,9 +32,11 @@ use PhpOffice\PhpSpreadsheet\RichText\RichText;
  */
 class UserRightsDocument extends AbstractArrayDocument
 {
+    use ArrayTrait;
     use RoleTranslatorTrait;
 
-    private bool $superAdmin = false;
+    private readonly ApplicationService $applicationService;
+    private readonly bool $superAdmin;
 
     /**
      * @param User[] $entities
@@ -44,12 +49,8 @@ class UserRightsDocument extends AbstractArrayDocument
         private readonly RoleBuilderService $service
     ) {
         parent::__construct($controller, $entities);
-        foreach ($this->entities as $entity) {
-            if ($entity->isSuperAdmin()) {
-                $this->superAdmin = true;
-                break;
-            }
-        }
+        $this->applicationService = $controller->getApplicationService();
+        $this->superAdmin = $this->anyMatch($entities, static fn (User $user): bool => $user->isSuperAdmin());
     }
 
     /**
@@ -78,6 +79,22 @@ class UserRightsDocument extends AbstractArrayDocument
         $sheet->finish();
 
         return true;
+    }
+
+    /**
+     * @return EntityName[]
+     */
+    private function getEntityNames(RoleInterface $role): array
+    {
+        $names = $this->removeValue(EntityName::sorted(), EntityName::LOG);
+        if (!$role->isAdmin()) {
+            $names = $this->removeValue($names, EntityName::USER);
+        }
+        if (!$this->applicationService->isDebug()) {
+            $names = $this->removeValue($names, EntityName::CUSTOMER);
+        }
+
+        return $names;
     }
 
     /**
@@ -121,14 +138,9 @@ class UserRightsDocument extends AbstractArrayDocument
 
     private function outputRole(WorksheetDocument $sheet, Role|User $entity, int &$row): void
     {
-        $names = EntityName::sorted();
-        $isAdmin = $entity->isAdmin();
         $this->outputEntityName($sheet, $entity, $row++);
-
+        $names = $this->getEntityNames($entity);
         foreach ($names as $name) {
-            if (EntityName::LOG === $name || (!$isAdmin && EntityName::USER === $name)) {
-                continue;
-            }
             $rights = $entity->getPermission($name);
             $this->outputRights($sheet, $name, $rights, $row++);
         }

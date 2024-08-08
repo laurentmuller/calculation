@@ -16,13 +16,16 @@ use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
+use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Pdf\Events\PdfGroupEvent;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
+use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
+use App\Traits\ArrayTrait;
 use App\Traits\RoleTranslatorTrait;
 use Elao\Enum\FlagBag;
 use fpdf\PdfBorder;
@@ -35,11 +38,13 @@ use fpdf\PdfMove;
  */
 class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerInterface
 {
+    use ArrayTrait;
     use RoleTranslatorTrait;
 
+    private readonly ApplicationService $applicationService;
     private ?PdfStyle $bulletStyle = null;
     private ?PdfStyle $entityStyle = null;
-    private bool $superAdmin = false;
+    private readonly bool $superAdmin;
 
     /**
      * @param User[] $entities
@@ -47,18 +52,13 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     public function __construct(
         AbstractController $controller,
         array $entities,
-        private readonly RoleBuilderService $service
+        private readonly RoleBuilderService $roleBuilderService
     ) {
         parent::__construct($controller, $entities);
         $this->setTitleTrans('user.rights.title', [], true)
             ->setDescriptionTrans('user.rights.description');
-
-        foreach ($this->entities as $entity) {
-            if ($entity->isSuperAdmin()) {
-                $this->superAdmin = true;
-                break;
-            }
-        }
+        $this->applicationService = $controller->getApplicationService();
+        $this->superAdmin = $this->anyMatch($entities, static fn (User $user): bool => $user->isSuperAdmin());
     }
 
     public function drawGroup(PdfGroupEvent $event): bool
@@ -112,6 +112,22 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     }
 
     /**
+     * @return EntityName[]
+     */
+    private function getEntityNames(RoleInterface $role): array
+    {
+        $names = $this->removeValue(EntityName::sorted(), EntityName::LOG);
+        if (!$role->isAdmin()) {
+            $names = $this->removeValue($names, EntityName::USER);
+        }
+        if (!$this->applicationService->isDebug()) {
+            $names = $this->removeValue($names, EntityName::CUSTOMER);
+        }
+
+        return $names;
+    }
+
+    /**
      * @psalm-param FlagBag<EntityPermission> $rights
      */
     private function getRightText(FlagBag $rights, EntityPermission $permission): ?string
@@ -136,32 +152,23 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
     private function outputRole(PdfGroupTable $table, Role|User $entity): void
     {
-        $outputUsers = $entity->isAdmin();
-        $names = EntityName::sorted();
-        $lines = \count($names) - 1;
-        if (!$outputUsers) {
-            --$lines;
-        }
-        if (!$this->isPrintable((float) $lines * self::LINE_HEIGHT)) {
+        $names = $this->getEntityNames($entity);
+        if (!$this->isPrintable((float) \count($names) * self::LINE_HEIGHT)) {
             $this->addPage();
         }
+
         if ($entity instanceof User) {
             $this->addBookmark($entity->getUserIdentifier(), true, 1);
             $table->setGroupKey($entity);
         } else {
             $role = $this->translateRole($entity);
-            $this->addBookmark($this->translateRole($entity), level: 1);
+            $this->addBookmark($role, true, 1);
             $table->setGroupKey($role);
         }
 
         foreach ($names as $name) {
-            if (EntityName::LOG === $name) {
-                continue;
-            }
-            if ($outputUsers || EntityName::USER !== $name) {
-                $rights = $entity->getPermission($name);
-                $this->outputRights($table, $name, $rights);
-            }
+            $rights = $entity->getPermission($name);
+            $this->outputRights($table, $name, $rights);
         }
     }
 
@@ -169,11 +176,10 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     {
         $this->addBookmark($this->trans('user.roles.name'), true);
         if ($this->superAdmin) {
-            $this->outputRole($table, $this->service->getRoleSuperAdmin());
+            $this->outputRole($table, $this->roleBuilderService->getRoleSuperAdmin());
         }
-        $application = $this->controller->getApplicationService();
-        $this->outputRole($table, $application->getAdminRole());
-        $this->outputRole($table, $application->getUserRole());
+        $this->outputRole($table, $this->applicationService->getAdminRole());
+        $this->outputRole($table, $this->applicationService->getUserRole());
     }
 
     private function outputTotal(PdfTable $table, array $entities): void
@@ -192,7 +198,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         $this->addBookmark($this->trans('user.list.title'));
         foreach ($users as $user) {
             if (!$user->isOverwrite()) {
-                $rights = $this->service->getRole($user)->getRights();
+                $rights = $this->roleBuilderService->getRole($user)->getRights();
                 $user->setRights($rights);
             }
             $this->outputRole($table, $user);

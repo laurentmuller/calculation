@@ -126,10 +126,7 @@ class PivotTable extends AbstractPivotAggregator
      */
     public function findCellByKey(mixed $columnKey, mixed $rowKey): ?PivotCell
     {
-        return $this->findFirst(
-            $this->cells,
-            fn (int $key, PivotCell $cell): bool => $cell->equalsKey($columnKey, $rowKey)
-        );
+        return $this->findFirst($this->cells, fn (PivotCell $cell): bool => $cell->equalsKey($columnKey, $rowKey));
     }
 
     /**
@@ -142,10 +139,7 @@ class PivotTable extends AbstractPivotAggregator
      */
     public function findCellByNode(PivotNode $column, PivotNode $row): ?PivotCell
     {
-        return $this->findFirst(
-            $this->cells,
-            fn (int $key, PivotCell $cell): bool => $cell->equalsNode($column, $row)
-        );
+        return $this->findFirst($this->cells, fn (PivotCell $cell): bool => $cell->equalsNode($column, $row));
     }
 
     /**
@@ -160,10 +154,7 @@ class PivotTable extends AbstractPivotAggregator
      */
     public function findCellByPath(string $columnPath, string $rowPath): ?PivotCell
     {
-        return $this->findFirst(
-            $this->cells,
-            fn (int $key, PivotCell $cell): bool => $cell->equalsPath($columnPath, $rowPath)
-        );
+        return $this->findFirst($this->cells, fn (PivotCell $cell): bool => $cell->equalsPath($columnPath, $rowPath));
     }
 
     /**

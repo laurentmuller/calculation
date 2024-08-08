@@ -52,43 +52,31 @@ abstract class AbstractReport extends PdfDocument
      */
     private const ENCODING_TO = 'CP1252';
 
-    /**
-     * The footer.
-     */
     private readonly ReportFooter $footer;
-
-    /**
-     * The header.
-     */
     private readonly ReportHeader $header;
-
-    /**
-     * The translator.
-     */
     private readonly TranslatorInterface $translator;
 
     public function __construct(
-        protected readonly AbstractController $controller,
+        AbstractController $controller,
         PdfOrientation $orientation = PdfOrientation::PORTRAIT
     ) {
         parent::__construct($orientation);
-        $this->setDisplayMode(PdfZoom::FULL_PAGE, PdfLayout::SINGLE);
-        $this->setAutoPageBreak(true, $this->bottomMargin - self::LINE_HEIGHT);
+        $this->setDisplayMode(PdfZoom::FULL_PAGE, PdfLayout::SINGLE)
+            ->setAutoPageBreak(true, $this->bottomMargin - self::LINE_HEIGHT);
 
-        $this->translator = $this->controller->getTranslator();
+        $this->translator = $controller->getTranslator();
         $this->header = new ReportHeader($this);
         $this->footer = new ReportFooter($this);
 
-        $applicationName = $controller->getApplicationName();
-        $this->setCreator($applicationName);
+        $name = $controller->getApplicationName();
+        $this->setCreator($name);
         $userName = $controller->getUserIdentifier();
         if (null !== $userName) {
             $this->setAuthor($userName);
         }
 
-        $service = $this->controller->getUserService();
-        $this->header->setCustomer($service->getCustomer());
-        $this->footer->setContent($applicationName, $controller->getApplicationOwnerUrl());
+        $this->header->setCustomer($controller->getUserService()->getCustomer());
+        $this->footer->setContent($name, $controller->getApplicationOwnerUrl());
     }
 
     public function footer(): void

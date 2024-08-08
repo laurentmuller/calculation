@@ -100,7 +100,7 @@ class PhpInfoService
         $info = \str_ireplace('background-color: white; text-align: center', '', $info);
         $info = \str_ireplace('<i>no value</i>', '<i class="text-secondary">No value</i>', $info);
         $info = \str_ireplace('(none)', '<i class="text-secondary">None</i>', $info);
-        $info = \str_ireplace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
+        $info = \str_ireplace('<table>', "<table class='table table-sm mb-0'>", $info);
         $info = \str_ireplace(self::REDACTED, '<i class="text-secondary">' . self::REDACTED . '</i>', $info);
 
         foreach (['Directive', 'Local Value', 'Master Value'] as $value) {

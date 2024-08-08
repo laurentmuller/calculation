@@ -20,24 +20,55 @@ trait ArrayTrait
     use ComparableSortTrait;
 
     /**
+     * Checks whether the callback returns <code>true</code> for any of the array elements.
+     *
+     * @template TKey of array-key
+     * @template TValue
+     *
+     * @param array<TKey, TValue> $array    the array that should be searched
+     * @param \Closure            $callback The callback function to call to check each element.
+     *                                      The first parameter contains the value ($value), the second parameter
+     *                                      contains the corresponding key ($key).
+     *                                      If this function returns <code>true</code> (or a truthy value),
+     *                                      <code>true</code> is returned immediately
+     *                                      and the callback will not be called for further elements.
+     *
+     * @return bool <code>true</code> if there is at least one element for which callback returns <code>true</code>,
+     *              <code>false</code> otherwise
+     *
+     * @psalm-param Closure(TValue, TKey=): bool $callback
+     */
+    public function anyMatch(array $array, \Closure $callback): bool
+    {
+        foreach ($array as $key => $value) {
+            if ($callback($value, $key)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Returns the first element of the given array that satisfies the given predicate.
      *
      * @template TKey of array-key
      * @template TValue
      *
-     * @param array<TKey, TValue>          $array
-     * @param \Closure(TKey, TValue): bool $p
+     * @param array<TKey, TValue> $array    the array that should be searched
+     * @param \Closure            $callback The callback function to call to find a matching element.
+     *                                      The first parameter contains the value ($value), the second parameter
+     *                                      contains the corresponding key ($key).
      *
-     * @return TValue|null
+     * @return TValue|null a value if there is at least one element for which callback returns <code>true</code>,
+     *                     null otherwise
+     *
+     * @psalm-param Closure(TValue, TKey=): bool $callback
      */
-    public function findFirst(array $array, \Closure $p): mixed
+    public function findFirst(array $array, \Closure $callback): mixed
     {
-        if ([] === $array) {
-            return null;
-        }
-
         foreach ($array as $key => $value) {
-            if ($p($key, $value)) {
+            if ($callback($value, $key)) {
                 return $value;
             }
         }
@@ -60,7 +91,7 @@ trait ArrayTrait
      */
     public function getColumnFilter(array $values, string|int $key, ?callable $callback = null, int $mode = 0): array
     {
-        return \array_filter($this->getColumn($values, $key), $callback, $mode);
+        return $this->getFiltered($this->getColumn($values, $key), $callback, $mode);
     }
 
     /**
@@ -198,5 +229,20 @@ trait ArrayTrait
     public function getUniqueMerged(array $first, array $second, int $flags = \SORT_STRING): array
     {
         return \array_unique(\array_merge($first, $second), $flags);
+    }
+
+    /**
+     * Remove elements of the given array that are equal the given value.
+     *
+     * @template T
+     *
+     * @param T[] $values the array to update
+     * @param T   $value  the value to remove
+     *
+     * @return T[]
+     */
+    public function removeValue(array $values, mixed $value): array
+    {
+        return \array_filter($values, fn (mixed $item): bool => $item !== $value);
     }
 }

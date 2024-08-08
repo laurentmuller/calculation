@@ -314,7 +314,7 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Returns a Json response with false as the result.
+     * Returns a JSON response with false as the result.
      *
      * @param array $data the data to merge within the response
      */
@@ -324,7 +324,7 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Returns a Json response with true as the result.
+     * Returns a JSON response with true as the result.
      *
      * @param array $data the data to merge within the response
      */

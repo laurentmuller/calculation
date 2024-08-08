@@ -394,10 +394,7 @@ class SchemaService implements ServiceSubscriberInterface
      */
     private function getTargetMetaData(string $name): ?ClassMetadata
     {
-        return $this->findFirst(
-            $this->getMetaDatas(),
-            fn (string $key, ClassMetadata $data): bool => $data->getName() === $name
-        );
+        return $this->findFirst($this->getMetaDatas(), fn (ClassMetadata $data): bool => $data->getName() === $name);
     }
 
     /**
@@ -494,7 +491,7 @@ class SchemaService implements ServiceSubscriberInterface
 
         return $this->findFirst(
             \array_keys($this->getMetaDatas()),
-            fn (int $key, string $value): bool => StringUtils::equalIgnoreCase($value, $name)
+            fn (string $value): bool => StringUtils::equalIgnoreCase($value, $name)
         ) ?? $name;
     }
 

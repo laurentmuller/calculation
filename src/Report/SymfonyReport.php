@@ -28,6 +28,7 @@ use App\Service\SymfonyInfoService;
  */
 class SymfonyReport extends AbstractReport
 {
+    private readonly bool $debug;
     private ?PdfStyle $style = null;
 
     public function __construct(
@@ -36,6 +37,7 @@ class SymfonyReport extends AbstractReport
     ) {
         parent::__construct($controller);
         $this->setTitleTrans('about.symfony_version', ['%version%' => $this->service->getVersion()]);
+        $this->debug = $controller->getApplicationService()->isDebug();
     }
 
     public function render(): bool
@@ -97,7 +99,6 @@ class SymfonyReport extends AbstractReport
     private function outputInfo(SymfonyInfoService $info): void
     {
         $this->addBookmark('Kernel');
-        $app = $this->controller->getApplicationService();
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
@@ -121,7 +122,7 @@ class SymfonyReport extends AbstractReport
 
         $this->addBookmark('Extensions', false, 1);
         $table->setGroupKey('Extensions');
-        $this->outputRowEnabled($table, 'Debug', $app->isDebug())
+        $this->outputRowEnabled($table, 'Debug', $this->debug)
             ->outputRowEnabled($table, 'OP Cache', $info->isZendCacheLoaded())
             ->outputRowEnabled($table, 'APCu', $info->isApcuLoaded())
             ->outputRowEnabled($table, 'Xdebug', $info->isXdebugLoaded());

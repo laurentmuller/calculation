@@ -159,6 +159,19 @@ class ArrayTraitTest extends TestCase
         yield [['value', 'value1'], ['value2'], ['value', 'value1', 'value2']];
     }
 
+    public function testAnyMatch(): void
+    {
+        $closure = fn (int $value): bool => 2 === $value;
+
+        $array = [];
+        $actual = $this->anyMatch($array, $closure);
+        self::assertFalse($actual);
+
+        $array = [1, 2, 3, 4];
+        $actual = $this->anyMatch($array, $closure);
+        self::assertTrue($actual);
+    }
+
     #[DataProvider('getColumnValues')]
     public function testColumn(array $values, array $expected): void
     {
@@ -193,16 +206,16 @@ class ArrayTraitTest extends TestCase
     public function testFindFirstWithKey(): void
     {
         $array = [];
-        $closure = fn (int $key): bool => 2 === $key;
+        $closure = fn (string $value, int $key): bool => 2 === $key;
         $actual = $this->findFirst($array, $closure);
         self::assertNull($actual);
 
         $array = $this->getFindFirstArray();
-        $closure = fn (int $key): bool => 10 === $key;
+        $closure = fn (string $value, int $key): bool => 10 === $key;
         $actual = $this->findFirst($array, $closure);
         self::assertSame('B', $actual);
 
-        $closure = fn (int $key): bool => 40 === $key;
+        $closure = fn (string $value, int $key): bool => 40 === $key;
         $actual = $this->findFirst($array, $closure);
         self::assertNull($actual);
     }
@@ -210,18 +223,28 @@ class ArrayTraitTest extends TestCase
     public function testFindFirstWithValue(): void
     {
         $array = [];
-        $closure = fn (int $key, string $value): bool => 'A' === $value;
+        $closure = fn (string $value): bool => 'A' === $value;
         $actual = $this->findFirst($array, $closure);
         self::assertNull($actual);
 
         $array = $this->getFindFirstArray();
-        $closure = fn (int $key, string $value): bool => 'B' === $value;
+        $closure = fn (string $value): bool => 'B' === $value;
         $actual = $this->findFirst($array, $closure);
         self::assertSame('B', $actual);
 
-        $closure = fn (int $key, string $value): bool => '4' === $value;
+        $closure = fn (string $value): bool => '4' === $value;
         $actual = $this->findFirst($array, $closure);
         self::assertNull($actual);
+    }
+
+    public function testRemoveValue(): void
+    {
+        $values = $this->getFindFirstArray();
+        $actual = $this->removeValue($values, 'FAKE');
+        self::assertSame($values, $actual);
+
+        $actual = $this->removeValue($values, 'A');
+        self::assertSame([10 => 'B',  20 => 'C'], $actual);
     }
 
     public function testSorted(): void

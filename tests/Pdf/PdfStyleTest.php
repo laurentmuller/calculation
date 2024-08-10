@@ -18,10 +18,10 @@ use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfLine;
 use App\Pdf\PdfStyle;
+use fpdf\Enums\PdfFontName;
+use fpdf\Enums\PdfFontStyle;
 use fpdf\PdfBorder;
 use fpdf\PdfDocument;
-use fpdf\PdfFontName;
-use fpdf\PdfFontStyle;
 use PHPUnit\Framework\TestCase;
 
 class PdfStyleTest extends TestCase

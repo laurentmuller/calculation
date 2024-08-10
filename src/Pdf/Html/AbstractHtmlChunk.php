@@ -16,9 +16,9 @@ use App\Pdf\PdfFont;
 use App\Report\HtmlReport;
 use App\Traits\ArrayTrait;
 use App\Utils\StringUtils;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
 use fpdf\PdfDocument;
-use fpdf\PdfTextAlignment;
 
 /**
  * Represents an HTML chunk.

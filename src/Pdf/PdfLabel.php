@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use fpdf\PdfPageSize;
-use fpdf\PdfUnit;
+use fpdf\Enums\PdfPageSize;
+use fpdf\Enums\PdfUnit;
 
 /**
  * Contains label layout.

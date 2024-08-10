@@ -89,7 +89,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the border cell color.
+     * Gets the cell border color.
      *
      * The value is RGB(221, 221, 221).
      *

@@ -16,8 +16,8 @@ use App\Entity\Calculation;
 use App\Entity\CalculationGroup;
 use App\Pdf\PdfStyle;
 use App\Report\CalculationReport;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
-use fpdf\PdfTextAlignment;
 
 /**
  * Table to render the totals by calculation's group.

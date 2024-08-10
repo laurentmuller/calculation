@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Traits;
 
-use fpdf\PdfRectangleStyle;
+use fpdf\Enums\PdfRectangleStyle;
 
 /**
  * Trait to draw circles and ellipses.

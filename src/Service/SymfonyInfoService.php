@@ -40,7 +40,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     debug: array<string, RouteType>}
  * @psalm-type PackageSourceType = array{
  *     name: string,
- *     version_normalized: string,
+ *     version: string,
  *     description?: string,
  *     homepage?: string,
  *     install-path: string,
@@ -60,7 +60,6 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     path: string,
  *     package: string,
  *     size: string}
- * @psalm-type BundlesType = array<string, BundleType>
  */
 final readonly class SymfonyInfoService
 {
@@ -92,7 +91,7 @@ final readonly class SymfonyInfoService
         string $app_mode
     ) {
         $this->projectDir = FileUtils::normalizeDirectory($projectDir);
-        $this->environment = Environment::from($this->kernel->getEnvironment());
+        $this->environment = Environment::fromKernel($this->kernel);
         $this->mode = Environment::from($app_mode);
     }
 
@@ -115,32 +114,30 @@ final readonly class SymfonyInfoService
     /**
      * Gets bundles information.
      *
-     * @psalm-return BundlesType
+     * @psalm-return array<string, BundleType>
+     *
+     * @throws InvalidArgumentException
      */
     public function getBundles(): array
     {
-        try {
-            return $this->cache->get('bundles', function (): array {
-                $bundles = [];
-                $projectDir = $this->projectDir;
-                $vendorDir = FileUtils::buildPath($projectDir, 'vendor');
-                foreach ($this->kernel->getBundles() as $key => $bundleObject) {
-                    $path = $bundleObject->getPath();
-                    $bundles[$key] = [
-                        'name' => $key,
-                        'namespace' => $bundleObject->getNamespace(),
-                        'path' => $this->makePathRelative($path, $projectDir),
-                        'package' => $this->makePathRelative($path, $vendorDir),
-                        'size' => FileUtils::formatSize($path),
-                    ];
-                }
-                \ksort($bundles);
+        return $this->cache->get('bundles', function (): array {
+            $bundles = [];
+            $projectDir = $this->projectDir;
+            $vendorDir = FileUtils::buildPath($projectDir, 'vendor');
+            foreach ($this->kernel->getBundles() as $key => $bundleObject) {
+                $path = $bundleObject->getPath();
+                $bundles[$key] = [
+                    'name' => $key,
+                    'namespace' => $bundleObject->getNamespace(),
+                    'path' => $this->makePathRelative($path, $projectDir),
+                    'package' => $this->makePathRelative($path, $vendorDir),
+                    'size' => FileUtils::formatSize($path),
+                ];
+            }
+            \ksort($bundles);
 
-                return $bundles;
-            });
-        } catch (InvalidArgumentException) {
-            return [];
-        }
+            return $bundles;
+        });
     }
 
     /**
@@ -163,6 +160,8 @@ final readonly class SymfonyInfoService
      * Gets the debug packages.
      *
      * @return array<string, PackageType>
+     *
+     * @throws InvalidArgumentException
      */
     public function getDebugPackages(): array
     {
@@ -173,6 +172,8 @@ final readonly class SymfonyInfoService
      * Gets debug routes.
      *
      * @return array<string, RouteType>
+     *
+     * @throws InvalidArgumentException
      */
     public function getDebugRoutes(): array
     {
@@ -233,13 +234,9 @@ final readonly class SymfonyInfoService
      */
     public function getMaintenanceStatus(): string
     {
+        $now = new \DateTimeImmutable();
         $eol = $this->getEndOfMonth(Kernel::END_OF_LIFE);
         $eom = $this->getEndOfMonth(Kernel::END_OF_MAINTENANCE);
-        if (!$eom instanceof \DateTimeImmutable || !$eol instanceof \DateTimeImmutable) {
-            return self::UNKNOWN;
-        }
-
-        $now = new \DateTimeImmutable();
         if ($now > $eol) {
             return 'Unmaintained';
         }
@@ -270,32 +267,32 @@ final readonly class SymfonyInfoService
      * Get the release date.
      *
      * @psalm-api
+     *
+     * @throws InvalidArgumentException
      */
     public function getReleaseDate(): string
     {
-        try {
-            return $this->cache->get('release', function (): string {
-                $url = \sprintf(self::RELEASE_URL, Kernel::MAJOR_VERSION, Kernel::MINOR_VERSION);
+        return $this->cache->get('release', function (): string {
+            $url = \sprintf(self::RELEASE_URL, Kernel::MAJOR_VERSION, Kernel::MINOR_VERSION);
 
-                try {
-                    /** @psalm-var array{release_date: string, ...} $content */
-                    $content = FileUtils::decodeJson($url);
-                    $date = $content['release_date'];
+            try {
+                /** @psalm-var array{release_date: string, ...} $content */
+                $content = FileUtils::decodeJson($url);
+                $date = $content['release_date'];
 
-                    return $this->formatMonthYear($date);
-                } catch (\Psr\Cache\CacheException|\InvalidArgumentException) {
-                    return self::UNKNOWN;
-                }
-            });
-        } catch (InvalidArgumentException) {
-            return self::UNKNOWN;
-        }
+                return $this->formatMonthYear($date);
+            } catch (\Psr\Cache\CacheException|\InvalidArgumentException) {
+                return self::UNKNOWN;
+            }
+        });
     }
 
     /**
      * Gets the runtime packages.
      *
      * @return array<string, PackageType>
+     *
+     * @throws InvalidArgumentException
      */
     public function getRuntimePackages(): array
     {
@@ -306,6 +303,8 @@ final readonly class SymfonyInfoService
      * Gets runtime routes.
      *
      * @return array<string, RouteType>
+     *
+     * @throws InvalidArgumentException
      */
     public function getRuntimeRoutes(): array
     {
@@ -378,8 +377,9 @@ final readonly class SymfonyInfoService
         return $description;
     }
 
-    private function createDate(string $date): \DateTimeImmutable|false
+    private function createDate(string $date): \DateTimeImmutable
     {
+        /** @psalm-var \DateTimeImmutable */
         return \DateTimeImmutable::createFromFormat('d/m/Y', '01/' . $date);
     }
 
@@ -390,12 +390,8 @@ final readonly class SymfonyInfoService
      */
     private function formatMonthYear(string $date): string
     {
-        $date = $this->createDate($date);
-        if ($date instanceof \DateTimeImmutable) {
-            return $date->format('F Y');
-        }
-
-        return self::UNKNOWN;
+        return $this->createDate($date)
+            ->format('F Y');
     }
 
     /**
@@ -420,11 +416,8 @@ final readonly class SymfonyInfoService
 
     private function getDaysBeforeExpiration(string $date): string
     {
-        $date = $this->getEndOfMonth($date);
-        if (!$date instanceof \DateTimeImmutable) {
-            return self::UNKNOWN;
-        }
         $today = new \DateTimeImmutable();
+        $date = $this->getEndOfMonth($date);
 
         return $today->diff($date)->format('%R%a days');
     }
@@ -438,7 +431,7 @@ final readonly class SymfonyInfoService
     }
 
     /**
-     * Gets empty packages information.
+     * Gets empty packages.
      *
      * @return PackagesType
      */
@@ -454,17 +447,11 @@ final readonly class SymfonyInfoService
      * Gets the end of month date.
      *
      * @param string $date the date as month/year format
-     *
-     * @return \DateTimeImmutable|false the date or false
      */
-    private function getEndOfMonth(string $date): \DateTimeImmutable|false
+    private function getEndOfMonth(string $date): \DateTimeImmutable
     {
-        $date = $this->createDate($date);
-        if ($date instanceof \DateTimeImmutable) {
-            return $date->modify('last day of this month 23:59:59');
-        }
-
-        return $date;
+        return $this->createDate($date)
+            ->modify('last day of this month 23:59:59');
     }
 
     /**
@@ -491,75 +478,65 @@ final readonly class SymfonyInfoService
      * Gets packages information.
      *
      * @return PackagesType
+     *
+     * @throws InvalidArgumentException
      */
     private function getPackages(): array
     {
-        try {
-            return $this->cache->get('packages', function (): array {
-                $path = FileUtils::buildPath($this->projectDir, self::PACKAGE_FILE_NAME);
-                if (!FileUtils::exists($path)) {
-                    return $this->getEmptyPackages();
-                }
+        return $this->cache->get('packages', function (): array {
+            $path = FileUtils::buildPath($this->projectDir, self::PACKAGE_FILE_NAME);
+            if (!FileUtils::exists($path)) {
+                return $this->getEmptyPackages();
+            }
 
-                try {
-                    /**
-                     * @psalm-var array{
-                     *     packages: array<string, PackageSourceType>|null,
-                     *     dev-package-names: string[]|null
-                     * } $content
-                     */
-                    $content = FileUtils::decodeJson($path);
-                    $runtimePackages = $content['packages'] ?? [];
-                    $debugPackages = $content['dev-package-names'] ?? [];
+            try {
+                /**
+                 * @psalm-var array{
+                 *     packages: array<string, PackageSourceType>|null,
+                 *     dev-package-names: string[]|null
+                 * } $content
+                 */
+                $content = FileUtils::decodeJson($path);
+                $runtimePackages = $content['packages'] ?? [];
+                $debugPackages = $content['dev-package-names'] ?? [];
 
-                    return $this->parsePackages($runtimePackages, $debugPackages);
-                } catch (\InvalidArgumentException) {
-                    return $this->getEmptyPackages();
-                }
-            });
-        } catch (InvalidArgumentException) {
-            return [
-                self::KEY_RUNTIME => [],
-                self::KEY_DEBUG => [],
-            ];
-        }
+                return $this->parsePackages($runtimePackages, $debugPackages);
+            } catch (\InvalidArgumentException) {
+                return $this->getEmptyPackages();
+            }
+        });
     }
 
     /**
      * Gets all routes.
      *
      * @return RoutesType
+     *
+     * @throws InvalidArgumentException
      */
     private function getRoutes(): array
     {
-        try {
-            return $this->cache->get('routes', function (): array {
-                /** @psalm-var array<string, RouteType> $runtimeRoutes */
-                $runtimeRoutes = [];
-                /** @psalm-var array<string, RouteType> $debugRoutes */
-                $debugRoutes = [];
-                $routes = $this->router->getRouteCollection()->all();
-                foreach ($routes as $name => $route) {
-                    if ($this->isDebugRoute($name)) {
-                        $debugRoutes[$name] = $this->parseRoute($name, $route);
-                    } else {
-                        $runtimeRoutes[$name] = $this->parseRoute($name, $route);
-                    }
+        return $this->cache->get('routes', function (): array {
+            /** @psalm-var array<string, RouteType> $runtimeRoutes */
+            $runtimeRoutes = [];
+            /** @psalm-var array<string, RouteType> $debugRoutes */
+            $debugRoutes = [];
+            $routes = $this->router->getRouteCollection()->all();
+            foreach ($routes as $name => $route) {
+                if ($this->isDebugRoute($name)) {
+                    $debugRoutes[$name] = $this->parseRoute($name, $route);
+                } else {
+                    $runtimeRoutes[$name] = $this->parseRoute($name, $route);
                 }
-                \ksort($runtimeRoutes);
-                \ksort($debugRoutes);
+            }
+            \ksort($runtimeRoutes);
+            \ksort($debugRoutes);
 
-                return [
-                    self::KEY_RUNTIME => $runtimeRoutes,
-                    self::KEY_DEBUG => $debugRoutes,
-                ];
-            });
-        } catch (InvalidArgumentException) {
             return [
-                self::KEY_RUNTIME => [],
-                self::KEY_DEBUG => [],
+                self::KEY_RUNTIME => $runtimeRoutes,
+                self::KEY_DEBUG => $debugRoutes,
             ];
-        }
+        });
     }
 
     private function isDebugRoute(string $name): bool
@@ -599,7 +576,7 @@ final readonly class SymfonyInfoService
             $entry = [
                 'name' => $name,
                 'license' => $this->getLicense($package),
-                'version' => $package['version_normalized'],
+                'version' => \ltrim($package['version'], 'v'),
                 'description' => $this->cleanDescription($package['description'] ?? ''),
                 'homepage' => $package['homepage'] ?? $package['support']['source'] ?? null,
             ];

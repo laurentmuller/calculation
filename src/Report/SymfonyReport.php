@@ -18,6 +18,7 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Service\SymfonyInfoService;
+use Psr\Cache\InvalidArgumentException;
 
 /**
  * Report containing Symfony configuration.
@@ -40,6 +41,9 @@ class SymfonyReport extends AbstractReport
         $this->debug = $controller->getApplicationService()->isDebug();
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function render(): bool
     {
         $this->addPage();

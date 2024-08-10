@@ -17,8 +17,8 @@ use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\PdfLabel;
 use App\Pdf\PdfLabelDocument;
 use App\Service\PdfLabelService;
+use fpdf\Enums\PdfScaling;
 use fpdf\PdfException;
-use fpdf\PdfScaling;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 

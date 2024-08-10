@@ -15,8 +15,8 @@ namespace App\Report;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfStyle;
 use App\Utils\FormatUtils;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
-use fpdf\PdfTextAlignment;
 
 /**
  * Class to output footer in PDF documents.

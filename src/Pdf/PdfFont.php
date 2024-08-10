@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
+use fpdf\Enums\PdfFontName;
+use fpdf\Enums\PdfFontStyle;
 use fpdf\PdfDocument;
-use fpdf\PdfFontName;
-use fpdf\PdfFontStyle;
 
 /**
  * Define a font style.

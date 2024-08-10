@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Pdf;
 
 use App\Pdf\PdfFont;
+use fpdf\Enums\PdfFontName;
+use fpdf\Enums\PdfFontStyle;
 use fpdf\PdfDocument;
-use fpdf\PdfFontName;
-use fpdf\PdfFontStyle;
 use PHPUnit\Framework\TestCase;
 
 class PdfFontTest extends TestCase

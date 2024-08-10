@@ -16,9 +16,9 @@ use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\PdfStyle;
 use App\Service\CommandService;
 use App\Utils\StringUtils;
-use fpdf\PdfFontName;
-use fpdf\PdfMove;
-use fpdf\PdfTextAlignment;
+use fpdf\Enums\PdfFontName;
+use fpdf\Enums\PdfMove;
+use fpdf\Enums\PdfTextAlignment;
 
 /**
  * Report for application commands.

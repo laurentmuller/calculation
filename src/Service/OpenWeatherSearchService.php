@@ -52,16 +52,14 @@ class OpenWeatherSearchService
      * @param int    $limit the maximum number of cities to return
      *
      * @pslam-return array<int, OpenWeatherCityType>
+     *
+     * @throws InvalidArgumentException
      */
     public function search(string $name, int $limit = self::DEFAULT_LIMIT): array
     {
         $key = 'OpenWeatherSearchService?' . \http_build_query(['name' => $name, 'limit' => $limit]);
 
-        try {
-            return $this->cache->get($key, fn (): array => $this->doSearch($name, $limit));
-        } catch (InvalidArgumentException) {
-            return [];
-        }
+        return $this->cache->get($key, fn (): array => $this->doSearch($name, $limit));
     }
 
     /**

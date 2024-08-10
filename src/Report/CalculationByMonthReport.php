@@ -32,11 +32,11 @@ use App\Pdf\Traits\PdfChartLegendTrait;
 use App\Report\Table\ReportTable;
 use App\Traits\ArrayTrait;
 use App\Utils\FormatUtils;
-use fpdf\PdfFontName;
-use fpdf\PdfOrientation;
+use fpdf\Enums\PdfFontName;
+use fpdf\Enums\PdfOrientation;
+use fpdf\Enums\PdfRectangleStyle;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfRectangle;
-use fpdf\PdfRectangleStyle;
-use fpdf\PdfTextAlignment;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**

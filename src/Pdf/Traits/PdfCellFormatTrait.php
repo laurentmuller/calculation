@@ -16,8 +16,8 @@ use App\Pdf\PdfCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Utils\FormatUtils;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfException;
-use fpdf\PdfTextAlignment;
 
 /**
  * Trait to add cells with formatted values.

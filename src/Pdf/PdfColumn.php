@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use fpdf\PdfTextAlignment;
+use fpdf\Enums\PdfTextAlignment;
 
 /**
  * Define a column for a Pdf table.

@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Response;
 
-use fpdf\PdfDestination;
+use fpdf\Enums\PdfDestination;
 use fpdf\PdfDocument;
 
 /**

@@ -19,7 +19,7 @@ use App\Pdf\PdfTable;
 use App\Service\HelpService;
 use App\Traits\ImageSizeTrait;
 use App\Utils\FileUtils;
-use fpdf\PdfTextAlignment;
+use fpdf\Enums\PdfTextAlignment;
 
 /**
  * Report for the help documentation.

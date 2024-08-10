@@ -23,8 +23,8 @@ use App\Pdf\Html\HtmlTextChunk;
 use App\Pdf\Html\HtmlUlChunk;
 use App\Report\HtmlReport;
 use App\Tests\TranslatorMockTrait;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
-use fpdf\PdfTextAlignment;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 

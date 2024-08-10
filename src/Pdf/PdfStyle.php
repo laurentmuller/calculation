@@ -16,10 +16,10 @@ use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
+use fpdf\Enums\PdfFontName;
+use fpdf\Enums\PdfFontStyle;
 use fpdf\PdfBorder;
 use fpdf\PdfDocument;
-use fpdf\PdfFontName;
-use fpdf\PdfFontStyle;
 
 /**
  * This class describes a style that can be applied to a PDF document.
@@ -49,7 +49,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     private PdfFillColor $fillColor;
 
     /**
-     * The font.
+     * The font style.
      */
     private PdfFont $font;
 
@@ -59,7 +59,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     private float $indent = 0.0;
 
     /**
-     * The line.
+     * The line style.
      */
     private PdfLine $line;
 
@@ -154,7 +154,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the border.
+     * Gets the border style.
      */
     public function getBorder(): ?PdfBorder
     {
@@ -221,7 +221,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the font.
+     * Gets the font style.
      */
     public function getFont(): PdfFont
     {
@@ -255,7 +255,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the line.
+     * Gets the line style.
      */
     public function getLine(): PdfLine
     {
@@ -310,7 +310,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Gets a value indicating if the fill color is set.
      *
-     * To be true, the fill color must be different from the White color.
+     * To be true, the fill color must be different from the white color.
      *
      * @return bool true if the fill color is set
      */
@@ -340,7 +340,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets border to default (none).
+     * Sets border style to default (all borders).
      */
     public function resetBorder(): static
     {
@@ -364,7 +364,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets font to the default value.
+     * Sets font style to the default value.
      *
      * The default value is:
      *
@@ -388,11 +388,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets the line width property to the default value.
-     *
-     * The default line width is:
-     *
-     * - 0.2 mm.
+     * Sets the line style property to the default value (0.2 mm).
      */
     public function resetLine(): static
     {
@@ -400,7 +396,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets the border.
+     * Sets the border style.
      */
     public function setBorder(?PdfBorder $border): static
     {
@@ -487,8 +483,10 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the font size in points.
+     *
+     * @param ?float $fontSize the font size to set or null to use the default size (9.0).
      */
-    public function setFontSize(float $fontSize): static
+    public function setFontSize(?float $fontSize = null): static
     {
         $this->font->setSize($fontSize);
 
@@ -521,6 +519,8 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the left indent.
+     *
+     * The minimum value allowed is 0.0.
      */
     public function setIndent(float $indent): static
     {
@@ -530,7 +530,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets the line.
+     * Sets the line style.
      */
     public function setLine(PdfLine $line): static
     {

@@ -58,7 +58,7 @@ use App\Validator\Password;
 use App\Validator\Strength;
 use App\Word\HtmlDocument;
 use Doctrine\ORM\EntityManagerInterface;
-use fpdf\PdfFontStyle;
+use fpdf\Enums\PdfFontStyle;
 use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use ReCaptcha\Response as ReCaptchaResponse;
@@ -255,9 +255,13 @@ class TestController extends AbstractController
     #[Get(path: '/memory', name: 'memory')]
     public function memoryImage(
         #[Autowire('%kernel.project_dir%/public/images/logo/logo-customer-148x148.png')]
-        string $image
+        string $logoFile,
+        #[Autowire('%kernel.project_dir%/public/images/icons/favicon-144x144.png')]
+        string $iconFile,
+        #[Autowire('%kernel.project_dir%/public/images/screenshots/home_light.png')]
+        string $screenshotFile
     ): PdfResponse {
-        $report = new MemoryImageReport($this, $image);
+        $report = new MemoryImageReport($this, $logoFile, $iconFile, $screenshotFile);
 
         return $this->renderPdfDocument($report);
     }

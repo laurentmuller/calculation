@@ -19,6 +19,7 @@ use App\Service\OpenWeatherCityUpdater;
 use App\Service\OpenWeatherSearchService;
 use App\Service\OpenWeatherService;
 use App\Utils\FileUtils;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormInterface;
@@ -197,6 +198,8 @@ class OpenWeatherController extends AbstractController
      * Returns an array of cities that match the query text.
      *
      * @psalm-api
+     *
+     * @throws InvalidArgumentException
      */
     #[Get(path: '/api/search', name: 'api_search')]
     public function apiSearch(Request $request, OpenWeatherSearchService $service, UrlGeneratorInterface $generator): JsonResponse
@@ -283,6 +286,8 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Shows the search city view.
+     *
+     * @throws InvalidArgumentException
      */
     #[GetPost(path: '/search', name: 'search')]
     public function search(Request $request, OpenWeatherSearchService $service): Response

@@ -14,7 +14,7 @@ namespace App\Tests\Pdf;
 
 use App\Pdf\PdfLabel;
 use App\Service\PdfLabelService;
-use fpdf\PdfUnit;
+use fpdf\Enums\PdfUnit;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 

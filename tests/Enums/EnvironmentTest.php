@@ -15,7 +15,9 @@ namespace App\Tests\Enums;
 use App\Enums\Environment;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class EnvironmentTest extends TestCase
 {
@@ -61,6 +63,18 @@ class EnvironmentTest extends TestCase
         $expected = 3;
         $actual = Environment::cases();
         self::assertCount($expected, $actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testFromKernel(): void
+    {
+        $kernel = $this->createMock(KernelInterface::class);
+        $kernel->method('getEnvironment')
+            ->willReturn('test');
+        $actual = Environment::fromKernel($kernel);
+        self::assertSame(Environment::TEST, $actual);
     }
 
     #[DataProvider('getIsDevelopment')]

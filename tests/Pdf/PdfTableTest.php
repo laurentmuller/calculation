@@ -25,10 +25,10 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfImageCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
 use fpdf\PdfDocument;
 use fpdf\PdfException;
-use fpdf\PdfTextAlignment;
 use PHPUnit\Framework\TestCase;
 
 class PdfTableTest extends TestCase

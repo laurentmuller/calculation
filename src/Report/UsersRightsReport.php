@@ -28,8 +28,8 @@ use App\Service\RoleBuilderService;
 use App\Traits\ArrayTrait;
 use App\Traits\RoleTranslatorTrait;
 use Elao\Enum\FlagBag;
+use fpdf\Enums\PdfMove;
 use fpdf\PdfBorder;
-use fpdf\PdfMove;
 
 /**
  * Report for the list of roles and users rights.

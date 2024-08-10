@@ -25,20 +25,38 @@ class MemoryImageReport extends AbstractReport
 {
     use PdfMemoryImageTrait;
 
-    public function __construct(AbstractController $controller, private readonly string $image)
-    {
+    public function __construct(
+        AbstractController $controller,
+        private readonly string $logoFile,
+        private readonly ?string $iconFile = null,
+        private readonly ?string $screenshotFile = null
+    ) {
         parent::__construct($controller);
+        $this->setTitle('In memory Images');
     }
 
     public function render(): bool
     {
-        $this->setTitle('In memory Images');
-
         $this->addPage();
         $this->addImageGD();
-        $this->addImageMemory();
+        $this->addLogoImage();
+        $this->addIconImage();
+        $this->addScreenshotImage();
 
         return true;
+    }
+
+    private function addIconImage(): void
+    {
+        if (null === $this->iconFile) {
+            return;
+        }
+        $data = FileUtils::readFile($this->iconFile);
+        if ('' === $data) {
+            throw PdfException::instance('Unable to get image content.');
+        }
+
+        $this->imageMemory($data, 85, 20, 30);
     }
 
     private function addImageGD(): void
@@ -57,13 +75,21 @@ class MemoryImageReport extends AbstractReport
         $this->imageGD($service->getImage(), 160, 20, 40);
     }
 
-    private function addImageMemory(): void
+    private function addLogoImage(): void
     {
-        $data = FileUtils::readFile($this->image);
+        $data = FileUtils::readFile($this->logoFile);
         if ('' === $data) {
             throw PdfException::instance('Unable to get image content.');
         }
 
         $this->imageMemory($data, 10, 20, 30);
+    }
+
+    private function addScreenshotImage(): void
+    {
+        if (null === $this->screenshotFile) {
+            return;
+        }
+        $this->image($this->screenshotFile, 10, 70, $this->getPrintableWidth());
     }
 }

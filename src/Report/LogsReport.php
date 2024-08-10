@@ -28,10 +28,10 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
+use fpdf\Enums\PdfMove;
+use fpdf\Enums\PdfOrientation;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
-use fpdf\PdfMove;
-use fpdf\PdfOrientation;
-use fpdf\PdfTextAlignment;
 
 /**
  * Report for the log.

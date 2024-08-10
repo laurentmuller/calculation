@@ -16,6 +16,7 @@ use App\Enums\Environment;
 use App\Service\SymfonyInfoService;
 use App\Tests\KernelServiceTestCase;
 use App\Utils\FormatUtils;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\HttpKernel\Kernel;
 
 class SymfonyInfoServiceTest extends KernelServiceTestCase
@@ -41,6 +42,9 @@ class SymfonyInfoServiceTest extends KernelServiceTestCase
         self::assertStringContainsString('cache', $actual);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testGetBundles(): void
     {
         $actual = $this->service->getBundles();
@@ -60,12 +64,18 @@ class SymfonyInfoServiceTest extends KernelServiceTestCase
         self::assertSame('UTF-8', $actual);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testGetDebugPackages(): void
     {
         $actual = $this->service->getDebugPackages();
         self::assertNotEmpty($actual);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testGetDebugRoutes(): void
     {
         $actual = $this->service->getDebugRoutes();
@@ -126,6 +136,9 @@ class SymfonyInfoServiceTest extends KernelServiceTestCase
         self::assertStringContainsString('calculation', $actual);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testGetReleaseDate(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
@@ -133,12 +146,18 @@ class SymfonyInfoServiceTest extends KernelServiceTestCase
         self::assertMatchesRegularExpression('/\d{4}/', $actual);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testGetRuntimePackages(): void
     {
         $actual = $this->service->getRuntimePackages();
         self::assertNotEmpty($actual);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testGetRuntimeRoutes(): void
     {
         $actual = $this->service->getRuntimeRoutes();

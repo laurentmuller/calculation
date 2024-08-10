@@ -233,24 +233,13 @@ class HelpService
      * Gets the full help content.
      *
      * @psalm-return HelpContentType
+     *
+     * @throws InvalidArgumentException
      */
     public function getHelp(): array
     {
-        try {
-            /** @psalm-var HelpContentType */
-            return $this->cache->get('help', fn (): array => $this->loadHelp());
-        } catch (InvalidArgumentException) {
-            return [
-                'actions' => [],
-                'dialogs' => [],
-                'entities' => [],
-                'mainMenu' => [
-                    'image' => null,
-                    'description' => null,
-                    'menus' => [],
-                ],
-            ];
-        }
+        /** @psalm-var HelpContentType */
+        return $this->cache->get('help', fn (): array => $this->loadHelp());
     }
 
     /**

@@ -15,8 +15,8 @@ namespace App\Pdf\Html;
 use App\Pdf\PdfFont;
 use App\Report\HtmlReport;
 use App\Utils\StringUtils;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfDocument;
-use fpdf\PdfTextAlignment;
 
 /**
  * A specialized chunk for HTML list item (li).

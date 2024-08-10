@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Pdf;
 
 use App\Pdf\PdfColumn;
-use fpdf\PdfTextAlignment;
+use fpdf\Enums\PdfTextAlignment;
 use PHPUnit\Framework\TestCase;
 
 class PdfColumnTest extends TestCase

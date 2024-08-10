@@ -14,9 +14,9 @@ namespace App\Pdf\Traits;
 
 use App\Pdf\PdfStyle;
 use App\Utils\FormatUtils;
+use fpdf\Enums\PdfMove;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfException;
-use fpdf\PdfMove;
-use fpdf\PdfTextAlignment;
 
 /**
  * Trait to handle bookmarks and page index.
@@ -28,6 +28,8 @@ use fpdf\PdfTextAlignment;
  *      page: int,
  *      link: int|null,
  *      hierarchy: array<string, int>}
+ *
+ * @psalm-require-extends \fpdf\PdfDocument
  */
 trait PdfBookmarkTrait
 {

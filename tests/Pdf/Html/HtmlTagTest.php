@@ -15,7 +15,7 @@ namespace App\Tests\Pdf\Html;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Html\HtmlStyle;
 use App\Pdf\Html\HtmlTag;
-use fpdf\PdfFontName;
+use fpdf\Enums\PdfFontName;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

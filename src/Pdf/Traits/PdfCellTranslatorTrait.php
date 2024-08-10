@@ -15,7 +15,7 @@ namespace App\Pdf\Traits;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfStyle;
 use App\Traits\TranslatorTrait;
-use fpdf\PdfTextAlignment;
+use fpdf\Enums\PdfTextAlignment;
 use Symfony\Contracts\Translation\TranslatableInterface;
 
 /**

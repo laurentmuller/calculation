@@ -15,7 +15,7 @@ namespace App\Pdf\Traits;
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Interfaces\PdfChartInterface;
-use fpdf\PdfRectangleStyle;
+use fpdf\Enums\PdfRectangleStyle;
 
 /**
  * Trait to draw chart legends.

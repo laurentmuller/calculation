@@ -16,10 +16,10 @@ use App\Model\CustomerInformation;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfStyle;
 use App\Utils\StringUtils;
+use fpdf\Enums\PdfMove;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
 use fpdf\PdfDocument;
-use fpdf\PdfMove;
-use fpdf\PdfTextAlignment;
 
 /**
  * Class to output header in PDF documents.

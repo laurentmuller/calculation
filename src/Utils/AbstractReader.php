@@ -37,11 +37,11 @@ abstract class AbstractReader implements \IteratorAggregate
         if ($file instanceof \SplFileInfo) {
             $file = $file->getPathname();
         }
-        if (\is_resource($file)) {
-            $this->stream = $file;
-        } else {
+        if (\is_string($file)) {
             $mode = $binary ? 'rb' : 'r';
             $this->stream = \fopen($file, $mode);
+        } else {
+            $this->stream = $file;
         }
     }
 

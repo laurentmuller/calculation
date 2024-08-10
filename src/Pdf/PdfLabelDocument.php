@@ -18,11 +18,11 @@ use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\Traits\PdfDashLineTrait;
 use App\Pdf\Traits\PdfStyleTrait;
 use App\Utils\StringUtils;
+use fpdf\Enums\PdfFontName;
+use fpdf\Enums\PdfScaling;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfDocument;
 use fpdf\PdfException;
-use fpdf\PdfFontName;
-use fpdf\PdfScaling;
-use fpdf\PdfTextAlignment;
 
 /**
  * PDF document to output labels.

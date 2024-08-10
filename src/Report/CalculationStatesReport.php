@@ -18,7 +18,7 @@ use App\Pdf\Events\PdfCellBackgroundEvent;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\PdfStyle;
 use App\Report\Table\ReportTable;
-use fpdf\PdfRectangleStyle;
+use fpdf\Enums\PdfRectangleStyle;
 
 /**
  * Report for the list of calculation states.

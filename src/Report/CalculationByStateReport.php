@@ -29,8 +29,8 @@ use App\Table\CalculationTable;
 use App\Traits\MathTrait;
 use App\Traits\StateTotalsTrait;
 use App\Utils\FormatUtils;
-use fpdf\PdfRectangleStyle;
-use fpdf\PdfTextAlignment;
+use fpdf\Enums\PdfRectangleStyle;
+use fpdf\Enums\PdfTextAlignment;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**

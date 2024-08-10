@@ -17,7 +17,7 @@ use App\Pdf\PdfFont;
 use App\Traits\EnumExtrasTrait;
 use App\Utils\StringUtils;
 use Elao\Enum\Attribute\EnumCase;
-use fpdf\PdfFontName;
+use fpdf\Enums\PdfFontName;
 
 /**
  * Html tag enumeration.

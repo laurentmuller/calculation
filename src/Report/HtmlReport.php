@@ -15,9 +15,9 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Pdf\Html\HtmlParentChunk;
 use App\Pdf\Html\HtmlParser;
-use fpdf\PdfOrientation;
-use fpdf\PdfPageSize;
-use fpdf\PdfRotation;
+use fpdf\Enums\PdfOrientation;
+use fpdf\Enums\PdfPageSize;
+use fpdf\Enums\PdfRotation;
 use fpdf\PdfSize;
 
 /**

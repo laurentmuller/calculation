@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 use App\Report\HtmlReport;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfDocument;
-use fpdf\PdfTextAlignment;
 
 /**
  * Represents a text chunk.

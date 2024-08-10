@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Pdf\Traits;
 
+use fpdf\Enums\PdfRectangleStyle;
 use fpdf\PdfRectangle;
-use fpdf\PdfRectangleStyle;
 
 /**
  * Trait to perform a rotation around a given center.
@@ -21,10 +21,15 @@ use fpdf\PdfRectangleStyle;
  * The rotation affects all elements, which are printed after the method call (except clickable areas). Rotation is not
  * kept from page to page. Each page begins with no rotation.
  *
+ * All angle parameters are expressed in degrees.
+ *
  * @psalm-require-extends \fpdf\PdfDocument
  */
 trait PdfRotationTrait
 {
+    /**
+     * The current rotation, in degrees.
+     */
     private float $angle = 0.0;
 
     /**
@@ -42,7 +47,7 @@ trait PdfRotationTrait
     /**
      * Set the rotation angle.
      *
-     * @param float      $angle the rotation angle or 0.0 to stop rotation
+     * @param float      $angle the rotation angle, in degrees, or 0.0 to stop rotation
      * @param float|null $x     the abscissa position or <code>null</code> to use the current abscissa
      * @param float|null $y     the ordinate position or <code>null</code> to use the current ordinate
      */
@@ -83,7 +88,7 @@ trait PdfRotationTrait
      * @param float             $y      the ordinate of upper-left corner
      * @param float             $width  the width
      * @param float             $height the height
-     * @param float             $angle  the rotation angle
+     * @param float             $angle  the rotation angle, in degrees
      * @param PdfRectangleStyle $style  the border and fill style
      */
     public function rotateRect(
@@ -108,7 +113,7 @@ trait PdfRotationTrait
      * It can be drawn (border only), filled (with no border) or both. Do nothing if the angle is equal to 0.0.
      *
      * @param PdfRectangle      $rectangle the rectangle to rotate
-     * @param float             $angle     the rotation angle
+     * @param float             $angle     the rotation angle, in degrees
      * @param PdfRectangleStyle $style     the border and fill style
      */
     public function rotateRectangle(
@@ -132,7 +137,7 @@ trait PdfRotationTrait
      * Do nothing if the text is empty or if the angle is equal to 0.0.
      *
      * @param string     $text  the text to rotate
-     * @param float      $angle the rotation angle
+     * @param float      $angle the rotation angle, in degrees
      * @param float|null $x     the abscissa position or <code>null</code> to use the current abscissa
      * @param float|null $y     the ordinate position or <code>null</code> to use the current ordinate
      */

@@ -16,9 +16,9 @@ use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfStyle;
+use fpdf\Enums\PdfFontName;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
-use fpdf\PdfFontName;
-use fpdf\PdfTextAlignment;
 
 /**
  * The HTML style.

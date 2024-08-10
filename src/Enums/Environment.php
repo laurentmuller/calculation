@@ -15,6 +15,7 @@ namespace App\Enums;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * The environment enumeration.
@@ -38,6 +39,14 @@ enum Environment: string implements TranslatableEnumInterface
      * The test environment.
      */
     case TEST = 'test';
+
+    /**
+     * Gets the environnement from the given kernel interface.
+     */
+    public static function fromKernel(KernelInterface $kernel): self
+    {
+        return self::from($kernel->getEnvironment());
+    }
 
     /**
      * Returns if this enumeration is the development environment.

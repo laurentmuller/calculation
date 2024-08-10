@@ -21,12 +21,12 @@ use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfDrawHeadersInterface;
 use App\Traits\MathTrait;
+use fpdf\Enums\PdfRectangleStyle;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
 use fpdf\PdfDocument;
 use fpdf\PdfException;
 use fpdf\PdfRectangle;
-use fpdf\PdfRectangleStyle;
-use fpdf\PdfTextAlignment;
 
 /**
  * Class to build and output a table.

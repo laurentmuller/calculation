@@ -44,7 +44,7 @@ abstract class IntegrationTestCase extends TestCase
     private const PATTERN_WITH_EXPECT = '/--TEST--\s*(.*?)\s*(?:--CONDITION--\s*(.*))?\s*(?:--DEPRECATION--\s*(.*?))?\s*((?:--TEMPLATE(?:\(.*?\))?--(?:.*?))+)--DATA--.*?--EXPECT--.*/s';
 
     /**
-     * @throws Error|\ReflectionException
+     * @throws Error
      */
     public function testIntegration(): void
     {
@@ -66,7 +66,7 @@ abstract class IntegrationTestCase extends TestCase
      * @param array<string, string> $templates
      * @param array<int, string[]>  $outputs
      *
-     * @throws Error|\ReflectionException
+     * @throws Error
      *
      * @psalm-suppress InternalClass
      * @psalm-suppress InternalMethod
@@ -94,10 +94,9 @@ abstract class IntegrationTestCase extends TestCase
         }
 
         $loader = new ArrayLoader($templates);
-        $algo = \PHP_VERSION_ID < 80100 ? 'sha256' : 'xxh128';
 
         foreach ($outputs as $index => $match) {
-            $twig = $this->createEnvironment($loader, $match, $algo);
+            $twig = $this->createEnvironment($loader, $match);
             $deprecations = [];
 
             try {
@@ -204,10 +203,8 @@ abstract class IntegrationTestCase extends TestCase
 
     /**
      * @param string[] $match
-     *
-     * @throws \ReflectionException
      */
-    private function createEnvironment(ArrayLoader $loader, array $match, string $algo): Environment
+    private function createEnvironment(ArrayLoader $loader, array $match): Environment
     {
         $config = [
             'cache' => false,
@@ -235,10 +232,6 @@ abstract class IntegrationTestCase extends TestCase
         foreach ($this->getTwigFunctions() as $function) {
             $twig->addFunction($function);
         }
-
-        $hash = \hash($algo, \uniqid((string) \mt_rand(), true));
-        $property = new \ReflectionProperty($twig, 'templateClassPrefix');
-        $property->setValue($twig, \sprintf('__TwigTemplate__%s__', $hash));
 
         return $twig;
     }

@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfDocument;
-use fpdf\PdfTextAlignment;
 
 /**
  * Define a cell in a table.

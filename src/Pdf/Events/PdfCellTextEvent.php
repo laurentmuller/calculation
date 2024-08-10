@@ -14,9 +14,9 @@ namespace App\Pdf\Events;
 
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\PdfTable;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfDocument;
 use fpdf\PdfRectangle;
-use fpdf\PdfTextAlignment;
 
 /**
  * The event raised when a cell text must be drawn.

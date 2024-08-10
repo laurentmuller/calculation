@@ -19,8 +19,8 @@ use App\Pdf\PdfTable;
 use App\Report\Table\ReportTable;
 use App\Service\SchemaService;
 use App\Traits\ArrayTrait;
-use fpdf\PdfFontName;
-use fpdf\PdfMove;
+use fpdf\Enums\PdfFontName;
+use fpdf\Enums\PdfMove;
 
 /**
  * Report to display database schema.

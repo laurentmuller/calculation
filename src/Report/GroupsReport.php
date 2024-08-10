@@ -18,8 +18,8 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Report\Table\ReportTable;
 use App\Utils\FormatUtils;
+use fpdf\Enums\PdfOrientation;
 use fpdf\PdfBorder;
-use fpdf\PdfOrientation;
 
 /**
  * Report for the list of groups.

@@ -14,7 +14,7 @@ namespace App\Pdf\Traits;
 
 use App\Pdf\PdfFont;
 use App\Pdf\PdfStyle;
-use fpdf\PdfFontName;
+use fpdf\Enums\PdfFontName;
 
 /**
  * Trait for style and font.

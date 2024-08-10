@@ -616,10 +616,8 @@ http_error_404:
     suggestion: Vérifiez si l'URL ne comporte pas d'erreurs ou retournez sur la <a href="%url%">page d'accueil</a>.
 http_error_500:
     description: Le serveur a rencontré un problème inattendu qui l'empêche de répondre à votre requête.
-    suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur la <a href="%url%">page d'accueil</a>.
 http_error_503:
     description: Le service est temporairement indisponible ou en maintenance.
-    suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur la <a href="%url%">page d'accueil</a>.
 color_picker:
     advanced_text: Avancé...
     custom_text: Personnalisé

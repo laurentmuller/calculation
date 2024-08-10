@@ -17,7 +17,7 @@ use App\Entity\Customer;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Utils\StringUtils;
-use fpdf\PdfOrientation;
+use fpdf\Enums\PdfOrientation;
 
 /**
  * Report for the list of customers.

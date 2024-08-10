@@ -16,8 +16,8 @@ use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\PdfBarScale;
 use App\Pdf\PdfStyle;
 use App\Traits\ArrayTrait;
-use fpdf\PdfRectangleStyle;
-use fpdf\PdfTextAlignment;
+use fpdf\Enums\PdfRectangleStyle;
+use fpdf\Enums\PdfTextAlignment;
 
 /**
  * Trait to draw bar chart.

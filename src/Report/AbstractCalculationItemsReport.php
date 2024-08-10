@@ -17,9 +17,9 @@ use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Utils\FormatUtils;
+use fpdf\Enums\PdfMove;
+use fpdf\Enums\PdfOrientation;
 use fpdf\PdfDocument;
-use fpdf\PdfMove;
-use fpdf\PdfOrientation;
 
 /**
  * Report for calculations with invalid items.

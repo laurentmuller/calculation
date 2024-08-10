@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
-use fpdf\PdfOrientation;
+use fpdf\Enums\PdfOrientation;
 
 /**
  * Abstract report rendering an array of objects.

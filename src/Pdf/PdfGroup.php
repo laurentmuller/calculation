@@ -14,8 +14,8 @@ namespace App\Pdf;
 
 use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
 use App\Utils\StringUtils;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfDocument;
-use fpdf\PdfTextAlignment;
 
 /**
  * Represent a group in the grouping table.

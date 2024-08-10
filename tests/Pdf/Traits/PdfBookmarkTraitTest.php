@@ -14,7 +14,7 @@ namespace App\Tests\Pdf\Traits;
 
 use App\Pdf\PdfFont;
 use App\Tests\Data\PdfDocumentBookmark;
-use fpdf\PdfDestination;
+use fpdf\Enums\PdfDestination;
 use fpdf\PdfException;
 use PHPUnit\Framework\TestCase;
 

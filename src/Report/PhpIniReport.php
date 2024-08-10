@@ -19,7 +19,7 @@ use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Service\PhpInfoService;
 use App\Utils\StringUtils;
-use fpdf\PdfFontStyle;
+use fpdf\Enums\PdfFontStyle;
 
 /**
  * Report for php.ini.

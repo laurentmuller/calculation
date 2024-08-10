@@ -19,16 +19,16 @@ use App\Pdf\Traits\PdfBookmarkTrait;
 use App\Pdf\Traits\PdfColumnTranslatorTrait;
 use App\Pdf\Traits\PdfStyleTrait;
 use App\Traits\MathTrait;
+use fpdf\Enums\PdfLayout;
+use fpdf\Enums\PdfOrientation;
+use fpdf\Enums\PdfTextAlignment;
+use fpdf\Enums\PdfZoom;
 use fpdf\PdfDocument;
-use fpdf\PdfLayout;
-use fpdf\PdfOrientation;
-use fpdf\PdfTextAlignment;
-use fpdf\PdfZoom;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Abstract report with a default header, a default footer, bookmarks, styles and bookmarks.
+ * Abstract report with a header and footer; styles and bookmarks capabilities.
  */
 abstract class AbstractReport extends PdfDocument
 {
@@ -37,9 +37,7 @@ abstract class AbstractReport extends PdfDocument
     use PdfColumnTranslatorTrait;
     use PdfStyleTrait;
 
-    /**
-     * The encoding source.
-     */
+    /** The encoding source. */
     private const ENCODING_FROM = [
         'ASCII',
         'UTF-8',
@@ -47,15 +45,19 @@ abstract class AbstractReport extends PdfDocument
         'ISO-8859-1',
     ];
 
-    /**
-     * The encoding target.
-     */
+    /** The encoding target. */
     private const ENCODING_TO = 'CP1252';
 
     private readonly ReportFooter $footer;
     private readonly ReportHeader $header;
     private readonly TranslatorInterface $translator;
 
+    /**
+     * Create a new instance.
+     *
+     * @param AbstractController $controller  the controller to get services from
+     * @param PdfOrientation     $orientation the page orientation
+     */
     public function __construct(
         AbstractController $controller,
         PdfOrientation $orientation = PdfOrientation::PORTRAIT
@@ -70,22 +72,25 @@ abstract class AbstractReport extends PdfDocument
 
         $name = $controller->getApplicationName();
         $this->setCreator($name);
-        $userName = $controller->getUserIdentifier();
-        if (null !== $userName) {
-            $this->setAuthor($userName);
+        $user = $controller->getUserIdentifier();
+        if (null !== $user) {
+            $this->setAuthor($user);
         }
 
         $this->header->setCustomer($controller->getUserService()->getCustomer());
         $this->footer->setContent($name, $controller->getApplicationOwnerUrl());
     }
 
+    /**
+     * This implementation output the report footer.
+     */
     public function footer(): void
     {
         $this->footer->output();
     }
 
     /**
-     * Gets the footer.
+     * Gets the report footer.
      */
     public function getFooter(): ReportFooter
     {
@@ -93,7 +98,7 @@ abstract class AbstractReport extends PdfDocument
     }
 
     /**
-     * Gets the header.
+     * Gets the report header.
      */
     public function getHeader(): ReportHeader
     {
@@ -105,6 +110,9 @@ abstract class AbstractReport extends PdfDocument
         return $this->translator;
     }
 
+    /**
+     * This implementation output the report header.
+     */
     public function header(): void
     {
         $this->header->output();

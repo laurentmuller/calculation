@@ -17,7 +17,7 @@ use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
-use fpdf\PdfFontName;
+use fpdf\Enums\PdfFontName;
 
 /**
  * Report to output HTML color names.

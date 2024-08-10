@@ -18,8 +18,8 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroup;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfDocument;
-use fpdf\PdfTextAlignment;
 use PHPUnit\Framework\TestCase;
 
 class PdfGroupTableTest extends TestCase

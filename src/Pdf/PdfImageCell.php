@@ -15,10 +15,10 @@ namespace App\Pdf;
 use App\Traits\ImageSizeTrait;
 use App\Traits\MathTrait;
 use App\Utils\FileUtils;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfDocument;
 use fpdf\PdfException;
 use fpdf\PdfRectangle;
-use fpdf\PdfTextAlignment;
 
 /**
  * Specialized cell containing an image.

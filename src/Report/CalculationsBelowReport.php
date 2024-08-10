@@ -18,8 +18,8 @@ use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfStyle;
 use App\Report\Table\ReportTable;
 use App\Traits\MathTrait;
-use fpdf\PdfOrientation;
-use fpdf\PdfTextAlignment;
+use fpdf\Enums\PdfOrientation;
+use fpdf\Enums\PdfTextAlignment;
 
 /**
  * Report for the list of calculations.

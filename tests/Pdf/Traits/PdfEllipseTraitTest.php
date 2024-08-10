@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Pdf\Traits;
 
 use App\Pdf\Traits\PdfEllipseTrait;
-use fpdf\PdfDestination;
+use fpdf\Enums\PdfDestination;
 use fpdf\PdfDocument;
 use PHPUnit\Framework\TestCase;
 

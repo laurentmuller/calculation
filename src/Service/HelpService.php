@@ -15,7 +15,6 @@ namespace App\Service;
 use App\Traits\TranslatorTrait;
 use App\Utils\FileUtils;
 use Psr\Cache\InvalidArgumentException;
-use Symfony\Component\Cache\Exception\InvalidArgumentException as CacheException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -118,6 +117,8 @@ class HelpService
      * @param string $id the action identifier to search for
      *
      * @psalm-return HelpActionType|null
+     *
+     * @throws InvalidArgumentException
      */
     public function findAction(string $id): ?array
     {
@@ -132,6 +133,8 @@ class HelpService
      * @return array|null the dialog, if found; null otherwise
      *
      * @pslam-return HelpDialogType|null
+     *
+     * @throws InvalidArgumentException
      */
     public function findDialog(string $id): ?array
     {
@@ -148,6 +151,8 @@ class HelpService
      * @psalm-param string|HelpDialogType|null $id
      *
      * @pslam-return HelpEntityType|null
+     *
+     * @throws InvalidArgumentException
      */
     public function findEntity(string|array|null $id = null): ?array
     {
@@ -165,6 +170,8 @@ class HelpService
      * Gets actions.
      *
      * @psalm-return array<string, HelpActionType>
+     *
+     * @throws InvalidArgumentException
      */
     public function getActions(): array
     {
@@ -175,6 +182,8 @@ class HelpService
      * Gets the dialogs.
      *
      * @psalm-return array<string, HelpDialogType>
+     *
+     * @throws InvalidArgumentException
      */
     public function getDialogs(): array
     {
@@ -185,6 +194,8 @@ class HelpService
      * @psalm-return array<string, HelpDialogType[]>
      *
      * @psalm-api
+     *
+     * @throws InvalidArgumentException
      */
     public function getDialogsByGroup(): array
     {
@@ -215,6 +226,8 @@ class HelpService
      * Gets the entities.
      *
      * @psalm-return array<string, HelpEntityType>
+     *
+     * @throws InvalidArgumentException
      */
     public function getEntities(): array
     {
@@ -238,8 +251,21 @@ class HelpService
      */
     public function getHelp(): array
     {
-        /** @psalm-var HelpContentType */
-        return $this->cache->get('help', fn (): array => $this->loadHelp());
+        try {
+            /** @psalm-var HelpContentType */
+            return $this->cache->get('help', fn (): array => $this->loadHelp());
+        } catch (\InvalidArgumentException) {
+            return [
+                'actions' => [],
+                'dialogs' => [],
+                'entities' => [],
+                'mainMenu' => [
+                    'image' => null,
+                    'description' => null,
+                    'menus' => [],
+                ],
+            ];
+        }
     }
 
     /**
@@ -254,6 +280,8 @@ class HelpService
      * Gets the main (root) menu.
      *
      * @psalm-return HelpMainMenuType
+     *
+     * @throws InvalidArgumentException
      */
     public function getMainMenu(): array
     {
@@ -266,6 +294,8 @@ class HelpService
      * @return array the main menus, if found; null otherwise
      *
      * @psalm-return HelpMenuType[]
+     *
+     * @throws InvalidArgumentException
      */
     public function getMainMenus(): array
     {
@@ -281,6 +311,8 @@ class HelpService
      * Merge current item with an action, if applicable.
      *
      * @psalm-param array{action?: string, ...} $item
+     *
+     * @throws InvalidArgumentException
      */
     public function mergeAction(array $item): array
     {
@@ -327,22 +359,18 @@ class HelpService
      */
     private function loadHelp(): array
     {
-        try {
-            /** @psalm-var HelpContentType $help */
-            $help = FileUtils::decodeJson($this->file);
-            $entities = $help['entities'];
-            if ([] !== $entities) {
-                $help['entities'] = $this->updateEntities($entities);
-            }
-            $dialogs = $help['dialogs'];
-            if ([] !== $dialogs) {
-                $help['dialogs'] = $this->updateDialogs($dialogs);
-            }
-
-            return $help;
-        } catch (\InvalidArgumentException $e) {
-            throw new CacheException($e->getMessage(), $e->getCode(), $e->getPrevious());
+        /** @psalm-var HelpContentType $help */
+        $help = FileUtils::decodeJson($this->file);
+        $entities = $help['entities'];
+        if ([] !== $entities) {
+            $help['entities'] = $this->updateEntities($entities);
         }
+        $dialogs = $help['dialogs'];
+        if ([] !== $dialogs) {
+            $help['dialogs'] = $this->updateDialogs($dialogs);
+        }
+
+        return $help;
     }
 
     /**
@@ -352,11 +380,10 @@ class HelpService
      */
     private function updateDialogs(array $dialogs): array
     {
-        /** @psalm-param HelpDialogType $value */
-        foreach ($dialogs as &$value) {
-            $group = $this->getDialogGroup($value);
-            $value['group'] = $this->trans($group);
-            $value['name'] = $this->trans($value['name'] ?? $value['id']);
+        foreach ($dialogs as &$dialog) {
+            $group = $this->getDialogGroup($dialog);
+            $dialog['group'] = $this->trans($group);
+            $dialog['name'] = $this->trans($dialog['name'] ?? $dialog['id']);
         }
 
         \usort(
@@ -404,9 +431,8 @@ class HelpService
      */
     private function updateEntities(array $entities): array
     {
-        /** @psalm-param HelpEntityType $value */
-        foreach ($entities as &$value) {
-            $value['name'] = $this->trans($value['id'] . '.name');
+        foreach ($entities as &$entity) {
+            $entity['name'] = $this->trans($entity['id'] . '.name');
         }
 
         $this->sortByName($entities);

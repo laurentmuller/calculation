@@ -15,6 +15,7 @@ namespace App\Tests\Service;
 use App\Service\HelpService;
 use App\Tests\KernelServiceTestCase;
 use PHPUnit\Framework\MockObject\Exception;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -28,6 +29,9 @@ class HelpServiceTest extends KernelServiceTestCase
         $this->service = $this->getService(HelpService::class);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testFindAction(): void
     {
         $actual = $this->service->findAction('list_search');
@@ -36,6 +40,9 @@ class HelpServiceTest extends KernelServiceTestCase
         self::assertNull($actual);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testFindDialog(): void
     {
         $actual = $this->service->findDialog('index.title');
@@ -46,6 +53,8 @@ class HelpServiceTest extends KernelServiceTestCase
 
     /**
      * @psalm-suppress InvalidArgument
+     *
+     * @throws InvalidArgumentException
      */
     public function testFindEntity(): void
     {
@@ -63,24 +72,36 @@ class HelpServiceTest extends KernelServiceTestCase
         self::assertNull($actual);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testGetActions(): void
     {
         $actual = $this->service->getActions();
         self::assertNotEmpty($actual);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testGetDialogs(): void
     {
         $actual = $this->service->getDialogs();
         self::assertNotEmpty($actual);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testGetDialogsByGroup(): void
     {
         $actual = $this->service->getDialogsByGroup();
         self::assertNotEmpty($actual);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testGetEntities(): void
     {
         $actual = $this->service->getEntities();
@@ -99,18 +120,27 @@ class HelpServiceTest extends KernelServiceTestCase
         self::assertStringEndsWith('/images', $actual);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testGetMainMenu(): void
     {
         $actual = $this->service->getMainMenu();
         self::assertNotEmpty($actual);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testGetMainMenus(): void
     {
         $actual = $this->service->getMainMenus();
         self::assertNotEmpty($actual);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testHelp(): void
     {
         $help = $this->service->getHelp();
@@ -118,7 +148,7 @@ class HelpServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws Exception
+     * @throws InvalidArgumentException|Exception
      */
     public function testInvalidFile(): void
     {
@@ -138,6 +168,9 @@ class HelpServiceTest extends KernelServiceTestCase
         self::assertEmpty($service->getDialogsByGroup());
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testMergeAction(): void
     {
         $expected = [];

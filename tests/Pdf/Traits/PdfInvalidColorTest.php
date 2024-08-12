@@ -44,6 +44,6 @@ class PdfInvalidColorTest extends TestCase
 
     private function getPdfInvalidColor(): PdfInvalidColor
     {
-        return new PdfInvalidColor();
+        return PdfInvalidColor::INVALID;
     }
 }

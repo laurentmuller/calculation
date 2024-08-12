@@ -15,7 +15,9 @@ namespace App\Tests\Data;
 use App\Pdf\Interfaces\PdfColorInterface;
 use App\Pdf\Traits\PdfColorTrait;
 
-class PdfInvalidColor implements PdfColorInterface
+enum PdfInvalidColor: string implements PdfColorInterface
 {
     use PdfColorTrait;
+
+    case INVALID = '';
 }

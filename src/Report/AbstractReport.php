@@ -15,7 +15,6 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
-use App\Pdf\Traits\PdfBookmarkTrait;
 use App\Pdf\Traits\PdfColumnTranslatorTrait;
 use App\Pdf\Traits\PdfStyleTrait;
 use App\Traits\MathTrait;
@@ -24,6 +23,7 @@ use fpdf\Enums\PdfOrientation;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\Enums\PdfZoom;
 use fpdf\PdfDocument;
+use fpdf\Traits\PdfBookmarkTrait;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 

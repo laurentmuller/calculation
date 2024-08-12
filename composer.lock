@@ -1875,22 +1875,23 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "2.0.1",
+            "version": "2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "2418e312083d37c2cddf7f3ac0ef2755cf4f8c71"
+                "reference": "b3570ebc432d382e020ffa155e7427a36f7af98d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/2418e312083d37c2cddf7f3ac0ef2755cf4f8c71",
-                "reference": "2418e312083d37c2cddf7f3ac0ef2755cf4f8c71",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/b3570ebc432d382e020ffa155e7427a36f7af98d",
+                "reference": "b3570ebc432d382e020ffa155e7427a36f7af98d",
                 "shasum": ""
             },
             "require": {
                 "elao/enum": "^2.0",
                 "ext-gd": "*",
                 "ext-iconv": "*",
+                "ext-intl": "*",
                 "ext-zlib": "*",
                 "php": "^8.2"
             },
@@ -1933,7 +1934,7 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2024-08-09T09:13:27+00:00"
+            "time": "2024-08-12T11:20:40+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",
@@ -11560,16 +11561,16 @@
         },
         {
             "name": "sebastian/comparator",
-            "version": "5.0.1",
+            "version": "5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "2db5010a484d53ebf536087a70b4a5423c102372"
+                "reference": "2d3e04c3b4c1e84a5e7382221ad8883c8fbc4f53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/2db5010a484d53ebf536087a70b4a5423c102372",
-                "reference": "2db5010a484d53ebf536087a70b4a5423c102372",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/2d3e04c3b4c1e84a5e7382221ad8883c8fbc4f53",
+                "reference": "2d3e04c3b4c1e84a5e7382221ad8883c8fbc4f53",
                 "shasum": ""
             },
             "require": {
@@ -11580,7 +11581,7 @@
                 "sebastian/exporter": "^5.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^10.3"
+                "phpunit/phpunit": "^10.4"
             },
             "type": "library",
             "extra": {
@@ -11625,7 +11626,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/comparator/issues",
                 "security": "https://github.com/sebastianbergmann/comparator/security/policy",
-                "source": "https://github.com/sebastianbergmann/comparator/tree/5.0.1"
+                "source": "https://github.com/sebastianbergmann/comparator/tree/5.0.2"
             },
             "funding": [
                 {
@@ -11633,7 +11634,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-14T13:18:12+00:00"
+            "time": "2024-08-12T06:03:08+00:00"
         },
         {
             "name": "sebastian/complexity",

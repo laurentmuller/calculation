@@ -16,6 +16,7 @@ use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use fpdf\PdfDocument;
+use fpdf\PdfException;
 
 /**
  * Class implementing this interface handles colors.
@@ -25,7 +26,7 @@ interface PdfColorInterface
     /**
      * Apply this draw color to the given document.
      *
-     * @throws \InvalidArgumentException if the color cannot be created
+     * @throws PdfException if the color cannot be created
      *
      * @see PdfColorInterface::getDrawColor()
      */
@@ -34,7 +35,7 @@ interface PdfColorInterface
     /**
      * Apply this fill color to the given document.
      *
-     * @throws \InvalidArgumentException if the color cannot be created
+     * @throws PdfException if the color cannot be created
      *
      * @see PdfColorInterface::getFillColor()
      */
@@ -43,7 +44,7 @@ interface PdfColorInterface
     /**
      * Apply this text color to the given document.
      *
-     * @throws \InvalidArgumentException if the color cannot be created
+     * @throws PdfException if the color cannot be created
      *
      * @see PdfColorInterface::getTextColor()
      */
@@ -68,14 +69,14 @@ interface PdfColorInterface
     /**
      * Gets this value as draw color.
      *
-     * @throws \InvalidArgumentException if the color cannot be created
+     * @throws PdfException if the color cannot be created
      */
     public function getDrawColor(): PdfDrawColor;
 
     /**
      * Gets this value as fill color.
      *
-     * @throws \InvalidArgumentException if the color cannot be created
+     * @throws PdfException if the color cannot be created
      */
     public function getFillColor(): PdfFillColor;
 
@@ -87,7 +88,7 @@ interface PdfColorInterface
     /**
      * Gets this value as text color.
      *
-     * @throws \InvalidArgumentException if the color cannot be created
+     * @throws PdfException if the color cannot be created
      */
     public function getTextColor(): PdfTextColor;
 }

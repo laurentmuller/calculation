@@ -99,6 +99,12 @@ class FileUtilsTest extends TestCase
         self::assertSame('test.bmp', $new_name);
     }
 
+    public function testChmodInvalid(): void
+    {
+        $actual = FileUtils::chmod(__DIR__ . '/fake.txt', 1);
+        self::assertFalse($actual);
+    }
+
     public function testDecodeJsonEmptyFile(): void
     {
         self::expectException(\InvalidArgumentException::class);
@@ -123,6 +129,12 @@ class FileUtilsTest extends TestCase
         self::assertIsString($file);
         $actual = FileUtils::dumpFile($file, 'My Content');
         self::assertTrue($actual);
+    }
+
+    public function testDumpFileInvalid(): void
+    {
+        $actual = FileUtils::dumpFile('a:/fake/fake.txt', 'fake');
+        self::assertFalse($actual);
     }
 
     public function testExist(): void
@@ -200,6 +212,12 @@ class FileUtilsTest extends TestCase
     {
         $actual = FileUtils::makePathRelative('/tmp/videos', '/tmp');
         self::assertSame('videos/', $actual);
+    }
+
+    public function testMkdirInvalid(): void
+    {
+        $actual = FileUtils::mkdir('a:/fake/');
+        self::assertFalse($actual);
     }
 
     public function testNormalize(): void

@@ -17,6 +17,7 @@ use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Interfaces\PdfColorInterface;
 use fpdf\PdfDocument;
+use fpdf\PdfException;
 
 /**
  * Trait for class implementing the color interface.
@@ -66,7 +67,7 @@ trait PdfColorTrait
     {
         $color = PdfDrawColor::create($this->value);
         if (!$color instanceof PdfDrawColor) {
-            throw new \InvalidArgumentException('Unable to create draw color.');
+            throw PdfException::instance('Unable to create draw color.');
         }
 
         return $color;
@@ -76,7 +77,7 @@ trait PdfColorTrait
     {
         $color = PdfFillColor::create($this->value);
         if (!$color instanceof PdfFillColor) {
-            throw new \InvalidArgumentException('Unable to create fill color.');
+            throw PdfException::instance('Unable to create fill color.');
         }
 
         return $color;
@@ -91,7 +92,7 @@ trait PdfColorTrait
     {
         $color = PdfTextColor::create($this->value);
         if (!$color instanceof PdfTextColor) {
-            throw new \InvalidArgumentException('Unable to create text color.');
+            throw PdfException::instance('Unable to create text color.');
         }
 
         return $color;

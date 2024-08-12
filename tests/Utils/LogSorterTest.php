@@ -15,6 +15,7 @@ namespace App\Tests\Utils;
 use App\Entity\Log;
 use App\Utils\LogSorter;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LogLevel;
 
 class LogSorterTest extends TestCase
 {
@@ -27,10 +28,8 @@ class LogSorterTest extends TestCase
     public function testSortByChannel(): void
     {
         $log1 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-01-01'))
             ->setChannel('ChannelA');
         $log2 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-02-02'))
             ->setChannel('ChannelB');
         $logs = [$log1, $log2];
 
@@ -63,6 +62,46 @@ class LogSorterTest extends TestCase
         $logs = [$log1, $log2];
 
         $sorter = new LogSorter('createdAt', true);
+        $sorter->sort($logs);
+        self::assertSame([$log1, $log2], $logs);
+    }
+
+    public function testSortByLevel(): void
+    {
+        $log1 = Log::instance(1)
+            ->setLevel(LogLevel::ALERT);
+        $log2 = Log::instance(1)
+            ->setLevel(LogLevel::DEBUG);
+        $logs = [$log1, $log2];
+
+        $sorter = new LogSorter('level', true);
+        $sorter->sort($logs);
+        self::assertSame([$log1, $log2], $logs);
+    }
+
+    public function testSortByMessage(): void
+    {
+        $log1 = Log::instance(1)
+            ->setMessage('Message 1');
+        $log2 = Log::instance(2)
+            ->setMessage('Message 2');
+        $logs = [$log1, $log2];
+
+        $sorter = new LogSorter('message', true);
+        $sorter->sort($logs);
+        self::assertSame([$log1, $log2], $logs);
+    }
+
+    public function testSortByUser(): void
+    {
+        $log1 = Log::instance(1)
+            ->setExtra(['user' => 'user1']);
+        $log2 = Log::instance(2)
+            ->setExtra(['user' => 'user2']);
+
+        $logs = [$log1, $log2];
+
+        $sorter = new LogSorter('user', true);
         $sorter->sort($logs);
         self::assertSame([$log1, $log2], $logs);
     }

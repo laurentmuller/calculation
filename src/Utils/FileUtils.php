@@ -400,7 +400,7 @@ final class FileUtils
      * @param string  $prefix       The prefix of the generated temporary directory
      * @param bool    $deleteOnExit if true, the directory is deleted at the end of the script
      *
-     * @return string|null the new temporary directory; null on failure
+     * @return ?string the new temporary directory; null on failure
      */
     public static function tempDir(?string $dir = null, string $prefix = 'tmp', bool $deleteOnExit = true): ?string
     {
@@ -408,13 +408,13 @@ final class FileUtils
             $dir ??= \sys_get_temp_dir();
             $base = self::buildPath($dir, $prefix);
             for ($i = 0; $i < 10; ++$i) {
-                $result = $base . \uniqid((string) \mt_rand(), true);
-                if (!self::exists($result) && self::mkdir($result)) {
+                $file = $base . \uniqid((string) \mt_rand(), true);
+                if (!self::exists($file) && self::mkdir($file)) {
                     if ($deleteOnExit) {
-                        \register_shutdown_function(fn (): bool => self::remove($result));
+                        \register_shutdown_function(fn (): bool => self::remove($file));
                     }
 
-                    return $result;
+                    return $file;
                 }
             }
         } catch (IOException) {
@@ -426,17 +426,24 @@ final class FileUtils
     /**
      * Create the temporary file in the given directory with a unique name.
      *
-     * @param string $prefix       the prefix of the generated temporary file name. Note: Windows uses only the first
-     *                             three characters of prefix.
-     * @param bool   $deleteOnExit if true, the file is deleted at the end of the script
-     * @param string $suffix       The suffix of the generated temporary filename
+     * @param string  $prefix       the prefix of the generated temporary file name. Note: Windows uses only the first
+     *                              three characters of prefix.
+     * @param bool    $deleteOnExit if true, the file is deleted at the end of the script
+     * @param string  $suffix       The suffix of the generated temporary filename
+     * @param ?string $dir          the directory where the temporary file will be created or null to use
+     *                              the directory path used for temporary files
      *
-     * @return string|null the new temporary file name (with the path); null on failure
+     * @return ?string the new temporary file name (with the path); null on failure
      */
-    public static function tempFile(string $prefix = 'tmp', bool $deleteOnExit = true, string $suffix = ''): ?string
-    {
+    public static function tempFile(
+        string $prefix = 'tmp',
+        bool $deleteOnExit = true,
+        string $suffix = '',
+        ?string $dir = null
+    ): ?string {
         try {
-            $file = self::getFilesystem()->tempnam(\sys_get_temp_dir(), $prefix, $suffix);
+            $dir ??= \sys_get_temp_dir();
+            $file = self::getFilesystem()->tempnam($dir, $prefix, $suffix);
             if ($deleteOnExit) {
                 \register_shutdown_function(fn (): bool => self::remove($file));
             }

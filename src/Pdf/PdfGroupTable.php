@@ -120,6 +120,8 @@ class PdfGroupTable extends PdfTable
 
     /**
      * Output the group.
+     *
+     * Do nothing if the group key is empty or if already outputting the group.
      */
     public function outputGroup(): static
     {

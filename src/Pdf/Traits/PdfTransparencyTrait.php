@@ -17,21 +17,21 @@ use App\Pdf\Enums\PdfBlendMode;
 /**
  * Trait to add transparency support.
  *
- * The alpha channel can be from 0 (fully transparent) to 1 (fully opaque). It applies to all
- * elements (text, drawings, images).
+ * The alpha channel can be from 0.0 (fully transparent) to 1.0 (fully opaque). It applies to all
+ * elements (texts, drawings, images).
  *
- * @psalm-type GStateType = array{
+ * @psalm-type TransparencyStateType = array{
  *      key: int,
  *      object: int,
  *      alpha: float,
- *      blend_mode: string}
+ *      blendMode: string}
  *
  * @psalm-require-extends \fpdf\PdfDocument
  */
 trait PdfTransparencyTrait
 {
-    /** @psalm-var GStateType[] */
-    private array $gStates = [];
+    /** @psalm-var TransparencyStateType[] */
+    private array $transparencyStates = [];
 
     /**
      * Reset the alpha mode to default (1.0).
@@ -44,26 +44,26 @@ trait PdfTransparencyTrait
     /**
      * Set the alpha mode.
      *
-     * @param float        $alpha     the alpha channel from 0 (fully transparent) to 1 (fully opaque)
+     * @param float        $alpha     the alpha channel from 0.0 (fully transparent) to 1.0 (fully opaque)
      * @param PdfBlendMode $blendMode the blend mode
      */
     public function setAlpha(float $alpha, PdfBlendMode $blendMode = PdfBlendMode::NORMAL): void
     {
-        $key = \count($this->gStates) + 1;
+        $key = \count($this->transparencyStates) + 1;
         $alpha = \max(0.0, \min($alpha, 1.0));
-        $gState = [
+        $state = [
             'key' => $key,
             'object' => 0,
             'alpha' => $alpha,
-            'blend_mode' => $blendMode->camel(),
+            'blendMode' => $blendMode->camel(),
         ];
-        $this->gStates[] = $gState;
+        $this->transparencyStates[] = $state;
         $this->outf('/GS%d gs', $key);
     }
 
     protected function endDoc(): void
     {
-        if ([] !== $this->gStates) {
+        if ([] !== $this->transparencyStates) {
             $this->updatePdfVersion('1.4');
         }
         parent::endDoc();
@@ -72,24 +72,25 @@ trait PdfTransparencyTrait
     protected function putResourceDictionary(): void
     {
         parent::putResourceDictionary();
-        if ([] !== $this->gStates) {
-            $this->put('/ExtGState <<');
-            foreach ($this->gStates as $gState) {
-                $this->putf('/GS%d %d 0 R', $gState['key'], $gState['object']);
-            }
-            $this->put('>>');
+        if ([] === $this->transparencyStates) {
+            return;
         }
+        $this->put('/ExtGState <<');
+        foreach ($this->transparencyStates as $state) {
+            $this->putf('/GS%d %d 0 R', $state['key'], $state['object']);
+        }
+        $this->put('>>');
     }
 
     protected function putResources(): void
     {
-        foreach ($this->gStates as &$gState) {
+        foreach ($this->transparencyStates as &$state) {
             $this->putNewObj();
-            $gState['object'] = $this->objectNumber;
+            $state['object'] = $this->objectNumber;
             $this->put('<</Type /ExtGState');
-            $this->putf('/ca %.3F', $gState['alpha']);
-            $this->putf('/CA %.3F', $gState['alpha']);
-            $this->putf('/BM /%s', $gState['blend_mode']);
+            $this->putf('/ca %.3F', $state['alpha']);
+            $this->putf('/CA %.3F', $state['alpha']);
+            $this->putf('/BM /%s', $state['blendMode']);
             $this->put('>>');
             $this->putEndObj();
         }

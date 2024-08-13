@@ -14,6 +14,7 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\Traits\PdfMemoryImageTrait;
+use App\Pdf\Traits\PdfTransparencyTrait;
 use App\Service\ImageService;
 use App\Utils\FileUtils;
 use fpdf\PdfException;
@@ -24,6 +25,7 @@ use fpdf\PdfException;
 class MemoryImageReport extends AbstractReport
 {
     use PdfMemoryImageTrait;
+    use PdfTransparencyTrait;
 
     public function __construct(
         AbstractController $controller,
@@ -41,6 +43,7 @@ class MemoryImageReport extends AbstractReport
         $this->addImageGD();
         $this->addLogoImage();
         $this->addIconImage();
+        $this->addTransparencyImage();
         $this->addScreenshotImage();
 
         return true;
@@ -56,7 +59,7 @@ class MemoryImageReport extends AbstractReport
             throw PdfException::instance('Unable to get image content.');
         }
 
-        $this->imageMemory($data, 85, 20, 30);
+        $this->imageMemory($data, 60, 20, 30);
     }
 
     private function addImageGD(): void
@@ -91,5 +94,20 @@ class MemoryImageReport extends AbstractReport
             return;
         }
         $this->image($this->screenshotFile, 10, 70, $this->getPrintableWidth());
+    }
+
+    private function addTransparencyImage(): void
+    {
+        if (null === $this->iconFile) {
+            return;
+        }
+        $data = FileUtils::readFile($this->iconFile);
+        if ('' === $data) {
+            throw PdfException::instance('Unable to get image content.');
+        }
+
+        $this->setAlpha(0.5);
+        $this->imageMemory($data, 110, 20, 30);
+        $this->resetAlpha();
     }
 }

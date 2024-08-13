@@ -108,7 +108,7 @@
         "symfony/var-dumper": "7.1.*",
         "symfony/web-profiler-bundle": "7.1.*",
         "vimeo/psalm": "^5.0",
-        "vincentlanglet/twig-cs-fixer": "^2.0",
+        "vincentlanglet/twig-cs-fixer": "^3.0",
         "weirdan/doctrine-psalm-plugin": "^2.0"
     },
     "replace": {
@@ -178,7 +178,7 @@
         "app-psalm": "vendor/bin/psalm --config psalm.xml",
         "app-stan": "vendor/bin/phpstan analyse --configuration phpstan.neon --memory-limit 2G",
         "app-rector": "vendor/bin/rector process --dry-run --config rector.php",
-        "app-twig-cs-fixer": "vendor/bin/twig-cs-fixer lint --config=.twig-cs-fixer.php",
+        "app-twig": "vendor/bin/twig-cs-fixer lint --config=.twig-cs-fixer.php",
         "app-test": "phpunit --exclude-group=legacy",
         "app-markdown": "markdownlint-cli2",
         "app-all": [
@@ -187,7 +187,7 @@
             "@app-psalm",
             "@app-stan",
             "@app-rector",
-            "@app-twig-cs-fixer",
+            "@app-twig",
             "@app-test",
             "@app-markdown"
         ]

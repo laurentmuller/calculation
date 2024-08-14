@@ -32,7 +32,7 @@ class PdfDashLineTraitTest extends TestCase
         $document->dashedRect(10, 10, 100, 50, 5, PdfLine::default());
         $document->dashedRectangle(PdfRectangle::instance(10, 10, 100, 50));
         $document->setDashPattern(10, 5);
-        $document->setDashPattern();
+        $document->resetDashPattern();
         $document->output(PdfDestination::STRING);
         self::assertSame(1, $document->getPage());
     }

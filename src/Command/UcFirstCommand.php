@@ -28,7 +28,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 /**
  * Command to set a first character uppercase to fields.
  *
- * @psalm-type EntitiesType = array<class-string, array{name: string, fields: non-empty-array<string>}>
+ * @psalm-type EntityType = array{name: string, fields: non-empty-array<string>}
  */
 #[AsCommand(name: 'app:uc-first', description: 'Set a first character uppercase to defined fields.')]
 class UcFirstCommand extends Command
@@ -41,7 +41,7 @@ class UcFirstCommand extends Command
     /** @psalm-var class-string|null */
     private ?string $className = null;
 
-    /** @psalm-var EntitiesType */
+    /** @psalm-var array<class-string, EntityType> */
     private array $entities = [];
 
     private ?string $fieldName = null;
@@ -113,6 +113,10 @@ class UcFirstCommand extends Command
      */
     private function askClassName(SymfonyStyle $io): ?string
     {
+        if (!$io->isInteractive()) {
+            return null;
+        }
+
         $entities = $this->getEntities();
         $question = new ChoiceQuestion('Select an entity:', \array_column($entities, 'name'));
         $question->setMaxAttempts(1)
@@ -135,6 +139,9 @@ class UcFirstCommand extends Command
 
     private function askFieldName(SymfonyStyle $io): ?string
     {
+        if (!$io->isInteractive()) {
+            return null;
+        }
         if (!\is_string($this->className)) {
             return null;
         }
@@ -191,7 +198,7 @@ class UcFirstCommand extends Command
     }
 
     /**
-     * @psalm-return EntitiesType
+     * @psalm-return array<class-string, EntityType>
      */
     private function getEntities(): array
     {

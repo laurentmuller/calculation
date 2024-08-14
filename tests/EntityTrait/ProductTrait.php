@@ -27,8 +27,11 @@ trait ProductTrait
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    public function getProduct(?Category $category = null, float $price = 1.0, string $description = 'Test description'): Product
-    {
+    public function getProduct(
+        ?Category $category = null,
+        float $price = 1.0,
+        string $description = 'Test description'
+    ): Product {
         if ($this->product instanceof Product) {
             return $this->product;
         }

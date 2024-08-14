@@ -18,6 +18,7 @@ use App\Pdf\PdfStyle;
 use App\Traits\ArrayTrait;
 use fpdf\Enums\PdfRectangleStyle;
 use fpdf\Enums\PdfTextAlignment;
+use fpdf\Traits\PdfRotationTrait;
 
 /**
  * Trait to draw bar chart.

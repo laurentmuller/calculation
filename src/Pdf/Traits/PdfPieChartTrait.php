@@ -16,6 +16,7 @@ use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Traits\ArrayTrait;
 use fpdf\Enums\PdfRectangleStyle;
+use fpdf\Traits\PdfSectorTrait;
 
 /**
  * Trait to draw pie chart.

@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
- * Command to update Javascript and CSS dependencies.
+ * Command to update JavaScript and CSS dependencies.
  *
  * @psalm-type PluginType = array{
  *     name: string,

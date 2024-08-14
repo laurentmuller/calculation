@@ -89,19 +89,25 @@ trait PdfDashLineTrait
     }
 
     /**
-     * Set the dash pattern to draw dashed lines or rectangles.
-     *
-     * Call the function without the parameter to restore normal drawing.
-     *
-     * @param float|null $black the length of dashes
-     * @param float|null $white the length of gaps
+     * Reset the dash pattern.
      */
-    public function setDashPattern(?float $black = null, ?float $white = null): void
+    public function resetDashPattern(): static
     {
-        if (null !== $black && null !== $white) {
-            $this->outf('[%.3F %.3F] 0 d', $black * $this->scaleFactor, $white * $this->scaleFactor);
-        } else {
-            $this->out('[] 0 d');
-        }
+        $this->out('[] 0 d');
+
+        return $this;
+    }
+
+    /**
+     * Set the dash pattern used to draw dashed lines or rectangles.
+     *
+     * @param float $black the length of dashes
+     * @param float $white the length of gaps
+     */
+    public function setDashPattern(float $black, float $white): static
+    {
+        $this->outf('[%.3F %.3F] 0 d', $black * $this->scaleFactor, $white * $this->scaleFactor);
+
+        return $this;
     }
 }

@@ -16,6 +16,7 @@ use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Interfaces\PdfChartInterface;
 use fpdf\Enums\PdfRectangleStyle;
+use fpdf\Traits\PdfEllipseTrait;
 
 /**
  * Trait to draw chart legends.

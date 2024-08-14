@@ -1875,16 +1875,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "2.0.2",
+            "version": "2.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "b3570ebc432d382e020ffa155e7427a36f7af98d"
+                "reference": "5e6d17f6c13f2a69d2b5d5574acef000ab39185d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/b3570ebc432d382e020ffa155e7427a36f7af98d",
-                "reference": "b3570ebc432d382e020ffa155e7427a36f7af98d",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/5e6d17f6c13f2a69d2b5d5574acef000ab39185d",
+                "reference": "5e6d17f6c13f2a69d2b5d5574acef000ab39185d",
                 "shasum": ""
             },
             "require": {
@@ -1934,7 +1934,7 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2024-08-12T11:20:40+00:00"
+            "time": "2024-08-14T14:05:14+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",
@@ -10185,16 +10185,16 @@
         },
         {
             "name": "phpstan/phpstan-symfony",
-            "version": "1.4.7",
+            "version": "1.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-symfony.git",
-                "reference": "ee88a01bc48f608143d3376802ec952270737cb8"
+                "reference": "14eec8c011b856eee4d744a2a3f709db1e1858bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/ee88a01bc48f608143d3376802ec952270737cb8",
-                "reference": "ee88a01bc48f608143d3376802ec952270737cb8",
+                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/14eec8c011b856eee4d744a2a3f709db1e1858bd",
+                "reference": "14eec8c011b856eee4d744a2a3f709db1e1858bd",
                 "shasum": ""
             },
             "require": {
@@ -10251,9 +10251,9 @@
             "description": "Symfony Framework extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-symfony/issues",
-                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.4.7"
+                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.4.8"
             },
-            "time": "2024-08-09T12:37:24+00:00"
+            "time": "2024-08-13T19:43:40+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -13124,16 +13124,16 @@
         },
         {
             "name": "vincentlanglet/twig-cs-fixer",
-            "version": "3.0.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/VincentLanglet/Twig-CS-Fixer.git",
-                "reference": "3954bbfece3dfd5881f1437e72334e089595d5de"
+                "reference": "ac11c63f17322e31dc6d8c5e8dada54423d66fe0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/3954bbfece3dfd5881f1437e72334e089595d5de",
-                "reference": "3954bbfece3dfd5881f1437e72334e089595d5de",
+                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/ac11c63f17322e31dc6d8c5e8dada54423d66fe0",
+                "reference": "ac11c63f17322e31dc6d8c5e8dada54423d66fe0",
                 "shasum": ""
             },
             "require": {
@@ -13192,7 +13192,7 @@
             "homepage": "https://github.com/VincentLanglet/Twig-CS-Fixer",
             "support": {
                 "issues": "https://github.com/VincentLanglet/Twig-CS-Fixer/issues",
-                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/3.0.0"
+                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/3.0.1"
             },
             "funding": [
                 {
@@ -13200,7 +13200,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-07-28T11:46:49+00:00"
+            "time": "2024-08-13T16:27:40+00:00"
         },
         {
             "name": "webmozart/assert",

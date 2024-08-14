@@ -14,17 +14,22 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\Traits\PdfMemoryImageTrait;
-use App\Pdf\Traits\PdfTransparencyTrait;
 use App\Service\ImageService;
 use App\Utils\FileUtils;
+use fpdf\Enums\PdfRectangleStyle;
 use fpdf\PdfException;
+use fpdf\Traits\PdfEllipseTrait;
+use fpdf\Traits\PdfRotationTrait;
+use fpdf\Traits\PdfTransparencyTrait;
 
 /**
  * Report to test in memory images.
  */
 class MemoryImageReport extends AbstractReport
 {
+    use PdfEllipseTrait;
     use PdfMemoryImageTrait;
+    use PdfRotationTrait;
     use PdfTransparencyTrait;
 
     public function __construct(
@@ -45,6 +50,10 @@ class MemoryImageReport extends AbstractReport
         $this->addIconImage();
         $this->addTransparencyImage();
         $this->addScreenshotImage();
+        $this->renderEllipses();
+
+        $this->addPage();
+        $this->renderRotation();
 
         return true;
     }
@@ -109,5 +118,27 @@ class MemoryImageReport extends AbstractReport
         $this->setAlpha(0.5);
         $this->imageMemory($data, 110, 20, 30);
         $this->resetAlpha();
+    }
+
+    private function renderEllipses(): void
+    {
+        $this->setDrawColor(255, 0, 0);
+        $this->ellipse(30, 220, 20, 10);
+        $this->circle(65, 220, 10);
+        $this->setFillColor(0, 255, 0);
+        $this->circle(65, 245, 10, PdfRectangleStyle::BOTH);
+        $this->ellipse(30, 245, 20, 10, PdfRectangleStyle::BOTH);
+    }
+
+    private function renderRotation(): void
+    {
+        $this->resetStyle();
+        $this->rotateText('My Rotated test', 45, 10, 50);
+        $this->rotateRect(50, 30, 20, 10, -45);
+        if (null !== $this->iconFile) {
+            $this->rotate(45, 60, 40);
+            $this->image($this->iconFile);
+            $this->endRotate();
+        }
     }
 }

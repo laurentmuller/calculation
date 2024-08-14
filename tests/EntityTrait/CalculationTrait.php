@@ -28,8 +28,11 @@ trait CalculationTrait
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    public function getCalculation(?CalculationState $state = null, string $customer = 'Test Customer', string $description = 'Test Description'): Calculation
-    {
+    public function getCalculation(
+        ?CalculationState $state = null,
+        string $customer = 'Test Customer',
+        string $description = 'Test Description'
+    ): Calculation {
         if ($this->calculation instanceof Calculation) {
             return $this->calculation;
         }

@@ -54,6 +54,8 @@ class UpdateAssetsCommand extends Command
 {
     use LoggerTrait;
 
+    private const ASSET_VERSION_PATTERN = '/asset-version\s*(\d*\.\d*\.\d*)/m';
+
     /**
      * The dry-run option.
      */
@@ -97,11 +99,12 @@ class UpdateAssetsCommand extends Command
         if (!$this->propertyExists($configuration, ['target', 'plugins', 'sources'], true)) {
             return Command::INVALID;
         }
-        if ($this->io->getBoolOption(self::DRY_RUN_OPTION)) {
-            return $this->dryRun($configuration);
-        }
 
         $target = FileUtils::buildPath($publicDir, $configuration['target']);
+        if ($this->io->getBoolOption(self::DRY_RUN_OPTION)) {
+            return $this->dryRun($configuration, $target);
+        }
+
         $targetTemp = $this->getTargetTemp($publicDir);
         if (false === $targetTemp) {
             return Command::FAILURE;
@@ -145,7 +148,7 @@ class UpdateAssetsCommand extends Command
                 foreach ($files as $file) {
                     $sourceFile = $this->getSourceFile($source, $format, $plugin, $file);
                     $targetFile = $this->getTargetFile($targetTemp, $plugin, $file);
-                    if ($this->copyFile($sourceFile, $targetFile, $prefixes)) {
+                    if ($this->copyFile($sourceFile, $targetFile, $version, $prefixes)) {
                         ++$countFiles;
                     }
                 }
@@ -195,6 +198,30 @@ class UpdateAssetsCommand extends Command
         }
     }
 
+    private function checkAssetVersion(string $filename, string $version): bool
+    {
+        if (!FileUtils::exists($filename)) {
+            return false;
+        }
+        $content = FileUtils::readFile($filename);
+        if ('' === $content) {
+            return false;
+        }
+        $result = \preg_match(self::ASSET_VERSION_PATTERN, $content, $matches, \PREG_OFFSET_CAPTURE);
+        if (1 !== $result) {
+            return false;
+        }
+
+        $assetVersion = $matches[1][0];
+        if (\version_compare($assetVersion, $version, '>=')) {
+            return false;
+        }
+
+        $this->writeln(\sprintf('✗ File %-25s %-12s Version %s available.', \basename($filename), $assetVersion, $version), 'fg=red');
+
+        return true;
+    }
+
     /**
      * @psalm-param string[] $paths
      */
@@ -216,11 +243,11 @@ class UpdateAssetsCommand extends Command
     /**
      * @psalm-param array<string, string> $prefixes
      */
-    private function copyFile(string $sourceFile, string $targetFile, array $prefixes): bool
+    private function copyFile(string $sourceFile, string $targetFile, string $version, array $prefixes): bool
     {
         $content = $this->readFile($sourceFile);
         if (\is_string($content)) {
-            return $this->dumpFile($content, $targetFile, $prefixes);
+            return $this->dumpFile($content, $targetFile, $version, $prefixes);
         }
 
         return false;
@@ -260,7 +287,7 @@ class UpdateAssetsCommand extends Command
     /**
      * @psalm-param  ConfigurationType $configuration
      */
-    private function dryRun(array $configuration): int
+    private function dryRun(array $configuration, string $target): int
     {
         $startTime = \time();
         $this->writeln('Check versions:');
@@ -288,11 +315,16 @@ class UpdateAssetsCommand extends Command
                     $this->writeln(\sprintf('✗ %-30s %-12s Version %s available.', $display, $version, $newVersion), 'fg=red');
                 } else {
                     $this->writeln(\sprintf('✓ %-30s %-12s', $display, $version));
+                    foreach ($plugin['files'] as $file) {
+                        $existingFile = $this->getTargetFile($target, $plugin, $file);
+                        $this->checkAssetVersion($existingFile, $version);
+                    }
                 }
             } else {
                 $this->writeln(\sprintf($pattern, '✗', $display, $version, 'No version information.'), 'fg=gray');
             }
         }
+
         $duration = $this->io?->formatDuration($startTime) ?? 'Unknown';
         $this->writeSuccess(\sprintf('Checked versions successfully. Duration: %s.', $duration));
 
@@ -302,12 +334,13 @@ class UpdateAssetsCommand extends Command
     /**
      * @psalm-param array<string, string> $prefixes
      */
-    private function dumpFile(string $content, string $targetFile, array $prefixes): bool
+    private function dumpFile(string $content, string $targetFile, string $version, array $prefixes): bool
     {
         // prefix file
         $extension = FileUtils::getExtension($targetFile);
         if ('' !== $extension && \array_key_exists($extension, $prefixes)) {
-            $content = $prefixes[$extension] . $content;
+            $prefix = \str_replace('$version', $version, $prefixes[$extension]);
+            $content = $prefix . $content;
         }
 
         // save

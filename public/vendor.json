@@ -25,8 +25,8 @@
     },
     "target": "vendor/",
     "prefixes": {
-        "js": "/**! compression tag for ftp-deployment */\n\n",
-        "css": "/**! compression tag for ftp-deployment */\n\n"
+        "js": "/**! asset-version $version */\n\n",
+        "css": "/**! asset-version $version */\n\n"
     },
     "plugins": [
         {

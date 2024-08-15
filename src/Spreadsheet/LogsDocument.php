@@ -50,23 +50,24 @@ class LogsDocument extends AbstractDocument
 
         $sheet = $this->getActiveSheet();
         $row = $sheet->setHeaders([
-            'log.fields.level' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
-            'log.fields.channel' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
             'log.fields.createdAt' => HeaderFormat::date(Alignment::VERTICAL_TOP),
             'log.fields.message' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
+            'log.fields.level' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
+            'log.fields.channel' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
             'log.fields.user' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
         ]);
 
-        $sheet->setFormat(3, 'dd/mm/yyyy hh:mm:ss')
-            ->setColumnWidth(4, 140, true);
+        $sheet->setFormat(1, 'dd/mm/yyyy hh:mm:ss')
+            ->setColumnWidth(1, 20)
+            ->setColumnWidth(2, 140, true);
 
         $logs = $logFile->getLogs();
         foreach ($logs as $log) {
             $sheet->setRowValues($row, [
-                $log->getLevel(true),
-                $log->getChannel(true),
                 $log->getCreatedAt(),
                 $log->getMessage(),
+                $log->getLevel(true),
+                $log->getChannel(true),
                 $log->getUser(),
             ]);
             $this->setBorderStyle($sheet, $row, $log->getLevel());

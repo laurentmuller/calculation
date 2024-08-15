@@ -238,14 +238,15 @@ class SearchService implements ServiceSubscriberInterface
     private function createCalculationDatesQuery(array &$queries): void
     {
         $class = Calculation::class;
-        if ($this->isGrantedSearch($class)) {
-            $fields = ['date', 'createdAt', 'updatedAt'];
-            foreach ($fields as $field) {
-                $content = "date_format(e.$field, '%d.%m.%Y')";
-                $key = $this->getKey($class, $field);
-                $builder = $this->createQueryBuilder($class, $field, $content);
-                $this->addQuery($queries, $key, $builder);
-            }
+        if (!$this->isGrantedSearch($class)) {
+            return;
+        }
+        $fields = ['date', 'createdAt', 'updatedAt'];
+        foreach ($fields as $field) {
+            $content = "date_format(e.$field, '%d.%m.%Y')";
+            $key = $this->getKey($class, $field);
+            $builder = $this->createQueryBuilder($class, $field, $content);
+            $this->addQuery($queries, $key, $builder);
         }
     }
 
@@ -257,14 +258,15 @@ class SearchService implements ServiceSubscriberInterface
     private function createCalculationGroupQuery(array &$queries): void
     {
         $class = Calculation::class;
-        if ($this->isGrantedSearch($class)) {
-            $field = 'group';
-            $content = 'g.code';
-            $key = $this->getKey($class, $field);
-            $builder = $this->createQueryBuilder($class, $field, $content)
-                ->join('e.groups', 'g');
-            $this->addQuery($queries, $key, $builder);
+        if (!$this->isGrantedSearch($class)) {
+            return;
         }
+        $field = 'group';
+        $content = 'g.code';
+        $key = $this->getKey($class, $field);
+        $builder = $this->createQueryBuilder($class, $field, $content)
+            ->join('e.groups', 'g');
+        $this->addQuery($queries, $key, $builder);
     }
 
     /**
@@ -275,16 +277,17 @@ class SearchService implements ServiceSubscriberInterface
     private function createCalculationItemQuery(array &$queries): void
     {
         $class = Calculation::class;
-        if ($this->isGrantedSearch($class)) {
-            $field = 'item';
-            $content = 'i.description';
-            $key = $this->getKey($class, $field);
-            $builder = $this->createQueryBuilder($class, $field, $content)
-                ->join('e.groups', 'g')
-                ->join('g.categories', 'c')
-                ->join('c.items', 'i');
-            $this->addQuery($queries, $key, $builder);
+        if (!$this->isGrantedSearch($class)) {
+            return;
         }
+        $field = 'item';
+        $content = 'i.description';
+        $key = $this->getKey($class, $field);
+        $builder = $this->createQueryBuilder($class, $field, $content)
+            ->join('e.groups', 'g')
+            ->join('g.categories', 'c')
+            ->join('c.items', 'i');
+        $this->addQuery($queries, $key, $builder);
     }
 
     /**
@@ -295,14 +298,15 @@ class SearchService implements ServiceSubscriberInterface
     private function createCalculationStateQuery(array &$queries): void
     {
         $class = Calculation::class;
-        if ($this->isGrantedSearch($class)) {
-            $field = 'state';
-            $content = 's.code';
-            $key = $this->getKey($class, $field);
-            $builder = $this->createQueryBuilder($class, $field, $content)
-                ->join('e.state', 's');
-            $this->addQuery($queries, $key, $builder);
+        if (!$this->isGrantedSearch($class)) {
+            return;
         }
+        $field = 'state';
+        $content = 's.code';
+        $key = $this->getKey($class, $field);
+        $builder = $this->createQueryBuilder($class, $field, $content)
+            ->join('e.state', 's');
+        $this->addQuery($queries, $key, $builder);
     }
 
     /**
@@ -316,15 +320,16 @@ class SearchService implements ServiceSubscriberInterface
      */
     private function createEntityQueries(array &$queries, string $class, string ...$fields): void
     {
-        if ($this->isGrantedSearch($class)) {
-            if ($this->isTimestampable($class)) {
-                $fields = \array_unique(\array_merge($fields, ['createdBy', 'updatedBy']));
-            }
-            foreach ($fields as $field) {
-                $key = $this->getKey($class, $field);
-                $builder = $this->createQueryBuilder($class, $field);
-                $this->addQuery($queries, $key, $builder);
-            }
+        if (!$this->isGrantedSearch($class)) {
+            return;
+        }
+        if ($this->isTimestampable($class)) {
+            $fields = \array_unique(\array_merge($fields, ['createdBy', 'updatedBy']));
+        }
+        foreach ($fields as $field) {
+            $key = $this->getKey($class, $field);
+            $builder = $this->createQueryBuilder($class, $field);
+            $this->addQuery($queries, $key, $builder);
         }
     }
 

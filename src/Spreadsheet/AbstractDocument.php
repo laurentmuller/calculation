@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
+use PhpOffice\PhpSpreadsheet\Exception;
 
 /**
  * Abstract Spreadsheet document.
@@ -22,7 +23,7 @@ abstract class AbstractDocument extends SpreadsheetDocument
     /**
      * @param AbstractController $controller the parent controller
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
     public function __construct(protected AbstractController $controller)
     {
@@ -34,7 +35,7 @@ abstract class AbstractDocument extends SpreadsheetDocument
      *
      * @return bool true if rendered successfully; false otherwise
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
+     * @throws Exception if an exception occurs
      */
     abstract public function render(): bool;
 

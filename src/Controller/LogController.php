@@ -53,20 +53,22 @@ class LogController extends AbstractController
     public function delete(Request $request, LogService $service, LoggerInterface $logger): Response
     {
         $file = $this->getLogFile($service)?->getFile();
-        if (null === $file) {
+        if (null === $file || FileUtils::empty($file)) {
             return $this->getEmptyResponse();
         }
         $form = $this->createForm(FormType::class);
         if ($this->handleRequestForm($request, $form)) {
             try {
-                FileUtils::dumpFile($file, '');
+                if ($this->setEmptyFile($file)) {
+                    return $this->redirectToHomePage('log.delete.success');
+                }
+
+                return $this->redirectToHomePage('log.delete.error', [], FlashType::DANGER);
             } catch (\Exception $e) {
                 return $this->renderFormException('log.delete.error', $e, $logger);
             } finally {
                 $service->clearCache();
             }
-
-            return $this->redirectToHomePage('log.delete.success');
         }
         $parameters = [
             'form' => $form,
@@ -86,7 +88,7 @@ class LogController extends AbstractController
     public function download(LogService $service): Response
     {
         if (!$service->isFileValid()) {
-            return $this->getEmptyResponse('log.download.error', FlashType::WARNING);
+            return $this->redirectToHomePage('log.download.error', [], FlashType::WARNING);
         }
 
         return $this->file($service->getFileName());
@@ -174,11 +176,9 @@ class LogController extends AbstractController
         return $this->getRequestString($request, 'route', 'log_index');
     }
 
-    private function getEmptyResponse(
-        string $message = 'log.list.empty',
-        FlashType $type = FlashType::INFO
-    ): RedirectResponse {
-        return $this->redirectToHomePage($message, [], $type);
+    private function getEmptyResponse(): RedirectResponse
+    {
+        return $this->redirectToHomePage('log.list.empty', [], FlashType::INFO);
     }
 
     private function getLogFile(LogService $service): ?LogFile
@@ -189,5 +189,12 @@ class LogController extends AbstractController
         }
 
         return $logFile;
+    }
+
+    private function setEmptyFile(string $file): bool
+    {
+        $stream = \fopen($file, 'w');
+
+        return \is_resource($stream) && \fclose($stream);
     }
 }

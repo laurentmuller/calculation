@@ -64,6 +64,14 @@ class WorksheetDocument extends Worksheet
      */
     private array $booleanFormats = [];
 
+    /**
+     * Create a new instance.
+     *
+     * Sets the page size to A4 and to portrait orientation.
+     *
+     * @param SpreadsheetDocument|null $parent the optional parent document
+     * @param string                   $title  the title
+     */
     public function __construct(?SpreadsheetDocument $parent = null, string $title = 'Worksheet')
     {
         parent::__construct($parent, $title);
@@ -83,7 +91,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Gets style for the given column.
      *
-     * @param int $columnIndex the column index ('A' = First column)
+     * @param int $columnIndex the one-based column index (1 = 'A' - First column)
      */
     public function getColumnStyle(int $columnIndex): Style
     {
@@ -114,10 +122,10 @@ class WorksheetDocument extends Worksheet
     /**
      * Set merge on a cell range by using cell coordinates.
      *
-     * @param int  $startColumn the index of the first column ('A' = First column)
-     * @param int  $endColumn   the index of the last column
-     * @param int  $startRow    the index of first row (1 = First row)
-     * @param ?int $endRow      the index of the last row or null to use the start row
+     * @param int  $startColumn the one-based index of the first column (1 = 'A' - First column)
+     * @param int  $endColumn   the one-based index of the last column
+     * @param int  $startRow    the one-based index of first row (1 = First row)
+     * @param ?int $endRow      the one-based index of the last row or null to use the start row
      *
      * @throws Exception if an exception occurs
      */
@@ -145,7 +153,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Set the auto-size for the given columns.
      *
-     * @param int ...$columnIndexes the column indexes ('A' = First column)
+     * @param int ...$columnIndexes the one-based column indexes (1 = 'A' - First column)
      */
     public function setAutoSize(int ...$columnIndexes): static
     {
@@ -159,23 +167,24 @@ class WorksheetDocument extends Worksheet
     /**
      * Sets content of the given cell.
      *
-     * @param int   $columnIndex the column index ('A' = First column)
-     * @param int   $rowIndex    the row index (1 = First row)
+     * Do nothing if the value to set is null or is an empty string ('').
+     *
+     * @param int   $columnIndex the one-based column index (1 = 'A' - First column)
+     * @param int   $rowIndex    the one-based row index (1 = First row)
      * @param mixed $value       the value to set
      */
     public function setCellContent(int $columnIndex, int $rowIndex, mixed $value): static
     {
-        if (null !== $value && '' !== $value) {
-            if ($value instanceof \DateTimeInterface) {
-                $value = Date::PHPToExcel($value);
-            } elseif (\is_bool($value)) {
-                $value = (int) $value;
-            }
-
-            return $this->setCellValue([$columnIndex, $rowIndex], $value);
+        if (null === $value || '' === $value) {
+            return $this;
+        }
+        if ($value instanceof \DateTimeInterface) {
+            $value = Date::PHPToExcel($value);
+        } elseif (\is_bool($value)) {
+            $value = (int) $value;
         }
 
-        return $this;
+        return $this->setCellValue([$columnIndex, $rowIndex], $value);
     }
 
     /**
@@ -215,10 +224,10 @@ class WorksheetDocument extends Worksheet
     /**
      * Sets a hyperlink for the given cell.
      *
-     * Do nothing if the link is empty.
+     * Do nothing if the link is an empty string ('').
      *
-     * @param int    $columnIndex the column index ('A' = First column)
-     * @param int    $rowIndex    the row index (1 = First row)
+     * @param int    $columnIndex the one-based column index (1 = 'A' - First column)
+     * @param int    $rowIndex    the one-based row index (1 = First row)
      * @param string $link        the hyperlink to set
      * @param string $color       the color of the font or an empty string if none
      * @param bool   $underline   true to set the underlined font
@@ -254,7 +263,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Add conditionals to the given column.
      *
-     * @param int $columnIndex the column index ('A' = First column)
+     * @param int $columnIndex the one-based column index (1 = 'A' - First column)
      */
     public function setColumnConditional(int $columnIndex, Conditional ...$conditionals): static
     {
@@ -268,7 +277,9 @@ class WorksheetDocument extends Worksheet
     /**
      * Set the width for the given column.
      *
-     * @param int  $columnIndex the column index ('A' = First column)
+     * The auto-size property is automatically disabled.
+     *
+     * @param int  $columnIndex the one-based column index (1 = 'A' - First column)
      * @param int  $width       the width to set
      * @param bool $wrapText    true to wrap text
      *
@@ -276,7 +287,9 @@ class WorksheetDocument extends Worksheet
      */
     public function setColumnWidth(int $columnIndex, int $width, bool $wrapText = false): static
     {
-        $this->getColumnDimensionByColumn($columnIndex)->setWidth($width);
+        $this->getColumnDimensionByColumn($columnIndex)
+            ->setAutoSize(false)
+            ->setWidth($width);
 
         return $wrapText ? $this->setWrapText($columnIndex) : $this;
     }
@@ -284,7 +297,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Sets the foreground color for the given column.
      *
-     * @param int    $columnIndex   the column index ('A' = First column)
+     * @param int    $columnIndex   the one-based column index (1 = 'A' - First column)
      * @param string $color         the hexadecimal color or an empty string for black color
      * @param bool   $includeHeader true to set color for all rows; false to skip the first row
      */
@@ -307,7 +320,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Sets the format for the given column index.
      *
-     * @param int    $columnIndex the column index ('A' = First column)
+     * @param int    $columnIndex the one-based column index ('A' = First column)
      * @param string $format      the format to apply
      */
     public function setFormat(int $columnIndex, string $format): static
@@ -322,7 +335,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Sets the amount format for the given column.
      *
-     * @param int  $columnIndex the column index ('A' = First column)
+     * @param int  $columnIndex the one-based column index (1 = 'A' - First column)
      * @param bool $zeroInRed   if true, the red color is used when values are smaller than or equal to 0
      */
     public function setFormatAmount(int $columnIndex, bool $zeroInRed = false): static
@@ -338,7 +351,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Sets the boolean format for the given column.
      *
-     * @param int    $columnIndex the column index ('A' = First column)
+     * @param int    $columnIndex the one-based column index (1 = 'A' - First column)
      * @param string $true        the value to display when <code>true</code>
      * @param string $false       the value to display when <code>false</code>
      * @param bool   $translate   <code>true</code> to translate values
@@ -365,7 +378,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Sets the date format ('dd/mm/yyyy') for the given column.
      *
-     * @param int $columnIndex the column index ('A' = First column)
+     * @param int $columnIndex the one-based column index (1 = 'A' - First column)
      */
     public function setFormatDate(int $columnIndex): static
     {
@@ -375,7 +388,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Sets the date and time format ('dd/mm/yyyy hh:mm') for the given column.
      *
-     * @param int $columnIndex the column index ('A' = First column)
+     * @param int $columnIndex the one-based column index (1 = 'A' - First column)
      */
     public function setFormatDateTime(int $columnIndex): static
     {
@@ -385,7 +398,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Sets the identifier format ('000000') for the given column.
      *
-     * @param int $columnIndex the column index ('A' = First column)
+     * @param int $columnIndex the one-based column index (1 = 'A' - First column)
      */
     public function setFormatId(int $columnIndex): static
     {
@@ -395,7 +408,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Sets the integer format for the given column.
      *
-     * @param int $columnIndex the column index ('A' = First column)
+     * @param int $columnIndex the one-based column index (1 = 'A' - First column)
      */
     public function setFormatInt(int $columnIndex): static
     {
@@ -405,7 +418,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Sets the percent format for the given column.
      *
-     * @param int  $columnIndex the column index ('A' = First column)
+     * @param int  $columnIndex the one-based column index (1 = 'A' - First column)
      * @param bool $decimals    true to display 2 decimals ('0.00%'), false if none ('0%').
      */
     public function setFormatPercent(int $columnIndex, bool $decimals = false): static
@@ -416,7 +429,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Sets the translated 'Yes/No' boolean format for the given column.
      *
-     * @param int $columnIndex the column index ('A' = First column)
+     * @param int $columnIndex the one-based column index (1 = 'A' - First column)
      */
     public function setFormatYesNo(int $columnIndex): static
     {
@@ -424,11 +437,13 @@ class WorksheetDocument extends Worksheet
     }
 
     /**
-     * Sets the headers with bold style and frozen first row.
+     * Sets the headers with bold style and frozen the given row index.
+     *
+     * Do nothing if headers is an empty array.
      *
      * @param array<string,HeaderFormat> $headers     the headers where the key is the column name to translate
-     * @param int                        $columnIndex the starting column index ('A' = First column)
-     * @param int                        $rowIndex    the row index (1 = First row)
+     * @param int                        $columnIndex the one-based starting column index (1 = 'A' - First column)
+     * @param int                        $rowIndex    the one-based row index (1 = First row)
      *
      * @return int this function return the given row index + 1
      *
@@ -448,7 +463,9 @@ class WorksheetDocument extends Worksheet
             ++$index;
         }
 
-        $this->getStyle([$columnIndex, $rowIndex, $index - 1, $rowIndex])->getFont()->setBold(true);
+        $this->getStyle([$columnIndex, $rowIndex, $index - 1, $rowIndex])
+            ->getFont()
+            ->setBold(true);
         $this->freezePane(\sprintf('A%d', $rowIndex + 1));
         $this->getPageSetup()
             ->setFitToWidth(1)
@@ -518,9 +535,9 @@ class WorksheetDocument extends Worksheet
     /**
      * Sets the values of the given row.
      *
-     * @param int   $rowIndex    the row index (1 = First row)
+     * @param int   $rowIndex    the one-based row index (1 = First row)
      * @param array $values      the values to set
-     * @param int   $columnIndex the starting column index ('A' = First column)
+     * @param int   $columnIndex the one-based starting column index (1 = 'A' - First column)
      */
     public function setRowValues(int $rowIndex, array $values, int $columnIndex = 1): static
     {
@@ -544,8 +561,6 @@ class WorksheetDocument extends Worksheet
      * @param bool   $validate                    False to skip validation of new title. WARNING: This should only be
      *                                            set at parse time (by Readers), where titles can be assumed to be
      *                                            valid.
-     *
-     * @return $this
      */
     public function setTitle(string $title, bool $updateFormulaCellReferences = true, bool $validate = true): static
     {
@@ -553,9 +568,11 @@ class WorksheetDocument extends Worksheet
     }
 
     /**
-     * Set wrap text for the given column. The auto-size is automatically disabled.
+     * Set wrap text for the given column.
      *
-     * @param int $columnIndex the column index ('A' = First column)
+     * The auto-size property is automatically disabled.
+     *
+     * @param int $columnIndex the one-based column index (1 = 'A' - First column)
      */
     public function setWrapText(int $columnIndex): static
     {
@@ -569,7 +586,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Get the string from the given column index.
      *
-     * @param int $columnIndex the column index ('A' = First column)
+     * @param int $columnIndex the one-based column index (1 = 'A' - First column)
      */
     public function stringFromColumnIndex(int $columnIndex): string
     {

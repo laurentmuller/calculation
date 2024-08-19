@@ -2,7 +2,6 @@ php_version: 8.2
 global_exclude_dirs:
     - vendor
     - tests
-    - features
     - var
 rules:
     web.apache_config:

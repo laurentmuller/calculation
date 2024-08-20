@@ -152,7 +152,7 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Output a javascript source tag with a nonce.
+     * Output a JavaScript source tag with a nonce.
      *
      * @param array<string, string|int> $parameters
      */

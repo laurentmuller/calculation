@@ -152,7 +152,7 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     }
 
     /**
-     * Sorts items.
+     * Sort items.
      *
      * @param SearchType[] $items
      */

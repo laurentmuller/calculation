@@ -97,7 +97,7 @@ trait SessionAwareTrait
     }
 
     /**
-     * Gets a session attribute, as integer value.
+     * Gets a session attribute, as integer's value.
      *
      * @param string $key     the attribute name
      * @param ?int   $default the default value if not found
@@ -128,7 +128,7 @@ trait SessionAwareTrait
     }
 
     /**
-     * Gets a session attribute, as string value.
+     * Gets a session attribute, as string's value.
      *
      * @param string  $key     the attribute name
      * @param ?string $default the default value if not found
@@ -171,7 +171,7 @@ trait SessionAwareTrait
     }
 
     /**
-     * Gets a session attribute, as boolean value.
+     * Gets a session attribute, as boolean's value.
      *
      * @param string $key     the attribute name
      * @param bool   $default the default value if not found
@@ -188,7 +188,7 @@ trait SessionAwareTrait
      *
      * @param string $key the attribute name
      *
-     * @return mixed the removed value or null when attribute does not exist
+     * @return mixed the removed value or null when the attribute does not exist
      */
     protected function removeSessionValue(string $key): mixed
     {

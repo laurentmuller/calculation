@@ -135,7 +135,8 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     /**
      * Gets the set of languages supported by other operations of the service.
      *
-     * @return array|false an array containing the language name as key and the BCP 47 language tag as value; false if an error occurs
+     * @return array|false an array containing the language name as the key and the BCP 47 language tag as value;
+     *                     false if an error occurs
      *
      * @psalm-return array<string, string>|false
      */

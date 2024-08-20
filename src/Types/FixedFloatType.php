@@ -16,7 +16,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
 /**
- * Type that maps an SQL DOUBLE to a PHP float with 2 decimals and 0.00 as default value.
+ * Type that maps an SQL DOUBLE to a PHP float with 2 decimals and 0.00 as the default value.
  */
 class FixedFloatType extends Type
 {

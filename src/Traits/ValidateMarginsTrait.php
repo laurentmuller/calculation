@@ -25,7 +25,7 @@ trait ValidateMarginsTrait
     /**
      * Get margins.
      *
-     * @pslam-template TKey as array-key
+     * @pslam-template TKey as the array-key
      * @pslam-template T extends MarginInterface
      *
      * @pslam-return Collection<TKey, T>

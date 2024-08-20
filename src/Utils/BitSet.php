@@ -81,7 +81,7 @@ class BitSet implements \Stringable
      *
      * @param int[] $bits the bits to clear
      *
-     * @throws \InvalidArgumentException If one of the bit argument is negative
+     * @throws \InvalidArgumentException If one of the bit's argument is negative
      */
     public function clears(array $bits): self
     {
@@ -248,7 +248,7 @@ class BitSet implements \Stringable
      *
      * @param int[] $bits the bits to set
      *
-     * @throws \InvalidArgumentException If one of the bit argument is negative
+     * @throws \InvalidArgumentException If one of the bit's argument is negative
      */
     public function sets(array $bits): self
     {

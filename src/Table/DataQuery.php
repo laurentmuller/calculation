@@ -77,7 +77,7 @@ class DataQuery implements SortModeInterface
     }
 
     /**
-     * Gets this values as attributes.
+     * Gets values as attributes.
      *
      * @psalm-return array<string, bool|int|string>
      */
@@ -115,7 +115,7 @@ class DataQuery implements SortModeInterface
     }
 
     /**
-     * Gets this values as parameters.
+     * Gets values as parameters.
      *
      * @psalm-return array<string, bool|int|string>
      */

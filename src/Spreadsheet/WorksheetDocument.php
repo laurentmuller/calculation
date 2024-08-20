@@ -48,7 +48,7 @@ class WorksheetDocument extends Worksheet
     private const FORMAT_INT = '#,##0';
 
     /**
-     * The top margins when customer header is present (21 millimeters).
+     * The top margins when the customer header is present (21 millimeters).
      */
     private const HEADER_CUSTOMER_MARGIN = 0.83;
 
@@ -124,7 +124,7 @@ class WorksheetDocument extends Worksheet
      *
      * @param int  $startColumn the one-based index of the first column (1 = 'A' - First column)
      * @param int  $endColumn   the one-based index of the last column
-     * @param int  $startRow    the one-based index of first row (1 = First row)
+     * @param int  $startRow    the one-based index of the first row (1 = First row)
      * @param ?int $endRow      the one-based index of the last row or null to use the start row
      *
      * @throws Exception if an exception occurs
@@ -165,7 +165,7 @@ class WorksheetDocument extends Worksheet
     }
 
     /**
-     * Sets content of the given cell.
+     * Sets the content of the given cell.
      *
      * Do nothing if the value to set is null or is an empty string ('').
      *
@@ -445,7 +445,7 @@ class WorksheetDocument extends Worksheet
      * @param int                        $columnIndex the one-based starting column index (1 = 'A' - First column)
      * @param int                        $rowIndex    the one-based row index (1 = First row)
      *
-     * @return int this function return the given row index + 1
+     * @return int the given row index + 1
      *
      * @throws Exception if an exception occurs
      */
@@ -558,8 +558,8 @@ class WorksheetDocument extends Worksheet
      *                                            This should be left as the default true, unless you are
      *                                            certain no formula cells on any worksheet contain
      *                                            references to this worksheet
-     * @param bool   $validate                    False to skip validation of new title. WARNING: This should only be
-     *                                            set at parse time (by Readers), where titles can be assumed to be
+     * @param bool   $validate                    False to skip validation of the new title. WARNING: This should only
+     *                                            be set at parse time (by Readers), where titles can be assumed to be
      *                                            valid.
      */
     public function setTitle(string $title, bool $updateFormulaCellReferences = true, bool $validate = true): static

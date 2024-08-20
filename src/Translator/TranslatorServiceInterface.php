@@ -36,7 +36,7 @@ interface TranslatorServiceInterface
      *
      * @param string $text the text to detect
      *
-     * @return array|false the detected language; false if not found or if an error occurs
+     * @return array|false the detected language; false if not found, or if an error occurs
      *
      * @psalm-return TranslatorDetectType|false
      */

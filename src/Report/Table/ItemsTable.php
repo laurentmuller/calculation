@@ -25,7 +25,7 @@ use fpdf\PdfBorder;
 use fpdf\PdfDocument;
 
 /**
- * Table to render the groups, categories and items of a calculation.
+ * Table to render the groups, categories and items of calculation.
  */
 class ItemsTable extends ReportGroupTable
 {
@@ -135,8 +135,8 @@ class ItemsTable extends ReportGroupTable
      *
      * @param CalculationItem $item           the item to get description for
      * @param array           $duplicateItems the duplicate items
-     * @param PdfStyle        $defaultStyle   the style to use if item is not duplicate
-     * @param PdfStyle        $errorStyle     the style to use when item is duplicate
+     * @param PdfStyle        $defaultStyle   the style to use if the item is not duplicate
+     * @param PdfStyle        $errorStyle     the style to use when the item is duplicate
      */
     private function addDescription(CalculationItem $item, array $duplicateItems, PdfStyle $defaultStyle, PdfStyle $errorStyle): self
     {
@@ -150,7 +150,7 @@ class ItemsTable extends ReportGroupTable
      * Adds format amount with an error style if the amount is equal to 0.
      *
      * @param float     $amount     the amount to output
-     * @param ?PdfStyle $errorStyle the error style to use when amount is equal to 0
+     * @param ?PdfStyle $errorStyle the error style to use when the amount is equal to 0
      */
     private function addStyledAmount(float $amount, ?PdfStyle $errorStyle = null): self
     {

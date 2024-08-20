@@ -105,7 +105,7 @@ final class DateUtils
     /**
      * Gets the numeric representation of a day of the month for the given date.
      *
-     * @return int a value 1 through 31
+     * @return int value 1 through 31
      */
     public static function getDay(\DateTimeInterface $date): int
     {
@@ -115,7 +115,7 @@ final class DateUtils
     /**
      * Gets the numeric representation of a month for the given date.
      *
-     * @return int a value 1 through 12
+     * @return int value 1 through 12
      */
     public static function getMonth(\DateTimeInterface $date): int
     {
@@ -172,7 +172,7 @@ final class DateUtils
      * ...
      * </pre>.
      *
-     * @param string $firstDay The first day of the week, in english, like 'sunday' or 'monday'
+     * @param string $firstDay The first day of the week, in English, like 'sunday' or 'monday'
      *
      * @return array<int, string>
      */
@@ -199,7 +199,7 @@ final class DateUtils
 
     /**
      * Gets the localized week day names.
-     * For example, with 'fr' as locale and 'sunday' as first day, return
+     * For example, with 'fr' as locale and 'sunday' as the first day, return
      * <pre>
      * Dimanche
      * Lundi
@@ -207,7 +207,7 @@ final class DateUtils
      * ...
      * </pre>.
      *
-     * @param string $firstDay the first day of the week, in english, like 'sunday' or 'monday'
+     * @param string $firstDay the first day of the week, in English, like 'sunday' or 'monday'
      *
      * @return array<int, string>
      */

@@ -23,7 +23,7 @@ use fpdf\PdfException;
 trait PdfMemoryImageTrait
 {
     /**
-     * Output a AVIF raster image from a file or a URL.
+     * Output an AVIF raster image from a file or a URL.
      *
      * @param string          $file   the image path
      * @param ?float          $x      the abscissa of the upper-left corner. If <code>null</code>, the current abscissa
@@ -31,7 +31,7 @@ trait PdfMemoryImageTrait
      * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
      *                                is used; moreover, a page break is triggered first if necessary (in case
      *                                automatic page breaking is enabled) and, after the call, the current ordinate
-     *                                is move to the bottom of the image.
+     *                                is moved to the bottom of the image.
      * @param float           $width  the width of the image in the page. There are three cases:
      *                                <ul>
      *                                <li>If the value is positive, it represents the width in user unit.</li>
@@ -80,7 +80,7 @@ trait PdfMemoryImageTrait
      * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
      *                                is used; moreover, a page break is triggered first if necessary (in case
      *                                automatic page breaking is enabled) and, after the call, the current ordinate
-     *                                is move to the bottom of the image.
+     *                                is moved to the bottom of the image.
      * @param float           $width  the width of the image in the page. There are three cases:
      *                                <ul>
      *                                <li>If the value is positive, it represents the width in user unit.</li>
@@ -129,7 +129,7 @@ trait PdfMemoryImageTrait
      * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
      *                                is used; moreover, a page break is triggered first if necessary (in case
      *                                automatic page breaking is enabled) and, after the call, the current ordinate
-     *                                is move to the bottom of the image.
+     *                                is moved to the bottom of the image.
      * @param float           $width  the width of the image in the page. There are three cases:
      *                                <ul>
      *                                <li>If the value is positive, it represents the width in user unit.</li>
@@ -178,7 +178,7 @@ trait PdfMemoryImageTrait
      * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
      *                                is used; moreover, a page break is triggered first if necessary (in case
      *                                automatic page breaking is enabled) and, after the call, the current ordinate
-     *                                is move to the bottom of the image.
+     *                                is moved to the bottom of the image.
      * @param float           $width  the width of the image in the page. There are three cases:
      *                                <ul>
      *                                <li>If the value is positive, it represents the width in user unit.</li>
@@ -219,7 +219,7 @@ trait PdfMemoryImageTrait
     }
 
     /**
-     * Output a XBM image from a file or a URL.
+     * Output an XBM image from a file or a URL.
      *
      * @param string          $file   the image path
      * @param ?float          $x      the abscissa of the upper-left corner. If <code>null</code>, the current abscissa
@@ -227,7 +227,7 @@ trait PdfMemoryImageTrait
      * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
      *                                is used; moreover, a page break is triggered first if necessary (in case
      *                                automatic page breaking is enabled) and, after the call, the current ordinate
-     *                                is move to the bottom of the image.
+     *                                is moved to the bottom of the image.
      * @param float           $width  the width of the image in the page. There are three cases:
      *                                <ul>
      *                                <li>If the value is positive, it represents the width in user unit.</li>
@@ -276,7 +276,7 @@ trait PdfMemoryImageTrait
      * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
      *                                is used; moreover, a page break is triggered first if necessary (in case
      *                                automatic page breaking is enabled) and, after the call, the current ordinate
-     *                                is move to the bottom of the image.
+     *                                is moved to the bottom of the image.
      * @param float           $width  the width of the image in the page. There are three cases:
      *                                <ul>
      *                                <li>If the value is positive, it represents the width in user unit.</li>
@@ -328,7 +328,7 @@ trait PdfMemoryImageTrait
      * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
      *                                is used; moreover, a page break is triggered first if necessary (in case
      *                                automatic page breaking is enabled) and, after the call, the current ordinate
-     *                                is move to the bottom of the image.
+     *                                is moved to the bottom of the image.
      * @param float           $width  the width of the image in the page. There are three cases:
      *                                <ul>
      *                                <li>If the value is positive, it represents the width in user unit.</li>
@@ -379,7 +379,7 @@ trait PdfMemoryImageTrait
      *                                is used.
      * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
      *                                is used; moreover, a page break is triggered first if necessary (in case automatic
-     *                                page breaking is enabled) and, after the call, the current ordinate is move to
+     *                                page breaking is enabled) and, after the call, the current ordinate is moved to
      *                                the bottom of the image.
      * @param float           $width  the width of the image in the page. There are three cases:
      *                                <ul>
@@ -425,7 +425,7 @@ trait PdfMemoryImageTrait
      * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
      *                                is used; moreover, a page break is triggered first if necessary (in case
      *                                automatic page breaking is enabled) and, after the call, the current ordinate
-     *                                is move to the bottom of the image.
+     *                                is moved to the bottom of the image.
      * @param float           $width  the width of the image in the page. There are three cases:
      *                                <ul>
      *                                <li>If the value is positive, it represents the width in user unit.</li>

@@ -85,7 +85,7 @@ final class StringUtils
     }
 
     /**
-     * Takes a JSON encoded string and converts it into a PHP value.
+     * Takes an encoded JSON string and converts it into a PHP value.
      *
      * @param string $value the value to decode
      * @param bool   $assoc when true, returned objects will be converted into associative arrays
@@ -114,7 +114,7 @@ final class StringUtils
      * @param mixed $value the value being encoded
      * @param int   $flags a bitmask flag. The <b>JSON_THROW_ON_ERROR</b> flag is always added.
      *
-     * @return string a JSON encoded string
+     * @return string an encoded JSON string
      *
      * @throws \InvalidArgumentException if the value cannot be encoded
      *
@@ -147,7 +147,7 @@ final class StringUtils
     }
 
     /**
-     * Returns a value indicating if the given strings are equal ignoring case consideration.
+     * Returns a value indicating if the given strings are equal, ignoring case consideration.
      *
      * @param string $string1 the first string to compare
      * @param string $string2 the second string to compare
@@ -214,7 +214,7 @@ final class StringUtils
     /**
      * Replace all occurrences of the pattern string with the replacement string.
      *
-     * @param array<string, string> $values  an array where key is the pattern and value is the replacement term
+     * @param array<string, string> $values  an array where key is the pattern, and value is the replacement term
      * @param string|string[]       $subject the string or array being searched and replaced on
      *
      * @return string|string[] returns a string or an array with the replaced values
@@ -232,7 +232,7 @@ final class StringUtils
     /**
      * Replace all occurrences of the search string with the replacement string.
      *
-     * @param array<string, string> $values  an array where key is the search term and value is the replacement term
+     * @param array<string, string> $values  an array where key is the search term, and value is the replacement term
      * @param string|string[]       $subject the string or array being searched and replaced on
      *
      * @return string|string[] returns a string or an array with the replaced values
@@ -275,7 +275,7 @@ final class StringUtils
     }
 
     /**
-     * Create a new unicode string.
+     * Create a new Unicode string.
      */
     public static function unicode(string $string, bool $ignore_case = false): UnicodeString
     {

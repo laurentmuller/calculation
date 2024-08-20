@@ -37,7 +37,7 @@ class ReportHeader
     private const LINE_HEIGHT = PdfDocument::LINE_HEIGHT;
 
     /**
-     * The line height for customer address.
+     * The line height for the customer address.
      */
     private const SMALL_HEIGHT = PdfDocument::LINE_HEIGHT - 1.0;
 

@@ -38,7 +38,7 @@ readonly class LogFilter
     }
 
     /**
-     * Apply this filters to the given logs.
+     * Apply filters to the given logs.
      *
      * @param Log[] $logs
      *

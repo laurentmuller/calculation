@@ -28,7 +28,7 @@ final class FormatUtils
     public const DECIMAL_SEP = '.';
 
     /**
-     * The default locale (French Swiss).
+     * The default locale (Swiss French).
      */
     public const DEFAULT_LOCALE = 'fr_CH';
 

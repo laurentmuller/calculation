@@ -32,7 +32,7 @@ use fpdf\Enums\PdfMove;
 use fpdf\PdfBorder;
 
 /**
- * Report for the list of roles and users rights.
+ * Report for the list of role and user rights.
  *
  * @extends AbstractArrayReport<User>
  */

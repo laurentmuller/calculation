@@ -145,7 +145,7 @@ class DataResults implements \JsonSerializable
     /**
      * Set the response status.
      *
-     * @param int<100, 511> $status one of the Response::HTTP_* status
+     * @param int<100, 511> $status one of the Response::HTTP_* statuses
      */
     public function setStatus(int $status): self
     {

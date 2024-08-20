@@ -49,7 +49,7 @@ class SpreadsheetDocument extends Spreadsheet
      * Add external sheet.
      *
      * @param Worksheet $worksheet  the external sheet to add
-     * @param ?int      $sheetIndex the index where sheet should go (0, 1, ... or null for last)
+     * @param ?int      $sheetIndex the index where the sheet should go (0, 1, ... or null for last)
      *
      * @throws Exception if the given worksheet is not an instance of WorksheetDocument
      */
@@ -68,7 +68,7 @@ class SpreadsheetDocument extends Spreadsheet
      * Add sheet.
      *
      * @param Worksheet $worksheet  the worksheet to add
-     * @param ?int      $sheetIndex the index where sheet should go (0, 1, ... or null for last)
+     * @param ?int      $sheetIndex the index where the sheet should go (0, 1, ... or null for last)
      *
      * @throws Exception if the given worksheet is not an instance of WorksheetDocument
      */
@@ -86,7 +86,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Create a sheet and add it to this workbook.
      *
-     * @param ?int $sheetIndex the index where sheet should go (0, 1, ..., or null for last)
+     * @param ?int $sheetIndex the index where the sheet should go (0, 1, ..., or null for last)
      *
      * @throws Exception
      */
@@ -96,12 +96,12 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Create a worksheet, set title and add it to this spreadsheet.
+     * Create a worksheet, set the title, and add it to this spreadsheet.
      *
      * The created sheet is activated.
      *
      * @param ?string $title      the title of the worksheet
-     * @param ?int    $sheetIndex the index where worksheet should go (0, 1, ..., or null for last)
+     * @param ?int    $sheetIndex the index where the worksheet should go (0, 1, ..., or null for last)
      *
      * @return WorksheetDocument the newly created worksheet
      *
@@ -206,7 +206,7 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Set active sheet index by name.
+     * Set the active sheet index by name.
      *
      * @param string $worksheetName Sheet title
      *

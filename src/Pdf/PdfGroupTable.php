@@ -27,7 +27,7 @@ class PdfGroupTable extends PdfTable
     private PdfGroup $group;
 
     /*
-     * The output the group before table header.
+     * The output the group before the table header.
      */
     private bool $groupBeforeHeader = false;
 
@@ -146,7 +146,7 @@ class PdfGroupTable extends PdfTable
     /**
      * Sets the group.
      *
-     * Do nothing if the new group is equals to the existing group.
+     * Do nothing if the new group is equal to the existing group.
      *
      * @param PdfGroup $group  the group to set
      * @param bool     $output true to output the new group (if not empty)
@@ -176,7 +176,7 @@ class PdfGroupTable extends PdfTable
     /**
      * Sets the group key.
      *
-     * Do nothing if the new group key is equals to the existing group key.
+     * Do nothing if the new group key is equal to the existing group key.
      *
      * @param mixed $key    the new group key
      * @param bool  $output true to output the new group (if not empty)

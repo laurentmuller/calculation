@@ -90,7 +90,7 @@ class Week extends AbstractCalendarItem
     /**
      * {@inheritdoc}
      *
-     * This implementation returns the ISO-8601 week number (1 to 53) of year for the last day of this week.
+     * This implementation returns the ISO-8601 week number (1 to 53) of the year for the last day of this week.
      * The weeks start on Monday.
      */
     public function getNumber(): int

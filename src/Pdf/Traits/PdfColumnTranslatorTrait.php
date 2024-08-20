@@ -24,7 +24,7 @@ trait PdfColumnTranslatorTrait
     use TranslatorTrait;
 
     /**
-     * Create a column with center alignment and a translated text.
+     * Create a column with the center alignment and a translated text.
      *
      * @param string|\Stringable|TranslatableInterface $id    the identifier to translate or an empty string if none
      * @param float                                    $width the column width
@@ -40,7 +40,7 @@ trait PdfColumnTranslatorTrait
     }
 
     /**
-     * Create a column with left alignment and a translated text.
+     * Create a column with the left alignment and a translated text.
      *
      * @param string|\Stringable|TranslatableInterface $id    the identifier to translate or an empty string if none
      * @param float                                    $width the column width
@@ -56,7 +56,7 @@ trait PdfColumnTranslatorTrait
     }
 
     /**
-     * Create a column with right alignment and a translated text.
+     * Create a column with the right alignment and a translated text.
      *
      * @param string|\Stringable|TranslatableInterface $id    the identifier to translate or an empty string if none
      * @param float                                    $width the column width

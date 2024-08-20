@@ -40,11 +40,11 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * Instantiates and opens the database.
      *
      * @param string $filename       Path to the SQLite database, or <code>:memory:</code> to use the in-memory database.
-     *                               If filename is an empty string, then a private, temporary on-disk database will be
+     *                               If the filename is an empty string, then a private, temporary on-disk database will be
      *                               created.
      *                               This private database will be automatically deleted as soon as the database
      *                               connection is closed.
-     * @param bool   $readonly       true open the database for reading only. Note that if the file name
+     * @param bool   $readonly       <code>true</code> open the database for reading only. Notes that if the file name
      *                               does not exist, the database is opened with the
      *                               <code>SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE</code> flags.
      * @param string $encryption_key an optional encryption key used when encrypting and decrypting an SQLite database
@@ -200,7 +200,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     }
 
     /**
-     * Rollback the current transaction (if any).
+     * Roll back the current transaction (if any).
      *
      * @return bool true on success; false on failure
      *
@@ -243,7 +243,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     abstract protected function createSchema(): void;
 
     /**
-     * Execute the given statement and fetch result to an associative array.
+     * Execute the given statement and fetch the result to an associative array.
      *
      * @param \SQLite3Stmt $stmt the statement to execute
      * @param int          $mode controls how the next row will be returned to the caller. This value

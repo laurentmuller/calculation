@@ -162,7 +162,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     }
 
     /**
-     * Returns if one or more users have reset password requested.
+     * Returns if one or more users have the reset password requested.
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */

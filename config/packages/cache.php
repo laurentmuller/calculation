@@ -15,6 +15,8 @@ use Symfony\Config\FrameworkConfig;
 return static function (FrameworkConfig $config): void {
     $one_hour = 3_600;
     $one_day = 86_400;
+    $fiveteen_minutes = 900;
+
     $cache = $config->cache();
 
     // used by the ApplicationService
@@ -64,6 +66,16 @@ return static function (FrameworkConfig $config): void {
 
     // used by the SearchService
     $config->cache()->pool('calculation.service.search')
+        ->adapters('cache.adapter.filesystem')
+        ->defaultLifetime($one_day);
+
+    // used by the LogService
+    $config->cache()->pool('calculation.service.log')
+        ->adapters('cache.adapter.filesystem')
+        ->defaultLifetime($fiveteen_minutes);
+
+    // used by the SchemaService
+    $config->cache()->pool('calculation.service.schema')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 };

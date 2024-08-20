@@ -14,25 +14,25 @@ namespace App\Service;
 
 use App\Entity\Log;
 use App\Model\LogFile;
-use App\Traits\CacheAwareTrait;
-use App\Traits\LoggerAwareTrait;
-use App\Traits\TranslatorAwareTrait;
+use App\Traits\LoggerTrait;
+use App\Traits\TranslatorTrait;
 use App\Utils\CSVReader;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
+use Psr\Cache\InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Service to read and cache log file.
+ * Service to read and cache the log file.
  */
-class LogService implements ServiceSubscriberInterface
+class LogService
 {
-    use CacheAwareTrait;
-    use LoggerAwareTrait;
-    use ServiceMethodsSubscriberTrait;
-    use TranslatorAwareTrait;
+    use LoggerTrait;
+    use TranslatorTrait;
 
     /**
      * The date format.
@@ -40,14 +40,14 @@ class LogService implements ServiceSubscriberInterface
     public const DATE_FORMAT = 'd.m.Y H:i:s.v';
 
     /**
-     * The cache timeout (15 minutes).
+     * The service formatter name.
      */
-    private const CACHE_TIMEOUT = 900;
+    public const FORMATTER_NAME = 'monolog.application.formatter';
 
     /**
-     * The key to cache result.
+     * The key for the cache result.
      */
-    private const KEY_CACHE = 'log_service_file';
+    private const KEY_CACHE = 'log_file';
 
     /**
      * The values separator.
@@ -57,6 +57,10 @@ class LogService implements ServiceSubscriberInterface
     public function __construct(
         #[Autowire('%kernel.logs_dir%/%kernel.environment%.log')]
         private readonly string $fileName,
+        private readonly LoggerInterface $logger,
+        private readonly TranslatorInterface $translator,
+        #[Target('calculation.service.log')]
+        private readonly CacheInterface $cache
     ) {
     }
 
@@ -65,16 +69,13 @@ class LogService implements ServiceSubscriberInterface
      */
     public function clearCache(): self
     {
-        if ($this->hasCacheItem(self::KEY_CACHE)) {
-            $this->deleteCacheItem(self::KEY_CACHE);
+        try {
+            $this->cache->delete(self::KEY_CACHE);
+        } catch (InvalidArgumentException $e) {
+            $this->logException($e);
         }
 
         return $this;
-    }
-
-    public function getCacheTimeout(): int
-    {
-        return self::CACHE_TIMEOUT;
     }
 
     /**
@@ -98,8 +99,23 @@ class LogService implements ServiceSubscriberInterface
      */
     public function getLogFile(): ?LogFile
     {
-        /** @psalm-var LogFile|null */
-        return $this->getCacheValue(self::KEY_CACHE, fn (): ?LogFile => $this->parseFile());
+        try {
+            return $this->cache->get(self::KEY_CACHE, fn (): ?LogFile => $this->parseFile());
+        } catch (InvalidArgumentException $e) {
+            $this->logException($e);
+
+            return null;
+        }
+    }
+
+    public function getLogger(): LoggerInterface
+    {
+        return $this->logger;
+    }
+
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**
@@ -129,34 +145,29 @@ class LogService implements ServiceSubscriberInterface
             return null;
         }
 
-        try {
-            $file = new LogFile($this->getFileName());
-            $reader = new CSVReader(file: $this->fileName, separator: self::VALUES_SEP);
-            /** @psalm-var string[]|null $values */
-            foreach ($reader as $key => $values) {
-                if (!\is_array($values) || 6 !== \count($values)) {
-                    continue;
-                }
-                $date = $this->parseDate($values[0]);
-                if (false === $date) {
-                    continue;
-                }
-                $file->addLog(Log::instance($key)
-                    ->setCreatedAt($date)
-                    ->setChannel($values[1])
-                    ->setLevel($values[2])
-                    ->setMessage($values[3])
-                    ->setContext($this->parseJson($values[4]))
-                    ->setExtra($this->parseJson($values[5])));
-            }
-            $file->sort();
+        $file = new LogFile($this->getFileName());
+        $reader = new CSVReader(file: $this->fileName, separator: self::VALUES_SEP);
 
-            return $file;
-        } catch (\Exception $e) {
-            $this->logException($e, $this->trans('log.download.error'));
+        /** @psalm-var string[]|null $values */
+        foreach ($reader as $key => $values) {
+            if (!\is_array($values) || 6 !== \count($values)) {
+                continue;
+            }
+            $date = $this->parseDate($values[0]);
+            if (false === $date) {
+                continue;
+            }
+            $log = Log::instance($key)
+                ->setCreatedAt($date)
+                ->setChannel($values[1])
+                ->setLevel($values[2])
+                ->setMessage($values[3])
+                ->setContext($this->parseJson($values[4]))
+                ->setExtra($this->parseJson($values[5]));
+            $file->addLog($log);
         }
 
-        return null;
+        return $file->sort();
     }
 
     /**

@@ -52,7 +52,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
     /**
      * Sets or add the bold font style.
      *
-     * @param bool $add true to add bold style to existing style, false to replace
+     * @param bool $add true to add bold style to the existing style, false to replace
      */
     public function bold(bool $add = false): self
     {

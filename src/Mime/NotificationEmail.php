@@ -36,7 +36,7 @@ class NotificationEmail extends BaseNotificationEmail
     }
 
     /**
-     * Adds the given uploaded file as attachment.
+     * Adds the given uploaded file as an attachment.
      *
      * Do nothing if the file is null or not valid.
      */
@@ -54,7 +54,7 @@ class NotificationEmail extends BaseNotificationEmail
     }
 
     /**
-     * Adds the given uploaded files as attachment.
+     * Adds the given uploaded files as attachments.
      *
      * @see NotificationEmail::attachFromUploadedFile()
      */

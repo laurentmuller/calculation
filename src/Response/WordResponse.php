@@ -16,7 +16,7 @@ use App\Word\WordDocument;
 use PhpOffice\PhpWord\IOFactory;
 
 /**
- * The WordResponse represents an HTTP streamed response within a Word 2007 (.docx) document.
+ * Represents an HTTP streamed response, within a Word 2007 (.docx) document.
  */
 class WordResponse extends AbstractStreamedResponse
 {

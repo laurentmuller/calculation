@@ -99,7 +99,7 @@ enum HtmlTag: string
     case KEYBOARD = 'kbd';
 
     /**
-     * The line break tag name.
+     * The line-break tag name.
      */
     #[EnumCase(extras: ['style' => false])]
     case LINE_BREAK = 'br';
@@ -123,7 +123,7 @@ enum HtmlTag: string
     case LIST_UNORDERED = 'ul';
 
     /**
-     * The page break class name.
+     * The page-break class name.
      */
     #[EnumCase(extras: ['style' => false])]
     case PAGE_BREAK = 'page-break';

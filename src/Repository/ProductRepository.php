@@ -58,7 +58,7 @@ class ProductRepository extends AbstractCategoryItemRepository
     }
 
     /**
-     * Gets all products ordered by the group, the category and the description.
+     * Gets all products ordered by the group, the category, and the description.
      *
      * @return Product[]
      */

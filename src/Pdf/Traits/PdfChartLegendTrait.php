@@ -77,15 +77,15 @@ trait PdfChartLegendTrait
     /**
      * Draw the given legends horizontally or vertically.
      *
-     * Does nothing if legends are empty. If horizontal value is false, the position is the same as before after this
-     * call.
+     * Does nothing if legends are empty.
+     * If the horizontal value is false, the position is the same as before after this call.
      *
      * @param ColorStringType[] $legends    the legends to draw
      * @param bool              $horizontal true to output legends as a horizontal list; false to output legends as
      *                                      a vertical list
      * @param ?float            $x          the abscissa of the legends or null to center the list (horizontal) or
      *                                      to use current position (vertical)
-     * @param ?float            $y          the ordinate of the legends or null to use current position
+     * @param ?float            $y          the ordinate of the legends or null to use the current position
      * @param bool              $circle     true to draw circle shapes; false to draw square shapes
      */
     public function legends(array $legends, bool $horizontal, ?float $x = null, ?float $y = null, bool $circle = true): static
@@ -105,8 +105,8 @@ trait PdfChartLegendTrait
      * Does nothing if legends are empty.
      *
      * @param ColorStringType[] $legends the legends to draw
-     * @param ?float            $x       the abscissa of the legends or null to center the list
-     * @param ?float            $y       the ordinate of the legends or null to use current position
+     * @param ?float            $x       the abscissa of the legends or null to center the abscissa
+     * @param ?float            $y       the ordinate of the legends or null to use the current ordinate
      * @param bool              $circle  true to a draw circle shape; false to draw a square shape
      */
     public function legendsHorizontal(array $legends, ?float $x = null, ?float $y = null, bool $circle = true): static
@@ -138,8 +138,8 @@ trait PdfChartLegendTrait
      * Does nothing if legends are empty. After this call, the position is the same as before.
      *
      * @param ColorStringType[] $legends the legends to draw
-     * @param ?float            $x       the abscissa of the legends or null to use current position
-     * @param ?float            $y       the ordinate of the legends or null to use current position
+     * @param ?float            $x       the abscissa of the legends or null to use the current abscissa
+     * @param ?float            $y       the ordinate of the legends or null to use the current ordinate
      * @param bool              $circle  true to draw a circle shape; false to draw a square shape
      */
     public function legendsVertical(array $legends, ?float $x = null, ?float $y = null, bool $circle = true): static

@@ -10,13 +10,14 @@
 
 declare(strict_types=1);
 
+use App\Service\LogService;
 use Symfony\Config\MonologConfig;
 
 return static function (MonologConfig $config): void {
     $config->handler('main')
         ->type('stream')
         ->path('%kernel.logs_dir%/%kernel.environment%.log')
-        ->formatter('monolog.custom_formatter')
+        ->formatter(LogService::FORMATTER_NAME)
         ->channels()
         ->elements(['app']);
 };

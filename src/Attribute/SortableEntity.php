@@ -39,8 +39,8 @@ readonly class SortableEntity implements SortModeInterface
      *                                     the class to reflect, or an object
      * @param bool          $validate      true to validate that the property name exists
      *
-     * @return array<string, string> an array with the field as a key and the order as value. A
-     *                               empty array is returned if not attribute is found.
+     * @return array<string, string> an array with the field as a key and the order as the value.
+     *                               An empty array is returned if no attribute is found.
      *
      * @throws \ReflectionException if the class does not exist or if the validated parameter
      *                              is true and a property name is not found

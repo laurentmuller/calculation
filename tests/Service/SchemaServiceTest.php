@@ -16,6 +16,7 @@ use App\Service\SchemaService;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\DBAL\Exception;
+use Psr\Cache\InvalidArgumentException;
 
 class SchemaServiceTest extends KernelServiceTestCase
 {
@@ -29,12 +30,18 @@ class SchemaServiceTest extends KernelServiceTestCase
         $this->service = $this->getService(SchemaService::class);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testGetTable(): void
     {
         $actual = $this->service->getTable('sy_Group');
         self::assertSame('sy_Group', $actual['name']);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testGetTables(): void
     {
         $actual = $this->service->getTables();
@@ -44,11 +51,11 @@ class SchemaServiceTest extends KernelServiceTestCase
     /**
      * @throws Exception
      */
-    public function testTableExist(): void
+    public function testTableExists(): void
     {
-        $actual = $this->service->tableExist('sy_Group');
+        $actual = $this->service->tableExists('sy_Group');
         self::assertTrue($actual);
-        $actual = $this->service->tableExist('fake');
+        $actual = $this->service->tableExists('fake');
         self::assertFalse($actual);
     }
 }

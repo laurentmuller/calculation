@@ -65,7 +65,7 @@ trait MathTrait
      * @param ?float $val       the value to round
      * @param int    $precision the number of decimal digits to round to
      *
-     * @return float the rounded value or 0 if value is empty
+     * @return float the rounded value or 0 if the value is empty
      */
     protected function round(?float $val, int $precision = FormatUtils::FRACTION_DIGITS): float
     {

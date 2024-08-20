@@ -96,7 +96,7 @@ class PdfLabel
      *
      * Returns this instance if this unit is already set as millimeter.
      *
-     * The returned instance has unit set to the millimeter.
+     * The returned instance has the unit set to the millimeter.
      */
     public function scaleToMillimeters(): self
     {

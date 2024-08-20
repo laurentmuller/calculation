@@ -24,7 +24,7 @@ interface PdfLabelTextListenerInterface
      *
      * @param PdfLabelTextEvent $event the event
      *
-     * @return bool true if listener handles the draw function; false to call the default behavior
+     * @return bool true if the listener handles the draw function; false to call the default behavior
      */
     public function drawLabelText(PdfLabelTextEvent $event): bool;
 }

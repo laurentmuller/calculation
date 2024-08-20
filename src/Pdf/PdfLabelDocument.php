@@ -49,11 +49,11 @@ class PdfLabelDocument extends PdfDocument
     // the padding inside labels
     private const PADDING = 3.0;
 
-    // the current column (0 based index)
+    // the current column (0-based index)
     private int $currentCol;
-    // the current row (0 based index)
+    // the current row (0-based index)
     private int $currentRow;
-    // the Avery format
+    // the label format
     private PdfLabel $label;
     // the draw border around labels
     private bool $labelBorder = false;
@@ -109,14 +109,14 @@ class PdfLabelDocument extends PdfDocument
     }
 
     /**
-     * This implementation skip output footer.
+     * This implementation skips the output footer.
      */
     final public function footer(): void
     {
     }
 
     /**
-     * This implementation skip output header.
+     * This implementation skips the output header.
      */
     final public function header(): void
     {

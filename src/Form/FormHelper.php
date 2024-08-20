@@ -142,7 +142,8 @@ class FormHelper
      * Add a checkbox type to the builder and reset all values to default.
      *
      * @param bool $notRequired <code>true</code> if not required; <code>false</code> if required
-     * @param bool $switch      <code>true</code> to use the checkbox switch style, <code>false</code> to use default style
+     * @param bool $switch      <code>true</code> to use the checkbox switch style, <code>false</code> to use
+     *                          the default style
      */
     public function addCheckboxType(bool $notRequired = true, bool $switch = true): self
     {
@@ -170,7 +171,7 @@ class FormHelper
     /**
      * Add a collection type to the builder with the given entry type and reset all values to default.
      *
-     * @param string               $entryType the entry type class must be a subclass of FormTypeInterface class
+     * @param string               $entryType the entry type class must be a subclass of the FormTypeInterface class
      * @param array<string, mixed> $options   the default options to override
      *
      * @throws UnexpectedValueException if the entry type is not an instance of FormTypeInterface class
@@ -508,7 +509,7 @@ class FormHelper
     /**
      * Sets the autocomplete attribute.
      *
-     * For Google Chrome, if You want to disable the auto-complete set a random string as attribute like 'nope'.
+     * For Google Chrome, if You want to disable the auto-complete, set a random string as the attribute like 'nope'.
      *
      * @param bool|string $autocomplete the autocomplete ('on'/'off') or false to remove
      *
@@ -659,7 +660,7 @@ class FormHelper
      *
      * @param callable(PreSetDataEvent): void $listener the event listener to add
      * @param int                             $priority The priority of the listener. Listeners with the higher
-     *                                                  priority are called before listeners with a lower priority.
+     *                                                  priority is called before listeners with a lower priority.
      */
     public function listenerPreSetData(callable $listener, int $priority = 0): self
     {
@@ -673,7 +674,7 @@ class FormHelper
      *
      * @param callable(PreSubmitEvent): void $listener $listener the event listener to add
      * @param int                            $priority The priority of the listener. Listeners with the higher
-     *                                                 priority are called before listeners with a lower priority.
+     *                                                 priority is called before listeners with a lower priority.
      */
     public function listenerPreSubmit(callable $listener, int $priority = 0): self
     {
@@ -873,7 +874,7 @@ class FormHelper
     }
 
     /**
-     * Updates a row attributes.
+     * Updates row's attributes.
      *
      * @param array<string, mixed> $attributes the attribute's names and values
      */

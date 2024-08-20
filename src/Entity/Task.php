@@ -46,7 +46,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     protected ?Category $category = null;
 
     /**
-     * The children items.
+     * The children's items.
      *
      * @var ArrayCollection<int, TaskItem>&ReadableCollection<int, TaskItem>
      */
@@ -198,7 +198,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     }
 
     /**
-     * Update position of items.
+     * Update the position of items.
      */
     public function updatePositions(): self
     {

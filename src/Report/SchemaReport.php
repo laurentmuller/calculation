@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
@@ -21,6 +22,7 @@ use App\Service\SchemaService;
 use App\Traits\ArrayTrait;
 use fpdf\Enums\PdfFontName;
 use fpdf\Enums\PdfMove;
+use Psr\Cache\InvalidArgumentException;
 
 /**
  * Report to display database schema.
@@ -48,6 +50,9 @@ class SchemaReport extends AbstractReport
         $this->setDescriptionTrans('schema.description');
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function render(): bool
     {
         $tables = $this->service->getTables();
@@ -57,15 +62,12 @@ class SchemaReport extends AbstractReport
 
         $this->addPage();
         $this->booleanStyle = PdfStyle::getCellStyle()
-            ->setFontName(PdfFontName::ZAPFDINGBATS);
+            ->setFontName(PdfFontName::ZAPFDINGBATS)
+            ->setTextColor(PdfTextColor::darkGreen());
 
-        /** @psalm-var string[] $names */
-        $names = $this->getColumn($tables, 'name');
-        $this->createLinks($names);
-
+        $this->createLinks(\array_keys($tables));
         $this->outputTables($tables);
-        foreach ($names as $name) {
-            $table = $this->service->getTable($name);
+        foreach ($tables as $table) {
             $this->outputTable($table);
         }
         $this->addPageIndex();

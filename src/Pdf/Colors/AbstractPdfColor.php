@@ -104,7 +104,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Creates a new instance from the given value.
      *
      * @param int[]|string|null $rgb an array containing the red, green and blue values, an integer value or a
-     *                               hexadecimal string like <code>'#FF8040'</code> or <code>'FFF'</code>
+     *                               hexadecimal string like <code>'FF8040'</code> or <code>'FFF'</code>
      *
      * @return static|null the color or null if the RGB value cannot be parsed
      *

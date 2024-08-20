@@ -133,7 +133,7 @@ trait CacheAwareTrait
     }
 
     /**
-     * Confirms if the cache contains specified cache item.
+     * Confirms if the cache contains the specified cache item.
      *
      * @throws \LogicException if an exception occurs
      */

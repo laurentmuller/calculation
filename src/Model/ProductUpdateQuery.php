@@ -27,7 +27,7 @@ class ProductUpdateQuery extends AbstractSimulateQuery
     final public const UPDATE_FIXED = 'fixed';
 
     /**
-     * Update products with a percent.
+     * Update products with a percentage.
      */
     final public const UPDATE_PERCENT = 'percent';
 
@@ -134,7 +134,7 @@ class ProductUpdateQuery extends AbstractSimulateQuery
     }
 
     /**
-     * Returns a value indicating if update is applied with the fixed amount.
+     * Returns a value indicating if the update is applied with the fixed amount.
      */
     public function isFixed(): bool
     {
@@ -142,7 +142,7 @@ class ProductUpdateQuery extends AbstractSimulateQuery
     }
 
     /**
-     * Returns a value indicating if update is applied with the percent.
+     * Returns a value indicating if the update is applied with the percent.
      */
     public function isPercent(): bool
     {
@@ -150,7 +150,7 @@ class ProductUpdateQuery extends AbstractSimulateQuery
     }
 
     /**
-     * Returns a value indicating if price is rounded (0.05).
+     * Returns a value indicating if the price is rounded (0.05).
      */
     public function isRound(): bool
     {
@@ -210,7 +210,7 @@ class ProductUpdateQuery extends AbstractSimulateQuery
     }
 
     /**
-     * Sets a value indicating if price is rounded (0.05).
+     * Sets a value indicating if the price is rounded (0.05).
      */
     public function setRound(bool $round): self
     {

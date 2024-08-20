@@ -15,7 +15,7 @@ namespace App\Pdf;
 use fpdf\Enums\PdfTextAlignment;
 
 /**
- * Define a column for a Pdf table.
+ * Define a column for a PDF table.
  */
 class PdfColumn
 {
@@ -23,8 +23,8 @@ class PdfColumn
      * @param ?string           $text      the column text
      * @param float             $width     the column width
      * @param ?PdfTextAlignment $alignment the column alignment
-     * @param bool              $fixed     true if the column width is fixed. This property is used only if the
-     *                                     parent's table uses all the document width.
+     * @param bool              $fixed     true if the column width is fixed.
+     *                                     This property is used only if the parent's table uses all the document width.
      */
     public function __construct(
         private ?string $text,
@@ -103,7 +103,7 @@ class PdfColumn
     }
 
     /**
-     * Create a column with right alignment.
+     * Create a column with the right alignment.
      *
      * @param ?string $text  the column text
      * @param float   $width the column width

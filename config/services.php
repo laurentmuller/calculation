@@ -81,10 +81,9 @@ return static function (ContainerConfigurator $config): void {
             $path . 'Word',
         ]);
 
-    // custom line and date formatter for monolog
-    $service = 'monolog.custom_formatter';
-    $services->set($service, LineFormatter::class)
-        ->args(["%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n", LogService::DATE_FORMAT]);
-    $services->get($service)
+    // custom line formatter
+    $format = "%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n";
+    $services->set(LogService::FORMATTER_NAME, LineFormatter::class)
+        ->args([$format, LogService::DATE_FORMAT])
         ->call('setBasePath', ['%kernel.project_dir%']);
 };

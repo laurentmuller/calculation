@@ -43,7 +43,7 @@ class SymfonyStyle extends BaseSymfonyStyle
     /**
      * Returns the argument value for a given argument name.
      *
-     * @throws InvalidArgumentException When argument given doesn't exist
+     * @throws InvalidArgumentException When the given argument doesn't exist
      */
     public function getArgument(string $name): mixed
     {
@@ -55,7 +55,7 @@ class SymfonyStyle extends BaseSymfonyStyle
      *
      * @return string[]
      *
-     * @throws InvalidArgumentException When option given doesn't exist
+     * @throws InvalidArgumentException When the given option doesn't exist
      */
     public function getArrayOption(string $name): array
     {
@@ -66,7 +66,7 @@ class SymfonyStyle extends BaseSymfonyStyle
     /**
      * Returns the option value, as bool, for a given option name.
      *
-     * @throws InvalidArgumentException When option given doesn't exist
+     * @throws InvalidArgumentException When the given option doesn't exist
      */
     public function getBoolOption(string $name): bool
     {
@@ -81,7 +81,7 @@ class SymfonyStyle extends BaseSymfonyStyle
     /**
      * Returns the option value, as integer, for a given option name.
      *
-     * @throws InvalidArgumentException When option given doesn't exist
+     * @throws InvalidArgumentException When the given option doesn't exist
      */
     public function getIntOption(string $name): int
     {
@@ -91,7 +91,7 @@ class SymfonyStyle extends BaseSymfonyStyle
     /**
      * Returns the option value for a given option name.
      *
-     * @throws InvalidArgumentException When option given doesn't exist
+     * @throws InvalidArgumentException When the given option doesn't exist
      */
     public function getOption(string $name): mixed
     {
@@ -106,7 +106,7 @@ class SymfonyStyle extends BaseSymfonyStyle
     /**
      * Returns the argument value, as string, for a given argument name.
      *
-     * @throws InvalidArgumentException When argument given doesn't exist
+     * @throws InvalidArgumentException When the given argument doesn't exist
      */
     public function getStringArgument(string $name): string
     {

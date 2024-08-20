@@ -82,7 +82,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
             if ($parent->isBookmark()) {
                 $report->addBookmark($text, true, $parent->getBookmarkLevel());
             }
-            // special case when parent contains only this text
+            // special case when the parent contains only this text
             if (1 === $parent->count() && $parent->is(...self::PARENT_MULTI_CELL)) {
                 $align = $parent->getAlignment();
                 switch ($align) {

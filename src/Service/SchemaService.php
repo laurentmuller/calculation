@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Traits\ArrayTrait;
-use App\Traits\CacheAwareTrait;
 use App\Utils\StringUtils;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
@@ -27,8 +26,9 @@ use Doctrine\DBAL\Types\FloatType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * Service to get database schema information.
@@ -60,13 +60,11 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
  *     size: float,
  *     sql_rows: string}
  */
-class SchemaService implements ServiceSubscriberInterface
+class SchemaService
 {
     use ArrayTrait;
-    use CacheAwareTrait;
-    use ServiceMethodsSubscriberTrait;
 
-    // Query to update records and sizes (MySQL platform)
+    // Query to get records and sizes (MySQL platform)
     private const SQL_ALL = <<<SQL_QUERY
             SELECT
                 TABLE_NAME AS 'name',
@@ -85,37 +83,44 @@ class SchemaService implements ServiceSubscriberInterface
      */
     private ?AbstractSchemaManager $schemaManager = null;
 
-    public function __construct(private readonly EntityManagerInterface $manager)
-    {
-    }
-
-    public function getCacheTimeout(): int
-    {
-        return 86_400; // 1 day
+    public function __construct(
+        private readonly EntityManagerInterface $manager,
+        #[Target('calculation.service.schema')]
+        private readonly CacheInterface $cache
+    ) {
     }
 
     /**
-     * Get table information.
+     * Get information for the given table.
      *
      * @param string $name the table's name to get information for
      *
-     * @return SchemaTableType
+     * @psalm-return SchemaTableType
+     *
+     * @throws InvalidArgumentException
      */
     public function getTable(string $name): array
     {
         /** @psalm-var SchemaTableType */
-        return $this->getCacheValue("schema_service.metadata.table.$name", fn (): array => $this->loadTable($name));
+        return $this->getTables(false)[$name] ?? [];
     }
 
     /**
      * Gets tables information.
      *
-     * @return array<string, SchemaTableType>
+     * @param bool $updateRecords true to update the number of records and size
+     *
+     * @psalm-return array<string, SchemaTableType>
+     *
+     * @throws InvalidArgumentException
      */
-    public function getTables(): array
+    public function getTables(bool $updateRecords = true): array
     {
         /** @psalm-var array<string, SchemaTableType> $tables */
-        $tables = $this->getCacheValue('schema_service.tables', fn (): array => $this->loadTables());
+        $tables = $this->cache->get('tables', fn (): array => $this->loadTables());
+        if (!$updateRecords) {
+            return $tables;
+        }
 
         if ($this->isMySQLPlatform()) {
             return $this->countAll($tables);
@@ -133,15 +138,17 @@ class SchemaService implements ServiceSubscriberInterface
      *
      * @throws \Doctrine\DBAL\Exception
      */
-    public function tableExist(string $name): bool
+    public function tableExists(string $name): bool
     {
-        return $this->getSchemaManager()->tablesExist([$name]);
+        return $this->getSchemaManager()->tableExists($name);
     }
 
     /**
      * @psalm-param array<string, SchemaTableType> $tables
      *
      * @psalm-return array<string, SchemaTableType>
+     *
+     * @throws InvalidArgumentException
      */
     private function countAll(array $tables): array
     {
@@ -153,10 +160,11 @@ class SchemaService implements ServiceSubscriberInterface
             if (!\is_string($database)) {
                 return $tables;
             }
+
             $sql = \str_replace('%database%', $database, self::SQL_ALL);
-            $result = $this->getConnection()
-                ->executeQuery($sql);
+            $result = $connection->executeQuery($sql);
             $rows = $result->fetchAllAssociative();
+
             /** @psalm-var array{name: string, records: int, size: int} $row */
             foreach ($rows as $row) {
                 $name = $this->mapTableName($row['name']);
@@ -167,6 +175,7 @@ class SchemaService implements ServiceSubscriberInterface
                 $tables[$name]['size'] = (float) $row['size'] / 1024.0;
             }
         } catch (\Doctrine\DBAL\Exception) {
+            // ignore
         } finally {
             $result?->free();
         }
@@ -196,9 +205,12 @@ class SchemaService implements ServiceSubscriberInterface
 
     /**
      * @pslam-return SchemaTableType
+     *
+     * @throws InvalidArgumentException
      */
     private function createSchemaTable(Table $table): array
     {
+        /** @psalm-var SchemaTableType */
         return [
             'name' => $this->mapTableName($table),
             'columns' => $this->getColumns($table),
@@ -212,6 +224,8 @@ class SchemaService implements ServiceSubscriberInterface
 
     /**
      * @param ForeignKeyConstraint[] $foreignKeys
+     *
+     * @throws InvalidArgumentException
      */
     private function findForeignTableName(string $name, array $foreignKeys): ?string
     {
@@ -227,6 +241,8 @@ class SchemaService implements ServiceSubscriberInterface
 
     /**
      * @pslam-return array<SchemaAssociationType>
+     *
+     * @throws InvalidArgumentException
      */
     private function getAssociations(Table $table): array
     {
@@ -257,6 +273,8 @@ class SchemaService implements ServiceSubscriberInterface
 
     /**
      * @pslam-return array<SchemaColumnType>
+     *
+     * @throws InvalidArgumentException
      */
     private function getColumns(Table $table): array
     {
@@ -339,6 +357,8 @@ class SchemaService implements ServiceSubscriberInterface
 
     /**
      * @psalm-return ClassMetadata<object>|null
+     *
+     * @throws InvalidArgumentException
      */
     private function getMetaData(Table|string $name): ?ClassMetadata
     {
@@ -349,14 +369,12 @@ class SchemaService implements ServiceSubscriberInterface
 
     /**
      * @return array<string, ClassMetadata<object>>
+     *
+     * @throws InvalidArgumentException
      */
     private function getMetaDatas(): array
     {
-        /** @psalm-var array<string, ClassMetadata<object>> */
-        return $this->getCacheValue(
-            'schema_service.metadata',
-            fn (): array => $this->loadMetaDatas($this->manager)
-        );
+        return $this->cache->get('metadata', fn (): array => $this->loadMetaDatas($this->manager));
     }
 
     /**
@@ -391,18 +409,12 @@ class SchemaService implements ServiceSubscriberInterface
 
     /**
      * @psalm-return ClassMetadata<object>|null
+     *
+     * @throws InvalidArgumentException
      */
     private function getTargetMetaData(string $name): ?ClassMetadata
     {
         return $this->findFirst($this->getMetaDatas(), fn (ClassMetadata $data): bool => $data->getName() === $name);
-    }
-
-    /**
-     * @throws \Doctrine\DBAL\Exception
-     */
-    private function introspectTable(string $name): Table
-    {
-        return $this->getSchemaManager()->introspectTable($name);
     }
 
     /**
@@ -449,21 +461,10 @@ class SchemaService implements ServiceSubscriberInterface
     }
 
     /**
-     * @pslam-return SchemaTableType
-     *
-     * @throws \Doctrine\DBAL\Exception
-     */
-    private function loadTable(string $name): array
-    {
-        $table = $this->introspectTable($name);
-
-        return $this->createSchemaTable($table);
-    }
-
-    /**
      * @pslam-return array<string, SchemaTableType>
      *
      * @throws \Doctrine\DBAL\Exception
+     * @throws InvalidArgumentException
      */
     private function loadTables(): array
     {
@@ -480,6 +481,8 @@ class SchemaService implements ServiceSubscriberInterface
 
     /**
      * @psalm-param Table|ClassMetadata<object>|string $name
+     *
+     * @throws InvalidArgumentException
      */
     private function mapTableName(Table|ClassMetadata|string $name): string
     {

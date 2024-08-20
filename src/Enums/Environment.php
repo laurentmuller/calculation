@@ -41,7 +41,7 @@ enum Environment: string implements TranslatableEnumInterface
     case TEST = 'test';
 
     /**
-     * Gets the environnement from the given kernel interface.
+     * Gets the environment from the given kernel interface.
      */
     public static function fromKernel(KernelInterface $kernel): self
     {

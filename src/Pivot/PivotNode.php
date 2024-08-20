@@ -350,7 +350,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     /**
      * Gets the parent's node.
      *
-     * @return self|null the parent's node or null if root
+     * @return self|null the parent's node or null if the root
      */
     public function getParent(): ?self
     {

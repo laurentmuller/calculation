@@ -34,7 +34,7 @@ class CalendarService
     private string $calendarModel = self::DEFAULT_CALENDAR_MODEL;
 
     /**
-     * Returns a calendar for specified year.
+     * Returns a calendar for the specified year.
      *
      * @param ?int $year the year to generate the calendar for or null for the current year
      *

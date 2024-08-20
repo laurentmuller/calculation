@@ -67,7 +67,7 @@ final readonly class SymfonyInfoService
     private const KEY_DEBUG = 'debug';
     // the array key for runtime packages and routes
     private const KEY_RUNTIME = 'runtime';
-    // the pattern to search license file
+    // the pattern to search the license file
     private const LICENSE_PATTERN = '/license(\.txt|\.md)?$/i';
     // the JSON file containing composer information
     private const PACKAGE_FILE_NAME = '/vendor/composer/installed.json';
@@ -112,7 +112,7 @@ final readonly class SymfonyInfoService
     }
 
     /**
-     * Gets bundles information.
+     * Gets bundle's information.
      *
      * @psalm-return array<string, BundleType>
      *
@@ -444,7 +444,7 @@ final readonly class SymfonyInfoService
     }
 
     /**
-     * Gets the end of month date.
+     * Gets the end of the month date.
      *
      * @param string $date the date as month/year format
      */

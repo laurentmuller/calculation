@@ -47,7 +47,7 @@ trait PdfStyleTrait
     }
 
     /**
-     * Reset this current style to default.
+     * Reset this current style to the default.
      */
     public function resetStyle(): static
     {

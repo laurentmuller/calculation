@@ -29,7 +29,7 @@ trait LoggerTrait
     /**
      * Logs with an arbitrary level message.
      *
-     * @throws \Psr\Log\InvalidArgumentException if level is not defined
+     * @throws \Psr\Log\InvalidArgumentException if the level is not defined
      */
     public function log(mixed $level, string|\Stringable $message, array $context = []): void
     {

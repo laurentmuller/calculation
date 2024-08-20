@@ -16,7 +16,7 @@ use App\Spreadsheet\SpreadsheetDocument;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 /**
- * The SpreadsheetResponse represents an HTTP streamed response within an Excel 2007 (.xlsx) document.
+ * Represents an HTTP streamed response, within an Excel 2007 (.xlsx) document.
  *
  * @see SpreadsheetDocument
  */

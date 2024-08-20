@@ -212,7 +212,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     }
 
     /**
-     * Gets months when key is month number (1-12).
+     * Gets months when the key is month number (1-12).
      *
      * @return Month[]
      */

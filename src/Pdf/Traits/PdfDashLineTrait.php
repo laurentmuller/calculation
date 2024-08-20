@@ -23,8 +23,8 @@ trait PdfDashLineTrait
     /**
      * Draw a dashed rectangle.
      *
-     * @param float              $x      the abscissa of upper-left corner
-     * @param float              $y      the ordinate of upper-left corner
+     * @param float              $x      the abscissa of the upper-left corner
+     * @param float              $y      the ordinate of the upper-left corner
      * @param float              $w      the width
      * @param float              $h      the height
      * @param int                $dashes the number of dashes per line

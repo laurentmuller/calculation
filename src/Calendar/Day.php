@@ -53,7 +53,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     }
 
     /**
-     * Returns this date formatted according to given format.
+     * Returns this date formatted according to the given format.
      */
     public function format(string $format): string
     {
@@ -164,7 +164,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     }
 
     /**
-     * Returns if this is the first day of the week (monday).
+     * Returns if this is the first day of the week (Monday).
      *
      * @psalm-api
      */
@@ -216,7 +216,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     }
 
     /**
-     * Returns if this is the last day of the week (sunday).
+     * Returns if this is the last day of the week (Sunday).
      *
      * @psalm-api
      */
@@ -226,7 +226,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     }
 
     /**
-     * Returns if this day is in the weekend (saturday or sunday).
+     * Returns if this day is in the weekend (Saturday or Sunday).
      *
      * @psalm-api
      */

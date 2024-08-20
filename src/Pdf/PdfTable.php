@@ -181,7 +181,7 @@ class PdfTable
     /**
      * Create and add a header row with the given values.
      *
-     * @throws PdfException if the row is already started, if values parameter is empty or if
+     * @throws PdfException if the row is already started, if values are empty or if
      *                      the number of values is greater than the number of columns
      */
     public function addHeaderRow(PdfCell|string|null ...$values): static
@@ -196,7 +196,7 @@ class PdfTable
     /**
      * Create and add a row with the given values.
      *
-     * @throws PdfException if the row is already started, if values parameter is empty or if
+     * @throws PdfException if the row is already started, if values are empty or if
      *                      the number of values is greater than the number of columns
      *
      * @see PdfTable::addStyledRow()

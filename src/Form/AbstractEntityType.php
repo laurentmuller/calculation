@@ -18,7 +18,7 @@ use App\Utils\StringUtils;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Type to edit an <code>EntityInterface</code> class.
+ * Type to edit a <code>EntityInterface</code> class.
  *
  * @template TEntity of EntityInterface
  */

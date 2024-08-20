@@ -42,7 +42,7 @@ interface PropertyServiceInterface
     final public const DEFAULT_MESSAGE_CLOSE = true;
 
     /**
-     * The default display flash bag message icon (boolean).
+     * The default display flash's bag message icon (boolean).
      */
     final public const DEFAULT_MESSAGE_ICON = true;
 
@@ -52,7 +52,7 @@ interface PropertyServiceInterface
     final public const DEFAULT_MESSAGE_POSITION = MessagePosition::BOTTOM_RIGHT;
 
     /**
-     * The default display message progress bar height (int).
+     * The default display message's progress bar height (int).
      */
     final public const DEFAULT_MESSAGE_PROGRESS = 1;
 
@@ -77,7 +77,7 @@ interface PropertyServiceInterface
     final public const DEFAULT_MIN_MARGIN = 1.1;
 
     /**
-     * The default numbers of displayed calculation in the home page (int).
+     * The default numbers of displayed calculations on the home page (int).
      */
     final public const DEFAULT_PANEL_CALCULATION = 12;
 
@@ -215,7 +215,7 @@ interface PropertyServiceInterface
     final public const P_EDIT_ACTION = 'edit_action';
 
     /**
-     * The property name for displaying close button (default = true) of the flash bag messages (boolean).
+     * The property name for displaying the close button (default = true) of the flash bag messages (boolean).
      */
     final public const P_MESSAGE_CLOSE = 'message_close';
 
@@ -245,7 +245,7 @@ interface PropertyServiceInterface
     final public const P_MESSAGE_TIMEOUT = 'message_timeout';
 
     /**
-     * The property name for displaying title (default = true) of the flash bag messages (boolean).
+     * The property name for displaying the title (default = true) of the flash bag messages (boolean).
      */
     final public const P_MESSAGE_TITLE = 'message_title';
 
@@ -369,7 +369,7 @@ interface PropertyServiceInterface
     public function getMessageTimeout(): int;
 
     /**
-     * Returns a value indicating numbers of displayed calculations in the home page.
+     * Returns a value indicating numbers of displayed calculations on the home page.
      */
     public function getPanelCalculation(): int;
 
@@ -409,17 +409,17 @@ interface PropertyServiceInterface
     public function isMessageTitle(): bool;
 
     /**
-     * Returns a value indicating if the catalog panel is displayed in the home page.
+     * Returns a value indicating if the catalog panel is displayed on the home page.
      */
     public function isPanelCatalog(): bool;
 
     /**
-     * Returns a value indicating if the month panel is displayed in the home page.
+     * Returns a value indicating if the month panel is displayed on the home page.
      */
     public function isPanelMonth(): bool;
 
     /**
-     * Returns a value indicating if the state panel is displayed in the home page.
+     * Returns a value indicating if the state panel is displayed on the home page.
      */
     public function isPanelState(): bool;
 

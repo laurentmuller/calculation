@@ -15,7 +15,7 @@ namespace App\Pdf\Colors;
 use fpdf\PdfDocument;
 
 /**
- * Color used color for filling operations (filled rectangles and cell backgrounds).
+ * Color used for filling operations (filled rectangles and cell backgrounds).
  */
 class PdfFillColor extends AbstractPdfColor
 {

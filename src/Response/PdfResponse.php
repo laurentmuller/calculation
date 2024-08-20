@@ -16,7 +16,7 @@ use fpdf\Enums\PdfDestination;
 use fpdf\PdfDocument;
 
 /**
- * The PdfResponse represents an HTTP response within a PDF document.
+ * Represents an HTTP response within a PDF document.
  *
  * @see PdfDocument
  */

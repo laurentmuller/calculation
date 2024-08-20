@@ -34,13 +34,13 @@ enum HtmlListType: string
     /*
      * Numbered list with lowercase roman numbers.
      *
-     * <b>N.B.:</b> Allowed value must be in range form 1 to 3999 (inclusive).
+     * <b>N.B.:</b> Allowed value must be in range from 1 to 3999 (inclusive).
      */
     case ROMAN_LOWER = 'i';
     /*
      * Numbered list with uppercase roman numbers.
      *
-     * <b>N.B.:</b> Allowed value must be in range form 1 to 3999 (inclusive).
+     * <b>N.B.:</b> Allowed value must be in range from 1 to 3999 (inclusive).
      */
     case ROMAN_UPPER = 'I';
 

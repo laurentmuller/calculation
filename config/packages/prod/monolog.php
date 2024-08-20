@@ -10,6 +10,7 @@
 
 declare(strict_types=1);
 
+use App\Service\LogService;
 use Psr\Log\LogLevel;
 use Symfony\Config\MonologConfig;
 
@@ -30,7 +31,7 @@ return static function (MonologConfig $config): void {
         ->type('stream')
         ->path('%kernel.logs_dir%/%kernel.environment%.log')
         ->level(LogLevel::INFO)
-        ->formatter('monolog.custom_formatter');
+        ->formatter(LogService::FORMATTER_NAME);
 
     $config->handler('console')
         ->type('console')
@@ -41,7 +42,7 @@ return static function (MonologConfig $config): void {
     $config->handler('deprecation')
         ->type('stream')
         ->path('%kernel.logs_dir%/%kernel.environment%.deprecations.log')
-        ->formatter('monolog.custom_formatter')
+        ->formatter(LogService::FORMATTER_NAME)
         ->channels()
         ->elements(['deprecation']);
 };

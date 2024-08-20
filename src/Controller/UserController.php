@@ -359,7 +359,7 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Sends an email to the user for reset its password.
+     * Sends an email to the user to reset its password.
      */
     #[GetPost(path: '/reset/send/{id}', name: 'reset_send', requirements: self::ID_REQUIREMENT)]
     public function sendPasswordRequest(Request $request, User $item, ResetPasswordService $service): Response

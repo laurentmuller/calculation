@@ -15,7 +15,7 @@ namespace App\Pivot\Field;
 use App\Utils\DateUtils;
 
 /**
- * The pivot field that maps month values (1...12) to month names (january, february, etc...).
+ * The pivot field that maps month values (1...12) to month names (January, February, etc...).
  */
 class PivotMonthField extends PivotDateField
 {

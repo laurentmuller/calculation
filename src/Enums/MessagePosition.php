@@ -21,7 +21,7 @@ use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
 
 /**
- * The message position for flash-bag.
+ * The message position for flashbag.
  *
  * @implements EnumDefaultInterface<MessagePosition>
  * @implements EnumSortableInterface<MessagePosition>

@@ -448,16 +448,17 @@ class SchemaService
      */
     private function loadMetaDatas(EntityManagerInterface $manager): array
     {
-        $result = [];
-        $datas = $manager->getMetadataFactory()->getAllMetadata();
-        foreach ($datas as $data) {
-            if ($data->isMappedSuperclass || $data->isEmbeddedClass) {
-                continue;
-            }
-            $result[$data->table['name']] = $data;
-        }
+        $datas = \array_filter(
+            $manager->getMetadataFactory()->getAllMetadata(),
+            static fn (ClassMetadata $data): bool => !$data->isMappedSuperclass && !$data->isEmbeddedClass
+        );
 
-        return $result;
+        return \array_reduce(
+            $datas,
+            /** @psalm-param array<string, ClassMetadata> $carry */
+            static fn (array $carry, ClassMetadata $data): array => $carry + [$data->table['name'] => $data],
+            []
+        );
     }
 
     /**
@@ -468,14 +469,17 @@ class SchemaService
      */
     private function loadTables(): array
     {
-        $result = [];
-        $tables = $this->getSchemaManager()->listTables();
-        foreach ($tables as $table) {
-            $name = $this->mapTableName($table);
-            $result[$name] = $this->createSchemaTable($table);
-        }
+        $result = \array_reduce(
+            $this->getSchemaManager()->listTables(),
+            fn (
+                array $carry,
+                Table $table
+            ): array => $carry + [$this->mapTableName($table) => $this->createSchemaTable($table)],
+            []
+        );
         \ksort($result);
 
+        /** @psalm-var array<string, SchemaTableType> */
         return $result;
     }
 

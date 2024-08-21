@@ -15,7 +15,7 @@ namespace App\Pdf\Colors;
 use fpdf\PdfDocument;
 
 /**
- * Color used color for all drawing operations (lines, rectangles and cell borders).
+ * Color used color for all drawing operations (lines, rectangles and for cell borders).
  */
 class PdfDrawColor extends AbstractPdfColor
 {

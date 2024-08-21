@@ -127,7 +127,7 @@ class AkismetService extends AbstractHttpClientService
      * </p>
      * <ul>
      * <li><b>blog</b> (required): The front page or home URL of the instance making the request. For a blog or wiki,
-     * this would be the front page. Note: Must be a full URI, including http://.</li>
+     * this would be the front page. Must be a full URI, including http://.</li>
      * <li><b>user_ip</b> (required): IP address of the comment submitter.</li>
      * <li><b>user_agent</b>: User agent string of the web browser submitting the comment - typically the
      * HTTP_USER_AGENT cgi variable. Not to be confused with the user agent of the Akismet library.</li>

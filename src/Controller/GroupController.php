@@ -137,7 +137,7 @@ class GroupController extends AbstractEntityController
     {
         $entities = $this->getEntities('code');
         if ([] === $entities) {
-            throw $this->createNotFoundException($this->trans('group.list.empty'));
+            throw $this->createTranslateNotFoundException('group.list.empty');
         }
         $doc = new GroupsDocument($this, $entities);
 
@@ -168,7 +168,7 @@ class GroupController extends AbstractEntityController
     {
         $entities = $this->getEntities('code');
         if ([] === $entities) {
-            throw $this->createNotFoundException($this->trans('group.list.empty'));
+            throw $this->createTranslateNotFoundException('group.list.empty');
         }
         $doc = new GroupsReport($this, $entities);
 

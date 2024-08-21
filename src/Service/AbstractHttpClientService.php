@@ -47,7 +47,7 @@ abstract class AbstractHttpClientService
     final protected const HEADERS = 'headers';
 
     /**
-     * The Json parameter name.
+     * The JSON parameter name.
      */
     final protected const JSON = 'json';
 

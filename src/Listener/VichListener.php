@@ -110,7 +110,7 @@ class VichListener
         $source = FileUtils::realPath($file);
         $this->resizer->resizeDefault($source, $source);
 
-        // rename if not PNG
+        // rename extension if not PNG
         if (ImageExtension::PNG->value !== $this->getFileExtension($file)) {
             $newName = FileUtils::changeExtension($name, ImageExtension::PNG);
             $mapping->setFileName($user, $newName);

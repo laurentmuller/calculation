@@ -605,6 +605,10 @@ help:
         text: Texte
         boolean: Oui/Non
         image: Image
+    errors:
+        page_not_found: Impossible de trouver la page d'aide '%id%'.
+        dialogs_not_found: Impossible de trouver les pages d'aide de l'application.
+        entities_not_found: Impossible de trouver les pages d'aide du catalogue.
 http_error:
     description: Il y a eu une erreur inconnue (%status_code% - %status_text%) qui a empêché l'aboutissement de votre requête.
     suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur la <a href="%url%">page d'accueil</a>.

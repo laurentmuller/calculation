@@ -53,10 +53,9 @@ class HelpController extends AbstractController
     #[Get(path: '/dialog/{id}', name: 'dialog')]
     public function dialog(string $id): Response
     {
-        /** @psalm-var HelpDialogType|null $dialog */
         $dialog = $this->service->findDialog($id);
         if (null === $dialog) {
-            throw $this->createNotFoundException("Unable to find the resource for the dialog '$id'.");
+            throw $this->createTranslateNotFoundException('help.errors.page_not_found', ['%id%' => $id]);
         }
         $entity = $this->service->findEntity($dialog);
 
@@ -77,7 +76,7 @@ class HelpController extends AbstractController
     {
         $dialogs = $this->service->getDialogs();
         if ([] === $dialogs) {
-            throw $this->createNotFoundException('Unable to find dialogs.');
+            throw $this->createTranslateNotFoundException('help.errors.dialogs_not_found');
         }
 
         $this->service->sortByName($dialogs);
@@ -128,7 +127,7 @@ class HelpController extends AbstractController
     {
         $entities = $this->service->getEntities();
         if ([] === $entities) {
-            throw $this->createNotFoundException('Unable to find entities.');
+            throw $this->createTranslateNotFoundException('help.errors.entities_not_found');
         }
 
         $this->service->sortByName($entities);
@@ -148,7 +147,7 @@ class HelpController extends AbstractController
     {
         $entity = $this->service->findEntity($id);
         if (null === $entity) {
-            throw $this->createNotFoundException("Unable to find the resource for the entity '$id'.");
+            throw $this->createTranslateNotFoundException('help.errors.page_not_found', ['%id%' => $id]);
         }
 
         return $this->render('help/help_entity.html.twig', [

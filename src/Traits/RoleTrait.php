@@ -13,13 +13,12 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Interfaces\RoleInterface;
-use App\Utils\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Trait for class implementing the <code>RoleInterface</code> interface.
+ * Trait for class implementing <code>RoleInterface</code>.
  *
  * @psalm-require-implements RoleInterface
  */
@@ -29,6 +28,8 @@ trait RoleTrait
 
     /**
      * The role name.
+     *
+     * @psalm-var (RoleInterface::ROLE_*|null)
      */
     #[Assert\Length(max: 25)]
     #[Assert\Choice([RoleInterface::ROLE_USER, RoleInterface::ROLE_ADMIN, RoleInterface::ROLE_SUPER_ADMIN])]
@@ -40,7 +41,7 @@ trait RoleTrait
      *
      * @see RoleInterface
      *
-     * @pslam-return RoleInterface::ROLE_*
+     * @psalm-return RoleInterface::ROLE_*
      */
     public function getRole(): string
     {
@@ -52,7 +53,7 @@ trait RoleTrait
      *
      * @see UserInterface
      *
-     * @pslam-return RoleInterface::ROLE_*[]
+     * @psalm-return RoleInterface::ROLE_*[]
      */
     public function getRoles(): array
     {
@@ -66,7 +67,7 @@ trait RoleTrait
      */
     public function hasRole(string $role): bool
     {
-        return StringUtils::equalIgnoreCase($role, $this->getRole());
+        return $role === $this->getRole();
     }
 
     /**
@@ -92,12 +93,7 @@ trait RoleTrait
      */
     public function setRole(?string $role): static
     {
-        // null or default?
-        if (null === $role || StringUtils::equalIgnoreCase(RoleInterface::ROLE_USER, $role)) {
-            $this->role = null;
-        } else {
-            $this->role = \strtoupper($role);
-        }
+        $this->role = RoleInterface::ROLE_USER === $role ? null : $role;
 
         return $this;
     }

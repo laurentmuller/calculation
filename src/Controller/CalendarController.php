@@ -380,7 +380,7 @@ class CalendarController extends AbstractController
     {
         $month = (int) ($month ?? \date('n'));
         if ($month < 1 || $month > 12) {
-            throw $this->createNotFoundException($this->trans('calendar.invalid_month'));
+            throw $this->createTranslateNotFoundException('calendar.invalid_month');
         }
 
         return $month;
@@ -399,7 +399,7 @@ class CalendarController extends AbstractController
     {
         $week = (int) ($week ?? \date('W'));
         if ($week < 1 || $week > 53) {
-            throw $this->createNotFoundException($this->trans('calendar.invalid_week'));
+            throw $this->createTranslateNotFoundException('calendar.invalid_week');
         }
 
         return $week;

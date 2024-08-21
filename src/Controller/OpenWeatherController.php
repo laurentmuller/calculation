@@ -306,7 +306,6 @@ class OpenWeatherController extends AbstractController
             $units = $data[self::KEY_UNITS];
             $limit = $data[self::KEY_LIMIT];
             $count = $data[self::KEY_COUNT];
-            /** @psalm-var array<int, OpenWeatherCityType> $cities */
             $cities = $service->search($query, $limit);
             if ([] !== $cities) {
                 // save

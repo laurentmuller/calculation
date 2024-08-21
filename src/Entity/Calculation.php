@@ -684,7 +684,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * Remove the duplicate items.
      *
      * All empty groups after deletion of the items are also removed.
-     * The total of this calculation must be updated after this return call.
+     * The total of these calculations must be updated after this return call.
      *
      * @return int the number of items removed
      */
@@ -711,7 +711,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * Remove the empty items.
      *
      * All empty groups after deletion of the items are also removed.
-     * The total of this calculation must be updated after this return call.
+     * The total of these calculations must be updated after this return call.
      *
      * @return int the number of items removed
      */

@@ -107,7 +107,7 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
      * @param string $name  the name to search for
      * @param int    $limit the maximum number of rows to return
      *
-     * @pslam-return array<int, OpenWeatherCityType>
+     * @psalm-return array<int, OpenWeatherCityType>
      */
     public function findCity(string $name, int $limit = 25): array
     {
@@ -116,6 +116,7 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
             return $this->findCityCountry($values[0], $values[1], $limit);
         }
 
+        /** @psalm-var array<int, OpenWeatherCityType> */
         return $this->search(self::SEARCH_CITY, $name, $limit);
     }
 
@@ -126,7 +127,7 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
      * @param string $country the country to search for
      * @param int    $limit   the maximum number of rows to return
      *
-     * @pslam-return array<int, OpenWeatherCityType>
+     * @psalm-return array<int, OpenWeatherCityType>
      */
     public function findCityCountry(string $city, string $country, int $limit = 25): array
     {
@@ -138,6 +139,7 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
         $stmt->bindValue(':country', $country);
         $stmt->bindValue(':limit', $limit, \SQLITE3_INTEGER);
 
+        /** @psalm-var array<int, OpenWeatherCityType> */
         return $this->executeAndFetch($stmt);
     }
 

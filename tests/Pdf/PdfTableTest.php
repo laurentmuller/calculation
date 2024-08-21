@@ -402,6 +402,15 @@ class PdfTableTest extends TestCase
         self::assertSame(1, $table->getColumnsCount());
     }
 
+    public function testStartHeaderRowAlreadyStarted(): void
+    {
+        $this->expectException(PdfException::class);
+        $this->expectExceptionMessage('Row already started.');
+        $this->createTable()
+            ->startHeaderRow()
+            ->startHeaderRow();
+    }
+
     public function testStartRowAlreadyStarted(): void
     {
         $this->expectException(PdfException::class);

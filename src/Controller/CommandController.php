@@ -118,7 +118,7 @@ class CommandController extends AbstractController
         CommandDataService $dataService,
     ): Response {
         if (!$service->hasCommand($name)) {
-            throw $this->createNotFoundException($this->trans('command.list.error', ['%name%' => $name]));
+            throw $this->createTranslateNotFoundException('command.list.error', ['%name%' => $name]);
         }
 
         /** @psalm-var CommandType $command */

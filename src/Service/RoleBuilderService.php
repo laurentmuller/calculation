@@ -91,6 +91,9 @@ class RoleBuilderService
         return $role;
     }
 
+    /**
+     * @psalm-param RoleInterface::ROLE_* $roleName
+     */
     private function getRoleWithAll(string $roleName): Role
     {
         $role = new Role($roleName);

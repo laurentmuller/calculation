@@ -25,6 +25,8 @@ class Role implements \Stringable, RoleInterface
     /**
      * @param string  $role the role
      * @param ?string $name the optional name
+     *
+     * @psalm-param RoleInterface::ROLE_* $role
      */
     public function __construct(string $role, protected ?string $name = null)
     {

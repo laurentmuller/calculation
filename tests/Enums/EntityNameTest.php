@@ -23,6 +23,7 @@ use App\Entity\Product;
 use App\Entity\Task;
 use App\Entity\User;
 use App\Enums\EntityName;
+use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -96,7 +97,7 @@ class EntityNameTest extends TestCase
         yield [null, null];
         yield [1456, null];
         yield ['fake', null];
-        yield [new Role(''), null];
+        yield [new Role(RoleInterface::ROLE_USER), null];
         yield ['Calculation', EntityName::CALCULATION];
         yield ['\Calculation', EntityName::CALCULATION];
         yield ['\Fake\Calculation', EntityName::CALCULATION];

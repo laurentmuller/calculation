@@ -252,7 +252,7 @@ class CalculationService implements ServiceSubscriberInterface
     }
 
     /**
-     * Update the total of the given calculation.
+     * Update the calculation's total.
      *
      * @param Calculation $calculation the calculation to update
      *
@@ -494,7 +494,7 @@ class CalculationService implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets the total amount of the groups.
+     * Gets the groups total amount.
      */
     private function getGroupsAmount(array $groups): float
     {
@@ -507,7 +507,7 @@ class CalculationService implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets the total margin amount of the groups.
+     * Gets the groups total margin amount.
      */
     private function getGroupsMargin(array $groups): float
     {

@@ -132,7 +132,7 @@ class HelpService
      *
      * @return array|null the dialog, if found; null otherwise
      *
-     * @pslam-return HelpDialogType|null
+     * @psalm-return HelpDialogType|null
      *
      * @throws InvalidArgumentException
      */
@@ -150,7 +150,7 @@ class HelpService
      *
      * @psalm-param string|HelpDialogType|null $id
      *
-     * @pslam-return HelpEntityType|null
+     * @psalm-return HelpEntityType|null
      *
      * @throws InvalidArgumentException
      */
@@ -355,7 +355,7 @@ class HelpService
     }
 
     /**
-     * @pslam-return HelpContentType
+     * @psalm-return HelpContentType
      */
     private function loadHelp(): array
     {

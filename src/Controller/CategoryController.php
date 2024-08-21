@@ -144,8 +144,7 @@ class CategoryController extends AbstractEntityController
     {
         $entities = $this->getEntities('code');
         if ([] === $entities) {
-            $message = $this->trans('category.list.empty');
-            throw $this->createNotFoundException($message);
+            throw $this->createTranslateNotFoundException('category.list.empty');
         }
         $doc = new CategoriesDocument($this, $entities);
 
@@ -176,8 +175,7 @@ class CategoryController extends AbstractEntityController
     {
         $entities = $this->getEntities('code');
         if ([] === $entities) {
-            $message = $this->trans('category.list.empty');
-            throw $this->createNotFoundException($message);
+            throw $this->createTranslateNotFoundException('category.list.empty');
         }
         $doc = new CategoriesReport($this, $entities);
 

@@ -20,15 +20,15 @@ class RoleTest extends TestCase
 {
     public function testGetName(): void
     {
-        $role = new Role('My Role');
-        self::assertSame('My Role', $role->getName());
-        $role = new Role('My Role', 'My Name');
+        $role = new Role(RoleInterface::ROLE_USER);
+        self::assertSame(RoleInterface::ROLE_USER, $role->getName());
+        $role = new Role(RoleInterface::ROLE_ADMIN, 'My Name');
         self::assertSame('My Name', $role->getName());
     }
 
     public function testGetRole(): void
     {
-        $role = new Role('My Role');
+        $role = new Role(RoleInterface::ROLE_ADMIN);
         $role->setRole(null);
         self::assertSame(RoleInterface::ROLE_USER, $role->getRole());
     }
@@ -83,24 +83,21 @@ class RoleTest extends TestCase
 
     public function testSetName(): void
     {
-        $role = new Role('My Role');
-        self::assertSame('My Role', $role->getName());
+        $role = new Role(RoleInterface::ROLE_ADMIN);
         $role->setName('My Name');
         self::assertSame('My Name', $role->getName());
     }
 
     public function testSetRole(): void
     {
-        $role = new Role('My Role');
+        $role = new Role(RoleInterface::ROLE_USER);
         $role->setRole(RoleInterface::ROLE_SUPER_ADMIN);
         self::assertTrue($role->isSuperAdmin());
     }
 
     public function testToString(): void
     {
-        $role = new Role('');
-        self::assertSame('', $role->__toString());
-        $role = new Role('My Role');
-        self::assertSame('My Role', $role->__toString());
+        $role = new Role(RoleInterface::ROLE_USER);
+        self::assertSame(RoleInterface::ROLE_USER, (string) $role);
     }
 }

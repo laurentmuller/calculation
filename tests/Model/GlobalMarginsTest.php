@@ -86,19 +86,6 @@ class GlobalMarginsTest extends TestCase
     /**
      * @throws \ReflectionException
      */
-    public function testSetMargins(): void
-    {
-        $margins = new GlobalMargins();
-        self::assertCount(0, $margins);
-        $margins->setMargins([$this->createMargin()]);
-        self::assertCount(1, $margins);
-        $margins->setMargins([]);
-        self::assertCount(0, $margins);
-    }
-
-    /**
-     * @throws \ReflectionException
-     */
     private function createMargin(): GlobalMargin
     {
         $margin = new GlobalMargin();

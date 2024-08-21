@@ -116,7 +116,6 @@ class SchemaService
      */
     public function getTables(bool $updateRecords = true): array
     {
-        /** @psalm-var array<string, SchemaTableType> $tables */
         $tables = $this->cache->get('tables', fn (): array => $this->loadTables());
         if (!$updateRecords) {
             return $tables;
@@ -204,7 +203,7 @@ class SchemaService
     }
 
     /**
-     * @pslam-return SchemaTableType
+     * @psalm-return SchemaTableType
      *
      * @throws InvalidArgumentException
      */
@@ -240,7 +239,7 @@ class SchemaService
     }
 
     /**
-     * @pslam-return array<SchemaAssociationType>
+     * @psalm-return array<SchemaAssociationType>
      *
      * @throws InvalidArgumentException
      */
@@ -272,7 +271,7 @@ class SchemaService
     }
 
     /**
-     * @pslam-return array<SchemaColumnType>
+     * @psalm-return array<SchemaColumnType>
      *
      * @throws InvalidArgumentException
      */
@@ -339,7 +338,7 @@ class SchemaService
     }
 
     /**
-     * @pslam-return array<SchemaIndexType>
+     * @psalm-return array<SchemaIndexType>
      */
     private function getIndexes(Table $table): array
     {
@@ -462,25 +461,25 @@ class SchemaService
     }
 
     /**
-     * @pslam-return array<string, SchemaTableType>
+     * @psalm-return array<string, SchemaTableType>
      *
      * @throws \Doctrine\DBAL\Exception
      * @throws InvalidArgumentException
      */
     private function loadTables(): array
     {
-        $result = \array_reduce(
+        $tables = \array_reduce(
             $this->getSchemaManager()->listTables(),
+            /** @psalm-param array<string, SchemaTableType> $carry  */
             fn (
                 array $carry,
                 Table $table
             ): array => $carry + [$this->mapTableName($table) => $this->createSchemaTable($table)],
             []
         );
-        \ksort($result);
+        \ksort($tables);
 
-        /** @psalm-var array<string, SchemaTableType> */
-        return $result;
+        return $tables;
     }
 
     /**

@@ -178,10 +178,6 @@ class Group extends AbstractCodeEntity
      */
     public function findMargin(float $amount): ?GroupMargin
     {
-        if ($this->margins->isEmpty()) {
-            return null;
-        }
-
         /** @psalm-var GroupMargin|null */
         return $this->margins->findFirst(
             fn (int $key, GroupMargin $margin): bool => $margin->contains($amount)

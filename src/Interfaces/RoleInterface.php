@@ -35,7 +35,7 @@ interface RoleInterface
     /**
      * Gets the role.
      *
-     * @pslam-return RoleInterface::ROLE_*
+     * @psalm-return RoleInterface::ROLE_*
      */
     public function getRole(): string;
 
@@ -44,7 +44,7 @@ interface RoleInterface
      *
      * @return string[]
      *
-     * @pslam-return RoleInterface::ROLE_*[]
+     * @psalm-return RoleInterface::ROLE_*[]
      */
     public function getRoles(): array;
 

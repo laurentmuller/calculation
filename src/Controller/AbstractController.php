@@ -43,6 +43,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -246,6 +247,27 @@ abstract class AbstractController extends BaseController
     }
 
     /**
+     * Returns a translated NotFoundHttpException.
+     *
+     * This will result in a 404 response code.
+     *
+     * @param string|\Stringable|TranslatableInterface $id         the message identifier
+     *                                                             (may also be an object that can be cast to string)
+     * @param array                                    $parameters an array of parameters for the message
+     * @param ?string                                  $domain     the domain or null to use the default
+     * @param ?\Throwable                              $previous   the previous throwable used for
+     *                                                             the exception chaining
+     */
+    protected function createTranslateNotFoundException(
+        string|\Stringable|TranslatableInterface $id,
+        array $parameters = [],
+        ?\Throwable $previous = null,
+        ?string $domain = null,
+    ): NotFoundHttpException {
+        return $this->createNotFoundException($this->trans($id, $parameters, $domain), $previous);
+    }
+
+    /**
      * {inheritDoc}.
      */
     protected function denyAccessUnlessGranted(
@@ -362,7 +384,7 @@ abstract class AbstractController extends BaseController
     protected function renderPdfDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
     {
         if ($doc instanceof AbstractReport && !$doc->render()) {
-            throw $this->createNotFoundException($this->trans('errors.render_document'));
+            throw $this->createTranslateNotFoundException('errors.render_document');
         }
         if (!StringUtils::isString($name) && StringUtils::isString($doc->getTitle())) {
             $name = $doc->getTitle();
@@ -389,7 +411,7 @@ abstract class AbstractController extends BaseController
         string $name = ''
     ): SpreadsheetResponse {
         if ($doc instanceof AbstractDocument && !$doc->render()) {
-            throw $this->createNotFoundException($this->trans('errors.render_document'));
+            throw $this->createTranslateNotFoundException('errors.render_document');
         }
         if (!StringUtils::isString($name) && StringUtils::isString($doc->getTitle())) {
             /** @psalm-var string $name */
@@ -414,7 +436,7 @@ abstract class AbstractController extends BaseController
     protected function renderWordDocument(WordDocument $doc, bool $inline = true, string $name = ''): WordResponse
     {
         if ($doc instanceof AbstractWordDocument && !$doc->render()) {
-            throw $this->createNotFoundException($this->trans('errors.render_document'));
+            throw $this->createTranslateNotFoundException('errors.render_document');
         }
         if (!StringUtils::isString($name) && StringUtils::isString($doc->getTitle())) {
             /** @psalm-var string $name */

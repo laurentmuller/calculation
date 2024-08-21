@@ -32,12 +32,13 @@ readonly class RoleHierarchyService
      *
      * @return string[] an array, maybe empty, of reachable role names
      *
-     * @pslam-return RoleInterface::ROLE_*[]
+     * @psalm-return RoleInterface::ROLE_*[]
      */
     public function getReachableRoleNames(mixed $data): array
     {
         $roles = $this->getRoleNames($data);
 
+        /** @psalm-var RoleInterface::ROLE_*[] */
         return [] === $roles ? $roles : $this->service->getReachableRoleNames($roles);
     }
 
@@ -46,11 +47,12 @@ readonly class RoleHierarchyService
      *
      * @return string[] an array, maybe empty, of role names
      *
-     * @pslam-return RoleInterface::ROLE_*[]
+     * @psalm-return RoleInterface::ROLE_*[]
      */
     public function getRoleNames(mixed $data): array
     {
         if ($data instanceof UserInterface) {
+            /** @psalm-var RoleInterface::ROLE_*[] */
             return $data->getRoles();
         }
         if ($data instanceof RoleInterface) {

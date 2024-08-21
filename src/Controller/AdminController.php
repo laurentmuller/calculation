@@ -171,6 +171,7 @@ class AdminController extends AbstractController
 
     /**
      * @psalm-param int[] $rights
+     * @psalm-param RoleInterface::ROLE_* $roleName
      */
     private function createRole(string $roleName, array $rights): Role
     {
@@ -184,6 +185,8 @@ class AdminController extends AbstractController
      * Edit rights for the given role name.
      *
      * @param int[] $rights
+     *
+     * @psalm-param RoleInterface::ROLE_* $roleName
      */
     private function editRights(
         Request $request,

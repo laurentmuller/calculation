@@ -104,7 +104,7 @@ class ResetPasswordController extends AbstractController
         }
         $token = $this->getTokenFromSession();
         if (null === $token) {
-            throw $this->createNotFoundException($this->trans('reset_not_found_password_token', [], 'security'));
+            throw $this->createTranslateNotFoundException('reset_not_found_password_token', domain: 'security');
         }
 
         try {

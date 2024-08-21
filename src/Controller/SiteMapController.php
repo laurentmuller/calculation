@@ -70,7 +70,7 @@ class SiteMapController extends AbstractController
     }
 
     /**
-     * @psalm-return string[]
+     * @return string[]
      */
     private function loadRoutes(array $values): array
     {

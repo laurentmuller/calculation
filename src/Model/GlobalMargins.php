@@ -53,7 +53,7 @@ class GlobalMargins implements \Countable
 
     public function count(): int
     {
-        return \count($this->margins);
+        return $this->margins->count();
     }
 
     /**
@@ -72,16 +72,6 @@ class GlobalMargins implements \Countable
     public function removeMargin(GlobalMargin $margin): self
     {
         $this->margins->removeElement($margin);
-
-        return $this;
-    }
-
-    /**
-     * @param GlobalMargin[] $margins
-     */
-    public function setMargins(array $margins): self
-    {
-        $this->margins = new ArrayCollection($margins);
 
         return $this;
     }

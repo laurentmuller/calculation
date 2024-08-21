@@ -90,8 +90,7 @@ class GlobalMarginController extends AbstractEntityController
     {
         $entities = $this->getEntities('minimum');
         if ([] === $entities) {
-            $message = $this->trans('globalmargin.list.empty');
-            throw $this->createNotFoundException($message);
+            throw $this->createTranslateNotFoundException('globalmargin.list.empty');
         }
         $doc = new GlobalMarginsDocument($this, $entities);
 
@@ -122,8 +121,7 @@ class GlobalMarginController extends AbstractEntityController
     {
         $entities = $this->getEntities('minimum');
         if ([] === $entities) {
-            $message = $this->trans('globalmargin.list.empty');
-            throw $this->createNotFoundException($message);
+            throw $this->createTranslateNotFoundException('globalmargin.list.empty');
         }
         $report = new GlobalMarginsReport($this, $entities);
 

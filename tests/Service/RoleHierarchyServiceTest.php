@@ -54,7 +54,7 @@ class RoleHierarchyServiceTest extends TestCase
      */
     public function testGetRoleNamesWithRole(): void
     {
-        $role = new Role('Fake');
+        $role = new Role(RoleInterface::ROLE_USER);
         $role->setRole(RoleInterface::ROLE_ADMIN);
         $hierarchy = $this->createMock(RoleHierarchyInterface::class);
         $service = new RoleHierarchyService($hierarchy);

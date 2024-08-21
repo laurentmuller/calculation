@@ -66,7 +66,7 @@ class AjaxCalculationController extends AbstractController
     }
 
     /**
-     * Update the total of a calculation.
+     * Update the calculation's total.
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */

@@ -249,11 +249,13 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * @param int          $mode controls how the next row will be returned to the caller. This value
      *                           must be one of either SQLITE3_ASSOC (default), SQLITE3_NUM, or SQLITE3_BOTH.
      *
-     * @pslam-template T of array<string, mixed>
+     * @psalm-template T of array<string, mixed>
      *
      * @psalm-param int<1,3> $mode
      *
-     * @pslam-return array<int, T>
+     * @psalm-return array<int, T>
+     *
+     * @phpstan-ignore method.templateTypeNotInParameter
      */
     protected function executeAndFetch(\SQLite3Stmt $stmt, int $mode = \SQLITE3_ASSOC): array
     {
@@ -268,6 +270,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
         }
         $result->finalize();
 
+        /** @psalm-var array<int, T> */
         return $rows;
     }
 
@@ -324,11 +327,13 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * @param int    $mode  controls how the next row will be returned to the caller. This value
      *                      must be one of either SQLITE3_ASSOC (default), SQLITE3_NUM, or SQLITE3_BOTH.
      *
-     * @pslam-template T of array<string, mixed>
+     * @psalm-template T of array<string, mixed>
      *
      * @psalm-param int<1,3> $mode $mode
      *
-     * @pslam-return array<int, T>
+     * @psalm-return array<int, T>
+     *
+     * @phpstan-ignore method.templateTypeNotInParameter
      */
     protected function search(string $query, string $value, int $limit, int $mode = \SQLITE3_ASSOC): array
     {

@@ -133,7 +133,7 @@ class CalculationItem extends AbstractEntity implements ComparableInterface, Par
     }
 
     /**
-     * Gets the total of this item.
+     * Gets the total.
      *
      * This is the quantity multiplied by the price.
      */

@@ -110,8 +110,9 @@ class FormHelper
 
     /**
      * @param FormBuilderInterface $builder     the parent builder
-     * @param ?string              $labelPrefix the label prefix. If the prefix is not null, the label is added
-     *                                          automatically when the field property is set.
+     * @param ?string              $labelPrefix the label prefix.
+     *                                          If the prefix is not null, the label is added automatically
+     *                                          when the field property is set.
      */
     public function __construct(private readonly FormBuilderInterface $builder, ?string $labelPrefix = null)
     {

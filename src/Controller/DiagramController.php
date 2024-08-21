@@ -49,7 +49,7 @@ class DiagramController extends AbstractController
     {
         $file = $this->getFile($name);
         if (null === $file) {
-            throw $this->createNotFoundException($this->transNotFound($name));
+            throw $this->createTranslateNotFoundException('diagram.error_not_found', ['%name%' => $name]);
         }
 
         return $this->render('test/diagram.html.twig', [
@@ -68,7 +68,7 @@ class DiagramController extends AbstractController
     {
         $file = $this->getFile($name);
         if (null === $file) {
-            return $this->jsonFalse(['message' => $this->transNotFound($name)]);
+            return $this->jsonFalse(['message' => $this->trans('diagram.error_not_found', ['%name%' => $name])]);
         }
 
         return $this->jsonTrue(['file' => $file]);
@@ -90,10 +90,5 @@ class DiagramController extends AbstractController
     private function getFiles(): array
     {
         return \array_column($this->service->getFiles(), 'title', 'name');
-    }
-
-    private function transNotFound(string $name): string
-    {
-        return $this->trans('diagram.error_not_found', ['%name%' => $name]);
     }
 }

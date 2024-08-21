@@ -51,7 +51,7 @@ class OpenWeatherSearchService
      * @param string $name  the name of the city to search for
      * @param int    $limit the maximum number of cities to return
      *
-     * @pslam-return array<int, OpenWeatherCityType>
+     * @psalm-return array<int, OpenWeatherCityType>
      *
      * @throws InvalidArgumentException
      */
@@ -63,7 +63,7 @@ class OpenWeatherSearchService
     }
 
     /**
-     * @pslam-return array<int, OpenWeatherCityType>
+     * @psalm-return array<int, OpenWeatherCityType>
      */
     private function doSearch(string $name, int $limit): array
     {
@@ -72,7 +72,6 @@ class OpenWeatherSearchService
         try {
             $db = new OpenWeatherDatabase($this->databaseName, true);
 
-            /** @psalm-var array<int, OpenWeatherCityType> $results */
             $results = $db->findCity($name, $limit);
             if ([] === $results) {
                 return [];
@@ -80,6 +79,7 @@ class OpenWeatherSearchService
 
             $this->formatter->update($results);
 
+            /** @psalm-var array<int, OpenWeatherCityType> */
             return $results;
         } finally {
             $db?->close();

@@ -35,7 +35,7 @@ class PivotSemesterField extends PivotDateField
     /**
      * Gets the callback used to format a semestre.
      *
-     * @pslam-return callable(int): string|null
+     * @psalm-return callable(int): string|null
      */
     public function getFormatter(): ?callable
     {

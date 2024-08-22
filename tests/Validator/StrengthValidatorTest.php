@@ -32,29 +32,21 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
 
     private const EMPTY_MESSAGE = 'empty';
 
-    /**
-     * @psalm-return \Generator<int, array{0: int}, mixed, void>
-     */
     public static function getStrengthInvalids(): \Generator
     {
         yield [-2];
         yield [5];
     }
 
-    /**
-     * @psalm-return \Generator<int, array{0: StrengthLevel}, mixed, void>
-     */
     public static function getStrengthLevels(): \Generator
     {
         $levels = StrengthLevel::cases();
         foreach ($levels as $level) {
             yield [$level];
+            yield [$level->value];
         }
     }
 
-    /**
-     * @psalm-return \Generator<int, array{0: string, 1:int, 2: bool}, mixed, void>
-     */
     public static function getStrengths(): \Generator
     {
         for ($i = -1; $i < 5; ++$i) {
@@ -63,7 +55,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
     }
 
     #[DataProvider('getStrengthLevels')]
-    public function testEmptyIsValid(StrengthLevel $level): void
+    public function testEmptyIsValid(StrengthLevel|int $level): void
     {
         $constraint = new Strength($level);
         $this->validator->validate('', $constraint);
@@ -83,11 +75,10 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
         $this->setObject($object);
         self::expectException(ConstraintDefinitionException::class);
         $this->validator->validate($object->password, $constraint);
-        self::fail('No such property exception must be raised.');
     }
 
     #[DataProvider('getStrengthLevels')]
-    public function testNullIsValid(StrengthLevel $level): void
+    public function testNullIsValid(StrengthLevel|int $level): void
     {
         $constraint = new Strength($level);
         $this->validator->validate(null, $constraint);

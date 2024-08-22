@@ -44,13 +44,8 @@ class ItemsTable extends ReportGroupTable
 
     public function getGroupStyle(): PdfStyle
     {
-        $style = parent::getGroupStyle();
-        if (!$style instanceof PdfStyle) {
-            $style = PdfStyle::getCellStyle()->setFontBold();
-        }
-        $style->setBorder(PdfBorder::leftRight());
-
-        return $style;
+        return parent::getGroupStyle()
+            ->setBorder(PdfBorder::leftRight());
     }
 
     /**
@@ -59,7 +54,6 @@ class ItemsTable extends ReportGroupTable
     public function output(): void
     {
         $calculation = $this->calculation;
-        $groups = $calculation->getGroups();
         $duplicateItems = $calculation->getDuplicateItems();
 
         $defaultStyle = PdfStyle::getCellStyle()
@@ -71,7 +65,7 @@ class ItemsTable extends ReportGroupTable
 
         $this->createColumns();
         $this->setGroupListener($listener);
-        foreach ($groups as $group) {
+        foreach ($calculation->getGroups() as $group) {
             $this->setGroupKey($group);
             foreach ($group->getCategories() as $category) {
                 $this->setGroupKey($category);

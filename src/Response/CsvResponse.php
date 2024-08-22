@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Response;
 
 /**
- * Represents an HTTP streamed response, within an CSV content.
+ * Represents an HTTP streamed response, within comma-separated values (*.csv) document.
  */
 class CsvResponse extends AbstractStreamedResponse
 {

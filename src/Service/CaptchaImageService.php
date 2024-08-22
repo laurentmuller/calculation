@@ -38,6 +38,11 @@ class CaptchaImageService implements ServiceSubscriberInterface
     use SessionAwareTrait;
 
     /**
+     * The default validation timeout in seconds (180 seconds = 3 minutes).
+     */
+    public const DEFAULT_TIME_OUT = 180;
+
+    /**
      * The allowed characters.
      */
     private const ALLOWED_VALUES = 'abcdefghjklmnpqrstuvwxyz23456789';
@@ -67,10 +72,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
      */
     private const KEY_TIME = 'captcha_time';
 
-    /**
-     * The maximum validation timeout in seconds (3 minutes).
-     */
-    private const MAX_TIME_OUT = 180;
+    private int $timeout = self::DEFAULT_TIME_OUT;
 
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/fonts/captcha.ttf')]
@@ -95,7 +97,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * Generate a captcha image and save values to the session.
      *
-     * @param bool $force  true to recreate an image, false to take the previous created image (if any)
+     * @param bool $force  true to recreate an image, false to take previous created image (if any)
      * @param int  $length the number of characters to output
      * @param int  $width  the image width
      * @param int  $height the image height
@@ -132,6 +134,28 @@ class CaptchaImageService implements ServiceSubscriberInterface
     }
 
     /**
+     * Gets validation timeout in seconds.
+     *
+     * The default value is 180 seconds (3 minutes).
+     */
+    public function getTimeout(): int
+    {
+        return $this->timeout;
+    }
+
+    /**
+     * Sets validation timeout in seconds.
+     *
+     * The minimum value allowed is 10 seconds.
+     */
+    public function setTimeout(int $timeout): self
+    {
+        $this->timeout = \max($timeout, 10);
+
+        return $this;
+    }
+
+    /**
      * Validate the timeout.
      */
     public function validateTimeout(): bool
@@ -140,7 +164,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
         $last = $this->getSessionInt(self::KEY_TIME, 0);
         $delta = $actual - $last;
 
-        return $delta <= self::MAX_TIME_OUT;
+        return $delta <= $this->getTimeout();
     }
 
     /**

@@ -10,9 +10,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Utils;
+namespace App\Tests\Reader;
 
-use App\Utils\AbstractReader;
+use App\Reader\AbstractReader;
 use PHPUnit\Framework\TestCase;
 
 class AbstractReaderTest extends TestCase

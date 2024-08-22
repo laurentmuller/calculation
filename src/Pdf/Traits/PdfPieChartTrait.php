@@ -87,10 +87,7 @@ trait PdfPieChartTrait
     {
         $color = $row['color'];
         if (\is_string($color)) {
-            $color = PdfFillColor::create($color);
-        }
-        if (!$color instanceof PdfFillColor) {
-            $color = PdfFillColor::darkGray();
+            $color = PdfFillColor::create($color) ?? PdfFillColor::darkGray();
         }
         $color->apply($this);
     }

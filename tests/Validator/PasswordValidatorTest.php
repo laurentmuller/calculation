@@ -91,9 +91,17 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
+    /**
+     * @param array<string, bool> $options
+     */
     #[DataProvider('getInvalidValues')]
-    public function testInvalid(mixed $value, array $options, string $message, string $code, array $parameters = []): void
-    {
+    public function testInvalid(
+        mixed $value,
+        array $options,
+        string $message,
+        string $code,
+        array $parameters = []
+    ): void {
         $constraint = $this->createPassword($options);
         $this->validator->validate($value, $constraint);
         $this->buildViolation($message)
@@ -111,6 +119,9 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
+    /**
+     * @param array<string, bool> $options
+     */
     #[DataProvider('getValidValues')]
     public function testValid(mixed $value, array $options): void
     {
@@ -124,18 +135,19 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         return new PasswordValidator();
     }
 
+    /**
+     * @param array<string, bool> $options
+     */
     private function createPassword(array $options): Password
     {
-        $options = \array_merge([
-            'all' => false,
-            'case_diff' => false,
-            'email' => false,
-            'letters' => false,
-            'numbers' => false,
-            'compromised' => false,
-            'special_char' => false,
-        ], $options);
-
-        return new Password($options);
+        return new Password(
+            all: $options['all'] ?? false,
+            letters: $options['letters'] ?? false,
+            case_diff: $options['case_diff'] ?? false,
+            numbers: $options['numbers'] ?? false,
+            special_char: $options['special_char'] ?? false,
+            email: $options['email'] ?? false,
+            compromised: $options['compromised'] ?? false,
+        );
     }
 }

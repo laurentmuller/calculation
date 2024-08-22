@@ -47,7 +47,7 @@ class Strength extends Constraint
         StrengthLevel|int $minimum = StrengthLevel::NONE,
         public ?string $userNamePath = null,
         public ?string $emailPath = null,
-        mixed $options = [],
+        ?array $options = null,
         ?array $groups = null,
         mixed $payload = null
     ) {

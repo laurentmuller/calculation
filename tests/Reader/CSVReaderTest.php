@@ -10,9 +10,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Utils;
+namespace App\Tests\Reader;
 
-use App\Utils\CSVReader;
+use App\Reader\CSVReader;
 use PHPUnit\Framework\TestCase;
 
 class CSVReaderTest extends TestCase

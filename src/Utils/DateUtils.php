@@ -164,15 +164,19 @@ final class DateUtils
 
     /**
      * Gets the localized short week day names.
-     * For example, with 'fr' as locale and 'sunday' as first day, return
+     * For example, with 'fr' as locale and 'Sunday' as first day, return
      * <pre>
      * Dim.
      * Lun.
      * Mar.
-     * ...
+     * Mer.
+     * Jeu.
+     * Ven.
+     * Sam.
+     * Dim.
      * </pre>.
      *
-     * @param string $firstDay The first day of the week, in English, like 'sunday' or 'monday'
+     * @param string $firstDay The first day of the week, in English, like 'Sunday' or 'Monday'
      *
      * @return array<int, string>
      */
@@ -207,7 +211,7 @@ final class DateUtils
      * ...
      * </pre>.
      *
-     * @param string $firstDay the first day of the week, in English, like 'sunday' or 'monday'
+     * @param string $firstDay the first day of the week, in English, like 'Sunday' or 'Monday'
      *
      * @return array<int, string>
      */
@@ -246,7 +250,7 @@ final class DateUtils
      * Returns a new date with the given interval subtracted.
      *
      * @param \DateTimeInterface   $date     the date
-     * @param \DateInterval|string $interval the interval to subtract
+     * @param \DateInterval|string $interval the date interval to subtract
      *
      * @return \DateTimeInterface the new date
      *

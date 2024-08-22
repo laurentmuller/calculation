@@ -18,15 +18,39 @@ use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+/**
+ * @psalm-import-type CalculationByMonthType from \App\Repository\CalculationRepository
+ */
 class CalculationByMonthReportTest extends TestCase
 {
     /**
      * @throws Exception
      */
+    public function testNewPage(): void
+    {
+        $entities = [];
+        for ($i = 0; $i <= 15; ++$i) {
+            $entities[] = [
+                'count' => 5,
+                'items' => 15.0,
+                'total' => 35.0,
+                'year' => 2024,
+                'month' => 3,
+                'margin_percent' => 0.15,
+                'margin_amount' => 7.0,
+                'date' => new \DateTime(),
+            ];
+        }
+        $report = $this->createReport($entities);
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $generator = $this->createMock(UrlGeneratorInterface::class);
         $data1 = [
             'count' => 1,
             'items' => 10.0,
@@ -68,8 +92,23 @@ class CalculationByMonthReportTest extends TestCase
             'date' => new \DateTime(),
         ];
         $entities = [$data1, $data2, $data3, $data4];
-        $report = new CalculationByMonthReport($controller, $entities, $generator);
+        $report = $this->createReport($entities);
         $actual = $report->render();
         self::assertTrue($actual);
+    }
+
+    /**
+     * @psalm-param CalculationByMonthType[] $entities
+     *
+     * @throws Exception
+     */
+    private function createReport(array $entities): CalculationByMonthReport
+    {
+        $controller = $this->createMock(AbstractController::class);
+        $controller->method('getMinMargin')
+            ->willReturn(1.1);
+        $generator = $this->createMock(UrlGeneratorInterface::class);
+
+        return new CalculationByMonthReport($controller, $entities, $generator);
     }
 }

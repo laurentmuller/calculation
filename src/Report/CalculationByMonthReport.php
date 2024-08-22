@@ -20,6 +20,7 @@ use App\Pdf\Events\PdfCellBackgroundEvent;
 use App\Pdf\Events\PdfCellTextEvent;
 use App\Pdf\Events\PdfPdfDrawHeadersEvent;
 use App\Pdf\Html\HtmlBootstrapColor;
+use App\Pdf\Html\HtmlColorName;
 use App\Pdf\Interfaces\PdfChartInterface;
 use App\Pdf\Interfaces\PdfColorInterface;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
@@ -71,7 +72,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     private float $minMargin;
 
     /**
-     * @param CalculationByMonthType[] $entities
+     * @psalm-param CalculationByMonthType[] $entities
      *
      * @psalm-suppress PropertyTypeCoercion
      */
@@ -106,8 +107,8 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         }
 
         return match ($event->index) {
-            2 => $this->drawHeaderCell($event, MonthChart::COLOR_AMOUNT->value),
-            3 => $this->drawHeaderCell($event, MonthChart::COLOR_MARGIN->value),
+            2 => $this->drawHeaderCell($event, MonthChart::COLOR_AMOUNT),
+            3 => $this->drawHeaderCell($event, MonthChart::COLOR_MARGIN),
             default => false,
         };
     }
@@ -162,13 +163,8 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             ->outputHeaders();
     }
 
-    private function drawHeaderCell(PdfCellTextEvent $event, string $rgb): bool
+    private function drawHeaderCell(PdfCellTextEvent $event, HtmlColorName $colorName): bool
     {
-        $color = PdfFillColor::create($rgb);
-        if (!$color instanceof PdfFillColor) {
-            return false;
-        }
-
         $text = $event->text;
         $table = $event->table;
         $bounds = $event->bounds;
@@ -176,7 +172,10 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         $textWidth = $parent->getStringWidth($text) + $parent->getCellMargin();
         $offset = ($bounds->width - $textWidth - self::RECT_WIDTH) / 2.0;
 
+        /** @psalm-var PdfFillColor $color */
+        $color = PdfFillColor::create($colorName->value);
         $color->apply($parent);
+
         $parent->rect(
             $bounds->x + $offset,
             $bounds->y + self::RECT_MARGIN,
@@ -278,8 +277,8 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             $h = $this->pageBreakTrigger - $top - 2.0 * self::LINE_HEIGHT;
         }
         $rows = \array_map(fn (array $entity): array => [
-            'label' => $this->getDateCell($entity['date'], false),
             'link' => $this->getURL($entity['date']),
+            'label' => $this->cleanText($this->getDateCell($entity['date'], false)),
             'values' => [
                 ['color' => MonthChart::COLOR_AMOUNT->value, 'value' => $entity['items']],
                 ['color' => MonthChart::COLOR_MARGIN->value, 'value' => $entity['margin_amount']],

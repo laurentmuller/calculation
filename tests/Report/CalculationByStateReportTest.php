@@ -26,6 +26,8 @@ class CalculationByStateReportTest extends TestCase
     public function testRender(): void
     {
         $controller = $this->createMock(AbstractController::class);
+        $controller->method('getMinMargin')
+            ->willReturn(1.1);
         $generator = $this->createMock(UrlGeneratorInterface::class);
         $data1 = [
             'id' => 1,

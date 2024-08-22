@@ -79,7 +79,7 @@ calculation:
         delete_task: Supprimer la tâche
         edit_item: Modifier l'article
         edit_task: Modifier la tâche
-        empty: La calculation ne contient aucun article ou le total est égale à 0.
+        empty: La calculation ne contient aucun article.
         empty_items: Aucun article.
         empty_search: Aucun article ne correspond aux critères de recherche
         error:

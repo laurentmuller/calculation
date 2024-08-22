@@ -37,16 +37,12 @@ class GroupsTable extends ReportTable
      */
     public function output(): void
     {
-        $groups = $this->calculation->getGroups();
-        if ($groups->isEmpty()) {
-            return;
-        }
-
         $this->createColumns();
-        foreach ($groups as $group) {
+        $calculation = $this->calculation;
+        foreach ($calculation->getGroups() as $group) {
             $this->outputGroup($group);
         }
-        $this->outputTotal($this->calculation);
+        $this->outputTotal($calculation);
     }
 
     /**

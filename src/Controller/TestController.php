@@ -284,7 +284,7 @@ class TestController extends AbstractController
     public function password(Request $request, CaptchaImageService $service): Response
     {
         $options = PropertyServiceInterface::PASSWORD_OPTIONS;
-        $passwordConstraint = new Password(['all' => true]);
+        $passwordConstraint = new Password(all: true);
         $strengthConstraint = new Strength(StrengthLevel::MEDIUM);
         $listener = function (PreSubmitEvent $event) use ($options, $passwordConstraint, $strengthConstraint): void {
             /** @psalm-var array $data */

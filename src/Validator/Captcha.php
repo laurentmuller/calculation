@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
+use App\Service\CaptchaImageService;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -31,5 +32,21 @@ class Captcha extends Constraint
 
     public string $invalid_message = 'captcha.invalid';
 
+    public int $timeout = CaptchaImageService::DEFAULT_TIME_OUT;
+
     public string $timeout_message = 'captcha.timeout';
+
+    /**
+     * @param string[] $groups
+     */
+    public function __construct(
+        ?int $timeout = null,
+        ?array $options = null,
+        ?array $groups = null,
+        mixed $payload = null
+    ) {
+        parent::__construct($options, $groups, $payload);
+
+        $this->timeout = $timeout ?? $this->timeout;
+    }
 }

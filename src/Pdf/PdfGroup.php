@@ -27,7 +27,7 @@ class PdfGroup implements PdfDocumentUpdaterInterface
     /**
      * The style.
      */
-    private ?PdfStyle $style;
+    private PdfStyle $style;
 
     /**
      * @param ?mixed           $key       the group key
@@ -44,7 +44,7 @@ class PdfGroup implements PdfDocumentUpdaterInterface
 
     public function apply(PdfDocument $doc): void
     {
-        $this->style?->apply($doc);
+        $this->style->apply($doc);
     }
 
     /**
@@ -80,7 +80,7 @@ class PdfGroup implements PdfDocumentUpdaterInterface
     /**
      * Gets the style.
      */
-    public function getStyle(): ?PdfStyle
+    public function getStyle(): PdfStyle
     {
         return $this->style;
     }
@@ -106,7 +106,7 @@ class PdfGroup implements PdfDocumentUpdaterInterface
     /**
      * Sets the alignment.
      */
-    public function setAlignment(PdfTextAlignment $alignment): self
+    public function setAlignment(PdfTextAlignment $alignment): static
     {
         $this->alignment = $alignment;
 
@@ -116,7 +116,7 @@ class PdfGroup implements PdfDocumentUpdaterInterface
     /**
      * Sets the key.
      */
-    public function setKey(mixed $key): self
+    public function setKey(mixed $key): static
     {
         $this->key = $key;
 
@@ -126,7 +126,7 @@ class PdfGroup implements PdfDocumentUpdaterInterface
     /**
      * Sets the style.
      */
-    public function setStyle(?PdfStyle $style): self
+    public function setStyle(PdfStyle $style): static
     {
         $this->style = $style;
 

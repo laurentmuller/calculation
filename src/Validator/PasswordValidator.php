@@ -43,10 +43,8 @@ class PasswordValidator extends AbstractConstraintValidator
 
     /**
      * Adds a violation.
-     *
-     * @return bool this function return always true
      */
-    private function addViolation(string $message, string $value, array $parameters, string $code): bool
+    private function addViolation(string $message, string $value, string $code, array $parameters = []): true
     {
         $this->context->buildViolation($message)
             ->setParameters($parameters)
@@ -71,15 +69,15 @@ class PasswordValidator extends AbstractConstraintValidator
     }
 
     /**
-     * Check constraints util a violation is added.
+     * Check constraints until a violation is found.
      */
     private function checkAny(string $value, Password $constraint): void
     {
         if (!($this->checkLetters($constraint, $value)
-            || $this->checkCaseDiff($constraint, $value)
-            || $this->checkNumber($constraint, $value)
-            || $this->checkSpecialChar($constraint, $value)
-            || $this->checkEmail($constraint, $value))) {
+        || $this->checkCaseDiff($constraint, $value)
+        || $this->checkNumber($constraint, $value)
+        || $this->checkSpecialChar($constraint, $value)
+        || $this->checkEmail($constraint, $value))) {
             $this->checkCompromised($constraint, $value);
         }
     }
@@ -101,20 +99,20 @@ class PasswordValidator extends AbstractConstraintValidator
     /**
      * Check if the password is compromised.
      */
-    private function checkCompromised(Password $constraint, string $value): bool
+    private function checkCompromised(Password $constraint, string $value): void
     {
         if (!$constraint->compromised) {
-            return false;
+            return;
         }
 
         $count = $this->getPasswordCount($value);
         if (0 === $count) {
-            return false;
+            return;
         }
 
         $parameters = ['{{count}}' => FormatUtils::formatInt($count)];
 
-        return $this->addViolation($constraint->compromised_message, $value, $parameters, Password::COMPROMISED_ERROR);
+        $this->addViolation($constraint->compromised_message, $value, Password::COMPROMISED_ERROR, $parameters);
     }
 
     /**
@@ -123,7 +121,7 @@ class PasswordValidator extends AbstractConstraintValidator
     private function checkEmail(Password $constraint, string $value): bool
     {
         if ($constraint->email && false !== \filter_var($value, \FILTER_VALIDATE_EMAIL)) {
-            return $this->addViolation($constraint->email_message, $value, [], Password::EMAIL_ERROR);
+            return $this->addViolation($constraint->email_message, $value, Password::EMAIL_ERROR);
         }
 
         return false;
@@ -208,7 +206,7 @@ class PasswordValidator extends AbstractConstraintValidator
     private function validateRegex(bool $enabled, string $pattern, string $value, string $message, string $code): bool
     {
         if ($enabled && 1 !== \preg_match($pattern, $value)) {
-            return $this->addViolation($message, $value, [], $code);
+            return $this->addViolation($message, $value, $code);
         }
 
         return false;

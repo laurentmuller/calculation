@@ -14,6 +14,7 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfMemoryImageTrait;
@@ -27,7 +28,6 @@ use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Writer\Result\GdResult;
-use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
 use Psr\Log\LoggerInterface;
@@ -85,9 +85,7 @@ class CalculationReport extends AbstractReport
         $this->renderTitle($calculation);
         $this->addPage();
         if ($calculation->isEmpty()) {
-            $this->renderEmpty();
-
-            return true;
+            return $this->renderEmpty();
         }
 
         ItemsTable::render($this);
@@ -161,17 +159,20 @@ class CalculationReport extends AbstractReport
     /**
      * Render a text when the calculation is empty.
      */
-    private function renderEmpty(): void
+    private function renderEmpty(): true
     {
-        PdfStyle::getHeaderStyle()->apply($this);
+        PdfStyle::getCellStyle()
+            ->setTextColor(PdfTextColor::red())
+            ->apply($this);
         $this->cell(
-            height: self::LINE_HEIGHT * 1.8,
+            height: self::LINE_HEIGHT * 2.0,
             text: $this->trans('calculation.edit.empty'),
             border: PdfBorder::all(),
-            move: PdfMove::NEW_LINE,
             align: PdfTextAlignment::CENTER,
             fill: true
         );
+
+        return true;
     }
 
     /**

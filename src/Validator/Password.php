@@ -33,16 +33,16 @@ class Password extends Constraint
     final public const SPECIAL_CHAR_ERROR = '5c5998ca-d67b-45ed-b210-dda950c8ea09';
 
     protected const ERROR_NAMES = [
-        self::CASE_DIFF_ERROR => 'CASE_DIFF_ERROR',
-        self::EMAIL_ERROR => 'EMAIL_ERROR',
         self::LETTERS_ERROR => 'LETTERS_ERROR',
+        self::CASE_DIFF_ERROR => 'CASE_DIFF_ERROR',
         self::NUMBERS_ERROR => 'NUMBERS_ERROR',
         self::SPECIAL_CHAR_ERROR => 'SPECIAL_CHAR_ERROR',
+        self::EMAIL_ERROR => 'EMAIL_ERROR',
         self::COMPROMISED_ERROR => 'COMPROMISED_ERROR',
     ];
 
     /**
-     * Add all violations or stop of the first violation found.
+     * Test all violations (true) or stop when the first violation is found (false).
      */
     public bool $all = false;
 
@@ -105,4 +105,30 @@ class Password extends Constraint
      * Special char error message.
      */
     public string $special_char_message = 'password.special_char';
+
+    /**
+     * @param string[] $groups
+     */
+    public function __construct(
+        ?bool $all = null,
+        ?bool $letters = null,
+        ?bool $case_diff = null,
+        ?bool $numbers = null,
+        ?bool $special_char = null,
+        ?bool $email = null,
+        ?bool $compromised = null,
+        ?array $options = null,
+        ?array $groups = null,
+        mixed $payload = null
+    ) {
+        parent::__construct($options, $groups, $payload);
+
+        $this->all = $all ?? $this->all;
+        $this->letters = $letters ?? $this->letters;
+        $this->case_diff = $case_diff ?? $this->case_diff;
+        $this->numbers = $numbers ?? $this->numbers;
+        $this->special_char = $special_char ?? $this->special_char;
+        $this->email = $email ?? $this->email;
+        $this->compromised = $compromised ?? $this->compromised;
+    }
 }

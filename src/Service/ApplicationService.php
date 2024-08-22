@@ -297,7 +297,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     }
 
     /**
-     * Create a password contraint with this security properties.
+     * Gets the password contraint.
      *
      * @psalm-api
      */

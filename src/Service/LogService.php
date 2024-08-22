@@ -14,9 +14,9 @@ namespace App\Service;
 
 use App\Entity\Log;
 use App\Model\LogFile;
+use App\Reader\CSVReader;
 use App\Traits\LoggerTrait;
 use App\Traits\TranslatorTrait;
-use App\Utils\CSVReader;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Psr\Cache\InvalidArgumentException;

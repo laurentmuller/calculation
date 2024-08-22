@@ -94,7 +94,7 @@ class PdfGroupTable extends PdfTable
     /**
      * Gets the group style.
      */
-    public function getGroupStyle(): ?PdfStyle
+    public function getGroupStyle(): PdfStyle
     {
         return $this->group->getStyle();
     }
@@ -206,7 +206,7 @@ class PdfGroupTable extends PdfTable
     /**
      * Sets the group style.
      */
-    public function setGroupStyle(?PdfStyle $style): static
+    public function setGroupStyle(PdfStyle $style): static
     {
         $this->group->setStyle($style);
 

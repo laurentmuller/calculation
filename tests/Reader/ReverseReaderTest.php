@@ -10,9 +10,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Utils;
+namespace App\Tests\Reader;
 
-use App\Utils\ReverseReader;
+use App\Reader\ReverseReader;
 use PHPUnit\Framework\TestCase;
 
 class ReverseReaderTest extends TestCase

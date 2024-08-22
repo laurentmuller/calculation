@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Utils;
+namespace App\Reader;
 
 /**
  * Class to read CSV file on the fly.

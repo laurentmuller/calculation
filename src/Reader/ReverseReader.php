@@ -10,19 +10,19 @@
 
 declare(strict_types=1);
 
-namespace App\Utils;
+namespace App\Reader;
 
 /**
  * Class to get the file content on the fly, line by line; in the reverse order (last line first).
  *
  * Example:
  *
- * <pre>
+ * <code>
  * $reader = new ReverseReader("path/to/file_name.txt");
- * foreach ($reader as $data) {
- *     echo $data . "\n";
+ * foreach ($reader as $line) {
+ *     echo $line . "\n";
  * }
- * </pre>
+ * </code>
  *
  * @extends AbstractReader<string>
  */
@@ -60,8 +60,8 @@ class ReverseReader extends AbstractReader
             } else {
                 \fseek($stream, -2, \SEEK_CUR);
             }
-            $read = ($char = \fgetc($stream));
-            if (false === $read) {
+            $char = \fgetc($stream);
+            if (false === $char) {
                 $hasLine = true;
             } elseif (self::LINE_FEED === $char || self::CARRIAGE_RETURN === $char) {
                 if ($started) {

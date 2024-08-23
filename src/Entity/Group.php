@@ -36,7 +36,9 @@ class Group extends AbstractCodeEntity
     /**
      * The children categories.
      *
-     * @var ArrayCollection<int, Category>
+     * @var Collection<int, Category>
+     *
+     * @psalm-var ArrayCollection<int, Category>
      */
     #[ORM\OneToMany(
         targetEntity: Category::class,
@@ -51,7 +53,9 @@ class Group extends AbstractCodeEntity
     /**
      * The children margins.
      *
-     * @var ArrayCollection<int, GroupMargin>
+     * @var Collection<int, GroupMargin>
+     *
+     * @psalm-var ArrayCollection<int, GroupMargin>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(

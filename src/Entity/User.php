@@ -87,7 +87,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     private ?string $password = null;
 
     /**
-     * @var ArrayCollection<int, UserProperty>
+     * @var Collection<int, UserProperty>
      */
     #[ORM\OneToMany(
         targetEntity: UserProperty::class,

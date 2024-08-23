@@ -67,7 +67,9 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The children groupes.
      *
-     * @var ArrayCollection<int, CalculationGroup>
+     * @var Collection<int, CalculationGroup>
+     *
+     * @psalm-var ArrayCollection<int, CalculationGroup>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(

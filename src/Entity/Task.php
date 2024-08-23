@@ -19,7 +19,6 @@ use App\Repository\TaskRepository;
 use App\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ReadableCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -48,7 +47,9 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     /**
      * The children's items.
      *
-     * @var ArrayCollection<int, TaskItem>&ReadableCollection<int, TaskItem>
+     * @var Collection<int, TaskItem>
+     *
+     * @psalm-var ArrayCollection<int, TaskItem>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(
@@ -76,7 +77,9 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     public function __clone()
     {
         parent::__clone();
-        $this->items = $this->items->map(fn (TaskItem $item): TaskItem => (clone $item)->setTask($this));
+        $this->items = $this->items->map(
+            fn (TaskItem $item): TaskItem => (clone $item)->setTask($this)
+        );
     }
 
     /**

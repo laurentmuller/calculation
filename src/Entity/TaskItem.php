@@ -43,7 +43,9 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
     /**
      * The margins.
      *
-     * @var ArrayCollection<int, TaskItemMargin>
+     * @var Collection<int, TaskItemMargin>
+     *
+     * @psalm-var ArrayCollection<int, TaskItemMargin>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(

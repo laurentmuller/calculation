@@ -55,7 +55,9 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     /**
      * The categories.
      *
-     * @var ArrayCollection<int, CalculationCategory>
+     * @var Collection<int, CalculationCategory>
+     *
+     * @psalm-var ArrayCollection<int, CalculationCategory>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(

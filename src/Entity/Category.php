@@ -40,7 +40,7 @@ class Category extends AbstractCodeEntity
     /**
      * The products that belong to this category.
      *
-     * @var ArrayCollection<int, Product>
+     * @var Collection<int, Product>
      */
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'category', fetch: self::EXTRA_LAZY)]
     private Collection $products;
@@ -48,7 +48,7 @@ class Category extends AbstractCodeEntity
     /**
      * The tasks that belong to this category.
      *
-     * @var ArrayCollection<int, Task>
+     * @var Collection<int, Task>
      */
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'category', fetch: self::EXTRA_LAZY)]
     private Collection $tasks;

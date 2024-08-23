@@ -70,7 +70,9 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
     /**
      * The items.
      *
-     * @var ArrayCollection<int, CalculationItem>
+     * @var Collection<int, CalculationItem>
+     *
+     * @psalm-var ArrayCollection<int, CalculationItem>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(

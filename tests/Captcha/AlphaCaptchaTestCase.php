@@ -44,9 +44,7 @@ abstract class AlphaCaptchaTestCase extends TestCase
 
     public function testCheckAnswer(): void
     {
-        $captcha = $this->createCaptcha($this->service);
-        $captcha->setTranslator($this->translator);
-
+        $captcha = $this->createCaptcha($this->service, $this->translator);
         $challenge = $captcha->getChallenge();
         self::assertCount(2, $challenge);
         $actual = $captcha->checkAnswer($challenge[1], $challenge[1]);
@@ -56,5 +54,8 @@ abstract class AlphaCaptchaTestCase extends TestCase
     /**
      * @psalm-return TCaptcha
      */
-    abstract protected function createCaptcha(DictionaryService $service): AbstractAlphaCaptcha;
+    abstract protected function createCaptcha(
+        DictionaryService $service,
+        TranslatorInterface $translator
+    ): AbstractAlphaCaptcha;
 }

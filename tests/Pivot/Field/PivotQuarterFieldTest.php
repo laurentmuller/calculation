@@ -37,8 +37,18 @@ class PivotQuarterFieldTest extends TestCase
     public function testGetDisplayValue(): void
     {
         $field = new PivotQuarterField('name');
+
         $actual = $field->getDisplayValue(1);
         self::assertSame('1st quarter', $actual);
+
+        $actual = $field->getDisplayValue(2);
+        self::assertSame('2nd quarter', $actual);
+
+        $actual = $field->getDisplayValue(3);
+        self::assertSame('3rd quarter', $actual);
+
+        $actual = $field->getDisplayValue(4);
+        self::assertSame('4th quarter', $actual);
 
         $actual = $field->getDisplayValue(5);
         self::assertSame('5', $actual);

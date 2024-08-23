@@ -103,6 +103,8 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
 
     /**
      * Render the given template and create an expression from the content.
+     *
+     * @return ?Expr the expression if the template is rendered; null on error
      */
     protected function createTemplateExpression(string $template, array $context = []): ?Expr
     {

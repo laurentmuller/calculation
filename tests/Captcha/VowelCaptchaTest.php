@@ -14,14 +14,15 @@ namespace App\Tests\Captcha;
 
 use App\Captcha\VowelCaptcha;
 use App\Service\DictionaryService;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @extends AlphaCaptchaTestCase<VowelCaptcha>
  */
 class VowelCaptchaTest extends AlphaCaptchaTestCase
 {
-    protected function createCaptcha(DictionaryService $service): VowelCaptcha
+    protected function createCaptcha(DictionaryService $service, TranslatorInterface $translator): VowelCaptcha
     {
-        return new VowelCaptcha($service);
+        return new VowelCaptcha($service, $translator);
     }
 }

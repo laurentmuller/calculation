@@ -44,11 +44,11 @@ class LetterCaptcha extends AbstractAlphaCaptcha
     protected function getQuestion(string $word, int $letterIndex): string
     {
         $parameters = [
-            '%index%' => $this->transCaptcha(self::INDEX_MAPPING[$letterIndex]),
-            '%letter%' => $this->transCaptcha('letter'),
+            '%index%' => $this->trans(self::INDEX_MAPPING[$letterIndex]),
+            '%letter%' => $this->trans('letter'),
             '%word%' => $word,
         ];
 
-        return $this->transCaptcha('sentence', $parameters);
+        return $this->trans('sentence', $parameters);
     }
 }

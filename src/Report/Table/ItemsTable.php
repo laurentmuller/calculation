@@ -27,7 +27,7 @@ use fpdf\PdfDocument;
 /**
  * Table to render the groups, categories and items of calculation.
  */
-class ItemsTable extends ReportGroupTable
+class ItemsTable extends ReportGroupTable implements PdfGroupListenerInterface
 {
     /**
      * The categories and items indent.
@@ -35,49 +35,29 @@ class ItemsTable extends ReportGroupTable
     private const INDENT = 4;
 
     private readonly Calculation $calculation;
+    private PdfStyle $groupStyle;
+    private PdfStyle $rowStyle;
 
     public function __construct(CalculationReport $parent)
     {
         parent::__construct($parent);
+
         $this->calculation = $parent->getCalculation();
-    }
-
-    public function getGroupStyle(): PdfStyle
-    {
-        return parent::getGroupStyle()
+        $this->groupStyle = parent::getGroupStyle()
+            ->setBorder(PdfBorder::leftRight());
+        $this->rowStyle = PdfStyle::getCellStyle()
             ->setBorder(PdfBorder::leftRight());
     }
 
-    /**
-     * Output groups, categories and items.
-     */
-    public function output(): void
+    public function drawGroup(PdfGroupEvent $event): true
     {
-        $calculation = $this->calculation;
-        $duplicateItems = $calculation->getDuplicateItems();
-
-        $defaultStyle = PdfStyle::getCellStyle()
-            ->setIndent(self::INDENT)
-            ->setBorder(PdfBorder::leftRight());
-        $errorStyle = (clone $defaultStyle)
-            ->setTextColor(PdfTextColor::red());
-        $listener = $this->createListener();
-
-        $this->createColumns();
-        $this->setGroupListener($listener);
-        foreach ($calculation->getGroups() as $group) {
-            $this->setGroupKey($group);
-            foreach ($group->getCategories() as $category) {
-                $this->setGroupKey($category);
-                foreach ($category->getItems() as $item) {
-                    $this->renderItem($item, $duplicateItems, $defaultStyle, $errorStyle);
-                }
-            }
+        /** @psalm-var CalculationGroup|CalculationCategory $key */
+        $key = $event->getGroupKey();
+        if ($key instanceof CalculationGroup) {
+            return $this->renderGroup($key);
         }
-        $this->setInProgress(true);
-        $this->renderTotal($calculation->getItemsTotal());
-        $this->setInProgress(false);
-        $this->getParent()->lineBreak(3);
+
+        return $this->renderCategory($key);
     }
 
     /**
@@ -91,64 +71,28 @@ class ItemsTable extends ReportGroupTable
         return $table;
     }
 
-    public function renderCategory(CalculationCategory $category, PdfStyle $style): true
-    {
-        $this->checkLines(2);
-        $style->setIndent(self::INDENT / 2);
-        $this->startRow($style)
-            ->add($category->getCode())
-            ->completeRow();
-
-        return true;
-    }
-
-    public function renderGroup(CalculationGroup $group, PdfStyle $style): true
-    {
-        $this->checkLines(3);
-        $style->resetIndent();
-        $this->startRow($style)
-            ->add($group->getCode())
-            ->completeRow();
-
-        return true;
-    }
-
     public function startRow(?PdfStyle $style = null): static
     {
-        if (!$style instanceof PdfStyle) {
-            $style = PdfStyle::getCellStyle()
-                ->setBorder(PdfBorder::leftRight());
-        }
-        parent::startRow($style);
+        parent::startRow($style ?? $this->rowStyle);
 
         return $this;
     }
 
-    /**
-     * Adds description with an error style if duplicate.
-     *
-     * @param CalculationItem $item           the item to get description for
-     * @param array           $duplicateItems the duplicate items
-     * @param PdfStyle        $defaultStyle   the style to use if the item is not duplicate
-     * @param PdfStyle        $errorStyle     the style to use when the item is duplicate
-     */
-    private function addDescription(CalculationItem $item, array $duplicateItems, PdfStyle $defaultStyle, PdfStyle $errorStyle): self
-    {
+    private function addDescription(
+        CalculationItem $item,
+        array $duplicateItems,
+        PdfStyle $defaultStyle,
+        PdfStyle $errorStyle
+    ): self {
         $style = \in_array($item, $duplicateItems, true) ? $errorStyle : $defaultStyle;
         $this->add($item->getDescription(), style: $style);
 
         return $this;
     }
 
-    /**
-     * Adds format amount with an error style if the amount is equal to 0.
-     *
-     * @param float     $amount     the amount to output
-     * @param ?PdfStyle $errorStyle the error style to use when the amount is equal to 0
-     */
     private function addStyledAmount(float $amount, ?PdfStyle $errorStyle = null): self
     {
-        return $this->addCellAmount($amount, style: 0.0 === $amount ? $errorStyle : null);
+        return $this->addCellAmount($amount, style: $this->isFloatZero($amount) ? $errorStyle : null);
     }
 
     private function checkLines(int $lines): void
@@ -169,34 +113,65 @@ class ItemsTable extends ReportGroupTable
         )->outputHeaders();
     }
 
-    private function createListener(): PdfGroupListenerInterface
+    private function output(): void
     {
-        return new class($this, $this->getGroupStyle()) implements PdfGroupListenerInterface {
-            public function __construct(private readonly ItemsTable $parent, private readonly PdfStyle $style)
-            {
-            }
+        $calculation = $this->calculation;
+        $duplicateItems = $calculation->getDuplicateItems();
 
-            public function drawGroup(PdfGroupEvent $event): bool
-            {
-                /** @psalm-var mixed $key */
-                $key = $event->getGroupKey();
-                if ($key instanceof CalculationGroup) {
-                    return $this->parent->renderGroup($key, $this->style);
-                }
-                if ($key instanceof CalculationCategory) {
-                    return $this->parent->renderCategory($key, $this->style);
-                }
+        $defaultStyle = PdfStyle::getCellStyle()
+            ->setIndent(self::INDENT)
+            ->setBorder(PdfBorder::leftRight());
+        $errorStyle = (clone $defaultStyle)
+            ->setTextColor(PdfTextColor::red());
 
-                return false;
+        $this->createColumns();
+        $this->setGroupListener($this);
+        foreach ($calculation->getGroups() as $group) {
+            $this->setGroupKey($group);
+            foreach ($group->getCategories() as $category) {
+                $this->setGroupKey($category);
+                foreach ($category->getItems() as $item) {
+                    $this->renderItem($item, $duplicateItems, $defaultStyle, $errorStyle);
+                }
             }
-        };
+        }
+        $this->setInProgress(true);
+        $this->renderTotal($calculation->getItemsTotal());
+        $this->setInProgress(false);
+        $this->getParent()->lineBreak(3);
+    }
+
+    private function renderCategory(CalculationCategory $category): true
+    {
+        $this->checkLines(2);
+        $this->groupStyle->setIndent(self::INDENT / 2);
+        $this->startRow($this->groupStyle)
+            ->add($category->getCode())
+            ->completeRow();
+
+        return true;
+    }
+
+    private function renderGroup(CalculationGroup $group): true
+    {
+        $this->checkLines(3);
+        $this->groupStyle->resetIndent();
+        $this->startRow($this->groupStyle)
+            ->add($group->getCode())
+            ->completeRow();
+
+        return true;
     }
 
     /**
      * @psalm-param CalculationItem[] $duplicateItems
      */
-    private function renderItem(CalculationItem $item, array $duplicateItems, PdfStyle $defaultStyle, PdfStyle $errorStyle): void
-    {
+    private function renderItem(
+        CalculationItem $item,
+        array $duplicateItems,
+        PdfStyle $defaultStyle,
+        PdfStyle $errorStyle
+    ): void {
         $this->startRow()
             ->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle)
             ->add($item->getUnit())
@@ -209,7 +184,7 @@ class ItemsTable extends ReportGroupTable
     private function renderTotal(float $total): void
     {
         $this->startHeaderRow()
-            ->addCellTrans('calculation.fields.itemsTotal', cols: 4)
+            ->addCellTrans('calculation.fields.itemsTotal', 4)
             ->addCellAmount($total)
             ->endRow();
     }

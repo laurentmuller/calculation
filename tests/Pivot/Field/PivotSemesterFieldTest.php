@@ -37,11 +37,15 @@ class PivotSemesterFieldTest extends TestCase
     public function testGetDisplayValue(): void
     {
         $field = new PivotSemesterField('name');
+
         $actual = $field->getDisplayValue(1);
         self::assertSame('1st semester', $actual);
 
-        $actual = $field->getDisplayValue(5);
-        self::assertSame('5', $actual);
+        $actual = $field->getDisplayValue(2);
+        self::assertSame('2nd semester', $actual);
+
+        $actual = $field->getDisplayValue(3);
+        self::assertSame('3', $actual);
     }
 
     public function testGetValue(): void

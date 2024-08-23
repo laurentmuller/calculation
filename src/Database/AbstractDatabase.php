@@ -39,9 +39,10 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     /**
      * Instantiates and opens the database.
      *
-     * @param string $filename       Path to the SQLite database, or <code>:memory:</code> to use the in-memory database.
-     *                               If the filename is an empty string, then a private, temporary on-disk database will be
-     *                               created.
+     * @param string $filename       Path to the SQLite database, or <code>:memory:</code> to use
+     *                               the in-memory database.
+     *                               If the filename is an empty string, then a private, temporary on-disk database
+     *                               will be created.
      *                               This private database will be automatically deleted as soon as the database
      *                               connection is closed.
      * @param bool   $readonly       <code>true</code> open the database for reading only. Notes that if the file name
@@ -52,7 +53,8 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     public function __construct(protected string $filename, bool $readonly = false, string $encryption_key = '')
     {
         // check creation state
-        $create = '' === $filename || self::IN_MEMORY === $filename || !FileUtils::exists($filename) || FileUtils::empty($filename);
+        $create = '' === $filename || self::IN_MEMORY === $filename
+            || !FileUtils::exists($filename) || FileUtils::empty($filename);
 
         if ($create) {
             $flags = \SQLITE3_OPEN_READWRITE | \SQLITE3_OPEN_CREATE;

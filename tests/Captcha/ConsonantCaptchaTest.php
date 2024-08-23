@@ -14,14 +14,29 @@ namespace App\Tests\Captcha;
 
 use App\Captcha\ConsonantCaptcha;
 use App\Service\DictionaryService;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @extends AlphaCaptchaTestCase<ConsonantCaptcha>
  */
 class ConsonantCaptchaTest extends AlphaCaptchaTestCase
 {
-    protected function createCaptcha(DictionaryService $service): ConsonantCaptcha
+    public function testNegativeIndex(): void
     {
-        return new ConsonantCaptcha($service);
+        $captcha = new class($this->service, $this->translator) extends ConsonantCaptcha {
+            protected function getLetterIndex(): int
+            {
+                return -1;
+            }
+        };
+        $challenge = $captcha->getChallenge();
+        self::assertCount(2, $challenge);
+        $actual = $captcha->checkAnswer($challenge[1], $challenge[1]);
+        self::assertTrue($actual);
+    }
+
+    protected function createCaptcha(DictionaryService $service, TranslatorInterface $translator): ConsonantCaptcha
+    {
+        return new ConsonantCaptcha($service, $translator);
     }
 }

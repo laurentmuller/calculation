@@ -17,7 +17,7 @@ use App\Utils\FileUtils;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * The database test.
+ * The database used for tests.
  */
 class Database extends AbstractDatabase
 {
@@ -26,7 +26,7 @@ class Database extends AbstractDatabase
      */
     public static function createDatabase(): self
     {
-        // remove existing file
+        // remove the existing file
         self::deleteDatabase();
 
         // file
@@ -34,6 +34,14 @@ class Database extends AbstractDatabase
 
         // create
         return new self($filename);
+    }
+
+    /**
+     * Make public for tests.
+     */
+    public function createIndex(string $table, string ...$columns): bool
+    {
+        return parent::createIndex($table, ...$columns);
     }
 
     /**
@@ -51,11 +59,43 @@ class Database extends AbstractDatabase
     }
 
     /**
+     * Make public for tests.
+     */
+    public function executeAndFetch(\SQLite3Stmt $stmt, int $mode = \SQLITE3_ASSOC): array
+    {
+        return parent::executeAndFetch($stmt, $mode);
+    }
+
+    /**
      * Gets the database file name.
      */
     public static function getDatabaseFilename(): string
     {
         return __DIR__ . '/db_test.sqlite';
+    }
+
+    /**
+     * Make public for tests.
+     */
+    public function getStatement(string $query): ?\SQLite3Stmt
+    {
+        return parent::getStatement($query);
+    }
+
+    /**
+     * Make public for tests.
+     */
+    public function likeValue(string $value): string
+    {
+        return parent::likeValue($value);
+    }
+
+    /**
+     * Make public for tests.
+     */
+    public function search(string $query, string $value, int $limit, int $mode = \SQLITE3_ASSOC): array
+    {
+        return parent::search($query, $value, $limit, $mode);
     }
 
     protected function createSchema(): void

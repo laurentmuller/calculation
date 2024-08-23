@@ -13,21 +13,18 @@ declare(strict_types=1);
 namespace App\Captcha;
 
 use App\Service\DictionaryService;
-use App\Traits\TranslatorAwareTrait;
 use App\Utils\StringUtils;
-use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Abstract implementation of the alpha captcha interface.
  */
-abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface, ServiceSubscriberInterface
+abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface
 {
-    use ServiceMethodsSubscriberTrait;
-    use TranslatorAwareTrait;
-
-    public function __construct(private readonly DictionaryService $dictionary)
-    {
+    public function __construct(
+        private readonly DictionaryService $dictionary,
+        private readonly TranslatorInterface $translator
+    ) {
     }
 
     public function checkAnswer(string $givenAnswer, string $expectedAnswer): bool
@@ -92,8 +89,8 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface, ServiceSub
     /**
      * Translates the given message with the 'captcha' domain.
      */
-    protected function transCaptcha(string $id, array $parameters = []): string
+    protected function trans(string $id, array $parameters = []): string
     {
-        return $this->trans($id, $parameters, 'captcha');
+        return $this->translator->trans($id, $parameters, 'captcha');
     }
 }

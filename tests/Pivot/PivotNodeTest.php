@@ -304,6 +304,22 @@ class PivotNodeTest extends TestCase
         self::assertSame('title', $node->getTitle());
     }
 
+    public function testSortAscending(): void
+    {
+        $parent = $this->createNode();
+        $parent->setSortMode(SortModeInterface::SORT_ASC);
+        $child = $this->createChildNode($parent);
+        self::assertSame($parent, $child->getParent());
+    }
+
+    public function testSortDescending(): void
+    {
+        $parent = $this->createNode();
+        $parent->setSortMode(SortModeInterface::SORT_DESC);
+        $child = $this->createChildNode($parent);
+        self::assertSame($parent, $child->getParent());
+    }
+
     public function testToString(): void
     {
         $node = $this->createNode();

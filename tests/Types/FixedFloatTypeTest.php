@@ -62,7 +62,7 @@ class FixedFloatTypeTest extends TestCase
         $platform = new MySQLPlatform();
         $type = new FixedFloatType();
         $actual = $type->getSQLDeclaration([], $platform);
-        $expected = $platform->getFloatDeclarationSQL([]) . " DEFAULT '0'";
+        $expected = "DOUBLE PRECISION DEFAULT '0'";
         self::assertSame($expected, $actual);
     }
 }

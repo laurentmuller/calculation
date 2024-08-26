@@ -16,6 +16,7 @@ use App\Pdf\Traits\PdfMemoryImageTrait;
 use App\Service\ImageService;
 use fpdf\PdfDocument;
 use fpdf\PdfException;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class PdfMemoryImageTraitTest extends TestCase
@@ -94,6 +95,21 @@ class PdfMemoryImageTraitTest extends TestCase
         $doc->addPage();
         $doc->imageGD($this->createGdImage());
         self::assertSame(1, $doc->getPage());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testImageGDInvalid(): void
+    {
+        self::expectException(PdfException::class);
+        $image = \imagecreate(100, 100);
+        self::assertInstanceOf(\GdImage::class, $image);
+        $doc = new class() extends PdfDocument {
+            use PdfMemoryImageTrait;
+        };
+        \imagedestroy($image);
+        $doc->imageGD($image);
     }
 
     public function testInvalidLoader(): void

@@ -94,7 +94,7 @@ class AbstractWordDocumentTest extends TestCase
             <div>Text</div>
             XML;
         $doc = new HtmlDocument($controller, $content);
-        $doc->setPrintAddress(false);
+        $doc->setPrintAddress(true);
         $actual = $doc->render();
         self::assertTrue($actual);
     }
@@ -105,8 +105,9 @@ class AbstractWordDocumentTest extends TestCase
     public function testWithoutURL(): void
     {
         $cs = $this->createCustomerInformation();
-        $cs->setUrl(null);
         $controller = $this->createMockController($cs);
+        $controller->method('getApplicationOwnerUrl')
+            ->willReturn('');
 
         $content = <<<XML
             <i>Test</i>

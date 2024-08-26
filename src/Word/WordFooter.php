@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Word;
 
 use App\Utils\FormatUtils;
+use App\Utils\StringUtils;
 use PhpOffice\PhpWord\Element\Row;
 use PhpOffice\PhpWord\Element\Section;
 use PhpOffice\PhpWord\Shared\Converter;
@@ -78,13 +79,13 @@ class WordFooter extends AbstractHeaderFooter
 
     private function addName(Row $row, int $width, array $cellStyle, array $textStyle): void
     {
-        $textStyle['alignment'] = Jc::CENTER;
-        $cell = $row->addCell($width);
         $text = $this->name ?? '';
-        if (null === $this->url) {
-            $cell->addText($text, $cellStyle, $textStyle);
-        } else {
+        $cell = $row->addCell($width);
+        $textStyle['alignment'] = Jc::CENTER;
+        if (StringUtils::isString($this->url)) {
             $cell->addLink($this->url, $text, $cellStyle, $textStyle);
+        } else {
+            $cell->addText($text, $cellStyle, $textStyle);
         }
     }
 

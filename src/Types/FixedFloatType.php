@@ -37,6 +37,6 @@ class FixedFloatType extends Type
         $column['scale'] = 2;
         $declaration = $platform->getFloatDeclarationSQL($column);
 
-        return "$declaration DEFAULT '0'";
+        return \sprintf("%s DEFAULT '0'", $declaration);
     }
 }

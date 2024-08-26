@@ -91,7 +91,7 @@ interface TableInterface
     /**
      * The display view parameter name (string: 'table' or 'custom').
      *
-     * @see \App\Enums\TableView
+     * @see TableView
      */
     final public const PARAM_VIEW = 'view';
 }

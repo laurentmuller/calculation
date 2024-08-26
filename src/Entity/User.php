@@ -88,6 +88,8 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
 
     /**
      * @var Collection<int, UserProperty>
+     *
+     * @psalm-var ArrayCollection<int, UserProperty>
      */
     #[ORM\OneToMany(
         targetEntity: UserProperty::class,

@@ -23,8 +23,7 @@ use Symfony\Component\Form\Test\TypeTestCase;
 trait PreloadedExtensionsTrait
 {
     /**
-     * @throws \ReflectionException
-     * @throws Exception
+     * @throws \ReflectionException|Exception
      */
     protected function getExtensions(): array
     {

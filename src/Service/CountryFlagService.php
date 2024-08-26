@@ -27,26 +27,17 @@ class CountryFlagService
      * @param ?string $locale   the locale used to translate country names or null to use default
      * @param bool    $flagOnly true to return a flag only; false to return flags and country names
      *
-     * @return array<string, string> an array where key is the flag and the country name (if applicable) and value is the country code
+     * @return array<string, string> an array where key is the flag and the country name (if applicable)
+     *                               and value is the country code
      */
     public function getChoices(?string $locale = null, bool $flagOnly = false): array
     {
-        $choices = [];
         $names = Countries::getNames($locale);
-
-        if ($flagOnly) {
-            foreach (\array_keys($names) as $code) {
-                $choices[$this->getFlag($code, false)] = $code;
-            }
-
-            return $choices;
+        foreach ($names as $code => &$name) {
+            $name = $this->getChoiceEntry($code, $name, $flagOnly);
         }
 
-        foreach ($names as $code => $name) {
-            $choices[\sprintf('%s %s', $this->getFlag($code, false), $name)] = $code;
-        }
-
-        return $choices;
+        return \array_flip($names);
     }
 
     /**
@@ -78,6 +69,13 @@ class CountryFlagService
         }
 
         return '';
+    }
+
+    private function getChoiceEntry(string $code, string $name, bool $flagOnly): string
+    {
+        $flag = $this->getFlag($code, false);
+
+        return $flagOnly ? $flag : \sprintf('%s %s', $flag, $name);
     }
 
     private function getEmojiChar(string $chr): string

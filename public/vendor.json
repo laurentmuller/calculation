@@ -219,7 +219,7 @@
         {
             "remark": "Comment lines 172649 to 172651 !",
             "name": "mermaid",
-            "version": "10.9.1",
+            "version": "11.0.2",
             "source": "cdnjs",
             "files": [
                 "mermaid.js"

@@ -75,7 +75,7 @@ class AjaxTranslateController extends AbstractController
     }
 
     /**
-     * Gets the list of translate languages.
+     * Gets the list of translatable languages.
      *
      * @throws ServiceNotFoundException if the service is not found
      */

@@ -54,7 +54,7 @@ class UserRightsDocument extends AbstractArrayDocument
     }
 
     /**
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @param User[] $entities
      */
     protected function doRender(array $entities): bool
     {

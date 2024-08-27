@@ -241,7 +241,8 @@ abstract class AbstractHtmlChunk
      *
      * @param HtmlReport $report   the report to set and restore font
      * @param ?PdfFont   $font     the font to apply
-     * @param callable   $callback the callback to call after the font has been set. The report is passed as argument.
+     * @param callable   $callback the callback to call after the font has been set.
+     *                             The report is passed as the argument.
      *
      * @psalm-param callable(HtmlReport):void $callback
      */

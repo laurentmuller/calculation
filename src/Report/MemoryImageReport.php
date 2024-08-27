@@ -23,7 +23,7 @@ use fpdf\Traits\PdfRotationTrait;
 use fpdf\Traits\PdfTransparencyTrait;
 
 /**
- * Report to test in memory images.
+ * Report testing in memory images.
  */
 class MemoryImageReport extends AbstractReport
 {

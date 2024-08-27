@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Interfaces;
 
 /**
- * Class implementing this interface allows comparaison.
+ * Class implementing this interface allows comparison.
  *
  * @template TComparable of ComparableInterface
  */

@@ -115,12 +115,12 @@ class OpenWeatherService extends AbstractHttpClientService
     private const URI_CURRENT = 'weather';
 
     /**
-     * 16 day / daily forecast URI.
+     * The 16 days / daily forecast URI.
      */
     private const URI_DAILY = 'forecast/daily';
 
     /**
-     * 5 days / 3 hours forecast URI.
+     * The 5 days / 3 hours forecast URI.
      */
     private const URI_FORECAST = 'forecast';
 
@@ -256,7 +256,7 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param int[]  $cityIds the city identifiers. The maximum number is 20.
      * @param string $units   the units to use
      *
-     * @return array|false the conditions for the given cities if success; false on error
+     * @return array|false the conditions for the given cities, if success; false on error
      *
      * @psalm-return OpenWeatherGroupType|false
      */

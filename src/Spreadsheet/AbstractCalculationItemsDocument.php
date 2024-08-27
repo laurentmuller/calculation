@@ -36,9 +36,6 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
         $this->setTitle($title);
     }
 
-    /**
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     */
     protected function doRender(array $entities): bool
     {
         $this->start((string) $this->getTitle(), true);

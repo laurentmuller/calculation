@@ -245,7 +245,7 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Set address.
+     * Set the address.
      */
     public function setAddress(?string $address): self
     {
@@ -305,7 +305,7 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Set first name.
+     * Set the first name.
      */
     public function setFirstName(?string $firstName): self
     {
@@ -315,7 +315,7 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Set last name.
+     * Set the last name.
      */
     public function setLastName(?string $lastName): self
     {
@@ -373,7 +373,7 @@ class Customer extends AbstractEntity
     /**
      * Join 2 elements with a string.
      * If both elements are empty, an empty string is returned;
-     * if one of the elements is empty, the other element is returned
+     * if one of the elements is empty, the other element is returned,
      * else both elements are returned with the separator.
      *
      * @param ?string $str1 the first element

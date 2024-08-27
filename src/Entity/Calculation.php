@@ -873,7 +873,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Update position of groups, categories and items.
+     * Update the position of groups, categories and items.
      */
     public function updatePositions(): self
     {

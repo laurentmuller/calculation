@@ -31,7 +31,7 @@ readonly class CommandResult
     }
 
     /**
-     * Returns a value indicating if the running status is success.
+     * Returns a value indicating if the running status is successful.
      */
     public function isSuccess(): bool
     {

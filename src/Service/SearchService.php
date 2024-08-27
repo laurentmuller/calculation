@@ -366,7 +366,7 @@ class SearchService implements ServiceSubscriberInterface
      *
      * @param string  $search the term to search
      * @param ?string $entity the entity to search in or null for all
-     * @param string  $extra  a SQL statement to add to the default native SELECT SQL statement
+     * @param string  $extra  the SQL statement to add to the default native SELECT SQL statement
      *
      * @psalm-return SearchType[]
      *

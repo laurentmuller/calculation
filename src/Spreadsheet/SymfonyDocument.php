@@ -82,7 +82,7 @@ class SymfonyDocument extends AbstractDocument
     }
 
     /**
-     * @throws \PhpOffice\PhpSpreadsheet\Exception if an error occurs
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     private function outputGroup(WorksheetDocument $sheet, int $row, string $group): self
     {

@@ -22,8 +22,7 @@ use Psr\Cache\InvalidArgumentException;
 class SymfonyDocumentTest extends KernelServiceTestCase
 {
     /**
-     * @throws Exception
-     * @throws InvalidArgumentException
+     * @throws Exception|InvalidArgumentException
      */
     public function testRender(): void
     {

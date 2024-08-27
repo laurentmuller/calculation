@@ -144,7 +144,7 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
-     * Gets query builder for state where editable is true.
+     * Gets query builder for the state where editable is true.
      *
      * @param literal-string $alias the entity alias
      *
@@ -167,7 +167,7 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
-     * Gets query builder for state where editable is false.
+     * Gets query builder for the state where editable is false.
      *
      * @param literal-string $alias the entity alias
      *

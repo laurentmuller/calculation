@@ -54,7 +54,7 @@ class RepeatPasswordType extends AbstractType
     }
 
     /**
-     * Gets the default confirm options (second options).
+     * Gets the default confirmation options (second options).
      */
     public static function getConfirmOptions(): array
     {

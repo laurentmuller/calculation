@@ -22,12 +22,12 @@ namespace App\Service;
 class CommandDataService
 {
     /**
-     * The argument's field prefix.
+     * The argument field prefix.
      */
     private const ARGUMENT_PREFIX = 'argument-';
 
     /**
-     * The option's field prefix.
+     * The option field prefix.
      */
     private const OPTION_PREFIX = 'option-';
 

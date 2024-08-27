@@ -27,7 +27,7 @@ use fpdf\PdfException;
 trait PdfCellFormatTrait
 {
     /**
-     * Adds a right aligned cell, with formatted value as amount, to the current row.
+     * Adds a right-aligned cell, with formatted value as amount, to the current row.
      *
      * @param float|int|string|null $number the number to format
      * @param int                   $cols   the number of columns to span
@@ -52,7 +52,7 @@ trait PdfCellFormatTrait
     }
 
     /**
-     * Adds a right aligned cell, with formatted value as integer, to the current row.
+     * Adds a right-aligned cell, with formatted value as integer, to the current row.
      *
      * @param \Countable|array|int|float|string|null $number the number to format
      * @param int                                    $cols   the number of columns to span
@@ -77,7 +77,7 @@ trait PdfCellFormatTrait
     }
 
     /**
-     * Adds a right aligned cell, with formatted value as percent, to the current row.
+     * Adds a right-aligned cell, with formatted value as percent, to the current row.
      *
      * @param float|int|string|null $number the number to format
      * @param int                   $cols   the number of columns to span

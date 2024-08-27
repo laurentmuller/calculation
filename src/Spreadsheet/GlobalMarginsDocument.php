@@ -21,8 +21,6 @@ class GlobalMarginsDocument extends AbstractArrayDocument
 {
     /**
      * @param \App\Entity\GlobalMargin[] $entities
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool
     {

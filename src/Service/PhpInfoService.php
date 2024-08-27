@@ -30,7 +30,7 @@ class PhpInfoService
      * @param int $what The output may be customized by passing one or more of the following constants bitwise values
      *                  summed together in the optional what parameter.
      *                  One can also combine the respective constants or bitwise values
-     *                  together with the bitwise or operator.
+     *                  with the bitwise or operator.
      *
      * @psalm-return array<string, array<string, array{local: scalar, master: scalar}|scalar>>
      */
@@ -89,7 +89,7 @@ class PhpInfoService
      * @param int $what The output may be customized by passing one or more of the following constants bitwise
      *                  values summed together in the optional what parameter.
      *                  One can also combine the respective constants or bitwise values
-     *                  together with the bitwise or operator.
+     *                  with the bitwise or operator.
      */
     public function asHtml(int $what = \INFO_ALL): string
     {
@@ -136,7 +136,7 @@ class PhpInfoService
      * @param int $what The output may be customized by passing one or more of the following constants bitwise values
      *                  summed together in the optional what parameter.
      *                  One can also combine the respective constants or bitwise values
-     *                  together with the bitwise or operator.
+     *                  with the bitwise or operator.
      */
     public function asText(int $what = \INFO_ALL): string
     {

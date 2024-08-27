@@ -25,7 +25,7 @@ class ThemeService
     use CookieTrait;
 
     /**
-     * The key name for selected theme cookie.
+     * The key name for the selected theme cookie.
      */
     private const KEY_THEME = 'THEME';
 

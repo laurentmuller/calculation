@@ -20,7 +20,7 @@ use App\Pdf\PdfStyle;
 use fpdf\Enums\PdfFontName;
 
 /**
- * Report to output HTML color names.
+ * Report outputting HTML color names.
  *
  * @see HtmlColorName
  */

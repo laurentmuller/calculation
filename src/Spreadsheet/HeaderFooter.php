@@ -46,7 +46,6 @@ class HeaderFooter
     private const INITIAL_FONT_SIZE = 11;
     // the page/pages format
     private const PAGE_AND_PAGES = 'Page &P / &N';
-
     // the center text
     private string $centerText = '';
     // the left text

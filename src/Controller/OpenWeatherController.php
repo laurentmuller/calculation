@@ -123,7 +123,7 @@ class OpenWeatherController extends AbstractController
     }
 
     /**
-     * Returns 16 day / daily forecast conditions data for a specific location.
+     * Returns 16 days / daily forecast conditions data for a specific location.
      *
      * @psalm-api
      */
@@ -261,7 +261,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Import cities.
      *
-     * Data can be downloaded from the <a href="https://bulk.openweathermap.org/sample/">sample directory</a>.
+     * Data can be downloaded from <a href="https://bulk.openweathermap.org/sample/">sample directory</a>.
      */
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[GetPost(path: '/import', name: 'import')]

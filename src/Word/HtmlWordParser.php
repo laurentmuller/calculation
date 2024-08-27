@@ -58,7 +58,7 @@ class HtmlWordParser
     private array $styles = [];
 
     /**
-     * Parse the given content by replacing class attributes by style attributes.
+     * Parse the given content by replacing class attributes with style attributes.
      */
     public function parse(string $content): string
     {

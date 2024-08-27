@@ -131,7 +131,7 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Render the page selection dialog for data table.
+     * Render the page selection dialog for the data table.
      *
      * @psalm-api
      */

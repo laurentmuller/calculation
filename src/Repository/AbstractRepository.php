@@ -33,7 +33,7 @@ use Doctrine\ORM\QueryBuilder;
 abstract class AbstractRepository extends ServiceEntityRepository implements SortModeInterface
 {
     /**
-     * The default entity alias used to create query builder (value = 'e').
+     * The default entity alias used to create the query builder (value = 'e').
      */
     final public const DEFAULT_ALIAS = 'e';
 
@@ -73,8 +73,8 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
     /**
      * Gets the default order of this entity.
      *
-     * @return array<string, string> an array with the field as the key and the order as value.
-     *                               An empty array is returned if not attribute is found.
+     * @return array<string, string> an array with the field as the key and the order as the value.
+     *                               An empty array is returned if no attribute is found.
      *
      * @throws \ReflectionException if the class does not exist or if the validation parameter
      *                              is true and a property name is not found
@@ -133,7 +133,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
     /**
      * Creates a search query.
      *
-     * @param array<string, string>  $sortedFields the sorted fields where key is the field name and value is the sort
+     * @param array<string, string>  $sortedFields the sorted fields where key is the field name, and value is the sort
      *                                             mode ('ASC' or 'DESC')
      * @param array<Criteria|string> $criteria     the filter criteria (the where clause)
      * @param literal-string         $alias        the entity alias

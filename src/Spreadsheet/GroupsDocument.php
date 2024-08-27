@@ -21,8 +21,6 @@ class GroupsDocument extends AbstractArrayDocument
 {
     /**
      * @param \App\Entity\Group[] $entities
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool
     {

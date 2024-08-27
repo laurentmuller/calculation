@@ -13,10 +13,21 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
+use App\Service\ResetPasswordService;
+use App\Service\UserExceptionService;
 use Doctrine\ORM\Exception\ORMException;
+use PHPUnit\Framework\MockObject\Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportException;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use SymfonyCasts\Bundle\ResetPassword\Exception\FakeRepositoryException;
+use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
+use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
 class UserControllerTest extends EntityControllerTestCase
 {
@@ -37,7 +48,7 @@ class UserControllerTest extends EntityControllerTestCase
         yield ['/user/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user/delete/1', self::ROLE_ADMIN];
 
-        // can delete when connected
+        // can delete it when connected
         yield ['/user/delete/1', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
         yield ['/user/delete/2', self::ROLE_SUPER_ADMIN];
 
@@ -80,6 +91,14 @@ class UserControllerTest extends EntityControllerTestCase
         yield ['/user/parameters', self::ROLE_USER];
         yield ['/user/parameters', self::ROLE_ADMIN];
         yield ['/user/parameters', self::ROLE_SUPER_ADMIN];
+
+        yield ['/user/reset/send/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/user/reset/send/1', self::ROLE_ADMIN];
+        yield ['/user/reset/send/1', self::ROLE_SUPER_ADMIN];
+
+        yield ['/user/message/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/user/message/1', self::ROLE_ADMIN];
+        yield ['/user/message/1', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
     }
 
     public function testMessageSuccess(): void
@@ -185,6 +204,81 @@ class UserControllerTest extends EntityControllerTestCase
         $this->client->submitForm($name, $data);
         $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
+    }
+
+    public function testSendPasswordRequest(): void
+    {
+        $this->checkForm(
+            uri: 'user/reset/send/1',
+            id: 'user.send.submit',
+            userName: self::ROLE_SUPER_ADMIN,
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSendPasswordRequestGenerateException(): void
+    {
+        $helper = $this->createMock(ResetPasswordHelperInterface::class);
+        $helper->method('generateResetToken')
+            ->willThrowException(new FakeRepositoryException());
+
+        $service = new ResetPasswordService(
+            $helper,
+            $this->createMock(UserRepository::class),
+            $this->createMock(UserExceptionService::class),
+            $this->createMock(TranslatorInterface::class),
+            $this->createMock(UrlGeneratorInterface::class),
+            $this->createMock(MailerInterface::class),
+            $this->getService(LoggerInterface::class),
+            'test@test.com',
+            'test'
+        );
+        $this->setService(ResetPasswordService::class, $service);
+
+        $this->checkForm(
+            uri: 'user/reset/send/1',
+            id: 'user.send.submit',
+            userName: self::ROLE_SUPER_ADMIN,
+            disableReboot: true
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSendPasswordRequestSendException(): void
+    {
+        $date = new \DateTime();
+        $token = new ResetPasswordToken('token', $date, $date->getTimestamp());
+        $helper = $this->createMock(ResetPasswordHelperInterface::class);
+        $helper->method('generateResetToken')
+            ->willReturn($token);
+
+        $mailer = $this->createMock(MailerInterface::class);
+        $mailer->method('send')
+            ->willThrowException(new TransportException());
+
+        $service = new ResetPasswordService(
+            $helper,
+            $this->createMock(UserRepository::class),
+            $this->createMock(UserExceptionService::class),
+            $this->createMock(TranslatorInterface::class),
+            $this->createMock(UrlGeneratorInterface::class),
+            $mailer,
+            $this->getService(LoggerInterface::class),
+            'test@test.com',
+            'test'
+        );
+        $this->setService(ResetPasswordService::class, $service);
+
+        $this->checkForm(
+            uri: 'user/reset/send/1',
+            id: 'user.send.submit',
+            userName: self::ROLE_SUPER_ADMIN,
+            disableReboot: true
+        );
     }
 
     /**

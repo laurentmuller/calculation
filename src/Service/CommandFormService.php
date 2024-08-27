@@ -73,7 +73,7 @@ readonly class CommandFormService
     }
 
     /**
-     * Filter the view's children by the given priority.
+     * Filter the view children by the given priority.
      *
      * @param FormView $view     the view to get filtered children
      * @param int      $priority the priority

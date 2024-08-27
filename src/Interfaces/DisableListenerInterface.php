@@ -15,7 +15,7 @@ namespace App\Interfaces;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 /**
- * Class implementing this interface deals with enablement state.
+ * Class implementing this interface deals with the enablement state.
  */
 #[AutoconfigureTag]
 interface DisableListenerInterface

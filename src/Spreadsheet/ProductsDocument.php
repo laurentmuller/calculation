@@ -21,8 +21,6 @@ class ProductsDocument extends AbstractArrayDocument
 {
     /**
      * @param \App\Entity\Product[] $entities
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool
     {

@@ -107,7 +107,7 @@ class AjaxSearchController extends AbstractController
     }
 
     /**
-     * Search distinct products and task suppliers.
+     * Searches distinct products and task suppliers.
      *
      * @psalm-api
      */
@@ -206,7 +206,7 @@ class AjaxSearchController extends AbstractController
     }
 
     /**
-     * Search distinct values from products and tasks.
+     * Searches distinct values from products and tasks.
      */
     private function getValuesFromManager(EntityManagerInterface $manager, string $field, ?string $query = null, ?int $limit = null): JsonResponse
     {

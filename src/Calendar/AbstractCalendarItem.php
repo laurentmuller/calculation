@@ -66,7 +66,7 @@ abstract class AbstractCalendarItem implements \JsonSerializable, \Stringable
     }
 
     /**
-     * Returns if this item is the current item (for example, curent month, current week or the current day).
+     * Returns if this item is the current item (for example, current month, current week or the current day).
      *
      * @return bool true if current
      */

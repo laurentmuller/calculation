@@ -26,7 +26,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Twig\Environment;
 
 /**
- * The calculation states table.
+ * The calculation state table.
  *
  * @template-extends AbstractEntityTable<CalculationState, CalculationStateRepository>
  */

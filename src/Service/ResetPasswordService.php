@@ -120,7 +120,7 @@ readonly class ResetPasswordService
     }
 
     /**
-     * Send the email to the user for resetting the password.
+     * Send the email to the user to resetting the password.
      *
      * @return ResetPasswordToken|false|null false if the user cannot be found; the token on success; null on error
      */

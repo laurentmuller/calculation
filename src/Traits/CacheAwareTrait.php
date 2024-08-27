@@ -89,7 +89,7 @@ trait CacheAwareTrait
     /**
      * Gets the default cache timeout.
      *
-     * @return \DateInterval|int|null The period of time from the present after which the item must be considered
+     * @return \DateInterval|int|null The period from the present after which the item must be considered
      *                                expired. An integer parameter is understood to be the time in seconds until
      *                                expiration. If null is returned, the expiration time is not set.
      */
@@ -105,7 +105,7 @@ trait CacheAwareTrait
      * @param mixed                  $default The default value to return or a callable function to get the default
      *                                        value. If the callable function returns a not null value, this value is
      *                                        saved to the cache.
-     * @param \DateInterval|int|null $time    The period of time from the present after which the item must be
+     * @param \DateInterval|int|null $time    The period from the present after which the item must be
      *                                        considered expired. An integer parameter is understood to be the time in
      *                                        seconds until expiration. If null is passed, the expiration time is not
      *                                        set.
@@ -151,7 +151,7 @@ trait CacheAwareTrait
      *
      * @param string                 $key   The key for which to save the value
      * @param mixed                  $value The value to save. If null, the key item is removed from the cache.
-     * @param \DateInterval|int|null $time  The period of time from the present after which the item must be considered
+     * @param \DateInterval|int|null $time  The period from the present after which the item must be considered
      *                                      expired. An integer parameter is understood to be the time in seconds until
      *                                      expiration. If null is passed, the expiration time is not set.
      */
@@ -180,7 +180,7 @@ trait CacheAwareTrait
      *
      * @param string                 $key   The key for which to save the value
      * @param mixed                  $value The value to save. If null, the key item is removed from the cache.
-     * @param \DateInterval|int|null $time  The period of time from the present after which the item must be considered
+     * @param \DateInterval|int|null $time  The period from the present after which the item must be considered
      *                                      expired. An integer parameter is understood to be the time in seconds until
      *                                      expiration. If null is passed, the expiration time is not set.
      *

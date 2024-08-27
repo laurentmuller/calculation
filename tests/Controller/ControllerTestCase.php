@@ -70,17 +70,28 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
         string $userName = self::ROLE_ADMIN,
         string $method = Request::METHOD_POST,
         bool $followRedirect = true,
+        bool $disableReboot = false
     ): void {
-        $this->loginUsername($userName);
-        $this->client->request($method, $uri);
+        try {
+            if ($disableReboot) {
+                $this->client->disableReboot();
+            }
 
-        $name = $this->getService(TranslatorInterface::class)
-            ->trans($id);
-        $this->client->submitForm($name, $data);
-        if ($followRedirect) {
-            $this->client->followRedirect();
+            $this->loginUsername($userName);
+            $this->client->request($method, $uri);
+
+            $button = $this->getService(TranslatorInterface::class)
+                ->trans($id);
+            $this->client->submitForm($button, $data);
+            if ($followRedirect) {
+                $this->client->followRedirect();
+            }
+            $this->assertResponseIsSuccessful();
+        } finally {
+            if ($disableReboot) {
+                $this->client->enableReboot();
+            }
         }
-        $this->assertResponseIsSuccessful();
     }
 
     /**

@@ -21,8 +21,6 @@ class TasksDocument extends AbstractArrayDocument
 {
     /**
      * @param \App\Entity\Task[] $entities
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool
     {

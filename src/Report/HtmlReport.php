@@ -21,7 +21,7 @@ use fpdf\Enums\PdfRotation;
 use fpdf\PdfSize;
 
 /**
- * Report to output HTML content.
+ * Report outputting HTML content.
  */
 class HtmlReport extends AbstractReport
 {

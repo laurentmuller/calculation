@@ -130,7 +130,7 @@ abstract class AbstractProperty extends AbstractEntity
     }
 
     /**
-     * Sets the property value as an array. Internally, the array is encoded as JSON string.
+     * Sets the property value as an array. Internally, the array is encoded to a JSON string.
      */
     public function setArray(?array $value): static
     {

@@ -86,7 +86,7 @@ trait AuthorizationCheckerAwareTrait
     }
 
     /**
-     * Returns if the given list od subjects can be exported.
+     * Returns if the given list of subjects can be exported.
      */
     protected function isGrantedExport(EntityName|string $subject): bool
     {

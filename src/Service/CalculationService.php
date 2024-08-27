@@ -266,7 +266,7 @@ class CalculationService implements ServiceSubscriberInterface
         $old_overall_total = $this->round($calculation->getOverallTotal());
         $old_global_margin = $this->round($calculation->getGlobalMargin());
 
-        // 1. update each groups and compute item and overall total
+        // 1. update each group and compute item and overall total
         $items_total = 0.0;
         $overall_total = 0.0;
         $groups = $calculation->getGroups();
@@ -299,7 +299,7 @@ class CalculationService implements ServiceSubscriberInterface
     }
 
     /**
-     * Finds or create a groups for the given identifier.
+     * Finds or create a group for the given identifier.
      *
      * @psalm-param ServiceGroupType[] $groups
      *
@@ -327,8 +327,8 @@ class CalculationService implements ServiceSubscriberInterface
      *
      * @param array     $groups        the calculation groups
      * @param float     $user_margin   the user margin
-     * @param ?callable $callback      the function to create a group lines
-     * @param ?float    $global_margin the global margin or null to compute new global margin
+     * @param ?callable $callback      the function to create group lines
+     * @param ?float    $global_margin the global margin or null to compute the new global margin
      *
      * @return array the total groups
      *
@@ -494,7 +494,7 @@ class CalculationService implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets the groups total amount.
+     * Gets groups total amount.
      */
     private function getGroupsAmount(array $groups): float
     {
@@ -507,7 +507,7 @@ class CalculationService implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets the groups total margin amount.
+     * Gets groups total margin amount.
      */
     private function getGroupsMargin(array $groups): float
     {

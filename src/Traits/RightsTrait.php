@@ -103,7 +103,7 @@ trait RightsTrait
     }
 
     /**
-     * Gets a value indicating if this rights overwrite the default rights.
+     * Gets a value indicating if this right overwrites the default rights.
      *
      * @return bool true if overwritten, false to use the default rights
      */
@@ -113,7 +113,7 @@ trait RightsTrait
     }
 
     /**
-     * Sets a value indicating if this rights overwrite the default rights.
+     * Sets a value indicating if this right overwrites the default rights.
      */
     public function setOverwrite(bool $overwrite): static
     {

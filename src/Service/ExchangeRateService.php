@@ -66,7 +66,7 @@ class ExchangeRateService extends AbstractHttpClientService
     private const URI_CODES = 'codes';
 
     /**
-     * The URI for latest exchange rates.
+     * The URI for the latest exchange rates.
      */
     private const URI_LATEST = 'latest/%s';
 
@@ -115,7 +115,8 @@ class ExchangeRateService extends AbstractHttpClientService
      *
      * @param string $code the base currency code
      *
-     * @return array<string, float> an array with the currency code as key and the currency rate as value or an empty array if an error occurs
+     * @return array<string, float> an array with the currency code as the key and the currency rate as value or
+     *                              an empty array if an error occurs
      */
     public function getLatest(string $code): array
     {

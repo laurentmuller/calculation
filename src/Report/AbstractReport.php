@@ -28,7 +28,7 @@ use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Abstract report with a header and footer; styles and bookmarks capabilities.
+ * Abstract report with a header and footer; styles and bookmark capabilities.
  */
 abstract class AbstractReport extends PdfDocument
 {

@@ -29,7 +29,7 @@ interface EnumDefaultInterface
      *
      * @psalm-return T
      *
-     * @throws \LogicException if default enumeration is not found
+     * @throws \LogicException if the default enumeration is not found
      */
     public static function getDefault(): self;
 

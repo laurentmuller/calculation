@@ -23,7 +23,7 @@ enum HtmlAttribute: string
     case CLASS_NAME = 'class';
 
     /**
-     * The start ordered list attribute name.
+     * The start ordered-list attribute name.
      */
     case LIST_START = 'start';
 

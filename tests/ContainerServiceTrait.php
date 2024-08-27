@@ -35,4 +35,12 @@ trait ContainerServiceTrait
         /** @psalm-var T */
         return static::getContainer()->get($class);
     }
+
+    /**
+     * Sets a service.
+     */
+    protected function setService(string $id, object $service): void
+    {
+        static::getContainer()->set($id, $service);
+    }
 }

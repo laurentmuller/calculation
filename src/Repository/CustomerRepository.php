@@ -48,7 +48,7 @@ class CustomerRepository extends AbstractRepository
     }
 
     /**
-     * Gets all the customers order by name and company.
+     * Gets all the customers ordered by name and company.
      *
      * @return Customer[]
      */

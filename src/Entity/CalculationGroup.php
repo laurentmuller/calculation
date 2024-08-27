@@ -386,7 +386,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     }
 
     /**
-     * Update position of categories and items.
+     * Update the position of categories and items.
      */
     public function updatePositions(): self
     {

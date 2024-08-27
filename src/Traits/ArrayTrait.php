@@ -33,7 +33,7 @@ trait ArrayTrait
      *                                      <code>true</code> is returned immediately
      *                                      and the callback will not be called for further elements.
      *
-     * @return bool <code>true</code> if there is at least one element for which callback returns <code>true</code>,
+     * @return bool <code>true</code> if there is at least one element for which the callback returns <code>true</code>,
      *              <code>false</code> otherwise
      *
      * @psalm-param Closure(TValue, TKey=): bool $callback
@@ -232,7 +232,7 @@ trait ArrayTrait
     }
 
     /**
-     * Remove elements of the given array that are equal the given value.
+     * Remove elements of the given array that are equal to the given value.
      *
      * @template T
      *

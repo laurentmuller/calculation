@@ -20,7 +20,7 @@ trait CheckSubClassTrait
     /**
      * Check if the given source is a class or a subclass of the given target class name.
      *
-     * @throws \InvalidArgumentException if check failed
+     * @throws \InvalidArgumentException if checking failed
      *
      * @psalm-param class-string $target
      */

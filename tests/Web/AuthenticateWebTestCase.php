@@ -101,7 +101,7 @@ abstract class AuthenticateWebTestCase extends WebTestCase
     }
 
     /**
-     * Login the given user.
+     * Log in the given user.
      */
     protected function loginUser(User $user): void
     {

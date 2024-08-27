@@ -59,9 +59,9 @@ class ImageService
      *
      * The color is automatically de-allocated as soon as there are no other references to this instance.
      *
-     * @param int $red   the value of red component
-     * @param int $green the value of green component
-     * @param int $blue  the value of blue component
+     * @param int $red   the value of the red component
+     * @param int $green the value of the green component
+     * @param int $blue  the value of the blue component
      *
      * @return int|false the color identifier on success, false if the allocation failed
      *
@@ -84,9 +84,9 @@ class ImageService
      *
      * The color is automatically de-allocated as soon as there are no other references to this instance.
      *
-     * @param int $red   the value of red component
-     * @param int $green the value of green component
-     * @param int $blue  the value of blue component
+     * @param int $red   the value of the red component
+     * @param int $green the value of the green component
+     * @param int $blue  the value of the blue component
      * @param int $alpha a value between 0 and 127
      *
      * @return int|false the color identifier on success, false if the allocation failed
@@ -181,7 +181,7 @@ class ImageService
     /**
      * Fill this image's bounds with the given color.
      *
-     * @param int $color the fill color. A color identifier created with the allocate method.
+     * @param int $color the fill color. A color identifier, created with the allocate method.
      * @param int $x     the x-coordinate of start point
      * @param int $y     the y-coordinate of start point
      *
@@ -201,7 +201,7 @@ class ImageService
      * @param int $y      the y-coordinate
      * @param int $width  the rectangle width
      * @param int $height the rectangle height
-     * @param int $color  the fill color. A color identifier created with the allocate method.
+     * @param int $color  the fill color. A color identifier, created with the allocate method.
      *
      * @return bool true on success or false on failure
      */
@@ -275,11 +275,11 @@ class ImageService
     /**
      * Draw a line.
      *
-     * @param int $x1    the x-coordinate for first point
-     * @param int $y1    the y-coordinate for first point
-     * @param int $x2    the x-coordinate for second point
-     * @param int $y2    the y-coordinate for second point
-     * @param int $color the line color. A color identifier created with the allocate method.
+     * @param int $x1    the x-coordinate for the first point
+     * @param int $y1    the y-coordinate for the first point
+     * @param int $x2    the x-coordinate for the second point
+     * @param int $y2    the y-coordinate for the second point
+     * @param int $color the line color. A color identifier, created with the allocate method.
      *
      * @return bool true on success or false on failure
      *
@@ -297,7 +297,7 @@ class ImageService
      * @param int $y      the y-coordinate
      * @param int $width  the rectangle width
      * @param int $height the rectangle height
-     * @param int $color  the border color. A color identifier created with the allocate method.
+     * @param int $color  the border color. A color identifier, created with the allocate method.
      *
      * @return bool true on success or false on failure
      */
@@ -342,7 +342,7 @@ class ImageService
      *
      * @param int $x     the x-coordinate
      * @param int $y     the y-coordinate
-     * @param int $color a color identifier created with the allocate method
+     * @param int $color a color identifier, created with the allocate method
      *
      * @return bool true on success or false on failure
      *
@@ -370,7 +370,7 @@ class ImageService
      * Gets the bounding box of a text using TrueType font.
      *
      * @param float  $size     the font size
-     * @param float  $angle    the angle in degrees in which text will be measured
+     * @param float  $angle    the angle in degrees in which the text will be measured
      * @param string $fontFile the path to the TrueType font
      * @param string $text     the string to be measured
      *
@@ -431,7 +431,7 @@ class ImageService
      * Gets the width and the height of a text using TrueType font.
      *
      * @param float  $size     the font size
-     * @param float  $angle    the angle in degrees in which text will be measured
+     * @param float  $angle    the angle in degrees in which the text will be measured
      * @param string $fontFile the path to the TrueType font
      * @param string $text     the string to be measured
      *
@@ -458,7 +458,7 @@ class ImageService
      * Write text to this image using TrueType font.
      *
      * @param float  $size     the font size
-     * @param float  $angle    The angle in degrees, with 0 degrees being left-to-right reading text.
+     * @param float  $angle    The angle in degrees, with 0 degrees being left-to-right reading the text.
      *                         Higher values represent a counter-clockwise rotation. For example, a
      *                         value of 90 would result in bottom-to-top reading text.
      * @param int    $x        The coordinates given by x and y will define the base point of the first

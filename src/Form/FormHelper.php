@@ -120,7 +120,7 @@ class FormHelper
     }
 
     /**
-     * Adds a new field to this builder and reset all values to default.
+     * Adds a new field to this builder and reset all values to the default.
      *
      * The field must have a unique name. Otherwise, the existing field is overwritten.
      *
@@ -140,7 +140,7 @@ class FormHelper
     }
 
     /**
-     * Add a checkbox type to the builder and reset all values to default.
+     * Add a checkbox type to the builder and reset all values to the default.
      *
      * @param bool $notRequired <code>true</code> if not required; <code>false</code> if required
      * @param bool $switch      <code>true</code> to use the checkbox switch style, <code>false</code> to use
@@ -159,7 +159,7 @@ class FormHelper
     }
 
     /**
-     * Adds a choice type to the builder and reset all values to default.
+     * Adds a choice type to the builder and reset all values to the default.
      *
      * @param array $choices an array, where the array key is the item's label, and the array value is the item's value
      */
@@ -170,7 +170,7 @@ class FormHelper
     }
 
     /**
-     * Add a collection type to the builder with the given entry type and reset all values to default.
+     * Add a collection type to the builder with the given entry type and reset all values to the default.
      *
      * @param string               $entryType the entry type class must be a subclass of the FormTypeInterface class
      * @param array<string, mixed> $options   the default options to override
@@ -197,7 +197,7 @@ class FormHelper
     }
 
     /**
-     * Add a color type to the builder and reset all values to default.
+     * Add a color type to the builder and reset all values to the default.
      *
      * @param bool $colorPicker true to wrap widget to a color-picker
      */
@@ -211,7 +211,7 @@ class FormHelper
     }
 
     /**
-     * Add a current password type to the builder and reset all values to default.
+     * Add a current password type to the builder and reset all values to the default.
      */
     public function addCurrentPasswordType(): self
     {
@@ -219,7 +219,7 @@ class FormHelper
     }
 
     /**
-     * Add a date type to the builder and reset all values to default.
+     * Add a date type to the builder and reset all values to the default.
      */
     public function addDateType(): self
     {
@@ -228,7 +228,7 @@ class FormHelper
     }
 
     /**
-     * Add an email type to the builder and reset all values to default.
+     * Add an email type to the builder and reset all values to the default.
      */
     public function addEmailType(): self
     {
@@ -239,7 +239,7 @@ class FormHelper
     }
 
     /**
-     * Add an enum type to the builder and reset all values to default.
+     * Add an enum type to the builder and reset all values to the default.
      *
      * @param string $class the enumeration class
      *
@@ -261,7 +261,7 @@ class FormHelper
     }
 
     /**
-     * Add a fax (telephone) type to the builder and reset all values to default.
+     * Add a fax (telephone) type to the builder and reset all values to the default.
      */
     public function addFaxType(?string $pattern = null): self
     {
@@ -272,7 +272,7 @@ class FormHelper
     }
 
     /**
-     * Add a file type to the builder and reset all values to default.
+     * Add a file type to the builder and reset all values to the default.
      *
      * @param string $extension the allowed file extension
      */
@@ -287,7 +287,7 @@ class FormHelper
     }
 
     /**
-     * Add a hidden type to the builder and reset all values to default.
+     * Add a hidden type to the builder and reset all values to the default.
      */
     public function addHiddenType(): self
     {
@@ -295,7 +295,7 @@ class FormHelper
     }
 
     /**
-     * Add a number type to the builder and reset all values to default.
+     * Add a number type to the builder and reset all values to the default.
      *
      * @param int $scale the number of decimals to set
      */
@@ -311,7 +311,7 @@ class FormHelper
     }
 
     /**
-     * Add a percent type to the builder and reset all values to default.
+     * Add a percent type to the builder and reset all values to the default.
      *
      * @param ?int  $min  the minimum value allowed (inclusive) or null if none
      * @param ?int  $max  the maximum value allowed (inclusive) or null if none
@@ -338,7 +338,7 @@ class FormHelper
     }
 
     /**
-     * Add a plain type to the builder and reset all values to default.
+     * Add a plain type to the builder and reset all values to the default.
      *
      * This type just renders the field as a span tag. This is useful for
      * forms where certain field needs to be shown but not editable.
@@ -355,7 +355,7 @@ class FormHelper
     }
 
     /**
-     * Add a repeat password type to the builder and reset all values to default.
+     * Add a repeat password type to the builder and reset all values to the default.
      *
      * @param string $passwordLabel the label used for the password
      * @param string $confirmLabel  the label used for the confirmation password
@@ -406,7 +406,7 @@ class FormHelper
     }
 
     /**
-     * Add a telephone type to the builder and reset all values to default.
+     * Add a telephone type to the builder and reset all values to the default.
      */
     public function addTelType(?string $pattern = null): self
     {
@@ -418,7 +418,7 @@ class FormHelper
     }
 
     /**
-     * Add a text area type to the builder and reset all values to default.
+     * Add a text area type to the builder and reset all values to the default.
      */
     public function addTextareaType(int $rows = 2, string $widgetClass = 'resizable'): self
     {
@@ -428,7 +428,7 @@ class FormHelper
     }
 
     /**
-     * Add a text type to the builder and reset all values to default.
+     * Add a text type to the builder and reset all values to the default.
      */
     public function addTextType(): self
     {
@@ -436,7 +436,7 @@ class FormHelper
     }
 
     /**
-     * Add a True/False choice type to the builder and reset all values to default.
+     * Add a True/False choice type to the builder and reset all values to the default.
      *
      * @param string           $trueText    the translatable text to use for the "True" value
      * @param string           $falseText   the translatable text to use for the "False" value
@@ -454,7 +454,7 @@ class FormHelper
     }
 
     /**
-     * Add an Url type to the builder and reset all values to default.
+     * Add an Url type to the builder and reset all values to the default.
      *
      * @param string $protocol If a value is submitted, that doesn't begin with some protocol,
      *                         (http://, ftp://, etc.), this protocol will be prepended to
@@ -484,7 +484,7 @@ class FormHelper
     }
 
     /**
-     * Adds a Vich image type and reset all values to default.
+     * Adds a Vich image type and reset all values to the default.
      */
     public function addVichImageType(): self
     {

@@ -21,7 +21,7 @@ use App\Validator\Captcha;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
- * Abstract form type for user with a captcha field (if applicable).
+ * Abstract form type for user entities with a captcha field (if applicable).
  */
 abstract class AbstractUserCaptchaType extends AbstractHelperType
 {

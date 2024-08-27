@@ -75,9 +75,9 @@ class IpStackService extends AbstractHttpClientService
     /**
      * Gets the IP information.
      *
-     * @param ?Request $request the request to get client IP address or null for detecting the IP address
+     * @param ?Request $request the request to get the client IP address or null for detecting the IP address
      *
-     * @return IpStackType|null the current Ip information if success; null on error
+     * @return IpStackType|null the current Ip information, if success; null on error
      */
     public function getIpInfo(?Request $request = null): ?array
     {

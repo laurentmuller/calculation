@@ -33,8 +33,10 @@ class PasswordService
 
     private ?Zxcvbn $service = null;
 
-    public function __construct(private readonly ZxcvbnFactoryInterface $factory, private readonly TranslatorInterface $translator)
-    {
+    public function __construct(
+        private readonly ZxcvbnFactoryInterface $factory,
+        private readonly TranslatorInterface $translator
+    ) {
     }
 
     public function getTranslator(): TranslatorInterface
@@ -45,7 +47,7 @@ class PasswordService
     /**
      * Validate the given password query.
      *
-     * @return array the validation result where the 'result' is boolean indicate, when true; the success
+     * @return array the validation results where the 'result' key is boolean indicate, when true; the success
      */
     public function validate(PasswordQuery $query): array
     {

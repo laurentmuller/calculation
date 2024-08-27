@@ -21,8 +21,6 @@ class CategoriesDocument extends AbstractArrayDocument
 {
     /**
      * @param \App\Entity\Category[] $entities
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool
     {

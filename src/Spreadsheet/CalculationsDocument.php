@@ -25,8 +25,6 @@ class CalculationsDocument extends AbstractArrayDocument
 
     /**
      * @param \App\Entity\Calculation[] $entities
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool
     {

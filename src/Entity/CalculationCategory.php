@@ -340,7 +340,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
     }
 
     /**
-     * Update position of items.
+     * Update the position of items.
      */
     public function updatePositions(): self
     {

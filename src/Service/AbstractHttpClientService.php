@@ -83,7 +83,8 @@ abstract class AbstractHttpClientService
     /**
      * Gets the language to use for user interface strings.
      *
-     * @param bool $languageOnly <code>true</code> to returns language only, <code>false</code> to returns language and the country (if any)
+     * @param bool $languageOnly <code>true</code> to return language only, <code>false</code> to return
+     *                           language and the country (if any)
      *
      * @return string the language
      */
@@ -151,7 +152,7 @@ abstract class AbstractHttpClientService
      *
      * @template T
      *
-     * @param (callable():T) $callback the callback to call when value is not is the cache
+     * @param (callable():T) $callback the callback to call when the value is not is the cache
      *
      * @return T
      */
@@ -196,7 +197,7 @@ abstract class AbstractHttpClientService
      * @template T
      *
      * @param string         $url      the URL for which to return the corresponding value
-     * @param (callable():T) $callback the callback to call when value is not is the cache
+     * @param (callable():T) $callback the callback to call when the value is not is the cache
      *
      * @return T the value, if found; the default otherwise
      */

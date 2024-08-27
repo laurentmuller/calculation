@@ -38,7 +38,7 @@ readonly class PdfLabelService
      *
      * @param ?string $file the file to decode or null to use default
      *
-     * @return array<string, PdfLabel> an array where key is the label's name and value is the label itself
+     * @return array<string, PdfLabel> an array where the key is the label's name and the value is the label itself
      *
      * @throws PdfException if the file cannot be decoded
      */

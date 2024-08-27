@@ -22,12 +22,12 @@ class CountryFlagService
     private const REGIONAL_OFFSET = 0x01F1A5;
 
     /**
-     * Gets choice values used by country type form.
+     * Gets choice values used for the country type form.
      *
      * @param ?string $locale   the locale used to translate country names or null to use default
      * @param bool    $flagOnly true to return a flag only; false to return flags and country names
      *
-     * @return array<string, string> an array where key is the flag and the country name (if applicable)
+     * @return array<string, string> an array where the key is the flag and the country name (if applicable)
      *                               and value is the country code
      */
     public function getChoices(?string $locale = null, bool $flagOnly = false): array
@@ -55,7 +55,8 @@ class CountryFlagService
      * @param string $alpha2Code the country code (ISO 3166-1 alpha-2) to get the Emoji flag for
      * @param bool   $validate   true to validate the given country code
      *
-     * @throws \InvalidArgumentException if validate parameter is true and the given country code does not exist
+     * @throws \InvalidArgumentException if the <code>$validate</code> parameter is <code>true</code>,
+     *                                   and the given country code does not exist
      *
      * @see Countries::exists()
      */

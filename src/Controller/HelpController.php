@@ -88,7 +88,7 @@ class HelpController extends AbstractController
     }
 
     /**
-     * Save screenshot image.
+     * Save the screenshot image.
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Post(path: '/download', name: 'download')]

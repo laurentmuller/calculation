@@ -241,6 +241,7 @@ class OpenWeatherControllerTest extends ControllerTestCase
             uri: '/openweather/search',
             id: 'common.button_search',
             data: $data,
+            disableReboot: true
         );
     }
 

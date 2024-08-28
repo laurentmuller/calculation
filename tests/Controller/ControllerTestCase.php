@@ -76,10 +76,11 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
             if ($disableReboot) {
                 $this->client->disableReboot();
             }
+            if ('' !== $userName) {
+                $this->loginUsername($userName);
+            }
 
-            $this->loginUsername($userName);
             $this->client->request($method, $uri);
-
             $button = $this->getService(TranslatorInterface::class)
                 ->trans($id);
             $this->client->submitForm($button, $data);

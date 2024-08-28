@@ -12,9 +12,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Service\CalculationService;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Utils\StringUtils;
 use Doctrine\ORM\Exception\ORMException;
+use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -94,5 +96,76 @@ class AjaxCalculationControllerTest extends ControllerTestCase
         $data = StringUtils::decodeJson($content);
         self::assertArrayHasKey('result', $data);
         self::assertTrue($data['result']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdateWithAdjust(): void
+    {
+        $data = [
+            'result' => true,
+            'overall_below' => true,
+            'overall_margin' => 0.0,
+            'overall_total' => 0.0,
+            'min_margin' => 1.1,
+            'user_margin' => 0.0,
+            'groups' => [],
+        ];
+        $service = $this->createMock(CalculationService::class);
+        $service->method('createGroupsFromData')
+            ->willReturn($data);
+        $service->method('adjustUserMargin')
+            ->willReturn($data);
+        $this->setService(CalculationService::class, $service);
+
+        $parameters = [
+            'adjust' => true,
+        ];
+        $this->checkRoute(
+            url: '/ajax/update',
+            username: self::ROLE_USER,
+            method: Request::METHOD_POST,
+            xmlHttpRequest: true,
+            parameters: $parameters
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdateWithException(): void
+    {
+        $service = $this->createMock(CalculationService::class);
+        $service->method('createGroupsFromData')
+            ->willThrowException(new \Exception('Fake Message'));
+        $this->setService(CalculationService::class, $service);
+        $this->checkRoute(
+            url: '/ajax/update',
+            username: self::ROLE_USER,
+            method: Request::METHOD_POST,
+            xmlHttpRequest: true
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdateWithResultFalse(): void
+    {
+        $data = [
+            'result' => false,
+        ];
+        $service = $this->createMock(CalculationService::class);
+        $service->method('createGroupsFromData')
+            ->willReturn($data);
+        $this->setService(CalculationService::class, $service);
+
+        $this->checkRoute(
+            url: '/ajax/update',
+            username: self::ROLE_USER,
+            method: Request::METHOD_POST,
+            xmlHttpRequest: true
+        );
     }
 }

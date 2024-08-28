@@ -153,11 +153,7 @@ class OpenWeatherControllerTest extends ControllerTestCase
      */
     public function testApiSearchFound(): void
     {
-        $city = [
-            'id' => self::CITY_ID,
-            'latitude' => 46.7318,
-            'longitude' => 7.1875,
-        ];
+        $city = $this->getCity();
         $service = $this->createMock(OpenWeatherSearchService::class);
         $service->method('search')
             ->willReturn([$city]);
@@ -223,6 +219,9 @@ class OpenWeatherControllerTest extends ControllerTestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSearchOne(): void
     {
         $data = [
@@ -231,6 +230,12 @@ class OpenWeatherControllerTest extends ControllerTestCase
             'form[limit]' => 15,
             'form[count]' => 5,
         ];
+
+        $city = $this->getCity();
+        $service = $this->createMock(OpenWeatherSearchService::class);
+        $service->method('search')
+            ->willReturn([$city]);
+        $this->setService(OpenWeatherSearchService::class, $service);
 
         $this->checkForm(
             uri: '/openweather/search',
@@ -282,6 +287,15 @@ class OpenWeatherControllerTest extends ControllerTestCase
             url: $url,
             username: self::ROLE_USER,
         );
+    }
+
+    private function getCity(): array
+    {
+        return [
+            'id' => self::CITY_ID,
+            'latitude' => 46.7318,
+            'longitude' => 7.1875,
+        ];
     }
 
     private function getImportFile(): string

@@ -202,20 +202,42 @@ class OpenWeatherControllerTest extends ControllerTestCase
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSearchMultiple(): void
     {
+        $city1 = [
+            'id' => 2660717,
+            'name' => 'Bern',
+            'country' => 'CH',
+            'latitude' => 46.666672,
+            'longitude' => 7.16667,
+        ];
+        $city2 = [
+            'id' => 2660718,
+            'name' => 'Fribourg',
+            'country' => 'CH',
+            'latitude' => 46.802368,
+            'longitude' => 7.15128,
+        ];
+        $service = $this->createMock(OpenWeatherSearchService::class);
+        $service->method('search')
+            ->willReturn([$city1, $city2]);
+        $this->setService(OpenWeatherSearchService::class, $service);
+
         $data = [
-            'form[query]' => 'paris',
+            'form[query]' => 'Le Mouret',
             'form[units]' => 'metric',
             'form[limit]' => 15,
             'form[count]' => 5,
         ];
-
         $this->checkForm(
             uri: '/openweather/search',
             id: 'common.button_search',
             data: $data,
             followRedirect: false,
+            disableReboot: true
         );
     }
 
@@ -224,19 +246,18 @@ class OpenWeatherControllerTest extends ControllerTestCase
      */
     public function testSearchOne(): void
     {
-        $data = [
-            'form[query]' => 'Le Mouret',
-            'form[units]' => 'metric',
-            'form[limit]' => 15,
-            'form[count]' => 5,
-        ];
-
         $city = $this->getCity();
         $service = $this->createMock(OpenWeatherSearchService::class);
         $service->method('search')
             ->willReturn([$city]);
         $this->setService(OpenWeatherSearchService::class, $service);
 
+        $data = [
+            'form[query]' => 'Le Mouret',
+            'form[units]' => 'metric',
+            'form[limit]' => 15,
+            'form[count]' => 5,
+        ];
         $this->checkForm(
             uri: '/openweather/search',
             id: 'common.button_search',
@@ -294,6 +315,8 @@ class OpenWeatherControllerTest extends ControllerTestCase
     {
         return [
             'id' => self::CITY_ID,
+            'name' => 'Bern',
+            'country' => 'CH',
             'latitude' => 46.7318,
             'longitude' => 7.1875,
         ];

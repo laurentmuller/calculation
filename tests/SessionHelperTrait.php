@@ -23,38 +23,29 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 trait SessionHelperTrait
 {
-    protected function createSession(KernelBrowser $client): SessionInterface
-    {
-        /** @psalm-var SessionFactory $factory */
-        $factory = static::getContainer()->get('session.factory');
-        $session = $factory->createSession();
-        $session->start();
-        $session->save();
-
-        $cookie = new Cookie(
-            $session->getName(),
-            $session->getId(),
-            null,
-            null,
-            'localhost',
-        );
-        $client->getCookieJar()->set($cookie);
-
-        return $session;
-    }
-
     protected function getSession(KernelBrowser $client): SessionInterface
     {
-        $cookie = $client->getCookieJar()->get('MOCKSESSID');
-        if (!$cookie instanceof Cookie) {
-            return $this->createSession($client);
-        }
-
         /** @psalm-var SessionFactory $factory */
         $factory = static::getContainer()->get('session.factory');
         $session = $factory->createSession();
-        $session->setId($cookie->getValue());
+        $cookieJar = $client->getCookieJar();
+
+        $cookie = $cookieJar->get('MOCKSESSID');
+        if ($cookie instanceof Cookie) {
+            $session->setId($cookie->getValue());
+            $session->start();
+
+            return $session;
+        }
+
         $session->start();
+        $session->save();
+        $cookie = new Cookie(
+            name: $session->getName(),
+            value: $session->getId(),
+            domain: 'localhost',
+        );
+        $cookieJar->set($cookie);
 
         return $session;
     }

@@ -63,7 +63,7 @@ interface TranslatorServiceInterface
     /**
      * Gets the name.
      */
-    public static function getName(): string;
+    public function getName(): string;
 
     /**
      * Returns if the last error is set.

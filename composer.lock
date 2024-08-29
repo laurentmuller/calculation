@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c52bcdaacbbe98989c7138e8c04abaad",
+    "content-hash": "01585ec3acde854a53e90da9755edc11",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -12378,47 +12378,6 @@
                 }
             ],
             "time": "2024-05-01T10:20:27+00:00"
-        },
-        {
-            "name": "syberisle/mock-php-stream",
-            "version": "1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/SyberIsle/mock-php-stream.git",
-                "reference": "e64208a7b4711448c98c556903a6d433c595c4df"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/SyberIsle/mock-php-stream/zipball/e64208a7b4711448c98c556903a6d433c595c4df",
-                "reference": "e64208a7b4711448c98c556903a6d433c595c4df",
-                "shasum": ""
-            },
-            "require-dev": {
-                "codeclimate/php-test-reporter": "^0.4.4",
-                "phpunit/phpunit": "^5.7"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/MockPhpStream.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "David Lundgren",
-                    "email": "dlundgren@syberisle.net"
-                }
-            ],
-            "description": "Stream wrapper for mocking php://",
-            "support": {
-                "issues": "https://github.com/SyberIsle/mock-php-stream/issues",
-                "source": "https://github.com/SyberIsle/mock-php-stream/tree/1.1.0"
-            },
-            "time": "2020-08-20T15:32:50+00:00"
         },
         {
             "name": "symfony/browser-kit",

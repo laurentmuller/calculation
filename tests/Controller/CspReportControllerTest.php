@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Tests\MockPhpStream;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\UnexpectedResponseException;
@@ -24,7 +25,7 @@ class CspReportControllerTest extends ControllerTestCase
         yield ['/csp', self::ROLE_USER, Response::HTTP_NO_CONTENT];
     }
 
-    public function testWithEmptyString(): void
+    public function testWithEmptyContent(): void
     {
         $this->invoke('');
     }
@@ -72,7 +73,7 @@ class CspReportControllerTest extends ControllerTestCase
 
     private function invoke(string $content): void
     {
-        \MockPhpStream::register();
+        MockPhpStream::register();
 
         try {
             \file_put_contents('php://input', $content);
@@ -83,7 +84,7 @@ class CspReportControllerTest extends ControllerTestCase
                 expected: Response::HTTP_NO_CONTENT
             );
         } finally {
-            \MockPhpStream::restore();
+            MockPhpStream::restore();
         }
     }
 }

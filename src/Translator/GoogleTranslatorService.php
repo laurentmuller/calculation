@@ -84,7 +84,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
         return 'https://cloud.google.com/translate/docs/translating-text';
     }
 
-    public static function getName(): string
+    public function getName(): string
     {
         return 'Google';
     }

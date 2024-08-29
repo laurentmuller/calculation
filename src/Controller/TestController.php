@@ -478,7 +478,7 @@ class TestController extends AbstractController
         $languages = $service->getLanguages();
         $error = $service->getLastError();
         if ($error instanceof HttpClientError) {
-            $id = \sprintf('%s.%s', $service::getName(), $error->getCode());
+            $id = \sprintf('%s.%s', $service->getName(), $error->getCode());
             if ($this->isTransDefined($id, 'translator')) {
                 $error->setMessage($this->trans($id, [], 'translator'));
             }

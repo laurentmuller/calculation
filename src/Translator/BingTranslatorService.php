@@ -94,7 +94,7 @@ class BingTranslatorService extends AbstractTranslatorService
         return 'https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-info-overview';
     }
 
-    public static function getName(): string
+    public function getName(): string
     {
         return 'Bing';
     }

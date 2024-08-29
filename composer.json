@@ -99,7 +99,6 @@
         "psalm/plugin-phpunit": "^0.19",
         "psalm/plugin-symfony": "^5.0",
         "rector/rector": "^1.0",
-        "syberisle/mock-php-stream": "^1.0",
         "symfony/browser-kit": "7.1.*",
         "symfony/css-selector": "7.1.*",
         "symfony/debug-bundle": "7.1.*",

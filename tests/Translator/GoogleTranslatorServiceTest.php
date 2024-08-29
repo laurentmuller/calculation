@@ -20,6 +20,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 class GoogleTranslatorServiceTest extends TestCase
@@ -184,9 +185,17 @@ class GoogleTranslatorServiceTest extends TestCase
         self::assertSame(['French' => 'fr'], $actual);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetName(): void
     {
-        $actual = GoogleTranslatorService::getName();
+        $service = new GoogleTranslatorService(
+            'apikey',
+            $this->createMock(CacheInterface::class),
+            $this->createMock(LoggerInterface::class),
+        );
+        $actual = $service->getName();
         self::assertSame('Google', $actual);
     }
 

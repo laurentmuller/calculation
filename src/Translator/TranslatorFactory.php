@@ -71,7 +71,7 @@ class TranslatorFactory implements ServiceSubscriberInterface
     {
         foreach ($this->translators as $translator) {
             if (StringUtils::equalIgnoreCase($classOrName, $translator::class)
-                || StringUtils::equalIgnoreCase($classOrName, $translator::getName())) {
+                || StringUtils::equalIgnoreCase($classOrName, $translator->getName())) {
                 return $translator;
             }
         }

@@ -24,7 +24,6 @@
                     <p class="ow-temperature-pills ow-temperature-day mb-0" title="{{ 'openweather.fields.temp_day'|trans }}">{{ tools.value_temp(data.temp.day, units_temp) }}</p>
                 </td>
                 <td class="">
-                    {% apply spaceless %}
                     <span title="{{ 'openweather.fields.description'|trans }}">{{ data.weather.description }}</span>
                     {% if data.rain|default(false) %}<span title="{{ 'openweather.fields.rain'|trans }}">, {{ tools.value_rain(data.rain, units_volume) }}</span>{% endif %}
                     <br>
@@ -36,7 +35,6 @@
                     <span title="{{ 'openweather.fields.pressure'|trans }}">{{ tools.value_pressure(data.pressure, units_pressure) }}</span>
                     <span> - </span>
                     <span title="{{ 'openweather.fields.humidity'|trans }}">{{ tools.value_humidity(data.humidity, units_percent) }}</span>
-                    {% endapply %}
                 </td>
             </tr>
             {% endfor %}

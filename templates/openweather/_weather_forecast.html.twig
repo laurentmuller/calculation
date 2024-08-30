@@ -18,7 +18,6 @@
                     <p class="ow-temperature-pills ow-temperature-forecast mt-1 mb-0" title="{{ 'openweather.fields.temp'|trans }}">{{ tools.value_temp(data.main.temp, units_temp) }}</p>
                 </td>
                 <td class="">
-                    {% apply spaceless %}
                     <span title="{{ 'openweather.fields.description'|trans }}">{{ data.weather.description }}</span>{% if data.rain['3h']|default(false) %}<span title="{{ 'openweather.fields.rain'|trans }}">, {{ tools.value_rain(data.rain['3h'], units_volume) }}</span>{% endif %}
                     <br>
                     <span title="{{ 'openweather.fields.wind_title'|trans }}">{{ tools.value_speed(data.wind.speed, units_speed) }}</span>
@@ -29,7 +28,6 @@
                     <span title="{{ 'openweather.fields.pressure'|trans }}">{{ tools.value_pressure(data.main.pressure, units_pressure) }}</span>
                     <span> - </span>
                     <span title="{{ 'openweather.fields.humidity'|trans }}">{{ tools.value_humidity(data.main.humidity, units_percent) }}</span>
-                    {% endapply %}
                </td>
             </tr>
             {% endfor %}

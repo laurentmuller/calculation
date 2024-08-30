@@ -39,6 +39,7 @@ final class SwitchTokenParser extends AbstractTokenParser
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
         $expressionParser = $this->parser->getExpressionParser();
+        /** @psalm-var array<string, Node> $nodes */
         $nodes = [
             'value' => $expressionParser->parseExpression(),
         ];
@@ -89,7 +90,7 @@ final class SwitchTokenParser extends AbstractTokenParser
         $nodes['cases'] = new Node($cases);
         $stream->expect(Token::BLOCK_END_TYPE);
 
-        return new SwitchNode($nodes, [], $lineno, $this->getTag());
+        return new SwitchNode($nodes, [], $lineno);
     }
 
     private function decideIfEnd(Token $token): bool

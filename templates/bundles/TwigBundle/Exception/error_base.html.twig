@@ -73,24 +73,22 @@
                     {% endif %}
                     <td class="value">
                         <samp>
-                            {% apply spaceless %}
-                                <strong>{{ loop.index0 }}.</strong>
-                                {% if trace_file %}
-                                    <span class="ms-1">{{ trace_file }}</span>
-                                {% endif -%}
-                                {% if trace.short_class|default(false) %}
-                                    <span class="ms-1">{{ trace.short_class }}</span>
-                                {% endif -%}
-                                {% if trace.type|default(false) %}
-                                    <span class="ms-1">{{ trace.type }}</span>
-                                {% endif -%}
-                                {% if trace.function|default(false) %}
-                                    <span class="ms-1 text-danger">{{ trace.function }}</span>
-                                {% endif -%}
-                                {% if trace.line|default(false) %}
-                                    <span class="ms-1 text-body-secondary">(line {{ trace.line }})</span>
-                                {% endif -%}
-                            {% endapply %}
+                            <strong>{{ loop.index0 }}.</strong>
+                            {% if trace_file %}
+                                <span class="ms-1">{{ trace_file }}</span>
+                            {% endif -%}
+                            {% if trace.short_class|default(false) %}
+                                <span class="ms-1">{{ trace.short_class }}</span>
+                            {% endif -%}
+                            {% if trace.type|default(false) %}
+                                <span class="ms-1">{{ trace.type }}</span>
+                            {% endif -%}
+                            {% if trace.function|default(false) %}
+                                <span class="ms-1 text-danger">{{ trace.function }}</span>
+                            {% endif -%}
+                            {% if trace.line|default(false) %}
+                                <span class="ms-1 text-body-secondary">(line {{ trace.line }})</span>
+                            {% endif -%}
                         </samp>
                     </td>
                 </tr>

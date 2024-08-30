@@ -36,11 +36,9 @@
                 {% endif %}
             </div>
             <div class="text-truncate user-select-none">
-                {% apply spaceless %}
-                    <span title="{{ 'calculation.fields.date'|trans }}">{{- calculation.date|locale_date }}</span>
-                    <span>&nbsp;/&nbsp;</span>
-                    <span title="{{ 'calculation.fields.state'|trans }}">{{ calculation.stateCode -}}</span>
-                {% endapply %}
+                <span title="{{ 'calculation.fields.date'|trans }}">{{- calculation.date|locale_date }}</span>
+                <span>&nbsp;/&nbsp;</span>
+                <span title="{{ 'calculation.fields.state'|trans }}">{{ calculation.stateCode -}}</span>
             </div>
             <div class="text-truncate user-select-none" title="{{ 'calculation.fields.customer'|trans }}">
                 {{- calculation.customer -}}

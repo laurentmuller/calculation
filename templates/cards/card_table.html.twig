@@ -26,7 +26,6 @@
 {% endmacro %}
 {# output a drop-down item #}
 {% macro output_dropdown(suffix, value, selection, text, attributes = [], icon = null) -%}
-{% apply spaceless %}
     {% set active = value == selection ? ' active' : '' %}
     {% set attributes = attributes|default([])|merge({
         type: 'button',
@@ -38,7 +37,6 @@
             {%- if icon -%}{{- icon(icon ~ ' me-1') -}}{%- endif -%}{{- text|default(value) -}}
         </button>
     </li>
-{% endapply %}
 {%- endmacro %}
 {# output a drop-down header #}
 {% macro output_dropdown_header(text, translate = false, icon = null) -%}
@@ -49,14 +47,14 @@
 {%- endmacro %}
 {# output a drop-down item path #}
 {% macro item_path(path, text, icon, class = '') %}
-{%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class|default(''))|trim -%}
+{%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class)|trim -%}
 <li>
     {{- link(path, text, class, icon ~ ' fa-fw') -}}
 </li>
 {%- endmacro %}
 {# output an external drop-down item path #}
 {% macro item_path_external(path, text, icon, class = '') %}
-{%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class|default(''))|trim -%}
+{%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class)|trim -%}
 <li>
     {{- linkExternal(path, text, class, icon ~ ' fa-fw') -}}
 </li>
@@ -67,7 +65,7 @@
 {%- endmacro %}
 {# output an external drop-down item #}
 {% macro item_external(path, text, icon, class = '') %}
-{%- set class = ('dropdown-item rowlink-skip ' ~ class|default(''))|trim -%}
+{%- set class = ('dropdown-item rowlink-skip ' ~ class)|trim -%}
 <li>
     {{- linkExternal(path, text, class, icon ~ ' fa-fw') -}}
 </li>

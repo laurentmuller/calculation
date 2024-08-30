@@ -36,7 +36,7 @@
     const THEME_CHANNEL = 'theme';
 
     /**
-     * The theme changed event name.
+     * The theme changed event-name.
      * @type {string}
      */
     const THEME_EVENT_NAME = 'theme_changed';
@@ -161,23 +161,28 @@
         }
     });
 
-    /*
-     * Channel to update theme in other tabs
-     */
-    const channel = new window.BroadcastChannel(THEME_CHANNEL);
-    channel.addEventListener('message', (e) => {
-        if (e.data === THEME_EVENT_NAME) {
-            const theme = getStoredTheme();
-            updateActiveTheme(theme);
-            setTheme(theme);
-        }
-    });
-
     /**
-     * Handle the content loaded event.
+     * Create the broadcast channel to update the theme in other tabs.
+     *
+     * @return {BroadcastChannel}
+     */
+    const createChannel = () => {
+        const channel = new window.BroadcastChannel(THEME_CHANNEL);
+        channel.addEventListener('message', (e) => {
+            if (e.data === THEME_EVENT_NAME) {
+                const theme = getStoredTheme();
+                updateActiveTheme(theme);
+                setTheme(theme);
+            }
+        });
+        return channel;
+    };
+    /**
+     * Handle the content-loaded event.
      */
     window.addEventListener('DOMContentLoaded', () => {
         updateActiveTheme(getPreferredTheme());
+        const channel = createChannel();
         document.querySelectorAll('[data-theme]').forEach((element) => {
             element.addEventListener('mousedown', () => {
                 setTimeout(() => hideThemeTooltip(), 100);

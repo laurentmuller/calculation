@@ -1,10 +1,8 @@
 {% from 'macros/_icons.html.twig' import icon %}
 <div class="dropup me-auto">
     <button class="nav-link d-flex align-items-center dropdown-toggle rowlink-skip" data-bs-toggle="dropdown" aria-expanded="false">
-        {% apply spaceless %}
-            {% set image = asset_image_user(app.user, '032', {alt: 'user.fields.imageFile'|trans, title: app.user.userIdentifier, class: 'avatar rounded-circle me-2'}) %}
-            {% if image %}{{ image|raw }}{% else %}{{ icon('user fa-lg far me-2') }}{% endif %}{{ app.user.userIdentifier }}
-        {% endapply %}
+        {% set image = asset_image_user(app.user, '032', {alt: 'user.fields.imageFile'|trans, title: app.user.userIdentifier, class: 'avatar rounded-circle me-2'}) %}
+        {% if image %}{{ image|raw }}{% else %}{{ icon('user fa-lg far me-2') }}{% endif %}{{ app.user.userIdentifier }}
     </button>
     {{ include('navigation/menu/_menu_user.html.twig', {class: 'dropdown-menu-default'}) }}
 </div>

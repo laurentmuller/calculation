@@ -12,24 +12,26 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Interfaces\EnumDefaultInterface;
 use App\Interfaces\EnumSortableInterface;
-use App\Traits\EnumDefaultTrait;
+use App\Traits\EnumExtrasTrait;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
+use fpdf\Interfaces\PdfEnumDefaultInterface;
+use fpdf\Traits\PdfEnumDefaultTrait;
 
 /**
  * Table view enumeration.
  *
- * @implements EnumDefaultInterface<TableView>
+ * @implements PdfEnumDefaultInterface<TableView>
  * @implements EnumSortableInterface<TableView>
  */
 #[ReadableEnum(prefix: 'table_view.', useValueAsDefault: true)]
-enum TableView: string implements EnumDefaultInterface, EnumSortableInterface, TranslatableEnumInterface
+enum TableView: string implements EnumSortableInterface, PdfEnumDefaultInterface, TranslatableEnumInterface
 {
-    use EnumDefaultTrait;
+    use EnumExtrasTrait;
+    use PdfEnumDefaultTrait;
     use TranslatableEnumTrait;
 
     /**
@@ -41,7 +43,7 @@ enum TableView: string implements EnumDefaultInterface, EnumSortableInterface, T
     /**
      * Show values within a table (default value).
      */
-    #[EnumCase(extras: ['page-size' => 20, EnumDefaultInterface::NAME => true])]
+    #[EnumCase(extras: ['page-size' => 20, PdfEnumDefaultInterface::NAME => true])]
     case TABLE = 'table';
 
     /**

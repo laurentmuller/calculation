@@ -12,30 +12,30 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Interfaces\EnumDefaultInterface;
 use App\Interfaces\EnumSortableInterface;
-use App\Traits\EnumDefaultTrait;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
+use fpdf\Interfaces\PdfEnumDefaultInterface;
+use fpdf\Traits\PdfEnumDefaultTrait;
 
 /**
  * Entity action enumeration.
  *
- * @implements EnumDefaultInterface<EntityAction>
+ * @implements PdfEnumDefaultInterface<EntityAction>
  * @implements EnumSortableInterface<EntityAction>
  */
 #[ReadableEnum(prefix: 'entity_action.', useValueAsDefault: true)]
-enum EntityAction: string implements EnumDefaultInterface, EnumSortableInterface, TranslatableEnumInterface
+enum EntityAction: string implements EnumSortableInterface, PdfEnumDefaultInterface, TranslatableEnumInterface
 {
-    use EnumDefaultTrait;
+    use PdfEnumDefaultTrait;
     use TranslatableEnumTrait;
 
     /**
      * Edit the entity (default value).
      */
-    #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
+    #[EnumCase(extras: [PdfEnumDefaultInterface::NAME => true])]
     case EDIT = 'edit';
 
     /**

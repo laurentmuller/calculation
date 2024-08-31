@@ -12,24 +12,24 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Interfaces\EnumDefaultInterface;
 use App\Interfaces\EnumSortableInterface;
-use App\Traits\EnumDefaultTrait;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
+use fpdf\Interfaces\PdfEnumDefaultInterface;
+use fpdf\Traits\PdfEnumDefaultTrait;
 
 /**
  * The password strength level.
  *
- * @implements EnumDefaultInterface<StrengthLevel>
+ * @implements PdfEnumDefaultInterface<StrengthLevel>
  * @implements EnumSortableInterface<StrengthLevel>
  */
 #[ReadableEnum(prefix: 'strength_level.')]
-enum StrengthLevel: int implements EnumDefaultInterface, EnumSortableInterface, TranslatableEnumInterface
+enum StrengthLevel: int implements EnumSortableInterface, PdfEnumDefaultInterface, TranslatableEnumInterface
 {
-    use EnumDefaultTrait;
+    use PdfEnumDefaultTrait;
     use TranslatableEnumTrait;
 
     /**
@@ -41,7 +41,7 @@ enum StrengthLevel: int implements EnumDefaultInterface, EnumSortableInterface, 
     /**
      * No validation level (default value).
      */
-    #[EnumCase('none', [EnumDefaultInterface::NAME => true])]
+    #[EnumCase('none', [PdfEnumDefaultInterface::NAME => true])]
     case NONE = -1;
 
     /**

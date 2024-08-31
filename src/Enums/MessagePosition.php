@@ -12,24 +12,24 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Interfaces\EnumDefaultInterface;
 use App\Interfaces\EnumSortableInterface;
-use App\Traits\EnumDefaultTrait;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
+use fpdf\Interfaces\PdfEnumDefaultInterface;
+use fpdf\Traits\PdfEnumDefaultTrait;
 
 /**
  * The message position for flashbag.
  *
- * @implements EnumDefaultInterface<MessagePosition>
+ * @implements PdfEnumDefaultInterface<MessagePosition>
  * @implements EnumSortableInterface<MessagePosition>
  */
 #[ReadableEnum(prefix: 'message_position.', useValueAsDefault: true)]
-enum MessagePosition: string implements EnumDefaultInterface, EnumSortableInterface, TranslatableEnumInterface
+enum MessagePosition: string implements EnumSortableInterface, PdfEnumDefaultInterface, TranslatableEnumInterface
 {
-    use EnumDefaultTrait;
+    use PdfEnumDefaultTrait;
     use TranslatableEnumTrait;
 
     /**
@@ -45,7 +45,7 @@ enum MessagePosition: string implements EnumDefaultInterface, EnumSortableInterf
     /**
      * Bottom right position.
      */
-    #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
+    #[EnumCase(extras: [PdfEnumDefaultInterface::NAME => true])]
     case BOTTOM_RIGHT = 'bottom-right';
 
     /**

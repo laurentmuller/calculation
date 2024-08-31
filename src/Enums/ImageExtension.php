@@ -12,15 +12,15 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Interfaces\EnumDefaultInterface;
 use App\Service\ImageService;
-use App\Traits\EnumDefaultTrait;
 use Elao\Enum\Attribute\EnumCase;
+use fpdf\Interfaces\PdfEnumDefaultInterface;
+use fpdf\Traits\PdfEnumDefaultTrait;
 
 /**
  * Image file extension numeration.
  *
- * @implements EnumDefaultInterface<ImageExtension>
+ * @implements PdfEnumDefaultInterface<ImageExtension>
  *
  * @psalm-type SaveOptionsType = array{
  *     compressed?: bool,
@@ -33,9 +33,9 @@ use Elao\Enum\Attribute\EnumCase;
  *     foreground_color?: null,
  *     quality?: int}
  */
-enum ImageExtension: string implements EnumDefaultInterface
+enum ImageExtension: string implements PdfEnumDefaultInterface
 {
-    use EnumDefaultTrait;
+    use PdfEnumDefaultTrait;
 
     /**
      * The Device-Independent Bitmap (DIB) graphic extension.
@@ -60,7 +60,7 @@ enum ImageExtension: string implements EnumDefaultInterface
     /**
      * The Portable Network Graphics (PNG) extension (default value).
      */
-    #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
+    #[EnumCase(extras: [PdfEnumDefaultInterface::NAME => true])]
     case PNG = 'png';
 
     /**

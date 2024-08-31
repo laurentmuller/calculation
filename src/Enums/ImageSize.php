@@ -12,23 +12,23 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Interfaces\EnumDefaultInterface;
-use App\Traits\EnumDefaultTrait;
 use Elao\Enum\Attribute\EnumCase;
+use fpdf\Interfaces\PdfEnumDefaultInterface;
+use fpdf\Traits\PdfEnumDefaultTrait;
 
 /**
  * Image size enumeration.
  *
- * @implements EnumDefaultInterface<ImageSize>
+ * @implements PdfEnumDefaultInterface<ImageSize>
  */
-enum ImageSize: int implements EnumDefaultInterface
+enum ImageSize: int implements PdfEnumDefaultInterface
 {
-    use EnumDefaultTrait;
+    use PdfEnumDefaultTrait;
 
     /**
      * The default image size used for edit purpose (192 pixels).
      */
-    #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
+    #[EnumCase(extras: [PdfEnumDefaultInterface::NAME => true])]
     case DEFAULT = 192;
 
     /**

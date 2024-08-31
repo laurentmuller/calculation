@@ -12,24 +12,26 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Interfaces\EnumDefaultInterface;
 use App\Interfaces\EnumSortableInterface;
-use App\Traits\EnumDefaultTrait;
+use App\Traits\EnumExtrasTrait;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
+use fpdf\Interfaces\PdfEnumDefaultInterface;
+use fpdf\Traits\PdfEnumDefaultTrait;
 
 /**
  * Theme style enumeration.
  *
- * @implements EnumDefaultInterface<Theme>
+ * @implements PdfEnumDefaultInterface<Theme>
  * @implements EnumSortableInterface<Theme>
  */
 #[ReadableEnum(prefix: 'theme.', suffix: '.name', useValueAsDefault: true)]
-enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, TranslatableEnumInterface
+enum Theme: string implements EnumSortableInterface, PdfEnumDefaultInterface, TranslatableEnumInterface
 {
-    use EnumDefaultTrait;
+    use EnumExtrasTrait;
+    use PdfEnumDefaultTrait;
     use TranslatableEnumTrait;
 
     /**
@@ -38,7 +40,7 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, Trans
      * The system theme changes the appearance from light to dark based on the user's preferences in the operating
      * system.
      */
-    #[EnumCase(extras: ['icon' => 'fa-solid fa-circle-half-stroke', EnumDefaultInterface::NAME => true])]
+    #[EnumCase(extras: ['icon' => 'fa-solid fa-circle-half-stroke', PdfEnumDefaultInterface::NAME => true])]
     case AUTO = 'auto';
 
     /**

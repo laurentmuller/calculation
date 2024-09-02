@@ -913,13 +913,7 @@ class FormHelper
         $existing = (string) ($array['class'] ?? '');
         $oldValues = \array_filter(\explode(' ', $existing));
         $newValues = \array_filter(\explode(' ', $classNames));
-        $className = \implode(' ', \array_unique([...$oldValues, ...$newValues]));
-
-        if (StringUtils::isString($className)) {
-            $array['class'] = $className;
-        } else {
-            unset($array['class']);
-        }
+        $array['class'] = \implode(' ', \array_unique([...$oldValues, ...$newValues]));
 
         return $this;
     }

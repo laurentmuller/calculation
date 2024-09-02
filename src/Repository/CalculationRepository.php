@@ -15,6 +15,7 @@ namespace App\Repository;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -95,7 +96,7 @@ class CalculationRepository extends AbstractRepository
     /**
      * Returns the number of distinct years and months.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function countDistinctMonths(): int
     {
@@ -110,7 +111,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @param float $minMargin the minimum margin
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function countItemsBelow(float $minMargin): int
     {
@@ -127,7 +128,7 @@ class CalculationRepository extends AbstractRepository
      *
      * Items are duplicate if the descriptions are equal.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function countItemsDuplicate(): int
     {
@@ -155,7 +156,7 @@ class CalculationRepository extends AbstractRepository
      *
      * Items are empty if the price or the quantity is equal to 0.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function countItemsEmpty(): int
     {
@@ -184,7 +185,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @return int the number of calculations
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function countStateReferences(CalculationState $state): int
     {

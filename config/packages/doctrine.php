@@ -27,7 +27,7 @@ return static function (DoctrineConfig $config): void {
         ->proxyDir('%kernel.cache_dir%/doctrine/orm/Proxies');
 
     $orm->controllerResolver()
-        ->autoMapping(true);
+        ->autoMapping(false);
 
     $manager = $orm->entityManager('default');
     $manager->autoMapping(true)

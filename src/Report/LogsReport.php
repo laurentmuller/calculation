@@ -39,19 +39,14 @@ use fpdf\PdfBorder;
 class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
 {
     /**
+     * The borderline width.
+     */
+    private const BORDER_WIDTH = 0.5;
+
+    /**
      * The delta date, in seconds, between log bookmarks.
      */
     private const DELTA_DATE = 600;
-
-    /**
-     * The borderline width.
-     */
-    private const FULL_WIDTH = 0.5;
-
-    /**
-     * The half-borderline width.
-     */
-    private const HALF_WIDTH = 0.25;
 
     /**
      * The border colors.
@@ -70,6 +65,11 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
      */
     private ?string $level = null;
 
+    /**
+     * The maximum index to draw border for card headers.
+     */
+    private int $levelsCount = 0;
+
     public function __construct(AbstractController $controller, private readonly LogFile $logFile)
     {
         parent::__construct($controller, PdfOrientation::LANDSCAPE);
@@ -83,6 +83,10 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
     {
         // cards
         if ($this->drawCards) {
+            if ($event->index >= $this->levelsCount) {
+                return false;
+            }
+
             $columns = $event->table->getColumns();
             $text = $columns[$event->index]->getText();
 
@@ -90,7 +94,7 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         }
 
         // row
-        if (!$event->table->isHeaders() && 0 === $event->index) {
+        if (0 === $event->index && !$event->table->isHeaders()) {
             return $this->drawBorder($event, $this->level);
         }
 
@@ -115,16 +119,22 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
 
     private function addDateBookmark(int $date): void
     {
-        $start_text = FormatUtils::formatDateTime($date, \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT);
-        $end_text = FormatUtils::formatTime($date - self::DELTA_DATE, \IntlDateFormatter::SHORT);
-        $this->addBookmark($start_text . ' - ' . $end_text, level: 1);
+        $startDate = FormatUtils::formatDateTime($date, \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT);
+        $endDate = FormatUtils::formatTime($date - self::DELTA_DATE, \IntlDateFormatter::SHORT);
+        $this->addBookmark(\sprintf('%s - %s', $startDate, $endDate), level: 1);
     }
 
-    private function cellTitle(): void
+    private function createTable(): PdfTable
     {
-        PdfFont::default()->bold()->apply($this);
-        $this->cell(text: $this->trans('log.name'), move: PdfMove::BELOW);
-        $this->resetStyle();
+        return PdfTable::instance($this)
+            ->addColumns(
+                $this->leftColumn('log.fields.createdAt', 33, true),
+                $this->leftColumn('log.fields.message', 150),
+                $this->leftColumn('log.fields.level', 20, true),
+                $this->leftColumn('log.fields.channel', 20, true),
+                $this->leftColumn('log.fields.user', 20, true)
+            )
+            ->outputHeaders();
     }
 
     private function drawBorder(PdfCellBorderEvent $event, ?string $level): bool
@@ -139,13 +149,13 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         }
 
         $bounds = $event->bounds;
-        $x = $bounds->x + self::HALF_WIDTH;
-        $y = $bounds->y + self::HALF_WIDTH;
-        $h = $bounds->height - self::FULL_WIDTH;
+        $x = $bounds->x + self::BORDER_WIDTH / 2.0;
+        $y = $bounds->y + self::BORDER_WIDTH / 2.0;
+        $h = $bounds->height - self::BORDER_WIDTH;
         $parent = $event->getDocument();
         $parent->rectangle($bounds, $event->border);
         $color->apply($parent);
-        $parent->setLineWidth(self::FULL_WIDTH);
+        $parent->setLineWidth(self::BORDER_WIDTH);
         $parent->line($x, $y, $x, $y + $h);
 
         return true;
@@ -153,29 +163,22 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
 
     private function getLevelColor(string $level): ?PdfDrawColor
     {
-        if (\array_key_exists($level, $this->colors)) {
-            return $this->colors[$level];
+        if (!\array_key_exists($level, $this->colors)) {
+            $color = LogLevel::instance($level)->getLevelColor();
+            $this->colors[$level] = HtmlBootstrapColor::parseDrawColor($color);
         }
 
-        $levelColor = LogLevel::instance($level)->getLevelColor();
-
-        return $this->colors[$level] = HtmlBootstrapColor::parseDrawColor($levelColor);
+        return $this->colors[$level];
     }
 
     private function getRoundedDate(Log $log): int
     {
-        $timestamp = $log->getTimestamp();
-        $remainder = $timestamp % self::DELTA_DATE;
-        if ($remainder > 0) {
-            return $timestamp + self::DELTA_DATE - $remainder;
-        }
-
-        return $timestamp;
+        return (int) \ceil($log->getTimestamp() / self::DELTA_DATE) * self::DELTA_DATE;
     }
 
     /**
-     * @psalm-param array<string, LogLevel> $levels
-     * @psalm-param array<string, LogChannel> $channels
+     * @param array<string, LogLevel>   $levels
+     * @param array<string, LogChannel> $channels
      */
     private function outputCards(array $levels, array $channels, int $count): void
     {
@@ -203,17 +206,17 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
 
         $level = $this->trans('log.fields.level');
         $chanel = $this->trans('log.fields.channel');
-        $this->addBookmark($level . ' - ' . $chanel);
+        $this->addBookmark(\sprintf('%s - %s', $level, $chanel));
 
-        $this->drawCards = true;
-        /** @psalm-var positive-int $levelsCount */
-        $levelsCount = \count($levels) * 2;
+        $this->levelsCount = \max(1, \count($levels) * 2);
         $channelsCount = \count($channels) * 2 + 1;
         $titleStyle = PdfStyle::default()->setBorder(PdfBorder::none())->setFontBold();
+
+        $this->drawCards = true;
         PdfTable::instance($this)
             ->addColumns(...$columns)
             ->startRow()
-            ->add($level, $levelsCount, $titleStyle, PdfTextAlignment::LEFT)
+            ->add($level, $this->levelsCount, $titleStyle, PdfTextAlignment::LEFT)
             ->add($chanel, $channelsCount, $titleStyle, PdfTextAlignment::LEFT)
             ->endRow()
             ->setBorderListener($this)
@@ -225,25 +228,19 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
     }
 
     /**
-     * @psalm-param Log[] $logs the logs
+     * @psalm-param Log[] $logs
      */
     private function outputLogs(array $logs): void
     {
-        $this->addBookmark($this->trans('log.name'), true);
+        $title = $this->trans('log.name');
+        $this->addBookmark($title, true);
+        PdfFont::default()->bold()->apply($this);
+        $this->cell(text: $title, move: PdfMove::BELOW);
+        $this->resetStyle();
 
         $date = 0;
-        $this->cellTitle();
-        $table = PdfTable::instance($this)
-            ->addColumns(
-                $this->leftColumn('log.fields.createdAt', 34, true),
-                $this->leftColumn('log.fields.message', 150),
-                $this->leftColumn('log.fields.level', 20, true),
-                $this->leftColumn('log.fields.channel', 20, true),
-                $this->leftColumn('log.fields.user', 20, true)
-            )
-            ->outputHeaders()
+        $table = $this->createTable()
             ->setBorderListener($this);
-
         foreach ($logs as $log) {
             $this->level = $log->getLevel();
             $newDate = $this->getRoundedDate($log);
@@ -264,10 +261,10 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
     }
 
     /**
-     * @psalm-param array<string, \Countable> $values
-     * @psalm-param PdfColumn[]        $columns
-     * @psalm-param PdfCell[]          $textCells
-     * @psalm-param PdfCell[]          $valueCells
+     * @param array<string, \Countable> $values
+     * @param PdfColumn[]               $columns
+     * @param PdfCell[]                 $textCells
+     * @param PdfCell[]                 $valueCells
      */
     private function updateCardsEntries(
         array $values,
@@ -277,12 +274,12 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         PdfColumn $emptyCol,
         PdfCell $emptyCell
     ): void {
-        $index = \count($values) - 1;
+        $index = \count($values);
         foreach ($values as $key => $value) {
             $columns[] = PdfColumn::center($key, 30);
             $textCells[] = new PdfCell(StringUtils::capitalize($key));
-            $valueCells[] = new PdfCell(FormatUtils::formatInt($value->count()));
-            if ($index-- > 0) {
+            $valueCells[] = new PdfCell(FormatUtils::formatInt($value));
+            if (--$index > 0) {
                 $columns[] = $emptyCol;
                 $textCells[] = $emptyCell;
                 $valueCells[] = $emptyCell;

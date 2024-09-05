@@ -73,9 +73,8 @@ class CspReportControllerTest extends ControllerTestCase
 
     private function invoke(string $content): void
     {
-        MockPhpStream::register();
-
         try {
+            MockPhpStream::register();
             \file_put_contents('php://input', $content);
 
             $this->checkRoute(

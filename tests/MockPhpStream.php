@@ -13,15 +13,15 @@ declare(strict_types=1);
 namespace App\Tests;
 
 /**
- * Allows you to override the 'php' stream wrapper functionality.
+ * Allow overriding the 'php' stream wrapper functionality.
  *
- * This should be used sparingly and only when you need to mock php://input for a test
+ * This should be used sparingly and only when you need to mock php://input for tests
  */
 #[\AllowDynamicProperties]
 class MockPhpStream
 {
     /**
-     * The protocol.
+     * The wrapper name protocol to be registered or unregistered.
      */
     private const PROTOCOL = 'php';
 
@@ -31,7 +31,7 @@ class MockPhpStream
     private string $content = '';
 
     /**
-     * The data content.
+     * The data content where the key is the path and value is the content.
      *
      * @var array<string, string>
      */
@@ -43,7 +43,7 @@ class MockPhpStream
     private int $index = 0;
 
     /**
-     * The length of the content.
+     * The length of the current content.
      */
     private int $length = 0;
 
@@ -55,20 +55,25 @@ class MockPhpStream
     /**
      * Registers this class as the 'php' stream wrapper.
      *
-     * @psalm-suppress UnusedFunctionCall
+     * @throws \LogicException if unable to register this class as stream wrapper for the 'php' protocol
      */
-    public static function register(): bool
+    public static function register(): true
     {
-        $wrappers = \stream_get_wrappers();
-        if (\in_array(self::PROTOCOL, $wrappers, true)) {
-            \stream_wrapper_unregister(self::PROTOCOL);
+        if (\in_array(self::PROTOCOL, \stream_get_wrappers(), true) && !\stream_wrapper_unregister(self::PROTOCOL)) {
+            throw new \LogicException(\sprintf("Unable to unregister stream wrapper for the '%s' protocol.", self::PROTOCOL));
         }
 
-        return \stream_wrapper_register(self::PROTOCOL, self::class);
+        if (!\stream_wrapper_register(self::PROTOCOL, self::class)) {
+            throw new \LogicException(\sprintf("Unable to register stream wrapper for the '%s' protocol.", self::PROTOCOL));
+        }
+
+        return true;
     }
 
     /**
      * Removes this class as the registered stream wrapper for 'php'.
+     *
+     * @return bool <code>true</code> on success or <code>false</code> on failure
      */
     public static function restore(): bool
     {
@@ -77,11 +82,11 @@ class MockPhpStream
 
     public function stream_close(): void
     {
-        if ('' === $this->content || '' === $this->path) {
-            return;
+        if ('' !== $this->path && '' !== $this->content) {
+            self::$data[$this->path] = $this->content;
+            $this->path = $this->content = '';
+            $this->index = 0;
         }
-
-        self::$data[$this->path] = $this->content;
     }
 
     public function stream_eof(): bool
@@ -95,32 +100,39 @@ class MockPhpStream
             unset(self::$data[$path]);
         }
 
-        if (isset(self::$data[$path])) {
-            $this->content = self::$data[$path];
-            $this->index = 0;
-            $this->length = \strlen($this->content);
-        }
-
+        $this->index = 0;
         $this->path = $path;
+        $this->content = self::$data[$path] ?? '';
+        $this->length = \strlen($this->content);
 
         return true;
     }
 
-    public function stream_read(int $count): string
+    public function stream_read(int $count): string|false
     {
-        if ('' === $this->content) {
-            return '';
+        $len = \min($count, $this->length - $this->index);
+        if ($len <= 0) {
+            return false;
         }
-
-        $length = \min($count, $this->length - $this->index);
-        $data = \substr($this->content, $this->index, $length);
-        $this->index += $length;
+        $data = \substr($this->content, $this->index, $len);
+        $this->index += $len;
 
         return $data;
     }
 
-    public function stream_seek(): bool
+    public function stream_seek(int $offset, int $whence): bool
     {
+        $newIndex = match ($whence) {
+            \SEEK_SET => $offset,
+            \SEEK_CUR => $this->index + $offset,
+            \SEEK_END => $this->length + $offset,
+            default => -1,
+        };
+        if ($newIndex < 0 || $newIndex >= $this->length) {
+            return false;
+        }
+        $this->index = $newIndex;
+
         return true;
     }
 
@@ -136,12 +148,12 @@ class MockPhpStream
 
     public function stream_write(string $data): int
     {
-        $length = \strlen($data);
-        if ($length > 0) {
+        $len = \strlen($data);
+        if ($len > 0) {
             $this->content .= $data;
-            $this->length += $length;
+            $this->length += $len;
         }
 
-        return $length;
+        return $len;
     }
 }

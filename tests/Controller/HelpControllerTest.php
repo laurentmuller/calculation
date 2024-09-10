@@ -178,7 +178,7 @@ class HelpControllerTest extends ControllerTestCase
     {
         $name = '*' . HelpService::IMAGES_EXT;
         $projectDir = $this->client->getKernel()->getProjectDir();
-        $dir = Path::canonicalize(Path::join($projectDir, self::IMAGES_PATH));
+        $dir = Path::join($projectDir, self::IMAGES_PATH);
         $finder = new Finder();
         $finder->in($dir)
             ->files()

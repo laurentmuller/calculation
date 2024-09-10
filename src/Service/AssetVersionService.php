@@ -15,13 +15,13 @@ namespace App\Service;
 use App\Entity\User;
 use App\Interfaces\DisableListenerInterface;
 use App\Traits\DisableListenerTrait;
+use App\Utils\FileUtils;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
-use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -60,7 +60,7 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
             'key_asset_version',
             fn (): string => $this->getBaseVersion($projectDir, $service)
         );
-        $this->imagesPath = $this->canonicalize($projectDir, 'public', self::IMAGES_PATH);
+        $this->imagesPath = FileUtils::buildPath($projectDir, 'public', self::IMAGES_PATH);
         $this->imagesVersion = $this->getFileTime($this->imagesPath, $version);
 
         parent::__construct($version);
@@ -88,16 +88,11 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
         return parent::getVersion($path);
     }
 
-    private function canonicalize(string ...$paths): string
-    {
-        return Path::canonicalize(Path::join(...$paths));
-    }
-
     private function getBaseVersion(string $projectDir, EnvironmentService $service): string
     {
         $file = $service->isProduction() ? '.htdeployment' : 'composer.lock';
 
-        return $this->getFileTime($this->canonicalize($projectDir, $file), Kernel::VERSION);
+        return $this->getFileTime(FileUtils::buildPath($projectDir, $file), Kernel::VERSION);
     }
 
     private function getFileTime(string $path, string $default): string

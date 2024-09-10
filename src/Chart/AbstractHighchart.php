@@ -17,8 +17,8 @@ use App\Traits\MathTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
+use HighchartsBundle\Highcharts\ChartExpression;
 use HighchartsBundle\Highcharts\Highchart;
-use Laminas\Json\Expr;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -104,9 +104,9 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     /**
      * Render the given template and create an expression from the content.
      *
-     * @return ?Expr the expression if the template is rendered; null on error
+     * @return ?ChartExpression the expression if the template is rendered; null on error
      */
-    protected function createTemplateExpression(string $template, array $context = []): ?Expr
+    protected function createTemplateExpression(string $template, array $context = []): ?ChartExpression
     {
         try {
             $content = $this->twig->render($template, $context);

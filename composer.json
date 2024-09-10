@@ -176,6 +176,7 @@
         ],
         "app-fixer-fix": "vendor/bin/php-cs-fixer fix --diff",
         "app-rector-fix": "vendor/bin/rector process --config rector.php",
+        "app-twig-fix": "vendor/bin/twig-cs-fixer lint --fix --config=.twig-cs-fixer.php",
         "app-fixer": "vendor/bin/php-cs-fixer fix --diff --dry-run",
         "app-psalm": "vendor/bin/psalm --config psalm.xml",
         "app-stan": "vendor/bin/phpstan analyse --configuration phpstan.neon --memory-limit 2G",

@@ -14,7 +14,7 @@ namespace App\Tests\Chart;
 
 use App\Chart\AbstractHighchart;
 use App\Service\ApplicationService;
-use Laminas\Json\Expr;
+use HighchartsBundle\Highcharts\ChartExpression;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -34,7 +34,7 @@ class AbstractChartTest extends TestCase
         $twig->expects(self::once())->method('render')
             ->willThrowException(new Error('Test Message'));
         $chart = new class($application, $generator, $twig)extends AbstractHighchart {
-            public function updateExpression(): ?Expr
+            public function updateExpression(): ?ChartExpression
             {
                 return $this->createTemplateExpression('fake');
             }
@@ -55,15 +55,15 @@ class AbstractChartTest extends TestCase
         $twig->expects(self::once())->method('render')
             ->willReturn('fake');
         $chart = new class($application, $generator, $twig)extends AbstractHighchart {
-            public function createTemplateExpression(string $template, array $context = []): ?Expr
+            public function createTemplateExpression(string $template, array $context = []): ?ChartExpression
             {
                 return parent::createTemplateExpression($template, $context);
             }
         };
 
-        $expected = new Expr('fake');
+        $expected = new ChartExpression('fake');
         $actual = $chart->createTemplateExpression('fake');
-        self::assertInstanceOf(Expr::class, $actual);
+        self::assertInstanceOf(ChartExpression::class, $actual);
         self::assertSame((string) $expected, (string) $actual);
     }
 

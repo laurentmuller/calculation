@@ -17,7 +17,7 @@ use App\Service\ApplicationService;
 use App\Table\CalculationTable;
 use App\Traits\StateTotalsTrait;
 use App\Utils\FormatUtils;
-use Laminas\Json\Expr;
+use HighchartsBundle\Highcharts\ChartExpression;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
@@ -80,7 +80,7 @@ class StateChart extends AbstractHighchart
         return FormatUtils::formatPercent($value, true, 2, \NumberFormatter::ROUND_HALFEVEN);
     }
 
-    private function getClickExpression(): Expr
+    private function getClickExpression(): ChartExpression
     {
         return self::createExpression('function() {location.href = this.url;}');
     }

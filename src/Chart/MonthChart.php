@@ -17,7 +17,7 @@ use App\Repository\CalculationRepository;
 use App\Service\ApplicationService;
 use App\Traits\ArrayTrait;
 use App\Utils\FormatUtils;
-use Laminas\Json\Expr;
+use HighchartsBundle\Highcharts\ChartExpression;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
@@ -150,12 +150,12 @@ class MonthChart extends AbstractHighchart
         return \array_map(static fn (array $item): int => $item['date']->getTimestamp() * 1000, $series);
     }
 
-    private function getClickExpression(): Expr
+    private function getClickExpression(): ChartExpression
     {
         return self::createExpression('function() {location.href = this.url;}');
     }
 
-    private function getFormatterExpression(): Expr
+    private function getFormatterExpression(): ChartExpression
     {
         return self::createExpression('function() {return Highcharts.numberFormat(this.value, 0);}');
     }

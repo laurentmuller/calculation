@@ -37,6 +37,7 @@
         "ext-sqlite3": "*",
         "ext-zip": "*",
         "ext-zlib": "*",
+        "ext-imagick": "*",
         "beberlei/doctrineextensions": "^v1.0",
         "createnl/zxcvbn-bundle": "^3.0",
         "doctrine/doctrine-bundle": "^2.0",
@@ -87,6 +88,7 @@
         "vich/uploader-bundle": "^2.0"
     },
     "require-dev": {
+        "fortawesome/font-awesome": "^6.6",
         "friendsofphp/php-cs-fixer": "^3.0",
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^1.0",

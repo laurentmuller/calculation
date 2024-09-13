@@ -260,7 +260,7 @@ class UpdateAssetsCommand extends Command
         }
 
         $this->writeVerbose(\sprintf('Rename directory "%s" to "%s".', $source, $target));
-        if ($this->rename($source, $target)) {
+        if ($this->mirror($source, $target)) {
             return true;
         }
 
@@ -486,6 +486,17 @@ class UpdateAssetsCommand extends Command
         }
     }
 
+    private function mirror(string $origin, string $target): bool
+    {
+        $this->writeVeryVerbose(\sprintf('Rename "%s" to "%s".', $origin, $target));
+        if (FileUtils::mirror($origin, $target, delete: true)) {
+            return true;
+        }
+        $this->writeError(\sprintf('Unable to rename the file "%s" to "%s".', $origin, $target));
+
+        return false;
+    }
+
     /**
      * @psalm-param string[]|string $properties
      */
@@ -524,17 +535,6 @@ class UpdateAssetsCommand extends Command
             $this->writeVeryVerbose(\sprintf('Remove "%s".', $file));
             FileUtils::remove($file);
         }
-    }
-
-    private function rename(string $origin, string $target): bool
-    {
-        $this->writeVeryVerbose(\sprintf('Rename "%s" to "%s".', $origin, $target));
-        if (FileUtils::rename($origin, $target, true)) {
-            return true;
-        }
-        $this->writeError(\sprintf('Unable to rename the file "%s" to "%s".', $origin, $target));
-
-        return false;
     }
 
     private function writeFile(string $filename, string $content): bool

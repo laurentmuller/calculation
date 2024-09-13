@@ -36,12 +36,10 @@ class OverallTable extends ReportTable
     /**
      * Render the table for the given report.
      */
-    public static function render(CalculationReport $parent): self
+    public static function render(CalculationReport $parent): void
     {
         $table = new self($parent);
         $table->output();
-
-        return $table;
     }
 
     public function startRow(?PdfStyle $style = null): static

@@ -14,6 +14,7 @@ namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Log;
+use App\Model\FontAwesomeImage;
 use App\Model\LogChannel;
 use App\Model\LogFile;
 use App\Model\LogLevel;
@@ -22,12 +23,13 @@ use App\Service\FontAwesomeService;
 use App\Utils\DateUtils;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LogLevel as PsrLevel;
 
 class LogsReportTest extends TestCase
 {
     /**
-     * @throws Exception
+     * @throws Exception|InvalidArgumentException
      */
     public function testEmpty(): void
     {
@@ -35,6 +37,7 @@ class LogsReportTest extends TestCase
         $logFile = $this->createMock(LogFile::class);
         $logFile->method('isEmpty')
             ->willReturn(true);
+
         $service = $this->createMock(FontAwesomeService::class);
 
         $report = new LogsReport($controller, $logFile, $service);
@@ -43,8 +46,7 @@ class LogsReportTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     * @throws \Exception
+     * @throws Exception|\Exception|InvalidArgumentException
      */
     public function testRender(): void
     {
@@ -76,10 +78,22 @@ class LogsReportTest extends TestCase
                 $log1->getChannel() => $logChannel1,
                 $log2->getChannel() => $logChannel2,
             ]);
+        $image = $this->getImage();
         $service = $this->createMock(FontAwesomeService::class);
+        $service->method('getImageFromIcon')
+            ->willReturn($image);
 
         $report = new LogsReport($controller, $logFile, $service);
         $actual = $report->render();
         self::assertTrue($actual);
+    }
+
+    private function getImage(): FontAwesomeImage
+    {
+        $path = __DIR__ . '/../Data/images/example.png';
+        $content = \file_get_contents($path);
+        self::assertIsString($content);
+
+        return new FontAwesomeImage($content, 64, 64, 96);
     }
 }

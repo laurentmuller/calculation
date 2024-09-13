@@ -63,12 +63,10 @@ class ItemsTable extends ReportGroupTable implements PdfGroupListenerInterface
     /**
      * Render the table for the given calculation.
      */
-    public static function render(CalculationReport $parent): self
+    public static function render(CalculationReport $parent): void
     {
         $table = new self($parent);
         $table->output();
-
-        return $table;
     }
 
     public function startRow(?PdfStyle $style = null): static

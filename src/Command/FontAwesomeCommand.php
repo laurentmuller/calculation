@@ -109,15 +109,8 @@ class FontAwesomeCommand extends Command
             }
 
             $target = $this->getTargetDirectory($io);
-            $relativeTarget = $this->getRelativePath($target);
-            if (FileUtils::isDir($target) && !FileUtils::remove($target)) {
-                $io->error(\sprintf('Unable to remove directory: "%s".', $relativeTarget));
-
-                return Command::FAILURE;
-            }
-
-            $io->writeln(\sprintf('Move %d files to "%s"...', $count, $relativeTarget));
-            if (!FileUtils::rename($tempDir, $target)) {
+            if (!FileUtils::mirror($tempDir, $target, delete: true)) {
+                $relativeTarget = $this->getRelativePath($target);
                 $io->error(\sprintf('Unable to copy %d files to the directory: "%s".', $count, $relativeTarget));
 
                 return Command::FAILURE;

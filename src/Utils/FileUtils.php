@@ -255,6 +255,31 @@ final class FileUtils
     }
 
     /**
+     * Mirrors a directory to another.
+     *
+     * Copies files and directories from the origin directory into the target directory.
+     *
+     * @param string $origin   the origin directory to copy from
+     * @param string $target   the target directory to copy to
+     * @param bool   $override if true, target files newer than origin files are overwritten
+     * @param bool   $delete   if true, delete files that are not in the source directory
+     */
+    public static function mirror(string $origin, string $target, bool $override = false, bool $delete = false): bool
+    {
+        try {
+            $options = [
+                'override' => $override,
+                'delete' => $delete,
+            ];
+            self::getFilesystem()->mirror($origin, $target, options: $options);
+
+            return true;
+        } catch (IOException) {
+            return false;
+        }
+    }
+
+    /**
      * Creates a directory recursively.
      */
     public static function mkdir(string|iterable $dirs, int $mode = 0o777): bool

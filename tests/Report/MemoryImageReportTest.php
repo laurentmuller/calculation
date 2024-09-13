@@ -13,15 +13,18 @@ declare(strict_types=1);
 namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
+use App\Model\FontAwesomeImage;
 use App\Report\MemoryImageReport;
+use App\Service\FontAwesomeService;
 use fpdf\PdfException;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\Cache\InvalidArgumentException;
 
 class MemoryImageReportTest extends TestCase
 {
     /**
-     * @throws Exception
+     * @throws Exception|InvalidArgumentException
      */
     public function testEmptyImage(): void
     {
@@ -33,7 +36,7 @@ class MemoryImageReportTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|InvalidArgumentException
      */
     public function testInvalidImage(): void
     {
@@ -44,7 +47,7 @@ class MemoryImageReportTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|InvalidArgumentException
      */
     public function testRender(): void
     {
@@ -53,5 +56,87 @@ class MemoryImageReportTest extends TestCase
         $report = new MemoryImageReport($controller, $image);
         $actual = $report->render();
         self::assertTrue($actual);
+    }
+
+    /**
+     * @throws Exception|InvalidArgumentException
+     */
+    public function testRenderWithIconFile(): void
+    {
+        $controller = $this->createMock(AbstractController::class);
+        $iconFile = __DIR__ . '/../../public/images/icons/favicon-114x114.png';
+        $report = new MemoryImageReport($controller, iconFile: $iconFile);
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
+    /**
+     * @throws Exception|InvalidArgumentException
+     */
+    public function testRenderWithInvalidIconFile(): void
+    {
+        self::expectException(PdfException::class);
+        $controller = $this->createMock(AbstractController::class);
+        $report = new MemoryImageReport($controller, iconFile: 'fake');
+        $report->render();
+    }
+
+    /**
+     * @throws Exception|InvalidArgumentException
+     */
+    public function testRenderWithLogoFile(): void
+    {
+        $controller = $this->createMock(AbstractController::class);
+        $logoFile = __DIR__ . '/../../public/images/icons/favicon-114x114.png';
+        $report = new MemoryImageReport($controller, logoFile: $logoFile);
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
+    /**
+     * @throws Exception|InvalidArgumentException
+     */
+    public function testRenderWithScreenshot(): void
+    {
+        $controller = $this->createMock(AbstractController::class);
+        $screenshotFile = __DIR__ . '/../../public/images/screenshots/home_light.png';
+        $report = new MemoryImageReport($controller, screenshotFile: $screenshotFile);
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
+    /**
+     * @throws Exception|InvalidArgumentException
+     */
+    public function testRenderWithService(): void
+    {
+        $controller = $this->createMock(AbstractController::class);
+        $image = $this->getImage();
+        $service = $this->createMock(FontAwesomeService::class);
+        $service->method('getImageFromIcon')
+            ->willReturn($image);
+        $report = new MemoryImageReport($controller, service: $service);
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
+    /**
+     * @throws Exception|InvalidArgumentException
+     */
+    public function testWithNoArgument(): void
+    {
+        $controller = $this->createMock(AbstractController::class);
+        $report = new MemoryImageReport($controller);
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
+    private function getImage(): FontAwesomeImage
+    {
+        $path = __DIR__ . '/../Data/images/example.png';
+        $content = \file_get_contents($path);
+        self::assertIsString($content);
+
+        return new FontAwesomeImage($content, 64, 64, 96);
     }
 }

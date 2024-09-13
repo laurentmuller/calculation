@@ -20,6 +20,7 @@ use App\Interfaces\RoleInterface;
 use App\Model\LogFile;
 use App\Report\LogsReport;
 use App\Resolver\DataQueryValueResolver;
+use App\Service\FontAwesomeService;
 use App\Service\LogService;
 use App\Spreadsheet\LogsDocument;
 use App\Table\DataQuery;
@@ -128,13 +129,13 @@ class LogController extends AbstractController
      * Export to PDF the content of the log file.
      */
     #[Get(path: '/pdf', name: 'pdf')]
-    public function pdf(LogService $service): Response
+    public function pdf(LogService $logService, FontAwesomeService $service): Response
     {
-        $logFile = $this->getLogFile($service);
+        $logFile = $this->getLogFile($logService);
         if (!$logFile instanceof LogFile) {
             return $this->getEmptyResponse();
         }
-        $doc = new LogsReport($this, $logFile);
+        $doc = new LogsReport($this, $logFile, $service);
 
         return $this->renderPdfDocument($doc);
     }

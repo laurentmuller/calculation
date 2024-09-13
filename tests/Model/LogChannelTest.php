@@ -26,9 +26,9 @@ class LogChannelTest extends TestCase
         yield ['doctrine', 'fa-fw fa-solid fa-database'];
         yield ['mailer', 'fa-fw fa-solid fa-envelope'];
         yield ['php', 'fa-fw fa-solid fa-code'];
-        yield ['request', 'fa-fw fa-solid fa-code-pull-request'];
+        yield ['request', 'fa-fw fa-solid fa-upload'];
         yield ['security', 'fa-fw fa-solid fa-key'];
-        yield ['deprecation', 'fa-solid fa-bug'];
+        yield ['deprecation', 'fa-fw fa-solid fa-bug'];
         yield ['', 'fa-fw fa-solid fa-file'];
     }
 

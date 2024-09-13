@@ -14,34 +14,34 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Log;
+use App\Model\FontAwesomeImage;
 use App\Model\LogChannel;
 use App\Model\LogFile;
 use App\Model\LogLevel;
-use App\Pdf\Colors\PdfDrawColor;
-use App\Pdf\Events\PdfCellBorderEvent;
 use App\Pdf\Html\HtmlBootstrapColor;
-use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
+use App\Pdf\Interfaces\PdfMemoryImageInterface;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFont;
+use App\Pdf\PdfIconCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
+use App\Pdf\Traits\PdfMemoryImageTrait;
+use App\Service\FontAwesomeService;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfOrientation;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
+use Psr\Cache\InvalidArgumentException;
 
 /**
  * Report for the log.
  */
-class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
+class LogsReport extends AbstractReport implements PdfMemoryImageInterface
 {
-    /**
-     * The borderline width.
-     */
-    private const BORDER_WIDTH = 0.5;
+    use PdfMemoryImageTrait;
 
     /**
      * The delta date, in seconds, between log bookmarks.
@@ -49,29 +49,15 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
     private const DELTA_DATE = 600;
 
     /**
-     * The border colors.
-     *
-     * @var array<string, ?PdfDrawColor>
+     * @var array<string, ?string>
      */
     private array $colors = [];
 
-    /**
-     * The draw cards state.
-     */
-    private bool $drawCards = false;
-
-    /**
-     * The current level.
-     */
-    private ?string $level = null;
-
-    /**
-     * The maximum index to draw border for card headers.
-     */
-    private int $levelsCount = 0;
-
-    public function __construct(AbstractController $controller, private readonly LogFile $logFile)
-    {
+    public function __construct(
+        AbstractController $controller,
+        private readonly LogFile $logFile,
+        private readonly FontAwesomeService $service
+    ) {
         parent::__construct($controller, PdfOrientation::LANDSCAPE);
         $this->setTitleTrans('log.title');
         $this->setDescriptionTrans('log.list.file', [
@@ -79,28 +65,9 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         ]);
     }
 
-    public function drawCellBorder(PdfCellBorderEvent $event): bool
-    {
-        // cards
-        if ($this->drawCards) {
-            if ($event->index >= $this->levelsCount) {
-                return false;
-            }
-
-            $columns = $event->table->getColumns();
-            $text = $columns[$event->index]->getText();
-
-            return $this->drawBorder($event, $text);
-        }
-
-        // row
-        if (0 === $event->index && !$event->table->isHeaders()) {
-            return $this->drawBorder($event, $this->level);
-        }
-
-        return false;
-    }
-
+    /**
+     * @throws InvalidArgumentException
+     */
     public function render(): bool
     {
         $this->addPage();
@@ -111,8 +78,8 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
             return true;
         }
 
-        $this->outputCards($logFile->getLevels(), $logFile->getChannels(), $logFile->count());
-        $this->outputLogs($logFile->getLogs());
+        $this->renderCards($logFile->getLevels(), $logFile->getChannels(), $logFile->count());
+        $this->renderLogs($logFile->getLogs());
 
         return true;
     }
@@ -130,42 +97,63 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
             ->addColumns(
                 $this->leftColumn('log.fields.createdAt', 33, true),
                 $this->leftColumn('log.fields.message', 150),
-                $this->leftColumn('log.fields.level', 20, true),
-                $this->leftColumn('log.fields.channel', 20, true),
+                $this->leftColumn('log.fields.level', 21, true),
+                $this->leftColumn('log.fields.channel', 24, true),
                 $this->leftColumn('log.fields.user', 20, true)
             )
             ->outputHeaders();
     }
 
-    private function drawBorder(PdfCellBorderEvent $event, ?string $level): bool
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function getChannelCell(Log $log): PdfIconCell|string
     {
-        if (!StringUtils::isString($level)) {
-            return false;
+        $text = $log->getChannel(true);
+        $image = $this->service->getImageFromIcon($log->getChannelIcon());
+        if (!$image instanceof FontAwesomeImage) {
+            return $text;
         }
 
-        $color = $this->getLevelColor($level);
-        if (!$color instanceof PdfDrawColor) {
-            return false;
-        }
-
-        $bounds = $event->bounds;
-        $x = $bounds->x + self::BORDER_WIDTH / 2.0;
-        $y = $bounds->y + self::BORDER_WIDTH / 2.0;
-        $h = $bounds->height - self::BORDER_WIDTH;
-        $parent = $event->getDocument();
-        $parent->rectangle($bounds, $event->border);
-        $color->apply($parent);
-        $parent->setLineWidth(self::BORDER_WIDTH);
-        $parent->line($x, $y, $x, $y + $h);
-
-        return true;
+        return new PdfIconCell($image, $text);
     }
 
-    private function getLevelColor(string $level): ?PdfDrawColor
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function getImageIcon(LogLevel|LogChannel $value): ?FontAwesomeImage
+    {
+        $color = null;
+        if ($value instanceof LogLevel) {
+            $icon = $value->getLevelIcon();
+            $color = $this->getLevelColor($value->getLevel());
+        } else {
+            $icon = $value->getChannelIcon();
+        }
+
+        return $this->service->getImageFromIcon($icon, $color);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function getLevelCell(Log $log): PdfIconCell|string
+    {
+        $text = $log->getLevel(true);
+        $color = $this->getLevelColor($log->getLevel());
+        $image = $this->service->getImageFromIcon($log->getLevelIcon(), $color);
+        if (!$image instanceof FontAwesomeImage) {
+            return $text;
+        }
+
+        return new PdfIconCell($image, $text);
+    }
+
+    private function getLevelColor(string $level): ?string
     {
         if (!\array_key_exists($level, $this->colors)) {
             $color = LogLevel::instance($level)->getLevelColor();
-            $this->colors[$level] = HtmlBootstrapColor::parseDrawColor($color);
+            $this->colors[$level] = HtmlBootstrapColor::parseTextColor($color)?->asHex('#');
         }
 
         return $this->colors[$level];
@@ -179,8 +167,10 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
     /**
      * @param array<string, LogLevel>   $levels
      * @param array<string, LogChannel> $channels
+     *
+     * @throws InvalidArgumentException
      */
-    private function outputCards(array $levels, array $channels, int $count): void
+    private function renderCards(array $levels, array $channels, int $count): void
     {
         $columns = [];
         $textCells = [];
@@ -208,29 +198,29 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         $chanel = $this->trans('log.fields.channel');
         $this->addBookmark(\sprintf('%s - %s', $level, $chanel));
 
-        $this->levelsCount = \max(1, \count($levels) * 2);
+        $levelsCount = \max(1, \count($levels) * 2);
         $channelsCount = \count($channels) * 2 + 1;
-        $titleStyle = PdfStyle::default()->setBorder(PdfBorder::none())->setFontBold();
+        $titleStyle = PdfStyle::default()
+            ->setBorder(PdfBorder::none())
+            ->setFontBold();
 
-        $this->drawCards = true;
         PdfTable::instance($this)
             ->addColumns(...$columns)
             ->startRow()
-            ->add($level, $this->levelsCount, $titleStyle, PdfTextAlignment::LEFT)
+            ->add($level, $levelsCount, $titleStyle, PdfTextAlignment::LEFT)
             ->add($chanel, $channelsCount, $titleStyle, PdfTextAlignment::LEFT)
             ->endRow()
-            ->setBorderListener($this)
             ->addStyledRow($textCells, PdfStyle::getHeaderStyle()->resetFont())
-            ->addStyledRow($valueCells, PdfStyle::getCellStyle()->setFontSize(14))
-            ->setBorderListener(null);
-        $this->drawCards = false;
+            ->addStyledRow($valueCells, PdfStyle::getCellStyle()->setFontSize(14));
         $this->lineBreak(3);
     }
 
     /**
      * @psalm-param Log[] $logs
+     *
+     * @throws InvalidArgumentException
      */
-    private function outputLogs(array $logs): void
+    private function renderLogs(array $logs): void
     {
         $title = $this->trans('log.name');
         $this->addBookmark($title, true);
@@ -239,10 +229,8 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         $this->resetStyle();
 
         $date = 0;
-        $table = $this->createTable()
-            ->setBorderListener($this);
+        $table = $this->createTable();
         foreach ($logs as $log) {
-            $this->level = $log->getLevel();
             $newDate = $this->getRoundedDate($log);
             if ($date !== $newDate) {
                 $date = $newDate;
@@ -251,20 +239,22 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
             $table->addRow(
                 $log->getFormattedDate(),
                 $log->getMessage(),
-                $log->getLevel(true),
-                $log->getChannel(true),
+                $this->getLevelCell($log),
+                $this->getChannelCell($log),
                 $log->getUser()
             );
         }
-        $table->setBorderListener(null);
+
         $this->renderCount($table, $logs, 'counters.logs');
     }
 
     /**
-     * @param array<string, \Countable> $values
-     * @param PdfColumn[]               $columns
-     * @param PdfCell[]                 $textCells
-     * @param PdfCell[]                 $valueCells
+     * @param array<string, LogLevel|LogChannel> $values
+     * @param PdfColumn[]                        $columns
+     * @param PdfCell[]                          $textCells
+     * @param PdfCell[]                          $valueCells
+     *
+     * @throws InvalidArgumentException
      */
     private function updateCardsEntries(
         array $values,
@@ -277,7 +267,13 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         $index = \count($values);
         foreach ($values as $key => $value) {
             $columns[] = PdfColumn::center($key, 30);
-            $textCells[] = new PdfCell(StringUtils::capitalize($key));
+            $text = StringUtils::capitalize($key);
+            $image = $this->getImageIcon($value);
+            if ($image instanceof FontAwesomeImage) {
+                $textCells[] = new PdfIconCell($image, $text, alignment: PdfTextAlignment::CENTER);
+            } else {
+                $textCells[] = new PdfCell($text);
+            }
             $valueCells[] = new PdfCell(FormatUtils::formatInt($value));
             if (--$index > 0) {
                 $columns[] = $emptyCol;

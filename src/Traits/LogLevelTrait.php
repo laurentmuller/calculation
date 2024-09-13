@@ -57,13 +57,13 @@ trait LogLevelTrait
      */
     public function getLevelIcon(): string
     {
-        return match ($this->level) {
+        return 'fa-fw fa-solid fa-' . match ($this->level) {
             PsrLevel::ALERT,
             PsrLevel::CRITICAL,
             PsrLevel::EMERGENCY,
-            PsrLevel::ERROR => 'fa-fw fa-solid fa-circle-exclamation',
-            PsrLevel::WARNING => 'fa-fw fa-solid fa-triangle-exclamation',
-            default => 'fa-fw fa-solid fa-circle-info',
+            PsrLevel::ERROR => 'circle-exclamation',
+            PsrLevel::WARNING => 'triangle-exclamation',
+            default => 'circle-info',
         };
     }
 

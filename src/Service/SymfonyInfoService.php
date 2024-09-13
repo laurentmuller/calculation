@@ -464,8 +464,8 @@ final readonly class SymfonyInfoService
             'vendor/composer',
             $package['install-path']
         );
-        $finder = new Finder();
-        $finder->in($dir)->depth(0)->files()
+        $finder = Finder::create()
+            ->in($dir)->depth(0)->files()
             ->name(self::LICENSE_PATTERN);
         foreach ($finder as $file) {
             return FileUtils::makePathRelative($file->getRealPath(), $this->projectDir);

@@ -20,7 +20,7 @@ use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LogLevel;
+use Psr\Log\LogLevel as PsrLevel;
 
 class LogTest extends TestCase
 {
@@ -34,31 +34,31 @@ class LogTest extends TestCase
         yield ['doctrine', 'fa-fw fa-solid fa-database'];
         yield ['mailer', 'fa-fw fa-solid fa-envelope'];
         yield ['php', 'fa-fw fa-solid fa-code'];
-        yield ['request', 'fa-fw fa-solid fa-code-pull-request'];
+        yield ['request', 'fa-fw fa-solid fa-upload'];
         yield ['security', 'fa-fw fa-solid fa-key'];
-        yield ['deprecation', 'fa-solid fa-bug'];
+        yield ['deprecation', 'fa-fw fa-solid fa-bug'];
         yield ['', 'fa-fw fa-solid fa-file'];
     }
 
     public static function getLevelColors(): \Generator
     {
-        yield [LogLevel::ALERT, 'text-danger'];
-        yield [LogLevel::CRITICAL, 'text-danger'];
-        yield [LogLevel::EMERGENCY, 'text-danger'];
-        yield [LogLevel::ERROR, 'text-danger'];
-        yield [LogLevel::WARNING, 'text-warning'];
-        yield [LogLevel::DEBUG, 'text-secondary'];
+        yield [PsrLevel::ALERT, 'text-danger'];
+        yield [PsrLevel::CRITICAL, 'text-danger'];
+        yield [PsrLevel::EMERGENCY, 'text-danger'];
+        yield [PsrLevel::ERROR, 'text-danger'];
+        yield [PsrLevel::WARNING, 'text-warning'];
+        yield [PsrLevel::DEBUG, 'text-secondary'];
         yield ['fake', 'text-info'];
         yield ['', 'text-info'];
     }
 
     public static function getLevelIcons(): \Generator
     {
-        yield [LogLevel::ALERT, 'fa-fw fa-solid fa-circle-exclamation'];
-        yield [LogLevel::CRITICAL, 'fa-fw fa-solid fa-circle-exclamation'];
-        yield [LogLevel::EMERGENCY, 'fa-fw fa-solid fa-circle-exclamation'];
-        yield [LogLevel::ERROR, 'fa-fw fa-solid fa-circle-exclamation'];
-        yield [LogLevel::WARNING, 'fa-fw fa-solid fa-triangle-exclamation'];
+        yield [PsrLevel::ALERT, 'fa-fw fa-solid fa-circle-exclamation'];
+        yield [PsrLevel::CRITICAL, 'fa-fw fa-solid fa-circle-exclamation'];
+        yield [PsrLevel::EMERGENCY, 'fa-fw fa-solid fa-circle-exclamation'];
+        yield [PsrLevel::ERROR, 'fa-fw fa-solid fa-circle-exclamation'];
+        yield [PsrLevel::WARNING, 'fa-fw fa-solid fa-triangle-exclamation'];
         yield ['fake', 'fa-fw fa-solid fa-circle-info'];
         yield ['', 'fa-fw fa-solid fa-circle-info'];
     }
@@ -198,7 +198,7 @@ class LogTest extends TestCase
     public function testLevel(): void
     {
         $log = new Log();
-        $log->setLevel(LogLevel::ALERT);
+        $log->setLevel(PsrLevel::ALERT);
         self::assertSame('alert', $log->getLevel());
         self::assertSame('Alert', $log->getLevel(true));
         self::assertTrue($log->isLevel());

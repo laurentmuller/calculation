@@ -6,9 +6,10 @@ symfony.lock
 /vendor/
 ###< symfony/framework-bundle ###
 
-###> public ###
+###> resources ###
 /public/images/users/*
 /public/vendor/
+/resources/fontawesome/
 ###< public ###
 
 ###> tests ###

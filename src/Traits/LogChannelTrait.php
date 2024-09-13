@@ -50,17 +50,17 @@ trait LogChannelTrait
      */
     public function getChannelIcon(): string
     {
-        return match ($this->channel) {
-            'application' => 'fa-fw fa-solid fa-laptop-code',
-            'cache' => 'fa-fw fa-solid fa-hard-drive',
-            'console' => 'fa-fw fa-solid fa-keyboard',
-            'doctrine' => 'fa-fw fa-solid fa-database',
-            'mailer' => 'fa-fw fa-solid fa-envelope',
-            'php' => 'fa-fw fa-solid fa-code',
-            'request' => 'fa-fw fa-solid fa-code-pull-request',
-            'security' => 'fa-fw fa-solid fa-key',
-            'deprecation' => 'fa-solid fa-bug',
-            default => 'fa-fw fa-solid fa-file',
+        return 'fa-fw fa-solid fa-' . match ($this->channel) {
+            'application' => 'laptop-code',
+            'cache' => 'hard-drive',
+            'console' => 'keyboard',
+            'doctrine' => 'database',
+            'mailer' => 'envelope',
+            'php' => 'code',
+            'request' => 'upload',
+            'security' => 'key',
+            'deprecation' => 'bug',
+            default => 'file',
         };
     }
 

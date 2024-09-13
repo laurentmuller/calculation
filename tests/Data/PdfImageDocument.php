@@ -12,13 +12,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Data;
 
+use App\Pdf\Interfaces\PdfMemoryImageInterface;
 use App\Pdf\Traits\PdfMemoryImageTrait;
 use fpdf\PdfDocument;
 
 /**
  * Image document for tests purposes.
  */
-class PdfImageDocument extends PdfDocument
+class PdfImageDocument extends PdfDocument implements PdfMemoryImageInterface
 {
     use PdfMemoryImageTrait;
 }

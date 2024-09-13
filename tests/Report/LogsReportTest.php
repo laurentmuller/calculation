@@ -18,6 +18,7 @@ use App\Model\LogChannel;
 use App\Model\LogFile;
 use App\Model\LogLevel;
 use App\Report\LogsReport;
+use App\Service\FontAwesomeService;
 use App\Utils\DateUtils;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -34,8 +35,9 @@ class LogsReportTest extends TestCase
         $logFile = $this->createMock(LogFile::class);
         $logFile->method('isEmpty')
             ->willReturn(true);
+        $service = $this->createMock(FontAwesomeService::class);
 
-        $report = new LogsReport($controller, $logFile);
+        $report = new LogsReport($controller, $logFile, $service);
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -74,8 +76,9 @@ class LogsReportTest extends TestCase
                 $log1->getChannel() => $logChannel1,
                 $log2->getChannel() => $logChannel2,
             ]);
+        $service = $this->createMock(FontAwesomeService::class);
 
-        $report = new LogsReport($controller, $logFile);
+        $report = new LogsReport($controller, $logFile, $service);
         $actual = $report->render();
         self::assertTrue($actual);
     }

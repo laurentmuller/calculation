@@ -100,8 +100,8 @@ class LogFile implements \Countable
     public function sort(): self
     {
         if (!$this->isEmpty()) {
-            \ksort($this->levels, \SORT_LOCALE_STRING);
-            \ksort($this->channels, \SORT_LOCALE_STRING);
+            \ksort($this->levels);
+            \ksort($this->channels);
             \uasort($this->logs, static fn (Log $a, Log $b): int => $b->compare($a));
         }
 

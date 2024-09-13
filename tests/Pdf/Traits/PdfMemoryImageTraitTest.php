@@ -12,11 +12,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Pdf\Traits;
 
-use App\Pdf\Traits\PdfMemoryImageTrait;
 use App\Service\ImageService;
-use fpdf\PdfDocument;
+use App\Tests\Data\PdfImageDocument;
 use fpdf\PdfException;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class PdfMemoryImageTraitTest extends TestCase
@@ -24,10 +22,7 @@ class PdfMemoryImageTraitTest extends TestCase
     public function testImageFromAvif(): void
     {
         $file = $this->getImagePath('avif');
-        $doc = new class() extends PdfDocument {
-            use PdfMemoryImageTrait;
-        };
-        $doc->addPage();
+        $doc = $this->createDocument();
         $doc->imageFromAvif($file);
         self::assertSame(1, $doc->getPage());
     }
@@ -35,10 +30,7 @@ class PdfMemoryImageTraitTest extends TestCase
     public function testImageFromBmp(): void
     {
         $file = $this->getImagePath('bmp');
-        $doc = new class() extends PdfDocument {
-            use PdfMemoryImageTrait;
-        };
-        $doc->addPage();
+        $doc = $this->createDocument();
         $doc->imageFromBmp($file);
         self::assertSame(1, $doc->getPage());
     }
@@ -46,10 +38,7 @@ class PdfMemoryImageTraitTest extends TestCase
     public function testImageFromWbmp(): void
     {
         $file = $this->getImagePath('wbmp');
-        $doc = new class() extends PdfDocument {
-            use PdfMemoryImageTrait;
-        };
-        $doc->addPage();
+        $doc = $this->createDocument();
         $doc->imageFromWbmp($file);
         self::assertSame(1, $doc->getPage());
     }
@@ -57,10 +46,7 @@ class PdfMemoryImageTraitTest extends TestCase
     public function testImageFromWebp(): void
     {
         $file = $this->getImagePath('webp');
-        $doc = new class() extends PdfDocument {
-            use PdfMemoryImageTrait;
-        };
-        $doc->addPage();
+        $doc = $this->createDocument();
         $doc->imageFromWebp($file);
         self::assertSame(1, $doc->getPage());
     }
@@ -68,10 +54,7 @@ class PdfMemoryImageTraitTest extends TestCase
     public function testImageFromXbm(): void
     {
         $file = $this->getImagePath('xbm');
-        $doc = new class() extends PdfDocument {
-            use PdfMemoryImageTrait;
-        };
-        $doc->addPage();
+        $doc = $this->createDocument();
         $doc->imageFromXbm($file);
         self::assertSame(1, $doc->getPage());
     }
@@ -79,44 +62,31 @@ class PdfMemoryImageTraitTest extends TestCase
     public function testImageFromXpm(): void
     {
         $file = $this->getImagePath('xpm');
-        $doc = new class() extends PdfDocument {
-            use PdfMemoryImageTrait;
-        };
-        $doc->addPage();
+        $doc = $this->createDocument();
         $doc->imageFromXpm($file);
         self::assertSame(1, $doc->getPage());
     }
 
     public function testImageGD(): void
     {
-        $doc = new class() extends PdfDocument {
-            use PdfMemoryImageTrait;
-        };
-        $doc->addPage();
+        $doc = $this->createDocument();
         $doc->imageGD($this->createGdImage());
         self::assertSame(1, $doc->getPage());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testImageGDInvalid(): void
     {
         self::expectException(PdfException::class);
         $image = \imagecreate(100, 100);
         self::assertInstanceOf(\GdImage::class, $image);
-        $doc = new class() extends PdfDocument {
-            use PdfMemoryImageTrait;
-        };
+        $doc = new PdfImageDocument();
         \imagedestroy($image);
         $doc->imageGD($image);
     }
 
     public function testInvalidLoader(): void
     {
-        $doc = new class() extends PdfDocument {
-            use PdfMemoryImageTrait;
-
+        $doc = new class() extends PdfImageDocument {
             public function loadInvalidImage(): void
             {
                 $this->imageFromLoader(
@@ -128,6 +98,14 @@ class PdfMemoryImageTraitTest extends TestCase
         self::expectException(PdfException::class);
         self::expectExceptionMessage('The image file "fake" is not a valid image.');
         $doc->loadInvalidImage();
+    }
+
+    private function createDocument(): PdfImageDocument
+    {
+        $doc = new PdfImageDocument();
+        $doc->addPage();
+
+        return $doc;
     }
 
     private function createGdImage(): \GdImage

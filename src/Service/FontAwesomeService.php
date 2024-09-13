@@ -16,7 +16,6 @@ use App\Model\FontAwesomeImage;
 use App\Traits\CacheKeyTrait;
 use App\Traits\LoggerTrait;
 use App\Utils\FileUtils;
-use App\Utils\StringUtils;
 use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -31,17 +30,19 @@ class FontAwesomeService
     use CacheKeyTrait;
     use LoggerTrait;
 
-    private const PATH_REPLACE = '<path style="fill:%s" ';
-    private const PATH_SEARCH = '<path ';
     private const SVG_EXTENSION = '.svg';
+    private const SVG_REPLACE = '<svg fill="%s" ';
+    private const SVG_SEARCH = '<svg ';
+
     private const TARGET_SIZE = 64;
     private const VIEW_BOX_PATTERN = '/viewBox="(\d+\s+){2}(?\'width\'\d+)\s+(?\'height\'\d+)"/mi';
 
     private ?\Imagick $imagick = null;
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%/vendor/fortawesome/font-awesome/svgs')]
+        #[Autowire('%kernel.project_dir%/resources/fontawesome')]
         private readonly string $svgDirectory,
+        private readonly FontAwesomeIconService $service,
         private readonly CacheInterface $cache,
         private readonly LoggerInterface $logger,
     ) {
@@ -58,7 +59,9 @@ class FontAwesomeService
      *
      * @param string      $relativePath the relative file path to the SVG directory.
      *                                  The SVG file extension (.svg) is added if not present.
-     * @param string|null $color        the optional foreground color to apply
+     * @param string|null $color        the foreground color to apply or <code>null</code> for black color
+     *
+     * @return ?FontAwesomeImage the image, if found, <code>null</code> otherwise
      *
      * @throws InvalidArgumentException
      */
@@ -71,12 +74,13 @@ class FontAwesomeService
         if (!\str_ends_with($relativePath, self::SVG_EXTENSION)) {
             $relativePath .= self::SVG_EXTENSION;
         }
+
         $path = FileUtils::buildPath($this->svgDirectory, $relativePath);
         if (!FileUtils::isFile($path)) {
             return null;
         }
-
-        $key = \sprintf('%s_%s', $path, $color ?? '');
+        $color ??= 'black';
+        $key = \sprintf('%s_%s', $path, $color);
 
         return $this->cache->get(
             $this->cleanKey($key),
@@ -84,9 +88,57 @@ class FontAwesomeService
         );
     }
 
+    /**
+     * Gets a Font Awesome image from the given icon class.
+     *
+     * @param string      $icon  the icon class to get image for
+     * @param string|null $color the foreground color to apply or <code>null</code> for black color
+     *
+     * @return ?FontAwesomeImage the image, if found, <code>null</code> otherwise
+     *
+     * @throws InvalidArgumentException
+     */
+    public function getImageFromIcon(string $icon, ?string $color = null): ?FontAwesomeImage
+    {
+        $path = $this->service->getIconPath($icon);
+        if (null === $path) {
+            return null;
+        }
+
+        return $this->getImage($path, $color);
+    }
+
     public function getLogger(): LoggerInterface
     {
         return $this->logger;
+    }
+
+    /**
+     * Gets the directory where SVG files as stored.
+     */
+    public function getSvgDirectory(): string
+    {
+        return $this->svgDirectory;
+    }
+
+    private function convert(string $content): FontAwesomeImage
+    {
+        $imagick = null;
+
+        try {
+            $imagick = $this->getImagick();
+            $imagick->readImageBlob($content);
+            $size = $this->getTargetSize($content);
+            $imagick->resizeImage($size[0], $size[1], \Imagick::FILTER_LANCZOS, 1);
+            $imagick->transparentPaintImage('white', 0.0, (float) \Imagick::getQuantum(), false);
+            $imagick->setImageFormat('png24');
+            $imageBlob = $imagick->getImageBlob();
+            $resolution = (int) $imagick->getImageResolution()['x'];
+
+            return new FontAwesomeImage($imageBlob, $size[0], $size[1], $resolution);
+        } finally {
+            $imagick?->clear();
+        }
     }
 
     private function getImagick(): \Imagick
@@ -117,7 +169,7 @@ class FontAwesomeService
         return [$this->round(self::TARGET_SIZE * $width, $height), self::TARGET_SIZE];
     }
 
-    private function loadImage(string $path, ?string $color, ItemInterface $item, bool &$save): ?FontAwesomeImage
+    private function loadImage(string $path, string $color, ItemInterface $item, bool &$save): ?FontAwesomeImage
     {
         $save = false;
         $content = \file_get_contents($path);
@@ -127,31 +179,18 @@ class FontAwesomeService
             return null;
         }
 
-        if (StringUtils::isString($color)) {
-            $content = $this->setFillColor($content, $color);
-        }
-        $size = $this->getTargetSize($content);
-
-        $imagick = null;
+        $content = $this->updateFillColor($content, $color);
 
         try {
-            $imagick = $this->getImagick();
-            $imagick->readImageBlob($content);
-            $imagick->resizeImage($size[0], $size[1], \Imagick::FILTER_LANCZOS, 1);
-            $imagick->setImageFormat('png24');
-            $blob = $imagick->getImageBlob();
-            $resolution = (int) $imagick->getImageResolution()['x'];
-            $image = new FontAwesomeImage($blob, $size[0], $size[1], $resolution);
+            $image = $this->convert($content);
             $item->set($image);
             $save = true;
 
             return $image;
-        } catch (\ImagickException $e) {
+        } catch (\Exception $e) {
             $this->logException($e, \sprintf('Unable to load image "%s".', $path));
 
             return null;
-        } finally {
-            $imagick?->clear();
         }
     }
 
@@ -160,8 +199,8 @@ class FontAwesomeService
         return (int) \round($dividend / $divisor);
     }
 
-    private function setFillColor(string $content, string $color): string
+    private function updateFillColor(string $content, string $color): string
     {
-        return \str_replace(self::PATH_SEARCH, \sprintf(self::PATH_REPLACE, $color), $content);
+        return \str_replace(self::SVG_SEARCH, \sprintf(self::SVG_REPLACE, $color), $content);
     }
 }

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Traits;
 
+use App\Pdf\Interfaces\PdfMemoryImageInterface;
 use fpdf\PdfDocument;
 use fpdf\PdfException;
 
@@ -19,6 +20,8 @@ use fpdf\PdfException;
  * Trait to output memory images.
  *
  * @psalm-require-extends PdfDocument
+ *
+ * @psalm-require-implements PdfMemoryImageInterface
  */
 trait PdfMemoryImageTrait
 {

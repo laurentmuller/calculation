@@ -20,6 +20,7 @@ use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfDrawHeadersInterface;
+use App\Pdf\Interfaces\PdfMemoryImageInterface;
 use App\Traits\MathTrait;
 use fpdf\Enums\PdfRectangleStyle;
 use fpdf\Enums\PdfTextAlignment;
@@ -761,15 +762,17 @@ class PdfTable
         $border = $style->getBorder() ?? $this->border;
         $this->drawCellBorder($parent, $index, $bounds, $border);
 
-        // image or text
+        // image and/or text
         $style->apply($parent);
         $parent->setPosition($position);
         $margin = $parent->getCellMargin();
         $textBounds = clone $bounds;
         $line_height = PdfDocument::LINE_HEIGHT;
-        if ($cell instanceof PdfImageCell) {
-            $imageBounds = (clone $textBounds)->inflate(-$margin);
-            $cell->drawImage($parent, $imageBounds, $alignment);
+
+        if ($cell instanceof PdfIconCell && $parent instanceof PdfMemoryImageInterface) {
+            $this->drawIconCell($parent, $cell, clone $textBounds);
+        } elseif ($cell instanceof PdfImageCell) {
+            $this->drawImageCell($parent, $cell, clone $textBounds, $margin, $alignment);
         } else {
             if (!$style->getFont()->isDefaultSize()) {
                 $line_height = $parent->getFontSize() + 2.0 * $margin;
@@ -866,6 +869,25 @@ class PdfTable
         if ('' !== $text) {
             $parent->multiCell(width: $bounds->width, height: $height, text: $text, align: $alignment);
         }
+    }
+
+    private function drawIconCell(
+        PdfDocument&PdfMemoryImageInterface $parent,
+        PdfIconCell $cell,
+        PdfRectangle $bounds
+    ): void {
+        $cell->drawImage($parent, $bounds);
+    }
+
+    private function drawImageCell(
+        PdfDocument $parent,
+        PdfImageCell $cell,
+        PdfRectangle $bounds,
+        float $margin,
+        PdfTextAlignment $alignment
+    ): void {
+        $bounds->inflate(-$margin);
+        $cell->drawImage($parent, $bounds, $alignment);
     }
 
     /**

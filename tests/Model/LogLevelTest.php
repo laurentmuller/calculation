@@ -44,7 +44,7 @@ class LogLevelTest extends TestCase
 
     public function testIncrement(): void
     {
-        $logLevel = LogLevel::instance('level');
+        $logLevel = LogLevel::instance(PsrLevel::WARNING);
         self::assertCount(0, $logLevel);
         $logLevel->increment();
         self::assertCount(1, $logLevel);
@@ -54,16 +54,17 @@ class LogLevelTest extends TestCase
 
     public function testInstance(): void
     {
-        $logLevel = LogLevel::instance('level');
-        self::assertSame('level', $logLevel->getLevel());
-        self::assertSame('level', $logLevel->__toString());
-        self::assertSame('Level', $logLevel->getLevel(true));
+        $expected = PsrLevel::WARNING;
+        $logLevel = LogLevel::instance($expected);
+        self::assertSame($expected, $logLevel->getLevel());
+        self::assertSame($expected, $logLevel->__toString());
+        self::assertSame('Warning', $logLevel->getLevel(true));
         self::assertCount(0, $logLevel);
     }
 
     public function testIsLevel(): void
     {
-        $logLevel = LogLevel::instance('level');
+        $logLevel = LogLevel::instance(PsrLevel::WARNING);
         self::assertTrue($logLevel->isLevel());
         $logLevel = LogLevel::instance('');
         self::assertFalse($logLevel->isLevel());
@@ -72,8 +73,7 @@ class LogLevelTest extends TestCase
     #[DataProvider('getLevelColors')]
     public function testLevelColor(string $level, string $expected): void
     {
-        $logLevel = LogLevel::instance('level');
-        $logLevel->setLevel($level);
+        $logLevel = LogLevel::instance($level);
         $actual = $logLevel->getLevelColor();
         self::assertSame($expected, $actual);
     }
@@ -81,8 +81,7 @@ class LogLevelTest extends TestCase
     #[DataProvider('getLevelIcons')]
     public function testLevelIcon(string $level, string $expected): void
     {
-        $logLevel = LogLevel::instance('level');
-        $logLevel->setLevel($level);
+        $logLevel = LogLevel::instance($level);
         $actual = $logLevel->getLevelIcon();
         self::assertSame($expected, $actual);
     }

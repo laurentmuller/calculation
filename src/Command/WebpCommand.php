@@ -171,7 +171,8 @@ class WebpCommand extends Command
         $extensions = \array_map(fn (ImageExtension $e): string => $e->getFilter(), $filtered);
         $depth = "<= $level";
 
-        return (new Finder())->ignoreUnreadableDirs()
+        return Finder::create()
+            ->ignoreUnreadableDirs()
             ->in($path)
             ->depth($depth)
             ->files()

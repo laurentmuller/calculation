@@ -13,19 +13,33 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Model\FontAwesomeImage;
+use App\Model\LogChannel;
+use App\Model\LogLevel;
+use App\Pdf\Colors\PdfTextColor;
+use App\Pdf\Html\HtmlBootstrapColor;
+use App\Pdf\Interfaces\PdfMemoryImageInterface;
+use App\Pdf\PdfIconCell;
+use App\Pdf\PdfStyle;
 use App\Pdf\Traits\PdfMemoryImageTrait;
+use App\Service\FontAwesomeService;
 use App\Service\ImageService;
 use App\Utils\FileUtils;
+use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfRectangleStyle;
+use fpdf\PdfBorder;
 use fpdf\PdfException;
+use fpdf\PdfRectangle;
 use fpdf\Traits\PdfEllipseTrait;
 use fpdf\Traits\PdfRotationTrait;
 use fpdf\Traits\PdfTransparencyTrait;
+use Monolog\Level;
+use Psr\Cache\InvalidArgumentException;
 
 /**
  * Report testing in memory images.
  */
-class MemoryImageReport extends AbstractReport
+class MemoryImageReport extends AbstractReport implements PdfMemoryImageInterface
 {
     use PdfEllipseTrait;
     use PdfMemoryImageTrait;
@@ -34,14 +48,18 @@ class MemoryImageReport extends AbstractReport
 
     public function __construct(
         AbstractController $controller,
-        private readonly string $logoFile,
+        private readonly ?string $logoFile = null,
         private readonly ?string $iconFile = null,
-        private readonly ?string $screenshotFile = null
+        private readonly ?string $screenshotFile = null,
+        private readonly ?FontAwesomeService $service = null,
     ) {
         parent::__construct($controller);
         $this->setTitle('In memory Images');
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function render(): bool
     {
         $this->addPage();
@@ -51,9 +69,8 @@ class MemoryImageReport extends AbstractReport
         $this->addTransparencyImage();
         $this->addScreenshotImage();
         $this->renderEllipses();
-
-        $this->addPage();
         $this->renderRotation();
+        $this->renderFontAwesome();
 
         return true;
     }
@@ -83,12 +100,14 @@ class MemoryImageReport extends AbstractReport
         $service->fillRectangle(30, 100, 30, 48, (int) $service->allocate(255, 0, 0));
         $service->fillRectangle(80, 80, 30, 68, (int) $service->allocate(0, 255, 0));
         $service->fillRectangle(130, 40, 30, 108, (int) $service->allocate(0, 0, 255));
-
         $this->imageGD($service->getImage(), 160, 20, 40);
     }
 
     private function addLogoImage(): void
     {
+        if (null === $this->logoFile) {
+            return;
+        }
         $data = FileUtils::readFile($this->logoFile);
         if ('' === $data) {
             throw PdfException::instance('Unable to get image content.');
@@ -114,10 +133,103 @@ class MemoryImageReport extends AbstractReport
         if ('' === $data) {
             throw PdfException::instance('Unable to get image content.');
         }
-
         $this->setAlpha(0.5);
         $this->imageMemory($data, 110, 20, 30);
         $this->resetAlpha();
+    }
+
+    private function getLevelColor(string $level): ?PdfTextColor
+    {
+        $log = new LogLevel($level);
+        $color = $log->getLevelColor();
+
+        return HtmlBootstrapColor::parseTextColor($color);
+    }
+
+    /**
+     * @return array<string, FontAwesomeImage>
+     *
+     * @throws InvalidArgumentException
+     */
+    private function getLogChannelImages(): array
+    {
+        $channels = [
+            'application',
+            'cache',
+            'console',
+            'doctrine',
+            'mailer',
+            'php',
+            'request',
+            'security',
+            'deprecation',
+            'file',
+        ];
+        $files = [];
+        foreach ($channels as $channel) {
+            $logChannel = new LogChannel($channel);
+            $image = $this->service?->getImageFromIcon($logChannel->getChannelIcon());
+            if ($image instanceof FontAwesomeImage) {
+                $files[$channel] = $image;
+            }
+        }
+
+        return $files;
+    }
+
+    /**
+     * @return array<string, FontAwesomeImage>
+     *
+     * @throws InvalidArgumentException
+     */
+    private function getLogLevelImages(): array
+    {
+        $files = [];
+        $levels = Level::cases();
+        foreach ($levels as $level) {
+            $logLevel = new LogLevel($level->name);
+            $color = HtmlBootstrapColor::parseTextColor($logLevel->getLevelColor())?->asHex('#');
+            $image = $this->service?->getImageFromIcon($logLevel->getLevelIcon(), $color);
+            if ($image instanceof FontAwesomeImage) {
+                $files[$logLevel->getLevel()] = $image;
+            }
+        }
+
+        return $files;
+    }
+
+    private function renderCellTitle(string $title): void
+    {
+        PdfStyle::getBoldCellStyle()->apply($this);
+        $this->cell(text: $title, border: PdfBorder::all(), move: PdfMove::NEW_LINE);
+        $this->resetStyle();
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function renderDigits(): void
+    {
+        $this->renderCellTitle('Digits');
+
+        $color = HtmlBootstrapColor::DANGER->value;
+        HtmlBootstrapColor::DANGER->applyTextColor($this);
+        foreach (\range(0, 9) as $index) {
+            $icon = \sprintf('fa-solid fa-%d', $index);
+            $image = $this->service?->getImageFromIcon($icon, $color);
+            if (!$image instanceof FontAwesomeImage) {
+                continue;
+            }
+
+            $bounds = new PdfRectangle(
+                $this->x,
+                $this->y,
+                $this->getPrintableWidth(),
+                self::LINE_HEIGHT,
+            );
+            $cell = new PdfIconCell($image, $icon);
+            $cell->drawImage($this, $bounds, PdfMove::NEW_LINE);
+        }
     }
 
     private function renderEllipses(): void
@@ -130,15 +242,61 @@ class MemoryImageReport extends AbstractReport
         $this->ellipse(30, 245, 20, 10, PdfRectangleStyle::BOTH);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function renderFontAwesome(): void
+    {
+        if (!$this->service instanceof FontAwesomeService) {
+            return;
+        }
+
+        $this->addPage()
+            ->resetStyle();
+
+        $this->renderDigits();
+        $channelFiles = $this->getLogChannelImages();
+        if ([] !== $channelFiles) {
+            $this->renderImages('Channels', $channelFiles, false);
+        }
+        $levelFiles = $this->getLogLevelImages();
+        if ([] !== $levelFiles) {
+            $this->renderImages('Levels', $levelFiles, true);
+        }
+    }
+
+    /**
+     * @param array<string, FontAwesomeImage> $files
+     */
+    private function renderImages(string $title, array $files, bool $color): void
+    {
+        $this->renderCellTitle($title);
+        foreach ($files as $name => $image) {
+            if ($color) {
+                $this->getLevelColor($name)?->apply($this);
+            }
+            $bounds = new PdfRectangle(
+                $this->leftMargin,
+                $this->y,
+                $this->getPrintableWidth(),
+                self::LINE_HEIGHT,
+            );
+            $cell = new PdfIconCell($image, \ucfirst($name));
+            $cell->drawImage($this, $bounds, PdfMove::NEW_LINE);
+        }
+    }
+
     private function renderRotation(): void
     {
+        if (null === $this->iconFile) {
+            return;
+        }
+        $this->addPage();
         $this->resetStyle();
         $this->rotateText('My Rotated test', 45, 10, 50);
         $this->rotateRect(50, 30, 20, 10, -45);
-        if (null !== $this->iconFile) {
-            $this->rotate(45, 60, 40);
-            $this->image($this->iconFile);
-            $this->endRotate();
-        }
+        $this->rotate(45, 60, 40);
+        $this->image($this->iconFile);
+        $this->endRotate();
     }
 }

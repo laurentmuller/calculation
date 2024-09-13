@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Model\FontAwesomeImage;
+use App\Service\FontAwesomeIconService;
 use App\Service\FontAwesomeService;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -22,6 +23,27 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class FontAwesomeServiceTest extends TestCase
 {
+    /**
+     * @throws Exception|InvalidArgumentException
+     */
+    public function testImageFromIconInvalid(): void
+    {
+        $service = $this->createService(__DIR__);
+        $actual = $service->getImageFromIcon('fake');
+        self::assertNull($actual);
+    }
+
+    /**
+     * @throws Exception|InvalidArgumentException
+     */
+    public function testImageFromIconValid(): void
+    {
+        $svgDirectory = __DIR__ . '/../Data/images';
+        $service = $this->createService($svgDirectory);
+        $actual = $service->getImageFromIcon('fa-solid fa-anchor');
+        self::assertNotNull($actual);
+    }
+
     /**
      * @throws Exception|InvalidArgumentException
      */
@@ -44,6 +66,17 @@ class FontAwesomeServiceTest extends TestCase
     public function testInvalidFile(): void
     {
         $this->checkImageIsInvalid(__DIR__, 'fake');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSvgDirectory(): void
+    {
+        $expected = __DIR__;
+        $service = $this->createService($expected);
+        $actual = $service->getSvgDirectory();
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -121,6 +154,7 @@ class FontAwesomeServiceTest extends TestCase
     {
         return new FontAwesomeService(
             $svgDirectory,
+            new FontAwesomeIconService(),
             new ArrayAdapter(),
             $this->createMock(LoggerInterface::class)
         );

@@ -30,21 +30,42 @@ class FontAwesomeImageTest extends TestCase
         self::assertSame($resolution, $actual->getResolution());
     }
 
-    public function testResizeBiggestHeight(): void
+    public function testResizeFloatBiggestHeight(): void
+    {
+        $image = $this->createImage(width: 20, height: 40);
+        $actual = $image->resize(80.0);
+        self::assertSame([40.0, 80.0], $actual);
+    }
+
+    public function testResizeFloatBiggestWidth(): void
+    {
+        $image = $this->createImage(width: 40, height: 20);
+        $actual = $image->resize(80.0);
+        self::assertSame([80.0, 40.0], $actual);
+    }
+
+    public function testResizeFloatSameValues(): void
+    {
+        $image = $this->createImage(width: 40, height: 40);
+        $actual = $image->resize(50.0);
+        self::assertSame([50.0, 50.0], $actual);
+    }
+
+    public function testResizeIntBiggestHeight(): void
     {
         $image = $this->createImage(width: 20, height: 40);
         $actual = $image->resize(80);
         self::assertSame([40, 80], $actual);
     }
 
-    public function testResizeBiggestWidth(): void
+    public function testResizeIntBiggestWidth(): void
     {
         $image = $this->createImage(width: 40, height: 20);
         $actual = $image->resize(80);
         self::assertSame([80, 40], $actual);
     }
 
-    public function testResizeSameValues(): void
+    public function testResizeIntSameValues(): void
     {
         $image = $this->createImage(width: 40, height: 40);
         $actual = $image->resize(50);

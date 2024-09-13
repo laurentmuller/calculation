@@ -58,32 +58,45 @@ readonly class FontAwesomeImage
     }
 
     /**
-     * Gets a scaled width and height to the desired size.
+     *  Gets a scaled width and height to the desired size.
      *
-     * @param int $size the desired size.
-     *                  If this width is greater than this height, then the width is set to the given size and
-     *                  the height is calculated.
-     *                  If this height is greater than this width, then the height is set to the given size and
-     *                  the width is calculated.
+     * @param int|float $size the desired size.
+     *                        If this width is greater than this height, then the width is set to the given size and
+     *                        the height is calculated.
+     *                        If this height is greater than this width, then the height is set to the given size and
+     *                        the width is calculated.
      *
-     * @return array{0: int, 1: int} an array where the first element is the scaled width or the desired size and
-     *                               the second element is the scaled height or the desired size
+     * @return array{0: int|float, 1: int|float} an array where the first element is the scaled width or the desired
+     *                                           size and the second element is the scaled height or the desired size
+     *
+     * @psalm-return ($size is int ? array{0: int, 1: int} : array{0: float, 1: float})
      */
-    public function resize(int $size): array
+    public function resize(int|float $size): array
     {
         if ($this->width === $this->height) {
             return [$size, $size];
         }
 
         if ($this->width > $this->height) {
-            return [$size, $this->round($size * $this->height, $this->width)];
+            return [
+                $size,
+                $this->round($size, $this->height, $this->width),
+            ];
         }
 
-        return [$this->round($size * $this->width, $this->height), $size];
+        return [
+            $this->round($size, $this->width, $this->height),
+            $size,
+        ];
     }
 
-    private function round(float $dividend, float $divisor): int
+    /**
+     * @psalm-return ($size is int ? int : float)
+     */
+    private function round(int|float $size, float $dividend, float $divisor): int|float
     {
-        return (int) \round($dividend / $divisor);
+        $value = (float) $size * $dividend / $divisor;
+
+        return \is_int($size) ? (int) \round($value) : $value;
     }
 }

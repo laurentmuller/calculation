@@ -63,8 +63,8 @@ class DiagramService
     {
         return $this->cache->get('diagram_files', function (): array {
             $files = [];
-            $finder = new Finder();
-            $finder->in($this->path)
+            $finder = Finder::create()
+                ->in($this->path)
                 ->files()
                 ->name('*' . self::FILE_SUFFIX);
             foreach ($finder as $file) {

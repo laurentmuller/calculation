@@ -1,8 +1,9 @@
 {% from 'macros/_themes_list.html.twig' import entries %}
 {% set current = theme(app.request) %}
 <div class="dropup">
-    <button class="nav-link d-flex align-items-center dropdown-toggle rowlink-skip theme-switcher" role="button" title="{{ 'theme.description'|trans }}" data-bs-toggle="dropdown" aria-expanded="false">
-        <span class="me-1"><i class="theme-icon {{ current.iconLight }}"></i></span><span class="theme-text d-lg-none">{{ current|trans }}</span>
+    <button class="nav-link d-flex align-items-center dropdown-toggle rowlink-skip theme-switcher" role="button" title="{{ 'theme.help'|trans }}" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="theme-icon {{ current.icon }}"></i>
+        <span class="theme-text d-lg-none">{{ current|trans }}</span>
     </button>
     {{ entries('right') }}
 </div>

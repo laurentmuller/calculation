@@ -45,7 +45,7 @@
 <div class="row">
     <div class="col-md-8 offset-md-2 my-2">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-md-6">
                 <div class="form-group mb-3">
                     <label class="form-label" for="country">Pays</label>
                     <select id="country" class="form-select" data-url="{{ asset('images/flags/flag_blank.png') }}">
@@ -55,7 +55,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-md-6">
                 <div class="form-group mb-3">
                     <label class="form-label required" for="currency">Monnaie</label>
                     <select id="currency" class="form-select" required="required">
@@ -69,7 +69,7 @@
     </div>
     <div class="col-md-8 offset-md-2 my-2">
         <div class="row">
-            <div class="col-xl-6">
+            <div class="col-md-6">
                 <div class="form-group mb-3">
                     <label class="form-label" for="state_single">Status (simple)</label>
                     <select id="state_single" class="form-select">
@@ -83,7 +83,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-xl-6">
+            <div class="col-md-6">
                 <div class="form-group mb-3">
                     <label class="form-label" for="state">Status (multiple)</label>
                     <div class="input-group">
@@ -109,7 +109,7 @@
     </div>
     <div class="col-md-8 offset-md-2 my-2">
         <div class="row">
-            <div class="col-xl-6">
+            <div class="col-md-6">
                 <div class="form-group mb-3">
                     <label class="form-label" for="category">Catégorie</label>
                     <div class="input-group">
@@ -132,7 +132,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-6">
+            <div class="col-md-6">
                 <div class="form-group mb-3">
                     <label class="form-label" for="product">Article</label>
                     <div class="input-group">
@@ -153,7 +153,7 @@
     </div>
     <div class="col-md-8 offset-md-2 my-2">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-md-4">
                 <span class="form-label cursor-default">Position</span>
                 <div class="dropdown dropdown-position">
                     {% set current = user_service.messagePosition %}
@@ -180,9 +180,17 @@
                     </table>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-md-4">
                 <span class="form-label cursor-default">Modal</span>
                 <button type="button" class="btn btn-form btn-primary mb-3 bottom-border-gradient bottom-border-gradient-100 w-100" data-bs-toggle="modal" data-bs-target="#dragModal">Launch modal</button>
+            </div>
+            <div class="col-md-4">
+                {% set active_theme = theme(app.request) %}
+                <span class="form-label cursor-default">Thème</span>
+                <button type="button" id="theme" data-url="{{ path('theme_dialog') }}" class="btn btn-form btn-success w-100">
+                    <span class="theme-icon me-1 {{ active_theme.icon }}"></span>
+                    <span class="theme-text">Appliquer un thème</span>
+                </button>
             </div>
         </div>
     </div>
@@ -256,6 +264,7 @@
 {{ asset_js('vendor/select2/js/i18n/fr.js') }}
 {{ asset_js('js/plugins/plugin-treeview.js') }}
 {{ asset_js('js/plugins/plugin-drag-modal.js') }}
+{{ asset_js('js/plugins/plugin-theme.js') }}
 {{ asset_js('js/extensions/select2-extensions.js') }}
 {{ asset_js('js/test/treeview.js') }}
 {% endblock %}

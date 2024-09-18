@@ -32,6 +32,18 @@
      */
     const THEME_DARK = 'dark';
 
+    // /**
+    //  * The theme chanel name.
+    //  * @type {string}
+    //  */
+    // const THEME_CHANNEL = 'theme';
+
+    // /**
+    //  * The theme changed event-name.
+    //  * @type {string}
+    //  */
+    // const THEME_EVENT_NAME = 'theme_changed';
+
     // ------------------------------------
     // Theme public class definition
     // ------------------------------------
@@ -153,7 +165,7 @@
          */
         _hideDialog() {
             this._getModal().hide();
-            $(this.options.targetId).trigger('focus');
+            // $(this.options.targetId).trigger('focus');
         }
 
         /**
@@ -175,23 +187,12 @@
             if (!$dialog) {
                 return;
             }
-            const options = this.options;
             const theme = this._getCookieValue();
             const selector = this._getInputSelector();
-            const iconSelector = `label ${options.labelIcon}`;
-            const isDark = theme === THEME_DARK || this._isMediaDark();
             $dialog.data('old-theme', theme).data('new-theme', false);
             $(selector).each(function () {
                 const $this = $(this);
                 $this.prop('checked', $this.val() === theme);
-                const $icon = $this.parent().find(iconSelector);
-                if (isDark) {
-                    $icon.removeClass($this.data(options.iconDark))
-                        .addClass($this.data(options.iconLight));
-                } else {
-                    $icon.removeClass($this.data(options.iconLight))
-                        .addClass($this.data(options.iconDark));
-                }
             });
             if (document.querySelectorAll(this._getInputCheckedSelector()).length === 0) {
                 document.querySelector(selector).checked = true;
@@ -221,14 +222,12 @@
             const oldTheme = $dialog.data('old-theme');
             const newTheme = $dialog.data('new-theme');
             if (oldTheme === newTheme) {
-                $(window).trigger('resize');
                 return;
             }
             if (!newTheme) {
                 if (oldTheme !== this._getTheme()) {
                     this._setTheme(oldTheme);
                 }
-                $(window).trigger('resize');
                 return;
             }
             this._setTheme(newTheme);
@@ -240,7 +239,6 @@
                 const title = $(this._getTitleSelector()).text();
                 Toaster.success(message, title);
             }
-            $(window).trigger('resize');
         }
 
         /**
@@ -263,18 +261,12 @@
         _onDialogAccept() {
             const $dialog = this._getDialog();
             const $input = $(this._getInputCheckedSelector());
-            const options = this.options;
             if ($input.length) {
+                const options = this.options;
                 $dialog.data('new-theme', $input.val());
-                const $label = $input.siblings('label');
-                if ($label.length) {
-                    const icon = $input.data(options.iconLight);
-                    const text = $label.children(options.labelText).text();
-                    $(options.label).each(function () {
-                        $(this).children(options.labelIcon).attr('class', icon);
-                        $(this).children(options.labelText).text(text);
-                    });
-                }
+                const icon = $input.data(options.icon);
+                this.$element.children(options.labelIcon).attr('class', icon);
+                //$(`${options.switcher} ${options.labelIcon}`).attr('class', icon);
             }
             this._hideDialog();
         }
@@ -331,6 +323,11 @@
                 theme = this._isMediaDark() ? THEME_DARK : THEME_LIGHT;
             }
             document.documentElement.setAttribute('data-bs-theme', theme);
+            // for testing
+            // const channel = new window.BroadcastChannel(THEME_CHANNEL);
+            // channel.postMessage(THEME_EVENT_NAME);
+            // channel.close();
+
         }
 
         /**
@@ -384,26 +381,26 @@
         url: null,
         // the dialog identifier
         dialogId: '#theme_modal',
-        // the target where to add dialog
+        // the target selector where to add dialog
         targetId: 'body',
         // the radio inputs selector
         input: '.form-check-input',
+
         // the label selector
-        label: '.theme-link',
-        // the label icon class selector
+        // label: '.theme-link',
+
+        // the theme icon selector
         labelIcon: '.theme-icon',
-        // the label text selector
-        labelText: '.theme-text',
         // the title message selector
         title: '.modal-title',
         // the success data message selector
         success: 'success',
         // the OK button selector
         ok: '.btn-ok',
-        // the light icon data key
-        'iconLight': 'icon-light',
-        // the dark icon data key
-        'iconDark': 'icon-dark'
+        // the icon data key
+        'icon': 'icon',
+        // the theme switcher selector
+        'switcher': '.theme-switcher'
     };
 
     /**

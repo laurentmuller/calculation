@@ -49,7 +49,7 @@ enum Theme: string implements EnumSortableInterface, PdfEnumDefaultInterface, Tr
      * The dark theme displays a dark background with a contrasting light foreground. In the dark mode, you will
      * usually see white or light text on black or dark backgrounds.
      */
-    #[EnumCase(extras: ['icon' => 'fa-solid fa-moon', 'light-icon' => 'fa-regular fa-moon'])]
+    #[EnumCase(extras: ['icon' => 'fa-regular fa-moon'])]
     case DARK = 'dark';
 
     /**
@@ -58,7 +58,7 @@ enum Theme: string implements EnumSortableInterface, PdfEnumDefaultInterface, Tr
      * The light theme displays a light background with a contrasting dark foreground. In light mode, you'll usually
      * see black or dark text on white or light backgrounds.
      */
-    #[EnumCase(extras: ['icon' => 'fa-solid fa-sun', 'light-icon' => 'fa-regular fa-sun'])]
+    #[EnumCase(extras: ['icon' => 'fa-regular fa-sun'])]
     case LIGHT = 'light';
 
     /**
@@ -75,26 +75,6 @@ enum Theme: string implements EnumSortableInterface, PdfEnumDefaultInterface, Tr
     public function getIcon(): string
     {
         return $this->getExtraString('icon');
-    }
-
-    /**
-     * Gets the icon for the dark mode.
-     *
-     * @psalm-api
-     */
-    public function getIconDark(): string
-    {
-        return $this->getIcon();
-    }
-
-    /**
-     * Gets the icon for light mode.
-     *
-     * @psalm-api
-     */
-    public function getIconLight(): string
-    {
-        return $this->getExtraString('light-icon', $this->getIcon());
     }
 
     /**

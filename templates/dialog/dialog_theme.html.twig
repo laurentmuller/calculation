@@ -1,29 +1,35 @@
 {% from 'macros/_icons.html.twig' import button_ok, button_close_modal %}
 {% from 'macros/_attributes.html.twig' import attributes as output_attributes %}
-{% macro output_theme(theme, is_dark, selection) -%}
+{# output a theme entry #}
+{% macro output_theme(theme, selection) -%}
     {% set id = 'form_theme_' ~ theme.value %}
     {% set id_help = id ~ '_help' %}
+    {% set icon = 'theme-icon ' ~ theme.icon %}
     {% set attributes = {
         type: 'radio',
         class: 'form-check-input',
         name: 'form_theme',
         value: theme.value,
+        'data-icon': icon,
         'aria-describedby': id_help,
-        'data-success': theme.success|trans,
-        'data-icon-light': theme.iconLight ~ ' me-1',
-        'data-icon-dark': theme.iconDark ~ ' me-1'} %}
+        'data-success': theme.success|trans
+    } %}
     <div class="form-check mb-3" title="{{ theme.title|trans }}">
-        <input id="{{ id }}"{{ output_attributes(attributes) }}{% if selection == theme %} checked{% endif %}>
+        <input id="{{ id }}"{{ output_attributes(attributes) }}{% if theme == selection %} checked{% endif %}>
         <label class="form-check-label" for="{{ id }}">
-            <i class="theme-icon me-1 {{ is_dark ? theme.iconLight : theme.iconDark }}"></i><span class="theme-text">{{ theme|trans }}</span>
+            <i class="{{ icon }}"></i>
+            <span class="theme-text">{{ theme|trans }}</span>
         </label>
-        <label id="{{ id_help }}" for="{{ id }}" class="form-label form-text">{{- theme.help|trans|raw -}}</label>
+        <label id="{{ id_help }}" for="{{ id }}" class="d-flex mt-1 mb-0 form-label">
+            {% set image_url = 'images/themes/theme_' ~ theme.value ~ '.png' %}
+            <img width="64" height="48" class="theme-image mt-2 me-2" src="{{ asset(image_url) }}" alt="{{ theme|trans }}">
+            <span class="text-secondary-emphasis">{{- theme.help|trans|raw -}}</span>
+        </label>
     </div>
 {%- endmacro %}
 {# parameters #}
 {% set dialog_id = 'theme_modal' %}
-{% set theme_selection = theme_selection|default(theme(app.request)) %}
-{% set is_dark = is_dark is defined ? is_dark : is_dark_theme(app.request) %}
+{% set selection = theme(app.request) %}
 <div id="{{ dialog_id }}" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -34,7 +40,7 @@
             <div class="modal-body mx-3">
                 <span class="form-label required mb-3">{{ 'theme.help'|trans }}</span>
                 {% for theme in themes() %}
-                    {{ _self.output_theme(theme, is_dark, theme_selection) }}
+                    {{ _self.output_theme(theme, selection) }}
                 {% endfor %}
             </div>
             <div class="modal-footer justify-content-start">

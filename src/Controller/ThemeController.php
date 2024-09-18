@@ -31,14 +31,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ThemeController extends AbstractController
 {
     #[Get(path: '/dialog', name: 'dialog')]
-    public function dialog(Request $request, ThemeService $service): JsonResponse
+    public function dialog(): JsonResponse
     {
-        $result = $this->renderView('dialog/dialog_theme.html.twig', [
-            'theme_selection' => $service->getTheme($request),
-            'is_dark' => $service->isDarkTheme($request),
-        ]);
+        $data = $this->renderView('dialog/dialog_theme.html.twig');
 
-        return $this->json($result);
+        return $this->json($data);
     }
 
     #[Get(path: '/save', name: 'save')]

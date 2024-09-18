@@ -297,7 +297,7 @@ function updatePosition($radio) {
     input.after(dropdownMenu);
     for (let index = 1; index < 10; index++) {
         const liElement = document.createElement('li');
-        const btnElement= document.createElement('button');
+        const btnElement = document.createElement('button');
         btnElement.classList.add('dropdown-item');
         btnElement.setAttribute('role', 'button');
         btnElement.textContent = 'Item ' + index;
@@ -329,7 +329,7 @@ function updatePosition($radio) {
 
     getItems().forEach(function (item) {
         item.addEventListener('click', () => {
-            input.value  = item.innerText ;
+            input.value = item.innerText;
             item.removeEventListener('click', this);
             item.remove();
             dropdown.hide();
@@ -337,4 +337,8 @@ function updatePosition($radio) {
             input.focus();
         });
     });
+
+    // theme
+    $('#theme').themeListener();
+
 }(jQuery));

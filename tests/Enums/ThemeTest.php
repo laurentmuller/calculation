@@ -31,20 +31,6 @@ class ThemeTest extends TestCase
     public static function getIcons(): \Iterator
     {
         yield [Theme::AUTO, 'fa-solid fa-circle-half-stroke'];
-        yield [Theme::DARK, 'fa-solid fa-moon'];
-        yield [Theme::LIGHT, 'fa-solid fa-sun'];
-    }
-
-    public static function getIconsDark(): \Iterator
-    {
-        yield [Theme::AUTO, 'fa-solid fa-circle-half-stroke'];
-        yield [Theme::DARK, 'fa-solid fa-moon'];
-        yield [Theme::LIGHT, 'fa-solid fa-sun'];
-    }
-
-    public static function getIconsLight(): \Iterator
-    {
-        yield [Theme::AUTO, 'fa-solid fa-circle-half-stroke'];
         yield [Theme::DARK, 'fa-regular fa-moon'];
         yield [Theme::LIGHT, 'fa-regular fa-sun'];
     }
@@ -107,20 +93,6 @@ class ThemeTest extends TestCase
     public function testIcon(Theme $theme, string $expected): void
     {
         $actual = $theme->getIcon();
-        self::assertSame($expected, $actual);
-    }
-
-    #[DataProvider('getIconsDark')]
-    public function testIconDark(Theme $theme, string $expected): void
-    {
-        $actual = $theme->getIconDark();
-        self::assertSame($expected, $actual);
-    }
-
-    #[DataProvider('getIconsLight')]
-    public function testIconLight(Theme $theme, string $expected): void
-    {
-        $actual = $theme->getIconLight();
         self::assertSame($expected, $actual);
     }
 

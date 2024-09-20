@@ -135,6 +135,7 @@ class FontAwesomeService
 
         try {
             $imagick = $this->getImagick();
+
             $imagick->readImageBlob($content);
             $size = $this->getTargetSize($content);
             $imagick->resizeImage($size[0], $size[1], \Imagick::FILTER_LANCZOS, 1);
@@ -177,6 +178,13 @@ class FontAwesomeService
         return [$this->round(self::TARGET_SIZE * $width, $height), self::TARGET_SIZE];
     }
 
+    private function isSvgSupported(): bool
+    {
+        $formats = \Imagick::queryFormats('SVG');
+
+        return 0 !== \count($formats);
+    }
+
     /**
      * @return array<string, string>
      */
@@ -194,6 +202,10 @@ class FontAwesomeService
     private function loadImage(string $path, string $color, ItemInterface $item, bool &$save): ?FontAwesomeImage
     {
         $save = false;
+        if (!$this->isSvgSupported()) {
+            return null;
+        }
+
         $content = \file_get_contents($path);
         if (!\is_string($content)) {
             $this->logError(\sprintf('Unable to read the file "%s".', $path));
@@ -209,7 +221,7 @@ class FontAwesomeService
             $save = true;
 
             return $image;
-        } catch (\Exception $e) {
+        } catch (\Exception|\ImagickException $e) {
             $this->logException($e, \sprintf('Unable to load image "%s".', $path));
 
             return null;

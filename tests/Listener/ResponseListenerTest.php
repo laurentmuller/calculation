@@ -18,7 +18,6 @@ use App\Service\NonceService;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Bundle\SecurityBundle\Security\FirewallConfig;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -32,7 +31,6 @@ class ResponseListenerTest extends TestCase
 {
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     public function testDebugDevFirewall(): void
     {
@@ -45,7 +43,6 @@ class ResponseListenerTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     public function testDebugMainFirewall(): void
     {
@@ -58,7 +55,6 @@ class ResponseListenerTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     public function testInvalidFile(): void
     {
@@ -71,7 +67,6 @@ class ResponseListenerTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     public function testNotExistFile(): void
     {
@@ -84,7 +79,6 @@ class ResponseListenerTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     public function testNotMainRequest(): void
     {
@@ -97,7 +91,6 @@ class ResponseListenerTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     public function testProdFile(): void
     {

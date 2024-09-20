@@ -23,13 +23,12 @@ use App\Service\FontAwesomeService;
 use App\Utils\DateUtils;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LogLevel as PsrLevel;
 
 class LogsReportTest extends TestCase
 {
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testEmpty(): void
     {
@@ -46,7 +45,7 @@ class LogsReportTest extends TestCase
     }
 
     /**
-     * @throws Exception|\Exception|InvalidArgumentException
+     * @throws Exception|\Exception
      */
     public function testRender(): void
     {

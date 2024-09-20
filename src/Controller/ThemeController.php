@@ -14,8 +14,8 @@ namespace App\Controller;
 
 use App\Attribute\Get;
 use App\Enums\Theme;
+use App\Interfaces\RoleInterface;
 use App\Service\ThemeService;
-use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -27,21 +27,22 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  */
 #[AsController]
 #[Route(path: '/theme', name: 'theme_')]
-#[IsGranted(new Expression('is_granted("ROLE_USER") and user.isEnabled()'))]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class ThemeController extends AbstractController
 {
     #[Get(path: '/dialog', name: 'dialog')]
     public function dialog(): JsonResponse
     {
-        $data = $this->renderView('dialog/dialog_theme.html.twig');
-
-        return $this->json($data);
+        return $this->json(
+            $this->renderView('dialog/dialog_theme.html.twig')
+        );
     }
 
     #[Get(path: '/save', name: 'save')]
     public function saveTheme(Request $request, ThemeService $service): JsonResponse
     {
-        $theme = $request->query->getEnum('theme', Theme::class, $service->getTheme($request));
+        $default = $service->getTheme($request);
+        $theme = $this->getRequestEnum($request, 'theme', $default);
 
         $response = $this->jsonTrue(
             ['message' => $this->trans($theme->getSuccess())]

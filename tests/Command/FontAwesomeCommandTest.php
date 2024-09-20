@@ -19,11 +19,39 @@ class FontAwesomeCommandTest extends CommandTestCase
 {
     private const COMMAND_NAME = 'app:fontawesome';
 
+    public function testInvalidJson(): void
+    {
+        $input = ['source' => 'tests/Data/json/fontawesome_invalid.json'];
+        $output = $this->execute(
+            name: self::COMMAND_NAME,
+            input: $input,
+            statusCode: Command::FAILURE
+        );
+        $this->validate($output, 'Unable to decode value.');
+    }
+
+    public function testRawEmpty(): void
+    {
+        try {
+            $input = [
+                'source' => 'tests/Data/json/fontawesome_raw_empty.json',
+                'target' => '/tests/Command/temp',
+            ];
+            $output = $this->execute(
+                name: self::COMMAND_NAME,
+                input: $input,
+            );
+            $this->validate($output, 'Generate successfully 1 files, 2 aliases from 1 sources.');
+        } finally {
+            FileUtils::remove(__DIR__ . '/temp');
+        }
+    }
+
     public function testSimulate(): void
     {
         try {
             $input = [
-                'source' => 'tests/Data/images/solid',
+                'source' => 'tests/Data/json/fontawesome_valid.json',
                 'target' => '/tests/Command/temp',
                 '--dry-run' => true,
             ];
@@ -31,7 +59,7 @@ class FontAwesomeCommandTest extends CommandTestCase
                 name: self::COMMAND_NAME,
                 input: $input,
             );
-            $this->validate($output, 'Simulate copied 1 files successfully.');
+            $this->validate($output, 'Simulate successfully 2 files, 4 aliases from 1 sources.');
         } finally {
             FileUtils::remove(__DIR__ . '/temp');
         }
@@ -39,7 +67,7 @@ class FontAwesomeCommandTest extends CommandTestCase
 
     public function testSourceEmpty(): void
     {
-        $input = ['source' => 'translations'];
+        $input = ['source' => 'tests/Data/json/fontawesome_empty.json'];
         $output = $this->execute(
             name: self::COMMAND_NAME,
             input: $input,
@@ -55,21 +83,21 @@ class FontAwesomeCommandTest extends CommandTestCase
             input: $input,
             statusCode: Command::INVALID
         );
-        $this->validate($output, 'Unable to find the SVG directory:');
+        $this->validate($output, 'Unable to find JSON source file:');
     }
 
     public function testSuccess(): void
     {
         try {
             $input = [
-                'source' => 'tests/Data/images/solid',
+                'source' => 'tests/Data/json/fontawesome_valid.json',
                 'target' => '/tests/Command/temp',
             ];
             $output = $this->execute(
                 name: self::COMMAND_NAME,
                 input: $input,
             );
-            $this->validate($output, 'Copied 1 files successfully.');
+            $this->validate($output, 'Generate successfully 2 files, 4 aliases from 1 sources.');
         } finally {
             FileUtils::remove(__DIR__ . '/temp');
         }

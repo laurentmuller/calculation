@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Model\FontAwesomeImage;
-use App\Pdf\Interfaces\PdfMemoryImageInterface;
+use App\Pdf\Traits\PdfImageTypeTrait;
 use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfDocument;
@@ -22,8 +22,10 @@ use fpdf\PdfRectangle;
 /**
  * PDF cell to output a FontAwesome image and an optional text.
  */
-class PdfIconCell extends PdfCell
+class PdfFontAwesomeCell extends PdfCell
 {
+    use PdfImageTypeTrait;
+
     /**
      * @param FontAwesomeImage  $image     the FontAwesome image to output
      * @param ?string           $text      the cell text
@@ -47,11 +49,12 @@ class PdfIconCell extends PdfCell
     }
 
     /**
-     * Draw this FontAwesome image to given cell bounds.
+     * Draw this FontAwesome image and text to given cell bounds.
      */
     public function drawImage(
-        PdfDocument&PdfMemoryImageInterface $parent,
+        PdfDocument $parent,
         PdfRectangle $bounds,
+        ?PdfTextAlignment $alignment = null,
         PdfMove $move = PdfMove::RIGHT
     ): void {
         $size = $this->image->resize(12.0);
@@ -60,27 +63,59 @@ class PdfIconCell extends PdfCell
         $offset = (PdfDocument::LINE_HEIGHT - $height) / 2.0;
 
         $text = $this->getText() ?? '';
-        $textWidth = $parent->getStringWidth($text);
         $cellMargin = $parent->getCellMargin();
-        $totalWidth = $width + $cellMargin + $textWidth;
+        $maxWidth = $bounds->width - $width - 3.0 * $cellMargin;
+        $textWidth = $parent->getStringWidth($text);
+        while ('' !== $text && $textWidth > $maxWidth) {
+            $text = \substr($text, 0, \strlen($text) - 1);
+            $textWidth = $parent->getStringWidth($text);
+        }
 
-        $alignment = $this->getAlignment() ?? PdfTextAlignment::LEFT;
+        $totalWidth = $width + $textWidth;
+        if ($textWidth > 0) {
+            $totalWidth += $cellMargin;
+        }
+
+        $alignment ??= $this->getAlignment() ?? PdfTextAlignment::LEFT;
         $x = match ($alignment) {
-            PdfTextAlignment::RIGHT => $bounds->right() - $cellMargin - $totalWidth,
+            PdfTextAlignment::RIGHT => $bounds->right() - $totalWidth - $cellMargin,
             PdfTextAlignment::CENTER,
             PdfTextAlignment::JUSTIFIED => $bounds->x + ($bounds->width - $totalWidth) / 2.0,
             default => $bounds->x + $cellMargin,
         };
         $y = $bounds->y;
 
-        $parent->imageMemory(
-            data: $this->image->getContent(),
+        $data = $this->image->getContent();
+        $mimeType = $this->getImageMimeType($data);
+        $fileType = $this->getImageFileType($mimeType);
+        $fileName = $this->getImageFileName($mimeType, $data);
+        $parent->image(
+            file: $fileName,
             x: $x,
             y: $y + $offset,
             width: $width,
-            height: $height
+            height: $height,
+            type: $fileType,
+            link: $this->getLink()
         );
-        $parent->setXY($x + $width, $y);
-        $parent->cell(width: $textWidth, text: $text, move: $move);
+        if ('' !== $text) {
+            $parent->setXY($x + $width, $y);
+            $parent->cell(
+                width: $textWidth,
+                text: $text,
+                link: $this->getLink()
+            );
+        }
+        switch ($move) {
+            case PdfMove::RIGHT:
+                $parent->setXY($bounds->right(), $bounds->y);
+                break;
+            case PdfMove::NEW_LINE:
+                $parent->setXY($parent->getLeftMargin(), $bounds->bottom());
+                break;
+            case PdfMove::BELOW:
+                $parent->setXY($bounds->x, $bounds->bottom());
+                break;
+        }
     }
 }

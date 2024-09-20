@@ -26,7 +26,6 @@ use Doctrine\DBAL\Types\FloatType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
 
@@ -96,8 +95,6 @@ class SchemaService
      * @param string $name the table's name to get information for
      *
      * @psalm-return SchemaTableType
-     *
-     * @throws InvalidArgumentException
      */
     public function getTable(string $name): array
     {
@@ -111,8 +108,6 @@ class SchemaService
      * @param bool $updateRecords true to update the number of records and size
      *
      * @psalm-return array<string, SchemaTableType>
-     *
-     * @throws InvalidArgumentException
      */
     public function getTables(bool $updateRecords = true): array
     {
@@ -146,8 +141,6 @@ class SchemaService
      * @psalm-param array<string, SchemaTableType> $tables
      *
      * @psalm-return array<string, SchemaTableType>
-     *
-     * @throws InvalidArgumentException
      */
     private function countAll(array $tables): array
     {
@@ -204,8 +197,6 @@ class SchemaService
 
     /**
      * @psalm-return SchemaTableType
-     *
-     * @throws InvalidArgumentException
      */
     private function createSchemaTable(Table $table): array
     {
@@ -223,8 +214,6 @@ class SchemaService
 
     /**
      * @param ForeignKeyConstraint[] $foreignKeys
-     *
-     * @throws InvalidArgumentException
      */
     private function findForeignTableName(string $name, array $foreignKeys): ?string
     {
@@ -240,8 +229,6 @@ class SchemaService
 
     /**
      * @psalm-return array<SchemaAssociationType>
-     *
-     * @throws InvalidArgumentException
      */
     private function getAssociations(Table $table): array
     {
@@ -272,8 +259,6 @@ class SchemaService
 
     /**
      * @psalm-return array<SchemaColumnType>
-     *
-     * @throws InvalidArgumentException
      */
     private function getColumns(Table $table): array
     {
@@ -356,8 +341,6 @@ class SchemaService
 
     /**
      * @psalm-return ClassMetadata<object>|null
-     *
-     * @throws InvalidArgumentException
      */
     private function getMetaData(Table|string $name): ?ClassMetadata
     {
@@ -368,8 +351,6 @@ class SchemaService
 
     /**
      * @return array<string, ClassMetadata<object>>
-     *
-     * @throws InvalidArgumentException
      */
     private function getMetaDatas(): array
     {
@@ -408,8 +389,6 @@ class SchemaService
 
     /**
      * @psalm-return ClassMetadata<object>|null
-     *
-     * @throws InvalidArgumentException
      */
     private function getTargetMetaData(string $name): ?ClassMetadata
     {
@@ -464,7 +443,6 @@ class SchemaService
      * @psalm-return array<string, SchemaTableType>
      *
      * @throws \Doctrine\DBAL\Exception
-     * @throws InvalidArgumentException
      */
     private function loadTables(): array
     {
@@ -484,8 +462,6 @@ class SchemaService
 
     /**
      * @psalm-param Table|ClassMetadata<object>|string $name
-     *
-     * @throws InvalidArgumentException
      */
     private function mapTableName(Table|ClassMetadata|string $name): string
     {

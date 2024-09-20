@@ -1,0 +1,4 @@
+{% set current = theme(app.request) %}
+<button class="theme-switcher nav-link rowlink-skip text-start" role="button" title="{{ 'theme.help'|trans }}" data-url="{{ path('theme_dialog') }}">
+    <i class="theme-icon {{ current.icon }}"></i><span class="theme-text d-lg-none ms-1">{{ current|trans }}</span>
+</button>

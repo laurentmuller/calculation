@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Service\HelpService;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,9 +51,6 @@ class HelpControllerTest extends ControllerTestCase
         $this->checkRoute('/help/dialog/fake_dialog_fake', self::ROLE_USER, Response::HTTP_NOT_FOUND);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testDialogs(): void
     {
         $dialogs = $this->help->getDialogs();
@@ -112,9 +108,6 @@ class HelpControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testEntities(): void
     {
         $entities = $this->help->getEntities();
@@ -129,9 +122,6 @@ class HelpControllerTest extends ControllerTestCase
         $this->checkRoute('/help/entity/fake_entity_fake', self::ROLE_USER, Response::HTTP_NOT_FOUND);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testImages(): void
     {
         foreach ($this->getImages() as $file) {
@@ -139,9 +129,6 @@ class HelpControllerTest extends ControllerTestCase
         }
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testUnusedImages(): void
     {
         $expected = \iterator_to_array($this->getImages());
@@ -201,8 +188,6 @@ class HelpControllerTest extends ControllerTestCase
 
     /**
      * @return \Generator<string>
-     *
-     * @throws InvalidArgumentException
      */
     private function getImages(): \Generator
     {

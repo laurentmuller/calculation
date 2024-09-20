@@ -1,30 +1,32 @@
 {% from 'macros/_icons.html.twig' import button_ok, button_close_modal %}
 {% from 'macros/_attributes.html.twig' import attributes as output_attributes %}
 {# output a theme entry #}
-{% macro output_theme(theme, selection) -%}
+{% macro output_theme(theme, checked) -%}
     {% set id = 'form_theme_' ~ theme.value %}
     {% set id_help = id ~ '_help' %}
-    {% set icon = 'theme-icon ' ~ theme.icon %}
     {% set attributes = {
+        id: id,
         type: 'radio',
-        class: 'form-check-input',
-        name: 'form_theme',
         value: theme.value,
-        'data-icon': icon,
+        name: 'form_theme',
+        class: 'form-check-input',
         'aria-describedby': id_help,
-        'data-success': theme.success|trans
+        'data-text': theme|trans,
+        'data-success': theme.success|trans,
+        'data-class': 'theme-icon ' ~ theme.icon
     } %}
-    <div class="form-check mb-3" title="{{ theme.title|trans }}">
-        <input id="{{ id }}"{{ output_attributes(attributes) }}{% if theme == selection %} checked{% endif %}>
+    <div class="form-check mb-3" title="{{ theme|trans }}">
+        <input{{ output_attributes(attributes) }}{% if checked %} checked="checked"{% endif %}>
         <label class="form-check-label" for="{{ id }}">
-            <i class="{{ icon }}"></i>
-            <span class="theme-text">{{ theme|trans }}</span>
+            <span class="d-inline d-lg-none"><i class="{{ theme.icon }}"></i></span>
+            <span>{{ theme|trans }}</span>
         </label>
-        <label id="{{ id_help }}" for="{{ id }}" class="d-flex mt-1 mb-0 form-label">
-            {% set image_url = 'images/themes/theme_' ~ theme.value ~ '.png' %}
-            <img width="64" height="48" class="theme-image mt-2 me-2" src="{{ asset(image_url) }}" alt="{{ theme|trans }}">
-            <span class="text-secondary-emphasis">{{- theme.help|trans|raw -}}</span>
-        </label>
+        <div class="d-none d-md-none d-lg-block">
+            <label id="{{ id_help }}" for="{{ id }}" class="form-label d-flex mt-1 mb-0">
+                <img width="64" height="48" class="mt-2 me-2" src="{{ asset(theme.thumbnail) }}" alt="{{ theme|trans }}">
+                <span class="text-secondary-emphasis">{{- theme.help|trans|raw -}}</span>
+            </label>
+        </div>
     </div>
 {%- endmacro %}
 {# parameters #}
@@ -38,15 +40,14 @@
                 {{- button_close_modal(true, null, dialog_id) -}}
             </div>
             <div class="modal-body mx-3">
-                <span class="form-label required mb-3">{{ 'theme.help'|trans }}</span>
+                <span class="form-label mb-3">{{ 'theme.help'|trans }}</span>
                 {% for theme in themes() %}
-                    {{ _self.output_theme(theme, selection) }}
+                    {{ _self.output_theme(theme, theme == selection) }}
                 {% endfor %}
             </div>
-            <div class="modal-footer justify-content-start">
+            <div class="modal-footer">
                 {{ button_ok() }}
                 {{ button_close_modal(false, 'common.button_cancel', dialog_id) }}
-                <small class="flex-grow-1 text-sm-end">{{ 'common.required'|trans|raw }}</small>
             </div>
         </div>
     </div>

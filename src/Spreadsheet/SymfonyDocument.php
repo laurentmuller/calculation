@@ -15,7 +15,6 @@ namespace App\Spreadsheet;
 use App\Controller\AbstractController;
 use App\Service\SymfonyInfoService;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use Psr\Cache\InvalidArgumentException;
 
 /**
  * Document containing Symfony configuration.
@@ -36,9 +35,6 @@ class SymfonyDocument extends AbstractDocument
         parent::__construct($controller);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function render(): bool
     {
         $info = $this->service;

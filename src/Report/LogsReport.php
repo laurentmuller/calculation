@@ -19,11 +19,10 @@ use App\Model\LogChannel;
 use App\Model\LogFile;
 use App\Model\LogLevel;
 use App\Pdf\Html\HtmlBootstrapColor;
-use App\Pdf\Interfaces\PdfMemoryImageInterface;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFont;
-use App\Pdf\PdfIconCell;
+use App\Pdf\PdfFontAwesomeCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfMemoryImageTrait;
@@ -34,12 +33,11 @@ use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfOrientation;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
-use Psr\Cache\InvalidArgumentException;
 
 /**
  * Report for the log.
  */
-class LogsReport extends AbstractReport implements PdfMemoryImageInterface
+class LogsReport extends AbstractReport
 {
     use PdfMemoryImageTrait;
 
@@ -65,9 +63,6 @@ class LogsReport extends AbstractReport implements PdfMemoryImageInterface
         ]);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function render(): bool
     {
         $this->addPage();
@@ -104,10 +99,7 @@ class LogsReport extends AbstractReport implements PdfMemoryImageInterface
             ->outputHeaders();
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
-    private function getChannelCell(Log $log): PdfIconCell|string
+    private function getChannelCell(Log $log): PdfFontAwesomeCell|string
     {
         $text = $log->getChannel(true);
         $image = $this->service->getImageFromIcon($log->getChannelIcon());
@@ -115,12 +107,9 @@ class LogsReport extends AbstractReport implements PdfMemoryImageInterface
             return $text;
         }
 
-        return new PdfIconCell($image, $text);
+        return new PdfFontAwesomeCell($image, $text);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     private function getImageIcon(LogLevel|LogChannel $value): ?FontAwesomeImage
     {
         $color = null;
@@ -134,10 +123,7 @@ class LogsReport extends AbstractReport implements PdfMemoryImageInterface
         return $this->service->getImageFromIcon($icon, $color);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
-    private function getLevelCell(Log $log): PdfIconCell|string
+    private function getLevelCell(Log $log): PdfFontAwesomeCell|string
     {
         $text = $log->getLevel(true);
         $color = $this->getLevelColor($log->getLevel());
@@ -146,7 +132,7 @@ class LogsReport extends AbstractReport implements PdfMemoryImageInterface
             return $text;
         }
 
-        return new PdfIconCell($image, $text);
+        return new PdfFontAwesomeCell($image, $text);
     }
 
     private function getLevelColor(string $level): ?string
@@ -167,8 +153,6 @@ class LogsReport extends AbstractReport implements PdfMemoryImageInterface
     /**
      * @param array<string, LogLevel>   $levels
      * @param array<string, LogChannel> $channels
-     *
-     * @throws InvalidArgumentException
      */
     private function renderCards(array $levels, array $channels, int $count): void
     {
@@ -217,8 +201,6 @@ class LogsReport extends AbstractReport implements PdfMemoryImageInterface
 
     /**
      * @psalm-param Log[] $logs
-     *
-     * @throws InvalidArgumentException
      */
     private function renderLogs(array $logs): void
     {
@@ -253,8 +235,6 @@ class LogsReport extends AbstractReport implements PdfMemoryImageInterface
      * @param PdfColumn[]                        $columns
      * @param PdfCell[]                          $textCells
      * @param PdfCell[]                          $valueCells
-     *
-     * @throws InvalidArgumentException
      */
     private function updateCardsEntries(
         array $values,
@@ -270,7 +250,7 @@ class LogsReport extends AbstractReport implements PdfMemoryImageInterface
             $text = StringUtils::capitalize($key);
             $image = $this->getImageIcon($value);
             if ($image instanceof FontAwesomeImage) {
-                $textCells[] = new PdfIconCell($image, $text, alignment: PdfTextAlignment::CENTER);
+                $textCells[] = new PdfFontAwesomeCell($image, $text, alignment: PdfTextAlignment::CENTER);
             } else {
                 $textCells[] = new PdfCell($text);
             }

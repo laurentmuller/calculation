@@ -15,7 +15,6 @@ namespace App\Tests\Service;
 use App\Service\CommandFormService;
 use App\Service\CommandService;
 use App\Tests\KernelServiceTestCase;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Form\FormInterface;
 
 /**
@@ -23,9 +22,6 @@ use Symfony\Component\Form\FormInterface;
  */
 class CommandFormServiceTest extends KernelServiceTestCase
 {
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testCreateForm(): void
     {
         $form = $this->createForm('completion');
@@ -33,9 +29,6 @@ class CommandFormServiceTest extends KernelServiceTestCase
         self::assertTrue($form->has('option-help'));
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testCreateFormMultiple(): void
     {
         $form = $this->createForm('cache:pool:invalidate-tags', [
@@ -54,9 +47,6 @@ class CommandFormServiceTest extends KernelServiceTestCase
         self::assertCount(2, $filtered);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testFilter(): void
     {
         $form = $this->createForm('completion');
@@ -71,8 +61,6 @@ class CommandFormServiceTest extends KernelServiceTestCase
 
     /**
      * @psalm-param array<string, array|scalar|null> $data
-     *
-     * @throws InvalidArgumentException
      */
     private function createForm(string $name = 'about', array $data = []): FormInterface
     {
@@ -86,8 +74,6 @@ class CommandFormServiceTest extends KernelServiceTestCase
      * @psalm-return CommandType
      *
      * @phpstan-return array
-     *
-     * @throws InvalidArgumentException
      */
     private function getCommand(string $name): array
     {

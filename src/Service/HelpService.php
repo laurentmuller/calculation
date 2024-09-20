@@ -14,7 +14,6 @@ namespace App\Service;
 
 use App\Traits\TranslatorTrait;
 use App\Utils\FileUtils;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -117,8 +116,6 @@ class HelpService
      * @param string $id the action identifier to search for
      *
      * @psalm-return HelpActionType|null
-     *
-     * @throws InvalidArgumentException
      */
     public function findAction(string $id): ?array
     {
@@ -133,8 +130,6 @@ class HelpService
      * @return array|null the dialog, if found; null otherwise
      *
      * @psalm-return HelpDialogType|null
-     *
-     * @throws InvalidArgumentException
      */
     public function findDialog(string $id): ?array
     {
@@ -151,8 +146,6 @@ class HelpService
      * @psalm-param string|HelpDialogType|null $id
      *
      * @psalm-return HelpEntityType|null
-     *
-     * @throws InvalidArgumentException
      */
     public function findEntity(string|array|null $id = null): ?array
     {
@@ -170,8 +163,6 @@ class HelpService
      * Gets actions.
      *
      * @psalm-return array<string, HelpActionType>
-     *
-     * @throws InvalidArgumentException
      */
     public function getActions(): array
     {
@@ -182,8 +173,6 @@ class HelpService
      * Gets the dialogs.
      *
      * @psalm-return array<string, HelpDialogType>
-     *
-     * @throws InvalidArgumentException
      */
     public function getDialogs(): array
     {
@@ -194,8 +183,6 @@ class HelpService
      * @psalm-return array<string, HelpDialogType[]>
      *
      * @psalm-api
-     *
-     * @throws InvalidArgumentException
      */
     public function getDialogsByGroup(): array
     {
@@ -226,8 +213,6 @@ class HelpService
      * Gets the entities.
      *
      * @psalm-return array<string, HelpEntityType>
-     *
-     * @throws InvalidArgumentException
      */
     public function getEntities(): array
     {
@@ -246,8 +231,6 @@ class HelpService
      * Gets the full help content.
      *
      * @psalm-return HelpContentType
-     *
-     * @throws InvalidArgumentException
      */
     public function getHelp(): array
     {
@@ -280,8 +263,6 @@ class HelpService
      * Gets the main (root) menu.
      *
      * @psalm-return HelpMainMenuType
-     *
-     * @throws InvalidArgumentException
      */
     public function getMainMenu(): array
     {
@@ -294,8 +275,6 @@ class HelpService
      * @return array the main menus, if found; null otherwise
      *
      * @psalm-return HelpMenuType[]
-     *
-     * @throws InvalidArgumentException
      */
     public function getMainMenus(): array
     {
@@ -311,8 +290,6 @@ class HelpService
      * Merge the current item with an action, if applicable.
      *
      * @psalm-param array{action?: string, ...} $item
-     *
-     * @throws InvalidArgumentException
      */
     public function mergeAction(array $item): array
     {

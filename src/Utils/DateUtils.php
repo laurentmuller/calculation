@@ -126,9 +126,7 @@ final class DateUtils
      * Gets the localized month names.
      * For example, with 'fr' as locale, return
      * <pre>
-     * Janvier
-     * Février
-     * ...
+     * Janvier, Février, ...
      * </pre>.
      *
      * @return array<int, string>
@@ -146,9 +144,7 @@ final class DateUtils
      * Gets the localized short month names.
      * For example, with 'fr' as locale, return
      * <pre>
-     * Janv.
-     * Févr.
-     * ...
+     * Janv., Févr., ...
      * </pre>.
      *
      * @return array<int, string>
@@ -166,14 +162,7 @@ final class DateUtils
      * Gets the localized short week day names.
      * For example, with 'fr' as locale and 'Sunday' as first day, return
      * <pre>
-     * Dim.
-     * Lun.
-     * Mar.
-     * Mer.
-     * Jeu.
-     * Ven.
-     * Sam.
-     * Dim.
+     * Dim., Lun., Mar., Mer., Jeu., Ven., Sam., Dim.
      * </pre>.
      *
      * @param string $firstDay The first day of the week, in English, like 'Sunday' or 'Monday'
@@ -205,10 +194,7 @@ final class DateUtils
      * Gets the localized week day names.
      * For example, with 'fr' as locale and 'sunday' as the first day, return
      * <pre>
-     * Dimanche
-     * Lundi
-     * Mardi
-     * ...
+     * Dimanche, Lundi, Mardi, ...
      * </pre>.
      *
      * @param string $firstDay the first day of the week, in English, like 'Sunday' or 'Monday'

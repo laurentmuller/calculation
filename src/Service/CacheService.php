@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Traits\ArrayTrait;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
 
@@ -48,8 +47,6 @@ class CacheService
      * Gets all available cache pools.
      *
      * @return array<string, string[]>
-     *
-     * @throws InvalidArgumentException
      */
     public function list(): array
     {

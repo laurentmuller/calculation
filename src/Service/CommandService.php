@@ -14,7 +14,6 @@ namespace App\Service;
 
 use App\Model\CommandResult;
 use App\Utils\StringUtils;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -101,8 +100,6 @@ class CommandService implements \Countable
 
     /**
      * Gets the number of commands.
-     *
-     * @throws InvalidArgumentException
      */
     public function count(): int
     {
@@ -142,8 +139,6 @@ class CommandService implements \Countable
     /**
      * Gets the first command.
      *
-     * @throws InvalidArgumentException
-     *
      * @psalm-return CommandType|false
      *
      * @phpstan-return array|false
@@ -160,8 +155,6 @@ class CommandService implements \Countable
      *
      * @psalm-return CommandType|null
      *
-     * @throws InvalidArgumentException
-     *
      * @phpstan-ignore return.phpDocType
      */
     public function getCommand(string $name): ?array
@@ -173,8 +166,6 @@ class CommandService implements \Countable
      * Gets all commands.
      *
      * @psalm-return array<string, CommandType>
-     *
-     * @throws InvalidArgumentException
      */
     public function getCommands(): array
     {
@@ -217,8 +208,6 @@ class CommandService implements \Countable
      * @param string $default the default name for commands without a name space
      *
      * @psalm-return array<string, CommandType[]>
-     *
-     * @throws InvalidArgumentException
      */
     public function getGroupedCommands(string $default = self::GLOBAL_GROUP): array
     {
@@ -231,8 +220,6 @@ class CommandService implements \Countable
      * @param string $default the default name for commands without a name space
      *
      * @return array<string, string[]>
-     *
-     * @throws InvalidArgumentException
      */
     public function getGroupedNames(string $default = self::GLOBAL_GROUP): array
     {
@@ -241,8 +228,6 @@ class CommandService implements \Countable
 
     /**
      * Returns if the given command name exists.
-     *
-     * @throws InvalidArgumentException
      */
     public function hasCommand(string $name): bool
     {
@@ -300,8 +285,6 @@ class CommandService implements \Countable
      * @psalm-param callable(CommandType):TValue $callback
      *
      * @psalm-return array<string, TValue[]>
-     *
-     * @throws InvalidArgumentException
      */
     private function getGroupedValues(string $default, callable $callback): array
     {

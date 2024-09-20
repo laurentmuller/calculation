@@ -15,16 +15,12 @@ namespace App\Tests\Service;
 use App\Service\CommandDataService;
 use App\Service\CommandService;
 use App\Tests\KernelServiceTestCase;
-use Psr\Cache\InvalidArgumentException;
 
 /**
  * @psalm-import-type CommandType from CommandService
  */
 class CommandDataServiceTest extends KernelServiceTestCase
 {
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testCreateData(): void
     {
         $command = $this->getCommand('completion');
@@ -36,9 +32,6 @@ class CommandDataServiceTest extends KernelServiceTestCase
         self::assertArrayHasKey('option-help', $actual);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testCreateParameters(): void
     {
         $value = 'my-shell';
@@ -81,9 +74,6 @@ class CommandDataServiceTest extends KernelServiceTestCase
         self::assertSame('option-fake', $actual);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testValidateData(): void
     {
         $command = $this->getCommand('completion');
@@ -112,8 +102,6 @@ class CommandDataServiceTest extends KernelServiceTestCase
 
     /**
      * @psalm-return CommandType
-     *
-     * @throws InvalidArgumentException
      *
      * @phpstan-ignore return.phpDocType
      */

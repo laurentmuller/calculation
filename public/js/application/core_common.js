@@ -74,11 +74,18 @@
         });
     }
 
+    // /**
+    //  * Initialize theme menu tooltips.
+    //  */
+    // function initThemeTooltip() {
+    //     $('[data-theme][data-bs-toggle="tooltip"]').tooltip();
+    // }
+
     /**
-     * Initialize theme menu tooltips.
+     * Initialize the theme switcher.
      */
-    function initThemeTooltip() {
-        $('[data-theme][data-bs-toggle="tooltip"]').tooltip();
+    function initThemeSwitcher() {
+        $('.theme-switcher').themeListener();
     }
 
     /**
@@ -102,25 +109,29 @@
      * Show the flash bag messages.
      */
     function showFlashBag() {
-        const $element = $('.flash:first');
-        if ($element.length) {
-            const options = $('#flashes').data();
-            const title = options.title ? $element.data('title') : null;
-            const text = $element.text();
-            const type = $element.data('type');
-            $element.remove();
-            if (text) {
-                Toaster.notify(type, text, title, options);
-            }
-            if ($('.flash').length) {
-                setTimeout(function () {
-                    showFlashBag();
-                }, 1500);
-            }
+        const $element = $('#flashes .flash:first');
+        if ($element.length === 0) {
+            return;
         }
+        const options = $('#flashes').data();
+        const title = options.title ? $element.data('title') : null;
+        const text = $element.text();
+        const type = $element.data('type');
+        $element.remove();
+        if (text) {
+            Toaster.notify(type, text, title, options);
+        }
+        if ($('#flashes .flash').length === 0) {
+            return;
+        }
+        const timeout = Math.max(1500, options.timeout - 500);
+        setTimeout(function () {
+            showFlashBag();
+        }, timeout);
     }
 
     initHorizontalSearch();
+    initThemeSwitcher();
     initBackToTop();
     initSidebar();
 
@@ -128,7 +139,7 @@
      * Must be called after content loaded.
      */
     window.addEventListener('DOMContentLoaded', () => {
-        initThemeTooltip();
+        // initThemeTooltip();
         showFlashBag();
     });
 }(jQuery));

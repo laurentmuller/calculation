@@ -11,9 +11,81 @@
  */
 function notify(type, message) {
     'use strict';
-    const title = $('.card-title:first').text();
+    const title = $('#main .card-title').text();
     Toaster.notify(type, message, title);
 }
+
+// jQuery extensions
+$.fn.extend({
+    /**
+     * @param {jQuery} $configuration
+     */
+    loadContent: function ($configuration) {
+        const $this = $(this);
+        if ($this.data('loaded')) {
+            return;
+        }
+        $this.data('loaded', true);
+        /** @type {string} */
+        const url = $this.data('url');
+        if (url) {
+            $.getJSON(url, function (response) {
+                if (response.result && response.content) {
+                    $this.html(response.content);
+                } else {
+                    $this.showError($configuration);
+                }
+            }).fail(function () {
+                $this.showError($configuration);
+            });
+        } else {
+            $this.showError($configuration);
+        }
+    },
+
+    /**
+     * @param {jQuery} $configuration
+     */
+    showError: function ($configuration) {
+        const content = $configuration.data('error');
+        const html = `<i class='fas fa-lg fa-exclamation-triangle me-2'></i>${content}`;
+        $(this).find('.alert:first').toggleClass('alert-danger py-0 py-3').html(html);
+    },
+
+    /**
+     * @param {string} title
+     */
+    updateTitle: function (title) {
+        $(this).prev('div').find('[data-bs-toggle]').attr('title', title);
+    },
+
+    /**
+     *  @param {string} [content]
+     */
+    displayLicense: function (content) {
+        const $row = $(this);
+        if (content) {
+            $row.data('content', content);
+        } else {
+            content = $row.data('content');
+        }
+        $('#license-content').html(content);
+        $('#license-modal').one('hidden.bs.modal', function () {
+            $row.find('.link-license').scrollInViewport().trigger('focus');
+        }).modal('show');
+
+        // clipboard
+        $('#license-modal .btn-copy').copyClipboard({
+            title: $('.card-title:first').text(),
+            copySuccess: function (e) {
+                $(e.trigger).parents('#license-modal').modal('hide');
+            },
+            copyError: function (e) {
+                $(e.trigger).parents('#license-modal').modal('hide');
+            }
+        });
+    }
+});
 
 /**
  * Ready function
@@ -23,74 +95,12 @@ function notify(type, message) {
     const $accordion = $('#aboutAccordion');
     const $configuration = $('#configuration');
 
-    // jQuery extensions
-    $.fn.extend({
-        loadContent: function () {
-            const $this = $(this);
-            if ($this.data('loaded')) {
-                return;
-            }
-            $this.data('loaded', true);
-            /** @type {string} */
-            const url = $this.data('url');
-            if (url) {
-                $.getJSON(url, function (response) {
-                    if (response.result && response.content) {
-                        $this.html(response.content);
-                    } else {
-                        $this.showError();
-                    }
-                }).fail(function () {
-                    $this.showError();
-                });
-            } else {
-                $this.showError();
-            }
-        },
-
-        showError: function () {
-            const content = $configuration.data('error');
-            const html = `<i class='fas fa-lg fa-exclamation-triangle me-2'></i>${content}`;
-            $(this).find('.alert:first').toggleClass('alert-danger py-0 py-3').html(html);
-        },
-
-        /** @param {string} title */
-        updateTitle: function (title) {
-            $(this).prev('div').find('[data-bs-toggle]').attr('title', title);
-        },
-
-        /** @param {string} [content] */
-        displayLicense: function (content) {
-            const $row = $(this);
-            if (content) {
-                $row.data('content', content);
-            } else {
-                content = $row.data('content');
-            }
-            $('#license-content').html(content);
-            $('#license-modal').one('hidden.bs.modal', function () {
-                $row.find('.link-license').scrollInViewport().trigger('focus');
-            }).modal('show');
-
-            // clipboard
-            $('#license-modal .btn-copy').copyClipboard({
-                title: $('.card-title:first').text(),
-                copySuccess: function (e) {
-                    $(e.trigger).parents('#license-modal').modal('hide');
-                },
-                copyError: function (e) {
-                    $(e.trigger).parents('#license-modal').modal('hide');
-                }
-            });
-        }
-    });
-
     // .card-body
     $accordion.on('shown.bs.collapse', function (e) {
         const $this = $(e.target);
         const $content = $this.find('.collapse-content');
         if ($content.length) {
-            $content.loadContent();
+            $content.loadContent($configuration);
         } else if (!$this.data('error')) {
             $this.data('error', true).showError();
         }
@@ -132,5 +142,4 @@ function notify(type, message) {
             }
         });
     });
-
 }(jQuery));

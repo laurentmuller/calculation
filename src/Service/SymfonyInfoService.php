@@ -14,7 +14,6 @@ namespace App\Service;
 
 use App\Enums\Environment;
 use App\Utils\FileUtils;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Finder\Finder;
@@ -115,8 +114,6 @@ final readonly class SymfonyInfoService
      * Gets bundle's information.
      *
      * @psalm-return array<string, BundleType>
-     *
-     * @throws InvalidArgumentException
      */
     public function getBundles(): array
     {
@@ -160,8 +157,6 @@ final readonly class SymfonyInfoService
      * Gets the debug packages.
      *
      * @return array<string, PackageType>
-     *
-     * @throws InvalidArgumentException
      */
     public function getDebugPackages(): array
     {
@@ -172,8 +167,6 @@ final readonly class SymfonyInfoService
      * Gets debug routes.
      *
      * @return array<string, RouteType>
-     *
-     * @throws InvalidArgumentException
      */
     public function getDebugRoutes(): array
     {
@@ -267,8 +260,6 @@ final readonly class SymfonyInfoService
      * Get the release date.
      *
      * @psalm-api
-     *
-     * @throws InvalidArgumentException
      */
     public function getReleaseDate(): string
     {
@@ -281,7 +272,7 @@ final readonly class SymfonyInfoService
                 $date = $content['release_date'];
 
                 return $this->formatMonthYear($date);
-            } catch (\Psr\Cache\CacheException|\InvalidArgumentException) {
+            } catch (\InvalidArgumentException) {
                 return self::UNKNOWN;
             }
         });
@@ -291,8 +282,6 @@ final readonly class SymfonyInfoService
      * Gets the runtime packages.
      *
      * @return array<string, PackageType>
-     *
-     * @throws InvalidArgumentException
      */
     public function getRuntimePackages(): array
     {
@@ -303,8 +292,6 @@ final readonly class SymfonyInfoService
      * Gets runtime routes.
      *
      * @return array<string, RouteType>
-     *
-     * @throws InvalidArgumentException
      */
     public function getRuntimeRoutes(): array
     {
@@ -405,10 +392,7 @@ final readonly class SymfonyInfoService
     private function formatPath(string $path, ?string $baseDir = null): string
     {
         if (null !== $baseDir) {
-            try {
-                return FileUtils::makePathRelative($path, $baseDir, true);
-            } catch (\InvalidArgumentException) {
-            }
+            return FileUtils::makePathRelative($path, $baseDir, true);
         }
 
         return FileUtils::normalizeDirectory($path);
@@ -478,8 +462,6 @@ final readonly class SymfonyInfoService
      * Gets packages information.
      *
      * @return PackagesType
-     *
-     * @throws InvalidArgumentException
      */
     private function getPackages(): array
     {
@@ -489,21 +471,17 @@ final readonly class SymfonyInfoService
                 return $this->getEmptyPackages();
             }
 
-            try {
-                /**
-                 * @psalm-var array{
-                 *     packages: array<string, PackageSourceType>|null,
-                 *     dev-package-names: string[]|null
-                 * } $content
-                 */
-                $content = FileUtils::decodeJson($path);
-                $runtimePackages = $content['packages'] ?? [];
-                $debugPackages = $content['dev-package-names'] ?? [];
+            /**
+             * @psalm-var array{
+             *     packages: array<string, PackageSourceType>|null,
+             *     dev-package-names: string[]|null
+             * } $content
+             */
+            $content = FileUtils::decodeJson($path);
+            $runtimePackages = $content['packages'] ?? [];
+            $debugPackages = $content['dev-package-names'] ?? [];
 
-                return $this->parsePackages($runtimePackages, $debugPackages);
-            } catch (\InvalidArgumentException) {
-                return $this->getEmptyPackages();
-            }
+            return $this->parsePackages($runtimePackages, $debugPackages);
         });
     }
 
@@ -511,8 +489,6 @@ final readonly class SymfonyInfoService
      * Gets all routes.
      *
      * @return RoutesType
-     *
-     * @throws InvalidArgumentException
      */
     private function getRoutes(): array
     {

@@ -92,11 +92,11 @@ abstract class AbstractHttpClientService
     {
         $locale = \Locale::getDefault();
         if ($languageOnly) {
-            /** @phpstan-var string */
+            /** @psalm-var string */
             return \Locale::getPrimaryLanguage($locale);
         }
 
-        /** @phpstan-var string */
+        /** @psalm-var string */
         return \Locale::canonicalize($locale);
     }
 
@@ -158,17 +158,11 @@ abstract class AbstractHttpClientService
      */
     protected function getCacheValue(string $key, callable $callback): mixed
     {
-        try {
-            return $this->cache->get($key, function (CacheItemInterface $item) use ($callback): mixed {
-                $item->expiresAfter($this->getCacheTimeout());
-
-                return \call_user_func($callback);
-            });
-        } catch (\Psr\Cache\InvalidArgumentException $e) {
-            $this->logException($e);
+        return $this->cache->get($key, function (CacheItemInterface $item) use ($callback): mixed {
+            $item->expiresAfter($this->getCacheTimeout());
 
             return \call_user_func($callback);
-        }
+        });
     }
 
     /**

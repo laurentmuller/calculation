@@ -19,7 +19,6 @@ use App\Traits\LoggerTrait;
 use App\Traits\TranslatorTrait;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
-use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -69,11 +68,7 @@ class LogService
      */
     public function clearCache(): self
     {
-        try {
-            $this->cache->delete(self::KEY_CACHE);
-        } catch (InvalidArgumentException $e) {
-            $this->logException($e);
-        }
+        $this->cache->delete(self::KEY_CACHE);
 
         return $this;
     }
@@ -99,13 +94,7 @@ class LogService
      */
     public function getLogFile(): ?LogFile
     {
-        try {
-            return $this->cache->get(self::KEY_CACHE, fn (): ?LogFile => $this->parseFile());
-        } catch (InvalidArgumentException $e) {
-            $this->logException($e);
-
-            return null;
-        }
+        return $this->cache->get(self::KEY_CACHE, fn (): ?LogFile => $this->parseFile());
     }
 
     public function getLogger(): LoggerInterface

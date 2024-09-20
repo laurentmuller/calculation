@@ -16,7 +16,6 @@ use App\Service\AssetVersionService;
 use App\Service\EnvironmentService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Filesystem\Path;
 
@@ -26,9 +25,6 @@ class AssetVersionServiceTest extends TestCase
     private string $imagesVersion;
     private AssetVersionService $service;
 
-    /**
-     * @throws InvalidArgumentException
-     */
     protected function setUp(): void
     {
         $projectDir = Path::canonicalize(__DIR__ . '/../Data');
@@ -61,18 +57,12 @@ class AssetVersionServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testDeleteCache(): void
     {
         $actual = $this->service->deleteCache();
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     #[DataProvider('getPaths')]
     public function testPath(string $path, bool $isImage = false): void
     {

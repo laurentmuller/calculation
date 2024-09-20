@@ -15,7 +15,6 @@ namespace App\Tests\Twig;
 use App\Twig\ConstantExtension;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\NullAdapter;
 
 class ConstantExtensionTest extends TestCase
@@ -51,9 +50,6 @@ class ConstantExtensionTest extends TestCase
         yield ['ENTITY_USER', 'EntityUser'];
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     #[DataProvider('getCalculationServiceConstants')]
     public function testCalculationService(string $key, int $expected): void
     {
@@ -64,9 +60,6 @@ class ConstantExtensionTest extends TestCase
         self::assertSame($expected, $globals[$key]);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     #[DataProvider('getEntityVoterConstants')]
     public function testEntityVoter(string $key, string $expected): void
     {

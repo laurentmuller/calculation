@@ -15,7 +15,6 @@ namespace App\Service;
 use App\Pdf\PdfLabel;
 use App\Utils\FileUtils;
 use fpdf\PdfException;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
@@ -44,11 +43,7 @@ readonly class PdfLabelService
      */
     public function all(?string $file = null): array
     {
-        try {
-            return $this->cache->get('service.labels', fn (): array => $this->loadLabels($file));
-        } catch (InvalidArgumentException $e) {
-            throw PdfException::instance('Unable to load labels.', $e);
-        }
+        return $this->cache->get('service.labels', fn (): array => $this->loadLabels($file));
     }
 
     /**

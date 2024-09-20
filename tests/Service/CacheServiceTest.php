@@ -14,7 +14,6 @@ namespace App\Tests\Service;
 
 use App\Service\CacheService;
 use App\Tests\KernelServiceTestCase;
-use Psr\Cache\InvalidArgumentException;
 
 class CacheServiceTest extends KernelServiceTestCase
 {
@@ -35,9 +34,6 @@ class CacheServiceTest extends KernelServiceTestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testList(): void
     {
         $actual = $this->service->list();

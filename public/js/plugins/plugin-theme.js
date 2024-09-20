@@ -32,17 +32,17 @@
      */
     const THEME_DARK = 'dark';
 
-    // /**
-    //  * The theme chanel name.
-    //  * @type {string}
-    //  */
-    // const THEME_CHANNEL = 'theme';
+    /**
+     * The theme chanel name.
+     * @type {string}
+     */
+    const THEME_CHANNEL = 'theme';
 
-    // /**
-    //  * The theme changed event-name.
-    //  * @type {string}
-    //  */
-    // const THEME_EVENT_NAME = 'theme_changed';
+    /**
+     * The theme changed event-name.
+     * @type {string}
+     */
+    const THEME_EVENT_NAME = 'theme_changed';
 
     // ------------------------------------
     // Theme public class definition
@@ -165,7 +165,6 @@
          */
         _hideDialog() {
             this._getModal().hide();
-            // $(this.options.targetId).trigger('focus');
         }
 
         /**
@@ -210,6 +209,16 @@
             }
         }
 
+
+        /**
+         * Hide the navigation bar and set focus to the element.
+         * @private
+         */
+        _setFocus() {
+            $('.navbar-collapse.collapse.show').removeClass('show');
+            this.$element.trigger('focus');
+        }
+
         /**
          * Handle the dialog hidden event.
          * @private
@@ -219,6 +228,8 @@
             if (!$dialog) {
                 return;
             }
+
+            this._setFocus();
             const oldTheme = $dialog.data('old-theme');
             const newTheme = $dialog.data('new-theme');
             if (oldTheme === newTheme) {
@@ -232,7 +243,6 @@
             }
             this._setTheme(newTheme);
             this._setCookieValue(newTheme);
-            /** @type {jQuery} */
             const $link = $(this._getInputCheckedSelector());
             if ($link.length) {
                 const message = $link.data(this.options.success);
@@ -260,13 +270,23 @@
          */
         _onDialogAccept() {
             const $dialog = this._getDialog();
+            if (!$dialog) {
+                return;
+            }
             const $input = $(this._getInputCheckedSelector());
-            if ($input.length) {
-                const options = this.options;
-                $dialog.data('new-theme', $input.val());
-                const icon = $input.data(options.icon);
-                this.$element.children(options.labelIcon).attr('class', icon);
-                //$(`${options.switcher} ${options.labelIcon}`).attr('class', icon);
+            if (0 === $input.length) {
+                return;
+            }
+            const options = this.options;
+            $dialog.data('new-theme', $input.val());
+
+            const icon = $input.data(options.icon);
+            if (icon) {
+                $(options.switcherIcon).attr('class', icon);
+            }
+            const text = $input.data(options.text);
+            if (text) {
+                $(options.switcherText).text(text);
             }
             this._hideDialog();
         }
@@ -280,11 +300,9 @@
             if (!$dialog) {
                 return;
             }
-
             const options = this.options;
             $(`${options.dialogId} ${options.ok}`)
                 .on('click', () => this._onDialogAccept());
-
             $dialog.on('show.bs.modal', () => this._onDialogShow())
                 .on('shown.bs.modal', () => this._onDialogVisible())
                 .on('hidden.bs.modal', () => this._onDialogHidden())
@@ -314,7 +332,17 @@
         }
 
         /**
-         * Sets the theme to the body.
+         * Notify that the theme has changed.
+         * @private
+         */
+        _notifyTheme() {
+            const channel = new window.BroadcastChannel(THEME_CHANNEL);
+            channel.postMessage(THEME_EVENT_NAME);
+            channel.close();
+        }
+
+        /**
+         * Sets the theme document element.
          * @param {string} theme - the theme to apply.
          * @private
          */
@@ -322,21 +350,18 @@
             if (theme === THEME_AUTO) {
                 theme = this._isMediaDark() ? THEME_DARK : THEME_LIGHT;
             }
-            document.documentElement.setAttribute('data-bs-theme', theme);
-            // for testing
-            // const channel = new window.BroadcastChannel(THEME_CHANNEL);
-            // channel.postMessage(THEME_EVENT_NAME);
-            // channel.close();
-
+            $(document.documentElement).attr('data-bs-theme', theme);
+            this._notifyTheme();
         }
 
+
         /**
-         * Gets the body theme.
+         * Gets the document element theme.
          * @return {string} the selected theme.
          * @private
          */
         _getTheme() {
-            return document.documentElement.getAttribute('data-bs-theme') || THEME_AUTO;
+            return $(document.documentElement).attr('data-bs-theme') || THEME_AUTO;
         }
 
         /**
@@ -377,7 +402,7 @@
      * The default options.
      */
     ThemeListener.DEFAULTS = {
-        // the Ajax URL to get dialog
+        // the URL to get dialog
         url: null,
         // the dialog identifier
         dialogId: '#theme_modal',
@@ -385,22 +410,20 @@
         targetId: 'body',
         // the radio inputs selector
         input: '.form-check-input',
-
-        // the label selector
-        // label: '.theme-link',
-
-        // the theme icon selector
-        labelIcon: '.theme-icon',
-        // the title message selector
+        // the title message selector in dialog
         title: '.modal-title',
-        // the success data message selector
+        // the success data message selector in dialog
         success: 'success',
-        // the OK button selector
+        // the OK button selector in dialog
         ok: '.btn-ok',
-        // the icon data key
-        'icon': 'icon',
-        // the theme switcher selector
-        'switcher': '.theme-switcher'
+        // the data key for the icon class
+        icon: 'class',
+        // the data key for the text content
+        text: 'text',
+        // the theme switcher text selector
+        switcherText: '.theme-switcher .theme-text',
+        // the theme switcher icon selector
+        switcherIcon: '.theme-switcher .theme-icon'
     };
 
     /**

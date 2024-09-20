@@ -20,7 +20,6 @@ use App\Service\CommandDataService;
 use App\Service\CommandFormService;
 use App\Service\CommandService;
 use App\Traits\CacheKeyTrait;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,8 +45,6 @@ class CommandController extends AbstractController
 
     /**
      * Render a single command.
-     *
-     * @throws InvalidArgumentException
      */
     #[Get(path: '/content', name: 'content')]
     public function command(
@@ -71,8 +68,6 @@ class CommandController extends AbstractController
 
     /**
      * Show all commands.
-     *
-     * @throws InvalidArgumentException
      */
     #[Get(path: '', name: 'all')]
     public function commands(
@@ -105,8 +100,6 @@ class CommandController extends AbstractController
 
     /**
      * Execute a command.
-     *
-     * @throws InvalidArgumentException
      */
     #[GetPost(path: '/execute', name: 'execute')]
     public function execute(
@@ -166,8 +159,6 @@ class CommandController extends AbstractController
 
     /**
      * Export commands to a PDF document.
-     *
-     * @throws InvalidArgumentException
      */
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(CommandService $service): Response

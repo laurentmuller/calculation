@@ -16,7 +16,6 @@ use App\Controller\CspReportController;
 use App\Service\NonceService;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -26,6 +25,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * Listener to add content security policy (CSP) to response.
@@ -79,9 +79,6 @@ class ResponseListener
     ) {
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     #[AsEventListener(event: KernelEvents::RESPONSE)]
     public function onKernelResponse(ResponseEvent $event): void
     {
@@ -106,9 +103,6 @@ class ResponseListener
         }
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     private function buildCSP(): string
     {
         $csp = $this->getCSP();
@@ -124,27 +118,13 @@ class ResponseListener
 
     /**
      * @psalm-return array<string, string[]>
-     *
-     * @throws InvalidArgumentException
-     *
-     * @psalm-suppress MixedArgumentTypeCoercion
      */
     private function getCSP(): array
     {
-        return $this->cache->get('csp_content', function (): array {
-            if (!FileUtils::exists($this->file)) {
-                return [];
-            }
-
-            try {
-                /* @psalm-var array<string, string[]> $content */
-                $content = FileUtils::decodeJson($this->file);
-
-                return $this->replaceValues($content);
-            } catch (\InvalidArgumentException) {
-                return [];
-            }
-        });
+        return $this->cache->get(
+            'csp_content',
+            fn (ItemInterface $item, bool &$save): array => $this->loadCSP($item, $save)
+        );
     }
 
     private function getReportURL(): string
@@ -155,6 +135,29 @@ class ResponseListener
     private function isDevFirewall(Request $request): bool
     {
         return self::FIREWALL_DEV === $this->security->getFirewallConfig($request)?->getName();
+    }
+
+    /**
+     * @psalm-return array<string, string[]>
+     */
+    private function loadCSP(ItemInterface $item, bool &$save): array
+    {
+        $save = false;
+        if (!FileUtils::exists($this->file)) {
+            return [];
+        }
+
+        try {
+            /** @psalm-var array<string, string[]> $content */
+            $content = FileUtils::decodeJson($this->file);
+            $content = $this->replaceValues($content);
+            $item->set($content);
+            $save = true;
+
+            return $content;
+        } catch (\InvalidArgumentException) {
+            return [];
+        }
     }
 
     /**

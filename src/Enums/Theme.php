@@ -66,7 +66,7 @@ enum Theme: string implements EnumSortableInterface, PdfEnumDefaultInterface, Tr
      */
     public function getHelp(): string
     {
-        return \sprintf('theme.%s.help', $this->value);
+        return $this->sprintf('theme.%s.help');
     }
 
     /**
@@ -82,15 +82,15 @@ enum Theme: string implements EnumSortableInterface, PdfEnumDefaultInterface, Tr
      */
     public function getSuccess(): string
     {
-        return \sprintf('theme.%s.success', $this->value);
+        return $this->sprintf('theme.%s.success');
     }
 
     /**
-     * Gets the title (to be translated).
+     * Gets the thumbnail asset image relative to the public directory.
      */
-    public function getTitle(): string
+    public function getThumbnail(): string
     {
-        return \sprintf('theme.%s.title', $this->value);
+        return $this->sprintf('images/themes/theme_%s.png');
     }
 
     /**
@@ -103,5 +103,10 @@ enum Theme: string implements EnumSortableInterface, PdfEnumDefaultInterface, Tr
             self::DARK,
             self::AUTO,
         ];
+    }
+
+    private function sprintf(string $format): string
+    {
+        return \sprintf($format, $this->value);
     }
 }

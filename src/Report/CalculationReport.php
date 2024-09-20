@@ -15,7 +15,6 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\Interfaces\PdfMemoryImageInterface;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfMemoryImageTrait;
@@ -36,7 +35,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Report for a calculation.
  */
-class CalculationReport extends AbstractReport implements PdfMemoryImageInterface
+class CalculationReport extends AbstractReport
 {
     use LoggerTrait;
     use PdfMemoryImageTrait;

@@ -14,7 +14,6 @@ namespace App\Tests\Service;
 
 use App\Service\CommandService;
 use App\Tests\KernelServiceTestCase;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\HttpKernel\Kernel;
@@ -22,9 +21,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class CommandServiceTest extends KernelServiceTestCase
 {
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testCount(): void
     {
         $actual = $this->getCommandService()->count();
@@ -57,9 +53,6 @@ class CommandServiceTest extends KernelServiceTestCase
         self::assertSame(Command::FAILURE, $actual->status);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testFirst(): void
     {
         $service = $this->getCommandService();
@@ -68,9 +61,6 @@ class CommandServiceTest extends KernelServiceTestCase
         self::assertSame('about', $command['name']);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testGetCommand(): void
     {
         $service = $this->getCommandService();
@@ -78,9 +68,6 @@ class CommandServiceTest extends KernelServiceTestCase
         self::assertIsNotArray($service->getCommand('_fake_command_test'));
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testGetCommands(): void
     {
         $service = $this->getCommandService();
@@ -90,9 +77,6 @@ class CommandServiceTest extends KernelServiceTestCase
         self::assertArrayNotHasKey('_fake_command_test', $commands);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testGetGroupeCommands(): void
     {
         $service = $this->getCommandService();
@@ -108,9 +92,6 @@ class CommandServiceTest extends KernelServiceTestCase
         self::assertArrayNotHasKey('_fake_command_group', $groups);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testGetGroupedNames(): void
     {
         $service = $this->getCommandService();
@@ -126,9 +107,6 @@ class CommandServiceTest extends KernelServiceTestCase
         self::assertArrayNotHasKey('_fake_command_group', $groups);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testHasCommand(): void
     {
         $service = $this->getCommandService();

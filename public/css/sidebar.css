@@ -57,23 +57,33 @@ html[data-bs-theme=light] .navbar-vertical.navbar-dark .border-bottom {
 }
 
 .navbar-vertical ul ul {
-    padding-left: 1.5rem;
+    padding-left: 0.75rem;
 }
 
+.navbar-vertical .nav-item {
+    padding-left: var(--bs-navbar-nav-link-padding-x);
+}
+
+.navbar-vertical .theme-switcher,
 .navbar-vertical .dropup .nav-link {
     color: var(--bs-navbar-color);
+    padding: var(--bs-navbar-toggler-padding-y) var(--bs-navbar-nav-link-padding-x);
 }
 
+.navbar-vertical .theme-switcher:hover,
+.navbar-vertical .theme-switcher:focus,
 .navbar-vertical .dropup .nav-link:hover,
 .navbar-vertical .dropup .nav-link:focus {
     color: var(--bs-navbar-hover-color);
 }
 
+.navbar-vertical .theme-switcher:focus-visible,
 .navbar-vertical .dropup .nav-link:focus-visible {
     outline: 0;
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
+.navbar-vertical .theme-switcher.disabled,
 .navbar-vertical .dropup .nav-link.disabled {
     color: var(--bs-navbar-disabled-color);
     pointer-events: none;
@@ -138,7 +148,7 @@ html[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
 .navbar-vertical ul:not(.dropdown-menu-default) .dropdown-item {
     color: var(--bs-navbar-color);
     white-space: normal;
-    padding: 0.3rem;
+    padding: var(--bs-nav-link-padding-y);
     width: 100%;
 }
 

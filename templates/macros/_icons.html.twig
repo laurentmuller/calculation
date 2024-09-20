@@ -182,40 +182,6 @@
 </h6>
 {% endmacro %}
 
-{% macro navItemThemeSwitcher(class) %}
-{% set class = (class|default('') ~ ' rowlink-skip theme-link')|trim %}
-{% set theme = theme(app.request) %}
-<button class="{{ class }}" title="{{ 'theme.description'|trans }}" data-url="{{ path('theme_dialog') }}">
-    <i class="theme-icon me-1 {{ theme.icon }}"></i><span class="theme-text">{{ theme|trans }}</span>
-</button >
-{% endmacro %}
-
-{% macro navItemToggle(class) %}
-{% from 'macros/_attributes.html.twig' import attributes %}
-{% set selection = theme(app.request) %}
-{% set class = ('rowlink-skip toggle-theme ' ~ class|default(''))|trim %}
-{% if app.current_route == 'user_parameters' %}
-    {% set class = class ~ ' disabled' %}
-{% endif %}
-{% set attr = {
-    href: '#',
-    class: class,
-    title: selection.title|trans,
-    'data-theme': selection.value,
-    'data-url': url('theme_save'),
-} %}
-{% for theme in themes() %}
-    {% set value = theme.value %}
-    {% set attr = attr|merge({
-        ('data-' ~ value ~ '-text'): theme|trans,
-        ('data-' ~ value ~ '-title'): theme.title|trans,
-        ('data-' ~ value ~ '-icon'): 'theme-icon me-1 ' ~ theme.icon}) %}
-{% endfor %}
-<a{{ attributes(attr) }}>
-    <i class="theme-icon me-1 {{ selection.icon }}"></i><span class="theme-text">{{ selection|trans }}</span>
-</a>
-{% endmacro %}
-
 {% macro sitemap() -%}
 {% set caller = app.request.query.string('caller')|default %}
 {% if app.user and caller is same as path('site_map') %}

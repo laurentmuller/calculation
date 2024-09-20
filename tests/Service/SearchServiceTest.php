@@ -20,7 +20,6 @@ use App\Utils\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\MockObject\Exception;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -39,7 +38,7 @@ class SearchServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws ORMException|Exception|InvalidArgumentException
+     * @throws ORMException|Exception
      */
     public function testCount(): void
     {
@@ -117,7 +116,7 @@ class SearchServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws ORMException|Exception|InvalidArgumentException
+     * @throws ORMException|Exception
      */
     public function testSearch(): void
     {
@@ -143,7 +142,7 @@ class SearchServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws ORMException|Exception|InvalidArgumentException
+     * @throws ORMException|Exception
      */
     public function testSearchDebug(): void
     {

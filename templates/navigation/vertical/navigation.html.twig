@@ -54,7 +54,9 @@
     </ul>
     {# bottom menus #}
     <div class="d-flex-wrap-center border-top w-100 py-2">
-        {{ include('navigation/vertical/navigation_user.html.twig') }}
-        {{ include('navigation/vertical/navigation_theme.html.twig') }}
+        {% if is_remembered -%}
+            {{ include('navigation/vertical/navigation_user.html.twig') }}
+        {% endif %}
+        {{ include('navigation/menu/_menu_theme.html.twig') }}
     </div>
 </div>

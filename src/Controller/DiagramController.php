@@ -15,7 +15,6 @@ namespace App\Controller;
 use App\Attribute\Get;
 use App\Interfaces\RoleInterface;
 use App\Service\DiagramService;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -41,8 +40,6 @@ class DiagramController extends AbstractController
 
     /**
      * Display a diagram.
-     *
-     * @throws InvalidArgumentException
      */
     #[Get(path: '', name: 'index')]
     public function index(#[MapQueryParameter] string $name = self::DEFAULT_DIAGRAM): Response
@@ -60,8 +57,6 @@ class DiagramController extends AbstractController
 
     /**
      * Load a diagram.
-     *
-     * @throws InvalidArgumentException
      */
     #[Get(path: '/load', name: 'load')]
     public function load(#[MapQueryParameter] string $name = self::DEFAULT_DIAGRAM): JsonResponse
@@ -74,9 +69,6 @@ class DiagramController extends AbstractController
         return $this->jsonTrue(['file' => $file]);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     private function getFile(string $name): ?array
     {
         return $this->service->getFile($name);
@@ -84,8 +76,6 @@ class DiagramController extends AbstractController
 
     /**
      * @return array<string, string>
-     *
-     * @throws InvalidArgumentException
      */
     private function getFiles(): array
     {

@@ -16,9 +16,9 @@ use App\Model\FontAwesomeImage;
 use App\Traits\CacheKeyTrait;
 use App\Traits\LoggerTrait;
 use App\Utils\FileUtils;
-use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
@@ -30,10 +30,11 @@ class FontAwesomeService
     use CacheKeyTrait;
     use LoggerTrait;
 
-    private const SVG_EXTENSION = '.svg';
+    public const ALIAS_FILE_NAME = 'aliases.json';
+    public const SVG_EXTENSION = '.svg';
+
     private const SVG_REPLACE = '<svg fill="%s" ';
     private const SVG_SEARCH = '<svg ';
-
     private const TARGET_SIZE = 64;
     private const VIEW_BOX_PATTERN = '/viewBox="(\d+\s+){2}(?\'width\'\d+)\s+(?\'height\'\d+)"/mi';
 
@@ -55,6 +56,19 @@ class FontAwesomeService
     }
 
     /**
+     * Gets the icon aliases.
+     *
+     * @return array<string, string> the aliases where key is alias name and value is existing file
+     */
+    public function getAliases(): array
+    {
+        return $this->cache->get(
+            $this->cleanKey(self::ALIAS_FILE_NAME),
+            fn (): array => $this->loadAliases()
+        );
+    }
+
+    /**
      * Gets a Font Awesome image.
      *
      * @param string      $relativePath the relative file path to the SVG directory.
@@ -62,8 +76,6 @@ class FontAwesomeService
      * @param string|null $color        the foreground color to apply or <code>null</code> for black color
      *
      * @return ?FontAwesomeImage the image, if found, <code>null</code> otherwise
-     *
-     * @throws InvalidArgumentException
      */
     public function getImage(string $relativePath, ?string $color = null): ?FontAwesomeImage
     {
@@ -71,14 +83,12 @@ class FontAwesomeService
             return null;
         }
 
-        if (!\str_ends_with($relativePath, self::SVG_EXTENSION)) {
-            $relativePath .= self::SVG_EXTENSION;
-        }
-
+        $relativePath = $this->normalizePath($relativePath);
         $path = FileUtils::buildPath($this->svgDirectory, $relativePath);
         if (!FileUtils::isFile($path)) {
             return null;
         }
+
         $color ??= 'black';
         $key = \sprintf('%s_%s', $path, $color);
 
@@ -95,8 +105,6 @@ class FontAwesomeService
      * @param string|null $color the foreground color to apply or <code>null</code> for black color
      *
      * @return ?FontAwesomeImage the image, if found, <code>null</code> otherwise
-     *
-     * @throws InvalidArgumentException
      */
     public function getImageFromIcon(string $icon, ?string $color = null): ?FontAwesomeImage
     {
@@ -169,6 +177,20 @@ class FontAwesomeService
         return [$this->round(self::TARGET_SIZE * $width, $height), self::TARGET_SIZE];
     }
 
+    /**
+     * @return array<string, string>
+     */
+    private function loadAliases(): array
+    {
+        $path = FileUtils::buildPath($this->svgDirectory, self::ALIAS_FILE_NAME);
+        if (!FileUtils::exists($path)) {
+            return [];
+        }
+
+        /** @psalm-var array<string, string> */
+        return FileUtils::decodeJson($path);
+    }
+
     private function loadImage(string $path, string $color, ItemInterface $item, bool &$save): ?FontAwesomeImage
     {
         $save = false;
@@ -192,6 +214,17 @@ class FontAwesomeService
 
             return null;
         }
+    }
+
+    private function normalizePath(string $path): string
+    {
+        if (!\str_ends_with($path, self::SVG_EXTENSION)) {
+            $path .= self::SVG_EXTENSION;
+        }
+        $path = Path::normalize($path);
+        $aliases = $this->getAliases();
+
+        return $aliases[$path] ?? $path;
     }
 
     private function round(float $dividend, float $divisor): int

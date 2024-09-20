@@ -65,9 +65,6 @@
 {% block stylesheets %}
 {{- asset_css('css/style.css') }}
 {% endblock %}
-{# javascript #}
-{{- asset_js('js/plugins/plugin-cookie.js') }}
-{{- asset_js('js/application/core-theme.js') }}
 </head>
 <body{% if status_bar %} class="status-bar"{% endif %} data-cookie-path="{{ cookie_path }}">
     {# vertical navigation #}
@@ -102,8 +99,10 @@
     {{- asset_js('js/extensions/array-extensions.js') }}
     {{- asset_js('js/extensions/jquery-extensions.js') }}
     {{- asset_js('js/extensions/string-extensions.js') }}
+    {{- asset_js('js/plugins/plugin-cookie.js') }}
     {{- asset_js('js/plugins/plugin-sidebar.js') }}
     {{- asset_js('js/plugins/plugin-toast.js') }}
+    {{- asset_js('js/plugins/plugin-theme.js') }}
     {{- asset_js('js/application/core_common.js') }}
 {% else %}
     {{- asset_js('js/compiled/core_common.js') }}

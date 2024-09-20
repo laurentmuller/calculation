@@ -152,12 +152,12 @@ class MonthChart extends AbstractHighchart
 
     private function getClickExpression(): ChartExpression
     {
-        return self::createExpression('function() {location.href = this.url;}');
+        return ChartExpression::instance('function() {location.href = this.url;}');
     }
 
     private function getFormatterExpression(): ChartExpression
     {
-        return self::createExpression('function() {return Highcharts.numberFormat(this.value, 0);}');
+        return ChartExpression::instance('function() {return Highcharts.numberFormat(this.value, 0);}');
     }
 
     /**

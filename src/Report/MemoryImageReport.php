@@ -18,8 +18,7 @@ use App\Model\LogChannel;
 use App\Model\LogLevel;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Html\HtmlBootstrapColor;
-use App\Pdf\Interfaces\PdfMemoryImageInterface;
-use App\Pdf\PdfIconCell;
+use App\Pdf\PdfFontAwesomeCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\Traits\PdfMemoryImageTrait;
 use App\Service\FontAwesomeService;
@@ -27,6 +26,7 @@ use App\Service\ImageService;
 use App\Utils\FileUtils;
 use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfRectangleStyle;
+use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
 use fpdf\PdfException;
 use fpdf\PdfRectangle;
@@ -34,12 +34,11 @@ use fpdf\Traits\PdfEllipseTrait;
 use fpdf\Traits\PdfRotationTrait;
 use fpdf\Traits\PdfTransparencyTrait;
 use Monolog\Level;
-use Psr\Cache\InvalidArgumentException;
 
 /**
  * Report testing in memory images.
  */
-class MemoryImageReport extends AbstractReport implements PdfMemoryImageInterface
+class MemoryImageReport extends AbstractReport
 {
     use PdfEllipseTrait;
     use PdfMemoryImageTrait;
@@ -57,9 +56,6 @@ class MemoryImageReport extends AbstractReport implements PdfMemoryImageInterfac
         $this->setTitle('In memory Images');
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function render(): bool
     {
         $this->addPage();
@@ -148,8 +144,6 @@ class MemoryImageReport extends AbstractReport implements PdfMemoryImageInterfac
 
     /**
      * @return array<string, FontAwesomeImage>
-     *
-     * @throws InvalidArgumentException
      */
     private function getLogChannelImages(): array
     {
@@ -179,8 +173,6 @@ class MemoryImageReport extends AbstractReport implements PdfMemoryImageInterfac
 
     /**
      * @return array<string, FontAwesomeImage>
-     *
-     * @throws InvalidArgumentException
      */
     private function getLogLevelImages(): array
     {
@@ -205,9 +197,6 @@ class MemoryImageReport extends AbstractReport implements PdfMemoryImageInterfac
         $this->resetStyle();
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     private function renderDigits(): void
     {
         $this->renderCellTitle('Digits');
@@ -227,8 +216,8 @@ class MemoryImageReport extends AbstractReport implements PdfMemoryImageInterfac
                 $this->getPrintableWidth(),
                 self::LINE_HEIGHT,
             );
-            $cell = new PdfIconCell($image, $icon);
-            $cell->drawImage($this, $bounds, PdfMove::NEW_LINE);
+            $cell = new PdfFontAwesomeCell($image, $icon);
+            $cell->drawImage($this, $bounds, PdfTextAlignment::LEFT, PdfMove::NEW_LINE);
         }
     }
 
@@ -242,9 +231,6 @@ class MemoryImageReport extends AbstractReport implements PdfMemoryImageInterfac
         $this->ellipse(30, 245, 20, 10, PdfRectangleStyle::BOTH);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     private function renderFontAwesome(): void
     {
         if (!$this->service instanceof FontAwesomeService) {
@@ -281,8 +267,8 @@ class MemoryImageReport extends AbstractReport implements PdfMemoryImageInterfac
                 $this->getPrintableWidth(),
                 self::LINE_HEIGHT,
             );
-            $cell = new PdfIconCell($image, \ucfirst($name));
-            $cell->drawImage($this, $bounds, PdfMove::NEW_LINE);
+            $cell = new PdfFontAwesomeCell($image, \ucfirst($name));
+            $cell->drawImage($this, $bounds, PdfTextAlignment::LEFT, PdfMove::NEW_LINE);
         }
     }
 

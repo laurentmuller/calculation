@@ -40,6 +40,7 @@
     const THEME_CHANNEL = 'theme';
     const THEME_EVENT_NAME = 'theme_changed';
     const THEME_LIGHT = 'light';
+    const THEME_DARK = 'dark';
 
     const CLASS_REGEX = /classId-(.*)-\d+/;
     const REPLACE_REGEX = /([a-z])([A-Z])/g;
@@ -101,10 +102,10 @@
 
     // Gets the color variables, depending on the selected theme.
     const getThemeVariables = () => {
-        if (THEME_LIGHT === getTheme()) {
+        if (THEME_DARK === getTheme()) {
             return {
-                primaryColor: '#21252908',
-                primaryTextColor: '#000',
+                primaryColor: '#DEE2E608',
+                primaryTextColor: '#FFF',
                 primaryBorderColor: '#6C757D',
                 lineColor: '#6C757D',
                 secondaryColor: '#006100',
@@ -112,8 +113,8 @@
             };
         }
         return {
-            primaryColor: '#DEE2E608',
-            primaryTextColor: '#FFF',
+            primaryColor: '#21252908',
+            primaryTextColor: '#000',
             primaryBorderColor: '#6C757D',
             lineColor: '#6C757D',
             secondaryColor: '#006100',

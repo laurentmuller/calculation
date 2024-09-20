@@ -34,7 +34,7 @@ class OverallTable extends ReportTable
     }
 
     /**
-     * Render the table for the given report.
+     * Create and render the table for the given report.
      */
     public static function render(CalculationReport $parent): void
     {

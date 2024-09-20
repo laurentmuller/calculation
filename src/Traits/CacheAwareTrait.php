@@ -14,7 +14,6 @@ namespace App\Traits;
 
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Contracts\Service\Attribute\SubscribedService;
 
 /**
@@ -55,11 +54,7 @@ trait CacheAwareTrait
      */
     public function deleteCacheItem(string $key): bool
     {
-        try {
-            return $this->getCacheItemPool()->deleteItem($this->cleanKey($key));
-        } catch (InvalidArgumentException $e) {
-            throw new \LogicException('Unable to delete the cache item.', $e->getCode(), $e);
-        }
+        return $this->getCacheItemPool()->deleteItem($this->cleanKey($key));
     }
 
     /**
@@ -69,11 +64,7 @@ trait CacheAwareTrait
      */
     public function getCacheItem(string $key): CacheItemInterface
     {
-        try {
-            return $this->getCacheItemPool()->getItem($this->cleanKey($key));
-        } catch (InvalidArgumentException $e) {
-            throw new \LogicException('Unable to get the cache item.', $e->getCode(), $e);
-        }
+        return $this->getCacheItemPool()->getItem($this->cleanKey($key));
     }
 
     #[SubscribedService]
@@ -139,11 +130,7 @@ trait CacheAwareTrait
      */
     public function hasCacheItem(string $key): bool
     {
-        try {
-            return $this->getCacheItemPool()->hasItem($this->cleanKey($key));
-        } catch (InvalidArgumentException $e) {
-            throw new \LogicException('Unable to check cache item.', $e->getCode(), $e);
-        }
+        return $this->getCacheItemPool()->hasItem($this->cleanKey($key));
     }
 
     /**

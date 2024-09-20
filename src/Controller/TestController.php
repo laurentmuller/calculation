@@ -33,6 +33,7 @@ use App\Model\HttpClientError;
 use App\Pdf\Events\PdfLabelTextEvent;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\PdfLabelDocument;
+use App\Report\FontAwesomeReport;
 use App\Report\HtmlColorNameReport;
 use App\Report\HtmlReport;
 use App\Report\MemoryImageReport;
@@ -60,7 +61,6 @@ use App\Validator\Strength;
 use App\Word\HtmlDocument;
 use Doctrine\ORM\EntityManagerInterface;
 use fpdf\Enums\PdfFontStyle;
-use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use ReCaptcha\Response as ReCaptchaResponse;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -240,6 +240,17 @@ class TestController extends AbstractController
     }
 
     /**
+     * Output a report with memory images.
+     */
+    #[Get(path: '/fontawesome', name: 'fontawesome')]
+    public function fontAwesome(FontAwesomeService $service): PdfResponse
+    {
+        $report = new FontAwesomeReport($this, $service);
+
+        return $this->renderPdfDocument($report);
+    }
+
+    /**
      * Output a report with HTML color names.
      */
     #[Get(path: '/colors', name: 'colors')]
@@ -397,9 +408,6 @@ class TestController extends AbstractController
         return $this->render('test/recaptcha.html.twig', ['form' => $form]);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     #[Get(path: '/search', name: 'search')]
     public function search(Request $request, SearchService $service): JsonResponse
     {

@@ -21,6 +21,7 @@ class TestControllerTest extends ControllerTestCase
         'label',
         'pdf',
         'word',
+        'fontawesome',
         'colors',
         'memory',
         'notifications',

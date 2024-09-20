@@ -22,7 +22,6 @@ use App\Service\SchemaService;
 use App\Traits\ArrayTrait;
 use fpdf\Enums\PdfFontName;
 use fpdf\Enums\PdfMove;
-use Psr\Cache\InvalidArgumentException;
 
 /**
  * Report to display database schema.
@@ -50,9 +49,6 @@ class SchemaReport extends AbstractReport
         $this->setDescriptionTrans('schema.description');
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function render(): bool
     {
         $tables = $this->service->getTables();

@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Utils\StringUtils;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Finder;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -44,8 +43,6 @@ class DiagramService
      * Gets the diagram file for the given name.
      *
      * @psalm-return DiagramType|null
-     *
-     * @throws InvalidArgumentException
      */
     public function getFile(string $name): ?array
     {
@@ -54,8 +51,6 @@ class DiagramService
 
     /**
      * Gets all diagram files.
-     *
-     * @throws InvalidArgumentException
      *
      * @psalm-return array<string, DiagramType>
      */

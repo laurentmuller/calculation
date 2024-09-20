@@ -37,7 +37,7 @@
                 {% if is_granted_data and app.current_route is not same as('search') -%}
                     {{ include('navigation/horizontal/navigation_search.html.twig') }}
                 {% endif %}
-                {{ include('navigation/horizontal/navigation_theme.html.twig') }}
+                {{ include('navigation/menu/_menu_theme.html.twig') }}
                 {% if is_remembered -%}
                     {{ include('navigation/horizontal/navigation_user.html.twig') }}
                 {% endif %}

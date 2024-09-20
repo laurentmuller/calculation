@@ -337,8 +337,4 @@ function updatePosition($radio) {
             input.focus();
         });
     });
-
-    // theme
-    $('#theme').themeListener();
-
 }(jQuery));

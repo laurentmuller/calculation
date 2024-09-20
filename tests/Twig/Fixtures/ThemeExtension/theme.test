@@ -1,17 +1,26 @@
 --TEST--
 "theme_extension" filter test
 --TEMPLATE--
-{{ themes(request)|length }}
+{{ themes()|length }}
+{{ themes()[0].value }}
+{{ themes()[0].icon }}
+{{ themes()[0].help }}
+{{ themes()[0].success }}
+{{ themes()[0].thumbnail }}
 {{ theme(request).value }}
 {{ theme_value(request) }}
 {{ is_dark_theme(request) ? 'ok' : 'ko' }}
-
 --DATA--
 return [
     'request' => new Symfony\Component\HttpFoundation\Request(),
 ]
 --EXPECT--
-0
+3
+light
+fa-regular fa-sun
+theme.light.help
+theme.light.success
+images/themes/theme_light.png
 auto
 auto
 ko

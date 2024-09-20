@@ -17,12 +17,11 @@ use App\Service\SymfonyInfoService;
 use App\Spreadsheet\SymfonyDocument;
 use App\Tests\KernelServiceTestCase;
 use PHPUnit\Framework\MockObject\Exception;
-use Psr\Cache\InvalidArgumentException;
 
 class SymfonyDocumentTest extends KernelServiceTestCase
 {
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testRender(): void
     {

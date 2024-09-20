@@ -26,7 +26,7 @@ class ThemeExtensionTest extends IntegrationTestCase
     {
         $service = $this->createMock(ThemeService::class);
         $service->method('getThemes')
-            ->willReturn([]);
+            ->willReturn(Theme::sorted());
         $service->method('getTheme')
             ->willReturn(Theme::getDefault());
         $service->method('getThemeValue')

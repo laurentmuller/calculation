@@ -49,11 +49,11 @@ class ThemeTest extends TestCase
         yield [Theme::LIGHT, 'theme.light.success'];
     }
 
-    public static function getTitles(): \Iterator
+    public static function getThumbnails(): \Iterator
     {
-        yield [Theme::AUTO, 'theme.auto.title'];
-        yield [Theme::DARK, 'theme.dark.title'];
-        yield [Theme::LIGHT, 'theme.light.title'];
+        yield [Theme::AUTO, 'images/themes/theme_auto.png'];
+        yield [Theme::DARK, 'images/themes/theme_dark.png'];
+        yield [Theme::LIGHT, 'images/themes/theme_light.png'];
     }
 
     public static function getTranslates(): \Iterator
@@ -122,10 +122,10 @@ class ThemeTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[DataProvider('getTitles')]
-    public function testTitle(Theme $theme, string $expected): void
+    #[DataProvider('getThumbnails')]
+    public function testThumbnail(Theme $theme, string $expected): void
     {
-        $actual = $theme->getTitle();
+        $actual = $theme->getThumbnail();
         self::assertSame($expected, $actual);
     }
 

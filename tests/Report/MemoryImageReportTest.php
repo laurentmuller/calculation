@@ -19,12 +19,11 @@ use App\Service\FontAwesomeService;
 use fpdf\PdfException;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Psr\Cache\InvalidArgumentException;
 
 class MemoryImageReportTest extends TestCase
 {
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testEmptyImage(): void
     {
@@ -36,7 +35,7 @@ class MemoryImageReportTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testInvalidImage(): void
     {
@@ -47,7 +46,7 @@ class MemoryImageReportTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testRender(): void
     {
@@ -59,7 +58,7 @@ class MemoryImageReportTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testRenderWithIconFile(): void
     {
@@ -71,7 +70,7 @@ class MemoryImageReportTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testRenderWithInvalidIconFile(): void
     {
@@ -82,7 +81,7 @@ class MemoryImageReportTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testRenderWithLogoFile(): void
     {
@@ -94,7 +93,7 @@ class MemoryImageReportTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testRenderWithScreenshot(): void
     {
@@ -106,7 +105,7 @@ class MemoryImageReportTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testRenderWithService(): void
     {
@@ -121,7 +120,7 @@ class MemoryImageReportTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testWithNoArgument(): void
     {

@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Database\OpenWeatherDatabase;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Cache\CacheInterface;
 
@@ -52,8 +51,6 @@ class OpenWeatherSearchService
      * @param int    $limit the maximum number of cities to return
      *
      * @psalm-return array<int, OpenWeatherCityType>
-     *
-     * @throws InvalidArgumentException
      */
     public function search(string $name, int $limit = self::DEFAULT_LIMIT): array
     {

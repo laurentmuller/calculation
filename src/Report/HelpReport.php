@@ -20,7 +20,6 @@ use App\Service\HelpService;
 use App\Traits\ImageSizeTrait;
 use App\Utils\FileUtils;
 use fpdf\Enums\PdfTextAlignment;
-use Psr\Cache\InvalidArgumentException;
 
 /**
  * Report for the help documentation.
@@ -52,9 +51,6 @@ class HelpReport extends AbstractReport
         $this->headerStyle = PdfStyle::getHeaderStyle();
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function render(): bool
     {
         $service = $this->service;
@@ -70,8 +66,6 @@ class HelpReport extends AbstractReport
      * @psalm-param HelpDialogType $dialog
      *
      * @psalm-return HelpEntityType|null
-     *
-     * @throws InvalidArgumentException
      */
     private function findEntity(array $dialog): ?array
     {
@@ -124,8 +118,6 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpActionType[] $actions
-     *
-     * @throws InvalidArgumentException
      */
     private function outputActions(array $actions, string $description): void
     {
@@ -200,8 +192,6 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpDialogType $item
-     *
-     * @throws InvalidArgumentException
      */
     private function outputDialog(array $item): void
     {
@@ -248,8 +238,6 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpDialogType $item
-     *
-     * @throws InvalidArgumentException
      */
     private function outputDialogEditActions(array $item): void
     {
@@ -261,8 +249,6 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpDialogType $item
-     *
-     * @throws InvalidArgumentException
      */
     private function outputDialogEntityAndFields(array $item): void
     {
@@ -322,8 +308,6 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpDialogType $item
-     *
-     * @throws InvalidArgumentException
      */
     private function outputDialogForbidden(array $item): void
     {
@@ -345,8 +329,6 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpDialogType $item
-     *
-     * @throws InvalidArgumentException
      */
     private function outputDialogGlobalActions(array $item): void
     {
@@ -386,8 +368,6 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param array<string, HelpDialogType[]> $groupedDialogs
-     *
-     * @throws InvalidArgumentException
      */
     private function outputDialogs(array $groupedDialogs, bool $newPage): bool
     {
@@ -425,8 +405,6 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpEntityType[] $entities
-     *
-     * @throws InvalidArgumentException
      */
     private function outputEntities(array $entities, bool $newPage): void
     {
@@ -455,8 +433,6 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpEntityType $item
-     *
-     * @throws InvalidArgumentException
      */
     private function outputEntity(array $item): void
     {
@@ -536,8 +512,6 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpMenuType[] $menus
-     *
-     * @throws InvalidArgumentException
      */
     private function outputMainMenus(array $menus): bool
     {
@@ -575,8 +549,6 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpMenuType[] $menus
-     *
-     * @throws InvalidArgumentException
      */
     private function outputMenus(PdfTable $table, array $menus, int $indent = 0): void
     {

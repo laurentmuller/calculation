@@ -18,7 +18,6 @@ use App\Traits\DisableListenerTrait;
 use App\Utils\FileUtils;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -46,9 +45,6 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
     private readonly string $imagesPath;
     private readonly string $imagesVersion;
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
@@ -68,17 +64,12 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
 
     /**
      * @psalm-api
-     *
-     * @throws InvalidArgumentException
      */
     public function deleteCache(): bool
     {
         return $this->cache->delete(self::KEY_IMAGES);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function getVersion(string $path): string
     {
         if (\str_starts_with($path, self::IMAGES_PATH)) {
@@ -102,8 +93,6 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
 
     /**
      * @return array<string, string>
-     *
-     * @throws InvalidArgumentException
      */
     private function getUserImages(): array
     {

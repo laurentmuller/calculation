@@ -34,9 +34,5 @@ class ThemeControllerTest extends ControllerTestCase
                 yield [$route, $user, Response::HTTP_OK, Request::METHOD_GET, true];
             }
         }
-
-        foreach ($routes as $route) {
-            yield [$route, self::ROLE_DISABLED, Response::HTTP_FORBIDDEN, Request::METHOD_GET, true];
-        }
     }
 }

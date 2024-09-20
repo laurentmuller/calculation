@@ -42,9 +42,10 @@
                 </button>
                 <div class="collapse{{ collapse_class }}" id="{{ id }}">
                     <ul class="dropdown-menu d-block border-0 pt-0">
-                        {{ dropdownItem(path('test_tree'), 'test.tree_view', 'folder-tree') }}
+                        {{ dropdownItemExternal(path('test_fontawesome'), 'test.fontawesome', 'font-awesome far') }}
                         {{ dropdownItemExternal(path('test_pdf'), 'common.button_export_pdf', ICON_PDF) }}
                         {{ dropdownItemExternal(path('test_word'), 'common.button_export_word', ICON_WORD) }}
+                        {{ dropdownItem(path('test_tree'), 'test.tree_view', 'folder-tree') }}
                     </ul>
                 </div>
             </li>

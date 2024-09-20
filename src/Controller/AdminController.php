@@ -27,7 +27,6 @@ use App\Service\CommandService;
 use App\Service\RoleBuilderService;
 use App\Traits\RoleTranslatorTrait;
 use App\Utils\FileUtils;
-use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,8 +48,6 @@ class AdminController extends AbstractController
 
     /**
      * Clear the application cache.
-     *
-     * @throws InvalidArgumentException
      */
     #[GetPost(path: '/clear', name: 'clear')]
     public function clearCache(

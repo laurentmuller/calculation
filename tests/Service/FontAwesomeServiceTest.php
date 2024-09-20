@@ -17,14 +17,13 @@ use App\Service\FontAwesomeIconService;
 use App\Service\FontAwesomeService;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class FontAwesomeServiceTest extends TestCase
 {
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testImageFromIconInvalid(): void
     {
@@ -34,7 +33,7 @@ class FontAwesomeServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testImageFromIconValid(): void
     {
@@ -45,7 +44,7 @@ class FontAwesomeServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testInvalidDirectory(): void
     {
@@ -53,7 +52,7 @@ class FontAwesomeServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testInvalidEmptyFile(): void
     {
@@ -61,7 +60,7 @@ class FontAwesomeServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testInvalidFile(): void
     {
@@ -80,7 +79,7 @@ class FontAwesomeServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testValidFileSizeEquals(): void
     {
@@ -90,7 +89,7 @@ class FontAwesomeServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testValidFileWidthGreater(): void
     {
@@ -100,7 +99,7 @@ class FontAwesomeServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testValidFileWidthSmaller(): void
     {
@@ -110,7 +109,7 @@ class FontAwesomeServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testValidFileWithColor(): void
     {
@@ -118,7 +117,7 @@ class FontAwesomeServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     public function testValidFileWithoutExtension(): void
     {
@@ -126,7 +125,7 @@ class FontAwesomeServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     private function checkImageIsInvalid(string $svgDirectory, string $relativePath): void
     {
@@ -136,7 +135,7 @@ class FontAwesomeServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|InvalidArgumentException
+     * @throws Exception
      */
     private function checkImageIsValid(string $svgDirectory, string $relativePath, ?string $color = null): FontAwesomeImage
     {

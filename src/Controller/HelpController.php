@@ -19,7 +19,6 @@ use App\Model\HelpDownloadQuery;
 use App\Report\HelpReport;
 use App\Response\PdfResponse;
 use App\Service\HelpService;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -47,8 +46,6 @@ class HelpController extends AbstractController
 
     /**
      * Display help for a dialog.
-     *
-     * @throws InvalidArgumentException
      */
     #[Get(path: '/dialog/{id}', name: 'dialog')]
     public function dialog(string $id): Response
@@ -68,8 +65,6 @@ class HelpController extends AbstractController
 
     /**
      * Display help for dialogs.
-     *
-     * @throws InvalidArgumentException
      */
     #[Get(path: '/dialogs', name: 'dialogs')]
     public function dialogs(): Response
@@ -119,8 +114,6 @@ class HelpController extends AbstractController
 
     /**
      * Display help for entities.
-     *
-     * @throws InvalidArgumentException
      */
     #[Get(path: '/entities', name: 'entities')]
     public function entities(): Response
@@ -139,8 +132,6 @@ class HelpController extends AbstractController
 
     /**
      * Display help for an entity.
-     *
-     * @throws InvalidArgumentException
      */
     #[Get(path: '/entity/{id}', name: 'entity')]
     public function entity(string $id): Response

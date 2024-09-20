@@ -18,8 +18,6 @@ use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
-use Symfony\Component\Cache\Exception\InvalidArgumentException;
-use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LogServiceTest extends KernelServiceTestCase
@@ -42,24 +40,6 @@ class LogServiceTest extends KernelServiceTestCase
         self::assertSame($actual, $this->service);
     }
 
-    /**
-     * @throws Exception
-     */
-    public function testClearCacheWithError(): void
-    {
-        $fileName = __DIR__ . '/../Data/log_invalid_json.txt';
-        $logger = $this->createMock(LoggerInterface::class);
-        $translator = $this->createMockTranslator();
-        $cache = $this->createMock(CacheInterface::class);
-        $cache->method('delete')
-            ->willThrowException(new InvalidArgumentException('fake message'));
-        $service = new LogService($fileName, $logger, $translator, $cache);
-
-        $service->clearCache();
-        $actual = $this->service->clearCache();
-        self::assertSame($actual, $this->service);
-    }
-
     public function testGetFileName(): void
     {
         $kernel = self::$kernel;
@@ -78,24 +58,6 @@ class LogServiceTest extends KernelServiceTestCase
 
         $actual = $this->service->getLog(0);
         self::assertNotNull($actual);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testGetLogFileWithError(): void
-    {
-        $fileName = __DIR__ . '/../Data/log_invalid_json.txt';
-        $logger = $this->createMock(LoggerInterface::class);
-        $translator = $this->createMockTranslator();
-        $cache = $this->createMock(CacheInterface::class);
-        $cache->method('get')
-            ->willThrowException(new InvalidArgumentException('fake message'));
-        $service = new LogService($fileName, $logger, $translator, $cache);
-
-        $service->getLogFile();
-        $actual = $service->getLogFile();
-        self::assertNull($actual);
     }
 
     public function testGetTranslator(): void

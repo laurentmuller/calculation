@@ -28,7 +28,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -142,8 +141,6 @@ class SearchService implements ServiceSubscriberInterface
      * @return int the number of rows
      *
      * @psalm-return non-negative-int
-     *
-     * @throws InvalidArgumentException
      */
     public function count(?string $search, ?string $entity = null): int
     {
@@ -203,8 +200,6 @@ class SearchService implements ServiceSubscriberInterface
      * @return array the array of results for the given search (can be empty)
      *
      * @psalm-return SearchType[]
-     *
-     * @throws InvalidArgumentException
      */
     public function search(?string $search, ?string $entity = null, int $limit = 25, int $offset = 0): array
     {
@@ -369,8 +364,6 @@ class SearchService implements ServiceSubscriberInterface
      * @param string  $extra  the SQL statement to add to the default native SELECT SQL statement
      *
      * @psalm-return SearchType[]
-     *
-     * @throws InvalidArgumentException
      */
     private function getArrayResult(string $search, ?string $entity = null, string $extra = ''): array
     {
@@ -424,8 +417,6 @@ class SearchService implements ServiceSubscriberInterface
      * Gets the SQL queries.
      *
      * @return array<string, string> the SQL queries
-     *
-     * @throws InvalidArgumentException
      */
     private function getQueries(): array
     {
@@ -461,8 +452,6 @@ class SearchService implements ServiceSubscriberInterface
 
     /**
      * Gets the result set mapping.
-     *
-     * @throws InvalidArgumentException
      */
     private function getResultSetMapping(): ResultSetMapping
     {

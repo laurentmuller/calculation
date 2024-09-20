@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Pdf\Traits;
 
-use App\Pdf\Interfaces\PdfMemoryImageInterface;
 use fpdf\PdfDocument;
 use fpdf\PdfException;
 
@@ -20,11 +19,11 @@ use fpdf\PdfException;
  * Trait to output memory images.
  *
  * @psalm-require-extends PdfDocument
- *
- * @psalm-require-implements PdfMemoryImageInterface
  */
 trait PdfMemoryImageTrait
 {
+    use PdfImageTypeTrait;
+
     /**
      * Output an AVIF raster image from a file or a URL.
      *
@@ -465,26 +464,5 @@ trait PdfMemoryImageTrait
             throw PdfException::format('The image file "%s" is not a valid image.', $file);
         }
         $this->imageGD($image, $x, $y, $width, $height, $link);
-    }
-
-    private function getImageFileName(string $mimeType, string $data): string
-    {
-        return \sprintf('data://%s;base64,%s', $mimeType, \base64_encode($data));
-    }
-
-    private function getImageFileType(string $mimeType): string
-    {
-        return \substr((string) \strrchr($mimeType, '/'), 1);
-    }
-
-    private function getImageMimeType(string $data): string
-    {
-        $info = new \finfo(\FILEINFO_MIME_TYPE);
-        $mime = $info->buffer($data);
-        if (!\is_string($mime)) {
-            throw PdfException::format('Empty or incorrect mime type: "%s".', (string) $mime);
-        }
-
-        return $mime;
     }
 }

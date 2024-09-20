@@ -20,7 +20,6 @@ use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfDrawHeadersInterface;
-use App\Pdf\Interfaces\PdfMemoryImageInterface;
 use App\Traits\MathTrait;
 use fpdf\Enums\PdfRectangleStyle;
 use fpdf\Enums\PdfTextAlignment;
@@ -769,8 +768,8 @@ class PdfTable
         $textBounds = clone $bounds;
         $line_height = PdfDocument::LINE_HEIGHT;
 
-        if ($cell instanceof PdfIconCell && $parent instanceof PdfMemoryImageInterface) {
-            $this->drawIconCell($parent, $cell, clone $textBounds);
+        if ($cell instanceof PdfFontAwesomeCell) {
+            $this->drawFontAwesomeCell($parent, $cell, clone $textBounds, $alignment);
         } elseif ($cell instanceof PdfImageCell) {
             $this->drawImageCell($parent, $cell, clone $textBounds, $margin, $alignment);
         } else {
@@ -871,12 +870,13 @@ class PdfTable
         }
     }
 
-    private function drawIconCell(
-        PdfDocument&PdfMemoryImageInterface $parent,
-        PdfIconCell $cell,
-        PdfRectangle $bounds
+    private function drawFontAwesomeCell(
+        PdfDocument $parent,
+        PdfFontAwesomeCell $cell,
+        PdfRectangle $bounds,
+        PdfTextAlignment $alignment
     ): void {
-        $cell->drawImage($parent, $bounds);
+        $cell->drawImage($parent, $bounds, $alignment);
     }
 
     private function drawImageCell(

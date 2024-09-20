@@ -82,6 +82,9 @@ class FontAwesomeService
         if (!FileUtils::isDir($this->svgDirectory)) {
             return null;
         }
+        if (!$this->isSvgSupported()) {
+            return null;
+        }
 
         $relativePath = $this->normalizePath($relativePath);
         $path = FileUtils::buildPath($this->svgDirectory, $relativePath);

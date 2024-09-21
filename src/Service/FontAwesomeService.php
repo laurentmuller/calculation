@@ -132,6 +132,16 @@ class FontAwesomeService
         return $this->svgDirectory;
     }
 
+    /**
+     * Gets a value indicating if the Imagick library supports the SVG format.
+     */
+    public function isSvgSupported(): bool
+    {
+        $formats = \Imagick::queryFormats('SVG');
+
+        return 0 !== \count($formats);
+    }
+
     private function convert(string $content): FontAwesomeImage
     {
         $imagick = null;
@@ -181,13 +191,6 @@ class FontAwesomeService
         return [$this->round(self::TARGET_SIZE * $width, $height), self::TARGET_SIZE];
     }
 
-    private function isSvgSupported(): bool
-    {
-        $formats = \Imagick::queryFormats('SVG');
-
-        return 0 !== \count($formats);
-    }
-
     /**
      * @return array<string, string>
      */
@@ -224,8 +227,10 @@ class FontAwesomeService
             $save = true;
 
             return $image;
-        } catch (\Exception|\ImagickException $e) {
-            $this->logException($e, \sprintf('Unable to load image "%s".', $path));
+        } catch (\Exception $e) {
+            if (!$e instanceof \ImagickException) {
+                $this->logException($e, \sprintf('Unable to load image "%s".', $path));
+            }
 
             return null;
         }

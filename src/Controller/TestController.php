@@ -18,6 +18,7 @@ use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\User;
+use App\Enums\FlashType;
 use App\Enums\Importance;
 use App\Enums\MessagePosition;
 use App\Enums\StrengthLevel;
@@ -243,8 +244,15 @@ class TestController extends AbstractController
      * Output a report with memory images.
      */
     #[Get(path: '/fontawesome', name: 'fontawesome')]
-    public function fontAwesome(FontAwesomeService $service): PdfResponse
+    public function fontAwesome(FontAwesomeService $service): Response
     {
+        if (!$service->isSvgSupported()) {
+            return $this->redirectToHomePage(
+                message: 'test.fontawesome_error',
+                type: FlashType::WARNING
+            );
+        }
+
         $report = new FontAwesomeReport($this, $service);
 
         return $this->renderPdfDocument($report);

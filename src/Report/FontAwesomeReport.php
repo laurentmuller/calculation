@@ -39,7 +39,7 @@ class FontAwesomeReport extends AbstractReport
     public function render(): bool
     {
         // check
-        if (!$this->isException()) {
+        if ($this->isException()) {
             return true;
         }
 

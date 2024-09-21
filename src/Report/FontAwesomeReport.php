@@ -38,6 +38,11 @@ class FontAwesomeReport extends AbstractReport
 
     public function render(): bool
     {
+        // check
+        if (!$this->isException()) {
+            return true;
+        }
+
         $columns = 3;
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle());
@@ -88,6 +93,21 @@ class FontAwesomeReport extends AbstractReport
         \ksort($results);
 
         return $results;
+    }
+
+    private function isException(): bool
+    {
+        // check
+        $this->service->getImage('solid/calendar.svg');
+        if ($this->service->isSvgSupported() && !$this->service->isImagickException()) {
+            return false;
+        }
+
+        $this->addPage();
+        PdfStyle::getBoldCellStyle()->apply($this);
+        $this->cell(text: $this->trans('test.fontawesome_error'), align: PdfTextAlignment::CENTER);
+
+        return true;
     }
 
     private function renderAliases(PdfGroupTable $table, int $columns): int

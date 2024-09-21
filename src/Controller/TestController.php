@@ -241,12 +241,12 @@ class TestController extends AbstractController
     }
 
     /**
-     * Output a report with memory images.
+     * Output a report with Fontawesome images.
      */
     #[Get(path: '/fontawesome', name: 'fontawesome')]
     public function fontAwesome(FontAwesomeService $service): Response
     {
-        if (!$service->isSvgSupported()) {
+        if (!$service->isSvgSupported() || $service->isImagickException()) {
             return $this->redirectToHomePage(
                 message: 'test.fontawesome_error',
                 type: FlashType::WARNING

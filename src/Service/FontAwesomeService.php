@@ -39,6 +39,7 @@ class FontAwesomeService
     private const VIEW_BOX_PATTERN = '/viewBox="(\d+\s+){2}(?\'width\'\d+)\s+(?\'height\'\d+)"/mi';
 
     private ?\Imagick $imagick = null;
+    private bool $imagickException = false;
 
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/fontawesome')]
@@ -82,7 +83,7 @@ class FontAwesomeService
         if (!FileUtils::isDir($this->svgDirectory)) {
             return null;
         }
-        if (!$this->isSvgSupported()) {
+        if ($this->imagickException || !$this->isSvgSupported()) {
             return null;
         }
 
@@ -130,6 +131,14 @@ class FontAwesomeService
     public function getSvgDirectory(): string
     {
         return $this->svgDirectory;
+    }
+
+    /**
+     * Returns a value indicating if an imagick exception has been raised.
+     */
+    public function isImagickException(): bool
+    {
+        return $this->imagickException;
     }
 
     /**
@@ -228,7 +237,9 @@ class FontAwesomeService
 
             return $image;
         } catch (\Exception $e) {
-            if (!$e instanceof \ImagickException) {
+            if ($e instanceof \ImagickException) {
+                $this->imagickException = true;
+            } else {
                 $this->logException($e, \sprintf('Unable to load image "%s".', $path));
             }
 

@@ -5,7 +5,7 @@
 /**
  * -------------- jQuery Extensions --------------
  */
-(function ($) {
+$(function () {
     'use strict';
 
     /**
@@ -580,26 +580,26 @@
         },
     });
 
-    if (!$.fn.popover) {
-        $.fn.popover = function (options = {}) {
-            return this.each(function () {
-                return new bootstrap.Popover(this, options);
-            });
-        };
-    }
-
-    if (!$.fn.tooltip) {
-        $.fn.tooltip = function (options = {}) {
-            return this.each(function () {
-                return new bootstrap.Tooltip(this, options);
-            });
-        };
-    }
+    // if (!$.fn.popover) {
+    //     $.fn.popover = function (options = {}) {
+    //         return this.each(function () {
+    //             bootstrap.Popover.getOrCreateInstance(this, options);
+    //         });
+    //     };
+    // }
+    //
+    // if (!$.fn.tooltip) {
+    //     $.fn.tooltip = function (options = {}) {
+    //         return this.each(function () {
+    //             bootstrap.Tooltip.getOrCreateInstance(this, options);
+    //         });
+    //     };
+    // }
 
     // if (!$.fn.dropdown) {
     //     $.fn.dropdown = function (options = {}) {
     //         return this.each(function () {
-    //             return new bootstrap.Dropdown(this, options);
+    //             bootstrap.Dropdown.getOrCreateInstance(this, options);
     //         });
     //     };
     // }
@@ -607,7 +607,7 @@
     // if (!$.fn.toast) {
     //     $.fn.toast = function (options = {}) {
     //         return this.each(function () {
-    //             return new bootstrap.Toast(this, options);
+    //             bootstrap.Toast.getOrCreateInstance(this, options);
     //         });
     //     };
     // }
@@ -621,4 +621,4 @@
     $(document).ajaxStop(function () {
         $('*').css('cursor', '');
     });
-}(jQuery));
+});

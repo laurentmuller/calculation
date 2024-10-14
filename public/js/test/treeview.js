@@ -177,7 +177,7 @@ function updatePosition($radio) {
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     const $tree = $('#tree');
     const treeView = $tree.boostrapTreeView({
@@ -337,4 +337,4 @@ function updatePosition($radio) {
             input.focus();
         });
     });
-}(jQuery));
+});

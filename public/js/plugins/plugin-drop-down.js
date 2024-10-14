@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // -----------------------------------
@@ -213,4 +213,4 @@
         $.fn.dropdown = oldDropDown;
         return this;
     };
-}(jQuery));
+});

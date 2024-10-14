@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // initialize password strength meter
@@ -32,4 +32,4 @@
         }
     };
     $form.initValidator(options);
-}(jQuery));
+});

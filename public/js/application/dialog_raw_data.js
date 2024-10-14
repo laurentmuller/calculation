@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     $('.modal-raw-data .btn-copy').copyClipboard({
         title: $('.card-title:first').text(),
@@ -17,4 +17,4 @@
     $('.modal.modal-raw-data').on('hide.bs.modal', function () {
         $(this).find('.pre-scrollable').scrollTop(0);
     });
-}(jQuery));
+});

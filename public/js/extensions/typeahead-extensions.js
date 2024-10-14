@@ -5,7 +5,7 @@
 /**
  * -------------- Typeahead Extensions --------------
  */
-(function ($) {
+$(function () {
     'use strict';
 
     /**
@@ -39,4 +39,4 @@
             return $element.typeahead(settings);
         }
     });
-}(jQuery));
+});

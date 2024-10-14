@@ -282,15 +282,13 @@
         }
     });
 
-    window.addEventListener('DOMContentLoaded', () => {
-        // create and handle the theme channel.
-        const channel = new window.BroadcastChannel(THEME_CHANNEL);
-        channel.addEventListener('message', (e) => {
-            if (e.data === THEME_EVENT_NAME) {
-                resetDiagram();
-                loadDiagram();
-            }
-        });
+    // create and handle the theme channel.
+    const channel = new window.BroadcastChannel(THEME_CHANNEL);
+    channel.addEventListener('message', (e) => {
+        if (e.data === THEME_EVENT_NAME) {
+            resetDiagram();
+            loadDiagram();
+        }
     });
 
     // save and initialize diagrams.

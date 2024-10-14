@@ -129,7 +129,7 @@ function updatePrices() {
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     // get widgets
     const $type = $('#form_type');
@@ -253,4 +253,4 @@ function updatePrices() {
         getProducts().toggleChecked();
         validateProducts();
     });
-}(jQuery));
+});

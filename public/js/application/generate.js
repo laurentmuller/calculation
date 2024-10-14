@@ -176,7 +176,7 @@ function generate() {
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     $('#modal-result').on('hide.bs.modal', function () {
         $('#overflow').scrollTop(0);
@@ -186,4 +186,4 @@ function generate() {
             generate();
         }
     });
-}(jQuery));
+});

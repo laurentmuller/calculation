@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // ------------------------------------------
@@ -651,4 +651,4 @@
         return this;
     };
 
-}(jQuery));
+});

@@ -4,7 +4,7 @@
 /**
  * Plugin to handle recaptcha.
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // ----------------------------------------------
@@ -139,4 +139,4 @@
             $this.trigger('click');
         }
     });
-}(jQuery));
+});

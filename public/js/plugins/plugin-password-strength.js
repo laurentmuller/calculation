@@ -7,7 +7,7 @@
  * @typedef {Object} ZXCVBNResult - the ZXCVBN result
  * @property {number} score
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // ----------------------------------------------
@@ -390,4 +390,4 @@
         return this;
     };
 
-}(jQuery));
+});

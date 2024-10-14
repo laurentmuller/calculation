@@ -6,7 +6,7 @@
 
 /* globals bootstrapTable */
 
-(function ($) {
+$(function () {
     'use strict';
 
     $.extend($.fn.bootstrapTable.defaults, {
@@ -20,7 +20,7 @@
         beforeContextMenuRow: function () {
             // return false here to prevent menu showing
         },
-        
+
         // Event default handlers
         onContextMenuItem: function () {
             return false;
@@ -244,4 +244,4 @@
         }
     };
 
-}(jQuery));
+});

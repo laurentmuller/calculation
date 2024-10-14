@@ -3,7 +3,7 @@
 /**
  * Plugin to edit the value of a table cell.
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // ------------------------------------
@@ -352,4 +352,4 @@
         $.fn.cellEdit = oldCellEdit;
         return this;
     };
-}(jQuery));
+});

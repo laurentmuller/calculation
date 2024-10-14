@@ -125,7 +125,7 @@ function sortMargins() {
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     // handle buttons
     $('.btn-add').on('click', function () {
@@ -144,4 +144,4 @@ function sortMargins() {
     // validation
     addMarginsMethods();
     $('form').initValidator();
-}(jQuery));
+});

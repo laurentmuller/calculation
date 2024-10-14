@@ -58,7 +58,7 @@ function loadContent(name) {
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     const $command = $('#command');
     const callback = () => {
@@ -71,4 +71,4 @@ function loadContent(name) {
 
     updateExecute();
     createPopover();
-}(jQuery));
+});

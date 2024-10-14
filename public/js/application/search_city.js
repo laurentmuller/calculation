@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     // submit form when units change
     const $form = $("#edit-form");
@@ -26,4 +26,4 @@
             text: $('.card-title').text() + '...',
         }
     });
-}(jQuery));
+});

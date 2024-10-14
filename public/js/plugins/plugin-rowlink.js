@@ -21,7 +21,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // ------------------------------------
@@ -157,4 +157,4 @@
         $(e.target).trigger('click.bs.rowlink', [e.ctrlKey]);
     });
 
-}(jQuery));
+});

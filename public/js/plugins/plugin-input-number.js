@@ -3,7 +3,7 @@
 /**
  * Plugin to validate and format number input.
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // ------------------------------------------
@@ -214,4 +214,4 @@
         $.fn.inputNumberFormat = oldInputNumberFormat;
         return this;
     };
-}(jQuery));
+});

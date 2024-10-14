@@ -25,9 +25,6 @@ use Twig\Extension\GlobalsInterface;
  */
 final class ConstantExtension extends AbstractExtension implements GlobalsInterface
 {
-    // the key name to cache constants
-    private const CACHE_KEY = 'twig_constant_extension';
-
     public function __construct(
         #[Target('calculation.service.constant')]
         private readonly CacheInterface $cache
@@ -36,7 +33,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
 
     public function getGlobals(): array
     {
-        return $this->cache->get(self::CACHE_KEY, fn (): array => $this->loadValues());
+        return $this->cache->get('twig_constant_extension', fn (): array => $this->loadValues());
     }
 
     /**

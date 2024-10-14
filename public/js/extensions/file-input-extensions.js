@@ -3,7 +3,7 @@
 /**
  * jQuery file input extensions.
  */
-(function ($) {
+$(function () {
     'use strict';
 
     /**
@@ -57,4 +57,4 @@
             });
         }
     });
-}(jQuery));
+});

@@ -3,9 +3,9 @@
 /* globals Toaster, ClipboardJS */
 
 /**
- * Plugin to copy element to the clipboard.
+ * Plugin to a copy element to the clipboard.
  */
-(function ($) {
+$(function () {
     'use strict';
 
     /**
@@ -158,4 +158,4 @@
         return this;
     };
 
-}(jQuery));
+});

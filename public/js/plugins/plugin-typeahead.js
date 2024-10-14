@@ -5,7 +5,7 @@
 /**
  * Plugin to look ahead values.
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // ------------------------------------
@@ -855,4 +855,4 @@
             e.preventDefault();
         }
     });
-}(jQuery));
+});

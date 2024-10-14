@@ -187,7 +187,7 @@ function handleEmail() {
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     // numbers
     $('#default_product_quantity').inputNumberFormat();
@@ -240,4 +240,4 @@ function handleEmail() {
     handleEmail();
     // handleFax();
     handleUrl();
-}(jQuery));
+});

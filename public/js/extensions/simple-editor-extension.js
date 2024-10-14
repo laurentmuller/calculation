@@ -3,7 +3,7 @@
 /**
  * jQuery Simple-Editor extensions.
  */
-(function ($) {
+$(function () {
     'use strict';
 
     /**
@@ -165,4 +165,4 @@
             });
         },
     });
-}(jQuery));
+});

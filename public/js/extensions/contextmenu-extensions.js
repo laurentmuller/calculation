@@ -187,7 +187,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
 /**
  * jQuery's extension for Bootstrap tables, rows and cells.
  */
-(function ($) {
+$(function () {
     'use strict';
 
     $.fn.extend({
@@ -252,4 +252,4 @@ const MenuBuilder = class { /* exported MenuBuilder */
             });
         }
     });
-}(jQuery));
+});

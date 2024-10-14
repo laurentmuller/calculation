@@ -46,7 +46,7 @@ function loadingTemplate(message) {
 /**
  * JQuery extension for Bootstrap tables rows and cells.
  */
-(function ($) {
+$(function () {
     'use strict';
 
     $.fn.extend({
@@ -1086,4 +1086,4 @@ function loadingTemplate(message) {
             });
         }
     });
-}(jQuery));
+});

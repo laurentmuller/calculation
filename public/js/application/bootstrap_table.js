@@ -457,7 +457,7 @@ function showSortDialog($table, $button) {
  * jQuery extensions.
  */
 
-(function ($) {
+$(function () {
     'use strict';
     $.fn.extend({
         /**
@@ -774,4 +774,4 @@ function showSortDialog($table, $button) {
     } else {
         $table.showSelection();
     }
-}(jQuery));
+});

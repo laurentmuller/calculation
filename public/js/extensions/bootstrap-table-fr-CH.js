@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     $.fn.bootstrapTable.locales['fr-CH'] = {
@@ -112,4 +112,4 @@
         }
     };
     $.extend($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales['fr-CH']);
-}(jQuery));
+});

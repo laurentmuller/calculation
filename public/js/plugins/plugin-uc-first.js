@@ -3,7 +3,7 @@
 /**
  * Plugin to set the first character to uppercase.
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // ------------------------------------
@@ -112,4 +112,4 @@
         }
     });
 
-}(jQuery));
+});

@@ -49,7 +49,7 @@ function parse($input) {
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     const options = {
@@ -99,4 +99,4 @@ function parse($input) {
 
     $('#editable').tableEditor(options);
 
-}(jQuery));
+});

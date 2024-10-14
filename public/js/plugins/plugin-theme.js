@@ -5,7 +5,7 @@
 /**
  * Plugin to handle theme.
  */
-(function ($) {
+$(function () {
     'use strict';
 
     /**
@@ -453,4 +453,4 @@
         $.fn.themeListener = oldThemeListener;
         return this;
     };
-}(jQuery));
+});

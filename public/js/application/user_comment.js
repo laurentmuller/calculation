@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // initialize editor
@@ -19,4 +19,4 @@
         simpleEditor: true,
         focus: false
     });
-}(jQuery));
+});

@@ -134,7 +134,7 @@ function swapCodes() {
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // initialize select
@@ -162,4 +162,4 @@ function swapCodes() {
     $('#amount').trigger('select').trigger('focus');
     compute();
 
-}(jQuery));
+});

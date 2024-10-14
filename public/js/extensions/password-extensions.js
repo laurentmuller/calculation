@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     /**
@@ -105,4 +105,4 @@
     // $('[data-bs-toggle='password']').password();
     $('input:password').togglePassword();
 
-}(jQuery));
+});

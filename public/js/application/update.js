@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // bind events
@@ -15,4 +15,4 @@
     });
 
     $('#edit-form').initValidator();
-}(jQuery));
+});

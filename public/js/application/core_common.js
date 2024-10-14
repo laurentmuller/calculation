@@ -5,7 +5,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     /**
@@ -134,12 +134,5 @@
     initThemeSwitcher();
     initBackToTop();
     initSidebar();
-
-    /**
-     * Must be called after content loaded.
-     */
-    window.addEventListener('DOMContentLoaded', () => {
-        // initThemeTooltip();
-        showFlashBag();
-    });
-}(jQuery));
+    showFlashBag();
+});

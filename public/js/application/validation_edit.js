@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     $('form').initValidator();
-}(jQuery));
+});

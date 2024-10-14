@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     const $form = $("#edit-form");
     $("#product_unit").initTypeahead({
@@ -16,4 +16,4 @@
     });
     $('#product_price').inputNumberFormat();
     $form.initValidator();
-}(jQuery));
+});

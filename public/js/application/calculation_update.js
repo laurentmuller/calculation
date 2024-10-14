@@ -42,7 +42,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     const $form = $('#edit-form');
     $form.simulate().initValidator({
@@ -74,4 +74,4 @@
     //     $dateTo.data('value', $dateTo.val());
     //     setDate($dateFrom, newDate);
     // });
-}(jQuery));
+});

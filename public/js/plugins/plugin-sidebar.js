@@ -5,7 +5,7 @@
  * Plugin to handle a sidebar.
  * ------------------------------------
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // ------------------------------------
@@ -406,4 +406,4 @@
         return this;
     };
 
-}(jQuery));
+});

@@ -293,7 +293,7 @@ function initCollapsePanel($link) {
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     // handle table
     const $calculations = $('#calculations');
@@ -378,4 +378,4 @@ function initCollapsePanel($link) {
     $('.card a.drop-down-icon-left[data-bs-toggle="collapse"]').each(function () {
         initCollapsePanel($(this));
     });
-}(jQuery));
+});

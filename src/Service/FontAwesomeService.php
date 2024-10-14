@@ -33,6 +33,7 @@ class FontAwesomeService
     public const ALIAS_FILE_NAME = 'aliases.json';
     public const SVG_EXTENSION = '.svg';
 
+    private const SVG_PREFIX = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
     private const SVG_REPLACE = '<svg fill="%s" ';
     private const SVG_SEARCH = '<svg ';
     private const TARGET_SIZE = 64;
@@ -83,7 +84,7 @@ class FontAwesomeService
         if (!FileUtils::isDir($this->svgDirectory)) {
             return null;
         }
-        if ($this->imagickException || !$this->isSvgSupported()) {
+        if ($this->isImagickException() || !$this->isSvgSupported()) {
             return null;
         }
 
@@ -146,9 +147,7 @@ class FontAwesomeService
      */
     public function isSvgSupported(): bool
     {
-        $formats = \Imagick::queryFormats('SVG');
-
-        return 0 !== \count($formats);
+        return $this->cache->get('svg_supported', fn (): bool => 0 !== \count(\Imagick::queryFormats('SVG')));
     }
 
     private function convert(string $content): FontAwesomeImage
@@ -157,7 +156,6 @@ class FontAwesomeService
 
         try {
             $imagick = $this->getImagick();
-
             $imagick->readImageBlob($content);
             $size = $this->getTargetSize($content);
             $imagick->resizeImage($size[0], $size[1], \Imagick::FILTER_LANCZOS, 1);
@@ -217,10 +215,6 @@ class FontAwesomeService
     private function loadImage(string $path, string $color, ItemInterface $item, bool &$save): ?FontAwesomeImage
     {
         $save = false;
-        if (!$this->isSvgSupported()) {
-            return null;
-        }
-
         $content = \file_get_contents($path);
         if (!\is_string($content)) {
             $this->logError(\sprintf('Unable to read the file "%s".', $path));
@@ -228,7 +222,7 @@ class FontAwesomeService
             return null;
         }
 
-        $content = $this->updateFillColor($content, $color);
+        $content = self::SVG_PREFIX . $this->updateFillColor($content, $color);
 
         try {
             $image = $this->convert($content);
@@ -237,10 +231,11 @@ class FontAwesomeService
 
             return $image;
         } catch (\Exception $e) {
+            if (!$this->imagickException) {
+                $this->logException($e, \sprintf('Unable to load image "%s".', $path));
+            }
             if ($e instanceof \ImagickException) {
                 $this->imagickException = true;
-            } else {
-                $this->logException($e, \sprintf('Unable to load image "%s".', $path));
             }
 
             return null;

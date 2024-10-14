@@ -124,8 +124,8 @@ const Application = {
      */
     initMenus: function () {
         'use strict';
-        // adjust button
         const that = this;
+        // adjust button
         const $buttonAdjust = $('.btn-adjust');
         if ($buttonAdjust.length) {
             $buttonAdjust.on('click', () => {
@@ -1595,7 +1595,7 @@ const MoveHandler = {
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     // move rows
     MoveHandler.init();
@@ -1678,4 +1678,4 @@ const MoveHandler = {
     if (edit && $button.length === 1) {
         Application.showEditItemDialog($button);
     }
-}(jQuery));
+});

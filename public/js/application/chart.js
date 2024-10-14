@@ -20,7 +20,7 @@ function onMonthsChange($months) {
 /**
  * Ready function.
  */
-(function ($) {
+$(function () {
     'use strict';
     // tooltip
     $('#data').tooltip({
@@ -36,4 +36,4 @@ function onMonthsChange($months) {
             $months.updateTimer(onMonthsChange, 250, $months);
         }).trigger('focus');
     }
-}(jQuery));
+});

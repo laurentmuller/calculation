@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     const $form = $('#edit-form');
     $form.simulate().initValidator({
@@ -21,4 +21,4 @@
         }
     });
     $('#form_sources .custom-switch').addClass('me-4');
-}(jQuery));
+});

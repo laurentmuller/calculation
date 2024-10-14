@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     const $form = $("#edit-form");
     $form.initValidator({
@@ -18,4 +18,4 @@
             'form[users][]': $form.data('error')
         }
     });
-}(jQuery));
+});

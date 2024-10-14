@@ -3,7 +3,7 @@
 /**
  * ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // get controls
@@ -115,4 +115,4 @@
 
     // initialize
     $form.initValidator(options);
-}(jQuery));
+});

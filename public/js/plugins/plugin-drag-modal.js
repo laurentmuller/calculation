@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // ------------------------------------
@@ -241,4 +241,4 @@
         $.fn.draggableModal = oldDraggableModal;
         return this;
     };
-}(jQuery));
+});

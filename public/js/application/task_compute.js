@@ -197,7 +197,7 @@ function onTaskChanged() {
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     // attach handlers
     $('#task').on('input', () => {
@@ -224,4 +224,4 @@ function onTaskChanged() {
 
     // update
     onInputChanged();
-}(jQuery));
+});

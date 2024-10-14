@@ -133,7 +133,7 @@ function setDefaultValues() {
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // validation
@@ -161,4 +161,4 @@ function setDefaultValues() {
     $('#user_rights_overwrite').on('click', function () {
         onOverwriteClick($(this));
     });
-}(jQuery));
+});

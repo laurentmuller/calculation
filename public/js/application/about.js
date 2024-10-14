@@ -90,7 +90,7 @@ $.fn.extend({
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     const $accordion = $('#aboutAccordion');
     const $configuration = $('#configuration');
@@ -142,4 +142,4 @@ $.fn.extend({
             }
         });
     });
-}(jQuery));
+});

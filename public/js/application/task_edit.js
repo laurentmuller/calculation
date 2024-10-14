@@ -340,7 +340,7 @@ function expand($caller) {
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     // handle add button
     $('.btn-add-item').on('click', function () {
@@ -395,4 +395,4 @@ function expand($caller) {
 
     // $('#task_name').on('keydown', (e) =>  window.console.log(e.key));
 
-}(jQuery));
+});

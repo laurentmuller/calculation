@@ -3,7 +3,7 @@
 /**
  * -------------- jQuery functions extensions --------------
  */
-(function ($) {
+$(function () {
     'use strict';
 
     $.fn.extend({
@@ -94,4 +94,4 @@
     // errors
     $("#data-table-edit").updateErrors();
 
-}(jQuery));
+});

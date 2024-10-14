@@ -3,7 +3,7 @@
 /**
  * -------------- Validator messages extension --------------
  */
-(function ($) {
+$(function () {
     'use strict';
 
     $.fn.extend({
@@ -522,4 +522,4 @@
             return $.validator.formatLabel(element, $.validator.messages.numberLabel, $.validator.messages.numberFallback, parameters);
         },
     });
-}(jQuery));
+});

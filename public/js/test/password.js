@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // password strength
@@ -47,4 +47,4 @@
         $input.data('strength', value).trigger('keyup');
     }).trigger('keyup');
 
-}(jQuery));
+});

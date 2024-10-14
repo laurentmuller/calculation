@@ -43,7 +43,7 @@ function random() {
 /**
  * Document ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     // default options
     const options = {
@@ -108,4 +108,4 @@ function random() {
 
     // first notification
     random();
-}(jQuery));
+});

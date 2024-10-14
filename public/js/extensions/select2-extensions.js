@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     /**
@@ -134,4 +134,4 @@
             });
         },
     });
-}(jQuery));
+});

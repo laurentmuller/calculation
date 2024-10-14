@@ -3,7 +3,7 @@
 /**
  * Plugin to highlight cells.
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // ------------------------------------
@@ -269,4 +269,4 @@
         return this;
     };
 
-}(jQuery));
+});

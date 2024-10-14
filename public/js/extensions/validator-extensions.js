@@ -3,7 +3,7 @@
 /**
  * jQuery Validation Plugin extensions.
  */
-(function ($) {
+$(function () {
     'use strict';
 
     /**
@@ -686,4 +686,4 @@
         return this.optional(element) || /\S+@\S+\.\S{2,}/.test(value);
     };
 
-}(jQuery));
+});

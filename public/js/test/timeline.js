@@ -55,7 +55,7 @@ function updateInput() {
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     $('#date').on('input', function (e) {
@@ -102,4 +102,4 @@ function updateInput() {
         }
     });
 
-}(jQuery));
+});

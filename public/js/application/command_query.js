@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     $('#edit-form').initValidator({
         spinner: {
@@ -11,4 +11,4 @@
         }
     });
     $('#edit-form [data-bs-toggle="popover"]').popover();
-}(jQuery));
+});

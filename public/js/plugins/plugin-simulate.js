@@ -3,7 +3,7 @@
 /**
  * Plugin to force user to confirm an operation.
  */
-(function ($) {
+$(function () {
     'use strict';
 
     // ----------------------------------------------
@@ -104,4 +104,4 @@
         $.fn.simulate = oldSimulate;
         return this;
     };
-}(jQuery));
+});

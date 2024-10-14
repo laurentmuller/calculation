@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     $('#form_message').initSimpleEditor({
         focus: true
@@ -14,4 +14,4 @@
         simpleEditor: true,
         focus: false
     });
-}(jQuery));
+});

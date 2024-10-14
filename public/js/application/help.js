@@ -5,7 +5,7 @@
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
 
     let searching = false;
@@ -131,4 +131,4 @@
         searching = false;
     });
 
-}(jQuery));
+});

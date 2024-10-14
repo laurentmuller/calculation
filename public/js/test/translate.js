@@ -240,7 +240,7 @@ function handleService() {
 /**
  * Ready function
  */
-(function ($) {
+$(function () {
     'use strict';
     const $text = $('#text');
     const $fromTo = $('#from, #to');
@@ -291,4 +291,4 @@ function handleService() {
     };
     $('#edit-form').initValidator(options);
     $text.trigger('focus');
-}(jQuery));
+});

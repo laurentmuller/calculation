@@ -26,15 +26,19 @@
                     <div class="modal-body">
                         {% for key, pool in pools %}
                             {%- set pools_length = pools_length + pool|length -%}
-                            <p class="fw-bold mb-1 pb-2 border-bottom d-flex-wrap-center">
-                                <span class="me-auto">{{- key|title -}}</span>
-                                <small class="fw-normal">{{ pool|length|integer }}</small>
-                            </p>
-                            <ul{% if loop.last %} class="mb-0"{% endif %}>
-                                {% for line in pool %}
-                                    <li class="text-break">{{ line }}</li>
-                                {% endfor %}
-                            </ul>
+                            <div class="mb-1 pb-2 border-bottom d-flex-wrap-center">
+                                <a class="drop-down-icon-left card-title flex-fill" data-bs-toggle="collapse" href="#{{ key }}" role="button" aria-expanded="true">
+                                    {{- key|title -}}
+                                </a>
+                                <small>{{ pool|integer }}</small>
+                            </div>
+                            <div class="collapse show" id="{{ key }}">
+                                <ul{% if loop.last %} class="mb-0"{% endif %}>
+                                    {% for line in pool %}
+                                        <li class="text-break">{{ line }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         {% endfor %}
                     </div>
                     <div class="modal-footer">

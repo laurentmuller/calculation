@@ -84,7 +84,7 @@ class SchemaService
 
     public function __construct(
         private readonly EntityManagerInterface $manager,
-        #[Target('calculation.service.schema')]
+        #[Target('calculation.schema')]
         private readonly CacheInterface $cache
     ) {
     }

@@ -1818,16 +1818,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "2.0.6",
+            "version": "2.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "5e6d17f6c13f2a69d2b5d5574acef000ab39185d"
+                "reference": "de6a87bd30dd7b42318e3f46cd697e3654220b99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/5e6d17f6c13f2a69d2b5d5574acef000ab39185d",
-                "reference": "5e6d17f6c13f2a69d2b5d5574acef000ab39185d",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/de6a87bd30dd7b42318e3f46cd697e3654220b99",
+                "reference": "de6a87bd30dd7b42318e3f46cd697e3654220b99",
                 "shasum": ""
             },
             "require": {
@@ -1877,20 +1877,20 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2024-08-14T14:05:14+00:00"
+            "time": "2024-10-14T12:56:00+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",
-            "version": "2.20.18",
+            "version": "2.20.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/HighchartsBundle.git",
-                "reference": "4be379a11b3135461bf5f5496b1f0d05a898def7"
+                "reference": "0b8cae759269f034dad3453928f5c9973d23968c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/4be379a11b3135461bf5f5496b1f0d05a898def7",
-                "reference": "4be379a11b3135461bf5f5496b1f0d05a898def7",
+                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/0b8cae759269f034dad3453928f5c9973d23968c",
+                "reference": "0b8cae759269f034dad3453928f5c9973d23968c",
                 "shasum": ""
             },
             "require": {
@@ -1951,7 +1951,7 @@
                 "issues": "https://github.com/laurentmuller/HighchartsBundle/issues",
                 "source": "https://github.com/laurentmuller/HighchartsBundle"
             },
-            "time": "2024-09-16T12:51:19+00:00"
+            "time": "2024-10-14T11:21:42+00:00"
         },
         {
             "name": "lorenzo/pinky",

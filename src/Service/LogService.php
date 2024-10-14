@@ -58,7 +58,7 @@ class LogService
         private readonly string $fileName,
         private readonly LoggerInterface $logger,
         private readonly TranslatorInterface $translator,
-        #[Target('calculation.service.log')]
+        #[Target('calculation.log')]
         private readonly CacheInterface $cache
     ) {
     }

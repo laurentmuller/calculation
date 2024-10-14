@@ -37,7 +37,7 @@
     const DIAGRAM_SELECTOR = '#diagram';
 
     const THEME_COOKIE_KEY = 'THEME';
-    const THEME_CHANNEL = 'theme';
+    const THEME_CHANNEL = 'theme_channel';
     const THEME_EVENT_NAME = 'theme_changed';
     const THEME_LIGHT = 'light';
     const THEME_DARK = 'dark';

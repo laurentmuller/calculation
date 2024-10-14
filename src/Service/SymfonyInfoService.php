@@ -82,7 +82,7 @@ final readonly class SymfonyInfoService
     public function __construct(
         private KernelInterface $kernel,
         private RouterInterface $router,
-        #[Target('calculation.service.symfony')]
+        #[Target('calculation.symfony')]
         private CacheInterface $cache,
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,

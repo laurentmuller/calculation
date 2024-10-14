@@ -26,7 +26,7 @@ use Twig\Extension\GlobalsInterface;
 final class ConstantExtension extends AbstractExtension implements GlobalsInterface
 {
     public function __construct(
-        #[Target('calculation.service.constant')]
+        #[Target('calculation.constant')]
         private readonly CacheInterface $cache
     ) {
     }

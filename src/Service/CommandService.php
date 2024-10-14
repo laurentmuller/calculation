@@ -93,7 +93,7 @@ class CommandService implements \Countable
 
     public function __construct(
         private readonly KernelInterface $kernel,
-        #[Target('calculation.service.command')]
+        #[Target('calculation.command')]
         private readonly CacheInterface $cache
     ) {
     }

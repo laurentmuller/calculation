@@ -127,7 +127,7 @@ class SearchService implements ServiceSubscriberInterface
         private readonly EntityManagerInterface $manager,
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
-        #[Target('calculation.service.search')]
+        #[Target('calculation.search')]
         private readonly CacheInterface $cache,
     ) {
     }

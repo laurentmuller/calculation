@@ -13,74 +13,74 @@ declare(strict_types=1);
 use Symfony\Config\FrameworkConfig;
 
 return static function (FrameworkConfig $config): void {
+    $fifteen_minutes = 900;
     $one_hour = 3_600;
     $one_day = 86_400;
-    $fiveteen_minutes = 900;
 
     $cache = $config->cache();
 
-    // used by the ApplicationService
-    $cache->pool('calculation.service.application')
+    // ApplicationService
+    $cache->pool('calculation.application')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_hour);
 
-    // used by the UserService
-    $config->cache()->pool('calculation.service.user')
+    // UserService
+    $config->cache()->pool('calculation.user')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_hour);
 
-    // used by the SymfonyInfoService
-    $config->cache()->pool('calculation.service.symfony')
+    // SymfonyInfoService
+    $config->cache()->pool('calculation.symfony')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
-    // used by the ConstantExtension
-    $config->cache()->pool('calculation.service.constant')
+    // ConstantExtension
+    $config->cache()->pool('calculation.constant')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
-    // used by the HelpService
-    $config->cache()->pool('calculation.service.help')
+    // HelpService
+    $config->cache()->pool('calculation.help')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
-    // used by the CommandService
-    $config->cache()->pool('calculation.service.command')
+    // CommandService
+    $config->cache()->pool('calculation.command')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
-    // used by the CacheService
-    $config->cache()->pool('calculation.service.cache')
+    // CacheService
+    $config->cache()->pool('calculation.cache')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
-    // used by the AssetVersionService
-    $config->cache()->pool('calculation.service.asset')
+    // AssetVersionService
+    $config->cache()->pool('calculation.asset')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
-    // used by the ResponseListener
-    $config->cache()->pool('calculation.service.response')
+    // ResponseListener
+    $config->cache()->pool('calculation.response')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
-    // used by the SearchService
-    $config->cache()->pool('calculation.service.search')
+    // SearchService
+    $config->cache()->pool('calculation.search')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
-    // used by the LogService
-    $config->cache()->pool('calculation.service.log')
+    // LogService
+    $config->cache()->pool('calculation.log')
         ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime($fiveteen_minutes);
+        ->defaultLifetime($fifteen_minutes);
 
-    // used by the SchemaService
-    $config->cache()->pool('calculation.service.schema')
+    // SchemaService
+    $config->cache()->pool('calculation.schema')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
-    // used by the FontAwesomeService
-    $config->cache()->pool('calculation.service.fontawesome')
+    // FontAwesomeService
+    $config->cache()->pool('calculation.fontawesome')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 };

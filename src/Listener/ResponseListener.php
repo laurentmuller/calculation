@@ -71,7 +71,7 @@ class ResponseListener
         private readonly string $file,
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
-        #[Target('calculation.service.response')]
+        #[Target('calculation.response')]
         private readonly CacheInterface $cache,
         private readonly UrlGeneratorInterface $generator,
         private readonly NonceService $service,

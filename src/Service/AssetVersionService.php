@@ -49,7 +49,7 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
         EnvironmentService $service,
-        #[Target('calculation.service.asset')]
+        #[Target('calculation.asset')]
         private readonly CacheInterface $cache,
     ) {
         $version = $this->cache->get(

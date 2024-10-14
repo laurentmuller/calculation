@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\Get;
-use App\Enums\Theme;
 use App\Interfaces\RoleInterface;
 use App\Service\ThemeService;
 use Symfony\Component\HttpFoundation\JsonResponse;

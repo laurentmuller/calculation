@@ -18,6 +18,7 @@ use App\Traits\LoggerTrait;
 use App\Utils\FileUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -30,7 +31,14 @@ class FontAwesomeService
     use CacheKeyTrait;
     use LoggerTrait;
 
+    /**
+     * The JSON file containing aliases.
+     */
     public const ALIAS_FILE_NAME = 'aliases.json';
+
+    /**
+     * The SVG file extension (including the dot character).
+     */
     public const SVG_EXTENSION = '.svg';
 
     private const SVG_PREFIX = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
@@ -46,6 +54,7 @@ class FontAwesomeService
         #[Autowire('%kernel.project_dir%/resources/fontawesome')]
         private readonly string $svgDirectory,
         private readonly FontAwesomeIconService $service,
+        #[Target('calculation.fontawesome')]
         private readonly CacheInterface $cache,
         private readonly LoggerInterface $logger,
     ) {
@@ -60,7 +69,7 @@ class FontAwesomeService
     /**
      * Gets the icon aliases.
      *
-     * @return array<string, string> the aliases where key is alias name and value is existing file
+     * @return array<string, string> the aliases where key is alias name and the value is the existing file
      */
     public function getAliases(): array
     {
@@ -95,7 +104,7 @@ class FontAwesomeService
         }
 
         $color ??= 'black';
-        $key = \sprintf('%s_%s', $path, $color);
+        $key = \sprintf('%s_%s', $relativePath, $color);
 
         return $this->cache->get(
             $this->cleanKey($key),
@@ -230,9 +239,10 @@ class FontAwesomeService
             $save = true;
 
             return $image;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if (!$this->imagickException) {
-                $this->logException($e, \sprintf('Unable to load image "%s".', $path));
+                $relativePath = Path::makeRelative($path, $this->svgDirectory);
+                $this->logException($e, \sprintf('Unable to load image "%s".', $relativePath));
             }
             if ($e instanceof \ImagickException) {
                 $this->imagickException = true;

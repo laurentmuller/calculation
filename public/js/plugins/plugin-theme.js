@@ -36,7 +36,7 @@ $(function () {
      * The theme chanel name.
      * @type {string}
      */
-    const THEME_CHANNEL = 'theme';
+    const THEME_CHANNEL = 'theme_channel';
 
     /**
      * The theme changed event-name.
@@ -265,7 +265,7 @@ $(function () {
         }
 
         /**
-         * Handle the OK button click event.
+         * Handle the click event of the OK button.
          * @private
          */
         _onDialogAccept() {
@@ -410,11 +410,11 @@ $(function () {
         targetId: 'body',
         // the radio inputs selector
         input: '.form-check-input',
-        // the title message selector in dialog
+        // the title message selector in the modal dialog
         title: '.modal-title',
         // the success data message selector in dialog
         success: 'success',
-        // the OK button selector in dialog
+        // the OK button selector in the modal dialog
         ok: '.btn-ok',
         // the data key for the icon class
         icon: 'class',

@@ -104,7 +104,7 @@ class HelpService
         private readonly string $file,
         #[Autowire('%kernel.project_dir%/public/help/images')]
         private readonly string $imagePath,
-        #[Target('calculation.service.help')]
+        #[Target('calculation.help')]
         private readonly CacheInterface $cache,
         private readonly TranslatorInterface $translator
     ) {

@@ -37,7 +37,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         private readonly UserPropertyRepository $repository,
         private readonly ApplicationService $service,
         private readonly Security $security,
-        #[Target('calculation.service.user')]
+        #[Target('calculation.user')]
         CacheItemPoolInterface $cacheItemPool
     ) {
         $this->setCacheItemPool($cacheItemPool);

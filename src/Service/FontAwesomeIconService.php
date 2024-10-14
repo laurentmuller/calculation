@@ -73,8 +73,6 @@ class FontAwesomeIconService
         'solid',
     ];
 
-    private const SVG_EXT = 'svg';
-
     /**
      * Convert the given icon class to a relative path.
      *
@@ -93,10 +91,10 @@ class FontAwesomeIconService
         }
 
         if ($this->isFolder($parts[0])) {
-            return \sprintf('%s/%s.%s', $parts[0], $parts[1], self::SVG_EXT);
+            return \sprintf('%s/%s%s', $parts[0], $parts[1], FontAwesomeService::SVG_EXTENSION);
         }
         if ($this->isFolder($parts[1])) {
-            return \sprintf('%s/%s.%s', $parts[1], $parts[0], self::SVG_EXT);
+            return \sprintf('%s/%s%s', $parts[1], $parts[0], FontAwesomeService::SVG_EXTENSION);
         }
 
         return null;

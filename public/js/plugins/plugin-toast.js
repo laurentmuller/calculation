@@ -187,13 +187,13 @@
          * The default options.
          */
         DEFAULTS: {
-            // the target to append toasts container to
+            // the target to append the container of toasts to
             target: 'body',
 
             // the container identifier
             id: 'div_toast_container_div',
 
-            // the toasts width
+            // the width of toasts
             containerWidth: '350px',
 
             // the show duration in milliseconds
@@ -207,14 +207,14 @@
             subtitle: null,
             displaySubtitle: false,
 
-            // the toasts position
+            // the position of toasts
             position: 'bottom-right',
 
             // The toast icon.
             // Possible values:
-            // - false: No icon is displayed.
             // - true: The default icon is displayed depending on the type.
-            // - string: A custom icon is displayed.
+            // - false: No icon is displayed.
+            // - String: A custom icon is displayed.
             icon: true,
 
             // the progress bar height or 0 for none
@@ -226,7 +226,7 @@
             // handler when a toast is hidden
             onHide: null,
 
-            // the jQuery selector to get data options from
+            // the JQuery selector to get data options from
             dataset: '#flashes'
         },
 
@@ -283,7 +283,7 @@
         },
 
         /**
-         * Returns if toast must be prepended or appended to the list; depending on the position.
+         * Returns if toast must be prepended or appended to the list, depending on the position.
          *
          * @param {string} position - The toast position.
          * @returns {boolean} true to prepend, false to append.
@@ -320,7 +320,7 @@
          * Gets or creates the toast container div.
          *
          * @param {Object} options - The toast options.
-         * @returns {jQuery} The toasts container.
+         * @returns {jQuery} The container of toasts.
          * @private
          */
         _getContainer: function (options) {

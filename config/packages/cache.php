@@ -16,6 +16,7 @@ return static function (FrameworkConfig $config): void {
     $fifteen_minutes = 900;
     $one_hour = 3_600;
     $one_day = 86_400;
+    $one_month = 2_592_000;
 
     $cache = $config->cache();
 
@@ -82,5 +83,5 @@ return static function (FrameworkConfig $config): void {
     // FontAwesomeService
     $config->cache()->pool('calculation.fontawesome')
         ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime($one_day);
+        ->defaultLifetime($one_month);
 };

@@ -181,7 +181,6 @@ class ImageExtensionTest extends TestCase
 
         try {
             $extension->saveImage(image: $image, options: $options);
-            self::fail('No exception throw');
         } finally {
             \imagedestroy($image);
         }

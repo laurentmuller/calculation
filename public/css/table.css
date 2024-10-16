@@ -37,6 +37,11 @@
     text-align: left;
 }
 
+/* reset padding headers */
+.bootstrap-table .fixed-table-container .table thead th.text-border {
+    padding-left: revert !important;
+}
+
 /* reset color for colored headers */
 .bootstrap-table .fixed-table-container .table thead th.text-danger {
     color: inherit !important;

@@ -17,6 +17,12 @@ namespace App\Model;
  */
 readonly class FontAwesomeImage
 {
+    /**
+     * @param string $content    the content, as 'png' format
+     * @param int    $width      the width in pixels
+     * @param int    $height     the height in pixels
+     * @param int    $resolution the resolution in DPI (dot per each)
+     */
     public function __construct(
         private string $content,
         private int $width,
@@ -58,20 +64,19 @@ readonly class FontAwesomeImage
     }
 
     /**
-     *  Gets a scaled width and height to the desired size.
+     * Gets a scaled width and height to the desired size.
      *
-     * @param int|float $size the desired size.
-     *                        If this width is greater than this height, then the width is set to the given size and
-     *                        the height is calculated.
-     *                        If this height is greater than this width, then the height is set to the given size and
-     *                        the width is calculated.
+     * @param int $size the desired size.
+     *                  If this width is greater than this height, then the width is set to the given size and
+     *                  the height is calculated.
+     *                  If this height is greater than this width, then the height is set to the given size and
+     *                  the width is calculated.
+     *                  If both values are equal, then return the desired size.
      *
-     * @return array{0: int|float, 1: int|float} an array where the first element is the scaled width or the desired
-     *                                           size and the second element is the scaled height or the desired size
-     *
-     * @psalm-return ($size is int ? array{0: int, 1: int} : array{0: float, 1: float})
+     * @return array{0: int, 1: int} an array where the first element is the scaled width or the desired
+     *                               size and the second element is the scaled height or the desired size
      */
-    public function resize(int|float $size): array
+    public function resize(int $size): array
     {
         if ($this->width === $this->height) {
             return [$size, $size];
@@ -84,13 +89,8 @@ readonly class FontAwesomeImage
         return [$this->round($size, $this->width, $this->height), $size];
     }
 
-    /**
-     * @psalm-return ($size is int ? int : float)
-     */
-    private function round(int|float $size, float $dividend, float $divisor): int|float
+    private function round(float $size, float $dividend, float $divisor): int
     {
-        $value = (float) $size * $dividend / $divisor;
-
-        return \is_int($size) ? (int) \round($value) : $value;
+        return (int) \round($size * $dividend / $divisor);
     }
 }

@@ -6,7 +6,9 @@
 }
 
 .text-border {
-    border-left: 0.2rem solid transparent !important;
+    border-left-color: transparent;
+    border-left-width: 0.2rem !important;
+    border-left-style: solid !important;
     padding-left: 0.45rem !important;
 }
 

@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Model\FontAwesomeImage;
-use App\Pdf\Traits\PdfImageTypeTrait;
+use App\Model\ImageData;
 use fpdf\Enums\PdfTextAlignment;
 
 /**
@@ -21,27 +21,17 @@ use fpdf\Enums\PdfTextAlignment;
  */
 class PdfFontAwesomeCell extends AbstractPdfImageCell
 {
-    use PdfImageTypeTrait;
+    /**
+     * The image data.
+     */
+    private ImageData $imageData;
 
     /**
-     * The image height.
+     * The image size.
+     *
+     * @var array{0: int, 1: int}
      */
-    private int $height;
-
-    /**
-     * The image path.
-     */
-    private string $path;
-
-    /**
-     * The image type.
-     */
-    private string $type;
-
-    /**
-     * The image width.
-     */
-    private int $width;
+    private array $size;
 
     /**
      * @param FontAwesomeImage  $image     the FontAwesome image to output
@@ -55,42 +45,35 @@ class PdfFontAwesomeCell extends AbstractPdfImageCell
      * @psalm-param positive-int $cols
      */
     public function __construct(
-        private readonly FontAwesomeImage $image,
+        FontAwesomeImage $image,
         ?string $text = null,
         int $cols = 1,
         ?PdfStyle $style = null,
         ?PdfTextAlignment $alignment = null,
         string|int|null $link = null
     ) {
+        $this->size = $image->resize(12);
+        $this->imageData = ImageData::instance($image->getContent());
         parent::__construct($text, $cols, $style, $alignment, $link);
-
-        $data = $this->image->getContent();
-        $mimeType = $this->getImageMimeType($data);
-        $this->type = $this->getImageFileType($mimeType);
-        $this->path = $this->getImageFileName($mimeType, $data);
-
-        $size = $this->image->resize(12);
-        $this->width = $size[0];
-        $this->height = $size[1];
     }
 
     public function getHeight(): int
     {
-        return $this->height;
+        return $this->size[1];
     }
 
     public function getPath(): string
     {
-        return $this->path;
+        return $this->imageData->getFileName();
     }
 
     public function getType(): string
     {
-        return $this->type;
+        return $this->imageData->getFileType();
     }
 
     public function getWidth(): int
     {
-        return $this->width;
+        return $this->size[0];
     }
 }

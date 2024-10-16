@@ -25,15 +25,19 @@
                     </div>
                     <div class="modal-body">
                         {% for key, pool in pools %}
+                            {%- set first = loop.first -%}
                             {%- set pools_length = pools_length + pool|length -%}
-                            <div class="mb-1 pb-2 border-bottom d-flex-wrap-center">
-                                <a class="drop-down-icon-left card-title flex-fill" data-bs-toggle="collapse" href="#{{ key }}" role="button" aria-expanded="true">
+                            <div class="d-flex-wrap-center border-bottom pb-1">
+                                <a role="button" class="drop-down-icon-left card-title flex-fill"
+                                   href="#{{ key }}"
+                                   data-bs-toggle="collapse"
+                                   aria-expanded="{{ first|json_encode }}">
                                     {{- key|title -}}
                                 </a>
                                 <small>{{ pool|integer }}</small>
                             </div>
-                            <div class="collapse show" id="{{ key }}">
-                                <ul{% if loop.last %} class="mb-0"{% endif %}>
+                            <div class="collapse{% if first %} show{% endif %}" id="{{ key }}">
+                                <ul>
                                     {% for line in pool %}
                                         <li class="text-break">{{ line }}</li>
                                     {% endfor %}
@@ -56,7 +60,8 @@
 {% block actions_form -%}
     {{ parent() }}
     {% if pools|length %}
-        <button type="button" class="btn btn-form btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal-cache-list">
+        <button type="button" class="btn btn-form btn-outline-success" data-bs-toggle="modal"
+                data-bs-target="#modal-cache-list">
             {{- 'clear_cache.list'|trans -}}
         </button>
     {% endif %}

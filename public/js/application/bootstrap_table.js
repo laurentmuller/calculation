@@ -69,7 +69,7 @@ function formatProductClass(row) {
 }
 
 /**
- * Cell style for a border column (calculations, status or log).
+ * Cell style for a text border column (calculation or status).
  *
  * @param {number} _value the field value.
  * @param {object} row the record data.
@@ -77,14 +77,14 @@ function formatProductClass(row) {
  */
 function styleBorderColor(_value, row) {
     'use strict';
-    if (!$.isUndefined(row.color)) {
-        return {
-            css: {
-                'border-left-color': `${row.color} !important`
-            }
-        };
+    if ($.isUndefined(row.color)) {
+        return {};
     }
-    return {};
+    return {
+        css: {
+            'border-left-color': row.color
+        }
+    };
 }
 
 /**
@@ -95,14 +95,14 @@ function styleBorderColor(_value, row) {
  */
 function styleProductPrice(value) {
     'use strict';
-    if ($.parseFloat(value) === 0) {
-        return {
-            css: {
-                color: 'var(--bs-danger)'
-            }
-        };
+    if ($.parseFloat(value) !== 0) {
+        return {};
     }
-    return {};
+    return {
+        css: {
+            color: 'var(--bs-danger)'
+        }
+    };
 }
 
 /**
@@ -115,14 +115,14 @@ function styleProductPrice(value) {
  */
 function styleTextMuted(row, index) {
     'use strict';
-    if ($.parseInt(row.textMuted) === 0) {
-        const $row = $('#table-edit tbody tr:eq(' + index + ')');
-        const classes = ($row.attr('class') || '') + ' text-body-secondary';
-        return {
-            classes: classes.trim()
-        };
+    if ($.parseInt(row.textMuted) !== 0) {
+        return {};
     }
-    return {};
+    const $row = $('#table-edit tbody tr:eq(' + index + ')');
+    const classes = ($row.attr('class') || '') + ' text-body-secondary';
+    return {
+        classes: classes.trim()
+    };
 }
 
 /**

@@ -36,7 +36,6 @@ class AbstractConstraintValidatorTest extends ConstraintValidatorTestCase
         $constraint = new Strength();
         self::expectException(UnexpectedTypeException::class);
         $this->validator->validate('', $constraint);
-        self::fail('An unexpected type exception must be raised');
     }
 
     public function testInvalidObject(): void
@@ -44,7 +43,6 @@ class AbstractConstraintValidatorTest extends ConstraintValidatorTestCase
         $constraint = new Password();
         self::expectException(UnexpectedTypeException::class);
         $this->validator->validate(new \stdClass(), $constraint);
-        self::fail('An unexpected type exception must be raised');
     }
 
     public function testNullIsValid(): void

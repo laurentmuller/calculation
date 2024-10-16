@@ -36,6 +36,9 @@ abstract class AbstractPdfImageCell extends PdfCell
         ?PdfTextAlignment $alignment = null,
         PdfMove $move = PdfMove::RIGHT
     ): void {
+        // style
+        $this->getStyle()?->apply($parent);
+
         // convert size
         $width = $parent->pixels2UserUnit($this->getWidth());
         $height = $parent->pixels2UserUnit($this->getHeight());
@@ -46,7 +49,7 @@ abstract class AbstractPdfImageCell extends PdfCell
         $maxWidth = $bounds->width - $width - 3.0 * $cellMargin;
         $textWidth = $parent->getStringWidth($text);
         while ('' !== $text && $textWidth > $maxWidth) {
-            $text = \substr($text, 0, \strlen($text) - 1);
+            $text = \substr($text, 0, -1);
             $textWidth = $parent->getStringWidth($text);
         }
 

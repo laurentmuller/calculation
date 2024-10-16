@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Traits;
 
+use App\Model\ImageData;
 use fpdf\PdfDocument;
 use fpdf\PdfException;
 
@@ -22,8 +23,6 @@ use fpdf\PdfException;
  */
 trait PdfMemoryImageTrait
 {
-    use PdfImageTypeTrait;
-
     /**
      * Output an AVIF raster image from a file or a URL.
      *
@@ -401,7 +400,7 @@ trait PdfMemoryImageTrait
      *                                </ul>
      * @param string|int|null $link   the URL or an identifier returned by the <code>addLink()</code> function
      *
-     * @throws PdfException if the image data is invalid
+     * @throws PdfException if the image cannot be processed
      */
     public function imageMemory(
         string $data,
@@ -411,10 +410,16 @@ trait PdfMemoryImageTrait
         float $height = 0.0,
         string|int|null $link = null
     ): void {
-        $mimeType = $this->getImageMimeType($data);
-        $fileType = $this->getImageFileType($mimeType);
-        $fileName = $this->getImageFileName($mimeType, $data);
-        $this->image($fileName, $x, $y, $width, $height, $fileType, $link);
+        $info = ImageData::instance($data);
+        $this->image(
+            $info->getFileName(),
+            $x,
+            $y,
+            $width,
+            $height,
+            $info->getFileType(),
+            $link
+        );
     }
 
     /**

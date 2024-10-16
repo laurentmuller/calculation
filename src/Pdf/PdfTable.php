@@ -928,12 +928,12 @@ class PdfTable
      */
     private function getCellHeight(?string $text, float $width, PdfStyle $style, PdfCell $cell): float
     {
+        $imageHeight = 0.0;
         $parent = $this->parent;
-        if ($cell instanceof PdfImageCell) {
-            $height = $parent->pixels2UserUnit($cell->getHeight());
-            $margins = 2.0 * $parent->getCellMargin();
-
-            return $height + $margins;
+        $margins = 2.0 * $parent->getCellMargin();
+        if ($cell instanceof AbstractPdfImageCell) {
+            $imageHeight = $margins + $parent->pixels2UserUnit($cell->getHeight());
+            $width -= $parent->pixels2UserUnit($cell->getWidth());
         }
 
         $style->apply($parent);
@@ -942,11 +942,10 @@ class PdfTable
         $height = PdfDocument::LINE_HEIGHT;
         if (!$style->getFont()->isDefaultSize()) {
             $fontSize = $style->getFont()->getSize();
-            $margins = 2.0 * $parent->getCellMargin();
             $height = $parent->points2UserUnit($fontSize) + $margins;
         }
 
-        return $lines * $height;
+        return \max($imageHeight, $lines * $height);
     }
 
     /**
@@ -966,12 +965,10 @@ class PdfTable
      * @param float[]    $widths the cell widths
      * @param PdfStyle[] $styles the cell styles
      * @param PdfCell[]  $cells  the cells
-     *
-     * @see PdfTable::getCellHeight()
      */
     private function getRowHeight(array $texts, array $widths, array $styles, array $cells): float
     {
-        $height = 0;
+        $height = 0.0;
         foreach ($texts as $index => $text) {
             $height = \max($height, $this->getCellHeight($text, $widths[$index], $styles[$index], $cells[$index]));
         }

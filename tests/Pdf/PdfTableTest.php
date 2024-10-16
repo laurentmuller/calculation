@@ -348,6 +348,21 @@ class PdfTableTest extends TestCase
         self::assertSame(1, $table->getColumnsCount());
     }
 
+    public function testImageCellWithLongText(): void
+    {
+        $path = __DIR__ . '/../Data/images/example.png';
+        $column = PdfColumn::left('', 25.0, true);
+        $table = $this->createTable(false)
+            ->addColumn($column);
+        $table->getParent()
+            ->addPage();
+        $cell = new PdfImageCell($path, 'A very long text used to check for trim.');
+        $table->startRow()
+            ->addCell($cell)
+            ->endRow();
+        self::assertSame(1, $table->getColumnsCount());
+    }
+
     public function testIsFullWidth(): void
     {
         $table = $this->createTable();

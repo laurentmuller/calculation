@@ -16,14 +16,12 @@ use App\Traits\ImageSizeTrait;
 use App\Traits\MathTrait;
 use App\Utils\FileUtils;
 use fpdf\Enums\PdfTextAlignment;
-use fpdf\PdfDocument;
 use fpdf\PdfException;
-use fpdf\PdfRectangle;
 
 /**
- * Specialized cell containing an image.
+ * A specialized cell containing an image and an optional text.
  */
-class PdfImageCell extends PdfCell
+class PdfImageCell extends AbstractPdfImageCell
 {
     use ImageSizeTrait;
     use MathTrait;
@@ -50,6 +48,7 @@ class PdfImageCell extends PdfCell
 
     /**
      * @param string            $path      the image path
+     * @param ?string           $text      the cell text
      * @param int               $cols      the cell columns span
      * @param ?PdfStyle         $style     the cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
@@ -62,6 +61,7 @@ class PdfImageCell extends PdfCell
      */
     public function __construct(
         private readonly string $path,
+        ?string $text = null,
         int $cols = 1,
         ?PdfStyle $style = null,
         ?PdfTextAlignment $alignment = null,
@@ -70,50 +70,12 @@ class PdfImageCell extends PdfCell
         if (!FileUtils::exists($path)) {
             throw PdfException::format("The image '%s' does not exist.", $path);
         }
-
-        parent::__construct(cols: $cols, style: $style, alignment: $alignment, link: $link);
-
+        parent::__construct($text, $cols, $style, $alignment, $link);
         $size = $this->getImageSize($path);
         $this->width = $this->originalWidth = $size[0];
         $this->height = $this->originalHeight = $size[1];
     }
 
-    /**
-     * Draw this image.
-     *
-     * @param PdfDocument      $parent    the parent document
-     * @param PdfRectangle     $bounds    the target bounds
-     * @param PdfTextAlignment $alignment the horizontal alignment
-     */
-    public function drawImage(PdfDocument $parent, PdfRectangle $bounds, PdfTextAlignment $alignment): void
-    {
-        // convert size
-        $width = $parent->pixels2UserUnit($this->width);
-        $height = $parent->pixels2UserUnit($this->height);
-
-        // get default position
-        $y = $bounds->y + ($bounds->height - $height) / 2.0;
-        $x = match ($alignment) {
-            PdfTextAlignment::RIGHT => $bounds->right() - $width,
-            PdfTextAlignment::CENTER,
-            PdfTextAlignment::JUSTIFIED => $bounds->x + ($bounds->width - $width) / 2.0,
-            default => $bounds->x,
-        };
-
-        // draw
-        $parent->image(
-            file: $this->path,
-            x: $x,
-            y: $y,
-            width: $width,
-            height: $height,
-            link: $this->getLink()
-        );
-    }
-
-    /**
-     * Gets the current image height.
-     */
     public function getHeight(): int
     {
         return $this->height;
@@ -132,29 +94,11 @@ class PdfImageCell extends PdfCell
         return [$this->originalWidth, $this->originalHeight];
     }
 
-    /**
-     * Gets the image path.
-     */
     public function getPath(): string
     {
         return $this->path;
     }
 
-    /**
-     * Gets the current image size.
-     *
-     * @return int[] an array with two elements. Index 0 and 1 contain respectively the width and the height.
-     *
-     * @psalm-return array{0: int, 1: int}
-     */
-    public function getSize(): array
-    {
-        return [$this->width, $this->height];
-    }
-
-    /**
-     * Gets the current image width.
-     */
     public function getWidth(): int
     {
         return $this->width;

@@ -768,10 +768,8 @@ class PdfTable
         $textBounds = clone $bounds;
         $line_height = PdfDocument::LINE_HEIGHT;
 
-        if ($cell instanceof PdfFontAwesomeCell) {
-            $this->drawFontAwesomeCell($parent, $cell, clone $textBounds, $alignment);
-        } elseif ($cell instanceof PdfImageCell) {
-            $this->drawImageCell($parent, $cell, clone $textBounds, $margin, $alignment);
+        if ($cell instanceof AbstractPdfImageCell) {
+            $cell->drawImage($parent, clone $textBounds, $alignment);
         } else {
             if (!$style->getFont()->isDefaultSize()) {
                 $line_height = $parent->getFontSize() + 2.0 * $margin;
@@ -868,26 +866,6 @@ class PdfTable
         if ('' !== $text) {
             $parent->multiCell(width: $bounds->width, height: $height, text: $text, align: $alignment);
         }
-    }
-
-    private function drawFontAwesomeCell(
-        PdfDocument $parent,
-        PdfFontAwesomeCell $cell,
-        PdfRectangle $bounds,
-        PdfTextAlignment $alignment
-    ): void {
-        $cell->drawImage($parent, $bounds, $alignment);
-    }
-
-    private function drawImageCell(
-        PdfDocument $parent,
-        PdfImageCell $cell,
-        PdfRectangle $bounds,
-        float $margin,
-        PdfTextAlignment $alignment
-    ): void {
-        $bounds->inflate(-$margin);
-        $cell->drawImage($parent, $bounds, $alignment);
     }
 
     /**

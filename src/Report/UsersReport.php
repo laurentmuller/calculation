@@ -35,8 +35,11 @@ class UsersReport extends AbstractArrayReport
     /**
      * @param User[] $entities
      */
-    public function __construct(AbstractController $controller, array $entities, private readonly StorageInterface $storage)
-    {
+    public function __construct(
+        AbstractController $controller,
+        array $entities,
+        private readonly StorageInterface $storage
+    ) {
         parent::__construct($controller, $entities);
     }
 

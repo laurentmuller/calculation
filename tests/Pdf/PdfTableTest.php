@@ -333,10 +333,6 @@ class PdfTableTest extends TestCase
         self::assertSame($expected[0], $cell->getWidth());
         self::assertSame($expected[1], $cell->getHeight());
 
-        $actual = $cell->getSize();
-        self::assertSame($expected[0], $actual[0]);
-        self::assertSame($expected[1], $actual[1]);
-
         $cell->resize();
         $cell->resize(248);
         $cell->resize(0, 294);

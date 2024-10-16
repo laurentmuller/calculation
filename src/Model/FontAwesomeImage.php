@@ -78,16 +78,10 @@ readonly class FontAwesomeImage
         }
 
         if ($this->width > $this->height) {
-            return [
-                $size,
-                $this->round($size, $this->height, $this->width),
-            ];
+            return [$size, $this->round($size, $this->height, $this->width)];
         }
 
-        return [
-            $this->round($size, $this->width, $this->height),
-            $size,
-        ];
+        return [$this->round($size, $this->width, $this->height), $size];
     }
 
     /**

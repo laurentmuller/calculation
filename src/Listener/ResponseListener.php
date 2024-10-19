@@ -48,20 +48,15 @@ class ResponseListener
     public const FIREWALL_MAIN = 'main';
 
     /**
-     * The header keys for CSP value.
+     * The CSP header key.
      */
-    private const CSP_HEADERS = [
-        'X-WebKit-CSP',
-        'Content-Security-Policy',
-        'X-Content-Security-Policy',
-    ];
+    private const CSP_HEADER = 'Content-Security-Policy';
 
     /**
      * The default headers to add.
      */
     private const DEFAULT_HEADERS = [
         'referrer-policy' => 'same-origin',
-        'X-FRAME-OPTIONS' => 'sameorigin',
         'X-Content-Type-Options' => 'nosniff',
         'x-permitted-cross-domain-policies' => 'none',
     ];
@@ -98,9 +93,7 @@ class ResponseListener
             return;
         }
 
-        foreach (self::CSP_HEADERS as $key) {
-            $headers->set($key, $csp);
-        }
+        $headers->set(self::CSP_HEADER, $csp);
     }
 
     private function buildCSP(): string
@@ -129,7 +122,13 @@ class ResponseListener
 
     private function getReportURL(): string
     {
-        return $this->generator->generate(CspReportController::ROUTE_NAME, [], UrlGeneratorInterface::ABSOLUTE_URL);
+        return $this->cache->get(
+            'report_url',
+            fn (): string => $this->generator->generate(
+                name: CspReportController::ROUTE_NAME,
+                referenceType: UrlGeneratorInterface::ABSOLUTE_URL
+            )
+        );
     }
 
     private function isDevFirewall(Request $request): bool

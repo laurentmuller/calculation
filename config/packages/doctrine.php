@@ -16,7 +16,8 @@ use Symfony\Config\DoctrineConfig;
 return static function (DoctrineConfig $config): void {
     $dbal = $config->dbal();
     $dbal->connection('default')
-        ->url('%env(resolve:DATABASE_URL)%');
+        ->url('%env(resolve:DATABASE_URL)%')
+        ->profilingCollectBacktrace('%kernel.debug%');
 
     $dbal->type(FixedFloatType::NAME)
         ->class(FixedFloatType::class);

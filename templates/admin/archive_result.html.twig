@@ -29,7 +29,7 @@
             {% for key, value in results %}
                 <tr>
                     <td class="text-border" style="{{ stateCss(value.state.color) }}">{{ key }}</td>
-                    <td class="text-end">{{ value.calculations|length|integer }}</td>
+                    <td class="text-end">{{ value.calculations|integer }}</td>
                 </tr>
             {% endfor %}
             <tr>

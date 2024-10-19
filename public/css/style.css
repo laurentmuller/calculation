@@ -980,3 +980,11 @@ body.status-bar .grecaptcha-badge {
 .card-header.text-bg-danger .text-danger {
     color: unset !important;
 }
+
+/*
+ * Remove selection color of accordion button
+ */
+.accordion.accordion-no-background .accordion-button:not(.collapsed) {
+    color: inherit;
+    background-color: inherit;
+}

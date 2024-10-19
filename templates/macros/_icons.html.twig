@@ -124,16 +124,16 @@
 {{- _self.linkExternal(path(route), 'common.button_pdf', 'btn btn-form btn-outline-secondary', ICON_PDF, 'common.button_export_pdf') -}}
 {%- endmacro %}
 
-{% macro link_excel(route) -%}
-{{ _self.linkExternal(path(route), null, null, ICON_EXCEL, 'common.button_export_excel') }}
+{% macro link_excel(route, class = null) -%}
+{{ _self.linkExternal(path(route), null, class, ICON_EXCEL, 'common.button_export_excel') }}
 {%- endmacro %}
 
 {% macro button_excel(route) -%}
 {{- _self.linkExternal(path(route), 'common.button_export', 'btn btn-form btn-outline-secondary', ICON_EXCEL, 'common.button_export_excel') -}}
 {%- endmacro %}
 
-{% macro link_word(route) -%}
-{{- _self.linkExternal(path(route), null, null, ICON_WORD, 'common.button_export_word') -}}
+{% macro link_word(route, class = null) -%}
+{{- _self.linkExternal(path(route), null, class, ICON_WORD, 'common.button_export_word') -}}
 {%- endmacro %}
 
 {% macro button_word(route) -%}

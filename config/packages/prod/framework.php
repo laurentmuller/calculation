@@ -18,9 +18,12 @@ return static function (FrameworkConfig $config): void {
 
     $cache = $config->cache();
 
+    $cache->pool('doctrine.metadata_cache_pool')
+        ->adapters('cache.system');
+
+    $cache->pool('doctrine.query_cache_pool')
+        ->adapters('cache.system');
+
     $cache->pool('doctrine.result_cache_pool')
         ->adapters('cache.app');
-
-    $cache->pool('doctrine.system_cache_pool')
-        ->adapters('cache.system');
 };

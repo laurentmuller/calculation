@@ -7,4 +7,4 @@
 --DATA--
 return []
 --EXPECT--
-<pre class="highlight highlight-sql"><span class="highlight-sql-keyword">SELECT</span></pre>
+<pre class="highlight highlight-sql"><span class="highlight-sql-reserved">SELECT</span></pre>

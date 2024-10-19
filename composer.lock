@@ -1370,24 +1370,27 @@
         },
         {
             "name": "elao/enum",
-            "version": "v2.5.0",
+            "version": "v2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Elao/PhpEnums.git",
-                "reference": "503a7fbe4e2ec3da23b83a4e2fbc45f373677919"
+                "reference": "25382e9a114872148f34f549d028378bc357ffac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elao/PhpEnums/zipball/503a7fbe4e2ec3da23b83a4e2fbc45f373677919",
-                "reference": "503a7fbe4e2ec3da23b83a4e2fbc45f373677919",
+                "url": "https://api.github.com/repos/Elao/PhpEnums/zipball/25382e9a114872148f34f549d028378bc357ffac",
+                "reference": "25382e9a114872148f34f549d028378bc357ffac",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1"
             },
+            "conflict": {
+                "doctrine/dbal": ">=4.0,<4.2"
+            },
             "require-dev": {
                 "composer/semver": "^3.2",
-                "doctrine/dbal": "^3.8|^4.0",
+                "doctrine/dbal": "^3.8|^4.2",
                 "doctrine/doctrine-bundle": "^2.11",
                 "doctrine/orm": "^2.20|^3.0",
                 "ext-pdo_sqlite": "*",
@@ -1403,6 +1406,7 @@
                 "symfony/phpunit-bridge": "^5.4.40|^6.4|^7.0",
                 "symfony/translation": "^5.4.40|^6.4|^7.0",
                 "symfony/var-dumper": "^5.4.40|^6.4|^7.0",
+                "symfony/var-exporter": "^5.4.40|^6.4|^7.0",
                 "symfony/yaml": "^5.4.40|^6.4|^7.0"
             },
             "type": "library",
@@ -1443,7 +1447,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Elao/PhpEnums/issues",
-                "source": "https://github.com/Elao/PhpEnums/tree/v2.5.0"
+                "source": "https://github.com/Elao/PhpEnums/tree/v2.5.1"
             },
             "funding": [
                 {
@@ -1451,7 +1455,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-06-07T13:59:15+00:00"
+            "time": "2024-10-16T19:13:47+00:00"
         },
         {
             "name": "endroid/qr-code",
@@ -9897,16 +9901,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.12.6",
+            "version": "1.12.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "dc4d2f145a88ea7141ae698effd64d9df46527ae"
+                "reference": "dc2b9976bd8b0f84ec9b0e50cc35378551de7af0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/dc4d2f145a88ea7141ae698effd64d9df46527ae",
-                "reference": "dc4d2f145a88ea7141ae698effd64d9df46527ae",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/dc2b9976bd8b0f84ec9b0e50cc35378551de7af0",
+                "reference": "dc2b9976bd8b0f84ec9b0e50cc35378551de7af0",
                 "shasum": ""
             },
             "require": {
@@ -9951,7 +9955,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-10-06T15:03:59+00:00"
+            "time": "2024-10-18T11:12:07+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
@@ -11324,16 +11328,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "1.2.7",
+            "version": "1.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "5b33bdd871895276e2c18e5410a4a57df9233ee0"
+                "reference": "05755bf43617449c08ee8e50fb840c85ad3b1240"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/5b33bdd871895276e2c18e5410a4a57df9233ee0",
-                "reference": "5b33bdd871895276e2c18e5410a4a57df9233ee0",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/05755bf43617449c08ee8e50fb840c85ad3b1240",
+                "reference": "05755bf43617449c08ee8e50fb840c85ad3b1240",
                 "shasum": ""
             },
             "require": {
@@ -11371,7 +11375,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/1.2.7"
+                "source": "https://github.com/rectorphp/rector/tree/1.2.8"
             },
             "funding": [
                 {
@@ -11379,7 +11383,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-10-12T11:12:46+00:00"
+            "time": "2024-10-18T11:54:27+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -13331,7 +13335,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -13350,7 +13354,7 @@
         "ext-zlib": "*",
         "ext-imagick": "*"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "platform-overrides": {
         "php": "8.2.19"
     },

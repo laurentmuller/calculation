@@ -117,23 +117,23 @@ class HighlightExtension extends AbstractExtension
 
     private function getSqlFormatter(): SqlFormatter
     {
-        if ($this->sqlFormatter instanceof SqlFormatter) {
-            return $this->sqlFormatter;
+        if (!$this->sqlFormatter instanceof SqlFormatter) {
+            $highlighter = new HtmlHighlighter([
+                HtmlHighlighter::HIGHLIGHT_PRE => 'class="highlight highlight-sql"',
+                Highlighter::HIGHLIGHT_QUOTE => 'class="highlight-sql-quote"',
+                Highlighter::HIGHLIGHT_BACKTICK_QUOTE => 'class="highlight-sql-backtick-quote"',
+                Highlighter::HIGHLIGHT_RESERVED => 'class="highlight-sql-reserved"',
+                Highlighter::HIGHLIGHT_BOUNDARY => 'class="highlight-sql-boundary"',
+                Highlighter::HIGHLIGHT_NUMBER => 'class="highlight-sql-number"',
+                Highlighter::HIGHLIGHT_WORD => 'class="highlight-sql-word"',
+                Highlighter::HIGHLIGHT_ERROR => 'class="highlight-sql-error"',
+                Highlighter::HIGHLIGHT_COMMENT => 'class="highlight-sql-comment"',
+                Highlighter::HIGHLIGHT_VARIABLE => 'class="highlight-sql-variable"',
+            ], true);
+
+            $this->sqlFormatter = new SqlFormatter($highlighter);
         }
 
-        $highlighter = new HtmlHighlighter([
-            HtmlHighlighter::HIGHLIGHT_PRE => 'class="highlight highlight-sql"',
-            Highlighter::HIGHLIGHT_QUOTE => 'class="highlight-sql-string"',
-            Highlighter::HIGHLIGHT_BACKTICK_QUOTE => 'class="highlight-sql-string"',
-            Highlighter::HIGHLIGHT_RESERVED => 'class="highlight-sql-keyword"',
-            Highlighter::HIGHLIGHT_BOUNDARY => 'class="highlight-sql-symbol"',
-            Highlighter::HIGHLIGHT_NUMBER => 'class="highlight-sql-number"',
-            Highlighter::HIGHLIGHT_WORD => 'class="highlight-sql-word"',
-            Highlighter::HIGHLIGHT_ERROR => 'class="highlight-sql-error"',
-            Highlighter::HIGHLIGHT_COMMENT => 'class="highlight-sql-comment"',
-            Highlighter::HIGHLIGHT_VARIABLE => 'class="highlight-sql-variable"',
-        ], true);
-
-        return $this->sqlFormatter = new SqlFormatter($highlighter);
+        return $this->sqlFormatter;
     }
 }

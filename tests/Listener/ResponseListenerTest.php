@@ -23,6 +23,7 @@ use Symfony\Bundle\SecurityBundle\Security\FirewallConfig;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -107,29 +108,27 @@ class ResponseListenerTest extends TestCase
         self::assertStringContainsString(CspReportController::ROUTE_NAME, $actual);
     }
 
+    protected static function assertHeader(ResponseHeaderBag $headers, string $key, string $value): void
+    {
+        self::assertTrue($headers->has($key));
+        self::assertSame($headers->get($key), $value);
+    }
+
     protected static function assertResponse(Response $response, bool $success = true): void
     {
         $headers = $response->headers;
 
-        // CSP headers
-        self::assertSame($success, $headers->has('X-WebKit-CSP'));
+        // CSP header
         self::assertSame($success, $headers->has('Content-Security-Policy'));
-        self::assertSame($success, $headers->has('X-Content-Security-Policy'));
 
         if (!$success) {
             return;
         }
 
         // default headers
-        self::assertTrue($headers->has('referrer-policy'));
-        self::assertTrue($headers->has('X-FRAME-OPTIONS'));
-        self::assertTrue($headers->has('X-Content-Type-Options'));
-        self::assertTrue($headers->has('x-permitted-cross-domain-policies'));
-
-        self::assertSame($headers->get('referrer-policy'), 'same-origin');
-        self::assertSame($headers->get('X-FRAME-OPTIONS'), 'sameorigin');
-        self::assertSame($headers->get('X-Content-Type-Options'), 'nosniff');
-        self::assertSame($headers->get('x-permitted-cross-domain-policies'), 'none');
+        self::assertHeader($headers, 'referrer-policy', 'same-origin');
+        self::assertHeader($headers, 'X-Content-Type-Options', 'nosniff');
+        self::assertHeader($headers, 'x-permitted-cross-domain-policies', 'none');
     }
 
     /**

@@ -15,6 +15,7 @@ namespace App\Service;
 use App\Traits\ArrayTrait;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * Service for cache commands.
@@ -50,14 +51,29 @@ class CacheService
      */
     public function list(): array
     {
-        return $this->cache->get('cache.pools', function (): array {
-            $result = $this->service->execute('cache:pool:list');
-            if (!$result->isSuccess()) {
-                return [];
-            }
+        return $this->cache->get(
+            'cache.pools',
+            fn (ItemInterface $item, bool &$save): array => $this->loadContent($item, $save)
+        );
+    }
 
-            return $this->parseContent($result->content);
-        });
+    /**
+     * @return array<string, string[]>
+     *
+     * @throws \Exception
+     */
+    private function loadContent(ItemInterface $item, bool &$save): array
+    {
+        $save = false;
+        $result = $this->service->execute('cache:pool:list');
+        if (!$result->isSuccess()) {
+            return [];
+        }
+        $content = $this->parseContent($result->content);
+        $item->set($content);
+        $save = true;
+
+        return $content;
     }
 
     /**

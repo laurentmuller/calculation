@@ -127,33 +127,21 @@ pre.highlight-sql {
     margin-bottom: 0;
 }
 
-pre.highlight-sql .highlight-sql-keyword {
+pre.highlight-sql .highlight-sql-quote {
+    color: #718C00;
+}
+
+pre.highlight-sql .highlight-sql-backtick-quote {
+    color: #718C00;
+}
+
+pre.highlight-sql .highlight-sql-reserved {
     color: var(--bs-link-color);
     font-weight: bold;
 }
 
-pre.highlight-sql .highlight-sql-word {
-    color: var(--bs-body-color);
-}
-
-pre.highlight-sql .highlight-sql-variable {
-    color: var(--bs-success);
-}
-
-pre.highlight-sql .highlight-sql-symbol {
+pre.highlight-sql .highlight-sql-boundary {
     color: var(--bs-gray-500);
-}
-
-pre.highlight-sql .highlight-sql-comment {
-    color: var(--bs-secondary);
-}
-
-pre.highlight-sql .highlight-sql-backtick {
-    color: #718C00;
-}
-
-pre.highlight-sql .highlight-sql-string {
-    color: #718C00;
 }
 
 pre.highlight-sql .highlight-sql-number {
@@ -161,6 +149,18 @@ pre.highlight-sql .highlight-sql-number {
     font-weight: bold;
 }
 
+pre.highlight-sql .highlight-sql-word {
+    color: var(--bs-body-color);
+}
+
 pre.highlight-sql .highlight-sql-error {
     color: var(--bs-danger);
+}
+
+pre.highlight-sql .highlight-sql-comment {
+    color: var(--bs-secondary);
+}
+
+pre.highlight-sql .highlight-sql-variable {
+    color: var(--bs-success);
 }

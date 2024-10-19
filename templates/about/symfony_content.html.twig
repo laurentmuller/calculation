@@ -2,18 +2,18 @@
 {% from 'macros/_icons.html.twig' import linkExternal, link %}
 {# macros #}
 {% macro headerLinkInfo(title, id, countable = null) -%}
-<div class="d-flex-wrap-center border-bottom" id="{{ id }}-header">
-    <a href="#{{ id }}" class="drop-down-icon-left flex-fill text-body my-1" data-bs-toggle="collapse" aria-expanded="false" aria-controls="{{ id }}" title="{{ 'about.expand'|trans }}">
-        {{- title -}}
+<div class="border-bottom" id="{{ id }}-header">
+    <a href="#{{ id }}" class="drop-down-icon-left d-flex text-body my-1" data-bs-toggle="collapse" aria-expanded="false" aria-controls="{{ id }}" title="{{ 'about.expand'|trans }}">
+        <span class="flex-fill">{{- title -}}</span>
+        {% if countable %}
+            <span class="badge text-bg-secondary rounded-pill">{{- countable|integer -}}</span>
+        {% endif %}
     </a>
-    {% if countable %}
-        <span class="badge text-bg-secondary rounded-pill">{{- countable|length|integer -}}</span>
-    {% endif %}
-    </div>
+</div>
 {%- endmacro %}
 {% macro rowBundle(bundle) -%}
 <tr>
-    <td class="e">{{- bundle.name -}}</td>
+    <td class="e">{{ bundle.name }}</td>
     <td class="v">{{ bundle.path }}</td>
     <td class="v text-percent">{{ bundle.size }}</td>
 </tr>
@@ -122,7 +122,7 @@
                 {{ tools.rowInfo('Project', service.projectDir) }}
                 {{ tools.rowInfo('Logs', service.logInfo) }}
                 {{ tools.rowInfo('Cache', service.cacheInfo) }}
-                {{ tools.rowInfo('Build', service.buildInfo) }}
+                    {{ tools.rowInfo('Build', service.buildInfo) }}
                 </tbody>
             </table>
         </div>

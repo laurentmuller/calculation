@@ -19,9 +19,13 @@ return static function (DoctrineConfig $config): void {
     $manager = $config->orm()
         ->entityManager('default');
 
+    $manager->metadataCacheDriver()
+        ->type('pool')
+        ->pool('doctrine.metadata_cache_pool');
+
     $manager->queryCacheDriver()
         ->type('pool')
-        ->pool('doctrine.system_cache_pool');
+        ->pool('doctrine.query_cache_pool');
 
     $manager->resultCacheDriver()
         ->type('pool')

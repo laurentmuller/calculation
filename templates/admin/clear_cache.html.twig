@@ -23,32 +23,40 @@
                         <h5 class="modal-title">{{ 'clear_cache.list'|trans }}</h5>
                         {{ button_close_modal(true) }}
                     </div>
-                    <div class="modal-body">
-                        {% for key, pool in pools %}
-                            {%- set first = loop.first -%}
-                            {%- set pools_length = pools_length + pool|length -%}
-                            <div class="d-flex-wrap-center border-bottom pb-1">
-                                <a role="button" class="drop-down-icon-left card-title flex-fill"
-                                   href="#{{ key }}"
-                                   data-bs-toggle="collapse"
-                                   aria-expanded="{{ first|json_encode }}">
-                                    {{- key|title -}}
-                                </a>
-                                <small>{{ pool|integer }}</small>
-                            </div>
-                            <div class="collapse{% if first %} show{% endif %}" id="{{ key }}">
-                                <ul>
-                                    {% for line in pool %}
-                                        <li class="text-break">{{ line }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        {% endfor %}
+                    <div class="modal-body p-2">
+                        <div id="accordion-cache" class="accordion accordion-flush accordion-no-background p-2">
+                            {% for key, pool in pools %}
+                                {%- set pools_length = pools_length + pool|length -%}
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button p-2{% if not loop.first %} collapsed{% endif %}"
+                                                type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#{{ key }}"
+                                                aria-expanded="{{ loop.first|json_encode }}"
+                                                aria-controls="{{ key }}">
+                                            <span class="flex-fill">{{- key|title -}}</span><small class="pe-2">{{ pool|integer }}</small>
+                                        </button>
+                                    </h2>
+                                    <div id="{{ key }}"
+                                         class="accordion-collapse collapse{% if loop.first %} show{% endif %}"
+                                         data-bs-parent="#accordion-cache">
+                                        <div class="accordion-body p-2">
+                                            <ul>
+                                                {% for line in pool %}
+                                                    <li class="text-break">{{ line }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                     <div class="modal-footer">
                         {{- button_close_modal(false) -}}
                         {% if pools_length %}
-                            <small class="ms-auto">{{ 'clear_cache.count'|trans({'%count%': pools_length|integer}) }}</small>
+                            <span class="ms-auto">{{ 'clear_cache.count'|trans({'%count%': pools_length|integer}) }}</span>
                         {% endif %}
                     </div>
                 </div>
@@ -60,8 +68,7 @@
 {% block actions_form -%}
     {{ parent() }}
     {% if pools|length %}
-        <button type="button" class="btn btn-form btn-outline-success" data-bs-toggle="modal"
-                data-bs-target="#modal-cache-list">
+        <button type="button" class="btn btn-form btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal-cache-list">
             {{- 'clear_cache.list'|trans -}}
         </button>
     {% endif %}

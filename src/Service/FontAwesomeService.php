@@ -239,7 +239,7 @@ class FontAwesomeService
             $save = true;
 
             return $image;
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             if (!$this->imagickException) {
                 $relativePath = Path::makeRelative($path, $this->svgDirectory);
                 $this->logException($e, \sprintf('Unable to load image "%s".', $relativePath));

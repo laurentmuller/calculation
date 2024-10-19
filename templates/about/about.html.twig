@@ -7,12 +7,12 @@
     {%- set route = path('about_' ~ id ~ '_content') -%}
     <div class="card-header d-flex-wrap-center">
         <a class="drop-down-icon-left card-title flex-fill" href="#{{ id }}" data-bs-toggle="collapse" aria-expanded="false" title="{{ 'about.expand'|trans }}">{{- title -}}</a>
-        {{ link_pdf(pdf_route) }}
+        {{ link_pdf(pdf_route, 'fa-fw') }}
         {% if excel_route %}
-            {{ link_excel(excel_route) }}
+            {{ link_excel(excel_route, 'fa-fw') }}
         {% endif %}
         {% if word_route %}
-            {{ link_word(word_route) }}
+            {{ link_word(word_route, 'fa-fw') }}
         {% endif %}
     </div>
     <div class="card-body collapse" id="{{ id }}" data-bs-parent="#aboutAccordion">

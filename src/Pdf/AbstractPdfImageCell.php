@@ -40,24 +40,21 @@ abstract class AbstractPdfImageCell extends PdfCell
         $this->getStyle()?->apply($parent);
 
         // convert size
-        $width = $parent->pixels2UserUnit($this->getWidth());
-        $height = $parent->pixels2UserUnit($this->getHeight());
+        $imageWidth = $parent->pixels2UserUnit($this->getWidth());
+        $imageHeight = $parent->pixels2UserUnit($this->getHeight());
 
         // compute text
         $text = $this->getText() ?? '';
         $cellMargin = $parent->getCellMargin();
-        $maxWidth = $bounds->width - $width - 3.0 * $cellMargin;
+        $maxWidth = $bounds->width - $imageWidth - 3.0 * $cellMargin;
         $textWidth = $parent->getStringWidth($text);
         while ('' !== $text && $textWidth > $maxWidth) {
             $text = \substr($text, 0, -1);
             $textWidth = $parent->getStringWidth($text);
         }
 
-        // width
-        $totalWidth = $width + $textWidth;
-        if ($textWidth > 0) {
-            $totalWidth += $cellMargin;
-        }
+        // total width
+        $totalWidth = $textWidth > 0 ? $imageWidth + $cellMargin + $textWidth : $imageWidth;
 
         // set position
         $alignment ??= $this->getAlignment() ?? PdfTextAlignment::LEFT;
@@ -74,15 +71,15 @@ abstract class AbstractPdfImageCell extends PdfCell
             $this->getPath(),
             $x,
             $y + $cellMargin,
-            $width,
-            $height,
+            $imageWidth,
+            $imageHeight,
             $this->getType(),
             $this->getLink()
         );
 
         // text
         if ('' !== $text) {
-            $parent->setXY($x + $width, $y);
+            $parent->setXY($x + $imageWidth, $y);
             $parent->cell(
                 width: $textWidth,
                 text: $text,

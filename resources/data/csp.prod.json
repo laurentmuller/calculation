@@ -1,24 +1,24 @@
 {
     "base-uri": [
-        "none"
+        "'none'"
     ],
     "media-src": [
-        "none"
+        "'none'"
     ],
     "object-src": [
-        "none"
+        "'none'"
     ],
     "default-src": [
-        "self"
+        "'self'"
     ],
     "form-action": [
-        "self"
+        "'self'"
     ],
     "manifest-src": [
-        "self"
+        "'self'"
     ],
     "frame-ancestors": [
-        "self"
+        "'self'"
     ],
     "script-src": [
         "nonce"
@@ -29,29 +29,29 @@
         "https://api.iconify.design"
     ],
     "connect-src": [
-        "self"
+        "'self'"
     ],
     "frame-src": [
-        "self",
+        "'self'",
         "https://www.google.com"
     ],
     "font-src": [
-        "self",
+        "'self'",
         "https://fonts.gstatic.com",
         "https://raw.githack.com"
     ],
     "style-src": [
-        "self",
-        "unsafe-inline",
+        "'self'",
+        "'unsafe-inline'",
         "https://fonts.googleapis.com"
     ],
     "style-src-elem": [
-        "self",
-        "unsafe-inline",
+        "'self'",
+        "'unsafe-inline'",
         "https://fonts.googleapis.com"
     ],
     "img-src": [
-        "self",
+        "'self'",
         "data:",
         "https://wise.com",
         "https://robohash.org",

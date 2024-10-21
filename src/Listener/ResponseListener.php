@@ -15,7 +15,6 @@ namespace App\Listener;
 use App\Controller\CspReportController;
 use App\Service\NonceService;
 use App\Utils\FileUtils;
-use App\Utils\StringUtils;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -99,24 +98,18 @@ class ResponseListener
     private function buildCSP(): string
     {
         $csp = $this->getCSP();
-        if ([] === $csp) {
-            return '';
+        if ('' === $csp) {
+            return $csp;
         }
 
-        $csp = $this->replaceNonce($csp);
-        $csp = $this->reduceValues($csp);
-
-        return \implode('', $csp);
+        return $this->replaceNonce($csp);
     }
 
-    /**
-     * @psalm-return array<string, string[]>
-     */
-    private function getCSP(): array
+    private function getCSP(): string
     {
         return $this->cache->get(
             'csp_content',
-            fn (ItemInterface $item, bool &$save): array => $this->loadCSP($item, $save)
+            fn (ItemInterface $item, bool &$save): string => $this->loadCSP($item, $save)
         );
     }
 
@@ -136,26 +129,25 @@ class ResponseListener
         return self::FIREWALL_DEV === $this->security->getFirewallConfig($request)?->getName();
     }
 
-    /**
-     * @psalm-return array<string, string[]>
-     */
-    private function loadCSP(ItemInterface $item, bool &$save): array
+    private function loadCSP(ItemInterface $item, bool &$save): string
     {
         $save = false;
         if (!FileUtils::exists($this->file)) {
-            return [];
+            return '';
         }
 
         try {
             /** @psalm-var array<string, string[]> $content */
             $content = FileUtils::decodeJson($this->file);
-            $content = $this->replaceValues($content);
-            $item->set($content);
+            $content = $this->replaceReportUrl($content);
+            $content = $this->reduceValues($content);
+            $csp = \implode('', $content);
+            $item->set($csp);
             $save = true;
 
-            return $content;
+            return $csp;
         } catch (\InvalidArgumentException) {
-            return [];
+            return '';
         }
     }
 
@@ -173,16 +165,9 @@ class ResponseListener
         );
     }
 
-    /**
-     * @psalm-param array<string, string[]> $array
-     *
-     * @psalm-return array<string, string[]>
-     */
-    private function replaceNonce(array $array): array
+    private function replaceNonce(string $csp): string
     {
-        $nonce = $this->service->getCspNonce();
-
-        return \array_map(fn (array $subject): array => \str_replace('nonce', $nonce, $subject), $array);
+        return \str_replace('nonce', $this->service->getCspNonce(), $csp);
     }
 
     /**
@@ -190,15 +175,11 @@ class ResponseListener
      *
      * @psalm-return array<string, string[]>
      */
-    private function replaceValues(array $array): array
+    private function replaceReportUrl(array $array): array
     {
-        $values = [
-            'none' => "'none'",
-            'self' => "'self'",
-            'unsafe-inline' => "'unsafe-inline'",
-            'report' => $this->getReportURL(),
-        ];
-
-        return \array_map(fn (array $subject): array => StringUtils::replace($values, $subject), $array);
+        return \array_map(
+            fn (array $subject): array => \str_replace('report', $this->getReportURL(), $subject),
+            $array
+        );
     }
 }

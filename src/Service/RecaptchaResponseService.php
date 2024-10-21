@@ -26,17 +26,17 @@ class RecaptchaResponseService
      */
     public function format(Response $response): string
     {
-        $html = $this->formatLine('success', (string) \json_encode($response->isSuccess()), true);
-        $html .= $this->formatLine('action', $response->getAction());
-        $html .= $this->formatLine('score', FormatUtils::formatPercent($response->getScore()));
-        $html .= $this->formatLine('hostname', $response->getHostname());
-        $html .= $this->formatLine('challengeTs', $this->formatChallenge($response->getChallengeTs()));
-        $html .= $this->formatLine('apkPackageName', $response->getApkPackageName());
+        $html = $this->formatLine('Success', (string) \json_encode($response->isSuccess()), true);
+        $html .= $this->formatLine('Action', $response->getAction());
+        $html .= $this->formatLine('Score', FormatUtils::formatPercent($response->getScore()));
+        $html .= $this->formatLine('Hostname', $response->getHostname());
+        $html .= $this->formatLine('Challenge TS', $this->formatChallenge($response->getChallengeTs()));
+        $html .= $this->formatLine('APK Package', $response->getApkPackageName());
 
         /** @psalm-var string[] $errorCodes $errorCodes */
         $errorCodes = $response->getErrorCodes();
         if ([] !== $errorCodes) {
-            $html .= $this->formatLine('error-codes', \implode('<br>', $errorCodes));
+            $html .= $this->formatLine('Error Codes', \implode('<br>', $errorCodes));
         }
 
         return $html;

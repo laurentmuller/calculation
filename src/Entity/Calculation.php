@@ -899,23 +899,22 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * @psalm-template TReturn
-     * @psalm-template TInitial
+     * @psalm-template TValue
      *
-     * @psalm-param \Closure(TReturn|TInitial, CalculationGroup): TReturn $func
-     * @psalm-param TInitial $initial
+     * @psalm-param \Closure(TValue, CalculationGroup): TValue $func
+     * @psalm-param TValue $initial
      *
-     * @psalm-return TReturn|TInitial
+     * @psalm-return TValue
      *
      * @psalm-suppress MixedArgumentTypeCoercion
      */
-    private function reduceGroups(\Closure $func, mixed $initial = null): mixed
+    private function reduceGroups(\Closure $func, mixed $initial): mixed
     {
         if ($this->groups->isEmpty()) {
             return $initial;
         }
 
-        /** @psalm-var TReturn */
+        /** @psalm-var TValue */
         return $this->groups->reduce($func, $initial);
     }
 

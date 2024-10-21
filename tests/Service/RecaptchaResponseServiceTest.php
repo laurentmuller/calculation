@@ -23,7 +23,7 @@ class RecaptchaResponseServiceTest extends TestCase
         $response = new Response(true);
         $service = new RecaptchaResponseService();
         $actual = $service->format($response);
-        self::assertStringContainsString('success', $actual);
+        self::assertStringContainsString('Success', $actual);
         self::assertStringContainsString('true', $actual);
     }
 
@@ -32,8 +32,8 @@ class RecaptchaResponseServiceTest extends TestCase
         $response = new Response(true, challengeTs: '2024-10-02');
         $service = new RecaptchaResponseService();
         $actual = $service->format($response);
-        self::assertStringContainsString('success', $actual);
-        self::assertStringContainsString('challengeTs', $actual);
+        self::assertStringContainsString('Success', $actual);
+        self::assertStringContainsString('Challenge TS', $actual);
     }
 
     public function testFormatWithErrorCodes(): void
@@ -41,7 +41,7 @@ class RecaptchaResponseServiceTest extends TestCase
         $response = new Response(true, ['Fake Error']);
         $service = new RecaptchaResponseService();
         $actual = $service->format($response);
-        self::assertStringContainsString('error-codes', $actual);
+        self::assertStringContainsString('Error Codes', $actual);
         self::assertStringContainsString('Fake Error', $actual);
     }
 }

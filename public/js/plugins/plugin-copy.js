@@ -20,9 +20,6 @@ $(function () {
     // ------------------------------------
     // CopyClipboard public class definition
     // ------------------------------------
-    /**
-     * @property {JQuery<HTMLButtonElement>} $element
-     */
     const CopyClipboard = class {
 
         // -----------------------------

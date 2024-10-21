@@ -36,7 +36,7 @@ class RecaptchaValidator extends AbstractConstraintValidator
     {
         $request = $this->requestStack->getCurrentRequest();
         if (!$request instanceof Request) {
-            $this->context->buildViolation(RecaptchaService::ERROR_PREFIX . 'no-request')
+            $this->context->buildViolation($this->getMessage('no-request'))
                 ->addViolation();
 
             return;
@@ -50,9 +50,14 @@ class RecaptchaValidator extends AbstractConstraintValidator
         /** @var string[] $errorCodes */
         $errorCodes = $response->getErrorCodes();
         foreach ($errorCodes as $code) {
-            $this->context->buildViolation(RecaptchaService::ERROR_PREFIX . $code)
+            $this->context->buildViolation($this->getMessage($code))
                 ->setCode($code)
                 ->addViolation();
         }
+    }
+
+    private function getMessage(string $code): string
+    {
+        return RecaptchaService::ERROR_PREFIX . $code;
     }
 }

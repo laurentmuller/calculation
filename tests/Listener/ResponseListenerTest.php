@@ -39,7 +39,7 @@ class ResponseListenerTest extends TestCase
         $listener = $this->createListener($file, true, ResponseListener::FIREWALL_DEV);
         $event = $this->createEvent();
         $listener->onKernelResponse($event);
-        self::assertResponse($event->getResponse(), false);
+        self::assertResponse($event->getResponse(), false, false);
     }
 
     /**
@@ -51,7 +51,7 @@ class ResponseListenerTest extends TestCase
         $listener = $this->createListener($file, true);
         $event = $this->createEvent();
         $listener->onKernelResponse($event);
-        self::assertResponse($event->getResponse());
+        self::assertResponse($event->getResponse(), true, true);
     }
 
     /**
@@ -63,7 +63,7 @@ class ResponseListenerTest extends TestCase
         $listener = $this->createListener($file);
         $event = $this->createEvent();
         $listener->onKernelResponse($event);
-        self::assertResponse($event->getResponse(), false);
+        self::assertResponse($event->getResponse(), false, true);
     }
 
     /**
@@ -75,7 +75,7 @@ class ResponseListenerTest extends TestCase
         $listener = $this->createListener($file);
         $event = $this->createEvent();
         $listener->onKernelResponse($event);
-        self::assertResponse($event->getResponse(), false);
+        self::assertResponse($event->getResponse(), false, true);
     }
 
     /**
@@ -87,7 +87,7 @@ class ResponseListenerTest extends TestCase
         $listener = $this->createListener($file);
         $event = $this->createEvent(HttpKernelInterface::SUB_REQUEST);
         $listener->onKernelResponse($event);
-        self::assertResponse($event->getResponse(), false);
+        self::assertResponse($event->getResponse(), false, false);
     }
 
     /**
@@ -100,7 +100,7 @@ class ResponseListenerTest extends TestCase
         $event = $this->createEvent();
         $listener->onKernelResponse($event);
         $response = $event->getResponse();
-        self::assertResponse($response);
+        self::assertResponse($response, true, true);
 
         $headers = $response->headers;
         $actual = $headers->get('Content-Security-Policy');
@@ -114,21 +114,19 @@ class ResponseListenerTest extends TestCase
         self::assertSame($headers->get($key), $value);
     }
 
-    protected static function assertResponse(Response $response, bool $success = true): void
+    protected static function assertResponse(Response $response, bool $cspSuccess, bool $headersSuccess): void
     {
         $headers = $response->headers;
 
         // CSP header
-        self::assertSame($success, $headers->has('Content-Security-Policy'));
-
-        if (!$success) {
-            return;
-        }
+        self::assertSame($cspSuccess, $headers->has('Content-Security-Policy'));
 
         // default headers
-        self::assertHeader($headers, 'referrer-policy', 'same-origin');
-        self::assertHeader($headers, 'X-Content-Type-Options', 'nosniff');
-        self::assertHeader($headers, 'x-permitted-cross-domain-policies', 'none');
+        if ($headersSuccess) {
+            self::assertHeader($headers, 'referrer-policy', 'same-origin');
+            self::assertHeader($headers, 'X-Content-Type-Options', 'nosniff');
+            self::assertHeader($headers, 'x-permitted-cross-domain-policies', 'none');
+        }
     }
 
     /**

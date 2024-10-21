@@ -42,7 +42,7 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
         }
 
         $value = (string) $value;
-        if ('' === $value && $this->skipEmptyString()) {
+        if ('' === $value) {
             return;
         }
 
@@ -55,14 +55,4 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
      * @psalm-param T $constraint
      */
     abstract protected function doValidate(string $value, Constraint $constraint): void;
-
-    /**
-     * Returns a value indicating if an empty string must be skipped or validate.
-     *
-     * @return bool true to skip validation; false to validate
-     */
-    protected function skipEmptyString(): bool
-    {
-        return true;
-    }
 }

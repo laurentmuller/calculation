@@ -2,60 +2,60 @@
 
 /* globals Toaster */
 
-
 /**
- * Notify a message.
+ * Notify a warning message.
  *
- * @param {string} type - the message type.
- * @param {string} message - the message content.
+ * @param {string} message
  */
-function notify(type, message) {
+function notifyWarning(message) {
     'use strict';
+    const type = Toaster.NotificationTypes.WARNING;
     const title = $('#main .card-title').text();
     Toaster.notify(type, message, title);
 }
 
 // jQuery extensions
 $.fn.extend({
-    /**
-     * @param {jQuery} $configuration
-     */
-    loadContent: function ($configuration) {
+    loadContent: function () {
+        'use strict';
         const $this = $(this);
         if ($this.data('loaded')) {
             return;
         }
         $this.data('loaded', true);
-        /** @type {string} */
         const url = $this.data('url');
-        if (url) {
-            $.getJSON(url, function (response) {
-                if (response.result && response.content) {
-                    $this.html(response.content);
-                } else {
-                    $this.showError($configuration);
-                }
-            }).fail(function () {
-                $this.showError($configuration);
-            });
-        } else {
-            $this.showError($configuration);
+        if (!url) {
+            $this.showError();
+            return;
         }
+        $.getJSON(url, function (response) {
+            if (response.result && response.content) {
+                $this.html(response.content);
+            } else {
+                $this.showError();
+            }
+        }).fail(function () {
+            $this.showError();
+        });
     },
 
-    /**
-     * @param {jQuery} $configuration
-     */
-    showError: function ($configuration) {
-        const content = $configuration.data('error');
+    showError: function () {
+        'use strict';
+        const $this = $(this);
+        if ($this.data('error')) {
+            return;
+        }
+        $this.data('error', true);
+        const content = $('#configuration').data('error');
         const html = `<i class='fas fa-lg fa-exclamation-triangle me-2'></i>${content}`;
-        $(this).find('.alert:first').toggleClass('alert-danger py-0 py-3').html(html);
+        $this.find('.alert:first').toggleClass('alert-danger py-0 py-3').html(html);
     },
 
     /**
      * @param {string} title
      */
     updateTitle: function (title) {
+        'use strict';
         $(this).prev('div').find('[data-bs-toggle]').attr('title', title);
     },
 
@@ -63,6 +63,7 @@ $.fn.extend({
      *  @param {string} [content]
      */
     displayLicense: function (content) {
+        'use strict';
         const $row = $(this);
         if (content) {
             $row.data('content', content);
@@ -94,19 +95,21 @@ $(function () {
     'use strict';
     const $accordion = $('#aboutAccordion');
     const $configuration = $('#configuration');
+    const expandTitle = $configuration.data('expand');
+    const collapseTitle = $configuration.data('collapse');
 
     // .card-body
     $accordion.on('shown.bs.collapse', function (e) {
-        const $this = $(e.target);
-        const $content = $this.find('.collapse-content');
+        const $target = $(e.target);
+        const $content = $target.find('.collapse-content');
         if ($content.length) {
-            $content.loadContent($configuration);
-        } else if (!$this.data('error')) {
-            $this.data('error', true).showError();
+            $content.loadContent();
+        } else {
+            $target.showError();
         }
-        $this.updateTitle($configuration.data('collapse'));
+        $target.updateTitle(collapseTitle);
     }).on('hidden.bs.collapse', function (e) {
-        $(e.target).updateTitle($configuration.data('expand'));
+        $(e.target).updateTitle(expandTitle);
     });
 
     // license
@@ -129,17 +132,17 @@ $(function () {
         if (!file || !url) {
             $this.remove();
             const message = $modal.data('load-error');
-            notify(Toaster.NotificationTypes.WARNING, message);
+            notifyWarning(message);
             return;
         }
         $.getJSON(url, {'file': file}, function (response) {
             if (response.result && response.content) {
                 $row.displayLicense(response.content);
-            } else {
-                $this.remove();
-                const message = response.message || $modal.data('load-error');
-                notify(Toaster.NotificationTypes.WARNING, message);
+                return;
             }
+            $this.remove();
+            const message = response.message || $modal.data('load-error');
+            notifyWarning(message);
         });
     });
 });

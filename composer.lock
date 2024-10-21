@@ -1822,16 +1822,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "2.0.10",
+            "version": "2.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "dc7d7e69796fea18a792f02693a1ca8653cf9c55"
+                "reference": "65dc299e0807160174b408ee055c7da55526c37c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/dc7d7e69796fea18a792f02693a1ca8653cf9c55",
-                "reference": "dc7d7e69796fea18a792f02693a1ca8653cf9c55",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/65dc299e0807160174b408ee055c7da55526c37c",
+                "reference": "65dc299e0807160174b408ee055c7da55526c37c",
                 "shasum": ""
             },
             "require": {
@@ -1881,7 +1881,7 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2024-10-15T14:34:57+00:00"
+            "time": "2024-10-21T10:47:43+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",
@@ -13335,7 +13335,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -13354,7 +13354,7 @@
         "ext-zlib": "*",
         "ext-imagick": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "platform-overrides": {
         "php": "8.2.19"
     },

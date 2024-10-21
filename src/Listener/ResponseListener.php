@@ -88,11 +88,9 @@ class ResponseListener
         $headers->add(self::DEFAULT_HEADERS);
 
         $csp = $this->buildCSP();
-        if ('' === $csp) {
-            return;
+        if ('' !== $csp) {
+            $headers->set(self::CSP_HEADER, $csp);
         }
-
-        $headers->set(self::CSP_HEADER, $csp);
     }
 
     private function buildCSP(): string
@@ -110,17 +108,6 @@ class ResponseListener
         return $this->cache->get(
             'csp_content',
             fn (ItemInterface $item, bool &$save): string => $this->loadCSP($item, $save)
-        );
-    }
-
-    private function getReportURL(): string
-    {
-        return $this->cache->get(
-            'report_url',
-            fn (): string => $this->generator->generate(
-                name: CspReportController::ROUTE_NAME,
-                referenceType: UrlGeneratorInterface::ABSOLUTE_URL
-            )
         );
     }
 
@@ -177,8 +164,13 @@ class ResponseListener
      */
     private function replaceReportUrl(array $array): array
     {
+        $reportUrl = $this->generator->generate(
+            name: CspReportController::ROUTE_NAME,
+            referenceType: UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
         return \array_map(
-            fn (array $subject): array => \str_replace('report', $this->getReportURL(), $subject),
+            fn (array $subject): array => \str_replace('report', $reportUrl, $subject),
             $array
         );
     }

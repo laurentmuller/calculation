@@ -108,7 +108,7 @@ class FileUtilsTest extends TestCase
     public function testDecodeJsonEmptyFile(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        FileUtils::decodeJson($this->getEmptyFile());
+        FileUtils::decodeJson(self::getEmptyFile());
     }
 
     public function testDecodeJsonInvalidFile(): void

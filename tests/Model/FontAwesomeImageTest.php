@@ -23,11 +23,13 @@ class FontAwesomeImageTest extends TestCase
         $width = 140;
         $height = 220;
         $resolution = 76;
+        $mimeType = 'image/png';
         $actual = $this->createImage($content, $width, $height, $resolution);
         self::assertSame($content, $actual->getContent());
         self::assertSame($width, $actual->getWidth());
         self::assertSame($height, $actual->getHeight());
         self::assertSame($resolution, $actual->getResolution());
+        self::assertSame($mimeType, $actual->getMimeType());
     }
 
     public function testResizeBiggestHeight(): void

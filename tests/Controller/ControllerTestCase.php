@@ -87,7 +87,7 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
             if ($followRedirect) {
                 $this->client->followRedirect();
             }
-            $this->assertResponseIsSuccessful();
+            self::assertResponseIsSuccessful();
         } finally {
             if ($disableReboot) {
                 $this->client->enableReboot();

@@ -22,6 +22,36 @@ use PHPUnit\Framework\TestCase;
 
 class PdfColorTest extends TestCase
 {
+    public static function getDrawColors(): \Iterator
+    {
+        yield [PdfDrawColor::black(), 0, 0, 0];
+        yield [PdfDrawColor::blue(), 0, 0, 255];
+        yield [PdfDrawColor::cellBorder(), 221, 221, 221];
+        yield [PdfDrawColor::darkGray(), 169, 169, 169];
+        yield [PdfDrawColor::darkGreen(), 0, 128, 0];
+        yield [PdfDrawColor::darkRed(), 128, 0, 0];
+        yield [PdfDrawColor::green(), 0, 255, 0];
+        yield [PdfDrawColor::header(), 245, 245, 245];
+        yield [PdfDrawColor::link(), 0, 0, 255];
+        yield [PdfDrawColor::red(), 255, 0, 0];
+        yield [PdfDrawColor::white(), 255, 255, 255];
+    }
+
+    public static function getFillColors(): \Iterator
+    {
+        yield [PdfFillColor::black(), 0, 0, 0];
+        yield [PdfFillColor::blue(), 0, 0, 255];
+        yield [PdfFillColor::cellBorder(), 221, 221, 221];
+        yield [PdfFillColor::darkGray(), 169, 169, 169];
+        yield [PdfFillColor::darkGreen(), 0, 128, 0];
+        yield [PdfFillColor::darkRed(), 128, 0, 0];
+        yield [PdfFillColor::green(), 0, 255, 0];
+        yield [PdfFillColor::header(), 245, 245, 245];
+        yield [PdfFillColor::link(), 0, 0, 255];
+        yield [PdfFillColor::red(), 255, 0, 0];
+        yield [PdfFillColor::white(), 255, 255, 255];
+    }
+
     public static function getHexColors(): \Generator
     {
         $rgb = [0x00, 0x00, 0x00];
@@ -75,19 +105,19 @@ class PdfColorTest extends TestCase
         yield ['0xFFF'];
     }
 
-    public static function getNamedColors(): \Iterator
+    public static function getTextColors(): \Iterator
     {
-        yield ['black', 0, 0, 0];
-        yield ['blue', 0, 0, 255];
-        yield ['cellBorder', 221, 221, 221];
-        yield ['darkGray', 169, 169, 169];
-        yield ['darkGreen', 0, 128, 0];
-        yield ['darkRed', 128, 0, 0];
-        yield ['green', 0, 255, 0];
-        yield ['header', 245, 245, 245];
-        yield ['link', 0, 0, 255];
-        yield ['red', 255, 0, 0];
-        yield ['white', 255, 255, 255];
+        yield [PdfTextColor::black(), 0, 0, 0];
+        yield [PdfTextColor::blue(), 0, 0, 255];
+        yield [PdfTextColor::cellBorder(), 221, 221, 221];
+        yield [PdfTextColor::darkGray(), 169, 169, 169];
+        yield [PdfTextColor::darkGreen(), 0, 128, 0];
+        yield [PdfTextColor::darkRed(), 128, 0, 0];
+        yield [PdfTextColor::green(), 0, 255, 0];
+        yield [PdfTextColor::header(), 245, 245, 245];
+        yield [PdfTextColor::link(), 0, 0, 255];
+        yield [PdfTextColor::red(), 255, 0, 0];
+        yield [PdfTextColor::white(), 255, 255, 255];
     }
 
     public static function getValidColors(): \Generator
@@ -216,19 +246,15 @@ class PdfColorTest extends TestCase
         self::assertEqualColor(PdfTextColor::black(), PdfTextColor::default());
     }
 
-    #[DataProvider('getNamedColors')]
-    public function testDrawColor(string $name, int $red, int $green, int $blue): void
+    #[DataProvider('getDrawColors')]
+    public function testDrawColor(PdfDrawColor $color, int $red, int $green, int $blue): void
     {
-        /** @var PdfDrawColor $color */
-        $color = PdfDrawColor::$name();
         self::assertEqualValues($color, $red, $green, $blue);
     }
 
-    #[DataProvider('getNamedColors')]
-    public function testFillColor(string $name, int $red, int $green, int $blue): void
+    #[DataProvider('getFillColors')]
+    public function testFillColor(PdfFillColor $color, int $red, int $green, int $blue): void
     {
-        /** @var PdfFillColor $color */
-        $color = PdfFillColor::$name();
         self::assertEqualValues($color, $red, $green, $blue);
     }
 
@@ -250,11 +276,9 @@ class PdfColorTest extends TestCase
         self::assertFalse($fill->isFillColor());
     }
 
-    #[DataProvider('getNamedColors')]
-    public function testTextColor(string $name, int $red, int $green, int $blue): void
+    #[DataProvider('getTextColors')]
+    public function testTextColor(PdfTextColor $color, int $red, int $green, int $blue): void
     {
-        /** @var PdfTextColor $color */
-        $color = PdfTextColor::$name();
         self::assertEqualValues($color, $red, $green, $blue);
     }
 

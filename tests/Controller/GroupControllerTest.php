@@ -95,7 +95,7 @@ class GroupControllerTest extends EntityControllerTestCase
 
         $this->loginUsername($userName);
         $crawler = $this->client->request(Request::METHOD_GET, $uri);
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
 
         $text = $this->getService(TranslatorInterface::class)
             ->trans('common.button_back_list');

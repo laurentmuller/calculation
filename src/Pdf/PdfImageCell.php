@@ -107,24 +107,25 @@ class PdfImageCell extends AbstractPdfImageCell
     /**
      * Resize the image.
      *
-     * If both height and width arguments are equal to 0, the new width and height are equals to the original size.
+     * If both height and width arguments are <code>null</code>, the new width and height are
+     * equals to the original size.
      *
-     * @param int $height the new height or 0 to take the original width as reference
-     * @param int $width  the new width or 0 to take the original height as reference
+     * @param ?int $width  the new width or <code>null</code> to take the original height as reference
+     * @param ?int $height the new height or <code>null</code> to take the original width as reference
      */
-    public function resize(int $height = 0, int $width = 0): self
+    public function resize(?int $width = null, ?int $height = null): self
     {
-        if (0 === $height && 0 === $width) {
-            $this->height = $this->originalHeight;
+        if (null === $width && null === $height) {
             $this->width = $this->originalWidth;
+            $this->height = $this->originalHeight;
 
             return $this;
         }
 
         $ratio = $this->safeDivide($this->originalWidth, $this->originalHeight, 1);
-        if ($height > 0) {
+        if (null !== $height) {
             $width = (int) \round((float) $height * $ratio);
-        } elseif ($width > 0) {
+        } else {
             $height = (int) \round((float) $width / $ratio);
         }
 

@@ -19,58 +19,38 @@ use PHPUnit\Framework\TestCase;
 
 class PdfMemoryImageTraitTest extends TestCase
 {
-    public function testImageFromAvif(): void
+    public function testImageAvif(): void
     {
         $file = $this->getImagePath('avif');
         $doc = $this->createDocument();
-        $doc->imageFromAvif($file);
+        $doc->imageAvif($file);
         self::assertSame(1, $doc->getPage());
     }
 
-    public function testImageFromBmp(): void
+    public function testImageBmp(): void
     {
         $file = $this->getImagePath('bmp');
         $doc = $this->createDocument();
-        $doc->imageFromBmp($file);
+        $doc->imageBmp($file);
         self::assertSame(1, $doc->getPage());
     }
 
-    public function testImageFromWbmp(): void
+    public function testImageData(): void
     {
-        $file = $this->getImagePath('wbmp');
-        $doc = $this->createDocument();
-        $doc->imageFromWbmp($file);
-        self::assertSame(1, $doc->getPage());
-    }
+        $file = $this->getImagePath('png');
+        $data = \file_get_contents($file);
+        self::assertIsString($data);
 
-    public function testImageFromWebp(): void
-    {
-        $file = $this->getImagePath('webp');
         $doc = $this->createDocument();
-        $doc->imageFromWebp($file);
-        self::assertSame(1, $doc->getPage());
-    }
-
-    public function testImageFromXbm(): void
-    {
-        $file = $this->getImagePath('xbm');
-        $doc = $this->createDocument();
-        $doc->imageFromXbm($file);
-        self::assertSame(1, $doc->getPage());
-    }
-
-    public function testImageFromXpm(): void
-    {
-        $file = $this->getImagePath('xpm');
-        $doc = $this->createDocument();
-        $doc->imageFromXpm($file);
+        $doc->imageData($data);
         self::assertSame(1, $doc->getPage());
     }
 
     public function testImageGD(): void
     {
         $doc = $this->createDocument();
-        $doc->imageGD($this->createGdImage());
+        $image = $this->createGdImage();
+        $doc->imageGD($image);
         self::assertSame(1, $doc->getPage());
     }
 
@@ -82,6 +62,38 @@ class PdfMemoryImageTraitTest extends TestCase
         $doc = new PdfImageDocument();
         \imagedestroy($image);
         $doc->imageGD($image);
+    }
+
+    public function testImageWbmp(): void
+    {
+        $file = $this->getImagePath('wbmp');
+        $doc = $this->createDocument();
+        $doc->imageWbmp($file);
+        self::assertSame(1, $doc->getPage());
+    }
+
+    public function testImageWebp(): void
+    {
+        $file = $this->getImagePath('webp');
+        $doc = $this->createDocument();
+        $doc->imageWebp($file);
+        self::assertSame(1, $doc->getPage());
+    }
+
+    public function testImageXbm(): void
+    {
+        $file = $this->getImagePath('xbm');
+        $doc = $this->createDocument();
+        $doc->imageXbm($file);
+        self::assertSame(1, $doc->getPage());
+    }
+
+    public function testImageXpm(): void
+    {
+        $file = $this->getImagePath('xpm');
+        $doc = $this->createDocument();
+        $doc->imageXpm($file);
+        self::assertSame(1, $doc->getPage());
     }
 
     public function testInvalidLoader(): void

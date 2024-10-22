@@ -62,15 +62,13 @@ class CommandDataServiceTest extends KernelServiceTestCase
 
     public function testGetArgumentKey(): void
     {
-        $dataService = $this->getCommandDataService();
-        $actual = $dataService->getArgumentKey('fake');
+        $actual = CommandDataService::getArgumentKey('fake');
         self::assertSame('argument-fake', $actual);
     }
 
     public function testGetOptionKey(): void
     {
-        $dataService = $this->getCommandDataService();
-        $actual = $dataService->getOptionKey('fake');
+        $actual = CommandDataService::getOptionKey('fake');
         self::assertSame('option-fake', $actual);
     }
 

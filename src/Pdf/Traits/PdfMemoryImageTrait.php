@@ -53,7 +53,7 @@ trait PdfMemoryImageTrait
      *
      * @throws PdfException if the image file does not exist, or if the image cannot be converted
      */
-    public function imageFromAvif(
+    public function imageAvif(
         string $file,
         ?float $x = null,
         ?float $y = null,
@@ -102,7 +102,7 @@ trait PdfMemoryImageTrait
      *
      * @throws PdfException if the image file does not exist, or if the image cannot be converted
      */
-    public function imageFromBmp(
+    public function imageBmp(
         string $file,
         ?float $x = null,
         ?float $y = null,
@@ -122,197 +122,53 @@ trait PdfMemoryImageTrait
     }
 
     /**
-     * Output a WBMP image from a file or a URL.
+     * Output the given image data.
      *
-     * @param string          $file   the image path
-     * @param ?float          $x      the abscissa of the upper-left corner. If <code>null</code>, the current abscissa
-     *                                is used.
-     * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
-     *                                is used; moreover, a page break is triggered first if necessary (in case
-     *                                automatic page breaking is enabled) and, after the call, the current ordinate
-     *                                is moved to the bottom of the image.
-     * @param float           $width  the width of the image in the page. There are three cases:
-     *                                <ul>
-     *                                <li>If the value is positive, it represents the width in user unit.</li>
-     *                                <li>If the value is negative, the absolute value represents the horizontal
-     *                                resolution in dpi.</li>
-     *                                <li>If the value is not specified or equal to zero, it is automatically
-     *                                calculated.</li>
-     *                                </ul>
-     * @param float           $height the height of the image in the page. There are three cases:
-     *                                <ul>
-     *                                <li>If the value is positive, it represents the width in user unit.</li>
-     *                                <li>If the value is negative, the absolute value represents the horizontal
-     *                                resolution in dpi.</li>
-     *                                <li>If the value is not specified or equal to zero, it is automatically
-     *                                calculated.</li>
-     *                                </ul>
-     * @param string|int|null $link   the URL or an identifier returned by the <code>addLink()</code> function
+     * @param ImageData|string $data   the image data or the image content to output
+     * @param ?float           $x      the abscissa of the upper-left corner. If <code>null</code>, the current abscissa
+     *                                 is used.
+     * @param ?float           $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
+     *                                 is used; moreover, a page break is triggered first if necessary (in case
+     *                                 automatic page breaking is enabled) and, after the call, the current ordinate is
+     *                                 moved to the bottom of the image.
+     * @param float            $width  the width of the image in the page. There are three cases:
+     *                                 <ul>
+     *                                 <li>If the value is positive, it represents the width in user unit.</li>
+     *                                 <li>If the value is negative, the absolute value represents the horizontal
+     *                                 resolution in dpi.</li>
+     *                                 <li>If the value is not specified or equal to zero, it is automatically
+     *                                 calculated.</li>
+     *                                 </ul>
+     * @param float            $height the height of the image in the page. There are three cases:
+     *                                 <ul>
+     *                                 <li>If the value is positive, it represents the width in user unit.</li>
+     *                                 <li>If the value is negative, the absolute value represents the horizontal
+     *                                 resolution in dpi.</li>
+     *                                 <li>If the value is not specified or equal to zero, it is automatically
+     *                                 calculated.</li>
+     *                                 </ul>
+     * @param string|int|null  $link   the URL or an identifier returned by the <code>addLink()</code> function
      *
-     * @throws PdfException if the image file does not exist, or if the image cannot be converted
+     * @throws PdfException if the image cannot be processed
      */
-    public function imageFromWbmp(
-        string $file,
+    public function imageData(
+        ImageData|string $data,
         ?float $x = null,
         ?float $y = null,
         float $width = 0.0,
         float $height = 0.0,
         string|int|null $link = null
     ): void {
-        $this->imageFromLoader(
-            static fn (): \GdImage|false => \imagecreatefromwbmp($file),
-            $file,
+        if (\is_string($data)) {
+            $data = new ImageData($data);
+        }
+        $this->image(
+            $data->getFileName(),
             $x,
             $y,
             $width,
             $height,
-            $link
-        );
-    }
-
-    /**
-     * Output a Webp image from a file or a URL.
-     *
-     * @param string          $file   the image path
-     * @param ?float          $x      the abscissa of the upper-left corner. If <code>null</code>, the current abscissa
-     *                                is used.
-     * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
-     *                                is used; moreover, a page break is triggered first if necessary (in case
-     *                                automatic page breaking is enabled) and, after the call, the current ordinate
-     *                                is moved to the bottom of the image.
-     * @param float           $width  the width of the image in the page. There are three cases:
-     *                                <ul>
-     *                                <li>If the value is positive, it represents the width in user unit.</li>
-     *                                <li>If the value is negative, the absolute value represents the horizontal
-     *                                resolution in dpi.</li>
-     *                                <li>If the value is not specified or equal to zero, it is automatically
-     *                                calculated.</li>
-     *                                </ul>
-     * @param float           $height the height of the image in the page. There are three cases:
-     *                                <ul>
-     *                                <li>If the value is positive, it represents the width in user unit.</li>
-     *                                <li>If the value is negative, the absolute value represents the horizontal
-     *                                resolution in dpi.</li>
-     *                                <li>If the value is not specified or equal to zero, it is automatically
-     *                                calculated.</li>
-     *                                </ul>
-     * @param string|int|null $link   the URL or an identifier returned by the <code>addLink()</code> function
-     *
-     * @throws PdfException if the image file does not exist, or if the image cannot be converted
-     */
-    public function imageFromWebp(
-        string $file,
-        ?float $x = null,
-        ?float $y = null,
-        float $width = 0.0,
-        float $height = 0.0,
-        string|int|null $link = null
-    ): void {
-        $this->imageFromLoader(
-            static fn (): \GdImage|false => \imagecreatefromwebp($file),
-            $file,
-            $x,
-            $y,
-            $width,
-            $height,
-            $link
-        );
-    }
-
-    /**
-     * Output an XBM image from a file or a URL.
-     *
-     * @param string          $file   the image path
-     * @param ?float          $x      the abscissa of the upper-left corner. If <code>null</code>, the current abscissa
-     *                                is used.
-     * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
-     *                                is used; moreover, a page break is triggered first if necessary (in case
-     *                                automatic page breaking is enabled) and, after the call, the current ordinate
-     *                                is moved to the bottom of the image.
-     * @param float           $width  the width of the image in the page. There are three cases:
-     *                                <ul>
-     *                                <li>If the value is positive, it represents the width in user unit.</li>
-     *                                <li>If the value is negative, the absolute value represents the horizontal
-     *                                resolution in dpi.</li>
-     *                                <li>If the value is not specified or equal to zero, it is automatically
-     *                                calculated.</li>
-     *                                </ul>
-     * @param float           $height the height of the image in the page. There are three cases:
-     *                                <ul>
-     *                                <li>If the value is positive, it represents the width in user unit.</li>
-     *                                <li>If the value is negative, the absolute value represents the horizontal
-     *                                resolution in dpi.</li>
-     *                                <li>If the value is not specified or equal to zero, it is automatically
-     *                                calculated.</li>
-     *                                </ul>
-     * @param string|int|null $link   the URL or an identifier returned by the <code>addLink()</code> function
-     *
-     * @throws PdfException if the image file does not exist, or if the image cannot be converted
-     */
-    public function imageFromXbm(
-        string $file,
-        ?float $x = null,
-        ?float $y = null,
-        float $width = 0.0,
-        float $height = 0.0,
-        string|int|null $link = null
-    ): void {
-        $this->imageFromLoader(
-            static fn (): \GdImage|false => \imagecreatefromxbm($file),
-            $file,
-            $x,
-            $y,
-            $width,
-            $height,
-            $link
-        );
-    }
-
-    /**
-     * Output XPM image from a file or a URL.
-     *
-     * @param string          $file   the image path
-     * @param ?float          $x      the abscissa of the upper-left corner. If <code>null</code>, the current abscissa
-     *                                is used.
-     * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
-     *                                is used; moreover, a page break is triggered first if necessary (in case
-     *                                automatic page breaking is enabled) and, after the call, the current ordinate
-     *                                is moved to the bottom of the image.
-     * @param float           $width  the width of the image in the page. There are three cases:
-     *                                <ul>
-     *                                <li>If the value is positive, it represents the width in user unit.</li>
-     *                                <li>If the value is negative, the absolute value represents the horizontal
-     *                                resolution in dpi.</li>
-     *                                <li>If the value is not specified or equal to zero, it is automatically
-     *                                calculated.</li>
-     *                                </ul>
-     * @param float           $height the height of the image in the page. There are three cases:
-     *                                <ul>
-     *                                <li>If the value is positive, it represents the width in user unit.</li>
-     *                                <li>If the value is negative, the absolute value represents the horizontal
-     *                                resolution in dpi.</li>
-     *                                <li>If the value is not specified or equal to zero, it is automatically
-     *                                calculated.</li>
-     *                                </ul>
-     * @param string|int|null $link   the URL or an identifier returned by the <code>addLink()</code> function
-     *
-     * @throws PdfException if the image file does not exist, or if the image cannot be converted
-     */
-    public function imageFromXpm(
-        string $file,
-        ?float $x = null,
-        ?float $y = null,
-        float $width = 0.0,
-        float $height = 0.0,
-        string|int|null $link = null
-    ): void {
-        $this->imageFromLoader(
-            static fn (): \GdImage|false => \imagecreatefromxpm($file),
-            $file,
-            $x,
-            $y,
-            $width,
-            $height,
+            $data->getFileType(),
             $link
         );
     }
@@ -361,27 +217,29 @@ trait PdfMemoryImageTrait
         \ob_start();
         $result = \imagepng($image);
         $data = \ob_get_clean();
+        \imagedestroy($image);
+
         if (!$result || !\is_string($data) || '' === $data) {
             throw PdfException::instance('Unable to convert the GD image to portable network graphics format.');
         }
 
-        try {
-            $this->imageMemory($data, $x, $y, $width, $height, $link);
-        } finally {
-            \imagedestroy($image);
-        }
+        $imageData = ImageData::instance(
+            data: $data,
+            mimeType: 'image/png'
+        );
+        $this->imageData($imageData, $x, $y, $width, $height, $link);
     }
 
     /**
-     * Output the given image data.
+     * Output a WBMP image from a file or a URL.
      *
-     * @param string          $data   the image data to output
+     * @param string          $file   the image path
      * @param ?float          $x      the abscissa of the upper-left corner. If <code>null</code>, the current abscissa
      *                                is used.
      * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
-     *                                is used; moreover, a page break is triggered first if necessary (in case automatic
-     *                                page breaking is enabled) and, after the call, the current ordinate is moved to
-     *                                the bottom of the image.
+     *                                is used; moreover, a page break is triggered first if necessary (in case
+     *                                automatic page breaking is enabled) and, after the call, the current ordinate
+     *                                is moved to the bottom of the image.
      * @param float           $width  the width of the image in the page. There are three cases:
      *                                <ul>
      *                                <li>If the value is positive, it represents the width in user unit.</li>
@@ -400,24 +258,170 @@ trait PdfMemoryImageTrait
      *                                </ul>
      * @param string|int|null $link   the URL or an identifier returned by the <code>addLink()</code> function
      *
-     * @throws PdfException if the image cannot be processed
+     * @throws PdfException if the image file does not exist, or if the image cannot be converted
      */
-    public function imageMemory(
-        string $data,
+    public function imageWbmp(
+        string $file,
         ?float $x = null,
         ?float $y = null,
         float $width = 0.0,
         float $height = 0.0,
         string|int|null $link = null
     ): void {
-        $info = ImageData::instance($data);
-        $this->image(
-            $info->getFileName(),
+        $this->imageFromLoader(
+            static fn (): \GdImage|false => \imagecreatefromwbmp($file),
+            $file,
             $x,
             $y,
             $width,
             $height,
-            $info->getFileType(),
+            $link
+        );
+    }
+
+    /**
+     * Output a Webp image from a file or a URL.
+     *
+     * @param string          $file   the image path
+     * @param ?float          $x      the abscissa of the upper-left corner. If <code>null</code>, the current abscissa
+     *                                is used.
+     * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
+     *                                is used; moreover, a page break is triggered first if necessary (in case
+     *                                automatic page breaking is enabled) and, after the call, the current ordinate
+     *                                is moved to the bottom of the image.
+     * @param float           $width  the width of the image in the page. There are three cases:
+     *                                <ul>
+     *                                <li>If the value is positive, it represents the width in user unit.</li>
+     *                                <li>If the value is negative, the absolute value represents the horizontal
+     *                                resolution in dpi.</li>
+     *                                <li>If the value is not specified or equal to zero, it is automatically
+     *                                calculated.</li>
+     *                                </ul>
+     * @param float           $height the height of the image in the page. There are three cases:
+     *                                <ul>
+     *                                <li>If the value is positive, it represents the width in user unit.</li>
+     *                                <li>If the value is negative, the absolute value represents the horizontal
+     *                                resolution in dpi.</li>
+     *                                <li>If the value is not specified or equal to zero, it is automatically
+     *                                calculated.</li>
+     *                                </ul>
+     * @param string|int|null $link   the URL or an identifier returned by the <code>addLink()</code> function
+     *
+     * @throws PdfException if the image file does not exist, or if the image cannot be converted
+     */
+    public function imageWebp(
+        string $file,
+        ?float $x = null,
+        ?float $y = null,
+        float $width = 0.0,
+        float $height = 0.0,
+        string|int|null $link = null
+    ): void {
+        $this->imageFromLoader(
+            static fn (): \GdImage|false => \imagecreatefromwebp($file),
+            $file,
+            $x,
+            $y,
+            $width,
+            $height,
+            $link
+        );
+    }
+
+    /**
+     * Output an XBM image from a file or a URL.
+     *
+     * @param string          $file   the image path
+     * @param ?float          $x      the abscissa of the upper-left corner. If <code>null</code>, the current abscissa
+     *                                is used.
+     * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
+     *                                is used; moreover, a page break is triggered first if necessary (in case
+     *                                automatic page breaking is enabled) and, after the call, the current ordinate
+     *                                is moved to the bottom of the image.
+     * @param float           $width  the width of the image in the page. There are three cases:
+     *                                <ul>
+     *                                <li>If the value is positive, it represents the width in user unit.</li>
+     *                                <li>If the value is negative, the absolute value represents the horizontal
+     *                                resolution in dpi.</li>
+     *                                <li>If the value is not specified or equal to zero, it is automatically
+     *                                calculated.</li>
+     *                                </ul>
+     * @param float           $height the height of the image in the page. There are three cases:
+     *                                <ul>
+     *                                <li>If the value is positive, it represents the width in user unit.</li>
+     *                                <li>If the value is negative, the absolute value represents the horizontal
+     *                                resolution in dpi.</li>
+     *                                <li>If the value is not specified or equal to zero, it is automatically
+     *                                calculated.</li>
+     *                                </ul>
+     * @param string|int|null $link   the URL or an identifier returned by the <code>addLink()</code> function
+     *
+     * @throws PdfException if the image file does not exist, or if the image cannot be converted
+     */
+    public function imageXbm(
+        string $file,
+        ?float $x = null,
+        ?float $y = null,
+        float $width = 0.0,
+        float $height = 0.0,
+        string|int|null $link = null
+    ): void {
+        $this->imageFromLoader(
+            static fn (): \GdImage|false => \imagecreatefromxbm($file),
+            $file,
+            $x,
+            $y,
+            $width,
+            $height,
+            $link
+        );
+    }
+
+    /**
+     * Output XPM image from a file or a URL.
+     *
+     * @param string          $file   the image path
+     * @param ?float          $x      the abscissa of the upper-left corner. If <code>null</code>, the current abscissa
+     *                                is used.
+     * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
+     *                                is used; moreover, a page break is triggered first if necessary (in case
+     *                                automatic page breaking is enabled) and, after the call, the current ordinate
+     *                                is moved to the bottom of the image.
+     * @param float           $width  the width of the image in the page. There are three cases:
+     *                                <ul>
+     *                                <li>If the value is positive, it represents the width in user unit.</li>
+     *                                <li>If the value is negative, the absolute value represents the horizontal
+     *                                resolution in dpi.</li>
+     *                                <li>If the value is not specified or equal to zero, it is automatically
+     *                                calculated.</li>
+     *                                </ul>
+     * @param float           $height the height of the image in the page. There are three cases:
+     *                                <ul>
+     *                                <li>If the value is positive, it represents the width in user unit.</li>
+     *                                <li>If the value is negative, the absolute value represents the horizontal
+     *                                resolution in dpi.</li>
+     *                                <li>If the value is not specified or equal to zero, it is automatically
+     *                                calculated.</li>
+     *                                </ul>
+     * @param string|int|null $link   the URL or an identifier returned by the <code>addLink()</code> function
+     *
+     * @throws PdfException if the image file does not exist, or if the image cannot be converted
+     */
+    public function imageXpm(
+        string $file,
+        ?float $x = null,
+        ?float $y = null,
+        float $width = 0.0,
+        float $height = 0.0,
+        string|int|null $link = null
+    ): void {
+        $this->imageFromLoader(
+            static fn (): \GdImage|false => \imagecreatefromxpm($file),
+            $file,
+            $x,
+            $y,
+            $width,
+            $height,
             $link
         );
     }

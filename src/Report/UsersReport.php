@@ -101,10 +101,10 @@ class UsersReport extends AbstractArrayReport
         $cell = new PdfImageCell($path);
         [$width, $height] = $cell->getOriginalSize();
         if ($width > $height) {
-            return $cell->resize(0, $size);
+            return $cell->resize(width: $size);
         }
         if ($width < $height || $width !== $size) {
-            return $cell->resize($size);
+            return $cell->resize(height: $size);
         }
 
         return $cell;

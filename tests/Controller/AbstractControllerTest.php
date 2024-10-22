@@ -88,7 +88,7 @@ class AbstractControllerTest extends KernelTestCase
     public function testGetSubscribedServices(): void
     {
         $controller = $this->createController();
-        $actual = $controller->getSubscribedServices();
+        $actual = $controller::getSubscribedServices();
         self::assertContains(UserService::class, $actual);
         self::assertContains(TranslatorInterface::class, $actual);
         self::assertContains(UrlGeneratorService::class, $actual);

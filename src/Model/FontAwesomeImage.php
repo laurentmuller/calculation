@@ -48,6 +48,14 @@ readonly class FontAwesomeImage
     }
 
     /**
+     * Gets the image mime type ('image/png').
+     */
+    public function getMimeType(): string
+    {
+        return 'image/png';
+    }
+
+    /**
      * Gets the image resolution in DPI (dot per each).
      */
     public function getResolution(): int

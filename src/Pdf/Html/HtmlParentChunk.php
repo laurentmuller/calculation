@@ -166,7 +166,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
             return true;
         }
 
-        return $child instanceof self && $child->isLastNewLine($child);
+        return $child instanceof self && $child::isLastNewLine($child);
     }
 
     private function doOutput(HtmlReport $report): void

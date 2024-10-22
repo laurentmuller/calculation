@@ -58,7 +58,7 @@ trait ProductTrait
             $this->product = new Product();
             $this->product->setDescription('Description');
 
-            return $this->setId($this->product);
+            return self::setId($this->product);
         }
 
         return $this->product;

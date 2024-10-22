@@ -66,11 +66,14 @@ abstract class AbstractPdfImageCell extends PdfCell
         };
         $y = $bounds->y;
 
+        // vertical offset
+        $offset = \max($cellMargin, (PdfDocument::LINE_HEIGHT - $imageHeight) / 2.0);
+
         // image
         $parent->image(
             $this->getPath(),
             $x,
-            $y + $cellMargin,
+            $y + $offset,
             $imageWidth,
             $imageHeight,
             $this->getType(),

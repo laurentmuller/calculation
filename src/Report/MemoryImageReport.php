@@ -81,7 +81,7 @@ class MemoryImageReport extends AbstractReport
             throw PdfException::instance('Unable to get image content.');
         }
 
-        $this->imageMemory($data, 60, 20, 30);
+        $this->imageData($data, 60, 20, 30);
     }
 
     private function addImageGD(): void
@@ -109,7 +109,7 @@ class MemoryImageReport extends AbstractReport
             throw PdfException::instance('Unable to get image content.');
         }
 
-        $this->imageMemory($data, 10, 20, 30);
+        $this->imageData($data, 10, 20, 30);
     }
 
     private function addScreenshotImage(): void
@@ -130,7 +130,7 @@ class MemoryImageReport extends AbstractReport
             throw PdfException::instance('Unable to get image content.');
         }
         $this->setAlpha(0.5);
-        $this->imageMemory($data, 110, 20, 30);
+        $this->imageData($data, 110, 20, 30);
         $this->resetAlpha();
     }
 

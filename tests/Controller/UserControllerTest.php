@@ -131,7 +131,7 @@ class UserControllerTest extends EntityControllerTestCase
         $this->loginUsername(self::ROLE_SUPER_ADMIN);
         $this->client->request(Request::METHOD_POST, '/user/reset');
         $this->client->followRedirect();
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
     }
 
     /**
@@ -143,7 +143,7 @@ class UserControllerTest extends EntityControllerTestCase
         $this->loginUsername(self::ROLE_SUPER_ADMIN);
         $this->client->request(Request::METHOD_POST, '/user/reset');
         $this->client->followRedirect();
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
     }
 
     /**
@@ -181,7 +181,7 @@ class UserControllerTest extends EntityControllerTestCase
             ->trans('common.button_ok');
         $this->client->submitForm($name);
         $this->client->followRedirect();
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
     }
 
     public function testRightsSameUser(): void
@@ -190,7 +190,7 @@ class UserControllerTest extends EntityControllerTestCase
         $uri = \sprintf('/user/rights/%d', self::ID_ADMIN);
         $this->client->request(Request::METHOD_POST, $uri);
         $this->client->followRedirect();
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
     }
 
     public function testRightsWithChanges(): void
@@ -203,7 +203,7 @@ class UserControllerTest extends EntityControllerTestCase
             ->trans('common.button_ok');
         $this->client->submitForm($name, $data);
         $this->client->followRedirect();
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
     }
 
     public function testSendPasswordRequest(): void

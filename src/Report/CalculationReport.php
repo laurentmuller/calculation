@@ -14,6 +14,7 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
+use App\Model\ImageData;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
@@ -25,9 +26,7 @@ use App\Traits\LoggerTrait;
 use App\Utils\StringUtils;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
-use Endroid\QrCode\Writer\Result\GdResult;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
 use Psr\Log\LoggerInterface;
@@ -122,6 +121,28 @@ class CalculationReport extends AbstractReport
     }
 
     /**
+     * Gets the QR code image data.
+     *
+     * @throws \Exception
+     */
+    private function getQrCodeImageData(): ImageData
+    {
+        $builder = new Builder(
+            writer: new PngWriter(),
+            data: $this->qrcode,
+            errorCorrectionLevel: ErrorCorrectionLevel::Medium,
+            size: (int) self::QR_CODE_SIZE,
+            margin: 0,
+        );
+        $result = $builder->build();
+
+        return ImageData::instance(
+            data: $result->getString(),
+            mimeType: $result->getMimeType()
+        );
+    }
+
+    /**
      * Return if the QR code must render.
      */
     private function isQrCode(): bool
@@ -185,20 +206,10 @@ class CalculationReport extends AbstractReport
         }
 
         try {
-            /** @psalm-var GdResult $result */
-            $result = Builder::create()
-                ->errorCorrectionLevel(ErrorCorrectionLevel::Medium)
-                ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
-                ->size((int) self::QR_CODE_SIZE)
-                ->writer(new PngWriter())
-                ->data($this->qrcode)
-                ->margin(0)
-                ->build();
-
-            $image = $result->getImage();
+            $data = $this->getQrCodeImageData();
             $x = $this->getPageWidth() - $this->getRightMargin() - self::QR_CODE_SIZE;
             $y = $this->getPageHeight() - ReportFooter::FOOTER_OFFSET - self::QR_CODE_SIZE;
-            $this->imageGD($image, $x, $y, self::QR_CODE_SIZE, self::QR_CODE_SIZE, $this->qrcode);
+            $this->imageData($data, $x, $y, self::QR_CODE_SIZE, self::QR_CODE_SIZE, $this->qrcode);
         } catch (\Exception $e) {
             $this->logException($e, $this->trans('report.calculation.error_qr_code'));
         }

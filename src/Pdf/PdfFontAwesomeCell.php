@@ -52,8 +52,11 @@ class PdfFontAwesomeCell extends AbstractPdfImageCell
         ?PdfTextAlignment $alignment = null,
         string|int|null $link = null
     ) {
-        $this->size = $image->resize(12);
-        $this->imageData = ImageData::instance($image->getContent());
+        $this->size = $image->resize(11);
+        $this->imageData = ImageData::instance(
+            data: $image->getContent(),
+            mimeType: $image->getMimeType()
+        );
         parent::__construct($text, $cols, $style, $alignment, $link);
     }
 

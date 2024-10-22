@@ -27,11 +27,11 @@ trait TranslatorMockTrait
         try {
             $translator = $this->createMock(TranslatorInterface::class);
             if (null !== $message) {
-                $translator->expects($this->any())
+                $translator->expects(self::any())
                     ->method('trans')
                     ->willReturn($message);
             } else {
-                $translator->expects($this->any())
+                $translator->expects(self::any())
                     ->method('trans')
                     ->willReturnArgument(0);
             }

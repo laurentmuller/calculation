@@ -17,15 +17,18 @@ namespace App\Model;
  */
 class ImageData
 {
-    private ?string $fileName = null;
-    private ?string $fileType = null;
-    private ?string $mimeType = null;
-
     /**
-     * @param string $data the image data
+     * @param string  $data     the image data
+     * @param ?string $mimeType the image mime type
+     * @param ?string $fileType the image file type
+     * @param ?string $fileName the image file name
      */
-    public function __construct(private readonly string $data)
-    {
+    public function __construct(
+        private readonly string $data,
+        private ?string $mimeType = null,
+        private ?string $fileType = null,
+        private ?string $fileName = null
+    ) {
     }
 
     /**
@@ -77,12 +80,19 @@ class ImageData
     }
 
     /**
-     * Creates a new instance for the given data.
+     * Creates a new instance.
      *
-     * @param string $data the image data
+     * @param string  $data     the image data
+     * @param ?string $mimeType the image mime type
+     * @param ?string $fileType the image file type
+     * @param ?string $fileName the image file name
      */
-    public static function instance(string $data): self
-    {
-        return new self($data);
+    public static function instance(
+        string $data,
+        ?string $mimeType = null,
+        ?string $fileType = null,
+        ?string $fileName = null
+    ): self {
+        return new self($data, $mimeType, $fileType, $fileName);
     }
 }

@@ -507,6 +507,10 @@ $(function () {
             marginBottom: $('footer:visible').length ? $('footer').outerHeight() : 0, focusOnShow: true
         },
 
+        /**
+         * @param {Object} params
+         * @return {Object}
+         */
         queryParams: function (params) {
             inputs.each(function () {
                 const id = this.getId();

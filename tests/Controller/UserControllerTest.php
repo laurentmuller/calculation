@@ -38,10 +38,11 @@ class UserControllerTest extends EntityControllerTestCase
         yield ['/user', self::ROLE_SUPER_ADMIN];
         yield ['/user', self::ROLE_DISABLED, Response::HTTP_FORBIDDEN];
 
+        yield ['/user/add', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user/add', self::ROLE_ADMIN];
         yield ['/user/add', self::ROLE_SUPER_ADMIN];
-        yield ['/user/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
 
+        yield ['/user/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user/edit/1', self::ROLE_ADMIN];
         yield ['/user/edit/1', self::ROLE_SUPER_ADMIN];
 

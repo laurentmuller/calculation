@@ -23,31 +23,39 @@ use Psr\Container\ContainerInterface;
 trait AwareTrait
 {
     /**
+     * Gets a service from this container.
+     *
      * @template T
      *
-     * @param class-string<T> $class
+     * @param class-string<T> $class the service class name to get for
      *
-     * @return T
+     * @return T the service
      *
      * @throws \LogicException if the service cannot be found
      */
     protected function getContainerService(string $function, string $class): mixed
     {
-        $id = self::class . '::' . $function;
+        $id = \sprintf('%s::%s', self::class, $function);
         if (!$this->container->has($id)) {
-            throw new \LogicException($this->getErrorMessage($class, $id));
+            throw $this->createLogicException($class, $id);
         }
 
         try {
             /** @psalm-var T */
             return $this->container->get($id);
         } catch (ContainerExceptionInterface $e) {
-            throw new \LogicException($this->getErrorMessage($class, $id), $e->getCode(), $e);
+            throw $this->createLogicException($class, $id, $e);
         }
     }
 
-    private function getErrorMessage(string $class, string $id): string
-    {
-        return \sprintf('Unable to find service "%s" from "%s".', $class, $id);
+    private function createLogicException(
+        string $class,
+        string $id,
+        ?ContainerExceptionInterface $previous = null
+    ): \LogicException {
+        $message = \sprintf('Unable to find service "%s" from "%s".', $class, $id);
+        $code = $previous instanceof \Throwable ? $previous->getCode() : 0;
+
+        return new \LogicException($message, $code, $previous);
     }
 }

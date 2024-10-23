@@ -28,7 +28,7 @@ interface AlphaCaptchaInterface
     /**
      * Gets the challenge.
      *
-     * @return string[] the question and the answer
+     * @return array{0: string, 1: string} the question and the answer
      */
     public function getChallenge(): array;
 }

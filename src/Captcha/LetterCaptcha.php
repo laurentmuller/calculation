@@ -17,18 +17,18 @@ namespace App\Captcha;
  */
 class LetterCaptcha extends AbstractAlphaCaptcha
 {
-    private const INDEX_MAPPING = [
-        '0' => 'first',
-        '1' => 'second',
-        '2' => 'third',
-        '3' => 'fourth',
-        '4' => 'fifth',
-        '-1' => 'last',
+    private const MAPPING = [
+        0 => 'first',
+        1 => 'second',
+        2 => 'third',
+        3 => 'fourth',
+        4 => 'fifth',
+        -1 => 'last',
     ];
 
     protected function getAnswer(string $word, int $letterIndex): string
     {
-        if (0 > $letterIndex) {
+        if ($letterIndex < 0) {
             $letterIndex = \abs($letterIndex) - 1;
             $word = \strrev($word);
         }
@@ -36,19 +36,13 @@ class LetterCaptcha extends AbstractAlphaCaptcha
         return $word[$letterIndex];
     }
 
-    protected function getLetterIndex(): int
+    protected function getMapping(): array
     {
-        return \array_rand(self::INDEX_MAPPING);
+        return self::MAPPING;
     }
 
-    protected function getQuestion(string $word, int $letterIndex): string
+    protected function getTranslatedLetter(): string
     {
-        $parameters = [
-            '%index%' => $this->trans(self::INDEX_MAPPING[$letterIndex]),
-            '%letter%' => $this->trans('letter'),
-            '%word%' => $word,
-        ];
-
-        return $this->trans('sentence', $parameters);
+        return $this->trans('letter');
     }
 }

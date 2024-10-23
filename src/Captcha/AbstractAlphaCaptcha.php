@@ -35,7 +35,7 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface
     public function getChallenge(): array
     {
         $word = $this->getRandomWord();
-        $letterIndex = $this->getLetterIndex();
+        $letterIndex = $this->getRandomIndex();
 
         return [
             $this->getQuestion($word, $letterIndex),
@@ -45,12 +45,10 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface
 
     /**
      * Finds an answer within the given source.
-     *
-     * @param string $source the source string to search in
      */
     protected function findAnswer(string $word, int $letterIndex, string $source): string
     {
-        if (0 > $letterIndex) {
+        if ($letterIndex < 0) {
             $letterIndex = \abs($letterIndex) - 1;
             $word = \strrev($word);
         }
@@ -69,14 +67,33 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface
     abstract protected function getAnswer(string $word, int $letterIndex): string;
 
     /**
-     * Gets the letter index used to get question and answer.
+     * Gets the mapping between the index and translatable letter.
+     *
+     * @return array<int, string>
      */
-    abstract protected function getLetterIndex(): int;
+    abstract protected function getMapping(): array;
 
     /**
      * Gets the question for the given word and letter index.
      */
-    abstract protected function getQuestion(string $word, int $letterIndex): string;
+    protected function getQuestion(string $word, int $letterIndex): string
+    {
+        $parameters = [
+            '%index%' => $this->getTranslatedIndex($letterIndex),
+            '%letter%' => $this->getTranslatedLetter(),
+            '%word%' => $word,
+        ];
+
+        return $this->trans('sentence', $parameters);
+    }
+
+    /**
+     * Gets the random letter index used to get question and answer.
+     */
+    protected function getRandomIndex(): int
+    {
+        return \array_rand($this->getMapping());
+    }
 
     /**
      * Gets a random word from the dictionary service.
@@ -85,6 +102,19 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface
     {
         return $this->dictionary->getRandomWord();
     }
+
+    /**
+     * Gets the translated letter index.
+     */
+    protected function getTranslatedIndex(int $letterIndex): string
+    {
+        return $this->trans($this->getMapping()[$letterIndex]);
+    }
+
+    /**
+     * Gets the translated letter name.
+     */
+    abstract protected function getTranslatedLetter(): string;
 
     /**
      * Translates the given message with the 'captcha' domain.

@@ -24,7 +24,7 @@ class LetterCaptchaTest extends AlphaCaptchaTestCase
     public function testNegativeIndex(): void
     {
         $captcha = new class($this->service, $this->translator) extends LetterCaptcha {
-            protected function getLetterIndex(): int
+            protected function getRandomIndex(): int
             {
                 return -1;
             }

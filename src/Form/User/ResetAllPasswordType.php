@@ -14,10 +14,10 @@ namespace App\Form\User;
 
 use App\Repository\UserRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -59,7 +59,7 @@ class ResetAllPasswordType extends AbstractType
         return ChoiceType::class;
     }
 
-    private function onPreSubmit(FormEvent $event): void
+    private function onPreSubmit(PreSubmitEvent $event): void
     {
         /** @var array $data */
         $data = $event->getData();

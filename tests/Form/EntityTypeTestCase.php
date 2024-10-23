@@ -44,7 +44,7 @@ abstract class EntityTypeTestCase extends TypeTestCase
     }
 
     /**
-     * Gets the data to test.
+     * Gets the data under test.
      *
      * @return array<string, mixed> an array where keys are field names
      */
@@ -94,9 +94,6 @@ abstract class EntityTypeTestCase extends TypeTestCase
         return $entity;
     }
 
-    /**
-     * Test.
-     */
     protected function submitValidData(): void
     {
         $entityClass = $this->getEntityClass();

@@ -41,6 +41,14 @@ class ResetAllPasswordTypeTest extends TypeTestCase
         parent::setUp();
     }
 
+    public function testSubmitNoData(): void
+    {
+        $form = $this->factory->create(ResetAllPasswordType::class);
+        $form->submit([]);
+        self::assertTrue($form->isSynchronized());
+        self::assertFalse($form->isValid());
+    }
+
     public function testSubmitValidData(): void
     {
         $form = $this->factory->create(ResetAllPasswordType::class);

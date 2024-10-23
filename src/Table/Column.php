@@ -16,6 +16,7 @@ use App\Interfaces\EntityInterface;
 use App\Interfaces\SortModeInterface;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
+use Symfony\Component\PropertyAccess\Exception\ExceptionInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -165,9 +166,9 @@ class Column implements \Stringable, SortModeInterface
 
                 try {
                     $accessor->setValue($column, $key, $value);
-                } catch (\Exception $e) {
+                } catch (ExceptionInterface $e) {
                     $message = \sprintf("Cannot set the property '%s'.", $key);
-                    throw new \InvalidArgumentException($message, (int) $e->getCode(), $e);
+                    throw new \InvalidArgumentException($message, $e->getCode(), $e);
                 }
             }
 

@@ -24,7 +24,7 @@ class ConsonantCaptchaTest extends AlphaCaptchaTestCase
     public function testNegativeIndex(): void
     {
         $captcha = new class($this->service, $this->translator) extends ConsonantCaptcha {
-            protected function getLetterIndex(): int
+            protected function getRandomIndex(): int
             {
                 return -1;
             }

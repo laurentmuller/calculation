@@ -53,7 +53,7 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
         iterable $captchas,
         TranslatorInterface $translator
     ) {
-        $this->captcha = $this->randomCaptcha($captchas);
+        $this->captcha = $this->getRandomCaptcha($captchas);
         $this->dataError = $translator->trans('required', [], 'captcha');
     }
 
@@ -85,11 +85,7 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
             'label_attr' => [
                 'class' => 'mb-0',
             ],
-            'constraints' => [
-                new Callback(function (?string $data, ExecutionContextInterface $context): void {
-                    $this->validate($data, $context);
-                }),
-            ],
+            'constraints' => [new Callback($this->validate(...))],
             'mapped' => false,
         ]);
     }
@@ -99,22 +95,26 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
         return TextType::class;
     }
 
-    public function validate(?string $data, ExecutionContextInterface $context): void
-    {
-        if (!StringUtils::isString($data) || !$this->captcha->checkAnswer($data, (string) $this->previousAnswer)) {
-            $context->buildViolation('error')
-                ->setTranslationDomain('captcha')
-                ->addViolation();
-        }
-    }
-
     /**
      * @param iterable<AlphaCaptchaInterface> $captchas
      */
-    private function randomCaptcha(iterable $captchas): AlphaCaptchaInterface
+    private function getRandomCaptcha(iterable $captchas): AlphaCaptchaInterface
     {
-        $captchas = $captchas instanceof \Traversable ? \iterator_to_array($captchas) : $captchas;
+        if ($captchas instanceof \Traversable) {
+            $captchas = \iterator_to_array($captchas);
+        }
 
         return $captchas[\array_rand($captchas)];
+    }
+
+    private function validate(?string $givenAnswer, ExecutionContextInterface $context): void
+    {
+        if (StringUtils::isString($givenAnswer) && StringUtils::isString($this->previousAnswer)
+            && $this->captcha->checkAnswer($givenAnswer, $this->previousAnswer)) {
+            return;
+        }
+        $context->buildViolation('error')
+            ->setTranslationDomain('captcha')
+            ->addViolation();
     }
 }

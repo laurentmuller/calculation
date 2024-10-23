@@ -154,7 +154,7 @@ class ResponseListener
 
     private function replaceNonce(string $csp): string
     {
-        return \str_replace('nonce', $this->service->getCspNonce(), $csp);
+        return \str_replace('%nonce%', $this->service->getCspNonce(), $csp);
     }
 
     /**
@@ -170,7 +170,7 @@ class ResponseListener
         );
 
         return \array_map(
-            fn (array $subject): array => \str_replace('report', $reportUrl, $subject),
+            fn (array $subject): array => \str_replace('%report%', $reportUrl, $subject),
             $array
         );
     }

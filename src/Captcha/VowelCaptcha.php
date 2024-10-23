@@ -17,33 +17,27 @@ namespace App\Captcha;
  */
 class VowelCaptcha extends AbstractAlphaCaptcha
 {
-    private const INDEX_MAPPING = [
-        '0' => 'first',
-        '1' => 'second',
-        '2' => 'third',
-        '-1' => 'last',
+    private const MAPPING = [
+        0 => 'first',
+        1 => 'second',
+        2 => 'third',
+        -1 => 'last',
     ];
 
-    private const VOWEL = 'AEIOUY';
+    private const SOURCE = 'AEIOUY';
 
     protected function getAnswer(string $word, int $letterIndex): string
     {
-        return $this->findAnswer($word, $letterIndex, self::VOWEL);
+        return $this->findAnswer($word, $letterIndex, self::SOURCE);
     }
 
-    protected function getLetterIndex(): int
+    protected function getMapping(): array
     {
-        return \array_rand(self::INDEX_MAPPING);
+        return self::MAPPING;
     }
 
-    protected function getQuestion(string $word, int $letterIndex): string
+    protected function getTranslatedLetter(): string
     {
-        $parameters = [
-            '%index%' => $this->trans(self::INDEX_MAPPING[$letterIndex]),
-            '%letter%' => $this->trans('vowel'),
-            '%word%' => $word,
-        ];
-
-        return $this->trans('sentence', $parameters);
+        return $this->trans('vowel');
     }
 }

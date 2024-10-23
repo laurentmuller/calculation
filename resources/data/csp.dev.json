@@ -21,10 +21,10 @@
         "'self'"
     ],
     "script-src": [
-        "nonce"
+        "%nonce%"
     ],
     "script-src-elem": [
-        "nonce",
+        "%nonce%",
         "https://www.google.com",
         "https://api.iconify.design"
     ],

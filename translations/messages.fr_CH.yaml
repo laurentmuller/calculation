@@ -911,7 +911,6 @@ password:
     security_numbers: Un chiffre est obligatoire
     security_email: Le mot de passe ne doit pas être une adresse e-mail
     security_strength_level: Force minimum
-    security_compromised: Le mot de passe ne doit pas être compromis
 pivot:
     column: Colonne
     fields:

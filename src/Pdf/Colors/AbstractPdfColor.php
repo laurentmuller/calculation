@@ -127,8 +127,8 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
         $rgb = (string) \preg_replace('/[^0-9A-F]/i', '', $rgb);
 
         return match (\strlen($rgb)) {
-            6 => self::createFrom6Chars($rgb),
             3 => self::createFrom3Chars($rgb),
+            6 => self::createFrom6Chars($rgb),
             default => null,
         };
     }
@@ -238,19 +238,20 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
 
     private static function createFrom3Chars(string $rgb): static
     {
-        /** @psalm-var int<0, 255> $r */
-        $r = \hexdec(\str_repeat(\substr($rgb, 0, 1), 2));
-        /** @psalm-var int<0, 255> $g */
-        $g = \hexdec(\str_repeat(\substr($rgb, 1, 1), 2));
-        /** @psalm-var int<0, 255> $b */
-        $b = \hexdec(\str_repeat(\substr($rgb, 2, 1), 2));
+        $r = self::hexdec(\str_repeat(\substr($rgb, 0, 1), 2));
+        $b = self::hexdec(\str_repeat(\substr($rgb, 1, 1), 2));
+        $g = self::hexdec(\str_repeat(\substr($rgb, 2, 1), 2));
 
         return new static($r, $g, $b);
     }
 
     private static function createFrom6Chars(string $rgb): static
     {
-        return self::createFromInt((int) \hexdec($rgb));
+        $r = self::hexdec(\substr($rgb, 0, 2));
+        $g = self::hexdec(\substr($rgb, 2, 2));
+        $b = self::hexdec(\substr($rgb, 4, 2));
+
+        return new static($r, $g, $b);
     }
 
     private static function createFromInt(int $rgb): static
@@ -263,5 +264,14 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
         $b = 0xFF & $rgb;
 
         return new static($r, $g, $b);
+    }
+
+    /**
+     * @psalm-return int<0, 255>
+     */
+    private static function hexdec(string $value): int
+    {
+        /** @psalm-var int<0, 255> */
+        return (int) \hexdec($value);
     }
 }

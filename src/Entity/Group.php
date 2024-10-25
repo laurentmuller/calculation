@@ -31,6 +31,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(fields: 'code', message: 'group.unique_code')]
 class Group extends AbstractCodeEntity
 {
+    /**
+     * @use ValidateMarginsTrait<int, GroupMargin>
+     */
     use ValidateMarginsTrait;
 
     /**

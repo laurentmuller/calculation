@@ -209,6 +209,12 @@ class PdfColorTest extends TestCase
         self::assertEqualValues($color, 0, 128, 0);
     }
 
+    public function testColorDarkRed(): void
+    {
+        $color = PdfFillColor::darkRed();
+        self::assertEqualValues($color, 128, 0, 0);
+    }
+
     public function testColorGreen(): void
     {
         $color = PdfFillColor::green();

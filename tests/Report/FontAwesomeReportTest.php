@@ -47,7 +47,7 @@ class FontAwesomeReportTest extends TestCase
     public function testRenderAliases(): void
     {
         $image = $this->createImage();
-        $svgDirectory = __DIR__ . '/../Data/images';
+        $svgDirectory = $this->getSvgDirectory();
         $controller = $this->createMock(AbstractController::class);
         $service = $this->createMock(FontAwesomeService::class);
         $service->method('getImage')
@@ -72,8 +72,7 @@ class FontAwesomeReportTest extends TestCase
     public function testRenderImages(): void
     {
         $image = $this->createImage();
-        $svgDirectory = __DIR__ . '/../Data/images';
-
+        $svgDirectory = $this->getSvgDirectory();
         $controller = $this->createMock(AbstractController::class);
         $service = $this->createMock(FontAwesomeService::class);
         $service->method('getImage')
@@ -92,7 +91,7 @@ class FontAwesomeReportTest extends TestCase
     public function testRenderNoAlias(): void
     {
         $image = $this->createImage();
-        $svgDirectory = __DIR__ . '/../Data/images';
+        $svgDirectory = $this->getSvgDirectory();
         $controller = $this->createMock(AbstractController::class);
         $service = $this->createMock(FontAwesomeService::class);
         $service->method('getImage')
@@ -113,9 +112,14 @@ class FontAwesomeReportTest extends TestCase
 
     private function createImage(): FontAwesomeImage
     {
-        $path = __DIR__ . '/../Data/images/example.png';
+        $path = $this->getSvgDirectory() . '/example.png';
         $content = FileUtils::readFile($path);
 
         return new FontAwesomeImage($content, 124, 147, 96);
+    }
+
+    private function getSvgDirectory(): string
+    {
+        return __DIR__ . '/../Data/images';
     }
 }

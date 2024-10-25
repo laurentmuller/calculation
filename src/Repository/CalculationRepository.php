@@ -720,7 +720,7 @@ class CalculationRepository extends AbstractRepository
             'date',
             'customer',
             'description' => "e.$column",
-            'state' => 's.code',
+            'stateCode' => 's.code',
             default => 'e.id',
         };
     }

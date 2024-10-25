@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
-use App\Utils\FormatUtils;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -22,8 +21,6 @@ use Symfony\Component\Validator\Constraint;
  */
 class PasswordValidator extends AbstractConstraintValidator
 {
-    private const API_ENDPOINT = 'https://api.pwnedpasswords.com/range/%s';
-
     public function __construct()
     {
         parent::__construct(Password::class);
@@ -44,10 +41,9 @@ class PasswordValidator extends AbstractConstraintValidator
     /**
      * Adds a violation.
      */
-    private function addViolation(string $message, string $value, string $code, array $parameters = []): true
+    private function addViolation(string $message, string $value, string $code): true
     {
         $this->context->buildViolation($message)
-            ->setParameters($parameters)
             ->setInvalidValue($value)
             ->setCode($code)
             ->addViolation();
@@ -65,7 +61,6 @@ class PasswordValidator extends AbstractConstraintValidator
         $this->checkNumber($constraint, $value);
         $this->checkSpecialChar($constraint, $value);
         $this->checkEmail($constraint, $value);
-        $this->checkCompromised($constraint, $value);
     }
 
     /**
@@ -74,11 +69,10 @@ class PasswordValidator extends AbstractConstraintValidator
     private function checkAny(string $value, Password $constraint): void
     {
         if (!($this->checkLetters($constraint, $value)
-        || $this->checkCaseDiff($constraint, $value)
-        || $this->checkNumber($constraint, $value)
-        || $this->checkSpecialChar($constraint, $value)
-        || $this->checkEmail($constraint, $value))) {
-            $this->checkCompromised($constraint, $value);
+            || $this->checkCaseDiff($constraint, $value)
+            || $this->checkNumber($constraint, $value)
+            || $this->checkSpecialChar($constraint, $value))) {
+            $this->checkEmail($constraint, $value);
         }
     }
 
@@ -97,34 +91,13 @@ class PasswordValidator extends AbstractConstraintValidator
     }
 
     /**
-     * Check if the password is compromised.
-     */
-    private function checkCompromised(Password $constraint, string $value): void
-    {
-        if (!$constraint->compromised) {
-            return;
-        }
-
-        $count = $this->getPasswordCount($value);
-        if (0 === $count) {
-            return;
-        }
-
-        $parameters = ['{{count}}' => FormatUtils::formatInt($count)];
-
-        $this->addViolation($constraint->compromised_message, $value, Password::COMPROMISED_ERROR, $parameters);
-    }
-
-    /**
      * Checks if the value is an e-mail.
      */
-    private function checkEmail(Password $constraint, string $value): bool
+    private function checkEmail(Password $constraint, string $value): void
     {
         if ($constraint->email && false !== \filter_var($value, \FILTER_VALIDATE_EMAIL)) {
-            return $this->addViolation($constraint->email_message, $value, Password::EMAIL_ERROR);
+            $this->addViolation($constraint->email_message, $value, Password::EMAIL_ERROR);
         }
-
-        return false;
     }
 
     /**
@@ -167,37 +140,6 @@ class PasswordValidator extends AbstractConstraintValidator
             $constraint->special_char_message,
             Password::SPECIAL_CHAR_ERROR
         );
-    }
-
-    /**
-     * Check if the password has been compromised in a data breach.
-     */
-    private function getPasswordCount(string $password): int
-    {
-        // hash
-        $hash = \strtoupper(\sha1($password));
-        $hashPrefix = \substr($hash, 0, 5);
-
-        // load
-        $url = \sprintf(self::API_ENDPOINT, $hashPrefix);
-        $lines = \file($url, \FILE_IGNORE_NEW_LINES | \FILE_SKIP_EMPTY_LINES);
-        if (false === $lines || [] === $lines) {
-            return 0;
-        }
-
-        // search
-        foreach ($lines as $line) {
-            if (!\str_contains($line, ':')) {
-                continue;
-            }
-
-            [$hashSuffix, $count] = \explode(':', $line);
-            if ($hashPrefix . $hashSuffix === $hash) {
-                return (int) $count;
-            }
-        }
-
-        return 0;
     }
 
     /**

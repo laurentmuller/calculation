@@ -335,7 +335,6 @@ interface PropertyServiceInterface
         'security_special_char',
         'security_case_diff',
         'security_email',
-        'security_compromised',
     ];
 
     /**

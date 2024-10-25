@@ -22,8 +22,6 @@ class Password extends Constraint
 {
     final public const CASE_DIFF_ERROR = '4c725240-da48-42df-ba9a-ce09a16ab1b5';
 
-    final public const COMPROMISED_ERROR = 'd042c39d-b2d3-4ef3-97b8-10948aed2988';
-
     final public const EMAIL_ERROR = '85386dde-1b29-42d4-9b7c-de03693fb963';
 
     final public const LETTERS_ERROR = 'cc369ec9-ea3d-4d27-8f96-6e03bfb63323';
@@ -38,7 +36,6 @@ class Password extends Constraint
         self::NUMBERS_ERROR => 'NUMBERS_ERROR',
         self::SPECIAL_CHAR_ERROR => 'SPECIAL_CHAR_ERROR',
         self::EMAIL_ERROR => 'EMAIL_ERROR',
-        self::COMPROMISED_ERROR => 'COMPROMISED_ERROR',
     ];
 
     /**
@@ -55,16 +52,6 @@ class Password extends Constraint
      * Case diff error message.
      */
     public string $case_diff_message = 'password.case_diff';
-
-    /**
-     * Checks if the password is compromised.
-     */
-    public bool $compromised = false;
-
-    /**
-     *  Password comprise error message.
-     */
-    public string $compromised_message = 'password.compromised';
 
     /**
      * Checks if the password is an e-mail.
@@ -116,7 +103,6 @@ class Password extends Constraint
         ?bool $numbers = null,
         ?bool $special_char = null,
         ?bool $email = null,
-        ?bool $compromised = null,
         ?array $options = null,
         ?array $groups = null,
         mixed $payload = null
@@ -129,6 +115,5 @@ class Password extends Constraint
         $this->numbers = $numbers ?? $this->numbers;
         $this->special_char = $special_char ?? $this->special_char;
         $this->email = $email ?? $this->email;
-        $this->compromised = $compromised ?? $this->compromised;
     }
 }

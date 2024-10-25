@@ -38,11 +38,7 @@ class ProfileChangePasswordType extends AbstractEntityType
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults([
-            'constraints' => [
-                new Callback(function (User $user, ExecutionContextInterface $context): void {
-                    $this->validate($context);
-                }),
-            ],
+            'constraints' => [new Callback($this->validate(...))],
         ]);
     }
 
@@ -76,8 +72,12 @@ class ProfileChangePasswordType extends AbstractEntityType
     /**
      * Conditional validation depending on the check password checkbox.
      */
-    private function validate(ExecutionContextInterface $context): void
+    private function validate(?User $user, ExecutionContextInterface $context): void
     {
+        if (!$user instanceof User) {
+            return;
+        }
+
         /** @psalm-var FormInterface<mixed> $root */
         $root = $context->getRoot();
 

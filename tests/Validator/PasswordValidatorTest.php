@@ -29,7 +29,6 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         yield ['letters'];
         yield ['numbers'];
         yield ['special_char'];
-        yield ['compromised'];
     }
 
     public static function getInvalidValues(): \Iterator
@@ -42,51 +41,26 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         yield ['123', ['special_char' => true], 'password.special_char', Password::SPECIAL_CHAR_ERROR];
     }
 
-    public static function getPasswords(): \Iterator
-    {
-        yield ['123456', true];
-        yield ['123*9-*55sA', false];
-    }
-
     public static function getValidValues(): \Iterator
     {
         yield ['ABC abc', ['case_diff' => true]];
         yield ['test', ['email' => true]];
         yield ['abc', ['letters' => true]];
         yield ['123', ['numbers' => true]];
-        yield ['123*9-*55sA', ['compromised' => true]];
         yield ['123@', ['special_char' => true]];
     }
 
     public function testAll(): void
     {
-        $constraint = $this->createPassword(['all' => true]);
+        $constraint = $this->createConstraint(['all' => true]);
         $this->validator->validate('zTp9F??TvRcG?+Z', $constraint);
         self::assertNoViolation();
-    }
-
-    #[DataProvider('getPasswords')]
-    public function testCompromised(string $value, bool $violation): void
-    {
-        $options = ['compromised' => true];
-        $constraint = $this->createPassword($options);
-        $this->validator->validate($value, $constraint);
-        if ($violation) {
-            $violations = $this->context->getViolations();
-            self::assertCount(1, $violations);
-            $first = $violations[0];
-            self::assertNotNull($first);
-            self::assertSame('password.compromised', $first->getMessageTemplate());
-            self::assertSame($value, $first->getInvalidValue());
-        } else {
-            self::assertNoViolation();
-        }
     }
 
     #[DataProvider('getConstraints')]
     public function testEmptyIsValid(string $constraint): void
     {
-        $constraint = $this->createPassword([$constraint => true]);
+        $constraint = $this->createConstraint([$constraint => true]);
         $this->validator->validate('', $constraint);
         self::assertNoViolation();
     }
@@ -102,7 +76,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         string $code,
         array $parameters = []
     ): void {
-        $constraint = $this->createPassword($options);
+        $constraint = $this->createConstraint($options);
         $this->validator->validate($value, $constraint);
         $this->buildViolation($message)
             ->setParameters($parameters)
@@ -114,7 +88,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     #[DataProvider('getConstraints')]
     public function testNullIsValid(string $constraint): void
     {
-        $constraint = $this->createPassword([$constraint => true]);
+        $constraint = $this->createConstraint([$constraint => true]);
         $this->validator->validate(null, $constraint);
         self::assertNoViolation();
     }
@@ -125,7 +99,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     #[DataProvider('getValidValues')]
     public function testValid(mixed $value, array $options): void
     {
-        $constraint = $this->createPassword($options);
+        $constraint = $this->createConstraint($options);
         $this->validator->validate($value, $constraint);
         self::assertNoViolation();
     }
@@ -138,7 +112,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     /**
      * @param array<string, bool> $options
      */
-    private function createPassword(array $options): Password
+    private function createConstraint(array $options): Password
     {
         return new Password(
             all: $options['all'] ?? false,
@@ -147,7 +121,6 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
             numbers: $options['numbers'] ?? false,
             special_char: $options['special_char'] ?? false,
             email: $options['email'] ?? false,
-            compromised: $options['compromised'] ?? false,
         );
     }
 }

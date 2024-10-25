@@ -32,6 +32,7 @@ class SimpleEditorTypeTest extends TypeTestCase
         $form = $this->factory->create(SimpleEditorType::class);
         $form->submit('Fake Text for testing purpose.');
         self::assertTrue($form->isSynchronized());
+        self::assertTrue($form->isSubmitted());
         self::assertTrue($form->isValid());
     }
 
@@ -39,8 +40,6 @@ class SimpleEditorTypeTest extends TypeTestCase
     {
         $path = __DIR__ . '/../../../resources/data/simple_editor_actions.json';
 
-        return [
-            new SimpleEditorType($path),
-        ];
+        return [new SimpleEditorType($path)];
     }
 }

@@ -17,11 +17,13 @@ use App\Form\Type\AlphaCaptchaType;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
+use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Validator\Validation;
 
 class AlphaCaptchaTypeTest extends TypeTestCase
 {
@@ -29,8 +31,11 @@ class AlphaCaptchaTypeTest extends TypeTestCase
     use TranslatorMockTrait;
     use ValidatorExtensionTrait;
 
+    private bool $valid = true;
+
     public function testFormView(): void
     {
+        $this->valid = true;
         $view = $this->factory->create(AlphaCaptchaType::class)
             ->createView();
         self::assertArrayHasKey('id', $view->vars);
@@ -38,12 +43,14 @@ class AlphaCaptchaTypeTest extends TypeTestCase
         self::assertSame('question', $view->vars['question']);
     }
 
-    public function testSubmit(): void
+    public function testSubmitInvalid(): void
     {
-        $form = $this->factory->create(AlphaCaptchaType::class);
-        $form->submit('Test');
-        self::assertTrue($form->isSubmitted());
-        self::assertTrue($form->isValid());
+        $this->validateSubmit(false);
+    }
+
+    public function testSubmitValid(): void
+    {
+        $this->validateSubmit(true);
     }
 
     /**
@@ -52,6 +59,8 @@ class AlphaCaptchaTypeTest extends TypeTestCase
     protected function getPreloadedExtensions(): array
     {
         $session = new Session(new MockArraySessionStorage());
+        $session->set('alpha_captcha_answer', 'fake');
+
         $requestStack = $this->createMock(RequestStack::class);
         $requestStack->method('getSession')
             ->willReturn($session);
@@ -60,14 +69,30 @@ class AlphaCaptchaTypeTest extends TypeTestCase
         $alphaCaptcha->method('getChallenge')
             ->willReturn(['question', 'nextAnswer']);
         $alphaCaptcha->method('checkAnswer')
-            ->willReturn(true);
+            ->willReturnCallback(fn (): bool => $this->valid);
 
+        $iterable = new \ArrayIterator([$alphaCaptcha]);
         $translator = $this->createMockTranslator();
-        $captchaType = new AlphaCaptchaType([$alphaCaptcha], $translator);
+        $captchaType = new AlphaCaptchaType($iterable, $translator);
         $captchaType->setRequestStack($requestStack);
 
-        return [
-            $captchaType,
-        ];
+        return [$captchaType];
+    }
+
+    protected function getValidatorExtension(): ValidatorExtension
+    {
+        $validator = Validation::createValidator();
+
+        return new ValidatorExtension($validator);
+    }
+
+    private function validateSubmit(bool $valid): void
+    {
+        $this->valid = $valid;
+        $form = $this->factory->create(AlphaCaptchaType::class);
+        $form->submit('nextAnswer');
+        self::assertTrue($form->isSubmitted());
+        self::assertTrue($form->isSynchronized());
+        self::assertSame($valid, $form->isValid());
     }
 }

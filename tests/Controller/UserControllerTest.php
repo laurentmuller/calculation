@@ -46,6 +46,9 @@ class UserControllerTest extends EntityControllerTestCase
         yield ['/user/edit/1', self::ROLE_ADMIN];
         yield ['/user/edit/1', self::ROLE_SUPER_ADMIN];
 
+        // for last login
+        yield ['/user/edit/2', self::ROLE_ADMIN];
+
         yield ['/user/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user/delete/1', self::ROLE_ADMIN];
 

@@ -38,6 +38,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class TaskItem extends AbstractEntity implements \Countable, ComparableInterface, ParentTimestampableInterface, PositionInterface
 {
     use PositionTrait;
+    /**
+     * @use ValidateMarginsTrait<int, TaskItemMargin>
+     */
     use ValidateMarginsTrait;
 
     /**

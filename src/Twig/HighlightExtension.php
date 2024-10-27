@@ -75,10 +75,7 @@ class HighlightExtension extends AbstractExtension
         /** @psalm-var resource $output */
         $output = \fopen('php://memory', 'r+');
         $dumper->dump($data, $output);
-        $content = \stream_get_contents($output, -1, 0);
-        if (!\is_string($content)) {
-            return null;
-        }
+        $content = (string) \stream_get_contents($output, -1, 0);
         $content = StringUtils::pregReplace(self::PHP_PATTERNS, $content);
         if ('' !== $id) {
             $content = (string) \preg_replace('/highlight-php-(\d+)/', $id, $content, 1);

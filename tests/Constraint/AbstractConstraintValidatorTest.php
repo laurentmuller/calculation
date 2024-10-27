@@ -10,11 +10,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Validator;
+namespace App\Tests\Constraint;
 
-use App\Validator\AbstractConstraintValidator;
-use App\Validator\Password;
-use App\Validator\Strength;
+use App\Constraint\AbstractConstraintValidator;
+use App\Constraint\Password;
+use App\Constraint\Strength;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;

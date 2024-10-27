@@ -170,7 +170,7 @@
     },
     "scripts": {
         "app-lint": [
-            "@php bin/console lint:yaml translations",
+            "@php bin/console lint:yaml translations .github/workflows --parse-tags",
             "@php bin/console lint:twig templates",
             "@php bin/console lint:container",
             "@php bin/console doctrine:schema:validate --skip-sync",

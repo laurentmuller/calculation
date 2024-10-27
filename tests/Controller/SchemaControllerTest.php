@@ -29,5 +29,7 @@ class SchemaControllerTest extends ControllerTestCase
         yield ['/schema/sy_Calculation', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/schema/sy_Calculation', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
         yield ['/schema/sy_Calculation', self::ROLE_SUPER_ADMIN];
+
+        yield ['/schema/fake_table', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
     }
 }

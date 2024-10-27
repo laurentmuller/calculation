@@ -40,14 +40,15 @@ final class SwitchTokenParser extends AbstractTokenParser
         $stream = $this->parser->getStream();
         $expressionParser = $this->parser->getExpressionParser();
         /** @psalm-var array<string, Node> $nodes */
-        $nodes = [
-            'value' => $expressionParser->parseExpression(),
-        ];
+        $nodes = ['value' => $expressionParser->parseExpression()];
+
         $stream->expect(Token::BLOCK_END_TYPE);
-        while (Token::TEXT_TYPE === $stream->getCurrent()->getType() && '' === \trim((string) $stream->getCurrent()->getValue())) {
+        while (Token::TEXT_TYPE === $stream->getCurrent()->getType()
+            && '' === \trim((string) $stream->getCurrent()->getValue())) {
             $stream->next();
         }
         $stream->expect(Token::BLOCK_START_TYPE);
+
         $cases = [];
         $end = false;
         while (!$end) {

@@ -10,11 +10,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Validator;
+namespace App\Tests\Constraint;
 
+use App\Constraint\Recaptcha;
+use App\Constraint\RecaptchaValidator;
 use App\Service\RecaptchaService;
-use App\Validator\Recaptcha;
-use App\Validator\RecaptchaValidator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use ReCaptcha\Response;

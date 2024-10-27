@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
+use App\Constraint\Strength;
 use App\Enums\StrengthLevel;
 use App\Tests\TranslatorMockTrait;
 use App\Traits\StrengthLevelTranslatorTrait;
-use App\Validator\Strength;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;

@@ -10,10 +10,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Validator;
+namespace App\Tests\Constraint;
 
-use App\Validator\Password;
-use App\Validator\PasswordValidator;
+use App\Constraint\Password;
+use App\Constraint\PasswordValidator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 

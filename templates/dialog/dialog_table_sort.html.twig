@@ -1,6 +1,7 @@
 {% from 'macros/_icons.html.twig' import icon, button_close_modal %}
 <div class="modal fade" id="modal-sort" role="dialog" aria-labelledby="modal-sort-title" aria-hidden="true" tabindex="-1">
     <div class="modal-dialog">
+        {% set column = columns|filter(c => c.default)|first %}
         <div class="modal-content">
             <div class="modal-header cursor-move">
                 <h5 class="modal-title" id="modal-sort-title">{{ icon('sort-amount-down-alt fa-fw', 'list.sort_title') }}</h5>
@@ -32,20 +33,15 @@
                         </label>
                     </div>
                 </div>
+                {% if column %}
+                    {% set key = column.order == 'asc' ? 'list.sort_ascending_title' : 'list.sort_descending_title' %}
+                    <div class="small text-body-tertiary mt-2">{{ key|trans({'%name%': column.title}) }}</div>
+                {% endif %}
             </div>
             <div class="modal-footer justify-content-start">
                 <button type="button" class="btn btn-form btn-primary" id="sort-button">{{- 'common.button_ok'|trans -}}</button>
-                {% set column = columns|filter(c => c.default)|first %}
                 {% if column %}
-                    {% set key = column.order == 'asc' ? 'list.sort_ascending_title' : 'list.sort_descending_title' %}
-                    {% set text = key|trans({'%name%': column.title}) %}
-                    <button type="button" class="btn btn-form btn-success" id="sort-default-button"
-                            data-bs-toggle="tooltip"
-                            data-bs-trigger="hover"
-                            data-bs-title="{{ text }}"
-                            data-bs-html="true"
-                            data-bs-placement="bottom"
-                            data-bs-custom-class="tooltip-lg">
+                    <button type="button" class="btn btn-form btn-success" id="sort-default-button">
                         {{- 'list.sort_default_title'|trans -}}
                     </button>
                 {% endif %}

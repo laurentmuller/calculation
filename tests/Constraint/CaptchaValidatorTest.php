@@ -10,11 +10,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Validator;
+namespace App\Tests\Constraint;
 
+use App\Constraint\Captcha;
+use App\Constraint\CaptchaValidator;
 use App\Service\CaptchaImageService;
-use App\Validator\Captcha;
-use App\Validator\CaptchaValidator;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 

@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Constraint\Strength;
 use App\Enums\StrengthLevel;
-use App\Validator\Strength;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**

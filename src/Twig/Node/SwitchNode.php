@@ -38,9 +38,6 @@ final class SwitchNode extends Node
         /** @psalm-var Node[] $cases */
         $cases = $this->getNode('cases');
         foreach ($cases as $case) {
-            if (!$case->hasNode('body')) {
-                continue;
-            }
             /** @psalm-var Node[] $values */
             $values = $case->getNode('values');
             foreach ($values as $value) {

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constraint\Password;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
@@ -29,7 +30,6 @@ use App\Repository\GlobalPropertyRepository;
 use App\Traits\MathTrait;
 use App\Traits\PropertyServiceTrait;
 use App\Utils\StringUtils;
-use App\Validator\Password;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;

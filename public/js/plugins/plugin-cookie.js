@@ -9,11 +9,10 @@
          * @param {string} key - the cookie key.
          * @param {string|number|boolean} value - the cookie value.
          * @param {string} path - the cookie path.
-         * @param {string|Date} [expires] - the expires date or null to use default (+1 year).
-         * @param {string} samesite - the same site behavior.
-         * @param {boolean} secure - true if secure.
+         * @param {string|Date} [expires] - the expired date or null to use default (+1 year).
+         * @param {string} samesite - the same site behavior ('strict', 'lax' or 'none').
          */
-        setValue: function (key, value, path = '/', expires = null, samesite = 'lax', secure = true) {
+        setValue: function (key, value, path = '/', expires = null, samesite = 'lax') {
             if (!expires) {
                 expires = new Date();
                 expires.setFullYear(expires.getFullYear() + 1);
@@ -25,7 +24,7 @@
                 value = JSON.stringify(value);
             }
             let cookie = `${key.toUpperCase()}=${value};expires=${expires};path=${path};samesite=${samesite};`;
-            if (secure) {
+            if (window.location.protocol === 'https:') {
                 cookie += 'secure';
             }
             document.cookie = cookie;

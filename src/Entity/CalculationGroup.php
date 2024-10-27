@@ -222,7 +222,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     }
 
     /**
-     * Checks whether the categories are empty (contains no categories).
+     * Checks whether the categories are empty (contains no category).
      *
      * @return bool true if the groups are empty, false otherwise
      */

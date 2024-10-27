@@ -10,12 +10,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Validator;
+namespace App\Tests\Constraint;
 
+use App\Constraint\Strength;
+use App\Constraint\StrengthValidator;
 use App\Enums\StrengthLevel;
 use App\Tests\TranslatorMockTrait;
-use App\Validator\Strength;
-use App\Validator\StrengthValidator;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;

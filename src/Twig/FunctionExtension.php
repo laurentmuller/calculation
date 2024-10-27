@@ -34,18 +34,18 @@ final class FunctionExtension extends AbstractExtension
 {
     use ImageSizeTrait;
 
-    private readonly string $webDir;
+    private readonly string $publicDir;
 
     public function __construct(
         #[Autowire('%kernel.project_dir%/public')]
-        string $webDir,
+        string $publicDir,
         #[Autowire(service: 'twig.extension.assets')]
         private readonly AssetExtension $extension,
         private readonly NonceService $service,
         private readonly UploaderHelper $helper,
         private readonly UrlGeneratorService $generator,
     ) {
-        $this->webDir = FileUtils::normalize($webDir);
+        $this->publicDir = FileUtils::normalize($publicDir);
     }
 
     public function getFunctions(): array
@@ -94,7 +94,7 @@ final class FunctionExtension extends AbstractExtension
             return false;
         }
 
-        return StringUtils::startWith($file, $this->webDir);
+        return StringUtils::startWith($file, $this->publicDir);
     }
 
     /**
@@ -199,7 +199,7 @@ final class FunctionExtension extends AbstractExtension
         if (!StringUtils::isString($path)) {
             return null;
         }
-        $path = FileUtils::buildPath($this->webDir, $path);
+        $path = FileUtils::buildPath($this->publicDir, $path);
         $file = \realpath($path);
         if (false === $file) {
             return null;

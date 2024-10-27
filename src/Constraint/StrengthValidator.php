@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Validator;
+namespace App\Constraint;
 
 use App\Enums\StrengthLevel;
 use App\Traits\StrengthLevelTranslatorTrait;

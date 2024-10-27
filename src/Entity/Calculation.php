@@ -685,7 +685,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Remove the duplicate items.
      *
-     * All empty groups after deletion of the items are also removed.
+     * All empty categories and groups after deletion of the items are also removed.
      * The total of these calculations must be updated after this return call.
      *
      * @return int the number of items removed
@@ -712,7 +712,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Remove the empty items.
      *
-     * All empty groups after deletion of the items are also removed.
+     * All empty categories and groups after deletion of the items are also removed.
      * The total of these calculations must be updated after this return call.
      *
      * @return int the number of items removed
@@ -921,10 +921,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Remove the given item.
      *
-     * If the category and the parent's group are empty after deletion of the item, the category and the group
-     * are also deleted.
-     *
-     * @param CalculationItem $item the item to remove
+     * The parent's category is removed, if empty after item deletion.
+     * The parent's group is removed, if empty after category deletion.
      */
     private function removeItem(CalculationItem $item): bool
     {

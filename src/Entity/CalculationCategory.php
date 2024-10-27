@@ -198,7 +198,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
     }
 
     /**
-     * Checks whether the category is empty (contains no items).
+     * Checks whether the category is empty (contains no item).
      *
      * @return bool true if groups are empty, false otherwise
      */

@@ -20,7 +20,7 @@ class PdfColumnTest extends TestCase
 {
     public function testAlignment(): void
     {
-        $actual = new PdfColumn(null);
+        $actual = new PdfColumn();
         self::assertSame(PdfTextAlignment::LEFT, $actual->getAlignment());
         $actual->setAlignment(PdfTextAlignment::RIGHT);
         self::assertSame(PdfTextAlignment::RIGHT, $actual->getAlignment());
@@ -28,13 +28,13 @@ class PdfColumnTest extends TestCase
 
     public function testCenter(): void
     {
-        $actual = PdfColumn::center(null, 0.0);
+        $actual = PdfColumn::center();
         self::assertSame(PdfTextAlignment::CENTER, $actual->getAlignment());
     }
 
     public function testConstructor(): void
     {
-        $actual = new PdfColumn(null);
+        $actual = new PdfColumn();
         self::assertNull($actual->getText());
         self::assertSame(0.0, $actual->getWidth());
         self::assertSame(PdfTextAlignment::LEFT, $actual->getAlignment());
@@ -43,7 +43,7 @@ class PdfColumnTest extends TestCase
 
     public function testFixed(): void
     {
-        $actual = new PdfColumn(null);
+        $actual = new PdfColumn();
         self::assertFalse($actual->isFixed());
         $actual->setFixed(true);
         self::assertTrue($actual->isFixed());
@@ -51,19 +51,19 @@ class PdfColumnTest extends TestCase
 
     public function testLeft(): void
     {
-        $actual = PdfColumn::left(null, 0.0);
+        $actual = PdfColumn::left();
         self::assertSame(PdfTextAlignment::LEFT, $actual->getAlignment());
     }
 
     public function testRight(): void
     {
-        $actual = PdfColumn::right(null, 0.0);
+        $actual = PdfColumn::right();
         self::assertSame(PdfTextAlignment::RIGHT, $actual->getAlignment());
     }
 
     public function testText(): void
     {
-        $actual = new PdfColumn(null);
+        $actual = new PdfColumn();
         self::assertNull($actual->getText());
         $actual->setText('text');
         self::assertSame('text', $actual->getText());
@@ -71,7 +71,7 @@ class PdfColumnTest extends TestCase
 
     public function testWidth(): void
     {
-        $actual = new PdfColumn(null);
+        $actual = new PdfColumn();
         self::assertSame(0.0, $actual->getWidth());
         $actual->setWidth(10.0);
         self::assertSame(10.0, $actual->getWidth());

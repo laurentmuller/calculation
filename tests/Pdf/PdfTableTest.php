@@ -60,7 +60,7 @@ class PdfTableTest extends TestCase
     public function testAddColumns(): void
     {
         $table = $this->createTable();
-        $column = new PdfColumn('');
+        $column = new PdfColumn();
         $table->addColumns($column);
         self::assertSame(1, $table->getColumnsCount());
     }
@@ -69,7 +69,7 @@ class PdfTableTest extends TestCase
     {
         $table = $this->createTable();
         $table->getParent()->addPage();
-        $table->addColumn(new PdfColumn(''))
+        $table->addColumn(new PdfColumn())
             ->addHeaderRow('Test');
         self::assertSame(1, $table->getColumnsCount());
     }
@@ -78,7 +78,7 @@ class PdfTableTest extends TestCase
     {
         $table = $this->createTable();
         $table->getParent()->addPage();
-        $table->addColumn(new PdfColumn(''))
+        $table->addColumn(new PdfColumn())
             ->addRow('Test');
         self::assertSame(1, $table->getColumnsCount());
     }
@@ -87,7 +87,7 @@ class PdfTableTest extends TestCase
     {
         $table = $this->createTable();
         $table->getParent()->addPage();
-        $table->addColumn(new PdfColumn(''))
+        $table->addColumn(new PdfColumn())
             ->addStyledRow(['Test']);
         self::assertSame(1, $table->getColumnsCount());
     }
@@ -113,7 +113,7 @@ class PdfTableTest extends TestCase
     public function testAlignment(): void
     {
         $table = $this->createTable(false)
-            ->addColumn(new PdfColumn(''));
+            ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
         $table->setAlignment(PdfTextAlignment::CENTER);
         $table->singleLine('text');
@@ -127,7 +127,7 @@ class PdfTableTest extends TestCase
     public function testBackgroundListener(): void
     {
         $table = $this->createTable()
-            ->addColumn(new PdfColumn(''));
+            ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
         $listener = new class() implements PdfDrawCellBackgroundInterface {
             public function drawCellBackground(PdfCellBackgroundEvent $event): bool
@@ -145,7 +145,7 @@ class PdfTableTest extends TestCase
     public function testBorderListener(): void
     {
         $table = $this->createTable()
-            ->addColumn(new PdfColumn(''));
+            ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
         $listener = new class() implements PdfDrawCellBorderInterface {
             public function drawCellBorder(PdfCellBorderEvent $event): bool
@@ -164,10 +164,10 @@ class PdfTableTest extends TestCase
     {
         $table = $this->createTable()
             ->addColumns(
-                new PdfColumn(''),
-                new PdfColumn(''),
-                new PdfColumn(''),
-                new PdfColumn('')
+                new PdfColumn(),
+                new PdfColumn(),
+                new PdfColumn(),
+                new PdfColumn()
             );
 
         $table->getParent()->addPage();
@@ -184,7 +184,7 @@ class PdfTableTest extends TestCase
     public function testCellFontSizeAndIndent(): void
     {
         $table = $this->createTable()
-            ->addColumn(new PdfColumn(''));
+            ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
         $style = PdfStyle::getCellStyle()
             ->setFontSize(12.0)
@@ -200,7 +200,7 @@ class PdfTableTest extends TestCase
             self::fail('Unable to find image.');
         }
         $table = $this->createTable()
-            ->addColumn(new PdfColumn(''));
+            ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
         $cell = new PdfImageCell($path);
         $table->startRow()
@@ -212,7 +212,7 @@ class PdfTableTest extends TestCase
     public function testCellLink(): void
     {
         $table = $this->createTable()
-            ->addColumn(new PdfColumn(''));
+            ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
         $cell = new PdfCell(link: 'https://example.com');
         $table->startRow()
@@ -225,7 +225,7 @@ class PdfTableTest extends TestCase
     {
         $table = $this->createTable();
         $table->getParent()->addPage();
-        $table->addColumn(new PdfColumn(''));
+        $table->addColumn(new PdfColumn());
         $table->checkNewPage(10_000);
         self::assertSame(2, $table->getParent()->getPage());
     }
@@ -234,7 +234,7 @@ class PdfTableTest extends TestCase
     {
         $table = $this->createTable();
         $table->getParent()->addPage();
-        $table->addColumns(new PdfColumn(''), new PdfColumn(''));
+        $table->addColumns(new PdfColumn(), new PdfColumn());
         $table->startRow()
             ->completeRow();
         self::assertSame(2, $table->getColumnsCount());
@@ -253,7 +253,7 @@ class PdfTableTest extends TestCase
         $this->expectException(PdfException::class);
         $this->expectExceptionMessage('Invalid spanned cells: expected 1, 2 given.');
         $this->createTable()
-            ->addColumn(PdfColumn::left('', 25.0))
+            ->addColumn(PdfColumn::left(width: 25.0))
             ->startRow()
             ->addCell(new PdfCell(cols: 2))
             ->endRow();
@@ -276,7 +276,7 @@ class PdfTableTest extends TestCase
 
     public function testGetColumns(): void
     {
-        $column = new PdfColumn('');
+        $column = new PdfColumn();
         $table = $this->createTable()
             ->addColumn($column);
         self::assertSame([$column], $table->getColumns());
@@ -295,7 +295,7 @@ class PdfTableTest extends TestCase
     public function testHeadersListener(): void
     {
         $table = $this->createTable()
-            ->addColumn(new PdfColumn(''));
+            ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
         $listener = new class() implements PdfDrawHeadersInterface {
             public function drawHeaders(PdfPdfDrawHeadersEvent $event): bool
@@ -324,7 +324,7 @@ class PdfTableTest extends TestCase
         $path = __DIR__ . '/../Data/images/example.png';
 
         $table = $this->createTable()
-            ->addColumn(new PdfColumn(''));
+            ->addColumn(new PdfColumn());
         $cell = new PdfImageCell($path);
         self::assertSame($path, $cell->getPath());
 
@@ -351,7 +351,7 @@ class PdfTableTest extends TestCase
     public function testImageCellWithLongText(): void
     {
         $path = __DIR__ . '/../Data/images/example.png';
-        $column = PdfColumn::left('', 25.0, true);
+        $column = PdfColumn::left(width: 25.0, fixed: true);
         $table = $this->createTable(false)
             ->addColumn($column);
         $table->getParent()
@@ -407,7 +407,7 @@ class PdfTableTest extends TestCase
     public function testSingleLine(): void
     {
         $table = $this->createTable()
-            ->addColumn(new PdfColumn(''));
+            ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
         $table->singleLine();
         self::assertSame(1, $table->getColumnsCount());
@@ -434,7 +434,7 @@ class PdfTableTest extends TestCase
     public function testTextListener(): void
     {
         $table = $this->createTable()
-            ->addColumn(new PdfColumn(''));
+            ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
         $listener = new class() implements PdfDrawCellTextInterface {
             public function drawCellText(PdfCellTextEvent $event): bool

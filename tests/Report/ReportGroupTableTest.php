@@ -43,7 +43,7 @@ class ReportGroupTableTest extends TestCase
         $report->resetStyle()
             ->addPage();
         $table = new ReportGroupTable($report);
-        $table->addColumns(PdfColumn::left('', 10.0));
+        $table->addColumns(PdfColumn::left(width: 10.0));
         $table->startRow()
             ->addCellTrans('id')
             ->endRow();
@@ -67,7 +67,7 @@ class ReportGroupTableTest extends TestCase
     {
         $report = $this->createReport();
         $table = new ReportGroupTable($report);
-        $table->addColumns(PdfColumn::left('', 10.0));
+        $table->addColumns(PdfColumn::left(width: 10.0));
         self::assertSame(0, $report->getPage());
         self::assertInstanceOf(TranslatorInterface::class, $table->getTranslator());
     }

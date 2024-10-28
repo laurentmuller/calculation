@@ -27,6 +27,7 @@ use App\Utils\StringUtils;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\PngWriter;
+use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
 use Psr\Log\LoggerInterface;
@@ -84,7 +85,7 @@ class CalculationReport extends AbstractReport
         $this->renderTitle($calculation);
         $this->addPage();
         if ($calculation->isEmpty()) {
-            return $this->renderEmpty();
+            return $this->renderEmpty($calculation);
         }
 
         ItemsTable::render($this);
@@ -180,18 +181,20 @@ class CalculationReport extends AbstractReport
     /**
      * Render a text when the calculation is empty.
      */
-    private function renderEmpty(): true
+    private function renderEmpty(Calculation $calculation): true
     {
-        PdfStyle::getCellStyle()
+        PdfStyle::getHeaderStyle()
             ->setTextColor(PdfTextColor::red())
             ->apply($this);
         $this->cell(
-            height: self::LINE_HEIGHT * 2.0,
+            height: self::LINE_HEIGHT * 1.25,
             text: $this->trans('calculation.edit.empty'),
             border: PdfBorder::all(),
+            move: PdfMove::BELOW,
             align: PdfTextAlignment::CENTER,
             fill: true
         );
+        $this->renderTimestampable($calculation);
 
         return true;
     }

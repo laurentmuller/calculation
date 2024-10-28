@@ -18,6 +18,7 @@ use App\Model\FontAwesomeImage;
 use App\Model\LogChannel;
 use App\Model\LogFile;
 use App\Model\LogLevel;
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
@@ -26,7 +27,8 @@ use App\Pdf\PdfFontAwesomeCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfMemoryImageTrait;
-use App\Service\FontAwesomeService;
+use App\Service\FontAwesomeIconService;
+use App\Service\FontAwesomeImageService;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use fpdf\Enums\PdfMove;
@@ -47,14 +49,20 @@ class LogsReport extends AbstractReport
     private const DELTA_DATE = 600;
 
     /**
-     * @var array<string, ?string>
+     * @var array<string, PdfFontAwesomeCell|string>
+     */
+    private array $cells = [];
+
+    /**
+     * @var array<string, string>
      */
     private array $colors = [];
 
     public function __construct(
         AbstractController $controller,
         private readonly LogFile $logFile,
-        private readonly FontAwesomeService $service
+        private readonly FontAwesomeImageService $imageService,
+        private readonly FontAwesomeIconService $iconService,
     ) {
         parent::__construct($controller, PdfOrientation::LANDSCAPE);
         $this->setTitleTrans('log.title');
@@ -66,15 +74,12 @@ class LogsReport extends AbstractReport
     public function render(): bool
     {
         $this->addPage();
-        $logFile = $this->logFile;
-        if ($logFile->isEmpty()) {
-            $this->cell(text: $this->trans('log.list.empty'));
-
-            return true;
+        if ($this->logFile->isEmpty()) {
+            return $this->renderEmpty();
         }
 
-        $this->renderCards($logFile->getLevels(), $logFile->getChannels(), $logFile->count());
-        $this->renderLogs($logFile->getLogs());
+        $this->renderCards();
+        $this->renderLogs();
 
         return true;
     }
@@ -99,15 +104,44 @@ class LogsReport extends AbstractReport
             ->outputHeaders();
     }
 
-    private function getChannelCell(Log $log): PdfFontAwesomeCell|string
-    {
-        $text = $log->getChannel(true);
-        $image = $this->service->getImageFromIcon($log->getChannelIcon());
-        if (!$image instanceof FontAwesomeImage) {
-            return $text;
+    private function getCell(
+        string $text,
+        string $icon,
+        string $color = FontAwesomeImageService::COLOR_BLACK
+    ): PdfFontAwesomeCell|string {
+        $key = \sprintf('%s_%s_%s', $text, $icon, $color);
+        if (\array_key_exists($key, $this->cells)) {
+            return $this->cells[$key];
         }
 
-        return new PdfFontAwesomeCell($image, $text);
+        $path = $this->iconService->getPath($icon);
+        if (!\is_string($path)) {
+            return $this->cells[$key] = $text;
+        }
+
+        $image = $this->imageService->getImage($path, $color);
+        if (!$image instanceof FontAwesomeImage) {
+            return $this->cells[$key] = $text;
+        }
+
+        return $this->cells[$key] = new PdfFontAwesomeCell($image, $text);
+    }
+
+    private function getCellChannel(Log $log): PdfFontAwesomeCell|string
+    {
+        $text = $log->getChannel(true);
+        $icon = $log->getChannelIcon();
+
+        return $this->getCell($text, $icon);
+    }
+
+    private function getCellLevel(Log $log): PdfFontAwesomeCell|string
+    {
+        $text = $log->getLevel(true);
+        $icon = $log->getLevelIcon();
+        $color = $this->getLevelColor($log->getLevel());
+
+        return $this->getCell($text, $icon, $color);
     }
 
     private function getImageIcon(LogLevel|LogChannel $value): ?FontAwesomeImage
@@ -119,30 +153,24 @@ class LogsReport extends AbstractReport
         } else {
             $icon = $value->getChannelIcon();
         }
-
-        return $this->service->getImageFromIcon($icon, $color);
-    }
-
-    private function getLevelCell(Log $log): PdfFontAwesomeCell|string
-    {
-        $text = $log->getLevel(true);
-        $color = $this->getLevelColor($log->getLevel());
-        $image = $this->service->getImageFromIcon($log->getLevelIcon(), $color);
-        if (!$image instanceof FontAwesomeImage) {
-            return $text;
+        $path = $this->iconService->getPath($icon);
+        if (!\is_string($path)) {
+            return null;
         }
 
-        return new PdfFontAwesomeCell($image, $text);
+        return $this->imageService->getImage($path, $color);
     }
 
-    private function getLevelColor(string $level): ?string
+    private function getLevelColor(string $level): string
     {
-        if (!\array_key_exists($level, $this->colors)) {
-            $color = LogLevel::instance($level)->getLevelColor();
-            $this->colors[$level] = HtmlBootstrapColor::parseTextColor($color)?->asHex('#');
+        if (\array_key_exists($level, $this->colors)) {
+            return $this->colors[$level];
         }
 
-        return $this->colors[$level];
+        $levelColor = LogLevel::instance($level)->getLevelColor();
+        $color = HtmlBootstrapColor::parseTextColor($levelColor)?->asHex('#') ?? FontAwesomeImageService::COLOR_BLACK;
+
+        return $this->colors[$level] = $color;
     }
 
     private function getRoundedDate(Log $log): int
@@ -150,17 +178,16 @@ class LogsReport extends AbstractReport
         return (int) \ceil($log->getTimestamp() / self::DELTA_DATE) * self::DELTA_DATE;
     }
 
-    /**
-     * @param array<string, LogLevel>   $levels
-     * @param array<string, LogChannel> $channels
-     */
-    private function renderCards(array $levels, array $channels, int $count): void
+    private function renderCards(): void
     {
+        $levels = $this->logFile->getLevels();
+        $channels = $this->logFile->getChannels();
+
         $columns = [];
         $textCells = [];
         $valueCells = [];
-        $sepCol = PdfColumn::center(null, 3);
-        $emptyCol = PdfColumn::center(null, 1);
+        $sepCol = PdfColumn::center(width: 3);
+        $emptyCol = PdfColumn::center(width: 1);
         $emptyCell = new PdfCell(style: PdfStyle::getNoBorderStyle());
 
         $this->updateCardsEntries($levels, $columns, $textCells, $valueCells, $emptyCol, $emptyCell);
@@ -176,7 +203,7 @@ class LogsReport extends AbstractReport
         $total = $this->trans('report.total');
         $columns[] = PdfColumn::center($total, 30);
         $textCells[] = new PdfCell($total);
-        $valueCells[] = new PdfCell(FormatUtils::formatInt($count));
+        $valueCells[] = new PdfCell(FormatUtils::formatInt($this->logFile->count()));
 
         $level = $this->trans('log.fields.level');
         $chanel = $this->trans('log.fields.channel');
@@ -199,11 +226,26 @@ class LogsReport extends AbstractReport
         $this->lineBreak(3);
     }
 
-    /**
-     * @psalm-param Log[] $logs
-     */
-    private function renderLogs(array $logs): void
+    private function renderEmpty(): true
     {
+        PdfStyle::getHeaderStyle()
+            ->setTextColor(PdfTextColor::red())
+            ->apply($this);
+        $this->cell(
+            height: self::LINE_HEIGHT * 1.25,
+            text: $this->trans('log.list.empty'),
+            border: PdfBorder::all(),
+            move: PdfMove::BELOW,
+            align: PdfTextAlignment::CENTER,
+            fill: true,
+        );
+
+        return true;
+    }
+
+    private function renderLogs(): void
+    {
+        $logs = $this->logFile->getLogs();
         $title = $this->trans('log.name');
         $this->addBookmark($title, true);
         PdfFont::default()->bold()->apply($this);
@@ -221,8 +263,8 @@ class LogsReport extends AbstractReport
             $table->addRow(
                 $log->getFormattedDate(),
                 $log->getMessage(),
-                $this->getLevelCell($log),
-                $this->getChannelCell($log),
+                $this->getCellLevel($log),
+                $this->getCellChannel($log),
                 $log->getUser()
             );
         }

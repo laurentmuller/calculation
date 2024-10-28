@@ -13,36 +13,14 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Model\FontAwesomeImage;
-use App\Service\FontAwesomeIconService;
-use App\Service\FontAwesomeService;
+use App\Service\FontAwesomeImageService;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-class FontAwesomeServiceTest extends TestCase
+class FontAwesomeImageServiceTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
-    public function testImageFromIconInvalid(): void
-    {
-        $service = $this->createService(__DIR__);
-        $actual = $service->getImageFromIcon('fake');
-        self::assertNull($actual);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testImageFromIconValid(): void
-    {
-        $svgDirectory = __DIR__ . '/../Data/images';
-        $service = $this->createService($svgDirectory);
-        $actual = $service->getImageFromIcon('fa-solid fa-anchor');
-        self::assertNotNull($actual);
-    }
-
     /**
      * @throws Exception
      */
@@ -137,8 +115,11 @@ class FontAwesomeServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    private function checkImageIsValid(string $svgDirectory, string $relativePath, ?string $color = null): FontAwesomeImage
-    {
+    private function checkImageIsValid(
+        string $svgDirectory,
+        string $relativePath,
+        ?string $color = null
+    ): FontAwesomeImage {
         $service = $this->createService($svgDirectory);
         $actual = $service->getImage($relativePath, $color);
         self::assertNotNull($actual);
@@ -149,11 +130,10 @@ class FontAwesomeServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    private function createService(string $svgDirectory): FontAwesomeService
+    private function createService(string $svgDirectory): FontAwesomeImageService
     {
-        return new FontAwesomeService(
+        return new FontAwesomeImageService(
             $svgDirectory,
-            new FontAwesomeIconService(),
             new ArrayAdapter(),
             $this->createMock(LoggerInterface::class)
         );

@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Service\FontAwesomeService;
+use App\Service\FontAwesomeImageService;
 use App\Utils\FileUtils;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -129,7 +129,7 @@ class FontAwesomeCommand extends Command
             $relativeTarget = $this->getRelativePath($target);
 
             \ksort($aliases);
-            $aliasesPath = FileUtils::buildPath($tempDir, FontAwesomeService::ALIAS_FILE_NAME);
+            $aliasesPath = FileUtils::buildPath($tempDir, FontAwesomeImageService::ALIAS_FILE_NAME);
             if (!FileUtils::dumpFile($aliasesPath, (string) \json_encode($aliases, \JSON_PRETTY_PRINT))) {
                 $io->error(\sprintf('Unable to copy aliases file to the directory: "%s".', $relativeTarget));
 
@@ -224,7 +224,7 @@ class FontAwesomeCommand extends Command
 
     private function getSvgFileName(string $style, string|int $name): string
     {
-        return \sprintf('%s/%s%s', $style, $name, FontAwesomeService::SVG_EXTENSION);
+        return \sprintf('%s/%s%s', $style, $name, FontAwesomeImageService::SVG_EXTENSION);
     }
 
     private function getTargetDirectory(SymfonyStyle $io): string

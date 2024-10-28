@@ -52,7 +52,7 @@ class PdfCellTranslatorTraitTest extends TestCase
 
             public function render(): bool
             {
-                $this->addColumn(PdfColumn::left('', 10.0));
+                $this->addColumn(PdfColumn::left(width: 10.0));
                 $this->startRow();
                 $this->addCellTrans('id');
                 $this->endRow();

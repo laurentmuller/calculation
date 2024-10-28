@@ -26,7 +26,7 @@ use Symfony\Contracts\Cache\ItemInterface;
 /**
  * Service to get Font Awesome images.
  */
-class FontAwesomeService
+class FontAwesomeImageService
 {
     use CacheKeyTrait;
     use LoggerTrait;
@@ -35,6 +35,11 @@ class FontAwesomeService
      * The JSON file containing aliases.
      */
     public const ALIAS_FILE_NAME = 'aliases.json';
+
+    /**
+     * The black color.
+     */
+    public const COLOR_BLACK = 'black';
 
     /**
      * The SVG file extension (including the dot character).
@@ -47,23 +52,15 @@ class FontAwesomeService
     private const TARGET_SIZE = 64;
     private const VIEW_BOX_PATTERN = '/viewBox="(\d+\s+){2}(?\'width\'\d+)\s+(?\'height\'\d+)"/mi';
 
-    private ?\Imagick $imagick = null;
     private bool $imagickException = false;
 
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/fontawesome')]
         private readonly string $svgDirectory,
-        private readonly FontAwesomeIconService $service,
         #[Target('calculation.fontawesome')]
         private readonly CacheInterface $cache,
         private readonly LoggerInterface $logger,
     ) {
-    }
-
-    public function __destruct()
-    {
-        $this->imagick?->clear();
-        $this->imagick = null;
     }
 
     /**
@@ -82,18 +79,17 @@ class FontAwesomeService
     /**
      * Gets a Font Awesome image.
      *
-     * @param string      $relativePath the relative file path to the SVG directory.
-     *                                  The SVG file extension (.svg) is added if not present.
-     * @param string|null $color        the foreground color to apply or <code>null</code> for black color
+     * @param string  $relativePath the relative file path to the SVG directory.
+     *                              The SVG file extension (.svg) is added if not present.
+     * @param ?string $color        the foreground color to apply or <code>null</code> for black color
      *
      * @return ?FontAwesomeImage the image, if found, <code>null</code> otherwise
      */
     public function getImage(string $relativePath, ?string $color = null): ?FontAwesomeImage
     {
-        if (!FileUtils::isDir($this->svgDirectory)) {
-            return null;
-        }
-        if ($this->isImagickException() || !$this->isSvgSupported()) {
+        if (!FileUtils::isDir($this->svgDirectory)
+            || $this->isImagickException()
+            || !$this->isSvgSupported()) {
             return null;
         }
 
@@ -103,31 +99,13 @@ class FontAwesomeService
             return null;
         }
 
-        $color ??= 'black';
+        $color ??= self::COLOR_BLACK;
         $key = \sprintf('%s_%s', $relativePath, $color);
 
         return $this->cache->get(
             $this->cleanKey($key),
             fn (ItemInterface $item, bool &$save): ?FontAwesomeImage => $this->loadImage($path, $color, $item, $save)
         );
-    }
-
-    /**
-     * Gets a Font Awesome image from the given icon class.
-     *
-     * @param string      $icon  the icon class to get image for
-     * @param string|null $color the foreground color to apply or <code>null</code> for black color
-     *
-     * @return ?FontAwesomeImage the image, if found, <code>null</code> otherwise
-     */
-    public function getImageFromIcon(string $icon, ?string $color = null): ?FontAwesomeImage
-    {
-        $path = $this->service->getIconPath($icon);
-        if (null === $path) {
-            return null;
-        }
-
-        return $this->getImage($path, $color);
     }
 
     public function getLogger(): LoggerInterface
@@ -164,7 +142,7 @@ class FontAwesomeService
         $imagick = null;
 
         try {
-            $imagick = $this->getImagick();
+            $imagick = new \Imagick();
             $imagick->readImageBlob($content);
             $size = $this->getTargetSize($content);
             $imagick->resizeImage($size[0], $size[1], \Imagick::FILTER_LANCZOS, 1);
@@ -177,15 +155,6 @@ class FontAwesomeService
         } finally {
             $imagick?->clear();
         }
-    }
-
-    private function getImagick(): \Imagick
-    {
-        if (!$this->imagick instanceof \Imagick) {
-            $this->imagick = new \Imagick();
-        }
-
-        return $this->imagick;
     }
 
     /**
@@ -231,7 +200,7 @@ class FontAwesomeService
             return null;
         }
 
-        $content = self::SVG_PREFIX . $this->updateFillColor($content, $color);
+        $content = self::SVG_PREFIX . $this->replaceFillColor($content, $color);
 
         try {
             $image = $this->convert($content);
@@ -263,13 +232,13 @@ class FontAwesomeService
         return $aliases[$path] ?? $path;
     }
 
+    private function replaceFillColor(string $content, string $color): string
+    {
+        return \str_replace(self::SVG_SEARCH, \sprintf(self::SVG_REPLACE, $color), $content);
+    }
+
     private function round(float $dividend, float $divisor): int
     {
         return (int) \round($dividend / $divisor);
-    }
-
-    private function updateFillColor(string $content, string $color): string
-    {
-        return \str_replace(self::SVG_SEARCH, \sprintf(self::SVG_REPLACE, $color), $content);
     }
 }

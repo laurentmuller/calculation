@@ -100,6 +100,6 @@ class PdfGroupTableTest extends TestCase
         $document = new PdfDocument();
 
         return PdfGroupTable::instance($document)
-            ->addColumn(new PdfColumn(''));
+            ->addColumn(new PdfColumn());
     }
 }

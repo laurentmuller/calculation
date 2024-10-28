@@ -19,7 +19,7 @@ use App\Pdf\PdfFontAwesomeCell;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Pdf\Traits\PdfMemoryImageTrait;
-use App\Service\FontAwesomeService;
+use App\Service\FontAwesomeImageService;
 use fpdf\Enums\PdfTextAlignment;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -30,7 +30,7 @@ class FontAwesomeReport extends AbstractReport
 
     public function __construct(
         AbstractController $controller,
-        private readonly FontAwesomeService $service
+        private readonly FontAwesomeImageService $service
     ) {
         parent::__construct($controller);
         $this->setTitle('Font Awesome Icons');
@@ -48,7 +48,7 @@ class FontAwesomeReport extends AbstractReport
             ->setGroupStyle(PdfStyle::getHeaderStyle());
         $width = $this->getPrintableWidth() / (float) $columns;
         for ($i = 0; $i < $columns; ++$i) {
-            $table->addColumn(PdfColumn::left('', $width));
+            $table->addColumn(PdfColumn::left(width: $width));
         }
         $total = $this->renderIcons($table, $columns) + $this->renderAliases($table, $columns);
         $this->renderTotal($total);
@@ -155,7 +155,7 @@ class FontAwesomeReport extends AbstractReport
         $index = 0;
         $finder = Finder::create()
             ->in($this->service->getSvgDirectory())
-            ->name('*' . FontAwesomeService::SVG_EXTENSION)
+            ->name('*' . FontAwesomeImageService::SVG_EXTENSION)
             ->files();
 
         foreach ($finder as $file) {

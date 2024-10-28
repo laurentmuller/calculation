@@ -27,7 +27,7 @@ class PdfColumn
      *                                     This property is used only if the parent's table uses all the document width.
      */
     public function __construct(
-        private ?string $text,
+        private ?string $text = null,
         private float $width = 0.0,
         private ?PdfTextAlignment $alignment = PdfTextAlignment::LEFT,
         private bool $fixed = false
@@ -44,7 +44,7 @@ class PdfColumn
      *
      * @return PdfColumn the new newly created column
      */
-    public static function center(?string $text, float $width, bool $fixed = false): self
+    public static function center(?string $text = null, float $width = 0.0, bool $fixed = false): self
     {
         return new self($text, $width, PdfTextAlignment::CENTER, $fixed);
     }
@@ -97,7 +97,7 @@ class PdfColumn
      *
      * @return PdfColumn the new newly created column
      */
-    public static function left(?string $text, float $width, bool $fixed = false): self
+    public static function left(?string $text = null, float $width = 0.0, bool $fixed = false): self
     {
         return new self($text, $width, PdfTextAlignment::LEFT, $fixed);
     }
@@ -112,7 +112,7 @@ class PdfColumn
      *
      * @return PdfColumn the new newly created column
      */
-    public static function right(?string $text, float $width, bool $fixed = false): self
+    public static function right(?string $text = null, float $width = 0.0, bool $fixed = false): self
     {
         return new self($text, $width, PdfTextAlignment::RIGHT, $fixed);
     }

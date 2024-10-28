@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 /**
- * Service to convert Font Awesome icons to paths.
+ * Service to get Font Awesome icons.
  */
 class FontAwesomeIconService
 {
@@ -82,19 +82,22 @@ class FontAwesomeIconService
      *
      * @return string|null the relative path, if applicable; null otherwise
      */
-    public function getIconPath(string $icon): ?string
+    public function getPath(string $icon): ?string
     {
         $icon = $this->cleanIcon($icon);
+        if ('' === $icon) {
+            return null;
+        }
         $parts = \array_unique(\explode(' ', $icon));
         if (2 !== \count($parts)) {
             return null;
         }
 
         if ($this->isFolder($parts[0])) {
-            return \sprintf('%s/%s%s', $parts[0], $parts[1], FontAwesomeService::SVG_EXTENSION);
+            return \sprintf('%s/%s%s', $parts[0], $parts[1], FontAwesomeImageService::SVG_EXTENSION);
         }
         if ($this->isFolder($parts[1])) {
-            return \sprintf('%s/%s%s', $parts[1], $parts[0], FontAwesomeService::SVG_EXTENSION);
+            return \sprintf('%s/%s%s', $parts[1], $parts[0], FontAwesomeImageService::SVG_EXTENSION);
         }
 
         return null;

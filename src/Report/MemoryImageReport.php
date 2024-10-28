@@ -21,7 +21,8 @@ use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\PdfFontAwesomeCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\Traits\PdfMemoryImageTrait;
-use App\Service\FontAwesomeService;
+use App\Service\FontAwesomeIconService;
+use App\Service\FontAwesomeImageService;
 use App\Service\ImageService;
 use App\Utils\FileUtils;
 use fpdf\Enums\PdfMove;
@@ -50,7 +51,8 @@ class MemoryImageReport extends AbstractReport
         private readonly ?string $logoFile = null,
         private readonly ?string $iconFile = null,
         private readonly ?string $screenshotFile = null,
-        private readonly ?FontAwesomeService $service = null,
+        private readonly ?FontAwesomeImageService $imageService = null,
+        private readonly ?FontAwesomeIconService $iconService = null,
     ) {
         parent::__construct($controller);
         $this->setTitle('In memory Images');
@@ -162,7 +164,11 @@ class MemoryImageReport extends AbstractReport
         $files = [];
         foreach ($channels as $channel) {
             $logChannel = new LogChannel($channel);
-            $image = $this->service?->getImageFromIcon($logChannel->getChannelIcon());
+            $icon = $this->iconService?->getPath($logChannel->getChannelIcon());
+            if (!\is_string($icon)) {
+                continue;
+            }
+            $image = $this->imageService?->getImage($icon);
             if ($image instanceof FontAwesomeImage) {
                 $files[$channel] = $image;
             }
@@ -181,10 +187,15 @@ class MemoryImageReport extends AbstractReport
         foreach ($levels as $level) {
             $logLevel = new LogLevel($level->name);
             $color = HtmlBootstrapColor::parseTextColor($logLevel->getLevelColor())?->asHex('#');
-            $image = $this->service?->getImageFromIcon($logLevel->getLevelIcon(), $color);
-            if ($image instanceof FontAwesomeImage) {
-                $files[$logLevel->getLevel()] = $image;
+            $icon = $this->iconService?->getPath($logLevel->getLevelIcon());
+            if (!\is_string($icon)) {
+                continue;
             }
+            $image = $this->imageService?->getImage($icon, $color);
+            if (!$image instanceof FontAwesomeImage) {
+                continue;
+            }
+            $files[$logLevel->getLevel()] = $image;
         }
 
         return $files;
@@ -204,8 +215,12 @@ class MemoryImageReport extends AbstractReport
         $color = HtmlBootstrapColor::DANGER->value;
         HtmlBootstrapColor::DANGER->applyTextColor($this);
         foreach (\range(0, 9) as $index) {
-            $icon = \sprintf('fa-solid fa-%d', $index);
-            $image = $this->service?->getImageFromIcon($icon, $color);
+            $source = \sprintf('fa-solid fa-%d', $index);
+            $icon = $this->iconService?->getPath($source);
+            if (!\is_string($icon)) {
+                continue;
+            }
+            $image = $this->imageService?->getImage($icon, $color);
             if (!$image instanceof FontAwesomeImage) {
                 continue;
             }
@@ -233,7 +248,7 @@ class MemoryImageReport extends AbstractReport
 
     private function renderFontAwesome(): void
     {
-        if (!$this->service instanceof FontAwesomeService) {
+        if (!$this->imageService instanceof FontAwesomeImageService) {
             return;
         }
 

@@ -80,7 +80,7 @@ return static function (FrameworkConfig $config): void {
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
-    // FontAwesomeService
+    // FontAwesomeImageService
     $config->cache()->pool('calculation.fontawesome')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_month);

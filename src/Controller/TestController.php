@@ -47,7 +47,8 @@ use App\Response\PdfResponse;
 use App\Response\WordResponse;
 use App\Service\AbstractHttpClientService;
 use App\Service\CaptchaImageService;
-use App\Service\FontAwesomeService;
+use App\Service\FontAwesomeIconService;
+use App\Service\FontAwesomeImageService;
 use App\Service\MailerService;
 use App\Service\PdfLabelService;
 use App\Service\RecaptchaResponseService;
@@ -244,7 +245,7 @@ class TestController extends AbstractController
      * Output a report with Fontawesome images.
      */
     #[Get(path: '/fontawesome', name: 'fontawesome')]
-    public function fontAwesome(FontAwesomeService $service): Response
+    public function fontAwesome(FontAwesomeImageService $service): Response
     {
         if (!$service->isSvgSupported() || $service->isImagickException()) {
             return $this->redirectToHomePage(
@@ -280,9 +281,17 @@ class TestController extends AbstractController
         string $iconFile,
         #[Autowire('%kernel.project_dir%/public/images/screenshots/home_light.png')]
         string $screenshotFile,
-        FontAwesomeService $service
+        FontAwesomeImageService $imageService,
+        FontAwesomeIconService $iconService
     ): PdfResponse {
-        $report = new MemoryImageReport($this, $logoFile, $iconFile, $screenshotFile, $service);
+        $report = new MemoryImageReport(
+            $this,
+            $logoFile,
+            $iconFile,
+            $screenshotFile,
+            $imageService,
+            $iconService
+        );
 
         return $this->renderPdfDocument($report);
     }

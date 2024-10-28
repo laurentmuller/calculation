@@ -55,7 +55,7 @@ class AbstractReportTest extends TestCase
 
         $report->addPage();
         $table = new PdfTable($report);
-        $table->addColumns(PdfColumn::left('', 10.0));
+        $table->addColumns(PdfColumn::left(width: 10.0));
         $report->renderCount($table, 1);
         $report->renderCount($table, []);
         $actual = $report->render();

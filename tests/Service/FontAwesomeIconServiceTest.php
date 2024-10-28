@@ -35,10 +35,10 @@ class FontAwesomeIconServiceTest extends TestCase
     }
 
     #[DataProvider('getIcons')]
-    public function testIconPath(string $icon, ?string $expected): void
+    public function testPath(string $icon, ?string $expected): void
     {
         $service = new FontAwesomeIconService();
-        $actual = $service->getIconPath($icon);
+        $actual = $service->getPath($icon);
         self::assertSame($expected, $actual);
     }
 }

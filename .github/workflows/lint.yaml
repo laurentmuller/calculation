@@ -19,9 +19,6 @@ jobs:
             -   name: Install dependencies
                 run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-            -   name: Lint YAML
-                run: php bin/console lint:yaml translations .github/workflows --parse-tags
-
             -   name: Lint Twig
                 run: php bin/console lint:twig templates
 
@@ -36,3 +33,6 @@ jobs:
 
             -   name: Validate Composer
                 run: composer validate --strict
+
+            -   name: Lint YAML
+                run: php bin/console lint:yaml translations .github/workflows --parse-tags

@@ -21,12 +21,18 @@ parameters:
 
     ignoreErrors:
         -
+             message: '#Variable property access#'
+             identifier: property.dynamicName
+        -
+             message: '#should be contravariant#'
+             identifier: method.childParameterType
+        -
+            message: '#no value type specified#'
             identifier: missingType.iterableValue
         -
             message: '#@extends contains generic type#'
-            path: src/Form/*
-        - message: '#should be contravariant#'
-        - message: '#Variable property access#'
+            identifier: generics.notGeneric
+            path: src/Form/Extension/*
         -
             message: '#Call to static method .* will always evaluate to true.#'
             path: tests/*

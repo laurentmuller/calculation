@@ -62,15 +62,15 @@ trait GroupByTrait
     private function getGroupKey(array|object $value, string|int|callable $key): string|int
     {
         if (\is_callable($key)) {
-            $entry = $key($value);
-        } elseif (\is_array($value)) {
-            /** @psalm-var array-key $entry */
-            $entry = $value[$key];
-        } else {
-            /** @psalm-var array-key $entry */
-            $entry = $value->{$key};
+            return $key($value);
         }
 
-        return $entry;
+        if (\is_array($value)) {
+            /** @psalm-var array-key */
+            return $value[$key];
+        }
+
+        /** @psalm-var array-key */
+        return $value->{$key};
     }
 }

@@ -21,23 +21,18 @@ jobs:
 
             -   name: Lint YAML
                 run: php bin/console lint:yaml translations .github/workflows --parse-tags
-                continue-on-error: true
 
             -   name: Lint Twig
                 run: php bin/console lint:twig templates
-                continue-on-error: true
 
             -   name: Lint Container
                 run: php bin/console lint:container
-                continue-on-error: true
 
             -   name: Lint Markdown
                 uses: DavidAnson/markdownlint-cli2-action@v17
-                continue-on-error: true
 
             -   name: Validate Schema
                 run: php bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction
-                continue-on-error: true
 
             -   name: Validate Composer
                 run: composer validate --strict

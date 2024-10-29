@@ -36,7 +36,3 @@ parameters:
         -
             message: '#Call to static method .* will always evaluate to true.#'
             path: tests/*
-        -
-            message: '#does not accept.*ReadableCollection#'
-            identifier: assign.propertyType
-            path: src/Entity/*

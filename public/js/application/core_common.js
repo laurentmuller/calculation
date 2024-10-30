@@ -89,7 +89,7 @@ $(function () {
     }
 
     /**
-     * Handle the back to top button.
+     * Handle the back-to-top button.
      */
     function initBackToTop() {
         const $button = $('.btn-back-to-top');

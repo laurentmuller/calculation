@@ -33,16 +33,10 @@ $(function () {
     const THEME_DARK = 'dark';
 
     /**
-     * The theme chanel name.
+     * The theme attribute.
      * @type {string}
      */
-    const THEME_CHANNEL = 'theme_channel';
-
-    /**
-     * The theme changed event-name.
-     * @type {string}
-     */
-    const THEME_EVENT_NAME = 'theme_changed';
+    const THEME_ATTRIBUTE = 'data-bs-theme';
 
     // ------------------------------------
     // Theme public class definition
@@ -231,14 +225,8 @@ $(function () {
 
             this._setFocus();
             const oldTheme = $dialog.data('old-theme');
-            const newTheme = $dialog.data('new-theme');
+            const newTheme = $dialog.data('new-theme') || this._getTheme();
             if (oldTheme === newTheme) {
-                return;
-            }
-            if (!newTheme) {
-                if (oldTheme !== this._getTheme()) {
-                    this._setTheme(oldTheme);
-                }
                 return;
             }
             this._setTheme(newTheme);
@@ -332,16 +320,6 @@ $(function () {
         }
 
         /**
-         * Notify that the theme has changed.
-         * @private
-         */
-        _notifyTheme() {
-            const channel = new window.BroadcastChannel(THEME_CHANNEL);
-            channel.postMessage(THEME_EVENT_NAME);
-            channel.close();
-        }
-
-        /**
          * Sets the theme document element.
          * @param {string} theme - the theme to apply.
          * @private
@@ -350,8 +328,7 @@ $(function () {
             if (theme === THEME_AUTO) {
                 theme = this._isMediaDark() ? THEME_DARK : THEME_LIGHT;
             }
-            $(document.documentElement).attr('data-bs-theme', theme);
-            this._notifyTheme();
+            document.documentElement.setAttribute(THEME_ATTRIBUTE, theme);
         }
 
 
@@ -361,7 +338,7 @@ $(function () {
          * @private
          */
         _getTheme() {
-            return $(document.documentElement).attr('data-bs-theme') || THEME_AUTO;
+            return document.documentElement.getAttribute(THEME_ATTRIBUTE) || THEME_AUTO;
         }
 
         /**

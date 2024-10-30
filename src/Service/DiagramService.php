@@ -56,40 +56,45 @@ class DiagramService
      */
     public function getFiles(): array
     {
-        return $this->cache->get('diagram_files', function (): array {
-            $files = [];
-            $finder = Finder::create()
-                ->in($this->path)
-                ->files()
-                ->name('*' . self::FILE_SUFFIX);
-            foreach ($finder as $file) {
-                $content = $file->getContents();
-                $name = $file->getBasename(self::FILE_SUFFIX);
-                $title = $this->findTitle($content, $name);
-                $content = $this->removeTitle($content);
-                $files[$name] = [
-                    'name' => $name,
-                    'title' => $title,
-                    'content' => $content,
-                ];
-            }
-            \uasort($files, fn (array $a, array $b): int => $a['title'] <=> $b['title']);
-
-            return $files;
-        });
+        return $this->cache->get('diagram_files', fn (): array => $this->loadDiagrams());
     }
 
     private function findTitle(string $content, string $name): string
     {
-        $found = \preg_match_all(self::TITLE_PATTERN, $content, $matches, \PREG_SET_ORDER);
-        if (1 === $found) {
-            return $matches[0][1];
+        if (1 === \preg_match(self::TITLE_PATTERN, $content, $matches)) {
+            return $matches[1];
         }
 
         return StringUtils::unicode($name)
             ->camel()
             ->title()
             ->toString();
+    }
+
+    /**
+     * @psalm-return array<string, DiagramType>
+     */
+    private function loadDiagrams(): array
+    {
+        $files = [];
+        $finder = Finder::create()
+            ->in($this->path)
+            ->files()
+            ->name('*' . self::FILE_SUFFIX);
+        foreach ($finder as $file) {
+            $content = $file->getContents();
+            $name = $file->getBasename(self::FILE_SUFFIX);
+            $title = $this->findTitle($content, $name);
+            $content = $this->removeTitle($content);
+            $files[$name] = [
+                'name' => $name,
+                'title' => $title,
+                'content' => $content,
+            ];
+        }
+        \uasort($files, fn (array $a, array $b): int => $a['title'] <=> $b['title']);
+
+        return $files;
     }
 
     private function removeTitle(string $content): string

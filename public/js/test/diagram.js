@@ -32,16 +32,11 @@
 (() => {
     'use strict';
 
+    const THEME_DARK = 'dark';
+    const THEME_ATTRIBUTE = 'data-bs-theme';
     const DATA_CODE = 'data-code';
     const DATA_PROCESSED = 'data-processed';
     const DIAGRAM_SELECTOR = '#diagram';
-
-    const THEME_COOKIE_KEY = 'THEME';
-    const THEME_CHANNEL = 'theme_channel';
-    const THEME_EVENT_NAME = 'theme_changed';
-    const THEME_LIGHT = 'light';
-    const THEME_DARK = 'dark';
-
     const CLASS_REGEX = /classId-(.*)-\d+/;
     const REPLACE_REGEX = /([a-z])([A-Z])/g;
     const REPLACE_TARGET = '$1_$2';
@@ -58,8 +53,11 @@
      */
     const $diagrams = $('#diagrams');
 
-    // Gets the selected theme (light or dark).
-    const getTheme = () => window.Cookie.getValue(THEME_COOKIE_KEY, THEME_LIGHT);
+    // the HTML document element
+    const targetNode = document.documentElement;
+
+    // returns if the dark theme is selected
+    const isDarkTheme = () => targetNode.getAttribute(THEME_ATTRIBUTE) === THEME_DARK;
 
     // buttons
     const $zoomIn = $('.btn-zoom-in');
@@ -102,7 +100,7 @@
 
     // Gets the color variables, depending on the selected theme.
     const getThemeVariables = () => {
-        if (THEME_DARK === getTheme()) {
+        if (isDarkTheme()) {
             return {
                 primaryColor: '#DEE2E608',
                 primaryTextColor: '#FFF',
@@ -282,16 +280,20 @@
         }
     });
 
-    // create and handle the theme channel.
-    const channel = new window.BroadcastChannel(THEME_CHANNEL);
-    channel.addEventListener('message', (e) => {
-        if (e.data === THEME_EVENT_NAME) {
-            resetDiagram();
-            loadDiagram();
-        }
-    });
-
     // save and initialize diagrams.
     saveDiagram();
     loadDiagram();
+
+    // add a listener to the theme attribute
+    const mutationCallback = (mutationsList) => {
+        for (const mutation of mutationsList) {
+            if (mutation.attributeName !== THEME_ATTRIBUTE) {
+                return;
+            }
+            resetDiagram();
+            loadDiagram();
+        }
+    };
+    const observer = new MutationObserver(mutationCallback);
+    observer.observe(targetNode, {attributes: true});
 })();

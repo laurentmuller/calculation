@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Entity\Calculation;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use Doctrine\ORM\Exception\ORMException;
@@ -33,6 +34,16 @@ class CalculationBelowControllerTest extends ControllerTestCase
         yield ['/calculation/below/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/calculation/below/excel', self::ROLE_ADMIN];
         yield ['/calculation/below/excel', self::ROLE_SUPER_ADMIN];
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testEmptyCalculation(): void
+    {
+        $this->deleteEntitiesByClass(Calculation::class);
+        $this->checkRoute('/calculation/below/pdf', self::ROLE_ADMIN, Response::HTTP_FOUND);
+        $this->checkRoute('/calculation/below/excel', self::ROLE_ADMIN, Response::HTTP_FOUND);
     }
 
     /**

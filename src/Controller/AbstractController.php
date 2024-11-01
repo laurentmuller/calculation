@@ -258,7 +258,7 @@ abstract class AbstractController extends BaseController
      * @param ?\Throwable                              $previous   the previous throwable used for
      *                                                             the exception chaining
      */
-    protected function createTranslateNotFoundException(
+    protected function createTranslatedNotFoundException(
         string|\Stringable|TranslatableInterface $id,
         array $parameters = [],
         ?\Throwable $previous = null,
@@ -384,7 +384,7 @@ abstract class AbstractController extends BaseController
     protected function renderPdfDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
     {
         if ($doc instanceof AbstractReport && !$doc->render()) {
-            throw $this->createTranslateNotFoundException('errors.render_document');
+            throw $this->createTranslatedNotFoundException('errors.render_document');
         }
         if (!StringUtils::isString($name) && StringUtils::isString($doc->getTitle())) {
             $name = $doc->getTitle();
@@ -411,7 +411,7 @@ abstract class AbstractController extends BaseController
         string $name = ''
     ): SpreadsheetResponse {
         if ($doc instanceof AbstractDocument && !$doc->render()) {
-            throw $this->createTranslateNotFoundException('errors.render_document');
+            throw $this->createTranslatedNotFoundException('errors.render_document');
         }
         if (!StringUtils::isString($name) && StringUtils::isString($doc->getTitle())) {
             /** @psalm-var string $name */
@@ -436,7 +436,7 @@ abstract class AbstractController extends BaseController
     protected function renderWordDocument(WordDocument $doc, bool $inline = true, string $name = ''): WordResponse
     {
         if ($doc instanceof AbstractWordDocument && !$doc->render()) {
-            throw $this->createTranslateNotFoundException('errors.render_document');
+            throw $this->createTranslatedNotFoundException('errors.render_document');
         }
         if (!StringUtils::isString($name) && StringUtils::isString($doc->getTitle())) {
             /** @psalm-var string $name */

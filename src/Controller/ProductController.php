@@ -110,7 +110,7 @@ class ProductController extends AbstractEntityController
     {
         $entities = $repository->findByDescription();
         if ([] === $entities) {
-            throw $this->createTranslateNotFoundException('product.list.empty');
+            throw $this->createTranslatedNotFoundException('product.list.empty');
         }
         $doc = new ProductsDocument($this, $entities);
 
@@ -140,7 +140,7 @@ class ProductController extends AbstractEntityController
     {
         $entities = $repository->findByGroup();
         if ([] === $entities) {
-            throw $this->createTranslateNotFoundException('product.list.empty');
+            throw $this->createTranslatedNotFoundException('product.list.empty');
         }
         $doc = new ProductsReport($this, $entities);
 

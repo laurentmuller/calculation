@@ -132,7 +132,7 @@ class CalculationController extends AbstractEntityController
     {
         $entities = $this->getEntities(['id' => SortModeInterface::SORT_DESC]);
         if ([] === $entities) {
-            throw $this->createTranslateNotFoundException('calculation.list.empty');
+            throw $this->createTranslatedNotFoundException('calculation.list.empty');
         }
         $doc = new CalculationsDocument($this, $entities);
 
@@ -180,7 +180,7 @@ class CalculationController extends AbstractEntityController
             'id' => SortModeInterface::SORT_DESC,
         ]);
         if ([] === $entities) {
-            throw $this->createTranslateNotFoundException('calculation.list.empty');
+            throw $this->createTranslatedNotFoundException('calculation.list.empty');
         }
         $doc = new CalculationsReport($this, $entities);
 

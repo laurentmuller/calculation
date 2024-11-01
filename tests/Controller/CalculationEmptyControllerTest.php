@@ -12,8 +12,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Entity\Calculation;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
+use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Response;
 
 class CalculationEmptyControllerTest extends ControllerTestCase
@@ -35,7 +37,17 @@ class CalculationEmptyControllerTest extends ControllerTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
+     */
+    public function testEmptyCalculation(): void
+    {
+        $this->deleteEntitiesByClass(Calculation::class);
+        $this->checkRoute('/calculation/empty/pdf', self::ROLE_ADMIN, Response::HTTP_FOUND);
+        $this->checkRoute('/calculation/empty/excel', self::ROLE_ADMIN, Response::HTTP_FOUND);
+    }
+
+    /**
+     * @throws ORMException
      */
     protected function addEntities(): void
     {
@@ -48,7 +60,7 @@ class CalculationEmptyControllerTest extends ControllerTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     protected function deleteEntities(): void
     {

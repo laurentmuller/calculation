@@ -19,11 +19,11 @@
                     <option value="{{ key }}"{% if file.name == key %} selected{% endif %}>{{ value }}</option>
                 {% endfor %}
             </select>
-            <span class="input-group-text text-center d-inline" id="zoom" style="width: 60px;" title="{{ 'diagram.zoom'|trans }}">100 %</span>
+            <span class="input-group-text text-center d-inline" id="zoom" title="{{ 'diagram.zoom'|trans }}" style="width: 60px;">100 %</span>
             <button type="button" class="btn btn-outline-secondary btn-zoom-in" title="{{ 'diagram.zoom_in'|trans }}">
                 <i class="fa-solid fa-magnifying-glass-plus"></i>
             </button>
-            <button type="button" class="btn btn-outline-secondary btn-center" title="{{ 'diagram.center'|trans }}">
+            <button type="button" class="btn btn-outline-secondary btn-reset" title="{{ 'diagram.reset'|trans }}">
                 <i class="fa-solid fa-arrows-to-dot"></i>
             </button>
             <button type="button" class="btn btn-outline-secondary btn-zoom-out" title="{{ 'diagram.zoom_out'|trans }}">
@@ -35,7 +35,7 @@
 {% endblock %}
 {# body #}
 {% block card_body -%}
-<div id="diagram" class="diagram" data-url="{{ path('diagram_load') }}">
+<div id="diagram" class="diagram" data-url="{{ path('diagram_load') }}" data-error="{{ 'diagram.error_not_found'|trans }}">
     {{- file.content -}}
 </div>
 {% endblock %}
@@ -48,7 +48,7 @@
 {% if app.debug %}
     {{ parent() }}
     {{ asset_js('vendor/mermaid/mermaid.js') }}
-    {{ asset_js('vendor/mermaid/svg-pan-zoom.js') }}
+    {{ asset_js('vendor/mermaid/panzoom.js') }}
     {{ asset_js('js/test/diagram.js') }}
 {% else %}
     {{ asset_js('js/compiled/diagram.js') }}

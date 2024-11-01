@@ -62,6 +62,7 @@
                 <div class="collapse{{ collapse_class }}" id="{{ id }}">
                     <ul class="dropdown-menu d-block border-0 pt-0">
                         {{ dropdownItem(path('schema_index'), 'schema.index.title', 'table') }}
+                        {{ dropdownItem(path('diagram_index'), 'diagram.title', 'diagram-project') }}
                         {{ dropdownItem(path('admin_dump_sql'), 'admin.dump_sql.title', 'database') }}
                         {{ dropdownItem(path('command_all'), 'command.list.title', 'code') }}
                         {{ dropdownItem(path('admin_import'), 'swisspost.title', 'download') }}
@@ -92,7 +93,6 @@
             {{ dropdownItem(path('test_editor'), 'test.editor', 'edit') }}
             {{ dropdownItem(path('test_password'), 'password.title', 'lock') }}
             {{ dropdownItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') }}
-            {{ dropdownItem(path('diagram_index'), 'diagram.title', 'diagram-project') }}
             {{ dropdownItem(path('customer_index'), 'customer.list.title', ICON_CUSTOMER) }}
         </ul>
     </div>

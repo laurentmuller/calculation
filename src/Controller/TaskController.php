@@ -141,7 +141,7 @@ class TaskController extends AbstractEntityController
     {
         $entities = $this->getEntities('name');
         if ([] === $entities) {
-            throw $this->createTranslateNotFoundException('task.list.empty');
+            throw $this->createTranslatedNotFoundException('task.list.empty');
         }
         $doc = new TasksDocument($this, $entities);
 
@@ -172,7 +172,7 @@ class TaskController extends AbstractEntityController
     {
         $entities = $this->getEntities('name');
         if ([] === $entities) {
-            throw $this->createTranslateNotFoundException('task.list.empty');
+            throw $this->createTranslatedNotFoundException('task.list.empty');
         }
         $doc = new TasksReport($this, $entities);
 

@@ -52,7 +52,7 @@ class HelpController extends AbstractController
     {
         $dialog = $this->service->findDialog($id);
         if (null === $dialog) {
-            throw $this->createTranslateNotFoundException('help.errors.page_not_found', ['%id%' => $id]);
+            throw $this->createTranslatedNotFoundException('help.errors.page_not_found', ['%id%' => $id]);
         }
         $entity = $this->service->findEntity($dialog);
 
@@ -71,7 +71,7 @@ class HelpController extends AbstractController
     {
         $dialogs = $this->service->getDialogs();
         if ([] === $dialogs) {
-            throw $this->createTranslateNotFoundException('help.errors.dialogs_not_found');
+            throw $this->createTranslatedNotFoundException('help.errors.dialogs_not_found');
         }
 
         $this->service->sortByName($dialogs);
@@ -120,7 +120,7 @@ class HelpController extends AbstractController
     {
         $entities = $this->service->getEntities();
         if ([] === $entities) {
-            throw $this->createTranslateNotFoundException('help.errors.entities_not_found');
+            throw $this->createTranslatedNotFoundException('help.errors.entities_not_found');
         }
 
         $this->service->sortByName($entities);
@@ -138,7 +138,7 @@ class HelpController extends AbstractController
     {
         $entity = $this->service->findEntity($id);
         if (null === $entity) {
-            throw $this->createTranslateNotFoundException('help.errors.page_not_found', ['%id%' => $id]);
+            throw $this->createTranslatedNotFoundException('help.errors.page_not_found', ['%id%' => $id]);
         }
 
         return $this->render('help/help_entity.html.twig', [

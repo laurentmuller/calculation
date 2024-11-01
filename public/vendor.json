@@ -218,20 +218,20 @@
         },
         {
             "name": "mermaid",
-            "version": "11.3.0",
+            "version": "11.4.0",
             "source": "cdnjs",
             "files": [
                 "mermaid.js"
             ]
         },
         {
-            "name": "svg-pan-zoom",
-            "version": "3.6.2",
+            "name": "@panzoom/panzoom",
+            "version": "4.5.1",
             "source": "jsdelivr",
             "prefix": "dist/",
             "target": "mermaid",
             "files": [
-                "dist/svg-pan-zoom.js"
+                "dist/panzoom.js"
             ]
         }
     ]

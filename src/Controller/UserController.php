@@ -115,7 +115,7 @@ class UserController extends AbstractEntityController
     {
         $entities = $this->getEntities('username');
         if ([] === $entities) {
-            throw $this->createTranslateNotFoundException('user.list.empty');
+            throw $this->createTranslatedNotFoundException('user.list.empty');
         }
         $doc = new UsersDocument($this, $entities, $storage);
 
@@ -204,7 +204,7 @@ class UserController extends AbstractEntityController
     {
         $entities = $this->getEntities('username');
         if ([] === $entities) {
-            throw $this->createTranslateNotFoundException('user.list.empty');
+            throw $this->createTranslatedNotFoundException('user.list.empty');
         }
         $doc = new UsersReport($this, $entities, $storage);
 
@@ -329,7 +329,7 @@ class UserController extends AbstractEntityController
     {
         $entities = $this->getEntities('username');
         if ([] === $entities) {
-            throw $this->createTranslateNotFoundException('user.list.empty');
+            throw $this->createTranslatedNotFoundException('user.list.empty');
         }
         $doc = new UserRightsDocument($this, $entities, $builder);
 
@@ -347,7 +347,7 @@ class UserController extends AbstractEntityController
     {
         $entities = $this->getEntities('username');
         if ([] === $entities) {
-            throw $this->createTranslateNotFoundException('user.list.empty');
+            throw $this->createTranslatedNotFoundException('user.list.empty');
         }
         $doc = new UsersRightsReport($this, $entities, $builder);
 

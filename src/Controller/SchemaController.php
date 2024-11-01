@@ -69,7 +69,7 @@ class SchemaController extends AbstractController
 
             return $this->redirectToRoute('schema_index');
         } catch (\Doctrine\DBAL\Exception $e) {
-            throw $this->createTranslateNotFoundException('schema.table.error', ['%name%' => $name], $e);
+            throw $this->createTranslatedNotFoundException('schema.table.error', ['%name%' => $name], $e);
         }
     }
 }

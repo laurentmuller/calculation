@@ -1,49 +1,29 @@
 /**! compression tag for ftp-deployment */
 
-/* globals Toaster, mermaid, svgPanZoom */
-
-/**
- * @typedef {Object} ShadowViewport
- * @property {function} destroy
- */
-
-/**
- * @typedef {Object} SvgPoint
- * @property {number} x
- * @property {number} y
- */
-
-/**
- * @typedef {Object} SvgViewBox
- * @property {number} x
- * @property {number} y
- * @property {number} width
- * @property {number} height
- */
-
-/**
- * @typedef {Object} SvgSizes
- * @property {number} width
- * @property {number} height
- * @property {number} realZoom
- * @property {SvgViewBox} viewBox
- */
+/* globals Toaster, mermaid, Panzoom */
 
 (() => {
     'use strict';
 
     const THEME_DARK = 'dark';
     const THEME_ATTRIBUTE = 'data-bs-theme';
+
     const DATA_CODE = 'data-code';
     const DATA_PROCESSED = 'data-processed';
+
     const DIAGRAM_SELECTOR = '#diagram';
+    const SVG_SELECTOR = '#diagram svg';
+
     const CLASS_REGEX = /classId-(.*)-\d+/;
     const REPLACE_REGEX = /([a-z])([A-Z])/g;
     const REPLACE_TARGET = '$1_$2';
 
+    const MIN_SCALE = 0.5;
+    const MAX_SCALE = 3.0;
+
     /**
      * The diagram renderer.
-     * @var {jQuery<HTMLPreElement>}
+     * @var {jQuery<HTMLElement>}
      */
     const $diagram = $(DIAGRAM_SELECTOR);
 
@@ -56,16 +36,51 @@
     // the HTML document element
     const targetNode = document.documentElement;
 
-    // returns if the dark theme is selected
+    /**
+     * The zoom-in button
+     */
+    const $zoomIn = $('.btn-zoom-in');
+
+    /**
+     * The zoom-out button.
+     */
+    const $zoomOut = $('.btn-zoom-out');
+
+    /**
+     * The reset button.
+     */
+    const $reset = $('.btn-reset');
+
+    /**
+     * The zoom label.
+     */
+    const $zoom = $('#zoom');
+
+    /**
+     * The SVG pan zoom.
+     */
+    let panzoom = null;
+
+    /**
+     * Gets SVG element.
+     * @return {SVGSVGElement}
+     */
+    const getSvgDiagram = () => document.querySelector(SVG_SELECTOR);
+
+    /**
+     * Returns if the dark theme is selected.
+     * @return {boolean}
+     */
     const isDarkTheme = () => targetNode.getAttribute(THEME_ATTRIBUTE) === THEME_DARK;
 
-    // buttons
-    const $zoomIn = $('.btn-zoom-in');
-    const $zoomOut = $('.btn-zoom-out');
-    const $center = $('.btn-center');
-    const $zoom = $('#zoom');
-    /** @type {ShadowViewport|null} */
-    let panZoom = null;
+    /**
+     * The number to format zoom.
+     */
+    const zoomFormatter = new Intl.NumberFormat('default', {
+        style: 'percent',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    });
 
     /**
      * Show an error message.
@@ -94,11 +109,15 @@
             });
         }
         if (!found) {
-            showError(`Unable to find a corresponding diagram for the node "${nodeId}".`);
+            const message = $diagram.data('error').replace('%name%', nodeId);
+            showError(message);
         }
     };
 
-    // Gets the color variables, depending on the selected theme.
+    /**
+     * Gets the color variables, depending on the selected theme.
+     * @return {object}
+     */
     const getThemeVariables = () => {
         if (isDarkTheme()) {
             return {
@@ -121,119 +140,83 @@
     };
 
     /**
-     * @param {number} value
+     * Handle the pan zoom change event.
      */
-    const formatZoom = (value) => {
-        const text = new Intl.NumberFormat('default', {
-            style: 'percent',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0
-        }).format(value);
-        $zoom.text(text);
+    const changeHandler = function (event) {
+        const scale = event.detail.scale;
+        const initial = scale === 1 && event.detail.x === 0 && event.detail.y === 0;
+        $zoomOut.attr('disabled', scale <= MIN_SCALE ? 'disabled' : null);
+        $zoomIn.attr('disabled', scale >= MAX_SCALE ? 'disabled' : null);
+        $reset.attr('disabled', initial ? 'disabled' : null);
+        $zoom.text(zoomFormatter.format(scale));
     };
 
-    /** @return {SVGSVGElement} */
-    const getDiagramSVG = () => $diagram.find('svg:first')[0];
 
     /**
-     * @param {ShadowViewport} [panZoom]
-     * @return {null}
+     * Destroy the SVG pan zoom.
      */
-    const destroySvgPanZoom = (panZoom) => {
-        if (panZoom) {
-            $center.off('click');
-            $zoomIn.off('click');
+    const destroyPanzoom = (panzoom) => {
+        if (panzoom) {
+            const svgDiagram = getSvgDiagram();
+            svgDiagram.parentElement.removeEventListener('wheel', panzoom.zoomWithWheel);
+            svgDiagram.removeEventListener('panzoomchange', changeHandler)
             $zoomOut.off('click');
-            panZoom.destroy();
+            $zoomIn.off('click');
+            $reset.off('click');
+            panzoom.destroy();
         }
         return null;
-    };
+    }
 
+    /**
+     * Create the SVG pan zoom.
+     */
+    const createPanZoom = () => {
+        // initialize
+        const svgDiagram = getSvgDiagram();
+        const panzoom = Panzoom(svgDiagram, {
+            minScale: MIN_SCALE, maxScale: MAX_SCALE,
+        });
 
-    /** @param {number} zoom */
-    const zoomHandler = function (zoom) {
-        // const svg = getDiagramSVG();
-        // const sizes = this.getSizes();
-        // if (zoom > 1.0) {
-        //     svg.style.height = String(sizes.height * zoom);
-        // } else {
-        //     svg.style.height = String(sizes.height);
-        // }
-        formatZoom(zoom);
+        // set handlers
+        $reset.on('click', () => panzoom.reset());
+        $zoomIn.on('click', () => panzoom.zoomIn());
+        $zoomOut.on('click', () => panzoom.zoomOut());
+        svgDiagram.addEventListener('panzoomchange', changeHandler)
+        svgDiagram.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
+
+        return panzoom;
     };
 
     /**
-     * @param  {SvgPoint} oldPane
-     * @param  {SvgPoint} newPan
-     * @return {SvgPoint|null}
+     * load the diagram.
      */
-    const beforePanHandler = function (oldPane, newPan) {
-        const margin = 100;
-        const svg = getDiagramSVG();
-        /** @type {SvgSizes} */
-        const sizes = this.getSizes();
-        const width = Math.max(sizes.width, svg.clientWidth);
-        const height = Math.max(sizes.height, svg.clientHeight);
-        const left = -((sizes.viewBox.x + sizes.viewBox.width) * sizes.realZoom) + margin;
-        const right = width - margin - (sizes.viewBox.x * sizes.realZoom);
-        const top = -((sizes.viewBox.y + height) * sizes.realZoom) + margin;
-        const bottom = height - margin - (sizes.viewBox.y * sizes.realZoom);
-
-        return {
-            x: Math.max(left, Math.min(right, newPan.x)),
-            y: Math.max(top, Math.min(bottom, newPan.y))
-        };
-    };
-
-    /**
-     * @return {ShadowViewport}
-     */
-    const createSvgPanZoom = () => {
-        const svg = getDiagramSVG();
-        const panZoom = svgPanZoom(svg, {
-            onZoom: zoomHandler, beforePan: beforePanHandler,
-        });
-        /** @type {SvgSizes} */
-        const sizes = panZoom.getSizes();
-        formatZoom(sizes.realZoom);
-        //svg.style.height = String(sizes.height);
-        svg.style.height = '100%';
-        svg.style.maxWidth = '100%';
-        svg.style.width = '100%';
-
-        $zoomOut.on('click', () => panZoom.zoomOut());
-        $zoomIn.on('click', () => panZoom.zoomIn());
-        $center.on('click', () => {
-            panZoom.reset();
-            panZoom.center();
-        });
-
-        return panZoom;
-    };
-
-    // load the diagram.
     const loadDiagram = () => {
         mermaid.initialize({
             theme: 'base',
-            useMaxWidth: false,
             startOnLoad: false,
+            useMaxWidth: false,
             securityLevel: 'loose',
             themeVariables: getThemeVariables()
         });
         mermaid.run({
-            nodes: [$diagram[0]],
+            querySelector: DIAGRAM_SELECTOR,
         }).then(() => {
-            panZoom = destroySvgPanZoom(panZoom);
-            panZoom = createSvgPanZoom();
+            panzoom = destroyPanzoom(panzoom);
+            panzoom = createPanZoom();
         });
     };
 
-    // Save the HTML content of the diagram.
+    /**
+     * Save the HTML content of the diagram.
+     */
     const saveDiagram = () => {
         $diagram.attr(DATA_CODE, $diagram.html());
     };
 
-    // Reset processed diagram.
+    /**
+     * Reset processed diagram.
+     */
     const resetDiagram = () => {
         const code = $diagram.attr(DATA_CODE);
         if (code) {
@@ -242,7 +225,26 @@
         }
     };
 
-    // Handle diagrams change selection.
+    /**
+     * Add a listener for the theme attribute.
+     */
+    const addThemeObserver = () => {
+        const mutationCallback = (mutationsList) => {
+            for (const mutation of mutationsList) {
+                if (mutation.attributeName === THEME_ATTRIBUTE) {
+                    resetDiagram();
+                    loadDiagram();
+                    break;
+                }
+            }
+        };
+        const observer = new MutationObserver(mutationCallback);
+        observer.observe(targetNode, {attributes: true});
+    };
+
+    /**
+     * Handle diagrams change selection.
+     */
     $diagrams.on('change', function () {
         const url = $('#diagram').data('url');
         if (!url) {
@@ -250,7 +252,7 @@
             return;
         }
         const data = {
-            'name': $(this).val()
+            'name': $diagrams.val()
         };
         $.getJSON(url, data, function (response) {
             // error?
@@ -272,7 +274,9 @@
         });
     }).trigger('focus');
 
-    // Handle history pop state
+    /**
+     * Handle history pop state.
+     */
     window.addEventListener('popstate', (e) => {
         if (e.state && e.state.name) {
             const name = e.state.name;
@@ -284,16 +288,6 @@
     saveDiagram();
     loadDiagram();
 
-    // add a listener to the theme attribute
-    const mutationCallback = (mutationsList) => {
-        for (const mutation of mutationsList) {
-            if (mutation.attributeName !== THEME_ATTRIBUTE) {
-                return;
-            }
-            resetDiagram();
-            loadDiagram();
-        }
-    };
-    const observer = new MutationObserver(mutationCallback);
-    observer.observe(targetNode, {attributes: true});
+    // add a listener for the theme attribute
+    addThemeObserver();
 })();

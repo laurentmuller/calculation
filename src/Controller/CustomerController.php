@@ -88,7 +88,7 @@ class CustomerController extends AbstractEntityController
     {
         $entities = $repository->findByNameAndCompany();
         if ([] === $entities) {
-            throw $this->createTranslateNotFoundException('customer.list.empty');
+            throw $this->createTranslatedNotFoundException('customer.list.empty');
         }
         $doc = new CustomersDocument($this, $entities);
 
@@ -118,7 +118,7 @@ class CustomerController extends AbstractEntityController
     {
         $entities = $repository->findByNameAndCompany();
         if ([] === $entities) {
-            throw $this->createTranslateNotFoundException('customer.list.empty');
+            throw $this->createTranslatedNotFoundException('customer.list.empty');
         }
         $grouped = $this->getRequestBoolean($request, 'grouped', true);
         $report = new CustomersReport($this, $entities, $grouped);

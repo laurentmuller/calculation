@@ -115,9 +115,11 @@ final class DateUtils
     /**
      * Gets the numeric representation of a month for the given date.
      *
+     * @param \DateTimeInterface $date the date to get month for
+     *
      * @return int value 1 through 12
      */
-    public static function getMonth(\DateTimeInterface $date): int
+    public static function getMonth(\DateTimeInterface $date = new \DateTime()): int
     {
         return (int) $date->format('n');
     }
@@ -183,9 +185,11 @@ final class DateUtils
      *
      * The weeks are starting on Monday.
      *
+     * @param \DateTimeInterface $date the date to get week for
+     *
      * @return int value 1 through 53
      */
-    public static function getWeek(\DateTimeInterface $date): int
+    public static function getWeek(\DateTimeInterface $date = new \DateTime()): int
     {
         return (int) $date->format('W');
     }
@@ -213,7 +217,7 @@ final class DateUtils
     /**
      * Gets the full numeric representation of a year with 4 digits for the given date.
      */
-    public static function getYear(\DateTimeInterface $date): int
+    public static function getYear(\DateTimeInterface $date = new \DateTime()): int
     {
         return (int) $date->format('Y');
     }

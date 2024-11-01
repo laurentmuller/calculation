@@ -378,7 +378,7 @@ class CalendarController extends AbstractController
      */
     private function validateMonth(?int $month = null): int
     {
-        $month = (int) ($month ?? \date('n'));
+        $month ??= DateUtils::getMonth();
         if ($month < 1 || $month > 12) {
             throw $this->createTranslatedNotFoundException('calendar.invalid_month');
         }
@@ -397,7 +397,7 @@ class CalendarController extends AbstractController
      */
     private function validateWeek(?int $week = null): int
     {
-        $week = (int) ($week ?? \date('W'));
+        $week ??= DateUtils::getWeek();
         if ($week < 1 || $week > 53) {
             throw $this->createTranslatedNotFoundException('calendar.invalid_week');
         }
@@ -410,10 +410,10 @@ class CalendarController extends AbstractController
      *
      * @param ?int $year the optional year to validate
      *
-     * @return int a valid year
+     * @return int a valid year with 4 digits
      */
     private function validateYear(?int $year = null): int
     {
-        return DateUtils::completYear((int) ($year ?? \date('Y')));
+        return DateUtils::completYear($year ?? DateUtils::getYear());
     }
 }

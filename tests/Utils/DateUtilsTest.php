@@ -233,6 +233,27 @@ class DateUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testGetDefaultMonth(): void
+    {
+        $actual = DateUtils::getMonth();
+        $expected = (int) (new \DateTime())->format('n');
+        self::assertSame($expected, $actual);
+    }
+
+    public function testGetDefaultWeek(): void
+    {
+        $actual = DateUtils::getWeek();
+        $expected = (int) (new \DateTime())->format('W');
+        self::assertSame($expected, $actual);
+    }
+
+    public function testGetDefaultYear(): void
+    {
+        $actual = DateUtils::getYear();
+        $expected = (int) (new \DateTime())->format('Y');
+        self::assertSame($expected, $actual);
+    }
+
     #[DataProvider('getMonths')]
     public function testGetMonth(\DateTimeInterface $date, int $expected): void
     {

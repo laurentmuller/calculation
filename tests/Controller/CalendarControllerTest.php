@@ -33,8 +33,8 @@ class CalendarControllerTest extends ControllerTestCase
         yield ['/calendar/year', self::ROLE_ADMIN];
         yield ['/calendar/year', self::ROLE_SUPER_ADMIN];
 
-        yield ['/calendar/month/2024/0', self::ROLE_ADMIN, Response::HTTP_NOT_FOUND];
-        yield ['/calendar/week/2024/0', self::ROLE_ADMIN, Response::HTTP_NOT_FOUND];
+        yield ['/calendar/month/2024/100', self::ROLE_ADMIN, Response::HTTP_NOT_FOUND];
+        yield ['/calendar/week/2024/100', self::ROLE_ADMIN, Response::HTTP_NOT_FOUND];
     }
 
     /**

@@ -159,14 +159,14 @@
         if (panzoom) {
             const svgDiagram = getSvgDiagram();
             svgDiagram.parentElement.removeEventListener('wheel', panzoom.zoomWithWheel);
-            svgDiagram.removeEventListener('panzoomchange', changeHandler)
+            svgDiagram.removeEventListener('panzoomchange', changeHandler);
             $zoomOut.off('click');
             $zoomIn.off('click');
             $reset.off('click');
             panzoom.destroy();
         }
         return null;
-    }
+    };
 
     /**
      * Create the SVG pan zoom.
@@ -182,7 +182,7 @@
         $reset.on('click', () => panzoom.reset());
         $zoomIn.on('click', () => panzoom.zoomIn());
         $zoomOut.on('click', () => panzoom.zoomOut());
-        svgDiagram.addEventListener('panzoomchange', changeHandler)
+        svgDiagram.addEventListener('panzoomchange', changeHandler);
         svgDiagram.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
 
         return panzoom;

@@ -218,6 +218,13 @@ class DateUtilsTest extends TestCase
         self::assertSame($expected, $year);
     }
 
+    public function testCompletYearWithDefault(): void
+    {
+        $expected = (int) (new \DateTime())->format('Y');
+        $actual = DateUtils::completYear();
+        self::assertSame($expected, $actual);
+    }
+
     #[DataProvider('getFormatFormDate')]
     public function testFormatFormDate(?\DateTimeInterface $date, ?string $expected): void
     {
@@ -230,6 +237,13 @@ class DateUtilsTest extends TestCase
     public function testGetDay(\DateTimeInterface $date, int $expected): void
     {
         $actual = DateUtils::getDay($date);
+        self::assertSame($expected, $actual);
+    }
+
+    public function testGetDefaultDay(): void
+    {
+        $actual = DateUtils::getDay();
+        $expected = (int) (new \DateTime())->format('j');
         self::assertSame($expected, $actual);
     }
 

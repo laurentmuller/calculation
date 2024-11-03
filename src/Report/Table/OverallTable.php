@@ -34,6 +34,27 @@ class OverallTable extends ReportTable
     }
 
     /**
+     * Output overall totals.
+     */
+    public function output(): void
+    {
+        $calculation = $this->calculation;
+        $totalItems = $calculation->getGroupsAmount();
+        $totalMargins = $calculation->getGroupsMarginAmount();
+        $totalBrut = $totalItems + $totalMargins;
+        $globalMargin = $calculation->getGlobalMargin();
+        $globalAmount = $totalBrut * ($globalMargin - 1.0);
+        $totalNet = $totalBrut + $globalAmount;
+        $userMargin = $calculation->getUserMargin();
+        $userAmount = $totalNet * $userMargin;
+
+        $this->createColumns()
+            ->outputGlobalMargin($globalMargin, $globalAmount)
+            ->outputUserMargin($userMargin, $userAmount, $totalNet)
+            ->outputOverallTotal($calculation, $totalItems);
+    }
+
+    /**
      * Create and render the table for the given report.
      */
     public static function render(CalculationReport $parent): void
@@ -62,27 +83,6 @@ class OverallTable extends ReportTable
             $this->rightColumn('', 20, true),
             $this->rightColumn('', 20, true),
         )->setRepeatHeader(false);
-    }
-
-    /**
-     * Output overall totals.
-     */
-    private function output(): void
-    {
-        $calculation = $this->calculation;
-        $totalItems = $calculation->getGroupsAmount();
-        $totalMargins = $calculation->getGroupsMarginAmount();
-        $totalBrut = $totalItems + $totalMargins;
-        $globalMargin = $calculation->getGlobalMargin();
-        $globalAmount = $totalBrut * ($globalMargin - 1.0);
-        $totalNet = $totalBrut + $globalAmount;
-        $userMargin = $calculation->getUserMargin();
-        $userAmount = $totalNet * $userMargin;
-
-        $this->createColumns()
-            ->outputGlobalMargin($globalMargin, $globalAmount)
-            ->outputUserMargin($userMargin, $userAmount, $totalNet)
-            ->outputOverallTotal($calculation, $totalItems);
     }
 
     private function outputGlobalMargin(float $globalMargin, float $globalAmount): self

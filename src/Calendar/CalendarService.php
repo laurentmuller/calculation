@@ -44,7 +44,7 @@ class CalendarService
      */
     public function generate(?int $year = null): Calendar
     {
-        $year = DateUtils::completYear($year ?? (int) \date('Y'));
+        $year = DateUtils::completYear($year);
 
         return $this->createCalendar()
             ->setMonthModel($this->getMonthModel())

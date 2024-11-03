@@ -80,13 +80,16 @@ final class DateUtils
      *
      * For example, if the year is set with 2 digits (10), the return value will be 2010.
      *
-     * @param int $year   the year to complet
-     * @param int $change the year change limit
+     * @param ?int $year   the year to complet or <code>null</code> to use the current year
+     * @param int  $change the year change limit
      *
      * @return int the full year
      */
-    public static function completYear(int $year, int $change = 1930): int
+    public static function completYear(?int $year = null, int $change = 1930): int
     {
+        if (null === $year) {
+            return self::getYear();
+        }
         if ($year <= 99) {
             return 100 + $change + ($year - $change) % 100;
         }
@@ -105,22 +108,28 @@ final class DateUtils
     /**
      * Gets the numeric representation of a day of the month for the given date.
      *
+     * @param ?\DateTimeInterface $date the date to get day for or <code>null</code> to use current date
+     *
      * @return int value 1 through 31
      */
-    public static function getDay(\DateTimeInterface $date): int
+    public static function getDay(?\DateTimeInterface $date = null): int
     {
+        $date ??= new \DateTime();
+
         return (int) $date->format('j');
     }
 
     /**
      * Gets the numeric representation of a month for the given date.
      *
-     * @param \DateTimeInterface $date the date to get month for
+     * @param ?\DateTimeInterface $date the date to get month for or <code>null</code> to use current date
      *
      * @return int value 1 through 12
      */
-    public static function getMonth(\DateTimeInterface $date = new \DateTime()): int
+    public static function getMonth(?\DateTimeInterface $date = null): int
     {
+        $date ??= new \DateTime();
+
         return (int) $date->format('n');
     }
 
@@ -185,12 +194,14 @@ final class DateUtils
      *
      * The weeks are starting on Monday.
      *
-     * @param \DateTimeInterface $date the date to get week for
+     * @param ?\DateTimeInterface $date the date to get week for or <code>null</code> to use current date
      *
      * @return int value 1 through 53
      */
-    public static function getWeek(\DateTimeInterface $date = new \DateTime()): int
+    public static function getWeek(?\DateTimeInterface $date = null): int
     {
+        $date ??= new \DateTime();
+
         return (int) $date->format('W');
     }
 
@@ -216,9 +227,13 @@ final class DateUtils
 
     /**
      * Gets the full numeric representation of a year with 4 digits for the given date.
+     *
+     * @param ?\DateTimeInterface $date the date to get year for or <code>null</code> to use current date
      */
-    public static function getYear(\DateTimeInterface $date = new \DateTime()): int
+    public static function getYear(?\DateTimeInterface $date = null): int
     {
+        $date ??= new \DateTime();
+
         return (int) $date->format('Y');
     }
 

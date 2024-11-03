@@ -312,8 +312,8 @@ class CalendarController extends AbstractController
      */
     private function todayMonth(array $yearsMonths, int $year, int $month): array|false
     {
-        $todayYear = (int) \date('Y');
-        $todayMonth = (int) \date('n');
+        $todayYear = DateUtils::getYear();
+        $todayMonth = DateUtils::getMonth();
         if ($year !== $todayYear || $month !== $todayMonth) {
             $yearMonth = $todayYear * 1000 + $todayMonth;
             /** @psalm-var array<int[]> $filtered */
@@ -336,8 +336,8 @@ class CalendarController extends AbstractController
      */
     private function todayWeek(array $yearsWeeks, int $year, int $week): array|false
     {
-        $todayYear = (int) \date('Y');
-        $todayWeek = (int) \date('W');
+        $todayYear = DateUtils::getYear();
+        $todayWeek = DateUtils::getWeek();
         if ($year !== $todayYear || $week !== $todayWeek) {
             $yearWeek = $year * 1000 + $week;
             /** @psalm-var array<int[]> $filtered */
@@ -359,7 +359,7 @@ class CalendarController extends AbstractController
      */
     private function todayYear(array $years, int $year): int|false
     {
-        $todayYear = (int) \date('Y');
+        $todayYear = DateUtils::getYear();
         if ($year !== $todayYear && \in_array($todayYear, $years, true)) {
             return $todayYear;
         }
@@ -414,6 +414,6 @@ class CalendarController extends AbstractController
      */
     private function validateYear(?int $year = null): int
     {
-        return DateUtils::completYear($year ?? DateUtils::getYear());
+        return DateUtils::completYear($year);
     }
 }

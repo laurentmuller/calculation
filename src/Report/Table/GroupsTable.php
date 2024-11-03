@@ -33,6 +33,19 @@ class GroupsTable extends ReportTable
     }
 
     /**
+     * Output totals by calculation's group.
+     */
+    public function output(): void
+    {
+        $this->createColumns();
+        $calculation = $this->calculation;
+        foreach ($calculation->getGroups() as $group) {
+            $this->outputGroup($group);
+        }
+        $this->outputTotal($calculation);
+    }
+
+    /**
      * Create and render the table for the given report.
      */
     public static function render(CalculationReport $parent): void
@@ -69,19 +82,6 @@ class GroupsTable extends ReportTable
             ->addCellTrans('report.calculation.margins', cols: 2, alignment: PdfTextAlignment::CENTER)
             ->add($columns[4]->getText())
             ->endRow();
-    }
-
-    /**
-     * Output totals by calculation's group.
-     */
-    private function output(): void
-    {
-        $this->createColumns();
-        $calculation = $this->calculation;
-        foreach ($calculation->getGroups() as $group) {
-            $this->outputGroup($group);
-        }
-        $this->outputTotal($calculation);
     }
 
     private function outputGroup(CalculationGroup $group): void

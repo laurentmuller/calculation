@@ -60,6 +60,34 @@ class ItemsTable extends ReportGroupTable implements PdfGroupListenerInterface
         return $this->renderCategory($key);
     }
 
+    public function output(): void
+    {
+        $calculation = $this->calculation;
+        $duplicateItems = $calculation->getDuplicateItems();
+
+        $defaultStyle = PdfStyle::getCellStyle()
+            ->setIndent(self::INDENT)
+            ->setBorder(PdfBorder::leftRight());
+        $errorStyle = (clone $defaultStyle)
+            ->setTextColor(PdfTextColor::red());
+
+        $this->createColumns();
+        $this->setGroupListener($this);
+        foreach ($calculation->getGroups() as $group) {
+            $this->setGroupKey($group);
+            foreach ($group->getCategories() as $category) {
+                $this->setGroupKey($category);
+                foreach ($category->getItems() as $item) {
+                    $this->renderItem($item, $duplicateItems, $defaultStyle, $errorStyle);
+                }
+            }
+        }
+        $this->setInProgress(true);
+        $this->renderTotal($calculation->getItemsTotal());
+        $this->setInProgress(false);
+        $this->getParent()->lineBreak(3);
+    }
+
     /**
      * Create and render the table for the given report.
      */
@@ -109,34 +137,6 @@ class ItemsTable extends ReportGroupTable implements PdfGroupListenerInterface
             $this->rightColumn('calculationitem.fields.quantity', 20, true),
             $this->rightColumn('calculationitem.fields.total', 20, true)
         )->outputHeaders();
-    }
-
-    private function output(): void
-    {
-        $calculation = $this->calculation;
-        $duplicateItems = $calculation->getDuplicateItems();
-
-        $defaultStyle = PdfStyle::getCellStyle()
-            ->setIndent(self::INDENT)
-            ->setBorder(PdfBorder::leftRight());
-        $errorStyle = (clone $defaultStyle)
-            ->setTextColor(PdfTextColor::red());
-
-        $this->createColumns();
-        $this->setGroupListener($this);
-        foreach ($calculation->getGroups() as $group) {
-            $this->setGroupKey($group);
-            foreach ($group->getCategories() as $category) {
-                $this->setGroupKey($category);
-                foreach ($category->getItems() as $item) {
-                    $this->renderItem($item, $duplicateItems, $defaultStyle, $errorStyle);
-                }
-            }
-        }
-        $this->setInProgress(true);
-        $this->renderTotal($calculation->getItemsTotal());
-        $this->setInProgress(false);
-        $this->getParent()->lineBreak(3);
     }
 
     private function renderCategory(CalculationCategory $category): true

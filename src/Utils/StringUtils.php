@@ -168,14 +168,10 @@ final class StringUtils
      */
     public static function exportVar(mixed $expression): string
     {
-        try {
-            $export = \var_export($expression, true);
-            $export = self::replace(self::VAR_SEARCH, $export);
+        $export = \var_export($expression, true);
+        $export = self::replace(self::VAR_SEARCH, $export);
 
-            return self::pregReplace(self::VAR_PATTERN, $export);
-        } catch (\Exception) {
-            return (string) $expression;
-        }
+        return self::pregReplace(self::VAR_PATTERN, $export);
     }
 
     /**

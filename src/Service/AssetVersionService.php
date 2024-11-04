@@ -108,7 +108,7 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
                 ->in($this->imagesPath)
                 ->files();
             foreach ($finder as $file) {
-                $images[$file->getFilename()] = $this->getFileTime($file->getRealPath(), $this->imagesVersion);
+                $images[$file->getFilename()] = (string) $file->getMTime();
             }
 
             return $images;

@@ -32,7 +32,8 @@ return static function (FrameworkConfig $config): void {
         ->sender('%mailer_user_email%');
 
     $config->assets()
-        ->versionStrategy(AssetVersionService::class);
+        ->versionStrategy(AssetVersionService::class)
+        ->strictMode('%kernel.debug%');
 
     $config->router()
         ->utf8(true);

@@ -20,33 +20,37 @@ use App\Entity\Log;
 readonly class LogFilter
 {
     private bool $isFilterChannel;
-
     private bool $isFilterLevel;
-
     private bool $isFilterValue;
+    private string $searchChannel;
+    private string $searchLevel;
+    private string $searchValue;
 
     /**
      * @param string $value   the value to search for
-     * @param string $channel the channel to search for
      * @param string $level   the level to search for
+     * @param string $channel the channel to search for
      */
-    public function __construct(private string $value, private string $level, private string $channel)
+    public function __construct(string $value, string $level, string $channel)
     {
-        $this->isFilterValue = '' !== \trim($this->value);
-        $this->isFilterLevel = '' !== \trim($this->level);
-        $this->isFilterChannel = '' !== \trim($this->channel);
+        $this->searchValue = \trim($value);
+        $this->searchLevel = \trim($level);
+        $this->searchChannel = \trim($channel);
+        $this->isFilterValue = '' !== $this->searchValue;
+        $this->isFilterLevel = '' !== $this->searchLevel;
+        $this->isFilterChannel = '' !== $this->searchChannel;
     }
 
     /**
-     * Apply filters to the given logs.
+     * Filters to the given logs.
      *
      * @param Log[] $logs
      *
      * @return Log[]
      */
-    public function apply(array $logs): array
+    public function filter(array $logs): array
     {
-        if (!self::isFilter($this->value, $this->level, $this->channel)) {
+        if (!self::isFilter($this->searchValue, $this->searchLevel, $this->searchChannel)) {
             return $logs;
         }
         if ($this->isFilterLevel) {
@@ -78,8 +82,7 @@ readonly class LogFilter
 
     private function acceptChannel(Log $log): bool
     {
-        return !$this->isFilterChannel && $log->isChannel()
-            && $this->acceptValue($log->getChannel());
+        return !$this->isFilterChannel && $this->acceptValue($log->getChannel());
     }
 
     private function acceptDate(Log $log): bool
@@ -89,8 +92,7 @@ readonly class LogFilter
 
     private function acceptLevel(Log $log): bool
     {
-        return !$this->isFilterLevel && $log->isLevel()
-            && $this->acceptValue($log->getLevel());
+        return !$this->isFilterLevel && $this->acceptValue($log->getLevel());
     }
 
     private function acceptMessage(Log $log): bool
@@ -105,7 +107,7 @@ readonly class LogFilter
 
     private function acceptValue(?string $haystack): bool
     {
-        return null !== $haystack && false !== \stripos($haystack, $this->value);
+        return null !== $haystack && false !== \stripos($haystack, $this->searchValue);
     }
 
     /**
@@ -117,7 +119,10 @@ readonly class LogFilter
      */
     private function filterChannel(array $logs): array
     {
-        return \array_filter($logs, fn (Log $log): bool => StringUtils::equalIgnoreCase($this->channel, $log->getChannel()));
+        return \array_filter(
+            $logs,
+            fn (Log $log): bool => StringUtils::equalIgnoreCase($this->searchChannel, $log->getChannel())
+        );
     }
 
     /**
@@ -129,7 +134,10 @@ readonly class LogFilter
      */
     private function filterLevel(array $logs): array
     {
-        return \array_filter($logs, fn (Log $log): bool => StringUtils::equalIgnoreCase($this->level, $log->getLevel()));
+        return \array_filter(
+            $logs,
+            fn (Log $log): bool => StringUtils::equalIgnoreCase($this->searchLevel, $log->getLevel())
+        );
     }
 
     /**
@@ -141,10 +149,13 @@ readonly class LogFilter
      */
     private function filterValue(array $logs): array
     {
-        return \array_filter($logs, fn (Log $log): bool => $this->acceptChannel($log)
+        return \array_filter(
+            $logs,
+            fn (Log $log): bool => $this->acceptChannel($log)
             || $this->acceptLevel($log)
             || $this->acceptDate($log)
             || $this->acceptMessage($log)
-            || $this->acceptUser($log));
+            || $this->acceptUser($log)
+        );
     }
 }

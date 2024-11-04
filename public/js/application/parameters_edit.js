@@ -85,7 +85,7 @@ function displayError() {
 function displayNotification($source) {
     'use strict';
     // get random text
-    const url = $('#edit-form').data("random");
+    const url = $('#edit-form').data('random');
     $.getJSON(url, function (response) {
         if (response.result && response.content) {
             const type = $source.data('value');
@@ -94,7 +94,7 @@ function displayNotification($source) {
             const options = {
                 dataset: '#flashes',
                 icon: $('#message_icon').isChecked(),
-                position: $("#message_position").val(),
+                position: $('#message_position').val(),
                 timeout: $('#message_timeout').intVal(),
                 progress: $('#message_progress').intVal(),
                 displayClose: $('#message_close').isChecked(),
@@ -194,6 +194,7 @@ $(function () {
 
     // validation
     $('#edit-form').initValidator({
+        ignore: [], // prevent no validation for hidden fields
         inline: true,
         rules: {
             'customer_url': {

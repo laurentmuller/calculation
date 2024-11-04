@@ -30,7 +30,7 @@ class LogFilterTest extends TestCase
         $logs = [$log1, $log2];
 
         $filter = new LogFilter('', '', 'channel');
-        $filter->apply($logs);
+        $filter->filter($logs);
         self::assertSame([$log1, $log2], $logs);
     }
 
@@ -45,7 +45,7 @@ class LogFilterTest extends TestCase
         $logs = [$log1, $log2];
 
         $filter = new LogFilter('', PsrLevel::ALERT, '');
-        $filter->apply($logs);
+        $filter->filter($logs);
         self::assertSame([$log1, $log2], $logs);
     }
 
@@ -60,7 +60,7 @@ class LogFilterTest extends TestCase
         $logs = [$log1, $log2];
 
         $filter = new LogFilter('message', '', '');
-        $filter->apply($logs);
+        $filter->filter($logs);
         self::assertSame([$log1, $log2], $logs);
     }
 
@@ -75,7 +75,7 @@ class LogFilterTest extends TestCase
         $logs = [$log1, $log2];
 
         $filter = new LogFilter('user', '', '');
-        $filter->apply($logs);
+        $filter->filter($logs);
         self::assertSame([$log1, $log2], $logs);
     }
 
@@ -90,7 +90,7 @@ class LogFilterTest extends TestCase
         $logs = [$log1, $log2];
 
         $filter = new LogFilter('', '', '');
-        $filter->apply($logs);
+        $filter->filter($logs);
         self::assertSame([$log1, $log2], $logs);
     }
 

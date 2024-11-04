@@ -374,7 +374,7 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 
-/* Remove red and green cross for invalid field */
+/* Remove red and green cross for invalid field
 .was-validated .form-control:invalid, .form-control.is-invalid {
     background-image: none !important;
     padding-right: 0.75rem !important;
@@ -384,7 +384,7 @@ input[type="number"] {
     background-image: none !important;
     padding-right: 1.75rem !important;
 }
-
+*/
 
 /* Custom file input */
 .custom-file-input:lang(fr) ~ .custom-file-label::after {

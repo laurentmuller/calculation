@@ -7,54 +7,54 @@
 
     const THEME_DARK = 'dark';
     const THEME_ATTRIBUTE = 'data-bs-theme';
-
-    const DATA_CODE = 'data-code';
     const DATA_PROCESSED = 'data-processed';
-
-    const DIAGRAM_SELECTOR = '#diagram';
-    const SVG_SELECTOR = '#diagram svg';
-
     const CLASS_REGEX = /classId-(.*)-\d+/;
     const REPLACE_REGEX = /([a-z])([A-Z])/g;
     const REPLACE_TARGET = '$1_$2';
-
     const MIN_SCALE = 0.5;
-    const MAX_SCALE = 3.0;
+    const MAX_SCALE = 2.5;
 
     /**
      * The diagram renderer.
-     * @var {jQuery<HTMLElement>}
+     * @type {HTMLDivElement}
      */
-    const $diagram = $(DIAGRAM_SELECTOR);
+    const diagram = document.getElementById('diagram');
 
     /**
      * The diagrams list.
-     * @var {jQuery<HTMLSelectElement>}
+     * @type {HTMLSelectElement}
      */
-    const $diagrams = $('#diagrams');
-
-    // the HTML document element
-    const targetNode = document.documentElement;
+    const diagrams = document.getElementById('diagrams');
 
     /**
-     * The zoom-in button
+     * The root node of the document.
+     * @type {HTMLElement}
      */
-    const $zoomIn = $('.btn-zoom-in');
+    const rootNode = document.documentElement;
 
     /**
      * The zoom-out button.
+     * @type {HTMLButtonElement}
      */
-    const $zoomOut = $('.btn-zoom-out');
+    const zoomOut = document.querySelector('.btn-zoom-out');
+
+    /**
+     * The zoom-in button
+     * @type {HTMLButtonElement}
+     */
+    const zoomIn = document.querySelector('.btn-zoom-in');
 
     /**
      * The reset button.
+     * @type {HTMLButtonElement}
      */
-    const $reset = $('.btn-reset');
+    const reset = document.querySelector('.btn-reset');
 
     /**
      * The zoom label.
+     * @type {HTMLSpanElement}
      */
-    const $zoom = $('#zoom');
+    const zoom = document.getElementById('zoom');
 
     /**
      * The SVG pan zoom.
@@ -65,13 +65,13 @@
      * Gets SVG element.
      * @return {SVGSVGElement}
      */
-    const getSvgDiagram = () => document.querySelector(SVG_SELECTOR);
+    const getSvgDiagram = () => document.querySelector('#diagram svg');
 
     /**
      * Returns if the dark theme is selected.
      * @return {boolean}
      */
-    const isDarkTheme = () => targetNode.getAttribute(THEME_ATTRIBUTE) === THEME_DARK;
+    const isDarkTheme = () => rootNode.getAttribute(THEME_ATTRIBUTE) === THEME_DARK;
 
     /**
      * The number to format zoom.
@@ -87,7 +87,8 @@
      * @param {string} message
      */
     const showError = (message) => {
-        Toaster.danger(message, $('.card-title').text());
+        const title = document.querySelector('.card-title').textContent;
+        Toaster.danger(message, title);
     };
 
     /**
@@ -99,18 +100,17 @@
         const result = CLASS_REGEX.exec(nodeId);
         if (result && result.length >= 2) {
             const className = result[1].replace(REPLACE_REGEX, REPLACE_TARGET);
-            $diagrams.find('option').each(function () {
-                const value = $(this).val();
-                if (className.equalsIgnoreCase(value)) {
-                    $diagrams.val(value).trigger('change');
+            for (const option of diagrams.options) {
+                if (className.equalsIgnoreCase(option.value)) {
+                    diagrams.value = option.value;
+                    diagrams.dispatchEvent(new Event('change'));
                     found = true;
-                    return false;
+                    break;
                 }
-            });
+            }
         }
         if (!found) {
-            const message = $diagram.data('error').replace('%name%', nodeId);
-            showError(message);
+            showError(diagram.dataset.error.replace('%name%', nodeId));
         }
     };
 
@@ -140,17 +140,27 @@
     };
 
     /**
-     * Handle the pan zoom change event.
+     * @param {HTMLButtonElement}  button
+     * @param {boolean} disabled
      */
-    const changeHandler = function (event) {
-        const scale = event.detail.scale;
-        const initial = scale === 1 && event.detail.x === 0 && event.detail.y === 0;
-        $zoomOut.attr('disabled', scale <= MIN_SCALE ? 'disabled' : null);
-        $zoomIn.attr('disabled', scale >= MAX_SCALE ? 'disabled' : null);
-        $reset.attr('disabled', initial ? 'disabled' : null);
-        $zoom.text(zoomFormatter.format(scale));
+    const updateState = function (button, disabled) {
+        if (disabled) {
+            button.setAttribute('disabled', 'disabled');
+        } else {
+            button.removeAttribute('disabled');
+        }
     };
 
+    /**
+     * Handle the pan zoom change event.
+     */
+    const zoomHandler = function (event) {
+        const scale = event.detail.scale;
+        updateState(zoomIn, scale >= MAX_SCALE);
+        updateState(zoomOut, scale <= MIN_SCALE);
+        updateState(reset, scale === 1 && event.detail.x === 0 && event.detail.y === 0);
+        zoom.textContent = zoomFormatter.format(scale);
+    };
 
     /**
      * Destroy the SVG pan zoom.
@@ -159,10 +169,10 @@
         if (panzoom) {
             const svgDiagram = getSvgDiagram();
             svgDiagram.parentElement.removeEventListener('wheel', panzoom.zoomWithWheel);
-            svgDiagram.removeEventListener('panzoomchange', changeHandler);
-            $zoomOut.off('click');
-            $zoomIn.off('click');
-            $reset.off('click');
+            svgDiagram.removeEventListener('panzoomchange', zoomHandler);
+            zoomOut.removeEventListener('click', panzoom.zoomOut);
+            zoomIn.removeEventListener('click', panzoom.zoomIn);
+            reset.removeEventListener('click', panzoom.reset);
             panzoom.destroy();
         }
         return null;
@@ -175,14 +185,15 @@
         // initialize
         const svgDiagram = getSvgDiagram();
         const panzoom = Panzoom(svgDiagram, {
-            minScale: MIN_SCALE, maxScale: MAX_SCALE,
+            minScale: MIN_SCALE,
+            maxScale: MAX_SCALE,
         });
 
         // set handlers
-        $reset.on('click', () => panzoom.reset());
-        $zoomIn.on('click', () => panzoom.zoomIn());
-        $zoomOut.on('click', () => panzoom.zoomOut());
-        svgDiagram.addEventListener('panzoomchange', changeHandler);
+        reset.addEventListener('click', panzoom.reset);
+        zoomIn.addEventListener('click', panzoom.zoomIn);
+        zoomOut.addEventListener('click', panzoom.zoomOut);
+        svgDiagram.addEventListener('panzoomchange', zoomHandler);
         svgDiagram.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
 
         return panzoom;
@@ -200,7 +211,7 @@
             themeVariables: getThemeVariables()
         });
         mermaid.run({
-            querySelector: DIAGRAM_SELECTOR,
+            nodes: [diagram]
         }).then(() => {
             panzoom = destroyPanzoom(panzoom);
             panzoom = createPanZoom();
@@ -211,17 +222,17 @@
      * Save the HTML content of the diagram.
      */
     const saveDiagram = () => {
-        $diagram.attr(DATA_CODE, $diagram.html());
+        diagram.dataset.code = diagram.textContent;
     };
 
     /**
      * Reset processed diagram.
      */
     const resetDiagram = () => {
-        const code = $diagram.attr(DATA_CODE);
+        const code = diagram.dataset.code;
         if (code) {
-            $diagram.attr(DATA_PROCESSED, null);
-            $diagram.html(code);
+            diagram.removeAttribute(DATA_PROCESSED);
+            diagram.textContent = code;
         }
     };
 
@@ -229,7 +240,7 @@
      * Add a listener for the theme attribute.
      */
     const addThemeObserver = () => {
-        const mutationCallback = (mutationsList) => {
+        const callback = (mutationsList) => {
             for (const mutation of mutationsList) {
                 if (mutation.attributeName === THEME_ATTRIBUTE) {
                     resetDiagram();
@@ -238,30 +249,30 @@
                 }
             }
         };
-        const observer = new MutationObserver(mutationCallback);
-        observer.observe(targetNode, {attributes: true});
+        const observer = new MutationObserver(callback);
+        observer.observe(rootNode, {attributes: true});
     };
 
     /**
      * Handle diagrams change selection.
      */
-    $diagrams.on('change', function () {
-        const url = $('#diagram').data('url');
-        if (!url) {
-            showError('Unable to find the corresponding diagram (URL not defined).');
-            return;
-        }
+    diagrams.addEventListener('change', function () {
+        const url = diagram.dataset.url;
         const data = {
-            'name': $diagrams.val()
+            'name': diagrams.value
         };
         $.getJSON(url, data, function (response) {
+            // focus
+            diagrams.focus();
+
             // error?
             if (!response.result) {
                 showError(response.message);
                 return;
             }
+
             // reload diagram
-            $diagram.text(response.file.content);
+            diagram.textContent = response.file.content;
             saveDiagram();
             resetDiagram();
             loadDiagram();
@@ -272,15 +283,15 @@
             url.searchParams.set('name', name);
             window.history.pushState({'name': name}, '', url);
         });
-    }).trigger('focus');
+    });
 
     /**
      * Handle history pop state.
      */
     window.addEventListener('popstate', (e) => {
         if (e.state && e.state.name) {
-            const name = e.state.name;
-            $diagrams.val(name).trigger('change');
+            diagrams.value = e.state.name;
+            diagrams.dispatchEvent(new Event('change'));
         }
     });
 

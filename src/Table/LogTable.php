@@ -140,7 +140,7 @@ class LogTable extends AbstractTable implements \Countable
         if (LogFilter::isFilter($search, $level, $channel)) {
             $filter = new LogFilter($search, $level, $channel);
 
-            return $filter->apply($entities);
+            return $filter->filter($entities);
         }
 
         return $entities;

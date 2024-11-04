@@ -46,29 +46,29 @@ readonly class LogSorter
     }
 
     /**
-     * Sort logs.
+     * Sort the given logs.
      *
-     * @param Log[] $logs
+     * Return <code>false</code> if the size of logs is smaller than 2 or if the default sort is set (date descending).
+     *
+     * @param Log[] $logs the logs to sort
      */
     public function sort(array &$logs): bool
     {
         if (\count($logs) <= 1 || self::isDefaultSort($this->field, $this->ascending)) {
             return false;
         }
-        $dateSorter = $this->getDateSorter();
-        if (self::COLUMN_DATE === $this->field) {
-            return \uasort($logs, $dateSorter);
-        }
-        $order = $this->ascending ? 1 : -1;
-        $fieldSorter = $this->getFieldSorter();
 
-        return \uasort($logs, function (Log $a, Log $b) use ($dateSorter, $fieldSorter, $order): int {
-            if (!$fieldSorter instanceof \Closure) {
-                return -$dateSorter($a, $b);
-            }
-            $result = $order * $fieldSorter($a, $b);
+        if (self::COLUMN_DATE === $this->field) {
+            return \uasort($logs, $this->getDateSorter(true));
+        }
+
+        $fieldSorter = $this->getFieldSorter();
+        $dateSorter = $this->getDateSorter(false);
+
+        return \uasort($logs, function (Log $a, Log $b) use ($fieldSorter, $dateSorter): int {
+            $result = $fieldSorter($a, $b);
             if (0 === $result) {
-                return -$dateSorter($a, $b);
+                return $dateSorter($a, $b);
             }
 
             return $result;
@@ -78,22 +78,26 @@ readonly class LogSorter
     /**
      * @return \Closure(Log, Log): int
      */
-    private function getDateSorter(): \Closure
+    private function getDateSorter(bool $ascending): \Closure
     {
-        return fn (Log $a, Log $b): int => $a->getCreatedAt() <=> $b->getCreatedAt();
+        $order = $ascending ? 1 : -1;
+
+        return fn (Log $a, Log $b): int => $order * ($a->getCreatedAt() <=> $b->getCreatedAt());
     }
 
     /**
-     * @return ?\Closure(Log, Log): int
+     * @return \Closure(Log, Log): int
      */
-    private function getFieldSorter(): ?\Closure
+    private function getFieldSorter(): \Closure
     {
+        $order = $this->ascending ? 1 : -1;
+
         return match ($this->field) {
-            self::COLUMN_LEVEL => fn (Log $a, Log $b): int => $a->getLevel() <=> $b->getLevel(),
-            self::COLUMN_CHANNEL => fn (Log $a, Log $b): int => $a->getChannel() <=> $b->getChannel(),
-            self::COLUMN_MESSAGE => fn (Log $a, Log $b): int => $a->getMessage() <=> $b->getMessage(),
-            self::COLUMN_USER => fn (Log $a, Log $b): int => $a->getUser() <=> $b->getUser(),
-            default => null,
+            self::COLUMN_LEVEL => fn (Log $a, Log $b): int => $order * ($a->getLevel() <=> $b->getLevel()),
+            self::COLUMN_CHANNEL => fn (Log $a, Log $b): int => $order * ($a->getChannel() <=> $b->getChannel()),
+            self::COLUMN_MESSAGE => fn (Log $a, Log $b): int => $order * ($a->getMessage() <=> $b->getMessage()),
+            self::COLUMN_USER => fn (Log $a, Log $b): int => $order * ($a->getUser() <=> $b->getUser()),
+            default => $this->getDateSorter(false),
         };
     }
 }

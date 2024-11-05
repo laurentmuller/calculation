@@ -39,6 +39,8 @@ readonly class LogSorter
 
     /**
      * Returns if the given field and ascending mode is the default sort.
+     *
+     * @return bool <code>true</code> if this sort is in date descending; <code>false</code> otherwise
      */
     public static function isDefaultSort(string $field, bool $ascending): bool
     {
@@ -67,11 +69,11 @@ readonly class LogSorter
 
         return \uasort($logs, function (Log $a, Log $b) use ($fieldSorter, $dateSorter): int {
             $result = $fieldSorter($a, $b);
-            if (0 === $result) {
-                return $dateSorter($a, $b);
+            if (0 !== $result) {
+                return $result;
             }
 
-            return $result;
+            return $dateSorter($a, $b);
         });
     }
 
@@ -80,7 +82,7 @@ readonly class LogSorter
      */
     private function getDateSorter(bool $ascending): \Closure
     {
-        $order = $ascending ? 1 : -1;
+        $order = $this->getOrder($ascending);
 
         return fn (Log $a, Log $b): int => $order * ($a->getCreatedAt() <=> $b->getCreatedAt());
     }
@@ -90,14 +92,19 @@ readonly class LogSorter
      */
     private function getFieldSorter(): \Closure
     {
-        $order = $this->ascending ? 1 : -1;
+        $order = $this->getOrder($this->ascending);
 
         return match ($this->field) {
+            self::COLUMN_MESSAGE => fn (Log $a, Log $b): int => $order * ($a->getMessage() <=> $b->getMessage()),
             self::COLUMN_LEVEL => fn (Log $a, Log $b): int => $order * ($a->getLevel() <=> $b->getLevel()),
             self::COLUMN_CHANNEL => fn (Log $a, Log $b): int => $order * ($a->getChannel() <=> $b->getChannel()),
-            self::COLUMN_MESSAGE => fn (Log $a, Log $b): int => $order * ($a->getMessage() <=> $b->getMessage()),
             self::COLUMN_USER => fn (Log $a, Log $b): int => $order * ($a->getUser() <=> $b->getUser()),
             default => $this->getDateSorter(false),
         };
+    }
+
+    private function getOrder(bool $ascending): int
+    {
+        return $ascending ? 1 : -1;
     }
 }

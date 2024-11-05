@@ -36,22 +36,6 @@ class StringUtilsTest extends TestCase
         yield ['my HOME', 'My home'];
     }
 
-    public static function getContains(): \Iterator
-    {
-        yield ['fake', '', false, false];
-        yield ['before ab after', 'ab', false, true];
-        yield ['before AB after', 'ab', false, false];
-        yield ['before AB after', 'ab', true, true];
-    }
-
-    public static function getEndWith(): \Iterator
-    {
-        yield ['fake', '', false, false];
-        yield ['fake', 'ke', false, true];
-        yield ['fake', 'KE', false, false];
-        yield ['fake', 'KE', true, true];
-    }
-
     public static function getEqualIgnoreCase(): \Iterator
     {
         yield ['home', 'Home'];
@@ -99,22 +83,15 @@ class StringUtilsTest extends TestCase
     #[DataProvider('getAscii')]
     public function testAscii(string $value, string $expected): void
     {
-        $result = StringUtils::ascii($value);
-        self::assertSame($expected, $result);
+        $actual = StringUtils::ascii($value);
+        self::assertSame($expected, $actual);
     }
 
     #[DataProvider('getCapitalize')]
     public function testCapitalize(string $value, string $expected): void
     {
-        $result = StringUtils::capitalize($value);
-        self::assertSame($expected, $result);
-    }
-
-    #[DataProvider('getContains')]
-    public function testContains(string $haystack, string $needle, bool $ignore_case, bool $expected): void
-    {
-        $result = StringUtils::contains($haystack, $needle, $ignore_case);
-        self::assertSame($expected, $result);
+        $actual = StringUtils::capitalize($value);
+        self::assertSame($expected, $actual);
     }
 
     public function testDecodeJsonArray(): void
@@ -163,25 +140,18 @@ class StringUtilsTest extends TestCase
         StringUtils::encodeJson($input);
     }
 
-    #[DataProvider('getEndWith')]
-    public function testEndWith(string $haystack, string $needle, bool $ignore_case, bool $expected): void
-    {
-        $result = StringUtils::endWith($haystack, $needle, $ignore_case);
-        self::assertSame($expected, $result);
-    }
-
     #[DataProvider('getEqualIgnoreCase')]
     public function testEqualIgnoreCase(string $string1, string $string2, bool $expected = true): void
     {
-        $result = StringUtils::equalIgnoreCase($string1, $string2);
-        self::assertSame($result, $expected);
+        $actual = StringUtils::equalIgnoreCase($string1, $string2);
+        self::assertSame($actual, $expected);
     }
 
     #[DataProvider('getExportVar')]
     public function testExportVar(mixed $var, mixed $expected): void
     {
-        $result = StringUtils::exportVar($var);
-        self::assertSame($expected, $result);
+        $actual = StringUtils::exportVar($var);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -198,15 +168,15 @@ class StringUtilsTest extends TestCase
             $this->expectException(\RuntimeException::class);
         }
         // @phpstan-ignore argument.type
-        $result = StringUtils::getShortName($var);
-        self::assertSame($expected, $result);
+        $actual = StringUtils::getShortName($var);
+        self::assertSame($expected, $actual);
     }
 
     #[DataProvider('getIsString')]
     public function testIsString(?string $var, bool $expected): void
     {
-        $result = StringUtils::isString($var);
-        self::assertSame($expected, $result);
+        $actual = StringUtils::isString($var);
+        self::assertSame($expected, $actual);
     }
 
     public function testNewLine(): void
@@ -223,8 +193,8 @@ class StringUtilsTest extends TestCase
     #[DataProvider('getStartWith')]
     public function testStartWith(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
-        $result = StringUtils::startWith($haystack, $needle, $ignore_case);
-        self::assertSame($expected, $result);
+        $actual = StringUtils::startWith($haystack, $needle, $ignore_case);
+        self::assertSame($expected, $actual);
     }
 
     private static function getVarArray(): string

@@ -423,7 +423,7 @@ class UpdateAssetsCommand extends Command
     {
         $name = $plugin['target'] ?? $plugin['name'];
         $prefix = $plugin['prefix'] ?? '';
-        if ('' !== $prefix && StringUtils::startWith($file, $prefix)) {
+        if (StringUtils::startWith($file, $prefix)) {
             $file = \substr($file, \strlen($prefix));
         }
 

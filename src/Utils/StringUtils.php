@@ -65,23 +65,7 @@ final class StringUtils
      */
     public static function capitalize(string $string): string
     {
-        return self::unicode($string)->lower()->title()->toString();
-    }
-
-    /**
-     * Tests if a substring is contained within a string.
-     *
-     * <b>NB:</b> If the needle is empty, this function returns false.
-     *
-     * @param string $string      the string to search in
-     * @param string $needle      the string to search for
-     * @param bool   $ignore_case true for case-insensitive; false for case-sensitive
-     *
-     * @return bool true if substring is contained within a string
-     */
-    public static function contains(string $string, string $needle, bool $ignore_case = true): bool
-    {
-        return self::unicode($string, $ignore_case)->containsAny($needle);
+        return \ucfirst(\strtolower($string));
     }
 
     /**
@@ -128,22 +112,6 @@ final class StringUtils
             $message = \sprintf("Unable to encode value '%s'.", \get_debug_type($value));
             throw new \InvalidArgumentException($message, $e->getCode(), $e);
         }
-    }
-
-    /**
-     * Tests if a string ends within the given suffix.
-     *
-     * <b>NB:</b> If the needle is empty, this function returns false.
-     *
-     * @param string $string      the string to search in
-     * @param string $suffix      the string suffix to search for
-     * @param bool   $ignore_case true for case-insensitive; false for case-sensitive
-     *
-     * @return bool true if ends with substring
-     */
-    public static function endWith(string $string, string $suffix, bool $ignore_case = true): bool
-    {
-        return self::unicode($string, $ignore_case)->endsWith($suffix);
     }
 
     /**
@@ -257,26 +225,37 @@ final class StringUtils
     /**
      * Tests if a string starts within the given prefix.
      *
-     * <b>NB:</b> If the needle is empty, this function returns false.
+     * <b>NB:</b> If the prefix argument is empty, this function returns false.
      *
-     * @param string $string      the string to search in
-     * @param string $prefix      the string prefix to search for
-     * @param bool   $ignore_case true for case-insensitive; false for case-sensitive
+     * @param string $string     the string to search in
+     * @param string $prefix     the string prefix to search for
+     * @param bool   $ignoreCase <code>true</code> for case-insensitive; <code>false</code> for case-sensitive
      *
-     * @return bool true if starts with substring
+     * @return bool true if the string starts within the prefix
      */
-    public static function startWith(string $string, string $prefix, bool $ignore_case = true): bool
+    public static function startWith(string $string, string $prefix, bool $ignoreCase = true): bool
     {
-        return self::unicode($string, $ignore_case)->startsWith($prefix);
+        if ('' === $prefix) {
+            return false;
+        }
+        if ($ignoreCase) {
+            return 0 === \stripos($string, $prefix);
+        }
+
+        return \str_starts_with($string, $prefix);
     }
 
     /**
      * Create a new Unicode string.
+     *
+     * @param bool $ignoreCase <code>true</code> for case-insensitive; <code>false</code> for case-sensitive
      */
-    public static function unicode(string $string, bool $ignore_case = false): UnicodeString
+    public static function unicode(string $string, bool $ignoreCase = false): UnicodeString
     {
-        $result = new UnicodeString($string);
+        if ($ignoreCase) {
+            return (new UnicodeString($string))->ignoreCase();
+        }
 
-        return $ignore_case ? $result->ignoreCase() : $result;
+        return new UnicodeString($string);
     }
 }

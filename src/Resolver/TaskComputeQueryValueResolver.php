@@ -16,12 +16,20 @@ use App\Model\TaskComputeQuery;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Value resolver for {@link TaskComputeQuery}.
  */
 final readonly class TaskComputeQueryValueResolver implements ValueResolverInterface
 {
+    public function __construct(private ValidatorInterface $validator)
+    {
+    }
+
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
         if (TaskComputeQuery::class !== $argument->getType()) {
@@ -29,6 +37,12 @@ final readonly class TaskComputeQueryValueResolver implements ValueResolverInter
         }
 
         $query = $this->createQuery($request);
+        $errors = $this->validator->validate($query);
+        if (\count($errors) > 0) {
+            $message = $this->mapErrors($errors);
+            $previous = new ValidationFailedException($query, $errors);
+            throw new BadRequestHttpException($message, $previous);
+        }
 
         return [$query];
     }
@@ -41,5 +55,16 @@ final readonly class TaskComputeQueryValueResolver implements ValueResolverInter
         $items = \array_map('intval', $payload->all('items'));
 
         return new TaskComputeQuery($id, $quantity, $items);
+    }
+
+    private function mapErrors(ConstraintViolationListInterface $errors): string
+    {
+        $str = '';
+        $class = TaskComputeQuery::class;
+        foreach ($errors as $error) {
+            $str .= \sprintf("%s.%s: %s\n", $class, $error->getPropertyPath(), $error->getMessage());
+        }
+
+        return \rtrim($str);
     }
 }

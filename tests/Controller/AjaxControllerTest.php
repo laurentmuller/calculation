@@ -25,9 +25,10 @@ class AjaxControllerTest extends ControllerTestCase
 
     public static function getRoutes(): \Iterator
     {
-        yield ['/ajax/task', self::ROLE_USER, Response::HTTP_OK, Request::METHOD_POST, true];
-        yield ['/ajax/task', self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_POST, true];
-        yield ['/ajax/task', self::ROLE_SUPER_ADMIN, Response::HTTP_OK, Request::METHOD_POST, true];
+        // HTTP_BAD_REQUEST
+        yield ['/ajax/task', self::ROLE_USER, Response::HTTP_BAD_REQUEST, Request::METHOD_POST, true];
+        yield ['/ajax/task', self::ROLE_ADMIN, Response::HTTP_BAD_REQUEST, Request::METHOD_POST, true];
+        yield ['/ajax/task', self::ROLE_SUPER_ADMIN, Response::HTTP_BAD_REQUEST, Request::METHOD_POST, true];
 
         yield ['/ajax/random/text', self::ROLE_USER];
         yield ['/ajax/random/text', self::ROLE_ADMIN];
@@ -36,30 +37,56 @@ class AjaxControllerTest extends ControllerTestCase
         yield ['/ajax/dialog/page', self::ROLE_USER];
         yield ['/ajax/dialog/page', self::ROLE_ADMIN];
         yield ['/ajax/dialog/page', self::ROLE_SUPER_ADMIN];
-
-        $query = '/ajax/license?file=vendor/symfony/runtime/LICENSE';
-        yield [$query, self::ROLE_SUPER_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
-
-        $query = '/ajax/license?file=fake';
-        yield [$query, self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
-
-        $query = '/ajax/license?file=tests/Data/empty.txt';
-        yield [$query, self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
     }
 
-    public function testComputeTaskEmpty(): void
+    public function testComputeTaskIdEqualZero(): void
     {
         $parameters = [
             'id' => 0,
+            'quantity' => 1.0,
+            'items' => [1],
         ];
+        $this->checkTaskRequest($parameters, Response::HTTP_BAD_REQUEST);
+    }
 
-        $this->checkRoute(
-            '/ajax/task',
-            self::ROLE_USER,
-            method: Request::METHOD_POST,
-            xmlHttpRequest: true,
-            parameters: $parameters
-        );
+    public function testComputeTaskInvalidItems(): void
+    {
+        $parameters = [
+            'id' => 1,
+            'quantity' => 1.0,
+            'items' => ['fake value'],
+        ];
+        $this->checkTaskRequest($parameters, Response::HTTP_BAD_REQUEST);
+    }
+
+    public function testComputeTaskItemsEmpty(): void
+    {
+        $parameters = [
+            'id' => 1,
+            'quantity' => 1.0,
+            'items' => [],
+        ];
+        $this->checkTaskRequest($parameters, Response::HTTP_BAD_REQUEST);
+    }
+
+    public function testComputeTaskNegativeItems(): void
+    {
+        $parameters = [
+            'id' => 1,
+            'quantity' => 1.0,
+            'items' => [-1],
+        ];
+        $this->checkTaskRequest($parameters, Response::HTTP_BAD_REQUEST);
+    }
+
+    public function testComputeTaskQuantityEqualZero(): void
+    {
+        $parameters = [
+            'id' => 1,
+            'quantity' => 0,
+            'items' => [1],
+        ];
+        $this->checkTaskRequest($parameters, Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -70,15 +97,10 @@ class AjaxControllerTest extends ControllerTestCase
         $taskItem = $this->getTaskItem();
         $parameters = [
             'id' => $taskItem->getParentEntity()?->getId(),
+            'quantity' => 1.0,
             'items' => [$taskItem->getId()],
         ];
-        $this->checkRoute(
-            '/ajax/task',
-            self::ROLE_USER,
-            method: Request::METHOD_POST,
-            xmlHttpRequest: true,
-            parameters: $parameters
-        );
+        $this->checkTaskRequest($parameters, Response::HTTP_OK);
     }
 
     public function testDialogSort(): void
@@ -177,5 +199,17 @@ class AjaxControllerTest extends ControllerTestCase
     protected function mustDeleteEntities(): bool
     {
         return true;
+    }
+
+    private function checkTaskRequest(array $parameters, int $expected): void
+    {
+        $this->checkRoute(
+            url: '/ajax/task',
+            username: self::ROLE_USER,
+            expected: $expected,
+            method: Request::METHOD_POST,
+            xmlHttpRequest: true,
+            parameters: $parameters
+        );
     }
 }

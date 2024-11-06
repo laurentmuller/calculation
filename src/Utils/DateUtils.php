@@ -108,7 +108,7 @@ final class DateUtils
     /**
      * Gets the numeric representation of a day of the month for the given date.
      *
-     * @param ?\DateTimeInterface $date the date to get day for or <code>null</code> to use current date
+     * @param ?\DateTimeInterface $date the date to get day for or <code>null</code> to use the current date
      *
      * @return int value 1 through 31
      */
@@ -122,7 +122,7 @@ final class DateUtils
     /**
      * Gets the numeric representation of a month for the given date.
      *
-     * @param ?\DateTimeInterface $date the date to get month for or <code>null</code> to use current date
+     * @param ?\DateTimeInterface $date the date to get month for or <code>null</code> to use the current date
      *
      * @return int value 1 through 12
      */
@@ -171,7 +171,7 @@ final class DateUtils
 
     /**
      * Gets the localized short week day names.
-     * For example, with 'fr' as locale and 'Sunday' as first day, return
+     * For example, with 'fr' as locale and 'Sunday' as the first day, return
      * <pre>
      * Dim., Lun., Mar., Mer., Jeu., Ven., Sam., Dim.
      * </pre>.
@@ -194,7 +194,7 @@ final class DateUtils
      *
      * The weeks are starting on Monday.
      *
-     * @param ?\DateTimeInterface $date the date to get week for or <code>null</code> to use current date
+     * @param ?\DateTimeInterface $date the date to get week for or <code>null</code> to use the current date
      *
      * @return int value 1 through 53
      */
@@ -228,7 +228,7 @@ final class DateUtils
     /**
      * Gets the full numeric representation of a year with 4 digits for the given date.
      *
-     * @param ?\DateTimeInterface $date the date to get year for or <code>null</code> to use current date
+     * @param ?\DateTimeInterface $date the date to get year for or <code>null</code> to use the current date
      */
     public static function getYear(?\DateTimeInterface $date = null): int
     {

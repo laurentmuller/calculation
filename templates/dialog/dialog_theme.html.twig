@@ -13,7 +13,7 @@
         'aria-describedby': id_help,
         'data-text': theme|trans,
         'data-success': theme.success|trans,
-        'data-class': 'theme-icon ' ~ theme.icon
+        'data-class': 'theme-icon ' ~ theme.icon,
     } %}
     <div class="form-check mb-3" title="{{ theme|trans }}">
         <input{{ output_attributes(attributes) }}{% if checked %} checked="checked"{% endif %}>

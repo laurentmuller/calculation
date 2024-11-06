@@ -16,6 +16,7 @@ use TwigCsFixer\Config\Config;
 $config = new Config();
 $config->allowNonFixableRules()
     ->addTokenParser(new SwitchTokenParser())
-    ->getFinder()->in(__DIR__ . '/templates');
+    ->getFinder()
+    ->in('templates');
 
 return $config;

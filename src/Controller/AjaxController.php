@@ -29,8 +29,6 @@ use App\Service\TaskService;
 use App\Service\UserService;
 use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
-use App\Utils\FileUtils;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -39,7 +37,6 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Twig\Extra\Markdown\MarkdownInterface;
 
 /**
  * Controller for all XMLHttpRequest (Ajax) calls.
@@ -73,32 +70,6 @@ class AjaxController extends AbstractController
         ]);
 
         return $this->jsonTrue($data);
-    }
-
-    /**
-     * Gets the license content.
-     */
-    #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[Get(path: '/license', name: 'license')]
-    public function license(
-        #[MapQueryParameter]
-        string $file,
-        MarkdownInterface $markdown,
-        #[Autowire('%kernel.project_dir%')]
-        string $projectDir,
-    ): JsonResponse {
-        $file = FileUtils::buildPath($projectDir, $file);
-        if (!FileUtils::exists($file)) {
-            return $this->jsonFalse(['message' => $this->trans('about.dialog.not_found')]);
-        }
-        $content = FileUtils::readFile($file);
-        if ('' === $content) {
-            return $this->jsonFalse(['message' => $this->trans('about.dialog.not_loaded')]);
-        }
-
-        return $this->jsonTrue([
-            'content' => $markdown->convert($content),
-        ]);
     }
 
     /**

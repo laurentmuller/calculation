@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Entity\Task;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Contains parameters to compute a task.
@@ -20,9 +21,17 @@ use App\Entity\Task;
 readonly class TaskComputeQuery
 {
     public function __construct(
+        #[Assert\Positive]
         public int $id,
+        #[Assert\Positive]
         public float $quantity = 1.0,
         /** @var int[] */
+        #[Assert\All([
+            new Assert\Type('int'),
+            new Assert\Positive(),
+        ])]
+        #[Assert\Unique]
+        #[Assert\Count(min: 1)]
         public array $items = []
     ) {
     }

@@ -20,8 +20,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class DataQueryValueResolverTest extends TestCase
 {
@@ -38,8 +41,8 @@ class DataQueryValueResolverTest extends TestCase
         self::assertIsArray($actual);
         self::assertCount(1, $actual);
 
-        /** @psalm-var DataQuery $query */
         $query = $actual[0];
+        self::assertInstanceOf(DataQuery::class, $query);
         self::assertFalse($query->callback);
         self::assertSame(0, $query->id);
         self::assertSame(TableView::TABLE, $query->view);
@@ -95,11 +98,31 @@ class DataQueryValueResolverTest extends TestCase
         self::assertIsArray($actual);
         self::assertCount(1, $actual);
 
-        /** @psalm-var DataQuery $query */
         $query = $actual[0];
+        self::assertInstanceOf(DataQuery::class, $query);
         self::assertSame(TableView::CUSTOM, $query->view);
         self::assertSame(10, $query->offset);
         self::assertSame(50, $query->limit);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testWithValidatorError(): void
+    {
+        $error = 'error';
+        $violationList = $this->createMock(ConstraintViolationListInterface::class);
+        $violationList->method('count')
+            ->willReturn(1);
+        $violationList->method('__toString')
+            ->willReturn($error);
+        $resolver = $this->createResolver($violationList);
+        $request = $this->createRequest();
+        $argument = $this->createArgumentMetadata();
+
+        self::expectException(HttpException::class);
+        self::expectExceptionMessage($error);
+        $resolver->resolve($request, $argument);
     }
 
     private function createAccessor(): PropertyAccessorInterface
@@ -125,10 +148,18 @@ class DataQueryValueResolverTest extends TestCase
         return Request::create('/', Request::METHOD_GET, $parameters);
     }
 
-    private function createResolver(): DataQueryValueResolver
+    /**
+     * @throws Exception
+     */
+    private function createResolver(?ConstraintViolationListInterface $violationList = null): DataQueryValueResolver
     {
         $accessor = $this->createAccessor();
+        $validator = $this->createMock(ValidatorInterface::class);
+        if ($violationList instanceof ConstraintViolationListInterface) {
+            $validator->method('validate')
+                ->willReturn($violationList);
+        }
 
-        return new DataQueryValueResolver($accessor);
+        return new DataQueryValueResolver($accessor, $validator);
     }
 }

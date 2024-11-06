@@ -18,9 +18,12 @@ use App\Interfaces\TableInterface;
 use App\Table\DataQuery;
 use App\Traits\CookieTrait;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Value resolver for {@link DataQuery}.
@@ -29,8 +32,10 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
 {
     use CookieTrait;
 
-    public function __construct(private PropertyAccessorInterface $accessor)
-    {
+    public function __construct(
+        private PropertyAccessorInterface $accessor,
+        private ValidatorInterface $validator
+    ) {
     }
 
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
@@ -40,6 +45,10 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
         }
 
         $query = $this->createQuery($request);
+        $errors = $this->validator->validate($query);
+        if (\count($errors) > 0) {
+            throw new HttpException(Response::HTTP_BAD_REQUEST, (string) $errors);
+        }
 
         return [$query];
     }

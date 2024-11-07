@@ -746,7 +746,7 @@ $(function () {
         }
 
         /**
-         * Cancel last timer if set.
+         * Cancel the last timer, if set.
          * @return {Typeahead} this instance for chaining.
          * @private
          */

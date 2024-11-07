@@ -606,7 +606,7 @@ class TestController extends AbstractController
         }, Currencies::getCurrencyCodes());
         $currencies = \array_filter(
             $currencies,
-            static fn (array $currency): bool => 0 === \preg_match('/\d|\(/', $currency['name'])
+            static fn (array $currency): bool => !StringUtils::pregMatch('/\d|\(/', $currency['name'])
         );
         \usort(
             $currencies,

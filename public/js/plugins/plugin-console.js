@@ -106,7 +106,7 @@
         },
 
         /**
-         * Check if console is present
+         * Check if the console is present
          */
         isConsole(method) {
             return window.console && window.console[method];

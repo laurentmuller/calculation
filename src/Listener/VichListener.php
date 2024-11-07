@@ -55,7 +55,7 @@ class VichListener
         }
 
         // new?
-        if (1 === \preg_match('/0{6}/m', $file->getFilename())) {
+        if (StringUtils::pregMatch('/0{6}/m', $file->getFilename())) {
             $file = $this->rename($mapping, $user, $file);
         }
 

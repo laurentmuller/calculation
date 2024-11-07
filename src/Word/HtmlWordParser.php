@@ -183,8 +183,9 @@ class HtmlWordParser
      */
     private function parseMargins(string $class): string
     {
-        if (1 === \preg_match_all(self::MARGINS_PATTERN, $class, $matches, \PREG_SET_ORDER)) {
-            $value = match ((int) $matches[0][3]) {
+        if (StringUtils::pregMatchAll(self::MARGINS_PATTERN, $class, $matches, \PREG_SET_ORDER)) {
+            $match = $matches[0];
+            $value = match ((int) $match[3]) {
                 1 => '4px',     // 0.25rem
                 2 => '8px',     // 0.5rem
                 3 => '16px',    // 1.0rem
@@ -193,7 +194,7 @@ class HtmlWordParser
                 default => '0',
             };
 
-            return match ($matches[0][1]) {
+            return match ($match[1]) {
                 't' => \sprintf('margin-top:%s;', $value),
                 'b' => \sprintf('margin-bottom:%s;', $value),
                 's' => \sprintf('margin-left:%s;', $value),

@@ -308,7 +308,7 @@ $(function () {
         'tooltipEditClass': 'tooltip-secondary',
         // the error tooltip class
         'tooltipErrorClass': 'tooltip-danger',
-        // start edit on create
+        // start edit automatically
         'autoEdit': false,
         // destroy on end edit or on cancel
         'autoDispose': false,

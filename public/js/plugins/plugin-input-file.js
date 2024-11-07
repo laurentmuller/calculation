@@ -251,7 +251,7 @@ $(function () {
                 $img[0].src = event.target.result;
                 file.result = event.target.result;
                 $element.find('.file-input-filename').text(file.name);
-                // if parent has max-height, using `(max-)height: 100%` on
+                // if the parent has max-height, using `(max-)height: 100%` on
                 // the child doesn't take padding and border into account
                 if ($preview.css('max-height') !== 'none') {
                     const mh = parseInt($preview.css('max-height'), 10) || 0;

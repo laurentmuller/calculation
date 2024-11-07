@@ -20,6 +20,7 @@ use App\Response\SpreadsheetResponse;
 use App\Service\PhpInfoService;
 use App\Spreadsheet\PhpIniDocument;
 use App\Traits\ArrayTrait;
+use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -78,7 +79,7 @@ class AboutPhpController extends AbstractController
         $version = \function_exists('apache_get_version')
             ? apache_get_version()
             : $request->server->get('SERVER_SOFTWARE');
-        if (\is_string($version) && 1 === \preg_match($regex, $version, $matches)) {
+        if (\is_string($version) && StringUtils::pregMatch($regex, $version, $matches)) {
             return $matches['version'];
         }
 

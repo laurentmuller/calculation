@@ -120,7 +120,7 @@ $(function () {
                 if (data) {
                     const $dialog = $(data);
                     $dialog.appendTo($(options.targetId));
-                    that._initDialog();
+                    that._initDialog($dialog);
                     that._showDialog();
                 }
             });
@@ -182,7 +182,7 @@ $(function () {
             }
             const theme = this._getCookieValue();
             const selector = this._getInputSelector();
-            $dialog.data('old-theme', theme).data('new-theme', false);
+            $dialog.data('old-theme', theme).data('new-theme', theme);
             $(selector).each(function () {
                 const $this = $(this);
                 $this.prop('checked', $this.val() === theme);
@@ -214,10 +214,19 @@ $(function () {
         }
 
         /**
-         * Handle the dialog hidden event.
+         * Handle the theme radio input change event.
+         * @param {ChangeEvent} e
          * @private
          */
-        _onDialogHidden() {
+        _onInputChange(e) {
+            this._setTheme($(e.currentTarget).val());
+        }
+
+        /**
+         * Handle the dialog hide event.
+         * @private
+         */
+        _onDialogHide() {
             const $dialog = this._getDialog();
             if (!$dialog) {
                 return;
@@ -226,10 +235,10 @@ $(function () {
             this._setFocus();
             const oldTheme = $dialog.data('old-theme');
             const newTheme = $dialog.data('new-theme') || this._getTheme();
+            this._setTheme(newTheme);
             if (oldTheme === newTheme) {
                 return;
             }
-            this._setTheme(newTheme);
             this._setCookieValue(newTheme);
             const $link = $(this._getInputCheckedSelector());
             if ($link.length) {
@@ -281,20 +290,17 @@ $(function () {
 
         /**
          * Initialize the dialog.
+         * @param {jQuery} $dialog the dialog to initialize.
          * @private
          */
-        _initDialog() {
-            const $dialog = this._getDialog();
-            if (!$dialog) {
-                return;
-            }
+        _initDialog($dialog) {
             const options = this.options;
-            $(`${options.dialogId} ${options.ok}`)
-                .on('click', () => this._onDialogAccept());
             $dialog.on('show.bs.modal', () => this._onDialogShow())
                 .on('shown.bs.modal', () => this._onDialogVisible())
-                .on('hidden.bs.modal', () => this._onDialogHidden())
-                .on('keydown', (e) => this._onDialogKeyDown(e));
+                .on('hide.bs.modal', () => this._onDialogHide())
+                .on('keydown', (e) => this._onDialogKeyDown(e))
+                .on('click', options.ok, () => this._onDialogAccept())
+                .on('change', options.input, (e) => this._onInputChange(e));
         }
 
         /**
@@ -325,12 +331,13 @@ $(function () {
          * @private
          */
         _setTheme(theme) {
-            if (theme === THEME_AUTO) {
+            if (!theme || theme === THEME_AUTO) {
                 theme = this._isMediaDark() ? THEME_DARK : THEME_LIGHT;
             }
-            document.documentElement.setAttribute(THEME_ATTRIBUTE, theme);
+            if (this._getTheme() !== theme) {
+                document.documentElement.setAttribute(THEME_ATTRIBUTE, theme);
+            }
         }
-
 
         /**
          * Gets the document element theme.

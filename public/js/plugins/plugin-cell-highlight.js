@@ -203,7 +203,7 @@ $(function () {
                     let cell = tableIndex[y][x];
                     // Table matrix is iterated left to right, top to bottom.
                     // It might be that cell has been assigned a value already
-                    // because previous row-cell had a 'rowspan' property,
+                    // because the previous row-cell had a 'rowspan' property,
                     // possibly together with 'colspan'.
                     if (!cell) {
                         cell = columns.eq(cellIndex++);

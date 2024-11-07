@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Constraint;
 
+use App\Utils\StringUtils;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -147,7 +148,7 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function validateRegex(bool $enabled, string $pattern, string $value, string $message, string $code): bool
     {
-        if ($enabled && 1 !== \preg_match($pattern, $value)) {
+        if ($enabled && !StringUtils::pregMatch($pattern, $value)) {
             return $this->addViolation($message, $value, $code);
         }
 

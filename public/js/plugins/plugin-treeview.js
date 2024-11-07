@@ -588,7 +588,7 @@ $(function () {
         }
 
         /**
-         * Remove handlers proxies.
+         * Remove handler proxies.
          * @private
          */
         _removeProxies() {

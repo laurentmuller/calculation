@@ -24,6 +24,10 @@ class PhpInfoService
      */
     public const REDACTED = '********';
 
+    private const CONVERT = ['yes', 'no', 'enabled', 'disabled', 'on', 'off', 'no value'];
+    private const DISABLED = ['off', 'no', 'disabled'];
+    private const ENABLED = ['on', 'yes', 'enabled'];
+
     /**
      * Gets PHP information as the array.
      *
@@ -49,17 +53,18 @@ class PhpInfoService
         $result = [];
         $matchs = null;
         $regexInfo = '<info>([^<]+)<\/info>';
-        $regex3cols = '/' . $regexInfo . '\s*' . $regexInfo . '\s*' . $regexInfo . '/i';
-        $regex2cols = '/' . $regexInfo . '\s*' . $regexInfo . '/i';
+        $regex2cols = \sprintf('/%1$s\s*%1$s/i', $regexInfo);
+        $regex3cols = \sprintf('/%1$s\s*%1$s\s*%1$s/i', $regexInfo);
         $regexLine = '/<h2[^>]*>([^<]+)<\/h2>/i';
+
         /** @psalm-var array<int, string> $array */
         $array = (array) \preg_split('/(<h2[^>]*>[^<]+<\/h2>)/i', $content, -1, \PREG_SPLIT_DELIM_CAPTURE);
         foreach ($array as $index => $entry) {
-            if (1 === \preg_match($regexLine, $entry, $matchs)) {
+            if (StringUtils::pregMatch($regexLine, $entry, $matchs)) {
                 $name = \trim($matchs[1]);
                 $vals = \explode(StringUtils::NEW_LINE, $array[$index + 1]);
                 foreach ($vals as $val) {
-                    if (1 === \preg_match($regex3cols, $val, $matchs)) {
+                    if (StringUtils::pregMatch($regex3cols, $val, $matchs)) {
                         // 3 columns
                         $match1 = \trim($matchs[1]);
                         $match2 = $this->convert(\trim($matchs[2]));
@@ -70,7 +75,7 @@ class PhpInfoService
                                 'master' => $match3,
                             ];
                         }
-                    } elseif (1 === \preg_match($regex2cols, $val, $matchs)) {
+                    } elseif (StringUtils::pregMatch($regex2cols, $val, $matchs)) {
                         // 2 columns
                         $match1 = \trim($matchs[1]);
                         $match2 = $this->convert(\trim($matchs[2]));
@@ -95,39 +100,39 @@ class PhpInfoService
     {
         $info = $this->asText($what);
 
-        $info = (string) \preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
-        $info = (string) \preg_replace('/<a\s(.+?)>(.+?)<\/a>/mi', '<p>$2</p>', $info);
+        $info = $this->pregReplace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
+        $info = $this->pregReplace('/<a\s(.+?)>(.+?)<\/a>/mi', '<p>$2</p>', $info);
         $info = \str_ireplace('background-color: white; text-align: center', '', $info);
         $info = \str_ireplace('<i>no value</i>', '<i class="text-secondary">No value</i>', $info);
         $info = \str_ireplace('(none)', '<i class="text-secondary">None</i>', $info);
         $info = \str_ireplace('<table>', "<table class='table table-sm mb-0'>", $info);
-        $info = \str_ireplace(self::REDACTED, '<i class="text-secondary">' . self::REDACTED . '</i>', $info);
+        $info = \str_ireplace(self::REDACTED, \sprintf('<i class="text-secondary">%s</i>', self::REDACTED), $info);
 
         foreach (['Directive', 'Local Value', 'Master Value'] as $value) {
-            $info = \str_replace($value, '<span class="fw-bold">' . $value . '</span>', $info);
+            $info = \str_replace($value, \sprintf('<span class="fw-bold">%s</span>', $value), $info);
         }
 
-        foreach (['on', 'yes', 'enabled'] as $value) {
-            $search = '/<td class="v">' . $value . '\s?<\/td>/mi';
-            $replace = '<td class="v enabled">' . StringUtils::capitalize($value) . '</td>';
-            $info = (string) \preg_replace($search, $replace, $info);
+        foreach (self::ENABLED as $value) {
+            $search = \sprintf('/<td class="v">%s\s?<\/td>/mi', $value);
+            $replace = \sprintf('<td class="v enabled">%s</td>', StringUtils::capitalize($value));
+            $info = $this->pregReplace($search, $replace, $info);
 
-            $search = '/<th>' . $value . '\s?<\/th>/mi';
-            $replace = '<td class="v enabled">' . StringUtils::capitalize($value) . '</td>';
-            $info = (string) \preg_replace($search, $replace, $info);
+            $search = \sprintf('/<th>%s\s?<\/th>/mi', $value);
+            $replace = \sprintf('<td class="v enabled">%s</td>', StringUtils::capitalize($value));
+            $info = $this->pregReplace($search, $replace, $info);
         }
 
-        foreach (['off', 'no', 'disabled'] as $value) {
-            $search = '/<td class="v">' . $value . '\s?<\/td>/mi';
-            $replace = '<td class="v disabled">' . StringUtils::capitalize($value) . '</td>';
-            $info = (string) \preg_replace($search, $replace, $info);
+        foreach (self::DISABLED as $value) {
+            $search = \sprintf('/<td class="v">%s\s?<\/td>/mi', $value);
+            $replace = \sprintf('<td class="v disabled">%s</td>', StringUtils::capitalize($value));
+            $info = $this->pregReplace($search, $replace, $info);
 
-            $search = '/<th>' . $value . '\s?<\/th>/mi';
-            $replace = '<td class="v disabled">' . StringUtils::capitalize($value) . '</td>';
-            $info = (string) \preg_replace($search, $replace, $info);
+            $search = \sprintf('/<th>%s\s?<\/th>/mi', $value);
+            $replace = \sprintf('<td class="v disabled">%s</td>', StringUtils::capitalize($value));
+            $info = $this->pregReplace($search, $replace, $info);
         }
 
-        return (string) \preg_replace('/<table\s(.+?)>(.+?)<\/table>/is', '', $info, 1);
+        return $this->pregReplace('/<table\s(.+?)>(.+?)<\/table>/is', '', $info, 1);
     }
 
     /**
@@ -158,13 +163,13 @@ class PhpInfoService
 
     private function convert(string $var): string|int|float
     {
-        if (\in_array(\strtolower($var), ['yes', 'no', 'enabled', 'disabled', 'on', 'off', 'no value'], true)) {
+        if (\in_array(\strtolower($var), self::CONVERT, true)) {
             return StringUtils::capitalize($var);
         }
-        if (1 === \preg_match('/^-?\d+$/', $var)) {
+        if (StringUtils::pregMatch('/^-?\d+$/', $var)) {
             return (int) $var;
         }
-        if (1 === \preg_match('/^-?\d+\.\d+$/', $var)) {
+        if (StringUtils::pregMatch('/^-?\d+\.\d+$/', $var)) {
             $pos = (int) \strrpos($var, '.');
             $decimals = \strlen($var) - $pos - 1;
 
@@ -174,13 +179,21 @@ class PhpInfoService
         return \str_replace('\\', '/', $var);
     }
 
+    /**
+     * @param non-empty-string $pattern
+     */
+    private function pregReplace(string $pattern, string $replacement, string $subject, int $limit = -1): string
+    {
+        return (string) \preg_replace($pattern, $replacement, $subject, $limit);
+    }
+
     private function updateContent(string $content): string
     {
-        $subst = '$1' . self::REDACTED . '$3';
+        $subst = \sprintf('$1%s$3', self::REDACTED);
         $keys = ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN', 'DATABASE_URL'];
         foreach ($keys as $key) {
-            $regex = "/(<tr.*\['.*$key']<\/td><td.*?>)(.*)(<.*<\/tr>)/mi";
-            $content = (string) \preg_replace($regex, $subst, $content);
+            $regex = \sprintf("/(<tr.*\['.*%s']<\/td><td.*?>)(.*)(<.*<\/tr>)/mi", $key);
+            $content = $this->pregReplace($regex, $subst, $content);
         }
         $content = \str_replace(['✘ ', '✔ ', '⊕'], '', $content);
 

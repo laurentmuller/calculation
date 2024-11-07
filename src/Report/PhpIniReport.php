@@ -75,7 +75,7 @@ class PhpIniReport extends AbstractReport
     {
         $color = null;
         $style = PdfFontStyle::REGULAR;
-        if (1 === \preg_match('/#[\dA-Fa-f]{6}/i', $var)) {
+        if (StringUtils::pregMatch('/#[\dA-Fa-f]{6}/i', $var)) {
             $color = PdfTextColor::create($var);
         } elseif (\in_array(
             \strtolower($var),

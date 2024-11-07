@@ -16,6 +16,7 @@ use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfStyle;
+use App\Utils\StringUtils;
 use fpdf\Enums\PdfFontName;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
@@ -327,7 +328,7 @@ class HtmlStyle extends PdfStyle
 
     private function updateMargins(string $class): self
     {
-        if (1 === \preg_match_all(self::MARGINS_PATTERN, $class, $matches, \PREG_SET_ORDER)) {
+        if (StringUtils::pregMatchAll(self::MARGINS_PATTERN, $class, $matches, \PREG_SET_ORDER)) {
             $match = $matches[0];
             $value = (float) $match[3];
             match ($match[1]) {

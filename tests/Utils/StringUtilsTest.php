@@ -63,6 +63,31 @@ class StringUtilsTest extends TestCase
         yield ['my home', true];
     }
 
+    public static function getPregMatch(): \Iterator
+    {
+        yield ['/\d+/', '1234', true];
+        yield ['/\d+/', 'FAKE', false];
+        yield ['/(?J)(?<match>foo)|(?<match>bar)/', 'foo bar', true];
+        yield ['/(foo)(bar)(baz)/', 'foobarbaz', true];
+        yield ['/(foo)(bar)(baz)/', 'foobaz', false];
+    }
+
+    public static function getPregMatchAll(): \Iterator
+    {
+        yield ['/\d+/', '1234', true];
+        yield ['/\d+/', 'FAKE', false];
+
+        yield ['/(?J)(?<match>foo)|(?<match>bar)/', 'foo bar', true];
+        yield ['/(foo)(bar)(baz)/', 'foobarbaz', true];
+        yield ['/(foo)(bar)(baz)/', 'foobaz', false];
+    }
+
+    public static function getPregReplace(): \Iterator
+    {
+        yield [['/\d+/' => ''], '1234', ''];
+        yield [['/\d+/' => ''], 'FAKE', 'FAKE'];
+    }
+
     public static function getShortName(): \Iterator
     {
         yield [null, null, true];
@@ -184,6 +209,36 @@ class StringUtilsTest extends TestCase
         self::assertSame("\n", StringUtils::NEW_LINE);
     }
 
+    /**
+     * @psalm-param non-empty-string $pattern
+     */
+    #[DataProvider('getPregMatch')]
+    public function testPregMatch(string $pattern, string $subject, bool $expected): void
+    {
+        $actual = StringUtils::pregMatch($pattern, $subject);
+        self::assertSame($expected, $actual);
+    }
+
+    /**
+     * @psalm-param non-empty-string $pattern
+     */
+    #[DataProvider('getPregMatchAll')]
+    public function testPregMatchAll(string $pattern, string $subject, bool $expected): void
+    {
+        $actual = StringUtils::pregMatchAll($pattern, $subject);
+        self::assertSame($expected, $actual);
+    }
+
+    /**
+     * @psalm-param non-empty-array<non-empty-string, string> $values
+     */
+    #[DataProvider('getPregReplace')]
+    public function testPregReplace(array $values, string $subject, string $expected): void
+    {
+        $actual = StringUtils::pregReplace($values, $subject);
+        self::assertSame($expected, $actual);
+    }
+
     public function testSlug(): void
     {
         $actual = StringUtils::slug('Wôrķšƥáçè ~~sèťtïñğš~~');
@@ -195,6 +250,15 @@ class StringUtilsTest extends TestCase
     {
         $actual = StringUtils::startWith($haystack, $needle, $ignore_case);
         self::assertSame($expected, $actual);
+    }
+
+    public function testUnicode(): void
+    {
+        $actual = StringUtils::unicode('fake')->toString();
+        self::assertSame('fake', $actual);
+
+        $actual = StringUtils::unicode('fake', true)->toString();
+        self::assertSame('fake', $actual);
     }
 
     private static function getVarArray(): string

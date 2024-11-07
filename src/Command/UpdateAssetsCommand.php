@@ -32,6 +32,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  *     source: string,
  *     target?: string,
  *     disabled?: bool,
+ *     update?: bool,
  *     prefix?: string,
  *     files: string[]}
  * @psalm-type CopyEntryType = array{
@@ -122,12 +123,12 @@ class UpdateAssetsCommand extends Command
                 $version = $plugin['version'];
                 $display = $plugin['display'] ?? $name;
                 if ($this->isPluginDisabled($plugin)) {
-                    $this->writeVerbose(\sprintf('Skip   : %s %s', $display, $version), 'fg=gray');
+                    $this->writeVerbose(\sprintf('Disabled : %s %s', $display, $version), 'fg=gray');
                     continue;
                 }
                 $files = $plugin['files'];
                 if ([] === $files) {
-                    $this->writeVerbose(\sprintf('Skip   : %s %s (No file defined)', $display, $version), 'fg=gray');
+                    $this->writeVerbose(\sprintf('Skip     : %s %s (No file defined)', $display, $version), 'fg=gray');
                     continue;
                 }
 
@@ -143,8 +144,7 @@ class UpdateAssetsCommand extends Command
                 $definition = $configuration['sources'][$pluginSource];
                 $source = $definition['source'];
                 $format = $definition['format'];
-
-                $this->writeVerbose(\sprintf('Install: %s %s', $display, $version));
+                $this->writeVerbose(\sprintf('Install  : %s %s', $display, $version));
                 foreach ($files as $file) {
                     $sourceFile = $this->getSourceFile($source, $format, $plugin, $file);
                     $targetFile = $this->getTargetFile($targetTemp, $plugin, $file);
@@ -154,16 +154,21 @@ class UpdateAssetsCommand extends Command
                 }
                 ++$countPlugins;
 
+                if (!$this->isPluginUpdate($plugin)) {
+                    continue;
+                }
+
                 $versionUrl = $definition['versionUrl'] ?? null;
                 $versionPaths = $definition['versionPaths'] ?? null;
                 if (\is_string($versionUrl) && \is_array($versionPaths)) {
                     $this->checkVersion($versionUrl, $versionPaths, $name, $version, $display);
-                } else {
-                    $this->writeVerbose(
-                        \sprintf('Check  : %s %s - No version information.', $display, $version),
-                        'fg=gray'
-                    );
+                    continue;
                 }
+
+                $this->writeVerbose(
+                    \sprintf('Check    : %s %s - No version information.', $display, $version),
+                    'fg=gray'
+                );
             }
             $expected = $this->countFiles($plugins);
             if ($expected !== $countFiles) {
@@ -207,8 +212,7 @@ class UpdateAssetsCommand extends Command
         if ('' === $content) {
             return false;
         }
-        $result = \preg_match(self::ASSET_VERSION_PATTERN, $content, $matches, \PREG_OFFSET_CAPTURE);
-        if (1 !== $result) {
+        if (!StringUtils::pregMatch(self::ASSET_VERSION_PATTERN, $content, $matches, \PREG_OFFSET_CAPTURE)) {
             return false;
         }
 
@@ -300,6 +304,10 @@ class UpdateAssetsCommand extends Command
             $display = $plugin['display'] ?? $name;
             if ($this->isPluginDisabled($plugin)) {
                 $this->writeln(\sprintf($pattern, '✗', $display, $version, 'Disabled.'), 'fg=gray');
+                continue;
+            }
+            if (!$this->isPluginUpdate($plugin)) {
+                $this->writeln(\sprintf($pattern, '✗', $display, $version, 'Skip Update.'), 'fg=gray');
                 continue;
             }
 
@@ -447,7 +455,15 @@ class UpdateAssetsCommand extends Command
      */
     private function isPluginDisabled(array $plugin): bool
     {
-        return isset($plugin['disabled']) && $plugin['disabled'];
+        return $plugin['disabled'] ?? false;
+    }
+
+    /**
+     * @psalm-param PluginType $plugin
+     */
+    private function isPluginUpdate(array $plugin): bool
+    {
+        return $plugin['update'] ?? true;
     }
 
     /**
@@ -504,13 +520,14 @@ class UpdateAssetsCommand extends Command
     {
         $properties = (array) $properties;
         foreach ($properties as $property) {
-            if (!isset($var[$property])) {
-                if ($log) {
-                    $this->writeError(\sprintf('Unable to find the property "%s".', $property));
-                }
-
-                return false;
+            if (isset($var[$property])) {
+                continue;
             }
+            if ($log) {
+                $this->writeError(\sprintf('Unable to find the property "%s".', $property));
+            }
+
+            return false;
         }
 
         return true;

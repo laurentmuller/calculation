@@ -107,14 +107,14 @@ class CommandsReport extends AbstractArrayReport
     private function outputHelp(string $text): void
     {
         $text = \strip_tags($text, '<a>');
-        $result = \preg_match_all(self::LINK_PATTERN, $text, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE);
-        if (false === $result || 0 === $result) {
+        if (!StringUtils::pregMatchAll(self::LINK_PATTERN, $text, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE)) {
             $this->write($text);
 
             return;
         }
 
         $offset = 0;
+        /** @psalm-var  array<int, array{0: string, 1: int}> $match */
         foreach ($matches as $match) {
             // previous chunk
             $index = $match[0][1];
@@ -246,8 +246,7 @@ class CommandsReport extends AbstractArrayReport
 
         // find classes
         $help = \str_replace(' target="_blank" rel="noopener noreferrer"', '', $help);
-        $result = \preg_match_all(self::CLASS_PATTERN, $help, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE);
-        if (false === $result || 0 === $result) {
+        if (!StringUtils::pregMatchAll(self::CLASS_PATTERN, $help, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE)) {
             $this->outputHelp($help);
             $this->leftMargin = $oldMargin;
             $this->lineBreak();
@@ -256,6 +255,7 @@ class CommandsReport extends AbstractArrayReport
         }
 
         $offset = 0;
+        /** @psalm-var  array<int, array{0: string, 1: int}> $match */
         foreach ($matches as $match) {
             // previous chunk
             $index = $match[0][1];

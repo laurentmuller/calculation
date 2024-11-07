@@ -79,6 +79,16 @@ class AjaxControllerTest extends ControllerTestCase
         $this->checkTaskRequest($parameters, Response::HTTP_BAD_REQUEST);
     }
 
+    public function testComputeTaskNoFound(): void
+    {
+        $parameters = [
+            'id' => 1_000_000,
+            'quantity' => 1.0,
+            'items' => [1],
+        ];
+        $this->checkTaskRequest($parameters, Response::HTTP_OK);
+    }
+
     public function testComputeTaskQuantityEqualZero(): void
     {
         $parameters = [

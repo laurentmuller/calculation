@@ -202,7 +202,7 @@ $(function () {
          * @private
          */
         _isFunction(value) {
-            return typeof value === 'function' && value !== $.noop;
+            return typeof value === 'function';
         }
     };
 
@@ -211,11 +211,11 @@ $(function () {
         'inputType': 'text',
         'inputClass': 'form-control cell-editor',
         'inputCss': {},
-        'onCreateInput': $.noop,
-        'onRemoveInput': $.noop,
-        'onKeyDown': $.noop,
-        'onInput': $.noop,
-        'onSave': $.noop,
+        'onCreateInput': null,
+        'onRemoveInput': null,
+        'onKeyDown': null,
+        'onInput': null,
+        'onSave': null,
     };
 
     /**

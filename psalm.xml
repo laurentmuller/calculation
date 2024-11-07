@@ -35,6 +35,11 @@
                 <directory name="src" />
             </errorLevel>
         </PossiblyUnusedMethod>
+        <ReferenceConstraintViolation>
+            <errorLevel type="suppress">
+                <file name="src/Utils/StringUtils.php" />
+            </errorLevel>
+        </ReferenceConstraintViolation>
     </issueHandlers>
 
     <plugins>

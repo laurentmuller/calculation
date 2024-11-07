@@ -16,6 +16,7 @@ use App\Model\FontAwesomeImage;
 use App\Traits\CacheKeyTrait;
 use App\Traits\LoggerTrait;
 use App\Utils\FileUtils;
+use App\Utils\StringUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -66,7 +67,7 @@ class FontAwesomeImageService
     /**
      * Gets the icon aliases.
      *
-     * @return array<string, string> the aliases where key is alias name and the value is the existing file
+     * @return array<string, string> the aliases where key is the alias name and the value is the existing file
      */
     public function getAliases(): array
     {
@@ -162,8 +163,8 @@ class FontAwesomeImageService
      */
     private function getTargetSize(string $content): array
     {
-        $result = \preg_match(self::VIEW_BOX_PATTERN, $content, $matches);
-        if (1 !== $result || $matches['width'] === $matches['height']) {
+        $result = StringUtils::pregMatch(self::VIEW_BOX_PATTERN, $content, $matches);
+        if (!$result || $matches['width'] === $matches['height']) {
             return [self::TARGET_SIZE, self::TARGET_SIZE];
         }
 

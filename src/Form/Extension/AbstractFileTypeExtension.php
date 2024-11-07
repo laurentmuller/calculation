@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Form\Extension;
 
+use App\Utils\StringUtils;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -114,7 +115,7 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
             return (int) $size;
         }
 
-        if (1 === \preg_match('/^(\d++)(' . \implode('|', \array_keys($factors)) . ')$/i', (string) $size, $matches)) {
+        if (StringUtils::pregMatch('/^(\d++)(' . \implode('|', \array_keys($factors)) . ')$/i', (string) $size, $matches)) {
             return (int) $matches[1] * $factors[\strtolower($matches[2])];
         }
 

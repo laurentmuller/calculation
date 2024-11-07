@@ -61,7 +61,7 @@ class DiagramService
 
     private function findTitle(string $content, string $name): string
     {
-        if (1 === \preg_match(self::TITLE_PATTERN, $content, $matches)) {
+        if (StringUtils::pregMatch(self::TITLE_PATTERN, $content, $matches)) {
             return $matches[1];
         }
 

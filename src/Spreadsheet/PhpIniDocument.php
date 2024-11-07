@@ -79,7 +79,7 @@ class PhpIniDocument extends AbstractDocument
     private function applyStyle(Worksheet $sheet, int $column, int $row, string $var): self
     {
         $color = null;
-        if (1 === \preg_match('/#[\dA-Fa-f]{6}/i', $var)) {
+        if (StringUtils::pregMatch('/#[\dA-Fa-f]{6}/i', $var)) {
             $color = \substr($var, 1);
         } elseif (\in_array(
             \strtolower($var),

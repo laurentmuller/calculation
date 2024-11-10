@@ -139,7 +139,7 @@ final class StringUtils
         $export = \var_export($expression, true);
         $export = self::replace(self::VAR_SEARCH, $export);
 
-        return self::pregReplace(self::VAR_PATTERN, $export);
+        return self::pregReplaceAll(self::VAR_PATTERN, $export);
     }
 
     /**
@@ -188,11 +188,10 @@ final class StringUtils
      *
      * @return bool <code>true</code> if the pattern matches the given subject
      *
-     * @psalm-pure
-     *
      * @psalm-param non-empty-string $pattern
+     * @psalm-param int-mask<256, 512> $flags
      *
-     * @phpstan-param int-mask<256, 512> $flags
+     * @psalm-suppress ReferenceConstraintViolation
      */
     public static function pregMatch(string $pattern, string $subject, ?array &$matches = null, int $flags = 0, int $offset = 0): bool
     {
@@ -205,16 +204,17 @@ final class StringUtils
      * @param string $pattern the pattern to search for
      * @param string $subject the input string
      *
-     * @param-out string[] $matches if matches is provided, then it is filled with the results of search.
+     * @param-out array<int, array> $matches if matches is provided, then it is filled with the results of search.
      *
      * @param int $flags  can be a combination of flags
      * @param int $offset to specify the place from which to start the search
      *
      * @return bool <code>true</code> if the pattern matches the given subject
      *
-     * @psalm-pure
-     *
      * @psalm-param non-empty-string $pattern
+     * @psalm-param int-mask<1, 2, 256, 512> $flags
+     *
+     * @psalm-suppress ReferenceConstraintViolation
      */
     public static function pregMatchAll(string $pattern, string $subject, ?array &$matches = null, int $flags = 0, int $offset = 0): bool
     {
@@ -224,11 +224,27 @@ final class StringUtils
     }
 
     /**
+     * Perform a regular expression search and replace.
+     *
+     * @param string $pattern     the pattern to search for
+     * @param string $replacement the string to replace
+     * @param string $subject     the string being searched and replaced on
+     * @param int    $limit       the maximum possible replacements for the pattern. Defaults to -1 (no limit).
+     *
+     * @psalm-param non-empty-string $pattern
+     */
+    public static function pregReplace(string $pattern, string $replacement, string $subject, int $limit = -1): string
+    {
+        return (string) \preg_replace($pattern, $replacement, $subject, $limit);
+    }
+
+    /**
      * Replace all occurrences of the pattern string with the replacement string.
      *
      * @param array<string, string> $values  an array where key is the pattern, and value is the replacement term
      * @param string|string[]       $subject the string or array being searched and replaced on
-     * @param int                   $limit   the maximum possible replacements for each pattern in each subject string
+     * @param int                   $limit   the maximum possible replacements for each pattern in each subject string.
+     *                                       Defaults to -1 (no limit).
      *
      * @return string|string[] returns a string or an array with the replaced values
      *
@@ -236,7 +252,7 @@ final class StringUtils
      *
      * @psalm-return ($subject is string ? string : string[])
      */
-    public static function pregReplace(array $values, string|array $subject, int $limit = -1): string|array
+    public static function pregReplaceAll(array $values, string|array $subject, int $limit = -1): string|array
     {
         /** @psalm-var string|string[] */
         return \preg_replace(\array_keys($values), \array_values($values), $subject, $limit);
@@ -292,6 +308,18 @@ final class StringUtils
         }
 
         return \str_starts_with($string, $prefix);
+    }
+
+    /**
+     * Trim the given string.
+     *
+     * @param ?string $str the value to trim
+     *
+     * @return string|null the trimmed string or null if empty after trimmed
+     */
+    public static function trim(?string $str): ?string
+    {
+        return null === $str || ($str = \trim($str)) === '' ? null : $str;
     }
 
     /**

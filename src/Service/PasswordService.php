@@ -15,6 +15,7 @@ namespace App\Service;
 use App\Enums\StrengthLevel;
 use App\Model\PasswordQuery;
 use App\Traits\StrengthLevelTranslatorTrait;
+use App\Utils\StringUtils;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use ZxcvbnPhp\Zxcvbn;
@@ -114,7 +115,7 @@ class PasswordService
 
     private function validatePassword(PasswordQuery $query): ?array
     {
-        if ('' === \trim($query->password)) {
+        if (null === StringUtils::trim($query->password)) {
             return $this->getFalseResult($this->trans('password.empty', [], 'validators'));
         }
 

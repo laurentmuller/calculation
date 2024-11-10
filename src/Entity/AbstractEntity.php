@@ -58,16 +58,4 @@ abstract class AbstractEntity implements EntityInterface
     {
         return null === $this->id || 0 === $this->id;
     }
-
-    /**
-     * Trim the given string.
-     *
-     * @param ?string $str the value to trim
-     *
-     * @return string|null the trimmed string or null if empty
-     */
-    protected function trim(?string $str): ?string
-    {
-        return null === $str || ($str = \trim($str)) === '' ? null : $str;
-    }
 }

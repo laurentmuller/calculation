@@ -17,6 +17,7 @@ use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Table\DataQuery;
 use App\Traits\CookieTrait;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -25,6 +26,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Value resolver for {@link DataQuery}.
@@ -35,7 +37,8 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
 
     public function __construct(
         private PropertyAccessorInterface $accessor,
-        private ValidatorInterface $validator
+        private ValidatorInterface $validator,
+        private TranslatorInterface $translator,
     ) {
     }
 
@@ -45,9 +48,7 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
             return [];
         }
 
-        $query = $this->getDefaultValue($argument);
-        $this->updateQuery($query, $request);
-
+        $query = $this->createQuery($request, $argument);
         $errors = $this->validator->validate($query);
         if (\count($errors) > 0) {
             $message = $this->mapErrors($errors);
@@ -58,7 +59,31 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
         return [$query];
     }
 
-    private function getDefaultValue(ArgumentMetadata $argument): DataQuery
+    private function createQuery(Request $request, ArgumentMetadata $argument): DataQuery
+    {
+        $query = $this->getDefaultQuery($argument);
+        $this->updateQuery($query, $request->query);
+
+        $query->prefix = $this->getPrefix($request);
+        $query->callback = $this->isCallback($request);
+        $query->view = $this->getView($request, $query->view);
+        if (0 === $query->limit) {
+            $query->limit = $this->getLimit($request, $query->prefix, $query->view);
+        }
+        if ('' === $query->sort) {
+            $query->sort = $this->getSort($request, $query->prefix);
+            $query->order = $this->getOrder($request, $query->prefix);
+        }
+
+        return $query;
+    }
+
+    private function formatError(string $key, string|\Stringable $message): string
+    {
+        return \sprintf('%s.%s: %s', DataQuery::class, $key, $message);
+    }
+
+    private function getDefaultQuery(ArgumentMetadata $argument): DataQuery
     {
         if ($argument->hasDefaultValue()) {
             /** @psalm-var DataQuery */
@@ -105,34 +130,28 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
     private function mapErrors(ConstraintViolationListInterface $errors): string
     {
         $str = '';
-        $class = DataQuery::class;
         foreach ($errors as $error) {
-            $str .= \sprintf("%s.%s: %s\n", $class, $error->getPropertyPath(), $error->getMessage());
+            $str .= $this->formatError($error->getPropertyPath(), $error->getMessage()) . "\n";
         }
 
         return \rtrim($str);
     }
 
-    private function updateQuery(DataQuery $query, Request $request): void
+    /**
+     * @psalm-param InputBag<string> $inputBag
+     */
+    private function updateQuery(DataQuery $query, InputBag $inputBag): void
     {
-        /** @psalm-var string|int $value */
-        foreach ($request->query as $key => $value) {
-            // special case for view
+        /** @psalm-var mixed $value */
+        foreach ($inputBag as $key => $value) {
+            if (!\property_exists($query, $key)) {
+                $message = $this->formatError($key, $this->translator->trans('schema.fields.error'));
+                throw new BadRequestHttpException($message);
+            }
             if (TableInterface::PARAM_VIEW === $key) {
                 $value = TableView::tryFrom((string) $value) ?? $query->view;
             }
             $this->accessor->setValue($query, $key, $value);
-        }
-
-        $query->prefix = $this->getPrefix($request);
-        $query->callback = $this->isCallback($request);
-        $query->view = $this->getView($request, $query->view);
-        if (0 === $query->limit) {
-            $query->limit = $this->getLimit($request, $query->prefix, $query->view);
-        }
-        if ('' === $query->sort) {
-            $query->sort = $this->getSort($request, $query->prefix);
-            $query->order = $this->getOrder($request, $query->prefix);
         }
     }
 }

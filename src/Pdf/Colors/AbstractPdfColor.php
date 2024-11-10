@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf\Colors;
 
 use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
+use App\Utils\StringUtils;
 
 /**
  * Define a RGB color.
@@ -124,7 +125,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
             return self::createFromInt($rgb);
         }
 
-        $rgb = (string) \preg_replace('/[^0-9A-F]/i', '', $rgb);
+        $rgb = StringUtils::pregReplace('/[^0-9A-F]/i', '', $rgb);
 
         return match (\strlen($rgb)) {
             3 => self::createFrom3Chars($rgb),

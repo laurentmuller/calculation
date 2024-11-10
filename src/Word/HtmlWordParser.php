@@ -63,7 +63,7 @@ class HtmlWordParser
     public function parse(string $content): string
     {
         // trim spaces
-        $content = (string) \preg_replace('/\s+/', ' ', $content);
+        $content = StringUtils::pregReplace('/\s+/', ' ', $content);
 
         if ('' === $content) {
             return $content;

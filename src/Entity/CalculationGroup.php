@@ -20,6 +20,7 @@ use App\Repository\CalculationGroupRepository;
 use App\Traits\CollectionTrait;
 use App\Traits\PositionTrait;
 use App\Types\FixedFloatType;
+use App\Utils\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -288,7 +289,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
      */
     public function setCode(?string $code): self
     {
-        $this->code = $this->trim($code);
+        $this->code = StringUtils::trim($code);
 
         return $this;
     }

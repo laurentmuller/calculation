@@ -495,7 +495,7 @@ class SearchService implements ServiceSubscriberInterface
         $param = ':' . self::SEARCH_PARAM;
         foreach ($queries as &$query) {
             $query = \str_replace('?', $param, $query);
-            $query = StringUtils::pregReplace($values, $query);
+            $query = StringUtils::pregReplaceAll($values, $query);
         }
     }
 }

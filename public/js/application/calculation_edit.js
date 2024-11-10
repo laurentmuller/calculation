@@ -319,8 +319,6 @@ const Application = {
                 value: true
             });
         }
-
-        // call
         const url = $form.data('update');
 
         /**
@@ -725,8 +723,8 @@ const Application = {
 
 
     /**
-     * Display the edit item dialog. This function copy the element to the
-     * dialog and display it. If the user click OK, the item is updated.
+     * Display the edit item dialog. This function copies the element to the dialog and displays it.
+     * If the user clicks OK, the item is updated.
      *
      * @param {jQuery} $source - the caller element (normally a button).
      */
@@ -741,8 +739,8 @@ const Application = {
     },
 
     /**
-     * Display the edit item dialog. This function copy the selected element to the
-     * dialog and display it. If the user click OK, a new item is added.
+     * Display the edit item dialog. This function copies the selected element to the
+     * dialog and displays it. If the user clicks OK, a new item is added.
      *
      * @param {jQuery} $source - the caller element (normally a button).
      */
@@ -777,7 +775,7 @@ const Application = {
 
     /**
      * Remove a calculation category. If the parent group is empty after
-     * deletion, then group is also deleted.
+     * deletion, then the group is also deleted.
      *
      * @param {jQuery} $element - the caller element (normally a button).
      * @return {Application} This instance for chaining.
@@ -790,7 +788,7 @@ const Application = {
         const $prev = $body.prev();
         const $next = $body.next();
 
-        // if it is the last category then remove the group
+        // if it is the last category, then remove the group
         if ($prev.is('.group') && ($next.length === 0 || $next.is('.group'))) {
             return that.removeGroup($prev);
         }
@@ -815,7 +813,7 @@ const Application = {
         let $row = $element.getParentRow();
         const $body = $row.parents('tbody');
 
-        // if it is the last item then remove the category
+        // if it is the last item, then remove the category
         if ($body.children().length === 2) {
             return that.removeCategory($body);
         }
@@ -1093,7 +1091,7 @@ const Application = {
 $.fn.extend({
 
     /**
-     * Finds an input element that have the name attribute within a given
+     * Finds an input element that has the name attribute within a given
      * substring.
      *
      * @param {string} name - the partial attribute name.

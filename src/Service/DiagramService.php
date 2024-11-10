@@ -99,6 +99,6 @@ class DiagramService
 
     private function removeTitle(string $content): string
     {
-        return (string) \preg_replace(self::TITLE_PATTERN, '', $content);
+        return StringUtils::pregReplace(self::TITLE_PATTERN, '', $content);
     }
 }

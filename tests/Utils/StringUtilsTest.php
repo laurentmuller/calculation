@@ -84,6 +84,12 @@ class StringUtilsTest extends TestCase
 
     public static function getPregReplace(): \Iterator
     {
+        yield ['/\d+/', '', '1234', ''];
+        yield ['/\d+/', '', 'FAKE', 'FAKE'];
+    }
+
+    public static function getPregReplaceAll(): \Iterator
+    {
         yield [['/\d+/' => ''], '1234', ''];
         yield [['/\d+/' => ''], 'FAKE', 'FAKE'];
     }
@@ -103,6 +109,16 @@ class StringUtilsTest extends TestCase
         yield ['fake', 'fa', false, true];
         yield ['fake', 'FA', false, false];
         yield ['fake', 'FA', true, true];
+    }
+
+    public static function getTrim(): \Iterator
+    {
+        yield ['', null];
+        yield [' ', null];
+        yield ['fake', 'fake'];
+        yield [' fake', 'fake'];
+        yield ['fake ', 'fake'];
+        yield [' fake ', 'fake'];
     }
 
     #[DataProvider('getAscii')]
@@ -230,12 +246,22 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-param non-empty-array<non-empty-string, string> $values
+     * @psalm-param non-empty-string $pattern
      */
     #[DataProvider('getPregReplace')]
-    public function testPregReplace(array $values, string $subject, string $expected): void
+    public function testPregReplace(string $pattern, string $replacement, string $subject, string $expected): void
     {
-        $actual = StringUtils::pregReplace($values, $subject);
+        $actual = StringUtils::pregReplace($pattern, $replacement, $subject);
+        self::assertSame($expected, $actual);
+    }
+
+    /**
+     * @psalm-param non-empty-array<non-empty-string, string> $values
+     */
+    #[DataProvider('getPregReplaceAll')]
+    public function testPregReplaceAll(array $values, string $subject, string $expected): void
+    {
+        $actual = StringUtils::pregReplaceAll($values, $subject);
         self::assertSame($expected, $actual);
     }
 
@@ -249,6 +275,13 @@ class StringUtilsTest extends TestCase
     public function testStartWith(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
         $actual = StringUtils::startWith($haystack, $needle, $ignore_case);
+        self::assertSame($expected, $actual);
+    }
+
+    #[DataProvider('getTrim')]
+    public function testTrim(?string $value, ?string $expected): void
+    {
+        $actual = StringUtils::trim($value);
         self::assertSame($expected, $actual);
     }
 

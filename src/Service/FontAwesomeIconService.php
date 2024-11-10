@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Utils\StringUtils;
+
 /**
  * Service to get Font Awesome icons.
  */
@@ -74,13 +76,12 @@ class FontAwesomeIconService
     ];
 
     /**
-     * Convert the given icon class to a relative path.
+     * Gets the relative path for the given icon class.
      *
-     * An icon like 'fa-solid fa-eye' is converted to 'solid/eye.svg'.
+     * @param string $icon the icon class to convert. An icon like 'fa-solid fa-eye' will be
+     *                     converted to 'solid/eye.svg'.
      *
-     * @param string $icon the icon class to convert
-     *
-     * @return string|null the relative path, if applicable; null otherwise
+     * @return ?string the relative path, if applicable; null otherwise
      */
     public function getPath(string $icon): ?string
     {
@@ -93,28 +94,29 @@ class FontAwesomeIconService
             return null;
         }
 
-        if ($this->isFolder($parts[0])) {
-            return \sprintf('%s/%s%s', $parts[0], $parts[1], FontAwesomeImageService::SVG_EXTENSION);
-        }
-        if ($this->isFolder($parts[1])) {
-            return \sprintf('%s/%s%s', $parts[1], $parts[0], FontAwesomeImageService::SVG_EXTENSION);
-        }
-
-        return null;
+        return match (true) {
+            $this->isFolder($parts[0]) => \sprintf(
+                '%s/%s%s',
+                $parts[0],
+                $parts[1],
+                FontAwesomeImageService::SVG_EXTENSION
+            ),
+            $this->isFolder($parts[1]) => \sprintf(
+                '%s/%s%s',
+                $parts[1],
+                $parts[0],
+                FontAwesomeImageService::SVG_EXTENSION
+            ),
+            default => null,
+        };
     }
 
-    /**
-     * Clean icon by removing unwanted strings.
-     */
     private function cleanIcon(string $icon): string
     {
-        // remove excluded classes
         $icon = \str_replace(self::EXCLUDED, '', \strtolower($icon));
-        // replace 'fa-' prefix
         $icon = \str_replace('fa-', '', $icon);
 
-        // suppress consecutive spaces
-        return \trim((string) \preg_replace('/\s+/', ' ', $icon));
+        return \trim(StringUtils::pregReplace('/\s+/', ' ', $icon));
     }
 
     private function isFolder(string $name): bool

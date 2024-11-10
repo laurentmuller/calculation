@@ -249,7 +249,7 @@ class Customer extends AbstractEntity
      */
     public function setAddress(?string $address): self
     {
-        $this->address = $this->trim($address);
+        $this->address = StringUtils::trim($address);
 
         return $this;
     }
@@ -269,7 +269,7 @@ class Customer extends AbstractEntity
      */
     public function setCity(?string $city): self
     {
-        $this->city = $this->trim($city);
+        $this->city = StringUtils::trim($city);
 
         return $this;
     }
@@ -279,7 +279,7 @@ class Customer extends AbstractEntity
      */
     public function setCompany(?string $company): self
     {
-        $this->company = $this->trim($company);
+        $this->company = StringUtils::trim($company);
 
         return $this;
     }
@@ -289,7 +289,7 @@ class Customer extends AbstractEntity
      */
     public function setCountry(?string $country): self
     {
-        $this->country = $this->trim($country);
+        $this->country = StringUtils::trim($country);
 
         return $this;
     }
@@ -299,7 +299,7 @@ class Customer extends AbstractEntity
      */
     public function setEmail(?string $email): self
     {
-        $this->email = $this->trim($email);
+        $this->email = StringUtils::trim($email);
 
         return $this;
     }
@@ -309,7 +309,7 @@ class Customer extends AbstractEntity
      */
     public function setFirstName(?string $firstName): self
     {
-        $this->firstName = $this->trim($firstName);
+        $this->firstName = StringUtils::trim($firstName);
 
         return $this;
     }
@@ -319,7 +319,7 @@ class Customer extends AbstractEntity
      */
     public function setLastName(?string $lastName): self
     {
-        $this->lastName = $this->trim($lastName);
+        $this->lastName = StringUtils::trim($lastName);
 
         return $this;
     }
@@ -329,7 +329,7 @@ class Customer extends AbstractEntity
      */
     public function setTitle(?string $title): self
     {
-        $this->title = $this->trim($title);
+        $this->title = StringUtils::trim($title);
 
         return $this;
     }
@@ -339,7 +339,7 @@ class Customer extends AbstractEntity
      */
     public function setWebSite(?string $webSite): self
     {
-        $webSite = $this->trim($webSite);
+        $webSite = StringUtils::trim($webSite);
         if (StringUtils::isString($webSite) && !\str_starts_with($webSite, 'http')) {
             $webSite = "https://$webSite";
         }
@@ -353,7 +353,7 @@ class Customer extends AbstractEntity
      */
     public function setZipCode(?string $zipCode): self
     {
-        $this->zipCode = $this->trim($zipCode);
+        $this->zipCode = StringUtils::trim($zipCode);
 
         return $this;
     }

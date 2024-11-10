@@ -19,6 +19,7 @@ use App\Repository\CalculationItemRepository;
 use App\Traits\MathTrait;
 use App\Traits\PositionTrait;
 use App\Types\FixedFloatType;
+use App\Utils\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -189,7 +190,7 @@ class CalculationItem extends AbstractEntity implements ComparableInterface, Par
      */
     public function setDescription(?string $description): self
     {
-        $this->description = $this->trim($description);
+        $this->description = StringUtils::trim($description);
 
         return $this;
     }
@@ -219,7 +220,7 @@ class CalculationItem extends AbstractEntity implements ComparableInterface, Par
      */
     public function setUnit(?string $unit): self
     {
-        $this->unit = $this->trim($unit);
+        $this->unit = StringUtils::trim($unit);
 
         return $this;
     }

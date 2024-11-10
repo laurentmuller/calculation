@@ -42,7 +42,7 @@ class PhpInfoService
     {
         $content = $this->asText($what);
         $content = \strip_tags($content, '<h2><th><td>');
-        $content = StringUtils::pregReplace(
+        $content = StringUtils::pregReplaceAll(
             [
                 '/<th[^>]*>([^<]+)<\/th>/i' => '<info>\1</info>',
                 '/<td[^>]*>([^<]+)<\/td>/i' => '<info>\1</info>',
@@ -100,8 +100,8 @@ class PhpInfoService
     {
         $info = $this->asText($what);
 
-        $info = $this->pregReplace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
-        $info = $this->pregReplace('/<a\s(.+?)>(.+?)<\/a>/mi', '<p>$2</p>', $info);
+        $info = StringUtils::pregReplace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
+        $info = StringUtils::pregReplace('/<a\s(.+?)>(.+?)<\/a>/mi', '<p>$2</p>', $info);
         $info = \str_ireplace('background-color: white; text-align: center', '', $info);
         $info = \str_ireplace('<i>no value</i>', '<i class="text-secondary">No value</i>', $info);
         $info = \str_ireplace('(none)', '<i class="text-secondary">None</i>', $info);
@@ -115,24 +115,24 @@ class PhpInfoService
         foreach (self::ENABLED as $value) {
             $search = \sprintf('/<td class="v">%s\s?<\/td>/mi', $value);
             $replace = \sprintf('<td class="v enabled">%s</td>', StringUtils::capitalize($value));
-            $info = $this->pregReplace($search, $replace, $info);
+            $info = StringUtils::pregReplace($search, $replace, $info);
 
             $search = \sprintf('/<th>%s\s?<\/th>/mi', $value);
             $replace = \sprintf('<td class="v enabled">%s</td>', StringUtils::capitalize($value));
-            $info = $this->pregReplace($search, $replace, $info);
+            $info = StringUtils::pregReplace($search, $replace, $info);
         }
 
         foreach (self::DISABLED as $value) {
             $search = \sprintf('/<td class="v">%s\s?<\/td>/mi', $value);
             $replace = \sprintf('<td class="v disabled">%s</td>', StringUtils::capitalize($value));
-            $info = $this->pregReplace($search, $replace, $info);
+            $info = StringUtils::pregReplace($search, $replace, $info);
 
             $search = \sprintf('/<th>%s\s?<\/th>/mi', $value);
             $replace = \sprintf('<td class="v disabled">%s</td>', StringUtils::capitalize($value));
-            $info = $this->pregReplace($search, $replace, $info);
+            $info = StringUtils::pregReplace($search, $replace, $info);
         }
 
-        return $this->pregReplace('/<table\s(.+?)>(.+?)<\/table>/is', '', $info, 1);
+        return StringUtils::pregReplace('/<table\s(.+?)>(.+?)<\/table>/is', '', $info, 1);
     }
 
     /**
@@ -179,21 +179,13 @@ class PhpInfoService
         return \str_replace('\\', '/', $var);
     }
 
-    /**
-     * @param non-empty-string $pattern
-     */
-    private function pregReplace(string $pattern, string $replacement, string $subject, int $limit = -1): string
-    {
-        return (string) \preg_replace($pattern, $replacement, $subject, $limit);
-    }
-
     private function updateContent(string $content): string
     {
         $subst = \sprintf('$1%s$3', self::REDACTED);
         $keys = ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN', 'DATABASE_URL'];
         foreach ($keys as $key) {
             $regex = \sprintf("/(<tr.*\['.*%s']<\/td><td.*?>)(.*)(<.*<\/tr>)/mi", $key);
-            $content = $this->pregReplace($regex, $subst, $content);
+            $content = StringUtils::pregReplace($regex, $subst, $content);
         }
         $content = \str_replace(['✘ ', '✔ ', '⊕'], '', $content);
 

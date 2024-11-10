@@ -19,6 +19,7 @@ use App\Traits\CollectionTrait;
 use App\Traits\TimestampableTrait;
 use App\Types\FixedFloatType;
 use App\Utils\FormatUtils;
+use App\Utils\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -752,7 +753,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function setCustomer(?string $customer): self
     {
-        $this->customer = $this->trim($customer);
+        $this->customer = StringUtils::trim($customer);
 
         return $this;
     }
@@ -772,7 +773,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function setDescription(?string $description): self
     {
-        $this->description = $this->trim($description);
+        $this->description = StringUtils::trim($description);
 
         return $this;
     }

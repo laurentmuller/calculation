@@ -47,7 +47,7 @@ class UserNamerTest extends TestCase
         $user = new User();
         $namer = new UserNamer();
         $mapping = new PropertyMapping('', '');
-        $result = $namer->name($user, $mapping);
-        self::assertSame($result, 'USER_000000_192.png');
+        $actual = $namer->name($user, $mapping);
+        self::assertSame('USER_000000_192.png', $actual);
     }
 }

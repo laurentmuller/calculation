@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
+use App\Utils\StringUtils;
+
 /**
  * Html attribute enumeration.
  */
@@ -68,8 +70,8 @@ enum HtmlAttribute: string
             return $default;
         }
 
-        $value = \trim($attribute->nodeValue);
-        if ('' === $value) {
+        $value = StringUtils::trim($attribute->nodeValue);
+        if (null === $value) {
             return $default;
         }
 

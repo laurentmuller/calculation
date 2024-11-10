@@ -572,10 +572,11 @@ class FormHelperTest extends TypeTestCase
     {
         self::assertTrue($form->has('name'));
         $field = $form->get('name');
-        $actual = $field->getConfig()
+        $innerType = $field->getConfig()
             ->getType()
             ->getInnerType();
-        self::assertSame($expected, $actual::class);
+        $actual = $innerType::class;
+        self::assertSame($expected, $actual);
     }
 
     /**

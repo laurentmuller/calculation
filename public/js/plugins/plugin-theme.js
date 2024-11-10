@@ -61,6 +61,10 @@ $(function () {
             this.$element.off('click', this.clickProxy);
             this.$element.removeData(ThemeListener.NAME);
             window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', this.changeProxy);
+            const modal = bootstrap.Modal.getInstance(this._getDialogId());
+            if (modal) {
+                modal.dispose();
+            }
             const $dialog = this._getDialog();
             if ($dialog) {
                 $dialog.remove();
@@ -167,8 +171,7 @@ $(function () {
          * @private
          */
         _getModal() {
-            const id = this._getDialogId();
-            return bootstrap.Modal.getOrCreateInstance(id);
+            return bootstrap.Modal.getOrCreateInstance(this._getDialogId());
         }
 
         /**

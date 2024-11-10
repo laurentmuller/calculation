@@ -55,7 +55,7 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface
         $answer = '';
         for ($i = $letterIndex; $i >= 0; --$i) {
             $answer = $word[\strcspn($word, $source)];
-            $word = (string) \preg_replace('/' . $answer . '/', '_', $word, 1);
+            $word = StringUtils::pregReplace('/' . $answer . '/', '_', $word, 1);
         }
 
         return $answer;

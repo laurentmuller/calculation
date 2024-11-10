@@ -25,6 +25,8 @@ class AjaxCalculationControllerTest extends ControllerTestCase
 {
     use CalculationTrait;
 
+    private const UPDATE_ROUTE_NAME = '/calculation/update';
+
     /**
      * @throws ORMException
      */
@@ -36,13 +38,7 @@ class AjaxCalculationControllerTest extends ControllerTestCase
 
     public static function getRoutes(): \Iterator
     {
-        yield ['/ajax/dialog/item', self::ROLE_USER, Response::HTTP_OK, Request::METHOD_GET, true];
-        yield ['/ajax/dialog/item', self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
-        yield ['/ajax/dialog/item', self::ROLE_SUPER_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
-
-        yield ['/ajax/dialog/task', self::ROLE_USER, Response::HTTP_OK, Request::METHOD_GET, true];
-        yield ['/ajax/dialog/task', self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
-        yield ['/ajax/dialog/task', self::ROLE_SUPER_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
+        yield [self::UPDATE_ROUTE_NAME, self::ROLE_USER,  Response::HTTP_OK, Request::METHOD_POST, true];
     }
 
     public function testUpdate(): void
@@ -87,7 +83,7 @@ class AjaxCalculationControllerTest extends ControllerTestCase
         ];
 
         $this->loginUsername('ROLE_USER');
-        $this->client->request(Request::METHOD_POST, '/ajax/update', $parameters);
+        $this->client->request(Request::METHOD_POST, self::UPDATE_ROUTE_NAME, $parameters);
         $response = $this->client->getResponse();
         self::assertTrue($response->isOk());
         self::assertInstanceOf(JsonResponse::class, $response);
@@ -123,7 +119,7 @@ class AjaxCalculationControllerTest extends ControllerTestCase
             'adjust' => true,
         ];
         $this->checkRoute(
-            url: '/ajax/update',
+            url: self::UPDATE_ROUTE_NAME,
             username: self::ROLE_USER,
             method: Request::METHOD_POST,
             xmlHttpRequest: true,
@@ -141,7 +137,7 @@ class AjaxCalculationControllerTest extends ControllerTestCase
             ->willThrowException(new \Exception('Fake Message'));
         $this->setService(CalculationService::class, $service);
         $this->checkRoute(
-            url: '/ajax/update',
+            url: self::UPDATE_ROUTE_NAME,
             username: self::ROLE_USER,
             method: Request::METHOD_POST,
             xmlHttpRequest: true
@@ -162,7 +158,7 @@ class AjaxCalculationControllerTest extends ControllerTestCase
         $this->setService(CalculationService::class, $service);
 
         $this->checkRoute(
-            url: '/ajax/update',
+            url: self::UPDATE_ROUTE_NAME,
             username: self::ROLE_USER,
             method: Request::METHOD_POST,
             xmlHttpRequest: true

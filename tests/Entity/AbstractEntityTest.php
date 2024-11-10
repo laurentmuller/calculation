@@ -13,23 +13,11 @@ declare(strict_types=1);
 namespace App\Tests\Entity;
 
 use App\Entity\AbstractEntity;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AbstractEntityTest extends TestCase
 {
     use IdTrait;
-
-    public static function getTrims(): \Generator
-    {
-        yield [null, null];
-        yield ['', null];
-        yield [' ', null];
-        yield ['content', 'content'];
-        yield [' content', 'content'];
-        yield ['content ', 'content'];
-        yield [' content ', 'content'];
-    }
 
     /**
      * @throws \ReflectionException
@@ -74,29 +62,10 @@ class AbstractEntityTest extends TestCase
 
     /**
      * @throws \ReflectionException
-     *
-     * @psalm-suppress InaccessibleMethod
-     */
-    #[DataProvider('getTrims')]
-    public function testTrim(?string $value, ?string $expected): void
-    {
-        $entity = $this->getEntity();
-        // @phpstan-ignore method.protected
-        $actual = $entity->trim($value);
-        self::assertSame($expected, $actual);
-    }
-
-    /**
-     * @throws \ReflectionException
      */
     private function getEntity(?int $id = null): AbstractEntity
     {
-        $entity = new class() extends AbstractEntity {
-            public function trim(?string $str): ?string
-            {
-                return parent::trim($str);
-            }
-        };
+        $entity = new class() extends AbstractEntity {};
         if (\is_int($id)) {
             return self::setId($entity, $id);
         }

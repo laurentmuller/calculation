@@ -14,7 +14,6 @@ namespace App\Tests\Controller;
 
 use App\Enums\StrengthLevel;
 use App\Tests\EntityTrait\TaskItemTrait;
-use App\Utils\StringUtils;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,10 +32,6 @@ class AjaxControllerTest extends ControllerTestCase
         yield ['/ajax/random/text', self::ROLE_USER];
         yield ['/ajax/random/text', self::ROLE_ADMIN];
         yield ['/ajax/random/text', self::ROLE_SUPER_ADMIN];
-
-        yield ['/ajax/dialog/page', self::ROLE_USER];
-        yield ['/ajax/dialog/page', self::ROLE_ADMIN];
-        yield ['/ajax/dialog/page', self::ROLE_SUPER_ADMIN];
     }
 
     public function testComputeTaskIdEqualZero(): void
@@ -111,26 +106,6 @@ class AjaxControllerTest extends ControllerTestCase
             'items' => [$taskItem->getId()],
         ];
         $this->checkTaskRequest($parameters, Response::HTTP_OK);
-    }
-
-    public function testDialogSort(): void
-    {
-        $parameters = [
-            [
-                'field' => 'description',
-                'title' => 'Description',
-                'order' => 'asc',
-                'default' => true,
-            ],
-        ];
-
-        $this->checkRoute(
-            '/ajax/dialog/sort',
-            self::ROLE_USER,
-            method: Request::METHOD_POST,
-            xmlHttpRequest: true,
-            content: StringUtils::encodeJson($parameters)
-        );
     }
 
     public function testPassword(): void

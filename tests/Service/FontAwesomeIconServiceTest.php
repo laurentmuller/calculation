@@ -32,6 +32,7 @@ class FontAwesomeIconServiceTest extends TestCase
         yield ['fa-fw fa-arrow-up fa-solid', 'solid/arrow-up.svg'];
         yield ['fa-arrow-up fa-solid fa-fw', 'solid/arrow-up.svg'];
         yield ['fa-2xs fa-arrow-up fa-solid', 'solid/arrow-up.svg'];
+        yield ['  fa-2xs  fa-arrow-up  fa-solid  ', 'solid/arrow-up.svg'];
     }
 
     #[DataProvider('getIcons')]

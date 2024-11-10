@@ -352,7 +352,7 @@ class CommandService implements \Countable
             return $help;
         }
 
-        $help = StringUtils::pregReplace(self::HREF_REPLACE, $help);
+        $help = StringUtils::pregReplaceAll(self::HREF_REPLACE, $help);
 
         return StringUtils::replace(self::HELP_REPLACE, $help);
     }
@@ -373,7 +373,7 @@ class CommandService implements \Countable
         if (0 === \count($arguments)) {
             $command['usage'] = [\sprintf('%s [options]', $command['name'])];
         } else {
-            $command['usage'] = StringUtils::pregReplace(self::USAGE_REPLACE, $command['usage']);
+            $command['usage'] = StringUtils::pregReplaceAll(self::USAGE_REPLACE, $command['usage']);
         }
         foreach ($arguments as &$argument) {
             $argument['description'] = $this->replaceHelp($argument['description']);

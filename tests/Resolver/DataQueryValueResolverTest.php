@@ -15,6 +15,7 @@ namespace App\Tests\Resolver;
 use App\Enums\TableView;
 use App\Resolver\DataQueryValueResolver;
 use App\Table\DataQuery;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -29,6 +30,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class DataQueryValueResolverTest extends TestCase
 {
+    use TranslatorMockTrait;
+
     /**
      * @throws Exception
      */
@@ -64,6 +67,18 @@ class DataQueryValueResolverTest extends TestCase
         self::assertSame('', $query->level);
         self::assertSame('', $query->channel);
         self::assertSame('', $query->entity);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testInvalidKey(): void
+    {
+        $resolver = $this->createResolver();
+        $request = $this->createRequest(['invalidKey' => 'value']);
+        $argument = $this->createArgumentMetadata();
+        self::expectException(BadRequestHttpException::class);
+        $resolver->resolve($request, $argument);
     }
 
     /**
@@ -207,7 +222,8 @@ class DataQueryValueResolverTest extends TestCase
                 ->method('validate')
                 ->willReturn($violationList);
         }
+        $translator = $this->createMockTranslator();
 
-        return new DataQueryValueResolver($accessor, $validator);
+        return new DataQueryValueResolver($accessor, $validator, $translator);
     }
 }

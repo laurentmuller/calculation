@@ -104,7 +104,7 @@ class Product extends AbstractCategoryItemEntity implements ComparableInterface,
      */
     public function setDescription(?string $description): self
     {
-        $this->description = $this->trim($description);
+        $this->description = StringUtils::trim($description);
 
         return $this;
     }

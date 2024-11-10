@@ -17,6 +17,7 @@ use App\Traits\MathTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
+use App\Utils\StringUtils;
 use HighchartsBundle\Highcharts\ChartExpression;
 use HighchartsBundle\Highcharts\Highchart;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -110,7 +111,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     {
         try {
             $content = $this->twig->render($template, $context);
-            $content = (string) \preg_replace(self::COMMENT_REGEX, '', $content);
+            $content = StringUtils::pregReplace(self::COMMENT_REGEX, '', $content);
 
             return ChartExpression::instance($content);
         } catch (\Twig\Error\Error) {

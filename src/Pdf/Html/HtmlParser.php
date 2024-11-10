@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
+use App\Utils\StringUtils;
+
 /**
  * Class to parse HTML content.
  */
@@ -158,16 +160,16 @@ readonly class HtmlParser
      */
     private function trimHtml(): ?string
     {
-        $content = \trim($this->html);
-        if ('' === $content) {
+        $content = StringUtils::trim($this->html);
+        if (null === $content) {
             return null;
         }
-        $content = \trim((string) \preg_replace('/\r\n|\n|\r/m', '', $content));
-        if ('' === $content) {
+        $content = StringUtils::trim(StringUtils::pregReplace('/\r\n|\n|\r/m', '', $content));
+        if (null === $content) {
             return null;
         }
-        $content = \trim((string) \preg_replace('/\s\s+/m', ' ', $content));
-        if ('' === $content) {
+        $content = StringUtils::trim(StringUtils::pregReplace('/\s\s+/m', ' ', $content));
+        if (null === $content) {
             return null;
         }
 

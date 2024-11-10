@@ -76,12 +76,12 @@ class HighlightExtension extends AbstractExtension
         $output = \fopen('php://memory', 'r+');
         $dumper->dump($data, $output);
         $content = (string) \stream_get_contents($output, -1, 0);
-        $content = StringUtils::pregReplace(self::PHP_PATTERNS, $content);
+        $content = StringUtils::pregReplaceAll(self::PHP_PATTERNS, $content);
         if ('' !== $id) {
-            $content = (string) \preg_replace('/highlight-php-(\d+)/', $id, $content, 1);
+            $content = StringUtils::pregReplace('/highlight-php-(\d+)/', $id, $content, 1);
         }
 
-        return \trim($content);
+        return StringUtils::trim($content);
     }
 
     private function exportSql(?string $sql): ?string
@@ -93,7 +93,7 @@ class HighlightExtension extends AbstractExtension
         $content = $this->getSqlFormatter()->format($sql);
         $content = StringUtils::replace(self::SQL_REPLACES, $content);
 
-        return \trim($content);
+        return StringUtils::trim($content);
     }
 
     private function getCloner(): VarCloner

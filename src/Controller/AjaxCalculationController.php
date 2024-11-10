@@ -12,12 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
 use App\Attribute\Post;
-use App\Form\Dialog\EditItemDialogType;
-use App\Form\Dialog\EditTaskDialogType;
 use App\Interfaces\RoleInterface;
-use App\Repository\TaskRepository;
 use App\Service\CalculationService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,44 +23,13 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
- * Controller for calculation XMLHttpRequest (Ajax) calls.
+ * Controller to update calculation's total within XMLHttpRequest (Ajax) calls.
  */
 #[AsController]
-#[Route(path: '/ajax', name: 'ajax_')]
+#[Route(path: '/calculation', name: 'calculation_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class AjaxCalculationController extends AbstractController
 {
-    /**
-     * Return the edit item dialog template.
-     *
-     * @psalm-api
-     */
-    #[Get(path: '/dialog/item', name: 'dialog_item')]
-    public function renderItemDialog(): JsonResponse
-    {
-        $parameters = [
-            'form' => $this->createForm(EditItemDialogType::class),
-        ];
-
-        return $this->renderDialog('dialog/dialog_edit_item.html.twig', $parameters);
-    }
-
-    /**
-     * Return the edit task dialog template.
-     *
-     * @psalm-api
-     */
-    #[Get(path: '/dialog/task', name: 'dialog_task')]
-    public function renderTaskDialog(TaskRepository $repository): JsonResponse
-    {
-        $parameters = [
-            'form' => $this->createForm(EditTaskDialogType::class),
-            'tasks' => $repository->getSortedTask(false),
-        ];
-
-        return $this->renderDialog('dialog/dialog_edit_task.html.twig', $parameters);
-    }
-
     /**
      * Update the calculation's total.
      *
@@ -102,10 +67,5 @@ class AjaxCalculationController extends AbstractController
 
             return $this->jsonException($e, $message);
         }
-    }
-
-    private function renderDialog(string $view, array $parameters): JsonResponse
-    {
-        return $this->json($this->renderView($view, $parameters));
     }
 }

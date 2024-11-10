@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Utils\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -111,7 +112,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      */
     public function setSupplier(?string $supplier): static
     {
-        $this->supplier = $this->trim($supplier);
+        $this->supplier = StringUtils::trim($supplier);
 
         return $this;
     }
@@ -121,7 +122,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      */
     public function setUnit(?string $unit): static
     {
-        $this->unit = $this->trim($unit);
+        $this->unit = StringUtils::trim($unit);
 
         return $this;
     }

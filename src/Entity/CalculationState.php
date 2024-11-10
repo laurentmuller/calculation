@@ -178,7 +178,7 @@ class CalculationState extends AbstractEntity implements ComparableInterface, Ti
      */
     public function setCode(string $code): self
     {
-        $this->code = $this->trim($code);
+        $this->code = StringUtils::trim($code);
 
         return $this;
     }
@@ -188,7 +188,7 @@ class CalculationState extends AbstractEntity implements ComparableInterface, Ti
      */
     public function setColor(string $color): self
     {
-        $this->color = (string) $this->trim($color);
+        $this->color = $color;
 
         return $this;
     }
@@ -198,7 +198,7 @@ class CalculationState extends AbstractEntity implements ComparableInterface, Ti
      */
     public function setDescription(?string $description): self
     {
-        $this->description = $this->trim($description);
+        $this->description = StringUtils::trim($description);
 
         return $this;
     }

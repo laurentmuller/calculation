@@ -233,7 +233,6 @@ $(function () {
                         // show the empty data message
                         $this.showCustomViewMessage();
                     }
-                    $this.saveParameters();
                 },
 
                 onSearch: function (searchText) {
@@ -477,7 +476,6 @@ $(function () {
             const $this = $(this);
             const url = $this.getOptions().saveUrl;
             if (url) {
-                //$.post(url, $this.getParameters());
                 const data = {view: $this.getDisplayMode()};
                 $.post(url, data);
             }
@@ -1011,7 +1009,7 @@ $(function () {
 
             $button.on('click', function () {
                 $dialog.modal('hide');
-                $this.selectPage($range.intVal(), true);
+                $this.selectPage($range.intVal(), false);
             });
         },
 

@@ -55,7 +55,7 @@ abstract class CommandTestCase extends KernelTestCase
     protected function validate(string $output, string|array $expected): void
     {
         $expected = (array) $expected;
-        $output = StringUtils::pregReplace(self::OUTPUT_REPLACE, $output);
+        $output = StringUtils::pregReplaceAll(self::OUTPUT_REPLACE, $output);
         foreach ($expected as $value) {
             self::assertStringContainsString($value, $output);
         }

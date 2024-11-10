@@ -138,5 +138,4 @@ $(function () {
         $this.rowlink($this.data());
         $(e.target).trigger('click.bs.rowlink', [e.ctrlKey]);
     });
-
 });

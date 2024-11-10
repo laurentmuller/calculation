@@ -116,7 +116,7 @@ class FormHelper
      */
     public function __construct(private readonly FormBuilderInterface $builder, ?string $labelPrefix = null)
     {
-        $this->labelPrefix = StringUtils::isString($labelPrefix) ? $labelPrefix : null;
+        $this->labelPrefix = StringUtils::trim($labelPrefix);
     }
 
     /**
@@ -906,7 +906,7 @@ class FormHelper
      */
     private function addClasses(array &$array, string $classNames): self
     {
-        if ('' === \trim($classNames)) {
+        if (null === StringUtils::trim($classNames)) {
             return $this;
         }
 

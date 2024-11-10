@@ -16,6 +16,7 @@ use App\Enums\ImageExtension;
 use App\Traits\MathTrait;
 use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -57,8 +58,8 @@ class WebpCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $source = \trim($io->getStringArgument(self::SOURCE_ARGUMENT));
-        if ('' === $source) {
+        $source = StringUtils::trim($io->getStringArgument(self::SOURCE_ARGUMENT));
+        if (null === $source) {
             $io->error('The "--source" argument requires a non-empty value.');
 
             return Command::INVALID;

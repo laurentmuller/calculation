@@ -59,9 +59,10 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        [$this->question, $nextAnswer] = $this->captcha->getChallenge();
+        $challenge = $this->captcha->getChallenge();
+        $this->question = $challenge->question;
         $this->previousAnswer = $this->getSessionString(self::SESSION_KEY);
-        $this->setSessionValue(self::SESSION_KEY, $nextAnswer);
+        $this->setSessionValue(self::SESSION_KEY, $challenge->answer);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options): void

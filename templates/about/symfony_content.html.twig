@@ -21,10 +21,10 @@
 {% macro headerPackage() %}
 <thead>
     <tr>
-        <th class="fw-normal">Name</th>
-        <th class="fw-normal text-id">Version</th>
-        <th class="fw-normal">Description</th>
-        <th class="fw-normal">&nbsp;</th>
+        <th>Name</th>
+        <th class="text-id">Version</th>
+        <th>Description</th>
+        <th>&nbsp;</th>
     </tr>
 </thead>
 {% endmacro %}
@@ -48,9 +48,9 @@
 {% macro headerRoute() -%}
 <thead>
     <tr>
-        <th class="fw-normal">Name</th>
-        <th class="fw-normal">Path</th>
-        <th class="fw-normal text-state">Method</th>
+        <th>Name</th>
+        <th>Path</th>
+        <th class="text-state">Method</th>
     </tr>
 </thead>
 {%- endmacro %}
@@ -59,8 +59,16 @@
     <td class="e">{{ route.name }}</td>
     <td class="v">{{ route.path }}</td>
     <td class="v text-state">{{ route.methods }}</td>
-    </tr>
+</tr>
 {%- endmacro %}
+{% macro headerNameValue() %}
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Value</th>
+    </tr>
+    </thead>
+{% endmacro %}
 {# parameters #}
 {%- set bundles = service.bundles -%}
 {%- set runtime_packages = service.runtimePackages -%}
@@ -84,7 +92,6 @@
             {{ tools.rowInfoBoolean('Long-Term support', service.longTermSupport|boolean) }}
             {{ tools.rowInfo('End of maintenance', service.endOfMaintenance) }}
             {{ tools.rowInfo('End of product life', service.endOfLife) }}
-
         </tbody>
     </table>
     {# Configuration #}
@@ -94,6 +101,7 @@
         {{ _self.headerLinkInfo('Parameters', 'parameters') }}
         <div class="collapse ps-3" id="parameters" aria-labelledby="parameters-header" data-bs-parent="#symfonyAccordion">
             <table class="table table-sm mb-0">
+                {{ _self.headerNameValue() }}
                 <tbody>
                 {{ tools.rowInfo('Locale', service.localeName) }}
                 {{ tools.rowInfo('Timezone', service.timezone) }}
@@ -106,6 +114,7 @@
         {{ _self.headerLinkInfo('Extensions', 'extensions') }}
         <div class="collapse ps-3" id="extensions" aria-labelledby="extensions-header" data-bs-parent="#symfonyAccordion">
             <table class="table table-sm mb-0">
+                {{ _self.headerNameValue() }}
                 <tbody>
                 {{ tools.rowInfoBoolean('Debug', app.debug ? 'Enabled' : 'Disabled', app.debug) }}
                 {{ tools.rowInfoBoolean('OP Cache', service.zendCacheLoaded ? 'Enabled' : 'Disabled', service.zendCacheLoaded) }}
@@ -118,11 +127,12 @@
         {{ _self.headerLinkInfo('Directories', 'directories') }}
         <div class="collapse ps-3" id="directories" aria-labelledby="directories-header" data-bs-parent="#symfonyAccordion">
             <table class="table table-sm mb-0">
+                {{ _self.headerNameValue() }}
                 <tbody>
                 {{ tools.rowInfo('Project', service.projectDir) }}
                 {{ tools.rowInfo('Logs', service.logInfo) }}
                 {{ tools.rowInfo('Cache', service.cacheInfo) }}
-                    {{ tools.rowInfo('Build', service.buildInfo) }}
+                {{ tools.rowInfo('Build', service.buildInfo) }}
                 </tbody>
             </table>
         </div>
@@ -133,9 +143,9 @@
                 <table class="table table-sm mb-0">
                     <thead>
                         <tr>
-                            <th class="fw-normal">Name</th>
-                            <th class="fw-normal">Path</th>
-                            <th class="fw-normal text-percent">Size</th>
+                            <th>Name</th>
+                            <th>Path</th>
+                            <th class="text-percent">Size</th>
                         </tr>
                     </thead>
                     <tbody>

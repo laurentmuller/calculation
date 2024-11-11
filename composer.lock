@@ -2348,16 +2348,16 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "3.3.0",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "87ddd21eb0b6b7ad20a11d314348ef307475f547"
+                "reference": "eec07c20b51cc785295a6feef81ada7feda755e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/87ddd21eb0b6b7ad20a11d314348ef307475f547",
-                "reference": "87ddd21eb0b6b7ad20a11d314348ef307475f547",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/eec07c20b51cc785295a6feef81ada7feda755e7",
+                "reference": "eec07c20b51cc785295a6feef81ada7feda755e7",
                 "shasum": ""
             },
             "require": {
@@ -2446,9 +2446,9 @@
             ],
             "support": {
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
-                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/3.3.0"
+                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/3.4.0"
             },
-            "time": "2024-09-29T07:04:07+00:00"
+            "time": "2024-11-10T10:10:41+00:00"
         },
         {
             "name": "phpoffice/phpword",
@@ -9901,16 +9901,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.12.8",
+            "version": "1.12.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "f6a60a4d66142b8156c9da923f1972657bc4748c"
+                "reference": "ceb937fb39a92deabc02d20709cf14b2c452502c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f6a60a4d66142b8156c9da923f1972657bc4748c",
-                "reference": "f6a60a4d66142b8156c9da923f1972657bc4748c",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/ceb937fb39a92deabc02d20709cf14b2c452502c",
+                "reference": "ceb937fb39a92deabc02d20709cf14b2c452502c",
                 "shasum": ""
             },
             "require": {
@@ -9955,7 +9955,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-06T19:06:49+00:00"
+            "time": "2024-11-10T17:10:04+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",

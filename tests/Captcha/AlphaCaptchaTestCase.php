@@ -46,8 +46,7 @@ abstract class AlphaCaptchaTestCase extends TestCase
     {
         $captcha = $this->createCaptcha($this->service, $this->translator);
         $challenge = $captcha->getChallenge();
-        self::assertCount(2, $challenge);
-        $actual = $captcha->checkAnswer($challenge[1], $challenge[1]);
+        $actual = $captcha->checkAnswer($challenge->answer, $challenge->answer);
         self::assertTrue($actual);
     }
 

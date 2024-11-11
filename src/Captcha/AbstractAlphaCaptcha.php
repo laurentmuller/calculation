@@ -32,15 +32,14 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface
         return StringUtils::equalIgnoreCase($givenAnswer, $expectedAnswer);
     }
 
-    public function getChallenge(): array
+    public function getChallenge(): Challenge
     {
         $word = $this->getRandomWord();
-        $letterIndex = $this->getRandomIndex();
+        $index = $this->getRandomIndex();
+        $question = $this->getQuestion($word, $index);
+        $answer = $this->getAnswer($word, $index);
 
-        return [
-            $this->getQuestion($word, $letterIndex),
-            $this->getAnswer($word, $letterIndex),
-        ];
+        return new Challenge($question, $answer);
     }
 
     /**

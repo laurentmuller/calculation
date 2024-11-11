@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Form\Type;
 
 use App\Captcha\AlphaCaptchaInterface;
+use App\Captcha\Challenge;
 use App\Form\Type\AlphaCaptchaType;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
@@ -65,9 +66,10 @@ class AlphaCaptchaTypeTest extends TypeTestCase
         $requestStack->method('getSession')
             ->willReturn($session);
 
+        $challenge = new Challenge('question', 'nextAnswer');
         $alphaCaptcha = $this->createMock(AlphaCaptchaInterface::class);
         $alphaCaptcha->method('getChallenge')
-            ->willReturn(['question', 'nextAnswer']);
+            ->willReturn($challenge);
         $alphaCaptcha->method('checkAnswer')
             ->willReturnCallback(fn (): bool => $this->valid);
 

@@ -1,6 +1,6 @@
 {% extends 'help/help_base.html.twig' %}
-{% import 'help/_help_tools.html.twig' as tools %}
 {% from 'macros/_icons.html.twig' import icon, link %}
+{% from 'help/_help_tools.html.twig' import output_icon, dialogs_button, entities_button, export_button %}
 {# macro #}
 {% macro output_dialog(dialog, entity) -%}
     {% set href = path('help_dialog', {id: dialog.id}) %}
@@ -50,7 +50,7 @@
             {% set menu_id = menu.id %}
             <div class="d-flex">
                 <a href="#{{ menu_id }}" class="drop-down-icon-left text-body flex-fill" data-bs-toggle="collapse" aria-expanded="false">
-                    {{- tools.output_icon(menu.icon|default(false), menu.name|default(menu.id)) -}}
+                    {{- output_icon(menu.icon|default(false), menu.name|default(menu.id)) -}}
                 </a>
             </div>
             <hr class="ms-3 my-1">
@@ -64,10 +64,10 @@
             <p class="mb-0">
                 {%- if href -%}
                     <a href="{{ href }}">
-                        {{- tools.output_icon(menu.icon|default(false), menu.name|default(menu.id)) -}}
+                        {{- output_icon(menu.icon|default(false), menu.name|default(menu.id)) -}}
                     </a>
                 {%- else -%}
-                    {{- tools.output_icon(menu.icon|default(false), menu.name|default(menu.id)) -}}
+                    {{- output_icon(menu.icon|default(false), menu.name|default(menu.id)) -}}
                 {%- endif -%}
             </p>
             {% if description %}
@@ -110,7 +110,7 @@
 {%- block container_class 'container-fluid' -%}
 {# title #}
 {% block help_title -%}
-    {{- tools.output_icon('question-circle', 'help.title') -}}
+    {{- output_icon('question-circle', 'help.title') -}}
 {%- endblock %}
 {# body #}
 {% block help_body -%}
@@ -171,7 +171,7 @@
     <button type="button" class="btn btn-outline-secondary btn-toggle-all link-items" title="{{ 'about.toggle'|trans }}">
         <i class="fa-solid fa-shuffle"></i>
     </button>
-    {{ tools.dialogs_button() }}
-    {{ tools.entities_button() }}
-    {{ tools.export_button() }}
+    {{ dialogs_button() }}
+    {{ entities_button() }}
+    {{ export_button() }}
 {%- endblock %}

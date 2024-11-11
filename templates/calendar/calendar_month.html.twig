@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {# imports #}
 {% from 'macros/_icons.html.twig' import link %}
-{% import 'calendar/_calendar.html.twig' as helper %}
+{% from 'calendar/_calendar.html.twig' import dayCell, linkCalculations %}
 {# macros #}
 {% macro weekRow(month, week) %}
 {%- set week_title = 'calendar.week_show'|trans({'%week%': week.number, '%year%': week.year}) -%}
@@ -16,7 +16,7 @@
         <a href="{{ href }}" class="text-white">{{ week.number }}</a>
     {% endif %}
     {% for day in week.days -%}
-        {{ helper.dayCell(month, day, false) }}
+        {{ dayCell(month, day, false) }}
     {%- endfor %}
 </tr>
 {% endmacro %}
@@ -55,7 +55,7 @@
             {% set href = path('calendar_year', {year: calendar.year}) %}
             {{ link(href, null, 'btn btn-primary', 'calendar-alt far', 'calendar.year_show', {'%year%': calendar.year}) }}
             {# calculations #}
-            {{ helper.linkCalculations('%02d.%d'|format(month.number, month.year), month.name ~ ' ' ~ month.year, calculations|length, 'btn btn-primary') }}
+            {{ linkCalculations('%02d.%d'|format(month.number, month.year), month.name ~ ' ' ~ month.year, calculations|length, 'btn btn-primary') }}
         </div>
     </div>
 </div>

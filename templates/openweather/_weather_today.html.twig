@@ -1,4 +1,4 @@
-{% import 'openweather/_weather_macro.html.twig' as tools %}
+{% from 'openweather/_weather_macro.html.twig' import value_unit, value_temp, value_wind, title as value_title %}
 {# macros #}
 {% macro row_title(name) %}
 <tr>
@@ -12,10 +12,10 @@
 </tr>
 {% endmacro %}
 {% macro row_unit(name, value, unit = '', separator = ' ') %}
-    {{ _self.row_text(name, tools.value_unit(value, unit, separator)) }}
+    {{ _self.row_text(name, value_unit(value, unit, separator)) }}
 {% endmacro %}
 {% macro row_temp(name, value, unit = '') %}
-    {{ _self.row_text(name, tools.value_temp(value, unit, '')) }}
+    {{ _self.row_text(name, value_temp(value, unit, '')) }}
 {% endmacro %}
 {% macro row_volume(name, value, unit = '') %}
     {{ _self.row_unit(name, value|number_format(1), unit, ' ') }}
@@ -31,7 +31,7 @@
 {% set coord = current.coord %}
 {# title #}
 {%- set title = 'openweather.fields.current'|trans -%}
-{{ tools.title(title, 'current_data_modal') }}
+{{ value_title(title, 'current_data_modal') }}
 {# table #}
 <table class="table table-no-end-line table-sm mb-0">
     <tbody>
@@ -43,7 +43,7 @@
 
         {{ _self.row_title('openweather.fields.wind') }}
         {{ _self.row_unit('openweather.fields.wind_speed', wind.speed, units_speed) }}
-        {{ _self.row_text('openweather.fields.wind_deg', tools.value_wind(wind.deg_description, wind.deg, units_degree)) }}
+        {{ _self.row_text('openweather.fields.wind_deg', value_wind(wind.deg_description, wind.deg, units_degree)) }}
         {% if wind.gust|default(false) %}
             {{ _self.row_unit('openweather.fields.wind_gust', wind.gust, units_speed) }}
         {% endif %}

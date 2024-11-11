@@ -1,5 +1,12 @@
 {% extends 'help/help_base.html.twig' %}
-{% import 'help/_help_tools.html.twig' as tools %}
+{% from 'help/_help_tools.html.twig' import
+    output_icon,
+    dialogs_button,
+    entities_button,
+    output_type,
+    output_required,
+    output_table_actions,
+    output_links %}
 {% from 'macros/_icons.html.twig' import link %}
 {# parameters #}
 {%- set entity_name = entity.id ~ '.name' -%}
@@ -11,15 +18,15 @@
 {%- set links = entity.links|default(false) -%}
 {# title #}
 {% block help_title -%}
-{{- tools.output_icon(entity.icon|default(false), entity_name) -}}
+{{- output_icon(entity.icon|default(false), entity_name) -}}
 {%- endblock %}
 {# search #}
 {% block help_search %}{% endblock %}
 {# actions #}
 {% block help_actions -%}
     {{ parent() }}
-    {{ tools.dialogs_button() }}
-    {{ tools.entities_button() }}
+    {{ dialogs_button() }}
+    {{ entities_button() }}
 {% endblock %}
 {# body #}
 {% block help_body -%}
@@ -47,8 +54,8 @@
             <tr>
                 <td class="text-nowrap">{% if path %}<a href="{{ path }}">{% endif %}{{ field_name }}{% if path %}</a>{% endif %}</td>
                 <td class="w-100">{{ field.description }}</td>
-                <td class="text-nowrap">{{ tools.output_type(field) }}</td>
-                <td class="text-nowrap text-center">{{- tools.output_required(field) -}}</td>
+                <td class="text-nowrap">{{ output_type(field) }}</td>
+                <td class="text-nowrap text-center">{{- output_required(field) -}}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -72,10 +79,10 @@
         <hr class="mt-0 mb-2">
     {% endif %}
     <p class="mb-1 mt-2">{{ 'help.labels.entity_actions'|trans }}</p>
-    {{ tools.output_table_actions(actions, service) }}
+    {{ output_table_actions(actions, service) }}
 {% endif %}
 {# links #}
 {% if links -%}
-    {{ tools.output_links(links, service) }}
+    {{ output_links(links, service) }}
 {%- endif %}
 {%- endblock %}

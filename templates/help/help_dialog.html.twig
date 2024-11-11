@@ -1,6 +1,15 @@
 {% extends 'help/help_base.html.twig' %}
-{% import 'help/_help_tools.html.twig' as tools %}
 {% from 'macros/_icons.html.twig' import link %}
+{% from 'help/_help_tools.html.twig' import
+    output_icon,
+    output_type,
+    output_required,
+    output_table_actions,
+    output_image,
+    output_links,
+    dialogs_button,
+    entities_button,
+    export_button %}
 {# macro #}
 {% macro output_entity_columns(entity) -%}
 {% set fields = entity.fields|default(false) %}
@@ -55,11 +64,11 @@
         {% for field in fields %}
             {% set name = id ? id ~ '.fields.' ~ field.name : field.name %}
             <tr>
-                <td class="text-nowrap">{{ tools.output_icon(null, name) }}</td>
+                <td class="text-nowrap">{{ output_icon(null, name) }}</td>
                 <td class="w-100">{{ field.description }}</td>
                 {% if id %}
-                    <td class="text-nowrap">{{ tools.output_type(field) }}</td>
-                    <td class="text-nowrap text-center">{{- tools.output_required(field) -}}</td>
+                    <td class="text-nowrap">{{ output_type(field) }}</td>
+                    <td class="text-nowrap text-center">{{- output_required(field) -}}</td>
                 {% endif %}
             </tr>
         {% endfor %}
@@ -72,7 +81,7 @@
 {% set actions = entity.actions|default(false) %}
 {% if actions %}
     <p class="mt-2 mb-0">{{ 'help.labels.entity_actions'|trans }}</p>
-    {{ tools.output_table_actions(actions, service) }}
+    {{ output_table_actions(actions, service) }}
 {% endif %}
 {%- endmacro %}
 {# parameters #}
@@ -81,26 +90,26 @@
 {%- set title_parameters = {'%name%': dialog_name|trans} -%}
 {# title #}
 {% block help_title -%}
-{{- tools.output_icon(dialog.icon|default(entity ? entity.icon|default(false) : false)|default(false), dialog_name) -}}
+{{- output_icon(dialog.icon|default(entity ? entity.icon|default(false) : false)|default(false), dialog_name) -}}
 {%- endblock %}
 {# search #}
 {% block help_search %}{% endblock %}
 {# actions #}
 {% block help_actions -%}
-    {{ tools.dialogs_button() }}
-    {{ tools.entities_button() }}
+    {{ dialogs_button() }}
+    {{ entities_button() }}
     {{ parent() }}
 {% endblock %}
 {# body #}
 {% block help_body -%}
 <p class="mb-0">{{ dialog.description }}</p>
 <hr class="my-2">
-{{ tools.output_image(dialog.image|default(false)) }}
+{{ output_image(dialog.image|default(false)) }}
 {# images #}
 {%- if dialog.images|default([])|length -%}
     {% for image in dialog.images %}
         <div class="my-2">
-            {{ tools.output_image(image, false) }}
+            {{ output_image(image, false) }}
         </div>
     {% endfor %}
 {% endif %}
@@ -131,13 +140,13 @@
 {% set actions = dialog.editActions|default(false) %}
 {% if actions %}
     <p class="mt-2 mb-0">{{ 'help.labels.edit_actions'|trans }}</p>
-    {{ tools.output_table_actions(actions, service) }}
+    {{ output_table_actions(actions, service) }}
 {% endif %}
 {# global actions #}
 {% set actions = dialog.globalActions|default(false) %}
 {% if actions -%}
     <p class="mt-2 mb-0">{{ 'help.labels.global_actions'|trans }}</p>
-    {{ tools.output_table_actions(actions, service) }}
+    {{ output_table_actions(actions, service) }}
 {%- endif %}
 {# forbidden #}
 {% if dialog.forbidden|default(false) -%}
@@ -145,10 +154,10 @@
     {%- set image = dialog.forbidden.image|default(false) -%}
     {%- set action = dialog.forbidden.action|default(false) -%}
     <p class="mb-2">{{ text }}</p>
-    {% if image %}{{- tools.output_image(image, false) -}}{% endif %}
+    {% if image %}{{- output_image(image, false) -}}{% endif %}
     {% if action %}
         <p class="mt-2 mb-0">{{ 'help.labels.edit_actions'|trans }}</p>
-        {{ tools.output_table_actions({action}, service) }}
+        {{ output_table_actions({action}, service) }}
     {% endif %}
 {%- endif %}
 {# links and entity #}
@@ -159,6 +168,6 @@
     {% set links = links|merge({link}) %}
 {%- endif %}
 {% if links|length -%}
-    {{ tools.output_links(links, service) }}
+    {{ output_links(links, service) }}
 {%- endif %}
 {%- endblock %}

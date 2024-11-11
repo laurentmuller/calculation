@@ -1,7 +1,7 @@
 {% extends 'cards/card_base.html.twig' %}
 {% from 'macros/_icons.html.twig' import homepage %}
 {# macros #}
-{% macro button(type, icon) -%}
+{% macro button(type) -%}
 <button type="button" data-type="{{ type }}" class="btn btn-notify btn-{{ type }}{% if type == 'dark' %} border{% endif %}" style="min-width: 109px;">
     {{- ('background.' ~ type)|trans -}}
 </button>

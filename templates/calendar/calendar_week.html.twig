@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {# imports #}
 {% from 'macros/_icons.html.twig' import link %}
-{% import 'calendar/_calendar.html.twig' as helper %}
+{% from 'calendar/_calendar.html.twig' import linkCalculations, dataRow %}
 {# parameters #}
 {%- set title = 'calendar.week_title' -%}
 {%- set title_parameters = {'%year%': week.year, '%week%': week.number} -%}
@@ -56,7 +56,7 @@
             </td>
             <td class="text-end">
                 {% if not day.empty -%}
-                    <span class="me-1">{{ helper.linkCalculations(day.date|locale_date('short'), day.date|locale_date('long'), day.count, 'text-white stretched-link', 'counters.calculations_day') }}</span>
+                    <span class="me-1">{{ linkCalculations(day.date|locale_date('short'), day.date|locale_date('long'), day.count, 'text-white stretched-link', 'counters.calculations_day') }}</span>
                 {%- endif %}
             </td>
         </tr>
@@ -66,7 +66,7 @@
         </thead>
         <tbody>
         {% for calculation in day.calculations -%}
-            {{ helper.dataRow(calculation, 'text-cell') -}}
+            {{ dataRow(calculation, 'text-cell') -}}
         {%- endfor %}
         </tbody>
     </table>

@@ -14,6 +14,7 @@ namespace App\Repository;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
+use App\Traits\MathTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
@@ -62,6 +63,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class CalculationRepository extends AbstractRepository
 {
+    use MathTrait;
+
     /**
      * The alias for the state entity.
      */
@@ -137,8 +140,7 @@ class CalculationRepository extends AbstractRepository
             ->innerJoin('e.groups', 'g')
             ->innerJoin('g.categories', 'c')
             ->innerJoin('c.items', 'i')
-            ->groupBy('e.id')
-            ->addGroupBy('i.description')
+            ->groupBy('e.id', 'i.description')
             ->having('COUNT(i.id) > 1')
             ->getDQL();
         /** @psalm-var literal-string $where */
@@ -229,11 +231,9 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
-     * Gets calculations grouped by months.
+     * Gets calculations grouped by years and months reversed.
      *
      * @param int $maxResults the maximum number of results to retrieve (the "limit")
-     *
-     * @return array an array with the year, the month, the number and the sum of calculations
      *
      * @psalm-return CalculationByMonthType[]
      *
@@ -247,19 +247,19 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('ROUND(SUM(c.overallTotal), 2) as total')
             ->addSelect('YEAR(c.date) as year')
             ->addSelect('MONTH(c.date) as month')
-            ->addSelect('ROUND(SUM(c.overallTotal) / SUM(c.itemsTotal), 4) as margin_percent')
-            ->groupBy('year')
-            ->addGroupBy('month')
+            ->groupBy('year', 'month')
             ->orderBy('year', self::SORT_DESC)
             ->addOrderBy('month', self::SORT_DESC)
             ->setMaxResults($maxResults);
 
-        $result = $builder->getQuery()->getArrayResult();
+        $result = $builder->getQuery()
+            ->getArrayResult();
 
         /** @psalm-var CalculationByMonthType $item */
         foreach ($result as &$item) {
             $item['date'] = $this->convertToDate($item);
             $item['margin_amount'] = $item['total'] - $item['items'];
+            $item['margin_percent'] = $this->gerMarginPercent($item['total'], $item['items']);
         }
 
         return \array_reverse($result);
@@ -435,9 +435,7 @@ class CalculationRepository extends AbstractRepository
             ->innerJoin('g.categories', 'c')
             ->innerJoin('c.items', 'i')
 
-            ->groupBy('e.id')
-            ->addGroupBy('s.code')
-            ->addGroupBy('i.description')
+            ->groupBy('e.id', 's.code', 'i.description')
 
             ->having('item_count > 1');
         $this->updateOrder($builder, $orderColumn, $orderDirection);
@@ -501,9 +499,7 @@ class CalculationRepository extends AbstractRepository
             ->innerJoin('g.categories', 'c')
             ->innerJoin('c.items', 'i')
 
-            ->groupBy('e.id')
-            ->addGroupBy('s.code')
-            ->addGroupBy('i.description')
+            ->groupBy('e.id', 's.code', 'i.description')
 
             ->having('item_price = 0')
             ->orHaving('item_quantity = 0');
@@ -688,6 +684,11 @@ class CalculationRepository extends AbstractRepository
     private function convertToDate(array $item): \DateTimeInterface
     {
         return new \DateTime(\sprintf('%s-%s-10', $item['year'], $item['month']));
+    }
+
+    private function gerMarginPercent(float $total, float $items): float
+    {
+        return $this->isFloatZero($items) ? 0.0 : $this->round($total / $items, 4);
     }
 
     /**

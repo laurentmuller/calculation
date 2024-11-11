@@ -15,6 +15,7 @@ namespace App\Resolver;
 use App\Enums\TableView;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
+use App\Service\UrlGeneratorService;
 use App\Table\DataQuery;
 use App\Traits\CookieTrait;
 use Symfony\Component\HttpFoundation\InputBag;
@@ -144,6 +145,9 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
     {
         /** @psalm-var mixed $value */
         foreach ($inputBag as $key => $value) {
+            if (UrlGeneratorService::PARAM_CALLER === $key) {
+                continue;
+            }
             if (!\property_exists($query, $key)) {
                 $message = $this->formatError($key, $this->translator->trans('schema.fields.error'));
                 throw new BadRequestHttpException($message);

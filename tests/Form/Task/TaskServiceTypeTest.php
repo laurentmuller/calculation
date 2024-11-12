@@ -35,7 +35,7 @@ class TaskServiceTypeTest extends TypeTestCase
             ->createView();
 
         foreach (\array_keys($formData) as $key) {
-            self::assertArrayHasKey($key, $view);
+            self::assertArrayHasKey($key, $view->children);
             self::assertSame((string) $formData[$key], $view->children[$key]->vars['value']);
         }
     }
@@ -45,17 +45,19 @@ class TaskServiceTypeTest extends TypeTestCase
      */
     public function testFormViewSimpleWidget(): void
     {
-        $formData = [
+        $data = [
             'task' => $this->getTask(),
             'quantity' => 1,
         ];
-        $view = $this->factory->create(TaskServiceType::class, $formData, ['simple_widget' => true])
-            ->createView();
+        $children = $this->factory
+            ->create(TaskServiceType::class, $data, ['simple_widget' => true])
+            ->createView()
+            ->children;
 
-        self::assertArrayHasKey('task', $view);
-        self::assertArrayHasKey('quantity', $view);
-        self::assertSame((string) $formData['task']->getId(), $view->children['task']->vars['value']);
-        self::assertSame((string) $formData['quantity'], $view->children['quantity']->vars['value']);
+        self::assertArrayHasKey('task', $children);
+        self::assertArrayHasKey('quantity', $children);
+        self::assertSame((string) $data['task']->getId(), $children['task']->vars['value']);
+        self::assertSame((string) $data['quantity'], $children['quantity']->vars['value']);
     }
 
     /**

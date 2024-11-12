@@ -88,36 +88,23 @@
         "vich/uploader-bundle": "^2.0"
     },
     "require-dev": {
+        "bamarni/composer-bin-plugin": "^1.8",
         "fortawesome/font-awesome": "^6.6",
-        "friendsofphp/php-cs-fixer": "^3.0",
-        "phpstan/extension-installer": "^1.0",
-        "phpstan/phpstan": "^1.0",
-        "phpstan/phpstan-deprecation-rules": "^1.0",
-        "phpstan/phpstan-doctrine": "^1.0",
-        "phpstan/phpstan-phpunit": "^1.0",
-        "phpstan/phpstan-strict-rules": "^1.0",
-        "phpstan/phpstan-symfony": "^1.0",
-        "phpunit/phpunit": "^10.0",
-        "psalm/plugin-phpunit": "^0.19",
-        "psalm/plugin-symfony": "^5.0",
-        "rector/rector": "^1.0",
         "symfony/browser-kit": "7.1.*",
         "symfony/css-selector": "7.1.*",
         "symfony/debug-bundle": "7.1.*",
         "symfony/maker-bundle": "^1.0",
-        "symfony/phpunit-bridge": "7.1.*",
         "symfony/stopwatch": "7.1.*",
         "symfony/var-dumper": "7.1.*",
         "symfony/web-profiler-bundle": "7.1.*",
-        "vimeo/psalm": "^5.0",
-        "vincentlanglet/twig-cs-fixer": "^3.0",
-        "weirdan/doctrine-psalm-plugin": "^2.0"
+        "phpunit/phpunit": "^11.0",
+        "symfony/phpunit-bridge": "7.1.*"
     },
     "replace": {
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php70" : "*",
-        "symfony/polyfill-php71" : "*",
+        "symfony/polyfill-php70": "*",
+        "symfony/polyfill-php71": "*",
         "symfony/polyfill-php72": "*",
         "symfony/polyfill-php73": "*",
         "symfony/polyfill-php74": "*",
@@ -145,10 +132,10 @@
         "platform-check": true,
         "discard-changes": true,
         "allow-plugins": {
+            "bamarni/composer-bin-plugin": true,
             "composer/package-versions-deprecated": true,
-            "symfony/runtime": true,
             "symfony/flex": true,
-            "phpstan/extension-installer": true
+            "symfony/runtime": true
         }
     },
     "extra": {
@@ -156,6 +143,11 @@
             "allow-contrib": true,
             "require": "7.1.*",
             "docker": false
+        },
+        "bamarni-bin": {
+            "bin-links": false,
+            "forward-command": true,
+            "target-directory": "vendor-bin"
         }
     },
     "autoload": {
@@ -169,6 +161,8 @@
         }
     },
     "scripts": {
+        "post-install-cmd": "@composer bin all install --ansi",
+        "post-update-cmd": "@composer bin all update --ansi",
         "app-lint": [
             "@php bin/console lint:yaml translations .github/workflows --parse-tags",
             "@php bin/console lint:twig templates",
@@ -176,15 +170,15 @@
             "@php bin/console doctrine:schema:validate --skip-sync",
             "@composer validate --strict"
         ],
-        "app-fixer-fix": "vendor/bin/php-cs-fixer fix --diff",
-        "app-rector-fix": "vendor/bin/rector process --config rector.php",
-        "app-twig-fix": "vendor/bin/twig-cs-fixer lint --fix --config=.twig-cs-fixer.php",
-        "app-fixer": "vendor/bin/php-cs-fixer fix --diff --dry-run",
-        "app-psalm": "vendor/bin/psalm --config psalm.xml",
-        "app-stan": "vendor/bin/phpstan analyse --configuration phpstan.neon --memory-limit 2G",
-        "app-rector": "vendor/bin/rector process --dry-run --config rector.php",
-        "app-twig": "vendor/bin/twig-cs-fixer lint --config=.twig-cs-fixer.php",
-        "app-test": "phpunit",
+        "app-fixer": "vendor-bin/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff --dry-run",
+        "app-fixer-fix": "vendor-bin/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff",
+        "app-rector": "vendor-bin/rector/vendor/bin/rector process --dry-run --config rector.php",
+        "app-rector-fix": "vendor-bin/rector/vendor/bin/rector process --config rector.php",
+        "app-twig": "vendor-bin/twig-cs-fixer/vendor/bin/twig-cs-fixer lint --config=.twig-cs-fixer.php",
+        "app-twig-fix": "vendor-bin/twig-cs-fixer/vendor/bin/twig-cs-fixer lint --fix --config=.twig-cs-fixer.php",
+        "app-psalm": "vendor-bin/psalm/vendor/bin/psalm --config psalm.xml",
+        "app-stan": "vendor-bin/phpstan/vendor/bin/phpstan analyse --configuration phpstan.neon --memory-limit 2G",
+        "app-test": "vendor-bin/phpunit/vendor/bin/phpunit",
         "app-markdown": "markdownlint-cli2",
         "app-all": [
             "@app-lint",

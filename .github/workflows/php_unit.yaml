@@ -21,8 +21,12 @@ jobs:
             -   name: Install dependencies
                 run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
+            -   name: Install PHPUnit
+                working-directory: ./vendor-bin/phpunit
+                run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
             -   name: Run PHPUnit
-                run: vendor/bin/phpunit --display-skipped --no-progress --coverage-clover ./clover.xml
+                run: vendor-bin/phpunit/vendor/bin/phpunit --display-skipped --no-progress --coverage-clover ./clover.xml
 
             -   name: Upload coverage to Codecov
                 uses: codecov/codecov-action@v4.6.0

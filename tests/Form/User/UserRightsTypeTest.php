@@ -33,19 +33,20 @@ class UserRightsTypeTest extends TypeTestCase
         $user = new User();
         $user->setUsername('username')
             ->setRole(RoleInterface::ROLE_ADMIN);
-
         $data = [
             'username' => 'username',
             'role' => 'user.roles.admin',
             'enabled' => 'common.value_enabled',
             'overwrite' => '1',
         ];
-        $view = $this->factory->create(UserRightsType::class, $user)
-            ->createView();
+        $children = $this->factory
+            ->create(UserRightsType::class, $user)
+            ->createView()
+            ->children;
 
         foreach (\array_keys($data) as $key) {
-            self::assertArrayHasKey($key, $view);
-            self::assertSame($data[$key], $view->children[$key]->vars['value']);
+            self::assertArrayHasKey($key, $children);
+            self::assertSame($data[$key], $children[$key]->vars['value']);
         }
     }
 

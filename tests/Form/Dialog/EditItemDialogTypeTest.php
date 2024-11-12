@@ -25,19 +25,21 @@ class EditItemDialogTypeTest extends TypeTestCase
 
     public function testFormView(): void
     {
-        $formData = [
+        $data = [
             'description' => 'Description',
             'unit' => 'Unit',
             'category' => null,
             'price' => 1.0,
             'quantity' => 1.0,
         ];
-        $view = $this->factory->create(EditItemDialogType::class, $formData)
-            ->createView();
+        $children = $this->factory
+            ->create(EditItemDialogType::class, $data)
+            ->createView()
+            ->children;
 
-        foreach (\array_keys($formData) as $key) {
-            self::assertArrayHasKey($key, $view);
-            self::assertSame((string) $formData[$key], $view->children[$key]->vars['value']);
+        foreach (\array_keys($data) as $key) {
+            self::assertArrayHasKey($key, $children);
+            self::assertSame((string) $data[$key], $children[$key]->vars['value']);
         }
     }
 

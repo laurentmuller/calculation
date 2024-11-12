@@ -19,5 +19,9 @@ jobs:
             -   name: Install dependencies
                 run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
+            -   name: Install Twig-CS-Fixer
+                working-directory: ./vendor-bin/twig-cs-fixer
+                run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
             -   name: Run Twig-CS-Fixer
-                run: vendor/bin/twig-cs-fixer lint --config=.twig-cs-fixer.php
+                run: vendor-bin/twig-cs-fixer/vendor/bin/twig-cs-fixer lint --config=.twig-cs-fixer.php

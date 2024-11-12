@@ -43,12 +43,14 @@ class UserRegistrationTypeTest extends TypeTestCase
             'username' => 'username',
             'email' => 'email@email.com',
         ];
-        $view = $this->factory->create(UserRegistrationType::class, $user)
-            ->createView();
+        $children = $this->factory
+            ->create(UserRegistrationType::class, $user)
+            ->createView()
+            ->children;
 
         foreach (\array_keys($data) as $key) {
-            self::assertArrayHasKey($key, $view);
-            self::assertSame($data[$key], $view->children[$key]->vars['value']);
+            self::assertArrayHasKey($key, $children);
+            self::assertSame($data[$key], $children[$key]->vars['value']);
         }
     }
 

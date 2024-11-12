@@ -34,12 +34,14 @@ class RequestChangePasswordTypeTest extends TypeTestCase
         $data = [
             'user' => 'username',
         ];
-        $view = $this->factory->create(RequestChangePasswordType::class, $data)
-            ->createView();
+        $children = $this->factory
+            ->create(RequestChangePasswordType::class, $data)
+            ->createView()
+            ->children;
 
         foreach (\array_keys($data) as $key) {
-            self::assertArrayHasKey($key, $view);
-            self::assertSame($data[$key], $view->children[$key]->vars['value']);
+            self::assertArrayHasKey($key, $children);
+            self::assertSame($data[$key], $children[$key]->vars['value']);
         }
     }
 

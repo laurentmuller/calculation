@@ -10,12 +10,10 @@
 
 declare(strict_types=1);
 
-use App\Twig\TokenParser\SwitchTokenParser;
 use TwigCsFixer\Config\Config;
 
 $config = new Config();
 $config->allowNonFixableRules()
-    ->addTokenParser(new SwitchTokenParser())
     ->getFinder()
     ->in('templates');
 

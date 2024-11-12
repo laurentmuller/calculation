@@ -19,5 +19,9 @@ jobs:
             -   name: Install dependencies
                 run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
+            -   name: Install Psalm
+                working-directory: ./vendor-bin/psalm
+                run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
             -   name: Run Psalm
-                run: vendor/bin/psalm --config=psalm.xml --no-progress
+                run: vendor-bin/psalm/vendor/bin/psalm --config=psalm.xml --no-progress

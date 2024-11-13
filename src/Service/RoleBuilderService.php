@@ -101,7 +101,7 @@ class RoleBuilderService
         $all = EntityPermission::getAllPermission();
         foreach ($entities as $entity) {
             $field = $entity->getRightsField();
-            $role->$field = $all;
+            $role->__set($field, $all);
         }
 
         return $role;

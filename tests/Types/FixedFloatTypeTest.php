@@ -37,6 +37,20 @@ class FixedFloatTypeTest extends TestCase
      * @psalm-suppress InternalMethod
      */
     #[DataProvider('getValues')]
+    public function testConvertToDatabaseValue(mixed $value, float $expected): void
+    {
+        $platform = new MySQLPlatform();
+        $type = new FixedFloatType();
+        $actual = $type->convertToDatabaseValue($value, $platform);
+        self::assertSame($expected, $actual);
+    }
+
+    /**
+     * @throws ConversionException
+     *
+     * @psalm-suppress InternalMethod
+     */
+    #[DataProvider('getValues')]
     public function testConvertToPHPValue(mixed $value, float $expected): void
     {
         $platform = new MySQLPlatform();

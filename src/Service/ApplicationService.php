@@ -306,7 +306,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         $contraint = new Password();
         foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $option) {
             $property = StringUtils::unicode($option)->trimPrefix('security_')->toString();
-            $contraint->{$property} = $this->getPropertyBoolean($option);
+            $contraint->__set($property, $this->getPropertyBoolean($option));
         }
 
         return $contraint;

@@ -21,11 +21,8 @@ parameters:
 
     ignoreErrors:
         -
-             message: '#Variable property access#'
-             identifier: property.dynamicName
-        -
-             message: '#should be contravariant#'
-             identifier: method.childParameterType
+            message: '#should be contravariant#'
+            identifier: method.childParameterType
         -
             message: '#no value type specified#'
             identifier: missingType.iterableValue

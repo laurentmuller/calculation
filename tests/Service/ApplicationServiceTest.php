@@ -236,7 +236,7 @@ class ApplicationServiceTest extends KernelServiceTestCase
         $actual = $service->getPasswordConstraint();
         foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $option) {
             $property = StringUtils::unicode($option)->trimPrefix('security_')->toString();
-            self::assertFalse($actual->{$property});
+            self::assertFalse($actual->__get($property));
         }
     }
 

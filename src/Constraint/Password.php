@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Constraint;
 
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Exception\InvalidOptionsException;
 
 /**
  * Password constraint.
@@ -115,5 +116,39 @@ class Password extends Constraint
         $this->numbers = $numbers ?? $this->numbers;
         $this->special_char = $special_char ?? $this->special_char;
         $this->email = $email ?? $this->email;
+    }
+
+    /**
+     * @throws InvalidOptionsException If an invalid option name is given
+     */
+    public function __get(string $option): mixed
+    {
+        return match ($option) {
+            'all' => $this->all,
+            'letters' => $this->letters,
+            'case_diff' => $this->case_diff,
+            'numbers' => $this->numbers,
+            'special_char' => $this->special_char,
+            'email' => $this->email,
+            default => parent::__get($option),
+        };
+    }
+
+    /**
+     * @psalm-param bool|array $value
+     *
+     * @throws InvalidOptionsException If an invalid option name is given
+     */
+    public function __set(string $option, mixed $value): void
+    {
+        match ($option) {
+            'all' => $this->all = (bool) $value,
+            'letters' => $this->letters = (bool) $value,
+            'case_diff' => $this->case_diff = (bool) $value,
+            'numbers' => $this->numbers = (bool) $value,
+            'special_char' => $this->special_char = (bool) $value,
+            'email' => $this->email = (bool) $value,
+            default => parent::__set($option, $value),
+        };
     }
 }

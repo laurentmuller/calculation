@@ -120,9 +120,9 @@ class RightsTraitTest extends TestCase
     {
         $attribute = $this->getAttribute($key);
         $rights = new FlagBag(EntityPermission::class, $attribute);
-        $this->$field = $rights;
+        $this->__set($field, $rights);
         /** @psalm-var FlagBag<EntityPermission> $value */
-        $value = $this->$field;
+        $value = $this->__get($field);
         $expected = $rights->getValue();
         $actual = $value->getValue();
         self::assertSame($expected, $actual);

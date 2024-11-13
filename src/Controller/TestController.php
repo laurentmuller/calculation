@@ -321,7 +321,7 @@ class TestController extends AbstractController
             $data = $event->getData();
             foreach ($options as $option) {
                 $property = StringUtils::unicode($option)->trimPrefix('security_')->toString();
-                $passwordConstraint->{$property} = (bool) ($data[$option] ?? false);
+                $passwordConstraint->__set($property, (bool) ($data[$option] ?? false));
             }
             $strength = (int) $data['level'];
             $strengthConstraint->minimum = StrengthLevel::tryFrom($strength) ?? StrengthLevel::NONE;

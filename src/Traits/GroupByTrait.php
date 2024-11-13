@@ -71,6 +71,6 @@ trait GroupByTrait
         }
 
         /** @psalm-var array-key */
-        return $value->{$key};
+        return $value->{$key}; // @phpstan-ignore property.dynamicName
     }
 }

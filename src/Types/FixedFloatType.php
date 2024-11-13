@@ -22,9 +22,14 @@ class FixedFloatType extends Type
 {
     final public const NAME = 'fixed_float';
 
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): float
+    {
+        return $this->convertToFloat($value);
+    }
+
     public function convertToPHPValue($value, AbstractPlatform $platform): float
     {
-        return null === $value ? 0.0 : (float) $value;
+        return $this->convertToFloat($value);
     }
 
     public function getName(): string
@@ -38,5 +43,10 @@ class FixedFloatType extends Type
         $declaration = $platform->getFloatDeclarationSQL($column);
 
         return \sprintf("%s DEFAULT '0'", $declaration);
+    }
+
+    private function convertToFloat(mixed $value): float
+    {
+        return null === $value ? 0.0 : (float) $value;
     }
 }

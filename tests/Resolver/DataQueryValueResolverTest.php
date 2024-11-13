@@ -14,6 +14,7 @@ namespace App\Tests\Resolver;
 
 use App\Enums\TableView;
 use App\Resolver\DataQueryValueResolver;
+use App\Service\UrlGeneratorService;
 use App\Table\DataQuery;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
@@ -93,6 +94,27 @@ class DataQueryValueResolverTest extends TestCase
         $actual = $resolver->resolve($request, $argument);
         self::assertIsArray($actual);
         self::assertCount(0, $actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testWithCaller(): void
+    {
+        $parameters = [
+            UrlGeneratorService::PARAM_CALLER => '/',
+        ];
+
+        $resolver = $this->createResolver();
+        $argument = $this->createArgumentMetadata();
+        $request = $this->createRequest($parameters);
+
+        $actual = $resolver->resolve($request, $argument);
+        self::assertIsArray($actual);
+        self::assertCount(1, $actual);
+
+        $query = $actual[0];
+        self::assertInstanceOf(DataQuery::class, $query);
     }
 
     /**

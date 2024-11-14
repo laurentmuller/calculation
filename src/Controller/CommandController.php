@@ -115,7 +115,7 @@ class CommandController extends AbstractController
         }
 
         /** @psalm-var CommandType $command */
-        $command = $service->getCommand($name);
+        $command = $service->getCommand($name); // @phpstan-ignore varTag.nativeType
         $session = $request->getSession();
         $key = $this->cleanKey('command.execute.' . $name);
         $data = $this->getCommandData($session, $dataService, $key, $command);

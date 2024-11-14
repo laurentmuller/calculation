@@ -92,11 +92,11 @@ abstract class AbstractHttpClientService
     {
         $locale = \Locale::getDefault();
         if ($languageOnly) {
-            /** @psalm-var string */
+            /** @psalm-var non-empty-string */
             return \Locale::getPrimaryLanguage($locale);
         }
 
-        /** @psalm-var string */
+        /** @psalm-var non-empty-string */
         return \Locale::canonicalize($locale);
     }
 

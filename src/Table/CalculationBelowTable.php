@@ -34,6 +34,8 @@ class CalculationBelowTable extends CalculationTable implements \Countable
     }
 
     /**
+     * @return int<0, max>
+     *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function count(): int

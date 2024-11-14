@@ -35,12 +35,11 @@ final class SwitchNode extends Node
             ->subcompile($this->getNode('value'))
             ->raw(") {\n")
             ->indent();
-        /** @psalm-var Node[] $cases */
-        $cases = $this->getNode('cases');
-        foreach ($cases as $case) {
-            /** @psalm-var Node[] $values */
-            $values = $case->getNode('values');
-            foreach ($values as $value) {
+
+        /** @psalm-var Node $case */
+        foreach ($this->getNode('cases') as $case) {
+            /** @psalm-var Node $value */
+            foreach ($case->getNode('values') as $value) {
                 $compiler->write('case ')
                     ->subcompile($value)
                     ->raw(":\n");

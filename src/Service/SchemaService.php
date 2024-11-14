@@ -206,9 +206,9 @@ class SchemaService
             'columns' => $this->getColumns($table),
             'indexes' => $this->getIndexes($table),
             'associations' => $this->getAssociations($table),
-            'sql_rows' => $this->getSqlCounter($table),
             'records' => 0,
-            'size' => 0,
+            'size' => 0.0,
+            'sql_rows' => $this->getSqlCounter($table),
         ];
     }
 

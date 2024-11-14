@@ -49,10 +49,11 @@ class OpenWeatherSearchServiceTest extends TestCase
 
     public function testSearchSuccess(): void
     {
-        $actual = $this->service->search('Fribourg');
-        self::assertCount(3, $actual);
-        /** @psalm-var array $actual */
-        $actual = $actual[0];
+        $cities = $this->service->search('Fribourg');
+        self::assertCount(3, $cities);
+
+        $actual = $cities[0];
+        // @phpstan-ignore staticMethod.impossibleType
         self::assertArrayHasKey('lat_dms', $actual);
         self::assertArrayHasKey('lon_dms', $actual);
         self::assertArrayHasKey('lat_lon_dms', $actual);

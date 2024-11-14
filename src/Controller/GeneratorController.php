@@ -100,6 +100,8 @@ class GeneratorController extends AbstractController
 
     /**
      * @param array{entity: ?string, count: int, simulate: bool} $data
+     *
+     * @return FormInterface<mixed>
      */
     private function createGenerateForm(array $data): FormInterface
     {

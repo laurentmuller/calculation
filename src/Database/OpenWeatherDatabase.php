@@ -84,6 +84,9 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
         LIMIT :limit
         SQL;
 
+    /**
+     * @return int<0, max>
+     */
     public function count(): int
     {
         return $this->getRecordsCount('city');

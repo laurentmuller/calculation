@@ -144,7 +144,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
      *
      * @psalm-return Query<int, TEntity>
      *
-     * @phpstan-return Query
+     * @phpstan-return Query<null, mixed>
      */
     public function getSearchQuery(
         array $sortedFields = [],
@@ -168,6 +168,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
             }
         }
 
+        /** @phpstan-var Query<null, mixed> */
         return $builder->getQuery();
     }
 

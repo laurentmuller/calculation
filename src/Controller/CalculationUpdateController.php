@@ -65,6 +65,8 @@ class CalculationUpdateController extends AbstractController
     }
 
     /**
+     * @return FormInterface<mixed>
+     *
      * @throws \Exception
      */
     private function createQueryForm(CalculationUpdateQuery $query): FormInterface

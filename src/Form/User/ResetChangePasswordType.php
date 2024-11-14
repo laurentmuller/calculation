@@ -23,6 +23,11 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class ResetChangePasswordType extends AbstractType
 {
+    /**
+     * @psalm-param FormBuilderInterface $builder
+     *
+     * @phpstan-param FormBuilderInterface<mixed> $builder
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $helper = new FormHelper($builder);

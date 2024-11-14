@@ -61,6 +61,8 @@ class CommandFormServiceTest extends KernelServiceTestCase
 
     /**
      * @psalm-param array<string, array|scalar|null> $data
+     *
+     * @phpstan-return FormInterface<mixed>
      */
     private function createForm(string $name = 'about', array $data = []): FormInterface
     {

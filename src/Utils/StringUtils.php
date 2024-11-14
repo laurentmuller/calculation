@@ -195,6 +195,7 @@ final class StringUtils
      */
     public static function pregMatch(string $pattern, string $subject, ?array &$matches = null, int $flags = 0, int $offset = 0): bool
     {
+        /** @phpstan-ignore paramOut.type */
         return 1 === \preg_match($pattern, $subject, $matches, $flags, $offset);
     }
 
@@ -218,6 +219,7 @@ final class StringUtils
      */
     public static function pregMatchAll(string $pattern, string $subject, ?array &$matches = null, int $flags = 0, int $offset = 0): bool
     {
+        /** @phpstan-ignore paramOut.type */
         $result = \preg_match_all($pattern, $subject, $matches, $flags, $offset);
 
         return \is_int($result) && $result > 0;
@@ -255,7 +257,7 @@ final class StringUtils
     public static function pregReplaceAll(array $values, string|array $subject, int $limit = -1): string|array
     {
         /** @psalm-var string|string[] */
-        return \preg_replace(\array_keys($values), \array_values($values), $subject, $limit);
+        return \preg_replace(\array_keys($values), \array_values($values), $subject, $limit); // @phpstan-ignore varTag.type
     }
 
     /**

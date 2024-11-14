@@ -74,18 +74,11 @@ class DatabaseTest extends KernelServiceTestCase
     }
 
     /**
-     * @template TEntity of EntityInterface
-     *
-     * @param class-string<TEntity> $className
+     * @param class-string<AbstractRepository<EntityInterface>> $className
      */
     #[DataProvider('getRepositories')]
     public function testRepository(string $className, int $expected): void
     {
-        /**
-         * @var AbstractRepository $repository
-         *
-         * @psalm-var AbstractRepository<TEntity> $repository
-         */
         $repository = $this->getService($className);
         $result = $repository->findAll();
         self::assertCount($expected, $result);

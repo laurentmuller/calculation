@@ -33,7 +33,7 @@ trait ContainerServiceTrait
     protected function getService(string $class)
     {
         /** @psalm-var T */
-        return static::getContainer()->get($class);
+        return static::getContainer()->get($class); // @phpstan-ignore varTag.nativeType
     }
 
     /**

@@ -84,6 +84,11 @@ class AnonymousCommand extends Command
         return $this->service->getGenerator();
     }
 
+    /**
+     * @psalm-return Query
+     *
+     * @phpstan-return Query<null, mixed>
+     */
     private function createQuery(): Query
     {
         return $this->repository

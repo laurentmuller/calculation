@@ -58,8 +58,9 @@ class ResetPasswordServiceTest extends TestCase
     {
         $helper = $this->createResetPasswordHelper();
         $service = $this->createService($helper);
-        $actual = $service->generateFakeResetToken();
-        self::assertSame('fake-token', $actual->getToken());
+        $token = $service->generateFakeResetToken();
+        $actual = \strlen($token->getToken());
+        self::assertSame(32, $actual);
     }
 
     /**

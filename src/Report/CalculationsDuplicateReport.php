@@ -19,6 +19,7 @@ use App\Traits\DuplicateItemsTrait;
  * Report for calculations with duplicate items.
  *
  * @psalm-import-type CalculationItemType from \App\Repository\CalculationRepository
+ * @psalm-import-type CalculationItemEntry from \App\Repository\CalculationRepository
  */
 class CalculationsDuplicateReport extends AbstractCalculationItemsReport
 {
@@ -33,14 +34,14 @@ class CalculationsDuplicateReport extends AbstractCalculationItemsReport
     }
 
     /**
-     * @param CalculationItemType[] $entities
+     * @psalm-param CalculationItemType[] $entities
      */
     protected function computeItemsCount(array $entities): int
     {
-        return \array_reduce($entities, function (int $carry, array $item): int {
-            /** @var array $child */
-            foreach ($item['items'] as $child) {
-                $carry += (int) $child['count'];
+        return \array_reduce($entities, function (int $carry, array $entity): int {
+            /** @psalm-var CalculationItemEntry $item */
+            foreach ($entity['items'] as $item) {
+                $carry += $item['count'];
             }
 
             return $carry;

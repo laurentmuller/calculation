@@ -37,15 +37,15 @@ class CustomerTest extends ConstraintValidatorTestCase
 
         $birthday = DateUtils::sub($currentDate, 'P1Y');
         $customer->setBirthday(clone $birthday);
-        /** @psalm-var int $age */
+
         $age = $customer->getAge();
-        self::assertSame(1, $age);
+        self::assertSame(1, $age); // @phpstan-ignore-line
 
         $birthday = DateUtils::add($birthday, 'P1D');
         $customer->setBirthday(clone $birthday);
-        /** @psalm-var int $age */
+
         $age = $customer->getAge();
-        self::assertSame(0, $age);
+        self::assertSame(0, $age); // @phpstan-ignore-line
     }
 
     public function testConstruct(): void

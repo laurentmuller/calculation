@@ -71,6 +71,8 @@ class CalculationArchiveController extends AbstractController
     }
 
     /**
+     * @return FormInterface<mixed>
+     *
      * @throws ORMException
      */
     private function createQueryForm(CalculationArchiveService $service, CalculationArchiveQuery $query): FormInterface

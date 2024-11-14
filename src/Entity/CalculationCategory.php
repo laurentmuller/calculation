@@ -127,7 +127,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
     }
 
     /**
-     * @return int the number of items
+     * @return int<0, max> the number of items
      */
     public function count(): int
     {

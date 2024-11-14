@@ -68,13 +68,12 @@ class OtherRepositoriesTest extends KernelServiceTestCase
     }
 
     /**
-     * @template TRepository of AbstractRepository
+     * @template TEntity of EntityInterface
      *
-     * @param class-string<TRepository> $class
+     * @param class-string<AbstractRepository<TEntity>> $class
      */
     protected function findAll(string $class): void
     {
-        /** @psalm-var AbstractRepository<EntityInterface> $repository */
         $repository = $this->getService($class);
         $actual = $repository->findAll();
         self::assertCount(0, $actual);

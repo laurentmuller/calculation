@@ -34,7 +34,7 @@ final class SwitchTokenParser extends AbstractTokenParser
         return 'switch';
     }
 
-    public function parse(Token $token): Node
+    public function parse(Token $token): SwitchNode
     {
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
@@ -68,7 +68,7 @@ final class SwitchTokenParser extends AbstractTokenParser
                         }
                     }
                     $stream->expect(Token::BLOCK_END_TYPE);
-                    $body = $this->parser->subparse(fn (Token $token): bool => $this->decideIfFork($token));
+                    $body = $this->parser->subparse(fn (Token $token): bool => $this->isFork($token));
                     $cases[] = new Node([
                         'values' => new Node($values),
                         'body' => $body,
@@ -77,7 +77,7 @@ final class SwitchTokenParser extends AbstractTokenParser
 
                 case 'default':
                     $stream->expect(Token::BLOCK_END_TYPE);
-                    $nodes['default'] = $this->parser->subparse(fn (Token $token): bool => $this->decideIfEnd($token));
+                    $nodes['default'] = $this->parser->subparse(fn (Token $token): bool => $this->isEnd($token));
                     break;
 
                 case 'endswitch':
@@ -94,12 +94,12 @@ final class SwitchTokenParser extends AbstractTokenParser
         return new SwitchNode($nodes, [], $lineno);
     }
 
-    private function decideIfEnd(Token $token): bool
+    private function isEnd(Token $token): bool
     {
         return $token->test(['endswitch']);
     }
 
-    private function decideIfFork(Token $token): bool
+    private function isFork(Token $token): bool
     {
         return $token->test(['case', 'default', 'endswitch']);
     }

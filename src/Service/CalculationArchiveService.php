@@ -185,11 +185,9 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         }
 
         /**
-         * @psalm-var \Doctrine\ORM\Query<array-key, Calculation> $query
-         *
-         * @phpstan-var \Doctrine\ORM\Query $query
+         * @psalm-var \Doctrine\ORM\Query<int, Calculation> $query
          */
-        $query = $this->createQueryBuilder($sources, $date)
+        $query = $this->createQueryBuilder($sources, $date) // @phpstan-ignore varTag.type
             ->getQuery();
 
         return $query->getResult();

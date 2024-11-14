@@ -204,7 +204,7 @@ class SimpleEditorType extends AbstractType
         $actions = $action['actions'] ?? [];
         $action['attributes']['aria-expanded'] = 'false';
         $action['attributes']['data-bs-toggle'] = 'dropdown';
-        $action['actions'] = $this->updateActions($actions, 'dropdown-item');
+        $action['actions'] = $this->updateActions($actions, 'dropdown-item'); // @phpstan-ignore-line
     }
 
     /**

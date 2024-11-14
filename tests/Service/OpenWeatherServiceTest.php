@@ -121,15 +121,18 @@ class OpenWeatherServiceTest extends KernelServiceTestCase
     {
         $cityIds = [self::CITY_VALID];
         $result = $this->service->group($cityIds);
-
         self::assertIsArray($result);
 
+        self::assertArrayHasKey('cnt', $result);
+        self::assertArrayHasKey('list', $result);
+        self::assertArrayHasKey('units', $result);
+
         /** @psalm-var int $cnt */
-        $cnt = $result['cnt'];
+        $cnt = $result['cnt']; // @phpstan-ignore varTag.type
         self::assertSame(1, $cnt);
 
         /** @psalm-var array<int, array> $list */
-        $list = $result['list'];
+        $list = $result['list']; // @phpstan-ignore varTag.type
         self::assertCount(1, $list);
 
         $units = $result['units'];

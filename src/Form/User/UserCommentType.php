@@ -31,6 +31,11 @@ class UserCommentType extends AbstractType
     {
     }
 
+    /**
+     * @psalm-param FormBuilderInterface $builder
+     *
+     * @phpstan-param FormBuilderInterface<mixed> $builder
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $helper = new FormHelper($builder, 'user.fields.');

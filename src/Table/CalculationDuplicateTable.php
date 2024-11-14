@@ -24,6 +24,8 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
     use DuplicateItemsTrait;
 
     /**
+     * @return int<0, max>
+     *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function count(): int

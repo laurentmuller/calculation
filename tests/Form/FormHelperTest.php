@@ -545,6 +545,9 @@ class FormHelperTest extends TypeTestCase
         self::assertCount(1, $form);
     }
 
+    /**
+     * @phpstan-param FormInterface<mixed> $form
+     */
     protected static function assertSameAttribute(FormInterface $form, string $name, mixed $expected): void
     {
         self::assertTrue($form->has('name'));
@@ -555,6 +558,9 @@ class FormHelperTest extends TypeTestCase
         self::assertSame($expected, $actual);
     }
 
+    /**
+     * @phpstan-param FormInterface<mixed> $form
+     */
     protected static function assertSameOption(FormInterface $form, string $name, mixed $expected): void
     {
         self::assertTrue($form->has('name'));
@@ -566,6 +572,8 @@ class FormHelperTest extends TypeTestCase
     }
 
     /**
+     * @phpstan-param FormInterface<mixed> $form
+     *
      * @psalm-param class-string $expected
      */
     protected static function assertSameType(FormInterface $form, string $expected): void
@@ -611,6 +619,9 @@ class FormHelperTest extends TypeTestCase
         ];
     }
 
+    /**
+     * @phpstan-param FormInterface<mixed> $form
+     */
     private function getAttrArray(FormInterface $form): array
     {
         $field = $form->get('name');
@@ -628,6 +639,9 @@ class FormHelperTest extends TypeTestCase
         return new FormHelper($builder, $labelPrefix);
     }
 
+    /**
+     * @phpstan-param FormInterface<mixed> $form
+     */
     private function getRowAttrArray(FormInterface $form): array
     {
         $field = $form->get('name');

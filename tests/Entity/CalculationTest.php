@@ -88,8 +88,12 @@ class CalculationTest extends EntityValidatorTestCase
 
         $expected = 'code';
         $entity->setCode($expected);
-        self::assertSame($expected, $entity->getCode());
-        self::assertSame($entity->getCode(), $entity->getDisplay());
+
+        $actualCode = $entity->getCode();
+        self::assertSame($expected, $actualCode); // @phpstan-ignore-line
+
+        $actualDisplay = $entity->getDisplay();
+        self::assertSame($expected, $actualDisplay); // @phpstan-ignore-line
 
         $category = new Category();
         $category->setCode('code');
@@ -354,8 +358,12 @@ class CalculationTest extends EntityValidatorTestCase
 
         $expected = 'code';
         $entity->setCode($expected);
-        self::assertSame($expected, $entity->getCode());
-        self::assertSame($entity->getCode(), $entity->getDisplay());
+
+        $actualCode = $entity->getCode();
+        self::assertSame($expected, $actualCode); // @phpstan-ignore-line
+
+        $actualDisplay = $entity->getDisplay();
+        self::assertSame($entity->getCode(), $actualDisplay);
 
         $group = new Group();
         $group->setCode('code');

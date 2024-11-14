@@ -140,24 +140,17 @@ class CalculationServiceTest extends KernelServiceTestCase
     {
         $json = <<<JSON
             {
-                "userMargin": "5",
+                "userMargin": 5,
                 "groups": [
                     {
-                        "position": "0",
-                        "code": "Travail",
-                        "group": "1",
+                        "group": 1,
+                        "code": "Group",
                         "categories": [
                             {
-                                "position": "0",
-                                "code": "Employé",
-                                "category": "1",
                                 "items": [
                                     {
-                                        "position": "0",
-                                        "description": "Fichier Préparation",
-                                        "unit": "heure",
-                                        "price": "90",
-                                        "quantity": "0.25"
+                                        "price": 90.0,
+                                        "quantity": 0.25
                                     }
                                 ]
                             }
@@ -169,9 +162,8 @@ class CalculationServiceTest extends KernelServiceTestCase
 
         $group = new Group();
         self::setId($group);
-
-        /** @psalm-var ServiceParametersType $source */
-        $source = \json_decode($json, true, \JSON_THROW_ON_ERROR);
+        // @phpstan-ignore cast.useless
+        $source = (array) \json_decode($json, true, \JSON_THROW_ON_ERROR);
         $service = $this->createCalculationService($group);
         $actual = $service->createGroupsFromData($source);
         self::assertCount(7, $actual);

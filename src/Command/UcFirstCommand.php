@@ -26,7 +26,7 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
- * Command to set a first character uppercase to fields.
+ * Command to set the first character uppercase to fields.
  *
  * @psalm-type EntityType = array{name: string, fields: non-empty-array<string>}
  */
@@ -253,7 +253,12 @@ class UcFirstCommand extends Command
     }
 
     /**
-     * @psalm-return string[]
+     * @return string[]
+     *
+     * @phpstan-template T of object
+     *
+     * @phpstan-param ClassMetadata<T> $metadata
+     * phpstan-ignore missingType.generics
      */
     private function getFields(ClassMetadata $metadata): array
     {

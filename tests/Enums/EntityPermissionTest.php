@@ -186,7 +186,7 @@ class EntityPermissionTest extends TestCase
     private function fromAll(): FlagBag
     {
         /** @psalm-var FlagBag<EntityPermission> $flagBag */
-        $flagBag = FlagBag::fromAll(EntityPermission::class);
+        $flagBag = FlagBag::fromAll(EntityPermission::class); // @phpstan-ignore varTag.type
 
         return $flagBag;
     }

@@ -344,7 +344,6 @@ class SearchService implements ServiceSubscriberInterface
         $alias = 'e';
         $name = StringUtils::getShortName($class);
         $content ??= "$alias.$field";
-        /** @psalm-var literal-string $where */
         $where = "$content LIKE :" . self::SEARCH_PARAM;
 
         return $this->manager->createQueryBuilder()

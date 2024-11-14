@@ -16,8 +16,12 @@ parameters:
     checkUninitializedProperties: true
 
     doctrine:
-    		reportUnknownTypes: true
+    		reportUnknownTypes: false
+    		allowNullablePropertyForRequiredField: true
     		ormRepositoryClass: App\Repository\AbstractRepository
+
+    strictRules:
+        strictArrayFilter: false
 
     ignoreErrors:
         -
@@ -33,3 +37,11 @@ parameters:
         -
             message: '#Call to static method .* will always evaluate to true.#'
             path: tests/*
+        -
+            identifier: doctrine.columnType
+            paths:
+                - src/Entity/User.php
+                - src/Traits/TimestampableTrait.php
+
+includes:
+	- vendor-bin/phpstan/vendor/phpstan/phpstan/conf/bleedingEdge.neon

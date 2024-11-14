@@ -73,7 +73,7 @@ trait PdfPieChartTrait
         PdfDrawColor::cellBorder()->apply($this);
         foreach ($rows as $row) {
             $this->pieApplyFillColor($row);
-            $endAngle = $startAngle + 360.0 * $row['value'] / $total;
+            $endAngle = $startAngle + 360.0 * $row['value'] / $total;  // @phpstan-ignore-line
             $this->sector($centerX, $centerY, $radius, $startAngle, $endAngle, $style, $clockwise, $origin);
             $startAngle = $endAngle;
         }

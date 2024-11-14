@@ -51,8 +51,8 @@ class CalculationsEmptyReport extends AbstractCalculationItemsReport
     {
         return \array_reduce(
             $entities,
-            /** @psalm-param CalculationItemType $item */
-            fn (int $carry, array $item): int => $carry + \count($item['items']),
+            /** @psalm-param CalculationItemType $entity */
+            fn (int $carry, array $entity): int => $carry + \count($entity['items']),
             0
         );
     }

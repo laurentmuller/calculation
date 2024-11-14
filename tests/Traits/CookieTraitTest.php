@@ -41,6 +41,7 @@ class CookieTraitTest extends TestCase
         self::assertSame(Theme::AUTO, $this->getCookieEnum($request, 'key', Theme::AUTO));
 
         $request = $this->createRequest(['KEY' => Theme::DARK]);
+        // @phpstan-ignore staticMethod.impossibleType
         self::assertSame(Theme::DARK, $this->getCookieEnum($request, 'key', Theme::AUTO));
     }
 

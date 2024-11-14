@@ -14,6 +14,8 @@ namespace App\Form\Task;
 
 use App\Entity\Task;
 use App\Form\AbstractListEntityType;
+use App\Repository\TaskRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -48,18 +50,25 @@ class TaskListType extends AbstractListEntityType
     }
 
     /**
+     * @psalm-param Options $options
+     *
+     * @phpstan-param Options<array<array-key, mixed>> $options
+     *
      * @throws \Doctrine\ORM\Exception\NotSupported
      */
     private function getSortedBuilder(Options $options): QueryBuilder
     {
-        /** @psalm-var \Doctrine\ORM\EntityManager $manager */
-        $manager = $options['em'];
-        /** @psalm-var class-string $class */
-        $class = $options['class'];
-        /** @psalm-var \App\Repository\TaskRepository $repository */
-        $repository = $manager->getRepository($class);
         /** @psalm-var bool $all */
         $all = $options['query_all'];
+
+        /** @psalm-var EntityManager $manager */
+        $manager = $options['em'];
+
+        /** @psalm-var class-string<Task> $class */
+        $class = $options['class'];
+
+        /** @psalm-var TaskRepository $repository */
+        $repository = $manager->getRepository($class); // @phpstan-ignore varTag.type
 
         return $repository->getSortedBuilder($all);
     }

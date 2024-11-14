@@ -102,7 +102,9 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
     }
 
     /**
-     * @return int the number of margins
+     * Gets the number of margins.
+     *
+     * @return int<0, max>
      */
     public function count(): int
     {

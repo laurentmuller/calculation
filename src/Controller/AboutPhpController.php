@@ -88,7 +88,6 @@ class AboutPhpController extends AbstractController
 
     private function getLoadedExtensions(): string
     {
-        /** @psalm-var string[] $extensions */
         $extensions = $this->getSorted(\array_map('strtolower', \get_loaded_extensions()));
 
         return \implode(', ', $extensions);

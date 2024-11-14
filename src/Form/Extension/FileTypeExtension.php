@@ -35,6 +35,8 @@ class FileTypeExtension extends AbstractFileTypeExtension
     }
 
     /**
+     * @param FormInterface<FileType> $form
+     *
      * @psalm-param array<array-key, mixed> $options
      *
      * @psalm-return array<array-key, mixed>

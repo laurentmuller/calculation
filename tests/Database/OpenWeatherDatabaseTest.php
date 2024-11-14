@@ -64,7 +64,6 @@ class OpenWeatherDatabaseTest extends TestCase
         $actual = $this->database->findCity(self::NAME);
         self::assertCount(1, $actual);
 
-        /** @psalm-var array<string, mixed> $row */
         $row = $actual[0];
         self::assertSame(self::ID, $row['id']);
         self::assertSame(self::NAME, $row['name']);
@@ -83,7 +82,6 @@ class OpenWeatherDatabaseTest extends TestCase
         $actual = $this->database->findCityCountry(self::NAME, self::COUNTRY);
         self::assertCount(1, $actual);
 
-        /** @psalm-var array<string, mixed> $row */
         $row = $actual[0];
         self::assertSame(self::ID, $row['id']);
         self::assertSame(self::NAME, $row['name']);

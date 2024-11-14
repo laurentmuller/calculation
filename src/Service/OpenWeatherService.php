@@ -408,7 +408,6 @@ class OpenWeatherService extends AbstractHttpClientService
     {
         $key = $this->getCacheKey($uri, $query);
 
-        // @phpstan-ignore return.type
         return $this->getUrlCacheValue($key, fn (): array|false => $this->doGet($uri, $query));
     }
 
@@ -430,7 +429,7 @@ class OpenWeatherService extends AbstractHttpClientService
         $hours = \intdiv($offset, 3600);
         $minutes = \abs(\intdiv($offset, 60) % 60);
         /** @psalm-var non-empty-string $timezone */
-        $timezone = \sprintf('%+03d%02d', $hours, $minutes);
+        $timezone = \sprintf('%+03d%02d', $hours, $minutes); // @phpstan-ignore varTag.type
 
         return new \DateTimeZone($timezone);
     }

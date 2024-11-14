@@ -59,6 +59,8 @@ readonly class CommandFormService
      * @psalm-param array<string, array|scalar|null> $data
      *
      * @phpstan-param array $command
+     *
+     * @phpstan-return FormInterface<mixed>
      */
     public function createForm(array $command, array $data, array $options = []): FormInterface
     {

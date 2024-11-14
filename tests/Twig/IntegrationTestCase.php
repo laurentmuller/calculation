@@ -320,7 +320,7 @@ abstract class IntegrationTestCase extends TestCase
         }
 
         /** @psalm-var TestTemplateType[] */
-        return $tests;
+        return $tests;  // @phpstan-ignore varTag.type
     }
 
     /**

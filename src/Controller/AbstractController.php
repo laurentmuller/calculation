@@ -414,7 +414,7 @@ abstract class AbstractController extends BaseController
             throw $this->createTranslatedNotFoundException('errors.render_document');
         }
         if (!StringUtils::isString($name) && StringUtils::isString($doc->getTitle())) {
-            /** @psalm-var string $name */
+            /** @psalm-var non-empty-string $name */
             $name = $doc->getTitle();
         }
 
@@ -439,7 +439,7 @@ abstract class AbstractController extends BaseController
             throw $this->createTranslatedNotFoundException('errors.render_document');
         }
         if (!StringUtils::isString($name) && StringUtils::isString($doc->getTitle())) {
-            /** @psalm-var string $name */
+            /** @psalm-var non-empty-string $name */
             $name = $doc->getTitle();
         }
 

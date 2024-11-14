@@ -165,12 +165,15 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
 
     /**
      * Gets the number of records for the given table.
+     *
+     * @return int<0, max>
      */
     public function getRecordsCount(string $table): int
     {
         $query = "SELECT COUNT(1) FROM $table";
         $result = $this->querySingle($query);
 
+        /** @psalm-var int<0, max> */
         return \is_int($result) ? $result : 0;
     }
 
@@ -255,7 +258,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      *
      * @psalm-param int<1,3> $mode
      *
-     * @psalm-return array<int, T>
+     * @psalm-return list<T>
      *
      * @phpstan-ignore method.templateTypeNotInParameter
      */
@@ -266,13 +269,14 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
             return [];
         }
 
+        /** @psalm-var list<T> $rows */
         $rows = [];
         while ($row = $result->fetchArray($mode)) {
             $rows[] = $row;
         }
         $result->finalize();
 
-        /** @psalm-var array<int, T> */
+        /** @psalm-var list<T> */
         return $rows;
     }
 
@@ -339,16 +343,14 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      */
     protected function search(string $query, string $value, int $limit, int $mode = \SQLITE3_ASSOC): array
     {
-        // parameter
         $value = $this->likeValue($value);
 
-        // create statement
         /** @var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement($query);
         $stmt->bindValue(':value', $value);
         $stmt->bindValue(':limit', $limit, \SQLITE3_INTEGER);
 
-        // execute
+        /** @psalm-var array<int, T> */
         return $this->executeAndFetch($stmt, $mode);
     }
 }

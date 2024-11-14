@@ -178,6 +178,9 @@ class FileTypeExtensionTest extends TypeTestCase
         self::assertNotNull($view['file']);
     }
 
+    /**
+     * @phpstan-return FormInterface<mixed>
+     */
     protected function createForm(array $options = []): FormInterface
     {
         return $this->factory->create(FileType::class, null, $options);

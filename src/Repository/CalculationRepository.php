@@ -114,6 +114,8 @@ class CalculationRepository extends AbstractRepository
      *
      * @param float $minMargin the minimum margin
      *
+     * @return int<0, max>
+     *
      * @throws ORMException
      */
     public function countItemsBelow(float $minMargin): int
@@ -121,6 +123,7 @@ class CalculationRepository extends AbstractRepository
         $builder = $this->createQueryBuilder('e')
             ->select('COUNT(e.id)');
 
+        /** @psalm-var int<0, max> */
         return (int) self::addBelowFilter($builder, $minMargin)
             ->getQuery()
             ->getSingleScalarResult();
@@ -130,6 +133,8 @@ class CalculationRepository extends AbstractRepository
      * Count the number of calculations with duplicate items.
      *
      * Items are duplicate if the descriptions are equal.
+     *
+     * @return int<0, max>
      *
      * @throws ORMException
      */
@@ -146,6 +151,7 @@ class CalculationRepository extends AbstractRepository
         /** @psalm-var literal-string $where */
         $where = "r.id in($dql)";
 
+        /** @psalm-var int<0, max> */
         return (int) $this->createQueryBuilder('r')
             ->select('COUNT(r.id)')
             ->where($where)
@@ -157,6 +163,8 @@ class CalculationRepository extends AbstractRepository
      * Count the number of calculations with empty items.
      *
      * Items are empty if the price or the quantity is equal to 0.
+     *
+     * @return int<0, max>
      *
      * @throws ORMException
      */
@@ -173,6 +181,7 @@ class CalculationRepository extends AbstractRepository
         /** @psalm-var literal-string $where */
         $where = "r.id in($dql)";
 
+        /** @psalm-var int<0, max> */
         return (int) $this->createQueryBuilder('r')
             ->select('COUNT(r.id)')
             ->where($where)

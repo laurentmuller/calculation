@@ -116,7 +116,9 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     }
 
     /**
-     * @return int the number of items
+     * Gets the number of items.
+     *
+     * @return int<0, max>
      */
     public function count(): int
     {
@@ -126,11 +128,13 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     /**
      * Gets the number of margins for all items.
      *
+     * @return int<0, max>
+     *
      * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function countMargins(): int
     {
-        /** @psalm-var int */
+        /** @psalm-var int<0, max> */
         return $this->items->reduce(fn (int $carry, TaskItem $item): int => $carry + $item->count(), 0);
     }
 

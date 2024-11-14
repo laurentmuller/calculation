@@ -61,6 +61,9 @@ class ProductUpdateController extends AbstractController
         ]);
     }
 
+    /**
+     * @return FormInterface<mixed>
+     */
     private function createQueryForm(ProductUpdateService $service, ProductUpdateQuery $query): FormInterface
     {
         $helper = $this->createFormHelper('product.update.', $query);

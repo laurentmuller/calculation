@@ -59,6 +59,8 @@ abstract class EntityTableTestCase extends TestCase
     abstract protected function createEntities(): array;
 
     /**
+     * @phpstan-return MockObject&Query<array-key, mixed>
+     *
      * @throws Exception
      */
     protected function createMockQuery(array $entities): MockObject&Query
@@ -71,6 +73,8 @@ abstract class EntityTableTestCase extends TestCase
     }
 
     /**
+     * @phpstan-param MockObject&Query<array-key, mixed> $query
+     *
      * @throws Exception
      */
     protected function createMockQueryBuilder(MockObject&Query $query): MockObject&QueryBuilder
@@ -98,11 +102,11 @@ abstract class EntityTableTestCase extends TestCase
      *
      * @psalm-return TEntityTable
      *
-     * @phpstan-ignore-next-line
-     *
      * @throws Exception
+     *
+     * @phpstan-ignore-next-line
      */
-    abstract protected function createTable(AbstractRepository $repository): AbstractEntityTable;
+    abstract protected function createTable(MockObject&AbstractRepository $repository): AbstractEntityTable;
 
     /**
      * @throws Exception|\ReflectionException
@@ -130,7 +134,6 @@ abstract class EntityTableTestCase extends TestCase
     protected function updateIds(array $entities): array
     {
         $index = 1;
-        $entities = $this->createEntities();
         foreach ($entities as $entity) {
             if ($entity instanceof EntityInterface) {
                 self::setId($entity, $index++);

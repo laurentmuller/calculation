@@ -130,6 +130,6 @@ class RightsTraitTest extends TestCase
 
     private function getAttribute(string $key): int
     {
-        return EntityPermission::tryFromName($key)?->value ?? -1;
+        return EntityPermission::tryFromName($key)->value ?? -1;
     }
 }

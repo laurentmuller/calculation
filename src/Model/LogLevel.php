@@ -18,6 +18,7 @@ class LogLevel implements \Countable, \Stringable
 {
     use LogLevelTrait;
 
+    /** @psalm-var int<0, max> */
     private int $count = 0;
 
     public function __construct(string $level)
@@ -30,11 +31,17 @@ class LogLevel implements \Countable, \Stringable
         return $this->getLevel();
     }
 
+    /**
+     * @return int<0, max>
+     */
     public function count(): int
     {
         return $this->count;
     }
 
+    /**
+     * @psalm-param positive-int $value
+     */
     public function increment(int $value = 1): self
     {
         $this->count += $value;

@@ -60,9 +60,18 @@ class Database extends AbstractDatabase
 
     /**
      * Make public for tests.
+     *
+     * @psalm-template T of array<string, mixed>
+     *
+     * @psalm-param int<1,3> $mode
+     *
+     * @psalm-return list<T>
+     *
+     * @phpstan-ignore method.templateTypeNotInParameter
      */
     public function executeAndFetch(\SQLite3Stmt $stmt, int $mode = \SQLITE3_ASSOC): array
     {
+        /** @psalm-var list<T> */
         return parent::executeAndFetch($stmt, $mode);
     }
 
@@ -92,9 +101,18 @@ class Database extends AbstractDatabase
 
     /**
      * Make public for tests.
+     *
+     * @psalm-template T of array<string, mixed>
+     *
+     * @psalm-param int<1,3> $mode $mode
+     *
+     * @psalm-return array<int, T>
+     *
+     * @phpstan-ignore method.templateTypeNotInParameter
      */
     public function search(string $query, string $value, int $limit, int $mode = \SQLITE3_ASSOC): array
     {
+        /** @psalm-var array<int, T> */
         return parent::search($query, $value, $limit, $mode);
     }
 

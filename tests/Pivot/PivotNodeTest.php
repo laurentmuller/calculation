@@ -284,16 +284,20 @@ class PivotNodeTest extends TestCase
     public function testSetSortMode(): void
     {
         $node = $this->createNode();
-        self::assertSame(SortModeInterface::SORT_ASC, $node->getSortMode());
+        $actual = $node->getSortMode();
+        self::assertSame(SortModeInterface::SORT_ASC, $actual);
 
         $node->setSortMode(SortModeInterface::SORT_DESC);
-        self::assertSame(SortModeInterface::SORT_DESC, $node->getSortMode());
+        $actual = $node->getSortMode();
+        self::assertSame(SortModeInterface::SORT_DESC, $actual);
 
         $node->setSortMode(SortModeInterface::SORT_DESC);
-        self::assertSame(SortModeInterface::SORT_DESC, $node->getSortMode());
+        $actual = $node->getSortMode();
+        self::assertSame(SortModeInterface::SORT_DESC, $actual);
 
         $node->setSortMode('fake');
-        self::assertSame(SortModeInterface::SORT_DESC, $node->getSortMode());
+        $actual = $node->getSortMode();
+        self::assertSame(SortModeInterface::SORT_DESC, $actual);
     }
 
     public function testSetTitle(): void

@@ -80,7 +80,6 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     {
         $key = $this->getCacheKey();
 
-        // @phpstan-ignore return.type
         return $this->getCacheValue($key, fn (): array|false => $this->doLoadLanguages());
     }
 

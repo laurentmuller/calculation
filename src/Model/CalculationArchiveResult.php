@@ -22,6 +22,7 @@ use App\Entity\CalculationState;
  */
 class CalculationArchiveResult implements \Countable
 {
+    /** @psalm-var int<0, max> */
     private int $count = 0;
     /** @psalm-var ResultsType */
     private array $results = [];
@@ -42,6 +43,11 @@ class CalculationArchiveResult implements \Countable
         return $this;
     }
 
+    /**
+     * Gets the number of calculations.
+     *
+     * @return int<0, max>
+     */
     public function count(): int
     {
         return $this->count;

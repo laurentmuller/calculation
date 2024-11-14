@@ -51,6 +51,8 @@ trait ManagerRegistryTrait
     }
 
     /**
+     * @phpstan-return MockObject&Query<array-key, mixed>
+     *
      * @throws Exception
      */
     private function createQuery(array $results): MockObject&Query
@@ -63,6 +65,8 @@ trait ManagerRegistryTrait
     }
 
     /**
+     * @phpstan-param  MockObject&Query<array-key, mixed> $query
+     *
      * @throws Exception
      */
     private function createQueryBuilder(MockObject&Query $query): MockObject&QueryBuilder

@@ -133,7 +133,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     }
 
     /**
-     * @return int the number of categories
+     * @return int<0, max> the number of categories
      */
     public function count(): int
     {

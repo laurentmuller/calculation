@@ -137,9 +137,8 @@ class LogService
         $file = new LogFile($this->getFileName());
         $reader = new CSVReader(file: $this->fileName, separator: self::VALUES_SEP);
 
-        /** @psalm-var string[]|null $values */
         foreach ($reader as $key => $values) {
-            if (!\is_array($values) || 6 !== \count($values)) {
+            if (6 !== \count($values)) {
                 continue;
             }
             $date = $this->parseDate($values[0]);

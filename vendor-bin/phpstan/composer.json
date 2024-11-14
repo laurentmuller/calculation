@@ -2,12 +2,11 @@
     "require": {
         "php": "^8.2",
         "phpstan/extension-installer": "^1.0",
-        "phpstan/phpstan": "^1.0",
-        "phpstan/phpstan-deprecation-rules": "^1.0",
-        "phpstan/phpstan-doctrine": "^1.0",
-        "phpstan/phpstan-phpunit": "^1.0",
-        "phpstan/phpstan-strict-rules": "^1.0",
-        "phpstan/phpstan-symfony": "^1.0"
+        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-doctrine": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpstan/phpstan-strict-rules": "^2.0"
     },
     "config": {
         "preferred-install": {

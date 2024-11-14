@@ -22,12 +22,13 @@ use App\Traits\TranslatorTrait;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Abstract parameters type.
  *
- * @extends AbstractType<\Symfony\Component\Form\FormTypeInterface>
+ * @extends AbstractType<FormTypeInterface>
  */
 abstract class AbstractParametersType extends AbstractType
 {

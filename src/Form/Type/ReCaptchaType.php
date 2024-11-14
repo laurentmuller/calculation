@@ -146,9 +146,6 @@ class ReCaptchaType extends AbstractType implements EventSubscriberInterface
         return false;
     }
 
-    /**
-     * @phpstan-param FormConfigInterface<mixed> $config
-     */
     private function updateService(FormConfigInterface $config): void
     {
         if ($config->hasOption('expectedAction')) {

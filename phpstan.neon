@@ -43,5 +43,7 @@ parameters:
                 - src/Entity/User.php
                 - src/Traits/TimestampableTrait.php
 
-includes:
-	- vendor-bin/phpstan/vendor/phpstan/phpstan/conf/bleedingEdge.neon
+        -
+            message: '#@extends contains generic type#'
+            identifier: generics.notGeneric
+            path: src/Form/*

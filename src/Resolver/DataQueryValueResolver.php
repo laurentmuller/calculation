@@ -18,6 +18,7 @@ use App\Interfaces\TableInterface;
 use App\Service\UrlGeneratorService;
 use App\Table\DataQuery;
 use App\Traits\CookieTrait;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
@@ -43,48 +44,24 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
     ) {
     }
 
+    /**
+     * @throws BadRequestException
+     */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
         if (DataQuery::class !== $argument->getType()) {
             return [];
         }
 
-        $query = $this->createQuery($request, $argument);
-        $errors = $this->validator->validate($query);
-        if (\count($errors) > 0) {
-            $message = $this->mapErrors($errors);
-            $previous = new ValidationFailedException($query, $errors);
-            throw new BadRequestHttpException($message, $previous);
-        }
+        $query = $this->createQuery($argument);
+        $this->updateQuery($query, $request->query);
+        $this->updateParameters($query, $request);
+        $this->validateQuery($query);
 
         return [$query];
     }
 
-    private function createQuery(Request $request, ArgumentMetadata $argument): DataQuery
-    {
-        $query = $this->getDefaultQuery($argument);
-        $this->updateQuery($query, $request->query);
-
-        $query->prefix = $this->getPrefix($request);
-        $query->callback = $this->isCallback($request);
-        $query->view = $this->getView($request, $query->view);
-        if (0 === $query->limit) {
-            $query->limit = $this->getLimit($request, $query->prefix, $query->view);
-        }
-        if ('' === $query->sort) {
-            $query->sort = $this->getSort($request, $query->prefix);
-            $query->order = $this->getOrder($request, $query->prefix);
-        }
-
-        return $query;
-    }
-
-    private function formatError(string $key, string|\Stringable $message): string
-    {
-        return \sprintf('%s.%s: %s', DataQuery::class, $key, $message);
-    }
-
-    private function getDefaultQuery(ArgumentMetadata $argument): DataQuery
+    private function createQuery(ArgumentMetadata $argument): DataQuery
     {
         if ($argument->hasDefaultValue()) {
             /** @psalm-var DataQuery */
@@ -92,6 +69,11 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
         }
 
         return new DataQuery();
+    }
+
+    private function formatError(string $key, string|\Stringable $message): string
+    {
+        return \sprintf('%s.%s: %s', DataQuery::class, $key, $message);
     }
 
     private function getLimit(Request $request, string $prefix, TableView $view): int
@@ -138,24 +120,51 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
         return \rtrim($str);
     }
 
+    private function updateParameters(DataQuery $query, Request $request): void
+    {
+        $query->prefix = $this->getPrefix($request);
+        $query->callback = $this->isCallback($request);
+        $query->view = $this->getView($request, $query->view);
+        if (0 === $query->limit) {
+            $query->limit = $this->getLimit($request, $query->prefix, $query->view);
+        }
+        if ('' === $query->sort) {
+            $query->sort = $this->getSort($request, $query->prefix);
+            $query->order = $this->getOrder($request, $query->prefix);
+        }
+    }
+
     /**
      * @psalm-param InputBag<string> $inputBag
      */
     private function updateQuery(DataQuery $query, InputBag $inputBag): void
     {
         /** @psalm-var mixed $value */
-        foreach ($inputBag as $key => $value) {
+        foreach ($inputBag as $key => $value) { // @phpstan-ignore varTag.type
             if (UrlGeneratorService::PARAM_CALLER === $key) {
                 continue;
             }
-            if (!\property_exists($query, $key)) {
+            if (!$this->accessor->isWritable($query, $key)) {
                 $message = $this->formatError($key, $this->translator->trans('schema.fields.error'));
                 throw new BadRequestHttpException($message);
             }
             if (TableInterface::PARAM_VIEW === $key) {
-                $value = TableView::tryFrom((string) $value) ?? $query->view;
+                $value = TableView::tryFrom((string) $value) ?? $query->view; // @phpstan-ignore property.nonObject
             }
             $this->accessor->setValue($query, $key, $value);
+        }
+    }
+
+    /**
+     * @throws BadRequestException
+     */
+    private function validateQuery(DataQuery $query): void
+    {
+        $errors = $this->validator->validate($query);
+        if (\count($errors) > 0) {
+            $message = $this->mapErrors($errors);
+            $previous = new ValidationFailedException($query, $errors);
+            throw new BadRequestHttpException($message, $previous);
         }
     }
 }

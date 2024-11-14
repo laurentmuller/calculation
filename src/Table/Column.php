@@ -172,6 +172,7 @@ class Column implements \Stringable, SortModeInterface
                 }
             }
 
+            /** @psalm-var Column */
             return $column;
         }, $definitions);
     }

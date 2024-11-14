@@ -29,7 +29,7 @@ trait PreloadedExtensionsTrait
     {
         /** @psalm-var array $extensions */
         $extensions = parent::getExtensions();
-        /** @psalm-var FormTypeInterface<mixed>[] $preloadedExtensions */
+        /** @psalm-var FormTypeInterface[] $preloadedExtensions */
         $preloadedExtensions = $this->getPreloadedExtensions();
         if ([] !== $preloadedExtensions) {
             $extensions[] = new PreloadedExtension($preloadedExtensions, []);

@@ -372,9 +372,6 @@ class FormatUtilsTest extends TestCase
         self::assertSame(\IntlDateFormatter::SHORT, FormatUtils::TIME_TYPE);
     }
 
-    /**
-     * @throws \Exception
-     */
     private static function createDate(): \DateTimeInterface
     {
         return new \DateTime(self::DATE_TIME, new \DateTimeZone(FormatUtils::DEFAULT_TIME_ZONE));

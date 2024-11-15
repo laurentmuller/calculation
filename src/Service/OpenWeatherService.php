@@ -440,13 +440,9 @@ class OpenWeatherService extends AbstractHttpClientService
     private function sortResults(array &$results): void
     {
         \uksort($results, function (string|int $keyA, string|int $keyB) use ($results): int {
-            $isArrayA = \is_array($results[$keyA]);
-            $isArrayB = \is_array($results[$keyB]);
-            if ($isArrayA && !$isArrayB) {
-                return 1;
-            }
-            if (!$isArrayA && $isArrayB) {
-                return -1;
+            $result = \is_array($results[$keyA]) <=> \is_array($results[$keyB]);
+            if (0 !== $result) {
+                return $result;
             }
 
             return $keyA <=> $keyB;

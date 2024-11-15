@@ -55,10 +55,11 @@
 {# body #}
 {% block card_body %}
 {% if id %}
+    {% set country_name = current.sys.country_name|default(current.sys.country) %}
     <div class="d-flex-wrap">
         <div class="me-auto">
             <h2>
-                <span class="flag-emoji mx-1" title="{{ current.sys.country_name }}">{{ current.sys.country|flag_emoji }}</span>{{- current.name }}, {{ current.sys.country_name -}}
+                <span class="flag-emoji mx-1" title="{{ country_name }}">{{ current.sys.country|flag_emoji }}</span>{{- current.name }}, {{ country_name -}}
             </h2>
             <h3 class="fw-normal">
                 <img src="{{ current.weather.icon_big }}" class="ow-image ow-image-title" alt="{{ 'openweather.fields.current_weather'|trans }}" title="{{ current.weather.description }}">{{ value_temp(current.main.temp, units_temp) }}, {{ current.weather.description }}

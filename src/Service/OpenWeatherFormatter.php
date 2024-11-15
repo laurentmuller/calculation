@@ -14,27 +14,29 @@ namespace App\Service;
 
 use App\Utils\FormatUtils;
 use Symfony\Component\Intl\Countries;
-use Symfony\Component\Intl\Exception\MissingResourceException;
 
 /**
  * Service to format and update openweather results.
  */
 class OpenWeatherFormatter
 {
-    /**
-     * The country flag URL.
-     */
-    private const COUNTRY_URL = 'https://openweathermap.org/images/flags/{0}.png';
+    // date formats
+    private const DATE_FORMATS = [
+        'date' => [\IntlDateFormatter::SHORT, \IntlDateFormatter::NONE],
+        'time' => [\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT],
+        'date_time' => [\IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT],
+        'date_time_medium' => [\IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT],
+        'date_time_long' => [\IntlDateFormatter::LONG, \IntlDateFormatter::SHORT],
+    ];
 
-    /**
-     * The big icon URL.
-     */
-    private const ICON_BIG_URL = 'https://openweathermap.org/img/wn/{0}@4x.png';
+    // the country flag URL
+    private const URL_COUNTRY = 'https://openweathermap.org/images/flags/%s.png';
 
-    /**
-     * The small icon URL.
-     */
-    private const ICON_SMALL_URL = 'https://openweathermap.org/img/wn/{0}@2x.png';
+    // the big icon URL
+    private const URL_ICON_BIG = 'https://openweathermap.org/img/wn/%s@4x.png';
+
+    // the small icon URL
+    private const URL_ICON_SMALL = 'https://openweathermap.org/img/wn/%s@2x.png';
 
     public function __construct(private readonly PositionService $service)
     {
@@ -60,7 +62,7 @@ class OpenWeatherFormatter
                     $this->updateDescription($result);
                     break;
                 case 'country':
-                    $this->updateCountry($results);
+                    $this->updateCountry($results, (string) $results[$key]);
                     break;
                 case 'dt':
                     $this->updateDate($results, (int) $result, $timezone);
@@ -93,15 +95,11 @@ class OpenWeatherFormatter
     }
 
     /**
-     * Gets the country name from the alpha2 code.
+     * @psalm-param array<int<-1,3>> $types
      */
-    private function getCountryName(string $country): string
+    private function formatDate(int $date, array $types, ?\DateTimeZone $timezone = null): string
     {
-        try {
-            return Countries::getName($country);
-        } catch (MissingResourceException) {
-            return '';
-        }
+        return FormatUtils::formatDateTime($date, $types[0], $types[1], timezone: $timezone);
     }
 
     private function getLatitude(array $result): ?float
@@ -116,11 +114,6 @@ class OpenWeatherFormatter
         return $result['lon'] ?? $result['longitude'] ?? null;
     }
 
-    private function replaceUrl(string $url, string $value): string
-    {
-        return \str_replace('{0}', $value, $url);
-    }
-
     /**
      * Update the latitude and longitude.
      */
@@ -131,33 +124,24 @@ class OpenWeatherFormatter
         if (null === $lat || null === $lon) {
             return;
         }
-
-        $result['lat_dms'] = $this->service->formatLatitude($lat);
-        $result['lon_dms'] = $this->service->formatLongitude($lon);
         $result['lat_lon_dms'] = $this->service->formatPosition($lat, $lon);
         $result['lat_lon_url'] = $this->service->getGoogleMapUrl($lat, $lon);
     }
 
-    private function updateCountry(array &$result): void
+    private function updateCountry(array &$result, string $country): void
     {
-        /** @psalm-var string $country */
-        $country = $result['country'];
-        $result['country_name'] = $this->getCountryName($country);
-        $result['country_flag'] = $this->replaceUrl(\strtolower($country), self::COUNTRY_URL);
+        if (Countries::exists($country)) {
+            $result['country_name'] = Countries::getName($country);
+            $result['country_flag'] = $this->updateUrl(self::URL_COUNTRY, \strtolower($country));
+        }
     }
 
     private function updateDate(array &$result, int $date, ?\DateTimeZone $timezone = null): void
     {
-        $result['dt_date'] = FormatUtils::formatDate($date, \IntlDateFormatter::SHORT);
-        $result['dt_date_locale'] = FormatUtils::formatDate($date, \IntlDateFormatter::SHORT, timezone: $timezone);
-        $result['dt_time'] = FormatUtils::formatTime($date, \IntlDateFormatter::SHORT);
-        $result['dt_time_locale'] = FormatUtils::formatTime($date, \IntlDateFormatter::SHORT, timezone: $timezone);
-        $result['dt_date_time'] = FormatUtils::formatDateTime($date, \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT);
-        $result['dt_date_time_locale'] = FormatUtils::formatDateTime($date, \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT, timezone: $timezone);
-        $result['dt_date_time_medium'] = FormatUtils::formatDateTime($date, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT);
-        $result['dt_date_time_medium_locale'] = FormatUtils::formatDateTime($date, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT, timezone: $timezone);
-        $result['dt_date_time_long'] = FormatUtils::formatDateTime($date, \IntlDateFormatter::LONG, \IntlDateFormatter::SHORT);
-        $result['dt_date_time_long_locale'] = FormatUtils::formatDateTime($date, \IntlDateFormatter::LONG, \IntlDateFormatter::SHORT, timezone: $timezone);
+        foreach (self::DATE_FORMATS as $key => $types) {
+            $result['dt_' . $key] = $this->formatDate($date, $types);
+            $result['dt_' . $key . '_locale'] = $this->formatDate($date, $types, $timezone);
+        }
         unset($result['dt_txt']);
     }
 
@@ -169,15 +153,15 @@ class OpenWeatherFormatter
 
     private function updateDescription(mixed &$result): void
     {
-        if (\is_string($result)) {
+        if (\is_string($result) && '' !== $result) {
             $result = \ucfirst($result);
         }
     }
 
     private function updateIcon(array &$result, string $icon): void
     {
-        $result['icon_big'] = $this->replaceUrl(self::ICON_BIG_URL, $icon);
-        $result['icon_small'] = $this->replaceUrl(self::ICON_SMALL_URL, $icon);
+        $result['icon_big'] = $this->updateUrl(self::URL_ICON_BIG, $icon);
+        $result['icon_small'] = $this->updateUrl(self::URL_ICON_SMALL, $icon);
     }
 
     private function updateLatitude(array &$result, float $latitude): void
@@ -192,12 +176,12 @@ class OpenWeatherFormatter
 
     private function updateSunrise(array &$result, int $date, ?\DateTimeZone $timezone = null): void
     {
-        $result['sunrise_formatted'] = FormatUtils::formatTime($date, \IntlDateFormatter::SHORT, timezone: $timezone);
+        $result['sunrise_formatted'] = $this->formatDate($date, self::DATE_FORMATS['time'], $timezone);
     }
 
     private function updateSunset(array &$result, int $date, ?\DateTimeZone $timezone = null): void
     {
-        $result['sunset_formatted'] = FormatUtils::formatTime($date, \IntlDateFormatter::SHORT, timezone: $timezone);
+        $result['sunset_formatted'] = $this->formatDate($date, self::DATE_FORMATS['time'], $timezone);
     }
 
     private function updateTimezone(array &$result, ?\DateTimeZone $timezone = null): void
@@ -205,6 +189,11 @@ class OpenWeatherFormatter
         if ($timezone instanceof \DateTimeZone) {
             $result['timezone_name'] = $timezone->getName();
         }
+    }
+
+    private function updateUrl(string $url, string $value): string
+    {
+        return \sprintf($url, $value);
     }
 
     private function updateWeather(mixed &$value): void

@@ -6,7 +6,6 @@
  * -------------- The Application --------------
  */
 const Application = {
-
     /**
      * Initialize application.
      *
@@ -28,7 +27,6 @@ const Application = {
      */
     initDragDrop: function (destroy) {
         'use strict';
-
         const that = this;
         if (destroy) {
             const $existing = $('#data-table-edit tbody.sortable');
@@ -272,7 +270,6 @@ const Application = {
      */
     updateTotals: function (adjust) {
         'use strict';
-
         const that = this;
         const $form = $('#edit-form');
         const $buttonAdjust = $('.btn-adjust');
@@ -372,7 +369,6 @@ const Application = {
      */
     disable: function (message) {
         'use strict';
-
         $('#edit-form :input, #item_form :input').attr('readonly', 'readonly');
         $(':submit, .btn-adjust, .btn-add-item, #totals-panel, #data-table-edit div.dropdown').fadeOut();
 
@@ -476,7 +472,6 @@ const Application = {
      */
     compareStrings: function (string1, string2) {
         'use strict';
-
         if ($.isUndefined(this.collator)) {
             const lang = $('html').attr('lang') || 'fr-CH';
             this.collator = new Intl.Collator(lang, {sensitivity: 'variant', caseFirst: 'upper'});
@@ -492,7 +487,6 @@ const Application = {
      */
     sortItems: function ($element) {
         'use strict';
-
         // get rows
         const that = this;
         const $tbody = $element.closest('tbody');
@@ -521,7 +515,6 @@ const Application = {
      */
     sortCategories: function ($element) {
         'use strict';
-
         const that = this;
         let $group = $element.closest('.group');
         if ($group.length === 0) {
@@ -549,7 +542,6 @@ const Application = {
      */
     sortGroups: function () {
         'use strict';
-
         const that = this;
         const $groups = that.getGroups();
         if ($groups.length < 2) {
@@ -588,7 +580,6 @@ const Application = {
      */
     sortCalculation: function () {
         'use strict';
-
         const that = this;
         that.sortGroups();
         that.getGroups().each(function () {
@@ -608,7 +599,6 @@ const Application = {
      */
     appendGroup: function (group) {
         'use strict';
-
         // find the next group where to insert this group before
         const that = this;
         let $nextGroup = null;
@@ -651,7 +641,6 @@ const Application = {
      */
     appendCategory: function ($group, category) {
         'use strict';
-
         // find the next category where to insert this category before
         const that = this;
         let $nextCategory = null;
@@ -696,7 +685,6 @@ const Application = {
      */
     showAddItemDialog: function ($source) {
         'use strict';
-
         // reset
         $('.table-edit tr.table-success').removeClass('table-success');
 
@@ -712,7 +700,6 @@ const Application = {
      */
     showAddTaskDialog: function ($source) {
         'use strict';
-
         // reset
         $('.table-edit tr.table-success').removeClass('table-success');
 
@@ -730,7 +717,6 @@ const Application = {
      */
     showEditItemDialog: function ($source) {
         'use strict';
-
         const $row = $source.getParentRow();
         if ($row && $row.length) {
             $row.addClass('table-primary').scrollInViewport();
@@ -746,7 +732,6 @@ const Application = {
      */
     showCopyItemDialog: function ($source) {
         'use strict';
-
         const $row = $source.getParentRow();
         if ($row && $row.length) {
             $row.addClass('table-primary').scrollInViewport();
@@ -762,7 +747,6 @@ const Application = {
      */
     removeGroup: function ($element) {
         'use strict';
-
         const that = this;
         const $head = $element.closest('.group');
         const $elements = $head.add($head.nextUntil('.group'));
@@ -782,7 +766,6 @@ const Application = {
      */
     removeCategory: function ($element) {
         'use strict';
-
         const that = this;
         const $body = $element.closest('tbody');
         const $prev = $body.prev();
@@ -807,7 +790,6 @@ const Application = {
      */
     removeItem: function ($element) {
         'use strict';
-
         // get row and body
         const that = this;
         let $row = $element.getParentRow();
@@ -831,7 +813,6 @@ const Application = {
      */
     onAddItemDialogSubmit: function () {
         'use strict';
-
         // hide dialog
         const dialog = this.getItemDialog().hide();
 
@@ -859,7 +840,6 @@ const Application = {
      */
     onEditItemDialogSubmit: function () {
         'use strict';
-
         // hide dialog
         const dialog = this.getItemDialog().hide();
 
@@ -927,7 +907,6 @@ const Application = {
      */
     onAddTaskDialogSubmit: function () {
         'use strict';
-
         // hide dialog
         /**
          * @type {EditTaskDialog}
@@ -960,8 +939,6 @@ const Application = {
      */
     onEditTaskDialogSubmit: function () {
         'use strict';
-
-        // hide dialog
         this.getTaskDialog().hide();
     },
 
@@ -980,7 +957,6 @@ const Application = {
      */
     onDragStop: function (e) {
         'use strict';
-
         const that = this;
         const $row = $(e.detail.item);
         const origin = e.detail.origin;
@@ -1381,7 +1357,6 @@ const MoveHandler = {
      */
     moveGroupUp: function ($group) {
         'use strict';
-
         const $target = $group.prevAll('.group:first');
         if ($target.length && $target !== $group) {
             return this.moveGroup($group, $target, true);
@@ -1617,33 +1592,38 @@ $(function () {
     $tableEdit.on('click', 'td.text-editable', function () {
         const $cell = $(this);
         $cell.cellEdit({
-            'type': 'number',
-            'required': true,
-            'autoEdit': true,
-            'autoDispose': true,
-            'useNumberFormat': true,
-            'inputClass': 'form-control form-control-sm text-end skip-validation',
-            'attributes': {
-                'inputmode': 'decimal',
-                'scale': '2'
+            type: 'number',
+            required: true,
+            autoEdit: true,
+            autoDispose: true,
+            useNumberFormat: true,
+            inputClass: 'form-control form-control-sm text-end skip-validation',
+            attributes: {
+                inputmode: 'decimal',
+                scale: 2
             },
-            'parser': function (value) {
+            parser: function (value) {
                 return $.parseFloat(value);
             },
-            'formatter': function (value) {
+            formatter: function (value) {
                 return $.formatFloat(value);
             },
-            'onStartEdit': function () {
+            onStartEdit: function () {
                 $.hideDropDownMenus();
                 $cell.removeClass('empty-cell');
             },
-            'onEndEdit': function (oldValue, newValue) {
+            onEndEdit: function (oldValue, newValue) {
                 const $row = $cell.parents('tr');
                 $row.timeoutToggle('table-success');
                 if (oldValue !== newValue) {
                     $row.updateTotal();
                     Application.updateTotals(false);
+                } else {
+                    $('#data-table-edit').updateErrors();
                 }
+            },
+            onCancelEdit: function () {
+                $('#data-table-edit').updateErrors();
             }
         });
     });

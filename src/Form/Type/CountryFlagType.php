@@ -36,21 +36,28 @@ class CountryFlagType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $defaultCode = CountryFlagService::getDefaultCode();
+        $loader = fn (Options $options): ChoiceLoaderInterface => $this->getChoiceLoader($options);
+
         $resolver->setDefaults([
-            'choice_loader' => fn (Options $options): ChoiceLoaderInterface => ChoiceList::lazy($this, fn (): array => $this->loadChoices($options)),
             'attr' => ['class' => self::FLAG_CLASS],
-            'preferred_choices' => [$defaultCode],
+            'choice_loader' => $loader,
             'choice_translation_locale' => null,
             'empty_data' => $defaultCode,
+            'preferred_choices' => [$defaultCode],
             'only_flag' => false,
-        ]);
-        $resolver->setAllowedTypes('choice_translation_locale', ['string', 'null']);
-        $resolver->setAllowedTypes('only_flag', 'boolean');
+            'separator' => \str_repeat('-', 53),
+        ])->setAllowedTypes('choice_translation_locale', ['string', 'null'])
+            ->setAllowedTypes('only_flag', 'boolean');
     }
 
     public function getParent(): ?string
     {
         return CountryType::class;
+    }
+
+    private function getChoiceLoader(Options $options): ChoiceLoaderInterface
+    {
+        return ChoiceList::lazy($this, fn (): array => $this->loadChoices($options));
     }
 
     private function loadChoices(Options $options): array

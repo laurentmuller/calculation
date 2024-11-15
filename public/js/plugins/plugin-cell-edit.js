@@ -56,6 +56,10 @@ $(function () {
         // private functions
         // -----------------------------
 
+        /**
+         * Initialize this plugin.
+         * @private
+         */
         _init() {
             const options = this.options;
             this.$target = $(options.target);
@@ -83,6 +87,7 @@ $(function () {
         }
 
         /**
+         * Handle the click event.
          * @param {MouseEvent} [e]
          * @return {CellEdit}
          * @private
@@ -144,6 +149,7 @@ $(function () {
         }
 
         /**
+         * Handle the blur event.
          * @param {KeyboardEvent} [e]
          * @return {CellEdit}
          * @private
@@ -152,6 +158,10 @@ $(function () {
             return this._cancel(e, true);
         }
 
+        /**
+         * Handle the input event.
+         * @private
+         */
         _input() {
             const options = this.options;
             const required = options.required;
@@ -193,6 +203,7 @@ $(function () {
         }
 
         /**
+         * Update the value.
          * @param {KeyboardEvent} [e]
          * @return {CellEdit}
          * @private
@@ -228,6 +239,7 @@ $(function () {
         }
 
         /**
+         * Cancel edition.
          * @param {KeyboardEvent} [e]
          * @param {boolean} notify
          * @return {CellEdit}
@@ -261,6 +273,12 @@ $(function () {
             return this;
         }
 
+        /**
+         * Parse the given value.
+         * @param {string} value
+         * @return {string}
+         * @private
+         */
         _parse(value) {
             if (this.options.parser) {
                 return this.options.parser(value);
@@ -268,6 +286,12 @@ $(function () {
             return value;
         }
 
+        /**
+         * Format the given value.
+         * @param {string} value
+         * @return {string}
+         * @private
+         */
         _format(value) {
             if (this.options.formatter) {
                 return this.options.formatter(value);
@@ -275,6 +299,12 @@ $(function () {
             return value;
         }
 
+        /**
+         * Check if the given value is function.
+         * @param {*} value
+         * @return {function|boolean}
+         * @private
+         */
         _checkFunction(value) {
             return typeof value === 'function' ? value : false;
         }

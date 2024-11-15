@@ -57,7 +57,7 @@ class OpenWeatherFormatterTest extends TestCase
         self::assertIsString($results['country_name']);
         self::assertIsString($results['country_flag']);
         self::assertSame('Suisse', $results['country_name']);
-        self::assertSame('ch', $results['country_flag']);
+        self::assertSame('https://openweathermap.org/images/flags/ch.png', $results['country_flag']);
     }
 
     public function testUpdateCountryInvalid(): void
@@ -68,12 +68,8 @@ class OpenWeatherFormatterTest extends TestCase
             'country' => 'fake',
         ];
         $this->formatter->update($results);
-        self::assertArrayHasKey('country_name', $results);
-        self::assertArrayHasKey('country_flag', $results);
-        self::assertIsString($results['country_name']);
-        self::assertIsString($results['country_flag']);
-        self::assertSame('', $results['country_name']);
-        self::assertSame('fake', $results['country_flag']);
+        self::assertArrayNotHasKey('country_name', $results);
+        self::assertArrayNotHasKey('country_flag', $results);
     }
 
     public function testUpdateDate(): void
@@ -138,6 +134,7 @@ class OpenWeatherFormatterTest extends TestCase
         ];
         $this->formatter->update($results);
         self::assertArrayHasKey('lat_dms', $results);
+        self::assertIsString($results['lat_dms']);
     }
 
     public function testUpdateLatitude(): void
@@ -147,6 +144,7 @@ class OpenWeatherFormatterTest extends TestCase
         ];
         $this->formatter->update($results);
         self::assertArrayHasKey('lat_dms', $results);
+        self::assertIsString($results['lat_dms']);
     }
 
     public function testUpdateLon(): void
@@ -156,6 +154,7 @@ class OpenWeatherFormatterTest extends TestCase
         ];
         $this->formatter->update($results);
         self::assertArrayHasKey('lon_dms', $results);
+        self::assertIsString($results['lon_dms']);
     }
 
     public function testUpdateLongitude(): void
@@ -165,6 +164,7 @@ class OpenWeatherFormatterTest extends TestCase
         ];
         $this->formatter->update($results);
         self::assertArrayHasKey('lon_dms', $results);
+        self::assertIsString($results['lon_dms']);
     }
 
     public function testUpdateSunrise(): void
@@ -176,6 +176,7 @@ class OpenWeatherFormatterTest extends TestCase
         ];
         $this->formatter->update($results);
         self::assertArrayHasKey('sunrise_formatted', $results);
+        self::assertIsString($results['sunrise_formatted']);
     }
 
     public function testUpdateSunset(): void
@@ -187,6 +188,7 @@ class OpenWeatherFormatterTest extends TestCase
         ];
         $this->formatter->update($results);
         self::assertArrayHasKey('sunset_formatted', $results);
+        self::assertIsString($results['sunset_formatted']);
     }
 
     public function testUpdateTimeZone(): void
@@ -197,6 +199,7 @@ class OpenWeatherFormatterTest extends TestCase
         ];
         $this->formatter->update($results, $timezone);
         self::assertArrayHasKey('timezone_name', $results);
+        self::assertIsString($results['timezone_name']);
     }
 
     public function testUpdateWeather(): void

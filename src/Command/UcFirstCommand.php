@@ -258,7 +258,6 @@ class UcFirstCommand extends Command
      * @phpstan-template T of object
      *
      * @phpstan-param ClassMetadata<T> $metadata
-     * phpstan-ignore missingType.generics
      */
     private function getFields(ClassMetadata $metadata): array
     {

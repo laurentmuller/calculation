@@ -76,7 +76,7 @@ class CountryFlagService
     {
         $flag = $this->getFlag($code, false);
 
-        return $flagOnly ? $flag : \sprintf('%s %s', $flag, $name);
+        return $flagOnly ? $flag : \sprintf('%s %s', $name, $flag);
     }
 
     private function getEmojiChar(string $chr): string

@@ -106,7 +106,9 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     }
 
     /**
-     * @return int<0, max> the number of children
+     * Gets the number of children.
+     *
+     * @return int<0, max>
      */
     public function count(): int
     {

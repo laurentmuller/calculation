@@ -93,5 +93,4 @@ $(function () {
 
     // errors
     $("#data-table-edit").updateErrors();
-
 });

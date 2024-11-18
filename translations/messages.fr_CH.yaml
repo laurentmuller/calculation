@@ -796,7 +796,7 @@ openweather:
     import:
         description: Permet de mettre à jour la liste de recherche des localités.
         file: Fichier d'archive
-        link: Les données peuvent être téléchargées depuis le <a href="%s" target="_blank" rel="noopener noreferrer">répertoire de données</a> de <a href="%s" target="_blank" rel="noopener noreferrer">OpenWeather</a>.
+        link: Les données peuvent être téléchargées depuis le <a href="%sample_url%" target="_blank" rel="noopener noreferrer">répertoire de données</a> de <a href="%site_url%" target="_blank" rel="noopener noreferrer">OpenWeather</a>.
         title: Importer les localités
     result:
         description: Résultats de l'importation.

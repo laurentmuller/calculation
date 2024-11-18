@@ -273,11 +273,7 @@ class OpenWeatherController extends AbstractController
             return $this->render('openweather/import_result.html.twig', $results);
         }
 
-        return $this->render('openweather/import_file.html.twig', [
-            'sample_url' => 'https://bulk.openweathermap.org/sample/',
-            'site_url' => 'https://openweathermap.org/',
-            'form' => $form,
-        ]);
+        return $this->render('openweather/import_query.html.twig', ['form' => $form]);
     }
 
     /**

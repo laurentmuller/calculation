@@ -194,7 +194,7 @@ class UpdateAssetsCommand extends Command
             );
 
             return Command::SUCCESS;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->writeError($e->getMessage());
 
             return Command::FAILURE;
@@ -494,7 +494,7 @@ class UpdateAssetsCommand extends Command
     {
         try {
             return FileUtils::decodeJson($filename);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->writeError($e->getMessage());
             $this->writeError(\sprintf('Unable to decode file "%s".', $filename));
 

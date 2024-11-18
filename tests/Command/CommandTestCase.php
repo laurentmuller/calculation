@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\MissingInputException;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 abstract class CommandTestCase extends KernelTestCase
 {
@@ -33,9 +34,7 @@ abstract class CommandTestCase extends KernelTestCase
         int $statusCode = Command::SUCCESS
     ): string {
         $kernel = self::bootKernel();
-        $application = new Application($kernel);
-        $command = $application->find($name);
-
+        $command = $this->findCommand($kernel, $name);
         $tester = new CommandTester($command);
         $result = $tester->execute($input, $options);
         self::assertSame($statusCode, $result);
@@ -47,6 +46,13 @@ abstract class CommandTestCase extends KernelTestCase
     {
         self::expectException(MissingInputException::class);
         $this->execute($name, $input);
+    }
+
+    protected function findCommand(KernelInterface $kernel, string $name): Command
+    {
+        $application = new Application($kernel);
+
+        return $application->find($name);
     }
 
     /**

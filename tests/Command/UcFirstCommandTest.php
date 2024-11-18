@@ -16,6 +16,7 @@ use App\Entity\Calculation;
 use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\CalculationTrait;
 use Doctrine\ORM\Exception\ORMException;
+use Symfony\Component\Console\Command\Command;
 
 class UcFirstCommandTest extends CommandTestCase
 {
@@ -96,5 +97,34 @@ class UcFirstCommandTest extends CommandTestCase
     {
         $input = ['--field' => 'customer'];
         $this->executeMissingInput(self::COMMAND_NAME, $input);
+    }
+
+    public function testInvalidClassName(): void
+    {
+        $expected = "Unable to find the entity 'fake'.";
+        $input = [
+            '--class' => 'fake',
+            '--dry-run' => true,
+        ];
+        $output = $this->execute(self::COMMAND_NAME, $input, [], Command::INVALID);
+        $this->validate($output, $expected);
+    }
+
+    public function testInvalidFieldName(): void
+    {
+        $expected = "Unable to find the field 'fake' for the 'Calculation' entity.";
+        $input = [
+            '--class' => Calculation::class,
+            '--field' => 'fake',
+            '--dry-run' => true,
+        ];
+        $output = $this->execute(self::COMMAND_NAME, $input, [], Command::INVALID);
+        $this->validate($output, $expected);
+    }
+
+    public function testNotInteractive(): void
+    {
+        $options = ['interactive' => false];
+        $this->execute(self::COMMAND_NAME, [], $options, Command::INVALID);
     }
 }

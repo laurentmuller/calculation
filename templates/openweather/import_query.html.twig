@@ -8,7 +8,11 @@
 {# body #}
 {% block card_body %}
 {{ parent() }}
-<p class="mb-0">{{ 'openweather.import.link'|trans|format(sample_url, site_url)|raw }}</p>
+{% set arguments = {
+    '%sample_url%': 'https://bulk.openweathermap.org/sample/',
+    '%site_url%': 'https://openweathermap.org',
+} %}
+<p class="mb-0">{{ 'openweather.import.link'|trans(arguments)|raw }}</p>
 {% endblock %}
 {# stylesheets #}
 {% block stylesheets %}

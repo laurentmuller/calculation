@@ -12,9 +12,11 @@ declare(strict_types=1);
 
 namespace App\Twig\TokenParser;
 
+use App\Twig\Node\CaseNode;
 use App\Twig\Node\SwitchNode;
 use Twig\Error\SyntaxError;
 use Twig\Node\Node;
+use Twig\Node\Nodes;
 use Twig\Token;
 use Twig\TokenParser\AbstractTokenParser;
 
@@ -69,10 +71,7 @@ final class SwitchTokenParser extends AbstractTokenParser
                     }
                     $stream->expect(Token::BLOCK_END_TYPE);
                     $body = $this->parser->subparse(fn (Token $token): bool => $this->isFork($token));
-                    $cases[] = new Node([
-                        'values' => new Node($values),
-                        'body' => $body,
-                    ]);
+                    $cases[] = new CaseNode($values, $body);
                     break;
 
                 case 'default':
@@ -85,10 +84,10 @@ final class SwitchTokenParser extends AbstractTokenParser
                     break;
 
                 default:
-                    throw new SyntaxError(\sprintf('Unexpected end of template. Twig was looking for the following tags "case", "default", or "endswitch" to close the "switch" block started at line %d).', $lineno), -1);
+                    throw new SyntaxError(\sprintf('Unexpected end of template. Twig was looking for the following tags "case", "default", or "endswitch" to close the "switch" block started at line %d).', $lineno));
             }
         }
-        $nodes['cases'] = new Node($cases);
+        $nodes['cases'] = new Nodes($cases);
         $stream->expect(Token::BLOCK_END_TYPE);
 
         return new SwitchNode($nodes, [], $lineno);

@@ -17,5 +17,5 @@
 {{ property('customer.fields.zipCode', item.zipCode) }}
 {{ property('customer.fields.city', item.city) }}
 {{ email(item.email, null, 'customer.fields.email') }}
-{{ externalLink(item.webSite, null, null, 'customer.fields.webSite') }}
+{{ externalLink(href: item.webSite, name: 'customer.fields.webSite') }}
 {% endblock %}

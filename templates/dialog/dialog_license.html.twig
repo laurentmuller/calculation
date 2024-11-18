@@ -11,7 +11,7 @@
                     <i class="fa-solid fa-book-open-reader"></i>
                     <span id="modal-license-title" class="dialog-title">{{ 'about.dialog.title'|trans }}</span>
                 </h5>
-                {{- button_close_modal(true, null, dialog_id) -}}
+                {{- button_close_modal(for_header: true, data_target: dialog_id) -}}
             </div>
             <div class="modal-body">
                 <div class="border pre-scrollable small-scrollbar">
@@ -25,7 +25,7 @@
                         data-clipboard-target="#license-content">
                     {{- 'common.button_copy'|trans -}}
                 </button>
-                {{- button_close_modal(false, null, dialog_id) }}
+                {{- button_close_modal(for_header: false, data_target: dialog_id) }}
             </div>
         </div>
     </div>

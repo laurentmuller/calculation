@@ -32,7 +32,6 @@ class RecaptchaServiceTest extends TestCase
         self::assertNull($service->getLastResponse());
         self::assertSame(0.5, $service->getScoreThreshold());
         self::assertSame(self::SITE_KEY, $service->getSiteKey());
-        self::assertNotNull($service->getTranslator());
     }
 
     public function testSetProperties(): void

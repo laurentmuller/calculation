@@ -8,7 +8,7 @@
         <div class="modal-content{% if not raw_data %} border-danger{% endif %}">
             <div class="modal-header{% if not raw_data %} text-bg-danger{% endif %}">
                 <h5 class="modal-title" id="modal-data-title"><i class="fa-solid fa-code me-1"></i><span class="dialog-title">{{ 'dialog_raw_data.title'|trans }}</span></h5>
-                {{- button_close_modal(true, null, dialog_id) -}}
+                {{- button_close_modal(for_header: true, data_target: dialog_id) -}}
             </div>
             <div class="modal-body">
             {%- if raw_data -%}
@@ -31,7 +31,7 @@
                             data-error="{{ 'common.copy_error'|trans }}"
                             data-clipboard-target="#{{ raw_data_id }}">{{ 'common.button_copy'|trans }}</button>
                 {% endif %}
-                {{- button_close_modal(false, null, dialog_id) }}
+                {{- button_close_modal(for_header: false, data_target: dialog_id) }}
             </div>
         </div>
     </div>

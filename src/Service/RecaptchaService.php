@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Traits\MathTrait;
-use App\Traits\TranslatorTrait;
 use ReCaptcha\ReCaptcha;
 use ReCaptcha\Response;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -26,7 +25,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class RecaptchaService
 {
     use MathTrait;
-    use TranslatorTrait;
 
     public const ERROR_PREFIX = 'recaptcha.';
 
@@ -91,11 +89,6 @@ class RecaptchaService
         return $this->siteKey;
     }
 
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
-    }
-
     /**
      * Sets a timeout, in seconds, to test against the challenge timestamp in <code>verify()</code>.
      */
@@ -135,7 +128,7 @@ class RecaptchaService
      */
     public function translateError(string $id): string
     {
-        return $this->trans(self::ERROR_PREFIX . $id, [], 'validators');
+        return $this->translator->trans(id: self::ERROR_PREFIX . $id, domain: 'validators');
     }
 
     /**

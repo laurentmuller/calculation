@@ -37,7 +37,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><i class="fa-solid fa-image me-1"></i><span class="dialog-title">{{ 'theme.title'|trans }}</span></h5>
-                {{- button_close_modal(true, null, dialog_id) -}}
+                {{- button_close_modal(for_header: true, data_target: dialog_id) -}}
             </div>
             <div class="modal-body mx-3">
                 <span class="form-label mb-3">{{ 'theme.help'|trans }}</span>

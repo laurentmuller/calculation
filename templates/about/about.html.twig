@@ -62,12 +62,12 @@
 {% block body %}
 {{ parent() }}
 <div class="card card-collapse" id="aboutAccordion">
-    {{ _self.card('licence', 'about_licence_pdf', false, 'about_licence_word') }}
-    {{ _self.card('policy', 'about_policy_pdf', false, 'about_policy_word') }}
+    {{ _self.card(id: 'licence', pdf_route: 'about_licence_pdf', word_route: 'about_licence_word') }}
+    {{ _self.card(id: 'policy', pdf_route: 'about_policy_pdf', word_route: 'about_policy_word') }}
     {% if is_admin %}
-        {{ _self.card('symfony', 'about_symfony_pdf', 'about_symfony_excel') }}
-        {{ _self.card('php', 'about_php_pdf', 'about_php_excel') }}
-        {{ _self.card('mysql', 'about_mysql_pdf', 'about_mysql_excel', false) }}
+        {{ _self.card(id: 'symfony', pdf_route: 'about_symfony_pdf', excel_route: 'about_symfony_excel') }}
+        {{ _self.card(id: 'php', pdf_route: 'about_php_pdf', excel_route: 'about_php_excel') }}
+        {{ _self.card(id: 'mysql', pdf_route: 'about_mysql_pdf', excel_route: 'about_mysql_excel') }}
     {% endif %}
 </div>
 <div class="d-flex-wrap-center mt-2 pb-3 d-print-none">

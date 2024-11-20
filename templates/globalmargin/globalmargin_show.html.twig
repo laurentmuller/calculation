@@ -1,6 +1,6 @@
 {% extends 'cards/card_show.html.twig' %}
 {% from 'macros/_properties.html.twig' import property %}
-{% from 'macros/_timestampable.html.twig' import timestampable_properties as properties %}
+{% from 'macros/_timestampable.html.twig' import timestampable_properties %}
 {# parameters #}
 {%- set title = 'globalmargin.show.title' -%}
 {%- set params = route_params(app.request, item) %}
@@ -11,5 +11,5 @@
 {{ property('globalmargin.fields.maximum', item.maximum|amount) }}
 {{ property('globalmargin.fields.delta', item.delta|amount) }}
 {{ property('globalmargin.fields.margin', item.margin|percent) }}
-{{ properties(item) }}
+{{ timestampable_properties(item) }}
 {% endblock %}

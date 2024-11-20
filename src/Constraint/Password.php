@@ -119,9 +119,11 @@ class Password extends Constraint
     }
 
     /**
+     * Gets an option value.
+     *
      * @throws InvalidOptionsException If an invalid option name is given
      */
-    public function __get(string $option): mixed
+    public function getOption(string $option): mixed
     {
         return match ($option) {
             'all' => $this->all,
@@ -135,11 +137,11 @@ class Password extends Constraint
     }
 
     /**
-     * @psalm-param bool|array $value
+     * Sets an option value.
      *
      * @throws InvalidOptionsException If an invalid option name is given
      */
-    public function __set(string $option, mixed $value): void
+    public function setOption(string $option, mixed $value): self
     {
         match ($option) {
             'all' => $this->all = (bool) $value,
@@ -150,5 +152,7 @@ class Password extends Constraint
             'email' => $this->email = (bool) $value,
             default => parent::__set($option, $value),
         };
+
+        return $this;
     }
 }

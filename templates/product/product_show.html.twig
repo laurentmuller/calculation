@@ -1,6 +1,6 @@
 {% extends 'cards/card_show.html.twig' %}
 {% from 'macros/_properties.html.twig' import property %}
-{% from 'macros/_timestampable.html.twig' import timestampable_properties as properties %}
+{% from 'macros/_timestampable.html.twig' import timestampable_properties %}
 {# parameters #}
 {%- set title = 'product.show.title' -%}
 {%- set params = route_params(app.request, item) %}
@@ -16,5 +16,5 @@
 {{ property('product.fields.supplier', item.supplier) }}
 {{ property('product.fields.price', item.price|amount, item.price ? '' : 'text-danger') }}
 {{ property('product.fields.unit', item.unit) }}
-{{ properties(item) }}
+{{ timestampable_properties(item) }}
 {% endblock %}

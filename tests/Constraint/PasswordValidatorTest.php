@@ -14,7 +14,9 @@ namespace App\Tests\Constraint;
 
 use App\Constraint\Password;
 use App\Constraint\PasswordValidator;
+use App\Interfaces\PropertyServiceInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Symfony\Component\Validator\Exception\InvalidOptionsException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 /**
@@ -22,15 +24,6 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
  */
 class PasswordValidatorTest extends ConstraintValidatorTestCase
 {
-    public static function getConstraints(): \Iterator
-    {
-        yield ['case_diff'];
-        yield ['email'];
-        yield ['letters'];
-        yield ['numbers'];
-        yield ['special_char'];
-    }
-
     public static function getInvalidValues(): \Iterator
     {
         yield ['abc', ['case_diff' => true], 'password.case_diff', Password::CASE_DIFF_ERROR];
@@ -41,28 +34,75 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         yield ['123', ['special_char' => true], 'password.special_char', Password::SPECIAL_CHAR_ERROR];
     }
 
+    public static function getOptions(): \Iterator
+    {
+        foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $option) {
+            yield [$option];
+        }
+        yield ['all'];
+    }
+
     public static function getValidValues(): \Iterator
     {
-        yield ['ABC abc', ['case_diff' => true]];
-        yield ['test', ['email' => true]];
-        yield ['abc', ['letters' => true]];
-        yield ['123', ['numbers' => true]];
-        yield ['123@', ['special_char' => true]];
+        yield ['ABC abc', 'case_diff'];
+        yield ['test', 'email'];
+        yield ['abc', 'letters'];
+        yield ['123', 'numbers'];
+        yield ['123@', 'special_char'];
+        yield ['aB123456#*/82568A', 'all'];
     }
 
     public function testAll(): void
     {
-        $constraint = $this->createConstraint(['all' => true]);
+        $options = [
+            'all' => true,
+            'case_diff' => true,
+            'email' => true,
+            'letters' => true,
+            'numbers' => true,
+            'special_char' => true,
+        ];
+        $constraint = $this->createConstraint($options);
         $this->validator->validate('zTp9F??TvRcG?+Z', $constraint);
         self::assertNoViolation();
     }
 
-    #[DataProvider('getConstraints')]
-    public function testEmptyIsValid(string $constraint): void
+    public function testAny(): void
     {
-        $constraint = $this->createConstraint([$constraint => true]);
+        $options = [
+            'all' => false,
+            'case_diff' => true,
+            'email' => true,
+            'letters' => true,
+            'numbers' => true,
+            'special_char' => true,
+        ];
+        $constraint = $this->createConstraint($options);
+        $this->validator->validate('zTp9F??TvRcG?+Z', $constraint);
+        self::assertNoViolation();
+    }
+
+    #[DataProvider('getOptions')]
+    public function testEmptyIsValid(string $option): void
+    {
+        $constraint = $this->createConstraint([$option => true]);
         $this->validator->validate('', $constraint);
         self::assertNoViolation();
+    }
+
+    public function testGetInvalidOptions(): void
+    {
+        self::expectException(InvalidOptionsException::class);
+        $constraint = $this->createConstraint([]);
+        $constraint->getOption('fake');
+    }
+
+    public function testGetSetAllOption(): void
+    {
+        $constraint = $this->createConstraint([]);
+        self::assertFalse($constraint->getOption('all'));
+        $constraint->setOption('all', true);
+        self::assertTrue($constraint->getOption('all'));
     }
 
     /**
@@ -85,21 +125,25 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
             ->assertRaised();
     }
 
-    #[DataProvider('getConstraints')]
-    public function testNullIsValid(string $constraint): void
+    #[DataProvider('getOptions')]
+    public function testNullIsValid(string $option): void
     {
-        $constraint = $this->createConstraint([$constraint => true]);
+        $constraint = $this->createConstraint([$option => true]);
         $this->validator->validate(null, $constraint);
         self::assertNoViolation();
     }
 
-    /**
-     * @param array<string, bool> $options
-     */
-    #[DataProvider('getValidValues')]
-    public function testValid(mixed $value, array $options): void
+    public function testSetInvalidOptions(): void
     {
-        $constraint = $this->createConstraint($options);
+        self::expectException(InvalidOptionsException::class);
+        $constraint = $this->createConstraint([]);
+        $constraint->setOption('fake', 'fake');
+    }
+
+    #[DataProvider('getValidValues')]
+    public function testValid(mixed $value, string $option): void
+    {
+        $constraint = $this->createConstraint([$option => true]);
         $this->validator->validate($value, $constraint);
         self::assertNoViolation();
     }

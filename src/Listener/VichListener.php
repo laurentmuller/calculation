@@ -65,7 +65,7 @@ class VichListener
     }
 
     /**
-     * Remove the small and medium image if applicable.
+     * Remove the medium and the small images.
      *
      * @psalm-api
      */
@@ -78,14 +78,12 @@ class VichListener
         $path = $mapping->getUploadDestination();
         $name = (string) $mapping->getFileName($user);
         $file = new File(FileUtils::buildPath($path, $name), false);
-
-        // delete medium images
         FileUtils::remove($this->buildPath($user, ImageSize::MEDIUM, $file));
         FileUtils::remove($this->buildPath($user, ImageSize::SMALL, $file));
     }
 
     /**
-     * Rename and resize the image if applicable.
+     * Rename and resize the image.
      *
      * @psalm-api
      */

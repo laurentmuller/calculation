@@ -71,9 +71,6 @@ class SecurityController extends AbstractController
         throw new \LogicException('This method should never be reached.');
     }
 
-    /**
-     * @psalm-api
-     */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Get(path: '/logout/success', name: self::SUCCESS_ROUTE)]
     public function logoutSuccess(): RedirectResponse

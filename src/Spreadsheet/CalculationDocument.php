@@ -307,8 +307,8 @@ class CalculationDocument extends AbstractDocument
     private function renderTimestampable(WorksheetDocument $sheet, Calculation $calculation, int $row): void
     {
         $translator = $this->getTranslator();
-        $created = $calculation->getCreatedText($translator);
-        $updated = $calculation->getUpdatedText($translator);
+        $created = $calculation->getCreatedMessage()->trans($translator);
+        $updated = $calculation->getUpdatedMessage()->trans($translator);
         $this->cell($sheet, 1, $row, $created);
         $sheet->mergeContent(2, 5, $row);
         $this->cell(

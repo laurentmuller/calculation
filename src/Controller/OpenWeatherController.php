@@ -199,7 +199,7 @@ class OpenWeatherController extends AbstractController
      * @psalm-api
      */
     #[Get(path: '/api/search', name: 'api_search')]
-    public function apiSearch(Request $request, OpenWeatherSearchService $service, UrlGeneratorInterface $generator): JsonResponse
+    public function apiSearch(Request $request, OpenWeatherSearchService $service): JsonResponse
     {
         try {
             $query = $this->getRequestQuery($request);
@@ -215,14 +215,30 @@ class OpenWeatherController extends AbstractController
                     self::KEY_LATITUDE => $city[self::KEY_LATITUDE],
                     self::KEY_LONGITUDE => $city[self::KEY_LONGITUDE],
                 ];
-                $city['onecall_url'] = $generator->generate('openweather_api_onecall', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
+                $city['onecall_url'] = $this->generateUrl(
+                    'openweather_api_onecall',
+                    $parameters,
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                );
                 $parameters = [
                     self::KEY_UNITS => $units,
                     self::KEY_ID => $city['id'],
                 ];
-                $city['current_url'] = $generator->generate('openweather_api_current', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
-                $city['forecast_url'] = $generator->generate('openweather_api_forecast', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
-                $city['daily_url'] = $generator->generate('openweather_api_daily', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
+                $city['current_url'] = $this->generateUrl(
+                    'openweather_api_current',
+                    $parameters,
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                );
+                $city['forecast_url'] = $this->generateUrl(
+                    'openweather_api_forecast',
+                    $parameters,
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                );
+                $city['daily_url'] = $this->generateUrl(
+                    'openweather_api_daily',
+                    $parameters,
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                );
             }
 
             return $this->json($cities);

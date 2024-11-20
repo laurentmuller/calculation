@@ -13,17 +13,12 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Interfaces\TimestampableInterface;
-use App\Tests\TranslatorMockTrait;
 use App\Traits\TimestampableTrait;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TimestampableTraitTest extends TestCase implements TimestampableInterface
 {
     use TimestampableTrait;
-    use TranslatorMockTrait;
-
-    private TranslatorInterface $translator;
 
     public function __toString(): string
     {
@@ -36,7 +31,6 @@ class TimestampableTraitTest extends TestCase implements TimestampableInterface
         $this->createdBy = null;
         $this->updatedAt = null;
         $this->updatedBy = null;
-        $this->translator = $this->createMockTranslator();
     }
 
     public function getDisplay(): string
@@ -54,12 +48,18 @@ class TimestampableTraitTest extends TestCase implements TimestampableInterface
         return true;
     }
 
-    public function testCreatedText(): void
+    public function testCreatedMessage(): void
     {
-        $actual = $this->getCreatedText($this->translator);
+        $message = $this->getCreatedMessage();
+        $actual = $message->getMessage();
         self::assertSame('common.entity_created', $actual);
 
-        $actual = $this->getCreatedText($this->translator, true);
+        $actual = $message->getParameters();
+        self::assertCount(2, $actual);
+        self::assertArrayHasKey('%date%', $actual);
+        self::assertArrayHasKey('%user%', $actual);
+
+        $actual = $this->getCreatedMessage(true)->getMessage();
         self::assertSame('common.entity_created_short', $actual);
     }
 
@@ -71,12 +71,18 @@ class TimestampableTraitTest extends TestCase implements TimestampableInterface
         self::assertNull($this->getUpdatedBy());
     }
 
-    public function testUpdatedText(): void
+    public function testUpdatedMessage(): void
     {
-        $actual = $this->getUpdatedText($this->translator);
+        $message = $this->getUpdatedMessage();
+        $actual = $message->getMessage();
         self::assertSame('common.entity_updated', $actual);
 
-        $actual = $this->getUpdatedText($this->translator, true);
+        $actual = $message->getParameters();
+        self::assertCount(2, $actual);
+        self::assertArrayHasKey('%date%', $actual);
+        self::assertArrayHasKey('%user%', $actual);
+
+        $actual = $this->getUpdatedMessage(true)->getMessage();
         self::assertSame('common.entity_updated_short', $actual);
     }
 

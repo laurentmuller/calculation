@@ -1,6 +1,6 @@
 {% extends 'cards/card_show.html.twig' %}
 {% from 'macros/_properties.html.twig' import property %}
-{% from 'macros/_timestampable.html.twig' import timestampable_properties as properties %}
+{% from 'macros/_timestampable.html.twig' import timestampable_properties %}
 {# parameters #}
 {%- set title = 'calculationstate.show.title' -%}
 {%- set params = route_params(app.request, item) %}
@@ -18,5 +18,5 @@
     <td class="w-25">{{ 'calculationstate.fields.color'|trans }}</td>
     <td class="w-75"><span class="state-color border border-secondary" style="background-color: {{ item.color|default('transparent') }};"></span></td>
 </tr>
-{{ properties(item) }}
+{{ timestampable_properties(item) }}
 {% endblock %}

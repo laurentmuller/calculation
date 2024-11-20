@@ -29,7 +29,6 @@ use App\Tests\DatabaseTrait;
 use App\Tests\DateAssertTrait;
 use App\Tests\KernelServiceTestCase;
 use App\Tests\TranslatorMockTrait;
-use App\Utils\StringUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\MockObject\Exception;
@@ -235,8 +234,7 @@ class ApplicationServiceTest extends KernelServiceTestCase
         $service = $this->getApplicationService();
         $actual = $service->getPasswordConstraint();
         foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $option) {
-            $property = StringUtils::unicode($option)->trimPrefix('security_')->toString();
-            self::assertFalse($actual->__get($property));
+            self::assertFalse($actual->getOption($option));
         }
     }
 

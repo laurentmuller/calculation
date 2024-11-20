@@ -130,7 +130,7 @@ class AdminController extends AbstractController
         }
 
         return $this->render('admin/parameters.html.twig', [
-            'options' => PropertyServiceInterface::PASSWORD_OPTIONS,
+            'options' => \array_keys(PropertyServiceInterface::PASSWORD_OPTIONS),
             'form' => $form,
         ]);
     }

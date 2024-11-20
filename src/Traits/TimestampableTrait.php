@@ -17,8 +17,8 @@ use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Trait for class implementing the TimestampableInterface interface.
@@ -63,14 +63,13 @@ trait TimestampableTrait
         return $this->createdBy;
     }
 
-    /**
-     * Gets the formatted text for the created date and username.
-     */
-    public function getCreatedText(TranslatorInterface $translator, bool $short = false): string
+    public function getCreatedMessage(bool $short = false): TranslatableMessage
     {
+        $date = $this->getDateMessage($this->createdAt);
+        $user = $this->getUserMessage($this->createdBy);
         $id = $short ? 'common.entity_created_short' : 'common.entity_created';
 
-        return $this->formatDateAndUser($this->createdAt, $this->createdBy, $translator, $id);
+        return new TranslatableMessage($id, ['%date%' => $date, '%user%' => $user]);
     }
 
     public function getUpdatedAt(): ?\DateTimeInterface
@@ -83,16 +82,18 @@ trait TimestampableTrait
         return $this->updatedBy;
     }
 
-    /**
-     * Gets the formatted text for the updated date and username.
-     */
-    public function getUpdatedText(TranslatorInterface $translator, bool $short = false): string
+    public function getUpdatedMessage(bool $short = false): TranslatableMessage
     {
+        $date = $this->getDateMessage($this->updatedAt);
+        $user = $this->getUserMessage($this->updatedBy);
         $id = $short ? 'common.entity_updated_short' : 'common.entity_updated';
 
-        return $this->formatDateAndUser($this->updatedAt, $this->updatedBy, $translator, $id);
+        return new TranslatableMessage($id, ['%date%' => $date, '%user%' => $user]);
     }
 
+    /**
+     * Update the created and modified date and user.
+     */
     public function updateTimestampable(\DateTimeImmutable $date, string $user): bool
     {
         $changed = false;
@@ -119,13 +120,21 @@ trait TimestampableTrait
         return $changed;
     }
 
-    private function formatDateAndUser(?\DateTimeInterface $date, ?string $user, TranslatorInterface $translator, string $id): string
+    private function getDateMessage(?\DateTimeInterface $date): string|TranslatableMessage
     {
-        $date = $date instanceof \DateTimeInterface ? FormatUtils::formatDateTime($date) : $translator->trans('common.empty_date');
-        if (!StringUtils::isString($user)) {
-            $user = $translator->trans('common.empty_user');
+        if ($date instanceof \DateTimeInterface) {
+            return FormatUtils::formatDateTime($date);
         }
 
-        return $translator->trans($id, ['%date%' => $date, '%user%' => $user]);
+        return new TranslatableMessage('common.empty_date');
+    }
+
+    private function getUserMessage(?string $user): string|TranslatableMessage
+    {
+        if (StringUtils::isString($user)) {
+            return $user;
+        }
+
+        return new TranslatableMessage('common.empty_user');
     }
 }

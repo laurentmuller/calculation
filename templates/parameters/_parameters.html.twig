@@ -27,7 +27,7 @@
     <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" title="{{ 'parameters.action_test'|trans }}" data-bs-toggle="dropdown" aria-expanded="false">
         <span class="visually-hidden">Basculer la liste déroulante</span>
     </button>
-    {% set types = enum('App\\Enums\\FlashType').cases() %}
+    {% set types = enum_cases('App\\Enums\\FlashType') %}
     <ul class="dropdown-menu dropdown-menu-end">
         {% for type in types %}
         <li>

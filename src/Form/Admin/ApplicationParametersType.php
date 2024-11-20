@@ -128,10 +128,10 @@ class ApplicationParametersType extends AbstractParametersType
             ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->addEnumType(StrengthLevel::class);
 
-        foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $option) {
-            $helper->field($option)
-                ->label("password.$option")
-                ->updateAttribute('data-default', $this->getDefaultValue($option))
+        foreach (\array_keys(PropertyServiceInterface::PASSWORD_OPTIONS) as $property) {
+            $helper->field($property)
+                ->label("password.$property")
+                ->updateAttribute('data-default', $this->getDefaultValue($property))
                 ->rowClass('mb-1')
                 ->addCheckboxType();
         }

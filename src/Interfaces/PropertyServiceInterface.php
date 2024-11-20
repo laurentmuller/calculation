@@ -327,14 +327,14 @@ interface PropertyServiceInterface
     public const P_USER_RIGHTS = 'user_rights';
 
     /**
-     * The password options.
+     * The password options where key is the property name and the value is password option name.
      */
     final public const PASSWORD_OPTIONS = [
-        'security_letters',
-        'security_numbers',
-        'security_special_char',
-        'security_case_diff',
-        'security_email',
+        'security_letters' => 'letters',
+        'security_case_diff' => 'case_diff',
+        'security_numbers' => 'numbers',
+        'security_special_char' => 'special_char',
+        'security_email' => 'email',
     ];
 
     /**

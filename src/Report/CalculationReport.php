@@ -226,8 +226,8 @@ class CalculationReport extends AbstractReport
         $this->useCellMargin(function () use ($calculation): void {
             $translator = $this->getTranslator();
             $width = $this->getPrintableWidth() / 2.0;
-            $created = $calculation->getCreatedText($translator);
-            $updated = $calculation->getUpdatedText($translator);
+            $created = $calculation->getCreatedMessage()->trans($translator);
+            $updated = $calculation->getUpdatedMessage()->trans($translator);
             $this->cell(width: $width, text: $created);
             $this->cell(width: $width, text: $updated, align: PdfTextAlignment::RIGHT);
         });

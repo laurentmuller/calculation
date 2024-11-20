@@ -313,25 +313,24 @@ class TestController extends AbstractController
     #[GetPost(path: '/password', name: 'password')]
     public function password(Request $request, CaptchaImageService $service): Response
     {
+        $password = new Password(all: true);
         $options = PropertyServiceInterface::PASSWORD_OPTIONS;
-        $passwordConstraint = new Password(all: true);
-        $strengthConstraint = new Strength(StrengthLevel::MEDIUM);
-        $listener = function (PreSubmitEvent $event) use ($options, $passwordConstraint, $strengthConstraint): void {
+        $strength = new Strength(StrengthLevel::MEDIUM);
+        $listener = function (PreSubmitEvent $event) use ($options, $password, $strength): void {
             /** @psalm-var array $data */
             $data = $event->getData();
-            foreach ($options as $option) {
-                $property = StringUtils::unicode($option)->trimPrefix('security_')->toString();
-                $passwordConstraint->__set($property, (bool) ($data[$option] ?? false));
+            foreach ($options as $property => $option) {
+                $password->setOption($option, (bool) ($data[$property] ?? false));
             }
-            $strength = (int) $data['level'];
-            $strengthConstraint->minimum = StrengthLevel::tryFrom($strength) ?? StrengthLevel::NONE;
+            $level = (int) $data['level'];
+            $strength->minimum = StrengthLevel::tryFrom($level) ?? StrengthLevel::NONE;
         };
         $data = [
             'input' => 'aB123456#*/82568A',
             'level' => StrengthLevel::MEDIUM,
         ];
-        foreach ($options as $option) {
-            $data[$option] = true;
+        foreach (\array_keys($options) as $property) {
+            $data[$property] = true;
         }
         $helper = $this->createFormHelper('password.', $data);
         $helper->listenerPreSubmit($listener);
@@ -345,11 +344,11 @@ class TestController extends AbstractController
             ->maxLength(UserInterface::MAX_USERNAME_LENGTH)
             ->constraints(
                 new Length(min: UserInterface::MIN_PASSWORD_LENGTH, max: UserInterface::MAX_USERNAME_LENGTH),
-                $passwordConstraint,
-                $strengthConstraint
+                $password,
+                $strength
             )->addTextType();
-        foreach ($options as $option) {
-            $helper->field($option)
+        foreach (\array_keys($options) as $property) {
+            $helper->field($property)
                 ->addCheckboxType();
         }
         $helper->field('level')
@@ -370,9 +369,9 @@ class TestController extends AbstractController
             $data = $form->getData();
             $message = $this->trans('password.success');
             $message .= '<ul>';
-            foreach ($options as $option) {
-                if (true === $data[$option]) {
-                    $message .= '<li>' . $this->trans("password.$option") . '</li>';
+            foreach (\array_keys($options) as $property) {
+                if (true === $data[$property]) {
+                    $message .= '<li>' . $this->trans("password.$property") . '</li>';
                 }
             }
             /** @psalm-var StrengthLevel $level */

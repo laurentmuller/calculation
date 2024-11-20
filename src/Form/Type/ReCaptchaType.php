@@ -24,7 +24,6 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -36,10 +35,8 @@ class ReCaptchaType extends AbstractType implements EventSubscriberInterface
 {
     private const RECAPTCHA_URL = 'https://www.google.com/recaptcha/api.js?render=';
 
-    public function __construct(
-        private readonly RecaptchaService $service,
-        private readonly RequestStack $requestStack
-    ) {
+    public function __construct(private readonly RecaptchaService $service)
+    {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -112,12 +109,8 @@ class ReCaptchaType extends AbstractType implements EventSubscriberInterface
     public function onPostSubmit(PostSubmitEvent $event): void
     {
         $form = $event->getForm();
-        $request = $this->getCurrentRequest($form);
-        if (!$request instanceof Request) {
-            return;
-        }
-
         $data = (string) $event->getData();
+        $request = Request::createFromGlobals();
         $this->updateService($form->getConfig());
         $response = $this->service->verify($data, $request);
         if ($response->isSuccess()) {
@@ -130,34 +123,18 @@ class ReCaptchaType extends AbstractType implements EventSubscriberInterface
         }
     }
 
-    /**
-     * @phpstan-param FormInterface<mixed> $form
-     */
-    private function getCurrentRequest(FormInterface $form): Request|false
-    {
-        $request = $this->requestStack->getCurrentRequest();
-        if ($request instanceof Request) {
-            return $request;
-        }
-
-        $error = $this->service->translateError('no-request');
-        $form->addError(new FormError($error));
-
-        return false;
-    }
-
     private function updateService(FormConfigInterface $config): void
     {
         if ($config->hasOption('expectedAction')) {
-            $expectedAction = (string) $config->getOption('expectedAction');
+            $expectedAction = (string) $config->getOption('expectedAction', $this->service->getExpectedAction());
             $this->service->setExpectedAction($expectedAction);
         }
         if ($config->hasOption('scoreThreshold')) {
-            $scoreThreshold = (float) $config->getOption('scoreThreshold');
+            $scoreThreshold = (float) $config->getOption('scoreThreshold', $this->service->getScoreThreshold());
             $this->service->setScoreThreshold($scoreThreshold);
         }
         if ($config->hasOption('challengeTimeout')) {
-            $challengeTimeout = (int) $config->getOption('challengeTimeout');
+            $challengeTimeout = (int) $config->getOption('challengeTimeout', $this->service->getChallengeTimeout());
             $this->service->setChallengeTimeout($challengeTimeout);
         }
     }

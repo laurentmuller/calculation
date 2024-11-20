@@ -29,7 +29,6 @@ use App\Model\Role;
 use App\Repository\GlobalPropertyRepository;
 use App\Traits\MathTrait;
 use App\Traits\PropertyServiceTrait;
-use App\Utils\StringUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -219,8 +218,8 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             self::P_DISPLAY_CAPTCHA => !$this->debug,
         ];
         // password options
-        foreach (self::PASSWORD_OPTIONS as $option) {
-            $properties[$option] = false;
+        foreach (\array_keys(self::PASSWORD_OPTIONS) as $property) {
+            $properties[$property] = false;
         }
 
         return $properties;
@@ -304,9 +303,8 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     public function getPasswordConstraint(): Password
     {
         $contraint = new Password();
-        foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $option) {
-            $property = StringUtils::unicode($option)->trimPrefix('security_')->toString();
-            $contraint->__set($property, $this->getPropertyBoolean($option));
+        foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $property => $option) {
+            $contraint->setOption($option, $this->getPropertyBoolean($property));
         }
 
         return $contraint;
@@ -343,8 +341,8 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
                 self::P_PRODUCT_EDIT => $this->isDefaultEdit(),
             ]
         );
-        foreach (self::PASSWORD_OPTIONS as $option) {
-            $properties[$option] = $this->getPropertyBoolean($option);
+        foreach (\array_keys(self::PASSWORD_OPTIONS) as $property) {
+            $properties[$property] = $this->getPropertyBoolean($property);
         }
 
         return $properties;

@@ -1,6 +1,6 @@
 {% extends 'cards/card_show.html.twig' %}
 {% from 'macros/_properties.html.twig' import property %}
-{% from 'macros/_timestampable.html.twig' import timestampable_properties as properties %}
+{% from 'macros/_timestampable.html.twig' import timestampable_properties %}
 {# parameters #}
 {%- set title = 'group.show.title' -%}
 {%- set params = route_params(app.request, item) -%}
@@ -17,7 +17,7 @@
 {{- property('group.fields.categories', 'counters.categories'|trans({count: item.countCategories})) }}
 {{ property('category.fields.products', 'counters.products'|trans({count: item.countProducts})) }}
 {{ property('category.fields.tasks', 'counters.tasks'|trans({count: item.countTasks})) }}
-{{ properties(item) }}
+{{ timestampable_properties(item) }}
 {% endblock %}
 {# body #}
 {% block card_body %}

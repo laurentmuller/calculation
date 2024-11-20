@@ -191,13 +191,10 @@ class CalculationController extends AbstractEntityController
      * Export a single calculation to a PDF document.
      */
     #[Get(path: '/pdf/{id}', name: 'pdf_id', requirements: self::ID_REQUIREMENT)]
-    public function pdfOne(
-        Calculation $calculation,
-        UrlGeneratorInterface $generator,
-        LoggerInterface $logger
-    ): PdfResponse {
+    public function pdfOne(Calculation $calculation, LoggerInterface $logger): PdfResponse
+    {
         $minMargin = $this->getMinMargin();
-        $qrcode = $this->getQrCode($generator, $calculation);
+        $qrcode = $this->getQrCode($calculation);
         $doc = new CalculationReport($this, $calculation, $minMargin, $qrcode, $logger);
 
         return $this->renderPdfDocument($doc);
@@ -277,13 +274,13 @@ class CalculationController extends AbstractEntityController
     /**
      * Gets the QR-code for the given calculation.
      */
-    private function getQrCode(UrlGeneratorInterface $generator, Calculation $calculation): string
+    private function getQrCode(Calculation $calculation): string
     {
         if (!$this->getUserService()->isQrCode()) {
             return '';
         }
 
-        return $generator->generate(
+        return $this->generateUrl(
             'calculation_show',
             ['id' => $calculation->getId()],
             UrlGeneratorInterface::ABSOLUTE_URL

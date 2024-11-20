@@ -24,6 +24,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -35,8 +36,10 @@ class ReCaptchaType extends AbstractType implements EventSubscriberInterface
 {
     private const RECAPTCHA_URL = 'https://www.google.com/recaptcha/api.js?render=';
 
-    public function __construct(private readonly RecaptchaService $service)
-    {
+    public function __construct(
+        private readonly RecaptchaService $service,
+        private readonly RequestStack $requestStack
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -110,7 +113,14 @@ class ReCaptchaType extends AbstractType implements EventSubscriberInterface
     {
         $form = $event->getForm();
         $data = (string) $event->getData();
-        $request = Request::createFromGlobals();
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request instanceof Request) {
+            $error = $this->service->translateError('no-request');
+            $form->addError(new FormError($error));
+
+            return;
+        }
+
         $this->updateService($form->getConfig());
         $response = $this->service->verify($data, $request);
         if ($response->isSuccess()) {

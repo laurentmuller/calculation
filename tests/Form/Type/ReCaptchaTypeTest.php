@@ -20,12 +20,16 @@ use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReCaptcha\Response;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ReCaptchaTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
     use TranslatorMockTrait;
 
+    private ?Request $request = null;
+    private MockObject&RequestStack $requestStack;
     private MockObject&RecaptchaService $service;
 
     /**
@@ -34,6 +38,8 @@ class ReCaptchaTypeTest extends TypeTestCase
     protected function setUp(): void
     {
         $this->service = $this->createService();
+        $this->request = $this->createMock(Request::class);
+        $this->requestStack = $this->createRequestStack();
         parent::setUp();
     }
 
@@ -67,6 +73,7 @@ class ReCaptchaTypeTest extends TypeTestCase
     {
         $data = 'test';
         $error = 'action-mismatch';
+        $this->setRequest($this->request);
         $this->setResponse($error);
         $this->service->method('translateErrors')
             ->willReturn([$error]);
@@ -81,9 +88,29 @@ class ReCaptchaTypeTest extends TypeTestCase
         self::assertSame($error, $errorForm->getMessage()); // @phpstan-ignore method.notFound
     }
 
+    public function testSubmitNoRequest(): void
+    {
+        $data = 'test';
+        $this->setRequest(null);
+        $this->setResponse();
+
+        $this->service->method('translateError')
+            ->willReturnArgument(0);
+
+        $form = $this->factory->create(ReCaptchaType::class, $data);
+        $form->submit($data);
+        self::assertTrue($form->isSynchronized());
+        self::assertSame($data, $form->getData());
+
+        self::assertCount(1, $form->getErrors());
+        $errorForm = $form->getErrors()[0];
+        self::assertSame('no-request', $errorForm->getMessage()); // @phpstan-ignore method.notFound
+    }
+
     public function testSubmitSuccess(): void
     {
         $data = 'test';
+        $this->setRequest($this->request);
         $this->setResponse();
 
         $form = $this->factory->create(ReCaptchaType::class, $data);
@@ -96,8 +123,16 @@ class ReCaptchaTypeTest extends TypeTestCase
     protected function getPreloadedExtensions(): array
     {
         return [
-            new ReCaptchaType($this->service),
+            new ReCaptchaType($this->service, $this->requestStack),
         ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createRequestStack(): MockObject&RequestStack
+    {
+        return $this->createMock(RequestStack::class);
     }
 
     /**
@@ -110,6 +145,12 @@ class ReCaptchaTypeTest extends TypeTestCase
             ->willReturn('login');
 
         return $service;
+    }
+
+    private function setRequest(?Request $request): void
+    {
+        $this->requestStack->method('getCurrentRequest')
+            ->willReturn($request);
     }
 
     private function setResponse(string $code = ''): void

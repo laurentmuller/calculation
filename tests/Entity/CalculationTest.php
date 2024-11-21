@@ -489,16 +489,7 @@ class CalculationTest extends EntityValidatorTestCase
         self::assertSame(100.0, $calculation->getOverallMarginAmount());
     }
 
-    public function testRemoveGroup(): void
-    {
-        $calculation = new Calculation();
-        self::assertCount(0, $calculation->getGroups());
-        $group = new CalculationGroup();
-        $calculation->removeGroup($group);
-        self::assertCount(0, $calculation->getGroups());
-    }
-
-    public function testRemoveItem(): void
+    public function testRemoveEmptyItems(): void
     {
         $calculation = new Calculation();
         $group = new CalculationGroup();
@@ -511,6 +502,49 @@ class CalculationTest extends EntityValidatorTestCase
         self::assertCount(1, $calculation->getGroups());
 
         $calculation->removeEmptyItems();
+        self::assertCount(0, $calculation->getGroups());
+    }
+
+    public function testRemoveEmptyItemsWithoutCategory(): void
+    {
+        $calculation = new Calculation();
+        $group = new CalculationGroup();
+        $category = new CalculationCategory();
+        $item = new CalculationItem();
+
+        $category->addItem($item);
+        $group->addCategory($category);
+        $calculation->addGroup($group);
+        self::assertCount(1, $calculation->getGroups());
+
+        $item->setCategory(null);
+        $calculation->removeEmptyItems();
+        self::assertCount(1, $calculation->getGroups());
+    }
+
+    public function testRemoveEmptyItemsWithoutGroup(): void
+    {
+        $calculation = new Calculation();
+        $group = new CalculationGroup();
+        $category = new CalculationCategory();
+        $item = new CalculationItem();
+
+        $category->addItem($item);
+        $group->addCategory($category);
+        $calculation->addGroup($group);
+        self::assertCount(1, $calculation->getGroups());
+
+        $category->setGroup(null);
+        $calculation->removeEmptyItems();
+        self::assertCount(1, $calculation->getGroups());
+    }
+
+    public function testRemoveGroup(): void
+    {
+        $calculation = new Calculation();
+        self::assertCount(0, $calculation->getGroups());
+        $group = new CalculationGroup();
+        $calculation->removeGroup($group);
         self::assertCount(0, $calculation->getGroups());
     }
 

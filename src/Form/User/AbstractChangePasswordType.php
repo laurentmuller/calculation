@@ -71,39 +71,33 @@ abstract class AbstractChangePasswordType extends AbstractEntityType
         return \trim($str);
     }
 
-    /**
-     * Conditional validation depending on the check password checkbox.
-     */
     private function validate(?User $user, ExecutionContextInterface $context): void
     {
-        if (!$user instanceof User) {
-            return;
-        }
-
         /** @psalm-var FormInterface<mixed> $root */
         $root = $context->getRoot();
         $form = $root->get('plainPassword');
         $password = (string) $form->getData();
+        $target = $form->get('first');
 
         $constraint = $this->service->getStrengthConstraint();
-        if (!$this->validateConstraint($form, $password, $context, $constraint)) {
+        if (!$this->validateConstraint($context, $constraint, $password, $target)) {
             return;
         }
         $constraint = $this->service->getPasswordConstraint();
-        if (!$this->validateConstraint($form, $password, $context, $constraint)) {
+        if (!$this->validateConstraint($context, $constraint, $password, $target)) {
             return;
         }
         if ((bool) $root->get('checkPassword')->getData()) {
             $constraint = new NotCompromisedPassword();
-            $this->validateConstraint($form, $password, $context, $constraint);
+            $this->validateConstraint($context, $constraint, $password, $target);
         }
     }
 
     private function validateConstraint(
-        FormInterface $form,
-        string $password,
         ExecutionContextInterface $context,
-        Constraint $constraint
+        Constraint $constraint,
+        string $password,
+        FormInterface $target
     ): bool {
         $violations = $context->getValidator()
             ->validate($password, $constraint);
@@ -111,9 +105,8 @@ abstract class AbstractChangePasswordType extends AbstractEntityType
             return true;
         }
 
-        $child = $form->get('first');
         $error = $this->mapViolations($violations);
-        $child->addError(new FormError($error));
+        $target->addError(new FormError($error));
 
         return false;
     }

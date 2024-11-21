@@ -74,6 +74,8 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
                 'second' => 'fake@fake.com',
             ],
         ];
+        $this->score = StrengthLevel::VERY_STRONG;
+        $this->strength = new Strength(StrengthLevel::VERY_WEAK);
         $this->password = new Password(email: true);
         $form = $this->factory->create(UserChangePasswordType::class, new User());
         $form->submit($data, false);

@@ -1103,6 +1103,7 @@ security:
         success: Bienvenue <b>%user_name%</b>. Vous vous êtes connecté à l'application <b>%app_name_version%</b> avec succès.
         error: Le nom de l'utilisateur ou le mot de passe est invalide.
     logout:
+        title: Se déconnecter de l'application
         success: Vous vous êtes déconnecté de l'application <b>%app_name_version%</b> avec succès.
 show:
     name: Nom

@@ -68,7 +68,7 @@ class SimpleEditorType extends AbstractType
         ])->setAllowedTypes('actions', ['array', 'null']);
     }
 
-    public function getParent(): ?string
+    public function getParent(): string
     {
         return HiddenType::class;
     }

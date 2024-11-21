@@ -8,4 +8,10 @@
             {{- 'index.disabled'|trans({'%username%': app.user.userIdentifier})|raw -}}
         </div>
     </div>
+    <hr class="mb-2"/>
+    <div class="d-flex">
+        <a href="{{ logout_path() }}" class="alert-link w-100 text-end" title="{{ 'security.logout.title'|trans }}">
+            <i class="fa-solid fa-sign-out-alt fa-fw me-1"></i>{{ 'index.logout'|trans }}
+        </a>
+    </div>
 </div>

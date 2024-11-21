@@ -14,7 +14,12 @@ namespace App\Tests\Form\Type;
 
 use App\Form\Type\SimpleEditorType;
 use App\Tests\Form\PreloadedExtensionsTrait;
+use PHPUnit\Framework\MockObject\Exception;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SimpleEditorTypeTest extends TypeTestCase
 {
@@ -23,6 +28,32 @@ class SimpleEditorTypeTest extends TypeTestCase
     public function testFormView(): void
     {
         $view = $this->factory->create(SimpleEditorType::class)
+            ->createView();
+        self::assertArrayHasKey('id', $view->vars);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testInvalidJson(): void
+    {
+        $actionsPath = __DIR__ . '/../../Data/json/fontawesome_invalid.json';
+
+        $resolver = new OptionsResolver();
+        $view = $this->createMock(FormView::class);
+        $form = $this->createMock(FormInterface::class);
+        $options = ['required' => false];
+
+        $editor = new SimpleEditorType($actionsPath);
+        $editor->configureOptions($resolver);
+        $editor->buildView($view, $form, $options);
+        self::assertSame(HiddenType::class, $editor->getParent());
+    }
+
+    public function testNoAction(): void
+    {
+        $options = ['actions' => []];
+        $view = $this->factory->create(SimpleEditorType::class, options: $options)
             ->createView();
         self::assertArrayHasKey('id', $view->vars);
     }
@@ -38,8 +69,8 @@ class SimpleEditorTypeTest extends TypeTestCase
 
     protected function getPreloadedExtensions(): array
     {
-        $path = __DIR__ . '/../../../resources/data/simple_editor_actions.json';
+        $actionsPath = __DIR__ . '/../../../resources/data/simple_editor_actions.json';
 
-        return [new SimpleEditorType($path)];
+        return [new SimpleEditorType($actionsPath)];
     }
 }

@@ -91,7 +91,7 @@ abstract class EntityTypeTestCase extends TypeTestCase
             $accessor->setValue($entity, $key, $value);
         }
 
-        /** @psalm-var TEntity */
+        /** @phpstan-var TEntity */
         return $entity;
     }
 

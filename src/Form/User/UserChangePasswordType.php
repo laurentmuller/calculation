@@ -12,33 +12,18 @@ declare(strict_types=1);
 
 namespace App\Form\User;
 
-use App\Entity\User;
-use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
 
 /**
  * Change the user password type.
- *
- * @template-extends AbstractEntityType<User>
  */
-class UserChangePasswordType extends AbstractEntityType
+class UserChangePasswordType extends AbstractChangePasswordType
 {
-    public function __construct()
-    {
-        parent::__construct(User::class);
-    }
-
-    public function getBlockPrefix(): string
-    {
-        return '';
-    }
-
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('username')
             ->updateOption('hidden_input', true)
             ->addPlainType();
-        $helper->field('plainPassword')
-            ->addRepeatPasswordType('user.password.new', 'user.password.new_confirmation');
+        parent::addFormFields($helper);
     }
 }

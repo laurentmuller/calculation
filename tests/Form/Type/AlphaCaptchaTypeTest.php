@@ -73,9 +73,8 @@ class AlphaCaptchaTypeTest extends TypeTestCase
         $alphaCaptcha->method('checkAnswer')
             ->willReturnCallback(fn (): bool => $this->valid);
 
-        $iterable = new \ArrayIterator([$alphaCaptcha]);
         $translator = $this->createMockTranslator();
-        $captchaType = new AlphaCaptchaType($iterable, $translator);
+        $captchaType = new AlphaCaptchaType([$alphaCaptcha], $translator);
         $captchaType->setRequestStack($requestStack);
 
         return [$captchaType];

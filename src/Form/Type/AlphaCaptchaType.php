@@ -91,7 +91,7 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
         ]);
     }
 
-    public function getParent(): ?string
+    public function getParent(): string
     {
         return TextType::class;
     }

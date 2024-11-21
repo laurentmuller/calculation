@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Constraint\Password;
+use App\Constraint\Strength;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
@@ -346,6 +347,13 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         }
 
         return $properties;
+    }
+
+    public function getStrengthConstraint(): Strength
+    {
+        $minimum = $this->getStrengthLevel();
+
+        return new Strength($minimum->value);
     }
 
     /**

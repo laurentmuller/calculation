@@ -30,7 +30,7 @@ abstract class AbstractChoiceType extends AbstractType
         $resolver->setDefault('choices', $this->getChoices());
     }
 
-    public function getParent(): ?string
+    public function getParent(): string
     {
         return ChoiceType::class;
     }

@@ -58,7 +58,7 @@ class CaptchaImageType extends AbstractType
             ->setAllowedTypes('refresh', ['null', 'string']);
     }
 
-    public function getParent(): ?string
+    public function getParent(): string
     {
         return TextType::class;
     }

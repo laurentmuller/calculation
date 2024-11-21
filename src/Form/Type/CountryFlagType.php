@@ -50,7 +50,7 @@ class CountryFlagType extends AbstractType
             ->setAllowedTypes('only_flag', 'boolean');
     }
 
-    public function getParent(): ?string
+    public function getParent(): string
     {
         return CountryType::class;
     }

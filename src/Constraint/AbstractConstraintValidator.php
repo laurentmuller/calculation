@@ -37,7 +37,11 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, $this->className);
         }
 
-        if (null !== $value && !\is_scalar($value) && !$value instanceof \Stringable) {
+        if (null === $value || '' === $value) {
+            return;
+        }
+
+        if (!\is_scalar($value) && !$value instanceof \Stringable) {
             throw new UnexpectedValueException($value, 'string');
         }
 

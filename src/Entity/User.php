@@ -343,21 +343,24 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     /**
      * A visual identifier that represents this user.
      *
+     * @return non-empty-string
+     *
      * @see UserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->username;
+        return $this->getUsername();
     }
 
     /**
      * Gets username.
      *
-     * @psalm-api
+     * @return non-empty-string
      */
     public function getUsername(): string
     {
-        return $this->getUserIdentifier();
+        /** @psalm-var non-empty-string */
+        return (string) $this->username;
     }
 
     /**
@@ -489,6 +492,8 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
 
     /**
      * Sets the username.
+     *
+     * @param non-empty-string $username
      */
     public function setUsername(string $username): self
     {

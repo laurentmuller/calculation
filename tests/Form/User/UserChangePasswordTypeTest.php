@@ -12,12 +12,24 @@ declare(strict_types=1);
 
 namespace App\Tests\Form\User;
 
+use App\Constraint\Password;
+use App\Constraint\Strength;
+use App\Constraint\StrengthValidator;
 use App\Entity\User;
+use App\Enums\StrengthLevel;
 use App\Form\Type\PlainType;
 use App\Form\User\UserChangePasswordType;
+use App\Service\ApplicationService;
+use App\Tests\Form\CustomConstraintValidatorFactory;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\TranslatorMockTrait;
+use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use PHPUnit\Framework\MockObject\Exception;
+use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
+use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
+use Symfony\Component\Validator\Validation;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use ZxcvbnPhp\Zxcvbn;
 
 /**
  * @extends EntityTypeTestCase<User, UserChangePasswordType>
@@ -26,6 +38,80 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
 {
     use PasswordHasherExtensionTrait;
     use TranslatorMockTrait;
+    use TranslatorMockTrait;
+    use ValidatorExtensionTrait;
+
+    private Password $password;
+    private StrengthLevel $score;
+    private ApplicationService $service;
+    private Strength $strength;
+    private TranslatorInterface $translator;
+
+    /**
+     * @throws Exception
+     */
+    protected function setUp(): void
+    {
+        $this->password = new Password();
+        $this->score = StrengthLevel::VERY_WEAK;
+        $this->strength = new Strength(StrengthLevel::WEAK);
+        $this->translator = $this->createMockTranslator();
+
+        $this->service = $this->createMock(ApplicationService::class);
+        $this->service->method('getPasswordConstraint')
+            ->willReturnCallback(fn (): Password => $this->password);
+        $this->service->method('getStrengthConstraint')
+            ->willReturnCallback(fn (): Strength => $this->strength);
+
+        parent::setUp();
+    }
+
+    public function testPasswordEmail(): void
+    {
+        $data = [
+            'plainPassword' => [
+                'first' => 'fake@fake.com',
+                'second' => 'fake@fake.com',
+            ],
+        ];
+        $this->password = new Password(email: true);
+        $form = $this->factory->create(UserChangePasswordType::class, new User());
+        $form->submit($data, false);
+        self::assertTrue($form->isSubmitted());
+        self::assertTrue($form->isSynchronized());
+    }
+
+    public function testStrengthInvalid(): void
+    {
+        $data = [
+            'plainPassword' => [
+                'first' => '187@*QWWék',
+                'second' => '187@*QWWék',
+            ],
+        ];
+        $this->score = StrengthLevel::VERY_WEAK;
+        $this->strength = new Strength(StrengthLevel::VERY_STRONG);
+        $form = $this->factory->create(UserChangePasswordType::class, new User());
+        $form->submit($data);
+        self::assertTrue($form->isSubmitted());
+        self::assertTrue($form->isSynchronized());
+    }
+
+    public function testStrengthValid(): void
+    {
+        $data = [
+            'plainPassword' => [
+                'first' => '187@*QWWék',
+                'second' => '187@*QWWék',
+            ],
+        ];
+        $this->score = StrengthLevel::VERY_STRONG;
+        $this->strength = new Strength(StrengthLevel::VERY_WEAK);
+        $form = $this->factory->create(UserChangePasswordType::class, new User());
+        $form->submit($data, false);
+        self::assertTrue($form->isSubmitted());
+        self::assertTrue($form->isSynchronized());
+    }
 
     protected function getData(): array
     {
@@ -44,7 +130,10 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
      */
     protected function getExtensions(): array
     {
-        return \array_merge(parent::getExtensions(), [$this->getPasswordHasherExtension()]);
+        return \array_merge(parent::getExtensions(), [
+            $this->getPasswordHasherExtension(),
+            $this->getValidatorExtension(),
+        ]);
     }
 
     protected function getFormTypeClass(): string
@@ -55,7 +144,47 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
     protected function getPreloadedExtensions(): array
     {
         return [
-            new PlainType($this->createMockTranslator()),
+            new PlainType($this->translator),
+            new UserChangePasswordType($this->service),
         ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function getValidatorExtension(): ValidatorExtension
+    {
+        $constraints = [
+            Strength::class => $this->getStrengthValidator(),
+        ];
+
+        $validator = Validation::createValidatorBuilder()
+            ->setConstraintValidatorFactory(new CustomConstraintValidatorFactory($constraints))
+            ->getValidator();
+
+        return new ValidatorExtension($validator);
+    }
+
+    private function getScore(): array
+    {
+        return [
+            'score' => $this->score->value,
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getStrengthValidator(): StrengthValidator
+    {
+        $service = $this->createMock(Zxcvbn::class);
+        $service->method('passwordStrength')
+            ->willReturnCallback(fn (): array => $this->getScore());
+
+        $factory = $this->createMock(ZxcvbnFactoryInterface::class);
+        $factory->method('createZxcvbn')
+            ->willReturn($service);
+
+        return new StrengthValidator($this->translator, $factory);
     }
 }

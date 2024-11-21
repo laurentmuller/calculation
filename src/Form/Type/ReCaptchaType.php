@@ -97,7 +97,7 @@ class ReCaptchaType extends AbstractType implements EventSubscriberInterface
         return 'recaptcha';
     }
 
-    public function getParent(): ?string
+    public function getParent(): string
     {
         return HiddenType::class;
     }

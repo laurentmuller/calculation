@@ -67,7 +67,7 @@ class RepeatPasswordType extends AbstractType
         ];
     }
 
-    public function getParent(): ?string
+    public function getParent(): string
     {
         return RepeatedType::class;
     }

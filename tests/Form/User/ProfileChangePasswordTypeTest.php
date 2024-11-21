@@ -12,8 +12,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Form\User;
 
+use App\Constraint\Strength;
 use App\Entity\User;
+use App\Enums\StrengthLevel;
 use App\Form\User\ProfileChangePasswordType;
+use App\Service\ApplicationService;
 use App\Tests\Form\EntityTypeTestCase;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
@@ -25,6 +28,19 @@ class ProfileChangePasswordTypeTest extends EntityTypeTestCase
 {
     use PasswordHasherExtensionTrait;
     use ValidatorExtensionTrait;
+
+    private ApplicationService $service;
+
+    /**
+     * @throws Exception
+     */
+    protected function setUp(): void
+    {
+        $this->service = $this->createMock(ApplicationService::class);
+        $this->service->method('getStrengthConstraint')
+            ->willReturn(new Strength(StrengthLevel::NONE));
+        parent::setUp();
+    }
 
     protected function getData(): array
     {
@@ -52,5 +68,12 @@ class ProfileChangePasswordTypeTest extends EntityTypeTestCase
     protected function getFormTypeClass(): string
     {
         return ProfileChangePasswordType::class;
+    }
+
+    protected function getPreloadedExtensions(): array
+    {
+        return [
+            new ProfileChangePasswordType($this->service),
+        ];
     }
 }

@@ -30,4 +30,4 @@ jobs:
                     token: ${{ secrets.CODECOV_TOKEN }}
                     slug: 'laurentmuller/calculation'
                     disable_search: true
-                    file: ./clover.xml
+                    files: ./clover.xml

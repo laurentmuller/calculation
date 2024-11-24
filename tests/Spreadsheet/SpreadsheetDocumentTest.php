@@ -19,7 +19,6 @@ use App\Tests\TranslatorMockTrait;
 use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SpreadsheetDocumentTest extends TestCase
 {
@@ -35,10 +34,12 @@ class SpreadsheetDocumentTest extends TestCase
     public function testAddExternalSheetSuccess(): void
     {
         $doc1 = $this->createDocument();
-        $doc1->addSheet(new WorksheetDocument(title: 'Fake'));
-        /** @psalm-var WorksheetDocument $sheet */
-        $sheet = $doc1->getSheetByName('Fake');
+        $sheet = $this->createWorksheet();
+        $doc1->addSheet($sheet);
         $clone = clone $sheet;
+        $clone->setTitle('Fake Clone');
+        $doc1->addSheet($clone);
+
         $doc2 = $this->createDocument();
         $actual = $doc2->addExternalSheet($clone);
         self::assertSame($clone, $actual);
@@ -54,7 +55,7 @@ class SpreadsheetDocumentTest extends TestCase
     public function testAddSheetSuccess(): void
     {
         $doc = $this->createDocument();
-        $sheet = new WorksheetDocument(title: 'Fake');
+        $sheet = $this->createWorksheet();
         $actual = $doc->addSheet($sheet);
         self::assertSame($sheet, $actual);
     }
@@ -113,17 +114,15 @@ class SpreadsheetDocumentTest extends TestCase
         $doc->setSubject('subject');
         $doc->setTitle('title');
         $doc->setUserName('user_name');
-
         self::assertSame('title', $doc->getTitle());
-        self::assertInstanceOf(TranslatorInterface::class, $doc->getTranslator());
     }
 
     public function testSetActiveSheetIndexByName(): void
     {
         $doc = $this->createDocument();
-        $doc->addSheet(new WorksheetDocument(title: 'Fake'));
+        $doc->addSheet($this->createWorksheet());
         $actual = $doc->setActiveSheetIndexByName('Fake');
-        self::assertInstanceOf(WorksheetDocument::class, $actual);
+        self::assertSame('Fake', $actual->getTitle());
     }
 
     /**
@@ -141,22 +140,29 @@ class SpreadsheetDocumentTest extends TestCase
 
     public function testSetDescriptionTrans(): void
     {
+        $expected = 'id';
         $doc = $this->createDocument();
-        $doc->setDescriptionTrans('id');
+        $doc->setDescriptionTrans($expected);
         $actual = $doc->getProperties()->getDescription();
-        self::assertSame('id', $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testSetTitleTrans(): void
     {
+        $expected = 'id';
         $doc = $this->createDocument();
-        $doc->setTitleTrans('id');
+        $doc->setTitleTrans($expected);
         $actual = $doc->getTitle();
-        self::assertSame('id', $actual);
+        self::assertSame($expected, $actual);
     }
 
     private function createDocument(): SpreadsheetDocument
     {
         return new SpreadsheetDocument($this->createMockTranslator());
+    }
+
+    private function createWorksheet(string $title = 'Fake'): WorksheetDocument
+    {
+        return new WorksheetDocument(title: $title);
     }
 }

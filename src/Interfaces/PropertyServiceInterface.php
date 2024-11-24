@@ -117,6 +117,11 @@ interface PropertyServiceInterface
     public const P_CACHE_SAVED = 'cache_saved';
 
     /**
+     * The property name to check for compromised password (bool).
+     */
+    final public const P_COMPROMISED_PASSWORD = 'compromised_password';
+
+    /**
      * The property name for the customer address (string).
      */
     final public const P_CUSTOMER_ADDRESS = 'customer_address';

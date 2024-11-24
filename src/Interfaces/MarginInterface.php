@@ -23,12 +23,12 @@ interface MarginInterface
     public function contains(float $value): bool;
 
     /**
-     * Get maximum.
+     * Get the maximum.
      */
     public function getMaximum(): float;
 
     /**
-     * Get minimum.
+     * Get the minimum.
      */
     public function getMinimum(): float;
 }

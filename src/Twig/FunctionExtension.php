@@ -68,7 +68,7 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Output a link style sheet tag with a nonce.
+     * Output a link style sheet tag with an nonce.
      *
      * @param array<string, string|int> $parameters
      */
@@ -152,7 +152,7 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Output a JavaScript source tag with a nonce.
+     * Output a JavaScript source tag with an nonce.
      *
      * @param array<string, string|int> $parameters
      */

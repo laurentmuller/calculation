@@ -213,7 +213,7 @@ class TestController extends AbstractController
     }
 
     /**
-     * Export a HTML page to PDF.
+     * Export an HTML page to PDF.
      */
     #[Get(path: '/pdf', name: 'pdf')]
     public function exportPdf(): PdfResponse

@@ -83,7 +83,7 @@ enum StrengthLevel: int implements EnumSortableInterface, PdfEnumDefaultInterfac
     /**
      * Returns the percentage of this level.
      *
-     * @return int a value between 0 and 100
+     * @return int<0, 100> a value between 0 and 100
      */
     public function percent(): int
     {

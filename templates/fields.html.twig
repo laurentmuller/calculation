@@ -158,9 +158,9 @@
     {%- endif -%}
     {%- set attr = attr|merge({class: (attr.class|default('') ~ ' text-lowercase')|trim}) -%}
     <div class="input-group">
-    <span class="input-group-text py-0 px-1 bg-white">
-        <img id="{{ id }}_image" class="captcha-image" alt="{{ image_title }}" title="{{ image_title }}" src="{{ image }}" width="150" height="30">
-    </span>
+        <span class="input-group-text py-0 px-1 bg-white">
+            <img id="{{ id }}_image" class="captcha-image" alt="{{ image_title }}" title="{{ image_title }}" src="{{ image }}" width="150" height="30">
+        </span>
         {{- block('form_widget_simple') -}}
         {% if refresh|default(false) %}
             <button id="{{ id }}_refresh" name="{{ id }}_refresh" class="btn btn-outline-secondary captcha-refresh" type="button" title="{{ 'captcha.refresh'|trans }}">

@@ -91,7 +91,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
      * @param string $value a value to search within the column or an empty string for all
      * @param int    $limit the maximum number of results to retrieve (the 'limit') or -1 for all
      *
-     * @return array an array, maybe empty; of matching values
+     * @return array an array, maybe empty, of matching values
      */
     public function getDistinctValues(string $field, string $value = '', int $limit = -1): array
     {

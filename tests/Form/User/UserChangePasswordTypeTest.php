@@ -40,6 +40,7 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
     use TranslatorMockTrait;
     use TranslatorMockTrait;
     use ValidatorExtensionTrait;
+    private bool $compromisedPassword = false;
 
     private Password $password;
     private StrengthLevel $score;
@@ -62,8 +63,44 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
             ->willReturnCallback(fn (): Password => $this->password);
         $this->service->method('getStrengthConstraint')
             ->willReturnCallback(fn (): Strength => $this->strength);
+        $this->service->method('isCompromisedPassword')
+            ->willReturnCallback(fn (): bool => $this->compromisedPassword);
 
         parent::setUp();
+    }
+
+    public function testNotCompromisedInvalid(): void
+    {
+        $data = [
+            'plainPassword' => [
+                'first' => 'password',
+                'second' => 'password',
+            ],
+        ];
+        $this->compromisedPassword = true;
+        $this->score = StrengthLevel::VERY_STRONG;
+        $this->strength = new Strength(StrengthLevel::VERY_WEAK);
+        $form = $this->factory->create(UserChangePasswordType::class, new User());
+        $form->submit($data);
+        self::assertTrue($form->isSubmitted());
+        self::assertTrue($form->isSynchronized());
+    }
+
+    public function testNotCompromisedValid(): void
+    {
+        $data = [
+            'plainPassword' => [
+                'first' => '187@*QWWék98(AC248aa',
+                'second' => '187@*QWWék98(AC248aa',
+            ],
+        ];
+        $this->compromisedPassword = true;
+        $this->score = StrengthLevel::VERY_STRONG;
+        $this->strength = new Strength(StrengthLevel::VERY_WEAK);
+        $form = $this->factory->create(UserChangePasswordType::class, new User());
+        $form->submit($data);
+        self::assertTrue($form->isSubmitted());
+        self::assertTrue($form->isSynchronized());
     }
 
     public function testPasswordEmail(): void
@@ -110,7 +147,7 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
         $this->score = StrengthLevel::VERY_STRONG;
         $this->strength = new Strength(StrengthLevel::VERY_WEAK);
         $form = $this->factory->create(UserChangePasswordType::class, new User());
-        $form->submit($data, false);
+        $form->submit($data);
         self::assertTrue($form->isSubmitted());
         self::assertTrue($form->isSynchronized());
     }

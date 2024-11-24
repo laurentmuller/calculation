@@ -77,7 +77,7 @@ $.fn.extend({
 
         // clipboard
         $('#license-modal .btn-copy').copyClipboard({
-            title: $('.card-title:first').text(),
+            title: $('#modal-license-title').text(),
             copySuccess: function (e) {
                 $(e.trigger).parents('#license-modal').modal('hide');
             },

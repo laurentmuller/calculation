@@ -97,7 +97,7 @@ class ProductProvider extends EntityProvider
     }
 
     /**
-     * Returns if the given product's description exist.
+     * Returns if the given product's description exists.
      *
      * @psalm-api
      */

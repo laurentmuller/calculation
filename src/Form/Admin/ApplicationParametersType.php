@@ -135,5 +135,12 @@ class ApplicationParametersType extends AbstractParametersType
                 ->rowClass('mb-1')
                 ->addCheckboxType();
         }
+
+        $key = PropertyServiceInterface::P_COMPROMISED_PASSWORD;
+        $helper->field($key)
+            ->label('password.security_compromised_password')
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
+            ->rowClass('mb-1')
+            ->addCheckboxType();
     }
 }

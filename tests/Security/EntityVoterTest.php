@@ -22,12 +22,16 @@ use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 class EntityVoterTest extends TestCase
 {
+    private MockObject&ApplicationService $application;
+    private RoleBuilderService $builder;
     private EntityVoter $voter;
 
     /**
@@ -35,14 +39,17 @@ class EntityVoterTest extends TestCase
      */
     protected function setUp(): void
     {
-        $builder = new RoleBuilderService();
-        $service = $this->createMock(ApplicationService::class);
-        $service->method('getAdminRights')
-            ->willReturn($builder->getRoleAdmin()->getRights());
-        $service->method('getUserRights')
-            ->willReturn($builder->getRoleUser()->getRights());
+        $this->builder = new RoleBuilderService();
+        $adminRights = $this->builder->getRoleAdmin()->getRights();
+        $userRights = $this->builder->getRoleUser()->getRights();
 
-        $this->voter = new EntityVoter($service);
+        $this->application = $this->createMock(ApplicationService::class);
+        $this->application->method('getAdminRights')
+            ->willReturn($adminRights);
+        $this->application->method('getUserRights')
+            ->willReturn($userRights);
+
+        $this->voter = new EntityVoter($this->application);
     }
 
     public static function getSupportsAttribute(): \Iterator
@@ -73,8 +80,7 @@ class EntityVoterTest extends TestCase
 
     public function testAdmin(): void
     {
-        $builder = new RoleBuilderService();
-        $role = $builder->getRoleAdmin();
+        $role = $this->builder->getRoleAdmin();
         $user = $this->getAdminUser()
             ->setRights($role->getRights());
 
@@ -86,8 +92,7 @@ class EntityVoterTest extends TestCase
 
     public function testAdminOverwrite(): void
     {
-        $builder = new RoleBuilderService();
-        $role = $builder->getRoleAdmin();
+        $role = $this->builder->getRoleAdmin();
         $user = $this->getAdminUser()
             ->setRights($role->getRights())
             ->setOverwrite(true);
@@ -139,8 +144,7 @@ class EntityVoterTest extends TestCase
 
     public function testUser(): void
     {
-        $builder = new RoleBuilderService();
-        $role = $builder->getRoleUser();
+        $role = $this->builder->getRoleUser();
         $user = $this->getDefaultUser()
             ->setRights($role->getRights());
 
@@ -150,19 +154,16 @@ class EntityVoterTest extends TestCase
         $this->assertVote($user, $subject, $attribute, $expected);
     }
 
-    /**
-     * @throws \ReflectionException
-     *
-     * @psalm-suppress UnusedMethodCall
-     */
     public function testVoteOnAttribute(): void
     {
-        $class = new \ReflectionClass($this->voter);
-        $method = $class->getMethod('voteOnAttribute');
-        $method->setAccessible(true);
+        $voter = new class($this->application) extends EntityVoter {
+            public function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+            {
+                return parent::voteOnAttribute($attribute, $subject, $token);
+            }
+        };
 
-        $builder = new RoleBuilderService();
-        $role = $builder->getRoleUser();
+        $role = $this->builder->getRoleUser();
         $user = $this->getDefaultUser()
             ->setRights($role->getRights());
         $token = $this->getUserToken($user);
@@ -172,8 +173,7 @@ class EntityVoterTest extends TestCase
             EntityName::CALCULATION->name,
             $token,
         ];
-        /** @psalm-var bool $actual */
-        $actual = $method->invoke($this->voter, ...$args);
+        $actual = $voter->voteOnAttribute(...$args);
         self::assertFalse($actual);
 
         $args = [
@@ -181,8 +181,7 @@ class EntityVoterTest extends TestCase
             'fake',
             $token,
         ];
-        /** @psalm-var bool $actual */
-        $actual = $method->invoke($this->voter, ...$args);
+        $actual = $voter->voteOnAttribute(...$args);
         self::assertFalse($actual);
     }
 

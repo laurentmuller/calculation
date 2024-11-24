@@ -20,7 +20,7 @@ namespace App\Faker;
  * @method int                          categoriesCount()                                       Gets the number of categories.
  * @method \App\Entity\Product          product()                                               Gets a random product.
  * @method int                          productsCount()                                         Gets the number of products.
- * @method bool                         productExist(string $description)                       Returns if the given product's description exist.
+ * @method bool                         productExist(string $description)                       Returns if the given product's description exists.
  * @method string                       productName()                                           Gets a random product's name.
  * @method \App\Entity\Product[]        products(int $count = 1, bool $allowDuplicates = false) Gets random products.
  * @method string|null                  productSupplier()                                       Gets a random product's supplier.

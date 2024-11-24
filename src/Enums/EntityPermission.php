@@ -14,6 +14,7 @@ namespace App\Enums;
 
 use App\Interfaces\EnumConstantsInterface;
 use App\Interfaces\EnumSortableInterface;
+use App\Utils\StringUtils;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
@@ -153,6 +154,6 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
 
     private function match(string $name): bool
     {
-        return 0 === \strcasecmp($name, $this->name);
+        return StringUtils::equalIgnoreCase($name, $this->name);
     }
 }

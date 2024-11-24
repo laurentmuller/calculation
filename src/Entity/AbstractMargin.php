@@ -101,7 +101,7 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
     }
 
     /**
-     * Set maximum.
+     * Set the maximum.
      */
     public function setMaximum(float $maximum): static
     {
@@ -111,7 +111,7 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
     }
 
     /**
-     * Set minimum.
+     * Set the minimum.
      */
     public function setMinimum(float $minimum): static
     {

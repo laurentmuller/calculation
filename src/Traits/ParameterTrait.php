@@ -15,7 +15,7 @@ namespace App\Traits;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Trait to get values from cookie and/or request.
+ * Trait to get values from a cookie and/or a request.
  */
 trait ParameterTrait
 {

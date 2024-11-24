@@ -16,7 +16,7 @@ use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
 use App\Utils\StringUtils;
 
 /**
- * Define a RGB color.
+ * Define an RGB color.
  */
 abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
 {

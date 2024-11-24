@@ -44,7 +44,7 @@ enum Importance: string implements EnumSortableInterface, PdfEnumDefaultInterfac
     case LOW = 'low';
 
     /**
-     * Medium  importance.
+     * Medium importance.
      */
     case MEDIUM = 'medium';
 

@@ -29,7 +29,7 @@ use PhpOffice\PhpWord\SimpleType\Jc;
  * <li>The phone, the fax and the email at the right if applicable.</li>
  * </ul>
  *
- * Do nothing if the document's title and the customer's name are empty.
+ * Do nothing if both the document's title and the customer's name are empty.
  */
 class WordHeader extends AbstractHeaderFooter
 {

@@ -90,14 +90,14 @@ trait RequestTrait
 
     private function getRequestBag(Request $request, string $key): ?ParameterBag
     {
-        if ($request->attributes->has($key)) {
-            return $request->attributes;
-        }
         if ($request->query->has($key)) {
             return $request->query;
         }
         if ($request->request->has($key)) {
             return $request->request;
+        }
+        if ($request->attributes->has($key)) {
+            return $request->attributes;
         }
 
         return null;

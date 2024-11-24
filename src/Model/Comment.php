@@ -120,7 +120,7 @@ class Comment
     /**
      * Returns if this is an email or a comment.
      *
-     * @return bool true if email, false if comment
+     * @return bool true if is an email, false if is a comment
      */
     public function isMail(): bool
     {

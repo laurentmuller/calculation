@@ -56,7 +56,7 @@ abstract class AbstractChangePasswordType extends AbstractEntityType
             ->addRepeatPasswordType('user.password.new', 'user.password.new_confirmation');
         $helper->field('checkPassword')
             ->label('user.change_password.check_password')
-            ->updateOption('data', true)
+            ->updateOption('data', $this->service->isCompromisedPassword())
             ->notMapped()
             ->addCheckboxType();
     }

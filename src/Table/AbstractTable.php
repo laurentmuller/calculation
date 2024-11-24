@@ -202,11 +202,12 @@ abstract class AbstractTable implements SortModeInterface
         if ($query->callback) {
             return;
         }
+
         $results->columns = $this->getColumns();
         $results->attributes = \array_merge([
             'total-rows' => $results->filtered,
             'total-not-filtered' => $results->totalNotFiltered,
-            'page-list' => $this->implodePageList($results->pageList),
+            'page-list' => \json_encode($results->pageList),
         ], $query->attributes(), $results->attributes);
     }
 
@@ -225,16 +226,6 @@ abstract class AbstractTable implements SortModeInterface
 
         /** @psalm-var non-empty-array<int, Column> */
         return $columns;
-    }
-
-    /**
-     * Implode the given page list.
-     *
-     * @param int[] $pageList the page list
-     */
-    private function implodePageList(array $pageList): string
-    {
-        return '[' . \implode(',', $pageList) . ']';
     }
 
     /**

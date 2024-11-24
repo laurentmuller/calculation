@@ -335,7 +335,7 @@ class PivotTableFactory
     }
 
     /**
-     * Find or create node and update value.
+     * Find or create a node and update value.
      *
      * @param PivotField[] $fields
      */

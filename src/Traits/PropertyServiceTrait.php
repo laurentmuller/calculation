@@ -88,7 +88,7 @@ trait PropertyServiceTrait
     public function setContainer(ContainerInterface $container): ?ContainerInterface
     {
         $result = $this->setContainerFromTrait($container);
-        if ($result instanceof ContainerInterface && !$this->getPropertyBoolean(self::P_CACHE_SAVED)) {
+        if (!$this->getPropertyBoolean(self::P_CACHE_SAVED)) {
             $this->updateAdapter();
         }
 

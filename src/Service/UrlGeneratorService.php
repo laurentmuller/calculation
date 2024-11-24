@@ -163,10 +163,10 @@ class UrlGeneratorService
     {
         /** @psalm-var string|null $caller */
         $caller = $params[self::PARAM_CALLER] ?? null;
-        if (StringUtils::isString($caller)) {
-            return ('/' === $caller) ? $caller : \rtrim($caller, '/');
+        if (!StringUtils::isString($caller)) {
+            return null;
         }
 
-        return null;
+        return '/' === $caller ? $caller : \rtrim($caller, '/');
     }
 }

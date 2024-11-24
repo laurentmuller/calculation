@@ -217,6 +217,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             // security
             self::P_STRENGTH_LEVEL => StrengthLevel::NONE,
             self::P_DISPLAY_CAPTCHA => !$this->debug,
+            self::P_COMPROMISED_PASSWORD => false,
         ];
         // password options
         foreach (\array_keys(self::PASSWORD_OPTIONS) as $property) {
@@ -332,6 +333,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
                 // security
                 self::P_DISPLAY_CAPTCHA => $this->isDisplayCaptcha(),
                 self::P_STRENGTH_LEVEL => $this->getStrengthLevel(),
+                self::P_COMPROMISED_PASSWORD => $this->isCompromisedPassword(),
                 // default state, category and margin
                 self::P_DEFAULT_STATE => $this->getDefaultState(),
                 self::P_DEFAULT_CATEGORY => $this->getDefaultCategory(),
@@ -384,6 +386,14 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         $role->setRights($rights);
 
         return $role;
+    }
+
+    /**
+     * Returns a value indicating if to check for compromised password.
+     */
+    public function isCompromisedPassword(): bool
+    {
+        return $this->getPropertyBoolean(self::P_COMPROMISED_PASSWORD);
     }
 
     /**

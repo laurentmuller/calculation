@@ -56,7 +56,7 @@ class FontAwesomeIconService
         'fa-spin',
         'fa-spin-pulse',
         'fa-spin-reverse',
-        // bordered & pulled
+        // bordered and pulled
         'fa-border',
         'fa-pull-right',
         'fa-pull-left',

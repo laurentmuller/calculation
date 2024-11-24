@@ -65,7 +65,7 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Add sheet.
+     * Add a sheet.
      *
      * @param Worksheet $worksheet  the worksheet to add
      * @param ?int      $sheetIndex the index where the sheet should go (0, 1, ... or null for last)

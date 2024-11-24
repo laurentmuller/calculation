@@ -72,7 +72,7 @@ class DataQuery implements SortModeInterface
         public string $channel = '',
         /** The search entity. */
         #[Assert\NotNull]
-        public string $entity = '',
+        public string $entity = ''
     ) {
     }
 

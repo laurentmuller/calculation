@@ -38,25 +38,6 @@ class EntityVoter extends Voter
         return EntityPermission::tryFromName($attribute) instanceof EntityPermission;
     }
 
-    public function vote(TokenInterface $token, mixed $subject, array $attributes): int
-    {
-        if ($subject instanceof EntityName) {
-            $subject = $subject->value;
-        }
-
-        /** @psalm-var mixed $attribute */
-        foreach ($attributes as &$attribute) {
-            if ($attribute instanceof EntityPermission) {
-                $attribute = $attribute->name;
-            }
-        }
-
-        return parent::vote($token, $subject, $attributes);
-    }
-
-    /**
-     * @phpstan-assert-if-true true $this->supportsAttribute()
-     */
     protected function supports(string $attribute, mixed $subject): bool
     {
         return $this->supportsAttribute($attribute) && EntityName::tryFromMixed($subject) instanceof EntityName;
@@ -107,10 +88,7 @@ class EntityVoter extends Voter
     private function getUser(TokenInterface $token): ?User
     {
         $user = $token->getUser();
-        if (!$user instanceof User || !$user->isEnabled()) {
-            return null;
-        }
 
-        return $user;
+        return $user instanceof User && $user->isEnabled() ? $user : null;
     }
 }

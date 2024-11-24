@@ -152,7 +152,7 @@ abstract class AbstractHttpClientService
      *
      * @template T
      *
-     * @param (callable():T) $callback the callback to call when the value is not is the cache
+     * @param (callable():T) $callback the callback to call when the value is not in the cache
      *
      * @return T
      */
@@ -191,7 +191,7 @@ abstract class AbstractHttpClientService
      * @template T
      *
      * @param string         $url      the URL for which to return the corresponding value
-     * @param (callable():T) $callback the callback to call when the value is not is the cache
+     * @param (callable():T) $callback the callback to call when the value is not in the cache
      *
      * @return T the value, if found; the default otherwise
      */

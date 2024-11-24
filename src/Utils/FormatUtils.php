@@ -221,8 +221,8 @@ final class FormatUtils
      *
      * @param int<-1,3>|null            $dateType the type of date formatting, one of the format types
      *                                            constants or null to use default
-     * @param int<-1,3>|null            $timeType the type of time formatting, one of the format types
-     *                                            constants or null to use default
+     * @param int<-1,3>|null            $timeType the type of time formatting, one of the format types constants or
+     *                                            null to use default
      * @param ?string                   $pattern  the optional pattern to use when formatting
      * @param \DateTimeZone|string|null $timezone the timezone identifier
      */

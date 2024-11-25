@@ -38,10 +38,9 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
 {
     use PasswordHasherExtensionTrait;
     use TranslatorMockTrait;
-    use TranslatorMockTrait;
     use ValidatorExtensionTrait;
-    private bool $compromisedPassword = false;
 
+    private bool $compromisedPassword = false;
     private Password $password;
     private StrengthLevel $score;
     private ApplicationService $service;
@@ -76,6 +75,7 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
                 'first' => 'password',
                 'second' => 'password',
             ],
+            'checkPassword' => true,
         ];
         $this->compromisedPassword = true;
         $this->score = StrengthLevel::VERY_STRONG;
@@ -93,6 +93,7 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
                 'first' => '187@*QWWék98(AC248aa',
                 'second' => '187@*QWWék98(AC248aa',
             ],
+            'checkPassword' => true,
         ];
         $this->compromisedPassword = true;
         $this->score = StrengthLevel::VERY_STRONG;

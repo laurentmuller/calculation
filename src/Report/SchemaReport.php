@@ -14,11 +14,15 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Model\FontAwesomeImage;
 use App\Pdf\Colors\PdfTextColor;
+use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
+use App\Pdf\PdfFontAwesomeCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Report\Table\ReportTable;
+use App\Service\FontAwesomeImageService;
 use App\Service\SchemaService;
 use App\Traits\ArrayTrait;
 use fpdf\Enums\PdfFontName;
@@ -37,22 +41,27 @@ class SchemaReport extends AbstractReport
     use ArrayTrait;
 
     private ?PdfStyle $booleanStyle = null;
+    private ?PdfCell $cellManyToOne = null;
+    private ?PdfCell $cellOneToMany = null;
 
     /**
      * @psalm-var array<string, int>
      */
     private array $tableLinks = [];
 
-    public function __construct(AbstractController $controller, private readonly SchemaService $service)
-    {
+    public function __construct(
+        AbstractController $controller,
+        private readonly SchemaService $schemaService,
+        private readonly FontAwesomeImageService $imageService
+    ) {
         parent::__construct($controller);
-        $this->setTitleTrans('schema.name', [], true);
+        $this->setTitleTrans(id: 'schema.name', isUTF8: true);
         $this->setDescriptionTrans('schema.description');
     }
 
     public function render(): bool
     {
-        $tables = $this->service->getTables();
+        $tables = $this->schemaService->getTables();
         if ([] === $tables) {
             return false;
         }
@@ -105,13 +114,6 @@ class SchemaReport extends AbstractReport
         return $value ? '3' : null;
     }
 
-    private function formatInverse(bool $inverse): string
-    {
-        $id = $inverse ? 'schema.table.one_to_many' : 'schema.table.many_to_one';
-
-        return $this->trans($id);
-    }
-
     /**
      * @psalm-param SchemaColumnType $column
      */
@@ -121,6 +123,35 @@ class SchemaReport extends AbstractReport
         $length = $column['length'];
 
         return $length > 0 ? \sprintf('%s(%d)', $type, $length) : $type;
+    }
+
+    private function getCellImage(string $id, string $icon): PdfCell
+    {
+        $text = $this->trans('schema.table.' . $id);
+        $image = $this->imageService->getImage('solid/' . $icon);
+        if ($image instanceof FontAwesomeImage) {
+            return new PdfFontAwesomeCell($image, $text);
+        }
+
+        return new PdfCell($text);
+    }
+
+    private function getCellManyToOne(): PdfCell
+    {
+        if (!$this->cellManyToOne instanceof PdfCell) {
+            $this->cellManyToOne = $this->getCellImage('many_to_one', 'arrow-right-from-bracket');
+        }
+
+        return $this->cellManyToOne;
+    }
+
+    private function getCellOneToMany(): PdfCell
+    {
+        if (!$this->cellOneToMany instanceof PdfCell) {
+            $this->cellOneToMany = $this->getCellImage('one_to_many', 'arrow-right-to-bracket');
+        }
+
+        return $this->cellOneToMany;
     }
 
     /**
@@ -143,7 +174,7 @@ class SchemaReport extends AbstractReport
             $table->startRow()
                 ->add($association['name'])
                 ->add($name, link: $link)
-                ->add($this->formatInverse($association['inverse']))
+                ->addCell($association['inverse'] ? $this->getCellOneToMany() : $this->getCellManyToOne())
                 ->endRow();
         }
     }

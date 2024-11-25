@@ -41,7 +41,7 @@ abstract class AbstractChangePasswordType extends AbstractEntityType
         parent::configureOptions($resolver);
         $resolver->setDefaults([
             'constraints' => [
-                new Callback($this->validate(...)),
+                new Callback(fn (mixed $object, ExecutionContextInterface $context) => $this->validate($context)),
             ],
         ]);
     }
@@ -55,11 +55,6 @@ abstract class AbstractChangePasswordType extends AbstractEntityType
     {
         $helper->field('plainPassword')
             ->addRepeatPasswordType('user.password.new', 'user.password.new_confirmation');
-        $helper->field('checkPassword')
-            ->label('user.change_password.check_password')
-            ->updateOption('data', $this->service->isCompromisedPassword())
-            ->notMapped()
-            ->addCheckboxType();
     }
 
     private function mapViolations(ConstraintViolationListInterface $list): string
@@ -72,7 +67,7 @@ abstract class AbstractChangePasswordType extends AbstractEntityType
         return \trim($str);
     }
 
-    private function validate(?User $user, ExecutionContextInterface $context): void
+    private function validate(ExecutionContextInterface $context): void
     {
         /** @psalm-var FormInterface<mixed> $root */
         $root = $context->getRoot();
@@ -88,7 +83,7 @@ abstract class AbstractChangePasswordType extends AbstractEntityType
         if (!$this->validateConstraint($context, $constraint, $password, $target)) {
             return;
         }
-        if ((bool) $root->get('checkPassword')->getData()) {
+        if ($this->service->isCompromisedPassword()) {
             $constraint = new NotCompromisedPassword();
             $this->validateConstraint($context, $constraint, $password, $target);
         }

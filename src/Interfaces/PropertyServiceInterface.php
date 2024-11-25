@@ -38,6 +38,11 @@ interface PropertyServiceInterface
     final public const DEFAULT_DISPLAY_MODE = TableView::TABLE;
 
     /**
+     * The default false value (boolean).
+     */
+    final public const DEFAULT_FALSE = false;
+
+    /**
      * The default display flash bag message close button (boolean).
      */
     final public const DEFAULT_MESSAGE_CLOSE = true;

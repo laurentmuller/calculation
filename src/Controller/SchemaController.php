@@ -17,6 +17,7 @@ use App\Attribute\Get;
 use App\Interfaces\RoleInterface;
 use App\Report\SchemaReport;
 use App\Response\PdfResponse;
+use App\Service\FontAwesomeImageService;
 use App\Service\SchemaService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -46,9 +47,11 @@ class SchemaController extends AbstractController
      * Export the schema to a PDF document.
      */
     #[Get(path: '/pdf', name: 'pdf')]
-    public function pdf(SchemaService $service): PdfResponse
-    {
-        $report = new SchemaReport($this, $service);
+    public function pdf(
+        SchemaService $schemaService,
+        FontAwesomeImageService $imageService
+    ): PdfResponse {
+        $report = new SchemaReport($this, $schemaService, $imageService);
 
         return $this->renderPdfDocument($report);
     }

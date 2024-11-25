@@ -18,7 +18,7 @@ use App\Form\FormHelper;
 /**
  * Change the password of the current (logged) user.
  */
-class ProfileChangePasswordType extends AbstractChangePasswordType
+class ProfilePasswordType extends AbstractChangePasswordType
 {
     protected function addFormFields(FormHelper $helper): void
     {

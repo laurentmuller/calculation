@@ -1822,16 +1822,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "2.0.11",
+            "version": "2.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "65dc299e0807160174b408ee055c7da55526c37c"
+                "reference": "b5b4ba03f9cb8154084a1a145bda45ee271f2d3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/65dc299e0807160174b408ee055c7da55526c37c",
-                "reference": "65dc299e0807160174b408ee055c7da55526c37c",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/b5b4ba03f9cb8154084a1a145bda45ee271f2d3d",
+                "reference": "b5b4ba03f9cb8154084a1a145bda45ee271f2d3d",
                 "shasum": ""
             },
             "require": {
@@ -1843,17 +1843,17 @@
                 "php": "^8.2"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.0",
-                "phpstan/extension-installer": "^1.0",
-                "phpstan/phpstan": "^1.0",
-                "phpstan/phpstan-deprecation-rules": "^1.0",
-                "phpstan/phpstan-strict-rules": "^1.0",
-                "phpunit/phpunit": "^11.0",
-                "psalm/plugin-phpunit": "^0.19",
-                "rector/rector": "^1.0",
-                "vimeo/psalm": "dev-master"
+                "bamarni/composer-bin-plugin": "^1.0",
+                "phpunit/phpunit": "^11.0"
             },
             "type": "library",
+            "extra": {
+                "bamarni-bin": {
+                    "bin-links": false,
+                    "forward-command": true,
+                    "target-directory": "vendor-bin"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "fpdf\\": "src/"
@@ -1881,20 +1881,20 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2024-10-21T10:47:43+00:00"
+            "time": "2024-11-25T08:08:19+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",
-            "version": "2.20.20",
+            "version": "2.20.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/HighchartsBundle.git",
-                "reference": "0b8cae759269f034dad3453928f5c9973d23968c"
+                "reference": "f0c1a9873b7bd08d51ae55a150dbc3ac65b29241"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/0b8cae759269f034dad3453928f5c9973d23968c",
-                "reference": "0b8cae759269f034dad3453928f5c9973d23968c",
+                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/f0c1a9873b7bd08d51ae55a150dbc3ac65b29241",
+                "reference": "f0c1a9873b7bd08d51ae55a150dbc3ac65b29241",
                 "shasum": ""
             },
             "require": {
@@ -1906,22 +1906,19 @@
                 "twig/twig": "^3.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.0",
-                "phpstan/extension-installer": "^1.0",
-                "phpstan/phpstan": "^1.0",
-                "phpstan/phpstan-deprecation-rules": "^1.0",
-                "phpstan/phpstan-phpunit": "^1.0",
-                "phpstan/phpstan-strict-rules": "^1.5",
+                "bamarni/composer-bin-plugin": "^1.0",
                 "phpunit/phpunit": "^11.0",
-                "psalm/plugin-phpunit": "^0.19",
-                "rector/rector": "^1.0",
-                "slam/phpstan-extensions": "^6.0",
-                "spaze/phpstan-disallowed-calls": "^3.0",
                 "symfony/framework-bundle": "^6.0| ^7.0",
-                "symfony/phpunit-bridge": "^6.0| ^7.0",
-                "vimeo/psalm": "dev-master"
+                "symfony/phpunit-bridge": "^6.0| ^7.0"
             },
             "type": "symfony-bundle",
+            "extra": {
+                "bamarni-bin": {
+                    "bin-links": false,
+                    "forward-command": true,
+                    "target-directory": "vendor-bin"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "HighchartsBundle\\": "src/"
@@ -1955,7 +1952,7 @@
                 "issues": "https://github.com/laurentmuller/HighchartsBundle/issues",
                 "source": "https://github.com/laurentmuller/HighchartsBundle"
             },
-            "time": "2024-10-14T11:21:42+00:00"
+            "time": "2024-11-25T08:10:02+00:00"
         },
         {
             "name": "lorenzo/pinky",

@@ -32,6 +32,7 @@ use App\Resolver\DataQueryValueResolver;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\MailerService;
+use App\Service\PasswordTooltipService;
 use App\Service\ResetPasswordService;
 use App\Service\RoleBuilderService;
 use App\Service\RoleHierarchyService;
@@ -177,7 +178,7 @@ class UserController extends AbstractEntityController
      * Change password for an existing user.
      */
     #[GetPost(path: '/password/{id}', name: 'password', requirements: self::ID_REQUIREMENT)]
-    public function password(Request $request, User $item): Response
+    public function password(Request $request, User $item, PasswordTooltipService $service): Response
     {
         $form = $this->createForm(UserChangePasswordType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
@@ -185,13 +186,12 @@ class UserController extends AbstractEntityController
 
             return $this->redirectToDefaultRoute($request, $item);
         }
-        $parameters = [
+
+        return $this->render('user/user_password.html.twig', [
             'item' => $item,
             'form' => $form,
-            'params' => ['id' => $item->getId()],
-        ];
-
-        return $this->render('user/user_password.html.twig', $parameters);
+            'tooltips' => $service->getTooltips(),
+        ]);
     }
 
     /**

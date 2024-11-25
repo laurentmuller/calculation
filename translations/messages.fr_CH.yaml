@@ -887,7 +887,7 @@ parameters:
     group_product: Article par défaut
     group_product_help: Article à ajouter automatiquement lors de la création d'une nouvelle calculation.
     group_security: Sécurité
-    group_security_help: Options de sécurité utilisées lors de la connection à l'application et de la définition du mot de passe.
+    group_security_help: Options de sécurité utilisées lors de la connection à l'application et de la définition des mots de passe.
     helps:
         panel_calculation: Nombre de calculations à afficher.
         panel_catalog: Afficher le nombre d'objets du catalogue (base de données).
@@ -904,6 +904,7 @@ parameters:
 password:
     input: Mot de passe
     title: Mot de passe
+    constraint: 'Contraintes du mot de passe :'
     success: 'Le mot de passe est valide. Les options suivantes ont été sélectionnées :'
     security_letters: Une lettre est obligatoire
     security_special_char: Un caractère spécial est obligatoire
@@ -995,7 +996,7 @@ product:
         type: Type de mise à jour
         submit: Mettre à jour
 profile:
-    change_password:
+    password:
         title: Modifier le mot de passe
         success: <b>%username%</b>, votre mot de passe a été modifié avec succès.
         failure: Impossible de trouver l'utilisateur actuel.

@@ -76,7 +76,6 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
                 'first' => 'password',
                 'second' => 'password',
             ],
-            'checkPassword' => true,
         ];
         $this->compromisedPassword = true;
         $this->score = StrengthLevel::VERY_STRONG;
@@ -94,7 +93,6 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
                 'first' => '187@*QWWék98(AC248aa',
                 'second' => '187@*QWWék98(AC248aa',
             ],
-            'checkPassword' => true,
         ];
         $this->compromisedPassword = true;
         $this->score = StrengthLevel::VERY_STRONG;

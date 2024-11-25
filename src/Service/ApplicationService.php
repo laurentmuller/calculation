@@ -218,11 +218,11 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             // security
             self::P_STRENGTH_LEVEL => StrengthLevel::NONE,
             self::P_DISPLAY_CAPTCHA => !$this->debug,
-            self::P_COMPROMISED_PASSWORD => false,
+            self::P_COMPROMISED_PASSWORD => self::DEFAULT_FALSE,
         ];
         // password options
         foreach (\array_keys(self::PASSWORD_OPTIONS) as $property) {
-            $properties[$property] = false;
+            $properties[$property] = self::DEFAULT_FALSE;
         }
 
         return $properties;

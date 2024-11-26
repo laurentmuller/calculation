@@ -16,9 +16,9 @@ parameters:
     checkUninitializedProperties: true
 
     doctrine:
-    		reportUnknownTypes: false
-    		allowNullablePropertyForRequiredField: true
-    		ormRepositoryClass: App\Repository\AbstractRepository
+    	reportUnknownTypes: false
+    	allowNullablePropertyForRequiredField: true
+    	ormRepositoryClass: App\Repository\AbstractRepository
 
     strictRules:
         strictArrayFilter: false

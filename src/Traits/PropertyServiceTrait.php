@@ -16,22 +16,17 @@ namespace App\Traits;
 use App\Entity\AbstractProperty;
 use App\Enums\EntityAction;
 use App\Utils\StringUtils;
-use Psr\Container\ContainerInterface;
-use Symfony\Contracts\Service\Attribute\Required;
-use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 
 /**
  * Trait for class implementing <code>PropertyServiceInterface</code>.
  *
  * @psalm-require-implements \App\Interfaces\PropertyServiceInterface
+ *
+ * @template TProperty of AbstractProperty
  */
 trait PropertyServiceTrait
 {
     use CacheTrait;
-    use ServiceMethodsSubscriberTrait {
-        ServiceMethodsSubscriberTrait::setContainer as setContainerFromTrait;
-    }
-    use TranslatorAwareTrait;
 
     // The saved cache state property name
     private const P_CACHE_SAVED = 'cache_saved';
@@ -59,20 +54,6 @@ trait PropertyServiceTrait
     public function isDarkNavigation(): bool
     {
         return $this->getPropertyBoolean(self::P_DARK_NAVIGATION, true);
-    }
-
-    /**
-     * Override to update cached values.
-     */
-    #[Required]
-    public function setContainer(ContainerInterface $container): ?ContainerInterface
-    {
-        $result = $this->setContainerFromTrait($container);
-        if (!$this->getPropertyBoolean(self::P_CACHE_SAVED) && $this->isConnected()) {
-            $this->updateAdapter();
-        }
-
-        return $result;
     }
 
     /**
@@ -212,6 +193,16 @@ trait PropertyServiceTrait
     }
 
     /**
+     * Initialize cache properties.
+     */
+    protected function initialize(): void
+    {
+        if (!$this->getPropertyBoolean(self::P_CACHE_SAVED) && $this->isConnected()) {
+            $this->updateAdapter();
+        }
+    }
+
+    /**
      * Returns if the given value is the default value.
      *
      * @param array<string, mixed> $defaultProperties the default properties to get the default value from
@@ -242,6 +233,13 @@ trait PropertyServiceTrait
 
         return false;
     }
+
+    /**
+     * Load entities from the database.
+     *
+     * @psalm-return TProperty[]
+     */
+    abstract protected function loadEntities(): array;
 
     /**
      * Load the properties.
@@ -280,17 +278,16 @@ trait PropertyServiceTrait
     }
 
     /**
-     * @param AbstractProperty[]|list<AbstractProperty> $properties
+     * Load entities from the database and save to the cache.
      */
-    protected function saveProperties(array $properties): void
+    protected function updateAdapter(): void
     {
         $this->clearCache();
+        $properties = $this->loadEntities();
         foreach ($properties as $property) {
             $this->saveDeferredCacheValue($property->getName(), $property->getValue());
         }
         $this->saveDeferredCacheValue(self::P_CACHE_SAVED, true);
         $this->commitDeferredValues();
     }
-
-    abstract protected function updateAdapter(): void;
 }

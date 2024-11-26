@@ -15,11 +15,14 @@ namespace App\Tests\Traits;
 
 use App\Traits\CacheTrait;
 use PHPUnit\Framework\TestCase;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class CacheTraitTest extends TestCase
 {
     use CacheTrait;
+
+    private CacheItemPoolInterface $cacheItemPool;
 
     protected function setUp(): void
     {
@@ -91,7 +94,7 @@ class CacheTraitTest extends TestCase
     {
         $key = 'cache_key';
         $value = 'cache_value';
-        $actual = $this->setCacheValue($key, $value);
+        $actual = $this->setCacheValue($key, $value, 1000);
         self::assertTrue($actual);
 
         $actual = $this->setCacheValue($key, null);

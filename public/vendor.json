@@ -50,7 +50,7 @@
         },
         {
             "name": "font-awesome",
-            "version": "6.6.0",
+            "version": "6.7.1",
             "source": "cdnjs",
             "files": [
                 "css/all.css",

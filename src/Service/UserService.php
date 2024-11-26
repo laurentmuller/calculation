@@ -25,13 +25,13 @@ use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
  * Service to manage user properties.
  */
-class UserService implements PropertyServiceInterface, ServiceSubscriberInterface
+class UserService implements PropertyServiceInterface
 {
+    /** @use PropertyServiceTrait<UserProperty> */
     use PropertyServiceTrait;
 
     public function __construct(
@@ -39,9 +39,9 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         private readonly ApplicationService $service,
         private readonly Security $security,
         #[Target('calculation.user')]
-        CacheItemPoolInterface $cacheItemPool
+        protected readonly CacheItemPoolInterface $cacheItemPool
     ) {
-        $this->cacheItemPool = $cacheItemPool;
+        $this->initialize();
     }
 
     /**
@@ -197,7 +197,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         }
 
         $defaultValues = $this->service->getProperties();
-        $existingProperties = $this->getExistingProperties($user);
+        $existingProperties = $this->getExistingProperties();
         /** @psalm-var mixed $value */
         foreach ($properties as $key => $value) {
             $this->saveProperty($key, $value, $defaultValues, $existingProperties, $user);
@@ -208,22 +208,25 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         return true;
     }
 
-    protected function updateAdapter(): void
+    /**
+     * @return UserProperty[]
+     */
+    protected function loadEntities(): array
     {
         $user = $this->getUser();
-        if (!$user instanceof UserInterface) {
-            return;
+        if ($user instanceof UserInterface) {
+            return $this->repository->findByUser($user);
         }
-        $properties = $this->repository->findByUser($user);
-        $this->saveProperties($properties);
+
+        return [];
     }
 
     /**
      * @psalm-return array<string, UserProperty>
      */
-    private function getExistingProperties(UserInterface $user): array
+    private function getExistingProperties(): array
     {
-        $properties = $this->repository->findByUser($user);
+        $properties = $this->loadEntities();
 
         return \array_reduce(
             $properties,

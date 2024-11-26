@@ -35,14 +35,15 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
  * Service to manage application properties.
  */
-class ApplicationService implements PropertyServiceInterface, ServiceSubscriberInterface
+class ApplicationService implements PropertyServiceInterface
 {
     use MathTrait;
+
+    /** @use PropertyServiceTrait<GlobalProperty> */
     use PropertyServiceTrait;
 
     public function __construct(
@@ -51,9 +52,9 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
         #[Target('calculation.application')]
-        CacheItemPoolInterface $cacheItemPool
+        protected readonly CacheItemPoolInterface $cacheItemPool
     ) {
-        $this->cacheItemPool = $cacheItemPool;
+        $this->initialize();
     }
 
     /**
@@ -584,10 +585,12 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         $this->updateDeletedEntity(self::P_DEFAULT_STATE, $state);
     }
 
-    protected function updateAdapter(): void
+    /**
+     * @return GlobalProperty[]
+     */
+    protected function loadEntities(): array
     {
-        $properties = $this->getPropertyRepository()->findAll();
-        $this->saveProperties($properties);
+        return $this->getPropertyRepository()->findAll();
     }
 
     /**
@@ -609,14 +612,11 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     }
 
     /**
-     * @psalm-return  array<string, GlobalProperty>
+     * @psalm-return array<string, GlobalProperty>
      */
     private function getExistingProperties(): array
     {
-        /** @psalm-var GlobalProperty[] $properties */
-        $properties = $this->manager
-            ->getRepository(GlobalProperty::class)
-            ->findAll();
+        $properties = $this->loadEntities();
 
         return \array_reduce(
             $properties,

@@ -33,7 +33,6 @@ use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\Exception\InvalidArgumentException;
@@ -70,7 +69,7 @@ class ApplicationServiceTest extends KernelServiceTestCase
         $cacheItemPool = $this->createMock(CacheItemPoolInterface::class);
         $cacheItemPool->method('clear')
             ->willReturn(false);
-        $service = $this->createServiceWithMock($cacheItemPool);
+        $service = $this->createApplicationService($cacheItemPool);
         $actual = $service->clearCache();
         self::assertFalse($actual);
     }
@@ -129,11 +128,11 @@ class ApplicationServiceTest extends KernelServiceTestCase
      */
     public function testDeleteCacheItemFail(): void
     {
+        self::expectException(\LogicException::class);
         $cacheItemPool = $this->createMock(CacheItemPoolInterface::class);
         $cacheItemPool->method('deleteItem')
             ->willThrowException(new InvalidArgumentException());
-        $service = $this->createServiceWithMock($cacheItemPool);
-        self::expectException(\LogicException::class);
+        $service = $this->createApplicationService($cacheItemPool);
         $service->deleteCacheItem('fake');
     }
 
@@ -148,12 +147,22 @@ class ApplicationServiceTest extends KernelServiceTestCase
      */
     public function testGetCacheItemFail(): void
     {
+        self::expectException(\LogicException::class);
         $cacheItemPool = $this->createMock(CacheItemPoolInterface::class);
         $cacheItemPool->method('getItem')
             ->willThrowException(new InvalidArgumentException());
-        $service = $this->createServiceWithMock($cacheItemPool);
-        self::expectException(\LogicException::class);
+        $service = $this->createApplicationService($cacheItemPool);
+
         $service->getCacheItem('fake');
+    }
+
+    public function testInvalidJson(): void
+    {
+        $key = PropertyServiceInterface::P_ADMIN_RIGHTS;
+        $service = $this->getApplicationService();
+        $service->setProperty($key, '{');
+        $actual = $service->getAdminRights();
+        self::assertNotEmpty($actual);
     }
 
     public function testLastArchiveCalculations(): void
@@ -261,7 +270,7 @@ class ApplicationServiceTest extends KernelServiceTestCase
             ->willReturn($item);
         $cacheItemPool->method('saveDeferred')
             ->willReturn(false);
-        $service = $this->createServiceWithMock($cacheItemPool);
+        $service = $this->createApplicationService($cacheItemPool);
         $actual = $service->saveDeferredCacheValue('fake', 'fake');
         self::assertFalse($actual);
     }
@@ -309,6 +318,15 @@ class ApplicationServiceTest extends KernelServiceTestCase
         $margin = $service->getMinMargin();
         $actual = $service->setProperty(PropertyServiceInterface::P_MIN_MARGIN, $margin);
         self::assertFalse($actual);
+    }
+
+    public function testStrengthConstraint(): void
+    {
+        $value = StrengthLevel::WEAK;
+        $service = $this->getApplicationService();
+        $service->setProperty(PropertyServiceInterface::P_STRENGTH_LEVEL, $value);
+        $actual = $service->getStrengthConstraint();
+        self::assertSame($value, $actual->minimum);
     }
 
     /**
@@ -423,17 +441,25 @@ class ApplicationServiceTest extends KernelServiceTestCase
         self::assertSame($role->getRights(), $rights);
     }
 
+    public function testValidJson(): void
+    {
+        $key = PropertyServiceInterface::P_ADMIN_RIGHTS;
+        $service = $this->getApplicationService();
+        $rights = $service->getAdminRights();
+        $service->setProperty($key, $rights);
+        $actual = $service->getAdminRights();
+        self::assertNotEmpty($actual);
+    }
+
     /**
      * @throws Exception
      */
-    private function createServiceWithMock(MockObject&CacheItemPoolInterface $cacheItemPool): ApplicationService
+    private function createApplicationService(CacheItemPoolInterface $cacheItemPool): ApplicationService
     {
         $manager = $this->createMock(EntityManagerInterface::class);
         $builder = $this->createMock(RoleBuilderService::class);
-        $service = new ApplicationService($manager, $builder, false, $cacheItemPool);
-        $service->setTranslator($this->createMockTranslator());
 
-        return $service;
+        return new ApplicationService($manager, $builder, false, $cacheItemPool);
     }
 
     private function getApplicationService(): ApplicationService

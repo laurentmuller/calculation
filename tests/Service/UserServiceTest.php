@@ -24,6 +24,7 @@ use App\Service\ApplicationService;
 use App\Service\UserService;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
+use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
@@ -31,84 +32,118 @@ class UserServiceTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
 
+    /**
+     * @throws Exception
+     */
     public function testActions(): void
     {
-        $service = $this->getUserService();
+        $service = $this->createUserService();
         self::assertSame(EntityAction::EDIT, $service->getEditAction());
         self::assertTrue($service->isActionEdit());
         self::assertFalse($service->isActionShow());
         self::assertFalse($service->isActionNone());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testDarkNavigation(): void
     {
-        $service = $this->getUserService();
+        $service = $this->createUserService();
         $actual = $service->isDarkNavigation();
         self::assertTrue($actual);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testDisplayMode(): void
     {
-        $service = $this->getUserService();
+        $service = $this->createUserService();
         self::assertSame(TableView::TABLE, $service->getDisplayMode());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetApplication(): void
     {
-        $service = $this->getUserService();
+        $service = $this->createUserService();
         $application = $service->getApplication();
         self::assertFalse($application->isPrintAddress());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetCustomer(): void
     {
-        $service = $this->getUserService();
-        $actual = $service->getCustomer();
-        self::assertNotNull($actual->getName());
+        $service = $this->createUserService();
+        $customer = $service->getCustomer();
+        $actual = $customer->getAddress();
+        self::assertNull($actual);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetMessageAttributes(): void
     {
-        $service = $this->getUserService();
+        $service = $this->createUserService();
         $actual = $service->getMessageAttributes();
         self::assertCount(7, $actual);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetProperties(): void
     {
-        $service = $this->getUserService();
+        $service = $this->createUserService();
         $actual = $service->getProperties();
         self::assertNotEmpty($actual);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testMessage(): void
     {
-        $service = $this->getUserService();
+        $service = $this->createUserService();
         self::assertSame(MessagePosition::BOTTOM_RIGHT, $service->getMessagePosition());
         self::assertSame(4000, $service->getMessageTimeout());
         self::assertFalse($service->isMessageSubTitle());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testOptions(): void
     {
-        $service = $this->getUserService();
+        $service = $this->createUserService();
         self::assertFalse($service->isQrCode());
         self::assertFalse($service->isPrintAddress());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testPanels(): void
     {
-        $service = $this->getUserService();
+        $service = $this->createUserService();
         self::assertTrue($service->isPanelCatalog());
         self::assertTrue($service->isPanelMonth());
         self::assertTrue($service->isPanelState());
         self::assertSame(12, $service->getPanelCalculation());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSetPropertiesAndRemove(): void
     {
         $user = $this->getUser(1);
-        $service = $this->getUserService($user);
+        $service = $this->createUserService($user);
 
         try {
             $service->setProperties(['qr_code' => true]);
@@ -119,16 +154,22 @@ class UserServiceTest extends KernelServiceTestCase
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSetPropertiesEmpty(): void
     {
-        $service = $this->getUserService();
+        $service = $this->createUserService();
         $actual = $service->setProperties([]);
         self::assertFalse($actual);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSetPropertiesNoUser(): void
     {
-        $service = $this->getUserService();
+        $service = $this->createUserService();
 
         try {
             $actual = $service->setProperties([
@@ -141,18 +182,24 @@ class UserServiceTest extends KernelServiceTestCase
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSetPropertiesSame(): void
     {
-        $service = $this->getUserService();
+        $service = $this->createUserService();
         $darkNavigation = $service->isDarkNavigation();
         $actual = $service->setProperty(PropertyServiceInterface::P_DARK_NAVIGATION, $darkNavigation);
         self::assertFalse($actual);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSetPropertiesWithUser(): void
     {
         $user = $this->getUser(1);
-        $service = $this->getUserService($user);
+        $service = $this->createUserService($user);
 
         try {
             $actual = $service->setProperties(['fake' => 'value']);
@@ -163,24 +210,24 @@ class UserServiceTest extends KernelServiceTestCase
         }
     }
 
-    private function getUser(int $id): ?User
-    {
-        $repository = $this->getService(UserRepository::class);
-
-        return $repository->find($id);
-    }
-
-    private function getUserService(?User $user = null): UserService
+    /**
+     * @throws Exception
+     */
+    private function createUserService(?User $user = null): UserService
     {
         $repository = $this->getService(UserPropertyRepository::class);
         $application = $this->getService(ApplicationService::class);
         $security = $this->createMock(Security::class);
-        if ($user instanceof User) {
-            $security->method('getUser')
-                ->willReturn($user);
-        }
+        $security->method('getUser')
+            ->willReturn($user);
         $cacheItemPool = new ArrayAdapter();
 
         return new UserService($repository, $application, $security, $cacheItemPool);
+    }
+
+    private function getUser(int $id): ?User
+    {
+        return $this->getService(UserRepository::class)
+            ->find($id);
     }
 }

@@ -18,15 +18,12 @@ use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * Trait to manage cache values.
+ *
+ * @property CacheItemPoolInterface $cacheItemPool
  */
 trait CacheTrait
 {
     use CacheKeyTrait;
-
-    /**
-     * The cache.
-     */
-    protected CacheItemPoolInterface $cacheItemPool;
 
     /**
      * Clear this cache adapter.
@@ -102,11 +99,9 @@ trait CacheTrait
      */
     public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
-        $item = $this->getCacheItem($key);
-        $item->set($value);
-        if (null !== $time) {
-            $item->expiresAfter($time);
-        }
+        $item = $this->getCacheItem($key)
+            ->expiresAfter($time ?? $this->getCacheTimeout())
+            ->set($value);
 
         return $this->cacheItemPool->saveDeferred($item);
     }
@@ -117,7 +112,7 @@ trait CacheTrait
      * If the value is null, the item is removed from the cache.
      *
      * @param string                 $key   The key for which to save the value
-     * @param mixed                  $value The value to save. If null, the key item is removed from the cache.
+     * @param mixed                  $value The value to save. If null, the item is removed from the cache.
      * @param \DateInterval|int|null $time  The period from the present after which the item must be considered
      *                                      expired. An integer parameter is understood to be the time in seconds until
      *                                      expiration. If null is passed, the expiration time is not set.
@@ -126,13 +121,12 @@ trait CacheTrait
      */
     public function setCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
-        $key = $this->cleanKey($key);
         if (null === $value) {
             return $this->deleteCacheItem($key);
         }
 
-        $item = $this->getCacheItem($key);
-        $item->expiresAfter($time ?? $this->getCacheTimeout())
+        $item = $this->getCacheItem($key)
+            ->expiresAfter($time ?? $this->getCacheTimeout())
             ->set($value);
 
         return $this->cacheItemPool->save($item);

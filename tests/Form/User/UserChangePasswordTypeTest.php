@@ -26,6 +26,7 @@ use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\TranslatorMockTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Validator\Validation;
@@ -40,13 +41,13 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
     use PasswordHasherExtensionTrait;
     use TranslatorMockTrait;
     use ValidatorExtensionTrait;
+    private MockObject&ApplicationService $application;
 
     private bool $compromisedPassword = false;
     private Password $password;
     private StrengthLevel $score;
-    private ApplicationService $service;
     private Strength $strength;
-    private TranslatorInterface $translator;
+    private MockObject&TranslatorInterface $translator;
 
     /**
      * @throws Exception
@@ -58,12 +59,12 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
         $this->strength = new Strength(StrengthLevel::WEAK);
         $this->translator = $this->createMockTranslator();
 
-        $this->service = $this->createMock(ApplicationService::class);
-        $this->service->method('getPasswordConstraint')
+        $this->application = $this->createMock(ApplicationService::class);
+        $this->application->method('getPasswordConstraint')
             ->willReturnCallback(fn (): Password => $this->password);
-        $this->service->method('getStrengthConstraint')
+        $this->application->method('getStrengthConstraint')
             ->willReturnCallback(fn (): Strength => $this->strength);
-        $this->service->method('isCompromisedPassword')
+        $this->application->method('isCompromisedPassword')
             ->willReturnCallback(fn (): bool => $this->compromisedPassword);
 
         parent::setUp();
@@ -184,7 +185,7 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
     {
         return [
             new PlainType($this->translator),
-            new UserChangePasswordType($this->service),
+            new UserChangePasswordType($this->application),
         ];
     }
 

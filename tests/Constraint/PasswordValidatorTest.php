@@ -106,11 +106,20 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         self::assertTrue($constraint->getOption('all'));
     }
 
+    #[DataProvider('getOptions')]
+    public function testGetSetOptions(string $option): void
+    {
+        $password = new Password();
+        self::assertFalse($password->getOption($option));
+        $password->setOption($option, true);
+        self::assertTrue($password->getOption($option));
+    }
+
     /**
      * @param array<string, bool> $options
      */
     #[DataProvider('getInvalidValues')]
-    public function testInvalid(
+    public function testInvalidValue(
         mixed $value,
         array $options,
         string $message,
@@ -142,7 +151,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     }
 
     #[DataProvider('getValidValues')]
-    public function testValid(mixed $value, string $option): void
+    public function testValidValue(mixed $value, string $option): void
     {
         $constraint = $this->createConstraint([$option => true]);
         $this->validator->validate($value, $constraint);

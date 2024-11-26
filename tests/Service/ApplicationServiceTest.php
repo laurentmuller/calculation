@@ -233,9 +233,9 @@ class ApplicationServiceTest extends KernelServiceTestCase
     public function testPasswordConstraint(): void
     {
         $service = $this->getApplicationService();
-        $actual = $service->getPasswordConstraint();
+        $password = $service->getPasswordConstraint();
         foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $option) {
-            self::assertFalse($actual->getOption($option));
+            self::assertFalse($password->getOption($option));
         }
     }
 

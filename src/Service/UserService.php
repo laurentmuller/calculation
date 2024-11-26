@@ -118,6 +118,11 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         return $this->loadProperties($updateAdapter);
     }
 
+    public function isConnected(): bool
+    {
+        return $this->service->isConnected();
+    }
+
     public function isDarkNavigation(): bool
     {
         return $this->getPropertyBoolean(self::P_DARK_NAVIGATION, $this->service->isDarkNavigation());

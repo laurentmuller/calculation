@@ -220,9 +220,11 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             self::P_DISPLAY_CAPTCHA => !$this->debug,
             self::P_COMPROMISED_PASSWORD => self::DEFAULT_FALSE,
         ];
+
         // password options
-        foreach (\array_keys(self::PASSWORD_OPTIONS) as $property) {
-            $properties[$property] = self::DEFAULT_FALSE;
+        $password = new Password();
+        foreach (self::PASSWORD_OPTIONS as $key => $option) {
+            $properties[$key] = (bool) $password->getOption($option);
         }
 
         return $properties;
@@ -395,6 +397,11 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     public function isCompromisedPassword(): bool
     {
         return $this->getPropertyBoolean(self::P_COMPROMISED_PASSWORD);
+    }
+
+    public function isConnected(): bool
+    {
+        return $this->manager->getConnection()->isConnected();
     }
 
     /**

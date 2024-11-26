@@ -36,7 +36,7 @@ readonly class PasswordTooltipService
         $results = [];
         $level = $this->service->getStrengthLevel();
         if (StrengthLevel::NONE !== $level) {
-            $prefix = $this->translator->trans('password.security_strength_level');
+            $prefix = $this->trans('security_strength_level');
             $suffix = $level->trans($this->translator);
             $results[] = \sprintf('%s : %s', $prefix, $suffix);
         }
@@ -44,14 +44,19 @@ readonly class PasswordTooltipService
         $constraint = $this->service->getPasswordConstraint();
         foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $property => $option) {
             if ((bool) $constraint->getOption($option)) {
-                $results[] = $this->translator->trans('password.' . $property);
+                $results[] = $this->trans($property);
             }
         }
 
         if ($this->service->isCompromisedPassword()) {
-            $results[] = $this->translator->trans('password.security_compromised_password');
+            $results[] = $this->trans('security_compromised_password');
         }
 
         return $results;
+    }
+
+    private function trans(string $id): string
+    {
+        return $this->translator->trans('password.' . $id);
     }
 }

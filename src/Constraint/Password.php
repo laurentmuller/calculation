@@ -68,7 +68,7 @@ class Password extends Constraint
     /**
      * Checks if the password contains letters.
      */
-    public bool $letters = true;
+    public bool $letters = false;
 
     /**
      * Letters error message.

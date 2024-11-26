@@ -66,6 +66,11 @@ trait PropertyServiceTrait
         return EntityAction::SHOW === $this->getEditAction();
     }
 
+    /**
+     * Return a value indicating whether an actual connection to the database is established.
+     */
+    abstract public function isConnected(): bool;
+
     public function isDarkNavigation(): bool
     {
         return $this->getPropertyBoolean(self::P_DARK_NAVIGATION, true);
@@ -89,7 +94,7 @@ trait PropertyServiceTrait
     public function setContainer(ContainerInterface $container): ?ContainerInterface
     {
         $result = $this->setContainerFromTrait($container);
-        if (!$this->getPropertyBoolean(self::P_CACHE_SAVED)) {
+        if ($this->isConnected() && !$this->getPropertyBoolean(self::P_CACHE_SAVED)) {
             $this->updateAdapter();
         }
 

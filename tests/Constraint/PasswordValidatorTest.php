@@ -68,6 +68,14 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
+    public function testAllOption(): void
+    {
+        $constraint = $this->createConstraint([]);
+        self::assertFalse($constraint->isOption('all'));
+        $constraint->setOption('all', true);
+        self::assertTrue($constraint->isOption('all'));
+    }
+
     public function testAny(): void
     {
         $options = [
@@ -91,30 +99,6 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
-    public function testGetInvalidOptions(): void
-    {
-        self::expectException(InvalidOptionsException::class);
-        $constraint = $this->createConstraint([]);
-        $constraint->getOption('fake');
-    }
-
-    public function testGetSetAllOption(): void
-    {
-        $constraint = $this->createConstraint([]);
-        self::assertFalse($constraint->getOption('all'));
-        $constraint->setOption('all', true);
-        self::assertTrue($constraint->getOption('all'));
-    }
-
-    #[DataProvider('getOptions')]
-    public function testGetSetOptions(string $option): void
-    {
-        $password = new Password();
-        self::assertFalse($password->getOption($option));
-        $password->setOption($option, true);
-        self::assertTrue($password->getOption($option));
-    }
-
     /**
      * @param array<string, bool> $options
      */
@@ -135,6 +119,14 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
             ->assertRaised();
     }
 
+    public function testIsOptionInvalid(): void
+    {
+        self::expectException(InvalidOptionsException::class);
+        self::expectExceptionMessage('The option "fake" does not exist.');
+        $constraint = $this->createConstraint([]);
+        $constraint->isOption('fake');
+    }
+
     #[DataProvider('getOptions')]
     public function testNullIsValid(string $option): void
     {
@@ -143,11 +135,21 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
-    public function testSetInvalidOptions(): void
+    #[DataProvider('getOptions')]
+    public function testOptionIsGet(string $option): void
+    {
+        $password = new Password();
+        self::assertFalse($password->isOption($option));
+        $password->setOption($option, true);
+        self::assertTrue($password->isOption($option));
+    }
+
+    public function testSetOptionInvalid(): void
     {
         self::expectException(InvalidOptionsException::class);
+        self::expectExceptionMessage('The option "fake" does not exist.');
         $constraint = $this->createConstraint([]);
-        $constraint->setOption('fake', 'fake');
+        $constraint->setOption('fake', false);
     }
 
     #[DataProvider('getValidValues')]

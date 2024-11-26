@@ -118,11 +118,6 @@ interface PropertyServiceInterface
     final public const P_ADMIN_RIGHTS = 'admin_rights';
 
     /**
-     * The saved cache state property (bool).
-     */
-    public const P_CACHE_SAVED = 'cache_saved';
-
-    /**
      * The property name to check for compromised password (bool).
      */
     final public const P_COMPROMISED_PASSWORD = 'compromised_password';

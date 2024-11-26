@@ -43,10 +43,6 @@ admin:
         count: 'Nombre de modifications : %count%'
         no_change: Le schéma de la base de données est à jour et ne nécessite aucune migration.
         error: Une erreur s'est produite lors de la mise à jour du schéma de la base de données.
-application_service:
-    clear_error: Une erreur s'est produite lors de l'effacement du cache des propriétés.
-    commit_error: Impossible de valider les changements dans le cache des propriétés.
-    deferred_error: Impossible de différer la sauvegarde de la propriété '%key%'.
 below:
     title: Marges insuffisantes
     description: Calculations contenant une marge globale inférieure à %margin%.
@@ -908,7 +904,7 @@ password:
     success: 'Le mot de passe est valide. Les options suivantes ont été sélectionnées :'
     security_letters: Une lettre est obligatoire
     security_special_char: Un caractère spécial est obligatoire
-    security_case_diff: Une majuscule et une minuscule est obligatoire
+    security_case_diff: Une majuscule et une minuscule sont obligatoires
     security_numbers: Un chiffre est obligatoire
     security_email: Le mot de passe ne doit pas être une adresse e-mail
     security_compromised_password: Le mot de passe ne doit pas être compromis

@@ -108,8 +108,8 @@
 {%- endblock %}
 {# footer #}
 {% block card_footer -%}
-{{- link(path('schema_index'), 'schema.index.title', 'btn btn-form btn-primary', null, 'schema.index.description') }}
-{{ homepage(class: 'btn btn-form btn-outline-secondary') -}}
+{{ link(path('schema_index'), 'schema.index.title', 'btn btn-form btn-success', null, 'schema.index.description') }}
+{{ homepage() }}
 {%- endblock %}
 {# javascripts #}
 {% block javascripts %}

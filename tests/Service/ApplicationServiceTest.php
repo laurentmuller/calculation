@@ -36,7 +36,6 @@ use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Exception\InvalidArgumentException;
 
 class ApplicationServiceTest extends KernelServiceTestCase
@@ -235,7 +234,7 @@ class ApplicationServiceTest extends KernelServiceTestCase
         $service = $this->getApplicationService();
         $password = $service->getPasswordConstraint();
         foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $option) {
-            self::assertFalse($password->getOption($option));
+            self::assertFalse($password->isOption($option));
         }
     }
 
@@ -432,7 +431,6 @@ class ApplicationServiceTest extends KernelServiceTestCase
         $manager = $this->createMock(EntityManagerInterface::class);
         $builder = $this->createMock(RoleBuilderService::class);
         $service = new ApplicationService($manager, $builder, false, $cacheItemPool);
-        $service->setLogger($this->createMock(LoggerInterface::class));
         $service->setTranslator($this->createMockTranslator());
 
         return $service;

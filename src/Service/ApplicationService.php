@@ -53,7 +53,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         #[Target('calculation.application')]
         CacheItemPoolInterface $cacheItemPool
     ) {
-        $this->setCacheItemPool($cacheItemPool);
+        $this->cacheItemPool = $cacheItemPool;
     }
 
     /**
@@ -224,7 +224,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         // password options
         $password = new Password();
         foreach (self::PASSWORD_OPTIONS as $key => $option) {
-            $properties[$key] = (bool) $password->getOption($option);
+            $properties[$key] = $password->isOption($option);
         }
 
         return $properties;

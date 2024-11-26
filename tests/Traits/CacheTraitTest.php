@@ -13,19 +13,18 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
-use App\Tests\KernelServiceTestCase;
-use App\Traits\CacheAwareTrait;
-use Psr\Cache\CacheItemPoolInterface;
+use App\Traits\CacheTrait;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-class CacheKernelServiceTest extends KernelServiceTestCase
+class CacheTraitTest extends TestCase
 {
-    use CacheAwareTrait;
+    use CacheTrait;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $cacheItemPool = $this->getService(CacheItemPoolInterface::class);
-        $this->setCacheItemPool($cacheItemPool);
+        $this->cacheItemPool = new ArrayAdapter();
     }
 
     public function testClearCache(): void
@@ -62,13 +61,14 @@ class CacheKernelServiceTest extends KernelServiceTestCase
 
     public function testGetCacheValue(): void
     {
+        /** @psalm-var string|null $actual */
         $actual = $this->getCacheValue('key');
         self::assertNull($actual);
 
         $key = 'key';
         $value = 'value';
         $this->setCacheValue($key, $value);
-        /** @psalm-var string $actual */
+        /** @psalm-var string|null $actual */
         $actual = $this->getCacheValue($key);
         self::assertSame($value, $actual);
 
@@ -77,23 +77,6 @@ class CacheKernelServiceTest extends KernelServiceTestCase
         /** @psalm-var string $actual */
         $actual = $this->getCacheValue($key, $default);
         self::assertSame($default, $actual);
-
-        $this->deleteCacheItem($key);
-        $callback = fn (): string => $default;
-        /** @psalm-var string $actual */
-        $actual = $this->getCacheValue($key, $callback);
-        self::assertSame($default, $actual);
-    }
-
-    public function testHasCacheItem(): void
-    {
-        $key = 'cache_item';
-        $actual = $this->hasCacheItem($key);
-        self::assertFalse($actual);
-
-        $this->setCacheValue($key, 'value');
-        $actual = $this->hasCacheItem($key);
-        self::assertTrue($actual);
     }
 
     public function testSaveDeferredCacheValue(): void

@@ -41,7 +41,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         #[Target('calculation.user')]
         CacheItemPoolInterface $cacheItemPool
     ) {
-        $this->setCacheItemPool($cacheItemPool);
+        $this->cacheItemPool = $cacheItemPool;
     }
 
     /**

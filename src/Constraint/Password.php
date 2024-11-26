@@ -124,7 +124,7 @@ class Password extends Constraint
      *
      * @throws InvalidOptionsException If an invalid option name is given
      */
-    public function getOption(string $option): mixed
+    public function isOption(string $option): bool
     {
         return match ($option) {
             'all' => $this->all,
@@ -133,7 +133,7 @@ class Password extends Constraint
             'numbers' => $this->numbers,
             'special_char' => $this->special_char,
             'email' => $this->email,
-            default => parent::__get($option),
+            default => throw new InvalidOptionsException(\sprintf('The option "%s" does not exist.', $option), [$option])
         };
     }
 
@@ -142,16 +142,16 @@ class Password extends Constraint
      *
      * @throws InvalidOptionsException If an invalid option name is given
      */
-    public function setOption(string $option, mixed $value): self
+    public function setOption(string $option, bool $value): self
     {
         match ($option) {
-            'all' => $this->all = (bool) $value,
-            'letters' => $this->letters = (bool) $value,
-            'case_diff' => $this->case_diff = (bool) $value,
-            'numbers' => $this->numbers = (bool) $value,
-            'special_char' => $this->special_char = (bool) $value,
-            'email' => $this->email = (bool) $value,
-            default => parent::__set($option, $value),
+            'all' => $this->all = $value,
+            'letters' => $this->letters = $value,
+            'case_diff' => $this->case_diff = $value,
+            'numbers' => $this->numbers = $value,
+            'special_char' => $this->special_char = $value,
+            'email' => $this->email = $value,
+            default => throw new InvalidOptionsException(\sprintf('The option "%s" does not exist.', $option), [$option])
         };
 
         return $this;

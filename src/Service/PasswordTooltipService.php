@@ -43,7 +43,7 @@ readonly class PasswordTooltipService
 
         $constraint = $this->service->getPasswordConstraint();
         foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $property => $option) {
-            if ((bool) $constraint->getOption($option)) {
+            if ($constraint->isOption($option)) {
                 $results[] = $this->trans($property);
             }
         }

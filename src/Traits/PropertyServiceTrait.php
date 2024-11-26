@@ -27,29 +27,14 @@ use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
  */
 trait PropertyServiceTrait
 {
-    use CacheAwareTrait {
-        clearCache as private clearCacheFromTrait;
-        saveDeferredCacheValue as private saveDeferredCacheValueFromTrait;
-    }
-    use LoggerAwareTrait;
+    use CacheTrait;
     use ServiceMethodsSubscriberTrait {
         ServiceMethodsSubscriberTrait::setContainer as setContainerFromTrait;
     }
     use TranslatorAwareTrait;
 
-    /**
-     * Clear this cache.
-     */
-    public function clearCache(): bool
-    {
-        if (!$this->clearCacheFromTrait()) {
-            $this->logWarning($this->trans('application_service.clear_error'));
-
-            return false;
-        }
-
-        return true;
-    }
+    // The saved cache state property name
+    private const P_CACHE_SAVED = 'cache_saved';
 
     public function isActionEdit(): bool
     {
@@ -76,17 +61,6 @@ trait PropertyServiceTrait
         return $this->getPropertyBoolean(self::P_DARK_NAVIGATION, true);
     }
 
-    public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
-    {
-        if (!$this->saveDeferredCacheValueFromTrait($key, $value, $time)) {
-            $this->logWarning($this->trans('application_service.deferred_error', ['%key%' => $key]));
-
-            return false;
-        }
-
-        return true;
-    }
-
     /**
      * Override to update cached values.
      */
@@ -94,7 +68,7 @@ trait PropertyServiceTrait
     public function setContainer(ContainerInterface $container): ?ContainerInterface
     {
         $result = $this->setContainerFromTrait($container);
-        if ($this->isConnected() && !$this->getPropertyBoolean(self::P_CACHE_SAVED)) {
+        if (!$this->getPropertyBoolean(self::P_CACHE_SAVED) && $this->isConnected()) {
             $this->updateAdapter();
         }
 
@@ -231,7 +205,7 @@ trait PropertyServiceTrait
      */
     protected function getPropertyString(string $name, ?string $default = null): ?string
     {
-        /** @psalm-var mixed $value */
+        /** @psalm-var string|null $value */
         $value = $this->getCacheValue($name, $default);
 
         return \is_string($value) ? $value : $default;
@@ -315,9 +289,7 @@ trait PropertyServiceTrait
             $this->saveDeferredCacheValue($property->getName(), $property->getValue());
         }
         $this->saveDeferredCacheValue(self::P_CACHE_SAVED, true);
-        if (!$this->commitDeferredValues()) {
-            $this->logWarning($this->trans('application_service.commit_error'));
-        }
+        $this->commitDeferredValues();
     }
 
     abstract protected function updateAdapter(): void;

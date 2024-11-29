@@ -168,14 +168,19 @@ class SchemaReport extends AbstractReport
             $this->leftColumn('schema.fields.table', 100),
             $this->leftColumn('schema.fields.relation', 55, true)
         );
+        $width = $this->getPrintableWidth();
         foreach ($associations as $association) {
-            $name = $association['table'];
-            $link = $this->findLink($name);
+            $x = $this->getX();
+            $y = $this->getY();
             $table->startRow()
                 ->add($association['name'])
-                ->add($name, link: $link)
+                ->add($association['table'])
                 ->addCell($association['inverse'] ? $this->getCellOneToMany() : $this->getCellManyToOne())
                 ->endRow();
+            $link = $this->findLink($association['table']);
+            if (self::isLink($link)) {
+                $this->link($x, $y, $width, $this->getY() - $y, $link);
+            }
         }
     }
 
@@ -194,14 +199,20 @@ class SchemaReport extends AbstractReport
             $this->centerColumn('schema.fields.required', 25, true),
             $this->leftColumn('schema.fields.default', 30, true)
         );
+        $width = $this->getPrintableWidth();
         foreach ($columns as $column) {
-            $link = $this->findLink($column['foreign_table']);
+            $x = $this->getX();
+            $y = $this->getY();
             $table->startRow()
-                ->add($column['name'], link: $link)
+                ->add($column['name'])
                 ->add($this->formatType($column))
                 ->add($this->formatBool($column['required']), style: $this->booleanStyle)
                 ->add($column['default'])
                 ->endRow();
+            $link = $this->findLink($column['foreign_table']);
+            if (self::isLink($link)) {
+                $this->link($x, $y, $width, $this->getY() - $y, $link);
+            }
         }
         $this->lineBreak();
     }
@@ -264,17 +275,22 @@ class SchemaReport extends AbstractReport
                 $this->rightColumn('schema.fields.indexes', 17, true),
                 $this->rightColumn('schema.fields.associations', 25, true)
             )->outputHeaders();
+        $width = $this->getPrintableWidth();
         foreach ($tables as $table) {
-            $name = $table['name'];
-            $link = $this->findLink($name);
+            $x = $this->getX();
+            $y = $this->getY();
             $instance->startRow()
-                ->add($name, link: $link)
+                ->add($table['name'])
                 ->addCellInt($table['columns'])
                 ->addCellInt($table['records'])
                 ->addCellAmount($table['size'])
                 ->addCellInt($table['indexes'])
                 ->addCellInt($table['associations'])
                 ->endRow();
+            $link = $this->findLink($table['name']);
+            if (self::isLink($link)) {
+                $this->link($x, $y, $width, $this->getY() - $y, $link);
+            }
         }
     }
 

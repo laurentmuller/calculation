@@ -58,7 +58,7 @@ class CustomersReport extends AbstractArrayReport
             $this->outputList($table, $entities);
         }
 
-        return $this->renderCount($table, $entities);
+        return $this->renderCount($table, $entities, 'counters.customers');
     }
 
     private function firstChar(string $text): string

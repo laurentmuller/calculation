@@ -21,6 +21,7 @@ use App\Traits\TranslatorTrait;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel as PsrLevel;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -119,9 +120,18 @@ class LogService
     }
 
     /**
+     * @psalm-return non-empty-string
+     */
+    private function parseChannel(string $name): string
+    {
+        /** @psalm-var non-empty-string */
+        return $name;
+    }
+
+    /**
      * Gets the log date.
      */
-    private function parseDate(string $value): \DateTimeInterface|false
+    private function parseDate(string $value): \DateTimeImmutable|false
     {
         return \DateTimeImmutable::createFromFormat(self::DATE_FORMAT, $value);
     }
@@ -148,9 +158,9 @@ class LogService
             }
             $log = Log::instance($key)
                 ->setCreatedAt($date)
-                ->setChannel($values[1])
-                ->setLevel($values[2])
-                ->setMessage($values[3])
+                ->setLevel($this->parseLevel($values[2]))
+                ->setChannel($this->parseChannel($values[1]))
+                ->setMessage($this->parseMessage($values[3]))
                 ->setContext($this->parseJson($values[4]))
                 ->setExtra($this->parseJson($values[5]));
             $file->addLog($log);
@@ -172,5 +182,19 @@ class LogService
         } catch (\InvalidArgumentException) {
             return null;
         }
+    }
+
+    /**
+     * @psalm-return PsrLevel::*
+     */
+    private function parseLevel(string $name): string
+    {
+        /** @psalm-var PsrLevel::*  */
+        return \strtolower($name);
+    }
+
+    private function parseMessage(string $value): string
+    {
+        return \trim($value);
     }
 }

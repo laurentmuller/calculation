@@ -22,6 +22,9 @@ class LogChannel implements \Countable, \Stringable
     /** @psalm-var int<0, max> */
     private int $count = 0;
 
+    /**
+     * @param non-empty-string $channel
+     */
     public function __construct(string $channel)
     {
         $this->setChannel($channel);
@@ -50,6 +53,9 @@ class LogChannel implements \Countable, \Stringable
         return $this;
     }
 
+    /**
+     * @param non-empty-string $channel
+     */
     public static function instance(string $channel): self
     {
         return new self($channel);

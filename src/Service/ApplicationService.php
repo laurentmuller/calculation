@@ -29,6 +29,7 @@ use App\Interfaces\PropertyServiceInterface;
 use App\Model\CustomerInformation;
 use App\Model\Role;
 use App\Repository\GlobalPropertyRepository;
+use App\Traits\ArrayTrait;
 use App\Traits\MathTrait;
 use App\Traits\PropertyServiceTrait;
 use Doctrine\ORM\EntityManagerInterface;
@@ -41,6 +42,7 @@ use Symfony\Component\DependencyInjection\Attribute\Target;
  */
 class ApplicationService implements PropertyServiceInterface
 {
+    use ArrayTrait;
     use MathTrait;
 
     /** @use PropertyServiceTrait<GlobalProperty> */
@@ -302,9 +304,7 @@ class ApplicationService implements PropertyServiceInterface
     }
 
     /**
-     * Gets the password contraint.
-     *
-     * @psalm-api
+     * Gets the password constraint.
      */
     public function getPasswordConstraint(): Password
     {
@@ -616,13 +616,9 @@ class ApplicationService implements PropertyServiceInterface
      */
     private function getExistingProperties(): array
     {
-        $properties = $this->loadEntities();
-
-        return \array_reduce(
-            $properties,
-            /** @psalm-param array<string, GlobalProperty> $carry */
-            fn (array $carry, GlobalProperty $property) => $carry + [$property->getName() => $property],
-            []
+        return $this->mapToKeyValue(
+            $this->loadEntities(),
+            fn (GlobalProperty $property): array => [$property->getName() => $property],
         );
     }
 

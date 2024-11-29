@@ -36,6 +36,7 @@ use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfOrientation;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
+use Psr\Log\LogLevel as PsrLevel;
 
 /**
  * Report for the log.
@@ -130,7 +131,7 @@ class LogsReport extends AbstractReport
 
     private function getCellChannel(Log $log): PdfFontAwesomeCell|string
     {
-        $text = $log->getChannel(true);
+        $text = $log->getChannelTitle();
         $icon = $log->getChannelIcon();
 
         return $this->getCell($text, $icon);
@@ -138,7 +139,7 @@ class LogsReport extends AbstractReport
 
     private function getCellLevel(Log $log): PdfFontAwesomeCell|string
     {
-        $text = $log->getLevel(true);
+        $text = $log->getLevelTitle();
         $icon = $log->getLevelIcon();
         $color = $this->getLevelColor($log->getLevel());
 
@@ -162,6 +163,9 @@ class LogsReport extends AbstractReport
         return $this->imageService->getImage($path, $color);
     }
 
+    /**
+     * @psalm-param PsrLevel::* $level
+     */
     private function getLevelColor(string $level): string
     {
         if (\array_key_exists($level, $this->colors)) {

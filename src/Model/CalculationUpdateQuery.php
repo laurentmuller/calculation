@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 class CalculationUpdateQuery extends AbstractSimulateQuery
 {
-    private \DateTimeInterface $date;
+    private \DateTimeImmutable $date;
     private string $interval = 'P1M';
     /** @var CalculationState[] */
     #[Assert\Count(min: 1)]
@@ -34,10 +34,10 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
      */
     public function __construct()
     {
-        $this->date = DateUtils::removeTime();
+        $this->date = DateUtils::removeTime(new \DateTimeImmutable());
     }
 
-    public function getDate(): \DateTimeInterface
+    public function getDate(): \DateTimeImmutable
     {
         return $this->date;
     }
@@ -45,7 +45,7 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
     /**
      * @throws \Exception
      */
-    public function getDateFrom(): \DateTimeInterface
+    public function getDateFrom(): \DateTimeImmutable
     {
         return DateUtils::sub($this->date, $this->interval);
     }
@@ -79,7 +79,7 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
         return $this->mapStates(static fn (CalculationState $state): int => (int) $state->getId());
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setDate(\DateTimeImmutable $date): self
     {
         $this->date = $date;
 

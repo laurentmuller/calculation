@@ -13,15 +13,24 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Interfaces\ComparableInterface;
 use App\Traits\LogLevelTrait;
+use Monolog\Level;
+use Psr\Log\LogLevel as PsrLevel;
 
-class LogLevel implements \Countable, \Stringable
+/**
+ * @implements ComparableInterface<LogLevel>
+ */
+class LogLevel implements \Countable, \Stringable, ComparableInterface
 {
     use LogLevelTrait;
 
     /** @psalm-var int<0, max> */
     private int $count = 0;
 
+    /**
+     * @psalm-param PsrLevel::* $level
+     */
     public function __construct(string $level)
     {
         $this->setLevel($level);
@@ -32,12 +41,22 @@ class LogLevel implements \Countable, \Stringable
         return $this->getLevel();
     }
 
+    public function compare(ComparableInterface $other): int
+    {
+        return $this->getLevelIndex() <=> $other->getLevelIndex();
+    }
+
     /**
      * @return int<0, max>
      */
     public function count(): int
     {
         return $this->count;
+    }
+
+    public function getLevelIndex(): int
+    {
+        return Level::fromName($this->level)->value;
     }
 
     /**
@@ -50,6 +69,9 @@ class LogLevel implements \Countable, \Stringable
         return $this;
     }
 
+    /**
+     * @psalm-param PsrLevel::* $level
+     */
     public static function instance(string $level): self
     {
         return new self($level);

@@ -36,6 +36,7 @@ use fpdf\Traits\PdfEllipseTrait;
 use fpdf\Traits\PdfRotationTrait;
 use fpdf\Traits\PdfTransparencyTrait;
 use Monolog\Level;
+use Psr\Log\LogLevel as PsrLevel;
 
 /**
  * Report testing in memory images.
@@ -137,9 +138,12 @@ class MemoryImageReport extends AbstractReport
         $this->resetAlpha();
     }
 
+    /**
+     * @psalm-param PsrLevel::* $level
+     */
     private function getLevelColor(string $level): ?PdfTextColor
     {
-        $log = new LogLevel($level);
+        $log = LogLevel::instance($level);
         $color = $log->getLevelColor();
 
         return HtmlBootstrapColor::parseTextColor($color);
@@ -186,7 +190,7 @@ class MemoryImageReport extends AbstractReport
         $files = [];
         $levels = Level::cases();
         foreach ($levels as $level) {
-            $logLevel = new LogLevel($level->name);
+            $logLevel = new LogLevel($level->toPsrLogLevel());
             $color = HtmlBootstrapColor::parseTextColor($logLevel->getLevelColor())?->asHex('#');
             $icon = $this->iconService?->getPath($logLevel->getLevelIcon());
             if (!\is_string($icon)) {
@@ -268,11 +272,12 @@ class MemoryImageReport extends AbstractReport
     }
 
     /**
-     * @param array<string, FontAwesomeImage> $files
+     * @psalm-param array<string, FontAwesomeImage> $files
      */
     private function renderImages(string $title, array $files, bool $color): void
     {
         $this->renderCellTitle($title);
+        /** @psalm-var PsrLevel::* $name */
         foreach ($files as $name => $image) {
             if ($color) {
                 $this->getLevelColor($name)?->apply($this);

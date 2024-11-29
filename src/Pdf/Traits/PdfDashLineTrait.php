@@ -24,11 +24,13 @@ trait PdfDashLineTrait
     /**
      * Draw a dashed rectangle.
      *
+     * After this call, the dashed style and the line width are restored.
+     *
      * @param float              $x      the abscissa of the upper-left corner
      * @param float              $y      the ordinate of the upper-left corner
      * @param float              $w      the width
      * @param float              $h      the height
-     * @param int                $dashes the number of dashes per line
+     * @param float              $dashes the length of dashes and gaps
      * @param PdfLine|float|null $line   the line width or null to use current
      */
     public function dashedRect(
@@ -36,9 +38,9 @@ trait PdfDashLineTrait
         float $y,
         float $w,
         float $h,
-        int $dashes = 15,
+        float $dashes = 1,
         PdfLine|float|null $line = null
-    ): void {
+    ): static {
         $oldWidth = $this->lineWidth;
         if ($line instanceof PdfLine) {
             $line->apply($this);
@@ -46,40 +48,26 @@ trait PdfDashLineTrait
             $this->setLineWidth($line);
         }
 
-        $right = $x + $w;
-        $bottom = $y + $h;
-        $increment = \max($w, $h) / (float) $dashes;
-        $length = $increment / 2.0;
-
-        // upper and lower dashes
-        $endValue = $right - 1.0;
-        for ($currentX = $x; $currentX <= $right; $currentX += $increment) {
-            $end = \min($currentX + $length, $endValue);
-            $this->line($currentX, $y, $end, $y);
-            $this->line($currentX, $bottom, $end, $bottom);
-        }
-
-        // left and right dashes
-        $endValue = $bottom - 1.0;
-        for ($currentY = $y; $currentY <= $bottom; $currentY += $increment) {
-            $end = \min($currentY + $length, $endValue);
-            $this->line($x, $currentY, $x, $end);
-            $this->line($right, $currentY, $right, $end);
-        }
-
+        $this->setDashPattern($dashes, $dashes);
+        $this->rect($x, $y, $w, $h);
+        $this->resetDashPattern();
         $this->setLineWidth($oldWidth);
+
+        return $this;
     }
 
     /**
      * Draw a dashed rectangle.
      *
+     * After this call, the dashed style and the line width are restored.
+     *
      * @param PdfRectangle       $rectangle the rectangle to draw
-     * @param int                $dashes    the number of dashes per line
+     * @param float              $dashes    the length of dashes and gaps
      * @param PdfLine|float|null $line      the line width or null to use current
      */
-    public function dashedRectangle(PdfRectangle $rectangle, int $dashes = 15, PdfLine|float|null $line = null): void
+    public function dashedRectangle(PdfRectangle $rectangle, float $dashes = 1, PdfLine|float|null $line = null): static
     {
-        $this->dashedRect(
+        return $this->dashedRect(
             $rectangle->x,
             $rectangle->y,
             $rectangle->width,
@@ -102,12 +90,12 @@ trait PdfDashLineTrait
     /**
      * Set the dash pattern used to draw dashed lines or rectangles.
      *
-     * @param float $black the length of dashes
-     * @param float $white the length of gaps
+     * @param float $dash the length of dashes
+     * @param float $gap  the length of gaps
      */
-    public function setDashPattern(float $black, float $white): static
+    public function setDashPattern(float $dash, float $gap): static
     {
-        $this->outf('[%.3F %.3F] 0 d', $black * $this->scaleFactor, $white * $this->scaleFactor);
+        $this->outf('[%.3F %.3F] 0 d', $dash * $this->scaleFactor, $gap * $this->scaleFactor);
 
         return $this;
     }

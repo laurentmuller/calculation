@@ -66,12 +66,6 @@ trait ValidateMarginsTrait
                     ->addViolation();
                 break;
             }
-            if ($max < $lastMax) {
-                $context->buildViolation('margin.maximum_overlap')
-                    ->atPath("margins[$key].maximum")
-                    ->addViolation();
-                break;
-            }
             if ($min !== $lastMax) {
                 $context->buildViolation('margin.minimum_discontinued')
                     ->atPath("margins[$key].minimum")

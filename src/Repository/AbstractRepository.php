@@ -19,7 +19,6 @@ use App\Interfaces\SortModeInterface;
 use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -57,18 +56,6 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
     public function flush(): void
     {
         $this->getEntityManager()->flush();
-    }
-
-    /**
-     * Gets the date time type for the given date.
-     */
-    public function getDateTimeType(\DateTimeInterface $date): string
-    {
-        if ($date instanceof \DateTimeImmutable) {
-            return Types::DATETIME_IMMUTABLE;
-        }
-
-        return Types::DATETIME_MUTABLE;
     }
 
     /**

@@ -316,7 +316,7 @@ class SchemaService
         if ($type instanceof BooleanType) {
             return StringUtils::encodeJson(\filter_var($default, \FILTER_VALIDATE_BOOLEAN));
         }
-        if ('0' === $default && $type instanceof FloatType) {
+        if ($type instanceof FloatType && '0' === $default) {
             return '0.00';
         }
 
@@ -432,11 +432,9 @@ class SchemaService
             static fn (ClassMetadata $data): bool => !$data->isMappedSuperclass && !$data->isEmbeddedClass
         );
 
-        return \array_reduce(
+        return $this->mapToKeyValue(
             $datas,
-            /** @psalm-param array<string, ClassMetadata> $carry */
-            static fn (array $carry, ClassMetadata $data): array => $carry + [$data->table['name'] => $data],
-            []
+            fn (ClassMetadata $data): array => [$data->table['name'] => $data]
         );
     }
 
@@ -447,14 +445,9 @@ class SchemaService
      */
     private function loadTables(): array
     {
-        $tables = \array_reduce(
+        $tables = $this->mapToKeyValue(
             $this->getSchemaManager()->listTables(),
-            /** @psalm-param array<string, SchemaTableType> $carry  */
-            fn (
-                array $carry,
-                Table $table
-            ): array => $carry + [$this->mapTableName($table) => $this->createSchemaTable($table)],
-            []
+            fn (Table $table): array => [$this->mapTableName($table) => $this->createSchemaTable($table)]
         );
         \ksort($tables);
 

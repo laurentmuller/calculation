@@ -94,7 +94,7 @@ class CalculationUpdateQueryTest extends TestCase
      */
     public function testValidationInvalidDate(): void
     {
-        $date = DateUtils::add(DateUtils::removeTime(), 'P1D');
+        $date = DateUtils::add(DateUtils::removeTime(new \DateTimeImmutable()), 'P1D');
         $query = new CalculationUpdateQuery();
         $query->setDate($date);
 
@@ -138,9 +138,9 @@ class CalculationUpdateQueryTest extends TestCase
         return $context;
     }
 
-    private function getDate(): \DateTimeInterface
+    private function getDate(): \DateTimeImmutable
     {
-        return DateUtils::removeTime();
+        return DateUtils::removeTime(new \DateTimeImmutable());
     }
 
     /**

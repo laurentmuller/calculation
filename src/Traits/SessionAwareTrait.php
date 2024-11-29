@@ -70,7 +70,7 @@ trait SessionAwareTrait
      */
     protected function getSessionDate(string $key, ?\DateTimeInterface $default = null): ?\DateTimeInterface
     {
-        /** @var \DateTimeInterface|int|null $value */
+        /** @psalm-var \DateTimeInterface|int|null $value */
         $value = $this->getSessionValue($key, $default);
         if (\is_int($value)) {
             return (new \DateTime())->setTimestamp($value);

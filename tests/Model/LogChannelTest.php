@@ -33,6 +33,9 @@ class LogChannelTest extends TestCase
         yield ['', 'fa-fw fa-solid fa-file'];
     }
 
+    /**
+     * @psalm-param non-empty-string $channel
+     */
     #[DataProvider('getChannelIcons')]
     public function testChannelIcon(string $channel, string $expected): void
     {
@@ -57,15 +60,7 @@ class LogChannelTest extends TestCase
         $logChannel = LogChannel::instance('channel');
         self::assertSame('channel', $logChannel->getChannel());
         self::assertSame('channel', $logChannel->__toString());
-        self::assertSame('Channel', $logChannel->getChannel(true));
+        self::assertSame('Channel', $logChannel->getChannelTitle());
         self::assertCount(0, $logChannel);
-    }
-
-    public function testIsChannel(): void
-    {
-        $logChannel = LogChannel::instance('channel');
-        self::assertTrue($logChannel->isChannel());
-        $logChannel = LogChannel::instance('');
-        self::assertFalse($logChannel->isChannel());
     }
 }

@@ -69,11 +69,7 @@ class LogTest extends TestCase
         $log = new Log();
         $log->setChannel('channel');
         self::assertSame('channel', $log->getChannel());
-        self::assertSame('Channel', $log->getChannel(true));
-        self::assertTrue($log->isChannel());
-
-        $log->setChannel('');
-        self::assertFalse($log->isChannel());
+        self::assertSame('Channel', $log->getChannelTitle());
     }
 
     public function testChannelApplication(): void
@@ -86,6 +82,9 @@ class LogTest extends TestCase
         self::assertSame('application', $log->getChannel());
     }
 
+    /**
+     * @psalm-param non-empty-string $channel
+     */
     #[DataProvider('getChannelIcons')]
     public function testChannelIcon(string $channel, string $expected): void
     {
@@ -100,13 +99,12 @@ class LogTest extends TestCase
      */
     public function testCompare(): void
     {
-        $date = new \DateTime();
+        $date = new \DateTimeImmutable();
         $log1 = new Log();
         $log1->setCreatedAt($date);
         $log2 = new Log();
         $log2->setCreatedAt($date);
         self::assertSame(0, $log1->compare($log2));
-
         $date = DateUtils::sub($date, 'PT1H');
         $log2->setCreatedAt($date);
         self::assertSame(1, $log1->compare($log2));
@@ -180,7 +178,7 @@ class LogTest extends TestCase
 
     public function testFormattedDate(): void
     {
-        $date = new \DateTime();
+        $date = new \DateTimeImmutable();
         $log = new Log();
         $log->setCreatedAt($date);
         $expected = FormatUtils::formatDateTime($date, \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM);
@@ -201,13 +199,12 @@ class LogTest extends TestCase
         $log = new Log();
         $log->setLevel(PsrLevel::ALERT);
         self::assertSame('alert', $log->getLevel());
-        self::assertSame('Alert', $log->getLevel(true));
-        self::assertTrue($log->isLevel());
-
-        $log->setLevel('');
-        self::assertFalse($log->isLevel());
+        self::assertSame('Alert', $log->getLevelTitle());
     }
 
+    /**
+     * @psalm-param PsrLevel::* $level
+     */
     #[DataProvider('getLevelColors')]
     public function testLevelColor(string $level, string $expected): void
     {
@@ -217,6 +214,9 @@ class LogTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    /**
+     * @psalm-param PsrLevel::* $level
+     */
     #[DataProvider('getLevelIcons')]
     public function testLevelIcon(string $level, string $expected): void
     {
@@ -228,7 +228,7 @@ class LogTest extends TestCase
 
     public function testTimestamp(): void
     {
-        $expected = new \DateTime();
+        $expected = new \DateTimeImmutable();
         $log = new Log();
         $log->setCreatedAt($expected);
         $actual = $log->getTimestamp();

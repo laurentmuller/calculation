@@ -76,13 +76,13 @@ class TimelineServiceTest extends TestCase
      */
     private function createMockRepository(?Calculation $calculation = null): MockObject&CalculationRepository
     {
-        $date = new \DateTime('today');
+        $date = new \DateTimeImmutable('today');
         $repository = $this->createMock(CalculationRepository::class);
 
         if ($calculation instanceof Calculation) {
             $repository->method('getByInterval')
                 ->willReturn([$calculation]);
-            $date = $calculation->getDate();
+            $date = \DateTimeImmutable::createFromInterface($calculation->getDate());
         }
 
         $repository->method('getMinMaxDates')

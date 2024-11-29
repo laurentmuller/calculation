@@ -22,19 +22,22 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 trait LogLevelTrait
 {
+    /**
+     * @psalm-var PsrLevel::*
+     */
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
     #[ORM\Column(length: 50)]
     private string $level = PsrLevel::INFO;
 
     /**
-     * Get the channel.
+     * Get the level.
      *
-     * @param bool $capitalize true to capitalize this level's name
+     * @psalm-return PsrLevel::*
      */
-    public function getLevel(bool $capitalize = false): string
+    public function getLevel(): string
     {
-        return $capitalize ? \ucfirst($this->level) : $this->level;
+        return $this->level;
     }
 
     /**
@@ -68,14 +71,20 @@ trait LogLevelTrait
         };
     }
 
-    public function isLevel(): bool
+    /**
+     * Gets the level with the first character uppercase.
+     */
+    public function getLevelTitle(): string
     {
-        return '' !== $this->level;
+        return \ucfirst($this->level);
     }
 
+    /**
+     * @psalm-param PsrLevel::* $level
+     */
     public function setLevel(string $level): self
     {
-        $this->level = \strtolower($level);
+        $this->level = $level;
 
         return $this;
     }

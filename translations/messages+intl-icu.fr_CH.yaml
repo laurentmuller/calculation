@@ -155,6 +155,12 @@ counters:
             one   {1 année} 
             other {# années}
         }
+    customers: >-
+        {count, plural, 
+            =0    {Aucun client}
+            one   {1 client}
+            other {# clients}
+        }
     customers_generate: >-
         {count, plural,  
             =0    {Aucun client n''a été généré.} 

@@ -16,6 +16,7 @@ namespace App\Pdf;
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Events\PdfLabelTextEvent;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
+use App\Pdf\Traits\PdfCleanTextTrait;
 use App\Pdf\Traits\PdfDashLineTrait;
 use App\Pdf\Traits\PdfStyleTrait;
 use App\Utils\StringUtils;
@@ -30,8 +31,20 @@ use fpdf\PdfException;
  **/
 class PdfLabelDocument extends PdfDocument
 {
+    use PdfCleanTextTrait;
     use PdfDashLineTrait;
     use PdfStyleTrait;
+
+    /** The encoding source. */
+    private const ENCODING_FROM = [
+        'ASCII',
+        'UTF-8',
+        'CP1252',
+        'ISO-8859-1',
+    ];
+
+    /** The encoding target. */
+    private const ENCODING_TO = 'CP1252';
 
     // the font mapping
     private const FONT_CONVERSION = [

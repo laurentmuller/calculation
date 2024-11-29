@@ -238,6 +238,21 @@ class ArrayTraitTest extends TestCase
         self::assertNull($actual);
     }
 
+    public function testMapToKeyValue(): void
+    {
+        $values = [
+            [
+                'key' => 'My Key',
+                'value' => 'My Value',
+            ],
+        ];
+        $actual = $this->mapToKeyValue(
+            $values,
+            fn (array $entry): array => [$entry['key'] => $entry['value']]
+        );
+        self::assertSame(['My Key' => 'My Value'], $actual);
+    }
+
     public function testRemoveValue(): void
     {
         $values = $this->getFindFirstArray();

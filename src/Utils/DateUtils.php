@@ -63,6 +63,12 @@ final class DateUtils
      * @return \DateTimeInterface the new date
      *
      * @throws \Exception if the interval is a string and cannot be parsed
+     *
+     * @psalm-template T of \DateTime|\DateTimeImmutable
+     *
+     * @psalm-param T $date
+     *
+     * @psalm-return (T is \DateTime ? \DateTime : \DateTimeImmutable)
      */
     public static function add(\DateTimeInterface $date, \DateInterval|string $interval): \DateTimeInterface
     {
@@ -70,10 +76,7 @@ final class DateUtils
             $interval = new \DateInterval($interval);
         }
 
-        /** @var \DateTime $clone */
-        $clone = (clone $date);
-
-        return $clone->add($interval);
+        return (clone $date)->add($interval);
     }
 
     /**
@@ -261,6 +264,12 @@ final class DateUtils
      * @return \DateTimeInterface the new date
      *
      * @throws \Exception if the interval is a string and cannot be parsed
+     *
+     * @psalm-template T of \DateTime|\DateTimeImmutable
+     *
+     * @psalm-param T $date
+     *
+     * @psalm-return (T is \DateTime ? \DateTime : \DateTimeImmutable)
      */
     public static function sub(\DateTimeInterface $date, \DateInterval|string $interval): \DateTimeInterface
     {
@@ -268,10 +277,19 @@ final class DateUtils
             $interval = new \DateInterval($interval);
         }
 
-        /** @var \DateTime $clone */
-        $clone = (clone $date);
+        return (clone $date)->sub($interval);
+    }
 
-        return $clone->sub($interval);
+    /**
+     * Convert the given date to a <code>\DateTimeImmutable</code>.
+     */
+    public static function toDateTimeImmutable(\DateTimeInterface $date): \DateTimeImmutable
+    {
+        if ($date instanceof \DateTimeImmutable) {
+            return $date;
+        }
+
+        return \DateTimeImmutable::createFromInterface($date);
     }
 
     /**

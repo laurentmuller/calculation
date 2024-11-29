@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Pdf\PdfLabel;
+use App\Traits\ArrayTrait;
 use App\Utils\FileUtils;
 use fpdf\PdfException;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
@@ -29,6 +30,8 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 readonly class PdfLabelService
 {
+    use ArrayTrait;
+
     public function __construct(private CacheInterface $cache)
     {
     }
@@ -101,14 +104,12 @@ readonly class PdfLabelService
         try {
             $serializer = $this->createSerializer();
 
-            /** @psalm-var PdfLabel[] $array */
-            $array = $serializer->deserialize($content, PdfLabel::class . '[]', 'json');
+            /** @psalm-var PdfLabel[] $labels */
+            $labels = $serializer->deserialize($content, PdfLabel::class . '[]', 'json');
 
-            return \array_reduce(
-                $array,
-                /** @psalm-param array<string, PdfLabel> $carry  */
-                fn (array $carry, PdfLabel $label): array => $carry + [$label->name => $label],
-                []
+            return $this->mapToKeyValue(
+                $labels,
+                fn (PdfLabel $label) => [$label->name => $label]
             );
         } catch (\Exception $e) {
             $message = \sprintf('Unable to deserialize the content of the file "%s".', $file);

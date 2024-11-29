@@ -239,11 +239,9 @@ abstract class AbstractTable implements SortModeInterface
      */
     private function mapEntity(EntityInterface|array $objectOrArray, array $columns): array
     {
-        return \array_reduce(
+        return $this->mapToKeyValue(
             $columns,
-            /** @psalm-param array<string, string> $carry */
-            fn (array $carry, Column $column) => $carry + [$column->getAlias() => $column->mapValue($objectOrArray)],
-            []
+            fn (Column $column): array => [$column->getAlias() => $column->mapValue($objectOrArray)]
         );
     }
 }

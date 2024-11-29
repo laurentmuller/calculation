@@ -42,10 +42,10 @@ class LogSorterTest extends TestCase
     public function testSortByChannelAndDate(): void
     {
         $log1 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-02-01'))
+            ->setCreatedAt(new \DateTimeImmutable('2024-02-01'))
             ->setChannel('ChannelA');
         $log2 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-01-02'))
+            ->setCreatedAt(new \DateTimeImmutable('2024-01-02'))
             ->setChannel('ChannelA');
         $logs = [$log1, $log2];
 
@@ -57,9 +57,9 @@ class LogSorterTest extends TestCase
     public function testSortByDate(): void
     {
         $log1 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-01-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2024-01-01'));
         $log2 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-02-02'));
+            ->setCreatedAt(new \DateTimeImmutable('2024-02-02'));
         $logs = [$log1, $log2];
 
         $sorter = new LogSorter('createdAt', true);
@@ -118,9 +118,9 @@ class LogSorterTest extends TestCase
     public function testWithoutFieldSorter(): void
     {
         $log1 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-02-02'));
+            ->setCreatedAt(new \DateTimeImmutable('2024-02-02'));
         $log2 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-01-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2024-01-01'));
         $logs = [$log1, $log2];
 
         $sorter = new LogSorter('fake', true);

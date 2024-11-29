@@ -217,11 +217,13 @@
             ]
         },
         {
+
             "name": "mermaid",
-            "version": "11.4.0",
-            "source": "cdnjs",
+            "version": "11.4.1",
+            "source": "jsdelivr",
+            "prefix": "dist/",
             "files": [
-                "mermaid.js"
+                "dist/mermaid.js"
             ]
         },
         {

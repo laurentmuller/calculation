@@ -125,14 +125,15 @@ class CalculationUpdateService implements ServiceSubscriberInterface
             ->getResult();
     }
 
-    private function getDate(\DateTimeInterface $default): \DateTimeInterface
+    private function getDate(\DateTimeImmutable $default): \DateTimeImmutable
     {
         $date = $this->getSessionDate(self::KEY_DATE, $default);
-        if ($date instanceof \DateTime) {
-            return DateUtils::removeTime($date);
+        if ($date instanceof \DateTimeImmutable) {
+            return $date;
         }
+        $date = DateUtils::removeTime($date);
 
-        return $date;
+        return DateUtils::toDateTimeImmutable($date);
     }
 
     private function getInterval(string $default): string

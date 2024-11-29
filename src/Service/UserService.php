@@ -20,6 +20,7 @@ use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
 use App\Model\CustomerInformation;
 use App\Repository\UserPropertyRepository;
+use App\Traits\ArrayTrait;
 use App\Traits\PropertyServiceTrait;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -31,6 +32,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class UserService implements PropertyServiceInterface
 {
+    use ArrayTrait;
     /** @use PropertyServiceTrait<UserProperty> */
     use PropertyServiceTrait;
 
@@ -226,13 +228,9 @@ class UserService implements PropertyServiceInterface
      */
     private function getExistingProperties(): array
     {
-        $properties = $this->loadEntities();
-
-        return \array_reduce(
-            $properties,
-            /** @psalm-param array<string, UserProperty> $carry */
-            fn (array $carry, UserProperty $property) => $carry + [$property->getName() => $property],
-            []
+        return $this->mapToKeyValue(
+            $this->loadEntities(),
+            fn (UserProperty $property): array => [$property->getName() => $property]
         );
     }
 

@@ -15,6 +15,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use App\Interfaces\RoleInterface;
+use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -50,7 +51,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
         string $hashedToken
     ): ResetPasswordRequestInterface {
         return $user->setResetPasswordRequest(
-            \DateTimeImmutable::createFromInterface($expiresAt),
+            DateUtils::toDateTimeImmutable($expiresAt),
             $selector,
             $hashedToken
         );

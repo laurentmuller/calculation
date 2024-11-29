@@ -149,9 +149,10 @@ class UpdateAssetsCommand extends Command
                 foreach ($files as $file) {
                     $sourceFile = $this->getSourceFile($source, $format, $plugin, $file);
                     $targetFile = $this->getTargetFile($targetTemp, $plugin, $file);
-                    if ($this->copyFile($sourceFile, $targetFile, $version, $prefixes)) {
-                        ++$countFiles;
+                    if (!$this->copyFile($sourceFile, $targetFile, $version, $prefixes)) {
+                        return Command::FAILURE;
                     }
+                    ++$countFiles;
                 }
                 ++$countPlugins;
 
@@ -279,14 +280,18 @@ class UpdateAssetsCommand extends Command
      */
     private function countFiles(array $plugins): int
     {
-        return \array_reduce($plugins, function (int $carry, array $plugin): int {
-            /** @psalm-var PluginType $plugin */
-            if (!$this->isPluginDisabled($plugin)) {
-                return $carry + \count($plugin['files']);
-            }
+        $plugins = \array_filter(
+            $plugins,
+            /** @psalm-param PluginType $plugin */
+            fn (array $plugin): bool => !$this->isPluginDisabled($plugin)
+        );
 
-            return $carry;
-        }, 0);
+        return \array_reduce(
+            $plugins,
+            /** @psalm-param PluginType $plugin */
+            fn (int $carry, array $plugin): int => $carry + \count($plugin['files']),
+            0
+        );
     }
 
     /**
@@ -538,13 +543,12 @@ class UpdateAssetsCommand extends Command
     {
         $this->writeVeryVerbose(\sprintf('Load "%s".', $filename));
         $content = FileUtils::readFile($filename);
-        if ('' === $content) {
-            $this->writeError(\sprintf('Unable to get content of "%s".', $filename));
-
-            return false;
+        if ('' !== $content) {
+            return $content;
         }
+        $this->writeError(\sprintf('Unable to get content of "%s".', $filename));
 
-        return $content;
+        return false;
     }
 
     private function remove(string $file): void

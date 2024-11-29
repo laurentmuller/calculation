@@ -23,10 +23,10 @@ class LogFilterTest extends TestCase
     public function testFilterByChannel(): void
     {
         $log1 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-01-01'))
+            ->setCreatedAt(new \DateTimeImmutable('2024-01-01'))
             ->setChannel('channel');
         $log2 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-02-02'))
+            ->setCreatedAt(new \DateTimeImmutable('2024-02-02'))
             ->setChannel('channel');
         $logs = [$log1, $log2];
 
@@ -38,10 +38,10 @@ class LogFilterTest extends TestCase
     public function testFilterByLevel(): void
     {
         $log1 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-01-01'))
+            ->setCreatedAt(new \DateTimeImmutable('2024-01-01'))
             ->setLevel(PsrLevel::ALERT);
         $log2 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-02-02'))
+            ->setCreatedAt(new \DateTimeImmutable('2024-02-02'))
             ->setLevel(PsrLevel::ALERT);
         $logs = [$log1, $log2];
 
@@ -53,10 +53,10 @@ class LogFilterTest extends TestCase
     public function testFilterByMessage(): void
     {
         $log1 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-01-01'))
+            ->setCreatedAt(new \DateTimeImmutable('2024-01-01'))
             ->setMessage('message');
         $log2 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-02-02'))
+            ->setCreatedAt(new \DateTimeImmutable('2024-02-02'))
             ->setMessage('message');
         $logs = [$log1, $log2];
 
@@ -68,10 +68,10 @@ class LogFilterTest extends TestCase
     public function testFilterByUser(): void
     {
         $log1 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-01-01'))
+            ->setCreatedAt(new \DateTimeImmutable('2024-01-01'))
             ->setExtra(['user' => 'user']);
         $log2 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-02-02'))
+            ->setCreatedAt(new \DateTimeImmutable('2024-02-02'))
             ->setExtra(['user' => 'user']);
         $logs = [$log1, $log2];
 
@@ -83,10 +83,10 @@ class LogFilterTest extends TestCase
     public function testFilterNone(): void
     {
         $log1 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-01-01'))
+            ->setCreatedAt(new \DateTimeImmutable('2024-01-01'))
             ->setMessage('message');
         $log2 = Log::instance(1)
-            ->setCreatedAt(new \DateTime('2024-02-02'))
+            ->setCreatedAt(new \DateTimeImmutable('2024-02-02'))
             ->setMessage('message');
         $logs = [$log1, $log2];
 

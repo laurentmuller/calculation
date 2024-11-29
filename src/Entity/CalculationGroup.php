@@ -327,7 +327,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     }
 
     /**
-     * Sorts categories and items in alphabetical order.
+     * Sorts categories and items in alphabetical order and update positions.
      *
      * @return bool true if the order has changed
      */

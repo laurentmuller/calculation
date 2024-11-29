@@ -23,12 +23,12 @@ use App\Utils\FormatUtils;
  * Service for calculations timeline.
  *
  * @psalm-type ParametersType=array{
- *     from: \DateTimeInterface,
- *     to: \DateTimeInterface,
+ *     from: \DateTimeImmutable,
+ *     to: \DateTimeImmutable,
  *     interval: string,
  *     date: string,
- *     min_date: \DateTimeInterface,
- *     max_date: \DateTimeInterface,
+ *     min_date: \DateTimeImmutable,
+ *     max_date: \DateTimeImmutable,
  *     today: ?string,
  *     previous: ?string,
  *     next: ?string,
@@ -104,7 +104,7 @@ readonly class TimelineService
     /**
      * @return array{0: int, 1: array<string, Calculation[]>}
      */
-    private function getCalculations(\DateTimeInterface $from, \DateTimeInterface $to): array
+    private function getCalculations(\DateTimeImmutable $from, \DateTimeImmutable $to): array
     {
         $calculations = $this->repository->getByInterval($from, $to);
         if ([] === $calculations) {
@@ -121,7 +121,7 @@ readonly class TimelineService
     }
 
     /**
-     * @return array{0: \DateTimeInterface|null, 1: \DateTimeInterface, 2: \DateTimeInterface}
+     * @return array{0: \DateTimeImmutable|null, 1: \DateTimeImmutable, 2: \DateTimeImmutable}
      *
      * @throws \Exception
      */
@@ -137,11 +137,11 @@ readonly class TimelineService
     }
 
     /**
-     * @return array{0: \DateTimeInterface, 1: \DateTimeInterface}
+     * @return array{0: \DateTimeImmutable, 1: \DateTimeImmutable}
      *
      * @throws \Exception
      */
-    private function getMinMaxDates(\DateTimeInterface $default): array
+    private function getMinMaxDates(\DateTimeImmutable $default): array
     {
         [$min_date, $max_date] = $this->repository->getMinMaxDates();
 
@@ -152,10 +152,10 @@ readonly class TimelineService
      * @throws \Exception
      */
     private function getNextDate(
-        \DateTimeInterface $date,
+        \DateTimeImmutable $date,
         string $interval,
-        \DateTimeInterface $max_date
-    ): ?\DateTimeInterface {
+        \DateTimeImmutable $max_date
+    ): ?\DateTimeImmutable {
         $nextDate = DateUtils::add($date, $interval);
 
         return $nextDate > $max_date ? null : $nextDate;
@@ -167,12 +167,12 @@ readonly class TimelineService
      * @psalm-return ParametersType
      */
     private function getParameters(
-        ?\DateTimeInterface $today,
-        \DateTimeInterface $from,
-        \DateTimeInterface $to,
+        ?\DateTimeImmutable $today,
+        \DateTimeImmutable $from,
+        \DateTimeImmutable $to,
         string $interval,
-        \DateTimeInterface $min_date,
-        \DateTimeInterface $max_date
+        \DateTimeImmutable $min_date,
+        \DateTimeImmutable $max_date
     ): array {
         $previous = $this->getPreviousDate($to, $interval, $min_date);
         $next = $this->getNextDate($to, $interval, $max_date);
@@ -200,10 +200,10 @@ readonly class TimelineService
      * @throws \Exception
      */
     private function getPreviousDate(
-        \DateTimeInterface $date,
+        \DateTimeImmutable $date,
         string $interval,
-        \DateTimeInterface $min_date
-    ): ?\DateTimeInterface {
+        \DateTimeImmutable $min_date
+    ): ?\DateTimeImmutable {
         $previous = DateUtils::sub($date, $interval);
 
         return $previous <= $min_date ? null : $previous;

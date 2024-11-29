@@ -48,7 +48,7 @@ class Log extends AbstractEntity implements ComparableInterface
 
     #[Assert\NotNull]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    private \DateTimeInterface $createdAt;
+    private \DateTimeImmutable $createdAt;
 
     /**
      * @var ?array<string, string>
@@ -102,7 +102,7 @@ class Log extends AbstractEntity implements ComparableInterface
         return $this->context;
     }
 
-    public function getCreatedAt(): \DateTimeInterface
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -164,7 +164,7 @@ class Log extends AbstractEntity implements ComparableInterface
         return $this;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -183,7 +183,7 @@ class Log extends AbstractEntity implements ComparableInterface
 
     public function setMessage(string $message): self
     {
-        $this->message = \trim($message);
+        $this->message = $message;
 
         return $this;
     }

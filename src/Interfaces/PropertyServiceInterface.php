@@ -175,7 +175,7 @@ interface PropertyServiceInterface
     /**
      * The property name for the date of the last updating prices of products (date).
      */
-    final public const P_DATE_PRODUCT = 'update_products';
+    final public const P_DATE_PRODUCT = 'update_product';
 
     /**
      * The property name for the default category (integer).

@@ -40,7 +40,8 @@ class UserParametersController extends AbstractController
     #[GetPost(path: '/parameters', name: 'parameters')]
     public function invoke(Request $request, UserService $userService): Response
     {
-        $form = $this->createForm(UserParametersType::class, $userService->getProperties());
+        $data = $userService->getProperties();
+        $form = $this->createForm(UserParametersType::class, $data);
         if ($this->handleRequestForm($request, $form)) {
             /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();

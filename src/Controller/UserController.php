@@ -22,6 +22,7 @@ use App\Form\User\ResetAllPasswordType;
 use App\Form\User\UserChangePasswordType;
 use App\Form\User\UserCommentType;
 use App\Form\User\UserRightsType;
+use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\Comment;
 use App\Report\UsersReport;
@@ -67,7 +68,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class UserController extends AbstractEntityController
 {
-    public function __construct(UserRepository $repository)
+    public function __construct(UserRepository $repository, private readonly PasswordTooltipService $service)
     {
         parent::__construct($repository);
     }
@@ -394,6 +395,16 @@ class UserController extends AbstractEntityController
     public function show(User $item): Response
     {
         return $this->showEntity($item);
+    }
+
+    /**
+     * @param User $item
+     */
+    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
+    {
+        $parameters['tooltips'] = $item->isNew() ? $this->service->getTooltips() : null;
+
+        return parent::editEntity($request, $item, $parameters);
     }
 
     protected function getEntities(

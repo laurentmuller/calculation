@@ -122,7 +122,7 @@
     },
     "config": {
         "platform": {
-            "php": "8.2.19"
+            "php": "8.2.24"
         },
         "optimize-autoloader": true,
         "preferred-install": {

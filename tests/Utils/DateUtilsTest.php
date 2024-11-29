@@ -363,6 +363,17 @@ class DateUtilsTest extends TestCase
         self::assertSame('2020-01-03', $add->format('Y-m-d'));
     }
 
+    public function testToDateTimeImmutable(): void
+    {
+        $date = new \DateTimeImmutable();
+        $actual = DateUtils::toDateTimeImmutable($date);
+        self::assertSame($date, $actual);
+
+        $date = new \DateTime();
+        $actual = DateUtils::toDateTimeImmutable($date);
+        self::assertSameDate($date, $actual);
+    }
+
     #[DataProvider('getWeekdayNames')]
     public function testWeekdayNames(string $name, int $index, string $firstDay = 'sunday'): void
     {

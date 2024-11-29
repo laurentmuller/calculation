@@ -60,7 +60,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     private bool $enabled = true;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeInterface $expiresAt = null;
+    private ?\DateTimeImmutable $expiresAt = null;
 
     #[Assert\Length(max: 100)]
     #[ORM\Column(length: 100, nullable: true)]
@@ -81,7 +81,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     private ?string $imageName = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeInterface $lastLogin = null;
+    private ?\DateTimeImmutable $lastLogin = null;
 
     #[Assert\NotBlank]
     #[ORM\Column]
@@ -102,7 +102,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     private Collection $properties;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeInterface $requestedAt = null;
+    private ?\DateTimeImmutable $requestedAt = null;
 
     #[Assert\Length(max: 20)]
     #[ORM\Column(length: 20, nullable: true)]
@@ -481,7 +481,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
      * @param string $selector    a non-hashed random string used to fetch a request from persistence
      * @param string $hashedToken the hashed token used to verify a reset request
      */
-    public function setResetPasswordRequest(\DateTimeInterface $expiresAt, string $selector, string $hashedToken): self
+    public function setResetPasswordRequest(\DateTimeImmutable $expiresAt, string $selector, string $hashedToken): self
     {
         $this->expiresAt = $expiresAt;
         $this->selector = $selector;

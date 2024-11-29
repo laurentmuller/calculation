@@ -104,7 +104,7 @@
         {%- set thumbnail_src = thumbnail_src|default(false) -%}
         {%- set thumbnail_alt = thumbnail_alt|default('filetype.image') -%}
         {%- if thumbnail_src -%}{%- set attr = attr|default({})|merge({'data-src': thumbnail_src}) -%}{%- endif -%}
-        <div class="text-center file-input {{ thumbnail_src ? 'file-input-exists' : 'file-input-new' }}" data-provider="file-input">
+        <div class="text-center file-input {{ thumbnail_src ? 'file-input-exists' : 'file-input-new' }} mb-3" data-provider="file-input">
             <div class="file-input-preview img-thumbnail" data-trigger="file-input" data-default="{{ empty_image }}">
                 {% if thumbnail_src or empty_image -%}
                     <img src="{{ thumbnail_src|default(empty_image) }}" alt="{{ thumbnail_alt|trans }}" title="{{ thumbnail_alt|trans }}">

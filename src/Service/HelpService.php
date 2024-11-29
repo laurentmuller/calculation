@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Traits\ArrayTrait;
 use App\Traits\TranslatorTrait;
 use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -89,6 +90,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class HelpService
 {
+    use ArrayTrait;
     use TranslatorTrait;
 
     /**
@@ -391,14 +393,11 @@ class HelpService
             }
         );
 
-        return \array_reduce(
+        /** @phpstan-var array<string, HelpDialogType> */
+        return $this->mapToKeyValue(
             $dialogs,
-            /**
-             * @psalm-param array<string, HelpDialogType> $carry
-             * @psalm-param HelpDialogType $dialog
-             */
-            static fn (array $carry, array $dialog) => $carry + [$dialog['id'] => $dialog],
-            []
+            /** @psalm-param HelpDialogType $dialog */
+            fn (array $dialog): array => [$dialog['id'] => $dialog]
         );
     }
 
@@ -412,17 +411,13 @@ class HelpService
         foreach ($entities as &$entity) {
             $entity['name'] = $this->trans($entity['id'] . '.name');
         }
-
         $this->sortByName($entities);
 
-        return \array_reduce(
+        /** @phpstan-var array<string, HelpEntityType> */
+        return $this->mapToKeyValue(
             $entities,
-            /**
-             * @psalm-param array<string, HelpEntityType> $carry
-             * @psalm-param HelpEntityType $entity
-             */
-            static fn (array $carry, array $entity) => $carry + [$entity['id'] => $entity],
-            []
+            /** @psalm-param HelpEntityType $entity  */
+            fn (array $entity): array => [$entity['id'] => $entity]
         );
     }
 }

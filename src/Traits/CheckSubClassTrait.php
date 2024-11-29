@@ -28,7 +28,8 @@ trait CheckSubClassTrait
     public function checkSubClass(string|object $source, string $target): void
     {
         if (!\is_a($source, $target, true) && !\is_subclass_of($source, $target)) {
-            throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given.', $target, \get_debug_type($source)));
+            $type = \is_string($source) ? $source : \get_debug_type($source);
+            throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given.', $target, $type));
         }
     }
 }

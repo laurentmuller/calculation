@@ -14,12 +14,16 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Entity\Log;
+use App\Traits\ComparableTrait;
+use Psr\Log\LogLevel as PsrLevel;
 
 /**
  * Contains information about a log file.
  */
 class LogFile implements \Countable
 {
+    use ComparableTrait;
+
     /**
      * @var array<string, LogChannel>
      */
@@ -101,14 +105,17 @@ class LogFile implements \Countable
     public function sort(): self
     {
         if (!$this->isEmpty()) {
-            \ksort($this->levels);
             \ksort($this->channels);
+            $this->levels = $this->getReversedSortedComparable($this->levels);
             \uasort($this->logs, static fn (Log $a, Log $b): int => $b->compare($a));
         }
 
         return $this;
     }
 
+    /**
+     * @param non-empty-string $name
+     */
     private function updateChannels(string $name): void
     {
         if (!\array_key_exists($name, $this->channels)) {
@@ -117,6 +124,9 @@ class LogFile implements \Countable
         $this->channels[$name]->increment();
     }
 
+    /**
+     * @psalm-param PsrLevel::* $name
+     */
     private function updateLevels(string $name): void
     {
         if (!\array_key_exists($name, $this->levels)) {

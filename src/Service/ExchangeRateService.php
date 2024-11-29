@@ -408,14 +408,13 @@ class ExchangeRateService extends AbstractHttpClientService
     {
         /** @psalm-var string[] $codes */
         $codes = $this->getColumnFilter($codes, 0, Currencies::exists(...));
-        /** @psalm-var array<string, ExchangeRateType> $result */
-        $result = \array_reduce($codes, function (array $carry, string $code): array {
-            $carry[$code] = $this->mapCode($code);
-
-            return $carry;
-        }, []);
+        $result = $this->mapToKeyValue(
+            $codes,
+            fn (string $code): array => [$code => $this->mapCode($code)]
+        );
         \uasort($result, fn (array $a, array $b): int => $a['name'] <=> $b['name']);
 
+        /** @psalm-var array<string, ExchangeRateType> */
         return $result;
     }
 

@@ -32,7 +32,7 @@ trait TimestampableTrait
      * The creation date.
      */
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeInterface $createdAt = null;
+    private ?\DateTimeImmutable $createdAt = null;
 
     /**
      * The creation username.
@@ -45,7 +45,7 @@ trait TimestampableTrait
      * The updated date.
      */
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null;
+    private ?\DateTimeImmutable $updatedAt = null;
 
     /**
      * The updated username.

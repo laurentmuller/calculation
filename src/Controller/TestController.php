@@ -174,6 +174,10 @@ class TestController extends AbstractController
                     return false;
                 }
 
+                if ('' === $event->text) {
+                    return true;
+                }
+
                 $parent = $event->parent;
                 $font = $parent->getCurrentFont();
                 $parent->setFont(style: PdfFontStyle::BOLD);

@@ -26,18 +26,57 @@ class CollectionTraitTest extends TestCase
     {
         /** @psalm-var ArrayCollection<array-key, Product> $collection */
         $collection = new ArrayCollection();
-        $actual = $this->getSortedCollection($collection);
-        self::assertSame([], $actual);
-
-        $item1 = new Product();
-        $item1->setDescription('description1');
+        $item1 = $this->createProduct('description1');
         $collection->add($item1);
-
-        $item2 = new Product();
-        $item2->setDescription('description2');
+        $item2 = $this->createProduct('description2');
         $collection->add($item2);
 
         $actual = $this->getSortedCollection($collection);
         self::assertSame([$item1, $item2], $actual);
+    }
+
+    public function testEmptyCollection(): void
+    {
+        /** @psalm-var ArrayCollection<array-key, Product> $collection */
+        $collection = new ArrayCollection();
+
+        $actual = $this->getSortedCollection($collection);
+        self::assertSame([], $actual);
+
+        $actual = $this->getReversedSortedCollection($collection);
+        self::assertSame([], $actual);
+    }
+
+    public function testReversedSortedCollectionNoPreserveKey(): void
+    {
+        /** @psalm-var ArrayCollection<array-key, Product> $collection */
+        $collection = new ArrayCollection();
+        $item1 = $this->createProduct('description1');
+        $collection->add($item1);
+        $item2 = $this->createProduct('description2');
+        $collection->add($item2);
+
+        $actual = $this->getReversedSortedCollection($collection, false);
+        self::assertSame([$item2, $item1], $actual);
+    }
+
+    public function testReversedSortedCollectionPreserveKey(): void
+    {
+        /** @psalm-var ArrayCollection<array-key, Product> $collection */
+        $collection = new ArrayCollection();
+        $item1 = $this->createProduct('description1');
+        $collection->add($item1);
+        $item2 = $this->createProduct('description2');
+        $collection->add($item2);
+
+        $actual = $this->getReversedSortedCollection($collection);
+        self::assertSame([1 => $item2, 0 => $item1], $actual);
+    }
+
+    private function createProduct(string $description): Product
+    {
+        $product = new Product();
+
+        return $product->setDescription($description);
     }
 }

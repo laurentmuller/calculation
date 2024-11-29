@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Interfaces;
 
+use Symfony\Component\Translation\TranslatableMessage;
+
 /**
  * Class implementing this interface deals with the creation and update information.
  */
@@ -29,6 +31,13 @@ interface TimestampableInterface extends EntityInterface
     public function getCreatedBy(): ?string;
 
     /**
+     * Gets the translatable message for the created date and the created user.
+     *
+     * @param bool $short <code>false</code> to get only data and user; <code>true</code> to get with a label prefix
+     */
+    public function getCreatedMessage(bool $short = false): TranslatableMessage;
+
+    /**
      * Gets the entity identifier.
      */
     public function getId(): ?int;
@@ -42,6 +51,13 @@ interface TimestampableInterface extends EntityInterface
      * Gets the updated username.
      */
     public function getUpdatedBy(): ?string;
+
+    /**
+     * Gets the translatable message for the updated date and the updated user.
+     *
+     * @param bool $short <code>false</code> to get only data and user; <code>true</code> to get with a label prefix
+     */
+    public function getUpdatedMessage(bool $short = false): TranslatableMessage;
 
     /**
      * Update the created and updated values.

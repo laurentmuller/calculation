@@ -19,7 +19,6 @@ use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\GlobalMarginTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\ORM\Query;
@@ -63,15 +62,6 @@ class GlobalMarginRepositoryTest extends KernelServiceTestCase
         } finally {
             $this->deleteGlobalMargin();
         }
-    }
-
-    public function testGetDateTimeType(): void
-    {
-        $actual = $this->repository->getDateTimeType(new \DateTimeImmutable());
-        self::assertSame(Types::DATETIME_IMMUTABLE, $actual);
-
-        $actual = $this->repository->getDateTimeType(new \DateTime());
-        self::assertSame(Types::DATETIME_MUTABLE, $actual);
     }
 
     /**

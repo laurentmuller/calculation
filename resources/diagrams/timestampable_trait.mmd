@@ -16,8 +16,10 @@ classDiagram
         -?string $updatedBy
         +getCreatedAt() ?DateTimeInterface
         +getCreatedBy() ?string
+        +getCreatedMessage(bool short) TranslatableMessage
         +getUpdatedAt() ?DateTimeInterface
         +getUpdatedBy() ?string
+        +getUpdatedMessage(bool short) TranslatableMessage
         +updateTimestampable(DateTimeImmutable date, string user) bool
     }
 

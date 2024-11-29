@@ -16,6 +16,7 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
+use App\Pdf\Traits\PdfCleanTextTrait;
 use App\Pdf\Traits\PdfColumnTranslatorTrait;
 use App\Pdf\Traits\PdfStyleTrait;
 use App\Traits\MathTrait;
@@ -35,19 +36,9 @@ abstract class AbstractReport extends PdfDocument
 {
     use MathTrait;
     use PdfBookmarkTrait;
+    use PdfCleanTextTrait;
     use PdfColumnTranslatorTrait;
     use PdfStyleTrait;
-
-    /** The encoding source. */
-    private const ENCODING_FROM = [
-        'ASCII',
-        'UTF-8',
-        'CP1252',
-        'ISO-8859-1',
-    ];
-
-    /** The encoding target. */
-    private const ENCODING_TO = 'CP1252';
 
     private readonly ReportFooter $footer;
     private readonly ReportHeader $header;
@@ -171,16 +162,6 @@ abstract class AbstractReport extends PdfDocument
         bool $isUTF8 = false
     ): static {
         return $this->setTitle($this->trans($id, $parameters), $isUTF8);
-    }
-
-    protected function cleanText(string $str): string
-    {
-        $str = parent::cleanText($str);
-        if ('' === $str) {
-            return $str;
-        }
-
-        return parent::convertEncoding($str, self::ENCODING_TO, self::ENCODING_FROM);
     }
 
     /**

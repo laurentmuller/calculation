@@ -59,18 +59,13 @@ class LogLevelTest extends TestCase
         $logLevel = LogLevel::instance($expected);
         self::assertSame($expected, $logLevel->getLevel());
         self::assertSame($expected, $logLevel->__toString());
-        self::assertSame('Warning', $logLevel->getLevel(true));
+        self::assertSame('Warning', $logLevel->getLevelTitle());
         self::assertCount(0, $logLevel);
     }
 
-    public function testIsLevel(): void
-    {
-        $logLevel = LogLevel::instance(PsrLevel::WARNING);
-        self::assertTrue($logLevel->isLevel());
-        $logLevel = LogLevel::instance('');
-        self::assertFalse($logLevel->isLevel());
-    }
-
+    /**
+     * @psalm-param PsrLevel::* $level
+     */
     #[DataProvider('getLevelColors')]
     public function testLevelColor(string $level, string $expected): void
     {
@@ -79,6 +74,9 @@ class LogLevelTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    /**
+     * @psalm-param PsrLevel::* $level
+     */
     #[DataProvider('getLevelIcons')]
     public function testLevelIcon(string $level, string $expected): void
     {

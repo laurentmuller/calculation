@@ -346,7 +346,7 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * Gets the delete token identifier for the given entity.
+     * Gets the deleted token identifier for the given entity.
      */
     private function getDeleteToken(EntityInterface $entity): string
     {

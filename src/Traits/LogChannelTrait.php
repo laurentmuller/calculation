@@ -31,6 +31,9 @@ trait LogChannelTrait
      */
     private const APP_CHANNEL_SHORT = 'app';
 
+    /**
+     * @var non-empty-string
+     */
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
     #[ORM\Column(length: 50)]
@@ -39,11 +42,11 @@ trait LogChannelTrait
     /**
      * Gets the channel's icon.
      *
-     * @param bool $capitalize true to capitalize this channel's name
+     * @psalm-return non-empty-string
      */
-    public function getChannel(bool $capitalize = false): string
+    public function getChannel(): string
     {
-        return $capitalize ? \ucfirst($this->channel) : $this->channel;
+        return $this->channel;
     }
 
     /**
@@ -65,11 +68,17 @@ trait LogChannelTrait
         };
     }
 
-    public function isChannel(): bool
+    /**
+     * Gets the channel with the first character uppercase.
+     */
+    public function getChannelTitle(): string
     {
-        return '' !== $this->channel;
+        return \ucfirst($this->channel);
     }
 
+    /**
+     * @param non-empty-string $channel
+     */
     public function setChannel(string $channel): self
     {
         $channel = \strtolower($channel);

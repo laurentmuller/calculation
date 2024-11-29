@@ -21,7 +21,27 @@ use Doctrine\Common\Collections\Collection;
  */
 trait CollectionTrait
 {
-    use ComparableSortTrait;
+    use ComparableTrait;
+
+    /**
+     * Sort, in reverse order, the given collection of comparable.
+     *
+     * @template TKey of array-key
+     * @template TValue of ComparableInterface
+     *
+     * @param Collection<TKey, TValue> $collection    the collection to sort
+     * @param bool                     $preserve_keys if set to true, the keys are preserved
+     *
+     * @return array<TKey, TValue> the sorted values in reverse order
+     */
+    public function getReversedSortedCollection(Collection $collection, bool $preserve_keys = true): array
+    {
+        if ($collection->isEmpty()) {
+            return [];
+        }
+
+        return $this->getReversedSortedComparable($collection->toArray(), $preserve_keys);
+    }
 
     /**
      * Sort the given collection of comparable.

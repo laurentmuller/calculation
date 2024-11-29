@@ -18,8 +18,6 @@ namespace App\Traits;
  */
 trait ArrayTrait
 {
-    use ComparableSortTrait;
-
     /**
      * Checks whether the callback returns <code>true</code> for any of the array elements.
      *
@@ -230,6 +228,31 @@ trait ArrayTrait
     public function getUniqueMerged(array $first, array $second, int $flags = \SORT_STRING): array
     {
         return \array_unique(\array_merge($first, $second), $flags);
+    }
+
+    /**
+     * Maps the given array to keys and values pairs using the given callback.
+     *
+     * @template TKey of array-key
+     * @template TValue
+     * @template TResult
+     *
+     * @param TValue[]                              $array    the array to map
+     * @param callable(TValue):array<TKey, TResult> $callable the callback to get the key and the value
+     *
+     * @return array<TKey, TResult> the mapped array
+     */
+    public function mapToKeyValue(array $array, callable $callable): array
+    {
+        return \array_reduce(
+            $array,
+            /**
+             * @psalm-param array<TKey, TResult> $carry
+             * @psalm-param TValue $value
+             */
+            fn (array $carry, $value): array => $carry + $callable($value),
+            []
+        );
     }
 
     /**

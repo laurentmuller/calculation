@@ -287,7 +287,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
     }
 
     /**
-     * Sorts items by the alphabetical order of descriptions.
+     * Sorts items by the alphabetical order of descriptions and update positions.
      *
      * @return bool true if the order has changed
      */

@@ -37,11 +37,6 @@ parameters:
         -
             message: '#Call to static method .* will always evaluate to true.#'
             path: tests/*
-        -
-            identifier: doctrine.columnType
-            paths:
-                - src/Entity/User.php
-                - src/Traits/TimestampableTrait.php
 
         -
             message: '#@extends contains generic type#'

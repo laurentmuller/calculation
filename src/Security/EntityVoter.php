@@ -39,6 +39,18 @@ class EntityVoter extends Voter
         return EntityPermission::tryFromName($attribute) instanceof EntityPermission;
     }
 
+    public function vote(TokenInterface $token, mixed $subject, array $attributes): int
+    {
+        /** @psalm-var mixed $attribute */
+        foreach ($attributes as &$attribute) {
+            if ($attribute instanceof EntityPermission) {
+                $attribute = $attribute->name;
+            }
+        }
+
+        return parent::vote($token, $subject, $attributes);
+    }
+
     protected function supports(string $attribute, mixed $subject): bool
     {
         return $this->supportsAttribute($attribute) && EntityName::tryFromMixed($subject) instanceof EntityName;

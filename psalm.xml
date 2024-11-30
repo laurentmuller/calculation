@@ -22,7 +22,6 @@
     <issueHandlers>
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
-                <referencedProperty name="Symfony\Component\HttpFoundation\Response::$charset"/>
                 <referencedProperty name="Symfony\Component\HttpFoundation\Response::$content"/>
                 <referencedProperty name="Symfony\Component\HttpFoundation\Response::$headers"/>
                 <referencedProperty name="Symfony\Component\HttpFoundation\Response::$statusCode"/>

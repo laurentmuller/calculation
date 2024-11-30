@@ -53,7 +53,6 @@ class ResetChangePasswordTypeTest extends TypeTestCase
      */
     protected function getExtensions(): array
     {
-        /** @psalm-var array $extensions */
         $extensions = parent::getExtensions();
         $extensions[] = $this->getPasswordHasherExtension();
 

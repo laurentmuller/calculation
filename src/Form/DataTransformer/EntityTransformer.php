@@ -85,10 +85,6 @@ readonly class EntityTransformer implements DataTransformerInterface
 
     private function validate(mixed $entity): bool
     {
-        if (!\is_object($entity)) {
-            return false;
-        }
-
-        return $this->className === DefaultProxyClassNameResolver::getClass($entity);
+        return \is_object($entity) && $this->className === DefaultProxyClassNameResolver::getClass($entity);
     }
 }

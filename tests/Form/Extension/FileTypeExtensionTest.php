@@ -195,10 +195,8 @@ class FileTypeExtensionTest extends TypeTestCase
 
     protected function getTypeExtensions(): array
     {
-        /** @psalm-var array $extensions */
-        $extensions = parent::getTypeExtensions();
-        $extensions[] = new FileTypeExtension();
-
-        return $extensions;
+        return [
+            new FileTypeExtension(),
+        ];
     }
 }

@@ -54,10 +54,8 @@ class TextTypeExtensionTest extends TypeTestCase
 
     protected function getTypeExtensions(): array
     {
-        /** @psalm-var array $extensions */
-        $extensions = parent::getTypeExtensions();
-        $extensions[] = new TextTypeExtension();
-
-        return $extensions;
+        return [
+            new TextTypeExtension(),
+        ];
     }
 }

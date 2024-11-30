@@ -65,6 +65,11 @@ abstract class EntityTypeTestCase extends TypeTestCase
      */
     abstract protected function getFormTypeClass(): string;
 
+    protected function getPreloadedExtensions(): array
+    {
+        return [];
+    }
+
     protected function getTypeExtensions(): array
     {
         return [

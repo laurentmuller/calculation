@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Form;
 
 use PHPUnit\Framework\MockObject\Exception;
+use Symfony\Component\Form\FormExtensionInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -24,13 +25,13 @@ use Symfony\Component\Form\Test\TypeTestCase;
 trait PreloadedExtensionsTrait
 {
     /**
+     * @return FormExtensionInterface[]
+     *
      * @throws \ReflectionException|Exception
      */
     protected function getExtensions(): array
     {
-        /** @psalm-var array $extensions */
         $extensions = parent::getExtensions();
-        /** @psalm-var FormTypeInterface[] $preloadedExtensions */
         $preloadedExtensions = $this->getPreloadedExtensions();
         if ([] !== $preloadedExtensions) {
             $extensions[] = new PreloadedExtension($preloadedExtensions, []);
@@ -39,8 +40,8 @@ trait PreloadedExtensionsTrait
         return $extensions;
     }
 
-    protected function getPreloadedExtensions(): array
-    {
-        return [];
-    }
+    /**
+     * @return FormTypeInterface[]
+     */
+    abstract protected function getPreloadedExtensions(): array;
 }

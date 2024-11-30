@@ -43,10 +43,8 @@ class UrlTypeExtensionTest extends TypeTestCase
 
     protected function getTypeExtensions(): array
     {
-        /** @psalm-var array $extensions */
-        $extensions = parent::getTypeExtensions();
-        $extensions[] = new UrlTypeExtension();
-
-        return $extensions;
+        return [
+            new UrlTypeExtension(),
+        ];
     }
 }

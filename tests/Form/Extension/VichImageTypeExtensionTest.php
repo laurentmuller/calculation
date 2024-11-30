@@ -54,10 +54,8 @@ class VichImageTypeExtensionTest extends TypeTestCase
 
     protected function getTypeExtensions(): array
     {
-        /** @psalm-var array $extensions */
-        $extensions = parent::getTypeExtensions();
-        $extensions[] = new VichImageTypeExtension();
-
-        return $extensions;
+        return [
+            new VichImageTypeExtension(),
+        ];
     }
 }

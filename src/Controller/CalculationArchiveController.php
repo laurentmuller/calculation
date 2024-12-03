@@ -37,7 +37,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class CalculationArchiveController extends AbstractController
 {
     /**
-     * @throws ORMException
+     * @throws ORMException|\DateException
      */
     #[GetPost(path: '/archive', name: 'archive')]
     public function invoke(Request $request, CalculationArchiveService $service): Response
@@ -74,7 +74,7 @@ class CalculationArchiveController extends AbstractController
     /**
      * @return FormInterface<mixed>
      *
-     * @throws ORMException
+     * @throws ORMException|\DateException
      */
     private function createQueryForm(CalculationArchiveService $service, CalculationArchiveQuery $query): FormInterface
     {

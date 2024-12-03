@@ -1,5 +1,5 @@
 {% extends '@email/default/notification/body.html.twig' %}
-{% set footer_text = 'notification.footer'|trans({'%app_name_version%': app_name_version}) %}
+{% set footer_text = 'notification.footer'|trans({'%name%': app_name_version}) %}
 {# style #}
 {% block style %}
     {{ parent() }}

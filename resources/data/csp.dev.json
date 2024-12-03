@@ -21,7 +21,8 @@
         "'self'"
     ],
     "script-src": [
-        "%nonce%"
+        "%nonce%",
+        "'unsafe-inline'"
     ],
     "script-src-elem": [
         "%nonce%",

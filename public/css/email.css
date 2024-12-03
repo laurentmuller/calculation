@@ -23,6 +23,11 @@ table.body.wrapper {
     border-bottom: 1px solid #f3f3f3;
 }
 
+td,
+a {
+    line-height: 100%;
+}
+
 #csp td {
     padding-top: 5px;
 }

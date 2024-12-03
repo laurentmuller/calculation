@@ -53,7 +53,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     /**
      * Create the archive query.
      *
-     * @throws ORMException
+     * @throws ORMException|\DateException
      */
     public function createQuery(): CalculationArchiveQuery
     {
@@ -68,7 +68,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     /**
      * Gets the maximum allowed date or null if none.
      *
-     * @throws ORMException
+     * @throws ORMException|\DateException
      */
     public function getDateMaxConstraint(): ?string
     {
@@ -193,7 +193,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     }
 
     /**
-     * @throws ORMException
+     * @throws ORMException|\DateException
      */
     private function getDate(): \DateTimeInterface
     {
@@ -223,19 +223,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
      */
     private function getDateMax(array $sources): ?\DateTimeImmutable
     {
-        $builder = $this->createQueryBuilder($sources)
-            ->select('MAX(c.date)');
-
-        try {
-            /** @var string|null $date */
-            $date = $builder->getQuery()->getSingleScalarResult();
-            if (null !== $date) {
-                return new \DateTimeImmutable($date);
-            }
-        } catch (\Exception) {
-        }
-
-        return null;
+        return $this->getScalarDate($sources, 'MAX');
     }
 
     /**
@@ -243,8 +231,16 @@ class CalculationArchiveService implements ServiceSubscriberInterface
      */
     private function getDateMin(array $sources): ?\DateTimeImmutable
     {
+        return $this->getScalarDate($sources, 'MIN');
+    }
+
+    /**
+     * @psalm-param CalculationState[] $sources
+     */
+    private function getScalarDate(array $sources, string $function): ?\DateTimeImmutable
+    {
         $builder = $this->createQueryBuilder($sources)
-            ->select('MIN(c.date)');
+            ->select(\sprintf('%s(c.date)', $function));
 
         try {
             /** @var string|null $date */
@@ -252,7 +248,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
             if (null !== $date) {
                 return new \DateTimeImmutable($date);
             }
-        } catch (\Exception) {
+        } catch (ORMException|\DateException) {
         }
 
         return null;

@@ -18,7 +18,8 @@
         "'self'"
     ],
     "frame-ancestors": [
-        "'self'"
+        "'self'",
+        "'unsafe-inline'"
     ],
     "script-src": [
         "%nonce%"

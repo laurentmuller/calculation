@@ -357,9 +357,7 @@ class ApplicationService implements PropertyServiceInterface
 
     public function getStrengthConstraint(): Strength
     {
-        $minimum = $this->getStrengthLevel();
-
-        return new Strength($minimum->value);
+        return new Strength($this->getStrengthLevel());
     }
 
     /**

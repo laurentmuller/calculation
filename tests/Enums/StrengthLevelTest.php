@@ -39,6 +39,16 @@ class StrengthLevelTest extends TestCase
         yield ['strength_level.weak', StrengthLevel::WEAK];
     }
 
+    public static function getPercents(): \Iterator
+    {
+        yield [0, StrengthLevel::NONE];
+        yield [20, StrengthLevel::VERY_WEAK];
+        yield [40, StrengthLevel::WEAK];
+        yield [60, StrengthLevel::MEDIUM];
+        yield [80, StrengthLevel::STRONG];
+        yield [100, StrengthLevel::VERY_STRONG];
+    }
+
     public static function getSmallerValues(): \Iterator
     {
         yield [StrengthLevel::NONE, StrengthLevel::VERY_WEAK, true];
@@ -81,14 +91,10 @@ class StrengthLevelTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testPercent(): void
+    #[DataProvider('getPercents')]
+    public function testPercent(int $expected, StrengthLevel $level): void
     {
-        self::assertSame(0, StrengthLevel::NONE->percent());
-        self::assertSame(20, StrengthLevel::VERY_WEAK->percent());
-        self::assertSame(40, StrengthLevel::WEAK->percent());
-        self::assertSame(60, StrengthLevel::MEDIUM->percent());
-        self::assertSame(80, StrengthLevel::STRONG->percent());
-        self::assertSame(100, StrengthLevel::VERY_STRONG->percent());
+        self::assertSame($expected, $level->percent());
     }
 
     #[DataProvider('getSmallerValues')]

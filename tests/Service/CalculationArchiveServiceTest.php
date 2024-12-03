@@ -26,6 +26,7 @@ use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\UnexpectedResultException;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -56,7 +57,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|ORMException|\DateException
      */
     public function testCreateQueryEmpty(): void
     {
@@ -70,7 +71,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|ORMException|\DateException
      */
     public function testCreateQueryWithDate(): void
     {
@@ -86,7 +87,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|ORMException|\DateException
      */
     public function testCreateQueryWithSessionDate(): void
     {
@@ -100,8 +101,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     * @throws \ReflectionException
+     * @throws Exception|ORMException|\DateException|\ReflectionException
      */
     public function testCreateQueryWithSessionSources(): void
     {
@@ -120,8 +120,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     * @throws \ReflectionException
+     * @throws Exception|ORMException|\DateException|\ReflectionException
      */
     public function testCreateQueryWithSessionTarget(): void
     {
@@ -143,7 +142,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|ORMException|\DateException
      */
     public function testCreateQueryWithSources(): void
     {
@@ -160,7 +159,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|ORMException|\DateException
      */
     public function testGetDateMaxConstraintDate(): void
     {
@@ -174,7 +173,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|ORMException|\DateException
      */
     public function testGetDateMaxConstraintException(): void
     {
@@ -186,7 +185,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|ORMException|\DateException
      */
     public function testGetDateMaxConstraintNull(): void
     {
@@ -198,7 +197,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|ORMException
      */
     public function testGetDateMinConstraintDate(): void
     {
@@ -212,7 +211,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|ORMException
      */
     public function testGetDateMinConstraintException(): void
     {
@@ -224,7 +223,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|ORMException
      */
     public function testGetDateMinConstraintNull(): void
     {
@@ -235,8 +234,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     * @throws ORMException
+     * @throws Exception|ORMException
      */
     public function testIsEditableCount(): void
     {
@@ -248,8 +246,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     * @throws ORMException
+     * @throws Exception|ORMException
      */
     public function testIsNotEditableCount(): void
     {
@@ -418,7 +415,7 @@ class CalculationArchiveServiceTest extends TestCase
     {
         $query = $this->createMock(Query::class);
         $query->method('getSingleScalarResult')
-            ->willThrowException(new \Exception());
+            ->willThrowException(new UnexpectedResultException());
 
         $queryBuilder = $this->createMock(QueryBuilder::class);
         $queryBuilder->method('getQuery')

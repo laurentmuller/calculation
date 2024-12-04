@@ -158,7 +158,7 @@ interface PropertyServiceInterface
     final public const P_CUSTOMER_ZIP_CITY = 'customer_zip_city';
 
     /**
-     * The property name to use a dark theme for the sidebar, the navigation abr and the footer (bool).
+     * The property's name to use a dark theme for the sidebar, the navigation abr and the footer (bool).
      */
     final public const P_DARK_NAVIGATION = 'dark_navigation';
 
@@ -333,7 +333,7 @@ interface PropertyServiceInterface
     public const P_USER_RIGHTS = 'user_rights';
 
     /**
-     * The password options where key is the property name and the value is password option name.
+     * The password options where the key is the property name and the value is the password option name.
      */
     final public const PASSWORD_OPTIONS = [
         'security_letters' => 'letters',

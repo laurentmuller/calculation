@@ -345,15 +345,18 @@ class TestController extends AbstractController
             ->updateAttribute(
                 'data-url',
                 $this->generateUrl(route: 'ajax_password', referenceType: UrlGeneratorInterface::ABSOLUTE_URL)
-            )->minLength(UserInterface::MIN_PASSWORD_LENGTH)
+            )
+            ->minLength(UserInterface::MIN_PASSWORD_LENGTH)
             ->maxLength(UserInterface::MAX_USERNAME_LENGTH)
             ->constraints(
                 new Length(min: UserInterface::MIN_PASSWORD_LENGTH, max: UserInterface::MAX_USERNAME_LENGTH),
                 $password,
                 $strength
             )->addTextType();
-        foreach (\array_keys($options) as $property) {
-            $helper->field($property)
+        foreach ($options as $key => $value) {
+            $helper->field($key)
+                ->updateAttribute('data-validation', $value)
+                ->widgetClass('password-option')
                 ->addCheckboxType();
         }
         $helper->field('level')

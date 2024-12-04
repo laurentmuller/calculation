@@ -226,9 +226,13 @@
     </div>
 {%- endblock %}
 
+{%- block alpha_captcha_label -%}
+    {{ form_label(form, null, {required: false, label_attr: {class: 'horizontal-line'}}) }}
+{%- endblock -%}
+
 {%- block alpha_captcha_widget -%}
     <div class="row align-items-center">
-        <label for="{{ id }}" class="col-sm-10 col-form-label">{{- question -}}</label>
+        <label for="{{ id }}" class="col-sm-10 col-form-label required">{{- question -}}</label>
         <div class="col-sm-2 col-3">{{- block('form_widget_simple') -}}</div>
     </div>
 {%- endblock -%}

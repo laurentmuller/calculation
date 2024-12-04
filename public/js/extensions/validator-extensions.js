@@ -1,5 +1,7 @@
 /**! compression tag for ftp-deployment */
 
+/* jshint esversion: 9 */
+
 /**
  * jQuery Validation Plugin extensions.
  */
@@ -273,7 +275,7 @@ $(function () {
                 focusInvalid: true,
                 showModification: true,
                 errorElement: 'small',
-                errorClass: 'is-invalid', // d-inline-block or d-block',
+                errorClass: 'is-invalid', // d-inline-block or d-block
                 ignore: ':hidden:not(".must-validate"), .skip-validation',
 
                 errorPlacement: function (error, element) {
@@ -503,6 +505,21 @@ $(function () {
      * -------------- Additional and override methods --------------
      */
 
+
+    /**
+     * Validate the Switzerland zip code (1000 to 9999).
+     */
+    $.validator.addMethod("zipcodeCH", function (value, element) {
+        return this.optional(element) || /^[1-9]\d{3}$/.test(value);
+    });
+
+    /**
+     * Validate that value is different from zero.
+     */
+    $.validator.addMethod("notEqualToZero", function (value, element) {
+        return this.optional(element) || $.parseFloat(value) !== 0;
+    });
+
     /*
      * check password score
      */
@@ -532,7 +549,7 @@ $(function () {
     }, 'The field can not contain the user name.');
 
     /*
-     * check if value is not an email
+     * check if the value is not an email
      */
     $.validator.addMethod('notEmail', function (value, element) {
         if (this.optional(element)) {
@@ -542,33 +559,33 @@ $(function () {
     }, 'The field can not be an email.');
 
     /*
-     * check if contains a lower case character
+     * check if the value contains a lower case character
      */
     $.validator.addMethod('lowercase', function (value, element) {
         if (this.optional(element)) {
             return true;
         }
-        return /[a-z\u00E0-\u00FC]/g.test(value);
+        return /\p{Ll}/u.test(value);
     }, 'The field must contain a lower case character.');
 
     /*
-     * check if contains an upper case character
+     * check if the value contains an upper case character
      */
     $.validator.addMethod('uppercase', function (value, element) {
         if (this.optional(element)) {
             return true;
         }
-        return /[A-Z\u00C0-\u00DC]/g.test(value);
+        return /\p{Lu}/u.test(value);
     }, 'The field must contain an upper case character.');
 
     /*
-     * check if contains an upper and lower case characters
+     * check if the value contains an upper and a lower case character
      */
-    $.validator.addMethod('mixedcase', function (value, element, param) {
+    $.validator.addMethod('mixedCase', function (value, element, param) {
         if (this.optional(element)) {
             return true;
         }
-        return $.validator.methods.lowercase.call(this, value, element, param) && $.validator.methods.uppercase.call(this, value, element, param);
+        return /(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/u.test(value);
     }, 'The field must contain both upper and lower case characters.');
 
     /*
@@ -578,7 +595,7 @@ $(function () {
         if (this.optional(element)) {
             return true;
         }
-        return $.validator.methods.lowercase.call(this, value, element, param) || $.validator.methods.uppercase.call(this, value, element, param);
+        return /\p{L}/u.test(value);
     }, 'The field must contain a letter.');
 
     /*
@@ -588,18 +605,17 @@ $(function () {
         if (this.optional(element)) {
             return true;
         }
-        return /\d/g.test(value);
+        return /\p{N}/u.test(value);
     }, 'The field must contain a digit character.');
 
     /*
      * check if contains a special character
      */
-    $.validator.addMethod('specialchar', function (value, element) {
+    $.validator.addMethod('specialChar', function (value, element) {
         if (this.optional(element)) {
             return true;
         }
-        const regex = /[-!$%^&*()_+|~=`{}[:;<>?,.@#\]]/g;
-        return regex.test(value);
+        return /[^p{Ll}\p{Lu}\p{L}\p{N}]/u.test(value);
     }, 'The field must contain a special character.');
 
     /*
@@ -685,5 +701,4 @@ $(function () {
     $.validator.methods.email = function (value, element) {
         return this.optional(element) || /\S+@\S+\.\S{2,}/.test(value);
     };
-
 });

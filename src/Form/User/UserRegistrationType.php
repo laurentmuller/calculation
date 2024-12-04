@@ -16,6 +16,7 @@ namespace App\Form\User;
 use App\Entity\User;
 use App\Form\FormHelper;
 use App\Traits\TranslatorAwareTrait;
+use App\Utils\StringUtils;
 use Symfony\Component\Form\Event\PreSetDataEvent;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
@@ -39,22 +40,18 @@ class UserRegistrationType extends AbstractUserCaptchaType implements ServiceSub
         $helper->field('username')
             ->label('user.fields.username')
             ->addUserNameType();
-
         $helper->field('email')
             ->label('user.fields.email')
             ->addEmailType();
-
         $helper->field('plainPassword')
             ->addRepeatPasswordType();
-
-        parent::addFormFields($helper);
-
         $helper->field('agreeTerms')
             ->notMapped()
             ->rowClass('mb-0')
             ->label('registration.agreeTerms.label')
             ->updateAttribute('data-error', $this->trans('registration.agreeTerms.error'))
             ->addCheckboxType(false);
+        parent::addFormFields($helper);
 
         $helper->listenerPreSetData(fn (PreSetDataEvent $event) => $this->onPreSetData($event));
     }
@@ -71,8 +68,10 @@ class UserRegistrationType extends AbstractUserCaptchaType implements ServiceSub
     {
         /** @var User $user */
         $user = $event->getData();
-        // the password must be set, if not; the form is not valid
-        $user->setPassword('123456');
-        $event->setData($user);
+        if (!StringUtils::isString($user->getPassword())) {
+            // the password must be set, if not; the form is not valid
+            $user->setPassword('123456');
+            $event->setData($user);
+        }
     }
 }

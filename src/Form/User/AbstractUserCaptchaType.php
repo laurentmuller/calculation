@@ -26,14 +26,10 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 abstract class AbstractUserCaptchaType extends AbstractHelperType
 {
-    /**
-     * The display captcha image flag.
-     */
-    private readonly bool $displayCaptcha;
-
-    public function __construct(protected CaptchaImageService $service, ApplicationService $application)
-    {
-        $this->displayCaptcha = $application->isDisplayCaptcha();
+    public function __construct(
+        protected readonly CaptchaImageService $service,
+        protected readonly ApplicationService $application
+    ) {
     }
 
     public function getBlockPrefix(): string
@@ -45,13 +41,13 @@ abstract class AbstractUserCaptchaType extends AbstractHelperType
      * Add form fields.
      *
      * Subclass must call <code>parent::addFormFields($helper);</code> to add
-     * the image captcha field (if applicable).
+     * the captcha field (if applicable).
      *
      * @throws \Exception
      */
     protected function addFormFields(FormHelper $helper): void
     {
-        if ($this->displayCaptcha) {
+        if ($this->application->isDisplayCaptcha()) {
             $helper->field('captcha')
                 ->label('captcha.label')
                 ->constraints(new NotBlank(), new Captcha())

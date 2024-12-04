@@ -1,13 +1,50 @@
 /**! compression tag for ftp-deployment */
 
+/* jshint esversion: 9 */
+
+/**
+ * Update rules.
+ * @param {jQuery} $input
+ * @param {Object} [validator]
+ */
+const updateRules = function ($input, validator) {
+    'use strict';
+    $input.rules('remove');
+    $('.password-option:checked').each(function () {
+        let rule = null;
+        switch ($(this).data('validation')) {
+            case 'letters':
+                rule = {letter: true};
+                break;
+            case 'case_diff':
+                rule = {mixedCase: true};
+                break;
+            case 'numbers':
+                rule = {digit: true};
+                break;
+            case 'special_char':
+                rule = {specialChar: true};
+                break;
+            case 'email':
+                rule = {notEmail: true};
+                break;
+        }
+        if (rule) {
+            $input.rules('add', rule);
+        }
+    });
+    if (validator) {
+        validator.element($input);
+    }
+};
+
 /**
  * Ready function
  */
 $(function () {
     'use strict';
-
     // password strength
-    const $input =  $("#form_input");
+    const $input = $('#form_input');
     $input.initPasswordStrength({
         labelContainer: $('#form_input_passwordStrength'),
         debug: true
@@ -15,7 +52,7 @@ $(function () {
 
     // validation
     const $captcha = $('#form_captcha');
-    $("#edit-form").initValidator({
+    const validator = $('#edit-form').initValidator({
         rules: {
             'form[captcha]': {
                 remote: {
@@ -29,6 +66,12 @@ $(function () {
             }
         }
     });
+
+    // password rules
+    $('.password-option').on('change', function () {
+        updateRules($input, validator);
+    });
+    updateRules($input);
 
     // image
     const url = $captcha.data('refresh');
@@ -46,5 +89,4 @@ $(function () {
         const value = $(this).val();
         $input.data('strength', value).trigger('keyup');
     }).trigger('keyup');
-
 });

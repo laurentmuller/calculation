@@ -38,17 +38,6 @@ $(function () {
 
     });
 
-    /**
-     * This is used to validate the Switzerland zip code (1000 - 9999).
-     */
-    $.validator.addMethod("zipcodeCH", function (value, element) {
-        return this.optional(element) || /^[1-9]\d{3}$/.test(value);
-    });
-
-    $.validator.addMethod("notEqualToZero", function (value, element) {
-        return this.optional(element) || $.parseFloat(value) !== 0;
-    });
-
     $.extend($.validator, {
         /**
          * Format message within the label (if any).
@@ -151,7 +140,7 @@ $(function () {
         },
 
         /*
-         * accept (file type)
+         * accept the file type
          */
         acceptFallback: 'Ce champ doit contenir un type de fichier valide.',
         acceptLabel: 'Le champ \"{0}\" doit contenir un type de fichier valide.',
@@ -209,12 +198,12 @@ $(function () {
         },
 
         /*
-         * mixedcase
+         * mixed case
          */
-        mixedcaseFallback: 'Ce champ doit contenir un caractère minuscule et majuscule.',
-        mixedcaseLabel: 'Le champ \"{0}\" doit contenir un caractère minuscule et majuscule.',
-        mixedcase: function (_parameters, element) {
-            return $.validator.formatLabel(element, $.validator.messages.mixedcaseLabel, $.validator.messages.mixedcaseFallback);
+        mixedCaseFallback: 'Ce champ doit contenir un caractère minuscule et majuscule.',
+        mixedCaseLabel: 'Le champ \"{0}\" doit contenir un caractère minuscule et majuscule.',
+        mixedCase: function (_parameters, element) {
+            return $.validator.formatLabel(element, $.validator.messages.mixedCaseLabel, $.validator.messages.mixedCaseFallback);
         },
 
         /*
@@ -227,11 +216,11 @@ $(function () {
         },
 
         /*
-         * specialchar
+         * special character
          */
         specialCharFallback: 'Ce champ doit contenir un caractère spécial.',
         specialCharLabel: 'Le champ \"{0}\" doit contenir un caractère spécial.',
-        specialchar: function (_parameters, element) {
+        specialChar: function (_parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.specialCharLabel, $.validator.messages.specialCharFallback);
         },
 
@@ -245,7 +234,7 @@ $(function () {
         },
 
         /*
-         * maximumfiles (file type)
+         * maximum files (file type)
          */
         maxfilesFallback: 'Le nombre de fichiers ne doit pas être supérieur à {0}.',
         maxfilesLabelSingle: 'Le champ \"{0}\" ne doit contenir qu\'un fichier.',
@@ -451,7 +440,7 @@ $(function () {
         },
 
         /*
-         * lettersonly
+         * letters only
          */
         lettersonlyFallback: 'Ce champ ne doit contenir que des lettres.',
         lettersonlyLabel: 'Le champ \"{0}\" ne doit contenir que des lettres.',
@@ -460,12 +449,12 @@ $(function () {
         },
 
         /*
-         * nowhitespace
+         * no white-space
          */
-        nowhitespaceFallback: 'Ce champ ne doit pas contenir d\'espace.',
-        nowhitespaceLabel: 'Le champ \"{0}\" ne doit pas contenir d\'espace.',
+        noWhitespaceFallback: 'Ce champ ne doit pas contenir d\'espace.',
+        noWhitespaceLabel: 'Le champ \"{0}\" ne doit pas contenir d\'espace.',
         nowhitespace: function (_parameters, element) {
-            return $.validator.formatLabel(element, $.validator.messages.nowhitespaceLabel, $.validator.messages.nowhitespaceFallback);
+            return $.validator.formatLabel(element, $.validator.messages.noWhitespaceLabel, $.validator.messages.noWhitespaceFallback);
         },
 
         /*

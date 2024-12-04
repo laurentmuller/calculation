@@ -31,7 +31,6 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 /**
  * Controller to register a new user.
@@ -100,7 +99,7 @@ class RegistrationController extends AbstractController
 
         try {
             $this->verifier->handleEmail($request, $user);
-        } catch (VerifyEmailExceptionInterface $e) {
+        } catch (\Throwable $e) {
             $this->handleException($request, $e);
 
             return $this->redirectToRoute(self::ROUTE_REGISTER);

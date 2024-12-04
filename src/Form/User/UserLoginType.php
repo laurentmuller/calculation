@@ -24,15 +24,11 @@ class UserLoginType extends AbstractUserCaptchaType
     {
         $helper->field('username')
             ->addUserNameType();
-
         $helper->field('password')
             ->addCurrentPasswordType();
-
-        parent::addFormFields($helper);
-
         $helper->field('remember_me')
-            ->rowClass('float-end')
             ->addCheckboxType();
+        parent::addFormFields($helper);
     }
 
     protected function getLabelPrefix(): ?string

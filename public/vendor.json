@@ -86,8 +86,8 @@
         },
         {
             "name": "highcharts",
-            "version": "11.4.8",
-            "source": "cdnjs",
+            "version": "12.0.1",
+            "source": "jsdelivr",
             "files": [
                 "highcharts.js"
             ]

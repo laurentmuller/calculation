@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Config\SecurityConfig;
 
 return static function (SecurityConfig $config): void {
-    // hasher
+    // password hasher
     $config->passwordHasher(PasswordAuthenticatedUserInterface::class)
         ->algorithm('auto');
     $config->passwordHasher(User::class)
@@ -56,15 +56,6 @@ return static function (SecurityConfig $config): void {
     // switch user
     $firewall->switchUser()
         ->role(RoleInterface::ROLE_SUPER_ADMIN);
-
-    // login
-    $firewall->formLogin()
-        ->loginPath(SecurityController::LOGIN_ROUTE)
-        ->checkPath(SecurityController::LOGIN_ROUTE)
-        ->usernameParameter(UserLoginType::USER_FIELD)
-        ->passwordParameter(UserLoginType::PASSWORD_FIELD)
-        ->csrfParameter(SecurityController::LOGIN_TOKEN)
-        ->enableCsrf(true);
 
     // logout
     $firewall->logout()

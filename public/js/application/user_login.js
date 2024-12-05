@@ -7,18 +7,25 @@ $(function () {
     'use strict';
 
     // initialize captcha
-    $('#captcha').initCaptcha();
+    const $captcha = $('#captcha').initCaptcha();
 
     // initialize validator
-    $('#edit-form').initValidator(
-        {
-            showModification: false,
-            spinner: {
-                text: $('.card-title').text() + '...',
-                // css: {
-                //     top: '25%',
-                // }
+    $('#edit-form').initValidator({
+        showModification: false,
+        spinner: {
+            text: $('.card-title').text() + '...',
+        },
+        rules: {
+            'captcha': {
+                remote: {
+                    url: $captcha.data('remote'),
+                    data: {
+                        captcha: function () {
+                            return $captcha.val();
+                        }
+                    }
+                }
             }
         }
-    );
+    });
 });

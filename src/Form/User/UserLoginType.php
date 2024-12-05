@@ -20,13 +20,28 @@ use App\Form\FormHelper;
  */
 class UserLoginType extends AbstractUserCaptchaType
 {
+    /**
+     * The password field name.
+     */
+    public const PASSWORD_FIELD = 'password';
+
+    /**
+     * The remember field name.
+     */
+    public const REMEMBER_FIELD = 'remember';
+
+    /**
+     * The user field name.
+     */
+    public const USER_FIELD = 'username';
+
     protected function addFormFields(FormHelper $helper): void
     {
-        $helper->field('username')
+        $helper->field(self::USER_FIELD)
             ->addUserNameType();
-        $helper->field('password')
+        $helper->field(self::PASSWORD_FIELD)
             ->addCurrentPasswordType();
-        $helper->field('remember_me')
+        $helper->field(self::REMEMBER_FIELD)
             ->addCheckboxType();
         parent::addFormFields($helper);
     }

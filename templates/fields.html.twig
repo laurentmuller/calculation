@@ -232,7 +232,7 @@
 
 {%- block alpha_captcha_widget -%}
     <div class="row align-items-center">
-        <label for="{{ id }}" class="col-sm-10 col-form-label required">{{- question -}}</label>
+        <label for="{{ id }}" class="col-sm-10 col-form-label{% if required %} required{% endif %}">{{- question -}}</label>
         <div class="col-sm-2 col-3">{{- block('form_widget_simple') -}}</div>
     </div>
 {%- endblock -%}

@@ -12,7 +12,7 @@
 {# body #}
 {% block card_body %}
 {# name #}
-{{ include('command/_command_name.html.twig', {command: command}, with_context=false) }}
+{{ include('command/_command_name.html.twig', {command: command}, with_context: false) }}
 {# parameters #}
 {% if parameters|length %}
     <div class="mb-3">

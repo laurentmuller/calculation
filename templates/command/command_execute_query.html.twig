@@ -18,7 +18,7 @@
 {# body #}
 {% block card_body %}
 {# name #}
-{{ include('command/_command_name.html.twig', {command: command}, with_context=false) }}
+{{ include('command/_command_name.html.twig', {command: command}, with_context: false) }}
 {# arguments #}
 {% if arguments.texts|length or arguments.checkboxes|length %}
     <p class="horizontal-line">{{ 'command.list.fields.arguments'|trans }}</p>

@@ -33,14 +33,29 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
+     * The authentication token name.
+     */
+    public const AUTHENTICATE_TOKEN = 'authenticate';
+
+    /**
      * The login route name.
      */
     public const LOGIN_ROUTE = 'app_login';
 
     /**
+     * The login token name.
+     */
+    public const LOGIN_TOKEN = 'login_token';
+
+    /**
      * The logout route name.
      */
     public const LOGOUT_ROUTE = 'app_logout';
+
+    /**
+     * The logout token name.
+     */
+    public const LOGOUT_TOKEN = 'logout_token';
 
     /**
      * The logout success route name.
@@ -55,8 +70,8 @@ class SecurityController extends AbstractController
             return $this->redirectToHomePage();
         }
         $form = $this->createForm(UserLoginType::class, [
-            'username' => $utils->getLastUsername(),
-            'remember_me' => true,
+            UserLoginType::USER_FIELD => $utils->getLastUsername(),
+            UserLoginType::REMEMBER_FIELD => true,
         ]);
 
         return $this->render('security/login.html.twig', [
@@ -76,7 +91,7 @@ class SecurityController extends AbstractController
     #[Get(path: '/logout/success', name: self::SUCCESS_ROUTE)]
     public function logoutSuccess(): RedirectResponse
     {
-        $this->successTrans('security.logout.success', ['%app_name_version%' => $this->getApplicationName()]);
+        $this->successTrans('security.logout.success', ['%app_name%' => $this->getApplicationName()]);
 
         return $this->redirectToRoute(self::LOGIN_ROUTE);
     }

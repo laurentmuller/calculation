@@ -1,7 +1,5 @@
 /**! compression tag for ftp-deployment */
 
-/* jshint esversion: 9 */
-
 /**
  * Update rules.
  * @param {jQuery} $input

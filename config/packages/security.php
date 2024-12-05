@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 use App\Controller\SecurityController;
 use App\Entity\User;
+use App\Form\User\UserLoginType;
 use App\Interfaces\RoleInterface;
 use App\Listener\ResponseListener;
+use App\Security\LoginFormAuthenticator;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -44,6 +46,8 @@ return static function (SecurityConfig $config): void {
 
     // main firewall
     $firewall = $config->firewall(ResponseListener::FIREWALL_MAIN)
+        ->customAuthenticators([LoginFormAuthenticator::class])
+        ->entryPoint(LoginFormAuthenticator::class)
         ->lazy(true);
 
     // allows 5 login attempts per minute
@@ -57,22 +61,22 @@ return static function (SecurityConfig $config): void {
     $firewall->formLogin()
         ->loginPath(SecurityController::LOGIN_ROUTE)
         ->checkPath(SecurityController::LOGIN_ROUTE)
-        ->usernameParameter('username')
-        ->passwordParameter('password')
-        ->csrfParameter('login_token')
+        ->usernameParameter(UserLoginType::USER_FIELD)
+        ->passwordParameter(UserLoginType::PASSWORD_FIELD)
+        ->csrfParameter(SecurityController::LOGIN_TOKEN)
         ->enableCsrf(true);
 
     // logout
     $firewall->logout()
         ->path(SecurityController::LOGOUT_ROUTE)
         ->target(SecurityController::SUCCESS_ROUTE)
-        ->csrfParameter('logout_token')
+        ->csrfParameter(SecurityController::LOGOUT_TOKEN)
         ->enableCsrf(true);
 
     // remember me
     $firewall->rememberMe()
         ->signatureProperties(['email', 'password'])
-        ->rememberMeParameter('remember_me')
+        ->rememberMeParameter(UserLoginType::REMEMBER_FIELD)
         ->secret('%app_secret%')
         ->path('%cookie_path%')
         ->lifetime(2_592_000) // 30 days

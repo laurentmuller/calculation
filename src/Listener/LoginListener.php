@@ -53,7 +53,7 @@ class LoginListener implements ServiceSubscriberInterface
     {
         $params = [
             '%user_name%' => $user->getUserIdentifier(),
-            '%app_name_version%' => $this->appNameVersion,
+            '%app_name%' => $this->appNameVersion,
         ];
         $this->successTrans('security.login.success', $params);
     }

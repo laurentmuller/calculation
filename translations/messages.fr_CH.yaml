@@ -559,7 +559,7 @@ help:
     home_menu: Page d'accueil de l'aide
     dialog_menu: Pages de l'application
     entity_menu: Catalogue (base de données)
-    description: Bienvenue dans le système d'aide de l'application <b>%app_name_version%</b>.
+    description: Bienvenue dans le système d'aide de l'application <b>%app_name%</b>.
     actions:
         clear: Effacer
         pages: Lignes par page
@@ -1096,13 +1096,13 @@ security:
         description: Connectez-vous avec votre nom d'utilisateur et votre mot de passe.
         username: Nom d'utilisateur
         password: Mot de passe
-        remember_me: Se souvenir de moi
+        remember: Se souvenir de moi
         submit: Connexion
-        success: Bienvenue <b>%user_name%</b>. Vous vous êtes connecté à l'application <b>%app_name_version%</b> avec succès.
+        success: Bienvenue <b>%user_name%</b>. Vous vous êtes connecté à l'application <b>%app_name%</b> avec succès.
         error: Le nom de l'utilisateur ou le mot de passe est invalide.
     logout:
         title: Se déconnecter de l'application
-        success: Vous vous êtes déconnecté de l'application <b>%app_name_version%</b> avec succès.
+        success: Vous vous êtes déconnecté de l'application <b>%app_name%</b> avec succès.
 show:
     name: Nom
     value: Valeur
@@ -1464,7 +1464,7 @@ notification:
     csp_title: Violation des règles CSP
     csp_description: L'agent utilisateur de l'application %name% a rapporté des violations des règles de la politique de sécurité de contenu (Content Security Policy).
     csp_error: Impossible de rapporter les violations des règles de la politique de sécurité.
-    footer: Notification envoyée depuis l'application %name%.
+    footer: Notification envoyée depuis l'application %app_name%.
     exception: La trace de la pile d'exception est en pièce jointe.
 # enumerations
 message_position:

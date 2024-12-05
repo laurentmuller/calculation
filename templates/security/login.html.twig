@@ -8,7 +8,7 @@
 {# footer #}
 {% block card_body -%}
 {{ parent() }}
-<input type="hidden" name="login_token" value="{{ csrf_token('authenticate') }}">
+<input type="hidden" name="{{ constant('App\\Controller\\SecurityController::LOGIN_TOKEN') }}" value="{{ csrf_token(constant('App\\Controller\\SecurityController::AUTHENTICATE_TOKEN')) }}">
 {% endblock %}
 {# actions #}
 {% block actions_form %}

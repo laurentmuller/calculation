@@ -54,7 +54,7 @@
     <hr class="my-1" />
 </div>
 <div id="content" data-url="{{ url('timeline_content') }}" data-min="{{ max_date_locale }}" data-max="{{ min_date_locale }}">
-    {{ include('test/_timeline_content.html.twig', {from: from, to: to, count: count, data: data}, with_context=false) }}
+    {{ include('test/_timeline_content.html.twig', {from: from, to: to, count: count, data: data}, with_context: false) }}
 </div>
 {%- endblock %}
 {# stylesheets #}

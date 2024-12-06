@@ -14,17 +14,25 @@ declare(strict_types=1);
 namespace App\Tests\Form\User;
 
 use App\Entity\User;
+use App\Form\Type\CaptchaImageType;
 use App\Form\User\ResetChangePasswordType;
+use App\Service\ApplicationService;
+use App\Service\CaptchaImageService;
 use App\Tests\Entity\IdTrait;
-use App\Tests\TranslatorMockTrait;
+use App\Tests\Form\PreloadedExtensionsTrait;
 use PHPUnit\Framework\MockObject\Exception;
+use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ResetChangePasswordTypeTest extends TypeTestCase
 {
     use IdTrait;
     use PasswordHasherExtensionTrait;
-    use TranslatorMockTrait;
+    use PreloadedExtensionsTrait {
+        getExtensions as getExtensionsFromTrait;
+    }
+    use ValidatorExtensionTrait;
 
     private User $user;
 
@@ -49,13 +57,32 @@ class ResetChangePasswordTypeTest extends TypeTestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\ReflectionException
      */
     protected function getExtensions(): array
     {
-        $extensions = parent::getExtensions();
+        $extensions = $this->getExtensionsFromTrait();
         $extensions[] = $this->getPasswordHasherExtension();
 
         return $extensions;
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function getPreloadedExtensions(): array
+    {
+        $generator = $this->createMock(UrlGeneratorInterface::class);
+        $service = $this->createMock(CaptchaImageService::class);
+        $service->method('generateImage')
+            ->willReturn('fake_content');
+        $application = $this->createMock(ApplicationService::class);
+        $application->method('isDisplayCaptcha')
+            ->willReturn(false);
+
+        return [
+            new CaptchaImageType($generator),
+            new ResetChangePasswordType($service, $application),
+        ];
     }
 }

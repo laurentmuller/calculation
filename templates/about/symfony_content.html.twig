@@ -99,7 +99,7 @@
     <div id="symfonyAccordion">
         {# parameters #}
         {{ _self.headerLinkInfo('Parameters', 'parameters') }}
-        <div class="collapse ps-3" id="parameters" aria-labelledby="parameters-header" data-bs-parent="#symfonyAccordion">
+        <div class="collapse ps-lg-3" id="parameters" aria-labelledby="parameters-header" data-bs-parent="#symfonyAccordion">
             <table class="table table-sm mb-0">
                 {{ _self.headerNameValue() }}
                 <tbody>
@@ -112,7 +112,7 @@
         </div>
         {# extensions #}
         {{ _self.headerLinkInfo('Extensions', 'extensions') }}
-        <div class="collapse ps-3" id="extensions" aria-labelledby="extensions-header" data-bs-parent="#symfonyAccordion">
+        <div class="collapse ps-lg-3" id="extensions" aria-labelledby="extensions-header" data-bs-parent="#symfonyAccordion">
             <table class="table table-sm mb-0">
                 {{ _self.headerNameValue() }}
                 <tbody>
@@ -125,7 +125,7 @@
         </div>
         {# directories #}
         {{ _self.headerLinkInfo('Directories', 'directories') }}
-        <div class="collapse ps-3" id="directories" aria-labelledby="directories-header" data-bs-parent="#symfonyAccordion">
+        <div class="collapse ps-lg-3" id="directories" aria-labelledby="directories-header" data-bs-parent="#symfonyAccordion">
             <table class="table table-sm mb-0">
                 {{ _self.headerNameValue() }}
                 <tbody>
@@ -139,7 +139,7 @@
         {# bundles #}
         {% if bundles|length %}
             {{ _self.headerLinkInfo('Bundles', 'bundles', bundles) }}
-            <div class="collapse ps-3" id="bundles" aria-labelledby="bundles-header" data-bs-parent="#symfonyAccordion">
+            <div class="collapse ps-lg-3" id="bundles" aria-labelledby="bundles-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-sm mb-0">
                     <thead>
                         <tr>
@@ -159,7 +159,7 @@
         {# runtime packages #}
         {% if runtime_packages|length %}
             {{ _self.headerLinkInfo('Packages', 'runtime-packages', runtime_packages) }}
-            <div class="accordion-collapse collapse ps-3 table-responsive" id="runtime-packages" aria-labelledby="runtime-packages-header" data-bs-parent="#symfonyAccordion">
+            <div class="accordion-collapse collapse ps-lg-3 table-responsive" id="runtime-packages" aria-labelledby="runtime-packages-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm mb-0">
                     {{ _self.headerPackage() }}
                     <tbody>
@@ -173,7 +173,7 @@
         {# debug packages #}
         {% if debug_packages|length %}
             {{ _self.headerLinkInfo('Debug Packages', 'dev-packages', debug_packages) }}
-            <div class="accordion-collapse collapse ps-3" id="dev-packages" aria-labelledby="dev-packages-header" data-bs-parent="#symfonyAccordion">
+            <div class="accordion-collapse collapse ps-lg-3" id="dev-packages" aria-labelledby="dev-packages-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm mb-0">
                     {{ _self.headerPackage() }}
                     <tbody>
@@ -187,7 +187,7 @@
         {# runtime routes #}
         {% if runtime_routes|length %}
             {{ _self.headerLinkInfo('Routes', 'runtime-routes', runtime_routes) }}
-            <div class="accordion-collapse collapse ps-3" id="runtime-routes" aria-labelledby="runtime-routes-header" data-bs-parent="#symfonyAccordion">
+            <div class="accordion-collapse collapse ps-lg-3" id="runtime-routes" aria-labelledby="runtime-routes-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm mb-0">
                     {{ _self.headerRoute() }}
                     <tbody>
@@ -201,7 +201,7 @@
         {# debug routes #}
         {% if debug_routes|length %}
             {{ _self.headerLinkInfo('Debug Routes', 'debug-routes', debug_routes) }}
-            <div class="accordion-collapse collapse ps-3" id="debug-routes" aria-labelledby="debug-routes-header" data-bs-parent="#symfonyAccordion">
+            <div class="accordion-collapse collapse ps-lg-3" id="debug-routes" aria-labelledby="debug-routes-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm mb-0">
                     {{ _self.headerRoute() }}
                     <tbody>

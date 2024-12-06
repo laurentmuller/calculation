@@ -18,6 +18,7 @@ use App\Attribute\GetPost;
 use App\Entity\User;
 use App\Form\User\RequestChangePasswordType;
 use App\Form\User\ResetChangePasswordType;
+use App\Security\LoginFormAuthenticator;
 use App\Service\ResetPasswordService;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -26,6 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
@@ -96,8 +98,17 @@ class ResetPasswordController extends AbstractController
      * Validates and process the reset URL that the user clicked in their email.
      */
     #[GetPost(path: '/reset/{token}', name: self::ROUTE_RESET)]
-    public function reset(Request $request, Security $security, ?string $token = null): Response
-    {
+    public function reset(
+        #[CurrentUser]
+        ?User $user,
+        Request $request,
+        Security $security,
+        ?string $token = null
+    ): Response {
+        if ($user instanceof User) {
+            return $this->redirectToHomePage();
+        }
+
         if (null !== $token) {
             $this->storeTokenInSession($token);
 
@@ -132,11 +143,11 @@ class ResetPasswordController extends AbstractController
     private function redirectAfterReset(Security $security, User $user): Response
     {
         try {
-            $response = $security->login($user, 'form_login');
+            $response = $security->login($user, LoginFormAuthenticator::class);
             if ($response instanceof Response) {
                 return $response;
             }
-        } catch (\Exception) {
+        } catch (\Throwable) {
             // ignore
         }
 

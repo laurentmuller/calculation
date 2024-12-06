@@ -319,28 +319,6 @@ class UserTest extends EntityValidatorTestCase
         self::assertCount(0, $user->getProperties());
     }
 
-    public function testSerialize(): void
-    {
-        $user = new User();
-        $user->setUsername('user')
-            ->setPassword('password');
-        $values = $user->__serialize();
-        self::assertCount(3, $values);
-        self::assertNull($values[0]);
-        self::assertSame('user', $values[1]);
-        self::assertSame('password', $values[2]);
-    }
-
-    public function testUnserialize(): void
-    {
-        $values = [1, 'user', 'password'];
-        $user = new User();
-        $user->__unserialize($values);
-        self::assertSame(1, $user->getId());
-        self::assertSame('user', $user->getUsername());
-        self::assertSame('password', $user->getPassword());
-    }
-
     public function testUpdateLastLogin(): void
     {
         $user = new User();

@@ -9,7 +9,7 @@ $(function () {
     $form.simulate().initValidator({
         rules: {
             'form[sources][]': {
-                /* eslint camelcase: "off" */
+                // eslint-disable-next-line camelcase
                 require_from_group: [1, '#form_sources .form-check-input']
             }
         },

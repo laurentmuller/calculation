@@ -22,13 +22,13 @@ return static function (DoctrineConfig $config): void {
 
     $manager->metadataCacheDriver()
         ->type('pool')
-        ->pool('doctrine.metadata_cache_pool');
+        ->pool('doctrine.metadata');
 
     $manager->queryCacheDriver()
         ->type('pool')
-        ->pool('doctrine.query_cache_pool');
+        ->pool('doctrine.query');
 
     $manager->resultCacheDriver()
         ->type('pool')
-        ->pool('doctrine.result_cache_pool');
+        ->pool('doctrine.result');
 };

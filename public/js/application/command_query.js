@@ -5,10 +5,6 @@
  */
 $(function () {
     'use strict';
-    $('#edit-form').initValidator({
-        spinner: {
-            text: $('.card-header small').text() + '..'
-        }
-    });
+    $('#edit-form').initValidator();
     $('#edit-form [data-bs-toggle="popover"]').popover();
 });

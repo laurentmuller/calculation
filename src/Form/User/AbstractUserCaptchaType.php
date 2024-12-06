@@ -17,6 +17,7 @@ use App\Constraint\Captcha;
 use App\Form\AbstractHelperType;
 use App\Form\FormHelper;
 use App\Form\Type\CaptchaImageType;
+use App\Security\SecurityAttributes;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -26,11 +27,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 abstract class AbstractUserCaptchaType extends AbstractHelperType
 {
-    /**
-     * The captcha field name.
-     */
-    public const CAPTCHA_FIELD = 'captcha';
-
     public function __construct(
         protected readonly CaptchaImageService $service,
         protected readonly ApplicationService $application
@@ -53,7 +49,7 @@ abstract class AbstractUserCaptchaType extends AbstractHelperType
     protected function addFormFields(FormHelper $helper): void
     {
         if ($this->application->isDisplayCaptcha()) {
-            $helper->field(self::CAPTCHA_FIELD)
+            $helper->field(SecurityAttributes::CAPTCHA_FIELD)
                 ->label('captcha.label')
                 ->constraints(new NotBlank(), new Captcha())
                 ->updateOption('image', $this->service->generateImage())

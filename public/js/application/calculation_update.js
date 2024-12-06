@@ -53,8 +53,6 @@ $(function () {
             }
         }, messages: {
             'form[states][]': $form.data('error')
-        }, spinner: {
-            text: $('.card-title').text() + '...'
         }
     });
     $('#form_sources .custom-switch').addClass('me-4');

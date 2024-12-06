@@ -350,7 +350,7 @@ common:
     value_null: Vide
     value_true: Oui
     value_unknown: Inconnu
-    save_data: Sauvegarde des données...
+    save_data: Sauvegarde des données
     data_changed: Données modifiées
     api_documentation: Documentation (API)
     api_documentation_help: Accéder à la documentation de l'interface d'application
@@ -808,6 +808,7 @@ openweather:
         place_holder: Veuillez saisir une localité
         query: Localité
         title: Rechercher une localité
+        submit: Recherche de localités
         units: Unités
 pagination:
     counter: Entrées %start% à %end% sur %count%
@@ -1028,12 +1029,12 @@ report:
         error_qr_code: Une erreur s'est produite lors de la génération du code QR.
 resetting:
     link: Mot de passe oublié ?
-    not_found_password_token: Aucun jeton de réinitialisation du mot de passe n'a été
-        trouvé dans l'URL ou dans la session.
+    not_found_password_token: Aucun jeton de réinitialisation du mot de passe n'a été trouvé dans l'URL ou dans la session.
     request:
         description: Entrez votre nom d'utilisateur ou votre adresse e-mail pour demander une réinitialisation du mot de passe.
         submit: Réinitialiser
         title: Réinitialiser le mot de passe
+        submit_title: Réinitialisation du mot de passe
         user: Nom d'utilisateur ou adresse e-mail
     success: <b>%username%</b>, votre mot de passe a été réinitialisé avec succès.
 rights:
@@ -1441,6 +1442,7 @@ user:
             success: <b>%orignal%</b>, vous avez pris l'identité de l'utilisateur <b>%name%</b> avec succès.
 archive:
     title: Archiver des calculations
+    submit: Archivage des calculations
     editable_empty: Aucun statut modifiable n'est présent.
     not_editable_empty: Aucun statut non-modifiable n'est présent.
     edit:
@@ -1547,6 +1549,7 @@ command:
     execute:
         title: Exécuter
         description: Exécute la commande sélectionnée.
+        submit_title: Exécution la commande
     result:
         title: Résultats
         description: Résultat de l'exécution de la commande.

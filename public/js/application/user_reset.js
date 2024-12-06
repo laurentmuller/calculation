@@ -30,12 +30,6 @@ $(function () {
             "plainPassword[second]": {
                 equalTo: message
             }
-        },
-        spinner: {
-            text: $('.card-title').text() + '...',
-            // css: {
-            //     top: '25%',
-            // }
         }
     };
     $form.initValidator(options);

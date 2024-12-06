@@ -11,12 +11,11 @@
 
 declare(strict_types=1);
 
-use App\Controller\SecurityController;
 use App\Entity\User;
-use App\Form\User\UserLoginType;
 use App\Interfaces\RoleInterface;
 use App\Listener\ResponseListener;
 use App\Security\LoginFormAuthenticator;
+use App\Security\SecurityAttributes;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -59,15 +58,15 @@ return static function (SecurityConfig $config): void {
 
     // logout
     $firewall->logout()
-        ->path(SecurityController::LOGOUT_ROUTE)
-        ->target(SecurityController::SUCCESS_ROUTE)
-        ->csrfParameter(SecurityController::LOGOUT_TOKEN)
+        ->path(SecurityAttributes::LOGOUT_ROUTE)
+        ->target(SecurityAttributes::LOGOUT_SUCCESS_ROUTE)
+        ->csrfParameter(SecurityAttributes::LOGOUT_TOKEN)
         ->enableCsrf(true);
 
     // remember me
     $firewall->rememberMe()
         ->signatureProperties(['email', 'password'])
-        ->rememberMeParameter(UserLoginType::REMEMBER_FIELD)
+        ->rememberMeParameter(SecurityAttributes::REMEMBER_FIELD)
         ->secret('%app_secret%')
         ->path('%cookie_path%')
         ->lifetime(2_592_000) // 30 days

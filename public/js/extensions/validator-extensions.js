@@ -441,11 +441,10 @@ $(function () {
          * @return {jQuery} this form for chaining.
          */
         showSubmit: function (options) {
-            //position-absolute top-50 start-50 translate-middle
             const $this = $(this);
             const settings = $.extend(true, {
                 parent: $this,
-                text: $this.data('save') || 'Saving data...',
+                text: $this.data('save') || $this.find('.card-title').text() || 'Sauvegarde des données',
                 alertClass: 'alert bg-body-secondary border border-secondary-subtle text-center position-absolute start-50 translate-middle z-3',
                 iconClass: 'fa-solid fa-spinner fa-spin me-2',
                 css: {
@@ -493,10 +492,6 @@ $(function () {
             parent.addClass('position-relative');
             $alert.appendTo($(parent)).show(settings.show);
             window.onpagehide = () => $alert.remove();
-            // window.addEventListener('pagehide', () => {
-            //     $alert.remove();
-            // });
-            //setTimeout(() => $alert.remove(), settings.hide);
             return $this;
         }
     });
@@ -509,14 +504,14 @@ $(function () {
     /**
      * Validate the Switzerland zip code (1000 to 9999).
      */
-    $.validator.addMethod("zipcodeCH", function (value, element) {
+    $.validator.addMethod('zipcodeCH', function (value, element) {
         return this.optional(element) || /^[1-9]\d{3}$/.test(value);
     });
 
     /**
      * Validate that value is different from zero.
      */
-    $.validator.addMethod("notEqualToZero", function (value, element) {
+    $.validator.addMethod('notEqualToZero', function (value, element) {
         return this.optional(element) || $.parseFloat(value) !== 0;
     });
 
@@ -581,7 +576,7 @@ $(function () {
     /*
      * check if the value contains an upper and a lower case character
      */
-    $.validator.addMethod('mixedCase', function (value, element, param) {
+    $.validator.addMethod('mixedCase', function (value, element) {
         if (this.optional(element)) {
             return true;
         }
@@ -591,7 +586,7 @@ $(function () {
     /*
      * check if contains alphabetic characters
      */
-    $.validator.addMethod('letter', function (value, element, param) {
+    $.validator.addMethod('letter', function (value, element) {
         if (this.optional(element)) {
             return true;
         }

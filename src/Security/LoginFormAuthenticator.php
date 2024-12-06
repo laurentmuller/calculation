@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace App\Security;
 
-use App\Controller\SecurityController;
-use App\Form\User\AbstractUserCaptchaType;
-use App\Form\User\UserLoginType;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,15 +52,15 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $this->validateCaptcha($request);
         $credentials = $this->getCredentials($request);
         $passport = new Passport(
-            new UserBadge($credentials[UserLoginType::USER_FIELD], $this->userProvider->loadUserByIdentifier(...)),
-            new PasswordCredentials($credentials[UserLoginType::PASSWORD_FIELD]),
+            new UserBadge($credentials[SecurityAttributes::USER_FIELD], $this->userProvider->loadUserByIdentifier(...)),
+            new PasswordCredentials($credentials[SecurityAttributes::PASSWORD_FIELD]),
             [
                 new RememberMeBadge(),
-                new CsrfTokenBadge(SecurityController::AUTHENTICATE_TOKEN, $credentials[SecurityController::LOGIN_TOKEN]),
+                new CsrfTokenBadge(SecurityAttributes::AUTHENTICATE_TOKEN, $credentials[SecurityAttributes::LOGIN_TOKEN]),
             ]
         );
         if ($this->userProvider instanceof PasswordUpgraderInterface) {
-            $passport->addBadge(new PasswordUpgradeBadge($credentials[UserLoginType::PASSWORD_FIELD], $this->userProvider));
+            $passport->addBadge(new PasswordUpgradeBadge($credentials[SecurityAttributes::PASSWORD_FIELD], $this->userProvider));
         }
 
         return $passport;
@@ -78,12 +75,12 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     {
         return $request->isMethod(Request::METHOD_POST)
             && 'form' === $request->getContentTypeFormat()
-            && $this->httpUtils->checkRequestPath($request, SecurityController::LOGIN_ROUTE);
+            && $this->httpUtils->checkRequestPath($request, SecurityAttributes::LOGIN_ROUTE);
     }
 
     protected function getLoginUrl(Request $request): string
     {
-        return $this->httpUtils->generateUri($request, SecurityController::LOGIN_ROUTE);
+        return $this->httpUtils->generateUri($request, SecurityAttributes::LOGIN_ROUTE);
     }
 
     /**
@@ -92,21 +89,21 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     private function getCredentials(Request $request): array
     {
         $credentials = [];
-        $credentials[UserLoginType::USER_FIELD] = $request->request->getString(UserLoginType::USER_FIELD);
-        $credentials[UserLoginType::PASSWORD_FIELD] = $request->request->getString(UserLoginType::PASSWORD_FIELD);
-        $credentials[SecurityController::LOGIN_TOKEN] = $request->request->getString(SecurityController::LOGIN_TOKEN);
+        $credentials[SecurityAttributes::USER_FIELD] = $request->request->getString(SecurityAttributes::USER_FIELD);
+        $credentials[SecurityAttributes::PASSWORD_FIELD] = $request->request->getString(SecurityAttributes::PASSWORD_FIELD);
+        $credentials[SecurityAttributes::LOGIN_TOKEN] = $request->request->getString(SecurityAttributes::LOGIN_TOKEN);
 
         if ($request->hasSession()) {
-            $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $credentials[UserLoginType::USER_FIELD]);
+            $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $credentials[SecurityAttributes::USER_FIELD]);
         }
 
-        if ('' === $credentials[UserLoginType::USER_FIELD]) {
+        if ('' === $credentials[SecurityAttributes::USER_FIELD]) {
             throw new BadCredentialsException('The username must be a non-empty string.');
         }
-        if ('' === $credentials[UserLoginType::PASSWORD_FIELD]) {
+        if ('' === $credentials[SecurityAttributes::PASSWORD_FIELD]) {
             throw new BadCredentialsException('The password must be a non-empty string.');
         }
-        if ('' === $credentials[SecurityController::LOGIN_TOKEN]) {
+        if ('' === $credentials[SecurityAttributes::LOGIN_TOKEN]) {
             throw new BadRequestHttpException('The token must be a non-empty string.');
         }
 
@@ -119,7 +116,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             return;
         }
 
-        $captcha = $request->request->getString(AbstractUserCaptchaType::CAPTCHA_FIELD);
+        $captcha = $request->request->getString(SecurityAttributes::CAPTCHA_FIELD);
         if ('' === $captcha || !$this->captchaImageService->validateToken($captcha)) {
             throw new CustomUserMessageAuthenticationException('captcha.invalid');
         }

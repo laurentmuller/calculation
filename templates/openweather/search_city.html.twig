@@ -5,6 +5,7 @@
 {%- set title = 'openweather.search.title' -%}
 {%- set title_icon = 'search' -%}
 {%- set submit_text = 'common.button_search' -%}
+{%- set submit_title = 'openweather.search.submit' -%}
 {%- set city = app.session.get('openweather.city', false) -%}
 {%- set units = app.session.get('openweather.units', 'metric') -%}
 {%- set cancel_path = city ? path('openweather_weather', {city: city, units: units}) : null -%}

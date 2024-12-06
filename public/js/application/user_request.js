@@ -25,9 +25,6 @@ $(function () {
                     }
                 }
             }
-        },
-        spinner: {
-            text: $('.card-title').text() + '...'
         }
     };
     $form.initValidator(options);

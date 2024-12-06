@@ -14,34 +14,20 @@ declare(strict_types=1);
 namespace App\Form\User;
 
 use App\Form\FormHelper;
+use App\Security\SecurityAttributes;
 
 /**
  * User login type.
  */
 class UserLoginType extends AbstractUserCaptchaType
 {
-    /**
-     * The password field name.
-     */
-    public const PASSWORD_FIELD = 'password';
-
-    /**
-     * The remember field name.
-     */
-    public const REMEMBER_FIELD = 'remember';
-
-    /**
-     * The user field name.
-     */
-    public const USER_FIELD = 'username';
-
     protected function addFormFields(FormHelper $helper): void
     {
-        $helper->field(self::USER_FIELD)
+        $helper->field(SecurityAttributes::USER_FIELD)
             ->addUserNameType();
-        $helper->field(self::PASSWORD_FIELD)
+        $helper->field(SecurityAttributes::PASSWORD_FIELD)
             ->addCurrentPasswordType();
-        $helper->field(self::REMEMBER_FIELD)
+        $helper->field(SecurityAttributes::REMEMBER_FIELD)
             ->addCheckboxType();
         parent::addFormFields($helper);
     }

@@ -21,9 +21,5 @@ $(function () {
     });
 
     // validation
-    $form.initValidator({
-        spinner: {
-            text: $('.card-title').text() + '...',
-        }
-    });
+    $form.initValidator();
 });

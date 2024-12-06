@@ -15,9 +15,6 @@ $(function () {
         },
         messages: {
             'form[sources][]':  $form.data('error')
-        },
-        spinner: {
-            text: $('.card-title').text() + '...'
         }
     });
     $('#form_sources .custom-switch').addClass('me-4');

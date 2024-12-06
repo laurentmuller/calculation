@@ -143,7 +143,7 @@ $(function () {
     // number inputs
     $fixed.inputNumberFormat();
 
-    // add custom method for products selection
+    // add custom method for product selection
     $.validator.addMethod('checkProducts', function () {
         if (getSelectableProducts().length === 0) {
             $overFlow.hide();
@@ -177,9 +177,7 @@ $(function () {
                 const id = $category.val();
                 $('#form_products :checkbox[data-category!="' + id + '"]').setChecked(false);
             }
-            $(form).showSubmit({
-                text: $('.card-title').text() + '...'
-            });
+            $(form).showSubmit();
             form.submit();
         }
     });

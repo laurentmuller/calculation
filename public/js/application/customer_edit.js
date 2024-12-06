@@ -93,15 +93,12 @@ $(function () {
     const options = {
         rules: {
             'customer[firstName]': {
-                // eslint-disable-next-line camelcase
                 require_from_group: [1, '.customer-group']
             },
             'customer[lastName]': {
-                // eslint-disable-next-line camelcase
                 require_from_group: [1, '.customer-group']
             },
             'customer[company]': {
-                // eslint-disable-next-line camelcase
                 require_from_group: [1, '.customer-group']
             },
             'customer[zipCode]': {

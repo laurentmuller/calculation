@@ -4,11 +4,12 @@
 {%- set title_description = 'security.login.description' -%}
 {%- set title_icon = 'sign-in-alt' -%}
 {%- set submit_text = 'security.login.submit' -%}
+{%- set submit_title = 'security.login.title' -%}
 {%- set cancel_path = false -%}
 {# footer #}
 {% block card_body -%}
 {{ parent() }}
-<input type="hidden" name="{{ constant('App\\Controller\\SecurityController::LOGIN_TOKEN') }}" value="{{ csrf_token(constant('App\\Controller\\SecurityController::AUTHENTICATE_TOKEN')) }}">
+<input type="hidden" name="{{ constant('App\\Security\\SecurityAttributes::LOGIN_TOKEN') }}" value="{{ csrf_token(constant('App\\Security\\SecurityAttributes::AUTHENTICATE_TOKEN')) }}">
 {% endblock %}
 {# actions #}
 {% block actions_form %}

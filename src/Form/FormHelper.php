@@ -16,6 +16,7 @@ namespace App\Form;
 use App\Form\Type\CurrentPasswordType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
+use App\Interfaces\EntityInterface;
 use App\Interfaces\EnumSortableInterface;
 use App\Interfaces\UserInterface;
 use App\Utils\FormatUtils;
@@ -35,6 +36,7 @@ use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\PercentType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -47,6 +49,8 @@ use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -313,6 +317,19 @@ class FormHelper
             ->updateAttribute('scale', $scale)
             ->updateOption('html5', true)
             ->add(NumberType::class);
+    }
+
+    public function addPasswordType(): self
+    {
+        $this->autocomplete('current-password')
+            ->minLength(UserInterface::MIN_PASSWORD_LENGTH)
+            ->maxLength(EntityInterface::MAX_STRING_LENGTH)
+            ->constraints(
+                new NotBlank(),
+                new Length(min: UserInterface::MIN_PASSWORD_LENGTH, max: EntityInterface::MAX_STRING_LENGTH),
+            );
+
+        return $this->add(PasswordType::class);
     }
 
     /**

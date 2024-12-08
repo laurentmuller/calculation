@@ -26,7 +26,7 @@ class UserLoginType extends AbstractUserCaptchaType
         $helper->field(SecurityAttributes::USER_FIELD)
             ->addUserNameType();
         $helper->field(SecurityAttributes::PASSWORD_FIELD)
-            ->addCurrentPasswordType();
+            ->addPasswordType();
         $helper->field(SecurityAttributes::REMEMBER_FIELD)
             ->addCheckboxType();
         parent::addFormFields($helper);

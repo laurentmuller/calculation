@@ -19,6 +19,9 @@ use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 
 class UserRepositoryTest extends KernelServiceTestCase
@@ -125,6 +128,32 @@ class UserRepositoryTest extends KernelServiceTestCase
         self::assertFalse($actual);
     }
 
+    public function testLoadUserByIdentifier(): void
+    {
+        $user = $this->repository->loadUserByIdentifier('ROLE_USER');
+        self::assertInstanceOf(User::class, $user);
+    }
+
+    public function testLoadUserByIdentifierException(): void
+    {
+        self::expectException(UserNotFoundException::class);
+        $this->repository->loadUserByIdentifier('FAKE');
+    }
+
+    public function testRefreshUser(): void
+    {
+        $user = $this->getUser();
+        $refreshedUser = $this->repository->refreshUser($user);
+        self::assertInstanceOf(User::class, $refreshedUser);
+    }
+
+    public function testRefreshUserException(): void
+    {
+        self::expectException(UnsupportedUserException::class);
+        $user = new InMemoryUser('username', 'password', ['ROLE_USER']);
+        $this->repository->refreshUser($user);
+    }
+
     public function testRemoveExpiredResetPasswordRequests(): void
     {
         $actual = $this->repository->removeExpiredResetPasswordRequests();
@@ -136,6 +165,12 @@ class UserRepositoryTest extends KernelServiceTestCase
         $user = $this->getUser();
         $this->repository->removeResetPasswordRequest($user);
         self::assertTrue($user->isExpired());
+    }
+
+    public function testSupportsClass(): void
+    {
+        self::assertTrue($this->repository->supportsClass(User::class));
+        self::assertFalse($this->repository->supportsClass(InMemoryUser::class));
     }
 
     public function testUpgradePassword(): void

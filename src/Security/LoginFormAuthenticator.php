@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Security;
 
+use App\Repository\UserRepository;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,9 +22,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
-use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\PasswordUpgradeBadge;
@@ -36,13 +34,10 @@ use Symfony\Component\Security\Http\SecurityRequestAttributes;
 
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
-    /**
-     * @param UserProviderInterface<UserInterface> $userProvider
-     */
     public function __construct(
         private readonly ApplicationService $applicationService,
         private readonly CaptchaImageService $captchaImageService,
-        private readonly UserProviderInterface $userProvider,
+        private readonly UserRepository $repository,
         private readonly HttpUtils $httpUtils,
     ) {
     }
@@ -51,19 +46,16 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     {
         $this->validateCaptcha($request);
         $credentials = $this->getCredentials($request);
-        $passport = new Passport(
-            new UserBadge($credentials[SecurityAttributes::USER_FIELD], $this->userProvider->loadUserByIdentifier(...)),
+
+        return new Passport(
+            new UserBadge($credentials[SecurityAttributes::USER_FIELD], $this->repository->loadUserByIdentifier(...)),
             new PasswordCredentials($credentials[SecurityAttributes::PASSWORD_FIELD]),
             [
                 new RememberMeBadge(),
+                new PasswordUpgradeBadge($credentials[SecurityAttributes::PASSWORD_FIELD], $this->repository),
                 new CsrfTokenBadge(SecurityAttributes::AUTHENTICATE_TOKEN, $credentials[SecurityAttributes::LOGIN_TOKEN]),
             ]
         );
-        if ($this->userProvider instanceof PasswordUpgraderInterface) {
-            $passport->addBadge(new PasswordUpgradeBadge($credentials[SecurityAttributes::PASSWORD_FIELD], $this->userProvider));
-        }
-
-        return $passport;
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response

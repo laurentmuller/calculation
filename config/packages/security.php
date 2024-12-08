@@ -14,6 +14,7 @@ declare(strict_types=1);
 use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Listener\ResponseListener;
+use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
 use App\Security\SecurityAttributes;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -33,10 +34,8 @@ return static function (SecurityConfig $config): void {
         ->roleHierarchy(RoleInterface::ROLE_SUPER_ADMIN, [RoleInterface::ROLE_ADMIN]);
 
     // user provider
-    $config->provider('app_user_provider')
-        ->entity()
-        ->class(User::class)
-        ->property('username');
+    $config->provider('user_provider')
+        ->id(UserRepository::class);
 
     // dev firewall
     $config->firewall(ResponseListener::FIREWALL_DEV)
@@ -47,6 +46,7 @@ return static function (SecurityConfig $config): void {
     $firewall = $config->firewall(ResponseListener::FIREWALL_MAIN)
         ->customAuthenticators([LoginFormAuthenticator::class])
         ->entryPoint(LoginFormAuthenticator::class)
+        ->provider('user_provider')
         ->lazy(true);
 
     // allows 5 login attempts per minute

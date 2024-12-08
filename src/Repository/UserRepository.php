@@ -19,8 +19,12 @@ use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use SymfonyCasts\Bundle\ResetPassword\Persistence\Repository\ResetPasswordRequestRepositoryTrait;
 use SymfonyCasts\Bundle\ResetPassword\Persistence\ResetPasswordRequestRepositoryInterface;
@@ -29,8 +33,10 @@ use SymfonyCasts\Bundle\ResetPassword\Persistence\ResetPasswordRequestRepository
  * Repository for user entity.
  *
  * @template-extends AbstractRepository<User>
+ *
+ * @implements UserProviderInterface<User>
  */
-class UserRepository extends AbstractRepository implements PasswordUpgraderInterface, ResetPasswordRequestRepositoryInterface
+class UserRepository extends AbstractRepository implements PasswordUpgraderInterface, ResetPasswordRequestRepositoryInterface, UserProviderInterface
 {
     use ResetPasswordRequestRepositoryTrait;
 
@@ -175,6 +181,34 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     }
 
     /**
+     * @see UserProviderInterface
+     */
+    public function loadUserByIdentifier(string $identifier): User
+    {
+        $user = $this->findByUsername($identifier);
+        if (!$user instanceof User) {
+            $e = new UserNotFoundException(\sprintf('User "%s" not found.', $identifier));
+            $e->setUserIdentifier($identifier);
+
+            throw $e;
+        }
+
+        return $user;
+    }
+
+    /**
+     * @see UserProviderInterface
+     */
+    public function refreshUser(UserInterface $user): User
+    {
+        if (!$user instanceof User) {
+            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', \get_debug_type($user)));
+        }
+
+        return $this->loadUserByIdentifier($user->getUsername());
+    }
+
+    /**
      * @see ResetPasswordRequestRepositoryInterface
      */
     public function removeExpiredResetPasswordRequests(): int
@@ -218,6 +252,14 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
         }
 
         $this->flush();
+    }
+
+    /**
+     * @see UserProviderInterface
+     */
+    public function supportsClass(string $class): bool
+    {
+        return User::class === $class;
     }
 
     /**

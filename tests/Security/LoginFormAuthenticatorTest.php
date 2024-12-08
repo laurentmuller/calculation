@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Security;
 
+use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
 use App\Security\SecurityAttributes;
 use App\Service\ApplicationService;
@@ -29,8 +30,6 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\HttpUtils;
 
@@ -134,8 +133,8 @@ class LoginFormAuthenticatorTest extends TestCase
      */
     public function testAuthenticateWithUserProvider(): void
     {
-        $userProvider = $this->createMock(ProviderInterface::class);
-        $authenticator = $this->createAuthenticator(userProvider: $userProvider);
+        $userProvider = $this->createMock(UserRepository::class);
+        $authenticator = $this->createAuthenticator(repository: $userProvider);
 
         $values = [
             SecurityAttributes::USER_FIELD => 'username',
@@ -273,25 +272,23 @@ class LoginFormAuthenticatorTest extends TestCase
     }
 
     /**
-     * @param UserProviderInterface<UserInterface>|null $userProvider
-     *
      * @throws Exception
      */
     private function createAuthenticator(
         ?ApplicationService $applicationService = null,
         ?CaptchaImageService $captchaImageService = null,
-        ?UserProviderInterface $userProvider = null,
+        ?UserRepository $repository = null,
         ?HttpUtils $httpUtils = null
     ): LoginFormAuthenticator {
         $applicationService ??= $this->createMock(ApplicationService::class);
         $captchaImageService ??= $this->createMock(CaptchaImageService::class);
-        $userProvider ??= $this->createMock(UserProviderInterface::class);
+        $repository ??= $this->createMock(UserRepository::class);
         $httpUtils ??= $this->createMock(HttpUtils::class);
 
         return new LoginFormAuthenticator(
             $applicationService,
             $captchaImageService,
-            $userProvider,
+            $repository,
             $httpUtils,
         );
     }

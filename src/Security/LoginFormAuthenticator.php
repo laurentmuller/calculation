@@ -45,15 +45,15 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     public function authenticate(Request $request): Passport
     {
         $this->validateCaptcha($request);
-        $credentials = $this->getCredentials($request);
+        [$user, $password, $token] = $this->getCredentials($request);
 
         return new Passport(
-            new UserBadge($credentials[SecurityAttributes::USER_FIELD], $this->repository->loadUserByIdentifier(...)),
-            new PasswordCredentials($credentials[SecurityAttributes::PASSWORD_FIELD]),
+            new UserBadge($user, $this->repository->loadUserByIdentifier(...)),
+            new PasswordCredentials($password),
             [
                 new RememberMeBadge(),
-                new PasswordUpgradeBadge($credentials[SecurityAttributes::PASSWORD_FIELD], $this->repository),
-                new CsrfTokenBadge(SecurityAttributes::AUTHENTICATE_TOKEN, $credentials[SecurityAttributes::LOGIN_TOKEN]),
+                new PasswordUpgradeBadge($password, $this->repository),
+                new CsrfTokenBadge(SecurityAttributes::AUTHENTICATE_TOKEN, $token),
             ]
         );
     }
@@ -66,7 +66,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     public function supports(Request $request): bool
     {
         return $request->isMethod(Request::METHOD_POST)
-            && 'form' === $request->getContentTypeFormat()
+            && SecurityAttributes::CONTENT_TYPE_FORMAT === $request->getContentTypeFormat()
             && $this->httpUtils->checkRequestPath($request, SecurityAttributes::LOGIN_ROUTE);
     }
 
@@ -76,30 +76,27 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     }
 
     /**
-     * @return array{username: non-empty-string, password: non-empty-string, login_token: non-empty-string}
+     * @psalm-return list{non-empty-string, non-empty-string, non-empty-string}
      */
     private function getCredentials(Request $request): array
     {
-        $credentials = [];
-        $credentials[SecurityAttributes::USER_FIELD] = $request->request->getString(SecurityAttributes::USER_FIELD);
-        $credentials[SecurityAttributes::PASSWORD_FIELD] = $request->request->getString(SecurityAttributes::PASSWORD_FIELD);
-        $credentials[SecurityAttributes::LOGIN_TOKEN] = $request->request->getString(SecurityAttributes::LOGIN_TOKEN);
-
-        if ($request->hasSession()) {
-            $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $credentials[SecurityAttributes::USER_FIELD]);
-        }
-
-        if ('' === $credentials[SecurityAttributes::USER_FIELD]) {
+        $user = \trim($request->request->getString(SecurityAttributes::USER_FIELD));
+        if ('' === $user) {
             throw new BadCredentialsException('The username must be a non-empty string.');
         }
-        if ('' === $credentials[SecurityAttributes::PASSWORD_FIELD]) {
+        $password = $request->request->getString(SecurityAttributes::PASSWORD_FIELD);
+        if ('' === $password) {
             throw new BadCredentialsException('The password must be a non-empty string.');
         }
-        if ('' === $credentials[SecurityAttributes::LOGIN_TOKEN]) {
+        $token = $request->request->getString(SecurityAttributes::LOGIN_TOKEN);
+        if ('' === $token) {
             throw new BadRequestHttpException('The token must be a non-empty string.');
         }
+        if ($request->hasSession()) {
+            $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $user);
+        }
 
-        return $credentials;
+        return [$user, $password, $token];
     }
 
     private function validateCaptcha(Request $request): void

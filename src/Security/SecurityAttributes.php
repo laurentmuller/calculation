@@ -29,6 +29,11 @@ final class SecurityAttributes
     public const CAPTCHA_FIELD = 'captcha';
 
     /**
+     * The allowed content type format.
+     */
+    public const CONTENT_TYPE_FORMAT = 'form';
+
+    /**
      * The login route name.
      */
     public const LOGIN_ROUTE = 'app_login';

@@ -25,11 +25,14 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\BadgeInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\PasswordUpgradeBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\HttpUtils;
 
@@ -64,8 +67,11 @@ class LoginFormAuthenticatorTest extends TestCase
         $request = self::createRequest(values: $values);
         $request->setSession(new Session(new MockArraySessionStorage()));
 
-        $actual = $authenticator->authenticate($request);
-        self::assertInstanceOf(Passport::class, $actual);
+        $passport = $authenticator->authenticate($request);
+        self::assertHasBadge($passport, UserBadge::class);
+        self::assertHasBadge($passport, RememberMeBadge::class);
+        self::assertHasBadge($passport, PasswordUpgradeBadge::class);
+        self::assertHasBadge($passport, CsrfTokenBadge::class);
     }
 
     /**
@@ -84,7 +90,29 @@ class LoginFormAuthenticatorTest extends TestCase
         ];
         $request = self::createRequest(values: $values);
 
-        self::expectException(BadCredentialsException::class);
+        self::expectException(CustomUserMessageAuthenticationException::class);
+        self::expectExceptionMessage('authenticator.empty_password');
+        $authenticator->authenticate($request);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAuthenticateEmptyToken(): void
+    {
+        $httpUtils = $this->createMock(HttpUtils::class);
+        $httpUtils->method('checkRequestPath')
+            ->willReturn(true);
+        $authenticator = $this->createAuthenticator(httpUtils: $httpUtils);
+        $values = [
+            SecurityAttributes::USER_FIELD => 'username',
+            SecurityAttributes::PASSWORD_FIELD => 'password',
+            SecurityAttributes::LOGIN_TOKEN => '',
+        ];
+        $request = self::createRequest(values: $values);
+
+        self::expectException(CustomUserMessageAuthenticationException::class);
+        self::expectExceptionMessage('authenticator.empty_token');
         $authenticator->authenticate($request);
     }
 
@@ -104,27 +132,8 @@ class LoginFormAuthenticatorTest extends TestCase
         ];
         $request = self::createRequest(values: $values);
 
-        self::expectException(BadCredentialsException::class);
-        $authenticator->authenticate($request);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testAuthenticateNoToken(): void
-    {
-        $httpUtils = $this->createMock(HttpUtils::class);
-        $httpUtils->method('checkRequestPath')
-            ->willReturn(true);
-        $authenticator = $this->createAuthenticator(httpUtils: $httpUtils);
-        $values = [
-            SecurityAttributes::USER_FIELD => 'username',
-            SecurityAttributes::PASSWORD_FIELD => 'password',
-            SecurityAttributes::LOGIN_TOKEN => '',
-        ];
-        $request = self::createRequest(values: $values);
-
-        self::expectException(BadRequestHttpException::class);
+        self::expectException(CustomUserMessageAuthenticationException::class);
+        self::expectExceptionMessage('authenticator.empty_user');
         $authenticator->authenticate($request);
     }
 
@@ -144,8 +153,11 @@ class LoginFormAuthenticatorTest extends TestCase
         $request = self::createRequest(values: $values);
         $request->setSession(new Session(new MockArraySessionStorage()));
 
-        $actual = $authenticator->authenticate($request);
-        self::assertInstanceOf(Passport::class, $actual);
+        $passport = $authenticator->authenticate($request);
+        self::assertHasBadge($passport, UserBadge::class);
+        self::assertHasBadge($passport, RememberMeBadge::class);
+        self::assertHasBadge($passport, PasswordUpgradeBadge::class);
+        self::assertHasBadge($passport, CsrfTokenBadge::class);
     }
 
     /**
@@ -235,7 +247,8 @@ class LoginFormAuthenticatorTest extends TestCase
             ->willReturn($expected);
         $authenticator = $this->createAuthenticator(httpUtils: $httpUtils);
 
-        $actual = $authenticator->onAuthenticationFailure(new Request(), new AuthenticationException());
+        $request = self::createRequest();
+        $actual = $authenticator->onAuthenticationFailure($request, new AuthenticationException());
         self::assertInstanceOf(RedirectResponse::class, $actual);
         self::assertSame($expected, $actual->getTargetUrl());
     }
@@ -250,7 +263,7 @@ class LoginFormAuthenticatorTest extends TestCase
             ->willReturn(true);
         $authenticator = $this->createAuthenticator(httpUtils: $httpUtils);
 
-        $request = new Request();
+        $request = self::createRequest();
         $token = $this->createMock(TokenInterface::class);
         $actual = $authenticator->onAuthenticationSuccess($request, $token, 'fake');
         self::assertNull($actual);
@@ -269,6 +282,15 @@ class LoginFormAuthenticatorTest extends TestCase
 
         $actual = $authenticator->supports($request);
         self::assertSame($expected, $actual);
+    }
+
+    /**
+     * @param class-string<BadgeInterface> $badgeClass
+     */
+    protected static function assertHasBadge(Passport $passport, string $badgeClass): void
+    {
+        $actual = $passport->getBadge($badgeClass);
+        self::assertInstanceOf($badgeClass, $actual);
     }
 
     /**

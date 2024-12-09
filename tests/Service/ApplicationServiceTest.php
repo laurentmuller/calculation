@@ -29,7 +29,6 @@ use App\Service\RoleBuilderService;
 use App\Tests\DatabaseTrait;
 use App\Tests\DateAssertTrait;
 use App\Tests\KernelServiceTestCase;
-use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\MockObject\Exception;
@@ -41,7 +40,6 @@ class ApplicationServiceTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
     use DateAssertTrait;
-    use TranslatorMockTrait;
 
     public function testActions(): void
     {

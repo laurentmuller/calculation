@@ -1,7 +1,8 @@
 {% extends 'cards/card_edit.html.twig' %}
+{% from 'macros/_icons.html.twig' import icon as output_icon %}
 {% form_theme form with _self %}
 {# macros #}
-{% macro collapseLine(href, form, expanded = false, options = null) %}
+{% macro collapseLine(href, form, icon, expanded = false, options = null) %}
 {%- set header_id = 'header_' ~ href -%}
 {%- set name = 'parameters.group_%s'|format(href)|trans -%}
 {%- set template = 'parameters/_parameters_%s.html.twig'|format(href) -%}
@@ -10,7 +11,7 @@
 {%- set title = expanded ? hide : show -%}
 <div class="card-header d-flex-wrap-center rounded-0">
     <a class="drop-down-icon-right card-title" href="#{{ href }}" data-bs-toggle="collapse" aria-expanded="{{ expanded|json_encode }}" title="{{ title }}" data-show="{{ show }}" data-hide="{{ hide }}">
-        {{- name -}}
+        {{- output_icon(icon ~ ' fa-fw me-1') -}}{{- name -}}
     </a>
 </div>
 <div id="{{ href }}" class="card-body pt-0 collapse{% if expanded %} show{% endif %}" data-bs-parent=".card-parameter">

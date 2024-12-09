@@ -5,8 +5,8 @@
 {%- set title_description = 'user.parameters.description' -%}
 {# sections #}
 {% block sections -%}
-{{ _self.collapseLine('display', form, true) }}
-{{ _self.collapseLine('message', form) }}
-{{ _self.collapseLine('home', form) }}
-{{ _self.collapseLine('options', form) }}
+{{ _self.collapseLine('display', form, 'display', true) }}
+{{ _self.collapseLine('message', form, 'bell') }}
+{{ _self.collapseLine('home', form, 'house-user') }}
+{{ _self.collapseLine('options', form, 'list-check') }}
 {%- endblock %}

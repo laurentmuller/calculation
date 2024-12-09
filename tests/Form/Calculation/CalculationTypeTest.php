@@ -22,6 +22,7 @@ use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use App\Tests\Form\CalculationState\CalculationStateTrait;
 use App\Tests\Form\EntityTypeTestCase;
+use App\Tests\TranslatorMockTrait;
 use App\Utils\DateUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\MockObject\Exception;
@@ -33,6 +34,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 class CalculationTypeTest extends EntityTypeTestCase
 {
     use CalculationStateTrait;
+    use TranslatorMockTrait;
 
     protected function getData(): array
     {

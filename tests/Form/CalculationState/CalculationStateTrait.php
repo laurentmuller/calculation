@@ -17,7 +17,6 @@ use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
 use App\Tests\Entity\IdTrait;
 use App\Tests\Form\ManagerRegistryTrait;
-use App\Tests\TranslatorMockTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -31,7 +30,6 @@ trait CalculationStateTrait
 {
     use IdTrait;
     use ManagerRegistryTrait;
-    use TranslatorMockTrait;
 
     private ?CalculationState $editableState = null;
     private ?CalculationState $notEditableState = null;

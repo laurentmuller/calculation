@@ -18,9 +18,7 @@ use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
@@ -45,10 +43,13 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     public function authenticate(Request $request): Passport
     {
         $this->validateCaptcha($request);
-        [$user, $password, $token] = $this->getCredentials($request);
+
+        $userIdentifier = $this->getUserIdentifier($request);
+        $password = $this->getPassword($request);
+        $token = $this->getToken($request);
 
         return new Passport(
-            new UserBadge($user, $this->repository->loadUserByIdentifier(...)),
+            new UserBadge($userIdentifier, $this->repository->loadUserByIdentifier(...)),
             new PasswordCredentials($password),
             [
                 new RememberMeBadge(),
@@ -75,28 +76,37 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         return $this->httpUtils->generateUri($request, SecurityAttributes::LOGIN_ROUTE);
     }
 
-    /**
-     * @psalm-return list{non-empty-string, non-empty-string, non-empty-string}
-     */
-    private function getCredentials(Request $request): array
+    private function getPassword(Request $request): string
     {
-        $user = \trim($request->request->getString(SecurityAttributes::USER_FIELD));
-        if ('' === $user) {
-            throw new BadCredentialsException('The username must be a non-empty string.');
-        }
         $password = $request->request->getString(SecurityAttributes::PASSWORD_FIELD);
         if ('' === $password) {
-            throw new BadCredentialsException('The password must be a non-empty string.');
-        }
-        $token = $request->request->getString(SecurityAttributes::LOGIN_TOKEN);
-        if ('' === $token) {
-            throw new BadRequestHttpException('The token must be a non-empty string.');
-        }
-        if ($request->hasSession()) {
-            $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $user);
+            throw new CustomUserMessageAuthenticationException('authenticator.empty_password');
         }
 
-        return [$user, $password, $token];
+        return $password;
+    }
+
+    private function getToken(Request $request): string
+    {
+        $token = $request->request->getString(SecurityAttributes::LOGIN_TOKEN);
+        if ('' === $token) {
+            throw new CustomUserMessageAuthenticationException('authenticator.empty_token');
+        }
+
+        return $token;
+    }
+
+    private function getUserIdentifier(Request $request): string
+    {
+        $userIdentifier = \trim($request->request->getString(SecurityAttributes::USER_FIELD));
+        if ('' === $userIdentifier) {
+            throw new CustomUserMessageAuthenticationException('authenticator.empty_user');
+        }
+        if ($request->hasSession()) {
+            $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $userIdentifier);
+        }
+
+        return $userIdentifier;
     }
 
     private function validateCaptcha(Request $request): void

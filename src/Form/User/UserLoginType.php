@@ -15,12 +15,20 @@ namespace App\Form\User;
 
 use App\Form\FormHelper;
 use App\Security\SecurityAttributes;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * User login type.
  */
 class UserLoginType extends AbstractUserCaptchaType
 {
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'csrf_protection' => false,
+        ]);
+    }
+
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field(SecurityAttributes::USER_FIELD)

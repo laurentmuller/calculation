@@ -51,14 +51,17 @@ class ApplicationParametersType extends AbstractParametersType
     private function addCustomerSection(FormHelper $helper): void
     {
         $helper->field(PropertyServiceInterface::P_CUSTOMER_NAME)
+            ->updateOption('prepend_icon', 'fa-solid fa-user-group')
             ->updateAttribute('spellcheck', 'false')
             ->addTextType();
 
         $helper->field(PropertyServiceInterface::P_CUSTOMER_ADDRESS)
+            ->updateOption('prepend_icon', 'fa-solid fa-location-dot')
             ->notRequired()
             ->addTextType();
 
         $helper->field(PropertyServiceInterface::P_CUSTOMER_ZIP_CITY)
+            ->updateOption('prepend_icon', 'fa-solid fa-map-location-dot')
             ->notRequired()
             ->addTextType();
 

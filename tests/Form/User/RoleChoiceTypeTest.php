@@ -17,7 +17,6 @@ use App\Entity\User;
 use App\Form\User\RoleChoiceType;
 use App\Interfaces\RoleInterface;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -25,7 +24,6 @@ use Symfony\Component\Form\Test\TypeTestCase;
 class RoleChoiceTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
-    use TranslatorMockTrait;
 
     public function testSubmitSynchronized(): void
     {

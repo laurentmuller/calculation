@@ -15,12 +15,9 @@ namespace App\Tests\Service;
 
 use App\Service\OpenWeatherService;
 use App\Tests\KernelServiceTestCase;
-use App\Tests\TranslatorMockTrait;
 
 class OpenWeatherServiceTest extends KernelServiceTestCase
 {
-    use TranslatorMockTrait;
-
     private const CITY_INVALID = 0;
     private const CITY_VALID = 2_660_718;
 

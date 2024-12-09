@@ -16,7 +16,6 @@ namespace App\Tests\Form\User;
 use App\Entity\User;
 use App\Form\User\ProfileEditType;
 use App\Tests\Form\EntityTypeTestCase;
-use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 
 /**
@@ -24,7 +23,6 @@ use PHPUnit\Framework\MockObject\Exception;
  */
 class ProfileEditTypeTest extends EntityTypeTestCase
 {
-    use TranslatorMockTrait;
     use VichImageTypeTrait;
 
     protected function getData(): array

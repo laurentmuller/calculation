@@ -5,14 +5,14 @@
 {%- set title_description = 'parameters.description' -%}
 {# sections #}
 {% block sections -%}
-{{ _self.collapseLine('customer', form, true) }}
-{{ _self.collapseLine('default', form) }}
-{{ _self.collapseLine('product', form) }}
-{{ _self.collapseLine('display', form) }}
-{{ _self.collapseLine('message', form) }}
-{{ _self.collapseLine('home', form) }}
-{{ _self.collapseLine('options', form) }}
+{{ _self.collapseLine('customer', form, 'user-tie', true) }}
+{{ _self.collapseLine('default', form, 'file-code') }}
+{{ _self.collapseLine('product', form, 'file-alt') }}
+{{ _self.collapseLine('display', form, 'display') }}
+{{ _self.collapseLine('message', form, 'bell') }}
+{{ _self.collapseLine('home', form, 'house-user') }}
+{{ _self.collapseLine('options', form, 'list-check') }}
 {% if is_super_admin %}
-    {{ _self.collapseLine('security', form, false, options) }}
+    {{ _self.collapseLine('security', form, 'lock', false, options) }}
 {% endif %}
 {%- endblock %}

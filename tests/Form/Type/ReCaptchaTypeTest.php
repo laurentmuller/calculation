@@ -16,7 +16,6 @@ namespace App\Tests\Form\Type;
 use App\Form\Type\ReCaptchaType;
 use App\Service\RecaptchaService;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReCaptcha\Response;
@@ -27,7 +26,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class ReCaptchaTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
-    use TranslatorMockTrait;
 
     private ?Request $request = null;
     private MockObject&RequestStack $requestStack;

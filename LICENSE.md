@@ -36,7 +36,7 @@ le désirent les éléments de l'application. Aucun droit d'utilisation
 supplémentaire n'est accordé au preneur de contrat et aux utilisateurs
 autorisés. Ils n'ont en particulier pas le droit de modifier cette application,
 de la corriger, de la développer, de la traduire, de la déchiffrer ou de la
-décompiler ni de la vendre, la louer, la prêter, la transmettre et ni, surtout,
+décompiler ni de la vendre, la louer, la prêter, la transmettre et ni surtout,
 de permettre à des tiers de l'utiliser.
 
 ## Mises à jour, développements, assistance technique

@@ -26,10 +26,19 @@ use App\Utils\StringUtils;
  */
 trait PropertyServiceTrait
 {
-    use CacheTrait;
+    use CacheTrait {
+        getCacheValue as private getCacheValueFromTrait;
+    }
 
     // The saved cache state property name
     private const P_CACHE_SAVED = 'cache_saved';
+
+    public function getCacheValue(string $key, mixed $default = null): mixed
+    {
+        $this->initialize();
+
+        return $this->getCacheValueFromTrait($key, $default);
+    }
 
     public function isActionEdit(): bool
     {
@@ -193,11 +202,11 @@ trait PropertyServiceTrait
     }
 
     /**
-     * Initialize cache properties.
+     * Initialize cached properties.
      */
     protected function initialize(): void
     {
-        if (!$this->getPropertyBoolean(self::P_CACHE_SAVED) && $this->isConnected()) {
+        if (!(bool) $this->getCacheValueFromTrait(self::P_CACHE_SAVED, false) && $this->isConnected()) {
             $this->updateAdapter();
         }
     }

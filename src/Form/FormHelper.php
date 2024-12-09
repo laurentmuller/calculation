@@ -242,7 +242,7 @@ class FormHelper
     public function addEmailType(): self
     {
         return $this->updateAttribute('inputmode', 'email')
-            ->updateOption('prepend_icon', 'fa-fw fa-solid fa-at')
+            ->updateOption('prepend_icon', 'fa-solid fa-at')
             ->updateOption('prepend_class', 'input-group-email')
             ->add(EmailType::class);
     }
@@ -275,7 +275,7 @@ class FormHelper
     public function addFaxType(?string $pattern = null): self
     {
         return $this->updateAttribute('pattern', $pattern)
-            ->updateOption('prepend_icon', 'fa-fw fa-solid fa-fax')
+            ->updateOption('prepend_icon', 'fa-solid fa-fax')
             ->updateOption('prepend_class', 'input-group-fax')
             ->add(TelType::class);
     }
@@ -432,7 +432,7 @@ class FormHelper
      */
     public function addTelType(?string $pattern = null): self
     {
-        return $this->updateOption('prepend_icon', 'fa-fw fa-solid fa-phone')
+        return $this->updateOption('prepend_icon', 'fa-solid fa-phone')
             ->updateOption('prepend_class', 'input-group-phone')
             ->updateAttribute('inputmode', 'tel')
             ->updateAttribute('pattern', $pattern)
@@ -485,7 +485,7 @@ class FormHelper
     public function addUrlType(string $protocol = 'https'): self
     {
         return $this->updateOption('default_protocol', $protocol)
-            ->updateOption('prepend_icon', 'fa-fw fa-solid fa-globe')
+            ->updateOption('prepend_icon', 'fa-solid fa-globe')
             ->updateOption('prepend_class', 'input-group-url')
             ->updateAttribute('inputmode', 'url')
             ->add(UrlType::class);
@@ -496,7 +496,7 @@ class FormHelper
      */
     public function addUserNameType(string|bool $autocomplete = 'username'): self
     {
-        return $this->updateOption('prepend_icon', 'fa-fw fa-regular fa-user')
+        return $this->updateOption('prepend_icon', 'fa-regular fa-user')
             ->autocomplete($autocomplete)
             ->updateAttributes([
                 'minLength' => UserInterface::MIN_USERNAME_LENGTH,

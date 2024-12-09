@@ -48,12 +48,13 @@ abstract class AbstractUserCaptchaType extends AbstractHelperType
      */
     protected function addFormFields(FormHelper $helper): void
     {
-        if ($this->application->isDisplayCaptcha()) {
-            $helper->field(SecurityAttributes::CAPTCHA_FIELD)
-                ->label('captcha.label')
-                ->constraints(new NotBlank(), new Captcha())
-                ->updateOption('image', $this->service->generateImage())
-                ->add(CaptchaImageType::class);
+        if (!$this->application->isDisplayCaptcha()) {
+            return;
         }
+        $helper->field(SecurityAttributes::CAPTCHA_FIELD)
+            ->label('captcha.label')
+            ->constraints(new NotBlank(), new Captcha())
+            ->updateOption('image', $this->service->generateImage())
+            ->add(CaptchaImageType::class);
     }
 }

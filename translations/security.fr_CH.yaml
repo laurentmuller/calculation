@@ -38,3 +38,8 @@ reset_not_found_password_token: Aucun jeton de ré-initialisation du mot de pass
 reset_user_not_found: Impossible de retrouver l'utilisateur <b>%name%</b> dans la base de données.
 reset_token_not_found: Impossible de générer un jeton de ré-initialisation pour l'utilisateur <b>%name%</b>.
 reset_token_send: Le lien de réinitialisation du mot de passe a été envoyé avec succès à l'utilisateur <b>%name%</b>.
+# login form authenticator
+authenticator:
+    empty_user: Le nom de l'utilisateur est requis.
+    empty_password: Le mot de passe est requis.
+    empty_token: Le jeton de falsification de requête inter-sites (CSRF) est requis.

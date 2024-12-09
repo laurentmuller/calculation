@@ -82,13 +82,13 @@
         <div class="input-group">
             {% if prepend_icon %}
                 <div class="input-group-text"{% if prepend_title %} title="{{ prepend_title|trans }}"{% endif %}>
-                    <i class="{{ prepend_icon }}"></i>
+                    <i class="fa-fw {{ prepend_icon }}"></i>
                 </div>
             {% endif %}
             {{- parent() -}}
             {% if append_icon %}
                 <div class="input-group-text"{% if append_title %} title="{{ append_title|trans }}"{% endif %}>
-                    <i class="{{ append_icon }}"></i>
+                    <i class="fa-fw {{ append_icon }}"></i>
                 </div>
             {% endif %}
         </div>

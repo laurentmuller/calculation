@@ -21,31 +21,37 @@
     {% for item in data -%}
     <tr title="{{ 'chart.state.row'|trans({'%name%': item.code}) }}">
         <td class="text-nowrap">
-            <div class="d-flex align-items-center">
+            <a class="d-flex align-items-center" href="{{ path(list_path, {stateId: item.id}) }}">
                 <span class="border me-1" style="width: 1.5rem; height: 1rem; background: {{ item.color }}"></span>
-                <a href="{{ path(list_path, {stateId: item.id}) }}">{{- item.code }}</a>
-            </div>
+                <span>{{ item.code }}</span>
+            </a>
         </td>
         <td class="text-currency">{{ item.count|integer }}</td>
         <td class="text-percent">{{ item.percent_calculation|percent(true, 2, 5) }}</td>
         <td class="text-currency">{{ item.items|amount }}</td>
         <td class="text-currency">{{ item.margin_amount|amount }}</td>
-        <td class="text-percent{{ _self.margin_below_class(item.margin_percent, min_margin) }}"{{ _self.margin_below_tooltip(item.margin_percent, min_margin) }}>{{ item.margin_percent|percent }}</td>
+        <td class="text-percent{{ _self.margin_below_class(item.margin_percent, min_margin) }}"
+                {{ _self.margin_below_tooltip(item.margin_percent, min_margin) }}>
+            {{- item.margin_percent|percent -}}
+        </td>
         <td class="text-currency">{{ item.total|amount }}</td>
         <td class="text-percent">{{ item.percent_amount|percent(true, 2, 5) }}</td>
     </tr>
     {% endfor -%}
-    <tr title="{{ 'chart.row_all'|trans }}">
-        <td class="fw-bold text-nowrap">
+    <tr title="{{ 'chart.row_all'|trans }}" class="fw-bold">
+        <td class="text-nowrap">
             <a href="{{ path(list_path) }}">{{ 'calculation.fields.total'|trans }}</a>
         </td>
-        <td class="fw-bold text-currency">{{ totals.calculation_count|integer }}</td>
-        <td class="fw-bold text-percent">{{ totals.calculation_percent|percent(true, 2, 5) }}</td>
-        <td class="fw-bold text-currency">{{ totals.items_amount|amount }}</td>
-        <td class="fw-bold text-currency">{{ totals.margin_amount|amount }}</td>
-        <td class="fw-bold text-percent{{ _self.margin_below_class(totals.margin_percent, min_margin) }}"{{ _self.margin_below_tooltip(totals.margin_percent, min_margin) }}>{{- totals.margin_percent|percent -}}</td>
-        <td class="fw-bold text-currency">{{ totals.total_amount|amount }}</td>
-        <td class="fw-bold text-percent">{{ totals.total_percent|percent(true, 2, 5) }}</td>
+        <td class="text-currency">{{ totals.calculation_count|integer }}</td>
+        <td class="text-percent">{{ totals.calculation_percent|percent(true, 2, 5) }}</td>
+        <td class="text-currency">{{ totals.items_amount|amount }}</td>
+        <td class="text-currency">{{ totals.margin_amount|amount }}</td>
+        <td class="text-percent{{ _self.margin_below_class(totals.margin_percent, min_margin) }}"
+                {{ _self.margin_below_tooltip(totals.margin_percent, min_margin) }}>
+            {{- totals.margin_percent|percent -}}
+        </td>
+        <td class="text-currency">{{ totals.total_amount|amount }}</td>
+        <td class="text-percent">{{ totals.total_percent|percent(true, 2, 5) }}</td>
     </tr>
 </tbody>
 {% endblock %}

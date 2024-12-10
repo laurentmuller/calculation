@@ -55,13 +55,13 @@
         <th class="text-nowrap">{{ 'chart.month.fields.month'|trans }}</th>
         <th class="text-currency">{{ 'calculation.list.title'|trans }}</th>
         <th class="text-center">
-            <div class="d-inline-flex align-items-baseline justify-content-center">
+            <div class="d-flex align-items-center justify-content-center">
                 <span class="border me-1" style="width: 1.25rem; height: 0.75rem; background: {{ color_amount }};"></span>
                 <span class="ms-auto">{{ 'calculationgroup.fields.amount'|trans }}</span>
             </div>
         </th>
         <th class="text-center" colspan="2">
-            <div class="d-inline-flex align-items-baseline justify-content-center">
+            <div class="d-flex align-items-center justify-content-center">
                 <span class="border me-1" style="width: 1.25rem; height: 0.75rem; background: {{ color_margin }};"></span>
                 <span>{{ 'calculation.fields.margin'|trans }}</span>
             </div>
@@ -71,43 +71,46 @@
 </thead>
 <tbody data-link="row" class="rowlink">
     {% for item in data -%}
-    {%- set month = item.date|locale_date('none', 'MMMM Y') -%}
-    {%- set parameters = {search: item.date|locale_date('none', 'MM.Y')} -%}
-    <tr title="{{ 'chart.month.row'|trans({'%name%': month}) }}">
-        <td class="text-nowrap">
-            <a href="{{ path(list_path, parameters) }}">{{ month }}</a>
-        </td>
-        <td class="text-currency position-relative ps-4">
-            {{- _self.cell_value(item.count|round, last_count|default) -}}
-            {%- set last_count = item.count|round -%}
-        </td>
-        <td class="text-currency position-relative ps-4">
-            {{- _self.cell_value(item.items|round, last_items|default) -}}
-            {%- set last_items = item.items|round -%}
-        </td>
-        <td class="text-currency position-relative ps-4">
-            {{- _self.cell_value(item.margin_amount|round, last_amount|default) -}}
-            {%- set last_amount = item.margin_amount|round -%}
-        </td>
-        <td class="text-percent position-relative ps-4{{ _self.margin_below_class(item.margin_percent, min_margin) }}"{{ _self.margin_below_tooltip(item.margin_percent, min_margin) }}>
-            {{- _self.cell_value(item.margin_percent|round(2, 'floor'), last_percent|default, true) -}}
-            {%- set last_percent = item.margin_percent|round(2, 'floor') -%}
-        </td>
-        <td class="text-currency position-relative ps-4">
-            {{- _self.cell_value(item.total|round, last_sum|default) -}}
-            {%- set last_sum = item.total|round -%}
-        </td>
-    </tr>
+        {%- set month = item.date|locale_date('none', 'MMMM Y') -%}
+        {%- set parameters = {search: item.date|locale_date('none', 'MM.Y')} -%}
+        <tr title="{{ 'chart.month.row'|trans({'%name%': month}) }}">
+            <td class="text-nowrap">
+                <a class="d-flex" href="{{ path(list_path, parameters) }}">{{ month }}</a>
+            </td>
+            <td class="text-currency position-relative ps-4">
+                {{- _self.cell_value(item.count|round, last_count|default) -}}
+            </td>
+            <td class="text-currency position-relative ps-4">
+                {{- _self.cell_value(item.items|round, last_items|default) -}}
+            </td>
+            <td class="text-currency position-relative ps-4">
+                {{- _self.cell_value(item.margin_amount|round, last_amount|default) -}}
+            </td>
+            <td class="text-percent position-relative ps-4{{ _self.margin_below_class(item.margin_percent, min_margin) }}"
+                    {{ _self.margin_below_tooltip(item.margin_percent, min_margin) }}>
+                {{- _self.cell_value(item.margin_percent|round(2, 'floor'), last_percent|default, true) -}}
+            </td>
+            <td class="text-currency position-relative ps-4">
+                {{- _self.cell_value(item.total|round, last_total|default) -}}
+            </td>
+        </tr>
+        {%- set last_count = item.count|round -%}
+        {%- set last_items = item.items|round -%}
+        {%- set last_amount = item.margin_amount|round -%}
+        {%- set last_percent = item.margin_percent|round(2, 'floor') -%}
+        {%- set last_total = item.total|round -%}
     {% endfor -%}
-    <tr title="{{ 'chart.row_all'|trans }}">
-        <td class="fw-bold text-nowrap">
+    <tr title="{{ 'chart.row_all'|trans }}" class="fw-bold">
+        <td class="text-nowrap">
             <a href="{{ path(list_path) }}">{{ 'calculation.fields.total'|trans }}</a>
         </td>
-        <td class="fw-bold text-currency">{{ totals.count|integer }}</td>
-        <td class="fw-bold text-currency">{{ totals.items|integer }}</td>
-        <td class="fw-bold text-currency">{{ totals.margin_amount|integer }}</td>
-        <td class="fw-bold text-percent{{ _self.margin_below_class(totals.margin_percent, min_margin) }}"{{ _self.margin_below_tooltip(totals.margin_percent, min_margin) }}>{{ totals.margin_percent|percent }}</td>
-        <td class="fw-bold text-currency">{{ totals.total|integer }}</td>
+        <td class="text-currency">{{ totals.count|integer }}</td>
+        <td class="text-currency">{{ totals.items|integer }}</td>
+        <td class="text-currency">{{ totals.margin_amount|integer }}</td>
+        <td class="text-percent{{ _self.margin_below_class(totals.margin_percent, min_margin) }}"
+                {{- _self.margin_below_tooltip(totals.margin_percent, min_margin) }}>{{ totals.margin_percent|percent -}}
+        </td>
+        <td class="text-currency">{{ totals.total|integer }}</td>
     </tr>
 </tbody>
 {% endblock %}

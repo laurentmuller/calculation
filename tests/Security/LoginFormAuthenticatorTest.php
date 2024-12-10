@@ -28,11 +28,11 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
-use Symfony\Component\Security\Http\Authenticator\Passport\Badge\BadgeInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\PasswordUpgradeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\HttpUtils;
 
@@ -64,14 +64,10 @@ class LoginFormAuthenticatorTest extends TestCase
             SecurityAttributes::PASSWORD_FIELD => 'password',
             SecurityAttributes::LOGIN_TOKEN => 'token',
         ];
-        $request = self::createRequest(values: $values);
-        $request->setSession(new Session(new MockArraySessionStorage()));
+        $request = self::createRequest(values: $values, session: $this->createSession());
 
         $passport = $authenticator->authenticate($request);
-        self::assertHasBadge($passport, UserBadge::class);
-        self::assertHasBadge($passport, RememberMeBadge::class);
-        self::assertHasBadge($passport, PasswordUpgradeBadge::class);
-        self::assertHasBadge($passport, CsrfTokenBadge::class);
+        $this->validatePassport($passport);
     }
 
     /**
@@ -140,7 +136,7 @@ class LoginFormAuthenticatorTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testAuthenticateWithUserProvider(): void
+    public function testAuthenticateWithSession(): void
     {
         $userProvider = $this->createMock(UserRepository::class);
         $authenticator = $this->createAuthenticator(repository: $userProvider);
@@ -150,14 +146,10 @@ class LoginFormAuthenticatorTest extends TestCase
             SecurityAttributes::PASSWORD_FIELD => 'password',
             SecurityAttributes::LOGIN_TOKEN => 'token',
         ];
-        $request = self::createRequest(values: $values);
-        $request->setSession(new Session(new MockArraySessionStorage()));
+        $request = self::createRequest(values: $values, session: $this->createSession());
 
         $passport = $authenticator->authenticate($request);
-        self::assertHasBadge($passport, UserBadge::class);
-        self::assertHasBadge($passport, RememberMeBadge::class);
-        self::assertHasBadge($passport, PasswordUpgradeBadge::class);
-        self::assertHasBadge($passport, CsrfTokenBadge::class);
+        $this->validatePassport($passport);
     }
 
     /**
@@ -198,11 +190,10 @@ class LoginFormAuthenticatorTest extends TestCase
             SecurityAttributes::PASSWORD_FIELD => 'password',
             SecurityAttributes::LOGIN_TOKEN => 'token',
         ];
-        $request = self::createRequest(values: $values);
-        $request->setSession(new Session(new MockArraySessionStorage()));
+        $request = self::createRequest(values: $values, session: $this->createSession());
 
-        $actual = $authenticator->authenticate($request);
-        self::assertInstanceOf(Passport::class, $actual);
+        $passport = $authenticator->authenticate($request);
+        $this->validatePassport($passport);
     }
 
     /**
@@ -285,15 +276,6 @@ class LoginFormAuthenticatorTest extends TestCase
     }
 
     /**
-     * @param class-string<BadgeInterface> $badgeClass
-     */
-    protected static function assertHasBadge(Passport $passport, string $badgeClass): void
-    {
-        $actual = $passport->getBadge($badgeClass);
-        self::assertInstanceOf($badgeClass, $actual);
-    }
-
-    /**
      * @throws Exception
      */
     private function createAuthenticator(
@@ -318,12 +300,36 @@ class LoginFormAuthenticatorTest extends TestCase
     private static function createRequest(
         array $values = [],
         string $method = Request::METHOD_POST,
-        string $contentType = 'application/x-www-form-urlencoded'
+        string $contentType = 'application/x-www-form-urlencoded',
+        ?Session $session = null
     ): Request {
         $request = new Request(request: $values);
         $request->setMethod($method);
         $request->headers->set('Content-Type', $contentType);
+        if ($session instanceof Session) {
+            $request->setSession($session);
+        }
 
         return $request;
+    }
+
+    private function createSession(): Session
+    {
+        return new Session(new MockArraySessionStorage());
+    }
+
+    private function validatePassport(Passport $passport): void
+    {
+        $classes = [
+            UserBadge::class,
+            PasswordCredentials::class,
+            RememberMeBadge::class,
+            PasswordUpgradeBadge::class,
+            CsrfTokenBadge::class,
+        ];
+        foreach ($classes as $class) {
+            $actual = $passport->getBadge($class);
+            self::assertInstanceOf($class, $actual);
+        }
     }
 }

@@ -42,7 +42,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function authenticate(Request $request): Passport
     {
-        $this->validateCaptcha($request);
+        $this->validatePassport($request);
 
         $userIdentifier = $this->getUserIdentifier($request);
         $password = $this->getPassword($request);
@@ -109,7 +109,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         return $userIdentifier;
     }
 
-    private function validateCaptcha(Request $request): void
+    private function validatePassport(Request $request): void
     {
         if (!$this->applicationService->isDisplayCaptcha()) {
             return;

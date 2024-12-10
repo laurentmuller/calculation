@@ -2,7 +2,7 @@
 {% from 'macros/_icons.html.twig' import dropdownSeparator, dropdownItem %}
 <ul class="dropdown-menu {{ class }}">
     {{ dropdownItem(logout_path(), 'index.logout', 'sign-out-alt') }}
-    {{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-gear') }}
+    {{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-pen') }}
     {{ dropdownItem(path('user_profile_password'), 'profile.password.title', 'unlock') }}
     {{ dropdownSeparator() }}
     {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}

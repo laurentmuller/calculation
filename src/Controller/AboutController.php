@@ -16,9 +16,12 @@ namespace App\Controller;
 use App\Attribute\Get;
 use App\Enums\Environment;
 use App\Interfaces\RoleInterface;
+use App\Pdf\Html\HtmlTag;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
 use App\Response\WordResponse;
+use App\Service\MarkdownService;
+use App\Utils\FileUtils;
 use App\Word\HtmlDocument;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,6 +37,19 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class AboutController extends AbstractController
 {
+    // the reverse order is important!
+    private const REPLACE = [
+        '<h4>' => '<h6 class="bookmark bookmark-3">',
+        '<h3>' => '<h5 class="bookmark bookmark-2">',
+        '<h2>' => '<h4 class="bookmark bookmark-1">',
+        '<h1>' => '<h3 class="bookmark">',
+        '</h4>' => '</h6>',
+        '</h3>' => '</h5>',
+        '</h2>' => '</h4>',
+        '</h1>' => '</h3>',
+        '<p>' => '<p class="text-justify">',
+    ];
+
     #[Get(path: '', name: 'index')]
     public function index(
         #[Autowire('%kernel.environment%')]
@@ -48,18 +64,17 @@ class AboutController extends AbstractController
     }
 
     #[Get(path: '/pdf', name: 'pdf')]
-    public function pdf(#[Autowire('%app_name%')] string $appName): PdfResponse
-    {
-        $parameters = [
-            'link' => false,
-            'comments' => false,
-        ];
-        $titleParameters = [
-            '%app_name%' => $appName,
-        ];
-        $content = $this->renderView('about/about_content.html.twig', $parameters);
+    public function pdf(
+        #[Autowire('%app_name%')]
+        string $appName,
+        #[Autowire('%kernel.project_dir%')]
+        string $projectDir,
+        MarkdownService $service
+    ): PdfResponse {
+        $content = $this->loadContent($projectDir, $service);
+        $parameters = ['%app_name%' => $appName];
         $report = new HtmlReport($this, $content);
-        $report->setTitleTrans('index.menu_info', $titleParameters, true);
+        $report->setTitleTrans('index.menu_info', $parameters, true);
 
         return $this->renderPdfDocument($report);
     }
@@ -69,20 +84,29 @@ class AboutController extends AbstractController
      * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     #[Get(path: '/word', name: 'word')]
-    public function word(#[Autowire('%app_name%')] string $appName): WordResponse
-    {
-        $parameters = [
-            'link' => false,
-            'comments' => false,
-        ];
-        $titleParameters = [
-            '%app_name%' => $appName,
-        ];
-
-        $content = $this->renderView('about/about_content.html.twig', $parameters);
+    public function word(
+        #[Autowire('%app_name%')]
+        string $appName,
+        #[Autowire('%kernel.project_dir%')]
+        string $projectDir,
+        MarkdownService $service
+    ): WordResponse {
+        $content = $this->loadContent($projectDir, $service);
+        $parameters = ['%app_name%' => $appName];
         $doc = new HtmlDocument($this, $content);
-        $doc->setTitleTrans('index.menu_info', $titleParameters);
+        $doc->setTitleTrans('index.menu_info', $parameters);
 
         return $this->renderWordDocument($doc);
+    }
+
+    private function loadContent(string $projectDir, MarkdownService $service): string
+    {
+        $path = FileUtils::buildPath($projectDir, AboutLicenceController::LICENCE_FILE);
+        $license = $service->convertFile($path, false, self::REPLACE);
+
+        $path = FileUtils::buildPath($projectDir, AboutPolicyController::POLICY_FILE);
+        $policy = $service->convertFile($path, false, self::REPLACE);
+
+        return \sprintf('%s<p class="%s" />%s', $license, HtmlTag::PAGE_BREAK->value, $policy);
     }
 }

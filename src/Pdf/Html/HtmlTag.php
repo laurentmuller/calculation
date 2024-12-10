@@ -229,8 +229,8 @@ enum HtmlTag: string
         if ($fontName instanceof PdfFontName) {
             $font->setName($fontName);
         }
-        $fontSize = $this->getExtraFloat('font-size', 1.0);
-        if (1.0 !== $fontSize) {
+        $fontSize = $this->getExtraFloat('font-size');
+        if ($fontSize > 0) {
             $font->setSize($fontSize * PdfFont::DEFAULT_SIZE);
         }
         if ($this->getExtraBool('font-bold')) {

@@ -15,7 +15,7 @@ Ce contrat a pour but de régler les compétences d'utilisation (licence) de
 l'application dans le cadre de la conclusion d'un abonnement en toutes ses
 formes. Les contenus du contrat acceptés au moment de la conclusion de
 l'abonnement (description de la prestation, conditions générales et
-dispositions-cadre de la communication électronique des données) sont partie
+dispositions cadre de la communication électronique des données) sont partie
 intégrante de la relation contractuelle. Dans le cas d'utilisations contraires
 ou divergentes de l'application, les conditions de ce contrat de licence priment
 sur les autres éléments contractuels.
@@ -66,7 +66,7 @@ prétention. Le preneur de licence a en permanence le droit de désinstaller
 l'application et de recourir aux prestations de la plate-forme du fournisseur
 dans le cadre de la description des prestations sans utiliser l'application.
 Les conditions de responsabilité dans le catalogue des prestations de
-l'abonnement, dans les conditions générales et dans les dispositions-cadre
+l'abonnement, dans les conditions générales et dans les dispositions cadre
 relatives à la communication électronique des données s'appliquent par ailleurs.
 
 ## Perte du droit d'utilisation
@@ -94,11 +94,6 @@ preneur de licence ou à son siège.
 ## Nous contacter
 
 Pour toute question relative au présent accord de licence, veuillez nous
-contacter par [courrier électronique](mailto:calculation@bibi.nu?subject=Calculation).
+contacter par courrier électronique.
 
-Montévraz, octobre 2023
-
-### Voir aussi
-
-- [Politique de confidentialité](POLICY.md)
-- [Page d'accueil](README.md)
+Montévraz, décembre 2024

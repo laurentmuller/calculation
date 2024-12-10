@@ -99,7 +99,7 @@ abstract class AbstractHtmlChunk
     }
 
     /**
-     * Gets the bottom margin from this style or 0 if none.
+     * Gets the bottom margin from this style or 0 if not available.
      */
     public function getBottomMargin(): float
     {
@@ -107,7 +107,7 @@ abstract class AbstractHtmlChunk
     }
 
     /**
-     * Gets the left margin from this style or 0 if none.
+     * Gets the left margin from this style or 0 if not available.
      */
     public function getLeftMargin(): float
     {
@@ -131,7 +131,7 @@ abstract class AbstractHtmlChunk
     }
 
     /**
-     * Gets the right margin from this style or 0 if none.
+     * Gets the right margin from this style or 0 if not available.
      */
     public function getRightMargin(): float
     {
@@ -147,7 +147,7 @@ abstract class AbstractHtmlChunk
     }
 
     /**
-     * Gets the top margin from this style or 0 if none.
+     * Gets the top margin from this style or 0 if not available.
      */
     public function getTopMargin(): float
     {
@@ -357,7 +357,7 @@ abstract class AbstractHtmlChunk
     }
 
     /**
-     * Update this style, depending on the tag name and class.
+     * Update this bookmark and style, depending on the tag name and classes.
      */
     private function updateStyle(): static
     {
@@ -366,8 +366,19 @@ abstract class AbstractHtmlChunk
             $this->parseBookmark($class);
         }
 
-        // create style
-        $style = HtmlTag::getStyle($this->name);
+        // create style from classes
+        $style = null;
+        foreach ($this->classes as $class) {
+            $style = HtmlTag::getStyle($class);
+            if ($style instanceof HtmlStyle) {
+                break;
+            }
+        }
+
+        // create style from name if none
+        $style ??= HtmlTag::getStyle($this->name);
+
+        // update
         if ($style instanceof HtmlStyle) {
             foreach ($this->classes as $class) {
                 $style->update($class);

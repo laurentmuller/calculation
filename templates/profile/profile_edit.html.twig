@@ -1,7 +1,7 @@
 {% extends 'cards/card_edit.html.twig' %}
 {# parameters #}
 {%- set title = 'profile.edit.title' -%}
-{%- set title_icon = 'user-gear' -%}
+{%- set title_icon = 'user-pen' -%}
 {%- set cancel_path = path('homepage') -%}
 {%- set form_attr = form_attr|default({})|merge({
                         'data-check-name': url('ajax_check_user_name'),

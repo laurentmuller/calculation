@@ -14,7 +14,7 @@
 {{- text|trans(parameters) -}}
 {%- endmacro %}
 
-{% macro link(href, text, class, icon, title = null, parameters = []) -%}
+{% macro link(href, text, class, icon = null, title = null, parameters = []) -%}
 {%- set role = (class and 'btn' in class) ? ' role="button"' : '' -%}
 {%- set title = title ? ' title="' ~ title|trans(parameters) ~ '"' : '' -%}
 {%- set class = class ? ' class="' ~ class ~ '"' : '' -%}
@@ -23,7 +23,7 @@
 </a>
 {%- endmacro %}
 
-{% macro linkExternal(href, text, class, icon, title = null, parameters = []) -%}
+{% macro linkExternal(href, text, class, icon = null, title = null, parameters = []) -%}
 {%- set role = (class and 'btn' in class) ? ' role="button"' : '' -%}
 {%- set title = title ? ' title="' ~ title|trans(parameters) ~ '"' : '' -%}
 {%- set class = class ? ' class="' ~ class ~ '"' : '' -%}
@@ -36,23 +36,23 @@
     {{ _self.linkExternal(href, 'common.api_documentation', class, icon, 'common.api_documentation_help') -}}
 {%- endmacro %}
 
-{% macro dropdownItem(href, text, icon, parameters = []) -%}
+{% macro dropdownItem(href, text, icon = null, parameters = []) -%}
 <li>
     {{- _self.link(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, parameters) -}}
 </li>
 {%- endmacro %}
 
-{% macro dropdownItemExternal(href, text, icon, parameters = []) -%}
+{% macro dropdownItemExternal(href, text, icon = null, parameters = []) -%}
 {{- _self.linkExternal(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, parameters) -}}
 {%- endmacro %}
 
-{% macro dropdownItemWithId(href, text, icon, id, disabled, parameters = []) -%}
+{% macro dropdownItemWithId(href, text, icon = null, id, disabled, parameters = []) -%}
 <a href="{{ href }}" class="dropdown-item rowlink-skip{% if disabled %} disabled {% endif %}" id="{{ id }}">
     {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, parameters) -}}
 </a>
 {%- endmacro %}
 
-{% macro dropdownItemWithClass(href, text, icon, class, hidden, parameters = []) -%}
+{% macro dropdownItemWithClass(href, text, icon = null, class, hidden, parameters = []) -%}
 {%- set class = ('dropdown-item rowlink-skip ' ~ (hidden ? 'd-none ' : '') ~ class|default(''))|trim -%}
 <li>
     <a href="{{ href }}" class="{{ class }}">
@@ -61,7 +61,7 @@
 </li>
 {%- endmacro %}
 
-{% macro dropdownItemButton(text, icon, class, hidden = false, parameters = []) -%}
+{% macro dropdownItemButton(text, icon, class = null, hidden = false, parameters = []) -%}
 {%- set class = ('dropdown-item rowlink-skip ' ~ (hidden ? 'd-none ' : '') ~ class|default(''))|trim -%}
 <li>
     <button type="button" class="{{ class }}">
@@ -95,9 +95,8 @@
 </button>
 {%- endmacro %}
 
-{% macro homepage(href = null, text = 'index.title', class = 'btn btn-form btn-primary') -%}
-{%- set href = href|default(path('homepage')) -%}
-{{- _self.link(href, text, class, 'home', 'index.title_help') -}}
+{% macro homepage() -%}
+{{- _self.link(path('homepage'), 'index.title', 'btn btn-form btn-primary', 'home', 'index.title_help') -}}
 {%- endmacro %}
 
 {% macro button_submit(text = 'common.button_ok', class = 'btn btn-form btn-primary', parameters = []) -%}

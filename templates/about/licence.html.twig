@@ -3,8 +3,7 @@
 {# parameters #}
 {%- set title = 'about.licence' -%}
 {%- set title_icon = 'info-circle' -%}
-{%- set key = constant('App\\Controller\\PolicyController::POLICY_ACCEPTED') -%}
-{%- set accepted = app.request.cookies.boolean(key) -%}
+{%- set accepted = app.request.cookies.boolean(constant('App\\Controller\\PolicyController::POLICY_ACCEPTED')) -%}
 {# navigation #}
 {% block card_container_class is_remembered ? '' : ' mt-3' %}
 {% block navigation_horizontal -%}{% if is_remembered %}{{ parent() }}{% endif %}{%- endblock %}
@@ -12,7 +11,7 @@
 {% block cookie_banner -%}{% endblock %}
 {# body #}
 {% block card_body %}
-{{ include('about/licence_content.html.twig', {link: true}) }}
+    {{ content|raw }}
 {% endblock %}
 {# footer #}
 {% block card_footer %}
@@ -20,14 +19,15 @@
     {% if is_remembered %}
         {{ homepage() }}
         {% if not accepted %}
-            {{ link(path('policy_accept'), 'cookie_banner.accept', 'btn btn-form btn-success', null, 'cookie_banner.accept_title') }}
+            {{ link(path('policy_accept'), 'cookie_banner.accept', 'btn btn-form btn-success', title: 'cookie_banner.accept_title') }}
         {% endif %}
     {% else %}
         {{ link(path('app_login'), 'index.login', 'btn btn-form btn-outline-primary') }}
     {% endif %}
     {{ sitemap() }}
-    {% set caller = app.request.query.string('caller')|default %}
-    {{ link(path('about_policy_index', {caller: caller}), 'about.policy', 'btn btn-form btn-secondary') }}
+    {% set caller = app.request.query.string('caller') %}
+    {% set params = caller ? {caller: caller} : {} %}
+    {{ link(path('about_policy_index', params), 'about.policy', 'btn btn-form btn-secondary') }}
     {{ button_pdf('about_licence_pdf') }}
     {{ button_word('about_licence_word') }}
 </div>

@@ -403,8 +403,7 @@ abstract class AbstractController extends BaseController
      *                                    <code>false</code> to send to the browser and force a file download.
      * @param string              $name   the name of the file (without an extension) or '' to use default ('document')
      *
-     * @throws NotFoundHttpException
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws NotFoundHttpException|\PhpOffice\PhpSpreadsheet\Exception
      */
     protected function renderSpreadsheetDocument(
         SpreadsheetDocument $doc,
@@ -431,8 +430,7 @@ abstract class AbstractController extends BaseController
      *                             with the name given.
      * @param string       $name   the name of the file (without an extension) or '' to use default ('document')
      *
-     * @throws NotFoundHttpException
-     * @throws \PhpOffice\PhpWord\Exception\Exception
+     * @throws NotFoundHttpException|\PhpOffice\PhpWord\Exception\Exception
      */
     protected function renderWordDocument(WordDocument $doc, bool $inline = true, string $name = ''): WordResponse
     {

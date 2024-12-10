@@ -65,6 +65,6 @@
 {% block card_footer %}
 {{- homepage() -}}
 {% if not result.valid %}
-    {{ link(path('admin_import'), 'swisspost.result.new_import', 'btn btn-outline-secondary', null) -}}
+    {{ link(path('admin_import'), 'swisspost.result.new_import', 'btn btn-outline-secondary') -}}
 {%- endif %}
 {% endblock %}

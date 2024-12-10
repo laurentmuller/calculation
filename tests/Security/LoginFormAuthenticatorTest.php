@@ -15,7 +15,6 @@ namespace App\Tests\Security;
 
 use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
-use App\Security\SecurityAttributes;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -53,26 +52,6 @@ class LoginFormAuthenticatorTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testAuthenticate(): void
-    {
-        $httpUtils = $this->createMock(HttpUtils::class);
-        $httpUtils->method('checkRequestPath')
-            ->willReturn(true);
-        $authenticator = $this->createAuthenticator(httpUtils: $httpUtils);
-        $values = [
-            SecurityAttributes::USER_FIELD => 'username',
-            SecurityAttributes::PASSWORD_FIELD => 'password',
-            SecurityAttributes::LOGIN_TOKEN => 'token',
-        ];
-        $request = self::createRequest(values: $values, session: $this->createSession());
-
-        $passport = $authenticator->authenticate($request);
-        $this->validatePassport($passport);
-    }
-
-    /**
-     * @throws Exception
-     */
     public function testAuthenticateEmptyPassword(): void
     {
         $httpUtils = $this->createMock(HttpUtils::class);
@@ -80,9 +59,9 @@ class LoginFormAuthenticatorTest extends TestCase
             ->willReturn(true);
         $authenticator = $this->createAuthenticator(httpUtils: $httpUtils);
         $values = [
-            SecurityAttributes::USER_FIELD => 'username',
-            SecurityAttributes::PASSWORD_FIELD => '',
-            SecurityAttributes::LOGIN_TOKEN => 'token',
+            'username' => 'username',
+            'password' => '',
+            'login_token' => 'token',
         ];
         $request = self::createRequest(values: $values);
 
@@ -101,9 +80,9 @@ class LoginFormAuthenticatorTest extends TestCase
             ->willReturn(true);
         $authenticator = $this->createAuthenticator(httpUtils: $httpUtils);
         $values = [
-            SecurityAttributes::USER_FIELD => 'username',
-            SecurityAttributes::PASSWORD_FIELD => 'password',
-            SecurityAttributes::LOGIN_TOKEN => '',
+            'username' => 'username',
+            'password' => 'password',
+            'login_token' => '',
         ];
         $request = self::createRequest(values: $values);
 
@@ -122,9 +101,9 @@ class LoginFormAuthenticatorTest extends TestCase
             ->willReturn(true);
         $authenticator = $this->createAuthenticator(httpUtils: $httpUtils);
         $values = [
-            SecurityAttributes::USER_FIELD => '',
-            SecurityAttributes::PASSWORD_FIELD => 'password',
-            SecurityAttributes::LOGIN_TOKEN => 'token',
+            'username' => '',
+            'password' => 'password',
+            'login_token' => 'token',
         ];
         $request = self::createRequest(values: $values);
 
@@ -136,17 +115,37 @@ class LoginFormAuthenticatorTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testAuthenticateSuccess(): void
+    {
+        $httpUtils = $this->createMock(HttpUtils::class);
+        $httpUtils->method('checkRequestPath')
+            ->willReturn(true);
+        $authenticator = $this->createAuthenticator(httpUtils: $httpUtils);
+        $values = [
+            'username' => 'username',
+            'password' => 'password',
+            'login_token' => 'token',
+        ];
+        $request = self::createRequest(values: $values);
+
+        $passport = $authenticator->authenticate($request);
+        $this->validatePassport($passport);
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testAuthenticateWithSession(): void
     {
         $userProvider = $this->createMock(UserRepository::class);
         $authenticator = $this->createAuthenticator(repository: $userProvider);
 
         $values = [
-            SecurityAttributes::USER_FIELD => 'username',
-            SecurityAttributes::PASSWORD_FIELD => 'password',
-            SecurityAttributes::LOGIN_TOKEN => 'token',
+            'username' => 'username',
+            'password' => 'password',
+            'login_token' => 'token',
         ];
-        $request = self::createRequest(values: $values, session: $this->createSession());
+        $request = self::createRequest(values: $values);
 
         $passport = $authenticator->authenticate($request);
         $this->validatePassport($passport);
@@ -163,10 +162,10 @@ class LoginFormAuthenticatorTest extends TestCase
 
         $authenticator = $this->createAuthenticator(applicationService: $applicationService);
         $values = [
-            SecurityAttributes::USER_FIELD => 'username',
-            SecurityAttributes::PASSWORD_FIELD => 'password',
-            SecurityAttributes::LOGIN_TOKEN => 'token',
-            SecurityAttributes::CAPTCHA_FIELD => '',
+            'username' => 'username',
+            'password' => 'password',
+            'login_token' => 'token',
+            'captcha' => '',
         ];
         $request = self::createRequest(values: $values);
 
@@ -186,11 +185,11 @@ class LoginFormAuthenticatorTest extends TestCase
 
         $authenticator = $this->createAuthenticator(applicationService: $applicationService);
         $values = [
-            SecurityAttributes::USER_FIELD => 'username',
-            SecurityAttributes::PASSWORD_FIELD => 'password',
-            SecurityAttributes::LOGIN_TOKEN => 'token',
+            'username' => 'username',
+            'password' => 'password',
+            'login_token' => 'token',
         ];
-        $request = self::createRequest(values: $values, session: $this->createSession());
+        $request = self::createRequest(values: $values);
 
         $passport = $authenticator->authenticate($request);
         $this->validatePassport($passport);
@@ -213,10 +212,10 @@ class LoginFormAuthenticatorTest extends TestCase
             captchaImageService: $captchaImageService
         );
         $values = [
-            SecurityAttributes::USER_FIELD => 'username',
-            SecurityAttributes::PASSWORD_FIELD => 'password',
-            SecurityAttributes::LOGIN_TOKEN => 'token',
-            SecurityAttributes::CAPTCHA_FIELD => 'captcha',
+            'username' => 'username',
+            'password' => 'password',
+            'login_token' => 'token',
+            'captcha' => 'captcha',
         ];
         $request = self::createRequest(values: $values);
 
@@ -300,22 +299,14 @@ class LoginFormAuthenticatorTest extends TestCase
     private static function createRequest(
         array $values = [],
         string $method = Request::METHOD_POST,
-        string $contentType = 'application/x-www-form-urlencoded',
-        ?Session $session = null
+        string $contentType = 'application/x-www-form-urlencoded'
     ): Request {
         $request = new Request(request: $values);
         $request->setMethod($method);
+        $request->setSession(new Session(new MockArraySessionStorage()));
         $request->headers->set('Content-Type', $contentType);
-        if ($session instanceof Session) {
-            $request->setSession($session);
-        }
 
         return $request;
-    }
-
-    private function createSession(): Session
-    {
-        return new Session(new MockArraySessionStorage());
     }
 
     private function validatePassport(Passport $passport): void

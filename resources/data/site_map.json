@@ -323,11 +323,11 @@
         {
             "route": "user_profile_edit",
             "text": "profile.edit.title",
-            "icon": "pencil"
+            "icon": "user-pen"
         },
         {
             "route": "user_profile_password",
-            "text": "profile.change_password.title",
+            "text": "profile.password.title",
             "icon": "unlock-alt"
         },
         {

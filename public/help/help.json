@@ -948,14 +948,14 @@
                     },
                     {
                         "id": "profile.edit.title",
-                        "icon": "user-gear",
+                        "icon": "user-pen",
                         "dialog": "profile.edit.title",
                         "description": "Page permettant de modifier son profile."
                     },
                     {
-                        "id": "profile.change_password.title",
+                        "id": "profile.password.title",
                         "icon": "unlock-alt",
-                        "dialog": "profile.change_password.title",
+                        "dialog": "profile.password.title",
                         "description": "Page permettant de modifier son mot de passe."
                     },
                     {
@@ -2549,7 +2549,7 @@
             "group": "help.groups.user_connected",
             "image": "profile/profile_edit",
             "entity": "user",
-            "icon": "user-gear",
+            "icon": "user-pen",
             "description": "Cette page permet de modifier son profile.",
             "editActions": [
                 {
@@ -2562,7 +2562,7 @@
             ],
             "links": [
                 {
-                    "id": "profile.change_password.title",
+                    "id": "profile.password.title",
                     "type": "dialog"
                 },
                 {
@@ -2572,7 +2572,7 @@
             ]
         },
         {
-            "id": "profile.change_password.title",
+            "id": "profile.password.title",
             "group": "help.groups.user_connected",
             "image": "profile/profile_change-password",
             "entity": "user",
@@ -2620,7 +2620,7 @@
             ],
             "links": [
                 {
-                    "id": "profile.change_password.title",
+                    "id": "profile.password.title",
                     "type": "dialog"
                 },
                 {

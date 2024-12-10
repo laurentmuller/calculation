@@ -14,7 +14,7 @@ conformément à la présente politique.
 
 Sauf définition contraire dans la présente politique de confidentialité, les
 termes utilisés dans la présente politique de confidentialité ont la même
-signification que dans notre [Accord de licence](LICENSE.md).
+signification que dans notre Accord de licence.
 
 ## Définitions
 
@@ -216,11 +216,6 @@ effet lorsqu'elles sont publiées sur cette page.
 ## Nous contacter
 
 Pour toute question relative à la présente politique de confidentialité,
-veuillez nous contacter par [courrier électronique](mailto:calculation@bibi.nu?subject=Calculation).
+veuillez nous contacter par courrier électronique.
 
-Montévraz, octobre 2023
-
-### Voir aussi
-
-- [Accord de licence](LICENSE.md)
-- [Page d'accueil](README.md)
+Montévraz, décembre 2024

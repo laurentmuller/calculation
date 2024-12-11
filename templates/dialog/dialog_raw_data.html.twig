@@ -3,7 +3,7 @@
 {% set dialog_id = id|default('raw_data_modal') %}
 {% set raw_data_id = raw_data_id|default(dialog_id ~ '_highlight') %}
 {# dialog #}
-<div id="{{ dialog_id }}" class="modal modal-raw-data fade" role="dialog" tabindex="-1" aria-labelledby="modal-data-title" aria-hidden="true">
+<div class="modal modal-raw-data fade" id="{{ dialog_id }}" tabindex="-1" aria-labelledby="modal-data-title" aria-hidden="true">
     <div class="modal-dialog{% if raw_data %} modal-lg{% endif %}">
         <div class="modal-content{% if not raw_data %} border-danger{% endif %}">
             <div class="modal-header{% if not raw_data %} text-bg-danger{% endif %}">

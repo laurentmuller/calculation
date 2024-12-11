@@ -1,7 +1,6 @@
 {% from 'macros/_icons.html.twig' import button_close_modal %}
 {% set dialog_id = 'license-modal' %}
-<div id="{{ dialog_id }}" class="modal fade" tabindex="-1" aria-hidden="true"
-     aria-labelledby="modal-license-title"
+<div class="modal fade" id="{{ dialog_id }}" tabindex="-1" aria-labelledby="modal-license-title" aria-hidden="true"
      data-load-error="{{ 'about.dialog.not_found'|trans }}"
      data-url="{{ path('about_symfony_license') }}">
     <div class="modal-dialog modal-lg">

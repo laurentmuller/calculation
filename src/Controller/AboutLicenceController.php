@@ -20,7 +20,6 @@ use App\Response\PdfResponse;
 use App\Response\WordResponse;
 use App\Service\MarkdownService;
 use App\Utils\FileUtils;
-use App\Utils\StringUtils;
 use App\Word\HtmlDocument;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -30,6 +29,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * Controller to output license information.
@@ -46,7 +46,8 @@ class AboutLicenceController extends AbstractController
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
-        private readonly MarkdownService $service
+        private readonly MarkdownService $service,
+        private readonly CacheInterface $cache
     ) {
     }
 
@@ -55,9 +56,6 @@ class AboutLicenceController extends AbstractController
     public function content(): JsonResponse
     {
         $content = $this->loadContent();
-        if (!StringUtils::isString($content)) {
-            return $this->jsonFalse();
-        }
 
         return $this->jsonTrue(['content' => $content]);
     }
@@ -72,6 +70,9 @@ class AboutLicenceController extends AbstractController
         return $this->render('about/licence.html.twig', $parameters);
     }
 
+    /**
+     * @throws NotFoundHttpException
+     */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(): PdfResponse
@@ -99,10 +100,13 @@ class AboutLicenceController extends AbstractController
 
     private function loadContent(): string
     {
-        $path = FileUtils::buildPath($this->projectDir, self::LICENCE_FILE);
-        $content = $this->service->convertFile($path, true);
-        $content = $this->service->updateTag('h2', 'h4', 'bookmark', $content);
+        return $this->cache->get('licence-content', function (): string {
+            $path = FileUtils::buildPath($this->projectDir, self::LICENCE_FILE);
+            $content = $this->service->convertFile($path);
+            $content = $this->service->removeTitle($content);
+            $content = $this->service->updateTag('h2', 'h4', 'bookmark', $content);
 
-        return $this->service->addTagClass('p', 'text-justify', $content);
+            return $this->service->addTagClass('p', 'text-justify', $content);
+        });
     }
 }

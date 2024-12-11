@@ -116,21 +116,19 @@ tr.text-body-secondary td .text-danger {
     }
 }
 
-/* text muted in card view */
-.bootstrap-table .custom-item.text-body-secondary a.text-body {
-    color: var(--bs-secondary-color) !important;
-}
-
 /* selection */
 .bootstrap-table .custom-item.table-primary {
-    background-color: var(--bs-table-bg) !important;
+    background-color: var(--bs-table-bg);
 }
 
 .bootstrap-table tr.table-primary.text-body-secondary,
 .bootstrap-table .custom-item.table-primary.text-body-secondary,
-html[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary hr,
-html[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary a.text-body {
+html[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary hr {
     color: var(--bs-table-color) !important;
+}
+
+.bootstrap-table a.item-link.text-body {
+    color: var(--bs-link-color) !important;
 }
 
 /* no record found */
@@ -177,7 +175,7 @@ html[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary a.text-body
 /* custom view header */
 .custom-view-header {
     flex: 1 1 auto;
-    font-weight: 700;
+    font-weight: 600;
     overflow: hidden;
 }
 

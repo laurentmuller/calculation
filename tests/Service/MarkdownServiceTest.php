@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\MarkdownService;
+use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -26,8 +27,9 @@ class MarkdownServiceTest extends TestCase
      */
     public function testAddTagClass(): void
     {
+        $content = '<h1>Hello</h1>';
         $service = $this->createService();
-        $actual = $service->addTagClass('h1', 'my-class', '<h1>Hello</h1>');
+        $actual = $service->addTagClass('h1', 'my-class', $content);
         self::assertSame('<h1 class="my-class">Hello</h1>', $actual);
     }
 
@@ -36,20 +38,10 @@ class MarkdownServiceTest extends TestCase
      */
     public function testAddTagClassNotFound(): void
     {
-        $service = $this->createService();
-        $actual = $service->addTagClass('fake', 'my-class', '<h1>Hello</h1>');
-        self::assertSame('<h1>Hello</h1>', $actual);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testConvertContentRemoveTitle(): void
-    {
         $content = '<h1>Hello</h1>';
         $service = $this->createService();
-        $actual = $service->convertContent($content, true);
-        self::assertSame('', $actual);
+        $actual = $service->addTagClass('fake', 'my-class', $content);
+        self::assertSame($content, $actual);
     }
 
     /**
@@ -68,8 +60,8 @@ class MarkdownServiceTest extends TestCase
      */
     public function testConvertFile(): void
     {
-        $path = __DIR__ . '/../Data/markdown.md';
-        $content = \file_get_contents($path);
+        $path = __DIR__ . '/../Data/reverse_reader.txt';
+        $content = FileUtils::readFile($path);
         $content = StringUtils::pregReplace('/[^>]$/m', '$0 ', $content);
         $service = $this->createService();
         $actual = $service->convertFile($path);
@@ -79,10 +71,33 @@ class MarkdownServiceTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testRemoveTitle(): void
+    {
+        $content = '<h1>Hello</h1>';
+        $service = $this->createService();
+        $actual = $service->removeTitle($content);
+        self::assertSame('', $actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testRemoveTitleEmpty(): void
+    {
+        $content = '<h4>Hello</h4>';
+        $service = $this->createService();
+        $actual = $service->removeTitle($content);
+        self::assertSame($content, $actual);
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testReplaceTag(): void
     {
+        $content = '<h1>Hello</h1>';
         $service = $this->createService();
-        $actual = $service->replaceTag('h1', 'h4', '<h1>Hello</h1>');
+        $actual = $service->replaceTag('h1', 'h4', $content);
         self::assertSame('<h4>Hello</h4>', $actual);
     }
 
@@ -91,9 +106,10 @@ class MarkdownServiceTest extends TestCase
      */
     public function testReplaceTagNotFound(): void
     {
+        $content = '<h1>Hello</h1>';
         $service = $this->createService();
-        $actual = $service->replaceTag('fake', 'h4', '<h1>Hello</h1>');
-        self::assertSame('<h1>Hello</h1>', $actual);
+        $actual = $service->replaceTag('fake', 'h4', $content);
+        self::assertSame($content, $actual);
     }
 
     /**
@@ -101,8 +117,9 @@ class MarkdownServiceTest extends TestCase
      */
     public function testUpdateTag(): void
     {
+        $content = '<h1>Hello</h1>';
         $service = $this->createService();
-        $actual = $service->updateTag('h1', 'h4', 'my-class', '<h1>Hello</h1>');
+        $actual = $service->updateTag('h1', 'h4', 'my-class', $content);
         self::assertSame('<h4 class="my-class">Hello</h4>', $actual);
     }
 
@@ -111,9 +128,52 @@ class MarkdownServiceTest extends TestCase
      */
     public function testUpdateTagNotFound(): void
     {
+        $content = '<h1>Hello</h1>';
         $service = $this->createService();
-        $actual = $service->updateTag('fake', 'h4', 'my-class', '<h1>Hello</h1>');
-        self::assertSame('<h1>Hello</h1>', $actual);
+        $actual = $service->updateTag('fake', 'h4', 'my-class', $content);
+        self::assertSame($content, $actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdateTags(): void
+    {
+        $content = '<h1>Hello</h1>';
+        $tags = [
+            ['h1', 'h4', 'my-class'],
+        ];
+        $service = $this->createService();
+        $actual = $service->updateTags($tags, $content);
+        self::assertSame('<h4 class="my-class">Hello</h4>', $actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdateTagsNoClass(): void
+    {
+        $content = '<h1>Hello</h1>';
+        $tags = [
+            ['h1', 'h4'],
+        ];
+        $service = $this->createService();
+        $actual = $service->updateTags($tags, $content);
+        self::assertSame('<h4>Hello</h4>', $actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdateTagsNotFound(): void
+    {
+        $content = '<h1>Hello</h1>';
+        $tags = [
+            ['fake', 'h4', 'my-class'],
+        ];
+        $service = $this->createService();
+        $actual = $service->updateTags($tags, $content);
+        self::assertSame($content, $actual);
     }
 
     /**

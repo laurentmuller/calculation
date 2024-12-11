@@ -18,7 +18,7 @@ use App\Utils\StringUtils;
 use Twig\Extra\Markdown\MarkdownInterface;
 
 /**
- * Service to convert mark down to HTML.
+ * Service to convert Markdown to HTML and to update tags.
  */
 readonly class MarkdownService
 {
@@ -27,8 +27,13 @@ readonly class MarkdownService
     }
 
     /**
-     * @param non-empty-string $tag
-     * @param non-empty-string $class
+     * Add the given class to the given tag.
+     *
+     * @param non-empty-string $tag     the tag name to add class to
+     * @param non-empty-string $class   the class name to add
+     * @param string           $content the HTML content to update
+     *
+     * @return string the updated content
      */
     public function addTagClass(string $tag, string $class, string $content): string
     {
@@ -41,33 +46,51 @@ readonly class MarkdownService
     /**
      * Convert the given content to HTML.
      *
-     * @param string $content     the content to convert
-     * @param bool   $removeTitle true to remove H1 tags
+     * @param string $content the Markdown content to convert
+     *
+     * @return string the content converted to HTML
      */
-    public function convertContent(string $content, bool $removeTitle = false): string
+    public function convertContent(string $content): string
     {
         $content = $this->markdown->convert($content);
-        if ($removeTitle) {
-            $content = \trim(StringUtils::pregReplace('/<h1[^>]*>.*?<\/h1>/', '', $content));
-        }
 
+        // remove line breaks of continuous texts
         return StringUtils::pregReplace('/[^>]$/m', '$0 ', $content);
     }
 
     /**
-     * Convert the content of the given file to HTML.
+     * Convert the Markdown content of the given file to HTML.
      *
-     * @param string $path        the file to load and to convert
-     * @param bool   $removeTitle true to remove H1 tags
+     * @param string $path the file to load and to convert
+     *
+     * @return string the Markdown file content converted to HTML
      */
-    public function convertFile(string $path, bool $removeTitle = false): string
+    public function convertFile(string $path): string
     {
-        return $this->convertContent(FileUtils::readFile($path), $removeTitle);
+        return $this->convertContent(FileUtils::readFile($path));
     }
 
     /**
-     * @param non-empty-string $oldTag
-     * @param non-empty-string $newTag
+     * Remove the title (H1 tag) from the given content.
+     *
+     * @param string $content the HTML content to update
+     * @param int    $limit   the maximum possible replacements or -1 to remove all
+     *
+     * @return string the updated content
+     */
+    public function removeTitle(string $content, int $limit = -1): string
+    {
+        return \trim(StringUtils::pregReplace('/<h1[^>]*>.*?<\/h1>/', '', $content, $limit));
+    }
+
+    /**
+     * Replace the given old tag with the given new tag.
+     *
+     * @param non-empty-string $oldTag  the tag name to search for
+     * @param non-empty-string $newTag  the tag name to replace by
+     * @param string           $content the HTML content to update
+     *
+     * @return string the updated content
      */
     public function replaceTag(string $oldTag, string $newTag, string $content): string
     {
@@ -78,14 +101,45 @@ readonly class MarkdownService
     }
 
     /**
-     * @param non-empty-string $oldTag
-     * @param non-empty-string $newTag
-     * @param non-empty-string $class
+     * Update the given tag by replacing the given old tag with the given new tag and adding the given class.
+     *
+     * This is a combination of the <code>replaceTag()</code> and <code>addTagClass()</code> functions.
+     *
+     * @param non-empty-string $oldTag  the tag name to search for
+     * @param non-empty-string $newTag  the tag name to replace by
+     * @param non-empty-string $class   the class name to add
+     * @param string           $content the HTML content to update
+     *
+     * @return string the updated content
      */
     public function updateTag(string $oldTag, string $newTag, string $class, string $content): string
     {
         $content = $this->replaceTag($oldTag, $newTag, $content);
 
         return $this->addTagClass($newTag, $class, $content);
+    }
+
+    /**
+     * Update the given HTML content with the given tags.
+     *
+     * Each tag entry contains the old tag name, the new tag name and optionally a class name to add.
+     *
+     * @param array  $tags    the tags
+     * @param string $content the HTML content to update
+     *
+     * @return string the updated content
+     *
+     * @psalm-param  array<array{0: non-empty-string, 1: non-empty-string, 2?: non-empty-string}> $tags
+     */
+    public function updateTags(array $tags, string $content): string
+    {
+        foreach ($tags as $tag) {
+            $content = $this->replaceTag($tag[0], $tag[1], $content);
+            if (isset($tag[2])) {
+                $content = $this->addTagClass($tag[1], $tag[2], $content);
+            }
+        }
+
+        return $content;
     }
 }

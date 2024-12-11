@@ -20,20 +20,23 @@ signification que dans notre Accord de licence.
 
 ### Application
 
-- **Application** : Par application, nous entendons le site web **Calculation**
-  exploité par **bibi.nu**.
+- **Application**  
+  Par application, nous entendons le site web **Calculation** exploité par
+  **bibi.nu**.
 
-- **Données à caractère personnel** : Les données à caractère personnel
-  désignent des données concernant un individu vivant qui peut être identifié à
-  partir de ces données (ou à partir de ces données et d'autres informations en
-  notre possession ou susceptibles d'entrer en notre possession).
+- **Données à caractère personnel**  
+  Les données à caractère personnel désignent des données concernant un individu
+  vivant qui peut être identifié à partir de ces données (ou à partir de ces
+  données et d'autres informations en notre possession ou susceptibles d'entrer
+  en notre possession).
 
-- **Données d'utilisation** : Les données d'utilisation sont recueillies
-  automatiquement et sont générées soit par l'utilisation de l'application, soit
-  par l'infrastructure de l'application proprement dite (par exemple, durée de
-  consultation d'une page).
+- **Données d'utilisation**  
+  Les données d'utilisation sont recueillies automatiquement et sont générées
+  soit par l'utilisation de l'application, soit par l'infrastructure de
+  l'application proprement dite (par exemple, durée de consultation d'une page).
 
-- **Cookies** : Les cookies sont de petits fichiers enregistrés sur votre
+- **Cookies**  
+  Les cookies sont de petits fichiers enregistrés sur votre
   dispositif (ordinateur, tablette ou mobile).
 
 ## Collecte et utilisation des données

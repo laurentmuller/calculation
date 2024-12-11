@@ -1,5 +1,5 @@
 {% from 'macros/_icons.html.twig' import icon, button_close_modal %}
-<div class="modal fade" id="modal-sort" role="dialog" aria-labelledby="modal-sort-title" aria-hidden="true" tabindex="-1">
+<div class="modal fade" id="modal-sort" tabindex="-1" aria-labelledby="modal-sort-title" aria-hidden="true">
     <div class="modal-dialog">
         {% set column = columns|filter(c => c.default)|first %}
         <div class="modal-content">

@@ -29,6 +29,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * Controller to output policy information.
@@ -45,7 +46,8 @@ class AboutPolicyController extends AbstractController
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
-        private readonly MarkdownService $service
+        private readonly MarkdownService $service,
+        private readonly CacheInterface $cache
     ) {
     }
 
@@ -68,6 +70,9 @@ class AboutPolicyController extends AbstractController
         return $this->render('about/policy.html.twig', $parameters);
     }
 
+    /**
+     * @throws NotFoundHttpException
+     */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(): PdfResponse
@@ -95,12 +100,18 @@ class AboutPolicyController extends AbstractController
 
     private function loadContent(): string
     {
-        $path = FileUtils::buildPath($this->projectDir, self::POLICY_FILE);
-        $content = $this->service->convertFile($path, true);
-        $content = $this->service->updateTag('h4', 'h6', 'bookmark bookmark-2', $content);
-        $content = $this->service->updateTag('h3', 'h5', 'bookmark bookmark-1', $content);
-        $content = $this->service->updateTag('h2', 'h4', 'bookmark', $content);
+        return $this->cache->get('policy-content', function (): string {
+            $tags = [
+                ['h4', 'h6', 'bookmark bookmark-2'],
+                ['h3', 'h5', 'bookmark bookmark-1'],
+                ['h2', 'h4', 'bookmark'],
+            ];
+            $path = FileUtils::buildPath($this->projectDir, self::POLICY_FILE);
+            $content = $this->service->convertFile($path);
+            $content = $this->service->removeTitle($content);
+            $content = $this->service->updateTags($tags, $content);
 
-        return $this->service->addTagClass('p', 'text-justify', $content);
+            return $this->service->addTagClass('p', 'text-justify', $content);
+        });
     }
 }

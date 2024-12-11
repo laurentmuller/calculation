@@ -82,7 +82,15 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Gets the application name and version.
+     * Gets the application name (without the version).
+     */
+    public function getApplication(): string
+    {
+        return $this->getParameterString('app_name');
+    }
+
+    /**
+     * Gets the application name and the version.
      */
     public function getApplicationName(): string
     {

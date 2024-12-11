@@ -9,7 +9,7 @@
 {%- set edit_title = edit_title|default('common.button_edit'|trans) -%}
 {%- set form_attr = form_attr|default({}) -%}
 {# modal #}
-<div id="{{ dialog_id }}" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="{{ dialog_id }}" aria-hidden="true">
+<div class="modal fade" id="{{ dialog_id }}" tabindex="-1" aria-labelledby="{{ dialog_id }}" aria-hidden="true">
     <div class="modal-dialog modal-lg">
        <div class="modal-content">
             <form id="{{ form_prefix }}_form" autocomplete="off" data-add="{{ add_title }}" data-edit="{{ edit_title }}"{{ attributes(form_attr) }}>

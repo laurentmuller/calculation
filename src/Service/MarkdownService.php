@@ -19,6 +19,8 @@ use Twig\Extra\Markdown\MarkdownInterface;
 
 /**
  * Service to convert Markdown to HTML and to update tags.
+ *
+ * @psalm-type TagType = array{0: non-empty-string, 1: non-empty-string, 2?: non-empty-string}
  */
 readonly class MarkdownService
 {
@@ -129,7 +131,7 @@ readonly class MarkdownService
      *
      * @return string the updated content
      *
-     * @psalm-param  array<array{0: non-empty-string, 1: non-empty-string, 2?: non-empty-string}> $tags
+     * @psalm-param TagType[] $tags
      */
     public function updateTags(array $tags, string $content): string
     {

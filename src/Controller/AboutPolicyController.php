@@ -13,105 +13,42 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Interfaces\RoleInterface;
-use App\Report\HtmlReport;
-use App\Response\PdfResponse;
-use App\Response\WordResponse;
-use App\Service\MarkdownService;
-use App\Utils\FileUtils;
-use App\Word\HtmlDocument;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * Controller to output policy information.
  */
 #[AsController]
 #[Route(path: '/about/policy', name: 'about_policy_')]
-class AboutPolicyController extends AbstractController
+class AboutPolicyController extends AbstractAboutController
 {
     /**
      * The policy file name (markdown).
      */
     public const POLICY_FILE = 'POLICY.md';
 
-    public function __construct(
-        #[Autowire('%kernel.project_dir%')]
-        private readonly string $projectDir,
-        private readonly MarkdownService $service,
-        private readonly CacheInterface $cache
-    ) {
+    protected function getFileName(): string
+    {
+        return self::POLICY_FILE;
     }
 
-    #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/content', name: 'content')]
-    public function content(): JsonResponse
+    protected function getTags(): array
     {
-        $content = $this->loadContent();
-
-        return $this->jsonTrue(['content' => $content]);
+        return [
+            ['h4', 'h6', 'bookmark bookmark-2'],
+            ['h3', 'h5', 'bookmark bookmark-1'],
+            ['h2', 'h4', 'bookmark'],
+        ];
     }
 
-    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Get(path: '', name: 'index')]
-    public function index(): Response
+    protected function getTitle(): string
     {
-        $content = $this->loadContent();
-        $parameters = ['content' => $content];
-
-        return $this->render('about/policy.html.twig', $parameters);
+        return 'about.policy';
     }
 
-    /**
-     * @throws NotFoundHttpException
-     */
-    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Get(path: '/pdf', name: 'pdf')]
-    public function pdf(): PdfResponse
+    protected function getView(): string
     {
-        $content = $this->loadContent();
-        $report = new HtmlReport($this, $content);
-        $report->setTitleTrans('about.policy', [], true);
-
-        return $this->renderPdfDocument($report);
-    }
-
-    /**
-     * @throws NotFoundHttpException|\PhpOffice\PhpWord\Exception\Exception
-     */
-    #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/word', name: 'word')]
-    public function word(): WordResponse
-    {
-        $content = $this->loadContent();
-        $doc = new HtmlDocument($this, $content);
-        $doc->setTitleTrans('about.policy');
-
-        return $this->renderWordDocument($doc);
-    }
-
-    private function loadContent(): string
-    {
-        return $this->cache->get('policy-content', function (): string {
-            $tags = [
-                ['h4', 'h6', 'bookmark bookmark-2'],
-                ['h3', 'h5', 'bookmark bookmark-1'],
-                ['h2', 'h4', 'bookmark'],
-            ];
-            $path = FileUtils::buildPath($this->projectDir, self::POLICY_FILE);
-            $content = $this->service->convertFile($path);
-            $content = $this->service->removeTitle($content);
-            $content = $this->service->updateTags($tags, $content);
-
-            return $this->service->addTagClass('p', 'text-justify', $content);
-        });
+        return 'about/policy.html.twig';
     }
 }

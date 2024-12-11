@@ -42,21 +42,10 @@ class AboutPolicyController extends AbstractController
      */
     public const POLICY_FILE = 'POLICY.md';
 
-    // the reverse order is important!
-    private const REPLACE = [
-        '<h4>' => '<h6 class="bookmark bookmark-2">',
-        '<h3>' => '<h5 class="bookmark bookmark-1">',
-        '<h2>' => '<h4 class="bookmark">',
-        '</h4>' => '</h6>',
-        '</h3>' => '</h5>',
-        '</h2>' => '</h4>',
-        '<p>' => '<p class="text-justify">',
-    ];
-
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
-        private readonly MarkdownService $markdownService
+        private readonly MarkdownService $service
     ) {
     }
 
@@ -107,7 +96,11 @@ class AboutPolicyController extends AbstractController
     private function loadContent(): string
     {
         $path = FileUtils::buildPath($this->projectDir, self::POLICY_FILE);
+        $content = $this->service->convertFile($path, true);
+        $content = $this->service->updateTag('h4', 'h6', 'bookmark bookmark-2', $content);
+        $content = $this->service->updateTag('h3', 'h5', 'bookmark bookmark-1', $content);
+        $content = $this->service->updateTag('h2', 'h4', 'bookmark', $content);
 
-        return $this->markdownService->convertFile($path, true, self::REPLACE);
+        return $this->service->addTagClass('p', 'text-justify', $content);
     }
 }

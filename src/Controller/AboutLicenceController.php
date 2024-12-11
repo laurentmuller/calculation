@@ -43,16 +43,10 @@ class AboutLicenceController extends AbstractController
      */
     public const LICENCE_FILE = 'LICENSE.md';
 
-    private const REPLACE = [
-        '<h2>' => '<h4 class="bookmark">',
-        '</h2>' => '</h4>',
-        '<p>' => '<p class="text-justify">',
-    ];
-
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
-        private readonly MarkdownService $markdownService
+        private readonly MarkdownService $service
     ) {
     }
 
@@ -106,7 +100,9 @@ class AboutLicenceController extends AbstractController
     private function loadContent(): string
     {
         $path = FileUtils::buildPath($this->projectDir, self::LICENCE_FILE);
+        $content = $this->service->convertFile($path, true);
+        $content = $this->service->updateTag('h2', 'h4', 'bookmark', $content);
 
-        return $this->markdownService->convertFile($path, true, self::REPLACE);
+        return $this->service->addTagClass('p', 'text-justify', $content);
     }
 }

@@ -131,6 +131,14 @@ html[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary hr {
     color: var(--bs-link-color) !important;
 }
 
+.bootstrap-table a.item-link.text-body:hover {
+    color: var(--bs-link-hover-color) !important;
+}
+
+.bootstrap-table .custom-item.table-primary a.item-link.text-body {
+    color: var(--bs-primary) !important;
+}
+
 /* no record found */
 .bootstrap-table:has(tr.no-records-found) {
     margin-bottom: 1rem;

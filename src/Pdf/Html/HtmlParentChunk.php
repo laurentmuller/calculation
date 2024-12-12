@@ -14,12 +14,27 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 use App\Report\HtmlReport;
+use fpdf\PdfDocument;
 
 /**
  * Represents a chunk container.
  */
 class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
 {
+    /**
+     * The tags to keep with the next chunk.
+     */
+    private const KEEP_WITH_NEXT = [
+        HtmlTag::H1,
+        HtmlTag::H2,
+        HtmlTag::H3,
+        HtmlTag::H4,
+        HtmlTag::H5,
+        HtmlTag::H6,
+        HtmlTag::LIST_ORDERED,
+        HtmlTag::LIST_UNORDERED,
+    ];
+
     /**
      * @var AbstractHtmlChunk[]
      */
@@ -172,10 +187,25 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
 
     private function doOutput(HtmlReport $report): void
     {
-        $report->moveY($this->getTopMargin(), false);
+        if ($this->isPrintable($report)) {
+            $report->moveY($this->getTopMargin(), false);
+        } else {
+            $report->addPage();
+        }
         parent::output($report);
         $this->outputChildren($report);
         $report->moveY($this->getBottomMargin(), false);
         $this->getParent()?->applyStyle($report);
+    }
+
+    private function isPrintable(HtmlReport $report): bool
+    {
+        if ($this->isEmpty() || !$this->is(...self::KEEP_WITH_NEXT)) {
+            return true;
+        }
+
+        return $report->isPrintable(
+            PdfDocument::LINE_HEIGHT * 2.0 + $this->getTopMargin() + $this->getBottomMargin()
+        );
     }
 }

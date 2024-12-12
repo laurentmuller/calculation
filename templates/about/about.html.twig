@@ -6,7 +6,7 @@
     {%- set title = ('about.' ~ id)|trans -%}
     {%- set route = path('about_' ~ id ~ '_content') -%}
     <div class="card-header d-flex-wrap-center">
-        <a class="drop-down-icon-left card-title flex-fill" href="#{{ id }}" data-bs-toggle="collapse" aria-expanded="false" title="{{ 'about.expand'|trans }}">{{- title -}}</a>
+        <a class="drop-down-icon-left card-title flex-fill" href="#{{ id }}" data-bs-toggle="collapse" aria-expanded="false" title="{{ 'common.expand'|trans }}">{{- title -}}</a>
         {{ link_pdf(pdf_route, 'fa-fw') }}
         {% if excel_route %}
             {{ link_excel(excel_route, 'fa-fw') }}
@@ -35,7 +35,7 @@
 {# card body #}
 {% block card_body %}
 {# application #}
-<div id="configuration" class="phpversion" data-collapse="{{ 'about.collapse'|trans }}" data-expand="{{ 'about.expand'|trans }}" data-error="{{ 'about.error'|trans }}">
+<div id="configuration" class="phpversion" data-collapse="{{ 'common.collapse'|trans }}" data-expand="{{ 'common.expand'|trans }}" data-error="{{ 'about.error'|trans }}">
     <table id="data-table-application" class="table table-sm mb-0">
         <tbody>
             <tr class="h">

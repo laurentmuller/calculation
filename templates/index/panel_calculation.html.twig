@@ -2,7 +2,7 @@
 {# parameters #}
 {%- set panel_key = 'DISPLAY_CALCULATION' -%}
 {%- set panel_show = app.request.cookies.boolean(panel_key, true) -%}
-{%- set panel_title = panel_show ? 'about.collapse' : 'about.expand' -%}
+{%- set panel_title = panel_show ? 'common.collapse' : 'common.expand' -%}
 
 {%- set caller = path(app.current_route) -%}
 {%- set selection = app.request.get('id', 0) -%}

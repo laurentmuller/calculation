@@ -80,6 +80,7 @@ $(function () {
          * @private
          */
         _init() {
+
             this.clickProxy = () => this._click();
             this.changeProxy = () => this._change();
             this.$element.on('click', this.clickProxy);
@@ -190,9 +191,11 @@ $(function () {
                 const $this = $(this);
                 $this.prop('checked', $this.val() === theme);
             });
-            if (document.querySelectorAll(this._getInputCheckedSelector()).length === 0) {
+            const checkedSelector = this._getInputCheckedSelector();
+            if (document.querySelectorAll(checkedSelector).length === 0) {
                 document.querySelector(selector).checked = true;
             }
+            $(checkedSelector).trigger('change');
         }
 
         /**
@@ -222,7 +225,31 @@ $(function () {
          * @private
          */
         _onInputChange(e) {
-            this._setTheme($(e.currentTarget).val());
+            const value = e.currentTarget.value;
+            this._setTheme(value);
+            const $dialog = this._getDialog();
+            if (!$dialog) {
+                return;
+            }
+            const $settings = $dialog.find(this.options.settings);
+            if (!$settings.length) {
+                return;
+            }
+            if (value === THEME_AUTO) {
+                $settings.removeAttr('disabled')
+            } else {
+                $settings.attr('disabled', 'disabled');
+            }
+        }
+
+        /**
+         * Handle the setting button click event.
+         * @param {ClickEvent} e
+         * @private
+         */
+        _onSettingsClick(e) {
+            e.preventDefault();
+            window.open('ms-settings:colors', '_self');
         }
 
         /**
@@ -304,6 +331,14 @@ $(function () {
                 .on('keydown', (e) => this._onDialogKeyDown(e))
                 .on('click', options.ok, () => this._onDialogAccept())
                 .on('change', options.input, (e) => this._onInputChange(e));
+
+            // settings button
+            const $settings = $dialog.find(options.settings);
+            if (!this._isWindow10() || !$settings.length) {
+                $settings.remove();
+                return
+            }
+            $settings.on('click', (e) => this._onSettingsClick(e));
         }
 
         /**
@@ -313,6 +348,17 @@ $(function () {
          */
         _isMediaDark() {
             return window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+
+        /**
+         * Detect if using window 10 or upper.
+         * @return {boolean}
+         * @private
+         */
+        _isWindow10() {
+            const regex = /Windows NT (\d+.?\d+)/gmi;
+            const match = regex.exec(window.navigator.userAgent);
+            return match && match.length > 1 && Number.parseFloat(match[1]) >= 10;
         }
 
         /**
@@ -403,6 +449,8 @@ $(function () {
         success: 'success',
         // the OK button selector in the modal dialog
         ok: '.btn-ok',
+        // the choose color mode selector in the modal dialog
+        settings: '.btn-settings',
         // the data key for the icon class
         icon: 'class',
         // the data key for the text content

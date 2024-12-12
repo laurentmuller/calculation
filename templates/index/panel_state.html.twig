@@ -26,7 +26,7 @@
 {# parameters #}
 {%- set panel_key = 'DISPLAY_STATE' -%}
 {%- set panel_show = app.request.cookies.boolean(panel_key, true) -%}
-{%- set panel_title = panel_show ? 'about.collapse' : 'about.expand' -%}
+{%- set panel_title = panel_show ? 'common.collapse' : 'common.expand' -%}
 {%- set is_states = states|length -%}
 {%- set table_path = is_granted_calculation ? 'calculation_index' : false -%}
 {%- set header_attributes = header_attributes|merge({

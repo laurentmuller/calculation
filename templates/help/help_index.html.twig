@@ -82,20 +82,20 @@
 {%- endmacro %}
 
 {% macro expand_button() %}
-<a href="#" class="expand-items link-items" title="{{ 'about.expand'|trans }}">
+<a href="#" class="expand-items link-items" title="{{ 'common.expand'|trans }}">
     <i class="fa-solid fa-plus"></i>
 </a>
 {% endmacro %}
 
 {% macro collapse_button() %}
-<a href="#" class="collapse-items link-items" title="{{ 'about.collapse'|trans }}">
+<a href="#" class="collapse-items link-items" title="{{ 'common.collapse'|trans }}">
     <i class="fa-solid fa-minus"></i>
 </a>
 {% endmacro %}
 
 {% macro output_header(icon, text) %}
 <div class="d-flex-wrap-center">
-    <a href="#" class="h6 flex-fill text-body link-items toggle-items" title="{{ 'about.toggle'|trans }}">
+    <a href="#" class="h6 flex-fill text-body link-items toggle-items" title="{{ 'common.toggle'|trans }}">
         {{- icon(icon ~ ' me-1', text) -}}
     </a>
     {{ _self.expand_button() }}
@@ -162,13 +162,13 @@
 {% block help_home -%}{% endblock %}
 {# actions #}
 {% block help_actions -%}
-    <button type="button" class="btn btn-outline-secondary btn-expand-all link-items" title="{{ 'about.expand'|trans }}">
+    <button type="button" class="btn btn-outline-secondary btn-expand-all link-items" title="{{ 'common.expand'|trans }}">
         <i class="fa-solid fa-plus"></i>
     </button>
-    <button type="button" class="btn btn-outline-secondary btn-collapse-all link-items" title="{{ 'about.collapse'|trans }}">
+    <button type="button" class="btn btn-outline-secondary btn-collapse-all link-items" title="{{ 'common.collapse'|trans }}">
         <i class="fa-solid fa-minus"></i>
     </button>
-    <button type="button" class="btn btn-outline-secondary btn-toggle-all link-items" title="{{ 'about.toggle'|trans }}">
+    <button type="button" class="btn btn-outline-secondary btn-toggle-all link-items" title="{{ 'common.toggle'|trans }}">
         <i class="fa-solid fa-shuffle"></i>
     </button>
     {{ dialogs_button() }}

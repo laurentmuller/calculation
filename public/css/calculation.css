@@ -58,8 +58,17 @@ thead.group tr.table-primary th.bg-body-tertiary {
     background-color: var(--bs-table-bg);
 }
 
+/* card view link */
 a.item-link.text-body {
     color: var(--bs-link-color) !important;
+}
+
+a.item-link.text-body:hover {
+    color: var(--bs-link-hover-color) !important;
+}
+
+.row-item.table-primary a.item-link.text-body {
+    color: var(--bs-primary) !important;
 }
 
 .row-item.text-body-secondary .fw-bold a {

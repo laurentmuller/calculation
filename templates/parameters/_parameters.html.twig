@@ -6,8 +6,8 @@
 {%- set header_id = 'header_' ~ href -%}
 {%- set name = 'parameters.group_%s'|format(href)|trans -%}
 {%- set template = 'parameters/_parameters_%s.html.twig'|format(href) -%}
-{%- set show = 'parameters.display_parameters.show'|trans({'%name%': name}) -%}
-{%- set hide = 'parameters.display_parameters.hide'|trans({'%name%': name}) -%}
+{%- set show = 'common.expand'|trans -%}
+{%- set hide = 'common.collapse'|trans -%}
 {%- set title = expanded ? hide : show -%}
 <div class="card-header d-flex-wrap-center rounded-0">
     <a class="drop-down-icon-right card-title" href="#{{ href }}" data-bs-toggle="collapse" aria-expanded="{{ expanded|json_encode }}" title="{{ title }}" data-show="{{ show }}" data-hide="{{ hide }}">

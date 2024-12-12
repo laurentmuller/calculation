@@ -44,6 +44,9 @@ abstract class AbstractAboutController extends AbstractController
     ) {
     }
 
+    /**
+     * Gets the HTML content as a JSON response.
+     */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Get(path: '/content', name: 'content')]
     public function content(): JsonResponse
@@ -53,6 +56,9 @@ abstract class AbstractAboutController extends AbstractController
         return $this->jsonTrue(['content' => $content]);
     }
 
+    /**
+     * Render a view with the HTML content.
+     */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Get(path: '', name: 'index')]
     public function index(): Response
@@ -65,6 +71,8 @@ abstract class AbstractAboutController extends AbstractController
     }
 
     /**
+     * Export the HTML content to a Portable Document Format (*.pdf) file.
+     *
      * @throws NotFoundHttpException
      */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
@@ -74,12 +82,14 @@ abstract class AbstractAboutController extends AbstractController
         $title = $this->getTitle();
         $content = $this->loadContent();
         $report = new HtmlReport($this, $content);
-        $report->setTitleTrans($title, [], true);
+        $report->setTitleTrans($title, isUTF8: true);
 
         return $this->renderPdfDocument($report);
     }
 
     /**
+     * Export the HTML content to a Word 2007 (.docx) document file.
+     *
      * @throws NotFoundHttpException|\PhpOffice\PhpWord\Exception\Exception
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
@@ -95,7 +105,7 @@ abstract class AbstractAboutController extends AbstractController
     }
 
     /**
-     * Gets the Markdown file name.
+     * Gets the Markdown file name; relative to the project directory.
      */
     abstract protected function getFileName(): string;
 
@@ -116,6 +126,9 @@ abstract class AbstractAboutController extends AbstractController
      */
     abstract protected function getView(): string;
 
+    /**
+     * Load the Markdown file and convert the content to HTML.
+     */
     private function loadContent(): string
     {
         $fileName = $this->getFileName();

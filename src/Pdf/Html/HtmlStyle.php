@@ -17,7 +17,6 @@ use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfStyle;
-use App\Utils\StringUtils;
 use fpdf\Enums\PdfFontName;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
@@ -27,11 +26,6 @@ use fpdf\PdfBorder;
  */
 class HtmlStyle extends PdfStyle
 {
-    /**
-     * The pattern to extract margins.
-     */
-    private const MARGINS_PATTERN = '/^[mp]([tbsexy])?-(sm-|md-|lg-|xl-|xxl-)?([012345])/im';
-
     /**
      * The alignment.
      */
@@ -204,22 +198,6 @@ class HtmlStyle extends PdfStyle
     }
 
     /**
-     * Sets the left and right margins.
-     */
-    public function setXMargins(float $margins): self
-    {
-        return $this->setLeftMargin($margins)->setRightMargin($margins);
-    }
-
-    /**
-     * Sets the top and bottom margins.
-     */
-    public function setYMargins(float $margins): self
-    {
-        return $this->setTopMargin($margins)->setBottomMargin($margins);
-    }
-
-    /**
      * Update this style for the given class.
      */
     public function update(string $class): self
@@ -329,18 +307,27 @@ class HtmlStyle extends PdfStyle
 
     private function updateMargins(string $class): self
     {
-        if (StringUtils::pregMatchAll(self::MARGINS_PATTERN, $class, $matches, \PREG_SET_ORDER)) {
-            $match = $matches[0];
-            $value = (float) $match[3];
-            match ($match[1]) {
-                't' => $this->setTopMargin($value),
-                'b' => $this->setBottomMargin($value),
-                's' => $this->setLeftMargin($value),
-                'e' => $this->setRightMargin($value),
-                'x' => $this->setXMargins($value),
-                'y' => $this->setYMargins($value),
-                default => $this->setMargins($value) // all
-            };
+        $spacing = HtmlSpacing::instance($class);
+        if (!$spacing instanceof HtmlSpacing || $spacing->isNone()) {
+            return $this;
+        }
+
+        $size = (float) $spacing->size;
+        if ($spacing->isAll()) {
+            return $this->setMargins($size);
+        }
+
+        if ($spacing->top) {
+            $this->setTopMargin($size);
+        }
+        if ($spacing->bottom) {
+            $this->setBottomMargin($size);
+        }
+        if ($spacing->left) {
+            $this->setLeftMargin($size);
+        }
+        if ($spacing->right) {
+            $this->setRightMargin($size);
         }
 
         return $this;

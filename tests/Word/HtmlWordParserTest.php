@@ -52,6 +52,7 @@ class HtmlWordParserTest extends TestCase
     public static function getMargins(): \Iterator
     {
         yield ['m-0', '0;'];
+        yield ['M-0', '0;'];
         yield ['m-1', 'margin:4px;'];
         yield ['m-2', 'margin:8px;'];
         yield ['m-3', 'margin:16px;'];

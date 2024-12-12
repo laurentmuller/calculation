@@ -3,7 +3,7 @@
 {# macros #}
 {% macro headerLinkInfo(title, id, countable = null) -%}
 <div class="border-bottom" id="{{ id }}-header">
-    <a href="#{{ id }}" class="drop-down-icon-left d-flex text-body my-1" data-bs-toggle="collapse" aria-expanded="false" aria-controls="{{ id }}" title="{{ 'about.expand'|trans }}">
+    <a href="#{{ id }}" class="drop-down-icon-left d-flex text-body my-1" data-bs-toggle="collapse" aria-expanded="false" aria-controls="{{ id }}" title="{{ 'common.expand'|trans }}">
         <span class="flex-fill">{{- title -}}</span>
         {% if countable %}
             <span class="badge text-bg-secondary rounded-pill">{{- countable|integer -}}</span>

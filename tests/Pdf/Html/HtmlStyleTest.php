@@ -77,12 +77,7 @@ class HtmlStyleTest extends TestCase
 
     public function testMargins(): void
     {
-        $expected = 5.0;
         $actual = HtmlStyle::default();
-        $actual->setXMargins($expected)
-            ->setYMargins($expected);
-        self::assertSameMargins($actual, $expected);
-
         $expected = 15.0;
         $actual->setMargins($expected);
         self::assertSameMargins($actual, $expected);

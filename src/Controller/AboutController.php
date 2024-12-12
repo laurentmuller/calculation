@@ -16,7 +16,6 @@ namespace App\Controller;
 use App\Attribute\Get;
 use App\Enums\Environment;
 use App\Interfaces\RoleInterface;
-use App\Pdf\Html\HtmlTag;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
 use App\Response\WordResponse;
@@ -107,9 +106,10 @@ class AboutController extends AbstractController
     {
         return $this->cache->get('about-content', function (): string {
             $license = $this->convertFile(AboutLicenceController::LICENCE_FILE);
+            $license = \substr($license, 0, (int) \strrpos($license, '<h4'));
             $policy = $this->convertFile(AboutPolicyController::POLICY_FILE);
 
-            return \sprintf('%s<p class="%s" />%s', $license, HtmlTag::PAGE_BREAK->value, $policy);
+            return $license . $policy;
         });
     }
 }

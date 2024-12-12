@@ -18,25 +18,20 @@ signification que dans notre Accord de licence.
 
 ## Définitions
 
-### Application
+- **Application.** Par application, nous entendons le site web
+  **Calculation** exploité par **bibi.nu**.
 
-- **Application**  
-  Par application, nous entendons le site web **Calculation** exploité par
-  **bibi.nu**.
+- **Données à caractère personnel.** Les données à caractère personnel désignent
+  des données concernant un individu vivant qui peut être identifié à partir de
+  ces données (ou à partir de ces données et d'autres informations en notre
+  possession ou susceptibles d'entrer en notre possession).
 
-- **Données à caractère personnel**  
-  Les données à caractère personnel désignent des données concernant un individu
-  vivant qui peut être identifié à partir de ces données (ou à partir de ces
-  données et d'autres informations en notre possession ou susceptibles d'entrer
-  en notre possession).
+- **Données d'utilisation.** Les données d'utilisation sont recueillies
+  automatiquement et sont générées soit par l'utilisation de l'application,
+  soit par l'infrastructure de l'application proprement dite (par exemple,
+  durée de consultation d'une page).
 
-- **Données d'utilisation**  
-  Les données d'utilisation sont recueillies automatiquement et sont générées
-  soit par l'utilisation de l'application, soit par l'infrastructure de
-  l'application proprement dite (par exemple, durée de consultation d'une page).
-
-- **Cookies**  
-  Les cookies sont de petits fichiers enregistrés sur votre
+- **Cookies.** Les cookies sont de petits fichiers enregistrés sur votre
   dispositif (ordinateur, tablette ou mobile).
 
 ## Collecte et utilisation des données
@@ -102,19 +97,13 @@ Exemples de cookies que nous utilisons :
 Le fournisseur utilise les données recueillies à des diverses fins :
 
 - Pour fournir et assurer notre application.
-
 - Pour vous faire part des changements apportés à notre application.
-
 - Pour vous permettre d'utiliser les fonctions interactives de notre application
   quand vous le souhaitez.
-
 - Pour assurer l'assistance client.
-
 - Pour recueillir des données précieuses ou d'analyses qui nous permettront
   d'améliorer notre application.
-
 - Pour contrôler l'utilisation de notre application.
-
 - Pour détecter, prévenir et régler les problèmes techniques.
 
 ## Transfert des données
@@ -147,14 +136,11 @@ Le fournisseur peut communiquer vos données à caractère personnel si elle est
 de bonne foi que cela est nécessaire pour :
 
 - S'acquitter d'une obligation légale.
-
 - Protéger et défendre les droits ou les biens du fournisseur.
-
 - Prévenir d'éventuels actes répréhensibles ou enquêter sur de tels actes dans
   le cadre de l'application.
-
-- Assurer la sécurité personnelle des utilisateurs, de l'application ou du public.
-
+- Assurer la sécurité personnelle des utilisateurs, de l'application ou
+  du public.
 - Se protéger contre la responsabilité civile.
 
 ## Sécurité des données
@@ -221,4 +207,4 @@ effet lorsqu'elles sont publiées sur cette page.
 Pour toute question relative à la présente politique de confidentialité,
 veuillez nous contacter par courrier électronique.
 
-Montévraz, décembre 2024
+Montévraz, décembre 2024.

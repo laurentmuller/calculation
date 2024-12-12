@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Word;
 
 use App\Pdf\Html\HtmlBootstrapColor;
+use App\Pdf\Html\HtmlSpacing;
 use App\Traits\ArrayTrait;
 use App\Utils\StringUtils;
 
@@ -45,11 +46,6 @@ class HtmlWordParser
         // page-break
         'page-break' => 'page-break-after:always;',
     ];
-
-    /**
-     * The pattern to extract margins.
-     */
-    private const MARGINS_PATTERN = '/^[m|p]([tbsexy])?-(sm-|md-|lg-|xl-|xxl-)?([012345])/im';
 
     /**
      * The mapping between class name and style.
@@ -184,29 +180,39 @@ class HtmlWordParser
      */
     private function parseMargins(string $class): string
     {
-        if (StringUtils::pregMatchAll(self::MARGINS_PATTERN, $class, $matches, \PREG_SET_ORDER)) {
-            $match = $matches[0];
-            $value = match ((int) $match[3]) {
-                1 => '4px',     // 0.25rem
-                2 => '8px',     // 0.5rem
-                3 => '16px',    // 1.0rem
-                4 => '24px',    // 1.5rem
-                5 => '48px',    // 3.0rem
-                default => '0',
-            };
-
-            return match ($match[1]) {
-                't' => \sprintf('margin-top:%s;', $value),
-                'b' => \sprintf('margin-bottom:%s;', $value),
-                's' => \sprintf('margin-left:%s;', $value),
-                'e' => \sprintf('margin-right:%s;', $value),
-                'x' => \sprintf('margin-left:%1$s;margin-right:%1$s;', $value),
-                'y' => \sprintf('margin-top:%1$s;margin-bottom:%1$s;', $value),
-                default => \sprintf('margin:%s;', $value),
-            };
+        $spacing = HtmlSpacing::instance($class);
+        if (!$spacing instanceof HtmlSpacing || $spacing->isNone()) {
+            return $class;
         }
 
-        return $class;
+        $size = match ($spacing->size) {
+            1 => '4px',     // 0.25rem
+            2 => '8px',     // 0.5rem
+            3 => '16px',    // 1.0rem
+            4 => '24px',    // 1.5rem
+            5 => '48px',    // 3.0rem
+            default => '0',
+        };
+
+        if ($spacing->isAll()) {
+            return \sprintf('margin:%s;', $size);
+        }
+
+        $result = '';
+        if ($spacing->top) {
+            $result .= \sprintf('margin-top:%s;', $size);
+        }
+        if ($spacing->bottom) {
+            $result .= \sprintf('margin-bottom:%s;', $size);
+        }
+        if ($spacing->left) {
+            $result .= \sprintf('margin-left:%s;', $size);
+        }
+        if ($spacing->right) {
+            $result .= \sprintf('margin-right:%s;', $size);
+        }
+
+        return $result;
     }
 
     private function replaceClass(string $class): string

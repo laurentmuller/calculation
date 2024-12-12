@@ -1,4 +1,4 @@
-{% from 'macros/_icons.html.twig' import button_ok, button_close_modal %}
+{% from 'macros/_icons.html.twig' import button_ok, button_close_modal, icon %}
 {% from 'macros/_attributes.html.twig' import attributes as output_attributes %}
 {# output a theme entry #}
 {% macro output_theme(theme, checked) -%}
@@ -24,12 +24,11 @@
         <div class="d-none d-md-none d-lg-block">
             <label id="{{ id_help }}" for="{{ id }}" class="form-label d-flex mt-1 mb-0">
                 <img width="64" height="48" class="mt-2 me-2" src="{{ asset(theme.thumbnail) }}" alt="{{ theme|trans }}">
-                <span class="text-secondary-emphasis">{{- theme.help|trans|raw -}}</span>
+                <span class="text-help text-secondary-emphasis">{{- theme.help|trans|raw -}}</span>
             </label>
         </div>
     </div>
 {%- endmacro %}
-{# parameters #}
 {% set dialog_id = 'theme_modal' %}
 {% set selection = theme(app.request) %}
 <div class="modal fade" id="{{ dialog_id }}" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
@@ -48,6 +47,9 @@
             <div class="modal-footer">
                 {{ button_ok() }}
                 {{ button_close_modal(false, 'common.button_cancel', dialog_id) }}
+                <button type="button" class="btn btn-settings btn-form btn-success" disabled="disabled">
+                    {{- 'theme.settings'|trans -}}
+                </button>
             </div>
         </div>
     </div>

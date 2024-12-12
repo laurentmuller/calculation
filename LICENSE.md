@@ -96,4 +96,4 @@ preneur de licence ou à son siège.
 Pour toute question relative au présent accord de licence, veuillez nous
 contacter par courrier électronique.
 
-Montévraz, décembre 2024
+Montévraz, décembre 2024.

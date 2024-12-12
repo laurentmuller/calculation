@@ -808,6 +808,7 @@ $(function () {
             const $this = $(this);
             let keyHandler = $this.data('keys.handler');
             if (!keyHandler) {
+                // eslint-disable-next-line
                 keyHandler = function (e) {
                     if ((e.key === 0 || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
                         return;

@@ -179,6 +179,7 @@ function onKeyDelete(e, $selection) {
 function createKeydownHandler($parent) {
     'use strict';
     /** @param {KeyboardEvent} e */
+    // eslint-disable-next-line
     return function (e) {
         if ((e.key === 0 || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
             return;

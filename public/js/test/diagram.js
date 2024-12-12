@@ -184,6 +184,7 @@
     const createPanZoom = () => {
         // initialize
         const svgDiagram = getSvgDiagram();
+        // eslint-disable-next-line
         const panzoom = Panzoom(svgDiagram, {
             minScale: MIN_SCALE,
             maxScale: MAX_SCALE,

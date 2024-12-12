@@ -287,6 +287,7 @@ $(function () {
             depth++;
 
             // add each node and sub-nodes
+            // eslint-disable-next-line
             $.each(nodes, function (_index, node) {
                 // create node element.
                 const $item = $(templates.item)

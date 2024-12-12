@@ -236,7 +236,7 @@ $(function () {
                 return;
             }
             if (value === THEME_AUTO) {
-                $settings.removeAttr('disabled')
+                $settings.removeAttr('disabled');
             } else {
                 $settings.attr('disabled', 'disabled');
             }
@@ -336,7 +336,7 @@ $(function () {
             const $settings = $dialog.find(options.settings);
             if (!this._isWindow10() || !$settings.length) {
                 $settings.remove();
-                return
+                return;
             }
             $settings.on('click', (e) => this._onSettingsClick(e));
         }

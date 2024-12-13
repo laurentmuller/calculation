@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 use App\Entity\User;
 use App\Interfaces\RoleInterface;
-use App\Listener\ResponseListener;
 use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
 use App\Security\SecurityAttributes;
@@ -26,8 +25,6 @@ return static function (SecurityConfig $config): void {
     // password hasher
     $config->passwordHasher(PasswordAuthenticatedUserInterface::class)
         ->algorithm('auto');
-    $config->passwordHasher(User::class)
-        ->algorithm('auto');
 
     // roles
     $config->roleHierarchy(RoleInterface::ROLE_ADMIN, RoleInterface::ROLE_USER)
@@ -38,12 +35,12 @@ return static function (SecurityConfig $config): void {
         ->id(UserRepository::class);
 
     // dev firewall
-    $config->firewall(ResponseListener::FIREWALL_DEV)
+    $config->firewall(SecurityAttributes::DEV_FIREWALL)
         ->pattern('^/(_(profiler|wdt)|css|images|js)/')
         ->security(false);
 
     // main firewall
-    $firewall = $config->firewall(ResponseListener::FIREWALL_MAIN)
+    $firewall = $config->firewall(SecurityAttributes::MAIN_FIREWALL)
         ->customAuthenticators([LoginFormAuthenticator::class])
         ->entryPoint(LoginFormAuthenticator::class)
         ->provider('user_provider')

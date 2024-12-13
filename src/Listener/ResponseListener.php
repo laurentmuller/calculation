@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Listener;
 
 use App\Controller\CspReportController;
+use App\Security\SecurityAttributes;
 use App\Service\NonceService;
 use App\Utils\FileUtils;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -37,16 +38,6 @@ use Symfony\Contracts\Cache\ItemInterface;
  */
 class ResponseListener
 {
-    /**
-     * The development firewall name.
-     */
-    public const FIREWALL_DEV = 'dev';
-
-    /**
-     * The main firewall name.
-     */
-    public const FIREWALL_MAIN = 'main';
-
     /**
      * The CSP header key.
      */
@@ -114,7 +105,7 @@ class ResponseListener
 
     private function isDevFirewall(Request $request): bool
     {
-        return self::FIREWALL_DEV === $this->security->getFirewallConfig($request)?->getName();
+        return SecurityAttributes::DEV_FIREWALL === $this->security->getFirewallConfig($request)?->getName();
     }
 
     private function loadCSP(ItemInterface $item, bool &$save): string

@@ -61,23 +61,11 @@ $(function () {
     // Init context menu
     BootstrapTable.prototype.initContextMenu = function () {
         const that = this;
-
-        // Context menu on Right-click
-        if (that.options.contextMenuTrigger === 'right' || that.options.contextMenuTrigger === 'both') {
+        // Context menu
+        if (that.options.contextMenuTrigger === 'left'
+            || that.options.contextMenuTrigger === 'right'
+            || that.options.contextMenuTrigger === 'both') {
             that.$body.find('> tr[data-index]').off('contextmenu.contextmenu').on('contextmenu.contextmenu', function (e) {
-                let rowData = that.data[$(this).data('index')],
-                    beforeShow = that.options.beforeContextMenuRow.apply(this, [e, rowData, null]);
-
-                if (beforeShow !== false) {
-                    that.showContextMenu({event: e});
-                }
-                return false;
-            });
-        }
-
-        // Context menu on Left-click
-        if (that.options.contextMenuTrigger === 'left' || that.options.contextMenuTrigger === 'both') {
-            that.$body.find('> tr[data-index]').off('click.contextmenu').on('click.contextmenu', function (e) {
                 let rowData = that.data[$(this).data('index')],
                     beforeShow = that.options.beforeContextMenuRow.apply(this, [e, rowData, null]);
 
@@ -166,7 +154,7 @@ $(function () {
         $menu.data('index', $tr.data('index'))
             .appendTo($('body'))
             .css({
-                position: "absolute",
+                position: 'absolute',
                 left: getMenuPosition($menu, screenPosX, 'width', 'scrollLeft'),
                 top: getMenuPosition($menu, screenPosY, 'height', 'scrollTop'),
                 zIndex: 1100

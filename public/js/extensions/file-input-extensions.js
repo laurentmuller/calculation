@@ -16,44 +16,25 @@ $(function () {
          */
         findFileInput() {
             const $parent =  $(this).parents('.form-group');
-            return $parent.findExists('.fileinput.input-group, .fileinput-preview.img-thumbnail');
+            return $parent.findExists('.file-input.input-group, .file-input-preview.img-thumbnail');
         },
 
 
         /**
          * Initialize a file input.
-         *
-         * @param {function} [callback] - the optional callback function to use after change.
+         * @param {jQuery} [$delete] the delete button
          */
-        initFileInput: function (callback) {
+        initFileInput: function ($delete) {
             return this.each(function () {
                 const $that = $(this);
                 $that.on('input', function () {
                     $that.valid();
-                    if (typeof callback === 'function') {
-                        callback($that);
+                    if ($delete && $delete.length) {
+                        const source = $that.data('src') || '';
+                        const target = $that.parents('.form-group').find('img').attr('src') || '';
+                        $delete.setChecked(source !== target);
                     }
                 });
-
-                // find group
-                const $group = $that.findFileInput();
-                if ($group) {
-                    // update class
-                    $that.on('focus', function () {
-                        if ($that.hasClass('is-invalid')) {
-                            $group.addClass('field-invalid');
-                        } else {
-                            $group.addClass('field-valid');
-                        }
-                    }).on('blur', function () {
-                        $group.removeClass('field-valid field-invalid');
-                    });
-
-                    // focus when select file
-                    $group.find('.file-input-filename,.file-input-exists').on('click', function () {
-                        $that.trigger('focus');
-                    });
-                }
             });
         }
     });

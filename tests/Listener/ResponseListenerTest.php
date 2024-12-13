@@ -15,6 +15,7 @@ namespace App\Tests\Listener;
 
 use App\Controller\CspReportController;
 use App\Listener\ResponseListener;
+use App\Security\SecurityAttributes;
 use App\Service\NonceService;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -37,7 +38,7 @@ class ResponseListenerTest extends TestCase
     public function testDebugDevFirewall(): void
     {
         $file = $this->getCspFile();
-        $listener = $this->createListener($file, true, ResponseListener::FIREWALL_DEV);
+        $listener = $this->createListener($file, true, SecurityAttributes::DEV_FIREWALL);
         $event = $this->createEvent();
         $listener->onKernelResponse($event);
         self::assertResponse($event->getResponse(), false, false);
@@ -148,7 +149,7 @@ class ResponseListenerTest extends TestCase
     private function createListener(
         string $file,
         bool $debug = false,
-        string $firewall = ResponseListener::FIREWALL_MAIN
+        string $firewall = SecurityAttributes::MAIN_FIREWALL
     ): ResponseListener {
         $cache = new ArrayAdapter();
         $generator = $this->createMockGenerator();
@@ -173,7 +174,7 @@ class ResponseListenerTest extends TestCase
     /**
      * @throws Exception
      */
-    private function createMockSecurity(string $name = ResponseListener::FIREWALL_MAIN): MockObject&Security
+    private function createMockSecurity(string $name = SecurityAttributes::MAIN_FIREWALL): MockObject&Security
     {
         $config = new FirewallConfig($name, '');
         $security = $this->createMock(Security::class);

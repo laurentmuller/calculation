@@ -34,6 +34,11 @@ final class SecurityAttributes
     public const CONTENT_TYPE_FORMAT = 'form';
 
     /**
+     * The development firewall name.
+     */
+    public const DEV_FIREWALL = 'dev';
+
+    /**
      * The login route name.
      */
     public const LOGIN_ROUTE = 'app_login';
@@ -57,6 +62,11 @@ final class SecurityAttributes
      * The logout token name.
      */
     public const LOGOUT_TOKEN = 'logout_token';
+
+    /**
+     * The main firewall name.
+     */
+    public const MAIN_FIREWALL = 'main';
 
     /**
      * The password field name.

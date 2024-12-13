@@ -26,7 +26,7 @@
 {%- set is_granted_customer = is_granted(PERMISSION_LIST, ENTITY_CUSTOMER) and is_test -%}
 {%- set is_granted_data = is_granted_calculation or is_granted_product or is_granted_task or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin -%}
 <!DOCTYPE html>
-<html lang="{{ app.locale|replace({_: '-'}) }}" data-bs-theme="{{ theme_value(app.request) }}">
+<html lang="{{ app.request.locale|replace({_: '-'}) }}" data-bs-theme="{{ theme_value(app.request) }}">
 {# head #}
 <head>
 <meta charset="utf-8" />

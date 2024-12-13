@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Listener;
 
 use App\Entity\User;
-use App\Listener\ResponseListener;
 use App\Listener\SwitchUserListener;
+use App\Security\SecurityAttributes;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -128,7 +128,7 @@ class SwitchUserListenerTest extends TestCase
         $user->setUsername('target');
         $token = $this->createUsernamePasswordToken();
 
-        return new SwitchUserToken($user, ResponseListener::FIREWALL_MAIN, [], $token);
+        return new SwitchUserToken($user, SecurityAttributes::MAIN_FIREWALL, [], $token);
     }
 
     private function createUsernamePasswordToken(): UsernamePasswordToken
@@ -136,6 +136,6 @@ class SwitchUserListenerTest extends TestCase
         $user = new User();
         $user->setUsername('source');
 
-        return new UsernamePasswordToken($user, ResponseListener::FIREWALL_MAIN);
+        return new UsernamePasswordToken($user, SecurityAttributes::MAIN_FIREWALL);
     }
 }

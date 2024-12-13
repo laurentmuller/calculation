@@ -123,6 +123,22 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     }
 
     /**
+     * @return array{int|null, string|null, string|null}
+     */
+    public function __serialize(): array
+    {
+        return [$this->id, $this->username, $this->password];
+    }
+
+    /**
+     * @param array{int|null, string|null, string|null} $data
+     */
+    public function __unserialize(array $data): void
+    {
+        [$this->id, $this->username, $this->password] = $data;
+    }
+
+    /**
      * Add a property.
      *
      * @psalm-api

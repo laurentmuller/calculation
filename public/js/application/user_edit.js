@@ -6,26 +6,11 @@
 $(function () {
     'use strict';
 
-    // image
-    const $imageFile = $('#user_imageFile_file');
-    if ($imageFile.length) {
-        // delete checkbox handler
-        let callback = null;
-        const $delete = $('#user_imageFile_delete');
-        if ($delete.length) {
-            callback = function ($file) {
-                const source = $file.data('src') || '';
-                const target = $file.parents('.form-group').find('img').attr('src') || '';
-                $delete.setChecked(source !== target);
-            };
-        }
-
-        // initialize
-        $imageFile.initFileInput(callback);
-    }
+    // image file handler
+    $('#user_imageFile_file').initFileInput($('#user_imageFile_delete'));
 
     // options
-    const $form = $("#edit-form");
+    const $form = $('#edit-form');
     const urlName = $form.data('check-name');
     const urlEmail = $form.data('check-email');
     let options = {
@@ -64,7 +49,7 @@ $(function () {
     const $userPlainPasswordFirst = $('#user_plainPassword_first');
     if ($userPlainPasswordFirst.length) {
         // update options
-        const message = $('#edit-form').data('equal_to');
+        const message = $form.data('equal_to');
         options = $.extend(true, options, {
             rules: {
                 'user[plainPassword][first]': {

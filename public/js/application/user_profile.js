@@ -9,22 +9,11 @@ $(function () {
     // remove pattern attribute
     $('#username').removeAttr('pattern');
 
-    // delete checkbox handler
-    let callback = null;
-    const $delete = $('#imageFile_delete');
-    if ($delete.length) {
-        callback = function ($file) {
-            const source = $file.data('src') || '';
-            const target = $file.parents('.form-group').find('img').attr('src') || '';
-            $delete.setChecked(source !== target);
-        };
-    }
-
     // image file handler
-    $('#imageFile_file').initFileInput(callback);
+    $('#imageFile_file').initFileInput($('#imageFile_delete'));
 
     // options
-    const $form = $("#edit-form");
+    const $form = $('#edit-form');
     const urlName = $form.data('check-name');
     const urlEmail = $form.data('check-email');
     const options = {
@@ -59,5 +48,5 @@ $(function () {
     };
 
     // validation
-    $('#edit-form').initValidator(options);
+    $form.initValidator(options);
 });

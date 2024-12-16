@@ -81,6 +81,11 @@ class ApplicationService implements PropertyServiceInterface
         return $role;
     }
 
+    public function getCalculations(): int
+    {
+        return $this->getPropertyInteger(self::P_CALCULATIONS, self::DEFAULT_CALCULATIONS);
+    }
+
     public function getCustomer(): CustomerInformation
     {
         $info = new CustomerInformation();
@@ -209,7 +214,7 @@ class ApplicationService implements PropertyServiceInterface
             self::P_MESSAGE_ICON => self::DEFAULT_MESSAGE_ICON,
             self::P_MESSAGE_CLOSE => self::DEFAULT_MESSAGE_CLOSE,
             // home page
-            self::P_PANEL_CALCULATION => self::DEFAULT_PANEL_CALCULATION,
+            self::P_CALCULATIONS => self::DEFAULT_CALCULATIONS,
             self::P_PANEL_CATALOG => self::DEFAULT_TRUE,
             self::P_PANEL_STATE => self::DEFAULT_TRUE,
             self::P_PANEL_MONTH => self::DEFAULT_TRUE,
@@ -296,11 +301,6 @@ class ApplicationService implements PropertyServiceInterface
     public function getMinMargin(): float
     {
         return $this->getPropertyFloat(self::P_MIN_MARGIN, self::DEFAULT_MIN_MARGIN);
-    }
-
-    public function getPanelCalculation(): int
-    {
-        return $this->getPropertyInteger(self::P_PANEL_CALCULATION, self::DEFAULT_PANEL_CALCULATION);
     }
 
     /**

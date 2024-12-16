@@ -54,6 +54,11 @@ class UserService implements PropertyServiceInterface
         return $this->service;
     }
 
+    public function getCalculations(): int
+    {
+        return $this->getPropertyInteger(self::P_CALCULATIONS, $this->service->getCalculations());
+    }
+
     public function getCustomer(): CustomerInformation
     {
         $customer = $this->service->getCustomer();
@@ -103,11 +108,6 @@ class UserService implements PropertyServiceInterface
     public function getMessageTimeout(): int
     {
         return $this->getPropertyInteger(self::P_MESSAGE_TIMEOUT, $this->service->getMessageTimeout());
-    }
-
-    public function getPanelCalculation(): int
-    {
-        return $this->getPropertyInteger(self::P_PANEL_CALCULATION, $this->service->getPanelCalculation());
     }
 
     /**

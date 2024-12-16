@@ -274,7 +274,7 @@ trait PropertyServiceTrait
             self::P_MESSAGE_POSITION => $this->getMessagePosition(),
             self::P_MESSAGE_TIMEOUT => $this->getMessageTimeout(),
             // home page
-            self::P_PANEL_CALCULATION => $this->getPanelCalculation(),
+            self::P_CALCULATIONS => $this->getCalculations(),
             self::P_PANEL_STATE => $this->isPanelState(),
             self::P_PANEL_MONTH => $this->isPanelMonth(),
             self::P_PANEL_CATALOG => $this->isPanelCatalog(),

@@ -863,7 +863,7 @@ parameters:
         message_title: Titre
         message_height: Barre de progression
         minimum_margin: Marge minimum
-        panel_calculation: Calculations
+        calculations: Calculations
         print_address: Imprimer l'adresse
         qr_code: Code QR sur les calculations
         time_format: Format des heures
@@ -886,7 +886,7 @@ parameters:
     group_security: Sécurité
     group_security_help: Options de sécurité utilisées lors de la connection à l'application et de la définition des mots de passe.
     helps:
-        panel_calculation: Nombre de calculations à afficher.
+        calculations: Nombre de calculations à afficher.
         panel_catalog: Afficher le nombre d'objets du catalogue (base de données).
         panel_month: Afficher la liste des calculations regroupées par mois.
         panel_state: Afficher la liste des calculations regroupées par statut.

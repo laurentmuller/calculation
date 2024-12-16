@@ -48,17 +48,17 @@ readonly class SortableField implements SortModeInterface
     public static function getOrder(object|string $objectOrClass, string $name): ?string
     {
         $class = new \ReflectionClass($objectOrClass);
-        if ($class->hasProperty($name)) {
-            $property = $class->getProperty($name);
-            $attributes = $property->getAttributes(self::class);
-            if ([] !== $attributes) {
-                $attribute = $attributes[0];
-                $instance = $attribute->newInstance();
-
-                return $instance->order;
-            }
+        if (!$class->hasProperty($name)) {
+            return null;
         }
+        $property = $class->getProperty($name);
+        $attributes = $property->getAttributes(self::class);
+        if ([] === $attributes) {
+            return null;
+        }
+        $attribute = $attributes[0];
+        $instance = $attribute->newInstance();
 
-        return null;
+        return $instance->order;
     }
 }

@@ -33,6 +33,11 @@ interface PropertyServiceInterface
     final public const DEFAULT_ACTION = EntityAction::EDIT;
 
     /**
+     * The default numbers of displayed calculations on the home page (int).
+     */
+    final public const DEFAULT_CALCULATIONS = 12;
+
+    /**
      * The default display mode (string).
      */
     final public const DEFAULT_DISPLAY_MODE = TableView::TABLE;
@@ -83,11 +88,6 @@ interface PropertyServiceInterface
     final public const DEFAULT_MIN_MARGIN = 1.1;
 
     /**
-     * The default numbers of displayed calculations on the home page (int).
-     */
-    final public const DEFAULT_PANEL_CALCULATION = 12;
-
-    /**
      * The default output customer address in PDF documents (boolean).
      */
     final public const DEFAULT_PRINT_ADDRESS = false;
@@ -116,6 +116,11 @@ interface PropertyServiceInterface
      * The property name for the administrator role rights (string).
      */
     final public const P_ADMIN_RIGHTS = 'admin_rights';
+
+    /**
+     * The property name for the numbers of displayed calculations in the home page (int).
+     */
+    final public const P_CALCULATIONS = 'calculations';
 
     /**
      * The property name to check for compromised password (bool).
@@ -268,11 +273,6 @@ interface PropertyServiceInterface
     final public const P_MIN_STRENGTH = 'min_strength';
 
     /**
-     * The property name for the numbers of displayed calculations in the home page (int).
-     */
-    final public const P_PANEL_CALCULATION = 'panel_calculation';
-
-    /**
      * The property name for displaying catalog panel in the home page (bool).
      */
     final public const P_PANEL_CATALOG = 'panel_catalog';
@@ -344,6 +344,11 @@ interface PropertyServiceInterface
     ];
 
     /**
+     * Returns a value indicating numbers of displayed calculations on the home page.
+     */
+    public function getCalculations(): int;
+
+    /**
      * Gets the customer information.
      */
     public function getCustomer(): CustomerInformation;
@@ -372,11 +377,6 @@ interface PropertyServiceInterface
      * Gets the timeout, in milliseconds, of the flash bag messages (default: 4000 ms).
      */
     public function getMessageTimeout(): int;
-
-    /**
-     * Returns a value indicating numbers of displayed calculations on the home page.
-     */
-    public function getPanelCalculation(): int;
 
     /**
      * Returns a value indicating if the default action is to edit the entity.

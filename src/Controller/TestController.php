@@ -26,6 +26,7 @@ use App\Enums\FlashType;
 use App\Enums\Importance;
 use App\Enums\MessagePosition;
 use App\Enums\StrengthLevel;
+use App\Enums\TableView;
 use App\Form\Type\AlphaCaptchaType;
 use App\Form\Type\CaptchaImageType;
 use App\Form\Type\ReCaptchaType;
@@ -35,6 +36,8 @@ use App\Interfaces\RoleInterface;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\UserInterface;
 use App\Model\HttpClientError;
+use App\Parameter\ApplicationParameters;
+use App\Parameter\UserParameters;
 use App\Pdf\Events\PdfLabelTextEvent;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\PdfLabelDocument;
@@ -498,6 +501,56 @@ class TestController extends AbstractController
         ];
 
         return $this->json($data);
+    }
+
+    #[Get(path: '/parameter', name: 'parameter')]
+    public function testParameter(ApplicationParameters $application, UserParameters $user): Response
+    {
+        $application->getDate()
+            ->setUpdateCalculations()
+            ->setImport();
+
+        $application->getCustomer()
+            ->setFax('fake');
+
+        $application->getDisplay()
+            ->setDisplayMode(TableView::CUSTOM);
+
+        $application->getHomePage()
+            ->setCalculations(8);
+
+        $application->getProduct();
+        $application->getDefaultValue();
+
+        $application->getSecurity()
+            ->setCaptcha(true)
+            ->setLevel(StrengthLevel::MEDIUM);
+
+        $user->getHomePage()
+            ->setCalculations(10);
+        $user->getOption()
+            ->setPrintAddress(true);
+
+        $applicationSaved = $application->save();
+        $userSaved = $user->save();
+
+        return $this->json([
+            'application_saved' => $applicationSaved,
+            'user_saved' => $userSaved,
+
+            'application_display' => $application->getDisplay(),
+            'user_display' => $user->getDisplay(),
+
+            'application_home_page' => $application->getHomePage(),
+            'user_home_page' => $user->getHomePage(),
+
+            'application_option' => $application->getOption(),
+            'user_option' => $user->getOption(),
+
+            'date' => $application->getDate(),
+            'customer' => $application->getCustomer(),
+            'security' => $application->getSecurity(),
+        ]);
     }
 
     /**

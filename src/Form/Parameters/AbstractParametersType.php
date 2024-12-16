@@ -115,7 +115,7 @@ abstract class AbstractParametersType extends AbstractType
             ->rowClass('mb-1')
             ->addCheckboxType();
 
-        $key = PropertyServiceInterface::P_PANEL_CALCULATION;
+        $key = PropertyServiceInterface::P_CALCULATIONS;
         $helper->field($key)
             ->updateRowAttribute('data-default', $this->getDefaultValue($key))
             ->help('parameters.helps.' . $key)

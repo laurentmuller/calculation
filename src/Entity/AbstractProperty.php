@@ -107,6 +107,14 @@ abstract class AbstractProperty extends AbstractEntity
     }
 
     /**
+     * Gets this property value as float.
+     */
+    public function getFloat(): float
+    {
+        return (float) ($this->value ?? 0.0);
+    }
+
+    /**
      * Gets this property value as integer.
      */
     public function getInteger(): int
@@ -152,6 +160,14 @@ abstract class AbstractProperty extends AbstractEntity
     public function setDate(?\DateTimeInterface $value): static
     {
         return $this->setInteger($value instanceof \DateTimeInterface ? $value->getTimestamp() : self::FALSE_VALUE);
+    }
+
+    /**
+     * Sets the property value as float.
+     */
+    public function setFloat(float $value): static
+    {
+        return $this->setString((string) $value);
     }
 
     /**

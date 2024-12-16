@@ -94,6 +94,17 @@ class AbstractPropertyTest extends TestCase
     /**
      * @throws \ReflectionException
      */
+    public function testFloat(): void
+    {
+        $entity = $this->getEntity();
+        self::assertSame(0.0, $entity->getFloat());
+        $entity->setFloat(1);
+        self::assertSame(1.0, $entity->getFloat());
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
     public function testInteger(): void
     {
         $entity = $this->getEntity();

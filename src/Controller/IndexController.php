@@ -125,7 +125,7 @@ class IndexController extends AbstractController
         $user = $restrict ? $this->getUser() : null;
         $parameters = [
             'min_margin' => $this->getMinMargin(),
-            'calculations' => $this->getCalculations($service->getPanelCalculation(), $user),
+            'calculations' => $this->getCalculations($service->getCalculations(), $user),
             'calculations_range' => AbstractParametersType::getCalculationRange(),
             self::PARAM_CUSTOM => TableView::CUSTOM === $view,
             self::PARAM_RESTRICT => $restrict,
@@ -163,10 +163,10 @@ class IndexController extends AbstractController
     {
         $this->checkAjaxRequest($request);
         $service = $this->getUserService();
-        $default = $service->getPanelCalculation();
+        $default = $service->getCalculations();
         $count = $this->getRequestInt($request, 'count', $default);
         if ($default !== $count) {
-            $service->setProperty(PropertyServiceInterface::P_PANEL_CALCULATION, $count);
+            $service->setProperty(PropertyServiceInterface::P_CALCULATIONS, $count);
         }
 
         return $this->sendJsonMessage('index.panel_table_count_success');

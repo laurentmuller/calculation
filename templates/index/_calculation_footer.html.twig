@@ -9,7 +9,7 @@
             <input type="checkbox" class="form-check-input" id="custom" data-value="{{ custom|json_encode }}"{% if custom %} checked{% endif %}>
             <label class="form-check-label" for="custom">{{ 'table_view.custom'|trans }}</label>
         </div>
-        {% set counter = user_service.panelCalculation %}
+        {% set counter = user_service.calculations %}
         <div class="dropdown dropdown-counter" title="{{ 'index.panel_table_count'|trans }}" data-path="{{ path('homepage_calculation') }}" data-value="{{ counter }}">
             <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ counter }}</button>
             <ul class="dropdown-menu">

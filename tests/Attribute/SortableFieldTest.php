@@ -52,6 +52,19 @@ class SortableFieldTest extends TestCase
     /**
      * @throws \ReflectionException
      */
+    public function testSortNotFound(): void
+    {
+        $testedClass = new class() {
+            public string $field = '';
+        };
+
+        $actual = SortableField::getOrder($testedClass, 'fake');
+        self::assertNull($actual);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
     public function testSortNull(): void
     {
         $testedClass = new class() {

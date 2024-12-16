@@ -23,9 +23,13 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
+ * Abstract parameters container.
+ *
  * @template TProperty of AbstractProperty
+ *
+ * @psalm-type TValue = scalar|array|\BackedEnum|\DateTimeInterface|EntityInterface|null
  */
-abstract class AbstractParameterContainer
+abstract class AbstractParameters
 {
     private ?PropertyAccessor $accessor = null;
 
@@ -50,53 +54,18 @@ abstract class AbstractParameterContainer
         $metaDatas = $this->getMetaDatas($parameter);
 
         foreach ($metaDatas as $metaData) {
-            $value = null;
             $property = $this->findProperty($metaData->name);
-            if (!$property instanceof AbstractProperty) {
-                /** @psalm-var mixed $value */
-                $value = $this->getDefaultPropertyValue($accessor, $default, $metaData);
-                if (null !== $value) {
-                    $accessor->setValue($parameter, $metaData->property, $value);
-                }
-                continue;
+            if ($property instanceof AbstractProperty) {
+                $value = $this->getPropertyValue($metaData, $property);
+            } else {
+                $value = $this->getDefaultPropertyValue($metaData, $default, $accessor);
             }
-            switch ($metaData->type) {
-                case 'bool':
-                    $value = $property->getBoolean();
-                    break;
-                case 'int':
-                    $value = $property->getInteger();
-                    break;
-                case 'float':
-                    $value = $property->getFloat();
-                    break;
-                case 'string':
-                    $value = $property->getValue();
-                    break;
-                case 'array':
-                    $value = $property->getArray();
-                    break;
-                case 'DateTimeInterface':
-                    $value = $property->getDate();
-                    break;
-                default:
-                    if ($metaData->isBackedEnumType()) {
-                        $value = $this->getBackEnum($metaData->type, $property);
-                        break;
-                    }
-                    if ($metaData->isEntityInterfaceType()) {
-                        $value = $this->getEntity($metaData->type, $property->getInteger());
-                        break;
-                    }
-                    throw new \LogicException(\sprintf('Unsupported type "%s" for property "%s".', $metaData->type, $metaData->property));
-            }
-
             if (null !== $value) {
                 $accessor->setValue($parameter, $metaData->property, $value);
             }
         }
 
-        /** @psalm-var T */
+        /** @phpstan-var T */
         return $parameter;
     }
 
@@ -120,7 +89,7 @@ abstract class AbstractParameterContainer
      */
     protected function getBackEnum(string $type, AbstractProperty $property): ?\BackedEnum
     {
-        if ($this->IsStringEnum($type)) {
+        if ($this->isStringEnum($type)) {
             return $type::tryFrom((string) $property->getValue());
         }
 
@@ -128,8 +97,6 @@ abstract class AbstractParameterContainer
     }
 
     /**
-     * Gets the given parameter type from the cache.
-     *
      * @template T of ParameterInterface
      *
      * @psalm-param class-string<T> $class
@@ -145,25 +112,30 @@ abstract class AbstractParameterContainer
         );
     }
 
+    /**
+     * @psalm-return TValue
+     */
     protected function getDefaultPropertyValue(
-        PropertyAccessor $accessor,
+        MetaData $metaData,
         ?ParameterInterface $parameter,
-        MetaData $metaData
+        PropertyAccessor $accessor
     ): mixed {
-        if (!$parameter instanceof ParameterInterface) {
-            return $metaData->default;
+        if ($parameter instanceof ParameterInterface) {
+            /** @psalm-var TValue */
+            return $accessor->getValue($parameter, $metaData->property);
         }
 
-        return $accessor->getValue($parameter, $metaData->property);
+        /** @psalm-var TValue */
+        return $metaData->default;
     }
 
     /**
      * @psalm-param class-string<EntityInterface> $type
      */
-    protected function getEntity(string $type, int $value): ?EntityInterface
+    protected function getEntity(string $type, AbstractProperty $property): ?EntityInterface
     {
-        /** psalm-var ?EntityInterface */
-        return $this->manager->getRepository($type)->find($value);
+        return $this->manager->getRepository($type)
+            ->find($property->getInteger());
     }
 
     /**
@@ -195,6 +167,18 @@ abstract class AbstractParameterContainer
     }
 
     /**
+     * @psalm-return TValue
+     */
+    protected function getParameterPropertyValue(
+        MetaData $metaData,
+        ParameterInterface $parameter,
+        PropertyAccessor $accessor
+    ): mixed {
+        /** @psalm-var TValue */
+        return $accessor->getValue($parameter, $metaData->property);
+    }
+
+    /**
      * @return \ReflectionProperty[]
      */
     protected function getProperties(ParameterInterface $parameter): array
@@ -205,20 +189,35 @@ abstract class AbstractParameterContainer
     }
 
     /**
-     * @psalm-return class-string<TProperty>
+     * @psalm-return TValue
      */
-    abstract protected function getPropertyClass(): string;
+    protected function getPropertyValue(MetaData $metaData, AbstractProperty $property): mixed
+    {
+        return match (true) {
+            'array' === $metaData->type => $property->getArray(),
+            'bool' === $metaData->type => $property->getBoolean(),
+            'float' === $metaData->type => $property->getFloat(),
+            'int' === $metaData->type => $property->getInteger(),
+            'string' === $metaData->type => $property->getValue(),
+            'DateTimeInterface' === $metaData->type => $property->getDate(),
+            $metaData->isBackedEnumType() => $this->getBackEnum($metaData->type, $property),
+            $metaData->isEntityInterfaceType() => $this->getEntity($metaData->type, $property),
+            default => throw new \LogicException(\sprintf('Unsupported type "%s" for property "%s".', $metaData->type, $metaData->property))
+        };
+    }
+
+    /**
+     * @return AbstractRepository<TProperty>
+     */
+    abstract protected function getRepository(): AbstractRepository;
 
     /**
      * @param class-string<\BackedEnum> $type
      */
-    protected function IsStringEnum(string $type): bool
+    protected function isStringEnum(string $type): bool
     {
         try {
             $enum = new \ReflectionEnum($type);
-            if (!$enum->isBacked()) {
-                throw new \LogicException(\sprintf('Type "%s" is not a backed enum.', $type));
-            }
 
             return 'string' === (string) $enum->getBackingType();
         } catch (\ReflectionException $e) {
@@ -226,12 +225,6 @@ abstract class AbstractParameterContainer
         }
     }
 
-    /**
-     * @template T of ParameterInterface
-     *
-     * @psalm-param T|null $parameter
-     * @psalm-param T|null $default
-     */
     protected function saveParameter(?ParameterInterface $parameter, ?ParameterInterface $default = null): bool
     {
         if (!$parameter instanceof ParameterInterface) {
@@ -240,17 +233,14 @@ abstract class AbstractParameterContainer
 
         $changed = false;
         $accessor = $this->getAccessor();
+        $repository = $this->getRepository();
         $metaDatas = $this->getMetaDatas($parameter);
-        /** @psalm-var AbstractRepository<TProperty> $repository */
-        $repository = $this->manager->getRepository($this->getPropertyClass());
 
         try {
             foreach ($metaDatas as $metaData) {
                 $property = $this->findProperty($metaData->name);
-                /** @psalm-var mixed $value */
-                $value = $accessor->getValue($parameter, $metaData->property);
-                /** @psalm-var mixed $defaultValue */
-                $defaultValue = $this->getDefaultPropertyValue($accessor, $default, $metaData);
+                $value = $this->getParameterPropertyValue($metaData, $parameter, $accessor);
+                $defaultValue = $this->getDefaultPropertyValue($metaData, $default, $accessor);
                 if ($value === $defaultValue || Parameter::isDefaultValue($parameter, $metaData->property, $value)) {
                     if ($property instanceof AbstractProperty) {
                         $repository->remove($property, false);
@@ -268,7 +258,7 @@ abstract class AbstractParameterContainer
             }
 
             if ($changed) {
-                //  $repository->flush();
+                $repository->flush();
                 $this->cache->delete($parameter::getCacheKey());
             }
 
@@ -276,5 +266,21 @@ abstract class AbstractParameterContainer
         } catch (\ReflectionException $e) {
             throw new \LogicException(\sprintf('Unable to save parameter "%s".', \get_debug_type($parameter)), $e->getCode(), $e);
         }
+    }
+
+    /**
+     * @param array<?ParameterInterface> $parameters
+     * @param array<?ParameterInterface> $defaults
+     */
+    protected function saveParameters(array $parameters, array $defaults = []): bool
+    {
+        $saved = false;
+        for ($i = 0, $count = \count($parameters); $i < $count; ++$i) {
+            if ($this->saveParameter($parameters[$i], $defaults[$i] ?? null)) {
+                $saved = true;
+            }
+        }
+
+        return $saved;
     }
 }

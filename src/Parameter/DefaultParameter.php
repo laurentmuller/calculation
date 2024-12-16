@@ -19,9 +19,9 @@ use App\Entity\Category;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Default value parameter.
+ * Default parameter.
  */
-class DefaultValueParameter implements ParameterInterface
+class DefaultParameter implements ParameterInterface
 {
     #[Parameter('default_category')]
     private ?Category $category = null;

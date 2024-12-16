@@ -15,6 +15,7 @@ namespace App\Parameter;
 
 use App\Entity\AbstractProperty;
 use App\Entity\GlobalProperty;
+use App\Repository\GlobalPropertyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -23,9 +24,9 @@ use Symfony\Contracts\Cache\CacheInterface;
 /**
  * Contains application parameters.
  *
- * @extends AbstractParameterContainer<GlobalProperty>
+ * @extends AbstractParameters<GlobalProperty>
  */
-class ApplicationParameters extends AbstractParameterContainer
+class ApplicationParameters extends AbstractParameters
 {
     #[Assert\Valid]
     private ?CustomerParameter $customer = null;
@@ -34,7 +35,7 @@ class ApplicationParameters extends AbstractParameterContainer
     private ?DateParameter $date = null;
 
     #[Assert\Valid]
-    private ?DefaultValueParameter $defaultValue = null;
+    private ?DefaultParameter $default = null;
 
     #[Assert\Valid]
     private ?DisplayParameter $display = null;
@@ -72,36 +73,54 @@ class ApplicationParameters extends AbstractParameterContainer
         return $this->date ??= $this->getCachedParameter(DateParameter::class);
     }
 
-    public function getDefaultValue(): DefaultValueParameter
+    public function getDefault(): DefaultParameter
     {
-        return $this->defaultValue ??= $this->getCachedParameter(DefaultValueParameter::class);
+        return $this->default ??= $this->getCachedParameter(DefaultParameter::class);
     }
 
+    /**
+     * Gets the display parameter.
+     */
     public function getDisplay(): DisplayParameter
     {
         return $this->display ??= $this->getCachedParameter(DisplayParameter::class);
     }
 
+    /**
+     * Gets the home page parameter.
+     */
     public function getHomePage(): HomePageParameter
     {
         return $this->homePage ??= $this->getCachedParameter(HomePageParameter::class);
     }
 
+    /**
+     * Gets the message parameter.
+     */
     public function getMessage(): MessageParameter
     {
         return $this->message ??= $this->getCachedParameter(MessageParameter::class);
     }
 
+    /**
+     * Gets the option parameter.
+     */
     public function getOption(): OptionParameter
     {
         return $this->option ??= $this->getCachedParameter(OptionParameter::class);
     }
 
+    /**
+     * Gets the product parameter.
+     */
     public function getProduct(): ProductParameter
     {
         return $this->product ??= $this->getCachedParameter(ProductParameter::class);
     }
 
+    /**
+     * Gets the security parameter.
+     */
     public function getSecurity(): SecurityParameter
     {
         return $this->security ??= $this->getCachedParameter(SecurityParameter::class);
@@ -114,36 +133,17 @@ class ApplicationParameters extends AbstractParameterContainer
      */
     public function save(): bool
     {
-        $saved = false;
-        if ($this->saveParameter($this->customer)) {
-            $saved = true;
-        }
-        if ($this->saveParameter($this->date)) {
-            $saved = true;
-        }
-        if ($this->saveParameter($this->defaultValue)) {
-            $saved = true;
-        }
-        if ($this->saveParameter($this->display)) {
-            $saved = true;
-        }
-        if ($this->saveParameter($this->homePage)) {
-            $saved = true;
-        }
-        if ($this->saveParameter($this->message)) {
-            $saved = true;
-        }
-        if ($this->saveParameter($this->option)) {
-            $saved = true;
-        }
-        if ($this->saveParameter($this->product)) {
-            $saved = true;
-        }
-        if ($this->saveParameter($this->security)) {
-            $saved = true;
-        }
-
-        return $saved;
+        return $this->saveParameters([
+            $this->customer,
+            $this->date,
+            $this->default,
+            $this->display,
+            $this->homePage,
+            $this->message,
+            $this->option,
+            $this->product,
+            $this->security,
+        ]);
     }
 
     protected function createProperty(string $name): AbstractProperty
@@ -153,12 +153,12 @@ class ApplicationParameters extends AbstractParameterContainer
 
     protected function findProperty(string $name): ?GlobalProperty
     {
-        return $this->manager->getRepository(GlobalProperty::class)
+        return $this->getRepository()
             ->findOneByName($name);
     }
 
-    protected function getPropertyClass(): string
+    protected function getRepository(): GlobalPropertyRepository
     {
-        return GlobalProperty::class;
+        return $this->manager->getRepository(GlobalProperty::class);
     }
 }

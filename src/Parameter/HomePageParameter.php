@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class HomePageParameter implements ParameterInterface
 {
-    #[Assert\Choice(choices: [4, 8, 12, 16, 20])]
+    #[Assert\Choice([4, 8, 12, 16, 20])]
     #[Parameter('calculations', 12)]
     private int $calculations = 12;
 

@@ -15,6 +15,7 @@ namespace App\Parameter;
 
 use App\Entity\User;
 use App\Entity\UserProperty;
+use App\Repository\UserPropertyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -24,9 +25,9 @@ use Symfony\Contracts\Cache\CacheInterface;
 /**
  * Contains user parameters.
  *
- * @extends AbstractParameterContainer<UserProperty>
+ * @extends AbstractParameters<UserProperty>
  */
-class UserParameters extends AbstractParameterContainer
+class UserParameters extends AbstractParameters
 {
     #[Assert\Valid]
     private ?DisplayParameter $display = null;
@@ -50,6 +51,9 @@ class UserParameters extends AbstractParameterContainer
         parent::__construct($cache, $manager);
     }
 
+    /**
+     * Gets the display parameter.
+     */
     public function getDisplay(): DisplayParameter
     {
         return $this->display ??= $this->getCachedParameter(
@@ -58,6 +62,9 @@ class UserParameters extends AbstractParameterContainer
         );
     }
 
+    /**
+     * Gets the home page parameter.
+     */
     public function getHomePage(): HomePageParameter
     {
         return $this->homePage ??= $this->getCachedParameter(
@@ -66,6 +73,9 @@ class UserParameters extends AbstractParameterContainer
         );
     }
 
+    /**
+     * Gets the message parameter.
+     */
     public function getMessage(): MessageParameter
     {
         return $this->message ??= $this->getCachedParameter(
@@ -74,6 +84,9 @@ class UserParameters extends AbstractParameterContainer
         );
     }
 
+    /**
+     * Gets the option parameter.
+     */
     public function getOption(): OptionParameter
     {
         return $this->option ??= $this->getCachedParameter(
@@ -89,21 +102,17 @@ class UserParameters extends AbstractParameterContainer
      */
     public function save(): bool
     {
-        $saved = false;
-        if ($this->saveParameter($this->display, $this->application->getDisplay())) {
-            $saved = true;
-        }
-        if ($this->saveParameter($this->homePage, $this->application->getHomePage())) {
-            $saved = true;
-        }
-        if ($this->saveParameter($this->message, $this->application->getMessage())) {
-            $saved = true;
-        }
-        if ($this->saveParameter($this->option, $this->application->getOption())) {
-            $saved = true;
-        }
-
-        return $saved;
+        return $this->saveParameters([
+            $this->display,
+            $this->homePage,
+            $this->message,
+            $this->option,
+        ], [
+            $this->application->getDisplay(),
+            $this->application->getHomePage(),
+            $this->application->getMessage(),
+            $this->application->getOption(),
+        ]);
     }
 
     protected function createProperty(string $name): UserProperty
@@ -123,12 +132,12 @@ class UserParameters extends AbstractParameterContainer
             return null;
         }
 
-        return $this->manager->getRepository(UserProperty::class)
+        return $this->getRepository()
             ->findOneByUserAndName($user, $name);
     }
 
-    protected function getPropertyClass(): string
+    protected function getRepository(): UserPropertyRepository
     {
-        return UserProperty::class;
+        return $this->manager->getRepository(UserProperty::class);
     }
 }

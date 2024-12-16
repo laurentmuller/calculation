@@ -520,14 +520,14 @@ class TestController extends AbstractController
             ->setCalculations(8);
 
         $application->getProduct();
-        $application->getDefaultValue();
+        $application->getDefault();
 
         $application->getSecurity()
             ->setCaptcha(true)
             ->setLevel(StrengthLevel::MEDIUM);
 
         $user->getHomePage()
-            ->setCalculations(10);
+            ->setCalculations(7);
         $user->getOption()
             ->setPrintAddress(true);
 

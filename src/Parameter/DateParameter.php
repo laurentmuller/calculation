@@ -21,9 +21,9 @@ class DateParameter implements ParameterInterface
     private ?\DateTimeInterface $archive = null;
     #[Parameter('last_import')]
     private ?\DateTimeInterface $import = null;
-    #[Parameter('update_product')]
-    private ?\DateTimeInterface $updateCalculations = null;
     #[Parameter('update_calculation')]
+    private ?\DateTimeInterface $updateCalculations = null;
+    #[Parameter('update_product')]
     private ?\DateTimeInterface $updateProducts = null;
 
     public function getArchive(): ?\DateTimeInterface

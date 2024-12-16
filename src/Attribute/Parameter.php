@@ -36,7 +36,7 @@ class Parameter
      *
      * @return self|null the attribute instance, if found; null otherwise
      *
-     * @throws \ReflectionException
+     * @throws \ReflectionException if the class does not exist
      *
      * @psalm-template T of object
      *
@@ -66,7 +66,7 @@ class Parameter
      *
      * @return mixed the default value
      *
-     * @throws \ReflectionException
+     * @throws \ReflectionException if the class does not exist
      *
      * @psalm-template T of object
      *
@@ -86,7 +86,7 @@ class Parameter
      *
      * @return ?string the parameter name or null if no attribute is found
      *
-     * @throws \ReflectionException
+     * @throws \ReflectionException if the class does not exist
      *
      * @psalm-template T of object
      *
@@ -107,7 +107,7 @@ class Parameter
      *
      * @return bool true if default value; false otherwise
      *
-     * @throws \ReflectionException
+     * @throws \ReflectionException if the class does not exist
      *
      * @psalm-template T of object
      *

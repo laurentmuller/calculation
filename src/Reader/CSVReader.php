@@ -58,6 +58,7 @@ class CSVReader extends AbstractReader
     {
         $data = \fgetcsv($stream, $this->length, $this->separator, $this->enclosure, $this->escape);
 
+        /** @phpstan-var list<string>|null */
         return \is_array($data) ? $data : null;
     }
 }

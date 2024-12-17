@@ -1,0 +1,9 @@
+{% extends 'cards/card_edit.html.twig' %}
+{%- set title = 'parameters.title' -%}
+{%- set title_icon = 'cogs' -%}
+{%- set title_description = 'parameters.description' -%}
+{# javascript #}
+{% block javascripts -%}
+    {{ parent() }}
+    {{- asset_js('js/application/validation_edit.js') }}
+{% endblock %}

@@ -120,7 +120,7 @@ class Database extends AbstractDatabase
     protected function createSchema(): void
     {
         // load script
-        $file = __DIR__ . '/../data/sql/db_test.sql';
+        $file = __DIR__ . '/../files/sql/db_test.sql';
         $sql = FileUtils::readFile($file);
         if ('' === $sql) {
             throw new \LogicException('Unable to find the schema.');

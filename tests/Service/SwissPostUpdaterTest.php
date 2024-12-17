@@ -36,8 +36,8 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
     {
         parent::setUp();
 
-        $source = __DIR__ . '/../data/sqlite/swiss_test_empty.sqlite';
-        $this->databaseName = __DIR__ . '/../data/csv/swiss_test_model.sqlite';
+        $source = __DIR__ . '/../files/sqlite/swiss_test_empty.sqlite';
+        $this->databaseName = __DIR__ . '/../files/csv/swiss_test_model.sqlite';
         \copy($source, $this->databaseName);
 
         $this->application = $this->createMock(ApplicationService::class);
@@ -69,28 +69,28 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
 
     public function testImport2FilesInZip(): void
     {
-        $path = __DIR__ . '/../data/zip/two_files.zip';
+        $path = __DIR__ . '/../files/zip/two_files.zip';
         $actual = $this->service->import($path, false);
         self::assertFalse($actual->isValid());
     }
 
     public function testImportEmptyZip(): void
     {
-        $path = __DIR__ . '/../data/zip/empty.zip';
+        $path = __DIR__ . '/../files/zip/empty.zip';
         $actual = $this->service->import($path, false);
         self::assertFalse($actual->isValid());
     }
 
     public function testImportFileContentEmpty(): void
     {
-        $path = __DIR__ . '/../data/zip/small_post_address_empty.zip';
+        $path = __DIR__ . '/../files/zip/small_post_address_empty.zip';
         $actual = $this->service->import($path, false);
         self::assertFalse($actual->isValid());
     }
 
     public function testImportFileEmpty(): void
     {
-        $path = __DIR__ . '/../data/txt/empty.txt';
+        $path = __DIR__ . '/../files/txt/empty.txt';
         $actual = $this->service->import($path, false);
         self::assertFalse($actual->isValid());
     }
@@ -133,7 +133,7 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
 
     public function testImportStateNoFound(): void
     {
-        $this->databaseName = __DIR__ . '/../data/sqlite/not_exist.sqlite';
+        $this->databaseName = __DIR__ . '/../files/sqlite/not_exist.sqlite';
         $this->application = $this->createMock(ApplicationService::class);
         $factory = $this->getService(FormFactoryInterface::class);
         $service = new SwissPostService($this->databaseName);
@@ -144,7 +144,7 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
         $this->service->setTranslator($translator)
             ->setLogger($logger);
 
-        $path = __DIR__ . '/../data/zip/small_post_address.zip';
+        $path = __DIR__ . '/../files/zip/small_post_address.zip';
         $actual = $this->service->import($path, false);
         self::assertFalse($actual->isValid());
     }
@@ -154,7 +154,7 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
         $date = new \DateTime('2024-01-17');
         $this->application->method('getLastImport')
             ->willReturn($date);
-        $path = __DIR__ . '/../data/zip/small_post_address.zip';
+        $path = __DIR__ . '/../files/zip/small_post_address.zip';
         $actual = $this->service->import($path, false);
         self::assertTrue($actual->isValid());
 
@@ -171,7 +171,7 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
 
     public function testImportSuccessOverwrite(): void
     {
-        $path = __DIR__ . '/../data/zip/small_post_address.zip';
+        $path = __DIR__ . '/../files/zip/small_post_address.zip';
         $actual = $this->service->import($path, true);
         self::assertTrue($actual->isValid());
 
@@ -191,7 +191,7 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
         $date = new \DateTime('2024-07-17');
         $this->application->method('getLastImport')
             ->willReturn($date);
-        $path = __DIR__ . '/../data/zip/small_post_address.zip';
+        $path = __DIR__ . '/../files/zip/small_post_address.zip';
         $actual = $this->service->import($path, false);
         self::assertFalse($actual->isValid());
     }

@@ -46,7 +46,7 @@ class ReverseReaderTest extends TestCase
 
     private function getFileName(): string
     {
-        return __DIR__ . '/../data/txt/reverse_reader.txt';
+        return __DIR__ . '/../files/txt/reverse_reader.txt';
     }
 
     private function getReader(): ReverseReader

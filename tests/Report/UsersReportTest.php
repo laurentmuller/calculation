@@ -35,7 +35,7 @@ class UsersReportTest extends TestCase
 
         $user2 = $this->createMock(User::class);
         $user2->method('getImagePath')
-            ->willReturn(__DIR__ . '/../data/images/example.png');
+            ->willReturn(__DIR__ . '/../files/images/example.png');
 
         $report = new UsersReport($controller, [$user1, $user2], $storage);
         $actual = $report->render();

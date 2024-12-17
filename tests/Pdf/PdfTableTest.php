@@ -196,7 +196,7 @@ class PdfTableTest extends TestCase
 
     public function testCellImage(): void
     {
-        $path = __DIR__ . '/../data/images/example.png';
+        $path = __DIR__ . '/../files/images/example.png';
         if (!\file_exists($path)) {
             self::fail('Unable to find image.');
         }
@@ -322,7 +322,7 @@ class PdfTableTest extends TestCase
 
     public function testImageCellValid(): void
     {
-        $path = __DIR__ . '/../data/images/example.png';
+        $path = __DIR__ . '/../files/images/example.png';
 
         $table = $this->createTable()
             ->addColumn(new PdfColumn());
@@ -351,7 +351,7 @@ class PdfTableTest extends TestCase
 
     public function testImageCellWithLongText(): void
     {
-        $path = __DIR__ . '/../data/images/example.png';
+        $path = __DIR__ . '/../files/images/example.png';
         $column = PdfColumn::left(width: 25.0, fixed: true);
         $table = $this->createTable(false)
             ->addColumn($column);

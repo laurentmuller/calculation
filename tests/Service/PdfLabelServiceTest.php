@@ -37,7 +37,7 @@ class PdfLabelServiceTest extends TestCase
 
     public function testAllWithEmptyFile(): void
     {
-        $file = __DIR__ . '/../data/txt/empty.txt';
+        $file = __DIR__ . '/../files/txt/empty.txt';
         self::expectException(PdfException::class);
         $service = $this->createService();
         $service->all($file);

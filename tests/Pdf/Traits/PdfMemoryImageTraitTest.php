@@ -137,6 +137,6 @@ class PdfMemoryImageTraitTest extends TestCase
 
     private function getImagePath(string $extension): string
     {
-        return \sprintf('%s/../../data/images/example.%s', __DIR__, $extension);
+        return \sprintf('%s/../../files/images/example.%s', __DIR__, $extension);
     }
 }

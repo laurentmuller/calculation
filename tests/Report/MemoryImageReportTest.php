@@ -30,7 +30,7 @@ class MemoryImageReportTest extends TestCase
     {
         self::expectException(PdfException::class);
         $controller = $this->createMock(AbstractController::class);
-        $image = __DIR__ . '/../data/txt/empty.txt';
+        $image = __DIR__ . '/../files/txt/empty.txt';
         $report = new MemoryImageReport($controller, $image);
         $report->render();
     }
@@ -52,7 +52,7 @@ class MemoryImageReportTest extends TestCase
     public function testRender(): void
     {
         $controller = $this->createMock(AbstractController::class);
-        $image = __DIR__ . '/../data/images/example.png';
+        $image = __DIR__ . '/../files/images/example.png';
         $report = new MemoryImageReport($controller, $image);
         $actual = $report->render();
         self::assertTrue($actual);
@@ -133,7 +133,7 @@ class MemoryImageReportTest extends TestCase
 
     private function getImage(): FontAwesomeImage
     {
-        $path = __DIR__ . '/../data/images/example.png';
+        $path = __DIR__ . '/../files/images/example.png';
         $content = \file_get_contents($path);
         self::assertIsString($content);
 

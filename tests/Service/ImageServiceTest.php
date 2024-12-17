@@ -79,7 +79,7 @@ class ImageServiceTest extends TestCase
 
     public function testFromFile(): void
     {
-        $file = __DIR__ . '/../data/images/example.png';
+        $file = __DIR__ . '/../files/images/example.png';
         $service = ImageService::fromFile($file);
         self::assertNotNull($service);
         self::assertSame($file, $service->getFilename());
@@ -96,7 +96,7 @@ class ImageServiceTest extends TestCase
         $service = ImageService::fromFile($file);
         self::assertNull($service);
 
-        $file = Path::normalize(__DIR__ . '/../data/images/example_invalid.png');
+        $file = Path::normalize(__DIR__ . '/../files/images/example_invalid.png');
         $service = ImageService::fromFile($file);
         self::assertNull($service);
     }

@@ -317,7 +317,7 @@ class FileUtilsTest extends TestCase
 
     private static function getEmptyFile(): string
     {
-        return __DIR__ . '/../data/txt/empty.txt';
+        return __DIR__ . '/../files/txt/empty.txt';
     }
 
     private function getFakeFile(): string
@@ -327,12 +327,12 @@ class FileUtilsTest extends TestCase
 
     private function getJsonFile(): string
     {
-        return __DIR__ . '/../data/city/list.json';
+        return __DIR__ . '/../files/city/list.json';
     }
 
     private static function getLinesFile(): string
     {
-        return __DIR__ . '/../data/txt/lines_count.txt';
+        return __DIR__ . '/../files/txt/lines_count.txt';
     }
 
     private function isLinux(): bool

@@ -174,7 +174,7 @@ class OpenWeatherCityUpdaterTest extends TestCase
 
     private function copy(string $fileName): string
     {
-        $path = FileUtils::realPath(__DIR__ . '/../Data');
+        $path = FileUtils::realPath(__DIR__ . '/../files');
         $originFile = FileUtils::buildPath($path, $fileName);
         $targetFile = FileUtils::buildPath($this->tempPath, \basename($originFile));
         FileUtils::copy($originFile, $targetFile);

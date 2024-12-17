@@ -20,7 +20,7 @@ class ImageDataTest extends TestCase
 {
     public function testValidData(): void
     {
-        $path = __DIR__ . '/../data/images/example.png';
+        $path = __DIR__ . '/../files/images/example.png';
         $content = \file_get_contents($path);
         self::assertIsString($content);
         $imageData = ImageData::instance($content);

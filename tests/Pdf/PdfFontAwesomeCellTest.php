@@ -81,7 +81,7 @@ class PdfFontAwesomeCellTest extends TestCase
 
     private function getImage(): FontAwesomeImage
     {
-        $path = __DIR__ . '/../data/images/example.png';
+        $path = __DIR__ . '/../files/images/example.png';
         $content = \file_get_contents($path);
         self::assertIsString($content);
 

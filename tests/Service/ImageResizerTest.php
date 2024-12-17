@@ -63,7 +63,7 @@ class ImageResizerTest extends KernelServiceTestCase
 
     public function testResizeWidthGreaterHeight(): void
     {
-        $source = __DIR__ . '/../data/images/example.png';
+        $source = __DIR__ . '/../files/images/example.png';
         $target = $this->getTarget();
         $actual = $this->service->resizeDefault($source, $target);
         self::assertTrue($actual);
@@ -85,7 +85,7 @@ class ImageResizerTest extends KernelServiceTestCase
 
     private function getSource(): string
     {
-        return __DIR__ . '/../data/images/example.bmp';
+        return __DIR__ . '/../files/images/example.bmp';
     }
 
     private function getTarget(): string

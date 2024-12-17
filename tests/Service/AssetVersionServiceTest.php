@@ -28,7 +28,7 @@ class AssetVersionServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $projectDir = Path::canonicalize(__DIR__ . '/../data/lock');
+        $projectDir = Path::canonicalize(__DIR__ . '/../files/lock');
         $imagesDir = Path::canonicalize($projectDir . '/public/images/users');
         if (!\file_exists($imagesDir)) {
             \mkdir($imagesDir, recursive: true);

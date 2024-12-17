@@ -121,6 +121,6 @@ class FontAwesomeReportTest extends TestCase
 
     private function getSvgDirectory(): string
     {
-        return __DIR__ . '/../Data/images';
+        return __DIR__ . '/../data/images';
     }
 }

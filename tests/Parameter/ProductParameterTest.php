@@ -17,9 +17,9 @@ use App\Entity\Product;
 use App\Parameter\ProductParameter;
 
 /**
- * @extends AbstractParameterTestCase<ProductParameter>
+ * @extends ParameterTestCase<ProductParameter>
  */
-class ProductParameterTest extends AbstractParameterTestCase
+class ProductParameterTest extends ParameterTestCase
 {
     public static function getParameterNames(): \Generator
     {

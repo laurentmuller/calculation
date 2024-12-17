@@ -18,9 +18,9 @@ use App\Enums\TableView;
 use App\Parameter\DisplayParameter;
 
 /**
- * @extends AbstractParameterTestCase<DisplayParameter>
+ * @extends ParameterTestCase<DisplayParameter>
  */
-class DisplayParameterTest extends AbstractParameterTestCase
+class DisplayParameterTest extends ParameterTestCase
 {
     public static function getParameterNames(): \Generator
     {

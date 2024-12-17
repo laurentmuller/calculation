@@ -92,7 +92,7 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
     }
 
     /**
-     * Set margin in percent.
+     * Set the margin in percent.
      */
     public function setMargin(float $margin): static
     {

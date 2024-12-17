@@ -60,7 +60,7 @@ class MarkdownServiceTest extends TestCase
      */
     public function testConvertFile(): void
     {
-        $path = __DIR__ . '/../Data/reverse_reader.txt';
+        $path = __DIR__ . '/../data/txt/reverse_reader.txt';
         $content = FileUtils::readFile($path);
         $content = StringUtils::pregReplace('/[^>]$/m', '$0 ', $content);
         $service = $this->createService();

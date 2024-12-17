@@ -75,7 +75,7 @@ class EntityProvider extends Base
      * @param string $field     the field name (column) to get values for
      * @param bool   $allowNull true to allow the return of a null value
      *
-     * @return mixed|null a random value or null if none
+     * @return mixed|null a random value or return null if none
      */
     protected function distinctValue(string $field, bool $allowNull = false): mixed
     {

@@ -62,7 +62,7 @@ class AkismetService extends AbstractHttpClientService
     private const URI_VERIFY = '1.1/verify-key';
 
     /**
-     * The value returned when the comment is not a spam.
+     * The value returned when the comment is not spam.
      */
     private const VALUE_FALSE = 'false';
 
@@ -122,7 +122,7 @@ class AkismetService extends AbstractHttpClientService
     }
 
     /**
-     * Verify if the given comment is a spam.
+     * Verify if the given comment is spam.
      * <p>
      * The parameters options can be one of the following:
      * </p>
@@ -164,7 +164,7 @@ class AkismetService extends AbstractHttpClientService
      * @param string $comment the comment to validate
      * @param array  $options the parameter options to override
      *
-     * @return bool <code>true</code> if the given comment is a spam; <code>false</code> otherwise
+     * @return bool <code>true</code> if the given comment is spam; <code>false</code> otherwise
      *
      * @throws ExceptionInterface
      */

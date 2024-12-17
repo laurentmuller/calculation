@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests;
 
 use App\Interfaces\EntityInterface;
-use App\Tests\Data\Database;
+use App\Tests\Fixture\Database;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -39,7 +39,6 @@ trait DatabaseTrait
         if (self::$database instanceof Database) {
             self::$database->close();
             self::$database = Database::deleteDatabase();
-            self::$database = null;
         }
     }
 

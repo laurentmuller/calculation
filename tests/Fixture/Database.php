@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Data;
+namespace App\Tests\Fixture;
 
 use App\Database\AbstractDatabase;
 use App\Utils\FileUtils;
@@ -81,7 +81,7 @@ class Database extends AbstractDatabase
      */
     public static function getDatabaseFilename(): string
     {
-        return __DIR__ . '/db_test.sqlite';
+        return __DIR__ . '/../db_test.sqlite';
     }
 
     /**
@@ -120,10 +120,15 @@ class Database extends AbstractDatabase
     protected function createSchema(): void
     {
         // load script
-        $file = __DIR__ . '/db_test.sql';
+        $file = __DIR__ . '/../data/sql/db_test.sql';
         $sql = FileUtils::readFile($file);
+        if ('' === $sql) {
+            throw new \LogicException('Unable to find the schema.');
+        }
 
         // execute
-        $this->exec($sql);
+        if (!$this->exec($sql)) {
+            throw new \LogicException('Unable to create the schema.');
+        }
     }
 }

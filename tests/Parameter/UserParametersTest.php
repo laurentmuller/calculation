@@ -32,6 +32,26 @@ class UserParametersTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testGetDefaultValues(): void
+    {
+        $user = $this->createUser();
+        $cache = new ArrayAdapter();
+        $manager = $this->createMockManager();
+        $security = $this->createMockSecurity($user);
+        $application = $this->createApplication();
+        $parameters = new UserParameters(
+            $cache,
+            $manager,
+            $security,
+            $application
+        );
+        $actual = $parameters->getDefaultValues();
+        self::assertNotEmpty($actual);
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testSaveNoUser(): void
     {
         $cache = new ArrayAdapter();

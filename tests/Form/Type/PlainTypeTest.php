@@ -15,7 +15,7 @@ namespace App\Tests\Form\Type;
 
 use App\Entity\User;
 use App\Form\Type\PlainType;
-use App\Tests\Data\DataForm;
+use App\Tests\Fixture\DataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
 use Symfony\Component\Form\Exception\TransformationFailedException;

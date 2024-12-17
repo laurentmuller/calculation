@@ -17,9 +17,9 @@ use App\Enums\MessagePosition;
 use App\Parameter\MessageParameter;
 
 /**
- * @extends AbstractParameterTestCase<MessageParameter>
+ * @extends ParameterTestCase<MessageParameter>
  */
-class MessageParameterTest extends AbstractParameterTestCase
+class MessageParameterTest extends ParameterTestCase
 {
     public static function getParameterNames(): \Generator
     {

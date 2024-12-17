@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Model;
 
 /**
- * Contains information about an image data.
+ * Contains information about a image data.
  */
 class ImageData
 {

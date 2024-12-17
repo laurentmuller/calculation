@@ -16,9 +16,9 @@ namespace App\Tests\Parameter;
 use App\Parameter\OptionParameter;
 
 /**
- * @extends AbstractParameterTestCase<OptionParameter>
+ * @extends ParameterTestCase<OptionParameter>
  */
-class OptionParameterTest extends AbstractParameterTestCase
+class OptionParameterTest extends ParameterTestCase
 {
     public static function getParameterNames(): \Generator
     {

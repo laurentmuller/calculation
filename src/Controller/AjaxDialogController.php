@@ -26,14 +26,14 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
- * Controller to render dialog views within a XMLHttpRequest (Ajax) call.
+ * Controller to render dialog views within an XMLHttpRequest (Ajax) call.
  */
 #[AsController]
 #[Route(path: '/ajax', name: 'ajax_')]
 class AjaxDialogController extends AbstractController
 {
     /**
-     * Return the calculation edit item dialog template.
+     * Render the edit item dialog template.
      *
      * @psalm-api
      */
@@ -72,7 +72,7 @@ class AjaxDialogController extends AbstractController
     }
 
     /**
-     * Return the calculation edit task dialog template.
+     * Render the edit task dialog template.
      *
      * @psalm-api
      */
@@ -87,12 +87,6 @@ class AjaxDialogController extends AbstractController
         return $this->renderDialog('dialog/dialog_edit_task.html.twig', $parameters);
     }
 
-    /**
-     * Returns a rendered view.
-     *
-     * @param string $view       the view to render
-     * @param array  $parameters the view parameters
-     */
     private function renderDialog(string $view, array $parameters = []): JsonResponse
     {
         return $this->json($this->renderView($view, $parameters));

@@ -16,9 +16,9 @@ namespace App\Tests\Parameter;
 use App\Parameter\DateParameter;
 
 /**
- * @extends AbstractParameterTestCase<DateParameter>
+ * @extends ParameterTestCase<DateParameter>
  */
-class DateParameterTest extends AbstractParameterTestCase
+class DateParameterTest extends ParameterTestCase
 {
     public static function getParameterNames(): \Generator
     {

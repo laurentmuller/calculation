@@ -22,7 +22,7 @@ class FontAwesomeCommandTest extends CommandTestCase
 
     public function testInvalidJson(): void
     {
-        $input = ['source' => 'tests/Data/json/fontawesome_invalid.json'];
+        $input = ['source' => 'tests/data/json/fontawesome_invalid.json'];
         $output = $this->execute(
             name: self::COMMAND_NAME,
             input: $input,
@@ -35,7 +35,7 @@ class FontAwesomeCommandTest extends CommandTestCase
     {
         try {
             $input = [
-                'source' => 'tests/Data/json/fontawesome_raw_empty.json',
+                'source' => 'tests/data/json/fontawesome_raw_empty.json',
                 'target' => '/tests/Command/temp',
             ];
             $output = $this->execute(
@@ -52,7 +52,7 @@ class FontAwesomeCommandTest extends CommandTestCase
     {
         try {
             $input = [
-                'source' => 'tests/Data/json/fontawesome_valid.json',
+                'source' => 'tests/data/json/fontawesome_valid.json',
                 'target' => '/tests/Command/temp',
                 '--dry-run' => true,
             ];
@@ -68,7 +68,7 @@ class FontAwesomeCommandTest extends CommandTestCase
 
     public function testSourceEmpty(): void
     {
-        $input = ['source' => 'tests/Data/json/fontawesome_empty.json'];
+        $input = ['source' => 'tests/data/json/fontawesome_empty.json'];
         $output = $this->execute(
             name: self::COMMAND_NAME,
             input: $input,
@@ -91,7 +91,7 @@ class FontAwesomeCommandTest extends CommandTestCase
     {
         try {
             $input = [
-                'source' => 'tests/Data/json/fontawesome_valid.json',
+                'source' => 'tests/data/json/fontawesome_valid.json',
                 'target' => '/tests/Command/temp',
             ];
             $output = $this->execute(

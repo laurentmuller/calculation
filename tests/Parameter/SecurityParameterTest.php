@@ -17,9 +17,9 @@ use App\Enums\StrengthLevel;
 use App\Parameter\SecurityParameter;
 
 /**
- * @extends AbstractParameterTestCase<SecurityParameter>
+ * @extends ParameterTestCase<SecurityParameter>
  */
-class SecurityParameterTest extends AbstractParameterTestCase
+class SecurityParameterTest extends ParameterTestCase
 {
     public static function getParameterNames(): \Generator
     {

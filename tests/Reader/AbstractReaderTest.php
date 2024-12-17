@@ -62,7 +62,7 @@ class AbstractReaderTest extends TestCase
             public function __construct()
             {
                 /** @psalm-var resource $resource */
-                $resource = \fopen(__DIR__ . '/../Data/csv_reader.csv', 'r');
+                $resource = \fopen(__DIR__ . '/../data/csv/data.csv', 'r');
                 parent::__construct($resource);
             }
 
@@ -83,7 +83,7 @@ class AbstractReaderTest extends TestCase
         return new class() extends AbstractReader {
             public function __construct()
             {
-                $file = new \SplFileInfo(__DIR__ . '/../Data/csv_reader.csv');
+                $file = new \SplFileInfo(__DIR__ . '/../data/csv/data.csv');
                 parent::__construct($file);
             }
 
@@ -106,7 +106,7 @@ class AbstractReaderTest extends TestCase
 
             public function __construct()
             {
-                $file = __DIR__ . '/../Data/csv_reader.csv';
+                $file = __DIR__ . '/../data/csv/data.csv';
                 parent::__construct($file);
             }
 

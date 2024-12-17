@@ -20,7 +20,7 @@ use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 
 /**
- * Service for calculations timeline.
+ * Service for the calculation timeline.
  *
  * @psalm-type ParametersType=array{
  *     from: \DateTimeImmutable,

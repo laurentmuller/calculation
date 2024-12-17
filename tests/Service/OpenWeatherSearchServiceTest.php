@@ -29,7 +29,7 @@ class OpenWeatherSearchServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->databaseName = __DIR__ . '/../Data/openweather_test.sqlite';
+        $this->databaseName = __DIR__ . '/../data/sqlite/openweather_test.sqlite';
         $service = new PositionService($this->createMockTranslator());
         $formatter = new OpenWeatherFormatter($service);
         $cache = new ArrayAdapter();

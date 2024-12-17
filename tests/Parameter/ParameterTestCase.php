@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @template T of ParameterInterface
  */
-abstract class AbstractParameterTestCase extends TestCase
+abstract class ParameterTestCase extends TestCase
 {
     /**
      * @psalm-var T ParameterInterface

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Form\Category;
 
 use App\Form\Category\CategoryListType;
-use App\Tests\Data\DataForm;
+use App\Tests\Fixture\DataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Extension\Core\Type\FormType;

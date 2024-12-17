@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Database;
 
 use App\Database\AbstractDatabase;
-use App\Tests\Data\Database;
+use App\Tests\Fixture\Database;
 use PHPUnit\Framework\TestCase;
 
 class AbstractDatabaseTest extends TestCase

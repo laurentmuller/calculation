@@ -35,12 +35,12 @@ class CategoryRepository extends AbstractRepository
     final public const FILTER_NONE = 0;
 
     /**
-     * The filter type to display only categories that contain one or more products.
+     * The filter's type to display only categories that contain one or more products.
      */
     final public const FILTER_PRODUCTS = 1;
 
     /**
-     * The filter type to display only categories that contain one or more tasks.
+     * The filter's type to display only categories that contain one or more tasks.
      */
     final public const FILTER_TASKS = 2;
 

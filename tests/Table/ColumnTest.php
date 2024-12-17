@@ -39,7 +39,7 @@ class ColumnTest extends TestCase
     public function testFromJsonEmpty(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        $path = __DIR__ . '/../Data/columns_empty.json';
+        $path = __DIR__ . '/../data/json/columns_empty.json';
         $table = $this->createTable();
         Column::fromJson($table, $path);
     }
@@ -61,7 +61,7 @@ class ColumnTest extends TestCase
     public function testFromJsonInvalidFormatter(): void
     {
         self::expectException(\InvalidArgumentException::class);
-        $path = __DIR__ . '/../Data/columns_invalid_formatter.json';
+        $path = __DIR__ . '/../data/json/columns_invalid_formatter.json';
         $table = $this->createTable();
         Column::fromJson($table, $path);
     }
@@ -73,7 +73,7 @@ class ColumnTest extends TestCase
     {
         $table = $this->createTable();
 
-        $path = __DIR__ . '/../Data/columns_default.json';
+        $path = __DIR__ . '/../data/json/columns_default.json';
         $columns = Column::fromJson($table, $path);
         self::assertCount(4, $columns);
     }

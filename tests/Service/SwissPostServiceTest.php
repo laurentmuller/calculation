@@ -23,7 +23,7 @@ class SwissPostServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->databaseName = __DIR__ . '/../Data/swiss_test.sqlite';
+        $this->databaseName = __DIR__ . '/../data/sqlite/swiss_test.sqlite';
         $this->service = new SwissPostService($this->databaseName);
     }
 

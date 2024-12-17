@@ -210,7 +210,7 @@ class VichListenerTest extends TestCase
 
     private function getImagesPath(): string
     {
-        return __DIR__ . '/../Data/images/';
+        return __DIR__ . '/../data/images/';
     }
 
     /**

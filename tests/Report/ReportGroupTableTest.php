@@ -16,7 +16,7 @@ namespace App\Tests\Report;
 use App\Controller\AbstractController;
 use App\Pdf\PdfColumn;
 use App\Report\Table\ReportGroupTable;
-use App\Tests\Data\TestReport;
+use App\Tests\Fixture\TestReport;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;

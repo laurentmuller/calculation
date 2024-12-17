@@ -94,7 +94,7 @@ class LogServiceTest extends KernelServiceTestCase
      */
     public function testParseInvalidCSV(): void
     {
-        $fileName = __DIR__ . '/../Data/log_invalid_csv.txt';
+        $fileName = __DIR__ . '/../data/txt/log_invalid_csv.txt';
         $logger = $this->createMock(LoggerInterface::class);
         $translator = $this->createMockTranslator();
         $cache = new ArrayAdapter();
@@ -110,7 +110,7 @@ class LogServiceTest extends KernelServiceTestCase
      */
     public function testParseInvalidJSON(): void
     {
-        $fileName = __DIR__ . '/../Data/log_invalid_json.txt';
+        $fileName = __DIR__ . '/../data/txt/log_invalid_json.txt';
         $logger = $this->createMock(LoggerInterface::class);
         $translator = $this->createMockTranslator();
         $cache = new ArrayAdapter();

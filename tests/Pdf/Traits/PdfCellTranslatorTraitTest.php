@@ -17,7 +17,7 @@ use App\Controller\AbstractController;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfCellTranslatorTrait;
-use App\Tests\Data\TestReport;
+use App\Tests\Fixture\TestReport;
 use App\Tests\TranslatorMockTrait;
 use fpdf\PdfDocument;
 use PHPUnit\Framework\MockObject\Exception;

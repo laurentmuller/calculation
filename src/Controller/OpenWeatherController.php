@@ -87,7 +87,7 @@ class OpenWeatherController extends AbstractController
     private const KEY_QUERY = 'query';
 
     /**
-     * The units key name.
+     * The unit's key name.
      */
     private const KEY_UNITS = 'units';
 

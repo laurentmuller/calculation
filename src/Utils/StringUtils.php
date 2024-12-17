@@ -182,7 +182,7 @@ final class StringUtils
      * @param string $pattern the pattern to search for
      * @param string $subject the input string
      *
-     * @param-out string[] $matches if matches is provided, then it is filled with the results of search.
+     * @param-out string[] $matches if matches are provided, then they are filled with the search results.
      *
      * @param int $flags  can be a combination of flags
      * @param int $offset to specify the place from which to start the search
@@ -206,7 +206,7 @@ final class StringUtils
      * @param string $pattern the pattern to search for
      * @param string $subject the input string
      *
-     * @param-out array<int, array> $matches if matches is provided, then it is filled with the results of search.
+     * @param-out array<int, array> $matches if matches are provided, then they ar filled with the search results.
      *
      * @param int $flags  can be a combination of flags
      * @param int $offset to specify the place from which to start the search

@@ -16,9 +16,9 @@ namespace App\Tests\Parameter;
 use App\Parameter\HomePageParameter;
 
 /**
- * @extends AbstractParameterTestCase<HomePageParameter>
+ * @extends ParameterTestCase<HomePageParameter>
  */
-class HomePageParameterTest extends AbstractParameterTestCase
+class HomePageParameterTest extends ParameterTestCase
 {
     public static function getParameterNames(): \Generator
     {

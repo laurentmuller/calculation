@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Form\CalculationState;
 
 use App\Form\CalculationState\CalculationStateListType;
-use App\Tests\Data\DataForm;
+use App\Tests\Fixture\DataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Parameter;
 
+use App\Entity\Category;
 use App\Entity\GlobalProperty;
 use App\Enums\EntityAction;
 use App\Enums\StrengthLevel;
@@ -26,6 +27,50 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class ApplicationParametersTest extends TestCase
 {
+    /**
+     * @throws Exception
+     */
+    public function testEnumInt(): void
+    {
+        $cache = new ArrayAdapter();
+        $property = GlobalProperty::instance('security_level')
+            ->setValue(StrengthLevel::NONE);
+        $manager = $this->createMockManager($property);
+        $parameters = new ApplicationParameters($cache, $manager);
+        $parameters->getSecurity()
+            ->setLevel(StrengthLevel::MEDIUM);
+        $actual = $parameters->save();
+        self::assertTrue($actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testEnumString(): void
+    {
+        $cache = new ArrayAdapter();
+        $property = GlobalProperty::instance('edit_action')
+            ->setValue(EntityAction::EDIT);
+        $manager = $this->createMockManager($property);
+        $parameters = new ApplicationParameters($cache, $manager);
+        $parameters->getDisplay()
+            ->setEditAction(EntityAction::NONE);
+        $actual = $parameters->save();
+        self::assertTrue($actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetDefaultValues(): void
+    {
+        $cache = new ArrayAdapter();
+        $manager = $this->createMockManager();
+        $parameters = new ApplicationParameters($cache, $manager);
+        $actual = $parameters->getDefaultValues();
+        self::assertNotEmpty($actual);
+    }
+
     /**
      * @throws Exception
      */
@@ -61,14 +106,17 @@ class ApplicationParametersTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testWithProperty(): void
+    public function testWithEntity(): void
     {
         $cache = new ArrayAdapter();
-        $property = GlobalProperty::instance('fake');
+        $category = new Category();
+        $category->setCode('fake');
+        $property = GlobalProperty::instance('default_category')
+            ->setValue(1);
         $manager = $this->createMockManager($property);
         $parameters = new ApplicationParameters($cache, $manager);
-        $parameters->getSecurity()
-            ->setCompromised(true);
+        $parameters->getDefault()
+            ->setCategory($category);
         $actual = $parameters->save();
         self::assertTrue($actual);
     }

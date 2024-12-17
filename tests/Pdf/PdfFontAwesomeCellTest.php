@@ -16,7 +16,7 @@ namespace App\Tests\Pdf;
 use App\Model\FontAwesomeImage;
 use App\Pdf\PdfFontAwesomeCell;
 use App\Pdf\PdfStyle;
-use App\Tests\Data\PdfImageDocument;
+use App\Tests\Fixture\PdfImageDocument;
 use fpdf\Enums\PdfMove;
 use fpdf\PdfRectangle;
 use PHPUnit\Framework\TestCase;
@@ -81,7 +81,7 @@ class PdfFontAwesomeCellTest extends TestCase
 
     private function getImage(): FontAwesomeImage
     {
-        $path = __DIR__ . '/../Data/images/example.png';
+        $path = __DIR__ . '/../data/images/example.png';
         $content = \file_get_contents($path);
         self::assertIsString($content);
 

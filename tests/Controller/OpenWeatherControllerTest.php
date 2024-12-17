@@ -329,7 +329,7 @@ class OpenWeatherControllerTest extends ControllerTestCase
         self::assertIsString($targetFile);
         self::assertFileExists($targetFile);
 
-        $originFile = __DIR__ . '/../Data/city.list.invalid.json.gz';
+        $originFile = __DIR__ . '/../data/city/list.invalid.json.gz';
         self::assertFileExists($originFile);
 
         FileUtils::copy($originFile, $targetFile, true);

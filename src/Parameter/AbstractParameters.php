@@ -28,6 +28,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  * @template TProperty of AbstractProperty
  *
  * @psalm-type TValue = scalar|array|\BackedEnum|\DateTimeInterface|EntityInterface|null
+ * @psalm-type TParameter = ParameterInterface|class-string<ParameterInterface>
  */
 abstract class AbstractParameters
 {
@@ -40,7 +41,33 @@ abstract class AbstractParameters
     }
 
     /**
-     * @template T of ParameterInterface
+     * Gets all default values.
+     *
+     * @return array<string, mixed>
+     *
+     * @psalm-return array<string, TValue>
+     */
+    abstract public function getDefaultValues(): array;
+
+    /**
+     * Save parameters.
+     *
+     * @return bool true if one of the parameters has changed
+     */
+    abstract public function save(): bool;
+
+    protected function createMetaData(Parameter $attribute, \ReflectionProperty $property): MetaData
+    {
+        return new MetaData(
+            $attribute->name,
+            $property->name,
+            \ltrim((string) $property->getType(), '?'),
+            $attribute->default
+        );
+    }
+
+    /**
+     * @psalm-template T of ParameterInterface
      *
      * @psalm-param class-string<T> $class
      * @psalm-param T|null $default
@@ -87,17 +114,21 @@ abstract class AbstractParameters
     /**
      * @param class-string<\BackedEnum> $type
      */
-    protected function getBackEnum(string $type, AbstractProperty $property): ?\BackedEnum
+    protected function getBackedEnumInt(string $type, AbstractProperty $property): ?\BackedEnum
     {
-        if ($this->isStringEnum($type)) {
-            return $type::tryFrom((string) $property->getValue());
-        }
-
         return $type::tryFrom($property->getInteger());
     }
 
     /**
-     * @template T of ParameterInterface
+     * @param class-string<\BackedEnum> $type
+     */
+    protected function getBackedEnumString(string $type, AbstractProperty $property): ?\BackedEnum
+    {
+        return $type::tryFrom((string) $property->getValue());
+    }
+
+    /**
+     * @psalm-template T of ParameterInterface
      *
      * @psalm-param class-string<T> $class
      * @psalm-param T|null $default
@@ -121,12 +152,10 @@ abstract class AbstractParameters
         PropertyAccessor $accessor
     ): mixed {
         if ($parameter instanceof ParameterInterface) {
-            /** @psalm-var TValue */
-            return $accessor->getValue($parameter, $metaData->property);
+            return $this->getParameterPropertyValue($metaData, $parameter, $accessor);
         }
 
-        /** @psalm-var TValue */
-        return $metaData->default;
+        return $this->getMetaDataDefaultValue($metaData);
     }
 
     /**
@@ -139,31 +168,37 @@ abstract class AbstractParameters
     }
 
     /**
-     * @psalm-return MetaData[]
+     * @psalm-return TValue
      */
-    protected function getMetaDatas(ParameterInterface $parameter): array
+    protected function getMetaDataDefaultValue(MetaData $metaData): mixed
     {
-        $metaDatas = [];
-        $properties = $this->getProperties($parameter);
-        foreach ($properties as $property) {
-            $attributes = $property->getAttributes(Parameter::class);
-            if ([] === $attributes) {
-                continue;
+        /** @psalm-var TValue */
+        return $metaData->default;
+    }
+
+    /**
+     * @return MetaData[]
+     *
+     * @psalm-param TParameter $parameter
+     */
+    protected function getMetaDatas(ParameterInterface|string $parameter): array
+    {
+        $key = 'meta_data_' . $parameter::getCacheKey();
+
+        return $this->cache->get($key, function () use ($parameter): array {
+            $metaDatas = [];
+            $properties = $this->getProperties($parameter);
+            foreach ($properties as $property) {
+                $attributes = $property->getAttributes(Parameter::class);
+                if ([] === $attributes) {
+                    continue;
+                }
+                $attribute = $attributes[0]->newInstance();
+                $metaDatas[] = $this->createMetaData($attribute, $property);
             }
 
-            /** @psalm-var  \ReflectionNamedType $type */
-            $type = $property->getType();
-            $attribute = $attributes[0]->newInstance();
-
-            $metaDatas[] = new MetaData(
-                $attribute->name,
-                $property->name,
-                \ltrim((string) $type, '?'),
-                $attribute->default
-            );
-        }
-
-        return $metaDatas;
+            return $metaDatas;
+        });
     }
 
     /**
@@ -179,13 +214,41 @@ abstract class AbstractParameters
     }
 
     /**
-     * @return \ReflectionProperty[]
+     * @psalm-param TParameter ...$parameters
+     *
+     * @psalm-return array<string, TValue>
      */
-    protected function getProperties(ParameterInterface $parameter): array
+    protected function getParametersDefaultValues(ParameterInterface|string ...$parameters): array
     {
-        $class = new \ReflectionClass($parameter);
+        $values = [];
+        $accessor = $this->getAccessor();
+        foreach ($parameters as $parameter) {
+            $metaDatas = $this->getMetaDatas($parameter);
+            foreach ($metaDatas as $metaData) {
+                if ($parameter instanceof ParameterInterface) {
+                    $values[$metaData->property] = $this->getParameterPropertyValue($metaData, $parameter, $accessor);
+                } else {
+                    $values[$metaData->property] = $this->getMetaDataDefaultValue($metaData);
+                }
+            }
+        }
 
-        return $class->getProperties(\ReflectionProperty::IS_PRIVATE);
+        return \array_filter($values);
+    }
+
+    /**
+     * @return \ReflectionProperty[]
+     *
+     * @psalm-param TParameter $parameter
+     */
+    protected function getProperties(ParameterInterface|string $parameter): array
+    {
+        try {
+            return (new \ReflectionClass($parameter))->getProperties(\ReflectionProperty::IS_PRIVATE);
+        } catch (\ReflectionException $e) {
+            $type = \is_string($parameter) ? $parameter : \get_debug_type($parameter);
+            throw new \LogicException(\sprintf('Unable to get properties for "%s".', $type), $e->getCode(), $e);
+        }
     }
 
     /**
@@ -200,7 +263,8 @@ abstract class AbstractParameters
             'int' === $metaData->type => $property->getInteger(),
             'string' === $metaData->type => $property->getValue(),
             'DateTimeInterface' === $metaData->type => $property->getDate(),
-            $metaData->isBackedEnumType() => $this->getBackEnum($metaData->type, $property),
+            $metaData->isEnumTypeInt() => $this->getBackedEnumInt($metaData->type, $property),
+            $metaData->isEnumTypeString() => $this->getBackedEnumString($metaData->type, $property),
             $metaData->isEntityInterfaceType() => $this->getEntity($metaData->type, $property),
             default => throw new \LogicException(\sprintf('Unsupported type "%s" for property "%s".', $metaData->type, $metaData->property))
         };
@@ -211,18 +275,20 @@ abstract class AbstractParameters
      */
     abstract protected function getRepository(): AbstractRepository;
 
-    /**
-     * @param class-string<\BackedEnum> $type
-     */
-    protected function isStringEnum(string $type): bool
+    protected function isDefaultValue(ParameterInterface $parameter, string $name, mixed $value): bool
     {
-        try {
-            $enum = new \ReflectionEnum($type);
-
-            return 'string' === (string) $enum->getBackingType();
-        } catch (\ReflectionException $e) {
-            throw new \LogicException(\sprintf('Unable to get enum for type "%s".', $type), $e->getCode(), $e);
+        $class = new \ReflectionClass($parameter);
+        if (!$class->hasProperty($name)) {
+            return false;
         }
+
+        $property = $class->getProperty($name);
+        $attributes = $property->getAttributes(Parameter::class);
+        if ([] === $attributes) {
+            return false;
+        }
+
+        return $attributes[0]->newInstance()->default === $value;
     }
 
     protected function saveParameter(?ParameterInterface $parameter, ?ParameterInterface $default = null): bool
@@ -236,36 +302,35 @@ abstract class AbstractParameters
         $repository = $this->getRepository();
         $metaDatas = $this->getMetaDatas($parameter);
 
-        try {
-            foreach ($metaDatas as $metaData) {
-                $property = $this->findProperty($metaData->name);
-                $value = $this->getParameterPropertyValue($metaData, $parameter, $accessor);
-                $defaultValue = $this->getDefaultPropertyValue($metaData, $default, $accessor);
-                if ($value === $defaultValue || Parameter::isDefaultValue($parameter, $metaData->property, $value)) {
-                    if ($property instanceof AbstractProperty) {
-                        $repository->remove($property, false);
-                        $changed = true;
-                    }
-                    continue;
-                }
-
-                if (!$property instanceof AbstractProperty) {
-                    $property = $this->createProperty($metaData->name);
+        foreach ($metaDatas as $metaData) {
+            $property = $this->findProperty($metaData->name);
+            $value = $this->getParameterPropertyValue($metaData, $parameter, $accessor);
+            $defaultValue = $this->getDefaultPropertyValue($metaData, $default, $accessor);
+            if ($value === $defaultValue || $this->isDefaultValue($parameter, $metaData->property, $value)) {
+                if ($property instanceof AbstractProperty) {
+                    $repository->remove($property, false);
                     $changed = true;
                 }
-                $property->setValue($value);
+                continue;
+            }
+
+            if (!$property instanceof AbstractProperty) {
+                $property = $this->createProperty($metaData->name);
+            }
+            $oldValue = $property->getValue();
+            $property->setValue($value);
+            if ($oldValue !== $property->getValue()) {
                 $repository->persist($property, false);
+                $changed = true;
             }
-
-            if ($changed) {
-                $repository->flush();
-                $this->cache->delete($parameter::getCacheKey());
-            }
-
-            return $changed;
-        } catch (\ReflectionException $e) {
-            throw new \LogicException(\sprintf('Unable to save parameter "%s".', \get_debug_type($parameter)), $e->getCode(), $e);
         }
+
+        if ($changed) {
+            $repository->flush();
+            $this->cache->delete($parameter::getCacheKey());
+        }
+
+        return $changed;
     }
 
     /**

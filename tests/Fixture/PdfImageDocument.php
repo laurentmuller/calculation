@@ -11,14 +11,15 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Data;
+namespace App\Tests\Fixture;
 
-use App\Pdf\Interfaces\PdfColorInterface;
-use App\Pdf\Traits\PdfColorTrait;
+use App\Pdf\Traits\PdfMemoryImageTrait;
+use fpdf\PdfDocument;
 
-enum PdfInvalidColor: string implements PdfColorInterface
+/**
+ * Image document for tests purposes.
+ */
+class PdfImageDocument extends PdfDocument
 {
-    use PdfColorTrait;
-
-    case INVALID = '';
+    use PdfMemoryImageTrait;
 }

@@ -129,7 +129,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     }
 
     /**
-     * Returns if the given keys are the same as this keys.
+     * Returns if the given keys are the same as these keys.
      *
      * @param array $keys the keys to compare to
      *

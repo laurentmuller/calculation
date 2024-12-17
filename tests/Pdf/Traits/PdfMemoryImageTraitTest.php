@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Pdf\Traits;
 
 use App\Service\ImageService;
-use App\Tests\Data\PdfImageDocument;
+use App\Tests\Fixture\PdfImageDocument;
 use fpdf\PdfException;
 use PHPUnit\Framework\TestCase;
 
@@ -137,6 +137,6 @@ class PdfMemoryImageTraitTest extends TestCase
 
     private function getImagePath(string $extension): string
     {
-        return \sprintf('%s/../../Data/images/example.%s', __DIR__, $extension);
+        return \sprintf('%s/../../data/images/example.%s', __DIR__, $extension);
     }
 }

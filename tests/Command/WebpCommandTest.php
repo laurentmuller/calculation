@@ -39,7 +39,7 @@ class WebpCommandTest extends CommandTestCase
             'Skip: 0',
         ];
         $input = [
-            'source' => '/tests/Data/public/images/users',
+            'source' => '/tests/data/public/images/users',
             '--dry-run' => true,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input);
@@ -51,7 +51,7 @@ class WebpCommandTest extends CommandTestCase
         $name = 'example_invalid.png';
         $path = FileUtils::tempDir(__DIR__);
         self::assertIsString($path);
-        $source = FileUtils::buildPath(__DIR__, '/../Data/images', $name);
+        $source = FileUtils::buildPath(__DIR__, '/../data/images', $name);
         $target = FileUtils::buildPath($path, $name);
         self::assertTrue(FileUtils::copy($source, $target));
         $source = FileUtils::makePathRelative($path, __DIR__ . '/../..');
@@ -121,7 +121,7 @@ class WebpCommandTest extends CommandTestCase
         $name = 'example.png';
         $path = FileUtils::tempDir(__DIR__);
         self::assertIsString($path);
-        $source = FileUtils::buildPath(__DIR__, '/../Data/images', $name);
+        $source = FileUtils::buildPath(__DIR__, '/../data/images', $name);
         $target = FileUtils::buildPath($path, $name);
         self::assertTrue(FileUtils::copy($source, $target));
         $source = FileUtils::makePathRelative($path, __DIR__ . '/../..');

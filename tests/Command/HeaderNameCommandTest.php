@@ -18,7 +18,7 @@ use Symfony\Component\Console\Command\Command;
 class HeaderNameCommandTest extends CommandTestCase
 {
     private const COMMAND_NAME = 'app:header:name';
-    private const DATA_PATH = '/tests/Data/css';
+    private const DATA_PATH = '/tests/data/css';
 
     protected function setUp(): void
     {
@@ -127,8 +127,8 @@ class HeaderNameCommandTest extends CommandTestCase
             self::DATA_PATH,
             'Skipped 2',
             'Updated 2',
-            'tests/Data/css/no_header.css',
-            'tests/Data/css/old_header.css',
+            'tests/data/css/no_header.css',
+            'tests/data/css/old_header.css',
         ];
         $input = [
             '--pattern' => 'css',
@@ -141,11 +141,11 @@ class HeaderNameCommandTest extends CommandTestCase
 
     private function replaceCssContents(): void
     {
-        $file = __DIR__ . '/../Data/css/no_header.css';
+        $file = __DIR__ . '/../data/css/no_header.css';
         if (\file_exists($file)) {
             \file_put_contents($file, "html {\n    width: 100vw;\n}\n");
         }
-        $file = __DIR__ . '/../Data/css/old_header.css';
+        $file = __DIR__ . '/../data/css/old_header.css';
         if (\file_exists($file)) {
             \file_put_contents($file, "/* old_header.css */\nhtml {\n    width: 100vw;\n}\n");
         }

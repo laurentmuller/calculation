@@ -18,9 +18,9 @@ use App\Entity\Category;
 use App\Parameter\DefaultParameter;
 
 /**
- * @extends AbstractParameterTestCase<DefaultParameter>
+ * @extends ParameterTestCase<DefaultParameter>
  */
-class DefaultParameterTest extends AbstractParameterTestCase
+class DefaultParameterTest extends ParameterTestCase
 {
     public static function getParameterNames(): \Generator
     {

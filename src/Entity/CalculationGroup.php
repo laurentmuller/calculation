@@ -317,7 +317,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     }
 
     /**
-     * Set margin.
+     * Set the margin.
      */
     public function setMargin(float $margin): self
     {

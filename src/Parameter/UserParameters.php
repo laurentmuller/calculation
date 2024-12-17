@@ -51,6 +51,16 @@ class UserParameters extends AbstractParameters
         parent::__construct($cache, $manager);
     }
 
+    public function getDefaultValues(): array
+    {
+        return $this->getParametersDefaultValues(
+            $this->application->getDisplay(),
+            $this->application->getHomePage(),
+            $this->application->getMessage(),
+            $this->application->getOption(),
+        );
+    }
+
     /**
      * Gets the display parameter.
      */
@@ -95,11 +105,6 @@ class UserParameters extends AbstractParameters
         );
     }
 
-    /**
-     * Save parameters.
-     *
-     * @return bool true if one of the parameters has changed
-     */
     public function save(): bool
     {
         return $this->saveParameters([

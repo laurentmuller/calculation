@@ -63,7 +63,7 @@ class CSVReaderTest extends TestCase
 
     private function getFileName(): string
     {
-        return __DIR__ . '/../Data/csv_reader.csv';
+        return __DIR__ . '/../data/csv/data.csv';
     }
 
     private function getReader(): CSVReader

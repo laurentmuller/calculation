@@ -16,9 +16,9 @@ namespace App\Tests\Parameter;
 use App\Parameter\CustomerParameter;
 
 /**
- * @extends AbstractParameterTestCase<CustomerParameter>
+ * @extends ParameterTestCase<CustomerParameter>
  */
-class CustomerParameterTest extends AbstractParameterTestCase
+class CustomerParameterTest extends ParameterTestCase
 {
     public static function getParameterNames(): \Generator
     {

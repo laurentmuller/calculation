@@ -36,7 +36,7 @@ class AboutSymfonyControllerTest extends ControllerTestCase
         $query = '/about/symfony/license?file=fake';
         yield [$query, self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
 
-        $query = '/about/symfony/license?file=tests/Data/empty.txt';
+        $query = '/about/symfony/license?file=tests/data/txt/empty.txt';
         yield [$query, self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
     }
 }

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
-use App\Tests\Data\Translatable;
+use App\Tests\Fixture\Translatable;
 use App\Tests\TranslatorMockTrait;
 use App\Traits\TranslatorTrait;
 use PHPUnit\Framework\MockObject\Exception;

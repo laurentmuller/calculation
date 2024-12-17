@@ -35,7 +35,7 @@ class FontAwesomeImageServiceTest extends TestCase
      */
     public function testInvalidEmptyFile(): void
     {
-        $this->checkImageIsInvalid(__DIR__ . '/../Data/images', 'empty.svg');
+        $this->checkImageIsInvalid(__DIR__ . '/../data/images', 'empty.svg');
     }
 
     /**
@@ -62,7 +62,7 @@ class FontAwesomeImageServiceTest extends TestCase
      */
     public function testValidFileSizeEquals(): void
     {
-        $actual = $this->checkImageIsValid(__DIR__ . '/../Data/images', '512x512.svg');
+        $actual = $this->checkImageIsValid(__DIR__ . '/../data/images', '512x512.svg');
         self::assertSame(64, $actual->getWidth());
         self::assertSame(64, $actual->getHeight());
     }
@@ -72,7 +72,7 @@ class FontAwesomeImageServiceTest extends TestCase
      */
     public function testValidFileWidthGreater(): void
     {
-        $actual = $this->checkImageIsValid(__DIR__ . '/../Data/images', '576x512.svg');
+        $actual = $this->checkImageIsValid(__DIR__ . '/../data/images', '576x512.svg');
         self::assertSame(64, $actual->getWidth());
         self::assertSame(57, $actual->getHeight());
     }
@@ -82,7 +82,7 @@ class FontAwesomeImageServiceTest extends TestCase
      */
     public function testValidFileWidthSmaller(): void
     {
-        $actual = $this->checkImageIsValid(__DIR__ . '/../Data/images', '448x512.svg');
+        $actual = $this->checkImageIsValid(__DIR__ . '/../data/images', '448x512.svg');
         self::assertSame(56, $actual->getWidth());
         self::assertSame(64, $actual->getHeight());
     }
@@ -92,7 +92,7 @@ class FontAwesomeImageServiceTest extends TestCase
      */
     public function testValidFileWithColor(): void
     {
-        $this->checkImageIsValid(__DIR__ . '/../Data/images', '448x512.svg', 'red');
+        $this->checkImageIsValid(__DIR__ . '/../data/images', '448x512.svg', 'red');
     }
 
     /**
@@ -100,7 +100,7 @@ class FontAwesomeImageServiceTest extends TestCase
      */
     public function testValidFileWithoutExtension(): void
     {
-        $this->checkImageIsValid(__DIR__ . '/../Data/images', '448x512');
+        $this->checkImageIsValid(__DIR__ . '/../data/images', '448x512');
     }
 
     /**

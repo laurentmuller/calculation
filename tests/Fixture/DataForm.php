@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Data;
+namespace App\Tests\Fixture;
 
 /**
  * Class for form type tests.

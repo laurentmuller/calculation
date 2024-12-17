@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Pdf\Traits;
 
-use App\Tests\Data\PdfInvalidColor;
+use App\Tests\Fixture\PdfInvalidColor;
 use fpdf\PdfException;
 use PHPUnit\Framework\TestCase;
 

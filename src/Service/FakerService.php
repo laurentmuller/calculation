@@ -39,7 +39,7 @@ class FakerService
     }
 
     /**
-     * Gets the faker generator.
+     * Gets the fake generator.
      */
     public function getGenerator(): Generator
     {

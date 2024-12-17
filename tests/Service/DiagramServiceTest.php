@@ -23,7 +23,7 @@ class DiagramServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $path = __DIR__ . '/../Data/diagrams';
+        $path = __DIR__ . '/../data/diagrams';
         $cache = new ArrayAdapter();
         $this->service = new DiagramService($path, $cache);
     }

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Data;
+namespace App\Tests\Fixture;
 
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;

@@ -52,12 +52,13 @@ class OpenWeatherCityUpdaterTest extends TestCase
      */
     public function testImportFileEmpty(): void
     {
-        $targetFile = $this->copy('empty.txt');
+        $targetFile = $this->copy('txt/empty.txt');
 
         try {
             $file = new UploadedFile($targetFile, \basename($targetFile), test: true);
             $service = $this->createService();
             $actual = $service->import($file);
+            self::assertHasKeys($actual);
             self::assertInvalid($actual, 'swisspost.error.open_archive');
         } finally {
             FileUtils::remove($targetFile);
@@ -69,12 +70,13 @@ class OpenWeatherCityUpdaterTest extends TestCase
      */
     public function testImportFileEmptyGz(): void
     {
-        $targetFile = $this->copy('city.list.empty.json.gz');
+        $targetFile = $this->copy('city/list.empty.json.gz');
 
         try {
             $file = new UploadedFile($targetFile, \basename($targetFile), test: true);
             $service = $this->createService();
             $actual = $service->import($file);
+            self::assertHasKeys($actual);
             self::assertInvalid($actual, 'openweather.error.empty_city');
         } finally {
             FileUtils::remove($this->getDatabaseName());
@@ -87,12 +89,13 @@ class OpenWeatherCityUpdaterTest extends TestCase
      */
     public function testImportFileInvalidJson(): void
     {
-        $targetFile = $this->copy('city.list.invalid.json.gz');
+        $targetFile = $this->copy('city/list.invalid.json.gz');
 
         try {
             $file = new UploadedFile($targetFile, \basename($targetFile), test: true);
             $service = $this->createService();
             $actual = $service->import($file);
+            self::assertHasKeys($actual);
             self::assertInvalid($actual, 'swisspost.error.open_archive');
         } finally {
             FileUtils::remove($targetFile);
@@ -109,6 +112,7 @@ class OpenWeatherCityUpdaterTest extends TestCase
         $file = new UploadedFile($path, $originalName, error: \UPLOAD_ERR_NO_FILE);
         $service = $this->createService();
         $actual = $service->import($file);
+        self::assertHasKeys($actual);
         self::assertInvalid($actual, 'swisspost.error.open_archive');
     }
 
@@ -117,12 +121,13 @@ class OpenWeatherCityUpdaterTest extends TestCase
      */
     public function testImportFileNotGz(): void
     {
-        $targetFile = $this->copy('city.list.json');
+        $targetFile = $this->copy('city/list.json');
 
         try {
             $file = new UploadedFile($targetFile, \basename($targetFile), test: true);
             $service = $this->createService();
             $actual = $service->import($file);
+            self::assertHasKeys($actual);
             self::assertInvalid($actual, 'swisspost.error.open_archive');
         } finally {
             FileUtils::remove($targetFile);
@@ -134,16 +139,13 @@ class OpenWeatherCityUpdaterTest extends TestCase
      */
     public function testImportFileValid(): void
     {
-        $targetFile = $this->copy('city.list.json.gz');
+        $targetFile = $this->copy('city/list.json.gz');
 
         try {
             $file = new UploadedFile($targetFile, \basename($targetFile), test: true);
             $service = $this->createService();
             $actual = $service->import($file);
-            self::assertArrayHasKey('result', $actual);
-            self::assertArrayHasKey('valid', $actual);
-            self::assertArrayHasKey('error', $actual);
-            self::assertArrayHasKey('message', $actual);
+            self::assertHasKeys($actual);
             self::assertTrue($actual['result']);
             self::assertSame(10, $actual['valid']);
             self::assertSame(0, $actual['error']);
@@ -154,12 +156,16 @@ class OpenWeatherCityUpdaterTest extends TestCase
         }
     }
 
-    protected static function assertInvalid(array $actual, string $message): void
+    protected static function assertHasKeys(array $actual): void
     {
         self::assertArrayHasKey('result', $actual);
         self::assertArrayHasKey('valid', $actual);
         self::assertArrayHasKey('error', $actual);
         self::assertArrayHasKey('message', $actual);
+    }
+
+    protected static function assertInvalid(array $actual, string $message): void
+    {
         self::assertFalse($actual['result']);
         self::assertSame(0, $actual['valid']);
         self::assertSame(0, $actual['error']);

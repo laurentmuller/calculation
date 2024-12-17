@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Tests\MockPhpStream;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\UnexpectedResponseException;
 use Symfony\Component\Mailer\MailerInterface;
@@ -36,9 +35,6 @@ class CspReportControllerTest extends ControllerTestCase
         $this->invoke('{');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithTransportException(): void
     {
         $mailer = $this->createMock(MailerInterface::class);

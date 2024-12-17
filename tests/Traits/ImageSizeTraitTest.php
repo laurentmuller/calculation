@@ -24,8 +24,8 @@ class ImageSizeTraitTest extends TestCase
     public static function getSizes(): \Iterator
     {
         yield ['', [0, 0]];
-        yield [__DIR__ . '/../Data/images/example.png', [124, 147]];
-        yield [__DIR__ . '/../Data/images/example.jpg', [500, 477]];
+        yield [__DIR__ . '/../data/images/example.png', [124, 147]];
+        yield [__DIR__ . '/../data/images/example.jpg', [500, 477]];
     }
 
     #[DataProvider('getSizes')]

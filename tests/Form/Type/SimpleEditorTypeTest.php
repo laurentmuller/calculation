@@ -38,7 +38,7 @@ class SimpleEditorTypeTest extends TypeTestCase
      */
     public function testInvalidJson(): void
     {
-        $actionsPath = __DIR__ . '/../../Data/json/fontawesome_invalid.json';
+        $actionsPath = __DIR__ . '/../../data/json/fontawesome_invalid.json';
 
         $resolver = new OptionsResolver();
         $view = $this->createMock(FormView::class);

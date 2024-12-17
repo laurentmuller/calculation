@@ -78,6 +78,20 @@ class ApplicationParameters extends AbstractParameters
         return $this->default ??= $this->getCachedParameter(DefaultParameter::class);
     }
 
+    public function getDefaultValues(): array
+    {
+        // the customer and date parameters are omitted because default values are null
+        return $this->getParametersDefaultValues(
+            DefaultParameter::class,
+            DisplayParameter::class,
+            HomePageParameter::class,
+            MessageParameter::class,
+            OptionParameter::class,
+            ProductParameter::class,
+            SecurityParameter::class,
+        );
+    }
+
     /**
      * Gets the display parameter.
      */
@@ -126,11 +140,6 @@ class ApplicationParameters extends AbstractParameters
         return $this->security ??= $this->getCachedParameter(SecurityParameter::class);
     }
 
-    /**
-     * Save parameters.
-     *
-     * @return bool true if one of the parameters has changed
-     */
     public function save(): bool
     {
         return $this->saveParameters([

@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Data;
+namespace App\Tests\Fixture;
 
 use App\Controller\AbstractController;
 use App\Report\AbstractReport;
 
 /**
- * Report for tests purpose.
+ * Report for test purpose.
  */
 class TestReport extends AbstractReport
 {

@@ -91,7 +91,7 @@ class WorksheetDocumentTest extends TestCase
 
     public function testSetCellImage(): void
     {
-        $path = __DIR__ . '/../Data/images/example.png';
+        $path = __DIR__ . '/../data/images/example.png';
         $sheet = $this->getActiveSheet();
         $sheet->setCellImage($path, 'A1', 124, 147);
         $actual = $sheet->getColumnDimension('A')->getWidth();

@@ -16,7 +16,7 @@ namespace App\Tests\Pdf;
 use App\Controller\AbstractController;
 use App\Model\CustomerInformation;
 use App\Pdf\PdfFont;
-use App\Tests\Data\TestReport;
+use App\Tests\Fixture\TestReport;
 use App\Tests\TranslatorMockTrait;
 use fpdf\Enums\PdfDestination;
 use fpdf\Enums\PdfPageSize;

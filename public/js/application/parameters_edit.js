@@ -125,9 +125,10 @@ function handleInput(inputId, groupId, callback) {
     }
     const handler = function (e) {
         e.preventDefault();
-        if ($input.valid() && $input.val().trim()) {
+        const value = String($input.val()).trim();
+        if ($input.valid() && value) {
             try {
-                callback($input.val().trim());
+                callback(value);
             } catch (error) {
                 $group.off('click', handler).removeClass('cursor-pointer');
                 window.console.error(error);
@@ -137,7 +138,7 @@ function handleInput(inputId, groupId, callback) {
     };
     $input.on('input', function () {
         $group.removeClass('cursor-pointer').off('click', handler);
-        if ($input.valid() && $input.val().trim()) {
+        if ($input.valid() && String($input.val()).trim()) {
             $group.addClass('cursor-pointer').on('click', handler);
         }
     }).trigger('input');
@@ -190,7 +191,7 @@ function handleEmail() {
 $(function () {
     'use strict';
     // numbers
-    $('#default_product_quantity').inputNumberFormat();
+    $('input.input-number').inputNumberFormat();
 
     // validation
     $('#edit-form').initValidator({

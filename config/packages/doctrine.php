@@ -24,8 +24,7 @@ return static function (DoctrineConfig $config): void {
         ->class(FixedFloatType::class);
 
     $orm = $config->orm();
-    $orm->enableLazyGhostObjects(true)
-        ->autoGenerateProxyClasses(true)
+    $orm->autoGenerateProxyClasses(true)
         ->proxyDir('%kernel.cache_dir%/doctrine/orm/Proxies');
 
     $orm->controllerResolver()

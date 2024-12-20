@@ -19,28 +19,15 @@ use App\Repository\UserPropertyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Target;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
- * Contains user parameters.
+ * Contains user parameters (preferences).
  *
  * @extends AbstractParameters<UserProperty>
  */
 class UserParameters extends AbstractParameters
 {
-    #[Assert\Valid]
-    private ?DisplayParameter $display = null;
-
-    #[Assert\Valid]
-    private ?HomePageParameter $homePage = null;
-
-    #[Assert\Valid]
-    private ?MessageParameter $message = null;
-
-    #[Assert\Valid]
-    private ?OptionParameter $option = null;
-
     public function __construct(
         #[Target('calculation.user')]
         CacheInterface $cache,
@@ -57,7 +44,7 @@ class UserParameters extends AbstractParameters
             $this->application->getDisplay(),
             $this->application->getHomePage(),
             $this->application->getMessage(),
-            $this->application->getOption(),
+            $this->application->getOptions(),
         );
     }
 
@@ -97,11 +84,11 @@ class UserParameters extends AbstractParameters
     /**
      * Gets the option parameter.
      */
-    public function getOption(): OptionParameter
+    public function getOptions(): OptionsParameter
     {
-        return $this->option ??= $this->getCachedParameter(
-            OptionParameter::class,
-            $this->application->getOption()
+        return $this->options ??= $this->getCachedParameter(
+            OptionsParameter::class,
+            $this->application->getOptions()
         );
     }
 
@@ -111,12 +98,12 @@ class UserParameters extends AbstractParameters
             $this->display,
             $this->homePage,
             $this->message,
-            $this->option,
+            $this->options,
         ], [
             $this->application->getDisplay(),
             $this->application->getHomePage(),
             $this->application->getMessage(),
-            $this->application->getOption(),
+            $this->application->getOptions(),
         ]);
     }
 
@@ -130,19 +117,19 @@ class UserParameters extends AbstractParameters
         return UserProperty::instance($name, $user);
     }
 
-    protected function findProperty(string $name): ?UserProperty
-    {
-        $user = $this->security->getUser();
-        if (!$user instanceof User) {
-            return null;
-        }
-
-        return $this->getRepository()
-            ->findOneByUserAndName($user, $name);
-    }
-
     protected function getRepository(): UserPropertyRepository
     {
         return $this->manager->getRepository(UserProperty::class);
+    }
+
+    protected function loadProperties(): array
+    {
+        $user = $this->security->getUser();
+        if (!$user instanceof User) {
+            return [];
+        }
+
+        return $this->getRepository()
+            ->findByUser($user);
     }
 }

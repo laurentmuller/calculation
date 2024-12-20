@@ -88,9 +88,9 @@ class TableTraitTest extends TestCase
         return new JsonResponse($data, $status);
     }
 
-    public function redirectToHomePage(string $message = '', FlashType $type = FlashType::SUCCESS): Response
+    public function redirectToHomePage(?string $id = null, FlashType $type = FlashType::SUCCESS): Response
     {
-        return new Response($message . $type->getIcon());
+        return new Response(($id ?? '') . $type->getIcon());
     }
 
     public function render(string $view, array $parameters = []): Response

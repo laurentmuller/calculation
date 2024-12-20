@@ -1,9 +1,237 @@
 {% extends 'cards/card_edit.html.twig' %}
-{%- set title = 'parameters.title' -%}
-{%- set title_icon = 'cogs' -%}
-{%- set title_description = 'parameters.description' -%}
-{# javascript #}
-{% block javascripts -%}
+{% form_theme form with _self %}
+{# parameters #}
+{%- set cancel_path = path('homepage') -%}
+{% block card_body_class ' p-0' %}
+{%- set form_attr = form_attr|default({})|merge({'data-random': url('ajax_random_text'), 'data-failure': 'parameters.failure'|trans}) -%}
+{# customized message progress field #}
+{% block _message_progress_widget -%}
+    <div class="input-group">
+        {{- block('choice_widget') -}}
+        <button type="button" class="btn btn-notify btn-outline-secondary d-print-none" title="{{ 'parameters.action_test'|trans }}">
+            <i class="fa-regular fa-bell"></i>
+        </button>
+        <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" title="{{ 'parameters.action_test'|trans }}" data-bs-toggle="dropdown" aria-expanded="false">
+        </button>
+        {% set types = enum_cases('App\\Enums\\FlashType') %}
+        <ul class="dropdown-menu dropdown-menu-end">
+            {% for type in types %}
+                <li>
+                    <button class="dropdown-item dropdown-notify" type="button" data-value="{{ type.value }}">
+                        <i class="me-1 {{ type.icon }}" style="color: {{ type.style }}"></i>{{- type|trans -}}
+                    </button>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{%- endblock %}
+
+{% macro renderHeader(href, icon, expanded = false) %}
+    {%- set show = 'common.expand'|trans -%}
+    {%- set hide = 'common.collapse'|trans -%}
+    {%- set title = expanded ? hide : show -%}
+    {%- set name = ('parameters.group_' ~ href)|trans -%}
+    <div class="card-header d-flex-wrap-center rounded-0">
+        <a class="drop-down-icon-right card-title collapsed{% if expanded %} show{% endif %}" href="#{{ href }}"
+           data-bs-toggle="collapse" data-show="{{ show }}" data-hide="{{ hide }}"
+           title="{{ title }}" aria-expanded="{{ expanded|json_encode }}">
+            <i class="fa-solid fa-{{ icon }} fa-fw me-1"></i>{{ name }}
+        </a>
+    </div>
+{% endmacro %}
+
+{% macro renderDescription(key) %}
+    <p class="mb-2 form-text text-body-secondary">{{ ('parameters.group_' ~ key ~ '_help')|trans }}</p>
+{% endmacro %}
+
+{% macro renderCustomer(form) %}
+    {{ _self.renderHeader('customer', 'user-tie', true) }}
+    <div id="customer" class="card-body pt-0 collapse show" data-bs-parent=".card-parameter">
+        {{ _self.renderDescription('customer') }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.address) }}
+        {{ form_row(form.zipCity) }}
+        <div class="row">
+            <div class="col-md-6">{{ form_row(form.phone) }}</div>
+            <div class="col-md-6">{{ form_row(form.fax) }}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">{{ form_row(form.email) }}</div>
+            <div class="col-md-6">{{ form_row(form.url) }}</div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro renderDefault(form) %}
+    {{ _self.renderHeader('default', 'file-code') }}
+    <div id="default" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
+        {{ _self.renderDescription('default') }}
+        <div class="row">
+            <div class="col-md-4">
+                {{ form_row(form.state) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_row(form.category) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_row(form.minMargin) }}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro renderProduct(form) %}
+    {{ _self.renderHeader('product', 'file-alt') }}
+    <div id="product" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
+        {{ _self.renderDescription('product') }}
+        <div class="row">
+            <div class="col-md-8">
+                {{ form_row(form.product) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_row(form.quantity) }}
+            </div>
+        </div>
+        {{ form_row(form.edit) }}
+    </div>
+{% endmacro %}
+
+{% macro renderDisplay(form, expanded = false) %}
+    {{ _self.renderHeader('display', 'display', expanded) }}
+    <div id="display" class="card-body pt-0 collapse{% if expanded %} show{% endif %}" data-bs-parent=".card-parameter">
+        {{ _self.renderDescription('display') }}
+        <div class="row">
+            <div class="col-md-7">
+                {{ form_row(form.displayMode) }}
+            </div>
+            <div class="col-md-5">
+                {{ form_row(form.editAction) }}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro renderMessage(form) %}
+    {{ _self.renderHeader('message', 'bell') }}
+    <div id="message" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
+        {{ _self.renderDescription('message') }}
+        <div class="row">
+            <div class="col-md-4">
+                {{ form_row(form.position) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_row(form.timeout) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_row(form.progress) }}
+            </div>
+        </div>
+        <div class="d-flex flex-md-row flex-column">
+            {{ form_row(form.icon) }}
+            {{ form_row(form.title) }}
+            {{ form_row(form.subTitle) }}
+            {{ form_row(form.close) }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro renderHomePage(form) %}
+    {{ _self.renderHeader('home', 'house-user') }}
+    <div id="home" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
+        {{ _self.renderDescription('home') }}
+        {{ form_row(form.calculations) }}
+        {{ form_row(form.panelState) }}
+        {{ form_row(form.panelMonth) }}
+        {{ form_row(form.panelCatalog) }}
+        {{ form_row(form.statusBar) }}
+        {{ form_row(form.darkNavigation) }}
+    </div>
+{% endmacro %}
+
+{% macro renderOptions(form) %}
+    {{ _self.renderHeader('options', 'list-check') }}
+    <div id="options" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
+        {{ _self.renderDescription('options') }}
+        {{ form_row(form.printAddress) }}
+        {{ form_row(form.qrCode) }}
+    </div>
+{% endmacro %}
+
+{% macro renderSecurity(form) %}
+    {{ _self.renderHeader('security', 'lock') }}
+    <div id="security" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
+        {{ _self.renderDescription('security') }}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.captcha) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.level) }}
+            </div>
+        </div>
+        <span class="form-label">{{ 'user.fields.password'|trans }}</span>
+        {{ form_row(form.letter) }}
+        {{ form_row(form.caseDiff) }}
+        {{ form_row(form.number) }}
+        {{ form_row(form.specialChar) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.compromised) }}
+    </div>
+{% endmacro %}
+
+{# body #}
+{% block card_body -%}
+<div class="card card-parameter card-collapse border-0">
+    {% if form.customer is defined %}
+        {{ _self.renderCustomer(form.customer) }}
+    {% endif %}
+    {% if form.default is defined %}
+        {{ _self.renderDefault(form.default) }}
+    {% endif %}
+    {% if form.product is defined %}
+        {{ _self.renderProduct(form.product) }}
+    {% endif %}
+    {{ _self.renderDisplay(form.display, form.customer is not defined) }}
+    {{ _self.renderMessage(form.message) }}
+    {{ _self.renderHomePage(form.homePage) }}
+    {% if form.options is defined %}
+        {{ _self.renderOptions(form.options) }}
+    {% endif %}
+    {% if form.security is defined %}
+        {{ _self.renderSecurity(form.security) }}
+    {% endif %}
+</div>
+{{ parent() }}
+{% endblock %}
+{# form #}
+{% block actions_form -%}
     {{ parent() }}
-    {{- asset_js('js/application/validation_edit.js') }}
+    <div class="dropdown">
+        <button class="btn btn-form btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false" title="{{ 'parameters.default_help'|trans }}">
+            {{- 'parameters.default'|trans -}}
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <button type="button" class="dropdown-item btn-item-visible">
+                    {{- 'parameters.default_visible'|trans -}}
+                </button>
+            </li>
+            <li>
+                <button type="button" class="dropdown-item btn-item-all">
+                    {{- 'parameters.default_all'|trans -}}
+                </button>
+            </li>
+        </ul>
+    </div>
+{%- endblock %}
+{# javascripts #}
+{% block javascripts %}
+    {% if app.debug %}
+        {{ parent() }}
+        {{ asset_js('js/plugins/plugin-input-number.js') }}
+        {{ asset_js('js/application/parameters_edit.js') }}
+    {% else %}
+        {{ asset_js('js/compiled/parameters_edit.js') }}
+    {% endif %}
 {% endblock %}

@@ -48,10 +48,11 @@ trait TableTrait
         if (null !== $subject) {
             $this->denyAccessUnlessGranted(EntityPermission::LIST, $subject);
         }
+
         // check empty
         $message = $table->getEmptyMessage();
         if (null !== $message) {
-            return $this->redirectToHomePage(message: $message, type: FlashType::INFO);
+            return $this->redirectToHomePage(id: $message, type: FlashType::INFO);
         }
 
         try {

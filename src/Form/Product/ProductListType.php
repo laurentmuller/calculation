@@ -43,9 +43,6 @@ class ProductListType extends AbstractListEntityType
 
     private function getGroupBy(Product $product): string
     {
-        $category = $product->getCategoryCode();
-        $group = $product->getGroupCode();
-
-        return \sprintf('%s - %s', $group, $category);
+        return \sprintf('%s - %s', $product->getGroupCode(), $product->getCategoryCode());
     }
 }

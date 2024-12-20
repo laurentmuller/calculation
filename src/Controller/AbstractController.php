@@ -219,19 +219,22 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Display a message, if not empty, and redirect to the home page.
+     * Display a flash message, if not empty, and redirect to the home page.
      *
-     * If the request is not null, and the caller parameter is set, redirect to it.
+     * @param ?string   $id         the optional flash message identifier to translate
+     * @param array     $parameters an array of parameters for the flash message
+     * @param FlashType $type       the flash message type
+     * @param ?Request  $request    the optional request, if not null, and the caller parameter is set, redirect to it
      */
     public function redirectToHomePage(
-        string $message = '',
+        ?string $id = null,
         array $parameters = [],
         FlashType $type = FlashType::SUCCESS,
         ?Request $request = null
     ): RedirectResponse {
-        if ('' !== $message) {
-            $message = $this->trans($message, $parameters);
-            $this->addFlashMessage($type, $message);
+        if (StringUtils::isString($id)) {
+            $id = $this->trans($id, $parameters);
+            $this->addFlashMessage($type, $id);
         }
         if ($request instanceof Request) {
             return $this->getUrlGenerator()->redirect($request);

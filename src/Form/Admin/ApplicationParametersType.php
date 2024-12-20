@@ -98,6 +98,7 @@ class ApplicationParametersType extends AbstractParametersType
         $key = PropertyServiceInterface::P_PRODUCT_QUANTITY;
         $helper->field($key)
             ->updateAttribute('data-default', (float) $this->getDefaultValue($key))
+            ->widgetClass('input-number')
             ->addNumberType();
 
         $key = PropertyServiceInterface::P_PRODUCT_EDIT;

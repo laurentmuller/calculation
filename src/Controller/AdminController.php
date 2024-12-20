@@ -65,7 +65,7 @@ class AdminController extends AbstractController
                 }
 
                 return $this->redirectToHomePage(
-                    message: 'clear_cache.failure',
+                    id: 'clear_cache.failure',
                     type: FlashType::DANGER,
                     request: $request
                 );

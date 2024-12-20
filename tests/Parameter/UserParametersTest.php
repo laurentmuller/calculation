@@ -93,7 +93,7 @@ class UserParametersTest extends TestCase
             ->setDarkNavigation(true);
         $parameters->getMessage()
             ->setIcon(false);
-        $parameters->getOption()
+        $parameters->getOptions()
             ->setPrintAddress(true);
 
         $actual = $parameters->save();
@@ -117,7 +117,7 @@ class UserParametersTest extends TestCase
             $security,
             $application
         );
-        $parameters->getOption()
+        $parameters->getOptions()
             ->setPrintAddress(true);
 
         $actual = $parameters->save();
@@ -135,7 +135,7 @@ class UserParametersTest extends TestCase
         $manager->method('getRepository')
             ->willReturn($repository);
 
-        return new ApplicationParameters($cache, $manager);
+        return new ApplicationParameters($cache, $manager, false);
     }
 
     /**

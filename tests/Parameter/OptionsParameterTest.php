@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Parameter;
 
-use App\Parameter\OptionParameter;
+use App\Parameter\OptionsParameter;
 
 /**
- * @extends ParameterTestCase<OptionParameter>
+ * @extends ParameterTestCase<OptionsParameter>
  */
-class OptionParameterTest extends ParameterTestCase
+class OptionsParameterTest extends ParameterTestCase
 {
     public static function getParameterNames(): \Generator
     {
@@ -48,8 +48,8 @@ class OptionParameterTest extends ParameterTestCase
         self::assertTrue($this->parameter->isPrintAddress());
     }
 
-    protected function createParameter(): OptionParameter
+    protected function createParameter(): OptionsParameter
     {
-        return new OptionParameter();
+        return new OptionsParameter();
     }
 }

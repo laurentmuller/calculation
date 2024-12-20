@@ -18,6 +18,7 @@ use App\Attribute\GetPost;
 use App\Constraint\Captcha;
 use App\Constraint\Password;
 use App\Constraint\Strength;
+use App\Entity\AbstractProperty;
 use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Product;
@@ -26,7 +27,8 @@ use App\Enums\FlashType;
 use App\Enums\Importance;
 use App\Enums\MessagePosition;
 use App\Enums\StrengthLevel;
-use App\Form\Admin\CustomerParameterType;
+use App\Form\Parameters\ApplicationParametersType;
+use App\Form\Parameters\UserParametersType;
 use App\Form\Type\AlphaCaptchaType;
 use App\Form\Type\CaptchaImageType;
 use App\Form\Type\ReCaptchaType;
@@ -34,9 +36,12 @@ use App\Form\Type\SimpleEditorType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\SortModeInterface;
+use App\Interfaces\TableInterface;
 use App\Interfaces\UserInterface;
 use App\Model\HttpClientError;
+use App\Parameter\AbstractParameters;
 use App\Parameter\ApplicationParameters;
+use App\Parameter\UserParameters;
 use App\Pdf\Events\PdfLabelTextEvent;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\PdfLabelDocument;
@@ -72,6 +77,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -256,7 +262,7 @@ class TestController extends AbstractController
     {
         if (!$service->isSvgSupported() || $service->isImagickException()) {
             return $this->redirectToHomePage(
-                message: 'test.fontawesome_error',
+                id: 'test.fontawesome_error',
                 type: FlashType::WARNING
             );
         }
@@ -502,20 +508,40 @@ class TestController extends AbstractController
         return $this->json($data);
     }
 
-    #[GetPost(path: '/parameter', name: 'parameter')]
-    public function testParameter(Request $request, ApplicationParameters $application): Response
+    #[GetPost(path: '/application/parameters', name: 'application_parameter')]
+    public function testApplicationParameters(Request $request, ApplicationParameters $parameters): Response
     {
-        $form = $this->createForm(CustomerParameterType::class, $application->getCustomer());
-        if ($this->handleRequestForm($request, $form)) {
-            if ($application->save()) {
-                return $this->redirectToHomePage($this->trans('parameters.success'));
-            }
-            // return $this->redirectToHomePage();
-        }
+        $templateParameters = [
+            'title_icon' => 'cogs',
+            'title' => 'parameters.title',
+            'title_description' => 'parameters.description',
+        ];
 
-        return $this->render('test/parameter.html.twig', [
-            'form' => $form,
-        ]);
+        return $this->renderParameters(
+            $request,
+            $parameters,
+            ApplicationParametersType::class,
+            'parameters.success',
+            $templateParameters
+        );
+    }
+
+    #[GetPost(path: '/user/parameters', name: 'user_parameter')]
+    public function testUserParameters(Request $request, UserParameters $parameters): Response
+    {
+        $templateParameters = [
+            'title_icon' => 'user-gear',
+            'title' => 'user.parameters.title',
+            'title_description' => 'user.parameters.description',
+        ];
+
+        return $this->renderParameters(
+            $request,
+            $parameters,
+            UserParametersType::class,
+            'user.parameters.success',
+            $templateParameters
+        );
     }
 
     /**
@@ -666,5 +692,39 @@ class TestController extends AbstractController
             : 'calculationstate.list.editable_0';
 
         return $this->groupBy($states, $fn);
+    }
+
+    /**
+     * @template T of AbstractProperty
+     *
+     * @psalm-param AbstractParameters<T> $parameters
+     * @psalm-param class-string<FormTypeInterface<mixed>> $type
+     *
+     * @phpstan-param class-string<FormTypeInterface> $type
+     */
+    private function renderParameters(
+        Request $request,
+        AbstractParameters $parameters,
+        string $type,
+        string $success,
+        array $templateParameters,
+    ): Response {
+        $options = ['default_values' => $parameters->getDefaultValues()];
+        $form = $this->createForm($type, $parameters, $options);
+        if ($this->handleRequestForm($request, $form)) {
+            if (!$parameters->save()) {
+                return $this->redirectToHomePage();
+            }
+            $response = $this->redirectToHomePage($success);
+            $path = $this->getCookiePath();
+            $view = $parameters->getDisplay()->getDisplayMode();
+            $this->updateCookie($response, TableInterface::PARAM_VIEW, $view, path: $path);
+
+            return $response;
+        }
+
+        $templateParameters['form'] = $form;
+
+        return $this->render('test/parameter.html.twig', $templateParameters);
     }
 }

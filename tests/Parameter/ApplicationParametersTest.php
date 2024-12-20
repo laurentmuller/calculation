@@ -36,7 +36,7 @@ class ApplicationParametersTest extends TestCase
         $property = GlobalProperty::instance('security_level')
             ->setValue(StrengthLevel::NONE);
         $manager = $this->createMockManager($property);
-        $parameters = new ApplicationParameters($cache, $manager);
+        $parameters = new ApplicationParameters($cache, $manager, false);
         $parameters->getSecurity()
             ->setLevel(StrengthLevel::MEDIUM);
         $actual = $parameters->save();
@@ -52,7 +52,7 @@ class ApplicationParametersTest extends TestCase
         $property = GlobalProperty::instance('edit_action')
             ->setValue(EntityAction::EDIT);
         $manager = $this->createMockManager($property);
-        $parameters = new ApplicationParameters($cache, $manager);
+        $parameters = new ApplicationParameters($cache, $manager, false);
         $parameters->getDisplay()
             ->setEditAction(EntityAction::NONE);
         $actual = $parameters->save();
@@ -66,7 +66,7 @@ class ApplicationParametersTest extends TestCase
     {
         $cache = new ArrayAdapter();
         $manager = $this->createMockManager();
-        $parameters = new ApplicationParameters($cache, $manager);
+        $parameters = new ApplicationParameters($cache, $manager, false);
         $actual = $parameters->getDefaultValues();
         self::assertNotEmpty($actual);
     }
@@ -78,7 +78,7 @@ class ApplicationParametersTest extends TestCase
     {
         $cache = new ArrayAdapter();
         $manager = $this->createMockManager();
-        $parameters = new ApplicationParameters($cache, $manager);
+        $parameters = new ApplicationParameters($cache, $manager, false);
         $parameters->getCustomer()
             ->setAddress('fake');
         $parameters->getDate()
@@ -91,7 +91,7 @@ class ApplicationParametersTest extends TestCase
             ->setDarkNavigation(true);
         $parameters->getMessage()
             ->setIcon(false);
-        $parameters->getOption()
+        $parameters->getOptions()
             ->setPrintAddress(true);
         $parameters->getProduct()
             ->setQuantity(1.25);
@@ -114,7 +114,7 @@ class ApplicationParametersTest extends TestCase
         $property = GlobalProperty::instance('default_category')
             ->setValue(1);
         $manager = $this->createMockManager($property);
-        $parameters = new ApplicationParameters($cache, $manager);
+        $parameters = new ApplicationParameters($cache, $manager, false);
         $parameters->getDefault()
             ->setCategory($category);
         $actual = $parameters->save();

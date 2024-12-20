@@ -28,6 +28,9 @@ class HomePageParameter implements ParameterInterface
     #[Parameter('dark_navigation', true)]
     private bool $darkNavigation = true;
 
+    #[Parameter('panel_catalog', true)]
+    private bool $panelCatalog = true;
+
     #[Parameter('panel_month', true)]
     private bool $panelMonth = true;
 
@@ -50,6 +53,11 @@ class HomePageParameter implements ParameterInterface
     public function isDarkNavigation(): bool
     {
         return $this->darkNavigation;
+    }
+
+    public function isPanelCatalog(): bool
+    {
+        return $this->panelCatalog;
     }
 
     public function isPanelMonth(): bool
@@ -77,6 +85,13 @@ class HomePageParameter implements ParameterInterface
     public function setDarkNavigation(bool $darkNavigation): self
     {
         $this->darkNavigation = $darkNavigation;
+
+        return $this;
+    }
+
+    public function setPanelCatalog(bool $panelCatalog): self
+    {
+        $this->panelCatalog = $panelCatalog;
 
         return $this;
     }

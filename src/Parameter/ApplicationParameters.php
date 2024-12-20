@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Parameter;
 
-use App\Entity\AbstractProperty;
 use App\Entity\GlobalProperty;
 use App\Repository\GlobalPropertyRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -38,19 +38,10 @@ class ApplicationParameters extends AbstractParameters
     private ?DefaultParameter $default = null;
 
     #[Assert\Valid]
-    private ?DisplayParameter $display = null;
-
-    #[Assert\Valid]
-    private ?HomePageParameter $homePage = null;
-
-    #[Assert\Valid]
-    private ?MessageParameter $message = null;
-
-    #[Assert\Valid]
-    private ?OptionParameter $option = null;
-
-    #[Assert\Valid]
     private ?ProductParameter $product = null;
+
+    #[Assert\Valid]
+    private ?RightsParameter $rights = null;
 
     #[Assert\Valid]
     private ?SecurityParameter $security = null;
@@ -59,6 +50,8 @@ class ApplicationParameters extends AbstractParameters
         #[Target('calculation.application')]
         CacheInterface $cache,
         EntityManagerInterface $manager,
+        #[Autowire('%kernel.debug%')]
+        private readonly bool $debug,
     ) {
         parent::__construct($cache, $manager);
     }
@@ -86,42 +79,10 @@ class ApplicationParameters extends AbstractParameters
             DisplayParameter::class,
             HomePageParameter::class,
             MessageParameter::class,
-            OptionParameter::class,
+            OptionsParameter::class,
             ProductParameter::class,
             SecurityParameter::class,
         );
-    }
-
-    /**
-     * Gets the display parameter.
-     */
-    public function getDisplay(): DisplayParameter
-    {
-        return $this->display ??= $this->getCachedParameter(DisplayParameter::class);
-    }
-
-    /**
-     * Gets the home page parameter.
-     */
-    public function getHomePage(): HomePageParameter
-    {
-        return $this->homePage ??= $this->getCachedParameter(HomePageParameter::class);
-    }
-
-    /**
-     * Gets the message parameter.
-     */
-    public function getMessage(): MessageParameter
-    {
-        return $this->message ??= $this->getCachedParameter(MessageParameter::class);
-    }
-
-    /**
-     * Gets the option parameter.
-     */
-    public function getOption(): OptionParameter
-    {
-        return $this->option ??= $this->getCachedParameter(OptionParameter::class);
     }
 
     /**
@@ -132,12 +93,22 @@ class ApplicationParameters extends AbstractParameters
         return $this->product ??= $this->getCachedParameter(ProductParameter::class);
     }
 
+    public function getRights(): RightsParameter
+    {
+        return $this->rights ??= $this->getCachedParameter(RightsParameter::class);
+    }
+
     /**
      * Gets the security parameter.
      */
     public function getSecurity(): SecurityParameter
     {
         return $this->security ??= $this->getCachedParameter(SecurityParameter::class);
+    }
+
+    public function isDebug(): bool
+    {
+        return $this->debug;
     }
 
     public function save(): bool
@@ -149,25 +120,26 @@ class ApplicationParameters extends AbstractParameters
             $this->display,
             $this->homePage,
             $this->message,
-            $this->option,
+            $this->options,
             $this->product,
+            $this->rights,
             $this->security,
         ]);
     }
 
-    protected function createProperty(string $name): AbstractProperty
+    protected function createProperty(string $name): GlobalProperty
     {
         return GlobalProperty::instance($name);
-    }
-
-    protected function findProperty(string $name): ?GlobalProperty
-    {
-        return $this->getRepository()
-            ->findOneByName($name);
     }
 
     protected function getRepository(): GlobalPropertyRepository
     {
         return $this->manager->getRepository(GlobalProperty::class);
+    }
+
+    protected function loadProperties(): array
+    {
+        return $this->getRepository()
+            ->findAll();
     }
 }

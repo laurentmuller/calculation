@@ -20,6 +20,7 @@ use App\Repository\AbstractRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -32,6 +33,18 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 abstract class AbstractParameters
 {
+    #[Assert\Valid]
+    protected ?DisplayParameter $display = null;
+
+    #[Assert\Valid]
+    protected ?HomePageParameter $homePage = null;
+
+    #[Assert\Valid]
+    protected ?MessageParameter $message = null;
+
+    #[Assert\Valid]
+    protected ?OptionsParameter $options = null;
+
     private ?PropertyAccessor $accessor = null;
 
     public function __construct(
@@ -43,11 +56,43 @@ abstract class AbstractParameters
     /**
      * Gets all default values.
      *
-     * @return array<string, mixed>
+     * @return array<string, array<string, mixed>>
      *
-     * @psalm-return array<string, TValue>
+     * @psalm-return array<array<string, TValue>>
      */
     abstract public function getDefaultValues(): array;
+
+    /**
+     * Gets the display parameter.
+     */
+    public function getDisplay(): DisplayParameter
+    {
+        return $this->display ??= $this->getCachedParameter(DisplayParameter::class);
+    }
+
+    /**
+     * Gets the home page parameter.
+     */
+    public function getHomePage(): HomePageParameter
+    {
+        return $this->homePage ??= $this->getCachedParameter(HomePageParameter::class);
+    }
+
+    /**
+     * Gets the message parameter.
+     */
+    public function getMessage(): MessageParameter
+    {
+        return $this->message ??= $this->getCachedParameter(MessageParameter::class);
+    }
+
+    /**
+     * Gets the option parameter.
+     */
+    public function getOptions(): OptionsParameter
+    {
+        return $this->options ??= $this->getCachedParameter(OptionsParameter::class);
+    }
 
     /**
      * Save parameters.
@@ -79,9 +124,10 @@ abstract class AbstractParameters
         $parameter = new $class();
         $accessor = $this->getAccessor();
         $metaDatas = $this->getMetaDatas($parameter);
+        $properties = $this->loadProperties();
 
         foreach ($metaDatas as $metaData) {
-            $property = $this->findProperty($metaData->name);
+            $property = $this->findProperty($properties, $metaData->name);
             if ($property instanceof AbstractProperty) {
                 $value = $this->getPropertyValue($metaData, $property);
             } else {
@@ -90,6 +136,10 @@ abstract class AbstractParameters
             if (null !== $value) {
                 $accessor->setValue($parameter, $metaData->property, $value);
             }
+        }
+
+        if ($parameter instanceof EntityParameterInterface) {
+            $parameter->updateEntities($this->manager);
         }
 
         /** @phpstan-var T */
@@ -102,9 +152,21 @@ abstract class AbstractParameters
     abstract protected function createProperty(string $name): AbstractProperty;
 
     /**
+     * @psalm-param TProperty[]  $properties
+     *
      * @psalm-return TProperty|null
      */
-    abstract protected function findProperty(string $name): ?AbstractProperty;
+    protected function findProperty(array $properties, string $name): ?AbstractProperty
+    {
+        $callback = static fn (AbstractProperty $property): bool => $property->getName() === $name;
+        foreach ($properties as $property) {
+            if ($callback($property)) {
+                return $property;
+            }
+        }
+
+        return null;
+    }
 
     protected function getAccessor(): PropertyAccessor
     {
@@ -137,10 +199,17 @@ abstract class AbstractParameters
      */
     protected function getCachedParameter(string $class, ?ParameterInterface $default = null): ParameterInterface
     {
-        return $this->cache->get(
+        $parameters = $this->cache->get(
             $class::getCacheKey(),
             fn (): ParameterInterface => $this->createParameter($class, $default)
         );
+
+        if ($parameters instanceof EntityParameterInterface) {
+            $parameters->updateEntities($this->manager);
+        }
+
+        /** @phpstan-var T */
+        return $parameters;
     }
 
     /**
@@ -214,23 +283,27 @@ abstract class AbstractParameters
     }
 
     /**
+     * @return array<string, array<string, mixed>>
+     *
      * @psalm-param TParameter ...$parameters
      *
-     * @psalm-return array<string, TValue>
+     * @psalm-return array<string, array<string, TValue>>
      */
     protected function getParametersDefaultValues(ParameterInterface|string ...$parameters): array
     {
         $values = [];
         $accessor = $this->getAccessor();
         foreach ($parameters as $parameter) {
+            $key = $parameter::getCacheKey();
             $metaDatas = $this->getMetaDatas($parameter);
             foreach ($metaDatas as $metaData) {
                 if ($parameter instanceof ParameterInterface) {
-                    $values[$metaData->property] = $this->getParameterPropertyValue($metaData, $parameter, $accessor);
+                    $values[$key][$metaData->property] = $this->getParameterPropertyValue($metaData, $parameter, $accessor);
                 } else {
-                    $values[$metaData->property] = $this->getMetaDataDefaultValue($metaData);
+                    $values[$key][$metaData->property] = $this->getMetaDataDefaultValue($metaData);
                 }
             }
+            $values[$key] = \array_filter($values[$key], static fn ($value): bool => null !== $value);
         }
 
         return \array_filter($values);
@@ -291,6 +364,24 @@ abstract class AbstractParameters
         return $attributes[0]->newInstance()->default === $value;
     }
 
+    /**
+     * @psalm-return TProperty[]
+     */
+    abstract protected function loadProperties(): array;
+
+    /**
+     * @psalm-template TEntity of EntityInterface
+     *
+     * @psalm-param TEntity $entity
+     *
+     * @psalm-return ?TEntity
+     */
+    protected function refreshEntity(EntityInterface $entity): ?EntityInterface
+    {
+        return $this->manager->getRepository($entity::class)
+            ->find($entity->getId());
+    }
+
     protected function saveParameter(?ParameterInterface $parameter, ?ParameterInterface $default = null): bool
     {
         if (!$parameter instanceof ParameterInterface) {
@@ -300,10 +391,11 @@ abstract class AbstractParameters
         $changed = false;
         $accessor = $this->getAccessor();
         $repository = $this->getRepository();
+        $properties = $this->loadProperties();
         $metaDatas = $this->getMetaDatas($parameter);
 
         foreach ($metaDatas as $metaData) {
-            $property = $this->findProperty($metaData->name);
+            $property = $this->findProperty($properties, $metaData->name);
             $value = $this->getParameterPropertyValue($metaData, $parameter, $accessor);
             $defaultValue = $this->getDefaultPropertyValue($metaData, $default, $accessor);
             if ($value === $defaultValue || $this->isDefaultValue($parameter, $metaData->property, $value)) {

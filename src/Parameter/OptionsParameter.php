@@ -16,14 +16,14 @@ namespace App\Parameter;
 use App\Attribute\Parameter;
 
 /**
- * Option parameter.
+ * Options parameter.
  */
-class OptionParameter implements ParameterInterface
+class OptionsParameter implements ParameterInterface
 {
-    #[Parameter('option_print_address', false)]
+    #[Parameter('print_address', false)]
     private bool $printAddress = false;
 
-    #[Parameter('option_qr_code', false)]
+    #[Parameter('qr_code', false)]
     private bool $qrCode = false;
 
     public static function getCacheKey(): string

@@ -15,7 +15,6 @@ namespace App\Parameter;
 
 use App\Attribute\Parameter;
 use App\Entity\Product;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -72,13 +71,5 @@ class ProductParameter implements EntityParameterInterface
         $this->quantity = $quantity;
 
         return $this;
-    }
-
-    public function updateEntities(EntityManagerInterface $manager): void
-    {
-        if ($this->product instanceof Product) {
-            $this->product = $manager->getRepository(Product::class)
-                ->find($this->product->getId());
-        }
     }
 }

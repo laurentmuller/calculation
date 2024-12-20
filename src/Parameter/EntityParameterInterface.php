@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace App\Parameter;
 
-use Doctrine\ORM\EntityManagerInterface;
-
 interface EntityParameterInterface extends ParameterInterface
 {
-    public function updateEntities(EntityManagerInterface $manager): void;
 }

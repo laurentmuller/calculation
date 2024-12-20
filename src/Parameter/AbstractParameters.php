@@ -138,10 +138,6 @@ abstract class AbstractParameters
             }
         }
 
-        if ($parameter instanceof EntityParameterInterface) {
-            $parameter->updateEntities($this->manager);
-        }
-
         /** @phpstan-var T */
         return $parameter;
     }
@@ -199,17 +195,17 @@ abstract class AbstractParameters
      */
     protected function getCachedParameter(string $class, ?ParameterInterface $default = null): ParameterInterface
     {
-        $parameters = $this->cache->get(
+        $parameter = $this->cache->get(
             $class::getCacheKey(),
             fn (): ParameterInterface => $this->createParameter($class, $default)
         );
 
-        if ($parameters instanceof EntityParameterInterface) {
-            $parameters->updateEntities($this->manager);
+        if ($parameter instanceof EntityParameterInterface) {
+            $this->updateEntities($parameter);
         }
 
         /** @phpstan-var T */
-        return $parameters;
+        return $parameter;
     }
 
     /**
@@ -369,19 +365,6 @@ abstract class AbstractParameters
      */
     abstract protected function loadProperties(): array;
 
-    /**
-     * @psalm-template TEntity of EntityInterface
-     *
-     * @psalm-param TEntity $entity
-     *
-     * @psalm-return ?TEntity
-     */
-    protected function refreshEntity(EntityInterface $entity): ?EntityInterface
-    {
-        return $this->manager->getRepository($entity::class)
-            ->find($entity->getId());
-    }
-
     protected function saveParameter(?ParameterInterface $parameter, ?ParameterInterface $default = null): bool
     {
         if (!$parameter instanceof ParameterInterface) {
@@ -439,5 +422,27 @@ abstract class AbstractParameters
         }
 
         return $saved;
+    }
+
+    protected function updateEntities(EntityParameterInterface $parameter): void
+    {
+        $metaDatas = \array_filter(
+            $this->getMetaDatas($parameter),
+            static fn (MetaData $metaData): bool => $metaData->isEntityInterfaceType(),
+        );
+        if ([] === $metaDatas) {
+            return;
+        }
+
+        $accessor = $this->getAccessor();
+        foreach ($metaDatas as $metaData) {
+            $value = $accessor->getValue($parameter, $metaData->property);
+            if (!$value instanceof EntityInterface) {
+                continue;
+            }
+            $value = $this->manager->getRepository($value::class)
+                ->find($value->getId());
+            $accessor->setValue($parameter, $metaData->property, $value);
+        }
     }
 }

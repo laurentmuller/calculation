@@ -22,8 +22,8 @@ class OptionsParameterTest extends ParameterTestCase
 {
     public static function getParameterNames(): \Generator
     {
-        yield ['printAddress', 'option_print_address'];
-        yield ['qrCode', 'option_qr_code'];
+        yield ['printAddress', 'print_address'];
+        yield ['qrCode', 'qr_code'];
     }
 
     public static function getParameterValues(): \Generator

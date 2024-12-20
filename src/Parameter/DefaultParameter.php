@@ -18,7 +18,6 @@ use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Traits\MathTrait;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -86,17 +85,5 @@ class DefaultParameter implements EntityParameterInterface
         $this->state = $state;
 
         return $this;
-    }
-
-    public function updateEntities(EntityManagerInterface $manager): void
-    {
-        if ($this->category instanceof Category) {
-            $this->category = $manager->getRepository(Category::class)
-                ->find($this->category->getId());
-        }
-        if ($this->state instanceof CalculationState) {
-            $this->state = $manager->getRepository(CalculationState::class)
-                ->find($this->state->getId());
-        }
     }
 }

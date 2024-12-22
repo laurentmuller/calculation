@@ -15,36 +15,34 @@ namespace App\Parameter;
 
 use App\Attribute\Parameter;
 use App\Entity\Calculation;
-use App\Entity\CalculationState;
-use App\Entity\Category;
 use App\Traits\MathTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Default parameter.
  */
-class DefaultParameter implements EntityParameterInterface
+class DefaultParameter implements ParameterInterface
 {
     use MathTrait;
 
     #[Parameter('default_category')]
-    private ?Category $category = null;
+    private ?int $categoryId = null;
 
     #[Assert\GreaterThanOrEqual(0.0)]
     #[Parameter('minimum_margin', 1.1)]
     private float $minMargin = 1.1;
 
     #[Parameter('default_state')]
-    private ?CalculationState $state = null;
+    private ?int $stateId = null;
 
     public static function getCacheKey(): string
     {
         return 'parameter_default_value';
     }
 
-    public function getCategory(): ?Category
+    public function getCategoryId(): ?int
     {
-        return $this->category;
+        return $this->categoryId;
     }
 
     public function getMinMargin(): float
@@ -52,9 +50,9 @@ class DefaultParameter implements EntityParameterInterface
         return $this->minMargin;
     }
 
-    public function getState(): ?CalculationState
+    public function getStateId(): ?int
     {
-        return $this->state;
+        return $this->stateId;
     }
 
     public function isMarginBelow(Calculation|float $value): bool
@@ -66,9 +64,9 @@ class DefaultParameter implements EntityParameterInterface
         return !$this->isFloatZero($value) && $value < $this->minMargin;
     }
 
-    public function setCategory(?Category $category): self
+    public function setCategoryId(?int $categoryId): self
     {
-        $this->category = $category;
+        $this->categoryId = $categoryId;
 
         return $this;
     }
@@ -80,9 +78,9 @@ class DefaultParameter implements EntityParameterInterface
         return $this;
     }
 
-    public function setState(?CalculationState $state): self
+    public function setStateId(?int $stateId): self
     {
-        $this->state = $state;
+        $this->stateId = $stateId;
 
         return $this;
     }

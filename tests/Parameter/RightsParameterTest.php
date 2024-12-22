@@ -60,6 +60,20 @@ class RightsParameterTest extends ParameterTestCase
         self::assertSame('ROLE_USER', $role->getName());
     }
 
+    public function testSetAdminRole(): void
+    {
+        $role = $this->parameter->getDefaultAdminRole();
+        $this->parameter->setAdminRole($role);
+        self::assertNull($this->parameter->getAdminRights());
+    }
+
+    public function testSetUserRole(): void
+    {
+        $role = $this->parameter->getDefaultUserRole();
+        $this->parameter->setUserRole($role);
+        self::assertNull($this->parameter->getUserRights());
+    }
+
     public function testSetValue(): void
     {
         $rights = [0, 1];

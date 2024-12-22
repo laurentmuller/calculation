@@ -24,41 +24,40 @@ class MetaDataTest extends TestCase
 {
     public function testDefault(): void
     {
-        $data = new MetaData('name', 'property', 'array', null);
-        self::assertFalse($data->isEnumTypeInt());
-        self::assertFalse($data->isEnumTypeString());
-        self::assertFalse($data->isEntityInterfaceType());
+        $actual = new MetaData('name', 'property', 'array', null);
+        self::assertSameMetaData($actual);
     }
 
     public function testIsEntity(): void
     {
-        $data = new MetaData('name', 'property', User::class, null);
-        self::assertFalse($data->isEnumTypeInt());
-        self::assertFalse($data->isEnumTypeString());
-        self::assertTrue($data->isEntityInterfaceType());
+        $actual = new MetaData('name', 'property', User::class, null);
+        self::assertSameMetaData($actual);
     }
 
     public function testIsEnumTypeInt(): void
     {
-        $data = new MetaData('name', 'property', StrengthLevel::class, null);
-        self::assertTrue($data->isEnumTypeInt());
-        self::assertFalse($data->isEnumTypeString());
-        self::assertFalse($data->isEntityInterfaceType());
+        $actual = new MetaData('name', 'property', StrengthLevel::class, null);
+        self::assertSameMetaData($actual, true);
     }
 
     public function testIsEnumTypeString(): void
     {
-        $data = new MetaData('name', 'property', MessagePosition::class, null);
-        self::assertFalse($data->isEnumTypeInt());
-        self::assertTrue($data->isEnumTypeString());
-        self::assertFalse($data->isEntityInterfaceType());
+        $actual = new MetaData('name', 'property', MessagePosition::class, null);
+        self::assertSameMetaData($actual, false, true);
     }
 
     public function testIsNotBackedEnum(): void
     {
-        $data = new MetaData('name', 'property', PdfTextAlignment::class, null);
-        self::assertFalse($data->isEnumTypeInt());
-        self::assertFalse($data->isEnumTypeString());
-        self::assertFalse($data->isEntityInterfaceType());
+        $actual = new MetaData('name', 'property', PdfTextAlignment::class, null);
+        self::assertSameMetaData($actual);
+    }
+
+    protected static function assertSameMetaData(
+        MetaData $actual,
+        bool $expectedEnumInt = false,
+        bool $expectedEnumString = false,
+    ): void {
+        self::assertSame($expectedEnumInt, $actual->isEnumTypeInt());
+        self::assertSame($expectedEnumString, $actual->isEnumTypeString());
     }
 }

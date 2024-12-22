@@ -68,10 +68,10 @@
         {{ _self.renderDescription('default') }}
         <div class="row">
             <div class="col-md-4">
-                {{ form_row(form.state) }}
+                {{ form_row(form.stateId) }}
             </div>
             <div class="col-md-4">
-                {{ form_row(form.category) }}
+                {{ form_row(form.categoryId) }}
             </div>
             <div class="col-md-4">
                 {{ form_row(form.minMargin) }}
@@ -86,7 +86,7 @@
         {{ _self.renderDescription('product') }}
         <div class="row">
             <div class="col-md-8">
-                {{ form_row(form.product) }}
+                {{ form_row(form.productId) }}
             </div>
             <div class="col-md-4">
                 {{ form_row(form.quantity) }}

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Parameter;
 
-use App\Entity\Product;
 use App\Parameter\ProductParameter;
 
 /**
@@ -24,21 +23,21 @@ class ProductParameterTest extends ParameterTestCase
     public static function getParameterNames(): \Generator
     {
         yield ['edit', 'default_product_edit'];
-        yield ['product', 'default_product'];
+        yield ['productId', 'default_product'];
         yield ['quantity', 'default_product_quantity'];
     }
 
     public static function getParameterValues(): \Generator
     {
         yield ['edit', false];
-        yield ['product', null];
+        yield ['productId', null];
         yield ['quantity', 0.0];
     }
 
     public function testDefaultValue(): void
     {
         self::assertFalse($this->parameter->isEdit());
-        self::assertNull($this->parameter->getProduct());
+        self::assertNull($this->parameter->getProductId());
         self::assertSame(0.0, $this->parameter->getQuantity());
 
         self::assertSame('parameter_product', $this->parameter::getCacheKey());
@@ -46,12 +45,10 @@ class ProductParameterTest extends ParameterTestCase
 
     public function testSetValue(): void
     {
-        $product = new Product();
-
         $this->parameter->setEdit(true);
         self::assertTrue($this->parameter->isEdit());
-        $this->parameter->setProduct($product);
-        self::assertSame($product, $this->parameter->getProduct());
+        $this->parameter->setProductId(24);
+        self::assertSame(24, $this->parameter->getProductId());
         $this->parameter->setQuantity(0.25);
         self::assertSame(0.25, $this->parameter->getQuantity());
     }

@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Parameter;
 
-use App\Entity\CalculationState;
-use App\Entity\Category;
+use App\Entity\Calculation;
 use App\Parameter\DefaultParameter;
 
 /**
@@ -24,38 +23,46 @@ class DefaultParameterTest extends ParameterTestCase
 {
     public static function getParameterNames(): \Generator
     {
-        yield ['category', 'default_category'];
+        yield ['categoryId', 'default_category'];
         yield ['minMargin', 'minimum_margin'];
-        yield ['state', 'default_state'];
+        yield ['stateId', 'default_state'];
     }
 
     public static function getParameterValues(): \Generator
     {
-        yield ['category', null];
+        yield ['categoryId', null];
         yield ['minMargin', 1.1];
-        yield ['state', null];
+        yield ['stateId', null];
     }
 
     public function testDefaultValue(): void
     {
-        self::assertNull($this->parameter->getCategory());
+        self::assertNull($this->parameter->getCategoryId());
         self::assertSame(1.1, $this->parameter->getMinMargin());
-        self::assertNull($this->parameter->getState());
+        self::assertNull($this->parameter->getStateId());
 
         self::assertSame('parameter_default_value', $this->parameter::getCacheKey());
     }
 
+    public function testMarginBelow(): void
+    {
+        self::assertFalse($this->parameter->isMarginBelow(0.0));
+        self::assertTrue($this->parameter->isMarginBelow(0.1));
+        $calculation = new Calculation();
+        self::assertFalse($this->parameter->isMarginBelow($calculation));
+    }
+
     public function testSetValue(): void
     {
-        $category = new Category();
-        $state = new CalculationState();
+        $categoryId = 12;
+        $stateId = 24;
 
-        $this->parameter->setCategory($category);
-        self::assertSame($category, $this->parameter->getCategory());
+        $this->parameter->setCategoryId($categoryId);
+        self::assertSame($categoryId, $this->parameter->getCategoryId());
         $this->parameter->setMinMargin(2.0);
         self::assertSame(2.0, $this->parameter->getMinMargin());
-        $this->parameter->setState($state);
-        self::assertSame($state, $this->parameter->getState());
+        $this->parameter->setStateId($stateId);
+        self::assertSame($stateId, $this->parameter->getStateId());
     }
 
     protected function createParameter(): DefaultParameter

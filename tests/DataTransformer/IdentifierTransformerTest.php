@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\DataTransformer;
 
 use App\Entity\Group;
-use App\Form\DataTransformer\EntityTransformer;
+use App\Form\DataTransformer\IdentifierTransformer;
 use App\Interfaces\EntityInterface;
 use App\Repository\GroupRepository;
 use App\Tests\Entity\IdTrait;
@@ -23,11 +23,19 @@ use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class EntityTransformerTest extends TestCase
+class IdentifierTransformerTest extends TestCase
 {
     use IdTrait;
 
     public static function getReverseTransformValues(): \Generator
+    {
+        yield [null, null];
+        yield ['', null, true];
+        yield [true, null, true];
+        yield ['fake', null, true];
+    }
+
+    public static function getTransformValues(): \Generator
     {
         yield [null, null];
         yield ['', null];
@@ -36,16 +44,8 @@ class EntityTransformerTest extends TestCase
         yield ['fake', null, true];
     }
 
-    public static function getTransformValues(): \Generator
-    {
-        yield [null, null];
-        yield ['', null, true];
-        yield [true, null, true];
-        yield ['fake', null, true];
-    }
-
     /**
-     * @psalm-param string|int|null $value
+     * @psalm-param EntityInterface|null $value
      *
      * @throws Exception|\ReflectionException
      */
@@ -73,13 +73,12 @@ class EntityTransformerTest extends TestCase
     {
         $group = $this->createGroup();
         $transformer = $this->createTransformer($group);
-        $value = $group->getId();
-        $actual = $transformer->reverseTransform($value);
-        self::assertSame($group, $actual);
+        $actual = $transformer->reverseTransform($group);
+        self::assertSame($group->getId(), $actual);
     }
 
     /**
-     * @psalm-param EntityInterface|null $value
+     * @psalm-param int|string|null $value
      *
      * @throws Exception|\ReflectionException
      */
@@ -107,9 +106,8 @@ class EntityTransformerTest extends TestCase
     {
         $group = $this->createGroup();
         $transformer = $this->createTransformer($group);
-        $actual = $transformer->transform($group);
-        $expected = $group->getId();
-        self::assertSame($expected, $actual);
+        $actual = $transformer->transform($group->getId());
+        self::assertSame($group, $actual);
     }
 
     /**
@@ -137,12 +135,12 @@ class EntityTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-return EntityTransformer<Group>
+     * @psalm-return IdentifierTransformer<Group>
      *
      * @throws Exception
      */
-    private function createTransformer(?Group $group = null): EntityTransformer
+    private function createTransformer(?Group $group = null): IdentifierTransformer
     {
-        return new EntityTransformer($this->createRepository($group));
+        return new IdentifierTransformer($this->createRepository($group));
     }
 }

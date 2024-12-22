@@ -13,7 +13,11 @@ declare(strict_types=1);
 
 namespace App\Parameter;
 
+use App\Entity\CalculationState;
+use App\Entity\Category;
 use App\Entity\GlobalProperty;
+use App\Entity\Product;
+use App\Interfaces\EntityInterface;
 use App\Repository\GlobalPropertyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -69,6 +73,30 @@ class ApplicationParameters extends AbstractParameters
     public function getDefault(): DefaultParameter
     {
         return $this->default ??= $this->getCachedParameter(DefaultParameter::class);
+    }
+
+    /**
+     * Gets the default category.
+     */
+    public function getDefaultCategory(): ?Category
+    {
+        return $this->findEntity(Category::class, $this->getDefault()->getCategoryId());
+    }
+
+    /**
+     * Gets the default product.
+     */
+    public function getDefaultProduct(): ?Product
+    {
+        return $this->findEntity(Product::class, $this->getProduct()->getProductId());
+    }
+
+    /**
+     * Gets the default calculation state.
+     */
+    public function getDefaultState(): ?CalculationState
+    {
+        return $this->findEntity(CalculationState::class, $this->getDefault()->getStateId());
     }
 
     public function getDefaultValues(): array
@@ -141,5 +169,22 @@ class ApplicationParameters extends AbstractParameters
     {
         return $this->getRepository()
             ->findAll();
+    }
+
+    /**
+     * @template TEntity of EntityInterface
+     *
+     * @psalm-param class-string<TEntity> $class
+     *
+     * @psalm-return TEntity|null
+     */
+    private function findEntity(string $class, ?int $id): ?EntityInterface
+    {
+        if (null === $id) {
+            return null;
+        }
+
+        return $this->manager->getRepository($class)
+            ->find($id);
     }
 }

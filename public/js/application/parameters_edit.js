@@ -59,13 +59,12 @@ function setDefaultValues($source) {
 function updateVisibleButton() {
     'use strict';
     let disabled = true;
-    const $button = $('.btn-default-visible');
     const $source = getActivePage();
     if ($source) {
         const selector = '[data-default]:not([data-default=""])';
         disabled = $source.find(selector).length === 0;
     }
-    $button.toggleDisabled(disabled);
+    $('.btn-item-visible').toggleDisabled(disabled);
 }
 
 /**
@@ -98,7 +97,7 @@ function displayNotification($source) {
                 timeout: $('#message_timeout').intVal(),
                 progress: $('#message_progress').intVal(),
                 displayClose: $('#message_close').isChecked(),
-                displaySubtitle: $('#message_sub_title').isChecked(),
+                displaySubtitle: $('#message_sub_title, #message_subTitle').isChecked(),
             };
             Toaster.notify(type, content, title, options);
         } else {

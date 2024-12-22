@@ -13,15 +13,23 @@ declare(strict_types=1);
 
 namespace App\Form\Parameters;
 
+use App\Entity\Product;
+use App\Form\DataTransformer\IdentifierTransformer;
 use App\Form\FormHelper;
 use App\Form\Product\ProductListType;
 use App\Parameter\ProductParameter;
+use App\Repository\ProductRepository;
 
 class ProductParameterType extends AbstractParameterType
 {
+    public function __construct(private readonly ProductRepository $repository)
+    {
+    }
+
     protected function addFormFields(FormHelper $helper): void
     {
-        $helper->field('product')
+        $helper->field('productId')
+            ->modelTransformer($this->getProductTransformer())
             ->label('parameters.fields.default_product')
             ->notRequired()
             ->widgetClass('must-validate')
@@ -40,5 +48,13 @@ class ProductParameterType extends AbstractParameterType
     protected function getParameterClass(): string
     {
         return ProductParameter::class;
+    }
+
+    /**
+     * @psalm-return IdentifierTransformer<Product>
+     */
+    private function getProductTransformer(): IdentifierTransformer
+    {
+        return new IdentifierTransformer($this->repository);
     }
 }

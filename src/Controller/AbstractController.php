@@ -186,7 +186,7 @@ abstract class AbstractController extends BaseController
         try {
             return $this->generatorService = $this->container->get(UrlGeneratorService::class);
         } catch (ContainerExceptionInterface $e) {
-            throw new \LogicException($e->getMessage(), $e->getCode(), $e);
+            throw new \LogicException(\sprintf('Unable to get the "%s" service,', UserService::class), $e->getCode(), $e);
         }
     }
 
@@ -214,7 +214,7 @@ abstract class AbstractController extends BaseController
         try {
             return $this->userService = $this->container->get(UserService::class);
         } catch (ContainerExceptionInterface $e) {
-            throw new \LogicException($e->getMessage(), $e->getCode(), $e);
+            throw new \LogicException(\sprintf('Unable to get the "%s" service,', UserService::class), $e->getCode(), $e);
         }
     }
 

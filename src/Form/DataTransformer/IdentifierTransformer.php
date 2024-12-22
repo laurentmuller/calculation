@@ -17,13 +17,13 @@ use App\Interfaces\EntityInterface;
 use App\Repository\AbstractRepository;
 
 /**
- * Data transformer to convert entity to identifier.
+ * Data transformer to convert identifier to entity.
  *
  * @template TEntity of EntityInterface
  *
- * @extends AbstractEntityTransformer<TEntity, TEntity, int>
+ * @extends AbstractEntityTransformer<TEntity, int, TEntity>
  */
-class EntityTransformer extends AbstractEntityTransformer
+class IdentifierTransformer extends AbstractEntityTransformer
 {
     /**
      * @psalm-param AbstractRepository<TEntity> $repository
@@ -34,20 +34,20 @@ class EntityTransformer extends AbstractEntityTransformer
     }
 
     /**
+     * @psalm-param EntityInterface|null $value
+     */
+    public function reverseTransform(mixed $value): ?int
+    {
+        return $this->toIdentifier($value);
+    }
+
+    /**
      * @param int|string|null $value
      *
      * @psalm-return TEntity|null
      */
-    public function reverseTransform(mixed $value): ?EntityInterface
+    public function transform(mixed $value): ?EntityInterface
     {
         return $this->toEntity($value);
-    }
-
-    /**
-     * @psalm-param EntityInterface|null $value
-     */
-    public function transform(mixed $value): ?int
-    {
-        return $this->toIdentifier($value);
     }
 }

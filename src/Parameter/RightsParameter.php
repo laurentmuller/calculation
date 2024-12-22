@@ -62,9 +62,14 @@ class RightsParameter implements ParameterInterface
      */
     public function getDefaultAdminRights(): array
     {
-        return $this->getService()
-            ->getRoleAdmin()
+        return $this->getDefaultAdminRole()
             ->getRights();
+    }
+
+    public function getDefaultAdminRole(): Role
+    {
+        return $this->getService()
+            ->getRoleAdmin();
     }
 
     /**
@@ -72,9 +77,14 @@ class RightsParameter implements ParameterInterface
      */
     public function getDefaultUserRights(): array
     {
-        return $this->getService()
-            ->getRoleUser()
+        return $this->getDefaultUserRole()
             ->getRights();
+    }
+
+    public function getDefaultUserRole(): Role
+    {
+        return $this->getService()
+            ->getRoleUser();
     }
 
     public function getService(): RoleBuilderService
@@ -108,6 +118,11 @@ class RightsParameter implements ParameterInterface
         return $this;
     }
 
+    public function setAdminRole(Role $role): self
+    {
+        return $this->setAdminRights($role->getRights());
+    }
+
     /**
      * @param int[]|null $userRights
      */
@@ -116,6 +131,11 @@ class RightsParameter implements ParameterInterface
         $this->userRights = $this->cleanRights($userRights, $this->getDefaultUserRights());
 
         return $this;
+    }
+
+    public function setUserRole(Role $role): self
+    {
+        return $this->setUserRights($role->getRights());
     }
 
     /**

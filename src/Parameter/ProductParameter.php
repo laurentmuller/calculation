@@ -20,13 +20,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Product parameter.
  */
-class ProductParameter implements EntityParameterInterface
+class ProductParameter implements ParameterInterface
 {
     #[Parameter('default_product_edit', false)]
     private bool $edit = false;
 
     #[Parameter('default_product')]
-    private ?Product $product = null;
+    private ?int $productId = null;
 
     #[Assert\GreaterThanOrEqual(0.0)]
     #[Parameter('default_product_quantity', 0.0)]
@@ -37,9 +37,9 @@ class ProductParameter implements EntityParameterInterface
         return 'parameter_product';
     }
 
-    public function getProduct(): ?Product
+    public function getProductId(): ?int
     {
-        return $this->product;
+        return $this->productId;
     }
 
     public function getQuantity(): float
@@ -59,9 +59,9 @@ class ProductParameter implements EntityParameterInterface
         return $this;
     }
 
-    public function setProduct(?Product $product): self
+    public function setProductId(?int $productId): self
     {
-        $this->product = $product;
+        $this->productId = $productId;
 
         return $this;
     }

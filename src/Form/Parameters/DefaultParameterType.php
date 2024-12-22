@@ -13,20 +13,30 @@ declare(strict_types=1);
 
 namespace App\Form\Parameters;
 
+use App\Entity\CalculationState;
+use App\Entity\Category;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Form\Category\CategoryListType;
+use App\Form\DataTransformer\IdentifierTransformer;
 use App\Form\FormHelper;
 use App\Parameter\DefaultParameter;
+use Doctrine\ORM\EntityManagerInterface;
 
 class DefaultParameterType extends AbstractParameterType
 {
+    public function __construct(private readonly EntityManagerInterface $manager)
+    {
+    }
+
     protected function addFormFields(FormHelper $helper): void
     {
-        $helper->field('state')
+        $helper->field('stateId')
+            ->modelTransformer($this->getCalculationStateTransformer())
             ->label('parameters.fields.default_state')
             ->add(CalculationStateListType::class);
 
-        $helper->field('category')
+        $helper->field('categoryId')
+            ->modelTransformer($this->getCategoryTransformer())
             ->label('parameters.fields.default_category')
             ->add(CategoryListType::class);
 
@@ -39,5 +49,21 @@ class DefaultParameterType extends AbstractParameterType
     protected function getParameterClass(): string
     {
         return DefaultParameter::class;
+    }
+
+    /**
+     * @psalm-return IdentifierTransformer<CalculationState>
+     */
+    private function getCalculationStateTransformer(): IdentifierTransformer
+    {
+        return new IdentifierTransformer($this->manager->getRepository(CalculationState::class));
+    }
+
+    /**
+     * @psalm-return IdentifierTransformer<Category>
+     */
+    private function getCategoryTransformer(): IdentifierTransformer
+    {
+        return new IdentifierTransformer($this->manager->getRepository(Category::class));
     }
 }

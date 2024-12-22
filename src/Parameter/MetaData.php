@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace App\Parameter;
 
-use App\Interfaces\EntityInterface;
-
 /**
  * Contains parameter meta-data.
  */
@@ -32,14 +30,6 @@ readonly class MetaData
         public string $type,
         public mixed $default
     ) {
-    }
-
-    /**
-     * @psalm-assert-if-true class-string<EntityInterface> $this->type
-     */
-    public function isEntityInterfaceType(): bool
-    {
-        return \is_a($this->type, EntityInterface::class, true);
     }
 
     /**

@@ -35,16 +35,7 @@ class UserParametersTest extends TestCase
     public function testGetDefaultValues(): void
     {
         $user = $this->createUser();
-        $cache = new ArrayAdapter();
-        $manager = $this->createMockManager();
-        $security = $this->createMockSecurity($user);
-        $application = $this->createApplication();
-        $parameters = new UserParameters(
-            $cache,
-            $manager,
-            $security,
-            $application
-        );
+        $parameters = $this->createUserParameters(user: $user);
         $actual = $parameters->getDefaultValues();
         self::assertNotEmpty($actual);
     }
@@ -77,16 +68,7 @@ class UserParametersTest extends TestCase
     public function testSaveSuccess(): void
     {
         $user = $this->createUser();
-        $cache = new ArrayAdapter();
-        $manager = $this->createMockManager();
-        $security = $this->createMockSecurity($user);
-        $application = $this->createApplication();
-        $parameters = new UserParameters(
-            $cache,
-            $manager,
-            $security,
-            $application
-        );
+        $parameters = $this->createUserParameters(user: $user);
         $parameters->getDisplay()
             ->setEditAction(EntityAction::NONE);
         $parameters->getHomePage()
@@ -105,18 +87,9 @@ class UserParametersTest extends TestCase
      */
     public function testSaveWithProperty(): void
     {
-        $cache = new ArrayAdapter();
         $user = $this->createUser();
         $property = UserProperty::instance('fake', $user);
-        $manager = $this->createMockManager($property);
-        $security = $this->createMockSecurity($user);
-        $application = $this->createApplication();
-        $parameters = new UserParameters(
-            $cache,
-            $manager,
-            $security,
-            $application
-        );
+        $parameters = $this->createUserParameters([$property], $user);
         $parameters->getOptions()
             ->setPrintAddress(true);
 
@@ -141,11 +114,11 @@ class UserParametersTest extends TestCase
     /**
      * @throws Exception
      */
-    private function createMockManager(?UserProperty $property = null): MockObject&EntityManagerInterface
+    private function createMockManager(array $properties = []): MockObject&EntityManagerInterface
     {
         $repository = $this->createMock(UserPropertyRepository::class);
-        $repository->method('findOneByUserAndName')
-            ->willReturn($property);
+        $repository->method('findByUser')
+            ->willReturn($properties);
         $manager = $this->createMock(EntityManagerInterface::class);
         $manager->method('getRepository')
             ->willReturn($repository);
@@ -171,5 +144,23 @@ class UserParametersTest extends TestCase
         $user->setUsername('fake');
 
         return $user;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createUserParameters(array $properties = [], ?User $user = null): UserParameters
+    {
+        $cache = new ArrayAdapter();
+        $manager = $this->createMockManager($properties);
+        $security = $this->createMockSecurity($user);
+        $application = $this->createApplication();
+
+        return new UserParameters(
+            $cache,
+            $manager,
+            $security,
+            $application
+        );
     }
 }

@@ -15,7 +15,6 @@ namespace App\Parameter;
 
 use App\Attribute\Parameter;
 use App\Entity\AbstractProperty;
-use App\Interfaces\EntityInterface;
 use App\Repository\AbstractRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -28,7 +27,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *
  * @template TProperty of AbstractProperty
  *
- * @psalm-type TValue = scalar|array|\BackedEnum|\DateTimeInterface|EntityInterface|null
+ * @psalm-type TValue = scalar|array|\BackedEnum|\DateTimeInterface|null
  * @psalm-type TParameter = ParameterInterface|class-string<ParameterInterface>
  */
 abstract class AbstractParameters
@@ -154,9 +153,8 @@ abstract class AbstractParameters
      */
     protected function findProperty(array $properties, string $name): ?AbstractProperty
     {
-        $callback = static fn (AbstractProperty $property): bool => $property->getName() === $name;
         foreach ($properties as $property) {
-            if ($callback($property)) {
+            if ($name === $property->getName()) {
                 return $property;
             }
         }
@@ -195,17 +193,11 @@ abstract class AbstractParameters
      */
     protected function getCachedParameter(string $class, ?ParameterInterface $default = null): ParameterInterface
     {
-        $parameter = $this->cache->get(
+        /** @phpstan-var T */
+        return $this->cache->get(
             $class::getCacheKey(),
             fn (): ParameterInterface => $this->createParameter($class, $default)
         );
-
-        if ($parameter instanceof EntityParameterInterface) {
-            $this->updateEntities($parameter);
-        }
-
-        /** @phpstan-var T */
-        return $parameter;
     }
 
     /**
@@ -221,15 +213,6 @@ abstract class AbstractParameters
         }
 
         return $this->getMetaDataDefaultValue($metaData);
-    }
-
-    /**
-     * @psalm-param class-string<EntityInterface> $type
-     */
-    protected function getEntity(string $type, AbstractProperty $property): ?EntityInterface
-    {
-        return $this->manager->getRepository($type)
-            ->find($property->getInteger());
     }
 
     /**
@@ -334,7 +317,6 @@ abstract class AbstractParameters
             'DateTimeInterface' === $metaData->type => $property->getDate(),
             $metaData->isEnumTypeInt() => $this->getBackedEnumInt($metaData->type, $property),
             $metaData->isEnumTypeString() => $this->getBackedEnumString($metaData->type, $property),
-            $metaData->isEntityInterfaceType() => $this->getEntity($metaData->type, $property),
             default => throw new \LogicException(\sprintf('Unsupported type "%s" for property "%s".', $metaData->type, $metaData->property))
         };
     }
@@ -422,27 +404,5 @@ abstract class AbstractParameters
         }
 
         return $saved;
-    }
-
-    protected function updateEntities(EntityParameterInterface $parameter): void
-    {
-        $metaDatas = \array_filter(
-            $this->getMetaDatas($parameter),
-            static fn (MetaData $metaData): bool => $metaData->isEntityInterfaceType(),
-        );
-        if ([] === $metaDatas) {
-            return;
-        }
-
-        $accessor = $this->getAccessor();
-        foreach ($metaDatas as $metaData) {
-            $value = $accessor->getValue($parameter, $metaData->property);
-            if (!$value instanceof EntityInterface) {
-                continue;
-            }
-            $value = $this->manager->getRepository($value::class)
-                ->find($value->getId());
-            $accessor->setValue($parameter, $metaData->property, $value);
-        }
     }
 }

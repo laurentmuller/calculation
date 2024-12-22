@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Parameter;
 
 use App\Attribute\Parameter;
-use App\Entity\Product;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**

@@ -55,6 +55,8 @@ class HomePageParameterTest extends ParameterTestCase
         self::assertSame(8, $this->parameter->getCalculations());
         $this->parameter->setDarkNavigation(false);
         self::assertFalse($this->parameter->isDarkNavigation());
+        $this->parameter->setPanelCatalog(false);
+        self::assertFalse($this->parameter->isPanelCatalog());
         $this->parameter->setPanelMonth(false);
         self::assertFalse($this->parameter->isPanelMonth());
         $this->parameter->setPanelState(false);

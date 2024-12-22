@@ -29,7 +29,7 @@ class TestControllerTest extends ControllerTestCase
         'recaptcha',
         'search',
         'swiss',
-        'user/parameters',
+        'application/parameters',
         'user/parameters',
         'translate',
         'tree',

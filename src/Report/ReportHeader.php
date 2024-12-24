@@ -164,13 +164,13 @@ class ReportHeader
     private function outputAddress(float $width): void
     {
         $this->applySmallStyle();
-        $text = $this->customer?->getAddress();
         $this->outputText(
             $width,
             self::SMALL_HEIGHT,
-            $text,
+            $this->customer?->getAddress(),
             PdfBorder::none(),
-            PdfTextAlignment::LEFT
+            PdfTextAlignment::RIGHT,
+            PdfMove::NEW_LINE
         );
     }
 
@@ -184,75 +184,15 @@ class ReportHeader
         $this->parent->multiCell(height: self::SMALL_HEIGHT, text: $description, align: PdfTextAlignment::LEFT);
     }
 
-    private function outputEmail(float $width): void
-    {
-        $this->applySmallStyle();
-        $text = $this->customer?->getEmail() ?? '';
-        $link = '' === $text ? null : "mailto:$text";
-        $this->outputText(
-            $width,
-            self::SMALL_HEIGHT,
-            $text,
-            PdfBorder::bottom(),
-            PdfTextAlignment::RIGHT,
-            PdfMove::NEW_LINE,
-            $link
-        );
-    }
-
-    private function outputFax(float $width): void
-    {
-        $this->applySmallStyle();
-        $text = $this->customer?->getTranslatedFax($this->parent);
-        $this->outputText(
-            $width,
-            self::SMALL_HEIGHT,
-            $text,
-            PdfBorder::none(),
-            PdfTextAlignment::RIGHT,
-            PdfMove::NEW_LINE
-        );
-    }
-
-    private function outputLine1(float $printableWidth, bool $isAddress): void
-    {
-        if ($isAddress) {
-            // customer name + title + phone
-            $cellWidth = $printableWidth / 3.0;
-            $this->outputName($cellWidth, true);
-            $this->outputTitle($cellWidth, true);
-            $this->outputPhone($cellWidth);
-        } else {
-            // title + customer name
-            $cellWidth = $printableWidth / 2.0;
-            $this->outputTitle($cellWidth, false);
-            $this->outputName($cellWidth, false);
-        }
-    }
-
-    private function outputLine2(float $printableWidth): void
-    {
-        $cellWidth = $printableWidth / 2.0;
-        $this->outputAddress($cellWidth);
-        $this->outputFax($cellWidth);
-    }
-
-    private function outputLine3(float $printableWidth): void
-    {
-        $cellWidth = $printableWidth / 2.0;
-        $this->outputZipCity($cellWidth);
-        $this->outputEmail($cellWidth);
-    }
-
     private function outputLines(): void
     {
         $parent = $this->parent;
         $isAddress = $this->isPrintAddress();
         $printableWidth = $parent->getPrintableWidth();
-        $this->outputLine1($printableWidth, $isAddress);
+        $this->outputTitleAndName($printableWidth, $isAddress);
         if ($isAddress) {
-            $this->outputLine2($printableWidth);
-            $this->outputLine3($printableWidth);
+            $this->outputAddress($printableWidth);
+            $this->outputZipCity($printableWidth);
         }
         $this->outputDescription();
         $parent->resetStyle()->lineBreak(2);
@@ -261,33 +201,16 @@ class ReportHeader
     private function outputName(float $width, bool $isAddress): void
     {
         $this->applyNameStyle();
-        $name = $this->customer?->getName();
-        $link = $this->customer?->getUrl() ?? null;
-        $align = $isAddress ? PdfTextAlignment::LEFT : PdfTextAlignment::RIGHT;
         $border = $isAddress ? PdfBorder::none() : PdfBorder::bottom();
-        $move = $isAddress ? PdfMove::RIGHT : PdfMove::NEW_LINE;
+        $move = $isAddress ? PdfMove::NEW_LINE : PdfMove::BELOW;
         $this->outputText(
             $width,
             self::LINE_HEIGHT,
-            $name,
+            $this->customer?->getName(),
             $border,
-            $align,
-            $move,
-            $link
-        );
-    }
-
-    private function outputPhone(float $width): void
-    {
-        $this->applySmallStyle();
-        $text = $this->customer?->getTranslatedPhone($this->parent);
-        $this->outputText(
-            $width,
-            self::SMALL_HEIGHT,
-            $text,
-            PdfBorder::none(),
             PdfTextAlignment::RIGHT,
-            PdfMove::NEW_LINE
+            $move,
+            $this->customer?->getUrl()
         );
     }
 
@@ -314,28 +237,34 @@ class ReportHeader
     private function outputTitle(float $width, bool $isAddress): void
     {
         $this->applyTitleStyle();
-        $title = $this->parent->getTitle();
-        $align = $isAddress ? PdfTextAlignment::CENTER : PdfTextAlignment::LEFT;
         $border = $isAddress ? PdfBorder::none() : PdfBorder::bottom();
         $this->outputText(
             $width,
             self::LINE_HEIGHT,
-            $title,
+            $this->parent->getTitle(),
             $border,
-            $align
+            PdfTextAlignment::LEFT,
         );
+    }
+
+    private function outputTitleAndName(float $printableWidth, bool $isAddress): void
+    {
+        // title + customer name
+        $cellWidth = $printableWidth / 2.0;
+        $this->outputTitle($cellWidth, $isAddress);
+        $this->outputName($cellWidth, $isAddress);
     }
 
     private function outputZipCity(float $width): void
     {
         $this->applySmallStyle();
-        $text = $this->customer?->getZipCity();
         $this->outputText(
             $width,
             self::SMALL_HEIGHT,
-            $text,
+            $this->customer?->getZipCity(),
             PdfBorder::bottom(),
-            PdfTextAlignment::LEFT
+            PdfTextAlignment::RIGHT,
+            PdfMove::NEW_LINE
         );
     }
 }

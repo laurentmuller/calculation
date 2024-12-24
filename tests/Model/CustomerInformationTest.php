@@ -26,7 +26,6 @@ class CustomerInformationTest extends TestCase
         $info = new CustomerInformation();
         self::assertNull($info->getAddress());
         self::assertNull($info->getEmail());
-        self::assertNull($info->getFax());
         self::assertNull($info->getName());
         self::assertNull($info->getPhone());
         self::assertNull($info->getUrl());
@@ -39,7 +38,6 @@ class CustomerInformationTest extends TestCase
         $info = new CustomerInformation();
         $info->setAddress('address');
         $info->setEmail('email');
-        $info->setFax('fax');
         $info->setName('name');
         $info->setPhone('phone');
         $info->setPrintAddress(true);
@@ -48,40 +46,11 @@ class CustomerInformationTest extends TestCase
 
         self::assertSame('address', $info->getAddress());
         self::assertSame('email', $info->getEmail());
-        self::assertSame('fax', $info->getFax());
         self::assertSame('name', $info->getName());
         self::assertSame('phone', $info->getPhone());
         self::assertSame('url', $info->getUrl());
         self::assertSame('zipCity', $info->getZipCity());
         self::assertTrue($info->isPrintAddress());
-    }
-
-    public function testTranslatedFax(): void
-    {
-        $info = new CustomerInformation();
-        self::assertSame('', $info->getTranslatedFax());
-
-        $info->setFax('0');
-        self::assertSame('Fax: 0', $info->getTranslatedFax());
-
-        $info->setFax('0');
-        $translator = $this->createMockTranslator();
-        self::assertSame('report.fax', $info->getTranslatedFax($translator));
-        self::assertSame('report.fax', $info->getTranslatedFax($this));
-    }
-
-    public function testTranslatedPhone(): void
-    {
-        $info = new CustomerInformation();
-        self::assertSame('', $info->getTranslatedPhone());
-
-        $info->setPhone('0');
-        self::assertSame('Phone: 0', $info->getTranslatedPhone());
-
-        $info->setFax('0');
-        $translator = $this->createMockTranslator();
-        self::assertSame('report.phone', $info->getTranslatedPhone($translator));
-        self::assertSame('report.phone', $info->getTranslatedPhone($this));
     }
 
     public function trans(string $id): string

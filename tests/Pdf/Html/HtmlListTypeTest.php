@@ -21,10 +21,6 @@ class HtmlListTypeTest extends TestCase
 {
     public static function getLetterValues(): \Iterator
     {
-        yield [-1, ''];
-        yield [-1, '', '.'];
-        yield [0, ''];
-        yield [0, '', '.'];
         yield [1, 'A'];
         yield [1, 'A.', '.'];
         yield [26, 'Z'];
@@ -34,10 +30,6 @@ class HtmlListTypeTest extends TestCase
 
     public static function getNumberValues(): \Iterator
     {
-        yield [-1, ''];
-        yield [-1, '', '.'];
-        yield [0, ''];
-        yield [0,  '', '.'];
         yield [1, '1'];
         yield [1,  '1.', '.'];
         yield [10, '10'];
@@ -49,10 +41,6 @@ class HtmlListTypeTest extends TestCase
 
     public static function getRomanValues(): \Iterator
     {
-        yield [-1, ''];
-        yield [-1, '', '.'];
-        yield [0, ''];
-        yield [0, '', '.'];
         yield [4000, ''];
         yield [4000, '', '.'];
         yield [1000, 'M'];
@@ -78,13 +66,20 @@ class HtmlListTypeTest extends TestCase
         yield [3999, 'MMMCMXCIX'];
     }
 
+    /**
+     * @psalm-param positive-int $value
+     */
     #[DataProvider('getLetterValues')]
     public function testLetterLower(int $value, string $expected, string $suffix = ''): void
     {
+        $expected = \strtolower($expected);
         $actual = HtmlListType::LETTER_LOWER->getBulletText($value, $suffix);
-        self::assertSame(\strtolower($expected), $actual);
+        self::assertSame($expected, $actual);
     }
 
+    /**
+     * @psalm-param positive-int $value
+     */
     #[DataProvider('getLetterValues')]
     public function testLetterUpper(int $value, string $expected, string $suffix = ''): void
     {
@@ -92,6 +87,9 @@ class HtmlListTypeTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    /**
+     * @psalm-param positive-int $value
+     */
     #[DataProvider('getNumberValues')]
     public function testNumber(int $value, string $expected, string $suffix = ''): void
     {
@@ -99,13 +97,20 @@ class HtmlListTypeTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    /**
+     * @psalm-param positive-int $value
+     */
     #[DataProvider('getRomanValues')]
     public function testRomanLower(int $value, string $expected, string $suffix = ''): void
     {
+        $expected = \strtolower($expected);
         $actual = HtmlListType::ROMAN_LOWER->getBulletText($value, $suffix);
-        self::assertSame(\strtolower($expected), $actual);
+        self::assertSame($expected, $actual);
     }
 
+    /**
+     * @psalm-param positive-int $value
+     */
     #[DataProvider('getRomanValues')]
     public function testRomanUpper(int $value, string $expected, string $suffix = ''): void
     {

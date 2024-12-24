@@ -36,7 +36,7 @@ class TimestampableTraitTest extends TestCase implements TimestampableInterface
 
     public function getDisplay(): string
     {
-        return TimestampableInterface::class;
+        return 'Fake';
     }
 
     public function getId(): ?int
@@ -53,7 +53,7 @@ class TimestampableTraitTest extends TestCase implements TimestampableInterface
     {
         $message = $this->getCreatedMessage();
         $actual = $message->getMessage();
-        self::assertSame('common.entity_created', $actual);
+        self::assertSame('common.entity_created_long', $actual);
 
         $actual = $message->getParameters();
         self::assertCount(2, $actual);
@@ -76,7 +76,7 @@ class TimestampableTraitTest extends TestCase implements TimestampableInterface
     {
         $message = $this->getUpdatedMessage();
         $actual = $message->getMessage();
-        self::assertSame('common.entity_updated', $actual);
+        self::assertSame('common.entity_updated_long', $actual);
 
         $actual = $message->getParameters();
         self::assertCount(2, $actual);
@@ -89,8 +89,8 @@ class TimestampableTraitTest extends TestCase implements TimestampableInterface
 
     public function testUpdateTimestampable(): void
     {
-        $date = new \DateTimeImmutable('2024-05-24');
         $user = 'user';
+        $date = new \DateTimeImmutable('2024-05-24');
         $actual = $this->updateTimestampable($date, $user);
 
         self::assertTrue($actual);

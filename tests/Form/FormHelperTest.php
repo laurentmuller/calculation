@@ -229,16 +229,6 @@ class FormHelperTest extends TypeTestCase
         self::assertCount(1, $form);
     }
 
-    public function testFaxType(): void
-    {
-        $helper = $this->getFormHelper();
-        $form = $helper->field(self::FIELD)
-            ->addFaxType()
-            ->createForm();
-        self::assertCount(1, $form);
-        self::assertSameType($form, TelType::class);
-    }
-
     public function testFieldPrefix(): void
     {
         $helper = $this->getFormHelper('prefix.');

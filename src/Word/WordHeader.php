@@ -27,7 +27,7 @@ use PhpOffice\PhpWord\SimpleType\Jc;
  * <ul>
  * <li>The customer's name at the left and the address if applicable.</li>
  * <li>The document's title at the center, if applicable; at the right else.</li>
- * <li>The phone, the fax and the email at the right if applicable.</li>
+ * <li>The phone and the email at the right if applicable.</li>
  * </ul>
  *
  * Do nothing if both the document's title and the customer's name are empty.
@@ -42,6 +42,8 @@ class WordHeader extends AbstractHeaderFooter
     {
         $title = $this->getTitle() ?? '';
         $name = $this->customer?->getName() ?? '';
+        $url = $this->customer?->getUrl();
+
         if ('' === $title && '' === $name) {
             return;
         }
@@ -49,17 +51,17 @@ class WordHeader extends AbstractHeaderFooter
         $row = $section->addHeader()
             ->addTable(['borderBottomSize' => 1])
             ->addRow();
+
+        $cell = $this->outputTitleAndName($row, $title, $name, $url);
         if ($this->printAddress) {
-            $this->outputAddress($row, $title, $name);
-        } else {
-            $this->outputDefault($row, $title, $name);
+            $this->outputAddress($cell);
         }
     }
 
     /**
      * Set the customer information.
      */
-    public function setCustomer(?CustomerInformation $customer): self
+    public function setCustomer(CustomerInformation $customer): self
     {
         $this->customer = $customer;
 
@@ -76,25 +78,8 @@ class WordHeader extends AbstractHeaderFooter
         return $this;
     }
 
-    private function addEmail(Cell $cell, array $cellStyle, array $textStyle): void
+    private function addName(Cell $cell, string $name, ?string $url, array $cellStyle, array $textStyle): void
     {
-        $email = $this->customer?->getEmail() ?? '';
-        if ('' !== $email) {
-            $cell->addLink("mailto:$email", $email, $cellStyle, $textStyle);
-        } else {
-            $cell->addText($email, $cellStyle, $textStyle);
-        }
-    }
-
-    private function addFax(Cell $cell, array $cellStyle, array $textStyle): void
-    {
-        $text = $this->customer?->getTranslatedFax($this->getTranslator()) ?? '';
-        $cell->addText($text, $cellStyle, $textStyle);
-    }
-
-    private function addName(Cell $cell, string $name, array $cellStyle, array $textStyle): void
-    {
-        $url = $this->customer?->getUrl();
         if (null !== $url) {
             $cell->addLink($url, $name, $cellStyle, $textStyle);
         } else {
@@ -102,66 +87,36 @@ class WordHeader extends AbstractHeaderFooter
         }
     }
 
-    private function addPhone(Cell $cell, array $cellStyle, array $textStyle): void
+    private function outputAddress(Cell $cell): void
     {
-        $text = $this->customer?->getTranslatedPhone($this->getTranslator()) ?? '';
-        $cell->addText($text, $cellStyle, $textStyle);
-    }
-
-    private function outputAddress(Row $row, string $title, string $name): void
-    {
-        $width = self::TOTAL_WIDTH / 3;
         $spaceAfter = Converter::pointToTwip(3);
-        $cellStyle = ['size' => 8, 'bold' => true];
-        $textStyle = ['spaceBefore' => 0,  'spaceAfter' => 0, 'alignment' => Jc::START];
+        $cellStyle = ['size' => 8, 'bold' => false];
+        $textStyle = ['spaceBefore' => 0,  'spaceAfter' => 0, 'alignment' => Jc::END];
 
-        // name
-        $cell = $row->addCell($width);
-        $this->addName($cell, $name, $cellStyle, $textStyle);
         // address
-        $cellStyle['bold'] = false;
-        $text = $this->customer?->getAddress() ?? '';
-        $cell->addText($text, $cellStyle, $textStyle);
+        $cell->addText($this->customer?->getAddress() ?? '', $cellStyle, $textStyle);
+
         // zip and city
         $textStyle['spaceAfter'] = $spaceAfter;
-        $text = $this->customer?->getZipCity() ?? '';
-        $cell->addText($text, $cellStyle, $textStyle);
-
-        // title
-        $cellStyle['bold'] = true;
-        $cellStyle['size'] = 10;
-        $textStyle['alignment'] = Jc::CENTER;
-        $textStyle['spaceAfter'] = 0;
-        $cell = $row->addCell($width);
-        $cell->addText($title, $cellStyle, $textStyle);
-
-        // phone
-        $cellStyle['bold'] = false;
-        $cellStyle['size'] = 8;
-        $textStyle['alignment'] = Jc::END;
-        $cell = $row->addCell($width);
-        $this->addPhone($cell, $cellStyle, $textStyle);
-        // fax
-        $this->addFax($cell, $cellStyle, $textStyle);
-        // email
-        $textStyle['spaceAfter'] = $spaceAfter;
-        $this->addEmail($cell, $cellStyle, $textStyle);
+        $cell->addText($this->customer?->getZipCity() ?? '', $cellStyle, $textStyle);
     }
 
-    private function outputDefault(Row $row, string $title, string $name): void
+    private function outputTitleAndName(Row $row, string $title, string $name, ?string $url): Cell
     {
         $width = self::TOTAL_WIDTH / 2;
         $cellStyle = ['size' => 10, 'bold' => true];
-        $textStyle = ['spaceBefore' => 0, 'spaceAfter' => Converter::pointToTwip(3)];
+        $textStyle = ['spaceBefore' => 0,  'spaceAfter' => 0, 'alignment' => Jc::START];
 
         // title
-        $textStyle['alignment'] = Jc::START;
         $cell = $row->addCell($width);
         $cell->addText($title, $cellStyle, $textStyle);
 
         // name
+        $cellStyle['size'] = 8;
         $textStyle['alignment'] = Jc::END;
         $cell = $row->addCell($width);
-        $this->addName($cell, $name, $cellStyle, $textStyle);
+        $this->addName($cell, $name, $url, $cellStyle, $textStyle);
+
+        return $cell;
     }
 }

@@ -111,36 +111,38 @@ function displayNotification($source) {
 /**
  * Handle input change.
  *
- * @param {string} inputId the input selector.
+ * @param {string} selector the input selector.
  * @param {string} groupId the group selector.
  * @param {function} callback the function to call.
  */
-function handleInput(inputId, groupId, callback) {
+function handleInput(selector, groupId, callback) {
     'use strict';
-    const $input = $(inputId);
-    const $group = $input.parents('.input-group').find(groupId);
-    if (!$input.length || !$group.length) {
-        return;
-    }
-    const handler = function (e) {
-        e.preventDefault();
-        const value = String($input.val()).trim();
-        if ($input.valid() && value) {
-            try {
-                callback(value);
-            } catch (error) {
-                $group.off('click', handler).removeClass('cursor-pointer');
-                window.console.error(error);
+    $(selector).each(function () {
+        const $input = $(this);
+        const $group = $input.parents('.input-group').find(groupId);
+        if (!$group.length) {
+            return;
+        }
+        const handler = function (e) {
+            e.preventDefault();
+            const value = String($input.val()).trim();
+            if (value && $input.valid()) {
+                try {
+                    callback(value);
+                } catch (error) {
+                    $group.off('click', handler).removeClass('cursor-pointer');
+                    window.console.error(error);
+                }
             }
-        }
-        $input.trigger('focus');
-    };
-    $input.on('input', function () {
-        $group.removeClass('cursor-pointer').off('click', handler);
-        if ($input.valid() && String($input.val()).trim()) {
-            $group.addClass('cursor-pointer').on('click', handler);
-        }
-    }).trigger('input');
+            $input.trigger('focus');
+        };
+        $input.on('input', function () {
+            $group.removeClass('cursor-pointer').off('click', handler);
+            if ($input.valid() && String($input.val()).trim()) {
+                $group.addClass('cursor-pointer').on('click', handler);
+            }
+        }).trigger('input');
+    });
 }
 
 /**
@@ -151,7 +153,7 @@ function handleUrl() {
     const handler = function (value) {
         window.open(value, '_blank');
     };
-    handleInput('#customer_url', '.input-group-url', handler);
+    handleInput('[inputmode="url"]', '.input-group-url', handler);
 }
 
 /**
@@ -165,14 +167,6 @@ function handlePhone() {
     handleInput('#customer_phone', '.input-group-phone', handler);
 }
 
-// function handleFax() {
-//     'use strict';
-//     const handler = function (value) {
-//         window.location.href = 'fax:' + value;
-//     };
-//     handleInput('#customer_fax', '.input-group-fax', handler);
-// }
-
 /**
  * Handle the Email input.
  */
@@ -182,6 +176,11 @@ function handleEmail() {
         window.location.href = 'mailto:' + value;
     };
     handleInput('#customer_email', '.input-group-email', handler);
+}
+
+function findCollapseButton($source) {
+    'use strict';
+    return $source.prev('.card-header').find('a.card-title');
 }
 
 /**
@@ -213,32 +212,30 @@ $(function () {
     $('.btn-item-all').on('click', function () {
         setDefaultValues();
     });
-    $('.btn-notify').on('click', () => {
-        const $items = $('.dropdown-notify');
-        const index = Math.floor(Math.random() * $items.length);
-        $items.eq(index).trigger('click');
-    });
-    $('.dropdown-notify').on('click', (e) => {
+    const $notify = $('.dropdown-notify');
+    $notify.on('click', (e) => {
         displayNotification($(e.currentTarget));
     });
+    $('.btn-notify').on('click', () => {
+        const index = Math.floor(Math.random() * $notify.length);
+        $notify.eq(index).trigger('click');
+    });
     $('.card-parameter .collapse').on('shown.bs.collapse', function () {
-        const $this = $(this);
-        const $button = $this.prev('.card-header').find('a.card-title');
+        const $button = findCollapseButton($(this));
         $button.attr('title', $button.data('hide'));
         const $page = getActivePage();
         if ($page && $page.find('.is-invalid').length === 0) {
-            $page.find(':input:first').trigger('focus');
+            $page.find(':input:first').trigger('focus')
+                .trigger('select');
         }
         updateVisibleButton();
     }).on('hidden.bs.collapse', function () {
-        const $this = $(this);
-        const $button = $this.prev('.card-header').find('a.card-title');
+        const $button = findCollapseButton($(this));
         $button.attr('title', $button.data('show'));
         updateVisibleButton();
     });
     updateVisibleButton();
     handlePhone();
     handleEmail();
-    // handleFax();
     handleUrl();
 });

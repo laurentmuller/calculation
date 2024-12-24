@@ -38,11 +38,6 @@ interface TimestampableInterface extends EntityInterface
     public function getCreatedMessage(bool $short = false): TranslatableMessage;
 
     /**
-     * Gets the entity identifier.
-     */
-    public function getId(): ?int;
-
-    /**
      * Gets the updated date.
      */
     public function getUpdatedAt(): ?\DateTimeInterface;

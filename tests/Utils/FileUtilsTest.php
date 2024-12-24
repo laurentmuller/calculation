@@ -100,9 +100,23 @@ class FileUtilsTest extends TestCase
         self::assertSame('test.bmp', $new_name);
     }
 
+    public function testChmod(): void
+    {
+        $file = FileUtils::tempFile();
+        self::assertIsString($file);
+
+        try {
+            $actual = FileUtils::chmod($file, 1);
+            self::assertTrue($actual);
+        } finally {
+            FileUtils::remove($file);
+        }
+    }
+
     public function testChmodInvalid(): void
     {
-        $actual = FileUtils::chmod(__DIR__ . '/fake.txt', 1);
+        $file = __DIR__ . '/fake.txt';
+        $actual = FileUtils::chmod($file, 1);
         self::assertFalse($actual);
     }
 
@@ -137,7 +151,8 @@ class FileUtilsTest extends TestCase
         if ($this->isLinux()) {
             self::markTestSkipped('Unable to test under Linux.');
         }
-        $actual = FileUtils::dumpFile('a:/fake/fak?e.txt', 'fake');
+        $file = 'a:/fake/fake.txt';
+        $actual = FileUtils::dumpFile($file, 'fake');
         self::assertFalse($actual);
     }
 
@@ -216,6 +231,30 @@ class FileUtilsTest extends TestCase
     {
         $actual = FileUtils::makePathRelative('/tmp/videos', '/tmp');
         self::assertSame('videos/', $actual);
+    }
+
+    public function testMirror(): void
+    {
+        $source = FileUtils::tempDir(__DIR__);
+        $target = FileUtils::tempDir(__DIR__);
+        self::assertIsString($source);
+        self::assertIsString($target);
+
+        try {
+            $actual = FileUtils::mirror($source, $target);
+            self::assertTrue($actual);
+        } finally {
+            FileUtils::remove($source);
+            FileUtils::remove($target);
+        }
+    }
+
+    public function testMirrorFail(): void
+    {
+        $source = __DIR__ . '/source';
+        $target = __DIR__ . '/target';
+        $actual = FileUtils::mirror($source, $target);
+        self::assertFalse($actual);
     }
 
     public function testMkdirInvalid(): void

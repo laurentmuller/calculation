@@ -38,9 +38,9 @@ trait ContainerServiceTrait
     }
 
     /**
-     * Sets a service.
+     * Sets a service or null to reset.
      */
-    protected function setService(string $id, object $service): void
+    protected function setService(string $id, ?object $service): void
     {
         static::getContainer()->set($id, $service);
     }

@@ -15,6 +15,8 @@ namespace App\Pdf\Html;
 
 /**
  * A specialized chunk for the HTML ordered list (ol).
+ *
+ * @see HtmlListType
  */
 class HtmlOlChunk extends AbstractHtmlListChunk
 {
@@ -42,6 +44,8 @@ class HtmlOlChunk extends AbstractHtmlListChunk
 
     /**
      * Gets the start counting.
+     *
+     * @psalm-return positive-int
      */
     public function getStart(): int
     {
@@ -63,7 +67,7 @@ class HtmlOlChunk extends AbstractHtmlListChunk
      */
     public function setStart(int $start): self
     {
-        $this->start = \max($start, 1);
+        $this->start = $start;
 
         return $this;
     }

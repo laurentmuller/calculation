@@ -26,7 +26,6 @@ use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Extends the worksheet class with shortcuts to render cells.
@@ -486,7 +485,7 @@ class WorksheetDocument extends Worksheet
     }
 
     /**
-     * Set the page orientation (default, portait or landscape).
+     * Set the page orientation (default, portait, or landscape).
      *
      * @psalm-param PageSetup::ORIENTATION_* $orientation
      */
@@ -597,34 +596,26 @@ class WorksheetDocument extends Worksheet
     /**
      * Update this header and footer with the given customer information.
      */
-    public function updateHeaderFooter(CustomerInformation $customer, ?TranslatorInterface $translator = null): static
+    public function updateHeaderFooter(CustomerInformation $customer): static
     {
-        $title = $this->getTitle();
-        $pageMargins = $this->getPageMargins();
+        $pageMargins = $this->getPageMargins()
+            ->setTop(self::HEADER_FOOTER_MARGIN)
+            ->setBottom(self::HEADER_FOOTER_MARGIN);
+
+        $header = HeaderFooter::header()
+            ->addLeft($this->getTitle(), true)
+            ->addRight($customer->getName(), true);
         if ($customer->isPrintAddress()) {
-            HeaderFooter::header()
-                ->addLeft($customer->getName(), true)
-                ->addLeft($customer->getAddress())
-                ->addLeft($customer->getZipCity())
-                ->addCenter($title, true)
-                ->addRight($customer->getTranslatedPhone($translator))
-                ->addRight($customer->getTranslatedFax($translator))
-                ->addRight($customer->getEmail())
-                ->apply($this);
+            $header->addRight($customer->getAddress())
+                ->addRight($customer->getZipCity());
             $pageMargins->setTop(self::HEADER_CUSTOMER_MARGIN);
-        } else {
-            HeaderFooter::header()
-                ->addLeft($title, true)
-                ->addRight($customer->getName(), true)
-                ->apply($this);
-            $pageMargins->setTop(self::HEADER_FOOTER_MARGIN);
         }
+        $header->apply($this);
 
         HeaderFooter::footer()
             ->addPages()
             ->addDateTime()
             ->apply($this);
-        $pageMargins->setBottom(self::HEADER_FOOTER_MARGIN);
 
         return $this;
     }

@@ -14,31 +14,35 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 /**
- * Lists type enumeration.
+ * Ordered list type enumeration.
  *
  * @see HtmlOlChunk
  */
 enum HtmlListType: string
 {
-    /*
+    /**
      * Numbered list with lowercase letters.
      */
     case LETTER_LOWER = 'a';
-    /*
+
+    /**
      * Numbered list with uppercase letters.
      */
     case LETTER_UPPER = 'A';
-    /*
+
+    /**
      * Numbered list with numbers (default).
      */
     case NUMBER = '1';
-    /*
+
+    /**
      * Numbered list with lowercase roman numbers.
      *
      * <b>N.B.:</b> Allowed value must be in range from 1 to 3999 (inclusive).
      */
     case ROMAN_LOWER = 'i';
-    /*
+
+    /**
      * Numbered list with uppercase roman numbers.
      *
      * <b>N.B.:</b> Allowed value must be in range from 1 to 3999 (inclusive).
@@ -52,13 +56,11 @@ enum HtmlListType: string
      * @param string $suffix the suffix to append
      *
      * @return string the bullet text or an empty string if the number is not positive
+     *
+     * @psalm-param positive-int $number
      */
     public function getBulletText(int $number, string $suffix = '.'): string
     {
-        if ($number <= 0) {
-            return '';
-        }
-
         return match ($this) {
             HtmlListType::LETTER_LOWER => $this->toLetterLower($number, $suffix) ,
             HtmlListType::LETTER_UPPER => $this->toLetterUpper($number, $suffix),

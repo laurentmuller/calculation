@@ -12,7 +12,9 @@
             </table>
         </div>
     </div>
-    <div class="card-footer px-3{% if new %} d-none{% endif %}">
-        {{- timestampable_footer(item, false) -}}
-    </div>
+    {% if not new %}
+        <div class="card-footer px-3">
+            {{- timestampable_footer(item, false) -}}
+        </div>
+    {% endif %}
 </div>

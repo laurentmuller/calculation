@@ -122,10 +122,18 @@ class HtmlStyle extends PdfStyle
     public function reset(): static
     {
         parent::reset();
-        $this->resetMargins();
-        $this->setAlignment(PdfTextAlignment::LEFT);
+        $this->resetAlignment()
+            ->resetMargins();
 
         return $this;
+    }
+
+    /**
+     * Sets alignement to default (left).
+     */
+    public function resetAlignment(): self
+    {
+        return $this->setAlignment(PdfTextAlignment::LEFT);
     }
 
     /**

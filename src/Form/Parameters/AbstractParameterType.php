@@ -92,24 +92,20 @@ abstract class AbstractParameterType extends AbstractHelperType
         return $value;
     }
 
-    private function getCacheKey(): string
-    {
-        return $this->getParameterClass()::getCacheKey();
-    }
-
     /**
      * @psalm-return  array<string, mixed>
      */
     private function getDefaultValues(FormInterface $form): array
     {
         $config = $form->getRoot()->getConfig();
-        if (!$config->hasOption(ApplicationParametersType::DEFAULT_VALUES)) {
+        if (!$config->hasOption(AbstractHelperParametersType::DEFAULT_VALUES)) {
             return [];
         }
 
+        $key = $this->getParameterClass()::getCacheKey();
         /** @psalm-var array<string, array<string, mixed>> $values */
-        $values = $config->getOption(ApplicationParametersType::DEFAULT_VALUES);
+        $values = $config->getOption(AbstractHelperParametersType::DEFAULT_VALUES);
 
-        return $values[$this->getCacheKey()] ?? [];
+        return $values[$key] ?? [];
     }
 }

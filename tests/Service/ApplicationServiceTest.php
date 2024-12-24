@@ -88,7 +88,6 @@ class ApplicationServiceTest extends KernelServiceTestCase
         self::assertSame('customer_url', $customer->getUrl());
         self::assertNull($customer->getAddress());
         self::assertNull($customer->getEmail());
-        self::assertNull($customer->getFax());
         self::assertNull($customer->getPhone());
         self::assertFalse($customer->isPrintAddress());
         self::assertNull($customer->getZipCity());

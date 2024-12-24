@@ -68,7 +68,7 @@ trait TimestampableTrait
     {
         $date = $this->getDateMessage($this->createdAt);
         $user = $this->getUserMessage($this->createdBy);
-        $id = $short ? 'common.entity_created_short' : 'common.entity_created';
+        $id = $short ? 'common.entity_created_short' : 'common.entity_created_long';
 
         return new TranslatableMessage($id, ['%date%' => $date, '%user%' => $user]);
     }
@@ -87,7 +87,7 @@ trait TimestampableTrait
     {
         $date = $this->getDateMessage($this->updatedAt);
         $user = $this->getUserMessage($this->updatedBy);
-        $id = $short ? 'common.entity_updated_short' : 'common.entity_updated';
+        $id = $short ? 'common.entity_updated_short' : 'common.entity_updated_long';
 
         return new TranslatableMessage($id, ['%date%' => $date, '%user%' => $user]);
     }

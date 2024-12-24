@@ -270,17 +270,6 @@ class FormHelper
     }
 
     /**
-     * Add a fax (telephone) type to the builder and reset all values to the default.
-     */
-    public function addFaxType(?string $pattern = null): self
-    {
-        return $this->updateAttribute('pattern', $pattern)
-            ->updateOption('prepend_icon', 'fa-solid fa-fax')
-            ->updateOption('prepend_class', 'input-group-fax')
-            ->add(TelType::class);
-    }
-
-    /**
      * Add a file type to the builder and reset all values to the default.
      *
      * @param string $extension the allowed file extension
@@ -478,14 +467,15 @@ class FormHelper
     /**
      * Add an Url type to the builder and reset all values to the default.
      *
-     * @param string $protocol If a value is submitted, that doesn't begin with some protocol,
-     *                         (http://, ftp://, etc.), this protocol will be prepended to
-     *                         the string when the data is submitted to the form.
+     * @param string  $protocol If a value is submitted, that doesn't begin with some protocol,
+     *                          (http://, ftp://, etc.), this protocol will be prepended to
+     *                          the string when the data is submitted to the form.
+     * @param ?string $icon     the prepended icon or null to use default (solid globe)
      */
-    public function addUrlType(string $protocol = 'https'): self
+    public function addUrlType(string $protocol = 'https', ?string $icon = null): self
     {
         return $this->updateOption('default_protocol', $protocol)
-            ->updateOption('prepend_icon', 'fa-solid fa-globe')
+            ->updateOption('prepend_icon', $icon ?? 'fa-solid fa-globe')
             ->updateOption('prepend_class', 'input-group-url')
             ->updateAttribute('inputmode', 'url')
             ->add(UrlType::class);

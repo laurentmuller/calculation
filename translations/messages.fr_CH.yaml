@@ -2,7 +2,6 @@ about:
     title: A propos de
     app_customer: Client
     app_customer_email: E-mail
-    app_customer_fax: Télécopieur
     app_customer_phone: Téléphone
     app_environment: Environnement
     app_mode: Mode d'exécution
@@ -323,14 +322,10 @@ common:
     empty: ''
     empty_date: Inconnue
     empty_user: Système
-    entity_created: 'Création : %date% - %user%'
-    entity_created_empty: 'Création : Système'
     entity_created_short: '%date% - %user%'
-    entity_created_tooltip: Date de création et nom de l'utilisateur
-    entity_updated: 'Mise à jour : %date% - %user%'
-    entity_updated_empty: 'Mise à jour : Système         '
+    entity_created_long: 'Création : %date% - %user%'
     entity_updated_short: '%date% - %user%'
-    entity_updated_tooltip: Date de mise à jour et nom de l'utilisateur
+    entity_updated_long: 'Mise à jour : %date% - %user%'
     hide_password: Masquer le mot de passe
     id: Numéro
     no_script_support: Votre navigateur ne supporte pas JavaScript !
@@ -834,17 +829,24 @@ parameters:
         show: Afficher le groupe %name%
     failure: Impossible d'afficher une notification.
     fields:
-        customer_address: Adresse
-        customer_email: E-mail
-        customer_email_title: Envoyer un message électronique au client
-        customer_fax: Télécopieur
-        customer_fax_title: Envoyer un fax au client
+        customer_company: Société
         customer_name: Nom
+        customer_address: Adresse
+        customer_zip_city: NPA / Localité
+        customer_contacts: Contact
         customer_phone: Téléphone
         customer_phone_title: Passer un appel téléphonique au client
+        customer_email: E-mail
+        customer_email_title: Envoyer un message électronique au client
         customer_url: Site internet
         customer_url_title: Accéder au site internet du client
-        customer_zip_city: NPA / Localité
+        customer_social: Site et réseaux sociaux
+        customer_linkedin: LinkedIn
+        customer_linkedin_title: Accéder au profile LinkedIn du client
+        customer_instagram: Instagram
+        customer_instagram_title: Accéder au profile Instagram du client
+        customer_facebook: Facebook
+        customer_facebook_title: Accéder au profile Facebook du client
         default_category: Catégorie
         default_product: Article
         default_product_edit: Éditer l'article lors de l'affichage de la nouvelle calculation
@@ -871,6 +873,8 @@ parameters:
         dark_navigation: Thème sombre
     group_customer: Client
     group_customer_help: Données du client utilisées pour l'impression des documents.
+    group_social: Site et réseaux sociaux
+    group_social_help: Liens vers le site internet et les réseaux sociaux.
     group_default: Valeurs par défaut
     group_default_help: Valeurs par défaut utilisées pour la création de nouveaux éléments et pour le calcul des marges.
     group_display: Affichage
@@ -1015,8 +1019,6 @@ registration:
 report:
     index: Index
     page: Page {0} / {1}
-    fax: 'Fax : {0}'
-    phone: 'Tél. : {0}'
     other: Autre
     total: Total
     calculation:

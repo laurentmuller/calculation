@@ -50,7 +50,7 @@
         },
         {
             "name": "font-awesome",
-            "version": "6.7.1",
+            "version": "6.7.2",
             "source": "cdnjs",
             "files": [
                 "css/all.css",
@@ -86,7 +86,7 @@
         },
         {
             "name": "highcharts",
-            "version": "12.0.2",
+            "version": "12.1.2",
             "source": "jsdelivr",
             "files": [
                 "highcharts.js"
@@ -141,7 +141,7 @@
         },
         {
             "name": "bootstrap-table",
-            "version": "1.23.5",
+            "version": "1.24.0",
             "source": "cdnjs",
             "files": [
                 "bootstrap-table.js",
@@ -151,7 +151,7 @@
         {
             "name": "bootstrap-table",
             "display": "bootstrap-table:defer-url",
-            "version": "1.23.5",
+            "version": "1.24.0",
             "source": "cdnjs",
             "prefix": "extensions/defer-url/",
             "files": [
@@ -161,7 +161,7 @@
         {
             "name": "bootstrap-table",
             "display": "bootstrap-table:custom-view",
-            "version": "1.23.5",
+            "version": "1.24.0",
             "source": "cdnjs",
             "prefix": "extensions/custom-view/",
             "files": [

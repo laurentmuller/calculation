@@ -52,14 +52,13 @@ class WorksheetDocumentTest extends TestCase
         $cs->setPrintAddress(true)
             ->setAddress('Address')
             ->setEmail('Email')
-            ->setFax('Fax')
             ->setName('Name')
             ->setPhone('Phone')
             ->setUrl('URL')
             ->setZipCity('ZipCity');
 
         $sheet = $this->getActiveSheet();
-        $sheet->updateHeaderFooter($cs, $this->createMockTranslator());
+        $sheet->updateHeaderFooter($cs);
         $actual = $sheet->getPageMargins()
             ->getTop();
         self::assertSame(0.83, $actual);

@@ -62,8 +62,11 @@ abstract class AbstractHtmlChunk
      * @param ?HtmlParentChunk $parent    the parent chunk
      * @param ?string          $className the class name
      */
-    public function __construct(private readonly string $name, ?HtmlParentChunk $parent = null, ?string $className = null)
-    {
+    public function __construct(
+        private readonly string $name,
+        ?HtmlParentChunk $parent = null,
+        ?string $className = null
+    ) {
         $parent?->add($this);
         $this->setClassName($className);
     }

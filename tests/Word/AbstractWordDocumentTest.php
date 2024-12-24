@@ -143,7 +143,6 @@ class AbstractWordDocumentTest extends TestCase
         $cs->setPrintAddress(true)
             ->setAddress('Address')
             ->setEmail('Email')
-            ->setFax('Fax')
             ->setName('Name')
             ->setPhone('Phone')
             ->setUrl('URL')

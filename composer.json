@@ -88,8 +88,8 @@
         "vich/uploader-bundle": "^2.0"
     },
     "require-dev": {
-        "bamarni/composer-bin-plugin": "^1.8",
-        "fortawesome/font-awesome": "^6.6",
+        "bamarni/composer-bin-plugin": "^1.0",
+        "fortawesome/font-awesome": "^6.0",
         "symfony/browser-kit": "7.2.*",
         "symfony/css-selector": "7.2.*",
         "symfony/debug-bundle": "7.2.*",

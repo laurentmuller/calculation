@@ -122,7 +122,7 @@ class SpreadsheetDocument extends Spreadsheet
         $customer = $controller->getUserService()->getCustomer();
 
         return $sheet->setPrintGridlines(true)
-            ->updateHeaderFooter($customer, $this->translator);
+            ->updateHeaderFooter($customer);
     }
 
     /**
@@ -230,7 +230,7 @@ class SpreadsheetDocument extends Spreadsheet
             ->setTitle($title);
         if ($controller instanceof AbstractController) {
             $customer = $controller->getUserService()->getCustomer();
-            $sheet->updateHeaderFooter($customer, $this->getTranslator());
+            $sheet->updateHeaderFooter($customer);
         }
 
         return $this;
@@ -360,7 +360,7 @@ class SpreadsheetDocument extends Spreadsheet
         $sheet = $this->getActiveSheet()
             ->setPrintGridlines(true)
             ->setTitle($title)
-            ->updateHeaderFooter($customer, $this->translator);
+            ->updateHeaderFooter($customer);
         if ($landscape) {
             $sheet->setPageLandscape();
         }

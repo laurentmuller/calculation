@@ -210,9 +210,7 @@ class LogsReport extends AbstractReport
         $textCells[] = new PdfCell($total);
         $valueCells[] = new PdfCell(FormatUtils::formatInt($this->logFile->count()));
 
-        $level = $this->trans('log.fields.level');
-        $chanel = $this->trans('log.fields.channel');
-        $this->addBookmark(\sprintf('%s - %s', $level, $chanel));
+        $this->addBookmark(text: $this->trans('calculation.edit.panel_resume'), isUTF8: true, currentY: false);
 
         $levelsCount = \max(1, \count($levels) * 2);
         $channelsCount = \count($channels) * 2 + 1;
@@ -223,8 +221,8 @@ class LogsReport extends AbstractReport
         PdfTable::instance($this)
             ->addColumns(...$columns)
             ->startRow()
-            ->add($level, $levelsCount, $titleStyle, PdfTextAlignment::LEFT)
-            ->add($chanel, $channelsCount, $titleStyle, PdfTextAlignment::LEFT)
+            ->add($this->trans('log.fields.level'), $levelsCount, $titleStyle, PdfTextAlignment::LEFT)
+            ->add($this->trans('log.fields.channel'), $channelsCount, $titleStyle, PdfTextAlignment::LEFT)
             ->endRow()
             ->addStyledRow($textCells, PdfStyle::getHeaderStyle()->resetFont())
             ->addStyledRow($valueCells, PdfStyle::getCellStyle()->setFontSize(14));

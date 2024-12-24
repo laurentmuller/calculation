@@ -76,6 +76,7 @@ return static function (ContainerConfigurator $config): void {
             $path . 'Model',
             $path . 'Pdf',
             $path . 'Report',
+            $path . 'Response',
             $path . 'Spreadsheet',
             $path . 'Traits',
             $path . 'Util',

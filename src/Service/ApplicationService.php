@@ -93,7 +93,6 @@ class ApplicationService implements PropertyServiceInterface
             ->setAddress($this->getCustomerAddress())
             ->setZipCity($this->getCustomerZipCity())
             ->setPhone($this->getCustomerPhone())
-            ->setFax($this->getCustomerFax())
             ->setEmail($this->getCustomerEmail())
             ->setUrl($this->getCustomerUrl())
             ->setPrintAddress($this->isPrintAddress());
@@ -115,14 +114,6 @@ class ApplicationService implements PropertyServiceInterface
     public function getCustomerEmail(): ?string
     {
         return $this->getPropertyString(self::P_CUSTOMER_EMAIL);
-    }
-
-    /**
-     * Gets the customer fax number.
-     */
-    public function getCustomerFax(): ?string
-    {
-        return $this->getPropertyString(self::P_CUSTOMER_FAX);
     }
 
     /**
@@ -331,7 +322,6 @@ class ApplicationService implements PropertyServiceInterface
                 self::P_CUSTOMER_ADDRESS => $this->getCustomerAddress(),
                 self::P_CUSTOMER_ZIP_CITY => $this->getCustomerZipCity(),
                 self::P_CUSTOMER_PHONE => $this->getCustomerPhone(),
-                self::P_CUSTOMER_FAX => $this->getCustomerFax(),
                 self::P_CUSTOMER_EMAIL => $this->getCustomerEmail(),
                 self::P_CUSTOMER_URL => $this->getCustomerUrl(),
                 // security

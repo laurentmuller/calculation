@@ -28,8 +28,17 @@ class CustomerParameter implements ParameterInterface
     #[Parameter('customer_email')]
     private ?string $email = null;
 
-    #[Parameter('customer_fax')]
-    private ?string $fax = null;
+    #[Assert\Url]
+    #[Parameter('customer_facebook')]
+    private ?string $facebook = null;
+
+    #[Assert\Url]
+    #[Parameter('customer_instagram')]
+    private ?string $instagram = null;
+
+    #[Assert\Url]
+    #[Parameter('customer_linkedin')]
+    private ?string $linkedin = null;
 
     #[Assert\NotBlank]
     #[Parameter('customer_name')]
@@ -38,6 +47,7 @@ class CustomerParameter implements ParameterInterface
     #[Parameter('customer_phone')]
     private ?string $phone = null;
 
+    #[Assert\Url]
     #[Parameter('customer_url')]
     private ?string $url = null;
 
@@ -59,9 +69,19 @@ class CustomerParameter implements ParameterInterface
         return $this->email;
     }
 
-    public function getFax(): ?string
+    public function getFacebook(): ?string
     {
-        return $this->fax;
+        return $this->facebook;
+    }
+
+    public function getInstagram(): ?string
+    {
+        return $this->instagram;
+    }
+
+    public function getLinkedin(): ?string
+    {
+        return $this->linkedin;
     }
 
     public function getName(): ?string
@@ -98,9 +118,23 @@ class CustomerParameter implements ParameterInterface
         return $this;
     }
 
-    public function setFax(?string $fax): self
+    public function setFacebook(?string $facebook): self
     {
-        $this->fax = $fax;
+        $this->facebook = $facebook;
+
+        return $this;
+    }
+
+    public function setInstagram(?string $instagram): self
+    {
+        $this->instagram = $instagram;
+
+        return $this;
+    }
+
+    public function setLinkedin(?string $linkedin): self
+    {
+        $this->linkedin = $linkedin;
 
         return $this;
     }

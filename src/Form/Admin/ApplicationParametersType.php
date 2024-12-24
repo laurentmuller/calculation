@@ -70,10 +70,6 @@ class ApplicationParametersType extends AbstractParametersType
             ->notRequired()
             ->addTelType();
 
-        $helper->field(PropertyServiceInterface::P_CUSTOMER_FAX)
-            ->notRequired()
-            ->addFaxType();
-
         $helper->field(PropertyServiceInterface::P_CUSTOMER_EMAIL)
             ->updateOption('prepend_title', 'parameters.fields.customer_email_title')
             ->notRequired()

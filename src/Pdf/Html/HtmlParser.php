@@ -67,13 +67,13 @@ readonly class HtmlParser
 
     private function createOlChunk(string $name, HtmlParentChunk $parent, ?string $className, \DOMNode $node): HtmlOlChunk
     {
-        $type = HtmlAttribute::LIST_TYPE->getEnumValue($node, HtmlListType::NUMBER);
         /** @psalm-var positive-int $start */
         $start = HtmlAttribute::LIST_START->getIntValue($node, 1);
+        $type = HtmlAttribute::LIST_TYPE->getEnumValue($node, HtmlListType::NUMBER);
         $chunk = new HtmlOlChunk($name, $parent, $className);
 
-        return $chunk->setType($type)
-            ->setStart($start);
+        return $chunk->setStart($start)
+            ->setType($type);
     }
 
     private function createPageBreakChunk(string $name, HtmlParentChunk $parent): HtmlParentChunk

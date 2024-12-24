@@ -1,27 +1,19 @@
 {# create timestampable row #}
 {% macro timestampable_footer(item, separator = true) %}
-{% if not item.new %}
-    {% if not item.createdAt and not item.createdBy %}
-        {% set created = 'common.entity_created_empty'|trans %}
-    {% else %}
+    {% if not item.new %}
         {% set created = item.createdMessage(false)|trans %}
-    {% endif %}
-    {% if not item.updatedAt and not item.updatedBy %}
-        {% set updated = 'common.entity_updated_empty'|trans %}
-    {% else %}
         {% set updated = item.updatedMessage(false)|trans %}
+        {% if separator %}
+            <hr class="card-footer-line">
+        {% endif %}
+        <div class="d-flex-wrap-center text-body-tertiary small{% if separator %} mt-2{% endif %}">
+            <span class="me-auto">{{- created -}}</span><span>{{- updated -}}</span>
+        </div>
     {% endif %}
-    {% if separator %}
-        <hr class="card-footer-line">
-    {% endif %}
-    <div class="d-flex-wrap-center text-body-tertiary small{% if separator %} mt-2{% endif %}">
-        <span class="me-auto">{{- created -}}</span><span>{{- updated -}}</span>
-    </div>
-{% endif %}
 {% endmacro %}
 
 {% macro timestampable_properties(item) -%}
-{% from 'macros/_properties.html.twig' import property %}
-{{ property('calculation.fields.created', item.createdMessage(true)|trans) }}
-{{ property('calculation.fields.updated', item.updatedMessage(true)|trans) }}
+    {% from 'macros/_properties.html.twig' import property %}
+    {{ property('calculation.fields.created', item.createdMessage(true)|trans) }}
+    {{ property('calculation.fields.updated', item.updatedMessage(true)|trans) }}
 {%- endmacro %}

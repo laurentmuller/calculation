@@ -205,9 +205,6 @@ final class FunctionExtension extends AbstractExtension
         if (false === $file) {
             return null;
         }
-        if (!FileUtils::isFile($file)) {
-            return null;
-        }
 
         return FileUtils::normalize($file);
     }

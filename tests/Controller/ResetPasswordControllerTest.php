@@ -38,9 +38,20 @@ class ResetPasswordControllerTest extends ControllerTestCase
         yield ['/reset-password/reset/', self::ROLE_ADMIN, Response::HTTP_MOVED_PERMANENTLY];
         yield ['/reset-password/reset/', self::ROLE_SUPER_ADMIN, Response::HTTP_MOVED_PERMANENTLY];
 
+        yield ['/reset-password/reset/fake', '', Response::HTTP_FOUND];
         yield ['/reset-password/reset/fake', self::ROLE_USER, Response::HTTP_FOUND];
         yield ['/reset-password/reset/fake', self::ROLE_ADMIN, Response::HTTP_FOUND];
         yield ['/reset-password/reset/fake', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
+    }
+
+    public function testRequestForm(): void
+    {
+        $data = ['user' => self::ROLE_SUPER_ADMIN];
+        $this->checkForm(
+            uri: '/reset-password',
+            id: 'resetting.request.submit',
+            data: $data,
+        );
     }
 
     /**

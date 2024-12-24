@@ -43,14 +43,19 @@ class HeaderFooter
 
     // the date and time format
     private const DATE_AND_TIME = '&D - &T';
+
     // the initial font size
     private const INITIAL_FONT_SIZE = 11;
+
     // the page/pages format
     private const PAGE_AND_PAGES = 'Page &P / &N';
+
     // the center text
     private string $centerText = '';
+
     // the left text
     private string $leftText = '';
+
     // the right text
     private string $rightText = '';
 

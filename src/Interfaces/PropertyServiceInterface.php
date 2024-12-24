@@ -138,11 +138,6 @@ interface PropertyServiceInterface
     final public const P_CUSTOMER_EMAIL = 'customer_email';
 
     /**
-     * The property name for the customer fax number (string).
-     */
-    final public const P_CUSTOMER_FAX = 'customer_fax';
-
-    /**
      * The property name for the customer name (string).
      */
     final public const P_CUSTOMER_NAME = 'customer_name';

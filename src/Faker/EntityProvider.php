@@ -86,7 +86,7 @@ class EntityProvider extends Base
 
         $values = $this->distinctValues[$field];
         if ($allowNull) {
-            $values += [null];
+            $values[] = null;
         }
 
         return static::randomElement($values);

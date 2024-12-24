@@ -215,16 +215,11 @@ final class FileUtils
         if ($skipEmpty) {
             $flags |= \SplFileObject::READ_AHEAD | \SplFileObject::SKIP_EMPTY;
         }
+        $file = new \SplFileObject($filename, 'r');
+        $file->setFlags($flags);
+        $file->seek(\PHP_INT_MAX);
 
-        try {
-            $file = new \SplFileObject($filename, 'r');
-            $file->setFlags($flags);
-            $file->seek(\PHP_INT_MAX);
-
-            return $file->key();
-        } catch (\Exception) {
-            return 0;
-        }
+        return $file->key();
     }
 
     /**

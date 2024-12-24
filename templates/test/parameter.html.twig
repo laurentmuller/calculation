@@ -8,10 +8,12 @@
 {% block _message_progress_widget -%}
     <div class="input-group">
         {{- block('choice_widget') -}}
-        <button type="button" class="btn btn-notify btn-outline-secondary d-print-none" title="{{ 'parameters.action_test'|trans }}">
+        <button type="button" class="btn btn-notify btn-outline-secondary d-print-none"
+                title="{{ 'parameters.action_test'|trans }}">
             <i class="fa-regular fa-bell"></i>
         </button>
-        <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" title="{{ 'parameters.action_test'|trans }}" data-bs-toggle="dropdown" aria-expanded="false">
+        <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+                title="{{ 'parameters.action_test'|trans }}" data-bs-toggle="dropdown" aria-expanded="false">
         </button>
         {% set types = enum_cases('App\\Enums\\FlashType') %}
         <ul class="dropdown-menu dropdown-menu-end">
@@ -44,22 +46,55 @@
     <p class="mb-2 form-text text-body-secondary">{{ ('parameters.group_' ~ key ~ '_help')|trans }}</p>
 {% endmacro %}
 
+{% macro renderLine(icon, text) %}
+    <div class="horizontal-line pb-2">
+        <i class="{{ icon }} fa-fw align-self-center me-1"></i>{{ text|trans }}
+    </div>
+{% endmacro %}
+
 {% macro renderCustomer(form) %}
     {{ _self.renderHeader('customer', 'user-tie', true) }}
     <div id="customer" class="card-body pt-0 collapse show" data-bs-parent=".card-parameter">
         {{ _self.renderDescription('customer') }}
+        {#
+        {{ _self.renderLine('fa-regular fa-building', 'parameters.fields.customer_company') }}
+        #}
         {{ form_row(form.name) }}
         {{ form_row(form.address) }}
         {{ form_row(form.zipCity) }}
+        {#
+        {{ _self.renderLine('fa-regular fa-address-card', 'parameters.fields.customer_contacts') }}
+        #}
         <div class="row">
             <div class="col-md-6">{{ form_row(form.phone) }}</div>
-            <div class="col-md-6">{{ form_row(form.fax) }}</div>
+            <div class="col-md-6">{{ form_row(form.email) }}</div>
+        </div>
+        {#
+        {{ _self.renderLine('fa-solid fa-network-wired', 'parameters.fields.customer_social') }}
+        <div class="row">
+            <div class="col-lg-6">{{ form_row(form.url) }}</div>
+            <div class="col-lg-6">{{ form_row(form.instagram) }}</div>
         </div>
         <div class="row">
-            <div class="col-md-6">{{ form_row(form.email) }}</div>
-            <div class="col-md-6">{{ form_row(form.url) }}</div>
+            <div class="col-lg-6">{{ form_row(form.facebook) }}</div>
+            <div class="col-lg-6">{{ form_row(form.linkedin) }}</div>
+        </div>
+        #}
+    </div>
+
+    {{ _self.renderHeader('social', 'network-wired') }}
+    <div id="social" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
+        {{ _self.renderDescription('social') }}
+        <div class="row">
+            <div class="col-lg-6">{{ form_row(form.url) }}</div>
+            <div class="col-lg-6">{{ form_row(form.instagram) }}</div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">{{ form_row(form.facebook) }}</div>
+            <div class="col-lg-6">{{ form_row(form.linkedin) }}</div>
         </div>
     </div>
+
 {% endmacro %}
 
 {% macro renderDefault(form) %}
@@ -181,27 +216,27 @@
 
 {# body #}
 {% block card_body -%}
-<div class="card card-parameter card-collapse border-0">
-    {% if form.customer is defined %}
-        {{ _self.renderCustomer(form.customer) }}
-    {% endif %}
-    {% if form.default is defined %}
-        {{ _self.renderDefault(form.default) }}
-    {% endif %}
-    {% if form.product is defined %}
-        {{ _self.renderProduct(form.product) }}
-    {% endif %}
-    {{ _self.renderDisplay(form.display, form.customer is not defined) }}
-    {{ _self.renderMessage(form.message) }}
-    {{ _self.renderHomePage(form.homePage) }}
-    {% if form.options is defined %}
-        {{ _self.renderOptions(form.options) }}
-    {% endif %}
-    {% if form.security is defined %}
-        {{ _self.renderSecurity(form.security) }}
-    {% endif %}
-</div>
-{{ parent() }}
+    <div class="card card-parameter card-collapse border-0">
+        {% if form.customer is defined %}
+            {{ _self.renderCustomer(form.customer) }}
+        {% endif %}
+        {% if form.default is defined %}
+            {{ _self.renderDefault(form.default) }}
+        {% endif %}
+        {% if form.product is defined %}
+            {{ _self.renderProduct(form.product) }}
+        {% endif %}
+        {{ _self.renderDisplay(form.display, form.customer is not defined) }}
+        {{ _self.renderMessage(form.message) }}
+        {{ _self.renderHomePage(form.homePage) }}
+        {% if form.options is defined %}
+            {{ _self.renderOptions(form.options) }}
+        {% endif %}
+        {% if form.security is defined %}
+            {{ _self.renderSecurity(form.security) }}
+        {% endif %}
+    </div>
+    {{ parent() }}
 {% endblock %}
 {# form #}
 {% block actions_form -%}

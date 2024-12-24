@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use Symfony\Contracts\Translation\TranslatorInterface;
-
 /**
  * Contains information about the customer.
  */
@@ -22,7 +20,6 @@ class CustomerInformation
 {
     private ?string $address = null;
     private ?string $email = null;
-    private ?string $fax = null;
     private ?string $name = null;
     private ?string $phone = null;
     private bool $printAddress = false;
@@ -46,14 +43,6 @@ class CustomerInformation
     }
 
     /**
-     * Gets the fax number.
-     */
-    public function getFax(): ?string
-    {
-        return $this->fax;
-    }
-
-    /**
      * Gets the name.
      */
     public function getName(): ?string
@@ -67,44 +56,6 @@ class CustomerInformation
     public function getPhone(): ?string
     {
         return $this->phone;
-    }
-
-    /**
-     * Gets the translated fax number.
-     */
-    public function getTranslatedFax(?object $translator = null): string
-    {
-        $fax = $this->fax ?? '';
-        if ('' === $fax) {
-            return $fax;
-        }
-        if ($translator instanceof TranslatorInterface) {
-            return $translator->trans('report.fax', ['{0}' => $fax]);
-        }
-        if (null !== $translator && \method_exists($translator, 'trans')) {
-            return (string) $translator->trans('report.fax', ['{0}' => $fax]);
-        }
-
-        return "Fax: $fax";
-    }
-
-    /**
-     * Gets the translated phone number.
-     */
-    public function getTranslatedPhone(?object $translator = null): string
-    {
-        $phone = $this->phone ?? '';
-        if ('' === $phone) {
-            return $phone;
-        }
-        if ($translator instanceof TranslatorInterface) {
-            return $translator->trans('report.phone', ['{0}' => $phone]);
-        }
-        if (null !== $translator && \method_exists($translator, 'trans')) {
-            return (string) $translator->trans('report.phone', ['{0}' => $phone]);
-        }
-
-        return "Phone: $phone";
     }
 
     /**
@@ -147,16 +98,6 @@ class CustomerInformation
     public function setEmail(?string $email): self
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Sets the fax number.
-     */
-    public function setFax(?string $fax): self
-    {
-        $this->fax = $fax;
 
         return $this;
     }

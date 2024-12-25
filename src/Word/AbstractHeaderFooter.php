@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Word;
 
 use PhpOffice\PhpWord\Element\Section;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Abstract base class to output header or footer in Word documents.
@@ -44,14 +43,6 @@ abstract class AbstractHeaderFooter
     protected function getTitle(): ?string
     {
         return $this->parent->getTitle();
-    }
-
-    /**
-     * Gets the translator.
-     */
-    protected function getTranslator(): TranslatorInterface
-    {
-        return $this->parent->getTranslator();
     }
 
     /**

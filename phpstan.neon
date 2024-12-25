@@ -41,4 +41,6 @@ parameters:
         -
             message: '#@extends contains generic type#'
             identifier: generics.notGeneric
-            path: src/Form/*
+            paths:
+                 - src/Form/*
+                 - tests/Fixture/*

@@ -102,7 +102,7 @@ class ApplicationParameters extends AbstractParameters
     public function getDefaultValues(): array
     {
         // the customer and date parameters are omitted because default values are null
-        return $this->getParametersDefaultValues(
+        $values = $this->getParametersDefaultValues(
             DefaultParameter::class,
             DisplayParameter::class,
             HomePageParameter::class,
@@ -111,6 +111,14 @@ class ApplicationParameters extends AbstractParameters
             ProductParameter::class,
             SecurityParameter::class,
         );
+
+        // special case for minimum margin
+        $key = DefaultParameter::getCacheKey();
+        /** @psalm-var float $minMargin */
+        $minMargin = $values[$key]['minMargin'];
+        $values[$key]['minMargin'] = $minMargin * 100.0;
+
+        return $values;
     }
 
     /**

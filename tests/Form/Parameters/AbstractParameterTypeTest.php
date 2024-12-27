@@ -26,7 +26,7 @@ class AbstractParameterTypeTest extends TypeTestCase
         $values = [
             'action' => EntityAction::SHOW,
             'minMargin' => 1.1,
-            'text' => 'Fake text',
+            'name' => 'Fake text',
             'value' => true,
         ];
         $this->validateParameters($values);

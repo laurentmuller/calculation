@@ -23,7 +23,6 @@ use App\Pdf\Traits\PdfMemoryImageTrait;
 use App\Report\Table\GroupsTable;
 use App\Report\Table\ItemsTable;
 use App\Report\Table\OverallTable;
-use App\Traits\LoggerTrait;
 use App\Utils\StringUtils;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\ErrorCorrectionLevel;
@@ -31,14 +30,12 @@ use Endroid\QrCode\Writer\PngWriter;
 use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
-use Psr\Log\LoggerInterface;
 
 /**
  * Report for a calculation.
  */
 class CalculationReport extends AbstractReport
 {
-    use LoggerTrait;
     use PdfMemoryImageTrait;
 
     private const QR_CODE_SIZE = 38.0;
@@ -47,8 +44,7 @@ class CalculationReport extends AbstractReport
         AbstractController $controller,
         private readonly Calculation $calculation,
         private readonly float $minMargin,
-        private readonly string $qrcode,
-        private readonly LoggerInterface $logger
+        private readonly string $qrcode
     ) {
         parent::__construct($controller);
     }
@@ -59,11 +55,6 @@ class CalculationReport extends AbstractReport
     public function getCalculation(): Calculation
     {
         return $this->calculation;
-    }
-
-    public function getLogger(): LoggerInterface
-    {
-        return $this->logger;
     }
 
     /**
@@ -124,8 +115,6 @@ class CalculationReport extends AbstractReport
 
     /**
      * Gets the QR code image data.
-     *
-     * @throws \Exception
      */
     private function getQrCodeImageData(): ImageData
     {
@@ -209,14 +198,10 @@ class CalculationReport extends AbstractReport
             return;
         }
 
-        try {
-            $data = $this->getQrCodeImageData();
-            $x = $this->getPageWidth() - $this->getRightMargin() - self::QR_CODE_SIZE;
-            $y = $this->getPageHeight() - ReportFooter::FOOTER_OFFSET - self::QR_CODE_SIZE;
-            $this->imageData($data, $x, $y, self::QR_CODE_SIZE, self::QR_CODE_SIZE, $this->qrcode);
-        } catch (\Exception $e) {
-            $this->logException($e, $this->trans('report.calculation.error_qr_code'));
-        }
+        $data = $this->getQrCodeImageData();
+        $x = $this->getPageWidth() - $this->getRightMargin() - self::QR_CODE_SIZE;
+        $y = $this->getPageHeight() - ReportFooter::FOOTER_OFFSET - self::QR_CODE_SIZE;
+        $this->imageData($data, $x, $y, self::QR_CODE_SIZE, self::QR_CODE_SIZE, $this->qrcode);
     }
 
     private function renderTimestampable(Calculation $calculation): void

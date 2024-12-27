@@ -35,11 +35,7 @@ trait AuthorizationCheckerAwareTrait
     #[SubscribedService]
     public function getChecker(): AuthorizationCheckerInterface
     {
-        if ($this->checker instanceof AuthorizationCheckerInterface) {
-            return $this->checker;
-        }
-
-        return $this->checker = $this->getContainerService(__FUNCTION__, AuthorizationCheckerInterface::class);
+        return $this->checker ??= $this->getContainerService(__FUNCTION__, AuthorizationCheckerInterface::class);
     }
 
     public function setChecker(AuthorizationCheckerInterface $checker): static

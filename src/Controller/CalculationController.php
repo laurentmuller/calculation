@@ -192,11 +192,11 @@ class CalculationController extends AbstractEntityController
      * Export a single calculation to a PDF document.
      */
     #[Get(path: '/pdf/{id}', name: 'pdf_id', requirements: self::ID_REQUIREMENT)]
-    public function pdfOne(Calculation $calculation, LoggerInterface $logger): PdfResponse
+    public function pdfOne(Calculation $calculation): PdfResponse
     {
         $minMargin = $this->getMinMargin();
         $qrcode = $this->getQrCode($calculation);
-        $doc = new CalculationReport($this, $calculation, $minMargin, $qrcode, $logger);
+        $doc = new CalculationReport($this, $calculation, $minMargin, $qrcode);
 
         return $this->renderPdfDocument($doc);
     }

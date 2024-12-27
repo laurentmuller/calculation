@@ -38,6 +38,7 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     use ServiceMethodsSubscriberTrait;
     use SessionAwareTrait;
     use TranslatorAwareTrait;
+
     private const KEY_DATE = 'calculation.update.date';
     private const KEY_INTERVAL = 'calculation.update.interval';
     private const KEY_STATES = 'calculation.update.states';

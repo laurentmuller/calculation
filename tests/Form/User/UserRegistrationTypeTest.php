@@ -94,8 +94,7 @@ class UserRegistrationTypeTest extends TypeTestCase
             ->willReturn(false);
 
         $translator = $this->createMockTranslator();
-        $type = new UserRegistrationType($service, $application);
-        $type->setTranslator($translator);
+        $type = new UserRegistrationType($service, $application, $translator);
 
         return [
             $type,

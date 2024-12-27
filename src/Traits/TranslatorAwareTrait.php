@@ -31,11 +31,7 @@ trait TranslatorAwareTrait
     #[SubscribedService]
     public function getTranslator(): TranslatorInterface
     {
-        if ($this->translator instanceof TranslatorInterface) {
-            return $this->translator;
-        }
-
-        return $this->translator = $this->getContainerService(__FUNCTION__, TranslatorInterface::class);
+        return $this->translator ??= $this->getContainerService(__FUNCTION__, TranslatorInterface::class);
     }
 
     public function setTranslator(TranslatorInterface $translator): static

@@ -15,20 +15,25 @@ namespace App\Form\User;
 
 use App\Entity\User;
 use App\Form\FormHelper;
-use App\Traits\TranslatorAwareTrait;
+use App\Service\ApplicationService;
+use App\Service\CaptchaImageService;
 use App\Utils\StringUtils;
 use Symfony\Component\Form\Event\PreSetDataEvent;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Type to register a new user.
  */
-class UserRegistrationType extends AbstractUserCaptchaType implements ServiceSubscriberInterface
+class UserRegistrationType extends AbstractUserCaptchaType
 {
-    use ServiceMethodsSubscriberTrait;
-    use TranslatorAwareTrait;
+    public function __construct(
+        CaptchaImageService $service,
+        ApplicationService $application,
+        private readonly TranslatorInterface $translator,
+    ) {
+        parent::__construct($service, $application);
+    }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -49,7 +54,7 @@ class UserRegistrationType extends AbstractUserCaptchaType implements ServiceSub
             ->notMapped()
             ->rowClass('mb-0')
             ->label('registration.agreeTerms.label')
-            ->updateAttribute('data-error', $this->trans('registration.agreeTerms.error'))
+            ->updateAttribute('data-error', $this->translator->trans('registration.agreeTerms.error'))
             ->addCheckboxType(false);
         parent::addFormFields($helper);
 

@@ -20,6 +20,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Abstract type for a parameter.
+ */
 abstract class AbstractParameterType extends AbstractHelperType
 {
     public function configureOptions(OptionsResolver $resolver): void
@@ -44,11 +47,10 @@ abstract class AbstractParameterType extends AbstractHelperType
             }
 
             $child = $children[$key];
-            $attributes = \array_merge(
+            $child->vars['attr'] = \array_merge(
                 $child->vars['attr'] ?? [],
-                ['data-default' => $this->convertValue($key, $value)]
+                ['data-default' => $this->convertValue($value)]
             );
-            $child->vars['attr'] = $attributes;
         }
     }
 
@@ -65,7 +67,7 @@ abstract class AbstractParameterType extends AbstractHelperType
     ): void {
         $helper->field($field)
             ->label($label)
-            ->labelClass('checkbox-inline checkbox-switch')
+            ->labelClass('checkbox-inline')
             ->help($help)
             ->addCheckboxType();
     }
@@ -75,18 +77,13 @@ abstract class AbstractParameterType extends AbstractHelperType
      */
     abstract protected function getParameterClass(): string;
 
-    private function convertValue(string $key, mixed $value): mixed
+    private function convertValue(mixed $value): mixed
     {
         if ($value instanceof \BackedEnum) {
             return $value->value;
         }
         if (\is_bool($value)) {
-            return $value ? 1 : 0;
-        }
-
-        // special case for minimum margin
-        if ('minMargin' === $key && \is_numeric($value)) {
-            return (float) $value * 100.0;
+            return (int) $value;
         }
 
         return $value;
@@ -98,13 +95,9 @@ abstract class AbstractParameterType extends AbstractHelperType
     private function getDefaultValues(FormInterface $form): array
     {
         $config = $form->getRoot()->getConfig();
-        if (!$config->hasOption(AbstractHelperParametersType::DEFAULT_VALUES)) {
-            return [];
-        }
-
         $key = $this->getParameterClass()::getCacheKey();
         /** @psalm-var array<string, array<string, mixed>> $values */
-        $values = $config->getOption(AbstractHelperParametersType::DEFAULT_VALUES);
+        $values = $config->getOption(AbstractHelperParametersType::DEFAULT_VALUES, []);
 
         return $values[$key] ?? [];
     }

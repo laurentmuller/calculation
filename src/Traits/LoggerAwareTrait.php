@@ -31,11 +31,7 @@ trait LoggerAwareTrait
     #[SubscribedService]
     public function getLogger(): LoggerInterface
     {
-        if ($this->logger instanceof LoggerInterface) {
-            return $this->logger;
-        }
-
-        return $this->logger = $this->getContainerService(__FUNCTION__, LoggerInterface::class);
+        return $this->logger ??= $this->getContainerService(__FUNCTION__, LoggerInterface::class);
     }
 
     public function setLogger(LoggerInterface $logger): static

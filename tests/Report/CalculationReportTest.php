@@ -21,7 +21,6 @@ use App\Entity\CalculationItem;
 use App\Report\CalculationReport;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 class CalculationReportTest extends TestCase
 {
@@ -30,9 +29,6 @@ class CalculationReportTest extends TestCase
      */
     public function testEmpty(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $logger = $this->createMock(LoggerInterface::class);
-
         $calculation = new Calculation();
         $calculation->setDescription('description')
             ->setCustomer('customer')
@@ -40,8 +36,8 @@ class CalculationReportTest extends TestCase
             ->setGlobalMargin(1.0)
             ->setItemsTotal(1000.0)
             ->setUserMargin(0.1);
-
-        $report = new CalculationReport($controller, $calculation, 1.1, '', $logger);
+        $controller = $this->createMock(AbstractController::class);
+        $report = new CalculationReport($controller, $calculation, 1.1, '');
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -51,9 +47,6 @@ class CalculationReportTest extends TestCase
      */
     public function testEmptyGroup(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $logger = $this->createMock(LoggerInterface::class);
-
         $calculation = new Calculation();
         $calculation->setDescription('description')
             ->setCustomer('customer')
@@ -66,7 +59,8 @@ class CalculationReportTest extends TestCase
         $group->setCode('Group');
         $calculation->addGroup($group);
 
-        $report = new CalculationReport($controller, $calculation, 1.1, 'qrcode', $logger);
+        $controller = $this->createMock(AbstractController::class);
+        $report = new CalculationReport($controller, $calculation, 1.1, 'qrcode');
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -76,9 +70,6 @@ class CalculationReportTest extends TestCase
      */
     public function testRender(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $logger = $this->createMock(LoggerInterface::class);
-
         $calculation = new Calculation();
         $calculation->setDescription('description')
             ->setCustomer('customer')
@@ -101,8 +92,8 @@ class CalculationReportTest extends TestCase
         $group->addCategory($category);
         $calculation->addGroup($group);
 
-        $report = new CalculationReport($controller, $calculation, 2.0, 'qrcode', $logger);
-        self::assertInstanceOf(LoggerInterface::class, $report->getLogger());
+        $controller = $this->createMock(AbstractController::class);
+        $report = new CalculationReport($controller, $calculation, 2.0, 'qrcode');
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -112,9 +103,6 @@ class CalculationReportTest extends TestCase
      */
     public function testRenderWithoutQrCode(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $logger = $this->createMock(LoggerInterface::class);
-
         $calculation = new Calculation();
         $calculation->setDescription('description')
             ->setCustomer('customer')
@@ -137,7 +125,8 @@ class CalculationReportTest extends TestCase
         $group->addCategory($category);
         $calculation->addGroup($group);
 
-        $report = new CalculationReport($controller, $calculation, 2.0, '', $logger);
+        $controller = $this->createMock(AbstractController::class);
+        $report = new CalculationReport($controller, $calculation, 2.0, '');
         $actual = $report->render();
         self::assertTrue($actual);
     }

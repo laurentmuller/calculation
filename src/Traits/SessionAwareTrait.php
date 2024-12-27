@@ -32,11 +32,7 @@ trait SessionAwareTrait
     #[SubscribedService]
     public function getRequestStack(): RequestStack
     {
-        if ($this->requestStack instanceof RequestStack) {
-            return $this->requestStack;
-        }
-
-        return $this->requestStack = $this->getContainerService(__FUNCTION__, RequestStack::class);
+        return $this->requestStack ??= $this->getContainerService(__FUNCTION__, RequestStack::class);
     }
 
     public function setRequestStack(RequestStack $requestStack): static

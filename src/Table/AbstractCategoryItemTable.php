@@ -54,7 +54,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     {
         $repository = $this->getRepository();
         $result = parent::addSearch($query, $builder, $alias);
-        $categoryId = $query->categoryId;
+        $categoryId = $query->getIntParameter(self::PARAM_CATEGORY);
         if (0 !== $categoryId) {
             /** @psalm-var string $field */
             $field = $repository->getSearchFields('category.id', $alias);
@@ -63,7 +63,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
 
             return true;
         }
-        $groupId = $query->groupId;
+        $groupId = $query->getIntParameter(CategoryTable::PARAM_GROUP);
         if (0 !== $groupId) {
             /** @psalm-var string $field */
             $field = $repository->getSearchFields('group.id', $alias);
@@ -87,10 +87,10 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     {
         parent::updateResults($query, $results);
         if (!$query->callback) {
-            $categoryId = $query->categoryId;
+            $categoryId = $query->getIntParameter(self::PARAM_CATEGORY);
             $results->addParameter(self::PARAM_CATEGORY, $categoryId);
 
-            $groupId = $query->groupId;
+            $groupId = $query->getIntParameter(CategoryTable::PARAM_GROUP);
             $results->addParameter(CategoryTable::PARAM_GROUP, $groupId);
 
             $results->addCustomData('dropdown', $this->getDropDownValues());

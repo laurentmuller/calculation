@@ -46,8 +46,9 @@ class ProductTableTest extends EntityTableTestCase
      */
     public function testWithCategoryId(): void
     {
+        $parameters = ['categoryId' => 10];
         $dataQuery = new DataQuery();
-        $dataQuery->categoryId = 10;
+        $dataQuery->addParameters($parameters);
         $this->processDataQuery($dataQuery);
     }
 
@@ -57,8 +58,9 @@ class ProductTableTest extends EntityTableTestCase
     public function testWithFindCategoryId(): void
     {
         $this->categoryId = 10;
+        $parameters = ['categoryId' => 10];
         $dataQuery = new DataQuery();
-        $dataQuery->categoryId = 10;
+        $dataQuery->addParameters($parameters);
         $this->processDataQuery($dataQuery);
     }
 
@@ -68,8 +70,9 @@ class ProductTableTest extends EntityTableTestCase
     public function testWithFindGroupId(): void
     {
         $this->groupId = 10;
+        $parameters = ['groupId' => 10];
         $dataQuery = new DataQuery();
-        $dataQuery->groupId = 10;
+        $dataQuery->addParameters($parameters);
         $this->processDataQuery($dataQuery);
     }
 
@@ -78,8 +81,9 @@ class ProductTableTest extends EntityTableTestCase
      */
     public function testWithGroupId(): void
     {
+        $parameters = ['groupId' => 10];
         $dataQuery = new DataQuery();
-        $dataQuery->groupId = 10;
+        $dataQuery->addParameters($parameters);
         $this->processDataQuery($dataQuery);
     }
 

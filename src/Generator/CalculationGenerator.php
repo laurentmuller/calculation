@@ -30,8 +30,11 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class CalculationGenerator extends AbstractEntityGenerator
 {
-    public function __construct(EntityManagerInterface $manager, FakerService $fakerService, private readonly CalculationService $service)
-    {
+    public function __construct(
+        EntityManagerInterface $manager,
+        FakerService $fakerService,
+        private readonly CalculationService $service
+    ) {
         parent::__construct($manager, $fakerService);
     }
 

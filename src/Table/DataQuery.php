@@ -23,58 +23,87 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class DataQuery implements SortModeInterface
 {
-    public function __construct(
-        /** The callback state (XMLHttpRequest). */
-        public bool $callback = false,
-        /** The selected identifier. */
-        #[Assert\PositiveOrZero]
-        public int $id = 0,
-        /** The view. */
-        public TableView $view = TableView::TABLE,
-        /** The position of the first result to retrieve (the "offset"). */
-        #[Assert\PositiveOrZero]
-        public int $offset = 0,
-        /** The maximum number of results to retrieve (the "limit"). */
-        #[Assert\PositiveOrZero]
-        public int $limit = 0,
-        /** The search term. */
-        #[Assert\NotNull]
-        public string $search = '',
-        /** The sorted field. */
-        #[Assert\NotNull]
-        public string $sort = '',
-        /**
-         * The sort order ('asc' or 'desc').
-         *
-         * @psalm-var self::SORT_*
-         */
-        #[Assert\Choice([self::SORT_ASC, self::SORT_DESC])]
-        public string $order = self::SORT_ASC,
-        /** The cookie prefix */
-        #[Assert\NotNull]
-        public string $prefix = '',
-        /** The group identifier. */
-        #[Assert\PositiveOrZero]
-        public int $groupId = 0,
-        /** The category identifier. */
-        #[Assert\PositiveOrZero]
-        public int $categoryId = 0,
-        /** The calculation state identifier. */
-        #[Assert\PositiveOrZero]
-        public int $stateId = 0,
-        /** The edit state identifier. */
-        #[Assert\Range(min: -1, max: 1)]
-        public int $stateEditable = 0,
-        /** The log level. */
-        #[Assert\NotNull]
-        public string $level = '',
-        /** The log channel. */
-        #[Assert\NotNull]
-        public string $channel = '',
-        /** The search entity. */
-        #[Assert\NotNull]
-        public string $entity = ''
-    ) {
+    /**
+     * The callback state (XMLHttpRequest).
+     */
+    public bool $callback = false;
+
+    /**
+     * The selected identifier.
+     */
+    #[Assert\PositiveOrZero]
+    public int $id = 0;
+
+    /**
+     * The maximum number of results to retrieve (the "limit").
+     */
+    #[Assert\PositiveOrZero]
+    public int $limit = 0;
+
+    /**
+     * The position of the first result to retrieve (the "offset").
+     */
+    #[Assert\PositiveOrZero]
+    public int $offset = 0;
+
+    /**
+     * The sort order ('asc' or 'desc').
+     *
+     * @psalm-var self::SORT_*
+     */
+    #[Assert\Choice([self::SORT_ASC, self::SORT_DESC])]
+    public string $order = self::SORT_ASC;
+
+    /**
+     * @var array<string, int|string>
+     */
+    public array $parameters = [];
+
+    /**
+     * The cookie prefix.
+     */
+    #[Assert\NotNull]
+    public string $prefix = '';
+
+    /**
+     * The search term.
+     */
+    #[Assert\NotNull]
+    public string $search = '';
+
+    /**
+     * The sorted field.
+     */
+    #[Assert\NotNull]
+    public string $sort = '';
+
+    /**
+     * The view.
+     */
+    public TableView $view = TableView::TABLE;
+
+    /**
+     * Add a parameter to this list of parameters.
+     */
+    public function addParameter(string $key, string|int $value): self
+    {
+        $this->parameters[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Add parameters to this list of parameters.
+     *
+     * @param array<string, int|string> $parameters
+     */
+    public function addParameters(array $parameters): self
+    {
+        foreach ($parameters as $key => $value) {
+            $this->addParameter($key, $value);
+        }
+
+        return $this;
     }
 
     /**
@@ -96,6 +125,14 @@ class DataQuery implements SortModeInterface
     }
 
     /**
+     * Gets a parameter value as integer.
+     */
+    public function getIntParameter(string $key, int $default = 0): int
+    {
+        return (int) ($this->parameters[$key] ?? $default);
+    }
+
+    /**
      * Get the page index (first = 1).
      */
     public function getPage(): int
@@ -105,6 +142,14 @@ class DataQuery implements SortModeInterface
         }
 
         return 1 + \intdiv($this->offset, $this->limit);
+    }
+
+    /**
+     * Gets a parameter value as string.
+     */
+    public function getStringParameter(string $key, string $default = ''): string
+    {
+        return (string) ($this->parameters[$key] ?? $default);
     }
 
     /**
@@ -120,7 +165,7 @@ class DataQuery implements SortModeInterface
      *
      * @psalm-return array<string, bool|int|string>
      */
-    public function parameters(): array
+    public function params(): array
     {
         return [
             TableInterface::PARAM_ID => $this->id,

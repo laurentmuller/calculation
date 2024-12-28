@@ -11,15 +11,18 @@ classDiagram
         +getName() string
         +setName(string)
         +getValue() string|null
-        +setValue(string|null)
-        +getBoolean() bool
-        +setBoolean(bool)
+        +setValue(mixed)
         +getArray() array|null
         +setArray(array|null)
+        +getBoolean() bool
+        +setBoolean(bool)
         +getDate() DateTimeInterface|null
         +setDate(DateTimeInterface|null)
+        +getFloat() float
+        +setFloat(float)
         +getInteger() int
         +setInteger(int)
+        +setString(string|null)
     }
 
     class EntityInterface {

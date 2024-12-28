@@ -17,7 +17,12 @@ use App\Enums\TableView;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Service\UrlGeneratorService;
+use App\Table\AbstractCategoryItemTable;
+use App\Table\CalculationTable;
+use App\Table\CategoryTable;
 use App\Table\DataQuery;
+use App\Table\LogTable;
+use App\Table\SearchTable;
 use App\Traits\CookieTrait;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\InputBag;
@@ -25,11 +30,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Value resolver for {@link DataQuery}.
@@ -38,11 +41,8 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
 {
     use CookieTrait;
 
-    public function __construct(
-        private PropertyAccessorInterface $accessor,
-        private ValidatorInterface $validator,
-        private TranslatorInterface $translator,
-    ) {
+    public function __construct(private ValidatorInterface $validator)
+    {
     }
 
     /**
@@ -137,22 +137,54 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
 
     /**
      * @psalm-param InputBag<string> $inputBag
+     *
+     * @psalm-suppress PropertyTypeCoercion
      */
     private function updateQuery(DataQuery $query, InputBag $inputBag): void
     {
-        /** @psalm-var mixed $value */
-        foreach ($inputBag as $key => $value) { // @phpstan-ignore varTag.type
-            if (UrlGeneratorService::PARAM_CALLER === $key) {
-                continue;
+        /** @psalm-var string[] $keys */
+        $keys = $inputBag->keys();
+        foreach ($keys as $key) {
+            switch ($key) {
+                case UrlGeneratorService::PARAM_CALLER:
+                    // skipped
+                    break;
+                case TableInterface::PARAM_ID:
+                    $query->id = $inputBag->getInt($key);
+                    break;
+                case TableInterface::PARAM_SEARCH:
+                    $query->search = $inputBag->getString($key);
+                    break;
+                case TableInterface::PARAM_SORT:
+                    $query->sort = $inputBag->getString($key);
+                    break;
+                case TableInterface::PARAM_ORDER:
+                    // @phpstan-ignore assign.propertyType
+                    $query->order = $inputBag->getString($key);
+                    break;
+                case TableInterface::PARAM_OFFSET:
+                    $query->offset = $inputBag->getInt($key);
+                    break;
+                case TableInterface::PARAM_LIMIT:
+                    $query->limit = $inputBag->getInt($key);
+                    break;
+                case TableInterface::PARAM_VIEW:
+                    $query->view = $inputBag->getEnum($key, TableView::class, $query->view);
+                    break;
+                case CategoryTable::PARAM_GROUP:
+                case CalculationTable::PARAM_STATE:
+                case CalculationTable::PARAM_EDITABLE:
+                case AbstractCategoryItemTable::PARAM_CATEGORY:
+                    $query->addParameter($key, $inputBag->getInt($key));
+                    break;
+                case LogTable::PARAM_LEVEL:
+                case LogTable::PARAM_CHANNEL:
+                case SearchTable::PARAM_ENTITY:
+                    $query->addParameter($key, $inputBag->getString($key));
+                    break;
+                default:
+                    throw new BadRequestHttpException(\sprintf('Invalid parameter "%s".', $key));
             }
-            if (!$this->accessor->isWritable($query, $key)) {
-                $message = $this->formatError($key, $this->translator->trans('schema.fields.error'));
-                throw new BadRequestHttpException($message);
-            }
-            if (TableInterface::PARAM_VIEW === $key) {
-                $value = TableView::tryFrom((string) $value) ?? $query->view; // @phpstan-ignore property.nonObject
-            }
-            $this->accessor->setValue($query, $key, $value);
         }
     }
 

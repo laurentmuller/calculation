@@ -34,7 +34,6 @@ class CalculationGeneratorTest extends GeneratorTestCase
     {
         parent::setUp();
         $this->service = $this->getService(CalculationService::class);
-        $this->service->setTranslator($this->translator);
     }
 
     public function testNegativeCount(): void

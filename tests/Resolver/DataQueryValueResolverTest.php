@@ -14,9 +14,15 @@ declare(strict_types=1);
 namespace App\Tests\Resolver;
 
 use App\Enums\TableView;
+use App\Interfaces\TableInterface;
 use App\Resolver\DataQueryValueResolver;
 use App\Service\UrlGeneratorService;
+use App\Table\AbstractCategoryItemTable;
+use App\Table\CalculationTable;
+use App\Table\CategoryTable;
 use App\Table\DataQuery;
+use App\Table\LogTable;
+use App\Table\SearchTable;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -24,7 +30,6 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -61,14 +66,14 @@ class DataQueryValueResolverTest extends TestCase
 
         self::assertSame('', $query->prefix);
 
-        self::assertSame(0, $query->groupId);
-        self::assertSame(0, $query->categoryId);
-        self::assertSame(0, $query->stateId);
-        self::assertSame(0, $query->stateEditable);
+        self::assertSame(0, $query->getIntParameter(CategoryTable::PARAM_GROUP));
+        self::assertSame(0, $query->getIntParameter(CalculationTable::PARAM_STATE));
+        self::assertSame(0, $query->getIntParameter(CalculationTable::PARAM_EDITABLE));
+        self::assertSame(0, $query->getIntParameter(AbstractCategoryItemTable::PARAM_CATEGORY));
 
-        self::assertSame('', $query->level);
-        self::assertSame('', $query->channel);
-        self::assertSame('', $query->entity);
+        self::assertSame('', $query->getStringParameter(LogTable::PARAM_LEVEL));
+        self::assertSame('', $query->getStringParameter(LogTable::PARAM_CHANNEL));
+        self::assertSame('', $query->getStringParameter(SearchTable::PARAM_ENTITY));
     }
 
     /**
@@ -121,6 +126,40 @@ class DataQueryValueResolverTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testWithDefaultParams(): void
+    {
+        $parameters = [
+            TableInterface::PARAM_ID => 1,
+            TableInterface::PARAM_SEARCH => 'search',
+            TableInterface::PARAM_SORT => 'sort',
+            TableInterface::PARAM_ORDER => 'asc',
+            TableInterface::PARAM_OFFSET => 10,
+            TableInterface::PARAM_LIMIT => 50,
+            TableInterface::PARAM_VIEW => TableView::TABLE->value,
+        ];
+
+        $resolver = $this->createResolver();
+        $argument = $this->createArgumentMetadata();
+        $request = $this->createRequest($parameters);
+
+        $actual = $resolver->resolve($request, $argument);
+        self::assertIsArray($actual);
+        self::assertCount(1, $actual);
+
+        $query = $actual[0];
+        self::assertInstanceOf(DataQuery::class, $query);
+        self::assertSame(1, $query->id);
+        self::assertSame('search', $query->search);
+        self::assertSame('sort', $query->sort);
+        self::assertSame('asc', $query->order);
+        self::assertSame(10, $query->offset);
+        self::assertSame(50, $query->limit);
+        self::assertSame(TableView::TABLE, $query->view);
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testWithDefaultValue(): void
     {
         $resolver = $this->createResolver();
@@ -158,6 +197,40 @@ class DataQueryValueResolverTest extends TestCase
         self::assertCount(1, $actual);
         $query = $actual[0];
         self::assertInstanceOf(DataQuery::class, $query);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testWithParameters(): void
+    {
+        $parameters = [
+            CategoryTable::PARAM_GROUP => 1,
+            CalculationTable::PARAM_STATE => 1,
+            CalculationTable::PARAM_EDITABLE => 1,
+            AbstractCategoryItemTable::PARAM_CATEGORY => 1,
+            LogTable::PARAM_LEVEL => 'level',
+            LogTable::PARAM_CHANNEL => 'channel',
+            SearchTable::PARAM_ENTITY => 'entity',
+        ];
+
+        $resolver = $this->createResolver();
+        $argument = $this->createArgumentMetadata();
+        $request = $this->createRequest($parameters);
+
+        $actual = $resolver->resolve($request, $argument);
+        self::assertIsArray($actual);
+        self::assertCount(1, $actual);
+
+        $query = $actual[0];
+        self::assertInstanceOf(DataQuery::class, $query);
+        self::assertSame(1, $query->getIntParameter(CategoryTable::PARAM_GROUP));
+        self::assertSame(1, $query->getIntParameter(CalculationTable::PARAM_STATE));
+        self::assertSame(1, $query->getIntParameter(CalculationTable::PARAM_EDITABLE));
+        self::assertSame(1, $query->getIntParameter(AbstractCategoryItemTable::PARAM_CATEGORY));
+        self::assertSame('level', $query->getStringParameter(LogTable::PARAM_LEVEL));
+        self::assertSame('channel', $query->getStringParameter(LogTable::PARAM_CHANNEL));
+        self::assertSame('entity', $query->getStringParameter(SearchTable::PARAM_ENTITY));
     }
 
     /**
@@ -238,15 +311,13 @@ class DataQueryValueResolverTest extends TestCase
      */
     private function createResolver(?ConstraintViolationListInterface $violationList = null): DataQueryValueResolver
     {
-        $accessor = PropertyAccess::createPropertyAccessor();
         $validator = $this->createMock(ValidatorInterface::class);
         if ($violationList instanceof ConstraintViolationListInterface) {
             $validator->expects(self::once())
                 ->method('validate')
                 ->willReturn($violationList);
         }
-        $translator = $this->createMockTranslator();
 
-        return new DataQueryValueResolver($accessor, $validator, $translator);
+        return new DataQueryValueResolver($validator);
     }
 }

@@ -70,7 +70,7 @@ class LogTableTest extends TestCase
         $twig = $this->createMock(Environment::class);
         $table = new LogTable($service, $twig);
 
-        $query = $this->createDataQuery(0);
+        $query = $this->createDataQuery(limit: 0);
         $results = $table->processDataQuery($query);
         self::assertSame(Response::HTTP_PRECONDITION_FAILED, $results->status);
         self::assertCount(0, $results->rows);
@@ -93,8 +93,8 @@ class LogTableTest extends TestCase
      */
     public function testWitSearchChannel(): void
     {
-        $query = $this->createDataQuery();
-        $query->channel = 'doctrine';
+        $parameters = ['channel' => 'doctrine'];
+        $query = $this->createDataQuery(parameters: $parameters);
 
         $table = $this->createTableWithData();
         $results = $table->processDataQuery($query);
@@ -107,8 +107,8 @@ class LogTableTest extends TestCase
      */
     public function testWitSearchLevel(): void
     {
-        $query = $this->createDataQuery();
-        $query->level = PsrLevel::ALERT;
+        $parameters = ['level' => PsrLevel::ALERT];
+        $query = $this->createDataQuery(parameters: $parameters);
 
         $table = $this->createTableWithData();
         $results = $table->processDataQuery($query);
@@ -155,12 +155,16 @@ class LogTableTest extends TestCase
         return [$channel1, $channel2];
     }
 
-    private function createDataQuery(int $limit = 15): DataQuery
+    /**
+     * @psalm-param array<string, int|string> $parameters
+     */
+    private function createDataQuery(array $parameters = [], int $limit = 15): DataQuery
     {
-        $query = new DataQuery();
-        $query->limit = $limit;
+        $dataQuery = new DataQuery();
+        $dataQuery->addParameters($parameters);
+        $dataQuery->limit = $limit;
 
-        return $query;
+        return $dataQuery;
     }
 
     private function createLevels(): array

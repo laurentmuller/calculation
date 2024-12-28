@@ -64,7 +64,7 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     {
         $items = [];
         $search = $query->search;
-        $entity = $query->entity;
+        $entity = $query->getStringParameter(self::PARAM_ENTITY);
         $results = parent::handleQuery($query);
         if (\strlen($search) > 1) {
             $items = $this->service->search($search, $entity, SearchService::NO_LIMIT);

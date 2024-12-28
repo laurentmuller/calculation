@@ -290,10 +290,15 @@ class CalculationServiceTest extends KernelServiceTestCase
             $groupRepository = $this->getService(GroupRepository::class);
         }
         $application = $this->getService(ApplicationService::class);
-        $service = new CalculationService($globalRepository, $marginRepository, $groupRepository, $application);
-        $service->setTranslator($this->createMockTranslator());
+        $translator = $this->createMockTranslator();
 
-        return $service;
+        return new CalculationService(
+            $globalRepository,
+            $marginRepository,
+            $groupRepository,
+            $application,
+            $translator
+        );
     }
 
     protected function echo(string $name, mixed $value): void

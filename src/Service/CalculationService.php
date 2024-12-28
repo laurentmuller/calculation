@@ -20,9 +20,7 @@ use App\Repository\GlobalMarginRepository;
 use App\Repository\GroupMarginRepository;
 use App\Repository\GroupRepository;
 use App\Traits\MathTrait;
-use App\Traits\TranslatorAwareTrait;
-use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to update calculation totals.
@@ -44,11 +42,9 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
  *     user_margin: float,
  *     groups: ServiceGroupType[]}
  */
-class CalculationService implements ServiceSubscriberInterface
+class CalculationService
 {
     use MathTrait;
-    use ServiceMethodsSubscriberTrait;
-    use TranslatorAwareTrait;
 
     /**
      * Empty row identifier.
@@ -89,7 +85,8 @@ class CalculationService implements ServiceSubscriberInterface
         private readonly GlobalMarginRepository $globalRepository,
         private readonly GroupMarginRepository $marginRepository,
         private readonly GroupRepository $groupRepository,
-        private readonly ApplicationService $service
+        private readonly ApplicationService $service,
+        private readonly TranslatorInterface $translator,
     ) {
     }
 
@@ -547,5 +544,10 @@ class CalculationService implements ServiceSubscriberInterface
             fn (float $carry, array $category): float => $carry + $this->reduceCategory($category),
             0.0
         );
+    }
+
+    private function trans(string $id): string
+    {
+        return $this->translator->trans($id);
     }
 }

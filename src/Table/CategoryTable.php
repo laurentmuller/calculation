@@ -100,7 +100,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     protected function addSearch(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
         $result = parent::addSearch($query, $builder, $alias);
-        $groupId = $query->groupId;
+        $groupId = $query->getIntParameter(self::PARAM_GROUP);
         if (0 === $groupId) {
             return $result;
         }
@@ -131,7 +131,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     {
         parent::updateResults($query, $results);
         if (!$query->callback) {
-            $groupId = $query->groupId;
+            $groupId = $query->getIntParameter(self::PARAM_GROUP);
             $results->addParameter(self::PARAM_GROUP, $groupId);
             $results->addCustomData('group', $this->getGroup($groupId));
             $results->addCustomData('dropdown', $this->getDropDownValues());

@@ -46,13 +46,13 @@ class DataQueryTest extends TestCase
         self::assertSame('', $actual->sort);
         self::assertSame(SortModeInterface::SORT_ASC, $actual->order);
         self::assertSame('', $actual->prefix);
-        self::assertSame(0, $actual->groupId);
-        self::assertSame(0, $actual->categoryId);
-        self::assertSame(0, $actual->stateId);
-        self::assertSame(0, $actual->stateEditable);
-        self::assertSame('', $actual->level);
-        self::assertSame('', $actual->channel);
-        self::assertSame('', $actual->entity);
+        self::assertSame(0, $actual->getIntParameter('groupId'));
+        self::assertSame(0, $actual->getIntParameter('categoryId'));
+        self::assertSame(0, $actual->getIntParameter('stateId'));
+        self::assertSame(0, $actual->getIntParameter('stateEditable'));
+        self::assertSame('', $actual->getStringParameter('level'));
+        self::assertSame('', $actual->getStringParameter('channel'));
+        self::assertSame('', $actual->getStringParameter('entity'));
     }
 
     public function testGetPage(): void
@@ -67,10 +67,10 @@ class DataQueryTest extends TestCase
         self::assertSame(3, $actual->getPage());
     }
 
-    public function testParameters(): void
+    public function testParams(): void
     {
         $query = new DataQuery();
-        $actual = $query->parameters();
+        $actual = $query->params();
         self::assertSame(0, $actual[TableInterface::PARAM_ID]);
         self::assertSame('', $actual[TableInterface::PARAM_SEARCH]);
         self::assertSame('', $actual[TableInterface::PARAM_SORT]);

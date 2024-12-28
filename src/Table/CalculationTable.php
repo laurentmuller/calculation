@@ -72,7 +72,7 @@ class CalculationTable extends AbstractEntityTable
     {
         $repository = $this->getRepository();
         $result = parent::addSearch($query, $builder, $alias);
-        $stateId = $query->stateId;
+        $stateId = $query->getIntParameter(self::PARAM_STATE);
         if (0 !== $stateId) {
             /** @psalm-var string $field */
             $field = $repository->getSearchFields('state.id', $alias);
@@ -82,7 +82,7 @@ class CalculationTable extends AbstractEntityTable
             return true;
         }
 
-        $stateEditable = $query->stateEditable;
+        $stateEditable = $query->getIntParameter(self::PARAM_EDITABLE);
         if (0 !== $stateEditable) {
             /** @psalm-var string $field */
             $field = $repository->getSearchFields('state.editable', $alias);
@@ -123,10 +123,10 @@ class CalculationTable extends AbstractEntityTable
         parent::updateResults($query, $results);
         if (!$query->callback) {
             $results->addAttribute('row-style', 'styleTextMuted');
-            $stateId = $query->stateId;
+            $stateId = $query->getIntParameter(self::PARAM_STATE);
             $results->addParameter(self::PARAM_STATE, $stateId);
 
-            $stateEditable = $query->stateEditable;
+            $stateEditable = $query->getIntParameter(self::PARAM_EDITABLE);
             $results->addParameter(self::PARAM_EDITABLE, $stateEditable);
 
             $results->addCustomData('dropdown', $this->getDropDownValues());

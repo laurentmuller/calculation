@@ -199,7 +199,7 @@ abstract class AbstractTable implements SortModeInterface
     {
         $results->pageList = $this->getAllowedPageList($results->totalNotFiltered);
         $query->limit = [] !== $results->pageList ? \min($query->limit, \max($results->pageList)) : $query->limit;
-        $results->params = \array_merge($query->parameters(), $results->params);
+        $results->params = \array_merge($query->params(), $results->params);
         if ($query->callback) {
             return;
         }

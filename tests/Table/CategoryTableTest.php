@@ -35,8 +35,9 @@ class CategoryTableTest extends EntityTableTestCase
      */
     public function testWithGroupId(): void
     {
+        $parameters = ['groupId' => 10];
         $dataQuery = new DataQuery();
-        $dataQuery->groupId = 10;
+        $dataQuery->addParameters($parameters);
         $this->processDataQuery($dataQuery);
     }
 

@@ -44,8 +44,9 @@ class CalculationTableTest extends EntityTableTestCase
     public function testWithFindStateId(): void
     {
         $this->stateId = 10;
+        $parameters = ['stateId' => 10];
         $dataQuery = new DataQuery();
-        $dataQuery->stateId = 10;
+        $dataQuery->addParameters($parameters);
         $this->processDataQuery($dataQuery);
     }
 
@@ -54,8 +55,9 @@ class CalculationTableTest extends EntityTableTestCase
      */
     public function testWithStateEditable(): void
     {
+        $parameters = ['stateEditable' => 1];
         $dataQuery = new DataQuery();
-        $dataQuery->stateEditable = 1;
+        $dataQuery->addParameters($parameters);
         $this->processDataQuery($dataQuery);
     }
 
@@ -64,8 +66,9 @@ class CalculationTableTest extends EntityTableTestCase
      */
     public function testWithStateId(): void
     {
+        $parameters = ['stateId' => 10];
         $dataQuery = new DataQuery();
-        $dataQuery->stateId = 10;
+        $dataQuery->addParameters($parameters);
         $this->processDataQuery($dataQuery);
     }
 

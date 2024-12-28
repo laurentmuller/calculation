@@ -28,7 +28,8 @@ trait AwareTrait
      *
      * @template T
      *
-     * @param class-string<T> $class the service class name to get for
+     * @param string          $function the calling function name
+     * @param class-string<T> $class    the service class name to get for
      *
      * @return T the service
      *

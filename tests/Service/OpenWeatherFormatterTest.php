@@ -37,7 +37,7 @@ class OpenWeatherFormatterTest extends TestCase
             ['lat' => 0.0, 'lon' => 0.0],
         ];
         $this->formatter->update($results);
-        /** @psalm-var array $actual */
+        self::assertIsArray($results[0]);
         $actual = $results[0];
         self::assertArrayHasKey('lat_dms', $actual);
         self::assertArrayHasKey('lon_dms', $actual);

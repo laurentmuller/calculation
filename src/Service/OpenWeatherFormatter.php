@@ -55,43 +55,20 @@ class OpenWeatherFormatter
                 $this->updateCoordinate($result);
             }
 
-            switch ((string) $key) {
-                case 'icon':
-                    $this->updateIcon($results, (string) $result);
-                    break;
-                case 'description':
-                    $this->updateDescription($result);
-                    break;
-                case 'country':
-                    $this->updateCountry($results, (string) $results[$key]);
-                    break;
-                case 'dt':
-                    $this->updateDate($results, (int) $result, $timezone);
-                    break;
-                case 'sunrise':
-                    $this->updateSunrise($results, (int) $result, $timezone);
-                    break;
-                case 'sunset':
-                    $this->updateSunset($results, (int) $result, $timezone);
-                    break;
-                case 'weather':
-                    $this->updateWeather($result);
-                    break;
-                case 'lat':
-                case 'latitude':
-                    $this->updateLatitude($results, (float) $result);
-                    break;
-                case 'lon':
-                case 'longitude':
-                    $this->updateLongitude($results, (float) $result);
-                    break;
-                case 'deg':
-                    $this->updateDegree($results, (int) $result);
-                    break;
-                case 'timezone':
-                    $this->updateTimezone($results, $timezone);
-                    break;
-            }
+            match ($key) {
+                'icon' => $this->updateIcon($results, (string) $result),
+                'description' => $this->updateDescription($result),
+                'country' => $this->updateCountry($results, (string) $results[$key]),
+                'dt' => $this->updateDate($results, (int) $result, $timezone),
+                'sunrise' => $this->updateSunrise($results, (int) $result, $timezone),
+                'sunset' => $this->updateSunset($results, (int) $result, $timezone),
+                'weather' => $this->updateWeather($result),
+                'lat','latitude' => $this->updateLatitude($results, (float) $result),
+                'lon','longitude' => $this->updateLongitude($results, (float) $result),
+                'deg' => $this->updateDegree($results, (int) $result),
+                'timezone' => $this->updateTimezone($results, $timezone),
+                default => null,
+            };
         }
     }
 

@@ -145,46 +145,25 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
         /** @psalm-var string[] $keys */
         $keys = $inputBag->keys();
         foreach ($keys as $key) {
-            switch ($key) {
-                case UrlGeneratorService::PARAM_CALLER:
-                    // skipped
-                    break;
-                case TableInterface::PARAM_ID:
-                    $query->id = $inputBag->getInt($key);
-                    break;
-                case TableInterface::PARAM_SEARCH:
-                    $query->search = $inputBag->getString($key);
-                    break;
-                case TableInterface::PARAM_SORT:
-                    $query->sort = $inputBag->getString($key);
-                    break;
-                case TableInterface::PARAM_ORDER:
-                    // @phpstan-ignore assign.propertyType
-                    $query->order = $inputBag->getString($key);
-                    break;
-                case TableInterface::PARAM_OFFSET:
-                    $query->offset = $inputBag->getInt($key);
-                    break;
-                case TableInterface::PARAM_LIMIT:
-                    $query->limit = $inputBag->getInt($key);
-                    break;
-                case TableInterface::PARAM_VIEW:
-                    $query->view = $inputBag->getEnum($key, TableView::class, $query->view);
-                    break;
-                case CategoryTable::PARAM_GROUP:
-                case CalculationTable::PARAM_STATE:
-                case CalculationTable::PARAM_EDITABLE:
-                case AbstractCategoryItemTable::PARAM_CATEGORY:
-                    $query->addParameter($key, $inputBag->getInt($key));
-                    break;
-                case LogTable::PARAM_LEVEL:
-                case LogTable::PARAM_CHANNEL:
-                case SearchTable::PARAM_ENTITY:
-                    $query->addParameter($key, $inputBag->getString($key));
-                    break;
-                default:
-                    throw new BadRequestHttpException(\sprintf('Invalid parameter "%s".', $key));
-            }
+            match ($key) {
+                UrlGeneratorService::PARAM_CALLER => true,
+                TableInterface::PARAM_ID => $query->id = $inputBag->getInt($key),
+                TableInterface::PARAM_SEARCH => $query->search = $inputBag->getString($key),
+                TableInterface::PARAM_SORT => $query->sort = $inputBag->getString($key),
+                // @phpstan-ignore assign.propertyType
+                TableInterface::PARAM_ORDER => $query->order = $inputBag->getString($key),
+                TableInterface::PARAM_OFFSET => $query->offset = $inputBag->getInt($key),
+                TableInterface::PARAM_LIMIT => $query->limit = $inputBag->getInt($key),
+                TableInterface::PARAM_VIEW => $query->view = $inputBag->getEnum($key, TableView::class, $query->view),
+                CategoryTable::PARAM_GROUP,
+                CalculationTable::PARAM_STATE,
+                CalculationTable::PARAM_EDITABLE,
+                AbstractCategoryItemTable::PARAM_CATEGORY => $query->addParameter($key, $inputBag->getInt($key)),
+                LogTable::PARAM_LEVEL,
+                LogTable::PARAM_CHANNEL,
+                SearchTable::PARAM_ENTITY => $query->addParameter($key, $inputBag->getString($key)),
+                default => throw new BadRequestHttpException(\sprintf('Invalid parameter "%s".', $key)),
+            };
         }
     }
 

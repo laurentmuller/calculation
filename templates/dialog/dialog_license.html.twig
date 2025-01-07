@@ -1,4 +1,4 @@
-{% from 'macros/_icons.html.twig' import button_close_modal %}
+{% from 'macros/_icons.html.twig' import title_modal, button_close_modal %}
 {% set dialog_id = 'license-modal' %}
 <div class="modal fade" id="{{ dialog_id }}" tabindex="-1" aria-labelledby="modal-license-title" aria-hidden="true"
      data-load-error="{{ 'about.dialog.not_found'|trans }}"
@@ -6,11 +6,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="fa-solid fa-book-open-reader"></i>
-                    <span id="modal-license-title" class="dialog-title">{{ 'about.dialog.title'|trans }}</span>
-                </h5>
-                {{- button_close_modal(for_header: true, data_target: dialog_id) -}}
+                {{- title_modal('modal-license-title', 'book-open-reader', 'about.dialog.title', dialog_id) -}}
             </div>
             <div class="modal-body">
                 <div class="border pre-scrollable small-scrollbar">

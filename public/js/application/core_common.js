@@ -93,16 +93,23 @@ $(function () {
      */
     function initBackToTop() {
         const $button = $('.btn-back-to-top');
-        if ($button.length) {
-            $(window).on('scroll', () => {
-                if ($(window).scrollTop() > 100) {
-                    $button.fadeIn('slow');
-                } else {
-                    $button.fadeOut('slow');
-                }
-            });
-            $button.on('click', () => $(window).scrollTop(0));
+        if (!$button.length) {
+            return;
         }
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                $button.fadeIn();
+            } else {
+                $button.fadeOut();
+            }
+        })
+        $button.on('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            })
+        });
     }
 
     /**

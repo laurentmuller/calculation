@@ -1,4 +1,4 @@
-{% from 'macros/_icons.html.twig' import button_ok, button_close_modal, icon %}
+{% from 'macros/_icons.html.twig' import button_ok, title_modal, button_close_modal, icon %}
 {% from 'macros/_attributes.html.twig' import attributes as output_attributes %}
 {# output a theme entry #}
 {% macro output_theme(theme, checked) -%}
@@ -15,7 +15,7 @@
         'data-success': theme.success|trans,
         'data-class': 'theme-icon ' ~ theme.icon,
     } %}
-    <div class="form-check mb-3" title="{{ theme|trans }}">
+    <div class="form-check mb-3">
         <input{{ output_attributes(attributes) }}{% if checked %} checked="checked"{% endif %}>
         <label class="form-check-label" for="{{ id }}">
             <span class="d-inline d-lg-none"><i class="{{ theme.icon }}"></i></span>
@@ -31,22 +31,21 @@
 {%- endmacro %}
 {% set dialog_id = 'theme_modal' %}
 {% set selection = theme(app.request) %}
-<div class="modal fade" id="{{ dialog_id }}" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
+<div class="modal fade" id="{{ dialog_id }}" tabindex="-1" aria-labelledby="theme-title" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="fa-solid fa-image me-1"></i><span class="dialog-title">{{ 'theme.title'|trans }}</span></h5>
-                {{- button_close_modal(for_header: true, data_target: dialog_id) -}}
+                {{ title_modal('theme-title', 'image', 'theme.title', dialog_id) }}
             </div>
             <div class="modal-body mx-3">
                 <span class="form-label mb-3">{{ 'theme.help'|trans }}</span>
                 {% for theme in themes() %}
-                    {{ _self.output_theme(theme, theme == selection) }}
+                    {{ _self.output_theme(theme: theme, checked: (theme == selection)) }}
                 {% endfor %}
             </div>
             <div class="modal-footer">
                 {{ button_ok() }}
-                {{ button_close_modal(false, 'common.button_cancel', dialog_id) }}
+                {{ button_close_modal(for_header: false, label: 'common.button_cancel', data_target: dialog_id) }}
                 <button type="button" class="btn btn-settings btn-form btn-success" disabled="disabled">
                     {{- 'theme.settings'|trans -}}
                 </button>

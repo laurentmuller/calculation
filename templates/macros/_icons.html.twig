@@ -167,6 +167,11 @@
 {% endif %}
 {%- endmacro %}
 
+{% macro title_modal(id, icon_title, text_title, data_target = false) %}
+    <h5 class="modal-title" id="{{ id }}">{{ _self.icon(icon_title, text_title) }}</h5>
+    {{- _self.button_close_modal(data_target: data_target) -}}
+{% endmacro %}
+
 {% macro footer_center() -%}
 <hr class="mb-2 mx-n3">
 <div class="d-flex-wrap-center">

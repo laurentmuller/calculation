@@ -653,7 +653,7 @@ const Application = {
             }
         });
 
-        // create category and update
+        // create a category and update
         const prototype = $group.getPrototype(/__categoryIndex__/g, 'categoryIndex');
         const $category = $(prototype);
         $category.find('tr:first th:first').text(category.code);
@@ -1113,7 +1113,7 @@ $.fn.extend({
         const $table = $('#data-table-edit');
         const index = $.parseInt($table.data(key));
         $table.data(key, index + 1);
-        // get prototype
+        // get the prototype
         const prototype = $parent.data('prototype');
         // replace index
         return prototype.replace(pattern, index);
@@ -1151,7 +1151,7 @@ $.fn.extend({
         // tbody
         const $parent = $(this);
 
-        // get prototype
+        // get the prototype
         const prototype = $parent.getPrototype(/__itemIndex__/g, 'itemIndex');
 
         // append and update

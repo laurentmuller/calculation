@@ -126,10 +126,14 @@ class PdfColorTest extends TestCase
         yield ['fff', 255, 255, 255];
         yield ['FFF', 255, 255, 255];
         yield ['FfF', 255, 255, 255];
+        yield ['abf', 170, 187, 255];
+
         yield ['ffffff', 255, 255, 255];
         yield ['FFFFFF', 255, 255, 255];
         yield ['fffFFF', 255, 255, 255];
         yield ['#FFFFFF', 255, 255, 255];
+        yield ['aabbff', 170, 187, 255];
+
         yield [[255, 255, 255], 255, 255, 255];
 
         $rgb = [255, 255, 255];

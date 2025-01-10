@@ -37,7 +37,9 @@ class CategoryTableTest extends EntityTableTestCase
     {
         $parameters = ['groupId' => 10];
         $dataQuery = new DataQuery();
-        $dataQuery->addParameters($parameters);
+        foreach ($parameters as $key => $value) {
+            $dataQuery->addParameter($key, $value);
+        }
         $this->processDataQuery($dataQuery);
     }
 

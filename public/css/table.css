@@ -175,9 +175,9 @@ html[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary hr {
     width: 130px;
 }
 
-/* drop-down second level */
+/* drop-down item of second level */
 .dropdown-item.dropdown-child {
-    padding-left: calc(2 * var(--bs-dropdown-item-padding-x)) !important;
+    padding-left: 2rem;
 }
 
 /* custom view header */

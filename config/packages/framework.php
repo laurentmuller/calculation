@@ -44,5 +44,5 @@ return static function (FrameworkConfig $config): void {
 
     $config->form()
         ->csrfProtection()
-        ->fieldName('form_token');
+        ->fieldName('csrf_token');
 };

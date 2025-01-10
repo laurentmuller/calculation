@@ -3,7 +3,7 @@
 {%- set title_icon = title_icon|default('circle-question far') -%}
 {%- set title = title|default('flash_bag.success') -%}
 {%- set border = border|default('warning') -%}
-{%- set submit_class = submit_class|default('btn btn-form btn-' ~ border) -%}
+{%- set submit_class = submit_class|default('btn-' ~ border) -%}
 {%- set show_required = show_required is defined ? show_required : false -%}
 {# class #}
 {% block card_class ' border-' ~ border %}

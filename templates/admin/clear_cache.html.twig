@@ -1,5 +1,5 @@
 {% extends 'cards/card_delete.html.twig' %}
-{% from 'macros/_icons.html.twig' import button_close_modal %}
+{% from 'macros/_icons.html.twig' import modal_title, modal_close_button %}
 {# parameters #}
 {%- set title = 'clear_cache.title' -%}
 {%- set submit_text = 'clear_cache.submit' -%}
@@ -20,8 +20,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">{{ 'clear_cache.list'|trans }}</h5>
-                        {{ button_close_modal(true) }}
+                        {{ modal_title(text_title: 'clear_cache.list') }}
                     </div>
                     <div class="modal-body p-2">
                         <div id="accordion-cache" class="accordion accordion-flush accordion-no-background p-2">
@@ -54,7 +53,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        {{- button_close_modal(false) -}}
+                        {{- modal_close_button(false) -}}
                         {% if pools_length %}
                             <span class="ms-auto">{{ 'clear_cache.count'|trans({'%count%': pools_length|integer}) }}</span>
                         {% endif %}

@@ -93,20 +93,6 @@ class DataQuery implements SortModeInterface
     }
 
     /**
-     * Add parameters to this list of parameters.
-     *
-     * @param array<string, int|string> $parameters
-     */
-    public function addParameters(array $parameters): self
-    {
-        foreach ($parameters as $key => $value) {
-            $this->addParameter($key, $value);
-        }
-
-        return $this;
-    }
-
-    /**
      * Gets values as attributes.
      *
      * @psalm-return array<string, bool|int|string>

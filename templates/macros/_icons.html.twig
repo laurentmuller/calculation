@@ -99,9 +99,9 @@
 {{- _self.link(path('homepage'), 'index.title', 'btn btn-form btn-primary', 'home', 'index.title_help') -}}
 {%- endmacro %}
 
-{% macro button_submit(text = 'common.button_ok', class = 'btn btn-form btn-primary', parameters = []) -%}
+{% macro button_submit(text = 'common.button_ok', class = 'btn-primary', parameters = []) -%}
 {% from 'macros/_attributes.html.twig' import attributes %}
-{%- set parameters = parameters|merge({type: 'submit', class: class, role: 'button'}) -%}
+{%- set parameters = parameters|merge({type: 'submit', class: ('btn btn-form btn-submit ' ~ class)|trim, role: 'button'}) -%}
 <button{{ attributes(parameters) }}>{{ text|trans }}</button>
 {%- endmacro %}
 
@@ -156,7 +156,12 @@
 {% if route_name %}{{ _self.link(path(route_name, parameters), '', 'btn btn-secondary', 'table', 'common.button_table') }}{% endif %}
 {%- endmacro %}
 
-{% macro button_close_modal(for_header = true, label = null, data_target = false) -%}
+{% macro modal_title(id, icon_title, text_title, data_target = false) %}
+    <h5 class="modal-title"{% if id %} id="{{ id }}{% endif %}">{{ _self.icon(icon_title, text_title) }}</h5>
+    {{- _self.modal_close_button(data_target: data_target) -}}
+{% endmacro %}
+
+{% macro modal_close_button(for_header = true, label = null, data_target = false) -%}
 {% set text = (label|default('common.button_close'))|trans %}
 {% if for_header %}
     <button type="button" class="btn-close" data-bs-dismiss="modal"{% if data_target %} data-bs-target="#{{ data_target }}"{% endif %} aria-label="{{ text }}" title="{{ text }}"></button>
@@ -166,11 +171,6 @@
     </button>
 {% endif %}
 {%- endmacro %}
-
-{% macro title_modal(id, icon_title, text_title, data_target = false) %}
-    <h5 class="modal-title" id="{{ id }}">{{ _self.icon(icon_title, text_title) }}</h5>
-    {{- _self.button_close_modal(data_target: data_target) -}}
-{% endmacro %}
 
 {% macro footer_center() -%}
 <hr class="mb-2 mx-n3">

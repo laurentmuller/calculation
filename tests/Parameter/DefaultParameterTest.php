@@ -47,20 +47,21 @@ class DefaultParameterTest extends ParameterTestCase
     public function testMarginBelow(): void
     {
         self::assertFalse($this->parameter->isMarginBelow(0.0));
+        self::assertFalse($this->parameter->isMarginBelow(2.0));
         self::assertTrue($this->parameter->isMarginBelow(0.1));
-        $calculation = new Calculation();
-        self::assertFalse($this->parameter->isMarginBelow($calculation));
+        self::assertFalse($this->parameter->isMarginBelow(new Calculation()));
     }
 
     public function testSetValue(): void
     {
         $categoryId = 12;
+        $minMargin = 2.0;
         $stateId = 24;
 
         $this->parameter->setCategoryId($categoryId);
         self::assertSame($categoryId, $this->parameter->getCategoryId());
-        $this->parameter->setMinMargin(2.0);
-        self::assertSame(2.0, $this->parameter->getMinMargin());
+        $this->parameter->setMinMargin($minMargin);
+        self::assertSame($minMargin, $this->parameter->getMinMargin());
         $this->parameter->setStateId($stateId);
         self::assertSame($stateId, $this->parameter->getStateId());
     }

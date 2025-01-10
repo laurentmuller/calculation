@@ -48,7 +48,9 @@ class ProductTableTest extends EntityTableTestCase
     {
         $parameters = ['categoryId' => 10];
         $dataQuery = new DataQuery();
-        $dataQuery->addParameters($parameters);
+        foreach ($parameters as $key => $value) {
+            $dataQuery->addParameter($key, $value);
+        }
         $this->processDataQuery($dataQuery);
     }
 
@@ -60,7 +62,9 @@ class ProductTableTest extends EntityTableTestCase
         $this->categoryId = 10;
         $parameters = ['categoryId' => 10];
         $dataQuery = new DataQuery();
-        $dataQuery->addParameters($parameters);
+        foreach ($parameters as $key => $value) {
+            $dataQuery->addParameter($key, $value);
+        }
         $this->processDataQuery($dataQuery);
     }
 
@@ -72,7 +76,9 @@ class ProductTableTest extends EntityTableTestCase
         $this->groupId = 10;
         $parameters = ['groupId' => 10];
         $dataQuery = new DataQuery();
-        $dataQuery->addParameters($parameters);
+        foreach ($parameters as $key => $value) {
+            $dataQuery->addParameter($key, $value);
+        }
         $this->processDataQuery($dataQuery);
     }
 
@@ -83,7 +89,9 @@ class ProductTableTest extends EntityTableTestCase
     {
         $parameters = ['groupId' => 10];
         $dataQuery = new DataQuery();
-        $dataQuery->addParameters($parameters);
+        foreach ($parameters as $key => $value) {
+            $dataQuery->addParameter($key, $value);
+        }
         $this->processDataQuery($dataQuery);
     }
 

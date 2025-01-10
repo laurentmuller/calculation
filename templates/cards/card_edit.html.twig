@@ -2,7 +2,7 @@
 {% from 'macros/_icons.html.twig' import button_submit, button_cancel %}
 {# parameters #}
 {%- set submit_text = submit_text|default('common.button_ok') -%}
-{%- set submit_class = submit_class|default('btn btn-form btn-primary') -%}
+{%- set submit_class = submit_class|default('btn-primary') -%}
 {%- set submit_params = submit_params|default({}) -%}
 {%- set submit_title = submit_title|default('common.save_data') -%}
 {%- set form_attr = form_attr|default({})|merge({id: 'edit-form', 'data-save': submit_title|trans, class: 'position-relative'}) -%}

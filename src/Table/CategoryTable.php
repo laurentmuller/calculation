@@ -100,7 +100,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     protected function addSearch(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
         $result = parent::addSearch($query, $builder, $alias);
-        $groupId = $query->getIntParameter(self::PARAM_GROUP);
+        $groupId = $this->getQueryGroupId($query);
         if (0 === $groupId) {
             return $result;
         }
@@ -130,12 +130,13 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);
-        if (!$query->callback) {
-            $groupId = $query->getIntParameter(self::PARAM_GROUP);
-            $results->addParameter(self::PARAM_GROUP, $groupId);
-            $results->addCustomData('group', $this->getGroup($groupId));
-            $results->addCustomData('dropdown', $this->getDropDownValues());
+        if ($query->callback) {
+            return;
         }
+        $groupId = $this->getQueryGroupId($query);
+        $results->addParameter(self::PARAM_GROUP, $groupId);
+        $results->addCustomData('group', $this->getGroup($groupId));
+        $results->addCustomData('dropdown', $this->getDropDownValues());
     }
 
     /**
@@ -152,5 +153,10 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     private function getGroup(int $groupId): ?Group
     {
         return 0 !== $groupId ? $this->groupRepository->find($groupId) : null;
+    }
+
+    private function getQueryGroupId(DataQuery $query): int
+    {
+        return $query->getIntParameter(self::PARAM_GROUP);
     }
 }

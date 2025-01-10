@@ -72,7 +72,7 @@ class CalculationTable extends AbstractEntityTable
     {
         $repository = $this->getRepository();
         $result = parent::addSearch($query, $builder, $alias);
-        $stateId = $query->getIntParameter(self::PARAM_STATE);
+        $stateId = $this->getQueryStateId($query);
         if (0 !== $stateId) {
             /** @psalm-var string $field */
             $field = $repository->getSearchFields('state.id', $alias);
@@ -82,7 +82,7 @@ class CalculationTable extends AbstractEntityTable
             return true;
         }
 
-        $stateEditable = $query->getIntParameter(self::PARAM_EDITABLE);
+        $stateEditable = $this->getQueryEditable($query);
         if (0 !== $stateEditable) {
             /** @psalm-var string $field */
             $field = $repository->getSearchFields('state.editable', $alias);
@@ -121,18 +121,17 @@ class CalculationTable extends AbstractEntityTable
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);
-        if (!$query->callback) {
-            $results->addAttribute('row-style', 'styleTextMuted');
-            $stateId = $query->getIntParameter(self::PARAM_STATE);
-            $results->addParameter(self::PARAM_STATE, $stateId);
-
-            $stateEditable = $query->getIntParameter(self::PARAM_EDITABLE);
-            $results->addParameter(self::PARAM_EDITABLE, $stateEditable);
-
-            $results->addCustomData('dropdown', $this->getDropDownValues());
-            $results->addCustomData('state', $this->getCalculationState($stateId));
-            $results->addCustomData('editable', $stateEditable);
+        if ($query->callback) {
+            return;
         }
+        $stateId = $this->getQueryStateId($query);
+        $editable = $this->getQueryEditable($query);
+        $results->addAttribute('row-style', 'styleTextMuted');
+        $results->addParameter(self::PARAM_STATE, $stateId);
+        $results->addParameter(self::PARAM_EDITABLE, $editable);
+        $results->addCustomData('dropdown', $this->getDropDownValues());
+        $results->addCustomData('state', $this->getCalculationState($stateId));
+        $results->addCustomData('editable', $editable);
     }
 
     /**
@@ -152,6 +151,16 @@ class CalculationTable extends AbstractEntityTable
             'id' => $entity->getId(),
             'code' => $entity->getCode(),
         ];
+    }
+
+    private function getQueryEditable(DataQuery $query): int
+    {
+        return $query->getIntParameter(self::PARAM_EDITABLE);
+    }
+
+    private function getQueryStateId(DataQuery $query): int
+    {
+        return $query->getIntParameter(self::PARAM_STATE);
     }
 
     private function isEditable(int $stateEditable): bool

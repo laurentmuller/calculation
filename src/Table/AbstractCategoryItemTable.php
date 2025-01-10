@@ -54,7 +54,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     {
         $repository = $this->getRepository();
         $result = parent::addSearch($query, $builder, $alias);
-        $categoryId = $query->getIntParameter(self::PARAM_CATEGORY);
+        $categoryId = $this->getQueryCategoryId($query);
         if (0 !== $categoryId) {
             /** @psalm-var string $field */
             $field = $repository->getSearchFields('category.id', $alias);
@@ -63,7 +63,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
 
             return true;
         }
-        $groupId = $query->getIntParameter(CategoryTable::PARAM_GROUP);
+        $groupId = $this->getQueryGroupId($query);
         if (0 !== $groupId) {
             /** @psalm-var string $field */
             $field = $repository->getSearchFields('group.id', $alias);
@@ -86,22 +86,18 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);
-        if (!$query->callback) {
-            $categoryId = $query->getIntParameter(self::PARAM_CATEGORY);
-            $results->addParameter(self::PARAM_CATEGORY, $categoryId);
-
-            $groupId = $query->getIntParameter(CategoryTable::PARAM_GROUP);
-            $results->addParameter(CategoryTable::PARAM_GROUP, $groupId);
-
-            $results->addCustomData('dropdown', $this->getDropDownValues());
-            $results->addCustomData('category', $this->getCategory($categoryId));
-            $results->addCustomData('group', $this->getGroup($groupId));
+        if ($query->callback) {
+            return;
         }
+        $groupId = $this->getQueryGroupId($query);
+        $categoryId = $this->getQueryCategoryId($query);
+        $results->addParameter(CategoryTable::PARAM_GROUP, $groupId);
+        $results->addParameter(self::PARAM_CATEGORY, $categoryId);
+        $results->addCustomData('dropdown', $this->getDropDownValues());
+        $results->addCustomData('category', $this->getCategory($categoryId));
+        $results->addCustomData('group', $this->getGroup($groupId));
     }
 
-    /**
-     * Gets the category data for the given identifier.
-     */
     private function getCategory(int $categoryId): ?array
     {
         if (0 === $categoryId) {
@@ -118,9 +114,6 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         ];
     }
 
-    /**
-     * Gets the group data for the given identifier.
-     */
     private function getGroup(int $groupId): ?array
     {
         if (0 === $groupId) {
@@ -135,5 +128,18 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
             'id' => $entity->getId(),
             'code' => $entity->getCode(),
         ];
+    }
+
+    private function getQueryCategoryId(DataQuery $query): int
+    {
+        return $query->getIntParameter(self::PARAM_CATEGORY);
+    }
+
+    /**
+     * Gets the group identifier.
+     */
+    private function getQueryGroupId(DataQuery $query): int
+    {
+        return $query->getIntParameter(CategoryTable::PARAM_GROUP);
     }
 }

@@ -108,8 +108,8 @@ class LogTable extends AbstractTable implements \Countable
         $entities = \array_slice($entities, $query->offset, $query->limit);
         $results->rows = $this->mapEntities($entities);
         if (!$query->callback) {
-            $level = $query->getStringParameter(self::PARAM_LEVEL);
-            $channel = $query->getStringParameter(self::PARAM_CHANNEL);
+            $level = $this->getQueryLevel($query);
+            $channel = $this->getQueryChannel($query);
             $results->params = [
                 self::PARAM_LEVEL => $level,
                 self::PARAM_CHANNEL => $channel,
@@ -136,8 +136,8 @@ class LogTable extends AbstractTable implements \Countable
     private function filter(DataQuery $query, array $entities): array
     {
         $search = $query->search;
-        $level = $query->getStringParameter(self::PARAM_LEVEL);
-        $channel = $query->getStringParameter(self::PARAM_CHANNEL);
+        $level = $this->getQueryLevel($query);
+        $channel = $this->getQueryChannel($query);
         if (LogFilter::isFilter($search, $level, $channel)) {
             $filter = new LogFilter($search, $level, $channel);
 
@@ -145,6 +145,16 @@ class LogTable extends AbstractTable implements \Countable
         }
 
         return $entities;
+    }
+
+    private function getQueryChannel(DataQuery $query): string
+    {
+        return $query->getStringParameter(self::PARAM_CHANNEL);
+    }
+
+    private function getQueryLevel(DataQuery $query): string
+    {
+        return $query->getStringParameter(self::PARAM_LEVEL);
     }
 
     /**

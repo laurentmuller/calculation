@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.3/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.4/phpunit.xsd"
          bootstrap="tests/bootstrap.php"
          displayDetailsOnTestsThatTriggerNotices="true"
          displayDetailsOnTestsThatTriggerWarnings="true"
@@ -16,7 +16,7 @@
         <server name="APP_DEBUG" value="false"/>
         <server name="SHELL_VERBOSITY" value="-1"/>
         <server name="SYMFONY_PHPUNIT_REMOVE" value=""/>
-        <server name="SYMFONY_PHPUNIT_VERSION" value="10.5"/>
+        <server name="SYMFONY_PHPUNIT_VERSION" value="11.5"/>
     </php>
 
     <testsuites>

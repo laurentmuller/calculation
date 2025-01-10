@@ -52,14 +52,15 @@ function handleSelection() {
  */
 function translate(form, notification) {
     'use strict';
-    // in progress ?
+    // in progress?
     const $form = $(form);
     if ($form.data('changing')) {
         $form.removeData('changing');
         return;
     }
+
     const $from = $('#from');
-    const $buttonSubmit = $form.find(':submit');
+    const $buttonSubmit = $('.btn-submit');
     const $buttonCopy = $('.btn-copy');
     const $labelDetected = $('#detected');
     const $textResult = $('#result');
@@ -93,12 +94,13 @@ function translate(form, notification) {
             $buttonCopy.toggleDisabled(false);
 
             // update
-            if ($from.val()) {
+            const fromValue = $from.val();
+            if (fromValue) {
                 $labelDetected.text('');
             } else {
                 const label = $form.data('detected').replace('%name%', data.from.name);
                 $labelDetected.text(label);
-                if (data.from.tag && $from.val() !== data.from.tag) {
+                if (data.from.tag && fromValue !== '' && fromValue !== data.from.tag) {
                     $form.data('changing', true);
                     $from.val(data.from.tag).trigger('change');
                     handleSelection();
@@ -118,7 +120,6 @@ function translate(form, notification) {
             $textResult.val('');
             $labelDetected.text('');
             $buttonCopy.toggleDisabled(true);
-
             // message
             handleError(response);
         }
@@ -136,9 +137,9 @@ function handleExchange() {
     'use strict';
     // exchange from and to language.
     const $from = $('#from');
-    const $to = $('#to');
     const from = $from.val();
     if (from) {
+        const $to = $('#to');
         $from.val($to.val()).trigger('change');
         $to.val(from).trigger('change');
     }

@@ -1,5 +1,5 @@
 {# edit modal dialog #}
-{% from 'macros/_icons.html.twig' import icon, button_close_modal %}
+{% from 'macros/_icons.html.twig' import icon, modal_close_button %}
 {% from 'macros/_attributes.html.twig' import attributes %}
 {# parameters #}
 {%- set form_prefix = form_prefix|default('edit') -%}
@@ -15,7 +15,7 @@
             <form id="{{ form_prefix }}_form" autocomplete="off" data-add="{{ add_title }}" data-edit="{{ edit_title }}"{{ attributes(form_attr) }}>
                 <div class="modal-header cursor-move">
                     <h5 class="modal-title" id="{{ dialog_id }}">{{ icon(dialog_icon ~ ' me-1') }}<span class="dialog-title">{{ edit_title }}</span></h5>
-                    {{- button_close_modal(data_target: dialog_id) }}
+                    {{- modal_close_button(data_target: dialog_id) }}
                 </div>
                 <div class="modal-body">
                     {% block modal_body %}{% endblock %}

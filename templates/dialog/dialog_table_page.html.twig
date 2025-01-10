@@ -1,10 +1,10 @@
-{% from 'macros/_icons.html.twig' import title_modal, button_close_modal %}
+{% from 'macros/_icons.html.twig' import modal_title, modal_close_button %}
 <div class="modal fade" id="modal-page" tabindex="-1" aria-labelledby="modal-page-title" aria-hidden="true"
      data-page="{{ 'datatable.dialog_page'|trans }}" data-record="{{ 'datatable.dialog_record'|trans }}">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header cursor-move">
-                {{ title_modal('modal-page-title', 'arrow-up-right-dots', 'datatable.dialog_title', 'modal-page') }}
+                {{ modal_title('modal-page-title', 'arrow-up-right-dots', 'datatable.dialog_title', 'modal-page') }}
             </div>
             <div class="modal-body p-4">
                 <label for="page-range" class="form-label">{{ 'datatable.dialog_message'|trans }}</label>
@@ -18,7 +18,7 @@
                 <button type="button" class="btn btn-form btn-primary" id="page-button">
                     {{- 'common.button_ok'|trans -}}
                 </button>
-                {{- button_close_modal(for_header: false, label: 'common.button_cancel') }}
+                {{- modal_close_button(for_header: false, label: 'common.button_cancel') }}
             </div>
         </div>
     </div>

@@ -241,8 +241,8 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     private static function createFrom3Chars(string $rgb): static
     {
         $r = self::hexdec(\str_repeat(\substr($rgb, 0, 1), 2));
-        $b = self::hexdec(\str_repeat(\substr($rgb, 1, 1), 2));
-        $g = self::hexdec(\str_repeat(\substr($rgb, 2, 1), 2));
+        $g = self::hexdec(\str_repeat(\substr($rgb, 1, 1), 2));
+        $b = self::hexdec(\str_repeat(\substr($rgb, 2, 1), 2));
 
         return new static($r, $g, $b);
     }

@@ -42,73 +42,74 @@ Object.defineProperty(String.prototype, 'equalsIgnoreCase', {
      */
     value: function (value) {
         'use strict';
-        // const string1 = this.toLocaleLowerCase();
-        // const string2 = value.toLocaleLowerCase();
-        // return string1 === string2;
-        const regexp = RegExp('^' + this.replace(/[.\\+*?\[\^\]$(){}=!<>|:-]/g, '\\$&') + '$', 'i');
-        return regexp.test(value);
+        const string1 = this.normalize('NFD').toLowerCase()
+        const string2 = value.normalize('NFD').toLowerCase();
+        return string1 === string2;
     }
 });
 
-/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
-Object.defineProperty(String.prototype, 'dasherize', {
-    /**
-     * Replace a camel cased to a dashed ('isAnEntry' > 'is-an-entry').
-     * @return {string}
-     */
-    value: function () {
-        'use strict';
-        // the first character is always in lower case
-        const trim = this.trim();
-        const first = trim.substring(0, 1).toLowerCase();
-        const other = trim.substring(1);
-        return first + other.replace(/([A-Z])/g, '-$1');
-    }
-});
-
-/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
-Object.defineProperty(String.prototype, 'camelize', {
-    /**
-     * Replace dashed to camel cased ('is-an-entry' > 'isAnEntry').
-     * @return {string}
-     */
-    value: function () {
-        'use strict';
-        return this.trim().replace(/[-_\s]+(.)?/g, function (_match, c) {
-            return c ? c.toUpperCase() : '';
-        });
-    }
-});
-
-/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
-Object.defineProperty(String.prototype, 'toBool', {
-    /**
-     * Converts this string to a boolean value
-     * @return {boolean} the boolean value.
-     */
-    value: function () {
-        'use strict';
-        try {
-            return !!JSON.parse(this.toLowerCase());
-        } catch (e) {
-            return false;
-        }
-    }
-});
+//
+// /*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
+// Object.defineProperty(String.prototype, 'dasherize', {
+//     /**
+//      * Replace a camel cased to a dashed ('isAnEntry' > 'is-an-entry').
+//      * @return {string}
+//      */
+//     value: function () {
+//         'use strict';
+//         // the first character is always in lower case
+//         const trim = this.trim();
+//         const first = trim.substring(0, 1).toLowerCase();
+//         const other = trim.substring(1);
+//         return first + other.replace(/([A-Z])/g, '-$1');
+//     }
+// });
+//
+// /*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
+// Object.defineProperty(String.prototype, 'camelize', {
+//     /**
+//      * Replace dashed to camel cased ('is-an-entry' > 'isAnEntry').
+//      * @return {string}
+//      */
+//     value: function () {
+//         'use strict';
+//         return this.trim().replace(/[-_\s]+(.)?/g, function (_match, c){
+//             return c ? c.toUpperCase() : '';
+//         });
+//     }
+// });
+//
+// /*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
+// Object.defineProperty(String.prototype, 'toBool', {
+//     /**
+//      * Converts this string to a boolean value
+//      * @return {boolean} the boolean value.
+//      */
+//     value: function () {
+//         'use strict';
+//         try {
+//             return !!JSON.parse(this.toLowerCase());
+//         } catch (e) {
+//             return false;
+//         }
+//     }
+// });
 
 /*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'format', {
     /**
-     * Format a string. Example: 'First {0}. Second {1}'.format('ASP', 'PHP');
+     * Format a string.
+     *
+     * Example: 'First {0}, Second {1}'.format('ASP', 'PHP');
+     * Returns: 'First ASP, Second PHP'
+     *
      * @return {string} this formatted string.
      */
     value: function () {
         'use strict';
         let formatted = this;
-        for (let i = 0; i < arguments.length; i++) {
-            const flags = 'gi';
-            const pattern = `\\{${i}\\}`;
-            const regexp = new RegExp(pattern, flags);
+        for (let i = 0, len = arguments.length; i < len; i++) {
+            const regexp = new RegExp(`\\{${i}\\}`, 'gi');
             formatted = formatted.replace(regexp, arguments[i]);
         }
         return formatted;
@@ -129,15 +130,15 @@ Object.defineProperty(String.prototype, 'startsWithIgnoreCase', {
         return regex.test(this);
     }
 });
-
-/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
-Object.defineProperty(String.prototype, 'ucFirst', {
-    /**
-     * Return this string with the first character uppercase.
-     * @return {string}
-     */
-    value: function () {
-        'use strict';
-        return this.charAt(0).toUpperCase() + this.slice(1);
-    }
-});
+//
+// /*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
+// Object.defineProperty(String.prototype, 'ucFirst', {
+//     /**
+//      * Return this string with the first character uppercase.
+//      * @return {string}
+//      */
+//     value: function () {
+//         'use strict';
+//         return this.charAt(0).toUpperCase() + this.slice(1);
+//     }
+// });

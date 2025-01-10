@@ -64,7 +64,7 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     {
         $items = [];
         $search = $query->search;
-        $entity = $query->getStringParameter(self::PARAM_ENTITY);
+        $entity = $this->getQueryEntity($query);
         $results = parent::handleQuery($query);
         if (\strlen($search) > 1) {
             $items = $this->service->search($search, $entity, SearchService::NO_LIMIT);
@@ -123,6 +123,11 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
             'product' => 'fa-regular fa-file-alt',
             default => 'fa-regular fa-file',
         };
+    }
+
+    private function getQueryEntity(DataQuery $query): string
+    {
+        return $query->getStringParameter(self::PARAM_ENTITY);
     }
 
     /**

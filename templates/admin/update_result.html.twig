@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import link, homepage, sitemap, button_close_modal %}
+{% from 'macros/_icons.html.twig' import link, homepage, sitemap, modal_title, modal_close_button %}
 {% from 'macros/_properties.html.twig' import stateCss %}
 {# macro #}
 {% macro add_line_info(name, value) -%}
@@ -44,8 +44,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-result-title">{{ title|trans }}</h5>
-                {{ button_close_modal() }}
+                {{ modal_title('modal-result-title', title_icon, title) }}
             </div>
             <div class="modal-body">
                 <span class="form-label">{{ 'calculation.list.title'|trans }}</span>
@@ -79,7 +78,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                {{ button_close_modal(false) }}
+                {{ modal_close_button(false) }}
             </div>
         </div>
     </div>

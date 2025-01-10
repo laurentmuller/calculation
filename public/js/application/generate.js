@@ -93,25 +93,25 @@ function renderProducts(items) {
  */
 function disableButtons() {
     'use strict';
-    const $form = $('#edit-form');
-    const $submit = $form.find(':submit');
-    $submit.data('focused', $submit.is(":focus")).toggleDisabled(true);
-    $form.find('.btn-cancel').toggleDisabled(true);
+    const $submit = $('.btn-submit');
+    const $cancel = $('.btn-cancel');
+    $submit.data('focused', $submit.is(':focus')).toggleDisabled(true);
+    $cancel.toggleDisabled(true);
     $('#message-result').slideUp();
 }
 
 /**
- * Enable submit and cancel buttons.
+ * Enable submitting and cancel buttons.
  */
 function enableButtons() {
     'use strict';
-    const $form = $('#edit-form');
-    const $submit = $form.find(':submit');
+    const $submit = $('.btn-submit');
+    const $cancel = $('.btn-cancel');
     $submit.toggleDisabled(false);
     if ($submit.data('focused')) {
         $submit.trigger('focus');
     }
-    $form.find('.btn-cancel').toggleDisabled(false);
+    $cancel.toggleDisabled(false);
 }
 
 /**
@@ -122,7 +122,7 @@ function enableButtons() {
  */
 function notifyMessage(type, message) {
     'use strict';
-    const title = $(".card-title").text();
+    const title = $('.card-title').text();
     Toaster.notify(type, message, title);
 }
 

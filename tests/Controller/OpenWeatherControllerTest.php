@@ -212,6 +212,7 @@ class OpenWeatherControllerTest extends ControllerTestCase
             'id' => 2660717,
             'name' => 'Bern',
             'country' => 'CH',
+            'country_name' => 'Switzerland',
             'latitude' => 46.666672,
             'longitude' => 7.16667,
         ];
@@ -219,6 +220,7 @@ class OpenWeatherControllerTest extends ControllerTestCase
             'id' => 2660718,
             'name' => 'Fribourg',
             'country' => 'CH',
+            'country_name' => 'Switzerland',
             'latitude' => 46.802368,
             'longitude' => 7.15128,
         ];
@@ -318,6 +320,7 @@ class OpenWeatherControllerTest extends ControllerTestCase
             'id' => self::CITY_ID,
             'name' => 'Bern',
             'country' => 'CH',
+            'country_name' => 'Switzerland',
             'latitude' => 46.7318,
             'longitude' => 7.1875,
         ];

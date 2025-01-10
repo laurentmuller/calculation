@@ -102,13 +102,13 @@ $(function () {
             } else {
                 $button.fadeOut();
             }
-        })
+        });
         $button.on('click', (e) => {
             e.preventDefault();
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
-            })
+            });
         });
     }
 

@@ -161,7 +161,9 @@ class LogTableTest extends TestCase
     private function createDataQuery(array $parameters = [], int $limit = 15): DataQuery
     {
         $dataQuery = new DataQuery();
-        $dataQuery->addParameters($parameters);
+        foreach ($parameters as $key => $value) {
+            $dataQuery->addParameter($key, $value);
+        }
         $dataQuery->limit = $limit;
 
         return $dataQuery;

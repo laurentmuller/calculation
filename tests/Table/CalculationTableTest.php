@@ -46,7 +46,9 @@ class CalculationTableTest extends EntityTableTestCase
         $this->stateId = 10;
         $parameters = ['stateId' => 10];
         $dataQuery = new DataQuery();
-        $dataQuery->addParameters($parameters);
+        foreach ($parameters as $key => $value) {
+            $dataQuery->addParameter($key, $value);
+        }
         $this->processDataQuery($dataQuery);
     }
 
@@ -57,7 +59,9 @@ class CalculationTableTest extends EntityTableTestCase
     {
         $parameters = ['stateEditable' => 1];
         $dataQuery = new DataQuery();
-        $dataQuery->addParameters($parameters);
+        foreach ($parameters as $key => $value) {
+            $dataQuery->addParameter($key, $value);
+        }
         $this->processDataQuery($dataQuery);
     }
 
@@ -68,7 +72,9 @@ class CalculationTableTest extends EntityTableTestCase
     {
         $parameters = ['stateId' => 10];
         $dataQuery = new DataQuery();
-        $dataQuery->addParameters($parameters);
+        foreach ($parameters as $key => $value) {
+            $dataQuery->addParameter($key, $value);
+        }
         $this->processDataQuery($dataQuery);
     }
 

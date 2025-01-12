@@ -27,7 +27,7 @@ class FontAwesomeImageServiceTest extends TestCase
      */
     public function testInvalidDirectory(): void
     {
-        $this->checkImageIsInvalid('fake', 'fake');
+        $this->checkImageIsInvalid('fake', 'fake', false);
     }
 
     /**
@@ -106,8 +106,12 @@ class FontAwesomeImageServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    private function checkImageIsInvalid(string $svgDirectory, string $relativePath): void
+    private function checkImageIsInvalid(string $svgDirectory, string $relativePath, bool $realPath = true): void
     {
+        if ($realPath) {
+            $svgDirectory = \realpath($svgDirectory);
+            self::assertIsString($svgDirectory);
+        }
         $service = $this->createService($svgDirectory);
         $actual = $service->getImage($relativePath);
         self::assertNull($actual);
@@ -121,6 +125,8 @@ class FontAwesomeImageServiceTest extends TestCase
         string $relativePath,
         ?string $color = null
     ): FontAwesomeImage {
+        $svgDirectory = \realpath($svgDirectory);
+        self::assertIsString($svgDirectory);
         $service = $this->createService($svgDirectory);
         $actual = $service->getImage($relativePath, $color);
         self::assertNotNull($actual);

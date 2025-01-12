@@ -44,43 +44,12 @@ class AjaxCalculationControllerTest extends ControllerTestCase
 
     public function testUpdate(): void
     {
-        $items = [
-            [
-                'position' => '0',
-                'description' => 'Avery 800 - Coulé Teinté',
-                'unit' => 'm2',
-                'price' => '16.7',
-                'quantity' => '5',
-            ],
-        ];
-        $categories = [
-            [
-                'position' => '0',
-                'code' => 'Film Teinté',
-                'category' => '5',
-                'items' => $items,
-            ],
-        ];
-        $groups = [
-            [
-                'position' => '0',
-                'code' => 'Matériel',
-                'group' => '10',
-                'categories' => $categories,
-            ],
-        ];
-        $calculation = [
-            'customer' => 'Customer',
-            'description' => 'Description',
-            'date' => '2024-05-17',
-            'state' => '2',
-            'userMargin' => '-16',
-            'groups' => $groups,
-        ];
-
         $parameters = [
             'adjust' => true,
-            'calculation' => $calculation,
+            'userMargin' => -0.16,
+            'groups' => [
+                ['id' => 10, 'total' => 83.5],
+            ],
         ];
 
         $this->loginUsername('ROLE_USER');
@@ -110,14 +79,16 @@ class AjaxCalculationControllerTest extends ControllerTestCase
             'groups' => [],
         ];
         $service = $this->createMock(CalculationService::class);
-        $service->method('createGroupsFromData')
+        $service->method('createGroupsFromQuery')
             ->willReturn($data);
-        $service->method('adjustUserMargin')
-            ->willReturn($data);
+        //        $service->method('adjustUserMargin')
+        //            ->willReturn($data);
         $this->setService(CalculationService::class, $service);
 
         $parameters = [
             'adjust' => true,
+            'userMargin' => 0.0,
+            'groups' => [],
         ];
         $this->checkRoute(
             url: self::UPDATE_ROUTE_NAME,
@@ -134,7 +105,7 @@ class AjaxCalculationControllerTest extends ControllerTestCase
     public function testUpdateWithException(): void
     {
         $service = $this->createMock(CalculationService::class);
-        $service->method('createGroupsFromData')
+        $service->method('createGroupsFromQuery')
             ->willThrowException(new \Exception('Fake Message'));
         $this->setService(CalculationService::class, $service);
         $this->checkRoute(
@@ -154,7 +125,7 @@ class AjaxCalculationControllerTest extends ControllerTestCase
             'result' => false,
         ];
         $service = $this->createMock(CalculationService::class);
-        $service->method('createGroupsFromData')
+        $service->method('createGroupsFromQuery')
             ->willReturn($data);
         $this->setService(CalculationService::class, $service);
 

@@ -262,6 +262,42 @@ const Application = {
         return this;
     },
 
+
+    /**
+     * Serialize the form as an array.
+     *
+     * @param {jQuery<HTMLFormElement>} $form - the form to serialize.
+     * @param {boolean} adjust - true to adjust the user margin.
+     */
+    serializeForm: function ($form, adjust) {
+        'use strict';
+        const groups = [];
+        $('#data-table-edit thead').each(function () {
+            let total = 0.0;
+            const $bodies = $(this).nextUntil('thead');
+            $bodies.each(function () {
+                $(this).find('tr.item').each(function () {
+                    const $item = $(this);
+                    const price = $item.find('input[name$="[price]"]').floatVal();
+                    const quantity = $item.find('input[name$="[quantity]"]').floatVal();
+                    total += price * quantity;
+                })
+            })
+            const id = $(this).find('input[name$="[group]"]').intVal();
+            groups.push({
+                id: id,
+                total: total
+            });
+        });
+        const userMargin = $('#calculation_userMargin').floatVal() / 100.0;
+
+        return {
+            adjust: adjust,
+            userMargin: userMargin,
+            groups: groups,
+        }
+    },
+
     /**
      * Update the totals.
      *
@@ -308,15 +344,8 @@ const Application = {
         }
 
         // parameters
-        adjust = adjust || false;
-        let data = $form.serializeArray();
-        if (adjust) {
-            data.push({
-                name: 'adjust',
-                value: true
-            });
-        }
         const url = $form.data('update');
+        const data = this.serializeForm($form, adjust);
 
         /**
          * @param {Object} response
@@ -334,14 +363,14 @@ const Application = {
             }
             // update content
             const $totalPanel = $('#totals-panel');
-            if (response.body) {
-                $('#totals-table > tbody').html(response.body);
+            if (response.view) {
+                $('#totals-table > tbody').html(response.view);
                 $totalPanel.fadeIn();
             } else {
                 $totalPanel.fadeOut();
             }
             if (response.adjust && !$.isUndefined(response.user_margin) && !isNaN(response.user_margin)) {
-                $('#calculation_userMargin').intVal(response.user_margin).selectFocus();
+                $('#calculation_userMargin').intVal(response.user_margin * 100).selectFocus();
             }
             if (response.overall_below) {
                 $buttonAdjust.toggleDisabled(false).removeClass('cursor-default');

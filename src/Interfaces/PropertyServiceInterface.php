@@ -95,7 +95,7 @@ interface PropertyServiceInterface
     /**
      * The default product edit (bool).
      */
-    final public const DEFAULT_PRODUCT_EDIT = true;
+    final public const DEFAULT_PRODUCT_EDIT = false;
 
     /**
      * The default output qr-code (boolean).

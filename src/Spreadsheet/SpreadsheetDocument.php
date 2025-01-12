@@ -73,13 +73,13 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @throws Exception if the given worksheet is not an instance of WorksheetDocument
      */
-    public function addSheet(Worksheet $worksheet, ?int $sheetIndex = null): WorksheetDocument
-    {
-        if (!$worksheet instanceof WorksheetDocument) {
-            throw new Exception(\sprintf('%s expected, %s given.', WorksheetDocument::class, \get_debug_type($worksheet)));
-        }
-
-        parent::addSheet($worksheet, $sheetIndex);
+    public function addSheet(
+        Worksheet $worksheet,
+        ?int $sheetIndex = null,
+        bool $retitleIfNeeded = false
+    ): WorksheetDocument {
+        $worksheet = $this->validateSheet($worksheet);
+        parent::addSheet($worksheet, $sheetIndex, $retitleIfNeeded);
 
         return $worksheet;
     }
@@ -93,7 +93,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function createSheet(?int $sheetIndex = null): WorksheetDocument
     {
-        return $this->addSheet(new WorksheetDocument($this), $sheetIndex);
+        return $this->addSheet(new WorksheetDocument($this), $sheetIndex, true);
     }
 
     /**
@@ -130,8 +130,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function getActiveSheet(): WorksheetDocument
     {
-        /** @psalm-var WorksheetDocument */
-        return parent::getActiveSheet();
+        return $this->validateSheet(parent::getActiveSheet());
     }
 
     /**
@@ -154,8 +153,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function getSheet(int $sheetIndex): WorksheetDocument
     {
-        /** @psalm-var WorksheetDocument */
-        return parent::getSheet($sheetIndex);
+        return $this->validateSheet(parent::getSheet($sheetIndex));
     }
 
     /**
@@ -165,8 +163,12 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function getSheetByName(string $worksheetName): ?WorksheetDocument
     {
-        /** @psalm-var WorksheetDocument|null */
-        return parent::getSheetByName($worksheetName);
+        $sheet = parent::getSheetByName($worksheetName);
+        if (!$sheet instanceof Worksheet) {
+            return null;
+        }
+
+        return $this->validateSheet($sheet);
     }
 
     /**
@@ -176,8 +178,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function getSheetByNameOrThrow(string $worksheetName): WorksheetDocument
     {
-        /** @psalm-var WorksheetDocument */
-        return parent::getSheetByNameOrThrow($worksheetName);
+        return $this->validateSheet(parent::getSheetByNameOrThrow($worksheetName));
     }
 
     /**
@@ -202,8 +203,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function setActiveSheetIndex(int $worksheetIndex): WorksheetDocument
     {
-        /** @psalm-var WorksheetDocument */
-        return parent::setActiveSheetIndex($worksheetIndex);
+        return $this->validateSheet(parent::setActiveSheetIndex($worksheetIndex));
     }
 
     /**
@@ -215,8 +215,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function setActiveSheetIndexByName(string $worksheetName): WorksheetDocument
     {
-        /** @psalm-var WorksheetDocument */
-        return parent::setActiveSheetIndexByName($worksheetName);
+        return $this->validateSheet(parent::setActiveSheetIndexByName($worksheetName));
     }
 
     /**
@@ -369,5 +368,14 @@ class SpreadsheetDocument extends Spreadsheet
             ->setCompany($customer->getName())
             ->setUserName($userName)
             ->setCategory($application);
+    }
+
+    protected function validateSheet(Worksheet $sheet): WorksheetDocument
+    {
+        if (!$sheet instanceof WorksheetDocument) {
+            throw new Exception(\sprintf('%s expected, %s given.', WorksheetDocument::class, \get_debug_type($sheet)));
+        }
+
+        return $sheet;
     }
 }

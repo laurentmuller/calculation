@@ -111,7 +111,7 @@ class ApplicationServiceTest extends KernelServiceTestCase
         $service = $this->getApplicationService();
         self::assertNull($service->getDefaultProduct());
         self::assertSame(0.0, $service->getDefaultQuantity());
-        self::assertTrue($service->isDefaultEdit());
+        self::assertFalse($service->isDefaultEdit());
     }
 
     public function testDefaultState(): void

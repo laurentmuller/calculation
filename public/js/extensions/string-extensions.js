@@ -42,7 +42,7 @@ Object.defineProperty(String.prototype, 'equalsIgnoreCase', {
      */
     value: function (value) {
         'use strict';
-        const string1 = this.normalize('NFD').toLowerCase()
+        const string1 = this.normalize('NFD').toLowerCase();
         const string2 = value.normalize('NFD').toLowerCase();
         return string1 === string2;
     }

@@ -191,7 +191,7 @@ class ApplicationService implements PropertyServiceInterface
             // margin
             self::P_MIN_MARGIN => self::DEFAULT_MIN_MARGIN,
             // default product
-            self::P_PRODUCT_EDIT => self::DEFAULT_TRUE,
+            self::P_PRODUCT_EDIT => self::DEFAULT_FALSE,
             self::P_PRODUCT_QUANTITY => 0,
             // display and edit entities
             self::P_DISPLAY_MODE => self::DEFAULT_DISPLAY_MODE,

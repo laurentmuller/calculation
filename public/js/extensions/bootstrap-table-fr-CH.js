@@ -37,5 +37,5 @@ $(function () {
             return 'Aucune entrée ne correspond aux critères de recherche.';
         }
     };
-    Object.assign($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales['fr-CH'])
+    Object.assign($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales['fr-CH']);
 });

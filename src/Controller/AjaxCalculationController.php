@@ -15,11 +15,13 @@ namespace App\Controller;
 
 use App\Attribute\Post;
 use App\Interfaces\RoleInterface;
+use App\Model\CalculationQuery;
+use App\Resolver\CalculationQueryResolver;
 use App\Service\CalculationService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -37,25 +39,23 @@ class AjaxCalculationController extends AbstractController
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Post(path: '/update', name: 'update')]
-    public function update(Request $request, CalculationService $service, LoggerInterface $logger): JsonResponse
-    {
+    public function update(
+        CalculationService $service,
+        LoggerInterface $logger,
+        #[MapRequestPayload(resolver: CalculationQueryResolver::class)]
+        CalculationQuery $query = new CalculationQuery()
+    ): JsonResponse {
         try {
-            $source = $this->getRequestAll($request, 'calculation');
-            $parameters = $service->createGroupsFromData($source);
+            $parameters = $service->createGroupsFromQuery($query);
             if (!$parameters['result']) {
                 return $this->json($parameters);
             }
-            $parameters['min_margin'] = $service->getMinMargin();
-            $adjust = $this->getRequestBoolean($request, 'adjust');
-            if ($adjust && $parameters['overall_below']) {
-                $parameters = $service->adjustUserMargin($parameters);
-            }
-            $body = $this->renderView('calculation/calculation_ajax_totals.html.twig', $parameters);
 
-            return $this->json([
-                'result' => true,
-                'body' => $body,
-                'adjust' => $adjust,
+            $view = $this->renderView('calculation/calculation_ajax_totals.html.twig', $parameters);
+
+            return $this->jsonTrue([
+                'view' => $view,
+                'adjust' => $query->adjust,
                 'user_margin' => $parameters['user_margin'],
                 'overall_margin' => $parameters['overall_margin'],
                 'overall_total' => $parameters['overall_total'],

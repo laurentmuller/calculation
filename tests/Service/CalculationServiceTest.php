@@ -23,6 +23,8 @@ use App\Entity\Group;
 use App\Entity\GroupMargin;
 use App\Entity\Product;
 use App\Interfaces\EntityInterface;
+use App\Model\CalculationGroupQuery;
+use App\Model\CalculationQuery;
 use App\Repository\GlobalMarginRepository;
 use App\Repository\GroupMarginRepository;
 use App\Repository\GroupRepository;
@@ -37,9 +39,6 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\MockObject\Exception;
 
-/**
- * @psalm-import-type ServiceParametersType from CalculationService
- */
 class CalculationServiceTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
@@ -53,49 +52,25 @@ class CalculationServiceTest extends KernelServiceTestCase
 
     /**
      * @throws Exception
+     * @throws ORMException|\ReflectionException
      */
     public function testAdjustUserMargin(): void
     {
-        $service = $this->createCalculationService();
+        $query = new CalculationQuery(
+            adjust: true,
+            userMargin: -0.99,
+            groups: [
+                new CalculationGroupQuery(1, 100.0),
+            ]
+        );
 
-        $group = [
-            'id' => 0,
-            'description' => 'description',
-            'amount' => 0.0,
-            'margin' => 0.0,
-            'margin_amount' => 0.0,
-            'total' => 0.0,
-        ];
-        $parameters = [
-            'result' => false,
-            'overall_below' => false,
-            'overall_margin' => 0.0,
-            'overall_total' => 0.0,
-            'min_margin' => 1.1,
-            'user_margin' => 0.05,
-            'groups' => [$group],
-        ];
-        $actual = $service->adjustUserMargin($parameters);
-        self::assertCount(7, $actual);
-
-        $parameters['groups'][] = [
-            'id' => 4,
-            'description' => 'ROW_TOTAL_NET',
-            'amount' => 10.0,
-            'margin' => 1.1,
-            'margin_amount' => 1.0,
-            'total' => 11.0,
-        ];
-        $parameters['groups'][] = [
-            'id' => 2,
-            'description' => 'ROW_TOTAL_GROUP',
-            'amount' => 10.0,
-            'margin' => 1.1,
-            'margin_amount' => 1.0,
-            'total' => 11.0,
-        ];
-
-        $actual = $service->adjustUserMargin($parameters);
+        $groupMargin = new GroupMargin();
+        $groupMargin->setMaximum(1000.0)
+            ->setMargin(0.02);
+        $group = $this->createGroup();
+        $group->addMargin($groupMargin);
+        $service = $this->createCalculationService($group, 1.0, 1.1);
+        $actual = $service->createGroupsFromQuery($query);
         self::assertCount(7, $actual);
     }
 
@@ -135,38 +110,34 @@ class CalculationServiceTest extends KernelServiceTestCase
     }
 
     /**
+     * @throws Exception|ORMException
+     */
+    public function testCreateGroupsFromDataEmpty(): void
+    {
+        $query = new CalculationQuery();
+        $service = $this->createCalculationService();
+        $actual = $service->createGroupsFromQuery($query);
+        self::assertCount(7, $actual);
+        self::assertArrayHasKey('groups', $actual);
+        self::assertCount(1, $actual['groups']);
+    }
+
+    /**
      * @throws Exception|ORMException|\ReflectionException
      */
-    public function testCreateGroupsFromData(): void
+    public function testCreateGroupsFromQuery(): void
     {
-        $json = <<<JSON
-            {
-                "userMargin": 5,
-                "groups": [
-                    {
-                        "group": 1,
-                        "code": "Group",
-                        "categories": [
-                            {
-                                "items": [
-                                    {
-                                        "price": 90.0,
-                                        "quantity": 0.25
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
-            JSON;
+        $query = new CalculationQuery(
+            adjust: false,
+            userMargin: 0.05,
+            groups: [
+                new CalculationGroupQuery(1, 2.5),
+            ]
+        );
 
-        $group = new Group();
-        self::setId($group);
-        // @phpstan-ignore cast.useless
-        $source = (array) \json_decode($json, true, \JSON_THROW_ON_ERROR);
+        $group = $this->createGroup();
         $service = $this->createCalculationService($group);
-        $actual = $service->createGroupsFromData($source);
+        $actual = $service->createGroupsFromQuery($query);
         self::assertCount(7, $actual);
         self::assertCount(7, $actual);
         self::assertArrayHasKey('groups', $actual);
@@ -174,12 +145,63 @@ class CalculationServiceTest extends KernelServiceTestCase
     }
 
     /**
+     * @throws Exception|ORMException|\ReflectionException
+     */
+    public function testCreateGroupsFromQueryEmpty(): void
+    {
+        $query = new CalculationQuery(
+            adjust: false,
+            userMargin: 0.05,
+            groups: []
+        );
+
+        $group = $this->createGroup();
+        $service = $this->createCalculationService($group);
+        $actual = $service->createGroupsFromQuery($query);
+        self::assertCount(7, $actual);
+        self::assertCount(7, $actual);
+        self::assertArrayHasKey('groups', $actual);
+        self::assertCount(1, $actual['groups']);
+    }
+
+    /**
      * @throws Exception|ORMException
      */
-    public function testCreateGroupsFromDataEmpty(): void
+    public function testCreateGroupsFromQueryGroupNotFound(): void
     {
+        $query = new CalculationQuery(
+            adjust: false,
+            userMargin: 0.05,
+            groups: [
+                new CalculationGroupQuery(10, 10.0),
+            ]
+        );
+
         $service = $this->createCalculationService();
-        $actual = $service->createGroupsFromData([]);
+        $actual = $service->createGroupsFromQuery($query);
+        self::assertCount(7, $actual);
+        self::assertCount(7, $actual);
+        self::assertArrayHasKey('groups', $actual);
+        self::assertCount(1, $actual['groups']);
+    }
+
+    /**
+     * @throws Exception|ORMException|\ReflectionException
+     */
+    public function testCreateGroupsFromQueryGroupTotalZero(): void
+    {
+        $query = new CalculationQuery(
+            adjust: false,
+            userMargin: 0.05,
+            groups: [
+                new CalculationGroupQuery(1, 0.0),
+            ]
+        );
+
+        $group = $this->createGroup();
+        $service = $this->createCalculationService($group);
+        $actual = $service->createGroupsFromQuery($query);
+        self::assertCount(7, $actual);
         self::assertCount(7, $actual);
         self::assertArrayHasKey('groups', $actual);
         self::assertCount(1, $actual['groups']);
@@ -275,20 +297,28 @@ class CalculationServiceTest extends KernelServiceTestCase
     }
 
     /**
+     * @throws ORMException|Exception
+     */
+    public function testUpdateTotalEmpty(): void
+    {
+        $calculation = new Calculation();
+        $service = $this->createCalculationService();
+        $actual = $service->updateTotal($calculation);
+        self::assertFalse($actual);
+    }
+
+    /**
      * @throws Exception
      */
-    protected function createCalculationService(?Group $group = null): CalculationService
-    {
+    protected function createCalculationService(
+        ?Group $group = null,
+        ?float $groupMargin = null,
+        ?float $globalMargin = null,
+    ): CalculationService {
         // get services
-        $globalRepository = $this->getService(GlobalMarginRepository::class);
-        $marginRepository = $this->getService(GroupMarginRepository::class);
-        if ($group instanceof Group) {
-            $groupRepository = $this->createMock(GroupRepository::class);
-            $groupRepository->method('find')
-                ->willReturn($group);
-        } else {
-            $groupRepository = $this->getService(GroupRepository::class);
-        }
+        $globalRepository = $this->createGlobalMarginRepository($globalMargin);
+        $marginRepository = $this->createGroupMarginRepository($groupMargin);
+        $groupRepository = $this->createGroupRepository($group);
         $application = $this->getService(ApplicationService::class);
         $translator = $this->createMockTranslator();
 
@@ -403,6 +433,61 @@ class CalculationServiceTest extends KernelServiceTestCase
             $manager->remove($item);
         }
         $manager->flush();
+
+        return $repository;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createGlobalMarginRepository(?float $globalMargin = null): GlobalMarginRepository
+    {
+        if (null === $globalMargin) {
+            return $this->getService(GlobalMarginRepository::class);
+        }
+        $repository = $this->createMock(GlobalMarginRepository::class);
+        $repository->method('getMargin')
+            ->willReturn($globalMargin);
+
+        return $repository;
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    private function createGroup(): Group
+    {
+        $group = new Group();
+
+        return self::setId($group);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createGroupMarginRepository(?float $groupMargin = null): GroupMarginRepository
+    {
+        if (null === $groupMargin) {
+            return $this->getService(GroupMarginRepository::class);
+        }
+        $repository = $this->createMock(GroupMarginRepository::class);
+        $repository->method('getMargin')
+            ->willReturn($groupMargin);
+
+        return $repository;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createGroupRepository(?Group $group = null): GroupRepository
+    {
+        if (!$group instanceof Group) {
+            return $this->getService(GroupRepository::class);
+        }
+        $repository = $this->createMock(GroupRepository::class);
+        $repository->method('find')
+            ->willReturn($group);
 
         return $repository;
     }

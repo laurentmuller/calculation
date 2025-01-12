@@ -57,6 +57,14 @@ class FontAwesomeImageServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testValidDirectory(): void
+    {
+        $directory = __DIR__ . '/../files/images';
+        $directory = $this->validateDirectory($directory);
+        $file = $directory . '/512x512.svg';
+        self::assertFileExists($file);
+    }
+
     /**
      * @throws Exception
      */
@@ -109,8 +117,7 @@ class FontAwesomeImageServiceTest extends TestCase
     private function checkImageIsInvalid(string $svgDirectory, string $relativePath, bool $realPath = true): void
     {
         if ($realPath) {
-            $svgDirectory = \realpath($svgDirectory);
-            self::assertIsString($svgDirectory);
+            $svgDirectory = $this->validateDirectory($svgDirectory);
         }
         $service = $this->createService($svgDirectory);
         $actual = $service->getImage($relativePath);
@@ -125,8 +132,7 @@ class FontAwesomeImageServiceTest extends TestCase
         string $relativePath,
         ?string $color = null
     ): FontAwesomeImage {
-        $svgDirectory = \realpath($svgDirectory);
-        self::assertIsString($svgDirectory);
+        $svgDirectory = $this->validateDirectory($svgDirectory);
         $service = $this->createService($svgDirectory);
         $actual = $service->getImage($relativePath, $color);
         self::assertNotNull($actual);
@@ -144,5 +150,14 @@ class FontAwesomeImageServiceTest extends TestCase
             new ArrayAdapter(),
             $this->createMock(LoggerInterface::class)
         );
+    }
+
+    private function validateDirectory(string $svgDirectory): string
+    {
+        $svgDirectory = \realpath($svgDirectory);
+        self::assertIsString($svgDirectory);
+        self::assertDirectoryExists($svgDirectory);
+
+        return $svgDirectory;
     }
 }

@@ -282,7 +282,7 @@ const Application = {
                     const quantity = $item.find('input[name$="[quantity]"]').floatVal();
                     total += price * quantity;
                 });
-            })
+            });
             const id = $(this).find('input[name$="[group]"]').intVal();
             groups.push({
                 id: id,

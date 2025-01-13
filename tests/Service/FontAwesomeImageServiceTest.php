@@ -46,6 +46,13 @@ class FontAwesomeImageServiceTest extends TestCase
         $this->checkImageIsInvalid(__DIR__, 'fake');
     }
 
+    public function testQueryFormats(): void
+    {
+        $formats = \Imagick::queryFormats();
+        self::assertNotEmpty($formats);
+        echo '<pre>' . \print_r($formats, true) . '</pre>';
+    }
+
     /**
      * @throws Exception
      */

@@ -29,7 +29,7 @@ trait IdTrait
      *
      * @throws \ReflectionException
      */
-    protected static function setId(object $entity, int $id = 1): object
+    protected static function setId(EntityInterface $entity, int $id = 1): EntityInterface
     {
         $class = new \ReflectionClass($entity::class);
         $property = $class->getProperty('id');

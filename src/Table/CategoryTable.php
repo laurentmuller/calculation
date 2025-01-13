@@ -122,11 +122,6 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
         return FileUtils::buildPath(__DIR__, 'Definition', 'category.json');
     }
 
-    protected function getDefaultOrder(): array
-    {
-        return ['code' => self::SORT_ASC];
-    }
-
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);

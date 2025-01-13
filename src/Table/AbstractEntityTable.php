@@ -70,23 +70,17 @@ abstract class AbstractEntityTable extends AbstractTable
         if ('' === $search) {
             return false;
         }
-        $searchFields = $this->getSearchFields();
-        if ([] === $searchFields) {
-            return false;
-        }
 
         $whereExpr = new Orx();
         $builderExpr = $builder->expr();
         $repository = $this->repository;
+        $searchFields = $this->getSearchFields();
         $parameter = ':' . TableInterface::PARAM_SEARCH;
         foreach ($searchFields as $searchField) {
             $fields = (array) $repository->getSearchFields($searchField, $alias);
             foreach ($fields as $field) {
                 $whereExpr->add($builderExpr->like($field, $parameter));
             }
-        }
-        if (0 === $whereExpr->count()) {
-            return false;
         }
 
         $builder->andWhere($whereExpr)

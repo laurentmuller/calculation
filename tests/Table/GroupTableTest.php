@@ -46,7 +46,7 @@ class GroupTableTest extends EntityTableTestCase
     /**
      * @throws Exception
      */
-    protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&GroupRepository
+    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&GroupRepository
     {
         $repository = $this->createMock(GroupRepository::class);
         $repository->method('getTableQueryBuilder')

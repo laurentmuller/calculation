@@ -33,13 +33,23 @@ class CategoryTableTest extends EntityTableTestCase
     /**
      * @throws Exception|\ReflectionException
      */
+    public function testWithCallback(): void
+    {
+        $parameters = ['groupId' => 10];
+        $dataQuery = new DataQuery();
+        $dataQuery->callback = true;
+        $this->updateQueryParameters($dataQuery, $parameters);
+        $this->processDataQuery($dataQuery);
+    }
+
+    /**
+     * @throws Exception|\ReflectionException
+     */
     public function testWithGroupId(): void
     {
         $parameters = ['groupId' => 10];
         $dataQuery = new DataQuery();
-        foreach ($parameters as $key => $value) {
-            $dataQuery->addParameter($key, $value);
-        }
+        $this->updateQueryParameters($dataQuery, $parameters);
         $this->processDataQuery($dataQuery);
     }
 
@@ -65,7 +75,7 @@ class CategoryTableTest extends EntityTableTestCase
         return [$entityEmpty, $entityCount];
     }
 
-    protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CategoryRepository
+    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CategoryRepository
     {
         $repository = $this->createMock(CategoryRepository::class);
         $repository->method('getTableQueryBuilder')

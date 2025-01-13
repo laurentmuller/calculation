@@ -96,7 +96,7 @@ abstract class EntityTableTestCase extends TestCase
      *
      * @throws Exception
      */
-    abstract protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&AbstractRepository;
+    abstract protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&AbstractRepository;
 
     /**
      * @psalm-param MockObject&TRepository $repository
@@ -117,7 +117,7 @@ abstract class EntityTableTestCase extends TestCase
         $entities = $this->updateIds($this->createEntities());
         $query = $this->createMockQuery($entities);
         $queryBuilder = $this->createMockQueryBuilder($query);
-        $repository = $this->createRepository($queryBuilder);
+        $repository = $this->createMockRepository($queryBuilder);
         $table = $this->createTable($repository);
 
         $results = $table->processDataQuery($dataQuery);
@@ -142,5 +142,15 @@ abstract class EntityTableTestCase extends TestCase
         }
 
         return $entities;
+    }
+
+    /**
+     * @psalm-param array<string, string|int> $parameters
+     */
+    protected function updateQueryParameters(DataQuery $dataQuery, array $parameters): void
+    {
+        foreach ($parameters as $key => $value) {
+            $dataQuery->addParameter($key, $value);
+        }
     }
 }

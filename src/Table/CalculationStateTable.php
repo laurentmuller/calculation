@@ -91,11 +91,6 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
         return FileUtils::buildPath(__DIR__, 'Definition', 'calculation_state.json');
     }
 
-    protected function getDefaultOrder(): array
-    {
-        return ['code' => self::SORT_ASC];
-    }
-
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);

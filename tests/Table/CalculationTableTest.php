@@ -20,6 +20,7 @@ use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Table\CalculationTable;
 use App\Table\DataQuery;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -30,12 +31,26 @@ use Twig\Environment;
  */
 class CalculationTableTest extends EntityTableTestCase
 {
+    private int $id;
     private int $stateId;
 
     protected function setUp(): void
     {
         parent::setUp();
+        $this->id = 0;
         $this->stateId = 0;
+    }
+
+    /**
+     * @throws Exception|\ReflectionException
+     */
+    public function testWithCallback(): void
+    {
+        $parameters = ['stateId' => 10];
+        $dataQuery = new DataQuery();
+        $dataQuery->callback = true;
+        $this->updateQueryParameters($dataQuery, $parameters);
+        $this->processDataQuery($dataQuery);
     }
 
     /**
@@ -46,9 +61,29 @@ class CalculationTableTest extends EntityTableTestCase
         $this->stateId = 10;
         $parameters = ['stateId' => 10];
         $dataQuery = new DataQuery();
-        foreach ($parameters as $key => $value) {
-            $dataQuery->addParameter($key, $value);
-        }
+        $this->updateQueryParameters($dataQuery, $parameters);
+        $this->processDataQuery($dataQuery);
+    }
+
+    /**
+     * @throws Exception|\ReflectionException
+     */
+    public function testWithSelectionFound(): void
+    {
+        $this->id = 3;
+        $dataQuery = new DataQuery();
+        $dataQuery->id = 3;
+        $dataQuery->limit = 1;
+        $this->processDataQuery($dataQuery);
+    }
+
+    /**
+     * @throws Exception|\ReflectionException
+     */
+    public function testWithSelectionNotFound(): void
+    {
+        $dataQuery = new DataQuery();
+        $dataQuery->id = 3;
         $this->processDataQuery($dataQuery);
     }
 
@@ -59,9 +94,7 @@ class CalculationTableTest extends EntityTableTestCase
     {
         $parameters = ['stateEditable' => 1];
         $dataQuery = new DataQuery();
-        foreach ($parameters as $key => $value) {
-            $dataQuery->addParameter($key, $value);
-        }
+        $this->updateQueryParameters($dataQuery, $parameters);
         $this->processDataQuery($dataQuery);
     }
 
@@ -72,41 +105,51 @@ class CalculationTableTest extends EntityTableTestCase
     {
         $parameters = ['stateId' => 10];
         $dataQuery = new DataQuery();
-        foreach ($parameters as $key => $value) {
-            $dataQuery->addParameter($key, $value);
-        }
+        $this->updateQueryParameters($dataQuery, $parameters);
         $this->processDataQuery($dataQuery);
     }
 
+    /**
+     * @psalm-return array[]
+     */
     protected function createEntities(): array
     {
         $entityEditable = [
             'id' => 1,
             'date' => new \DateTime('2024-11-10'),
-            'customer' => 'customer',
-            'description' => 'description',
+            'customer' => 'customer 1',
+            'description' => 'description 1',
             'overallTotal' => 1000.0,
             'overallMargin' => 1.0,
-            'stateCode' => 'stateCode',
-            'stateColor' => 'stateColor',
+            'stateCode' => 'editableCode',
+            'stateColor' => 'editableColor',
             'editable' => true,
         ];
         $entityNotEditable = [
             'id' => 2,
             'date' => new \DateTime('2024-11-10'),
-            'customer' => 'customer',
-            'description' => 'description',
+            'customer' => 'customer 2',
+            'description' => 'description 2',
             'overallTotal' => 1000.0,
             'overallMargin' => 1.0,
-            'stateCode' => 'stateCode',
-            'stateColor' => 'stateColor',
+            'stateCode' => 'notEditableCode',
+            'stateColor' => 'notEditableColor',
             'editable' => false,
         ];
 
         return [$entityEditable, $entityNotEditable];
     }
 
-    protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CalculationRepository
+    protected function createMockQuery(array $entities): MockObject&Query
+    {
+        $query = parent::createMockQuery($entities);
+        $query->method('getOneOrNullResult')
+            ->willReturnCallback(fn (): ?array => $this->getOneOrNullResult());
+
+        return $query;
+    }
+
+    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CalculationRepository
     {
         $repository = $this->createMock(CalculationRepository::class);
         $repository->method('getTableQueryBuilder')
@@ -122,16 +165,33 @@ class CalculationTableTest extends EntityTableTestCase
      */
     protected function createTable(AbstractRepository $repository): CalculationTable
     {
-        $stateRepository = $this->createMock(CalculationStateRepository::class);
-        if (0 !== $this->stateId) {
-            $state = new CalculationState();
-            $state->setCode('code');
-            self::setId($state);
-            $stateRepository->method('find')
-                ->willReturn($state);
-        }
+        $stateRepository = $this->createMockCalculationStateRepository();
         $twig = $this->createMock(Environment::class);
 
         return new CalculationTable($repository, $stateRepository, $twig);
+    }
+
+    /**
+     * @throws Exception|\ReflectionException
+     */
+    private function createMockCalculationStateRepository(): MockObject&CalculationStateRepository
+    {
+        $repository = $this->createMock(CalculationStateRepository::class);
+        if (0 === $this->stateId) {
+            return $repository;
+        }
+
+        $state = new CalculationState();
+        $state->setCode('code');
+        self::setId($state);
+        $repository->method('find')
+            ->willReturn($state);
+
+        return $repository;
+    }
+
+    private function getOneOrNullResult(): ?array
+    {
+        return 0 === $this->id ? null : $this->createEntities()[0];
     }
 }

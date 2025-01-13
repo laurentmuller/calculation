@@ -57,11 +57,6 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
         return FileUtils::buildPath(__DIR__, 'Definition', 'calculation_items.json');
     }
 
-    protected function getDefaultOrder(): array
-    {
-        return ['id' => self::SORT_DESC];
-    }
-
     /**
      * Gets the entities.
      *

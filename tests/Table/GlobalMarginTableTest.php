@@ -34,7 +34,7 @@ class GlobalMarginTableTest extends EntityTableTestCase
     {
         $expected = GlobalMargin::class;
         $queryBuilder = $this->createMock(QueryBuilder::class);
-        $repository = $this->createRepository($queryBuilder);
+        $repository = $this->createMockRepository($queryBuilder);
         $repository->method('getClassName')
             ->willReturn($expected);
         $table = $this->createTable($repository);
@@ -65,7 +65,7 @@ class GlobalMarginTableTest extends EntityTableTestCase
     /**
      * @throws Exception
      */
-    protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&GlobalMarginRepository
+    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&GlobalMarginRepository
     {
         $repository = $this->createMock(GlobalMarginRepository::class);
         $repository->method('createDefaultQueryBuilder')

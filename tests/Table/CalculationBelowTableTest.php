@@ -87,7 +87,7 @@ class CalculationBelowTableTest extends EntityTableTestCase
         return $queryBuilder;
     }
 
-    protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CalculationRepository
+    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CalculationRepository
     {
         $repository = $this->createMock(CalculationRepository::class);
         $repository->method('getTableQueryBuilder')
@@ -124,7 +124,7 @@ class CalculationBelowTableTest extends EntityTableTestCase
         $entities = $this->updateIds($this->createEntities());
         $query = $this->createMockQuery($entities);
         $queryBuilder = $this->createMockQueryBuilder($query);
-        $repository = $this->createRepository($queryBuilder);
+        $repository = $this->createMockRepository($queryBuilder);
         $table = $this->createTable($repository);
         $actual = $table->getEmptyMessage();
         self::assertSame($expected, $actual);

@@ -34,11 +34,6 @@ class GlobalMarginTable extends AbstractEntityTable
         return FileUtils::buildPath(__DIR__, 'Definition', 'global_margin.json');
     }
 
-    protected function getDefaultOrder(): array
-    {
-        return ['minimum' => self::SORT_ASC];
-    }
-
     protected function updateDataQuery(DataQuery $query): void
     {
         parent::updateDataQuery($query);

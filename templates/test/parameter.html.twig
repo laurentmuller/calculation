@@ -60,8 +60,10 @@
         {{ _self.renderLine('fa-regular fa-building', 'parameters.fields.customer_company') }}
         #}
         {{ form_row(form.name) }}
-        {{ form_row(form.address) }}
-        {{ form_row(form.zipCity) }}
+        <div class="row">
+            <div class="col-md-6">{{ form_row(form.address) }}</div>
+            <div class="col-md-6">{{ form_row(form.zipCity) }}</div>
+        </div>
         {#
         {{ _self.renderLine('fa-regular fa-address-card', 'parameters.fields.customer_contacts') }}
         #}

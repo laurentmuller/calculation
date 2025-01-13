@@ -33,9 +33,4 @@ class CustomerTable extends AbstractEntityTable
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'customer.json');
     }
-
-    protected function getDefaultOrder(): array
-    {
-        return [CustomerRepository::NAME_COMPANY_FIELD => self::SORT_ASC];
-    }
 }

@@ -125,11 +125,6 @@ class UserTable extends AbstractEntityTable
         return FileUtils::buildPath(__DIR__, 'Definition', 'user.json');
     }
 
-    protected function getDefaultOrder(): array
-    {
-        return ['username' => self::SORT_ASC];
-    }
-
     /**
      * @throws ORMException
      */

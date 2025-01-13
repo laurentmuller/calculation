@@ -44,13 +44,23 @@ class ProductTableTest extends EntityTableTestCase
     /**
      * @throws Exception|\ReflectionException
      */
+    public function testWithCallback(): void
+    {
+        $parameters = ['categoryId' => 10];
+        $dataQuery = new DataQuery();
+        $dataQuery->callback = true;
+        $this->updateQueryParameters($dataQuery, $parameters);
+        $this->processDataQuery($dataQuery);
+    }
+
+    /**
+     * @throws Exception|\ReflectionException
+     */
     public function testWithCategoryId(): void
     {
         $parameters = ['categoryId' => 10];
         $dataQuery = new DataQuery();
-        foreach ($parameters as $key => $value) {
-            $dataQuery->addParameter($key, $value);
-        }
+        $this->updateQueryParameters($dataQuery, $parameters);
         $this->processDataQuery($dataQuery);
     }
 
@@ -62,9 +72,7 @@ class ProductTableTest extends EntityTableTestCase
         $this->categoryId = 10;
         $parameters = ['categoryId' => 10];
         $dataQuery = new DataQuery();
-        foreach ($parameters as $key => $value) {
-            $dataQuery->addParameter($key, $value);
-        }
+        $this->updateQueryParameters($dataQuery, $parameters);
         $this->processDataQuery($dataQuery);
     }
 
@@ -76,9 +84,7 @@ class ProductTableTest extends EntityTableTestCase
         $this->groupId = 10;
         $parameters = ['groupId' => 10];
         $dataQuery = new DataQuery();
-        foreach ($parameters as $key => $value) {
-            $dataQuery->addParameter($key, $value);
-        }
+        $this->updateQueryParameters($dataQuery, $parameters);
         $this->processDataQuery($dataQuery);
     }
 
@@ -89,9 +95,7 @@ class ProductTableTest extends EntityTableTestCase
     {
         $parameters = ['groupId' => 10];
         $dataQuery = new DataQuery();
-        foreach ($parameters as $key => $value) {
-            $dataQuery->addParameter($key, $value);
-        }
+        $this->updateQueryParameters($dataQuery, $parameters);
         $this->processDataQuery($dataQuery);
     }
 
@@ -110,7 +114,7 @@ class ProductTableTest extends EntityTableTestCase
         return [$entity];
     }
 
-    protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&ProductRepository
+    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&ProductRepository
     {
         $repository = $this->createMock(ProductRepository::class);
         $repository->method('getTableQueryBuilder')

@@ -48,9 +48,7 @@ class TaskTableTest extends EntityTableTestCase
     {
         $parameters = ['categoryId' => 10];
         $dataQuery = new DataQuery();
-        foreach ($parameters as $key => $value) {
-            $dataQuery->addParameter($key, $value);
-        }
+        $this->updateQueryParameters($dataQuery, $parameters);
         $this->processDataQuery($dataQuery);
     }
 
@@ -62,9 +60,7 @@ class TaskTableTest extends EntityTableTestCase
         $this->categoryId = 10;
         $parameters = ['categoryId' => 10];
         $dataQuery = new DataQuery();
-        foreach ($parameters as $key => $value) {
-            $dataQuery->addParameter($key, $value);
-        }
+        $this->updateQueryParameters($dataQuery, $parameters);
         $this->processDataQuery($dataQuery);
     }
 
@@ -76,9 +72,7 @@ class TaskTableTest extends EntityTableTestCase
         $this->groupId = 10;
         $parameters = ['groupId' => 10];
         $dataQuery = new DataQuery();
-        foreach ($parameters as $key => $value) {
-            $dataQuery->addParameter($key, $value);
-        }
+        $this->updateQueryParameters($dataQuery, $parameters);
         $this->processDataQuery($dataQuery);
     }
 
@@ -89,9 +83,7 @@ class TaskTableTest extends EntityTableTestCase
     {
         $parameters = ['groupId' => 10];
         $dataQuery = new DataQuery();
-        foreach ($parameters as $key => $value) {
-            $dataQuery->addParameter($key, $value);
-        }
+        $this->updateQueryParameters($dataQuery, $parameters);
         $this->processDataQuery($dataQuery);
     }
 
@@ -114,7 +106,7 @@ class TaskTableTest extends EntityTableTestCase
     /**
      * @throws Exception
      */
-    protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&TaskRepository
+    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&TaskRepository
     {
         $repository = $this->createMock(TaskRepository::class);
         $repository->method('getTableQueryBuilder')

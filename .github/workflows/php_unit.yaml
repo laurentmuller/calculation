@@ -15,8 +15,8 @@ jobs:
                 with:
                     php-version: '8.2'
                     ini-values: intl.default_locale=fr_CH
+                    extensions: imagick
                     coverage: xdebug
-                    extensions: imagick-7.1.0
 
             -   name: Install dependencies
                 run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist

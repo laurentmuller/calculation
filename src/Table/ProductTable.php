@@ -46,11 +46,6 @@ class ProductTable extends AbstractCategoryItemTable
         return FileUtils::buildPath(__DIR__, 'Definition', 'product.json');
     }
 
-    protected function getDefaultOrder(): array
-    {
-        return ['description' => self::SORT_ASC];
-    }
-
     protected function getDropDownValues(): array
     {
         return $this->categoryRepository->getDropDownProducts();

@@ -42,7 +42,7 @@ class CustomerTableTest extends EntityTableTestCase
     /**
      * @throws Exception
      */
-    protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CustomerRepository
+    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CustomerRepository
     {
         $repository = $this->createMock(CustomerRepository::class);
         $repository->method('createDefaultQueryBuilder')

@@ -72,10 +72,7 @@ class FontAwesomeImageService
      */
     public function getAliases(): array
     {
-        return $this->cache->get(
-            $this->cleanKey(self::ALIAS_FILE_NAME),
-            fn (): array => $this->loadAliases()
-        );
+        return $this->cache->get('aliases_json', fn (): array => $this->loadAliases());
     }
 
     /**
@@ -202,21 +199,18 @@ class FontAwesomeImageService
             return null;
         }
 
-        $content = self::SVG_PREFIX . $this->replaceFillColor($content, $color);
-
         try {
+            $content = self::SVG_PREFIX . $this->replaceFillColor($content, $color);
             $image = $this->convert($content);
             $item->set($image);
             $save = true;
 
             return $image;
         } catch (\Exception $e) {
-            if (!$this->imagickException) {
-                $relativePath = Path::makeRelative($path, $this->svgDirectory);
-                $this->logException($e, \sprintf('Unable to load image "%s".', $relativePath));
-            }
             if ($e instanceof \ImagickException) {
                 $this->imagickException = true;
+            } else {
+                $this->logException($e, \sprintf('Unable to load image "%s".', $path));
             }
 
             return null;

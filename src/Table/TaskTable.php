@@ -46,11 +46,6 @@ class TaskTable extends AbstractCategoryItemTable
         return FileUtils::buildPath(__DIR__, 'Definition', 'task.json');
     }
 
-    protected function getDefaultOrder(): array
-    {
-        return ['name' => self::SORT_ASC];
-    }
-
     protected function getDropDownValues(): array
     {
         return $this->categoryRepository->getDropDownTasks();

@@ -120,9 +120,4 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'group.json');
     }
-
-    protected function getDefaultOrder(): array
-    {
-        return ['code' => self::SORT_ASC];
-    }
 }

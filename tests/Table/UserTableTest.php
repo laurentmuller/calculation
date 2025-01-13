@@ -93,7 +93,7 @@ class UserTableTest extends EntityTableTestCase
         return [$user, $admin];
     }
 
-    protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&UserRepository
+    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&UserRepository
     {
         $repository = $this->createMock(UserRepository::class);
         $repository->method('getTableQueryBuilder')

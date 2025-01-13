@@ -53,7 +53,7 @@ class CalculationStateTableTest extends EntityTableTestCase
         return [$entityEditable, $entityNotEditable];
     }
 
-    protected function createRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CalculationStateRepository
+    protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CalculationStateRepository
     {
         $repository = $this->createMock(CalculationStateRepository::class);
         $repository->method('getTableQueryBuilder')

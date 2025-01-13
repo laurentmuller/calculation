@@ -48,9 +48,12 @@ class FontAwesomeImageServiceTest extends TestCase
 
     public function testQueryFormats(): void
     {
+        $version = \Imagick::getVersion();
+        echo '<pre>' . \print_r($version, true) . '</pre>';
+
         $formats = \Imagick::queryFormats();
-        self::assertNotEmpty($formats);
         echo '<pre>' . \print_r($formats, true) . '</pre>';
+        self::assertNotEmpty($formats);
     }
 
     /**

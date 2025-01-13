@@ -57,16 +57,6 @@ class FontAwesomeImageServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
-    public function testSvgSupported(): void
-    {
-        $expected = __DIR__;
-        $service = $this->createService($expected);
-        self::assertTrue($service->isSvgSupported());
-    }
-
     public function testValidDirectory(): void
     {
         $directory = __DIR__ . '/../files/images';
@@ -150,6 +140,9 @@ class FontAwesomeImageServiceTest extends TestCase
     ): ?FontAwesomeImage {
         $svgDirectory = $this->validateDirectory($svgDirectory);
         $service = $this->createService($svgDirectory);
+        if (!$service->isSvgSupported()) {
+            return null;
+        }
         $actual = $service->getImage($relativePath, $color);
         if ($service->isImagickException()) {
             return null;

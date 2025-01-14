@@ -10,19 +10,12 @@ jobs:
             -   name: Checkout code
                 uses: actions/checkout@v4
 
-            -   name: Install Imagick
-                run: |
-                    sudo apt-get update
-                    sudo apt-get install -y imagemagick
-                    sudo apt-get install -y php-imagick
-                    sudo phpenmod imagick                 
-
             -   name: Install PHP with extensions
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: '8.2'
                     ini-values: intl.default_locale=fr_CH.UTF-8, date.timezone=Europe/Zurich
-                    extensions: imagick-7.1.0
+                    extensions: imagick-6.q16
                     coverage: xdebug
 
             -   name: Install dependencies

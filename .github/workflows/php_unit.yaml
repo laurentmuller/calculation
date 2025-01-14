@@ -14,8 +14,8 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: '8.2'
-                    ini-values: intl.default_locale=fr_CH
-                    extensions: imagick-7.1.0-18
+                    ini-values: intl.default_locale=fr_CH.UTF-8, date.timezone=Europe/Zurich
+                    extensions: imagick-7.1.0
                     coverage: xdebug
 
             -   name: Install dependencies

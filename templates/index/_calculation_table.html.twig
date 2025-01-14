@@ -20,8 +20,8 @@
                 <td class="text-customer text-cell user-select-none">{{ calculation.customer }}</td>
                 <td class="text-description text-cell user-select-none">{{ calculation.description }}</td>
                 {%- if calculation.overallTotal and calculation.overallMargin < min_margin -%}
-                    {%- set margin_title = 'calculation.list.margin_below'|trans({'%margin%': calculation.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
-                    <td class="text-percent user-select-none text-danger has-tooltip" title="{{ margin_title }}">{{ calculation.overallMargin|percent }}</td>
+                    {%- set overall_title = 'calculation.list.margin_below'|trans({'%margin%': calculation.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
+                    <td class="text-percent user-select-none text-danger has-tooltip" title="{{ overall_title }}">{{ calculation.overallMargin|percent }}</td>
                 {%- else -%}
                     <td class="text-percent user-select-none">{{ calculation.overallMargin|percent }}</td>
                 {%- endif -%}

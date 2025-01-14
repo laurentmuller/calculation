@@ -94,16 +94,16 @@ class CalculationService
     /**
      * Gets the row constants.
      *
-     * @return array<string, mixed>
+     * @return array<string, int>
      */
     public static function constants(): array
     {
         $reflection = new \ReflectionClass(self::class);
         $constants = $reflection->getReflectionConstants(\ReflectionClassConstant::IS_PUBLIC);
 
+        /** @psalm-var array<string, int> */
         return \array_reduce(
             $constants,
-            /** @psalm-param array<string, mixed> $carry */
             static fn (array $carry, \ReflectionClassConstant $c): array => $carry + [$c->getName() => $c->getValue()],
             []
         );
@@ -155,8 +155,8 @@ class CalculationService
             return $this->createEmptyParameters();
         }
 
-        /** @psalm-var GroupType[] $targetGroups */
-        $targetGroups = [];
+        /** @psalm-var GroupType[] $groups */
+        $groups = [];
         foreach ($query->groups as $group) {
             if ($this->isFloatZero($group->total)) {
                 continue;
@@ -168,11 +168,11 @@ class CalculationService
                 continue;
             }
 
-            if (!\array_key_exists($id, $targetGroups)) {
-                $targetGroups[$id] = $this->createGroup(self::ROW_GROUP, (string) $targetGroup->getCode());
+            if (!\array_key_exists($id, $groups)) {
+                $groups[$id] = $this->createGroup(self::ROW_GROUP, (string) $targetGroup->getCode());
             }
 
-            $current = &$targetGroups[$id];
+            $current = &$groups[$id];
             $amount = $current['amount'] + $group->total;
             $margin = $this->getGroupMargin($targetGroup, $amount);
             $total = $this->round($margin * $amount);
@@ -183,19 +183,19 @@ class CalculationService
             $current['total'] = $total;
         }
 
-        if ([] === $targetGroups) {
+        if ([] === $groups) {
             return $this->createEmptyParameters();
         }
 
         $user_margin = $query->userMargin;
-        $targetGroups = $this->computeGroups(groups: $targetGroups, user_margin: $user_margin);
-        $last_group = \end($targetGroups);
+        $groups = $this->computeGroups(groups: $groups, user_margin: $user_margin);
+        $last_group = \end($groups);
         $overall_total = $last_group['total'];
         $overall_margin = $last_group['margin'];
         $overall_below = !$this->isFloatZero($overall_total) && $this->service->isMarginBelow($overall_margin);
 
-        if ($query->adjust && $overall_below && $this->adjustUserMargin($targetGroups)) {
-            $user_group = $this->findOrCreateGroup($targetGroups, self::ROW_USER_MARGIN);
+        if ($query->adjust && $overall_below && $this->adjustUserMargin($groups)) {
+            $user_group = $this->findOrCreateGroup($groups, self::ROW_USER_MARGIN);
             $user_margin = $user_group['margin'];
             $overall_below = false;
         }
@@ -206,8 +206,8 @@ class CalculationService
             'overall_total' => $overall_total,
             'overall_below' => $overall_below,
             'user_margin' => $user_margin,
-            'min_margin' => 0.0,
-            'groups' => $targetGroups,
+            'min_margin' => $this->getMinMargin(),
+            'groups' => $groups,
         ];
     }
 
@@ -414,8 +414,8 @@ class CalculationService
             'overall_below' => false,
             'overall_margin' => 0.0,
             'overall_total' => 0.0,
-            'min_margin' => 0.0,
             'user_margin' => 0.0,
+            'min_margin' => $this->getMinMargin(),
             'groups' => [$this->createEmptyGroup()],
         ];
     }

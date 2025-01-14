@@ -161,11 +161,11 @@ class ReportHeader
         return $this->customer instanceof CustomerInformation && $this->customer->isPrintAddress();
     }
 
-    private function outputAddress(float $width): void
+    private function outputAddress(float $cellWidth): void
     {
         $this->applySmallStyle();
         $this->outputText(
-            $width,
+            $cellWidth,
             self::SMALL_HEIGHT,
             $this->customer?->getAddress(),
             PdfBorder::none(),
@@ -176,41 +176,71 @@ class ReportHeader
 
     private function outputDescription(): void
     {
-        $description = $this->description ?? '';
-        if ('' === $description) {
+        $description = StringUtils::trim($this->description);
+        if (null === $description) {
             return;
         }
         $this->applySmallStyle();
-        $this->parent->multiCell(height: self::SMALL_HEIGHT, text: $description, align: PdfTextAlignment::LEFT);
+        $this->parent->multiCell(
+            height: self::SMALL_HEIGHT,
+            text: $description,
+            align: PdfTextAlignment::LEFT
+        );
+    }
+
+    private function outputEmail(float $cellWidth): void
+    {
+        $this->applySmallStyle();
+        $this->outputText(
+            $cellWidth,
+            self::SMALL_HEIGHT,
+            $this->customer?->getEmail(),
+            PdfBorder::none(),
+            PdfTextAlignment::LEFT,
+        );
     }
 
     private function outputLines(): void
     {
         $parent = $this->parent;
         $isAddress = $this->isPrintAddress();
-        $printableWidth = $parent->getPrintableWidth();
-        $this->outputTitleAndName($printableWidth, $isAddress);
+        $cellWidth = $parent->getPrintableWidth() / 2.0;
+        $this->outputTitle($cellWidth, $isAddress);
+        $this->outputName($cellWidth, $isAddress);
         if ($isAddress) {
-            $this->outputAddress($printableWidth);
-            $this->outputZipCity($printableWidth);
+            $this->outputEmail($cellWidth);
+            $this->outputAddress($cellWidth);
+            $this->outputPhone($cellWidth);
+            $this->outputZipCity($cellWidth);
         }
         $this->outputDescription();
         $parent->resetStyle()->lineBreak(2);
     }
 
-    private function outputName(float $width, bool $isAddress): void
+    private function outputName(float $cellWidth, bool $isAddress): void
     {
         $this->applyNameStyle();
         $border = $isAddress ? PdfBorder::none() : PdfBorder::bottom();
-        $move = $isAddress ? PdfMove::NEW_LINE : PdfMove::BELOW;
         $this->outputText(
-            $width,
+            $cellWidth,
             self::LINE_HEIGHT,
             $this->customer?->getName(),
             $border,
             PdfTextAlignment::RIGHT,
-            $move,
+            PdfMove::NEW_LINE,
             $this->customer?->getUrl()
+        );
+    }
+
+    private function outputPhone(float $cellWidth): void
+    {
+        $this->applySmallStyle();
+        $this->outputText(
+            $cellWidth,
+            self::SMALL_HEIGHT,
+            $this->customer?->getPhone(),
+            PdfBorder::bottom(),
+            PdfTextAlignment::LEFT,
         );
     }
 
@@ -234,12 +264,12 @@ class ReportHeader
         );
     }
 
-    private function outputTitle(float $width, bool $isAddress): void
+    private function outputTitle(float $cellWidth, bool $isAddress): void
     {
         $this->applyTitleStyle();
         $border = $isAddress ? PdfBorder::none() : PdfBorder::bottom();
         $this->outputText(
-            $width,
+            $cellWidth,
             self::LINE_HEIGHT,
             $this->parent->getTitle(),
             $border,
@@ -247,19 +277,11 @@ class ReportHeader
         );
     }
 
-    private function outputTitleAndName(float $printableWidth, bool $isAddress): void
-    {
-        // title + customer name
-        $cellWidth = $printableWidth / 2.0;
-        $this->outputTitle($cellWidth, $isAddress);
-        $this->outputName($cellWidth, $isAddress);
-    }
-
-    private function outputZipCity(float $width): void
+    private function outputZipCity(float $cellWidth): void
     {
         $this->applySmallStyle();
         $this->outputText(
-            $width,
+            $cellWidth,
             self::SMALL_HEIGHT,
             $this->customer?->getZipCity(),
             PdfBorder::bottom(),

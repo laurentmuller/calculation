@@ -68,7 +68,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     }
 
     /**
-     * @psalm-return array<string, mixed>
+     * @psalm-return array<string, string|int>
      */
     private function loadValues(): array
     {

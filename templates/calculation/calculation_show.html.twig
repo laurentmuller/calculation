@@ -108,8 +108,8 @@
                 <td class="bg-body-tertiary text-nowrap fw-bold">{{ 'calculation.fields.overallTotal'|trans }}</td>
                 <td class="bg-body-tertiary fw-bold text-currency">{{ item.groupsAmount|amount }}</td>
                 {%- if user_service.application.marginBelow(item) -%}
-                    {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
-                    <td class="bg-body-tertiary fw-bold text-currency text-danger has-tooltip" data-bs-html="true" data-bs-title="{{ margin_below_title }}">{{ item.overallMargin|percent }}</td>
+                    {%- set overall_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
+                    <td class="bg-body-tertiary fw-bold text-currency text-danger has-tooltip" data-bs-html="true" data-bs-title="{{ overall_title }}">{{ item.overallMargin|percent }}</td>
                 {%- else -%}
                     <td class="bg-body-tertiary fw-bold text-currency">{{ item.overallMargin|percent }}</td>
                 {%- endif -%}

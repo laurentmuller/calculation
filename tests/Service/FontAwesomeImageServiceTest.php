@@ -17,11 +17,22 @@ use App\Model\FontAwesomeImage;
 use App\Service\FontAwesomeImageService;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class FontAwesomeImageServiceTest extends TestCase
 {
+    /**
+     * @throws Exception
+     */
+    public function testAliases(): void
+    {
+        $svgDirectory = __DIR__ . '/../files/json';
+        $service = $this->createService($svgDirectory);
+        $actual = $service->getAliases();
+        self::assertCount(2, $actual);
+    }
+
     /**
      * @throws Exception
      */
@@ -46,15 +57,14 @@ class FontAwesomeImageServiceTest extends TestCase
         $this->checkImageIsInvalid(__DIR__, 'fake');
     }
 
-    public function testQueryFormats(): void
+    /**
+     * @throws Exception
+     */
+    public function testLogger(): void
     {
-        $version = \Imagick::getVersion();
-        \print_r($version);
-
-        $formats = \Imagick::queryFormats('S*');
-        \print_r($formats);
-
-        self::assertNotEmpty($formats);
+        $service = $this->createService(__DIR__);
+        $actual = $service->getLogger();
+        self::assertInstanceOf(NullLogger::class, $actual);
     }
 
     /**
@@ -82,10 +92,8 @@ class FontAwesomeImageServiceTest extends TestCase
     public function testValidFileSizeEquals(): void
     {
         $actual = $this->checkImageIsValid(__DIR__ . '/../files/images', '512x512.svg');
-        if ($actual instanceof FontAwesomeImage) {
-            self::assertSame(64, $actual->getWidth());
-            self::assertSame(64, $actual->getHeight());
-        }
+        self::assertSame(64, $actual->getWidth());
+        self::assertSame(64, $actual->getHeight());
     }
 
     /**
@@ -94,10 +102,8 @@ class FontAwesomeImageServiceTest extends TestCase
     public function testValidFileWidthGreater(): void
     {
         $actual = $this->checkImageIsValid(__DIR__ . '/../files/images', '576x512.svg');
-        if ($actual instanceof FontAwesomeImage) {
-            self::assertSame(64, $actual->getWidth());
-            self::assertSame(57, $actual->getHeight());
-        }
+        self::assertSame(64, $actual->getWidth());
+        self::assertSame(57, $actual->getHeight());
     }
 
     /**
@@ -106,10 +112,8 @@ class FontAwesomeImageServiceTest extends TestCase
     public function testValidFileWidthSmaller(): void
     {
         $actual = $this->checkImageIsValid(__DIR__ . '/../files/images', '448x512.svg');
-        if ($actual instanceof FontAwesomeImage) {
-            self::assertSame(56, $actual->getWidth());
-            self::assertSame(64, $actual->getHeight());
-        }
+        self::assertSame(56, $actual->getWidth());
+        self::assertSame(64, $actual->getHeight());
     }
 
     /**
@@ -148,16 +152,10 @@ class FontAwesomeImageServiceTest extends TestCase
         string $svgDirectory,
         string $relativePath,
         ?string $color = null
-    ): ?FontAwesomeImage {
+    ): FontAwesomeImage {
         $svgDirectory = $this->validateDirectory($svgDirectory);
         $service = $this->createService($svgDirectory);
-        if (!$service->isSvgSupported()) {
-            return null;
-        }
         $actual = $service->getImage($relativePath, $color);
-        if ($service->isImagickException()) {
-            return null;
-        }
         self::assertNotNull($actual);
 
         return $actual;
@@ -171,7 +169,7 @@ class FontAwesomeImageServiceTest extends TestCase
         return new FontAwesomeImageService(
             $svgDirectory,
             new ArrayAdapter(),
-            $this->createMock(LoggerInterface::class)
+            new NullLogger()
         );
     }
 

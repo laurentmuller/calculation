@@ -63,7 +63,7 @@ calculation:
         add_item: Ajouter un article
         add_task: Ajouter une tâche
         adjust_label: Ajuster la marge utilisateur
-        adjust_title: Ajuster la marge utilisateur pour atteindre le seuil minimal de <b>%minimum%</b>
+        adjust_title: Ajuster la marge utilisateur pour atteindre la marge minimale de <b>%minimum%</b>
         delete_category: Supprimer la catégorie
         delete_group: Supprimer le groupe
         delete_item: Supprimer l'article
@@ -132,7 +132,7 @@ calculation:
         empty: Aucune calculation définie.
         excel_single_title: Exporter la calculation
         excel_title: Exporter la liste des calculations
-        margin_below: La marge globale de <b>%margin%</b> est en dessous du seuil minimal de <b>%minimum%</b>
+        margin_below: La marge globale de <b>%margin%</b> est en dessous de la marge minimale de <b>%minimum%</b>
         pdf_single_title: Télécharger la calculation
         pdf_title: Télécharger la liste des calculations
         state_all_description: Toutes les calculations

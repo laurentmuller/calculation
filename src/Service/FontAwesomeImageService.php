@@ -99,10 +99,10 @@ class FontAwesomeImageService
         }
 
         $color ??= self::COLOR_BLACK;
-        $key = \sprintf('%s_%s', $relativePath, $color);
+        $key = $this->cleanKey(\sprintf('%s_%s', $relativePath, $color));
 
         return $this->cache->get(
-            $this->cleanKey($key),
+            $key,
             fn (ItemInterface $item, bool &$save): ?FontAwesomeImage => $this->loadImage($path, $color, $item, $save)
         );
     }

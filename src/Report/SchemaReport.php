@@ -15,7 +15,6 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Model\FontAwesomeImage;
-use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFontAwesomeCell;
@@ -68,9 +67,7 @@ class SchemaReport extends AbstractReport
 
         $this->addPage();
         $this->booleanStyle = PdfStyle::getCellStyle()
-            ->setFontName(PdfFontName::ZAPFDINGBATS)
-            ->setTextColor(PdfTextColor::darkGreen());
-
+            ->setFontName(PdfFontName::ZAPFDINGBATS);
         $this->createLinks(\array_keys($tables));
         $this->outputTables($tables);
         foreach ($tables as $table) {

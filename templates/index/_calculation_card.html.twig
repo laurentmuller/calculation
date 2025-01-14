@@ -49,8 +49,8 @@
             <hr class="mt-2 mb-1">
             <div class="d-flex-wrap-center">
                 {%- if calculation.overallTotal and calculation.overallMargin < min_margin -%}
-                    {%- set margin_title = 'calculation.list.margin_below'|trans({'%margin%': calculation.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
-                    <div class="user-select-none text-danger has-tooltip" title="{{ margin_title }}">
+                    {%- set overall_title = 'calculation.list.margin_below'|trans({'%margin%': calculation.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
+                    <div class="user-select-none text-danger has-tooltip" title="{{ overall_title }}">
                         {{ calculation.overallMargin|percent }}
                     </div>
                 {% else %}

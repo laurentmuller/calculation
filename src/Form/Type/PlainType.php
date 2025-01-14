@@ -243,7 +243,7 @@ class PlainType extends AbstractType
 
     private function formatBool(bool $value): string
     {
-        return $value ? $this->trans('common.value_true') : $this->trans('common.value_false');
+        return $this->trans($value ? 'common.value_true' : 'common.value_false');
     }
 
     /**
@@ -305,7 +305,6 @@ class PlainType extends AbstractType
      */
     private function getDataValue(mixed $value, array $options): string
     {
-        // transform callback
         /** @psalm-var mixed $value */
         $value = $this->transformValue($value, $options);
 
@@ -333,7 +332,7 @@ class PlainType extends AbstractType
             return $this->formatNumber($value, $options);
         }
 
-        if (\is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'))) {
+        if (\is_scalar($value) || $value instanceof \Stringable) {
             return (string) $value;
         }
 

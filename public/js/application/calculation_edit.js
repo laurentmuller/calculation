@@ -264,12 +264,11 @@ const Application = {
 
 
     /**
-     * Serialize the form as an array.
+     * Serialize the form.
      *
-     * @param {jQuery<HTMLFormElement>} $form - the form to serialize.
      * @param {boolean} adjust - true to adjust the user margin.
      */
-    serializeForm: function ($form, adjust) {
+    serializeForm: function (adjust) {
         'use strict';
         const groups = [];
         $('#data-table-edit thead').each(function () {
@@ -277,9 +276,9 @@ const Application = {
             const $bodies = $(this).nextUntil('thead');
             $bodies.each(function () {
                 $(this).find('tr.item').each(function () {
-                    const $item = $(this);
-                    const price = $item.find('input[name$="[price]"]').floatVal();
-                    const quantity = $item.find('input[name$="[quantity]"]').floatVal();
+                    const $row = $(this);
+                    const price = $row.findNamedInput('price').floatVal();
+                    const quantity = $row.findNamedInput('quantity').floatVal();
                     total += price * quantity;
                 });
             });
@@ -345,7 +344,7 @@ const Application = {
 
         // parameters
         const url = $form.data('update');
-        const data = this.serializeForm($form, adjust);
+        const data = this.serializeForm(adjust);
 
         /**
          * @param {Object} response
@@ -364,8 +363,11 @@ const Application = {
             // update content
             const $totalPanel = $('#totals-panel');
             if (response.view) {
-                $('#totals-table > tbody').html(response.view);
-                $totalPanel.fadeIn();
+                const $body = $('#totals-table > tbody');
+                $body.fadeOut(200, function () {
+                    $body.html(response.view).fadeIn(200);
+                    $totalPanel.fadeIn();
+                });
             } else {
                 $totalPanel.fadeOut();
             }

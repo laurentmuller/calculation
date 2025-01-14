@@ -4,11 +4,18 @@ on: [ push, pull_request ]
 
 jobs:
     build:
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-latest
 
         steps:
             -   name: Checkout code
                 uses: actions/checkout@v4
+
+            -   name:️ Install Imagick
+                run:|
+                    sudo apt-get update
+                    sudo apt-get install -y imagemagick
+                    sudo apt-get install -y php-imagick
+                    sudo phpenmod imagick
 
             -   name: Install PHP with extensions
                 uses: shivammathur/setup-php@v2

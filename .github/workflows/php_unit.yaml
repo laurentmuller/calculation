@@ -10,12 +10,12 @@ jobs:
             -   name: Checkout code
                 uses: actions/checkout@v4
 
-            -   name:️ Install Imagick
+            -   name: Install Imagick
                 run: |
                     sudo apt-get update
                     sudo apt-get install -y imagemagick
                     sudo apt-get install -y php-imagick
-                    sudo phpenmod imagick
+                    sudo phpenmod imagick                 
 
             -   name: Install PHP with extensions
                 uses: shivammathur/setup-php@v2

@@ -43,7 +43,7 @@ class SearchServiceTest extends KernelServiceTestCase
      */
     public function testCount(): void
     {
-        $service = $this->getSearchService();
+        $service = $this->createSearchService();
         $actual = $service->count('');
         self::assertSame(0, $actual);
 
@@ -68,7 +68,7 @@ class SearchServiceTest extends KernelServiceTestCase
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
 
-        $service = $this->getSearchService();
+        $service = $this->createSearchService();
         $actual = $service->formatContent('Calculation.id', 1);
         self::assertSame('000001', $actual);
 
@@ -85,9 +85,9 @@ class SearchServiceTest extends KernelServiceTestCase
     /**
      * @throws Exception
      */
-    public function testGetEntities(): void
+    public function testGetEntitiesNotDebug(): void
     {
-        $service = $this->getSearchService();
+        $service = $this->createSearchService();
         $actual = $service->getEntities();
 
         self::assertArrayHasKey('calculation', $actual);
@@ -108,9 +108,9 @@ class SearchServiceTest extends KernelServiceTestCase
     /**
      * @throws Exception
      */
-    public function testGetEntitiesDebug(): void
+    public function testGetEntitiesWithDebug(): void
     {
-        $service = $this->getSearchService(true);
+        $service = $this->createSearchService(true);
         $actual = $service->getEntities();
         self::assertArrayHasKey('customer', $actual);
         self::assertSame('customer.name', $actual['customer']);
@@ -119,9 +119,9 @@ class SearchServiceTest extends KernelServiceTestCase
     /**
      * @throws ORMException|Exception
      */
-    public function testSearch(): void
+    public function testSearchNotDebug(): void
     {
-        $service = $this->getSearchService();
+        $service = $this->createSearchService();
         $actual = $service->search('');
         self::assertCount(0, $actual);
 
@@ -143,12 +143,22 @@ class SearchServiceTest extends KernelServiceTestCase
     }
 
     /**
+     * @throws Exception
+     */
+    public function testSearchNotGranted(): void
+    {
+        $service = $this->createSearchService(true, false);
+        $actual = $service->search('fake');
+        self::assertCount(0, $actual);
+    }
+
+    /**
      * @throws ORMException|Exception
      */
-    public function testSearchDebug(): void
+    public function testSearchWithDebug(): void
     {
-        $service = $this->getSearchService(true);
         $this->getCalculation();
+        $service = $this->createSearchService(true);
         $actual = $service->search('customer');
         self::assertCount(1, $actual);
     }
@@ -156,14 +166,13 @@ class SearchServiceTest extends KernelServiceTestCase
     /**
      * @throws Exception
      */
-    private function getSearchService(bool $debug = false): SearchService
+    private function createSearchService(bool $debug = false, bool $granted = true): SearchService
     {
         $checker = $this->createMock(AuthorizationCheckerInterface::class);
         $checker->method('isGranted')
-            ->willReturn(true);
+            ->willReturn($granted);
         $cache = new ArrayAdapter();
         $manager = $this->getService(EntityManagerInterface::class);
-
         $service = new SearchService($manager, $debug, $cache);
         $service->setChecker($checker);
 

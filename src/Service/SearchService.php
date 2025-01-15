@@ -27,6 +27,7 @@ use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NativeQuery;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -329,6 +330,11 @@ class SearchService implements ServiceSubscriberInterface
         }
     }
 
+    private function createNativeQuery(string $sql): NativeQuery
+    {
+        return $this->manager->createNativeQuery($sql, $this->getResultSetMapping());
+    }
+
     /**
      * Creates a query builder.
      *
@@ -345,7 +351,7 @@ class SearchService implements ServiceSubscriberInterface
         $alias = 'e';
         $name = StringUtils::getShortName($class);
         $content ??= "$alias.$field";
-        $where = "$content LIKE :" . self::SEARCH_PARAM;
+        $where = \sprintf('%s LIKE :%s', $content, self::SEARCH_PARAM);
 
         return $this->manager->createQueryBuilder()
             ->select("$alias.id")
@@ -369,15 +375,18 @@ class SearchService implements ServiceSubscriberInterface
     {
         $queries = $this->getQueries();
         if (StringUtils::isString($entity)) {
-            $queries = \array_filter($queries, fn (string $key): bool => 0 === \stripos($key, $entity), \ARRAY_FILTER_USE_KEY);
+            $queries = \array_filter(
+                $queries,
+                static fn (string $key): bool => 0 === \stripos($key, $entity),
+                \ARRAY_FILTER_USE_KEY
+            );
         }
         if ([] === $queries) {
             return [];
         }
 
         $sql = \implode(' UNION ', $queries) . $extra;
-        $mapping = $this->getResultSetMapping();
-        $query = $this->manager->createNativeQuery($sql, $mapping);
+        $query = $this->createNativeQuery($sql);
         $query->setParameter(self::SEARCH_PARAM, "%$search%", Types::STRING);
 
         /** @psalm-var SearchType[] */
@@ -475,9 +484,7 @@ class SearchService implements ServiceSubscriberInterface
 
     private function isTimestampable(string $class): bool
     {
-        $interfaces = \class_implements($class);
-
-        return \is_array($interfaces) && \in_array(TimestampableInterface::class, $interfaces, true);
+        return \is_a($class, TimestampableInterface::class, true);
     }
 
     /**

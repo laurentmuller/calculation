@@ -23,7 +23,6 @@ use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfFont;
 use App\Pdf\PdfFontAwesomeCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
@@ -80,10 +79,17 @@ class LogsReport extends AbstractReport
             return $this->renderEmpty();
         }
 
-        $this->renderCards();
-        $this->renderLogs();
+        return $this->renderCards()
+            ->renderLogs();
+    }
 
-        return true;
+    private function addBookmarkAndTitle(string $id, bool $currentY): void
+    {
+        $text = $this->trans($id);
+        $this->addBookmark(text: $text, isUTF8: true, currentY: $currentY);
+        PdfStyle::default()->setFontBold()->apply($this);
+        $this->useCellMargin(fn (): static => $this->cell(text: $text, move: PdfMove::NEW_LINE));
+        $this->resetStyle();
     }
 
     private function addDateBookmark(int $date): void
@@ -122,11 +128,11 @@ class LogsReport extends AbstractReport
         }
 
         $image = $this->imageService->getImage($path, $color);
-        if (!$image instanceof FontAwesomeImage) {
-            return $this->cells[$key] = $text;
+        if ($image instanceof FontAwesomeImage) {
+            return $this->cells[$key] = new PdfFontAwesomeCell($image, $text);
         }
 
-        return $this->cells[$key] = new PdfFontAwesomeCell($image, $text);
+        return $this->cells[$key] = $text;
     }
 
     private function getCellChannel(Log $log): PdfFontAwesomeCell|string
@@ -183,7 +189,7 @@ class LogsReport extends AbstractReport
         return (int) \ceil($log->getTimestamp() / self::DELTA_DATE) * self::DELTA_DATE;
     }
 
-    private function renderCards(): void
+    private function renderCards(): self
     {
         $levels = $this->logFile->getLevels();
         $channels = $this->logFile->getChannels();
@@ -205,28 +211,18 @@ class LogsReport extends AbstractReport
         $textCells[] = $emptyCell;
         $valueCells[] = $emptyCell;
 
-        $total = $this->trans('report.total');
-        $columns[] = PdfColumn::center($total, 30);
-        $textCells[] = new PdfCell($total);
+        $columns[] = PdfColumn::center(width: 30);
+        $textCells[] = new PdfCell($this->trans('report.total'));
         $valueCells[] = new PdfCell(FormatUtils::formatInt($this->logFile->count()));
 
-        $this->addBookmark(text: $this->trans('calculation.edit.panel_resume'), isUTF8: true, currentY: false);
-
-        $levelsCount = \max(1, \count($levels) * 2);
-        $channelsCount = \count($channels) * 2 + 1;
-        $titleStyle = PdfStyle::default()
-            ->setBorder(PdfBorder::none())
-            ->setFontBold();
-
+        $this->addBookmarkAndTitle('calculation.edit.panel_resume', false);
         PdfTable::instance($this)
             ->addColumns(...$columns)
-            ->startRow()
-            ->add($this->trans('log.fields.level'), $levelsCount, $titleStyle, PdfTextAlignment::LEFT)
-            ->add($this->trans('log.fields.channel'), $channelsCount, $titleStyle, PdfTextAlignment::LEFT)
-            ->endRow()
             ->addStyledRow($textCells, PdfStyle::getHeaderStyle()->resetFont())
             ->addStyledRow($valueCells, PdfStyle::getCellStyle()->setFontSize(14));
         $this->lineBreak(3);
+
+        return $this;
     }
 
     private function renderEmpty(): true
@@ -238,7 +234,7 @@ class LogsReport extends AbstractReport
             height: self::LINE_HEIGHT * 1.25,
             text: $this->trans('log.list.empty'),
             border: PdfBorder::all(),
-            move: PdfMove::BELOW,
+            move: PdfMove::NEW_LINE,
             align: PdfTextAlignment::CENTER,
             fill: true,
         );
@@ -246,16 +242,11 @@ class LogsReport extends AbstractReport
         return true;
     }
 
-    private function renderLogs(): void
+    private function renderLogs(): bool
     {
-        $logs = $this->logFile->getLogs();
-        $title = $this->trans('log.name');
-        $this->addBookmark($title, true);
-        PdfFont::default()->bold()->apply($this);
-        $this->cell(text: $title, move: PdfMove::BELOW);
-        $this->resetStyle();
-
         $date = 0;
+        $logs = $this->logFile->getLogs();
+        $this->addBookmarkAndTitle('log.name', true);
         $table = $this->createTable();
         foreach ($logs as $log) {
             $newDate = $this->getRoundedDate($log);
@@ -272,7 +263,7 @@ class LogsReport extends AbstractReport
             );
         }
 
-        $this->renderCount($table, $logs, 'counters.logs');
+        return $this->renderCount($table, $logs, 'counters.logs');
     }
 
     /**

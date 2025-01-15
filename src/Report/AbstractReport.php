@@ -169,7 +169,7 @@ abstract class AbstractReport extends PdfDocument
      */
     protected function translateCount(\Countable|array|int $count, string $message = 'common.count'): string
     {
-        if (!\is_int($count)) {
+        if (\is_countable($count)) {
             $count = \count($count);
         }
 

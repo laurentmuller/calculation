@@ -54,11 +54,14 @@ thead.group tr.table-primary th.bg-body-tertiary {
 }
 
 /* card view */
+.row-item.table-primary.text-body-secondary {
+    color: var(--bs-table-color) !important;
+}
+
 .row-item.table-primary {
     background-color: var(--bs-table-bg);
 }
 
-/* card view link */
 a.item-link.text-body {
     color: var(--bs-link-color) !important;
 }
@@ -69,8 +72,4 @@ a.item-link.text-body:hover {
 
 .row-item.table-primary a.item-link.text-body {
     color: var(--bs-primary) !important;
-}
-
-.row-item.text-body-secondary .fw-bold a {
-    color: var(--bs-secondary-color) !important;
 }

@@ -481,23 +481,7 @@ class WorksheetDocument extends Worksheet
      */
     public function setPageLandscape(): static
     {
-        return $this->setPageOrientation(PageSetup::ORIENTATION_LANDSCAPE);
-    }
-
-    /**
-     * Set the page orientation (default, portait, or landscape).
-     *
-     * @psalm-param PageSetup::ORIENTATION_* $orientation
-     */
-    public function setPageOrientation(string $orientation): static
-    {
-        switch ($orientation) {
-            case PageSetup::ORIENTATION_DEFAULT:
-            case PageSetup::ORIENTATION_PORTRAIT:
-            case PageSetup::ORIENTATION_LANDSCAPE:
-                $this->getPageSetup()->setOrientation($orientation);
-                break;
-        }
+        $this->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
 
         return $this;
     }
@@ -507,19 +491,7 @@ class WorksheetDocument extends Worksheet
      */
     public function setPagePortrait(): static
     {
-        return $this->setPageOrientation(PageSetup::ORIENTATION_PORTRAIT);
-    }
-
-    /**
-     * Sets the paper size for the active sheet.
-     *
-     * @param int $size the paper size that must be one of PageSetup paper size constant
-     *
-     * @psalm-param PageSetup::PAPERSIZE_* $size
-     */
-    public function setPageSize(int $size): static
-    {
-        $this->getPageSetup()->setPaperSize($size);
+        $this->getPageSetup()->setOrientation(PageSetup::ORIENTATION_PORTRAIT);
 
         return $this;
     }
@@ -529,7 +501,9 @@ class WorksheetDocument extends Worksheet
      */
     public function setPageSizeA4(): static
     {
-        return $this->setPageSize(PageSetup::PAPERSIZE_A4);
+        $this->getPageSetup()->setPaperSize(PageSetup::PAPERSIZE_A4);
+
+        return $this;
     }
 
     /**

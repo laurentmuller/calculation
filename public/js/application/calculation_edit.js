@@ -267,6 +267,7 @@ const Application = {
      * Serialize the form.
      *
      * @param {boolean} adjust - true to adjust the user margin.
+     * @return {Object} the data to post.
      */
     serializeForm: function (adjust) {
         'use strict';
@@ -351,7 +352,7 @@ const Application = {
          * @param {boolean} response.result
          * @param {boolean} response.adjust
          * @param {string} response.message
-         * @param {string} response.body
+         * @param {string} response.view
          * @param {number} response.user_margin
          * @param {boolean} response.overall_below
          */
@@ -364,8 +365,8 @@ const Application = {
             const $totalPanel = $('#totals-panel');
             if (response.view) {
                 const $body = $('#totals-table > tbody');
-                $body.fadeOut(200, function () {
-                    $body.html(response.view).fadeIn(200);
+                $body.fadeOut(300, function () {
+                    $body.html(response.view).fadeIn(300);
                     $totalPanel.fadeIn();
                 });
             } else {

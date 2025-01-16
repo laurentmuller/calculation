@@ -13,61 +13,67 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Utils\StringUtils;
-
 /**
  * Service to get Font Awesome icons.
  */
 class FontAwesomeIconService
 {
+    // extracted from https://docs.fontawesome.com/web/style/style-cheatsheet
     private const EXCLUDED = [
-        // fixed width
-        'fa-fw',
-        // sizing
-        'fa-2xs',
-        'fa-xs',
-        'fa-sm',
-        'fa-lg',
-        'fa-xl',
-        'fa-2xl',
-        'fa-1x',
-        'fa-2x',
-        'fa-3x',
-        'fa-4x',
-        'fa-5x',
-        'fa-6x',
-        'fa-7x',
-        'fa-8x',
-        'fa-9x',
-        'fa-10x',
-        // rotate
-        'fa-rotate-90',
-        'fa-rotate-180',
-        'fa-rotate-270',
-        'fa-flip-horizontal',
-        'fa-flip-vertical',
-        'fa-flip-both',
-        'fa-rotate-by',
-        // animating
-        'fa-beat',
-        'fa-beat-fade',
-        'fa-bounce',
-        'fa-flip',
-        'fa-shake',
-        'fa-spin',
-        'fa-spin-pulse',
-        'fa-spin-reverse',
-        // bordered and pulled
-        'fa-border',
-        'fa-pull-right',
-        'fa-pull-left',
-        // stacking
-        'fa-stack',
-        'fa-stack-1x',
-        'fa-stack-2x',
-        'fa-inverse',
-        // transforms
-        'fa-seedling',
+        // General
+        'fa-inverse', // Inverts the color of an icon to white
+        // Sizing Icons
+        'fa-1x',  // Changes an icon’s font-size to 1.0em
+        'fa-2x',  // Changes an icon’s font-size to 2.0em
+        'fa-3x',  // Changes an icon’s font-size to 3.0em
+        'fa-4x',  // Changes an icon’s font-size to 4.0em
+        'fa-5x',  // Changes an icon’s font-size to 5.0em
+        'fa-6x',  // Changes an icon’s font-size to 6.0em
+        'fa-7x',  // Changes an icon’s font-size to 7.0em
+        'fa-8x',  // Changes an icon’s font-size to 8.0em
+        'fa-9x',  // Changes an icon’s font-size to 9.0em
+        'fa-10x', // Changes an icon’s font-size to 10.0em
+        'fa-2xs', // Changes an icon’s font-size to 0.625em (~10px) and vertically aligns
+        'fa-xs',  // Changes an icon’s font-size to 0.75em (~12px) and vertically aligns
+        'fa-sm',  // Changes an icon’s font-size to 0.875em (~14px) and vertically aligns
+        'fa-lg',  // Changes an icon’s font-size to 1.25em (~120px) and vertically aligns
+        'fa-xl',  // Changes an icon’s font-size to 1.5em (~24px) and vertically aligns
+        'fa-2xl', // Changes an icon’s font-size to 2.0em (~32px) and vertically aligns
+        // Fixed-Width Icons
+        'fa-fw', // Sets an icon to display at a fixed width for easy vertical alignment
+        // Icons in a List
+        'fa-ul', // Used on a <ul> or <ol> elements to style icons as list bullets
+        'fa-li', // Used on individual <li> elements to style icons as list bullets
+        // Rotating Icons
+        'fa-rotate-90', //  Rotates an icon 90°
+        'fa-rotate-180', // Rotates an icon 180°
+        'fa-rotate-270', // Rotates an icon 270°
+        'fa-flip-horizontal', // Mirrors an icon horizontally
+        'fa-flip-vertical', // Mirrors an icon vertically
+        'fa-flip-both', // Mirrors an icon both vertically and horizontally
+        'fa-rotate-by', // Rotates an icon by a specific degree
+        // Animating Icons
+        'fa-spin', // Makes an icon spin 360° clock-wise
+        'fa-spin-pulse', // Makes an icon spin 360° clock-wise in 8 incremental steps
+        'fa-spin-reverse', // When used in conjunction with fa-spin or fa-spin-pulse, makes an icon spin counter-clockwise
+        'fa-beat', // Makes an icon scale up and down
+        'fa-fade', // Makes an icon visually fade in and out using opacity
+        'fa-flip', // Makes an icon rotate about the Y axis
+        // Bordered Icons
+        'fa-border', // Creates a border with border-radius and padding applied around an icon
+        // Pulled Icons
+        'fa-pull-left', // Pulls an icon by floating it left and applying a margin-right
+        'fa-pull-right', // Pulls an icon by floating it right and applying a margin-left
+        // Stacking Icons
+        'fa-stack', // Used on a parent HTML element of the two icons to be stacked
+        'fa-stack-1x', // Used on the icon, which should be displayed at base size when stacked
+        'fa-stack-2x', // Used on the icon, which should be displayed larger when stacked
+        'fa-inverse', // Inverts the color of the icon displayed at base size when stacked
+        // Duotone Icons
+        'fa-swap-opacity', // Swap the default opacity of each layer in a duotone icon
+        // Accessibility
+        'fa-sr-only', // Visually hides an element containing a text-equivalent
+        'fa-sr-only-focusable', // Used alongside fa-sr-only to show the element again when it is focused
     ];
 
     private const FOLDERS = [
@@ -86,11 +92,7 @@ class FontAwesomeIconService
      */
     public function getPath(string $icon): ?string
     {
-        $icon = $this->cleanIcon($icon);
-        if ('' === $icon) {
-            return null;
-        }
-        $parts = \array_unique(\explode(' ', $icon));
+        $parts = $this->splitIcon($icon);
         if (2 !== \count($parts)) {
             return null;
         }
@@ -112,16 +114,26 @@ class FontAwesomeIconService
         };
     }
 
-    private function cleanIcon(string $icon): string
-    {
-        $icon = \str_replace(self::EXCLUDED, '', \strtolower($icon));
-        $icon = \str_replace('fa-', '', $icon);
-
-        return \trim(StringUtils::pregReplace('/\s+/', ' ', $icon));
-    }
-
     private function isFolder(string $name): bool
     {
         return \in_array($name, self::FOLDERS, true);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function splitIcon(string $icon): array
+    {
+        $values = \array_filter(\explode(' ', \strtolower($icon)));
+        if (\count($values) < 2) {
+            return [];
+        }
+
+        $values = \array_diff($values, self::EXCLUDED);
+        if (2 !== \count($values)) {
+            return [];
+        }
+
+        return \array_map(fn (string $value): string => \str_replace('fa-', '', $value), \array_values($values));
     }
 }

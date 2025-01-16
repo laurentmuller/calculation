@@ -23,6 +23,34 @@ use Symfony\Component\Form\FormInterface;
  */
 class CommandFormServiceTest extends KernelServiceTestCase
 {
+    public function testBoolArgument(): void
+    {
+        $argument = [
+            'name' => 'fake',
+            'is_required' => false,
+            'is_array' => false,
+            'description' => 'fake',
+            'default' => true,
+            'display' => 'fake',
+            'arguments' => 'fake',
+        ];
+        $command = [
+            'name' => 'fake',
+            'description' => 'fake',
+            'usage' => [],
+            'help' => 'fake',
+            'hidden' => false,
+            'definition' => [
+                'arguments' => ['fake' => $argument],
+                'options' => [],
+            ],
+        ];
+        $service = $this->getCommandFormService();
+        $actual = $service->createForm($command, []);
+        self::assertCount(1, $actual);
+        self::assertTrue($actual->has('argument-fake'));
+    }
+
     public function testCreateForm(): void
     {
         $form = $this->createForm('completion');

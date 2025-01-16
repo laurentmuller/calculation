@@ -61,6 +61,12 @@ class LogServiceTest extends KernelServiceTestCase
         self::assertNotNull($actual);
     }
 
+    public function testGetLogger(): void
+    {
+        $actual = $this->service->getLogger();
+        self::assertInstanceOf(LoggerInterface::class, $actual);
+    }
+
     public function testGetTranslator(): void
     {
         $actual = $this->service->getTranslator();

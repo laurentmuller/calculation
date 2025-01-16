@@ -55,10 +55,9 @@ class CommandDataServiceTest extends KernelServiceTestCase
         self::assertEmpty($actual);
 
         self::expectException(\LogicException::class);
-        $actual = $dataService->createParameters($command, [
+        $dataService->createParameters($command, [
             'fake-invalid-option' => true,
         ]);
-        self::assertEmpty($actual);
     }
 
     public function testGetArgumentKey(): void
@@ -71,6 +70,67 @@ class CommandDataServiceTest extends KernelServiceTestCase
     {
         $actual = CommandDataService::getOptionKey('fake');
         self::assertSame('option-fake', $actual);
+    }
+
+    public function testInvalidArgument(): void
+    {
+        $argument = [
+            'name' => 'fake',
+            'is_required' => false,
+            'is_array' => false,
+            'description' => 'fake',
+            'default' => true,
+            'display' => 'fake',
+            'arguments' => 'fake',
+        ];
+        $command = [
+            'name' => 'fake',
+            'description' => 'fake',
+            'usage' => [],
+            'help' => 'fake',
+            'hidden' => false,
+            'definition' => [
+                'arguments' => ['fake' => $argument],
+                'options' => [],
+            ],
+        ];
+        $dataService = $this->getCommandDataService();
+        self::expectException(\LogicException::class);
+        $dataService->createParameters($command, [
+            'argument-fake-invalid' => true,
+        ]);
+    }
+
+    public function testInvalidOption(): void
+    {
+        $option = [
+            'name' => 'fake',
+            'shortcut' => 'fake',
+            'name_shortcut' => 'fake',
+            'accept_value' => false,
+            'is_value_required' => false,
+            'is_multiple' => false,
+            'description' => 'fake',
+            'default' => true,
+            'display' => 'fake',
+            'arguments' => 'fake',
+        ];
+        $command = [
+            'name' => 'fake',
+            'description' => 'fake',
+            'usage' => [],
+            'help' => 'fake',
+            'hidden' => false,
+            'definition' => [
+                'arguments' => [],
+                'options' => ['fake' => $option],
+            ],
+        ];
+        $dataService = $this->getCommandDataService();
+        self::expectException(\LogicException::class);
+        $dataService->createParameters($command, [
+            'option-fake-invalid' => true,
+        ]);
     }
 
     public function testValidateData(): void
@@ -97,6 +157,26 @@ class CommandDataServiceTest extends KernelServiceTestCase
         self::assertSame($value, $actual['argument-shell']);
         self::assertArrayHasKey('option-help', $actual);
         self::assertTrue($actual['option-help']);
+    }
+
+    public function testValidateKeyNotFound(): void
+    {
+        $command = [
+            'name' => 'fake',
+            'description' => 'fake',
+            'usage' => [],
+            'help' => 'fake',
+            'hidden' => false,
+            'definition' => [
+                'arguments' => [],
+                'options' => [],
+            ],
+        ];
+        $dataService = $this->getCommandDataService();
+        $actual = $dataService->validateData($command, [
+            'fake' => 'fake',
+        ]);
+        self::assertEmpty($actual);
     }
 
     /**

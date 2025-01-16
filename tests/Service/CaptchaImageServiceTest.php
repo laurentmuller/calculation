@@ -91,6 +91,17 @@ class CaptchaImageServiceTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testSetTimeout(): void
+    {
+        $service = $this->createService();
+        $service->setTimeout(60);
+        $actual = $service->getTimeout();
+        self::assertSame(60, $actual);
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testValidateTimeoutError(): void
     {
         $service = $this->createService();

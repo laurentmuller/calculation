@@ -18,7 +18,6 @@ use App\Faker\CategoryProvider;
 use App\Faker\Factory;
 use App\Repository\CategoryRepository;
 use App\Utils\FormatUtils;
-use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -33,7 +32,7 @@ class CategoryProviderTest extends TestCase
         $entity->setCode('code');
         $provider = $this->createProvider($entity);
 
-        $actual = $provider->categoriesCount();
+        $actual = \count($provider);
         self::assertSame(1, $actual);
 
         $actual = $provider->category();
@@ -47,7 +46,7 @@ class CategoryProviderTest extends TestCase
     {
         $provider = $this->createProvider();
 
-        $actual = $provider->categoriesCount();
+        $actual = \count($provider);
         self::assertSame(0, $actual);
 
         $actual = $provider->category();
@@ -63,16 +62,11 @@ class CategoryProviderTest extends TestCase
         $repository = $this->createMock(CategoryRepository::class);
         $repository->method('findBy')
             ->willReturn($entities);
-
         $repository->method('findAll')
             ->willReturn($entities);
 
-        $manager = $this->createMock(EntityManagerInterface::class);
-        $manager->method('getRepository')
-            ->willReturn($repository);
-
         $generator = Factory::create(FormatUtils::DEFAULT_LOCALE);
 
-        return new CategoryProvider($generator, $manager);
+        return new CategoryProvider($generator, $repository);
     }
 }

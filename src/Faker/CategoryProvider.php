@@ -15,28 +15,17 @@ namespace App\Faker;
 
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Category provider.
  *
- * @template-extends EntityProvider<Category, CategoryRepository>
+ * @template-extends EntityProvider<Category>
  */
 class CategoryProvider extends EntityProvider
 {
-    public function __construct(Generator $generator, EntityManagerInterface $manager)
+    public function __construct(Generator $generator, CategoryRepository $repository)
     {
-        parent::__construct($generator, $manager, Category::class);
-    }
-
-    /**
-     * Gets the number of users.
-     *
-     * @psalm-api
-     */
-    public function categoriesCount(): int
-    {
-        return $this->count();
+        parent::__construct($generator, $repository);
     }
 
     /**

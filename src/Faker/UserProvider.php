@@ -15,18 +15,17 @@ namespace App\Faker;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * User provider.
  *
- * @template-extends EntityProvider<User, UserRepository>
+ * @template-extends EntityProvider<User>
  */
 class UserProvider extends EntityProvider
 {
-    public function __construct(Generator $generator, EntityManagerInterface $manager)
+    public function __construct(Generator $generator, UserRepository $repository)
     {
-        parent::__construct($generator, $manager, User::class);
+        parent::__construct($generator, $repository);
     }
 
     /**
@@ -45,16 +44,6 @@ class UserProvider extends EntityProvider
         $user = $this->user();
 
         return ($user instanceof User) ? $user->getUserIdentifier() : null;
-    }
-
-    /**
-     * Gets the number of users.
-     *
-     * @psalm-api
-     */
-    public function usersCount(): int
-    {
-        return $this->count();
     }
 
     protected function getCriteria(): array

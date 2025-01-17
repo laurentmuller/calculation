@@ -16,9 +16,8 @@ namespace App\Tests\Faker;
 use App\Entity\CalculationState;
 use App\Faker\CalculationStateProvider;
 use App\Faker\Factory;
-use App\Repository\UserRepository;
+use App\Repository\CalculationStateRepository;
 use App\Utils\FormatUtils;
-use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -33,7 +32,7 @@ class CalculationStateProviderTest extends TestCase
         $entity->setCode('code');
         $provider = $this->createProvider($entity);
 
-        $actual = $provider->statesCount();
+        $actual = \count($provider);
         self::assertSame(1, $actual);
 
         $actual = $provider->state();
@@ -47,7 +46,7 @@ class CalculationStateProviderTest extends TestCase
     {
         $provider = $this->createProvider();
 
-        $actual = $provider->statesCount();
+        $actual = \count($provider);
         self::assertSame(0, $actual);
 
         $actual = $provider->state();
@@ -60,19 +59,14 @@ class CalculationStateProviderTest extends TestCase
     private function createProvider(?CalculationState $entity = null): CalculationStateProvider
     {
         $entities = $entity instanceof CalculationState ? [$entity] : [];
-        $repository = $this->createMock(UserRepository::class);
+        $repository = $this->createMock(CalculationStateRepository::class);
         $repository->method('findBy')
             ->willReturn($entities);
-
         $repository->method('findAll')
             ->willReturn($entities);
 
-        $manager = $this->createMock(EntityManagerInterface::class);
-        $manager->method('getRepository')
-            ->willReturn($repository);
-
         $generator = Factory::create(FormatUtils::DEFAULT_LOCALE);
 
-        return new CalculationStateProvider($generator, $manager);
+        return new CalculationStateProvider($generator, $repository);
     }
 }

@@ -17,6 +17,7 @@ use App\Entity\Calculation;
 use App\Entity\CalculationItem;
 use App\Entity\Category;
 use App\Faker\Generator;
+use App\Faker\ProductProvider;
 use App\Interfaces\EntityInterface;
 use App\Service\CalculationService;
 use App\Service\FakerService;
@@ -110,8 +111,9 @@ class CalculationGenerator extends AbstractEntityGenerator
      */
     private function getMinMax(Generator $generator): array
     {
-        $productsCount = $generator->productsCount();
+        $provider = $generator->getProvider(ProductProvider::class);
+        $count = $provider instanceof ProductProvider ? \count($provider) : 0;
 
-        return [\min(5, $productsCount), \min(15, $productsCount)];
+        return [\min(5, $count), \min(15, $count)];
     }
 }

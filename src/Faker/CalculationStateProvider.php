@@ -15,18 +15,17 @@ namespace App\Faker;
 
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Calculation state provider.
  *
- * @template-extends EntityProvider<CalculationState, CalculationStateRepository>
+ * @template-extends EntityProvider<CalculationState>
  */
 class CalculationStateProvider extends EntityProvider
 {
-    public function __construct(Generator $generator, EntityManagerInterface $manager)
+    public function __construct(Generator $generator, CalculationStateRepository $repository)
     {
-        parent::__construct($generator, $manager, CalculationState::class);
+        parent::__construct($generator, $repository);
     }
 
     /**
@@ -35,16 +34,6 @@ class CalculationStateProvider extends EntityProvider
     public function state(): ?CalculationState
     {
         return $this->entity();
-    }
-
-    /**
-     * Gets the number of calculation states.
-     *
-     * @psalm-api
-     */
-    public function statesCount(): int
-    {
-        return $this->count();
     }
 
     protected function getCriteria(): array

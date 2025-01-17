@@ -36,7 +36,7 @@ signification que dans notre Accord de licence.
 
 ## Collecte et utilisation des données
 
-Nous recueillons plusieurs types de données à différentes fins en vue de vous
+Nous recueillons plusieurs types de données à différents fins en vue de vous
 fournir notre application et de l'améliorer.
 
 ### Types de données recueillies
@@ -109,10 +109,10 @@ Le fournisseur utilise les données recueillies à des diverses fins :
 ## Transfert des données
 
 Les informations vous concernant, notamment vos données à caractère personnel,
-peuvent être transférées de votre région, province, pays, ou autre division
-territoriale vers des ordinateurs – et stockées sur ces derniers – situés à un
-endroit où la législation relative à la protection des données diffère de celle
-du territoire où vous résidez.
+peuvent être transférées de votre région, votre province, votre pays, ou toute
+autre division territoriale vers des ordinateurs – et stockées sur ces derniers
+– situés à un endroit où la législation relative à la protection des données 
+diffère de celle du territoire où vous résidez.
 
 Si vous résidez hors de Suisse et que vous choisissez de nous communiquer des
 informations, sachez que nous transférons les données, y compris les données à
@@ -193,7 +193,7 @@ temps à autre. Nous vous informerons de toute modification en publiant la
 nouvelle politique de confidentialité sur cette page.
 
 Avant que la modification ne prenne effet, nous vous en informerons par courrier
-électronique et/ou en plaçant un avis bien en vue dans notre application et nous
+électronique ou/et en plaçant un avis bien en vue dans notre application et nous
 actualiserons la "date de prise d'effet" qui figure en bas de la présente
 politique de confidentialité.
 

@@ -15,26 +15,17 @@ namespace App\Faker;
 
 use App\Interfaces\EntityInterface;
 use App\Repository\AbstractRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Faker\Provider\Base;
 
 /**
  * Entity provider.
  *
  * @template TEntity of EntityInterface
- * @template TRepository of AbstractRepository<TEntity>
  *
  * @property \Faker\UniqueGenerator $unique
  */
-class EntityProvider extends Base
+class EntityProvider extends Base implements \Countable
 {
-    /**
-     * The repository.
-     *
-     * @psalm-var TRepository
-     */
-    protected readonly AbstractRepository $repository;
-
     /**
      * The cached distinct values.
      *
@@ -45,26 +36,22 @@ class EntityProvider extends Base
     /**
      * The cached entities.
      *
-     * @psalm-var list<TEntity>
+     * @var list<TEntity>
      */
     private array $entities = [];
 
     /**
-     * @psalm-param class-string<TEntity> $className the entity class name.
-     *
-     * @psalm-suppress PropertyTypeCoercion
+     * @param AbstractRepository<TEntity> $repository the repository to get entities from
      */
-    public function __construct(Generator $generator, EntityManagerInterface $manager, string $className)
+    public function __construct(Generator $generator, protected readonly AbstractRepository $repository)
     {
         parent::__construct($generator);
-        // @phpstan-ignore assign.propertyType
-        $this->repository = $manager->getRepository($className);
     }
 
     /**
      * Gets the number of entities.
      */
-    protected function count(): int
+    public function count(): int
     {
         return \count($this->getEntities());
     }
@@ -73,9 +60,9 @@ class EntityProvider extends Base
      * Gets a random value for the given column.
      *
      * @param string $field     the field name (column) to get values for
-     * @param bool   $allowNull true to allow the return of a null value
+     * @param bool   $allowNull true to allow null value
      *
-     * @return mixed|null a random value or return null if none
+     * @return mixed|null a random value or null if none
      */
     protected function distinctValue(string $field, bool $allowNull = false): mixed
     {
@@ -95,7 +82,7 @@ class EntityProvider extends Base
     /**
      * Gets a random entity.
      *
-     * @psalm-return TEntity|null
+     * @return TEntity|null
      */
     protected function entity()
     {
@@ -106,7 +93,7 @@ class EntityProvider extends Base
     /**
      * Gets the criteria used to filter entities.
      *
-     * @psalm-return array<string, mixed>
+     * @return array<string, mixed>
      */
     protected function getCriteria(): array
     {
@@ -116,14 +103,13 @@ class EntityProvider extends Base
     /**
      * Gets all entities.
      *
-     * @psalm-return list<TEntity>
+     * @return list<TEntity>
      */
     protected function getEntities(): array
     {
         if ([] === $this->entities) {
-            $repository = $this->repository;
             $criteria = $this->getCriteria();
-            $this->entities = [] === $criteria ? $repository->findAll() : $repository->findBy($criteria);
+            $this->entities = [] === $criteria ? $this->repository->findAll() : $this->repository->findBy($criteria);
         }
 
         return $this->entities;

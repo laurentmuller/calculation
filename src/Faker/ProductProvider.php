@@ -15,12 +15,11 @@ namespace App\Faker;
 
 use App\Entity\Product;
 use App\Repository\ProductRepository;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Product provider.
  *
- * @template-extends EntityProvider<Product, ProductRepository>
+ * @template-extends EntityProvider<Product>
  */
 class ProductProvider extends EntityProvider
 {
@@ -84,9 +83,9 @@ class ProductProvider extends EntityProvider
         'boîtier',
         'portefeuille'];
 
-    public function __construct(Generator $generator, EntityManagerInterface $manager)
+    public function __construct(Generator $generator, ProductRepository $repository)
     {
-        parent::__construct($generator, $manager, Product::class);
+        parent::__construct($generator, $repository);
     }
 
     /**
@@ -129,7 +128,7 @@ class ProductProvider extends EntityProvider
     public function products(int $count = 1, bool $allowDuplicates = false): array
     {
         // products?
-        if (0 === $this->productsCount()) {
+        if (0 === $this->count()) {
             return [];
         }
 
@@ -149,16 +148,6 @@ class ProductProvider extends EntityProvider
         });
 
         return $products;
-    }
-
-    /**
-     * Gets the number of products.
-     *
-     * @psalm-api
-     */
-    public function productsCount(): int
-    {
-        return $this->count();
     }
 
     /**

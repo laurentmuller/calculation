@@ -19,7 +19,6 @@ use App\Faker\Factory;
 use App\Faker\ProductProvider;
 use App\Repository\ProductRepository;
 use App\Utils\FormatUtils;
-use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -112,7 +111,7 @@ class ProductProviderTest extends TestCase
             ->setUnit('unit');
         $provider = $this->createProvider($entity);
 
-        $actual = $provider->productsCount();
+        $actual = \count($provider);
         self::assertSame(1, $actual);
 
         $actual = $provider->product();
@@ -129,7 +128,7 @@ class ProductProviderTest extends TestCase
     {
         $provider = $this->createProvider();
 
-        $actual = $provider->productsCount();
+        $actual = \count($provider);
         self::assertSame(0, $actual);
 
         $actual = $provider->product();
@@ -158,22 +157,15 @@ class ProductProviderTest extends TestCase
         $repository = $this->createMock(ProductRepository::class);
         $repository->method('findBy')
             ->willReturn($entities);
-
         $repository->method('findOneBy')
             ->willReturn($entity);
-
         $repository->method('findAll')
             ->willReturn($entities);
-
         $repository->method('getDistinctValues')
             ->willReturn($values);
 
-        $manager = $this->createMock(EntityManagerInterface::class);
-        $manager->method('getRepository')
-            ->willReturn($repository);
-
         $generator = Factory::create(FormatUtils::DEFAULT_LOCALE);
 
-        return new ProductProvider($generator, $manager);
+        return new ProductProvider($generator, $repository);
     }
 }

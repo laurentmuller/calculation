@@ -19,10 +19,12 @@ use App\Faker\CustomAddress;
 use App\Faker\CustomCompany;
 use App\Faker\CustomPerson;
 use App\Faker\CustomPhoneNumber;
+use App\Faker\Generator;
 use App\Faker\ProductProvider;
 use App\Faker\UserProvider;
 use App\Service\FakerService;
 use App\Tests\KernelServiceTestCase;
+use Faker\Provider\Base;
 
 class FakerServiceTest extends KernelServiceTestCase
 {
@@ -30,29 +32,26 @@ class FakerServiceTest extends KernelServiceTestCase
     {
         $service = $this->getService(FakerService::class);
         $generator = $service->getGenerator();
-        /** @psalm-var object[] $providers */
-        $providers = $generator->getProviders();
-        self::assertNotEmpty($providers);
-        self::assertProviderExist($providers, CustomPerson::class);
-        self::assertProviderExist($providers, CustomCompany::class);
-        self::assertProviderExist($providers, CustomAddress::class);
-        self::assertProviderExist($providers, CustomPhoneNumber::class);
-        self::assertProviderExist($providers, UserProvider::class);
-        self::assertProviderExist($providers, ProductProvider::class);
-        self::assertProviderExist($providers, CategoryProvider::class);
-        self::assertProviderExist($providers, CalculationStateProvider::class);
+
+        self::assertProviderExist($generator, CustomPerson::class);
+        self::assertProviderExist($generator, CustomCompany::class);
+        self::assertProviderExist($generator, CustomAddress::class);
+        self::assertProviderExist($generator, CustomPhoneNumber::class);
+        self::assertProviderExist($generator, UserProvider::class);
+        self::assertProviderExist($generator, ProductProvider::class);
+        self::assertProviderExist($generator, CategoryProvider::class);
+        self::assertProviderExist($generator, CalculationStateProvider::class);
     }
 
     /**
-     * @psalm-param object[] $providers
+     * @template TProvider of Base
+     *
+     * @param class-string<TProvider> $class
      */
-    protected static function assertProviderExist(array $providers, string $class): void
+    protected static function assertProviderExist(Generator $generator, string $class): void
     {
-        foreach ($providers as $provider) {
-            if ($provider::class === $class) {
-                return;
-            }
-        }
-        self::fail("Unable to find the $class provider");
+        $provider = $generator->getProvider($class);
+        self::assertNotNull($provider);
+        self::assertInstanceOf($class, $provider);
     }
 }

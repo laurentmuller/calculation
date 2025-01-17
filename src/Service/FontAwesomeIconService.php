@@ -68,7 +68,6 @@ class FontAwesomeIconService
         'fa-stack', // Used on a parent HTML element of the two icons to be stacked
         'fa-stack-1x', // Used on the icon, which should be displayed at base size when stacked
         'fa-stack-2x', // Used on the icon, which should be displayed larger when stacked
-        'fa-inverse', // Inverts the color of the icon displayed at base size when stacked
         // Duotone Icons
         'fa-swap-opacity', // Swap the default opacity of each layer in a duotone icon
         // Accessibility
@@ -97,21 +96,25 @@ class FontAwesomeIconService
             return null;
         }
 
-        return match (true) {
-            $this->isFolder($parts[0]) => \sprintf(
+        if ($this->isFolder($parts[0])) {
+            return \sprintf(
                 '%s/%s%s',
                 $parts[0],
                 $parts[1],
                 FontAwesomeImageService::SVG_EXTENSION
-            ),
-            $this->isFolder($parts[1]) => \sprintf(
+            );
+        }
+
+        if ($this->isFolder($parts[1])) {
+            return \sprintf(
                 '%s/%s%s',
                 $parts[1],
                 $parts[0],
                 FontAwesomeImageService::SVG_EXTENSION
-            ),
-            default => null,
-        };
+            );
+        }
+
+        return null;
     }
 
     private function isFolder(string $name): bool

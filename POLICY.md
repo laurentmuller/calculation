@@ -111,7 +111,7 @@ Le fournisseur utilise les données recueillies à des diverses fins :
 Les informations vous concernant, notamment vos données à caractère personnel,
 peuvent être transférées de votre région, votre province, votre pays, ou toute
 autre division territoriale vers des ordinateurs – et stockées sur ces derniers
-– situés à un endroit où la législation relative à la protection des données 
+– situés à un endroit où la législation relative à la protection des données
 diffère de celle du territoire où vous résidez.
 
 Si vous résidez hors de Suisse et que vous choisissez de nous communiquer des

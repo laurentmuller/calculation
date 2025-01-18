@@ -8,6 +8,8 @@ php bin/console lint:xliff translations                                         
 php bin/console lint:container                                                           && ^
 php bin/console doctrine:schema:validate --skip-sync --no-interaction                    && ^
 composer validate --strict                                                               && ^
+ECHO ----- MARKDOWN -------------------------------------------------------------------- && ^
+markdownlint-cli2                                                                        && ^
 ECHO ----- PHP-CS-FIXER ---------------------------------------------------------------- && ^
 .\vendor-bin\php-cs-fixer\vendor\bin\php-cs-fixer.bat fix --diff --dry-run               && ^
 ECHO ----- PHP-PSALM ------------------------------------------------------------------- && ^

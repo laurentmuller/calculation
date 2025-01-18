@@ -192,8 +192,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * Finds or create a calculation category for the given category.
      *
      * @param Category $category the category to find
-     *
-     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function findCategory(Category $category): CalculationCategory
     {
@@ -204,7 +202,11 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
         // find category
         $code = $category->getCode();
-        /** @psalm-var CalculationCategory|null $first */
+        /**
+         * @psalm-suppress MixedArgumentTypeCoercion
+         *
+         * @psalm-var CalculationCategory|null $first
+         */
         $first = $group->getCategories()->findFirst(
             fn (int $key, CalculationCategory $category): bool => $code === $category->getCode()
         );
@@ -223,14 +225,16 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * Finds or create a calculation group for the given group.
      *
      * @param Group $group the group to find
-     *
-     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function findGroup(Group $group): CalculationGroup
     {
         // find the group
         $code = $group->getCode();
-        /** @psalm-var CalculationGroup|null $first */
+        /**
+         * @psalm-suppress MixedArgumentTypeCoercion
+         *
+         * @psalm-var CalculationGroup|null $first
+         */
         $first = $this->groups->findFirst(
             fn (int $key, CalculationGroup $group): bool => $code === $group->getCode()
         );
@@ -907,8 +911,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * @psalm-param TValue $initial
      *
      * @psalm-return TValue
-     *
-     * @psalm-suppress MixedArgumentTypeCoercion
      */
     private function reduceGroups(\Closure $func, mixed $initial): mixed
     {
@@ -916,7 +918,11 @@ class Calculation extends AbstractEntity implements TimestampableInterface
             return $initial;
         }
 
-        /** @psalm-var TValue */
+        /**
+         * @psalm-suppress MixedArgumentTypeCoercion
+         *
+         * @psalm-var TValue
+         */
         return $this->groups->reduce($func, $initial);
     }
 

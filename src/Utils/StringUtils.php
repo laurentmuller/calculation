@@ -191,13 +191,11 @@ final class StringUtils
      *
      * @psalm-param non-empty-string $pattern
      * @psalm-param int-mask<256, 512> $flags
-     *
-     * @psalm-suppress ReferenceConstraintViolation
      */
     public static function pregMatch(string $pattern, string $subject, ?array &$matches = null, int $flags = 0, int $offset = 0): bool
     {
-        /** @phpstan-ignore paramOut.type */
-        return 1 === \preg_match($pattern, $subject, $matches, $flags, $offset);
+        /** @psalm-suppress ReferenceConstraintViolation */
+        return 1 === \preg_match($pattern, $subject, $matches, $flags, $offset); // @phpstan-ignore paramOut.type
     }
 
     /**
@@ -215,14 +213,13 @@ final class StringUtils
      *
      * @psalm-param non-empty-string $pattern
      * @psalm-param int-mask<1, 2, 256, 512> $flags
-     *
-     * @psalm-suppress ReferenceConstraintViolation
      */
     public static function pregMatchAll(string $pattern, string $subject, ?array &$matches = null, int $flags = 0, int $offset = 0): bool
     {
         /** @phpstan-ignore paramOut.type */
         $result = \preg_match_all($pattern, $subject, $matches, $flags, $offset);
 
+        /** @psalm-suppress ReferenceConstraintViolation */
         return \is_int($result) && $result > 0;
     }
 

@@ -73,8 +73,6 @@ class DatabaseInfoService
      * Gets the database information.
      *
      * @return array<string, string>
-     *
-     * @psalm-suppress InternalMethod
      */
     public function getDatabase(): array
     {
@@ -82,7 +80,11 @@ class DatabaseInfoService
             $this->database = [];
 
             try {
-                /** @noinspection PhpInternalEntityUsedInspection */
+                /**
+                 * @noinspection PhpInternalEntityUsedInspection
+                 *
+                 * @psalm-suppress InternalMethod
+                 */
                 $params = $this->getConnection()->getParams();
                 foreach (['dbname', 'host', 'port', 'driver', 'serverVersion', 'charset'] as $key) {
                     $value = $params[$key] ?? null;

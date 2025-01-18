@@ -83,8 +83,8 @@ class CalculationService
     public const ROW_USER_MARGIN = 5;
 
     public function __construct(
-        private readonly GlobalMarginRepository $globalRepository,
-        private readonly GroupMarginRepository $marginRepository,
+        private readonly GlobalMarginRepository $globalMarginRepository,
+        private readonly GroupMarginRepository $groupMarginRepository,
         private readonly GroupRepository $groupRepository,
         private readonly ApplicationService $service,
         private readonly TranslatorInterface $translator,
@@ -163,7 +163,7 @@ class CalculationService
             }
 
             $id = $group->id;
-            $targetGroup = $this->findGroup($id);
+            $targetGroup = $this->findGroupFromRepository($id);
             if (!$targetGroup instanceof Group) {
                 continue;
             }
@@ -194,8 +194,9 @@ class CalculationService
         $overall_margin = $last_group['margin'];
         $overall_below = !$this->isFloatZero($overall_total) && $this->service->isMarginBelow($overall_margin);
 
-        if ($query->adjust && $overall_below && $this->adjustUserMargin($groups)) {
-            $user_group = $this->findOrCreateGroup($groups, self::ROW_USER_MARGIN);
+        if ($query->adjust && $overall_below) {
+            $this->adjustUserMargin($groups);
+            $user_group = $this->findGroupFromArray($groups, self::ROW_USER_MARGIN);
             $user_margin = $user_group['margin'];
             $overall_below = false;
         }
@@ -267,23 +268,22 @@ class CalculationService
     }
 
     /**
-     * Finds or create a group for the given identifier.
+     * Finds a group for the given identifier.
      *
      * @psalm-param GroupType[] $groups
      *
      * @psalm-return GroupType
+     *
+     * @throws \LogicException if the group is not found
      */
-    private function &findOrCreateGroup(array &$groups, int $id): array
+    private function &findGroupFromArray(array &$groups, int $id): array
     {
         foreach ($groups as &$group) {
             if ($group['id'] === $id) {
                 return $group;
             }
         }
-        $newGroup = $this->createGroup($id, $this->trans('common.value_unknown'));
-        $groups[] = $newGroup;
-
-        return $newGroup;
+        throw new \LogicException(\sprintf('Group "%d" not found.', $id));
     }
 
     /**
@@ -293,28 +293,25 @@ class CalculationService
      *
      * @psalm-suppress UnsupportedReferenceUsage
      */
-    private function adjustUserMargin(array &$groups): bool
+    private function adjustUserMargin(array &$groups): void
     {
-        $total_group = &$this->findOrCreateGroup($groups, self::ROW_TOTAL_GROUP);
-        $net_group = &$this->findOrCreateGroup($groups, self::ROW_TOTAL_NET);
-        $user_group = &$this->findOrCreateGroup($groups, self::ROW_USER_MARGIN);
-        $overall_group = &$this->findOrCreateGroup($groups, self::ROW_OVERALL_TOTAL);
+        $total_group = &$this->findGroupFromArray($groups, self::ROW_TOTAL_GROUP);
+        $net_group = &$this->findGroupFromArray($groups, self::ROW_TOTAL_NET);
+        $user_group = &$this->findGroupFromArray($groups, self::ROW_USER_MARGIN);
+        $overall_group = &$this->findGroupFromArray($groups, self::ROW_OVERALL_TOTAL);
+
         $min_margin = $this->service->getMinMargin();
         $total_amount = $total_group['amount'];
         $net_total = $net_group['total'];
-        if ($this->isFloatZero($net_total) || $this->isFloatZero($total_amount)) {
-            return false;
-        }
-
         $user_margin = (($total_amount * $min_margin) - $net_total) / $net_total;
         $user_margin = $this->ceil($user_margin);
+
         $user_group['margin'] = $user_margin;
         $user_group['total'] = $net_total * $user_margin;
+
         $overall_group['total'] = $net_total + $user_group['total'];
         $overall_group['margin'] = $this->floor($overall_group['total'] / $total_amount);
         $overall_group['margin_amount'] = $overall_group['total'] - $total_amount;
-
-        return true;
     }
 
     private function ceil(float $value): float
@@ -407,10 +404,10 @@ class CalculationService
     /**
      * @psalm-return ParametersType
      */
-    private function createEmptyParameters(bool $result = true): array
+    private function createEmptyParameters(): array
     {
         return [
-            'result' => $result,
+            'result' => true,
             'overall_below' => false,
             'overall_margin' => 0.0,
             'overall_total' => 0.0,
@@ -450,7 +447,7 @@ class CalculationService
     /**
      * Find a group for the given identifier.
      */
-    private function findGroup(int $id): ?Group
+    private function findGroupFromRepository(int $id): ?Group
     {
         return $this->groupRepository->find($id);
     }
@@ -468,7 +465,7 @@ class CalculationService
     private function getGlobalMargin(float $amount): float
     {
         if (!$this->isFloatZero($amount)) {
-            return $this->globalRepository->getMargin($amount);
+            return $this->globalMarginRepository->getMargin($amount);
         }
 
         return $amount;
@@ -481,15 +478,13 @@ class CalculationService
      */
     private function getGroupMargin(Group $group, float $amount): float
     {
-        if (0.0 !== $amount) {
-            return $this->marginRepository->getMargin($group, $amount);
-        }
-
-        return 0;
+        return $this->groupMarginRepository->getMargin($group, $amount);
     }
 
     /**
      * Gets groups total amount.
+     *
+     * @psalm-param GroupType[] $groups
      */
     private function getGroupsAmount(array $groups): float
     {
@@ -503,6 +498,8 @@ class CalculationService
 
     /**
      * Gets groups total margin amount.
+     *
+     * @psalm-param GroupType[] $groups
      */
     private function getGroupsMargin(array $groups): float
     {

@@ -127,8 +127,6 @@ abstract class AbstractController extends BaseController
      * Gets the request stack.
      *
      * @throws \LogicException if the service cannot be found
-     *
-     * @psalm-suppress MixedAssignment
      */
     public function getRequestStack(): RequestStack
     {
@@ -137,7 +135,11 @@ abstract class AbstractController extends BaseController
         }
 
         try {
-            /** @psalm-var RequestStack */
+            /**
+             * @psalm-suppress MixedAssignment
+             *
+             * @psalm-var RequestStack
+             */
             return $this->requestStack = $this->container->get('request_stack');
         } catch (ContainerExceptionInterface $e) {
             throw new \LogicException($e->getMessage(), $e->getCode(), $e);

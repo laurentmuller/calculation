@@ -74,8 +74,6 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
 
     /**
      * @psalm-param CalculationByMonthType[] $entities
-     *
-     * @psalm-suppress PropertyTypeCoercion
      */
     public function __construct(
         AbstractController $controller,
@@ -86,6 +84,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         parent::__construct($controller, $entities, $orientation);
         $this->setTitleTrans('chart.month.title');
         $this->minMargin = $controller->getMinMargin();
+        /** @psalm-suppress PropertyTypeCoercion */
         $this->colors = new \WeakMap();
     }
 

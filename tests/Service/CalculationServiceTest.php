@@ -315,16 +315,15 @@ class CalculationServiceTest extends KernelServiceTestCase
         ?float $groupMargin = null,
         ?float $globalMargin = null,
     ): CalculationService {
-        // get services
-        $globalRepository = $this->createGlobalMarginRepository($globalMargin);
-        $marginRepository = $this->createGroupMarginRepository($groupMargin);
+        $globalMarginRepository = $this->createGlobalMarginRepository($globalMargin);
+        $groupMarginRepository = $this->createGroupMarginRepository($groupMargin);
         $groupRepository = $this->createGroupRepository($group);
         $application = $this->getService(ApplicationService::class);
         $translator = $this->createMockTranslator();
 
         return new CalculationService(
-            $globalRepository,
-            $marginRepository,
+            $globalMarginRepository,
+            $groupMarginRepository,
             $groupRepository,
             $application,
             $translator

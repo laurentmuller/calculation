@@ -24,6 +24,7 @@ use App\Table\DataQuery;
 use App\Table\LogTable;
 use App\Table\SearchTable;
 use App\Traits\CookieTrait;
+use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -137,8 +138,6 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
 
     /**
      * @psalm-param InputBag<string> $inputBag
-     *
-     * @psalm-suppress PropertyTypeCoercion
      */
     private function updateQuery(DataQuery $query, InputBag $inputBag): void
     {
@@ -150,8 +149,7 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
                 TableInterface::PARAM_ID => $query->id = $inputBag->getInt($key),
                 TableInterface::PARAM_SEARCH => $query->search = $inputBag->getString($key),
                 TableInterface::PARAM_SORT => $query->sort = $inputBag->getString($key),
-                // @phpstan-ignore assign.propertyType
-                TableInterface::PARAM_ORDER => $query->order = $inputBag->getString($key),
+                TableInterface::PARAM_ORDER => $query->order = $this->validateOrder($inputBag->getString($key)),
                 TableInterface::PARAM_OFFSET => $query->offset = $inputBag->getInt($key),
                 TableInterface::PARAM_LIMIT => $query->limit = $inputBag->getInt($key),
                 TableInterface::PARAM_VIEW => $query->view = $inputBag->getEnum($key, TableView::class, $query->view),
@@ -165,6 +163,14 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
                 default => throw new BadRequestHttpException(\sprintf('Invalid parameter "%s".', $key)),
             };
         }
+    }
+
+    /**
+     * @psalm-return self::SORT_*
+     */
+    private function validateOrder(string $order): string
+    {
+        return StringUtils::equalIgnoreCase(self::SORT_DESC, $order) ? self::SORT_DESC : self::SORT_ASC;
     }
 
     /**

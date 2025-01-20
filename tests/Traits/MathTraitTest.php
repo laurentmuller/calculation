@@ -21,6 +21,20 @@ class MathTraitTest extends TestCase
 {
     use MathTrait;
 
+    public static function getCeil(): \Iterator
+    {
+        yield [4.3, 4.30];
+        yield [9.999, 10.0];
+        yield [-3.14, -3.14];
+    }
+
+    public static function getFloor(): \Iterator
+    {
+        yield [4.3, 4.30];
+        yield [9.999, 9.99];
+        yield [-3.14, -3.14];
+    }
+
     public static function getIsBitSet(): \Iterator
     {
         yield [31, 1];
@@ -96,6 +110,20 @@ class MathTraitTest extends TestCase
         yield [50,  0, 100, 50];
         yield [-1,  0, 100, 0];
         yield [101,  0, 100, 100];
+    }
+
+    #[DataProvider('getCeil')]
+    public function testCeil(float $value, float $expected): void
+    {
+        $actual = $this->ceil($value);
+        self::assertSame($expected, $actual);
+    }
+
+    #[DataProvider('getFloor')]
+    public function testFloor(float $value, float $expected): void
+    {
+        $actual = $this->floor($value);
+        self::assertSame($expected, $actual);
     }
 
     #[DataProvider('getIsBitSet')]

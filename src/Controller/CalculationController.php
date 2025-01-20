@@ -249,7 +249,7 @@ class CalculationController extends AbstractEntityController
         $parameters['empty_items'] = $item->hasEmptyItems();
         $parameters['duplicate_items'] = $item->hasDuplicateItems();
         $parameters['overall_below'] = $this->isMarginBelow($item);
-        $parameters['groups'] = $this->service->createGroupsFromCalculation($item);
+        $parameters['groups'] = $this->service->createGroups($item);
         $parameters['editable'] = $item->isEditable();
         if ($item->isEditable()) {
             $parameters['group_index'] = $item->getGroupsCount();

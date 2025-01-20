@@ -22,13 +22,13 @@ class ConstantExtensionTest extends TestCase
 {
     public static function getCalculationServiceConstants(): \Iterator
     {
-        yield ['ROW_EMPTY', 0];
-        yield ['ROW_GROUP', 1];
-        yield ['ROW_TOTAL_GROUP', 2];
-        yield ['ROW_GLOBAL_MARGIN', 3];
-        yield ['ROW_TOTAL_NET', 4];
-        yield ['ROW_USER_MARGIN', 5];
-        yield ['ROW_OVERALL_TOTAL', 6];
+        yield ['ROW_EMPTY', -1];
+        yield ['ROW_GROUP', -2];
+        yield ['ROW_TOTAL_GROUP', -3];
+        yield ['ROW_GLOBAL_MARGIN', -4];
+        yield ['ROW_TOTAL_NET', -5];
+        yield ['ROW_USER_MARGIN', -6];
+        yield ['ROW_OVERALL_TOTAL', -7];
     }
 
     public static function getEntityVoterConstants(): \Iterator

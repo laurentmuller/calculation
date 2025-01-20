@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Interfaces\EnumConstantsInterface;
+use App\Interfaces\ConstantsInterface;
 use App\Interfaces\EnumSortableInterface;
 use App\Traits\EnumExtrasTrait;
 use App\Utils\StringUtils;
@@ -25,11 +25,11 @@ use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
 /**
  * The entity name enumeration.
  *
- * @implements EnumConstantsInterface<string>
+ * @implements ConstantsInterface<string>
  * @implements EnumSortableInterface<EntityName>
  */
 #[ReadableEnum(suffix: '.name')]
-enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface, TranslatableEnumInterface
+enum EntityName: string implements ConstantsInterface, EnumSortableInterface, TranslatableEnumInterface
 {
     use EnumExtrasTrait;
     use TranslatableEnumTrait;

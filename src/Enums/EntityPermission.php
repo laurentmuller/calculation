@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Interfaces\EnumConstantsInterface;
+use App\Interfaces\ConstantsInterface;
 use App\Interfaces\EnumSortableInterface;
 use App\Utils\StringUtils;
 use Elao\Enum\Attribute\EnumCase;
@@ -25,11 +25,11 @@ use Elao\Enum\FlagBag;
 /**
  * Entity permission enumeration.
  *
- * @implements EnumConstantsInterface<string>
+ * @implements ConstantsInterface<string>
  * @implements EnumSortableInterface<EntityPermission>
  */
 #[ReadableEnum(prefix: 'rights.')]
-enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterface, TranslatableEnumInterface
+enum EntityPermission: int implements ConstantsInterface, EnumSortableInterface, TranslatableEnumInterface
 {
     use TranslatableEnumTrait;
 
@@ -91,11 +91,6 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
      */
     public static function getAllPermission(): FlagBag
     {
-        /**
-         * @psalm-suppress InvalidArgument
-         *
-         * @psalm-var FlagBag<EntityPermission>
-         */
         return FlagBag::from(...EntityPermission::sorted());
     }
 
@@ -106,11 +101,6 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
      */
     public static function getDefaultPermission(): FlagBag
     {
-        /**
-         * @psalm-suppress InvalidArgument
-         *
-         * @psalm-var FlagBag<EntityPermission>
-         */
         return FlagBag::from(
             EntityPermission::LIST,
             EntityPermission::EXPORT,
@@ -121,7 +111,7 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
     /**
      * Gets a flag bag with no permission.
      *
-     * @psalm-return FlagBag<EntityPermission>
+     * @return FlagBag<EntityPermission>
      */
     public static function getNonePermission(): FlagBag
     {

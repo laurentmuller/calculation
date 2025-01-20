@@ -46,7 +46,7 @@ class AjaxCalculationController extends AbstractController
         CalculationQuery $query = new CalculationQuery()
     ): JsonResponse {
         try {
-            $parameters = $service->createGroupsFromQuery($query);
+            $parameters = $service->createParameters($query);
             if (!$parameters['result']) {
                 return $this->json($parameters);
             }

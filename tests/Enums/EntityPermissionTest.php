@@ -180,15 +180,10 @@ class EntityPermissionTest extends TestCase
     }
 
     /**
-     * @psalm-return FlagBag<EntityPermission>
-     *
-     * @psalm-suppress InvalidArgument
+     * @return FlagBag<EntityPermission>
      */
     private function fromAll(): FlagBag
     {
-        /** @psalm-var FlagBag<EntityPermission> $flagBag */
-        $flagBag = FlagBag::fromAll(EntityPermission::class); // @phpstan-ignore varTag.type
-
-        return $flagBag;
+        return FlagBag::fromAll(EntityPermission::class);
     }
 }

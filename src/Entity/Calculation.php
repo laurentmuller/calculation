@@ -17,6 +17,7 @@ use App\Interfaces\SortModeInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Repository\CalculationRepository;
 use App\Traits\CollectionTrait;
+use App\Traits\MathTrait;
 use App\Traits\TimestampableTrait;
 use App\Types\FixedFloatType;
 use App\Utils\FormatUtils;
@@ -35,6 +36,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Calculation extends AbstractEntity implements TimestampableInterface
 {
     use CollectionTrait;
+    use MathTrait;
     use TimestampableTrait;
 
     /**
@@ -491,7 +493,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     {
         $value = $this->safeDivide($this->overallTotal, $this->itemsTotal);
 
-        return \floor($value * 100.0) / 100.0;
+        return $this->floor($value);
     }
 
     /**

@@ -15,6 +15,7 @@ namespace App\Twig;
 
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
+use App\Interfaces\ConstantsInterface;
 use App\Service\CalculationService;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -23,8 +24,10 @@ use Twig\Extension\GlobalsInterface;
 
 /**
  * Twig extension to access global constants.
+ *
+ * @implements ConstantsInterface<string>
  */
-final class ConstantExtension extends AbstractExtension implements GlobalsInterface
+final class ConstantExtension extends AbstractExtension implements ConstantsInterface, GlobalsInterface
 {
     public function __construct(
         #[Target('calculation.constant')]
@@ -32,15 +35,10 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     ) {
     }
 
-    public function getGlobals(): array
-    {
-        return $this->cache->get('twig_constant_extension', fn (): array => $this->loadValues());
-    }
-
     /**
      * @psalm-return array<string, string>
      */
-    private function getIcons(): array
+    public static function constants(): array
     {
         return [
             // entity
@@ -67,13 +65,18 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
         ];
     }
 
+    public function getGlobals(): array
+    {
+        return $this->cache->get('twig_constant_extension', fn (): array => $this->loadValues());
+    }
+
     /**
      * @psalm-return array<string, string|int>
      */
     private function loadValues(): array
     {
         return \array_merge(
-            $this->getIcons(),
+            self::constants(),
             EntityName::constants(),
             EntityPermission::constants(),
             CalculationService::constants()

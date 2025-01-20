@@ -70,7 +70,7 @@ class CalculationServiceTest extends KernelServiceTestCase
         $group = $this->createGroup();
         $group->addMargin($groupMargin);
         $service = $this->createCalculationService($group, 1.0, 1.1);
-        $actual = $service->createGroupsFromQuery($query);
+        $actual = $service->createParameters($query);
         self::assertCount(7, $actual);
     }
 
@@ -85,27 +85,26 @@ class CalculationServiceTest extends KernelServiceTestCase
         $calculation = new Calculation();
 
         $service = $this->createCalculationService();
-        $actual = $service->createGroupsFromCalculation($calculation);
+        $actual = $service->createGroups($calculation);
         self::assertCount(1, $actual);
         self::assertArrayHasKey(0, $actual);
 
         $row = $actual[0];
-        self::assertArrayHasKey('id', $row);
-        self::assertSame(0, $row['id']);
+        self::assertSame(-1, $row['id']);
         self::assertSame(0.0, $row['amount']);
-        self::assertSame(0.0, $row['margin']);
+        self::assertSame(0.0, $row['margin_percent']);
         self::assertSame(0.0, $row['margin_amount']);
         self::assertSame(0.0, $row['total']);
 
         $calculation = new Calculation();
         $calculation->addProduct($product, self::QUANTITY);
-        $actual = $service->createGroupsFromCalculation($calculation);
+        $actual = $service->createGroups($calculation);
         self::assertCount(6, $actual);
 
         $calculation = new Calculation();
         $calculation->addProduct($product, self::QUANTITY)
             ->setUserMargin(self::MARGIN_USER);
-        $actual = $service->createGroupsFromCalculation($calculation);
+        $actual = $service->createGroups($calculation);
         self::assertCount(6, $actual);
     }
 
@@ -116,9 +115,8 @@ class CalculationServiceTest extends KernelServiceTestCase
     {
         $query = new CalculationQuery();
         $service = $this->createCalculationService();
-        $actual = $service->createGroupsFromQuery($query);
+        $actual = $service->createParameters($query);
         self::assertCount(7, $actual);
-        self::assertArrayHasKey('groups', $actual);
         self::assertCount(1, $actual['groups']);
     }
 
@@ -137,10 +135,8 @@ class CalculationServiceTest extends KernelServiceTestCase
 
         $group = $this->createGroup();
         $service = $this->createCalculationService($group);
-        $actual = $service->createGroupsFromQuery($query);
+        $actual = $service->createParameters($query);
         self::assertCount(7, $actual);
-        self::assertCount(7, $actual);
-        self::assertArrayHasKey('groups', $actual);
         self::assertCount(6, $actual['groups']);
     }
 
@@ -157,10 +153,8 @@ class CalculationServiceTest extends KernelServiceTestCase
 
         $group = $this->createGroup();
         $service = $this->createCalculationService($group);
-        $actual = $service->createGroupsFromQuery($query);
+        $actual = $service->createParameters($query);
         self::assertCount(7, $actual);
-        self::assertCount(7, $actual);
-        self::assertArrayHasKey('groups', $actual);
         self::assertCount(1, $actual['groups']);
     }
 
@@ -178,10 +172,8 @@ class CalculationServiceTest extends KernelServiceTestCase
         );
 
         $service = $this->createCalculationService();
-        $actual = $service->createGroupsFromQuery($query);
+        $actual = $service->createParameters($query);
         self::assertCount(7, $actual);
-        self::assertCount(7, $actual);
-        self::assertArrayHasKey('groups', $actual);
         self::assertCount(1, $actual['groups']);
     }
 
@@ -200,10 +192,8 @@ class CalculationServiceTest extends KernelServiceTestCase
 
         $group = $this->createGroup();
         $service = $this->createCalculationService($group);
-        $actual = $service->createGroupsFromQuery($query);
+        $actual = $service->createParameters($query);
         self::assertCount(7, $actual);
-        self::assertCount(7, $actual);
-        self::assertArrayHasKey('groups', $actual);
         self::assertCount(1, $actual['groups']);
     }
 
@@ -213,29 +203,20 @@ class CalculationServiceTest extends KernelServiceTestCase
         self::assertCount(7, $constants);
 
         self::assertArrayHasKey('ROW_EMPTY', $constants);
-        self::assertArrayHasKey('ROW_GLOBAL_MARGIN', $constants);
         self::assertArrayHasKey('ROW_GROUP', $constants);
-        self::assertArrayHasKey('ROW_OVERALL_TOTAL', $constants);
         self::assertArrayHasKey('ROW_TOTAL_GROUP', $constants);
+        self::assertArrayHasKey('ROW_GLOBAL_MARGIN', $constants);
         self::assertArrayHasKey('ROW_TOTAL_NET', $constants);
         self::assertArrayHasKey('ROW_USER_MARGIN', $constants);
+        self::assertArrayHasKey('ROW_OVERALL_TOTAL', $constants);
 
-        self::assertSame(0, $constants['ROW_EMPTY']);
-        self::assertSame(3, $constants['ROW_GLOBAL_MARGIN']);
-        self::assertSame(1, $constants['ROW_GROUP']);
-        self::assertSame(6, $constants['ROW_OVERALL_TOTAL']);
-        self::assertSame(2, $constants['ROW_TOTAL_GROUP']);
-        self::assertSame(4, $constants['ROW_TOTAL_NET']);
-        self::assertSame(5, $constants['ROW_USER_MARGIN']);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testGetMinMargin(): void
-    {
-        $service = $this->createCalculationService();
-        self::assertSame(1.1, $service->getMinMargin());
+        self::assertSame(-1, $constants['ROW_EMPTY']);
+        self::assertSame(-2, $constants['ROW_GROUP']);
+        self::assertSame(-3, $constants['ROW_TOTAL_GROUP']);
+        self::assertSame(-4, $constants['ROW_GLOBAL_MARGIN']);
+        self::assertSame(-5, $constants['ROW_TOTAL_NET']);
+        self::assertSame(-6, $constants['ROW_USER_MARGIN']);
+        self::assertSame(-7, $constants['ROW_OVERALL_TOTAL']);
     }
 
     /**

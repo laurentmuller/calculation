@@ -21,6 +21,22 @@ use App\Utils\FormatUtils;
 trait MathTrait
 {
     /**
+     * Round fractions up with 2 digits.
+     */
+    protected function ceil(float $value): float
+    {
+        return \ceil($value * 100.0) / 100.0;
+    }
+
+    /**
+     * Round fractions down with 2 digits.
+     */
+    protected function floor(float $value): float
+    {
+        return \floor($value * 100.0) / 100.0;
+    }
+
+    /**
      * Checks if the given value contains the bit mask.
      *
      * @param int $value the value to be tested

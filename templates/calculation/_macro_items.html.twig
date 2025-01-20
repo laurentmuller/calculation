@@ -52,7 +52,7 @@
             </div>
         </td>
     {% else %}
-        <td class=" text-cell ps-3">{{ item.description.vars.value }}</td>
+        <td class="text-description text-cell ps-3">{{ item.description.vars.value }}</td>
         <td class="text-unit">{{ item.unit.vars.value }}</td>
         <td class="text-currency">{{ item.price.vars.value|amount }}</td>
         <td class="text-currency">{{ item.quantity.vars.value|amount }}</td>

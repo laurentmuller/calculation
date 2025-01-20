@@ -65,14 +65,9 @@ class RightsTraitTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @psalm-suppress InvalidPropertyAssignmentValue
-     * @psalm-suppress InvalidArgument
-     */
     public function testIsSet(): void
     {
         self::assertFalse($this->__isset('fake'));
-        // @phpstan-ignore assign.propertyType
         $this->LogRights = FlagBag::fromAll(EntityPermission::class);
         self::assertTrue($this->__isset('LogRights'));
     }
@@ -104,7 +99,6 @@ class RightsTraitTest extends TestCase
 
     /**
      * @psalm-suppress InvalidPropertyAssignmentValue
-     * @psalm-suppress InvalidArgument
      * @psalm-suppress UndefinedThisPropertyAssignment
      */
     public function testSetInvalid(): void
@@ -112,7 +106,6 @@ class RightsTraitTest extends TestCase
         self::assertSame(0, $this->getPermission(EntityName::LOG)->getValue());
         $this->__set('LogRights', null);
         self::assertSame(0, $this->getPermission(EntityName::LOG)->getValue());
-        // @phpstan-ignore argument.type
         $this->__set('fake', FlagBag::fromAll(EntityPermission::class));
         self::assertSame(0, $this->getPermission(EntityName::LOG)->getValue());
     }

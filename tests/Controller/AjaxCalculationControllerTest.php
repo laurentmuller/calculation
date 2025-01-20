@@ -79,10 +79,8 @@ class AjaxCalculationControllerTest extends ControllerTestCase
             'groups' => [],
         ];
         $service = $this->createMock(CalculationService::class);
-        $service->method('createGroupsFromQuery')
+        $service->method('createParameters')
             ->willReturn($data);
-        //        $service->method('adjustUserMargin')
-        //            ->willReturn($data);
         $this->setService(CalculationService::class, $service);
 
         $parameters = [
@@ -105,7 +103,7 @@ class AjaxCalculationControllerTest extends ControllerTestCase
     public function testUpdateWithException(): void
     {
         $service = $this->createMock(CalculationService::class);
-        $service->method('createGroupsFromQuery')
+        $service->method('createParameters')
             ->willThrowException(new \Exception('Fake Message'));
         $this->setService(CalculationService::class, $service);
         $this->checkRoute(
@@ -125,7 +123,7 @@ class AjaxCalculationControllerTest extends ControllerTestCase
             'result' => false,
         ];
         $service = $this->createMock(CalculationService::class);
-        $service->method('createGroupsFromQuery')
+        $service->method('createParameters')
             ->willReturn($data);
         $this->setService(CalculationService::class, $service);
 

@@ -18,7 +18,7 @@ namespace App\Interfaces;
  *
  * @template TValue as (string|int)
  */
-interface EnumConstantsInterface
+interface ConstantsInterface
 {
     /**
      * Gets the constant enumerations.

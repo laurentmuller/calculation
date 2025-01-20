@@ -18,6 +18,7 @@ use App\Entity\CalculationGroup;
 use App\Entity\Group;
 use App\Interfaces\ConstantsInterface;
 use App\Interfaces\EntityInterface;
+use App\Model\CalculationGroupQuery;
 use App\Model\CalculationQuery;
 use App\Repository\GlobalMarginRepository;
 use App\Repository\GroupMarginRepository;
@@ -157,32 +158,7 @@ class CalculationService implements ConstantsInterface
             return $this->createEmptyParameters();
         }
 
-        $groups = [];
-        foreach ($query->groups as $group) {
-            if ($this->isFloatZero($group->total)) {
-                continue;
-            }
-
-            $id = $group->id;
-            $targetGroup = $this->findGroupFromRepository($id);
-            if (!$targetGroup instanceof Group) {
-                continue;
-            }
-
-            if (!\array_key_exists($id, $groups)) {
-                $groups[$id] = $this->createGroup(self::ROW_GROUP, $targetGroup);
-            }
-
-            $current = &$groups[$id];
-            $amount = $current['amount'] + $group->total;
-            $margin_percent = $this->getGroupMargin($targetGroup, $amount);
-            $total = $this->round($margin_percent * $amount);
-            $current['amount'] = $amount;
-            $current['margin_percent'] = $margin_percent;
-            $current['margin_amount'] = $total - $amount;
-            $current['total'] = $total;
-        }
-
+        $groups = $this->convertQueryGroups($query->groups);
         if ([] === $groups) {
             return $this->createEmptyParameters();
         }
@@ -195,7 +171,7 @@ class CalculationService implements ConstantsInterface
         $overall_below = !$this->isFloatZero($overall_total) && $this->service->isMarginBelow($overall_margin);
 
         if ($query->adjust && $overall_below) {
-            $this->adjustUserMargin($groups);
+            $groups = $this->adjustUserMargin($groups);
             $user_group = $groups[self::ROW_USER_MARGIN];
             $user_margin = $user_group['margin_percent'];
             $overall_below = false;
@@ -214,8 +190,6 @@ class CalculationService implements ConstantsInterface
 
     /**
      * Update the calculation's total.
-     *
-     * @param Calculation $calculation the calculation to update
      *
      * @return bool true if updated; false otherwise
      *
@@ -263,26 +237,28 @@ class CalculationService implements ConstantsInterface
      * Adjust the user margin to have the desired overall minimum margin.
      *
      * @psalm-param GroupType[] $groups
+     *
+     * @psalm-return GroupType[]
      */
-    private function adjustUserMargin(array &$groups): void
+    private function adjustUserMargin(array $groups): array
     {
         $total_group = &$groups[self::ROW_TOTAL_GROUP];
         $total_net_group = &$groups[self::ROW_TOTAL_NET];
         $user_margin_group = &$groups[self::ROW_USER_MARGIN];
         $overall_total_group = &$groups[self::ROW_OVERALL_TOTAL];
 
-        $min_margin = $this->service->getMinMargin();
         $total_amount = $total_group['amount'];
         $net_total = $total_net_group['total'];
-        $user_margin = (($total_amount * $min_margin) - $net_total) / $net_total;
+        $user_margin = (($total_amount * $this->getMinMargin()) - $net_total) / $net_total;
         $user_margin = $this->ceil($user_margin);
-
         $user_margin_group['margin_percent'] = $user_margin;
         $user_margin_group['total'] = $net_total * $user_margin;
 
         $overall_total_group['total'] = $net_total + $user_margin_group['total'];
         $overall_total_group['margin_percent'] = $this->floor($overall_total_group['total'] / $total_amount);
         $overall_total_group['margin_amount'] = $overall_total_group['total'] - $total_amount;
+
+        return $groups;
     }
 
     /**
@@ -353,6 +329,44 @@ class CalculationService implements ConstantsInterface
     }
 
     /**
+     * @param CalculationGroupQuery[] $queryGroups
+     *
+     * @return GroupType[]
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    private function convertQueryGroups(array $queryGroups): array
+    {
+        $groups = [];
+        foreach ($queryGroups as $group) {
+            if ($this->isFloatZero($group->total)) {
+                continue;
+            }
+
+            $id = $group->id;
+            $targetGroup = $this->findGroup($id);
+            if (!$targetGroup instanceof Group) {
+                continue;
+            }
+
+            if (!\array_key_exists($id, $groups)) {
+                $groups[$id] = $this->createGroup(self::ROW_GROUP, $targetGroup);
+            }
+
+            $current = &$groups[$id];
+            $amount = $current['amount'] + $group->total;
+            $margin_percent = $this->getGroupMargin($targetGroup, $amount);
+            $total = $this->round($margin_percent * $amount);
+            $current['amount'] = $amount;
+            $current['margin_percent'] = $margin_percent;
+            $current['margin_amount'] = $total - $amount;
+            $current['total'] = $total;
+        }
+
+        return $groups;
+    }
+
+    /**
      * Creates the group when no data is present.
      *
      * @psalm-return GroupType
@@ -408,7 +422,7 @@ class CalculationService implements ConstantsInterface
     /**
      * Find a group for the given identifier.
      */
-    private function findGroupFromRepository(int $id): ?Group
+    private function findGroup(int $id): ?Group
     {
         return $this->groupRepository->find($id);
     }

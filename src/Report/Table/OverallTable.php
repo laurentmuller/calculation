@@ -17,6 +17,7 @@ use App\Entity\Calculation;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfStyle;
 use App\Report\CalculationReport;
+use App\Traits\MathTrait;
 use fpdf\PdfBorder;
 
 /**
@@ -24,6 +25,8 @@ use fpdf\PdfBorder;
  */
 class OverallTable extends ReportTable
 {
+    use MathTrait;
+
     private readonly Calculation $calculation;
     private readonly float $minMargin;
 
@@ -44,10 +47,10 @@ class OverallTable extends ReportTable
         $totalMargins = $calculation->getGroupsMarginAmount();
         $totalBrut = $totalItems + $totalMargins;
         $globalMargin = $calculation->getGlobalMargin();
-        $globalAmount = $totalBrut * ($globalMargin - 1.0);
+        $globalAmount = $this->round($totalBrut * ($globalMargin - 1.0));
         $totalNet = $totalBrut + $globalAmount;
         $userMargin = $calculation->getUserMargin();
-        $userAmount = $totalNet * $userMargin;
+        $userAmount = $this->round($totalNet * $userMargin);
 
         $this->createColumns()
             ->outputGlobalMargin($globalMargin, $globalAmount)
@@ -114,7 +117,7 @@ class OverallTable extends ReportTable
 
     private function outputUserMargin(float $userMargin, float $userAmount, float $totalNet): self
     {
-        if (0.0 !== $userMargin) {
+        if (!$this->isFloatZero($userMargin)) {
             $this->startHeaderRow()
                 ->addCellTrans('calculation.fields.totalNet', cols: 4)
                 ->addCellAmount($totalNet)

@@ -61,6 +61,31 @@ class CSVReaderTest extends TestCase
         $reader->close();
     }
 
+    public function testReaderWithResource(): void
+    {
+        $resource = \fopen($this->getFileName(), 'r');
+        self::assertIsResource($resource);
+        $reader = new CSVReader($resource);
+        self::assertTrue($reader->isOpen());
+        $reader->close();
+    }
+
+    public function testReaderWithSplFileInfo(): void
+    {
+        $file = new \SplFileInfo($this->getFileName());
+        $reader = new CSVReader($file);
+        self::assertTrue($reader->isOpen());
+        $reader->close();
+    }
+
+    public function testReaderWithString(): void
+    {
+        $file = $this->getFileName();
+        $reader = new CSVReader($file);
+        self::assertTrue($reader->isOpen());
+        $reader->close();
+    }
+
     private function getFileName(): string
     {
         return __DIR__ . '/../files/csv/data.csv';

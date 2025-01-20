@@ -14,13 +14,25 @@ declare(strict_types=1);
 namespace App\Tests\Types;
 
 use App\Types\FixedFloatType;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\DBAL\Types\Type;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class FixedFloatTypeTest extends TestCase
 {
+    /**
+     * @throws Exception
+     */
+    public static function setUpBeforeClass(): void
+    {
+        if (!Type::hasType(FixedFloatType::NAME)) {
+            Type::addType(FixedFloatType::NAME, FixedFloatType::class);
+        }
+    }
+
     public static function getValues(): \Generator
     {
         yield [null, 0.0];
@@ -33,51 +45,56 @@ class FixedFloatTypeTest extends TestCase
     }
 
     /**
-     * @throws ConversionException
-     *
-     * @psalm-suppress InternalMethod
+     * @throws ConversionException|Exception
      */
     #[DataProvider('getValues')]
     public function testConvertToDatabaseValue(mixed $value, float $expected): void
     {
         $platform = new MySQLPlatform();
-        $type = new FixedFloatType();
+        $type = $this->getFixedFloatType();
         $actual = $type->convertToDatabaseValue($value, $platform);
         self::assertSame($expected, $actual);
     }
 
     /**
-     * @throws ConversionException
-     *
-     * @psalm-suppress InternalMethod
+     * @throws ConversionException|Exception
      */
     #[DataProvider('getValues')]
     public function testConvertToPHPValue(mixed $value, float $expected): void
     {
         $platform = new MySQLPlatform();
-        $type = new FixedFloatType();
+        $type = $this->getFixedFloatType();
         $actual = $type->convertToPHPValue($value, $platform);
         self::assertSame($expected, $actual);
     }
 
     /**
-     * @psalm-suppress InternalMethod
+     * @throws Exception
      */
     public function testName(): void
     {
-        $type = new FixedFloatType();
+        /** @psalm-var FixedFloatType $type */
+        $type = $this->getFixedFloatType();
         self::assertSame('fixed_float', $type->getName());
     }
 
     /**
-     * @psalm-suppress InternalMethod
+     * @throws Exception
      */
     public function testSQLDeclaration(): void
     {
         $platform = new MySQLPlatform();
-        $type = new FixedFloatType();
+        $type = $this->getFixedFloatType();
         $actual = $type->getSQLDeclaration([], $platform);
         $expected = "DOUBLE PRECISION DEFAULT '0'";
         self::assertSame($expected, $actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getFixedFloatType(): Type
+    {
+        return Type::getType(FixedFloatType::NAME);
     }
 }

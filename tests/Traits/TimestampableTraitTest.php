@@ -49,19 +49,48 @@ class TimestampableTraitTest extends TestCase implements TimestampableInterface
         return true;
     }
 
-    public function testCreatedMessage(): void
+    public function testCreatedMessageEmpty(): void
     {
         $message = $this->getCreatedMessage();
         $actual = $message->getMessage();
-        self::assertSame('common.entity_created_long', $actual);
+        self::assertSame('common.entity_created', $actual);
 
         $actual = $message->getParameters();
-        self::assertCount(2, $actual);
-        self::assertArrayHasKey('%date%', $actual);
-        self::assertArrayHasKey('%user%', $actual);
+        self::assertCount(1, $actual);
+        self::assertArrayHasKey('%content%', $actual);
 
         $actual = $this->getCreatedMessage(true)->getMessage();
-        self::assertSame('common.entity_created_short', $actual);
+        self::assertSame('common.entity_empty', $actual);
+    }
+
+    public function testCreatedMessageWithValues(): void
+    {
+        $this->createdBy = null;
+        $this->createdAt = new \DateTimeImmutable();
+        $message = $this->getCreatedMessage();
+        $actual = $message->getMessage();
+        self::assertSame('common.entity_created', $actual);
+        $actual = $message->getParameters();
+        self::assertCount(1, $actual);
+
+        $this->createdBy = 'user';
+        $this->createdAt = new \DateTimeImmutable();
+        $message = $this->getCreatedMessage();
+        $actual = $message->getMessage();
+        self::assertSame('common.entity_created', $actual);
+        $actual = $message->getParameters();
+        self::assertCount(1, $actual);
+
+        $this->createdBy = 'user';
+        $this->createdAt = null;
+        $message = $this->getCreatedMessage();
+        $actual = $message->getMessage();
+        self::assertSame('common.entity_created', $actual);
+        $actual = $message->getParameters();
+        self::assertCount(1, $actual);
+
+        $actual = $this->getCreatedMessage(true)->getMessage();
+        self::assertSame('common.entity_date_user', $actual);
     }
 
     public function testDefault(): void
@@ -76,15 +105,43 @@ class TimestampableTraitTest extends TestCase implements TimestampableInterface
     {
         $message = $this->getUpdatedMessage();
         $actual = $message->getMessage();
-        self::assertSame('common.entity_updated_long', $actual);
+        self::assertSame('common.entity_updated', $actual);
 
         $actual = $message->getParameters();
-        self::assertCount(2, $actual);
-        self::assertArrayHasKey('%date%', $actual);
-        self::assertArrayHasKey('%user%', $actual);
+        self::assertCount(1, $actual);
+        self::assertArrayHasKey('%content%', $actual);
 
         $actual = $this->getUpdatedMessage(true)->getMessage();
-        self::assertSame('common.entity_updated_short', $actual);
+        self::assertSame('common.entity_empty', $actual);
+    }
+
+    public function testUpdatedMessageWithValues(): void
+    {
+        $this->updatedBy = null;
+        $this->updatedAt = new \DateTimeImmutable();
+        $message = $this->getUpdatedMessage();
+        $actual = $message->getMessage();
+        self::assertSame('common.entity_updated', $actual);
+        $actual = $message->getParameters();
+        self::assertCount(1, $actual);
+
+        $this->updatedBy = 'user';
+        $this->updatedAt = new \DateTimeImmutable();
+        $actual = $message->getMessage();
+        self::assertSame('common.entity_updated', $actual);
+        $actual = $message->getParameters();
+        self::assertCount(1, $actual);
+
+        $this->updatedBy = 'user';
+        $this->updatedAt = null;
+        $message = $this->getUpdatedMessage();
+        $actual = $message->getMessage();
+        self::assertSame('common.entity_updated', $actual);
+        $actual = $message->getParameters();
+        self::assertCount(1, $actual);
+
+        $actual = $this->getUpdatedMessage(true)->getMessage();
+        self::assertSame('common.entity_date_user', $actual);
     }
 
     public function testUpdateTimestampable(): void

@@ -320,12 +320,12 @@ common:
     delete_message: Êtes-vous sûr de vouloir supprimer l'objet <b>%name%</b> ?
     delete_failure: Impossible de supprimer l'objet <b>%name%</b> de la base de données.
     empty: ''
-    empty_date: Inconnue
-    empty_user: Système
-    entity_created_short: '%date% - %user%'
-    entity_created_long: 'Création : %date% - %user%'
-    entity_updated_short: '%date% - %user%'
-    entity_updated_long: 'Mise à jour : %date% - %user%'
+    entity_empty: Aucune donnée disponible
+    entity_empty_date: Inconnue
+    entity_empty_user: Système
+    entity_date_user: '%date% - %user%'
+    entity_created: 'Création : %content%'
+    entity_updated: 'Mise à jour : %content%'
     hide_password: Masquer le mot de passe
     id: Numéro
     no_script_support: Votre navigateur ne supporte pas JavaScript !

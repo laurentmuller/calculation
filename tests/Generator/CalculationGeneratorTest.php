@@ -15,7 +15,7 @@ namespace App\Tests\Generator;
 
 use App\Entity\CalculationState;
 use App\Generator\CalculationGenerator;
-use App\Service\CalculationService;
+use App\Service\CalculationUpdateService;
 use App\Tests\EntityTrait\CalculationStateTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use Doctrine\ORM\Exception\ORMException;
@@ -28,12 +28,12 @@ class CalculationGeneratorTest extends GeneratorTestCase
     use CalculationStateTrait;
     use ProductTrait;
 
-    private CalculationService $service;
+    private CalculationUpdateService $service;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->service = $this->getService(CalculationService::class);
+        $this->service = $this->getService(CalculationUpdateService::class);
     }
 
     public function testNegativeCount(): void

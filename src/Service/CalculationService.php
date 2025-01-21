@@ -189,51 +189,6 @@ class CalculationService implements ConstantsInterface
     }
 
     /**
-     * Update the calculation's total.
-     *
-     * @return bool true if updated; false otherwise
-     *
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
-    public function updateTotal(Calculation $calculation): bool
-    {
-        $old_items_total = $this->round($calculation->getItemsTotal());
-        $old_overall_total = $this->round($calculation->getOverallTotal());
-        $old_global_margin = $this->round($calculation->getGlobalMargin());
-
-        // 1. update each group and compute item and overall total
-        $items_total = 0.0;
-        $overall_total = 0.0;
-        $groups = $calculation->getGroups();
-        foreach ($groups as $group) {
-            $group->update();
-            $items_total += $group->getAmount();
-            $overall_total += $group->getTotal();
-        }
-        $items_total = $this->round($items_total);
-        $overall_total = $this->round($overall_total);
-
-        // 2. update global margin, net total and overall total
-        $global_margin = $this->round($this->getGlobalMargin($overall_total));
-        $overall_total = $this->round($overall_total * $global_margin);
-        $overall_total = $this->round($overall_total * (1.0 + $calculation->getUserMargin()));
-
-        // 3. equal?
-        if ($this->isFloatEquals($old_items_total, $items_total)
-            && $this->isFloatEquals($old_global_margin, $global_margin)
-            && $this->isFloatEquals($old_overall_total, $overall_total)) {
-            return false;
-        }
-
-        // 3. update
-        $calculation->setItemsTotal($items_total)
-            ->setGlobalMargin($global_margin)
-            ->setOverallTotal($overall_total);
-
-        return true;
-    }
-
-    /**
      * Adjust the user margin to have the desired overall minimum margin.
      *
      * @psalm-param GroupType[] $groups

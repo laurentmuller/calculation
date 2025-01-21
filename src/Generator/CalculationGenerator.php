@@ -19,7 +19,7 @@ use App\Entity\Category;
 use App\Faker\Generator;
 use App\Faker\ProductProvider;
 use App\Interfaces\EntityInterface;
-use App\Service\CalculationService;
+use App\Service\CalculationUpdateService;
 use App\Service\FakerService;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
@@ -34,7 +34,7 @@ class CalculationGenerator extends AbstractEntityGenerator
     public function __construct(
         EntityManagerInterface $manager,
         FakerService $fakerService,
-        private readonly CalculationService $service
+        private readonly CalculationUpdateService $service
     ) {
         parent::__construct($manager, $fakerService);
     }
@@ -83,7 +83,7 @@ class CalculationGenerator extends AbstractEntityGenerator
             ->setCustomer($generator->name())
             ->setState($generator->state())
             ->setDate($date);
-        $this->service->updateTotal($entity);
+        $this->service->updateCalculation($entity);
 
         return $entity;
     }

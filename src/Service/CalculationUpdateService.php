@@ -19,10 +19,11 @@ use App\Model\CalculationUpdateQuery;
 use App\Model\CalculationUpdateResult;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use App\Repository\GlobalMarginRepository;
 use App\Traits\LoggerAwareTrait;
+use App\Traits\MathTrait;
 use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
-use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Exception\ORMException;
@@ -35,6 +36,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 class CalculationUpdateService implements ServiceSubscriberInterface
 {
     use LoggerAwareTrait;
+    use MathTrait;
     use ServiceMethodsSubscriberTrait;
     use SessionAwareTrait;
     use TranslatorAwareTrait;
@@ -46,8 +48,8 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     public function __construct(
         private readonly CalculationRepository $calculationRepository,
         private readonly CalculationStateRepository $stateRepository,
-        private readonly SuspendEventListenerService $listenerService,
-        private readonly CalculationService $calculationService,
+        private readonly GlobalMarginRepository $globalMarginRepository,
+        private readonly SuspendEventListenerService $listenerService
     ) {
     }
 
@@ -90,7 +92,7 @@ class CalculationUpdateService implements ServiceSubscriberInterface
 
         foreach ($calculations as $calculation) {
             $oldTotal = $calculation->getOverallTotal();
-            if (!$this->calculationService->updateTotal($calculation)) {
+            if (!$this->updateCalculation($calculation)) {
                 continue;
             }
             $result->addCalculation($oldTotal, $calculation);
@@ -107,16 +109,63 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     }
 
     /**
+     * Update the calculation's total.
+     *
+     * @return bool true if updated; false otherwise
+     *
+     * @throws ORMException
+     */
+    public function updateCalculation(Calculation $calculation): bool
+    {
+        // save old values
+        $old_items_total = $this->round($calculation->getItemsTotal());
+        $old_overall_total = $this->round($calculation->getOverallTotal());
+        $old_global_margin = $this->round($calculation->getGlobalMargin());
+
+        // 1. update each group and compute item and overall total
+        $items_total = 0.0;
+        $overall_total = 0.0;
+        $groups = $calculation->getGroups();
+        foreach ($groups as $group) {
+            $group->update();
+            $items_total += $group->getAmount();
+            $overall_total += $group->getTotal();
+        }
+        $items_total = $this->round($items_total);
+        $overall_total = $this->round($overall_total);
+
+        // 2. update global margin, net total and overall total
+        $global_margin = $this->round($this->getGlobalMargin($overall_total));
+        $overall_total = $this->round($overall_total * $global_margin);
+        $overall_total = $this->round($overall_total * (1.0 + $calculation->getUserMargin()));
+
+        // 3. equal?
+        if ($this->isFloatEquals($old_items_total, $items_total)
+            && $this->isFloatEquals($old_global_margin, $global_margin)
+            && $this->isFloatEquals($old_overall_total, $overall_total)) {
+            return false;
+        }
+
+        // 4. update
+        $calculation->setItemsTotal($items_total)
+            ->setGlobalMargin($global_margin)
+            ->setOverallTotal($overall_total);
+
+        return true;
+    }
+
+    /**
      * @psalm-return Calculation[]
      *
      * @throws \Exception
      */
     private function getCalculations(CalculationUpdateQuery $query): array
     {
+        $expr = Criteria::expr();
         $criteria = Criteria::create()
-            ->andWhere(Criteria::expr()->in('state', $query->getStates()))
-            ->andWhere(Criteria::expr()->gte('date', $query->getDateFrom()))
-            ->andWhere(Criteria::expr()->lte('date', $query->getDate()));
+            ->andWhere($expr->in('state', $query->getStates()))
+            ->andWhere($expr->gte('date', $query->getDateFrom()))
+            ->andWhere($expr->lte('date', $query->getDate()));
 
         /** @psalm-var Calculation[] */
         return $this->calculationRepository
@@ -129,12 +178,18 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     private function getDate(\DateTimeImmutable $default): \DateTimeImmutable
     {
         $date = $this->getSessionDate(self::KEY_DATE, $default);
-        if ($date instanceof \DateTimeImmutable) {
-            return $date;
-        }
-        $date = DateUtils::removeTime($date);
 
-        return DateUtils::toDateTimeImmutable($date);
+        return $date instanceof \DateTimeImmutable ? $date : $default;
+    }
+
+    /**
+     * Gets the global margin, in percent, for the given amount.
+     *
+     * @throws ORMException
+     */
+    private function getGlobalMargin(float $amount): float
+    {
+        return $this->isFloatZero($amount) ? 0.0 : $this->globalMarginRepository->getMargin($amount);
     }
 
     private function getInterval(string $default): string
@@ -154,6 +209,7 @@ class CalculationUpdateService implements ServiceSubscriberInterface
             ->getEditableQueryBuilder()
             ->getQuery()
             ->getResult();
+
         if ($useSession) {
             /** @var int[] $ids */
             $ids = $this->getSessionValue(self::KEY_STATES, []);

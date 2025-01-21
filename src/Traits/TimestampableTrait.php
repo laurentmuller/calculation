@@ -54,7 +54,7 @@ trait TimestampableTrait
     #[ORM\Column(length: UserInterface::MAX_USERNAME_LENGTH, nullable: true)]
     private ?string $updatedBy = null;
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -66,19 +66,15 @@ trait TimestampableTrait
 
     public function getCreatedMessage(bool $short = false): TranslatableMessage
     {
-        if (null === $this->createdAt && null === $this->createdBy) {
-            $content = new TranslatableMessage('common.entity_empty');
-        } else {
-            $content = new TranslatableMessage('common.entity_date_user', [
-                '%date%' => $this->getDateMessage($this->createdAt),
-                '%user%' => $this->getUserMessage($this->createdBy),
-            ]);
+        $content = $this->getContentMessage($this->createdAt, $this->createdBy);
+        if ($short) {
+            return $content;
         }
 
-        return $short ? $content : new TranslatableMessage('common.entity_created', ['%content%' => $content]);
+        return new TranslatableMessage('common.entity_created', ['%content%' => $content]);
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
@@ -90,16 +86,12 @@ trait TimestampableTrait
 
     public function getUpdatedMessage(bool $short = false): TranslatableMessage
     {
-        if (null === $this->updatedAt && null === $this->updatedBy) {
-            $content = new TranslatableMessage('common.entity_empty');
-        } else {
-            $content = new TranslatableMessage('common.entity_date_user', [
-                '%date%' => $this->getDateMessage($this->updatedAt),
-                '%user%' => $this->getUserMessage($this->updatedBy),
-            ]);
+        $content = $this->getContentMessage($this->updatedAt, $this->updatedBy);
+        if ($short) {
+            return $content;
         }
 
-        return $short ? $content : new TranslatableMessage('common.entity_updated', ['%content%' => $content]);
+        return new TranslatableMessage('common.entity_updated', ['%content%' => $content]);
     }
 
     /**
@@ -131,9 +123,21 @@ trait TimestampableTrait
         return $changed;
     }
 
-    private function getDateMessage(?\DateTimeInterface $date): string|TranslatableMessage
+    private function getContentMessage(?\DateTimeImmutable $date, ?string $user): TranslatableMessage
     {
-        if ($date instanceof \DateTimeInterface) {
+        if (!$date instanceof \DateTimeImmutable && null === $user) {
+            return new TranslatableMessage('common.entity_empty');
+        }
+
+        return new TranslatableMessage('common.entity_date_user', [
+            '%date%' => $this->getDateMessage($date),
+            '%user%' => $this->getUserMessage($user),
+        ]);
+    }
+
+    private function getDateMessage(?\DateTimeImmutable $date): string|TranslatableMessage
+    {
+        if ($date instanceof \DateTimeImmutable) {
             return FormatUtils::formatDateTime($date);
         }
 

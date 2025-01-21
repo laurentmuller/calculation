@@ -30,6 +30,7 @@ use App\Resolver\DataQueryValueResolver;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\CalculationService;
+use App\Service\CalculationUpdateService;
 use App\Spreadsheet\CalculationDocument;
 use App\Spreadsheet\CalculationsDocument;
 use App\Table\CalculationTable;
@@ -53,8 +54,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CalculationController extends AbstractEntityController
 {
-    public function __construct(CalculationRepository $repository, private readonly CalculationService $service)
-    {
+    public function __construct(
+        CalculationRepository $repository,
+        private readonly CalculationService $calculationService,
+        private readonly CalculationUpdateService $updateService,
+    ) {
         parent::__construct($repository);
     }
 
@@ -75,7 +79,7 @@ class CalculationController extends AbstractEntityController
         $product = $application->getDefaultProduct();
         if ($product instanceof Product) {
             $item->addProduct($product, $application->getDefaultQuantity());
-            $this->service->updateTotal($item);
+            $this->updateService->updateCalculation($item);
         }
 
         return $this->editEntity($request, $item);
@@ -249,7 +253,7 @@ class CalculationController extends AbstractEntityController
         $parameters['empty_items'] = $item->hasEmptyItems();
         $parameters['duplicate_items'] = $item->hasDuplicateItems();
         $parameters['overall_below'] = $this->isMarginBelow($item);
-        $parameters['groups'] = $this->service->createGroups($item);
+        $parameters['groups'] = $this->calculationService->createGroups($item);
         $parameters['editable'] = $item->isEditable();
         if ($item->isEditable()) {
             $parameters['group_index'] = $item->getGroupsCount();
@@ -267,7 +271,7 @@ class CalculationController extends AbstractEntityController
      */
     protected function saveToDatabase(EntityInterface $item): void
     {
-        $this->service->updateTotal($item);
+        $this->updateService->updateCalculation($item);
         parent::saveToDatabase($item);
     }
 

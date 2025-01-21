@@ -14,9 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Entity\Calculation;
-use App\Entity\CalculationCategory;
-use App\Entity\CalculationGroup;
-use App\Entity\CalculationItem;
 use App\Entity\Category;
 use App\Entity\GlobalMargin;
 use App\Entity\Group;
@@ -217,75 +214,6 @@ class CalculationServiceTest extends KernelServiceTestCase
         self::assertSame(-5, $constants['ROW_TOTAL_NET']);
         self::assertSame(-6, $constants['ROW_USER_MARGIN']);
         self::assertSame(-7, $constants['ROW_OVERALL_TOTAL']);
-    }
-
-    /**
-     * @throws ORMException|Exception
-     */
-    public function testService(): void
-    {
-        self::bootKernel();
-
-        $product = $this->init();
-        $calculation = new Calculation();
-        $calculation->addProduct($product, self::QUANTITY)
-            ->setUserMargin(self::MARGIN_USER);
-
-        $service = $this->createCalculationService();
-        $service->updateTotal($calculation);
-
-        self::assertSame(1, $calculation->getGroupsCount());
-        self::assertSame(1, $calculation->getCategoriesCount());
-
-        /** @var CalculationGroup $group */
-        $group = $calculation->getGroups()->first();
-
-        self::assertCount(1, $calculation->getGroups());
-        self::assertCount(1, $group->getCategories());
-
-        /** @var CalculationCategory $category */
-        $category = $group->getCategories()->first();
-        self::assertCount(1, $category->getItems());
-
-        /** @var CalculationItem $item */
-        $item = $category->getItems()->first();
-
-        $totalItem = self::PRODUCT_PRICE * self::QUANTITY;
-        $totalGroup = $totalItem * self::MARGIN_PERCENT;
-        $totalUser = $totalGroup * (1.0 + self::MARGIN_USER);
-        $totalOverall = $totalUser * self::MARGIN_PERCENT;
-
-        // item
-        self::assertSame(self::PRODUCT_PRICE, $item->getPrice());
-        self::assertSame(self::QUANTITY, $item->getQuantity());
-        self::assertSame($totalItem, $item->getTotal());
-
-        // group
-        self::assertSame($totalItem, $group->getAmount());
-        self::assertSame(self::MARGIN_PERCENT, $group->getMargin());
-        self::assertSame($totalGroup, $group->getTotal());
-
-        // category
-        self::assertSame($totalItem, $category->getAmount());
-        self::assertSame($category->getAmount(), $item->getTotal());
-
-        // assert
-        self::assertSame($totalItem, $calculation->getItemsTotal());
-        self::assertSame($totalGroup, $calculation->getGroupsTotal());
-        self::assertSame(self::MARGIN_PERCENT, $calculation->getGlobalMargin());
-        self::assertSame(self::MARGIN_USER, $calculation->getUserMargin());
-        self::assertSame($totalOverall, $calculation->getOverallTotal());
-    }
-
-    /**
-     * @throws ORMException|Exception
-     */
-    public function testUpdateTotalEmpty(): void
-    {
-        $calculation = new Calculation();
-        $service = $this->createCalculationService();
-        $actual = $service->updateTotal($calculation);
-        self::assertFalse($actual);
     }
 
     /**

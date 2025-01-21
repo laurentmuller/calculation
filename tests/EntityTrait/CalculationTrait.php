@@ -15,7 +15,7 @@ namespace App\Tests\EntityTrait;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
-use App\Service\CalculationService;
+use App\Service\CalculationUpdateService;
 
 /**
  * Trait to manage a calculation.
@@ -53,9 +53,9 @@ trait CalculationTrait
     public function updateCalculation(): void
     {
         if ($this->calculation instanceof Calculation) {
-            $service = self::getContainer()->get(CalculationService::class);
-            self::assertInstanceOf(CalculationService::class, $service);
-            $service->updateTotal($this->calculation);
+            $service = self::getContainer()->get(CalculationUpdateService::class);
+            self::assertInstanceOf(CalculationUpdateService::class, $service);
+            $service->updateCalculation($this->calculation);
             $this->addEntity($this->calculation);
         }
     }

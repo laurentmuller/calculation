@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
+use App\Entity\Category;
+use App\Entity\Group;
+use App\Entity\GroupMargin;
+use App\Entity\Product;
 use App\Service\CalculationUpdateService;
 use App\Tests\DatabaseTrait;
 use App\Tests\DateAssertTrait;
@@ -41,7 +45,7 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws \Exception|ORMException
      */
     public function testCreateQuery(): void
     {
@@ -98,7 +102,7 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
     /**
      * @throws ORMException
      */
-    public function testUpdateEmpty(): void
+    public function testUpdateEmptyState(): void
     {
         $this->loginUsername(self::ROLE_ADMIN);
         $service = $this->getService(CalculationUpdateService::class);
@@ -114,13 +118,7 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
      */
     public function testUpdateNoCalculation(): void
     {
-        $date = $this->getDate();
-        $state = $this->getCalculationState();
-        $calculation = $this->getCalculation($state);
-        $calculation->setDate($date)
-            ->setOverallTotal(0.0);
-        $this->addEntity($calculation);
-
+        $this->getCalculationState();
         $this->loginUsername(self::ROLE_ADMIN);
         $service = $this->getService(CalculationUpdateService::class);
         $query = $service->createQuery();
@@ -156,6 +154,28 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
     /**
      * @throws ORMException
      */
+    public function testUpdateOneCalculationNoState(): void
+    {
+        $date = $this->getDate();
+        $state = $this->getCalculationState();
+        $calculation = $this->getCalculation($state);
+        $calculation->setDate($date)
+            ->setOverallTotal(0.0);
+        $this->addEntity($calculation);
+
+        $this->loginUsername(self::ROLE_ADMIN);
+        $service = $this->getService(CalculationUpdateService::class);
+        $query = $service->createQuery();
+
+        $result = $service->update($query);
+        self::assertCount(0, $result);
+        self::assertCount(0, $result->getResults());
+        self::assertFalse($result->isValid());
+    }
+
+    /**
+     * @throws ORMException
+     */
     public function testUpdateOneNoSimulate(): void
     {
         $date = $this->getDate();
@@ -169,6 +189,47 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         $service = $this->getService(CalculationUpdateService::class);
         $query = $service->createQuery();
         $query->setSimulate(false);
+
+        $result = $service->update($query);
+        self::assertCount(1, $result);
+        self::assertCount(1, $result->getResults());
+        self::assertTrue($result->isValid());
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testUpdateTotalNotEmpty(): void
+    {
+        $group = new Group();
+        $group->setCode('code');
+        $this->addEntity($group);
+        $groupMargin = new GroupMargin();
+        $groupMargin->setMaximum(1000.0)
+            ->setMargin(1.0);
+        $group->addMargin($groupMargin);
+
+        $category = new Category();
+        $category->setCode('code');
+        $category->setGroup($group);
+        $this->addEntity($category);
+
+        $product = new Product();
+        $product->setDescription('Product Test')
+            ->setPrice(100.0)
+            ->setCategory($category);
+        $this->addEntity($product);
+
+        $date = $this->getDate();
+        $state = $this->getCalculationState();
+        $calculation = $this->getCalculation($state)
+            ->addProduct($product)
+            ->setDate($date);
+        $this->addEntity($calculation);
+
+        $this->loginUsername(self::ROLE_ADMIN);
+        $service = $this->getService(CalculationUpdateService::class);
+        $query = $service->createQuery();
 
         $result = $service->update($query);
         self::assertCount(1, $result);

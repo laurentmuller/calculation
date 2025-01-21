@@ -69,7 +69,7 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws \Exception|ORMException
      */
     public function testSaveQuery(): void
     {
@@ -142,6 +142,8 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         $this->addEntity($calculation);
 
         $this->loginUsername(self::ROLE_ADMIN);
+        $session = $this->getRequestStack()->getSession();
+        $session->set('calculation.update.states', [$state->getId()]);
         $service = $this->getService(CalculationUpdateService::class);
         $query = $service->createQuery();
 

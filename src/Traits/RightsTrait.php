@@ -50,7 +50,7 @@ trait RightsTrait
     private ?array $rights = null;
 
     /**
-     * NB: The mixed value must be returned. If not, SymfonyInsight will raise an exception.
+     * NB: The mixed value must be returned. If not, ProxyHelper class will raise an exception.
      *
      * @return ?FlagBag<EntityPermission>
      */

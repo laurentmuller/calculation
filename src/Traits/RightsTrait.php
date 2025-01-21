@@ -84,7 +84,7 @@ trait RightsTrait
      *
      * @return FlagBag<EntityPermission>
      */
-    public function getPermission(EntityName $entity): FlagBag
+    public function getPermission(EntityName $entity): mixed
     {
         $offset = $entity->offset();
         $rights = $this->getRights();

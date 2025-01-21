@@ -49,9 +49,6 @@ class CalculationUpdateResult implements \Countable
         return \count($this->results);
     }
 
-    /**
-     * @psalm-api
-     */
     public function getResults(): array
     {
         return $this->results;

@@ -232,8 +232,8 @@ class CalculationService implements ConstantsInterface
         float $user_margin,
         ?float $global_margin = null
     ): array {
-        $groups_amount = $this->round($this->getGroupsAmount($groups));
-        $groups_margin = $this->round($this->getGroupsMargin($groups));
+        $groups_amount = $this->getGroupsAmount($groups);
+        $groups_margin = $this->getGroupsMargin($groups);
         $total_net = $groups_amount + $groups_margin;
         $groups[self::ROW_TOTAL_GROUP] = $this->createGroup(
             id: self::ROW_TOTAL_GROUP,
@@ -407,33 +407,23 @@ class CalculationService implements ConstantsInterface
     }
 
     /**
-     * Gets groups total amount.
+     * Gets the sum of group's amount.
      *
      * @psalm-param GroupType[] $groups
      */
     private function getGroupsAmount(array $groups): float
     {
-        return \array_reduce(
-            $groups,
-            /** @psalm-param GroupType $group */
-            static fn (float $carry, array $group): float => $carry + $group['amount'],
-            0.0
-        );
+        return $this->round(\array_sum(\array_column($groups, 'amount')));
     }
 
     /**
-     * Gets groups total margin amount.
+     * Gets the sum of group's margin amount.
      *
      * @psalm-param GroupType[] $groups
      */
     private function getGroupsMargin(array $groups): float
     {
-        return \array_reduce(
-            $groups,
-            /** @psalm-param GroupType $group */
-            static fn (float $carry, array $group): float => $carry + $group['margin_amount'],
-            0.0
-        );
+        return $this->round(\array_sum(\array_column($groups, 'margin_amount')));
     }
 
     /**

@@ -50,9 +50,11 @@ trait RightsTrait
     private ?array $rights = null;
 
     /**
+     * NB: The mixed value must be returned. If not, SymfonyInsight will raise an exception.
+     *
      * @return ?FlagBag<EntityPermission>
      */
-    public function __get(string $name): ?FlagBag
+    public function __get(string $name): mixed
     {
         $entity = EntityName::tryFromField($name);
 
@@ -84,7 +86,7 @@ trait RightsTrait
      *
      * @return FlagBag<EntityPermission>
      */
-    public function getPermission(EntityName $entity): mixed
+    public function getPermission(EntityName $entity): FlagBag
     {
         $offset = $entity->offset();
         $rights = $this->getRights();

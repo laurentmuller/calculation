@@ -389,11 +389,7 @@ class CalculationService implements ConstantsInterface
      */
     private function getGlobalMargin(float $amount): float
     {
-        if (!$this->isFloatZero($amount)) {
-            return $this->globalMarginRepository->getMargin($amount);
-        }
-
-        return $amount;
+        return $this->isFloatZero($amount) ? 0.0 : $this->globalMarginRepository->getMargin($amount);
     }
 
     /**

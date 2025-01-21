@@ -17,6 +17,7 @@ use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Service\ApplicationService;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Twig\Environment;
 
@@ -37,7 +38,7 @@ class CalculationBelowTable extends CalculationTable implements \Countable
     /**
      * @return int<0, max>
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function count(): int
     {
@@ -45,7 +46,7 @@ class CalculationBelowTable extends CalculationTable implements \Countable
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function getEmptyMessage(): ?string
     {

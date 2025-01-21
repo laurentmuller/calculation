@@ -18,12 +18,12 @@ use App\Entity\CalculationGroup;
 use App\Entity\Group;
 use App\Interfaces\ConstantsInterface;
 use App\Interfaces\EntityInterface;
-use App\Model\CalculationGroupQuery;
 use App\Model\CalculationQuery;
 use App\Repository\GlobalMarginRepository;
 use App\Repository\GroupMarginRepository;
 use App\Repository\GroupRepository;
 use App\Traits\MathTrait;
+use Doctrine\ORM\Exception\ORMException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -46,6 +46,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *     min_margin: float,
  *     user_margin: float,
  *     groups: GroupType[]}
+ *
+ * @psalm-import-type QueryGroupType from CalculationQuery
  */
 class CalculationService implements ConstantsInterface
 {
@@ -116,7 +118,7 @@ class CalculationService implements ConstantsInterface
     /**
      * Creates groups, used to render the total view, from the given calculation.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      *
      * @psalm-return non-empty-array<GroupType>
      */
@@ -129,7 +131,7 @@ class CalculationService implements ConstantsInterface
         $groups = \array_map(
             fn (CalculationGroup $group): array => $this->createGroup(
                 id: self::ROW_GROUP,
-                description: $group,
+                entityOrId: $group,
                 amount: $group->getAmount(),
                 margin_percent: $group->getMargin(),
                 margin_amount: $group->getMarginAmount(),
@@ -148,7 +150,7 @@ class CalculationService implements ConstantsInterface
     /**
      * Creates parameters, used to render the total view, for the given query.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      *
      * @psalm-return ParametersType
      */
@@ -172,8 +174,7 @@ class CalculationService implements ConstantsInterface
 
         if ($query->adjust && $overall_below) {
             $groups = $this->adjustUserMargin($groups);
-            $user_group = $groups[self::ROW_USER_MARGIN];
-            $user_margin = $user_group['margin_percent'];
+            $user_margin = $groups[self::ROW_USER_MARGIN]['margin_percent'];
             $overall_below = false;
         }
 
@@ -197,21 +198,20 @@ class CalculationService implements ConstantsInterface
      */
     private function adjustUserMargin(array $groups): array
     {
-        $total_group = &$groups[self::ROW_TOTAL_GROUP];
-        $total_net_group = &$groups[self::ROW_TOTAL_NET];
+        $total_net = $groups[self::ROW_TOTAL_NET]['total'];
+        $total_group = $groups[self::ROW_TOTAL_GROUP]['amount'];
+
+        $user_margin = $this->ceil((($total_group * $this->getMinMargin()) - $total_net) / $total_net);
+        $user_total = $this->round($total_net * $user_margin);
         $user_margin_group = &$groups[self::ROW_USER_MARGIN];
-        $overall_total_group = &$groups[self::ROW_OVERALL_TOTAL];
-
-        $total_amount = $total_group['amount'];
-        $net_total = $total_net_group['total'];
-        $user_margin = (($total_amount * $this->getMinMargin()) - $net_total) / $net_total;
-        $user_margin = $this->ceil($user_margin);
         $user_margin_group['margin_percent'] = $user_margin;
-        $user_margin_group['total'] = $net_total * $user_margin;
+        $user_margin_group['total'] = $user_total;
 
-        $overall_total_group['total'] = $net_total + $user_margin_group['total'];
-        $overall_total_group['margin_percent'] = $this->floor($overall_total_group['total'] / $total_amount);
-        $overall_total_group['margin_amount'] = $overall_total_group['total'] - $total_amount;
+        $overall_total = $total_net + $user_total;
+        $overall_total_group = &$groups[self::ROW_OVERALL_TOTAL];
+        $overall_total_group['margin_percent'] = $this->floor($overall_total / $total_group);
+        $overall_total_group['margin_amount'] = $overall_total - $total_group;
+        $overall_total_group['total'] = $overall_total;
 
         return $groups;
     }
@@ -225,7 +225,7 @@ class CalculationService implements ConstantsInterface
      *
      * @psalm-return non-empty-array<GroupType>
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     private function computeGroups(
         array $groups,
@@ -237,7 +237,7 @@ class CalculationService implements ConstantsInterface
         $total_net = $groups_amount + $groups_margin;
         $groups[self::ROW_TOTAL_GROUP] = $this->createGroup(
             id: self::ROW_TOTAL_GROUP,
-            description: 'calculation.fields.marginTotal',
+            entityOrId: 'calculation.fields.marginTotal',
             amount: $groups_amount,
             margin_percent: 1.0 + $this->round($this->safeDivide($groups_margin, $groups_amount)),
             margin_amount: $groups_margin,
@@ -249,20 +249,20 @@ class CalculationService implements ConstantsInterface
         $total_net += $global_amount;
         $groups[self::ROW_GLOBAL_MARGIN] = $this->createGroup(
             id: self::ROW_GLOBAL_MARGIN,
-            description: 'calculation.fields.globalMargin',
+            entityOrId: 'calculation.fields.globalMargin',
             margin_percent: $global_margin,
             total: $global_amount
         );
         $groups[self::ROW_TOTAL_NET] = $this->createGroup(
             id: self::ROW_TOTAL_NET,
-            description: 'calculation.fields.totalNet',
+            entityOrId: 'calculation.fields.totalNet',
             total: $total_net
         );
 
         $user_amount = $this->round($total_net * $user_margin);
         $groups[self::ROW_USER_MARGIN] = $this->createGroup(
             id: self::ROW_USER_MARGIN,
-            description: 'calculation.fields.userMargin',
+            entityOrId: 'calculation.fields.userMargin',
             margin_percent: $user_margin,
             total: $user_amount
         );
@@ -273,7 +273,7 @@ class CalculationService implements ConstantsInterface
         $overall_margin = $this->floor(1.0 + $overall_margin);
         $groups[self::ROW_OVERALL_TOTAL] = $this->createGroup(
             id: self::ROW_OVERALL_TOTAL,
-            description: 'calculation.fields.overallTotal',
+            entityOrId: 'calculation.fields.overallTotal',
             amount: $groups_amount,
             margin_percent: $overall_margin,
             margin_amount: $overall_amount,
@@ -284,38 +284,42 @@ class CalculationService implements ConstantsInterface
     }
 
     /**
-     * @param CalculationGroupQuery[] $queryGroups
+     * @param QueryGroupType[] $queryGroups
      *
      * @return GroupType[]
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     private function convertQueryGroups(array $queryGroups): array
     {
         $groups = [];
-        foreach ($queryGroups as $group) {
-            if ($this->isFloatZero($group->total)) {
+        foreach ($queryGroups as $queryGroup) {
+            if ($this->isFloatZero($queryGroup['total'])) {
                 continue;
             }
 
-            $id = $group->id;
-            $targetGroup = $this->findGroup($id);
-            if (!$targetGroup instanceof Group) {
+            $id = $queryGroup['id'];
+            $group = $this->findGroup($id);
+            if (!$group instanceof Group) {
                 continue;
             }
 
             if (!\array_key_exists($id, $groups)) {
-                $groups[$id] = $this->createGroup(self::ROW_GROUP, $targetGroup);
+                $groups[$id] = $this->createGroup(self::ROW_GROUP, $group);
             }
 
             $current = &$groups[$id];
-            $amount = $current['amount'] + $group->total;
-            $margin_percent = $this->getGroupMargin($targetGroup, $amount);
+            $amount = $current['amount'] + $queryGroup['total'];
+            $margin_percent = $this->getGroupMargin($group, $amount);
             $total = $this->round($margin_percent * $amount);
-            $current['amount'] = $amount;
-            $current['margin_percent'] = $margin_percent;
-            $current['margin_amount'] = $total - $amount;
-            $current['total'] = $total;
+            $margin_amount = $total - $amount;
+
+            $current = \array_merge($current, [
+                'margin_percent' => $margin_percent,
+                'margin_amount' => $margin_amount,
+                'amount' => $amount,
+                'total' => $total,
+            ]);
         }
 
         return $groups;
@@ -352,16 +356,16 @@ class CalculationService implements ConstantsInterface
      */
     private function createGroup(
         int $id,
-        EntityInterface|string $description,
+        EntityInterface|string $entityOrId,
         float $amount = 0.0,
         float $margin_percent = 0.0,
         float $margin_amount = 0.0,
         float $total = 0.0
     ): array {
-        if ($description instanceof EntityInterface) {
-            $description = (string) $description;
+        if ($entityOrId instanceof EntityInterface) {
+            $description = $entityOrId->getDisplay();
         } else {
-            $description = $this->translator->trans($description);
+            $description = $this->translator->trans($entityOrId);
         }
 
         return [
@@ -385,7 +389,7 @@ class CalculationService implements ConstantsInterface
     /**
      * Gets the global margin, in percent, for the given amount.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     private function getGlobalMargin(float $amount): float
     {
@@ -395,7 +399,7 @@ class CalculationService implements ConstantsInterface
     /**
      * Gets the margin, in percent, for the given group and amount.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     private function getGroupMargin(Group $group, float $amount): float
     {

@@ -35,6 +35,7 @@ use App\Spreadsheet\CalculationDocument;
 use App\Spreadsheet\CalculationsDocument;
 use App\Table\CalculationTable;
 use App\Table\DataQuery;
+use Doctrine\ORM\Exception\ORMException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,7 +66,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Add a new calculation.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     #[GetPost(path: '/add', name: 'add')]
     public function add(Request $request): Response
@@ -88,7 +89,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit a copy (cloned) calculation.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     #[GetPost(path: '/clone/{id}', name: 'clone', requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, Calculation $item): Response
@@ -117,7 +118,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit a calculation.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     #[GetPost(path: '/edit/{id}', name: 'edit', requirements: self::ID_REQUIREMENT)]
     public function edit(Request $request, Calculation $item): Response
@@ -129,8 +130,8 @@ class CalculationController extends AbstractEntityController
      * Export the calculations to a Spreadsheet document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
-     * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws ORMException
      */
     #[Get(path: '/excel', name: 'excel')]
     public function excel(): SpreadsheetResponse
@@ -174,7 +175,7 @@ class CalculationController extends AbstractEntityController
      * Export calculations to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(): PdfResponse
@@ -245,7 +246,7 @@ class CalculationController extends AbstractEntityController
     /**
      * @param Calculation $item
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
@@ -267,7 +268,7 @@ class CalculationController extends AbstractEntityController
     /**
      * @psalm-param Calculation $item
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     protected function saveToDatabase(EntityInterface $item): void
     {

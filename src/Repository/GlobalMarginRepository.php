@@ -16,6 +16,7 @@ namespace App\Repository;
 use App\Entity\GlobalMargin;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -47,7 +48,7 @@ class GlobalMarginRepository extends AbstractRepository
      *
      * @return float the margin in percent, if found; 0 otherwise
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function getMargin(float $amount): float
     {

@@ -53,7 +53,8 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     /**
      * Create the archive query.
      *
-     * @throws ORMException|\DateException
+     * @throws \DateException
+     * @throws ORMException
      */
     public function createQuery(): CalculationArchiveQuery
     {
@@ -68,7 +69,8 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     /**
      * Gets the maximum allowed date or null if none.
      *
-     * @throws ORMException|\DateException
+     * @throws \DateException
+     * @throws ORMException
      */
     public function getDateMaxConstraint(): ?string
     {
@@ -193,7 +195,8 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     }
 
     /**
-     * @throws ORMException|\DateException
+     * @throws \DateException
+     * @throws ORMException
      */
     private function getDate(): \DateTimeInterface
     {

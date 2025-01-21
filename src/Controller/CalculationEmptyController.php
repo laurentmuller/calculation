@@ -23,6 +23,7 @@ use App\Spreadsheet\CalculationsEmptyDocument;
 use App\Table\CalculationEmptyTable;
 use App\Table\DataQuery;
 use App\Traits\TableTrait;
+use Doctrine\ORM\Exception\ORMException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,7 +48,7 @@ class CalculationEmptyController extends AbstractController
      * Export the empty items to a Spreadsheet document.
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     #[Get(path: '/excel', name: 'excel')]
     public function excel(CalculationRepository $repository): Response
@@ -78,7 +79,7 @@ class CalculationEmptyController extends AbstractController
     /**
      * Export the calculations where items have the price or the quantity is equal to 0.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(CalculationRepository $repository): Response
@@ -96,7 +97,7 @@ class CalculationEmptyController extends AbstractController
     /**
      * Returns a response if no calculation's item is empty.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     private function getEmptyResponse(CalculationRepository $repository): ?RedirectResponse
     {

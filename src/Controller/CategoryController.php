@@ -30,6 +30,7 @@ use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\CategoriesDocument;
 use App\Table\CategoryTable;
 use App\Table\DataQuery;
+use Doctrine\ORM\Exception\ORMException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -82,7 +83,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Delete a category.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     #[GetDelete(path: '/delete/{id}', name: 'delete', requirements: self::ID_REQUIREMENT)]
     public function delete(
@@ -137,8 +138,8 @@ class CategoryController extends AbstractEntityController
      * Export the categories to a Spreadsheet document.
      *
      * @throws NotFoundHttpException
-     * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws ORMException
      */
     #[Get(path: '/excel', name: 'excel')]
     public function excel(): SpreadsheetResponse
@@ -168,8 +169,8 @@ class CategoryController extends AbstractEntityController
     /**
      * Export the categories to a PDF document.
      *
-     * @throws NotFoundHttpException                if no category is found
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws NotFoundHttpException if no category is found
+     * @throws ORMException
      */
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(): PdfResponse

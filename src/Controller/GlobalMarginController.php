@@ -28,6 +28,7 @@ use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\GlobalMarginsDocument;
 use App\Table\DataQuery;
 use App\Table\GlobalMarginTable;
+use Doctrine\ORM\Exception\ORMException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -83,8 +84,8 @@ class GlobalMarginController extends AbstractEntityController
      * Export the global margins to a Spreadsheet document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
-     * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws ORMException
      */
     #[Get(path: '/excel', name: 'excel')]
     public function excel(): SpreadsheetResponse
@@ -115,7 +116,7 @@ class GlobalMarginController extends AbstractEntityController
      * Export the global margins to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(): PdfResponse

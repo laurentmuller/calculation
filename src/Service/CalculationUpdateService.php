@@ -76,7 +76,8 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     }
 
     /**
-     * @throws ORMException|\Exception
+     * @throws \Exception
+     * @throws ORMException
      */
     public function update(CalculationUpdateQuery $query): CalculationUpdateResult
     {
@@ -109,7 +110,7 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     }
 
     /**
-     * Update the calculation's total.
+     * Update the given calculation's total.
      *
      * @return bool true if updated; false otherwise
      *

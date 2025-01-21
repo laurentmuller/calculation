@@ -42,6 +42,7 @@ use App\Spreadsheet\UsersDocument;
 use App\Table\DataQuery;
 use App\Table\UserTable;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -110,8 +111,8 @@ class UserController extends AbstractEntityController
      * Export the customers to a Spreadsheet document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws ORMException
      */
     #[Get(path: '/excel', name: 'excel')]
     public function excel(StorageInterface $storage): SpreadsheetResponse
@@ -199,7 +200,7 @@ class UserController extends AbstractEntityController
      * Export the users to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(StorageInterface $storage): PdfResponse
@@ -323,8 +324,8 @@ class UserController extends AbstractEntityController
      * Export the user access rights to a Spreadsheet document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws ORMException
      */
     #[Get(path: '/rights/excel', name: 'rights_excel')]
     public function rightsExcel(RoleBuilderService $builder): SpreadsheetResponse
@@ -342,7 +343,7 @@ class UserController extends AbstractEntityController
      * Export user access rights to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     #[Get(path: '/rights/pdf', name: 'rights_pdf')]
     public function rightsPdf(RoleBuilderService $builder): PdfResponse

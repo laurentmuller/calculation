@@ -15,6 +15,7 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -43,7 +44,7 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
      *
      * @return int the number of entities
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function countCategoryReferences(Category $category): int
     {

@@ -291,11 +291,11 @@ const Application = {
         });
         const userMargin = $('#calculation_userMargin').floatVal() / 100.0;
 
-        return {
+        return JSON.stringify({
             adjust: adjust,
             userMargin: userMargin,
             groups: groups,
-        };
+        });
     },
 
     /**
@@ -343,10 +343,6 @@ const Application = {
             that.jqXHR = null;
         }
 
-        // parameters
-        const url = $form.data('update');
-        const data = this.serializeForm(adjust);
-
         /**
          * @param {Object} response
          * @param {boolean} response.result
@@ -356,37 +352,43 @@ const Application = {
          * @param {number} response.user_margin
          * @param {boolean} response.overall_below
          */
-        that.jqXHR = $.post(url, data, function (response) {
-            // error?
-            if (!response.result) {
-                return that.disable(response.message);
-            }
-            // update content
-            const $totalPanel = $('#totals-panel');
-            if (response.view) {
-                const $body = $('#totals-table > tbody');
-                $body.fadeOut(300, function () {
-                    $body.html(response.view).fadeIn(300);
-                    $totalPanel.fadeIn();
-                });
-            } else {
-                $totalPanel.fadeOut();
-            }
-            if (response.adjust && !$.isUndefined(response.user_margin) && !isNaN(response.user_margin)) {
-                $('#calculation_userMargin').intVal(response.user_margin * 100).selectFocus();
-            }
-            if (response.overall_below) {
-                $buttonAdjust.toggleDisabled(false).removeClass('cursor-default');
-            } else {
-                $buttonAdjust.toggleDisabled(true).addClass('cursor-default');
-            }
-            $('#calculation_customer').trigger('input');
-            $('#data-table-edit').updateErrors();
-            return that;
+        that.jqXHR = $.post({
+            url: $form.data('update'),
+            data: this.serializeForm(adjust),
+            contentType: 'application/json;',
+            success: function (response) {
+                // error?
+                if (!response.result) {
+                    return that.disable(response.message);
+                }
 
-        }).fail(function (_jqXHR, textStatus) {
-            if (textStatus !== 'abort') {
-                return that.disable();
+                // update content
+                const $totalPanel = $('#totals-panel');
+                if (response.view) {
+                    const $body = $('#totals-table > tbody');
+                    $body.fadeOut(300, function () {
+                        $body.html(response.view).fadeIn(300);
+                        $totalPanel.fadeIn();
+                    });
+                } else {
+                    $totalPanel.fadeOut();
+                }
+                if (response.adjust && !$.isUndefined(response.user_margin) && !isNaN(response.user_margin)) {
+                    $('#calculation_userMargin').intVal(response.user_margin * 100).selectFocus();
+                }
+                if (response.overall_below) {
+                    $buttonAdjust.toggleDisabled(false).removeClass('cursor-default');
+                } else {
+                    $buttonAdjust.toggleDisabled(true).addClass('cursor-default');
+                }
+                $('#calculation_customer').trigger('input');
+                $('#data-table-edit').updateErrors();
+                return that;
+            },
+            fail: function (_jqXHR, textStatus) {
+                if (textStatus !== 'abort') {
+                    return that.disable();
+                }
             }
         });
 

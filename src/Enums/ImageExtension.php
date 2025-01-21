@@ -165,7 +165,7 @@ enum ImageExtension: string implements PdfEnumDefaultInterface
      *
      * @return bool true on success or false on failure
      *
-     * @throw \InvalidArgumentException if one of the given options is invalid
+     * @throws \InvalidArgumentException if one of the given options is invalid
      *
      * @psalm-param SaveOptionsType $options
      */

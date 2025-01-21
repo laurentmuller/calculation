@@ -31,6 +31,7 @@ use App\Service\TaskService;
 use App\Spreadsheet\TasksDocument;
 use App\Table\DataQuery;
 use App\Table\TaskTable;
+use Doctrine\ORM\Exception\ORMException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -133,9 +134,9 @@ class TaskController extends AbstractEntityController
     /**
      * Export tasks to a Spreadsheet document.
      *
-     * @throws NotFoundHttpException                if no category is found
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws NotFoundHttpException               if no category is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws ORMException
      */
     #[Get(path: '/excel', name: 'excel')]
     public function excel(): SpreadsheetResponse
@@ -165,8 +166,8 @@ class TaskController extends AbstractEntityController
     /**
      * Export tasks to a PDF document.
      *
-     * @throws NotFoundHttpException                if no category is found
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws NotFoundHttpException if no category is found
+     * @throws ORMException
      */
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(): PdfResponse

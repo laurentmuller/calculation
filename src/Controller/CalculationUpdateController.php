@@ -38,7 +38,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class CalculationUpdateController extends AbstractController
 {
     /**
-     * @throws ORMException|\Exception
+     * @throws \Exception
+     * @throws ORMException
      */
     #[GetPost(path: '/update', name: 'update')]
     public function update(Request $request, CalculationUpdateService $service): Response

@@ -44,16 +44,16 @@ class AjaxCalculationControllerTest extends ControllerTestCase
 
     public function testUpdate(): void
     {
-        $parameters = [
+        $parameter = \json_encode([
             'adjust' => true,
             'userMargin' => -0.16,
             'groups' => [
                 ['id' => 10, 'total' => 83.5],
             ],
-        ];
+        ]);
 
         $this->loginUsername('ROLE_USER');
-        $this->client->request(Request::METHOD_POST, self::UPDATE_ROUTE_NAME, $parameters);
+        $this->client->request(Request::METHOD_POST, self::UPDATE_ROUTE_NAME, [$parameter]);
         $response = $this->client->getResponse();
         self::assertTrue($response->isOk());
         self::assertInstanceOf(JsonResponse::class, $response);

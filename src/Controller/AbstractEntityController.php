@@ -26,6 +26,7 @@ use App\Traits\TableTrait;
 use App\Utils\StringUtils;
 use App\Word\WordDocument;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Exception\ORMException;
 use fpdf\PdfDocument;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -212,7 +213,7 @@ abstract class AbstractEntityController extends AbstractController
      *
      * @psalm-return TEntity[]
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     protected function getEntities(
         array|string $sortedFields = [],

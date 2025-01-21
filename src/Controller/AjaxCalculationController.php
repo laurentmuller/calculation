@@ -16,8 +16,8 @@ namespace App\Controller;
 use App\Attribute\Post;
 use App\Interfaces\RoleInterface;
 use App\Model\CalculationQuery;
-use App\Resolver\CalculationQueryResolver;
 use App\Service\CalculationService;
+use Doctrine\ORM\Exception\ORMException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
- * Controller to update calculation's total within XMLHttpRequest (Ajax) calls.
+ * Controller to update calculation's total or the user margin within XMLHttpRequest (Ajax) calls.
  */
 #[AsController]
 #[Route(path: '/calculation', name: 'calculation_')]
@@ -34,33 +34,26 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AjaxCalculationController extends AbstractController
 {
     /**
-     * Update the calculation's total.
-     *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     #[Post(path: '/update', name: 'update')]
     public function update(
         CalculationService $service,
         LoggerInterface $logger,
-        #[MapRequestPayload(resolver: CalculationQueryResolver::class)]
+        #[MapRequestPayload]
         CalculationQuery $query = new CalculationQuery()
     ): JsonResponse {
         try {
             $parameters = $service->createParameters($query);
-            if (!$parameters['result']) {
-                return $this->json($parameters);
+            if ($parameters['result']) {
+                $view = $this->renderView('calculation/calculation_ajax_totals.html.twig', $parameters);
+                $parameters = \array_merge($parameters, [
+                    'adjust' => $query->adjust,
+                    'view' => $view,
+                ]);
             }
 
-            $view = $this->renderView('calculation/calculation_ajax_totals.html.twig', $parameters);
-
-            return $this->jsonTrue([
-                'view' => $view,
-                'adjust' => $query->adjust,
-                'user_margin' => $parameters['user_margin'],
-                'overall_margin' => $parameters['overall_margin'],
-                'overall_total' => $parameters['overall_total'],
-                'overall_below' => $parameters['overall_below'],
-            ]);
+            return $this->json($parameters);
         } catch (\Exception $e) {
             $message = $this->trans('calculation.edit.error.update_total');
             $context = $this->getExceptionContext($e);

@@ -20,7 +20,6 @@ use App\Entity\Group;
 use App\Entity\GroupMargin;
 use App\Entity\Product;
 use App\Interfaces\EntityInterface;
-use App\Model\CalculationGroupQuery;
 use App\Model\CalculationQuery;
 use App\Repository\GlobalMarginRepository;
 use App\Repository\GroupMarginRepository;
@@ -57,7 +56,7 @@ class CalculationServiceTest extends KernelServiceTestCase
             adjust: true,
             userMargin: -0.99,
             groups: [
-                new CalculationGroupQuery(1, 100.0),
+                ['id' => 1, 'total' => 100.0],
             ]
         );
 
@@ -126,7 +125,7 @@ class CalculationServiceTest extends KernelServiceTestCase
             adjust: false,
             userMargin: 0.05,
             groups: [
-                new CalculationGroupQuery(1, 2.5),
+                ['id' => 1, 'total' => 2.5],
             ]
         );
 
@@ -164,7 +163,7 @@ class CalculationServiceTest extends KernelServiceTestCase
             adjust: false,
             userMargin: 0.05,
             groups: [
-                new CalculationGroupQuery(10, 10.0),
+                ['id' => 10, 'total' => 10.0],
             ]
         );
 
@@ -183,7 +182,7 @@ class CalculationServiceTest extends KernelServiceTestCase
             adjust: false,
             userMargin: 0.05,
             groups: [
-                new CalculationGroupQuery(1, 0.0),
+                ['id' => 1, 'total' => 0.0],
             ]
         );
 

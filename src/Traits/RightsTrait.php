@@ -52,7 +52,7 @@ trait RightsTrait
     /**
      * @return ?FlagBag<EntityPermission>
      */
-    public function __get(string $name): mixed
+    public function __get(string $name): ?FlagBag
     {
         $entity = EntityName::tryFromField($name);
 

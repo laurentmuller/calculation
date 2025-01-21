@@ -16,6 +16,7 @@ namespace App\Repository;
 use App\Entity\CalculationGroup;
 use App\Entity\Group;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,7 +38,7 @@ class CalculationGroupRepository extends AbstractRepository
      *
      * @return int the number of calculations
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function countGroupReferences(Group $group): int
     {

@@ -23,6 +23,7 @@ use App\Service\CalculationUpdateService;
 use App\Service\FakerService;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
 
 /**
  * Class to generate calculations.
@@ -40,7 +41,7 @@ class CalculationGenerator extends AbstractEntityGenerator
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     protected function createEntities(int $count, bool $simulate, Generator $generator): array
     {
@@ -72,7 +73,7 @@ class CalculationGenerator extends AbstractEntityGenerator
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     private function createEntity(int $min, int $max, Generator $generator): Calculation
     {

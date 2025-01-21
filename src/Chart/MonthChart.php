@@ -18,6 +18,7 @@ use App\Repository\CalculationRepository;
 use App\Service\ApplicationService;
 use App\Traits\ArrayTrait;
 use App\Utils\FormatUtils;
+use Doctrine\ORM\Exception\ORMException;
 use HighchartsBundle\Highcharts\ChartExpression;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
@@ -55,8 +56,7 @@ class MonthChart extends AbstractHighchart
     /**
      * Generate the chart data.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Exception
+     * @throws \Exception|ORMException
      */
     public function generate(int $months): array
     {
@@ -123,7 +123,7 @@ class MonthChart extends AbstractHighchart
     /**
      * @return int[]
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     private function getAllowedMonths(): array
     {

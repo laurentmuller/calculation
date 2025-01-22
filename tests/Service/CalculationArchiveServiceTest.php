@@ -25,7 +25,6 @@ use App\Tests\Entity\IdTrait;
 use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\UnexpectedResultException;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -177,7 +176,6 @@ class CalculationArchiveServiceTest extends TestCase
     public function testGetDateMaxConstraintException(): void
     {
         $this->setCalculationStates();
-        $this->setCalculationsException();
         $service = $this->createService();
         $actual = $service->getDateMaxConstraint();
         self::assertNull($actual);
@@ -215,7 +213,6 @@ class CalculationArchiveServiceTest extends TestCase
     public function testGetDateMinConstraintException(): void
     {
         $this->setCalculationStates();
-        $this->setCalculationsException();
         $service = $this->createService();
         $actual = $service->getDateMinConstraint();
         self::assertNull($actual);
@@ -395,26 +392,6 @@ class CalculationArchiveServiceTest extends TestCase
         $query = $this->createMock(Query::class);
         $query->method('getResult')
             ->willReturn($calculations);
-
-        $queryBuilder = $this->createMock(QueryBuilder::class);
-        $queryBuilder->method('getQuery')
-            ->willReturn($query);
-
-        $queryBuilder->method('select')
-            ->willReturn($queryBuilder);
-
-        $this->calculationRepository->method('createQueryBuilder')
-            ->willReturn($queryBuilder);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function setCalculationsException(): void
-    {
-        $query = $this->createMock(Query::class);
-        $query->method('getSingleScalarResult')
-            ->willThrowException(new UnexpectedResultException());
 
         $queryBuilder = $this->createMock(QueryBuilder::class);
         $queryBuilder->method('getQuery')

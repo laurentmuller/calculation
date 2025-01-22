@@ -32,7 +32,9 @@ return static function (MonologConfig $config): void {
         ->type('stream')
         ->path('%kernel.logs_dir%/%kernel.environment%.log')
         ->level(LogLevel::INFO)
-        ->formatter(LogService::FORMATTER_NAME);
+        ->formatter(LogService::FORMATTER_NAME)
+        ->channels()
+        ->elements(['!deprecation']);
 
     $config->handler('console')
         ->type('console')

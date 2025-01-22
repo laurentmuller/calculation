@@ -24,7 +24,7 @@ return static function (MonologConfig $config): void {
         ->level(LogLevel::DEBUG)
         ->formatter(LogService::FORMATTER_NAME)
         ->channels()
-        ->elements(['!event']);
+        ->elements(['!event', '!deprecation']);
 
     $config->handler('console')
         ->type('console')

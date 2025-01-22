@@ -17,7 +17,6 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\ResetPasswordService;
 use App\Service\UserExceptionService;
-use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\MockObject\Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -139,9 +138,6 @@ class UserControllerTest extends EntityControllerTestCase
         self::assertResponseIsSuccessful();
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testResetAllPasswordRequestOneUser(): void
     {
         $this->setResetPasswordRequest(self::ROLE_USER);
@@ -151,9 +147,6 @@ class UserControllerTest extends EntityControllerTestCase
         self::assertResponseIsSuccessful();
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testResetAllPasswordSuccess(): void
     {
         $this->setResetPasswordRequest(self::ROLE_USER);
@@ -167,9 +160,6 @@ class UserControllerTest extends EntityControllerTestCase
         $this->checkForm($uri, 'common.button_delete');
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testResetSuccess(): void
     {
         $user = $this->setResetPasswordRequest(self::ROLE_USER);
@@ -220,9 +210,6 @@ class UserControllerTest extends EntityControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSendPasswordRequestGenerateException(): void
     {
         $helper = $this->createMock(ResetPasswordHelperInterface::class);
@@ -286,9 +273,6 @@ class UserControllerTest extends EntityControllerTestCase
         );
     }
 
-    /**
-     * @throws ORMException
-     */
     private function setResetPasswordRequest(string $username): User
     {
         $user = $this->loadUser($username);

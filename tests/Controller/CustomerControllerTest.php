@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Entity\Customer;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Response;
 
 class CustomerControllerTest extends EntityControllerTestCase
@@ -62,18 +61,12 @@ class CustomerControllerTest extends EntityControllerTestCase
         $this->checkAddEntity('/customer/add', $data);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testDelete(): void
     {
         $uri = \sprintf('/customer/delete/%d', (int) $this->getCustomer()->getId());
         $this->checkDeleteEntity($uri);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testEdit(): void
     {
         $uri = \sprintf('/customer/edit/%d', (int) $this->getCustomer()->getId());
@@ -85,41 +78,26 @@ class CustomerControllerTest extends EntityControllerTestCase
         $this->checkEditEntity($uri, $data);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testExcelEmpty(): void
     {
         $this->checkUriWithEmptyEntity('/customer/excel', Customer::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testPdfEmpty(): void
     {
         $this->checkUriWithEmptyEntity('/customer/pdf', Customer::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function addEntities(): void
     {
         $this->getCustomer();
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function deleteEntities(): void
     {
         $this->customer = $this->deleteEntity($this->customer);
     }
 
-    /**
-     * @throws ORMException
-     */
     private function getCustomer(): Customer
     {
         if ($this->customer instanceof Customer) {

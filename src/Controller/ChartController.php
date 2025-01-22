@@ -25,7 +25,6 @@ use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Response\PdfResponse;
 use App\Traits\MathTrait;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -50,7 +49,6 @@ class ChartController extends AbstractController
 
     /**
      * @throws BadRequestHttpException
-     * @throws ORMException
      */
     #[Get(path: '/month', name: 'month')]
     public function month(Request $request, MonthChart $chart): Response

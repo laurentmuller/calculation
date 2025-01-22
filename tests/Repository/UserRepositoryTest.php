@@ -17,7 +17,6 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -119,9 +118,6 @@ class UserRepositoryTest extends KernelServiceTestCase
         self::assertInstanceOf(QueryBuilder::class, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testIsResettableUsers(): void
     {
         $actual = $this->repository->isResettableUsers();

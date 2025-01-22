@@ -19,6 +19,7 @@ use App\Enums\Importance;
 use App\Mime\ResetPasswordEmail;
 use App\Repository\UserRepository;
 use App\Traits\LoggerTrait;
+use App\Utils\DateUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
@@ -101,7 +102,7 @@ readonly class ResetPasswordService
         $expireAt = clone $token->getExpiresAt();
         $interval = new \DateInterval(self::THROTTLE_OFFSET);
 
-        return $expireAt->sub($interval);
+        return DateUtils::sub($expireAt, $interval);
     }
 
     /**

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -69,8 +68,6 @@ abstract class EntityControllerTestCase extends ControllerTestCase
 
     /**
      * @psalm-param class-string $className
-     *
-     * @throws ORMException
      */
     protected function checkUriWithEmptyEntity(
         string $uri,

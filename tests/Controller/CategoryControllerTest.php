@@ -18,7 +18,6 @@ use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\CategoryTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use App\Tests\EntityTrait\TaskTrait;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -65,9 +64,6 @@ class CategoryControllerTest extends EntityControllerTestCase
         yield ['/category/excel', self::ROLE_SUPER_ADMIN];
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testAdd(): void
     {
         $data = [
@@ -78,9 +74,6 @@ class CategoryControllerTest extends EntityControllerTestCase
         $this->checkAddEntity('/category/add', $data);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testDelete(): void
     {
         $this->addEntities();
@@ -88,9 +81,6 @@ class CategoryControllerTest extends EntityControllerTestCase
         $this->checkDeleteEntity($uri);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testDeleteWithDependencies(): void
     {
         $this->getTask();
@@ -114,9 +104,6 @@ class CategoryControllerTest extends EntityControllerTestCase
         self::assertSame($text, $button->text());
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testEdit(): void
     {
         $this->addEntities();
@@ -129,33 +116,21 @@ class CategoryControllerTest extends EntityControllerTestCase
         $this->checkEditEntity($uri, $data);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testExcelEmpty(): void
     {
         $this->checkUriWithEmptyEntity('/category/excel', Category::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testPdfEmpty(): void
     {
         $this->checkUriWithEmptyEntity('/category/pdf', Category::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function addEntities(): void
     {
         $this->getCategory();
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function deleteEntities(): void
     {
         $this->deleteCategory();

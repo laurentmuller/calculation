@@ -25,7 +25,6 @@ use App\Repository\TaskItemRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\Entity\IdTrait;
 use App\Tests\KernelServiceTestCase;
-use Doctrine\ORM\Exception\ORMException;
 
 class OtherRepositoriesTest extends KernelServiceTestCase
 {
@@ -34,7 +33,6 @@ class OtherRepositoriesTest extends KernelServiceTestCase
 
     /**
      * @throws \ReflectionException
-     * @throws ORMException
      */
     public function testCountCategoryReferences(): void
     {
@@ -47,7 +45,6 @@ class OtherRepositoriesTest extends KernelServiceTestCase
 
     /**
      * @throws \ReflectionException
-     * @throws ORMException
      */
     public function testCountGroupReferences(): void
     {

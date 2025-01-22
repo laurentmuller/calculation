@@ -45,9 +45,6 @@ class TaskTest extends EntityValidatorTestCase
         self::assertSame(-1, $actual);
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testDuplicate(): void
     {
         $group = $this->createGroup();
@@ -106,9 +103,6 @@ class TaskTest extends EntityValidatorTestCase
         $this->validatePaths($results, 'name');
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testNotDuplicate(): void
     {
         $group = $this->createGroup();

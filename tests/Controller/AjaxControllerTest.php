@@ -15,7 +15,6 @@ namespace App\Tests\Controller;
 
 use App\Enums\StrengthLevel;
 use App\Tests\EntityTrait\TaskItemTrait;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -95,9 +94,6 @@ class AjaxControllerTest extends ControllerTestCase
         $this->checkTaskRequest($parameters, Response::HTTP_BAD_REQUEST);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testComputeTaskSuccess(): void
     {
         $taskItem = $this->getTaskItem();
@@ -174,9 +170,6 @@ class AjaxControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function deleteEntities(): void
     {
         $this->deleteTaskItem();

@@ -20,7 +20,6 @@ use App\Model\CalculationUpdateQuery;
 use App\Repository\CalculationStateRepository;
 use App\Service\CalculationUpdateService;
 use App\Utils\DateUtils;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,7 +38,6 @@ class CalculationUpdateController extends AbstractController
 {
     /**
      * @throws \Exception
-     * @throws ORMException
      */
     #[GetPost(path: '/update', name: 'update')]
     public function update(Request $request, CalculationUpdateService $service): Response

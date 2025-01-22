@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Utils\DateUtils;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,7 +50,7 @@ trait CookieTrait
         Request $request,
         string $key,
         string $prefix = '',
-        float $default = 0
+        float $default = 0.0
     ): float {
         return (float) $request->cookies->get($this->getCookieName($key, $prefix), (string) $default);
     }
@@ -109,7 +110,7 @@ trait CookieTrait
 
     private function getCookieExpire(string $modify): \DateTimeInterface
     {
-        return (new \DateTime())->modify($modify);
+        return DateUtils::modify(new \DateTime(), $modify);
     }
 
     /**

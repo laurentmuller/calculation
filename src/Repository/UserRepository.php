@@ -17,7 +17,6 @@ use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -170,8 +169,6 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
 
     /**
      * Returns if one or more users have the reset password requested.
-     *
-     * @throws ORMException
      */
     public function isResettableUsers(): bool
     {

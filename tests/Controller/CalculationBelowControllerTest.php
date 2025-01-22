@@ -16,7 +16,6 @@ namespace App\Tests\Controller;
 use App\Entity\Calculation;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Response;
 
 class CalculationBelowControllerTest extends ControllerTestCase
@@ -37,9 +36,6 @@ class CalculationBelowControllerTest extends ControllerTestCase
         yield ['/calculation/below/excel', self::ROLE_SUPER_ADMIN];
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testEmptyCalculation(): void
     {
         $this->deleteEntitiesByClass(Calculation::class);
@@ -47,9 +43,6 @@ class CalculationBelowControllerTest extends ControllerTestCase
         $this->checkRoute('/calculation/below/excel', self::ROLE_ADMIN, Response::HTTP_FOUND);
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function addEntities(): void
     {
         $product = $this->getProduct();
@@ -61,9 +54,6 @@ class CalculationBelowControllerTest extends ControllerTestCase
         $this->addEntity($calculation);
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function deleteEntities(): void
     {
         $this->deleteCalculation();

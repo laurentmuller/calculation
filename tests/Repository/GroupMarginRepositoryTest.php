@@ -17,7 +17,6 @@ use App\Repository\GroupMarginRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\GroupTrait;
 use App\Tests\KernelServiceTestCase;
-use Doctrine\ORM\Exception\ORMException;
 
 class GroupMarginRepositoryTest extends KernelServiceTestCase
 {
@@ -32,9 +31,6 @@ class GroupMarginRepositoryTest extends KernelServiceTestCase
         $this->repository = $this->getService(GroupMarginRepository::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testGetMargin(): void
     {
         $group = $this->getGroup();

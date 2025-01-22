@@ -15,7 +15,6 @@ namespace App\Tests\Controller;
 
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -31,9 +30,6 @@ class CalculationArchiveControllerTest extends ControllerTestCase
         yield ['/admin/archive', self::ROLE_SUPER_ADMIN];
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testArchiveEditableEmpty(): void
     {
         $this->addNotEditState();
@@ -58,9 +54,6 @@ class CalculationArchiveControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testArchiveNotEditableEmpty(): void
     {
         $this->addEditState();
@@ -86,7 +79,7 @@ class CalculationArchiveControllerTest extends ControllerTestCase
     }
 
     /**
-     * @throws ORMException|\Exception
+     * @throws \Exception
      */
     public function testArchiveSuccess(): void
     {
@@ -121,27 +114,18 @@ class CalculationArchiveControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function addEntities(): void
     {
         $this->addEditState();
         $this->addNotEditState();
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function deleteEntities(): void
     {
         $this->editState = $this->deleteEntity($this->editState);
         $this->notEditSate = $this->deleteEntity($this->notEditSate);
     }
 
-    /**
-     * @throws ORMException
-     */
     private function addEditState(): void
     {
         if ($this->editState instanceof CalculationState) {
@@ -152,9 +136,6 @@ class CalculationArchiveControllerTest extends ControllerTestCase
         $this->addEntity($this->editState);
     }
 
-    /**
-     * @throws ORMException
-     */
     private function addNotEditState(): void
     {
         if ($this->notEditSate instanceof CalculationState) {

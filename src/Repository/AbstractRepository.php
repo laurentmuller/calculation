@@ -19,7 +19,6 @@ use App\Interfaces\SortModeInterface;
 use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -126,8 +125,6 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
      *                                             mode ('ASC' or 'DESC')
      * @param array<Criteria|string> $criteria     the filter criteria (the where clause)
      * @param literal-string         $alias        the entity alias
-     *
-     * @throws ORMException
      *
      * @see AbstractRepository::createDefaultQueryBuilder()
      *

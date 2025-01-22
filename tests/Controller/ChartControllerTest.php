@@ -47,9 +47,6 @@ class ChartControllerTest extends ControllerTestCase
         }
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function addEntities(): void
     {
         $this->getGlobalMargin();
@@ -59,9 +56,6 @@ class ChartControllerTest extends ControllerTestCase
         $this->updateCalculation();
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function deleteEntities(): void
     {
         $this->deleteGlobalMargin();

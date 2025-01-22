@@ -76,7 +76,7 @@ class TimestampableListenerTest extends TestCase
 
         $listener = $this->createListener(false);
         $listener->onFlush($event);
-        self::assertEntityUpdated($task, 'common.empty_user');
+        self::assertEntityUpdated($task, 'common.entity_empty_user');
     }
 
     /**

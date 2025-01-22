@@ -20,7 +20,6 @@ use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\CalculationStateTrait;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\KernelServiceTestCase;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 
 class CalculationStateRepositoryTest extends KernelServiceTestCase
@@ -37,18 +36,12 @@ class CalculationStateRepositoryTest extends KernelServiceTestCase
         $this->repository = $this->getService(CalculationStateRepository::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function tearDown(): void
     {
         $this->deleteCalculation();
         parent::tearDown();
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testGetCalculations(): void
     {
         $actual = $this->repository->getCalculations();
@@ -59,9 +52,6 @@ class CalculationStateRepositoryTest extends KernelServiceTestCase
         self::assertCount(1, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testGetDropDown(): void
     {
         $actual = $this->repository->getDropDown();
@@ -90,9 +80,6 @@ class CalculationStateRepositoryTest extends KernelServiceTestCase
         }
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testGetDropDownBelow(): void
     {
         $actual = $this->repository->getDropDownBelow(0.0);
@@ -103,9 +90,6 @@ class CalculationStateRepositoryTest extends KernelServiceTestCase
         self::assertCount(0, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testGetEditableCount(): void
     {
         $actual = $this->repository->getEditableCount();
@@ -121,9 +105,6 @@ class CalculationStateRepositoryTest extends KernelServiceTestCase
         self::assertSame(0, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testGetNotEditableCount(): void
     {
         $actual = $this->repository->getNotEditableCount();

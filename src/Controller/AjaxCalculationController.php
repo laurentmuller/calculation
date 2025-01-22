@@ -17,7 +17,6 @@ use App\Attribute\Post;
 use App\Interfaces\RoleInterface;
 use App\Model\CalculationQuery;
 use App\Service\CalculationGroupService;
-use Doctrine\ORM\Exception\ORMException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -33,9 +32,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class AjaxCalculationController extends AbstractController
 {
-    /**
-     * @throws ORMException
-     */
     #[Post(path: '/update', name: 'update')]
     public function update(
         CalculationGroupService $service,

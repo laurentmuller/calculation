@@ -40,9 +40,6 @@ class GeneratorControllerTest extends ControllerTestCase
         yield ['/generate/customer', self::ROLE_SUPER_ADMIN];
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function addEntities(): void
     {
         if (!self::$state instanceof CalculationState) {
@@ -75,9 +72,6 @@ class GeneratorControllerTest extends ControllerTestCase
         }
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function deleteEntities(): void
     {
         if (null !== self::$products) {

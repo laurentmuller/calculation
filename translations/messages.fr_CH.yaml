@@ -778,7 +778,7 @@ openweather:
         wind: Vent
         wind_title: Vitesse du vent
         wind_deg: Direction
-        wind_deg_title: 'Direction du vent : %degrees%'
+        wind_deg_title: 'Direction du vent : %value%'
         wind_gust: Rafales
         wind_speed: Vitesse
         current_weather: Prévision actuelle

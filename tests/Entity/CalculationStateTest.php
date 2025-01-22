@@ -66,9 +66,6 @@ class CalculationStateTest extends EntityValidatorTestCase
         self::assertSame('description', $state->getDescription());
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testDuplicate(): void
     {
         $first = new CalculationState();
@@ -101,9 +98,6 @@ class CalculationStateTest extends EntityValidatorTestCase
         $this->validatePaths($results, 'code');
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testNotDuplicate(): void
     {
         $first = new CalculationState();

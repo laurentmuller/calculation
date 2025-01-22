@@ -17,9 +17,6 @@ use App\Entity\GlobalProperty;
 
 class GlobalPropertyTest extends EntityValidatorTestCase
 {
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testDuplicate(): void
     {
         $first = new GlobalProperty();
@@ -67,9 +64,6 @@ class GlobalPropertyTest extends EntityValidatorTestCase
         $this->validatePaths($results, 'value');
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testNotDuplicate(): void
     {
         $first = new GlobalProperty();

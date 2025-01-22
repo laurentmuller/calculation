@@ -18,7 +18,6 @@ use App\Generator\ProductGenerator;
 use App\Service\FakerService;
 use App\Tests\EntityTrait\CategoryTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\MockObject\Exception;
 
 /**
@@ -35,9 +34,6 @@ class ProductGeneratorTest extends GeneratorTestCase
         self::assertValidateResponse($actual, false, 0);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testNotSimulate(): void
     {
         $this->getCategory();

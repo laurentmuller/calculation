@@ -18,7 +18,6 @@ use App\Repository\CalculationRepository;
 use App\Table\CalculationEmptyTable;
 use App\Table\DataQuery;
 use App\Tests\TranslatorMockTrait;
-use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +27,7 @@ class CalculationEmptyTableTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @throws Exception|ORMException
+     * @throws Exception
      */
     public function testDefault(): void
     {

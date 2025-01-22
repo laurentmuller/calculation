@@ -19,7 +19,6 @@ use App\Repository\GroupRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\CategoryTrait;
 use App\Tests\KernelServiceTestCase;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 
 class GroupRepositoryTest extends KernelServiceTestCase
@@ -35,18 +34,12 @@ class GroupRepositoryTest extends KernelServiceTestCase
         $this->repository = $this->getService(GroupRepository::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function tearDown(): void
     {
         $this->deleteGroup();
         parent::tearDown();
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testFindByCode(): void
     {
         $actual = $this->repository->findByCode();
@@ -57,9 +50,6 @@ class GroupRepositoryTest extends KernelServiceTestCase
         self::assertCount(1, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testGetDropDown(): void
     {
         $actual = $this->repository->getDropDown();

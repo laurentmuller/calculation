@@ -23,7 +23,6 @@ use App\Service\SuspendEventListenerService;
 use App\Tests\DateAssertTrait;
 use App\Tests\Entity\IdTrait;
 use App\Tests\TranslatorMockTrait;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnexpectedResultException;
@@ -57,7 +56,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|ORMException|\DateException
+     * @throws Exception|\DateException
      */
     public function testCreateQueryEmpty(): void
     {
@@ -71,7 +70,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|ORMException|\DateException
+     * @throws Exception|\DateException
      */
     public function testCreateQueryWithDate(): void
     {
@@ -87,7 +86,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|ORMException|\DateException
+     * @throws Exception|\DateException
      */
     public function testCreateQueryWithSessionDate(): void
     {
@@ -101,7 +100,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|ORMException|\DateException|\ReflectionException
+     * @throws Exception|\DateException|\ReflectionException
      */
     public function testCreateQueryWithSessionSources(): void
     {
@@ -120,7 +119,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|ORMException|\DateException|\ReflectionException
+     * @throws Exception|\DateException|\ReflectionException
      */
     public function testCreateQueryWithSessionTarget(): void
     {
@@ -142,7 +141,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|ORMException|\DateException
+     * @throws Exception|\DateException
      */
     public function testCreateQueryWithSources(): void
     {
@@ -159,7 +158,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|ORMException|\DateException
+     * @throws Exception|\DateException
      */
     public function testGetDateMaxConstraintDate(): void
     {
@@ -173,7 +172,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|ORMException|\DateException
+     * @throws Exception|\DateException
      */
     public function testGetDateMaxConstraintException(): void
     {
@@ -185,7 +184,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|ORMException|\DateException
+     * @throws Exception|\DateException
      */
     public function testGetDateMaxConstraintNull(): void
     {
@@ -197,7 +196,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|ORMException
+     * @throws Exception
      */
     public function testGetDateMinConstraintDate(): void
     {
@@ -211,7 +210,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|ORMException
+     * @throws Exception
      */
     public function testGetDateMinConstraintException(): void
     {
@@ -223,7 +222,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|ORMException
+     * @throws Exception
      */
     public function testGetDateMinConstraintNull(): void
     {
@@ -234,7 +233,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|ORMException
+     * @throws Exception
      */
     public function testIsEditableCount(): void
     {
@@ -246,7 +245,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|ORMException
+     * @throws Exception
      */
     public function testIsNotEditableCount(): void
     {

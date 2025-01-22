@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Traits\DuplicateItemsTrait;
-use Doctrine\ORM\Exception\ORMException;
 
 /**
  * Calculation table for duplicate items.
@@ -27,17 +26,12 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
 
     /**
      * @return int<0, max>
-     *
-     * @throws ORMException
      */
     public function count(): int
     {
         return $this->repository->countItemsDuplicate();
     }
 
-    /**
-     * @throws ORMException
-     */
     public function getEmptyMessage(): ?string
     {
         return 0 === $this->count() ? 'duplicate.empty' : null;

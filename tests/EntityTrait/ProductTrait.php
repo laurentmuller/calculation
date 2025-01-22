@@ -25,9 +25,6 @@ trait ProductTrait
 
     private ?Product $product = null;
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function getProduct(
         ?Category $category = null,
         float $price = 1.0,
@@ -46,9 +43,6 @@ trait ProductTrait
         return $this->addEntity($this->product);
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function deleteProduct(): void
     {
         if ($this->product instanceof Product) {

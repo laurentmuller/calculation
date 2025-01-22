@@ -18,7 +18,6 @@ use App\Interfaces\PropertyServiceInterface;
 use App\Service\ApplicationService;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
-use Doctrine\ORM\Exception\ORMException;
 
 class CalculationControllerTest extends EntityControllerTestCase
 {
@@ -76,9 +75,6 @@ class CalculationControllerTest extends EntityControllerTestCase
         yield ['/calculation?search=22', self::ROLE_SUPER_ADMIN];
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testAdd(): void
     {
         $state = $this->getCalculationState();
@@ -95,9 +91,6 @@ class CalculationControllerTest extends EntityControllerTestCase
         $this->checkAddEntity('/calculation/add', $data);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testEditState(): void
     {
         $this->addEntities();
@@ -108,25 +101,16 @@ class CalculationControllerTest extends EntityControllerTestCase
         $this->checkEditEntity($uri, $data);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testExcelEmpty(): void
     {
         $this->checkUriWithEmptyEntity('/calculation/excel', Calculation::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testPdfEmpty(): void
     {
         $this->checkUriWithEmptyEntity('/calculation/pdf', Calculation::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testWithQrCode(): void
     {
         $service = $this->getService(ApplicationService::class);
@@ -147,9 +131,6 @@ class CalculationControllerTest extends EntityControllerTestCase
         }
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function addEntities(): void
     {
         $product = $this->getProduct();
@@ -162,9 +143,6 @@ class CalculationControllerTest extends EntityControllerTestCase
         $this->addEntity($this->getCalculation());
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function deleteEntities(): void
     {
         $this->deleteCalculation();

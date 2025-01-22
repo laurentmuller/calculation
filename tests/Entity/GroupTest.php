@@ -135,9 +135,6 @@ class GroupTest extends EntityValidatorTestCase
         self::assertTrue($group->hasTasks());
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testDuplicate(): void
     {
         $first = new Group();
@@ -205,9 +202,6 @@ class GroupTest extends EntityValidatorTestCase
         $this->validatePaths($results, 'code');
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testNotDuplicate(): void
     {
         $first = new Group();

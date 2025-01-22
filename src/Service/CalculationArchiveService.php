@@ -24,7 +24,6 @@ use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -54,7 +53,6 @@ class CalculationArchiveService implements ServiceSubscriberInterface
      * Create the archive query.
      *
      * @throws \DateException
-     * @throws ORMException
      */
     public function createQuery(): CalculationArchiveQuery
     {
@@ -70,7 +68,6 @@ class CalculationArchiveService implements ServiceSubscriberInterface
      * Gets the maximum allowed date or null if none.
      *
      * @throws \DateException
-     * @throws ORMException
      */
     public function getDateMaxConstraint(): ?string
     {
@@ -82,8 +79,6 @@ class CalculationArchiveService implements ServiceSubscriberInterface
 
     /**
      * Gets the minimum allowed date or null if none.
-     *
-     * @throws ORMException
      */
     public function getDateMinConstraint(): ?string
     {
@@ -95,8 +90,6 @@ class CalculationArchiveService implements ServiceSubscriberInterface
 
     /**
      * Returns a value indicating if one or more calculation states are editable.
-     *
-     * @throws ORMException
      */
     public function isEditableStates(): bool
     {
@@ -105,8 +98,6 @@ class CalculationArchiveService implements ServiceSubscriberInterface
 
     /**
      * Returns a value indicating if one or more calculation states are not editable.
-     *
-     * @throws ORMException
      */
     public function isNotEditableStates(): bool
     {
@@ -196,7 +187,6 @@ class CalculationArchiveService implements ServiceSubscriberInterface
 
     /**
      * @throws \DateException
-     * @throws ORMException
      */
     private function getDate(): \DateTimeInterface
     {
@@ -245,22 +235,14 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         $builder = $this->createQueryBuilder($sources)
             ->select(\sprintf('%s(c.date)', $function));
 
-        try {
-            /** @var string|null $date */
-            $date = $builder->getQuery()->getSingleScalarResult();
-            if (null !== $date) {
-                return new \DateTimeImmutable($date);
-            }
-        } catch (ORMException|\DateException) {
-        }
+        /** @var string|null $date */
+        $date = $builder->getQuery()->getSingleScalarResult();
 
-        return null;
+        return null === $date ? null : new \DateTimeImmutable($date);
     }
 
     /**
      * @psalm-return CalculationState[]
-     *
-     * @throws ORMException
      */
     private function getSources(bool $useSession): array
     {

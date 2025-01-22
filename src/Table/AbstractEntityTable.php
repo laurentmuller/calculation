@@ -17,7 +17,6 @@ use App\Interfaces\EntityInterface;
 use App\Interfaces\TableInterface;
 use App\Repository\AbstractRepository;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;
@@ -128,9 +127,6 @@ abstract class AbstractEntityTable extends AbstractTable
         return $this->repository;
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function handleQuery(DataQuery $query): DataResults
     {
         $results = parent::handleQuery($query);
@@ -202,8 +198,6 @@ abstract class AbstractEntityTable extends AbstractTable
      * @param EntityType[]   $entities the entities to search in or to update
      * @param DataQuery      $query    the query to get values from
      * @param literal-string $alias    the entity alias
-     *
-     * @throws ORMException
      */
     private function addSelection(array &$entities, DataQuery $query, string $alias): void
     {
@@ -239,8 +233,6 @@ abstract class AbstractEntityTable extends AbstractTable
      *
      * @param QueryBuilder   $builder the source builder
      * @param literal-string $alias   the root alias
-     *
-     * @throws ORMException
      */
     private function countFiltered(QueryBuilder $builder, string $alias): int
     {

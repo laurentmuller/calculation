@@ -46,7 +46,7 @@ trait ParameterTrait
         return $this->getRequestEnum($request, $key, $default);
     }
 
-    protected function getParamFloat(Request $request, string $key, string $prefix = '', float $default = 0): float
+    protected function getParamFloat(Request $request, string $key, string $prefix = '', float $default = 0.0): float
     {
         $default = $this->getCookieFloat($request, $key, $prefix, $default);
 

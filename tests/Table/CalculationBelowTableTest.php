@@ -19,7 +19,6 @@ use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Service\ApplicationService;
 use App\Table\CalculationBelowTable;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\MockObject\Exception;
@@ -40,7 +39,7 @@ class CalculationBelowTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException|ORMException
+     * @throws Exception|\ReflectionException
      */
     public function testWithCountItemsBelow(): void
     {
@@ -116,7 +115,7 @@ class CalculationBelowTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException|ORMException
+     * @throws Exception|\ReflectionException
      */
     private function processCountItemsBelow(int $count, mixed $expected): void
     {

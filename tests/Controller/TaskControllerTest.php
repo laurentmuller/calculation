@@ -17,7 +17,6 @@ use App\Entity\Task;
 use App\Interfaces\PropertyServiceInterface;
 use App\Service\ApplicationService;
 use App\Tests\EntityTrait\TaskItemTrait;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Response;
 
 class TaskControllerTest extends EntityControllerTestCase
@@ -67,9 +66,6 @@ class TaskControllerTest extends EntityControllerTestCase
         yield ['/task/compute/1', self::ROLE_SUPER_ADMIN];
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testAdd(): void
     {
         $category = $this->getCategory();
@@ -86,18 +82,12 @@ class TaskControllerTest extends EntityControllerTestCase
         $this->checkAddEntity('/task/add', $data);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testComputeEmpty(): void
     {
         $uri = '/task/compute/1';
         $this->checkUriWithEmptyEntity($uri, Task::class, expected: Response::HTTP_FOUND);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testDelete(): void
     {
         $this->addEntities();
@@ -105,9 +95,6 @@ class TaskControllerTest extends EntityControllerTestCase
         $this->checkDeleteEntity($uri);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testEdit(): void
     {
         $this->addEntities();
@@ -121,33 +108,21 @@ class TaskControllerTest extends EntityControllerTestCase
         $this->checkEditEntity($uri, $data);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testExcelEmpty(): void
     {
         $this->checkUriWithEmptyEntity('/task/excel', Task::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testPdfEmpty(): void
     {
         $this->checkUriWithEmptyEntity('/task/pdf', Task::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function addEntities(): void
     {
         $this->getTaskItem();
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function deleteEntities(): void
     {
         $this->deleteTaskItem();

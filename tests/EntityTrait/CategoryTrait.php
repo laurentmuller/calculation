@@ -25,9 +25,6 @@ trait CategoryTrait
 
     private ?Category $category = null;
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function getCategory(?Group $group = null, string $code = 'Test Category'): Category
     {
         if ($this->category instanceof Category) {
@@ -42,9 +39,6 @@ trait CategoryTrait
         return $this->addEntity($this->category);
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function deleteCategory(): void
     {
         if ($this->category instanceof Category) {

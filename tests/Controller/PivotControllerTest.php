@@ -38,7 +38,7 @@ class PivotControllerTest extends ControllerTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Exception
      */
     protected function addEntities(): void
     {
@@ -61,9 +61,6 @@ class PivotControllerTest extends ControllerTestCase
         $this->addEntity($calculation);
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function deleteEntities(): void
     {
         $this->deleteCalculation();

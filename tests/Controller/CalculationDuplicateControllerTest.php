@@ -38,9 +38,6 @@ class CalculationDuplicateControllerTest extends ControllerTestCase
         yield ['/calculation/duplicate/excel', self::ROLE_SUPER_ADMIN];
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function addEntities(): void
     {
         $product = $this->getProduct();
@@ -55,9 +52,6 @@ class CalculationDuplicateControllerTest extends ControllerTestCase
         $this->addEntity($calculation);
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function deleteEntities(): void
     {
         $this->duplicate = $this->deleteEntity($this->duplicate);

@@ -22,9 +22,6 @@ trait GlobalMarginTrait
 {
     private ?GlobalMargin $globalMargin = null;
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function deleteGlobalMargin(): void
     {
         if ($this->globalMargin instanceof GlobalMargin) {
@@ -32,9 +29,6 @@ trait GlobalMarginTrait
         }
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function getGlobalMargin(
         float $minimum = 0.0,
         float $maximum = 1_000_000.0,

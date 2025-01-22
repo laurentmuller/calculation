@@ -14,24 +14,17 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Tests\EntityTrait\ProductTrait;
-use Doctrine\ORM\Exception\ORMException;
 
 class AjaxSearchControllerTest extends ControllerTestCase
 {
     use ProductTrait;
 
-    /**
-     * @throws ORMException
-     */
     protected function setUp(): void
     {
         parent::setUp();
         $this->getProduct();
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function tearDown(): void
     {
         $this->deleteProduct();

@@ -17,7 +17,6 @@ use App\Chart\MonthChart;
 use App\Repository\CalculationRepository;
 use App\Service\ApplicationService;
 use App\Tests\TranslatorMockTrait;
-use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -50,9 +49,6 @@ class MonthChartTest extends TestCase
         $this->translator = $this->createMockTranslator();
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testWithElevenMonths(): void
     {
         $this->repository->method('countDistinctMonths')
@@ -63,9 +59,6 @@ class MonthChartTest extends TestCase
         self::assertInstanceOf(MonthChart::class, $chart);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testWithOneMonth(): void
     {
         $this->repository->method('countDistinctMonths')
@@ -76,9 +69,6 @@ class MonthChartTest extends TestCase
         self::assertInstanceOf(MonthChart::class, $chart);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testWithSeries(): void
     {
         $this->repository->method('countDistinctMonths')

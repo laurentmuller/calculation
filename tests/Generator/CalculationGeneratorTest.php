@@ -18,7 +18,6 @@ use App\Generator\CalculationGenerator;
 use App\Service\CalculationUpdateService;
 use App\Tests\EntityTrait\CalculationStateTrait;
 use App\Tests\EntityTrait\ProductTrait;
-use Doctrine\ORM\Exception\ORMException;
 
 /**
  * @extends GeneratorTestCase<CalculationGenerator>
@@ -43,9 +42,6 @@ class CalculationGeneratorTest extends GeneratorTestCase
         self::assertValidateResponse($actual, false, 0);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testNotSimulate(): void
     {
         $this->getCalculationState();
@@ -58,9 +54,6 @@ class CalculationGeneratorTest extends GeneratorTestCase
         self::assertValidateResponse($actual, true, 1);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testNotSimulateError(): void
     {
         $this->deleteCalculationState();

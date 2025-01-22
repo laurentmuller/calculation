@@ -25,7 +25,6 @@ use App\Table\CalculationBelowTable;
 use App\Table\DataQuery;
 use App\Traits\TableTrait;
 use App\Utils\FormatUtils;
-use Doctrine\ORM\Exception\ORMException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,7 +48,6 @@ class CalculationBelowController extends AbstractController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if the report cannot be rendered
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws ORMException
      */
     #[Get(path: '/excel', name: 'excel')]
     public function excel(CalculationRepository $repository): Response
@@ -85,8 +83,6 @@ class CalculationBelowController extends AbstractController
 
     /**
      * Export calculations to a PDF document.
-     *
-     * @throws ORMException
      */
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(CalculationRepository $repository): Response
@@ -109,8 +105,6 @@ class CalculationBelowController extends AbstractController
 
     /**
      * Returns a response if no calculation is below the given margin.
-     *
-     * @throws ORMException
      */
     private function getEmptyResponse(CalculationRepository $repository, float $minMargin): ?RedirectResponse
     {

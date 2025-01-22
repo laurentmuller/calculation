@@ -19,7 +19,6 @@ use App\Interfaces\RoleInterface;
 use App\Model\CalculationArchiveQuery;
 use App\Repository\CalculationStateRepository;
 use App\Service\CalculationArchiveService;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +37,6 @@ class CalculationArchiveController extends AbstractController
 {
     /**
      * @throws \DateException
-     * @throws ORMException
      */
     #[GetPost(path: '/archive', name: 'archive')]
     public function invoke(Request $request, CalculationArchiveService $service): Response
@@ -76,7 +74,6 @@ class CalculationArchiveController extends AbstractController
      * @return FormInterface<mixed>
      *
      * @throws \DateException
-     * @throws ORMException
      */
     private function createQueryForm(CalculationArchiveService $service, CalculationArchiveQuery $query): FormInterface
     {

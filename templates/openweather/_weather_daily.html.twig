@@ -27,7 +27,7 @@
                     <span title="{{ 'openweather.fields.description'|trans }}">{{ data.weather.description }}</span>
                     {% if data.rain|default(false) %}<span title="{{ 'openweather.fields.rain'|trans }}">, {{ tools.value_rain(data.rain, units_volume) }}</span>{% endif %}
                     <br>
-                    <span title={{ 'openweather.fields.wind_title'|trans }}>{{ tools.value_speed(data.speed, units_speed) }}</span>
+                    <span title="{{ 'openweather.fields.wind_title'|trans }}">{{ tools.value_speed(data.speed, units_speed) }}</span>
                     <span>, </span>
                     <span title="{{ 'openweather.fields.wind_deg'|trans }}">
                         {{- tools.value_wind(data.deg_description, data.deg, units_degree) -}}

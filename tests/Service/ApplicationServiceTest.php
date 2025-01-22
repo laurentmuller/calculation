@@ -30,7 +30,6 @@ use App\Tests\DatabaseTrait;
 use App\Tests\DateAssertTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\MockObject\Exception;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -272,9 +271,6 @@ class ApplicationServiceTest extends KernelServiceTestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testSaveExistingProperty(): void
     {
         $manager = $this->getManager();
@@ -326,9 +322,6 @@ class ApplicationServiceTest extends KernelServiceTestCase
         self::assertSame($value, $actual->minimum);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testUpdateDeletedCategory(): void
     {
         $service = $this->getApplicationService();
@@ -360,9 +353,6 @@ class ApplicationServiceTest extends KernelServiceTestCase
         $manager->flush();
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testUpdateDeletedProduct(): void
     {
         $service = $this->getApplicationService();
@@ -400,9 +390,6 @@ class ApplicationServiceTest extends KernelServiceTestCase
         $manager->flush();
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testUpdateDeletedState(): void
     {
         $service = $this->getApplicationService();

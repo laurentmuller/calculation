@@ -23,9 +23,6 @@ trait GroupTrait
 {
     private ?Group $group = null;
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function getGroup(string $code = 'Test Group'): Group
     {
         if ($this->group instanceof Group) {
@@ -43,9 +40,6 @@ trait GroupTrait
         return $this->addEntity($this->group);
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function deleteGroup(): void
     {
         if ($this->group instanceof Group) {

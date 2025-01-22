@@ -17,7 +17,6 @@ use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Traits\MathTrait;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -99,8 +98,6 @@ class CalculationRepository extends AbstractRepository
 
     /**
      * Returns the number of distinct years and months.
-     *
-     * @throws ORMException
      */
     public function countDistinctMonths(): int
     {
@@ -116,8 +113,6 @@ class CalculationRepository extends AbstractRepository
      * @param float $minMargin the minimum margin
      *
      * @return int<0, max>
-     *
-     * @throws ORMException
      */
     public function countItemsBelow(float $minMargin): int
     {
@@ -136,8 +131,6 @@ class CalculationRepository extends AbstractRepository
      * Items are duplicate if the descriptions are equal.
      *
      * @return int<0, max>
-     *
-     * @throws ORMException
      */
     public function countItemsDuplicate(): int
     {
@@ -166,8 +159,6 @@ class CalculationRepository extends AbstractRepository
      * Items are empty if the price or the quantity is equal to 0.
      *
      * @return int<0, max>
-     *
-     * @throws ORMException
      */
     public function countItemsEmpty(): int
     {
@@ -196,8 +187,6 @@ class CalculationRepository extends AbstractRepository
      * @param CalculationState $state the state to search for
      *
      * @return int the number of calculations
-     *
-     * @throws ORMException
      */
     public function countStateReferences(CalculationState $state): int
     {
@@ -243,8 +232,6 @@ class CalculationRepository extends AbstractRepository
      * @param int $maxResults the maximum number of results to retrieve (the "limit")
      *
      * @psalm-return CalculationByMonthType[]
-     *
-     * @throws \Exception
      */
     public function getByMonth(int $maxResults = 6): array
     {
@@ -685,9 +672,6 @@ class CalculationRepository extends AbstractRepository
             ->groupBy("$alias.id");
     }
 
-    /**
-     * @throws \Exception
-     */
     private function convertToDate(array $item): \DateTimeInterface
     {
         return new \DateTime(\sprintf('%s-%s-10', $item['year'], $item['month']));

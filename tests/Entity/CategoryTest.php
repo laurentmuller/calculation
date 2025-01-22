@@ -99,9 +99,6 @@ class CategoryTest extends EntityValidatorTestCase
         self::assertSame('description', $object->getDescription());
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testDuplicate(): void
     {
         $group = new Group();
@@ -160,9 +157,6 @@ class CategoryTest extends EntityValidatorTestCase
         $this->validatePaths($results, 'code');
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testNotDuplicate(): void
     {
         $group = new Group();

@@ -16,7 +16,6 @@ namespace App\Repository;
 use App\Entity\CalculationCategory;
 use App\Entity\Category;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,8 +36,6 @@ class CalculationCategoryRepository extends AbstractRepository
      * @param Category $category the category to search for
      *
      * @return int the number of calculations
-     *
-     * @throws ORMException
      */
     public function countCategoryReferences(Category $category): int
     {

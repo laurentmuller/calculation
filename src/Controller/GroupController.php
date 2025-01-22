@@ -27,7 +27,6 @@ use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\GroupsDocument;
 use App\Table\DataQuery;
 use App\Table\GroupTable;
-use Doctrine\ORM\Exception\ORMException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -79,8 +78,6 @@ class GroupController extends AbstractEntityController
 
     /**
      * Delete a group.
-     *
-     * @throws ORMException
      */
     #[GetDelete(path: '/delete/{id}', name: 'delete', requirements: self::ID_REQUIREMENT)]
     public function delete(
@@ -132,7 +129,6 @@ class GroupController extends AbstractEntityController
      *
      * @throws NotFoundHttpException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws ORMException
      */
     #[Get(path: '/excel', name: 'excel')]
     public function excel(): SpreadsheetResponse
@@ -163,7 +159,6 @@ class GroupController extends AbstractEntityController
      * Export the groups to a PDF document.
      *
      * @throws NotFoundHttpException
-     * @throws ORMException
      */
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(): PdfResponse

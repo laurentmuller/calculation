@@ -21,7 +21,6 @@ use App\Traits\RoleTranslatorTrait;
 use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
@@ -125,9 +124,6 @@ class UserTable extends AbstractEntityTable
         return FileUtils::buildPath(__DIR__, 'Definition', 'user.json');
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);
@@ -152,9 +148,6 @@ class UserTable extends AbstractEntityTable
         return (int) $user->getId();
     }
 
-    /**
-     * @throws ORMException
-     */
     private function isResettableUsers(): bool
     {
         return $this->getRepository()->isResettableUsers();

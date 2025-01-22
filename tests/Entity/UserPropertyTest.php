@@ -16,13 +16,9 @@ namespace App\Tests\Entity;
 use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Repository\UserPropertyRepository;
-use Doctrine\ORM\Exception\ORMException;
 
 class UserPropertyTest extends EntityValidatorTestCase
 {
-    /**
-     * @throws ORMException
-     */
     public function testDuplicate(): void
     {
         $first = new UserProperty('name');
@@ -41,9 +37,6 @@ class UserPropertyTest extends EntityValidatorTestCase
         }
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testFindByName(): void
     {
         $user = $this->getUser();
@@ -64,9 +57,6 @@ class UserPropertyTest extends EntityValidatorTestCase
         }
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testFindByUser(): void
     {
         $user = $this->getUser();
@@ -128,9 +118,6 @@ class UserPropertyTest extends EntityValidatorTestCase
         $this->validatePaths($results, 'value');
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testNotDuplicate(): void
     {
         $user = $this->getUser();

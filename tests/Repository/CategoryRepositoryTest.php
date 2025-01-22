@@ -22,7 +22,6 @@ use App\Tests\EntityTrait\CategoryTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use App\Tests\EntityTrait\TaskTrait;
 use App\Tests\KernelServiceTestCase;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 
 class CategoryRepositoryTest extends KernelServiceTestCase
@@ -46,9 +45,6 @@ class CategoryRepositoryTest extends KernelServiceTestCase
         self::assertInstanceOf(QueryBuilder::class, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testGetDropDownProducts(): void
     {
         $actual = $this->repository->getDropDownProducts();
@@ -77,9 +73,6 @@ class CategoryRepositoryTest extends KernelServiceTestCase
         }
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testGetDropDownTasks(): void
     {
         $actual = $this->repository->getDropDownTasks();

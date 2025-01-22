@@ -18,7 +18,6 @@ use App\Traits\ArrayTrait;
 use App\Traits\GroupByTrait;
 use App\Traits\MathTrait;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -136,8 +135,6 @@ class CalculationStateRepository extends AbstractRepository
 
     /**
      * Get the number of calculation states where editable is true.
-     *
-     * @throws ORMException
      */
     public function getEditableCount(): int
     {
@@ -148,8 +145,6 @@ class CalculationStateRepository extends AbstractRepository
      * Gets query builder for the state where editable is true.
      *
      * @param literal-string $alias the entity alias
-     *
-     * @throws ORMException
      */
     public function getEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -159,8 +154,6 @@ class CalculationStateRepository extends AbstractRepository
 
     /**
      * Get the number of calculation states where editable is false.
-     *
-     * @throws ORMException
      */
     public function getNotEditableCount(): int
     {
@@ -171,8 +164,6 @@ class CalculationStateRepository extends AbstractRepository
      * Gets query builder for the state where editable is false.
      *
      * @param literal-string $alias the entity alias
-     *
-     * @throws ORMException
      */
     public function getNotEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -236,8 +227,6 @@ class CalculationStateRepository extends AbstractRepository
 
     /**
      * Get the number of calculation states for the given editable value.
-     *
-     * @throws ORMException
      */
     private function countStates(bool $editable): int
     {

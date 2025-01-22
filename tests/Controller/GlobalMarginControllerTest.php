@@ -15,7 +15,6 @@ namespace App\Tests\Controller;
 
 use App\Entity\GlobalMargin;
 use App\Tests\EntityTrait\GlobalMarginTrait;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Response;
 
 class GlobalMarginControllerTest extends EntityControllerTestCase
@@ -45,9 +44,6 @@ class GlobalMarginControllerTest extends EntityControllerTestCase
         yield ['/globalmargin/excel', self::ROLE_SUPER_ADMIN];
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testEdit(): void
     {
         $this->deleteEntitiesByClass(GlobalMargin::class);
@@ -56,33 +52,21 @@ class GlobalMarginControllerTest extends EntityControllerTestCase
         $this->checkEditEntity($uri, id: 'common.button_ok');
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testExcelEmpty(): void
     {
         $this->checkUriWithEmptyEntity('/globalmargin/excel', GlobalMargin::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testPdfEmpty(): void
     {
         $this->checkUriWithEmptyEntity('/globalmargin/pdf', GlobalMargin::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function addEntities(): void
     {
         $this->getGlobalMargin();
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function deleteEntities(): void
     {
         $this->deleteGlobalMargin();

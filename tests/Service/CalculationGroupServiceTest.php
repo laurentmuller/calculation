@@ -32,7 +32,6 @@ use App\Tests\KernelServiceTestCase;
 use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\MockObject\Exception;
 
 class CalculationGroupServiceTest extends KernelServiceTestCase
@@ -48,7 +47,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
 
     /**
      * @throws Exception
-     * @throws ORMException|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testAdjustUserMargin(): void
     {
@@ -71,7 +70,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws ORMException|Exception
+     * @throws Exception
      */
     public function testCreateGroupsFromCalculation(): void
     {
@@ -105,7 +104,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws Exception|ORMException
+     * @throws Exception
      */
     public function testCreateGroupsFromDataEmpty(): void
     {
@@ -117,7 +116,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws Exception|ORMException|\ReflectionException
+     * @throws Exception|\ReflectionException
      */
     public function testCreateGroupsFromQuery(): void
     {
@@ -137,7 +136,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws Exception|ORMException|\ReflectionException
+     * @throws Exception|\ReflectionException
      */
     public function testCreateGroupsFromQueryEmpty(): void
     {
@@ -155,7 +154,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws Exception|ORMException
+     * @throws Exception
      */
     public function testCreateGroupsFromQueryGroupNotFound(): void
     {
@@ -174,7 +173,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws Exception|ORMException|\ReflectionException
+     * @throws Exception|\ReflectionException
      */
     public function testCreateGroupsFromQueryGroupTotalZero(): void
     {
@@ -245,9 +244,6 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
         }
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function init(): Product
     {
         $manager = $this->getManager();
@@ -257,9 +253,6 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
         return $this->initProducts($manager, $category);
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function initCategories(EntityManager $manager): Category
     {
         $this->initRepository($manager, GroupMargin::class);
@@ -287,9 +280,6 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
         return $category;
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function initGlobalMargins(EntityManager $manager): void
     {
         $this->initRepository($manager, GlobalMargin::class);
@@ -303,9 +293,6 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
         $manager->flush();
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function initProducts(EntityManager $manager, Category $category): Product
     {
         $this->initRepository($manager, Product::class);
@@ -327,8 +314,6 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
      * @psalm-param class-string<TEntity> $entityName
      *
      * @psalm-return EntityRepository<TEntity> $repository
-     *
-     * @throws ORMException
      */
     protected function initRepository(EntityManager $manager, string $entityName): EntityRepository
     {

@@ -28,7 +28,6 @@ use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\CalculationStatesDocument;
 use App\Table\CalculationStateTable;
 use App\Table\DataQuery;
-use Doctrine\ORM\Exception\ORMException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -78,8 +77,6 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * Delete a calculation state.
-     *
-     * @throws ORMException
      */
     #[GetDelete(path: '/delete/{id}', name: 'delete', requirements: self::ID_REQUIREMENT)]
     public function delete(
@@ -124,7 +121,6 @@ class CalculationStateController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws ORMException
      */
     #[Get(path: '/excel', name: 'excel')]
     public function excel(): SpreadsheetResponse
@@ -155,7 +151,6 @@ class CalculationStateController extends AbstractEntityController
      * Export the calculation states to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
-     * @throws ORMException
      */
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(): PdfResponse

@@ -23,7 +23,6 @@ use App\Spreadsheet\CalculationsDuplicateDocument;
 use App\Table\CalculationDuplicateTable;
 use App\Table\DataQuery;
 use App\Traits\TableTrait;
-use Doctrine\ORM\Exception\ORMException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,7 +47,6 @@ class CalculationDuplicateController extends AbstractController
      * Export the duplicate items to a Spreadsheet document.
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws ORMException
      */
     #[Get(path: '/excel', name: 'excel')]
     public function excel(CalculationRepository $repository): Response
@@ -78,8 +76,6 @@ class CalculationDuplicateController extends AbstractController
 
     /**
      * Exports the duplicate items in the calculations.
-     *
-     * @throws ORMException
      */
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(CalculationRepository $repository): Response
@@ -96,8 +92,6 @@ class CalculationDuplicateController extends AbstractController
 
     /**
      * Returns a response if no item is duplicated.
-     *
-     * @throws ORMException
      */
     private function getEmptyResponse(CalculationRepository $repository): ?RedirectResponse
     {

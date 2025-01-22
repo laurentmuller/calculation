@@ -16,7 +16,6 @@ namespace App\Tests;
 use App\Interfaces\EntityInterface;
 use App\Tests\Fixture\Database;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -50,8 +49,6 @@ trait DatabaseTrait
      * @psalm-param T $entity
      *
      * @psalm-return T
-     *
-     * @throws ORMException
      */
     protected function addEntity(EntityInterface $entity): EntityInterface
     {
@@ -66,8 +63,6 @@ trait DatabaseTrait
      * Delete all entities for the given class.
      *
      * @psalm-param class-string $className
-     *
-     * @throws ORMException
      */
     protected function deleteEntitiesByClass(string $className): void
     {
@@ -88,8 +83,6 @@ trait DatabaseTrait
      * Delete an entity from the database.
      *
      * @return null this function returns always null
-     *
-     * @throws ORMException
      */
     protected function deleteEntity(?EntityInterface $entity): null
     {

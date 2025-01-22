@@ -17,7 +17,6 @@ use App\Repository\ProductRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use App\Tests\KernelServiceTestCase;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Query\Expr\OrderBy;
 
 class ProductRepositoryTest extends KernelServiceTestCase
@@ -33,18 +32,12 @@ class ProductRepositoryTest extends KernelServiceTestCase
         $this->repository = $this->getService(ProductRepository::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function tearDown(): void
     {
         $this->deleteProduct();
         parent::tearDown();
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testCountCategoryReferences(): void
     {
         $category = $this->getCategory();
@@ -52,9 +45,6 @@ class ProductRepositoryTest extends KernelServiceTestCase
         self::assertSame(0, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testFindByCategory(): void
     {
         $category = $this->getCategory();
@@ -65,9 +55,6 @@ class ProductRepositoryTest extends KernelServiceTestCase
         self::assertCount(1, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testFindByDescription(): void
     {
         $actual = $this->repository->findByDescription();
@@ -78,9 +65,6 @@ class ProductRepositoryTest extends KernelServiceTestCase
         self::assertCount(1, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testFindByGroup(): void
     {
         $this->getGroup();
@@ -159,9 +143,6 @@ class ProductRepositoryTest extends KernelServiceTestCase
         self::assertSame('e', $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testSearch(): void
     {
         $actual = $this->repository->search('fake');

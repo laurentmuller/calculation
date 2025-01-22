@@ -19,7 +19,6 @@ use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\KernelServiceTestCase;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -29,9 +28,6 @@ class SearchServiceTest extends KernelServiceTestCase
     use CalculationTrait;
     use DatabaseTrait;
 
-    /**
-     * @throws ORMException
-     */
     protected function tearDown(): void
     {
         $this->deleteCalculation();
@@ -39,7 +35,7 @@ class SearchServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws ORMException|Exception
+     * @throws Exception
      */
     public function testCount(): void
     {
@@ -117,7 +113,7 @@ class SearchServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws ORMException|Exception
+     * @throws Exception
      */
     public function testSearchNotDebug(): void
     {
@@ -153,7 +149,7 @@ class SearchServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws ORMException|Exception
+     * @throws Exception
      */
     public function testSearchWithDebug(): void
     {

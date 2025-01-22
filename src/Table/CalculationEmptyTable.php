@@ -15,7 +15,6 @@ namespace App\Table;
 
 use App\Repository\CalculationRepository;
 use App\Traits\EmptyItemsTrait;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -46,17 +45,12 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
 
     /**
      * @return int<0, max>
-     *
-     * @throws ORMException
      */
     public function count(): int
     {
         return $this->repository->countItemsEmpty();
     }
 
-    /**
-     * @throws ORMException
-     */
     public function getEmptyMessage(): ?string
     {
         return 0 === $this->count() ? 'empty.empty' : null;

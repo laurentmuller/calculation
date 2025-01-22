@@ -49,9 +49,6 @@ class TaskItemTest extends EntityValidatorTestCase
         self::assertSame(-1, $actual);
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testDuplicate(): void
     {
         $group = $this->createGroup();
@@ -103,9 +100,6 @@ class TaskItemTest extends EntityValidatorTestCase
         self::assertSame('name', $item->getDisplay());
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testNotDuplicate(): void
     {
         $group = $this->createGroup();

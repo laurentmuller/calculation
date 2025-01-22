@@ -19,7 +19,6 @@ use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\GlobalMarginTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\ORM\Query;
 
@@ -47,9 +46,6 @@ class GlobalMarginRepositoryTest extends KernelServiceTestCase
         self::assertSame('source', $actual[0]);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testFindByMinimum(): void
     {
         $actual = $this->repository->findByMinimum();
@@ -85,9 +81,6 @@ class GlobalMarginRepositoryTest extends KernelServiceTestCase
         self::assertCount(0, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testGetMargin(): void
     {
         $actual = $this->repository->getMargin(0.0);
@@ -111,9 +104,6 @@ class GlobalMarginRepositoryTest extends KernelServiceTestCase
         self::assertSame('source.field', $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testGetSearchQuery(): void
     {
         $sortedFields = [

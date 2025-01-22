@@ -16,7 +16,6 @@ namespace App\Tests\Command;
 use App\Entity\Calculation;
 use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\CalculationTrait;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\Console\Command\Command;
 
 class UcFirstCommandTest extends CommandTestCase
@@ -26,18 +25,12 @@ class UcFirstCommandTest extends CommandTestCase
 
     private const COMMAND_NAME = 'app:uc-first';
 
-    /**
-     * @throws ORMException
-     */
     protected function setUp(): void
     {
         parent::setUp();
         $this->deleteEntitiesByClass(Calculation::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testExecute(): void
     {
         $this->getCalculation(customer: 'customer');
@@ -51,9 +44,6 @@ class UcFirstCommandTest extends CommandTestCase
         $this->validate($output, $expected);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testExecuteDryRun(): void
     {
         $this->getCalculation(customer: 'customer');

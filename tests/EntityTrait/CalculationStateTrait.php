@@ -22,9 +22,6 @@ trait CalculationStateTrait
 {
     private ?CalculationState $calculationState = null;
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function deleteCalculationState(): void
     {
         if ($this->calculationState instanceof CalculationState) {
@@ -32,9 +29,6 @@ trait CalculationStateTrait
         }
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function getCalculationState(string $code = 'Test State'): CalculationState
     {
         if ($this->calculationState instanceof CalculationState) {

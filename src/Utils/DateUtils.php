@@ -62,13 +62,11 @@ final class DateUtils
      *
      * @return \DateTimeInterface the new date
      *
-     * @throws \Exception if the interval is a string and cannot be parsed
-     *
      * @psalm-template T of \DateTime|\DateTimeImmutable
      *
      * @psalm-param T $date
      *
-     * @psalm-return (T is \DateTime ? \DateTime : \DateTimeImmutable)
+     * @psalm-return T
      */
     public static function add(\DateTimeInterface $date, \DateInterval|string $interval): \DateTimeInterface
     {
@@ -242,13 +240,32 @@ final class DateUtils
     }
 
     /**
+     * Alters the timestamp of the given date.
+     *
+     * @param \DateTimeInterface $date     the date to modify
+     * @param string             $modifier a date/time string
+     *
+     * @return \DateTimeInterface the modified date
+     *
+     * @psalm-template T of \DateTime|\DateTimeImmutable
+     *
+     * @psalm-param T $date
+     *
+     * @psalm-return T
+     */
+    public static function modify(\DateTimeInterface $date, string $modifier): \DateTimeInterface
+    {
+        return (clone $date)->modify($modifier);
+    }
+
+    /**
      * Remove the time part of the given date.
      *
      * @psalm-template T of \DateTime|\DateTimeImmutable
      *
      * @psalm-param T $date
      *
-     * @psalm-return (T is \DateTime ? \DateTime : \DateTimeImmutable)
+     * @psalm-return T
      */
     public static function removeTime(\DateTime|\DateTimeImmutable $date = new \DateTime()): \DateTime|\DateTimeImmutable
     {
@@ -263,13 +280,11 @@ final class DateUtils
      *
      * @return \DateTimeInterface the new date
      *
-     * @throws \Exception if the interval is a string and cannot be parsed
-     *
      * @psalm-template T of \DateTime|\DateTimeImmutable
      *
      * @psalm-param T $date
      *
-     * @psalm-return (T is \DateTime ? \DateTime : \DateTimeImmutable)
+     * @psalm-return T
      */
     public static function sub(\DateTimeInterface $date, \DateInterval|string $interval): \DateTimeInterface
     {

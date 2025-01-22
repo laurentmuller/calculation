@@ -16,7 +16,6 @@ namespace App\Tests\Command;
 use App\Entity\Calculation;
 use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\CalculationTrait;
-use Doctrine\ORM\Exception\ORMException;
 
 class AnonymousCommandTest extends CommandTestCase
 {
@@ -25,18 +24,12 @@ class AnonymousCommandTest extends CommandTestCase
 
     private const COMMAND_NAME = 'app:anonymous';
 
-    /**
-     * @throws ORMException
-     */
     protected function setUp(): void
     {
         parent::setUp();
         $this->deleteEntitiesByClass(Calculation::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testExecute(): void
     {
         $this->getCalculation();
@@ -53,9 +46,6 @@ class AnonymousCommandTest extends CommandTestCase
         $this->validate($output, $expected);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testExecuteDryRun(): void
     {
         $this->getCalculation();

@@ -35,7 +35,6 @@ use App\Spreadsheet\CalculationDocument;
 use App\Spreadsheet\CalculationsDocument;
 use App\Table\CalculationTable;
 use App\Table\DataQuery;
-use Doctrine\ORM\Exception\ORMException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,8 +64,6 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Add a new calculation.
-     *
-     * @throws ORMException
      */
     #[GetPost(path: '/add', name: 'add')]
     public function add(Request $request): Response
@@ -88,8 +85,6 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Edit a copy (cloned) calculation.
-     *
-     * @throws ORMException
      */
     #[GetPost(path: '/clone/{id}', name: 'clone', requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, Calculation $item): Response
@@ -117,8 +112,6 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Edit a calculation.
-     *
-     * @throws ORMException
      */
     #[GetPost(path: '/edit/{id}', name: 'edit', requirements: self::ID_REQUIREMENT)]
     public function edit(Request $request, Calculation $item): Response
@@ -131,7 +124,6 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws ORMException
      */
     #[Get(path: '/excel', name: 'excel')]
     public function excel(): SpreadsheetResponse
@@ -175,7 +167,6 @@ class CalculationController extends AbstractEntityController
      * Export calculations to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
-     * @throws ORMException
      */
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(): PdfResponse
@@ -245,8 +236,6 @@ class CalculationController extends AbstractEntityController
 
     /**
      * @param Calculation $item
-     *
-     * @throws ORMException
      */
     protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
@@ -267,8 +256,6 @@ class CalculationController extends AbstractEntityController
 
     /**
      * @psalm-param Calculation $item
-     *
-     * @throws ORMException
      */
     protected function saveToDatabase(EntityInterface $item): void
     {

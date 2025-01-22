@@ -26,9 +26,6 @@ trait CalculationTrait
 
     private ?Calculation $calculation = null;
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function getCalculation(
         ?CalculationState $state = null,
         string $customer = 'Test Customer',
@@ -47,7 +44,6 @@ trait CalculationTrait
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Exception
      */
     public function updateCalculation(): void
@@ -60,9 +56,6 @@ trait CalculationTrait
         }
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function deleteCalculation(): void
     {
         if ($this->calculation instanceof Calculation) {

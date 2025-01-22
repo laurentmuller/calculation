@@ -15,7 +15,6 @@ namespace App\Tests\Controller;
 
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Response;
 
 class CalculationUpdateControllerTest extends ControllerTestCase
@@ -30,7 +29,7 @@ class CalculationUpdateControllerTest extends ControllerTestCase
     }
 
     /**
-     * @throws ORMException|\Exception
+     * @throws \Exception
      */
     public function testUpdate(): void
     {

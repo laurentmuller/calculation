@@ -23,7 +23,6 @@ use App\Service\CalculationUpdateService;
 use App\Service\FakerService;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Exception\ORMException;
 
 /**
  * Class to generate calculations.
@@ -40,9 +39,6 @@ class CalculationGenerator extends AbstractEntityGenerator
         parent::__construct($manager, $fakerService);
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function createEntities(int $count, bool $simulate, Generator $generator): array
     {
         $entities = [];
@@ -72,9 +68,6 @@ class CalculationGenerator extends AbstractEntityGenerator
         ];
     }
 
-    /**
-     * @throws ORMException
-     */
     private function createEntity(int $min, int $max, Generator $generator): Calculation
     {
         $date = $generator->dateTimeBetween('today', 'last day of next month');

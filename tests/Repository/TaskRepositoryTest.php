@@ -17,7 +17,6 @@ use App\Repository\TaskRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\TaskTrait;
 use App\Tests\KernelServiceTestCase;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 
 class TaskRepositoryTest extends KernelServiceTestCase
@@ -33,18 +32,12 @@ class TaskRepositoryTest extends KernelServiceTestCase
         $this->repository = $this->getService(TaskRepository::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function tearDown(): void
     {
         $this->deleteTask();
         parent::tearDown();
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testCountCategoryReferences(): void
     {
         $category = $this->getCategory();
@@ -74,9 +67,6 @@ class TaskRepositoryTest extends KernelServiceTestCase
         self::assertInstanceOf(QueryBuilder::class, $builder);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testGetSortedTask(): void
     {
         $actual = $this->repository->getSortedTask();

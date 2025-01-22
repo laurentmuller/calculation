@@ -19,7 +19,6 @@ use App\Repository\UserPropertyRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\Entity\IdTrait;
 use App\Tests\KernelServiceTestCase;
-use Doctrine\ORM\Exception\ORMException;
 
 class UserPropertyRepositoryTest extends KernelServiceTestCase
 {
@@ -34,9 +33,6 @@ class UserPropertyRepositoryTest extends KernelServiceTestCase
         $this->repository = $this->getService(UserPropertyRepository::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testFindByUser(): void
     {
         $user = new User();
@@ -58,9 +54,6 @@ class UserPropertyRepositoryTest extends KernelServiceTestCase
         self::assertCount(1, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testFindOneByUserAndName(): void
     {
         $user = new User();

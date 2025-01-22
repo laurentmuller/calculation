@@ -25,9 +25,6 @@ trait TaskItemTrait
 
     private ?TaskItem $taskItem = null;
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function deleteTaskItem(): void
     {
         if ($this->taskItem instanceof TaskItem) {
@@ -36,9 +33,6 @@ trait TaskItemTrait
         $this->deleteTask();
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function getTaskItem(?Task $task = null, string $name = 'Test Task Item'): TaskItem
     {
         if ($this->taskItem instanceof TaskItem) {

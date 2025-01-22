@@ -17,7 +17,6 @@ use App\Entity\Calculation;
 use App\Repository\CalculationRepository;
 use App\Table\CalculationDuplicateTable;
 use App\Table\DataQuery;
-use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -25,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 class CalculationDuplicateTableTest extends TestCase
 {
     /**
-     * @throws Exception|ORMException
+     * @throws Exception
      */
     public function testDefault(): void
     {

@@ -77,9 +77,6 @@ class UserTest extends EntityValidatorTestCase
         self::assertTrue($user->contains($property));
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testDuplicateBoth(): void
     {
         $first = new User();
@@ -100,9 +97,6 @@ class UserTest extends EntityValidatorTestCase
         }
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testDuplicateEmail(): void
     {
         $first = new User();
@@ -123,9 +117,6 @@ class UserTest extends EntityValidatorTestCase
         }
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testDuplicateUserName(): void
     {
         $first = new User();
@@ -262,9 +253,6 @@ class UserTest extends EntityValidatorTestCase
         self::assertFalse($user->isExpired());
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testNotDuplicate(): void
     {
         $first = new User();

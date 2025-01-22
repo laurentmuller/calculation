@@ -23,7 +23,6 @@ use App\Tests\Entity\IdTrait;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use App\Tests\KernelServiceTestCase;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 
 class CalculationRepositoryTest extends KernelServiceTestCase
@@ -42,12 +41,8 @@ class CalculationRepositoryTest extends KernelServiceTestCase
         $this->repository = $this->getService(CalculationRepository::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function tearDown(): void
     {
-        //        $this->deleteProduct();
         $this->deleteCalculation();
         parent::tearDown();
     }
@@ -59,36 +54,24 @@ class CalculationRepositoryTest extends KernelServiceTestCase
         self::assertInstanceOf(QueryBuilder::class, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testCountDistinctMonths(): void
     {
         $actual = $this->repository->countDistinctMonths();
         self::assertSame(0, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testCountItemsBelow(): void
     {
         $actual = $this->repository->countItemsBelow(1.0);
         self::assertSame(0, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testCountItemsDuplicate(): void
     {
         $actual = $this->repository->countItemsDuplicate();
         self::assertSame(0, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testCountItemsEmpty(): void
     {
         $actual = $this->repository->countItemsEmpty();
@@ -97,7 +80,6 @@ class CalculationRepositoryTest extends KernelServiceTestCase
 
     /**
      * @throws \ReflectionException
-     * @throws ORMException
      */
     public function testCountStateReferences(): void
     {
@@ -124,7 +106,6 @@ class CalculationRepositoryTest extends KernelServiceTestCase
 
     /**
      * @throws \Exception
-     * @throws ORMException
      */
     public function testGetByMonth(): void
     {
@@ -181,9 +162,6 @@ class CalculationRepositoryTest extends KernelServiceTestCase
         self::assertCount(0, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testGetItemsDuplicate(): void
     {
         $actual = $this->repository->getItemsDuplicate();
@@ -199,9 +177,6 @@ class CalculationRepositoryTest extends KernelServiceTestCase
         self::assertCount(1, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testGetItemsEmpty(): void
     {
         $actual = $this->repository->getItemsEmpty();
@@ -217,7 +192,6 @@ class CalculationRepositoryTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws ORMException
      * @throws \ReflectionException
      */
     public function testGetLastCalculations(): void
@@ -238,7 +212,6 @@ class CalculationRepositoryTest extends KernelServiceTestCase
 
     /**
      * @throws \Exception
-     * @throws ORMException
      */
     public function testGetMinMaxDates(): void
     {

@@ -40,7 +40,7 @@ class TimestampableListener implements DisableListenerInterface
 
     public function __construct(private readonly Security $security, TranslatorInterface $translator)
     {
-        $this->emptyUser = $translator->trans('common.empty_user');
+        $this->emptyUser = $translator->trans('common.entity_empty_user');
     }
 
     /**

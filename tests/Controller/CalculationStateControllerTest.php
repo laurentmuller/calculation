@@ -16,7 +16,6 @@ namespace App\Tests\Controller;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Tests\EntityTrait\CalculationTrait;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -71,9 +70,6 @@ class CalculationStateControllerTest extends EntityControllerTestCase
         $this->checkAddEntity('/calculationstate/add', $data);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testDelete(): void
     {
         $this->addEntities();
@@ -81,9 +77,6 @@ class CalculationStateControllerTest extends EntityControllerTestCase
         $this->checkDeleteEntity($uri);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testDeleteWithDependencies(): void
     {
         $this->getCalculation();
@@ -103,9 +96,6 @@ class CalculationStateControllerTest extends EntityControllerTestCase
         self::assertSame($text, $button->text());
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testEdit(): void
     {
         $this->addEntities();
@@ -119,35 +109,23 @@ class CalculationStateControllerTest extends EntityControllerTestCase
         $this->checkEditEntity($uri, $data);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testExcelEmpty(): void
     {
         $this->deleteEntitiesByClass(Calculation::class);
         $this->checkUriWithEmptyEntity('/calculationstate/excel', CalculationState::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testPdfEmpty(): void
     {
         $this->deleteEntitiesByClass(Calculation::class);
         $this->checkUriWithEmptyEntity('/calculationstate/pdf', CalculationState::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function addEntities(): void
     {
         $this->getCalculationState();
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function deleteEntities(): void
     {
         $this->deleteEntitiesByClass(Calculation::class);

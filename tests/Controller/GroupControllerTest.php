@@ -16,7 +16,6 @@ namespace App\Tests\Controller;
 use App\Entity\Group;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\CategoryTrait;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -70,9 +69,6 @@ class GroupControllerTest extends EntityControllerTestCase
         $this->checkAddEntity('/group/add', $data);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testDelete(): void
     {
         $this->addEntities();
@@ -80,9 +76,6 @@ class GroupControllerTest extends EntityControllerTestCase
         $this->checkDeleteEntity($uri);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testDeleteWithDependencies(): void
     {
         $this->getCategory();
@@ -105,9 +98,6 @@ class GroupControllerTest extends EntityControllerTestCase
         self::assertSame($text, $button->text());
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testEdit(): void
     {
         $this->addEntities();
@@ -119,33 +109,21 @@ class GroupControllerTest extends EntityControllerTestCase
         $this->checkEditEntity($uri, $data);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testExcelEmpty(): void
     {
         $this->checkUriWithEmptyEntity('/group/excel', Group::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testPdfEmpty(): void
     {
         $this->checkUriWithEmptyEntity('/group/pdf', Group::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function addEntities(): void
     {
         $this->getGroup();
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function deleteEntities(): void
     {
         $this->deleteCategory();

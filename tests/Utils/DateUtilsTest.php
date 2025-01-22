@@ -68,6 +68,22 @@ class DateUtilsTest extends TestCase
         yield [new \DateTime('22-2-1'), '2022-02-01'];
     }
 
+    public static function getModifies(): \Iterator
+    {
+        $date = new \DateTime('2024-01-10');
+
+        yield [$date, '+1 day', '2024-01-11'];
+        yield [$date, '-1 day', '2024-01-09'];
+
+        yield [$date, '+1 month', '2024-02-10'];
+        yield [$date, '-1 month', '2023-12-10'];
+
+        yield [$date, '+1 year', '2025-01-10'];
+        yield [$date, '-1 year', '2023-01-10'];
+
+        yield [$date, 'July 1st, 2023', '2023-07-01'];
+    }
+
     public static function getMonthNames(): \Iterator
     {
         yield ['Janvier', 1];
@@ -287,6 +303,14 @@ class DateUtilsTest extends TestCase
     public function testGetYear(\DateTimeInterface $date, int $expected): void
     {
         $actual = DateUtils::getYear($date);
+        self::assertSame($expected, $actual);
+    }
+
+    #[DataProvider('getModifies')]
+    public function testModify(\DateTime $date, string $modifier, string $expected): void
+    {
+        $date = DateUtils::modify($date, $modifier);
+        $actual = $date->format('Y-m-d');
         self::assertSame($expected, $actual);
     }
 

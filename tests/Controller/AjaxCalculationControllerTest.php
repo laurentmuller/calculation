@@ -16,7 +16,6 @@ namespace App\Tests\Controller;
 use App\Service\CalculationGroupService;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Utils\StringUtils;
-use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,9 +27,6 @@ class AjaxCalculationControllerTest extends ControllerTestCase
 
     private const UPDATE_ROUTE_NAME = '/calculation/update';
 
-    /**
-     * @throws ORMException
-     */
     protected function setUp(): void
     {
         parent::setUp();

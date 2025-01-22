@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Enums\Environment;
+use App\Utils\DateUtils;
 use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -435,8 +436,7 @@ final readonly class SymfonyInfoService
      */
     private function getEndOfMonth(string $date): \DateTimeImmutable
     {
-        return $this->createDate($date)
-            ->modify('last day of this month 23:59:59');
+        return DateUtils::modify($this->createDate($date), 'last day of this month 23:59:59');
     }
 
     /**

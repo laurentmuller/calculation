@@ -15,7 +15,6 @@ namespace App\Tests\Controller;
 
 use App\Entity\Calculation;
 use App\Tests\EntityTrait\CalculationTrait;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Response;
 
 class CalendarControllerTest extends ControllerTestCase
@@ -38,9 +37,6 @@ class CalendarControllerTest extends ControllerTestCase
         yield ['/calendar/week/2024/100', self::ROLE_ADMIN, Response::HTTP_NOT_FOUND];
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testTwoCalculations(): void
     {
         $calculation1 = $this->getCalculation();

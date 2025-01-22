@@ -26,7 +26,6 @@ use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\FormatUtils;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
@@ -46,16 +45,13 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     private const KEY_STATES = 'calculation.update.states';
 
     public function __construct(
-        private readonly CalculationRepository $calculationRepository,
         private readonly GlobalMarginRepository $globalMarginRepository,
+        private readonly CalculationRepository $calculationRepository,
         private readonly CalculationStateRepository $stateRepository,
         private readonly SuspendEventListenerService $listenerService
     ) {
     }
 
-    /**
-     * @throws ORMException
-     */
     public function createQuery(): CalculationUpdateQuery
     {
         $query = new CalculationUpdateQuery();
@@ -77,7 +73,6 @@ class CalculationUpdateService implements ServiceSubscriberInterface
 
     /**
      * @throws \Exception
-     * @throws ORMException
      */
     public function update(CalculationUpdateQuery $query): CalculationUpdateResult
     {
@@ -113,8 +108,6 @@ class CalculationUpdateService implements ServiceSubscriberInterface
      * Update the given calculation's total.
      *
      * @return bool true if updated; false otherwise
-     *
-     * @throws ORMException
      */
     public function updateCalculation(Calculation $calculation): bool
     {
@@ -185,8 +178,6 @@ class CalculationUpdateService implements ServiceSubscriberInterface
 
     /**
      * Gets the global margin, in percent, for the given amount.
-     *
-     * @throws ORMException
      */
     private function getGlobalMargin(float $amount): float
     {
@@ -200,8 +191,6 @@ class CalculationUpdateService implements ServiceSubscriberInterface
 
     /**
      * @return CalculationState[]
-     *
-     * @throws ORMException
      */
     private function getStates(bool $useSession): array
     {

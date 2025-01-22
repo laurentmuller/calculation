@@ -39,9 +39,6 @@ class TimelineControllerTest extends ControllerTestCase
         }
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function addEntities(): void
     {
         $product = $this->getProduct();
@@ -53,9 +50,6 @@ class TimelineControllerTest extends ControllerTestCase
             ->addProduct($product);
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     protected function deleteEntities(): void
     {
         $this->deleteCalculation();

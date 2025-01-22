@@ -17,7 +17,6 @@ use App\Entity\Group;
 use App\Entity\GroupMargin;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -39,8 +38,6 @@ class GroupMarginRepository extends AbstractRepository
      * @param float $amount the amount to get percent for
      *
      * @return float the margin, in percent, if found; 0 otherwise
-     *
-     * @throws ORMException
      */
     public function getMargin(Group $group, float $amount): float
     {

@@ -23,7 +23,6 @@ use App\Tests\DateAssertTrait;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\Web\AuthenticateWebTestCase;
 use App\Utils\DateUtils;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -35,18 +34,12 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
     use DatabaseTrait;
     use DateAssertTrait;
 
-    /**
-     * @throws ORMException
-     */
     protected function tearDown(): void
     {
         $this->deleteCalculation();
         parent::tearDown();
     }
 
-    /**
-     * @throws \Exception|ORMException
-     */
     public function testCreateQuery(): void
     {
         $service = $this->getService(CalculationUpdateService::class);
@@ -69,7 +62,7 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
     }
 
     /**
-     * @throws \Exception|ORMException
+     * @throws \Exception
      */
     public function testSaveQuery(): void
     {
@@ -99,9 +92,6 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testUpdateEmptyState(): void
     {
         $this->loginUsername(self::ROLE_ADMIN);
@@ -113,9 +103,6 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertFalse($result->isValid());
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testUpdateNoCalculation(): void
     {
         $this->getCalculationState();
@@ -129,9 +116,6 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertFalse($result->isValid());
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testUpdateOne(): void
     {
         $date = $this->getDate();
@@ -153,9 +137,6 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertTrue($result->isValid());
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testUpdateOneCalculationNoState(): void
     {
         $date = $this->getDate();
@@ -175,9 +156,6 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertFalse($result->isValid());
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testUpdateOneNoSimulate(): void
     {
         $date = $this->getDate();
@@ -198,9 +176,6 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertTrue($result->isValid());
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testUpdateTotalNotEmpty(): void
     {
         $group = new Group();

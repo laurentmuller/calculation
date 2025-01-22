@@ -81,9 +81,6 @@ class ProductTest extends EntityValidatorTestCase
         self::assertSame(-1, $actual);
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testDuplicate(): void
     {
         $group = $this->getGroup();
@@ -133,9 +130,6 @@ class ProductTest extends EntityValidatorTestCase
         $this->validatePaths($results, 'description');
     }
 
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     public function testNotDuplicate(): void
     {
         $group = $this->getGroup();

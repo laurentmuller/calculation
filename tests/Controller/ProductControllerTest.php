@@ -17,7 +17,6 @@ use App\Entity\Product;
 use App\Interfaces\PropertyServiceInterface;
 use App\Service\ApplicationService;
 use App\Tests\EntityTrait\ProductTrait;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductControllerTest extends EntityControllerTestCase
@@ -59,9 +58,6 @@ class ProductControllerTest extends EntityControllerTestCase
         yield ['/product/excel', self::ROLE_SUPER_ADMIN];
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testAdd(): void
     {
         $category = $this->getCategory();
@@ -79,9 +75,6 @@ class ProductControllerTest extends EntityControllerTestCase
         $this->checkAddEntity('/product/add', $data);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testDelete(): void
     {
         $this->addEntities();
@@ -89,9 +82,6 @@ class ProductControllerTest extends EntityControllerTestCase
         $this->checkDeleteEntity($uri);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testEdit(): void
     {
         $this->addEntities();
@@ -106,33 +96,21 @@ class ProductControllerTest extends EntityControllerTestCase
         $this->checkEditEntity($uri, $data);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testExcelEmpty(): void
     {
         $this->checkUriWithEmptyEntity('/product/excel', Product::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function testPdfEmpty(): void
     {
         $this->checkUriWithEmptyEntity('/product/pdf', Product::class);
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function addEntities(): void
     {
         $this->getProduct();
     }
 
-    /**
-     * @throws ORMException
-     */
     protected function deleteEntities(): void
     {
         $this->deleteProduct();

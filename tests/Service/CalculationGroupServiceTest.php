@@ -25,7 +25,7 @@ use App\Repository\GlobalMarginRepository;
 use App\Repository\GroupMarginRepository;
 use App\Repository\GroupRepository;
 use App\Service\ApplicationService;
-use App\Service\CalculationService;
+use App\Service\CalculationGroupService;
 use App\Tests\DatabaseTrait;
 use App\Tests\Entity\IdTrait;
 use App\Tests\KernelServiceTestCase;
@@ -35,7 +35,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\MockObject\Exception;
 
-class CalculationServiceTest extends KernelServiceTestCase
+class CalculationGroupServiceTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
     use IdTrait;
@@ -195,7 +195,7 @@ class CalculationServiceTest extends KernelServiceTestCase
 
     public function testGetConstants(): void
     {
-        $constants = CalculationService::constants();
+        $constants = CalculationGroupService::constants();
         self::assertCount(7, $constants);
 
         self::assertArrayHasKey('ROW_EMPTY', $constants);
@@ -222,14 +222,14 @@ class CalculationServiceTest extends KernelServiceTestCase
         ?Group $group = null,
         ?float $groupMargin = null,
         ?float $globalMargin = null,
-    ): CalculationService {
+    ): CalculationGroupService {
         $globalMarginRepository = $this->createGlobalMarginRepository($globalMargin);
         $groupMarginRepository = $this->createGroupMarginRepository($groupMargin);
         $groupRepository = $this->createGroupRepository($group);
         $application = $this->getService(ApplicationService::class);
         $translator = $this->createMockTranslator();
 
-        return new CalculationService(
+        return new CalculationGroupService(
             $globalMarginRepository,
             $groupMarginRepository,
             $groupRepository,

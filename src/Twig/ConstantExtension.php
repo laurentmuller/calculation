@@ -16,7 +16,7 @@ namespace App\Twig;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Interfaces\ConstantsInterface;
-use App\Service\CalculationService;
+use App\Service\CalculationGroupService;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
 use Twig\Extension\AbstractExtension;
@@ -79,7 +79,7 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
             self::constants(),
             EntityName::constants(),
             EntityPermission::constants(),
-            CalculationService::constants()
+            CalculationGroupService::constants()
         );
     }
 }

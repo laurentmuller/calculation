@@ -29,7 +29,7 @@ use App\Repository\CalculationRepository;
 use App\Resolver\DataQueryValueResolver;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
-use App\Service\CalculationService;
+use App\Service\CalculationGroupService;
 use App\Service\CalculationUpdateService;
 use App\Spreadsheet\CalculationDocument;
 use App\Spreadsheet\CalculationsDocument;
@@ -57,7 +57,7 @@ class CalculationController extends AbstractEntityController
 {
     public function __construct(
         CalculationRepository $repository,
-        private readonly CalculationService $calculationService,
+        private readonly CalculationGroupService $groupService,
         private readonly CalculationUpdateService $updateService,
     ) {
         parent::__construct($repository);
@@ -254,7 +254,7 @@ class CalculationController extends AbstractEntityController
         $parameters['empty_items'] = $item->hasEmptyItems();
         $parameters['duplicate_items'] = $item->hasDuplicateItems();
         $parameters['overall_below'] = $this->isMarginBelow($item);
-        $parameters['groups'] = $this->calculationService->createGroups($item);
+        $parameters['groups'] = $this->groupService->createGroups($item);
         $parameters['editable'] = $item->isEditable();
         if ($item->isEditable()) {
             $parameters['group_index'] = $item->getGroupsCount();

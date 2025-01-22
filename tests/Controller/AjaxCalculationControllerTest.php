@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Service\CalculationService;
+use App\Service\CalculationGroupService;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Utils\StringUtils;
 use Doctrine\ORM\Exception\ORMException;
@@ -78,10 +78,10 @@ class AjaxCalculationControllerTest extends ControllerTestCase
             'user_margin' => 0.0,
             'groups' => [],
         ];
-        $service = $this->createMock(CalculationService::class);
+        $service = $this->createMock(CalculationGroupService::class);
         $service->method('createParameters')
             ->willReturn($data);
-        $this->setService(CalculationService::class, $service);
+        $this->setService(CalculationGroupService::class, $service);
 
         $parameters = [
             'adjust' => true,
@@ -102,10 +102,10 @@ class AjaxCalculationControllerTest extends ControllerTestCase
      */
     public function testUpdateWithException(): void
     {
-        $service = $this->createMock(CalculationService::class);
+        $service = $this->createMock(CalculationGroupService::class);
         $service->method('createParameters')
             ->willThrowException(new \Exception('Fake Message'));
-        $this->setService(CalculationService::class, $service);
+        $this->setService(CalculationGroupService::class, $service);
         $this->checkRoute(
             url: self::UPDATE_ROUTE_NAME,
             username: self::ROLE_USER,
@@ -122,10 +122,10 @@ class AjaxCalculationControllerTest extends ControllerTestCase
         $data = [
             'result' => false,
         ];
-        $service = $this->createMock(CalculationService::class);
+        $service = $this->createMock(CalculationGroupService::class);
         $service->method('createParameters')
             ->willReturn($data);
-        $this->setService(CalculationService::class, $service);
+        $this->setService(CalculationGroupService::class, $service);
 
         $this->checkRoute(
             url: self::UPDATE_ROUTE_NAME,

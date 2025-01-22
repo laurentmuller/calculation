@@ -47,8 +47,8 @@ class CalculationUpdateService implements ServiceSubscriberInterface
 
     public function __construct(
         private readonly CalculationRepository $calculationRepository,
-        private readonly CalculationStateRepository $stateRepository,
         private readonly GlobalMarginRepository $globalMarginRepository,
+        private readonly CalculationStateRepository $stateRepository,
         private readonly SuspendEventListenerService $listenerService
     ) {
     }

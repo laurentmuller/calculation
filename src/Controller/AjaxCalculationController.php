@@ -16,7 +16,7 @@ namespace App\Controller;
 use App\Attribute\Post;
 use App\Interfaces\RoleInterface;
 use App\Model\CalculationQuery;
-use App\Service\CalculationService;
+use App\Service\CalculationGroupService;
 use Doctrine\ORM\Exception\ORMException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,7 +38,7 @@ class AjaxCalculationController extends AbstractController
      */
     #[Post(path: '/update', name: 'update')]
     public function update(
-        CalculationService $service,
+        CalculationGroupService $service,
         LoggerInterface $logger,
         #[MapRequestPayload]
         CalculationQuery $query = new CalculationQuery()

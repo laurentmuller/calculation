@@ -41,6 +41,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *      remaining: int,
  *      date: \DateTimeInterface,
  *      documentation: string}
+ * @psalm-type ResponseType = array{
+ *     refresh_day_of_month: int,
+ *     plan_quota: int,
+ *     requests_remaining: int,
+ *     documentation: string}
  */
 class ExchangeRateService extends AbstractHttpClientService
 {
@@ -232,7 +237,7 @@ class ExchangeRateService extends AbstractHttpClientService
      */
     private function doGetQuota(string $url): ?array
     {
-        /** @psalm-var array{refresh_day_of_month: int, plan_quota: int, requests_remaining: int, documentation: string}|null $response */
+        /** @psalm-var ResponseType|null $response */
         $response = $this->get($url);
         if (!\is_array($response)) {
             return null;
@@ -412,7 +417,7 @@ class ExchangeRateService extends AbstractHttpClientService
             $codes,
             fn (string $code): array => [$code => $this->mapCode($code)]
         );
-        \uasort($result, fn (array $a, array $b): int => $a['name'] <=> $b['name']);
+        \uasort($result, static fn (array $a, array $b): int => $a['name'] <=> $b['name']);
 
         /** @psalm-var array<string, ExchangeRateType> */
         return $result;

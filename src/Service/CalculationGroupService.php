@@ -27,7 +27,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Service to update calculation totals.
+ * Service to create total's groups used to render the total view.
  *
  * @implements ConstantsInterface<int>
  *
@@ -49,7 +49,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @psalm-import-type QueryGroupType from CalculationQuery
  */
-class CalculationService implements ConstantsInterface
+class CalculationGroupService implements ConstantsInterface
 {
     use MathTrait;
 
@@ -407,7 +407,7 @@ class CalculationService implements ConstantsInterface
     }
 
     /**
-     * Gets the sum of group's amount.
+     * Gets the sum of the group's amount.
      *
      * @psalm-param GroupType[] $groups
      */
@@ -417,7 +417,7 @@ class CalculationService implements ConstantsInterface
     }
 
     /**
-     * Gets the sum of group's margin amount.
+     * Gets the sum of the group's margin amount.
      *
      * @psalm-param GroupType[] $groups
      */

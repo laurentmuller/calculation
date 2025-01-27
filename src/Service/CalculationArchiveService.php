@@ -51,8 +51,6 @@ class CalculationArchiveService implements ServiceSubscriberInterface
 
     /**
      * Create the archive query.
-     *
-     * @throws \DateException
      */
     public function createQuery(): CalculationArchiveQuery
     {
@@ -66,15 +64,13 @@ class CalculationArchiveService implements ServiceSubscriberInterface
 
     /**
      * Gets the maximum allowed date or null if none.
-     *
-     * @throws \DateException
      */
     public function getDateMaxConstraint(): ?string
     {
         $sources = $this->getSources(false);
         $date = $this->getDateMax($sources);
 
-        return DateUtils::formatFormDate($date?->sub(new \DateInterval('P1M')));
+        return $date instanceof \DateTimeImmutable ? DateUtils::formatFormDate(DateUtils::sub($date, 'P1M')) : null;
     }
 
     /**
@@ -85,7 +81,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         $sources = $this->getSources(false);
         $date = $this->getDateMin($sources);
 
-        return DateUtils::formatFormDate($date);
+        return $date instanceof \DateTimeImmutable ? DateUtils::formatFormDate($date) : null;
     }
 
     /**
@@ -185,9 +181,6 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         return $query->getResult();
     }
 
-    /**
-     * @throws \DateException
-     */
     private function getDate(): \DateTimeInterface
     {
         $date = $this->getSessionDate(self::KEY_DATE);
@@ -198,14 +191,13 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         $sources = $this->getSources(false);
         $minDate = $this->getDateMin($sources);
         if (!$minDate instanceof \DateTimeImmutable) {
-            return (new \DateTimeImmutable())->sub(new \DateInterval('P6M'));
+            return DateUtils::sub(new \DateTimeImmutable(), 'P6M');
         }
 
-        $interval = new \DateInterval('P1M');
-        $minDate = $minDate->add($interval);
+        $minDate = DateUtils::add($minDate, 'P1M');
         $maxDate = $this->getDateMax($sources);
         if ($maxDate instanceof \DateTimeImmutable && $minDate >= $maxDate) {
-            return $maxDate->sub($interval);
+            return DateUtils::sub($maxDate, 'P1M');
         }
 
         return $minDate;
@@ -267,7 +259,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
 
     private function getTarget(): ?CalculationState
     {
-        $id = $this->getSessionInt(self::KEY_TARGET, 0);
+        $id = $this->getSessionInt(self::KEY_TARGET);
         if (0 !== $id) {
             return $this->stateRepository->find($id);
         }
@@ -283,7 +275,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
             $this->trans('archive.fields.target') => $query->getTargetCode(),
             $this->trans('archive.result.calculations') => $result->count(),
         ];
-        $message = $this->trans('archive.title');
+        $message = $this->trans('counters.calculations_archive', ['count' => $result->count()]);
         $this->logInfo($message, $context);
     }
 }

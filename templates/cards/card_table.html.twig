@@ -141,10 +141,10 @@
 {%- set is_page_list = pageList is defined and pageList|length > 1 -%}
 {%- set attributes = attributes|default({})|merge({
     classes: 'table table-hover table-list table-no-end-line table-sm',
+    'row-class': row_selector,
     'row-selector': 'tbody .' ~ row_selector,
     'custom-selector': '.custom-item.' ~ row_selector,
     'search-selector': '.form-control-search',
-    'row-class': row_selector,
     'single-select': true,
     'toggle-selector': '#toggle',
     'undefined-text': '&#8203;',
@@ -284,7 +284,7 @@
     </ul>
 </div>
 {# custom view template #}
-<div id="custom-view-template" class="d-none">
+<template id="custom-view-template">
     <div class="col col-custom-view mb-2 px-1">
         <div class="custom-item border h-100 p-2{% block custom_view_card_class %}{%- endblock %}">
             <div class="d-flex-no-wrap-center rowlink-skip">
@@ -296,7 +296,7 @@
             {% block custom_view_body -%}{%- endblock %}
         </div>
     </div>
-</div>
+</template>
 {%- endblock -%}
 {# stylesheets #}
 {% block stylesheets %}

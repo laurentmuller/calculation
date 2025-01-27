@@ -89,11 +89,11 @@ class WorksheetDocument extends Worksheet
     }
 
     /**
-     * Gets style for the given column.
+     * Gets style for the given column index.
      *
      * @param int $columnIndex the one-based column index (1 = 'A' - First column)
      */
-    public function getColumnStyle(int $columnIndex): Style
+    public function getColumnStyleFromIndex(int $columnIndex): Style
     {
         $coordinate = $this->stringFromColumnIndex($columnIndex);
 
@@ -267,7 +267,7 @@ class WorksheetDocument extends Worksheet
      */
     public function setColumnConditional(int $columnIndex, Conditional ...$conditionals): static
     {
-        $style = $this->getColumnStyle($columnIndex);
+        $style = $this->getColumnStyleFromIndex($columnIndex);
         $conditionals = \array_merge($style->getConditionalStyles(), $conditionals);
         $style->setConditionalStyles($conditionals);
 
@@ -303,7 +303,7 @@ class WorksheetDocument extends Worksheet
      */
     public function setForeground(int $columnIndex, string $color, bool $includeHeader = false): static
     {
-        $style = $this->getColumnStyle($columnIndex);
+        $style = $this->getColumnStyleFromIndex($columnIndex);
         $fontColor = $style->getFont()->getColor();
         if (\strlen($color) > 6) {
             $fontColor->setARGB($color);
@@ -325,7 +325,7 @@ class WorksheetDocument extends Worksheet
      */
     public function setFormat(int $columnIndex, string $format): static
     {
-        $this->getColumnStyle($columnIndex)
+        $this->getColumnStyleFromIndex($columnIndex)
             ->getNumberFormat()
             ->setFormatCode($format);
 

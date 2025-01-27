@@ -221,7 +221,7 @@ class PdfChartLegendTraitTest extends TestCase
     private function getLegends(): array
     {
         $legend1 = [
-            'color' => PdfFillColor::link(),
+            'color' => PdfFillColor::blue(),
             'label' => 'Label',
         ];
         $legend2 = [

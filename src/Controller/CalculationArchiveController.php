@@ -35,9 +35,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationArchiveController extends AbstractController
 {
-    /**
-     * @throws \DateException
-     */
     #[GetPost(path: '/archive', name: 'archive')]
     public function invoke(Request $request, CalculationArchiveService $service): Response
     {
@@ -72,8 +69,6 @@ class CalculationArchiveController extends AbstractController
 
     /**
      * @return FormInterface<mixed>
-     *
-     * @throws \DateException
      */
     private function createQueryForm(CalculationArchiveService $service, CalculationArchiveQuery $query): FormInterface
     {
@@ -90,7 +85,9 @@ class CalculationArchiveController extends AbstractController
                 'multiple' => true,
                 'expanded' => true,
                 'group_by' => fn (): null => null,
-                'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getEditableQueryBuilder(),
+                'query_builder' => static fn (
+                    CalculationStateRepository $repository
+                ): QueryBuilder => $repository->getEditableQueryBuilder(),
             ])
             ->labelClass('checkbox-inline checkbox-switch')
             ->add(CalculationStateListType::class);
@@ -98,7 +95,9 @@ class CalculationArchiveController extends AbstractController
         $helper->field('target')
             ->updateOptions([
                 'group_by' => fn (): null => null,
-                'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getNotEditableQueryBuilder(),
+                'query_builder' => static fn (
+                    CalculationStateRepository $repository
+                ): QueryBuilder => $repository->getNotEditableQueryBuilder(),
             ])
             ->add(CalculationStateListType::class);
 

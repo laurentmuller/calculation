@@ -206,7 +206,7 @@ calculationstate:
     list:
         title: Statuts
         add_title: Créer un nouveau statut
-        calculation_title: Afficher les calculations de ce statut
+        calculation_title: Afficher les calculations pour ce statut
         editable_0: Non-Modifiable
         editable_1: Modifiable
         empty: Aucun statut défini.
@@ -267,8 +267,8 @@ category:
         group_all_text: Tous les groupes
         group_help: Afficher les catégories pour le groupe sélectionné
         pdf_title: Télécharger la liste des catégories
-        product_title: Afficher les articles de cette catégorie
-        task_title: Afficher les tâches de cette catégorie
+        product_title: Afficher les articles pour cette catégorie
+        task_title: Afficher les tâches pour cette catégorie
     name: Catégorie
     show:
         title: Propriétés de la catégorie
@@ -540,9 +540,9 @@ group:
         empty: Aucun groupe défini.
         excel_title: Exporter la liste des groupes
         pdf_title: Télécharger la liste des groupes
-        category_title: Afficher les catégories de ce groupe
-        product_title: Afficher les articles de ce groupe
-        task_title: Afficher les tâches de ce groupe
+        category_title: Afficher les catégories pour ce groupe
+        product_title: Afficher les articles pour ce groupe
+        task_title: Afficher les tâches de pour groupe
     name: Groupe
     show:
         title: Propriétés du groupe

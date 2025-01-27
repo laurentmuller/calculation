@@ -23,9 +23,9 @@ trait ParameterTrait
     use CookieTrait;
     use RequestTrait;
 
-    protected function getParamBoolean(Request $request, string $key, string $prefix = '', bool $default = false): bool
+    protected function getParamBoolean(Request $request, string $key, bool $default = false, string $prefix = ''): bool
     {
-        $default = $this->getCookieBoolean($request, $key, $prefix, $default);
+        $default = $this->getCookieBoolean($request, $key, $default, $prefix);
 
         return $this->getRequestBoolean($request, $key, $default);
     }
@@ -46,23 +46,23 @@ trait ParameterTrait
         return $this->getRequestEnum($request, $key, $default);
     }
 
-    protected function getParamFloat(Request $request, string $key, string $prefix = '', float $default = 0.0): float
+    protected function getParamFloat(Request $request, string $key, float $default = 0.0, string $prefix = ''): float
     {
-        $default = $this->getCookieFloat($request, $key, $prefix, $default);
+        $default = $this->getCookieFloat($request, $key, $default, $prefix);
 
         return $this->getRequestFloat($request, $key, $default);
     }
 
-    protected function getParamInt(Request $request, string $key, string $prefix = '', int $default = 0): int
+    protected function getParamInt(Request $request, string $key, int $default = 0, string $prefix = ''): int
     {
-        $default = $this->getCookieInt($request, $key, $prefix, $default);
+        $default = $this->getCookieInt($request, $key, $default, $prefix);
 
         return $this->getRequestInt($request, $key, $default);
     }
 
-    protected function getParamString(Request $request, string $key, string $prefix = '', string $default = ''): string
+    protected function getParamString(Request $request, string $key, string $default = '', string $prefix = ''): string
     {
-        $default = $this->getCookieString($request, $key, $prefix, $default);
+        $default = $this->getCookieString($request, $key, $default, $prefix);
 
         return $this->getRequestString($request, $key, $default);
     }

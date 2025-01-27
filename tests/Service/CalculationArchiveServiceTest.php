@@ -55,7 +55,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|\DateException
+     * @throws Exception
      */
     public function testCreateQueryEmpty(): void
     {
@@ -65,11 +65,11 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertCount(0, $actual->getSources());
         self::assertCount(0, $actual->getSourcesId());
         self::assertNull($actual->getTarget());
-        self::assertNotNull($actual->getDate());
+        self::assertInstanceOf(\DateTimeImmutable::class, $actual->getDate());
     }
 
     /**
-     * @throws Exception|\DateException
+     * @throws Exception
      */
     public function testCreateQueryWithDate(): void
     {
@@ -85,7 +85,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|\DateException
+     * @throws Exception
      */
     public function testCreateQueryWithSessionDate(): void
     {
@@ -94,12 +94,11 @@ class CalculationArchiveServiceTest extends TestCase
         $this->setCalculationStates();
         $service = $this->createService();
         $actual = $service->createQuery();
-        self::assertNotNull($actual->getDate());
         self::assertSame($expected, $actual->getDate());
     }
 
     /**
-     * @throws Exception|\DateException|\ReflectionException
+     * @throws Exception|\ReflectionException
      */
     public function testCreateQueryWithSessionSources(): void
     {
@@ -118,7 +117,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|\DateException|\ReflectionException
+     * @throws Exception|\ReflectionException
      */
     public function testCreateQueryWithSessionTarget(): void
     {
@@ -140,7 +139,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|\DateException
+     * @throws Exception
      */
     public function testCreateQueryWithSources(): void
     {
@@ -151,13 +150,13 @@ class CalculationArchiveServiceTest extends TestCase
 
         $service = $this->createService();
         $actual = $service->createQuery();
-        self::assertNotNull($actual->getDate());
         self::assertCount(1, $actual->getSources());
         self::assertSame([$stateEditable], $actual->getSources());
+        self::assertInstanceOf(\DateTimeImmutable::class, $actual->getDate());
     }
 
     /**
-     * @throws Exception|\DateException
+     * @throws Exception
      */
     public function testGetDateMaxConstraintDate(): void
     {
@@ -171,7 +170,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|\DateException
+     * @throws Exception
      */
     public function testGetDateMaxConstraintException(): void
     {
@@ -182,7 +181,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|\DateException
+     * @throws Exception
      */
     public function testGetDateMaxConstraintNull(): void
     {
@@ -367,7 +366,7 @@ class CalculationArchiveServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    private function setCalculationDate(mixed $value = null): void
+    private function setCalculationDate(?string $value = null): void
     {
         $query = $this->createMock(Query::class);
         $query->method('getSingleScalarResult')

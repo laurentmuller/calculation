@@ -45,7 +45,7 @@ class HeaderFormat
      */
     public function apply(WorksheetDocument $parent, int $columnIndex): void
     {
-        $alignment = $parent->getColumnStyle($columnIndex)->getAlignment();
+        $alignment = $parent->getColumnStyleFromIndex($columnIndex)->getAlignment();
         if (null !== $this->horizontal && Alignment::HORIZONTAL_GENERAL !== $this->horizontal) {
             $alignment->setHorizontal($this->horizontal);
         }

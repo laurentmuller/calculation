@@ -100,18 +100,18 @@ tr.text-body-secondary td .text-danger {
 }
 
 /* loading message */
-.loading-message {
+.alert-loading-message {
     width: 50%;
 }
 
 @media (max-width: 992px) {
-    .loading-message {
+    .alert-loading-message {
         width: 70%;
     }
 }
 
 @media (max-width: 768px) {
-    .loading-message {
+    .alert-loading-message {
         width: 100%;
     }
 }

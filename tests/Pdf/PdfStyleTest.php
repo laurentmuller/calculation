@@ -141,7 +141,7 @@ class PdfStyleTest extends TestCase
         self::assertEqualsCanonicalizing(PdfBorder::all(), $actual->getBorder());
         self::assertEqualsCanonicalizing(PdfDrawColor::default(), $actual->getDrawColor());
         self::assertEqualsCanonicalizing(PdfFillColor::default(), $actual->getFillColor());
-        self::assertEqualsCanonicalizing(PdfTextColor::link(), $actual->getTextColor());
+        self::assertEqualsCanonicalizing(PdfTextColor::blue(), $actual->getTextColor());
     }
 
     public function testNoBorderStyle(): void

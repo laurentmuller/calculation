@@ -186,7 +186,6 @@ abstract class AbstractEntityTable extends AbstractTable
             }
         }
         $this->updateOrderBy($orderBy, $this->getDefaultOrder(), $alias);
-
         foreach ($orderBy as $sort => $order) {
             $builder->addOrderBy($sort, $order);
         }
@@ -195,9 +194,9 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Add the selected entity if any and if it is missing.
      *
-     * @param EntityType[]   $entities the entities to search in or to update
-     * @param DataQuery      $query    the query to get values from
-     * @param literal-string $alias    the entity alias
+     * @psalm-param EntityType[]   $entities the entities to search in or to update
+     * @psalm-param DataQuery      $query    the query to get values from
+     * @psalm-param literal-string $alias    the entity alias
      */
     private function addSelection(array &$entities, DataQuery $query, string $alias): void
     {
@@ -206,10 +205,12 @@ abstract class AbstractEntityTable extends AbstractTable
             return;
         }
 
-        foreach ($entities as $entity) {
-            if ($id === $this->getEntityId($entity)) {
-                return;
-            }
+        if ($this->anyMatch(
+            $entities,
+            /** @psalm-param EntityType $current */
+            fn (EntityInterface|array $current): bool => $id === $this->getEntityId($current) // @phpstan-ignore argument.type
+        )) {
+            return;
         }
 
         /** @psalm-var EntityType|null $entity */

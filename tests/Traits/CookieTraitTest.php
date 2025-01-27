@@ -93,6 +93,10 @@ class CookieTraitTest extends TestCase
         $response = $this->createResponse();
         $this->updateCookie($response, 'KEY', true);
         self::assertSame('', $response->getContent());
+
+        $response = $this->createResponse();
+        $this->updateCookie($response, 'KEY', Theme::getDefault());
+        self::assertSame('', $response->getContent());
     }
 
     private function createRequest(array $cookies = []): Request

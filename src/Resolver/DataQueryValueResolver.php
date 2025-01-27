@@ -78,9 +78,9 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
         return \sprintf('%s.%s: %s', DataQuery::class, $key, $message);
     }
 
-    private function getLimit(Request $request, string $prefix, TableView $view): int
+    private function getLimit(Request $request, TableView $view, string $prefix): int
     {
-        return $this->getCookieInt($request, TableInterface::PARAM_LIMIT, $prefix, $view->getPageSize());
+        return $this->getCookieInt($request, TableInterface::PARAM_LIMIT, $view->getPageSize(), $prefix);
     }
 
     /**
@@ -89,7 +89,7 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
     private function getOrder(Request $request, string $prefix): string
     {
         /** @psalm-var self::SORT_* */
-        return $this->getCookieString($request, TableInterface::PARAM_ORDER, $prefix, self::SORT_ASC);
+        return $this->getCookieString($request, TableInterface::PARAM_ORDER, self::SORT_ASC, $prefix);
     }
 
     private function getPrefix(Request $request): string
@@ -99,7 +99,7 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
 
     private function getSort(Request $request, string $prefix): string
     {
-        return $this->getCookieString($request, TableInterface::PARAM_SORT, $prefix);
+        return $this->getCookieString($request, TableInterface::PARAM_SORT, '', $prefix);
     }
 
     private function getView(Request $request, TableView $default): TableView
@@ -128,7 +128,7 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
         $query->callback = $this->isCallback($request);
         $query->view = $this->getView($request, $query->view);
         if (0 === $query->limit) {
-            $query->limit = $this->getLimit($request, $query->prefix, $query->view);
+            $query->limit = $this->getLimit($request, $query->view, $query->prefix);
         }
         if ('' === $query->sort) {
             $query->sort = $this->getSort($request, $query->prefix);

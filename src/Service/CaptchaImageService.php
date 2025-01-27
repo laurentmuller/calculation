@@ -162,7 +162,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
     public function validateTimeout(): bool
     {
         $actual = \time();
-        $last = $this->getSessionInt(self::KEY_TIME, 0);
+        $last = $this->getSessionInt(self::KEY_TIME);
         $delta = $actual - $last;
 
         return $delta <= $this->getTimeout();

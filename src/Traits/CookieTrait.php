@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Utils\DateUtils;
+use fpdf\Interfaces\PdfEnumDefaultInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,8 +24,12 @@ use Symfony\Component\HttpFoundation\Response;
  */
 trait CookieTrait
 {
-    protected function getCookieBoolean(Request $request, string $key, string $prefix = '', bool $default = false): bool
-    {
+    protected function getCookieBoolean(
+        Request $request,
+        string $key,
+        bool $default = false,
+        string $prefix = ''
+    ): bool {
         return $request->cookies->getBoolean($this->getCookieName($key, $prefix), $default);
     }
 
@@ -49,8 +54,8 @@ trait CookieTrait
     protected function getCookieFloat(
         Request $request,
         string $key,
-        string $prefix = '',
-        float $default = 0.0
+        float $default = 0.0,
+        string $prefix = ''
     ): float {
         return (float) $request->cookies->get($this->getCookieName($key, $prefix), (string) $default);
     }
@@ -58,8 +63,8 @@ trait CookieTrait
     protected function getCookieInt(
         Request $request,
         string $key,
-        string $prefix = '',
-        int $default = 0
+        int $default = 0,
+        string $prefix = ''
     ): int {
         return $request->cookies->getInt($this->getCookieName($key, $prefix), $default);
     }
@@ -67,8 +72,8 @@ trait CookieTrait
     protected function getCookieString(
         Request $request,
         string $key,
-        string $prefix = '',
-        string $default = ''
+        string $default = '',
+        string $prefix = ''
     ): string {
         return $request->cookies->getString($this->getCookieName($key, $prefix), $default);
     }
@@ -76,7 +81,7 @@ trait CookieTrait
     /**
      * Add or remove a cookie depending on the value.
      *
-     * If the value is null or empty (''), the cookie is removed.
+     * If the value is null, empty ('') or is the default enumeration, the cookie is removed.
      */
     protected function updateCookie(
         Response $response,
@@ -87,6 +92,9 @@ trait CookieTrait
         string $modify = '+1 year',
         bool $httpOnly = true
     ): void {
+        if ($value instanceof PdfEnumDefaultInterface && $value->isDefault()) {
+            $value = null;
+        }
         if (null === $value || '' === $value) {
             $this->clearCookie($response, $key, $prefix, $path, $httpOnly);
         } else {

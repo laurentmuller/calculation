@@ -360,7 +360,7 @@ class WorksheetDocumentTest extends TestCase
         $sheet->setCellContent(3, 1, new \DateTime());
         $sheet->setCellContent(4, 1, 'Fake');
 
-        $actual = $sheet->getColumnStyle(0);
+        $actual = $sheet->getColumnStyleFromIndex(0);
         self::assertInstanceOf(Style::class, $actual);
         self::assertInstanceOf(SpreadsheetDocument::class, $sheet->getParent());
         $actual = $sheet->getPercentFormat();

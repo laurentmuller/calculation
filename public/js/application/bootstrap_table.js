@@ -24,7 +24,7 @@ function customViewFormatter(data) {
         Object.keys(row).forEach(function (key) {
             html = html.replaceAll(`%${key}%`, row[key] || undefinedText);
         });
-        // functions
+        // apply format functions
         let match = regex.exec(html);
         while (match !== null) {
             let value = undefinedText;

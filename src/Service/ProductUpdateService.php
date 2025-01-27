@@ -64,8 +64,8 @@ class ProductUpdateService implements ServiceSubscriberInterface
 
         $query = new ProductUpdateQuery();
         $query->setAllProducts(true)
-            ->setPercent($this->getSessionFloat(self::KEY_PERCENT, 0))
-            ->setFixed($this->getSessionFloat(self::KEY_FIXED, 0))
+            ->setPercent($this->getSessionFloat(self::KEY_PERCENT))
+            ->setFixed($this->getSessionFloat(self::KEY_FIXED))
             ->setRound($this->isSessionBool(self::KEY_ROUND))
             ->setProducts($products)
             ->setCategory($category)
@@ -159,7 +159,7 @@ class ProductUpdateService implements ServiceSubscriberInterface
      */
     private function getCategory(): ?Category
     {
-        $id = $this->getSessionInt(self::KEY_CATEGORY, 0);
+        $id = $this->getSessionInt(self::KEY_CATEGORY);
         if (0 !== $id) {
             return $this->categoryRepository->find($id);
         }

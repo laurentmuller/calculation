@@ -118,8 +118,8 @@ class SessionKernelServiceTest extends KernelServiceTestCase
     public function testSessionFloat(): void
     {
         $key = 'float';
-        $actual = $this->getSessionFloat($key, null);
-        self::assertNull($actual);
+        $actual = $this->getSessionFloat($key);
+        self::assertSame(0.0, $actual);
 
         $default = 1.0;
         $actual = $this->getSessionFloat($key, $default);
@@ -127,7 +127,7 @@ class SessionKernelServiceTest extends KernelServiceTestCase
 
         $value = 25.5;
         $this->setSessionValue($key, $value);
-        $actual = $this->getSessionFloat($key, null);
+        $actual = $this->getSessionFloat($key);
         self::assertSame($value, $actual);
 
         $actual = $this->getSessionFloat($key, $default);
@@ -137,8 +137,8 @@ class SessionKernelServiceTest extends KernelServiceTestCase
     public function testSessionInt(): void
     {
         $key = 'int';
-        $actual = $this->getSessionInt($key, null);
-        self::assertNull($actual);
+        $actual = $this->getSessionInt($key);
+        self::assertSame(0, $actual);
 
         $default = 1;
         $actual = $this->getSessionInt($key, $default);
@@ -146,7 +146,7 @@ class SessionKernelServiceTest extends KernelServiceTestCase
 
         $value = 25;
         $this->setSessionValue($key, $value);
-        $actual = $this->getSessionInt($key, null);
+        $actual = $this->getSessionInt($key);
         self::assertSame($value, $actual);
 
         $actual = $this->getSessionInt($key, $default);

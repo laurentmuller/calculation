@@ -50,7 +50,7 @@ class ColumnFormatTest extends TestCase
         $sheet = $doc->getSheet(0);
         $sheet->setCellValue('A1', 0.25);
         ColumnFormat::AMOUNT->apply($sheet, 1);
-        $actual = $sheet->getColumnStyle(1)
+        $actual = $sheet->getColumnStyleFromIndex(1)
             ->getNumberFormat()
             ->getFormatCode();
         self::assertSame(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1, $actual);

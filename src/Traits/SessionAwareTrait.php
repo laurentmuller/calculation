@@ -79,36 +79,26 @@ trait SessionAwareTrait
      * Gets a session attribute, as float value.
      *
      * @param string $key     the attribute name
-     * @param ?float $default the default value if not found
+     * @param float  $default the default value if not found
      *
-     * @return float|null the session value, if found; the default value otherwise
-     *
-     * @psalm-return ($default is null ? (float|null) : float)
+     * @return float the session value, if found; the default value otherwise
      */
-    protected function getSessionFloat(string $key, ?float $default): ?float
+    protected function getSessionFloat(string $key, float $default = 0.0): float
     {
-        /** @psalm-var float|null $value */
-        $value = $this->getSessionValue($key, $default);
-
-        return \is_float($value) ? $value : $default;
+        return (float) $this->getSessionValue($key, $default);
     }
 
     /**
      * Gets a session attribute, as integer's value.
      *
      * @param string $key     the attribute name
-     * @param ?int   $default the default value if not found
+     * @param int    $default the default value if not found
      *
-     * @return int|null the session value, if found; the default value otherwise
-     *
-     * @psalm-return ($default is null ? (int|null) : int)
+     * @return int the session value, if found; the default value otherwise
      */
-    protected function getSessionInt(string $key, ?int $default): ?int
+    protected function getSessionInt(string $key, int $default = 0): int
     {
-        /** @psalm-var int|null $value */
-        $value = $this->getSessionValue($key, $default);
-
-        return \is_int($value) ? $value : $default;
+        return (int) $this->getSessionValue($key, $default);
     }
 
     /**

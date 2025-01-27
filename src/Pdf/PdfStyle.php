@@ -279,7 +279,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     public static function getLinkStyle(): self
     {
         return self::default()
-            ->setTextColor(PdfTextColor::link());
+            ->setTextColor(PdfTextColor::blue());
     }
 
     /**

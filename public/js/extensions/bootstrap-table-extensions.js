@@ -40,7 +40,9 @@
  */
 function loadingTemplate(message) {
     'use strict';
-    return `<div class="alert bg-body-secondary border border-secondary-subtle text-center loading-message" role="alert"><i class="fa-solid fa-spinner fa-spin me-2"></i>${message}</div>`;
+    return `<div class="alert alert-light alert-loading-message text-center" role="alert">
+                <i class="fa-solid fa-spinner fa-spin me-2"></i>${message}
+           </div>`
 }
 
 /**
@@ -159,7 +161,7 @@ $(function () {
                     }
                 },
 
-                // update UI on post page load
+                // update UI on post page's load
                 onPostBody: function (content) {
                     const isData = content.length !== 0;
                     if (isData) {

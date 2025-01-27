@@ -155,7 +155,7 @@ class HelpControllerTest extends ControllerTestCase
     private function getDownloadImage(): string
     {
         $path = __DIR__ . '/../files/images/example.png';
-        $type = \mime_content_type($path);
+        $type = (string) \mime_content_type($path);
         $data = (string) \file_get_contents($path);
         $encoded = \base64_encode($data);
 

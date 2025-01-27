@@ -94,6 +94,7 @@ readonly class AES256EncryptorService
      */
     public function encryptJson(mixed $data, int $flags = 0): string|false
     {
+        /** @psalm-var non-empty-string $encoded */
         $encoded = \json_encode($data, $flags | \JSON_THROW_ON_ERROR);
 
         return $this->encrypt($encoded);

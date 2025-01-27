@@ -108,6 +108,7 @@ final class StringUtils
     public static function encodeJson(mixed $value, int $flags = 0): string
     {
         try {
+            /** @psalm-var non-empty-string */
             return \json_encode($value, $flags | \JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
             $message = \sprintf("Unable to encode value '%s'.", \get_debug_type($value));

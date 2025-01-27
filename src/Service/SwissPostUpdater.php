@@ -163,6 +163,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
 
     private function clean(string $str): string
     {
+        /** @psalm-var string */
         return \mb_convert_encoding(\trim($str), 'UTF-8', 'ISO-8859-1');
     }
 

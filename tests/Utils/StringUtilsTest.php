@@ -139,8 +139,9 @@ class StringUtilsTest extends TestCase
     public function testDecodeJsonArray(): void
     {
         $expected = ['key' => 'value'];
+        /** @psalm-var non-empty-string $encoded */
         $encoded = \json_encode($expected);
-        $actual = StringUtils::decodeJson($encoded); // @phpstan-ignore argument.type
+        $actual = StringUtils::decodeJson($encoded);
         self::assertSame($expected, $actual);
     }
 
@@ -149,8 +150,9 @@ class StringUtilsTest extends TestCase
         $expected = new \stdClass();
         $expected->key = 'value';
         $expected->date = 'date';
+        /** @psalm-var non-empty-string $encoded */
         $encoded = \json_encode($expected);
-        $actual = StringUtils::decodeJson($encoded, false); // @phpstan-ignore argument.type
+        $actual = StringUtils::decodeJson($encoded, false);
         self::assertObjectHasProperty('key', $actual);
         self::assertObjectHasProperty('date', $actual);
         self::assertSame($expected->key, $actual->key);

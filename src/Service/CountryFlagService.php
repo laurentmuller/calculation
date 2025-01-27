@@ -82,6 +82,10 @@ class CountryFlagService
 
     private function getEmojiChar(string $chr): string
     {
-        return \mb_chr(self::REGIONAL_OFFSET + \mb_ord($chr, 'UTF-8'), 'UTF-8');
+        /** @psalm-var int $order */
+        $order = \mb_ord($chr, 'UTF-8');
+
+        /** @psalm-var string */
+        return \mb_chr(self::REGIONAL_OFFSET + $order, 'UTF-8');
     }
 }

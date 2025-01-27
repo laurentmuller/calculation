@@ -197,7 +197,9 @@ class HelpController extends AbstractController
         if (\is_numeric(\end($parts))) {
             \array_pop($parts);
         }
+        /** @psalm-var string $first */
         $first = \reset($parts);
+        /** @psalm-var string $last */
         $last = \end($parts);
         if ($first === $last) {
             $last = 'list';

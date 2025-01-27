@@ -23,6 +23,7 @@ class ImageExtensionTest extends TestCase
 {
     public static function getCreateImages(): \Iterator
     {
+        /** @psalm-var non-empty-string $dir */
         $dir = \realpath(__DIR__ . '/../files/images');
         yield [ImageExtension::BMP, $dir . '/example.bmp'];
         yield [ImageExtension::GIF, $dir . '/example.gif'];

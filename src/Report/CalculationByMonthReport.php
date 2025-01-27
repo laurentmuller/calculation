@@ -196,6 +196,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             return $this->colors[$color] = $color->getTextColor();
         }
 
+        /** @psalm-var PdfTextColor */
         return $this->colors[$color];
     }
 

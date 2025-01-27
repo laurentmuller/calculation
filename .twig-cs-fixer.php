@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 use TwigCsFixer\Config\Config;
 
-$cache_dir = __DIR__ . '/var/cache/twig-cs-fixer/';
+$cache_dir = __DIR__ . '/var/cache/twig-cs-fixer';
 if (!file_exists($cache_dir)) {
     mkdir($cache_dir, 0777, true);
 }

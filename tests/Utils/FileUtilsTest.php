@@ -92,12 +92,14 @@ class FileUtilsTest extends TestCase
 
     public function testChangeExtension(): void
     {
+        $expected = 'test.png';
         $old_name = 'test.jpeg';
-        $new_name = FileUtils::changeExtension($old_name, 'png');
-        self::assertSame('test.png', $new_name);
+        $actual = FileUtils::changeExtension($old_name, 'png');
+        self::assertSame($expected, $actual);
 
-        $new_name = FileUtils::changeExtension($old_name, ImageExtension::BMP);
-        self::assertSame('test.bmp', $new_name);
+        $expected = 'test.bmp';
+        $actual = FileUtils::changeExtension($old_name, ImageExtension::BMP);
+        self::assertSame($expected, $actual);
     }
 
     public function testChmod(): void
@@ -134,8 +136,9 @@ class FileUtilsTest extends TestCase
 
     public function testDecodeJsonValid(): void
     {
+        $expected = 10;
         $actual = FileUtils::decodeJson($this->getJsonFile());
-        self::assertCount(10, $actual);
+        self::assertCount($expected, $actual);
     }
 
     public function testDumFile(): void
@@ -148,6 +151,9 @@ class FileUtilsTest extends TestCase
 
     public function testDumpFileInvalid(): void
     {
+        if ($this->isLinux()) {
+            self::markTestSkipped('Unable to test under Linux.');
+        }
         $file = $this->getFakeFile();
         $actual = FileUtils::dumpFile($file, 'fake');
         self::assertFalse($actual);
@@ -226,8 +232,9 @@ class FileUtilsTest extends TestCase
 
     public function testMakePathRelative(): void
     {
+        $expected = 'videos/';
         $actual = FileUtils::makePathRelative('/tmp/videos', '/tmp');
-        self::assertSame('videos/', $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testMirror(): void
@@ -266,20 +273,23 @@ class FileUtilsTest extends TestCase
 
     public function testNormalize(): void
     {
+        $expected = 'C:/Temp/';
         $actual = FileUtils::normalize('C:\\Temp\\');
-        self::assertSame('C:/Temp/', $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testNormalizeDirectory(): void
     {
+        $expected = \sprintf('C:%sTemp', \DIRECTORY_SEPARATOR);
         $actual = FileUtils::normalizeDirectory('C:\\Temp');
-        self::assertSame('C:' . \DIRECTORY_SEPARATOR . 'Temp', $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testReadFileInvalid(): void
     {
-        $content = FileUtils::readFile(__DIR__);
-        self::assertSame('', $content);
+        $expected = '';
+        $actual = FileUtils::readFile(__DIR__);
+        self::assertSame($expected, $actual);
     }
 
     public function testReadFileValid(): void

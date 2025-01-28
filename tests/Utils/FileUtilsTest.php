@@ -148,7 +148,7 @@ class FileUtilsTest extends TestCase
 
     public function testDumpFileInvalid(): void
     {
-        $file = 'a:/fake:dir/fake.txt';
+        $file = $this->getFakeFile();
         $actual = FileUtils::dumpFile($file, 'fake');
         self::assertFalse($actual);
     }
@@ -259,7 +259,8 @@ class FileUtilsTest extends TestCase
         if ($this->isLinux()) {
             self::markTestSkipped('Unable to test under Linux.');
         }
-        $actual = FileUtils::mkdir('a:/fak?e/');
+        $file = $this->getFakeDir();
+        $actual = FileUtils::mkdir($file);
         self::assertFalse($actual);
     }
 
@@ -356,9 +357,14 @@ class FileUtilsTest extends TestCase
         return __DIR__ . '/../files/txt/empty.txt';
     }
 
+    private function getFakeDir(): string
+    {
+        return __DIR__ . '/fake:Dir';
+    }
+
     private function getFakeFile(): string
     {
-        return __DIR__ . '/fake.txt';
+        return $this->getFakeDir() . '/fake.txt';
     }
 
     private function getJsonFile(): string

@@ -147,7 +147,7 @@ class Month extends AbstractCalendarItem implements \Stringable
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array{month: int, name: string, shortName: string, startDate: string|null, endDate: string|null}
      */
     public function jsonSerialize(): array
     {

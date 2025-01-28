@@ -12,6 +12,7 @@
     {% endif %}
 {% endmacro %}
 
+{# create timestampable properties #}
 {% macro timestampable_properties(item) -%}
     {% from 'macros/_properties.html.twig' import property %}
     {{ property('calculation.fields.created', item.createdMessage(true)|trans) }}

@@ -130,7 +130,7 @@ class Week extends AbstractCalendarItem
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array{week: int, startDate: string|null, endDate: string|null, days: Day[]}
      */
     public function jsonSerialize(): array
     {

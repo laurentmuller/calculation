@@ -237,7 +237,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array{day: int, name: string, shortName: string, date: string}
      */
     public function jsonSerialize(): array
     {

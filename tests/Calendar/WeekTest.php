@@ -100,7 +100,6 @@ class WeekTest extends CalendarTestCase
         self::assertSame(1, $actual['week']);
         self::assertSame('01.01.2024', $actual['startDate']);
         self::assertSame('07.01.2024', $actual['endDate']);
-        self::assertIsArray($actual['days']);
         self::assertCount(2, $actual['days']);
     }
 

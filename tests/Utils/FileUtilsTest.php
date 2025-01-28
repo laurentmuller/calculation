@@ -148,10 +148,7 @@ class FileUtilsTest extends TestCase
 
     public function testDumpFileInvalid(): void
     {
-        if ($this->isLinux()) {
-            self::markTestSkipped('Unable to test under Linux.');
-        }
-        $file = 'a:/fake/fake.txt';
+        $file = 'a:/fake:dir/fake.txt';
         $actual = FileUtils::dumpFile($file, 'fake');
         self::assertFalse($actual);
     }

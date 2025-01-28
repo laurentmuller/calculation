@@ -191,7 +191,7 @@ final class StringUtils
      * @return bool <code>true</code> if the pattern matches the given subject
      *
      * @psalm-param non-empty-string $pattern
-     * @psalm-param int-mask<256, 512> $flags
+     * @psalm-param 0|256|512|768 $flags
      */
     public static function pregMatch(string $pattern, string $subject, ?array &$matches = null, int $flags = 0, int $offset = 0): bool
     {

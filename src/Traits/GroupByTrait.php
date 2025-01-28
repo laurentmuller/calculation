@@ -47,7 +47,7 @@ trait GroupByTrait
         }
 
         /** @psalm-var callable(array): array $function */
-        $function = [self::class, __FUNCTION__]; // @phpstan-ignore-line
+        $function = [self::class, __FUNCTION__]; // @phpstan-ignore varTag.nativeType
         $slice_args = \array_slice(\func_get_args(), 2);
         foreach ($result as $groupKey => $value) {
             $params = \array_merge([$value], $slice_args);

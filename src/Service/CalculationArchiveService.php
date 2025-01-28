@@ -174,11 +174,10 @@ class CalculationArchiveService implements ServiceSubscriberInterface
             return [];
         }
 
-        /** @psalm-var \Doctrine\ORM\Query<int, Calculation> $query */
-        $query = $this->createQueryBuilder($sources, $date) // @phpstan-ignore varTag.type
-            ->getQuery();
-
-        return $query->getResult();
+        /** @psalm-var Calculation[] */
+        return $this->createQueryBuilder($sources, $date)
+            ->getQuery()
+            ->getResult();
     }
 
     private function getDate(): \DateTimeInterface

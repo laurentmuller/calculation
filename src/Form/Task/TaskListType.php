@@ -16,7 +16,7 @@ namespace App\Form\Task;
 use App\Entity\Task;
 use App\Form\AbstractListEntityType;
 use App\Repository\TaskRepository;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -62,7 +62,7 @@ class TaskListType extends AbstractListEntityType
         /** @psalm-var bool $all */
         $all = $options['query_all'];
 
-        /** @psalm-var EntityManager $manager */
+        /** @psalm-var EntityManagerInterface $manager */
         $manager = $options['em'];
 
         /** @psalm-var class-string<Task> $class */

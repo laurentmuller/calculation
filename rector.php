@@ -10,13 +10,11 @@
 
 declare(strict_types=1);
 
-use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
-use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\Set\TwigSetList;
 
@@ -30,10 +28,6 @@ return RectorConfig::configure()
         __DIR__ . '/public',
     ])->withSkip([
         PreferPHPUnitThisCallRector::class,
-        DisallowedEmptyRuleFixerRector::class,
-        FlipTypeControlToUseExclusiveTypeRector::class => [
-            __DIR__ . '/src/Form/DataTransformer/EntityTransformer.php',
-        ],
     ])->withSets([
         // global
         SetList::PHP_82,
@@ -44,19 +38,22 @@ return RectorConfig::configure()
         SetList::TYPE_DECLARATION,
         // Doctrine
         DoctrineSetList::DOCTRINE_DBAL_40,
+        DoctrineSetList::TYPED_COLLECTIONS,
         DoctrineSetList::DOCTRINE_CODE_QUALITY,
         DoctrineSetList::DOCTRINE_COLLECTION_22,
-        DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
         // PHP-Unit
-        PHPUnitSetList::PHPUNIT_100,
+        PHPUnitSetList::PHPUNIT_110,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
-        PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES,
         // Symfony
-        SymfonySetList::SYMFONY_71,
+        SymfonySetList::SYMFONY_72,
         SymfonySetList::SYMFONY_CODE_QUALITY,
-        SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
         // twig
-        TwigSetList::TWIG_240,
+        TwigSetList::TWIG_24,
         TwigSetList::TWIG_UNDERSCORE_TO_NAMESPACE,
-    ]);
+    ])->withAttributesSets(
+        // annotations to attributes
+        symfony: true,
+        doctrine: true,
+        phpunit: true
+    );

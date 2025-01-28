@@ -429,7 +429,7 @@ class SearchService implements ServiceSubscriberInterface
      */
     private function getQueries(): array
     {
-        return $this->cache->get('queries', function () {
+        return $this->cache->get('queries', function (): array {
             $queries = [];
             $this->createEntityQueries($queries, Calculation::class, 'id', 'customer', 'description', 'overallTotal');
             $this->createEntityQueries($queries, CalculationState::class, 'code', 'description');

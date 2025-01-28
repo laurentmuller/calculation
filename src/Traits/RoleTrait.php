@@ -30,7 +30,7 @@ trait RoleTrait
     /**
      * The role name.
      *
-     * @psalm-var (RoleInterface::ROLE_*|null)
+     * @psalm-var RoleInterface::ROLE_*|null
      */
     #[Assert\Length(max: 25)]
     #[Assert\Choice([RoleInterface::ROLE_USER, RoleInterface::ROLE_ADMIN, RoleInterface::ROLE_SUPER_ADMIN])]

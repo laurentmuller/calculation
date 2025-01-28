@@ -16,6 +16,7 @@ namespace App\Pdf\Traits;
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Traits\ArrayTrait;
+use App\Traits\MathTrait;
 use fpdf\Enums\PdfRectangleStyle;
 use fpdf\Traits\PdfSectorTrait;
 
@@ -31,6 +32,7 @@ use fpdf\Traits\PdfSectorTrait;
 trait PdfPieChartTrait
 {
     use ArrayTrait;
+    use MathTrait;
     use PdfSectorTrait;
 
     /**
@@ -74,7 +76,7 @@ trait PdfPieChartTrait
         PdfDrawColor::cellBorder()->apply($this);
         foreach ($rows as $row) {
             $this->pieApplyFillColor($row);
-            $endAngle = $startAngle + 360.0 * $row['value'] / $total;  // @phpstan-ignore-line
+            $endAngle = $startAngle + $this->safeDivide(360.0 * $row['value'], $total);
             $this->sector($centerX, $centerY, $radius, $startAngle, $endAngle, $style, $clockwise, $origin);
             $startAngle = $endAngle;
         }

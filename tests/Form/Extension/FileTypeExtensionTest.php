@@ -193,6 +193,9 @@ class FileTypeExtensionTest extends TypeTestCase
             ->createView();
     }
 
+    /**
+     * @return FileTypeExtension[]
+     */
     protected function getTypeExtensions(): array
     {
         return [

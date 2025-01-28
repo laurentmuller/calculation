@@ -56,11 +56,21 @@ class CountryFlagType extends AbstractType
         return CountryType::class;
     }
 
+    /**
+     * @phpstan-param Options<array> $options
+     *
+     * @psalm-param Options $options
+     */
     private function getChoiceLoader(Options $options): ChoiceLoaderInterface
     {
         return ChoiceList::lazy($this, fn (): array => $this->loadChoices($options));
     }
 
+    /**
+     * @phpstan-param Options<array> $options
+     *
+     * @psalm-param Options $options
+     */
     private function loadChoices(Options $options): array
     {
         /** @psalm-var string|null $locale */

@@ -32,16 +32,9 @@ parameters:
             message: '#no value type specified#'
             identifier: missingType.iterableValue
         -
+            message: '#Call to static method .* will always evaluate to true.#'
+            path: tests/*
+        -
             message: '#@extends contains generic type#'
             identifier: generics.notGeneric
             path: src/Form/Extension/*
-        -
-            message: '#Call to static method .* will always evaluate to true.#'
-            path: tests/*
-
-        -
-            message: '#@extends contains generic type#'
-            identifier: generics.notGeneric
-            paths:
-                 - src/Form/*
-                 - tests/Fixture/*

@@ -52,6 +52,9 @@ class TextTypeExtensionTest extends TypeTestCase
         self::assertArrayNotHasKey('append_class', $attr);
     }
 
+    /**
+     * @return TextTypeExtension[]
+     */
     protected function getTypeExtensions(): array
     {
         return [

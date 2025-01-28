@@ -102,6 +102,9 @@ class UserRegistrationTypeTest extends TypeTestCase
         ];
     }
 
+    /**
+     * @return TextTypeExtension[]
+     */
     protected function getTypeExtensions(): array
     {
         return [

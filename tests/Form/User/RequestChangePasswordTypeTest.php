@@ -79,6 +79,9 @@ class RequestChangePasswordTypeTest extends TypeTestCase
         ];
     }
 
+    /**
+     * @return TextTypeExtension[]
+     */
     protected function getTypeExtensions(): array
     {
         return [

@@ -52,6 +52,9 @@ class VichImageTypeExtensionTest extends TypeTestCase
         ];
     }
 
+    /**
+     * @return VichImageTypeExtension[]
+     */
     protected function getTypeExtensions(): array
     {
         return [

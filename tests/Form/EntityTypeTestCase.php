@@ -70,6 +70,14 @@ abstract class EntityTypeTestCase extends TypeTestCase
         return [];
     }
 
+    /**
+     * @return array{
+     *     FileTypeExtension,
+     *     TextTypeExtension,
+     *     UrlTypeExtension,
+     *     VichImageTypeExtension
+     * }
+     */
     protected function getTypeExtensions(): array
     {
         return [

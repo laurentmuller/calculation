@@ -673,6 +673,14 @@ class FormHelperTest extends TypeTestCase
         ];
     }
 
+    /**
+     * @return array{
+     *     FileTypeExtension,
+     *     TextTypeExtension,
+     *     UrlTypeExtension,
+     *     VichImageTypeExtension
+     * }
+     */
     protected function getTypeExtensions(): array
     {
         return [
@@ -690,6 +698,9 @@ class FormHelperTest extends TypeTestCase
         return new FormHelper($builder, $labelPrefix);
     }
 
+    /**
+     * @phpstan-param FormConfigInterface<mixed> $config
+     */
     private static function validateAttribute(FormConfigInterface $config, string $option, string $name, mixed $expected): void
     {
         self::assertTrue($config->hasOption($option));

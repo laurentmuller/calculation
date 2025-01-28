@@ -41,6 +41,9 @@ class UrlTypeExtensionTest extends TypeTestCase
         self::assertSame('ftp', $attr['data-protocol']);
     }
 
+    /**
+     * @return UrlTypeExtension[]
+     */
     protected function getTypeExtensions(): array
     {
         return [

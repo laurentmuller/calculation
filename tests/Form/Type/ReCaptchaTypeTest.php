@@ -84,7 +84,7 @@ class ReCaptchaTypeTest extends TypeTestCase
 
         self::assertCount(1, $form->getErrors());
         $errorForm = $form->getErrors()[0];
-        self::assertSame($error, $errorForm->getMessage()); // @phpstan-ignore method.notFound
+        self::assertSame($error, $errorForm->getMessage());
     }
 
     public function testSubmitNoRequest(): void
@@ -103,7 +103,7 @@ class ReCaptchaTypeTest extends TypeTestCase
 
         self::assertCount(1, $form->getErrors());
         $errorForm = $form->getErrors()[0];
-        self::assertSame('no-request', $errorForm->getMessage()); // @phpstan-ignore method.notFound
+        self::assertSame('no-request', $errorForm->getMessage());
     }
 
     public function testSubmitSuccess(): void

@@ -36,6 +36,10 @@ class FileTypeExtension extends AbstractFileTypeExtension
     }
 
     /**
+     * @phpstan-param FormInterface<array> $form
+     *
+     * @psalm-param FormInterface $form
+     *
      * @psalm-return array<array-key, mixed>
      */
     protected function updateOptions(FormInterface $form, array $options): array

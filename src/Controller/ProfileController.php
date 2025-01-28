@@ -15,6 +15,7 @@ namespace App\Controller;
 
 use App\Attribute\GetPost;
 use App\Entity\User;
+use App\Form\AbstractEntityType;
 use App\Form\User\ProfileEditType;
 use App\Form\User\ProfilePasswordType;
 use App\Interfaces\RoleInterface;
@@ -71,6 +72,8 @@ class ProfileController extends AbstractController
     }
 
     /**
+     * @phpstan-param class-string<AbstractEntityType<User>> $type
+     *
      * @psalm-param class-string $type
      */
     private function handleForm(

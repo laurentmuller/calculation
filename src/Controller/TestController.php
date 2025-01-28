@@ -698,9 +698,9 @@ class TestController extends AbstractController
      * @template T of AbstractProperty
      *
      * @psalm-param AbstractParameters<T> $parameters
-     * @psalm-param class-string<FormTypeInterface<mixed>> $type
+     * @psalm-param class-string<FormTypeInterface> $type
      *
-     * @phpstan-param class-string<FormTypeInterface> $type
+     * @phpstan-param class-string<FormTypeInterface<array>> $type
      */
     private function renderParameters(
         Request $request,

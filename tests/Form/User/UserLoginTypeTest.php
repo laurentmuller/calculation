@@ -64,6 +64,9 @@ class UserLoginTypeTest extends TypeTestCase
         ];
     }
 
+    /**
+     * @return TextTypeExtension[]
+     */
     protected function getTypeExtensions(): array
     {
         return [

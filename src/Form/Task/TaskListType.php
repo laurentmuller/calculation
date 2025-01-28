@@ -51,6 +51,10 @@ class TaskListType extends AbstractListEntityType
     }
 
     /**
+     * @phpstan-param Options<array> $options
+     *
+     * @psalm-param Options $options
+     *
      * @throws \Doctrine\ORM\Exception\NotSupported
      */
     private function getSortedBuilder(Options $options): QueryBuilder

@@ -56,6 +56,9 @@ class UserCommentTypeTest extends TypeTestCase
         ];
     }
 
+    /**
+     * @return FileTypeExtension[]
+     */
     protected function getTypeExtensions(): array
     {
         return [

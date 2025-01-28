@@ -23,7 +23,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Base extension for FileType.
  *
- * @psalm-template T of \Symfony\Component\Form\FormTypeInterface
+ * @template T of \Symfony\Component\Form\FormTypeInterface
  *
  * @extends AbstractTypeExtension<T>
  */

@@ -89,6 +89,11 @@ abstract class AbstractChangePasswordType extends AbstractEntityType
         }
     }
 
+    /**
+     * @phpstan-param FormInterface<array> $target
+     *
+     * @psalm-param FormInterface $target
+     */
     private function validateConstraint(
         ExecutionContextInterface $context,
         Constraint $constraint,

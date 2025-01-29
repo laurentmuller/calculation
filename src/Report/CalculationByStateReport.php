@@ -27,7 +27,6 @@ use App\Pdf\Traits\PdfChartLegendTrait;
 use App\Pdf\Traits\PdfPieChartTrait;
 use App\Report\Table\ReportTable;
 use App\Table\CalculationTable;
-use App\Traits\MathTrait;
 use App\Traits\StateTotalsTrait;
 use App\Utils\FormatUtils;
 use fpdf\Enums\PdfRectangleStyle;
@@ -43,7 +42,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class CalculationByStateReport extends AbstractArrayReport implements PdfChartInterface, PdfDrawCellTextInterface, PdfDrawHeadersInterface
 {
-    use MathTrait;
     use PdfChartLegendTrait;
     use PdfPieChartTrait;
     use StateTotalsTrait;

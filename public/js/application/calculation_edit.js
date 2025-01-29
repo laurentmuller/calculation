@@ -374,7 +374,9 @@ const Application = {
                     $totalPanel.fadeOut();
                 }
                 if (response.adjust && !$.isUndefined(response.user_margin) && !isNaN(response.user_margin)) {
-                    $('#calculation_userMargin').intVal(response.user_margin * 100).selectFocus();
+                    const value = Math.round(response.user_margin * 100);
+                    $('#calculation_userMargin').data('value', value)
+                        .intVal(value).selectFocus();
                 }
                 if (response.overall_below) {
                     $buttonAdjust.toggleDisabled(false).removeClass('cursor-default');
@@ -1664,9 +1666,14 @@ $(function () {
 
     // user margin
     const $margin = $('#calculation_userMargin');
-    $margin.on('input', function () {
+    $margin.data('value', $margin.intVal()).on('input', function () {
         $margin.updateTimer(function () {
-            Application.updateTotals(false);
+            const oldValue = $margin.data('value');
+            const newValue = $margin.intVal();
+            if (oldValue !== newValue) {
+                $margin.data('value', newValue);
+                Application.updateTotals(false);
+            }
         }, 250);
     });
 

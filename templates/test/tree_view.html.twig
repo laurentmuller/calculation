@@ -157,14 +157,13 @@
                 <span class="form-label cursor-default">Position</span>
                 <div class="dropdown dropdown-position">
                     {% set current = user_service.messagePosition %}
-                    {% set positions = enum('App\\Enums\\MessagePosition').sorted() %}
                     <button type="button" class="btn-position form-control d-flex align-items-center dropdown-toggle" data-value="{{ current.value }}" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="position-icon me-2"><i class="{{ current.icon }}" style="--fa-rotate-angle: {{ current.angle }}deg;"></i></span>
                         <span class="position-text flex-fill text-start">{{- current|trans -}}</span>
                     </button>
                     <table class="dropdown-menu w-auto table table-borderless mb-0 px-2">
                         <tr>
-                            {% for position in positions %}
+                            {% for position in enum('App\\Enums\\MessagePosition').sorted() %}
                             <td>
                                 {% set id = 'btn-check-dropdown-' ~ position.value %}
                                 <div class="form-check ps-0">

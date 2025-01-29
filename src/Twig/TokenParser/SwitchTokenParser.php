@@ -46,8 +46,7 @@ final class SwitchTokenParser extends AbstractTokenParser
         $nodes = ['value' => $expressionParser->parseExpression()];
 
         $stream->expect(Token::BLOCK_END_TYPE);
-        while (Token::TEXT_TYPE === $stream->getCurrent()->getType()
-            && '' === \trim((string) $stream->getCurrent()->getValue())) {
+        while ($stream->test(Token::TEXT_TYPE) && '' === \trim((string) $stream->getCurrent()->getValue())) {
             $stream->next();
         }
         $stream->expect(Token::BLOCK_START_TYPE);

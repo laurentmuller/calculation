@@ -26,6 +26,7 @@ use App\Service\FontAwesomeIconService;
 use App\Service\FontAwesomeImageService;
 use App\Service\ImageService;
 use App\Utils\FileUtils;
+use fpdf\Color\PdfRgbColor;
 use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfRectangleStyle;
 use fpdf\Enums\PdfTextAlignment;
@@ -243,10 +244,10 @@ class MemoryImageReport extends AbstractReport
 
     private function renderEllipses(): void
     {
-        $this->setDrawColor(255, 0, 0);
+        $this->setDrawColor(PdfRgbColor::red());
         $this->ellipse(30, 220, 20, 10);
         $this->circle(65, 220, 10);
-        $this->setFillColor(0, 255, 0);
+        $this->setFillColor(PdfRgbColor::green());
         $this->circle(65, 245, 10, PdfRectangleStyle::BOTH);
         $this->ellipse(30, 245, 20, 10, PdfRectangleStyle::BOTH);
     }

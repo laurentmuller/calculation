@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Colors;
 
+use fpdf\Color\PdfRgbColor;
 use fpdf\PdfDocument;
 
 /**
@@ -22,7 +23,8 @@ class PdfDrawColor extends AbstractPdfColor
 {
     public function apply(PdfDocument $doc): void
     {
-        $doc->setDrawColor($this->red, $this->green, $this->blue);
+        $color = PdfRgbColor::instance($this->red, $this->green, $this->blue);
+        $doc->setDrawColor($color);
     }
 
     /**

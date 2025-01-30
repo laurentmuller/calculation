@@ -52,13 +52,6 @@ interface PdfColorInterface
     public function applyTextColor(PdfDocument $doc): void;
 
     /**
-     * Gets this value converted to an integer.
-     *
-     * @see PdfColorInterface::asRGB()
-     */
-    public function asInt(): int;
-
-    /**
      * Gets this value converted to RGB.
      *
      * @return array{0: int, 1: int, 2: int}

@@ -769,7 +769,7 @@ $(function () {
                 $parent = $this;
                 selector = $this.getOptions().rowSelector;
             }
-            $link = $parent.find(selector + ' ' + actionSelector);
+            $link = $parent.find(`${selector} ${actionSelector}`);
             return $link.length ? $link : null;
         },
 
@@ -1073,7 +1073,7 @@ $(function () {
                     const sortOrder = $option.data('sort');
                     if (sortName && sortOrder) {
                         $sortName.val(sortName);
-                        $('#sort-order-' + sortOrder).setChecked(true);
+                        $(`#sort-order-${sortOrder}`).setChecked(true);
                         $button.trigger('click');
                     }
                 }

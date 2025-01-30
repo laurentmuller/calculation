@@ -42,11 +42,6 @@ trait PdfColorTrait
         $this->getTextColor()->apply($doc);
     }
 
-    public function asInt(): int
-    {
-        return $this->hex2int($this->getPhpOfficeColor());
-    }
-
     /**
      * @return array{0: int, 1: int, 2: int}
      *

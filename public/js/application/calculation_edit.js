@@ -1111,7 +1111,7 @@ $.fn.extend({
      */
     findNamedInput: function (name) {
         'use strict';
-        const selector = 'input[name*=\'' + name + '\']';
+        const selector = `input[name*='${name}']`;
         const $result = $(this).find(selector);
         return $result.length ? $result : null;
     },

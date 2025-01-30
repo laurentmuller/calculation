@@ -77,21 +77,6 @@ class PdfColorTest extends TestCase
         yield [$rgb[0], $rgb[1], $rgb[2], '0x0000ff', '0x'];
     }
 
-    public static function getIntColors(): \Generator
-    {
-        $rgb = [0, 0, 0];
-        $value = (($rgb[0] & 0xFF) << 0x10) | (($rgb[1] & 0xFF) << 0x8) | ($rgb[2] & 0xFF);
-        yield [$rgb[0], $rgb[1], $rgb[2], $value];
-
-        $rgb = [255, 255, 255];
-        $value = (($rgb[0] & 0xFF) << 0x10) | (($rgb[1] & 0xFF) << 0x8) | ($rgb[2] & 0xFF);
-        yield [$rgb[0], $rgb[1], $rgb[2], $value];
-
-        $rgb = [50, 100, 150];
-        $value = (($rgb[0] & 0xFF) << 0x10) | (($rgb[1] & 0xFF) << 0x8) | ($rgb[2] & 0xFF);
-        yield [$rgb[0], $rgb[1], $rgb[2], $value];
-    }
-
     public static function getInvalidColors(): \Generator
     {
         yield [''];
@@ -129,13 +114,9 @@ class PdfColorTest extends TestCase
         yield ['#FFFFFF', 255, 255, 255];
         yield ['aabbff', 170, 187, 255];
 
-        $rgb = [255, 255, 255];
-        $value = (($rgb[0] & 0xFF) << 0x10) | (($rgb[1] & 0xFF) << 0x8) | ($rgb[2] & 0xFF);
-        yield [$value, $rgb[0], $rgb[1], $rgb[2]];
-
-        $rgb = [50, 100, 150];
-        $value = (($rgb[0] & 0xFF) << 0x10) | (($rgb[1] & 0xFF) << 0x8) | ($rgb[2] & 0xFF);
-        yield [$value, $rgb[0], $rgb[1], $rgb[2]];
+        yield ['#aabbff', 170, 187, 255];
+        yield ['aabbff#', 170, 187, 255];
+        yield ['#aabbff#', 170, 187, 255];
     }
 
     public function testApply(): void
@@ -161,19 +142,6 @@ class PdfColorTest extends TestCase
     {
         $color = new PdfDrawColor($red, $green, $blue);
         $actual = $color->asHex($prefix);
-        self::assertSame($expected, $actual);
-    }
-
-    /**
-     * @psalm-param int<0, 255> $red
-     * @psalm-param int<0, 255> $green
-     * @psalm-param int<0, 255> $blue
-     */
-    #[DataProvider('getIntColors')]
-    public function testAsInt(int $red, int $green, int $blue, int $expected): void
-    {
-        $color = new PdfDrawColor($red, $green, $blue);
-        $actual = $color->asInt();
         self::assertSame($expected, $actual);
     }
 
@@ -256,11 +224,8 @@ class PdfColorTest extends TestCase
         self::assertEqualValues($color, $red, $green, $blue);
     }
 
-    /**
-     * @psalm-param int|string|null $rgb
-     */
     #[DataProvider('getInvalidColors')]
-    public function testInvalidColors(int|string|null $rgb): void
+    public function testInvalidColors(?string $rgb): void
     {
         $color = PdfTextColor::create($rgb);
         self::assertNull($color);
@@ -280,11 +245,8 @@ class PdfColorTest extends TestCase
         self::assertEqualValues($color, $red, $green, $blue);
     }
 
-    /**
-     * @psalm-param int|string|null $rgb
-     */
     #[DataProvider('getValidColors')]
-    public function testValidColors(int|string|null $rgb, int $red, int $green, int $blue): void
+    public function testValidColors(string $rgb, int $red, int $green, int $blue): void
     {
         $color = PdfTextColor::create($rgb);
         self::assertEqualValues($color, $red, $green, $blue);

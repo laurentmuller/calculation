@@ -50,15 +50,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      */
     public function asHex(string $prefix = ''): string
     {
-        return $prefix . \substr('000000' . \dechex($this->asInt()), -6);
-    }
-
-    /**
-     * Gets the integer representation of these values.
-     */
-    public function asInt(): int
-    {
-        return (($this->red & 0xFF) << 0x10) | (($this->green & 0xFF) << 0x8) | ($this->blue & 0xFF);
+        return \sprintf('%s%02x%02x%02x', $prefix, $this->red, $this->green, $this->blue);
     }
 
     /**
@@ -102,24 +94,24 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Creates a new instance from the given value.
      *
-     * @param int|string|null $value an integer value or a hexadecimal string
-     *                               like <code>'FF8040'</code> or <code>'FFF'</code>
+     * @param string|null $value an integer value or a hexadecimal string
+     *                           like <code>'FF8040'</code> or <code>'FFF'</code>
      *
      * @return static|null the color or null if the RGB value cannot be parsed
-     *
-     * @psalm-param int|string|null $value
      */
-    public static function create(int|string|null $value): ?static
+    public static function create(?string $value): ?static
     {
         if (null === $value || '' === $value) {
             return null;
         }
 
-        if (\is_int($value)) {
-            return self::createFromInt($value);
-        }
+        $value = (string) \preg_replace('/[^0-9A-F]/i', '', $value);
 
-        return self::createFromString($value);
+        return match (\strlen($value)) {
+            3 => self::createFrom3Chars($value),
+            6 => self::createFrom6Chars($value),
+            default => null,
+        };
     }
 
     /**
@@ -229,29 +221,6 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
         $blue = self::hexdec(\substr($value, 4, 2));
 
         return new static($red, $green, $blue);
-    }
-
-    private static function createFromInt(int $value): static
-    {
-        /** @psalm-var int<0, 255> $red */
-        $red = 0xFF & ($value >> 0x10);
-        /** @psalm-var int<0, 255> $green */
-        $green = 0xFF & ($value >> 0x8);
-        /** @psalm-var int<0, 255> $blue */
-        $blue = 0xFF & $value;
-
-        return new static($red, $green, $blue);
-    }
-
-    private static function createFromString(string $value): ?static
-    {
-        $value = (string) \preg_replace('/[^0-9A-F]/i', '', $value);
-
-        return match (\strlen($value)) {
-            3 => self::createFrom3Chars($value),
-            6 => self::createFrom6Chars($value),
-            default => null,
-        };
     }
 
     /**

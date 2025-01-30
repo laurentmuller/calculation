@@ -46,7 +46,7 @@ use App\Pdf\Events\PdfLabelTextEvent;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\PdfLabelDocument;
 use App\Report\FontAwesomeReport;
-use App\Report\HtmlColorNameReport;
+use App\Report\HtmlColorsReport;
 use App\Report\HtmlReport;
 use App\Report\MemoryImageReport;
 use App\Repository\CustomerRepository;
@@ -106,6 +106,17 @@ class TestController extends AbstractController
     use CookieTrait;
     use GroupByTrait;
     use StrengthLevelTranslatorTrait;
+
+    /**
+     * Output a report with HTML and Boostrap colors.
+     */
+    #[Get(path: '/colors', name: 'colors')]
+    public function colors(): PdfResponse
+    {
+        $report = new HtmlColorsReport($this);
+
+        return $this->renderPdfDocument($report);
+    }
 
     /**
      * Test sending notification mail.
@@ -268,17 +279,6 @@ class TestController extends AbstractController
         }
 
         $report = new FontAwesomeReport($this, $service);
-
-        return $this->renderPdfDocument($report);
-    }
-
-    /**
-     * Output a report with HTML color names.
-     */
-    #[Get(path: '/colors', name: 'colors')]
-    public function htmlColorNames(): PdfResponse
-    {
-        $report = new HtmlColorNameReport($this);
 
         return $this->renderPdfDocument($report);
     }

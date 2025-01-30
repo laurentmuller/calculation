@@ -26,12 +26,12 @@ class HtmlBootstrapColorTest extends TestCase
     public static function getColorValues(): \Iterator
     {
         yield [HtmlBootstrapColor::DANGER, '#DC3545'];
-        yield [HtmlBootstrapColor::DARK, '#343A40'];
-        yield [HtmlBootstrapColor::INFO, '#17A2B8'];
+        yield [HtmlBootstrapColor::DARK, '#212529'];
+        yield [HtmlBootstrapColor::INFO, '#0DCAF0'];
         yield [HtmlBootstrapColor::LIGHT, '#F8F9FA'];
-        yield [HtmlBootstrapColor::PRIMARY, '#007BFF'];
+        yield [HtmlBootstrapColor::PRIMARY, '#0D6EFD'];
         yield [HtmlBootstrapColor::SECONDARY, '#6C757D'];
-        yield [HtmlBootstrapColor::SUCCESS, '#28A745'];
+        yield [HtmlBootstrapColor::SUCCESS, '#198754'];
         yield [HtmlBootstrapColor::WARNING, '#FFC107'];
     }
 
@@ -92,12 +92,12 @@ class HtmlBootstrapColorTest extends TestCase
     public static function getPhpOfficeColors(): \Iterator
     {
         yield [HtmlBootstrapColor::DANGER, 'DC3545'];
-        yield [HtmlBootstrapColor::DARK, '343A40'];
-        yield [HtmlBootstrapColor::INFO, '17A2B8'];
+        yield [HtmlBootstrapColor::DARK, '212529'];
+        yield [HtmlBootstrapColor::INFO, '0DCAF0'];
         yield [HtmlBootstrapColor::LIGHT, 'F8F9FA'];
-        yield [HtmlBootstrapColor::PRIMARY, '007BFF'];
+        yield [HtmlBootstrapColor::PRIMARY, '0D6EFD'];
         yield [HtmlBootstrapColor::SECONDARY, '6C757D'];
-        yield [HtmlBootstrapColor::SUCCESS, '28A745'];
+        yield [HtmlBootstrapColor::SUCCESS, '198754'];
         yield [HtmlBootstrapColor::WARNING, 'FFC107'];
     }
 
@@ -123,14 +123,6 @@ class HtmlBootstrapColorTest extends TestCase
         $document = new PdfDocument();
         $color->applyTextColor($document);
         self::assertSame(0, $document->getPage());
-    }
-
-    public function testAsInt(): void
-    {
-        $expected = \hexdec('DC3545');
-        $color = HtmlBootstrapColor::DANGER;
-        $actual = $color->asInt();
-        self::assertSame($expected, $actual);
     }
 
     public function testAsRGB(): void

@@ -22,19 +22,19 @@ use App\Pdf\Traits\PdfColorTrait;
 /**
  * Bootstrap color enumeration.
  *
- * @version 4.4.1
+ * Picked from version 5.3.
  */
 enum HtmlBootstrapColor: string implements PdfColorInterface
 {
     use PdfColorTrait;
 
     case DANGER = '#DC3545';
-    case DARK = '#343A40';
-    case INFO = '#17A2B8';
+    case DARK = '#212529';
+    case INFO = '#0DCAF0';
     case LIGHT = '#F8F9FA';
-    case PRIMARY = '#007BFF';
+    case PRIMARY = '#0D6EFD';
     case SECONDARY = '#6C757D';
-    case SUCCESS = '#28A745';
+    case SUCCESS = '#198754';
     case WARNING = '#FFC107';
 
     /**
@@ -63,7 +63,7 @@ enum HtmlBootstrapColor: string implements PdfColorInterface
 
     private static function parseClass(string $class): ?HtmlBootstrapColor
     {
-        $values = \explode('-', $class);
+        $values = \explode('-', \strtolower($class));
 
         return match (\end($values)) {
             'primary' => HtmlBootstrapColor::PRIMARY,

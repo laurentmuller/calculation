@@ -13,39 +13,48 @@ declare(strict_types=1);
 
 namespace App\Pdf\Colors;
 
+use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
 use fpdf\Color\PdfRgbColor;
 use fpdf\PdfDocument;
 
 /**
- * Color used for filling operations (filled rectangles and cell backgrounds).
+ * RGB color used for filling operations (filled rectangles and cell backgrounds).
  */
-class PdfFillColor extends AbstractPdfColor
+readonly class PdfFillColor extends PdfRgbColor implements PdfDocumentUpdaterInterface
 {
     public function apply(PdfDocument $doc): void
     {
-        $color = PdfRgbColor::instance($this->red, $this->green, $this->blue);
-        $doc->setFillColor($color);
+        $doc->setFillColor($this);
     }
 
     /**
-     * The default fill color is white.
+     * Gets the default fill color (white).
      */
-    public static function default(): self
+    public static function default(): static
     {
-        return self::white();
+        /** @psalm-var static */
+        return static::white();
     }
 
     /**
-     * Gets a value indicating if the fill color is set.
+     * Gets the header fill color.
      *
-     * To be true, this color must be different from the white color.
+     * The value is RGB(245, 245, 245).
+     */
+    public static function header(): self
+    {
+        return new self(245, 245, 245);
+    }
+
+    /**
+     * Returns a value indicating if the fill color is set.
+     *
+     * To be true, this color must be different from white color.
      *
      * @return bool true if the fill color is set
      */
     public function isFillColor(): bool
     {
-        return self::MAX_VALUE !== $this->red
-            || self::MAX_VALUE !== $this->green
-            || self::MAX_VALUE !== $this->blue;
+        return !$this->equals(static::white());
     }
 }

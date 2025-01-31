@@ -13,25 +13,26 @@ declare(strict_types=1);
 
 namespace App\Pdf\Colors;
 
+use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
 use fpdf\Color\PdfRgbColor;
 use fpdf\PdfDocument;
 
 /**
- * Color used for drawing text operations.
+ * RGB color used for drawing text operations.
  */
-class PdfTextColor extends AbstractPdfColor
+readonly class PdfTextColor extends PdfRgbColor implements PdfDocumentUpdaterInterface
 {
     public function apply(PdfDocument $doc): void
     {
-        $color = PdfRgbColor::instance($this->red, $this->green, $this->blue);
-        $doc->setTextColor($color);
+        $doc->setTextColor($this);
     }
 
     /**
-     * The default draw color is black.
+     * Gets the default text color (black).
      */
-    public static function default(): self
+    public static function default(): static
     {
-        return self::black();
+        /** @psalm-var static */
+        return static::black();
     }
 }

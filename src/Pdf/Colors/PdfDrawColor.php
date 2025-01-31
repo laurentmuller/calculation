@@ -13,25 +13,36 @@ declare(strict_types=1);
 
 namespace App\Pdf\Colors;
 
+use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
 use fpdf\Color\PdfRgbColor;
 use fpdf\PdfDocument;
 
 /**
- * Color used color for all drawing operations (lines, rectangles and for cell borders).
+ * RGB color used for all drawing operations (lines, rectangles and for cell borders).
  */
-class PdfDrawColor extends AbstractPdfColor
+readonly class PdfDrawColor extends PdfRgbColor implements PdfDocumentUpdaterInterface
 {
     public function apply(PdfDocument $doc): void
     {
-        $color = PdfRgbColor::instance($this->red, $this->green, $this->blue);
-        $doc->setDrawColor($color);
+        $doc->setDrawColor($this);
     }
 
     /**
-     * The default draw color is black.
+     * Gets the cell border color.
+     *
+     * The value is RGB(221, 221, 221).
      */
-    public static function default(): self
+    public static function cellBorder(): self
     {
-        return self::black();
+        return new self(221, 221, 221);
+    }
+
+    /**
+     * Gets the default draw color (black).
+     */
+    public static function default(): static
+    {
+        /** @psalm-var static */
+        return static::black();
     }
 }

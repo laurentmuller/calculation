@@ -23,7 +23,7 @@ class HtmlColorsReportTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testEmpty(): void
+    public function testReport(): void
     {
         $controller = $this->createMock(AbstractController::class);
         $report = new HtmlColorsReport($controller);

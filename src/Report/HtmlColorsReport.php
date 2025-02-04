@@ -16,15 +16,17 @@ namespace App\Report;
 use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\Html\HtmlColorName;
 use App\Pdf\Html\HtmlGrayedColor;
+use App\Pdf\Interfaces\PdfColorInterface;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Utils\FormatUtils;
-use fpdf\Enums\PdfFontName;
 
 /**
  * Report outputting HTML color names.
+ *
+ * @psalm-type ColorType = HtmlColorName|HtmlBootstrapColor|HtmlGrayedColor
  */
 class HtmlColorsReport extends AbstractReport
 {
@@ -37,30 +39,35 @@ class HtmlColorsReport extends AbstractReport
         $this->outputTable('Html by Name', $colors);
 
         $this->addPage();
-        $this->sortColors($colors);
+        \usort($colors, $this->compareColors(...));
         $this->outputTable('Html by Value', $colors);
 
         $this->addPage();
         $colors = HtmlBootstrapColor::cases();
         $this->outputTable('Bootstrap by Name', $colors);
 
-        $this->sortColors($colors);
         $this->moveY(self::LINE_HEIGHT);
+        \usort($colors, $this->compareColors(...));
         $this->outputTable('Bootstrap by Value', $colors, true);
 
-        $this->addPage();
+        $this->moveY(self::LINE_HEIGHT);
         $colors = HtmlGrayedColor::cases();
         $this->outputTable('Grayed by Name', $colors);
 
-        $this->sortColors($colors);
         $this->moveY(self::LINE_HEIGHT);
+        \usort($colors, $this->compareColors(...));
         $this->outputTable('Grayed by Value', $colors, true);
 
         return true;
     }
 
+    private function compareColors(PdfColorInterface $color1, PdfColorInterface $color2): int
+    {
+        return \hexdec($color1->getPhpOfficeColor()) <=> \hexdec($color2->getPhpOfficeColor());
+    }
+
     /**
-     * @param array<HtmlColorName|HtmlBootstrapColor|HtmlGrayedColor> $colors
+     * @param array<ColorType> $colors
      */
     private function outputTable(string $title, array $colors, bool $currentY = false): void
     {
@@ -68,41 +75,32 @@ class HtmlColorsReport extends AbstractReport
         $table = PdfGroupTable::instance($this)
             ->addColumns(
                 PdfColumn::left('Name', 40),
-                PdfColumn::center('Hexadecimal', 35, true),
-                PdfColumn::center('RGB', 35, true),
-                PdfColumn::center('Color', 35, true),
-            )->outputHeaders()
+                PdfColumn::center('Hexadecimal', 30, true),
+                PdfColumn::center('Red', 18, true),
+                PdfColumn::center('Green', 18, true),
+                PdfColumn::center('Blue', 18, true),
+                PdfColumn::center('Color', 30, true),
+            )
+            ->outputHeaders()
             ->setGroupKey($title);
 
         $colorStyle = PdfStyle::getCellStyle();
         $colorCell = new PdfCell(style: $colorStyle);
-        $valueStyle = PdfStyle::getCellStyle()
-            ->setFontName(PdfFontName::COURIER);
 
         foreach ($colors as $color) {
+            $rgb = $color->asRGB();
             $colorStyle->setFillColor($color->getFillColor());
             $table->addRow(
                 $color->name,
-                new PdfCell(text: $color->value, style: $valueStyle),
-                \implode(', ', $color->asRGB()),
+                $color->value,
+                (string) $rgb[0],
+                (string) $rgb[1],
+                (string) $rgb[2],
                 $colorCell,
             );
         }
+
         $text = \sprintf('%d colors', FormatUtils::formatInt($colors));
         $table->singleLine($text, PdfStyle::getHeaderStyle());
-    }
-
-    /**
-     * @param array<HtmlColorName|HtmlBootstrapColor|HtmlGrayedColor> $colors
-     */
-    private function sortColors(array &$colors): void
-    {
-        \usort(
-            $colors,
-            fn (
-                HtmlColorName|HtmlBootstrapColor|HtmlGrayedColor $color1,
-                HtmlColorName|HtmlBootstrapColor|HtmlGrayedColor $color2
-            ): int => \hexdec($color1->value) <=> \hexdec($color2->value)
-        );
     }
 }

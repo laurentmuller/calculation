@@ -55,8 +55,6 @@ interface PdfColorInterface
      * Gets this value converted to RGB.
      *
      * @return array{0: int, 1: int, 2: int}
-     *
-     * @see PdfColorInterface::asInt()
      */
     public function asRGB(): array;
 

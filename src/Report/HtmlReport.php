@@ -75,7 +75,8 @@ class HtmlReport extends AbstractReport
      */
     public function updateLeftMargin(float $leftMargin): self
     {
-        $this->x = $this->leftMargin = $leftMargin;
+        $this->setLeftMargin($leftMargin);
+        $this->x = $leftMargin;
 
         return $this;
     }
@@ -87,7 +88,7 @@ class HtmlReport extends AbstractReport
      */
     public function updateRightMargin(float $rightMargin): self
     {
-        $this->rightMargin = $rightMargin;
+        $this->setRightMargin($rightMargin);
 
         return $this;
     }
@@ -99,8 +100,8 @@ class HtmlReport extends AbstractReport
     ): void {
         parent::beginPage($orientation, $size, $rotation);
         if (1 === $this->page) {
-            $this->defaultLeftMargin = $this->leftMargin;
-            $this->defaultRightMargin = $this->rightMargin;
+            $this->defaultLeftMargin = $this->getLeftMargin();
+            $this->defaultRightMargin = $this->getRightMargin();
         }
     }
 
@@ -111,13 +112,13 @@ class HtmlReport extends AbstractReport
      */
     private function applyDefaultMargins(): array
     {
-        $leftMargin = $this->leftMargin;
-        $rightMargin = $this->rightMargin;
+        $leftMargin = $this->getLeftMargin();
+        $rightMargin = $this->getRightMargin();
         if (null !== $this->defaultLeftMargin && $this->defaultLeftMargin !== $leftMargin) {
             $this->x = $this->defaultLeftMargin;
         }
         if (null !== $this->defaultRightMargin && $this->defaultRightMargin !== $rightMargin) {
-            $this->rightMargin = $this->defaultRightMargin;
+            $this->setRightMargin($this->defaultRightMargin);
         }
 
         return [$leftMargin, $rightMargin];
@@ -130,11 +131,12 @@ class HtmlReport extends AbstractReport
      */
     private function applyPreviousMargins(array $previousMargins): void
     {
-        if ($previousMargins[0] !== $this->leftMargin) {
-            $this->leftMargin = $this->x = $previousMargins[0];
+        if ($previousMargins[0] !== $this->getLeftMargin()) {
+            $this->setLeftMargin($previousMargins[0]);
+            $this->x = $previousMargins[0];
         }
-        if ($previousMargins[1] !== $this->rightMargin) {
-            $this->rightMargin = $previousMargins[1];
+        if ($previousMargins[1] !== $this->getRightMargin()) {
+            $this->setRightMargin($previousMargins[1]);
         }
     }
 

@@ -55,7 +55,7 @@ abstract class AbstractReport extends PdfDocument
         PdfOrientation $orientation = PdfOrientation::PORTRAIT
     ) {
         parent::__construct($orientation);
-        $this->setAutoPageBreak(true, $this->bottomMargin - self::LINE_HEIGHT)
+        $this->setAutoPageBreak(true, $this->getBottomMargin() - self::LINE_HEIGHT)
             ->setLayout(PdfLayout::SINGLE_PAGE)
             ->setZoom(PdfZoom::FULL_PAGE);
 

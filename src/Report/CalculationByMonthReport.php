@@ -273,7 +273,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     {
         $h = 100;
         $newPage = \count($entities) > 12;
-        $top = $this->topMargin + $this->getHeader()->getHeight();
+        $top = $this->getTopMargin() + $this->getHeader()->getHeight();
         if ($newPage) {
             $h = $this->pageBreakTrigger - $top - 2.0 * self::LINE_HEIGHT;
         }

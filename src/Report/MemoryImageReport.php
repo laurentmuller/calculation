@@ -284,7 +284,7 @@ class MemoryImageReport extends AbstractReport
                 $this->getLevelColor($name)?->apply($this);
             }
             $bounds = new PdfRectangle(
-                $this->leftMargin,
+                $this->getLeftMargin(),
                 $this->y,
                 $this->getPrintableWidth(),
                 self::LINE_HEIGHT,

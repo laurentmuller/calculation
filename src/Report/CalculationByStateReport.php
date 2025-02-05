@@ -215,7 +215,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     {
         $margin = $this->getLeftMargin();
         $printableWidth = $this->getPrintableWidth();
-        $top = $this->topMargin + $this->getHeader()->getHeight() + self::LINE_HEIGHT;
+        $top = $this->getTopMargin() + $this->getHeader()->getHeight() + self::LINE_HEIGHT;
         $radius = $printableWidth / 4.0;
         $centerX = $margin + $printableWidth / 2.0;
         $centerY = $top + $radius;

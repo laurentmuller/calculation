@@ -242,14 +242,14 @@ class CommandsReport extends AbstractArrayReport
     private function renderStyledHelp(string $help): void
     {
         // margin
-        $oldMargin = $this->leftMargin;
-        $this->leftMargin = $this->x;
+        $oldMargin = $this->getLeftMargin();
+        $this->setLeftMargin($this->x);
 
         // find classes
         $help = \str_replace(' target="_blank" rel="noopener noreferrer"', '', $help);
         if (!StringUtils::pregMatchAll(self::CLASS_PATTERN, $help, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE)) {
             $this->outputHelp($help);
-            $this->leftMargin = $oldMargin;
+            $this->setLeftMargin($oldMargin);
             $this->lineBreak();
 
             return;
@@ -279,7 +279,7 @@ class CommandsReport extends AbstractArrayReport
         }
 
         // restore
-        $this->leftMargin = $oldMargin;
+        $this->setLeftMargin($oldMargin);
         $this->lineBreak();
     }
 

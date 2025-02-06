@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Pdf\PdfFont;
 use App\Pdf\PdfStyle;
 use App\Utils\FormatUtils;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
+use fpdf\PdfDocument;
 
 /**
  * Class to output footer in PDF documents.
@@ -71,35 +71,41 @@ class ReportFooter
         return $this;
     }
 
-    /**
-     * Gets the formatted current date.
-     */
-    private function getDate(): string
+    private function outputContent(float $width): self
     {
-        return $this->date ??= FormatUtils::formatDateTime(new \DateTime());
+        return $this->outputText($this->content, $width, PdfTextAlignment::CENTER, $this->url);
     }
 
-    /**
-     * Gets the formatted pages.
-     */
-    private function getPages(): string
+    private function outputDate(float $width): void
+    {
+        $text = $this->date ??= FormatUtils::formatDateTime(new \DateTime());
+
+        $this->outputText($text, $width, PdfTextAlignment::RIGHT);
+    }
+
+    private function outputPages(float $width): self
     {
         $parent = $this->parent;
+        $text = $parent->trans('report.page', [
+            '{0}' => $parent->getPage(),
+            '{1}' => $parent->getAliasNumberPages(),
+        ]);
 
-        return $parent->trans('report.page', ['{0}' => $parent->getPage(), '{1}' => '{nb}']);
+        return $this->outputText($text, $width, PdfTextAlignment::LEFT);
     }
 
     /**
      * Output the given text.
      */
-    private function outputText(string $text, float $width, PdfTextAlignment $align, ?string $link = null): self
+    private function outputText(?string $text, float $width, PdfTextAlignment $align, ?string $link = null): self
     {
+        $text ??= '';
         $this->parent->cell(
             width: $width,
             text: $text,
             border: PdfBorder::top(),
             align: $align,
-            link: $link
+            link: '' !== $text ? $link : null
         );
 
         return $this;
@@ -110,10 +116,10 @@ class ReportFooter
         $parent = $this->parent;
         $parent->setY(-self::FOOTER_OFFSET);
         $width = $parent->getPrintableWidth() / 3.0;
-        PdfStyle::default()->setFontSize(PdfFont::DEFAULT_SIZE - 1.0)->apply($parent);
-        $this->outputText($this->getPages(), $width, PdfTextAlignment::LEFT)
-            ->outputText($this->content ?? '', $width, PdfTextAlignment::CENTER, $this->url)
-            ->outputText($this->getDate(), $width, PdfTextAlignment::RIGHT);
+        PdfStyle::default()->setFontSize(PdfDocument::LINE_HEIGHT - 1.0)->apply($parent);
+        $this->outputPages($width)
+            ->outputContent($width)
+            ->outputDate($width);
         $parent->resetStyle();
     }
 }

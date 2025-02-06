@@ -180,6 +180,7 @@ class ReportHeader
         if (null === $description) {
             return;
         }
+
         $this->applySmallStyle();
         $this->parent->multiCell(
             height: self::SMALL_HEIGHT,
@@ -253,14 +254,15 @@ class ReportHeader
         PdfMove $move = PdfMove::RIGHT,
         string|int|null $link = null
     ): void {
+        $text ??= '';
         $this->parent->cell(
             width: $width,
             height: $height,
-            text: $text ?? '',
+            text: $text,
             border: $border,
             move: $move,
             align: $align,
-            link: $link
+            link: '' !== $text ? $link : null
         );
     }
 

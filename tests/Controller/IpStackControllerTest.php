@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Service\IpStackService;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 class IpStackControllerTest extends ControllerTestCase
@@ -26,9 +25,6 @@ class IpStackControllerTest extends ControllerTestCase
         yield ['/ipstack', self::ROLE_SUPER_ADMIN];
     }
 
-    /**
-     * @throws Exception
-     */
     public function testIpstack(): void
     {
         $data = [

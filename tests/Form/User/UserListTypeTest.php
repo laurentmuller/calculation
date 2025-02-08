@@ -16,7 +16,6 @@ namespace App\Tests\Form\User;
 use App\Form\User\UserListType;
 use App\Tests\Fixture\DataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
@@ -62,7 +61,7 @@ class UserListTypeTest extends TypeTestCase
     }
 
     /**
-     * @throws \ReflectionException|Exception
+     * @throws \ReflectionException
      */
     protected function getPreloadedExtensions(): array
     {

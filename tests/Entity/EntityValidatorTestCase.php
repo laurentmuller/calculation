@@ -64,8 +64,6 @@ abstract class EntityValidatorTestCase extends KernelServiceTestCase
             $sources[] = $result->getPropertyPath();
         }
         $diff = \array_diff($paths, $sources);
-        if ([] !== $diff) {
-            self::fail(\sprintf('Unable to find constraint violation for path: "%s".', \implode('", "', $diff)));
-        }
+        self::assertEmpty($diff);
     }
 }

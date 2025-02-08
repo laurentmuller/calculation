@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\CaptchaImageService;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,9 +30,6 @@ class CaptchaImageServiceTest extends TestCase
         $this->session = new Session(new MockArraySessionStorage());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testClear(): void
     {
         $service = $this->createService();
@@ -44,7 +40,6 @@ class CaptchaImageServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
      * @throws \Exception
      */
     public function testGenerateImageForce(): void
@@ -58,7 +53,6 @@ class CaptchaImageServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
      * @throws \Exception
      */
     public function testGenerateImageNotForce(): void
@@ -72,7 +66,6 @@ class CaptchaImageServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
      * @throws \Exception
      */
     public function testGenerateImageNotForceWithData(): void
@@ -88,9 +81,6 @@ class CaptchaImageServiceTest extends TestCase
         self::assertSame($expected, $this->session->get('captcha_data'));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSetTimeout(): void
     {
         $service = $this->createService();
@@ -99,9 +89,6 @@ class CaptchaImageServiceTest extends TestCase
         self::assertSame(60, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testValidateTimeoutError(): void
     {
         $service = $this->createService();
@@ -109,9 +96,6 @@ class CaptchaImageServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testValidateTimeoutSuccess(): void
     {
         $this->session->set('captcha_time', \time() + 1_000);
@@ -120,9 +104,6 @@ class CaptchaImageServiceTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testValidateTokenDataEmpty(): void
     {
         $service = $this->createService();
@@ -130,9 +111,6 @@ class CaptchaImageServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testValidateTokenSessionEmpty(): void
     {
         $service = $this->createService();
@@ -140,9 +118,6 @@ class CaptchaImageServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testValidateTokenSuccess(): void
     {
         $token = 'token';
@@ -152,9 +127,6 @@ class CaptchaImageServiceTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createRequestStack(): MockObject&RequestStack
     {
         $request = new Request();
@@ -168,9 +140,6 @@ class CaptchaImageServiceTest extends TestCase
         return $requestStack;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createService(): CaptchaImageService
     {
         $font = __DIR__ . '/../../resources/fonts/captcha.ttf';

@@ -17,7 +17,6 @@ use App\Chart\MonthChart;
 use App\Repository\CalculationRepository;
 use App\Service\ApplicationService;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -37,9 +36,6 @@ class MonthChartTest extends TestCase
     private MockObject&TranslatorInterface $translator;
     private MockObject&Environment $twig;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         $this->application = $this->createMock(ApplicationService::class);

@@ -17,7 +17,6 @@ use App\Enums\EntityPermission;
 use App\Interfaces\PropertyServiceInterface;
 use App\Service\CacheService;
 use App\Service\DictionaryService;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminControllerTest extends ControllerTestCase
@@ -54,9 +53,6 @@ class AdminControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testClearCacheFalse(): void
     {
         $service = $this->createMock(CacheService::class);
@@ -72,9 +68,6 @@ class AdminControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testClearCachePoolThrowException(): void
     {
         $service = $this->createMock(CacheService::class);
@@ -90,9 +83,6 @@ class AdminControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testClearCacheThrowException(): void
     {
         $service = $this->createMock(CacheService::class);

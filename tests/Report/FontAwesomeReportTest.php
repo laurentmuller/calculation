@@ -18,14 +18,10 @@ use App\Model\FontAwesomeImage;
 use App\Report\FontAwesomeReport;
 use App\Service\FontAwesomeImageService;
 use App\Utils\FileUtils;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class FontAwesomeReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testIsException(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -42,9 +38,6 @@ class FontAwesomeReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderAliases(): void
     {
         $image = $this->createImage();
@@ -67,9 +60,6 @@ class FontAwesomeReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderImages(): void
     {
         $image = $this->createImage();
@@ -86,9 +76,6 @@ class FontAwesomeReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderNoAlias(): void
     {
         $image = $this->createImage();

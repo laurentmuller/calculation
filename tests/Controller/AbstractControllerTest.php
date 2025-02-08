@@ -20,7 +20,6 @@ use App\Service\ApplicationService;
 use App\Service\UrlGeneratorService;
 use App\Service\UserService;
 use Faker\Container\ContainerException;
-use PHPUnit\Framework\MockObject\Exception;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -76,9 +75,6 @@ class AbstractControllerTest extends KernelTestCase
         self::assertInstanceOf(RequestStack::class, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetRequestStackException(): void
     {
         $controller = $this->createMockController();
@@ -105,9 +101,6 @@ class AbstractControllerTest extends KernelTestCase
         self::assertInstanceOf(TranslatorInterface::class, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetTranslatorException(): void
     {
         $controller = $this->createMockController();
@@ -125,9 +118,6 @@ class AbstractControllerTest extends KernelTestCase
         self::assertInstanceOf(UrlGeneratorService::class, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetUrlGeneratorException(): void
     {
         $controller = $this->createMockController();
@@ -192,9 +182,6 @@ class AbstractControllerTest extends KernelTestCase
         };
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockController(): AbstractController
     {
         $container = $this->createMock(ContainerInterface::class);

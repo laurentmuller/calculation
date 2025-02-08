@@ -16,14 +16,10 @@ namespace App\Tests\Report;
 use App\Controller\AbstractController;
 use App\Report\PhpIniReport;
 use App\Service\PhpInfoService;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class PhpIniReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $data = [
@@ -49,9 +45,6 @@ class PhpIniReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderEmpty(): void
     {
         $controller = $this->createMock(AbstractController::class);

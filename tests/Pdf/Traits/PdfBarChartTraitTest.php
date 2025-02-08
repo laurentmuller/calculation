@@ -18,14 +18,10 @@ use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Interfaces\PdfChartInterface;
 use App\Pdf\Traits\PdfBarChartTrait;
 use App\Report\AbstractReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class PdfBarChartTraitTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testEmpty(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -45,9 +41,6 @@ class PdfBarChartTraitTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderWithRotation(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -84,9 +77,6 @@ class PdfBarChartTraitTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderWithRow(): void
     {
         $controller = $this->createMock(AbstractController::class);

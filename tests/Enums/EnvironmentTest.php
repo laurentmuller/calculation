@@ -16,7 +16,6 @@ namespace App\Tests\Enums;
 use App\Enums\Environment;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -66,9 +65,6 @@ class EnvironmentTest extends TestCase
         self::assertCount($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testFromKernel(): void
     {
         $kernel = $this->createMock(KernelInterface::class);

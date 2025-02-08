@@ -16,7 +16,6 @@ namespace App\Tests\Constraint;
 use App\Constraint\Captcha;
 use App\Constraint\CaptchaValidator;
 use App\Service\CaptchaImageService;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 /**
@@ -24,9 +23,6 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
  */
 class CaptchaValidatorTest extends ConstraintValidatorTestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testEmptyIsValid(): void
     {
         $contraint = $this->createConstraint();
@@ -35,9 +31,6 @@ class CaptchaValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
-    /**
-     * @throws Exception
-     */
     public function testNullIsValid(): void
     {
         $contraint = $this->createConstraint();
@@ -46,9 +39,6 @@ class CaptchaValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
-    /**
-     * @throws Exception
-     */
     public function testTimeoutInvalid(): void
     {
         $contraint = $this->createConstraint();
@@ -59,9 +49,6 @@ class CaptchaValidatorTest extends ConstraintValidatorTestCase
             ->assertRaised();
     }
 
-    /**
-     * @throws Exception
-     */
     public function testTokenInvalid(): void
     {
         $contraint = $this->createConstraint();
@@ -72,9 +59,6 @@ class CaptchaValidatorTest extends ConstraintValidatorTestCase
             ->assertRaised();
     }
 
-    /**
-     * @throws Exception
-     */
     protected function createValidator(): CaptchaValidator
     {
         $service = $this->createService();
@@ -87,9 +71,6 @@ class CaptchaValidatorTest extends ConstraintValidatorTestCase
         return new Captcha();
     }
 
-    /**
-     * @throws Exception
-     */
     private function createService(bool $validateTimeout = true, bool $validateToken = true): CaptchaImageService
     {
         $service = $this->createMock(CaptchaImageService::class);
@@ -101,9 +82,6 @@ class CaptchaValidatorTest extends ConstraintValidatorTestCase
         return $service;
     }
 
-    /**
-     * @throws Exception
-     */
     private function initValidator(bool $validateTimeout = true, bool $validateToken = true): CaptchaValidator
     {
         $service = $this->createService($validateTimeout, $validateToken);

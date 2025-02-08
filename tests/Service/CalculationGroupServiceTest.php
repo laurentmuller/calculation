@@ -32,7 +32,6 @@ use App\Tests\KernelServiceTestCase;
 use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use PHPUnit\Framework\MockObject\Exception;
 
 class CalculationGroupServiceTest extends KernelServiceTestCase
 {
@@ -46,7 +45,6 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
     private const QUANTITY = 10.0;
 
     /**
-     * @throws Exception
      * @throws \ReflectionException
      */
     public function testAdjustUserMargin(): void
@@ -69,9 +67,6 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
         self::assertCount(7, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCreateGroupsFromCalculation(): void
     {
         self::bootKernel();
@@ -103,9 +98,6 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
         self::assertCount(6, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCreateGroupsFromDataEmpty(): void
     {
         $query = new CalculationQuery();
@@ -116,7 +108,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testCreateGroupsFromQuery(): void
     {
@@ -136,7 +128,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testCreateGroupsFromQueryEmpty(): void
     {
@@ -153,9 +145,6 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
         self::assertCount(1, $actual['groups']);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCreateGroupsFromQueryGroupNotFound(): void
     {
         $query = new CalculationQuery(
@@ -173,7 +162,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testCreateGroupsFromQueryGroupTotalZero(): void
     {
@@ -214,9 +203,6 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
         self::assertSame(-7, $constants['ROW_OVERALL_TOTAL']);
     }
 
-    /**
-     * @throws Exception
-     */
     protected function createCalculationService(
         ?Group $group = null,
         ?float $groupMargin = null,
@@ -329,9 +315,6 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
         return $repository;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createGlobalMarginRepository(?float $globalMargin = null): GlobalMarginRepository
     {
         if (null === $globalMargin) {
@@ -354,9 +337,6 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
         return self::setId($group);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createGroupMarginRepository(?float $groupMargin = null): GroupMarginRepository
     {
         if (null === $groupMargin) {
@@ -369,9 +349,6 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
         return $repository;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createGroupRepository(?Group $group = null): GroupRepository
     {
         if (!$group instanceof Group) {

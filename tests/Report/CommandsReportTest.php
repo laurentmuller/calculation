@@ -16,7 +16,6 @@ namespace App\Tests\Report;
 use App\Controller\AbstractController;
 use App\Report\CommandsReport;
 use App\Service\CommandService;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -25,8 +24,6 @@ use PHPUnit\Framework\TestCase;
 class CommandsReportTest extends TestCase
 {
     /**
-     * @throws Exception
-     *
      * @psalm-suppress InvalidArgument
      */
     public function testRender(): void

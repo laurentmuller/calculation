@@ -15,7 +15,6 @@ namespace App\Tests\Form\Type;
 
 use App\Form\Type\SimpleEditorType;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -33,9 +32,6 @@ class SimpleEditorTypeTest extends TypeTestCase
         self::assertArrayHasKey('id', $view->vars);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testInvalidJson(): void
     {
         $actionsPath = __DIR__ . '/../../files/json/fontawesome_invalid.json';

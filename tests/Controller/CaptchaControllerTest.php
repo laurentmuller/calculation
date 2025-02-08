@@ -16,7 +16,6 @@ namespace App\Tests\Controller;
 use App\Controller\CaptchaController;
 use App\Service\CaptchaImageService;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,7 +39,7 @@ class CaptchaControllerTest extends ControllerTestCase
     }
 
     /**
-     * @throws \Exception|Exception
+     * @throws \Exception
      */
     public function testInvalidImage(): void
     {
@@ -54,9 +53,6 @@ class CaptchaControllerTest extends ControllerTestCase
         self::assertSame('captcha.generate', $actual['message']);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testInvalidTimeout(): void
     {
         $controller = $this->getController();
@@ -70,9 +66,6 @@ class CaptchaControllerTest extends ControllerTestCase
         self::assertSame('"captcha.timeout"', $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testInvalidToken(): void
     {
         $controller = $this->getController();
@@ -83,9 +76,6 @@ class CaptchaControllerTest extends ControllerTestCase
         self::assertSame('"captcha.invalid"', $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testValid(): void
     {
         $controller = $this->getController();
@@ -96,9 +86,6 @@ class CaptchaControllerTest extends ControllerTestCase
         self::assertSame('true', $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createService(
         ?string $generateImage,
         bool $validateTimeout,

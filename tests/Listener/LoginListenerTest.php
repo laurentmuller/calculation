@@ -17,7 +17,6 @@ use App\Entity\User;
 use App\Listener\LoginListener;
 use App\Repository\UserRepository;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -28,9 +27,6 @@ class LoginListenerTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @throws Exception
-     */
     public function testLogin(): void
     {
         $user = new User();
@@ -42,9 +38,6 @@ class LoginListenerTest extends TestCase
         self::assertNotNull($user->getLastLogin());
     }
 
-    /**
-     * @throws Exception
-     */
     private function createListener(): LoginListener
     {
         $repository = $this->createMock(UserRepository::class);
@@ -55,9 +48,6 @@ class LoginListenerTest extends TestCase
         return $listener;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createLoginSuccessEvent(User $user): MockObject&LoginSuccessEvent
     {
         $event = $this->createMock(LoginSuccessEvent::class);
@@ -68,9 +58,6 @@ class LoginListenerTest extends TestCase
         return $event;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createRequestStack(): MockObject&RequestStack
     {
         $session = $this->createMock(SessionInterface::class);

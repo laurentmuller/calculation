@@ -16,7 +16,6 @@ namespace App\Tests\Captcha;
 use App\Captcha\AbstractAlphaCaptcha;
 use App\Service\DictionaryService;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -31,9 +30,6 @@ abstract class AlphaCaptchaTestCase extends TestCase
     protected MockObject&DictionaryService $service;
     protected MockObject&TranslatorInterface $translator;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         $letters = \implode('', \range('A', 'Z'));

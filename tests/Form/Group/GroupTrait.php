@@ -18,7 +18,6 @@ use App\Repository\GroupRepository;
 use App\Tests\Entity\IdTrait;
 use App\Tests\Form\ManagerRegistryTrait;
 use Doctrine\Persistence\ManagerRegistry;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -49,7 +48,7 @@ trait GroupTrait
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getGroupEntityType(): EntityType
     {
@@ -57,7 +56,7 @@ trait GroupTrait
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getGroupRegistry(): MockObject&ManagerRegistry
     {

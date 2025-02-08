@@ -16,7 +16,6 @@ namespace App\Tests\Form\Dialog;
 use App\Form\Dialog\EditItemDialogType;
 use App\Tests\Form\Category\CategoryTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 class EditItemDialogTypeTest extends TypeTestCase
@@ -70,7 +69,7 @@ class EditItemDialogTypeTest extends TypeTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getPreloadedExtensions(): array
     {

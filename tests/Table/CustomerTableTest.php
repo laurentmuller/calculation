@@ -18,7 +18,6 @@ use App\Repository\AbstractRepository;
 use App\Repository\CustomerRepository;
 use App\Table\CustomerTable;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -39,9 +38,6 @@ class CustomerTableTest extends EntityTableTestCase
         return [$entity];
     }
 
-    /**
-     * @throws Exception
-     */
     protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CustomerRepository
     {
         $repository = $this->createMock(CustomerRepository::class);

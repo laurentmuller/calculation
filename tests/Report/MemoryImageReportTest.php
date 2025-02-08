@@ -18,14 +18,10 @@ use App\Model\FontAwesomeImage;
 use App\Report\MemoryImageReport;
 use App\Service\FontAwesomeImageService;
 use fpdf\PdfException;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class MemoryImageReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testEmptyImage(): void
     {
         self::expectException(PdfException::class);
@@ -35,9 +31,6 @@ class MemoryImageReportTest extends TestCase
         $report->render();
     }
 
-    /**
-     * @throws Exception
-     */
     public function testInvalidImage(): void
     {
         self::expectException(PdfException::class);
@@ -46,9 +39,6 @@ class MemoryImageReportTest extends TestCase
         $report->render();
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -58,9 +48,6 @@ class MemoryImageReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderWithIconFile(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -70,9 +57,6 @@ class MemoryImageReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderWithInvalidIconFile(): void
     {
         self::expectException(PdfException::class);
@@ -81,9 +65,6 @@ class MemoryImageReportTest extends TestCase
         $report->render();
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderWithLogoFile(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -93,9 +74,6 @@ class MemoryImageReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderWithScreenshot(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -105,9 +83,6 @@ class MemoryImageReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderWithService(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -120,9 +95,6 @@ class MemoryImageReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithNoArgument(): void
     {
         $controller = $this->createMock(AbstractController::class);

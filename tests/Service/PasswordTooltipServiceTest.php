@@ -18,7 +18,6 @@ use App\Enums\StrengthLevel;
 use App\Service\ApplicationService;
 use App\Service\PasswordTooltipService;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -33,9 +32,6 @@ class PasswordTooltipServiceTest extends TestCase
     private Password $password;
     private MockObject&TranslatorInterface $translator;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         $this->password = new Password(letters: false);

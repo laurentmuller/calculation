@@ -16,7 +16,6 @@ namespace App\Tests\Chart;
 use App\Chart\AbstractHighchart;
 use App\Service\ApplicationService;
 use HighchartsBundle\Highcharts\ChartExpression;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
@@ -24,9 +23,6 @@ use Twig\Error\Error;
 
 class AbstractChartTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testCreateInvalidTemplateExpression(): void
     {
         $application = $this->createMock(ApplicationService::class);
@@ -45,9 +41,6 @@ class AbstractChartTest extends TestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCreateTemplateExpression(): void
     {
         $application = $this->createMock(ApplicationService::class);
@@ -68,9 +61,6 @@ class AbstractChartTest extends TestCase
         self::assertSame((string) $expected, (string) $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetMinMargin(): void
     {
         $expected = 1.1;
@@ -90,9 +80,6 @@ class AbstractChartTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testHideTitle(): void
     {
         $application = $this->createMock(ApplicationService::class);
@@ -104,9 +91,6 @@ class AbstractChartTest extends TestCase
         self::assertNull($chart->title['text']);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testInitializeOptions(): void
     {
         $application = $this->createMock(ApplicationService::class);
@@ -137,9 +121,6 @@ class AbstractChartTest extends TestCase
         self::assertSame("'", $chart->lang['thousandsSep']);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testTooltipOptions(): void
     {
         $application = $this->createMock(ApplicationService::class);
@@ -163,8 +144,6 @@ class AbstractChartTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     *
      * @psalm-suppress DocblockTypeContradiction
      */
     public function testType(): void

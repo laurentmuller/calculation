@@ -15,14 +15,10 @@ namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
 use App\Report\CalculationsDuplicateReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class CalculationsDuplicateReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $controller = $this->createMock(AbstractController::class);

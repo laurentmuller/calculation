@@ -20,7 +20,6 @@ use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
 use App\Tests\Entity\IdTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -57,7 +56,7 @@ class ResetChangePasswordTypeTest extends TypeTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getExtensions(): array
     {
@@ -67,9 +66,6 @@ class ResetChangePasswordTypeTest extends TypeTestCase
         return $extensions;
     }
 
-    /**
-     * @throws Exception
-     */
     protected function getPreloadedExtensions(): array
     {
         $generator = $this->createMock(UrlGeneratorInterface::class);

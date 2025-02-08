@@ -14,11 +14,9 @@ declare(strict_types=1);
 namespace App\Tests\Form\Extension;
 
 use App\Form\Extension\VichImageTypeExtension;
-use App\Form\Type\PlainType;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\Form\User\VichImageTypeTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
@@ -41,13 +39,9 @@ class VichImageTypeExtensionTest extends TypeTestCase
         self::assertNull($options['placeholder']);
     }
 
-    /**
-     * @throws Exception
-     */
     protected function getPreloadedExtensions(): array
     {
         return [
-            new PlainType($this->createMockTranslator()),
             $this->createVichImageType(),
         ];
     }

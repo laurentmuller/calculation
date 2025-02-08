@@ -52,6 +52,9 @@ class AjaxUserControllerTest extends AuthenticateWebTestCase
         yield ['username.not_found', 'USER_XXX_INVALID@INVALID.COM'];
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[DataProvider('getEmails')]
     public function testCheckEmail(string|bool $expected, ?string $email = null, ?int $id = null): void
     {
@@ -62,6 +65,9 @@ class AjaxUserControllerTest extends AuthenticateWebTestCase
         $this->validateResponse($response, $expected);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[DataProvider('getNames')]
     public function testCheckName(string|bool $expected, ?string $username = null, ?int $id = null): void
     {
@@ -72,6 +78,9 @@ class AjaxUserControllerTest extends AuthenticateWebTestCase
         $this->validateResponse($response, $expected);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[DataProvider('getUsers')]
     public function testCheckUser(string|bool $expected, ?string $user = null): void
     {
@@ -90,20 +99,18 @@ class AjaxUserControllerTest extends AuthenticateWebTestCase
         return $this->translator;
     }
 
+    /**
+     * @throws \JsonException
+     */
     private function validateResponse(Response $response, string|bool $expected): void
     {
         self::assertTrue($response->isOk());
-
-        try {
-            $content = $response->getContent();
-            self::assertIsString($content);
-            $result = \json_decode(json: $content, flags: \JSON_THROW_ON_ERROR);
-            if (\is_string($expected)) {
-                $expected = $this->getTranslator()->trans(id: $expected, domain: 'validators');
-            }
-            self::assertSame($expected, $result);
-        } catch (\JsonException $e) {
-            self::fail($e->getMessage());
+        $content = $response->getContent();
+        self::assertIsString($content);
+        $result = \json_decode(json: $content, flags: \JSON_THROW_ON_ERROR);
+        if (\is_string($expected)) {
+            $expected = $this->getTranslator()->trans(id: $expected, domain: 'validators');
         }
+        self::assertSame($expected, $result);
     }
 }

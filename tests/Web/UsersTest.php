@@ -23,11 +23,15 @@ class UsersTest extends AuthenticateWebTestCase
 {
     public static function getUserExist(): \Iterator
     {
-        yield [self::ROLE_USER, true];
-        yield [self::ROLE_ADMIN, true];
-        yield [self::ROLE_SUPER_ADMIN, true];
-        yield [self::ROLE_DISABLED, true];
-        yield [self::ROLE_FAKE, false];
+        yield [self::ROLE_USER];
+        yield [self::ROLE_ADMIN];
+        yield [self::ROLE_SUPER_ADMIN];
+        yield [self::ROLE_DISABLED];
+    }
+
+    public static function getUserNotExist(): \Iterator
+    {
+        yield [self::ROLE_FAKE];
     }
 
     public static function getUserRole(): \Iterator
@@ -38,23 +42,30 @@ class UsersTest extends AuthenticateWebTestCase
     }
 
     #[DataProvider('getUserExist')]
-    public function testUserExist(string $username, bool $exist): void
+    public function testUserExist(string $username): void
     {
-        $user = $this->loadUser($username, false);
-        if ($exist) {
-            self::assertNotNull($user, "The user '$username' is null.");
-        } else {
-            self::assertNull($user, "The user '$username' is not null.");
-        }
+        $user = $this->loadUser($username);
+        self::assertNotNull($user);
     }
 
+    /**
+     * @psalm-param \App\Interfaces\RoleInterface::ROLE_* $username
+     */
+    #[DataProvider('getUserNotExist')]
+    public function testUserNotExist(string $username): void
+    {
+        $user = $this->loadUser($username);
+        self::assertNull($user);
+    }
+
+    /**
+     * @psalm-param \App\Interfaces\RoleInterface::ROLE_* $username
+     */
     #[DataProvider('getUserRole')]
     public function testUserRole(string $username): void
     {
-        /** @psalm-var \App\Interfaces\RoleInterface::ROLE_* $role */
-        $role = $username;
-        $user = $this->loadUser($username, false);
+        $user = $this->loadUser($username);
         self::assertNotNull($user);
-        self::assertTrue($user->hasRole($role));
+        self::assertTrue($user->hasRole($username));
     }
 }

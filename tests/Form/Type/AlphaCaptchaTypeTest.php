@@ -18,7 +18,6 @@ use App\Captcha\Challenge;
 use App\Form\Type\AlphaCaptchaType;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -55,9 +54,6 @@ class AlphaCaptchaTypeTest extends TypeTestCase
         $this->validateSubmit(true);
     }
 
-    /**
-     * @throws Exception
-     */
     protected function getPreloadedExtensions(): array
     {
         $session = new Session(new MockArraySessionStorage());

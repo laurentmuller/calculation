@@ -16,15 +16,11 @@ namespace App\Tests\Report;
 use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Report\UsersReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 class UsersReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $controller = $this->createMock(AbstractController::class);

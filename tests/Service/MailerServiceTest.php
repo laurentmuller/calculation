@@ -18,7 +18,6 @@ use App\Enums\Importance;
 use App\Model\Comment;
 use App\Service\MailerService;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -31,7 +30,6 @@ class MailerServiceTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @throws Exception
      * @throws TransportExceptionInterface
      */
     public function testSendComment(): void
@@ -49,7 +47,6 @@ class MailerServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
      * @throws TransportExceptionInterface
      */
     public function testSendNotification(): void
@@ -73,9 +70,6 @@ class MailerServiceTest extends TestCase
         return new UploadedFile(__FILE__, \basename(__FILE__), test: true);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createService(): MailerService
     {
         $generator = $this->createMock(UrlGeneratorInterface::class);

@@ -15,16 +15,12 @@ namespace App\Tests\Service;
 
 use App\Model\FontAwesomeImage;
 use App\Service\FontAwesomeImageService;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class FontAwesomeImageServiceTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testAliases(): void
     {
         $svgDirectory = __DIR__ . '/../files/json';
@@ -33,33 +29,21 @@ class FontAwesomeImageServiceTest extends TestCase
         self::assertCount(2, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testInvalidDirectory(): void
     {
         $this->checkImageIsInvalid('fake', 'fake', false);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testInvalidEmptyFile(): void
     {
         $this->checkImageIsInvalid(__DIR__ . '/../files/images', 'empty.svg');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testInvalidFile(): void
     {
         $this->checkImageIsInvalid(__DIR__, 'fake');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testLogger(): void
     {
         $service = $this->createService(__DIR__);
@@ -67,9 +51,6 @@ class FontAwesomeImageServiceTest extends TestCase
         self::assertInstanceOf(NullLogger::class, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSvgDirectory(): void
     {
         $expected = __DIR__;
@@ -86,9 +67,6 @@ class FontAwesomeImageServiceTest extends TestCase
         self::assertFileExists($file);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testValidFileSizeEquals(): void
     {
         $actual = $this->checkImageIsValid(__DIR__ . '/../files/images', '512x512.svg');
@@ -96,9 +74,6 @@ class FontAwesomeImageServiceTest extends TestCase
         self::assertSame(64, $actual->getHeight());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testValidFileWidthGreater(): void
     {
         $actual = $this->checkImageIsValid(__DIR__ . '/../files/images', '576x512.svg');
@@ -106,9 +81,6 @@ class FontAwesomeImageServiceTest extends TestCase
         self::assertSame(57, $actual->getHeight());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testValidFileWidthSmaller(): void
     {
         $actual = $this->checkImageIsValid(__DIR__ . '/../files/images', '448x512.svg');
@@ -116,25 +88,16 @@ class FontAwesomeImageServiceTest extends TestCase
         self::assertSame(64, $actual->getHeight());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testValidFileWithColor(): void
     {
         $this->checkImageIsValid(__DIR__ . '/../files/images', '448x512.svg', 'red');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testValidFileWithoutExtension(): void
     {
         $this->checkImageIsValid(__DIR__ . '/../files/images', '448x512');
     }
 
-    /**
-     * @throws Exception
-     */
     private function checkImageIsInvalid(string $svgDirectory, string $relativePath, bool $realPath = true): void
     {
         if ($realPath) {
@@ -145,9 +108,6 @@ class FontAwesomeImageServiceTest extends TestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function checkImageIsValid(
         string $svgDirectory,
         string $relativePath,
@@ -161,9 +121,6 @@ class FontAwesomeImageServiceTest extends TestCase
         return $actual;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createService(string $svgDirectory): FontAwesomeImageService
     {
         return new FontAwesomeImageService(

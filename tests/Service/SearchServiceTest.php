@@ -19,7 +19,6 @@ use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\KernelServiceTestCase;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -34,9 +33,6 @@ class SearchServiceTest extends KernelServiceTestCase
         parent::tearDown();
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCount(): void
     {
         $service = $this->createSearchService();
@@ -57,9 +53,6 @@ class SearchServiceTest extends KernelServiceTestCase
         self::assertSame(0, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testFormatContent(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
@@ -78,9 +71,6 @@ class SearchServiceTest extends KernelServiceTestCase
         self::assertSame('value', $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetEntitiesNotDebug(): void
     {
         $service = $this->createSearchService();
@@ -101,9 +91,6 @@ class SearchServiceTest extends KernelServiceTestCase
         self::assertSame('calculationstate.name', $actual['calculationstate']);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetEntitiesWithDebug(): void
     {
         $service = $this->createSearchService(true);
@@ -112,9 +99,6 @@ class SearchServiceTest extends KernelServiceTestCase
         self::assertSame('customer.name', $actual['customer']);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSearchNotDebug(): void
     {
         $service = $this->createSearchService();
@@ -138,9 +122,6 @@ class SearchServiceTest extends KernelServiceTestCase
         self::assertCount(0, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSearchNotGranted(): void
     {
         $service = $this->createSearchService(true, false);
@@ -148,9 +129,6 @@ class SearchServiceTest extends KernelServiceTestCase
         self::assertCount(0, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSearchWithDebug(): void
     {
         $this->getCalculation();
@@ -159,9 +137,6 @@ class SearchServiceTest extends KernelServiceTestCase
         self::assertCount(1, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createSearchService(bool $debug = false, bool $granted = true): SearchService
     {
         $checker = $this->createMock(AuthorizationCheckerInterface::class);

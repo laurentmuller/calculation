@@ -17,14 +17,10 @@ use App\Controller\AbstractController;
 use App\Entity\Group;
 use App\Entity\GroupMargin;
 use App\Report\GroupsReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class GroupsReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $controller = $this->createMock(AbstractController::class);

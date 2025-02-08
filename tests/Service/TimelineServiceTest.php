@@ -16,14 +16,13 @@ namespace App\Tests\Service;
 use App\Entity\Calculation;
 use App\Repository\CalculationRepository;
 use App\Service\TimelineService;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class TimelineServiceTest extends TestCase
 {
     /**
-     * @throws Exception|\Exception
+     * @throws \Exception
      */
     public function testCurrent(): void
     {
@@ -35,7 +34,7 @@ class TimelineServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|\Exception
+     * @throws \Exception
      */
     public function testCurrentWithDates(): void
     {
@@ -48,7 +47,7 @@ class TimelineServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|\Exception
+     * @throws \Exception
      */
     public function testFirst(): void
     {
@@ -60,7 +59,7 @@ class TimelineServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|\Exception
+     * @throws \Exception
      */
     public function testLast(): void
     {
@@ -71,9 +70,6 @@ class TimelineServiceTest extends TestCase
         self::assertSame(0, $actual['count']);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockRepository(?Calculation $calculation = null): MockObject&CalculationRepository
     {
         $date = new \DateTimeImmutable('today');

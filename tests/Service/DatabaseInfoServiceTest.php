@@ -18,7 +18,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Statement;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,9 +32,6 @@ class DatabaseInfoServiceTest extends TestCase
         'charset' => 'utf8mb4',
     ];
 
-    /**
-     * @throws Exception
-     */
     public function testGetConfiguration(): void
     {
         $values = [
@@ -53,9 +49,6 @@ class DatabaseInfoServiceTest extends TestCase
         self::assertCount(1, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetDatabase(): void
     {
         $expected = [
@@ -71,9 +64,6 @@ class DatabaseInfoServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetVersion(): void
     {
         $expected = '1.0.0';
@@ -84,9 +74,6 @@ class DatabaseInfoServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockConnection(string $method, array $values = []): MockObject&EntityManagerInterface
     {
         $result = $this->createMock(Result::class);

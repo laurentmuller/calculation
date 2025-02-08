@@ -16,15 +16,11 @@ namespace App\Tests\Spreadsheet;
 use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Spreadsheet\UsersDocument;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 class UsersDocumentTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $storage = $this->createMock(StorageInterface::class);

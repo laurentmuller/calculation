@@ -18,14 +18,10 @@ use App\Faker\CalculationStateProvider;
 use App\Faker\Factory;
 use App\Repository\CalculationStateRepository;
 use App\Utils\FormatUtils;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class CalculationStateProviderTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testWithEntity(): void
     {
         $entity = new CalculationState();
@@ -39,9 +35,6 @@ class CalculationStateProviderTest extends TestCase
         self::assertSame($entity, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithoutEntity(): void
     {
         $provider = $this->createProvider();
@@ -53,9 +46,6 @@ class CalculationStateProviderTest extends TestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createProvider(?CalculationState $entity = null): CalculationStateProvider
     {
         $entities = $entity instanceof CalculationState ? [$entity] : [];

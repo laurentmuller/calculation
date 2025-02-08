@@ -19,7 +19,6 @@ use App\Service\ResetPasswordService;
 use App\Service\UserExceptionService;
 use App\Tests\Entity\IdTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -41,9 +40,6 @@ class ResetPasswordServiceTest extends TestCase
     use IdTrait;
     use TranslatorMockTrait;
 
-    /**
-     * @throws Exception
-     */
     public function testFlush(): void
     {
         $helper = $this->createResetPasswordHelper();
@@ -52,9 +48,6 @@ class ResetPasswordServiceTest extends TestCase
         self::assertTrue(true);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGenerateFakeResetToken(): void
     {
         $helper = $this->createResetPasswordHelper();
@@ -64,9 +57,6 @@ class ResetPasswordServiceTest extends TestCase
         self::assertSame(32, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetExpiresLifeTime(): void
     {
         $helper = $this->createResetPasswordHelper();
@@ -77,9 +67,6 @@ class ResetPasswordServiceTest extends TestCase
         self::assertSame('%count% minute|%count% minutes', $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetLogger(): void
     {
         $helper = $this->createResetPasswordHelper();
@@ -88,9 +75,6 @@ class ResetPasswordServiceTest extends TestCase
         self::assertInstanceOf(LoggerInterface::class, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetThrottleLifeTime(): void
     {
         $helper = $this->createResetPasswordHelper();
@@ -99,9 +83,6 @@ class ResetPasswordServiceTest extends TestCase
         self::assertSame('%count% minute|%count% minutes', $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testHandleException(): void
     {
         $helper = $this->createResetPasswordHelper();
@@ -111,7 +92,6 @@ class ResetPasswordServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
      * @throws \ReflectionException
      */
     public function testSendEmailWithMailerException(): void
@@ -129,7 +109,6 @@ class ResetPasswordServiceTest extends TestCase
 
     /**
      * @throws \ReflectionException
-     * @throws Exception
      */
     public function testSendEmailWithTokenException(): void
     {
@@ -145,7 +124,6 @@ class ResetPasswordServiceTest extends TestCase
 
     /**
      * @throws \ReflectionException
-     * @throws Exception
      */
     public function testSendEmailWithUserNameFound(): void
     {
@@ -157,9 +135,6 @@ class ResetPasswordServiceTest extends TestCase
         self::assertInstanceOf(ResetPasswordToken::class, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSendEmailWithUserNameNotFound(): void
     {
         $helper = $this->createResetPasswordHelper();
@@ -168,17 +143,11 @@ class ResetPasswordServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockResetPasswordHelper(): MockObject&ResetPasswordHelperInterface
     {
         return $this->createMock(ResetPasswordHelperInterface::class);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createResetPasswordHelper(): ResetPasswordHelperInterface
     {
         $generator = $this->createMock(ResetPasswordTokenGenerator::class);
@@ -203,9 +172,6 @@ class ResetPasswordServiceTest extends TestCase
         return new ResetPasswordToken('token', $date, $date->getTimestamp());
     }
 
-    /**
-     * @throws Exception
-     */
     private function createService(
         ResetPasswordHelperInterface $helper,
         ?User $user = null,

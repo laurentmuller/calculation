@@ -21,7 +21,6 @@ use App\Tests\Entity\IdTrait;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,7 +35,7 @@ abstract class EntityTableTestCase extends TestCase
     use IdTrait;
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithDefaultDataQuery(): void
     {
@@ -44,7 +43,7 @@ abstract class EntityTableTestCase extends TestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithSelection(): void
     {
@@ -61,8 +60,6 @@ abstract class EntityTableTestCase extends TestCase
 
     /**
      * @phpstan-return MockObject&Query<array-key, mixed>
-     *
-     * @throws Exception
      */
     protected function createMockQuery(array $entities): MockObject&Query
     {
@@ -75,8 +72,6 @@ abstract class EntityTableTestCase extends TestCase
 
     /**
      * @phpstan-param MockObject&Query<array-key, mixed> $query
-     *
-     * @throws Exception
      */
     protected function createMockQueryBuilder(MockObject&Query $query): MockObject&QueryBuilder
     {
@@ -93,8 +88,6 @@ abstract class EntityTableTestCase extends TestCase
 
     /**
      * @psalm-return MockObject&TRepository
-     *
-     * @throws Exception
      */
     abstract protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&AbstractRepository;
 
@@ -103,14 +96,12 @@ abstract class EntityTableTestCase extends TestCase
      *
      * @psalm-return TEntityTable
      *
-     * @throws Exception
-     *
      * @phpstan-ignore-next-line
      */
     abstract protected function createTable(MockObject&AbstractRepository $repository): AbstractEntityTable;
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function processDataQuery(DataQuery $dataQuery): void
     {

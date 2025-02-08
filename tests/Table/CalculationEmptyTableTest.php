@@ -18,7 +18,6 @@ use App\Repository\CalculationRepository;
 use App\Table\CalculationEmptyTable;
 use App\Table\DataQuery;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,9 +25,6 @@ class CalculationEmptyTableTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @throws Exception
-     */
     public function testDefault(): void
     {
         $table = $this->createTable();
@@ -38,9 +34,6 @@ class CalculationEmptyTableTest extends TestCase
         self::assertSame('empty.empty', $table->getEmptyMessage());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithData(): void
     {
         $entity = $this->getEntity();
@@ -52,9 +45,6 @@ class CalculationEmptyTableTest extends TestCase
         self::assertCount(1, $results->rows);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithoutData(): void
     {
         $table = $this->createTable();
@@ -64,9 +54,6 @@ class CalculationEmptyTableTest extends TestCase
         self::assertCount(0, $results->rows);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockRepository(array $entities = []): MockObject&CalculationRepository
     {
         $repository = $this->createMock(CalculationRepository::class);
@@ -80,9 +67,6 @@ class CalculationEmptyTableTest extends TestCase
         return $repository;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createTable(array $entities = []): CalculationEmptyTable
     {
         $repository = $this->createMockRepository($entities);

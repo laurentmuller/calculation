@@ -17,7 +17,6 @@ use App\Entity\Category;
 use App\Form\Category\CategoryType;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\Form\Group\GroupTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
@@ -47,7 +46,7 @@ class CategoryTypeTest extends EntityTypeTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getPreloadedExtensions(): array
     {

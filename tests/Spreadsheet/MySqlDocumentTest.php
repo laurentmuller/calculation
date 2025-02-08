@@ -16,14 +16,10 @@ namespace App\Tests\Spreadsheet;
 use App\Controller\AbstractController;
 use App\Service\DatabaseInfoService;
 use App\Spreadsheet\MySqlDocument;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class MySqlDocumentTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $database = [
@@ -39,9 +35,6 @@ class MySqlDocumentTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderEmpty(): void
     {
         $document = $this->createDocument([], []);
@@ -49,9 +42,6 @@ class MySqlDocumentTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderNoDatabase(): void
     {
         $configuration = [
@@ -63,9 +53,6 @@ class MySqlDocumentTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createDocument(array $database, array $configuration): MySqlDocument
     {
         $controller = $this->createMock(AbstractController::class);

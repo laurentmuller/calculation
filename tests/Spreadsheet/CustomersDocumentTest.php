@@ -16,14 +16,10 @@ namespace App\Tests\Spreadsheet;
 use App\Controller\AbstractController;
 use App\Entity\Customer;
 use App\Spreadsheet\CustomersDocument;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class CustomersDocumentTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $customer1 = new Customer();

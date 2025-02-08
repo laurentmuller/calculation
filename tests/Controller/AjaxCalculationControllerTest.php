@@ -16,7 +16,6 @@ namespace App\Tests\Controller;
 use App\Service\CalculationGroupService;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Utils\StringUtils;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,9 +59,6 @@ class AjaxCalculationControllerTest extends ControllerTestCase
         self::assertTrue($data['result']);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdateWithAdjust(): void
     {
         $data = [
@@ -93,9 +89,6 @@ class AjaxCalculationControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdateWithException(): void
     {
         $service = $this->createMock(CalculationGroupService::class);
@@ -110,9 +103,6 @@ class AjaxCalculationControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdateWithResultFalse(): void
     {
         $data = [

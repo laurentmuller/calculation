@@ -18,14 +18,10 @@ use App\Faker\Factory;
 use App\Faker\UserProvider;
 use App\Repository\UserRepository;
 use App\Utils\FormatUtils;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class UserProviderTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testWithEntity(): void
     {
         $entity = new User();
@@ -43,9 +39,6 @@ class UserProviderTest extends TestCase
         self::assertSame('user_name', $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithoutEntity(): void
     {
         $provider = $this->createProvider();
@@ -60,9 +53,6 @@ class UserProviderTest extends TestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createProvider(?User $entity = null): UserProvider
     {
         $entities = $entity instanceof User ? [$entity] : [];

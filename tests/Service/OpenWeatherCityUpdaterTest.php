@@ -16,7 +16,6 @@ namespace App\Tests\Service;
 use App\Service\OpenWeatherCityUpdater;
 use App\Tests\TranslatorMockTrait;
 use App\Utils\FileUtils;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -37,9 +36,6 @@ class OpenWeatherCityUpdaterTest extends TestCase
         FileUtils::remove($this->tempPath);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCreateForm(): void
     {
         $service = $this->createService();
@@ -47,9 +43,6 @@ class OpenWeatherCityUpdaterTest extends TestCase
         self::assertFalse($actual->has('file'));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testImportFileEmpty(): void
     {
         $targetFile = $this->copy('txt/empty.txt');
@@ -65,9 +58,6 @@ class OpenWeatherCityUpdaterTest extends TestCase
         }
     }
 
-    /**
-     * @throws Exception
-     */
     public function testImportFileEmptyGz(): void
     {
         $targetFile = $this->copy('city/list.empty.json.gz');
@@ -84,9 +74,6 @@ class OpenWeatherCityUpdaterTest extends TestCase
         }
     }
 
-    /**
-     * @throws Exception
-     */
     public function testImportFileInvalidJson(): void
     {
         $targetFile = $this->copy('city/list.invalid.json.gz');
@@ -102,9 +89,6 @@ class OpenWeatherCityUpdaterTest extends TestCase
         }
     }
 
-    /**
-     * @throws Exception
-     */
     public function testImportFileIsInvalid(): void
     {
         $originalName = 'test.txt';
@@ -116,9 +100,6 @@ class OpenWeatherCityUpdaterTest extends TestCase
         self::assertInvalid($actual, 'swisspost.error.open_archive');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testImportFileNotGz(): void
     {
         $targetFile = $this->copy('city/list.json');
@@ -134,9 +115,6 @@ class OpenWeatherCityUpdaterTest extends TestCase
         }
     }
 
-    /**
-     * @throws Exception
-     */
     public function testImportFileValid(): void
     {
         $targetFile = $this->copy('city/list.json.gz');
@@ -182,9 +160,6 @@ class OpenWeatherCityUpdaterTest extends TestCase
         return $targetFile;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createService(): OpenWeatherCityUpdater
     {
         $databaseName = $this->getDatabaseName();

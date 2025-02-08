@@ -19,7 +19,6 @@ use App\Enums\StrengthLevel;
 use App\Tests\TranslatorMockTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 use ZxcvbnPhp\Zxcvbn;
@@ -131,9 +130,6 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
         new Strength($strength);
     }
 
-    /**
-     * @throws Exception
-     */
     protected function createValidator(): StrengthValidator
     {
         $factory = $this->createMock(ZxcvbnFactoryInterface::class);

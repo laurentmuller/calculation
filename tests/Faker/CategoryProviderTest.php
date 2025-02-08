@@ -18,14 +18,10 @@ use App\Faker\CategoryProvider;
 use App\Faker\Factory;
 use App\Repository\CategoryRepository;
 use App\Utils\FormatUtils;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class CategoryProviderTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testWithEntity(): void
     {
         $entity = new Category();
@@ -39,9 +35,6 @@ class CategoryProviderTest extends TestCase
         self::assertSame($entity, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithoutEntity(): void
     {
         $provider = $this->createProvider();
@@ -53,9 +46,6 @@ class CategoryProviderTest extends TestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createProvider(?Category $entity = null): CategoryProvider
     {
         $entities = $entity instanceof Category ? [$entity] : [];

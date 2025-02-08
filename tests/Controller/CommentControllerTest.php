@@ -15,7 +15,6 @@ namespace App\Tests\Controller;
 
 use App\Enums\Importance;
 use App\Service\MailerService;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -45,9 +44,6 @@ class CommentControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testInvokeWithException(): void
     {
         $mailer = $this->createMock(MailerInterface::class);

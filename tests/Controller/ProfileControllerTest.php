@@ -29,6 +29,7 @@ class ProfileControllerTest extends ControllerTestCase
     public function testEdit(): void
     {
         $user = $this->loadUser(self::ROLE_USER);
+        self::assertNotNull($user);
         $data = [
             'username' => $user->getUsername(),
             'email' => $user->getEmail(),
@@ -44,8 +45,9 @@ class ProfileControllerTest extends ControllerTestCase
 
     public function testPassword(): void
     {
-        $password = $this->loadUser(self::ROLE_USER)
-            ->getPassword();
+        $user = $this->loadUser(self::ROLE_USER);
+        self::assertNotNull($user);
+        $password = $user->getPassword();
         $data = [
             'currentPassword' => $password,
             'plainPassword[first]' => $password,

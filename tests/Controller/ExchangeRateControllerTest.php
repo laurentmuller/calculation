@@ -15,7 +15,6 @@ namespace App\Tests\Controller;
 
 use App\Model\HttpClientError;
 use App\Service\ExchangeRateService;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -40,9 +39,6 @@ class ExchangeRateControllerTest extends ControllerTestCase
         yield ['/exchange/rate?baseCode=CHF&targetCode=EUR', self::ROLE_SUPER_ADMIN];
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetCodesWithError(): void
     {
         $service = $this->createMockService();
@@ -55,9 +51,6 @@ class ExchangeRateControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetLatestSuccess(): void
     {
         $data = ['USD' => 1.0];
@@ -73,9 +66,6 @@ class ExchangeRateControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetLatestWithError(): void
     {
         $service = $this->createMockService();
@@ -88,9 +78,6 @@ class ExchangeRateControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetRateNull(): void
     {
         $data = null;
@@ -106,9 +93,6 @@ class ExchangeRateControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetRateSuccess(): void
     {
         $data = [
@@ -128,9 +112,6 @@ class ExchangeRateControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetRateWithError(): void
     {
         $service = $this->createMockService();
@@ -143,9 +124,6 @@ class ExchangeRateControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockService(): MockObject&ExchangeRateService
     {
         $error = new HttpClientError(100, 'Fake Message');

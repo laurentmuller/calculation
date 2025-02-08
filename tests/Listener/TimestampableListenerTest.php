@@ -24,7 +24,6 @@ use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -35,9 +34,6 @@ class TimestampableListenerTest extends TestCase
 
     private const USER_NAME = 'user_name';
 
-    /**
-     * @throws Exception
-     */
     public function testDeleteDiff(): void
     {
         $task = new Task();
@@ -53,9 +49,6 @@ class TimestampableListenerTest extends TestCase
         self::assertNull($task->getCreatedBy());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testDisabled(): void
     {
         $event = $this->createEvent();
@@ -66,9 +59,6 @@ class TimestampableListenerTest extends TestCase
         self::assertFalse($listener->isEnabled());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testEmptyUser(): void
     {
         $task = new Task();
@@ -79,9 +69,6 @@ class TimestampableListenerTest extends TestCase
         self::assertEntityUpdated($task, 'common.entity_empty_user');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testNoEntity(): void
     {
         $event = $this->createEvent();
@@ -91,9 +78,6 @@ class TimestampableListenerTest extends TestCase
         self::assertTrue($listener->isEnabled());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testNotTimestampable(): void
     {
         $log = new Log();
@@ -104,9 +88,6 @@ class TimestampableListenerTest extends TestCase
         self::assertTrue($listener->isEnabled());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdate(): void
     {
         $task = new Task();
@@ -117,9 +98,6 @@ class TimestampableListenerTest extends TestCase
         self::assertEntityUpdated($task);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdateWithChild(): void
     {
         $task = new Task();
@@ -145,8 +123,6 @@ class TimestampableListenerTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     *
      * @psalm-param array<string, EntityInterface> $events
      */
     private function createEvent(array $events = []): OnFlushEventArgs
@@ -156,9 +132,6 @@ class TimestampableListenerTest extends TestCase
         return new OnFlushEventArgs($objectManager);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createListener(bool $createUser = true): TimestampableListener
     {
         $security = $this->createMockSecurity($createUser);
@@ -168,8 +141,6 @@ class TimestampableListenerTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     *
      * @psalm-param array<string, EntityInterface> $events
      */
     private function createMockObjectManager(array $events = []): MockObject&EntityManagerInterface
@@ -187,9 +158,6 @@ class TimestampableListenerTest extends TestCase
         return $manager;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockSecurity(bool $createUser = true): MockObject&Security
     {
         $security = $this->createMock(Security::class);

@@ -17,14 +17,10 @@ use App\Controller\AbstractController;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfTable;
 use App\Report\AbstractReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class AbstractReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testAddPageIndex(): void
     {
         $report = $this->createReport();
@@ -33,9 +29,6 @@ class AbstractReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testDescriptionTrans(): void
     {
         $report = $this->createReport();
@@ -44,9 +37,6 @@ class AbstractReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderCount(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -63,9 +53,6 @@ class AbstractReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testTitleTrans(): void
     {
         $report = $this->createReport();
@@ -74,9 +61,6 @@ class AbstractReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createReport(?AbstractController $controller = null): AbstractReport
     {
         $controller ??= $this->createMock(AbstractController::class);

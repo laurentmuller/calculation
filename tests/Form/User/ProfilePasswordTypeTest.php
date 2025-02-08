@@ -19,7 +19,6 @@ use App\Enums\StrengthLevel;
 use App\Form\User\ProfilePasswordType;
 use App\Service\ApplicationService;
 use App\Tests\Form\EntityTypeTestCase;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 
@@ -33,9 +32,6 @@ class ProfilePasswordTypeTest extends EntityTypeTestCase
 
     private MockObject&ApplicationService $application;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         $this->application = $this->createMock(ApplicationService::class);
@@ -57,7 +53,7 @@ class ProfilePasswordTypeTest extends EntityTypeTestCase
     }
 
     /**
-     * @throws \Exception|Exception
+     * @throws \Exception
      */
     protected function getExtensions(): array
     {

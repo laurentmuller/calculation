@@ -17,14 +17,10 @@ use App\Controller\AbstractController;
 use App\Entity\Group;
 use App\Entity\GroupMargin;
 use App\Spreadsheet\GroupsDocument;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class GroupsDocumentTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRenderWithMargins(): void
     {
         $group = new Group();
@@ -38,9 +34,6 @@ class GroupsDocumentTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderWithoutMargin(): void
     {
         $group = new Group();

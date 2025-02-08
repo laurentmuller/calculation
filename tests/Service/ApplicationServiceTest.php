@@ -30,7 +30,6 @@ use App\Tests\DatabaseTrait;
 use App\Tests\DateAssertTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\MockObject\Exception;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\Exception\InvalidArgumentException;
@@ -58,9 +57,6 @@ class ApplicationServiceTest extends KernelServiceTestCase
         self::assertSame($role->getRights(), $rights);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testClearFail(): void
     {
         $cacheItemPool = $this->createMock(CacheItemPoolInterface::class);
@@ -119,9 +115,6 @@ class ApplicationServiceTest extends KernelServiceTestCase
         self::assertNull($service->getDefaultState());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testDeleteCacheItemFail(): void
     {
         self::expectException(\LogicException::class);
@@ -138,9 +131,6 @@ class ApplicationServiceTest extends KernelServiceTestCase
         self::assertSame(TableView::TABLE, $service->getDisplayMode());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetCacheItemFail(): void
     {
         self::expectException(\LogicException::class);
@@ -255,9 +245,6 @@ class ApplicationServiceTest extends KernelServiceTestCase
         self::assertFalse($service->isQrCode());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSaveDeferredCacheValueFail(): void
     {
         $item = $this->createMock(CacheItemInterface::class);
@@ -435,9 +422,6 @@ class ApplicationServiceTest extends KernelServiceTestCase
         self::assertNotEmpty($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createApplicationService(CacheItemPoolInterface $cacheItemPool): ApplicationService
     {
         $manager = $this->createMock(EntityManagerInterface::class);

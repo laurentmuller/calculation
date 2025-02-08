@@ -17,7 +17,6 @@ use App\Model\HttpClientError;
 use App\Service\IpStackService;
 use App\Service\PositionService;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -33,9 +32,6 @@ class IpStackServiceTest extends TestCase
     private const ERROR_CODE = 404;
     private const ERROR_MESSAGE = 'Error Message';
 
-    /**
-     * @throws Exception
-     */
     public function testGetIpInfoError(): void
     {
         $response = $this->getErrorResponse();
@@ -47,9 +43,6 @@ class IpStackServiceTest extends TestCase
         self::assertError($service);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetIpInfoSuccess(): void
     {
         $response = $this->getValidResponse();
@@ -60,9 +53,6 @@ class IpStackServiceTest extends TestCase
         self::assertIsArray($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetIpInfoWithClientIp(): void
     {
         $response = $this->getValidResponse();
@@ -77,9 +67,6 @@ class IpStackServiceTest extends TestCase
         self::assertIsArray($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetIpInfoWithRequest(): void
     {
         $response = $this->getValidResponse();
@@ -91,9 +78,6 @@ class IpStackServiceTest extends TestCase
         self::assertIsArray($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetWithException(): void
     {
         $response = new MockResponse([
@@ -114,9 +98,6 @@ class IpStackServiceTest extends TestCase
         self::assertSame($message, $actual->getMessage());
     }
 
-    /**
-     * @throws Exception
-     */
     private function createService(): IpStackService
     {
         $key = 'fake';

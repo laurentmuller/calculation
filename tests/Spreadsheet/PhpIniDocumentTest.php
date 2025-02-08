@@ -16,14 +16,10 @@ namespace App\Tests\Spreadsheet;
 use App\Controller\AbstractController;
 use App\Service\PhpInfoService;
 use App\Spreadsheet\PhpIniDocument;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class PhpIniDocumentTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $data = [
@@ -43,9 +39,6 @@ class PhpIniDocumentTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderEmpty(): void
     {
         $document = $this->createDocument([]);
@@ -55,8 +48,6 @@ class PhpIniDocumentTest extends TestCase
 
     /**
      * @psalm-param array<string, array<string, array{local: scalar, master: scalar}|scalar>> $data
-     *
-     * @throws Exception
      */
     private function createDocument(array $data): PhpIniDocument
     {

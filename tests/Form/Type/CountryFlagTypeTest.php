@@ -16,7 +16,6 @@ namespace App\Tests\Form\Type;
 use App\Form\Type\CountryFlagType;
 use App\Service\CountryFlagService;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 class CountryFlagTypeTest extends TypeTestCase
@@ -38,9 +37,6 @@ class CountryFlagTypeTest extends TypeTestCase
         self::assertTrue($form->isValid());
     }
 
-    /**
-     * @throws Exception
-     */
     protected function getPreloadedExtensions(): array
     {
         $service = $this->createMock(CountryFlagService::class);

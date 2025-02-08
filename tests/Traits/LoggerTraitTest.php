@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Traits\LoggerTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -26,9 +25,6 @@ class LoggerTraitTest extends TestCase
 
     private MockObject&LoggerInterface $logger;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         $this->logger = $this->createMock(LoggerInterface::class);

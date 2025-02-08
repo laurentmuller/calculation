@@ -20,7 +20,6 @@ use App\Pdf\Traits\PdfCellTranslatorTrait;
 use App\Tests\Fixture\TestReport;
 use App\Tests\TranslatorMockTrait;
 use fpdf\PdfDocument;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -37,9 +36,6 @@ class PdfCellTranslatorTraitTest extends TestCase
         $this->translator = $this->createMockTranslator();
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $document = $this->createReport();
@@ -72,9 +68,6 @@ class PdfCellTranslatorTraitTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createReport(): TestReport
     {
         $controller = $this->createMock(AbstractController::class);

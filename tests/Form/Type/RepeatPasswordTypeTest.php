@@ -15,7 +15,6 @@ namespace App\Tests\Form\Type;
 
 use App\Form\Type\RepeatPasswordType;
 use App\Tests\Form\User\PasswordHasherExtensionTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 class RepeatPasswordTypeTest extends TypeTestCase
@@ -29,9 +28,6 @@ class RepeatPasswordTypeTest extends TypeTestCase
         self::assertArrayHasKey('id', $view->vars);
     }
 
-    /**
-     * @throws Exception
-     */
     protected function getExtensions(): array
     {
         $extensions = parent::getExtensions();

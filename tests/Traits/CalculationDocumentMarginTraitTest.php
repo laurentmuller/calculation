@@ -16,14 +16,10 @@ namespace App\Tests\Traits;
 use App\Controller\AbstractController;
 use App\Spreadsheet\AbstractDocument;
 use App\Traits\CalculationDocumentMarginTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class CalculationDocumentMarginTraitTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testMarginFormat(): void
     {
         $controller = $this->createMock(AbstractController::class);

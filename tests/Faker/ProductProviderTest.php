@@ -19,14 +19,10 @@ use App\Faker\Factory;
 use App\Faker\ProductProvider;
 use App\Repository\ProductRepository;
 use App\Utils\FormatUtils;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class ProductProviderTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testProductName(): void
     {
         $provider = $this->createProvider();
@@ -34,9 +30,6 @@ class ProductProviderTest extends TestCase
         self::assertNotEmpty($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testProductsEmpty(): void
     {
         $provider = $this->createProvider();
@@ -44,9 +37,6 @@ class ProductProviderTest extends TestCase
         self::assertCount(0, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testProductsWithOneProduct(): void
     {
         $entity = new Product();
@@ -58,9 +48,6 @@ class ProductProviderTest extends TestCase
         self::assertCount(1, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testProductsWithTwoCategories(): void
     {
         $category1 = new Category();
@@ -80,9 +67,6 @@ class ProductProviderTest extends TestCase
         self::assertCount(2, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testProductsWithTwoProducts(): void
     {
         $category = new Category();
@@ -100,9 +84,6 @@ class ProductProviderTest extends TestCase
         self::assertCount(2, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithEntity(): void
     {
         $entity = new Product();
@@ -121,9 +102,6 @@ class ProductProviderTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithoutEntity(): void
     {
         $provider = $this->createProvider();
@@ -144,9 +122,6 @@ class ProductProviderTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createProvider(Product ...$entities): ProductProvider
     {
         $entity = [] === $entities ? null : $entities[0];

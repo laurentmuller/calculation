@@ -15,7 +15,6 @@ namespace App\Tests\Resolver;
 
 use App\Model\TaskComputeQuery;
 use App\Resolver\TaskComputeQueryValueResolver;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,9 +27,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class TaskComputeQueryValueResolverTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testDefault(): void
     {
         $request = $this->createRequest();
@@ -49,9 +45,6 @@ class TaskComputeQueryValueResolverTest extends TestCase
         self::assertSame([], $query->items);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testInvalidType(): void
     {
         $request = $this->createRequest();
@@ -65,7 +58,7 @@ class TaskComputeQueryValueResolverTest extends TestCase
     }
 
     /**
-     * @throws Exception|\JsonException
+     * @throws \JsonException
      */
     public function testValid(): void
     {
@@ -91,9 +84,6 @@ class TaskComputeQueryValueResolverTest extends TestCase
         self::assertSame([1, 2, 3], $query->items);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithValidationError(): void
     {
         $violation = $this->createConstraintViolation();
@@ -107,9 +97,6 @@ class TaskComputeQueryValueResolverTest extends TestCase
         $resolver->resolve($request, $argument);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createArgumentMetadata(string $type = TaskComputeQuery::class): MockObject&ArgumentMetadata
     {
         $argument = $this->createMock(ArgumentMetadata::class);
@@ -120,9 +107,6 @@ class TaskComputeQueryValueResolverTest extends TestCase
         return $argument;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createConstraintViolation(): MockObject&ConstraintViolationInterface
     {
         $violation = $this->createMock(ConstraintViolationInterface::class);
@@ -139,9 +123,6 @@ class TaskComputeQueryValueResolverTest extends TestCase
         return Request::create('/', content: $content);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createResolver(
         ?ConstraintViolationListInterface $violationList = null
     ): TaskComputeQueryValueResolver {

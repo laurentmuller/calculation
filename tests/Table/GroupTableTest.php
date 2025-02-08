@@ -18,7 +18,6 @@ use App\Repository\AbstractRepository;
 use App\Repository\GroupRepository;
 use App\Table\GroupTable;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Twig\Environment;
@@ -43,9 +42,6 @@ class GroupTableTest extends EntityTableTestCase
         return [$entity];
     }
 
-    /**
-     * @throws Exception
-     */
     protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&GroupRepository
     {
         $repository = $this->createMock(GroupRepository::class);
@@ -57,8 +53,6 @@ class GroupTableTest extends EntityTableTestCase
 
     /**
      * @psalm-param GroupRepository $repository
-     *
-     * @throws Exception
      */
     protected function createTable(AbstractRepository $repository): GroupTable
     {

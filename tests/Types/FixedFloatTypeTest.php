@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Types;
 
 use App\Types\FixedFloatType;
-use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
@@ -23,9 +22,6 @@ use PHPUnit\Framework\TestCase;
 
 class FixedFloatTypeTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public static function setUpBeforeClass(): void
     {
         if (!Type::hasType(FixedFloatType::NAME)) {
@@ -45,7 +41,7 @@ class FixedFloatTypeTest extends TestCase
     }
 
     /**
-     * @throws ConversionException|Exception
+     * @throws ConversionException
      */
     #[DataProvider('getValues')]
     public function testConvertToDatabaseValue(mixed $value, float $expected): void
@@ -57,7 +53,7 @@ class FixedFloatTypeTest extends TestCase
     }
 
     /**
-     * @throws ConversionException|Exception
+     * @throws ConversionException
      */
     #[DataProvider('getValues')]
     public function testConvertToPHPValue(mixed $value, float $expected): void
@@ -68,9 +64,6 @@ class FixedFloatTypeTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testName(): void
     {
         /** @psalm-var FixedFloatType $type */
@@ -78,9 +71,6 @@ class FixedFloatTypeTest extends TestCase
         self::assertSame('fixed_float', $type->getName());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSQLDeclaration(): void
     {
         $platform = new MySQLPlatform();
@@ -90,9 +80,6 @@ class FixedFloatTypeTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function getFixedFloatType(): Type
     {
         return Type::getType(FixedFloatType::NAME);

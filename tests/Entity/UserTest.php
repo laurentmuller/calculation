@@ -16,7 +16,6 @@ namespace App\Tests\Entity;
 use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Utils\DateUtils;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Exception\MappingNotFoundException;
 use Vich\UploaderBundle\Storage\StorageInterface;
@@ -171,9 +170,6 @@ class UserTest extends EntityValidatorTestCase
         self::assertSame($file, $user->getImageFile());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testImagePath(): void
     {
         $user = new User();

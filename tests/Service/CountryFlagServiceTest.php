@@ -36,13 +36,17 @@ class CountryFlagServiceTest extends TestCase
         yield ['zh_Hans_MO', 'MO'];
     }
 
-    public static function getFlags(): \Iterator
+    public static function getFlagsInvalid(): \Iterator
+    {
+        yield ['ZZ', '', true, true];
+    }
+
+    public static function getFlagsValid(): \Iterator
     {
         yield ['CH', '🇨🇭'];
         yield ['CH', '🇨🇭', true];
         yield ['CH', '🇨🇭', false];
         yield ['FR', '🇫🇷'];
-        yield ['ZZ', '', true, true];
         yield ['ZZ', '', false];
     }
 
@@ -64,17 +68,18 @@ class CountryFlagServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[DataProvider('getFlags')]
-    public function testGetFlag(string $alpha2Code, string $expected, bool $validate = true, bool $exception = false): void
+    #[DataProvider('getFlagsInvalid')]
+    public function testGetFlag(string $alpha2Code, string $expected, bool $validate = true): void
     {
-        if ($exception) {
-            self::expectException(\InvalidArgumentException::class);
-            self::expectExceptionMessage("Invalid country code: '$alpha2Code'.");
-        }
-        $flag = $this->service->getFlag($alpha2Code, $validate);
-        if ($exception) {
-            self::fail('No exception raised');
-        }
-        self::assertSame($expected, $flag);
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage("Invalid country code: '$alpha2Code'.");
+        $this->service->getFlag($alpha2Code, $validate);
+    }
+
+    #[DataProvider('getFlagsValid')]
+    public function testGetFlagsValid(string $alpha2Code, string $expected, bool $validate = true): void
+    {
+        $actual = $this->service->getFlag($alpha2Code, $validate);
+        self::assertSame($expected, $actual);
     }
 }

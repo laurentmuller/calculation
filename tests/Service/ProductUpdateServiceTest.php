@@ -24,7 +24,6 @@ use App\Service\SuspendEventListenerService;
 use App\Tests\Entity\IdTrait;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -94,9 +93,6 @@ class ProductUpdateServiceTest extends TestCase
         yield [25.41, 0.06, 26.95];
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCreateQuery(): void
     {
         $service = $this->createService();
@@ -104,9 +100,6 @@ class ProductUpdateServiceTest extends TestCase
         self::assertSame($this->category, $query->getCategory());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCreateQueryEmpty(): void
     {
         $this->session->set('product.update.category', 0);
@@ -116,9 +109,6 @@ class ProductUpdateServiceTest extends TestCase
         self::assertNull($query->getCategory());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testEmptyProducts(): void
     {
         $service = $this->createService();
@@ -129,9 +119,6 @@ class ProductUpdateServiceTest extends TestCase
         self::assertCount(0, $result->getProducts());
     }
 
-    /**
-     * @throws Exception
-     */
     #[DataProvider('getFixedRounded')]
     public function testFixedRounded(float $price, float $expected, float $fixed = 1.0): void
     {
@@ -152,9 +139,6 @@ class ProductUpdateServiceTest extends TestCase
         self::assertProduct($product, $expected);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testFixedValue(): void
     {
         $price = 2.0;
@@ -176,9 +160,6 @@ class ProductUpdateServiceTest extends TestCase
         self::assertProduct($product, $expected);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetAllProducts(): void
     {
         $service = $this->createService();
@@ -186,9 +167,6 @@ class ProductUpdateServiceTest extends TestCase
         self::assertSame([$this->product], $products);
     }
 
-    /**
-     * @throws Exception
-     */
     #[DataProvider('getPercentRounded')]
     public function testPercentRounded(float $price, float $percent, float $expected): void
     {
@@ -208,9 +186,6 @@ class ProductUpdateServiceTest extends TestCase
         self::assertProduct($product, $expected);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testPercentValue(): void
     {
         $price = 1.0;
@@ -232,9 +207,6 @@ class ProductUpdateServiceTest extends TestCase
         self::assertProduct($product, $expected);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSaveQuery(): void
     {
         $service = $this->createService();
@@ -272,9 +244,6 @@ class ProductUpdateServiceTest extends TestCase
         return $query;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createRequestStack(): MockObject&RequestStack
     {
         $request = new Request();
@@ -288,9 +257,6 @@ class ProductUpdateServiceTest extends TestCase
         return $requestStack;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createService(): ProductUpdateService
     {
         $productRepository = $this->createMock(ProductRepository::class);

@@ -19,7 +19,6 @@ use App\Repository\CalculationStateRepository;
 use App\Table\CalculationStateTable;
 use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Twig\Environment;
@@ -64,8 +63,6 @@ class CalculationStateTableTest extends EntityTableTestCase
 
     /**
      * @psalm-param CalculationStateRepository $repository
-     *
-     * @throws Exception
      */
     protected function createTable(AbstractRepository $repository): CalculationStateTable
     {

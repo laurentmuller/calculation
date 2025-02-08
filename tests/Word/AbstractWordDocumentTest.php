@@ -20,7 +20,6 @@ use App\Service\UserService;
 use App\Tests\TranslatorMockTrait;
 use App\Word\AbstractWordDocument;
 use App\Word\HtmlDocument;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,7 +28,7 @@ class AbstractWordDocumentTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @throws Exception|\PhpOffice\PhpWord\Exception\Exception
+     * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     public function testDefault(): void
     {
@@ -48,7 +47,7 @@ class AbstractWordDocumentTest extends TestCase
     }
 
     /**
-     * @throws Exception|\PhpOffice\PhpWord\Exception\Exception
+     * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     public function testWithCustomer(): void
     {
@@ -66,7 +65,7 @@ class AbstractWordDocumentTest extends TestCase
     }
 
     /**
-     * @throws Exception|\PhpOffice\PhpWord\Exception\Exception
+     * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     public function testWithEmptyValues(): void
     {
@@ -83,7 +82,7 @@ class AbstractWordDocumentTest extends TestCase
     }
 
     /**
-     * @throws Exception|\PhpOffice\PhpWord\Exception\Exception
+     * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     public function testWithoutEmail(): void
     {
@@ -101,7 +100,7 @@ class AbstractWordDocumentTest extends TestCase
     }
 
     /**
-     * @throws Exception|\PhpOffice\PhpWord\Exception\Exception
+     * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     public function testWithoutURL(): void
     {
@@ -121,7 +120,7 @@ class AbstractWordDocumentTest extends TestCase
     }
 
     /**
-     * @throws Exception|\PhpOffice\PhpWord\Exception\Exception
+     * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     public function testWithPrintAddress(): void
     {
@@ -151,9 +150,6 @@ class AbstractWordDocumentTest extends TestCase
         return $cs;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockController(CustomerInformation $cs): MockObject&AbstractController
     {
         $application = $this->createMock(ApplicationService::class);

@@ -15,14 +15,10 @@ namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
 use App\Report\AbstractArrayReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class AbstractArrayReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $report = $this->createReport();
@@ -35,8 +31,6 @@ class AbstractArrayReportTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     *
      * @psalm-suppress MissingTemplateParam
      *
      * @phpstan-ignore missingType.generics

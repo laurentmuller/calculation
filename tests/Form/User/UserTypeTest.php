@@ -20,7 +20,6 @@ use App\Form\User\UserType;
 use App\Interfaces\RoleInterface;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -50,7 +49,7 @@ class UserTypeTest extends EntityTypeTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getExtensions(): array
     {
@@ -62,9 +61,6 @@ class UserTypeTest extends EntityTypeTestCase
         return UserType::class;
     }
 
-    /**
-     * @throws Exception
-     */
     protected function getPreloadedExtensions(): array
     {
         return [
@@ -74,9 +70,6 @@ class UserTypeTest extends EntityTypeTestCase
         ];
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockSecurity(): MockObject&Security
     {
         $security = $this->createMock(Security::class);

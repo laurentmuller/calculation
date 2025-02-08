@@ -17,7 +17,6 @@ use App\Form\Task\TaskServiceType;
 use App\Form\Type\PlainType;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 class TaskServiceTypeTest extends TypeTestCase
@@ -81,7 +80,7 @@ class TaskServiceTypeTest extends TypeTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getPreloadedExtensions(): array
     {

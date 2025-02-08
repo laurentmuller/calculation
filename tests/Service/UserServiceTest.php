@@ -24,7 +24,6 @@ use App\Service\ApplicationService;
 use App\Service\UserService;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
@@ -32,9 +31,6 @@ class UserServiceTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
 
-    /**
-     * @throws Exception
-     */
     public function testActions(): void
     {
         $service = $this->createUserService();
@@ -44,9 +40,6 @@ class UserServiceTest extends KernelServiceTestCase
         self::assertFalse($service->isActionNone());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testDarkNavigation(): void
     {
         $service = $this->createUserService();
@@ -54,18 +47,12 @@ class UserServiceTest extends KernelServiceTestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testDisplayMode(): void
     {
         $service = $this->createUserService();
         self::assertSame(TableView::TABLE, $service->getDisplayMode());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetApplication(): void
     {
         $service = $this->createUserService();
@@ -73,9 +60,6 @@ class UserServiceTest extends KernelServiceTestCase
         self::assertFalse($application->isPrintAddress());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetCustomer(): void
     {
         $service = $this->createUserService();
@@ -84,9 +68,6 @@ class UserServiceTest extends KernelServiceTestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetMessageAttributes(): void
     {
         $service = $this->createUserService();
@@ -94,9 +75,6 @@ class UserServiceTest extends KernelServiceTestCase
         self::assertCount(7, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetProperties(): void
     {
         $service = $this->createUserService();
@@ -104,9 +82,6 @@ class UserServiceTest extends KernelServiceTestCase
         self::assertNotEmpty($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testMessage(): void
     {
         $service = $this->createUserService();
@@ -115,9 +90,6 @@ class UserServiceTest extends KernelServiceTestCase
         self::assertFalse($service->isMessageSubTitle());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testOptions(): void
     {
         $service = $this->createUserService();
@@ -125,9 +97,6 @@ class UserServiceTest extends KernelServiceTestCase
         self::assertFalse($service->isPrintAddress());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testPanels(): void
     {
         $service = $this->createUserService();
@@ -137,9 +106,6 @@ class UserServiceTest extends KernelServiceTestCase
         self::assertSame(12, $service->getCalculations());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSetPropertiesAndRemove(): void
     {
         $user = $this->getUser(1);
@@ -154,9 +120,6 @@ class UserServiceTest extends KernelServiceTestCase
         }
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSetPropertiesEmpty(): void
     {
         $service = $this->createUserService();
@@ -164,9 +127,6 @@ class UserServiceTest extends KernelServiceTestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSetPropertiesNoUser(): void
     {
         $service = $this->createUserService();
@@ -182,9 +142,6 @@ class UserServiceTest extends KernelServiceTestCase
         }
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSetPropertiesSame(): void
     {
         $service = $this->createUserService();
@@ -193,9 +150,6 @@ class UserServiceTest extends KernelServiceTestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSetPropertiesWithUser(): void
     {
         $user = $this->getUser(1);
@@ -210,9 +164,6 @@ class UserServiceTest extends KernelServiceTestCase
         }
     }
 
-    /**
-     * @throws Exception
-     */
     private function createUserService(?User $user = null): UserService
     {
         $repository = $this->getService(UserPropertyRepository::class);

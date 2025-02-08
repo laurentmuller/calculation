@@ -15,7 +15,6 @@ namespace App\Tests\Translator;
 
 use App\Model\TranslateQuery;
 use App\Translator\GoogleTranslatorService;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -27,7 +26,6 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 class GoogleTranslatorServiceTest extends TestCase
 {
     /**
-     * @throws Exception
      * @throws ExceptionInterface
      */
     public function testDetectFalse(): void
@@ -46,7 +44,6 @@ class GoogleTranslatorServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
      * @throws ExceptionInterface
      */
     public function testDetectNotString(): void
@@ -64,7 +61,6 @@ class GoogleTranslatorServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
      * @throws ExceptionInterface
      */
     public function testDetectSuccess(): void
@@ -99,7 +95,6 @@ class GoogleTranslatorServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
      * @throws \ReflectionException
      *
      * @psalm-suppress UnusedMethodCall
@@ -116,9 +111,6 @@ class GoogleTranslatorServiceTest extends TestCase
         self::assertIsArray($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetLanguagesInvalidArray(): void
     {
         $translator = $this->createTranslator(new JsonMockResponse());
@@ -126,9 +118,6 @@ class GoogleTranslatorServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetLanguagesInvalidCode(): void
     {
         $expected_code = 404;
@@ -151,9 +140,6 @@ class GoogleTranslatorServiceTest extends TestCase
         self::assertSame($expected_message, $actual->getMessage());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetLanguagesInvalidMessage(): void
     {
         $expected_code = 404;
@@ -175,9 +161,6 @@ class GoogleTranslatorServiceTest extends TestCase
         self::assertSame($expected_message, $actual->getMessage());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetLanguagesSuccess(): void
     {
         $response = $this->getLanguagesResponse();
@@ -186,9 +169,6 @@ class GoogleTranslatorServiceTest extends TestCase
         self::assertSame(['French' => 'fr'], $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetName(): void
     {
         $service = new GoogleTranslatorService(
@@ -201,7 +181,6 @@ class GoogleTranslatorServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
      * @throws ExceptionInterface
      */
     public function testTranslateFalse(): void
@@ -221,7 +200,6 @@ class GoogleTranslatorServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
      * @throws ExceptionInterface
      */
     public function testTranslateNotString(): void
@@ -242,7 +220,6 @@ class GoogleTranslatorServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception
      * @throws ExceptionInterface
      */
     public function testTranslateSuccess(): void
@@ -265,9 +242,6 @@ class GoogleTranslatorServiceTest extends TestCase
         self::assertIsArray($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createTranslator(JsonMockResponse ...$responses): GoogleTranslatorService
     {
         $key = 'fake';

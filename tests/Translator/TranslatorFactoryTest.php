@@ -16,7 +16,6 @@ namespace App\Tests\Translator;
 use App\Translator\BingTranslatorService;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -30,9 +29,6 @@ class TranslatorFactoryTest extends TestCase
 {
     private MockObject&RequestStack $requestStack;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         $session = new Session(new MockArraySessionStorage());
@@ -41,9 +37,6 @@ class TranslatorFactoryTest extends TestCase
             ->willReturn($session);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testExist(): void
     {
         $translators = [$this->createBingTranslator()];
@@ -52,9 +45,6 @@ class TranslatorFactoryTest extends TestCase
         self::assertFalse($factory->exists('fake'));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testFind(): void
     {
         $translators = [$this->createBingTranslator()];
@@ -63,9 +53,6 @@ class TranslatorFactoryTest extends TestCase
         self::assertNull($factory->find('fake'));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetServiceInvalid(): void
     {
         self::expectException(ServiceNotFoundException::class);
@@ -74,9 +61,6 @@ class TranslatorFactoryTest extends TestCase
         $factory->getService('fake');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetServiceValid(): void
     {
         $translators = [$this->createBingTranslator()];
@@ -84,9 +68,6 @@ class TranslatorFactoryTest extends TestCase
         self::assertNotNull($factory->getService(BingTranslatorService::class));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetSessionServiceWithInvalidValue(): void
     {
         $this->requestStack->getSession()
@@ -97,9 +78,6 @@ class TranslatorFactoryTest extends TestCase
         self::assertNotNull($factory->getSessionService());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetSessionServiceWithoutValue(): void
     {
         $translators = [$this->createBingTranslator()];
@@ -107,9 +85,6 @@ class TranslatorFactoryTest extends TestCase
         self::assertNotNull($factory->getSessionService());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetTranslators(): void
     {
         $translators = [$this->createBingTranslator()];
@@ -118,9 +93,6 @@ class TranslatorFactoryTest extends TestCase
         self::assertSame($translators, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createBingTranslator(): BingTranslatorService
     {
         $key = 'key';

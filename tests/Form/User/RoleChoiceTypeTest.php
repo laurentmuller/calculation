@@ -17,7 +17,6 @@ use App\Entity\User;
 use App\Form\User\RoleChoiceType;
 use App\Interfaces\RoleInterface;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Test\TypeTestCase;
 
@@ -33,7 +32,7 @@ class RoleChoiceTypeTest extends TypeTestCase
     }
 
     /**
-     * @throws Exception
+     * @return RoleChoiceType[]
      */
     protected function getPreloadedExtensions(): array
     {

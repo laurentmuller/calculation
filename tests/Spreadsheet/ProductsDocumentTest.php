@@ -18,14 +18,10 @@ use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Spreadsheet\ProductsDocument;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class ProductsDocumentTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $group = new Group();

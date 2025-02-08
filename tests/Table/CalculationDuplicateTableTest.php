@@ -17,15 +17,11 @@ use App\Entity\Calculation;
 use App\Repository\CalculationRepository;
 use App\Table\CalculationDuplicateTable;
 use App\Table\DataQuery;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CalculationDuplicateTableTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testDefault(): void
     {
         $table = $this->createTable();
@@ -35,9 +31,6 @@ class CalculationDuplicateTableTest extends TestCase
         self::assertSame('duplicate.empty', $table->getEmptyMessage());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithData(): void
     {
         $entity = $this->getEntity();
@@ -49,9 +42,6 @@ class CalculationDuplicateTableTest extends TestCase
         self::assertCount(1, $results->rows);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithoutData(): void
     {
         $table = $this->createTable();
@@ -61,9 +51,6 @@ class CalculationDuplicateTableTest extends TestCase
         self::assertCount(0, $results->rows);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockRepository(array $entities = []): MockObject&CalculationRepository
     {
         $repository = $this->createMock(CalculationRepository::class);
@@ -75,9 +62,6 @@ class CalculationDuplicateTableTest extends TestCase
         return $repository;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createTable(array $entities = []): CalculationDuplicateTable
     {
         $repository = $this->createMockRepository($entities);

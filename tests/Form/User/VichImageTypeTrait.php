@@ -15,7 +15,6 @@ namespace App\Tests\Form\User;
 
 use App\Entity\User;
 use Metadata\AdvancedMetadataFactoryInterface;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -32,9 +31,6 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  */
 trait VichImageTypeTrait
 {
-    /**
-     * @throws Exception
-     */
     protected function createVichImageType(): VichImageType
     {
         $callback = fn (?User $user): ?string => $user?->getImageName();
@@ -53,8 +49,6 @@ trait VichImageTypeTrait
     }
 
     /**
-     * @throws Exception
-     *
      * @psalm-suppress InternalClass
      * @psalm-suppress InternalMethod
      */
@@ -67,9 +61,6 @@ trait VichImageTypeTrait
         return new PropertyMappingFactory($metadata, $resolver);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createUploadHandler(MockObject&StorageInterface $storage): UploadHandler
     {
         $factory = $this->createPropertyMappingFactory();

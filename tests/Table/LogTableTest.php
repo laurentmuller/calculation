@@ -20,7 +20,6 @@ use App\Model\LogLevel;
 use App\Service\LogService;
 use App\Table\DataQuery;
 use App\Table\LogTable;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,18 +27,12 @@ use Twig\Environment;
 
 class LogTableTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testEmptyMessage(): void
     {
         $this->processEmptyMessage(0, 'log.list.empty');
         $this->processEmptyMessage(1, null);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetEntityClassName(): void
     {
         $service = $this->createMock(LogService::class);
@@ -49,9 +42,6 @@ class LogTableTest extends TestCase
         self::assertSame(Log::class, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithData(): void
     {
         $query = $this->createDataQuery();
@@ -61,9 +51,6 @@ class LogTableTest extends TestCase
         self::assertCount(2, $results->rows);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithEmptyQuery(): void
     {
         $service = $this->createMock(LogService::class);
@@ -76,9 +63,6 @@ class LogTableTest extends TestCase
         self::assertCount(0, $results->rows);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithoutData(): void
     {
         $query = $this->createDataQuery();
@@ -88,9 +72,6 @@ class LogTableTest extends TestCase
         self::assertCount(0, $results->rows);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWitSearchChannel(): void
     {
         $parameters = ['channel' => 'doctrine'];
@@ -102,9 +83,6 @@ class LogTableTest extends TestCase
         self::assertCount(1, $results->rows);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWitSearchLevel(): void
     {
         $parameters = ['level' => PsrLevel::ALERT];
@@ -116,9 +94,6 @@ class LogTableTest extends TestCase
         self::assertCount(1, $results->rows);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWitSortChannel(): void
     {
         $query = $this->createDataQuery();
@@ -130,9 +105,6 @@ class LogTableTest extends TestCase
         self::assertCount(2, $results->rows);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWitSortLevel(): void
     {
         $query = $this->createDataQuery();
@@ -192,9 +164,6 @@ class LogTableTest extends TestCase
         return [$log1, $log2];
     }
 
-    /**
-     * @throws Exception
-     */
     private function createTableWithData(): LogTable
     {
         $file = $this->createMock(LogFile::class);
@@ -222,9 +191,6 @@ class LogTableTest extends TestCase
         return new LogTable($service, $twig);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createTableWithoutData(): LogTable
     {
         $file = $this->createMock(LogFile::class);
@@ -252,9 +218,6 @@ class LogTableTest extends TestCase
         return new LogTable($service, $twig);
     }
 
-    /**
-     * @throws Exception
-     */
     private function processEmptyMessage(int $count, mixed $expected): void
     {
         $file = $this->createMock(LogFile::class);

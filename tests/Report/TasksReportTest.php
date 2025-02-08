@@ -20,14 +20,10 @@ use App\Entity\Task;
 use App\Entity\TaskItem;
 use App\Entity\TaskItemMargin;
 use App\Report\TasksReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class TasksReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $controller = $this->createMock(AbstractController::class);

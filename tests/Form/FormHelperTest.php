@@ -27,7 +27,6 @@ use App\Pdf\Html\HtmlAttribute;
 use App\Tests\Form\User\PasswordHasherExtensionTrait;
 use App\Tests\Form\User\VichImageTypeTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -652,7 +651,7 @@ class FormHelperTest extends TypeTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getExtensions(): array
     {
@@ -662,9 +661,6 @@ class FormHelperTest extends TypeTestCase
         return $extensions;
     }
 
-    /**
-     * @throws Exception
-     */
     protected function getPreloadedExtensions(): array
     {
         return [

@@ -17,14 +17,10 @@ use App\Controller\AbstractController;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Spreadsheet\CategoriesDocument;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class CategoriesDocumentTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $group = new Group();

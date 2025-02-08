@@ -18,7 +18,6 @@ use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Interfaces\PdfChartInterface;
 use App\Pdf\Traits\PdfChartLegendTrait;
 use App\Report\AbstractReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,9 +25,6 @@ use PHPUnit\Framework\TestCase;
  */
 class PdfChartLegendTraitTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testLegends(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -64,9 +60,6 @@ class PdfChartLegendTraitTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testLegendsHeight(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -102,9 +95,6 @@ class PdfChartLegendTraitTest extends TestCase
         self::assertSame(10.0, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testLegendsHorizontal(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -138,9 +128,6 @@ class PdfChartLegendTraitTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testLegendsVertical(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -174,9 +161,6 @@ class PdfChartLegendTraitTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testLegendsWidths(): void
     {
         $controller = $this->createMock(AbstractController::class);

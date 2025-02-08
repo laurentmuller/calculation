@@ -19,7 +19,6 @@ use App\Repository\GlobalMarginRepository;
 use App\Table\DataQuery;
 use App\Table\GlobalMarginTable;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -27,9 +26,6 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class GlobalMarginTableTest extends EntityTableTestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testGetEntityClassName(): void
     {
         $expected = GlobalMargin::class;
@@ -43,7 +39,7 @@ class GlobalMarginTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testSearch(): void
     {
@@ -62,9 +58,6 @@ class GlobalMarginTableTest extends EntityTableTestCase
         return [$entity];
     }
 
-    /**
-     * @throws Exception
-     */
     protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&GlobalMarginRepository
     {
         $repository = $this->createMock(GlobalMarginRepository::class);

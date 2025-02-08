@@ -16,7 +16,6 @@ namespace App\Tests\Service;
 use App\Service\SchemaService;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
-use Doctrine\DBAL\Exception;
 
 class SchemaServiceTest extends KernelServiceTestCase
 {
@@ -42,9 +41,6 @@ class SchemaServiceTest extends KernelServiceTestCase
         self::assertNotEmpty($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testTableExists(): void
     {
         $actual = $this->service->tableExists('sy_Group');

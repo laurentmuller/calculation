@@ -21,7 +21,6 @@ use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -70,7 +69,7 @@ class UserRegistrationTypeTest extends TypeTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getExtensions(): array
     {
@@ -80,9 +79,6 @@ class UserRegistrationTypeTest extends TypeTestCase
         return $extensions;
     }
 
-    /**
-     * @throws Exception
-     */
     protected function getPreloadedExtensions(): array
     {
         $generator = $this->createMock(UrlGeneratorInterface::class);

@@ -15,7 +15,6 @@ namespace App\Tests\Controller;
 
 use App\Service\LogService;
 use PHPUnit\Framework\Attributes\Depends;
-use PHPUnit\Framework\MockObject\Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -77,41 +76,26 @@ class LogControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testDeleteEmpty(): void
     {
         $this->checkEmptyService('/log/delete');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testDownloadEmpty(): void
     {
         $this->checkEmptyService('/log/download');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testExcelEmpty(): void
     {
         $this->checkEmptyService('/log/excel');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testPdfEmpty(): void
     {
         $this->checkEmptyService('/log/pdf');
     }
 
-    /**
-     * @throws Exception
-     */
     private function checkEmptyService(string $url): void
     {
         $service = $this->createMock(LogService::class);

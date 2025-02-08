@@ -24,7 +24,6 @@ use App\Table\DataQuery;
 use App\Table\LogTable;
 use App\Table\SearchTable;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,9 +38,6 @@ class DataQueryValueResolverTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @throws Exception
-     */
     public function testDefault(): void
     {
         $resolver = $this->createResolver();
@@ -76,9 +72,6 @@ class DataQueryValueResolverTest extends TestCase
         self::assertSame('', $query->getStringParameter(SearchTable::PARAM_ENTITY));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testInvalidKey(): void
     {
         $resolver = $this->createResolver();
@@ -88,9 +81,6 @@ class DataQueryValueResolverTest extends TestCase
         $resolver->resolve($request, $argument);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testInvalidType(): void
     {
         $resolver = $this->createResolver();
@@ -102,9 +92,6 @@ class DataQueryValueResolverTest extends TestCase
         self::assertCount(0, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithCaller(): void
     {
         $parameters = [
@@ -123,9 +110,6 @@ class DataQueryValueResolverTest extends TestCase
         self::assertInstanceOf(DataQuery::class, $query);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithDefaultParams(): void
     {
         $parameters = [
@@ -157,9 +141,6 @@ class DataQueryValueResolverTest extends TestCase
         self::assertSame(TableView::TABLE, $query->view);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithDefaultValue(): void
     {
         $resolver = $this->createResolver();
@@ -179,9 +160,6 @@ class DataQueryValueResolverTest extends TestCase
         self::assertInstanceOf(DataQuery::class, $query);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithNoDefaultValue(): void
     {
         $resolver = $this->createResolver();
@@ -199,9 +177,6 @@ class DataQueryValueResolverTest extends TestCase
         self::assertInstanceOf(DataQuery::class, $query);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithParameters(): void
     {
         $parameters = [
@@ -233,9 +208,6 @@ class DataQueryValueResolverTest extends TestCase
         self::assertSame('entity', $query->getStringParameter(SearchTable::PARAM_ENTITY));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithQuery(): void
     {
         $parameters = [
@@ -259,9 +231,6 @@ class DataQueryValueResolverTest extends TestCase
         self::assertSame(50, $query->limit);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithValidationError(): void
     {
         $violation = $this->createConstraintViolation();
@@ -274,9 +243,6 @@ class DataQueryValueResolverTest extends TestCase
         $resolver->resolve($request, $argument);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createArgumentMetadata(string $type = DataQuery::class): MockObject&ArgumentMetadata
     {
         $argument = $this->createMock(ArgumentMetadata::class);
@@ -287,9 +253,6 @@ class DataQueryValueResolverTest extends TestCase
         return $argument;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createConstraintViolation(): MockObject&ConstraintViolationInterface
     {
         $violation = $this->createMock(ConstraintViolationInterface::class);
@@ -306,9 +269,6 @@ class DataQueryValueResolverTest extends TestCase
         return Request::create('/', parameters: $parameters);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createResolver(?ConstraintViolationListInterface $violationList = null): DataQueryValueResolver
     {
         $validator = $this->createMock(ValidatorInterface::class);

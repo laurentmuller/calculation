@@ -16,14 +16,10 @@ namespace App\Tests\Spreadsheet;
 use App\Controller\AbstractController;
 use App\Entity\GlobalMargin;
 use App\Spreadsheet\GlobalMarginsDocument;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class GlobalMarginsDocumentTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $margins = new GlobalMargin();
@@ -36,9 +32,6 @@ class GlobalMarginsDocumentTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderEmpty(): void
     {
         $controller = $this->createMock(AbstractController::class);

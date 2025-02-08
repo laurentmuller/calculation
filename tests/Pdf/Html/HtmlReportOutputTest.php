@@ -26,16 +26,12 @@ use App\Report\HtmlReport;
 use App\Tests\TranslatorMockTrait;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class HtmlReportOutputTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @throws Exception
-     */
     public function testHtmlLiChunkNoParent(): void
     {
         $report = $this->createReport();
@@ -44,9 +40,6 @@ class HtmlReportOutputTest extends TestCase
         self::assertSame(1, $report->getPage());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testHtmlLiChunkWithStyle(): void
     {
         $report = $this->createReport();
@@ -63,9 +56,6 @@ class HtmlReportOutputTest extends TestCase
         self::assertSame(1, $report->getPage());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testHtmlOlChunk(): void
     {
         $report = $this->createReport();
@@ -76,9 +66,6 @@ class HtmlReportOutputTest extends TestCase
         self::assertSame(1, $report->getPage());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testHtmlPageBreakChunk(): void
     {
         $report = $this->createReport();
@@ -87,9 +74,6 @@ class HtmlReportOutputTest extends TestCase
         self::assertSame(2, $report->getPage());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testHtmlTextChunk(): void
     {
         $report = $this->createReport();
@@ -109,9 +93,6 @@ class HtmlReportOutputTest extends TestCase
         self::assertSame(1, $report->getPage());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testHtmlUlChunk(): void
     {
         $report = $this->createReport();
@@ -122,9 +103,6 @@ class HtmlReportOutputTest extends TestCase
         self::assertSame(1, $report->getPage());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testOuputWithBorder(): void
     {
         $report = $this->createReport();
@@ -142,9 +120,6 @@ class HtmlReportOutputTest extends TestCase
         self::assertSame(2, $report->getPage());
     }
 
-    /**
-     * @throws Exception
-     */
     private function createReport(): HtmlReport
     {
         $controller = $this->createMock(AbstractController::class);

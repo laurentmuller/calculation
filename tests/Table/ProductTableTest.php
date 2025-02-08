@@ -23,7 +23,6 @@ use App\Repository\ProductRepository;
 use App\Table\DataQuery;
 use App\Table\ProductTable;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -42,7 +41,7 @@ class ProductTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithCallback(): void
     {
@@ -54,7 +53,7 @@ class ProductTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithCategoryId(): void
     {
@@ -65,7 +64,7 @@ class ProductTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithFindCategoryId(): void
     {
@@ -77,7 +76,7 @@ class ProductTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithFindGroupId(): void
     {
@@ -89,7 +88,7 @@ class ProductTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithGroupId(): void
     {
@@ -126,7 +125,7 @@ class ProductTableTest extends EntityTableTestCase
     /**
      * @psalm-param ProductRepository $repository
      *
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function createTable(AbstractRepository $repository): ProductTable
     {

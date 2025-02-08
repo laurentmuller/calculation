@@ -18,7 +18,6 @@ use App\Repository\UserRepository;
 use App\Tests\Entity\IdTrait;
 use App\Tests\Form\ManagerRegistryTrait;
 use Doctrine\Persistence\ManagerRegistry;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
@@ -47,7 +46,7 @@ trait UserTrait
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getUserEntityType(): EntityType
     {
@@ -55,7 +54,7 @@ trait UserTrait
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getUserRegistry(): MockObject&ManagerRegistry
     {

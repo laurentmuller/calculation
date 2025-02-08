@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Form;
 
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\FormExtensionInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\PreloadedExtension;
@@ -27,7 +26,7 @@ trait PreloadedExtensionsTrait
     /**
      * @return FormExtensionInterface[]
      *
-     * @throws \ReflectionException|Exception
+     * @throws \ReflectionException
      */
     protected function getExtensions(): array
     {
@@ -41,7 +40,9 @@ trait PreloadedExtensionsTrait
     }
 
     /**
-     * @return FormTypeInterface[]
+     * @psalm-return FormTypeInterface[]
+     *
+     * @phpstan-return FormTypeInterface<mixed>[]
      */
     abstract protected function getPreloadedExtensions(): array;
 }

@@ -19,7 +19,6 @@ use App\Repository\UserRepository;
 use App\Tests\Entity\IdTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 class ResetAllPasswordTypeTest extends TypeTestCase
@@ -58,9 +57,6 @@ class ResetAllPasswordTypeTest extends TypeTestCase
         self::assertTrue($form->isValid());
     }
 
-    /**
-     * @throws Exception
-     */
     protected function getPreloadedExtensions(): array
     {
         $repository = $this->createMock(UserRepository::class);

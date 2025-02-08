@@ -135,16 +135,17 @@ class UpdateAssetsCommandTest extends CommandTestCase
 
     private function createDirectory(string $dir): void
     {
-        if (!FileUtils::exists($dir) && !FileUtils::mkdir($dir)) {
-            self::fail('Unable to create directory ' . $dir);
+        if (FileUtils::exists($dir)) {
+            return;
         }
+        $actual = FileUtils::mkdir($dir);
+        self::assertTrue($actual);
     }
 
     private function dumpFile(string $file, string $content): void
     {
-        if (!FileUtils::dumpFile($file, $content)) {
-            self::fail('Unable to set content to ' . $file);
-        }
+        $actual = FileUtils::dumpFile($file, $content);
+        self::assertTrue($actual);
     }
 
     private function executeInvalidCommand(string $projectDir): void
@@ -158,8 +159,10 @@ class UpdateAssetsCommandTest extends CommandTestCase
 
     private function removeFile(string $file): void
     {
-        if (FileUtils::exists($file) && !FileUtils::remove($file)) {
-            self::fail('Unable to delete file ' . $file);
+        if (!FileUtils::exists($file)) {
+            return;
         }
+        $actual = FileUtils::remove($file);
+        self::assertTrue($actual);
     }
 }

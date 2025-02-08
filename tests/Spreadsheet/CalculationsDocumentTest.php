@@ -17,7 +17,6 @@ use App\Controller\AbstractController;
 use App\Entity\Calculation;
 use App\Spreadsheet\CalculationsDocument;
 use App\Tests\Entity\IdTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class CalculationsDocumentTest extends TestCase
@@ -25,7 +24,6 @@ class CalculationsDocumentTest extends TestCase
     use IdTrait;
 
     /**
-     * @throws Exception
      * @throws \ReflectionException
      */
     public function testRender(): void

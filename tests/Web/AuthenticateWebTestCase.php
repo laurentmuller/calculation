@@ -70,8 +70,6 @@ abstract class AuthenticateWebTestCase extends WebTestCase
      * @param string $url      the URL to be tested
      * @param string $username the username to login
      * @param int    $expected the expected result
-     *
-     * @throws \InvalidArgumentException if the response cannot be found
      */
     protected function checkResponse(string $url, string $username, int $expected): void
     {
@@ -82,23 +80,12 @@ abstract class AuthenticateWebTestCase extends WebTestCase
 
     /**
      * Loads a user from the database.
-     *
-     * @param string $username the username to search for
-     * @param bool   $verify   true to check if the user is not null
-     *
-     * @return ?User the user, if found; null otherwise
-     *
-     * @psalm-return ($verify is true ? User : (User|null))
      */
-    protected function loadUser(string $username, bool $verify = true): ?User
+    protected function loadUser(string $username): ?User
     {
         $repository = $this->getService(UserRepository::class);
-        $user = $repository->findByUsername($username);
-        if ($verify) {
-            self::assertNotNull($user, "The user '$username' is null.");
-        }
 
-        return $user;
+        return $repository->findByUsername($username);
     }
 
     /**
@@ -113,18 +100,12 @@ abstract class AuthenticateWebTestCase extends WebTestCase
      * Load and login with the given username.
      *
      * @param string $username the username to login
-     * @param bool   $verify   true to check if the user is not null
-     *
-     * @throws \InvalidArgumentException if the given username cannot be found
      */
-    protected function loginUsername(string $username, bool $verify = true): void
+    protected function loginUsername(string $username): void
     {
-        $user = $this->loadUser($username, $verify);
-        if ($user instanceof User) {
-            $this->loginUser($user);
-        } else {
-            self::fail("Unable to find the user '$username'.");
-        }
+        $user = $this->loadUser($username);
+        self::assertNotNull($user);
+        $this->loginUser($user);
     }
 
     /**

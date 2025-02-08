@@ -17,7 +17,6 @@ use App\Interfaces\SortModeInterface;
 use App\Repository\GlobalMarginRepository;
 use App\Table\Column;
 use App\Table\GlobalMarginTable;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class ColumnTest extends TestCase
@@ -33,9 +32,6 @@ class ColumnTest extends TestCase
         self::assertSame('actions rowlink-skip d-print-none', $column->getClass());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testFromJsonEmpty(): void
     {
         self::expectException(\InvalidArgumentException::class);
@@ -44,9 +40,6 @@ class ColumnTest extends TestCase
         Column::fromJson($table, $path);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testFromJsonInvalidFile(): void
     {
         self::expectException(\InvalidArgumentException::class);
@@ -55,9 +48,6 @@ class ColumnTest extends TestCase
         Column::fromJson($table, $path);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testFromJsonInvalidFormatter(): void
     {
         self::expectException(\InvalidArgumentException::class);
@@ -66,9 +56,6 @@ class ColumnTest extends TestCase
         Column::fromJson($table, $path);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testFromJsonValid(): void
     {
         $table = $this->createTable();
@@ -194,9 +181,6 @@ class ColumnTest extends TestCase
         self::assertSame('field', $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createTable(): GlobalMarginTable
     {
         $repository = $this->createMock(GlobalMarginRepository::class);

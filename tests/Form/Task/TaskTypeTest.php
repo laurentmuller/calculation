@@ -18,7 +18,6 @@ use App\Form\Task\TaskType;
 use App\Tests\Form\Category\CategoryTrait;
 use App\Tests\Form\EntityTypeTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\MockObject\Exception;
 
 /**
  * @extends EntityTypeTestCase<Task, TaskType>
@@ -49,7 +48,7 @@ class TaskTypeTest extends EntityTypeTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getPreloadedExtensions(): array
     {

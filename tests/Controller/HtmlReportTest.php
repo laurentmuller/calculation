@@ -15,14 +15,10 @@ namespace App\Tests\Controller;
 
 use App\Controller\AbstractController;
 use App\Report\HtmlReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class HtmlReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $html = <<<HTML
@@ -50,9 +46,6 @@ class HtmlReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderEmpty(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -61,9 +54,6 @@ class HtmlReportTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderList(): void
     {
         $html = <<<HTML
@@ -102,9 +92,6 @@ class HtmlReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderSpace(): void
     {
         $controller = $this->createMock(AbstractController::class);

@@ -316,7 +316,7 @@ final class StringUtils
      *
      * @param ?string $str the value to trim
      *
-     * @return string|null the trimmed string or null if empty after trimmed
+     * @return ?string the trimmed string or null if empty after trimmed
      */
     public static function trim(?string $str): ?string
     {

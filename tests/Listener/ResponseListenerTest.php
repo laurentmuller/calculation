@@ -17,7 +17,6 @@ use App\Controller\CspReportController;
 use App\Listener\ResponseListener;
 use App\Security\SecurityAttributes;
 use App\Service\NonceService;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -32,9 +31,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ResponseListenerTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testDebugDevFirewall(): void
     {
         $file = $this->getCspFile();
@@ -44,9 +40,6 @@ class ResponseListenerTest extends TestCase
         self::assertResponse($event->getResponse(), false, false);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testDebugMainFirewall(): void
     {
         $file = $this->getCspFile();
@@ -56,9 +49,6 @@ class ResponseListenerTest extends TestCase
         self::assertResponse($event->getResponse(), true, true);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testInvalidFile(): void
     {
         $file = __FILE__;
@@ -68,9 +58,6 @@ class ResponseListenerTest extends TestCase
         self::assertResponse($event->getResponse(), false, true);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testNotExistFile(): void
     {
         $file = 'fake';
@@ -80,9 +67,6 @@ class ResponseListenerTest extends TestCase
         self::assertResponse($event->getResponse(), false, true);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testNotMainRequest(): void
     {
         $file = 'fake';
@@ -92,9 +76,6 @@ class ResponseListenerTest extends TestCase
         self::assertResponse($event->getResponse(), false, false);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testProdFile(): void
     {
         $file = $this->getCspFile(false);
@@ -131,9 +112,6 @@ class ResponseListenerTest extends TestCase
         }
     }
 
-    /**
-     * @throws Exception
-     */
     private function createEvent(int $requestType = HttpKernelInterface::MAIN_REQUEST): ResponseEvent
     {
         $kernel = $this->createMock(HttpKernelInterface::class);
@@ -143,9 +121,6 @@ class ResponseListenerTest extends TestCase
         return new ResponseEvent($kernel, $request, $requestType, $response);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createListener(
         string $file,
         bool $debug = false,
@@ -159,9 +134,6 @@ class ResponseListenerTest extends TestCase
         return new ResponseListener($file, $debug, $cache, $generator, $service, $security);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockGenerator(): MockObject&UrlGeneratorInterface
     {
         $generator = $this->createMock(UrlGeneratorInterface::class);
@@ -171,9 +143,6 @@ class ResponseListenerTest extends TestCase
         return $generator;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockSecurity(string $name = SecurityAttributes::MAIN_FIREWALL): MockObject&Security
     {
         $config = new FirewallConfig($name, '');

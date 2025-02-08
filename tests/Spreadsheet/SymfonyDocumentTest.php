@@ -17,13 +17,9 @@ use App\Controller\AbstractController;
 use App\Service\SymfonyInfoService;
 use App\Spreadsheet\SymfonyDocument;
 use App\Tests\KernelServiceTestCase;
-use PHPUnit\Framework\MockObject\Exception;
 
 class SymfonyDocumentTest extends KernelServiceTestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $controller = $this->createMock(AbstractController::class);

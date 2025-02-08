@@ -19,7 +19,6 @@ use App\Interfaces\EntityInterface;
 use App\Repository\GroupRepository;
 use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
@@ -27,47 +26,46 @@ class IdentifierTransformerTest extends TestCase
 {
     use IdTrait;
 
-    public static function getReverseTransformValues(): \Generator
+    public static function getReverseInvalid(): \Generator
     {
-        yield [null, null];
         yield ['', null, true];
         yield [true, null, true];
         yield ['fake', null, true];
     }
 
-    public static function getTransformValues(): \Generator
+    public static function getReverseValid(): \Generator
+    {
+        yield [null, null];
+    }
+
+    public static function getTransformInvalid(): \Generator
+    {
+        yield [true];
+        yield [-1];
+        yield ['fake'];
+    }
+
+    public static function getTransformValid(): \Generator
     {
         yield [null, null];
         yield ['', null];
-        yield [true, null, true];
-        yield [-1, null, true];
-        yield ['fake', null, true];
     }
 
     /**
      * @psalm-param EntityInterface|null $value
      *
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
-    #[DataProvider('getReverseTransformValues')]
-    public function testReverseTransform(mixed $value, mixed $expected, bool $exception = false): void
+    #[DataProvider('getReverseInvalid')]
+    public function testReverseInvalid(mixed $value): void
     {
-        $group = null;
-        if ($exception) {
-            $this->expectException(TransformationFailedException::class);
-        } else {
-            $group = $this->createGroup();
-        }
-        $transformer = $this->createTransformer($group);
-        $actual = $transformer->reverseTransform($value);
-        self::assertSame($expected, $actual);
-        if ($exception) {
-            self::fail('A exception must be raised.');
-        }
+        $this->expectException(TransformationFailedException::class);
+        $transformer = $this->createTransformer(null);
+        $transformer->reverseTransform($value);
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testReverseTransformGroup(): void
     {
@@ -78,29 +76,21 @@ class IdentifierTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-param int|string|null $value
+     * @psalm-param EntityInterface|null $value
      *
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
-    #[DataProvider('getTransformValues')]
-    public function testTransform(mixed $value, mixed $expected, bool $exception = false): void
+    #[DataProvider('getReverseValid')]
+    public function testReverseValid(mixed $value, mixed $expected): void
     {
-        $group = null;
-        if ($exception) {
-            $this->expectException(TransformationFailedException::class);
-        } else {
-            $group = $this->createGroup();
-        }
+        $group = $this->createGroup();
         $transformer = $this->createTransformer($group);
-        $actual = $transformer->transform($value);
+        $actual = $transformer->reverseTransform($value);
         self::assertSame($expected, $actual);
-        if ($exception) {
-            self::fail('A exception must be raised.');
-        }
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testTransformGroup(): void
     {
@@ -108,6 +98,31 @@ class IdentifierTransformerTest extends TestCase
         $transformer = $this->createTransformer($group);
         $actual = $transformer->transform($group->getId());
         self::assertSame($group, $actual);
+    }
+
+    /**
+     * @psalm-param int|string|null $value
+     */
+    #[DataProvider('getTransformInvalid')]
+    public function testTransformInvalid(mixed $value): void
+    {
+        $this->expectException(TransformationFailedException::class);
+        $transformer = $this->createTransformer(null);
+        $transformer->transform($value);
+    }
+
+    /**
+     * @psalm-param int|string|null $value
+     *
+     * @throws \ReflectionException
+     */
+    #[DataProvider('getTransformValid')]
+    public function testTransformValid(mixed $value, mixed $expected): void
+    {
+        $group = $this->createGroup();
+        $transformer = $this->createTransformer($group);
+        $actual = $transformer->transform($value);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -120,9 +135,6 @@ class IdentifierTransformerTest extends TestCase
         return self::setId($group);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createRepository(?Group $group = null): GroupRepository
     {
         $repository = $this->createMock(GroupRepository::class);
@@ -136,8 +148,6 @@ class IdentifierTransformerTest extends TestCase
 
     /**
      * @psalm-return IdentifierTransformer<Group>
-     *
-     * @throws Exception
      */
     private function createTransformer(?Group $group = null): IdentifierTransformer
     {

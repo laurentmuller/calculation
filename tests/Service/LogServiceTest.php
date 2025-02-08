@@ -16,7 +16,6 @@ namespace App\Tests\Service;
 use App\Service\LogService;
 use App\Tests\KernelServiceTestCase;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -80,9 +79,6 @@ class LogServiceTest extends KernelServiceTestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testParseFileInvalid(): void
     {
         $fileName = 'fake';
@@ -95,9 +91,6 @@ class LogServiceTest extends KernelServiceTestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testParseInvalidCSV(): void
     {
         $fileName = __DIR__ . '/../files/txt/log_invalid_csv.txt';
@@ -111,9 +104,6 @@ class LogServiceTest extends KernelServiceTestCase
         self::assertCount(0, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testParseInvalidJSON(): void
     {
         $fileName = __DIR__ . '/../files/txt/log_invalid_json.txt';

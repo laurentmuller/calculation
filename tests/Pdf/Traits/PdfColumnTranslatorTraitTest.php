@@ -17,14 +17,10 @@ use App\Controller\AbstractController;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Report\AbstractReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class PdfColumnTranslatorTraitTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testColumns(): void
     {
         $controller = $this->createMock(AbstractController::class);

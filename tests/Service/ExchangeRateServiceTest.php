@@ -16,7 +16,6 @@ namespace App\Tests\Service;
 use App\Model\HttpClientError;
 use App\Service\ExchangeRateService;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -31,9 +30,6 @@ class ExchangeRateServiceTest extends TestCase
     private const ERROR_CODE = 404;
     private const ERROR_MESSAGE = 'Error Message';
 
-    /**
-     * @throws Exception
-     */
     public function testGetLatestError(): void
     {
         $response = $this->getErrorResponse();
@@ -45,9 +41,6 @@ class ExchangeRateServiceTest extends TestCase
         self::assertError($service);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetLatestSuccess(): void
     {
         $response = new JsonMockResponse(
@@ -68,9 +61,6 @@ class ExchangeRateServiceTest extends TestCase
         self::assertSame(1.01, $actual['chf']);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetLatestWithNull(): void
     {
         $response = new JsonMockResponse(
@@ -85,9 +75,6 @@ class ExchangeRateServiceTest extends TestCase
         self::assertEmpty($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetQuotaError(): void
     {
         $response = $this->getErrorResponse();
@@ -99,9 +86,6 @@ class ExchangeRateServiceTest extends TestCase
         self::assertError($service);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetQuotaSuccess(): void
     {
         $response = new JsonMockResponse(
@@ -127,9 +111,6 @@ class ExchangeRateServiceTest extends TestCase
         self::assertSame('Documentation', $actual['documentation']);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetRateAndDatesError(): void
     {
         $response = $this->getErrorResponse();
@@ -141,9 +122,6 @@ class ExchangeRateServiceTest extends TestCase
         self::assertError($service);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetRateAndDatesSuccess(): void
     {
         $response = new JsonMockResponse(
@@ -167,9 +145,6 @@ class ExchangeRateServiceTest extends TestCase
         self::assertGreaterThan(0, $actual['next']);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetRateAndDatesWithNull(): void
     {
         $response = new JsonMockResponse(
@@ -185,9 +160,6 @@ class ExchangeRateServiceTest extends TestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetRateError(): void
     {
         $response = $this->getErrorResponse();
@@ -199,9 +171,6 @@ class ExchangeRateServiceTest extends TestCase
         self::assertError($service);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetRateSuccess(): void
     {
         $response = new JsonMockResponse(
@@ -217,9 +186,6 @@ class ExchangeRateServiceTest extends TestCase
         self::assertSame(1.00, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetRateWithNull(): void
     {
         $response = new JsonMockResponse(
@@ -234,9 +200,6 @@ class ExchangeRateServiceTest extends TestCase
         self::assertSame(0.0, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetSupportedCodesError(): void
     {
         $response = $this->getErrorResponse();
@@ -248,9 +211,6 @@ class ExchangeRateServiceTest extends TestCase
         self::assertError($service);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetSupportedCodesSuccess(): void
     {
         $response = new JsonMockResponse(
@@ -283,9 +243,6 @@ class ExchangeRateServiceTest extends TestCase
         self::assertSame(0, $actual['roundingIncrement']);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetSupportedCodesWithNull(): void
     {
         $response = new JsonMockResponse(
@@ -300,9 +257,6 @@ class ExchangeRateServiceTest extends TestCase
         self::assertEmpty($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetWithException(): void
     {
         $response = new MockResponse([
@@ -323,9 +277,6 @@ class ExchangeRateServiceTest extends TestCase
         self::assertSame($message, $actual->getMessage());
     }
 
-    /**
-     * @throws Exception
-     */
     private function createService(): ExchangeRateService
     {
         $key = 'fake';

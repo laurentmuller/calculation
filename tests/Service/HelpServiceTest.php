@@ -15,7 +15,6 @@ namespace App\Tests\Service;
 
 use App\Service\HelpService;
 use App\Tests\KernelServiceTestCase;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -118,9 +117,6 @@ class HelpServiceTest extends KernelServiceTestCase
         self::assertNotEmpty($help);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testInvalidFile(): void
     {
         $file = __FILE__;

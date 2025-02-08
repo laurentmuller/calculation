@@ -19,7 +19,6 @@ use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
 use App\Utils\StringUtils;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\MockObject\Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -36,9 +35,6 @@ abstract class GeneratorTestCase extends KernelServiceTestCase
     protected EntityManagerInterface $manager;
     protected TranslatorInterface $translator;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -53,24 +49,20 @@ abstract class GeneratorTestCase extends KernelServiceTestCase
         $content = $actual->getContent();
         self::assertIsString($content);
 
-        try {
-            $actual = StringUtils::decodeJson($content);
-            self::assertArrayHasKey('result', $actual);
-            self::assertSame($expected, $actual['result']);
-            if ($count <= 0) {
-                return $actual;
-            }
-
-            self::assertArrayHasKey('count', $actual);
-            self::assertSame($count, $actual['count']);
-            self::assertArrayHasKey('items', $actual);
-            self::assertIsArray($actual['items']);
-            self::assertCount($count, $actual['items']);
-
+        $actual = StringUtils::decodeJson($content);
+        self::assertArrayHasKey('result', $actual);
+        self::assertSame($expected, $actual['result']);
+        if ($count <= 0) {
             return $actual;
-        } catch (\InvalidArgumentException $e) {
-            self::fail($e->getMessage());
         }
+
+        self::assertArrayHasKey('count', $actual);
+        self::assertSame($count, $actual['count']);
+        self::assertArrayHasKey('items', $actual);
+        self::assertIsArray($actual['items']);
+        self::assertCount($count, $actual['items']);
+
+        return $actual;
     }
 
     /**

@@ -18,7 +18,6 @@ use App\Pdf\PdfColumn;
 use App\Report\Table\ReportTable;
 use App\Tests\Fixture\TestReport;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -35,9 +34,6 @@ class ReportTableTest extends TestCase
         $this->translator = $this->createMockTranslator();
     }
 
-    /**
-     * @throws Exception
-     */
     public function testAddCellTrans(): void
     {
         $report = $this->createReport();
@@ -51,9 +47,6 @@ class ReportTableTest extends TestCase
         self::assertSame(1, $report->getPage());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testFromReport(): void
     {
         $report = $this->createReport();
@@ -61,9 +54,6 @@ class ReportTableTest extends TestCase
         self::assertSame(0, $table->getColumnsCount());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $report = $this->createReport();
@@ -73,9 +63,6 @@ class ReportTableTest extends TestCase
         self::assertInstanceOf(TranslatorInterface::class, $table->getTranslator());
     }
 
-    /**
-     * @throws Exception
-     */
     private function createReport(): TestReport
     {
         $controller = $this->createMock(AbstractController::class);

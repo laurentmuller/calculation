@@ -21,7 +21,6 @@ use App\Model\TaskComputeResult;
 use App\Repository\TaskRepository;
 use App\Service\TaskService;
 use App\Tests\Entity\IdTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class TaskServiceTest extends TestCase
@@ -29,7 +28,7 @@ class TaskServiceTest extends TestCase
     use IdTrait;
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testComputeQueryEmpty(): void
     {
@@ -47,9 +46,6 @@ class TaskServiceTest extends TestCase
         self::assertSame($task->getId(), $actual->getTask()->getId());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testComputeQueryNoTask(): void
     {
         $repository = $this->createRepository();
@@ -64,7 +60,7 @@ class TaskServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testComputeQueryOneItem(): void
     {
@@ -83,7 +79,7 @@ class TaskServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testGetSortedTasks(): void
     {
@@ -116,9 +112,6 @@ class TaskServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createRepository(?Task $task = null): TaskRepository
     {
         $tasks = $task instanceof Task ? [$task] : [];

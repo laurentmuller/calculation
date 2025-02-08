@@ -15,7 +15,6 @@ namespace App\Tests\Traits;
 
 use App\Traits\AwareTrait;
 use Faker\Container\ContainerException;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -25,9 +24,6 @@ class AwareTraitTest extends TestCase
 
     private ?ContainerInterface $container = null;
 
-    /**
-     * @throws Exception
-     */
     public function testGetWithException(): void
     {
         $code = 200;
@@ -43,9 +39,6 @@ class AwareTraitTest extends TestCase
         $this->getContainerService(__FUNCTION__, self::class);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testHasWithException(): void
     {
         self::expectExceptionCode(0);
@@ -58,9 +51,6 @@ class AwareTraitTest extends TestCase
         $this->getContainerService(__FUNCTION__, self::class);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithoutException(): void
     {
         $this->container = $this->createMock(ContainerInterface::class);

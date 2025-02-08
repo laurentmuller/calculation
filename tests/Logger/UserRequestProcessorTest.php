@@ -17,16 +17,12 @@ use App\Entity\User;
 use App\Logger\UserRequestProcessor;
 use Monolog\Level;
 use Monolog\LogRecord;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class UserRequestProcessorTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testInvokeWithoutUser(): void
     {
         $security = $this->createSecurity();
@@ -37,9 +33,6 @@ class UserRequestProcessorTest extends TestCase
         self::assertCount(0, $extra);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testInvokeWithUser(): void
     {
         $user = new User();
@@ -67,9 +60,6 @@ class UserRequestProcessorTest extends TestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     private function createSecurity(?User $user = null): MockObject&Security
     {
         $security = $this->createMock(Security::class);

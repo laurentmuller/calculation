@@ -16,15 +16,11 @@ namespace App\Tests\Service;
 use App\Service\MarkdownService;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Twig\Extra\Markdown\MarkdownInterface;
 
 class MarkdownServiceTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testAddTagClass(): void
     {
         $content = '<h1>Hello</h1>';
@@ -33,9 +29,6 @@ class MarkdownServiceTest extends TestCase
         self::assertSame('<h1 class="my-class">Hello</h1>', $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testAddTagClassNotFound(): void
     {
         $content = '<h1>Hello</h1>';
@@ -44,9 +37,6 @@ class MarkdownServiceTest extends TestCase
         self::assertSame($content, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testConvertContentWithTitle(): void
     {
         $content = '<h1>Hello</h1>';
@@ -55,9 +45,6 @@ class MarkdownServiceTest extends TestCase
         self::assertSame($content, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testConvertFile(): void
     {
         $path = __DIR__ . '/../files/txt/reverse_reader.txt';
@@ -68,9 +55,6 @@ class MarkdownServiceTest extends TestCase
         self::assertSame($content, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRemoveTitle(): void
     {
         $content = '<h1>Hello</h1>';
@@ -79,9 +63,6 @@ class MarkdownServiceTest extends TestCase
         self::assertSame('', $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRemoveTitleEmpty(): void
     {
         $content = '<h4>Hello</h4>';
@@ -90,9 +71,6 @@ class MarkdownServiceTest extends TestCase
         self::assertSame($content, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testReplaceTag(): void
     {
         $content = '<h1>Hello</h1>';
@@ -101,9 +79,6 @@ class MarkdownServiceTest extends TestCase
         self::assertSame('<h4>Hello</h4>', $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testReplaceTagNotFound(): void
     {
         $content = '<h1>Hello</h1>';
@@ -112,9 +87,6 @@ class MarkdownServiceTest extends TestCase
         self::assertSame($content, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdateTag(): void
     {
         $content = '<h1>Hello</h1>';
@@ -123,9 +95,6 @@ class MarkdownServiceTest extends TestCase
         self::assertSame('<h4 class="my-class">Hello</h4>', $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdateTagNotFound(): void
     {
         $content = '<h1>Hello</h1>';
@@ -134,9 +103,6 @@ class MarkdownServiceTest extends TestCase
         self::assertSame($content, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdateTags(): void
     {
         $content = '<h1>Hello</h1>';
@@ -148,9 +114,6 @@ class MarkdownServiceTest extends TestCase
         self::assertSame('<h4 class="my-class">Hello</h4>', $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdateTagsNoClass(): void
     {
         $content = '<h1>Hello</h1>';
@@ -162,9 +125,6 @@ class MarkdownServiceTest extends TestCase
         self::assertSame('<h4>Hello</h4>', $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdateTagsNotFound(): void
     {
         $content = '<h1>Hello</h1>';
@@ -176,9 +136,6 @@ class MarkdownServiceTest extends TestCase
         self::assertSame($content, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createService(): MarkdownService
     {
         $markdown = $this->createMock(MarkdownInterface::class);

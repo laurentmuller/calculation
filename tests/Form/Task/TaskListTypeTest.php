@@ -16,7 +16,6 @@ namespace App\Tests\Form\Task;
 use App\Form\Task\TaskListType;
 use App\Tests\Fixture\DataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
@@ -62,7 +61,7 @@ class TaskListTypeTest extends TypeTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getPreloadedExtensions(): array
     {

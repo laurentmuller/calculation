@@ -20,7 +20,6 @@ use App\Interfaces\RoleInterface;
 use App\Service\ApplicationService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -33,9 +32,6 @@ class UserParametersTypeTest extends TypeTestCase
     private MockObject&Security $security;
     private ?User $user = null;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         $this->security = $this->createMock(Security::class);
@@ -61,9 +57,6 @@ class UserParametersTypeTest extends TypeTestCase
         self::assertTrue($form->isSynchronized());
     }
 
-    /**
-     * @throws Exception
-     */
     protected function getPreloadedExtensions(): array
     {
         $translator = $this->createMockTranslator();

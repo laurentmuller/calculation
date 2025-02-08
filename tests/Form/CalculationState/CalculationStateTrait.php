@@ -18,7 +18,6 @@ use App\Repository\CalculationStateRepository;
 use App\Tests\Entity\IdTrait;
 use App\Tests\Form\ManagerRegistryTrait;
 use Doctrine\Persistence\ManagerRegistry;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -35,7 +34,7 @@ trait CalculationStateTrait
     private ?CalculationState $notEditableState = null;
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getCalculationStateEntityType(): EntityType
     {
@@ -43,7 +42,7 @@ trait CalculationStateTrait
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getCalculationStateRegistry(): MockObject&ManagerRegistry
     {

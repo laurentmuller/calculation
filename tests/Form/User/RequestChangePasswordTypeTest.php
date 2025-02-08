@@ -20,7 +20,6 @@ use App\Form\User\RequestChangePasswordType;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -59,9 +58,6 @@ class RequestChangePasswordTypeTest extends TypeTestCase
         self::assertTrue($form->isValid());
     }
 
-    /**
-     * @throws Exception
-     */
     protected function getPreloadedExtensions(): array
     {
         $generator = $this->createMock(UrlGeneratorInterface::class);

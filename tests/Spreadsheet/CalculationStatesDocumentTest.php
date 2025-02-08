@@ -16,14 +16,10 @@ namespace App\Tests\Spreadsheet;
 use App\Controller\AbstractController;
 use App\Entity\CalculationState;
 use App\Spreadsheet\CalculationStatesDocument;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class CalculationStatesDocumentTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $state1 = new CalculationState();

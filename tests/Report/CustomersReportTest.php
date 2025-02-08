@@ -16,14 +16,10 @@ namespace App\Tests\Report;
 use App\Controller\AbstractController;
 use App\Entity\Customer;
 use App\Report\CustomersReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class CustomersReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRenderGrouped(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -47,9 +43,6 @@ class CustomersReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderNotGrouped(): void
     {
         $controller = $this->createMock(AbstractController::class);

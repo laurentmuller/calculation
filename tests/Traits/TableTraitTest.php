@@ -22,7 +22,6 @@ use App\Tests\TranslatorMockTrait;
 use App\Traits\ExceptionContextTrait;
 use App\Traits\TableTrait;
 use App\Traits\TranslatorTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -76,11 +75,7 @@ class TableTraitTest extends TestCase
             throw new \LogicException();
         }
 
-        try {
-            return $this->createMock(UserService::class);
-        } catch (Exception $e) {
-            self::fail($e->getMessage());
-        }
+        return $this->createMock(UserService::class);
     }
 
     public function json(mixed $data, int $status = 200): JsonResponse
@@ -98,9 +93,6 @@ class TableTraitTest extends TestCase
         return new Response($view);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testDenyAccess(): void
     {
         $this->denyException = true;
@@ -122,9 +114,6 @@ class TableTraitTest extends TestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testEmptyMessage(): void
     {
         $table = $this->createMock(AbstractTable::class);
@@ -145,9 +134,6 @@ class TableTraitTest extends TestCase
         self::assertInstanceOf(Response::class, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testThrowException(): void
     {
         $this->throwException = true;
@@ -165,9 +151,6 @@ class TableTraitTest extends TestCase
         self::assertInstanceOf(Response::class, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testThrowExceptionJson(): void
     {
         $this->throwException = true;
@@ -187,9 +170,6 @@ class TableTraitTest extends TestCase
         self::assertInstanceOf(JsonResponse::class, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testValidJsonResponse(): void
     {
         $table = $this->createMock(AbstractTable::class);
@@ -208,9 +188,6 @@ class TableTraitTest extends TestCase
         self::assertInstanceOf(JsonResponse::class, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testValidResponse(): void
     {
         $table = $this->createMock(AbstractTable::class);

@@ -20,7 +20,6 @@ use App\Interfaces\RoleInterface;
 use App\Service\RoleHierarchyService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
@@ -66,9 +65,6 @@ class UserRightsTypeTest extends TypeTestCase
         self::assertTrue($form->isValid());
     }
 
-    /**
-     * @throws Exception
-     */
     protected function getPreloadedExtensions(): array
     {
         $roleHierarchy = $this->createMock(RoleHierarchyInterface::class);

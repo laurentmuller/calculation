@@ -197,9 +197,6 @@ class PdfTableTest extends TestCase
     public function testCellImage(): void
     {
         $path = __DIR__ . '/../files/images/example.png';
-        if (!\file_exists($path)) {
-            self::fail('Unable to find image.');
-        }
         $table = $this->createTable()
             ->addColumn(new PdfColumn());
         $table->getParent()->addPage();

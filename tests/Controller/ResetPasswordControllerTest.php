@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Tests\SessionHelperTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use SymfonyCasts\Bundle\ResetPassword\Exception\FakeRepositoryException;
@@ -54,9 +53,6 @@ class ResetPasswordControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testResetTokenWithException(): void
     {
         $helper = $this->createMock(ResetPasswordHelperInterface::class);
@@ -73,9 +69,6 @@ class ResetPasswordControllerTest extends ControllerTestCase
         $this->checkResponse($url, self::ROLE_USER, Response::HTTP_FOUND);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testResetWithToken(): void
     {
         $user = $this->loadUser(self::ROLE_SUPER_ADMIN);

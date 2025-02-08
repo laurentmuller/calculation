@@ -16,7 +16,6 @@ namespace App\Tests\Controller;
 use App\Model\HttpClientError;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -29,9 +28,6 @@ class AjaxTranslateControllerTest extends ControllerTestCase
         yield ['/ajax/languages', self::ROLE_USER];
     }
 
-    /**
-     * @throws Exception
-     */
     public function testDetectException(): void
     {
         $service = $this->createMock(TranslatorServiceInterface::class);
@@ -43,9 +39,6 @@ class AjaxTranslateControllerTest extends ControllerTestCase
         $this->checkDetect($parameters);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testDetectValid(): void
     {
         $result = [
@@ -60,9 +53,6 @@ class AjaxTranslateControllerTest extends ControllerTestCase
         $this->checkDetect($parameters);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testDetectWithError(): void
     {
         $error = new HttpClientError(400000, 'Fake Message');
@@ -79,9 +69,6 @@ class AjaxTranslateControllerTest extends ControllerTestCase
         $this->checkDetect($parameters);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testLanguageException(): void
     {
         $service = $this->createMock(TranslatorServiceInterface::class);
@@ -92,9 +79,6 @@ class AjaxTranslateControllerTest extends ControllerTestCase
         $this->checkLanguages();
     }
 
-    /**
-     * @throws Exception
-     */
     public function testLanguageFalse(): void
     {
         $service = $this->createMock(TranslatorServiceInterface::class);
@@ -105,9 +89,6 @@ class AjaxTranslateControllerTest extends ControllerTestCase
         $this->checkLanguages();
     }
 
-    /**
-     * @throws Exception
-     */
     public function testLanguageValid(): void
     {
         $result = [
@@ -121,9 +102,6 @@ class AjaxTranslateControllerTest extends ControllerTestCase
         $this->checkLanguages();
     }
 
-    /**
-     * @throws Exception
-     */
     public function testLanguageWithError(): void
     {
         $error = new HttpClientError(100, 'Fake Message');
@@ -157,9 +135,6 @@ class AjaxTranslateControllerTest extends ControllerTestCase
         $this->checkTranslate($parameters);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testTranslateException(): void
     {
         $service = $this->createMock(TranslatorServiceInterface::class);
@@ -196,9 +171,6 @@ class AjaxTranslateControllerTest extends ControllerTestCase
         $this->checkTranslate($parameters);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testTranslateValid(): void
     {
         $result = [
@@ -218,9 +190,6 @@ class AjaxTranslateControllerTest extends ControllerTestCase
         $this->checkTranslate($parameters);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testTranslateWithError(): void
     {
         $error = new HttpClientError(100, 'Fake Message');
@@ -269,9 +238,6 @@ class AjaxTranslateControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     private function setFactoryService(MockObject&TranslatorServiceInterface $service): void
     {
         $factory = $this->createMock(TranslatorFactory::class);

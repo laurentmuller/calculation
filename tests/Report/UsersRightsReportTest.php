@@ -19,14 +19,10 @@ use App\Interfaces\RoleInterface;
 use App\Report\UsersRightsReport;
 use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class UsersRightsReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $service = new RoleBuilderService();
@@ -50,9 +46,6 @@ class UsersRightsReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderEmpty(): void
     {
         $controller = $this->createMock(AbstractController::class);

@@ -15,13 +15,12 @@ namespace App\Tests\Word;
 
 use App\Controller\AbstractController;
 use App\Word\HtmlDocument;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class HtmlDocumentTest extends TestCase
 {
     /**
-     * @throws Exception|\PhpOffice\PhpWord\Exception\Exception
+     * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     public function testEmptyContent(): void
     {
@@ -32,7 +31,7 @@ class HtmlDocumentTest extends TestCase
     }
 
     /**
-     * @throws Exception|\PhpOffice\PhpWord\Exception\Exception
+     * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     public function testWithoutTitle(): void
     {
@@ -47,7 +46,7 @@ class HtmlDocumentTest extends TestCase
     }
 
     /**
-     * @throws Exception|\PhpOffice\PhpWord\Exception\Exception
+     * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     public function testWithPrintAddress(): void
     {
@@ -63,7 +62,7 @@ class HtmlDocumentTest extends TestCase
     }
 
     /**
-     * @throws Exception|\PhpOffice\PhpWord\Exception\Exception
+     * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     public function testWithTitle(): void
     {

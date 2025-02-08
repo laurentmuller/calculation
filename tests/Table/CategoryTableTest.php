@@ -20,7 +20,6 @@ use App\Repository\GroupRepository;
 use App\Table\CategoryTable;
 use App\Table\DataQuery;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Twig\Environment;
@@ -31,7 +30,7 @@ use Twig\Environment;
 class CategoryTableTest extends EntityTableTestCase
 {
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithCallback(): void
     {
@@ -43,7 +42,7 @@ class CategoryTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithGroupId(): void
     {
@@ -86,8 +85,6 @@ class CategoryTableTest extends EntityTableTestCase
 
     /**
      * @psalm-param CategoryRepository $repository
-     *
-     * @throws Exception
      */
     protected function createTable(AbstractRepository $repository): CategoryTable
     {

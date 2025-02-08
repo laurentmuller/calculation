@@ -15,13 +15,9 @@ namespace App\Tests\Twig;
 
 use App\Service\NonceService;
 use App\Twig\NonceExtension;
-use PHPUnit\Framework\MockObject\Exception;
 
 class NonceExtensionTest extends IntegrationTestCase
 {
-    /**
-     * @throws Exception
-     */
     protected function getExtensions(): array
     {
         $service = $this->createMock(NonceService::class);

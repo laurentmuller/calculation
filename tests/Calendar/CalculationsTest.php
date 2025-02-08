@@ -17,7 +17,6 @@ use App\Calendar\CalculationsDay;
 use App\Calendar\CalculationsMonth;
 use App\Calendar\CalculationsWeek;
 use App\Calendar\Calendar;
-use App\Calendar\CalendarException;
 use App\Entity\Calculation;
 
 class CalculationsTest extends CalendarTestCase
@@ -74,30 +73,18 @@ class CalculationsTest extends CalendarTestCase
 
     private function createCalculationsDay(): CalculationsDay
     {
-        try {
-            $date = new \DateTime('2024-01-01');
+        $date = new \DateTime('2024-01-01');
 
-            return new CalculationsDay($this->calendar, $date);
-        } catch (\Exception $e) {
-            self::fail($e->getMessage());
-        }
+        return new CalculationsDay($this->calendar, $date);
     }
 
     private function createCalculationsMonth(): CalculationsMonth
     {
-        try {
-            return new CalculationsMonth($this->calendar, 1);
-        } catch (CalendarException $e) {
-            self::fail($e->getMessage());
-        }
+        return new CalculationsMonth($this->calendar, 1);
     }
 
     private function createCalculationsWeek(): CalculationsWeek
     {
-        try {
-            return new CalculationsWeek($this->calendar, 1);
-        } catch (CalendarException $e) {
-            self::fail($e->getMessage());
-        }
+        return new CalculationsWeek($this->calendar, 1);
     }
 }

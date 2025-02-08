@@ -24,7 +24,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -43,9 +42,6 @@ class PersistenceListenerTest extends TestCase
         $this->user->setUsername('user_name');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCollectionDeletions(): void
     {
         $task = new Task();
@@ -61,9 +57,6 @@ class PersistenceListenerTest extends TestCase
         self::assertTrue($listener->isEnabled());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCollectionUpdates(): void
     {
         $task = new Task();
@@ -79,9 +72,6 @@ class PersistenceListenerTest extends TestCase
         self::assertTrue($listener->isEnabled());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testDelete(): void
     {
         $task = new Task();
@@ -93,9 +83,6 @@ class PersistenceListenerTest extends TestCase
         self::assertTrue($listener->isEnabled());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testDeleteDiff(): void
     {
         $task = new Task();
@@ -111,9 +98,6 @@ class PersistenceListenerTest extends TestCase
         self::assertTrue($listener->isEnabled());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testDisabled(): void
     {
         $event = $this->createEvent();
@@ -124,9 +108,6 @@ class PersistenceListenerTest extends TestCase
         self::assertFalse($listener->isEnabled());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testInsert(): void
     {
         $task = new Task();
@@ -138,9 +119,6 @@ class PersistenceListenerTest extends TestCase
         self::assertTrue($listener->isEnabled());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testIsCurrentUser(): void
     {
         $event = $this->createEvent(['getScheduledEntityUpdates' => $this->user]);
@@ -150,9 +128,6 @@ class PersistenceListenerTest extends TestCase
         self::assertTrue($listener->isEnabled());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testNotTimestampable(): void
     {
         $log = new Log();
@@ -163,9 +138,6 @@ class PersistenceListenerTest extends TestCase
         self::assertTrue($listener->isEnabled());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdate(): void
     {
         $task = new Task();
@@ -177,9 +149,6 @@ class PersistenceListenerTest extends TestCase
         self::assertTrue($listener->isEnabled());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdateUserLastLogin(): void
     {
         $user = new User();
@@ -195,9 +164,6 @@ class PersistenceListenerTest extends TestCase
         self::assertTrue($listener->isEnabled());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdateUserPassword(): void
     {
         $user = new User();
@@ -213,9 +179,6 @@ class PersistenceListenerTest extends TestCase
         self::assertTrue($listener->isEnabled());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdateUserReset(): void
     {
         $user = new User();
@@ -231,9 +194,6 @@ class PersistenceListenerTest extends TestCase
         self::assertTrue($listener->isEnabled());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdateUserRights(): void
     {
         $user = new User();
@@ -249,9 +209,6 @@ class PersistenceListenerTest extends TestCase
         self::assertTrue($listener->isEnabled());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUserNotChange(): void
     {
         $user = new User();
@@ -264,8 +221,6 @@ class PersistenceListenerTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     *
      * @psalm-param array<string, EntityInterface> $events
      * @psalm-param array<string, EntityInterface> $collections
      * @psalm-param array<string, string>  $changeSets
@@ -280,9 +235,6 @@ class PersistenceListenerTest extends TestCase
         return new OnFlushEventArgs($objectManager);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createListener(): PersistenceListener
     {
         $security = $this->createMockSecurity();
@@ -294,8 +246,6 @@ class PersistenceListenerTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     *
      * @psalm-param array<string, EntityInterface> $events
      * @psalm-param array<string, EntityInterface> $collections
      * @psalm-param array<string, string>  $changeSets
@@ -328,9 +278,6 @@ class PersistenceListenerTest extends TestCase
         return $manager;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockSecurity(): MockObject&Security
     {
         $security = $this->createMock(Security::class);
@@ -340,9 +287,6 @@ class PersistenceListenerTest extends TestCase
         return $security;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createRequestStack(): MockObject&RequestStack
     {
         $session = $this->createMock(SessionInterface::class);

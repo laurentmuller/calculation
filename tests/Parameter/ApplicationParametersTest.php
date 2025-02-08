@@ -27,7 +27,6 @@ use App\Repository\GlobalPropertyRepository;
 use App\Repository\ProductRepository;
 use App\Tests\Entity\IdTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -36,9 +35,6 @@ class ApplicationParametersTest extends TestCase
 {
     use IdTrait;
 
-    /**
-     * @throws Exception
-     */
     public function testEnumInt(): void
     {
         $property = GlobalProperty::instance('security_level')
@@ -50,9 +46,6 @@ class ApplicationParametersTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testEnumString(): void
     {
         $property = GlobalProperty::instance('edit_action')
@@ -65,7 +58,7 @@ class ApplicationParametersTest extends TestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testGetDefaultCategoryNotNull(): void
     {
@@ -82,9 +75,6 @@ class ApplicationParametersTest extends TestCase
         self::assertSame($category, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetDefaultCategoryNull(): void
     {
         $parameters = $this->createApplication();
@@ -93,7 +83,7 @@ class ApplicationParametersTest extends TestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testGetDefaultProductNotNull(): void
     {
@@ -110,9 +100,6 @@ class ApplicationParametersTest extends TestCase
         self::assertSame($product, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetDefaultProductNull(): void
     {
         $parameters = $this->createApplication();
@@ -121,7 +108,7 @@ class ApplicationParametersTest extends TestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testGetDefaultStateNotNull(): void
     {
@@ -138,9 +125,6 @@ class ApplicationParametersTest extends TestCase
         self::assertSame($state, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetDefaultStateNull(): void
     {
         $parameters = $this->createApplication();
@@ -148,9 +132,6 @@ class ApplicationParametersTest extends TestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetDefaultValues(): void
     {
         $parameters = $this->createApplication();
@@ -158,9 +139,6 @@ class ApplicationParametersTest extends TestCase
         self::assertNotEmpty($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testIsDebug(): void
     {
         $parameters = $this->createApplication();
@@ -168,9 +146,6 @@ class ApplicationParametersTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRights(): void
     {
         $parameters = $this->createApplication();
@@ -179,9 +154,6 @@ class ApplicationParametersTest extends TestCase
         self::assertNull($actual->getUserRights());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSaveSuccess(): void
     {
         $parameters = $this->createApplication();
@@ -209,9 +181,6 @@ class ApplicationParametersTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSecurity(): void
     {
         $parameters = $this->createApplication();
@@ -219,9 +188,6 @@ class ApplicationParametersTest extends TestCase
         self::assertFalse($actual->isCaptcha());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithDefaultValue(): void
     {
         $property = GlobalProperty::instance('security_captcha')
@@ -234,7 +200,7 @@ class ApplicationParametersTest extends TestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithEntity(): void
     {
@@ -250,9 +216,6 @@ class ApplicationParametersTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithExistingProperty(): void
     {
         $property = GlobalProperty::instance('security_captcha');
@@ -264,9 +227,6 @@ class ApplicationParametersTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createApplication(
         array $properties = [],
         ?Category $category = null,
@@ -279,9 +239,6 @@ class ApplicationParametersTest extends TestCase
         return new ApplicationParameters($cache, $manager, false);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockManager(
         array $properties = [],
         ?Category $category = null,

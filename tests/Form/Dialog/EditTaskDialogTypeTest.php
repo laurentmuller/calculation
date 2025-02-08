@@ -17,7 +17,6 @@ use App\Form\Dialog\EditTaskDialogType;
 use App\Tests\Form\Category\CategoryTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\Form\Task\TaskTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 class EditTaskDialogTypeTest extends TypeTestCase
@@ -51,7 +50,7 @@ class EditTaskDialogTypeTest extends TypeTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getPreloadedExtensions(): array
     {

@@ -17,7 +17,6 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\ResetPasswordService;
 use App\Service\UserExceptionService;
-use PHPUnit\Framework\MockObject\Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -237,9 +236,6 @@ class UserControllerTest extends EntityControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSendPasswordRequestSendException(): void
     {
         $date = new \DateTime();
@@ -276,6 +272,7 @@ class UserControllerTest extends EntityControllerTestCase
     private function setResetPasswordRequest(string $username): User
     {
         $user = $this->loadUser($username);
+        self::assertNotNull($user);
         $expiresAt = \DateTimeImmutable::createFromInterface(new \DateTime());
         $user->setResetPasswordRequest($expiresAt, 'selector', 'hashedToken');
         $this->addEntity($user);

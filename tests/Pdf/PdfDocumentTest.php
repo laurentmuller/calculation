@@ -20,7 +20,6 @@ use App\Tests\Fixture\TestReport;
 use App\Tests\TranslatorMockTrait;
 use fpdf\Enums\PdfDestination;
 use fpdf\Enums\PdfPageSize;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -37,9 +36,6 @@ class PdfDocumentTest extends TestCase
         $this->translator = $this->createMockTranslator();
     }
 
-    /**
-     * @throws Exception
-     */
     public function testApplyFont(): void
     {
         $doc = $this->createReport();
@@ -48,9 +44,6 @@ class PdfDocumentTest extends TestCase
         self::assertEqualsCanonicalizing($font, $oldFont);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testConstructor(): void
     {
         $doc = $this->createReport();
@@ -64,9 +57,6 @@ class PdfDocumentTest extends TestCase
         self::assertNotEmpty($content);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCurrentFont(): void
     {
         $doc = $this->createReport();
@@ -76,9 +66,6 @@ class PdfDocumentTest extends TestCase
         self::assertSame(PdfFont::DEFAULT_STYLE, $font->getStyle());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testFooter(): void
     {
         $doc = $this->createReport();
@@ -88,9 +75,6 @@ class PdfDocumentTest extends TestCase
         self::assertSame(1, $doc->getPage());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testFooterWithReport(): void
     {
         $doc = $this->createReport();
@@ -98,9 +82,6 @@ class PdfDocumentTest extends TestCase
         self::assertSame(1, $doc->getPage());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testHeaderDefault(): void
     {
         $doc = $this->createReport();
@@ -108,9 +89,6 @@ class PdfDocumentTest extends TestCase
         self::assertSame(5.0, $header->getHeight());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testHeaderWithDescription(): void
     {
         $doc = $this->createReport();
@@ -120,9 +98,6 @@ class PdfDocumentTest extends TestCase
         self::assertSame(9.0, $header->getHeight());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testHeaderWithPrintAddress(): void
     {
         $doc = $this->createReport();
@@ -137,9 +112,6 @@ class PdfDocumentTest extends TestCase
         self::assertSame(1, $doc->getPage());
     }
 
-    /**
-     * @throws Exception
-     */
     private function createReport(): TestReport
     {
         $controller = $this->createMock(AbstractController::class);

@@ -15,7 +15,6 @@ namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
 use App\Report\CalculationByMonthReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -24,9 +23,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class CalculationByMonthReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testNewPage(): void
     {
         $entities = [];
@@ -47,9 +43,6 @@ class CalculationByMonthReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $data1 = [
@@ -100,8 +93,6 @@ class CalculationByMonthReportTest extends TestCase
 
     /**
      * @psalm-param CalculationByMonthType[] $entities
-     *
-     * @throws Exception
      */
     private function createReport(array $entities): CalculationByMonthReport
     {

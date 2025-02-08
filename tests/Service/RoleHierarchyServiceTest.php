@@ -17,15 +17,11 @@ use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Service\RoleHierarchyService;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
 class RoleHierarchyServiceTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testGetRoleNamesWithHierarchy(): void
     {
         $user = new User();
@@ -39,9 +35,6 @@ class RoleHierarchyServiceTest extends TestCase
         self::assertSame([RoleInterface::ROLE_ADMIN], $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetRoleNamesWithNull(): void
     {
         $hierarchy = $this->createMock(RoleHierarchyInterface::class);
@@ -50,9 +43,6 @@ class RoleHierarchyServiceTest extends TestCase
         self::assertCount(0, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetRoleNamesWithRole(): void
     {
         $role = new Role(RoleInterface::ROLE_USER);
@@ -64,9 +54,6 @@ class RoleHierarchyServiceTest extends TestCase
         self::assertSame([RoleInterface::ROLE_ADMIN], $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetRoleNamesWithUser(): void
     {
         $user = new User();
@@ -77,9 +64,6 @@ class RoleHierarchyServiceTest extends TestCase
         self::assertSame([RoleInterface::ROLE_USER], $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testHasRoleWithNull(): void
     {
         $hierarchy = $this->createMock(RoleHierarchyInterface::class);

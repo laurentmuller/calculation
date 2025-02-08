@@ -25,7 +25,6 @@ use App\Tests\Form\CustomConstraintValidatorFactory;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\TranslatorMockTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
@@ -49,9 +48,6 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
     private Strength $strength;
     private MockObject&TranslatorInterface $translator;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         $this->password = new Password();
@@ -166,7 +162,7 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getExtensions(): array
     {
@@ -189,9 +185,6 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
         ];
     }
 
-    /**
-     * @throws Exception
-     */
     protected function getValidatorExtension(): ValidatorExtension
     {
         $constraints = [
@@ -212,9 +205,6 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
         ];
     }
 
-    /**
-     * @throws Exception
-     */
     private function getStrengthValidator(): StrengthValidator
     {
         $service = $this->createMock(Zxcvbn::class);

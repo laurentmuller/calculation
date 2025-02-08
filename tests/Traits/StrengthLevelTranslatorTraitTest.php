@@ -18,7 +18,6 @@ use App\Enums\StrengthLevel;
 use App\Tests\TranslatorMockTrait;
 use App\Traits\StrengthLevelTranslatorTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -54,8 +53,6 @@ class StrengthLevelTranslatorTraitTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     *
      * @psalm-suppress InternalClass
      * @psalm-suppress InternalMethod
      */

@@ -23,15 +23,11 @@ use App\Report\LogsReport;
 use App\Service\FontAwesomeIconService;
 use App\Service\FontAwesomeImageService;
 use App\Utils\DateUtils;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
 
 class LogsReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testEmpty(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -48,7 +44,7 @@ class LogsReportTest extends TestCase
     }
 
     /**
-     * @throws Exception|\Exception
+     * @throws \Exception
      */
     public function testRender(): void
     {

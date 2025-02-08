@@ -16,7 +16,6 @@ namespace App\Tests\Service;
 use App\Model\HttpClientError;
 use App\Service\AkismetService;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -38,9 +37,6 @@ class AkismetServiceTest extends TestCase
 
     private MockObject&RequestStack $requestStack;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -48,7 +44,7 @@ class AkismetServiceTest extends TestCase
     }
 
     /**
-     * @throws ExceptionInterface|Exception
+     * @throws ExceptionInterface
      */
     public function testActivityException(): void
     {
@@ -61,7 +57,7 @@ class AkismetServiceTest extends TestCase
     }
 
     /**
-     * @throws ExceptionInterface|Exception
+     * @throws ExceptionInterface
      */
     public function testActivityInvalidCode(): void
     {
@@ -73,7 +69,7 @@ class AkismetServiceTest extends TestCase
     }
 
     /**
-     * @throws ExceptionInterface|Exception
+     * @throws ExceptionInterface
      */
     public function testActivityLastError(): void
     {
@@ -89,7 +85,7 @@ class AkismetServiceTest extends TestCase
     }
 
     /**
-     * @throws ExceptionInterface|Exception
+     * @throws ExceptionInterface
      */
     public function testActivitySuccess(): void
     {
@@ -119,9 +115,6 @@ class AkismetServiceTest extends TestCase
         self::assertIsArray($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testEmptyKey(): void
     {
         $key = '';
@@ -142,7 +135,7 @@ class AkismetServiceTest extends TestCase
     }
 
     /**
-     * @throws ExceptionInterface|Exception
+     * @throws ExceptionInterface
      */
     public function testIsSpamInvalidCode(): void
     {
@@ -158,7 +151,7 @@ class AkismetServiceTest extends TestCase
     }
 
     /**
-     * @throws ExceptionInterface|Exception
+     * @throws ExceptionInterface
      */
     public function testIsSpamNoRequest(): void
     {
@@ -171,7 +164,7 @@ class AkismetServiceTest extends TestCase
     }
 
     /**
-     * @throws ExceptionInterface|Exception
+     * @throws ExceptionInterface
      */
     public function testIsSpamSuccess(): void
     {
@@ -184,9 +177,6 @@ class AkismetServiceTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testIsValidKeyInvalidCode(): void
     {
         $request = new Request();
@@ -200,9 +190,6 @@ class AkismetServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testIsValidKeyLastError(): void
     {
         $request = new Request();
@@ -220,9 +207,6 @@ class AkismetServiceTest extends TestCase
         self::assertSame(self::ERROR_MESSAGE, $actual->getMessage());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testIsValidKeyNoRequest(): void
     {
         $this->requestStack->method('getCurrentRequest')
@@ -233,9 +217,6 @@ class AkismetServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testIsValidKeySuccess(): void
     {
         $request = new Request();
@@ -251,7 +232,7 @@ class AkismetServiceTest extends TestCase
     }
 
     /**
-     * @throws ExceptionInterface|Exception
+     * @throws ExceptionInterface
      */
     public function testUsageException(): void
     {
@@ -264,7 +245,7 @@ class AkismetServiceTest extends TestCase
     }
 
     /**
-     * @throws ExceptionInterface|Exception
+     * @throws ExceptionInterface
      */
     public function testUsageInvalidCode(): void
     {
@@ -276,7 +257,7 @@ class AkismetServiceTest extends TestCase
     }
 
     /**
-     * @throws ExceptionInterface|Exception
+     * @throws ExceptionInterface
      */
     public function testUsageLastError(): void
     {
@@ -292,7 +273,7 @@ class AkismetServiceTest extends TestCase
     }
 
     /**
-     * @throws ExceptionInterface|Exception
+     * @throws ExceptionInterface
      */
     public function testUsageSuccess(): void
     {
@@ -313,7 +294,7 @@ class AkismetServiceTest extends TestCase
     }
 
     /**
-     * @throws ExceptionInterface|Exception
+     * @throws ExceptionInterface
      */
     public function testVerifyLastError(): void
     {
@@ -332,9 +313,6 @@ class AkismetServiceTest extends TestCase
         self::assertSame(self::ERROR_MESSAGE, $actual->getMessage());
     }
 
-    /**
-     * @throws Exception
-     */
     private function createService(): AkismetService
     {
         $key = 'fake';

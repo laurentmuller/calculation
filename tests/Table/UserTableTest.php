@@ -21,7 +21,6 @@ use App\Table\DataQuery;
 use App\Table\UserTable;
 use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
@@ -48,7 +47,7 @@ class UserTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithoutTokenNoUser(): void
     {
@@ -57,7 +56,7 @@ class UserTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithTokenUser(): void
     {
@@ -104,8 +103,6 @@ class UserTableTest extends EntityTableTestCase
 
     /**
      * @psalm-param UserRepository $repository
-     *
-     * @throws Exception
      */
     protected function createTable(AbstractRepository $repository): UserTable
     {
@@ -116,9 +113,6 @@ class UserTableTest extends EntityTableTestCase
         return new UserTable($repository, $translator, $twig, $security);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockSecurity(): MockObject&Security
     {
         $security = $this->createMock(Security::class);

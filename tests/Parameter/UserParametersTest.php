@@ -21,7 +21,6 @@ use App\Parameter\UserParameters;
 use App\Repository\GlobalPropertyRepository;
 use App\Repository\UserPropertyRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -29,9 +28,6 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class UserParametersTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testGetDefaultValues(): void
     {
         $user = $this->createUser();
@@ -40,9 +36,6 @@ class UserParametersTest extends TestCase
         self::assertNotEmpty($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSaveNoUser(): void
     {
         $cache = new ArrayAdapter();
@@ -62,9 +55,6 @@ class UserParametersTest extends TestCase
         $parameters->save();
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSaveSuccess(): void
     {
         $user = $this->createUser();
@@ -82,9 +72,6 @@ class UserParametersTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSaveWithProperty(): void
     {
         $user = $this->createUser();
@@ -97,9 +84,6 @@ class UserParametersTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createApplication(): ApplicationParameters
     {
         $cache = new ArrayAdapter();
@@ -111,9 +95,6 @@ class UserParametersTest extends TestCase
         return new ApplicationParameters($cache, $manager, false);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockManager(array $properties = []): MockObject&EntityManagerInterface
     {
         $repository = $this->createMock(UserPropertyRepository::class);
@@ -126,9 +107,6 @@ class UserParametersTest extends TestCase
         return $manager;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockSecurity(?User $user = null): MockObject&Security
     {
         $security = $this->createMock(Security::class);
@@ -146,9 +124,6 @@ class UserParametersTest extends TestCase
         return $user;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createUserParameters(array $properties = [], ?User $user = null): UserParameters
     {
         $cache = new ArrayAdapter();

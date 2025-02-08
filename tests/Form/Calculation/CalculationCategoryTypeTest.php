@@ -18,7 +18,6 @@ use App\Form\Calculation\CalculationCategoryType;
 use App\Repository\CategoryRepository;
 use App\Tests\Form\EntityTypeTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\MockObject\Exception;
 
 /**
  * @extends EntityTypeTestCase<CalculationCategory, CalculationCategoryType>
@@ -44,9 +43,6 @@ class CalculationCategoryTypeTest extends EntityTypeTestCase
         return CalculationCategoryType::class;
     }
 
-    /**
-     * @throws Exception
-     */
     protected function getPreloadedExtensions(): array
     {
         return [

@@ -20,15 +20,11 @@ use App\Model\LogFile;
 use App\Model\LogLevel;
 use App\Spreadsheet\LogsDocument;
 use App\Utils\DateUtils;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
 
 class LogsDocumentTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testEmpty(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -42,7 +38,6 @@ class LogsDocumentTest extends TestCase
     }
 
     /**
-     * @throws Exception
      * @throws \Exception
      */
     public function testRender(): void

@@ -26,7 +26,6 @@ use App\Tests\Form\CalculationState\CalculationStateTrait;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\TranslatorMockTrait;
 use App\Utils\DateUtils;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
@@ -41,9 +40,6 @@ class CalculationEditStateTypeTest extends EntityTypeTestCase
     private MockObject&ApplicationService $application;
     private bool $marginBelow = false;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         $this->application = $this->createMock(ApplicationService::class);
@@ -75,7 +71,7 @@ class CalculationEditStateTypeTest extends EntityTypeTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getPreloadedExtensions(): array
     {

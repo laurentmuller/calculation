@@ -16,7 +16,6 @@ namespace App\Tests\Traits;
 use App\Tests\Fixture\Translatable;
 use App\Tests\TranslatorMockTrait;
 use App\Traits\TranslatorTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Translator;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -34,15 +33,11 @@ class TranslatorTraitTest extends TestCase
             return $this->createMockTranslator();
         }
 
-        try {
-            $translator = $this->createMock(Translator::class);
-            $translator->method('trans')
-                ->willReturnArgument(0);
+        $translator = $this->createMock(Translator::class);
+        $translator->method('trans')
+            ->willReturnArgument(0);
 
-            return $translator;
-        } catch (Exception $e) {
-            self::fail($e->getMessage());
-        }
+        return $translator;
     }
 
     public function testIsTransDefined(): void

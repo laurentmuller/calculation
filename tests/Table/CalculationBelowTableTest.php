@@ -21,7 +21,6 @@ use App\Service\ApplicationService;
 use App\Table\CalculationBelowTable;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Twig\Environment;
 
@@ -39,7 +38,7 @@ class CalculationBelowTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithCountItemsBelow(): void
     {
@@ -100,8 +99,6 @@ class CalculationBelowTableTest extends EntityTableTestCase
 
     /**
      * @psalm-param  CalculationRepository $repository
-     *
-     * @throws Exception
      */
     protected function createTable(AbstractRepository $repository): CalculationBelowTable
     {
@@ -115,7 +112,7 @@ class CalculationBelowTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     private function processCountItemsBelow(int $count, mixed $expected): void
     {

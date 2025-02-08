@@ -22,7 +22,6 @@ use App\Table\CalculationTable;
 use App\Table\DataQuery;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Twig\Environment;
 
@@ -42,7 +41,7 @@ class CalculationTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithCallback(): void
     {
@@ -54,7 +53,7 @@ class CalculationTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithFindStateId(): void
     {
@@ -66,7 +65,7 @@ class CalculationTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithSelectionFound(): void
     {
@@ -78,7 +77,7 @@ class CalculationTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithSelectionNotFound(): void
     {
@@ -88,7 +87,7 @@ class CalculationTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithStateEditable(): void
     {
@@ -99,7 +98,7 @@ class CalculationTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithStateId(): void
     {
@@ -161,7 +160,7 @@ class CalculationTableTest extends EntityTableTestCase
     /**
      * @psalm-param  CalculationRepository $repository
      *
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function createTable(AbstractRepository $repository): CalculationTable
     {
@@ -172,7 +171,7 @@ class CalculationTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     private function createMockCalculationStateRepository(): MockObject&CalculationStateRepository
     {

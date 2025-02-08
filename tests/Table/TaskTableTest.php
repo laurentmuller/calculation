@@ -23,7 +23,6 @@ use App\Repository\TaskRepository;
 use App\Table\DataQuery;
 use App\Table\TaskTable;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -42,7 +41,7 @@ class TaskTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithCategoryId(): void
     {
@@ -53,7 +52,7 @@ class TaskTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithFindCategoryId(): void
     {
@@ -65,7 +64,7 @@ class TaskTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithFindGroupId(): void
     {
@@ -77,7 +76,7 @@ class TaskTableTest extends EntityTableTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testWithGroupId(): void
     {
@@ -103,9 +102,6 @@ class TaskTableTest extends EntityTableTestCase
         return [$entity];
     }
 
-    /**
-     * @throws Exception
-     */
     protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&TaskRepository
     {
         $repository = $this->createMock(TaskRepository::class);
@@ -118,7 +114,7 @@ class TaskTableTest extends EntityTableTestCase
     /**
      * @psalm-param TaskRepository $repository
      *
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function createTable(AbstractRepository $repository): TaskTable
     {

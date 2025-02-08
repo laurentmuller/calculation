@@ -5,6 +5,7 @@ symfony.lock
 /var/
 /vendor/
 /vendor-bin/**/vendor/
+/vendor-bin/**/composer.lock
 ###< symfony/framework-bundle ###
 
 ###> resources and vendor ###

@@ -18,7 +18,6 @@ use App\Service\SwissPostService;
 use App\Service\SwissPostUpdater;
 use App\Tests\KernelServiceTestCase;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -101,9 +100,6 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
         self::assertFalse($actual->isValid());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testImportInvalidFile(): void
     {
         $sourceFile = $this->createMock(UploadedFile::class);

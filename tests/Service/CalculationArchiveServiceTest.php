@@ -25,7 +25,6 @@ use App\Tests\Entity\IdTrait;
 use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -44,9 +43,6 @@ class CalculationArchiveServiceTest extends TestCase
     private Session $session;
     private MockObject&CalculationStateRepository $stateRepository;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         $this->session = new Session(new MockArraySessionStorage());
@@ -54,9 +50,6 @@ class CalculationArchiveServiceTest extends TestCase
         $this->stateRepository = $this->createMock(CalculationStateRepository::class);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCreateQueryEmpty(): void
     {
         $this->setCalculationStates();
@@ -68,9 +61,6 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertInstanceOf(\DateTimeImmutable::class, $actual->getDate());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCreateQueryWithDate(): void
     {
         $expected = new \DateTime('2024-02-01');
@@ -84,9 +74,6 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertSameDate($expected, $actual->getDate());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCreateQueryWithSessionDate(): void
     {
         $expected = new \DateTime('2024-01-01');
@@ -98,7 +85,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testCreateQueryWithSessionSources(): void
     {
@@ -117,7 +104,7 @@ class CalculationArchiveServiceTest extends TestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     public function testCreateQueryWithSessionTarget(): void
     {
@@ -138,9 +125,6 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertSame($expected, $actual->getTarget());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCreateQueryWithSources(): void
     {
         $stateEditable = new CalculationState();
@@ -155,9 +139,6 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertInstanceOf(\DateTimeImmutable::class, $actual->getDate());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetDateMaxConstraintDate(): void
     {
         $expected = '2024-01-01';
@@ -169,9 +150,6 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetDateMaxConstraintException(): void
     {
         $this->setCalculationStates();
@@ -180,9 +158,6 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetDateMaxConstraintNull(): void
     {
         $this->setCalculationDate();
@@ -192,9 +167,6 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetDateMinConstraintDate(): void
     {
         $expected = '2024-01-01';
@@ -206,9 +178,6 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetDateMinConstraintException(): void
     {
         $this->setCalculationStates();
@@ -217,9 +186,6 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetDateMinConstraintNull(): void
     {
         $this->setCalculationStates();
@@ -228,9 +194,6 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testIsEditableCount(): void
     {
         $this->stateRepository->method('getEditableCount')
@@ -240,9 +203,6 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testIsNotEditableCount(): void
     {
         $this->stateRepository->method('getNotEditableCount')
@@ -252,9 +212,6 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSaveQuery(): void
     {
         $query = new CalculationArchiveQuery();
@@ -265,9 +222,6 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertNotNull($this->session->get('archive.date'));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdateNull(): void
     {
         $query = new CalculationArchiveQuery();
@@ -276,9 +230,6 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertCount(0, $actual->getResults());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdateWithNotSimulate(): void
     {
         $stateEditable = new CalculationState();
@@ -303,9 +254,6 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertCount(1, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testUpdateWithSimulate(): void
     {
         $stateEditable = new CalculationState();
@@ -329,9 +277,6 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertCount(1, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createRequestStack(): MockObject&RequestStack
     {
         $request = new Request();
@@ -345,9 +290,6 @@ class CalculationArchiveServiceTest extends TestCase
         return $requestStack;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createService(): CalculationArchiveService
     {
         $listenerService = $this->createMock(SuspendEventListenerService::class);
@@ -363,9 +305,6 @@ class CalculationArchiveServiceTest extends TestCase
         return $service;
     }
 
-    /**
-     * @throws Exception
-     */
     private function setCalculationDate(?string $value = null): void
     {
         $query = $this->createMock(Query::class);
@@ -383,9 +322,6 @@ class CalculationArchiveServiceTest extends TestCase
             ->willReturn($queryBuilder);
     }
 
-    /**
-     * @throws Exception
-     */
     private function setCalculations(array $calculations = []): void
     {
         $query = $this->createMock(Query::class);
@@ -403,9 +339,6 @@ class CalculationArchiveServiceTest extends TestCase
             ->willReturn($queryBuilder);
     }
 
-    /**
-     * @throws Exception
-     */
     private function setCalculationStates(array $calculationStates = []): void
     {
         $query = $this->createMock(Query::class);

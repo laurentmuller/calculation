@@ -16,7 +16,6 @@ namespace App\Tests\Form\Type;
 use App\Form\Type\ReCaptchaType;
 use App\Service\RecaptchaService;
 use App\Tests\Form\PreloadedExtensionsTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReCaptcha\Response;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -31,9 +30,6 @@ class ReCaptchaTypeTest extends TypeTestCase
     private MockObject&RequestStack $requestStack;
     private MockObject&RecaptchaService $service;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         $this->service = $this->createService();
@@ -126,17 +122,11 @@ class ReCaptchaTypeTest extends TypeTestCase
         ];
     }
 
-    /**
-     * @throws Exception
-     */
     private function createRequestStack(): MockObject&RequestStack
     {
         return $this->createMock(RequestStack::class);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createService(): MockObject&RecaptchaService
     {
         $service = $this->createMock(RecaptchaService::class);

@@ -17,7 +17,6 @@ use App\Entity\Product;
 use App\Form\Product\ProductType;
 use App\Tests\Form\Category\CategoryTrait;
 use App\Tests\Form\EntityTypeTestCase;
-use PHPUnit\Framework\MockObject\Exception;
 
 /**
  * @extends EntityTypeTestCase<Product, ProductType>
@@ -48,7 +47,7 @@ class ProductTypeTest extends EntityTypeTestCase
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getPreloadedExtensions(): array
     {

@@ -18,7 +18,6 @@ use App\Generator\ProductGenerator;
 use App\Service\FakerService;
 use App\Tests\EntityTrait\CategoryTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\MockObject\Exception;
 
 /**
  * @extends GeneratorTestCase<ProductGenerator>
@@ -49,9 +48,6 @@ class ProductGeneratorTest extends GeneratorTestCase
         self::assertValidateResponse($actual, true, 1);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testProductExist(): void
     {
         $count = 0;

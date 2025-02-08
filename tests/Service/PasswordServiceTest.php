@@ -20,7 +20,6 @@ use App\Tests\KernelServiceTestCase;
 use App\Tests\TranslatorMockTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
 use ZxcvbnPhp\Zxcvbn;
 
 class PasswordServiceTest extends KernelServiceTestCase
@@ -49,9 +48,6 @@ class PasswordServiceTest extends KernelServiceTestCase
         yield ['123456', StrengthLevel::VERY_STRONG, false];
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCustom(): void
     {
         $translator = $this->createMockTranslator();

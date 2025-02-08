@@ -18,14 +18,10 @@ use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Report\ProductsReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class ProductsReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $controller = $this->createMock(AbstractController::class);

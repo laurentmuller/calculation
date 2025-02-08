@@ -17,7 +17,6 @@ use App\Entity\User;
 use App\Listener\SwitchUserListener;
 use App\Security\SecurityAttributes;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\InputBag;
@@ -32,9 +31,6 @@ class SwitchUserListenerTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @throws Exception
-     */
     public function testSwitchUserDefault(): void
     {
         $request = $this->createRequest();
@@ -49,9 +45,6 @@ class SwitchUserListenerTest extends TestCase
         self::assertSame('', $request->query->get('_switch_user'));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSwitchUserExit(): void
     {
         $request = $this->createRequest('_exit');
@@ -66,9 +59,6 @@ class SwitchUserListenerTest extends TestCase
         self::assertSame('_exit', $request->query->get('_switch_user'));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSwitchUserOriginal(): void
     {
         $request = $this->createRequest('fake');
@@ -83,9 +73,6 @@ class SwitchUserListenerTest extends TestCase
         self::assertSame('fake', $request->query->get('_switch_user'));
     }
 
-    /**
-     * @throws Exception
-     */
     private function createListener(): SwitchUserListener
     {
         $listener = new SwitchUserListener();
@@ -95,9 +82,6 @@ class SwitchUserListenerTest extends TestCase
         return $listener;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createRequest(string $action = ''): MockObject&Request
     {
         /** @psalm-var InputBag<string> $query */
@@ -108,9 +92,6 @@ class SwitchUserListenerTest extends TestCase
         return $request;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createRequestStack(): MockObject&RequestStack
     {
         $session = $this->createMock(SessionInterface::class);

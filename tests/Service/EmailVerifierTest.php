@@ -19,7 +19,6 @@ use App\Repository\UserRepository;
 use App\Service\EmailVerifier;
 use App\Tests\Entity\IdTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +26,6 @@ use Symfony\Component\HttpFoundation\UriSigner;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Generator\VerifyEmailTokenGenerator;
 use SymfonyCasts\Bundle\VerifyEmail\Model\VerifyEmailSignatureComponents;
 use SymfonyCasts\Bundle\VerifyEmail\Util\VerifyEmailQueryUtility;
@@ -40,8 +38,6 @@ class EmailVerifierTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @throws Exception
-     * @throws VerifyEmailExceptionInterface
      * @throws \ReflectionException
      */
     public function testHandleEmail(): void
@@ -59,7 +55,6 @@ class EmailVerifierTest extends TestCase
     }
 
     /**
-     * @throws Exception
      * @throws TransportExceptionInterface
      * @throws \ReflectionException
      */
@@ -77,9 +72,6 @@ class EmailVerifierTest extends TestCase
         self::assertFalse($user->isVerified());
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockVerifyEmailHelper(): MockObject&VerifyEmailHelperInterface
     {
         $date = new \DateTime();
@@ -103,9 +95,6 @@ class EmailVerifierTest extends TestCase
         return self::setId($user);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createVerifyEmailHelper(): VerifyEmailHelper
     {
         $router = $this->createMock(UrlGeneratorInterface::class);

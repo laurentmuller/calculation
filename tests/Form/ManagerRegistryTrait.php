@@ -18,7 +18,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,8 +34,6 @@ trait ManagerRegistryTrait
     /**
      * @psalm-param class-string $entityClass
      * @psalm-param class-string $repositoryClass
-     *
-     * @throws Exception
      */
     protected function createManagerRegistry(
         string $entityClass,
@@ -53,8 +50,6 @@ trait ManagerRegistryTrait
 
     /**
      * @phpstan-return MockObject&Query<array-key, mixed>
-     *
-     * @throws Exception
      */
     private function createQuery(array $results): MockObject&Query
     {
@@ -67,8 +62,6 @@ trait ManagerRegistryTrait
 
     /**
      * @phpstan-param  MockObject&Query<array-key, mixed> $query
-     *
-     * @throws Exception
      */
     private function createQueryBuilder(MockObject&Query $query): MockObject&QueryBuilder
     {
@@ -84,8 +77,6 @@ trait ManagerRegistryTrait
 
     /**
      * @psalm-param class-string $repositoryClass
-     *
-     * @throws Exception
      */
     private function createRepository(
         string $repositoryClass,
@@ -99,9 +90,6 @@ trait ManagerRegistryTrait
         return $repository;
     }
 
-    /**
-     * @throws Exception
-     */
     private function getEntityManager(): MockObject&EntityManager
     {
         if (null === $this->entityManager) {
@@ -113,9 +101,6 @@ trait ManagerRegistryTrait
         return $this->entityManager;
     }
 
-    /**
-     * @throws Exception
-     */
     private function getManagerRegistry(): MockObject&ManagerRegistry
     {
         if (null === $this->managerRegistry) {

@@ -19,7 +19,6 @@ use App\Tests\Entity\IdTrait;
 use App\Tests\Form\Category\CategoryTrait;
 use App\Tests\Form\ManagerRegistryTrait;
 use Doctrine\Persistence\ManagerRegistry;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -52,7 +51,7 @@ trait TaskTrait
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getTaskEntityType(): EntityType
     {
@@ -60,7 +59,7 @@ trait TaskTrait
     }
 
     /**
-     * @throws Exception|\ReflectionException
+     * @throws \ReflectionException
      */
     protected function getTaskRegistry(): MockObject&ManagerRegistry
     {

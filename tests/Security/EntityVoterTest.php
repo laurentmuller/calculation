@@ -22,7 +22,6 @@ use App\Security\EntityVoter;
 use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -35,9 +34,6 @@ class EntityVoterTest extends TestCase
     private RoleBuilderService $builder;
     private EntityVoter $voter;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         $this->builder = new RoleBuilderService();

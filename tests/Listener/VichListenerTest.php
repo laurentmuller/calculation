@@ -19,7 +19,6 @@ use App\Service\ImageResizer;
 use App\Service\UserNamer;
 use App\Tests\TranslatorMockTrait;
 use App\Utils\FileUtils;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -32,9 +31,6 @@ class VichListenerTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @throws Exception
-     */
     public function testPostUploadInvalidFile(): void
     {
         $event = $this->createEvent();
@@ -43,9 +39,6 @@ class VichListenerTest extends TestCase
         self::assertInstanceOf(Event::class, $event);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testPostUploadNewFile(): void
     {
         $path = $this->getImagesPath();
@@ -63,9 +56,6 @@ class VichListenerTest extends TestCase
         }
     }
 
-    /**
-     * @throws Exception
-     */
     public function testPostUploadValidFile(): void
     {
         $file = $this->createUploadedFile();
@@ -75,9 +65,6 @@ class VichListenerTest extends TestCase
         self::assertInstanceOf(Event::class, $event);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testPreRemove(): void
     {
         $event = $this->createEvent();
@@ -86,9 +73,6 @@ class VichListenerTest extends TestCase
         self::assertInstanceOf(Event::class, $event);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testPreUploadInvalidFile(): void
     {
         $event = $this->createEvent();
@@ -97,9 +81,6 @@ class VichListenerTest extends TestCase
         self::assertInstanceOf(Event::class, $event);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testPreUploadValidFile(): void
     {
         $file = $this->createUploadedFile();
@@ -110,8 +91,6 @@ class VichListenerTest extends TestCase
     }
 
     /**
-     * @throws Exception
-     *
      * @psalm-suppress MissingTemplateParam
      */
     public function testPreUploadWithEmptyNamer(): void
@@ -143,9 +122,6 @@ class VichListenerTest extends TestCase
         return new Event($user, $mapping);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createListener(): VichListener
     {
         $resizer = $this->createMockImageResizer();
@@ -153,9 +129,6 @@ class VichListenerTest extends TestCase
         return new VichListener($resizer);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createMockImageResizer(): MockObject&ImageResizer
     {
         $translator = $this->createMockTranslator();

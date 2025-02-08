@@ -15,15 +15,11 @@ namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
 use App\Report\CalculationByStateReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CalculationByStateReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $controller = $this->createMock(AbstractController::class);

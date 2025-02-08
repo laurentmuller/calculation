@@ -20,7 +20,6 @@ use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use App\Tests\Form\EntityTypeTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\MockObject\Exception;
 
 /**
  * @extends EntityTypeTestCase<CalculationGroup, CalculationGroupType>
@@ -46,9 +45,6 @@ class CalculationGroupTypeTest extends EntityTypeTestCase
         return CalculationGroupType::class;
     }
 
-    /**
-     * @throws Exception
-     */
     protected function getPreloadedExtensions(): array
     {
         return [

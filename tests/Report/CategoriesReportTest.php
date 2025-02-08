@@ -17,14 +17,10 @@ use App\Controller\AbstractController;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Report\CategoriesReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class CategoriesReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $controller = $this->createMock(AbstractController::class);

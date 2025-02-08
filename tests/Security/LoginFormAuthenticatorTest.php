@@ -18,7 +18,6 @@ use App\Security\LoginFormAuthenticator;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,9 +48,6 @@ class LoginFormAuthenticatorTest extends TestCase
         yield [$request, true];
     }
 
-    /**
-     * @throws Exception
-     */
     public function testAuthenticateEmptyPassword(): void
     {
         $httpUtils = $this->createMock(HttpUtils::class);
@@ -70,9 +66,6 @@ class LoginFormAuthenticatorTest extends TestCase
         $authenticator->authenticate($request);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testAuthenticateEmptyToken(): void
     {
         $httpUtils = $this->createMock(HttpUtils::class);
@@ -91,9 +84,6 @@ class LoginFormAuthenticatorTest extends TestCase
         $authenticator->authenticate($request);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testAuthenticateEmptyUserName(): void
     {
         $httpUtils = $this->createMock(HttpUtils::class);
@@ -112,9 +102,6 @@ class LoginFormAuthenticatorTest extends TestCase
         $authenticator->authenticate($request);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testAuthenticateSuccess(): void
     {
         $httpUtils = $this->createMock(HttpUtils::class);
@@ -132,9 +119,6 @@ class LoginFormAuthenticatorTest extends TestCase
         $this->validatePassport($passport);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testAuthenticateWithSession(): void
     {
         $userProvider = $this->createMock(UserRepository::class);
@@ -151,9 +135,6 @@ class LoginFormAuthenticatorTest extends TestCase
         $this->validatePassport($passport);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCaptchaEmpty(): void
     {
         $applicationService = $this->createMock(ApplicationService::class);
@@ -174,9 +155,6 @@ class LoginFormAuthenticatorTest extends TestCase
         $authenticator->authenticate($request);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCaptchaNotDisplay(): void
     {
         $applicationService = $this->createMock(ApplicationService::class);
@@ -195,9 +173,6 @@ class LoginFormAuthenticatorTest extends TestCase
         $this->validatePassport($passport);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCaptchaTimeout(): void
     {
         $applicationService = $this->createMock(ApplicationService::class);
@@ -224,9 +199,6 @@ class LoginFormAuthenticatorTest extends TestCase
         $authenticator->authenticate($request);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGetLoginUrl(): void
     {
         $expected = '/login';
@@ -243,9 +215,6 @@ class LoginFormAuthenticatorTest extends TestCase
         self::assertSame($expected, $actual->getTargetUrl());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testOnAuthenticationSuccess(): void
     {
         $httpUtils = $this->createMock(HttpUtils::class);
@@ -259,9 +228,6 @@ class LoginFormAuthenticatorTest extends TestCase
         self::assertNull($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     #[DataProvider('getSupports')]
     public function testSupports(Request $request, bool $expected): void
     {
@@ -274,9 +240,6 @@ class LoginFormAuthenticatorTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createAuthenticator(
         ?ApplicationService $applicationService = null,
         ?CaptchaImageService $captchaImageService = null,

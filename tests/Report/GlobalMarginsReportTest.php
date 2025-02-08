@@ -16,14 +16,10 @@ namespace App\Tests\Report;
 use App\Controller\AbstractController;
 use App\Entity\GlobalMargin;
 use App\Report\GlobalMarginsReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class GlobalMarginsReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $controller = $this->createMock(AbstractController::class);

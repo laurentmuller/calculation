@@ -16,7 +16,6 @@ namespace App\Tests\Twig;
 use App\Service\NonceService;
 use App\Service\UrlGeneratorService;
 use App\Twig\FunctionExtension;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Component\Asset\Packages;
@@ -25,9 +24,6 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 class FunctionExtensionTest extends IntegrationTestCase
 {
-    /**
-     * @throws Exception
-     */
     protected function getExtensions(): array
     {
         $webDir = __DIR__ . '/../../public';
@@ -52,9 +48,6 @@ class FunctionExtensionTest extends IntegrationTestCase
         return __DIR__ . '/Fixtures/FunctionExtension';
     }
 
-    /**
-     * @throws Exception
-     */
     private function createAssetExtension(): AssetExtension
     {
         $packages = $this->createMock(Packages::class);
@@ -64,9 +57,6 @@ class FunctionExtensionTest extends IntegrationTestCase
         return new AssetExtension($packages);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createGenerator(): MockObject&UrlGeneratorService
     {
         $generator = $this->createMock(UrlGeneratorService::class);
@@ -78,9 +68,6 @@ class FunctionExtensionTest extends IntegrationTestCase
         return $generator;
     }
 
-    /**
-     * @throws Exception
-     */
     private function createHelper(): UploaderHelper
     {
         $callback = fn (?array $value): mixed => \is_array($value) ? $value[0] : $value;
@@ -91,9 +78,6 @@ class FunctionExtensionTest extends IntegrationTestCase
         return new UploaderHelper($storage);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createNonceService(): MockObject&NonceService
     {
         $service = $this->createMock(NonceService::class);

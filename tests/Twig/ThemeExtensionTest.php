@@ -16,13 +16,9 @@ namespace App\Tests\Twig;
 use App\Enums\Theme;
 use App\Service\ThemeService;
 use App\Twig\ThemeExtension;
-use PHPUnit\Framework\MockObject\Exception;
 
 class ThemeExtensionTest extends IntegrationTestCase
 {
-    /**
-     * @throws Exception
-     */
     protected function getExtensions(): array
     {
         $service = $this->createMock(ThemeService::class);

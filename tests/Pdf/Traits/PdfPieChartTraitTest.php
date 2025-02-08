@@ -18,7 +18,6 @@ use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Interfaces\PdfChartInterface;
 use App\Pdf\Traits\PdfPieChartTrait;
 use App\Report\AbstractReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,9 +25,6 @@ use PHPUnit\Framework\TestCase;
  */
 class PdfPieChartTraitTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testCounterClockwise(): void
     {
         $centerX = 250;
@@ -47,9 +43,6 @@ class PdfPieChartTraitTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testEmptyRadius(): void
     {
         $centerX = 100;
@@ -61,9 +54,6 @@ class PdfPieChartTraitTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testEmptyRows(): void
     {
         $centerX = 100;
@@ -75,9 +65,6 @@ class PdfPieChartTraitTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testEmptySum(): void
     {
         $centerX = 100;
@@ -92,9 +79,6 @@ class PdfPieChartTraitTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testEmptyValue(): void
     {
         $centerX = 250;
@@ -113,9 +97,6 @@ class PdfPieChartTraitTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testFillColors(): void
     {
         $centerX = 250;
@@ -134,9 +115,6 @@ class PdfPieChartTraitTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testInvalidFillColor(): void
     {
         $centerX = 100;
@@ -151,9 +129,6 @@ class PdfPieChartTraitTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testNewPageAndColors(): void
     {
         $centerX = 250;
@@ -170,8 +145,6 @@ class PdfPieChartTraitTest extends TestCase
 
     /**
      * @psalm-param ColorValueType[] $rows
-     *
-     * @throws Exception
      */
     private function createReport(
         float $centerX,

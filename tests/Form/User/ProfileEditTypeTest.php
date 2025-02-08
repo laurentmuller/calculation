@@ -16,7 +16,6 @@ namespace App\Tests\Form\User;
 use App\Entity\User;
 use App\Form\User\ProfileEditType;
 use App\Tests\Form\EntityTypeTestCase;
-use PHPUnit\Framework\MockObject\Exception;
 
 /**
  * @extends EntityTypeTestCase<User, ProfileEditType>
@@ -44,9 +43,6 @@ class ProfileEditTypeTest extends EntityTypeTestCase
         return ProfileEditType::class;
     }
 
-    /**
-     * @throws Exception
-     */
     protected function getPreloadedExtensions(): array
     {
         return [

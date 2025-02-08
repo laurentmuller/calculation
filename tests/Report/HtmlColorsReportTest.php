@@ -15,14 +15,10 @@ namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
 use App\Report\HtmlColorsReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class HtmlColorsReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testReport(): void
     {
         $controller = $this->createMock(AbstractController::class);

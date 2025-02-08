@@ -17,7 +17,6 @@ use App\Model\HttpClientError;
 use App\Service\OpenWeatherSearchService;
 use App\Service\OpenWeatherService;
 use App\Utils\FileUtils;
-use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 class OpenWeatherControllerTest extends ControllerTestCase
@@ -55,73 +54,46 @@ class OpenWeatherControllerTest extends ControllerTestCase
         yield ['/openweather/import', self::ROLE_SUPER_ADMIN];
     }
 
-    /**
-     * @throws Exception
-     */
     public function testApiCurrentException(): void
     {
         $this->checkRouteException('/openweather/api/current', 'current');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testApiCurrentFalse(): void
     {
         $this->checkRouteFalse('/openweather/api/current', 'current');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testApiDailyException(): void
     {
         $this->checkRouteException('/openweather/api/daily', 'daily');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testApiDailyFalse(): void
     {
         $this->checkRouteFalse('/openweather/api/daily', 'daily');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testApiForecastException(): void
     {
         $this->checkRouteException('/openweather/api/forecast', 'forecast');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testApiForecastFalse(): void
     {
         $this->checkRouteFalse('/openweather/api/forecast', 'forecast');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testApiOneCallException(): void
     {
         $this->checkRouteException('/openweather/api/onecall', 'oneCall');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testApiOneCallFalse(): void
     {
         $this->checkRouteFalse('/openweather/api/onecall', 'oneCall');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testApiSearchEmpty(): void
     {
         $service = $this->createMock(OpenWeatherSearchService::class);
@@ -134,9 +106,6 @@ class OpenWeatherControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testApiSearchException(): void
     {
         $service = $this->createMock(OpenWeatherSearchService::class);
@@ -149,9 +118,6 @@ class OpenWeatherControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testApiSearchFound(): void
     {
         $city = $this->getCity();
@@ -165,9 +131,6 @@ class OpenWeatherControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCurrent(): void
     {
         $data = [
@@ -203,9 +166,6 @@ class OpenWeatherControllerTest extends ControllerTestCase
         }
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSearchMultiple(): void
     {
         $city1 = [
@@ -244,9 +204,6 @@ class OpenWeatherControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testSearchOne(): void
     {
         $city = $this->getCity();
@@ -279,9 +236,6 @@ class OpenWeatherControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     private function checkRouteException(string $url, string $method): void
     {
         $service = $this->createMock(OpenWeatherService::class);
@@ -295,9 +249,6 @@ class OpenWeatherControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     private function checkRouteFalse(string $url, string $method): void
     {
         $error = new HttpClientError(200, 'Fake');

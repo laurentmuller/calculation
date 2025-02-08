@@ -19,14 +19,10 @@ use App\Entity\CalculationCategory;
 use App\Entity\CalculationGroup;
 use App\Entity\CalculationItem;
 use App\Report\CalculationReport;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class CalculationReportTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testEmpty(): void
     {
         $calculation = new Calculation();
@@ -42,9 +38,6 @@ class CalculationReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testEmptyGroup(): void
     {
         $calculation = new Calculation();
@@ -65,9 +58,6 @@ class CalculationReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $calculation = new Calculation();
@@ -98,9 +88,6 @@ class CalculationReportTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testRenderWithoutQrCode(): void
     {
         $calculation = new Calculation();

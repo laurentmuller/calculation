@@ -20,14 +20,10 @@ use App\Entity\Task;
 use App\Entity\TaskItem;
 use App\Entity\TaskItemMargin;
 use App\Spreadsheet\TasksDocument;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class TasksDocumentTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $group = new Group();

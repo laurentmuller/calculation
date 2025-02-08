@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Form\User;
 
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\PasswordHasher\EventListener\PasswordHasherListener;
 use Symfony\Component\Form\Extension\PasswordHasher\PasswordHasherExtension;
@@ -24,9 +23,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
  */
 trait PasswordHasherExtensionTrait
 {
-    /**
-     * @throws Exception
-     */
     protected function getPasswordHasherExtension(): PasswordHasherExtension
     {
         $passwordHasher = $this->createMock(UserPasswordHasher::class);

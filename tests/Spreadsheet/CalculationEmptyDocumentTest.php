@@ -15,14 +15,10 @@ namespace App\Tests\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Spreadsheet\CalculationsEmptyDocument;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class CalculationEmptyDocumentTest extends TestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testRender(): void
     {
         $data = [

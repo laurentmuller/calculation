@@ -67,9 +67,8 @@ abstract class AbstractParameterType extends AbstractHelperType
     ): void {
         $helper->field($field)
             ->label($label)
-            ->labelClass('checkbox-inline')
             ->help($help)
-            ->addCheckboxType();
+            ->addCheckboxType(inline: true);
     }
 
     /**

@@ -1,55 +1,5 @@
 /**! compression tag for ftp-deployment */
 
-/* tooltips with custom background colors and sizes */
-
-.tooltip-primary {
-    --bs-tooltip-bg: var(--bs-primary);
-    --bs-tooltip-color: var(--bs-white);
-    --bs-tooltip-opacity: 1;
-}
-
-.tooltip-secondary {
-    --bs-tooltip-bg: var(--bs-secondary);
-    --bs-tooltip-color: var(--bs-white);
-    --bs-tooltip-opacity: 1;
-}
-
-.tooltip-success {
-    --bs-tooltip-bg: var(--bs-success);
-    --bs-tooltip-color: var(--bs-white);
-    --bs-tooltip-opacity: 1;
-}
-
-.tooltip-info {
-    --bs-tooltip-bg: var(--bs-info);
-    --bs-tooltip-color: var(--bs-dark);
-    --bs-tooltip-opacity: 1;
-}
-
-.tooltip-warning {
-    --bs-tooltip-bg: var(--bs-warning);
-    --bs-tooltip-color: var(--bs-dark);
-    --bs-tooltip-opacity: 1;
-}
-
-.tooltip-danger {
-    --bs-tooltip-bg: var(--bs-danger);
-    --bs-tooltip-color: var(--bs-white);
-    --bs-tooltip-opacity: 1;
-}
-
-.tooltip-light {
-    --bs-tooltip-bg: var(--bs-light);
-    --bs-tooltip-color: var(--bs-dark);
-    --bs-tooltip-opacity: 1;
-}
-
-.tooltip-dark {
-    --bs-tooltip-bg: var(--bs-dark);
-    --bs-tooltip-color: var(--bs-white);
-    --bs-tooltip-opacity: 1;
-}
-
 .tooltip-left .tooltip-inner {
     text-align: left !important;
 }
@@ -60,8 +10,4 @@
 
 .tooltip-xl .tooltip-inner {
     max-width: 400px;
-}
-
-.tooltip-opaque.tooltip.show {
-    opacity: 1;
 }

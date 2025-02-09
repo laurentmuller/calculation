@@ -84,9 +84,8 @@ abstract class AbstractParametersType extends AbstractType
     protected function addCheckBox(FormHelper $helper, string $key): void
     {
         $helper->field($key)
-            ->labelClass('checkbox-inline checkbox-switch')
             ->updateAttribute('data-default', $this->getDefaultValue($key))
-            ->addCheckboxType();
+            ->addCheckboxType(inline: true);
     }
 
     protected function addDisplaySection(FormHelper $helper): void

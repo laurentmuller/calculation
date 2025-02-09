@@ -89,7 +89,7 @@ class CalculationArchiveController extends AbstractController
                     CalculationStateRepository $repository
                 ): QueryBuilder => $repository->getEditableQueryBuilder(),
             ])
-            ->labelClass('checkbox-inline checkbox-switch')
+            ->labelClass('checkbox-inline')
             ->add(CalculationStateListType::class);
 
         $helper->field('target')

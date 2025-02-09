@@ -16,6 +16,7 @@ namespace App\Controller;
 use App\Enums\EntityPermission;
 use App\Enums\FlashType;
 use App\Form\FormHelper;
+use App\Model\CustomerInformation;
 use App\Report\AbstractReport;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
@@ -118,6 +119,16 @@ abstract class AbstractController extends BaseController
     public function getApplicationService(): ApplicationService
     {
         return $this->getUserService()->getApplication();
+    }
+
+    /**
+     * Gets the customer information.
+     *
+     * This is a shortcut to get customer information from the user service.
+     */
+    public function getCustomer(): CustomerInformation
+    {
+        return $this->getUserService()->getCustomer();
     }
 
     /**

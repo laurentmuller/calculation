@@ -105,13 +105,14 @@ class SpreadsheetDocument extends Spreadsheet
         ?string $title = null,
         ?int $sheetIndex = null
     ): WorksheetDocument {
+        $sheetIndex ??= $this->getSheetCount();
         $sheet = $this->createSheet($sheetIndex);
         if (null !== $title) {
             $sheet->setTitle($title);
         }
 
-        $this->setActiveSheetIndex($sheetIndex ?? $this->getSheetCount() - 1);
-        $customer = $controller->getUserService()->getCustomer();
+        $this->setActiveSheetIndex($sheetIndex);
+        $customer = $controller->getCustomer();
 
         return $sheet->setPrintGridlines(true)
             ->updateHeaderFooter($customer);
@@ -222,7 +223,7 @@ class SpreadsheetDocument extends Spreadsheet
         $sheet = $this->getActiveSheet()
             ->setTitle($title);
         if ($controller instanceof AbstractController) {
-            $customer = $controller->getUserService()->getCustomer();
+            $customer = $controller->getCustomer();
             $sheet->updateHeaderFooter($customer);
         }
 
@@ -345,9 +346,9 @@ class SpreadsheetDocument extends Spreadsheet
      */
     protected function initialize(AbstractController $controller, string $title, bool $landscape = false): static
     {
-        $customer = $controller->getUserService()->getCustomer();
-        $application = $controller->getApplicationName();
+        $customer = $controller->getCustomer();
         $userName = $controller->getUserIdentifier();
+        $application = $controller->getApplicationName();
         $title = $this->trans($title);
 
         $sheet = $this->getActiveSheet()

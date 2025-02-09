@@ -510,7 +510,6 @@ $(function () {
                 }
 
                 that.toggling = true;
-                $item.removeClass('rounded-bottom');
                 $icon.toggleClass(options.collapseIcon).toggleClass(options.expandIcon);
                 $group.toggle(options.toggleDuration, function () {
                     const title = $icon.hasClass(options.expandIcon) ? options.texts.collapse : options.texts.expand;
@@ -529,8 +528,6 @@ $(function () {
          */
         _updateBorders() {
             this.$element.find('.list-group-item:first').removeClass('border-top-0');
-            this.$element.find('.list-group-item.rounded-bottom').removeClass('rounded-bottom');
-            this.$element.find('.list-group-item:visible:last').addClass('rounded-bottom');
             return this;
         }
 
@@ -625,7 +622,7 @@ $(function () {
             itemIcon: '<i class="item-icon me-1" />',
             itemText: '<span class="item-text w-100" />',
             itemBadge: '<span class="badge" />',
-            groupItem: '<div role="group" class="group-item list-group rounded-0" />'
+            groupItem: '<div role="group" class="group-item list-group" />'
         }
     };
 

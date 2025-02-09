@@ -7,13 +7,7 @@
 }
 
 .simple-editor .simple-editor-toolbar button {
-    border-radius: 0;
     border: 0;
-}
-
-/* first button */
-.simple-editor .simple-editor-toolbar .btn-group:first-child button:first-child {
-    border-top-left-radius: var(--bs-border-radius) !important;
 }
 
 .simple-editor .simple-editor-content {

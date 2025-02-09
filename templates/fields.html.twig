@@ -123,9 +123,6 @@
     {%- else -%}
         <div class="input-group">
             {%- set is_empty = not value -%}
-            {% if is_empty %}
-                {% set attr = attr|merge({class: (attr.class|default('') ~ ' rounded-end')|trim}) %}
-            {% endif %}
             {{- block('form_widget_simple') }}
             <button class="btn btn-file-delete btn-outline-secondary{% if is_empty %} d-none{% endif %}" type="button" title="{{ 'common.button_delete'|trans }}">
                 <i class="fa-solid fa-times"></i>
@@ -198,7 +195,7 @@
     {%- set editor_id = form.vars.id ~ '_editor' -%}
     <div class="simple-editor form-control p-0" id="{{ editor_id }}">
         {% if groups|default([])|length -%}
-            <div class="simple-editor-toolbar btn-toolbar rounded-top d-print-none" role="toolbar">
+            <div class="simple-editor-toolbar btn-toolbar d-print-none" role="toolbar">
                 {% for group, actions in groups %}
                     <div class="btn-group btn-group-sm" role="group" aria-label="{{ group }}">
                         {% for action in actions %}

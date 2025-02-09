@@ -17,7 +17,7 @@
 {% if parameters|length %}
     <div class="mb-3">
         <span class="form-label">{{ 'command.list.fields.arguments'|trans }}</span>
-        <div class="border pre-scrollable pre-scrollable-highlight-php small-scrollbar font-monospace rounded">
+        <div class="border pre-scrollable pre-scrollable-highlight-php small-scrollbar font-monospace">
             {{ parameters|var_export_php }}
         </div>
     </div>

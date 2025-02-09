@@ -106,7 +106,6 @@ footer span {
 /* read-only widget */
 .form-control-plaintext.form-control-readonly {
     padding: 0.375rem 0.75rem;
-    border-radius: var(--bs-border-radius);
     border: var(--bs-border-width) solid var(--bs-border-color);
     color: var(--bs-secondary-color) !important;
 }
@@ -642,7 +641,6 @@ table.table-fixed-header th {
 
 .small-scrollbar::-webkit-scrollbar-thumb {
     visibility: hidden;
-    border-radius: 0;
     background-color: var(--bs-secondary-bg-subtle);
 }
 
@@ -837,8 +835,8 @@ span.bottom-border-gradient {
     content: '';
     height: 0.25rem;
     bottom: -0.25rem;
-    left: var(--bs-border-radius);
-    right: var(--bs-border-radius);
+    left: 0;
+    right: 0;
 }
 
 .bottom-border-gradient-20:after {
@@ -875,7 +873,7 @@ span.bottom-border-gradient {
     background: linear-gradient(
             to right,
             var(--bs-danger) calc(20% - 1px),
-            transparent calc(20% - 1px), transparent calc(20% + 1px),
+            transparent 20%, transparent calc(20% + 1px),
             var(--bs-danger) calc(20% + 1px), var(--bs-danger) calc(40% - 1px),
             transparent calc(40% - 1px), transparent calc(40% + 1px),
             var(--bs-warning) calc(40% + 1px), var(--bs-warning) calc(60% - 1px),
@@ -889,7 +887,7 @@ span.bottom-border-gradient {
     background: linear-gradient(
             to right,
             var(--bs-danger) calc(20% - 1px),
-            transparent calc(20% - 1px), transparent calc(20% + 1px),
+            transparent 20%, transparent calc(20% + 1px),
             var(--bs-danger) calc(20% + 1px), var(--bs-danger) calc(40% - 1px),
             transparent calc(40% - 1px), transparent calc(40% + 1px),
             var(--bs-warning) calc(40% + 1px), var(--bs-warning) calc(60% - 1px),

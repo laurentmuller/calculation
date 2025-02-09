@@ -33,7 +33,7 @@
     {%- set hide = 'common.collapse'|trans -%}
     {%- set title = expanded ? hide : show -%}
     {%- set name = ('parameters.group_' ~ href)|trans -%}
-    <div class="card-header d-flex-wrap-center rounded-0">
+    <div class="card-header d-flex-wrap-center">
         <a class="drop-down-icon-right card-title collapsed{% if expanded %} show{% endif %}" href="#{{ href }}"
            data-bs-toggle="collapse" data-show="{{ show }}" data-hide="{{ hide }}"
            title="{{ title }}" aria-expanded="{{ expanded|json_encode }}">

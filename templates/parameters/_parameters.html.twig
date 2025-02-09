@@ -9,7 +9,7 @@
 {%- set show = 'common.expand'|trans -%}
 {%- set hide = 'common.collapse'|trans -%}
 {%- set title = expanded ? hide : show -%}
-<div class="card-header d-flex-wrap-center rounded-0">
+<div class="card-header d-flex-wrap-center">
     <a class="drop-down-icon-right card-title" href="#{{ href }}" data-bs-toggle="collapse"
        aria-expanded="{{ expanded|json_encode }}" title="{{ title }}" data-show="{{ show }}" data-hide="{{ hide }}">
         {{- output_icon(icon ~ ' fa-fw me-1') -}}{{- name -}}

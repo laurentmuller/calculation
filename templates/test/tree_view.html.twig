@@ -2,12 +2,12 @@
 {% from 'macros/_icons.html.twig' import icon %}
 {# macros #}
 {% macro side_bar_collapse(text, target, expanded = false, icon = false) %}
-<button class="btn btn-toggle rounded border-0" data-bs-toggle="collapse" data-bs-target="{{ target }}" aria-expanded="{{ expanded|json_encode }}">
+<button class="btn btn-toggle border-0" data-bs-toggle="collapse" data-bs-target="{{ target }}" aria-expanded="{{ expanded|json_encode }}">
     {%- if icon -%}{{- icon(icon ~ ' me-1') -}}{%- endif %}{{- text -}}
 </button>
 {% endmacro %}
 {% macro side_bar_link(text, icon = null, href = '#') %}
-<li><a href="{{ href }}" class="rounded d-block">{{ icon(icon, text) }}</a></li>
+<li><a href="{{ href }}" class="d-block">{{ icon(icon, text) }}</a></li>
 {% endmacro %}
 {% macro side_bar_divider() %}
 <li><hr class="dropdown-divider border-top my-1"></li>

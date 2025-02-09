@@ -6,8 +6,10 @@
 
 .select2-container--bootstrap-5 .select2-selection {
     background-color: var(--bs-body-bg) !important;
+    /*
     border: var(--bs-border-width) solid var(--bs-border-color);
     border-radius: var(--bs-border-radius);
+     */
 }
 
 html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection__rendered {
@@ -37,6 +39,7 @@ html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection__cho
 .select2-container--bootstrap-5 .select2-selection.select2-selection--single {
     padding-top: 5px !important;
     min-height: calc(1.5em + 0.7rem);
+    border-radius: 0;
 }
 
 .select2-container--bootstrap-5 .select2-selection.select2-selection--multiple {
@@ -60,6 +63,13 @@ html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection__cho
     margin-top: 0.2rem !important;
     margin-bottom: 0.1rem !important;
     margin-right: 0.2rem !important;
+}
+
+.select2-container--bootstrap-5 .select2-dropdown,
+.select2-container--bootstrap-5 .select2-selection,
+.select2-container--bootstrap-5 .select2-dropdown .select2-search .select2-search__field,
+.select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__rendered .select2-selection__choice {
+    border-radius: 0 !important;
 }
 
 .select2-container--bootstrap-5 .select2-selection--multiple .select2-search {

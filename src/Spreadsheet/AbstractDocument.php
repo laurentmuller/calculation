@@ -23,8 +23,6 @@ abstract class AbstractDocument extends SpreadsheetDocument
 {
     /**
      * @param AbstractController $controller the parent controller
-     *
-     * @throws Exception
      */
     public function __construct(protected AbstractController $controller)
     {

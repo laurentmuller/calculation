@@ -34,9 +34,6 @@ class SpreadsheetDocument extends Spreadsheet
      */
     private ?string $title = null;
 
-    /**
-     * @throws Exception
-     */
     public function __construct(private readonly TranslatorInterface $translator)
     {
         parent::__construct();
@@ -56,10 +53,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function addExternalSheet(Worksheet $worksheet, ?int $sheetIndex = null): WorksheetDocument
     {
-        if (!$worksheet instanceof WorksheetDocument) {
-            throw new Exception(\sprintf('%s expected, %s given.', WorksheetDocument::class, \get_debug_type($worksheet)));
-        }
-
+        $worksheet = $this->validateSheet($worksheet);
         parent::addExternalSheet($worksheet, $sheetIndex);
 
         return $worksheet;
@@ -88,12 +82,12 @@ class SpreadsheetDocument extends Spreadsheet
      * Create a sheet and add it to this workbook.
      *
      * @param ?int $sheetIndex the index where the sheet should go (0, 1, ..., or null for last)
-     *
-     * @throws Exception
      */
     public function createSheet(?int $sheetIndex = null): WorksheetDocument
     {
-        return $this->addSheet(new WorksheetDocument($this), $sheetIndex, true);
+        $worksheet = new WorksheetDocument($this);
+
+        return $this->addSheet($worksheet, $sheetIndex, true);
     }
 
     /**
@@ -105,8 +99,6 @@ class SpreadsheetDocument extends Spreadsheet
      * @param ?int    $sheetIndex the index where the worksheet should go (0, 1, ..., or null for last)
      *
      * @return WorksheetDocument the newly created worksheet
-     *
-     * @throws Exception
      */
     public function createSheetAndTitle(
         AbstractController $controller,
@@ -140,16 +132,16 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function getAllSheets(): array
     {
-        /** @psalm-var WorksheetDocument[] */
+        /** @var WorksheetDocument[] */
         return parent::getAllSheets();
     }
 
     /**
      * Get a sheet by the given index.
      *
-     * @param int $sheetIndex Sheet index
+     * @param int $sheetIndex the sheet index
      *
-     * @throws Exception
+     * @throws Exception if the sheet index if is out of bounds
      */
     public function getSheet(int $sheetIndex): WorksheetDocument
     {
@@ -157,14 +149,14 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Get a sheet by name.
+     * Get a sheet by the given name.
      *
-     * @param string $worksheetName Sheet name
+     * @param string $worksheetName the sheet name
      */
     public function getSheetByName(string $worksheetName): ?WorksheetDocument
     {
         $sheet = parent::getSheetByName($worksheetName);
-        if (!$sheet instanceof Worksheet) {
+        if (!$sheet instanceof WorksheetDocument) {
             return null;
         }
 
@@ -172,9 +164,11 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Get a sheet by name, throwing exception if not found.
+     * Get a sheet by the given name, throwing exception if not found.
      *
-     * @throws Exception
+     * @param string $worksheetName the sheet name
+     *
+     * @throws Exception if the sheet with the given name does not exist
      */
     public function getSheetByNameOrThrow(string $worksheetName): WorksheetDocument
     {
@@ -195,11 +189,11 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Set active sheet index.
+     * Set the active sheet index.
      *
-     * @param int $worksheetIndex Active sheet index
+     * @param int $worksheetIndex the active sheet index
      *
-     * @throws Exception
+     * @throws Exception if the sheet index if is out of bounds
      */
     public function setActiveSheetIndex(int $worksheetIndex): WorksheetDocument
     {
@@ -209,9 +203,9 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Set the active sheet index by name.
      *
-     * @param string $worksheetName Sheet title
+     * @param string $worksheetName the sheet name
      *
-     * @throws Exception
+     * @throws Exception if the given sheet name is not found
      */
     public function setActiveSheetIndexByName(string $worksheetName): WorksheetDocument
     {
@@ -370,6 +364,11 @@ class SpreadsheetDocument extends Spreadsheet
             ->setCategory($application);
     }
 
+    /**
+     * Validate that the given sheet is an instance worksheet document.
+     *
+     * @throws Exception if the given sheet is not an instance worksheet document
+     */
     protected function validateSheet(Worksheet $sheet): WorksheetDocument
     {
         if (!$sheet instanceof WorksheetDocument) {

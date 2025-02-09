@@ -20,7 +20,6 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
  * Document containing PHP configuration.
@@ -29,9 +28,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
  */
 class PhpIniDocument extends AbstractDocument
 {
-    /**
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     */
     public function __construct(AbstractController $controller, private readonly PhpInfoService $service)
     {
         parent::__construct($controller);
@@ -77,7 +73,7 @@ class PhpIniDocument extends AbstractDocument
         return true;
     }
 
-    private function applyStyle(Worksheet $sheet, int $column, int $row, string $var): self
+    private function applyStyle(WorksheetDocument $sheet, int $column, int $row, string $var): self
     {
         $color = null;
         if (StringUtils::pregMatch('/#[\dA-Fa-f]{6}/i', $var)) {

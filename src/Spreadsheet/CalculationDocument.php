@@ -43,8 +43,6 @@ class CalculationDocument extends AbstractDocument
     /**
      * @param AbstractController $controller  the parent controller
      * @param Calculation        $calculation the calculation to render
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function __construct(AbstractController $controller, private readonly Calculation $calculation)
     {

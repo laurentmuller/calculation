@@ -57,12 +57,12 @@ abstract class AbstractController extends BaseController
     use TranslatorFlashMessageAwareTrait;
 
     /**
-     * The home route name.
+     * The home page route name.
      */
     final public const HOME_PAGE = 'homepage';
 
     /**
-     * The route requirement for identifier.
+     * The route requirement for an entity identifier.
      */
     final protected const ID_REQUIREMENT = ['id' => Requirement::DIGITS];
 
@@ -75,8 +75,10 @@ abstract class AbstractController extends BaseController
      */
     public function getAddressFrom(): Address
     {
-        $email = $this->getParameterString('mailer_user_email');
-        $name = $this->getParameterString('mailer_user_name');
+        /** @var string $email */
+        $email = $this->getParameter('mailer_user_email');
+        /** @var string $name */
+        $name = $this->getParameter('mailer_user_name');
 
         return new Address($email, $name);
     }
@@ -86,7 +88,8 @@ abstract class AbstractController extends BaseController
      */
     public function getApplication(): string
     {
-        return $this->getParameterString('app_name');
+        /** @var string */
+        return $this->getParameter('app_name');
     }
 
     /**
@@ -94,7 +97,8 @@ abstract class AbstractController extends BaseController
      */
     public function getApplicationName(): string
     {
-        return $this->getParameterString('app_name_version');
+        /** @var string */
+        return $this->getParameter('app_name_version');
     }
 
     /**
@@ -102,7 +106,8 @@ abstract class AbstractController extends BaseController
      */
     public function getApplicationOwnerUrl(): string
     {
-        return $this->getParameterString('app_owner_url');
+        /** @var string */
+        return $this->getParameter('app_owner_url');
     }
 
     /**
@@ -304,16 +309,8 @@ abstract class AbstractController extends BaseController
      */
     protected function getCookiePath(): string
     {
-        return $this->getParameterString('cookie_path');
-    }
-
-    /**
-     * Gets a string container parameter by its name.
-     */
-    protected function getParameterString(string $name): string
-    {
-        /** @psalm-var string */
-        return $this->getParameter($name);
+        /** @var string */
+        return $this->getParameter('cookie_path');
     }
 
     /**

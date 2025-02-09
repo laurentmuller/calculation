@@ -29,6 +29,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
  * Extends the worksheet class with shortcuts to render cells.
+ *
+ *  Note: All work sheets are instance of  {@link SpreadsheetDocument}.
  */
 class WorksheetDocument extends Worksheet
 {
@@ -105,7 +107,7 @@ class WorksheetDocument extends Worksheet
      */
     public function getParent(): ?SpreadsheetDocument
     {
-        /** @psalm-var SpreadsheetDocument|null */
+        /** @var SpreadsheetDocument|null */
         return parent::getParent();
     }
 
@@ -139,7 +141,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Re-bind parent.
      *
-     * @throws Exception if the given $parent is not an instance of WorksheetDocument
+     * @throws Exception if the given parent is not an instance of WorksheetDocument
      */
     public function rebindParent(Spreadsheet $parent): static
     {
@@ -604,7 +606,7 @@ class WorksheetDocument extends Worksheet
      */
     private function validateTitle(string $title): string
     {
-        /** @var string[] $invalidChars */
+        /** @psalm-var string[] $invalidChars */
         $invalidChars = self::getInvalidCharacters();
         $title = \str_replace($invalidChars, '', $title);
         if (StringHelper::countCharacters($title) > self::SHEET_TITLE_MAXIMUM_LENGTH) {

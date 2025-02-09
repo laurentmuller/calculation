@@ -22,9 +22,6 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
  */
 class MySqlDocument extends AbstractDocument
 {
-    /**
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     */
     public function __construct(AbstractController $controller, private readonly DatabaseInfoService $service)
     {
         parent::__construct($controller);

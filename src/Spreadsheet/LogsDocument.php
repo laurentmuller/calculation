@@ -33,9 +33,6 @@ class LogsDocument extends AbstractDocument
      */
     private array $colors = [];
 
-    /**
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     */
     public function __construct(AbstractController $controller, private readonly LogFile $logFile)
     {
         parent::__construct($controller);

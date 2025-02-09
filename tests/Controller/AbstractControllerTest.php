@@ -14,17 +14,26 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\AbstractController;
-use App\Form\FormHelper;
 use App\Interfaces\PropertyServiceInterface;
+use App\Report\AbstractReport;
+use App\Response\PdfResponse;
+use App\Response\SpreadsheetResponse;
+use App\Response\WordResponse;
 use App\Service\ApplicationService;
 use App\Service\UrlGeneratorService;
 use App\Service\UserService;
+use App\Spreadsheet\AbstractDocument;
+use App\Spreadsheet\SpreadsheetDocument;
+use App\Word\AbstractWordDocument;
+use App\Word\WordDocument;
 use Faker\Container\ContainerException;
+use fpdf\PdfDocument;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mime\Address;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -82,6 +91,13 @@ class AbstractControllerTest extends KernelTestCase
         $controller->getRequestStack();
     }
 
+    public function testGetRequestStackWithException(): void
+    {
+        self::expectException(\LogicException::class);
+        $controller = $this->createMockController();
+        $controller->getRequestStack();
+    }
+
     public function testGetSubscribedServices(): void
     {
         $controller = $this->createController();
@@ -108,6 +124,13 @@ class AbstractControllerTest extends KernelTestCase
         $controller->getTranslator();
     }
 
+    public function testGetTranslatorWithException(): void
+    {
+        self::expectException(\LogicException::class);
+        $controller = $this->createMockController();
+        $controller->getTranslator();
+    }
+
     public function testGetUrlGenerator(): void
     {
         $controller = $this->createController();
@@ -122,6 +145,13 @@ class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createMockController();
         self::expectException(\LogicException::class);
+        $controller->getUrlGenerator();
+    }
+
+    public function testGetUrlGeneratorWithException(): void
+    {
+        self::expectException(\LogicException::class);
+        $controller = $this->createMockController();
         $controller->getUrlGenerator();
     }
 
@@ -140,6 +170,54 @@ class AbstractControllerTest extends KernelTestCase
         // second time for test caching
         $actual = $controller->getUserService();
         self::assertInstanceOf(UserService::class, $actual);
+    }
+
+    public function testGetUserServiceWithException(): void
+    {
+        self::expectException(\LogicException::class);
+        $controller = $this->createMockController();
+        $controller->getUserService();
+    }
+
+    public function testPdfDocumentWithException(): void
+    {
+        self::expectException(NotFoundHttpException::class);
+        $controller = $this->createController();
+        $report = new class($controller) extends AbstractReport {
+            public function render(): bool
+            {
+                return false;
+            }
+        };
+        /**
+         * @psalm-suppress InaccessibleMethod
+         *
+         * @phpstan-ignore method.protected
+         */
+        $controller->renderPdfDocument($report);
+    }
+
+    public function testPdfDocumentWithTitle(): void
+    {
+        $controller = $this->createController();
+        $report = new class($controller) extends AbstractReport {
+            public function render(): bool
+            {
+                return true;
+            }
+
+            public function getTitle(): string
+            {
+                return 'Fake';
+            }
+        };
+        /**
+         * @psalm-suppress InaccessibleMethod
+         *
+         * @phpstan-ignore method.protected
+         */
+        $response = $controller->renderPdfDocument($report);
+        self::assertInstanceOf(PdfResponse::class, $response);
     }
 
     public function testRedirectToHomePage(): void
@@ -164,6 +242,94 @@ class AbstractControllerTest extends KernelTestCase
         self::assertInstanceOf(RedirectResponse::class, $actual);
     }
 
+    public function testSpreadsheetDocumentWithException(): void
+    {
+        self::expectException(NotFoundHttpException::class);
+        $controller = $this->createController();
+        $doc = new class($controller) extends AbstractDocument {
+            public function render(): bool
+            {
+                return false;
+            }
+        };
+        /**
+         * @psalm-suppress InaccessibleMethod
+         *
+         * @phpstan-ignore method.protected
+         */
+        $controller->renderSpreadsheetDocument($doc);
+    }
+
+    public function testSpreadsheetDocumentWithTitle(): void
+    {
+        $controller = $this->createController();
+        $doc = new class($controller) extends AbstractDocument {
+            public function render(): bool
+            {
+                return true;
+            }
+
+            public function getTitle(): string
+            {
+                return 'Fake';
+            }
+        };
+        /**
+         * @psalm-suppress InaccessibleMethod
+         *
+         * @phpstan-ignore method.protected
+         */
+        $response = $controller->renderSpreadsheetDocument($doc);
+        self::assertInstanceOf(SpreadsheetResponse::class, $response);
+    }
+
+    /**
+     * @throws \PhpOffice\PhpWord\Exception\Exception
+     */
+    public function testWordDocumentWithException(): void
+    {
+        self::expectException(NotFoundHttpException::class);
+        $controller = $this->createController();
+        $doc = new class($controller) extends AbstractWordDocument {
+            public function render(): bool
+            {
+                return false;
+            }
+        };
+        /**
+         * @psalm-suppress InaccessibleMethod
+         *
+         * @phpstan-ignore method.protected
+         */
+        $controller->renderWordDocument($doc);
+    }
+
+    /**
+     * @throws \PhpOffice\PhpWord\Exception\Exception
+     */
+    public function testWordDocumentWithTitle(): void
+    {
+        $controller = $this->createController();
+        $doc = new class($controller) extends AbstractWordDocument {
+            public function render(): bool
+            {
+                return true;
+            }
+
+            public function getTitle(): string
+            {
+                return 'Fake';
+            }
+        };
+        /**
+         * @psalm-suppress InaccessibleMethod
+         *
+         * @phpstan-ignore method.protected
+         */
+        $response = $controller->renderWordDocument($doc);
+        self::assertInstanceOf(WordResponse::class, $response);
+    }
+
     private function createController(): AbstractController
     {
         return new class(self::getContainer()) extends AbstractController {
@@ -172,12 +338,28 @@ class AbstractControllerTest extends KernelTestCase
                 $this->setContainer($container);
             }
 
-            public function createFormHelper(
-                ?string $labelPrefix = null,
-                mixed $data = null,
-                array $options = []
-            ): FormHelper {
-                return parent::createFormHelper($labelPrefix, $data, $options);
+            public function renderPdfDocument(
+                PdfDocument $doc,
+                bool $inline = true,
+                string $name = ''
+            ): PdfResponse {
+                return parent::renderPdfDocument($doc, $inline, $name);
+            }
+
+            public function renderSpreadsheetDocument(
+                SpreadsheetDocument $doc,
+                bool $inline = true,
+                string $name = ''
+            ): SpreadsheetResponse {
+                return parent::renderSpreadsheetDocument($doc, $inline, $name);
+            }
+
+            public function renderWordDocument(
+                WordDocument $doc,
+                bool $inline = true,
+                string $name = ''
+            ): WordResponse {
+                return parent::renderWordDocument($doc, $inline, $name);
             }
         };
     }

@@ -36,8 +36,6 @@ class CalculationsEmptyDocument extends AbstractCalculationItemsDocument
     private readonly string $quantityLabel;
 
     /**
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     *
      * @psalm-param CalculationItemType[] $entities
      */
     public function __construct(AbstractController $controller, array $entities)

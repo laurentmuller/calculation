@@ -32,18 +32,19 @@ class RequestTraitTest extends TestCase
         $actual = $this->getRequestAll($request, 'key', [1, 2, 3]);
         self::assertSame([1, 2, 3], $actual);
 
-        $request = $this->createRequest(['key' => [1, 2, 3]]);
+        $request = $this->createRequest(query: ['key' => [1, 2, 3]]);
         $actual = $this->getRequestAll($request, 'key');
         self::assertSame([1, 2, 3], $actual);
 
-        $request = $this->createRequest(['key' => [1, 2, 3]]);
+        $request = $this->createRequest(request: ['key' => [1, 2, 3]]);
         $actual = $this->getRequestAll($request, 'key', [0]);
         self::assertSame([1, 2, 3], $actual);
     }
 
     public function testRequestAttributes(): void
     {
-        $request = new Request(attributes: ['key' => 'value']);
+        $attributes = ['key' => 'value'];
+        $request = new Request(attributes: $attributes);
         $actual = $this->getRequestString($request, 'key');
         self::assertSame('value', $actual);
     }
@@ -54,11 +55,11 @@ class RequestTraitTest extends TestCase
         $actual = $this->getRequestBoolean($request, 'key');
         self::assertFalse($actual);
 
-        $request = $this->createRequest(['key' => false]);
+        $request = $this->createRequest(query: ['key' => false]);
         $actual = $this->getRequestBoolean($request, 'key');
         self::assertFalse($actual);
 
-        $request = $this->createRequest(['key' => true]);
+        $request = $this->createRequest(request: ['key' => true]);
         $actual = $this->getRequestBoolean($request, 'key');
         self::assertTrue($actual);
     }
@@ -73,7 +74,7 @@ class RequestTraitTest extends TestCase
         $actual = $this->getRequestEnum($request, 'key', Theme::DARK);
         self::assertSame(Theme::DARK, $actual);
 
-        $request = $this->createRequest(['key' => Theme::DARK]);
+        $request = $this->createRequest(query: ['key' => Theme::DARK]);
         $actual = $this->getRequestEnum($request, 'key', Theme::LIGHT);
         self::assertSame(Theme::DARK, $actual);
     }
@@ -88,11 +89,11 @@ class RequestTraitTest extends TestCase
         $actual = $this->getRequestFloat($request, 'key', 1.0);
         self::assertSame(1.0, $actual);
 
-        $request = $this->createRequest(['key' => 1.0]);
+        $request = $this->createRequest(query: ['key' => 1.0]);
         $actual = $this->getRequestFloat($request, 'key');
         self::assertSame(1.0, $actual);
 
-        $request = $this->createRequest(['key' => 1.0]);
+        $request = $this->createRequest(request: ['key' => 1.0]);
         $actual = $this->getRequestFloat($request, 'key', 2.0);
         self::assertSame(1.0, $actual);
     }
@@ -107,11 +108,11 @@ class RequestTraitTest extends TestCase
         $actual = $this->getRequestInt($request, 'key', 1);
         self::assertSame(1, $actual);
 
-        $request = $this->createRequest(['key' => 1]);
+        $request = $this->createRequest(query: ['key' => 1]);
         $actual = $this->getRequestInt($request, 'key');
         self::assertSame(1, $actual);
 
-        $request = $this->createRequest(['key' => 1.0]);
+        $request = $this->createRequest(request: ['key' => 1.0]);
         $actual = $this->getRequestInt($request, 'key', 2);
         self::assertSame(1, $actual);
     }
@@ -133,11 +134,11 @@ class RequestTraitTest extends TestCase
         $actual = $this->getRequestString($request, 'key', 'empty');
         self::assertSame('empty', $actual);
 
-        $request = $this->createRequest(['key' => 'empty']);
+        $request = $this->createRequest(query: ['key' => 'empty']);
         $actual = $this->getRequestString($request, 'key', 'empty');
         self::assertSame('empty', $actual);
 
-        $request = $this->createRequest(['key' => 'empty']);
+        $request = $this->createRequest(request: ['key' => 'empty']);
         $actual = $this->getRequestString($request, 'key', 'default');
         self::assertSame('empty', $actual);
     }
@@ -149,15 +150,35 @@ class RequestTraitTest extends TestCase
         self::assertNull($actual);
     }
 
-    private function createRequest(array $request = []): Request
+    /**
+     * @param array<string, scalar|array|\BackedEnum> $query
+     * @param array<string, scalar|array|\BackedEnum> $request
+     * @param array<string, scalar|array|\BackedEnum> $attributes
+     */
+    private function createRequest(
+        array $query = [],
+        array $request = [],
+        array $attributes = []
+    ): Request {
+        $query = $this->mapValues($query);
+        $request = $this->mapValues($request);
+        $attributes = $this->mapValues($attributes);
+
+        return new Request(query: $query, request: $request, attributes: $attributes);
+    }
+
+    /**
+     * @param array<string, scalar|array|\BackedEnum> $values
+     */
+    private function mapValues(array $values): array
     {
-        /** @psalm-var mixed $value */
-        foreach ($request as &$value) {
+        /* @psalm-var scalar|array|\BackedEnum $value */
+        foreach ($values as &$value) {
             if ($value instanceof \BackedEnum) {
                 $value = $value->value;
             }
         }
 
-        return new Request(request: $request);
+        return $values;
     }
 }

@@ -29,3 +29,8 @@ symfony.lock
 /deployment.phar
 /deploy/
 ###< deploy ###
+
+###> scss ###
+/package-lock.json
+/node_modules
+###< scss ###

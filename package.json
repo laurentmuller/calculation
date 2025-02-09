@@ -1,0 +1,16 @@
+{
+    "name": "custom_bootstrap",
+    "version": "1.0.0",
+    "description": "Extends Bootstrap with no rounded and themed popovers and tooltips.",
+    "license": "MIT",
+    "author": "bibi@bibi.nu",
+    "type": "commonjs",
+    "dependencies": {
+        "bootstrap": "^5.3",
+        "jquery": "^3.7"
+    },
+    "scripts": {
+        "watch": "sass --watch scss/bootstrap.scss:public/css/bootstrap.css --no-source-map",
+        "build": "sass scss/bootstrap.scss:public/css/bootstrap.css --no-source-map"
+    }
+}

@@ -11666,5 +11666,3 @@ html[data-bs-theme=dark] .popover-dark {
 html[data-bs-theme=light] .popover-light {
   --bs-popover-border-color: var(--bs-light-border-subtle);
 }
-
-/*# sourceMappingURL=bootstrap.css.map */

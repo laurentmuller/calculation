@@ -1,0 +1,34 @@
+// custom variables
+$enable-rounded: false;
+$tooltip-opacity: 1.0;
+
+/**! compression tag for ftp-deployment */
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+$separator: --;
+
+/** Themed tooltips */
+@each $key, $value in $theme-colors {
+    .tooltip-#{$key} {
+        #{$separator}#{$prefix}tooltip-bg: var(--#{$prefix}#{$key});
+        #{$separator}#{$prefix}tooltip-color: color-contrast($value);
+    }
+}
+
+/* Themed popovers */
+@each $key, $value in $theme-colors {
+    .popover-#{$key} {
+        #{$separator}#{$prefix}popover-border-color: var(--#{$prefix}#{$key});
+        #{$separator}#{$prefix}popover-header-bg: var(--#{$prefix}#{$key});
+        #{$separator}#{$prefix}popover-header-color: color-contrast($value);
+    }
+}
+
+/** special border for themed popover */
+html[data-bs-theme=dark] .popover-dark {
+    --bs-popover-border-color: var(--bs-dark-border-subtle);
+}
+
+html[data-bs-theme=light] .popover-light {
+    --bs-popover-border-color: var(--bs-light-border-subtle);
+}

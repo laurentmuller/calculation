@@ -11568,6 +11568,11 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+/** keep form-switch rounded */
+.form-switch .form-check-input {
+  border-radius: 2em;
+}
+
 /** Themed tooltips */
 .tooltip-primary {
   --bs-tooltip-bg: var(--bs-primary);
@@ -11665,4 +11670,50 @@ html[data-bs-theme=dark] .popover-dark {
 
 html[data-bs-theme=light] .popover-light {
   --bs-popover-border-color: var(--bs-light-border-subtle);
+}
+
+/* Themed form-check */
+.form-check.form-primary .form-check-input:checked {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+.form-check.form-secondary .form-check-input:checked {
+  background-color: var(--bs-secondary);
+  border-color: var(--bs-secondary);
+}
+
+.form-check.form-success .form-check-input:checked {
+  background-color: var(--bs-success);
+  border-color: var(--bs-success);
+}
+
+.form-check.form-info .form-check-input:checked {
+  background-color: var(--bs-info);
+  border-color: var(--bs-info);
+}
+
+.form-check.form-warning .form-check-input:checked {
+  background-color: var(--bs-warning);
+  border-color: var(--bs-warning);
+}
+
+.form-check.form-danger .form-check-input:checked {
+  background-color: var(--bs-danger);
+  border-color: var(--bs-danger);
+}
+
+.form-check.form-light .form-check-input:checked {
+  background-color: var(--bs-light);
+  border-color: var(--bs-light);
+}
+
+.form-check.form-dark .form-check-input:checked {
+  background-color: var(--bs-dark);
+  border-color: var(--bs-dark);
+}
+
+/* special case for themed form check */
+html[data-bs-theme=dark] .form-check.form-dark .form-check-input:checked {
+  border-color: var(--bs-border-color);
 }

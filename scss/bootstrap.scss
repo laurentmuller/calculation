@@ -5,6 +5,11 @@ $tooltip-opacity: 1.0;
 /**! compression tag for ftp-deployment */
 @import "../node_modules/bootstrap/scss/bootstrap";
 
+/** keep form-switch rounded */
+.form-switch .form-check-input {
+    @include border-radius($form-switch-border-radius, $form-switch-border-radius);
+}
+
 $separator: --;
 
 /** Themed tooltips */
@@ -31,4 +36,17 @@ html[data-bs-theme=dark] .popover-dark {
 
 html[data-bs-theme=light] .popover-light {
     --bs-popover-border-color: var(--bs-light-border-subtle);
+}
+
+/* Themed form-check */
+@each $key, $value in $theme-colors {
+    .form-check.form-#{$key} .form-check-input:checked {
+        background-color: var(--#{$prefix}#{$key});
+        border-color: var(--#{$prefix}#{$key});
+    }
+}
+
+/* special case for themed form check */
+html[data-bs-theme=dark] .form-check.form-dark .form-check-input:checked {
+    border-color: var(--bs-border-color);
 }

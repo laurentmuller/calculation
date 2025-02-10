@@ -70,8 +70,8 @@ $(function () {
         const title = options.title ? $(this).text() : null;
         notify(type, title, options);
 
-        // update options
-        $('.form-switch:has(.control-option)').attr('class', 'form-check form-check-inline form-switch form-' + type);
+        // update class
+        $('.form-check-option').attr('class', 'form-check form-check-inline form-switch form-check-option form-' + type);
     });
 
     // set default values
@@ -98,7 +98,7 @@ $(function () {
     });
 
     // display a notification when a value change
-    $('#position, #timeout, #progress, #maxNbChars, .control-option').on('input', function () {
+    $('#position, #timeout, #progress, #maxNbChars, .form-check-input-option').on('input', function () {
         random();
         const $this = $(this);
         if ($this.is(('#autohide'))) {

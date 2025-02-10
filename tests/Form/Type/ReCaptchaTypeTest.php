@@ -111,7 +111,7 @@ class ReCaptchaTypeTest extends TypeTestCase
         $form = $this->factory->create(ReCaptchaType::class, $data);
         $form->submit($data);
         self::assertTrue($form->isSynchronized());
-        self::assertCount(0, $form->getErrors());
+        self::assertEmpty($form->getErrors());
         self::assertSame($data, $form->getData());
     }
 

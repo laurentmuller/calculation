@@ -48,8 +48,8 @@ class CategoryTest extends EntityValidatorTestCase
         self::assertSame(0, $object->countProducts());
         self::assertSame(0, $object->countTasks());
         self::assertSame(0, $object->countItems());
-        self::assertCount(0, $object->getProducts());
-        self::assertCount(0, $object->getTasks());
+        self::assertEmpty($object->getProducts());
+        self::assertEmpty($object->getTasks());
         self::assertFalse($object->hasProducts());
         self::assertFalse($object->hasTasks());
 
@@ -59,7 +59,7 @@ class CategoryTest extends EntityValidatorTestCase
         self::assertSame(0, $object->countTasks());
         self::assertSame(1, $object->countItems());
         self::assertCount(1, $object->getProducts());
-        self::assertCount(0, $object->getTasks());
+        self::assertEmpty($object->getTasks());
         self::assertTrue($object->hasProducts());
         self::assertFalse($object->hasTasks());
 
@@ -77,7 +77,7 @@ class CategoryTest extends EntityValidatorTestCase
         self::assertSame(0, $object->countProducts());
         self::assertSame(1, $object->countTasks());
         self::assertSame(1, $object->countItems());
-        self::assertCount(0, $object->getProducts());
+        self::assertEmpty($object->getProducts());
         self::assertCount(1, $object->getTasks());
         self::assertFalse($object->hasProducts());
         self::assertTrue($object->hasTasks());
@@ -86,8 +86,8 @@ class CategoryTest extends EntityValidatorTestCase
         self::assertSame(0, $object->countProducts());
         self::assertSame(0, $object->countTasks());
         self::assertSame(0, $object->countItems());
-        self::assertCount(0, $object->getProducts());
-        self::assertCount(0, $object->getTasks());
+        self::assertEmpty($object->getProducts());
+        self::assertEmpty($object->getTasks());
         self::assertFalse($object->hasProducts());
         self::assertFalse($object->hasTasks());
     }

@@ -85,7 +85,7 @@ class CommandFormServiceTest extends KernelServiceTestCase
         $filtered = $commandFormService->filter($view, CommandFormService::ARGUMENT_TEXT);
         self::assertCount(1, $filtered);
         $filtered = $commandFormService->filter($view, CommandFormService::ARGUMENT_BOOL);
-        self::assertCount(0, $filtered);
+        self::assertEmpty($filtered);
     }
 
     /**

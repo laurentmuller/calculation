@@ -59,7 +59,7 @@ class SwissPostServiceTest extends TestCase
     {
         $actual = $this->service
             ->findAll('fake');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testFindCityFound(): void
@@ -80,7 +80,7 @@ class SwissPostServiceTest extends TestCase
     {
         $actual = $this->service
             ->findCity('fake');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testFindStreetFound(): void
@@ -102,7 +102,7 @@ class SwissPostServiceTest extends TestCase
     {
         $actual = $this->service
             ->findStreet('fake');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testFindZipFound(): void
@@ -123,7 +123,7 @@ class SwissPostServiceTest extends TestCase
     {
         $actual = $this->service
             ->findZip('fake');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testGetDatabaseName(): void

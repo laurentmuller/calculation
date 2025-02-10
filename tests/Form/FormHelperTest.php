@@ -77,7 +77,7 @@ class FormHelperTest extends TypeTestCase
     {
         $helper = $this->getFormHelper();
         $actual = $helper->field(self::FIELD)
-            ->addCheckboxType(switch: true, inline: true)
+            ->addCheckboxType(inline: true)
             ->createForm();
         self::assertCount(1, $actual);
         self::assertSameType($actual, CheckboxType::class);
@@ -92,29 +92,29 @@ class FormHelperTest extends TypeTestCase
             ->createForm();
         self::assertCount(1, $actual);
         self::assertSameType($actual, CheckboxType::class);
-        self::assertSameLabelAttribute($actual, 'class', null);
+        self::assertSameLabelAttribute($actual, 'class', 'checkbox-switch');
     }
 
     public function testCheckboxTypeInline(): void
     {
         $helper = $this->getFormHelper();
         $actual = $helper->field(self::FIELD)
-            ->addCheckboxType(inline: true)
+            ->addCheckboxType(switch: false, inline: true)
             ->createForm();
         self::assertCount(1, $actual);
         self::assertSameType($actual, CheckboxType::class);
         self::assertSameLabelAttribute($actual, 'class', 'checkbox-inline');
     }
 
-    public function testCheckboxTypeSwitch(): void
+    public function testCheckboxTypeNone(): void
     {
         $helper = $this->getFormHelper();
         $actual = $helper->field(self::FIELD)
-            ->addCheckboxType(switch: true)
+            ->addCheckboxType(switch: false)
             ->createForm();
         self::assertCount(1, $actual);
         self::assertSameType($actual, CheckboxType::class);
-        self::assertSameLabelAttribute($actual, 'class', 'checkbox-switch');
+        self::assertSameLabelAttribute($actual, 'class', null);
     }
 
     public function testChoiceType(): void

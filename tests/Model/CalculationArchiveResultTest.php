@@ -47,7 +47,7 @@ class CalculationArchiveResultTest extends TestCase
 
         $result->reset();
         self::assertCount(0, $result);
-        self::assertCount(0, $result->getResults());
+        self::assertEmpty($result->getResults());
         self::assertFalse($result->isValid());
 
         $expected = [];
@@ -59,7 +59,7 @@ class CalculationArchiveResultTest extends TestCase
     {
         $result = new CalculationArchiveResult();
         self::assertCount(0, $result);
-        self::assertCount(0, $result->getResults());
+        self::assertEmpty($result->getResults());
         self::assertFalse($result->isValid());
     }
 

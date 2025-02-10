@@ -35,8 +35,8 @@ class LogFileTest extends TestCase
     public function testAddLog(): void
     {
         self::assertCount(0, $this->file);
-        self::assertCount(0, $this->file->getLevels());
-        self::assertCount(0, $this->file->getChannels());
+        self::assertEmpty($this->file->getLevels());
+        self::assertEmpty($this->file->getChannels());
 
         $log = $this->createLog();
         $this->file->addLog($log);

@@ -126,7 +126,7 @@ class TaskItemTest extends EntityValidatorTestCase
     {
         $item = new TaskItem();
         self::assertCount(0, $item);
-        self::assertCount(0, $item->getMargins());
+        self::assertEmpty($item->getMargins());
         self::assertTrue($item->isEmpty());
 
         $margin = $this->createMargin(0);
@@ -141,7 +141,7 @@ class TaskItemTest extends EntityValidatorTestCase
 
         $item->removeMargin($margin);
         self::assertCount(0, $item);
-        self::assertCount(0, $item->getMargins());
+        self::assertEmpty($item->getMargins());
         self::assertTrue($item->isEmpty());
     }
 

@@ -34,7 +34,7 @@ class ProductProviderTest extends TestCase
     {
         $provider = $this->createProvider();
         $actual = $provider->products();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testProductsWithOneProduct(): void

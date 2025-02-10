@@ -154,8 +154,10 @@ class FormHelper
      * @param bool $notRequired <code>true</code> if not required; <code>false</code> if required
      * @param bool $switch      <code>true</code> to use the checkbox switch style, <code>false</code> to use
      *                          the default style
+     * @param bool $inline      <code>true</code> to set checkbox inline style, <code>false</code>
+     *                          to use the default style
      */
-    public function addCheckboxType(bool $notRequired = true, bool $switch = false, bool $inline = false): self
+    public function addCheckboxType(bool $notRequired = true, bool $switch = true, bool $inline = false): self
     {
         $classes = [];
         if ($switch) {

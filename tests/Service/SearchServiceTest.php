@@ -103,10 +103,10 @@ class SearchServiceTest extends KernelServiceTestCase
     {
         $service = $this->createSearchService();
         $actual = $service->search('');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $actual = $service->search('fake');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $this->getCalculation();
         $actual = $service->search('customer');
@@ -119,14 +119,14 @@ class SearchServiceTest extends KernelServiceTestCase
         self::assertCount(1, $actual);
 
         $actual = $service->search('customer', 'fake_entity');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testSearchNotGranted(): void
     {
         $service = $this->createSearchService(true, false);
         $actual = $service->search('fake');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testSearchWithDebug(): void

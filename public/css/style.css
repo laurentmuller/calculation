@@ -1,7 +1,5 @@
 @import 'context_menu.css';
 @import 'color_picker.css';
-@import 'tooltips.css';
-@import 'popover.css';
 @import 'toast.css';
 @import 'colums.css';
 @import 'sidebar.css';
@@ -601,20 +599,6 @@ table.table-fixed-header th {
         min-width: 50%;
     }
 }
-
-/*
-@media (max-width: 768px) {
-    .index-child {
-        min-width: 50%;
-    }
-}
-
-@media (max-width: 576px) {
-    .index-child {
-        min-width: 100%;
-    }
-}
-*/
 
 /* bold font for default action */
 .dropdown-menu .btn-default {

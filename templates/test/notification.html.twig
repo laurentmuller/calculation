@@ -2,8 +2,18 @@
 {% from 'macros/_icons.html.twig' import homepage %}
 {# macros #}
 {% macro button(type) -%}
-<button type="button" data-type="{{ type }}" class="btn btn-notify btn-{{ type }}{% if type == 'dark' %} border{% endif %}" style="min-width: 109px;">
-    {{- ('background.' ~ type)|trans -}}
+{%- set text = ('background.' ~ type)|trans -%}
+<button type="button"
+        data-type="{{ type }}"
+        data-bs-html="true"
+        data-bs-trigger="hover"
+        data-bs-toggle="popover"
+        data-bs-placement="right"
+        data-bs-custom-class="popover-{{ type }}"
+        data-bs-title="{{ 'test.notification'|trans }}"
+        data-bs-content="Affiche une notification de type <b>{{ text }}</b> avec des données aléatoires."
+        class="btn btn-notify btn-{{ type }}{% if type == 'dark' %} border{% endif %}" style="min-width: 109px;">
+    {{- text -}}
 </button>
 {%- endmacro %}
 

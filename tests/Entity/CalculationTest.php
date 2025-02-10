@@ -221,10 +221,10 @@ class CalculationTest extends EntityValidatorTestCase
 
         $calculation = new Calculation();
         self::assertFalse($calculation->hasDuplicateItems());
-        self::assertCount(0, $calculation->getDuplicateItems());
+        self::assertEmpty($calculation->getDuplicateItems());
         $calculation->addProduct($product);
         self::assertFalse($calculation->hasDuplicateItems());
-        self::assertCount(0, $calculation->getDuplicateItems());
+        self::assertEmpty($calculation->getDuplicateItems());
         $calculation->addProduct($product);
         self::assertTrue($calculation->hasDuplicateItems());
         self::assertCount(2, $calculation->getDuplicateItems());
@@ -253,7 +253,7 @@ class CalculationTest extends EntityValidatorTestCase
 
         $calculation = new Calculation();
         self::assertFalse($calculation->hasEmptyItems());
-        self::assertCount(0, $calculation->getEmptyItems());
+        self::assertEmpty($calculation->getEmptyItems());
         $calculation->addProduct($product);
         self::assertTrue($calculation->hasEmptyItems());
         self::assertCount(1, $calculation->getEmptyItems());
@@ -377,7 +377,7 @@ class CalculationTest extends EntityValidatorTestCase
         self::assertCount(0, $entity);
 
         $calculation = new Calculation();
-        self::assertCount(0, $calculation->getGroups());
+        self::assertEmpty($calculation->getGroups());
         self::assertSame(0, $calculation->getGroupsCount());
         self::assertSame(0, $calculation->getCategoriesCount());
         self::assertFalse($calculation->contains($entity));
@@ -388,7 +388,7 @@ class CalculationTest extends EntityValidatorTestCase
         self::assertTrue($calculation->contains($entity));
 
         $calculation->removeGroup($entity);
-        self::assertCount(0, $calculation->getGroups());
+        self::assertEmpty($calculation->getGroups());
         self::assertSame(0, $calculation->getGroupsCount());
         self::assertFalse($calculation->contains($entity));
     }
@@ -503,7 +503,7 @@ class CalculationTest extends EntityValidatorTestCase
         self::assertCount(1, $calculation->getGroups());
 
         $calculation->removeEmptyItems();
-        self::assertCount(0, $calculation->getGroups());
+        self::assertEmpty($calculation->getGroups());
     }
 
     public function testRemoveEmptyItemsWithoutCategory(): void
@@ -543,10 +543,10 @@ class CalculationTest extends EntityValidatorTestCase
     public function testRemoveGroup(): void
     {
         $calculation = new Calculation();
-        self::assertCount(0, $calculation->getGroups());
+        self::assertEmpty($calculation->getGroups());
         $group = new CalculationGroup();
         $calculation->removeGroup($group);
-        self::assertCount(0, $calculation->getGroups());
+        self::assertEmpty($calculation->getGroups());
     }
 
     public function testSortable(): void

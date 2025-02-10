@@ -45,7 +45,7 @@ class OpenWeatherSearchServiceTest extends TestCase
     public function testSearchEmpty(): void
     {
         $actual = $this->service->search('fake');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testSearchSuccess(): void

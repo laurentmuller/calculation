@@ -21,7 +21,7 @@ class CalculationStateTest extends EntityValidatorTestCase
     {
         $state = new CalculationState();
         self::assertSame(0, $state->countCalculations());
-        self::assertCount(0, $state->getCalculations());
+        self::assertEmpty($state->getCalculations());
         self::assertFalse($state->hasCalculations());
     }
 

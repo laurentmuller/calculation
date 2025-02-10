@@ -74,7 +74,7 @@ class SearchTableTest extends TestCase
         $table = $this->createTable($service);
         $results = $table->processDataQuery(new DataQuery());
         self::assertSame(Response::HTTP_OK, $results->status);
-        self::assertCount(0, $results->rows);
+        self::assertEmpty($results->rows);
     }
 
     public function testWithSearchNoResult(): void
@@ -86,7 +86,7 @@ class SearchTableTest extends TestCase
         $table = $this->createTable($service);
         $results = $table->processDataQuery($query);
         self::assertSame(Response::HTTP_OK, $results->status);
-        self::assertCount(0, $results->rows);
+        self::assertEmpty($results->rows);
     }
 
     public function testWithSearchResults(): void

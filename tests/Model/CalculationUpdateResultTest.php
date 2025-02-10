@@ -28,7 +28,7 @@ class CalculationUpdateResultTest extends TestCase
     {
         $result = new CalculationUpdateResult();
         self::assertCount(0, $result);
-        self::assertCount(0, $result->getResults());
+        self::assertEmpty($result->getResults());
         self::assertFalse($result->isValid());
     }
 

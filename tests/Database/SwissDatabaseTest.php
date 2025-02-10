@@ -44,7 +44,7 @@ class SwissDatabaseTest extends TestCase
         $this->insertCity();
 
         $actual = $this->database->findCity('fake');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $actual = $this->database->findCity(self::CITY_NAME);
         self::assertCount(1, $actual);
@@ -63,7 +63,7 @@ class SwissDatabaseTest extends TestCase
         $this->insertStreet();
 
         $actual = $this->database->findStreet('fake');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $actual = $this->database->findStreet(self::STREET_NAME);
         self::assertCount(1, $actual);
@@ -79,16 +79,16 @@ class SwissDatabaseTest extends TestCase
     public function testFindWhenEmpty(): void
     {
         $actual = $this->database->findAll(self::CITY_NAME);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $actual = $this->database->findCity(self::CITY_NAME);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $actual = $this->database->findZip((string) self::CITY_ZIP);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $actual = $this->database->findStreet(self::STREET_NAME);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testFindZip(): void
@@ -97,7 +97,7 @@ class SwissDatabaseTest extends TestCase
         $this->insertCity();
 
         $actual = $this->database->findZip('fake');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $actual = $this->database->findZip((string) self::CITY_ZIP);
         self::assertCount(1, $actual);

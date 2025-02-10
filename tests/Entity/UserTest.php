@@ -25,7 +25,7 @@ class UserTest extends EntityValidatorTestCase
     public function testAddProperty(): void
     {
         $user = new User();
-        self::assertCount(0, $user->getProperties());
+        self::assertEmpty($user->getProperties());
         $property = new UserProperty();
         $user->addProperty($property);
         self::assertCount(1, $user->getProperties());
@@ -300,7 +300,7 @@ class UserTest extends EntityValidatorTestCase
         $user->addProperty($property);
         self::assertCount(1, $user->getProperties());
         $user->removeProperty($property);
-        self::assertCount(0, $user->getProperties());
+        self::assertEmpty($user->getProperties());
     }
 
     public function testSerialize(): void

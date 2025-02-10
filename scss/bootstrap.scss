@@ -1,52 +1,70 @@
-// custom variables
+// override variables
 $enable-rounded: false;
 $tooltip-opacity: 1.0;
 
 /**! compression tag for ftp-deployment */
 @import "../node_modules/bootstrap/scss/bootstrap";
 
-/** keep form-switch rounded */
+/* themed tooltips */
+@each $key, $value in $theme-colors {
+    .tooltip.tooltip-#{$key} {
+        --#{$prefix}tooltip-bg: var(--#{$prefix}#{$key});
+        --#{$prefix}tooltip-color: #{color-contrast($value)};
+    }
+}
+
+/* specific tooltips */
+.tooltip.tooltip-lg .tooltip-inner {
+    max-width: #{$modal-sm};
+}
+
+.tooltip.tooltip-xl .tooltip-inner {
+    max-width: #{$modal-md};
+}
+
+/* themed popovers */
+@each $key, $value in $theme-colors {
+    $color: var(--#{$prefix}#{$key});
+    .popover.popover-#{$key} {
+        --#{$prefix}popover-border-color: #{$color};
+        --#{$prefix}popover-header-bg: #{$color};
+        --#{$prefix}popover-header-color: #{color-contrast($value)};
+    }
+}
+
+/* specific popover */
+.popover.popover-w-100 {
+    max-width: 100%;
+}
+
+/* themed form-check */
+@each $key, $value in $theme-colors {
+    $color: var(--#{$prefix}#{$key});
+    .form-check.form-#{$key} .form-check-input:checked {
+        background-color: #{$color};
+        border-color: #{$color};
+    }
+}
+
+/* keep form-switch rounded */
 .form-switch .form-check-input {
     @include border-radius($form-switch-border-radius, $form-switch-border-radius);
 }
 
-$separator: --;
-
-/** Themed tooltips */
-@each $key, $value in $theme-colors {
-    .tooltip-#{$key} {
-        #{$separator}#{$prefix}tooltip-bg: var(--#{$prefix}#{$key});
-        #{$separator}#{$prefix}tooltip-color: color-contrast($value);
+/* light theme exceptions */
+html[data-bs-theme=light] {
+    .popover-light {
+        --bs-popover-border-color: var(--bs-light-border-subtle);
     }
 }
 
-/* Themed popovers */
-@each $key, $value in $theme-colors {
-    .popover-#{$key} {
-        #{$separator}#{$prefix}popover-border-color: var(--#{$prefix}#{$key});
-        #{$separator}#{$prefix}popover-header-bg: var(--#{$prefix}#{$key});
-        #{$separator}#{$prefix}popover-header-color: color-contrast($value);
+/* dark theme exceptions */
+html[data-bs-theme=dark] {
+    .popover-dark {
+        --bs-popover-border-color: var(--bs-dark-border-subtle);
     }
-}
 
-/** special border for themed popover */
-html[data-bs-theme=dark] .popover-dark {
-    --bs-popover-border-color: var(--bs-dark-border-subtle);
-}
-
-html[data-bs-theme=light] .popover-light {
-    --bs-popover-border-color: var(--bs-light-border-subtle);
-}
-
-/* Themed form-check */
-@each $key, $value in $theme-colors {
-    .form-check.form-#{$key} .form-check-input:checked {
-        background-color: var(--#{$prefix}#{$key});
-        border-color: var(--#{$prefix}#{$key});
+    .form-check.form-dark .form-check-input:checked {
+        border-color: var(--bs-border-color);
     }
-}
-
-/* special case for themed form check */
-html[data-bs-theme=dark] .form-check.form-dark .form-check-input:checked {
-    border-color: var(--bs-border-color);
 }

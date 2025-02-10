@@ -60,7 +60,7 @@ class LogTableTest extends TestCase
         $query = $this->createDataQuery(limit: 0);
         $results = $table->processDataQuery($query);
         self::assertSame(Response::HTTP_PRECONDITION_FAILED, $results->status);
-        self::assertCount(0, $results->rows);
+        self::assertEmpty($results->rows);
     }
 
     public function testWithoutData(): void
@@ -69,7 +69,7 @@ class LogTableTest extends TestCase
         $table = $this->createTableWithoutData();
         $results = $table->processDataQuery($query);
         self::assertSame(Response::HTTP_OK, $results->status);
-        self::assertCount(0, $results->rows);
+        self::assertEmpty($results->rows);
     }
 
     public function testWitSearchChannel(): void

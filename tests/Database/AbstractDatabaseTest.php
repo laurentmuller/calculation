@@ -84,7 +84,7 @@ class AbstractDatabaseTest extends TestCase
         $stmt = $this->database->prepare($query);
         self::assertInstanceOf(\SQLite3Stmt::class, $stmt);
         $actual = $this->database->executeAndFetch($stmt);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testInvalidStatement(): void

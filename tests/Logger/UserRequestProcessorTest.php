@@ -30,7 +30,7 @@ class UserRequestProcessorTest extends TestCase
         $record = $processor($this->createRecord());
 
         $extra = $record->extra;
-        self::assertCount(0, $extra);
+        self::assertEmpty($extra);
     }
 
     public function testInvokeWithUser(): void

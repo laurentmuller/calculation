@@ -28,7 +28,7 @@ class NotificationEmailTest extends TestCase
     {
         $mail = CspViolationEmail::create();
         $mail->attachFromUploadedFile(null);
-        self::assertCount(0, $mail->getAttachments());
+        self::assertEmpty($mail->getAttachments());
 
         $file = new UploadedFile(
             path: __FILE__,
@@ -42,7 +42,7 @@ class NotificationEmailTest extends TestCase
     public function testAttachFromUploadedFiles(): void
     {
         $mail = CspViolationEmail::create();
-        self::assertCount(0, $mail->getAttachments());
+        self::assertEmpty($mail->getAttachments());
 
         $file = new UploadedFile(
             path: __FILE__,

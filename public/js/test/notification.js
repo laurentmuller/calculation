@@ -106,6 +106,9 @@ $(function () {
         }
     });
 
+    // popover
+    $('button[data-type][data-bs-toggle="popover"]').popover();
+
     // first notification
     random();
 });

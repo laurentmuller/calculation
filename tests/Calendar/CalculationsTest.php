@@ -33,7 +33,6 @@ class CalculationsTest extends CalendarTestCase
     {
         $actual = $this->createCalculationsDay();
         self::assertTrue($actual->isEmpty());
-        self::assertCount(0, $actual);
         self::assertSame([], $actual->getCalculations());
 
         $calculation = new Calculation();
@@ -47,7 +46,6 @@ class CalculationsTest extends CalendarTestCase
     {
         $actual = $this->createCalculationsMonth();
         self::assertTrue($actual->isEmpty());
-        self::assertCount(0, $actual);
         self::assertSame([], $actual->getCalculations());
 
         $calculation = new Calculation();
@@ -61,7 +59,6 @@ class CalculationsTest extends CalendarTestCase
     {
         $actual = $this->createCalculationsWeek();
         self::assertTrue($actual->isEmpty());
-        self::assertCount(0, $actual);
         self::assertSame([], $actual->getCalculations());
 
         $calculation = new Calculation();

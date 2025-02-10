@@ -67,7 +67,7 @@ class UserPropertyTest extends EntityValidatorTestCase
 
         try {
             $actual = $this->getRepository()->findByUser($user);
-            self::assertCount(0, $actual);
+            self::assertEmpty($actual);
             $this->saveEntity($expected);
             $actual = $this->getRepository()->findByUser($user);
             self::assertCount(1, $actual);

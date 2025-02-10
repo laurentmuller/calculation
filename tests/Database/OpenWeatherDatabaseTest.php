@@ -60,7 +60,7 @@ class OpenWeatherDatabaseTest extends TestCase
         $this->insertCity();
 
         $actual = $this->database->findCity('fake');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $actual = $this->database->findCity(self::NAME);
         self::assertCount(1, $actual);
@@ -78,7 +78,7 @@ class OpenWeatherDatabaseTest extends TestCase
         $this->insertCity();
 
         $actual = $this->database->findCityCountry('fake', 'fake');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $actual = $this->database->findCityCountry(self::NAME, self::COUNTRY);
         self::assertCount(1, $actual);
@@ -94,16 +94,16 @@ class OpenWeatherDatabaseTest extends TestCase
     public function testFindCitySplit(): void
     {
         $actual = $this->database->findCity('fake, fake');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testFindWhenEmpty(): void
     {
         $actual = $this->database->findCity(self::NAME);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $actual = $this->database->findCityCountry(self::NAME, self::COUNTRY);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     private function insertCity(): bool

@@ -48,7 +48,7 @@ class CalculationDuplicateTableTest extends TestCase
         $query = new DataQuery();
         $query->limit = 15;
         $results = $table->processDataQuery($query);
-        self::assertCount(0, $results->rows);
+        self::assertEmpty($results->rows);
     }
 
     private function createMockRepository(array $entities = []): MockObject&CalculationRepository

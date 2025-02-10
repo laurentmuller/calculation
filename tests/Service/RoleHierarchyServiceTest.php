@@ -40,7 +40,7 @@ class RoleHierarchyServiceTest extends TestCase
         $hierarchy = $this->createMock(RoleHierarchyInterface::class);
         $service = new RoleHierarchyService($hierarchy);
         $actual = $service->getRoleNames(null);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testGetRoleNamesWithRole(): void

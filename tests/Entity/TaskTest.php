@@ -128,7 +128,7 @@ class TaskTest extends EntityValidatorTestCase
         self::assertTrue($task->isEmpty());
         self::assertCount(0, $task);
         self::assertSame(0, $task->countMargins());
-        self::assertCount(0, $task->getItems());
+        self::assertEmpty($task->getItems());
 
         $item = new TaskItem();
         $task->removeItem($item);
@@ -148,7 +148,7 @@ class TaskTest extends EntityValidatorTestCase
         self::assertTrue($task->isEmpty());
         self::assertCount(0, $task);
         self::assertSame(0, $task->countMargins());
-        self::assertCount(0, $task->getItems());
+        self::assertEmpty($task->getItems());
     }
 
     public function testUpdatePosition(): void

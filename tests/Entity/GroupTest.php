@@ -27,8 +27,8 @@ class GroupTest extends EntityValidatorTestCase
     {
         $group = new Group();
         self::assertFalse($group->hasCategories());
-        self::assertCount(0, $group->getCategories());
-        self::assertSame(0, $group->countCategories());
+        self::assertEmpty($group->getCategories());
+        self::assertEmpty($group->countCategories());
 
         $category = new Category();
         $group->addCategory($category);
@@ -38,7 +38,7 @@ class GroupTest extends EntityValidatorTestCase
 
         $group->removeCategory($category);
         self::assertFalse($group->hasCategories());
-        self::assertCount(0, $group->getCategories());
+        self::assertEmpty($group->getCategories());
         self::assertSame(0, $group->countCategories());
     }
 
@@ -180,7 +180,7 @@ class GroupTest extends EntityValidatorTestCase
     {
         $group = new Group();
         self::assertFalse($group->hasMargins());
-        self::assertCount(0, $group->getMargins());
+        self::assertEmpty($group->getMargins());
         self::assertSame(0, $group->countMargins());
 
         $margin = $this->createMargin();
@@ -191,7 +191,7 @@ class GroupTest extends EntityValidatorTestCase
 
         $group->removeMargin($margin);
         self::assertFalse($group->hasMargins());
-        self::assertCount(0, $group->getMargins());
+        self::assertEmpty($group->getMargins());
         self::assertSame(0, $group->countMargins());
     }
 

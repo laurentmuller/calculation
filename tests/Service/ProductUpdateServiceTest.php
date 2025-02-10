@@ -116,7 +116,7 @@ class ProductUpdateServiceTest extends TestCase
 
         $result = $service->update($query);
         self::assertFalse($result->isValid());
-        self::assertCount(0, $result->getProducts());
+        self::assertEmpty($result->getProducts());
     }
 
     #[DataProvider('getFixedRounded')]

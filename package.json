@@ -9,7 +9,7 @@
         "bootstrap": "^5.3"
     },
     "scripts": {
-        "watch": "sass --watch scss/bootstrap.scss:public/css/bootstrap.css --no-source-map",
-        "build": "sass scss/bootstrap.scss:public/css/bootstrap.css --no-source-map"
+        "watch": "sass --watch --no-source-map scss/bootstrap.scss:public/vendor/bootstrap/css/bootstrap.css",
+        "build": "sass --no-source-map scss/bootstrap.scss:public/vendor/bootstrap/css/bootstrap.css"
     }
 }

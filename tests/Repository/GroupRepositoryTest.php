@@ -43,7 +43,7 @@ class GroupRepositoryTest extends KernelServiceTestCase
     public function testFindByCode(): void
     {
         $actual = $this->repository->findByCode();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $this->getGroup();
         $actual = $this->repository->findByCode();
@@ -53,11 +53,11 @@ class GroupRepositoryTest extends KernelServiceTestCase
     public function testGetDropDown(): void
     {
         $actual = $this->repository->getDropDown();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $this->getCategory();
         $actual = $this->repository->getDropDown();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $group = new Group();
         $group->setCode('My Code');

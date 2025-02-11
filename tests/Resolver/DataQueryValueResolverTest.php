@@ -89,7 +89,7 @@ class DataQueryValueResolverTest extends TestCase
 
         $actual = $resolver->resolve($request, $argument);
         self::assertIsArray($actual);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testWithCaller(): void

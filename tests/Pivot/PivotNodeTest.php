@@ -61,7 +61,7 @@ class PivotNodeTest extends TestCase
         self::assertFalse($node->isTitle());
 
         $actual = $node->getChildren();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
         self::assertNull($node->getParent());
         self::assertSame('key', $node->getTitle());
         self::assertSame([], $node->getTitles());

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\ProductUpdateResult;
+use App\Tests\AssertEmptyTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,6 +22,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductUpdateResultTest extends TestCase
 {
+    use AssertEmptyTrait;
+
     public function testAddProduct(): void
     {
         $result = new ProductUpdateResult();
@@ -36,7 +39,7 @@ class ProductUpdateResultTest extends TestCase
     public function testCount(): void
     {
         $actual = new ProductUpdateResult();
-        self::assertCount(0, $actual);
+        self::assertEmptyCountable($actual);
     }
 
     public function testIsValid(): void

@@ -48,11 +48,11 @@ class CategoryRepositoryTest extends KernelServiceTestCase
     public function testGetDropDownProducts(): void
     {
         $actual = $this->repository->getDropDownProducts();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $this->getProduct();
         $actual = $this->repository->getDropDownProducts();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $category = new Category();
         $category->setCode('My Code')
@@ -76,11 +76,11 @@ class CategoryRepositoryTest extends KernelServiceTestCase
     public function testGetDropDownTasks(): void
     {
         $actual = $this->repository->getDropDownTasks();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $this->getTask();
         $actual = $this->repository->getDropDownTasks();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $category = new Category();
         $category->setCode('My Code')

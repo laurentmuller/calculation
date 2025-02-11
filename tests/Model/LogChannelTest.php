@@ -14,11 +14,14 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\LogChannel;
+use App\Tests\AssertEmptyTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class LogChannelTest extends TestCase
 {
+    use AssertEmptyTrait;
+
     public static function getChannelIcons(): \Generator
     {
         yield ['application', 'fa-fw fa-solid fa-laptop-code'];
@@ -48,7 +51,7 @@ class LogChannelTest extends TestCase
     public function testIncrement(): void
     {
         $logChannel = LogChannel::instance('channel');
-        self::assertCount(0, $logChannel);
+        self::assertEmptyCountable($logChannel);
         $logChannel->increment();
         self::assertCount(1, $logChannel);
         $logChannel->increment(2);
@@ -61,6 +64,6 @@ class LogChannelTest extends TestCase
         self::assertSame('channel', $logChannel->getChannel());
         self::assertSame('channel', $logChannel->__toString());
         self::assertSame('Channel', $logChannel->getChannelTitle());
-        self::assertCount(0, $logChannel);
+        self::assertEmptyCountable($logChannel);
     }
 }

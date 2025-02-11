@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\LogService;
+use App\Tests\AssertEmptyTrait;
 use App\Tests\KernelServiceTestCase;
 use App\Tests\TranslatorMockTrait;
 use Psr\Log\LoggerInterface;
@@ -22,6 +23,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LogServiceTest extends KernelServiceTestCase
 {
+    use AssertEmptyTrait;
     use TranslatorMockTrait;
 
     private LogService $service;
@@ -101,7 +103,7 @@ class LogServiceTest extends KernelServiceTestCase
 
         $actual = $service->getLogFile();
         self::assertNotNull($actual);
-        self::assertCount(0, $actual);
+        self::assertEmptyCountable($actual);
     }
 
     public function testParseInvalidJSON(): void

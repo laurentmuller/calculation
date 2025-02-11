@@ -42,7 +42,7 @@ class UserPropertyRepositoryTest extends KernelServiceTestCase
         $this->addEntity($user);
 
         $actual = $this->repository->findByUser($user);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $property = new UserProperty();
         $property->setUser($user)

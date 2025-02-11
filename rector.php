@@ -14,7 +14,6 @@ declare(strict_types=1);
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
-use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertCountWithZeroToAssertEmptyRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
@@ -30,9 +29,6 @@ return RectorConfig::configure()
         __DIR__ . '/public',
     ])->withSkip([
         PreferPHPUnitThisCallRector::class,
-        AssertCountWithZeroToAssertEmptyRector::class => [
-            __DIR__ . '/tests',
-        ],
     ])->withSets([
         // global
         SetList::PHP_82,

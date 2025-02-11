@@ -70,14 +70,14 @@ class TaskRepositoryTest extends KernelServiceTestCase
     public function testGetSortedTask(): void
     {
         $actual = $this->repository->getSortedTask();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $this->getTask();
         $actual = $this->repository->getSortedTask();
         self::assertCount(1, $actual);
 
         $actual = $this->repository->getSortedTask(false);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testGetSortFields(): void

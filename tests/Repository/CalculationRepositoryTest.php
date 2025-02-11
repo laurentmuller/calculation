@@ -101,7 +101,7 @@ class CalculationRepositoryTest extends KernelServiceTestCase
         $from = new \DateTimeImmutable();
         $to = new \DateTimeImmutable();
         $actual = $this->repository->getByInterval($from, $to);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     /**
@@ -110,10 +110,10 @@ class CalculationRepositoryTest extends KernelServiceTestCase
     public function testGetByMonth(): void
     {
         $actual = $this->repository->getByMonth();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $actual = $this->repository->getByMonth(12);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $this->getCalculation();
         $actual = $this->repository->getByMonth(12);
@@ -123,49 +123,49 @@ class CalculationRepositoryTest extends KernelServiceTestCase
     public function testGetCalendarYears(): void
     {
         $actual = $this->repository->getCalendarYears();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testGetCalendarYearsMonths(): void
     {
         $actual = $this->repository->getCalendarYearsMonths();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testGetCalendarYearsWeeks(): void
     {
         $actual = $this->repository->getCalendarYearsWeeks();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testGetForMonth(): void
     {
         $actual = $this->repository->getForMonth(2024, 1);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testGetForWeek(): void
     {
         $actual = $this->repository->getForWeek(2024, 1);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testGetForYear(): void
     {
         $actual = $this->repository->getForYear(2024);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testGetItemsBelow(): void
     {
         $actual = $this->repository->getItemsBelow(1.1);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testGetItemsDuplicate(): void
     {
         $actual = $this->repository->getItemsDuplicate();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $calculation = $this->getCalculation();
         $product = $this->getProduct();
@@ -180,7 +180,7 @@ class CalculationRepositoryTest extends KernelServiceTestCase
     public function testGetItemsEmpty(): void
     {
         $actual = $this->repository->getItemsEmpty();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $calculation = $this->getCalculation();
         $product = $this->getProduct();
@@ -197,13 +197,13 @@ class CalculationRepositoryTest extends KernelServiceTestCase
     public function testGetLastCalculations(): void
     {
         $actual = $this->repository->getLastCalculations(6);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $user = new User();
         $user->setUsername('fake');
         self::setId($user);
         $actual = $this->repository->getLastCalculations(6, $user);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $this->getCalculation();
         $actual = $this->repository->getLastCalculations(6);
@@ -236,7 +236,7 @@ class CalculationRepositoryTest extends KernelServiceTestCase
     public function testGetPivot(): void
     {
         $actual = $this->repository->getPivot();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testGetSearchFields(): void

@@ -48,12 +48,15 @@ class FontAwesomeImageService
      */
     public const SVG_EXTENSION = '.svg';
 
+    private const IMAGE_FORMAT = 'png24';
     private const SVG_PREFIX = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
     private const SVG_REPLACE = '<svg fill="%s" ';
     private const SVG_SEARCH = '<svg ';
     private const TARGET_SIZE = 64;
+    private const TRANSPARENT_COLOR = 'white';
     private const VIEW_BOX_PATTERN = '/viewBox="(\d+\s+){2}(?\'width\'\d+)\s+(?\'height\'\d+)"/mi';
 
+    private ?\Imagick $imagick = null;
     private bool $imagickException = false;
 
     public function __construct(
@@ -86,9 +89,7 @@ class FontAwesomeImageService
      */
     public function getImage(string $relativePath, ?string $color = null): ?FontAwesomeImage
     {
-        if (!FileUtils::isDir($this->svgDirectory)
-            || $this->isImagickException()
-            || !$this->isSvgSupported()) {
+        if (!$this->isCallable()) {
             return null;
         }
 
@@ -113,11 +114,22 @@ class FontAwesomeImageService
     }
 
     /**
-     * Gets the directory where SVG files as stored.
+     * Gets the directory where SVG files are stored.
      */
     public function getSvgDirectory(): string
     {
         return $this->svgDirectory;
+    }
+
+    /**
+     * Gets a value indicating if images can be loaded.
+     *
+     * To allow loading images, the SVG directory must exist; the SVG format must be supported by the Imagick
+     * library, and no Imagick exception has yet been raised.
+     */
+    public function isCallable(): bool
+    {
+        return $this->isSvgDirectory() && $this->isSvgSupported() && !$this->isImagickException();
     }
 
     /**
@@ -138,22 +150,26 @@ class FontAwesomeImageService
 
     private function convert(string $content): FontAwesomeImage
     {
-        $imagick = null;
+        $imagick = $this->getImagick();
 
         try {
-            $imagick = new \Imagick();
             $imagick->readImageBlob($content);
             $size = $this->getTargetSize($content);
             $imagick->resizeImage($size[0], $size[1], \Imagick::FILTER_LANCZOS, 1);
-            $imagick->transparentPaintImage('white', 0.0, (float) \Imagick::getQuantum(), false);
-            $imagick->setImageFormat('png24');
+            $imagick->transparentPaintImage(self::TRANSPARENT_COLOR, 0.0, (float) \Imagick::getQuantum(), false);
+            $imagick->setImageFormat(self::IMAGE_FORMAT);
             $imageBlob = $imagick->getImageBlob();
             $resolution = (int) $imagick->getImageResolution()['x'];
 
             return new FontAwesomeImage($imageBlob, $size[0], $size[1], $resolution);
         } finally {
-            $imagick?->clear();
+            $imagick->clear();
         }
+    }
+
+    private function getImagick(): \Imagick
+    {
+        return $this->imagick ??= new \Imagick();
     }
 
     /**
@@ -169,10 +185,15 @@ class FontAwesomeImageService
         $width = (int) $matches['width'];
         $height = (int) $matches['height'];
         if ($width > $height) {
-            return [self::TARGET_SIZE, $this->round(self::TARGET_SIZE * $height, $width)];
+            return [self::TARGET_SIZE, $this->roundSize(self::TARGET_SIZE * $height, $width)];
         }
 
-        return [$this->round(self::TARGET_SIZE * $width, $height), self::TARGET_SIZE];
+        return [$this->roundSize(self::TARGET_SIZE * $width, $height), self::TARGET_SIZE];
+    }
+
+    private function isSvgDirectory(): bool
+    {
+        return $this->cache->get('svg_directory', fn (): bool => FileUtils::isDir($this->svgDirectory));
     }
 
     /**
@@ -233,7 +254,7 @@ class FontAwesomeImageService
         return \str_replace(self::SVG_SEARCH, \sprintf(self::SVG_REPLACE, $color), $content);
     }
 
-    private function round(float $dividend, float $divisor): int
+    private function roundSize(float $dividend, float $divisor): int
     {
         return (int) \round($dividend / $divisor);
     }

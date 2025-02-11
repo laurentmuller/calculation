@@ -17,9 +17,11 @@ use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Task;
 use App\Entity\TaskItem;
+use App\Tests\AssertEmptyTrait;
 
 class TaskTest extends EntityValidatorTestCase
 {
+    use AssertEmptyTrait;
     use IdTrait;
 
     public function testClone(): void
@@ -126,13 +128,13 @@ class TaskTest extends EntityValidatorTestCase
     {
         $task = new Task();
         self::assertTrue($task->isEmpty());
-        self::assertCount(0, $task);
+        self::assertEmptyCountable($task);
         self::assertSame(0, $task->countMargins());
         self::assertEmpty($task->getItems());
 
         $item = new TaskItem();
         $task->removeItem($item);
-        self::assertCount(0, $task);
+        self::assertEmptyCountable($task);
 
         $task->addItem($item);
         self::assertFalse($task->isEmpty());
@@ -146,7 +148,7 @@ class TaskTest extends EntityValidatorTestCase
 
         $task->removeItem($item);
         self::assertTrue($task->isEmpty());
-        self::assertCount(0, $task);
+        self::assertEmptyCountable($task);
         self::assertSame(0, $task->countMargins());
         self::assertEmpty($task->getItems());
     }

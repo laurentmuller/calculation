@@ -49,7 +49,7 @@ class GlobalMarginRepositoryTest extends KernelServiceTestCase
     public function testFindByMinimum(): void
     {
         $actual = $this->repository->findByMinimum();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         try {
             $this->getGlobalMargin();
@@ -72,13 +72,13 @@ class GlobalMarginRepositoryTest extends KernelServiceTestCase
     public function testGetDistinctValues(): void
     {
         $actual = $this->repository->getDistinctValues('minimum');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $actual = $this->repository->getDistinctValues('minimum', '0');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $actual = $this->repository->getDistinctValues('minimum', '0', 15);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testGetMargin(): void

@@ -70,14 +70,14 @@ $tooltip-opacity: 1.0;
 /* light theme exceptions */
 html[data-bs-theme=light] {
     .popover-light {
-        --bs-popover-border-color: #{var-property(light-border-subtle)};
+        #{prefix-property(popover-border-color)}: #{var-property(light-border-subtle)};
     }
 }
 
 /* dark theme exceptions */
 html[data-bs-theme=dark] {
     .popover-dark {
-        --bs-popover-border-color: #{var-property(dark-border-subtle)};
+        #{prefix-property(popover-border-color)}: #{var-property(dark-border-subtle)};
     }
 
     .form-check.form-dark .form-check-input:checked {

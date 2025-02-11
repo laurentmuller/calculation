@@ -59,7 +59,7 @@ class PasswordTooltipServiceTest extends TestCase
     {
         $service = new PasswordTooltipService($this->application, $this->translator);
         $actual = $service->getTooltips();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testWithPasswordLetter(): void

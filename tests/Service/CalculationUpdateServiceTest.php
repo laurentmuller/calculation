@@ -18,6 +18,7 @@ use App\Entity\Group;
 use App\Entity\GroupMargin;
 use App\Entity\Product;
 use App\Service\CalculationUpdateService;
+use App\Tests\AssertEmptyTrait;
 use App\Tests\DatabaseTrait;
 use App\Tests\DateAssertTrait;
 use App\Tests\EntityTrait\CalculationTrait;
@@ -30,6 +31,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 class CalculationUpdateServiceTest extends AuthenticateWebTestCase
 {
+    use AssertEmptyTrait;
     use CalculationTrait;
     use DatabaseTrait;
     use DateAssertTrait;
@@ -44,8 +46,8 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
     {
         $service = $this->getService(CalculationUpdateService::class);
         $query = $service->createQuery();
-        self::assertCount(0, $query->getStates());
-        self::assertCount(0, $query->getStatesId());
+        self::assertEmpty($query->getStates());
+        self::assertEmpty($query->getStatesId());
         self::assertSame('', $query->getStatesCode());
 
         $expected = $this->getDateFrom();
@@ -98,8 +100,8 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         $service = $this->getService(CalculationUpdateService::class);
         $query = $service->createQuery();
         $result = $service->update($query);
-        self::assertCount(0, $result->getResults());
-        self::assertCount(0, $result);
+        self::assertEmpty($result->getResults());
+        self::assertEmptyCountable($result);
         self::assertFalse($result->isValid());
     }
 
@@ -111,8 +113,8 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         $query = $service->createQuery();
 
         $result = $service->update($query);
-        self::assertCount(0, $result);
-        self::assertCount(0, $result->getResults());
+        self::assertEmptyCountable($result);
+        self::assertEmpty($result->getResults());
         self::assertFalse($result->isValid());
     }
 
@@ -151,8 +153,8 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         $query = $service->createQuery();
 
         $result = $service->update($query);
-        self::assertCount(0, $result);
-        self::assertCount(0, $result->getResults());
+        self::assertEmptyCountable($result);
+        self::assertEmpty($result->getResults());
         self::assertFalse($result->isValid());
     }
 

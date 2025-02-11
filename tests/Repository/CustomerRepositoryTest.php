@@ -32,7 +32,7 @@ class CustomerRepositoryTest extends KernelServiceTestCase
     public function testFindByNameAndCompany(): void
     {
         $actual = $this->repository->findByNameAndCompany();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testGetSearchFields(): void

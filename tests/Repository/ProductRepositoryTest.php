@@ -49,7 +49,7 @@ class ProductRepositoryTest extends KernelServiceTestCase
     {
         $category = $this->getCategory();
         $actual = $this->repository->findByCategory($category);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
         $this->getProduct();
         $actual = $this->repository->findByCategory($category);
         self::assertCount(1, $actual);
@@ -58,7 +58,7 @@ class ProductRepositoryTest extends KernelServiceTestCase
     public function testFindByDescription(): void
     {
         $actual = $this->repository->findByDescription();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $this->getProduct();
         $actual = $this->repository->findByDescription();
@@ -69,7 +69,7 @@ class ProductRepositoryTest extends KernelServiceTestCase
     {
         $this->getGroup();
         $actual = $this->repository->findByGroup();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $this->getProduct();
         $actual = $this->repository->findByGroup();
@@ -146,7 +146,7 @@ class ProductRepositoryTest extends KernelServiceTestCase
     public function testSearch(): void
     {
         $actual = $this->repository->search('fake');
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $this->getProduct();
         $actual = $this->repository->search('Test');

@@ -88,7 +88,7 @@ class UserRepositoryTest extends KernelServiceTestCase
     public function testGetResettableUsers(): void
     {
         $actual = $this->repository->getResettableUsers();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testGetSortedBuilder(): void

@@ -16,16 +16,19 @@ namespace App\Tests\Pdf\Html;
 use App\Pdf\Html\HtmlBrChunk;
 use App\Pdf\Html\HtmlLiChunk;
 use App\Pdf\Html\HtmlUlChunk;
+use App\Tests\AssertEmptyTrait;
 use PHPUnit\Framework\TestCase;
 
 class HtmlUlChunkTest extends TestCase
 {
+    use AssertEmptyTrait;
+
     public function testAdd(): void
     {
         $ulChunk = new HtmlUlChunk('ul');
-        self::assertCount(0, $ulChunk);
+        self::assertEmptyCountable($ulChunk);
         $ulChunk->add(new HtmlBrChunk('br'));
-        self::assertCount(0, $ulChunk);
+        self::assertEmptyCountable($ulChunk);
         $ulChunk->add(new HtmlLiChunk('li'));
         self::assertCount(1, $ulChunk);
     }

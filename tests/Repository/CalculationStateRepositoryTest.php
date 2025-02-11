@@ -45,7 +45,7 @@ class CalculationStateRepositoryTest extends KernelServiceTestCase
     public function testGetCalculations(): void
     {
         $actual = $this->repository->getCalculations();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $this->getCalculation();
         $actual = $this->repository->getCalculations();
@@ -55,11 +55,11 @@ class CalculationStateRepositoryTest extends KernelServiceTestCase
     public function testGetDropDown(): void
     {
         $actual = $this->repository->getDropDown();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $this->getCalculation();
         $actual = $this->repository->getDropDown();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $state = new CalculationState();
         $state->setCode('My Code');
@@ -83,11 +83,11 @@ class CalculationStateRepositoryTest extends KernelServiceTestCase
     public function testGetDropDownBelow(): void
     {
         $actual = $this->repository->getDropDownBelow(0.0);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
 
         $this->getCalculation();
         $actual = $this->repository->getDropDownBelow(0.0);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     public function testGetEditableCount(): void

@@ -15,11 +15,13 @@ namespace App\Tests\Model;
 
 use App\Entity\GlobalMargin;
 use App\Model\GlobalMargins;
+use App\Tests\AssertEmptyTrait;
 use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\TestCase;
 
 class GlobalMarginsTest extends TestCase
 {
+    use AssertEmptyTrait;
     use IdTrait;
 
     /**
@@ -28,7 +30,7 @@ class GlobalMarginsTest extends TestCase
     public function testAddMargin(): void
     {
         $margins = new GlobalMargins();
-        self::assertCount(0, $margins);
+        self::assertEmptyCountable($margins);
 
         $margin = $this->createMargin();
         $margins->addMargin($margin);
@@ -43,7 +45,7 @@ class GlobalMarginsTest extends TestCase
     public function testConstruct(): void
     {
         $margins = new GlobalMargins();
-        self::assertCount(0, $margins);
+        self::assertEmptyCountable($margins);
 
         $margins = new GlobalMargins([$this->createMargin()]);
         self::assertCount(1, $margins);
@@ -52,7 +54,7 @@ class GlobalMarginsTest extends TestCase
     public function testCount(): void
     {
         $margins = new GlobalMargins();
-        self::assertCount(0, $margins);
+        self::assertEmptyCountable($margins);
     }
 
     /**
@@ -62,7 +64,7 @@ class GlobalMarginsTest extends TestCase
     {
         $margins = new GlobalMargins();
         $actual = $margins->getMargins();
-        self::assertCount(0, $actual);
+        self::assertEmptyCountable($actual);
         $margins->addMargin($this->createMargin());
         $actual = $margins->getMargins();
         self::assertCount(1, $actual);
@@ -75,13 +77,13 @@ class GlobalMarginsTest extends TestCase
     {
         $margins = new GlobalMargins();
         $margin = $this->createMargin();
-        self::assertCount(0, $margins);
+        self::assertEmptyCountable($margins);
         $margins->removeMargin($margin);
-        self::assertCount(0, $margins);
+        self::assertEmptyCountable($margins);
         $margins->addMargin($margin);
         self::assertCount(1, $margins);
         $margins->removeMargin($margin);
-        self::assertCount(0, $margins);
+        self::assertEmptyCountable($margins);
     }
 
     /**

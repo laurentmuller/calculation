@@ -55,8 +55,8 @@ class CalculationArchiveServiceTest extends TestCase
         $this->setCalculationStates();
         $service = $this->createService();
         $actual = $service->createQuery();
-        self::assertCount(0, $actual->getSources());
-        self::assertCount(0, $actual->getSourcesId());
+        self::assertEmpty($actual->getSources());
+        self::assertEmpty($actual->getSourcesId());
         self::assertNull($actual->getTarget());
         self::assertInstanceOf(\DateTimeImmutable::class, $actual->getDate());
     }
@@ -227,7 +227,7 @@ class CalculationArchiveServiceTest extends TestCase
         $query = new CalculationArchiveQuery();
         $service = $this->createService();
         $actual = $service->update($query);
-        self::assertCount(0, $actual->getResults());
+        self::assertEmpty($actual->getResults());
     }
 
     public function testUpdateWithNotSimulate(): void

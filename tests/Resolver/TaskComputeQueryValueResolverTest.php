@@ -54,7 +54,7 @@ class TaskComputeQueryValueResolverTest extends TestCase
         $actual = $resolver->resolve($request, $argument);
 
         self::assertIsArray($actual);
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 
     /**

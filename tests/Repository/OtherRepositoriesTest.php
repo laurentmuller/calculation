@@ -74,6 +74,6 @@ class OtherRepositoriesTest extends KernelServiceTestCase
     {
         $repository = $this->getService($class);
         $actual = $repository->findAll();
-        self::assertCount(0, $actual);
+        self::assertEmpty($actual);
     }
 }

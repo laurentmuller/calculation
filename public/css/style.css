@@ -969,3 +969,10 @@ body.status-bar .grecaptcha-badge {
     color: inherit;
     background-color: inherit;
 }
+
+/*
+ * Border for dark button in dark mode
+ */
+html[data-bs-theme=dark] .card-body button.btn.btn-dark {
+    border: var(--bs-border-width) solid var(--bs-border-color);
+}

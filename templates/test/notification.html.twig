@@ -12,7 +12,7 @@
         data-bs-custom-class="popover-{{ type }}"
         data-bs-title="{{ 'test.notification'|trans }}"
         data-bs-content="Affiche une notification de type <b>{{ text }}</b> avec des données aléatoires."
-        class="btn btn-notify btn-{{ type }}{% if type == 'dark' %} border{% endif %}" style="min-width: 109px;">
+        class="btn btn-notify btn-{{ type }}" style="min-width: 109px;">
     {{- text -}}
 </button>
 {%- endmacro %}

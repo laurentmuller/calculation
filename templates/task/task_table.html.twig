@@ -74,5 +74,6 @@
 {% block custom_view_body -%}
 {{ _self.property_value('%groupCode% / %categoryCode%') }}
 {{ _self.property_row('task.fields.unit', '%unit%') }}
+{{ _self.property_line() }}
 {{ _self.property_row('task.fields.items', '%items%') }}
 {%- endblock %}

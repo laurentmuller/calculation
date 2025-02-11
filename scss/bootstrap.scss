@@ -5,11 +5,28 @@ $tooltip-opacity: 1.0;
 /**! compression tag for ftp-deployment */
 @import "../node_modules/bootstrap/scss/bootstrap";
 
+// functions and methods
+@function prefix-property($property) {
+    @return --#{$prefix}#{$property};
+}
+
+@function var-property($property) {
+    @return var(#{prefix-property($property)});
+}
+
+@mixin var-color($property, $key) {
+    #{prefix-property($property)}: #{var-property($key)};
+}
+
+@mixin contrast-color($property, $value) {
+    #{prefix-property($property)}: #{color-contrast($value)};
+}
+
 /* themed tooltips */
 @each $key, $value in $theme-colors {
     .tooltip.tooltip-#{$key} {
-        --#{$prefix}tooltip-bg: var(--#{$prefix}#{$key});
-        --#{$prefix}tooltip-color: #{color-contrast($value)};
+        @include var-color(tooltip-bg, $key);
+        @include contrast-color(tooltip-color, $value);
     }
 }
 
@@ -24,11 +41,10 @@ $tooltip-opacity: 1.0;
 
 /* themed popovers */
 @each $key, $value in $theme-colors {
-    $color: var(--#{$prefix}#{$key});
     .popover.popover-#{$key} {
-        --#{$prefix}popover-border-color: #{$color};
-        --#{$prefix}popover-header-bg: #{$color};
-        --#{$prefix}popover-header-color: #{color-contrast($value)};
+        @include var-color(popover-header-bg, $key);
+        @include var-color(popover-border-color, $key);
+        @include contrast-color(popover-header-color, $value);
     }
 }
 
@@ -39,7 +55,7 @@ $tooltip-opacity: 1.0;
 
 /* themed form-check */
 @each $key, $value in $theme-colors {
-    $color: var(--#{$prefix}#{$key});
+    $color: var-property($key);
     .form-check.form-#{$key} .form-check-input:checked {
         background-color: #{$color};
         border-color: #{$color};
@@ -54,17 +70,17 @@ $tooltip-opacity: 1.0;
 /* light theme exceptions */
 html[data-bs-theme=light] {
     .popover-light {
-        --bs-popover-border-color: var(--bs-light-border-subtle);
+        --bs-popover-border-color: #{var-property(light-border-subtle)};
     }
 }
 
 /* dark theme exceptions */
 html[data-bs-theme=dark] {
     .popover-dark {
-        --bs-popover-border-color: var(--bs-dark-border-subtle);
+        --bs-popover-border-color: #{var-property(dark-border-subtle)};
     }
 
     .form-check.form-dark .form-check-input:checked {
-        border-color: var(--bs-border-color);
+        border-color: #{var-property(border-color)};
     }
 }

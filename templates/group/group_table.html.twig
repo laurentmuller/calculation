@@ -60,6 +60,7 @@
 {# custom view body #}
 {% block custom_view_body -%}
 {{ _self.property_value('%description%') }}
+{{ _self.property_line() }}
 <div class="row rowlink-skip">
     <div class="col-4 user-select-none">{{ 'group.fields.margins'|trans }}</div>
     <div class="col-2 user-select-none">%margins%</div>

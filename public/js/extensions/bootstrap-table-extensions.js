@@ -24,13 +24,19 @@
  * @property {string} view - the display mode ('table' or 'custom').
  * @property {string} searchText - the search text.
  *
- * @typedef {jQuery} jQueryTable - the bootstrap table.
+ * @typedef {jQuery<HTMLTableElement>} jQueryTable - the bootstrap table.
  * @property {Options} getOptions - the options.
  * @property {boolean} isCustomView - true if custom view is displayed.
- * @property {jQuery} getCustomView - get the custom view.
+ * @property {jQuery<HTMLDivElement>} getCustomView - get the custom view.
  * @property {jQueryTable} enableKeys - enable the key handler.
  * @property {jQueryTable} disableKeys - disable the key handler.
  */
+
+/**
+ * The loading message.
+ * @type {string|null}
+ */
+let loadingMessage = null;
 
 /**
  * Gets the loading template.
@@ -38,11 +44,13 @@
  * @param {string} message - the loading message.
  * @returns {string} the loading template.
  */
+
 function loadingTemplate(message) {
     'use strict';
-    return `<div class="alert alert-light alert-loading-message text-center" role="alert">
-                <i class="fa-solid fa-spinner fa-spin me-2"></i>${message}
-           </div>`
+    if (loadingMessage === null) {
+        loadingMessage = $('#loading-template').html();
+    }
+    return loadingMessage.replace('%message%', message);
 }
 
 /**
@@ -85,7 +93,7 @@ $(function () {
          */
         updateCustomRow: function ($table) {
             const index = $(this).parents('.col-custom-view').index();
-            const $row = $table.find('tbody tr[data-index]:eq(' + index + ')');
+            const $row = $table.find(`tbody tr[data-index]:eq(${index})`);
             if ($row.length) {
                 return $row.updateRow($table);
             }
@@ -100,18 +108,14 @@ $(function () {
          */
         updateRow: function ($table) {
             const $row = $(this);
-            const options = $table.getOptions();
-            const rowClass = options.rowClass;
-
             // no data?
             if ($row.hasClass('no-records-found')) {
                 return true;
             }
 
-            // already selected?
-            if ($row.hasClass(rowClass)) {
-                return true;
-            }
+            // get selection class
+            const options = $table.getOptions();
+            const rowClass = options.rowClass;
 
             // remove old selection
             $table.find(options.rowSelector).removeClass(rowClass);
@@ -121,9 +125,14 @@ $(function () {
 
             // custom view?
             if ($table.isCustomView()) {
+                // remove selection
                 const $view = $table.getCustomView();
-                $view.find('.custom-item.' + rowClass).removeClass(rowClass);
-                $view.find('.custom-item:eq(' + $row.index() + ')').addClass(rowClass);
+                $view.find(options.customSelector).removeClass(rowClass);
+
+                // add selection
+                const index = $row.index();
+                const selector = `.custom-item:eq(${index})`;
+                $view.find(selector).addClass(rowClass);
             }
             $table.showSelection();
             $table.trigger('update-row.bs.table', this);
@@ -182,9 +191,7 @@ $(function () {
                         const isModal = $item.is('.page-first-separator,.page-last-separator');
                         const title = isModal ? modalTitle : $link.attr('aria-label');
                         $link.attr({
-                            'href': '#',
-                            'title': title,
-                            'aria-label': title
+                            'href': '#', 'title': title, 'aria-label': title
                         });
                         if (isModal) {
                             $item.removeClass('disabled');
@@ -202,12 +209,11 @@ $(function () {
                 },
 
                 onCustomViewPostBody: function (data) {
-                    const $view = $this.getCustomView();
-
                     // data?
                     if (data.length !== 0) {
                         // hide the empty data message
                         $this.hideCustomViewMessage();
+                        const $view = $this.getCustomView();
                         const params = $this.getParameters();
                         const selector = '.custom-view-actions:eq(%index%)';
                         const callback = typeof options.onRenderCustomView === 'function' ? options.onRenderCustomView : false;
@@ -217,7 +223,6 @@ $(function () {
                             const rowSelector = selector.replace('%index%', '' + index);
                             const $customActions = $view.find(rowSelector);
                             $rowActions.appendTo($customActions);
-
                             if (callback) {
                                 const row = data[index];
                                 const $item = $customActions.parents('.custom-item');
@@ -226,9 +231,9 @@ $(function () {
                         });
 
                         // display selection
-                        const $selection = $view.find(options.customSelector);
-                        if ($selection.length) {
-                            $selection.scrollInViewport();
+                        const $row = $this.getSelection();
+                        if ($row) {
+                            $row.updateRow($this);
                         }
                         $this.highlight();
                     } else {
@@ -428,23 +433,6 @@ $(function () {
         },
 
         /**
-         * Scroll the selected row, if any, into the visible area of the browser window.
-         *
-         * @return {jQuery} this instance for chaining.
-         */
-        showSelection: function () {
-            const $this = $(this);
-            let $row = $this.getSelection();
-            if ($row) {
-                if ($this.isCustomView()) {
-                    $row = $this.getCustomView().find('.custom-item:eq(' + $row.index() + ')');
-                }
-                $row.scrollInViewport();
-            }
-            return $this;
-        },
-
-        /**
          * Gets the selected row index.
          *
          * @return {int} the selected row index, if any; -1 otherwise.
@@ -455,18 +443,46 @@ $(function () {
         },
 
         /**
+         * Scroll the selected row, if any, into the visible area of the browser window.
+         *
+         * @return {jQuery} this instance for chaining.
+         */
+        showSelection: function () {
+            const $this = $(this);
+            let $row = $this.getSelection();
+            if (!$row) {
+                return this;
+            }
+
+            if ($this.isCustomView()) {
+                const index = $row.index();
+                const options = $this.getOptions();
+                const rowClass = options.rowClass;
+                const $view = $this.getCustomView();
+                const selector = `.custom-item:eq(${index})`;
+                $row = $view.find(selector);
+                $row.addClass(rowClass);
+            }
+            $row.scrollInViewport();
+
+            return $this;
+        },
+
+
+        /**
          * Gets the custom view container.
          *
          * @return {jQuery<HTMLDivElement>|null} the custom view container, if displayed, null otherwise.
          */
         getCustomView: function () {
             const $this = $(this);
-            if ($this.isCustomView()) {
-                /** @type {jQuery<HTMLDivElement>} */
-                const $parent = $this.parents('.bootstrap-table');
-                return $parent.find('.fixed-table-custom-view');
+            if (!$this.isCustomView()) {
+                return null;
             }
-            return null;
+
+            /** @type {jQuery<HTMLDivElement>} */
+            const $parent = $this.parents('.bootstrap-table');
+            return $parent.find('.fixed-table-custom-view');
         },
 
         /**
@@ -594,18 +610,19 @@ $(function () {
         highlight: function () {
             const $this = $(this);
             const text = $this.getSearchText();
-            if (text.length > 0) {
-                const options = {
-                    element: 'span',
-                    className: 'text-success',
-                    separateWordSearch: false,
-                    ignorePunctuation: ['\'', ',']
-                };
-                if ($this.isCustomView()) {
-                    $this.getCustomView().find('.custom-item').mark(text, options);
-                } else {
-                    $this.find('tbody td:not(.rowlink-skip)').mark(text, options);
-                }
+            if (!text) {
+                return $this;
+            }
+            const options = {
+                element: 'span',
+                className: 'text-success',
+                separateWordSearch: false,
+                ignorePunctuation: ['\'', ',']
+            };
+            if ($this.isCustomView()) {
+                $this.getCustomView().find('.custom-item').mark(text, options);
+            } else {
+                $this.find('tbody td:not(.rowlink-skip)').mark(text, options);
             }
             return $this;
         },
@@ -677,13 +694,11 @@ $(function () {
             const options = this.getOptions();
             if (options.sortName !== sortName || options.sortOrder !== sortOrder) {
                 $(this).bootstrapTable('sortBy', {
-                    field: sortName,
-                    sortOrder: sortOrder
+                    field: sortName, sortOrder: sortOrder
                 });
             }
             return this;
-        },
-        /**
+        }, /**
          * Select the first row.
          *
          * @return {boolean} true if the first row is selected.

@@ -71,11 +71,13 @@ abstract class AuthenticateWebTestCase extends WebTestCase
      * @param string $username the username to login
      * @param int    $expected the expected result
      */
-    protected function checkResponse(string $url, string $username, int $expected): void
+    protected function checkResponse(string $url, string $username, int $expected): string|false
     {
         $response = $this->client->getResponse();
         $statusCode = $response->getStatusCode();
         self::assertSame($expected, $statusCode, "Invalid status code for '$url' and '$username'.");
+
+        return $response->getContent();
     }
 
     /**

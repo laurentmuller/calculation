@@ -130,13 +130,14 @@ class AjaxControllerTest extends ControllerTestCase
             'value' => '{"value"',
         ];
 
-        $this->checkRoute(
+        $content = $this->checkRoute(
             '/ajax/session/set',
             self::ROLE_USER,
             method: Request::METHOD_POST,
             xmlHttpRequest: true,
             parameters: $parameters
         );
+        self::assertContentException($content);
     }
 
     public function testSaveSessionSuccess(): void
@@ -146,13 +147,14 @@ class AjaxControllerTest extends ControllerTestCase
             'value' => '{"value": "New"}',
         ];
 
-        $this->checkRoute(
+        $content = $this->checkRoute(
             '/ajax/session/set',
             self::ROLE_USER,
             method: Request::METHOD_POST,
             xmlHttpRequest: true,
             parameters: $parameters
         );
+        self::assertContentValid($content);
     }
 
     public function testSaveTable(): void
@@ -161,13 +163,39 @@ class AjaxControllerTest extends ControllerTestCase
             'view' => 'table',
         ];
 
-        $this->checkRoute(
+        $content = $this->checkRoute(
             '/ajax/save',
             self::ROLE_USER,
             method: Request::METHOD_POST,
             xmlHttpRequest: true,
             parameters: $parameters
         );
+        self::assertContentValid($content);
+    }
+
+    protected static function assertContentException(string|false $content): void
+    {
+        self::assertIsString($content);
+        $actual = \json_decode($content, true);
+        self::assertIsArray($actual);
+
+        self::assertArrayHasKey('result', $actual);
+        self::assertIsBool($actual['result']);
+        self::assertFalse($actual['result']);
+
+        self::assertArrayHasKey('message', $actual);
+        self::assertIsString($actual['message']);
+
+        self::assertArrayHasKey('exception', $actual);
+        self::assertIsArray($actual['exception']);
+    }
+
+    protected static function assertContentValid(string|false $content): void
+    {
+        self::assertIsString($content);
+        $actual = \json_decode($content, true);
+        self::assertIsBool($actual);
+        self::assertTrue($actual);
     }
 
     protected function deleteEntities(): void

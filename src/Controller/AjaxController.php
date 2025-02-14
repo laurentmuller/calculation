@@ -121,7 +121,7 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Save table parameters.
+     * Save table view parameter.
      *
      * @psalm-api
      */
@@ -131,10 +131,9 @@ class AjaxController extends AbstractController
         Request $request,
         UserService $service
     ): JsonResponse {
-        $value = $request->request->getString(TableInterface::PARAM_VIEW);
-        $view = TableView::tryFrom($value) ?? TableView::TABLE;
         $response = $this->json(true);
         $path = $this->getCookiePath();
+        $view = $this->getRequestEnum($request, TableInterface::PARAM_VIEW, TableView::TABLE);
         $this->updateCookie($response, TableInterface::PARAM_VIEW, $view, path: $path);
         $service->setProperty(PropertyServiceInterface::P_DISPLAY_MODE, $view);
 

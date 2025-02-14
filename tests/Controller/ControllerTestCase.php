@@ -113,7 +113,7 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
         bool $xmlHttpRequest = false,
         array $parameters = [],
         ?string $content = null
-    ): void {
+    ): string|false {
         if ($this->mustLogin($username)) {
             $this->loginUsername($username);
         }
@@ -140,7 +140,8 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
         if ($outputBuffer) {
             \ob_get_clean();
         }
-        $this->checkResponse($url, $username, $expected);
+
+        return $this->checkResponse($url, $username, $expected);
     }
 
     /**

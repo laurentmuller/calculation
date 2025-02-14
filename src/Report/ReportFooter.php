@@ -29,7 +29,7 @@ class ReportFooter
     /**
      * The footer offset in millimeters.
      */
-    final public const FOOTER_OFFSET = 15.0;
+    final public const FOOTER_OFFSET = 13.0;
 
     /**
      * The content text.
@@ -55,7 +55,7 @@ class ReportFooter
      */
     public function output(): void
     {
-        $this->parent->useCellMargin(fn () => $this->outputTexts());
+        $this->parent->useCellMargin(fn () => $this->outputFooter());
     }
 
     /**
@@ -71,16 +71,46 @@ class ReportFooter
         return $this;
     }
 
+    /**
+     * Output the given text.
+     */
+    private function outputCell(?string $text, float $width, PdfTextAlignment $align, ?string $link = null): self
+    {
+        $text ??= '';
+        $this->parent->cell(
+            width: $width,
+            height: PdfDocument::LINE_HEIGHT - 2.0,
+            text: $text,
+            border: PdfBorder::top(),
+            align: $align,
+            link: '' !== $text ? $link : null
+        );
+
+        return $this;
+    }
+
     private function outputContent(float $width): self
     {
-        return $this->outputText($this->content, $width, PdfTextAlignment::CENTER, $this->url);
+        return $this->outputCell($this->content, $width, PdfTextAlignment::CENTER, $this->url);
     }
 
     private function outputDate(float $width): void
     {
         $text = $this->date ??= FormatUtils::formatDateTime(new \DateTime());
 
-        $this->outputText($text, $width, PdfTextAlignment::RIGHT);
+        $this->outputCell($text, $width, PdfTextAlignment::RIGHT);
+    }
+
+    private function outputFooter(): void
+    {
+        $parent = $this->parent;
+        $parent->setY(-self::FOOTER_OFFSET);
+        $width = $parent->getPrintableWidth() / 3.0;
+        PdfStyle::default()->setFontSize(6.0)->apply($parent);
+        $this->outputPages($width)
+            ->outputContent($width)
+            ->outputDate($width);
+        $parent->resetStyle();
     }
 
     private function outputPages(float $width): self
@@ -91,35 +121,6 @@ class ReportFooter
             '{1}' => $parent->getAliasNumberPages(),
         ]);
 
-        return $this->outputText($text, $width, PdfTextAlignment::LEFT);
-    }
-
-    /**
-     * Output the given text.
-     */
-    private function outputText(?string $text, float $width, PdfTextAlignment $align, ?string $link = null): self
-    {
-        $text ??= '';
-        $this->parent->cell(
-            width: $width,
-            text: $text,
-            border: PdfBorder::top(),
-            align: $align,
-            link: '' !== $text ? $link : null
-        );
-
-        return $this;
-    }
-
-    private function outputTexts(): void
-    {
-        $parent = $this->parent;
-        $parent->setY(-self::FOOTER_OFFSET);
-        $width = $parent->getPrintableWidth() / 3.0;
-        PdfStyle::default()->setFontSize(PdfDocument::LINE_HEIGHT - 1.0)->apply($parent);
-        $this->outputPages($width)
-            ->outputContent($width)
-            ->outputDate($width);
-        $parent->resetStyle();
+        return $this->outputCell($text, $width, PdfTextAlignment::LEFT);
     }
 }

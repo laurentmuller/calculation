@@ -67,16 +67,32 @@ $tooltip-opacity: 1.0;
     @include border-radius($form-switch-border-radius, $form-switch-border-radius);
 }
 
+/* keep form-range rounded */
+.form-range {
+    &::-webkit-slider-thumb {
+        @include border-radius($form-range-thumb-border-radius, $form-range-thumb-border-radius);
+    }
+    &::-webkit-slider-runnable-track {
+        @include border-radius($form-range-track-border-radius, $form-range-thumb-border-radius);
+    }
+    &::-moz-range-thumb {
+        @include border-radius($form-range-track-border-radius, $form-range-thumb-border-radius);
+    }
+    &::-moz-range-track {
+        @include border-radius($form-range-track-border-radius, $form-range-thumb-border-radius);
+    }
+}
+
 /* light theme exceptions */
 html[data-bs-theme=light] {
-    .popover-light {
+    .popover.popover-light {
         #{prefix-property(popover-border-color)}: #{var-property(light-border-subtle)};
     }
 }
 
 /* dark theme exceptions */
 html[data-bs-theme=dark] {
-    .popover-dark {
+    .popover.popover-dark {
         #{prefix-property(popover-border-color)}: #{var-property(dark-border-subtle)};
     }
 

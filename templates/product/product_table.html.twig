@@ -69,8 +69,8 @@
 {%- endblock %}
 {# custom view body #}
 {% block custom_view_body -%}
-{{ _self.property_value('%groupCode% / %categoryCode%') }}
-{{ _self.property_value('%supplier%') }}
+{{ _self.property_row('product.fields.category', '%groupCode% / %categoryCode%') }}
+{{ _self.property_row('product.fields.supplier', '%supplier%') }}
 {{ _self.property_line() }}
 {{ _self.property_row('product.fields.price', '<span class="JavaScript:formatProductClass">%price%</span>JavaScript:formatProductUnit', 'text-end') }}
 {%- endblock %}

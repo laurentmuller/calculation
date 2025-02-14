@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Calculation package.
  *
@@ -37,44 +38,52 @@ $rules = [
     // --------------------------------------------------------------
     //  Rules override
     // --------------------------------------------------------------
-    'method_chaining_indentation' => true,
-    'native_function_invocation' => ['include' => ['@internal', 'all']],
-    'final_internal_class' => true,
-    'header_comment' => ['header' => $comment, 'location' => 'after_open', 'separate' => 'bottom'],
-    'blank_line_before_statement' => ['statements' => ['declare', 'try', 'return']],
-    'no_unused_imports' => true,
-    'strict_comparison' => true,
     'strict_param' => true,
-    'ordered_imports' => ['imports_order' => ['const', 'class', 'function']],
-    'ordered_class_elements' => ['sort_algorithm' => 'alpha'],
-    'concat_space' => ['spacing' => 'one'],
-    'array_syntax' => ['syntax' => 'short'],
-    'list_syntax' => ['syntax' => 'short'],
-    'doctrine_annotation_array_assignment' => ['operator' => '='],
-    'ordered_interfaces' => true,
-    'no_useless_else' => true,
-    'no_useless_return' => true,
     'php_unit_strict' => true,
-    'php_unit_test_case_static_method_calls' => ['call_type' => 'self'],
-    'phpdoc_to_comment' => [
-        'ignored_tags' => ['phpstan-var', 'psalm-suppress'],
-        'allow_before_return_statement' => true
-    ],
+    'no_useless_else' => true,
+    'no_unused_imports' => true,
+    'no_useless_return' => true,
+    'strict_comparison' => true,
+    'ordered_interfaces' => true,
+    'final_internal_class' => true,
+    'method_chaining_indentation' => true,
+    'concat_space' => ['spacing' => 'one'],
+    'list_syntax' => ['syntax' => 'short'],
+    'array_syntax' => ['syntax' => 'short'],
+    'ordered_class_elements' => ['sort_algorithm' => 'alpha'],
     'attribute_empty_parentheses' => ['use_parentheses' => false],
+    'doctrine_annotation_array_assignment' => ['operator' => '='],
+    'native_function_invocation' => ['include' => ['@internal', 'all']],
+    'php_unit_test_case_static_method_calls' => ['call_type' => 'self'],
     'new_with_braces' => ['anonymous_class' => true, 'named_class' => true],
-
+    'ordered_imports' => ['imports_order' => ['const', 'class', 'function']],
+    'blank_line_before_statement' => ['statements' => ['declare', 'try', 'return']],
+    'header_comment' => [
+        'header' => $comment,
+        'location' => 'after_open',
+        'separate' => 'bottom'],
+    'phpdoc_to_comment' => [
+        'allow_before_return_statement' => true,
+        'ignored_tags' => ['phpstan-var', 'psalm-suppress'],
+    ],
 ];
 
 $finder = Finder::create()
     ->in(__DIR__ . '/config')
     ->in(__DIR__ . '/src')
-    ->in(__DIR__ . '/tests');
+    ->in(__DIR__ . '/tests')
+    ->append([
+        __FILE__,
+        __DIR__ . '/public/index.php',
+        __DIR__ . '/.twig-cs-fixer.php',
+        __DIR__ . '/rector.php',
+    ]);
 
 $config = new Config();
 
 return $config
-    ->setParallelConfig(ParallelConfigFactory::detect())
     ->setCacheFile(__DIR__ . '/var/cache/php-cs-fixer/.php-cs-fixer.cache')
+    ->setParallelConfig(ParallelConfigFactory::detect())
     ->setRiskyAllowed(true)
     ->setFinder($finder)
     ->setRules($rules);

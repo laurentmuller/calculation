@@ -29,7 +29,7 @@ function customViewFormatter(data) {
         while (match !== null) {
             let value = undefinedText;
             const callback = match[1];
-            if (typeof window[callback] !== 'undefined') {
+            if (window[callback]) {
                 value = window[callback](row) || undefinedText;
             }
             html = html.replaceAll(match[0], value);
@@ -77,7 +77,7 @@ function formatProductClass(row) {
  */
 function styleBorderColor(_value, row) {
     'use strict';
-    if ($.isUndefined(row.color)) {
+    if (!row.color) {
         return {};
     }
     return {
@@ -118,7 +118,7 @@ function styleTextMuted(row, index) {
     if ($.parseInt(row.textMuted) !== 0) {
         return {};
     }
-    const $row = $('#table-edit tbody tr:eq(' + index + ')');
+    const $row = $(`#table-edit tbody tr:eq(${index})`);
     const classes = ($row.attr('class') || '') + ' text-body-secondary';
     return {
         classes: classes.trim()
@@ -595,21 +595,24 @@ $(function () {
         onPageChange: function () {
             // hide
             $('.card').trigger('click');
-            if ($table.isCustomView()) {
-                $('.bootstrap-table .fixed-table-custom-view .custom-item').animate({'opacity': '0'}, 200);
-                $table.hideCustomViewMessage();
+            if (!$table.isCustomView()) {
+                return;
             }
+            const $view = $table.getCustomView();
+            const $items = $view.find('.custom-item');
+            $items.animate({'opacity': '0'}, 200);
+            $table.hideCustomViewMessage();
         },
 
         onRenderCustomView: function (_$table, row, $item) {
             // update border color
-            if (typeof row.color !== 'undefined') {
+            if (row.color) {
                 const style = `border-left-color: ${row.color} !important`;
                 $item.attr('style', style);
             }
 
             // text-muted
-            if (typeof row.textMuted !== 'undefined') {
+            if (row.textMuted) {
                 const value = $.parseInt(row.textMuted);
                 if (value === 0) {
                     $item.addClass('text-body-secondary');

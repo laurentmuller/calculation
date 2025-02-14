@@ -297,6 +297,12 @@
         </div>
     </div>
 </template>
+{# loading message template #}
+<template id="loading-template">
+    <div class="alert alert-light alert-loading-message text-center" role="alert">
+        <i class="fa-solid fa-spinner fa-spin me-2"></i><span>%message%</span>
+    </div>
+</template>
 {%- endblock -%}
 {# stylesheets #}
 {% block stylesheets %}

@@ -11,10 +11,10 @@
     "scripts": {
         "watch": "sass --watch --no-source-map scss/bootstrap.scss:public/vendor/bootstrap/css/bootstrap.css",
         "build": "sass --no-source-map scss/bootstrap.scss:public/vendor/bootstrap/css/bootstrap.css",
-        "stylelint": "npx  stylelint public/css/toast.css"
+        "stylelint": "npx stylelint public/css/*.css"
     },
     "devDependencies": {
-        "stylelint": "^16.14.1",
+        "stylelint": "^16.0.0",
         "stylelint-config-standard": "^37.0.0"
     }
 }

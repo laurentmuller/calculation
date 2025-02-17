@@ -1,6 +1,6 @@
 @import 'style.css';
 
-/**! compression tag for ftp-deployment */
+/** ! compression tag for ftp-deployment */
 
 :root {
     --sitemap-line-width: 1px;
@@ -52,7 +52,7 @@
     width: 100%;
 }
 
-.primary-nav .home:before {
+.primary-nav .home::before {
     display: none;
 }
 
@@ -117,7 +117,6 @@
 .primary-nav ul ul ul {
     margin-top: .6em;
     padding-top: .6em;
-    /*padding-bottom: .625em;*/
 }
 
 .primary-nav ul ul ul li {
@@ -159,16 +158,16 @@
     background-color: #c20035;
 }
 
-.primary-nav ul ul ul ul li a:link:after,
-.primary-nav ul ul ul ul li a:visited:after {
+.primary-nav ul ul ul ul li a:link::after,
+.primary-nav ul ul ul ul li a:visited::after {
     display: none;
 }
 
 /* connecting lines */
-.primary-nav ul:before,
-.primary-nav ul:after,
-.primary-nav ul li:before,
-.primary-nav ul li:after {
+.primary-nav ul::before,
+.primary-nav ul::after,
+.primary-nav ul li::before,
+.primary-nav ul li::after {
     content: '';
     display: block;
     position: absolute;
@@ -178,7 +177,7 @@
     z-index: -1;
 }
 
-.primary-nav > ul > li:before {
+.primary-nav > ul > li::before {
     height: 1.375em;
     top: -1.375em;
     right: calc(50% + .625em);
@@ -187,13 +186,13 @@
     border-right-width: var(--sitemap-line-width);
 }
 
-.primary-nav > ul > li:first-child + li:before {
+.primary-nav > ul > li:first-child + li::before {
     border-top-width: 0;
     height: 5em;
     top: -5em;
 }
 
-.primary-nav ul ul li:after {
+.primary-nav ul ul li::after {
     width: 50%;
     height: .6875em;
     top: 0;
@@ -201,7 +200,7 @@
     border-left-width: var(--sitemap-line-width);
 }
 
-.primary-nav ul ul li:first-child:before {
+.primary-nav ul ul li:first-child::before {
     width: 50%;
     height: 1.3125em;
     top: .6875em;
@@ -209,11 +208,11 @@
     border-left-width: var(--sitemap-line-width);
 }
 
-.primary-nav > ul > li:last-child:after {
+.primary-nav > ul > li:last-child::after {
     border-bottom-width: 0;
 }
 
-.primary-nav ul ul ul li:before {
+.primary-nav ul ul ul li::before {
     width: calc(50% - 5px);
     height: 100%;
     top: -50%;
@@ -222,13 +221,13 @@
     border-bottom-width: var(--sitemap-line-width);
 }
 
-.primary-nav ul ul ul li:first-child:before {
+.primary-nav ul ul ul li:first-child::before {
     height: 2.125em;
     top: calc(var(--sitemap-line-width) * -1);
     border-top-width: var(--sitemap-line-width);
 }
 
-.primary-nav ul ul ul:before {
+.primary-nav ul ul ul::before {
     width: 50%;
     height: 1.25em;
     top: -11px;
@@ -236,16 +235,16 @@
     border-left-width: var(--sitemap-line-width);
 }
 
-.primary-nav ul ul ul li:after {
+.primary-nav ul ul ul li::after {
     border-width: 0;
 }
 
-.primary-nav ul ul ul ul li:before,
-.primary-nav ul ul ul ul li:first-child:before {
+.primary-nav ul ul ul ul li::before,
+.primary-nav ul ul ul ul li:first-child::before {
     display: none;
 }
 
-.primary-nav ul ul ul ul:before {
+.primary-nav ul ul ul ul::before {
     width: var(--sitemap-line-width);
     height: calc(100% + 2.5em);
     top: -2.5em;
@@ -282,14 +281,14 @@
     background-color: #ff831b;
 }
 
-.utility-nav li a:link:after,
-.utility-nav li a:visited:after {
-    color: rgba(255, 255, 255, .75);
+.utility-nav li a:link::after,
+.utility-nav li a:visited::after {
+    color: rgb(255 255 255 / 75%);
     margin-top: .25em;
 }
 
 /* responsive styles */
-@media screen and (max-width: 30em) {
+@media screen and (width <= 30em) {
     .primary-nav ul {
         display: block;
     }
@@ -325,57 +324,60 @@ that you don't need, and your sitemap layout will work perfectly.
  */
 
 /* two column */
-@media screen and (min-width: 30em) {
+@media screen and (width >= 30em) {
     .primary-nav > ul > li {
         max-width: 50%;
     }
 }
 
 /* three column */
-@media screen and (min-width: 38.5em) {
+@media screen and (width >= 38.5em) {
     .primary-nav > ul > li {
         max-width: 33.3333%;
     }
 }
 
 /* four column */
-@media screen and (min-width: 50em) {
+@media screen and (width >= 50em) {
     .primary-nav > ul > li {
         max-width: 25%;
     }
 }
 
 /* five column */
-@media screen and (min-width: 61em) {
+@media screen and (width >= 61em) {
     .primary-nav > ul > li {
         max-width: 20%;
     }
 }
 
 /* six column */
-@media screen and (min-width: 73em) {
+@media screen and (width >= 73em) {
     .primary-nav > ul > li {
         max-width: 16.66%;
     }
 }
 
 /* seven column
-@media screen and (min-width: 84.5em) {
+@media screen and (width >= 84.5em) {
 	.primary-nav > ul > li {	max-width: 14.285%;	}
 }
  */
+
 /* eight column
-@media screen and (min-width: 96em) {
+@media screen and (width >= 96em) {
 	.primary-nav > ul > li {	max-width: 12.5%; }
 }
  */
+
 /* nine column
-@media screen and (min-width: 107.5em) {
+@media screen and (width >= 107.5em) {
 	.primary-nav > ul > li {	max-width: 11.11%; }
 }
  */
+
 /* ten column
-@media screen and (min-width: 119em) {
+@media screen and (width >= 119em) {
 	.primary-nav > ul > li {	max-width: 10%; }
 }
 */

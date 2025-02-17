@@ -58,33 +58,33 @@
     background-image: none;
 }
 
-.bootstrap-table .fixed-table-container .table thead th .sortable:after {
+.bootstrap-table .fixed-table-container .table thead th .sortable::after {
     font-family: "Font Awesome 6 Free", sans-serif;
     font-weight: 900;
     padding-left: 0.35rem;
     opacity: 0.3;
 }
 
-.bootstrap-table .fixed-table-container .table thead th .both:after {
+.bootstrap-table .fixed-table-container .table thead th .both::after {
     content: "\f0dc";
 }
 
-.bootstrap-table .fixed-table-container .table thead th .asc:after {
+.bootstrap-table .fixed-table-container .table thead th .asc::after {
     content: "\f0d8";
     opacity: 1;
 }
 
-.bootstrap-table .fixed-table-container .table thead th .desc:after {
+.bootstrap-table .fixed-table-container .table thead th .desc::after {
     content: "\f0d7";
     opacity: 1;
 }
 
 /* hide icons on print */
 @media print {
-    .bootstrap-table .fixed-table-container .table thead th .sortable:after,
-    .bootstrap-table .fixed-table-container .table thead th .both:after,
-    .bootstrap-table .fixed-table-container .table thead th .asc:after,
-    .bootstrap-table .fixed-table-container .table thead th .desc:after {
+    .bootstrap-table .fixed-table-container .table thead th .sortable::after,
+    .bootstrap-table .fixed-table-container .table thead th .both::after,
+    .bootstrap-table .fixed-table-container .table thead th .asc::after,
+    .bootstrap-table .fixed-table-container .table thead th .desc::after {
         display: none;
     }
 }
@@ -104,13 +104,13 @@ tr.text-body-secondary td .text-danger {
     width: 50%;
 }
 
-@media (max-width: 992px) {
+@media (width <= 992px) {
     .alert-loading-message {
         width: 70%;
     }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
     .alert-loading-message {
         width: 100%;
     }

@@ -24,13 +24,13 @@
     max-width: 5rem;
 }
 
-@media ( min-width: 576px) {
+@media (width >= 576px) {
     .message {
         max-width: 5rem;
     }
 }
 
-@media ( min-width: 768px) {
+@media (width >= 768px) {
     .message {
         max-width: 10rem;
     }

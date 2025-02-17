@@ -15,6 +15,7 @@ table.body.wrapper {
     background-color: #fff;
 }
 
+/* stylelint-disable selector-class-pattern */
 .container.body_alert,
 .container.body_warning,
 .container.body_default {
@@ -22,6 +23,7 @@ table.body.wrapper {
     border-right: 1px solid #f3f3f3;
     border-bottom: 1px solid #f3f3f3;
 }
+/* stylelint-enable selector-class-pattern */
 
 td,
 a {

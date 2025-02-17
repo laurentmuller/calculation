@@ -6,6 +6,10 @@
     display: none;
 }
 
+.diagram:has(svg) {
+    display: block;
+}
+
 body.status-bar .diagram {
     height: calc(100vh - 120px);
 }
@@ -16,10 +20,6 @@ body:not(.status-bar) .diagram {
 
 .page-content:not(.sidebar-show) .diagram {
     height: calc(100vh - 180px);
-}
-
-.diagram:has(svg) {
-    display: block;
 }
 
 .diagram svg {

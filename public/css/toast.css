@@ -57,7 +57,7 @@
 }
 
 /* center of small size */
-@media only screen and (max-width: 576px) {
+@media only screen and (width <= 576px) {
     .toast-plugin {
         left: 0 !important;
         right: 0 !important;
@@ -98,6 +98,12 @@ html[data-bs-theme=dark] .toast-plugin .toast.border-dark {
     margin-top: 4rem !important;
 }
 
+.page-content:has(footer) .toast-plugin.bottom-left,
+.page-content:has(footer) .toast-plugin.bottom-center,
+.page-content:has(footer) .toast-plugin.bottom-right {
+    margin-bottom: 2rem !important;
+}
+
 .page-content.sidebar-show .toast-plugin.top-left,
 .page-content.sidebar-show .toast-plugin.center-left,
 .page-content.sidebar-show .toast-plugin.bottom-left {
@@ -109,10 +115,4 @@ html[data-bs-theme=dark] .toast-plugin .toast.border-dark {
 .page-content.sidebar-show .toast-plugin.center-center,
 .page-content.sidebar-show .toast-plugin.bottom-center {
     margin-left: 9rem !important;
-}
-
-.page-content:has(footer) .toast-plugin.bottom-left,
-.page-content:has(footer) .toast-plugin.bottom-center,
-.page-content:has(footer) .toast-plugin.bottom-right {
-    margin-bottom: 2rem !important;
 }

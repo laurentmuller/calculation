@@ -36,6 +36,7 @@
     color: #6c757d !important;
 }
 
+/* stylelint-disable selector-class-pattern */
 .context-menu-icon.context-menu-icon--fa5 i,
 .context-menu-icon.context-menu-icon--fa5 svg {
     position: inherit !important;
@@ -44,3 +45,4 @@
     top: inherit !important;
     margin-right: 0.3rem;
 }
+/* stylelint-enable selector-class-pattern */

@@ -17,7 +17,6 @@
     margin: 0;
     font-size: 23px;
     cursor: pointer;
-    filter: alpha(opacity=0);
     opacity: 0;
     direction: ltr;
 }
@@ -139,7 +138,6 @@
 
 .file-input .file-input-preview {
     cursor: pointer;
-    /*background-color: transparent;*/
 }
 
 .form-group.has-warning .file-input .file-input-preview {

@@ -40,7 +40,7 @@ html {
 }
 
 /* navbar-vertical */
-.navbar.navbar-vertical:after {
+.navbar.navbar-vertical::after {
     top: 0;
     right: 0;
     content: "";
@@ -49,7 +49,7 @@ html {
     border-right: var(--bs-border-width) solid var(--bs-border-color);
 }
 
-body.status-bar .navbar.navbar-vertical:after {
+body.status-bar .navbar.navbar-vertical::after {
     height: calc(100% - 30px);
 }
 
@@ -65,7 +65,7 @@ body.status-bar .navbar.navbar-vertical .hide-sidebar {
     right: 0.75rem;
 }
 
-/* update bottom margin when the status-bar is visible*/
+/* update bottom margin when the status-bar is visible */
 body.status-bar {
     margin-bottom: 30px;
 }
@@ -95,7 +95,7 @@ footer span {
 }
 
 /* required */
-.required:not(.form-check-label):after {
+.required:not(.form-check-label)::after {
     content: "*";
     color: var(--bs-danger);
 }
@@ -208,10 +208,10 @@ span.state-color {
 
 /* print media */
 @media print {
-    span.required:after,
-    label.required:after,
-    legend.required:after,
-    th.required:after {
+    span.required::after,
+    label.required::after,
+    legend.required::after,
+    th.required::after {
         content: "";
     }
 
@@ -266,53 +266,53 @@ body:not(.status-bar) .btn-back-to-top {
 }
 
 /* states and months cards in home page */
-@media (min-width: 0px) {
+@media (width >= 0) {
     .card-index {
         flex: 1 0 calc(100% - 30px);
     }
 }
 
-@media (min-width: 576px) {
+@media (width >= 576px) {
     .card-index {
         flex: 1 0 calc(50% - 30px);
     }
 }
 
-@media (min-width: 768px) {
+@media (width >= 768px) {
     .card-index {
-        flex: 1 0 calc(33.33333333333333% - 30px);
+        flex: 1 0 calc(33.333333% - 30px);
     }
 }
 
-@media (min-width: 1200px) {
+@media (width >= 1200px) {
     .card-index {
-        flex: 1 0 calc(16.66666666666667% - 30px);
+        flex: 1 0 calc(16.666667% - 30px);
     }
 }
 
 /* calculation (duplicate items, empty values and below margin) */
-.duplicate-cell:after {
+.duplicate-cell::after {
     content: " (D) ";
     color: var(--bs-danger);
     font-size: x-small;
     vertical-align: super;
 }
 
-.duplicate-footer:before {
+.duplicate-footer::before {
     content: " (D) ";
     color: var(--bs-danger);
     font-size: smaller;
     vertical-align: super;
 }
 
-.empty-cell:before {
+.empty-cell::before {
     content: " (V) ";
     color: var(--bs-danger);
     font-size: x-small;
     vertical-align: super;
 }
 
-.empty-footer:before {
+.empty-footer::before {
     content: " (V) ";
     color: var(--bs-danger);
     font-size: smaller;
@@ -360,13 +360,13 @@ textarea.fixed {
 }
 
 /* Remove spin buttons for number type */
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-input[type="number"] {
+input[type=number] {
     -moz-appearance: textfield;
 }
 
@@ -449,7 +449,7 @@ input[type="number"] {
     border-color: var(--bs-dark-bg-subtle) !important;
 }
 
-/* $input-border-width*/
+/* $input-border-width */
 .form-control-border-left-0:not(.is-invalid) {
     border-left-width: 0 !important;
 }
@@ -472,7 +472,7 @@ input[type="number"] {
     flex-direction: row;
 }
 
-.horizontal-line:after {
+.horizontal-line::after {
     content: "";
     flex: 1 1;
     display: inline-block;
@@ -481,7 +481,7 @@ input[type="number"] {
 }
 
 /* Toggle icon (angle-right) before the element */
-.drop-down-icon-left:before {
+.drop-down-icon-left::before {
     font-family: "Font Awesome 6 Free", sans-serif;
     font-weight: 900;
     float: left;
@@ -490,7 +490,7 @@ input[type="number"] {
     transition: transform 0.15s ease-in-out;
 }
 
-.drop-down-icon-left[aria-expanded="true"]:before {
+.drop-down-icon-left[aria-expanded=true]::before {
     transform: rotate(90deg);
 }
 
@@ -499,7 +499,7 @@ input[type="number"] {
     flex: 1 1 auto !important;
 }
 
-.drop-down-icon-right:after {
+.drop-down-icon-right::after {
     font-family: "Font Awesome 6 Free", sans-serif;
     font-weight: 900;
     float: right;
@@ -508,7 +508,7 @@ input[type="number"] {
     transition: transform 0.15s ease-in-out;
 }
 
-.drop-down-icon-right[aria-expanded="true"]::after {
+.drop-down-icon-right[aria-expanded=true]::after {
     transform: rotate(-90deg);
 }
 
@@ -535,7 +535,7 @@ tr.strikeout-danger td {
     position: relative;
 }
 
-tr.strikeout-danger td:before {
+tr.strikeout-danger td::before {
     left: 0;
     top: 50%;
     width: 100%;
@@ -576,25 +576,25 @@ table.table-fixed-header th {
     min-width: 15%;
 }
 
-@media (max-width: 1200px) {
+@media (width <= 1200px) {
     .index-child {
         min-width: 20%;
     }
 }
 
-@media (max-width: 992px) {
+@media (width <= 992px) {
     .index-child {
         min-width: 25%;
     }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
     .index-child {
         min-width: 33%;
     }
 }
 
-@media (max-width: 576px) {
+@media (width <= 576px) {
     .index-child {
         min-width: 50%;
     }
@@ -665,11 +665,11 @@ html[data-bs-theme=dark] .small-scrollbar::-webkit-scrollbar-corner {
 @font-face {
     font-family: NotoColorEmojiLimited;
     unicode-range: U+1F1E6-1F1FF;
-    src: url(../font/NotoColorEmoji.ttf);
+    src: url('../font/NotoColorEmoji.ttf');
 }
 
 .flag-emoji {
-    font-family: 'NotoColorEmojiLimited', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-family: NotoColorEmojiLimited, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 /* remove last line */
@@ -708,7 +708,7 @@ table.table-no-end-line tfoot tr:last-child td {
     background-color: var(--bs-body-bg);
     border-color: #86b7fe;
     outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
 }
 
 .field-invalid {
@@ -813,7 +813,7 @@ span.bottom-border-gradient {
     height: 0;
 }
 
-.bottom-border-gradient:after {
+.bottom-border-gradient::after {
     position: absolute;
     content: '';
     height: 0.25rem;
@@ -822,7 +822,7 @@ span.bottom-border-gradient {
     right: 0;
 }
 
-.bottom-border-gradient-20:after {
+.bottom-border-gradient-20::after {
     background: linear-gradient(
             to right,
             var(--bs-danger) calc(20% - 1px),
@@ -830,7 +830,7 @@ span.bottom-border-gradient {
     ) !important;
 }
 
-.bottom-border-gradient-40:after {
+.bottom-border-gradient-40::after {
     background: linear-gradient(
             to right,
             var(--bs-danger) calc(20% - 1px),
@@ -840,7 +840,7 @@ span.bottom-border-gradient {
     ) !important;
 }
 
-.bottom-border-gradient-60:after {
+.bottom-border-gradient-60::after {
     background: linear-gradient(
             to right,
             var(--bs-danger) calc(20% - 1px),
@@ -852,7 +852,7 @@ span.bottom-border-gradient {
     ) !important;
 }
 
-.bottom-border-gradient-80:after {
+.bottom-border-gradient-80::after {
     background: linear-gradient(
             to right,
             var(--bs-danger) calc(20% - 1px),
@@ -866,7 +866,7 @@ span.bottom-border-gradient {
     ) !important;
 }
 
-.bottom-border-gradient-100:after {
+.bottom-border-gradient-100::after {
     background: linear-gradient(
             to right,
             var(--bs-danger) calc(20% - 1px),
@@ -890,8 +890,7 @@ span.bottom-border-gradient {
     display: flex !important;
     flex-wrap: wrap !important;
     align-items: start !important;
-    row-gap: 0.25rem !important;
-    column-gap: 0.5rem !important;
+    gap: 0.25rem 0.5rem !important;
     -moz-column-gap: 0.5rem !important;
 }
 
@@ -899,8 +898,7 @@ span.bottom-border-gradient {
     display: flex !important;
     flex-wrap: wrap !important;
     align-items: center !important;
-    row-gap: 0.25rem !important;
-    column-gap: 0.5rem !important;
+    gap: 0.25rem 0.5rem !important;
     -moz-column-gap: 0.5rem !important;
 }
 

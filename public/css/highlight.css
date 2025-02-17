@@ -97,15 +97,15 @@ html[data-bs-theme=dark] pre.highlight-php .highlight-php-ref {
 }
 
 html[data-bs-theme=dark] pre.highlight-php .highlight-php-public {
-    color: #FFFFFF
+    color: #FFF
 }
 
 html[data-bs-theme=dark] pre.highlight-php .highlight-php-protected {
-    color: #FFFFFF
+    color: #FFF
 }
 
 html[data-bs-theme=dark] pre.highlight-php .highlight-php-private {
-    color: #FFFFFF
+    color: #FFF
 }
 
 html[data-bs-theme=dark] pre.highlight-php .highlight-php-key {

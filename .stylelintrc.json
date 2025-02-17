@@ -1,0 +1,22 @@
+{
+    "extends": [
+        "stylelint-config-standard"
+    ],
+    "rules": {
+        "number-max-precision": [
+            6
+        ],
+        "selector-attribute-quotes": "never",
+        "import-notation": "string",
+        "no-descending-specificity": null,
+        "property-no-vendor-prefix": null,
+        "declaration-property-value-keyword-no-deprecated": [
+            true,
+            {
+                "ignoreKeywords": [
+                    "break-word"
+                ]
+            }
+        ]
+    }
+}

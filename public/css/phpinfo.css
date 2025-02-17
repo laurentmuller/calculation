@@ -79,14 +79,14 @@
     color: var(--bs-secondary);
 }
 
-.phpversion td.enabled:before {
+.phpversion td.enabled::before {
     content: '✓';
     font-weight: bold;
     margin-right: 0.25rem;
     color: var(--bs-success);
 }
 
-.phpversion td.v.disabled:before {
+.phpversion td.v.disabled::before {
     content: '✗';
     font-weight: bold;
     margin-right: 0.25rem;

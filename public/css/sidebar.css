@@ -15,13 +15,11 @@
     max-width: var(--sidebar-width);
     padding: 0.5rem 1rem 0.75rem;
     transition: margin-left var(--sidebar-delay) ease-in-out;
-    overflow-y: auto;
-    overflow-x: hidden;
-    flex-direction: column !important;
+    overflow: hidden auto;
+    flex-flow: column nowrap !important;
     text-align: left !important;
     justify-content: initial;
     display: flex;
-    flex-wrap: nowrap;
     align-items: flex-start;
 }
 
@@ -80,7 +78,7 @@ html[data-bs-theme=light] .navbar-vertical.navbar-dark .border-bottom {
 .navbar-vertical .theme-switcher:focus-visible,
 .navbar-vertical .dropup .nav-link:focus-visible {
     outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
 }
 
 .navbar-vertical .theme-switcher.disabled,
@@ -105,7 +103,7 @@ html[data-bs-theme=light] .navbar-vertical.navbar-dark .border-bottom {
     transition: transform 0.15s ease-in-out;
 }
 
-.navbar-vertical .nav-link-toggle[aria-expanded="true"]::after {
+.navbar-vertical .nav-link-toggle[aria-expanded=true]::after {
     transform: rotate(-90deg);
 }
 
@@ -118,6 +116,13 @@ html[data-bs-theme=light] .navbar-vertical.navbar-dark .border-bottom {
     background-color: transparent;
 }
 
+.navbar-vertical:hover::-webkit-scrollbar,
+.navbar-vertical:hover::-webkit-scrollbar-thumb,
+.navbar-vertical:focus::-webkit-scrollbar,
+.navbar-vertical:focus::-webkit-scrollbar-thumb {
+    visibility: visible;
+}
+
 .navbar-vertical::-webkit-scrollbar-thumb {
     visibility: hidden;
     background-color: var(--bs-secondary-bg-subtle);
@@ -125,13 +130,6 @@ html[data-bs-theme=light] .navbar-vertical.navbar-dark .border-bottom {
 
 html[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
     background-color: var(--bs-secondary-bg);
-}
-
-.navbar-vertical:hover::-webkit-scrollbar,
-.navbar-vertical:hover::-webkit-scrollbar-thumb,
-.navbar-vertical:focus::-webkit-scrollbar,
-.navbar-vertical:focus::-webkit-scrollbar-thumb {
-    visibility: visible;
 }
 
 /**
@@ -164,7 +162,7 @@ html[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
 /**
  * Show / Hide buttons
  */
-@media (max-width: 1200px) {
+@media (width <= 1200px) {
     .show-sidebar,
     .hide-sidebar {
         display: none;

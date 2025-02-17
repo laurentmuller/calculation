@@ -25,6 +25,7 @@ class SymfonyStyleTest extends TestCase
 {
     private ArrayInput $input;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->input = new ArrayInput([]);

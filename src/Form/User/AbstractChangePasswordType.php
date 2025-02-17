@@ -36,6 +36,7 @@ abstract class AbstractChangePasswordType extends AbstractEntityType
         parent::__construct(User::class);
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
@@ -46,11 +47,13 @@ abstract class AbstractChangePasswordType extends AbstractEntityType
         ]);
     }
 
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return '';
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('plainPassword')

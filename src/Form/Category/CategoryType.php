@@ -31,6 +31,7 @@ class CategoryType extends AbstractEntityType
         parent::__construct(Category::class);
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('code')

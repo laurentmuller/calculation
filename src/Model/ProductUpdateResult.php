@@ -37,6 +37,7 @@ class ProductUpdateResult implements \Countable
         return $this;
     }
 
+    #[\Override]
     public function count(): int
     {
         return \count($this->products);

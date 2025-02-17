@@ -37,6 +37,7 @@ class CountryFlagTypeTest extends TypeTestCase
         self::assertTrue($form->isValid());
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         $service = $this->createMock(CountryFlagService::class);

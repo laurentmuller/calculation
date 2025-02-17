@@ -69,6 +69,7 @@ abstract class AbstractReader implements \IteratorAggregate
     /**
      * @return \Generator<int, TValue>
      */
+    #[\Override]
     public function getIterator(): \Generator
     {
         while (\is_resource($this->stream) && !\feof($this->stream) && null !== $data = $this->getNextData($this->stream)) {

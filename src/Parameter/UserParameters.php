@@ -38,6 +38,7 @@ class UserParameters extends AbstractParameters
         parent::__construct($cache, $manager);
     }
 
+    #[\Override]
     public function getDefaultValues(): array
     {
         return $this->getParametersDefaultValues(
@@ -51,6 +52,7 @@ class UserParameters extends AbstractParameters
     /**
      * Gets the display parameter.
      */
+    #[\Override]
     public function getDisplay(): DisplayParameter
     {
         return $this->display ??= $this->getCachedParameter(
@@ -62,6 +64,7 @@ class UserParameters extends AbstractParameters
     /**
      * Gets the home page parameter.
      */
+    #[\Override]
     public function getHomePage(): HomePageParameter
     {
         return $this->homePage ??= $this->getCachedParameter(
@@ -73,6 +76,7 @@ class UserParameters extends AbstractParameters
     /**
      * Gets the message parameter.
      */
+    #[\Override]
     public function getMessage(): MessageParameter
     {
         return $this->message ??= $this->getCachedParameter(
@@ -84,6 +88,7 @@ class UserParameters extends AbstractParameters
     /**
      * Gets the option parameter.
      */
+    #[\Override]
     public function getOptions(): OptionsParameter
     {
         return $this->options ??= $this->getCachedParameter(
@@ -92,6 +97,7 @@ class UserParameters extends AbstractParameters
         );
     }
 
+    #[\Override]
     public function save(): bool
     {
         return $this->saveParameters([
@@ -107,6 +113,7 @@ class UserParameters extends AbstractParameters
         ]);
     }
 
+    #[\Override]
     protected function createProperty(string $name): UserProperty
     {
         $user = $this->security->getUser();
@@ -117,11 +124,13 @@ class UserParameters extends AbstractParameters
         return UserProperty::instance($name, $user);
     }
 
+    #[\Override]
     protected function getRepository(): UserPropertyRepository
     {
         return $this->manager->getRepository(UserProperty::class);
     }
 
+    #[\Override]
     protected function loadProperties(): array
     {
         $user = $this->security->getUser();

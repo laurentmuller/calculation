@@ -25,6 +25,7 @@ class CalculationDuplicateControllerTest extends ControllerTestCase
 
     private ?Product $duplicate = null;
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/calculation/duplicate', self::ROLE_USER, Response::HTTP_FORBIDDEN];
@@ -38,6 +39,7 @@ class CalculationDuplicateControllerTest extends ControllerTestCase
         yield ['/calculation/duplicate/excel', self::ROLE_SUPER_ADMIN];
     }
 
+    #[\Override]
     protected function addEntities(): void
     {
         $product = $this->getProduct();
@@ -52,6 +54,7 @@ class CalculationDuplicateControllerTest extends ControllerTestCase
         $this->addEntity($calculation);
     }
 
+    #[\Override]
     protected function deleteEntities(): void
     {
         $this->duplicate = $this->deleteEntity($this->duplicate);

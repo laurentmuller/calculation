@@ -20,6 +20,7 @@ use App\Parameter\CustomerParameter;
  */
 class CustomerParameterTest extends ParameterTestCase
 {
+    #[\Override]
     public static function getParameterNames(): \Generator
     {
         yield ['address', 'customer_address'];
@@ -34,6 +35,7 @@ class CustomerParameterTest extends ParameterTestCase
         yield ['linkedin', 'customer_linkedin'];
     }
 
+    #[\Override]
     public static function getParameterValues(): \Generator
     {
         yield ['address', null];
@@ -87,6 +89,7 @@ class CustomerParameterTest extends ParameterTestCase
         self::assertSame('linkedin', $this->parameter->getLinkedin());
     }
 
+    #[\Override]
     protected function createParameter(): CustomerParameter
     {
         return new CustomerParameter();

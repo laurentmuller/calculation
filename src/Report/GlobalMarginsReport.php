@@ -22,6 +22,7 @@ use App\Report\Table\ReportTable;
  */
 class GlobalMarginsReport extends AbstractArrayReport
 {
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('globalmargin.list.title');

@@ -22,6 +22,7 @@ class PivotControllerTest extends ControllerTestCase
     use CalculationTrait;
     use ProductTrait;
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/pivot', self::ROLE_USER];
@@ -40,6 +41,7 @@ class PivotControllerTest extends ControllerTestCase
     /**
      * @throws \Exception
      */
+    #[\Override]
     protected function addEntities(): void
     {
         $margin = new GroupMargin();
@@ -61,6 +63,7 @@ class PivotControllerTest extends ControllerTestCase
         $this->addEntity($calculation);
     }
 
+    #[\Override]
     protected function deleteEntities(): void
     {
         $this->deleteCalculation();

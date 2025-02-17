@@ -62,6 +62,7 @@ class CalculationsReport extends AbstractArrayReport
         $this->setTitleTrans('calculation.list.title');
     }
 
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->addPage();

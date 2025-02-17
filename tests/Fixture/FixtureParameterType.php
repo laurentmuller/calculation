@@ -22,6 +22,7 @@ use App\Form\Parameters\AbstractParameterType;
  */
 class FixtureParameterType extends AbstractParameterType
 {
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('minMargin')
@@ -33,6 +34,7 @@ class FixtureParameterType extends AbstractParameterType
         $this->addCheckboxType($helper, 'value', 'Value');
     }
 
+    #[\Override]
     protected function getParameterClass(): string
     {
         return FixtureParameter::class;

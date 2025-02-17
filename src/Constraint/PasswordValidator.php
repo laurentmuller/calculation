@@ -28,6 +28,7 @@ class PasswordValidator extends AbstractConstraintValidator
         parent::__construct(Password::class);
     }
 
+    #[\Override]
     public function validate(#[\SensitiveParameter] mixed $value, Constraint $constraint): void
     {
         parent::validate($value, $constraint);
@@ -36,6 +37,7 @@ class PasswordValidator extends AbstractConstraintValidator
     /**
      * @param Password $constraint
      */
+    #[\Override]
     protected function doValidate(#[\SensitiveParameter] string $value, Constraint $constraint): void
     {
         if ($constraint->all) {

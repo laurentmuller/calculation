@@ -29,6 +29,7 @@ class TranslatorFactoryTest extends TestCase
 {
     private MockObject&RequestStack $requestStack;
 
+    #[\Override]
     protected function setUp(): void
     {
         $session = new Session(new MockArraySessionStorage());

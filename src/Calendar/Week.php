@@ -94,11 +94,13 @@ class Week extends AbstractCalendarItem
      * This implementation returns the ISO-8601 week number (1 to 53) of the year for the last day of this week.
      * The weeks start on Monday.
      */
+    #[\Override]
     public function getNumber(): int
     {
         return $this->number;
     }
 
+    #[\Override]
     public function isCurrent(): bool
     {
         $today = $this->getToday();
@@ -132,6 +134,7 @@ class Week extends AbstractCalendarItem
     /**
      * @return array{week: int, startDate: string|null, endDate: string|null, days: Day[]}
      */
+    #[\Override]
     public function jsonSerialize(): array
     {
         return [
@@ -142,6 +145,7 @@ class Week extends AbstractCalendarItem
         ];
     }
 
+    #[\Override]
     protected function reset(): void
     {
         parent::reset();

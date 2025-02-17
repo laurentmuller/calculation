@@ -22,6 +22,7 @@ use App\Tests\Form\EntityTypeTestCase;
  */
 class TaskItemMarginTypeTest extends EntityTypeTestCase
 {
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -31,11 +32,13 @@ class TaskItemMarginTypeTest extends EntityTypeTestCase
         ];
     }
 
+    #[\Override]
     protected function getEntityClass(): string
     {
         return TaskItemMargin::class;
     }
 
+    #[\Override]
     protected function getFormTypeClass(): string
     {
         return TaskItemMarginType::class;

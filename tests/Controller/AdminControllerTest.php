@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AdminControllerTest extends ControllerTestCase
 {
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/admin/clear', self::ROLE_USER, Response::HTTP_FORBIDDEN];

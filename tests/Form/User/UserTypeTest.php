@@ -32,6 +32,7 @@ class UserTypeTest extends EntityTypeTestCase
     use TranslatorMockTrait;
     use VichImageTypeTrait;
 
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -43,6 +44,7 @@ class UserTypeTest extends EntityTypeTestCase
         ];
     }
 
+    #[\Override]
     protected function getEntityClass(): string
     {
         return User::class;
@@ -51,16 +53,19 @@ class UserTypeTest extends EntityTypeTestCase
     /**
      * @throws \ReflectionException
      */
+    #[\Override]
     protected function getExtensions(): array
     {
         return \array_merge(parent::getExtensions(), [$this->getPasswordHasherExtension()]);
     }
 
+    #[\Override]
     protected function getFormTypeClass(): string
     {
         return UserType::class;
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         return [

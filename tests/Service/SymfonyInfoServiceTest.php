@@ -23,6 +23,7 @@ class SymfonyInfoServiceTest extends KernelServiceTestCase
 {
     private SymfonyInfoService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

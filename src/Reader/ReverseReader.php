@@ -48,6 +48,7 @@ class ReverseReader extends AbstractReader
         parent::__construct($file, $binary);
     }
 
+    #[\Override]
     protected function getNextData($stream): ?string
     {
         $line = '';

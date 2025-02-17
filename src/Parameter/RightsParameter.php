@@ -52,6 +52,7 @@ class RightsParameter implements ParameterInterface
         return $role;
     }
 
+    #[\Override]
     public static function getCacheKey(): string
     {
         return 'parameter_rights';

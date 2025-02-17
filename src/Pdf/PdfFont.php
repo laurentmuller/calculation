@@ -45,6 +45,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
     ) {
     }
 
+    #[\Override]
     public function apply(PdfDocument $doc): void
     {
         $doc->setFont($this->name, $this->style, $this->size);

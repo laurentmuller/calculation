@@ -50,6 +50,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         parent::__construct($repository);
     }
 
+    #[\Override]
     protected function addSearch(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
         $repository = $this->getRepository();
@@ -83,6 +84,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
      */
     abstract protected function getDropDownValues(): array;
 
+    #[\Override]
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);

@@ -30,6 +30,7 @@ abstract class AbstractPivotAggregator implements \JsonSerializable, \Stringable
         $this->addValue($value);
     }
 
+    #[\Override]
     public function __toString(): string
     {
         $name = StringUtils::getShortName($this);

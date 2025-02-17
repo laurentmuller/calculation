@@ -73,6 +73,7 @@ class NotificationEmail extends BaseNotificationEmail
         return new static($headers, $body);
     }
 
+    #[\Override]
     public function getContext(): array
     {
         $context = parent::getContext();
@@ -83,6 +84,7 @@ class NotificationEmail extends BaseNotificationEmail
         return $context;
     }
 
+    #[\Override]
     public function getPreparedHeaders(): Headers
     {
         $subject = $this->getSubject();

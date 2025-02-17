@@ -131,6 +131,7 @@ class PdfTableTest extends TestCase
             ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
         $listener = new class() implements PdfDrawCellBackgroundInterface {
+            #[\Override]
             public function drawCellBackground(PdfCellBackgroundEvent $event): bool
             {
                 TestCase::assertNotNull($event->getDocument());
@@ -149,6 +150,7 @@ class PdfTableTest extends TestCase
             ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
         $listener = new class() implements PdfDrawCellBorderInterface {
+            #[\Override]
             public function drawCellBorder(PdfCellBorderEvent $event): bool
             {
                 TestCase::assertNotNull($event->getDocument());
@@ -296,6 +298,7 @@ class PdfTableTest extends TestCase
             ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
         $listener = new class() implements PdfDrawHeadersInterface {
+            #[\Override]
             public function drawHeaders(PdfPdfDrawHeadersEvent $event): bool
             {
                 $columns = $event->getColumns();
@@ -435,6 +438,7 @@ class PdfTableTest extends TestCase
             ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
         $listener = new class() implements PdfDrawCellTextInterface {
+            #[\Override]
             public function drawCellText(PdfCellTextEvent $event): bool
             {
                 TestCase::assertNotNull($event->getDocument());

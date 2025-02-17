@@ -59,6 +59,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
         parent::__construct($aggregator, $value);
     }
 
+    #[\Override]
     public function __toString(): string
     {
         $className = StringUtils::getShortName($this);
@@ -99,6 +100,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
         return $this->sort();
     }
 
+    #[\Override]
     public function addValue(mixed $value): static
     {
         parent::addValue($value);
@@ -111,6 +113,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      *
      * @return int<0, max>
      */
+    #[\Override]
     public function count(): int
     {
         return \count($this->children);
@@ -485,6 +488,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
         return null !== $this->title;
     }
 
+    #[\Override]
     public function jsonSerialize(): ?array
     {
         return \array_filter([

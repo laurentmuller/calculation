@@ -32,6 +32,7 @@ class Post extends Route
         parent::__construct($path, $name, $requirements);
     }
 
+    #[\Override]
     public function getMethods(): array
     {
         return [Request::METHOD_POST];

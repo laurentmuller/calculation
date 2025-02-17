@@ -28,6 +28,7 @@ use App\Report\Table\ReportGroupTable;
  */
 class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterface
 {
+    #[\Override]
     public function drawGroup(PdfGroupEvent $event): bool
     {
         /** @var ReportGroupTable $table */
@@ -47,6 +48,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         return true;
     }
 
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('task.list.title', [], true);

@@ -36,6 +36,7 @@ class MonthChartTest extends TestCase
     private MockObject&TranslatorInterface $translator;
     private MockObject&Environment $twig;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->application = $this->createMock(ApplicationService::class);

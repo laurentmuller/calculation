@@ -22,6 +22,7 @@ namespace App\Form;
  */
 abstract class AbstractMarginType extends AbstractEntityType
 {
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('minimum')
@@ -37,6 +38,7 @@ abstract class AbstractMarginType extends AbstractEntityType
             ->addPercentType(100);
     }
 
+    #[\Override]
     protected function getLabelPrefix(): string
     {
         return 'globalmargin.fields.';

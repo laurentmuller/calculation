@@ -31,6 +31,7 @@ class UserListType extends AbstractListEntityType
         parent::__construct(User::class);
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);

@@ -53,6 +53,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
         return $this;
     }
 
+    #[\Override]
     public function count(): int
     {
         return \count($this->children);
@@ -113,6 +114,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
         return [] === $this->children;
     }
 
+    #[\Override]
     public function isNewLine(): bool
     {
         $name = \strtolower($this->getName());
@@ -130,6 +132,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
         };
     }
 
+    #[\Override]
     public function output(HtmlReport $report): void
     {
         $this->applyMargins(

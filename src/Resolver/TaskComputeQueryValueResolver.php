@@ -31,6 +31,7 @@ final readonly class TaskComputeQueryValueResolver implements ValueResolverInter
     {
     }
 
+    #[\Override]
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
         if (TaskComputeQuery::class !== $argument->getType()) {

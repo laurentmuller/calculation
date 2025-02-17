@@ -21,6 +21,7 @@ use App\Form\FormHelper;
  */
 class GlobalMarginsType extends AbstractHelperType
 {
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('margins')->addCollectionType(GlobalMarginType::class);

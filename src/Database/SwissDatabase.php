@@ -344,6 +344,7 @@ class SwissDatabase extends AbstractDatabase
         return false !== $stmt->execute();
     }
 
+    #[\Override]
     protected function createSchema(): void
     {
         // tables

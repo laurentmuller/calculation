@@ -23,6 +23,7 @@ class FixtureParameter implements ParameterInterface
     public string $name = '';
     public bool $value = false;
 
+    #[\Override]
     public static function getCacheKey(): string
     {
         return 'fake';

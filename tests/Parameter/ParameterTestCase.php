@@ -28,6 +28,7 @@ abstract class ParameterTestCase extends TestCase
      */
     protected ParameterInterface $parameter;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->parameter = $this->createParameter();

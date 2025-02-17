@@ -49,6 +49,7 @@ class CalculationDocument extends AbstractDocument
         parent::__construct($controller);
     }
 
+    #[\Override]
     public function render(): bool
     {
         $calculation = $this->calculation;

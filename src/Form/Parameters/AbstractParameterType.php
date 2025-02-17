@@ -25,6 +25,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 abstract class AbstractParameterType extends AbstractHelperType
 {
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -32,6 +33,7 @@ abstract class AbstractParameterType extends AbstractHelperType
         ]);
     }
 
+    #[\Override]
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $values = $this->getDefaultValues($form);
@@ -54,6 +56,7 @@ abstract class AbstractParameterType extends AbstractHelperType
         }
     }
 
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return '';

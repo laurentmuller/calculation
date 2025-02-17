@@ -63,6 +63,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         $this->minMargin = $controller->getMinMargin();
     }
 
+    #[\Override]
     public function drawCellText(PdfCellTextEvent $event): bool
     {
         if (0 !== $event->index || null === $this->currentEntity) {
@@ -78,6 +79,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         return true;
     }
 
+    #[\Override]
     public function drawHeaders(PdfPdfDrawHeadersEvent $event): bool
     {
         $cells = [];
@@ -112,6 +114,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         return true;
     }
 
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->addPage();

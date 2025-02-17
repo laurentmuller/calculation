@@ -18,6 +18,7 @@ namespace App\Faker;
  */
 class Factory extends \Faker\Factory
 {
+    #[\Override]
     public static function create($locale = self::DEFAULT_LOCALE): Generator
     {
         $generator = new Generator();

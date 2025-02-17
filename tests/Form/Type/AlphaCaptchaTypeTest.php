@@ -54,6 +54,7 @@ class AlphaCaptchaTypeTest extends TypeTestCase
         $this->validateSubmit(true);
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         $session = new Session(new MockArraySessionStorage());

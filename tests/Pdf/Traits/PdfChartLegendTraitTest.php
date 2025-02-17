@@ -31,6 +31,7 @@ class PdfChartLegendTraitTest extends TestCase
         $report = new class($controller) extends AbstractReport implements PdfChartInterface {
             use PdfChartLegendTrait;
 
+            #[\Override]
             public function render(): bool
             {
                 return true;
@@ -66,6 +67,7 @@ class PdfChartLegendTraitTest extends TestCase
         $report = new class($controller) extends AbstractReport implements PdfChartInterface {
             use PdfChartLegendTrait;
 
+            #[\Override]
             public function render(): bool
             {
                 return true;
@@ -101,6 +103,7 @@ class PdfChartLegendTraitTest extends TestCase
         $report = new class($controller) extends AbstractReport implements PdfChartInterface {
             use PdfChartLegendTrait;
 
+            #[\Override]
             public function render(): bool
             {
                 return true;
@@ -134,6 +137,7 @@ class PdfChartLegendTraitTest extends TestCase
         $report = new class($controller) extends AbstractReport implements PdfChartInterface {
             use PdfChartLegendTrait;
 
+            #[\Override]
             public function render(): bool
             {
                 return true;
@@ -167,6 +171,7 @@ class PdfChartLegendTraitTest extends TestCase
         $report = new class($controller) extends AbstractReport implements PdfChartInterface {
             use PdfChartLegendTrait;
 
+            #[\Override]
             public function render(): bool
             {
                 return true;

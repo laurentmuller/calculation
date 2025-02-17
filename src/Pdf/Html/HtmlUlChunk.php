@@ -18,11 +18,13 @@ namespace App\Pdf\Html;
  */
 class HtmlUlChunk extends AbstractHtmlListChunk
 {
+    #[\Override]
     public function getBulletLast(): string
     {
         return \chr(149);
     }
 
+    #[\Override]
     public function getBulletText(HtmlLiChunk $chunk): string
     {
         return $this->getBulletLast();

@@ -27,6 +27,7 @@ class UserPropertyRepositoryTest extends KernelServiceTestCase
 
     private UserPropertyRepository $repository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

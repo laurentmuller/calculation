@@ -24,6 +24,7 @@ use App\Tests\Form\EntityTypeTestCase;
  */
 class CustomerTypeTest extends EntityTypeTestCase
 {
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -39,16 +40,19 @@ class CustomerTypeTest extends EntityTypeTestCase
         ];
     }
 
+    #[\Override]
     protected function getEntityClass(): string
     {
         return Customer::class;
     }
 
+    #[\Override]
     protected function getFormTypeClass(): string
     {
         return CustomerType::class;
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         return [

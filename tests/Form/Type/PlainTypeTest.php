@@ -164,6 +164,7 @@ class PlainTypeTest extends TypeTestCase
         $this->validateViewValue($data, $expected);
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         return [

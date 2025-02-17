@@ -27,6 +27,7 @@ class LetterCaptcha extends AbstractAlphaCaptcha
         -1 => 'last',
     ];
 
+    #[\Override]
     protected function getAnswer(string $word, int $letterIndex): string
     {
         if ($letterIndex < 0) {
@@ -37,11 +38,13 @@ class LetterCaptcha extends AbstractAlphaCaptcha
         return $word[$letterIndex];
     }
 
+    #[\Override]
     protected function getMapping(): array
     {
         return self::MAPPING;
     }
 
+    #[\Override]
     protected function getTranslatedLetter(): string
     {
         return $this->trans('letter');

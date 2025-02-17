@@ -66,6 +66,7 @@ class Log extends AbstractEntity implements ComparableInterface
         $this->createdAt = new \DateTimeImmutable();
     }
 
+    #[\Override]
     public function compare(ComparableInterface $other): int
     {
         return $this->getCreatedAt() <=> $other->getCreatedAt();
@@ -107,6 +108,7 @@ class Log extends AbstractEntity implements ComparableInterface
         return $this->createdAt;
     }
 
+    #[\Override]
     public function getDisplay(): string
     {
         return $this->getMessage();

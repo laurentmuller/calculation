@@ -22,6 +22,7 @@ class HelpServiceTest extends KernelServiceTestCase
 {
     private HelpService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

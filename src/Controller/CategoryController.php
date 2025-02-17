@@ -191,6 +191,7 @@ class CategoryController extends AbstractEntityController
     /**
      * @psalm-param Category $item
      */
+    #[\Override]
     protected function deleteFromDatabase(EntityInterface $item): void
     {
         $this->getApplicationService()->updateDeletedCategory($item);

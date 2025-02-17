@@ -31,6 +31,7 @@ class CustomerType extends AbstractEntityType
         parent::__construct(Customer::class);
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('title')

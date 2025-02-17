@@ -32,11 +32,13 @@ abstract class AbstractStreamedResponse extends StreamedResponse implements Mime
         parent::__construct(callback: $callback, headers: $headers);
     }
 
+    #[\Override]
     public function getAttachmentMimeType(): string
     {
         return 'application/x-download';
     }
 
+    #[\Override]
     public function getInlineMimeType(): string
     {
         if (null === $this->mimeType) {

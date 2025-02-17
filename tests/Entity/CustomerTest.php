@@ -172,6 +172,7 @@ class CustomerTest extends ConstraintValidatorTestCase
         self::assertSame('zipCode city', $customer->getZipCity());
     }
 
+    #[\Override]
     protected function createValidator(): ConstraintValidatorInterface
     {
         return new IsNullValidator();

@@ -41,6 +41,7 @@ class LogsDocument extends AbstractDocument
         ]);
     }
 
+    #[\Override]
     public function render(): bool
     {
         $logFile = $this->logFile;

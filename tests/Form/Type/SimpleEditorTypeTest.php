@@ -64,6 +64,7 @@ class SimpleEditorTypeTest extends TypeTestCase
         self::assertTrue($form->isValid());
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         $actionsPath = __DIR__ . '/../../../resources/files/simple_editor_actions.json';

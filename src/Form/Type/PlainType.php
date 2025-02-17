@@ -104,6 +104,7 @@ class PlainType extends AbstractType
     /**
      * @psalm-param OptionsType $options
      */
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         /** @psalm-var mixed $data */
@@ -121,6 +122,7 @@ class PlainType extends AbstractType
         ]);
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $this->configureDefaults($resolver);

@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ExchangeRateControllerTest extends ControllerTestCase
 {
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/exchange', self::ROLE_USER, Response::HTTP_FORBIDDEN];

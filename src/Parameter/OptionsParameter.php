@@ -26,6 +26,7 @@ class OptionsParameter implements ParameterInterface
     #[Parameter('qr_code', false)]
     private bool $qrCode = false;
 
+    #[\Override]
     public static function getCacheKey(): string
     {
         return 'parameter_option';

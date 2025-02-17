@@ -40,6 +40,7 @@ class UserTableTest extends EntityTableTestCase
 
     private int $state;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -64,6 +65,7 @@ class UserTableTest extends EntityTableTestCase
         $this->processDataQuery(new DataQuery());
     }
 
+    #[\Override]
     protected function createEntities(): array
     {
         $user = [
@@ -92,6 +94,7 @@ class UserTableTest extends EntityTableTestCase
         return [$user, $admin];
     }
 
+    #[\Override]
     protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&UserRepository
     {
         $repository = $this->createMock(UserRepository::class);
@@ -104,6 +107,7 @@ class UserTableTest extends EntityTableTestCase
     /**
      * @psalm-param UserRepository $repository
      */
+    #[\Override]
     protected function createTable(AbstractRepository $repository): UserTable
     {
         $translator = $this->createMockTranslator();

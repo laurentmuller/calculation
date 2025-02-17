@@ -31,6 +31,7 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
     private string $databaseName;
     private SwissPostUpdater $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -51,6 +52,7 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
             ->setLogger($logger);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         if (\is_file($this->databaseName)) {

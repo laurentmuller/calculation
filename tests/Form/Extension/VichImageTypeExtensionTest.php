@@ -39,6 +39,7 @@ class VichImageTypeExtensionTest extends TypeTestCase
         self::assertNull($options['placeholder']);
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         return [
@@ -49,6 +50,7 @@ class VichImageTypeExtensionTest extends TypeTestCase
     /**
      * @return VichImageTypeExtension[]
      */
+    #[\Override]
     protected function getTypeExtensions(): array
     {
         return [

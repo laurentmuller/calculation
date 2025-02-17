@@ -25,6 +25,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class AttributeRightType extends AbstractType
 {
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -37,6 +38,7 @@ class AttributeRightType extends AbstractType
         ]);
     }
 
+    #[\Override]
     public function getParent(): string
     {
         return FlagBagType::class;

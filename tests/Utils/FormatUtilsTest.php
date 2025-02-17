@@ -24,6 +24,7 @@ class FormatUtilsTest extends TestCase
     private const PERCENT_SYMBOL = '%';
     private const TIME_STAMP = 1_645_358_399;
 
+    #[\Override]
     protected function setUp(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);

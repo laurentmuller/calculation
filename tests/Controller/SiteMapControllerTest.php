@@ -15,6 +15,7 @@ namespace App\Tests\Controller;
 
 class SiteMapControllerTest extends ControllerTestCase
 {
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/sitemap', self::ROLE_USER];

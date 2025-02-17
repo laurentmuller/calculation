@@ -21,6 +21,7 @@ use Twig\TwigFunction;
  */
 class PhpExtension extends AbstractExtension
 {
+    #[\Override]
     public function getFunctions(): array
     {
         return [

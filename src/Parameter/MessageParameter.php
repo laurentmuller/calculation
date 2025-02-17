@@ -45,6 +45,7 @@ class MessageParameter implements ParameterInterface
     #[Parameter('message_title', true)]
     private bool $title = true;
 
+    #[\Override]
     public static function getCacheKey(): string
     {
         return 'parameter_message';

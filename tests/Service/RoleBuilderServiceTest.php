@@ -24,6 +24,7 @@ class RoleBuilderServiceTest extends TestCase
 {
     private RoleBuilderService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->service = new RoleBuilderService();

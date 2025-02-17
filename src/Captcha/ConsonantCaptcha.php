@@ -27,16 +27,19 @@ class ConsonantCaptcha extends AbstractAlphaCaptcha
 
     private const SOURCE = 'BCDFGHJKLMNPQRSTVWXZ';
 
+    #[\Override]
     protected function getAnswer(string $word, int $letterIndex): string
     {
         return $this->findAnswer($word, $letterIndex, self::SOURCE);
     }
 
+    #[\Override]
     protected function getMapping(): array
     {
         return self::MAPPING;
     }
 
+    #[\Override]
     protected function getTranslatedLetter(): string
     {
         return $this->trans('consonant');

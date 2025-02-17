@@ -28,6 +28,7 @@ class ReportTableTest extends TestCase
 
     private MockObject&TranslatorInterface $translator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

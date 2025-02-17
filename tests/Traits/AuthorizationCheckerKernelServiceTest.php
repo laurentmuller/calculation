@@ -23,6 +23,7 @@ class AuthorizationCheckerKernelServiceTest extends KernelServiceTestCase
 {
     use AuthorizationCheckerAwareTrait;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

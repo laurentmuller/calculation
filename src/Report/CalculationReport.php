@@ -65,12 +65,14 @@ class CalculationReport extends AbstractReport
         return $this->minMargin;
     }
 
+    #[\Override]
     public function header(): void
     {
         parent::header();
         $this->renderCalculation();
     }
 
+    #[\Override]
     public function render(): bool
     {
         $calculation = $this->calculation;

@@ -58,6 +58,7 @@ class SchemaReport extends AbstractReport
         $this->setDescriptionTrans('schema.description');
     }
 
+    #[\Override]
     public function render(): bool
     {
         $tables = $this->schemaService->getTables();

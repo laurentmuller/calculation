@@ -263,6 +263,7 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * @throws AccessDeniedException
      */
+    #[\Override]
     protected function renderPdfDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
     {
         $this->checkPermission(EntityPermission::EXPORT);
@@ -274,6 +275,7 @@ abstract class AbstractEntityController extends AbstractController
      * @throws AccessDeniedException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
+    #[\Override]
     protected function renderSpreadsheetDocument(
         SpreadsheetDocument $doc,
         bool $inline = true,
@@ -289,6 +291,7 @@ abstract class AbstractEntityController extends AbstractController
      * @throws NotFoundHttpException
      * @throws \PhpOffice\PhpWord\Exception\Exception
      */
+    #[\Override]
     protected function renderWordDocument(WordDocument $doc, bool $inline = true, string $name = ''): WordResponse
     {
         $this->checkPermission(EntityPermission::EXPORT);

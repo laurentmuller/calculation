@@ -97,6 +97,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
         );
     }
 
+    #[\Override]
     protected function addSearch(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
         $result = parent::addSearch($query, $builder, $alias);
@@ -112,16 +113,19 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
         return true;
     }
 
+    #[\Override]
     protected function createQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->getRepository()->getTableQueryBuilder($alias);
     }
 
+    #[\Override]
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'category.json');
     }
 
+    #[\Override]
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);

@@ -43,6 +43,7 @@ class LogTable extends AbstractTable implements \Countable
     {
     }
 
+    #[\Override]
     public function count(): int
     {
         return $this->service->getLogFile()?->count() ?? 0;
@@ -78,21 +79,25 @@ class LogTable extends AbstractTable implements \Countable
         return $this->twig->render('macros/_cell_log_level.html.twig', ['value' => $value, 'log' => $log]);
     }
 
+    #[\Override]
     public function getEmptyMessage(): ?string
     {
         return 0 === $this->count() ? 'log.list.empty' : null;
     }
 
+    #[\Override]
     public function getEntityClassName(): ?string
     {
         return Log::class;
     }
 
+    #[\Override]
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'log.json');
     }
 
+    #[\Override]
     protected function handleQuery(DataQuery $query): DataResults
     {
         $results = parent::handleQuery($query);

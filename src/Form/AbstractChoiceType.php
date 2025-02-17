@@ -26,11 +26,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 abstract class AbstractChoiceType extends AbstractType
 {
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('choices', $this->getChoices());
     }
 
+    #[\Override]
     public function getParent(): string
     {
         return ChoiceType::class;

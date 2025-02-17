@@ -23,6 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class GroupTypeTest extends EntityTypeTestCase
 {
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -32,11 +33,13 @@ class GroupTypeTest extends EntityTypeTestCase
         ];
     }
 
+    #[\Override]
     protected function getEntityClass(): string
     {
         return Group::class;
     }
 
+    #[\Override]
     protected function getFormTypeClass(): string
     {
         return GroupType::class;

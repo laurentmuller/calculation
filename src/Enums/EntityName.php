@@ -109,6 +109,7 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
      *
      * @return array<string, string>
      */
+    #[\Override]
     public static function constants(): array
     {
         return \array_reduce(
@@ -140,6 +141,7 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
     /**
      * @return EntityName[]
      */
+    #[\Override]
     public static function sorted(): array
     {
         return [

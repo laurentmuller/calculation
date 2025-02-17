@@ -41,6 +41,7 @@ class PasswordService
     ) {
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;

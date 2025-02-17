@@ -52,12 +52,14 @@ abstract class AbstractParametersType extends AbstractType
      *
      * @phpstan-param FormBuilderInterface<mixed> $builder
      */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $helper = new FormHelper($builder, self::LABEL_PREFIX);
         $this->addSections($helper);
     }
 
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return '';
@@ -73,6 +75,7 @@ abstract class AbstractParametersType extends AbstractType
         return \range(4, 20, 4);
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;

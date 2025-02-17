@@ -99,11 +99,13 @@ class LogService
         return $this->cache->get(self::KEY_CACHE, fn (): ?LogFile => $this->parseFile());
     }
 
+    #[\Override]
     public function getLogger(): LoggerInterface
     {
         return $this->logger;
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;

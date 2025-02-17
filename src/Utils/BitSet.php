@@ -28,6 +28,7 @@ class BitSet implements \Stringable
      */
     private array $words = [];
 
+    #[\Override]
     public function __toString(): string
     {
         return \sprintf('BitSet{%s}', \implode(',', $this->toIndexes()));

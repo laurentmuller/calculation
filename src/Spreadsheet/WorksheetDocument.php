@@ -105,6 +105,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Get parent or null.
      */
+    #[\Override]
     public function getParent(): ?SpreadsheetDocument
     {
         /** @var SpreadsheetDocument|null */
@@ -143,6 +144,7 @@ class WorksheetDocument extends Worksheet
      *
      * @throws Exception if the given parent is not an instance of WorksheetDocument
      */
+    #[\Override]
     public function rebindParent(Spreadsheet $parent): static
     {
         if (!$parent instanceof SpreadsheetDocument) {
@@ -538,6 +540,7 @@ class WorksheetDocument extends Worksheet
      *                                            be set at parse time (by Readers), where titles can be assumed to be
      *                                            valid.
      */
+    #[\Override]
     public function setTitle(string $title, bool $updateFormulaCellReferences = true, bool $validate = true): static
     {
         return parent::setTitle($this->validateTitle($title), $updateFormulaCellReferences, $validate);

@@ -27,6 +27,7 @@ class SearchServiceTest extends KernelServiceTestCase
     use CalculationTrait;
     use DatabaseTrait;
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->deleteCalculation();

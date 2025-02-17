@@ -90,6 +90,7 @@ class TaskComputeResult implements \JsonSerializable
         return $this->task;
     }
 
+    #[\Override]
     public function jsonSerialize(): array
     {
         return [

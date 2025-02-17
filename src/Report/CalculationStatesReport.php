@@ -30,6 +30,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
 {
     private ?CalculationState $currentState = null;
 
+    #[\Override]
     public function drawCellBackground(PdfCellBackgroundEvent $event): bool
     {
         if (3 !== $event->index || !$this->currentState instanceof CalculationState) {
@@ -45,6 +46,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
         return true;
     }
 
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('calculationstate.list.title');

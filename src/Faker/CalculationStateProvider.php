@@ -36,6 +36,7 @@ class CalculationStateProvider extends EntityProvider
         return $this->entity();
     }
 
+    #[\Override]
     protected function getCriteria(): array
     {
         return ['editable' => true];

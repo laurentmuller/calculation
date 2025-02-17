@@ -23,6 +23,7 @@ class ResetPasswordControllerTest extends ControllerTestCase
 {
     use SessionHelperTrait;
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/reset-password', self::ROLE_USER];

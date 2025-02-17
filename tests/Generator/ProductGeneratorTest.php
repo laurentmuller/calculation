@@ -66,6 +66,7 @@ class ProductGeneratorTest extends GeneratorTestCase
             ->willReturn($generator);
 
         $productGenerator = new class($manager, $fakerService) extends ProductGenerator {
+            #[\Override]
             public function createEntities(int $count, bool $simulate, Generator $generator): array
             {
                 return parent::createEntities($count, $simulate, $generator);
@@ -75,6 +76,7 @@ class ProductGeneratorTest extends GeneratorTestCase
         self::assertCount(1, $actual);
     }
 
+    #[\Override]
     protected function createGenerator(): ProductGenerator
     {
         $generator = new ProductGenerator($this->manager, $this->fakerService);

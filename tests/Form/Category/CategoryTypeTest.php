@@ -26,6 +26,7 @@ class CategoryTypeTest extends EntityTypeTestCase
 {
     use GroupTrait;
 
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -35,11 +36,13 @@ class CategoryTypeTest extends EntityTypeTestCase
         ];
     }
 
+    #[\Override]
     protected function getEntityClass(): string
     {
         return Category::class;
     }
 
+    #[\Override]
     protected function getFormTypeClass(): string
     {
         return CategoryType::class;
@@ -48,6 +51,7 @@ class CategoryTypeTest extends EntityTypeTestCase
     /**
      * @throws \ReflectionException
      */
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         return [

@@ -32,11 +32,13 @@ use Twig\TokenParser\AbstractTokenParser;
  */
 final class SwitchTokenParser extends AbstractTokenParser
 {
+    #[\Override]
     public function getTag(): string
     {
         return 'switch';
     }
 
+    #[\Override]
     public function parse(Token $token): SwitchNode
     {
         $lineno = $token->getLine();

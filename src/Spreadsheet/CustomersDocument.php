@@ -23,6 +23,7 @@ class CustomersDocument extends AbstractArrayDocument
     /**
      * @param \App\Entity\Customer[] $entities
      */
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->start('customer.list.title');

@@ -49,6 +49,7 @@ class AbstractChartTest extends TestCase
         $twig->expects(self::once())->method('render')
             ->willReturn('fake');
         $chart = new class($application, $generator, $twig)extends AbstractHighchart {
+            #[\Override]
             public function createTemplateExpression(string $template, array $context = []): ?ChartExpression
             {
                 return parent::createTemplateExpression($template, $context);
@@ -70,6 +71,7 @@ class AbstractChartTest extends TestCase
         $generator = $this->createMock(UrlGeneratorInterface::class);
         $twig = $this->createMock(Environment::class);
         $chart = new class($application, $generator, $twig) extends AbstractHighchart {
+            #[\Override]
             public function getMinMargin(): float
             {
                 return parent::getMinMargin();

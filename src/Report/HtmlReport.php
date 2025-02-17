@@ -37,6 +37,7 @@ class HtmlReport extends AbstractReport
         parent::__construct($controller, $orientation);
     }
 
+    #[\Override]
     public function footer(): void
     {
         $previousMargins = $this->applyDefaultMargins();
@@ -44,6 +45,7 @@ class HtmlReport extends AbstractReport
         $this->applyPreviousMargins($previousMargins);
     }
 
+    #[\Override]
     public function header(): void
     {
         $previousMargins = $this->applyDefaultMargins();
@@ -51,6 +53,7 @@ class HtmlReport extends AbstractReport
         $this->applyPreviousMargins($previousMargins);
     }
 
+    #[\Override]
     public function render(): bool
     {
         if ('' === $this->html) {
@@ -93,6 +96,7 @@ class HtmlReport extends AbstractReport
         return $this;
     }
 
+    #[\Override]
     protected function beginPage(
         ?PdfOrientation $orientation = null,
         PdfPageSize|PdfSize|null $size = null,

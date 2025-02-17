@@ -22,6 +22,7 @@ use fpdf\PdfDocument;
  */
 readonly class PdfFillColor extends PdfRgbColor implements PdfDocumentUpdaterInterface
 {
+    #[\Override]
     public function apply(PdfDocument $doc): void
     {
         $doc->setFillColor($this);

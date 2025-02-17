@@ -20,6 +20,7 @@ use App\Form\FormHelper;
  */
 class UserChangePasswordType extends AbstractChangePasswordType
 {
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('username')

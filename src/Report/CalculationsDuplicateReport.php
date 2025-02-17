@@ -37,6 +37,7 @@ class CalculationsDuplicateReport extends AbstractCalculationItemsReport
     /**
      * @psalm-param CalculationItemType[] $entities
      */
+    #[\Override]
     protected function computeItemsCount(array $entities): int
     {
         return \array_reduce($entities, function (int $carry, array $entity): int {
@@ -49,6 +50,7 @@ class CalculationsDuplicateReport extends AbstractCalculationItemsReport
         }, 0);
     }
 
+    #[\Override]
     protected function transCount(array $parameters): string
     {
         return $this->trans('duplicate.count', $parameters);

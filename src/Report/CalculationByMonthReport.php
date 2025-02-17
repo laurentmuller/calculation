@@ -88,6 +88,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         $this->colors = new \WeakMap();
     }
 
+    #[\Override]
     public function drawCellBackground(PdfCellBackgroundEvent $event): bool
     {
         return match ($event->index) {
@@ -100,6 +101,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         };
     }
 
+    #[\Override]
     public function drawCellText(PdfCellTextEvent $event): bool
     {
         if (!$this->drawHeaders) {
@@ -113,6 +115,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         };
     }
 
+    #[\Override]
     public function drawHeaders(PdfPdfDrawHeadersEvent $event): true
     {
         $cells = [];
@@ -138,6 +141,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         return true;
     }
 
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->addPage();

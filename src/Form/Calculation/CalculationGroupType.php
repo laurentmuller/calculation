@@ -37,6 +37,7 @@ class CalculationGroupType extends AbstractEntityType
         $this->transformer = new EntityTransformer($repository);
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('group')

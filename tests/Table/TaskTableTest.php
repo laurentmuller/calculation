@@ -33,6 +33,7 @@ class TaskTableTest extends EntityTableTestCase
     private int $categoryId;
     private int $groupId;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -86,6 +87,7 @@ class TaskTableTest extends EntityTableTestCase
         $this->processDataQuery($dataQuery);
     }
 
+    #[\Override]
     protected function createEntities(): array
     {
         $entity = [
@@ -102,6 +104,7 @@ class TaskTableTest extends EntityTableTestCase
         return [$entity];
     }
 
+    #[\Override]
     protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&TaskRepository
     {
         $repository = $this->createMock(TaskRepository::class);
@@ -116,6 +119,7 @@ class TaskTableTest extends EntityTableTestCase
      *
      * @throws \ReflectionException
      */
+    #[\Override]
     protected function createTable(AbstractRepository $repository): TaskTable
     {
         $categoryRepository = $this->createMock(CategoryRepository::class);

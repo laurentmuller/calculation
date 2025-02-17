@@ -111,11 +111,13 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
         );
     }
 
+    #[\Override]
     protected function createQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->getRepository()->getTableQueryBuilder($alias);
     }
 
+    #[\Override]
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'group.json');

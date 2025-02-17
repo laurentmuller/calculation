@@ -61,6 +61,7 @@ class MemoryImageReport extends AbstractReport
         $this->setTitle('In memory Images');
     }
 
+    #[\Override]
     public function render(): bool
     {
         $this->addPage();

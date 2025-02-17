@@ -21,6 +21,7 @@ use App\Parameter\DefaultParameter;
  */
 class DefaultParameterTest extends ParameterTestCase
 {
+    #[\Override]
     public static function getParameterNames(): \Generator
     {
         yield ['categoryId', 'default_category'];
@@ -28,6 +29,7 @@ class DefaultParameterTest extends ParameterTestCase
         yield ['stateId', 'default_state'];
     }
 
+    #[\Override]
     public static function getParameterValues(): \Generator
     {
         yield ['categoryId', null];
@@ -66,6 +68,7 @@ class DefaultParameterTest extends ParameterTestCase
         self::assertSame($stateId, $this->parameter->getStateId());
     }
 
+    #[\Override]
     protected function createParameter(): DefaultParameter
     {
         return new DefaultParameter();

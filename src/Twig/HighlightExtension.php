@@ -51,6 +51,7 @@ class HighlightExtension extends AbstractExtension
     private ?HtmlDumper $dumper = null;
     private ?SqlFormatter $sqlFormatter = null;
 
+    #[\Override]
     public function getFilters(): array
     {
         return [

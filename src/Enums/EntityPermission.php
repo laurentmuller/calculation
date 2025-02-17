@@ -74,6 +74,7 @@ enum EntityPermission: int implements ConstantsInterface, EnumSortableInterface,
      *
      * @return array<string, string>
      */
+    #[\Override]
     public static function constants(): array
     {
         return \array_reduce(
@@ -121,6 +122,7 @@ enum EntityPermission: int implements ConstantsInterface, EnumSortableInterface,
     /**
      * @return EntityPermission[]
      */
+    #[\Override]
     public static function sorted(): array
     {
         return [

@@ -22,6 +22,7 @@ class ImageResizerTest extends KernelServiceTestCase
 {
     private ImageResizer $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

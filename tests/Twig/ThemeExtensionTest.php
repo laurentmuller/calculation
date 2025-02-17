@@ -19,6 +19,7 @@ use App\Twig\ThemeExtension;
 
 class ThemeExtensionTest extends IntegrationTestCase
 {
+    #[\Override]
     protected function getExtensions(): array
     {
         $service = $this->createMock(ThemeService::class);
@@ -34,6 +35,7 @@ class ThemeExtensionTest extends IntegrationTestCase
         return [new ThemeExtension($service)];
     }
 
+    #[\Override]
     protected function getFixturesDir(): string
     {
         return __DIR__ . '/Fixtures/ThemeExtension';

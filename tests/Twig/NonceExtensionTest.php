@@ -18,6 +18,7 @@ use App\Twig\NonceExtension;
 
 class NonceExtensionTest extends IntegrationTestCase
 {
+    #[\Override]
     protected function getExtensions(): array
     {
         $service = $this->createMock(NonceService::class);
@@ -27,6 +28,7 @@ class NonceExtensionTest extends IntegrationTestCase
         return [new NonceExtension($service)];
     }
 
+    #[\Override]
     protected function getFixturesDir(): string
     {
         return __DIR__ . '/Fixtures/NonceExtension';

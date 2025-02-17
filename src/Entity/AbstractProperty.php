@@ -101,6 +101,7 @@ abstract class AbstractProperty extends AbstractEntity
         return null;
     }
 
+    #[\Override]
     public function getDisplay(): string
     {
         return $this->name ?? parent::getDisplay();

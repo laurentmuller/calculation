@@ -27,6 +27,7 @@ abstract class AbstractCalendarItem implements \JsonSerializable, \Stringable
         $this->reset();
     }
 
+    #[\Override]
     abstract public function __toString(): string;
 
     /**

@@ -23,6 +23,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 abstract class AbstractHelperType extends AbstractType
 {
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $helper = $this->createFormHelper($builder);

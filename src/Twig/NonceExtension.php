@@ -29,6 +29,7 @@ final class NonceExtension extends AbstractExtension
     /**
      * @throws \Exception
      */
+    #[\Override]
     public function getFunctions(): array
     {
         return [

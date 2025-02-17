@@ -25,6 +25,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class CustomerTableTest extends EntityTableTestCase
 {
+    #[\Override]
     protected function createEntities(): array
     {
         $entity = new Customer();
@@ -38,6 +39,7 @@ class CustomerTableTest extends EntityTableTestCase
         return [$entity];
     }
 
+    #[\Override]
     protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CustomerRepository
     {
         $repository = $this->createMock(CustomerRepository::class);
@@ -50,6 +52,7 @@ class CustomerTableTest extends EntityTableTestCase
     /**
      * @psalm-param CustomerRepository $repository
      */
+    #[\Override]
     protected function createTable(AbstractRepository $repository): CustomerTable
     {
         return new CustomerTable($repository);

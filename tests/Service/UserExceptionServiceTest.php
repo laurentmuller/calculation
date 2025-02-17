@@ -34,6 +34,7 @@ class UserExceptionServiceTest extends TestCase
     private Request $request;
     private UserExceptionService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->service = new UserExceptionService();

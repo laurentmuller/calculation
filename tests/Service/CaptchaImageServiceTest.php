@@ -25,6 +25,7 @@ class CaptchaImageServiceTest extends TestCase
 {
     private Session $session;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->session = new Session(new MockArraySessionStorage());

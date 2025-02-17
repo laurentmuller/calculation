@@ -28,11 +28,13 @@ class AboutPolicyController extends AbstractAboutController
      */
     public const POLICY_FILE = 'POLICY.md';
 
+    #[\Override]
     protected function getFileName(): string
     {
         return self::POLICY_FILE;
     }
 
+    #[\Override]
     protected function getTags(): array
     {
         return [
@@ -42,11 +44,13 @@ class AboutPolicyController extends AbstractAboutController
         ];
     }
 
+    #[\Override]
     protected function getTitle(): string
     {
         return 'about.policy';
     }
 
+    #[\Override]
     protected function getView(): string
     {
         return 'about/policy.html.twig';

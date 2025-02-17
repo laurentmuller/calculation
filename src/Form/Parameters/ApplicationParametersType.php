@@ -27,6 +27,7 @@ class ApplicationParametersType extends AbstractHelperParametersType
     {
     }
 
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildForm($builder, $options);
@@ -38,6 +39,7 @@ class ApplicationParametersType extends AbstractHelperParametersType
         }
     }
 
+    #[\Override]
     protected function getParametersClass(): string
     {
         return ApplicationParameters::class;

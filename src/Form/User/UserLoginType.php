@@ -22,6 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class UserLoginType extends AbstractUserCaptchaType
 {
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -29,6 +30,7 @@ class UserLoginType extends AbstractUserCaptchaType
         ]);
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field(SecurityAttributes::USER_FIELD)
@@ -40,6 +42,7 @@ class UserLoginType extends AbstractUserCaptchaType
         parent::addFormFields($helper);
     }
 
+    #[\Override]
     protected function getLabelPrefix(): ?string
     {
         return 'security.login.';

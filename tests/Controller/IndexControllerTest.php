@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class IndexControllerTest extends ControllerTestCase
 {
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/', self::ROLE_DISABLED];

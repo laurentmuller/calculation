@@ -25,6 +25,7 @@ class PdfColumnTranslatorTraitTest extends TestCase
     {
         $controller = $this->createMock(AbstractController::class);
         $report = new class($controller) extends AbstractReport {
+            #[\Override]
             public function render(): bool
             {
                 $this->addPage();

@@ -35,6 +35,7 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
         $this->setTitle($title);
     }
 
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->start((string) $this->getTitle(), true);

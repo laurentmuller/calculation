@@ -36,11 +36,13 @@ class ResetAllPasswordType extends AbstractType
     ) {
     }
 
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addEventListener(FormEvents::PRE_SUBMIT, $this->onPreSubmit(...));
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -55,6 +57,7 @@ class ResetAllPasswordType extends AbstractType
         ]);
     }
 
+    #[\Override]
     public function getParent(): string
     {
         return ChoiceType::class;

@@ -26,6 +26,7 @@ class TestReport extends AbstractReport
         parent::__construct($controller);
     }
 
+    #[\Override]
     public function render(): bool
     {
         if ($this->render) {

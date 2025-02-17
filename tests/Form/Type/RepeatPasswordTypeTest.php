@@ -28,6 +28,7 @@ class RepeatPasswordTypeTest extends TypeTestCase
         self::assertArrayHasKey('id', $view->vars);
     }
 
+    #[\Override]
     protected function getExtensions(): array
     {
         $extensions = parent::getExtensions();

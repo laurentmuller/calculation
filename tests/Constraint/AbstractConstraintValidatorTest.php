@@ -73,6 +73,7 @@ class AbstractConstraintValidatorTest extends ConstraintValidatorTestCase
      *
      * @phpstan-ignore missingType.generics
      */
+    #[\Override]
     protected function createValidator(): AbstractConstraintValidator
     {
         return new class() extends AbstractConstraintValidator {
@@ -81,6 +82,7 @@ class AbstractConstraintValidatorTest extends ConstraintValidatorTestCase
                 parent::__construct(Password::class);
             }
 
+            #[\Override]
             protected function doValidate(string $value, Constraint $constraint): void
             {
             }

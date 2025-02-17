@@ -28,6 +28,7 @@ class DisplayParameter implements ParameterInterface
     #[Parameter('edit_action', EntityAction::EDIT)]
     private EntityAction $editAction = EntityAction::EDIT;
 
+    #[\Override]
     public static function getCacheKey(): string
     {
         return 'parameter_display';

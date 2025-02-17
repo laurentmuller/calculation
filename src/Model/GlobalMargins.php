@@ -55,6 +55,7 @@ class GlobalMargins implements \Countable
         return $this;
     }
 
+    #[\Override]
     public function count(): int
     {
         return $this->margins->count();
@@ -65,6 +66,7 @@ class GlobalMargins implements \Countable
      *
      * @return Collection<int, GlobalMargin>
      */
+    #[\Override]
     public function getMargins(): Collection
     {
         return $this->margins;

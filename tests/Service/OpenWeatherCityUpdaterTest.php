@@ -26,11 +26,13 @@ class OpenWeatherCityUpdaterTest extends TestCase
 
     private string $tempPath;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->tempPath = (string) FileUtils::tempDir();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         FileUtils::remove($this->tempPath);

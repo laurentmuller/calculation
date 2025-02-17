@@ -27,6 +27,7 @@ class UrlGeneratorServiceTest extends KernelServiceTestCase
 
     private UrlGeneratorService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

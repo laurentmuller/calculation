@@ -28,11 +28,13 @@ class SwissDatabaseTest extends TestCase
 
     private SwissDatabase $database;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->database = new SwissDatabase(AbstractDatabase::IN_MEMORY);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->database->close();

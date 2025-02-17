@@ -99,6 +99,7 @@ class ApplicationParameters extends AbstractParameters
         return $this->findEntity(CalculationState::class, $this->getDefault()->getStateId());
     }
 
+    #[\Override]
     public function getDefaultValues(): array
     {
         // the customer and date parameters are omitted because default values are null
@@ -147,6 +148,7 @@ class ApplicationParameters extends AbstractParameters
         return $this->debug;
     }
 
+    #[\Override]
     public function save(): bool
     {
         return $this->saveParameters([
@@ -163,16 +165,19 @@ class ApplicationParameters extends AbstractParameters
         ]);
     }
 
+    #[\Override]
     protected function createProperty(string $name): GlobalProperty
     {
         return GlobalProperty::instance($name);
     }
 
+    #[\Override]
     protected function getRepository(): GlobalPropertyRepository
     {
         return $this->manager->getRepository(GlobalProperty::class);
     }
 
+    #[\Override]
     protected function loadProperties(): array
     {
         return $this->getRepository()

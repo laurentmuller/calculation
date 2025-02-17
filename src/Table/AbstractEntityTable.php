@@ -49,6 +49,7 @@ abstract class AbstractEntityTable extends AbstractTable
     {
     }
 
+    #[\Override]
     public function getEntityClassName(): ?string
     {
         return $this->repository->getClassName();
@@ -127,6 +128,7 @@ abstract class AbstractEntityTable extends AbstractTable
         return $this->repository;
     }
 
+    #[\Override]
     protected function handleQuery(DataQuery $query): DataResults
     {
         $results = parent::handleQuery($query);

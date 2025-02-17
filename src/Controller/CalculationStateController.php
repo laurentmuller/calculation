@@ -176,6 +176,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * @psalm-param CalculationState $item
      */
+    #[\Override]
     protected function deleteFromDatabase(EntityInterface $item): void
     {
         $this->getApplicationService()->updateDeletedState($item);

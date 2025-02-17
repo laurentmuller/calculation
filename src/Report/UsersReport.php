@@ -44,6 +44,7 @@ class UsersReport extends AbstractArrayReport
         parent::__construct($controller, $entities);
     }
 
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('user.list.title');

@@ -108,6 +108,7 @@ class FontAwesomeImageService
         );
     }
 
+    #[\Override]
     public function getLogger(): LoggerInterface
     {
         return $this->logger;

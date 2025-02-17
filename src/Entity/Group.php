@@ -78,6 +78,7 @@ class Group extends AbstractCodeEntity
         $this->categories = new ArrayCollection();
     }
 
+    #[\Override]
     public function __clone()
     {
         parent::__clone();
@@ -225,6 +226,7 @@ class Group extends AbstractCodeEntity
      *
      * @return Collection<int, GroupMargin>
      */
+    #[\Override]
     public function getMargins(): Collection
     {
         return $this->margins;

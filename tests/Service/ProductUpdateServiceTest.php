@@ -47,6 +47,7 @@ class ProductUpdateServiceTest extends TestCase
     /**
      * @throws \ReflectionException
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->category = new Category();

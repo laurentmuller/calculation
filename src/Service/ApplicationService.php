@@ -81,11 +81,13 @@ class ApplicationService implements PropertyServiceInterface
         return $role;
     }
 
+    #[\Override]
     public function getCalculations(): int
     {
         return $this->getPropertyInteger(self::P_CALCULATIONS, self::DEFAULT_CALCULATIONS);
     }
 
+    #[\Override]
     public function getCustomer(): CustomerInformation
     {
         $info = new CustomerInformation();
@@ -229,11 +231,13 @@ class ApplicationService implements PropertyServiceInterface
         return $properties;
     }
 
+    #[\Override]
     public function getDisplayMode(): TableView
     {
         return $this->getPropertyEnum(self::P_DISPLAY_MODE, self::DEFAULT_DISPLAY_MODE);
     }
 
+    #[\Override]
     public function getEditAction(): EntityAction
     {
         return $this->getPropertyEnum(self::P_EDIT_ACTION, self::DEFAULT_ACTION);
@@ -271,16 +275,19 @@ class ApplicationService implements PropertyServiceInterface
         return $this->getPropertyDate(self::P_DATE_PRODUCT);
     }
 
+    #[\Override]
     public function getMessagePosition(): MessagePosition
     {
         return $this->getPropertyEnum(self::P_MESSAGE_POSITION, self::DEFAULT_MESSAGE_POSITION);
     }
 
+    #[\Override]
     public function getMessageProgress(): int
     {
         return $this->getPropertyInteger(self::P_MESSAGE_PROGRESS, self::DEFAULT_MESSAGE_PROGRESS);
     }
 
+    #[\Override]
     public function getMessageTimeout(): int
     {
         return $this->getPropertyInteger(self::P_MESSAGE_TIMEOUT, self::DEFAULT_MESSAGE_TIMEOUT);
@@ -388,6 +395,7 @@ class ApplicationService implements PropertyServiceInterface
         return $this->getPropertyBoolean(self::P_COMPROMISED_PASSWORD);
     }
 
+    #[\Override]
     public function isConnected(): bool
     {
         return $this->manager->getConnection()->isConnected();
@@ -432,51 +440,61 @@ class ApplicationService implements PropertyServiceInterface
         return !$this->isFloatZero($value) && $value < $this->getMinMargin();
     }
 
+    #[\Override]
     public function isMessageClose(): bool
     {
         return $this->getPropertyBoolean(self::P_MESSAGE_CLOSE, self::DEFAULT_MESSAGE_CLOSE);
     }
 
+    #[\Override]
     public function isMessageIcon(): bool
     {
         return $this->getPropertyBoolean(self::P_MESSAGE_ICON, self::DEFAULT_MESSAGE_ICON);
     }
 
+    #[\Override]
     public function isMessageSubTitle(): bool
     {
         return $this->getPropertyBoolean(self::P_MESSAGE_SUB_TITLE, self::DEFAULT_MESSAGE_SUB_TITLE);
     }
 
+    #[\Override]
     public function isMessageTitle(): bool
     {
         return $this->getPropertyBoolean(self::P_MESSAGE_TITLE, self::DEFAULT_MESSAGE_TITLE);
     }
 
+    #[\Override]
     public function isPanelCatalog(): bool
     {
         return $this->getPropertyBoolean(self::P_PANEL_CATALOG, self::DEFAULT_TRUE);
     }
 
+    #[\Override]
     public function isPanelMonth(): bool
     {
         return $this->getPropertyBoolean(self::P_PANEL_MONTH, self::DEFAULT_TRUE);
     }
 
+    #[\Override]
     public function isPanelState(): bool
     {
         return $this->getPropertyBoolean(self::P_PANEL_STATE, self::DEFAULT_TRUE);
     }
 
+    #[\Override]
     public function isPrintAddress(): bool
     {
         return $this->getPropertyBoolean(self::P_PRINT_ADDRESS, self::DEFAULT_PRINT_ADDRESS);
     }
 
+    #[\Override]
     public function isQrCode(): bool
     {
         return $this->getPropertyBoolean(self::P_QR_CODE, self::DEFAULT_QR_CODE);
     }
 
+    #[\Override]
     public function isStatusBar(): bool
     {
         return $this->getPropertyBoolean(self::P_STATUS_BAR, self::DEFAULT_TRUE);
@@ -526,6 +544,7 @@ class ApplicationService implements PropertyServiceInterface
      *
      * @return bool true if one or more properties have changed
      */
+    #[\Override]
     public function setProperties(array $properties): bool
     {
         if ([] === $properties) {
@@ -576,6 +595,7 @@ class ApplicationService implements PropertyServiceInterface
     /**
      * @return GlobalProperty[]
      */
+    #[\Override]
     protected function loadEntities(): array
     {
         return $this->getPropertyRepository()->findAll();

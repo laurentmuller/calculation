@@ -26,12 +26,14 @@ class ProductRepositoryTest extends KernelServiceTestCase
 
     private ProductRepository $repository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->repository = $this->getService(ProductRepository::class);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->deleteProduct();

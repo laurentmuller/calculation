@@ -35,6 +35,7 @@ class WordFooter extends AbstractHeaderFooter
     private ?string $name = null;
     private ?string $url = null;
 
+    #[\Override]
     public function output(Section $section): void
     {
         $width = self::TOTAL_WIDTH / 3;

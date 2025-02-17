@@ -29,6 +29,7 @@ class UserParametersType extends AbstractParametersType
         parent::__construct($security, $translator, $service->getProperties());
     }
 
+    #[\Override]
     protected function addSections(FormHelper $helper): void
     {
         $this->addDisplaySection($helper);

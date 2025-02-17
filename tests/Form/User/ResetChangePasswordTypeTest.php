@@ -38,6 +38,7 @@ class ResetChangePasswordTypeTest extends TypeTestCase
     /**
      * @throws \ReflectionException
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->user = new User();
@@ -58,6 +59,7 @@ class ResetChangePasswordTypeTest extends TypeTestCase
     /**
      * @throws \ReflectionException
      */
+    #[\Override]
     protected function getExtensions(): array
     {
         $extensions = $this->getExtensionsFromTrait();
@@ -66,6 +68,7 @@ class ResetChangePasswordTypeTest extends TypeTestCase
         return $extensions;
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         $generator = $this->createMock(UrlGeneratorInterface::class);

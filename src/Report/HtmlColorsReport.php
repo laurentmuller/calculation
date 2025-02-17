@@ -30,6 +30,7 @@ use App\Utils\FormatUtils;
  */
 class HtmlColorsReport extends AbstractReport
 {
+    #[\Override]
     public function render(): bool
     {
         $this->setTitle('Colors');

@@ -41,6 +41,7 @@ class SymfonyReport extends AbstractReport
         $this->debug = $controller->getApplicationService()->isDebug();
     }
 
+    #[\Override]
     public function render(): bool
     {
         $this->addPage();

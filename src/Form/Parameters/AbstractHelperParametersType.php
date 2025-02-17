@@ -27,6 +27,7 @@ abstract class AbstractHelperParametersType extends AbstractType
 {
     public const DEFAULT_VALUES = 'default_values';
 
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('display', DisplayParameterType::class);
@@ -35,6 +36,7 @@ abstract class AbstractHelperParametersType extends AbstractType
         $builder->add('options', OptionsParameterType::class);
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -45,6 +47,7 @@ abstract class AbstractHelperParametersType extends AbstractType
             ->setAllowedTypes(self::DEFAULT_VALUES, 'array');
     }
 
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return '';

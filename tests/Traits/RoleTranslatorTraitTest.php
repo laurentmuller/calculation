@@ -28,6 +28,7 @@ class RoleTranslatorTraitTest extends TestCase
 
     private TranslatorInterface $translator;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->translator = $this->createMockTranslator();
@@ -53,6 +54,7 @@ class RoleTranslatorTraitTest extends TestCase
         yield [new Role(RoleInterface::ROLE_SUPER_ADMIN), 'user.roles.super_admin'];
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;

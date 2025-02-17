@@ -20,6 +20,7 @@ class CountAggregator extends AbstractAggregator
 {
     private int $result = 0;
 
+    #[\Override]
     public function add(mixed $value): static
     {
         if ($value instanceof self) {
@@ -31,11 +32,13 @@ class CountAggregator extends AbstractAggregator
         return $this;
     }
 
+    #[\Override]
     public function getResult(): int
     {
         return $this->result;
     }
 
+    #[\Override]
     public function init(): static
     {
         $this->result = 0;

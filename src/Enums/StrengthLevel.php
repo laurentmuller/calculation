@@ -94,6 +94,7 @@ enum StrengthLevel: int implements EnumSortableInterface, PdfEnumDefaultInterfac
     /**
      * @return StrengthLevel[]
      */
+    #[\Override]
     public static function sorted(): array
     {
         return [

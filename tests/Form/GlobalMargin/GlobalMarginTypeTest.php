@@ -22,6 +22,7 @@ use App\Tests\Form\EntityTypeTestCase;
  */
 class GlobalMarginTypeTest extends EntityTypeTestCase
 {
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -31,11 +32,13 @@ class GlobalMarginTypeTest extends EntityTypeTestCase
         ];
     }
 
+    #[\Override]
     protected function getEntityClass(): string
     {
         return GlobalMargin::class;
     }
 
+    #[\Override]
     protected function getFormTypeClass(): string
     {
         return GlobalMarginType::class;

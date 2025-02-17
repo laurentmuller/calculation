@@ -25,6 +25,7 @@ class ConsonantCaptchaTest extends AlphaCaptchaTestCase
     public function testNegativeIndex(): void
     {
         $captcha = new class($this->service, $this->translator) extends ConsonantCaptcha {
+            #[\Override]
             protected function getRandomIndex(): int
             {
                 return -1;
@@ -35,6 +36,7 @@ class ConsonantCaptchaTest extends AlphaCaptchaTestCase
         self::assertTrue($actual);
     }
 
+    #[\Override]
     protected function createCaptcha(DictionaryService $service, TranslatorInterface $translator): ConsonantCaptcha
     {
         return new ConsonantCaptcha($service, $translator);

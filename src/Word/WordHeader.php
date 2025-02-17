@@ -38,6 +38,7 @@ class WordHeader extends AbstractHeaderFooter
 
     private bool $printAddress = false;
 
+    #[\Override]
     public function output(Section $section): void
     {
         $title = $this->getTitle() ?? '';

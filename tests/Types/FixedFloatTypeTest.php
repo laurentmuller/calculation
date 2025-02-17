@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 class FixedFloatTypeTest extends TestCase
 {
+    #[\Override]
     public static function setUpBeforeClass(): void
     {
         if (!Type::hasType(FixedFloatType::NAME)) {

@@ -40,6 +40,7 @@ class AbstractArrayReportTest extends TestCase
         $controller = $this->createMock(AbstractController::class);
 
         return new class($controller, $entities) extends AbstractArrayReport {
+            #[\Override]
             protected function doRender(array $entities): bool
             {
                 return true;

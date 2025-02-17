@@ -24,6 +24,7 @@ class RightsTraitTest extends TestCase
 {
     use RightsTrait;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->rights = null;

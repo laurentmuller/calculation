@@ -97,6 +97,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
         $this->categories = new ArrayCollection();
     }
 
+    #[\Override]
     public function __clone()
     {
         parent::__clone();
@@ -118,6 +119,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
         return $this;
     }
 
+    #[\Override]
     public function compare(ComparableInterface $other): int
     {
         return \strnatcasecmp((string) $this->getCode(), (string) $other->getCode());
@@ -138,6 +140,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
      *
      * @return int<0, max>
      */
+    #[\Override]
     public function count(): int
     {
         return $this->categories->count();
@@ -181,6 +184,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
         return $this->code;
     }
 
+    #[\Override]
     public function getDisplay(): string
     {
         return (string) $this->getCode();
@@ -210,6 +214,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
         return $this->amount * ($this->margin - 1.0);
     }
 
+    #[\Override]
     public function getParentEntity(): ?Calculation
     {
         return $this->calculation;

@@ -25,6 +25,7 @@ class SessionKernelServiceTest extends KernelServiceTestCase
     use DateAssertTrait;
     use SessionAwareTrait;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

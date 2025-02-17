@@ -34,6 +34,7 @@ class Role implements \Stringable, RoleInterface
         $this->role = $role;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->getRole();

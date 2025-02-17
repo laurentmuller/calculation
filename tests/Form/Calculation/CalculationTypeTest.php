@@ -35,6 +35,7 @@ class CalculationTypeTest extends EntityTypeTestCase
     use CalculationStateTrait;
     use TranslatorMockTrait;
 
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -47,11 +48,13 @@ class CalculationTypeTest extends EntityTypeTestCase
         ];
     }
 
+    #[\Override]
     protected function getEntityClass(): string
     {
         return Calculation::class;
     }
 
+    #[\Override]
     protected function getFormTypeClass(): string
     {
         return CalculationType::class;
@@ -60,6 +63,7 @@ class CalculationTypeTest extends EntityTypeTestCase
     /**
      * @throws \ReflectionException
      */
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         return [

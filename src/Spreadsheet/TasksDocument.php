@@ -23,6 +23,7 @@ class TasksDocument extends AbstractArrayDocument
     /**
      * @param \App\Entity\Task[] $entities
      */
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->start('task.list.title');

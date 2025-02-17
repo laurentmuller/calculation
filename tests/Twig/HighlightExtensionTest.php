@@ -17,11 +17,13 @@ use App\Twig\HighlightExtension;
 
 class HighlightExtensionTest extends IntegrationTestCase
 {
+    #[\Override]
     protected function getExtensions(): array
     {
         return [new HighlightExtension()];
     }
 
+    #[\Override]
     protected function getFixturesDir(): string
     {
         return __DIR__ . '/Fixtures/HighlightExtension';

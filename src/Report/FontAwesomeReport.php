@@ -37,6 +37,7 @@ class FontAwesomeReport extends AbstractReport
         $this->setTitle('Font Awesome Icons');
     }
 
+    #[\Override]
     public function render(): bool
     {
         // check

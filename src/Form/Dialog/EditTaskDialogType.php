@@ -23,11 +23,13 @@ use App\Form\Task\TaskListType;
  */
 class EditTaskDialogType extends AbstractHelperType
 {
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'task';
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('task')
@@ -46,6 +48,7 @@ class EditTaskDialogType extends AbstractHelperType
             ->addNumberType();
     }
 
+    #[\Override]
     protected function getLabelPrefix(): string
     {
         return 'task_compute.fields.';

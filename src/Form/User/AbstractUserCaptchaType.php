@@ -33,6 +33,7 @@ abstract class AbstractUserCaptchaType extends AbstractHelperType
     ) {
     }
 
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return '';
@@ -46,6 +47,7 @@ abstract class AbstractUserCaptchaType extends AbstractHelperType
      *
      * @throws \Exception
      */
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         if (!$this->application->isDisplayCaptcha()) {

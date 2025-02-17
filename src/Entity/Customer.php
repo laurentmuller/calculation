@@ -144,6 +144,7 @@ class Customer extends AbstractEntity
         return $this->country;
     }
 
+    #[\Override]
     public function getDisplay(): string
     {
         if (StringUtils::isString($this->firstName) || StringUtils::isString($this->lastName) || StringUtils::isString($this->company)) {

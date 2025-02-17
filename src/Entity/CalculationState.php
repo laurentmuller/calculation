@@ -102,6 +102,7 @@ class CalculationState extends AbstractEntity implements ComparableInterface, Ti
         return $copy;
     }
 
+    #[\Override]
     public function compare(ComparableInterface $other): int
     {
         return \strnatcasecmp((string) $this->getCode(), (string) $other->getCode());
@@ -151,6 +152,7 @@ class CalculationState extends AbstractEntity implements ComparableInterface, Ti
         return $this->description;
     }
 
+    #[\Override]
     public function getDisplay(): string
     {
         return (string) $this->getCode();

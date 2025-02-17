@@ -23,6 +23,7 @@ use Twig\Extra\Markdown\MarkdownInterface;
 
 class CommentControllerTest extends ControllerTestCase
 {
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/user/comment', self::ROLE_USER];

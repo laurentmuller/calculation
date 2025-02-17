@@ -23,6 +23,7 @@ class GroupsDocument extends AbstractArrayDocument
     /**
      * @param \App\Entity\Group[] $entities
      */
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->start('group.list.title');

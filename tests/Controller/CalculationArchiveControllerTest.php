@@ -23,6 +23,7 @@ class CalculationArchiveControllerTest extends ControllerTestCase
     private ?CalculationState $editState = null;
     private ?CalculationState $notEditSate = null;
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/admin/archive', self::ROLE_USER, Response::HTTP_FORBIDDEN];
@@ -114,12 +115,14 @@ class CalculationArchiveControllerTest extends ControllerTestCase
         );
     }
 
+    #[\Override]
     protected function addEntities(): void
     {
         $this->addEditState();
         $this->addNotEditState();
     }
 
+    #[\Override]
     protected function deleteEntities(): void
     {
         $this->editState = $this->deleteEntity($this->editState);

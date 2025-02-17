@@ -43,11 +43,13 @@ class ReCaptchaType extends AbstractType implements EventSubscriberInterface
     ) {
     }
 
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addEventSubscriber($this);
     }
 
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $key = $this->service->getSiteKey();
@@ -65,6 +67,7 @@ class ReCaptchaType extends AbstractType implements EventSubscriberInterface
         ];
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('mapped', false);
@@ -93,16 +96,19 @@ class ReCaptchaType extends AbstractType implements EventSubscriberInterface
             ->allowedTypes('int');
     }
 
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'recaptcha';
     }
 
+    #[\Override]
     public function getParent(): string
     {
         return HiddenType::class;
     }
 
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [

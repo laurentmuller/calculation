@@ -130,6 +130,7 @@ class MonthTest extends CalendarTestCase
         self::assertSame('Month(1.2024, 01.01.2024 - 31.01.2024)', $actual);
     }
 
+    #[\Override]
     protected function createMonth(int $number = 1, int $year = 2024): Month
     {
         $month = parent::createMonth($number, $year);

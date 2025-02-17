@@ -45,6 +45,7 @@ class UserCommentTypeTest extends TypeTestCase
         self::assertTrue($form->isSynchronized());
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         $transformer = new AddressTransformer();
@@ -59,6 +60,7 @@ class UserCommentTypeTest extends TypeTestCase
     /**
      * @return FileTypeExtension[]
      */
+    #[\Override]
     protected function getTypeExtensions(): array
     {
         return [

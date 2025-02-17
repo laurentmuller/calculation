@@ -20,12 +20,14 @@ class HeaderNameCommandTest extends CommandTestCase
     private const COMMAND_NAME = 'app:header:name';
     private const DATA_PATH = '/tests/files/css';
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->replaceCssContents();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

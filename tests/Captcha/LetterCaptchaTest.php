@@ -25,6 +25,7 @@ class LetterCaptchaTest extends AlphaCaptchaTestCase
     public function testNegativeIndex(): void
     {
         $captcha = new class($this->service, $this->translator) extends LetterCaptcha {
+            #[\Override]
             protected function getRandomIndex(): int
             {
                 return -1;
@@ -35,6 +36,7 @@ class LetterCaptchaTest extends AlphaCaptchaTestCase
         self::assertTrue($actual);
     }
 
+    #[\Override]
     protected function createCaptcha(DictionaryService $service, TranslatorInterface $translator): LetterCaptcha
     {
         return new LetterCaptcha($service, $translator);

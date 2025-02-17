@@ -74,6 +74,7 @@ class Product extends AbstractCategoryItemEntity implements ComparableInterface,
         return $copy;
     }
 
+    #[\Override]
     public function compare(ComparableInterface $other): int
     {
         return \strnatcasecmp((string) $this->getDescription(), (string) $other->getDescription());
@@ -87,6 +88,7 @@ class Product extends AbstractCategoryItemEntity implements ComparableInterface,
         return $this->description;
     }
 
+    #[\Override]
     public function getDisplay(): string
     {
         return (string) $this->getDescription();

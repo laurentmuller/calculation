@@ -46,11 +46,13 @@ class CalculationsEmptyDocument extends AbstractCalculationItemsDocument
         $this->quantityLabel = $this->trans('calculationitem.fields.quantity');
     }
 
+    #[\Override]
     protected function getPriceLabel(): string
     {
         return $this->priceLabel;
     }
 
+    #[\Override]
     protected function getQuantityLabel(): string
     {
         return $this->quantityLabel;

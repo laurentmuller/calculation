@@ -162,6 +162,7 @@ abstract class AbstractController extends BaseController
         }
     }
 
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return [
@@ -300,6 +301,7 @@ abstract class AbstractController extends BaseController
     /**
      * {inheritDoc}.
      */
+    #[\Override]
     protected function denyAccessUnlessGranted(
         mixed $attribute,
         mixed $subject = null,

@@ -35,6 +35,7 @@ abstract class GeneratorTestCase extends KernelServiceTestCase
     protected EntityManagerInterface $manager;
     protected TranslatorInterface $translator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

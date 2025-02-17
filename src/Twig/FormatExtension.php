@@ -68,6 +68,7 @@ final class FormatExtension extends AbstractExtension
         return $this->trans('common.value_false');
     }
 
+    #[\Override]
     public function getFilters(): array
     {
         $options = ['needs_environment' => true];
@@ -85,6 +86,7 @@ final class FormatExtension extends AbstractExtension
         ];
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;

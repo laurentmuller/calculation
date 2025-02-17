@@ -23,6 +23,7 @@ class AddressTransformerTest extends TestCase
 {
     private AddressTransformer $transformer;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->transformer = new AddressTransformer();

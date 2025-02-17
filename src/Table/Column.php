@@ -114,6 +114,7 @@ class Column implements \Stringable, SortModeInterface
      */
     private bool $visible = true;
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->field;

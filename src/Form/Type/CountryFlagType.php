@@ -34,6 +34,7 @@ class CountryFlagType extends AbstractType
     {
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $defaultCode = CountryFlagService::getDefaultCode();
@@ -51,6 +52,7 @@ class CountryFlagType extends AbstractType
             ->setAllowedTypes('only_flag', 'boolean');
     }
 
+    #[\Override]
     public function getParent(): string
     {
         return CountryType::class;

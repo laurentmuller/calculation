@@ -30,6 +30,7 @@ class LogChannel implements \Countable, \Stringable
         $this->setChannel($channel);
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->getChannel();
@@ -38,6 +39,7 @@ class LogChannel implements \Countable, \Stringable
     /**
      * @return int<0, max>
      */
+    #[\Override]
     public function count(): int
     {
         return $this->count;

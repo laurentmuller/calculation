@@ -23,11 +23,13 @@ class FixedFloatType extends Type
 {
     final public const NAME = 'fixed_float';
 
+    #[\Override]
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): float
     {
         return $this->convertToFloat($value);
     }
 
+    #[\Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): float
     {
         return $this->convertToFloat($value);
@@ -38,6 +40,7 @@ class FixedFloatType extends Type
         return self::NAME;
     }
 
+    #[\Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         $column['scale'] = 2;

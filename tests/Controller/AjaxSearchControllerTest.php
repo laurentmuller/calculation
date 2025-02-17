@@ -19,18 +19,21 @@ class AjaxSearchControllerTest extends ControllerTestCase
 {
     use ProductTrait;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->getProduct();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->deleteProduct();
         parent::tearDown();
     }
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/ajax/search/address', self::ROLE_USER];

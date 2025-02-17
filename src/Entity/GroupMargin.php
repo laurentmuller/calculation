@@ -35,6 +35,7 @@ class GroupMargin extends AbstractMargin implements ParentTimestampableInterface
     #[ORM\JoinColumn(name: 'group_id', nullable: false, onDelete: 'cascade')]
     private ?Group $group = null;
 
+    #[\Override]
     public function getParentEntity(): ?Group
     {
         return $this->group;

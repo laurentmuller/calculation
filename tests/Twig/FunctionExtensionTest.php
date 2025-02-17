@@ -24,6 +24,7 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 class FunctionExtensionTest extends IntegrationTestCase
 {
+    #[\Override]
     protected function getExtensions(): array
     {
         $webDir = __DIR__ . '/../../public';
@@ -43,6 +44,7 @@ class FunctionExtensionTest extends IntegrationTestCase
         return [$testExtension];
     }
 
+    #[\Override]
     protected function getFixturesDir(): string
     {
         return __DIR__ . '/Fixtures/FunctionExtension';

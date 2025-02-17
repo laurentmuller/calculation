@@ -40,6 +40,7 @@ class HomePageParameter implements ParameterInterface
     #[Parameter('status_bar', true)]
     private bool $statusBar = true;
 
+    #[\Override]
     public static function getCacheKey(): string
     {
         return 'parameter_home_page';

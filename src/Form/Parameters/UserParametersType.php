@@ -20,6 +20,7 @@ use App\Parameter\UserParameters;
  */
 class UserParametersType extends AbstractHelperParametersType
 {
+    #[\Override]
     protected function getParametersClass(): string
     {
         return UserParameters::class;

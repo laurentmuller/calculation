@@ -21,6 +21,7 @@ class GlobalMarginControllerTest extends EntityControllerTestCase
 {
     use GlobalMarginTrait;
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/globalmargin', self::ROLE_USER];
@@ -62,11 +63,13 @@ class GlobalMarginControllerTest extends EntityControllerTestCase
         $this->checkUriWithEmptyEntity('/globalmargin/pdf', GlobalMargin::class);
     }
 
+    #[\Override]
     protected function addEntities(): void
     {
         $this->getGlobalMargin();
     }
 
+    #[\Override]
     protected function deleteEntities(): void
     {
         $this->deleteGlobalMargin();

@@ -27,6 +27,7 @@ class CalculationsDocument extends AbstractArrayDocument
     /**
      * @param \App\Entity\Calculation[] $entities
      */
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $title = $this->getTitle() ?? 'calculation.list.title';

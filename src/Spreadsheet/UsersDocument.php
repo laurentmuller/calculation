@@ -46,6 +46,7 @@ class UsersDocument extends AbstractArrayDocument
     /**
      * @param User[] $entities
      */
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->start('user.list.title');

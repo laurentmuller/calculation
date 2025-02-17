@@ -45,16 +45,19 @@ abstract class AbstractEntity implements EntityInterface
         return $this->getDisplay();
     }
 
+    #[\Override]
     public function getDisplay(): string
     {
         return \sprintf('%d', (int) $this->id);
     }
 
+    #[\Override]
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    #[\Override]
     public function isNew(): bool
     {
         return null === $this->id || 0 === $this->id;

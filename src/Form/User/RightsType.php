@@ -36,6 +36,7 @@ class RightsType extends AbstractHelperType
     /**
      * Add fields to the given helper.
      */
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $entities = EntityName::sorted();

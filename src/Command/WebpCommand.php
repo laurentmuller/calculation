@@ -47,6 +47,7 @@ class WebpCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this->addArgument(self::SOURCE_ARGUMENT, InputOption::VALUE_REQUIRED, 'The source directory relative to the project directory.');
@@ -56,6 +57,7 @@ class WebpCommand extends Command
         $this->setHelp('The <info>%command.name%</info> command convert images, from the given directory, to the <href=https://en.wikipedia.org/wiki/WebP>WebP</> format.');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

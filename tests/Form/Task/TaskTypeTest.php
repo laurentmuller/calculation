@@ -26,6 +26,7 @@ class TaskTypeTest extends EntityTypeTestCase
 {
     use CategoryTrait;
 
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -37,11 +38,13 @@ class TaskTypeTest extends EntityTypeTestCase
         ];
     }
 
+    #[\Override]
     protected function getEntityClass(): string
     {
         return Task::class;
     }
 
+    #[\Override]
     protected function getFormTypeClass(): string
     {
         return TaskType::class;
@@ -50,6 +53,7 @@ class TaskTypeTest extends EntityTypeTestCase
     /**
      * @throws \ReflectionException
      */
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         return [

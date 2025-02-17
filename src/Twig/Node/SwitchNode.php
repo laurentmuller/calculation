@@ -29,6 +29,7 @@ use Twig\Node\Node;
 #[YieldReady]
 final class SwitchNode extends Node
 {
+    #[\Override]
     public function compile(Compiler $compiler): void
     {
         $compiler->addDebugInfo($this)

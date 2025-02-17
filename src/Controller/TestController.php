@@ -187,6 +187,7 @@ class TestController extends AbstractController
     public function exportLabel(CustomerRepository $repository, PdfLabelService $service): PdfResponse
     {
         $listener = new class() implements PdfLabelTextListenerInterface {
+            #[\Override]
             public function drawLabelText(PdfLabelTextEvent $event): bool
             {
                 if ($event->index !== $event->lines - 1 && $event->index > 2) {

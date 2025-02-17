@@ -43,6 +43,7 @@ class PdfGroup implements PdfDocumentUpdaterInterface
         $this->style = $style ?? PdfStyle::getCellStyle()->setFontBold();
     }
 
+    #[\Override]
     public function apply(PdfDocument $doc): void
     {
         $this->style->apply($doc);

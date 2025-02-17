@@ -20,6 +20,7 @@ use App\Form\FormHelper;
  */
 class RequestChangePasswordType extends AbstractUserCaptchaType
 {
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('user')

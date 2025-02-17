@@ -28,12 +28,14 @@ class GroupRepositoryTest extends KernelServiceTestCase
 
     private GroupRepository $repository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->repository = $this->getService(GroupRepository::class);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->deleteGroup();

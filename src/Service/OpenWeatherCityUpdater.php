@@ -68,6 +68,7 @@ readonly class OpenWeatherCityUpdater
         return $helper->createForm();
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;

@@ -23,12 +23,14 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
  */
 class VichImageTypeExtension extends AbstractFileTypeExtension
 {
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
         $resolver->setDefault('placeholder', null);
     }
 
+    #[\Override]
     public static function getExtendedTypes(): iterable
     {
         return [VichImageType::class];

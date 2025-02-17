@@ -31,6 +31,7 @@ class DateParameter implements ParameterInterface
         return $this->archive;
     }
 
+    #[\Override]
     public static function getCacheKey(): string
     {
         return 'parameter_date';

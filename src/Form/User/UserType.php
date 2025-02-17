@@ -31,6 +31,7 @@ class UserType extends AbstractEntityType
         parent::__construct(User::class);
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('id')

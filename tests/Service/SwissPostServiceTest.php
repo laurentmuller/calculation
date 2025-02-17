@@ -21,6 +21,7 @@ class SwissPostServiceTest extends TestCase
     private string $databaseName;
     private SwissPostService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->databaseName = __DIR__ . '/../files/sqlite/swiss_test.sqlite';

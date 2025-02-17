@@ -26,12 +26,14 @@ class TaskRepositoryTest extends KernelServiceTestCase
 
     private TaskRepository $repository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->repository = $this->getService(TaskRepository::class);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->deleteTask();

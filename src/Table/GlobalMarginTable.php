@@ -29,17 +29,20 @@ class GlobalMarginTable extends AbstractEntityTable
         parent::__construct($repository);
     }
 
+    #[\Override]
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'global_margin.json');
     }
 
+    #[\Override]
     protected function updateDataQuery(DataQuery $query): void
     {
         parent::updateDataQuery($query);
         $query->limit = \PHP_INT_MAX;
     }
 
+    #[\Override]
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);

@@ -20,6 +20,7 @@ use App\Report\HtmlReport;
  */
 class HtmlPageBreakChunk extends AbstractHtmlChunk
 {
+    #[\Override]
     public function output(HtmlReport $report): void
     {
         $report->addPage();

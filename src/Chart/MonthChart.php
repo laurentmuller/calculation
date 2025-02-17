@@ -83,6 +83,7 @@ class MonthChart extends AbstractHighchart
         ];
     }
 
+    #[\Override]
     protected function setTooltipOptions(): static
     {
         parent::setTooltipOptions();

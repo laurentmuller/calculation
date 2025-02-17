@@ -25,6 +25,7 @@ class GroupControllerTest extends EntityControllerTestCase
     use CalculationTrait;
     use CategoryTrait;
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/group', self::ROLE_USER];
@@ -119,11 +120,13 @@ class GroupControllerTest extends EntityControllerTestCase
         $this->checkUriWithEmptyEntity('/group/pdf', Group::class);
     }
 
+    #[\Override]
     protected function addEntities(): void
     {
         $this->getGroup();
     }
 
+    #[\Override]
     protected function deleteEntities(): void
     {
         $this->deleteCategory();

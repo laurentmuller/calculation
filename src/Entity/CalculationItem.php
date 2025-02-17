@@ -72,6 +72,7 @@ class CalculationItem extends AbstractEntity implements ComparableInterface, Par
     #[ORM\Column(length: 15, nullable: true)]
     private ?string $unit = null;
 
+    #[\Override]
     public function compare(ComparableInterface $other): int
     {
         return \strnatcasecmp((string) $this->getDescription(), (string) $other->getDescription());
@@ -108,11 +109,13 @@ class CalculationItem extends AbstractEntity implements ComparableInterface, Par
         return $this->description;
     }
 
+    #[\Override]
     public function getDisplay(): string
     {
         return (string) $this->getDescription();
     }
 
+    #[\Override]
     public function getParentEntity(): ?Calculation
     {
         return $this->category?->getParentEntity();

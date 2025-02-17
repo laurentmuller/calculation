@@ -28,6 +28,7 @@ class PdfBarChartTraitTest extends TestCase
         $report = new class($controller) extends AbstractReport implements PdfChartInterface {
             use PdfBarChartTrait;
 
+            #[\Override]
             public function render(): bool
             {
                 $this->renderBarChart([], []);
@@ -47,6 +48,7 @@ class PdfBarChartTraitTest extends TestCase
         $report = new class($controller) extends AbstractReport implements PdfChartInterface {
             use PdfBarChartTrait;
 
+            #[\Override]
             public function render(): bool
             {
                 $row = [
@@ -83,6 +85,7 @@ class PdfBarChartTraitTest extends TestCase
         $report = new class($controller) extends AbstractReport implements PdfChartInterface {
             use PdfBarChartTrait;
 
+            #[\Override]
             public function render(): bool
             {
                 $row = [

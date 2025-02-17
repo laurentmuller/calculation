@@ -153,6 +153,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
         return $this;
     }
 
+    #[\Override]
     public function compare(ComparableInterface $other): int
     {
         return \strnatcasecmp($this->getUserIdentifier(), $other->getUserIdentifier());
@@ -173,6 +174,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     /**
      * @see UserInterface
      */
+    #[\Override]
     public function eraseCredentials(): void
     {
     }
@@ -221,6 +223,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
         return $url;
     }
 
+    #[\Override]
     public function getDisplay(): string
     {
         return $this->getUsername();
@@ -242,11 +245,13 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
         return new Address((string) $this->email, (string) $this->username);
     }
 
+    #[\Override]
     public function getExpiresAt(): \DateTimeInterface
     {
         return $this->expiresAt ?? new \DateTimeImmutable();
     }
 
+    #[\Override]
     public function getHashedToken(): string
     {
         return (string) $this->hashedToken;
@@ -311,6 +316,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
         return \sprintf('%s (%s)', $this->getUserIdentifier(), (string) $this->getEmail());
     }
 
+    #[\Override]
     public function getPassword(): ?string
     {
         return (string) $this->password;
@@ -326,6 +332,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
         return $this->properties;
     }
 
+    #[\Override]
     public function getRequestedAt(): \DateTimeInterface
     {
         return $this->requestedAt ?? new \DateTimeImmutable();
@@ -336,6 +343,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
         return $this->selector;
     }
 
+    #[\Override]
     public function getUser(): self
     {
         return $this;
@@ -348,6 +356,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
      *
      * @see UserInterface
      */
+    #[\Override]
     public function getUserIdentifier(): string
     {
         return $this->getUsername();
@@ -372,6 +381,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
         return $this->enabled;
     }
 
+    #[\Override]
     public function isExpired(): bool
     {
         return !$this->expiresAt instanceof \DateTimeInterface || $this->expiresAt->getTimestamp() <= \time();

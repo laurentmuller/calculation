@@ -184,6 +184,7 @@ class AbstractControllerTest extends KernelTestCase
         self::expectException(NotFoundHttpException::class);
         $controller = $this->createController();
         $report = new class($controller) extends AbstractReport {
+            #[\Override]
             public function render(): bool
             {
                 return false;
@@ -201,11 +202,13 @@ class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $report = new class($controller) extends AbstractReport {
+            #[\Override]
             public function render(): bool
             {
                 return true;
             }
 
+            #[\Override]
             public function getTitle(): string
             {
                 return 'Fake';
@@ -247,6 +250,7 @@ class AbstractControllerTest extends KernelTestCase
         self::expectException(NotFoundHttpException::class);
         $controller = $this->createController();
         $doc = new class($controller) extends AbstractDocument {
+            #[\Override]
             public function render(): bool
             {
                 return false;
@@ -264,11 +268,13 @@ class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $doc = new class($controller) extends AbstractDocument {
+            #[\Override]
             public function render(): bool
             {
                 return true;
             }
 
+            #[\Override]
             public function getTitle(): string
             {
                 return 'Fake';
@@ -291,6 +297,7 @@ class AbstractControllerTest extends KernelTestCase
         self::expectException(NotFoundHttpException::class);
         $controller = $this->createController();
         $doc = new class($controller) extends AbstractWordDocument {
+            #[\Override]
             public function render(): bool
             {
                 return false;
@@ -311,11 +318,13 @@ class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $doc = new class($controller) extends AbstractWordDocument {
+            #[\Override]
             public function render(): bool
             {
                 return true;
             }
 
+            #[\Override]
             public function getTitle(): string
             {
                 return 'Fake';
@@ -338,6 +347,7 @@ class AbstractControllerTest extends KernelTestCase
                 $this->setContainer($container);
             }
 
+            #[\Override]
             public function renderPdfDocument(
                 PdfDocument $doc,
                 bool $inline = true,
@@ -346,6 +356,7 @@ class AbstractControllerTest extends KernelTestCase
                 return parent::renderPdfDocument($doc, $inline, $name);
             }
 
+            #[\Override]
             public function renderSpreadsheetDocument(
                 SpreadsheetDocument $doc,
                 bool $inline = true,
@@ -354,6 +365,7 @@ class AbstractControllerTest extends KernelTestCase
                 return parent::renderSpreadsheetDocument($doc, $inline, $name);
             }
 
+            #[\Override]
             public function renderWordDocument(
                 WordDocument $doc,
                 bool $inline = true,

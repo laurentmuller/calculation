@@ -26,6 +26,7 @@ class LoggerTraitTest extends TestCase
 
     private BufferedOutput $output;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->output = new BufferedOutput();

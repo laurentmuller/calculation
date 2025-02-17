@@ -28,6 +28,7 @@ readonly class UserRequestProcessor implements ProcessorInterface
     {
     }
 
+    #[\Override]
     public function __invoke(LogRecord $record): LogRecord
     {
         $user = $this->security->getUser();

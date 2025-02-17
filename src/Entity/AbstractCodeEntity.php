@@ -44,6 +44,7 @@ abstract class AbstractCodeEntity extends AbstractEntity implements ComparableIn
     #[ORM\Column(nullable: true)]
     protected ?string $description = null;
 
+    #[\Override]
     public function compare(ComparableInterface $other): int
     {
         return \strnatcasecmp((string) $this->getCode(), (string) $other->getCode());
@@ -65,6 +66,7 @@ abstract class AbstractCodeEntity extends AbstractEntity implements ComparableIn
         return $this->description;
     }
 
+    #[\Override]
     public function getDisplay(): string
     {
         return (string) $this->getCode();

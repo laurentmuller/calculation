@@ -50,16 +50,19 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     {
     }
 
+    #[\Override]
     protected function getAllowedPageList(int $totalNotFiltered): array
     {
         return TableInterface::PAGE_LIST;
     }
 
+    #[\Override]
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'search.json');
     }
 
+    #[\Override]
     protected function handleQuery(DataQuery $query): DataResults
     {
         $items = [];

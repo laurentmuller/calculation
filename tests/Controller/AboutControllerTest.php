@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AboutControllerTest extends ControllerTestCase
 {
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/about', '', Response::HTTP_FOUND];

@@ -22,6 +22,7 @@ class CountryFlagServiceTest extends TestCase
 {
     private CountryFlagService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->service = new CountryFlagService();

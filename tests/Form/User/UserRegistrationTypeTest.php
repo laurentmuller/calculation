@@ -71,6 +71,7 @@ class UserRegistrationTypeTest extends TypeTestCase
     /**
      * @throws \ReflectionException
      */
+    #[\Override]
     protected function getExtensions(): array
     {
         $extensions = $this->getExtensionsFromTrait();
@@ -79,6 +80,7 @@ class UserRegistrationTypeTest extends TypeTestCase
         return $extensions;
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         $generator = $this->createMock(UrlGeneratorInterface::class);
@@ -101,6 +103,7 @@ class UserRegistrationTypeTest extends TypeTestCase
     /**
      * @return TextTypeExtension[]
      */
+    #[\Override]
     protected function getTypeExtensions(): array
     {
         return [

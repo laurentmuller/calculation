@@ -35,6 +35,7 @@ class CommandControllerTest extends ControllerTestCase
         '/command/pdf',
     ];
 
+    #[\Override]
     public static function getRoutes(): \Generator
     {
         foreach (self::ROUTES as $route) {

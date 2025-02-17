@@ -27,6 +27,7 @@ class CustomConstraintValidatorFactory extends ConstraintValidatorFactory
         parent::__construct();
     }
 
+    #[\Override]
     public function getInstance(Constraint $constraint): ConstraintValidatorInterface
     {
         return $this->constraints[$constraint::class] ?? parent::getInstance($constraint);

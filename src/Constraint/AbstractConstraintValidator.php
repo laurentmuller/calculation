@@ -32,6 +32,7 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
     {
     }
 
+    #[\Override]
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (!\is_a($constraint, $this->className)) {

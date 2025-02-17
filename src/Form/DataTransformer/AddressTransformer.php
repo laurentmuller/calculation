@@ -28,6 +28,7 @@ class AddressTransformer implements DataTransformerInterface
     /**
      * @psalm-param mixed $value
      */
+    #[\Override]
     public function reverseTransform(mixed $value): ?Address
     {
         if (null === $value || '' === $value) {
@@ -50,6 +51,7 @@ class AddressTransformer implements DataTransformerInterface
     /**
      * @psalm-param mixed $value
      */
+    #[\Override]
     public function transform(mixed $value): ?string
     {
         if (null === $value) {

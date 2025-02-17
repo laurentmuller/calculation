@@ -18,6 +18,7 @@ use App\Twig\EmojiFlagExtension;
 
 class EmojiFlagExtensionTest extends IntegrationTestCase
 {
+    #[\Override]
     protected function getExtensions(): array
     {
         $service = new CountryFlagService();
@@ -25,6 +26,7 @@ class EmojiFlagExtensionTest extends IntegrationTestCase
         return [new EmojiFlagExtension($service)];
     }
 
+    #[\Override]
     protected function getFixturesDir(): string
     {
         return __DIR__ . '/Fixtures/EmojiFlagExtension';

@@ -20,6 +20,7 @@ class AES256EncryptorServiceTest extends TestCase
 {
     private AES256EncryptorService $encryptor;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->encryptor = new AES256EncryptorService('fake-key');

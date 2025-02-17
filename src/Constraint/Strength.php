@@ -65,6 +65,7 @@ class Strength extends Constraint
         }
     }
 
+    #[\Override]
     public function getDefaultOption(): ?string
     {
         return 'minimum';

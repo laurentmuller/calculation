@@ -22,6 +22,7 @@ class AjaxControllerTest extends ControllerTestCase
 {
     use TaskItemTrait;
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         // HTTP_BAD_REQUEST
@@ -198,11 +199,13 @@ class AjaxControllerTest extends ControllerTestCase
         self::assertTrue($actual);
     }
 
+    #[\Override]
     protected function deleteEntities(): void
     {
         $this->deleteTaskItem();
     }
 
+    #[\Override]
     protected function mustDeleteEntities(): bool
     {
         return true;

@@ -54,6 +54,7 @@ class CSVReader extends AbstractReader
         parent::__construct($file, $binary);
     }
 
+    #[\Override]
     protected function getNextData($stream): ?array
     {
         $data = \fgetcsv($stream, $this->length, $this->separator, $this->enclosure, $this->escape);

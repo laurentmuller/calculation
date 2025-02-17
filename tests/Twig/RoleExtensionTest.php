@@ -26,11 +26,13 @@ class RoleExtensionTest extends IntegrationTestCase
         self::assertNotNull($extension->getTranslator());
     }
 
+    #[\Override]
     protected function getExtensions(): array
     {
         return [new RoleExtension($this->createMockTranslator())];
     }
 
+    #[\Override]
     protected function getFixturesDir(): string
     {
         return __DIR__ . '/Fixtures/RoleExtension';

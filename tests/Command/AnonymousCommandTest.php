@@ -24,6 +24,7 @@ class AnonymousCommandTest extends CommandTestCase
 
     private const COMMAND_NAME = 'app:anonymous';
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

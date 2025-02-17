@@ -20,6 +20,7 @@ class Translatable implements TranslatableInterface
 {
     public string $id = 'id';
 
+    #[\Override]
     public function trans(TranslatorInterface $translator, ?string $locale = null): string
     {
         return $this->id;

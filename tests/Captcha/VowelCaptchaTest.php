@@ -22,6 +22,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class VowelCaptchaTest extends AlphaCaptchaTestCase
 {
+    #[\Override]
     protected function createCaptcha(DictionaryService $service, TranslatorInterface $translator): VowelCaptcha
     {
         return new VowelCaptcha($service, $translator);

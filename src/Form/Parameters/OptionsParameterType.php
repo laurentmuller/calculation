@@ -18,6 +18,7 @@ use App\Parameter\OptionsParameter;
 
 class OptionsParameterType extends AbstractParameterType
 {
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $this->addCheckboxType(
@@ -34,6 +35,7 @@ class OptionsParameterType extends AbstractParameterType
         );
     }
 
+    #[\Override]
     protected function getParameterClass(): string
     {
         return OptionsParameter::class;

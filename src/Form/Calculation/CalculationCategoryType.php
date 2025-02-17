@@ -37,6 +37,7 @@ class CalculationCategoryType extends AbstractEntityType
         $this->transformer = new EntityTransformer($repository);
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('category')

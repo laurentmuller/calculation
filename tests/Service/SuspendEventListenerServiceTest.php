@@ -24,6 +24,7 @@ class SuspendEventListenerServiceTest extends TestCase implements DisableListene
 
     private ?SuspendEventListenerService $service = null;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->service = new SuspendEventListenerService([$this]);

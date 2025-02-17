@@ -26,6 +26,7 @@ class TimestampableTraitTest extends TestCase implements TimestampableInterface
         return $this->getDisplay();
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->createdAt = null;
@@ -34,16 +35,19 @@ class TimestampableTraitTest extends TestCase implements TimestampableInterface
         $this->updatedBy = null;
     }
 
+    #[\Override]
     public function getDisplay(): string
     {
         return 'Fake';
     }
 
+    #[\Override]
     public function getId(): ?int
     {
         return null;
     }
 
+    #[\Override]
     public function isNew(): bool
     {
         return true;

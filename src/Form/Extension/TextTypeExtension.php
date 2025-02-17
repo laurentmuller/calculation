@@ -38,6 +38,7 @@ class TextTypeExtension extends AbstractTypeExtension
     /**
      * @psalm-param array<array-key, mixed> $options
      */
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         foreach (self::STRING_OPTIONS as $option) {
@@ -47,6 +48,7 @@ class TextTypeExtension extends AbstractTypeExtension
         }
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         foreach (self::STRING_OPTIONS as $option) {
@@ -55,6 +57,7 @@ class TextTypeExtension extends AbstractTypeExtension
         }
     }
 
+    #[\Override]
     public static function getExtendedTypes(): iterable
     {
         return [TextType::class];

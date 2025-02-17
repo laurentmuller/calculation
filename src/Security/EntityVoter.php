@@ -34,11 +34,13 @@ class EntityVoter extends Voter
     {
     }
 
+    #[\Override]
     public function supportsAttribute(string $attribute): bool
     {
         return EntityPermission::tryFromName($attribute) instanceof EntityPermission;
     }
 
+    #[\Override]
     public function vote(TokenInterface $token, mixed $subject, array $attributes): int
     {
         /** @psalm-var mixed $attribute */
@@ -51,11 +53,13 @@ class EntityVoter extends Voter
         return parent::vote($token, $subject, $attributes);
     }
 
+    #[\Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
         return $this->supportsAttribute($attribute) && EntityName::tryFromMixed($subject) instanceof EntityName;
     }
 
+    #[\Override]
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $this->getUser($token);

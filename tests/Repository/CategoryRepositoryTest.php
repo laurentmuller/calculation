@@ -33,6 +33,7 @@ class CategoryRepositoryTest extends KernelServiceTestCase
 
     private CategoryRepository $repository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

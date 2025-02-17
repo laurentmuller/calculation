@@ -84,11 +84,13 @@ class EmptyItemsTraitTest extends TestCase
         self::assertSame("description1 (price)\ndescription2 (price)", $actual);
     }
 
+    #[\Override]
     protected function getPriceLabel(): string
     {
         return 'price';
     }
 
+    #[\Override]
     protected function getQuantityLabel(): string
     {
         return 'quantity';

@@ -34,6 +34,7 @@ class AbstractWordDocumentTest extends TestCase
     {
         $controller = $this->createMock(AbstractController::class);
         $doc = new class($controller) extends AbstractWordDocument {
+            #[\Override]
             public function render(): bool
             {
                 return true;
@@ -54,6 +55,7 @@ class AbstractWordDocumentTest extends TestCase
         $cs = $this->createCustomerInformation();
         $controller = $this->createMockController($cs);
         $doc = new class($controller) extends AbstractWordDocument {
+            #[\Override]
             public function render(): bool
             {
                 return true;

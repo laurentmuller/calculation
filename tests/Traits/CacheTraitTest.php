@@ -24,6 +24,7 @@ class CacheTraitTest extends TestCase
 
     private CacheItemPoolInterface $cacheItemPool;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

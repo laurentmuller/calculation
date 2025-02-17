@@ -26,6 +26,7 @@ class AssetVersionServiceTest extends TestCase
     private string $imagesVersion;
     private AssetVersionService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         $projectDir = Path::canonicalize(__DIR__ . '/../files/lock');

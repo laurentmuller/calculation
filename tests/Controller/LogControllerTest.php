@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LogControllerTest extends ControllerTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -27,6 +28,7 @@ class LogControllerTest extends ControllerTestCase
         $logger->info('LogControllerTest: A message for testing purposes.');
     }
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/log', self::ROLE_DISABLED, Response::HTTP_FORBIDDEN];

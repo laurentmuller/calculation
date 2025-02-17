@@ -102,6 +102,7 @@ class CommandService implements \Countable
     /**
      * Gets the number of commands.
      */
+    #[\Override]
     public function count(): int
     {
         return \count($this->getCommands());

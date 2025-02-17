@@ -45,6 +45,7 @@ class TableTraitTest extends TestCase
     private bool $throwException;
     private TranslatorInterface $translator;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->denyException = false;
@@ -64,6 +65,7 @@ class TableTraitTest extends TestCase
         return '/';
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;

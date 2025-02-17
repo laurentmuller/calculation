@@ -47,6 +47,7 @@ class RoleRightsTypeTest extends TypeTestCase
         self::assertTrue($form->isSynchronized());
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         $roleHierarchy = $this->createMock(RoleHierarchyInterface::class);

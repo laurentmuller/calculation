@@ -157,6 +157,7 @@ class PdfPieChartTraitTest extends TestCase
         $report = new class($controller) extends AbstractReport implements PdfChartInterface {
             use PdfPieChartTrait;
 
+            #[\Override]
             public function render(): bool
             {
                 return true;

@@ -70,6 +70,7 @@ class BingTranslatorService extends AbstractTranslatorService
     /**
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
+    #[\Override]
     public function detect(string $text): array|false
     {
         $json = [['Text' => $text]];
@@ -90,11 +91,13 @@ class BingTranslatorService extends AbstractTranslatorService
         ];
     }
 
+    #[\Override]
     public static function getApiUrl(): string
     {
         return 'https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-info-overview';
     }
 
+    #[\Override]
     public function getName(): string
     {
         return 'Bing';
@@ -103,6 +106,7 @@ class BingTranslatorService extends AbstractTranslatorService
     /**
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
+    #[\Override]
     public function translate(TranslateQuery $query): array|false
     {
         $params = [
@@ -131,6 +135,7 @@ class BingTranslatorService extends AbstractTranslatorService
         return $this->createTranslateResults($query, $target);
     }
 
+    #[\Override]
     protected function getDefaultOptions(): array
     {
         return [
@@ -148,6 +153,7 @@ class BingTranslatorService extends AbstractTranslatorService
     /**
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
+    #[\Override]
     protected function loadLanguages(): array|false
     {
         $query = ['scope' => 'translation'];

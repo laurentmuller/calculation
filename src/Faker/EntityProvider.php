@@ -51,6 +51,7 @@ class EntityProvider extends Base implements \Countable
     /**
      * Gets the number of entities.
      */
+    #[\Override]
     public function count(): int
     {
         return \count($this->getEntities());

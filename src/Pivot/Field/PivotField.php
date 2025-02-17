@@ -84,6 +84,7 @@ class PivotField implements \JsonSerializable
         return null;
     }
 
+    #[\Override]
     public function jsonSerialize(): array
     {
         return \array_filter([

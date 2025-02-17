@@ -28,6 +28,7 @@ class PivotSemesterField extends PivotDateField
         parent::__construct($name, self::PART_MONTH, $title);
     }
 
+    #[\Override]
     public function getDisplayValue($value): string
     {
         return $this->formatSemester((int) $value);
@@ -59,6 +60,7 @@ class PivotSemesterField extends PivotDateField
         return $this;
     }
 
+    #[\Override]
     protected function doGetValue(\DateTimeInterface $date): int
     {
         $value = parent::doGetValue($date);

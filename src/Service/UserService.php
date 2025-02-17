@@ -54,11 +54,13 @@ class UserService implements PropertyServiceInterface
         return $this->service;
     }
 
+    #[\Override]
     public function getCalculations(): int
     {
         return $this->getPropertyInteger(self::P_CALCULATIONS, $this->service->getCalculations());
     }
 
+    #[\Override]
     public function getCustomer(): CustomerInformation
     {
         $customer = $this->service->getCustomer();
@@ -67,11 +69,13 @@ class UserService implements PropertyServiceInterface
         return $customer;
     }
 
+    #[\Override]
     public function getDisplayMode(): TableView
     {
         return $this->getPropertyEnum(self::P_DISPLAY_MODE, $this->service->getDisplayMode());
     }
 
+    #[\Override]
     public function getEditAction(): EntityAction
     {
         return $this->getPropertyEnum(self::P_EDIT_ACTION, $this->service->getEditAction());
@@ -95,16 +99,19 @@ class UserService implements PropertyServiceInterface
         ];
     }
 
+    #[\Override]
     public function getMessagePosition(): MessagePosition
     {
         return $this->getPropertyEnum(self::P_MESSAGE_POSITION, $this->service->getMessagePosition());
     }
 
+    #[\Override]
     public function getMessageProgress(): int
     {
         return $this->getPropertyInteger(self::P_MESSAGE_PROGRESS, $this->service->getMessageProgress());
     }
 
+    #[\Override]
     public function getMessageTimeout(): int
     {
         return $this->getPropertyInteger(self::P_MESSAGE_TIMEOUT, $this->service->getMessageTimeout());
@@ -120,6 +127,7 @@ class UserService implements PropertyServiceInterface
         return $this->loadProperties($updateAdapter);
     }
 
+    #[\Override]
     public function isConnected(): bool
     {
         return $this->service->isConnected();
@@ -130,51 +138,61 @@ class UserService implements PropertyServiceInterface
         return $this->getPropertyBoolean(self::P_DARK_NAVIGATION, $this->service->isDarkNavigation());
     }
 
+    #[\Override]
     public function isMessageClose(): bool
     {
         return $this->getPropertyBoolean(self::P_MESSAGE_CLOSE, $this->service->isMessageClose());
     }
 
+    #[\Override]
     public function isMessageIcon(): bool
     {
         return $this->getPropertyBoolean(self::P_MESSAGE_ICON, $this->service->isMessageIcon());
     }
 
+    #[\Override]
     public function isMessageSubTitle(): bool
     {
         return $this->getPropertyBoolean(self::P_MESSAGE_SUB_TITLE, $this->service->isMessageSubTitle());
     }
 
+    #[\Override]
     public function isMessageTitle(): bool
     {
         return $this->getPropertyBoolean(self::P_MESSAGE_TITLE, $this->service->isMessageTitle());
     }
 
+    #[\Override]
     public function isPanelCatalog(): bool
     {
         return $this->getPropertyBoolean(self::P_PANEL_CATALOG, $this->service->isPanelCatalog());
     }
 
+    #[\Override]
     public function isPanelMonth(): bool
     {
         return $this->getPropertyBoolean(self::P_PANEL_MONTH, $this->service->isPanelMonth());
     }
 
+    #[\Override]
     public function isPanelState(): bool
     {
         return $this->getPropertyBoolean(self::P_PANEL_STATE, $this->service->isPanelState());
     }
 
+    #[\Override]
     public function isPrintAddress(): bool
     {
         return $this->getPropertyBoolean(self::P_PRINT_ADDRESS, $this->service->isPrintAddress());
     }
 
+    #[\Override]
     public function isQrCode(): bool
     {
         return $this->getPropertyBoolean(self::P_QR_CODE, $this->service->isQrCode());
     }
 
+    #[\Override]
     public function isStatusBar(): bool
     {
         return $this->getPropertyBoolean(self::P_STATUS_BAR, $this->service->isStatusBar());
@@ -185,6 +203,7 @@ class UserService implements PropertyServiceInterface
      *
      * @return bool true if one or more properties have changed
      */
+    #[\Override]
     public function setProperties(array $properties): bool
     {
         if ([] === $properties) {
@@ -213,6 +232,7 @@ class UserService implements PropertyServiceInterface
     /**
      * @return UserProperty[]
      */
+    #[\Override]
     protected function loadEntities(): array
     {
         $user = $this->getUser();

@@ -49,6 +49,7 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
     /**
      * @throws BadRequestException
      */
+    #[\Override]
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
         if (DataQuery::class !== $argument->getType()) {

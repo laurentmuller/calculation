@@ -71,6 +71,7 @@ class HtmlStyle extends PdfStyle
      * - Text Alignment: Left
      * - Margins: 0.0
      */
+    #[\Override]
     public static function default(): self
     {
         return new self();
@@ -119,6 +120,7 @@ class HtmlStyle extends PdfStyle
     /**
      * Reset all values to default.
      */
+    #[\Override]
     public function reset(): static
     {
         parent::reset();

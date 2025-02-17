@@ -37,16 +37,19 @@ class CalculationBelowTable extends CalculationTable implements \Countable
     /**
      * @return int<0, max>
      */
+    #[\Override]
     public function count(): int
     {
         return $this->getRepository()->countItemsBelow($this->getMinMargin());
     }
 
+    #[\Override]
     public function getEmptyMessage(): ?string
     {
         return 0 === $this->count() ? 'below.empty' : null;
     }
 
+    #[\Override]
     protected function createQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return CalculationRepository::addBelowFilter(
@@ -56,11 +59,13 @@ class CalculationBelowTable extends CalculationTable implements \Countable
         );
     }
 
+    #[\Override]
     protected function getDropDownValues(): array
     {
         return $this->stateRepository->getDropDownBelow($this->getMinMargin());
     }
 
+    #[\Override]
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);

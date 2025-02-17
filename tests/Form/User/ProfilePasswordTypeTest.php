@@ -32,6 +32,7 @@ class ProfilePasswordTypeTest extends EntityTypeTestCase
 
     private MockObject&ApplicationService $application;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->application = $this->createMock(ApplicationService::class);
@@ -40,6 +41,7 @@ class ProfilePasswordTypeTest extends EntityTypeTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -47,6 +49,7 @@ class ProfilePasswordTypeTest extends EntityTypeTestCase
         ];
     }
 
+    #[\Override]
     protected function getEntityClass(): string
     {
         return User::class;
@@ -55,6 +58,7 @@ class ProfilePasswordTypeTest extends EntityTypeTestCase
     /**
      * @throws \Exception
      */
+    #[\Override]
     protected function getExtensions(): array
     {
         return \array_merge(parent::getExtensions(), [
@@ -63,11 +67,13 @@ class ProfilePasswordTypeTest extends EntityTypeTestCase
         ]);
     }
 
+    #[\Override]
     protected function getFormTypeClass(): string
     {
         return ProfilePasswordType::class;
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         return [

@@ -65,6 +65,7 @@ enum Importance: string implements EnumSortableInterface, PdfEnumDefaultInterfac
     /**
      * @return Importance[]
      */
+    #[\Override]
     public static function sorted(): array
     {
         return [

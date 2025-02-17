@@ -88,6 +88,7 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
     /**
      * @return int<0, max>
      */
+    #[\Override]
     public function count(): int
     {
         return $this->getRecordsCount('city');
@@ -173,6 +174,7 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
         return false !== $stmt->execute();
     }
 
+    #[\Override]
     protected function createSchema(): void
     {
         $this->exec(self::CREATE_CITY);

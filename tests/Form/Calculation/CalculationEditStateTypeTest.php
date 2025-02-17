@@ -40,6 +40,7 @@ class CalculationEditStateTypeTest extends EntityTypeTestCase
     private MockObject&ApplicationService $application;
     private bool $marginBelow = false;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->application = $this->createMock(ApplicationService::class);
@@ -52,6 +53,7 @@ class CalculationEditStateTypeTest extends EntityTypeTestCase
         $this->submitValidData();
     }
 
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -60,11 +62,13 @@ class CalculationEditStateTypeTest extends EntityTypeTestCase
         ];
     }
 
+    #[\Override]
     protected function getEntityClass(): string
     {
         return Calculation::class;
     }
 
+    #[\Override]
     protected function getFormTypeClass(): string
     {
         return CalculationEditStateType::class;
@@ -73,6 +77,7 @@ class CalculationEditStateTypeTest extends EntityTypeTestCase
     /**
      * @throws \ReflectionException
      */
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         $translator = $this->createMockTranslator();

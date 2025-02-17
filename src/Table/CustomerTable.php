@@ -29,6 +29,7 @@ class CustomerTable extends AbstractEntityTable
         parent::__construct($repository);
     }
 
+    #[\Override]
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'customer.json');

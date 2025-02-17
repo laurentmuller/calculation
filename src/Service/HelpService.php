@@ -284,6 +284,7 @@ class HelpService
         return $this->getMainMenu()['menus'];
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;

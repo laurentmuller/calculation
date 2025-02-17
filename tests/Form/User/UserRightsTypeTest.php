@@ -65,6 +65,7 @@ class UserRightsTypeTest extends TypeTestCase
         self::assertTrue($form->isValid());
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         $roleHierarchy = $this->createMock(RoleHierarchyInterface::class);

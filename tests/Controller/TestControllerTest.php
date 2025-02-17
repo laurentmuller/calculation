@@ -35,6 +35,7 @@ class TestControllerTest extends ControllerTestCase
         'tree',
     ];
 
+    #[\Override]
     public static function getRoutes(): \Generator
     {
         foreach (self::ROUTES as $route) {

@@ -28,11 +28,13 @@ class AboutLicenceController extends AbstractAboutController
      */
     public const LICENCE_FILE = 'LICENSE.md';
 
+    #[\Override]
     protected function getFileName(): string
     {
         return self::LICENCE_FILE;
     }
 
+    #[\Override]
     protected function getTags(): array
     {
         return [
@@ -40,11 +42,13 @@ class AboutLicenceController extends AbstractAboutController
         ];
     }
 
+    #[\Override]
     protected function getTitle(): string
     {
         return 'about.licence';
     }
 
+    #[\Override]
     protected function getView(): string
     {
         return 'about/licence.html.twig';

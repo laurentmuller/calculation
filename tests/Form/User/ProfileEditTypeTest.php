@@ -24,6 +24,7 @@ class ProfileEditTypeTest extends EntityTypeTestCase
 {
     use VichImageTypeTrait;
 
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -33,16 +34,19 @@ class ProfileEditTypeTest extends EntityTypeTestCase
         ];
     }
 
+    #[\Override]
     protected function getEntityClass(): string
     {
         return User::class;
     }
 
+    #[\Override]
     protected function getFormTypeClass(): string
     {
         return ProfileEditType::class;
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         return [

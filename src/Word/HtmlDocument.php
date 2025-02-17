@@ -30,6 +30,7 @@ class HtmlDocument extends AbstractWordDocument
         parent::__construct($controller);
     }
 
+    #[\Override]
     public function render(): bool
     {
         if ('' === $this->content) {

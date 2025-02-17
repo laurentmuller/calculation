@@ -58,6 +58,7 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
         $this->dataError = $translator->trans('required', [], 'captcha');
     }
 
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $challenge = $this->captcha->getChallenge();
@@ -66,11 +67,13 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
         $this->setSessionValue(self::SESSION_KEY, $challenge->answer);
     }
 
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['question'] = $this->question;
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -92,6 +95,7 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
         ]);
     }
 
+    #[\Override]
     public function getParent(): string
     {
         return TextType::class;

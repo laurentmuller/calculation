@@ -17,11 +17,13 @@ use App\Twig\SwitchExtension;
 
 class SwitchExtensionTest extends IntegrationTestCase
 {
+    #[\Override]
     protected function getExtensions(): array
     {
         return [new SwitchExtension()];
     }
 
+    #[\Override]
     protected function getFixturesDir(): string
     {
         return __DIR__ . '/Fixtures/SwitchExtension';

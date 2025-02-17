@@ -40,6 +40,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     ) {
     }
 
+    #[\Override]
     public function authenticate(Request $request): Passport
     {
         $this->validateCaptcha($request);
@@ -59,11 +60,13 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
+    #[\Override]
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         return null;
     }
 
+    #[\Override]
     public function supports(Request $request): bool
     {
         return $request->isMethod(Request::METHOD_POST)
@@ -71,6 +74,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             && $this->httpUtils->checkRequestPath($request, SecurityAttributes::LOGIN_ROUTE);
     }
 
+    #[\Override]
     protected function getLoginUrl(Request $request): string
     {
         return $this->httpUtils->generateUri($request, SecurityAttributes::LOGIN_ROUTE);

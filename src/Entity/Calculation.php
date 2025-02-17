@@ -118,6 +118,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         $this->groups = new ArrayCollection();
     }
 
+    #[\Override]
     public function __clone()
     {
         parent::__clone();
@@ -286,6 +287,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         return $this->description;
     }
 
+    #[\Override]
     public function getDisplay(): string
     {
         return $this->getFormattedId();

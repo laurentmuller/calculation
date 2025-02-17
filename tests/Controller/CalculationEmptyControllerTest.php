@@ -23,6 +23,7 @@ class CalculationEmptyControllerTest extends ControllerTestCase
     use CalculationTrait;
     use ProductTrait;
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/calculation/empty', self::ROLE_USER, Response::HTTP_FORBIDDEN];
@@ -43,6 +44,7 @@ class CalculationEmptyControllerTest extends ControllerTestCase
         $this->checkRoute('/calculation/empty/excel', self::ROLE_ADMIN, Response::HTTP_FOUND);
     }
 
+    #[\Override]
     protected function addEntities(): void
     {
         $product = $this->getProduct()
@@ -53,6 +55,7 @@ class CalculationEmptyControllerTest extends ControllerTestCase
         $this->addEntity($calculation);
     }
 
+    #[\Override]
     protected function deleteEntities(): void
     {
         $this->deleteCalculation();

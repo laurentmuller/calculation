@@ -34,6 +34,7 @@ class ApplicationParametersType extends AbstractParametersType
         parent::__construct($security, $translator, $service->getDefaultValues());
     }
 
+    #[\Override]
     protected function addSections(FormHelper $helper): void
     {
         $this->addCustomerSection($helper);

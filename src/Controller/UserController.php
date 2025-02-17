@@ -396,6 +396,7 @@ class UserController extends AbstractEntityController
     /**
      * @param User $item
      */
+    #[\Override]
     protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
         $parameters['tooltips'] = $item->isNew() ? $this->service->getTooltips() : null;
@@ -403,6 +404,7 @@ class UserController extends AbstractEntityController
         return parent::editEntity($request, $item, $parameters);
     }
 
+    #[\Override]
     protected function getEntities(
         array|string $sortedFields = [],
         array $criteria = [],

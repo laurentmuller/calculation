@@ -29,6 +29,7 @@ class CalculationGeneratorTest extends GeneratorTestCase
 
     private CalculationUpdateService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -79,6 +80,7 @@ class CalculationGeneratorTest extends GeneratorTestCase
         self::assertValidateResponse($actual, true, 1);
     }
 
+    #[\Override]
     protected function createGenerator(): CalculationGenerator
     {
         $generator = new CalculationGenerator($this->manager, $this->fakerService, $this->service);

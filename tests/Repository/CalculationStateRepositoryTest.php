@@ -30,12 +30,14 @@ class CalculationStateRepositoryTest extends KernelServiceTestCase
 
     private CalculationStateRepository $repository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->repository = $this->getService(CalculationStateRepository::class);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->deleteCalculation();

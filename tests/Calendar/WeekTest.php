@@ -112,6 +112,7 @@ class WeekTest extends CalendarTestCase
         self::assertSame('Week(1-2024, 01.01.2024 - 07.01.2024)', $actual);
     }
 
+    #[\Override]
     protected function createWeek(int $number = 1, int $year = 2024): Week
     {
         $week = parent::createWeek($number, $year);

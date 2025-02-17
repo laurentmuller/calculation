@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ThemeControllerTest extends ControllerTestCase
 {
+    #[\Override]
     public static function getRoutes(): \Generator
     {
         $routes = [

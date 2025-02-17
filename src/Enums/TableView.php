@@ -58,6 +58,7 @@ enum TableView: string implements EnumSortableInterface, PdfEnumDefaultInterface
     /**
      * @return TableView[]
      */
+    #[\Override]
     public static function sorted(): array
     {
         return [

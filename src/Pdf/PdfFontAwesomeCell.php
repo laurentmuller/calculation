@@ -61,21 +61,25 @@ class PdfFontAwesomeCell extends AbstractPdfImageCell
         parent::__construct($text, $cols, $style, $alignment, $link);
     }
 
+    #[\Override]
     public function getHeight(): int
     {
         return $this->size[1];
     }
 
+    #[\Override]
     public function getPath(): string
     {
         return $this->imageData->getFileName();
     }
 
+    #[\Override]
     public function getType(): string
     {
         return $this->imageData->getFileType();
     }
 
+    #[\Override]
     public function getWidth(): int
     {
         return $this->size[0];

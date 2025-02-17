@@ -20,6 +20,7 @@ use App\Parameter\DisplayParameter;
 
 class DisplayParameterType extends AbstractParameterType
 {
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('displayMode')
@@ -31,6 +32,7 @@ class DisplayParameterType extends AbstractParameterType
             ->addEnumType(EntityAction::class);
     }
 
+    #[\Override]
     protected function getParameterClass(): string
     {
         return DisplayParameter::class;

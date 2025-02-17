@@ -22,12 +22,14 @@ use App\Parameter\DisplayParameter;
  */
 class DisplayParameterTest extends ParameterTestCase
 {
+    #[\Override]
     public static function getParameterNames(): \Generator
     {
         yield ['displayMode', 'display_mode'];
         yield ['editAction', 'edit_action'];
     }
 
+    #[\Override]
     public static function getParameterValues(): \Generator
     {
         yield ['displayMode', TableView::TABLE];
@@ -50,6 +52,7 @@ class DisplayParameterTest extends ParameterTestCase
         self::assertSame(EntityAction::SHOW, $this->parameter->getEditAction());
     }
 
+    #[\Override]
     protected function createParameter(): DisplayParameter
     {
         return new DisplayParameter();

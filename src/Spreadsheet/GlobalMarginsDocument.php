@@ -23,6 +23,7 @@ class GlobalMarginsDocument extends AbstractArrayDocument
     /**
      * @param \App\Entity\GlobalMargin[] $entities
      */
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->start('globalmargin.list.title');

@@ -72,6 +72,7 @@ class LogsReport extends AbstractReport
         ]);
     }
 
+    #[\Override]
     public function render(): bool
     {
         $this->addPage();

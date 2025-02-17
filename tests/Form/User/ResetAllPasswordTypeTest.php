@@ -32,6 +32,7 @@ class ResetAllPasswordTypeTest extends TypeTestCase
     /**
      * @throws \ReflectionException
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->user = new User();
@@ -57,6 +58,7 @@ class ResetAllPasswordTypeTest extends TypeTestCase
         self::assertTrue($form->isValid());
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         $repository = $this->createMock(UserRepository::class);

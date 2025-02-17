@@ -34,6 +34,7 @@ class RoleChoiceTypeTest extends TypeTestCase
     /**
      * @return RoleChoiceType[]
      */
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         $user = new User();

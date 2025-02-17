@@ -29,6 +29,7 @@ class CategoryControllerTest extends EntityControllerTestCase
     use ProductTrait;
     use TaskTrait;
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/category', self::ROLE_USER];
@@ -126,11 +127,13 @@ class CategoryControllerTest extends EntityControllerTestCase
         $this->checkUriWithEmptyEntity('/category/pdf', Category::class);
     }
 
+    #[\Override]
     protected function addEntities(): void
     {
         $this->getCategory();
     }
 
+    #[\Override]
     protected function deleteEntities(): void
     {
         $this->deleteCategory();

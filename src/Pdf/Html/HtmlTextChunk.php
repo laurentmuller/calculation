@@ -42,6 +42,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
      */
     private ?string $text = null;
 
+    #[\Override]
     public function isNewLine(): bool
     {
         // check if the next chunk is a parent chunk
@@ -70,11 +71,13 @@ class HtmlTextChunk extends AbstractHtmlChunk
         return $this;
     }
 
+    #[\Override]
     protected function getOutputText(): ?string
     {
         return $this->text;
     }
 
+    #[\Override]
     protected function outputText(HtmlReport $report, string $text): void
     {
         $parent = $this->getParent();

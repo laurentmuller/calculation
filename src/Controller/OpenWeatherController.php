@@ -377,6 +377,7 @@ class OpenWeatherController extends AbstractController
         return $this->redirectToRoute('openweather_search');
     }
 
+    #[\Override]
     protected function getSessionKey(string $key): string
     {
         return self::PREFIX_KEY . $key;

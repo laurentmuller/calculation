@@ -65,6 +65,7 @@ abstract class EntityTypeTestCase extends TypeTestCase
      */
     abstract protected function getFormTypeClass(): string;
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         return [];
@@ -78,6 +79,7 @@ abstract class EntityTypeTestCase extends TypeTestCase
      *     VichImageTypeExtension
      * }
      */
+    #[\Override]
     protected function getTypeExtensions(): array
     {
         return [

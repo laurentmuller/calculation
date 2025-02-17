@@ -23,6 +23,7 @@ class NonceServiceTest extends TestCase
     /**
      * @throws \Exception
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->service = new NonceService();

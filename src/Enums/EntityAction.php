@@ -52,6 +52,7 @@ enum EntityAction: string implements EnumSortableInterface, PdfEnumDefaultInterf
     /**
      * @return EntityAction[]
      */
+    #[\Override]
     public static function sorted(): array
     {
         return [

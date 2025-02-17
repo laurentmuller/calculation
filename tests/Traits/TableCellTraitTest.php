@@ -24,6 +24,7 @@ class TableCellTraitTest extends KernelServiceTestCase
 
     protected Environment $twig;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

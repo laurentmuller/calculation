@@ -152,6 +152,7 @@ class PivotCell extends AbstractPivotAggregator
         return \implode($separator, $titles);
     }
 
+    #[\Override]
     public function jsonSerialize(): array
     {
         return [

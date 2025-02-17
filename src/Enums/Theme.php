@@ -97,6 +97,7 @@ enum Theme: string implements EnumSortableInterface, PdfEnumDefaultInterface, Tr
     /**
      * @return Theme[]
      */
+    #[\Override]
     public static function sorted(): array
     {
         return [

@@ -27,6 +27,7 @@ class IcuTranslationTest extends KernelServiceTestCase
     /**
      * @throws \Exception
      */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

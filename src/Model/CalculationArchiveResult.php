@@ -49,6 +49,7 @@ class CalculationArchiveResult implements \Countable
      *
      * @return int<0, max>
      */
+    #[\Override]
     public function count(): int
     {
         return $this->count;

@@ -31,6 +31,7 @@ class HttpClientError implements \JsonSerializable, \Stringable
     {
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return \sprintf('%d. %s', $this->code, $this->message);
@@ -65,6 +66,7 @@ class HttpClientError implements \JsonSerializable, \Stringable
      *              trace: string}
      *     }
      */
+    #[\Override]
     public function jsonSerialize(): array
     {
         $result = [

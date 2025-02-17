@@ -29,6 +29,7 @@ class CalculationItemType extends AbstractEntityType
         parent::__construct(CalculationItem::class);
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('description')->addHiddenType()

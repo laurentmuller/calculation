@@ -23,6 +23,7 @@ class ProductsDocument extends AbstractArrayDocument
     /**
      * @param \App\Entity\Product[] $entities
      */
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->start('product.list.title');

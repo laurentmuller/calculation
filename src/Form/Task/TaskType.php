@@ -31,6 +31,7 @@ class TaskType extends AbstractEntityType
         parent::__construct(Task::class);
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('name')

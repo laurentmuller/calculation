@@ -26,6 +26,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class CalculationGroupTypeTest extends EntityTypeTestCase
 {
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -35,16 +36,19 @@ class CalculationGroupTypeTest extends EntityTypeTestCase
         ];
     }
 
+    #[\Override]
     protected function getEntityClass(): string
     {
         return CalculationGroup::class;
     }
 
+    #[\Override]
     protected function getFormTypeClass(): string
     {
         return CalculationGroupType::class;
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         return [

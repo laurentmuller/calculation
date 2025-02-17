@@ -21,6 +21,7 @@ use App\Parameter\MessageParameter;
  */
 class MessageParameterTest extends ParameterTestCase
 {
+    #[\Override]
     public static function getParameterNames(): \Generator
     {
         yield ['close', 'message_close'];
@@ -32,6 +33,7 @@ class MessageParameterTest extends ParameterTestCase
         yield ['title', 'message_title'];
     }
 
+    #[\Override]
     public static function getParameterValues(): \Generator
     {
         yield ['close', true];
@@ -74,6 +76,7 @@ class MessageParameterTest extends ParameterTestCase
         self::assertFalse($this->parameter->isTitle());
     }
 
+    #[\Override]
     protected function createParameter(): MessageParameter
     {
         return new MessageParameter();

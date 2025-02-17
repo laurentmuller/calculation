@@ -48,6 +48,7 @@ class CalculationsEmptyReport extends AbstractCalculationItemsReport
     /**
      * @param CalculationItemType[] $entities
      */
+    #[\Override]
     protected function computeItemsCount(array $entities): int
     {
         return \array_reduce(
@@ -58,16 +59,19 @@ class CalculationsEmptyReport extends AbstractCalculationItemsReport
         );
     }
 
+    #[\Override]
     protected function getPriceLabel(): string
     {
         return $this->priceLabel;
     }
 
+    #[\Override]
     protected function getQuantityLabel(): string
     {
         return $this->quantityLabel;
     }
 
+    #[\Override]
     protected function transCount(array $parameters): string
     {
         return $this->trans('empty.count', $parameters);

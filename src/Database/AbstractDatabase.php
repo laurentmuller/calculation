@@ -76,6 +76,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     /**
      * Returns a string representing this object.
      */
+    #[\Override]
     public function __toString(): string
     {
         return $this->getFilename();
@@ -106,6 +107,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * All opened statements are also closed.
      * If a transaction is active, then it is canceled (rollback).
      */
+    #[\Override]
     public function close(): bool
     {
         // close statements

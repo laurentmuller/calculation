@@ -37,6 +37,7 @@ class AkismetServiceTest extends TestCase
 
     private MockObject&RequestStack $requestStack;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

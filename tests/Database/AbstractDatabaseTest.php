@@ -24,11 +24,13 @@ class AbstractDatabaseTest extends TestCase
 
     private Database $database;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->database = new Database(AbstractDatabase::IN_MEMORY);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->database->close();

@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PolicyControllerTest extends ControllerTestCase
 {
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/policy/accept', '', Response::HTTP_FOUND];

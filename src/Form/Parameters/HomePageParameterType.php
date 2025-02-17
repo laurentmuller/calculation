@@ -18,6 +18,7 @@ use App\Parameter\HomePageParameter;
 
 class HomePageParameterType extends AbstractParameterType
 {
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('calculations')
@@ -37,6 +38,7 @@ class HomePageParameterType extends AbstractParameterType
         $this->addCheckboxType($helper, 'darkNavigation', 'parameters.fields.dark_navigation', 'parameters.helps.dark_navigation');
     }
 
+    #[\Override]
     protected function getParameterClass(): string
     {
         return HomePageParameter::class;

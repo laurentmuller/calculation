@@ -101,6 +101,7 @@ class CalculationGroupService implements ConstantsInterface
      *
      * @return array<string, int>
      */
+    #[\Override]
     public static function constants(): array
     {
         $reflection = new \ReflectionClass(self::class);

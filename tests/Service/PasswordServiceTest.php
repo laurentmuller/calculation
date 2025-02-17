@@ -28,6 +28,7 @@ class PasswordServiceTest extends KernelServiceTestCase
 
     private PasswordService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

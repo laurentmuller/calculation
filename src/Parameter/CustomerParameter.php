@@ -59,6 +59,7 @@ class CustomerParameter implements ParameterInterface
         return $this->address;
     }
 
+    #[\Override]
     public static function getCacheKey(): string
     {
         return 'parameter_customer';

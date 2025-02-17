@@ -20,6 +20,7 @@ class SumAggregator extends AbstractAggregator
 {
     private float $result = 0.0;
 
+    #[\Override]
     public function add(mixed $value): static
     {
         if ($value instanceof self) {
@@ -31,16 +32,19 @@ class SumAggregator extends AbstractAggregator
         return $this;
     }
 
+    #[\Override]
     public function getFormattedResult(): float
     {
         return \round($this->getResult(), 2);
     }
 
+    #[\Override]
     public function getResult(): float
     {
         return $this->result;
     }
 
+    #[\Override]
     public function init(): static
     {
         $this->result = 0;

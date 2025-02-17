@@ -32,6 +32,7 @@ class PasswordTooltipServiceTest extends TestCase
     private Password $password;
     private MockObject&TranslatorInterface $translator;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->password = new Password(letters: false);

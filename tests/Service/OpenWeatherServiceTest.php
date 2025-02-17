@@ -23,6 +23,7 @@ class OpenWeatherServiceTest extends KernelServiceTestCase
 
     private OpenWeatherService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

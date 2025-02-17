@@ -36,6 +36,7 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
     use DatabaseTrait;
     use DateAssertTrait;
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->deleteCalculation();

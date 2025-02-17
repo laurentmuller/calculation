@@ -62,6 +62,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         $this->superAdmin = $this->anyMatch($entities, static fn (User $user): bool => $user->isSuperAdmin());
     }
 
+    #[\Override]
     public function drawGroup(PdfGroupEvent $event): bool
     {
         /** @var User|string $key */
@@ -84,6 +85,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         return true;
     }
 
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->addPage();

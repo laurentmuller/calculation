@@ -20,6 +20,7 @@ class CustomerControllerTest extends EntityControllerTestCase
 {
     private ?Customer $customer = null;
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/customer', self::ROLE_USER];
@@ -88,11 +89,13 @@ class CustomerControllerTest extends EntityControllerTestCase
         $this->checkUriWithEmptyEntity('/customer/pdf', Customer::class);
     }
 
+    #[\Override]
     protected function addEntities(): void
     {
         $this->getCustomer();
     }
 
+    #[\Override]
     protected function deleteEntities(): void
     {
         $this->customer = $this->deleteEntity($this->customer);

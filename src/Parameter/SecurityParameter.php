@@ -45,6 +45,7 @@ class SecurityParameter implements ParameterInterface
     #[Parameter('security_special_char', false)]
     private bool $specialChar = false;
 
+    #[\Override]
     public static function getCacheKey(): string
     {
         return 'parameter_security';

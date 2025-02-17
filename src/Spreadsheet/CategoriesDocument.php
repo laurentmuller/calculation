@@ -23,6 +23,7 @@ class CategoriesDocument extends AbstractArrayDocument
     /**
      * @param \App\Entity\Category[] $entities
      */
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->start('category.list.title');

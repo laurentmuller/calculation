@@ -23,6 +23,7 @@ class DateUtilsTest extends TestCase
 {
     use DateAssertTrait;
 
+    #[\Override]
     protected function setUp(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);

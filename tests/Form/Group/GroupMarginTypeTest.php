@@ -22,6 +22,7 @@ use App\Tests\Form\EntityTypeTestCase;
  */
 class GroupMarginTypeTest extends EntityTypeTestCase
 {
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -31,11 +32,13 @@ class GroupMarginTypeTest extends EntityTypeTestCase
         ];
     }
 
+    #[\Override]
     protected function getEntityClass(): string
     {
         return GroupMargin::class;
     }
 
+    #[\Override]
     protected function getFormTypeClass(): string
     {
         return GroupMarginType::class;

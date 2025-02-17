@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AboutLicenceControllerTest extends ControllerTestCase
 {
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/about/licence'];

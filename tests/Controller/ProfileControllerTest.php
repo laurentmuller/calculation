@@ -15,6 +15,7 @@ namespace App\Tests\Controller;
 
 class ProfileControllerTest extends ControllerTestCase
 {
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/user/profile/password', self::ROLE_USER];

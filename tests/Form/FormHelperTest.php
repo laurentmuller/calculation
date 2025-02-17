@@ -667,6 +667,7 @@ class FormHelperTest extends TypeTestCase
     /**
      * @throws \ReflectionException
      */
+    #[\Override]
     protected function getExtensions(): array
     {
         $extensions = $this->getExtensionsFromTrait();
@@ -675,6 +676,7 @@ class FormHelperTest extends TypeTestCase
         return $extensions;
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         return [
@@ -691,6 +693,7 @@ class FormHelperTest extends TypeTestCase
      *     VichImageTypeExtension
      * }
      */
+    #[\Override]
     protected function getTypeExtensions(): array
     {
         return [

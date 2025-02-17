@@ -40,6 +40,7 @@ class PhpIniReport extends AbstractReport
         $this->setTitleTrans('about.php_version', ['%version%' => $version]);
     }
 
+    #[\Override]
     public function render(): bool
     {
         $this->addPage();

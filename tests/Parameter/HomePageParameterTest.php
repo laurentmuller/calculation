@@ -20,6 +20,7 @@ use App\Parameter\HomePageParameter;
  */
 class HomePageParameterTest extends ParameterTestCase
 {
+    #[\Override]
     public static function getParameterNames(): \Generator
     {
         yield ['calculations', 'calculations'];
@@ -29,6 +30,7 @@ class HomePageParameterTest extends ParameterTestCase
         yield ['statusBar', 'status_bar'];
     }
 
+    #[\Override]
     public static function getParameterValues(): \Generator
     {
         yield ['calculations', 12];
@@ -65,6 +67,7 @@ class HomePageParameterTest extends ParameterTestCase
         self::assertFalse($this->parameter->isStatusBar());
     }
 
+    #[\Override]
     protected function createParameter(): HomePageParameter
     {
         return new HomePageParameter();

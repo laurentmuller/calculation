@@ -52,6 +52,7 @@ class HelpReport extends AbstractReport
         $this->headerStyle = PdfStyle::getHeaderStyle();
     }
 
+    #[\Override]
     public function render(): bool
     {
         $service = $this->service;

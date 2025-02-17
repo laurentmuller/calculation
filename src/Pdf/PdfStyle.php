@@ -90,6 +90,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
         $this->fillColor = clone $this->fillColor;
     }
 
+    #[\Override]
     public function apply(PdfDocument $doc): void
     {
         $this->font->apply($doc);

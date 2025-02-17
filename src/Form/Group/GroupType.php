@@ -30,6 +30,7 @@ class GroupType extends AbstractEntityType
         parent::__construct(Group::class);
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('code')

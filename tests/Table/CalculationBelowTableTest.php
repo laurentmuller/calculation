@@ -31,6 +31,7 @@ class CalculationBelowTableTest extends EntityTableTestCase
 {
     private int $countItemsBelow;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -46,6 +47,7 @@ class CalculationBelowTableTest extends EntityTableTestCase
         $this->processCountItemsBelow(0, 'below.empty');
     }
 
+    #[\Override]
     protected function createEntities(): array
     {
         $entityEditable = [
@@ -74,6 +76,7 @@ class CalculationBelowTableTest extends EntityTableTestCase
         return [$entityEditable, $entityNotEditable];
     }
 
+    #[\Override]
     protected function createMockQueryBuilder(MockObject&Query $query): MockObject&QueryBuilder
     {
         $queryBuilder = parent::createMockQueryBuilder($query);
@@ -85,6 +88,7 @@ class CalculationBelowTableTest extends EntityTableTestCase
         return $queryBuilder;
     }
 
+    #[\Override]
     protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CalculationRepository
     {
         $repository = $this->createMock(CalculationRepository::class);
@@ -100,6 +104,7 @@ class CalculationBelowTableTest extends EntityTableTestCase
     /**
      * @psalm-param  CalculationRepository $repository
      */
+    #[\Override]
     protected function createTable(AbstractRepository $repository): CalculationBelowTable
     {
         $stateRepository = $this->createMock(CalculationStateRepository::class);

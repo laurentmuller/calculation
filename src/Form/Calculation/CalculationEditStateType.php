@@ -35,6 +35,7 @@ class CalculationEditStateType extends AbstractEntityType
         parent::__construct(Calculation::class);
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('id')

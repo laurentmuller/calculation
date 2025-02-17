@@ -20,6 +20,7 @@ use App\Form\FormHelper;
  */
 class RoleRightsType extends RightsType
 {
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         parent::addFormFields($helper);

@@ -45,6 +45,7 @@ abstract class AuthenticateWebTestCase extends WebTestCase
 
     protected KernelBrowser $client;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

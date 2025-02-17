@@ -27,5 +27,6 @@ interface ParentTimestampableInterface extends ParentEntityInterface
      *
      * @psalm-return TEntity|null
      */
+    #[\Override]
     public function getParentEntity(): ?TimestampableInterface;
 }

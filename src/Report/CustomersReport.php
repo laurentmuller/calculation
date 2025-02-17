@@ -40,6 +40,7 @@ class CustomersReport extends AbstractArrayReport
         $this->other = $this->trans('report.other');
     }
 
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('customer.list.title');

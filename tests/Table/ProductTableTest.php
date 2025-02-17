@@ -33,6 +33,7 @@ class ProductTableTest extends EntityTableTestCase
     private int $categoryId;
     private int $groupId;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -98,6 +99,7 @@ class ProductTableTest extends EntityTableTestCase
         $this->processDataQuery($dataQuery);
     }
 
+    #[\Override]
     protected function createEntities(): array
     {
         $entity = [
@@ -113,6 +115,7 @@ class ProductTableTest extends EntityTableTestCase
         return [$entity];
     }
 
+    #[\Override]
     protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&ProductRepository
     {
         $repository = $this->createMock(ProductRepository::class);
@@ -127,6 +130,7 @@ class ProductTableTest extends EntityTableTestCase
      *
      * @throws \ReflectionException
      */
+    #[\Override]
     protected function createTable(AbstractRepository $repository): ProductTable
     {
         $categoryRepository = $this->createMock(CategoryRepository::class);

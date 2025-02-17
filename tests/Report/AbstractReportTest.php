@@ -66,6 +66,7 @@ class AbstractReportTest extends TestCase
         $controller ??= $this->createMock(AbstractController::class);
 
         return new class($controller) extends AbstractReport {
+            #[\Override]
             public function render(): bool
             {
                 $this->translateCount(1);

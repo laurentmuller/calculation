@@ -50,6 +50,7 @@ class ItemsTable extends ReportGroupTable implements PdfGroupListenerInterface
             ->setBorder(PdfBorder::leftRight());
     }
 
+    #[\Override]
     public function drawGroup(PdfGroupEvent $event): true
     {
         /** @psalm-var CalculationGroup|CalculationCategory $key */
@@ -98,6 +99,7 @@ class ItemsTable extends ReportGroupTable implements PdfGroupListenerInterface
         $table->output();
     }
 
+    #[\Override]
     public function startRow(?PdfStyle $style = null): static
     {
         parent::startRow($style ?? $this->rowStyle);

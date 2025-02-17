@@ -139,6 +139,7 @@ class PositionService
         return \sprintf(self::GOOGLE_MAP_URL, $latitude, $longitude);
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;

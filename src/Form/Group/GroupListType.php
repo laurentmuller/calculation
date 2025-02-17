@@ -31,6 +31,7 @@ class GroupListType extends AbstractListEntityType
         parent::__construct(Group::class);
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);

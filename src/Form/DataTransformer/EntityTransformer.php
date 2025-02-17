@@ -38,6 +38,7 @@ class EntityTransformer extends AbstractEntityTransformer
      *
      * @psalm-return TEntity|null
      */
+    #[\Override]
     public function reverseTransform(mixed $value): ?EntityInterface
     {
         return $this->toEntity($value);
@@ -46,6 +47,7 @@ class EntityTransformer extends AbstractEntityTransformer
     /**
      * @psalm-param EntityInterface|null $value
      */
+    #[\Override]
     public function transform(mixed $value): ?int
     {
         return $this->toIdentifier($value);

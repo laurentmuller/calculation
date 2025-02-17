@@ -75,6 +75,7 @@ class LogDatabase extends AbstractDatabase
         return false !== $stmt->execute();
     }
 
+    #[\Override]
     protected function createSchema(): void
     {
         $this->exec(self::SQL_CREATE);

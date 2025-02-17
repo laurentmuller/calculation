@@ -52,6 +52,7 @@ class CategoryTableTest extends EntityTableTestCase
         $this->processDataQuery($dataQuery);
     }
 
+    #[\Override]
     protected function createEntities(): array
     {
         $entityEmpty = [
@@ -74,6 +75,7 @@ class CategoryTableTest extends EntityTableTestCase
         return [$entityEmpty, $entityCount];
     }
 
+    #[\Override]
     protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CategoryRepository
     {
         $repository = $this->createMock(CategoryRepository::class);
@@ -86,6 +88,7 @@ class CategoryTableTest extends EntityTableTestCase
     /**
      * @psalm-param CategoryRepository $repository
      */
+    #[\Override]
     protected function createTable(AbstractRepository $repository): CategoryTable
     {
         $twig = $this->createMock(Environment::class);

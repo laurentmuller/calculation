@@ -50,6 +50,7 @@ class CalculationsBelowReport extends AbstractArrayReport
         parent::__construct($controller, $entities, PdfOrientation::LANDSCAPE);
     }
 
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->addPage();

@@ -101,11 +101,13 @@ class UserTable extends AbstractEntityTable
             'icon' => $this->getRoleIcon($role)]);
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
     }
 
+    #[\Override]
     protected function createQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         $user = $this->security->getUser();
@@ -119,11 +121,13 @@ class UserTable extends AbstractEntityTable
         return $query;
     }
 
+    #[\Override]
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'user.json');
     }
 
+    #[\Override]
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);

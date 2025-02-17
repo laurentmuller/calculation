@@ -27,6 +27,7 @@ class TranslatorTraitTest extends TestCase
 
     private bool $useInterface = true;
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         if ($this->useInterface) {
@@ -56,6 +57,7 @@ class TranslatorTraitTest extends TestCase
         $translator = new class() implements TranslatorInterface {
             use TranslatorTrait;
 
+            #[\Override]
             public function trans(
                 string $id,
                 array $parameters = [],
@@ -65,11 +67,13 @@ class TranslatorTraitTest extends TestCase
                 return $id;
             }
 
+            #[\Override]
             public function getLocale(): string
             {
                 return \Locale::getDefault();
             }
 
+            #[\Override]
             public function getTranslator(): TranslatorInterface
             {
                 return $this;

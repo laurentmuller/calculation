@@ -50,6 +50,7 @@ abstract class AbstractWordDocument extends WordDocument
         $this->footer = new WordFooter($this);
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
@@ -136,6 +137,7 @@ abstract class AbstractWordDocument extends WordDocument
         return $section;
     }
 
+    #[\Override]
     protected function initialize(): void
     {
         parent::initialize();

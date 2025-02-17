@@ -40,6 +40,7 @@ class Database extends AbstractDatabase
     /**
      * Make public for tests.
      */
+    #[\Override]
     public function createIndex(string $table, string ...$columns): bool
     {
         return parent::createIndex($table, ...$columns);
@@ -70,6 +71,7 @@ class Database extends AbstractDatabase
      *
      * @phpstan-ignore method.templateTypeNotInParameter
      */
+    #[\Override]
     public function executeAndFetch(\SQLite3Stmt $stmt, int $mode = \SQLITE3_ASSOC): array
     {
         /** @psalm-var list<T> */
@@ -87,6 +89,7 @@ class Database extends AbstractDatabase
     /**
      * Make public for tests.
      */
+    #[\Override]
     public function getStatement(string $query): ?\SQLite3Stmt
     {
         return parent::getStatement($query);
@@ -95,6 +98,7 @@ class Database extends AbstractDatabase
     /**
      * Make public for tests.
      */
+    #[\Override]
     public function likeValue(string $value): string
     {
         return parent::likeValue($value);
@@ -111,12 +115,14 @@ class Database extends AbstractDatabase
      *
      * @phpstan-ignore method.templateTypeNotInParameter
      */
+    #[\Override]
     public function search(string $query, string $value, int $limit, int $mode = \SQLITE3_ASSOC): array
     {
         /** @psalm-var array<int, T> */
         return parent::search($query, $value, $limit, $mode);
     }
 
+    #[\Override]
     protected function createSchema(): void
     {
         // load script

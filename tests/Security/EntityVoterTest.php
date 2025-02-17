@@ -34,6 +34,7 @@ class EntityVoterTest extends TestCase
     private RoleBuilderService $builder;
     private EntityVoter $voter;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->builder = new RoleBuilderService();
@@ -154,6 +155,7 @@ class EntityVoterTest extends TestCase
     public function testVoteOnAttribute(): void
     {
         $voter = new class($this->application) extends EntityVoter {
+            #[\Override]
             public function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
             {
                 return parent::voteOnAttribute($attribute, $subject, $token);

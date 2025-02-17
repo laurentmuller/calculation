@@ -25,6 +25,7 @@ class OpenWeatherFormatterTest extends TestCase
 
     private OpenWeatherFormatter $formatter;
 
+    #[\Override]
     protected function setUp(): void
     {
         $service = new PositionService($this->createMockTranslator());

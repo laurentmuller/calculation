@@ -28,6 +28,7 @@ class DefaultParameterType extends AbstractParameterType
     {
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('stateId')
@@ -46,6 +47,7 @@ class DefaultParameterType extends AbstractParameterType
             ->addPercentType(0);
     }
 
+    #[\Override]
     protected function getParameterClass(): string
     {
         return DefaultParameter::class;

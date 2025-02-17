@@ -28,11 +28,13 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface
     ) {
     }
 
+    #[\Override]
     public function checkAnswer(string $givenAnswer, string $expectedAnswer): bool
     {
         return StringUtils::equalIgnoreCase($givenAnswer, $expectedAnswer);
     }
 
+    #[\Override]
     public function getChallenge(): Challenge
     {
         $word = $this->getRandomWord();

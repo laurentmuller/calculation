@@ -48,6 +48,7 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
     private Strength $strength;
     private MockObject&TranslatorInterface $translator;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->password = new Password();
@@ -149,6 +150,7 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
         self::assertTrue($form->isSynchronized());
     }
 
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -156,6 +158,7 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
         ];
     }
 
+    #[\Override]
     protected function getEntityClass(): string
     {
         return User::class;
@@ -164,6 +167,7 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
     /**
      * @throws \ReflectionException
      */
+    #[\Override]
     protected function getExtensions(): array
     {
         return \array_merge(parent::getExtensions(), [
@@ -172,11 +176,13 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
         ]);
     }
 
+    #[\Override]
     protected function getFormTypeClass(): string
     {
         return UserChangePasswordType::class;
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         return [

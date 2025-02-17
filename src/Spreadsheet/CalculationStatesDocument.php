@@ -26,6 +26,7 @@ class CalculationStatesDocument extends AbstractArrayDocument
     /**
      * @param \App\Entity\CalculationState[] $entities
      */
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->start('calculationstate.list.title', true);

@@ -25,12 +25,14 @@ class HelpControllerTest extends ControllerTestCase
 
     private HelpService $help;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->help = $this->getService(HelpService::class);
     }
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         $routes = [

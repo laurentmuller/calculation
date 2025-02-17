@@ -55,6 +55,7 @@ class TextTypeExtensionTest extends TypeTestCase
     /**
      * @return TextTypeExtension[]
      */
+    #[\Override]
     protected function getTypeExtensions(): array
     {
         return [

@@ -22,6 +22,7 @@ class TimelineControllerTest extends ControllerTestCase
     use CalculationTrait;
     use ProductTrait;
 
+    #[\Override]
     public static function getRoutes(): \Generator
     {
         $routes = [
@@ -39,6 +40,7 @@ class TimelineControllerTest extends ControllerTestCase
         }
     }
 
+    #[\Override]
     protected function addEntities(): void
     {
         $product = $this->getProduct();
@@ -50,6 +52,7 @@ class TimelineControllerTest extends ControllerTestCase
             ->addProduct($product);
     }
 
+    #[\Override]
     protected function deleteEntities(): void
     {
         $this->deleteCalculation();

@@ -15,6 +15,7 @@ namespace App\Tests\Fixture;
 
 class EmptyStringable implements \Stringable
 {
+    #[\Override]
     public function __toString(): string
     {
         return '';

@@ -23,6 +23,7 @@ class ProductControllerTest extends EntityControllerTestCase
 {
     use ProductTrait;
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/product', self::ROLE_USER];
@@ -106,11 +107,13 @@ class ProductControllerTest extends EntityControllerTestCase
         $this->checkUriWithEmptyEntity('/product/pdf', Product::class);
     }
 
+    #[\Override]
     protected function addEntities(): void
     {
         $this->getProduct();
     }
 
+    #[\Override]
     protected function deleteEntities(): void
     {
         $this->deleteProduct();

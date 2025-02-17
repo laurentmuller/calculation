@@ -75,6 +75,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
         $this->items = new ArrayCollection();
     }
 
+    #[\Override]
     public function __clone()
     {
         parent::__clone();
@@ -111,6 +112,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
         return $copy;
     }
 
+    #[\Override]
     public function compare(ComparableInterface $other): int
     {
         return \strnatcasecmp((string) $this->getName(), (string) $other->getName());
@@ -121,6 +123,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
      *
      * @return int<0, max>
      */
+    #[\Override]
     public function count(): int
     {
         return $this->items->count();
@@ -141,6 +144,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
         return $this->items->reduce(fn (int $carry, TaskItem $item): int => $carry + $item->count(), 0);
     }
 
+    #[\Override]
     public function getDisplay(): string
     {
         return (string) $this->name;

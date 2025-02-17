@@ -53,6 +53,7 @@ class SimpleEditorType extends AbstractType
     /**
      * @psalm-param array{required: bool, ...} $options
      */
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         if ($options['required']) {
@@ -61,6 +62,7 @@ class SimpleEditorType extends AbstractType
         $view->vars['groups'] = $this->getGroupedActions($options);
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -69,6 +71,7 @@ class SimpleEditorType extends AbstractType
         ])->setAllowedTypes('actions', ['array', 'null']);
     }
 
+    #[\Override]
     public function getParent(): string
     {
         return HiddenType::class;

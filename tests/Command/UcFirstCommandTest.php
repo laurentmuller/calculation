@@ -25,6 +25,7 @@ class UcFirstCommandTest extends CommandTestCase
 
     private const COMMAND_NAME = 'app:uc-first';
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

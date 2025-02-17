@@ -30,6 +30,7 @@ class StrengthLevelTranslatorTraitTest extends TestCase
 
     private TranslatorInterface $translator;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->translator = $this->createMockTranslator();
@@ -47,6 +48,7 @@ class StrengthLevelTranslatorTraitTest extends TestCase
         yield [5, 'very_strong'];
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;

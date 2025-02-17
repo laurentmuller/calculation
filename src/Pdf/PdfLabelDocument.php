@@ -125,6 +125,7 @@ class PdfLabelDocument extends PdfDocument
     /**
      * This implementation skips the output footer.
      */
+    #[\Override]
     final public function footer(): void
     {
     }
@@ -132,6 +133,7 @@ class PdfLabelDocument extends PdfDocument
     /**
      * This implementation skips the output header.
      */
+    #[\Override]
     final public function header(): void
     {
     }

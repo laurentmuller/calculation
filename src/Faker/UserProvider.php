@@ -46,6 +46,7 @@ class UserProvider extends EntityProvider
         return ($user instanceof User) ? $user->getUserIdentifier() : null;
     }
 
+    #[\Override]
     protected function getCriteria(): array
     {
         return ['enabled' => true];

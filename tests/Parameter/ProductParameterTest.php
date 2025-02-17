@@ -20,6 +20,7 @@ use App\Parameter\ProductParameter;
  */
 class ProductParameterTest extends ParameterTestCase
 {
+    #[\Override]
     public static function getParameterNames(): \Generator
     {
         yield ['edit', 'default_product_edit'];
@@ -27,6 +28,7 @@ class ProductParameterTest extends ParameterTestCase
         yield ['quantity', 'default_product_quantity'];
     }
 
+    #[\Override]
     public static function getParameterValues(): \Generator
     {
         yield ['edit', false];
@@ -53,6 +55,7 @@ class ProductParameterTest extends ParameterTestCase
         self::assertSame(0.25, $this->parameter->getQuantity());
     }
 
+    #[\Override]
     protected function createParameter(): ProductParameter
     {
         return new ProductParameter();

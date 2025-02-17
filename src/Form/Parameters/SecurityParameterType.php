@@ -19,6 +19,7 @@ use App\Parameter\SecurityParameter;
 
 class SecurityParameterType extends AbstractParameterType
 {
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('captcha')
@@ -37,6 +38,7 @@ class SecurityParameterType extends AbstractParameterType
         $this->addCheckboxType($helper, 'compromised', 'password.security_compromised_password');
     }
 
+    #[\Override]
     protected function getParameterClass(): string
     {
         return SecurityParameter::class;

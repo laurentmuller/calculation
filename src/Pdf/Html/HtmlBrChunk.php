@@ -18,6 +18,7 @@ namespace App\Pdf\Html;
  */
 class HtmlBrChunk extends AbstractHtmlChunk
 {
+    #[\Override]
     public function isNewLine(): bool
     {
         return true;

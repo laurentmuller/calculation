@@ -55,6 +55,7 @@ class GroupsTable extends ReportTable
         $table->output();
     }
 
+    #[\Override]
     public function startRow(?PdfStyle $style = null): static
     {
         if (!$style instanceof PdfStyle) {

@@ -35,11 +35,13 @@ class UserRegistrationType extends AbstractUserCaptchaType
         parent::__construct($service, $application);
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', User::class);
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('username')
@@ -61,6 +63,7 @@ class UserRegistrationType extends AbstractUserCaptchaType
         $helper->listenerPreSetData(fn (PreSetDataEvent $event) => $this->onPreSetData($event));
     }
 
+    #[\Override]
     protected function getLabelPrefix(): ?string
     {
         return 'user.fields.';

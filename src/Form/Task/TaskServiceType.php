@@ -29,6 +29,7 @@ class TaskServiceType extends AbstractHelperType
     /**
      * @psalm-param array{simple_widget: bool, ...} $options
      */
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         if ($options['simple_widget']) {
@@ -38,17 +39,20 @@ class TaskServiceType extends AbstractHelperType
         $view->vars['simple_widget'] = $options['simple_widget'];
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('simple_widget', false)
             ->setAllowedTypes('simple_widget', 'bool');
     }
 
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return '';
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('task')
@@ -59,6 +63,7 @@ class TaskServiceType extends AbstractHelperType
             ->addNumberType();
     }
 
+    #[\Override]
     protected function getLabelPrefix(): string
     {
         return 'task_compute.fields.';

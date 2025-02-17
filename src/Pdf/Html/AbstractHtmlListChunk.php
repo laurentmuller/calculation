@@ -24,6 +24,7 @@ abstract class AbstractHtmlListChunk extends HtmlParentChunk
      * Do nothing if the child is already in this collection,
      * or if the child is not an instance of HtmlLiChunk
      */
+    #[\Override]
     public function add(AbstractHtmlChunk $child): static
     {
         if ($child instanceof HtmlLiChunk) {

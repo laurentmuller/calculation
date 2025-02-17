@@ -23,6 +23,7 @@ class CalculationsTest extends CalendarTestCase
 {
     private Calendar $calendar;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

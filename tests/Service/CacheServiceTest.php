@@ -20,6 +20,7 @@ class CacheServiceTest extends KernelServiceTestCase
 {
     private CacheService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -40,6 +40,7 @@ abstract class AbstractListEntityType extends AbstractType
         $this->checkSubClass($this->className, EntityInterface::class);
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -48,6 +49,7 @@ abstract class AbstractListEntityType extends AbstractType
         ]);
     }
 
+    #[\Override]
     public function getParent(): string
     {
         return EntityType::class;

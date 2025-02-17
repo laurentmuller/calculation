@@ -36,11 +36,13 @@ class LogLevel implements \Countable, \Stringable, ComparableInterface
         $this->setLevel($level);
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->getLevel();
     }
 
+    #[\Override]
     public function compare(ComparableInterface $other): int
     {
         return $this->getLevelIndex() <=> $other->getLevelIndex();
@@ -49,6 +51,7 @@ class LogLevel implements \Countable, \Stringable, ComparableInterface
     /**
      * @return int<0, max>
      */
+    #[\Override]
     public function count(): int
     {
         return $this->count;

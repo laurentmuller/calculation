@@ -22,6 +22,7 @@ use App\Tests\Form\EntityTypeTestCase;
  */
 class CalculationStateTypeTest extends EntityTypeTestCase
 {
+    #[\Override]
     protected function getData(): array
     {
         return [
@@ -32,11 +33,13 @@ class CalculationStateTypeTest extends EntityTypeTestCase
         ];
     }
 
+    #[\Override]
     protected function getEntityClass(): string
     {
         return CalculationState::class;
     }
 
+    #[\Override]
     protected function getFormTypeClass(): string
     {
         return CalculationStateType::class;

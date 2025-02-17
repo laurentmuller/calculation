@@ -33,6 +33,7 @@ class SymfonyDocument extends AbstractDocument
         parent::__construct($controller);
     }
 
+    #[\Override]
     public function render(): bool
     {
         $info = $this->service;

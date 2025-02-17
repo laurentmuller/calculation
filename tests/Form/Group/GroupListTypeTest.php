@@ -63,6 +63,7 @@ class GroupListTypeTest extends TypeTestCase
     /**
      * @throws \ReflectionException
      */
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         return [

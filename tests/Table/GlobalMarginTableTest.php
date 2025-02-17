@@ -48,6 +48,7 @@ class GlobalMarginTableTest extends EntityTableTestCase
         $this->processDataQuery($query);
     }
 
+    #[\Override]
     protected function createEntities(): array
     {
         $entity = new GlobalMargin();
@@ -58,6 +59,7 @@ class GlobalMarginTableTest extends EntityTableTestCase
         return [$entity];
     }
 
+    #[\Override]
     protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&GlobalMarginRepository
     {
         $repository = $this->createMock(GlobalMarginRepository::class);
@@ -70,6 +72,7 @@ class GlobalMarginTableTest extends EntityTableTestCase
     /**
      * @psalm-param GlobalMarginRepository $repository
      */
+    #[\Override]
     protected function createTable(AbstractRepository $repository): GlobalMarginTable
     {
         return new GlobalMarginTable($repository);

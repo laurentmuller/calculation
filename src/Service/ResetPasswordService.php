@@ -88,6 +88,7 @@ readonly class ResetPasswordService
     /**
      * Gets logger.
      */
+    #[\Override]
     public function getLogger(): LoggerInterface
     {
         return $this->logger;

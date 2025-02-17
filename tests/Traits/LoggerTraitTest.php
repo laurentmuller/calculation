@@ -25,11 +25,13 @@ class LoggerTraitTest extends TestCase
 
     private MockObject&LoggerInterface $logger;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->logger = $this->createMock(LoggerInterface::class);
     }
 
+    #[\Override]
     public function getLogger(): LoggerInterface
     {
         return $this->logger;

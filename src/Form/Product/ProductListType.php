@@ -31,6 +31,7 @@ class ProductListType extends AbstractListEntityType
         parent::__construct(Product::class);
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);

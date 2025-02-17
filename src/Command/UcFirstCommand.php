@@ -54,6 +54,7 @@ class UcFirstCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this->addOption(self::OPTION_CLASS, 'c', InputOption::VALUE_OPTIONAL, 'The entity class to update.');
@@ -62,6 +63,7 @@ class UcFirstCommand extends Command
         $this->addOption(self::OPTION_DRY_RUN, 'd', InputOption::VALUE_NONE, 'Simulate update without flush change to the database.');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
@@ -102,6 +104,7 @@ class UcFirstCommand extends Command
         return Command::SUCCESS;
     }
 
+    #[\Override]
     protected function interact(InputInterface $input, OutputInterface $output): void
     {
         $io = new SymfonyStyle($input, $output);

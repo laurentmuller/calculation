@@ -113,6 +113,7 @@ enum MessagePosition: string implements EnumSortableInterface, PdfEnumDefaultInt
     /**
      * @return MessagePosition[]
      */
+    #[\Override]
     public static function sorted(): array
     {
         return [

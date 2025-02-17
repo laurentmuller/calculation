@@ -25,6 +25,7 @@ use Faker\Provider\Person;
  */
 class CustomerGenerator extends AbstractEntityGenerator
 {
+    #[\Override]
     protected function createEntities(int $count, bool $simulate, Generator $generator): array
     {
         $entities = [];
@@ -37,11 +38,13 @@ class CustomerGenerator extends AbstractEntityGenerator
         return $entities;
     }
 
+    #[\Override]
     protected function getCountMessage(int $count): string
     {
         return $this->trans('counters.customers_generate', ['count' => $count]);
     }
 
+    #[\Override]
     protected function mapEntity(EntityInterface $entity): array
     {
         return [

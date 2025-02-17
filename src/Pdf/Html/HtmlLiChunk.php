@@ -24,6 +24,7 @@ use fpdf\PdfDocument;
  */
 class HtmlLiChunk extends HtmlParentChunk
 {
+    #[\Override]
     public function outputChildren(HtmlReport $report): void
     {
         $margin = $this->getBulletMargin($report);
@@ -32,6 +33,7 @@ class HtmlLiChunk extends HtmlParentChunk
         });
     }
 
+    #[\Override]
     protected function getOutputText(): ?string
     {
         $parent = $this->getParent();
@@ -42,6 +44,7 @@ class HtmlLiChunk extends HtmlParentChunk
         return null;
     }
 
+    #[\Override]
     protected function outputText(HtmlReport $report, string $text): void
     {
         $this->applyFont($report, $this->findFont(), function (HtmlReport $report) use ($text): void {

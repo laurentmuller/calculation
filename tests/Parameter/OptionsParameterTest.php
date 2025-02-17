@@ -20,12 +20,14 @@ use App\Parameter\OptionsParameter;
  */
 class OptionsParameterTest extends ParameterTestCase
 {
+    #[\Override]
     public static function getParameterNames(): \Generator
     {
         yield ['printAddress', 'print_address'];
         yield ['qrCode', 'qr_code'];
     }
 
+    #[\Override]
     public static function getParameterValues(): \Generator
     {
         yield ['printAddress', false];
@@ -48,6 +50,7 @@ class OptionsParameterTest extends ParameterTestCase
         self::assertTrue($this->parameter->isPrintAddress());
     }
 
+    #[\Override]
     protected function createParameter(): OptionsParameter
     {
         return new OptionsParameter();

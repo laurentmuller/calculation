@@ -24,6 +24,7 @@ class CalculationControllerTest extends EntityControllerTestCase
     use CalculationTrait;
     use ProductTrait;
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/calculation', self::ROLE_USER];
@@ -131,6 +132,7 @@ class CalculationControllerTest extends EntityControllerTestCase
         }
     }
 
+    #[\Override]
     protected function addEntities(): void
     {
         $product = $this->getProduct();
@@ -143,6 +145,7 @@ class CalculationControllerTest extends EntityControllerTestCase
         $this->addEntity($this->getCalculation());
     }
 
+    #[\Override]
     protected function deleteEntities(): void
     {
         $this->deleteCalculation();

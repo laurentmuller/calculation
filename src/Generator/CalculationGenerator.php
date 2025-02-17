@@ -39,6 +39,7 @@ class CalculationGenerator extends AbstractEntityGenerator
         parent::__construct($manager, $fakerService);
     }
 
+    #[\Override]
     protected function createEntities(int $count, bool $simulate, Generator $generator): array
     {
         $entities = [];
@@ -50,11 +51,13 @@ class CalculationGenerator extends AbstractEntityGenerator
         return $entities;
     }
 
+    #[\Override]
     protected function getCountMessage(int $count): string
     {
         return $this->trans('counters.calculations_generate', ['count' => $count]);
     }
 
+    #[\Override]
     protected function mapEntity(EntityInterface $entity): array
     {
         return [

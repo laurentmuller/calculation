@@ -23,6 +23,7 @@ class SchemaServiceTest extends KernelServiceTestCase
 
     private SchemaService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -21,6 +21,7 @@ use App\Parameter\SecurityParameter;
  */
 class SecurityParameterTest extends ParameterTestCase
 {
+    #[\Override]
     public static function getParameterNames(): \Generator
     {
         yield ['captcha', 'security_captcha'];
@@ -33,6 +34,7 @@ class SecurityParameterTest extends ParameterTestCase
         yield ['specialChar', 'security_special_char'];
     }
 
+    #[\Override]
     public static function getParameterValues(): \Generator
     {
         yield ['captcha', false];
@@ -79,6 +81,7 @@ class SecurityParameterTest extends ParameterTestCase
         self::assertTrue($this->parameter->isSpecialChar());
     }
 
+    #[\Override]
     protected function createParameter(): SecurityParameter
     {
         return new SecurityParameter();

@@ -27,6 +27,7 @@ use Twig\Environment;
  */
 class GroupTableTest extends EntityTableTestCase
 {
+    #[\Override]
     protected function createEntities(): array
     {
         $entity = [
@@ -42,6 +43,7 @@ class GroupTableTest extends EntityTableTestCase
         return [$entity];
     }
 
+    #[\Override]
     protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&GroupRepository
     {
         $repository = $this->createMock(GroupRepository::class);
@@ -54,6 +56,7 @@ class GroupTableTest extends EntityTableTestCase
     /**
      * @psalm-param GroupRepository $repository
      */
+    #[\Override]
     protected function createTable(AbstractRepository $repository): GroupTable
     {
         $twig = $this->createMock(Environment::class);

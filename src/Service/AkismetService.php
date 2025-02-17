@@ -116,6 +116,7 @@ class AkismetService extends AbstractHttpClientService
         }
     }
 
+    #[\Override]
     public function getCacheTimeout(): int
     {
         return self::CACHE_TIMEOUT;
@@ -232,6 +233,7 @@ class AkismetService extends AbstractHttpClientService
         }
     }
 
+    #[\Override]
     protected function getDefaultOptions(): array
     {
         return [self::BASE_URI => self::HOST_NAME];

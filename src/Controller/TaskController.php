@@ -190,6 +190,7 @@ class TaskController extends AbstractEntityController
     /**
      * @param Task $item
      */
+    #[\Override]
     protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
         $parameters['item_index'] = $item->count();

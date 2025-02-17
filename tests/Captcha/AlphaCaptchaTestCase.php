@@ -30,6 +30,7 @@ abstract class AlphaCaptchaTestCase extends TestCase
     protected MockObject&DictionaryService $service;
     protected MockObject&TranslatorInterface $translator;
 
+    #[\Override]
     protected function setUp(): void
     {
         $letters = \implode('', \range('A', 'Z'));

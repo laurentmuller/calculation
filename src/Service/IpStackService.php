@@ -68,6 +68,7 @@ class IpStackService extends AbstractHttpClientService
         parent::__construct($key, $cache, $logger);
     }
 
+    #[\Override]
     public function getCacheTimeout(): int
     {
         return self::CACHE_TIMEOUT;

@@ -52,6 +52,7 @@ class ReportGroupTable extends PdfGroupTable
         return new self($parent, $fullWidth);
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;

@@ -25,6 +25,7 @@ class GroupMarginRepositoryTest extends KernelServiceTestCase
 
     private GroupMarginRepository $repository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

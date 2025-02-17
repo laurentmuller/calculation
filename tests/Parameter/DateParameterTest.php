@@ -20,6 +20,7 @@ use App\Parameter\DateParameter;
  */
 class DateParameterTest extends ParameterTestCase
 {
+    #[\Override]
     public static function getParameterNames(): \Generator
     {
         yield ['archive', 'archive_calculation'];
@@ -28,6 +29,7 @@ class DateParameterTest extends ParameterTestCase
         yield ['updateProducts', 'update_product'];
     }
 
+    #[\Override]
     public static function getParameterValues(): \Generator
     {
         yield ['archive', null];
@@ -59,6 +61,7 @@ class DateParameterTest extends ParameterTestCase
         self::assertSame($date, $this->parameter->getUpdateProducts());
     }
 
+    #[\Override]
     protected function createParameter(): DateParameter
     {
         return new DateParameter();

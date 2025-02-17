@@ -27,11 +27,13 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
     /**
      * @return int<0, max>
      */
+    #[\Override]
     public function count(): int
     {
         return $this->repository->countItemsDuplicate();
     }
 
+    #[\Override]
     public function getEmptyMessage(): ?string
     {
         return 0 === $this->count() ? 'duplicate.empty' : null;
@@ -42,6 +44,7 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
      *
      * @psalm-return CalculationItemType[]
      */
+    #[\Override]
     protected function getEntities(string $orderColumn = 'id', string $orderDirection = self::SORT_DESC): array
     {
         return $this->repository->getItemsDuplicate($orderColumn, $orderDirection);
@@ -50,6 +53,7 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
     /**
      * @psalm-param CalculationItemType[] $items
      */
+    #[\Override]
     protected function getItemsCount(array $items): int
     {
         return \array_reduce(

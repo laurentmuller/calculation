@@ -77,6 +77,7 @@ abstract class AbstractReport extends PdfDocument
     /**
      * This implementation output the report footer.
      */
+    #[\Override]
     public function footer(): void
     {
         $this->footer->output();
@@ -98,6 +99,7 @@ abstract class AbstractReport extends PdfDocument
         return $this->header;
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
@@ -106,6 +108,7 @@ abstract class AbstractReport extends PdfDocument
     /**
      * This implementation output the report header.
      */
+    #[\Override]
     public function header(): void
     {
         $this->header->output();

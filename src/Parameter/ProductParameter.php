@@ -31,6 +31,7 @@ class ProductParameter implements ParameterInterface
     #[Parameter('default_product_quantity', 0.0)]
     private float $quantity = 0.0;
 
+    #[\Override]
     public static function getCacheKey(): string
     {
         return 'parameter_product';

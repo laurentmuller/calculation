@@ -20,12 +20,14 @@ use App\Parameter\RightsParameter;
  */
 class RightsParameterTest extends ParameterTestCase
 {
+    #[\Override]
     public static function getParameterNames(): \Generator
     {
         yield ['adminRights', 'admin_rights'];
         yield ['userRights', 'user_rights'];
     }
 
+    #[\Override]
     public static function getParameterValues(): \Generator
     {
         yield ['adminRights', null];
@@ -83,6 +85,7 @@ class RightsParameterTest extends ParameterTestCase
         self::assertSame($rights, $this->parameter->getUserRights());
     }
 
+    #[\Override]
     protected function createParameter(): RightsParameter
     {
         return new RightsParameter();

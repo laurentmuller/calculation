@@ -49,6 +49,7 @@ final class FunctionExtension extends AbstractExtension
         $this->publicDir = FileUtils::normalize($publicDir);
     }
 
+    #[\Override]
     public function getFunctions(): array
     {
         $options = ['is_safe' => ['html']];

@@ -31,6 +31,7 @@ class CaptchaValidator extends AbstractConstraintValidator
     /**
      * @param Captcha $constraint
      */
+    #[\Override]
     protected function doValidate(string $value, Constraint $constraint): void
     {
         $this->service->setTimeout($constraint->timeout);

@@ -64,6 +64,7 @@ class StateChart extends AbstractHighchart
         ];
     }
 
+    #[\Override]
     protected function setTooltipOptions(): static
     {
         parent::setTooltipOptions();

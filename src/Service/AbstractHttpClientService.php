@@ -111,6 +111,7 @@ abstract class AbstractHttpClientService
         return $this->lastError;
     }
 
+    #[\Override]
     public function getLogger(): LoggerInterface
     {
         return $this->logger;

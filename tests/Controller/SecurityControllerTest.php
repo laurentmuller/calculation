@@ -18,6 +18,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
 class SecurityControllerTest extends ControllerTestCase
 {
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/login', AuthenticatedVoter::PUBLIC_ACCESS];

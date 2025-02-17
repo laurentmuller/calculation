@@ -77,6 +77,7 @@ class PdfImageCell extends AbstractPdfImageCell
         $this->height = $this->originalHeight = $size[1];
     }
 
+    #[\Override]
     public function getHeight(): int
     {
         return $this->height;
@@ -95,11 +96,13 @@ class PdfImageCell extends AbstractPdfImageCell
         return [$this->originalWidth, $this->originalHeight];
     }
 
+    #[\Override]
     public function getPath(): string
     {
         return $this->path;
     }
 
+    #[\Override]
     public function getWidth(): int
     {
         return $this->width;

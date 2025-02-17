@@ -45,11 +45,13 @@ class StrengthValidator extends AbstractConstraintValidator
         $this->propertyAccessor = $propertyAccessor ?? PropertyAccess::createPropertyAccessor();
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
     }
 
+    #[\Override]
     public function validate(#[\SensitiveParameter] mixed $value, Constraint $constraint): void
     {
         parent::validate($value, $constraint);
@@ -58,6 +60,7 @@ class StrengthValidator extends AbstractConstraintValidator
     /**
      * @param Strength $constraint
      */
+    #[\Override]
     protected function doValidate(#[\SensitiveParameter] string $value, Constraint $constraint): void
     {
         $minimum = $constraint->minimum;

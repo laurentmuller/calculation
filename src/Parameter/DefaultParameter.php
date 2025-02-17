@@ -35,6 +35,7 @@ class DefaultParameter implements ParameterInterface
     #[Parameter('default_state')]
     private ?int $stateId = null;
 
+    #[\Override]
     public static function getCacheKey(): string
     {
         return 'parameter_default_value';

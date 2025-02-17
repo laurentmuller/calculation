@@ -26,12 +26,14 @@ class AjaxCalculationControllerTest extends ControllerTestCase
 
     private const UPDATE_ROUTE_NAME = '/calculation/update';
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->getCalculation();
     }
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield [self::UPDATE_ROUTE_NAME, self::ROLE_USER,  Response::HTTP_OK, Request::METHOD_POST, true];

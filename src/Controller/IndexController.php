@@ -172,6 +172,7 @@ class IndexController extends AbstractController
         return $this->sendJsonMessage('index.panel_table_count_success');
     }
 
+    #[\Override]
     protected function getSessionKey(string $key): string
     {
         return match ($key) {

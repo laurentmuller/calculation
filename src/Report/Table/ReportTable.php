@@ -52,6 +52,7 @@ class ReportTable extends PdfTable
         return new self($parent, $fullWidth);
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;

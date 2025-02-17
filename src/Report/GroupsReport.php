@@ -40,6 +40,7 @@ class GroupsReport extends AbstractArrayReport
         $this->setTitleTrans('group.list.title');
     }
 
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->addPage();

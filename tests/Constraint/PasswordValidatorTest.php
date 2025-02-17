@@ -160,6 +160,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
+    #[\Override]
     protected function createValidator(): PasswordValidator
     {
         return new PasswordValidator();

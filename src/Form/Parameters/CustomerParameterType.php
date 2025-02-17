@@ -18,6 +18,7 @@ use App\Parameter\CustomerParameter;
 
 class CustomerParameterType extends AbstractParameterType
 {
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('name')
@@ -81,6 +82,7 @@ class CustomerParameterType extends AbstractParameterType
         );
     }
 
+    #[\Override]
     protected function getParameterClass(): string
     {
         return CustomerParameter::class;

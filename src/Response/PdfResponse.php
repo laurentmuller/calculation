@@ -38,6 +38,7 @@ class PdfResponse extends AbstractStreamedResponse
         parent::__construct($callback, $inline, $name);
     }
 
+    #[\Override]
     public function getFileExtension(): string
     {
         return 'pdf';

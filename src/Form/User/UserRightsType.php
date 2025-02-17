@@ -30,12 +30,14 @@ class UserRightsType extends RightsType implements ServiceSubscriberInterface
     use ServiceMethodsSubscriberTrait;
     use TranslatorAwareTrait;
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
         $resolver->setDefault('data_class', User::class);
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         parent::addFormFields($helper);
@@ -52,6 +54,7 @@ class UserRightsType extends RightsType implements ServiceSubscriberInterface
             ->addCheckboxType();
     }
 
+    #[\Override]
     protected function getLabelPrefix(): ?string
     {
         return 'user.fields.';

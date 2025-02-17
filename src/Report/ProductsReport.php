@@ -24,6 +24,7 @@ use App\Report\Table\ReportGroupTable;
  */
 class ProductsReport extends AbstractArrayReport
 {
+    #[\Override]
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('product.list.title');

@@ -52,6 +52,7 @@ class PdfGroupTable extends PdfTable
         $this->group = new PdfGroup();
     }
 
+    #[\Override]
     public function checkNewPage(float $height): bool
     {
         if ($this->isGroupBeforeHeader() && $this->isRepeatHeader()) {
@@ -106,6 +107,7 @@ class PdfGroupTable extends PdfTable
      * @param PdfDocument $parent    the parent document to print in
      * @param bool        $fullWidth a value indicating if the table takes all the printable width
      */
+    #[\Override]
     public static function instance(PdfDocument $parent, bool $fullWidth = true): self
     {
         return new self($parent, $fullWidth);

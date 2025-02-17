@@ -20,6 +20,7 @@ use App\Form\FormHelper;
  */
 class ProfilePasswordType extends AbstractChangePasswordType
 {
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('currentPassword')
@@ -28,6 +29,7 @@ class ProfilePasswordType extends AbstractChangePasswordType
         $helper->field('username')->addHiddenType();
     }
 
+    #[\Override]
     protected function getLabelPrefix(): ?string
     {
         return null;

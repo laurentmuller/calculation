@@ -24,6 +24,7 @@ class CalculationStateControllerTest extends EntityControllerTestCase
 {
     use CalculationTrait;
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/calculationstate', self::ROLE_USER];
@@ -121,11 +122,13 @@ class CalculationStateControllerTest extends EntityControllerTestCase
         $this->checkUriWithEmptyEntity('/calculationstate/pdf', CalculationState::class);
     }
 
+    #[\Override]
     protected function addEntities(): void
     {
         $this->getCalculationState();
     }
 
+    #[\Override]
     protected function deleteEntities(): void
     {
         $this->deleteEntitiesByClass(Calculation::class);

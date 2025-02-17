@@ -112,6 +112,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     /**
      * @throws \Exception
      */
+    #[\Override]
     public function __toString(): string
     {
         $year = (int) $this->year;
@@ -239,11 +240,13 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     /**
      * This implementation returns the generated year.
      */
+    #[\Override]
     public function getNumber(): int
     {
         return $this->getYear();
     }
 
+    #[\Override]
     public function getToday(): Day
     {
         if (!$this->today instanceof Day) {
@@ -316,11 +319,13 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         return $this->weekShortNames;
     }
 
+    #[\Override]
     public function getYear(): int
     {
         return (int) $this->year;
     }
 
+    #[\Override]
     public function isCurrent(): bool
     {
         $today = $this->getToday();
@@ -331,6 +336,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     /**
      * @return array<string, mixed>
      */
+    #[\Override]
     public function jsonSerialize(): array
     {
         return [
@@ -340,6 +346,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         ];
     }
 
+    #[\Override]
     protected function reset(): void
     {
         parent::reset();

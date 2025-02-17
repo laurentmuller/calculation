@@ -24,12 +24,14 @@ use Symfony\Component\Form\FormView;
  */
 class FileTypeExtension extends AbstractFileTypeExtension
 {
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $options = $this->updateOptions($form, $options);
         parent::buildView($view, $form, $options);
     }
 
+    #[\Override]
     public static function getExtendedTypes(): iterable
     {
         return [FileType::class];

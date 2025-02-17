@@ -30,6 +30,7 @@ class CalculationStateTableTest extends EntityTableTestCase
 {
     use TranslatorMockTrait;
 
+    #[\Override]
     protected function createEntities(): array
     {
         $entityEditable = [
@@ -52,6 +53,7 @@ class CalculationStateTableTest extends EntityTableTestCase
         return [$entityEditable, $entityNotEditable];
     }
 
+    #[\Override]
     protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CalculationStateRepository
     {
         $repository = $this->createMock(CalculationStateRepository::class);
@@ -64,6 +66,7 @@ class CalculationStateTableTest extends EntityTableTestCase
     /**
      * @psalm-param CalculationStateRepository $repository
      */
+    #[\Override]
     protected function createTable(AbstractRepository $repository): CalculationStateTable
     {
         $twig = $this->createMock(Environment::class);

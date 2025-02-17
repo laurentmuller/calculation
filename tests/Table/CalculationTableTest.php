@@ -33,6 +33,7 @@ class CalculationTableTest extends EntityTableTestCase
     private int $id;
     private int $stateId;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -111,6 +112,7 @@ class CalculationTableTest extends EntityTableTestCase
     /**
      * @psalm-return array[]
      */
+    #[\Override]
     protected function createEntities(): array
     {
         $entityEditable = [
@@ -139,6 +141,7 @@ class CalculationTableTest extends EntityTableTestCase
         return [$entityEditable, $entityNotEditable];
     }
 
+    #[\Override]
     protected function createMockQuery(array $entities): MockObject&Query
     {
         $query = parent::createMockQuery($entities);
@@ -148,6 +151,7 @@ class CalculationTableTest extends EntityTableTestCase
         return $query;
     }
 
+    #[\Override]
     protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&CalculationRepository
     {
         $repository = $this->createMock(CalculationRepository::class);
@@ -162,6 +166,7 @@ class CalculationTableTest extends EntityTableTestCase
      *
      * @throws \ReflectionException
      */
+    #[\Override]
     protected function createTable(AbstractRepository $repository): CalculationTable
     {
         $stateRepository = $this->createMockCalculationStateRepository();

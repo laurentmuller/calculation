@@ -76,6 +76,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
         $this->margins = new ArrayCollection();
     }
 
+    #[\Override]
     public function __clone()
     {
         parent::__clone();
@@ -97,6 +98,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
         return $this;
     }
 
+    #[\Override]
     public function compare(ComparableInterface $other): int
     {
         return \strnatcasecmp((string) $this->getName(), (string) $other->getName());
@@ -107,6 +109,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
      *
      * @return int<0, max>
      */
+    #[\Override]
     public function count(): int
     {
         return $this->margins->count();
@@ -143,6 +146,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
         return $margin instanceof TaskItemMargin ? $margin->getValue() : 0;
     }
 
+    #[\Override]
     public function getDisplay(): string
     {
         return (string) $this->name;
@@ -151,6 +155,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
     /**
      * @return Collection<int, TaskItemMargin>
      */
+    #[\Override]
     public function getMargins(): Collection
     {
         return $this->margins;
@@ -164,6 +169,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
         return $this->name;
     }
 
+    #[\Override]
     public function getParentEntity(): ?Task
     {
         return $this->task;

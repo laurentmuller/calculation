@@ -52,6 +52,7 @@ class RegistrationController extends AbstractController
     ) {
     }
 
+    #[\Override]
     public function getLogger(): LoggerInterface
     {
         return $this->logger;

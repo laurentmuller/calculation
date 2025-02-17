@@ -29,6 +29,7 @@ class RoleExtension extends AbstractExtension
     {
     }
 
+    #[\Override]
     public function getFilters(): array
     {
         return [
@@ -37,6 +38,7 @@ class RoleExtension extends AbstractExtension
         ];
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;

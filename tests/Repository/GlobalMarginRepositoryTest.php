@@ -29,6 +29,7 @@ class GlobalMarginRepositoryTest extends KernelServiceTestCase
 
     private GlobalMarginRepository $repository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -27,6 +27,7 @@ class OpenWeatherSearchServiceTest extends TestCase
     private string $databaseName;
     private OpenWeatherSearchService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->databaseName = __DIR__ . '/../files/sqlite/openweather_test.sqlite';

@@ -26,6 +26,7 @@ class ProductParameterType extends AbstractParameterType
     {
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('productId')
@@ -45,6 +46,7 @@ class ProductParameterType extends AbstractParameterType
         $this->addCheckboxType($helper, 'edit', 'parameters.fields.default_product_edit');
     }
 
+    #[\Override]
     protected function getParameterClass(): string
     {
         return ProductParameter::class;

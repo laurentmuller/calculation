@@ -51,6 +51,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @throws Exception if the given worksheet is not an instance of WorksheetDocument
      */
+    #[\Override]
     public function addExternalSheet(Worksheet $worksheet, ?int $sheetIndex = null): WorksheetDocument
     {
         $worksheet = $this->validateSheet($worksheet);
@@ -67,6 +68,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @throws Exception if the given worksheet is not an instance of WorksheetDocument
      */
+    #[\Override]
     public function addSheet(
         Worksheet $worksheet,
         ?int $sheetIndex = null,
@@ -83,6 +85,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param ?int $sheetIndex the index where the sheet should go (0, 1, ..., or null for last)
      */
+    #[\Override]
     public function createSheet(?int $sheetIndex = null): WorksheetDocument
     {
         $worksheet = new WorksheetDocument($this);
@@ -121,6 +124,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Get the active sheet.
      */
+    #[\Override]
     public function getActiveSheet(): WorksheetDocument
     {
         return $this->validateSheet(parent::getActiveSheet());
@@ -131,6 +135,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @return WorksheetDocument[]
      */
+    #[\Override]
     public function getAllSheets(): array
     {
         /** @var WorksheetDocument[] */
@@ -144,6 +149,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @throws Exception if the sheet index if is out of bounds
      */
+    #[\Override]
     public function getSheet(int $sheetIndex): WorksheetDocument
     {
         return $this->validateSheet(parent::getSheet($sheetIndex));
@@ -154,6 +160,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param string $worksheetName the sheet name
      */
+    #[\Override]
     public function getSheetByName(string $worksheetName): ?WorksheetDocument
     {
         $sheet = parent::getSheetByName($worksheetName);
@@ -171,6 +178,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @throws Exception if the sheet with the given name does not exist
      */
+    #[\Override]
     public function getSheetByNameOrThrow(string $worksheetName): WorksheetDocument
     {
         return $this->validateSheet(parent::getSheetByNameOrThrow($worksheetName));
@@ -184,6 +192,7 @@ class SpreadsheetDocument extends Spreadsheet
         return $this->title;
     }
 
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
@@ -196,6 +205,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @throws Exception if the sheet index if is out of bounds
      */
+    #[\Override]
     public function setActiveSheetIndex(int $worksheetIndex): WorksheetDocument
     {
         return $this->validateSheet(parent::setActiveSheetIndex($worksheetIndex));
@@ -208,6 +218,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @throws Exception if the given sheet name is not found
      */
+    #[\Override]
     public function setActiveSheetIndexByName(string $worksheetName): WorksheetDocument
     {
         return $this->validateSheet(parent::setActiveSheetIndexByName($worksheetName));

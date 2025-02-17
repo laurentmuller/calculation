@@ -55,6 +55,7 @@ class LogFile implements \Countable
         return $this;
     }
 
+    #[\Override]
     public function count(): int
     {
         return \count($this->logs);

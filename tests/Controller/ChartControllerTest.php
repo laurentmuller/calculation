@@ -24,6 +24,7 @@ class ChartControllerTest extends ControllerTestCase
     use GlobalMarginTrait;
     use ProductTrait;
 
+    #[\Override]
     public static function getRoutes(): \Generator
     {
         $routes = [
@@ -47,6 +48,7 @@ class ChartControllerTest extends ControllerTestCase
         }
     }
 
+    #[\Override]
     protected function addEntities(): void
     {
         $this->getGlobalMargin();
@@ -56,6 +58,7 @@ class ChartControllerTest extends ControllerTestCase
         $this->updateCalculation();
     }
 
+    #[\Override]
     protected function deleteEntities(): void
     {
         $this->deleteGlobalMargin();
@@ -63,6 +66,7 @@ class ChartControllerTest extends ControllerTestCase
         $this->deleteProduct();
     }
 
+    #[\Override]
     protected function mustDeleteEntities(): bool
     {
         return true;

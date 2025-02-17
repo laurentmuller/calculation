@@ -29,6 +29,7 @@ class TaskItemMarginType extends AbstractEntityType
         parent::__construct(TaskItemMargin::class);
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         // must-validate class?

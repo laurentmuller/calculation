@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AjaxTranslateControllerTest extends ControllerTestCase
 {
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/ajax/detect', self::ROLE_USER];

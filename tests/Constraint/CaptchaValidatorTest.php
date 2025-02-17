@@ -59,6 +59,7 @@ class CaptchaValidatorTest extends ConstraintValidatorTestCase
             ->assertRaised();
     }
 
+    #[\Override]
     protected function createValidator(): CaptchaValidator
     {
         $service = $this->createService();

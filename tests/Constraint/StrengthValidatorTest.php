@@ -130,6 +130,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
         new Strength($strength);
     }
 
+    #[\Override]
     protected function createValidator(): StrengthValidator
     {
         $factory = $this->createMock(ZxcvbnFactoryInterface::class);

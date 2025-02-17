@@ -27,11 +27,13 @@ class OpenWeatherDatabaseTest extends TestCase
 
     private OpenWeatherDatabase $database;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->database = new OpenWeatherDatabase(AbstractDatabase::IN_MEMORY);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->database->close();

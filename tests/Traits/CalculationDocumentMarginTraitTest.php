@@ -39,6 +39,7 @@ class CalculationDocumentMarginTraitTest extends TestCase
                 return $this->getMarginFormat();
             }
 
+            #[\Override]
             public function render(): bool
             {
                 return true;

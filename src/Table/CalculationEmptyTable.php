@@ -46,11 +46,13 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
     /**
      * @return int<0, max>
      */
+    #[\Override]
     public function count(): int
     {
         return $this->repository->countItemsEmpty();
     }
 
+    #[\Override]
     public function getEmptyMessage(): ?string
     {
         return 0 === $this->count() ? 'empty.empty' : null;
@@ -61,11 +63,13 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
      *
      * @psalm-return CalculationItemType[]
      */
+    #[\Override]
     protected function getEntities(string $orderColumn = 'id', string $orderDirection = self::SORT_DESC): array
     {
         return $this->repository->getItemsEmpty($orderColumn, $orderDirection);
     }
 
+    #[\Override]
     protected function getItemsCount(array $items): int
     {
         return \array_reduce(
@@ -84,11 +88,13 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
         return '<br>';
     }
 
+    #[\Override]
     protected function getPriceLabel(): string
     {
         return $this->priceLabel;
     }
 
+    #[\Override]
     protected function getQuantityLabel(): string
     {
         return $this->quantityLabel;

@@ -31,6 +31,7 @@ class CaptchaImageType extends AbstractType
     {
     }
 
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars = \array_replace($view->vars, [
@@ -40,6 +41,7 @@ class CaptchaImageType extends AbstractType
         ]);
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -59,6 +61,7 @@ class CaptchaImageType extends AbstractType
             ->setAllowedTypes('refresh', ['null', 'string']);
     }
 
+    #[\Override]
     public function getParent(): string
     {
         return TextType::class;

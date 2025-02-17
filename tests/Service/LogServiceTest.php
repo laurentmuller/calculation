@@ -28,6 +28,7 @@ class LogServiceTest extends KernelServiceTestCase
 
     private LogService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -33,6 +33,7 @@ abstract class AbstractAggregator implements \JsonSerializable, \Stringable
         }
     }
 
+    #[\Override]
     public function __toString(): string
     {
         $name = StringUtils::getShortName($this);
@@ -67,6 +68,7 @@ abstract class AbstractAggregator implements \JsonSerializable, \Stringable
      */
     abstract public function init(): static;
 
+    #[\Override]
     public function jsonSerialize(): array
     {
         return [

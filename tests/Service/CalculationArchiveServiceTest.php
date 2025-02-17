@@ -43,6 +43,7 @@ class CalculationArchiveServiceTest extends TestCase
     private Session $session;
     private MockObject&CalculationStateRepository $stateRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->session = new Session(new MockArraySessionStorage());

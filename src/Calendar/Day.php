@@ -45,6 +45,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
         parent::__construct($calendar, $key);
     }
 
+    #[\Override]
     public function __toString(): string
     {
         $name = StringUtils::getShortName($this);
@@ -100,6 +101,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     /**
      * This implementation returns the day of the month (1 to 31).
      */
+    #[\Override]
     public function getNumber(): int
     {
         return (int) $this->format('j');
@@ -150,11 +152,13 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
         return (int) $this->format('N');
     }
 
+    #[\Override]
     public function getYear(): int
     {
         return DateUtils::getYear($this->date);
     }
 
+    #[\Override]
     public function isCurrent(): bool
     {
         $today = $this->getToday();
@@ -239,6 +243,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     /**
      * @return array{day: int, name: string, shortName: string, date: string}
      */
+    #[\Override]
     public function jsonSerialize(): array
     {
         return [

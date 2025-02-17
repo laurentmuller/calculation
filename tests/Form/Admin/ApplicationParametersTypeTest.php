@@ -41,6 +41,7 @@ class ApplicationParametersTypeTest extends TypeTestCase
     private MockObject&Security $security;
     private ?User $user = null;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->security = $this->createMock(Security::class);
@@ -69,6 +70,7 @@ class ApplicationParametersTypeTest extends TypeTestCase
     /**
      * @throws \ReflectionException
      */
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         $translator = $this->createMockTranslator();
@@ -91,6 +93,7 @@ class ApplicationParametersTypeTest extends TypeTestCase
     /**
      * @return TextTypeExtension[]
      */
+    #[\Override]
     protected function getTypeExtensions(): array
     {
         return [

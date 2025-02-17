@@ -21,6 +21,7 @@ use Twig\Extension\AbstractExtension;
  */
 final class SwitchExtension extends AbstractExtension
 {
+    #[\Override]
     public function getTokenParsers(): array
     {
         return [new SwitchTokenParser()];

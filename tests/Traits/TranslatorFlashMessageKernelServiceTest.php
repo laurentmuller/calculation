@@ -25,6 +25,7 @@ class TranslatorFlashMessageKernelServiceTest extends KernelServiceTestCase
     use TranslatorFlashMessageAwareTrait;
     use TranslatorMockTrait;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

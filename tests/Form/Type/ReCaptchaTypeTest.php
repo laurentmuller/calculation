@@ -30,6 +30,7 @@ class ReCaptchaTypeTest extends TypeTestCase
     private MockObject&RequestStack $requestStack;
     private MockObject&RecaptchaService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->service = $this->createService();
@@ -115,6 +116,7 @@ class ReCaptchaTypeTest extends TypeTestCase
         self::assertSame($data, $form->getData());
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         return [

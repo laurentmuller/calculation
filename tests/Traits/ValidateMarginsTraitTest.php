@@ -79,6 +79,7 @@ class ValidateMarginsTraitTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
+    #[\Override]
     protected function createValidator(): LengthValidator
     {
         return new LengthValidator();

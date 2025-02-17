@@ -45,11 +45,13 @@ abstract class AbstractEntityType extends AbstractHelperType
         $this->className = $className;
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', $this->className);
     }
 
+    #[\Override]
     protected function getLabelPrefix(): ?string
     {
         $name = \strtolower(StringUtils::getShortName($this->className));

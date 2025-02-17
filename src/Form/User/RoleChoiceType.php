@@ -26,6 +26,7 @@ class RoleChoiceType extends AbstractChoiceType
     {
     }
 
+    #[\Override]
     protected function getChoices(): array
     {
         $choices = [

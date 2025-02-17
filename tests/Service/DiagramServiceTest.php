@@ -21,6 +21,7 @@ class DiagramServiceTest extends TestCase
 {
     private DiagramService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         $path = __DIR__ . '/../files/diagrams';

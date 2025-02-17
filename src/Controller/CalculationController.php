@@ -237,6 +237,7 @@ class CalculationController extends AbstractEntityController
     /**
      * @param Calculation $item
      */
+    #[\Override]
     protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
         $parameters['min_margin'] = $this->getMinMargin();
@@ -257,6 +258,7 @@ class CalculationController extends AbstractEntityController
     /**
      * @psalm-param Calculation $item
      */
+    #[\Override]
     protected function saveToDatabase(EntityInterface $item): void
     {
         $this->updateService->updateCalculation($item);

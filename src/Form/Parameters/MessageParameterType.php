@@ -24,6 +24,7 @@ class MessageParameterType extends AbstractParameterType
     {
     }
 
+    #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('position')
@@ -46,6 +47,7 @@ class MessageParameterType extends AbstractParameterType
         $this->addCheckboxType($helper, 'close', 'parameters.fields.message_close');
     }
 
+    #[\Override]
     protected function getParameterClass(): string
     {
         return MessageParameter::class;

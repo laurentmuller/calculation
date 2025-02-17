@@ -1,6 +1,7 @@
 @import 'style.css';
 @import '../vendor/font-mfizz/font-mfizz.css';
 
+/* stylelint-disable-next-line */
 /**! compression tag for ftp-deployment */
 
 .phpversion table {

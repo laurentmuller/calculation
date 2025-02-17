@@ -25,6 +25,7 @@ class FormatExtensionTest extends IntegrationTestCase
     /**
      * @throws Error|\ReflectionException
      */
+    #[\Override]
     protected function doIntegrationTest(
         string $file,
         string $message,
@@ -38,11 +39,13 @@ class FormatExtensionTest extends IntegrationTestCase
         parent::doIntegrationTest($file, $message, $condition, $templates, $exception, $outputs, $deprecation);
     }
 
+    #[\Override]
     protected function getExtensions(): array
     {
         return [new FormatExtension($this->createMockTranslator())];
     }
 
+    #[\Override]
     protected function getFixturesDir(): string
     {
         return __DIR__ . '/Fixtures/FormatExtension';

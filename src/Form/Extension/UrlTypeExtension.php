@@ -28,6 +28,7 @@ class UrlTypeExtension extends AbstractTypeExtension
     /**
      * @psalm-param array{default_protocol?: string, ...} $options
      */
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         if (isset($options['default_protocol'])) {
@@ -36,6 +37,7 @@ class UrlTypeExtension extends AbstractTypeExtension
         }
     }
 
+    #[\Override]
     public static function getExtendedTypes(): iterable
     {
         return [UrlType::class];

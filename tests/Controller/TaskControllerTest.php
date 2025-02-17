@@ -23,6 +23,7 @@ class TaskControllerTest extends EntityControllerTestCase
 {
     use TaskItemTrait;
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/task', self::ROLE_USER];
@@ -118,11 +119,13 @@ class TaskControllerTest extends EntityControllerTestCase
         $this->checkUriWithEmptyEntity('/task/pdf', Task::class);
     }
 
+    #[\Override]
     protected function addEntities(): void
     {
         $this->getTaskItem();
     }
 
+    #[\Override]
     protected function deleteEntities(): void
     {
         $this->deleteTaskItem();

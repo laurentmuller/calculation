@@ -23,6 +23,7 @@ class CustomerRepositoryTest extends KernelServiceTestCase
 
     private CustomerRepository $repository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

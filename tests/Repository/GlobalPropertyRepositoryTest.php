@@ -24,6 +24,7 @@ class GlobalPropertyRepositoryTest extends KernelServiceTestCase
 
     private GlobalPropertyRepository $repository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

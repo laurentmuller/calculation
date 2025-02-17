@@ -27,6 +27,7 @@ class GeneratorControllerTest extends ControllerTestCase
     private static ?array $products = null;
     private static ?CalculationState $state = null;
 
+    #[\Override]
     public static function getRoutes(): \Iterator
     {
         yield ['/generate', self::ROLE_USER, Response::HTTP_FORBIDDEN];
@@ -40,6 +41,7 @@ class GeneratorControllerTest extends ControllerTestCase
         yield ['/generate/customer', self::ROLE_SUPER_ADMIN];
     }
 
+    #[\Override]
     protected function addEntities(): void
     {
         if (!self::$state instanceof CalculationState) {
@@ -72,6 +74,7 @@ class GeneratorControllerTest extends ControllerTestCase
         }
     }
 
+    #[\Override]
     protected function deleteEntities(): void
     {
         if (null !== self::$products) {

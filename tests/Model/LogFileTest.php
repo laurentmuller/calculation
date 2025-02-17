@@ -27,6 +27,7 @@ class LogFileTest extends TestCase
 
     private LogFile $file;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->file = new LogFile(__DIR__ . '/file.log');

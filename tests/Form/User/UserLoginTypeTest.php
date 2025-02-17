@@ -43,6 +43,7 @@ class UserLoginTypeTest extends TypeTestCase
         self::assertTrue($form->isValid());
     }
 
+    #[\Override]
     protected function getPreloadedExtensions(): array
     {
         $generator = $this->createMock(UrlGeneratorInterface::class);
@@ -63,6 +64,7 @@ class UserLoginTypeTest extends TypeTestCase
     /**
      * @return TextTypeExtension[]
      */
+    #[\Override]
     protected function getTypeExtensions(): array
     {
         return [

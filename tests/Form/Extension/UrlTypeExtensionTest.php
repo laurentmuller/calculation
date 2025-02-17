@@ -44,6 +44,7 @@ class UrlTypeExtensionTest extends TypeTestCase
     /**
      * @return UrlTypeExtension[]
      */
+    #[\Override]
     protected function getTypeExtensions(): array
     {
         return [

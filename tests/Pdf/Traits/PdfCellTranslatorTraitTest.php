@@ -30,6 +30,7 @@ class PdfCellTranslatorTraitTest extends TestCase
 
     private MockObject&TranslatorInterface $translator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -57,6 +58,7 @@ class PdfCellTranslatorTraitTest extends TestCase
                 return true;
             }
 
+            #[\Override]
             public function getTranslator(): TranslatorInterface
             {
                 return $this->translator;

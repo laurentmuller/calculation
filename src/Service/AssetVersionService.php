@@ -77,6 +77,7 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
         return $this->cache->delete(self::KEY_IMAGES);
     }
 
+    #[\Override]
     public function getVersion(string $path): string
     {
         if (\str_starts_with($path, self::IMAGES_PATH)) {

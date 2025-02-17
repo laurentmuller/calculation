@@ -26,6 +26,7 @@ class AverageAggregator extends AbstractAggregator
 
     private float $sum = 0.0;
 
+    #[\Override]
     public function add(mixed $value): static
     {
         if ($value instanceof self) {
@@ -39,16 +40,19 @@ class AverageAggregator extends AbstractAggregator
         return $this;
     }
 
+    #[\Override]
     public function getFormattedResult(): float
     {
         return \round($this->getResult(), 2);
     }
 
+    #[\Override]
     public function getResult(): float
     {
         return $this->safeDivide($this->sum, $this->count);
     }
 
+    #[\Override]
     public function init(): static
     {
         $this->sum = 0;

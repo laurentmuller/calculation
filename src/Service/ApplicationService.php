@@ -201,11 +201,11 @@ class ApplicationService implements PropertyServiceInterface
             // notification
             self::P_MESSAGE_POSITION => self::DEFAULT_MESSAGE_POSITION,
             self::P_MESSAGE_TIMEOUT => self::DEFAULT_MESSAGE_TIMEOUT,
-            self::P_MESSAGE_TITLE => self::DEFAULT_MESSAGE_TITLE,
-            self::P_MESSAGE_SUB_TITLE => self::DEFAULT_MESSAGE_SUB_TITLE,
+            self::P_MESSAGE_TITLE => self::DEFAULT_TRUE,
+            self::P_MESSAGE_SUB_TITLE => self::DEFAULT_FALSE,
             self::P_MESSAGE_PROGRESS => self::DEFAULT_MESSAGE_PROGRESS,
-            self::P_MESSAGE_ICON => self::DEFAULT_MESSAGE_ICON,
-            self::P_MESSAGE_CLOSE => self::DEFAULT_MESSAGE_CLOSE,
+            self::P_MESSAGE_ICON => self::DEFAULT_TRUE,
+            self::P_MESSAGE_CLOSE => self::DEFAULT_TRUE,
             // home page
             self::P_CALCULATIONS => self::DEFAULT_CALCULATIONS,
             self::P_PANEL_CATALOG => self::DEFAULT_TRUE,
@@ -214,8 +214,8 @@ class ApplicationService implements PropertyServiceInterface
             self::P_STATUS_BAR => self::DEFAULT_TRUE,
             self::P_DARK_NAVIGATION => self::DEFAULT_TRUE,
             // document's options
-            self::P_QR_CODE => self::DEFAULT_QR_CODE,
-            self::P_PRINT_ADDRESS => self::DEFAULT_PRINT_ADDRESS,
+            self::P_QR_CODE => self::DEFAULT_FALSE,
+            self::P_PRINT_ADDRESS => self::DEFAULT_FALSE,
             // security
             self::P_STRENGTH_LEVEL => StrengthLevel::NONE,
             self::P_DISPLAY_CAPTCHA => !$this->debug,
@@ -415,7 +415,7 @@ class ApplicationService implements PropertyServiceInterface
      */
     public function isDefaultEdit(): bool
     {
-        return $this->getPropertyBoolean(self::P_PRODUCT_EDIT, self::DEFAULT_PRODUCT_EDIT);
+        return $this->getPropertyBoolean(self::P_PRODUCT_EDIT, self::DEFAULT_FALSE);
     }
 
     /**
@@ -443,25 +443,25 @@ class ApplicationService implements PropertyServiceInterface
     #[\Override]
     public function isMessageClose(): bool
     {
-        return $this->getPropertyBoolean(self::P_MESSAGE_CLOSE, self::DEFAULT_MESSAGE_CLOSE);
+        return $this->getPropertyBoolean(self::P_MESSAGE_CLOSE, self::DEFAULT_TRUE);
     }
 
     #[\Override]
     public function isMessageIcon(): bool
     {
-        return $this->getPropertyBoolean(self::P_MESSAGE_ICON, self::DEFAULT_MESSAGE_ICON);
+        return $this->getPropertyBoolean(self::P_MESSAGE_ICON, self::DEFAULT_TRUE);
     }
 
     #[\Override]
     public function isMessageSubTitle(): bool
     {
-        return $this->getPropertyBoolean(self::P_MESSAGE_SUB_TITLE, self::DEFAULT_MESSAGE_SUB_TITLE);
+        return $this->getPropertyBoolean(self::P_MESSAGE_SUB_TITLE, self::DEFAULT_FALSE);
     }
 
     #[\Override]
     public function isMessageTitle(): bool
     {
-        return $this->getPropertyBoolean(self::P_MESSAGE_TITLE, self::DEFAULT_MESSAGE_TITLE);
+        return $this->getPropertyBoolean(self::P_MESSAGE_TITLE, self::DEFAULT_TRUE);
     }
 
     #[\Override]
@@ -485,13 +485,13 @@ class ApplicationService implements PropertyServiceInterface
     #[\Override]
     public function isPrintAddress(): bool
     {
-        return $this->getPropertyBoolean(self::P_PRINT_ADDRESS, self::DEFAULT_PRINT_ADDRESS);
+        return $this->getPropertyBoolean(self::P_PRINT_ADDRESS, self::DEFAULT_FALSE);
     }
 
     #[\Override]
     public function isQrCode(): bool
     {
-        return $this->getPropertyBoolean(self::P_QR_CODE, self::DEFAULT_QR_CODE);
+        return $this->getPropertyBoolean(self::P_QR_CODE, self::DEFAULT_FALSE);
     }
 
     #[\Override]

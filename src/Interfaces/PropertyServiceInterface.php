@@ -48,16 +48,6 @@ interface PropertyServiceInterface
     final public const DEFAULT_FALSE = false;
 
     /**
-     * The default display flash bag message close button (boolean).
-     */
-    final public const DEFAULT_MESSAGE_CLOSE = true;
-
-    /**
-     * The default display flash's bag message icon (boolean).
-     */
-    final public const DEFAULT_MESSAGE_ICON = true;
-
-    /**
      * The default position of the flash bag messages (string).
      */
     final public const DEFAULT_MESSAGE_POSITION = MessagePosition::BOTTOM_RIGHT;
@@ -68,39 +58,14 @@ interface PropertyServiceInterface
     final public const DEFAULT_MESSAGE_PROGRESS = 1;
 
     /**
-     * The default display flash bag message subtitle (boolean).
-     */
-    final public const DEFAULT_MESSAGE_SUB_TITLE = false;
-
-    /**
      * The default timeout of the flash bag messages (integer).
      */
     final public const DEFAULT_MESSAGE_TIMEOUT = 4000;
 
     /**
-     * The default display flash bag message title (boolean).
-     */
-    final public const DEFAULT_MESSAGE_TITLE = true;
-
-    /**
      * The default minimum margin of a calculation (float).
      */
     final public const DEFAULT_MIN_MARGIN = 1.1;
-
-    /**
-     * The default output customer address in PDF documents (boolean).
-     */
-    final public const DEFAULT_PRINT_ADDRESS = false;
-
-    /**
-     * The default product edit (bool).
-     */
-    final public const DEFAULT_PRODUCT_EDIT = false;
-
-    /**
-     * The default output qr-code (boolean).
-     */
-    final public const DEFAULT_QR_CODE = false;
 
     /**
      * The default password strength level.

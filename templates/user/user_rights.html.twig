@@ -36,7 +36,7 @@
 {{ form_row(form.overwrite, {attr: {'data-default': default.overwrite|json_encode}}) }}
 {% endblock %}
 {# javascripts #}
-{% block javascripts -%}
+{% block javascripts %}
 {% if app.debug %}
     {{ parent() }}
     {{ asset_js('js/application/user_rights.js') }}

@@ -47,7 +47,7 @@
 {{ parent() }}
 {%- endblock %}
 {# javascript #}
-{% block javascripts -%}
+{% block javascripts %}
 {% if app.debug %}
     {{- parent() -}}
     {{- asset_js('vendor/jquery-validate/jquery.validate.js') }}

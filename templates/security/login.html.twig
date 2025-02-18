@@ -18,7 +18,7 @@
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}
-{% if app.debug %}
+{% if is_js_debug %}
     {{ parent() }}
     {{ asset_js('js/extensions/password-extensions.js') }}
     {{ asset_js('js/application/user_recaptcha.js') }}

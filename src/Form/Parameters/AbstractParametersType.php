@@ -187,12 +187,7 @@ abstract class AbstractParametersType extends AbstractType
 
     protected function isSuperAdmin(): bool
     {
-        $user = $this->security->getUser();
-        if (!$user instanceof RoleInterface) {
-            return false;
-        }
-
-        return $user->isSuperAdmin();
+        return $this->security->isGranted(RoleInterface::ROLE_SUPER_ADMIN);
     }
 
     private function addOption(FormHelper $helper, string $key, ?string $label = null): void

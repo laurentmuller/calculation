@@ -45,7 +45,7 @@
 {%- endblock -%}
 {# javascripts #}
 {% block javascripts %}
-{% if app.debug %}
+{% if is_js_debug %}
     {{ parent() }}
     {{ asset_js('vendor/mermaid/mermaid.js') }}
     {{ asset_js('vendor/mermaid/panzoom.js') }}

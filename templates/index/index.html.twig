@@ -50,7 +50,7 @@
 {# javascripts #}
 {% block javascripts %}
 {% if enabled %}
-    {% if app.debug %}
+    {% if is_js_debug %}
         {{ parent() -}}
         {{ asset_js('vendor/jquery-contextmenu/jquery.contextMenu.js') }}
         {{ asset_js('js/plugins/plugin-rowlink.js') }}

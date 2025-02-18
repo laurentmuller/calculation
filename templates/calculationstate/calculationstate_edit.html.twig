@@ -26,7 +26,7 @@
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}
-{% if app.debug %}
+{% if is_js_debug %}
     {{ parent() }}
     {{ asset_js('js/plugins/plugin-color-picker.js') }}
     {{ asset_js('js/application/calculationstate_edit.js') }}

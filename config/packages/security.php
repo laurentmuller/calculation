@@ -11,7 +11,6 @@
 
 declare(strict_types=1);
 
-use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;

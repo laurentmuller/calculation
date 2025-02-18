@@ -24,7 +24,7 @@
 </div>
 {%- endblock %}
 {% block javascripts %}
-    {% if app.debug %}
+    {% if is_js_debug %}
         {{ parent() }}
         {{ asset_js('vendor/jquery-mark/jquery.mark.js') }}
         {{ asset_js('js/application/help.js') }}

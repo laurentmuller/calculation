@@ -10,6 +10,7 @@
  */
 
 declare(strict_types=1);
+
 use App\Enums\Importance;
 use Symfony\Config\FrameworkConfig;
 

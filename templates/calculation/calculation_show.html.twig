@@ -149,7 +149,7 @@
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}
-{% if app.debug %}
+{% if is_js_debug %}
     {{ parent() }}
     {{ asset_js('js/application/calculation_error.js') }}
 {% else %}

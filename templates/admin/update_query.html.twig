@@ -29,7 +29,7 @@
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}
-{% if app.debug %}
+{% if is_js_debug %}
     {{ parent() }}
     {{ asset_js('js/plugins/plugin-simulate.js') }}
     {{ asset_js('js/application/calculation_update.js') }}

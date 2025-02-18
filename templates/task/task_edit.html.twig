@@ -131,7 +131,7 @@
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}
-{% if app.debug %}
+{% if is_js_debug %}
     {{ parent() }}
     {{ asset_js('vendor/html5sortable/html5sortable.js') }}
     {{ asset_js('js/plugins/plugin-typeahead.js') }}

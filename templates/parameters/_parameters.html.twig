@@ -76,7 +76,7 @@
 {%- endblock %}
 {# javascripts #}
 {% block javascripts %}
-{% if app.debug %}
+{% if is_js_debug %}
     {{ parent() }}
     {{ asset_js('js/plugins/plugin-input-number.js') }}
     {{ asset_js('js/application/parameters_edit.js') }}

@@ -42,8 +42,6 @@ class RoleChoiceType extends AbstractChoiceType
 
     private function isSuperAdmin(): bool
     {
-        $user = $this->security->getUser();
-
-        return $user instanceof RoleInterface && $user->isSuperAdmin();
+        return $this->security->isGranted(RoleInterface::ROLE_SUPER_ADMIN);
     }
 }

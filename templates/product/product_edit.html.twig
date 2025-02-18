@@ -33,7 +33,7 @@
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}
-{% if app.debug %}
+{% if is_js_debug %}
     {{ parent() }}
     {{ asset_js('js/plugins/plugin-typeahead.js') }}
     {{ asset_js('js/plugins/plugin-input-number.js') }}

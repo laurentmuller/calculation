@@ -29,7 +29,7 @@
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}
-{% if app.debug %}
+{% if is_js_debug %}
     {{ parent() }}
     {{ asset_js('js/extensions/simple-editor-extension.js') }}
     {{ asset_js('js/application/user_comment.js') }}

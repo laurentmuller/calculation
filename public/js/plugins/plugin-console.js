@@ -1,5 +1,6 @@
-/**! compression tag for ftp-deployment */
-
+/**
+ * Console utility.
+ */
 (() => {
     'use strict';
 

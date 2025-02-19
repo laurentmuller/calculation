@@ -1,5 +1,3 @@
-/**! compression tag for ftp-deployment */
-
 /**
  * jQuery file input extensions.
  */

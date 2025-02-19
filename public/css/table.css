@@ -2,9 +2,6 @@
 @import '../vendor/bootstrap-table/bootstrap-table.css';
 @import '../vendor/jquery-contextmenu/jquery.contextMenu.css';
 
-/* stylelint-disable-next-line */
-/**! compression tag for ftp-deployment */
-
 /* global styles */
 .bootstrap-table .fixed-table-container .fixed-table-body .table {
     table-layout: fixed !important;

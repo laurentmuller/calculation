@@ -1,4 +1,4 @@
-/**! compression tag for ftp-deployment */
+
 
 /**
  * Handles the months input change.

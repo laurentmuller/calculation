@@ -1,8 +1,5 @@
 @import 'style.css';
 
-/* stylelint-disable-next-line */
-/** ! compression tag for ftp-deployment */
-
 :root {
     --sitemap-line-width: 1px;
     --sitemap-border-width: 2px;

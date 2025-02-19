@@ -1,6 +1,5 @@
-/**! compression tag for ftp-deployment */
-
 /* global grecaptcha */
+
 /**
  * Plugin to handle recaptcha.
  */

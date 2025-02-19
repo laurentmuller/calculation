@@ -1,5 +1,3 @@
-/**! compression tag for ftp-deployment */
-
 /**
  * Update the user-interface.
  * @param {Object} response

@@ -1,5 +1,6 @@
-/**! compression tag for ftp-deployment */
-
+/**
+ * Cookie utility.
+ */
 (() => {
     'use strict';
     window.Cookie = {

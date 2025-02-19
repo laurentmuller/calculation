@@ -1,9 +1,6 @@
 @import 'style.css';
 @import '../vendor/jquery-contextmenu/jquery.contextMenu.css';
 
-/* stylelint-disable-next-line */
-/**! compression tag for ftp-deployment */
-
 @media (width >= 1200px) {
     .col-xl-4 {
         -ms-flex: initial;

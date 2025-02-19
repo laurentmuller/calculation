@@ -1,5 +1,3 @@
-/**! compression tag for ftp-deployment */
-
 /**
  * Finds a checkbox within the given parent.
  *

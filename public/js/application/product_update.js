@@ -1,5 +1,3 @@
-/**! compression tag for ftp-deployment */
-
 /**
  * Gets the product's checkboxes for the selected category.
  * @param {number} [id] - the selected category.

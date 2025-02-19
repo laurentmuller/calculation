@@ -1,5 +1,3 @@
-/**! compression tag for ftp-deployment */
-
 /**
  * Plugin to validate and format number input.
  */

@@ -1,5 +1,3 @@
-/**! compression tag for ftp-deployment */
-
 /**
  * Plugin to edit the value of a table cell.
  */

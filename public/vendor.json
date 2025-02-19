@@ -25,8 +25,8 @@
     },
     "target": "vendor/",
     "prefixes": {
-        "js": "/**! asset-version $version */\n\n",
-        "css": "/**! asset-version $version */\n\n"
+        "js": "/** asset-version $version */\n\n",
+        "css": "/** asset-version $version */\n\n"
     },
     "plugins": [
         {

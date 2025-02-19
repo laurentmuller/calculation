@@ -1,5 +1,3 @@
-/**! compression tag for ftp-deployment */
-
 /**
  * @typedef {Object} Options - the table options
  * @property {number} id - the selected object identifier.

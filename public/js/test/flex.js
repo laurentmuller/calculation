@@ -1,5 +1,3 @@
-/**! compression tag for ftp-deployment */
-
 /**
  * Gets the number format.
  */

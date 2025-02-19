@@ -1,9 +1,6 @@
 @import 'table.css';
 @import 'highlight.css';
 
-/* stylelint-disable-next-line */
-/**! compression tag for ftp-deployment */
-
 .date {
     width: 170px;
 }

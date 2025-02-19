@@ -1,4 +1,4 @@
-/**! compression tag for ftp-deployment */
+
 
 /**
  * -------------- jQuery extensions --------------

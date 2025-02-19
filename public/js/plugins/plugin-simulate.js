@@ -1,5 +1,3 @@
-/**! compression tag for ftp-deployment */
-
 /**
  * Plugin to force user to confirm an operation.
  */

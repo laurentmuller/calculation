@@ -1,5 +1,3 @@
-/**! compression tag for ftp-deployment */
-
 /**
  * ------------------------------------
  * Plugin to handle a sidebar.

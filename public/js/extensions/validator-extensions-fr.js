@@ -1,5 +1,3 @@
-/**! compression tag for ftp-deployment */
-
 /**
  * -------------- Validator messages extension --------------
  */

@@ -4,9 +4,6 @@
 @import 'colums.css';
 @import 'sidebar.css';
 
-/* stylelint-disable-next-line */
-/**! compression tag for ftp-deployment */
-
 html {
     width: 100vw;
     overflow-x: hidden;

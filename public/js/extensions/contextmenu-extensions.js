@@ -1,5 +1,3 @@
-/**! compression tag for ftp-deployment */
-
 /**
  * Class to build context-menu items.
  */

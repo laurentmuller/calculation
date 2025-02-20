@@ -1,7 +1,3 @@
-
-
-/* global EditDialog */
-
 /**
  * Edit item dialog class.
  * @class EditItemDialog
@@ -14,7 +10,6 @@ class EditItemDialog extends EditDialog {
      * @returns {{description: string, unit: string, price: number, quantity: number, total: number}} the item.
      */
     getItem() {
-        'use strict';
         const price = this.$price.floatVal();
         const quantity = this.$quantity.floatVal();
         const total = $.roundValue(price * quantity);
@@ -36,7 +31,6 @@ class EditItemDialog extends EditDialog {
      * @return {this} This instance for chaining.
      */
     showCopy($row) {
-        'use strict';
         // loaded?
         if (!this._isDialogLoaded()) {
             this._loadDialog('showCopy', $row);
@@ -57,13 +51,12 @@ class EditItemDialog extends EditDialog {
     }
 
     /**
-     * Initialize the dialog add.
+     * Initialize the dialog when adding a new item.
      * @param {jQuery} $row - the selected row.
      * @return {this} This instance for chaining.
      * @private
      */
     _initAdd($row) {
-        'use strict';
         // update values
         if ($row) {
             const $input = $row.siblings(':first').findNamedInput('category');
@@ -87,8 +80,6 @@ class EditItemDialog extends EditDialog {
      * @private
      */
     _initEdit($row) {
-        'use strict';
-
         // copy values
         this.copy = false;
         this.$description.val($row.findNamedInput('description').val());
@@ -107,7 +98,6 @@ class EditItemDialog extends EditDialog {
      * @protected
      */
     _init() {
-        'use strict';
         // get elements
         const that = this;
         that.copy = false;
@@ -157,7 +147,6 @@ class EditItemDialog extends EditDialog {
      * @private
      */
     _updateTotal() {
-        'use strict';
         const item = this.getItem();
         this.$total.text($.formatFloat(item.total));
     }
@@ -167,7 +156,6 @@ class EditItemDialog extends EditDialog {
      * @private
      */
     _onDelete() {
-        'use strict';
         this.hide();
         if (this.$editingRow) {
             const $button = this.$editingRow.findExists('.btn-delete-item');
@@ -183,7 +171,6 @@ class EditItemDialog extends EditDialog {
      * @private
      */
     _onDialogShow() {
-        'use strict';
         if (this.$editingRow) {
             this.$searchRow.hide();
             if (this.copy) {
@@ -205,7 +192,6 @@ class EditItemDialog extends EditDialog {
      * @private
      */
     _onDialogVisible() {
-        'use strict';
         if (this.$price.attr('readonly')) {
             this.$cancelButton.trigger('focus');
         } else if (this.copy) {
@@ -228,7 +214,6 @@ class EditItemDialog extends EditDialog {
      * @protected
      */
     _isDialogLoaded() {
-        'use strict';
         return $('#item_modal').length !== 0;
     }
 
@@ -257,7 +242,6 @@ class EditItemDialog extends EditDialog {
      * @private
      */
     _initSearchProduct() {
-        'use strict';
         const $form = $('#edit-form');
         const that = this;
         that.$search.initTypeahead({

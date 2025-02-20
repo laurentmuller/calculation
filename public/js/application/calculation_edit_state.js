@@ -1,5 +1,3 @@
-
-
 /**
  * Ready function
  */

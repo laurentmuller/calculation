@@ -98,7 +98,7 @@ $(function () {
         },
 
         /**
-         * Initialize a select with select2 plugin.
+         * Initialize a select list with select2 plugin.
          *
          * @param {object} [options] - The select2 options.
          */

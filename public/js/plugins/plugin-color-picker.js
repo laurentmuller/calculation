@@ -120,7 +120,7 @@ $(function () {
                     'class': 'color-picker dropdown-menu text-center p-2'
                 }).appendTo(that.$parent);
 
-                // hide element and add parent
+                // hide the element and add the parent
                 that.$element.css('display', 'table-column').after(that.$parent).prependTo(that.$parent);
             }
 

@@ -184,7 +184,7 @@ function onTaskChanged() {
 
     // unit
     const $selection = $task.getSelectedOption();
-    $('#unit').html($selection.data('unit') || '&nbsp;');
+    $('#unit').html(String($selection.data('unit')) || '&nbsp;');
 
     // submit
     if (!empty) {

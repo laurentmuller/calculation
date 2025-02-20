@@ -20,7 +20,7 @@ Object.defineProperty(URLSearchParams.prototype, 'length', {
 Object.defineProperty(URLSearchParams.prototype, 'toQuery', {
     /**
      * Returns the parameters query.
-     * @returns {string} the parameters query.
+     * @returns {string} the query parameters.
      */
     value: function () {
         'use strict';

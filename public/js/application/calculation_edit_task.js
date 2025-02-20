@@ -1,5 +1,3 @@
-
-
 /* globals EditDialog, Toaster */
 
 /**
@@ -16,7 +14,6 @@ class EditTaskDialog extends EditDialog {
      * @return {Array.<{description: string, unit: string, price: number, quantity: number, total: number}>} the items.
      */
     getItems() {
-        'use strict';
         const that = this;
         /** @type {string} */
         const unit = that.$unit.val();
@@ -49,7 +46,6 @@ class EditTaskDialog extends EditDialog {
      * @protected
      */
     _init() {
-        'use strict';
         // get elements
         const that = this;
         that.$form = $('#task_form');
@@ -108,7 +104,6 @@ class EditTaskDialog extends EditDialog {
      * @private
      */
     _abort() {
-        'use strict';
         if (this.jqXHR) {
             this.jqXHR.abort();
             this.jqXHR = null;
@@ -125,7 +120,6 @@ class EditTaskDialog extends EditDialog {
      * @private
      */
     _send(data) {
-        'use strict';
         const that = this;
         const url = that.$form.data('url');
         /**
@@ -166,7 +160,6 @@ class EditTaskDialog extends EditDialog {
      * @private
      */
     _update() {
-        'use strict';
         const that = this;
         // disable
         that.$submit.toggleDisabled(true);
@@ -202,7 +195,6 @@ class EditTaskDialog extends EditDialog {
      * @private
      */
     _getItemValues() {
-        'use strict';
         return this._getCheckedItems().map(function () {
             return $(this).intVal();
         }).get();
@@ -218,7 +210,6 @@ class EditTaskDialog extends EditDialog {
      * @private
      */
     _updateValue(id, value) {
-        'use strict';
         const $item = $('#' + id);
         $item.data('value', value).text($.formatFloat(value));
         return this;
@@ -231,7 +222,6 @@ class EditTaskDialog extends EditDialog {
      * @private
      */
     _resetValues() {
-        'use strict';
         const value = $.formatFloat(0);
         this.$form.find('.form-control-plaintext').text(value);
         return this;
@@ -244,7 +234,6 @@ class EditTaskDialog extends EditDialog {
      * @private
      */
     _showError(message) {
-        'use strict';
         this._resetValues();
         this.$submit.toggleDisabled(true);
         this.$modal.modal('hide');
@@ -260,7 +249,6 @@ class EditTaskDialog extends EditDialog {
      * @private
      */
     _onDialogVisible() {
-        'use strict';
         if (this.$editingRow) {
             if (this.$quantity.isEmptyValue()) {
                 this.$quantity.selectFocus();
@@ -294,7 +282,6 @@ class EditTaskDialog extends EditDialog {
      * @private
      */
     _onTaskChanged() {
-        'use strict';
         // toggle rows visibility
         const id = this.$task.intVal();
         $(`.task-item-row:not([data-id="${id}"])`).addClass('d-none');
@@ -337,7 +324,6 @@ class EditTaskDialog extends EditDialog {
      * @protected
      */
     _isDialogLoaded() {
-        'use strict';
         return $('#task_modal').length !== 0;
     }
 

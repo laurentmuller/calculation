@@ -12,7 +12,7 @@ $(function () {
         /**
          * Finds the simple editor container within the current element.
          *
-         * @return {jQuery} the editor or null if not found.
+         * @return {jQuery} the editor or null if is not found.
          */
         findSimpleEditor: function () {
             const $editor = $(this).parents('div.simple-editor');
@@ -57,7 +57,7 @@ $(function () {
         /**
          * Initialize a simple editor.
          *
-         * @param {Object} options - the initialisation options.
+         * @param {Object} options - the initialization options.
          * @return {jQuery} the input for chaining.
          */
         initSimpleEditor: function (options) {

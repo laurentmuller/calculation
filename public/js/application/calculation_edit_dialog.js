@@ -1,7 +1,3 @@
-
-
-/* global EditDialog */
-
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "EditDialog" }] */
 
 /**
@@ -18,7 +14,6 @@ class EditDialog {
      * @param {Application} application - the parent application.
      */
     constructor(application) {
-        'use strict';
         if (this.constructor === EditDialog) {
             throw new TypeError('Abstract class "EditDialog" cannot be instantiated directly.');
         }
@@ -31,7 +26,6 @@ class EditDialog {
      * @return {this} This instance for chaining.
      */
     showAdd($row) {
-        'use strict';
         // loaded?
         if (!this._isDialogLoaded()) {
             this._loadDialog('showAdd', $row);
@@ -55,7 +49,6 @@ class EditDialog {
      * @return {this} This instance for chaining.
      */
     showEdit($row) {
-        'use strict';
         // loaded?
         if (!this._isDialogLoaded()) {
             this._loadDialog('showEdit', $row);
@@ -78,7 +71,6 @@ class EditDialog {
      * @return {this} This instance for chaining.
      */
     hide() {
-        'use strict';
         this.$modal.modal('hide');
         return this;
     }
@@ -88,7 +80,6 @@ class EditDialog {
      * @returns {{id: number, code: string}}  the group.
      */
     getGroup() {
-        'use strict';
         const $selection = this.$category.getSelectedOption();
         const id = $.parseInt($selection.data('groupId'));
         const code = $selection.data('groupCode');
@@ -104,7 +95,6 @@ class EditDialog {
      * @returns {{id: number, code: string}} the category.
      */
     getCategory() {
-        'use strict';
         const $selection = this.$category.getSelectedOption();
         const id = this.$category.intVal();
         const code = $selection.text();
@@ -120,7 +110,6 @@ class EditDialog {
      * @return {jQuery} the row or null if none.
      */
     getEditingRow() {
-        'use strict';
         return this.$editingRow;
     }
 
@@ -130,7 +119,6 @@ class EditDialog {
      * @protected
      */
     _init() {
-        'use strict';
         // handle dialog events
         this._initDialog(this.$modal);
         return this;
@@ -143,7 +131,6 @@ class EditDialog {
      * @protected
      */
     _initDialog($modal) {
-        'use strict';
         const that = this;
         $modal.on('show.bs.modal', function () {
             that._onDialogShow();
@@ -168,7 +155,6 @@ class EditDialog {
 
     /*eslint no-unused-vars: ["error", { "args": "none" }]*/
     _initAdd($row) {
-        'use strict';
         return this;
     }
 
@@ -181,7 +167,6 @@ class EditDialog {
 
     /*eslint no-unused-vars: ["error", { "args": "none" }]*/
     _initEdit($row) {
-        'use strict';
         return this;
     }
 
@@ -191,7 +176,6 @@ class EditDialog {
      * @protected
      */
     _onDialogShow() {
-        'use strict';
         const title = this._getDialogTitle();
         this.$modal.find('.dialog-title').text(title);
         return this;
@@ -212,7 +196,6 @@ class EditDialog {
      * @protected
      */
     _onDialogVisible() {
-        'use strict';
         if (this.$editingRow) {
             this.$editingRow.addClass('table-primary');
         }
@@ -225,7 +208,6 @@ class EditDialog {
      * @protected
      */
     _onDialogHide() {
-        'use strict';
         $('tr.table-primary').removeClass('table-primary');
         return this;
     }
@@ -236,7 +218,6 @@ class EditDialog {
      * @protected
      */
     _resetValidator() {
-        'use strict';
         this.$form.resetValidator();
         return this;
     }
@@ -248,7 +229,6 @@ class EditDialog {
      * @protected
      */
     _loadDialog(callback, $row) {
-        'use strict';
         const url = this._getDialogUrl();
         if (!url) {
             return;
@@ -268,7 +248,6 @@ class EditDialog {
      * @protected
      */
     _getDialogUrl() {
-        'use strict';
         throw new Error('Method must be implemented by derived class.');
     }
 
@@ -278,7 +257,6 @@ class EditDialog {
      * @protected
      */
     _isDialogLoaded() {
-        'use strict';
         throw new Error('Method must be implemented by derived class.');
     }
 
@@ -288,7 +266,6 @@ class EditDialog {
      * @protected
      */
     _initSearchUnits($input) {
-        'use strict';
         const $editForm = $('#edit-form');
         $input.initTypeahead({
             url: $editForm.data('search-unit'),

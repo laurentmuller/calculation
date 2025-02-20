@@ -10,7 +10,7 @@ function getProducts(id) {
 }
 
 /**
- * Returns a value indicating if all product checkbox is checked.
+ * Returns a value indicating if all product checkboxes are checked.
  *
  * @returns {boolean} - true if checked.
  */

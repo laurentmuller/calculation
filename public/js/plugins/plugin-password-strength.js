@@ -320,7 +320,7 @@ $(function () {
     // Default options
     // -----------------------------
     PasswordStrength.DEFAULTS = {
-        // true to debug result
+        // true to debug the result
         debug: false,
 
         // user field selector

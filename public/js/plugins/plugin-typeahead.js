@@ -131,7 +131,7 @@ $(function () {
             this.ajaxSuccessProxy = (data) => this._ajaxSuccess(data);
             this.ajaxErrorProxy = (jqXHR, textStatus, errorThrown) => this._ajaxError(jqXHR, textStatus, errorThrown);
 
-            // create menu
+            // create the menu
             this.$menu = $(this.options.menu).insertAfter(this.$element);
 
             // add dropdown attribute
@@ -220,8 +220,6 @@ $(function () {
 
             // render categories, separators and items
             const regex = that._getHighlighter();
-
-            /** @type {jQuery.TypeOrArray<jQuery.Node>} */
             const $items = data.map(function (item) {
                 if (item.__type__ === 'category') {
                     return that._renderCategory(regex, item);

@@ -208,7 +208,7 @@ function validateMaximumMargin($element) {
     if (maximum <= minimum) {
         return setMarginError($element, 'maximum_greater_minimum');
     }
-    // get next row
+    // get the next row
     const $rows = getSortedMargins($element);
     const index = $rows.index($row);
     if (index === $rows.length - 1) {

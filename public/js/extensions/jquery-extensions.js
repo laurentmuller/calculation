@@ -450,7 +450,7 @@ $(function () {
         },
 
         /**
-         * Gets select option in the list.
+         * Gets the selected option in the list.
          *
          * @return {?jQuery<HTMLOptionElement>} the selected element, if any; null otherwise.
          */

@@ -83,7 +83,7 @@ $(function () {
          * @private
          */
         _headerMouseDown(e) {
-            // left button?
+            // the left button?
             if (e.button !== 0) {
                 return;
             }

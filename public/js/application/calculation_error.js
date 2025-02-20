@@ -1,11 +1,9 @@
-
-
-/**
- * -------------- jQuery functions extensions --------------
- */
-$(function () {
+(function ($) {
     'use strict';
 
+    /**
+     * -------------- jQuery functions extensions --------------
+     */
     $.fn.extend({
         /**
          * Returns this trimmed text or value content.
@@ -73,24 +71,29 @@ $(function () {
 
             // show or hide
             if (emptyFound || duplicateFound) {
-                $("#error-empty").toggleClass('d-none', !emptyFound);
-                $("#error-duplicate").toggleClass('d-none', !duplicateFound);
-                $("#error-all").removeClass('d-none').fadeIn();
+                $('#error-empty').toggleClass('d-none', !emptyFound);
+                $('#error-duplicate').toggleClass('d-none', !duplicateFound);
+                $('#error-all').removeClass('d-none').fadeIn();
             } else {
-                $("#error-all").fadeOut();
+                $('#error-all').fadeOut();
             }
 
             return emptyFound || duplicateFound;
         }
     });
 
-    // tooltip
-    $('body').tooltip({
-        customClass: 'tooltip-danger',
-        selector: '.has-tooltip',
-        html: true
-    });
+    /**
+     * Ready function
+     */
+    $(function () {
+        // tooltip
+        $('body').tooltip({
+            customClass: 'tooltip-danger',
+            selector: '.has-tooltip',
+            html: true
+        });
 
-    // errors
-    $("#data-table-edit").updateErrors();
-});
+        // errors
+        $('#data-table-edit').updateErrors();
+    });
+}(jQuery));

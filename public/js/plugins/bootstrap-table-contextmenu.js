@@ -90,7 +90,7 @@ $(function () {
         }
     };
 
-    // Show context menu
+    // Show the context menu
     BootstrapTable.prototype.showContextMenu = function (params) {
         if (!params || !params.event) {
             return false;

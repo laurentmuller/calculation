@@ -381,7 +381,7 @@ $(function () {
         error: $form.data('supplier-error')
     });
 
-    // start drag & drop
+    // start drag and drop
     startDragItems();
 
     // update UI

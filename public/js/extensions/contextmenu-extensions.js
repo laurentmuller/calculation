@@ -103,7 +103,6 @@ const MenuBuilder = class { /* exported MenuBuilder */
      * @return {boolean} true if empty.
      */
     isEmpty() {
-        'use strict';
         return $.isEmptyObject(this.items);
     }
 

@@ -1,19 +1,18 @@
 /* globals Toaster */
 
-/**
- * Notify a warning message.
- *
- * @param {string} message
- */
-function notifyWarning(message) {
-    'use strict';
-    const type = Toaster.NotificationTypes.WARNING;
-    const title = $('#main .card-title').text();
-    Toaster.notify(type, message, title);
-}
-
 (function ($) {
     'use strict';
+
+    /**
+     * Notify a warning message.
+     *
+     * @param {string} message
+     */
+    function notifyWarning(message) {
+        const type = Toaster.NotificationTypes.WARNING;
+        const title = $('#main .card-title').text();
+        Toaster.notify(type, message, title);
+    }
 
     // jQuery extensions
     $.fn.extend({

@@ -18,7 +18,7 @@ $(function () {
                 if ($button.length) {
                     const $icon = $button.find('i');
                     $button.on('mousedown', function (e) {
-                        if (e.button === 0 && $element.prop('type') === 'password' && $element.val().length > 0) {
+                        if (e.button === 0 && $element.prop('type') === 'password' && String($element.val()).length > 0) {
                             $element.prop('type', 'text');
                             $icon.toggleClass('fa-eye-slash fa-eye');
                         }
@@ -29,7 +29,7 @@ $(function () {
                         }
                     });
                     $element.on('input', function () {
-                        $button.toggleClass('disabled', $element.val().length === 0);
+                        $button.toggleClass('disabled', String($element.val()).length === 0);
                     });
                 }
             });

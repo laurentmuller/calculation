@@ -339,7 +339,7 @@ $(function () {
                     $item.addClass(node.class);
                 }
 
-                // add custom id to node if present
+                // add the custom identifier to the node, if present
                 if (node.id) {
                     $item.attr('id', node.id);
                 }

@@ -3,9 +3,6 @@
  * @version v1.1.4
  * @link https://github.com/prograhammer/bootstrap-table-contextmenu
  */
-
-/* globals bootstrapTable */
-
 $(function () {
     'use strict';
 
@@ -44,31 +41,35 @@ $(function () {
         'contextmenu-row.bs.table': 'onContextMenuRow'
     });
 
+    /**
+     * @property prevPage
+     * @property nextPage
+     */
     let BootstrapTable = $.fn.bootstrapTable.Constructor,
         _initBody = BootstrapTable.prototype.initBody;
 
     BootstrapTable.prototype.initBody = function () {
-
         // Init Body
         _initBody.apply(this, Array.prototype.slice.apply(arguments));
-
         // Init Context menu
-        if (this.options.contextMenu || this.options.contextMenuButton || this.options.beforeContextMenuRow) {
+        const that = this;
+        if (that.options.contextMenu || that.options.contextMenuButton || that.options.beforeContextMenuRow) {
             this.initContextMenu();
         }
     };
 
     // Init context menu
     BootstrapTable.prototype.initContextMenu = function () {
-        const that = this;
         // Context menu
-        if (that.options.contextMenuTrigger === 'left'
-            || that.options.contextMenuTrigger === 'right'
-            || that.options.contextMenuTrigger === 'both') {
-            that.$body.find('> tr[data-index]').off('contextmenu.contextmenu').on('contextmenu.contextmenu', function (e) {
-                let rowData = that.data[$(this).data('index')],
-                    beforeShow = that.options.beforeContextMenuRow.apply(this, [e, rowData, null]);
-
+        const that = this;
+        const contextMenuTrigger = that.options.contextMenuTrigger;
+        // Context menu on mouse-click
+        if (contextMenuTrigger === 'left' || contextMenuTrigger === 'right' || contextMenuTrigger === 'both') {
+            that.$body.find('> tr[data-index]')
+                .off('contextmenu.contextmenu')
+                .on('contextmenu.contextmenu', function (e) {
+                const rowData = that.data[$(this).data('index')];
+                const beforeShow = that.options.beforeContextMenuRow.apply(this, [e, rowData, null]);
                 if (beforeShow !== false) {
                     that.showContextMenu({event: e});
                 }
@@ -78,10 +79,12 @@ $(function () {
 
         // Context menu on Button-click
         if (typeof that.options.contextMenuButton === 'string') {
-            that.$body.find('> tr[data-index]').find(that.options.contextMenuButton).off('click.contextmenu').on('click.contextmenu', function (e) {
-                let rowData = that.data[$(this).closest('tr[data-index]').data('index')],
-                    beforeShow = that.options.beforeContextMenuRow.apply(this, [e, rowData, this]);
-
+            that.$body.find('> tr[data-index]')
+                .find(that.options.contextMenuButton)
+                .off('click.contextmenu')
+                .on('click.contextmenu', function (e) {
+                const rowData = that.data[$(this).closest('tr[data-index]').data('index')];
+                const beforeShow = that.options.beforeContextMenuRow.apply(this, [e, rowData, this]);
                 if (beforeShow !== false) {
                     that.showContextMenu({event: e, buttonElement: this});
                 }
@@ -92,22 +95,22 @@ $(function () {
 
     // Show the context menu
     BootstrapTable.prototype.showContextMenu = function (params) {
+        const that = this
         if (!params || !params.event) {
             return false;
         }
-        if (params && !params.contextMenu && typeof this.options.contextMenu !== 'string') {
+        if (params && !params.contextMenu && typeof that.options.contextMenu !== 'string') {
             return false;
         }
 
-        let that = this,
-            $menu, screenPosX, screenPosY,
-            $tr = $(params.event.target).closest('tr[data-index]'),
-            item = that.data[$tr.data('index')];
+        let $menu, screenPosX, screenPosY;
+        const $tr = $(params.event.target).closest('tr[data-index]');
+        const item = that.data[$tr.data('index')];
 
-        if (params && !params.contextMenu && typeof this.options.contextMenu === 'string') {
+        if (params && !params.contextMenu && typeof that.options.contextMenu === 'string') {
             screenPosX = params.event.clientX;
             screenPosY = params.event.clientY;
-            $menu = $(this.options.contextMenu);
+            $menu = $(that.options.contextMenu);
         }
         if (params && params.contextMenu) {
             screenPosX = params.event.clientX;
@@ -120,21 +123,19 @@ $(function () {
         }
 
         function getMenuPosition($menu, screenPos, direction, scrollDir) {
-            let win = $(window)[direction](),
-                scroll = $(window)[scrollDir](),
-                menu = $menu[direction](),
-                position = screenPos + scroll;
-
+            const win = $(window)[direction]();
+            const scroll = $(window)[scrollDir]();
+            const menu = $menu[direction]();
+            let position = screenPos + scroll;
             if (screenPos + menu > win && menu < screenPos) {
                 position -= menu;
             }
-
             return position;
         }
 
         // Bind click on menu item
         $menu.find('li').off('click.contextmenu').on('click.contextmenu', function () {
-            let rowData = that.data[$menu.data('index')];
+            const rowData = that.data[$menu.data('index')];
             that.trigger('contextmenu-item', rowData, $(this));
         });
 
@@ -169,67 +170,71 @@ $(function () {
     };
 
     BootstrapTable.prototype.getSelectedRow = function () {
-        if (this.data.length) {
-            const $row = this.$body.find(`tr.${this.options.rowSelector}`);
+        const that = this;
+        if (that.data.length) {
+            const $row = that.$body.find(`tr.${that.options.rowSelector}`);
             return $row.length ? $row : null;
         }
         return null;
     };
 
     BootstrapTable.prototype.selectFirstRow = function (force = false) {
-        if (this.data.length) {
-            const item = this.data[0];
-            const $row = this.$body.find('tr[data-index]:first');
-            if (force || $row !== this.getSelectedRow()) {
-                this.trigger('click-row', item, $row);
+        const that = this;
+        if (that.data.length) {
+            const item = that.data[0];
+            const $row = that.$body.find('tr[data-index]:first');
+            if (force || $row !== that.getSelectedRow()) {
+                that.trigger('click-row', item, $row);
             }
         }
     };
 
     BootstrapTable.prototype.selectLastRow = function (force = false) {
-        if (this.data.length) {
-            const item = this.data[this.data.length - 1];
-            const $row = this.$body.find('tr[data-index]:last');
+        const that = this;
+        if (that.data.length) {
+            const item = that.data[that.data.length - 1];
+            const $row = that.$body.find('tr[data-index]:last');
             if (force || $row !== this.getSelectedRow()) {
-                this.trigger('click-row', item, $row);
+                that.trigger('click-row', item, $row);
             }
         }
     };
 
     BootstrapTable.prototype.selectPreviousRow = function () {
-        if (this.data.length) {
-            const $row = this.getSelectedRow();
+        const that = this;
+        if (that.data.length) {
+            const $row = that.getSelectedRow();
             if ($row) {
                 const index = $row.index();
                 if (index > 0) {
-                    const item = this.data[index - 1];
+                    const item = that.data[index - 1];
                     const $prev = $row.prev('tr[data-index]');
-                    this.trigger('click-row', item, $prev);
+                    that.trigger('click-row', item, $prev);
                 } else {
-                    this.prevPage();
+                    that.prevPage();
                 }
             } else {
-                this.selectFirstRow();
+                that.selectFirstRow();
             }
         }
     };
 
     BootstrapTable.prototype.selectNextRow = function () {
-        if (this.data.length) {
+        const that = this;
+        if (that.data.length) {
             const $row = this.getSelectedRow();
             if ($row) {
                 const index = $row.index();
-                if (index < this.data.length) {
-                    const item = this.data[index + 1];
+                if (index < that.data.length) {
+                    const item = that.data[index + 1];
                     const $next = $row.next('tr[data-index]');
-                    this.trigger('click-row', item, $next);
+                    that.trigger('click-row', item, $next);
                 } else {
-                    this.nextPage();
+                    that.nextPage();
                 }
             } else {
-                this.selectFirstRow();
+                that.selectFirstRow();
             }
         }
     };
-
 });

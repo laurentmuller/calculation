@@ -1,40 +1,41 @@
 /* globals Toaster */
 
-/**
- * -------------- Typeahead Extensions --------------
- */
-$(function () {
+(function ($) {
     'use strict';
 
     /**
-     * -------------- Functions extensions --------------
+     * -------------- Typeahead Extensions --------------
      */
-    $.fn.extend({
-
+    $(function () {
         /**
-         * Initialize a type ahead search.
-         *
-         * @param {Object} [options] - the options to override.
-         * @return {Typeahead} The type ahead instance.
+         * -------------- Functions extensions --------------
          */
-        initTypeahead: function (options) {
-            const $element = $(this);
-            const defaults = {
-                valueField: '',
-                ajax: {
-                    url: options.url
-                },
-                onSelect: function () {
-                    $element.select();
-                },
-                onError: function () {
-                    const message = options.error;
-                    const title = $('#edit-form').data('title');
-                    Toaster.danger(message, title);
-                }
-            };
-            const settings = $.extend(true, defaults, options);
-            return $element.typeahead(settings);
-        }
+        $.fn.extend({
+            /**
+             * Initialize a type ahead search.
+             *
+             * @param {Object} [options] - the options to override.
+             * @return {Typeahead} The type ahead instance.
+             */
+            initTypeahead: function (options) {
+                const $element = $(this);
+                const defaults = {
+                    valueField: '',
+                    ajax: {
+                        url: options.url
+                    },
+                    onSelect: function () {
+                        $element.select();
+                    },
+                    onError: function () {
+                        const message = options.error;
+                        const title = $('#edit-form').data('title');
+                        Toaster.danger(message, title);
+                    }
+                };
+                const settings = $.extend(true, defaults, options);
+                return $element.typeahead(settings);
+            }
+        });
     });
-});
+}(jQuery));

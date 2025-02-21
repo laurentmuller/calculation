@@ -95,7 +95,7 @@ $(function () {
             return;
         }
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
+            if (window.scrollY > 150) {
                 $button.fadeIn();
             } else {
                 $button.fadeOut();
@@ -105,7 +105,7 @@ $(function () {
             e.preventDefault();
             window.scrollTo({
                 top: 0,
-                behavior: 'smooth'
+                behavior: 'auto'
             });
         });
     }

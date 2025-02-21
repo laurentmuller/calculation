@@ -3,695 +3,697 @@
 /**
  * jQuery Validation Plugin extensions.
  */
-$(function () {
+(function ($) {
     'use strict';
 
-    /**
-     * -------------- jQuery Extensions --------------
-     */
-    $.fn.extend({
-
+    $(function () {
         /**
-         * Gets the validator.
-         *
-         * @return {jQuery|null}
+         * -------------- jQuery Extensions --------------
          */
-        getValidator() {
-            return $(this).data('validator');
-        },
+        $.fn.extend({
 
-        /**
-         * Validate elements.
-         *
-         * @return {jQuery}
-         */
-        validateElement() {
-            return this.each(function () {
-                const $that = $(this);
-                const $form = $that.parents('form');
-                if ($form.length) {
-                    const validator = $form.getValidator();
-                    if (validator) {
-                        validator.element($that);
-                    }
-                }
-            });
-        },
+            /**
+             * Gets the validator.
+             *
+             * @return {jQuery|null}
+             */
+            getValidator() {
+                return $(this).data('validator');
+            },
 
-        /**
-         * Validate the form.
-         *
-         * @return {jQuery}
-         */
-        validateForm() {
-            return this.each(() => {
-                const validator = $(this).getValidator();
-                if (validator) {
-                    validator.form();
-                }
-            });
-        },
-
-        /**
-         * Initialize the captcha.
-         *
-         * @return {jQuery} the caller for chaining.
-         */
-        initCaptcha() {
-            return this.each(function () {
-                const $that = $(this);
-                const url = $that.data('refresh');
-                const $parent = $that.parents('.form-group');
-                const $image = $parent.find('.captcha-image');
-                const $refresh = $parent.find('.captcha-refresh');
-                $refresh.on('click', function () {
-                    $.getJSON(url, function (response) {
-                        if (response.result) {
-                            $image.attr('src', response.data);
-                            $that.val('').trigger('focus');
+            /**
+             * Validate elements.
+             *
+             * @return {jQuery}
+             */
+            validateElement() {
+                return this.each(function () {
+                    const $that = $(this);
+                    const $form = $that.parents('form');
+                    if ($form.length) {
+                        const validator = $form.getValidator();
+                        if (validator) {
+                            validator.element($that);
                         }
+                    }
+                });
+            },
+
+            /**
+             * Validate the form.
+             *
+             * @return {jQuery}
+             */
+            validateForm() {
+                return this.each(() => {
+                    const validator = $(this).getValidator();
+                    if (validator) {
+                        validator.form();
+                    }
+                });
+            },
+
+            /**
+             * Initialize the captcha.
+             *
+             * @return {jQuery} the caller for chaining.
+             */
+            initCaptcha() {
+                return this.each(function () {
+                    const $that = $(this);
+                    const url = $that.data('refresh');
+                    const $parent = $that.parents('.form-group');
+                    const $image = $parent.find('.captcha-image');
+                    const $refresh = $parent.find('.captcha-refresh');
+                    $refresh.on('click', function () {
+                        $.getJSON(url, function (response) {
+                            if (response.result) {
+                                $image.attr('src', response.data);
+                                $that.val('').trigger('focus');
+                            }
+                        });
                     });
                 });
-            });
-        },
+            },
 
-        /**
-         * Initialize simple file input.
-         *
-         * @return {jQuery} the caller for chaining.
-         */
-        initSimpleFileInput() {
-            return this.each(function () {
-                const $this = $(this);
-                const $delete = $this.parent().find('.btn-file-delete');
-                if ($delete.length) {
-                    $delete.on('click', function () {
-                        $this.val('').trigger('change').trigger('focus');
-                    });
-                    $this.on('change', function () {
-                        const empty = String($this.val()).length === 0;
-                        $delete.toggleClass('d-none', empty);
-                        $this.toggleClass('rounded-end', empty);
-                        $this.valid();
-                    });
+            /**
+             * Initialize simple file input.
+             *
+             * @return {jQuery} the caller for chaining.
+             */
+            initSimpleFileInput() {
+                return this.each(function () {
+                    const $this = $(this);
+                    const $delete = $this.parent().find('.btn-file-delete');
+                    if ($delete.length) {
+                        $delete.on('click', function () {
+                            $this.val('').trigger('change').trigger('focus');
+                        });
+                        $this.on('change', function () {
+                            const empty = String($this.val()).length === 0;
+                            $delete.toggleClass('d-none', empty);
+                            $this.toggleClass('rounded-end', empty);
+                            $this.valid();
+                        });
+                    }
+                });
+            },
+
+            /**
+             * Gets password strength score or -1 if not found.
+             *
+             * @return {number}
+             */
+            findPasswordScore: function () {
+                const $that = $(this);
+                const data = $that.data('password-strength');
+                if (data && data.verdict && !$.isUndefined(data.verdict.score)) {
+                    return data.verdict.score;
                 }
-            });
-        },
+                return -1;
+            },
 
-        /**
-         * Gets password strength score or -1 if not found.
-         *
-         * @return {number}
-         */
-        findPasswordScore: function () {
-            const $that = $(this);
-            const data = $that.data('password-strength');
-            if (data && data.verdict && !$.isUndefined(data.verdict.score)) {
-                return data.verdict.score;
-            }
-            return -1;
-        },
+            /**
+             * Finds the reCaptcha frame within the current element.
+             *
+             * @return {jQuery} the frame.
+             */
+            findReCaptcha: function () {
+                const $element = $(this);
+                return $element.findExists('iframe:first') || $element.parent().findExists('iframe:first');
+            },
 
-        /**
-         * Finds the reCaptcha frame within the current element.
-         *
-         * @return {jQuery} the frame.
-         */
-        findReCaptcha: function () {
-            const $element = $(this);
-            return $element.findExists('iframe:first') || $element.parent().findExists('iframe:first');
-        },
+            /**
+             * Finds the color-picker drop-down
+             *
+             * @return {jQuery} the color-picker drop-down, if found; null otherwise.
+             */
+            findColorPicker() {
+                const $element = $(this);
+                const $parent = $element.parents('.form-group');
+                return $parent.findExists('button.color-picker');
+            },
 
-        /**
-         * Finds the color-picker drop-down
-         *
-         * @return {jQuery} the color-picker drop-down, if found; null otherwise.
-         */
-        findColorPicker() {
-            const $element = $(this);
-            const $parent = $element.parents('.form-group');
-            return $parent.findExists('button.color-picker');
-        },
+            /**
+             * Remove validation class and error
+             *
+             * @return {jQuery} the caller for chaining.
+             */
+            removeValidation: function () {
+                return this.each(function () {
+                    const $this = $(this);
+                    $this.removeClass('is-invalid');
+                    $this.parents('.form-group').find('.is-invalid.invalid-feedback').remove();
+                });
+            },
 
-        /**
-         * Remove validation class and error
-         *
-         * @return {jQuery} the caller for chaining.
-         */
-        removeValidation: function () {
-            return this.each(function () {
-                const $this = $(this);
-                $this.removeClass('is-invalid');
-                $this.parents('.form-group').find('.is-invalid.invalid-feedback').remove();
-            });
-        },
+            /**
+             * Initialize default validator options.
+             *
+             * @param {Object} [options] - the options
+             * @param {boolean} [options.recaptcha]
+             * @param {boolean} [options.fileInput]
+             * @param {boolean} [options.colorPicker]
+             * @param {boolean} [options.simpleEditor]
+             * @param {function} [options.submitHandler]
+             * @param {Object} [options.spinner]
+             * @param {Object} [options.rules]
+             * @param {function} [options.highlight]
+             * @param {function} [options.unhighlight]
+             * @param {function} [options.invalidHandler]
+             * @returns the validator.
+             */
+            initValidator: function (options) {
+                // get options
+                options = options || {};
+                const recaptcha = options.recaptcha;
+                const fileInput = options.fileInput;
+                const colorPicker = options.colorPicker;
+                const simpleEditor = options.simpleEditor;
 
-        /**
-         * Initialize default validator options.
-         *
-         * @param {Object} [options] - the options
-         * @param {boolean} [options.recaptcha]
-         * @param {boolean} [options.fileInput]
-         * @param {boolean} [options.colorPicker]
-         * @param {boolean} [options.simpleEditor]
-         * @param {function} [options.submitHandler]
-         * @param {Object} [options.spinner]
-         * @param {Object} [options.rules]
-         * @param {function} [options.highlight]
-         * @param {function} [options.unhighlight]
-         * @param {function} [options.invalidHandler]
-         * @returns the validator.
-         */
-        initValidator: function (options) {
-            // get options
-            options = options || {};
-            const recaptcha = options.recaptcha;
-            const fileInput = options.fileInput;
-            const colorPicker = options.colorPicker;
-            const simpleEditor = options.simpleEditor;
+                // override elementValue function
+                if (simpleEditor) {
+                    $.validator.prototype.elementValue = (function (parent) {
+                        return function (element) {
+                            if ($(element).findSimpleEditor()) {
+                                return $(element).getSimpleEditorContent();
+                            }
+                            return parent.apply(this, arguments);
+                        };
+                    }($.validator.prototype.elementValue));
+                }
 
-            // override elementValue function
-            if (simpleEditor) {
-                $.validator.prototype.elementValue = (function (parent) {
-                    return function (element) {
-                        if ($(element).findSimpleEditor()) {
-                            return $(element).getSimpleEditorContent();
+                // override focusInvalid function
+                $.validator.prototype.focusInvalid = (function (parent) {
+                    return function () {
+                        if (this.settings.focusInvalid) {
+                            // get invalid elements
+                            const $elements = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
+
+                            // simple editor
+                            if (simpleEditor) {
+                                if ($elements.focusSimpleEditor()) {
+                                    return;
+                                }
+                            }
+
+                            // reCaptcha
+                            if (recaptcha) {
+                                const $recaptcha = $elements.findReCaptcha();
+                                if ($recaptcha) {
+                                    $recaptcha.trigger('focus');
+                                    $elements.trigger('focusin');
+                                    return;
+                                }
+                            }
+
+                            // color-picker
+                            if (colorPicker) {
+                                const $colorPicker = $elements.findColorPicker();
+                                if ($colorPicker) {
+                                    $colorPicker.trigger('focus');
+                                    return;
+                                }
+                            }
+
+                            // select
+                            try {
+                                $elements.selectFocus();
+                            } catch (e) {
+                                // ignore
+                            }
+
+                            // call the original function
+                            parent.apply(this, arguments);
                         }
-                        return parent.apply(this, arguments);
                     };
-                }($.validator.prototype.elementValue));
-            }
+                }($.validator.prototype.focusInvalid));
 
-            // override focusInvalid function
-            $.validator.prototype.focusInvalid = (function (parent) {
-                return function () {
-                    if (this.settings.focusInvalid) {
-                        // get invalid elements
-                        const $elements = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
+                /**
+                 * Finds the container of the given element.
+                 *
+                 * @param {jQuery} $element - the element to update.
+                 */
+                $.validator.prototype.findElement = function ($element) {
+                    let $toUpdate = false;
+                    if (simpleEditor && !$toUpdate) {
+                        $toUpdate = $element.findSimpleEditor();
+                    }
+                    if (recaptcha && !$toUpdate) {
+                        $toUpdate = $element.findReCaptcha();
+                    }
+                    if (fileInput && !$toUpdate) {
+                        $toUpdate = $element.findFileInput();
+                    }
+                    if (colorPicker && !$toUpdate) {
+                        $toUpdate = $element.findColorPicker();
+                    }
+                    return $toUpdate;
+                };
 
-                        // simple editor
-                        if (simpleEditor) {
-                            if ($elements.focusSimpleEditor()) {
-                                return;
+                /**
+                 * Find elements with the same name attribute.
+                 *
+                 * @param {jQuery<Element>} $element the element to search same name for.
+                 * @return {jQuery[]|jQuery<Element>} the elements, if found; the argument element otherwise.
+                 */
+                $.validator.prototype.findNamedElements = function ($element) {
+                    const name = $element.attr('name') || '';
+                    if (name.endsWith('[]')) {
+                        const $elements = $element.closest('form').find(`[name="${name}"]`);
+                        if ($elements.length) {
+                            return $elements;
+                        }
+                    }
+                    return $element;
+                };
+
+                // default options
+                let defaults = {
+                    focus: true,
+                    focusInvalid: true,
+                    showModification: true,
+                    errorElement: 'small',
+                    errorClass: 'is-invalid', // d-inline-block or d-block
+                    ignore: ':hidden:not(".must-validate"), .skip-validation',
+
+                    errorPlacement: function (error, element) {
+                        const $parent = $(element).closest('.form-group, .mb-3');
+                        $parent.find('invalid-feedback').remove();
+                        error.addClass('invalid-feedback').appendTo($parent);
+                    },
+
+                    highlight: function (element, errorClass) {
+                        const $element = $(element);
+                        this.findNamedElements($element).addClass(errorClass);
+                        const $toUpdate = this.findElement($element);
+                        if ($toUpdate) {
+                            $toUpdate.addClass('border-danger');
+                            if ($toUpdate.hasClass('field-valid')) {
+                                $toUpdate.removeClass('field-valid').addClass('field-invalid');
                             }
                         }
+                    },
 
-                        // reCaptcha
-                        if (recaptcha) {
-                            const $recaptcha = $elements.findReCaptcha();
-                            if ($recaptcha) {
-                                $recaptcha.trigger('focus');
-                                $elements.trigger('focusin');
-                                return;
+                    unhighlight: function (element, errorClass) {
+                        const $element = $(element);
+                        this.findNamedElements($element).removeClass(errorClass);
+                        const $toUpdate = this.findElement($element);
+                        if ($toUpdate) {
+                            $toUpdate.removeClass('border-danger');
+                            if ($toUpdate.hasClass('field-invalid')) {
+                                $toUpdate.removeClass('field-invalid').addClass('field-valid');
                             }
                         }
+                    },
 
-                        // color-picker
-                        if (colorPicker) {
-                            const $colorPicker = $elements.findColorPicker();
-                            if ($colorPicker) {
-                                $colorPicker.trigger('focus');
-                                return;
-                            }
+                    invalidHandler: function (e, validator) {
+                        // expand the collapsed parent (if any)
+                        const $element = $(validator.findLastActive() || (validator.errorList.length && validator.errorList[0].element));
+                        const $collapse = $element.parents('.collapse:not(.show)');
+                        if ($collapse.length) {
+                            $collapse.collapse('show');
                         }
-
-                        // select
-                        try {
-                            $elements.selectFocus();
-                        } catch (e) {
-                            // ignore
-                        }
-
-                        // call the original function
-                        parent.apply(this, arguments);
                     }
                 };
-            }($.validator.prototype.focusInvalid));
+
+                if (!options.submitHandler) {
+                    defaults.submitHandler = function (form) {
+                        $(form).showSubmit(options.spinner || {});
+                        form.submit();
+                    };
+                }
+
+                // merge
+                const settings = $.extend(true, defaults, options);
+
+                // validate
+                const $that = $(this);
+                const validator = $that.validate(settings);
+
+                // focus
+                if (settings.focus) {
+                    $that.initFocus();
+                }
+
+                // display the message on modification
+                if (settings.showModification) {
+                    const $message = $('#footer-message');
+                    if ($message.length) {
+                        const data = $that.serialize();
+                        $that.find(':input').on('change input', function () {
+                            if ($that.serialize() === data) {
+                                $message.hide(300);
+                            } else {
+                                $message.show(300);
+                            }
+                        });
+                    }
+                }
+
+                return validator;
+            },
 
             /**
-             * Finds the container of the given element.
-             *
-             * @param {jQuery} $element - the element to update.
+             * Sets focus to the first invalid field, if any; to the first editable
+             * field otherwise.
              */
-            $.validator.prototype.findElement = function ($element) {
-                let $toUpdate = false;
-                if (simpleEditor && !$toUpdate) {
-                    $toUpdate = $element.findSimpleEditor();
-                }
-                if (recaptcha && !$toUpdate) {
-                    $toUpdate = $element.findReCaptcha();
-                }
-                if (fileInput && !$toUpdate) {
-                    $toUpdate = $element.findFileInput();
-                }
-                if (colorPicker && !$toUpdate) {
-                    $toUpdate = $element.findColorPicker();
-                }
-                return $toUpdate;
-            };
+            initFocus: function () {
+                let found = false;
+                const $that = $(this);
+                const toFind = 'input,select,textarea';
+                const selector = ':visible:enabled:not([readonly]):first';
+                // :hidden:not(.must-validate)
 
-            /**
-             * Find elements with the same name attribute.
-             *
-             * @param {jQuery<Element>} $element the element to search same name for.
-             * @return {jQuery[]|jQuery<Element>} the elements, if found; the argument element otherwise.
-             */
-            $.validator.prototype.findNamedElements = function ($element) {
-                const name = $element.attr('name') || '';
-                if (name.endsWith('[]')) {
-                    const $elements = $element.closest('form').find(`[name="${name}"]`);
-                    if ($elements.length) {
-                        return $elements;
-                    }
-                }
-                return $element;
-            };
-
-            // default options
-            let defaults = {
-                focus: true,
-                focusInvalid: true,
-                showModification: true,
-                errorElement: 'small',
-                errorClass: 'is-invalid', // d-inline-block or d-block
-                ignore: ':hidden:not(".must-validate"), .skip-validation',
-
-                errorPlacement: function (error, element) {
-                    const $parent = $(element).closest('.form-group, .mb-3');
-                    $parent.find('invalid-feedback').remove();
-                    error.addClass('invalid-feedback').appendTo($parent);
-                },
-
-                highlight: function (element, errorClass) {
-                    const $element = $(element);
-                    this.findNamedElements($element).addClass(errorClass);
-                    const $toUpdate = this.findElement($element);
-                    if ($toUpdate) {
-                        $toUpdate.addClass('border-danger');
-                        if ($toUpdate.hasClass('field-valid')) {
-                            $toUpdate.removeClass('field-valid').addClass('field-invalid');
+                // find the first invalid field
+                $that.find('.invalid-feedback').each(function () {
+                    const $group = $(this).closest('.form-group');
+                    if ($group.length) {
+                        const $input = $group.find(toFind).filter(selector);
+                        if ($input.length) {
+                            $input.selectFocus();
+                            found = true;
                         }
                     }
-                },
+                    return !found;
+                });
 
-                unhighlight: function (element, errorClass) {
-                    const $element = $(element);
-                    this.findNamedElements($element).removeClass(errorClass);
-                    const $toUpdate = this.findElement($element);
-                    if ($toUpdate) {
-                        $toUpdate.removeClass('border-danger');
-                        if ($toUpdate.hasClass('field-invalid')) {
-                            $toUpdate.removeClass('field-invalid').addClass('field-valid');
-                        }
+                // set focus to first editable field
+                if (!found) {
+                    /** @type {jQuery<HTMLInputElement>} */
+                    let $input = $that.find(toFind).filter(selector);
+                    if ($input.is(':radio') && !$input.isChecked()) {
+                        $input = $input.parents('.form-group').find(':radio:checked');
                     }
-                },
-
-                invalidHandler: function (e, validator) {
-                    // expand the collapsed parent (if any)
-                    const $element = $(validator.findLastActive() || (validator.errorList.length && validator.errorList[0].element));
-                    const $collapse = $element.parents('.collapse:not(.show)');
-                    if ($collapse.length) {
-                        $collapse.collapse('show');
-                    }
-                }
-            };
-
-            if (!options.submitHandler) {
-                defaults.submitHandler = function (form) {
-                    $(form).showSubmit(options.spinner || {});
-                    form.submit();
-                };
-            }
-
-            // merge
-            const settings = $.extend(true, defaults, options);
-
-            // validate
-            const $that = $(this);
-            const validator = $that.validate(settings);
-
-            // focus
-            if (settings.focus) {
-                $that.initFocus();
-            }
-
-            // display the message on modification
-            if (settings.showModification) {
-                const $message = $('#footer-message');
-                if ($message.length) {
-                    const data = $that.serialize();
-                    $that.find(':input').on('change input', function () {
-                        if ($that.serialize() === data) {
-                            $message.hide(300);
-                        } else {
-                            $message.show(300);
-                        }
-                    });
-                }
-            }
-
-            return validator;
-        },
-
-        /**
-         * Sets focus to the first invalid field, if any; to the first editable
-         * field otherwise.
-         */
-        initFocus: function () {
-            let found = false;
-            const $that = $(this);
-            const toFind = 'input,select,textarea';
-            const selector = ':visible:enabled:not([readonly]):first';
-            // :hidden:not(.must-validate)
-
-            // find the first invalid field
-            $that.find('.invalid-feedback').each(function () {
-                const $group = $(this).closest('.form-group');
-                if ($group.length) {
-                    const $input = $group.find(toFind).filter(selector);
                     if ($input.length) {
                         $input.selectFocus();
-                        found = true;
                     }
                 }
-                return !found;
-            });
+                return this;
+            },
 
-            // set focus to first editable field
-            if (!found) {
-                /** @type {jQuery<HTMLInputElement>} */
-                let $input = $that.find(toFind).filter(selector);
-                if ($input.is(':radio') && !$input.isChecked()) {
-                    $input = $input.parents('.form-group').find(':radio:checked');
-                }
-                if ($input.length) {
-                    $input.selectFocus();
-                }
-            }
-            return this;
-        },
-
-        /**
-         * Initialize an input type color within the color-picker plugin.
-         *
-         * @param {Object} [options] - the options
-         */
-        initColorPicker: function (options) {
-            return this.each(function () {
-                const $that = $(this);
-                $that.colorpicker(options);
-                const $colorPicker = $that.findColorPicker();
-                if ($colorPicker) {
-                    // update class
-                    $colorPicker.on('focus', function () {
-                        if ($that.hasClass('is-invalid')) {
-                            $colorPicker.addClass('field-invalid');
-                        } else {
-                            $colorPicker.addClass('field-valid');
-                        }
-                    }).on('blur', function () {
-                        $colorPicker.removeClass('field-valid field-invalid');
-                    });
-                }
-            });
-        },
-
-        /**
-         * Reset the form content and the validator (if any).
-         *
-         * @return {jQuery} the caller for chaining.
-         */
-        resetValidator: function () {
-            const $that = $(this);
-            const validator = $that.data('validator');
-            if (validator) {
-                validator.resetForm();
-            }
-            $that[0].reset();
-            $that.find('.is-invalid').removeClass('is-invalid');
-            return $that;
-        },
-
-        /**
-         * Display an information alert while the form is submitted.
-         *
-         * @param {Object} [options] - the alert options.
-         * @return {jQuery} this form for chaining.
-         */
-        showSubmit: function (options) {
-            const $this = $(this);
-            const settings = $.extend(true, {
-                parent: $this,
-                text: $this.data('save') || $this.find('.card-title').text() || 'Sauvegarde des données',
-                alertClass: 'alert bg-body-secondary border border-secondary-subtle text-center position-absolute start-50 translate-middle z-3',
-                iconClass: 'fa-solid fa-spinner fa-spin me-2',
-                css: {
-                    width: '90%',
-                    zIndex: 2
-                },
-                maxWidth: 600,
-                hide: 1500,
-                show: 150
-            }, options);
-
-            // check width
-            const parent = settings.parent;
-            let width = settings.css.width;
-            const parentWidth = parent.width();
-            const windowWidth = Math.floor($(window).width() * 0.9);
-            if (width.endsWith('%')) {
-                width = $.parseInt(width);
-                width = Math.floor(parentWidth * width / 100.0);
-            } else if (width.endsWith('px')) {
-                width = $.parseInt(width, 10);
-            }
-            settings.css.width = Math.min(width, windowWidth, settings.maxWidth) + 'px';
-
-            // check height
-            if (window.innerHeight < parent.height()) {
-                settings.css.top = '25%';
-            } else {
-                settings.alertClass += ' top-50';
-            }
-
-            // build alert
-            const $alert = $('<div />', {
-                class: settings.alertClass,
-                text: settings.text,
-                css: settings.css,
-                role: 'alert',
-            });
-            if (settings.iconClass) {
-                const $icon = $('<i />', {
-                    class: settings.iconClass
+            /**
+             * Initialize an input type color within the color-picker plugin.
+             *
+             * @param {Object} [options] - the options
+             */
+            initColorPicker: function (options) {
+                return this.each(function () {
+                    const $that = $(this);
+                    $that.colorpicker(options);
+                    const $colorPicker = $that.findColorPicker();
+                    if ($colorPicker) {
+                        // update class
+                        $colorPicker.on('focus', function () {
+                            if ($that.hasClass('is-invalid')) {
+                                $colorPicker.addClass('field-invalid');
+                            } else {
+                                $colorPicker.addClass('field-valid');
+                            }
+                        }).on('blur', function () {
+                            $colorPicker.removeClass('field-valid field-invalid');
+                        });
+                    }
                 });
-                $alert.prepend($icon);
-            }
-            parent.addClass('position-relative');
-            $alert.appendTo($(parent)).show(settings.show);
-            window.onpagehide = () => $alert.remove();
-            return $this;
-        }
-    });
+            },
 
-    /**
-     * -------------- Additional and override methods --------------
-     */
+            /**
+             * Reset the form content and the validator (if any).
+             *
+             * @return {jQuery} the caller for chaining.
+             */
+            resetValidator: function () {
+                const $that = $(this);
+                const validator = $that.data('validator');
+                if (validator) {
+                    validator.resetForm();
+                }
+                $that[0].reset();
+                $that.find('.is-invalid').removeClass('is-invalid');
+                return $that;
+            },
 
+            /**
+             * Display an information alert while the form is submitted.
+             *
+             * @param {Object} [options] - the alert options.
+             * @return {jQuery} this form for chaining.
+             */
+            showSubmit: function (options) {
+                const $this = $(this);
+                const settings = $.extend(true, {
+                    parent: $this,
+                    text: $this.data('save') || $this.find('.card-title').text() || 'Sauvegarde des données',
+                    alertClass: 'alert bg-body-secondary border border-secondary-subtle text-center position-absolute start-50 translate-middle z-3',
+                    iconClass: 'fa-solid fa-spinner fa-spin me-2',
+                    css: {
+                        width: '90%',
+                        zIndex: 2
+                    },
+                    maxWidth: 600,
+                    hide: 1500,
+                    show: 150
+                }, options);
 
-    /**
-     * Validate the Switzerland zip code (1000 to 9999).
-     */
-    $.validator.addMethod('zipcodeCH', function (value, element) {
-        return this.optional(element) || /^[1-9]\d{3}$/.test(value);
-    });
+                // check width
+                const parent = settings.parent;
+                let width = settings.css.width;
+                const parentWidth = parent.width();
+                const windowWidth = Math.floor($(window).width() * 0.9);
+                if (width.endsWith('%')) {
+                    width = $.parseInt(width);
+                    width = Math.floor(parentWidth * width / 100.0);
+                } else if (width.endsWith('px')) {
+                    width = $.parseInt(width, 10);
+                }
+                settings.css.width = Math.min(width, windowWidth, settings.maxWidth) + 'px';
 
-    /**
-     * Validate that value is different from zero.
-     */
-    $.validator.addMethod('notEqualToZero', function (value, element) {
-        return this.optional(element) || $.parseFloat(value) !== 0;
-    });
+                // check height
+                if (window.innerHeight < parent.height()) {
+                    settings.css.top = '25%';
+                } else {
+                    settings.alertClass += ' top-50';
+                }
 
-    /*
-     * check password score
-     */
-    $.validator.addMethod('password', function (_value, element, param) {
-        if (this.optional(element)) {
-            return true;
-        }
-        const score = $(element).findPasswordScore();
-        return score === -1 || score >= param;
-    }, $.validator.format('The password must have a minimum score of {0}.'));
-
-    /*
-     * check if the value contains the username
-     */
-    $.validator.addMethod('notUsername', function (value, element, param) {
-        if (this.optional(element)) {
-            return true;
-        }
-        const $target = $(param);
-        if (this.settings.onfocusout && $target.not('.validate-notUsername-blur').length) {
-            $target.addClass('validate-notUsername-blur').on('blur.validate-notUsername', function () {
-                $(element).valid();
-            });
-        }
-        const target = String($target.val()).trim();
-        return target.length === 0 || value.indexOfIgnoreCase(target) === -1;
-    }, 'The field can not contain the user name.');
-
-    /*
-     * check if the value is not an email
-     */
-    $.validator.addMethod('notEmail', function (value, element) {
-        if (this.optional(element)) {
-            return true;
-        }
-        return !$.validator.methods.email.call(this, value, element);
-    }, 'The field can not be an email.');
-
-    /*
-     * check if the value contains a lower case character
-     */
-    $.validator.addMethod('lowercase', function (value, element) {
-        if (this.optional(element)) {
-            return true;
-        }
-        return /\p{Ll}/u.test(value);
-    }, 'The field must contain a lower case character.');
-
-    /*
-     * check if the value contains an upper case character
-     */
-    $.validator.addMethod('uppercase', function (value, element) {
-        if (this.optional(element)) {
-            return true;
-        }
-        return /\p{Lu}/u.test(value);
-    }, 'The field must contain an upper case character.');
-
-    /*
-     * check if the value contains an upper and a lower case character
-     */
-    $.validator.addMethod('mixedCase', function (value, element) {
-        if (this.optional(element)) {
-            return true;
-        }
-        return /(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/u.test(value);
-    }, 'The field must contain both upper and lower case characters.');
-
-    /*
-     * check if contains alphabetic characters
-     */
-    $.validator.addMethod('letter', function (value, element) {
-        if (this.optional(element)) {
-            return true;
-        }
-        return /\p{L}/u.test(value);
-    }, 'The field must contain a letter.');
-
-    /*
-     * check if contains a digit character
-     */
-    $.validator.addMethod('digit', function (value, element) {
-        if (this.optional(element)) {
-            return true;
-        }
-        return /\p{N}/u.test(value);
-    }, 'The field must contain a digit character.');
-
-    /*
-     * check if contains a special character
-     */
-    $.validator.addMethod('specialChar', function (value, element) {
-        if (this.optional(element)) {
-            return true;
-        }
-        return /[^p{Ll}\p{Lu}\p{L}\p{N}]/u.test(value);
-    }, 'The field must contain a special character.');
-
-    /*
-     * check if contains a greater value
-     */
-    $.validator.addMethod('greaterThanValue', function (value, element, param) {
-        return this.optional(element) || value > param;
-    }, 'The field must contain a greater value.');
-
-    /*
-     * check if contains a value greater than or equal value
-     */
-    $.validator.addMethod('greaterThanEqualValue', function (value, element, param) {
-        return this.optional(element) || value >= param;
-    }, 'The field must contain a greater than or equal value.');
-
-    /*
-     * check if contains a lesser value
-     */
-    $.validator.addMethod('lessThanValue', function (value, element, param) {
-        return this.optional(element) || value > param;
-    }, 'The field must contain a lesser value.');
-
-    /*
-     * check if contains a lesser or equal value
-     */
-    $.validator.addMethod('lessThanEqualValue', function (value, element, param) {
-        return this.optional(element) || value <= param;
-    }, 'The field must contain a lesser than or equal value.');
-
-    /*
-     * Check for unique value
-     */
-    $.validator.addMethod('unique', function (value, element, param) {
-        /** @var {jQuery<HTMLDivElement>} */
-        const $fields = $(param, element.form);
-        const $fieldsFirst = $fields.eq(0);
-        const validator = $fieldsFirst.data('valid_unique') ? $fieldsFirst.data('valid_unique') : $.extend({}, this);
-
-        let isValid = true;
-        $fields.each(function () {
-            if (element !== this && value.equalsIgnoreCase(validator.elementValue(this))) {
-                isValid = false;
-                return false;
+                // build alert
+                const $alert = $('<div />', {
+                    class: settings.alertClass,
+                    text: settings.text,
+                    css: settings.css,
+                    role: 'alert',
+                });
+                if (settings.iconClass) {
+                    const $icon = $('<i />', {
+                        class: settings.iconClass
+                    });
+                    $alert.prepend($icon);
+                }
+                parent.addClass('position-relative');
+                $alert.appendTo($(parent)).show(settings.show);
+                window.onpagehide = () => $alert.remove();
+                return $this;
             }
         });
 
-        // store the cloned validator for future validation
-        $fieldsFirst.data('valid_unique', validator);
+        /**
+         * -------------- Additional and override methods --------------
+         */
 
-        // If an element isn't being validated, run each require_from_group field's
-        // validation rules
-        if (!$(element).data('being_validated')) {
-            $fields.data('being_validated', JSON.stringify(true));
-            $fields.each(function () {
-                validator.element(this);
-            });
-            $fields.data('being_validated', JSON.stringify(false));
-        }
 
-        return isValid;
-    }, 'The value must be unique.');
+        /**
+         * Validate the Switzerland zip code (1000 to 9999).
+         */
+        $.validator.addMethod('zipcodeCH', function (value, element) {
+            return this.optional(element) || /^[1-9]\d{3}$/.test(value);
+        });
 
-    /*
-     * override URL by adding the protocol prefix (if any)
-     */
-    $.validator.methods.url = (function (parent) {
-        return function (value, element) {
-            const regex = new RegExp(/^[\w+.-]+:\/\//);
-            if (!regex.test(value)) {
-                const protocol = $(element).data('protocol');
-                if (protocol) {
-                    value = protocol + '://' + value;
-                }
+        /**
+         * Validate that value is different from zero.
+         */
+        $.validator.addMethod('notEqualToZero', function (value, element) {
+            return this.optional(element) || $.parseFloat(value) !== 0;
+        });
+
+        /*
+         * check password score
+         */
+        $.validator.addMethod('password', function (_value, element, param) {
+            if (this.optional(element)) {
+                return true;
             }
-            return parent.call(this, value, element);
-        };
-    }($.validator.methods.url));
+            const score = $(element).findPasswordScore();
+            return score === -1 || score >= param;
+        }, $.validator.format('The password must have a minimum score of {0}.'));
 
-    /*
-     * replace email with a simple <string>@<string>.<string> value
-     */
-    $.validator.methods.email = function (value, element) {
-        return this.optional(element) || /\S+@\S+\.\S{2,}/.test(value);
-    };
-});
+        /*
+         * check if the value contains the username
+         */
+        $.validator.addMethod('notUsername', function (value, element, param) {
+            if (this.optional(element)) {
+                return true;
+            }
+            const $target = $(param);
+            if (this.settings.onfocusout && $target.not('.validate-notUsername-blur').length) {
+                $target.addClass('validate-notUsername-blur').on('blur.validate-notUsername', function () {
+                    $(element).valid();
+                });
+            }
+            const target = String($target.val()).trim();
+            return target.length === 0 || value.indexOfIgnoreCase(target) === -1;
+        }, 'The field can not contain the user name.');
+
+        /*
+         * check if the value is not an email
+         */
+        $.validator.addMethod('notEmail', function (value, element) {
+            if (this.optional(element)) {
+                return true;
+            }
+            return !$.validator.methods.email.call(this, value, element);
+        }, 'The field can not be an email.');
+
+        /*
+         * check if the value contains a lower case character
+         */
+        $.validator.addMethod('lowercase', function (value, element) {
+            if (this.optional(element)) {
+                return true;
+            }
+            return /\p{Ll}/u.test(value);
+        }, 'The field must contain a lower case character.');
+
+        /*
+         * check if the value contains an upper case character
+         */
+        $.validator.addMethod('uppercase', function (value, element) {
+            if (this.optional(element)) {
+                return true;
+            }
+            return /\p{Lu}/u.test(value);
+        }, 'The field must contain an upper case character.');
+
+        /*
+         * check if the value contains an upper and a lower case character
+         */
+        $.validator.addMethod('mixedCase', function (value, element) {
+            if (this.optional(element)) {
+                return true;
+            }
+            return /(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/u.test(value);
+        }, 'The field must contain both upper and lower case characters.');
+
+        /*
+         * check if contains alphabetic characters
+         */
+        $.validator.addMethod('letter', function (value, element) {
+            if (this.optional(element)) {
+                return true;
+            }
+            return /\p{L}/u.test(value);
+        }, 'The field must contain a letter.');
+
+        /*
+         * check if contains a digit character
+         */
+        $.validator.addMethod('digit', function (value, element) {
+            if (this.optional(element)) {
+                return true;
+            }
+            return /\p{N}/u.test(value);
+        }, 'The field must contain a digit character.');
+
+        /*
+         * check if contains a special character
+         */
+        $.validator.addMethod('specialChar', function (value, element) {
+            if (this.optional(element)) {
+                return true;
+            }
+            return /[^p{Ll}\p{Lu}\p{L}\p{N}]/u.test(value);
+        }, 'The field must contain a special character.');
+
+        /*
+         * check if contains a greater value
+         */
+        $.validator.addMethod('greaterThanValue', function (value, element, param) {
+            return this.optional(element) || value > param;
+        }, 'The field must contain a greater value.');
+
+        /*
+         * check if contains a value greater than or equal value
+         */
+        $.validator.addMethod('greaterThanEqualValue', function (value, element, param) {
+            return this.optional(element) || value >= param;
+        }, 'The field must contain a greater than or equal value.');
+
+        /*
+         * check if contains a lesser value
+         */
+        $.validator.addMethod('lessThanValue', function (value, element, param) {
+            return this.optional(element) || value > param;
+        }, 'The field must contain a lesser value.');
+
+        /*
+         * check if contains a lesser or equal value
+         */
+        $.validator.addMethod('lessThanEqualValue', function (value, element, param) {
+            return this.optional(element) || value <= param;
+        }, 'The field must contain a lesser than or equal value.');
+
+        /*
+         * Check for unique value
+         */
+        $.validator.addMethod('unique', function (value, element, param) {
+            /** @var {jQuery<HTMLDivElement>} */
+            const $fields = $(param, element.form);
+            const $fieldsFirst = $fields.eq(0);
+            const validator = $fieldsFirst.data('valid_unique') ? $fieldsFirst.data('valid_unique') : $.extend({}, this);
+
+            let isValid = true;
+            $fields.each(function () {
+                if (element !== this && value.equalsIgnoreCase(validator.elementValue(this))) {
+                    isValid = false;
+                    return false;
+                }
+            });
+
+            // store the cloned validator for future validation
+            $fieldsFirst.data('valid_unique', validator);
+
+            // If an element isn't being validated, run each require_from_group field's
+            // validation rules
+            if (!$(element).data('being_validated')) {
+                $fields.data('being_validated', JSON.stringify(true));
+                $fields.each(function () {
+                    validator.element(this);
+                });
+                $fields.data('being_validated', JSON.stringify(false));
+            }
+
+            return isValid;
+        }, 'The value must be unique.');
+
+        /*
+         * override URL by adding the protocol prefix (if any)
+         */
+        $.validator.methods.url = (function (parent) {
+            return function (value, element) {
+                const regex = new RegExp(/^[\w+.-]+:\/\//);
+                if (!regex.test(value)) {
+                    const protocol = $(element).data('protocol');
+                    if (protocol) {
+                        value = protocol + '://' + value;
+                    }
+                }
+                return parent.call(this, value, element);
+            };
+        }($.validator.methods.url));
+
+        /*
+         * replace email with a simple <string>@<string>.<string> value
+         */
+        $.validator.methods.email = function (value, element) {
+            return this.optional(element) || /\S+@\S+\.\S{2,}/.test(value);
+        };
+    });
+}(jQuery));

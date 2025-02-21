@@ -52,7 +52,7 @@
             loadingMessage = $('#loading-template').html();
         }
         return loadingMessage.replace('%message%', message);
-    }
+    };
 
     /**
      * JQuery extension for Bootstrap tables rows and cells.

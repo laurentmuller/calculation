@@ -1,3 +1,5 @@
+/* globals EditDialog */
+
 /**
  * Edit item dialog class.
  * @class EditItemDialog

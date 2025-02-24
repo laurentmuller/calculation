@@ -38,7 +38,7 @@ window.customViewFormatter = function (data) {
     }, '');
 
     return `<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 my-0 mx-n1">${content}</div>`;
-};
+}
 
 /**
  * Format the product unit in the custom view.
@@ -48,7 +48,7 @@ window.customViewFormatter = function (data) {
  */
 window.formatProductUnit = function (row) {
     return row.unit ? ' / ' + row.unit : '';
-};
+}
 
 /**
  * Gets the class of the product price in the custom view.
@@ -63,7 +63,7 @@ window.formatProductClass = function (row) {
         return ' text-danger';
     }
     return '';
-};
+}
 
 /**
  * Cell style for a text border column (calculation or status).
@@ -82,7 +82,7 @@ window.styleBorderColor = function (_value, row) {
             'border-left-color': row.color
         }
     };
-};
+}
 
 /**
  * Cell class for the product price.
@@ -100,7 +100,7 @@ window.styleProductPrice = function (value) {
             color: 'var(--bs-danger)'
         }
     };
-};
+}
 
 /**
  * Row classes for the text muted.
@@ -120,7 +120,7 @@ window.styleTextMuted = function (row, index) {
     return {
         classes: classes.trim()
     };
-};
+}
 
 /**
  * Returns if the current row is rendered for the connected user
@@ -129,7 +129,7 @@ window.styleTextMuted = function (row, index) {
  * @param {Object} row the row data.
  * @returns {boolean} true if connected user
  */
-function isConnectedUser($table, row) {
+window.isConnectedUser = function ($table, row) {
     'use strict';
     const currentId = $.parseInt(row.id);
     const connectedId = $.parseInt($table.data('user-id'));
@@ -143,7 +143,7 @@ function isConnectedUser($table, row) {
  * @param {Object} row the row data.
  * @returns {boolean} true if connected user
  */
-function isOrignalUser($table, row) {
+window.isOrignalUser = function ($table, row) {
     'use strict';
     const currentId = $.parseInt(row.id);
     const originalId = $.parseInt($table.data('original-user-id'));
@@ -156,7 +156,7 @@ function isOrignalUser($table, row) {
  * @param {jQuery} $action the action to remove.
  * @param {string} [divider] the previous divider, if any; to remove.
  */
-function removeAction($action, divider) {
+window.removeAction = function ($action, divider) {
     'use strict';
     const $parent = $action.parents('li');
     if (divider) {
@@ -173,7 +173,7 @@ function removeAction($action, divider) {
  * @param {jQuery} _$element the table row.
  * @param {jQuery} $action the action to update
  */
-function updateUserMessageAction($table, row, _$element, $action) {
+window.updateUserMessageAction = function ($table, row, _$element, $action) {
     'use strict';
     if (isConnectedUser($table, row)) {
         removeAction($action, '.user-message-divider');
@@ -188,7 +188,7 @@ function updateUserMessageAction($table, row, _$element, $action) {
  * @param {jQuery} _$element the table row.
  * @param {jQuery} $action the action to update
  */
-function updateUserDeleteAction($table, row, _$element, $action) {
+window.updateUserDeleteAction = function ($table, row, _$element, $action) {
     'use strict';
     if (isConnectedUser($table, row) || isOrignalUser($table, row)) {
         removeAction($action, '.delete-divider');
@@ -203,7 +203,7 @@ function updateUserDeleteAction($table, row, _$element, $action) {
  * @param {jQuery} _$element the table row.
  * @param {jQuery} $action the action to update
  */
-function updateUserSwitchAction($table, row, _$element, $action) {
+window.updateUserSwitchAction = function ($table, row, _$element, $action) {
     'use strict';
     if (isConnectedUser($table, row)) {
         removeAction($action, '.user-switch-divider');
@@ -226,7 +226,7 @@ function updateUserSwitchAction($table, row, _$element, $action) {
  * @param {jQuery} _$element the table row.
  * @param {jQuery} $action the action to update
  */
-function updateUserResetAction($table, row, _$element, $action) {
+window.updateUserResetAction = function ($table, row, _$element, $action) {
     'use strict';
     if (!row.hashedToken) {
         removeAction($action, '.user-reset-divider');
@@ -246,7 +246,7 @@ function updateUserResetAction($table, row, _$element, $action) {
  * @param {jQuery} _$element the table row.
  * @param {jQuery} $action the action to update
  */
-function updateSearchAction($table, row, _$element, $action) {
+window.updateSearchAction = function ($table, row, _$element, $action) {
     'use strict';
     if ($action.is('.btn-show') && !row.allowShow) {
         removeAction($action);
@@ -276,7 +276,7 @@ function updateSearchAction($table, row, _$element, $action) {
  * @param {jQuery} $element the table row.
  * @param {jQuery} $action the action to update
  */
-function updateCalculationEditAction(_$table, row, $element, $action) {
+window.updateCalculationEditAction = function (_$table, row, $element, $action) {
     'use strict';
     const value = $.parseInt(row.textMuted);
     if (value === 0) {
@@ -298,7 +298,7 @@ function updateCalculationEditAction(_$table, row, $element, $action) {
  * @param {jQuery} _$element the table row.
  * @param {jQuery} $action the action to update
  */
-function updateCalculationAction(_$table, _row, _$element, $action) {
+window.updateCalculationAction = function (_$table, _row, _$element, $action) {
     'use strict';
     const href = $action.attr('href').split('?')[0];
     $action.attr('href', href);
@@ -312,7 +312,7 @@ function updateCalculationAction(_$table, _row, _$element, $action) {
  * @param {jQuery} _$element the table row.
  * @param {jQuery} $action the action to update
  */
-function updateTaskComputeAction(_$table, row, _$element, $action) {
+window.updateTaskComputeAction = function (_$table, row, _$element, $action) {
     'use strict';
     if ($.parseInt(row.items) === 0) {
         removeAction($action, '.task-compute-divider');
@@ -326,7 +326,7 @@ function updateTaskComputeAction(_$table, row, _$element, $action) {
  * @param {jQuery} $action the action to update
  * @param {string} propertyName  the property name to get from row.
  */
-function updateShowEntityAction(row, $action, propertyName) {
+window.updateShowEntityAction = function (row, $action, propertyName) {
     'use strict';
     if (row.hasOwnProperty(propertyName)) {
         const value = row[propertyName];
@@ -364,7 +364,7 @@ window.formatActions = function (value) {
  *
  * @param {jQueryTable} $table the parent table.
  */
-function initializeKeyHandler($table) {
+window.initializeKeyHandler = function ($table) {
     'use strict';
     const selector = 'a, input:not(.form-control-search), select, .btn, .dropdown-item, .rowlink-skip';
     $('body').on('focus', selector, function () {
@@ -379,7 +379,7 @@ function initializeKeyHandler($table) {
  *
  * @param {jQueryTable} $table the parent table.
  */
-function initializeContextMenus($table) {
+window.initializeContextMenus = function ($table) {
     'use strict';
     const selector = '.table-primary td:not(.rowlink-skip), .table-primary div:not(.rowlink-skip)';
     const hideMenus = function () {
@@ -394,7 +394,7 @@ function initializeContextMenus($table) {
  *
  * @param {jQueryTable} $table the parent table.
  */
-function initializeDangerTooltips($table) {
+window.initializeDangerTooltips = function ($table) {
     'use strict';
     const selector = $table.data('danger-tooltip-selector');
     if (selector) {
@@ -413,7 +413,7 @@ function initializeDangerTooltips($table) {
  * @param {jQuery} $button the caller button.
  * @param {jQuery} [$source] the source page link.
  */
-function showPageDialog($table, $button, $source) {
+window.showPageDialog = function ($table, $button, $source) {
     'use strict';
     const $dialog = $('#modal-page');
     if ($dialog.length === 0) {
@@ -434,7 +434,7 @@ function showPageDialog($table, $button, $source) {
  * @param {jQueryTable} $table the data table.
  * @param {jQuery} $button the caller button.
  */
-function showSortDialog($table, $button) {
+window.showSortDialog = function ($table, $button) {
     'use strict';
     const $dialog = $('#modal-sort');
     if ($dialog.length === 0) {
@@ -448,7 +448,7 @@ function showSortDialog($table, $button) {
     } else {
         $dialog.modal('show');
     }
-}
+};
 
 /**
  * jQuery

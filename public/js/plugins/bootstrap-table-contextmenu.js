@@ -95,7 +95,7 @@ $(function () {
 
     // Show the context menu
     BootstrapTable.prototype.showContextMenu = function (params) {
-        const that = this
+        const that = this;
         if (!params || !params.event) {
             return false;
         }

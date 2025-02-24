@@ -123,6 +123,22 @@ window.styleTextMuted = function (row, index) {
 };
 
 /**
+ * Update the reset request password user action.
+ *
+ * @param {jQueryTable} $table the parent table.
+ * @param {Object} row the row data.
+ * @param {string} row.hashedToken the reset password value
+ * @param {jQuery} _$element the table row.
+ * @param {jQuery} $action the action to update
+ */
+function updateUserResetAction($table, row, _$element, $action) {
+    'use strict';
+    if (!row.hashedToken) {
+        removeAction($action, '.user-reset-divider');
+    }
+};
+
+/**
  * Returns if the current row is rendered for the connected user
  *
  * @param {jQueryTable} $table the parent table.
@@ -214,22 +230,6 @@ function updateUserSwitchAction($table, row, _$element, $action) {
         };
         const href = source + '?' + $.param(params);
         $action.attr('href', href);
-    }
-}
-
-/**
- * Update the reset request password user action.
- *
- * @param {jQueryTable} $table the parent table.
- * @param {Object} row the row data.
- * @param {string} row.hashedToken the reset password value
- * @param {jQuery} _$element the table row.
- * @param {jQuery} $action the action to update
- */
-window.updateUserResetAction = function ($table, row, _$element, $action) {
-    'use strict';
-    if (!row.hashedToken) {
-        removeAction($action, '.user-reset-divider');
     }
 }
 

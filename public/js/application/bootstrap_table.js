@@ -38,7 +38,7 @@ window.customViewFormatter = function (data) {
     }, '');
 
     return `<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 my-0 mx-n1">${content}</div>`;
-}
+};
 
 /**
  * Format the product unit in the custom view.
@@ -48,7 +48,7 @@ window.customViewFormatter = function (data) {
  */
 window.formatProductUnit = function (row) {
     return row.unit ? ' / ' + row.unit : '';
-}
+};
 
 /**
  * Gets the class of the product price in the custom view.
@@ -63,7 +63,7 @@ window.formatProductClass = function (row) {
         return ' text-danger';
     }
     return '';
-}
+};
 
 /**
  * Cell style for a text border column (calculation or status).
@@ -82,7 +82,7 @@ window.styleBorderColor = function (_value, row) {
             'border-left-color': row.color
         }
     };
-}
+};
 
 /**
  * Cell class for the product price.
@@ -100,7 +100,7 @@ window.styleProductPrice = function (value) {
             color: 'var(--bs-danger)'
         }
     };
-}
+};
 
 /**
  * Row classes for the text muted.
@@ -120,7 +120,7 @@ window.styleTextMuted = function (row, index) {
     return {
         classes: classes.trim()
     };
-}
+};
 
 /**
  * Returns if the current row is rendered for the connected user

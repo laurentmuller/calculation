@@ -124,16 +124,16 @@
         },
         {
             "name": "bjeavons/zxcvbn-php",
-            "version": "1.4.1",
+            "version": "1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bjeavons/zxcvbn-php.git",
-                "reference": "603e015f2c81118a8f42930140311d125eba6f8a"
+                "reference": "426f664501a0747beb8f3ee17ac30c7dd6327ffa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bjeavons/zxcvbn-php/zipball/603e015f2c81118a8f42930140311d125eba6f8a",
-                "reference": "603e015f2c81118a8f42930140311d125eba6f8a",
+                "url": "https://api.github.com/repos/bjeavons/zxcvbn-php/zipball/426f664501a0747beb8f3ee17ac30c7dd6327ffa",
+                "reference": "426f664501a0747beb8f3ee17ac30c7dd6327ffa",
                 "shasum": ""
             },
             "require": {
@@ -174,9 +174,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bjeavons/zxcvbn-php/issues",
-                "source": "https://github.com/bjeavons/zxcvbn-php/tree/1.4.1"
+                "source": "https://github.com/bjeavons/zxcvbn-php/tree/1.4.2"
             },
-            "time": "2024-11-21T22:10:41+00:00"
+            "time": "2025-02-24T16:47:20+00:00"
         },
         {
             "name": "composer/pcre",

@@ -20,7 +20,6 @@ use App\Pdf\PdfStyle;
 use fpdf\Enums\PdfFontName;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
-use fpdf\PdfMargins;
 
 /**
  * The HTML style.
@@ -33,15 +32,29 @@ class HtmlStyle extends PdfStyle
     private PdfTextAlignment $alignment = PdfTextAlignment::LEFT;
 
     /**
-     * The margins.
+     * The bottom margin.
      */
-    private PdfMargins $margins;
+    private float $bottomMargin = 0;
+
+    /**
+     * The left margin.
+     */
+    private float $leftMargin = 0;
+
+    /**
+     * The right margin.
+     */
+    private float $rightMargin = 0;
+
+    /**
+     * The top margin.
+     */
+    private float $topMargin = 0;
 
     public function __construct()
     {
         parent::__construct();
         $this->setBorder(PdfBorder::none());
-        $this->margins = PdfMargins::instance();
     }
 
     /**
@@ -77,7 +90,7 @@ class HtmlStyle extends PdfStyle
      */
     public function getBottomMargin(): float
     {
-        return $this->margins->bottom;
+        return $this->bottomMargin;
     }
 
     /**
@@ -85,7 +98,7 @@ class HtmlStyle extends PdfStyle
      */
     public function getLeftMargin(): float
     {
-        return $this->margins->left;
+        return $this->leftMargin;
     }
 
     /**
@@ -93,7 +106,7 @@ class HtmlStyle extends PdfStyle
      */
     public function getRightMargin(): float
     {
-        return $this->margins->right;
+        return $this->rightMargin;
     }
 
     /**
@@ -101,7 +114,7 @@ class HtmlStyle extends PdfStyle
      */
     public function getTopMargin(): float
     {
-        return $this->margins->top;
+        return $this->topMargin;
     }
 
     /**
@@ -130,9 +143,7 @@ class HtmlStyle extends PdfStyle
      */
     public function resetMargins(): self
     {
-        $this->margins->reset();
-
-        return $this;
+        return $this->setMargins(0);
     }
 
     /**
@@ -150,7 +161,7 @@ class HtmlStyle extends PdfStyle
      */
     public function setBottomMargin(float $bottomMargin): self
     {
-        $this->margins->bottom = $bottomMargin;
+        $this->bottomMargin = $bottomMargin;
 
         return $this;
     }
@@ -160,7 +171,7 @@ class HtmlStyle extends PdfStyle
      */
     public function setLeftMargin(float $leftMargin): self
     {
-        $this->margins->left = $leftMargin;
+        $this->leftMargin = $leftMargin;
 
         return $this;
     }
@@ -170,7 +181,10 @@ class HtmlStyle extends PdfStyle
      */
     public function setMargins(float $margin): self
     {
-        $this->margins->setMargins($margin);
+        $this->topMargin = $margin;
+        $this->bottomMargin = $margin;
+        $this->leftMargin = $margin;
+        $this->rightMargin = $margin;
 
         return $this;
     }
@@ -180,7 +194,7 @@ class HtmlStyle extends PdfStyle
      */
     public function setRightMargin(float $rightMargin): self
     {
-        $this->margins->right = $rightMargin;
+        $this->rightMargin = $rightMargin;
 
         return $this;
     }
@@ -190,7 +204,7 @@ class HtmlStyle extends PdfStyle
      */
     public function setTopMargin(float $topMargin): self
     {
-        $this->margins->top = $topMargin;
+        $this->topMargin = $topMargin;
 
         return $this;
     }

@@ -123,6 +123,21 @@ window.styleTextMuted = function (row, index) {
 };
 
 /**
+ * Remove the given action by removing the parent's list entry.
+ *
+ * @param {jQuery} $action the action to remove.
+ * @param {string} [divider] the previous divider, if any; to remove.
+ */
+function removeAction($action, divider) {
+    'use strict';
+    const $parent = $action.parents('li');
+    if (divider) {
+        $parent.prev(divider).remove();
+    }
+    $parent.remove();
+}
+
+/**
  * Update the reset request password user action.
  *
  * @param {jQueryTable} $table the parent table.
@@ -136,7 +151,7 @@ function updateUserResetAction($table, row, _$element, $action) {
     if (!row.hashedToken) {
         removeAction($action, '.user-reset-divider');
     }
-};
+}
 
 /**
  * Returns if the current row is rendered for the connected user
@@ -164,21 +179,6 @@ function isOrignalUser($table, row) {
     const currentId = $.parseInt(row.id);
     const originalId = $.parseInt($table.data('original-user-id'));
     return currentId === originalId;
-}
-
-/**
- * Remove the given action by removing the parent's list entry.
- *
- * @param {jQuery} $action the action to remove.
- * @param {string} [divider] the previous divider, if any; to remove.
- */
-function removeAction($action, divider) {
-    'use strict';
-    const $parent = $action.parents('li');
-    if (divider) {
-        $parent.prev(divider).remove();
-    }
-    $parent.remove();
 }
 
 /**

@@ -83,7 +83,7 @@ class Database extends AbstractDatabase
      */
     public static function getDatabaseFilename(): string
     {
-        return __DIR__ . '/../db_test.sqlite';
+        return __DIR__ . '/db_test.sqlite';
     }
 
     /**

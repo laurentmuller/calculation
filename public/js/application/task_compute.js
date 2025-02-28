@@ -30,7 +30,7 @@ function updateValue(id, value) {
 function resetValues() {
     'use strict';
     const value = $.formatFloat(0);
-    $('#edit-form .form-control-plaintext:not(.skip-reset)').text(value);
+    $('#edit-form .form-control-read-only:not(.skip-reset)').text(value);
 }
 
 /**

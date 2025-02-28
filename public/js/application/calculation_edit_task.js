@@ -223,7 +223,7 @@ class EditTaskDialog extends EditDialog {
      */
     _resetValues() {
         const value = $.formatFloat(0);
-        this.$form.find('.form-control-plaintext').text(value);
+        this.$form.find('.form-control-read-only').text(value);
         return this;
     }
 

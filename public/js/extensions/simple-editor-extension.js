@@ -116,7 +116,7 @@
                         if (validator) {
                             validator.lastActive = $content;
                         }
-                        if ($editor.hasClass('border-danger')) {
+                        if ($editor.hasClass('invalid-border-color')) {
                             $editor.addClass('field-invalid');
                         } else {
                             $editor.addClass('field-valid');

@@ -30,7 +30,7 @@
 {% block plain_widget -%}
     {% set display_value = display_value|default('&nbsp;') %}
     {% if expanded %}
-        {% set class = (attr.class|default('') ~ ' form-control-plaintext form-control-readonly')|trim %}
+        {% set class = (attr.class|default('') ~ ' form-control-read-only')|trim %}
         <div class="{{ class }}"{% if not hidden_input %}{{ block('widget_container_attributes') }}{% endif %}>
             <span{% if text_class %} class="{{ text_class }}"{% endif %}>{{ display_value|raw }}</span>
         </div>
@@ -172,6 +172,11 @@
     {{- block('form_row') -}}
 {%- endblock %}
 
+{% block simple_editor_label -%}
+    {%- set element = 'span' -%}
+    {{ block('form_label') }}
+{%- endblock %}
+
 {% macro simple_editor_button(action) %}
     {%- set translation_domain = 'messages' -%}
     {%- set attr_translation_parameters = [] -%}
@@ -184,41 +189,38 @@
     </button>
 {% endmacro %}
 
-{% block simple_editor_label -%}
-    {%- set element = 'span' -%}
-    {%- set label_attr = label_attr|merge({class: 'cursor-default'}) -%}
-    {{ block('form_label') }}
-{%- endblock %}
+{% macro simple_editor_groups(groups) %}
+    {% for group, actions in groups %}
+        <div class="btn-group btn-group-sm" role="group" aria-label="{{ ('simple_editor.groups.' ~ group)|trans }}">
+            {% for action in actions %}
+                {% if action.actions|default([])|length %}
+                    <div class="btn-group btn-group-sm" role="group">
+                        {{ _self.simple_editor_button(action) }}
+                        <div class="dropdown-menu">
+                            {% for child in action.actions %}
+                                {{ _self.simple_editor_button(child) }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    {{ _self.simple_editor_button(action) }}
+                {% endif %}
+            {% endfor %}
+            {% if not loop.last %}
+                <span class="border-start"></span>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endmacro %}
 
 {% block simple_editor_widget -%}
     {%- set type = type|default('hidden') -%}
     {%- set editor_id = form.vars.id ~ '_editor' -%}
     <div class="simple-editor form-control p-0" id="{{ editor_id }}">
-        {% if groups|default([])|length -%}
-            <div class="simple-editor-toolbar btn-toolbar d-print-none" role="toolbar">
-                {% for group, actions in groups %}
-                    <div class="btn-group btn-group-sm" role="group" aria-label="{{ group }}">
-                        {% for action in actions %}
-                            {% if action.actions|default([])|length %}
-                                <div class="btn-group btn-group-sm" role="group">
-                                    {{ _self.simple_editor_button(action) }}
-                                    <div class="dropdown-menu">
-                                        {% for child in action.actions %}
-                                            {{ _self.simple_editor_button(child) }}
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            {% else %}
-                                {{ _self.simple_editor_button(action) }}
-                            {% endif %}
-                        {% endfor %}
-                        {% if not loop.last %}
-                            <div class="border-start separator"></div>{% endif %}
-                    </div>
-                {% endfor %}
-            </div>
-        {%- endif %}
-        <div class="simple-editor-content small-scrollbar border-top" contenteditable="true"></div>
+        <div class="simple-editor-toolbar btn-toolbar border-bottom d-print-none" role="toolbar">
+            {{ _self.simple_editor_groups(groups|default({})) }}
+        </div>
+        <div class="simple-editor-content small-scrollbar" contenteditable="true"></div>
         {{- block('form_widget_simple') -}}
     </div>
 {%- endblock %}

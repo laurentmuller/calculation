@@ -3,10 +3,10 @@
 {% from 'macros/_properties.html.twig' import stateCss %}
 {# macro #}
 {% macro add_line_info(name, value) -%}
-<tr>
-    <td class="w-30 text-nowrap">{{ name|trans }}</td>
-    <td>{{ value|raw }}</td>
-</tr>
+    <tr>
+        <td class="w-30 text-nowrap">{{ name|trans }}</td>
+        <td>{{ value|raw }}</td>
+    </tr>
 {%- endmacro %}
 {# parameters #}
 {%- set title = 'calculation.update.title' -%}
@@ -16,80 +16,82 @@
 {%- set results = result.results -%}
 {# body #}
 {% block card_body %}
-<div class="table-responsive position-relative">
-    <table class="table table-no-bottom table-sm">
-        {{ _self.add_line_info('calculation.update.dateFrom', query.dateFrom|locale_date('full')|title) }}
-        {{ _self.add_line_info('calculation.update.dateTo', query.date|locale_date('full')|title) }}
-        {{ _self.add_line_info('calculation.update.states', query.statesCode) }}
-        {% if result.valid %}
-            <tr>
-                <td class="w-30 text-nowrap">{{ 'calculation.list.title'|trans }}</td>
-                <td>
-                    <a href="#modal-result" class="stretched-link" title="{{ 'archive.result.show'|trans }}" data-bs-toggle="modal">
-                        <i class="fa-solid fa-eye me-1"></i>{{ result.count|integer }}
-                    </a>
-                </td>
-            </tr>
-        {% else %}
-            {{ _self.add_line_info('calculation.list.title', result.count|integer) }}
+    <div class="table-responsive position-relative">
+        <table class="table table-no-bottom table-sm">
+            {{ _self.add_line_info('calculation.update.dateFrom', query.dateFrom|locale_date('full')|title) }}
+            {{ _self.add_line_info('calculation.update.dateTo', query.date|locale_date('full')|title) }}
+            {{ _self.add_line_info('calculation.update.states', query.statesCode) }}
+            {% if result.valid %}
+                <tr>
+                    <td class="w-30 text-nowrap">{{ 'calculation.list.title'|trans }}</td>
+                    <td>
+                        <a href="#modal-result" class="stretched-link" title="{{ 'archive.result.show'|trans }}" data-bs-toggle="modal">
+                            <i class="fa-solid fa-eye me-1"></i>{{ result.count|integer }}
+                        </a>
+                    </td>
+                </tr>
+            {% endif %}
+        </table>
+    </div>
+    {% if result.valid %}
+        {% if query.simulate %}
+            <p class="mb-0 text-end text-body-secondary small">{{ 'simulate.message'|trans }}</p>
         {% endif %}
-    </table>
-</div>
-{% if result.valid %}
-{% if query.simulate %}
-    <p class="mb-0 text-end text-body-secondary small">{{ 'simulate.message'|trans }}</p>
-{% endif %}
-{# dialog #}
-<div class="modal fade" id="modal-result" tabindex="-1" aria-labelledby="modal-result-title" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                {{ modal_title('modal-result-title', title_icon, title) }}
-            </div>
-            <div class="modal-body">
-                <span class="form-label">{{ 'calculation.list.title'|trans }}</span>
-                <div class="overflow-auto table-fixed-header small-scrollbar border">
-                    <table class="table table-hover table-fixed-header table-no-end-line table-sm mb-0">
-                        <thead>
-                            <tr>
-                                <th class="text-id text-border">{{ 'calculation.fields.id'|trans }}</th>
-                                <th class="text-date">{{ 'calculation.fields.date'|trans }}</th>
-                                <th class="text-nowrap">{{ 'calculation.fields.customer'|trans }}</th>
-                                <th class="text-nowrap">{{ 'calculation.fields.description'|trans }}</th>
-                                <th class="text-currency">{{ 'calculation.result.old_value'|trans }}</th>
-                                <th class="text-currency">{{ 'calculation.result.new_value'|trans }}</th>
-                                <th class="text-currency">{{ 'calculation.result.delta'|trans }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {% for value in result.results %}
-                            <tr>
-                                <td class="text-id text-border" style="{{ stateCss(value.color) }}">{{ value.id|identifier }}</td>
-                                <td class="text-date">{{ value.date|locale_date }}</td>
-                                <td class="text-nowrap">{{ value.customer }}</td>
-                                <td class="text-nowrap">{{ value.description }}</td>
-                                <td class="text-currency">{{ value.old_value|amount }}</td>
-                                <td class="text-currency">{{ value.new_value|amount }}</td>
-                                <td class="text-currency">{{ value.delta|amount }}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+        {# dialog #}
+        <div class="modal fade" id="modal-result" tabindex="-1" aria-labelledby="modal-result-title" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        {{ modal_title('modal-result-title', title_icon, title) }}
+                    </div>
+                    <div class="modal-body">
+                        <span class="form-label">{{ 'calculation.list.title'|trans }}</span>
+                        <div class="overflow-auto table-fixed-header small-scrollbar border">
+                            <table class="table table-hover table-fixed-header table-no-end-line table-sm mb-0">
+                                <thead>
+                                <tr>
+                                    <th class="text-id text-border">{{ 'calculation.fields.id'|trans }}</th>
+                                    <th class="text-date">{{ 'calculation.fields.date'|trans }}</th>
+                                    <th class="text-nowrap">{{ 'calculation.fields.customer'|trans }}</th>
+                                    <th class="text-nowrap">{{ 'calculation.fields.description'|trans }}</th>
+                                    <th class="text-currency">{{ 'calculation.result.old_value'|trans }}</th>
+                                    <th class="text-currency">{{ 'calculation.result.new_value'|trans }}</th>
+                                    <th class="text-currency">{{ 'calculation.result.delta'|trans }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for value in result.results %}
+                                    <tr>
+                                        <td class="text-id text-border" style="{{ stateCss(value.color) }}">{{ value.id|identifier }}</td>
+                                        <td class="text-date">{{ value.date|locale_date }}</td>
+                                        <td class="text-nowrap">{{ value.customer }}</td>
+                                        <td class="text-nowrap">{{ value.description }}</td>
+                                        <td class="text-currency">{{ value.old_value|amount }}</td>
+                                        <td class="text-currency">{{ value.new_value|amount }}</td>
+                                        <td class="text-currency">{{ value.delta|amount }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ modal_close_button(false) }}
+                    </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                {{ modal_close_button(false) }}
-            </div>
         </div>
-    </div>
-</div>
-{% endif %}
+    {% else %}
+        <div class="alert alert-warning text-center mb-0" role="alert">
+            {{- 'calculation.result.empty'|trans -}}
+        </div>
+    {% endif %}
 {% endblock %}
 {# footer #}
 {% block card_footer %}
-<div class="d-flex-wrap-center">
-    {{ homepage() }}
-    {{ link(path('admin_update'), 'calculation.result.update', 'btn btn-form btn-secondary') -}}
-    {{ sitemap() }}
-</div>
+    <div class="d-flex-wrap-center">
+        {{ homepage() }}
+        {{ link(path('admin_update'), 'calculation.result.update', 'btn btn-form btn-secondary') -}}
+        {{ sitemap() }}
+    </div>
 {% endblock %}

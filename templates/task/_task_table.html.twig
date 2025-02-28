@@ -1,6 +1,6 @@
 {# add a plain text input #}
 {% macro plain_text_input(id, class = '') %}
-{%- set class = ('form-control-plaintext form-control-readonly text-end ' ~ class)|trim -%}
+{%- set class = ('form-control-read-only text-end ' ~ class)|trim -%}
 <span id="{{ id }}" class="{{ class }}">{{ 0|amount }}</span>
 {% endmacro %}
 {# add a task item #}

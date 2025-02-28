@@ -42,10 +42,10 @@ class HtmlStyleTest extends TestCase
         yield ['border-start', PdfBorder::left()];
         yield ['border-end', PdfBorder::right()];
         yield ['border-0', PdfBorder::none()];
-        yield ['border-top-0', PdfBorder::all()->setTop(false)];
-        yield ['border-start-0', PdfBorder::all()->setLeft(false)];
-        yield ['border-end-0', PdfBorder::all()->setRight(false)];
-        yield ['border-bottom-0', PdfBorder::all()->setBottom(false)];
+        yield ['border-top-0', PdfBorder::notTop()];
+        yield ['border-start-0', PdfBorder::notLeft()];
+        yield ['border-end-0', PdfBorder::notRight()];
+        yield ['border-bottom-0', PdfBorder::notBottom()];
     }
 
     public static function getMargins(): \Iterator
@@ -180,9 +180,44 @@ class HtmlStyleTest extends TestCase
         self::assertSame(PdfFontStyle::UNDERLINE, $actual);
 
         $style = HtmlStyle::default();
+        $style->update('text-decoration-none');
+        $actual = $style->getFont()->getStyle();
+        self::assertSame(PdfFontStyle::REGULAR, $actual);
+
+        $style = HtmlStyle::default();
         $style->update('font-monospace');
         $actual = $style->getFont()->getName();
         self::assertSame(PdfFontName::COURIER, $actual);
+
+        $style = HtmlStyle::default();
+        $style->update('fs-1');
+        $actual = $style->getFont()->getSize();
+        self::assertSame(22.5, $actual);
+
+        $style = HtmlStyle::default();
+        $style->update('fs-2');
+        $actual = $style->getFont()->getSize();
+        self::assertSame(18.0, $actual);
+
+        $style = HtmlStyle::default();
+        $style->update('fs-3');
+        $actual = $style->getFont()->getSize();
+        self::assertSame(15.75, $actual);
+
+        $style = HtmlStyle::default();
+        $style->update('fs-4');
+        $actual = $style->getFont()->getSize();
+        self::assertSame(13.5, $actual);
+
+        $style = HtmlStyle::default();
+        $style->update('fs-5');
+        $actual = $style->getFont()->getSize();
+        self::assertSame(11.25, $actual);
+
+        $style = HtmlStyle::default();
+        $style->update('fs-6');
+        $actual = $style->getFont()->getSize();
+        self::assertSame(9.9, $actual);
     }
 
     public function testUpdateMargins(): void

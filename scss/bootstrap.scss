@@ -1,8 +1,8 @@
 // override variables
 $enable-rounded: false;
+$enable-validation-icons: false;
 $tooltip-opacity: 1.0;
 
-/**! compression tag for ftp-deployment */
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // functions and methods
@@ -72,12 +72,15 @@ $tooltip-opacity: 1.0;
     &::-webkit-slider-thumb {
         @include border-radius($form-range-thumb-border-radius, $form-range-thumb-border-radius);
     }
+
     &::-webkit-slider-runnable-track {
         @include border-radius($form-range-track-border-radius, $form-range-thumb-border-radius);
     }
+
     &::-moz-range-thumb {
         @include border-radius($form-range-track-border-radius, $form-range-thumb-border-radius);
     }
+
     &::-moz-range-track {
         @include border-radius($form-range-track-border-radius, $form-range-thumb-border-radius);
     }
@@ -99,4 +102,31 @@ html[data-bs-theme=dark] {
     .form-check.form-dark .form-check-input:checked {
         border-color: #{var-property(border-color)};
     }
+
+    .card-body button.btn.btn-dark {
+        border: var(--bs-border-width) solid var(--bs-border-color);
+    }
+}
+
+@if $enable-validation-icons {
+    /* simple-editor invalid */
+    .simple-editor.invalid-border-color .simple-editor-toolbar {
+        padding-right: $input-height-inner;
+        background-repeat: no-repeat;
+        background-image: escape-svg($form-feedback-icon-invalid);
+        background-position: right $input-height-inner-quarter center;
+        background-size: $input-height-inner-half $input-height-inner-half;
+    }
+}
+
+/* read-only form control */
+.form-control-read-only {
+    display: block;
+    width: 100%;
+    padding: $input-padding-y $input-padding-x;
+    margin-bottom: 0;
+    line-height: $input-line-height;
+    color: var(--bs-secondary-color);
+    background-color: transparent;
+    border: $input-border-width solid $input-border-color;
 }

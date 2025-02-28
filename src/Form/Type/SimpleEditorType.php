@@ -44,6 +44,8 @@ class SimpleEditorType extends AbstractType
 {
     use GroupByTrait;
 
+    private const ACTION_PREFIX = 'simple_editor.actions.';
+
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/data/simple_editor_actions.json')]
         private readonly string $actionsPath
@@ -261,7 +263,7 @@ class SimpleEditorType extends AbstractType
     private function updateText(array &$action): self
     {
         if (isset($action['text'])) {
-            $action['text'] = 'simple_editor.' . $action['text'];
+            $action['text'] = self::ACTION_PREFIX . $action['text'];
         }
 
         return $this;
@@ -274,7 +276,7 @@ class SimpleEditorType extends AbstractType
     {
         $title = $action['title'] ?? $action['exec'] ?? null;
         if (\is_string($title)) {
-            $action['attributes']['title'] = "simple_editor.$title";
+            $action['attributes']['title'] = self::ACTION_PREFIX . $title;
         }
 
         return $this;

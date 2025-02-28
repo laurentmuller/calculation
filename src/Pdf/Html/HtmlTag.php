@@ -185,6 +185,14 @@ enum HtmlTag: string
     }
 
     /**
+     * Gets the font size, if applicable; the default size otherwise.
+     */
+    public function getFontSize(): float
+    {
+        return PdfFont::DEFAULT_SIZE * $this->getExtraFloat('font-size', 1.0);
+    }
+
+    /**
      * Creates a style for the given tag name, ignoring case consideration.
      */
     public static function getStyle(string $value): ?HtmlStyle
@@ -229,9 +237,9 @@ enum HtmlTag: string
         if ($fontName instanceof PdfFontName) {
             $font->setName($fontName);
         }
-        $fontSize = $this->getExtraFloat('font-size');
-        if ($fontSize > 0) {
-            $font->setSize($fontSize * PdfFont::DEFAULT_SIZE);
+        $fontSize = $this->getFontSize();
+        if (PdfFont::DEFAULT_SIZE !== $fontSize) {
+            $font->setSize($fontSize);
         }
         if ($this->getExtraBool('font-bold')) {
             $font->bold(true);

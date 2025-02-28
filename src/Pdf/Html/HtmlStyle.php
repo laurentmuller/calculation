@@ -258,10 +258,10 @@ class HtmlStyle extends PdfStyle
             'border-start' => PdfBorder::left(),
             'border-end' => PdfBorder::right(),
             'border-0' => PdfBorder::none(),
-            'border-top-0' => PdfBorder::all()->setTop(false),
-            'border-start-0' => PdfBorder::all()->setLeft(false),
-            'border-end-0' => PdfBorder::all()->setRight(false),
-            'border-bottom-0' => PdfBorder::all()->setBottom(false),
+            'border-top-0' => PdfBorder::notTop(),
+            'border-start-0' => PdfBorder::notLeft(),
+            'border-end-0' => PdfBorder::notRight(),
+            'border-bottom-0' => PdfBorder::notBottom(),
             default => null
         };
         if ($border instanceof PdfBorder) {
@@ -296,8 +296,9 @@ class HtmlStyle extends PdfStyle
     private function updateFont(string $class): self
     {
         switch ($class) {
+            case 'fw-normal':
             case 'fst-normal':
-                $this->setFontRegular();
+                $this->resetFont();
                 break;
             case 'fw-bold':
             case 'fw-bolder':
@@ -309,8 +310,29 @@ class HtmlStyle extends PdfStyle
             case 'text-decoration-underline':
                 $this->setFontUnderline(true);
                 break;
+            case 'text-decoration-none':
+                $this->setFontStyle($this->getFont()->getStyle()->removeUnderLine());
+                break;
             case 'font-monospace':
                 $this->setFontName(PdfFontName::COURIER);
+                break;
+            case 'fs-1':
+                $this->setFontSize(HtmlTag::H1->getFontSize());
+                break;
+            case 'fs-2':
+                $this->setFontSize(HtmlTag::H2->getFontSize());
+                break;
+            case 'fs-3':
+                $this->setFontSize(HtmlTag::H3->getFontSize());
+                break;
+            case 'fs-4':
+                $this->setFontSize(HtmlTag::H4->getFontSize());
+                break;
+            case 'fs-5':
+                $this->setFontSize(HtmlTag::H5->getFontSize());
+                break;
+            case 'fs-6':
+                $this->setFontSize(HtmlTag::H6->getFontSize());
                 break;
         }
 

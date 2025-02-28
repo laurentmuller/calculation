@@ -158,6 +158,7 @@ calculation:
         last_update: 'Dernière mise à jour : %date%'
     result:
         description: Résultat de la mise à jour des calculations.
+        empty: Aucune calculation ne correspond aux critères de mise à jour.
         update: Nouvelle mise à jour
         old_value: Ancien total
         new_value: Nouveau total
@@ -1110,33 +1111,42 @@ show:
     name: Nom
     value: Valeur
 simple_editor:
-    titles: Style
-    h1: Titre 1
-    h2: Titre 2
-    h3: Titre 3
-    h4: Titre 4
-    h5: Titre 5
-    h6: Titre 6
-    normal: Normale
-    bold: Gras
-    italic: Italique
-    underline: Souligné
-    strikethrough: Barré
-    removeFormat: Supprimer le format
-    subscript: Indice
-    superscript: Exposant
-    indent: Augmenter le retrait
-    outdent: Diminuer le retrait
-    insertOrderedList: Liste numérotée
-    insertUnorderedList: Liste à puces
-    insertHorizontalRule: Ligne horizontale
-    justifyCenter: Centrer
-    justifyLeft: Aligner à gauche
-    justifyRight: Aligner à droite
-    justify_full: Justifier
-    line: Ligne horizontale
-    undo: Annuler la dernière action
-    redo: Rétablir la dernière action
+    groups:
+        font: Police
+        script: Effet
+        align: Alignement
+        paragraph: Retrait
+        list: Liste
+        line: Ligne
+        edit: Edition
+    actions:
+        titles: Style
+        h1: Titre 1
+        h2: Titre 2
+        h3: Titre 3
+        h4: Titre 4
+        h5: Titre 5
+        h6: Titre 6
+        normal: Normale
+        bold: Gras
+        italic: Italique
+        underline: Souligné
+        strikethrough: Barré
+        removeFormat: Supprimer le format
+        subscript: Indice
+        superscript: Exposant
+        indent: Augmenter le retrait
+        outdent: Diminuer le retrait
+        insertOrderedList: Liste numérotée
+        insertUnorderedList: Liste à puces
+        insertHorizontalRule: Ligne horizontale
+        justifyCenter: Centrer
+        justifyLeft: Aligner à gauche
+        justifyRight: Aligner à droite
+        justifyFull: Justifier
+        line: Ligne horizontale
+        undo: Annuler la dernière action
+        redo: Rétablir la dernière action
 swisspost:
     error:
         file_temp: Impossible de créer un fichier temporaire.
@@ -1456,7 +1466,7 @@ archive:
     result:
         new_archive: Nouvel archivage
         description: Résultat de l'archivage des calculations.
-        empty: Aucune calculation ne correspond aux critères de mise à jour.
+        empty: Aucune calculation ne correspond aux critères d'archivage.
         total: Total
         old_state: Ancien statut
         calculations: Calculations

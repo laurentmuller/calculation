@@ -149,9 +149,9 @@ class CalculationReport extends AbstractReport
     private function renderCalculation(): void
     {
         $leftStyle = PdfStyle::getHeaderStyle()
-            ->setBorder(PdfBorder::all()->setRight(false));
+            ->setBorder(PdfBorder::notRight());
         $rightStyle = PdfStyle::getHeaderStyle()
-            ->setBorder(PdfBorder::all()->setLeft(false));
+            ->setBorder(PdfBorder::notLeft());
 
         $calculation = $this->calculation;
         PdfTable::instance($this)

@@ -274,7 +274,7 @@
                     focusInvalid: true,
                     showModification: true,
                     errorElement: 'small',
-                    errorClass: 'is-invalid', // d-inline-block or d-block
+                    errorClass: 'is-invalid',
                     ignore: ':hidden:not(".must-validate"), .skip-validation',
 
                     errorPlacement: function (error, element) {
@@ -288,7 +288,7 @@
                         this.findNamedElements($element).addClass(errorClass);
                         const $toUpdate = this.findElement($element);
                         if ($toUpdate) {
-                            $toUpdate.addClass('border-danger');
+                            $toUpdate.addClass('invalid-border-color');
                             if ($toUpdate.hasClass('field-valid')) {
                                 $toUpdate.removeClass('field-valid').addClass('field-invalid');
                             }
@@ -300,7 +300,7 @@
                         this.findNamedElements($element).removeClass(errorClass);
                         const $toUpdate = this.findElement($element);
                         if ($toUpdate) {
-                            $toUpdate.removeClass('border-danger');
+                            $toUpdate.removeClass('invalid-border-color');
                             if ($toUpdate.hasClass('field-invalid')) {
                                 $toUpdate.removeClass('field-invalid').addClass('field-valid');
                             }

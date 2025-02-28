@@ -1,7 +1,7 @@
 {
     "name": "custom_bootstrap",
     "version": "1.0.0",
-    "description": "Extends Bootstrap with no rounded and themed popovers and tooltips and form-check.",
+    "description": "Extends Bootstrap without rounded, themed popovers, tooltips and form-check.",
     "license": "MIT",
     "author": "bibi@bibi.nu",
     "type": "commonjs",
@@ -14,7 +14,7 @@
         "stylelint": "npx stylelint public/css/*.css"
     },
     "devDependencies": {
-        "stylelint": "^16.0.0",
-        "stylelint-config-standard": "^37.0.0"
+        "stylelint": "^16.0",
+        "stylelint-config-standard": "^37.0"
     }
 }

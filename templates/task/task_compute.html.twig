@@ -17,7 +17,7 @@
     </div>
     <div class="col-md-3">
         <span class="form-label">{{ 'task.fields.unit'|trans }}</span>
-        <span id="unit" class="form-control-plaintext form-control-readonly skip-reset">{{ task.unit|default('&nbsp;')|raw }}</span>
+        <span id="unit" class="form-control-read-only skip-reset">{{ task.unit|default('&nbsp;')|raw }}</span>
     </div>
     <div class="col-md-3">
         {{ form_row(form.quantity) }}

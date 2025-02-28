@@ -72,13 +72,13 @@
         "group": "font"
     },
     {
-        "exec": "superscript",
-        "icon": "superscript",
+        "exec": "subscript",
+        "icon": "subscript",
         "group": "script"
     },
     {
-        "exec": "subscript",
-        "icon": "subscript",
+        "exec": "superscript",
+        "icon": "superscript",
         "group": "script"
     },
     {
@@ -100,6 +100,12 @@
         "group": "align"
     },
     {
+        "exec": "justifyFull",
+        "state": "justifyFull",
+        "icon": "align-justify",
+        "group": "align"
+    },
+    {
         "exec": "indent",
         "icon": "indent",
         "group": "paragraph"
@@ -110,15 +116,15 @@
         "group": "paragraph"
     },
     {
-        "exec": "insertOrderedList",
-        "state": "insertOrderedList",
-        "icon": "list-ol",
-        "group": "list"
-    },
-    {
         "exec": "insertUnorderedList",
         "state": "insertUnorderedList",
         "icon": "list-ul",
+        "group": "list"
+    },
+    {
+        "exec": "insertOrderedList",
+        "state": "insertOrderedList",
+        "icon": "list-ol",
         "group": "list"
     },
     {

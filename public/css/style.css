@@ -98,13 +98,6 @@ footer span {
     color: var(--bs-danger);
 }
 
-/* read-only widget */
-.form-control-plaintext.form-control-readonly {
-    padding: 0.375rem 0.75rem;
-    border: var(--bs-border-width) solid var(--bs-border-color);
-    color: var(--bs-secondary-color) !important;
-}
-
 /* card-title (same as h5) */
 h1.card-title,
 .h1.card-title {
@@ -798,6 +791,7 @@ a.disabled {
 
 span.form-label {
     display: inline-block;
+    cursor: default;
 }
 
 /* password strength */
@@ -958,17 +952,13 @@ body.status-bar .grecaptcha-badge {
     color: unset !important;
 }
 
-/*
- * Remove selection color of accordion button
- */
+/* Remove selection color of accordion button */
 .accordion.accordion-no-background .accordion-button:not(.collapsed) {
     color: inherit;
     background-color: inherit;
 }
 
-/*
- * Border for dark button in dark mode
- */
-html[data-bs-theme=dark] .card-body button.btn.btn-dark {
-    border: var(--bs-border-width) solid var(--bs-border-color);
+/** Border color for invalid input */
+.invalid-border-color {
+    border-color: var(--bs-form-invalid-border-color);
 }

@@ -1,7 +1,19 @@
 {# horizontal toolbar #}
 {% from 'macros/_icons.html.twig' import icon, link, navItem %}
+{# parameters #}
+{%- set is_admin = is_granted('ROLE_ADMIN') -%}
+{%- set is_granted_data = is_granted(PERMISSION_LIST, ENTITY_CALCULATION)
+    or is_granted(PERMISSION_LIST, ENTITY_PRODUCT)
+    or is_granted(PERMISSION_LIST, ENTITY_TASK)
+    or is_granted(PERMISSION_LIST, ENTITY_CATEGORY)
+    or is_granted(PERMISSION_LIST, ENTITY_GROUP)
+    or is_granted(PERMISSION_LIST, ENTITY_CALCULATION_STATE)
+    or is_granted(PERMISSION_LIST, ENTITY_GLOBAL_MARGIN)
+-%}
+{%- set is_dark_navigation = app.user and user_service.darkNavigation -%}
+{%- set sidebar_show = app.user and app.request.cookies.boolean('MENU_SIDEBAR_SHOW') -%}
+{%- set display_style = sidebar_show ? 'none' : 'flex' -%}
 {# horizontal navigation #}
-{% set display_style = sidebar_show ? 'none' : 'flex' %}
 <nav id="navigation" class="navbar navbar-horizontal navbar-expand-lg bg-body-tertiary border-bottom ps-2 pb-1" style="display: {{ display_style }}"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
     <div class="container-fluid ps-0">
         <button class="btn btn-outline-secondary rounded-circle show-sidebar py-0 px-2 mt-1" title="{{ 'index.sidebar_show'|trans }}">
@@ -15,7 +27,7 @@
         </button>
         <div class="navbar-collapse collapse" id="navbar-horizontal">
             <ul class="navbar-nav me-auto">
-                {% if is_granted_calculation -%}
+                {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION) -%}
                     <li class="nav-item">
                         {{- link(path('calculation_index'), 'calculation.list.title', 'nav-link', ICON_CALCULATION) -}}
                     </li>
@@ -23,10 +35,10 @@
                 {% if is_granted_data -%}
                    {{ include('navigation/horizontal/navigation_data.html.twig') }}
                 {% endif %}
-                {% if is_granted_calculation %}
+                {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION) %}
                     {{ include('navigation/horizontal/navigation_chart.html.twig') }}
                 {% endif %}
-                {% if is_admin or is_granted_task %}
+                {% if is_admin or is_granted(PERMISSION_LIST, ENTITY_CALCULATION) %}
                     {{ include('navigation/horizontal/navigation_tools.html.twig') }}
                 {% endif %}
                 {% if is_admin -%}
@@ -38,7 +50,7 @@
                     {{ include('navigation/horizontal/navigation_search.html.twig') }}
                 {% endif %}
                 {{ include('navigation/menu/_menu_theme.html.twig') }}
-                {% if is_remembered -%}
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
                     {{ include('navigation/horizontal/navigation_user.html.twig') }}
                 {% endif %}
             </ul>

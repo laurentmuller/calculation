@@ -1,4 +1,5 @@
 {%- set key = constant('App\\Controller\\PolicyController::POLICY_ACCEPTED') -%}
+{%- set is_dark_navigation = app.user and user_service.darkNavigation -%}
 {% if app.user and not app.request.cookies.boolean(key) %}
     {% from 'macros/_icons.html.twig' import link %}
     <footer class="navbar navbar-footer bg-body-tertiary py-1 justify-content-md-end fixed-bottom small d-print-none" style="z-index: 1031;"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>

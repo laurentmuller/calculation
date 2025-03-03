@@ -4,6 +4,7 @@
 {%- set title = 'about.policy' -%}
 {%- set title_icon = 'info-circle' -%}
 {%- set accepted = app.request.cookies.boolean(constant('App\\Controller\\PolicyController::POLICY_ACCEPTED')) -%}
+{%- set is_remembered = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
 {# navigation #}
 {% block card_container_class is_remembered ? '' : ' mt-3' %}
 {% block navigation_horizontal -%}{% if is_remembered %}{{ parent() }}{% endif %}{%- endblock %}

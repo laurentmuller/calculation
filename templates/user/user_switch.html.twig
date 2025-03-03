@@ -1,4 +1,4 @@
-{% if is_impersonator %}
+{% if is_granted('IS_IMPERSONATOR') %}
 {% from 'macros/_icons.html.twig' import link %}
 <div class="alert alert-warning my-2" role="alert">
     <div class="d-flex-wrap-center">

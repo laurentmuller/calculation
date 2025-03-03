@@ -11,9 +11,10 @@ $(function () {
      */
     function initHorizontalSearch() {
         const $div = $('#search-div-horizontal');
-        if ($div.length === 0) {
+        if ($div.length === 0 || $div.data('initialized')) {
             return;
         }
+        $div.data('initialized', true)
         const formSize = 150;
         const breakPoint = 992;
         const $input = $('#search-input-horizontal');
@@ -67,23 +68,29 @@ $(function () {
      * Initialize the sidebar.
      */
     function initSidebar() {
-        $('.navbar-vertical').sidebar({
-            pathname: 'caller'
+        const $body = $('body');
+        $body.sidebar({
+            pathname: 'caller',
+            verticalTarget: 'body',
+            horizontalTarget: '.page-content'
         });
+        $body.on('toggle-navigation', () => {
+            initHorizontalSearch();
+            initThemeSwitcher();
+        })
     }
-
-    // /**
-    //  * Initialize theme menu tooltips.
-    //  */
-    // function initThemeTooltip() {
-    //     $('[data-theme][data-bs-toggle="tooltip"]').tooltip();
-    // }
 
     /**
      * Initialize the theme switcher.
      */
     function initThemeSwitcher() {
-        $('.theme-switcher').themeListener();
+        $('.theme-switcher').each(function () {
+            const $this = $(this);
+            if (!$this.data('initialized')) {
+                $this.data('initialized', true)
+                $this.themeListener();
+            }
+        })
     }
 
     /**

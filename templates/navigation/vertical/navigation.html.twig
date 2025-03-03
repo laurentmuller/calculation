@@ -1,18 +1,26 @@
 {# imports #}
 {% from 'macros/_icons.html.twig' import icon, dropdownItem, dropdownSeparator %}
 {% from 'macros/_attributes.html.twig' import attributes %}
-{# attributes #}
-{%- set sidebar_attributes = {
-    'show-menu': 'index.menu_show'|trans,
-    'hide-menu': 'index.menu_hide'|trans,
-} -%}
+{# parameters #}
+{%- set is_admin = is_granted('ROLE_ADMIN') -%}
+{%- set is_granted_data = is_granted(PERMISSION_LIST, ENTITY_CALCULATION)
+    or is_granted(PERMISSION_LIST, ENTITY_PRODUCT)
+    or is_granted(PERMISSION_LIST, ENTITY_TASK)
+    or is_granted(PERMISSION_LIST, ENTITY_CATEGORY)
+    or is_granted(PERMISSION_LIST, ENTITY_GROUP)
+    or is_granted(PERMISSION_LIST, ENTITY_CALCULATION_STATE)
+    or is_granted(PERMISSION_LIST, ENTITY_GLOBAL_MARGIN)
+-%}
+{%- set is_dark_navigation = app.user and user_service.darkNavigation -%}
+{%- set sidebar_show = app.user and app.request.cookies.boolean('MENU_SIDEBAR_SHOW') -%}
+{%- set sidebar_class = sidebar_show ? ' sidebar-show' : '' -%}
 {# sidebar #}
-<div id="sidebar" class="navbar navbar-vertical bg-body-tertiary d-print-none{{ sidebar_class }}"{{ attributes(sidebar_attributes, 'data-') }}{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
+<div id="sidebar" class="navbar navbar-vertical bg-body-tertiary d-print-none{{ sidebar_class }}"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
     {# toggle sidebar #}
     <button class="btn btn-outline-secondary rounded-circle py-0 px-2 hide-sidebar" title="{{ 'index.sidebar_hide'|trans }}">
         <i class="fa-solid fa-angle-left"></i>
     </button>
-    {% if not status_bar %}
+    {% if not user_service.statusBar %}
         {# about image and link #}
         <div class="d-flex position-relative mb-2" style="margin-right: 28px">
             <div class="flex-shrink-0">
@@ -32,29 +40,29 @@
     </a>
     {# menus #}
     <ul class="navbar-nav mb-auto pt-1 border-top w-100">
-        {% if is_granted_calculation -%}
+        {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION) -%}
             {{ dropdownItem(path('calculation_index'), 'calculation.list.title', ICON_CALCULATION) }}
             {{ dropdownSeparator(false, 'mt-1') }}
         {% endif %}
         {% if is_granted_data %}
             {{ include('navigation/vertical/navigation_data.html.twig') }}
         {% endif %}
-        {% if is_granted_calculation %}
+        {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION) %}
             {{ include('navigation/vertical/navigation_chart.html.twig') }}
         {% endif %}
-        {% if is_admin or is_granted_task %}
+        {% if is_admin or is_granted(PERMISSION_LIST, ENTITY_CALCULATION) %}
             {{ include('navigation/vertical/navigation_tools.html.twig') }}
         {% endif %}
         {% if is_admin -%}
             {{ include('navigation/vertical/navigation_admin.html.twig') }}
         {% endif %}
-        {% if is_super_admin %}
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
             {{ include('navigation/vertical/navigation_test.html.twig') }}
         {% endif %}
     </ul>
     {# bottom menus #}
     <div class="d-flex-wrap-center border-top w-100 py-2">
-        {% if is_remembered -%}
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
             {{ include('navigation/vertical/navigation_user.html.twig') }}
         {% endif %}
         {{ include('navigation/menu/_menu_theme.html.twig') }}

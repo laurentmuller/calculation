@@ -1,19 +1,29 @@
 {# common user menu #}
 {% from 'macros/_icons.html.twig' import dropdownSeparator, dropdownItem %}
+{# parameters #}
+{%- set is_granted_data = is_granted(PERMISSION_LIST, ENTITY_CALCULATION)
+    or is_granted(PERMISSION_LIST, ENTITY_PRODUCT)
+    or is_granted(PERMISSION_LIST, ENTITY_TASK)
+    or is_granted(PERMISSION_LIST, ENTITY_CATEGORY)
+    or is_granted(PERMISSION_LIST, ENTITY_GROUP)
+    or is_granted(PERMISSION_LIST, ENTITY_CALCULATION_STATE)
+    or is_granted(PERMISSION_LIST, ENTITY_GLOBAL_MARGIN)
+-%}
+
 <ul class="dropdown-menu {{ class }}">
     {{ dropdownItem(logout_path(), 'index.logout', 'sign-out-alt') }}
     {{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-pen') }}
     {{ dropdownItem(path('user_profile_password'), 'profile.password.title', 'unlock') }}
     {{ dropdownSeparator() }}
     {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
-    {% if is_impersonator -%}
+    {% if is_granted('IS_IMPERSONATOR') -%}
         {{ dropdownSeparator() }}
         {{ dropdownItem(impersonation_exit_path(path('user_index')), 'user.switch.exit.title', 'user-slash') }}
     {% endif %}
-    {% if is_env_dev -%}
+    {% if app_mode == 'dev' -%}
         {{ dropdownSeparator() }}
         {{ dropdownItem(link_prod, 'environment.switch', 'location-arrow', {'%name%': 'environment.prod'|trans}) }}
-    {% elseif is_env_prod or is_env_local -%}
+    {% elseif app_mode == 'prod' or app_mode == 'local' -%}
         {{ dropdownSeparator() }}
         {{ dropdownItem(link_dev, 'environment.switch', 'location-arrow', {'%name%': 'environment.dev'|trans}) }}
     {% endif %}
@@ -22,10 +32,10 @@
         {{ dropdownItem(path('site_map'), 'index.menu_site_map', 'sitemap') }}
     {% endif %}
     {{ dropdownItem(path('user_comment'), 'user.comment.title', 'envelope far') }}
-    {% if is_env_dev %}
+    {% if app_mode == 'dev' %}
         {{ dropdownItem(path('help_index'), 'help.title', 'question-circle') }}
     {% endif %}
-    {% if not status_bar %}
+    {% if not user_service.statusBar %}
         {{ dropdownSeparator() }}
         {{ dropdownItem(path('about_index'), 'index.menu_info', 'info-circle', {'%app_name%': app_name}) }}
     {% endif %}

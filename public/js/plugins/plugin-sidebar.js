@@ -31,11 +31,17 @@ $(function () {
          * Destructor.
          */
         destroy() {
-            this.$element.off('shown.bs.collapse hidden.bs.collapse', 'div.collapse', this.toggleCollapseProxy);
-            this.$showButton.off('click', this.showSidebarProxy);
-            this.$hideButton.off('click', this.hideSidebarProxy);
-            $(window).off('resize', this.resizeProxy);
+            if (this.$verticalNavigation) {
+                this.$verticalNavigation.off('shown.bs.collapse hidden.bs.collapse', 'div.collapse', this.toggleCollapseProxy);
+            }
+            if (this.$showButton) {
+                this.$showButton.off('click', this.showSidebarProxy);
+            }
+            if (this.$hideButton) {
+                this.$hideButton.off('click', this.hideSidebarProxy);
+            }
             this.$element.removeData(Sidebar.NAME);
+            $(window).off('resize', this.resizeProxy);
         }
 
         // -----------------------------
@@ -49,89 +55,87 @@ $(function () {
         _init() {
             // get elements
             const options = this.options;
-            this.$navbarHorizontal = $(options.horizontalNavbarSelector);
-            this.$showButton = $(options.showSidebarSelector);
-            this.$hideButton = $(options.hideSidebarSelector);
-            this.$pageContent = $(options.pageContentSelector);
+            this.$verticalNavigation = this._ensureInstance(null, options.verticalSelector);
+            this.$horizontalNavigation = this._ensureInstance(null, options.horizontalSelector);
 
-            // update collapse menus
-            this._updateSiblingMenus();
-
-            // update toggle buttons
-            this._updateToggleButtons();
-
-            // initialize the timeout
-            this._initTimeout();
-
-            // highlight url
-            this._highlightPath();
+            this.$verticalTarget = this._ensureInstance(null, options.verticalTarget);
+            this.$horizontalTarget = this._ensureInstance(null, options.horizontalTarget);
 
             // create proxies
             this.toggleCollapseProxy = () => this._updateToggleButtons();
-            this.showSidebarProxy = (e) => this._showSidebar(e);
-            this.hideSidebarProxy = (e) => this._hideSidebar(e);
+            this.showSidebarProxy = (e) => this._showVerticalNavigation(e);
+            this.hideSidebarProxy = (e) => this._showHorizontalNavigation(e);
             this.resizeProxy = (e) => this._resize(e);
 
-            // bind events
-            this.$element.on('shown.bs.collapse hidden.bs.collapse', 'div.collapse', this.toggleCollapseProxy);
-            this.$showButton.on('click', this.showSidebarProxy);
-            this.$hideButton.on('click', this.hideSidebarProxy);
-            $(window).on('resize', this.resizeProxy);
+            if (this.$verticalNavigation) {
+                this.$verticalNavigation.on('shown.bs.collapse hidden.bs.collapse', 'div.collapse', this.toggleCollapseProxy);
+                this._updateToggleButtons();
+                this._updateSiblingMenus();
+                this._highlightPath();
+            }
 
-            // hide sidebar if too small
-            $(window).trigger('resize');
+            this._initShowButton();
+            this._initHideButton();
+
+            $(window).on('resize', this.resizeProxy)
+                .trigger('resize');
         }
 
-        /**
-         * Initialize the timeout to display/hide sidebar automatically.
-         * @private
-         */
-        _initTimeout() {
-            // timeout?
-            const timeout = this.options.timeout;
-            if (timeout > 0) {
-                this._initShowButtonTimeout(timeout);
-                this._initHideButtonTimeout(timeout);
+        _initShowButton() {
+            const options = this.options;
+            this.$showButton = this._ensureInstance(null, options.showButtonSelector);
+            if (this.$showButton) {
+                this.$showButton.on('click', this.showSidebarProxy);
+                this._initShowButtonTimeout(options.timeout);
+            }
+        }
+
+        _initHideButton() {
+            const options = this.options;
+            this.$hideButton = this._ensureInstance(null, options.hideButtonSelector);
+            if (this.$hideButton) {
+                this.$hideButton.on('click', this.hideSidebarProxy);
+                this._initHideButtonTimeout(options.timeout);
             }
         }
 
         /**
-         * Initialize the timeout to show sidebar automatically.
+         * Initialize the timeout to show vertical navigation automatically.
          * @param {number} timeout
          * @private
          */
         _initShowButtonTimeout(timeout) {
             const that = this;
-            if (that.$showButton.length === 0) {
+            if (!that.$showButton) {
                 return;
             }
             const removeTimer = () => that.$showButton.removeTimer();
             that.$showButton.on('mouseenter', function (e) {
-                if (!that._isSideBarVisible()) {
+                if (!that._isVerticalNavigationVisible()) {
                     that.$showButton.createTimer(function () {
                         removeTimer();
-                        that._showSidebar(e);
+                        that._showVerticalNavigation(e);
                     }, timeout);
                 }
             }).on('mouseleave', removeTimer);
         }
 
         /**
-         * Initialize the timeout to hide sidebar automatically.
+         * Initialize the timeout to hide vertical navigation automatically.
          * @param {number} timeout
          * @private
          */
         _initHideButtonTimeout(timeout) {
             const that = this;
-            if (that.$hideButton.length === 0) {
+            if (!that.$hideButton) {
                 return;
             }
             const removeTimer = () => that.$hideButton.removeTimer();
             that.$hideButton.on('mouseenter', function (e) {
-                if (that._isSideBarVisible()) {
+                if (that._isVerticalNavigationVisible()) {
                     that.$hideButton.createTimer(function () {
                         removeTimer();
-                        that._hideSidebar(e);
+                        that._showHorizontalNavigation(e);
                     }, timeout);
                 }
             }).on('mouseleave', removeTimer);
@@ -155,52 +159,109 @@ $(function () {
          */
         _resize(e) {
             if (this._isClientTooSmall()) {
-                this._hideSidebar(e);
+                this._showHorizontalNavigation(e);
             }
         }
 
         /**
-         * Hide the sidebar if visible.
+         * Show the horizontal navigation.
          *
          * @param {Event} e - the event.
          * @private
          */
-        _hideSidebar(e) {
-            if (this._isSideBarVisible()) {
-                this._toggleSidebar(e);
+        _showHorizontalNavigation(e) {
+            if (!this._isVerticalNavigationVisible()) {
+                return;
+            }
+            if (!this.$horizontalNavigation) {
+                this._loadHorizontalNavigation();
+            } else {
+                this._toggleNavigation(e);
             }
         }
 
         /**
-         * Show the sidebar if hidden.
+         * Show the vertical navigation.
          *
          * @param {Event} e - the event.
          * @private
          */
-        _showSidebar(e) {
-            if (!this._isSideBarVisible()) {
-                this._toggleSidebar(e);
+        _showVerticalNavigation(e) {
+            if (this._isVerticalNavigationVisible()) {
+                return;
+            }
+            if (!this.$verticalNavigation) {
+                this._loadVerticalNavigation();
+            } else {
+                this._toggleNavigation(e);
             }
         }
 
+        _loadVerticalNavigation() {
+            const that = this;
+            const options = this.options;
+            if (!options.verticalUrl || !options.verticalTarget || !that.$verticalTarget) {
+                return;
+            }
+
+            $.getJSON(options.verticalUrl, function (response) {
+                if (!response.result || !response.view || !that.$verticalTarget) {
+                    return;
+                }
+                that.$verticalNavigation = $(response.view);
+                that._updateSiblingMenus();
+                that._updateToggleButtons();
+                that._highlightPath();
+                that.$verticalTarget.prepend(that.$verticalNavigation);
+                if (!that.$hideButton) {
+                    that._initHideButton();
+                }
+                that._toggleNavigation();
+            });
+        }
+
+        _loadHorizontalNavigation() {
+            const that = this;
+            const options = this.options;
+            if (!options.horizontalUrl || !options.horizontalTarget || !that.$horizontalTarget) {
+                return;
+            }
+
+            $.getJSON(options.horizontalUrl, function (response) {
+                if (!response.result || !response.view) {
+                    return;
+                }
+                that.$horizontalNavigation = $(response.view);
+                that.$horizontalTarget.prepend(that.$horizontalNavigation);
+                if (!that.$showButton) {
+                    that._initShowButton();
+                }
+                that._toggleNavigation();
+            });
+        }
+
         /**
-         * Toggle the sidebar visibility.
+         * Toggle the navigation visibility.
          *
          * @param {Event} [e] - the event.
          * @private
          */
-        _toggleSidebar(e) {
+        _toggleNavigation(e) {
             if (e) {
                 e.preventDefault();
             }
             $.hideTooltips();
             $.hideDropDownMenus();
             const that = this;
-            that.$element.add(that.$pageContent).toggleClass('sidebar-show').promise().done(() => {
-                that.$navbarHorizontal.toggle(that.options.duration, () => {
-                    that._saveState();
+            if (that.$verticalNavigation && that.$horizontalTarget) {
+                that.$verticalNavigation.add(that.$horizontalTarget).toggleClass('sidebar-show').promise().done(() => {
+                    that.$horizontalNavigation.toggle(that.options.duration, () => {
+                        that._saveState();
+                        that.$element.trigger('toggle-navigation');
+                    });
+
                 });
-            });
+            }
         }
 
         /**
@@ -209,7 +270,7 @@ $(function () {
          */
         _updateToggleButtons() {
             const options = this.options;
-            this.$element.find('div.collapse').each(function (index, element) {
+            this.$verticalNavigation.find('div.collapse').each(function (index, element) {
                 const $element = $(element);
                 const show = $element.hasClass('show');
                 const title = show ? options.hideMenu : options.showMenu;
@@ -223,12 +284,12 @@ $(function () {
          * @private
          */
         _updateSiblingMenus() {
-            if (!this.options.collapseSiblingMenus) {
+            if (!this.options.collapseSiblingMenus || !this.$verticalNavigation) {
                 return;
             }
             const that = this;
-            const rootId = that._ensureId(this.$element);
-            this.$element.find('div.collapse').each(function (index, element) {
+            const rootId = that._ensureId(this.$verticalNavigation);
+            this.$verticalNavigation.find('div.collapse').each(function (index, element) {
                 const $element = $(element);
                 const count = $element.parents('div.collapse').length;
                 if (count === 0) {
@@ -260,10 +321,13 @@ $(function () {
         }
 
         /**
-         * Add active class to selected url (if any).
+         * Add active class to the selected url (if any).
          * @private
          */
         _highlightPath() {
+            if (!this.$verticalNavigation) {
+                return;
+            }
             const pathname = this.options.pathname || '';
             const params = (new URL(document.location)).searchParams;
             const search = params.get(pathname) || window.location.pathname;
@@ -279,17 +343,17 @@ $(function () {
             }
 
             // active target element
-            this.$element.find(`a[href="${search}"]:not(.navbar-brand)`).addClass('active bg-body-secondary');
+            this.$verticalNavigation.find(`a[href="${search}"]:not(.navbar-brand)`).addClass('active bg-body-secondary');
         }
 
         /**
-         * Returns if the sidebar is visible.
+         * Returns if the vertical navigation is visible.
          *
          * @return {boolean} true if visible; false if hidden.
          * @private
          */
-        _isSideBarVisible() {
-            return this.$element.hasClass('sidebar-show');
+        _isVerticalNavigationVisible() {
+            return this.$verticalNavigation && this.$verticalNavigation.hasClass('sidebar-show');
         }
 
         /**
@@ -301,10 +365,10 @@ $(function () {
             const menus = {};
             const options = this.options;
             const selector = `div.collapse[id^='${options.menuPrefix}']`;
-            this.$element.find(selector).each(function (index, element) {
+            this.$verticalNavigation.find(selector).each(function (index, element) {
                 menus[element.id] = element.classList.contains('show');
             });
-            menus[options.menuShow] = this._isSideBarVisible();
+            menus[options.menuShow] = this._isVerticalNavigationVisible();
             return menus;
         }
 
@@ -341,6 +405,22 @@ $(function () {
                 document.cookie = `${key}=${JSON.stringify(value)};${suffix}`;
             }
         }
+
+        /**
+         * Find a child element.
+         *
+         * @param {jQuery|null} $parent
+         * @param {string} selector
+         * @return {jQuery|null}
+         * @private
+         */
+        _ensureInstance($parent, selector) {
+            const $instance = $parent ? $parent.find(selector) : $(selector);
+            if ($instance && $instance.length) {
+                return $instance;
+            }
+            return null;
+        }
     };
 
     // -----------------------------------
@@ -351,14 +431,6 @@ $(function () {
         menuShow: 'MENU_SIDEBAR_SHOW',
         // the menu prefix used to save state
         menuPrefix: 'MENU_SIDEBAR_',
-        // show sidebar button selector
-        showSidebarSelector: '.show-sidebar',
-        // hide sidebar button selector
-        hideSidebarSelector: '.hide-sidebar',
-        // horizontal navigation bar selector
-        horizontalNavbarSelector: '.navbar-horizontal',
-        // page content selector
-        pageContentSelector: '.page-content',
         // the timeout to display/hide sidebar automatically (0 = disabled)
         timeout: 1500,
         // the duration to show / hide menus
@@ -373,7 +445,24 @@ $(function () {
         // the path name to search in query parameters to highlight URL
         pathname: null,
         // collapse sibling's menus
-        collapseSiblingMenus: true
+        collapseSiblingMenus: true,
+
+        // the URL to load the vertical navigation
+        verticalUrl: null,
+        // the selector where to prepend the loaded vertical navigation
+        verticalTarget: null,
+        // vertical navigation selector
+        verticalSelector: '.navbar-vertical',
+        // the URL to load the horizontal navigation
+        horizontalUrl: null,
+        // the selector where to prepend the loaded horizontal navigation
+        horizontalTarget: null,
+        // horizontal navigation selector
+        horizontalSelector: '.navbar-horizontal',
+        // show vertical navigation button selector
+        showButtonSelector: '.show-sidebar',
+        // hide vertical navigation button selector
+        hideButtonSelector: '.hide-sidebar',
     };
 
     /**

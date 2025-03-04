@@ -87,7 +87,7 @@ class Database extends AbstractDatabase
         static $fileName = null;
         if (null === $fileName) {
             $path = (string) \realpath(__DIR__);
-            $fileName = Path::normalize($path. '/db_test.sqlite');
+            $fileName = Path::normalize($path . '/db_test.sqlite');
         }
 
         /** @psalm-var string */

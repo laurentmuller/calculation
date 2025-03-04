@@ -9,8 +9,8 @@ $(function () {
     // ------------------------------------
 
     /**
-     * @property {JQuery<HTMLElement>} $element
-     * @property {JQuery<HTMLInputElement>} $input
+     * @property {jQuery<HTMLElement>} $element
+     * @property {jQuery<HTMLInputElement>} $input
      */
     const CellEdit = class {
 
@@ -44,7 +44,7 @@ $(function () {
         /**
          * Gets the input element.
          *
-         * @return {JQuery<HTMLInputElement>}
+         * @return {jQuery<HTMLInputElement>}
          */
         getInput() {
             return this.$input;

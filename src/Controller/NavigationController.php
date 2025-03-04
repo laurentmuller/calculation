@@ -50,6 +50,6 @@ class NavigationController extends AbstractController
     {
         $view = $this->renderView($template);
 
-        return $this->jsonTrue(['view' => $view]);
+        return $this->json($view);
     }
 }

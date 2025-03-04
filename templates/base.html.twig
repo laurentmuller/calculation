@@ -4,7 +4,7 @@
 {%- set is_active = app.user and app.user.enabled -%}
 {%- set status_bar = status_bar is defined ? status_bar : is_active and user_service.statusBar -%}
 {%- set sidebar_show = app.user and app.request.cookies.boolean('MENU_SIDEBAR_SHOW') -%}
-{%- set sidebar_class = sidebar_show ? ' sidebar-show' : '' -%}
+{%- set sidebar_class = sidebar_show ? 'page-content sidebar-show' : 'page-content' -%}
 {%- set is_js_debug = app.debug -%}
 <!DOCTYPE html>
 <html lang="{{ app.request.locale|replace({_: '-'}) }}" data-bs-theme="{{ theme_value(app.request) }}">
@@ -60,7 +60,7 @@
         {% endif %}
     {%- endblock %}
     {# main content #}
-    <div class="page-content{{ sidebar_class }}">
+    <div class="{{ sidebar_class }}">
         {# horizontal navigation #}
         {%- block navigation_horizontal -%}
             {% if not sidebar_show %}

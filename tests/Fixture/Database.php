@@ -16,6 +16,7 @@ namespace App\Tests\Fixture;
 use App\Database\AbstractDatabase;
 use App\Utils\FileUtils;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Path;
 
 /**
  * The database used for tests.
@@ -83,7 +84,14 @@ class Database extends AbstractDatabase
      */
     public static function getDatabaseFilename(): string
     {
-        return __DIR__ . '/db_test.sqlite';
+        static $fileName = null;
+        if (null === $fileName) {
+            $path = (string) \realpath(__DIR__);
+            $fileName = Path::normalize($path. '/db_test.sqlite');
+        }
+
+        /** @psalm-var string */
+        return $fileName;
     }
 
     /**

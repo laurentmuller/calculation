@@ -14,7 +14,7 @@ $(function () {
         if ($div.length === 0 || $div.data('initialized')) {
             return;
         }
-        $div.data('initialized', true)
+        $div.data('initialized', true);
         const formSize = 150;
         const breakPoint = 992;
         const $input = $('#search-input-horizontal');
@@ -65,6 +65,19 @@ $(function () {
     }
 
     /**
+     * Initialize the theme switcher.
+     */
+    function initThemeSwitcher() {
+        $('.theme-switcher').each(function () {
+            const $this = $(this);
+            if (!$this.data('initialized')) {
+                $this.data('initialized', true);
+                $this.themeListener();
+            }
+        });
+    }
+
+    /**
      * Initialize the sidebar.
      */
     function initSidebar() {
@@ -77,26 +90,14 @@ $(function () {
         $body.on('toggle-navigation', () => {
             initHorizontalSearch();
             initThemeSwitcher();
-        })
-    }
-
-    /**
-     * Initialize the theme switcher.
-     */
-    function initThemeSwitcher() {
-        $('.theme-switcher').each(function () {
-            const $this = $(this);
-            if (!$this.data('initialized')) {
-                $this.data('initialized', true)
-                $this.themeListener();
-            }
-        })
+        });
     }
 
     /**
      * Handle the back-to-top button.
      */
     function initBackToTop() {
+        /** @type {*|jQuery|HTMLElement} */
         const $button = $('.btn-back-to-top');
         if (!$button.length) {
             return;

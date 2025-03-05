@@ -4,7 +4,6 @@
  * ------------------------------------
  */
 
-/*jshint esversion: 8 */
 $(function () {
     'use strict';
 
@@ -97,8 +96,11 @@ $(function () {
         _initShowButton() {
             const options = this.options;
             this.$showButton = this._ensureInstance(null, options.showButtonSelector);
-            if (this.$showButton) {
-                this.$showButton.on('click', this.showSidebarProxy);
+            if (!this.$showButton) {
+                return;
+            }
+            this.$showButton.click(this.showSidebarProxy);
+            if (options.timeout > 0) {
                 this._initShowButtonTimeout(options.timeout);
             }
         }
@@ -106,8 +108,11 @@ $(function () {
         _initHideButton() {
             const options = this.options;
             this.$hideButton = this._ensureInstance(null, options.hideButtonSelector);
-            if (this.$hideButton) {
-                this.$hideButton.on('click', this.hideSidebarProxy);
+            if (!this.$hideButton) {
+                return;
+            }
+            this.$hideButton.click(this.hideSidebarProxy);
+            if (options.timeout > 0) {
                 this._initHideButtonTimeout(options.timeout);
             }
         }
@@ -127,14 +132,14 @@ $(function () {
         _initShowButtonTimeout(timeout) {
             const that = this;
             const removeTimer = () => that.$showButton.removeTimer();
-            that.$showButton.on('mouseenter', function (e) {
-                if (!that._isVerticalNavigationVisible()) {
+            that.$showButton.on('mouseenter', function () {
+                if (that._isHorizontalNavigationVisible()) {
                     that.$showButton.createTimer(function () {
                         removeTimer();
-                        that._showVerticalNavigation(e);
+                        that._showVerticalNavigation();
                     }, timeout);
                 }
-            }).on('mouseleave', removeTimer);
+            }).on('mouseleave click', removeTimer);
         }
 
         /**
@@ -145,14 +150,14 @@ $(function () {
         _initHideButtonTimeout(timeout) {
             const that = this;
             const removeTimer = () => that.$hideButton.removeTimer();
-            that.$hideButton.on('mouseenter', function (e) {
+            that.$hideButton.on('mouseenter', function () {
                 if (that._isVerticalNavigationVisible()) {
                     that.$hideButton.createTimer(function () {
                         removeTimer();
-                        that._showHorizontalNavigation(e);
+                        that._showHorizontalNavigation();
                     }, timeout);
                 }
-            }).on('mouseleave', removeTimer);
+            }).on('mouseleave click', removeTimer);
         }
 
         /**
@@ -181,7 +186,7 @@ $(function () {
          * @private
          */
         _showHorizontalNavigation() {
-            if (!this._isVerticalNavigationVisible()) {
+            if (this._isHorizontalNavigationVisible()) {
                 return;
             }
             if (!this.$horizontalNavigation) {
@@ -227,6 +232,8 @@ $(function () {
                     that._initHideButton();
                 }
                 that._toggleNavigation();
+            }).fail(function () {
+                that._destroyShowButton(true);
             });
         }
 
@@ -251,6 +258,8 @@ $(function () {
                     that._initShowButton();
                 }
                 that._toggleNavigation();
+            }).fail(function () {
+                that._destroyHideButton(true);
             });
         }
 
@@ -262,13 +271,14 @@ $(function () {
             $.hideTooltips();
             $.hideDropDownMenus();
             const that = this;
+            const duration = that.options.duration;
+            const className = that.options.sidebarClassName;
             if (that.$verticalNavigation && that.$horizontalTarget) {
-                that.$verticalNavigation.add(that.$horizontalTarget).toggleClass('sidebar-show').promise().done(() => {
-                    that.$horizontalNavigation.toggle(that.options.duration, () => {
-                        that._saveState();
+                that.$verticalNavigation.add(that.$horizontalTarget).toggleClass(className).promise().done(() => {
+                    that.$horizontalNavigation.toggle(duration, () => {
                         that.$element.trigger('toggle-navigation');
+                        that._saveState();
                     });
-
                 });
             }
         }
@@ -338,18 +348,17 @@ $(function () {
             const params = (new URL(document.location)).searchParams;
             const search = params.get(pathname) || window.location.pathname;
             let paths = search.split('/');
-            while (paths.length > 2) {
+            while (paths.length > 1) {
                 const path = paths.join('/');
                 const $element = $(`.nav-item a[href="${path}"]`);
                 if ($element.length) {
-                    $element.addClass('active');
+                    $element.addClass('active bg-body-secondary');
                     break;
                 }
                 paths.pop();
             }
-
             // active target element
-            this.$verticalNavigation.find(`a[href="${search}"]:not(.navbar-brand)`).addClass('active bg-body-secondary');
+            // this.$verticalNavigation.find(`a[href="${search}"]:not(.navbar-brand)`).addClass('active bg-body-secondary');
         }
 
         /**
@@ -357,9 +366,20 @@ $(function () {
          *
          * @return {boolean} true if visible; false if hidden.
          * @private
-         */
+         // */
         _isVerticalNavigationVisible() {
-            return this.$verticalNavigation && this.$verticalNavigation.hasClass('sidebar-show');
+            const className = this.options.sidebarClassName;
+            return this.$verticalNavigation && this.$verticalNavigation.hasClass(className);
+        }
+
+        /**
+         * Returns if the horizontal navigation is visible.
+         *
+         * @return {boolean} true if visible; false if hidden.
+         * @private
+         */
+        _isHorizontalNavigationVisible() {
+            return !this._isVerticalNavigationVisible();
         }
 
         /**
@@ -499,6 +519,8 @@ $(function () {
         showButtonSelector: '.show-sidebar',
         // hide vertical navigation button selector
         hideButtonSelector: '.hide-sidebar',
+        // the sidebar show class name
+        sidebarClassName: 'sidebar-show',
     };
 
     /**

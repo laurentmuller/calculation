@@ -147,7 +147,8 @@ html[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
     width: 100%;
 }
 
-.navbar-vertical ul:not(.dropdown-menu-default) .dropdown-item.active {
+.navbar-vertical ul:not(.dropdown-menu-default) .dropdown-item.active,
+.navbar-vertical ul:not(.dropdown-menu-default) .dropdown-item:active {
     color: var(--bs-emphasis-color);
 }
 

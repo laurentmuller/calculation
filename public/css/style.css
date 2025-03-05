@@ -873,7 +873,8 @@ span.bottom-border-gradient {
     ) !important;
 }
 
-.typeahead.dropdown-menu .dropdown-item.active span {
+.typeahead.dropdown-menu .dropdown-item.active span,
+.typeahead.dropdown-menu .dropdown-item:active span {
     color: inherit !important;
     font-weight: inherit !important;
 }

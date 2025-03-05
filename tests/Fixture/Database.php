@@ -15,6 +15,7 @@ namespace App\Tests\Fixture;
 
 use App\Database\AbstractDatabase;
 use App\Utils\FileUtils;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
 
@@ -52,10 +53,18 @@ class Database extends AbstractDatabase
      */
     public static function deleteDatabase(): ?self
     {
+        $count = 0;
         $fs = new Filesystem();
         $filename = self::getDatabaseFilename();
-        if ($fs->exists($filename)) {
-            $fs->remove($filename);
+        while ($fs->exists($filename)) {
+            try {
+                $fs->remove($filename);
+            } catch (IOException $e) {
+                if (++$count >= 5) {
+                    throw $e;
+                }
+                \sleep(1);
+            }
         }
 
         return null;
@@ -86,8 +95,7 @@ class Database extends AbstractDatabase
     {
         static $fileName = null;
         if (null === $fileName) {
-            $path = (string) \realpath(__DIR__);
-            $fileName = Path::normalize($path . '/db_test.sqlite');
+            $fileName = Path::normalize(__DIR__ . '/db_test.sqlite');
         }
 
         /** @psalm-var string */

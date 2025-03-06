@@ -9,8 +9,7 @@
     or is_granted(PERMISSION_LIST, ENTITY_CALCULATION_STATE)
     or is_granted(PERMISSION_LIST, ENTITY_GLOBAL_MARGIN)
 -%}
-
-<ul class="dropdown-menu {{ class }}">
+<ul class="dropdown-menu {{ dropdown_class }}">
     {{ dropdownItem(logout_path(), 'index.logout', 'sign-out-alt') }}
     {{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-pen') }}
     {{ dropdownItem(path('user_profile_password'), 'profile.password.title', 'unlock') }}

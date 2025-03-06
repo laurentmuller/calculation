@@ -675,8 +675,8 @@ index:
     toggle_navigation: Basculer la navigation horizontal
     sidebar_show: Afficher la barre latérale
     sidebar_hide: Masquer la barre latérale
-    menu_show: Développer le menu
-    menu_hide: Réduire le menu
+    menu_show: Affiche le menu
+    menu_hide: Masquer le menu
 list:
     add_title: Créer un nouvel élément
     empty_list: Aucune donnée correspondante.

@@ -90,10 +90,16 @@ html[data-bs-theme=dark] .toast-plugin .toast.border-dark {
 }
 
 /* margins */
-.page-content:not(.sidebar-show) .toast-plugin.top-left,
-.page-content:not(.sidebar-show) .toast-plugin.top-center,
-.page-content:not(.sidebar-show) .toast-plugin.top-right {
+body:not(.sidebar-show) .toast-plugin.top-left,
+body:not(.sidebar-show) .toast-plugin.top-center,
+body:not(.sidebar-show) .toast-plugin.top-right {
     margin-top: 4rem !important;
+}
+
+body.sidebar-show .toast-plugin.top-left,
+body.sidebar-show .toast-plugin.center-left,
+body.sidebar-show .toast-plugin.bottom-left {
+    margin-left: var(--sidebar-width) !important;
 }
 
 .page-content:has(footer) .toast-plugin.bottom-left,
@@ -102,15 +108,9 @@ html[data-bs-theme=dark] .toast-plugin .toast.border-dark {
     margin-bottom: 2rem !important;
 }
 
-.page-content.sidebar-show .toast-plugin.top-left,
-.page-content.sidebar-show .toast-plugin.center-left,
-.page-content.sidebar-show .toast-plugin.bottom-left {
-    margin-left: var(--sidebar-width) !important;
-}
-
-.page-content.sidebar-show .modal,
-.page-content.sidebar-show .toast-plugin.top-center,
-.page-content.sidebar-show .toast-plugin.center-center,
-.page-content.sidebar-show .toast-plugin.bottom-center {
+body.sidebar-show .modal,
+body.sidebar-show .toast-plugin.top-center,
+body.sidebar-show .toast-plugin.center-center,
+body.sidebar-show .toast-plugin.bottom-center {
     margin-left: 9rem !important;
 }

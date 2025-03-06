@@ -84,8 +84,6 @@ $(function () {
         const $body = $('body');
         $body.sidebar({
             pathname: 'caller',
-            verticalTarget: 'body',
-            horizontalTarget: '.page-content'
         });
         $body.on('toggle-navigation', () => {
             initHorizontalSearch();

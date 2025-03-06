@@ -11,21 +11,23 @@
     or is_granted(PERMISSION_LIST, ENTITY_GLOBAL_MARGIN)
 -%}
 {%- set is_dark_navigation = app.user and user_service.darkNavigation -%}
-{%- set sidebar_show = app.user and app.request.cookies.boolean('MENU_SIDEBAR_SHOW') -%}
-{%- set display_style = sidebar_show ? 'none' : 'flex' -%}
 {# horizontal navigation #}
-<nav id="navigation" class="navbar navbar-horizontal navbar-expand-lg bg-body-tertiary border-bottom ps-2 pb-1" style="display: {{ display_style }}"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
+<nav class="navbar navbar-horizontal navbar-expand-lg bg-body-tertiary border-bottom ps-2 pb-1"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
     <div class="container-fluid ps-0">
+        {# toggle navigation #}
         <button class="btn btn-outline-secondary rounded-circle show-sidebar py-0 px-2 mt-1" title="{{ 'index.sidebar_show'|trans }}">
             <i class="fa-solid fa-angle-right"></i>
         </button>
+        {# home page #}
         <a class="navbar-brand nav-sidebar-horizontal ms-3" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
             {{- icon('home') -}}
         </a>
-        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-horizontal" aria-controls="navbarContent" aria-expanded="false" aria-label="{{ 'index.toggle_navigation'|trans }}">
+        {# navigation toggler #}
+        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-horizontal-menu" aria-controls="navbarContent" aria-expanded="false" aria-label="{{ 'index.toggle_navigation'|trans }}">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="navbar-collapse collapse" id="navbar-horizontal">
+        {# menus #}
+        <div class="navbar-collapse collapse" id="navbar-horizontal-menu">
             <ul class="navbar-nav me-auto">
                 {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION) -%}
                     <li class="nav-item">

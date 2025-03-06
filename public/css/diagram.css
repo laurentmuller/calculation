@@ -16,7 +16,7 @@ body:not(.status-bar) .diagram {
     height: calc(100vh - 90px);
 }
 
-.page-content:not(.sidebar-show) .diagram {
+body:not(.sidebar-show) .diagram {
     height: calc(100vh - 180px);
 }
 

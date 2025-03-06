@@ -75,12 +75,12 @@ $(function () {
             this.hideSidebarProxy = () => this._showHorizontalNavigation();
             this.resizeProxy = () => this._resize();
 
-            if (this.$verticalNavigation) {
-                this._initVerticalNavigation();
-            }
-
             this._initShowButton();
             this._initHideButton();
+            this._highlightPath();
+            if (this.$verticalNavigation) {
+                this._initVerticalNavigation()
+            }
 
             if (!this.$verticalTarget && this.$showButton) {
                 this._destroyShowButton(true);
@@ -93,6 +93,10 @@ $(function () {
                 .trigger('resize');
         }
 
+        /**
+         * Initialize the button used to show vertical navigation.
+         * @private
+         */
         _initShowButton() {
             const options = this.options;
             this.$showButton = this._ensureInstance(null, options.showButtonSelector);
@@ -105,6 +109,10 @@ $(function () {
             }
         }
 
+        /**
+         * Initialize the button used to hide vertical navigation.
+         * @private
+         */
         _initHideButton() {
             const options = this.options;
             this.$hideButton = this._ensureInstance(null, options.hideButtonSelector);
@@ -117,11 +125,14 @@ $(function () {
             }
         }
 
+        /**
+         * Initialize the vertical navigation.
+         * @private
+         */
         _initVerticalNavigation() {
             this.$verticalNavigation.on('shown.bs.collapse hidden.bs.collapse', 'div.collapse', this.toggleCollapseProxy);
             this._updateToggleButtons();
             this._updateSiblingMenus();
-            this._highlightPath();
         }
 
         /**
@@ -211,6 +222,10 @@ $(function () {
             }
         }
 
+        /**
+         * Load the vertical navigation content.
+         * @private
+         */
         _loadVerticalNavigation() {
             const that = this;
             const options = that.options;
@@ -237,6 +252,10 @@ $(function () {
             });
         }
 
+        /**
+         * Load the horizontal navigation content.
+         * @private
+         */
         _loadHorizontalNavigation() {
             const that = this;
             const options = that.options;
@@ -244,7 +263,6 @@ $(function () {
                 that._destroyHideButton(true);
                 return;
             }
-
             that.loading = true;
             $.getJSON(options.horizontalUrl, function (response) {
                 that.loading = false;
@@ -270,17 +288,11 @@ $(function () {
         _toggleNavigation() {
             $.hideTooltips();
             $.hideDropDownMenus();
-            const that = this;
-            const duration = that.options.duration;
-            const className = that.options.sidebarClassName;
-            if (that.$verticalNavigation && that.$horizontalTarget) {
-                that.$verticalNavigation.add(that.$horizontalTarget).toggleClass(className).promise().done(() => {
-                    that.$horizontalNavigation.toggle(duration, () => {
-                        that.$element.trigger('toggle-navigation');
-                        that._saveState();
-                    });
-                });
-            }
+            const className = this.options.sidebarClassName;
+            this.$element.toggleClass(className)
+                .trigger('toggle-navigation');
+            this._highlightPath();
+            this._saveState();
         }
 
         /**
@@ -325,18 +337,17 @@ $(function () {
         /**
          * Ensure that the given element has a unique identifier.
          *
-         * @param {jQuery} $element te element to validate.
-         * @return {string} the unique identifier.
+         * @param {jQuery} $element the element to validate or update.
+         * @return {string} the unique identifier selector.
          * @private
          */
         _ensureId($element) {
-            const id = $element.attr('id');
-            if (id) {
-                return `#${id}`;
+            let id = $element.attr('id');
+            if (!id) {
+                id = 'id-' + Math.floor(Math.random() * Date.now()).toString(16);
+                $element.attr('id', id);
             }
-            const randomClass = Math.floor(Math.random() * Date.now()).toString(16);
-            $element.addClass(randomClass);
-            return `.${randomClass}`;
+            return '#' + id;
         }
 
         /**
@@ -350,15 +361,16 @@ $(function () {
             let paths = search.split('/');
             while (paths.length > 1) {
                 const path = paths.join('/');
-                const $element = $(`.nav-item a[href="${path}"]`);
+                const selector = `a[href="${path}"]`;
+                const $element = $(selector);
                 if ($element.length) {
-                    $element.addClass('active bg-body-secondary');
+                    if (!$element.hasClass('navbar-brand')) {
+                        $element.addClass(this.options.selectionClassName);
+                    }
                     break;
                 }
                 paths.pop();
             }
-            // active target element
-            // this.$verticalNavigation.find(`a[href="${search}"]:not(.navbar-brand)`).addClass('active bg-body-secondary');
         }
 
         /**
@@ -369,7 +381,7 @@ $(function () {
          // */
         _isVerticalNavigationVisible() {
             const className = this.options.sidebarClassName;
-            return this.$verticalNavigation && this.$verticalNavigation.hasClass(className);
+            return this.$element.hasClass(className);
         }
 
         /**
@@ -489,30 +501,25 @@ $(function () {
         menuPrefix: 'MENU_SIDEBAR_',
         // the timeout to display/hide sidebar automatically (0 = disabled)
         timeout: 1500,
-        // the duration to show / hide menus
-        duration: 350,
         // the minimum client width to hide sidebar
         minWidth: 1200,
         // texts
-        showSidebar: 'Show sidebar',
-        hideSidebar: 'Hide sidebar',
         showMenu: 'Expand menu',
         hideMenu: 'Collapse menu',
         // the path name to search in query parameters to highlight URL
         pathname: null,
         // collapse sibling's menus
         collapseSiblingMenus: true,
-
         // the URL to load the vertical navigation
         verticalUrl: null,
         // the selector where to prepend the loaded vertical navigation
-        verticalTarget: null,
+        verticalTarget: 'body',
         // vertical navigation selector
         verticalSelector: '.navbar-vertical',
         // the URL to load the horizontal navigation
         horizontalUrl: null,
         // the selector where to prepend the loaded horizontal navigation
-        horizontalTarget: null,
+        horizontalTarget: 'body',
         // horizontal navigation selector
         horizontalSelector: '.navbar-horizontal',
         // show vertical navigation button selector
@@ -521,6 +528,8 @@ $(function () {
         hideButtonSelector: '.hide-sidebar',
         // the sidebar show class name
         sidebarClassName: 'sidebar-show',
+        // the selected path class name
+        selectionClassName: 'bg-body-secondary',
     };
 
     /**

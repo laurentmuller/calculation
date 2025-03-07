@@ -79,7 +79,7 @@ $(function () {
             this._initHideButton();
             this._highlightPath();
             if (this.$verticalNavigation) {
-                this._initVerticalNavigation()
+                this._initVerticalNavigation();
             }
 
             if (!this.$verticalTarget && this.$showButton) {

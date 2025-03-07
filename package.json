@@ -16,5 +16,13 @@
     "devDependencies": {
         "stylelint": "^16.0",
         "stylelint-config-standard": "^37.0"
+    },
+    "jshintConfig": {
+        "esversion": 9,
+        "bitwise": true,
+        "eqeqeq": true,
+        "latedef": true,
+        "strict": true,
+        "asi": false
     }
 }

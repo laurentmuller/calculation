@@ -1,5 +1,3 @@
-/* jshint esversion: 9 */
-
 /**
  * jQuery Validation Plugin extensions.
  */

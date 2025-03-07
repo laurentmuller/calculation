@@ -12,7 +12,7 @@ $(function () {
             $unit.removeTimer();
             const newValue = $unit.val();
             const oldValue = $unit.data('value');
-            if (newValue !== oldValue && $query.val().trim().length >= 2) {
+            if (newValue !== oldValue && String($query.val()).trim().length >= 2) {
                 $form.trigger('submit');
             }
         }, 500);

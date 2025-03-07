@@ -2,8 +2,10 @@
     getSortedMargins,
     addMarginsMethods,
     validateOtherMargins,
-    getMinimumInput, getMaximumInput,
-    getMinimumSelector, getMaximumSelector
+    getMinimumInput,
+    getMaximumInput,
+    getMinimumSelector,
+    getMaximumSelector
 */
 
 /**

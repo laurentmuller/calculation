@@ -1,5 +1,3 @@
-/* globals URLSearchParams */
-
 /**
  * -------------- URLSearchParams Extensions --------------
  */

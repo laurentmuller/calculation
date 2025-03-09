@@ -319,7 +319,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     #[\Override]
     public function getPassword(): ?string
     {
-        return (string) $this->password;
+        return $this->password;
     }
 
     /**

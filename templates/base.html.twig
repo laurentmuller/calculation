@@ -43,6 +43,8 @@
 <link rel="apple-touch-icon" sizes="152x152" href="{{ asset_icon(152) }}">
 <link rel="apple-touch-icon" sizes="180x180" href="{{ asset_icon(180) }}">
 {# stylesheets #}
+<link rel="preload" href="{{ preload(asset('vendor/bootstrap/css/bootstrap.css'), {as: 'style'}) }}" as="style" nonce="{{ csp_nonce() }}">
+<link rel="preload" href="{{ preload(asset('vendor/font-awesome/css/all.css'), {as: 'style'}) }}" as="style" nonce="{{ csp_nonce() }}">
 {{- asset_css('vendor/bootstrap/css/bootstrap.css') }}
 {{- asset_css('vendor/font-awesome/css/all.css') }}
 {% block stylesheets %}

@@ -27,15 +27,15 @@ body:not(.sidebar-show) .navbar-vertical {
 
 /* horizontal navigation bar */
 .navbar-horizontal {
-    transition: transform var(--sidebar-delay) ease-in-out;
+    transition: margin-top var(--sidebar-delay) ease-in-out;
 }
 
 body.sidebar-show .navbar-horizontal {
-    transform: translateY(-100%);
+    margin-top: -56.5px;
 }
 
 body:not(.sidebar-show) .navbar-horizontal {
-    transform: translateY(0);
+    margin-top: 0;
 }
 
 /* menus */

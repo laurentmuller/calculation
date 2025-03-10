@@ -185,6 +185,7 @@
 
             // groupes
             let lastGroup = null;
+            /** @type {jQuery|HTMLElement|*} */
             const $groups = that.getGroups();
             $groups.each(function (indexGroup, group) {
                 const $group = $(group);
@@ -352,8 +353,10 @@
                     }
 
                     // update content
+                    /** @type {jQuery|HTMLElement|*} */
                     const $totalPanel = $('#totals-panel');
                     if (response.view) {
+                        /** @type {jQuery|HTMLElement|*} */
                         const $body = $('#totals-table > tbody');
                         $body.fadeOut(300, function () {
                             $body.html(response.view).fadeIn(300);
@@ -425,7 +428,7 @@
         /**
          * Gets groups.
          *
-         * @returns {jQuery} the groups.
+         * @returns {jQuery|HTMLElement|*} the groups.
          */
         getGroups: function () {
             return $('#data-table-edit .group');
@@ -434,18 +437,20 @@
         /**
          * Gets the categories for the given group.
          *
-         * @param {jQuery} $group - the group (thead) to search categories for.
-         * @returns {jQuery} the categories.
+         * @param {jQuery|HTMLElement|*} $group - the group (thead) to search categories for.
+         * @returns {jQuery|HTMLElement|*} the categories.
          */
         getCategories: function ($group) {
-            return $group.nextUntil('.group').find('.category');
+            /** @type {jQuery|HTMLElement|*} */
+            const $last = $group.nextUntil('.group');
+            return $last.find('.category');
         },
 
         /**
          * Gets the items for the given category.
          *
-         * @param {jQuery} $category - the category (th) to search items for.
-         * @returns {jQuery} the items.
+         * @param {jQuery|HTMLElement|*} $category - the category (th) to search items for.
+         * @returns {jQuery|HTMLElement|*} the items.
          */
         getItems: function ($category) {
             return $category.parents('tbody').find('.item');
@@ -455,7 +460,7 @@
          * Finds or create the table head for the given group.
          *
          * @param {{id: number, code: string}} group - the group data used to find row.
-         * @returns {jQuery} the table head.
+         * @returns {jQuery|HTMLElement|*} the table head.
          */
         findOrCreateGroup: function (group) {
             const $group = $('#data-table-edit .group:has(input[name$="[group]"][value="' + group.id + '"])');
@@ -468,9 +473,9 @@
         /**
          * Find or create the table body for the given category.
          *
-         * @param {jQuery} $group - the parent group (thead).
+         * @param {jQuery|HTMLElement|*} $group - the parent group (thead).
          * @param {{id: number, code: string}} category - the category data used to update row.
-         * @returns {jQuery} the table body.
+         * @returns {jQuery|HTMLElement|*} the table body.
          */
         findOrCreateCategory: function ($group, category) {
             const $body = $('#data-table-edit tbody:has(input[name$="[category]"][value="' + category.id + '"])');
@@ -500,14 +505,14 @@
         /**
          * Sort items by description.
          *
-         * @param {jQuery} $element - the caller element (button or tbody) used to find the category.
+         * @param {jQuery|HTMLElement|*} $element - the caller element (button or tbody) used to find the category.
          * @return {Application} This instance for chaining.
          */
         sortItems: function ($element) {
             // get rows
             const that = this;
             const $tbody = $element.closest('tbody');
-            /** @type {jQuery[]|jQuery} */
+            /** @type {jQuery|HTMLElement|*} */
             const $items = $tbody.find('.item');
             if ($items.length < 2) {
                 return that;
@@ -521,13 +526,16 @@
             }).appendTo($tbody);
 
             // update UI
-            return that.updatePositions().updateButtons().initDragDrop(true);
+            that.updatePositions();
+            that.updateButtons();
+            that.initDragDrop(true);
+            return that;
         },
 
         /**
          * Sort categories by code.
          *
-         * @param {jQuery} $element - the caller element (button, row or thead) used to
+         * @param {jQuery|HTMLElement|*} $element - the caller element (button, row or thead) used to
          *            find the group and the categories.
          * @return {Application} This instance for chaining.
          */
@@ -649,9 +657,9 @@
         /**
          * Appends the given category to the table.
          *
-         * @param {jQuery} $group - the parent group (thead).
+         * @param {jQuery|HTMLElement|*} $group - the parent group (thead).
          * @param {{id: number, code: string}} category - the category data used to update row.
-         * @returns {jQuery} the appended category.
+         * @returns {jQuery|HTMLElement|*} the appended category.
          */
         appendCategory: function ($group, category) {
             // find the next category where to insert this category before
@@ -694,7 +702,7 @@
         /**
          * Display the dialog to add an item.
          *
-         * @param {jQuery} $source - the caller element (normally a button).
+         * @param {jQuery|HTMLElement|*} $source - the caller element (normally a button).
          */
         showAddItemDialog: function ($source) {
             // reset
@@ -708,7 +716,7 @@
         /**
          * Display the add task dialog.
          *
-         * @param {jQuery} $source - the caller element (normally a button).
+         * @param {jQuery|HTMLElement|*} $source - the caller element (normally a button).
          */
         showAddTaskDialog: function ($source) {
             // reset
@@ -725,7 +733,7 @@
          * This function copies the element to the dialog and displays it.
          * If the user clicks OK, the item is updated.
          *
-         * @param {jQuery} $source - the caller element (normally a button).
+         * @param {jQuery|HTMLElement|*} $source - the caller element (normally a button).
          */
         showEditItemDialog: function ($source) {
             const $row = $source.getParentRow();
@@ -740,7 +748,7 @@
          * This function copies the selected element to the dialog and displays it.
          * If the user clicks OK, a new item is added.
          *
-         * @param {jQuery} $source - the caller element (normally a button).
+         * @param {jQuery|HTMLElement|*} $source - the caller element (normally a button).
          */
         showCopyItemDialog: function ($source) {
             const $row = $source.getParentRow();
@@ -753,7 +761,7 @@
         /**
          * Remove a calculation group.
          *
-         * @param {jQuery} $element - the caller element (normally a button).
+         * @param {jQuery|HTMLElement|*} $element - the caller element (normally a button).
          * @return {Application} This instance for chaining.
          */
         removeGroup: function ($element) {
@@ -771,7 +779,7 @@
          * Remove a calculation category.
          * If the parent group is empty after deletion, then the group is also deleted.
          *
-         * @param {jQuery} $element - the caller element (normally a button).
+         * @param {jQuery|HTMLElement|*} $element - the caller element (normally a button).
          * @return {Application} This instance for chaining.
          */
         removeCategory: function ($element) {
@@ -794,7 +802,7 @@
         /**
          * Remove a calculation item.
          *
-         * @param {jQuery} $element - the caller element (button).
+         * @param {jQuery|HTMLElement|*} $element - the caller element (button).
          * @return {Application} This instance for chaining.
          */
         removeItem: function ($element) {
@@ -850,6 +858,7 @@
             const dialog = this.getItemDialog().hide();
 
             // get dialog values
+            /** @type {jQuery|HTMLElement|*} */
             const $editingRow = dialog.getEditingRow();
             if (!$editingRow) {
                 return this;
@@ -989,7 +998,8 @@
                 // Moved to a new position
                 // -----------------------------
                 $row.timeoutToggle('table-success');
-                that.updatePositions().updateButtons();
+                that.updatePositions();
+                that.updateButtons();
             } else {
                 // -----------------------------
                 // No change
@@ -1034,7 +1044,7 @@
         /**
          * Edit the calculation item's price.
          *
-         * @param {jQuery} $element - the caller element (button).
+         * @param {jQuery|HTMLElement|*} $element - the caller element (button).
          * @return {Application} This instance for chaining.
          */
         editItemPrice: function ($element) {
@@ -1048,7 +1058,7 @@
         /**
          * Edit the calculation item's quantity.
          *
-         * @param {jQuery} $element - the caller element (button).
+         * @param {jQuery|HTMLElement|*} $element - the caller element (button).
          * @return {Application} This instance for chaining.
          */
         editItemQuantity: function ($element) {
@@ -1070,7 +1080,7 @@
          * substring.
          *
          * @param {string} name - the partial attribute name.
-         * @return {jQuery|null} - The input, if found; null otherwise.
+         * @return {jQuery|HTMLElement|*|null} - The input, if found; null otherwise.
          */
         findNamedInput: function (name) {
             const selector = `input[name*='${name}']`;
@@ -1276,10 +1286,10 @@
         /**
          * Move a source group before or after the target group.
          *
-         * @param {jQuery} $source - the group to move.
-         * @param {jQuery} $target - the target group.
+         * @param {jQuery|HTMLElement|*} $source - the group to move.
+         * @param {jQuery|HTMLElement|*} $target - the target group.
          * @param {boolean} up - true to move before the target (up); false to move after (down).
-         * @return {jQuery} the moved group.
+         * @return {jQuery|HTMLElement|*} the moved group.
          */
         moveGroup: function ($source, $target, up) {
             // hide menus
@@ -1288,6 +1298,7 @@
             // check
             if ($source && $target && $source !== $target) {
                 // save the source tbody
+                /** @type {jQuery|HTMLElement|*} */
                 const $bodies = $source.nextUntil('.group');
 
                 // move
@@ -1300,7 +1311,8 @@
 
                 // update
                 $source.scrollInViewport().find('tr:first').timeoutToggle('table-success');
-                Application.updatePositions().updateButtons();
+                Application.updatePositions();
+                Application.updateButtons();
             }
             return $source;
         },
@@ -1308,8 +1320,8 @@
         /**
          * Move a calculation group to the first position.
          *
-         * @param {jQuery} $group - the group to move.
-         * @return {jQuery} - the moved group.
+         * @param {jQuery|HTMLElement|*} $group - the group to move.
+         * @return {jQuery|HTMLElement|*} - the moved group.
          */
         moveGroupFirst: function ($group) {
             const $target = $group.prevAll('.group:last');
@@ -1322,8 +1334,8 @@
         /**
          * Move a calculation group to the last position.
          *
-         * @param {jQuery} $group - the group to move.
-         * @return {jQuery} - the moved group.
+         * @param {jQuery|HTMLElement|*} $group - the group to move.
+         * @return {jQuery|HTMLElement|*} - the moved group.
          */
         moveGroupLast: function ($group) {
             const $target = $group.nextAll('.group:last');
@@ -1336,8 +1348,8 @@
         /**
          * Move up a calculation group.
          *
-         * @param {jQuery} $group - the group to move.
-         * @return {jQuery} - the moved group.
+         * @param {jQuery|HTMLElement|*} $group - the group to move.
+         * @return {jQuery|HTMLElement|*} - the moved group.
          */
         moveGroupUp: function ($group) {
             const $target = $group.prevAll('.group:first');
@@ -1351,8 +1363,8 @@
         /**
          * Move down a calculation group.
          *
-         * @param {jQuery} $group - the group to move.
-         * @return {jQuery} - the moved group.
+         * @param {jQuery|HTMLElement|*} $group - the group to move.
+         * @return {jQuery|HTMLElement|*} - the moved group.
          */
         moveGroupDown: function ($group) {
             const $target = $group.nextAll('.group:first');
@@ -1365,10 +1377,10 @@
         /**
          * Move a source category before or after the target category.
          *
-         * @param {jQuery} $source - the category to move.
-         * @param {jQuery} $target - the target category.
+         * @param {jQuery|*} $source - the category to move.
+         * @param {jQuery|*} $target - the target category.
          * @param {boolean} up - true to move before the target (up); false to move after (down).
-         * @return {jQuery} - the moved category.
+         * @return {jQuery|HTMLElement|*} - the moved category.
          */
         moveCategory: function ($source, $target, up) {
             // hide menus
@@ -1385,7 +1397,8 @@
 
                 // update
                 $source.scrollInViewport().find('tr:first').timeoutToggle('table-success');
-                Application.updatePositions().updateButtons();
+                Application.updatePositions();
+                Application.updateButtons();
             }
             return $source;
         },
@@ -1393,8 +1406,8 @@
         /**
          * Move a calculation category to the first position.
          *
-         * @param {jQuery} $category - the category to move.
-         * @return {jQuery} the moved category.
+         * @param {jQuery|HTMLElement|*} $category - the category to move.
+         * @return {jQuery|HTMLElement|*} the moved category.
          */
         moveCategoryFirst: function ($category) {
             const $target = $category.prevUntil('thead').last();
@@ -1407,8 +1420,8 @@
         /**
          * Move a calculation category to the last position.
          *
-         * @param {jQuery} $category - the category to move.
-         * @return {jQuery} the moved category.
+         * @param {jQuery|HTMLElement|*} $category - the category to move.
+         * @return {jQuery|HTMLElement|*} the moved category.
          */
         moveCategoryLast: function ($category) {
             const $target = $category.nextUntil('thead').last();
@@ -1421,8 +1434,8 @@
         /**
          * Move up a calculation category.
          *
-         * @param {jQuery} $category - the category to move.
-         * @return {jQuery} - the moved category.
+         * @param {jQuery|HTMLElement|*} $category - the category to move.
+         * @return {jQuery|HTMLElement|*} - the moved category.
          */
         moveCategoryUp: function ($category) {
             const $target = $category.prev();
@@ -1436,8 +1449,8 @@
         /**
          * Move down a calculation category.
          *
-         * @param {jQuery} $category - the category to move.
-         * @return {jQuery} the moved category.
+         * @param {jQuery|HTMLElement|*} $category - the category to move.
+         * @return {jQuery|HTMLElement|*} the moved category.
          */
         moveCategoryDown: function ($category) {
             const $target = $category.next();
@@ -1449,10 +1462,10 @@
         /**
          * Move a source item before or after the target item.
          *
-         * @param {jQuery} $source - the item to move.
-         * @param {jQuery} $target - the target item.
+         * @param {jQuery|HTMLElement|*} $source - the item to move.
+         * @param {jQuery|HTMLElement|*} $target - the target item.
          * @param {boolean} up - true to move before the target (up); false to move after (down).
-         * @return {jQuery} the moved item.
+         * @return {jQuery|HTMLElement|*} the moved item.
          */
         moveItem: function ($source, $target, up) {
             // hide menus
@@ -1469,7 +1482,8 @@
 
                 // update
                 $source.scrollInViewport().timeoutToggle('table-success');
-                Application.updatePositions().updateButtons();
+                Application.updatePositions();
+                Application.updateButtons();
             }
             return $source;
         },
@@ -1477,8 +1491,8 @@
         /**
          * Move a calculation item to the first position.
          *
-         * @param {jQuery} $item - the item to move.
-         * @return {jQuery} - the moved item.
+         * @param {jQuery|HTMLElement|*} $item - the item to move.
+         * @return {jQuery|HTMLElement|*} - the moved item.
          */
         moveItemFirst: function ($item) {
             const index = $item.index();
@@ -1492,8 +1506,8 @@
         /**
          * Move a calculation item to the last position.
          *
-         * @param {jQuery} $item - the item to move.
-         * @return {jQuery} - the moved item.
+         * @param {jQuery|HTMLElement|*} $item - the item to move.
+         * @return {jQuery|HTMLElement|*} - the moved item.
          */
         moveItemLast: function ($item) {
             const index = $item.index();
@@ -1508,8 +1522,8 @@
         /**
          * Move up a calculation item.
          *
-         * @param {jQuery} $item - the item to move.
-         * @return {jQuery} - the moved item.
+         * @param {jQuery|HTMLElement|*} $item - the item to move.
+         * @return {jQuery|HTMLElement|*} - the moved item.
          */
         moveItemUp: function ($item) {
             const index = $item.index();
@@ -1523,8 +1537,8 @@
         /**
          * Move down a calculation item.
          *
-         * @param {jQuery} $item - the item to move.
-         * @return {jQuery} - the moved item.
+         * @param {jQuery|HTMLElement|*} $item - the item to move.
+         * @return {jQuery|HTMLElement|*} - the moved item.
          */
         moveItemDown: function ($item) {
             const index = $item.index();

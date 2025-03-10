@@ -14,14 +14,16 @@
 {%- set is_dark_navigation = app.user and user_service.darkNavigation -%}
 {# vertical navigation #}
 <div class="navbar navbar-vertical bg-body-tertiary d-print-none"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
-    {# toggle navigation #}
-    <button class="btn btn-outline-secondary rounded-circle py-0 px-2 hide-sidebar" title="{{ 'index.sidebar_hide'|trans }}">
-        <i class="fa-solid fa-angle-left"></i>
-    </button>
-    {# home page #}
-    <a class="navbar-brand mb-2" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
-        {{- icon('home', 'index.title') -}}
-    </a>
+    <div class="d-flex align-items-center w-100 mb-2">
+        {# home page #}
+        <a class="navbar-brand w-100" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
+            {{- icon('home', 'index.title') -}}
+        </a>
+        {# toggle navigation #}
+        <button class="btn btn-outline-secondary rounded-circle py-0 px-2 hide-sidebar" title="{{ 'index.sidebar_hide'|trans }}">
+            <i class="fa-solid fa-angle-left"></i>
+        </button>
+    </div>
     {# menus #}
     <ul class="navbar-nav mb-auto pt-1 border-top w-100">
         {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION) -%}

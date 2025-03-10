@@ -8,9 +8,9 @@
 {% block card_container_class ' col col-xl-10 offset-xl-1' %}
 {# body #}
 {% block card_body -%}
-<div class="table-responsive">
-    <table class="table table-hover table-list table-sm">
-        <thead>
+    <div class="table-responsive">
+        <table class="table table-hover table-list table-sm">
+            <thead>
             <tr>
                 <th class="w-100 text-nowrap">{{ 'schema.fields.name'|trans }}</th>
                 <th class="text-currency">{{ 'schema.fields.columns'|trans }}</th>
@@ -19,30 +19,30 @@
                 <th class="text-currency">{{ 'schema.fields.indexes'|trans }}</th>
                 <th class="text-currency">{{ 'schema.fields.associations'|trans }}</th>
             </tr>
-        </thead>
-        <tbody data-link="row" class="rowlink">
-        {% for table in tables %}
-            {% set name = table.name %}
-            <tr title="{{ 'schema.index.tooltip'|trans({'%name%': name}) }}">
-                <td class="w-100 text-nowrap"><a href="{{ path('schema_table', {name: name}) }}">{{ name }}</a></td>
-                <td class="text-currency">{{ table.columns|integer }}</td>
-                <td class="text-currency">{{ table.records|integer }}</td>
-                <td class="text-currency">{{ table.size|amount }}</td>
-                <td class="text-currency">{{ table.indexes|integer }}</td>
-                <td class="text-currency">{{ table.associations|integer }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody data-link="row" class="rowlink">
+            {% for table in tables %}
+                {% set name = table.name %}
+                <tr title="{{ 'schema.index.tooltip'|trans({'%name%': name}) }}">
+                    <td class="w-100 text-nowrap"><a href="{{ path('schema_table', {name: name}) }}">{{ name }}</a></td>
+                    <td class="text-currency">{{ table.columns|integer }}</td>
+                    <td class="text-currency">{{ table.records|integer }}</td>
+                    <td class="text-currency">{{ table.size|amount }}</td>
+                    <td class="text-currency">{{ table.indexes|integer }}</td>
+                    <td class="text-currency">{{ table.associations|integer }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {%- endblock %}
 {# footer #}
 {% block card_footer -%}
-{{- homepage() }}
-{{ button_pdf('schema_pdf') -}}
+    {{ homepage() }}
+    {{ button_pdf('schema_pdf') }}
 {%- endblock %}
 {# javascripts #}
 {% block javascripts %}
-{{ parent() }}
-{{ asset_js('js/plugins/plugin-rowlink.js') }}
+    {{ parent() }}
+    {{ asset_js('js/plugins/plugin-rowlink.js') }}
 {%- endblock %}

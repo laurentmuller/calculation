@@ -3,7 +3,7 @@
     --sidebar-delay: 0.35s;
 }
 
-/* navigation bar */
+/* vertical navigation bar */
 .navbar-vertical {
     top: 0;
     left: 0;
@@ -23,6 +23,19 @@
 
 body:not(.sidebar-show) .navbar-vertical {
     margin-left: calc(var(--sidebar-width) * -1);
+}
+
+/* horizontal navigation bar */
+.navbar-horizontal {
+    transition: transform var(--sidebar-delay) ease-in-out;
+}
+
+body.sidebar-show .navbar-horizontal {
+    transform: translateY(-100%);
+}
+
+body:not(.sidebar-show) .navbar-horizontal {
+    transform: translateY(0);
 }
 
 /* menus */

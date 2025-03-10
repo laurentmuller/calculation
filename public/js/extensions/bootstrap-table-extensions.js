@@ -24,7 +24,7 @@
  * @property {string} view - the display mode ('table' or 'custom').
  * @property {string} searchText - the search text.
  *
- * @typedef {jQuery<HTMLTableElement>} jQueryTable - the bootstrap table.
+ * @typedef {jQuery|HTMLTableElement|*} jQueryTable - the bootstrap table.
  * @property {Options} getOptions - the table options.
  * @property {boolean} isCustomView - true if custom view is displayed.
  * @property {jQuery<HTMLDivElement>} getCustomView - get the custom view.
@@ -462,7 +462,7 @@
                 if (!$this.isCustomView()) {
                     return null;
                 }
-                /** @type {jQuery<HTMLDivElement>} */
+                /** @type {jQuery|HTMLElement|*} */
                 const $parent = $this.parents('.bootstrap-table');
                 return $parent.find('.fixed-table-custom-view');
             },
@@ -963,6 +963,7 @@
                 $dialog.data('initialized', true);
 
                 const $this = $(this);
+                /** @type {jQuery|HTMLElement|*} */
                 const $range = $('#page-range');
                 const $labelRecord = $('#page-record');
                 const $labelLabel = $('#page-label');

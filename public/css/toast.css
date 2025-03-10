@@ -102,9 +102,9 @@ body.sidebar-show .toast-plugin.bottom-left {
     margin-left: var(--sidebar-width) !important;
 }
 
-.page-content:has(footer) .toast-plugin.bottom-left,
-.page-content:has(footer) .toast-plugin.bottom-center,
-.page-content:has(footer) .toast-plugin.bottom-right {
+body:has(footer) .toast-plugin.bottom-left,
+body:has(footer) .toast-plugin.bottom-center,
+body:has(footer) .toast-plugin.bottom-right {
     margin-bottom: 2rem !important;
 }
 

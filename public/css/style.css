@@ -4,25 +4,23 @@
 @import 'colums.css';
 @import 'sidebar.css';
 
-html {
-    width: 100vw;
-    overflow-x: hidden;
+:root {
+    --statusbar-height: 30px;
 }
 
 /* page-content */
 .page-content {
     transition: margin-left var(--sidebar-delay) ease-in-out;
+    margin-top: 1rem;
 }
 
 body.sidebar-show .page-content {
     width: calc(100% - var(--sidebar-width));
     margin-left: var(--sidebar-width);
-    margin-top: 1rem;
 }
 
 body:not(.sidebar-show) .page-content {
     width: 100%;
-    margin-top: 1rem;
 }
 
 @media print {
@@ -32,21 +30,8 @@ body:not(.sidebar-show) .page-content {
     }
 }
 
-/* navbar-horizontal */
-.navbar-horizontal {
-    transition: margin-top var(--sidebar-delay) ease-in-out;
-}
-
-body.sidebar-show .navbar-horizontal {
-    margin-top: -56.5px;
-}
-
-body:not(.sidebar-show) .navbar-horizontal {
-    margin-top: 0;
-}
-
-/* navbar-vertical */
-.navbar.navbar-vertical::after {
+/* vertical navigation border */
+.navbar-vertical::after {
     top: 0;
     right: 0;
     content: "";
@@ -55,25 +40,13 @@ body:not(.sidebar-show) .navbar-horizontal {
     border-right: var(--bs-border-width) solid var(--bs-border-color);
 }
 
-body.status-bar .navbar.navbar-vertical::after {
-    height: calc(100% - 30px);
+body.status-bar .navbar-vertical::after {
+    height: calc(100% - var(--statusbar-height));
 }
 
-/* hide-sidebar */
-.navbar.navbar-vertical .hide-sidebar {
-    position: absolute;
-    top: 1rem;
-    right: 0.5rem;
-}
-
-body.status-bar .navbar.navbar-vertical .hide-sidebar {
-    top: 1rem;
-    right: 0.75rem;
-}
-
-/* update bottom margin when the status-bar is visible */
+/* bottom margin when the status-bar is visible */
 body.status-bar {
-    margin-bottom: 30px;
+    margin-bottom: var(--statusbar-height);
 }
 
 /* footer */
@@ -81,7 +54,7 @@ footer {
     transition: all var(--sidebar-delay) ease-in-out;
 }
 
-html:has(.sidebar-show) footer {
+body.sidebar-show footer {
     left: var(--sidebar-width);
     width: calc(100% - var(--sidebar-width));
 }
@@ -766,7 +739,6 @@ a.disabled {
 }
 
 /* dropdown menu with checked item on the right */
-.navbar-menu:has(.dropdown-item-checked-right),
 .dropdown-menu:has(.dropdown-item-checked-right) {
     min-width: 14rem;
 }
@@ -777,26 +749,10 @@ a.disabled {
     content: '\f00c';
     margin-left: 0.5rem;
     float: right;
+    top: 0;
 }
 
-/* dropdown menu with checked item on the left */
-.dropdown-item-checked-left {
-    padding-left: calc((2 * var(--bs-dropdown-item-padding-x)) + 6px);
-}
-
-.dropdown-item-checked-left-active {
-    padding-left: var(--bs-dropdown-item-padding-x);
-}
-
-.dropdown-item-checked-left-active::before {
-    font-family: "Font Awesome 6 Free", sans-serif;
-    font-weight: 900;
-    content: '\f00c';
-    padding-right: 6px;
-    float: left;
-}
-
-
+/* read-only control label */
 span.form-label {
     display: inline-block;
     cursor: default;

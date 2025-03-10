@@ -63,11 +63,11 @@ $(function () {
         _init() {
             // get elements
             const options = this.options;
-            this.$verticalNavigation = this._ensureInstance(null, options.verticalSelector);
-            this.$horizontalNavigation = this._ensureInstance(null, options.horizontalSelector);
+            this.$verticalNavigation = this._ensureInstance(options.verticalSelector);
+            this.$horizontalNavigation = this._ensureInstance(options.horizontalSelector);
 
-            this.$verticalTarget = this._ensureInstance(null, options.verticalTarget);
-            this.$horizontalTarget = this._ensureInstance(null, options.horizontalTarget);
+            this.$verticalTarget = this._ensureInstance(options.verticalTarget);
+            this.$horizontalTarget = this._ensureInstance(options.horizontalTarget);
 
             // create proxies
             this.toggleCollapseProxy = () => this._updateToggleButtons();
@@ -99,7 +99,7 @@ $(function () {
          */
         _initShowButton() {
             const options = this.options;
-            this.$showButton = this._ensureInstance(null, options.showButtonSelector);
+            this.$showButton = this._ensureInstance(options.showButtonSelector);
             if (!this.$showButton) {
                 return;
             }
@@ -115,7 +115,7 @@ $(function () {
          */
         _initHideButton() {
             const options = this.options;
-            this.$hideButton = this._ensureInstance(null, options.hideButtonSelector);
+            this.$hideButton = this._ensureInstance(options.hideButtonSelector);
             if (!this.$hideButton) {
                 return;
             }
@@ -235,7 +235,6 @@ $(function () {
             }
             that.loading = true;
             $.getJSON(options.verticalUrl, function (response) {
-                that.loading = false;
                 if (!response) {
                     that._destroyShowButton(true);
                     return;
@@ -249,6 +248,8 @@ $(function () {
                 that._toggleNavigation();
             }).fail(function () {
                 that._destroyShowButton(true);
+            }).always(function () {
+                that.loading = false;
             });
         }
 
@@ -265,7 +266,6 @@ $(function () {
             }
             that.loading = true;
             $.getJSON(options.horizontalUrl, function (response) {
-                that.loading = false;
                 if (!response) {
                     that._destroyHideButton(true);
                     return;
@@ -278,6 +278,8 @@ $(function () {
                 that._toggleNavigation();
             }).fail(function () {
                 that._destroyHideButton(true);
+            }).always(function () {
+                that.loading = false;
             });
         }
 
@@ -337,7 +339,7 @@ $(function () {
         /**
          * Ensure that the given element has a unique identifier.
          *
-         * @param {jQuery} $element the element to validate or update.
+         * @param {jQuery|HTMLElement|*} $element the element to validate or update.
          * @return {string} the unique identifier selector.
          * @private
          */
@@ -355,6 +357,14 @@ $(function () {
          * @private
          */
         _highlightPath() {
+            if (!this.options.selectionClassName) {
+                return;
+            }
+            const $navigations = this._getNavigations();
+            if (!$navigations) {
+                return;
+            }
+
             const pathname = this.options.pathname || '';
             const params = (new URL(document.location)).searchParams;
             const search = params.get(pathname) || window.location.pathname;
@@ -362,14 +372,32 @@ $(function () {
             while (paths.length > 1) {
                 const path = paths.join('/');
                 const selector = `a[href="${path}"]`;
-                const $element = $(selector);
+                const $element = $navigations.find(selector);
                 if ($element.length) {
+                    // skip brand class
                     if (!$element.hasClass('navbar-brand')) {
                         $element.addClass(this.options.selectionClassName);
                     }
                     break;
                 }
                 paths.pop();
+            }
+        }
+
+        /**
+         * Gets the horizontal and vertical navigations, if applicable.
+         * @returns {jQuery|HTMLElement|*|null}
+         * @private
+         */
+        _getNavigations() {
+            if (this.$horizontalNavigation && this.$verticalNavigation) {
+                return this.$horizontalNavigation.add(this.$verticalNavigation);
+            } else if (this.$horizontalNavigation) {
+                return this.$horizontalNavigation;
+            } else if (this.$verticalNavigation) {
+                return this.$verticalNavigation;
+            } else {
+                return null;
             }
         }
 
@@ -447,13 +475,12 @@ $(function () {
         /**
          * Find an element.
          *
-         * @param {jQuery} [$parent] the optional parent to search in.
          * @param {string} selector the selector.
-         * @return {jQuery|null}
+         * @return {jQuery|HTMLElement|*|null}
          * @private
          */
-        _ensureInstance($parent, selector) {
-            const $instance = $parent ? $parent.find(selector) : $(selector);
+        _ensureInstance(selector) {
+            const $instance = $(selector);
             if ($instance && $instance.length) {
                 return $instance;
             }
@@ -526,7 +553,7 @@ $(function () {
         showButtonSelector: '.show-sidebar',
         // hide vertical navigation button selector
         hideButtonSelector: '.hide-sidebar',
-        // the sidebar show class name
+        // the vertical navigation show class name
         sidebarClassName: 'sidebar-show',
         // the selected path class name
         selectionClassName: 'bg-body-secondary',

@@ -217,7 +217,7 @@ function updateUserDeleteAction($table, row, _$element, $action) {
  * @param {jQueryTable} $table the parent table.
  * @param {Object} row the row data.
  * @param {jQuery} _$element the table row.
- * @param {jQuery} $action the action to update
+ * @param {jQuery|HTMLElement|*} $action the action to update
  */
 function updateUserSwitchAction($table, row, _$element, $action) {
     'use strict';
@@ -244,7 +244,7 @@ function updateUserSwitchAction($table, row, _$element, $action) {
  * @param {boolean} row.allowEdit the edit granted.
  * @param {boolean} row.allowDelete the deleted granted.
  * @param {jQuery} _$element the table row.
- * @param {jQuery} $action the action to update
+ * @param {jQuery|HTMLElement|*} $action the action to update
  */
 function updateSearchAction($table, row, _$element, $action) {
     'use strict';
@@ -296,7 +296,7 @@ function updateCalculationEditAction(_$table, row, $element, $action) {
  * @param {jQuery} _$table the parent table.
  * @param {Object} _row the row data.
  * @param {jQuery} _$element the table row.
- * @param {jQuery} $action the action to update
+ * @param {jQuery|HTMLElement|*} $action the action to update
  */
 function updateCalculationAction(_$table, _row, _$element, $action) {
     'use strict';
@@ -323,7 +323,7 @@ function updateTaskComputeAction(_$table, row, _$element, $action) {
  * Update the show entity action.
  *
  * @param {Object} row the row data.
- * @param {jQuery} $action the action to update
+ * @param {jQuery|HTMLElement|*} $action the action to update
  * @param {string} propertyName  the property name to get from row.
  */
 function updateShowEntityAction(row, $action, propertyName) {
@@ -463,7 +463,7 @@ function showSortDialog($table, $button) {
          */
         getContextMenuItems: function () {
             const $this = $(this);
-            /** @type {jQuery<HTMLElement>} */
+            /** @type {jQuery|HTMLElement|*} */
             const $parent = $this.parents('.custom-item, tr');
             const $elements = $parent.find('.dropdown-menu').children();
             const builder = new MenuBuilder({

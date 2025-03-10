@@ -81,11 +81,9 @@ $(function () {
      * Initialize the sidebar.
      */
     function initSidebar() {
-        const $body = $('body');
-        $body.sidebar({
-            pathname: 'caller',
-        });
-        $body.on('toggle-navigation', () => {
+        $('body').sidebar({
+            pathname: 'caller'
+        }).on('toggle-navigation', () => {
             initHorizontalSearch();
             initThemeSwitcher();
         });
@@ -95,6 +93,7 @@ $(function () {
      * Handle the back-to-top button.
      */
     function initBackToTop() {
+        /** @type {*|jQuery|HTMLElement} */
         const $button = $('.btn-back-to-top');
         if (!$button.length) {
             return;

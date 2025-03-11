@@ -209,7 +209,7 @@ span.state-color {
     display: none;
     position: fixed;
     right: 15px;
-    bottom: 45px;
+    bottom: 15px;
     opacity: 0.25;
     z-index: 999997;
     padding-top: 5px;
@@ -220,8 +220,8 @@ span.state-color {
     opacity: 1;
 }
 
-body:not(.status-bar) .btn-back-to-top {
-    bottom: 15px;
+body.status-bar .btn-back-to-top {
+    bottom: calc(15px + var(--statusbar-height));
 }
 
 /* row link */
@@ -342,18 +342,6 @@ input[type=number] {
     -moz-appearance: textfield;
 }
 
-/* Remove red and green cross for invalid field
-.was-validated .form-control:invalid, .form-control.is-invalid {
-    background-image: none !important;
-    padding-right: 0.75rem !important;
-}
-
-.was-validated .custom-select:valid, .custom-select.is-valid {
-    background-image: none !important;
-    padding-right: 1.75rem !important;
-}
-*/
-
 /* Custom file input */
 .custom-file-input:lang(fr) ~ .custom-file-label::after {
     content: "Parcourir";
@@ -412,7 +400,7 @@ input[type=number] {
     width: 85% !important;
 }
 
-/* $input-border-color */
+/* input-border-color */
 .input-group-prepend .border.border-right-0 {
     border-color: var(--bs-dark-bg-subtle) !important;
 }
@@ -421,7 +409,7 @@ input[type=number] {
     border-color: var(--bs-dark-bg-subtle) !important;
 }
 
-/* $input-border-width */
+/* input-border-width */
 .form-control-border-left-0:not(.is-invalid) {
     border-left-width: 0 !important;
 }
@@ -626,14 +614,6 @@ html[data-bs-theme=dark] .small-scrollbar::-webkit-scrollbar-corner {
     color: inherit;
 }
 
-/**
- * Flag emoji
-@font-face {
-    font-family: NotoColorEmojiLimited;
-    unicode-range: U+1F1E6-1F1FF;
-    src: url(https://raw.githack.com/googlefonts/noto-emoji/main/fonts/NotoColorEmoji.ttf);
-}
-*/
 @font-face {
     font-family: NotoColorEmojiLimited;
     unicode-range: U+1F1E6-1F1FF;
@@ -702,40 +682,6 @@ a,
 a.disabled {
     pointer-events: none;
     color: var(--bs-tertiary-color);
-}
-
-/* negative margins */
-.mx-n1 {
-    margin-left: -0.25rem !important;
-    margin-right: -0.25rem !important;
-}
-
-.mx-n2 {
-    margin-left: -0.5rem !important;
-    margin-right: -0.5rem !important;
-}
-
-.mx-n3 {
-    margin-left: -1rem !important;
-    margin-right: -1rem !important;
-}
-
-.mx-n4 {
-    margin-left: -1.5rem !important;
-    margin-right: -1.5rem !important;
-}
-
-.mx-n5 {
-    margin-left: -3rem !important;
-    margin-right: -3rem !important;
-}
-
-.mb-n1 {
-    margin-bottom: -0.25rem !important;
-}
-
-.mb-n2 {
-    margin-bottom: -0.5rem !important;
 }
 
 /* dropdown menu with checked item on the right */
@@ -907,7 +853,7 @@ span.bottom-border-gradient {
 }
 
 body.status-bar .grecaptcha-badge {
-    bottom: 35px !important;
+    bottom: calc(5px + var(--statusbar-height)) !important;
 }
 
 /*

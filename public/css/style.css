@@ -447,7 +447,7 @@ input[type=number] {
     float: left;
     margin-right: 6px;
     content: "\f105";
-    transition: transform 0.15s ease-in-out;
+    transition: transform var(--sidebar-delay) ease-in-out;
 }
 
 .drop-down-icon-left[aria-expanded=true]::before {
@@ -465,7 +465,7 @@ input[type=number] {
     float: right;
     margin-left: 6px;
     content: "\f104";
-    transition: transform 0.15s ease-in-out;
+    transition: transform var(--sidebar-delay) ease-in-out;
 }
 
 .drop-down-icon-right[aria-expanded=true]::after {
@@ -660,12 +660,17 @@ table.table-no-end-line tfoot tr:last-child td {
     background-color: var(--bs-body-bg);
     border-color: #86b7fe;
     outline: 0;
-    box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 .field-invalid {
     border-color: var(--bs-form-invalid-border-color);
     box-shadow: 0 0 0 0.25rem rgba(var(--bs-danger-rgb), 0.25);
+}
+
+/** border color for invalid input */
+.invalid-border-color {
+    border-color: var(--bs-form-invalid-border-color);
 }
 
 /* re-implement text justify */
@@ -867,9 +872,4 @@ body.status-bar .grecaptcha-badge {
 .accordion.accordion-no-background .accordion-button:not(.collapsed) {
     color: inherit;
     background-color: inherit;
-}
-
-/** Border color for invalid input */
-.invalid-border-color {
-    border-color: var(--bs-form-invalid-border-color);
 }

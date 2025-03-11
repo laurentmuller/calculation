@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {# parameters #}
 {%- set title = 'index.title' -%}
-{%- set enabled = app.user.enabled -%}
+{%- set enabled = app.user and app.user.enabled -%}
 {%- set header_attributes = {
     class: 'drop-down-icon-left card-title flex-fill',
     'data-bs-toggle': 'collapse',
@@ -14,15 +14,13 @@
 {% block navigation_horizontal -%}
     {%- if enabled -%}{{ parent() }}{%- endif -%}
 {%- endblock %}
-{# show footer #}
+{# footer #}
 {% block footer -%}
     {%- if enabled -%}{{- parent() -}}{%- endif -%}
 {%- endblock %}
-{# show body #}
+{# body #}
 {% block body -%}
-<div class="row">
-{% if enabled %}
-    <div class="col">
+    {% if enabled %}
         {{ include('index/panel_calculation.html.twig') }}
         {% if user_service.panelMonth %}
             {{ include('index/panel_month.html.twig') }}
@@ -34,31 +32,31 @@
             {{ include('index/panel_catalog.html.twig') }}
         {% endif %}
         {{ include('user/user_switch.html.twig') }}
-    </div>
-{% else %}
-    <div class="col-md-8 offset-md-2 my-auto h-50">
-        {{ include('index/panel_disabled.html.twig') }}
-        {{ include('user/user_switch.html.twig') }}
-    </div>
-{% endif %}
-</div>
+    {% else %}
+        <div class="row">
+            <div class="col-md-8 offset-md-2 my-auto h-50">
+                {{ include('index/panel_disabled.html.twig') }}
+                {{ include('user/user_switch.html.twig') }}
+            </div>
+        </div>
+    {% endif %}
 {%- endblock %}
 {# stylesheets #}
 {% block stylesheets %}
-{{ asset_css(enabled ? 'css/calculation.css' : 'css/center.css') }}
+    {{ asset_css(enabled ? 'css/calculation.css' : 'css/center.css') }}
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}
-{% if enabled %}
-    {% if is_js_debug %}
-        {{ parent() -}}
-        {{ asset_js('vendor/jquery-contextmenu/jquery.contextMenu.js') }}
-        {{ asset_js('js/plugins/plugin-rowlink.js') }}
-        {{ asset_js('js/plugins/plugin-cookie.js') }}
-        {{ asset_js('js/extensions/contextmenu-extensions.js') }}
-        {{ asset_js('js/application/index.js') }}
-    {% else %}
-        {{ asset_js('js/compiled/index.js') }}
+    {% if enabled %}
+        {% if is_js_debug %}
+            {{ parent() -}}
+            {{ asset_js('vendor/jquery-contextmenu/jquery.contextMenu.js') }}
+            {{ asset_js('js/plugins/plugin-rowlink.js') }}
+            {{ asset_js('js/plugins/plugin-cookie.js') }}
+            {{ asset_js('js/extensions/contextmenu-extensions.js') }}
+            {{ asset_js('js/application/index.js') }}
+        {% else %}
+            {{ asset_js('js/compiled/index.js') }}
+        {% endif %}
     {% endif %}
-{% endif %}
 {% endblock %}

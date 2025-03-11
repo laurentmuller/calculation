@@ -105,7 +105,7 @@ $(function () {
             }
             this.$showButton.click(this.showSidebarProxy);
             if (options.timeout > 0) {
-                this._initShowButtonTimeout(options.timeout);
+                this._initButtonTimeout(this.$showButton, options.timeout, this.showSidebarProxy);
             }
         }
 
@@ -121,7 +121,7 @@ $(function () {
             }
             this.$hideButton.click(this.hideSidebarProxy);
             if (options.timeout > 0) {
-                this._initHideButtonTimeout(options.timeout);
+                this._initButtonTimeout(this.$hideButton, options.timeout, this.hideSidebarProxy);
             }
         }
 
@@ -136,38 +136,19 @@ $(function () {
         }
 
         /**
-         * Initialize the timeout to show vertical navigation automatically.
+         * Initialize the timeout to toggle navigation automatically.
+         * @param {jQuery|HTMLButtonElement|*} $button
          * @param {number} timeout
+         * @param {function} callback
          * @private
          */
-        _initShowButtonTimeout(timeout) {
-            const that = this;
-            const removeTimer = () => that.$showButton.removeTimer();
-            that.$showButton.on('mouseenter', function () {
-                if (that._isHorizontalNavigationVisible()) {
-                    that.$showButton.createTimer(function () {
-                        removeTimer();
-                        that._showVerticalNavigation();
-                    }, timeout);
-                }
-            }).on('mouseleave click', removeTimer);
-        }
-
-        /**
-         * Initialize the timeout to hide vertical navigation automatically.
-         * @param {number} timeout
-         * @private
-         */
-        _initHideButtonTimeout(timeout) {
-            const that = this;
-            const removeTimer = () => that.$hideButton.removeTimer();
-            that.$hideButton.on('mouseenter', function () {
-                if (that._isVerticalNavigationVisible()) {
-                    that.$hideButton.createTimer(function () {
-                        removeTimer();
-                        that._showHorizontalNavigation();
-                    }, timeout);
-                }
+        _initButtonTimeout($button, timeout, callback) {
+            const removeTimer = () => $button.removeTimer();
+            $button.on('mouseenter', function () {
+                $button.createTimer(function () {
+                    removeTimer();
+                    callback();
+                }, timeout);
             }).on('mouseleave click', removeTimer);
         }
 

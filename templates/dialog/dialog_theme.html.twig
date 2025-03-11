@@ -1,4 +1,4 @@
-{% from 'macros/_icons.html.twig' import button_ok, modal_title, modal_close_button, icon %}
+{% from 'macros/_icons.html.twig' import button_ok, modal_title, modal_close_button %}
 {% from 'macros/_attributes.html.twig' import attributes as output_attributes %}
 {# output a theme entry #}
 {% macro output_theme(theme, checked) -%}
@@ -23,7 +23,7 @@
         </label>
         <div class="d-none d-md-none d-lg-block">
             <label id="{{ id_help }}" for="{{ id }}" class="form-label d-flex mt-1 mb-0">
-                <img width="64" height="48" class="mt-2 me-2" src="{{ asset(theme.thumbnail) }}" alt="{{ theme|trans }}">
+                {{ asset_image(theme.thumbnail, {width: 64, height: 48, class: 'mt-2 me-2', alt: theme|trans}) }}
                 <span class="text-help text-secondary-emphasis">{{- theme.help|trans|raw -}}</span>
             </label>
         </div>

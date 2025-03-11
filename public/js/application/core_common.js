@@ -93,7 +93,7 @@ $(function () {
      * Handle the back-to-top button.
      */
     function initBackToTop() {
-        /** @type {*|jQuery|HTMLElement} */
+        /** @type {jQuery|HTMLButtonElement|*} */
         const $button = $('.btn-back-to-top');
         if (!$button.length) {
             return;

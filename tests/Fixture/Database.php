@@ -56,13 +56,10 @@ class Database extends AbstractDatabase
         $count = 0;
         $fs = new Filesystem();
         $filename = self::getDatabaseFilename();
-        while ($fs->exists($filename)) {
+        while ($fs->exists($filename) && ++$count < 5) {
             try {
                 $fs->remove($filename);
-            } catch (IOException $e) {
-                if (++$count >= 5) {
-                    throw $e;
-                }
+            } catch (IOException) {
                 \sleep(1);
             }
         }

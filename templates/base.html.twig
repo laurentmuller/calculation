@@ -1,8 +1,8 @@
 {# parameters #}
 {%- set title_parameters = title_parameters|default({}) -%}
 {%- set page_title = app_name ~ (title is defined ? ' - ' ~ title|trans(title_parameters) : '') -%}
-{%- set sidebar_show = app.user and app.request.cookies.boolean('MENU_SIDEBAR_SHOW') -%}
-{%- set status_bar = status_bar is defined ? status_bar : app.user and user_service.statusBar -%}
+{%- set sidebar_show = app.user and app.user.enabled and app.request.cookies.boolean('MENU_SIDEBAR_SHOW') -%}
+{%- set status_bar = status_bar is defined ? status_bar : app.user and app.user.enabled and user_service.statusBar -%}
 {%- set body_class = sidebar_show ? 'sidebar-show' : '' -%}
 {%- if status_bar %}
     {% set body_class = (body_class ~ ' status-bar')|trim %}

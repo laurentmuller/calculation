@@ -1,6 +1,7 @@
 :root {
     --sidebar-width: 18rem;
     --sidebar-delay: 0.35s;
+    --horizontal-navigation-height: 61px;
 }
 
 /* vertical navigation bar */
@@ -27,16 +28,19 @@ body:not(.sidebar-show) .navbar-vertical {
 
 /* horizontal navigation bar */
 .navbar-horizontal {
+    height: var(--horizontal-navigation-height);
     transition: margin-top var(--sidebar-delay) ease-in-out;
 }
 
 body.sidebar-show .navbar-horizontal {
-    margin-top: -56.5px;
+    margin-top: calc(var(--horizontal-navigation-height) * -1);
 }
 
+/*
 body:not(.sidebar-show) .navbar-horizontal {
     margin-top: 0;
 }
+*/
 
 /* menus */
 .navbar-vertical .navbar-nav {
@@ -77,11 +81,13 @@ body:not(.sidebar-show) .navbar-horizontal {
     color: var(--bs-navbar-hover-color);
 }
 
+/*
 .navbar-vertical .theme-switcher:focus-visible,
 .navbar-vertical .dropup .nav-link:focus-visible {
     outline: 0;
     box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
 }
+*/
 
 .navbar-vertical .theme-switcher.disabled,
 .navbar-vertical .dropup .nav-link.disabled {
@@ -158,6 +164,12 @@ html[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
 /**
  * Show / Hide buttons
  */
+.show-sidebar,
+.hide-sidebar {
+    padding: 0 0.5rem;
+    border-radius: 50%;
+}
+
 @media (width <= 1200px) {
     .show-sidebar,
     .hide-sidebar {

@@ -76,6 +76,7 @@
                 const events = 'click focus keyup mouseup input';
                 return this.each(function () {
                     const $this = $(this);
+                    /** @type {jQuery|HTMLElement|*} */
                     const $editor = $this.parents('div.simple-editor');
                     const $content = $editor.find('div.simple-editor-content');
 

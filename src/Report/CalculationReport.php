@@ -26,6 +26,7 @@ use App\Report\Table\OverallTable;
 use App\Utils\StringUtils;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Exception\ValidationException;
 use Endroid\QrCode\Writer\PngWriter;
 use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfTextAlignment;
@@ -72,6 +73,9 @@ class CalculationReport extends AbstractReport
         $this->renderCalculation();
     }
 
+    /**
+     * @throws ValidationException
+     */
     #[\Override]
     public function render(): bool
     {
@@ -117,11 +121,14 @@ class CalculationReport extends AbstractReport
 
     /**
      * Gets the QR code image data.
+     *
+     * @throws ValidationException
      */
     private function getQrCodeImageData(): ImageData
     {
         $builder = new Builder(
             writer: new PngWriter(),
+            writerOptions: [PngWriter::WRITER_OPTION_NUMBER_OF_COLORS => 2],
             data: $this->qrcode,
             errorCorrectionLevel: ErrorCorrectionLevel::Medium,
             size: (int) self::QR_CODE_SIZE,
@@ -193,6 +200,8 @@ class CalculationReport extends AbstractReport
 
     /**
      * Render the QR code (if any).
+     *
+     * @throws ValidationException
      */
     private function renderQrCode(): void
     {

@@ -19,10 +19,14 @@ use App\Entity\CalculationCategory;
 use App\Entity\CalculationGroup;
 use App\Entity\CalculationItem;
 use App\Report\CalculationReport;
+use Endroid\QrCode\Exception\ValidationException;
 use PHPUnit\Framework\TestCase;
 
 class CalculationReportTest extends TestCase
 {
+    /**
+     * @throws ValidationException
+     */
     public function testEmpty(): void
     {
         $calculation = new Calculation();
@@ -38,6 +42,9 @@ class CalculationReportTest extends TestCase
         self::assertTrue($actual);
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function testEmptyGroup(): void
     {
         $calculation = new Calculation();
@@ -58,6 +65,9 @@ class CalculationReportTest extends TestCase
         self::assertTrue($actual);
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function testRender(): void
     {
         $calculation = new Calculation();
@@ -88,6 +98,9 @@ class CalculationReportTest extends TestCase
         self::assertTrue($actual);
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function testRenderWithoutQrCode(): void
     {
         $calculation = new Calculation();

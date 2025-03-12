@@ -48,7 +48,7 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
             'ICON_CATEGORY' => 'folder far',
             'ICON_CUSTOMER' => 'address-card far',
             'ICON_GLOBAL_MARGIN' => 'percent',
-            'ICON_GROUP' => 'code-branch',
+            'ICON_GROUP' => 'folder-closed far',
             'ICON_LOG' => 'book',
             'ICON_PRODUCT' => 'file-alt far',
             'ICON_TASK' => 'tasks',

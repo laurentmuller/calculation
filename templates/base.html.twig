@@ -12,95 +12,95 @@
 <html lang="{{ app.request.locale|replace({_: '-'}) }}" data-bs-theme="{{ theme_value(app.request) }}">
 {# head #}
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="application-name" content="{{ app_name }}">
-<meta name="description" content="{{ app_description }}">
-<meta name="theme-color" content="#212529">
-<meta name="msapplication-TileColor" content="#212529">
-<meta name="msapplication-TileImage" content="{{ asset_icon(144) }}">
-<meta name="msapplication-config" content="{{ asset('browserconfig.xml') }}" />
-<meta property="og:title" content="{{ page_title }}" />
-<meta property="og:image" content="{{ asset_icon(144) }}" />
-<meta property="og:url" content="{{ app.request.uri }}" />
-<meta property="og:description" content="{{ app_description }}">
-<meta property="og:type" content="website" />
-<title>{{ page_title }}</title>
-<link rel="manifest" type="application/manifest+json" href="{{ asset('site.webmanifest') }}">
-<link rel="icon" type="image/png" sizes="16x16" href="{{ asset_icon(16) }}">
-<link rel="icon" type="image/png" sizes="32x32" href="{{ asset_icon(32) }}">
-<link rel="icon" type="image/png" sizes="96x96" href="{{ asset_icon(96) }}">
-<link rel="icon" type="image/png" sizes="192x192" href="{{ asset_icon(192) }}">
-<link rel="icon" type="image/png" sizes="256x256" href="{{ asset_icon(256) }}">
-<link rel="apple-touch-icon" sizes="57x57" href="{{ asset_icon(57) }}">
-<link rel="apple-touch-icon" sizes="60x60" href="{{ asset_icon(60) }}">
-<link rel="apple-touch-icon" sizes="72x72" href="{{ asset_icon(72) }}">
-<link rel="apple-touch-icon" sizes="76x76" href="{{ asset_icon(76) }}">
-<link rel="apple-touch-icon" sizes="114x114" href="{{ asset_icon(114) }}">
-<link rel="apple-touch-icon" sizes="120x120" href="{{ asset_icon(120) }}">
-<link rel="apple-touch-icon" sizes="144x144" href="{{ asset_icon(144) }}">
-<link rel="apple-touch-icon" sizes="152x152" href="{{ asset_icon(152) }}">
-<link rel="apple-touch-icon" sizes="180x180" href="{{ asset_icon(180) }}">
-{# stylesheets #}
-<link rel="preload" href="{{ preload(asset('vendor/bootstrap/css/bootstrap.css'), {as: 'style'}) }}" as="style" nonce="{{ csp_nonce() }}">
-<link rel="preload" href="{{ preload(asset('vendor/font-awesome/css/all.css'), {as: 'style'}) }}" as="style" nonce="{{ csp_nonce() }}">
-{{- asset_css('vendor/bootstrap/css/bootstrap.css') }}
-{{- asset_css('vendor/font-awesome/css/all.css') }}
-{% block stylesheets %}
-{{- asset_css('css/style.css') }}
-{% endblock %}
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="application-name" content="{{ app_name }}">
+    <meta name="description" content="{{ app_description }}">
+    <meta name="theme-color" content="#212529">
+    <meta name="msapplication-TileColor" content="#212529">
+    <meta name="msapplication-TileImage" content="{{ asset_icon(144) }}">
+    <meta name="msapplication-config" content="{{ asset('browserconfig.xml') }}"/>
+    <meta property="og:title" content="{{ page_title }}"/>
+    <meta property="og:image" content="{{ asset_icon(144) }}"/>
+    <meta property="og:url" content="{{ app.request.uri }}"/>
+    <meta property="og:description" content="{{ app_description }}">
+    <meta property="og:type" content="website"/>
+    <title>{{ page_title }}</title>
+    <link rel="manifest" type="application/manifest+json" href="{{ asset('site.webmanifest') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset_icon(16) }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset_icon(32) }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset_icon(96) }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset_icon(192) }}">
+    <link rel="icon" type="image/png" sizes="256x256" href="{{ asset_icon(256) }}">
+    <link rel="apple-touch-icon" sizes="57x57" href="{{ asset_icon(57) }}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{{ asset_icon(60) }}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ asset_icon(72) }}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset_icon(76) }}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ asset_icon(114) }}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{ asset_icon(120) }}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{{ asset_icon(144) }}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ asset_icon(152) }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset_icon(180) }}">
+    {# stylesheets #}
+    <link rel="preload" href="{{ preload(asset('vendor/bootstrap/css/bootstrap.css'), {as: 'style'}) }}" as="style" nonce="{{ csp_nonce() }}">
+    <link rel="preload" href="{{ preload(asset('vendor/font-awesome/css/all.css'), {as: 'style'}) }}" as="style" nonce="{{ csp_nonce() }}">
+    {{- asset_css('vendor/bootstrap/css/bootstrap.css') }}
+    {{- asset_css('vendor/font-awesome/css/all.css') }}
+    {% block stylesheets %}
+        {{- asset_css('css/style.css') }}
+    {% endblock %}
 </head>
 <body class="{{ body_class }}"
-        data-cookie-path="{{ cookie_path }}"
-        data-vertical-url="{{ path('navigation_vertical') }}"
-        data-horizontal-url="{{ path('navigation_horizontal') }}"
-        data-show-menu="{{ 'index.menu_show'|trans }}"
-        data-hide-menu="{{ 'index.menu_hide'|trans }}">
-    {# vertical navigation #}
-    {%- block navigation_vertical -%}
-        {% if sidebar_show %}
-            {{ include('navigation/vertical/navigation.html.twig') }}
-        {% endif %}
-    {%- endblock %}
-    {# horizontal navigation #}
-    {%- block navigation_horizontal -%}
-        {% if not sidebar_show %}
-            {{ include('navigation/horizontal/navigation.html.twig') }}
-        {% endif %}
-    {%- endblock %}
-    {# main content #}
-    <div class="page-content">
-        {# container #}
-        <div role="main" class="{% block container_class 'container' %}">
-            {% block body -%}{%- endblock %}
-        </div>
-        {# messages #}
-        {% block flashbag -%}{{ include('flash_bag.html.twig') }}{%- endblock %}
-        {# cookie_banner #}
-        {% block cookie_banner -%}{{ include('cookie_banner.html.twig') }}{%- endblock %}
-        {# back to top #}
-        {% block back_to_top -%}{{ include('back_to_top.html.twig') }}{%- endblock %}
+      data-cookie-path="{{ cookie_path }}"
+      data-vertical-url="{{ path('navigation_vertical') }}"
+      data-horizontal-url="{{ path('navigation_horizontal') }}"
+      data-show-menu="{{ 'index.menu_show'|trans }}"
+      data-hide-menu="{{ 'index.menu_hide'|trans }}">
+{# vertical navigation #}
+{%- block navigation_vertical -%}
+    {% if sidebar_show %}
+        {{ include('navigation/vertical/navigation.html.twig') }}
+    {% endif %}
+{%- endblock %}
+{# horizontal navigation #}
+{%- block navigation_horizontal -%}
+    {% if not sidebar_show %}
+        {{ include('navigation/horizontal/navigation.html.twig') }}
+    {% endif %}
+{%- endblock %}
+{# main content #}
+<div class="page-content">
+    {# container #}
+    <div role="main" class="{% block container_class 'container' %}">
+        {% block body -%}{%- endblock %}
     </div>
-    {# footer #}
-    {% block footer -%}{% if status_bar %}{{ include('footer.html.twig') }}{% endif %}{%- endblock %}
+    {# messages #}
+    {% block flashbag -%}{{ include('flash_bag.html.twig') }}{%- endblock %}
+    {# cookie_banner #}
+    {% block cookie_banner -%}{{ include('cookie_banner.html.twig') }}{%- endblock %}
+    {# back to top #}
+    {% block back_to_top -%}{{ include('back_to_top.html.twig') }}{%- endblock %}
+</div>
+{# footer #}
+{% block footer -%}{% if status_bar %}{{ include('footer.html.twig') }}{% endif %}{%- endblock %}
 {# java scripts #}
 <noscript>{{ 'common.no_script_support'|trans }}</noscript>
 {% block javascripts %}
-{% if is_js_debug %}
-    {{- asset_js('vendor/jquery/jquery.js') }}
-    {{- asset_js('vendor/bootstrap/js/bootstrap.bundle.js') }}
-    {{- asset_js('js/extensions/array-extensions.js') }}
-    {{- asset_js('js/extensions/jquery-extensions.js') }}
-    {{- asset_js('js/extensions/string-extensions.js') }}
-    {{- asset_js('js/plugins/plugin-cookie.js') }}
-    {{- asset_js('js/plugins/plugin-sidebar.js') }}
-    {{- asset_js('js/plugins/plugin-toast.js') }}
-    {{- asset_js('js/plugins/plugin-theme.js') }}
-    {{- asset_js('js/application/core_common.js') }}
-{% else %}
-    {{- asset_js('js/compiled/core_common.js') }}
-{% endif %}
+    {% if is_js_debug %}
+        {{- asset_js('vendor/jquery/jquery.js') }}
+        {{- asset_js('vendor/bootstrap/js/bootstrap.bundle.js') }}
+        {{- asset_js('js/extensions/array-extensions.js') }}
+        {{- asset_js('js/extensions/jquery-extensions.js') }}
+        {{- asset_js('js/extensions/string-extensions.js') }}
+        {{- asset_js('js/plugins/plugin-cookie.js') }}
+        {{- asset_js('js/plugins/plugin-sidebar.js') }}
+        {{- asset_js('js/plugins/plugin-toast.js') }}
+        {{- asset_js('js/plugins/plugin-theme.js') }}
+        {{- asset_js('js/application/core_common.js') }}
+    {% else %}
+        {{- asset_js('js/compiled/core_common.js') }}
+    {% endif %}
 {% endblock %}
 </body>
 </html>

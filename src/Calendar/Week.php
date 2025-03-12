@@ -45,6 +45,7 @@ class Week extends AbstractCalendarItem
         parent::__construct($calendar, $key);
     }
 
+    #[\Override]
     public function __toString(): string
     {
         $name = StringUtils::getShortName($this);

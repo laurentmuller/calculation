@@ -17,6 +17,7 @@ use App\Model\TranslateQuery;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 /**
  * Google translator service v2.0.
@@ -59,7 +60,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
     #[\Override]
     public function detect(string $text): array|false
@@ -94,7 +95,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
     #[\Override]
     public function translate(TranslateQuery $query): array|false
@@ -137,7 +138,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
     #[\Override]
     protected function loadLanguages(): array|false
@@ -162,7 +163,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
     private function call(string $uri, array $query = []): array|false
     {

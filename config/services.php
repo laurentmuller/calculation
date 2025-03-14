@@ -44,6 +44,7 @@ return static function (ContainerConfigurator $config): void {
         'google_translator_key' => '%env(string:GOOGLE_TRANSLATOR_KEY)%',
         'google_recaptcha_secret_key' => '%env(string:GOOGLE_RECAPTCHA_SECRET_KEY)%',
         'google_recaptcha_site_key' => '%env(string:GOOGLE_RECAPTCHA_SITE_KEY)%',
+        'deepl_translator_key' => '%env(string:DEEPL_TRANSLATOR_KEY)%',
         // links
         'link_dev' => '%env(string:LINK_DEV)%',
         'link_prod' => '%env(string:LINK_PROD)%',

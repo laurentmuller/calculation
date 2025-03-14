@@ -55,12 +55,12 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      */
     public function findLanguage(?string $tag): ?string
     {
-        if (null === $tag) {
+        if (null === $tag || '' === $tag) {
             return null;
         }
 
         $languages = $this->getLanguages();
-        if (false === $languages) {
+        if (false === $languages || [] === $languages) {
             return null;
         }
 
@@ -105,6 +105,15 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
         ];
     }
 
+    /**
+     * Find a value from the array for the given property path.
+     *
+     * @param array  $values the array to search value in
+     * @param string $path   the property path to search value for
+     * @param bool   $error  <code>true</code> to set last error if the value is not found
+     *
+     * @return mixed the value or <code>null</code> if not found
+     */
     protected function getValue(array $values, string $path, bool $error = true): mixed
     {
         $accessor = $this->getPropertyAccessor();

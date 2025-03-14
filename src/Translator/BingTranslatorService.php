@@ -20,6 +20,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
@@ -68,7 +69,7 @@ class BingTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
     #[\Override]
     public function detect(string $text): array|false
@@ -104,7 +105,7 @@ class BingTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
     #[\Override]
     public function translate(TranslateQuery $query): array|false
@@ -151,7 +152,7 @@ class BingTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
     #[\Override]
     protected function loadLanguages(): array|false
@@ -176,7 +177,7 @@ class BingTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      *
      * @psalm-param Request::METHOD_* $method
      */
@@ -195,7 +196,7 @@ class BingTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
     private function checkResponse(ResponseInterface $response): array|false
     {

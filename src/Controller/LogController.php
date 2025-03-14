@@ -152,9 +152,8 @@ class LogController extends AbstractController
     public function refresh(Request $request, LogService $service): Response
     {
         $service->clearCache();
-        $route = $this->getDefaultRoute($request);
 
-        return $this->redirectToRoute($route);
+        return $this->redirectToDefaultRoute($request);
     }
 
     /**
@@ -166,9 +165,8 @@ class LogController extends AbstractController
         $item = $service->getLog($id);
         if (!$item instanceof Log) {
             $this->warningTrans('log.show.not_found');
-            $route = $this->getDefaultRoute($request);
 
-            return $this->redirectToRoute($route);
+            return $this->redirectToDefaultRoute($request);
         }
 
         return $this->render('log/log_show.html.twig', ['item' => $item]);
@@ -195,6 +193,13 @@ class LogController extends AbstractController
         }
 
         return $logFile;
+    }
+
+    private function redirectToDefaultRoute(Request $request): RedirectResponse
+    {
+        $route = $this->getDefaultRoute($request);
+
+        return $this->redirectToRoute($route);
     }
 
     private function setEmptyFile(string $file): bool

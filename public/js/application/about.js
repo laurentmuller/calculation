@@ -96,6 +96,7 @@
         // .card-body
         $accordion.on('shown.bs.collapse', function (e) {
             const $target = $(e.target);
+            /** @type {JQuery|HTMLElement|*} */
             const $content = $target.find('.collapse-content');
             if ($content.length) {
                 $content.loadContent();
@@ -116,6 +117,7 @@
         }).on('click', 'tr[data-license] .link-license', function (e) {
             e.preventDefault();
             const $this = $(this);
+            /** @type {JQuery|HTMLElement|*} */
             const $row = $this.parents('tr');
             if ($row.data('content')) {
                 $row.displayLicense();

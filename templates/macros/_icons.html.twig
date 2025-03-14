@@ -105,8 +105,8 @@
 <button{{ attributes(parameters) }}>{{ text|trans }}</button>
 {%- endmacro %}
 
-{% macro button_ok(href = '#', text = 'common.button_ok', class = 'btn btn-ok btn-form btn-primary', autofocus = false) -%}
-{{- _self.link(href, text, class) -}}
+{% macro button_ok(href = '#', text = 'common.button_ok', class = 'btn btn-ok btn-form btn-primary') -%}
+{{- _self.link(href: href, text: text, class: class) -}}
 {%- endmacro %}
 
 {% macro button_cancel(href = '#', text = 'common.button_cancel', class = 'btn btn-cancel btn-form btn-secondary') -%}

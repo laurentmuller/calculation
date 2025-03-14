@@ -21,26 +21,6 @@ use App\Interfaces\ComparableInterface;
 trait ComparableTrait
 {
     /**
-     * Sort, in reverse order, the given array of comparable.
-     *
-     * @template TKey of array-key
-     * @template TValue of ComparableInterface
-     *
-     * @param array<TKey, TValue> $values        the values to sort
-     * @param bool                $preserve_keys if set to true, the keys are preserved
-     *
-     * @return array<TKey, TValue> the sorted values in reverse order
-     */
-    public function getReversedSortedComparable(array $values, bool $preserve_keys = true): array
-    {
-        if ([] === $values) {
-            return [];
-        }
-
-        return \array_reverse($this->getSortedComparable($values), $preserve_keys);
-    }
-
-    /**
      * Sort the given array of comparable.
      *
      * @template TKey of array-key
@@ -48,14 +28,49 @@ trait ComparableTrait
      *
      * @param array<TKey, TValue> $values the values to sort
      *
-     * @return array<TKey, TValue> the sorted values
+     * @return array<TKey, TValue> $values the sorted values
      */
-    public function getSortedComparable(array $values): array
+    public function sortComparable(array $values): array
     {
-        if ([] === $values) {
-            return [];
+        return $this->compareInternal(
+            $values,
+            static fn (ComparableInterface $a, ComparableInterface $b): int => $a->compare($b)
+        );
+    }
+
+    /**
+     * Sort, in reverse order, the given array of comparable.
+     *
+     * @template TKey of array-key
+     * @template TValue of ComparableInterface
+     *
+     * @param array<TKey, TValue> $values the values to sort
+     *
+     * @return array<TKey, TValue> $values the sorted values, in reverse order
+     */
+    public function sortReverseComparable(array $values): array
+    {
+        return $this->compareInternal(
+            $values,
+            static fn (ComparableInterface $a, ComparableInterface $b): int => $b->compare($a)
+        );
+    }
+
+    /**
+     * @template TKey of array-key
+     * @template TValue of ComparableInterface
+     *
+     * @param array<TKey, TValue>          $values
+     * @param callable(TValue, TValue):int $callable
+     *
+     * @return array<TKey, TValue>
+     */
+    private function compareInternal(array $values, callable $callable): array
+    {
+        if ([] === $values || 1 === \count($values)) {
+            return $values;
         }
-        \uasort($values, static fn (ComparableInterface $a, ComparableInterface $b): int => $a->compare($b));
+        \uasort($values, $callable);
 
         return $values;
     }

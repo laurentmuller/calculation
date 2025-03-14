@@ -45,6 +45,7 @@ function setDefaultValues($source) {
         const value = $this.data('default');
         const oldValue = $this.find(':radio:checked').val();
         if (value.toString() !== oldValue.toString()) {
+            /** @type {JQuery|HTMLElement|*} */
             const $radio = $this.find(`:radio[value="${value}"]`);
             $radio.setChecked(true).trigger('input');
         }

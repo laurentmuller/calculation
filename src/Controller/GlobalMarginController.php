@@ -54,24 +54,20 @@ class GlobalMarginController extends AbstractEntityController
     #[GetPost(path: '/edit', name: 'edit')]
     public function edit(Request $request): Response
     {
-        $this->checkPermission(EntityPermission::ADD, EntityPermission::EDIT, EntityPermission::DELETE);
+        $this->checkPermission(
+            EntityPermission::ADD,
+            EntityPermission::EDIT,
+            EntityPermission::DELETE
+        );
 
         $repository = $this->getRepository();
-        $existingMargins = $repository->findByMinimum();
-        $root = new GlobalMargins($existingMargins);
+        $oldMargins = $repository->findByMinimum();
+        $root = new GlobalMargins($oldMargins);
         $form = $this->createForm(GlobalMarginsType::class, $root);
         if ($this->handleRequestForm($request, $form)) {
-            $newMargins = $root->getMargins()->toArray();
-            foreach ($newMargins as $margin) {
-                $repository->persist($margin, false);
-            }
-            $deletedMargins = \array_diff($existingMargins, $newMargins);
-            foreach ($deletedMargins as $margin) {
-                $repository->remove($margin, false);
-            }
-            $repository->flush();
+            $this->updateMargins($repository, $oldMargins, $root->toArray());
 
-            return $this->redirectToRoute('globalmargin_index');
+            return $this->redirectToDefaultRoute($request, $request->query->getInt('id'));
         }
 
         return $this->render('globalmargin/globalmargin_edit_list.html.twig', [
@@ -134,5 +130,26 @@ class GlobalMarginController extends AbstractEntityController
     public function show(GlobalMargin $item): Response
     {
         return $this->showEntity($item);
+    }
+
+    /**
+     * Flush modified margins.
+     *
+     * @param GlobalMargin[] $oldMargins
+     * @param GlobalMargin[] $newMargins
+     */
+    private function updateMargins(
+        GlobalMarginRepository $repository,
+        array $oldMargins,
+        array $newMargins
+    ): void {
+        foreach ($newMargins as $margin) {
+            $repository->persist($margin, false);
+        }
+        $deletedMargins = \array_diff($oldMargins, $newMargins);
+        foreach ($deletedMargins as $margin) {
+            $repository->remove($margin, false);
+        }
+        $repository->flush();
     }
 }

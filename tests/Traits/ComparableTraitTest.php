@@ -21,51 +21,57 @@ class ComparableTraitTest extends TestCase
 {
     use ComparableTrait;
 
-    public function testComparableSorted(): void
-    {
-        $values = [];
-        $values[] = $item1 = $this->createProduct('description1');
-        $values[] = $item2 = $this->createProduct('description2');
-
-        $actual = $this->getSortedComparable($values);
-        self::assertSame([$item1, $item2], $actual);
-    }
-
     public function testEmptyArray(): void
     {
-        $values = [];
+        $values = $this->sortComparable($this->createArray());
+        self::assertSame([], $values);
 
-        $actual = $this->getSortedComparable($values);
-        self::assertSame([], $actual);
-
-        $actual = $this->getReversedSortedComparable($values);
-        self::assertSame([], $actual);
+        $values = $this->sortReverseComparable($this->createArray());
+        self::assertSame([], $values);
     }
 
-    public function testReversedSortedComparableNoPreserveKey(): void
+    public function testOneValue(): void
     {
-        $values = [];
-        $values[] = $item1 = $this->createProduct('description1');
-        $values[] = $item2 = $this->createProduct('description2');
+        $product = $this->createProduct('description1');
 
-        $actual = $this->getReversedSortedComparable($values, false);
-        self::assertSame([$item2, $item1], $actual);
+        $values = $this->sortComparable($this->createArray($product));
+        self::assertSame([$product], $values);
+
+        $values = $this->sortReverseComparable($this->createArray($product));
+        self::assertSame([$product], $values);
     }
 
-    public function testReversedSortedComparablePreserveKey(): void
+    public function testSortComparable(): void
     {
-        $values = [];
-        $values[] = $item1 = $this->createProduct('description1');
-        $values[] = $item2 = $this->createProduct('description2');
+        $product1 = $this->createProduct('description1');
+        $product2 = $this->createProduct('description2');
 
-        $actual = $this->getReversedSortedComparable($values);
-        self::assertSame([1 => $item2, 0 => $item1], $actual);
+        $values = $this->sortComparable($this->createArray($product1, $product2));
+        self::assertSame([$product1, $product2], $values);
+    }
+
+    public function testSortReverseComparable(): void
+    {
+        $product1 = $this->createProduct('description1');
+        $product2 = $this->createProduct('description2');
+
+        $values = $this->sortReverseComparable($this->createArray($product1, $product2));
+        self::assertSame([1 => $product2, 0 => $product1], $values);
+    }
+
+    /**
+     * @psalm-return array<array-key, Product>
+     */
+    private function createArray(Product ...$products): array
+    {
+        return [...$products];
     }
 
     private function createProduct(string $description): Product
     {
         $product = new Product();
+        $product->setDescription($description);
 
-        return $product->setDescription($description);
+        return $product;
     }
 }

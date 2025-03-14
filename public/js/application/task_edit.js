@@ -29,7 +29,7 @@ function updateUI() {
 
     // update tables
     $('#items .table-edit').each(function () {
-        /** @var {jquery<HTMLTableElement>} $table */
+        /** @type {JQuery|HTMLTableElement|*} */
         const $table = $(this);
         const rows = $table.find('tbody > tr').length;
         $table.toggleClass('d-none', rows === 0);

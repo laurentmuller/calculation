@@ -16,67 +16,76 @@ namespace App\Tests\Traits;
 use App\Entity\Product;
 use App\Traits\CollectionTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use PHPUnit\Framework\TestCase;
 
 class CollectionTraitTest extends TestCase
 {
     use CollectionTrait;
 
-    public function testComparableSorted(): void
+    public function testEmpty(): void
     {
-        /** @psalm-var ArrayCollection<array-key, Product> $collection */
-        $collection = new ArrayCollection();
-        $item1 = $this->createProduct('description1');
-        $collection->add($item1);
-        $item2 = $this->createProduct('description2');
-        $collection->add($item2);
-
-        $actual = $this->getSortedCollection($collection);
-        self::assertSame([$item1, $item2], $actual);
-    }
-
-    public function testEmptyCollection(): void
-    {
-        /** @psalm-var ArrayCollection<array-key, Product> $collection */
-        $collection = new ArrayCollection();
+        $collection = $this->createCollection();
 
         $actual = $this->getSortedCollection($collection);
         self::assertSame([], $actual);
 
-        $actual = $this->getReversedSortedCollection($collection);
+        $actual = $this->getReverseSortedCollection($collection);
         self::assertSame([], $actual);
     }
 
-    public function testReversedSortedCollectionNoPreserveKey(): void
+    public function testOneValue(): void
     {
-        /** @psalm-var ArrayCollection<array-key, Product> $collection */
-        $collection = new ArrayCollection();
-        $item1 = $this->createProduct('description1');
-        $collection->add($item1);
-        $item2 = $this->createProduct('description2');
-        $collection->add($item2);
+        $product = $this->createProduct('description1');
 
-        $actual = $this->getReversedSortedCollection($collection, false);
-        self::assertSame([$item2, $item1], $actual);
+        $collection = $this->createCollection($product);
+        $actual = $this->getSortedCollection($collection);
+        self::assertSame([$product], $actual);
+
+        $collection = $this->createCollection($product);
+        $actual = $this->getReverseSortedCollection($collection);
+        self::assertSame([$product], $actual);
     }
 
-    public function testReversedSortedCollectionPreserveKey(): void
+    public function testReverseSorted(): void
     {
-        /** @psalm-var ArrayCollection<array-key, Product> $collection */
-        $collection = new ArrayCollection();
-        $item1 = $this->createProduct('description1');
-        $collection->add($item1);
-        $item2 = $this->createProduct('description2');
-        $collection->add($item2);
+        $product1 = $this->createProduct('description1');
+        $product2 = $this->createProduct('description2');
+        $collection = $this->createCollection($product1, $product2);
 
-        $actual = $this->getReversedSortedCollection($collection);
-        self::assertSame([1 => $item2, 0 => $item1], $actual);
+        $actual = $this->getReverseSortedCollection($collection);
+        self::assertSame([1 => $product2, 0 => $product1], $actual);
+    }
+
+    public function testSorted(): void
+    {
+        $product1 = $this->createProduct('description1');
+        $product2 = $this->createProduct('description2');
+        $collection = $this->createCollection($product1, $product2);
+
+        $actual = $this->getSortedCollection($collection);
+        self::assertSame([$product1, $product2], $actual);
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    private function createCollection(Product ...$products): Collection
+    {
+        /** @var Collection<int, Product> $collection */
+        $collection = new ArrayCollection();
+        foreach ($products as $product) {
+            $collection->add($product);
+        }
+
+        return $collection;
     }
 
     private function createProduct(string $description): Product
     {
         $product = new Product();
+        $product->setDescription($description);
 
-        return $product->setDescription($description);
+        return $product;
     }
 }

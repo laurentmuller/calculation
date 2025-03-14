@@ -116,6 +116,7 @@ function removeMargin($caller) {
 function sortMargins() {
     'use strict';
     const $table = $('#data-table-edit');
+    /** @type {JQuery|HTMLElement|*} */
     const $body = $table.find('tbody');
     if ($body.children('tr').length > 1) {
         getSortedMargins($body).appendTo($body);

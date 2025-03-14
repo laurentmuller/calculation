@@ -20,14 +20,11 @@ use App\Entity\Log;
  */
 readonly class LogSorter
 {
+    // sortable field names
     private const COLUMN_CHANNEL = 'channel';
-
     private const COLUMN_DATE = 'createdAt';
-
     private const COLUMN_LEVEL = 'level';
-
     private const COLUMN_MESSAGE = 'message';
-
     private const COLUMN_USER = 'user';
 
     /**
@@ -62,30 +59,46 @@ readonly class LogSorter
         }
 
         if (self::COLUMN_DATE === $this->field) {
-            return \uasort($logs, $this->getDateSorter(true));
+            // date and identifier ascending
+            $sorter = fn (Log $a, Log $b): int => $a->compare($b);
+        } else {
+            $sorter = $this->getCompositeSorter(
+                $this->getFieldSorter(),
+                $this->getDateSorter(),
+                $this->getIdSorter()
+            );
         }
 
-        $fieldSorter = $this->getFieldSorter();
-        $dateSorter = $this->getDateSorter(false);
-
-        return \uasort($logs, function (Log $a, Log $b) use ($fieldSorter, $dateSorter): int {
-            $result = $fieldSorter($a, $b);
-            if (0 !== $result) {
-                return $result;
-            }
-
-            return $dateSorter($a, $b);
-        });
+        return \uasort($logs, $sorter);
     }
 
     /**
+     * @param \Closure(Log, Log): int ...$sorters
+     *
      * @return \Closure(Log, Log): int
      */
-    private function getDateSorter(bool $ascending): \Closure
+    private function getCompositeSorter(\Closure ...$sorters): \Closure
     {
-        $order = $this->getOrder($ascending);
+        return function (Log $a, Log $b) use ($sorters): int {
+            foreach ($sorters as $sorter) {
+                $result = $sorter($a, $b);
+                if (0 !== $result) {
+                    return $result;
+                }
+            }
 
-        return fn (Log $a, Log $b): int => $order * ($a->getCreatedAt() <=> $b->getCreatedAt());
+            return 0;
+        };
+    }
+
+    /**
+     * Gets the date sorter in descending mode.
+     *
+     * @return \Closure(Log, Log): int
+     */
+    private function getDateSorter(): \Closure
+    {
+        return static fn (Log $a, Log $b): int => $b->getCreatedAt() <=> $a->getCreatedAt();
     }
 
     /**
@@ -96,12 +109,22 @@ readonly class LogSorter
         $order = $this->getOrder($this->ascending);
 
         return match ($this->field) {
-            self::COLUMN_MESSAGE => fn (Log $a, Log $b): int => $order * ($a->getMessage() <=> $b->getMessage()),
-            self::COLUMN_LEVEL => fn (Log $a, Log $b): int => $order * ($a->getLevel() <=> $b->getLevel()),
-            self::COLUMN_CHANNEL => fn (Log $a, Log $b): int => $order * ($a->getChannel() <=> $b->getChannel()),
-            self::COLUMN_USER => fn (Log $a, Log $b): int => $order * ($a->getUser() <=> $b->getUser()),
-            default => $this->getDateSorter(false),
+            self::COLUMN_MESSAGE => static fn (Log $a, Log $b): int => $order * ($a->getMessage() <=> $b->getMessage()),
+            self::COLUMN_LEVEL => static fn (Log $a, Log $b): int => $order * ($a->getLevel() <=> $b->getLevel()),
+            self::COLUMN_CHANNEL => static fn (Log $a, Log $b): int => $order * ($a->getChannel() <=> $b->getChannel()),
+            self::COLUMN_USER => static fn (Log $a, Log $b): int => $order * ($a->getUser() <=> $b->getUser()),
+            default => $this->getDateSorter(),
         };
+    }
+
+    /**
+     * Gets the identifier sorter in descending mode.
+     *
+     * @return \Closure(Log, Log): int
+     */
+    private function getIdSorter(): \Closure
+    {
+        return static fn (Log $a, Log $b): int => $b->getId() <=> $a->getId();
     }
 
     private function getOrder(bool $ascending): int

@@ -694,7 +694,7 @@ list:
     sort_descending: Tri décroissant
     sort_descending_title: "Tri par défaut : %name%, Ordre décroissant."
 log:
-    name: Entré du journal
+    name: Entrée du journal
     title: Journal de l'application
     delete:
         title: Supprimer le journal

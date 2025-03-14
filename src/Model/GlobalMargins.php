@@ -81,4 +81,14 @@ class GlobalMargins implements \Countable
 
         return $this;
     }
+
+    /**
+     * Gets margins as an array.
+     *
+     * @return array<int, GlobalMargin>
+     */
+    public function toArray(): array
+    {
+        return $this->margins->toArray();
+    }
 }

@@ -29,18 +29,20 @@ trait CollectionTrait
      * @template TKey of array-key
      * @template TValue of ComparableInterface
      *
-     * @param Collection<TKey, TValue> $collection    the collection to sort
-     * @param bool                     $preserve_keys if set to true, the keys are preserved
+     * @param Collection<TKey, TValue> $collection the collection to sort
      *
      * @return array<TKey, TValue> the sorted values in reverse order
      */
-    public function getReversedSortedCollection(Collection $collection, bool $preserve_keys = true): array
+    public function getReverseSortedCollection(Collection $collection): array
     {
         if ($collection->isEmpty()) {
             return [];
         }
+        if (1 === $collection->count()) {
+            return $collection->toArray();
+        }
 
-        return $this->getReversedSortedComparable($collection->toArray(), $preserve_keys);
+        return $this->sortReverseComparable($collection->toArray());
     }
 
     /**
@@ -58,7 +60,10 @@ trait CollectionTrait
         if ($collection->isEmpty()) {
             return [];
         }
+        if (1 === $collection->count()) {
+            return $collection->toArray();
+        }
 
-        return $this->getSortedComparable($collection->toArray());
+        return $this->sortComparable($collection->toArray());
     }
 }

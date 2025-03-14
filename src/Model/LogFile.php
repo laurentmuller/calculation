@@ -101,14 +101,14 @@ class LogFile implements \Countable
     }
 
     /**
-     * Sorts levels, channels and logs by date descending.
+     * Sorts levels, channels and logs.
      */
     public function sort(): self
     {
         if (!$this->isEmpty()) {
             \ksort($this->channels);
-            $this->levels = $this->getReversedSortedComparable($this->levels);
-            \uasort($this->logs, static fn (Log $a, Log $b): int => $b->compare($a));
+            $this->levels = $this->sortReverseComparable($this->levels);
+            $this->logs = $this->sortReverseComparable($this->logs);
         }
 
         return $this;

@@ -26,6 +26,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents an application log entry.
  *
+ * Compare first by the date and then by the identifier, both in ascending mode.
+ *
  * @implements ComparableInterface<Log>
  */
 class Log extends AbstractEntity implements ComparableInterface
@@ -69,7 +71,9 @@ class Log extends AbstractEntity implements ComparableInterface
     #[\Override]
     public function compare(ComparableInterface $other): int
     {
-        return $this->getCreatedAt() <=> $other->getCreatedAt();
+        $result = $this->getCreatedAt() <=> $other->getCreatedAt();
+
+        return 0 !== $result ? $result : $this->getId() <=> $other->getId();
     }
 
     public static function formatDate(\DateTimeInterface $date): string

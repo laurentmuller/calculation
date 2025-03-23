@@ -134,14 +134,18 @@ $(function () {
             const $element = this.$element;
             const className = options.selectionClass;
             const $items = this.$menu.find('.dropdown-item').removeClass(className);
+            /** @type {JQuery<HTMLSpanElement>|any} */
+            const $iconElement = $element.find(options.iconClass);
+            /** @type {JQuery<HTMLSpanElement>|any} */
+            const $textElement = $element.find(options.textClass);
 
             // default values
-            /** @type {jQuery} */
-            let $icon = $element.find(':first-child');
+            /** @type {JQuery<HTMLSpanElement>|any} */
+            let $icon = $iconElement.find('i');
             if ($icon.length === 0 && $element.data('icon')) {
                 $icon = $($element.data('icon'));
             }
-            let text = $element.text().trim();
+            let text = $textElement.text().trim();
 
             // select first item if no value or no selection
             if (!value || !$selection) {
@@ -151,7 +155,7 @@ $(function () {
 
             // icon
             if (options.copyIcon) {
-                const $newIcon = $selection.find(':first-child');
+                const $newIcon = $selection.find(options.iconClass).find('i');
                 if ($newIcon.length) {
                     $icon = $newIcon;
                 }
@@ -163,18 +167,15 @@ $(function () {
             // text
             if (options.copyText) {
                 if (value) {
-                    text = $selection.text().trim() || text;
+                    text = $selection.find(options.textClass).text().trim() || text;
                 } else {
                     text = $element.data('default') || text;
                 }
             }
 
             // update
-            if ($icon.length) {
-                $element.text(text).prepend($icon.clone());
-            } else {
-                $element.text(text);
-            }
+            $iconElement.empty().append($icon.clone());
+            $textElement.text(text);
             $element.data('value', value).trigger('input', value);
         }
     };
@@ -186,6 +187,8 @@ $(function () {
         copyText: true,
         copyIcon: true,
         resetIcon: true,
+        iconClass: '.dropdown-icon',
+        textClass: '.dropdown-label',
         selectionClass: 'active'
     };
 

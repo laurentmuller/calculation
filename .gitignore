@@ -8,11 +8,12 @@ symfony.lock
 /vendor-bin/**/composer.lock
 ###< symfony/framework-bundle ###
 
-###> resources and vendor ###
+###> resources ###
+/public/build/*
 /public/images/users/*
 /public/vendor/
 /resources/fontawesome/
-###< public ###
+###< resources ###
 
 ###> tests ###
 /tests/Data/db_test.sqlite

@@ -9,7 +9,8 @@
 {%- endmacro %}
 {# output a drop-down menu #}
 {% macro output_dropdown_menu(id, icon, text, title, value, default) -%}
-{%- set attributes = attributes|default([])|merge({
+{% set icon = icon(icon) %}
+{%- set attributes = {
     id: id,
     title: title|trans,
     type: 'button',
@@ -17,24 +18,25 @@
     'aria-expanded': 'false',
     'data-bs-toggle': 'dropdown',
     'data-value': value,
-    'data-icon': icon(icon ~ ' me-1')|raw,
-    'data-default': default}) -%}
-{%- set attributes = attributes|filter(v => v is not empty) -%}
+    'data-icon': icon,
+    'data-default': default} -%}
 <button{{ output_attributes(attributes) }}>
-    {{- icon(icon ~ ' me-1') -}}{{- text -}}
+    <span class="dropdown-icon">{{- icon -}}</span>
+    <span class="dropdown-label ms-1 d-none d-sm-inline">{{- text -}}</span>
 </button>
 {% endmacro %}
 {# output a drop-down item #}
-{% macro output_dropdown(suffix, value, selection, text, attributes = [], icon = null) -%}
+{% macro output_dropdown_item(suffix, value, selection, text, icon, attributes = []) -%}
     {% set active = value == selection ? ' active' : '' %}
-    {% set attributes = attributes|default([])|merge({
+    {% set attributes = attributes|merge({
         type: 'button',
         role: 'button',
         'data-value': value,
         class: ('dropdown-item dropdown-' ~ suffix ~ active)|trim}) %}
     <li>
         <button{{ output_attributes(attributes) }}>
-            {%- if icon -%}{{- icon(icon ~ ' me-1') -}}{%- endif -%}{{- text|default(value) -}}
+            <span class="dropdown-icon">{{- icon(icon) -}}</span>
+            <span class="dropdown-label ms-1">{{- text|default(value) -}}</span>
         </button>
     </li>
 {%- endmacro %}
@@ -214,7 +216,7 @@
         {% endblock %}
         <div class="btn-group btn-group-sm" role="group">
             <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_other_actions" data-bs-toggle="dropdown" title="{{ 'common.global_actions'|trans }}" aria-expanded="false">
-                <i class="fa-solid fa-bars me-1"></i>{{- 'common.actions'|trans -}}
+                <i class="fa-solid fa-bars"></i><span class="ms-1 d-none d-sm-inline">{{- 'common.actions'|trans -}}</span>
             </button>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="button_other_actions">
                 {# display mode #}
@@ -307,13 +309,14 @@
 </template>
 {%- endblock -%}
 {# stylesheets #}
-{% block stylesheets %}
-{{ asset_css('css/table.css') }}
+{% block stylesheets -%}
+    {{ preload_css('css/table.css') }}
+    {{ asset_css('css/table.css') }}
 {%- endblock -%}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
-    {{ parent() -}}
+    {{ parent() }}
     {{ asset_js('vendor/jquery-mark/jquery.mark.js') }}
     {{ asset_js('vendor/bootstrap-table/bootstrap-table.js') }}
     {{ asset_js('vendor/bootstrap-table/bootstrap-table-defer-url.js') }}

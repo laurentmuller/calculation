@@ -18,7 +18,9 @@ use App\Service\UrlGeneratorService;
 use App\Twig\FunctionExtension;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
+use Symfony\Bridge\Twig\Extension\WebLinkExtension;
 use Symfony\Component\Asset\Packages;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Vich\UploaderBundle\Storage\StorageInterface;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
@@ -28,20 +30,22 @@ class FunctionExtensionTest extends IntegrationTestCase
     protected function getExtensions(): array
     {
         $webDir = __DIR__ . '/../../public';
-        $extension = $this->createAssetExtension();
-        $service = $this->createNonceService();
-        $helper = $this->createHelper();
-        $generator = $this->createGenerator();
+        $assetExtension = $this->createAssetExtension();
+        $webLinkExtension = $this->createWebLinkExtension();
+        $nonceService = $this->createNonceService();
+        $uploaderHelper = $this->createUploaderHelper();
+        $urlGeneratorService = $this->createUrlGeneratorService();
 
-        $testExtension = new FunctionExtension(
+        $extension = new FunctionExtension(
             $webDir,
-            $extension,
-            $service,
-            $helper,
-            $generator
+            $assetExtension,
+            $webLinkExtension,
+            $nonceService,
+            $uploaderHelper,
+            $urlGeneratorService
         );
 
-        return [$testExtension];
+        return [$extension];
     }
 
     #[\Override]
@@ -59,7 +63,28 @@ class FunctionExtensionTest extends IntegrationTestCase
         return new AssetExtension($packages);
     }
 
-    private function createGenerator(): MockObject&UrlGeneratorService
+    private function createNonceService(): MockObject&NonceService
+    {
+        $service = $this->createMock(NonceService::class);
+        $service->method('getCspNonce')
+            ->willReturn('nonce');
+        $service->method('getNonce')
+            ->willReturn('nonce');
+
+        return $service;
+    }
+
+    private function createUploaderHelper(): UploaderHelper
+    {
+        $callback = fn (?array $value): mixed => \is_array($value) ? $value[0] : $value;
+        $storage = $this->createMock(StorageInterface::class);
+        $storage->method('resolveUri')
+            ->willReturnCallback($callback);
+
+        return new UploaderHelper($storage);
+    }
+
+    private function createUrlGeneratorService(): MockObject&UrlGeneratorService
     {
         $generator = $this->createMock(UrlGeneratorService::class);
         $generator->method('routeParams')
@@ -70,24 +95,10 @@ class FunctionExtensionTest extends IntegrationTestCase
         return $generator;
     }
 
-    private function createHelper(): UploaderHelper
+    private function createWebLinkExtension(): WebLinkExtension
     {
-        $callback = fn (?array $value): mixed => \is_array($value) ? $value[0] : $value;
-        $storage = $this->createMock(StorageInterface::class);
-        $storage->method('resolveUri')
-            ->willReturnCallback($callback);
+        $stack = $this->createMock(RequestStack::class);
 
-        return new UploaderHelper($storage);
-    }
-
-    private function createNonceService(): MockObject&NonceService
-    {
-        $service = $this->createMock(NonceService::class);
-        $service->method('getCspNonce')
-            ->willReturn('nonce');
-        $service->method('getNonce')
-            ->willReturn('nonce');
-
-        return $service;
+        return new WebLinkExtension($stack);
     }
 }

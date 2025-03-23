@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Languages;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * DeepL translator service v2.0.
@@ -90,7 +91,7 @@ class DeeplTranslatorService extends AbstractTranslatorService
 
         $response = $this->requestPost(self::URI_TRANSLATE, [self::JSON => $params]);
         if (Response::HTTP_OK !== $response->getStatusCode()) {
-            return false;
+            return $this->parseError($response);
         }
 
         $values = $response->toArray();
@@ -116,7 +117,6 @@ class DeeplTranslatorService extends AbstractTranslatorService
             self::BASE_URI => self::HOST_NAME,
             self::HEADERS => [
                 'Authorization' => \sprintf('DeepL-Auth-Key %s', $this->key),
-                // 'Content-Type' => 'application/json',
             ],
         ];
     }
@@ -129,7 +129,7 @@ class DeeplTranslatorService extends AbstractTranslatorService
     {
         $response = $this->requestPost(self::URI_LANGUAGE);
         if (Response::HTTP_OK !== $response->getStatusCode()) {
-            return false;
+            return $this->parseError($response);
         }
 
         /** @var array<array{laguage: string}> $values */
@@ -172,5 +172,22 @@ class DeeplTranslatorService extends AbstractTranslatorService
     private function getLanguageName(string $language): string
     {
         return \ucfirst(Languages::getName($language));
+    }
+
+    /**
+     * @throws ExceptionInterface
+     */
+    private function parseError(ResponseInterface $response): false
+    {
+        $content = $response->getContent(false);
+        if ('' === $content) {
+            return false;
+        }
+        $values = \json_decode($content, true);
+        if ([] === $values || !isset($values['message'])) {
+            return false;
+        }
+
+        return $this->setLastError($response->getStatusCode(), (string) $values['message']);
     }
 }

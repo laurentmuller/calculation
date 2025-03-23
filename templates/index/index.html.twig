@@ -42,21 +42,22 @@
     {% endif %}
 {%- endblock %}
 {# stylesheets #}
-{% block stylesheets %}
+{% block stylesheets -%}
+    {{ preload_css(enabled ? 'css/calculation.css' : 'css/center.css') }}
     {{ asset_css(enabled ? 'css/calculation.css' : 'css/center.css') }}
-{% endblock %}
+{%- endblock %}
 {# javascripts #}
-{% block javascripts %}
-    {% if enabled %}
-        {% if is_js_debug %}
-            {{ parent() -}}
-            {{ asset_js('vendor/jquery-contextmenu/jquery.contextMenu.js') }}
-            {{ asset_js('js/plugins/plugin-rowlink.js') }}
-            {{ asset_js('js/plugins/plugin-cookie.js') }}
-            {{ asset_js('js/extensions/contextmenu-extensions.js') }}
-            {{ asset_js('js/application/index.js') }}
-        {% else %}
-            {{ asset_js('js/compiled/index.js') }}
-        {% endif %}
+{% block javascripts -%}
+{% if enabled %}
+    {% if is_js_debug %}
+        {{ parent() -}}
+        {{ asset_js('vendor/jquery-contextmenu/jquery.contextMenu.js') }}
+        {{ asset_js('js/plugins/plugin-rowlink.js') }}
+        {{ asset_js('js/plugins/plugin-cookie.js') }}
+        {{ asset_js('js/extensions/contextmenu-extensions.js') }}
+        {{ asset_js('js/application/index.js') }}
+    {% else %}
+        {{ asset_js('js/compiled/index.js') }}
     {% endif %}
+{% endif %}
 {% endblock %}

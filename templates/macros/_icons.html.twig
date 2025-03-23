@@ -37,9 +37,7 @@
 {%- endmacro %}
 
 {% macro dropdownItem(href, text, icon = null, parameters = []) -%}
-<li>
-    {{- _self.link(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, parameters) -}}
-</li>
+<li>{{ _self.link(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, parameters) }}</li>
 {%- endmacro %}
 
 {% macro dropdownItemExternal(href, text, icon = null, parameters = []) -%}

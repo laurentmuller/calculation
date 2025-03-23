@@ -17,7 +17,6 @@ use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Events\PdfLabelTextEvent;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\Traits\PdfCleanTextTrait;
-use App\Pdf\Traits\PdfDashLineTrait;
 use App\Pdf\Traits\PdfStyleTrait;
 use App\Utils\StringUtils;
 use fpdf\Enums\PdfFontName;
@@ -25,6 +24,7 @@ use fpdf\Enums\PdfScaling;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfDocument;
 use fpdf\PdfException;
+use fpdf\Traits\PdfDashTrait;
 
 /**
  * PDF document to output labels.
@@ -32,7 +32,7 @@ use fpdf\PdfException;
 class PdfLabelDocument extends PdfDocument
 {
     use PdfCleanTextTrait;
-    use PdfDashLineTrait;
+    use PdfDashTrait;
     use PdfStyleTrait;
 
     /** The encoding source. */
@@ -190,7 +190,7 @@ class PdfLabelDocument extends PdfDocument
         PdfDrawColor::cellBorder()->apply($this);
         $x = $this->label->getOffsetX($this->currentCol);
         $y = $this->label->getOffsetY($this->currentRow);
-        $this->dashedRect($x, $y, $this->label->width, $this->label->height);
+        $this->dashedRect($x, $y, $this->label->width, $this->label->height, 1.0);
     }
 
     /**

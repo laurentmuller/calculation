@@ -9,8 +9,8 @@
         "bootstrap": "^5.3"
     },
     "scripts": {
-        "watch": "sass --watch --no-source-map scss/bootstrap.scss:public/vendor/bootstrap/css/bootstrap.css",
-        "build": "sass --no-source-map scss/bootstrap.scss:public/vendor/bootstrap/css/bootstrap.css",
+        "watch": "sass --watch --no-source-map scss/bootstrap.scss:public/build/css/bootstrap.css",
+        "build": "sass --no-source-map scss/bootstrap.scss:public/build/css/bootstrap.css",
         "stylelint": "npx stylelint public/css/*.css"
     },
     "devDependencies": {

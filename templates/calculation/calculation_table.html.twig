@@ -24,12 +24,12 @@
     {% endif %}
     {{ _self.output_dropdown_menu('state', ICON_CALCULATION_STATE, text, 'calculation.list.state_help', input_value, data_default) }}
     <ul class="dropdown-menu" aria-labelledby="state">
-        {{ _self.output_dropdown('state', 0, input_value, 'calculation.list.state_all_text'|trans, {}, 'filter-circle-xmark') }}
+        {{ _self.output_dropdown_item('state', 0, input_value, 'calculation.list.state_all_text'|trans, 'filter-circle-xmark') }}
         {% for key, entry in customData.dropdown %}
             {{ _self.item_separator() }}
-            {{ _self.output_dropdown('editable', entry.id, state_editable, entry.text|trans, {'data-parameter': 'stateEditable'}, entry.icon) }}
+            {{ _self.output_dropdown_item('editable', entry.id, state_editable, entry.text|trans, entry.icon, {'data-parameter': 'stateEditable'}) }}
             {% for code, id in entry.states %}
-                {{ _self.output_dropdown('child state', id, state_id, code, {'data-parameter': 'stateId'}, ICON_CALCULATION_STATE) }}
+                {{ _self.output_dropdown_item('child state', id, state_id, code, ICON_CALCULATION_STATE, {'data-parameter': 'stateId'}) }}
             {% endfor %}
         {% endfor %}
     </ul>

@@ -20,10 +20,10 @@
     {% set text = level|length ? level|capitalize : data_default %}
     {{ _self.output_dropdown_menu('level', 'layer-group', text, 'log.list.level_help', level, data_default) }}
     <ul class="dropdown-menu" aria-labelledby="level">
-        {{ _self.output_dropdown('level', '', level, 'log.list.level_all'|trans, false, 'filter-circle-xmark') }}
+        {{ _self.output_dropdown_item('level', '', level, 'log.list.level_all'|trans, 'filter-circle-xmark') }}
         {{ _self.item_separator() }}
         {% for key, icon in customData.levels %}
-            {{ _self.output_dropdown('level', key, level, key|capitalize, {}, icon) }}
+            {{ _self.output_dropdown_item('level', key, level, key|capitalize, icon) }}
         {% endfor %}
     </ul>
 {% endif %}
@@ -33,10 +33,10 @@
     {% set text = channel|length ? channel|capitalize : data_default %}
     {{ _self.output_dropdown_menu('channel', 'tools', text, 'log.list.channel_help', channel, data_default) }}
     <ul class="dropdown-menu" aria-labelledby="channel">
-        {{ _self.output_dropdown('channel', '', channel, 'log.list.channel_all'|trans, false, 'filter-circle-xmark') }}
+        {{ _self.output_dropdown_item('channel', '', channel, 'log.list.channel_all'|trans, 'filter-circle-xmark') }}
         {{ _self.item_separator() }}
         {% for key, icon in customData.channels %}
-            {{ _self.output_dropdown('channel', key, channel, key|capitalize, {}, icon) }}
+            {{ _self.output_dropdown_item('channel', key, channel, key|capitalize, icon) }}
         {% endfor %}
     </ul>
 {% endif %}

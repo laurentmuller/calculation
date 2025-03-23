@@ -12,15 +12,14 @@ $(function () {
             return 'Chargement en cours';
         },
         formatShowingRows: function (pageFrom, pageTo, totalRows, totalNotFiltered) {
-            const rows = Number.parseInt(totalRows);
             pageFrom = $.formatInt(pageFrom);
             pageTo = $.formatInt(pageTo);
-            totalRows = $.formatInt(rows);
-            if (totalNotFiltered > 0 && totalNotFiltered > rows) {
+            const formattedRows = $.formatInt(totalRows);
+            if (totalNotFiltered > 0 && totalNotFiltered > totalRows) {
                 totalNotFiltered = $.formatInt(totalNotFiltered);
-                return 'Entrée {0} - {1} / {2} ({3} au total)'.format(pageFrom, pageTo, totalRows, totalNotFiltered);
+                return 'Entrée {0} - {1} / {2} ({3} au total)'.format(pageFrom, pageTo, formattedRows, totalNotFiltered);
             }
-            return 'Entrée {0} - {1} / {2}'.format(pageFrom, pageTo, totalRows);
+            return 'Entrée {0} - {1} / {2}'.format(pageFrom, pageTo, formattedRows);
         },
         formatSRPaginationPreText: function () {
             return 'Afficher la page précédente';

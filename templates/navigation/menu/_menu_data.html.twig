@@ -1,22 +1,22 @@
 {# common data menu #}
 {% from 'macros/_icons.html.twig' import dropdownItem %}
 <ul class="dropdown-menu">
-    {% if is_granted(PERMISSION_LIST, ENTITY_PRODUCT) -%}
+    {% if is_granted(PERMISSION_LIST, ENTITY_PRODUCT) %}
         {{ dropdownItem(path('product_index'), 'product.list.title', ICON_PRODUCT) }}
-    {% endif -%}
-    {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION) -%}
+    {% endif %}
+    {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION) %}
         {{ dropdownItem(path('task_index'), 'task.list.title', ICON_TASK) }}
-    {% endif -%}
-    {% if is_granted(PERMISSION_LIST, ENTITY_CATEGORY) -%}
+    {% endif %}
+    {% if is_granted(PERMISSION_LIST, ENTITY_CATEGORY) %}
         {{ dropdownItem(path('category_index'), 'category.list.title', ICON_CATEGORY) }}
-    {% endif -%}
-    {% if is_granted(PERMISSION_LIST, ENTITY_GROUP) -%}
+    {% endif %}
+    {% if is_granted(PERMISSION_LIST, ENTITY_GROUP) %}
         {{ dropdownItem(path('group_index'), 'group.list.title', ICON_GROUP) }}
-    {% endif -%}
-    {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION_STATE) -%}
+    {% endif %}
+    {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION_STATE) %}
         {{ dropdownItem(path('calculationstate_index'), 'calculationstate.list.title', ICON_CALCULATION_STATE) }}
-    {% endif -%}
-    {% if is_granted(PERMISSION_LIST, ENTITY_GLOBAL_MARGIN) -%}
+    {% endif %}
+    {% if is_granted(PERMISSION_LIST, ENTITY_GLOBAL_MARGIN) %}
         {{ dropdownItem(path('globalmargin_index'), 'globalmargin.list.title', ICON_GLOBAL_MARGIN) }}
-    {% endif -%}
+    {% endif %}
 </ul>

@@ -1,0 +1,8 @@
+--TEST--
+"preload_css" function test
+--TEMPLATE--
+{{ preload_css('fake') }}
+--DATA--
+return []
+--EXPECT--
+<link href="url" nonce="nonce" rel="preload" as="style">

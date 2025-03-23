@@ -20,12 +20,12 @@
     {%- set input_text = customData.group.code ?? customData.category.code ?? data_default -%}
     {{ _self.output_dropdown_menu('category', ICON_CATEGORY, input_text, 'task.list.category_help', input_value, data_default) }}
     <ul class="dropdown-menu">
-        {{ _self.output_dropdown('category', 0, input_value, 'product.list.category_all_text'|trans, {}, 'filter-circle-xmark') }}
+        {{ _self.output_dropdown_item('category', 0, input_value, 'product.list.category_all_text'|trans, 'filter-circle-xmark') }}
         {% for key, entry in customData.dropdown %}
             {{ _self.item_separator() }}
-            {{ _self.output_dropdown('group', entry.id, group_id, key, {'data-parameter': 'groupId'}, ICON_GROUP) }}
+            {{ _self.output_dropdown_item('group', entry.id, group_id, key, ICON_GROUP, {'data-parameter': 'groupId'}) }}
             {% for code, id in entry.categories %}
-                {{ _self.output_dropdown('child category', id, category_id, code, {'data-parameter': 'categoryId'}, ICON_CATEGORY) }}
+                {{ _self.output_dropdown_item('child category', id, category_id, code, ICON_CATEGORY, {'data-parameter': 'categoryId'}) }}
             {% endfor %}
         {% endfor %}
     </ul>

@@ -22,6 +22,7 @@ use App\Traits\ImageSizeTrait;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
+use Symfony\Bridge\Twig\Extension\WebLinkExtension;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Extension\AbstractExtension;
@@ -41,10 +42,12 @@ final class FunctionExtension extends AbstractExtension
         #[Autowire('%kernel.project_dir%/public')]
         string $publicDir,
         #[Autowire(service: 'twig.extension.assets')]
-        private readonly AssetExtension $extension,
-        private readonly NonceService $service,
-        private readonly UploaderHelper $helper,
-        private readonly UrlGeneratorService $generator,
+        private readonly AssetExtension $assetExtension,
+        #[Autowire(service: 'twig.extension.weblink')]
+        private readonly WebLinkExtension $webLinkExtension,
+        private readonly NonceService $nonceService,
+        private readonly UploaderHelper $uploaderHelper,
+        private readonly UrlGeneratorService $urlGeneratorService,
     ) {
         $this->publicDir = FileUtils::normalize($publicDir);
     }
@@ -62,6 +65,7 @@ final class FunctionExtension extends AbstractExtension
             new TwigFunction('asset_icon', $this->assetIcon(...), $options),
             new TwigFunction('asset_image', $this->assetImage(...), $options),
             new TwigFunction('asset_image_user', $this->assetImageUser(...), $options),
+            new TwigFunction('preload_css', $this->preloadCss(...), $options),
 
             // routes
             new TwigFunction('cancel_url', $this->cancelUrl(...)),
@@ -81,9 +85,8 @@ final class FunctionExtension extends AbstractExtension
             'nonce' => $this->getNonce(),
             'rel' => 'stylesheet',
         ], $parameters);
-        $attributes = $this->reduceParams($parameters);
 
-        return "<link $attributes>";
+        return \sprintf('<link %s>', $this->reduceParams($parameters));
     }
 
     /**
@@ -122,9 +125,8 @@ final class FunctionExtension extends AbstractExtension
             'height' => $height,
             'width' => $width,
         ], $parameters);
-        $attributes = $this->reduceParams($parameters);
 
-        return "<image $attributes>";
+        return \sprintf('<image %s>', $this->reduceParams($parameters));
     }
 
     /**
@@ -139,7 +141,7 @@ final class FunctionExtension extends AbstractExtension
         if (null === $user || [] === $user) {
             return false;
         }
-        $asset = $this->helper->asset($user, className: User::class);
+        $asset = $this->uploaderHelper->asset($user, className: User::class);
         if (null === $asset) {
             return false;
         }
@@ -164,9 +166,8 @@ final class FunctionExtension extends AbstractExtension
             'src' => $this->getAssetUrl($path),
             'nonce' => $this->getNonce(),
         ], $parameters);
-        $attributes = $this->reduceParams($parameters);
 
-        return "<script $attributes></script>";
+        return \sprintf('<script %s></script>', $this->reduceParams($parameters));
     }
 
     /**
@@ -177,7 +178,7 @@ final class FunctionExtension extends AbstractExtension
         EntityInterface|int|null $id = 0,
         string $defaultRoute = AbstractController::HOME_PAGE
     ): string {
-        return $this->generator->cancelUrl($request, $id, $defaultRoute);
+        return $this->urlGeneratorService->cancelUrl($request, $id, $defaultRoute);
     }
 
     /**
@@ -185,12 +186,12 @@ final class FunctionExtension extends AbstractExtension
      */
     private function getAssetUrl(string $path): string
     {
-        return $this->extension->getAssetUrl($path);
+        return $this->assetExtension->getAssetUrl($path);
     }
 
     private function getNonce(): string
     {
-        return $this->service->getNonce();
+        return $this->nonceService->getNonce();
     }
 
     /**
@@ -223,6 +224,24 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
+     * Output a preload style sheet tag within a nonce token.
+     *
+     * @param array<string, string|int> $parameters
+     */
+    private function preloadCss(string $path, array $parameters = []): string
+    {
+        $url = $this->getAssetUrl($path);
+        $href = $this->webLinkExtension->preload($url, ['as' => 'style']);
+        $parameters = \array_merge([
+            'rel' => 'preload',
+            'href' => $href,
+            'as' => 'style',
+        ], $parameters);
+
+        return $this->assetCss($path, $parameters);
+    }
+
+    /**
      * Reduce parameters.
      *
      * @param array<string, string|int> $parameters
@@ -239,6 +258,6 @@ final class FunctionExtension extends AbstractExtension
      */
     private function routeParams(Request $request, EntityInterface|int|null $id = 0): array
     {
-        return $this->generator->routeParams($request, $id);
+        return $this->urlGeneratorService->routeParams($request, $id);
     }
 }

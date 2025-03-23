@@ -70,39 +70,40 @@
 {{ form_end(form) }}
 {%- endblock %}
 {# stylesheets #}
-{% block stylesheets %}
-{{ asset_css('css/calculation.css') }}
+{% block stylesheets -%}
+    {{ preload_css('css/calculation.css') }}
+    {{ asset_css('css/calculation.css') }}
 {% endblock %}
 {# javascripts #}
-{% block javascripts %}
-{% if is_js_debug %}
-    {{ parent() -}}
-    {{ asset_js('js/application/calculation_error.js') }}
-    {% if editable %}
-        {{ asset_js('vendor/jquery-validate/jquery.validate.js') }}
-        {{ asset_js('vendor/jquery-validate/additional-methods.js') }}
-        {{ asset_js('vendor/jquery-validate/messages_fr.js') }}
-        {{ asset_js('vendor/html5sortable/html5sortable.js') }}
-        {{ asset_js('vendor/jquery-contextmenu/jquery.contextMenu.js') }}
-        {{ asset_js('js/extensions/contextmenu-extensions.js') }}
-        {{ asset_js('js/extensions/validator-extensions.js') }}
-        {{ asset_js('js/extensions/validator-extensions-fr.js') }}
-        {{ asset_js('js/extensions/typeahead-extensions.js') }}
-        {{ asset_js('js/plugins/plugin-typeahead.js') }}
-        {{ asset_js('js/plugins/plugin-rowlink.js') }}
-        {{ asset_js('js/plugins/plugin-input-number.js') }}
-        {{ asset_js('js/plugins/plugin-drag-modal.js') }}
-        {{ asset_js('js/plugins/plugin-cell-edit.js') }}
-        {{ asset_js('js/application/calculation_edit_dialog.js') }}
-        {{ asset_js('js/application/calculation_edit_item.js') }}
-        {{ asset_js('js/application/calculation_edit_task.js') }}
-        {{ asset_js('js/application/calculation_edit.js') }}
-    {% endif %}
-{% else %}
-    {% if editable %}
-        {{ asset_js('js/compiled/calculation_edit.js') }}
+{% block javascripts -%}
+    {% if is_js_debug %}
+        {{ parent() }}
+        {{ asset_js('js/application/calculation_error.js') }}
+        {% if editable %}
+            {{ asset_js('vendor/jquery-validate/jquery.validate.js') }}
+            {{ asset_js('vendor/jquery-validate/additional-methods.js') }}
+            {{ asset_js('vendor/jquery-validate/messages_fr.js') }}
+            {{ asset_js('vendor/html5sortable/html5sortable.js') }}
+            {{ asset_js('vendor/jquery-contextmenu/jquery.contextMenu.js') }}
+            {{ asset_js('js/extensions/contextmenu-extensions.js') }}
+            {{ asset_js('js/extensions/validator-extensions.js') }}
+            {{ asset_js('js/extensions/validator-extensions-fr.js') }}
+            {{ asset_js('js/extensions/typeahead-extensions.js') }}
+            {{ asset_js('js/plugins/plugin-typeahead.js') }}
+            {{ asset_js('js/plugins/plugin-rowlink.js') }}
+            {{ asset_js('js/plugins/plugin-input-number.js') }}
+            {{ asset_js('js/plugins/plugin-drag-modal.js') }}
+            {{ asset_js('js/plugins/plugin-cell-edit.js') }}
+            {{ asset_js('js/application/calculation_edit_dialog.js') }}
+            {{ asset_js('js/application/calculation_edit_item.js') }}
+            {{ asset_js('js/application/calculation_edit_task.js') }}
+            {{ asset_js('js/application/calculation_edit.js') }}
+        {% endif %}
     {% else %}
-        {{ asset_js('js/compiled/calculation_error.js') }}
+        {% if editable %}
+            {{ asset_js('js/compiled/calculation_edit.js') }}
+        {% else %}
+            {{ asset_js('js/compiled/calculation_error.js') }}
+        {% endif %}
     {% endif %}
-{% endif %}
 {% endblock %}

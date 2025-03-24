@@ -10,6 +10,7 @@
         "import-notation": "string",
         "no-descending-specificity": null,
         "property-no-vendor-prefix": null,
+        "at-rule-no-unknown": null,
         "declaration-property-value-keyword-no-deprecated": [
             true,
             {

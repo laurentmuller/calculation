@@ -28,6 +28,7 @@
             if (window.location.protocol === 'https:') {
                 cookie += 'secure';
             }
+            /* stylelint-disable-next-line */
             document.cookie = cookie;
         },
 
@@ -41,6 +42,7 @@
          */
         getValue: function (key, defaultValue) {
             key = `${key.toUpperCase()}=`;
+            /* stylelint-disable-next-line */
             const decodedCookie = decodeURIComponent(document.cookie);
             const entries = decodedCookie.split(';');
             for (let i = 0; i < entries.length; i++) {

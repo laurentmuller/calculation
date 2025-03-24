@@ -449,6 +449,7 @@ $(function () {
             const suffix = `expires=${date};path=${path};samesite=lax;secure`;
             const state = this._getState();
             for (const [key, value] of Object.entries(state)) {
+                /* stylelint-disable-next-line */
                 document.cookie = `${key}=${JSON.stringify(value)};${suffix}`;
             }
         }

@@ -18,7 +18,6 @@ use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Interfaces\PdfColorInterface;
 use fpdf\PdfDocument;
-use fpdf\PdfException;
 
 /**
  * Trait for class implementing the color interface.
@@ -56,22 +55,14 @@ trait PdfColorTrait
 
     public function getDrawColor(): PdfDrawColor
     {
-        $color = PdfDrawColor::create($this->value);
-        if (!$color instanceof PdfDrawColor) {
-            throw PdfException::instance('Unable to create draw color.');
-        }
-
-        return $color;
+        /** @psalm-var PdfDrawColor */
+        return PdfDrawColor::create($this->value);
     }
 
     public function getFillColor(): PdfFillColor
     {
-        $color = PdfFillColor::create($this->value);
-        if (!$color instanceof PdfFillColor) {
-            throw PdfException::instance('Unable to create fill color.');
-        }
-
-        return $color;
+        /** @psalm-var PdfFillColor */
+        return PdfFillColor::create($this->value);
     }
 
     public function getPhpOfficeColor(): string
@@ -81,12 +72,8 @@ trait PdfColorTrait
 
     public function getTextColor(): PdfTextColor
     {
-        $color = PdfTextColor::create($this->value);
-        if (!$color instanceof PdfTextColor) {
-            throw PdfException::instance('Unable to create text color.');
-        }
-
-        return $color;
+        /** @psalm-var PdfTextColor */
+        return PdfTextColor::create($this->value);
     }
 
     /**

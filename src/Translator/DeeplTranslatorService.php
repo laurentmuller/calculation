@@ -164,7 +164,7 @@ class DeeplTranslatorService extends AbstractTranslatorService
     {
         /** @psalm-var string[] $languages */
         $languages = \array_column($values, 'language');
-        $languages = \array_map('strtolower', $languages);
+        $languages = \array_map(strtolower(...), $languages);
 
         return \array_filter($languages, fn (string $language): bool => Languages::exists($language));
     }

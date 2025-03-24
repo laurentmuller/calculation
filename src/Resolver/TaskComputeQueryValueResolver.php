@@ -54,7 +54,7 @@ final readonly class TaskComputeQueryValueResolver implements ValueResolverInter
         $payload = $request->getPayload();
         $id = $payload->getInt('id');
         $quantity = (float) $payload->get('quantity', 1.0);
-        $items = \array_map('intval', $payload->all('items'));
+        $items = \array_map(intval(...), $payload->all('items'));
 
         return new TaskComputeQuery($id, $quantity, $items);
     }

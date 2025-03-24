@@ -87,7 +87,7 @@ class CacheService
         $callback = static fn (string $line): bool => !\str_starts_with($line, '-')
             && !\str_starts_with($line, 'Pool name');
 
-        $lines = $this->getSorted($this->getFiltered(\array_map('trim', $lines), $callback));
+        $lines = $this->getSorted($this->getFiltered(\array_map(trim(...), $lines), $callback));
 
         $results = [];
         foreach ($lines as $line) {

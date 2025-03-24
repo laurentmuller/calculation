@@ -33,6 +33,7 @@ use Twig\Extra\Markdown\MarkdownInterface;
  * Controller to output symfony information.
  */
 #[AsController]
+#[IsGranted(RoleInterface::ROLE_ADMIN)]
 #[Route(path: '/about/symfony', name: 'about_symfony_')]
 class AboutSymfonyController extends AbstractController
 {
@@ -48,7 +49,6 @@ class AboutSymfonyController extends AbstractController
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Get(path: '/excel', name: 'excel')]
     public function excel(SymfonyInfoService $service): SpreadsheetResponse
     {
@@ -60,7 +60,6 @@ class AboutSymfonyController extends AbstractController
     /**
      * Gets the license content.
      */
-    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Get(path: '/license', name: 'license')]
     public function license(
         #[MapQueryParameter]
@@ -83,7 +82,6 @@ class AboutSymfonyController extends AbstractController
         ]);
     }
 
-    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(SymfonyInfoService $service): PdfResponse
     {

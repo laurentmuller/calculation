@@ -23,7 +23,6 @@ use App\Spreadsheet\PhpIniDocument;
 use App\Traits\ArrayTrait;
 use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -32,20 +31,20 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to output PHP information.
  */
 #[AsController]
+#[IsGranted(RoleInterface::ROLE_ADMIN)]
 #[Route(path: '/about/php', name: 'about_php_')]
 class AboutPhpController extends AbstractController
 {
     use ArrayTrait;
 
-    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Get(path: '/content', name: 'content')]
-    public function content(Request $request, PhpInfoService $service): JsonResponse
+    public function content(PhpInfoService $service): JsonResponse
     {
         $parameters = [
             'phpInfo' => $service->asHtml(),
             'version' => $service->getVersion(),
             'extensions' => $this->getLoadedExtensions(),
-            'apache' => $this->getApacheVersion($request),
+            'apache' => $this->getApacheVersion(),
         ];
         $content = $this->renderView('about/php_content.html.twig', $parameters);
 
@@ -55,7 +54,6 @@ class AboutPhpController extends AbstractController
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Get(path: '/excel', name: 'excel')]
     public function excel(PhpInfoService $service): SpreadsheetResponse
     {
@@ -64,7 +62,6 @@ class AboutPhpController extends AbstractController
         return $this->renderSpreadsheetDocument($doc);
     }
 
-    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(PhpInfoService $service): PdfResponse
     {
@@ -73,23 +70,24 @@ class AboutPhpController extends AbstractController
         return $this->renderPdfDocument($report);
     }
 
-    private function getApacheVersion(Request $request): bool|string
+    private function getApacheVersion(): string|false
     {
-        $regex = '/Apache\/(?P<version>[1-9]\d*\.\d[^\s]*)/i';
-        /** @psalm-var mixed $version */
-        $version = \function_exists('apache_get_version')
-            ? apache_get_version()
-            : $request->server->get('SERVER_SOFTWARE');
-        if (\is_string($version) && StringUtils::pregMatch($regex, $version, $matches)) {
-            return $matches['version'];
+        if (!\function_exists('apache_get_version')) {
+            return false;
         }
 
-        return false;
+        $version = apache_get_version();
+        $regex = '/Apache\/(?<version>[1-9]\d*[\.?\d]*)/i';
+        if (!\is_string($version) || !StringUtils::pregMatch($regex, $version, $matches)) {
+            return false;
+        }
+
+        return $matches['version'];
     }
 
     private function getLoadedExtensions(): string
     {
-        $extensions = $this->getSorted(\array_map('strtolower', \get_loaded_extensions()));
+        $extensions = $this->getSorted(\array_map(strtolower(...), \get_loaded_extensions()));
 
         return \implode(', ', $extensions);
     }

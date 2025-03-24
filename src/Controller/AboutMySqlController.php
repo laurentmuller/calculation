@@ -29,10 +29,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to output MySQL information.
  */
 #[AsController]
+#[IsGranted(RoleInterface::ROLE_ADMIN)]
 #[Route(path: '/about/mysql', name: 'about_mysql_')]
 class AboutMySqlController extends AbstractController
 {
-    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Get(path: '/content', name: 'content')]
     public function content(DatabaseInfoService $service): JsonResponse
     {
@@ -44,7 +44,6 @@ class AboutMySqlController extends AbstractController
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Get(path: '/excel', name: 'excel')]
     public function excel(DatabaseInfoService $service): SpreadsheetResponse
     {
@@ -53,7 +52,6 @@ class AboutMySqlController extends AbstractController
         return $this->renderSpreadsheetDocument($doc);
     }
 
-    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(DatabaseInfoService $service): PdfResponse
     {

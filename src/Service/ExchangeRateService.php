@@ -370,7 +370,7 @@ class ExchangeRateService extends AbstractHttpClientService
 
     private function getUrl(string $uri, string ...$parameters): string
     {
-        return \sprintf($uri, ...\array_map('strtoupper', $parameters));
+        return \sprintf($uri, ...\array_map(strtoupper(...), $parameters));
     }
 
     /**

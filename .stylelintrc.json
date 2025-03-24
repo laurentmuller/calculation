@@ -11,7 +11,7 @@
         "no-descending-specificity": null,
         "property-no-vendor-prefix": null,
         "at-rule-no-unknown": null,
-        "no-document-cookie": null,
+        "eslint-plugin-unicorn/no-document-cookie": null,
         "declaration-property-value-keyword-no-deprecated": [
             true,
             {

@@ -3,15 +3,13 @@
         "stylelint-config-standard"
     ],
     "rules": {
-        "number-max-precision": [
-            6
-        ],
+        "number-max-precision": [6],
         "selector-attribute-quotes": "never",
         "import-notation": "string",
         "no-descending-specificity": null,
         "property-no-vendor-prefix": null,
         "at-rule-no-unknown": null,
-        "unicorn/no-document-cookie": null,
+        "no-document-cookie": null,
         "declaration-property-value-keyword-no-deprecated": [
             true,
             {

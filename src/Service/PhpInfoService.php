@@ -25,17 +25,14 @@ class PhpInfoService
      */
     public const REDACTED = '********';
 
-    private const CONVERT = ['yes', 'no', 'enabled', 'disabled', 'on', 'off', 'no value'];
-    private const DISABLED = ['off', 'no', 'disabled'];
-    private const ENABLED = ['on', 'yes', 'enabled'];
+    private const DISABLED = ['off', 'no', 'disabled', 'not enabled'];
+    private const ENABLED = ['active', 'on', 'yes', 'enabled', 'supported'];
 
     /**
      * Gets PHP information as the array.
      *
-     * @param int $what The output may be customized by passing one or more of the following constants bitwise values
-     *                  summed together in the optional what parameter.
-     *                  One can also combine the respective constants or bitwise values
-     *                  with the bitwise or operator.
+     * @param int $what the output may be customized by passing one or more of the constants bitwise values
+     *                  summed together in the optional what parameter
      *
      * @psalm-return array<string, array<string, array{local: scalar, master: scalar}|scalar>>
      */
@@ -92,10 +89,8 @@ class PhpInfoService
     /**
      * Gets PHP information as HTML.
      *
-     * @param int $what The output may be customized by passing one or more of the following constants bitwise
-     *                  values summed together in the optional what parameter.
-     *                  One can also combine the respective constants or bitwise values
-     *                  with the bitwise or operator.
+     * @param int $what the output may be customized by passing one or more of the constants bitwise values
+     *                  summed together in the optional what parameter
      */
     public function asHtml(int $what = \INFO_ALL): string
     {
@@ -139,10 +134,8 @@ class PhpInfoService
     /**
      * Gets PHP information as text (raw data).
      *
-     * @param int $what The output may be customized by passing one or more of the following constants bitwise values
-     *                  summed together in the optional what parameter.
-     *                  One can also combine the respective constants or bitwise values
-     *                  with the bitwise or operator.
+     * @param int $what the output may be customized by passing one or more of the constants bitwise values
+     *                  summed together in the optional what parameter
      */
     public function asText(int $what = \INFO_ALL): string
     {
@@ -164,7 +157,10 @@ class PhpInfoService
 
     private function convert(string $var): string|int|float
     {
-        if (\in_array(\strtolower($var), self::CONVERT, true)) {
+        if (\in_array(\strtolower($var), self::DISABLED, true)) {
+            return StringUtils::capitalize($var);
+        }
+        if (\in_array(\strtolower($var), self::ENABLED, true)) {
             return StringUtils::capitalize($var);
         }
         if (StringUtils::pregMatch('/^-?\d+$/', $var)) {
@@ -189,6 +185,7 @@ class PhpInfoService
             $content = StringUtils::pregReplace($regex, $subst, $content);
         }
         $content = \str_replace(['✘ ', '✔ ', '⊕'], '', $content);
+        $content = \str_ireplace(' </td>', '</td>', $content);
 
         return \trim($content);
     }

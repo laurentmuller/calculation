@@ -27,11 +27,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *
  * @psalm-import-type OpenWeatherCityType from OpenWeatherDatabase
  *
- * @psalm-type OpenWeatherGroupType = array<array{
- *      cnt: int,
- *      units: array,
- *      list: array<int, array>
- *  }>
+ * @psalm-type OpenWeatherGroupType = array{cnt: int, units: array, list: array<int, array>}
  */
 class OpenWeatherService extends AbstractHttpClientService
 {
@@ -106,9 +102,14 @@ class OpenWeatherService extends AbstractHttpClientService
     private const CACHE_TIMEOUT = 60 * 15;
 
     /**
-     * The host name.
+     * The host name version 2.5.
      */
-    private const HOST_NAME = 'https://api.openweathermap.org/data/2.5/';
+    private const HOST_NAME_V_2_5 = 'https://api.openweathermap.org/data/2.5/';
+
+    /**
+     * The host name version 3.0 (used for one Api call).
+     */
+    private const HOST_NAME_V_3_0 = 'https://api.openweathermap.org/data/3.0/';
 
     /**
      * Current condition URI.
@@ -157,6 +158,8 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param int    $count the number of results to return or -1 for all
      * @param string $units the units to use
      *
+     * @psalm-param self::UNIT_* $units
+     *
      * @psalm-return array{current: array|false, forecast: array|false, daily: array|false}
      */
     public function all(int $id, int $count = self::DEFAULT_COUNT, string $units = self::UNIT_METRIC): array
@@ -175,6 +178,8 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param string $units the units to use
      *
      * @return array|false the current conditions if success; false on error
+     *
+     * @psalm-param self::UNIT_* $units
      */
     public function current(int $id, string $units = self::UNIT_METRIC): array|false
     {
@@ -194,6 +199,8 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param string $units the units to use
      *
      * @return array|false the current conditions if success; false on error
+     *
+     * @psalm-param self::UNIT_* $units
      */
     public function daily(int $id, int $count = self::DEFAULT_COUNT, string $units = self::UNIT_METRIC): array|false
     {
@@ -216,6 +223,8 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param string $units the units to use
      *
      * @return array|false the current conditions if success; false on error
+     *
+     * @psalm-param self::UNIT_* $units
      */
     public function forecast(int $id, int $count = self::DEFAULT_COUNT, string $units = self::UNIT_METRIC): array|false
     {
@@ -238,6 +247,8 @@ class OpenWeatherService extends AbstractHttpClientService
 
     /**
      * Gets the degree units.
+     *
+     * @psalm-param self::UNIT_* $units
      */
     public function getDegreeUnit(string $units): string
     {
@@ -246,6 +257,8 @@ class OpenWeatherService extends AbstractHttpClientService
 
     /**
      * Gets the speed units.
+     *
+     * @psalm-param self::UNIT_* $units
      */
     public function getSpeedUnit(string $units): string
     {
@@ -255,10 +268,12 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * Returns current conditions data for a group of cities.
      *
-     * @param int[]  $cityIds the city identifiers. The maximum number is 20.
+     * @param int[]  $cityIds the city identifiers. The maximum is 20.
      * @param string $units   the units to use
      *
      * @return array|false the conditions for the given cities, if success; false on error
+     *
+     * @psalm-param self::UNIT_* $units
      *
      * @psalm-return OpenWeatherGroupType|false
      */
@@ -272,7 +287,7 @@ class OpenWeatherService extends AbstractHttpClientService
             'units' => $units,
         ];
 
-        /** @psalm-var  OpenWeatherGroupType|false */
+        /** @psalm-var OpenWeatherGroupType|false */
         return $this->get(self::URI_GROUP, $query);
     }
 
@@ -292,10 +307,15 @@ class OpenWeatherService extends AbstractHttpClientService
      *
      * @return array|false the essential conditions if success; false on error
      *
+     * @psalm-param self::UNIT_* $units
      * @psalm-param self::EXCLUDE_* ...$exclude
      */
-    public function oneCall(float $latitude, float $longitude, string $units = self::UNIT_METRIC, string ...$exclude): array|false
-    {
+    public function oneCall(
+        float $latitude,
+        float $longitude,
+        string $units = self::UNIT_METRIC,
+        string ...$exclude
+    ): array|false {
         $query = [
             'lat' => $latitude,
             'lon' => $longitude,
@@ -305,14 +325,13 @@ class OpenWeatherService extends AbstractHttpClientService
             $query['exclude'] = \implode(',', $exclude);
         }
 
-        return $this->get(self::URI_ONECALL, $query);
+        return $this->get(self::URI_ONECALL, $query, self::HOST_NAME_V_3_0);
     }
 
     #[\Override]
     protected function getDefaultOptions(): array
     {
         return [
-            self::BASE_URI => self::HOST_NAME,
             self::QUERY => [
                 'appid' => $this->key,
                 'lang' => self::getAcceptLanguage(),
@@ -325,6 +344,8 @@ class OpenWeatherService extends AbstractHttpClientService
      *
      * @param array  $data  the data to update
      * @param string $units the query units
+     *
+     * @psalm-param self::UNIT_* $units
      */
     private function addUnits(array &$data, string $units): void
     {
@@ -353,11 +374,11 @@ class OpenWeatherService extends AbstractHttpClientService
 
     /**
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \Exception
      */
-    private function doGet(string $uri, array $query = []): array|false
+    private function doGet(string $uri, array $query, string $hostName): array|false
     {
         $response = $this->requestGet($uri, [
+            self::BASE_URI => $hostName,
             self::QUERY => $query,
         ]);
 
@@ -366,10 +387,13 @@ class OpenWeatherService extends AbstractHttpClientService
         if (!$this->checkErrorCode($results)) {
             return false;
         }
+
+        /** @psalm-var self::UNIT_* $units */
+        $units = $query['units'];
         $offset = $this->findTimezone($results);
         $timezone = $this->offsetToTimZone($offset);
         $this->formatter->update($results, $timezone);
-        $this->addUnits($results, (string) $query['units']);
+        $this->addUnits($results, $units);
         $this->sortResults($results);
 
         return $results;
@@ -402,30 +426,29 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * Make an HTTP-GET call.
      *
-     * @param string $uri   the uri to append to the host name
-     * @param array  $query an associative array of query string values to add to the request
+     * @param string $uri      the uri to append to the host name
+     * @param array  $query    an associative array of query string values to add to the request
+     * @param string $hostName the host name (API version) to use
      *
      * @return array|false the JSON response on success, false on failure
      */
-    private function get(string $uri, array $query = []): array|false
+    private function get(string $uri, array $query = [], string $hostName = self::HOST_NAME_V_2_5): array|false
     {
-        $key = $this->getCacheKey($uri, $query);
+        $key = $this->getCacheKey($hostName . $uri, $query);
 
-        return $this->getUrlCacheValue($key, fn (): array|false => $this->doGet($uri, $query));
+        return $this->getUrlCacheValue($key, fn (): array|false => $this->doGet($uri, $query, $hostName));
     }
 
     /**
-     * Gets the cache key for the given uri and query parameters.
+     * Gets the cache key for the given url and query parameters.
      */
-    private function getCacheKey(string $uri, array $query): string
+    private function getCacheKey(string $url, array $query): string
     {
-        return $uri . '?' . \http_build_query($query);
+        return $url . '?' . \http_build_query($query);
     }
 
     /**
      * Converts the given offset to a time zone.
-     *
-     * @throws \Exception
      */
     private function offsetToTimZone(int $offset): \DateTimeZone
     {

@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
- * Service to search cities.
+ * Service to search cities for OpenWeatherMap.
  *
  * @psalm-import-type OpenWeatherCityType from OpenWeatherDatabase
  */

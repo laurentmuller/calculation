@@ -103,6 +103,24 @@ trait CookieTrait
     }
 
     /**
+     * Add or remove cookies depending on the values.
+     *
+     * @param array<string, string|bool|int|float|\BackedEnum|null> $values
+     */
+    protected function updateCookies(
+        Response $response,
+        array $values,
+        string $prefix = '',
+        string $path = '/',
+        string $modify = '+1 year',
+        bool $httpOnly = true
+    ): void {
+        foreach ($values as $key => $value) {
+            $this->updateCookie($response, $key, $value, $prefix, $path, $modify, $httpOnly);
+        }
+    }
+
+    /**
      * Clears a cookie in the browser.
      */
     private function clearCookie(

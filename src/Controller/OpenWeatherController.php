@@ -19,6 +19,7 @@ use App\Interfaces\RoleInterface;
 use App\Service\OpenWeatherCityUpdater;
 use App\Service\OpenWeatherSearchService;
 use App\Service\OpenWeatherService;
+use App\Traits\CookieTrait;
 use App\Utils\FileUtils;
 use Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
@@ -34,13 +35,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Constraints\Length;
 
 /**
- * Controller for the OpenWeather API.
+ * Controller for the OpenWeatherMap API.
  *
  * @see https://openweathermap.org/api
  *
  * @psalm-type OpenWeatherSearchType = array{
  *     query: string,
- *     units: string,
+ *     units: OpenWeatherService::UNIT_*,
  *     limit: int,
  *     count: int}
  *
@@ -51,6 +52,8 @@ use Symfony\Component\Validator\Constraints\Length;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class OpenWeatherController extends AbstractController
 {
+    use CookieTrait;
+
     /**
      * The count key name.
      */
@@ -94,7 +97,7 @@ class OpenWeatherController extends AbstractController
     /**
      * The prefix key for sessions.
      */
-    private const PREFIX_KEY = 'openweather.';
+    private const PREFIX_KEY = 'openweather';
 
     public function __construct(private readonly OpenWeatherService $service)
     {
@@ -258,17 +261,25 @@ class OpenWeatherController extends AbstractController
         $units = $this->getRequestUnits($request);
         $count = $this->getRequestCount($request);
         $values = $this->service->all($id, $count, $units);
+        $values['count'] = $count;
+        $values['api_url'] = 'https://openweathermap.org/api';
+        $response = $this->render('openweather/weather.htm.twig', $values);
+
         if (false !== $values['current']) {
-            $this->setSessionValues([
+            $values = [
                 self::KEY_ID => $id,
                 self::KEY_UNITS => $units,
                 self::KEY_COUNT => $count,
-            ]);
+            ];
+            $this->updateCookies(
+                $response,
+                $values,
+                self::PREFIX_KEY,
+                $this->getCookiePath()
+            );
         }
-        $values['count'] = $count;
-        $values['api_url'] = 'https://openweathermap.org/api';
 
-        return $this->render('openweather/weather.htm.twig', $values);
+        return $response;
     }
 
     /**
@@ -300,10 +311,10 @@ class OpenWeatherController extends AbstractController
     public function search(Request $request, OpenWeatherSearchService $service): Response
     {
         $data = [
-            self::KEY_QUERY => $this->getSessionQuery($request),
-            self::KEY_UNITS => $this->getSessionUnits($request),
-            self::KEY_LIMIT => $this->getSessionLimit($request),
-            self::KEY_COUNT => $this->getSessionCount($request),
+            self::KEY_QUERY => $this->getCookieQuery($request),
+            self::KEY_UNITS => $this->getCookieUnits($request),
+            self::KEY_LIMIT => $this->getCookieLimit($request),
+            self::KEY_COUNT => $this->getCookieCount($request),
         ];
         $form = $this->createSearchForm($data);
         if ($this->handleRequestForm($request, $form)) {
@@ -314,43 +325,50 @@ class OpenWeatherController extends AbstractController
             $limit = $data[self::KEY_LIMIT];
             $count = $data[self::KEY_COUNT];
             $cities = $service->search($query, $limit);
+
+            // found?
             if ([] !== $cities) {
-                // save
-                $this->setSessionValues([
-                    self::KEY_QUERY => $query,
-                    self::KEY_UNITS => $units,
-                    self::KEY_LIMIT => $limit,
-                    self::KEY_COUNT => $count,
-                ]);
+                // only one?
                 if (1 === \count($cities)) {
-                    return $this->redirectToRoute('openweather_current', [
+                    $response = $this->redirectToRoute('openweather_current', [
                         self::KEY_ID => \reset($cities)['id'],
                         self::KEY_UNITS => $units,
                         self::KEY_COUNT => $count,
                     ]);
+                    $values = [
+                        self::KEY_QUERY => $query,
+                        self::KEY_UNITS => $units,
+                        self::KEY_LIMIT => $limit,
+                        self::KEY_COUNT => $count,
+                    ];
+                    $this->updateCookies(
+                        $response,
+                        $values,
+                        self::PREFIX_KEY,
+                        $this->getCookiePath()
+                    );
+
+                    return $response;
                 }
-                /** @psalm-var array{units: array, list: array<int, mixed>}|null $group */
-                $group = null;
-                $cityIds = \array_map(fn (array $city): int => $city['id'], $cities);
-                foreach (\array_keys($cities) as $index) {
-                    // load current weather by chunks of 20 items
-                    if (0 === $index % OpenWeatherService::MAX_GROUP) {
-                        $ids = \array_splice($cityIds, 0, OpenWeatherService::MAX_GROUP);
-                        $group = $this->service->group($ids, $units);
-                    }
-                    if (\is_array($group)) {
-                        $cities[$index]['units'] = $group['units'];
-                        $cities[$index]['current'] = (array) $group['list'][$index % 20];
-                    }
-                }
+
+                $cities = $this->updateCities($cities, $units);
             }
 
-            return $this->render('openweather/search_city.html.twig', [
+            $response = $this->render('openweather/search_city.html.twig', [
                 'form' => $form,
                 'cities' => $cities,
                 'units' => $units,
                 'count' => $count,
             ]);
+            $this->updateCookie(
+                $response,
+                self::KEY_QUERY,
+                $query,
+                self::PREFIX_KEY,
+                $this->getCookiePath()
+            );
+
+            return $response;
         }
 
         return $this->render('openweather/search_city.html.twig', [
@@ -365,22 +383,16 @@ class OpenWeatherController extends AbstractController
     #[Get(path: '', name: 'weather')]
     public function weather(Request $request): Response
     {
-        $id = $this->getSessionId($request);
+        $id = $this->getCookieId($request);
         if (0 !== $id) {
             return $this->redirectToRoute('openweather_current', [
                 self::KEY_ID => $id,
-                self::KEY_UNITS => $this->getSessionUnits($request),
-                self::KEY_COUNT => $this->getSessionCount($request),
+                self::KEY_UNITS => $this->getCookieUnits($request),
+                self::KEY_COUNT => $this->getCookieCount($request),
             ]);
         }
 
         return $this->redirectToRoute('openweather_search');
-    }
-
-    #[\Override]
-    protected function getSessionKey(string $key): string
-    {
-        return self::PREFIX_KEY . $key;
     }
 
     /**
@@ -411,6 +423,60 @@ class OpenWeatherController extends AbstractController
         return $helper->createForm();
     }
 
+    private function getCookieCount(Request $request): int
+    {
+        return $this->getCookieInt(
+            $request,
+            self::KEY_COUNT,
+            $this->getRequestCount($request),
+            self::PREFIX_KEY
+        );
+    }
+
+    private function getCookieId(Request $request): int
+    {
+        return $this->getCookieInt(
+            $request,
+            self::KEY_ID,
+            $this->getRequestId($request),
+            self::PREFIX_KEY
+        );
+    }
+
+    private function getCookieLimit(Request $request): int
+    {
+        return $this->getCookieInt(
+            $request,
+            self::KEY_LIMIT,
+            $this->getRequestLimit($request),
+            self::PREFIX_KEY
+        );
+    }
+
+    private function getCookieQuery(Request $request): string
+    {
+        return $this->getCookieString(
+            $request,
+            self::KEY_QUERY,
+            $this->getRequestQuery($request),
+            self::PREFIX_KEY
+        );
+    }
+
+    /**
+     * @psalm-return OpenWeatherService::UNIT_* $units
+     */
+    private function getCookieUnits(Request $request): string
+    {
+        /** @psalm-var OpenWeatherService::UNIT_* */
+        return $this->getCookieString(
+            $request,
+            self::KEY_UNITS,
+            $this->getRequestUnits($request),
+            self::PREFIX_KEY
+        );
+    }
+
     private function getRequestCount(Request $request): int
     {
         return $this->getRequestInt($request, self::KEY_COUNT, OpenWeatherService::DEFAULT_COUNT);
@@ -431,33 +497,35 @@ class OpenWeatherController extends AbstractController
         return \trim($this->getRequestString($request, self::KEY_QUERY));
     }
 
+    /**
+     * @psalm-return OpenWeatherService::UNIT_* $units
+     */
     private function getRequestUnits(Request $request): string
     {
+        /** @psalm-var OpenWeatherService::UNIT_* */
         return $this->getRequestString($request, self::KEY_UNITS, OpenWeatherService::UNIT_METRIC);
     }
 
-    private function getSessionCount(Request $request): int
+    /**
+     * @psalm-param array<int, OpenWeatherCityType> $cities
+     * @psalm-param OpenWeatherService::UNIT_* $units
+     */
+    private function updateCities(array $cities, string $units): array
     {
-        return $this->getSessionInt(self::KEY_COUNT, $this->getRequestCount($request));
-    }
+        $cityIds = \array_map(fn (array $city): int => $city['id'], $cities);
+        for ($i = 0, $len = \count($cityIds); $i < $len; $i += OpenWeatherService::MAX_GROUP) {
+            $ids = \array_slice($cityIds, $i, OpenWeatherService::MAX_GROUP);
+            $group = $this->service->group($ids, $units);
+            if (!\is_array($group)) {
+                continue;
+            }
+            $unitsGroup = $group['units'];
+            for ($index = $i, $min = \min($len, $i + OpenWeatherService::MAX_GROUP); $index < $min; ++$index) {
+                $cities[$index]['current'] = $group['list'][$index % OpenWeatherService::MAX_GROUP];
+                $cities[$index]['units'] = $unitsGroup;
+            }
+        }
 
-    private function getSessionId(Request $request): int
-    {
-        return $this->getSessionInt(self::KEY_ID, $this->getRequestId($request));
-    }
-
-    private function getSessionLimit(Request $request): int
-    {
-        return $this->getSessionInt(self::KEY_LIMIT, $this->getRequestLimit($request));
-    }
-
-    private function getSessionQuery(Request $request): string
-    {
-        return $this->getSessionString(self::KEY_QUERY, $this->getRequestQuery($request));
-    }
-
-    private function getSessionUnits(Request $request): string
-    {
-        return $this->getSessionString(self::KEY_UNITS, $this->getRequestUnits($request));
+        return $cities;
     }
 }

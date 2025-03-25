@@ -31,12 +31,12 @@
     {{ _self.value_unit(value, unit, '') }}
 {%- endmacro %}
 
-{% macro value_rain(value, unit = '') %}
-{{ _self.value_unit(value|number_format(1), unit, ' ') }}
-{% endmacro %}
+{% macro value_rain(value, unit = '') -%}
+    {{ _self.value_unit(value|number_format(1), unit, ' ') }}
+{%- endmacro %}
 
-{% macro value_wind(description, degrees, unit) %}
+{% macro value_wind(description, degrees, unit) -%}
 <span title="{{ 'openweather.fields.wind_deg_title'|trans({'%value%': _self.value_no_sep(degrees, unit)}) }}">
-    <i class="fa-solid fa-location-arrow fa-rotate-by text-success" style="--fa-rotate-angle: {{ degrees - 45 }}deg;"></i> {{ description -}}
+    <i class="fa-solid fa-location-arrow fa-rotate-by text-success me-1" style="--fa-rotate-angle: {{ degrees - 45 }}deg;"></i>{{ description -}}
 </span>
-{% endmacro %}
+{%- endmacro %}

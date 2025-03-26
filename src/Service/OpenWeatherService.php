@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Database\OpenWeatherDatabase;
+use App\Enums\OpenWeatherUnits;
 use phpDocumentor\Reflection\DocBlock\Tags\See;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 /**
  * Service to get weather from OpenWeatherMap.
@@ -34,32 +36,22 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * The number of daily results to return.
      */
-    final public const DEFAULT_COUNT = 5;
+    public const DEFAULT_COUNT = 5;
 
     /**
      * The number of search results to return.
      */
-    final public const DEFAULT_LIMIT = 15;
-
-    /**
-     * The imperial degree.
-     */
-    final public const DEGREE_IMPERIAL = '°F';
-
-    /**
-     * The metric degree.
-     */
-    final public const DEGREE_METRIC = '°C';
+    public const DEFAULT_LIMIT = 15;
 
     /**
      * The parameter value to exclude the current data.
      */
-    final public const EXCLUDE_CURRENT = 'current';
+    public const EXCLUDE_CURRENT = 'current';
 
     /**
      * The parameter value to exclude the daily data.
      */
-    final public const EXCLUDE_DAILY = 'daily';
+    public const EXCLUDE_DAILY = 'daily';
 
     /**
      * The parameter value to exclude the hourly data.
@@ -74,27 +66,47 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * The maximum number of city identifiers to retrieve.
      */
-    final public const MAX_GROUP = 20;
+    public const MAX_GROUP = 20;
 
     /**
-     * The imperial speed.
+     * The count parameter name.
      */
-    final public const SPEED_IMPERIAL = 'mph';
+    public const PARAM_COUNT = 'count';
 
     /**
-     * The metric speed.
+     * The excluded parameter name.
      */
-    final public const SPEED_METRIC = 'm/s';
+    public const PARAM_EXCLUDE = 'exclude';
 
     /**
-     * The imperial units parameter value.
+     * The city identifier parameter name.
      */
-    final public const UNIT_IMPERIAL = 'imperial';
+    public const PARAM_ID = 'id';
 
     /**
-     * The metric units parameter value.
+     * The latitude parameter name.
      */
-    final public const UNIT_METRIC = 'metric';
+    public const PARAM_LATITUDE = 'lat';
+
+    /**
+     * The limit parameter name.
+     */
+    public const PARAM_LIMIT = 'limit';
+
+    /**
+     * The latitude parameter name.
+     */
+    public const PARAM_LONGITUDE = 'lon';
+
+    /**
+     * The query parameter name.
+     */
+    public const PARAM_QUERY = 'query';
+
+    /**
+     * The unit's parameter name.
+     */
+    public const PARAM_UNITS = 'units';
 
     /**
      * The cache timeout (15 minutes).
@@ -154,16 +166,17 @@ class OpenWeatherService extends AbstractHttpClientService
      * Returns the current, the hourly and daily forecasts
      * conditions data for a specific location.
      *
-     * @param int    $id    the city identifier
-     * @param int    $count the number of results to return or -1 for all
-     * @param string $units the units to use
-     *
-     * @psalm-param self::UNIT_* $units
+     * @param int              $id    the city identifier
+     * @param int              $count the number of results to return or -1 for all
+     * @param OpenWeatherUnits $units the unit to use
      *
      * @psalm-return array{current: array|false, forecast: array|false, daily: array|false}
      */
-    public function all(int $id, int $count = self::DEFAULT_COUNT, string $units = self::UNIT_METRIC): array
-    {
+    public function all(
+        int $id,
+        int $count = self::DEFAULT_COUNT,
+        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+    ): array {
         return [
             'current' => $this->current($id, $units),
             'forecast' => $this->forecast($id, $count, $units),
@@ -174,18 +187,16 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * Returns the current conditions data for a specific location.
      *
-     * @param int    $id    the city identifier
-     * @param string $units the units to use
+     * @param int              $id    the city identifier
+     * @param OpenWeatherUnits $units the unit to use
      *
      * @return array|false the current conditions if success; false on error
-     *
-     * @psalm-param self::UNIT_* $units
      */
-    public function current(int $id, string $units = self::UNIT_METRIC): array|false
+    public function current(int $id, OpenWeatherUnits $units = OpenWeatherUnits::METRIC): array|false
     {
         $query = [
-            'id' => $id,
-            'units' => $units,
+            self::PARAM_ID => $id,
+            self::PARAM_UNITS => $units->value,
         ];
 
         return $this->get(self::URI_CURRENT, $query);
@@ -194,19 +205,20 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * Returns daily forecast conditions data for a specific location.
      *
-     * @param int    $id    the city identifier
-     * @param int    $count the number of results to return or -1 for all
-     * @param string $units the units to use
+     * @param int              $id    the city identifier
+     * @param int              $count the number of results to return or -1 for all
+     * @param OpenWeatherUnits $units the unit to use
      *
      * @return array|false the current conditions if success; false on error
-     *
-     * @psalm-param self::UNIT_* $units
      */
-    public function daily(int $id, int $count = self::DEFAULT_COUNT, string $units = self::UNIT_METRIC): array|false
-    {
+    public function daily(
+        int $id,
+        int $count = self::DEFAULT_COUNT,
+        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+    ): array|false {
         $query = [
-            'id' => $id,
-            'units' => $units,
+            self::PARAM_ID => $id,
+            self::PARAM_UNITS => $units,
         ];
         if ($count > 0) {
             $query['cnt'] = $count;
@@ -218,19 +230,20 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * Returns hourly forecast conditions data for a specific location.
      *
-     * @param int    $id    the city identifier
-     * @param int    $count the number of results to return or -1 for all
-     * @param string $units the units to use
+     * @param int              $id    the city identifier
+     * @param int              $count the number of results to return or -1 for all
+     * @param OpenWeatherUnits $units the unit to use
      *
      * @return array|false the current conditions if success; false on error
-     *
-     * @psalm-param self::UNIT_* $units
      */
-    public function forecast(int $id, int $count = self::DEFAULT_COUNT, string $units = self::UNIT_METRIC): array|false
-    {
+    public function forecast(
+        int $id,
+        int $count = self::DEFAULT_COUNT,
+        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+    ): array|false {
         $query = [
-            'id' => $id,
-            'units' => $units,
+            self::PARAM_ID => $id,
+            self::PARAM_UNITS => $units->value,
         ];
         if ($count > 0) {
             $query['cnt'] = $count;
@@ -246,45 +259,23 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * Gets the degree units.
-     *
-     * @psalm-param self::UNIT_* $units
-     */
-    public function getDegreeUnit(string $units): string
-    {
-        return self::UNIT_METRIC === $units ? self::DEGREE_METRIC : self::DEGREE_IMPERIAL;
-    }
-
-    /**
-     * Gets the speed units.
-     *
-     * @psalm-param self::UNIT_* $units
-     */
-    public function getSpeedUnit(string $units): string
-    {
-        return self::UNIT_METRIC === $units ? self::SPEED_METRIC : self::SPEED_IMPERIAL;
-    }
-
-    /**
      * Returns current conditions data for a group of cities.
      *
-     * @param int[]  $cityIds the city identifiers. The maximum is 20.
-     * @param string $units   the units to use
+     * @param int[]            $cityIds the city identifiers. The maximum is 20.
+     * @param OpenWeatherUnits $units   the units to use
      *
      * @return array|false the conditions for the given cities, if success; false on error
      *
-     * @psalm-param self::UNIT_* $units
-     *
      * @psalm-return OpenWeatherGroupType|false
      */
-    public function group(array $cityIds, string $units = self::UNIT_METRIC): array|false
+    public function group(array $cityIds, OpenWeatherUnits $units = OpenWeatherUnits::METRIC): array|false
     {
         if (\count($cityIds) > self::MAX_GROUP) {
             throw new \InvalidArgumentException('The number of city identifiers is greater than 20.');
         }
         $query = [
-            'id' => \implode(',', $cityIds),
-            'units' => $units,
+            self::PARAM_ID => \implode(',', $cityIds),
+            self::PARAM_UNITS => $units->value,
         ];
 
         /** @psalm-var OpenWeatherGroupType|false */
@@ -294,32 +285,31 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * Returns all essential weather data for a specific location.
      *
-     * @param float  $latitude   the latitude
-     * @param float  $longitude  the longitude
-     * @param string ...$exclude the parts to exclude from the response. Available values:
-     *                           <ul>
-     *                           <li>'current'</li>
-     *                           <li>'minutely'</li>
-     *                           <li>'hourly'</li>
-     *                           <li>'daily'</li>
-     *                           </ul>
-     * @param string $units      the units to use
+     * @param float            $latitude   the latitude
+     * @param float            $longitude  the longitude
+     * @param string           ...$exclude the parts to exclude from the response. Available values:
+     *                                     <ul>
+     *                                     <li>'current'</li>
+     *                                     <li>'minutely'</li>
+     *                                     <li>'hourly'</li>
+     *                                     <li>'daily'</li>
+     *                                     </ul>
+     * @param OpenWeatherUnits $units      the unit to use
      *
      * @return array|false the essential conditions if success; false on error
      *
-     * @psalm-param self::UNIT_* $units
      * @psalm-param self::EXCLUDE_* ...$exclude
      */
     public function oneCall(
         float $latitude,
         float $longitude,
-        string $units = self::UNIT_METRIC,
+        OpenWeatherUnits $units = OpenWeatherUnits::METRIC,
         string ...$exclude
     ): array|false {
         $query = [
-            'lat' => $latitude,
-            'lon' => $longitude,
-            'units' => $units,
+            self::PARAM_LATITUDE => $latitude,
+            self::PARAM_LONGITUDE => $longitude,
+            self::PARAM_UNITS => $units->value,
         ];
         if ([] !== $exclude) {
             $query['exclude'] = \implode(',', $exclude);
@@ -342,17 +332,15 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * Adds units to the given array.
      *
-     * @param array  $data  the data to update
-     * @param string $units the query units
-     *
-     * @psalm-param self::UNIT_* $units
+     * @param array            $data  the data to update
+     * @param OpenWeatherUnits $units the query unit
      */
-    private function addUnits(array &$data, string $units): void
+    private function addUnits(array &$data, OpenWeatherUnits $units): void
     {
         $data['units'] = [
-            'system' => $units,
-            'speed' => $this->getSpeedUnit($units),
-            'temperature' => $this->getDegreeUnit($units),
+            'system' => $units->value,
+            'speed' => $units->getSpeed(),
+            'temperature' => $units->getDegree(),
             'pressure' => 'hPa',
             'degree' => '°',
             'percent' => '%',
@@ -373,7 +361,7 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
     private function doGet(string $uri, array $query, string $hostName): array|false
     {
@@ -388,8 +376,11 @@ class OpenWeatherService extends AbstractHttpClientService
             return false;
         }
 
-        /** @psalm-var self::UNIT_* $units */
-        $units = $query['units'];
+        /** @psalm-var OpenWeatherUnits|string $units */
+        $units = $query[self::PARAM_UNITS];
+        if (\is_string($units)) {
+            $units = OpenWeatherUnits::from($units);
+        }
         $offset = $this->findTimezone($results);
         $timezone = $this->offsetToTimZone($offset);
         $this->formatter->update($results, $timezone);

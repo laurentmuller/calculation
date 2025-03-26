@@ -64,11 +64,11 @@
     </div>
 </div>
 <div class="d-flex-wrap small text-body-secondary">
-    <div class="me-auto" id="last-update" data-text="{{ 'exchange_rate.last_update'|trans }}">
-        {{- 'exchange_rate.last_update'|trans({'%date%': 'common.empty_date'|trans}) -}}
+    <div id="last-update" data-text="{{ 'exchange_rate.last_update'|trans }}" class="me-auto">
+        {{- 'exchange_rate.last_update'|trans({'%date%': 'common.entity_empty_date'|trans}) -}}
     </div>
     <div id="next-update" data-text="{{ 'exchange_rate.next_update'|trans }}">
-        {{- 'exchange_rate.next_update'|trans({'%date%': 'common.empty_date'|trans}) -}}
+        {{- 'exchange_rate.next_update'|trans({'%date%': 'common.entity_empty_date'|trans}) -}}
     </div>
 </div>
 {% endblock %}

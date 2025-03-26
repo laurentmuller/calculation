@@ -413,15 +413,18 @@ class ExchangeRateService extends AbstractHttpClientService
      */
     private function mapCodes(array $codes): array
     {
-        /** @psalm-var string[] $codes */
+        /** @var string[] $codes */
         $codes = $this->getColumnFilter($codes, 0, Currencies::exists(...));
-        $result = $this->mapToKeyValue(
-            $codes,
-            fn (string $code): array => [$code => $this->mapCode($code)]
-        );
+
+        // remove XCG (Caribbean guilder)
+        $key = \array_search('XCG', $codes, true);
+        if (false !== $key) {
+            unset($codes[$key]);
+        }
+
+        $result = $this->mapToKeyValue($codes, fn (string $code): array => [$code => $this->mapCode($code)]);
         \uasort($result, static fn (array $a, array $b): int => $a['name'] <=> $b['name']);
 
-        /** @psalm-var array<string, ExchangeRateType> */
         return $result;
     }
 

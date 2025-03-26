@@ -145,10 +145,9 @@ class IndexController extends AbstractController
             $parameters['margin_count'] = $this->count(GlobalMargin::class);
         }
 
-        $path = $this->getCookiePath();
         $response = $this->render('index/index.html.twig', $parameters);
-        $this->updateCookie($response, self::PARAM_RESTRICT, $restrict, path: $path);
-        $this->updateCookie($response, TableInterface::PARAM_VIEW, $view, path: $path);
+        $this->updateCookie($response, self::PARAM_RESTRICT, $restrict);
+        $this->updateCookie($response, TableInterface::PARAM_VIEW, $view);
 
         return $response;
     }

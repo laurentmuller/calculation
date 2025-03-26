@@ -48,7 +48,7 @@ $(function () {
          */
         constructor(element, options) {
             this.$element = $(element);
-            this.options = $.extend(true, {}, ThemeListener.DEFAULTS, options);
+            this.options = $.extend(true, {}, ThemeListener.DEFAULTS, $(element).data(), options);
             this._init();
         }
 
@@ -65,6 +65,17 @@ $(function () {
             }
             const $dialog = this._getDialog();
             if ($dialog) {
+                const options = this.options;
+                $dialog.off('show.bs.modal', this._onDialogShow)
+                    .off('shown.bs.modal', this._onDialogVisible)
+                    .off('hide.bs.modal', this._onDialogHide)
+                    .off('keydown', this._onDialogKeyDown)
+                    .off('click', options.ok, this._onDialogAccept)
+                    .off('change', options.input, this._onInputChange);
+                const $settings = $dialog.find(options.settings);
+                if ($settings.length) {
+                    $settings.off('click', this._onSettingsClick);
+                }
                 $dialog.remove();
             }
         }
@@ -78,7 +89,6 @@ $(function () {
          * @private
          */
         _init() {
-
             this.clickProxy = () => this._click();
             this.changeProxy = () => this._change();
             this.$element.on('click', this.clickProxy);
@@ -115,7 +125,7 @@ $(function () {
         _loadDialog() {
             const that = this;
             const options = that.options;
-            const url = options.url || that.$element.data('url');
+            const url = options.url;
             if (!url) {
                 return;
             }
@@ -131,7 +141,7 @@ $(function () {
 
         /**
          * Gets the dialog
-         * @return {jQuery|null} the dialog, if found; null otherwise.
+         * @return {jQuery<HTMLDivElement>|*|null} the dialog, if found; null otherwise.
          * @private
          */
         _getDialog() {
@@ -219,7 +229,7 @@ $(function () {
 
         /**
          * Handle the theme radio input change event.
-         * @param {ChangeEvent} e
+         * @param {Event} e
          * @private
          */
         _onInputChange(e) {
@@ -242,7 +252,7 @@ $(function () {
 
         /**
          * Handle the setting button click event.
-         * @param {ClickEvent} e
+         * @param {Event} e
          * @private
          */
         _onSettingsClick(e) {
@@ -318,7 +328,7 @@ $(function () {
 
         /**
          * Initialize the dialog.
-         * @param {jQuery} $dialog the dialog to initialize.
+         * @param {jQuery<HTMLDivElement>|*} $dialog the dialog to initialize.
          * @private
          */
         _initDialog($dialog) {

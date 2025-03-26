@@ -96,8 +96,7 @@ trait TableTrait
         string|bool|int|\BackedEnum|null $default = null,
         string $prefix = ''
     ): void {
-        $path = $this->getCookiePath();
         $value = $results->getParameter($key, $default);
-        $this->updateCookie($response, $key, $value, $prefix, $path);
+        $this->updateCookie($response, $key, $value, $prefix);
     }
 }

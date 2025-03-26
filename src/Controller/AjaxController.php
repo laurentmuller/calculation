@@ -132,9 +132,8 @@ class AjaxController extends AbstractController
         UserService $service
     ): JsonResponse {
         $response = $this->json(true);
-        $path = $this->getCookiePath();
         $view = $this->getRequestEnum($request, TableInterface::PARAM_VIEW, TableView::TABLE);
-        $this->updateCookie($response, TableInterface::PARAM_VIEW, $view, path: $path);
+        $this->updateCookie($response, TableInterface::PARAM_VIEW, $view);
         $service->setProperty(PropertyServiceInterface::P_DISPLAY_MODE, $view);
 
         return $response;

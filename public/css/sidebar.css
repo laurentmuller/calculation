@@ -1,6 +1,6 @@
 :root {
     --sidebar-width: 18rem;
-    --sidebar-delay: 0.35s;
+    --sidebar-delay: 0.15s;
     --horizontal-navigation-height: 61px;
 }
 
@@ -22,6 +22,12 @@
     align-items: flex-start;
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .navbar-vertical {
+        transition: none;
+    }
+}
+
 body:not(.sidebar-show) .navbar-vertical {
     margin-left: calc(var(--sidebar-width) * -1);
 }
@@ -30,6 +36,12 @@ body:not(.sidebar-show) .navbar-vertical {
 .navbar-horizontal {
     height: var(--horizontal-navigation-height);
     transition: margin-top var(--sidebar-delay) ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .navbar-horizontal {
+        transition: none;
+    }
 }
 
 body.sidebar-show .navbar-horizontal {
@@ -108,7 +120,13 @@ body:not(.sidebar-show) .navbar-horizontal {
     float: right;
     margin-left: 6px;
     content: "\f104";
-    transition: transform 0.15s ease-in-out;
+    transition: transform var(--sidebar-delay) ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .navbar-vertical .nav-link-toggle::after {
+        transition: none;
+    }
 }
 
 .navbar-vertical .nav-link-toggle[aria-expanded=true]::after {

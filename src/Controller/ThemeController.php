@@ -47,7 +47,7 @@ class ThemeController extends AbstractController
         $response = $this->jsonTrue(
             ['message' => $this->trans($theme->getSuccess())]
         );
-        $service->saveTheme($response, $this->getCookiePath(), $theme);
+        $service->saveTheme($response, $theme);
 
         return $response;
     }

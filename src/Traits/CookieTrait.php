@@ -69,6 +69,14 @@ trait CookieTrait
         return $request->cookies->getInt($this->getCookieName($key, $prefix), $default);
     }
 
+    /**
+     * Gets the cookie path. The default value is '/'.
+     */
+    protected function getCookiePath(): string
+    {
+        return '/';
+    }
+
     protected function getCookieString(
         Request $request,
         string $key,
@@ -88,17 +96,15 @@ trait CookieTrait
         string $key,
         string|bool|int|float|\BackedEnum|null $value,
         string $prefix = '',
-        string $path = '/',
-        string $modify = '+1 year',
         bool $httpOnly = true
     ): void {
         if ($value instanceof PdfEnumDefaultInterface && $value->isDefault()) {
             $value = null;
         }
         if (null === $value || '' === $value) {
-            $this->clearCookie($response, $key, $prefix, $path, $httpOnly);
+            $this->clearCookie($response, $key, $prefix, $httpOnly);
         } else {
-            $this->setCookie($response, $key, $value, $prefix, $path, $modify, $httpOnly);
+            $this->setCookie($response, $key, $value, $prefix, $httpOnly);
         }
     }
 
@@ -111,12 +117,10 @@ trait CookieTrait
         Response $response,
         array $values,
         string $prefix = '',
-        string $path = '/',
-        string $modify = '+1 year',
         bool $httpOnly = true
     ): void {
         foreach ($values as $key => $value) {
-            $this->updateCookie($response, $key, $value, $prefix, $path, $modify, $httpOnly);
+            $this->updateCookie($response, $key, $value, $prefix, $httpOnly);
         }
     }
 
@@ -127,16 +131,21 @@ trait CookieTrait
         Response $response,
         string $key,
         string $prefix,
-        string $path,
         bool $httpOnly
     ): void {
-        $name = $this->getCookieName($key, $prefix);
-        $response->headers->clearCookie(name: $name, path: $path, httpOnly: $httpOnly);
+        $response->headers->clearCookie(
+            name: $this->getCookieName($key, $prefix),
+            path: $this->getCookiePath(),
+            httpOnly: $httpOnly
+        );
     }
 
-    private function getCookieExpire(string $modify): \DateTimeInterface
+    /**
+     * Gets the cookie expiration date. The default value is now plus 1 year.
+     */
+    private function getCookieExpire(): \DateTimeInterface
     {
-        return DateUtils::modify(new \DateTime(), $modify);
+        return DateUtils::modify(new \DateTime(), '+1 year');
     }
 
     /**
@@ -144,7 +153,7 @@ trait CookieTrait
      */
     private function getCookieName(string $key, string $prefix = ''): string
     {
-        return '' === $prefix ? \strtoupper($key) : \strtoupper($prefix . '_' . $key);
+        return \strtoupper('' === $prefix ? $key : $prefix . '_' . $key);
     }
 
     /**
@@ -153,10 +162,8 @@ trait CookieTrait
     private function setCookie(
         Response $response,
         string $key,
-        string|bool|int|float|\BackedEnum|null $value,
+        string|bool|int|float|\BackedEnum $value,
         string $prefix,
-        string $path,
-        string $modify,
         bool $httpOnly
     ): void {
         if ($value instanceof \BackedEnum) {
@@ -168,8 +175,8 @@ trait CookieTrait
         $cookie = Cookie::create(
             name: $this->getCookieName($key, $prefix),
             value: (string) $value,
-            expire: $this->getCookieExpire($modify),
-            path: $path,
+            expire: $this->getCookieExpire(),
+            path: $this->getCookiePath(),
             httpOnly: $httpOnly
         );
         $response->headers->setCookie($cookie);

@@ -717,9 +717,8 @@ class TestController extends AbstractController
                 return $this->redirectToHomePage();
             }
             $response = $this->redirectToHomePage($success);
-            $path = $this->getCookiePath();
             $view = $parameters->getDisplay()->getDisplayMode();
-            $this->updateCookie($response, TableInterface::PARAM_VIEW, $view, path: $path);
+            $this->updateCookie($response, TableInterface::PARAM_VIEW, $view);
 
             return $response;
         }

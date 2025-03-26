@@ -49,14 +49,14 @@ class ThemeServiceTest extends TestCase
     #[DataProvider('getThemes')]
     public function testGetTheme(Request $request, Theme $expected): void
     {
-        $service = new ThemeService();
+        $service = new ThemeService('/');
         $value = $service->getTheme($request);
         self::assertSame($expected, $value);
     }
 
     public function testGetThemes(): void
     {
-        $service = new ThemeService();
+        $service = new ThemeService('/');
         $themes = $service->getThemes();
         self::assertSame(Theme::sorted(), $themes);
     }
@@ -64,7 +64,7 @@ class ThemeServiceTest extends TestCase
     #[DataProvider('getThemeValues')]
     public function testGetThemeValue(Request $request, string $expected): void
     {
-        $service = new ThemeService();
+        $service = new ThemeService('/');
         $value = $service->getThemeValue($request);
         self::assertSame($expected, $value);
     }
@@ -72,7 +72,7 @@ class ThemeServiceTest extends TestCase
     #[DataProvider('getIsDarkTheme')]
     public function testIsDarkTheme(Request $request, bool $expected): void
     {
-        $service = new ThemeService();
+        $service = new ThemeService('/');
         $value = $service->isDarkTheme($request);
         self::assertSame($expected, $value);
     }
@@ -81,9 +81,9 @@ class ThemeServiceTest extends TestCase
     {
         $path = '/';
         $theme = Theme::DARK;
-        $service = new ThemeService();
+        $service = new ThemeService('/');
         $response = new Response();
-        $service->saveTheme($response, $path, $theme);
+        $service->saveTheme($response, $theme);
 
         $cookies = $response->headers->getCookies();
         self::assertCount(1, $cookies);

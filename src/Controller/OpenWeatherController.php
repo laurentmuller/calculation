@@ -274,8 +274,7 @@ class OpenWeatherController extends AbstractController
             $this->updateCookies(
                 $response,
                 $values,
-                self::PREFIX_KEY,
-                $this->getCookiePath()
+                self::PREFIX_KEY
             );
         }
 
@@ -344,8 +343,7 @@ class OpenWeatherController extends AbstractController
                     $this->updateCookies(
                         $response,
                         $values,
-                        self::PREFIX_KEY,
-                        $this->getCookiePath()
+                        self::PREFIX_KEY
                     );
 
                     return $response;
@@ -364,8 +362,7 @@ class OpenWeatherController extends AbstractController
                 $response,
                 self::KEY_QUERY,
                 $query,
-                self::PREFIX_KEY,
-                $this->getCookiePath()
+                self::PREFIX_KEY
             );
 
             return $response;

@@ -15,6 +15,7 @@ namespace App\Service;
 
 use App\Enums\Theme;
 use App\Traits\CookieTrait;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -29,6 +30,12 @@ class ThemeService
      * The key name for the selected theme cookie.
      */
     private const KEY_THEME = 'THEME';
+
+    public function __construct(
+        #[Autowire('%cookie_path%')]
+        private readonly string $cookiePath
+    ) {
+    }
 
     /**
      * Gets the selected theme from cookies.
@@ -67,8 +74,13 @@ class ThemeService
     /**
      * Save the given theme to cookies.
      */
-    public function saveTheme(Response $response, string $path, Theme $theme): void
+    public function saveTheme(Response $response, Theme $theme): void
     {
-        $this->updateCookie(response: $response, key: self::KEY_THEME, value: $theme, path: $path, httpOnly: false);
+        $this->updateCookie(response: $response, key: self::KEY_THEME, value: $theme, httpOnly: false);
+    }
+
+    protected function getCookiePath(): string
+    {
+        return $this->cookiePath;
     }
 }

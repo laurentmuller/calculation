@@ -99,6 +99,12 @@ class CookieTraitTest extends TestCase
         self::assertSame('', $response->getContent());
     }
 
+    #[\Override]
+    protected function getCookiePath(): string
+    {
+        return '/';
+    }
+
     private function createRequest(array $cookies = []): Request
     {
         /** @psalm-var mixed $value */

@@ -194,7 +194,7 @@ class OpenWeatherControllerTest extends ControllerTestCase
             'form[query]' => 'Le Mouret',
             'form[units]' => 'metric',
             'form[limit]' => 15,
-            'form[count]' => 5,
+            'form[cnt]' => 5,
         ];
         $this->checkForm(
             uri: '/openweather/search',
@@ -217,7 +217,7 @@ class OpenWeatherControllerTest extends ControllerTestCase
             'form[query]' => 'Le Mouret',
             'form[units]' => 'metric',
             'form[limit]' => 15,
-            'form[count]' => 5,
+            'form[cnt]' => 5,
         ];
         $this->checkForm(
             uri: '/openweather/search',

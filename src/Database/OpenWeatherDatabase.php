@@ -52,6 +52,20 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
         SQL;
 
     /**
+     * SQL statement to find a city for the given identifier.
+     */
+    private const SEARCH_BY_ID = <<<'SQL'
+        SELECT
+            id,
+            name,
+            country,
+            latitude,
+            longitude
+        FROM city
+        WHERE id = :id
+        SQL;
+
+    /**
      * SQL statement to find a city.
      */
     private const SEARCH_CITY = <<<'SQL'
@@ -104,6 +118,26 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
     public function deleteCities(): bool
     {
         return $this->exec(self::DELETE_CITIES);
+    }
+
+    /**
+     * Finds a city by for the given identifier.
+     *
+     * @param int $id the identifier to get city for
+     *
+     * @return array|false the city, if found; false otherwise
+     *
+     * @psalm-return OpenWeatherCityType|false
+     */
+    public function findById(int $id): array|false
+    {
+        /** @psalm-var \SQLite3Stmt $stmt */
+        $stmt = $this->getStatement(self::SEARCH_BY_ID);
+        $stmt->bindValue(':id', $id);
+        /** @psalm-var array<int, OpenWeatherCityType> $result */
+        $result = $this->executeAndFetch($stmt);
+
+        return [] === $result ? false : \reset($result);
     }
 
     /**

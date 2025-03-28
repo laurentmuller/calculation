@@ -76,7 +76,7 @@ class FunctionExtensionTest extends IntegrationTestCase
 
     private function createUploaderHelper(): UploaderHelper
     {
-        $callback = fn (?array $value): mixed => \is_array($value) ? $value[0] : $value;
+        $callback = fn (?object $value): mixed => null !== $value ? ((array) $value)[0] : null;
         $storage = $this->createMock(StorageInterface::class);
         $storage->method('resolveUri')
             ->willReturnCallback($callback);

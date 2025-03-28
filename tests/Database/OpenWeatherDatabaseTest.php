@@ -57,6 +57,19 @@ class OpenWeatherDatabaseTest extends TestCase
         self::assertTrue($actual);
     }
 
+    public function testFindByIdNotFound(): void
+    {
+        $actual = $this->database->findById(self::ID);
+        self::assertFalse($actual);
+    }
+
+    public function testFindByIdSuccess(): void
+    {
+        $this->insertCity();
+        $actual = $this->database->findById(self::ID);
+        self::assertIsArray($actual);
+    }
+
     public function testFindCity(): void
     {
         $this->insertCity();

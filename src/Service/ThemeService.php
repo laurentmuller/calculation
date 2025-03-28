@@ -79,6 +79,7 @@ class ThemeService
         $this->updateCookie(response: $response, key: self::KEY_THEME, value: $theme, httpOnly: false);
     }
 
+    #[\Override]
     protected function getCookiePath(): string
     {
         return $this->cookiePath;

@@ -278,6 +278,6 @@ class DataQueryValueResolverTest extends TestCase
                 ->willReturn($violationList);
         }
 
-        return new DataQueryValueResolver($validator);
+        return new DataQueryValueResolver('/', $validator);
     }
 }

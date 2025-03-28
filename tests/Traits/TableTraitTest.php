@@ -60,6 +60,7 @@ class TableTraitTest extends TestCase
         }
     }
 
+    #[\Override]
     public function getCookiePath(): string
     {
         return '/';

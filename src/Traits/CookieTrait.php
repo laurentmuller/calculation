@@ -70,12 +70,9 @@ trait CookieTrait
     }
 
     /**
-     * Gets the cookie path. The default value is '/'.
+     * Gets the cookie path.
      */
-    protected function getCookiePath(): string
-    {
-        return '/';
-    }
+    abstract protected function getCookiePath(): string;
 
     protected function getCookieString(
         Request $request,

@@ -806,6 +806,7 @@ openweather:
         title: Rechercher une localité
         submit: Recherche de localités
         units: Unités
+        country: Pays
 pagination:
     counter: Entrées %start% à %end% sur %count%
     page: Page %page%

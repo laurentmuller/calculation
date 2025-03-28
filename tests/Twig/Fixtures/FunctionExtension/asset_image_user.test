@@ -5,11 +5,13 @@
 {{ asset_image_user(user_image, 32) }}
 {{ asset_image_user(user_fake) }}
 {{ asset_image_user(user_null) }}
+{{ asset_image_user(user) }}
 --DATA--
 return [
     'user_image' => ['images/avatar.png'],
     'user_fake' => ['fake'],
     'user_null' => null,
+    'user' => new App\Entity\User(),
 ]
 --EXPECT--
 <image src="url" height="170" width="190">

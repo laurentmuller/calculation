@@ -25,6 +25,7 @@ use App\Table\LogTable;
 use App\Table\SearchTable;
 use App\Traits\CookieTrait;
 use App\Utils\StringUtils;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,8 +43,11 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
 {
     use CookieTrait;
 
-    public function __construct(private ValidatorInterface $validator)
-    {
+    public function __construct(
+        #[Autowire('%cookie_path%')]
+        private string $cookiePath,
+        private ValidatorInterface $validator
+    ) {
     }
 
     /**
@@ -62,6 +66,12 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
         $this->validateQuery($query);
 
         return [$query];
+    }
+
+    #[\Override]
+    protected function getCookiePath(): string
+    {
+        return $this->cookiePath;
     }
 
     private function createQuery(ArgumentMetadata $argument): DataQuery

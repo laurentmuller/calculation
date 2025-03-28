@@ -141,7 +141,7 @@ final class FunctionExtension extends AbstractExtension
         if (null === $user || [] === $user) {
             return false;
         }
-        $asset = $this->uploaderHelper->asset($user, className: User::class);
+        $asset = $this->uploaderHelper->asset((object) $user, className: User::class);
         if (null === $asset) {
             return false;
         }
@@ -218,9 +218,9 @@ final class FunctionExtension extends AbstractExtension
      */
     private function imageSize(string $path): array
     {
-        $full_path = (string) $this->getRealPath($path);
+        $realPath = (string) $this->getRealPath($path);
 
-        return $this->getImageSize($full_path);
+        return $this->getImageSize($realPath);
     }
 
     /**

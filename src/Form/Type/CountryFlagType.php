@@ -47,7 +47,7 @@ class CountryFlagType extends AbstractType
             'empty_data' => $defaultCode,
             'preferred_choices' => [$defaultCode],
             'only_flag' => false,
-            'separator' => \str_repeat('-', 53),
+            'separator' => '─────────────────────────────',
         ])->setAllowedTypes('choice_translation_locale', ['string', 'null'])
             ->setAllowedTypes('only_flag', 'boolean');
     }

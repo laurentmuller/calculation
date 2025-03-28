@@ -16,12 +16,14 @@ namespace App\Controller;
 use App\Attribute\Get;
 use App\Attribute\GetPost;
 use App\Enums\OpenWeatherUnits;
+use App\Form\Type\CountryFlagType;
 use App\Interfaces\RoleInterface;
 use App\Service\OpenWeatherCityUpdater;
 use App\Service\OpenWeatherSearchService;
 use App\Service\OpenWeatherService;
 use App\Traits\CookieTrait;
 use App\Utils\FileUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormInterface;
@@ -42,11 +44,10 @@ use Symfony\Component\Validator\Constraints\Length;
  *
  * @psalm-type OpenWeatherSearchType = array{
  *     query: string,
+ *     country: string,
  *     units: OpenWeatherUnits,
  *     limit: int,
- *     count: int}
- *
- * @psalm-import-type OpenWeatherCityType from \App\Database\OpenWeatherDatabase
+ *     cnt: int}
  */
 #[AsController]
 #[Route(path: '/openweather', name: 'openweather_')]
@@ -56,7 +57,12 @@ class OpenWeatherController extends AbstractController
     use CookieTrait;
 
     /**
-     * The prefix key for sessions.
+     * The country parameter name.
+     */
+    private const PARAM_COUNTRY = 'country';
+
+    /**
+     * The prefix key for cookies.
      */
     private const PREFIX_KEY = 'openweather';
 
@@ -270,12 +276,7 @@ class OpenWeatherController extends AbstractController
     #[GetPost(path: '/search', name: 'search')]
     public function search(Request $request, OpenWeatherSearchService $service): Response
     {
-        $data = [
-            OpenWeatherService::PARAM_QUERY => $this->getCookieQuery($request),
-            OpenWeatherService::PARAM_UNITS => $this->getCookieUnits($request),
-            OpenWeatherService::PARAM_LIMIT => $this->getCookieLimit($request),
-            OpenWeatherService::PARAM_COUNT => $this->getCookieCount($request),
-        ];
+        $data = $this->getData($request);
         $form = $this->createSearchForm($data);
         if ($this->handleRequestForm($request, $form)) {
             /** @psalm-var OpenWeatherSearchType $data */
@@ -284,33 +285,33 @@ class OpenWeatherController extends AbstractController
             $units = $data[OpenWeatherService::PARAM_UNITS];
             $limit = $data[OpenWeatherService::PARAM_LIMIT];
             $count = $data[OpenWeatherService::PARAM_COUNT];
-            $cities = $service->search($query, $limit);
+            $country = $data[self::PARAM_COUNTRY];
 
-            // found?
+            $name = $query;
+            if (StringUtils::isString($country)) {
+                $name .= ',' . $country;
+            }
+
+            $cities = $service->search($name, $limit);
             if ([] !== $cities) {
                 // only one?
                 if (1 === \count($cities)) {
                     $response = $this->redirectToRoute('openweather_current', [
                         OpenWeatherService::PARAM_ID => \reset($cities)['id'],
-                        OpenWeatherService::PARAM_UNITS => $units,
+                        OpenWeatherService::PARAM_UNITS => $units->value,
                         OpenWeatherService::PARAM_COUNT => $count,
                     ]);
-                    $values = [
-                        OpenWeatherService::PARAM_QUERY => $query,
-                        OpenWeatherService::PARAM_UNITS => $units,
-                        OpenWeatherService::PARAM_LIMIT => $limit,
-                        OpenWeatherService::PARAM_COUNT => $count,
-                    ];
+
                     $this->updateCookies(
                         $response,
-                        $values,
+                        $data,
                         self::PREFIX_KEY
                     );
 
                     return $response;
                 }
 
-                $cities = $this->updateCities($cities, $units);
+                $this->updateCities($cities, $units);
             }
 
             $response = $this->render('openweather/search_city.html.twig', [
@@ -319,10 +320,9 @@ class OpenWeatherController extends AbstractController
                 'units' => $units,
                 'count' => $count,
             ]);
-            $this->updateCookie(
+            $this->updateCookies(
                 $response,
-                OpenWeatherService::PARAM_QUERY,
-                $query,
+                $data,
                 self::PREFIX_KEY
             );
 
@@ -339,13 +339,13 @@ class OpenWeatherController extends AbstractController
      * Shows the current weather, if applicable, the search cities otherwise.
      */
     #[Get(path: '', name: 'weather')]
-    public function weather(Request $request): Response
+    public function weather(Request $request, OpenWeatherSearchService $service): Response
     {
         $id = $this->getCookieId($request);
-        if (0 !== $id) {
+        if (0 !== $id && false !== $service->findById($id)) {
             return $this->redirectToRoute('openweather_current', [
                 OpenWeatherService::PARAM_ID => $id,
-                OpenWeatherService::PARAM_UNITS => $this->getCookieUnits($request),
+                OpenWeatherService::PARAM_UNITS => $this->getCookieUnits($request)->value,
                 OpenWeatherService::PARAM_COUNT => $this->getCookieCount($request),
             ]);
         }
@@ -354,8 +354,6 @@ class OpenWeatherController extends AbstractController
     }
 
     /**
-     * @psalm-param OpenWeatherSearchType $data
-     *
      * @psalm-return FormInterface<mixed>
      */
     private function createSearchForm(array $data): FormInterface
@@ -365,6 +363,10 @@ class OpenWeatherController extends AbstractController
             ->constraints(new Length(['min' => 2]))
             ->updateAttributes(['placeholder' => 'openweather.search.place_holder', 'minlength' => 2])
             ->add(SearchType::class);
+        $helper->field(self::PARAM_COUNTRY)
+            ->updateOption('empty_data', '')
+            ->notRequired()
+            ->add(CountryFlagType::class);
         $helper->field(OpenWeatherService::PARAM_UNITS)
             ->addEnumType(OpenWeatherUnits::class);
         $transformer = new NumberToLocalizedStringTransformer(0);
@@ -384,6 +386,16 @@ class OpenWeatherController extends AbstractController
             $request,
             OpenWeatherService::PARAM_COUNT,
             $this->getRequestCount($request),
+            self::PREFIX_KEY
+        );
+    }
+
+    private function getCookieCountry(Request $request): string
+    {
+        return $this->getCookieString(
+            $request,
+            self::PARAM_COUNTRY,
+            $this->getRequestCountry($request),
             self::PREFIX_KEY
         );
     }
@@ -428,9 +440,25 @@ class OpenWeatherController extends AbstractController
         );
     }
 
+    private function getData(Request $request): array
+    {
+        return [
+            OpenWeatherService::PARAM_QUERY => $this->getCookieQuery($request),
+            OpenWeatherService::PARAM_UNITS => $this->getCookieUnits($request),
+            OpenWeatherService::PARAM_LIMIT => $this->getCookieLimit($request),
+            OpenWeatherService::PARAM_COUNT => $this->getCookieCount($request),
+            self::PARAM_COUNTRY => $this->getCookieCountry($request),
+        ];
+    }
+
     private function getRequestCount(Request $request): int
     {
         return $this->getRequestInt($request, OpenWeatherService::PARAM_COUNT, OpenWeatherService::DEFAULT_COUNT);
+    }
+
+    private function getRequestCountry(Request $request): string
+    {
+        return $this->getRequestString($request, self::PARAM_COUNTRY);
     }
 
     private function getRequestId(Request $request): int
@@ -445,7 +473,7 @@ class OpenWeatherController extends AbstractController
 
     private function getRequestQuery(Request $request): string
     {
-        return \trim($this->getRequestString($request, OpenWeatherService::PARAM_QUERY));
+        return $this->getRequestString($request, OpenWeatherService::PARAM_QUERY);
     }
 
     private function getRequestUnits(Request $request): OpenWeatherUnits
@@ -454,17 +482,17 @@ class OpenWeatherController extends AbstractController
     }
 
     /**
-     * @psalm-param array<int, OpenWeatherCityType> $cities
+     * @psalm-param array<int, array> $cities
      */
-    private function updateCities(array $cities, OpenWeatherUnits $units): array
+    private function updateCities(array &$cities, OpenWeatherUnits $units): void
     {
         $maxGroup = OpenWeatherService::MAX_GROUP;
-        $cityIds = \array_map(fn (array $city): int => $city['id'], $cities);
-        for ($i = 0, $len = \count($cityIds); $i < $len; $i += $maxGroup) {
-            $ids = \array_slice($cityIds, $i, $maxGroup);
-            $group = $this->service->group($ids, $units);
+        $ids = \array_map(fn (array $city): int => (int) $city['id'], $cities);
+        for ($i = 0, $len = \count($ids); $i < $len; $i += $maxGroup) {
+            $cityIds = \array_slice($ids, $i, $maxGroup);
+            $group = $this->service->group($cityIds, $units);
             if (!\is_array($group)) {
-                continue;
+                throw new \InvalidArgumentException('Unable to get cities weather.');
             }
             $groupUnits = $group['units'];
             for ($index = $i, $min = \min($len, $i + $maxGroup); $index < $min; ++$index) {
@@ -472,7 +500,5 @@ class OpenWeatherController extends AbstractController
                 $cities[$index]['units'] = $groupUnits;
             }
         }
-
-        return $cities;
     }
 }

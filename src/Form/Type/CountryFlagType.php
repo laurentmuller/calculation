@@ -43,9 +43,9 @@ class CountryFlagType extends AbstractType
         $resolver->setDefaults([
             'attr' => ['class' => self::FLAG_CLASS],
             'choice_loader' => $loader,
-            'choice_translation_locale' => null,
             'empty_data' => $defaultCode,
             'preferred_choices' => [$defaultCode],
+            'duplicate_preferred_choices' => false,
             'only_flag' => false,
             'separator' => '─────────────────────────────',
         ])->setAllowedTypes('choice_translation_locale', ['string', 'null'])

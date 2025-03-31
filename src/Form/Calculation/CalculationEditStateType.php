@@ -63,7 +63,7 @@ class CalculationEditStateType extends AbstractEntityType
             ->label('calculation.state.new_state')
             ->add(CalculationStateListType::class);
 
-        $helper->listenerPreSetData(fn (PreSetDataEvent $event) => $this->onPreSetData($event));
+        $helper->listenerPreSetData($this->onPreSetData(...));
     }
 
     private function getOverallAttributes(Calculation $data): array

@@ -18,11 +18,6 @@
 <p class="mb-0 text-end text-body-secondary small">{{ 'swisspost.import.last_import'|trans({'%date%': date}) }}</p>
 {%- endif %}
 {% endblock %}
-{# stylesheets #}
-{% block stylesheets %}
-{{ parent() }}
-{{ asset_css('css/fileinput.css') }}
-{% endblock %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}

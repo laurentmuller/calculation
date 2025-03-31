@@ -14,11 +14,6 @@
 } %}
 <p class="mb-0">{{ 'openweather.import.link'|trans(arguments)|raw }}</p>
 {% endblock %}
-{# stylesheets #}
-{% block stylesheets %}
-{{ parent() }}
-{{ asset_css('css/fileinput.css') }}
-{% endblock %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}

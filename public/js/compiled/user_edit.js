@@ -12,13 +12,13 @@
  * Plugin Files
  */
 <!--#include file="../plugins/plugin-password-strength.js" -->
-<!--#include file="../plugins/plugin-input-file.js" -->
+<!--#include file="../plugins/plugin-input-image.js" -->
 
 /**
  * Extensions
  */
+<!--#include file="../extensions/image-input-extensions.js" -->
 <!--#include file="../extensions/password-extensions.js" -->
-<!--#include file="../extensions/file-input-extensions.js" -->
 
 /**
  * Specific Files

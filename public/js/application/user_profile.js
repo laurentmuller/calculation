@@ -8,13 +8,15 @@ $(function () {
     $('#username').removeAttr('pattern');
 
     // image file handler
-    $('#imageFile_file').initFileInput($('#imageFile_delete'));
+    $('#imageFile_file').initImageInput($('#imageFile_delete'))
+        .imageInput();
 
     // options
     const $form = $('#edit-form');
     const urlName = $form.data('check-name');
     const urlEmail = $form.data('check-email');
     const options = {
+        imageInput: true,
         rules: {
             'username': {
                 remote: {

@@ -217,7 +217,7 @@
         {
 
             "name": "mermaid",
-            "version": "11.5.0",
+            "version": "11.6.0",
             "source": "jsdelivr",
             "prefix": "dist/",
             "files": [

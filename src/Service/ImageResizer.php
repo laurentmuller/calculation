@@ -54,7 +54,7 @@ class ImageResizer implements ServiceSubscriberInterface
     {
         try {
             $options = ['format' => ImageExtension::PNG->value];
-            $newSize = $this->getNewSize($source, $size->value);
+            $newSize = $this->getTargetSize($source, $size->value);
             $this->imagine->open($source)
                 ->resize($newSize)
                 ->save($target, $options);
@@ -106,11 +106,11 @@ class ImageResizer implements ServiceSubscriberInterface
         return $this->resize($source, $target, ImageSize::SMALL);
     }
 
-    private function getNewSize(string $filename, float $size): Box
+    private function getTargetSize(string $filename, float $size): Box
     {
         [$imageWidth, $imageHeight] = $this->getImageSize($filename);
         if (0 === $imageWidth || 0 === $imageHeight) {
-            throw new \InvalidArgumentException("Unable to get image size for the file \"$filename\".");
+            throw new \InvalidArgumentException(\sprintf('Unable to get image size for the file "%s".', $filename));
         }
         $ratio = (float) $imageWidth / (float) $imageHeight;
         $width = $size;

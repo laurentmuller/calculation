@@ -60,7 +60,7 @@ class UserRegistrationType extends AbstractUserCaptchaType
             ->addCheckboxType(false);
         parent::addFormFields($helper);
 
-        $helper->listenerPreSetData(fn (PreSetDataEvent $event) => $this->onPreSetData($event));
+        $helper->listenerPreSetData($this->onPreSetData(...));
     }
 
     #[\Override]

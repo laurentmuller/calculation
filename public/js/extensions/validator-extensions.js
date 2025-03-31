@@ -151,6 +151,7 @@
              * @param {Object} [options] - the options
              * @param {boolean} [options.recaptcha]
              * @param {boolean} [options.fileInput]
+             * @param {boolean} [options.imageInput]
              * @param {boolean} [options.colorPicker]
              * @param {boolean} [options.simpleEditor]
              * @param {function} [options.submitHandler]
@@ -165,7 +166,7 @@
                 // get options
                 options = options || {};
                 const recaptcha = options.recaptcha;
-                const fileInput = options.fileInput;
+                const imageInput = options.imageInput;
                 const colorPicker = options.colorPicker;
                 const simpleEditor = options.simpleEditor;
 
@@ -240,8 +241,8 @@
                     if (recaptcha && !$toUpdate) {
                         $toUpdate = $element.findReCaptcha();
                     }
-                    if (fileInput && !$toUpdate) {
-                        $toUpdate = $element.findFileInput();
+                    if (imageInput && !$toUpdate) {
+                        $toUpdate = $element.findImageInput();
                     }
                     if (colorPicker && !$toUpdate) {
                         $toUpdate = $element.findColorPicker();

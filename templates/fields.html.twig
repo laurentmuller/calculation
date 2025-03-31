@@ -97,34 +97,30 @@
     {% endif %}
 {%- endblock form_widget_simple %}
 
-{# use file-input style #}
+{# use image-input style #}
 {% block file_widget -%}
-    {%- if thumbnail is defined and thumbnail -%}
+    {%- if thumbnail|default(false) -%}
         {%- set empty_image = empty_image|default(false) -%}
         {%- set thumbnail_src = thumbnail_src|default(false) -%}
-        {%- set thumbnail_alt = thumbnail_alt|default('filetype.image') -%}
+        {%- set thumbnail_alt = (thumbnail_alt|default('filetype.image'))|trans -%}
         {%- if thumbnail_src -%}{%- set attr = attr|default({})|merge({'data-src': thumbnail_src}) -%}{%- endif -%}
-        <div class="text-center file-input {{ thumbnail_src ? 'file-input-exists' : 'file-input-new' }} mb-3" data-provider="file-input">
-            <div class="file-input-preview img-thumbnail" data-trigger="file-input" data-default="{{ empty_image }}">
+        <div class="image-input {{ thumbnail_src ? 'image-input-exists' : 'image-input-new' }}">
+            <div class="image-input-preview img-thumbnail" data-default="{{ empty_image }}" title="{{ thumbnail_alt }}">
                 {% if thumbnail_src or empty_image -%}
-                    <img src="{{ thumbnail_src|default(empty_image) }}" alt="{{ thumbnail_alt|trans }}" title="{{ thumbnail_alt|trans }}">
-                {%- endif %}
+                    <img src="{{ thumbnail_src|default(empty_image) }}" alt="{{ thumbnail_alt }}">
+                {% endif %}
             </div>
-            <div class="text-start">
-            <span class="btn btn-file btn-sm btn-form-sm btn-outline-secondary">
-                <span class="file-input-new">{{ 'common.button_browse'|trans }}</span>
-                <span class="file-input-exists">{{ 'common.button_edit'|trans }}</span>
-                {%- set attr = attr|merge({'aria-label': thumbnail_alt|trans}) -%}
-                {{- block('form_widget_simple') -}}
-            </span>
-                <button type="button" class="btn btn-sm btn-form-sm btn-outline-danger file-input-exists" data-dismiss="file-input">{{ 'common.button_delete'|trans }}</button>
+            <div class="d-flex-wrap">
+                <button type="button" class="btn image-input-browse btn-sm btn-outline-secondary  flex-fill">{{ 'common.button_browse'|trans }}</button>
+                <button type="button" class="btn image-input-edit btn-sm btn-outline-secondary  flex-fill">{{ 'common.button_edit'|trans }}</button>
+                <button type="button" class="btn image-input-delete btn-sm btn-outline-danger flex-fill">{{ 'common.button_delete'|trans }}</button>
             </div>
+            {{- block('form_widget_simple') -}}
         </div>
     {%- else -%}
         <div class="input-group">
-            {%- set is_empty = not value -%}
             {{- block('form_widget_simple') }}
-            <button class="btn btn-file-delete btn-outline-secondary{% if is_empty %} d-none{% endif %}" type="button" title="{{ 'common.button_delete'|trans }}">
+            <button class="btn btn-file-delete btn-outline-secondary{% if not value %} d-none{% endif %}" type="button" title="{{ 'common.button_delete'|trans }}">
                 <i class="fa-solid fa-times"></i>
             </button>
         </div>

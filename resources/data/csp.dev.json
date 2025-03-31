@@ -53,6 +53,7 @@
     "img-src": [
         "'self'",
         "data:",
+        "blob:",
         "https://wise.com",
         "https://robohash.org",
         "https://openweathermap.org"

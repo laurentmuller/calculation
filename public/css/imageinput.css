@@ -1,0 +1,35 @@
+@import 'style.css';
+
+.image-input {
+    display: inline-block;
+}
+
+.image-input input[type=file] {
+    display: none;
+}
+
+.image-input .img-thumbnail {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    text-align: center;
+    width: 200px;
+    height: 180px;
+    cursor: pointer;
+}
+
+.image-input .img-thumbnail > img {
+    position: absolute;
+    margin: 0;
+    max-width: 100%;
+    max-height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.image-input.image-input-new .image-input-edit,
+.image-input.image-input-new .image-input-delete,
+.image-input.image-input-exists .image-input-browse {
+    display: none;
+}

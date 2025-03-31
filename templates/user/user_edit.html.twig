@@ -48,7 +48,7 @@
 {% endblock %}
 {# stylesheets #}
 {% block stylesheets %}
-{{ asset_css('css/fileinput.css') }}
+{{ asset_css('css/imageinput.css') }}
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}
@@ -56,8 +56,8 @@
     {{ parent() }}
     {{ asset_js('vendor/zxcvbn/zxcvbn.js') }}
     {{ asset_js('js/plugins/plugin-password-strength.js') }}
-    {{ asset_js('js/plugins/plugin-input-file.js') }}
-    {{ asset_js('js/extensions/file-input-extensions.js') }}
+    {{ asset_js('js/plugins/plugin-input-image.js') }}
+    {{ asset_js('js/extensions/image-input-extensions.js') }}
     {{ asset_js('js/extensions/password-extensions.js') }}
     {{ asset_js('js/application/user_edit.js') }}
 {% else %}

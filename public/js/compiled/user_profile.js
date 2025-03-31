@@ -4,14 +4,14 @@
 <!--#include file="core_edit.js" -->
 
 /**
- * Plugin and Common Files
+ * Plugin Files
  */
-<!--#include file="../plugins/plugin-input-file.js" -->
+<!--#include file="../plugins/image-input-file.js" -->
 
 /**
  * Extensions
  */
-<!--#include file="../extensions/file-input-extensions.js" -->
+<!--#include file="../extensions/image-input-extensions.js" -->
 <!--#include file="../extensions/password-extensions.js" -->
 
 /**

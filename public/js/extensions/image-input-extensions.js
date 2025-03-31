@@ -9,19 +9,20 @@
          * -------------- jQuery Extensions --------------
          */
         $.fn.extend({
+
             /**
-             * Finds the file input container within the current element.
+             * Finds the image input container within the current element.
              */
-            findFileInput() {
-                const $parent = $(this).parents('.form-group');
-                return $parent.findExists('.file-input.input-group, .file-input-preview.img-thumbnail');
+            findImageInput() {
+                const $parent = $(this).parents('.image-input');
+                return $parent.findExists('.image-input-preview');
             },
 
             /**
-             * Initialize a file input.
-             * @param {jQuery} [$delete] the delete button
+             * Initialize an image input.
+             * @param {jQuery} [$delete] the delete checkbox
              */
-            initFileInput: function ($delete) {
+            initImageInput: function ($delete) {
                 return this.each(function () {
                     const $that = $(this);
                     $that.on('input', function () {

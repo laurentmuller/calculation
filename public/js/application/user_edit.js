@@ -5,14 +5,15 @@ $(function () {
     'use strict';
 
     // image file handler
-    $('#user_imageFile_file').initFileInput($('#user_imageFile_delete'));
+    $('#user_imageFile_file').initImageInput($('#user_imageFile_delete'))
+        .imageInput();
 
     // options
     const $form = $('#edit-form');
     const urlName = $form.data('check-name');
     const urlEmail = $form.data('check-email');
     let options = {
-        fileInput: true,
+        imageInput: true,
         rules: {
             'user[username]': {
                 remote: {
@@ -74,4 +75,6 @@ $(function () {
 
     // initialize validator
     $form.initValidator(options);
+
+
 });

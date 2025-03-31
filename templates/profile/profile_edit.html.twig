@@ -8,14 +8,14 @@
                         'data-check-email': url('ajax_check_user_email')}) -%}
 {# stylesheets #}
 {% block stylesheets %}
-{{ asset_css('css/fileinput.css') }}
+{{ asset_css('css/imageinput.css') }}
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
     {{ parent() }}
-    {{ asset_js('js/plugins/plugin-input-file.js') }}
-    {{ asset_js('js/extensions/file-input-extensions.js') }}
+    {{ asset_js('js/plugins/plugin-input-image.js') }}
+    {{ asset_js('js/extensions/image-input-extensions.js') }}
     {{ asset_js('js/extensions/password-extensions.js') }}
     {{ asset_js('js/application/user_profile.js') }}
 {% else %}

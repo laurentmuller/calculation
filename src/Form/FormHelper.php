@@ -509,18 +509,15 @@ class FormHelper
      */
     public function addVichImageType(): self
     {
-        // see https://github.com/kartik-v/bootstrap-fileinput
         $this->notRequired()
-            ->updateRowAttribute('class', 'mb-0')
             ->updateOptions([
                 'translation_domain' => 'messages',
                 'download_uri' => false,
             ])->updateAttributes([
                 'accept' => 'image/gif,image/jpeg,image/png,image/bmp',
-                'title' => '',
             ]);
 
-        // labels
+        // label
         if (!isset($this->options['delete_label'])) {
             $this->updateOption('delete_label', false);
         }

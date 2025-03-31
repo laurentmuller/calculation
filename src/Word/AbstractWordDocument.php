@@ -33,8 +33,6 @@ abstract class AbstractWordDocument extends WordDocument
 
     private readonly WordHeader $header;
 
-    private bool $printAddress;
-
     private readonly TranslatorInterface $translator;
 
     /**
@@ -44,8 +42,7 @@ abstract class AbstractWordDocument extends WordDocument
     {
         parent::__construct();
         $this->translator = $this->controller->getTranslator();
-        $this->customer = $this->controller->getApplicationService()->getCustomer();
-        $this->printAddress = $this->controller->getUserService()->isPrintAddress();
+        $this->customer = $this->controller->getCustomer();
         $this->header = new WordHeader($this);
         $this->footer = new WordFooter($this);
     }
@@ -64,18 +61,6 @@ abstract class AbstractWordDocument extends WordDocument
      * @throws \PhpOffice\PhpWord\Exception\Exception if an exception occurs
      */
     abstract public function render(): bool;
-
-    /**
-     * Set a value indicating if the customer address is printed.
-     *
-     * @psalm-api
-     */
-    public function setPrintAddress(bool $printAddress): static
-    {
-        $this->printAddress = $printAddress;
-
-        return $this;
-    }
 
     /**
      * Sets the title to be translated.
@@ -108,8 +93,7 @@ abstract class AbstractWordDocument extends WordDocument
      */
     protected function addDefaultHeader(Section $section): static
     {
-        $this->header->setPrintAddress($this->printAddress)
-            ->setCustomer($this->customer)
+        $this->header->setCustomer($this->customer)
             ->output($section);
 
         return $this;

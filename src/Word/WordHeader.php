@@ -36,8 +36,6 @@ class WordHeader extends AbstractHeaderFooter
 {
     private ?CustomerInformation $customer = null;
 
-    private bool $printAddress = false;
-
     #[\Override]
     public function output(Section $section): void
     {
@@ -54,7 +52,7 @@ class WordHeader extends AbstractHeaderFooter
             ->addRow();
 
         $cell = $this->outputTitleAndName($row, $title, $name, $url);
-        if ($this->printAddress) {
+        if ($this->customer?->isPrintAddress() ?? false) {
             $this->outputAddress($cell);
         }
     }
@@ -65,16 +63,6 @@ class WordHeader extends AbstractHeaderFooter
     public function setCustomer(CustomerInformation $customer): self
     {
         $this->customer = $customer;
-
-        return $this;
-    }
-
-    /**
-     * Set a value indicating if the customer address is printed.
-     */
-    public function setPrintAddress(bool $printAddress): self
-    {
-        $this->printAddress = $printAddress;
 
         return $this;
     }

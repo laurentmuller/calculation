@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Database\OpenWeatherDatabase;
+use App\Traits\CacheKeyTrait;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Cache\CacheInterface;
 
@@ -24,6 +25,8 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class OpenWeatherSearchService
 {
+    use CacheKeyTrait;
+
     /**
      * The number of search results to return.
      */
@@ -38,9 +41,9 @@ class OpenWeatherSearchService
     }
 
     /**
-     * Finds a city by for the given identifier.
+     * Finds a city for the given identifier.
      *
-     * @param int $id the identifier to get city for
+     * @param int $id the city identifier to search for
      *
      * @return array|false the city, if found; false otherwise
      *
@@ -48,15 +51,7 @@ class OpenWeatherSearchService
      */
     public function findById(int $id): array|false
     {
-        $db = null;
-
-        try {
-            $db = new OpenWeatherDatabase($this->databaseName, true);
-
-            return $db->findById($id);
-        } finally {
-            $db?->close();
-        }
+        return $this->call(fn (OpenWeatherDatabase $db): array|false => $db->findById($id));
     }
 
     /**
@@ -77,9 +72,29 @@ class OpenWeatherSearchService
      */
     public function search(string $name, int $limit = self::DEFAULT_LIMIT): array
     {
-        $key = 'OpenWeatherSearchService?' . \http_build_query(['name' => $name, 'limit' => $limit]);
+        $key = $this->cleanKey('OpenWeatherSearchService?' . \http_build_query(['name' => $name, 'limit' => $limit]));
 
         return $this->cache->get($key, fn (): array => $this->doSearch($name, $limit));
+    }
+
+    /**
+     * @template TResult
+     *
+     * @param callable(OpenWeatherDatabase): TResult $callable
+     *
+     * @return TResult
+     */
+    private function call(callable $callable): mixed
+    {
+        $db = null;
+
+        try {
+            $db = new OpenWeatherDatabase($this->databaseName, true);
+
+            return $callable($db);
+        } finally {
+            $db?->close();
+        }
     }
 
     /**
@@ -87,11 +102,7 @@ class OpenWeatherSearchService
      */
     private function doSearch(string $name, int $limit): array
     {
-        $db = null;
-
-        try {
-            $db = new OpenWeatherDatabase($this->databaseName, true);
-
+        return $this->call(function (OpenWeatherDatabase $db) use ($name, $limit): array {
             $results = $db->findCity($name, $limit);
             if ([] === $results) {
                 return [];
@@ -101,8 +112,6 @@ class OpenWeatherSearchService
 
             /** @psalm-var array<int, OpenWeatherCityType> */
             return $results;
-        } finally {
-            $db?->close();
-        }
+        });
     }
 }

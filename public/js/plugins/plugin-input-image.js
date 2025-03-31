@@ -7,6 +7,7 @@ $(function () {
     // ------------------------------------
     // ImageInput public class definition
     // ------------------------------------
+
     const ImageInput = class {
         // -----------------------------
         // public functions
@@ -72,13 +73,12 @@ $(function () {
         _addListeners() {
             this.$element.on('change', this.changeProxy);
             this.$delete.on('click', this.deleteProxy);
-            this.$preview.on('click', this.editProxy);
             this.$browse.on('click', this.editProxy);
             this.$edit.on('click', this.editProxy);
-
-            this.$preview.on('dragenter', this.dragEnterProxy);
-            this.$preview.on('dragover', this.dragOverProxy);
-            this.$preview.on('drop', this.dropProxy);
+            this.$preview.on('click', this.editProxy)
+                .on('dragenter', this.dragEnterProxy)
+                .on('dragover', this.dragOverProxy)
+                .on('drop', this.dropProxy);
         }
 
         /**
@@ -88,13 +88,12 @@ $(function () {
         _removeListeners() {
             this.$element.off('change', this.changeProxy);
             this.$delete.off('click', this.deleteProxy);
-            this.$preview.off('click', this.editProxy);
             this.$browse.off('click', this.editProxy);
             this.$edit.off('click', this.editProxy);
-
-            this.$preview.off('dragenter', this.dragEnterProxy);
-            this.$preview.off('dragover', this.dragOverProxy);
-            this.$preview.off('drop', this.dropProxy);
+            this.$preview.off('click', this.editProxy)
+                .off('dragenter', this.dragEnterProxy)
+                .off('dragover', this.dragOverProxy)
+                .off('drop', this.dropProxy);
         }
 
         /**
@@ -103,13 +102,8 @@ $(function () {
          * @private
          */
         _dragEnter(e) {
-            e.preventDefault();
-            e.stopPropagation();
             const dataTransfer = this._getDataTransfer(e);
-            if (!dataTransfer) {
-                return;
-            }
-            if (!this._isDataFiles(dataTransfer)) {
+            if (dataTransfer && !this._isDataFiles(dataTransfer)) {
                 dataTransfer.effectAllowed = 'none';
             }
         }
@@ -120,16 +114,9 @@ $(function () {
          * @private
          */
         _dragOver(e) {
-            e.preventDefault();
-            e.stopPropagation();
             const dataTransfer = this._getDataTransfer(e);
-            if (!dataTransfer) {
-                return;
-            }
-            if (this._isDataFiles(dataTransfer)) {
-                e.originalEvent.dataTransfer.dropEffect = 'copy';
-            } else {
-                e.originalEvent.dataTransfer.dropEffect = 'none';
+            if (dataTransfer) {
+                dataTransfer.dropEffect = this._isDataFiles(dataTransfer) ? 'copy' : 'none';
             }
         }
 
@@ -139,13 +126,8 @@ $(function () {
          * @private
          */
         _drop(e) {
-            e.preventDefault();
-            e.stopPropagation();
             const dataTransfer = this._getDataTransfer(e);
-            if (!dataTransfer) {
-                return;
-            }
-            if (!this._isDataFiles(dataTransfer)) {
+            if (!dataTransfer || !this._isDataFiles(dataTransfer)) {
                 return;
             }
             const files = dataTransfer.files;
@@ -241,6 +223,8 @@ $(function () {
          * @private
          */
         _getDataTransfer(e) {
+            e.preventDefault();
+            e.stopPropagation();
             return e.originalEvent && e.originalEvent.dataTransfer;
         }
 
@@ -271,20 +255,19 @@ $(function () {
                 return false;
             }
 
-            // validate file
-            const file = files[0];
-            if (!file || !this._accept(file)) {
-                if (deleteOnError) {
-                    this._delete(e);
+            // apply the first valid file
+            for (const file of files) {
+                if (file && this._accept(file)) {
+                    this._findImage(true).attr('src', URL.createObjectURL(file));
+                    this.$parent.removeClass('image-input-new').addClass('image-input-exists');
+                    this.$edit.trigger('focus');
+                    return true;
                 }
-                return false;
             }
-
-            // set image
-            this._findImage(true).attr('src', URL.createObjectURL(file));
-            this.$parent.removeClass('image-input-new').addClass('image-input-exists');
-            this.$edit.trigger('focus');
-            return true;
+            if (deleteOnError) {
+                this._delete(e);
+            }
+            return false;
         }
     };
 
@@ -308,7 +291,7 @@ $(function () {
     // ImageInput plugin definition
     // ------------------------------------
     const oldImageInput = $.fn.imageInput;
-    $.fn.imageInput = function (options) { // jslint ignore:line
+    $.fn.imageInput = function (options) {
         return this.each(function () {
             const $this = $(this);
             const data = $this.data(ImageInput.NAME);

@@ -41,7 +41,6 @@ class AbstractWordDocumentTest extends TestCase
             }
         };
         $doc->setTitleTrans('id');
-        $doc->setPrintAddress(true);
 
         $actual = $doc->render();
         self::assertTrue($actual);
@@ -61,7 +60,6 @@ class AbstractWordDocumentTest extends TestCase
                 return true;
             }
         };
-        $doc->setPrintAddress(true);
         $actual = $doc->render();
         self::assertTrue($actual);
     }
@@ -78,7 +76,6 @@ class AbstractWordDocumentTest extends TestCase
             <div>Text</div>
             XML;
         $doc = new HtmlDocument($controller, $content);
-        $doc->setPrintAddress(true);
         $actual = $doc->render();
         self::assertTrue($actual);
     }
@@ -96,7 +93,6 @@ class AbstractWordDocumentTest extends TestCase
             <div>Text</div>
             XML;
         $doc = new HtmlDocument($controller, $content);
-        $doc->setPrintAddress(true);
         $actual = $doc->render();
         self::assertTrue($actual);
     }
@@ -116,7 +112,6 @@ class AbstractWordDocumentTest extends TestCase
             <div>Text</div>
             XML;
         $doc = new HtmlDocument($controller, $content);
-        $doc->setPrintAddress(false);
         $actual = $doc->render();
         self::assertTrue($actual);
     }
@@ -133,7 +128,6 @@ class AbstractWordDocumentTest extends TestCase
             <div>Text</div>
             XML;
         $doc = new HtmlDocument($controller, $content);
-        $doc->setPrintAddress(true);
         $actual = $doc->render();
         self::assertTrue($actual);
     }

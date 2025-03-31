@@ -141,7 +141,7 @@ final class FunctionExtension extends AbstractExtension
         if (null === $user || [] === $user) {
             return false;
         }
-        $asset = $this->uploaderHelper->asset((object) $user, className: User::class);
+        $asset = $this->uploaderHelper->asset($user, className: User::class);
         if (null === $asset) {
             return false;
         }

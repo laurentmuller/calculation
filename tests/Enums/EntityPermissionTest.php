@@ -23,7 +23,7 @@ class EntityPermissionTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    public static function getLabel(): \Iterator
+    public static function getLabel(): \Generator
     {
         yield [EntityPermission::ADD, 'rights.add'];
         yield [EntityPermission::DELETE, 'rights.delete'];
@@ -33,7 +33,7 @@ class EntityPermissionTest extends TestCase
         yield [EntityPermission::SHOW, 'rights.show'];
     }
 
-    public static function getTryFromName(): \Iterator
+    public static function getTryFromName(): \Generator
     {
         yield [EntityPermission::ADD, 'add'];
         yield [EntityPermission::ADD, 'AdD'];
@@ -48,7 +48,7 @@ class EntityPermissionTest extends TestCase
         yield [null, 'FAKE'];
     }
 
-    public static function getValue(): \Iterator
+    public static function getValue(): \Generator
     {
         yield [EntityPermission::ADD, 1];
         yield [EntityPermission::DELETE, 2];

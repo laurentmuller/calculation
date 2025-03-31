@@ -50,7 +50,7 @@ class EntityVoterTest extends TestCase
         $this->voter = new EntityVoter($this->application);
     }
 
-    public static function getSupportsAttribute(): \Iterator
+    public static function getSupportsAttribute(): \Generator
     {
         yield ['add', true];
         yield ['ADD', true];

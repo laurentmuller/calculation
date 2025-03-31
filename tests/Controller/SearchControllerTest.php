@@ -16,7 +16,7 @@ namespace App\Tests\Controller;
 class SearchControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/search', self::ROLE_USER];
         yield ['/search', self::ROLE_ADMIN];

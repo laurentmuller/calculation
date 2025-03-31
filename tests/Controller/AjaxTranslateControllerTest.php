@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 class AjaxTranslateControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/ajax/detect', self::ROLE_USER];
         yield ['/ajax/detect?text=hello', self::ROLE_USER];

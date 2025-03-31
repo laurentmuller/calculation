@@ -16,7 +16,7 @@ namespace App\Tests\Controller;
 class ProfileControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/user/profile/password', self::ROLE_USER];
         yield ['/user/profile/password', self::ROLE_ADMIN];

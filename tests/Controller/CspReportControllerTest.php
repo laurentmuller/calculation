@@ -21,7 +21,7 @@ use Symfony\Component\Mailer\MailerInterface;
 class CspReportControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/csp', self::ROLE_USER, Response::HTTP_NO_CONTENT];
     }

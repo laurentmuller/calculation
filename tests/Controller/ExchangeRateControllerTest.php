@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ExchangeRateControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/exchange', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/exchange', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];

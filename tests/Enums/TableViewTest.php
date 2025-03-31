@@ -23,13 +23,13 @@ class TableViewTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    public static function getDefault(): \Iterator
+    public static function getDefault(): \Generator
     {
         yield [TableView::getDefault(), TableView::TABLE];
         yield [PropertyServiceInterface::DEFAULT_DISPLAY_MODE, TableView::TABLE];
     }
 
-    public static function getValues(): \Iterator
+    public static function getValues(): \Generator
     {
         yield [TableView::TABLE, 'table'];
         yield [TableView::CUSTOM, 'custom'];

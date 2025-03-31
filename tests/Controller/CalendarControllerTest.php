@@ -22,7 +22,7 @@ class CalendarControllerTest extends ControllerTestCase
     use CalculationTrait;
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/calendar/month', self::ROLE_USER];
         yield ['/calendar/month', self::ROLE_ADMIN];

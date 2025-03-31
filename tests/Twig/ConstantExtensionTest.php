@@ -20,7 +20,7 @@ use Symfony\Component\Cache\Adapter\NullAdapter;
 
 class ConstantExtensionTest extends TestCase
 {
-    public static function getCalculationServiceConstants(): \Iterator
+    public static function getCalculationServiceConstants(): \Generator
     {
         yield ['ROW_EMPTY', -1];
         yield ['ROW_GROUP', -2];
@@ -31,7 +31,7 @@ class ConstantExtensionTest extends TestCase
         yield ['ROW_OVERALL_TOTAL', -7];
     }
 
-    public static function getEntityVoterConstants(): \Iterator
+    public static function getEntityVoterConstants(): \Generator
     {
         yield ['PERMISSION_ADD', 'ADD'];
         yield ['PERMISSION_DELETE', 'DELETE'];

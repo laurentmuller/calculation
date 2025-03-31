@@ -44,7 +44,7 @@ class UserExceptionServiceTest extends TestCase
         $this->request->setSession($session);
     }
 
-    public static function getExceptions(): \Iterator
+    public static function getExceptions(): \Generator
     {
         // register user
         yield [new ExpiredSignatureException(), 'registration_expired_signature'];

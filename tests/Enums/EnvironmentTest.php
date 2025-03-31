@@ -23,35 +23,35 @@ class EnvironmentTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    public static function getIsDevelopment(): \Iterator
+    public static function getIsDevelopment(): \Generator
     {
         yield [Environment::DEVELOPMENT, true];
         yield [Environment::PRODUCTION, false];
         yield [Environment::TEST, false];
     }
 
-    public static function getIsProduction(): \Iterator
+    public static function getIsProduction(): \Generator
     {
         yield [Environment::DEVELOPMENT, false];
         yield [Environment::PRODUCTION, true];
         yield [Environment::TEST, false];
     }
 
-    public static function getIsTest(): \Iterator
+    public static function getIsTest(): \Generator
     {
         yield [Environment::DEVELOPMENT, false];
         yield [Environment::PRODUCTION, false];
         yield [Environment::TEST, true];
     }
 
-    public static function getLabels(): \Iterator
+    public static function getLabels(): \Generator
     {
         yield [Environment::DEVELOPMENT, 'environment.dev'];
         yield [Environment::PRODUCTION, 'environment.prod'];
         yield [Environment::TEST, 'environment.test'];
     }
 
-    public static function getValues(): \Iterator
+    public static function getValues(): \Generator
     {
         yield [Environment::DEVELOPMENT, 'dev'];
         yield [Environment::PRODUCTION, 'prod'];

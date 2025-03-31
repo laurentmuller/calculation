@@ -23,13 +23,13 @@ class StrengthLevelTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    public static function getDefault(): \Iterator
+    public static function getDefault(): \Generator
     {
         yield [StrengthLevel::getDefault(), StrengthLevel::NONE];
         yield [PropertyServiceInterface::DEFAULT_STRENGTH_LEVEL, StrengthLevel::NONE];
     }
 
-    public static function getLabels(): \Iterator
+    public static function getLabels(): \Generator
     {
         yield ['strength_level.medium', StrengthLevel::MEDIUM];
         yield ['strength_level.none', StrengthLevel::NONE];
@@ -39,7 +39,7 @@ class StrengthLevelTest extends TestCase
         yield ['strength_level.weak', StrengthLevel::WEAK];
     }
 
-    public static function getPercents(): \Iterator
+    public static function getPercents(): \Generator
     {
         yield [0, StrengthLevel::NONE];
         yield [20, StrengthLevel::VERY_WEAK];
@@ -49,7 +49,7 @@ class StrengthLevelTest extends TestCase
         yield [100, StrengthLevel::VERY_STRONG];
     }
 
-    public static function getSmallerValues(): \Iterator
+    public static function getSmallerValues(): \Generator
     {
         yield [StrengthLevel::NONE, StrengthLevel::VERY_WEAK, true];
         yield [StrengthLevel::VERY_WEAK, StrengthLevel::WEAK, true];
@@ -61,7 +61,7 @@ class StrengthLevelTest extends TestCase
         yield [StrengthLevel::VERY_WEAK, -1, false];
     }
 
-    public static function getValues(): \Iterator
+    public static function getValues(): \Generator
     {
         yield [StrengthLevel::NONE, -1];
         yield [StrengthLevel::VERY_WEAK, 0];

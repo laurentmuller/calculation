@@ -24,7 +24,7 @@ class CheckSubClassTraitTest extends TestCase
 {
     use CheckSubClassTrait;
 
-    public static function getSubClass(): \Iterator
+    public static function getSubClass(): \Generator
     {
         yield [Calculation::class, Calculation::class];
         yield [Calculation::class, AbstractEntity::class];

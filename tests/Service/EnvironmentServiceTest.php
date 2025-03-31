@@ -20,28 +20,28 @@ use PHPUnit\Framework\TestCase;
 
 class EnvironmentServiceTest extends TestCase
 {
-    public static function getEnvironment(): \Iterator
+    public static function getEnvironment(): \Generator
     {
         yield ['dev', Environment::DEVELOPMENT];
         yield ['prod', Environment::PRODUCTION];
         yield ['test', Environment::TEST];
     }
 
-    public static function getIsDevelopment(): \Iterator
+    public static function getIsDevelopment(): \Generator
     {
         yield ['dev', true];
         yield ['prod', false];
         yield ['test', false];
     }
 
-    public static function getIsProduction(): \Iterator
+    public static function getIsProduction(): \Generator
     {
         yield ['dev', false];
         yield ['prod', true];
         yield ['test', false];
     }
 
-    public static function getIsTest(): \Iterator
+    public static function getIsTest(): \Generator
     {
         yield ['dev', false];
         yield ['prod', false];

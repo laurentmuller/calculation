@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 class HtmlSpacingTest extends TestCase
 {
-    public static function getInvalidClasses(): \Iterator
+    public static function getInvalidClasses(): \Generator
     {
         yield ['fake'];
         yield ['mm-0'];
@@ -32,7 +32,7 @@ class HtmlSpacingTest extends TestCase
         yield ['my-6'];
     }
 
-    public static function getIsAll(): \Iterator
+    public static function getIsAll(): \Generator
     {
         yield ['m-0', true];
         yield ['mt-0', false];
@@ -43,7 +43,7 @@ class HtmlSpacingTest extends TestCase
         yield ['my-0', false];
     }
 
-    public static function getIsNone(): \Iterator
+    public static function getIsNone(): \Generator
     {
         yield ['m-0'];
         yield ['mt-0'];
@@ -54,7 +54,7 @@ class HtmlSpacingTest extends TestCase
         yield ['my-0'];
     }
 
-    public static function getValidClasses(): \Iterator
+    public static function getValidClasses(): \Generator
     {
         yield ['m-0', 0, true, true, true, true];
         yield ['M-0', 0, true, true, true, true];

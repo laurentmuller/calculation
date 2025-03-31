@@ -23,7 +23,7 @@ class CalculationUpdateControllerTest extends ControllerTestCase
     use ProductTrait;
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/admin/update', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/admin/update', self::ROLE_ADMIN];

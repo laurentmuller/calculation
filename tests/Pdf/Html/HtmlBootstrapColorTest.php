@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 
 class HtmlBootstrapColorTest extends TestCase
 {
-    public static function getColorValues(): \Iterator
+    public static function getColorValues(): \Generator
     {
         yield [HtmlBootstrapColor::DANGER, '#DC3545'];
         yield [HtmlBootstrapColor::DARK, '#212529'];
@@ -89,7 +89,7 @@ class HtmlBootstrapColorTest extends TestCase
         yield ['empty-class', null];
     }
 
-    public static function getPhpOfficeColors(): \Iterator
+    public static function getPhpOfficeColors(): \Generator
     {
         yield [HtmlBootstrapColor::DANGER, 'DC3545'];
         yield [HtmlBootstrapColor::DARK, '212529'];

@@ -23,20 +23,20 @@ class EntityActionTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    public static function getDefault(): \Iterator
+    public static function getDefault(): \Generator
     {
         yield [EntityAction::getDefault(), EntityAction::EDIT];
         yield [PropertyServiceInterface::DEFAULT_ACTION, EntityAction::EDIT];
     }
 
-    public static function getLabel(): \Iterator
+    public static function getLabel(): \Generator
     {
         yield ['entity_action.edit', EntityAction::EDIT];
         yield ['entity_action.show', EntityAction::SHOW];
         yield ['entity_action.none', EntityAction::NONE];
     }
 
-    public static function getValues(): \Iterator
+    public static function getValues(): \Generator
     {
         yield [EntityAction::NONE, 'none'];
         yield [EntityAction::EDIT, 'edit'];

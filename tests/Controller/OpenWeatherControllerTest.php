@@ -24,7 +24,7 @@ class OpenWeatherControllerTest extends ControllerTestCase
     private const CITY_ID = 7286311;
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         $users = [
             self::ROLE_USER,

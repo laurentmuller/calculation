@@ -36,7 +36,7 @@ class StrengthLevelTranslatorTraitTest extends TestCase
         $this->translator = $this->createMockTranslator();
     }
 
-    public static function getTranslateLevels(): \Iterator
+    public static function getTranslateLevels(): \Generator
     {
         yield [-2, 'none'];
         yield [-1, 'none'];

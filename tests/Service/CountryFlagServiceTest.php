@@ -28,7 +28,7 @@ class CountryFlagServiceTest extends TestCase
         $this->service = new CountryFlagService();
     }
 
-    public static function getDefaultCodes(): \Iterator
+    public static function getDefaultCodes(): \Generator
     {
         yield ['en-US', 'US'];
         yield ['fr-CH', 'CH'];
@@ -37,12 +37,12 @@ class CountryFlagServiceTest extends TestCase
         yield ['zh_Hans_MO', 'MO'];
     }
 
-    public static function getFlagsInvalid(): \Iterator
+    public static function getFlagsInvalid(): \Generator
     {
         yield ['ZZ', '', true, true];
     }
 
-    public static function getFlagsValid(): \Iterator
+    public static function getFlagsValid(): \Generator
     {
         yield ['CH', '🇨🇭'];
         yield ['CH', '🇨🇭', true];

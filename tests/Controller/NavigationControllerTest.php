@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 class NavigationControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         $routes = [
             '/navigation/horizontal',

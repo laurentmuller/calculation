@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AdminControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/admin/clear', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/admin/clear', self::ROLE_ADMIN];

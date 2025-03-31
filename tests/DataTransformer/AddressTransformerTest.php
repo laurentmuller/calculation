@@ -29,6 +29,9 @@ class AddressTransformerTest extends TestCase
         $this->transformer = new AddressTransformer();
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array>
+     */
     public static function getReverseTransformInvalid(): \Generator
     {
         yield [true];

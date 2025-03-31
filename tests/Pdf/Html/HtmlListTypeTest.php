@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 class HtmlListTypeTest extends TestCase
 {
-    public static function getLetterValues(): \Iterator
+    public static function getLetterValues(): \Generator
     {
         yield [1, 'A'];
         yield [1, 'A.', '.'];
@@ -28,7 +28,7 @@ class HtmlListTypeTest extends TestCase
         yield [53, 'AAA'];
     }
 
-    public static function getNumberValues(): \Iterator
+    public static function getNumberValues(): \Generator
     {
         yield [1, '1'];
         yield [1,  '1.', '.'];
@@ -39,7 +39,7 @@ class HtmlListTypeTest extends TestCase
         yield [1000, '1000.suffix', '.suffix'];
     }
 
-    public static function getRomanValues(): \Iterator
+    public static function getRomanValues(): \Generator
     {
         yield [4000, ''];
         yield [4000, '', '.'];

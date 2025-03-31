@@ -22,14 +22,14 @@ use PHPUnit\Framework\TestCase;
 
 class HtmlTagTest extends TestCase
 {
-    public static function getMatches(): \Iterator
+    public static function getMatches(): \Generator
     {
         yield [HtmlTag::BODY, 'body', true];
         yield [HtmlTag::BODY, 'BODY', true];
         yield [HtmlTag::BODY, 'fake', false];
     }
 
-    public static function getStyles(): \Iterator
+    public static function getStyles(): \Generator
     {
         yield [HtmlTag::BODY, null];
         yield [HtmlTag::SPAN, null];

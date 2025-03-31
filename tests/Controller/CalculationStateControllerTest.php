@@ -25,7 +25,7 @@ class CalculationStateControllerTest extends EntityControllerTestCase
     use CalculationTrait;
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/calculationstate', self::ROLE_USER];
         yield ['/calculationstate', self::ROLE_ADMIN];

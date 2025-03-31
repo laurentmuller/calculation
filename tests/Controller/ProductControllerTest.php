@@ -24,7 +24,7 @@ class ProductControllerTest extends EntityControllerTestCase
     use ProductTrait;
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/product', self::ROLE_USER];
         yield ['/product', self::ROLE_ADMIN];

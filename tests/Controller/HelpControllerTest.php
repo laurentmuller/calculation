@@ -33,7 +33,7 @@ class HelpControllerTest extends ControllerTestCase
     }
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         $routes = [
             '/help',

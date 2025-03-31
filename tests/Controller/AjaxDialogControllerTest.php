@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AjaxDialogControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         $routes = ['page', 'item', 'task'];
         $users = [self::ROLE_USER, self::ROLE_ADMIN, self::ROLE_SUPER_ADMIN];

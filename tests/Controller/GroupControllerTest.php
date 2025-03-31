@@ -26,7 +26,7 @@ class GroupControllerTest extends EntityControllerTestCase
     use CategoryTrait;
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/group', self::ROLE_USER];
         yield ['/group', self::ROLE_ADMIN];

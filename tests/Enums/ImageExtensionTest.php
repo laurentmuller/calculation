@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 class ImageExtensionTest extends TestCase
 {
-    public static function getCreateImages(): \Iterator
+    public static function getCreateImages(): \Generator
     {
         /** @psalm-var non-empty-string $dir */
         $dir = \realpath(__DIR__ . '/../files/images');
@@ -35,7 +35,7 @@ class ImageExtensionTest extends TestCase
         yield [ImageExtension::XPM, $dir . '/example.xpm'];
     }
 
-    public static function getFilters(): \Iterator
+    public static function getFilters(): \Generator
     {
         yield [ImageExtension::BMP, '*.bmp'];
         yield [ImageExtension::GIF, '*.gif'];
@@ -48,7 +48,7 @@ class ImageExtensionTest extends TestCase
         yield [ImageExtension::XPM, '*.xpm'];
     }
 
-    public static function getImageTypes(): \Iterator
+    public static function getImageTypes(): \Generator
     {
         yield [ImageExtension::BMP,  \IMAGETYPE_BMP];
         yield [ImageExtension::GIF, \IMAGETYPE_GIF];
@@ -69,7 +69,7 @@ class ImageExtensionTest extends TestCase
         }
     }
 
-    public static function getTryFromTypes(): \Iterator
+    public static function getTryFromTypes(): \Generator
     {
         yield [\IMAGETYPE_BMP, ImageExtension::BMP];
         yield [\IMAGETYPE_GIF, ImageExtension::GIF];
@@ -82,7 +82,7 @@ class ImageExtensionTest extends TestCase
         yield [-1];
     }
 
-    public static function getTypes(): \Iterator
+    public static function getTypes(): \Generator
     {
         yield [ImageExtension::BMP, \IMAGETYPE_BMP];
         yield [ImageExtension::GIF, \IMAGETYPE_GIF];
@@ -116,7 +116,7 @@ class ImageExtensionTest extends TestCase
         yield [ImageExtension::XPM, [], false];
     }
 
-    public static function getValues(): \Iterator
+    public static function getValues(): \Generator
     {
         yield [ImageExtension::BMP, 'bmp'];
         yield [ImageExtension::GIF, 'gif'];

@@ -19,7 +19,7 @@ use App\Interfaces\PropertyServiceInterface;
 class UserParametersControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/user/parameters', self::ROLE_USER];
         yield ['/user/parameters', self::ROLE_ADMIN];

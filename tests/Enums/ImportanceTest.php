@@ -22,7 +22,7 @@ class ImportanceTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    public static function getLabels(): \Iterator
+    public static function getLabels(): \Generator
     {
         yield ['importance.high', Importance::HIGH];
         yield ['importance.low', Importance::LOW];
@@ -30,7 +30,7 @@ class ImportanceTest extends TestCase
         yield ['importance.urgent', Importance::URGENT];
     }
 
-    public static function getLabelsFull(): \Iterator
+    public static function getLabelsFull(): \Generator
     {
         yield ['importance.high_full', Importance::HIGH];
         yield ['importance.low_full', Importance::LOW];
@@ -38,7 +38,7 @@ class ImportanceTest extends TestCase
         yield ['importance.urgent_full', Importance::URGENT];
     }
 
-    public static function getValues(): \Iterator
+    public static function getValues(): \Generator
     {
         yield [Importance::HIGH, 'high'];
         yield [Importance::LOW, 'low'];

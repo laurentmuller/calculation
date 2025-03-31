@@ -28,7 +28,7 @@ class GeneratorControllerTest extends ControllerTestCase
     private static ?CalculationState $state = null;
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/generate', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/generate', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];

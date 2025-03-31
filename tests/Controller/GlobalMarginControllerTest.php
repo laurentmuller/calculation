@@ -22,7 +22,7 @@ class GlobalMarginControllerTest extends EntityControllerTestCase
     use GlobalMarginTrait;
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/globalmargin', self::ROLE_USER];
         yield ['/globalmargin', self::ROLE_ADMIN];

@@ -71,7 +71,7 @@ class ProductUpdateServiceTest extends TestCase
         $this->session->set('product.update.category', 1);
     }
 
-    public static function getFixedRounded(): \Iterator
+    public static function getFixedRounded(): \Generator
     {
         yield [1.00, 2.00];
         yield [1.01, 2.00];

@@ -16,7 +16,7 @@ namespace App\Tests\Controller;
 class SiteMapControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/sitemap', self::ROLE_USER];
         yield ['/sitemap', self::ROLE_ADMIN];

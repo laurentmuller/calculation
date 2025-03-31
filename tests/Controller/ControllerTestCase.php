@@ -28,8 +28,10 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
      * Gets the routes to test.
      *
      * Each entry must contain a URL, a username, an optional expected result, request method and XML http request.
+     *
+     * @psalm-return \Generator<array-key, array{0: string, ...}>
      */
-    abstract public static function getRoutes(): \Iterator;
+    abstract public static function getRoutes(): \Generator;
 
     /**
      * Checks the given route.

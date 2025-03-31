@@ -36,7 +36,7 @@ class DatabaseTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
 
-    public static function getRepositories(): \Iterator
+    public static function getRepositories(): \Generator
     {
         yield [GroupRepository::class, 0];
         yield [CategoryRepository::class, 0];
@@ -51,7 +51,7 @@ class DatabaseTest extends KernelServiceTestCase
         yield [UserRepository::class, 4];
     }
 
-    public static function getTables(): \Iterator
+    public static function getTables(): \Generator
     {
         yield ['sy_Group', 0];
         yield ['sy_Category', 0];
@@ -66,7 +66,7 @@ class DatabaseTest extends KernelServiceTestCase
         yield ['sy_User', 4];
     }
 
-    public static function getUsers(): \Iterator
+    public static function getUsers(): \Generator
     {
         yield [AuthenticateWebTestCase::ROLE_USER, RoleInterface::ROLE_USER];
         yield [AuthenticateWebTestCase::ROLE_ADMIN, RoleInterface::ROLE_ADMIN];

@@ -26,7 +26,7 @@ class CalculationDuplicateControllerTest extends ControllerTestCase
     private ?Product $duplicate = null;
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/calculation/duplicate', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/calculation/duplicate', self::ROLE_ADMIN];

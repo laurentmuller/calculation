@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 class IpStackControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/ipstack', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/ipstack', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];

@@ -23,7 +23,7 @@ class PivotControllerTest extends ControllerTestCase
     use ProductTrait;
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/pivot', self::ROLE_USER];
         yield ['/pivot', self::ROLE_ADMIN];

@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 class FileUtilsTest extends TestCase
 {
-    public static function getBuildPaths(): \Iterator
+    public static function getBuildPaths(): \Generator
     {
         yield ['', ''];
         yield ['/', '/'];
@@ -33,7 +33,7 @@ class FileUtilsTest extends TestCase
         yield ['home/test/value', 'home', 'test', 'value/'];
     }
 
-    public static function getExtension(): \Iterator
+    public static function getExtension(): \Generator
     {
         yield ['', ''];
         yield ['file', ''];
@@ -43,7 +43,7 @@ class FileUtilsTest extends TestCase
         yield ['file.TXT', 'txt', true];
     }
 
-    public static function getFormatSize(): \Iterator
+    public static function getFormatSize(): \Generator
     {
         $kb = 1024;
         $mb = $kb * $kb;
@@ -75,7 +75,7 @@ class FileUtilsTest extends TestCase
         yield [new \SplFileInfo("D:\zzz_aaa"), $empty];
     }
 
-    public static function getRealPath(): \Iterator
+    public static function getRealPath(): \Generator
     {
         yield [__DIR__, __DIR__];
         yield [__FILE__, __FILE__];

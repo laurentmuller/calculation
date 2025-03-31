@@ -21,21 +21,21 @@ class MathTraitTest extends TestCase
 {
     use MathTrait;
 
-    public static function getCeil(): \Iterator
+    public static function getCeil(): \Generator
     {
         yield [4.3, 4.30];
         yield [9.999, 10.0];
         yield [-3.14, -3.14];
     }
 
-    public static function getFloor(): \Iterator
+    public static function getFloor(): \Generator
     {
         yield [4.3, 4.30];
         yield [9.999, 9.99];
         yield [-3.14, -3.14];
     }
 
-    public static function getIsBitSet(): \Iterator
+    public static function getIsBitSet(): \Generator
     {
         yield [31, 1];
         yield [31, 2];
@@ -49,7 +49,7 @@ class MathTraitTest extends TestCase
         yield [0, 16, false];
     }
 
-    public static function getIsFloatEquals(): \Iterator
+    public static function getIsFloatEquals(): \Generator
     {
         yield [0, 0];
         yield [0, 0.01, 0];
@@ -60,7 +60,7 @@ class MathTraitTest extends TestCase
         yield [0, 0.01, 2, false];
     }
 
-    public static function getIsFloatZero(): \Iterator
+    public static function getIsFloatZero(): \Generator
     {
         yield [0];
         yield [0, 0];
@@ -74,7 +74,7 @@ class MathTraitTest extends TestCase
         yield [0.001, 3, false];
     }
 
-    public static function getRound(): \Iterator
+    public static function getRound(): \Generator
     {
         yield [0, 0.0];
         yield [1.5, 1.5];
@@ -86,7 +86,7 @@ class MathTraitTest extends TestCase
         yield [1.1551, 1.16];
     }
 
-    public static function getSafeDivide(): \Iterator
+    public static function getSafeDivide(): \Generator
     {
         yield [100, 0,  0.0];
         yield [100, 5,  20.0];
@@ -94,7 +94,7 @@ class MathTraitTest extends TestCase
         yield [100, 0,  11.0,  11.0];
     }
 
-    public static function getValidateFloatRange(): \Iterator
+    public static function getValidateFloatRange(): \Generator
     {
         yield [0.0,  0, 100.0, 0.0];
         yield [100.0,  0, 100.0, 100.0];
@@ -103,7 +103,7 @@ class MathTraitTest extends TestCase
         yield [100.1,  0.0, 100.0, 100.0];
     }
 
-    public static function getValidateIntRange(): \Iterator
+    public static function getValidateIntRange(): \Generator
     {
         yield [0,  0, 100, 0];
         yield [100,  0, 100, 100];

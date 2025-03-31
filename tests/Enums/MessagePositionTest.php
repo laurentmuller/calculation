@@ -23,7 +23,7 @@ class MessagePositionTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    public static function getAngle(): \Iterator
+    public static function getAngle(): \Generator
     {
         yield [MessagePosition::TOP_LEFT, 315];
         yield [MessagePosition::TOP_CENTER, 0];
@@ -36,13 +36,13 @@ class MessagePositionTest extends TestCase
         yield [MessagePosition::BOTTOM_RIGHT, 135];
     }
 
-    public static function getDefault(): \Iterator
+    public static function getDefault(): \Generator
     {
         yield [MessagePosition::getDefault(), MessagePosition::BOTTOM_RIGHT];
         yield [PropertyServiceInterface::DEFAULT_MESSAGE_POSITION, MessagePosition::BOTTOM_RIGHT];
     }
 
-    public static function getIcon(): \Iterator
+    public static function getIcon(): \Generator
     {
         yield [MessagePosition::TOP_LEFT, 'fa-solid fa-arrow-up fa-rotate-by'];
         yield [MessagePosition::TOP_CENTER, 'fa-solid fa-arrow-up fa-rotate-by'];
@@ -55,7 +55,7 @@ class MessagePositionTest extends TestCase
         yield [MessagePosition::BOTTOM_RIGHT, 'fa-solid fa-arrow-up fa-rotate-by'];
     }
 
-    public static function getLabel(): \Iterator
+    public static function getLabel(): \Generator
     {
         yield [MessagePosition::TOP_LEFT, 'top-left'];
         yield [MessagePosition::TOP_CENTER, 'top-center'];
@@ -68,7 +68,7 @@ class MessagePositionTest extends TestCase
         yield [MessagePosition::BOTTOM_RIGHT, 'bottom-right'];
     }
 
-    public static function getTranslation(): \Iterator
+    public static function getTranslation(): \Generator
     {
         yield [MessagePosition::TOP_LEFT, 'message_position.top-left'];
         yield [MessagePosition::TOP_CENTER, 'message_position.top-center'];

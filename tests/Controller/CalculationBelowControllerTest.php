@@ -24,7 +24,7 @@ class CalculationBelowControllerTest extends ControllerTestCase
     use ProductTrait;
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/calculation/below', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/calculation/below', self::ROLE_ADMIN];

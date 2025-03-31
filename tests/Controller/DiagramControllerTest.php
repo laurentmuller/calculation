@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 class DiagramControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/diagram', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/diagram', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];

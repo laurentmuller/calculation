@@ -25,7 +25,10 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
  */
 class PasswordValidatorTest extends ConstraintValidatorTestCase
 {
-    public static function getInvalidValues(): \Iterator
+    /**
+     * @psalm-return \Generator<array-key, array{string, array<string, bool>, string, string}>
+     */
+    public static function getInvalidValues(): \Generator
     {
         yield ['abc', ['case_diff' => true], 'password.case_diff', Password::CASE_DIFF_ERROR];
         yield ['myemail@website.com', ['email' => true], 'password.email', Password::EMAIL_ERROR];
@@ -35,7 +38,10 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         yield ['123', ['special_char' => true], 'password.special_char', Password::SPECIAL_CHAR_ERROR];
     }
 
-    public static function getOptions(): \Iterator
+    /**
+     * @psalm-return \Generator<array-key, array{string}>
+     */
+    public static function getOptions(): \Generator
     {
         foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $option) {
             yield [$option];
@@ -43,7 +49,10 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         yield ['all'];
     }
 
-    public static function getValidValues(): \Iterator
+    /**
+     * @psalm-return \Generator<array-key, array{string, string}>
+     */
+    public static function getValidValues(): \Generator
     {
         yield ['ABC abc', 'case_diff'];
         yield ['test', 'email'];

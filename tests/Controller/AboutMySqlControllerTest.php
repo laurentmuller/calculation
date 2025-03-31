@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AboutMySqlControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/about/mysql/content', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/about/mysql/content', self::ROLE_ADMIN];

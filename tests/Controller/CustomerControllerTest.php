@@ -21,7 +21,7 @@ class CustomerControllerTest extends EntityControllerTestCase
     private ?Customer $customer = null;
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/customer', self::ROLE_USER];
         yield ['/customer', self::ROLE_ADMIN];

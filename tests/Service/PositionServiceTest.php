@@ -22,7 +22,7 @@ class PositionServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    public static function getDirections(): \Iterator
+    public static function getDirections(): \Generator
     {
         yield [0, 'N'];
         yield [22, 'N / N-E'];
@@ -44,7 +44,7 @@ class PositionServiceTest extends TestCase
         yield [361, 'N'];
     }
 
-    public static function getFormatDirections(): \Iterator
+    public static function getFormatDirections(): \Generator
     {
         yield [0, 'openweather.direction.N'];
         yield [90, 'openweather.direction.E'];
@@ -52,7 +52,7 @@ class PositionServiceTest extends TestCase
         yield [270, 'openweather.direction.W'];
     }
 
-    public static function getLatitudes(): \Iterator
+    public static function getLatitudes(): \Generator
     {
         yield [-91.0, '', true];
         yield [-90.0, '90° 0\' 0" openweather.direction.S'];
@@ -61,7 +61,7 @@ class PositionServiceTest extends TestCase
         yield [91.0, '', true];
     }
 
-    public static function getLongitudes(): \Iterator
+    public static function getLongitudes(): \Generator
     {
         yield [-181.0, '', true];
         yield [-180.0, '180° 0\' 0" openweather.direction.W'];
@@ -70,7 +70,7 @@ class PositionServiceTest extends TestCase
         yield [181.0, '', true];
     }
 
-    public static function getPositions(): \Iterator
+    public static function getPositions(): \Generator
     {
         yield [-90.0, -180.0, '90° 0\' 0" openweather.direction.S, 180° 0\' 0" openweather.direction.W'];
         yield [0.0, 0.0, '0° 0\' 0" openweather.direction.N, 0° 0\' 0" openweather.direction.E'];

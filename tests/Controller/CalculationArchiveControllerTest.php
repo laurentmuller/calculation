@@ -24,7 +24,7 @@ class CalculationArchiveControllerTest extends ControllerTestCase
     private ?CalculationState $notEditSate = null;
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/admin/archive', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/admin/archive', self::ROLE_ADMIN];

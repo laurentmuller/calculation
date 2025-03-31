@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 class SchemaControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/schema', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/schema', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];

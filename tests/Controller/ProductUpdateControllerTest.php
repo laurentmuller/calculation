@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ProductUpdateControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/admin/product', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/admin/product', self::ROLE_ADMIN];

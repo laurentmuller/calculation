@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Web;
 
+use App\Interfaces\RoleInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
@@ -21,7 +22,10 @@ use PHPUnit\Framework\Attributes\DataProvider;
 #[\PHPUnit\Framework\Attributes\CoversNothing]
 class UsersTest extends AuthenticateWebTestCase
 {
-    public static function getUserExist(): \Iterator
+    /**
+     * @psalm-return \Generator<array-key, array{string}>
+     */
+    public static function getUserExist(): \Generator
     {
         yield [self::ROLE_USER];
         yield [self::ROLE_ADMIN];
@@ -29,12 +33,18 @@ class UsersTest extends AuthenticateWebTestCase
         yield [self::ROLE_DISABLED];
     }
 
-    public static function getUserNotExist(): \Iterator
+    /**
+     * @psalm-return \Generator<array-key, array{string}>
+     */
+    public static function getUserNotExist(): \Generator
     {
         yield [self::ROLE_FAKE];
     }
 
-    public static function getUserRole(): \Iterator
+    /**
+     * @psalm-return \Generator<array-key, array{RoleInterface::ROLE_*}>
+     */
+    public static function getUserRole(): \Generator
     {
         yield [self::ROLE_USER];
         yield [self::ROLE_ADMIN];
@@ -48,9 +58,6 @@ class UsersTest extends AuthenticateWebTestCase
         self::assertNotNull($user);
     }
 
-    /**
-     * @psalm-param \App\Interfaces\RoleInterface::ROLE_* $username
-     */
     #[DataProvider('getUserNotExist')]
     public function testUserNotExist(string $username): void
     {
@@ -59,7 +66,7 @@ class UsersTest extends AuthenticateWebTestCase
     }
 
     /**
-     * @psalm-param \App\Interfaces\RoleInterface::ROLE_* $username
+     * @psalm-param RoleInterface::ROLE_* $username
      */
     #[DataProvider('getUserRole')]
     public function testUserRole(string $username): void

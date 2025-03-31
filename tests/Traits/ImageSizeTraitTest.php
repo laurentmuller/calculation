@@ -21,7 +21,7 @@ class ImageSizeTraitTest extends TestCase
 {
     use ImageSizeTrait;
 
-    public static function getSizes(): \Iterator
+    public static function getSizes(): \Generator
     {
         yield ['', [0, 0]];
         yield [__DIR__ . '/../files/images/example.png', [124, 147]];

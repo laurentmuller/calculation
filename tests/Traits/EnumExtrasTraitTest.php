@@ -20,25 +20,25 @@ use PHPUnit\Framework\TestCase;
 
 class EnumExtrasTraitTest extends TestCase
 {
-    public static function getExtraBool(): \Iterator
+    public static function getExtraBool(): \Generator
     {
         yield [HtmlTag::H1, 'font-bold', true];
         yield [HtmlTag::H1, 'fake-key', true, true];
     }
 
-    public static function getExtraFloat(): \Iterator
+    public static function getExtraFloat(): \Generator
     {
         yield [HtmlTag::H1, 'font-size', 2.5];
         yield [HtmlTag::H1, 'fake-key', 2.5, true];
     }
 
-    public static function getExtraInt(): \Iterator
+    public static function getExtraInt(): \Generator
     {
         yield [TableView::TABLE, 'page-size', 20];
         yield [TableView::TABLE, 'fake-key', 20, true];
     }
 
-    public static function getExtraString(): \Iterator
+    public static function getExtraString(): \Generator
     {
         yield [HtmlTag::KEYBOARD, 'font-name', 'courier'];
         yield [HtmlTag::KEYBOARD, 'fake-key', 'courier', true];

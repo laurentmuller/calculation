@@ -34,7 +34,7 @@ class AjaxCalculationControllerTest extends ControllerTestCase
     }
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield [self::UPDATE_ROUTE_NAME, self::ROLE_USER,  Response::HTTP_OK, Request::METHOD_POST, true];
     }

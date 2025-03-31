@@ -23,7 +23,7 @@ use Vich\UploaderBundle\Mapping\PropertyMapping;
 
 class UserNamerTest extends TestCase
 {
-    public static function getBaseNames(): \Iterator
+    public static function getBaseNames(): \Generator
     {
         yield ['USER_000001_192', 1, ImageSize::DEFAULT];
         yield ['USER_000001_192.png', 1, ImageSize::DEFAULT, 'png'];

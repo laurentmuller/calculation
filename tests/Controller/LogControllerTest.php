@@ -29,7 +29,7 @@ class LogControllerTest extends ControllerTestCase
     }
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/log', self::ROLE_DISABLED, Response::HTTP_FORBIDDEN];
         yield ['/log', self::ROLE_USER, Response::HTTP_FORBIDDEN];

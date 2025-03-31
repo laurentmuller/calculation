@@ -30,7 +30,7 @@ class FormatUtilsTest extends TestCase
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
     }
 
-    public static function getAmounts(): \Iterator
+    public static function getAmounts(): \Generator
     {
         yield [null, '0.00'];
         yield ['', '0.00'];
@@ -64,7 +64,7 @@ class FormatUtilsTest extends TestCase
         yield [0.116, '0.12'];
     }
 
-    public static function getDateFormatterPatterns(): \Iterator
+    public static function getDateFormatterPatterns(): \Generator
     {
         yield ['dd/mm/yy', 'dd/mm/yyyy'];
         yield ['dd-mm-yy', 'dd-mm-yyyy'];
@@ -74,7 +74,7 @@ class FormatUtilsTest extends TestCase
     /**
      * @throws \Exception
      */
-    public static function getDates(): \Iterator
+    public static function getDates(): \Generator
     {
         $date = self::createDate();
         yield [$date, '20.02.2022'];
@@ -132,7 +132,7 @@ class FormatUtilsTest extends TestCase
         yield [self::TIME_STAMP, '20.02.2022 12:59'];
     }
 
-    public static function getIds(): \Iterator
+    public static function getIds(): \Generator
     {
         yield [null, '000000'];
         yield ['', '000000'];
@@ -158,7 +158,7 @@ class FormatUtilsTest extends TestCase
         yield [-123456, '-123456'];
     }
 
-    public static function getIntegers(): \Iterator
+    public static function getIntegers(): \Generator
     {
         yield [null, '0'];
         yield ['', '0'];
@@ -186,7 +186,7 @@ class FormatUtilsTest extends TestCase
         yield [new LogFile(''), '0'];
     }
 
-    public static function getPercents(): \Iterator
+    public static function getPercents(): \Generator
     {
         yield [null, '0%'];
         yield [null, '0', false];
@@ -214,7 +214,7 @@ class FormatUtilsTest extends TestCase
     /**
      * @throws \Exception
      */
-    public static function getTimes(): \Iterator
+    public static function getTimes(): \Generator
     {
         $date = self::createDate();
         yield [$date, '12:59'];

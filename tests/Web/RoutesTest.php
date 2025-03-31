@@ -23,7 +23,10 @@ use Symfony\Component\HttpFoundation\Response;
 #[\PHPUnit\Framework\Attributes\CoversNothing]
 class RoutesTest extends AuthenticateWebTestCase
 {
-    public static function getRoutes(): \Iterator
+    /**
+     * @psalm-return \Generator<array-key, array{string, string, int}>
+     */
+    public static function getRoutes(): \Generator
     {
         // not exist
         yield ['/not_exist', self::ROLE_USER, Response::HTTP_NOT_FOUND];

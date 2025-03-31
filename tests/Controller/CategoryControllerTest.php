@@ -30,7 +30,7 @@ class CategoryControllerTest extends EntityControllerTestCase
     use TaskTrait;
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/category', self::ROLE_USER];
         yield ['/category', self::ROLE_ADMIN];

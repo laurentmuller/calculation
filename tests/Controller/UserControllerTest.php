@@ -31,7 +31,7 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 class UserControllerTest extends EntityControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/user', self::ROLE_USER, Response::HTTP_FORBIDDEN];
         yield ['/user', self::ROLE_ADMIN];

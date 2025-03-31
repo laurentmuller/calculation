@@ -23,7 +23,7 @@ class AjaxUserControllerTest extends AuthenticateWebTestCase
 {
     private ?TranslatorInterface $translator = null;
 
-    public static function getEmails(): \Iterator
+    public static function getEmails(): \Generator
     {
         yield [true, 'myemail_fake_zz@myemail.com'];
         yield [true, 'ROLE_SUPER_ADMIN@TEST.COM', 1];
@@ -33,7 +33,7 @@ class AjaxUserControllerTest extends AuthenticateWebTestCase
         yield ['email.already_used', 'ROLE_SUPER_ADMIN@TEST.COM'];
     }
 
-    public static function getNames(): \Iterator
+    public static function getNames(): \Generator
     {
         yield [true, 'myEmail_fake_zz'];
         yield [true, 'ROLE_SUPER_ADMIN', 1];
@@ -43,7 +43,7 @@ class AjaxUserControllerTest extends AuthenticateWebTestCase
         yield ['username.already_used', 'ROLE_SUPER_ADMIN'];
     }
 
-    public static function getUsers(): \Iterator
+    public static function getUsers(): \Generator
     {
         yield ['username.blank'];
         yield [true, 'ROLE_SUPER_ADMIN'];

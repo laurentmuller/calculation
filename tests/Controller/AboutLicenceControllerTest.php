@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AboutLicenceControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/about/licence'];
         yield ['/about/licence', self::ROLE_USER];

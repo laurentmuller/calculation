@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AboutControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/about', '', Response::HTTP_FOUND];
         // redirect to login page

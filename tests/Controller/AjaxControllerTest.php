@@ -23,7 +23,7 @@ class AjaxControllerTest extends ControllerTestCase
     use TaskItemTrait;
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         // HTTP_BAD_REQUEST
         yield ['/ajax/task', self::ROLE_USER, Response::HTTP_BAD_REQUEST, Request::METHOD_POST, true];

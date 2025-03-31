@@ -19,7 +19,10 @@ use PHPUnit\Framework\TestCase;
 
 class HtmlWordParserTest extends TestCase
 {
-    public static function getBorders(): \Iterator
+    /**
+     * @psalm-return \Generator<array-key, array{string, string}>
+     */
+    public static function getBorders(): \Generator
     {
         yield ['border', 'border:1px #808080 solid;'];
         yield ['border-top', 'border-top:1px #808080 solid;'];
@@ -35,7 +38,10 @@ class HtmlWordParserTest extends TestCase
         yield ['border-bottom-0', 'border-bottom:0 #000000 none;'];
     }
 
-    public static function getClassToStyles(): \Iterator
+    /**
+     * @psalm-return \Generator<array-key, array{string, string}>
+     */
+    public static function getClassToStyles(): \Generator
     {
         yield ['text-start', 'text-align:left;'];
         yield ['text-center', 'text-align:center;'];
@@ -49,7 +55,10 @@ class HtmlWordParserTest extends TestCase
         yield ['page-break', 'page-break-after:always;'];
     }
 
-    public static function getMargins(): \Iterator
+    /**
+     * @psalm-return \Generator<array-key, array{string, string}>
+     */
+    public static function getMargins(): \Generator
     {
         yield ['m-0', '0;'];
         yield ['M-0', '0;'];

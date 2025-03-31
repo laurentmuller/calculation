@@ -34,7 +34,7 @@ class EntityNameTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    public static function getLabel(): \Iterator
+    public static function getLabel(): \Generator
     {
         yield ['calculation.name', EntityName::CALCULATION];
         yield ['calculationstate.name', EntityName::CALCULATION_STATE];
@@ -48,7 +48,7 @@ class EntityNameTest extends TestCase
         yield ['user.name', EntityName::USER];
     }
 
-    public static function getOffset(): \Iterator
+    public static function getOffset(): \Generator
     {
         yield [EntityName::CALCULATION, 0];
         yield [EntityName::CALCULATION_STATE, 1];
@@ -62,7 +62,7 @@ class EntityNameTest extends TestCase
         yield [EntityName::USER, 9];
     }
 
-    public static function getRightsField(): \Iterator
+    public static function getRightsField(): \Generator
     {
         yield [EntityName::CALCULATION, 'CalculationRights'];
         yield [EntityName::CALCULATION_STATE, 'CalculationStateRights'];
@@ -76,7 +76,7 @@ class EntityNameTest extends TestCase
         yield [EntityName::USER, 'UserRights'];
     }
 
-    public static function getTryFromField(): \Iterator
+    public static function getTryFromField(): \Generator
     {
         yield ['', null];
         yield ['Fake', null];
@@ -93,7 +93,7 @@ class EntityNameTest extends TestCase
         yield ['UserRights', EntityName::USER];
     }
 
-    public static function getTryFromMixed(): \Iterator
+    public static function getTryFromMixed(): \Generator
     {
         yield [null, null];
         yield [1456, null];
@@ -134,7 +134,7 @@ class EntityNameTest extends TestCase
         yield [EntityName::CALCULATION, EntityName::CALCULATION];
     }
 
-    public static function getValue(): \Iterator
+    public static function getValue(): \Generator
     {
         yield [EntityName::CALCULATION, 'EntityCalculation'];
         yield [EntityName::CALCULATION_STATE, 'EntityCalculationState'];

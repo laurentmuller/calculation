@@ -26,7 +26,7 @@ class CaptchaControllerTest extends ControllerTestCase
     use TranslatorMockTrait;
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/captcha/image', AuthenticatedVoter::PUBLIC_ACCESS, Response::HTTP_OK,  Request::METHOD_GET, true];
         yield ['/captcha/image', self::ROLE_USER];

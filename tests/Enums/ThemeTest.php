@@ -22,49 +22,49 @@ class ThemeTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    public static function getHelps(): \Iterator
+    public static function getHelps(): \Generator
     {
         yield [Theme::AUTO, 'theme.auto.help'];
         yield [Theme::DARK, 'theme.dark.help'];
         yield [Theme::LIGHT, 'theme.light.help'];
     }
 
-    public static function getIcons(): \Iterator
+    public static function getIcons(): \Generator
     {
         yield [Theme::AUTO, 'fa-solid fa-circle-half-stroke'];
         yield [Theme::DARK, 'fa-regular fa-moon'];
         yield [Theme::LIGHT, 'fa-regular fa-sun'];
     }
 
-    public static function getLabels(): \Iterator
+    public static function getLabels(): \Generator
     {
         yield [Theme::AUTO, 'theme.auto.name'];
         yield [Theme::DARK, 'theme.dark.name'];
         yield [Theme::LIGHT, 'theme.light.name'];
     }
 
-    public static function getSuccess(): \Iterator
+    public static function getSuccess(): \Generator
     {
         yield [Theme::AUTO, 'theme.auto.success'];
         yield [Theme::DARK, 'theme.dark.success'];
         yield [Theme::LIGHT, 'theme.light.success'];
     }
 
-    public static function getThumbnails(): \Iterator
+    public static function getThumbnails(): \Generator
     {
         yield [Theme::AUTO, 'images/themes/theme_auto.png'];
         yield [Theme::DARK, 'images/themes/theme_dark.png'];
         yield [Theme::LIGHT, 'images/themes/theme_light.png'];
     }
 
-    public static function getTranslates(): \Iterator
+    public static function getTranslates(): \Generator
     {
         yield [Theme::AUTO, 'theme.auto.name'];
         yield [Theme::DARK, 'theme.dark.name'];
         yield [Theme::LIGHT, 'theme.light.name'];
     }
 
-    public static function getValues(): \Iterator
+    public static function getValues(): \Generator
     {
         yield [Theme::AUTO, 'auto'];
         yield [Theme::DARK, 'dark'];

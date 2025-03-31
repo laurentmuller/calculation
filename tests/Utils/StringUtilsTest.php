@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 class StringUtilsTest extends TestCase
 {
-    public static function getAscii(): \Iterator
+    public static function getAscii(): \Generator
     {
         yield ['home', 'home'];
         yield ['नमस्ते', 'namaste'];
@@ -28,7 +28,7 @@ class StringUtilsTest extends TestCase
         yield ['спасибо', 'spasibo'];
     }
 
-    public static function getCapitalize(): \Iterator
+    public static function getCapitalize(): \Generator
     {
         yield ['home', 'Home'];
         yield ['hOmE', 'Home'];
@@ -37,14 +37,14 @@ class StringUtilsTest extends TestCase
         yield ['my HOME', 'My home'];
     }
 
-    public static function getEqualIgnoreCase(): \Iterator
+    public static function getEqualIgnoreCase(): \Generator
     {
         yield ['home', 'Home'];
         yield ['home', 'HOME'];
         yield ['a', 'b', false];
     }
 
-    public static function getExportVar(): \Iterator
+    public static function getExportVar(): \Generator
     {
         yield [null, 'NULL'];
         yield [true, 'true'];
@@ -57,14 +57,14 @@ class StringUtilsTest extends TestCase
         yield [['key' => 'value'], self::getVarArray()];
     }
 
-    public static function getIsString(): \Iterator
+    public static function getIsString(): \Generator
     {
         yield [null, false];
         yield ['', false];
         yield ['my home', true];
     }
 
-    public static function getPregMatch(): \Iterator
+    public static function getPregMatch(): \Generator
     {
         yield ['/\d+/', '1234', true];
         yield ['/\d+/', 'FAKE', false];
@@ -73,7 +73,7 @@ class StringUtilsTest extends TestCase
         yield ['/(foo)(bar)(baz)/', 'foobaz', false];
     }
 
-    public static function getPregMatchAll(): \Iterator
+    public static function getPregMatchAll(): \Generator
     {
         yield ['/\d+/', '1234', true];
         yield ['/\d+/', 'FAKE', false];
@@ -83,19 +83,19 @@ class StringUtilsTest extends TestCase
         yield ['/(foo)(bar)(baz)/', 'foobaz', false];
     }
 
-    public static function getPregReplace(): \Iterator
+    public static function getPregReplace(): \Generator
     {
         yield ['/\d+/', '', '1234', ''];
         yield ['/\d+/', '', 'FAKE', 'FAKE'];
     }
 
-    public static function getPregReplaceAll(): \Iterator
+    public static function getPregReplaceAll(): \Generator
     {
         yield [['/\d+/' => ''], '1234', ''];
         yield [['/\d+/' => ''], 'FAKE', 'FAKE'];
     }
 
-    public static function getShortName(): \Iterator
+    public static function getShortName(): \Generator
     {
         yield [null, null, true];
         yield [self::class, 'StringUtilsTest'];
@@ -104,7 +104,7 @@ class StringUtilsTest extends TestCase
         yield ['invalid argument', null, true];
     }
 
-    public static function getStartWith(): \Iterator
+    public static function getStartWith(): \Generator
     {
         yield ['fake', '', false, false];
         yield ['fake', 'fa', false, true];
@@ -112,7 +112,7 @@ class StringUtilsTest extends TestCase
         yield ['fake', 'FA', true, true];
     }
 
-    public static function getTrim(): \Iterator
+    public static function getTrim(): \Generator
     {
         yield ['', null];
         yield [' ', null];

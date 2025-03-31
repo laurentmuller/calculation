@@ -22,7 +22,7 @@ class FlashTypeTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    public static function getIcons(): \Iterator
+    public static function getIcons(): \Generator
     {
         yield [FlashType::DANGER, 'fas fa-lg fa-exclamation-triangle'];
         yield [FlashType::INFO, 'fas fa-lg fa-info-circle'];
@@ -30,7 +30,7 @@ class FlashTypeTest extends TestCase
         yield [FlashType::WARNING, 'fas fa-lg fa-exclamation-circle'];
     }
 
-    public static function getLabels(): \Iterator
+    public static function getLabels(): \Generator
     {
         yield [FlashType::DANGER, 'flash_bag.danger'];
         yield [FlashType::INFO, 'flash_bag.info'];
@@ -38,7 +38,7 @@ class FlashTypeTest extends TestCase
         yield [FlashType::WARNING, 'flash_bag.warning'];
     }
 
-    public static function getStyles(): \Iterator
+    public static function getStyles(): \Generator
     {
         yield [FlashType::DANGER, 'var(--bs-danger)'];
         yield [FlashType::INFO, 'var(--bs-info)'];
@@ -46,7 +46,7 @@ class FlashTypeTest extends TestCase
         yield [FlashType::WARNING, 'var(--bs-warning)'];
     }
 
-    public static function getValues(): \Iterator
+    public static function getValues(): \Generator
     {
         yield [FlashType::DANGER, 'danger'];
         yield [FlashType::INFO, 'info'];

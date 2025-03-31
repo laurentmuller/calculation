@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 class ImageSizeTest extends TestCase
 {
-    public static function getValues(): \Iterator
+    public static function getValues(): \Generator
     {
         yield [ImageSize::DEFAULT, 192];
         yield [ImageSize::MEDIUM, 96];

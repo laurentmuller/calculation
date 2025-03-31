@@ -29,7 +29,7 @@ class DateUtilsTest extends TestCase
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
     }
 
-    public static function getCompletYears(): \Iterator
+    public static function getCompletYears(): \Generator
     {
         yield [29, 2029];
         yield [30, 2030];
@@ -58,7 +58,7 @@ class DateUtilsTest extends TestCase
         }
     }
 
-    public static function getFormatFormDate(): \Iterator
+    public static function getFormatFormDate(): \Generator
     {
         yield [null, null];
         yield [new \DateTime('2022-1-1'), '2022-01-01'];
@@ -69,7 +69,7 @@ class DateUtilsTest extends TestCase
         yield [new \DateTime('22-2-1'), '2022-02-01'];
     }
 
-    public static function getModifies(): \Iterator
+    public static function getModifies(): \Generator
     {
         $date = new \DateTime('2024-01-10');
 
@@ -85,7 +85,7 @@ class DateUtilsTest extends TestCase
         yield [$date, 'July 1st, 2023', '2023-07-01'];
     }
 
-    public static function getMonthNames(): \Iterator
+    public static function getMonthNames(): \Generator
     {
         yield ['Janvier', 1];
         yield ['Février', 2];
@@ -128,7 +128,7 @@ class DateUtilsTest extends TestCase
         yield [$date, $expected];
     }
 
-    public static function getShortMonthNames(): \Iterator
+    public static function getShortMonthNames(): \Generator
     {
         yield ['Janv.', 1];
         yield ['Févr.', 2];
@@ -144,7 +144,7 @@ class DateUtilsTest extends TestCase
         yield ['Déc.', 12];
     }
 
-    public static function getShortWeekdayNames(): \Iterator
+    public static function getShortWeekdayNames(): \Generator
     {
         // default (sunday)
         yield ['Dim.', 1];
@@ -164,7 +164,7 @@ class DateUtilsTest extends TestCase
         yield ['Dim.', 7, 'monday'];
     }
 
-    public static function getWeekdayNames(): \Iterator
+    public static function getWeekdayNames(): \Generator
     {
         // default (sunday)
         yield ['Dimanche', 1];

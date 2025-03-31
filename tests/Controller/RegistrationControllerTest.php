@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 class RegistrationControllerTest extends ControllerTestCase
 {
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/register', self::ROLE_USER];
         yield ['/register', self::ROLE_ADMIN];

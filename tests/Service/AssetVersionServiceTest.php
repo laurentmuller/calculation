@@ -39,7 +39,7 @@ class AssetVersionServiceTest extends TestCase
         $this->service = new AssetVersionService($projectDir, new EnvironmentService('test'), new ArrayAdapter());
     }
 
-    public static function getPaths(): \Iterator
+    public static function getPaths(): \Generator
     {
         yield [''];
         yield ['/'];

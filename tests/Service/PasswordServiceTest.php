@@ -35,7 +35,7 @@ class PasswordServiceTest extends KernelServiceTestCase
         $this->service = $this->getService(PasswordService::class);
     }
 
-    public static function getValidations(): \Iterator
+    public static function getValidations(): \Generator
     {
         yield ['', StrengthLevel::NONE, false];
         yield ['49898*962Zbhasajk', StrengthLevel::NONE, false];

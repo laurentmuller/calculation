@@ -22,25 +22,25 @@ class OpenWeatherUnitsTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    public static function getDegrees(): \Iterator
+    public static function getDegrees(): \Generator
     {
         yield ['°F', OpenWeatherUnits::IMPERIAL];
         yield ['°C', OpenWeatherUnits::METRIC];
     }
 
-    public static function getLabels(): \Iterator
+    public static function getLabels(): \Generator
     {
         yield ['openweather.current.imperial.text', OpenWeatherUnits::IMPERIAL];
         yield ['openweather.current.metric.text', OpenWeatherUnits::METRIC];
     }
 
-    public static function getSpeeds(): \Iterator
+    public static function getSpeeds(): \Generator
     {
         yield ['mph', OpenWeatherUnits::IMPERIAL];
         yield ['m/s', OpenWeatherUnits::METRIC];
     }
 
-    public static function getValues(): \Iterator
+    public static function getValues(): \Generator
     {
         yield ['imperial', OpenWeatherUnits::IMPERIAL];
         yield ['metric', OpenWeatherUnits::METRIC];

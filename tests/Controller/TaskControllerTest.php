@@ -24,7 +24,7 @@ class TaskControllerTest extends EntityControllerTestCase
     use TaskItemTrait;
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/task', self::ROLE_USER];
         yield ['/task', self::ROLE_ADMIN];

@@ -34,7 +34,7 @@ class AjaxSearchControllerTest extends ControllerTestCase
     }
 
     #[\Override]
-    public static function getRoutes(): \Iterator
+    public static function getRoutes(): \Generator
     {
         yield ['/ajax/search/address', self::ROLE_USER];
         yield ['/ajax/search/address?zip=1000', self::ROLE_USER];

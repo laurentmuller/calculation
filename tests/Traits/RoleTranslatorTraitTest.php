@@ -34,7 +34,7 @@ class RoleTranslatorTraitTest extends TestCase
         $this->translator = $this->createMockTranslator();
     }
 
-    public static function getRoleIcons(): \Iterator
+    public static function getRoleIcons(): \Generator
     {
         yield [RoleInterface::ROLE_USER, 'fa-solid fa-user'];
         yield [RoleInterface::ROLE_ADMIN, 'fa-solid fa-user-shield'];
@@ -44,7 +44,7 @@ class RoleTranslatorTraitTest extends TestCase
         yield [new Role(RoleInterface::ROLE_SUPER_ADMIN), 'fa-solid fa-user-gear'];
     }
 
-    public static function getTranslateRoles(): \Iterator
+    public static function getTranslateRoles(): \Generator
     {
         yield [RoleInterface::ROLE_USER, 'user.roles.user'];
         yield [RoleInterface::ROLE_ADMIN, 'user.roles.admin'];

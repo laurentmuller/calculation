@@ -26,6 +26,13 @@ class EntityTransformerTest extends TestCase
 {
     use IdTrait;
 
+    /**
+     * @psalm-return \Generator<array-key, array<string|int|null>>
+     *
+     * @psalm-suppress InvalidReturnType
+     *
+     * @phpstan-return \Generator<array-key, array<bool|int|string>>
+     */
     public static function getReverseInvalid(): \Generator
     {
         yield [true];
@@ -33,12 +40,22 @@ class EntityTransformerTest extends TestCase
         yield ['fake'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string|int|null, mixed}>
+     */
     public static function getReverseValid(): \Generator
     {
         yield [null, null];
         yield ['', null];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{EntityInterface|null}>
+     *
+     * @psalm-suppress InvalidReturnType
+     *
+     * @phpstan-return \Generator<array-key, array<string|bool>>
+     */
     public static function getTransformInvalid(): \Generator
     {
         yield [''];
@@ -46,6 +63,9 @@ class EntityTransformerTest extends TestCase
         yield ['fake'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{EntityInterface|null, mixed}>
+     */
     public static function getTransformValid(): \Generator
     {
         yield [null, null];

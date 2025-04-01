@@ -19,8 +19,14 @@ use App\Utils\FileUtils;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @psalm-import-type SaveOptionsType from ImageExtension
+ */
 class ImageExtensionTest extends TestCase
 {
+    /**
+     * @psalm-return \Generator<array-key, array{ImageExtension, string}>
+     */
     public static function getCreateImages(): \Generator
     {
         /** @psalm-var non-empty-string $dir */
@@ -35,6 +41,9 @@ class ImageExtensionTest extends TestCase
         yield [ImageExtension::XPM, $dir . '/example.xpm'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{ImageExtension, string}>
+     */
     public static function getFilters(): \Generator
     {
         yield [ImageExtension::BMP, '*.bmp'];
@@ -48,6 +57,9 @@ class ImageExtensionTest extends TestCase
         yield [ImageExtension::XPM, '*.xpm'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{ImageExtension, int}>
+     */
     public static function getImageTypes(): \Generator
     {
         yield [ImageExtension::BMP,  \IMAGETYPE_BMP];
@@ -61,14 +73,29 @@ class ImageExtensionTest extends TestCase
         yield [ImageExtension::XPM,  \IMAGETYPE_UNKNOWN];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{ImageExtension, SaveOptionsType}>
+     *
+     * @phpstan-return \Generator<array-key, array<ImageExtension, array>>
+     */
     public static function getInvalidOptions(): \Generator
     {
+        /**
+         * @psalm-var SaveOptionsType $options
+         *
+         * @phpstan-ignore varTag.nativeType
+         */
+        $options = ['fake' => 100];
         $values = ImageExtension::cases();
         foreach ($values as $value) {
-            yield [$value, ['fake' => 100]];
+            /* @phpstan-ignore generator.valueType */
+            yield [$value, $options];
         }
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: int, 1?: ImageExtension}>
+     */
     public static function getTryFromTypes(): \Generator
     {
         yield [\IMAGETYPE_BMP, ImageExtension::BMP];
@@ -82,6 +109,9 @@ class ImageExtensionTest extends TestCase
         yield [-1];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{ImageExtension, int}>
+     */
     public static function getTypes(): \Generator
     {
         yield [ImageExtension::BMP, \IMAGETYPE_BMP];
@@ -95,6 +125,9 @@ class ImageExtensionTest extends TestCase
         yield [ImageExtension::XPM, \IMAGETYPE_UNKNOWN];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: ImageExtension, 1: SaveOptionsType, 2?: false}>
+     */
     public static function getValidOptions(): \Generator
     {
         yield [ImageExtension::BMP, ['compressed' => true]];
@@ -116,6 +149,9 @@ class ImageExtensionTest extends TestCase
         yield [ImageExtension::XPM, [], false];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{ImageExtension, string}>
+     */
     public static function getValues(): \Generator
     {
         yield [ImageExtension::BMP, 'bmp'];
@@ -168,11 +204,7 @@ class ImageExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-param array{
-     *      compressed?: bool,
-     *      quality?: int,
-     *      filters?: int,
-     *      foreground_color?: int|null} $options
+     * @psalm-param SaveOptionsType $options
      */
     #[DataProvider('getInvalidOptions')]
     public function testInvalidOptions(ImageExtension $extension, array $options): void
@@ -219,11 +251,7 @@ class ImageExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-param array{
-     *       compressed?: bool,
-     *       quality?: int,
-     *       filters?: int,
-     *       foreground_color?: int|null} $options
+     * @psalm-param SaveOptionsType $options
      */
     #[DataProvider('getValidOptions')]
     public function testValidOptions(ImageExtension $extension, array $options, bool $expected = true): void

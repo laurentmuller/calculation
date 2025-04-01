@@ -23,6 +23,9 @@ use PHPUnit\Framework\TestCase;
 
 class HtmlBootstrapColorTest extends TestCase
 {
+    /**
+     * @psalm-return \Generator<array-key, array{HtmlBootstrapColor, string}>
+     */
     public static function getColorValues(): \Generator
     {
         yield [HtmlBootstrapColor::DANGER, '#DC3545'];
@@ -35,6 +38,9 @@ class HtmlBootstrapColorTest extends TestCase
         yield [HtmlBootstrapColor::WARNING, '#FFC107'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, ?HtmlBootstrapColor}>
+     */
     public static function getParseDrawColors(): \Generator
     {
         yield ['border-primary', HtmlBootstrapColor::PRIMARY];
@@ -50,6 +56,9 @@ class HtmlBootstrapColorTest extends TestCase
         yield ['empty-class', null];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, ?HtmlBootstrapColor}>
+     */
     public static function getParseFillColors(): \Generator
     {
         yield ['bg-primary', HtmlBootstrapColor::PRIMARY];
@@ -74,6 +83,9 @@ class HtmlBootstrapColorTest extends TestCase
         yield ['empty-class', null];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, ?HtmlBootstrapColor}>
+     */
     public static function getParseTextColors(): \Generator
     {
         yield ['text-primary', HtmlBootstrapColor::PRIMARY];
@@ -89,6 +101,9 @@ class HtmlBootstrapColorTest extends TestCase
         yield ['empty-class', null];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{HtmlBootstrapColor, string}>
+     */
     public static function getPhpOfficeColors(): \Generator
     {
         yield [HtmlBootstrapColor::DANGER, 'DC3545'];

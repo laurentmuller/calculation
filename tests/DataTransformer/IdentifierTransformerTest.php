@@ -26,18 +26,35 @@ class IdentifierTransformerTest extends TestCase
 {
     use IdTrait;
 
+    /**
+     * @psalm-return \Generator<array-key, array<EntityInterface|null>>
+     *
+     * @psalm-suppress InvalidReturnType
+     *
+     * @phpstan-return \Generator<array-key, array<string|bool>>
+     */
     public static function getReverseInvalid(): \Generator
     {
-        yield ['', null, true];
-        yield [true, null, true];
-        yield ['fake', null, true];
+        yield [''];
+        yield [true];
+        yield ['fake'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{?EntityInterface, mixed}>
+     */
     public static function getReverseValid(): \Generator
     {
         yield [null, null];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{int|string|null}>
+     *
+     * @psalm-suppress InvalidReturnType
+     *
+     * @phpstan-return \Generator<array-key, array<bool|int|string>>
+     */
     public static function getTransformInvalid(): \Generator
     {
         yield [true];
@@ -45,6 +62,9 @@ class IdentifierTransformerTest extends TestCase
         yield ['fake'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{int|string|null, mixed}>
+     */
     public static function getTransformValid(): \Generator
     {
         yield [null, null];
@@ -53,14 +73,12 @@ class IdentifierTransformerTest extends TestCase
 
     /**
      * @psalm-param EntityInterface|null $value
-     *
-     * @throws \ReflectionException
      */
     #[DataProvider('getReverseInvalid')]
     public function testReverseInvalid(mixed $value): void
     {
         $this->expectException(TransformationFailedException::class);
-        $transformer = $this->createTransformer(null);
+        $transformer = $this->createTransformer();
         $transformer->reverseTransform($value);
     }
 
@@ -107,7 +125,7 @@ class IdentifierTransformerTest extends TestCase
     public function testTransformInvalid(mixed $value): void
     {
         $this->expectException(TransformationFailedException::class);
-        $transformer = $this->createTransformer(null);
+        $transformer = $this->createTransformer();
         $transformer->transform($value);
     }
 

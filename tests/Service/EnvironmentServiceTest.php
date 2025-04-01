@@ -20,6 +20,9 @@ use PHPUnit\Framework\TestCase;
 
 class EnvironmentServiceTest extends TestCase
 {
+    /**
+     * @psalm-return \Generator<array-key, array{string, Environment}>
+     */
     public static function getEnvironment(): \Generator
     {
         yield ['dev', Environment::DEVELOPMENT];
@@ -27,6 +30,9 @@ class EnvironmentServiceTest extends TestCase
         yield ['test', Environment::TEST];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, bool}>
+     */
     public static function getIsDevelopment(): \Generator
     {
         yield ['dev', true];
@@ -34,6 +40,9 @@ class EnvironmentServiceTest extends TestCase
         yield ['test', false];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, bool}>
+     */
     public static function getIsProduction(): \Generator
     {
         yield ['dev', false];
@@ -41,6 +50,9 @@ class EnvironmentServiceTest extends TestCase
         yield ['test', false];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, bool}>
+     */
     public static function getIsTest(): \Generator
     {
         yield ['dev', false];

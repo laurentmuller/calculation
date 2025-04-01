@@ -23,6 +23,9 @@ class ArrayTraitTest extends TestCase
 
     private const KEY = 'key';
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: array, 1: array, 2?: callable}>
+     */
     public static function getColumnFilterValues(): \Generator
     {
         // empty
@@ -61,6 +64,9 @@ class ArrayTraitTest extends TestCase
         yield [$values, $expected, $callback];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: array, 1: float, 2?: float}>
+     */
     public static function getColumnMaxValues(): \Generator
     {
         // empty
@@ -88,6 +94,9 @@ class ArrayTraitTest extends TestCase
         yield [$values, 2.0];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: array, 1: float, 2?: float}>
+     */
     public static function getColumnSumValues(): \Generator
     {
         // empty
@@ -115,6 +124,9 @@ class ArrayTraitTest extends TestCase
         yield [$values, 3.0];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{array, array}>
+     */
     public static function getColumnValues(): \Generator
     {
         $values = [
@@ -133,6 +145,9 @@ class ArrayTraitTest extends TestCase
         yield [$values, $expected];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{array, array}>
+     */
     public static function getUniqueFilteredValues(): \Generator
     {
         $expected = [];
@@ -147,6 +162,9 @@ class ArrayTraitTest extends TestCase
         yield [$values, $expected];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{array, array, array}>
+     */
     public static function getUniqueMergedValues(): \Generator
     {
         yield [[], [], []];

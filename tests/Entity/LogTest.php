@@ -27,6 +27,9 @@ class LogTest extends TestCase
 {
     use DateAssertTrait;
 
+    /**
+     * @psalm-return \Generator<array-key, array{non-empty-string, string}>
+     */
     public static function getChannelIcons(): \Generator
     {
         yield ['application', 'fa-fw fa-solid fa-laptop-code'];
@@ -38,30 +41,36 @@ class LogTest extends TestCase
         yield ['request', 'fa-fw fa-solid fa-upload'];
         yield ['security', 'fa-fw fa-solid fa-key'];
         yield ['deprecation', 'fa-fw fa-solid fa-bug'];
-        yield ['', 'fa-fw fa-solid fa-file'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{PsrLevel::*, string}>
+     */
     public static function getLevelColors(): \Generator
     {
+        yield [PsrLevel::EMERGENCY, 'text-danger'];
         yield [PsrLevel::ALERT, 'text-danger'];
         yield [PsrLevel::CRITICAL, 'text-danger'];
-        yield [PsrLevel::EMERGENCY, 'text-danger'];
         yield [PsrLevel::ERROR, 'text-danger'];
         yield [PsrLevel::WARNING, 'text-warning'];
+        yield [PsrLevel::NOTICE, 'text-info'];
+        yield [PsrLevel::INFO, 'text-info'];
         yield [PsrLevel::DEBUG, 'text-secondary'];
-        yield ['fake', 'text-info'];
-        yield ['', 'text-info'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{PsrLevel::*, string}>
+     */
     public static function getLevelIcons(): \Generator
     {
+        yield [PsrLevel::EMERGENCY, 'fa-fw fa-solid fa-circle-exclamation'];
         yield [PsrLevel::ALERT, 'fa-fw fa-solid fa-circle-exclamation'];
         yield [PsrLevel::CRITICAL, 'fa-fw fa-solid fa-circle-exclamation'];
-        yield [PsrLevel::EMERGENCY, 'fa-fw fa-solid fa-circle-exclamation'];
         yield [PsrLevel::ERROR, 'fa-fw fa-solid fa-circle-exclamation'];
         yield [PsrLevel::WARNING, 'fa-fw fa-solid fa-triangle-exclamation'];
-        yield ['fake', 'fa-fw fa-solid fa-circle-info'];
-        yield ['', 'fa-fw fa-solid fa-circle-info'];
+        yield [PsrLevel::NOTICE, 'fa-fw fa-solid fa-circle-info'];
+        yield [PsrLevel::INFO, 'fa-fw fa-solid fa-circle-info'];
+        yield [PsrLevel::DEBUG, 'fa-fw fa-solid fa-circle-info'];
     }
 
     public function testChannel(): void

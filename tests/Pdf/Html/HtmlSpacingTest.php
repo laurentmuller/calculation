@@ -19,6 +19,9 @@ use PHPUnit\Framework\TestCase;
 
 class HtmlSpacingTest extends TestCase
 {
+    /**
+     * @psalm-return \Generator<array-key, array{string}>
+     */
     public static function getInvalidClasses(): \Generator
     {
         yield ['fake'];
@@ -32,6 +35,9 @@ class HtmlSpacingTest extends TestCase
         yield ['my-6'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, bool}>
+     */
     public static function getIsAll(): \Generator
     {
         yield ['m-0', true];
@@ -43,6 +49,9 @@ class HtmlSpacingTest extends TestCase
         yield ['my-0', false];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string}>
+     */
     public static function getIsNone(): \Generator
     {
         yield ['m-0'];
@@ -54,6 +63,9 @@ class HtmlSpacingTest extends TestCase
         yield ['my-0'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, int, bool, bool, bool, bool}>
+     */
     public static function getValidClasses(): \Generator
     {
         yield ['m-0', 0, true, true, true, true];

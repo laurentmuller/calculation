@@ -30,6 +30,9 @@ class RightsTraitTest extends TestCase
         $this->rights = null;
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string}>
+     */
     public static function getRightsFields(): \Generator
     {
         $values = EntityName::cases();

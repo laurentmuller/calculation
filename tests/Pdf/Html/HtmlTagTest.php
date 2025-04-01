@@ -22,6 +22,9 @@ use PHPUnit\Framework\TestCase;
 
 class HtmlTagTest extends TestCase
 {
+    /**
+     * @psalm-return \Generator<array-key, array{HtmlTag, string, bool}>
+     */
     public static function getMatches(): \Generator
     {
         yield [HtmlTag::BODY, 'body', true];
@@ -29,6 +32,9 @@ class HtmlTagTest extends TestCase
         yield [HtmlTag::BODY, 'fake', false];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{HtmlTag, HtmlStyle|null}>
+     */
     public static function getStyles(): \Generator
     {
         yield [HtmlTag::BODY, null];

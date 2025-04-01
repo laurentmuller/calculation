@@ -23,6 +23,9 @@ class EntityPermissionTest extends TestCase
 {
     use TranslatorMockTrait;
 
+    /**
+     * @psalm-return \Generator<array-key, array{EntityPermission, string}>
+     */
     public static function getLabel(): \Generator
     {
         yield [EntityPermission::ADD, 'rights.add'];
@@ -33,6 +36,9 @@ class EntityPermissionTest extends TestCase
         yield [EntityPermission::SHOW, 'rights.show'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{?EntityPermission, string}>
+     */
     public static function getTryFromName(): \Generator
     {
         yield [EntityPermission::ADD, 'add'];
@@ -48,6 +54,9 @@ class EntityPermissionTest extends TestCase
         yield [null, 'FAKE'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{EntityPermission, int}>
+     */
     public static function getValue(): \Generator
     {
         yield [EntityPermission::ADD, 1];

@@ -44,6 +44,9 @@ class UserExceptionServiceTest extends TestCase
         $this->request->setSession($session);
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: \Throwable, 1: string, 2?: 1}>
+     */
     public static function getExceptions(): \Generator
     {
         // register user

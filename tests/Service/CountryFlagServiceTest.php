@@ -28,6 +28,9 @@ class CountryFlagServiceTest extends TestCase
         $this->service = new CountryFlagService();
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, string}>
+     */
     public static function getDefaultCodes(): \Generator
     {
         yield ['en-US', 'US'];
@@ -37,11 +40,17 @@ class CountryFlagServiceTest extends TestCase
         yield ['zh_Hans_MO', 'MO'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, string, bool, bool}>
+     */
     public static function getFlagsInvalid(): \Generator
     {
         yield ['ZZ', '', true, true];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: string, 1: string, 2?: bool}>
+     */
     public static function getFlagsValid(): \Generator
     {
         yield ['CH', '🇨🇭'];

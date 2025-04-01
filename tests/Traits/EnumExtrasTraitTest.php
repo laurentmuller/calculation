@@ -20,24 +20,36 @@ use PHPUnit\Framework\TestCase;
 
 class EnumExtrasTraitTest extends TestCase
 {
+    /**
+     * @psalm-return \Generator<array-key, array{0: HtmlTag, 1: string, 2: bool, 3?: true}>
+     */
     public static function getExtraBool(): \Generator
     {
         yield [HtmlTag::H1, 'font-bold', true];
         yield [HtmlTag::H1, 'fake-key', true, true];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: HtmlTag, 1: string, 2: float, 3?: true}>
+     */
     public static function getExtraFloat(): \Generator
     {
         yield [HtmlTag::H1, 'font-size', 2.5];
         yield [HtmlTag::H1, 'fake-key', 2.5, true];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: TableView, 1: string, 2: int, 3?: true}>
+     */
     public static function getExtraInt(): \Generator
     {
         yield [TableView::TABLE, 'page-size', 20];
         yield [TableView::TABLE, 'fake-key', 20, true];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: HtmlTag, 1: string, 2: string, 3?: true}>
+     */
     public static function getExtraString(): \Generator
     {
         yield [HtmlTag::KEYBOARD, 'font-name', 'courier'];

@@ -22,6 +22,9 @@ class CacheKeyTraitTest extends TestCase
 {
     use CacheKeyTrait;
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, string}>
+     */
     public static function getCleanKeys(): \Generator
     {
         yield ['', ''];

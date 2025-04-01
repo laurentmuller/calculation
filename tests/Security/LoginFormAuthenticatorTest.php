@@ -36,6 +36,9 @@ use Symfony\Component\Security\Http\HttpUtils;
 
 class LoginFormAuthenticatorTest extends TestCase
 {
+    /**
+     * @psalm-return \Generator<array-key, array{Request, bool}>
+     */
     public static function getSupports(): \Generator
     {
         $request = self::createRequest(method: Request::METHOD_GET);

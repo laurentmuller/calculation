@@ -23,6 +23,9 @@ class EnvironmentTest extends TestCase
 {
     use TranslatorMockTrait;
 
+    /**
+     * @psalm-return \Generator<array-key, array{Environment, bool}>
+     */
     public static function getIsDevelopment(): \Generator
     {
         yield [Environment::DEVELOPMENT, true];
@@ -30,6 +33,9 @@ class EnvironmentTest extends TestCase
         yield [Environment::TEST, false];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{Environment, bool}>
+     */
     public static function getIsProduction(): \Generator
     {
         yield [Environment::DEVELOPMENT, false];
@@ -37,6 +43,9 @@ class EnvironmentTest extends TestCase
         yield [Environment::TEST, false];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{Environment, bool}>
+     */
     public static function getIsTest(): \Generator
     {
         yield [Environment::DEVELOPMENT, false];
@@ -44,6 +53,9 @@ class EnvironmentTest extends TestCase
         yield [Environment::TEST, true];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{Environment, string}>
+     */
     public static function getLabels(): \Generator
     {
         yield [Environment::DEVELOPMENT, 'environment.dev'];
@@ -51,6 +63,9 @@ class EnvironmentTest extends TestCase
         yield [Environment::TEST, 'environment.test'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{Environment, string}>
+     */
     public static function getValues(): \Generator
     {
         yield [Environment::DEVELOPMENT, 'dev'];

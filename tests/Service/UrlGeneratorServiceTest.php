@@ -34,12 +34,18 @@ class UrlGeneratorServiceTest extends KernelServiceTestCase
         $this->service = $this->getService(UrlGeneratorService::class);
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: string, 1: string, 2?: array}>
+     */
     public static function getGenerates(): \Generator
     {
         yield ['homepage', '/'];
         yield ['product_edit', '/product/edit/10', ['id' => 10]];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: Request, 1: string, 2?: EntityInterface|int}>
+     */
     public static function getRequests(): \Generator
     {
         yield [new Request(), '/'];
@@ -50,6 +56,8 @@ class UrlGeneratorServiceTest extends KernelServiceTestCase
     }
 
     /**
+     * @psalm-return \Generator<array-key, array{0: Request, 1: array, 2?: EntityInterface|int}>
+     *
      * @throws \ReflectionException
      */
     public static function getRouteParams(): \Generator

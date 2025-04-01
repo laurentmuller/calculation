@@ -19,6 +19,9 @@ use PHPUnit\Framework\TestCase;
 
 class PdfBarScaleTest extends TestCase
 {
+    /**
+     * @psalm-return \Generator<array-key, array{PdfBarScale, float, float, float}>
+     */
     public static function getValues(): \Generator
     {
         yield [self::createScale(0.0, 9.0), 0.0, 10.0,  1.0];

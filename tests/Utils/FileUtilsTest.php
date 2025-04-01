@@ -20,6 +20,9 @@ use PHPUnit\Framework\TestCase;
 
 class FileUtilsTest extends TestCase
 {
+    /**
+     * @psalm-return \Generator<array-key, array{0: string, 1: string, 2?: string, 3?: string}>
+     */
     public static function getBuildPaths(): \Generator
     {
         yield ['', ''];
@@ -33,6 +36,9 @@ class FileUtilsTest extends TestCase
         yield ['home/test/value', 'home', 'test', 'value/'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: string, 1: string, 2?: true}>
+     */
     public static function getExtension(): \Generator
     {
         yield ['', ''];
@@ -43,6 +49,9 @@ class FileUtilsTest extends TestCase
         yield ['file.TXT', 'txt', true];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string|\SplFileInfo|int, string}>
+     */
     public static function getFormatSize(): \Generator
     {
         $kb = 1024;
@@ -75,6 +84,9 @@ class FileUtilsTest extends TestCase
         yield [new \SplFileInfo("D:\zzz_aaa"), $empty];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string|\SplFileInfo, string}>
+     */
     public static function getRealPath(): \Generator
     {
         yield [__DIR__, __DIR__];

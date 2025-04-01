@@ -30,6 +30,9 @@ class FormatUtilsTest extends TestCase
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string|int|float|null, string}>
+     */
     public static function getAmounts(): \Generator
     {
         yield [null, '0.00'];
@@ -64,6 +67,9 @@ class FormatUtilsTest extends TestCase
         yield [0.116, '0.12'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, string}>
+     */
     public static function getDateFormatterPatterns(): \Generator
     {
         yield ['dd/mm/yy', 'dd/mm/yyyy'];
@@ -72,7 +78,11 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @psalm-return \Generator<array-key, array{
+     *      0: \DateTimeInterface|int|null,
+     *      1: string|null,
+     *      2?: int<-1,3>|null,
+     *      3?: string|null}>
      */
     public static function getDates(): \Generator
     {
@@ -89,6 +99,12 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
+     * @psalm-return \Generator<array-key, array{
+     *     0: \DateTimeInterface|int|null,
+     *     1: string|null,
+     *     2?: int<-1,3>|null,
+     *     3?: int<-1,3>|null}>
+     *
      * @throws \Exception
      */
     public static function getDateTimes(): \Generator
@@ -132,6 +148,9 @@ class FormatUtilsTest extends TestCase
         yield [self::TIME_STAMP, '20.02.2022 12:59'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{int|float|string|null, string}>
+     */
     public static function getIds(): \Generator
     {
         yield [null, '000000'];
@@ -158,6 +177,9 @@ class FormatUtilsTest extends TestCase
         yield [-123456, '-123456'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{\Countable|array|int|float|string|null, string}>
+     */
     public static function getIntegers(): \Generator
     {
         yield [null, '0'];
@@ -186,6 +208,13 @@ class FormatUtilsTest extends TestCase
         yield [new LogFile(''), '0'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{
+     *     0: int|float|string|null,
+     *     1: string,
+     *     2?: bool,
+     *     3?: \NumberFormatter::ROUND_*}>
+     */
     public static function getPercents(): \Generator
     {
         yield [null, '0%'];
@@ -212,7 +241,10 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @psalm-return \Generator<array-key, array{
+     *     0: \DateTimeInterface|int|null,
+     *     1: string|null,
+     *     2?: int<0,3>|null}>
      */
     public static function getTimes(): \Generator
     {

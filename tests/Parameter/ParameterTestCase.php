@@ -34,8 +34,14 @@ abstract class ParameterTestCase extends TestCase
         $this->parameter = $this->createParameter();
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, string}>
+     */
     abstract public static function getParameterNames(): \Generator;
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, mixed}>
+     */
     abstract public static function getParameterValues(): \Generator;
 
     /**

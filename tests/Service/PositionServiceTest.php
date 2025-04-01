@@ -22,6 +22,9 @@ class PositionServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 
+    /**
+     * @psalm-return \Generator<array-key, array{float, string}>
+     */
     public static function getDirections(): \Generator
     {
         yield [0, 'N'];
@@ -44,6 +47,9 @@ class PositionServiceTest extends TestCase
         yield [361, 'N'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{int, string}>
+     */
     public static function getFormatDirections(): \Generator
     {
         yield [0, 'openweather.direction.N'];
@@ -52,6 +58,9 @@ class PositionServiceTest extends TestCase
         yield [270, 'openweather.direction.W'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: float, 1: string, 2?: true}>
+     */
     public static function getLatitudes(): \Generator
     {
         yield [-91.0, '', true];
@@ -61,6 +70,9 @@ class PositionServiceTest extends TestCase
         yield [91.0, '', true];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: float, 1: string, 2?: true}>
+     */
     public static function getLongitudes(): \Generator
     {
         yield [-181.0, '', true];
@@ -70,6 +82,9 @@ class PositionServiceTest extends TestCase
         yield [181.0, '', true];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: float, 1: float, 2: string, 3?: true}>
+     */
     public static function getPositions(): \Generator
     {
         yield [-90.0, -180.0, '90° 0\' 0" openweather.direction.S, 180° 0\' 0" openweather.direction.W'];

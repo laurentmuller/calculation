@@ -30,6 +30,9 @@ class FixedFloatTypeTest extends TestCase
         }
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string|float|int|null, float}>
+     */
     public static function getValues(): \Generator
     {
         yield [null, 0.0];

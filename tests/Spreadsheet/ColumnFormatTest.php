@@ -25,6 +25,9 @@ class ColumnFormatTest extends TestCase
 {
     use TranslatorMockTrait;
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, ColumnFormat}>
+     */
     public static function getAlignments(): \Generator
     {
         yield [Alignment::HORIZONTAL_RIGHT, ColumnFormat::AMOUNT];

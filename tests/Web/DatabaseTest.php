@@ -36,6 +36,11 @@ class DatabaseTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
 
+    /**
+     * @psalm-return \Generator<array-key, array{class-string<AbstractRepository>, int}>
+     *
+     * @phpstan-ignore missingType.generics
+     */
     public static function getRepositories(): \Generator
     {
         yield [GroupRepository::class, 0];
@@ -51,6 +56,9 @@ class DatabaseTest extends KernelServiceTestCase
         yield [UserRepository::class, 4];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, int}>
+     */
     public static function getTables(): \Generator
     {
         yield ['sy_Group', 0];
@@ -66,6 +74,9 @@ class DatabaseTest extends KernelServiceTestCase
         yield ['sy_User', 4];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, RoleInterface::ROLE_*}>
+     */
     public static function getUsers(): \Generator
     {
         yield [AuthenticateWebTestCase::ROLE_USER, RoleInterface::ROLE_USER];
@@ -75,7 +86,7 @@ class DatabaseTest extends KernelServiceTestCase
     }
 
     /**
-     * @param class-string<AbstractRepository<EntityInterface>> $className
+     * @psalm-param class-string<AbstractRepository<EntityInterface>> $className
      */
     #[DataProvider('getRepositories')]
     public function testRepository(string $className, int $expected): void

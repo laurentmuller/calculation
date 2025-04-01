@@ -22,24 +22,36 @@ class OpenWeatherUnitsTest extends TestCase
 {
     use TranslatorMockTrait;
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, OpenWeatherUnits}>
+     */
     public static function getDegrees(): \Generator
     {
         yield ['°F', OpenWeatherUnits::IMPERIAL];
         yield ['°C', OpenWeatherUnits::METRIC];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, OpenWeatherUnits}>
+     */
     public static function getLabels(): \Generator
     {
         yield ['openweather.current.imperial.text', OpenWeatherUnits::IMPERIAL];
         yield ['openweather.current.metric.text', OpenWeatherUnits::METRIC];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, OpenWeatherUnits}>
+     */
     public static function getSpeeds(): \Generator
     {
         yield ['mph', OpenWeatherUnits::IMPERIAL];
         yield ['m/s', OpenWeatherUnits::METRIC];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, OpenWeatherUnits}>
+     */
     public static function getValues(): \Generator
     {
         yield ['imperial', OpenWeatherUnits::IMPERIAL];

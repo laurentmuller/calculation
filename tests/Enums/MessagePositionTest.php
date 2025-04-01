@@ -23,6 +23,9 @@ class MessagePositionTest extends TestCase
 {
     use TranslatorMockTrait;
 
+    /**
+     * @psalm-return \Generator<array-key, array{MessagePosition, int}>
+     */
     public static function getAngle(): \Generator
     {
         yield [MessagePosition::TOP_LEFT, 315];
@@ -36,12 +39,18 @@ class MessagePositionTest extends TestCase
         yield [MessagePosition::BOTTOM_RIGHT, 135];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{MessagePosition, MessagePosition}>
+     */
     public static function getDefault(): \Generator
     {
         yield [MessagePosition::getDefault(), MessagePosition::BOTTOM_RIGHT];
         yield [PropertyServiceInterface::DEFAULT_MESSAGE_POSITION, MessagePosition::BOTTOM_RIGHT];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{MessagePosition, string}>
+     */
     public static function getIcon(): \Generator
     {
         yield [MessagePosition::TOP_LEFT, 'fa-solid fa-arrow-up fa-rotate-by'];
@@ -55,6 +64,9 @@ class MessagePositionTest extends TestCase
         yield [MessagePosition::BOTTOM_RIGHT, 'fa-solid fa-arrow-up fa-rotate-by'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{MessagePosition, string}>
+     */
     public static function getLabel(): \Generator
     {
         yield [MessagePosition::TOP_LEFT, 'top-left'];
@@ -68,6 +80,9 @@ class MessagePositionTest extends TestCase
         yield [MessagePosition::BOTTOM_RIGHT, 'bottom-right'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{MessagePosition, string}>
+     */
     public static function getTranslation(): \Generator
     {
         yield [MessagePosition::TOP_LEFT, 'message_position.top-left'];

@@ -20,6 +20,9 @@ use PHPUnit\Framework\TestCase;
 
 class StringUtilsTest extends TestCase
 {
+    /**
+     * @psalm-return \Generator<array-key, array{string, string}>
+     */
     public static function getAscii(): \Generator
     {
         yield ['home', 'home'];
@@ -28,6 +31,9 @@ class StringUtilsTest extends TestCase
         yield ['спасибо', 'spasibo'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, string}>
+     */
     public static function getCapitalize(): \Generator
     {
         yield ['home', 'Home'];
@@ -37,6 +43,9 @@ class StringUtilsTest extends TestCase
         yield ['my HOME', 'My home'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: string, 1: string, 2?: false}>
+     */
     public static function getEqualIgnoreCase(): \Generator
     {
         yield ['home', 'Home'];
@@ -44,6 +53,9 @@ class StringUtilsTest extends TestCase
         yield ['a', 'b', false];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{mixed, mixed}>
+     */
     public static function getExportVar(): \Generator
     {
         yield [null, 'NULL'];
@@ -57,6 +69,9 @@ class StringUtilsTest extends TestCase
         yield [['key' => 'value'], self::getVarArray()];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{?string, bool}>
+     */
     public static function getIsString(): \Generator
     {
         yield [null, false];
@@ -64,6 +79,9 @@ class StringUtilsTest extends TestCase
         yield ['my home', true];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{non-empty-string, string, bool}>
+     */
     public static function getPregMatch(): \Generator
     {
         yield ['/\d+/', '1234', true];
@@ -73,6 +91,9 @@ class StringUtilsTest extends TestCase
         yield ['/(foo)(bar)(baz)/', 'foobaz', false];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{non-empty-string, string, bool}>
+     */
     public static function getPregMatchAll(): \Generator
     {
         yield ['/\d+/', '1234', true];
@@ -83,27 +104,37 @@ class StringUtilsTest extends TestCase
         yield ['/(foo)(bar)(baz)/', 'foobaz', false];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{non-empty-string, string, string, string}>
+     */
     public static function getPregReplace(): \Generator
     {
         yield ['/\d+/', '', '1234', ''];
         yield ['/\d+/', '', 'FAKE', 'FAKE'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{non-empty-array<non-empty-string, string>, string, string}>
+     */
     public static function getPregReplaceAll(): \Generator
     {
         yield [['/\d+/' => ''], '1234', ''];
         yield [['/\d+/' => ''], 'FAKE', 'FAKE'];
     }
 
-    public static function getShortName(): \Generator
+    /**
+     * @psalm-return \Generator<array-key, array{object|class-string, string}>
+     */
+    public static function getShortNameValid(): \Generator
     {
-        yield [null, null, true];
         yield [self::class, 'StringUtilsTest'];
         yield [Calculation::class, 'Calculation'];
         yield [new Calculation(), 'Calculation'];
-        yield ['invalid argument', null, true];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, string, bool, bool}>
+     */
     public static function getStartWith(): \Generator
     {
         yield ['fake', '', false, false];
@@ -112,6 +143,9 @@ class StringUtilsTest extends TestCase
         yield ['fake', 'FA', true, true];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, ?string}>
+     */
     public static function getTrim(): \Generator
     {
         yield ['', null];
@@ -196,21 +230,25 @@ class StringUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @psalm-param object|class-string|null $var
-     *
-     * @psalm-suppress PossiblyNullArgument
-     */
-    #[DataProvider('getShortName')]
-    public function testGetShortName(object|string|null $var, mixed $expected, bool $exception = false): void
+    public function testGetShortNameInvalid(): void
     {
-        if (null === $var) {
-            $this->expectException(\TypeError::class);
-        } elseif ($exception) {
-            $this->expectException(\RuntimeException::class);
-        }
-        // @phpstan-ignore argument.type
-        $actual = StringUtils::getShortName($var);
+        /**
+         * @psalm-var class-string $objectOrClass
+         *
+         * @phpstan-ignore varTag.nativeType
+         */
+        $objectOrClass = 'Fake Class';
+        $this->expectException(\RuntimeException::class);
+        StringUtils::getShortName($objectOrClass);
+    }
+
+    /**
+     * @psalm-param object|class-string $objectOrClass
+     */
+    #[DataProvider('getShortNameValid')]
+    public function testGetShortNameValid(object|string $objectOrClass, string $expected): void
+    {
+        $actual = StringUtils::getShortName($objectOrClass);
         self::assertSame($expected, $actual);
     }
 

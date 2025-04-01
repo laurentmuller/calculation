@@ -19,6 +19,9 @@ use PHPUnit\Framework\TestCase;
 
 class HtmlListTypeTest extends TestCase
 {
+    /**
+     * @psalm-return \Generator<array-key, array{0: positive-int, 1: string, 2?: string}>
+     */
     public static function getLetterValues(): \Generator
     {
         yield [1, 'A'];
@@ -28,6 +31,9 @@ class HtmlListTypeTest extends TestCase
         yield [53, 'AAA'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: positive-int, 1: string, 2?: string}>
+     */
     public static function getNumberValues(): \Generator
     {
         yield [1, '1'];
@@ -39,6 +45,9 @@ class HtmlListTypeTest extends TestCase
         yield [1000, '1000.suffix', '.suffix'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: positive-int, 1: string, 2?: string}>
+     */
     public static function getRomanValues(): \Generator
     {
         yield [4000, ''];

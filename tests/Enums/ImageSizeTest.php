@@ -19,6 +19,9 @@ use PHPUnit\Framework\TestCase;
 
 class ImageSizeTest extends TestCase
 {
+    /**
+     * @psalm-return \Generator<array-key, array{ImageSize, int}>
+     */
     public static function getValues(): \Generator
     {
         yield [ImageSize::DEFAULT, 192];

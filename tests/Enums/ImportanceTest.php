@@ -22,6 +22,9 @@ class ImportanceTest extends TestCase
 {
     use TranslatorMockTrait;
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, Importance}>
+     */
     public static function getLabels(): \Generator
     {
         yield ['importance.high', Importance::HIGH];
@@ -30,6 +33,9 @@ class ImportanceTest extends TestCase
         yield ['importance.urgent', Importance::URGENT];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, Importance}>
+     */
     public static function getLabelsFull(): \Generator
     {
         yield ['importance.high_full', Importance::HIGH];
@@ -38,6 +44,9 @@ class ImportanceTest extends TestCase
         yield ['importance.urgent_full', Importance::URGENT];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{Importance, string}>
+     */
     public static function getValues(): \Generator
     {
         yield [Importance::HIGH, 'high'];

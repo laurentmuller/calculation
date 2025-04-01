@@ -39,6 +39,9 @@ class AssetVersionServiceTest extends TestCase
         $this->service = new AssetVersionService($projectDir, new EnvironmentService('test'), new ArrayAdapter());
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: string, 1?: true}>
+     */
     public static function getPaths(): \Generator
     {
         yield [''];

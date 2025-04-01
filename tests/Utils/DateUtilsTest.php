@@ -29,6 +29,9 @@ class DateUtilsTest extends TestCase
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: int, 1: int,2?: 1931}>
+     */
     public static function getCompletYears(): \Generator
     {
         yield [29, 2029];
@@ -46,6 +49,9 @@ class DateUtilsTest extends TestCase
         yield [31, 2031, 1931];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{\DateTimeInterface, int}>
+     */
     public static function getDays(): \Generator
     {
         // today
@@ -58,6 +64,9 @@ class DateUtilsTest extends TestCase
         }
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{?\DateTimeInterface, ?string}>
+     */
     public static function getFormatFormDate(): \Generator
     {
         yield [null, null];
@@ -69,6 +78,9 @@ class DateUtilsTest extends TestCase
         yield [new \DateTime('22-2-1'), '2022-02-01'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{\DateTime, string, string}>
+     */
     public static function getModifies(): \Generator
     {
         $date = new \DateTime('2024-01-10');
@@ -85,6 +97,9 @@ class DateUtilsTest extends TestCase
         yield [$date, 'July 1st, 2023', '2023-07-01'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, int}>
+     */
     public static function getMonthNames(): \Generator
     {
         yield ['Janvier', 1];
@@ -101,6 +116,9 @@ class DateUtilsTest extends TestCase
         yield ['Décembre', 12];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{\DateTime, int}>
+     */
     public static function getMonths(): \Generator
     {
         // today
@@ -113,21 +131,31 @@ class DateUtilsTest extends TestCase
         }
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{\DateTime, \DateTimeImmutable}>
+     */
     public static function getRemoveTimes(): \Generator
     {
         $format = 'Y-m-d H:i:s';
+        /** @psalm-var \DateTimeImmutable $expected */
         $expected = \DateTimeImmutable::createFromFormat($format, '2013-03-15 00:00:00');
 
+        /** @psalm-var \DateTime $date */
         $date = \DateTime::createFromFormat($format, '2013-03-15 00:00:00');
         yield [$date, $expected];
 
+        /** @psalm-var \DateTime $date */
         $date = \DateTime::createFromFormat($format, '2013-03-15 01:02:03');
         yield [$date, $expected];
 
+        /** @psalm-var \DateTime $date */
         $date = \DateTime::createFromFormat($format, '2013-03-15 23:59:59');
         yield [$date, $expected];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, int}>
+     */
     public static function getShortMonthNames(): \Generator
     {
         yield ['Janv.', 1];
@@ -144,6 +172,9 @@ class DateUtilsTest extends TestCase
         yield ['Déc.', 12];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: string, 1: int, 2?: 'monday'}>
+     */
     public static function getShortWeekdayNames(): \Generator
     {
         // default (sunday)
@@ -164,6 +195,9 @@ class DateUtilsTest extends TestCase
         yield ['Dim.', 7, 'monday'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: string, 1: int, 2?: 'monday'}>
+     */
     public static function getWeekdayNames(): \Generator
     {
         // default (sunday)
@@ -184,6 +218,9 @@ class DateUtilsTest extends TestCase
         yield ['Dimanche', 7, 'monday'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{\DateTime, int}>
+     */
     public static function getWeeks(): \Generator
     {
         // today
@@ -196,6 +233,9 @@ class DateUtilsTest extends TestCase
         yield [new \DateTime('2023-04-28'), 17];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{\DateTime, int}>
+     */
     public static function getYears(): \Generator
     {
         // today

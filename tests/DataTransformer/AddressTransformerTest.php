@@ -30,7 +30,7 @@ class AddressTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array>
+     * @psalm-return \Generator<array-key, array{mixed}>
      */
     public static function getReverseTransformInvalid(): \Generator
     {
@@ -39,6 +39,9 @@ class AddressTransformerTest extends TestCase
         yield ['email-invalid'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{mixed, mixed}>
+     */
     public static function getReverseTransformValid(): \Generator
     {
         yield [null, null];
@@ -46,12 +49,18 @@ class AddressTransformerTest extends TestCase
         yield ['username <user@root.com>', new Address('user@root.com', 'username')];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{mixed}>
+     */
     public static function getTransformInvalid(): \Generator
     {
         yield [true];
         yield [25];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{mixed, mixed}>
+     */
     public static function getTransformValid(): \Generator
     {
         yield [null, null];

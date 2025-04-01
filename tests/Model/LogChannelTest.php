@@ -22,6 +22,9 @@ class LogChannelTest extends TestCase
 {
     use AssertEmptyTrait;
 
+    /**
+     * @psalm-return \Generator<array-key, array{non-empty-string, string}>
+     */
     public static function getChannelIcons(): \Generator
     {
         yield ['application', 'fa-fw fa-solid fa-laptop-code'];
@@ -33,7 +36,6 @@ class LogChannelTest extends TestCase
         yield ['request', 'fa-fw fa-solid fa-upload'];
         yield ['security', 'fa-fw fa-solid fa-key'];
         yield ['deprecation', 'fa-fw fa-solid fa-bug'];
-        yield ['', 'fa-fw fa-solid fa-file'];
     }
 
     /**

@@ -71,6 +71,9 @@ class ProductUpdateServiceTest extends TestCase
         $this->session->set('product.update.category', 1);
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{float, float}>
+     */
     public static function getFixedRounded(): \Generator
     {
         yield [1.00, 2.00];
@@ -83,6 +86,9 @@ class ProductUpdateServiceTest extends TestCase
         yield [1.05, 2.05];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{float, float, float}>
+     */
     public static function getPercentRounded(): \Generator
     {
         $price = 18.8;

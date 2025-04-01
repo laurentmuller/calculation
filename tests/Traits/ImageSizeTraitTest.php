@@ -21,6 +21,9 @@ class ImageSizeTraitTest extends TestCase
 {
     use ImageSizeTrait;
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, array}>
+     */
     public static function getSizes(): \Generator
     {
         yield ['', [0, 0]];

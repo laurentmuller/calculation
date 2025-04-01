@@ -21,6 +21,9 @@ class MathTraitTest extends TestCase
 {
     use MathTrait;
 
+    /**
+     * @psalm-return \Generator<array-key, array{float, float}>
+     */
     public static function getCeil(): \Generator
     {
         yield [4.3, 4.30];
@@ -28,6 +31,9 @@ class MathTraitTest extends TestCase
         yield [-3.14, -3.14];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{float, float}>
+     */
     public static function getFloor(): \Generator
     {
         yield [4.3, 4.30];
@@ -35,6 +41,9 @@ class MathTraitTest extends TestCase
         yield [-3.14, -3.14];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: int, 1: int, 2?: false}>
+     */
     public static function getIsBitSet(): \Generator
     {
         yield [31, 1];
@@ -49,6 +58,11 @@ class MathTraitTest extends TestCase
         yield [0, 16, false];
     }
 
+    /**
+     * float $val1, float $val2, int $precision = 2, bool $expected = true.
+     *
+     * @psalm-return \Generator<array-key, array{0: float, 1: float, 2?: int, 3?: bool}>
+     */
     public static function getIsFloatEquals(): \Generator
     {
         yield [0, 0];
@@ -60,6 +74,9 @@ class MathTraitTest extends TestCase
         yield [0, 0.01, 2, false];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: float, 1?: int, 2?: false}>
+     */
     public static function getIsFloatZero(): \Generator
     {
         yield [0];
@@ -74,6 +91,11 @@ class MathTraitTest extends TestCase
         yield [0.001, 3, false];
     }
 
+    /**
+     * float $val, float $expected, int $precision = 2.
+     *
+     * @psalm-return \Generator<array-key, array{0: float, 1: float, 2?: int}>
+     */
     public static function getRound(): \Generator
     {
         yield [0, 0.0];
@@ -86,6 +108,9 @@ class MathTraitTest extends TestCase
         yield [1.1551, 1.16];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{0: float, 1: float, 2: float, 3?: 11.0}>
+     */
     public static function getSafeDivide(): \Generator
     {
         yield [100, 0,  0.0];
@@ -94,6 +119,9 @@ class MathTraitTest extends TestCase
         yield [100, 0,  11.0,  11.0];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{float, float, float, float}>
+     */
     public static function getValidateFloatRange(): \Generator
     {
         yield [0.0,  0, 100.0, 0.0];
@@ -103,6 +131,9 @@ class MathTraitTest extends TestCase
         yield [100.1,  0.0, 100.0, 100.0];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{int, int, int, int}>
+     */
     public static function getValidateIntRange(): \Generator
     {
         yield [0,  0, 100, 0];

@@ -34,6 +34,9 @@ class EntityNameTest extends TestCase
 {
     use TranslatorMockTrait;
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, EntityName}>
+     */
     public static function getLabel(): \Generator
     {
         yield ['calculation.name', EntityName::CALCULATION];
@@ -48,6 +51,9 @@ class EntityNameTest extends TestCase
         yield ['user.name', EntityName::USER];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{EntityName, int}>
+     */
     public static function getOffset(): \Generator
     {
         yield [EntityName::CALCULATION, 0];
@@ -62,6 +68,9 @@ class EntityNameTest extends TestCase
         yield [EntityName::USER, 9];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{EntityName, string}>
+     */
     public static function getRightsField(): \Generator
     {
         yield [EntityName::CALCULATION, 'CalculationRights'];
@@ -76,6 +85,9 @@ class EntityNameTest extends TestCase
         yield [EntityName::USER, 'UserRights'];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, ?EntityName}>
+     */
     public static function getTryFromField(): \Generator
     {
         yield ['', null];
@@ -93,6 +105,9 @@ class EntityNameTest extends TestCase
         yield ['UserRights', EntityName::USER];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{mixed, mixed}>
+     */
     public static function getTryFromMixed(): \Generator
     {
         yield [null, null];
@@ -134,6 +149,9 @@ class EntityNameTest extends TestCase
         yield [EntityName::CALCULATION, EntityName::CALCULATION];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{EntityName, string}>
+     */
     public static function getValue(): \Generator
     {
         yield [EntityName::CALCULATION, 'EntityCalculation'];

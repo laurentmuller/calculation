@@ -23,12 +23,18 @@ class EntityActionTest extends TestCase
 {
     use TranslatorMockTrait;
 
+    /**
+     * @psalm-return \Generator<array-key, array{EntityAction, EntityAction}>
+     */
     public static function getDefault(): \Generator
     {
         yield [EntityAction::getDefault(), EntityAction::EDIT];
         yield [PropertyServiceInterface::DEFAULT_ACTION, EntityAction::EDIT];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{string, EntityAction}>
+     */
     public static function getLabel(): \Generator
     {
         yield ['entity_action.edit', EntityAction::EDIT];
@@ -36,6 +42,9 @@ class EntityActionTest extends TestCase
         yield ['entity_action.none', EntityAction::NONE];
     }
 
+    /**
+     * @psalm-return \Generator<array-key, array{EntityAction, string}>
+     */
     public static function getValues(): \Generator
     {
         yield [EntityAction::NONE, 'none'];

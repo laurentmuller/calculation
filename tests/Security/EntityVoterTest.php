@@ -51,7 +51,7 @@ class EntityVoterTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, bool}>
+     * @psalm-return \Generator<int, array{string, bool}>
      */
     public static function getSupportsAttribute(): \Generator
     {

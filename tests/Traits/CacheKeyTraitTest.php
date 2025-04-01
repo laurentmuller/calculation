@@ -23,7 +23,7 @@ class CacheKeyTraitTest extends TestCase
     use CacheKeyTrait;
 
     /**
-     * @psalm-return \Generator<array-key, array{string, string}>
+     * @psalm-return \Generator<int, array{string, string}>
      */
     public static function getCleanKeys(): \Generator
     {

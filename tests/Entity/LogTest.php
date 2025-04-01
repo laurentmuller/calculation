@@ -28,7 +28,7 @@ class LogTest extends TestCase
     use DateAssertTrait;
 
     /**
-     * @psalm-return \Generator<array-key, array{non-empty-string, string}>
+     * @psalm-return \Generator<int, array{non-empty-string, string}>
      */
     public static function getChannelIcons(): \Generator
     {
@@ -44,7 +44,7 @@ class LogTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{PsrLevel::*, string}>
+     * @psalm-return \Generator<int, array{PsrLevel::*, string}>
      */
     public static function getLevelColors(): \Generator
     {
@@ -59,7 +59,7 @@ class LogTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{PsrLevel::*, string}>
+     * @psalm-return \Generator<int, array{PsrLevel::*, string}>
      */
     public static function getLevelIcons(): \Generator
     {

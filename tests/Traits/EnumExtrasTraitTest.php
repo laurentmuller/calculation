@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 class EnumExtrasTraitTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<array-key, array{0: HtmlTag, 1: string, 2: bool, 3?: true}>
+     * @psalm-return \Generator<int, array{0: HtmlTag, 1: string, 2: bool, 3?: true}>
      */
     public static function getExtraBool(): \Generator
     {
@@ -30,7 +30,7 @@ class EnumExtrasTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: HtmlTag, 1: string, 2: float, 3?: true}>
+     * @psalm-return \Generator<int, array{0: HtmlTag, 1: string, 2: float, 3?: true}>
      */
     public static function getExtraFloat(): \Generator
     {
@@ -39,7 +39,7 @@ class EnumExtrasTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: TableView, 1: string, 2: int, 3?: true}>
+     * @psalm-return \Generator<int, array{0: TableView, 1: string, 2: int, 3?: true}>
      */
     public static function getExtraInt(): \Generator
     {
@@ -48,7 +48,7 @@ class EnumExtrasTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: HtmlTag, 1: string, 2: string, 3?: true}>
+     * @psalm-return \Generator<int, array{0: HtmlTag, 1: string, 2: string, 3?: true}>
      */
     public static function getExtraString(): \Generator
     {

@@ -21,7 +21,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 class ProductTest extends EntityValidatorTestCase
 {
     /**
-     * @psalm-return \Generator<array-key, array{float, float}>
+     * @psalm-return \Generator<int, array{float, float}>
      */
     public static function getPrices(): \Generator
     {

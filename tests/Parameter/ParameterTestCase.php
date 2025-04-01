@@ -35,12 +35,12 @@ abstract class ParameterTestCase extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, string}>
+     * @psalm-return \Generator<int, array{string, string}>
      */
     abstract public static function getParameterNames(): \Generator;
 
     /**
-     * @psalm-return \Generator<array-key, array{string, mixed}>
+     * @psalm-return \Generator<int, array{string, mixed}>
      */
     abstract public static function getParameterValues(): \Generator;
 

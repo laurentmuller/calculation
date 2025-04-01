@@ -30,12 +30,6 @@
             </errorLevel>
         </PropertyNotSetInConstructor>
         <ClassMustBeFinal errorLevel="suppress" />
-        <!-- psalm/plugin-phpunit v0.19.4: DataProvider  -->
-        <MixedReturnStatement>
-            <errorLevel type="suppress">
-                <directory name="tests" />
-            </errorLevel>
-        </MixedReturnStatement>
     </issueHandlers>
 
     <plugins>

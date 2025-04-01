@@ -24,7 +24,7 @@ class MessagePositionTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @psalm-return \Generator<array-key, array{MessagePosition, int}>
+     * @psalm-return \Generator<int, array{MessagePosition, int}>
      */
     public static function getAngle(): \Generator
     {
@@ -40,7 +40,7 @@ class MessagePositionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{MessagePosition, MessagePosition}>
+     * @psalm-return \Generator<int, array{MessagePosition, MessagePosition}>
      */
     public static function getDefault(): \Generator
     {
@@ -49,7 +49,7 @@ class MessagePositionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{MessagePosition, string}>
+     * @psalm-return \Generator<int, array{MessagePosition, string}>
      */
     public static function getIcon(): \Generator
     {
@@ -65,7 +65,7 @@ class MessagePositionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{MessagePosition, string}>
+     * @psalm-return \Generator<int, array{MessagePosition, string}>
      */
     public static function getLabel(): \Generator
     {
@@ -81,7 +81,7 @@ class MessagePositionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{MessagePosition, string}>
+     * @psalm-return \Generator<int, array{MessagePosition, string}>
      */
     public static function getTranslation(): \Generator
     {

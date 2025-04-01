@@ -24,7 +24,7 @@ class EntityActionTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @psalm-return \Generator<array-key, array{EntityAction, EntityAction}>
+     * @psalm-return \Generator<int, array{EntityAction, EntityAction}>
      */
     public static function getDefault(): \Generator
     {
@@ -33,7 +33,7 @@ class EntityActionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, EntityAction}>
+     * @psalm-return \Generator<int, array{string, EntityAction}>
      */
     public static function getLabel(): \Generator
     {
@@ -43,7 +43,7 @@ class EntityActionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{EntityAction, string}>
+     * @psalm-return \Generator<int, array{EntityAction, string}>
      */
     public static function getValues(): \Generator
     {

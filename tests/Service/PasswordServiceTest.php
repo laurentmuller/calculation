@@ -36,7 +36,7 @@ class PasswordServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, StrengthLevel, bool}>
+     * @psalm-return \Generator<int, array{string, StrengthLevel, bool}>
      */
     public static function getValidations(): \Generator
     {

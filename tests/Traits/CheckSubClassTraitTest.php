@@ -25,7 +25,7 @@ class CheckSubClassTraitTest extends TestCase
     use CheckSubClassTrait;
 
     /**
-     * @psalm-return \Generator<array-key, array{0: string|object, 1: class-string, 2?: true}>
+     * @psalm-return \Generator<int, array{0: string|object, 1: class-string, 2?: true}>
      */
     public static function getSubClass(): \Generator
     {

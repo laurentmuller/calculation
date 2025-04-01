@@ -24,7 +24,7 @@ class StrengthLevelTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @psalm-return \Generator<array-key, array{StrengthLevel, StrengthLevel}>
+     * @psalm-return \Generator<int, array{StrengthLevel, StrengthLevel}>
      */
     public static function getDefault(): \Generator
     {
@@ -33,7 +33,7 @@ class StrengthLevelTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, StrengthLevel}>
+     * @psalm-return \Generator<int, array{string, StrengthLevel}>
      */
     public static function getLabels(): \Generator
     {
@@ -46,7 +46,7 @@ class StrengthLevelTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{int, StrengthLevel}>
+     * @psalm-return \Generator<int, array{int, StrengthLevel}>
      */
     public static function getPercents(): \Generator
     {
@@ -59,7 +59,7 @@ class StrengthLevelTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{StrengthLevel, StrengthLevel|int, bool}>
+     * @psalm-return \Generator<int, array{StrengthLevel, StrengthLevel|int, bool}>
      */
     public static function getSmallerValues(): \Generator
     {
@@ -74,7 +74,7 @@ class StrengthLevelTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{StrengthLevel, int}>
+     * @psalm-return \Generator<int, array{StrengthLevel, int}>
      */
     public static function getValues(): \Generator
     {

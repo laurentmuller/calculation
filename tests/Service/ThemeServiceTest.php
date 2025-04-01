@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ThemeServiceTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<array-key, array{Request, bool}>
+     * @psalm-return \Generator<int, array{Request, bool}>
      */
     public static function getIsDarkTheme(): \Generator
     {
@@ -34,7 +34,7 @@ class ThemeServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{Request, Theme}>
+     * @psalm-return \Generator<int, array{Request, Theme}>
      */
     public static function getThemes(): \Generator
     {
@@ -45,7 +45,7 @@ class ThemeServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{Request, string}>
+     * @psalm-return \Generator<int, array{Request, string}>
      */
     public static function getThemeValues(): \Generator
     {

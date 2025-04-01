@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 class HtmlBootstrapColorTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<array-key, array{HtmlBootstrapColor, string}>
+     * @psalm-return \Generator<int, array{HtmlBootstrapColor, string}>
      */
     public static function getColorValues(): \Generator
     {
@@ -39,7 +39,7 @@ class HtmlBootstrapColorTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, ?HtmlBootstrapColor}>
+     * @psalm-return \Generator<int, array{string, ?HtmlBootstrapColor}>
      */
     public static function getParseDrawColors(): \Generator
     {
@@ -57,7 +57,7 @@ class HtmlBootstrapColorTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, ?HtmlBootstrapColor}>
+     * @psalm-return \Generator<int, array{string, ?HtmlBootstrapColor}>
      */
     public static function getParseFillColors(): \Generator
     {
@@ -84,7 +84,7 @@ class HtmlBootstrapColorTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, ?HtmlBootstrapColor}>
+     * @psalm-return \Generator<int, array{string, ?HtmlBootstrapColor}>
      */
     public static function getParseTextColors(): \Generator
     {
@@ -102,7 +102,7 @@ class HtmlBootstrapColorTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{HtmlBootstrapColor, string}>
+     * @psalm-return \Generator<int, array{HtmlBootstrapColor, string}>
      */
     public static function getPhpOfficeColors(): \Generator
     {

@@ -35,7 +35,7 @@ class RoleTranslatorTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{Role|string, string}>
+     * @psalm-return \Generator<int, array{Role|string, string}>
      */
     public static function getRoleIcons(): \Generator
     {
@@ -48,7 +48,7 @@ class RoleTranslatorTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{Role|string, string}>
+     * @psalm-return \Generator<int, array{Role|string, string}>
      */
     public static function getTranslateRoles(): \Generator
     {

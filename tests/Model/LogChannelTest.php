@@ -23,7 +23,7 @@ class LogChannelTest extends TestCase
     use AssertEmptyTrait;
 
     /**
-     * @psalm-return \Generator<array-key, array{non-empty-string, string}>
+     * @psalm-return \Generator<int, array{non-empty-string, string}>
      */
     public static function getChannelIcons(): \Generator
     {

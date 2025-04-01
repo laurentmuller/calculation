@@ -35,7 +35,7 @@ class EntityNameTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @psalm-return \Generator<array-key, array{string, EntityName}>
+     * @psalm-return \Generator<int, array{string, EntityName}>
      */
     public static function getLabel(): \Generator
     {
@@ -52,7 +52,7 @@ class EntityNameTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{EntityName, int}>
+     * @psalm-return \Generator<int, array{EntityName, int}>
      */
     public static function getOffset(): \Generator
     {
@@ -69,7 +69,7 @@ class EntityNameTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{EntityName, string}>
+     * @psalm-return \Generator<int, array{EntityName, string}>
      */
     public static function getRightsField(): \Generator
     {
@@ -86,7 +86,7 @@ class EntityNameTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, ?EntityName}>
+     * @psalm-return \Generator<int, array{string, ?EntityName}>
      */
     public static function getTryFromField(): \Generator
     {
@@ -106,7 +106,7 @@ class EntityNameTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{mixed, mixed}>
+     * @psalm-return \Generator<int, array{mixed, mixed}>
      */
     public static function getTryFromMixed(): \Generator
     {
@@ -150,7 +150,7 @@ class EntityNameTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{EntityName, string}>
+     * @psalm-return \Generator<int, array{EntityName, string}>
      */
     public static function getValue(): \Generator
     {

@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 class PasswordValidatorTest extends ConstraintValidatorTestCase
 {
     /**
-     * @psalm-return \Generator<array-key, array{string, array<string, bool>, string, string}>
+     * @psalm-return \Generator<int, array{string, array<string, bool>, string, string}>
      */
     public static function getInvalidValues(): \Generator
     {
@@ -39,7 +39,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string}>
+     * @psalm-return \Generator<int, array{string}>
      */
     public static function getOptions(): \Generator
     {
@@ -50,7 +50,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, string}>
+     * @psalm-return \Generator<int, array{string, string}>
      */
     public static function getValidValues(): \Generator
     {

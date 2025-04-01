@@ -24,7 +24,7 @@ use Vich\UploaderBundle\Mapping\PropertyMapping;
 class UserNamerTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<array-key, array{0: string, 1: int, 2: ImageSize, 3?: string|ImageExtension}>
+     * @psalm-return \Generator<int, array{0: string, 1: int, 2: ImageSize, 3?: string|ImageExtension}>
      */
     public static function getBaseNames(): \Generator
     {

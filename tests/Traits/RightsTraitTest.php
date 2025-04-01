@@ -31,7 +31,7 @@ class RightsTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string}>
+     * @psalm-return \Generator<int, array{string}>
      */
     public static function getRightsFields(): \Generator
     {

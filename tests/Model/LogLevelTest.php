@@ -24,7 +24,7 @@ class LogLevelTest extends TestCase
     use AssertEmptyTrait;
 
     /**
-     * @psalm-return \Generator<array-key, array{PsrLevel::*, string}>
+     * @psalm-return \Generator<int, array{PsrLevel::*, string}>
      */
     public static function getLevelColors(): \Generator
     {
@@ -39,7 +39,7 @@ class LogLevelTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{PsrLevel::*, string}>
+     * @psalm-return \Generator<int, array{PsrLevel::*, string}>
      */
     public static function getLevelIcons(): \Generator
     {

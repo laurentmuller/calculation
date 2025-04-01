@@ -23,7 +23,7 @@ class OpenWeatherUnitsTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @psalm-return \Generator<array-key, array{string, OpenWeatherUnits}>
+     * @psalm-return \Generator<int, array{string, OpenWeatherUnits}>
      */
     public static function getDegrees(): \Generator
     {
@@ -32,7 +32,7 @@ class OpenWeatherUnitsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, OpenWeatherUnits}>
+     * @psalm-return \Generator<int, array{string, OpenWeatherUnits}>
      */
     public static function getLabels(): \Generator
     {
@@ -41,7 +41,7 @@ class OpenWeatherUnitsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, OpenWeatherUnits}>
+     * @psalm-return \Generator<int, array{string, OpenWeatherUnits}>
      */
     public static function getSpeeds(): \Generator
     {
@@ -50,7 +50,7 @@ class OpenWeatherUnitsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, OpenWeatherUnits}>
+     * @psalm-return \Generator<int, array{string, OpenWeatherUnits}>
      */
     public static function getValues(): \Generator
     {

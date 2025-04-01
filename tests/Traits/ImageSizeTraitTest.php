@@ -22,7 +22,7 @@ class ImageSizeTraitTest extends TestCase
     use ImageSizeTrait;
 
     /**
-     * @psalm-return \Generator<array-key, array{string, array}>
+     * @psalm-return \Generator<int, array{string, array}>
      */
     public static function getSizes(): \Generator
     {

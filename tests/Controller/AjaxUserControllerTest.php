@@ -23,6 +23,9 @@ class AjaxUserControllerTest extends AuthenticateWebTestCase
 {
     private ?TranslatorInterface $translator = null;
 
+    /**
+     * @psalm-return \Generator<int, array{0: bool|non-empty-string, 1?: string, 2?: 1}>
+     */
     public static function getEmails(): \Generator
     {
         yield [true, 'myemail_fake_zz@myemail.com'];
@@ -33,6 +36,9 @@ class AjaxUserControllerTest extends AuthenticateWebTestCase
         yield ['email.already_used', 'ROLE_SUPER_ADMIN@TEST.COM'];
     }
 
+    /**
+     * @psalm-return \Generator<int, array{0: bool|string, 1?: string, 2?: 1}>
+     */
     public static function getNames(): \Generator
     {
         yield [true, 'myEmail_fake_zz'];
@@ -43,6 +49,9 @@ class AjaxUserControllerTest extends AuthenticateWebTestCase
         yield ['username.already_used', 'ROLE_SUPER_ADMIN'];
     }
 
+    /**
+     * @psalm-return \Generator<int, array{0: bool|string, 1?: string}>
+     */
     public static function getUsers(): \Generator
     {
         yield ['username.blank'];

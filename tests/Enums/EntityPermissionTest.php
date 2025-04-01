@@ -24,7 +24,7 @@ class EntityPermissionTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @psalm-return \Generator<array-key, array{EntityPermission, string}>
+     * @psalm-return \Generator<int, array{EntityPermission, string}>
      */
     public static function getLabel(): \Generator
     {
@@ -37,7 +37,7 @@ class EntityPermissionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{?EntityPermission, string}>
+     * @psalm-return \Generator<int, array{?EntityPermission, string}>
      */
     public static function getTryFromName(): \Generator
     {
@@ -55,7 +55,7 @@ class EntityPermissionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{EntityPermission, int}>
+     * @psalm-return \Generator<int, array{EntityPermission, int}>
      */
     public static function getValue(): \Generator
     {

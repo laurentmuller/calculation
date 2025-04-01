@@ -27,7 +27,7 @@ class IdentifierTransformerTest extends TestCase
     use IdTrait;
 
     /**
-     * @psalm-return \Generator<array-key, array<EntityInterface|null>>
+     * @psalm-return \Generator<int, array<EntityInterface|null>>
      *
      * @psalm-suppress InvalidReturnType
      *
@@ -41,7 +41,7 @@ class IdentifierTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{?EntityInterface, mixed}>
+     * @psalm-return \Generator<int, array{?EntityInterface, mixed}>
      */
     public static function getReverseValid(): \Generator
     {
@@ -49,7 +49,7 @@ class IdentifierTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{int|string|null}>
+     * @psalm-return \Generator<int, array{int|string|null}>
      *
      * @psalm-suppress InvalidReturnType
      *
@@ -63,7 +63,7 @@ class IdentifierTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{int|string|null, mixed}>
+     * @psalm-return \Generator<int, array{int|string|null, mixed}>
      */
     public static function getTransformValid(): \Generator
     {

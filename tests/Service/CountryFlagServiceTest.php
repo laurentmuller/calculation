@@ -29,7 +29,7 @@ class CountryFlagServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, string}>
+     * @psalm-return \Generator<int, array{string, string}>
      */
     public static function getDefaultCodes(): \Generator
     {
@@ -41,7 +41,7 @@ class CountryFlagServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, string, bool, bool}>
+     * @psalm-return \Generator<int, array{string, string, bool, bool}>
      */
     public static function getFlagsInvalid(): \Generator
     {
@@ -49,7 +49,7 @@ class CountryFlagServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: string, 1: string, 2?: bool}>
+     * @psalm-return \Generator<int, array{0: string, 1: string, 2?: bool}>
      */
     public static function getFlagsValid(): \Generator
     {

@@ -30,7 +30,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: int, 1: int,2?: 1931}>
+     * @psalm-return \Generator<int, array{0: int, 1: int,2?: 1931}>
      */
     public static function getCompletYears(): \Generator
     {
@@ -50,7 +50,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{\DateTimeInterface, int}>
+     * @psalm-return \Generator<int, array{\DateTimeInterface, int}>
      */
     public static function getDays(): \Generator
     {
@@ -65,7 +65,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{?\DateTimeInterface, ?string}>
+     * @psalm-return \Generator<int, array{?\DateTimeInterface, ?string}>
      */
     public static function getFormatFormDate(): \Generator
     {
@@ -79,7 +79,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{\DateTime, string, string}>
+     * @psalm-return \Generator<int, array{\DateTime, string, string}>
      */
     public static function getModifies(): \Generator
     {
@@ -98,7 +98,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, int}>
+     * @psalm-return \Generator<int, array{string, int}>
      */
     public static function getMonthNames(): \Generator
     {
@@ -117,7 +117,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{\DateTime, int}>
+     * @psalm-return \Generator<int, array{\DateTime, int}>
      */
     public static function getMonths(): \Generator
     {
@@ -132,7 +132,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{\DateTime, \DateTimeImmutable}>
+     * @psalm-return \Generator<int, array{\DateTime, \DateTimeImmutable}>
      */
     public static function getRemoveTimes(): \Generator
     {
@@ -154,7 +154,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, int}>
+     * @psalm-return \Generator<int, array{string, int}>
      */
     public static function getShortMonthNames(): \Generator
     {
@@ -173,7 +173,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: string, 1: int, 2?: 'monday'}>
+     * @psalm-return \Generator<int, array{0: string, 1: int, 2?: 'monday'}>
      */
     public static function getShortWeekdayNames(): \Generator
     {
@@ -196,7 +196,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: string, 1: int, 2?: 'monday'}>
+     * @psalm-return \Generator<int, array{0: string, 1: int, 2?: 'monday'}>
      */
     public static function getWeekdayNames(): \Generator
     {
@@ -219,7 +219,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{\DateTime, int}>
+     * @psalm-return \Generator<int, array{\DateTime, int}>
      */
     public static function getWeeks(): \Generator
     {
@@ -234,7 +234,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{\DateTime, int}>
+     * @psalm-return \Generator<int, array{\DateTime, int}>
      */
     public static function getYears(): \Generator
     {

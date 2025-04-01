@@ -31,7 +31,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string|int|float|null, string}>
+     * @psalm-return \Generator<int, array{string|int|float|null, string}>
      */
     public static function getAmounts(): \Generator
     {
@@ -68,7 +68,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, string}>
+     * @psalm-return \Generator<int, array{string, string}>
      */
     public static function getDateFormatterPatterns(): \Generator
     {
@@ -78,7 +78,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{
+     * @psalm-return \Generator<int, array{
      *      0: \DateTimeInterface|int|null,
      *      1: string|null,
      *      2?: int<-1,3>|null,
@@ -99,7 +99,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{
+     * @psalm-return \Generator<int, array{
      *     0: \DateTimeInterface|int|null,
      *     1: string|null,
      *     2?: int<-1,3>|null,
@@ -149,7 +149,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{int|float|string|null, string}>
+     * @psalm-return \Generator<int, array{int|float|string|null, string}>
      */
     public static function getIds(): \Generator
     {
@@ -178,7 +178,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{\Countable|array|int|float|string|null, string}>
+     * @psalm-return \Generator<int, array{\Countable|array|int|float|string|null, string}>
      */
     public static function getIntegers(): \Generator
     {
@@ -209,7 +209,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{
+     * @psalm-return \Generator<int, array{
      *     0: int|float|string|null,
      *     1: string,
      *     2?: bool,
@@ -241,7 +241,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{
+     * @psalm-return \Generator<int, array{
      *     0: \DateTimeInterface|int|null,
      *     1: string|null,
      *     2?: int<0,3>|null}>

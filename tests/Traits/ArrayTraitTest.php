@@ -24,7 +24,7 @@ class ArrayTraitTest extends TestCase
     private const KEY = 'key';
 
     /**
-     * @psalm-return \Generator<array-key, array{0: array, 1: array, 2?: callable}>
+     * @psalm-return \Generator<int, array{0: array, 1: array, 2?: callable}>
      */
     public static function getColumnFilterValues(): \Generator
     {
@@ -65,7 +65,7 @@ class ArrayTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: array, 1: float, 2?: float}>
+     * @psalm-return \Generator<int, array{0: array, 1: float, 2?: float}>
      */
     public static function getColumnMaxValues(): \Generator
     {
@@ -95,7 +95,7 @@ class ArrayTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: array, 1: float, 2?: float}>
+     * @psalm-return \Generator<int, array{0: array, 1: float, 2?: float}>
      */
     public static function getColumnSumValues(): \Generator
     {
@@ -125,7 +125,7 @@ class ArrayTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{array, array}>
+     * @psalm-return \Generator<int, array{array, array}>
      */
     public static function getColumnValues(): \Generator
     {
@@ -146,7 +146,7 @@ class ArrayTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{array, array}>
+     * @psalm-return \Generator<int, array{array, array}>
      */
     public static function getUniqueFilteredValues(): \Generator
     {
@@ -163,7 +163,7 @@ class ArrayTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{array, array, array}>
+     * @psalm-return \Generator<int, array{array, array, array}>
      */
     public static function getUniqueMergedValues(): \Generator
     {

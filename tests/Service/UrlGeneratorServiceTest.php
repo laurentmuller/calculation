@@ -35,7 +35,7 @@ class UrlGeneratorServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: string, 1: string, 2?: array}>
+     * @psalm-return \Generator<int, array{0: string, 1: string, 2?: array}>
      */
     public static function getGenerates(): \Generator
     {
@@ -44,7 +44,7 @@ class UrlGeneratorServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: Request, 1: string, 2?: EntityInterface|int}>
+     * @psalm-return \Generator<int, array{0: Request, 1: string, 2?: EntityInterface|int}>
      */
     public static function getRequests(): \Generator
     {
@@ -56,7 +56,7 @@ class UrlGeneratorServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: Request, 1: array, 2?: EntityInterface|int}>
+     * @psalm-return \Generator<int, array{0: Request, 1: array, 2?: EntityInterface|int}>
      *
      * @throws \ReflectionException
      */

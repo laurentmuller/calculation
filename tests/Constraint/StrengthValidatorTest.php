@@ -33,7 +33,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
     private const EMPTY_MESSAGE = 'empty';
 
     /**
-     * @psalm-return \Generator<array-key, array{int}>
+     * @psalm-return \Generator<int, array{int}>
      */
     public static function getStrengthInvalids(): \Generator
     {
@@ -42,7 +42,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{StrengthLevel|int}>
+     * @psalm-return \Generator<int, array{StrengthLevel|int}>
      */
     public static function getStrengthLevels(): \Generator
     {
@@ -54,7 +54,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, int, bool}>
+     * @psalm-return \Generator<int, array{string, int, bool}>
      */
     public static function getStrengths(): \Generator
     {

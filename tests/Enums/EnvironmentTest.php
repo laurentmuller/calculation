@@ -24,7 +24,7 @@ class EnvironmentTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @psalm-return \Generator<array-key, array{Environment, bool}>
+     * @psalm-return \Generator<int, array{Environment, bool}>
      */
     public static function getIsDevelopment(): \Generator
     {
@@ -34,7 +34,7 @@ class EnvironmentTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{Environment, bool}>
+     * @psalm-return \Generator<int, array{Environment, bool}>
      */
     public static function getIsProduction(): \Generator
     {
@@ -44,7 +44,7 @@ class EnvironmentTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{Environment, bool}>
+     * @psalm-return \Generator<int, array{Environment, bool}>
      */
     public static function getIsTest(): \Generator
     {
@@ -54,7 +54,7 @@ class EnvironmentTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{Environment, string}>
+     * @psalm-return \Generator<int, array{Environment, string}>
      */
     public static function getLabels(): \Generator
     {
@@ -64,7 +64,7 @@ class EnvironmentTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{Environment, string}>
+     * @psalm-return \Generator<int, array{Environment, string}>
      */
     public static function getValues(): \Generator
     {

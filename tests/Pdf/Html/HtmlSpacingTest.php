@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 class HtmlSpacingTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<array-key, array{string}>
+     * @psalm-return \Generator<int, array{string}>
      */
     public static function getInvalidClasses(): \Generator
     {
@@ -36,7 +36,7 @@ class HtmlSpacingTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, bool}>
+     * @psalm-return \Generator<int, array{string, bool}>
      */
     public static function getIsAll(): \Generator
     {
@@ -50,7 +50,7 @@ class HtmlSpacingTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string}>
+     * @psalm-return \Generator<int, array{string}>
      */
     public static function getIsNone(): \Generator
     {
@@ -64,7 +64,7 @@ class HtmlSpacingTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, int, bool, bool, bool, bool}>
+     * @psalm-return \Generator<int, array{string, int, bool, bool, bool, bool}>
      */
     public static function getValidClasses(): \Generator
     {

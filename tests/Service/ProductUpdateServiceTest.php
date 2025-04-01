@@ -72,7 +72,7 @@ class ProductUpdateServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{float, float}>
+     * @psalm-return \Generator<int, array{float, float}>
      */
     public static function getFixedRounded(): \Generator
     {
@@ -87,7 +87,7 @@ class ProductUpdateServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{float, float, float}>
+     * @psalm-return \Generator<int, array{float, float, float}>
      */
     public static function getPercentRounded(): \Generator
     {

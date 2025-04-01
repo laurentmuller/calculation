@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 class ImageExtensionTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<array-key, array{ImageExtension, string}>
+     * @psalm-return \Generator<int, array{ImageExtension, string}>
      */
     public static function getCreateImages(): \Generator
     {
@@ -42,7 +42,7 @@ class ImageExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{ImageExtension, string}>
+     * @psalm-return \Generator<int, array{ImageExtension, string}>
      */
     public static function getFilters(): \Generator
     {
@@ -58,7 +58,7 @@ class ImageExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{ImageExtension, int}>
+     * @psalm-return \Generator<int, array{ImageExtension, int}>
      */
     public static function getImageTypes(): \Generator
     {
@@ -74,9 +74,9 @@ class ImageExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{ImageExtension, SaveOptionsType}>
+     * @psalm-return \Generator<int, array{ImageExtension, SaveOptionsType}>
      *
-     * @phpstan-return \Generator<array-key, array<ImageExtension, array>>
+     * @phpstan-return \Generator<int, array<ImageExtension, array>>
      */
     public static function getInvalidOptions(): \Generator
     {
@@ -94,7 +94,7 @@ class ImageExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: int, 1?: ImageExtension}>
+     * @psalm-return \Generator<int, array{0: int, 1?: ImageExtension}>
      */
     public static function getTryFromTypes(): \Generator
     {
@@ -110,7 +110,7 @@ class ImageExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{ImageExtension, int}>
+     * @psalm-return \Generator<int, array{ImageExtension, int}>
      */
     public static function getTypes(): \Generator
     {
@@ -126,7 +126,7 @@ class ImageExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: ImageExtension, 1: SaveOptionsType, 2?: false}>
+     * @psalm-return \Generator<int, array{0: ImageExtension, 1: SaveOptionsType, 2?: false}>
      */
     public static function getValidOptions(): \Generator
     {
@@ -150,7 +150,7 @@ class ImageExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{ImageExtension, string}>
+     * @psalm-return \Generator<int, array{ImageExtension, string}>
      */
     public static function getValues(): \Generator
     {

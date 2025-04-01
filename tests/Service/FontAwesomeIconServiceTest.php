@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 class FontAwesomeIconServiceTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<array-key, array{string, ?string}>
+     * @psalm-return \Generator<int, array{string, ?string}>
      */
     public static function getIcons(): \Generator
     {

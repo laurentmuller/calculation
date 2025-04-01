@@ -21,7 +21,7 @@ use Symfony\Component\Cache\Adapter\NullAdapter;
 class ConstantExtensionTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<array-key, array{string, int}>
+     * @psalm-return \Generator<int, array{string, int}>
      */
     public static function getCalculationServiceConstants(): \Generator
     {
@@ -35,7 +35,7 @@ class ConstantExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, string}>
+     * @psalm-return \Generator<int, array{string, string}>
      */
     public static function getEntityVoterConstants(): \Generator
     {

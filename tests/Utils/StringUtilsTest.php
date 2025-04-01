@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 class StringUtilsTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<array-key, array{string, string}>
+     * @psalm-return \Generator<int, array{string, string}>
      */
     public static function getAscii(): \Generator
     {
@@ -32,7 +32,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, string}>
+     * @psalm-return \Generator<int, array{string, string}>
      */
     public static function getCapitalize(): \Generator
     {
@@ -44,7 +44,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: string, 1: string, 2?: false}>
+     * @psalm-return \Generator<int, array{0: string, 1: string, 2?: false}>
      */
     public static function getEqualIgnoreCase(): \Generator
     {
@@ -54,7 +54,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{mixed, mixed}>
+     * @psalm-return \Generator<int, array{mixed, mixed}>
      */
     public static function getExportVar(): \Generator
     {
@@ -70,7 +70,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{?string, bool}>
+     * @psalm-return \Generator<int, array{?string, bool}>
      */
     public static function getIsString(): \Generator
     {
@@ -80,7 +80,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{non-empty-string, string, bool}>
+     * @psalm-return \Generator<int, array{non-empty-string, string, bool}>
      */
     public static function getPregMatch(): \Generator
     {
@@ -92,7 +92,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{non-empty-string, string, bool}>
+     * @psalm-return \Generator<int, array{non-empty-string, string, bool}>
      */
     public static function getPregMatchAll(): \Generator
     {
@@ -105,7 +105,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{non-empty-string, string, string, string}>
+     * @psalm-return \Generator<int, array{non-empty-string, string, string, string}>
      */
     public static function getPregReplace(): \Generator
     {
@@ -114,7 +114,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{non-empty-array<non-empty-string, string>, string, string}>
+     * @psalm-return \Generator<int, array{non-empty-array<non-empty-string, string>, string, string}>
      */
     public static function getPregReplaceAll(): \Generator
     {
@@ -123,7 +123,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{object|class-string, string}>
+     * @psalm-return \Generator<int, array{object|class-string, string}>
      */
     public static function getShortNameValid(): \Generator
     {
@@ -133,7 +133,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, string, bool, bool}>
+     * @psalm-return \Generator<int, array{string, string, bool, bool}>
      */
     public static function getStartWith(): \Generator
     {
@@ -144,7 +144,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{string, ?string}>
+     * @psalm-return \Generator<int, array{string, ?string}>
      */
     public static function getTrim(): \Generator
     {

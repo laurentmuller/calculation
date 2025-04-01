@@ -23,7 +23,7 @@ class ThemeTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @psalm-return \Generator<array-key, array{Theme, string}>
+     * @psalm-return \Generator<int, array{Theme, string}>
      */
     public static function getHelps(): \Generator
     {
@@ -33,7 +33,7 @@ class ThemeTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{Theme, string}>
+     * @psalm-return \Generator<int, array{Theme, string}>
      */
     public static function getIcons(): \Generator
     {
@@ -43,7 +43,7 @@ class ThemeTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{Theme, string}>
+     * @psalm-return \Generator<int, array{Theme, string}>
      */
     public static function getLabels(): \Generator
     {
@@ -53,7 +53,7 @@ class ThemeTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{Theme, string}>
+     * @psalm-return \Generator<int, array{Theme, string}>
      */
     public static function getSuccess(): \Generator
     {
@@ -63,7 +63,7 @@ class ThemeTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{Theme, string}>
+     * @psalm-return \Generator<int, array{Theme, string}>
      */
     public static function getThumbnails(): \Generator
     {
@@ -73,7 +73,7 @@ class ThemeTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{Theme, string}>
+     * @psalm-return \Generator<int, array{Theme, string}>
      */
     public static function getTranslates(): \Generator
     {
@@ -83,7 +83,7 @@ class ThemeTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{Theme, string}>
+     * @psalm-return \Generator<int, array{Theme, string}>
      */
     public static function getValues(): \Generator
     {

@@ -22,7 +22,7 @@ class MathTraitTest extends TestCase
     use MathTrait;
 
     /**
-     * @psalm-return \Generator<array-key, array{float, float}>
+     * @psalm-return \Generator<int, array{float, float}>
      */
     public static function getCeil(): \Generator
     {
@@ -32,7 +32,7 @@ class MathTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{float, float}>
+     * @psalm-return \Generator<int, array{float, float}>
      */
     public static function getFloor(): \Generator
     {
@@ -42,7 +42,7 @@ class MathTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: int, 1: int, 2?: false}>
+     * @psalm-return \Generator<int, array{0: int, 1: int, 2?: false}>
      */
     public static function getIsBitSet(): \Generator
     {
@@ -61,7 +61,7 @@ class MathTraitTest extends TestCase
     /**
      * float $val1, float $val2, int $precision = 2, bool $expected = true.
      *
-     * @psalm-return \Generator<array-key, array{0: float, 1: float, 2?: int, 3?: bool}>
+     * @psalm-return \Generator<int, array{0: float, 1: float, 2?: int, 3?: bool}>
      */
     public static function getIsFloatEquals(): \Generator
     {
@@ -75,7 +75,7 @@ class MathTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: float, 1?: int, 2?: false}>
+     * @psalm-return \Generator<int, array{0: float, 1?: int, 2?: false}>
      */
     public static function getIsFloatZero(): \Generator
     {
@@ -94,7 +94,7 @@ class MathTraitTest extends TestCase
     /**
      * float $val, float $expected, int $precision = 2.
      *
-     * @psalm-return \Generator<array-key, array{0: float, 1: float, 2?: int}>
+     * @psalm-return \Generator<int, array{0: float, 1: float, 2?: int}>
      */
     public static function getRound(): \Generator
     {
@@ -109,7 +109,7 @@ class MathTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{0: float, 1: float, 2: float, 3?: 11.0}>
+     * @psalm-return \Generator<int, array{0: float, 1: float, 2: float, 3?: 11.0}>
      */
     public static function getSafeDivide(): \Generator
     {
@@ -120,7 +120,7 @@ class MathTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{float, float, float, float}>
+     * @psalm-return \Generator<int, array{float, float, float, float}>
      */
     public static function getValidateFloatRange(): \Generator
     {
@@ -132,7 +132,7 @@ class MathTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{int, int, int, int}>
+     * @psalm-return \Generator<int, array{int, int, int, int}>
      */
     public static function getValidateIntRange(): \Generator
     {

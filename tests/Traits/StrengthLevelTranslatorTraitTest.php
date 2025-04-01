@@ -37,7 +37,7 @@ class StrengthLevelTranslatorTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<array-key, array{int, string}>
+     * @psalm-return \Generator<int, array{int, string}>
      */
     public static function getTranslateLevels(): \Generator
     {

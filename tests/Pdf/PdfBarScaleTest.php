@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 class PdfBarScaleTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<array-key, array{PdfBarScale, float, float, float}>
+     * @psalm-return \Generator<int, array{PdfBarScale, float, float, float}>
      */
     public static function getValues(): \Generator
     {

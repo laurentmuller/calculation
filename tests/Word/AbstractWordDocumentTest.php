@@ -157,6 +157,8 @@ class AbstractWordDocumentTest extends TestCase
         $service = $this->createMock(UserService::class);
         $service->method('isPrintAddress')
             ->willReturn(true);
+        $service->method('getCustomer')
+            ->willReturn($cs);
 
         $controller = $this->createMock(AbstractController::class);
         $controller->method('getUserIdentifier')
@@ -169,6 +171,8 @@ class AbstractWordDocumentTest extends TestCase
             ->willReturn($application);
         $controller->method('getUserService')
             ->willReturn($service);
+        $controller->method('getCustomer')
+            ->willReturn($cs);
 
         return $controller;
     }

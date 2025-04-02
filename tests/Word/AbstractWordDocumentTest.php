@@ -20,6 +20,7 @@ use App\Service\UserService;
 use App\Tests\TranslatorMockTrait;
 use App\Word\AbstractWordDocument;
 use App\Word\HtmlDocument;
+use PhpOffice\PhpWord\Exception\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,7 +29,7 @@ class AbstractWordDocumentTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @throws \PhpOffice\PhpWord\Exception\Exception
+     * @throws Exception
      */
     public function testDefault(): void
     {
@@ -41,13 +42,12 @@ class AbstractWordDocumentTest extends TestCase
             }
         };
         $doc->setTitleTrans('id');
-
         $actual = $doc->render();
         self::assertTrue($actual);
     }
 
     /**
-     * @throws \PhpOffice\PhpWord\Exception\Exception
+     * @throws Exception
      */
     public function testWithCustomer(): void
     {
@@ -65,71 +65,56 @@ class AbstractWordDocumentTest extends TestCase
     }
 
     /**
-     * @throws \PhpOffice\PhpWord\Exception\Exception
+     * @throws Exception
      */
     public function testWithEmptyValues(): void
     {
         $cs = new CustomerInformation();
         $controller = $this->createMockController($cs);
-        $content = <<<XML
-            <i>Test</i>
-            <div>Text</div>
-            XML;
-        $doc = new HtmlDocument($controller, $content);
-        $actual = $doc->render();
-        self::assertTrue($actual);
+        $this->render($controller);
     }
 
     /**
-     * @throws \PhpOffice\PhpWord\Exception\Exception
+     * @throws Exception
      */
     public function testWithoutEmail(): void
     {
         $cs = $this->createCustomerInformation();
         $cs->setEmail(null);
         $controller = $this->createMockController($cs);
-        $content = <<<XML
-            <i>Test</i>
-            <div>Text</div>
-            XML;
-        $doc = new HtmlDocument($controller, $content);
-        $actual = $doc->render();
-        self::assertTrue($actual);
+        $this->render($controller);
     }
 
     /**
-     * @throws \PhpOffice\PhpWord\Exception\Exception
+     * @throws Exception
+     */
+    public function testWithoutNameAndTitle(): void
+    {
+        $cs = $this->createCustomerInformation();
+        $cs->setName(null);
+        $controller = $this->createMockController($cs);
+        $this->render($controller, '');
+    }
+
+    /**
+     * @throws Exception
      */
     public function testWithoutURL(): void
     {
         $cs = $this->createCustomerInformation();
+        $cs->setUrl(null);
         $controller = $this->createMockController($cs);
-        $controller->method('getApplicationOwnerUrl')
-            ->willReturn('');
-
-        $content = <<<XML
-            <i>Test</i>
-            <div>Text</div>
-            XML;
-        $doc = new HtmlDocument($controller, $content);
-        $actual = $doc->render();
-        self::assertTrue($actual);
+        $this->render($controller);
     }
 
     /**
-     * @throws \PhpOffice\PhpWord\Exception\Exception
+     * @throws Exception
      */
     public function testWithPrintAddress(): void
     {
         $cs = $this->createCustomerInformation();
         $controller = $this->createMockController($cs);
-        $content = <<<XML
-            <i>Test</i>
-            <div>Text</div>
-            XML;
-        $doc = new HtmlDocument($controller, $content);
-        $actual = $doc->render();
-        self::assertTrue($actual);
+        $this->render($controller);
     }
 
     private function createCustomerInformation(): CustomerInformation
@@ -137,10 +122,10 @@ class AbstractWordDocumentTest extends TestCase
         $cs = new CustomerInformation();
         $cs->setPrintAddress(true)
             ->setAddress('Address')
-            ->setEmail('Email')
+            ->setEmail('email@example.com')
             ->setName('Name')
             ->setPhone('Phone')
-            ->setUrl('URL')
+            ->setUrl('https://www.example.com')
             ->setZipCity('ZipCity');
 
         return $cs;
@@ -164,7 +149,7 @@ class AbstractWordDocumentTest extends TestCase
         $controller->method('getUserIdentifier')
             ->willReturn('User');
         $controller->method('getApplicationOwnerUrl')
-            ->willReturn('https://www.example.com');
+            ->willReturnCallback(fn (): string => $cs->getUrl() ?? '');
         $controller->method('getApplicationName')
             ->willReturn('Calculation');
         $controller->method('getApplicationService')
@@ -175,5 +160,20 @@ class AbstractWordDocumentTest extends TestCase
             ->willReturn($cs);
 
         return $controller;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function render(MockObject&AbstractController $controller, string $title = 'Title'): void
+    {
+        $content = <<<XML
+            <i>Test</i>
+            <div>Text</div>
+            XML;
+        $doc = new HtmlDocument($controller, $content);
+        $doc->setTitle($title);
+        $actual = $doc->render();
+        self::assertTrue($actual);
     }
 }

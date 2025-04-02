@@ -137,10 +137,7 @@ final class FormatUtils
         }
 
         $formatter = self::getDateFormatter($dateType, $timeType, $pattern, $timezone);
-        $result = $formatter->format($date);
-        if (false === $result) {
-            return null;
-        }
+        $result = (string) $formatter->format($date);
         if (StringUtils::isString($pattern)) {
             return \ucfirst($result);
         }
@@ -288,7 +285,7 @@ final class FormatUtils
         return ($value ** -1.0) === -\INF ? 0.0 : $value;
     }
 
-    private static function hashCode(mixed ...$values): string
+    private static function hashCode(\DateTimeZone|string|int|null ...$values): string
     {
         $values = \array_map(
             fn (mixed $value): string => $value instanceof \DateTimeZone ? $value->getName() : (string) $value,

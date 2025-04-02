@@ -78,7 +78,7 @@ final class DateUtils
     }
 
     /**
-     * Complete the give year with four digits.
+     * Complete the given year with four digits.
      *
      * For example, if the year is set with 2 digits (10), the return value will be 2010.
      *

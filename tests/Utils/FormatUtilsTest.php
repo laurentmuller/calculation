@@ -14,12 +14,15 @@ declare(strict_types=1);
 namespace App\Tests\Utils;
 
 use App\Model\LogFile;
+use App\Tests\PrivateInstanceTrait;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class FormatUtilsTest extends TestCase
 {
+    use PrivateInstanceTrait;
+
     private const DATE_TIME = '2022-02-20 12:59:59';
     private const PERCENT_SYMBOL = '%';
     private const TIME_STAMP = 1_645_358_399;
@@ -394,6 +397,14 @@ class FormatUtilsTest extends TestCase
     public function testPercentSymbol(): void
     {
         self::assertSame(self::PERCENT_SYMBOL, FormatUtils::PERCENT_SYMBOL);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testPrivateInstance(): void
+    {
+        self::assertPrivateInstance(FormatUtils::class);
     }
 
     public function testThousandsSep(): void

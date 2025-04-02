@@ -14,12 +14,15 @@ declare(strict_types=1);
 namespace App\Tests\Utils;
 
 use App\Entity\Calculation;
+use App\Tests\PrivateInstanceTrait;
 use App\Utils\StringUtils;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class StringUtilsTest extends TestCase
 {
+    use PrivateInstanceTrait;
+
     /**
      * @psalm-return \Generator<int, array{string, string}>
      */
@@ -302,6 +305,14 @@ class StringUtilsTest extends TestCase
     {
         $actual = StringUtils::pregReplaceAll($values, $subject);
         self::assertSame($expected, $actual);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testPrivateInstance(): void
+    {
+        self::assertPrivateInstance(StringUtils::class);
     }
 
     public function testSlug(): void

@@ -14,12 +14,15 @@ declare(strict_types=1);
 namespace App\Tests\Utils;
 
 use App\Enums\ImageExtension;
+use App\Tests\PrivateInstanceTrait;
 use App\Utils\FileUtils;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class FileUtilsTest extends TestCase
 {
+    use PrivateInstanceTrait;
+
     /**
      * @psalm-return \Generator<int, array{0: string, 1: string, 2?: string, 3?: string}>
      */
@@ -295,6 +298,14 @@ class FileUtilsTest extends TestCase
         $expected = \sprintf('C:%sTemp', \DIRECTORY_SEPARATOR);
         $actual = FileUtils::normalizeDirectory('C:\\Temp');
         self::assertSame($expected, $actual);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testPrivateInstance(): void
+    {
+        self::assertPrivateInstance(FileUtils::class);
     }
 
     public function testReadFileInvalid(): void

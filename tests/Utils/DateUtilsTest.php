@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Utils;
 
 use App\Tests\DateAssertTrait;
+use App\Tests\PrivateInstanceTrait;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -22,6 +23,7 @@ use PHPUnit\Framework\TestCase;
 class DateUtilsTest extends TestCase
 {
     use DateAssertTrait;
+    use PrivateInstanceTrait;
 
     #[\Override]
     protected function setUp(): void
@@ -368,6 +370,14 @@ class DateUtilsTest extends TestCase
     {
         $values = DateUtils::getMonths();
         self::assertCount(12, $values);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testPrivateInstance(): void
+    {
+        self::assertPrivateInstance(DateUtils::class);
     }
 
     #[DataProvider('getRemoveTimes')]

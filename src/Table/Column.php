@@ -125,15 +125,12 @@ class Column implements \Stringable, SortModeInterface
      */
     public static function createColumnAction(): self
     {
-        $column = new self();
-        $column->setField('id')
+        return self::instance('id')
             ->setAlias('action')
             ->setSortable(false)
             ->setSearchable(false)
-            ->setCellFormatter('formatActions')
+            ->setCellFormatter('renderActions')
             ->setClass('actions rowlink-skip d-print-none');
-
-        return $column;
     }
 
     /**
@@ -144,39 +141,22 @@ class Column implements \Stringable, SortModeInterface
      *
      * @return Column[] the column definitions
      *
-     * @throws \InvalidArgumentException if a property cannot be set
+     * @throws \InvalidArgumentException if the given file contains no definition, or if a property cannot be set
      */
     public static function fromJson(AbstractTable $parent, string $path): array
     {
-        /** @var array<array<string, mixed>> $definitions */
+        /** @var array<array<string, string|bool>> $definitions */
         $definitions = FileUtils::decodeJson($path);
         if ([] === $definitions) {
-            throw new \InvalidArgumentException("The file '$path' does not contain any definition.");
+            throw new \InvalidArgumentException(\sprintf('The file "%s" contains no definition.', $path));
         }
 
         $accessor = self::getAccessor();
 
-        return \array_map(function (array $definition) use ($parent, $accessor): self {
-            $column = new self();
-
-            /** @psalm-var mixed $value */
-            foreach ($definition as $key => $value) {
-                // special case for the field formatter
-                if (self::FIELD_FORMATTER === $key) {
-                    $value = [$parent, $value];
-                }
-
-                try {
-                    $accessor->setValue($column, $key, $value);
-                } catch (ExceptionInterface $e) {
-                    $message = \sprintf("Cannot set the property '%s'.", $key);
-                    throw new \InvalidArgumentException($message, $e->getCode(), $e);
-                }
-            }
-
-            /** @psalm-var Column */
-            return $column;
-        }, $definitions);
+        return \array_map(
+            static fn (array $definition): self => self::mapDefinition($parent, $definition, $accessor),
+            $definitions
+        );
     }
 
     public function getAlias(): string
@@ -232,9 +212,6 @@ class Column implements \Stringable, SortModeInterface
         return $this->field;
     }
 
-    /**
-     * @psalm-api
-     */
     public function getFieldFormatter(): string|callable|null
     {
         return $this->fieldFormatter;
@@ -250,9 +227,6 @@ class Column implements \Stringable, SortModeInterface
         return $this->order;
     }
 
-    /**
-     * @psalm-api
-     */
     public function getStyleFormatter(): ?string
     {
         return $this->styleFormatter;
@@ -261,6 +235,14 @@ class Column implements \Stringable, SortModeInterface
     public function getTitle(): ?string
     {
         return $this->title;
+    }
+
+    /**
+     * Create a new instance with the given field.
+     */
+    public static function instance(string $field = ''): self
+    {
+        return (new self())->setField($field);
     }
 
     public function isDefault(): bool
@@ -289,11 +271,9 @@ class Column implements \Stringable, SortModeInterface
     }
 
     /**
-     * Map the given entity or array to a string value using this field property.
+     * Map the given entity or array to a string value using this field.
      *
-     * @param EntityType $objectOrArray the entity or array to map
-     *
-     * @return string the mapped value
+     * @psalm-param EntityType $objectOrArray the entity or array to map
      */
     public function mapValue(EntityInterface|array $objectOrArray): string
     {
@@ -335,14 +315,13 @@ class Column implements \Stringable, SortModeInterface
     public function setField(string $field): self
     {
         $this->field = $field;
+        $this->property = '[' . \str_replace('.', '].[', $field) . ']';
 
-        return $this->updateProperty();
+        return $this;
     }
 
     /**
      * @psalm-param string|callable(mixed, EntityType): string|null $fieldFormatter
-     *
-     * @psalm-api
      */
     public function setFieldFormatter(string|callable|null $fieldFormatter): self
     {
@@ -351,9 +330,6 @@ class Column implements \Stringable, SortModeInterface
         return $this;
     }
 
-    /**
-     * @psalm-api
-     */
     public function setNumeric(bool $numeric): self
     {
         $this->numeric = $numeric;
@@ -363,8 +339,6 @@ class Column implements \Stringable, SortModeInterface
 
     /**
      * Sets the default sorting order.
-     *
-     * @psalm-api
      */
     public function setOrder(string $order): self
     {
@@ -392,9 +366,6 @@ class Column implements \Stringable, SortModeInterface
         return $this;
     }
 
-    /**
-     * @psalm-api
-     */
     public function setStyleFormatter(?string $styleFormatter): self
     {
         $this->styleFormatter = $styleFormatter;
@@ -417,12 +388,8 @@ class Column implements \Stringable, SortModeInterface
     }
 
     /**
-     * Formats the given value using the field formatter if applicable.
-     *
-     * @param EntityType $objectOrArray the parent entity or array
-     * @param mixed      $value         the value to format
-     *
-     * @return string the formatted value
+     * @psalm-param EntityType $objectOrArray
+     * @psalm-param mixed      $value
      */
     private function formatValue(EntityInterface|array $objectOrArray, mixed $value): string
     {
@@ -446,14 +413,29 @@ class Column implements \Stringable, SortModeInterface
     }
 
     /**
-     * Update the property path for the array.
+     * @param array<string, string|bool> $definition
+     *
+     * @throws \InvalidArgumentException if a property cannot be set
      */
-    private function updateProperty(): self
-    {
-        if ('' !== $this->field) {
-            $this->property = \str_replace('.', '].[', '[' . $this->field . ']');
+    private static function mapDefinition(
+        AbstractTable $parent,
+        array $definition,
+        PropertyAccessorInterface $accessor
+    ): self {
+        $column = self::instance();
+        foreach ($definition as $key => $value) {
+            // special case for the field formatter
+            if (self::FIELD_FORMATTER === $key) {
+                $value = [$parent, $value];
+            }
+
+            try {
+                $accessor->setValue($column, $key, $value);
+            } catch (ExceptionInterface $e) {
+                throw new \InvalidArgumentException(\sprintf('Unable set the property "%s".', $key), $e->getCode(), $e);
+            }
         }
 
-        return $this;
+        return $column;
     }
 }

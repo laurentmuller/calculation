@@ -21,6 +21,9 @@ $(function () {
          */
         constructor(element, options) {
             this.$element = $(element);
+            if (!this.$element.is('input[type=file]')) {
+                throw new Error('Element is not an input file.');
+            }
             this.options = $.extend({}, ImageInput.DEFAULTS, options);
             this._init();
         }

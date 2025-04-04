@@ -264,8 +264,16 @@
         {% endfor %}
     </tbody>
 </table>
-{# dropdown actions template #}
-<div id="dropdown-actions" class="dropdown d-print-none d-none">
+{# dropdown actions template
+<template id="actions-template" class="dropdown-menu dropdown-menu-end">
+    <ul class="dropdown-menu">
+        {{ _self.item_path(path('product_edit', {id: 0}), 'product.edit.title', ICON_EDIT, edit_class) }}
+        {{ _self.item_path(path('product_delete', {id: 0}), 'product.delete.title', ICON_DELETE, 'btn-delete') }}
+        {{ _self.item_path(path('product_show', {id: 0}), 'product.show.title', ICON_SHOW, show_class) }}
+    </ul>
+</template>
+#}
+<template id="dropdown-actions" class="dropdown d-print-none">
     {{ dropdownEllipsis() }}
     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-actions">
         {% if allow_edit %}
@@ -286,7 +294,7 @@
         {% endif %}
         {% block other_actions -%}{%- endblock %}
     </ul>
-</div>
+</template>
 {# custom view template #}
 <template id="custom-view-template">
     <div class="col col-custom-view mb-2 px-1">

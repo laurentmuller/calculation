@@ -38,12 +38,14 @@
             ]
         },
         {
+            "example": "https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/js/bootstrap.bundle.js",
             "name": "bootstrap",
-            "version": "5.3.3",
-            "source": "cdnjs",
+            "version": "5.3.4",
+            "source": "jsdelivr",
+            "prefix": "dist/",
             "files": [
-                "js/bootstrap.bundle.js",
-                "js/bootstrap.bundle.js.map"
+                "dist/js/bootstrap.bundle.js",
+                "dist/js/bootstrap.bundle.js.map"
             ]
         },
         {
@@ -215,7 +217,6 @@
             ]
         },
         {
-
             "name": "mermaid",
             "version": "11.6.0",
             "source": "jsdelivr",

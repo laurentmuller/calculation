@@ -65,14 +65,15 @@
             // -------------------------------
 
             /**
-             * Update the href attribute of the action.
+             * Update the href attribute of drop-down actions.
              *
              * @param {Object} row - the row data.
              * @param {Object} params - the query parameters.
              */
             updateLink: function (row, params) {
                 const $link = $(this);
-                const regex = /\bid=\d+/;
+                // console.log($link.attr('href'));
+                const regex = /\bid=\d+/i;
                 const values = $link.attr('href').split('?');
                 values[0] = values[0].replace(/\/\d+/, '/' + row.action);
                 if (values.length > 1 && values[1].match(regex)) {
@@ -390,7 +391,7 @@
             /**
              * Get the loaded data (rows) of table when this method is called.
              *
-             * @return {array} the loaded data.
+             * @return {Array<Object>} the loaded data.
              */
             getData: function () {
                 return $(this).bootstrapTable('getData');
@@ -483,7 +484,7 @@
             },
 
             /**
-             * Update the href attribute of the actions.
+             * Update the href attribute of actions.
              *
              * @param {array} rows - the rendered data.
              * @return {jQuery} this instance for chaining.
@@ -495,24 +496,22 @@
                 const onUpdateHref = typeof options.onUpdateHref === 'function' ? options.onUpdateHref : false;
                 const onRenderAction = typeof options.onRenderAction === 'function' ? options.onRenderAction : false;
                 // run over rows
-                $this.find('tbody tr[data-index]').each(function () {
+                $this.find('tbody tr[data-index]').each(function (index) {
                     const $row = $(this);
-                    const row = rows[$row.index()];
-                    let $paths = $(this).find('.dropdown-item-path');
-                    if ($paths.length) {
-                        $paths.each(function () {
-                            // update link
-                            const $link = $(this);
-                            $link.updateLink(row, params);
-                            if (onRenderAction) {
-                                onRenderAction($this, row, $row, $link);
-                            }
-                        });
-                        // update row
-                        $paths = $(this).find('.dropdown-item-path');
-                        if ($paths.length && onUpdateHref) {
-                            onUpdateHref($this, $paths);
+                    const row = rows[index];
+                    const $links = $(this).find('a.dropdown-item-path');
+                    if (!$links.length) {
+                        return true;
+                    }
+                    $links.each(function () {
+                        const $link = $(this);
+                        $link.updateLink(row, params);
+                        if (onRenderAction) {
+                            onRenderAction($this, row, $row, $link);
                         }
+                    });
+                    if (onUpdateHref) {
+                        onUpdateHref($this, $links);
                     }
                 });
                 return $this;
@@ -963,7 +962,6 @@
                 $dialog.data('initialized', true);
 
                 const $this = $(this);
-                /** @type {jQuery|HTMLElement|*} */
                 const $range = $('#page-range');
                 const $labelRecord = $('#page-record');
                 const $labelLabel = $('#page-label');

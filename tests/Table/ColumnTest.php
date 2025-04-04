@@ -28,7 +28,7 @@ class ColumnTest extends TestCase
         self::assertSame('action', $column->getAlias());
         self::assertFalse($column->isSortable());
         self::assertFalse($column->isSearchable());
-        self::assertSame('formatActions', $column->getCellFormatter());
+        self::assertSame('renderActions', $column->getCellFormatter());
         self::assertSame('actions rowlink-skip d-print-none', $column->getClass());
     }
 
@@ -59,7 +59,6 @@ class ColumnTest extends TestCase
     public function testFromJsonValid(): void
     {
         $table = $this->createTable();
-
         $path = __DIR__ . '/../files/json/columns_default.json';
         $columns = Column::fromJson($table, $path);
         self::assertCount(4, $columns);
@@ -67,7 +66,7 @@ class ColumnTest extends TestCase
 
     public function testGetAttribues(): void
     {
-        $column = new Column();
+        $column = Column::instance();
         $column->setClass('class')
             ->setField('field')
             ->setOrder('desc')
@@ -98,7 +97,7 @@ class ColumnTest extends TestCase
 
     public function testGetClass(): void
     {
-        $column = new Column();
+        $column = Column::instance();
         $column->setClass('class')
             ->setSortable(false);
         $actual = $column->getClass();
@@ -111,7 +110,7 @@ class ColumnTest extends TestCase
 
     public function testGetProperties(): void
     {
-        $column = new Column();
+        $column = Column::instance();
         self::assertNull($column->getFieldFormatter());
         self::assertNull($column->getStyleFormatter());
         self::assertNull($column->getTitle());
@@ -119,7 +118,7 @@ class ColumnTest extends TestCase
 
     public function testInvalidSort(): void
     {
-        $column = new Column();
+        $column = Column::instance();
         self::assertSame(SortModeInterface::SORT_ASC, $column->getOrder());
         $column->setOrder('fake');
         self::assertSame(SortModeInterface::SORT_ASC, $column->getOrder());
@@ -127,13 +126,11 @@ class ColumnTest extends TestCase
 
     public function testMapValueBool(): void
     {
-        $column = new Column();
-        $column->setField('field');
-
         $data = [
             'id' => 1,
             'field' => true,
         ];
+        $column = Column::instance('field');
         $actual = $column->mapValue($data);
         self::assertSame('1', $actual);
 
@@ -153,8 +150,7 @@ class ColumnTest extends TestCase
             'id' => 1,
             'field' => 'value',
         ];
-        $column = new Column();
-        $column->setField('field');
+        $column = Column::instance('field');
         $actual = $column->mapValue($data);
         self::assertSame('value', $actual);
     }
@@ -166,8 +162,7 @@ class ColumnTest extends TestCase
             'field' => 'value',
         ];
         $callback = fn (string $value): string => 'prefix.' . $value;
-        $column = new Column();
-        $column->setField('field')
+        $column = Column::instance('field')
             ->setFieldFormatter($callback);
         $actual = $column->mapValue($data);
         self::assertSame('prefix.value', $actual);
@@ -175,8 +170,7 @@ class ColumnTest extends TestCase
 
     public function testToString(): void
     {
-        $column = new Column();
-        $column->setField('field');
+        $column = Column::instance('field');
         $actual = (string) $column;
         self::assertSame('field', $actual);
     }

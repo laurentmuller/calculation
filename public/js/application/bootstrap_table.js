@@ -47,6 +47,7 @@ window.customViewFormatter = function (data) {
  * @returns {string} the formatted product unit.
  */
 window.formatProductUnit = function (row) {
+    'use strict';
     return row.unit ? ' / ' + row.unit : '';
 };
 
@@ -340,23 +341,13 @@ function updateShowEntityAction(row, $action, propertyName) {
 }
 
 /**
- * Formatter for the actions' column.
+ * Render cell for the action's column.
  *
- * @param {number} value the field value (identifier).
  * @returns {string} the rendered cell.
  */
-window.formatActions = function (value) {
+window.renderActions = function () {
     'use strict';
-    const substr = '$1' + value;
-    const regex = /(\/|\bid=)(\d+)/;
-    const $actions = $('#dropdown-actions').clone().removeClass('d-none');
-    $actions.find('.dropdown-item-path').each(function () {
-        const $link = $(this);
-        const source = $link.attr('href');
-        const target = source.replace(regex, substr);
-        $link.attr('href', target);
-    });
-    return $actions.html();
+    return $('#dropdown-actions').clone().html();
 };
 
 /**
@@ -771,5 +762,81 @@ function showSortDialog($table, $button) {
         } else {
             $table.showSelection();
         }
+
+        // /**
+        //  * @param {jQuery} $menu
+        //  * @param {Object} row
+        //  * @param {Object} params
+        //  */
+        // window.updateDropDownMenu = function ($menu, row, params) {
+        //     $menu.find('a.dropdown-item-path').each(function () {
+        //         const $link = $(this);
+        //         $link.updateLink(row, params);
+        //         const source = $link.attr('href');
+        //         console.log(source);
+        //     });
+        // };
+        //
+        // /**
+        //  * @param {jQuery} $button
+        //  * @return {number}
+        //  */
+        // window.getRowIndex = function ($button) {
+        //     const index = $button.parents('tr').index();
+        //     if (index !== -1) {
+        //         return index;
+        //     }
+        //     return $button.parents('.col-custom-view').index();
+        // };
+        //
+        // /**
+        //  * @param {jQuery} $button
+        //  */
+        // window.addDropDownMenu = function ($button) {
+        //     if ($button.data('menu-added')) {
+        //         return;
+        //     }
+        //     $button.data('menu-added', true).trigger('focus');
+        //     const $menu = cloneDropDownMenu();
+        //     const params = $table.getParameters();
+        //     const index = getRowIndex($button);
+        //     const data = $table.getData();
+        //     const row = data[index];
+        //     updateDropDownMenu($menu, row, params);
+        //     // $menu.insertAfter($button);
+        // };
+        //
+        // /**
+        //  * @param {KeyboardEvent} e
+        //  */
+        // window.keyDownHandler = function (e) {
+        //     if (e.key === 'Enter') {
+        //         addDropDownMenu($(this));
+        //     }
+        // };
+        //
+        // /**
+        //  * @param {MouseEvent} e
+        //  */
+        // window.mouseDownHandler = function (e) {
+        //     if (e.button === 0) {
+        //         addDropDownMenu($(this));
+        //     }
+        // };
+        //
+        // /**
+        //  * @return {jQuery}
+        //  */
+        // window.cloneDropDownMenu = function () {
+        //     // return $('#actions-template').clone();
+        //     const template = document.getElementById('actions-template');
+        //     const content = template.content.cloneNode(true);
+        //     return $(content);
+        // };
+        //
+        // const selector = 'button[data-bs-toggle="dropdown"]';
+        // const $parent = $table.parents('.bootstrap-table');
+        // $parent.on('mousedown', selector, mouseDownHandler);
+        // $parent.on('keydown', selector, keyDownHandler);
     });
 }(jQuery));

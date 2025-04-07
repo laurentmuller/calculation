@@ -3,7 +3,7 @@
 /**
  * Formatter for the custom view.
  *
- * @param {Array.<Object>} data the rows to format.
+ * @param {Object[]} data the rows to format.
  * @returns {string} the custom view.
  */
 window.customViewFormatter = function (data) {
@@ -43,8 +43,8 @@ window.customViewFormatter = function (data) {
 /**
  * Format the product unit in the custom view.
  *
- * @param {object} row the record data.
- * @returns {string} the formatted product unit.
+ * @param {Object} row the record data.
+ * @returns {String} the formatted product unit.
  */
 window.formatProductUnit = function (row) {
     'use strict';
@@ -54,8 +54,8 @@ window.formatProductUnit = function (row) {
 /**
  * Gets the class of the product price in the custom view.
  *
- * @param {object} row the record data.
- * @returns {string} the class.
+ * @param {Object} row the record data.
+ * @returns {String} the class.
  */
 window.formatProductClass = function (row) {
     'use strict';
@@ -70,8 +70,8 @@ window.formatProductClass = function (row) {
  * Cell style for a text border column (calculation or status).
  *
  * @param {number} _value the field value.
- * @param {object} row the record data.
- * @returns {object} the cell style.
+ * @param {Object} row the record data.
+ * @returns {Object} the cell style.
  */
 window.styleBorderColor = function (_value, row) {
     'use strict';
@@ -88,8 +88,8 @@ window.styleBorderColor = function (_value, row) {
 /**
  * Cell class for the product price.
  *
- * @param {string} value the product price.
- * @returns {object} the cell classes.
+ * @param {String} value the product price.
+ * @returns {Object} the cell classes.
  */
 window.styleProductPrice = function (value) {
     'use strict';
@@ -107,9 +107,9 @@ window.styleProductPrice = function (value) {
  * Row classes for the text muted.
  *
  * @param {Object} row the record data.
- * @param {string} row.textMuted the text muted value
+ * @param {String} row.textMuted the text muted value
  * @param {int} index the row index.
- * @returns {object} the row classes.
+ * @returns {Object} the row classes.
  */
 window.styleTextMuted = function (row, index) {
     'use strict';
@@ -127,7 +127,7 @@ window.styleTextMuted = function (row, index) {
  * Remove the given action by removing the parent's list entry.
  *
  * @param {jQuery} $action the action to remove.
- * @param {string} [divider] the previous divider, if any; to remove.
+ * @param {String} [divider] the previous divider, if any; to remove.
  */
 function removeAction($action, divider) {
     'use strict';
@@ -143,7 +143,7 @@ function removeAction($action, divider) {
  *
  * @param {jQueryTable} $table the parent table.
  * @param {Object} row the row data.
- * @param {string} row.hashedToken the reset password value
+ * @param {String} row.hashedToken the reset password value
  * @param {jQuery} _$element the table row.
  * @param {jQuery} $action the action to update
  */
@@ -239,8 +239,8 @@ function updateUserSwitchAction($table, row, _$element, $action) {
  *
  * @param {jQueryTable} $table the parent table.
  * @param {Object} row the row data.
- * @param {string} row.id the row identifier.
- * @param {string} row.type the entity type.
+ * @param {String} row.id the row identifier.
+ * @param {String} row.type the entity type.
  * @param {boolean} row.allowShow the show granted.
  * @param {boolean} row.allowEdit the edit granted.
  * @param {boolean} row.allowDelete the deleted granted.
@@ -325,7 +325,7 @@ function updateTaskComputeAction(_$table, row, _$element, $action) {
  *
  * @param {Object} row the row data.
  * @param {jQuery|HTMLElement|*} $action the action to update
- * @param {string} propertyName  the property name to get from row.
+ * @param {String} propertyName  the property name to get from row.
  */
 function updateShowEntityAction(row, $action, propertyName) {
     'use strict';
@@ -343,7 +343,7 @@ function updateShowEntityAction(row, $action, propertyName) {
 /**
  * Render cell for the action's column.
  *
- * @returns {string} the rendered cell.
+ * @returns {String} the rendered cell.
  */
 window.renderActions = function () {
     'use strict';
@@ -756,87 +756,10 @@ function showSortDialog($table, $button) {
         if ($searchMinimum.length) {
             $searchMinimum.toggleClass('d-none', $table.isSearchText());
         }
-
         if ($table.isEmpty()) {
             $('input.form-control-search').trigger('focus');
         } else {
             $table.showSelection();
         }
-
-        // /**
-        //  * @param {jQuery} $menu
-        //  * @param {Object} row
-        //  * @param {Object} params
-        //  */
-        // window.updateDropDownMenu = function ($menu, row, params) {
-        //     $menu.find('a.dropdown-item-path').each(function () {
-        //         const $link = $(this);
-        //         $link.updateLink(row, params);
-        //         const source = $link.attr('href');
-        //         console.log(source);
-        //     });
-        // };
-        //
-        // /**
-        //  * @param {jQuery} $button
-        //  * @return {number}
-        //  */
-        // window.getRowIndex = function ($button) {
-        //     const index = $button.parents('tr').index();
-        //     if (index !== -1) {
-        //         return index;
-        //     }
-        //     return $button.parents('.col-custom-view').index();
-        // };
-        //
-        // /**
-        //  * @param {jQuery} $button
-        //  */
-        // window.addDropDownMenu = function ($button) {
-        //     if ($button.data('menu-added')) {
-        //         return;
-        //     }
-        //     $button.data('menu-added', true).trigger('focus');
-        //     const $menu = cloneDropDownMenu();
-        //     const params = $table.getParameters();
-        //     const index = getRowIndex($button);
-        //     const data = $table.getData();
-        //     const row = data[index];
-        //     updateDropDownMenu($menu, row, params);
-        //     // $menu.insertAfter($button);
-        // };
-        //
-        // /**
-        //  * @param {KeyboardEvent} e
-        //  */
-        // window.keyDownHandler = function (e) {
-        //     if (e.key === 'Enter') {
-        //         addDropDownMenu($(this));
-        //     }
-        // };
-        //
-        // /**
-        //  * @param {MouseEvent} e
-        //  */
-        // window.mouseDownHandler = function (e) {
-        //     if (e.button === 0) {
-        //         addDropDownMenu($(this));
-        //     }
-        // };
-        //
-        // /**
-        //  * @return {jQuery}
-        //  */
-        // window.cloneDropDownMenu = function () {
-        //     // return $('#actions-template').clone();
-        //     const template = document.getElementById('actions-template');
-        //     const content = template.content.cloneNode(true);
-        //     return $(content);
-        // };
-        //
-        // const selector = 'button[data-bs-toggle="dropdown"]';
-        // const $parent = $table.getTableContainer();
-        // $parent.on('mousedown', selector, mouseDownHandler);
-        // $parent.on('keydown', selector, keyDownHandler);
     });
 }(jQuery));

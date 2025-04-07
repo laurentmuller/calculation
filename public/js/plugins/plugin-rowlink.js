@@ -20,14 +20,11 @@ $(function () {
          * @param {Object|string} [options] - the plugin options.
          */
         constructor(element, options) {
-            const that = this;
-            that.$element = $(element);
-            that.options = $.extend({}, Rowlink.DEFAULTS, options);
-            that.proxy = function (e) {
-                that._click(e);
-            };
-            that.enabled = false;
-            that.enable();
+            this.enabled = false;
+            this.$element = $(element);
+            this.options = $.extend({}, Rowlink.DEFAULTS, options);
+            this.proxy = (e) => this._click(e);
+            this.enable();
         }
 
         enable() {

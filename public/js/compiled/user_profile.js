@@ -6,7 +6,7 @@
 /**
  * Plugin Files
  */
-<!--#include file="../plugins/image-input-file.js" -->
+<!--#include file="../plugins/plugin-input-image.js" -->
 
 /**
  * Extensions

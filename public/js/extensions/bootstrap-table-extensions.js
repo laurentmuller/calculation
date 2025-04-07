@@ -142,7 +142,7 @@
             /**
              * Initialize the table-boostrap.
              *
-             * @param {object} options - the options to merge with default.
+             * @param {Object} options - the options to merge with default.
              * @return {jQueryTable} this instance for chaining.
              */
             initBootstrapTable: function (options) {
@@ -163,20 +163,25 @@
                             $element.editRow();
                         }
                     },
-                    // update UI on post page's load
-                    onPostBody: function (content) {
+
+                    /**
+                     * Handle post-body event
+                     * @param {Object[]} data - the rendered data.
+                     */
+                    onPostBody: function (data) {
                         // remove opacity
                         $this.css('opacity', 1);
-                        const isData = content.length !== 0;
+                        const isData = data.length !== 0;
                         if (isData) {
                             // select first row if none
                             if (!$this.getSelection()) {
                                 $this.selectFirstRow();
                             }
                             // update
-                            $this.highlight().updateHref(content);
+                            $this.highlight().updateHref(data);
                         }
                         $this.updateHistory().toggleClass('table-hover', isData);
+
                         // update pagination links
                         const modalTitle = $this.data('pagination-title');
                         $('.fixed-table-pagination .page-item').each(function (_index, element) {
@@ -201,6 +206,10 @@
                         });
                     },
 
+                    /**
+                     * Handle post-custom-body event
+                     * @param {Object[]} data - the rendered data.
+                     */
                     onCustomViewPostBody: function (data) {
                         // data?
                         if (data.length !== 0) {
@@ -234,6 +243,10 @@
                         }
                     },
 
+                    /**
+                     * Handle search event.
+                     * @param {String} searchText
+                     */
                     onSearch: function (searchText) {
                         $this.data('search-text', searchText);
                     }
@@ -295,7 +308,7 @@
             /**
              * Gets the sortable columns.
              *
-             * @return {Array} the sortable columns.
+             * @return {Object[]} the sortable columns.
              */
             getSortableColumns() {
                 const columns = $(this).getOptions().columns[0];
@@ -341,7 +354,7 @@
             /**
              * Gets the search text.
              *
-             * @return {string} the search text.
+             * @return {String} the search text.
              */
             getSearchText: function () {
                 return String($(this).data('search-text')) || '';
@@ -391,7 +404,7 @@
             /**
              * Get the loaded data (rows) of table when this method is called.
              *
-             * @return {Array<Object>} the loaded data.
+             * @return {Object[]} the loaded data.
              */
             getData: function () {
                 return $(this).bootstrapTable('getData');
@@ -493,7 +506,7 @@
             /**
              * Update the href attribute of actions.
              *
-             * @param {array} rows - the rendered data.
+             * @param {Object[]} rows - the rendered data.
              * @return {jQuery} this instance for chaining.
              */
             updateHref: function (rows) {
@@ -527,7 +540,7 @@
             /**
              * Refresh/reload the remote server data.
              *
-             * @param {object} [options] - the refresh options.
+             * @param {Object} [options] - the refresh options.
              * @return {jQuery} this instance for chaining.
              */
             refresh: function (options) {
@@ -537,7 +550,7 @@
             /**
              * Reset the search text.
              *
-             * @param {string} [text] - the optional search text.
+             * @param {String} [text] - the optional search text.
              * @return {jQuery} this instance for chaining.
              */
             resetSearch: function (text) {
@@ -566,7 +579,7 @@
             /**
              * Toggles the display mode.
              *
-             * @param {string} mode - the display mode to set ('table' or 'custom').
+             * @param {String} mode - the display mode to set ('table' or 'custom').
              * @return {jQuery} this instance for chaining.
              */
             setDisplayMode: function (mode) {
@@ -581,7 +594,7 @@
             /**
              * Gets the display mode.
              *
-             * @return {string} the display mode ('table' or 'custom').
+             * @return {String} the display mode ('table' or 'custom').
              */
             getDisplayMode: function () {
                 const $this = $(this);
@@ -671,8 +684,8 @@
             /**
              * Sort the data.
              *
-             * @param {string} sortName - the sort field.
-             * @param {string} sortOrder - the sort order ('asc' or 'desc').
+             * @param {String} sortName - the sort field.
+             * @param {String} sortOrder - the sort order ('asc' or 'desc').
              *
              * @return {jQuery} this instance for chaining.
              */
@@ -757,7 +770,7 @@
             /**
              * Finds an action for the given selector
              *
-             * @param {string} actionSelector - the action selector.
+             * @param {String} actionSelector - the action selector.
              * @return {jQuery} the action, if found; null otherwise.
              */
             findAction: function (actionSelector) {
@@ -929,7 +942,7 @@
              *
              * @param {Options} [options] the options to get pages from.
              * @param {number} [pageNumber] the optional current page.
-             * @return {string} the formatted pages.
+             * @return {String} the formatted pages.
              */
             formatPages: function (options, pageNumber) {
                 const $this = $(this);

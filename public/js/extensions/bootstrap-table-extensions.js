@@ -250,7 +250,7 @@
                     }
                 });
                 // handle items in custom view
-                $this.parents('.bootstrap-table').on('mousedown', '.custom-item', function () {
+                $this.getTableContainer().on('mousedown', '.custom-item', function () {
                     $(this).updateCustomRow($this);
                 }).on('focus', '.custom-item a.item-link,.custom-item button[data-bs-toggle="dropdown"]', function () {
                     $(this).updateCustomRow($this);
@@ -463,9 +463,16 @@
                 if (!$this.isCustomView()) {
                     return null;
                 }
-                /** @type {jQuery|HTMLElement|*} */
-                const $parent = $this.parents('.bootstrap-table');
+                const $parent = $this.getTableContainer();
                 return $parent.find('.fixed-table-custom-view');
+            },
+
+            /**
+             * Gets the bootstrap table container.
+             * @return {jQuery|HTMLDivElement|*}
+             */
+            getTableContainer: function () {
+                return $(this).parents('.bootstrap-table');
             },
 
             /**

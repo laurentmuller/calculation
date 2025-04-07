@@ -377,7 +377,7 @@ function initializeContextMenus($table) {
         $.hideDropDownMenus();
         return true;
     };
-    $table.parents('.bootstrap-table').initContextMenu(selector, hideMenus);
+    $table.getTableContainer().initContextMenu(selector, hideMenus);
 }
 
 /**
@@ -389,7 +389,7 @@ function initializeDangerTooltips($table) {
     'use strict';
     const selector = $table.data('danger-tooltip-selector');
     if (selector) {
-        $table.parents('.bootstrap-table').tooltip({
+        $table.getTableContainer().tooltip({
             customClass: 'tooltip-danger',
             selector: selector,
             html: true
@@ -835,7 +835,7 @@ function showSortDialog($table, $button) {
         // };
         //
         // const selector = 'button[data-bs-toggle="dropdown"]';
-        // const $parent = $table.parents('.bootstrap-table');
+        // const $parent = $table.getTableContainer();
         // $parent.on('mousedown', selector, mouseDownHandler);
         // $parent.on('keydown', selector, keyDownHandler);
     });

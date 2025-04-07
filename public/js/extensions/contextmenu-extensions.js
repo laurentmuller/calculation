@@ -1,5 +1,5 @@
 /**
- * Class to build context-menu items.
+ * Class to build context menus.
  */
 const MenuBuilder = class { /* exported MenuBuilder */
 
@@ -33,8 +33,8 @@ const MenuBuilder = class { /* exported MenuBuilder */
     }
 
     /**
-     * Adds a separator. Do nothing if the last item is already a
-     * separator.
+     * Adds a separator.
+     * Do nothing if empty or if the last item is already a separator.
      *
      * @return {MenuBuilder} This instance for chaining.
      */
@@ -53,7 +53,8 @@ const MenuBuilder = class { /* exported MenuBuilder */
     }
 
     /**
-     * Adds a title. Do nothing if the last item is already a title.
+     * Adds a title.
+     * Do nothing if the last item is already a title.
      *
      * @param {jQuery} $item - the item's title.
      * @return {MenuBuilder} This instance for chaining.
@@ -182,9 +183,9 @@ const MenuBuilder = class { /* exported MenuBuilder */
  */
 
 /**
- * jQuery's extension for Bootstrap tables, rows and cells.
+ * jQuery's extension for Bootstrap tables context-menu.
  */
-$(function () {
+(function ($) {
     'use strict';
 
     $.fn.extend({
@@ -209,7 +210,6 @@ $(function () {
          */
         initContextMenu: function (selector, fnShow, fnHide, options) {
             return this.each(function () {
-                //const $this = $(this);
                 // build callback
                 const build = function ($element) {
                     // get items
@@ -249,4 +249,4 @@ $(function () {
             });
         }
     });
-});
+}(jQuery));

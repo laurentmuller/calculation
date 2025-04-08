@@ -16,8 +16,10 @@ namespace App\Twig;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Interfaces\ConstantsInterface;
+use App\Interfaces\RoleInterface;
 use App\Service\CalculationGroupService;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Contracts\Cache\CacheInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
@@ -36,7 +38,7 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
     }
 
     /**
-     * @psalm-return array<string, string>
+     * @return array<string, string>
      */
     #[\Override]
     public static function constants(): array
@@ -66,6 +68,9 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
         ];
     }
 
+    /**
+     * @return array<string, string|int>
+     */
     #[\Override]
     public function getGlobals(): array
     {
@@ -73,7 +78,24 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
     }
 
     /**
-     * @psalm-return array<string, string|int>
+     * @param class-string $class
+     *
+     * @return array<string, string>
+     *
+     * @throws \ReflectionException
+     */
+    private function getClassConstants(string $class): array
+    {
+        $class = new \ReflectionClass($class);
+
+        /** @psalm-var array<string, string> */
+        return $class->getConstants(\ReflectionClassConstant::IS_PUBLIC);
+    }
+
+    /**
+     * @return array<string, string|int>
+     *
+     * @throws \ReflectionException
      */
     private function loadValues(): array
     {
@@ -81,7 +103,9 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
             self::constants(),
             EntityName::constants(),
             EntityPermission::constants(),
-            CalculationGroupService::constants()
+            CalculationGroupService::constants(),
+            $this->getClassConstants(RoleInterface::class),
+            $this->getClassConstants(AuthenticatedVoter::class),
         );
     }
 }

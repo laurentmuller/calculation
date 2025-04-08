@@ -1,7 +1,7 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% import 'macros/_rights.html.twig' as rights %}
 {# parameters #}
-{%- set is_admin = is_granted('ROLE_ADMIN') -%}
+{%- set is_admin = is_granted(ROLE_ADMIN) -%}
 {%- set title = is_admin ? 'index.menu_rights_admin' : 'index.menu_rights_user' -%}
 {%- set title_icon = is_admin ? 'user-shield' : 'user-check' -%}
 {%- set title_description = 'user.rights.description' -%}

@@ -12,7 +12,7 @@
 {{ _self.collapseLine('message', form, 'bell') }}
 {{ _self.collapseLine('home', form, 'house-user') }}
 {{ _self.collapseLine('options', form, 'list-check') }}
-{% if is_granted('ROLE_SUPER_ADMIN') %}
+{% if is_granted(ROLE_SUPER_ADMIN) %}
     {{ _self.collapseLine('security', form, 'lock', false, options) }}
 {% endif %}
 {%- endblock %}

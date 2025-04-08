@@ -21,6 +21,19 @@ use Symfony\Component\Cache\Adapter\NullAdapter;
 class ConstantExtensionTest extends TestCase
 {
     /**
+     * @psalm-return \Generator<int, array{string, string}>
+     */
+    public static function getAuthenticatedVoterConstants(): \Generator
+    {
+        yield ['IS_AUTHENTICATED_FULLY', 'IS_AUTHENTICATED_FULLY'];
+        yield ['IS_AUTHENTICATED_REMEMBERED', 'IS_AUTHENTICATED_REMEMBERED'];
+        yield ['IS_AUTHENTICATED', 'IS_AUTHENTICATED'];
+        yield ['IS_IMPERSONATOR', 'IS_IMPERSONATOR'];
+        yield ['IS_REMEMBERED', 'IS_REMEMBERED'];
+        yield ['PUBLIC_ACCESS', 'PUBLIC_ACCESS'];
+    }
+
+    /**
      * @psalm-return \Generator<int, array{string, int}>
      */
     public static function getCalculationServiceConstants(): \Generator
@@ -57,23 +70,47 @@ class ConstantExtensionTest extends TestCase
         yield ['ENTITY_USER', 'EntityUser'];
     }
 
-    #[DataProvider('getCalculationServiceConstants')]
-    public function testCalculationService(string $key, int $expected): void
+    /**
+     * @psalm-return \Generator<int, array{string, string}>
+     */
+    public static function getRoleConstants(): \Generator
     {
-        $extension = new ConstantExtension(new NullAdapter());
-        $globals = $extension->getGlobals();
-        self::assertArrayHasKey($key, $globals);
-        self::assertIsInt($globals[$key]);
-        self::assertSame($expected, $globals[$key]);
+        yield ['ROLE_ADMIN', 'ROLE_ADMIN'];
+        yield ['ROLE_SUPER_ADMIN', 'ROLE_SUPER_ADMIN'];
+        yield ['ROLE_USER', 'ROLE_USER'];
+    }
+
+    #[DataProvider('getAuthenticatedVoterConstants')]
+    public function testAuthenticatedVoterConstants(string $key, string $expected): void
+    {
+        self::assertIsSameConstant($key, $expected);
+    }
+
+    #[DataProvider('getCalculationServiceConstants')]
+    public function testCalculationServiceConstants(string $key, int $expected): void
+    {
+        self::assertIsSameConstant($key, $expected);
     }
 
     #[DataProvider('getEntityVoterConstants')]
-    public function testEntityVoter(string $key, string $expected): void
+    public function testEntityVoterConstants(string $key, string $expected): void
+    {
+        self::assertIsSameConstant($key, $expected);
+    }
+
+    #[DataProvider('getRoleConstants')]
+    public function testRoleConstants(string $key, string $expected): void
+    {
+        self::assertIsSameConstant($key, $expected);
+    }
+
+    protected static function assertIsSameConstant(string $key, string|int $expected): void
     {
         $extension = new ConstantExtension(new NullAdapter());
         $globals = $extension->getGlobals();
         self::assertArrayHasKey($key, $globals);
-        self::assertIsString($globals[$key]);
-        self::assertSame($expected, $globals[$key]);
+
+        $actual = $globals[$key];
+        self::assertSame($expected, $actual);
     }
 }

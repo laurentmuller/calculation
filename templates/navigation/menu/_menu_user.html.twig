@@ -15,7 +15,7 @@
     {{ dropdownItem(path('user_profile_password'), 'profile.password.title', 'unlock') }}
     {{ dropdownSeparator() }}
     {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
-    {% if is_granted('IS_IMPERSONATOR') -%}
+    {% if is_granted(IS_IMPERSONATOR) -%}
         {{ dropdownSeparator() }}
         {{ dropdownItem(impersonation_exit_path(path('user_index')), 'user.switch.exit.title', 'user-slash') }}
     {% endif %}

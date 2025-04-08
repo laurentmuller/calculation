@@ -1,6 +1,6 @@
 {# common tool menu #}
 {% from 'macros/_icons.html.twig' import dropdownSeparator, dropdownItem %}
-{%- set is_admin = is_granted('ROLE_ADMIN') -%}
+{%- set is_admin = is_granted(ROLE_ADMIN) -%}
 <ul class="dropdown-menu">
     {{ dropdownItem(path('search'), 'search.title', 'search') }}
     {% if is_admin %}

@@ -25,15 +25,15 @@ trait ContainerServiceTrait
     /**
      * Gets the service for the given class name.
      *
-     * @template T
+     * @template TService
      *
-     * @param class-string<T> $class
+     * @param class-string<TService> $class
      *
-     * @return T
+     * @return TService
      */
     protected function getService(string $class)
     {
-        /** @psalm-var T */
+        /** @psalm-var TService */
         return static::getContainer()->get($class); // @phpstan-ignore varTag.nativeType
     }
 

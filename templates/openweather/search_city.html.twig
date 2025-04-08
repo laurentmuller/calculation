@@ -51,7 +51,7 @@
 {# actions #}
 {% block actions_form -%}
 {{ parent() }}
-{% if is_granted('ROLE_ADMIN') %}
+{% if is_granted(ROLE_ADMIN) %}
     {{ link(path('openweather_import'), 'common.button_import', 'btn btn-form btn-outline-secondary') }}
 {% endif %}
 {% endblock %}

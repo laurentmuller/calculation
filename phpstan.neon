@@ -24,9 +24,9 @@ parameters:
         strictArrayFilter: false
 
     type_coverage:
-        param: 90
-        return: 90
-        property: 90
+        param: 99
+        return: 99
+        property: 100
 
     ignoreErrors:
         -

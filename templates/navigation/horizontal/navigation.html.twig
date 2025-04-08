@@ -1,7 +1,7 @@
 {# horizontal toolbar #}
 {% from 'macros/_icons.html.twig' import icon, link, navItem %}
 {# parameters #}
-{%- set is_admin = is_granted('ROLE_ADMIN') -%}
+{%- set is_admin = is_granted(ROLE_ADMIN) -%}
 {%- set is_granted_data = is_granted(PERMISSION_LIST, ENTITY_CALCULATION)
     or is_granted(PERMISSION_LIST, ENTITY_PRODUCT)
     or is_granted(PERMISSION_LIST, ENTITY_TASK)
@@ -52,7 +52,7 @@
                     {{ include('navigation/horizontal/navigation_search.html.twig') }}
                 {% endif %}
                 {{ include('navigation/menu/_menu_theme.html.twig') }}
-                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
+                {% if is_granted(IS_AUTHENTICATED_REMEMBERED) -%}
                     {{ include('navigation/horizontal/navigation_user.html.twig') }}
                 {% endif %}
             </ul>

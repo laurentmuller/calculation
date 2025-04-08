@@ -1,6 +1,6 @@
 {# common admin menu #}
 {# parameters #}
-{%- set is_super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
+{%- set is_super_admin = is_granted(ROLE_SUPER_ADMIN) -%}
 {% from 'macros/_icons.html.twig' import dropdownItem, dropdownSeparator %}
 <ul class="dropdown-menu">
     {{ dropdownItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}
@@ -14,7 +14,7 @@
     {% endif %}
     {{ dropdownSeparator() }}
     {{ dropdownItem(path('admin_parameters'), 'parameters.title', 'cogs') }}
-    {% if is_granted('ROLE_ADMIN') -%}
+    {% if is_granted(ROLE_ADMIN) -%}
         {{ dropdownSeparator() }}
         {{ dropdownItem(path('log_index'), 'log.title', ICON_LOG) }}
         {% if is_super_admin -%}

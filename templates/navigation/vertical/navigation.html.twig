@@ -2,7 +2,7 @@
 {% from 'macros/_icons.html.twig' import icon, dropdownItem, dropdownSeparator %}
 {% from 'macros/_attributes.html.twig' import attributes %}
 {# parameters #}
-{% set is_admin = is_granted('ROLE_ADMIN') %}
+{% set is_admin = is_granted(ROLE_ADMIN) %}
 {% set is_granted_data = is_granted(PERMISSION_LIST, ENTITY_CALCULATION)
     or is_granted(PERMISSION_LIST, ENTITY_PRODUCT)
     or is_granted(PERMISSION_LIST, ENTITY_TASK)
@@ -42,13 +42,13 @@
         {% if is_admin -%}
             {{ include('navigation/vertical/navigation_admin.html.twig') }}
         {% endif %}
-        {% if is_granted('ROLE_SUPER_ADMIN') %}
+        {% if is_granted(ROLE_SUPER_ADMIN) %}
             {{ include('navigation/vertical/navigation_test.html.twig') }}
         {% endif %}
     </ul>
     {# bottom menus #}
     <div class="d-flex-wrap-center border-top w-100 py-2">
-        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
+        {% if is_granted(IS_AUTHENTICATED_REMEMBERED) -%}
             {{ include('navigation/vertical/navigation_user.html.twig') }}
         {% endif %}
         {{ include('navigation/menu/_menu_theme.html.twig') }}

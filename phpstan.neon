@@ -23,6 +23,11 @@ parameters:
     strictRules:
         strictArrayFilter: false
 
+    type_coverage:
+        param: 90
+        return: 90
+        property: 90
+
     ignoreErrors:
         -
             message: '#should be contravariant#'

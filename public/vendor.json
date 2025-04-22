@@ -86,7 +86,7 @@
         },
         {
             "name": "highcharts",
-            "version": "12.1.2",
+            "version": "12.2.0",
             "source": "jsdelivr",
             "files": [
                 "highcharts.js"

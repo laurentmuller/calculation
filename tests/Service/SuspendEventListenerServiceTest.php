@@ -22,7 +22,7 @@ class SuspendEventListenerServiceTest extends TestCase implements DisableListene
 {
     use DisableListenerTrait;
 
-    private ?SuspendEventListenerService $service = null;
+    private SuspendEventListenerService $service;
 
     #[\Override]
     protected function setUp(): void
@@ -30,41 +30,26 @@ class SuspendEventListenerServiceTest extends TestCase implements DisableListene
         $this->service = new SuspendEventListenerService([$this]);
     }
 
-    public function testDestruct(): void
-    {
-        self::assertNotNull($this->service);
-        $this->service = null;
-        self::assertNull($this->service);
-    }
-
     public function testDisableListeners(): void
     {
-        self::assertNotNull($this->service);
         self::assertFalse($this->service->isDisabled());
         self::assertTrue($this->isEnabled());
-
         $this->service->disableListeners();
-
         self::assertTrue($this->service->isDisabled());
     }
 
     public function testEnableListeners(): void
     {
-        self::assertNotNull($this->service);
         self::assertFalse($this->service->isDisabled());
         self::assertTrue($this->isEnabled());
-
         $this->service->enableListeners();
-
         self::assertFalse($this->service->isDisabled());
     }
 
     public function testSuspendListeners(): void
     {
-        self::assertNotNull($this->service);
         self::assertFalse($this->service->isDisabled());
         $this->service->suspendListeners(function (): void {
-            self::assertNotNull($this->service);
             self::assertTrue($this->service->isDisabled());
         });
         self::assertFalse($this->service->isDisabled());

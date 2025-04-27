@@ -51,16 +51,16 @@ trait CalculationTrait
         if ($this->calculation instanceof Calculation) {
             $service = self::getContainer()->get(CalculationUpdateService::class);
             self::assertInstanceOf(CalculationUpdateService::class, $service);
+            // @phpstan-ignore-next-line
             $service->updateCalculation($this->calculation);
+            // @phpstan-ignore-next-line
             $this->addEntity($this->calculation);
         }
     }
 
     protected function deleteCalculation(): void
     {
-        if ($this->calculation instanceof Calculation) {
-            $this->calculation = $this->deleteEntity($this->calculation);
-        }
+        $this->calculation = $this->deleteEntity($this->calculation);
         $this->deleteCalculationState();
     }
 }

@@ -14,10 +14,12 @@ declare(strict_types=1);
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\SingleMockPropertyTypeRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\Set\TwigSetList;
+use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector;
 
 return RectorConfig::configure()
     ->withCache(__DIR__ . '/var/cache/rector')
@@ -29,6 +31,8 @@ return RectorConfig::configure()
         __DIR__ . '/public',
     ])->withSkip([
         PreferPHPUnitThisCallRector::class,
+        SingleMockPropertyTypeRector::class,
+        TypedPropertyFromCreateMockAssignRector::class,
     ])->withSets([
         // global
         SetList::PHP_82,

@@ -30,8 +30,8 @@ use App\Tests\DatabaseTrait;
 use App\Tests\Entity\IdTrait;
 use App\Tests\KernelServiceTestCase;
 use App\Tests\TranslatorMockTrait;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ObjectManager;
 
 class CalculationGroupServiceTest extends KernelServiceTestCase
 {
@@ -239,7 +239,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
         return $this->initProducts($manager, $category);
     }
 
-    protected function initCategories(EntityManagerInterface $manager): Category
+    protected function initCategories(ObjectManager $manager): Category
     {
         $this->initRepository($manager, GroupMargin::class);
         $this->initRepository($manager, Category::class);
@@ -266,7 +266,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
         return $category;
     }
 
-    protected function initGlobalMargins(EntityManagerInterface $manager): void
+    protected function initGlobalMargins(ObjectManager $manager): void
     {
         $this->initRepository($manager, GlobalMargin::class);
 
@@ -279,7 +279,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
         $manager->flush();
     }
 
-    protected function initProducts(EntityManagerInterface $manager, Category $category): Product
+    protected function initProducts(ObjectManager $manager, Category $category): Product
     {
         $this->initRepository($manager, Product::class);
 
@@ -301,7 +301,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
      *
      * @psalm-return EntityRepository<TEntity> $repository
      */
-    protected function initRepository(EntityManagerInterface $manager, string $entityName): EntityRepository
+    protected function initRepository(ObjectManager $manager, string $entityName): EntityRepository
     {
         /** @psalm-var \App\Repository\AbstractRepository<TEntity> $repository */
         $repository = $manager->getRepository($entityName);

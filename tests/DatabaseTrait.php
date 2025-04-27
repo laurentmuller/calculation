@@ -15,8 +15,8 @@ namespace App\Tests;
 
 use App\Interfaces\EntityInterface;
 use App\Tests\Fixture\Database;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectManager;
 
 /**
  * Trait to manage database test.
@@ -98,12 +98,11 @@ trait DatabaseTrait
     /**
      * Gets the entity manager.
      */
-    protected function getManager(): EntityManagerInterface
+    protected function getManager(): ObjectManager
     {
         /** @psalm-var ManagerRegistry $registry */
         $registry = static::getContainer()->get('doctrine');
 
-        /** @psalm-var EntityManagerInterface */
         return $registry->getManager();
     }
 }

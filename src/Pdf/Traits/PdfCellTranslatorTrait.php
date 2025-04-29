@@ -33,14 +33,12 @@ trait PdfCellTranslatorTrait
      *
      * @param string|\Stringable|TranslatableInterface $id        the message identifier to be translated; may also be
      *                                                            an object that can be cast to string
-     * @param int                                      $cols      the number of columns to span
+     * @param positive-int                             $cols      the number of columns to span
      * @param ?PdfStyle                                $style     the cell style to use or null to use the default
      *                                                            cell style
      * @param ?PdfTextAlignment                        $alignment the cell alignment
      * @param string|int|null                          $link      the optional cell link. A URL or identifier
      *                                                            returned by the <code>addLink()</code> function.
-     *
-     * @psalm-param positive-int $cols
      */
     public function addCellTrans(
         string|\Stringable|TranslatableInterface $id,

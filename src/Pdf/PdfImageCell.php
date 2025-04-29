@@ -50,13 +50,11 @@ class PdfImageCell extends AbstractPdfImageCell
     /**
      * @param string            $path      the image path
      * @param ?string           $text      the cell text
-     * @param int               $cols      the cell columns span
+     * @param positive-int      $cols      the cell columns span
      * @param ?PdfStyle         $style     the cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
      * @param string|int|null   $link      the optional cell link.
      *                                     A URL or an identifier returned by the <code>addLink()</code> function.
-     *
-     * @psalm-param positive-int $cols
      *
      * @throws PdfException if the given image path does not exist
      */

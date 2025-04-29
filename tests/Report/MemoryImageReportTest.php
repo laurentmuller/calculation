@@ -16,7 +16,7 @@ namespace App\Tests\Report;
 use App\Controller\AbstractController;
 use App\Model\FontAwesomeImage;
 use App\Report\MemoryImageReport;
-use App\Service\FontAwesomeImageService;
+use App\Service\FontAwesomeService;
 use fpdf\PdfException;
 use PHPUnit\Framework\TestCase;
 
@@ -87,10 +87,10 @@ class MemoryImageReportTest extends TestCase
     {
         $controller = $this->createMock(AbstractController::class);
         $image = $this->getImage();
-        $service = $this->createMock(FontAwesomeImageService::class);
+        $service = $this->createMock(FontAwesomeService::class);
         $service->method('getImage')
             ->willReturn($image);
-        $report = new MemoryImageReport($controller, imageService: $service);
+        $report = new MemoryImageReport(controller: $controller, service: $service);
         $actual = $report->render();
         self::assertTrue($actual);
     }

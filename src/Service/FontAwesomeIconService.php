@@ -42,8 +42,8 @@ class FontAwesomeIconService
         // Fixed-Width Icons
         'fa-fw', // Sets an icon to display at a fixed width for easy vertical alignment
         // Icons in a List
-        'fa-ul', // Used on a <ul> or <ol> elements to style icons as list bullets
-        'fa-li', // Used on individual <li> elements to style icons as list bullets
+        'fa-ul', // Used on order or unordered list elements to style icons as list bullets
+        'fa-li', // Used on individual list item elements to style icons as list bullets
         // Rotating Icons
         'fa-rotate-90', //  Rotates an icon 90°
         'fa-rotate-180', // Rotates an icon 180°
@@ -84,8 +84,8 @@ class FontAwesomeIconService
     /**
      * Gets the relative path for the given icon class.
      *
-     * @param string $icon the icon class to convert. An icon like 'fa-solid fa-eye' will be
-     *                     converted to 'solid/eye.svg'.
+     * @param string $icon the icon class to convert.
+     *                     An icon like 'fa-solid fa-eye' will be converted to 'solid/eye.svg'.
      *
      * @return ?string the relative path, if applicable; null otherwise
      */

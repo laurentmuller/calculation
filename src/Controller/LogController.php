@@ -21,8 +21,7 @@ use App\Interfaces\RoleInterface;
 use App\Model\LogFile;
 use App\Report\LogsReport;
 use App\Resolver\DataQueryValueResolver;
-use App\Service\FontAwesomeIconService;
-use App\Service\FontAwesomeImageService;
+use App\Service\FontAwesomeService;
 use App\Service\LogService;
 use App\Spreadsheet\LogsDocument;
 use App\Table\DataQuery;
@@ -133,14 +132,13 @@ class LogController extends AbstractController
     #[Get(path: '/pdf', name: 'pdf')]
     public function pdf(
         LogService $logService,
-        FontAwesomeImageService $imageService,
-        FontAwesomeIconService $iconService
+        FontAwesomeService $service
     ): Response {
         $logFile = $this->getLogFile($logService);
         if (!$logFile instanceof LogFile) {
             return $this->getEmptyResponse();
         }
-        $doc = new LogsReport($this, $logFile, $imageService, $iconService);
+        $doc = new LogsReport($this, $logFile, $service);
 
         return $this->renderPdfDocument($doc);
     }

@@ -71,7 +71,7 @@ class FontAwesomeImageService
     /**
      * Gets the icon aliases.
      *
-     * @return array<string, string> the aliases where key is the alias name and the value is the existing file
+     * @return array<string, string> the aliases where the key is the alias name and the value is the existing file
      */
     public function getAliases(): array
     {

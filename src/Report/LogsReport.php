@@ -15,7 +15,6 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Log;
-use App\Model\FontAwesomeImage;
 use App\Model\LogChannel;
 use App\Model\LogFile;
 use App\Model\LogLevel;
@@ -27,8 +26,8 @@ use App\Pdf\PdfFontAwesomeCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfMemoryImageTrait;
-use App\Service\FontAwesomeIconService;
 use App\Service\FontAwesomeImageService;
+use App\Service\FontAwesomeService;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use fpdf\Enums\PdfMove;
@@ -62,8 +61,7 @@ class LogsReport extends AbstractReport
     public function __construct(
         AbstractController $controller,
         private readonly LogFile $logFile,
-        private readonly FontAwesomeImageService $imageService,
-        private readonly FontAwesomeIconService $iconService,
+        private readonly FontAwesomeService $service
     ) {
         parent::__construct($controller, PdfOrientation::LANDSCAPE);
         $this->setTitleTrans('log.title');
@@ -119,21 +117,12 @@ class LogsReport extends AbstractReport
         string $color = FontAwesomeImageService::COLOR_BLACK
     ): PdfFontAwesomeCell|string {
         $key = \sprintf('%s_%s_%s', $text, $icon, $color);
-        if (\array_key_exists($key, $this->cells)) {
+        if (isset($this->cells[$key])) {
             return $this->cells[$key];
         }
+        $cell = $this->service->getFontAwesomeCell($icon, $color, $text) ?? $text;
 
-        $path = $this->iconService->getPath($icon);
-        if (!\is_string($path)) {
-            return $this->cells[$key] = $text;
-        }
-
-        $image = $this->imageService->getImage($path, $color);
-        if ($image instanceof FontAwesomeImage) {
-            return $this->cells[$key] = new PdfFontAwesomeCell($image, $text);
-        }
-
-        return $this->cells[$key] = $text;
+        return $this->cells[$key] = $cell;
     }
 
     private function getCellChannel(Log $log): PdfFontAwesomeCell|string
@@ -153,7 +142,7 @@ class LogsReport extends AbstractReport
         return $this->getCell($text, $icon, $color);
     }
 
-    private function getImageIcon(LogLevel|LogChannel $value): ?FontAwesomeImage
+    private function getImageIcon(LogLevel|LogChannel $value, string $text): PdfCell
     {
         $color = null;
         if ($value instanceof LogLevel) {
@@ -162,12 +151,15 @@ class LogsReport extends AbstractReport
         } else {
             $icon = $value->getChannelIcon();
         }
-        $path = $this->iconService->getPath($icon);
-        if (!\is_string($path)) {
-            return null;
-        }
 
-        return $this->imageService->getImage($path, $color);
+        $cell = $this->service->getFontAwesomeCell(
+            icon: $icon,
+            color: $color,
+            text: $text,
+            alignment: PdfTextAlignment::CENTER
+        );
+
+        return $cell ?? new PdfCell($text);
     }
 
     /**
@@ -285,12 +277,7 @@ class LogsReport extends AbstractReport
         foreach ($values as $key => $value) {
             $columns[] = PdfColumn::center($key, 30);
             $text = StringUtils::capitalize($key);
-            $image = $this->getImageIcon($value);
-            if ($image instanceof FontAwesomeImage) {
-                $textCells[] = new PdfFontAwesomeCell($image, $text, alignment: PdfTextAlignment::CENTER);
-            } else {
-                $textCells[] = new PdfCell($text);
-            }
+            $textCells[] = $this->getImageIcon($value, $text);
             $valueCells[] = new PdfCell(FormatUtils::formatInt($value));
             if (--$index > 0) {
                 $columns[] = $emptyCol;

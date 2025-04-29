@@ -55,8 +55,8 @@ use App\Response\PdfResponse;
 use App\Response\WordResponse;
 use App\Service\AbstractHttpClientService;
 use App\Service\CaptchaImageService;
-use App\Service\FontAwesomeIconService;
 use App\Service\FontAwesomeImageService;
+use App\Service\FontAwesomeService;
 use App\Service\MailerService;
 use App\Service\PdfLabelService;
 use App\Service\RecaptchaResponseService;
@@ -295,16 +295,14 @@ class TestController extends AbstractController
         string $iconFile,
         #[Autowire('%kernel.project_dir%/public/images/screenshots/home_light.png')]
         string $screenshotFile,
-        FontAwesomeImageService $imageService,
-        FontAwesomeIconService $iconService
+        FontAwesomeService $service
     ): PdfResponse {
         $report = new MemoryImageReport(
             $this,
             $logoFile,
             $iconFile,
             $screenshotFile,
-            $imageService,
-            $iconService
+            $service
         );
 
         return $this->renderPdfDocument($report);

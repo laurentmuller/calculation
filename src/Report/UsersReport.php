@@ -20,6 +20,7 @@ use App\Pdf\PdfCell;
 use App\Pdf\PdfImageCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
+use App\Service\FontAwesomeService;
 use App\Traits\RoleTranslatorTrait;
 use App\Utils\FormatUtils;
 use Vich\UploaderBundle\Storage\StorageInterface;
@@ -34,12 +35,18 @@ class UsersReport extends AbstractArrayReport
     use RoleTranslatorTrait;
 
     /**
+     * @var array<string, PdfCell>
+     */
+    private array $cells = [];
+
+    /**
      * @param User[] $entities
      */
     public function __construct(
         AbstractController $controller,
         array $entities,
-        private readonly StorageInterface $storage
+        private readonly StorageInterface $storage,
+        private readonly FontAwesomeService $service
     ) {
         parent::__construct($controller, $entities);
     }
@@ -66,8 +73,8 @@ class UsersReport extends AbstractArrayReport
             ->addColumns(
                 $this->centerColumn('user.fields.imageFile', 18, true),
                 $this->leftColumn('user.fields.username', 25),
-                $this->leftColumn('user.fields.email', 30),
-                $this->leftColumn('user.fields.role', 35, true),
+                $this->leftColumn('user.fields.email', 35),
+                $this->leftColumn('user.fields.role', 40, true),
                 $this->leftColumn('user.fields.enabled', 18, true),
                 $this->leftColumn('user.fields.lastLogin', 30, true)
             )->outputHeaders();
@@ -112,19 +119,32 @@ class UsersReport extends AbstractArrayReport
         return $cell;
     }
 
+    private function getRoleCell(User $user): PdfCell
+    {
+        $role = $user->getRole();
+        if (isset($this->cells[$role])) {
+            return $this->cells[$role];
+        }
+
+        $icon = $this->getRoleIcon($role);
+        $text = $this->translateRole($role);
+        $cell = $this->service->getFontAwesomeCell(icon: $icon, text: $text) ?? new PdfCell($text);
+
+        return $this->cells[$role] = $cell;
+    }
+
     private function outputEntity(PdfTable $table, User $entity, PdfStyle $enabledStyle, PdfStyle $disabledStyle): void
     {
         $enabled = $entity->isEnabled();
-        $style = $enabled ? $enabledStyle : $disabledStyle;
-        $text = $this->formatEditable($enabled);
-        $role = $this->translateRole($entity->getRole());
-        $cell = $this->getImageCell($entity);
+        $editableText = $this->formatEditable($enabled);
+        $editableStyle = $enabled ? $enabledStyle : $disabledStyle;
+
         $table->startRow()
-            ->addCell($cell)
+            ->addCell($this->getImageCell($entity))
             ->add($entity->getUserIdentifier())
             ->add($entity->getEmail())
-            ->add($role)
-            ->add($text, style: $style)
+            ->addCell($this->getRoleCell($entity))
+            ->add(text: $editableText, style: $editableStyle)
             ->add($this->formatLastLogin($entity->getLastLogin()))
             ->endRow();
     }

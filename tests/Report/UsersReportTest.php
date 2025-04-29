@@ -16,6 +16,7 @@ namespace App\Tests\Report;
 use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Report\UsersReport;
+use App\Service\FontAwesomeService;
 use PHPUnit\Framework\TestCase;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
@@ -25,6 +26,7 @@ class UsersReportTest extends TestCase
     {
         $controller = $this->createMock(AbstractController::class);
         $storage = $this->createMock(StorageInterface::class);
+        $service = $this->createMock(FontAwesomeService::class);
 
         $user1 = new User();
         $user1->updateLastLogin();
@@ -33,7 +35,7 @@ class UsersReportTest extends TestCase
         $user2->method('getImagePath')
             ->willReturn(__DIR__ . '/../files/images/example.png');
 
-        $report = new UsersReport($controller, [$user1, $user2], $storage);
+        $report = new UsersReport($controller, [$user1, $user2], $storage, $service);
         $actual = $report->render();
         self::assertTrue($actual);
     }

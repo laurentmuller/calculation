@@ -37,13 +37,10 @@ class PdfFontAwesomeCell extends AbstractPdfImageCell
     /**
      * @param FontAwesomeImage  $image     the FontAwesome image to output
      * @param ?string           $text      the cell text
-     * @param int               $cols      the cell columns span
+     * @param positive-int      $cols      the cell columns span
      * @param ?PdfStyle         $style     the cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
-     * @param string|int|null   $link      the optional cell link.
-     *                                     A URL or identifier returned by the <code>addLink()</code> function.
-     *
-     * @psalm-param positive-int $cols
+     * @param string|int|null   $link      the optional cell link
      */
     public function __construct(
         FontAwesomeImage $image,

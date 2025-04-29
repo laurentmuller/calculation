@@ -32,6 +32,7 @@ use App\Repository\UserRepository;
 use App\Resolver\DataQueryValueResolver;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
+use App\Service\FontAwesomeService;
 use App\Service\MailerService;
 use App\Service\PasswordTooltipService;
 use App\Service\ResetPasswordService;
@@ -200,13 +201,15 @@ class UserController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
     #[Get(path: '/pdf', name: 'pdf')]
-    public function pdf(StorageInterface $storage): PdfResponse
-    {
+    public function pdf(
+        StorageInterface $storage,
+        FontAwesomeService $service
+    ): PdfResponse {
         $entities = $this->getEntities('username');
         if ([] === $entities) {
             throw $this->createTranslatedNotFoundException('user.list.empty');
         }
-        $doc = new UsersReport($this, $entities, $storage);
+        $doc = new UsersReport($this, $entities, $storage, $service);
 
         return $this->renderPdfDocument($doc);
     }

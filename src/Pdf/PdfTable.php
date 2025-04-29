@@ -120,15 +120,13 @@ class PdfTable
      * Adds a cell to the current row.
      *
      * @param ?string           $text      the text of the cell
-     * @param int               $cols      the number of columns to span
+     * @param positive-int      $cols      the number of columns to span
      * @param ?PdfStyle         $style     the cell style or null to use the default cell style
      * @param ?PdfTextAlignment $alignment the text alignment or null to use the column alignment
-     * @param string|int|null   $link      the optional cell link. A URL or identifier returned by
-     *                                     the <code>addLink()</code> function.
+     * @param string|int|null   $link      the optional cell link.
+     *                                     A URL or identifier returned by the <code>addLink()</code> function.
      *
      * @throws PdfException if no current row is started
-     *
-     * @psalm-param positive-int $cols
      */
     public function add(
         ?string $text = null,
@@ -182,8 +180,8 @@ class PdfTable
     /**
      * Create and add a header row with the given values.
      *
-     * @throws PdfException if the row is already started, if values are empty or if
-     *                      the number of values is greater than the number of columns
+     * @throws PdfException if the row is already started, if values are empty, or if the number of values is greater
+     *                      than the number of columns
      */
     public function addHeaderRow(PdfCell|string|null ...$values): static
     {
@@ -197,8 +195,8 @@ class PdfTable
     /**
      * Create and add a row with the given values.
      *
-     * @throws PdfException if the row is already started, if values are empty or if
-     *                      the number of values is greater than the number of columns
+     * @throws PdfException if the row is already started, if values are empty, or if the number of values is greater
+     *                      than the number of columns
      *
      * @see PdfTable::addStyledRow()
      */
@@ -215,8 +213,8 @@ class PdfTable
      * @param array<PdfCell|string|null> $cells the cells to output
      * @param ?PdfStyle                  $style the row style or null for default cell style
      *
-     * @throws PdfException if a row is already started, if the cells are empty or if
-     *                      the number of spanned cells is greater than the number of columns
+     * @throws PdfException if a row is already started, if the cells are empty, or if the number of spanned cells is
+     *                      greater than the number of columns
      *
      * @see PdfTable::addRow()
      */
@@ -291,7 +289,7 @@ class PdfTable
      *
      * After this call, no more cell is defined.
      *
-     * @throws PdfException if no cell is defined or if the number of spanned cells is not equal to the number of
+     * @throws PdfException if no cell is defined or, if the number of spanned cells is not equal to the number of
      *                      columns
      */
     public function endRow(): static

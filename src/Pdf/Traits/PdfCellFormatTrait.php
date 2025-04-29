@@ -31,12 +31,10 @@ trait PdfCellFormatTrait
      * Adds a right-aligned cell, with formatted value as amount, to the current row.
      *
      * @param float|int|string|null $number the number to format
-     * @param int                   $cols   the number of columns to span
+     * @param positive-int          $cols   the number of columns to span
      * @param ?PdfStyle             $style  the cell style to use or null to use the default cell style
      * @param string|int|null       $link   the optional cell link.
      *                                      A URL or identifier returned by the <code>addLink()</code> function.
-     *
-     * @psalm-param positive-int $cols
      *
      * @throws PdfException if no current row is started
      */
@@ -53,15 +51,13 @@ trait PdfCellFormatTrait
     }
 
     /**
-     * Adds a right-aligned cell, with formatted value as integer, to the current row.
+     * Adds a right-aligned cell, with the formatted value as integer, to the current row.
      *
      * @param \Countable|array|int|float|string|null $number the number to format
-     * @param int                                    $cols   the number of columns to span
+     * @param positive-int                           $cols   the number of columns to span
      * @param ?PdfStyle                              $style  the cell style to use or null to use the default cell style
      * @param string|int|null                        $link   the optional cell link. A URL or identifier returned by
      *                                                       the <code>addLink()</code> function.
-     *
-     * @psalm-param positive-int $cols
      *
      * @throws PdfException if no current row is started
      */
@@ -81,12 +77,10 @@ trait PdfCellFormatTrait
      * Adds a right-aligned cell, with formatted value as percent, to the current row.
      *
      * @param float|int|string|null $number the number to format
-     * @param int                   $cols   the number of columns to span
+     * @param positive-int          $cols   the number of columns to span
      * @param ?PdfStyle             $style  the cell style to use or null to use the default cell style
      * @param string|int|null       $link   the optional cell link.
      *                                      A URL or identifier returned by the <code>addLink()</code> function.
-     *
-     * @psalm-param positive-int $cols
      *
      * @throws PdfException if no current row is started
      */

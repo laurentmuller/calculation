@@ -20,8 +20,7 @@ use App\Model\LogChannel;
 use App\Model\LogFile;
 use App\Model\LogLevel;
 use App\Report\LogsReport;
-use App\Service\FontAwesomeIconService;
-use App\Service\FontAwesomeImageService;
+use App\Service\FontAwesomeService;
 use App\Utils\DateUtils;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
@@ -34,11 +33,8 @@ class LogsReportTest extends TestCase
         $logFile = $this->createMock(LogFile::class);
         $logFile->method('isEmpty')
             ->willReturn(true);
-
-        $imageService = $this->createMock(FontAwesomeImageService::class);
-        $iconService = new FontAwesomeIconService();
-
-        $report = new LogsReport($controller, $logFile, $imageService, $iconService);
+        $service = $this->createMock(FontAwesomeService::class);
+        $report = new LogsReport($controller, $logFile, $service);
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -77,12 +73,11 @@ class LogsReportTest extends TestCase
                 $log2->getChannel() => $logChannel2,
             ]);
         $image = $this->getImage();
-        $imageService = $this->createMock(FontAwesomeImageService::class);
-        $imageService->method('getImage')
+        $service = $this->createMock(FontAwesomeService::class);
+        $service->method('getImage')
             ->willReturn($image);
-        $iconService = new FontAwesomeIconService();
 
-        $report = new LogsReport($controller, $logFile, $imageService, $iconService);
+        $report = new LogsReport($controller, $logFile, $service);
         $actual = $report->render();
         self::assertTrue($actual);
     }

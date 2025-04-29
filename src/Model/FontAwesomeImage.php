@@ -82,8 +82,8 @@ readonly class FontAwesomeImage
      *                  the width is calculated.
      *                  If both values are equal, then return the desired size.
      *
-     * @return array{0: int, 1: int} an array where the first element is the scaled width or the desired
-     *                               size and the second element is the scaled height or the desired size
+     * @return array{0: int, 1: int} an array where the first element is the scaled width or the desired size.
+     *                               The second element is the scaled height or the desired size
      */
     public function resize(int $size): array
     {

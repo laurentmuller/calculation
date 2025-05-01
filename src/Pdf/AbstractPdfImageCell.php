@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Utils\StringUtils;
 use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfDocument;
@@ -24,14 +25,49 @@ use fpdf\PdfRectangle;
 abstract class AbstractPdfImageCell extends PdfCell
 {
     /**
-     * Draw this image and text.
-     *
-     * @param PdfDocument       $parent    the parent to output image and text to
-     * @param PdfRectangle      $bounds    the cell bounds
-     * @param ?PdfTextAlignment $alignment the image and text alignment
-     * @param PdfMove           $move      indicates where the current position should go after the call
+     * Override the default behavior by adding this image width.
      */
-    public function drawImage(
+    #[\Override]
+    public function computeWidth(PdfDocument $parent): float
+    {
+        $width = parent::computeWidth($parent);
+        if (StringUtils::isString($this->getText())) {
+            $width += $parent->getCellMargin();
+        }
+        $width += $parent->pixels2UserUnit($this->getWidth());
+
+        return $width;
+    }
+
+    /**
+     *  Gets the image height in pixels.
+     * /
+     */
+    abstract public function getHeight(): int;
+
+    /**
+     * Gets the image path.
+     */
+    abstract public function getPath(): string;
+
+    /**
+     * Gets the image type.
+     */
+    public function getType(): string
+    {
+        return '';
+    }
+
+    /**
+     * Gets the image width in pixels.
+     */
+    abstract public function getWidth(): int;
+
+    /**
+     * Override the default behavior by output this image before the text.
+     */
+    #[\Override]
+    public function output(
         PdfDocument $parent,
         PdfRectangle $bounds,
         ?PdfTextAlignment $alignment = null,
@@ -104,28 +140,4 @@ abstract class AbstractPdfImageCell extends PdfCell
                 break;
         }
     }
-
-    /**
-     *  Gets the image height in pixels.
-     * /
-     */
-    abstract public function getHeight(): int;
-
-    /**
-     * Gets the image path.
-     */
-    abstract public function getPath(): string;
-
-    /**
-     * Gets the image type.
-     */
-    public function getType(): string
-    {
-        return '';
-    }
-
-    /**
-     * Gets the image width in pixels.
-     */
-    abstract public function getWidth(): int;
 }

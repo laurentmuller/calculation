@@ -237,7 +237,7 @@ class MemoryImageReport extends AbstractReport
                 self::LINE_HEIGHT,
             );
             $cell = new PdfFontAwesomeCell($image, $icon);
-            $cell->drawImage($this, $bounds, PdfTextAlignment::LEFT, PdfMove::NEW_LINE);
+            $cell->output($this, $bounds, PdfTextAlignment::LEFT, PdfMove::NEW_LINE);
         }
     }
 
@@ -289,7 +289,7 @@ class MemoryImageReport extends AbstractReport
                 self::LINE_HEIGHT,
             );
             $cell = new PdfFontAwesomeCell($image, \ucfirst($name));
-            $cell->drawImage($this, $bounds, PdfTextAlignment::LEFT, PdfMove::NEW_LINE);
+            $cell->output($this, $bounds, PdfTextAlignment::LEFT, PdfMove::NEW_LINE);
         }
     }
 

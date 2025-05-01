@@ -21,16 +21,19 @@ use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Pdf\Events\PdfGroupEvent;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
+use App\Pdf\PdfCell;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Service\ApplicationService;
+use App\Service\FontAwesomeService;
 use App\Service\RoleBuilderService;
 use App\Traits\ArrayTrait;
 use App\Traits\RoleTranslatorTrait;
 use Elao\Enum\FlagBag;
 use fpdf\Enums\PdfMove;
 use fpdf\PdfBorder;
+use fpdf\PdfRectangle;
 
 /**
  * Report for the list of role and user rights.
@@ -53,6 +56,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     public function __construct(
         AbstractController $controller,
         array $entities,
+        private readonly FontAwesomeService $fontAwesomeService,
         private readonly RoleBuilderService $roleBuilderService
     ) {
         parent::__construct($controller, $entities);
@@ -65,24 +69,13 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     #[\Override]
     public function drawGroup(PdfGroupEvent $event): bool
     {
-        /** @var User|string $key */
+        /** @var User|Role $key */
         $key = $event->getGroupKey();
-        if (!$key instanceof User) {
-            return false;
+        if ($key instanceof Role) {
+            return $this->drawGroupRole($event, $key);
         }
 
-        $position = $this->getPosition();
-        $text = $key->getUserIdentifier();
-        $description = $key->isEnabled() ? $this->translateRole($key) : $this->trans('common.value_disabled');
-        $event->group->apply($this);
-        $this->cell(border: PdfBorder::all());
-        $this->setPosition($position);
-        $width = $this->getStringWidth($text);
-        $this->cell(width: $width, text: $text);
-        PdfStyle::default()->apply($this);
-        $this->cell(text: ' - ' . $description, move: PdfMove::NEW_LINE);
-
-        return true;
+        return $this->drawGroupUser($event, $key);
     }
 
     #[\Override]
@@ -114,6 +107,62 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         return $table;
     }
 
+    private function drawGroupRole(PdfGroupEvent $event, Role $role): true
+    {
+        /** @var positive-int $cols */
+        $cols = $event->table->getColumnsCount();
+        $cell = $this->getRoleCell(
+            $role,
+            $cols,
+            $event->group->getStyle()
+        );
+        $event->table
+            ->startRow()
+            ->addCell($cell)
+            ->endRow();
+
+        return true;
+    }
+
+    private function drawGroupUser(PdfGroupEvent $event, User $user): true
+    {
+        // border
+        $position = $this->getPosition();
+        $this->cell(border: PdfBorder::all());
+        $this->setPosition($position);
+
+        // bounds
+        $bounds = new PdfRectangle(
+            $position->x,
+            $position->y,
+            $this->getPrintableWidth(),
+            self::LINE_HEIGHT
+        );
+
+        // user identifier
+        $cell = $this->getRoleCell($user, 1, $event->group->getStyle());
+        $cell->output(
+            parent: $this,
+            bounds: $bounds
+        );
+
+        // move right
+        $bounds->indent($cell->computeWidth($this) - $this->cellMargin);
+
+        // description
+        $cell = new PdfCell(
+            text: '- ' . $this->getUserDescription($user),
+            style: PdfStyle::default()
+        );
+        $cell->output(
+            parent: $this,
+            bounds: $bounds,
+            move: PdfMove::NEW_LINE
+        );
+
+        return true;
+    }
+
     /**
      * @return EntityName[]
      */
@@ -130,12 +179,42 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         return $names;
     }
 
+    private function getEntityText(Role|User $entity): string
+    {
+        return $entity instanceof User ? $entity->getUserIdentifier() : $this->translateRole($entity);
+    }
+
     /**
      * @psalm-param FlagBag<EntityPermission> $rights
      */
     private function getRightText(FlagBag $rights, EntityPermission $permission): ?string
     {
         return $rights->hasFlags($permission) ? PdfStyle::BULLET : null;
+    }
+
+    /**
+     * @param positive-int $cols
+     */
+    private function getRoleCell(
+        Role|User $entity,
+        int $cols,
+        ?PdfStyle $style = null
+    ): PdfCell {
+        $icon = $this->getRoleIcon($entity);
+        $text = $this->getEntityText($entity);
+        $cell = $this->fontAwesomeService->getFontAwesomeCell(
+            icon: $icon,
+            text: $text,
+            cols: $cols,
+            style: $style
+        );
+
+        return $cell ?? new PdfCell(text: $text, cols: $cols, style: $style);
+    }
+
+    private function getUserDescription(User $user): string
+    {
+        return $user->isEnabled() ? $this->translateRole($user) : $this->trans('common.value_disabled');
     }
 
     /**
@@ -160,14 +239,9 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
             $this->addPage();
         }
 
-        if ($entity instanceof User) {
-            $this->addBookmark($entity->getUserIdentifier(), true, 1);
-            $table->setGroupKey($entity);
-        } else {
-            $role = $this->translateRole($entity);
-            $this->addBookmark($role, true, 1);
-            $table->setGroupKey($role);
-        }
+        $text = $this->getEntityText($entity);
+        $this->addBookmark($text, true, 1);
+        $table->setGroupKey($entity);
 
         foreach ($names as $name) {
             $rights = $entity->getPermission($name);

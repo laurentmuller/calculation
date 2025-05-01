@@ -116,10 +116,7 @@ class UserController extends AbstractEntityController
     #[Get(path: '/excel', name: 'excel')]
     public function excel(StorageInterface $storage): SpreadsheetResponse
     {
-        $entities = $this->getEntities('username');
-        if ([] === $entities) {
-            throw $this->createTranslatedNotFoundException('user.list.empty');
-        }
+        $entities = $this->getEntitiesByUserName();
         $doc = new UsersDocument($this, $entities, $storage);
 
         return $this->renderSpreadsheetDocument($doc);
@@ -205,10 +202,7 @@ class UserController extends AbstractEntityController
         StorageInterface $storage,
         FontAwesomeService $service
     ): PdfResponse {
-        $entities = $this->getEntities('username');
-        if ([] === $entities) {
-            throw $this->createTranslatedNotFoundException('user.list.empty');
-        }
+        $entities = $this->getEntitiesByUserName();
         $doc = new UsersReport($this, $entities, $storage, $service);
 
         return $this->renderPdfDocument($doc);
@@ -329,10 +323,7 @@ class UserController extends AbstractEntityController
     #[Get(path: '/rights/excel', name: 'rights_excel')]
     public function rightsExcel(RoleBuilderService $builder): SpreadsheetResponse
     {
-        $entities = $this->getEntities('username');
-        if ([] === $entities) {
-            throw $this->createTranslatedNotFoundException('user.list.empty');
-        }
+        $entities = $this->getEntitiesByUserName();
         $doc = new UserRightsDocument($this, $entities, $builder);
 
         return $this->renderSpreadsheetDocument($doc);
@@ -344,13 +335,10 @@ class UserController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     #[Get(path: '/rights/pdf', name: 'rights_pdf')]
-    public function rightsPdf(RoleBuilderService $builder): PdfResponse
+    public function rightsPdf(FontAwesomeService $fontAwesomeService, RoleBuilderService $builder): PdfResponse
     {
-        $entities = $this->getEntities('username');
-        if ([] === $entities) {
-            throw $this->createTranslatedNotFoundException('user.list.empty');
-        }
-        $doc = new UsersRightsReport($this, $entities, $builder);
+        $entities = $this->getEntitiesByUserName();
+        $doc = new UsersRightsReport($this, $entities, $fontAwesomeService, $builder);
 
         return $this->renderPdfDocument($doc);
     }
@@ -418,6 +406,14 @@ class UserController extends AbstractEntityController
         }
 
         return parent::getEntities($sortedFields, $criteria, $alias);
+    }
+
+    /**
+     * @return User[]
+     */
+    private function getEntitiesByUserName(): array
+    {
+        return $this->getEntities('username');
     }
 
     /**

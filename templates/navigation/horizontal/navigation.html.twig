@@ -2,7 +2,8 @@
 {% from 'macros/_icons.html.twig' import icon, link, navItem %}
 {# parameters #}
 {%- set is_admin = is_granted(ROLE_ADMIN) -%}
-{%- set is_granted_data = is_granted(PERMISSION_LIST, ENTITY_CALCULATION)
+{%- set is_granted_calculation = is_granted(PERMISSION_LIST, ENTITY_CALCULATION) -%}
+{%- set is_granted_data = is_granted_calculation
     or is_granted(PERMISSION_LIST, ENTITY_PRODUCT)
     or is_granted(PERMISSION_LIST, ENTITY_TASK)
     or is_granted(PERMISSION_LIST, ENTITY_CATEGORY)
@@ -12,14 +13,14 @@
 -%}
 {%- set is_dark_navigation = app.user and user_service.darkNavigation -%}
 {# horizontal navigation #}
-<nav class="navbar navbar-horizontal navbar-expand-lg bg-body-tertiary border-bottom ps-2 pb-1 z-1"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
+<nav class="navbar navbar-horizontal navbar-expand-lg bg-body-tertiary border-bottom ps-2 z-3"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
     <div class="container-fluid ps-0">
         {# toggle navigation #}
         <button class="btn btn-outline-secondary show-sidebar me-3" title="{{ 'index.sidebar_show'|trans }}">
             <i class="fa-solid fa-angle-right"></i>
         </button>
         {# home page #}
-        <a class="navbar-brand" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
+        <a class="navbar-brand me-2" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
             {{- icon('home') -}}
         </a>
         {# navigation toggler #}
@@ -27,9 +28,9 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         {# menus #}
-        <div class="navbar-collapse collapse" id="navbar-horizontal-menu">
+        <div class="navbar-collapse collapse bg-body-tertiary ps-3 ps-lg-0" id="navbar-horizontal-menu">
             <ul class="navbar-nav me-auto">
-                {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION) -%}
+                {% if is_granted_calculation -%}
                     <li class="nav-item">
                         {{- link(path('calculation_index'), 'calculation.list.title', 'nav-link', ICON_CALCULATION) -}}
                     </li>
@@ -37,10 +38,10 @@
                 {% if is_granted_data -%}
                    {{ include('navigation/horizontal/navigation_data.html.twig') }}
                 {% endif %}
-                {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION) %}
+                {% if is_granted_calculation %}
                     {{ include('navigation/horizontal/navigation_chart.html.twig') }}
                 {% endif %}
-                {% if is_admin or is_granted(PERMISSION_LIST, ENTITY_CALCULATION) %}
+                {% if is_admin or is_granted_calculation %}
                     {{ include('navigation/horizontal/navigation_tools.html.twig') }}
                 {% endif %}
                 {% if is_admin -%}

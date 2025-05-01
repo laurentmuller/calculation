@@ -767,7 +767,7 @@ class PdfTable
         $line_height = PdfDocument::LINE_HEIGHT;
 
         if ($cell instanceof AbstractPdfImageCell) {
-            $cell->drawImage($parent, clone $textBounds, $alignment);
+            $cell->output($parent, clone $textBounds, $alignment);
         } else {
             if (!$style->getFont()->isDefaultSize()) {
                 $line_height = $parent->getFontSize() + 2.0 * $margin;

@@ -13,8 +13,11 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Utils\StringUtils;
+use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfDocument;
+use fpdf\PdfRectangle;
 
 /**
  * Define a cell in a table.
@@ -43,6 +46,22 @@ class PdfCell
         if ($this->style instanceof PdfStyle) {
             $this->style = clone $this->style;
         }
+    }
+
+    /**
+     * Gets the required width; include cell margins.
+     *
+     * @param PdfDocument $parent the parent to apply this style and compute this text
+     */
+    public function computeWidth(PdfDocument $parent): float
+    {
+        $width = 2.0 * $parent->getCellMargin();
+        if (StringUtils::isString($this->text)) {
+            $this->getStyle()?->apply($parent);
+            $width += $parent->getStringWidth($this->text);
+        }
+
+        return $width;
     }
 
     /**
@@ -93,5 +112,34 @@ class PdfCell
     public function hasLink(): bool
     {
         return PdfDocument::isLink($this->link);
+    }
+
+    /**
+     * Apply this style, if any, and output this text.
+     *
+     * @param PdfDocument       $parent    the parent to output text to
+     * @param PdfRectangle      $bounds    the cell bounds
+     * @param ?PdfTextAlignment $alignment the text alignment
+     * @param PdfMove           $move      indicates where the current position should go after the call
+     *
+     * @see PdfDocument::cell()
+     */
+    public function output(
+        PdfDocument $parent,
+        PdfRectangle $bounds,
+        ?PdfTextAlignment $alignment = null,
+        PdfMove $move = PdfMove::RIGHT
+    ): void {
+        $this->style?->apply($parent);
+        $parent->setXY($bounds->x, $bounds->y);
+        $alignment ??= $this->alignment ?? PdfTextAlignment::LEFT;
+        $parent->cell(
+            width: $bounds->width,
+            height: $bounds->height,
+            text: $this->text ?? '',
+            move: $move,
+            align: $alignment,
+            link: $this->link
+        );
     }
 }

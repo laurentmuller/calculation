@@ -186,6 +186,7 @@ html[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
 .hide-sidebar {
     padding: 0 0.5rem;
     border-radius: 50%;
+    margin-top: 3px;
 }
 
 @media (width <= 1200px) {

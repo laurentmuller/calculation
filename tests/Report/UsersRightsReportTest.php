@@ -18,6 +18,7 @@ use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Report\UsersRightsReport;
 use App\Service\ApplicationService;
+use App\Service\FontAwesomeService;
 use App\Service\RoleBuilderService;
 use PHPUnit\Framework\TestCase;
 
@@ -25,23 +26,25 @@ class UsersRightsReportTest extends TestCase
 {
     public function testRender(): void
     {
-        $service = new RoleBuilderService();
+        $roleBuilderService = new RoleBuilderService();
 
         $application = $this->createMock(ApplicationService::class);
         $application->method('getAdminRole')
-            ->willReturn($service->getRoleAdmin());
+            ->willReturn($roleBuilderService->getRoleAdmin());
         $application->method('getUserRole')
-            ->willReturn($service->getRoleUser());
+            ->willReturn($roleBuilderService->getRoleUser());
 
         $controller = $this->createMock(AbstractController::class);
         $controller->method('getApplicationService')
             ->willReturn($application);
 
+        $fontAwesomeService = $this->createMock(FontAwesomeService::class);
+
         $user = new User();
         $user->setUsername('UserName')
             ->setRole(RoleInterface::ROLE_SUPER_ADMIN);
 
-        $report = new UsersRightsReport($controller, [$user], $service);
+        $report = new UsersRightsReport($controller, [$user], $fontAwesomeService, $roleBuilderService);
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -49,9 +52,10 @@ class UsersRightsReportTest extends TestCase
     public function testRenderEmpty(): void
     {
         $controller = $this->createMock(AbstractController::class);
-        $service = $this->createMock(RoleBuilderService::class);
+        $fontAwesomeService = $this->createMock(FontAwesomeService::class);
+        $roleBuilderService = $this->createMock(RoleBuilderService::class);
 
-        $report = new UsersRightsReport($controller, [], $service);
+        $report = new UsersRightsReport($controller, [], $fontAwesomeService, $roleBuilderService);
         $actual = $report->render();
         self::assertFalse($actual);
     }

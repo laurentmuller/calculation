@@ -30,7 +30,7 @@ class PdfFontAwesomeCellTest extends TestCase
         $bounds = new PdfRectangle(0, 0, 100, 5.0);
 
         $doc = $this->getDocument();
-        $cell->drawImage($doc, $bounds);
+        $cell->output($doc, $bounds);
         self::assertSame(1, $doc->getPage());
     }
 
@@ -40,7 +40,7 @@ class PdfFontAwesomeCellTest extends TestCase
         $cell = new PdfFontAwesomeCell($image, 'Text');
         $bounds = new PdfRectangle(0, 0, 100, 5.0);
         $doc = $this->getDocument();
-        $cell->drawImage($doc, $bounds, move: PdfMove::BELOW);
+        $cell->output($doc, $bounds, move: PdfMove::BELOW);
         $position = $doc->getPosition();
         self::assertSame(0.0, $position->x);
         self::assertSame(5.0, $position->y);
@@ -53,7 +53,7 @@ class PdfFontAwesomeCellTest extends TestCase
         $bounds = new PdfRectangle(0, 0, 100, 5.0);
 
         $doc = $this->getDocument();
-        $cell->drawImage($doc, $bounds, move: PdfMove::NEW_LINE);
+        $cell->output($doc, $bounds, move: PdfMove::NEW_LINE);
         $position = $doc->getPosition();
         self::assertSame($doc->getLeftMargin(), $position->x);
         self::assertSame(5.0, $position->y);
@@ -65,7 +65,7 @@ class PdfFontAwesomeCellTest extends TestCase
         $cell = new PdfFontAwesomeCell($image, 'Text');
         $bounds = new PdfRectangle(0, 0, 100, 5.0);
         $doc = $this->getDocument();
-        $cell->drawImage($doc, $bounds);
+        $cell->output($doc, $bounds);
         $position = $doc->getPosition();
         self::assertSame(100.0, $position->x);
         self::assertSame(0.0, $position->y);

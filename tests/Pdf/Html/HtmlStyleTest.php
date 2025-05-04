@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 class HtmlStyleTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<int, array{string, PdfTextAlignment}>
+     * @phpstan-return \Generator<int, array{string, PdfTextAlignment}>
      */
     public static function getAlignments(): \Generator
     {
@@ -39,7 +39,7 @@ class HtmlStyleTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, PdfBorder}>
+     * @phpstan-return \Generator<int, array{string, PdfBorder}>
      */
     public static function getBorders(): \Generator
     {
@@ -55,7 +55,7 @@ class HtmlStyleTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, float, float, float, float}>
+     * @phpstan-return \Generator<int, array{string, float, float, float, float}>
      */
     public static function getMargins(): \Generator
     {

@@ -17,7 +17,7 @@ use App\Traits\GroupByTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @psalm-type UtilsType = array{id: int, value: string}
+ * @phpstan-type UtilsType = array{id: int, value: string}
  */
 class GroupByTraitTest extends TestCase
 {
@@ -25,7 +25,7 @@ class GroupByTraitTest extends TestCase
 
     public function testGroupByArrays(): void
     {
-        /** @psalm-var UtilsType[] $array */
+        /** @phpstan-var UtilsType[] $array */
         $array = [
             $this->createObject(1, '1'),
             $this->createObject(2, '2'),
@@ -41,7 +41,7 @@ class GroupByTraitTest extends TestCase
 
     public function testGroupByCallable(): void
     {
-        /** @psalm-var UtilsType[] $array */
+        /** @phpstan-var UtilsType[] $array */
         $array = [
             $this->createObject(1, '1'),
             $this->createObject(2, '2'),
@@ -58,7 +58,7 @@ class GroupByTraitTest extends TestCase
 
     public function testGroupByEmpty(): void
     {
-        /** @psalm-var array<array{key: string, ...}> $array */
+        /** @phpstan-var array<array{key: string, ...}> $array */
         $array = [];
         $actual = $this->groupBy($array, 'key');
         self::assertSame([], $actual);
@@ -66,7 +66,7 @@ class GroupByTraitTest extends TestCase
 
     public function testGroupByMultiple(): void
     {
-        /** @psalm-var array<array{id0: int, id1: string, value: string}> $array */
+        /** @phpstan-var array<array{id0: int, id1: string, value: string}> $array */
         $array = [
             ['id0' => 1, 'id1' => '1', 'value' => '1'],
             ['id0' => 1, 'id1' => '1', 'value' => '2'],
@@ -134,7 +134,7 @@ class GroupByTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return UtilsType
+     * @phpstan-return UtilsType
      */
     private function createObject(int $id, string $value): array
     {

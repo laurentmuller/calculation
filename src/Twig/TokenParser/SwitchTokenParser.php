@@ -20,6 +20,7 @@ use Twig\Node\Node;
 use Twig\Node\Nodes;
 use Twig\Token;
 use Twig\TokenParser\AbstractTokenParser;
+use Twig\TokenStream;
 
 /**
  * Class SwitchTokenParser that parses {% switch %} tags.
@@ -42,13 +43,13 @@ final class SwitchTokenParser extends AbstractTokenParser
     public function parse(Token $token): SwitchNode
     {
         $lineno = $token->getLine();
-        $stream = $this->parser->getStream();
-        $expressionParser = $this->parser->getExpressionParser();
+        $parser = $this->parser;
+        $stream = $parser->getStream();
         /** @psalm-var array<string, Node> $nodes */
-        $nodes = ['value' => $expressionParser->parseExpression()];
+        $nodes = ['value' => $parser->parseExpression()];
 
         $stream->expect(Token::BLOCK_END_TYPE);
-        while ($stream->test(Token::TEXT_TYPE) && '' === \trim((string) $stream->getCurrent()->getValue())) {
+        while ($this->isEmptyText($stream)) {
             $stream->next();
         }
         $stream->expect(Token::BLOCK_START_TYPE);
@@ -62,7 +63,7 @@ final class SwitchTokenParser extends AbstractTokenParser
                     $values = [];
                     while (true) {
                         /** @psalm-var Node $node */
-                        $node = $expressionParser->parsePrimaryExpression();
+                        $node = $parser->parseExpression();
                         $values[] = $node;
                         // multiple allowed values?
                         if ($stream->test(Token::OPERATOR_TYPE, 'or')) {
@@ -93,6 +94,11 @@ final class SwitchTokenParser extends AbstractTokenParser
         $stream->expect(Token::BLOCK_END_TYPE);
 
         return new SwitchNode($nodes, [], $lineno);
+    }
+
+    private function isEmptyText(TokenStream $stream): bool
+    {
+        return $stream->test(Token::TEXT_TYPE) && '' === \trim((string) $stream->getCurrent()->getValue());
     }
 
     private function isEnd(Token $token): bool

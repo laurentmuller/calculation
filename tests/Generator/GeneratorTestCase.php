@@ -67,14 +67,14 @@ abstract class GeneratorTestCase extends KernelServiceTestCase
     }
 
     /**
-     * @psalm-return TGenerator
+     * @phpstan-return TGenerator
      */
     abstract protected function createGenerator(): AbstractEntityGenerator;
 
     /**
-     * @psalm-param TGenerator $generator
+     * @phpstan-param TGenerator $generator
      *
-     * @psalm-return TGenerator
+     * @phpstan-return TGenerator
      */
     protected function updateGenerator(AbstractEntityGenerator $generator): AbstractEntityGenerator
     {

@@ -19,7 +19,7 @@ use Symfony\Component\Form\Extension\PasswordHasher\PasswordHasherExtension;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
 
 /**
- * @psalm-require-extends TestCase
+ * @phpstan-require-extends TestCase
  */
 trait PasswordHasherExtensionTrait
 {

@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 class PdfCellTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<int, array{string|int|null, bool}>
+     * @phpstan-return \Generator<int, array{string|int|null, bool}>
      */
     public static function getHasLinks(): \Generator
     {

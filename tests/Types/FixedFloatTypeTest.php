@@ -31,7 +31,7 @@ class FixedFloatTypeTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string|float|int|null, float}>
+     * @phpstan-return \Generator<int, array{string|float|int|null, float}>
      */
     public static function getValues(): \Generator
     {
@@ -70,7 +70,7 @@ class FixedFloatTypeTest extends TestCase
 
     public function testName(): void
     {
-        /** @psalm-var FixedFloatType $type */
+        /** @phpstan-var FixedFloatType $type */
         $type = $this->getFixedFloatType();
         self::assertSame('fixed_float', $type->getName());
     }

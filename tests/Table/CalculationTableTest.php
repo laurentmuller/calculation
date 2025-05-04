@@ -110,7 +110,7 @@ class CalculationTableTest extends EntityTableTestCase
     }
 
     /**
-     * @psalm-return array[]
+     * @phpstan-return array[]
      */
     #[\Override]
     protected function createEntities(): array
@@ -162,7 +162,7 @@ class CalculationTableTest extends EntityTableTestCase
     }
 
     /**
-     * @psalm-param  CalculationRepository $repository
+     * @phpstan-param  CalculationRepository $repository
      *
      * @throws \ReflectionException
      */

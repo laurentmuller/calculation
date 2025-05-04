@@ -93,16 +93,16 @@ abstract class EntityTypeTestCase extends TypeTestCase
     /**
      * Update the given entity with the given data.
      *
-     * @psalm-param class-string<TEntity> $entityClass
-     * @psalm-param array<string, mixed>  $data
+     * @phpstan-param class-string<TEntity> $entityClass
+     * @phpstan-param array<string, mixed>  $data
      *
-     * @psalm-return TEntity
+     * @phpstan-return TEntity
      */
     protected function populate(string $entityClass, array $data): EntityInterface
     {
         $entity = new $entityClass();
         $accessor = PropertyAccess::createPropertyAccessor();
-        /** @psalm-var mixed $value */
+        /** @phpstan-var mixed $value */
         foreach ($data as $key => $value) {
             $accessor->setValue($entity, $key, $value);
         }
@@ -134,9 +134,9 @@ abstract class EntityTypeTestCase extends TypeTestCase
         $keys = \array_keys($data);
         $accessor = PropertyAccess::createPropertyAccessor();
         foreach ($keys as $field) {
-            /** @psalm-var mixed $expected */
+            /** @phpstan-var mixed $expected */
             $expected = $accessor->getValue($entity, $field);
-            /** @psalm-var mixed $actual */
+            /** @phpstan-var mixed $actual */
             $actual = $accessor->getValue($model, $field);
             $this->validate($expected, $actual);
         }

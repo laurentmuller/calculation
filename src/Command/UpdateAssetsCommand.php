@@ -369,12 +369,12 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @psalm-return array<string, string>
+     * @return array<string, string>
      */
     private function getConfigArray(array $configuration, string $name): array
     {
         if ($this->propertyExists($configuration, $name)) {
-            /** @psalm-var array<string, string> $array */
+            /** @var array<string, string> $array */
             $array = $configuration[$name];
 
             return $array;
@@ -384,7 +384,7 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @psalm-param string[] $paths
+     * @param string[] $paths
      */
     private function getLastVersion(string $url, array $paths, string $name): ?string
     {

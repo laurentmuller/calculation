@@ -650,8 +650,7 @@ class FormHelperTest extends TypeTestCase
 
     /**
      * @phpstan-param FormInterface<mixed> $form
-     *
-     * @psalm-param class-string $expected
+     * @phpstan-param class-string $expected
      */
     protected static function assertSameType(FormInterface $form, string $expected): void
     {

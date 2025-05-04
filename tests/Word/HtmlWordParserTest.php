@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 class HtmlWordParserTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<int, array{string, string}>
+     * @phpstan-return \Generator<int, array{string, string}>
      */
     public static function getBorders(): \Generator
     {
@@ -39,7 +39,7 @@ class HtmlWordParserTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, string}>
+     * @phpstan-return \Generator<int, array{string, string}>
      */
     public static function getClassToStyles(): \Generator
     {
@@ -56,7 +56,7 @@ class HtmlWordParserTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, string}>
+     * @phpstan-return \Generator<int, array{string, string}>
      */
     public static function getMargins(): \Generator
     {

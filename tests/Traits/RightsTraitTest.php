@@ -31,7 +31,7 @@ class RightsTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string}>
+     * @phpstan-return \Generator<int, array{string}>
      */
     public static function getRightsFields(): \Generator
     {
@@ -119,7 +119,7 @@ class RightsTraitTest extends TestCase
         $attribute = $this->getAttribute($key);
         $rights = new FlagBag(EntityPermission::class, $attribute);
         $this->__set($field, $rights);
-        /** @psalm-var FlagBag<EntityPermission> $value */
+        /** @phpstan-var FlagBag<EntityPermission> $value */
         $value = $this->__get($field);
         $expected = $rights->getValue();
         $actual = $value->getValue();

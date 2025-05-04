@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 class HtmlTagTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<int, array{HtmlTag, string, bool}>
+     * @phpstan-return \Generator<int, array{HtmlTag, string, bool}>
      */
     public static function getMatches(): \Generator
     {
@@ -33,7 +33,7 @@ class HtmlTagTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{HtmlTag, HtmlStyle|null}>
+     * @phpstan-return \Generator<int, array{HtmlTag, HtmlStyle|null}>
      */
     public static function getStyles(): \Generator
     {

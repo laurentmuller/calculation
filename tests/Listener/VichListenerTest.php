@@ -111,7 +111,7 @@ class VichListenerTest extends TestCase
     }
 
     /**
-     * @psalm-param NamerInterface<object>|null $namer
+     * @phpstan-param NamerInterface<object>|null $namer
      */
     private function createEvent(
         ?UploadedFile $file = null,
@@ -142,7 +142,7 @@ class VichListenerTest extends TestCase
     }
 
     /**
-     * @psalm-param NamerInterface<object>|null $namer
+     * @phpstan-param NamerInterface<object>|null $namer
      */
     private function createPropertyMapping(?NamerInterface $namer = null): PropertyMapping
     {
@@ -188,13 +188,13 @@ class VichListenerTest extends TestCase
     }
 
     /**
-     * @psalm-param NamerInterface<object>|null $namer
+     * @phpstan-param NamerInterface<object>|null $namer
      *
-     * @psalm-return NamerInterface<object>
+     * @phpstan-return NamerInterface<object>
      */
     private function getNamer(?NamerInterface $namer = null): NamerInterface
     {
-        /** @psalm-var NamerInterface<object> */
+        /** @phpstan-var NamerInterface<object> */
         return $namer ?? new UserNamer();
     }
 }

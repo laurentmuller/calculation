@@ -222,9 +222,9 @@ class PersistenceListenerTest extends TestCase
     }
 
     /**
-     * @psalm-param array<string, EntityInterface> $events
-     * @psalm-param array<string, EntityInterface> $collections
-     * @psalm-param array<string, string>  $changeSets
+     * @phpstan-param array<string, EntityInterface> $events
+     * @phpstan-param array<string, EntityInterface> $collections
+     * @phpstan-param array<string, string>  $changeSets
      */
     private function createEvent(
         array $events = [],
@@ -247,9 +247,9 @@ class PersistenceListenerTest extends TestCase
     }
 
     /**
-     * @psalm-param array<string, EntityInterface> $events
-     * @psalm-param array<string, EntityInterface> $collections
-     * @psalm-param array<string, string>  $changeSets
+     * @phpstan-param array<string, EntityInterface> $events
+     * @phpstan-param array<string, EntityInterface> $collections
+     * @phpstan-param array<string, string>  $changeSets
      */
     private function createMockObjectManager(
         array $events = [],

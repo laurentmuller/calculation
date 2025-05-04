@@ -84,10 +84,8 @@ class PdfImageCell extends AbstractPdfImageCell
     /**
      * Gets the original image width and height.
      *
-     * @return int[] an array with two elements. Index 0 and 1 contain respectively the original width and the
-     *               original height.
-     *
-     * @psalm-return array{0: int, 1: int}
+     * @return array{0: int, 1: int} an array with two elements. Index 0 and 1 contain respectively the original width and the
+     *                               original height.
      */
     public function getOriginalSize(): array
     {

@@ -119,7 +119,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     #[\Override]
-    public function __clone()
+    public function __clone(): void
     {
         parent::__clone();
         $this->date = new \DateTime();

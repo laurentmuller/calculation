@@ -105,7 +105,7 @@ class UserTableTest extends EntityTableTestCase
     }
 
     /**
-     * @psalm-param UserRepository $repository
+     * @phpstan-param UserRepository $repository
      */
     #[\Override]
     protected function createTable(AbstractRepository $repository): UserTable

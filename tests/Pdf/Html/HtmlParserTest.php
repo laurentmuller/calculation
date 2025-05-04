@@ -90,7 +90,7 @@ class HtmlParserTest extends TestCase
     }
 
     /**
-     * @psalm-param class-string<AbstractHtmlChunk> ...$classes
+     * @phpstan-param class-string<AbstractHtmlChunk> ...$classes
      */
     protected static function assertChunks(mixed $actual, string ...$classes): void
     {

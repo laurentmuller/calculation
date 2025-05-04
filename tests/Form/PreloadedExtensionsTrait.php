@@ -19,7 +19,7 @@ use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
- * @psalm-require-extends TypeTestCase
+ * @phpstan-require-extends TypeTestCase
  */
 trait PreloadedExtensionsTrait
 {

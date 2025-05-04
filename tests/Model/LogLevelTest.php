@@ -24,7 +24,7 @@ class LogLevelTest extends TestCase
     use AssertEmptyTrait;
 
     /**
-     * @psalm-return \Generator<int, array{PsrLevel::*, string}>
+     * @phpstan-return \Generator<int, array{PsrLevel::*, string}>
      */
     public static function getLevelColors(): \Generator
     {
@@ -39,7 +39,7 @@ class LogLevelTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{PsrLevel::*, string}>
+     * @phpstan-return \Generator<int, array{PsrLevel::*, string}>
      */
     public static function getLevelIcons(): \Generator
     {
@@ -74,7 +74,7 @@ class LogLevelTest extends TestCase
     }
 
     /**
-     * @psalm-param PsrLevel::* $level
+     * @phpstan-param PsrLevel::* $level
      */
     #[DataProvider('getLevelColors')]
     public function testLevelColor(string $level, string $expected): void
@@ -85,7 +85,7 @@ class LogLevelTest extends TestCase
     }
 
     /**
-     * @psalm-param PsrLevel::* $level
+     * @phpstan-param PsrLevel::* $level
      */
     #[DataProvider('getLevelIcons')]
     public function testLevelIcon(string $level, string $expected): void

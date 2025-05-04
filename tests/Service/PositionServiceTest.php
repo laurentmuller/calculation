@@ -23,7 +23,7 @@ class PositionServiceTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @psalm-return \Generator<int, array{float, string}>
+     * @phpstan-return \Generator<int, array{float, string}>
      */
     public static function getDirections(): \Generator
     {
@@ -48,7 +48,7 @@ class PositionServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{int, string}>
+     * @phpstan-return \Generator<int, array{int, string}>
      */
     public static function getFormatDirections(): \Generator
     {
@@ -59,7 +59,7 @@ class PositionServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: float, 1: string, 2?: true}>
+     * @phpstan-return \Generator<int, array{0: float, 1: string, 2?: true}>
      */
     public static function getLatitudes(): \Generator
     {
@@ -71,7 +71,7 @@ class PositionServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: float, 1: string, 2?: true}>
+     * @phpstan-return \Generator<int, array{0: float, 1: string, 2?: true}>
      */
     public static function getLongitudes(): \Generator
     {
@@ -83,7 +83,7 @@ class PositionServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: float, 1: float, 2: string, 3?: true}>
+     * @phpstan-return \Generator<int, array{0: float, 1: float, 2: string, 3?: true}>
      */
     public static function getPositions(): \Generator
     {

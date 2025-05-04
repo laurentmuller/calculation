@@ -24,7 +24,7 @@ class AjaxUserControllerTest extends AuthenticateWebTestCase
     private ?TranslatorInterface $translator = null;
 
     /**
-     * @psalm-return \Generator<int, array{0: bool|non-empty-string, 1?: string, 2?: 1}>
+     * @phpstan-return \Generator<int, array{0: bool|non-empty-string, 1?: string, 2?: 1}>
      */
     public static function getEmails(): \Generator
     {
@@ -37,7 +37,7 @@ class AjaxUserControllerTest extends AuthenticateWebTestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: bool|string, 1?: string, 2?: 1}>
+     * @phpstan-return \Generator<int, array{0: bool|string, 1?: string, 2?: 1}>
      */
     public static function getNames(): \Generator
     {
@@ -50,7 +50,7 @@ class AjaxUserControllerTest extends AuthenticateWebTestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: bool|string, 1?: string}>
+     * @phpstan-return \Generator<int, array{0: bool|string, 1?: string}>
      */
     public static function getUsers(): \Generator
     {

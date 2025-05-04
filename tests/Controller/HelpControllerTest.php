@@ -190,7 +190,7 @@ class HelpControllerTest extends ControllerTestCase
     }
 
     /**
-     * @psalm-return \Generator<string>
+     * @phpstan-return \Generator<string>
      */
     private function getImages(): \Generator
     {

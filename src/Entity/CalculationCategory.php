@@ -92,7 +92,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
     }
 
     #[\Override]
-    public function __clone()
+    public function __clone(): void
     {
         parent::__clone();
         $this->items = $this->items->map(

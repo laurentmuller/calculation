@@ -107,7 +107,7 @@ class CookieTraitTest extends TestCase
 
     private function createRequest(array $cookies = []): Request
     {
-        /** @psalm-var mixed $value */
+        /** @phpstan-var mixed $value */
         foreach ($cookies as &$value) {
             if ($value instanceof \BackedEnum) {
                 $value = $value->value;

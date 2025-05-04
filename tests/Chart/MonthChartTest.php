@@ -24,7 +24,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
- * @psalm-import-type CalculationByMonthType from CalculationRepository
+ * @phpstan-import-type CalculationByMonthType from CalculationRepository
  */
 class MonthChartTest extends TestCase
 {
@@ -87,7 +87,7 @@ class MonthChartTest extends TestCase
     }
 
     /**
-     * @psalm-return CalculationByMonthType[]
+     * @phpstan-return CalculationByMonthType[]
      */
     private function createSeries(): array
     {

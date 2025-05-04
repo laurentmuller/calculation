@@ -21,7 +21,7 @@ use App\Report\AbstractReport;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @psalm-import-type ColorValueType from PdfChartInterface
+ * @phpstan-import-type ColorValueType from PdfChartInterface
  */
 class PdfPieChartTraitTest extends TestCase
 {
@@ -144,7 +144,7 @@ class PdfPieChartTraitTest extends TestCase
     }
 
     /**
-     * @psalm-param ColorValueType[] $rows
+     * @phpstan-param ColorValueType[] $rows
      */
     private function createReport(
         float $centerX,

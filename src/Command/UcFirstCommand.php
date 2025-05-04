@@ -113,7 +113,7 @@ class UcFirstCommand extends Command
     }
 
     /**
-     * @psalm-return class-string|null
+     * @return class-string|null
      */
     private function askClassName(SymfonyStyle $io): ?string
     {
@@ -178,7 +178,7 @@ class UcFirstCommand extends Command
     }
 
     /**
-     * @psalm-return class-string|null
+     * @return class-string|null
      */
     private function getClassName(SymfonyStyle $io): ?string
     {

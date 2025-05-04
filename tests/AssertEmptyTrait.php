@@ -16,14 +16,14 @@ namespace App\Tests;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Trait used as workaround to use <code>assertEmpty()</code> function within the <code>Countable</code> interface.
+ * Trait used as a workaround to use <code>assertEmpty()</code> function within the <code>Countable</code> interface.
  *
  * @require-extends TestCase
  */
 trait AssertEmptyTrait
 {
     /**
-     * @psalm-assert empty|\Countable $actual
+     * @phpstan-assert empty|\Countable $actual
      */
     final public static function assertEmptyCountable(mixed $actual): void
     {

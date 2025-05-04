@@ -34,16 +34,16 @@ class PivotMonthFieldTest extends TestCase
         $actual = $field->getDisplayValue(null);
         self::assertNull($actual);
 
-        /** @psalm-var string $actual */
+        /** @phpstan-var string $actual */
         $actual = $field->getDisplayValue(7);
         self::assertSame('Juillet', $actual);
 
         $field = new PivotMonthField('name', short: true);
-        /** @psalm-var string $actual */
+        /** @phpstan-var string $actual */
         $actual = $field->getDisplayValue(7);
         self::assertSame('Juil.', $actual);
 
-        /** @psalm-var int $actual */
+        /** @phpstan-var int $actual */
         $actual = $field->getDisplayValue(-1);
         self::assertSame(-1, $actual);
     }

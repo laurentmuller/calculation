@@ -23,7 +23,7 @@ class LogChannelTest extends TestCase
     use AssertEmptyTrait;
 
     /**
-     * @psalm-return \Generator<int, array{non-empty-string, string}>
+     * @phpstan-return \Generator<int, array{non-empty-string, string}>
      */
     public static function getChannelIcons(): \Generator
     {
@@ -39,7 +39,7 @@ class LogChannelTest extends TestCase
     }
 
     /**
-     * @psalm-param non-empty-string $channel
+     * @phpstan-param non-empty-string $channel
      */
     #[DataProvider('getChannelIcons')]
     public function testChannelIcon(string $channel, string $expected): void

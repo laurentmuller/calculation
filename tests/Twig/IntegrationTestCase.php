@@ -27,7 +27,7 @@ use Twig\TwigTest;
 /**
  * Integration test helper.
  *
- * @psalm-type TestTemplateType=array{
+ * @phpstan-type TestTemplateType=array{
  *      file: string,
  *      message: string,
  *      condition: string,
@@ -88,7 +88,7 @@ abstract class IntegrationTestCase extends TestCase
         if ('' !== $condition) {
             $ret = true;
             $this->eval('$ret = ' . $condition);
-            /** @psalm-var bool $ret */
+            /** @phpstan-var bool $ret */
             if (!$ret) {
                 self::markTestSkipped($condition);
             }
@@ -258,7 +258,7 @@ abstract class IntegrationTestCase extends TestCase
     }
 
     /**
-     * @psalm-return \Iterator<string>
+     * @phpstan-return \Iterator<string>
      */
     private function getIterator(string $fixturesDir): \Iterator
     {
@@ -271,7 +271,7 @@ abstract class IntegrationTestCase extends TestCase
     }
 
     /**
-     * @psalm-return TestTemplateType[]
+     * @phpstan-return TestTemplateType[]
      */
     private function getTests(): array
     {
@@ -320,7 +320,7 @@ abstract class IntegrationTestCase extends TestCase
             ];
         }
 
-        /** @psalm-var TestTemplateType[] */
+        /** @phpstan-var TestTemplateType[] */
         return $tests;  // @phpstan-ignore varTag.type
     }
 

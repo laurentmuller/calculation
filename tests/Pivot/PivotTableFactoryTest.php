@@ -112,7 +112,7 @@ class PivotTableFactoryTest extends TestCase
     }
 
     /**
-     * @psalm-return array<array<array-key, mixed>>
+     * @phpstan-return array<array<array-key, mixed>>
      */
     private function createDataset(): array
     {

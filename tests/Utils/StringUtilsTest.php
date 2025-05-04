@@ -24,7 +24,7 @@ class StringUtilsTest extends TestCase
     use PrivateInstanceTrait;
 
     /**
-     * @psalm-return \Generator<int, array{string, string}>
+     * @phpstan-return \Generator<int, array{string, string}>
      */
     public static function getAscii(): \Generator
     {
@@ -35,7 +35,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, string}>
+     * @phpstan-return \Generator<int, array{string, string}>
      */
     public static function getCapitalize(): \Generator
     {
@@ -47,7 +47,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: string, 1: string, 2?: false}>
+     * @phpstan-return \Generator<int, array{0: string, 1: string, 2?: false}>
      */
     public static function getEqualIgnoreCase(): \Generator
     {
@@ -57,7 +57,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{mixed, mixed}>
+     * @phpstan-return \Generator<int, array{mixed, mixed}>
      */
     public static function getExportVar(): \Generator
     {
@@ -73,7 +73,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{?string, bool}>
+     * @phpstan-return \Generator<int, array{?string, bool}>
      */
     public static function getIsString(): \Generator
     {
@@ -83,7 +83,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{non-empty-string, string, bool}>
+     * @phpstan-return \Generator<int, array{non-empty-string, string, bool}>
      */
     public static function getPregMatch(): \Generator
     {
@@ -95,7 +95,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{non-empty-string, string, bool}>
+     * @phpstan-return \Generator<int, array{non-empty-string, string, bool}>
      */
     public static function getPregMatchAll(): \Generator
     {
@@ -108,7 +108,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{non-empty-string, string, string, string}>
+     * @phpstan-return \Generator<int, array{non-empty-string, string, string, string}>
      */
     public static function getPregReplace(): \Generator
     {
@@ -117,7 +117,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{non-empty-array<non-empty-string, string>, string, string}>
+     * @phpstan-return \Generator<int, array{non-empty-array<non-empty-string, string>, string, string}>
      */
     public static function getPregReplaceAll(): \Generator
     {
@@ -126,7 +126,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{object|class-string, string}>
+     * @phpstan-return \Generator<int, array{object|class-string, string}>
      */
     public static function getShortNameValid(): \Generator
     {
@@ -136,7 +136,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, string, bool, bool}>
+     * @phpstan-return \Generator<int, array{string, string, bool, bool}>
      */
     public static function getStartWith(): \Generator
     {
@@ -147,7 +147,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, ?string}>
+     * @phpstan-return \Generator<int, array{string, ?string}>
      */
     public static function getTrim(): \Generator
     {
@@ -176,7 +176,7 @@ class StringUtilsTest extends TestCase
     public function testDecodeJsonArray(): void
     {
         $expected = ['key' => 'value'];
-        /** @psalm-var non-empty-string $encoded */
+        /** @phpstan-var non-empty-string $encoded */
         $encoded = \json_encode($expected);
         $actual = StringUtils::decodeJson($encoded);
         self::assertSame($expected, $actual);
@@ -187,7 +187,7 @@ class StringUtilsTest extends TestCase
         $expected = new \stdClass();
         $expected->key = 'value';
         $expected->date = 'date';
-        /** @psalm-var non-empty-string $encoded */
+        /** @phpstan-var non-empty-string $encoded */
         $encoded = \json_encode($expected);
         $actual = StringUtils::decodeJson($encoded, false);
         self::assertObjectHasProperty('key', $actual);
@@ -206,7 +206,7 @@ class StringUtilsTest extends TestCase
     public function testEncodeJson(): void
     {
         $expected = '{"key":"value"}';
-        /** @psalm-var mixed $decoded */
+        /** @phpstan-var mixed $decoded */
         $decoded = \json_decode($expected, true);
         $actual = StringUtils::encodeJson($decoded);
         self::assertSame($expected, $actual);
@@ -236,7 +236,7 @@ class StringUtilsTest extends TestCase
     public function testGetShortNameInvalid(): void
     {
         /**
-         * @psalm-var class-string $objectOrClass
+         * @phpstan-var class-string $objectOrClass
          *
          * @phpstan-ignore varTag.nativeType
          */
@@ -246,7 +246,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-param object|class-string $objectOrClass
+     * @phpstan-param object|class-string $objectOrClass
      */
     #[DataProvider('getShortNameValid')]
     public function testGetShortNameValid(object|string $objectOrClass, string $expected): void
@@ -268,7 +268,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-param non-empty-string $pattern
+     * @phpstan-param non-empty-string $pattern
      */
     #[DataProvider('getPregMatch')]
     public function testPregMatch(string $pattern, string $subject, bool $expected): void
@@ -278,7 +278,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-param non-empty-string $pattern
+     * @phpstan-param non-empty-string $pattern
      */
     #[DataProvider('getPregMatchAll')]
     public function testPregMatchAll(string $pattern, string $subject, bool $expected): void
@@ -288,7 +288,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-param non-empty-string $pattern
+     * @phpstan-param non-empty-string $pattern
      */
     #[DataProvider('getPregReplace')]
     public function testPregReplace(string $pattern, string $replacement, string $subject, string $expected): void
@@ -298,7 +298,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-param non-empty-array<non-empty-string, string> $values
+     * @phpstan-param non-empty-array<non-empty-string, string> $values
      */
     #[DataProvider('getPregReplaceAll')]
     public function testPregReplaceAll(array $values, string $subject, string $expected): void

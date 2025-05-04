@@ -49,7 +49,7 @@ abstract class AlphaCaptchaTestCase extends TestCase
     }
 
     /**
-     * @psalm-return TCaptcha
+     * @phpstan-return TCaptcha
      */
     abstract protected function createCaptcha(
         DictionaryService $service,

@@ -18,7 +18,7 @@ use App\Service\CommandService;
 use App\Tests\KernelServiceTestCase;
 
 /**
- * @psalm-import-type CommandType from CommandService
+ * @phpstan-import-type CommandType from CommandService
  */
 class CommandDataServiceTest extends KernelServiceTestCase
 {
@@ -180,7 +180,7 @@ class CommandDataServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @psalm-return CommandType
+     * @phpstan-return CommandType
      *
      * @phpstan-ignore return.phpDocType
      */

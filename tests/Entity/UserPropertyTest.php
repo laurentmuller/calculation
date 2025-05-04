@@ -146,7 +146,7 @@ class UserPropertyTest extends EntityValidatorTestCase
 
     private function getRepository(): UserPropertyRepository
     {
-        /** @psalm-var UserPropertyRepository  */
+        /** @phpstan-var UserPropertyRepository  */
         return $this->getManager()->getRepository(UserProperty::class); // @phpstan-ignore varTag.type
     }
 

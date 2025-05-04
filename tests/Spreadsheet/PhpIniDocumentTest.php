@@ -47,7 +47,7 @@ class PhpIniDocumentTest extends TestCase
     }
 
     /**
-     * @psalm-param array<string, array<string, array{local: scalar, master: scalar}|scalar>> $data
+     * @phpstan-param array<string, array<string, array{local: scalar, master: scalar}|scalar>> $data
      */
     private function createDocument(array $data): PhpIniDocument
     {

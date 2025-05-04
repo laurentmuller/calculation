@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @psalm-require-extends TestCase
+ * @phpstan-require-extends TestCase
  */
 trait TranslatorMockTrait
 {

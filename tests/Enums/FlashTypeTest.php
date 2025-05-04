@@ -23,7 +23,7 @@ class FlashTypeTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @psalm-return \Generator<int, array{FlashType, string}>
+     * @phpstan-return \Generator<int, array{FlashType, string}>
      */
     public static function getIcons(): \Generator
     {
@@ -34,7 +34,7 @@ class FlashTypeTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{FlashType, string}>
+     * @phpstan-return \Generator<int, array{FlashType, string}>
      */
     public static function getLabels(): \Generator
     {
@@ -45,7 +45,7 @@ class FlashTypeTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{FlashType, string}>
+     * @phpstan-return \Generator<int, array{FlashType, string}>
      */
     public static function getStyles(): \Generator
     {
@@ -56,7 +56,7 @@ class FlashTypeTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{FlashType, string}>
+     * @phpstan-return \Generator<int, array{FlashType, string}>
      */
     public static function getValues(): \Generator
     {

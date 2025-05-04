@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 abstract class ParameterTestCase extends TestCase
 {
     /**
-     * @psalm-var T ParameterInterface
+     * @phpstan-var T ParameterInterface
      */
     protected ParameterInterface $parameter;
 
@@ -35,12 +35,12 @@ abstract class ParameterTestCase extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, string}>
+     * @phpstan-return \Generator<int, array{string, string}>
      */
     abstract public static function getParameterNames(): \Generator;
 
     /**
-     * @psalm-return \Generator<int, array{string, mixed}>
+     * @phpstan-return \Generator<int, array{string, mixed}>
      */
     abstract public static function getParameterValues(): \Generator;
 
@@ -65,7 +65,7 @@ abstract class ParameterTestCase extends TestCase
     }
 
     /**
-     * @psalm-return  T
+     * @phpstan-return  T
      */
     abstract protected function createParameter(): ParameterInterface;
 

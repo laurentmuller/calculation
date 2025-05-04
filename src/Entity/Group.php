@@ -79,7 +79,7 @@ class Group extends AbstractCodeEntity
     }
 
     #[\Override]
-    public function __clone()
+    public function __clone(): void
     {
         parent::__clone();
         $this->margins = $this->margins->map(

@@ -77,7 +77,7 @@ class PdfBarScale
     }
 
     /**
-     * @psalm-return array{0: float, 1: float}
+     * @return array{0: float, 1: float}
      */
     private function fixBounds(float $lowerBound, float $upperBound): array
     {

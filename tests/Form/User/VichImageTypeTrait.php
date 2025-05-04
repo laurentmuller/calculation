@@ -27,7 +27,7 @@ use Vich\UploaderBundle\Metadata\MetadataReader;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 /**
- * @psalm-require-extends TestCase
+ * @phpstan-require-extends TestCase
  */
 trait VichImageTypeTrait
 {

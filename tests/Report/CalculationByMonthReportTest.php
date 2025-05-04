@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * @psalm-import-type CalculationByMonthType from \App\Repository\CalculationRepository
+ * @phpstan-import-type CalculationByMonthType from \App\Repository\CalculationRepository
  */
 class CalculationByMonthReportTest extends TestCase
 {
@@ -92,7 +92,7 @@ class CalculationByMonthReportTest extends TestCase
     }
 
     /**
-     * @psalm-param CalculationByMonthType[] $entities
+     * @phpstan-param CalculationByMonthType[] $entities
      */
     private function createReport(array $entities): CalculationByMonthReport
     {

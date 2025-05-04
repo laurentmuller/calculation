@@ -22,18 +22,18 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @psalm-require-extends TestCase
+ * @phpstan-require-extends TestCase
  */
 trait ManagerRegistryTrait
 {
     private (EntityManager&MockObject)|null $entityManager = null;
     private (ManagerRegistry&MockObject)|null $managerRegistry = null;
-    /** @psalm-var array<string, mixed */
+    /** @var array<string, mixed> */
     private array $repositories = [];
 
     /**
-     * @psalm-param class-string $entityClass
-     * @psalm-param class-string $repositoryClass
+     * @param class-string $entityClass
+     * @param class-string $repositoryClass
      */
     protected function createManagerRegistry(
         string $entityClass,
@@ -76,7 +76,7 @@ trait ManagerRegistryTrait
     }
 
     /**
-     * @psalm-param class-string $repositoryClass
+     * @phpstan-param class-string $repositoryClass
      */
     private function createRepository(
         string $repositoryClass,

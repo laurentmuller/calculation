@@ -172,7 +172,7 @@ class RequestTraitTest extends TestCase
      */
     private function mapValues(array $values): array
     {
-        /* @psalm-var scalar|array|\BackedEnum $value */
+        /* @phpstan-var scalar|array|\BackedEnum $value */
         foreach ($values as &$value) {
             if ($value instanceof \BackedEnum) {
                 $value = $value->value;

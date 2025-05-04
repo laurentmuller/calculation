@@ -115,7 +115,7 @@ class TaskTableTest extends EntityTableTestCase
     }
 
     /**
-     * @psalm-param TaskRepository $repository
+     * @phpstan-param TaskRepository $repository
      *
      * @throws \ReflectionException
      */

@@ -184,9 +184,9 @@ final class FormatExtension extends AbstractExtension
     /**
      * Check the time format.
      *
-     * @throws RuntimeError
+     * @return int<-1,3>|null
      *
-     * @psalm-return int<-1,3>|null
+     * @throws RuntimeError
      */
     private function translateFormat(?string $format = null): ?int
     {

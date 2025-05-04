@@ -76,7 +76,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     }
 
     #[\Override]
-    public function __clone()
+    public function __clone(): void
     {
         parent::__clone();
         $this->items = $this->items->map(

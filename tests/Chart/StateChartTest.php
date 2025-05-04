@@ -24,7 +24,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
- * @psalm-import-type QueryCalculationType from CalculationStateRepository
+ * @phpstan-import-type QueryCalculationType from CalculationStateRepository
  */
 class StateChartTest extends TestCase
 {
@@ -72,7 +72,7 @@ class StateChartTest extends TestCase
     }
 
     /**
-     * @psalm-return QueryCalculationType[]
+     * @phpstan-return QueryCalculationType[]
      */
     private function createSeries(): array
     {

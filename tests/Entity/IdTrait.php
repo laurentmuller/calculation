@@ -23,9 +23,9 @@ trait IdTrait
     /**
      * @template T of EntityInterface
      *
-     * @psalm-param T $entity
+     * @phpstan-param T $entity
      *
-     * @psalm-return  T
+     * @phpstan-return  T
      *
      * @throws \ReflectionException
      */

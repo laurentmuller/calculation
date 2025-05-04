@@ -54,7 +54,7 @@ class GroupTableTest extends EntityTableTestCase
     }
 
     /**
-     * @psalm-param GroupRepository $repository
+     * @phpstan-param GroupRepository $repository
      */
     #[\Override]
     protected function createTable(AbstractRepository $repository): GroupTable

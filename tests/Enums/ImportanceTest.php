@@ -23,7 +23,7 @@ class ImportanceTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @psalm-return \Generator<int, array{string, Importance}>
+     * @phpstan-return \Generator<int, array{string, Importance}>
      */
     public static function getLabels(): \Generator
     {
@@ -34,7 +34,7 @@ class ImportanceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, Importance}>
+     * @phpstan-return \Generator<int, array{string, Importance}>
      */
     public static function getLabelsFull(): \Generator
     {
@@ -45,7 +45,7 @@ class ImportanceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{Importance, string}>
+     * @phpstan-return \Generator<int, array{Importance, string}>
      */
     public static function getValues(): \Generator
     {

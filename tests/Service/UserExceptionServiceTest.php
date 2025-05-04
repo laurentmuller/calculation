@@ -45,7 +45,7 @@ class UserExceptionServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: \Throwable, 1: string, 2?: 1}>
+     * @phpstan-return \Generator<int, array{0: \Throwable, 1: string, 2?: 1}>
      */
     public static function getExceptions(): \Generator
     {

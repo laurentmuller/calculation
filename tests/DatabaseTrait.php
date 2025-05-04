@@ -46,9 +46,9 @@ trait DatabaseTrait
      *
      * @template T of EntityInterface
      *
-     * @psalm-param T $entity
+     * @phpstan-param T $entity
      *
-     * @psalm-return T
+     * @phpstan-return T
      */
     protected function addEntity(EntityInterface $entity): EntityInterface
     {
@@ -62,7 +62,7 @@ trait DatabaseTrait
     /**
      * Delete all entities for the given class.
      *
-     * @psalm-param class-string $className
+     * @phpstan-param class-string $className
      */
     protected function deleteEntitiesByClass(string $className): void
     {
@@ -100,7 +100,7 @@ trait DatabaseTrait
      */
     protected function getManager(): ObjectManager
     {
-        /** @psalm-var ManagerRegistry $registry */
+        /** @phpstan-var ManagerRegistry $registry */
         $registry = static::getContainer()->get('doctrine');
 
         return $registry->getManager();

@@ -86,7 +86,7 @@ class CategoryTableTest extends EntityTableTestCase
     }
 
     /**
-     * @psalm-param CategoryRepository $repository
+     * @phpstan-param CategoryRepository $repository
      */
     #[\Override]
     protected function createTable(AbstractRepository $repository): CategoryTable

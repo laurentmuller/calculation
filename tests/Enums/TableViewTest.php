@@ -24,7 +24,7 @@ class TableViewTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @psalm-return \Generator<int, array{TableView, TableView}>
+     * @phpstan-return \Generator<int, array{TableView, TableView}>
      */
     public static function getDefault(): \Generator
     {
@@ -33,7 +33,7 @@ class TableViewTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{TableView, string}>
+     * @phpstan-return \Generator<int, array{TableView, string}>
      */
     public static function getValues(): \Generator
     {

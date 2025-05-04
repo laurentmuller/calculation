@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 class EnvironmentServiceTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<int, array{string, Environment}>
+     * @phpstan-return \Generator<int, array{string, Environment}>
      */
     public static function getEnvironment(): \Generator
     {
@@ -31,7 +31,7 @@ class EnvironmentServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, bool}>
+     * @phpstan-return \Generator<int, array{string, bool}>
      */
     public static function getIsDevelopment(): \Generator
     {
@@ -41,7 +41,7 @@ class EnvironmentServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, bool}>
+     * @phpstan-return \Generator<int, array{string, bool}>
      */
     public static function getIsProduction(): \Generator
     {
@@ -51,7 +51,7 @@ class EnvironmentServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, bool}>
+     * @phpstan-return \Generator<int, array{string, bool}>
      */
     public static function getIsTest(): \Generator
     {

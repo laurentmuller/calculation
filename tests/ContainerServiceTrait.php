@@ -18,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 /**
  * Trait to get service from the container.
  *
- * @psalm-require-extends KernelTestCase
+ * @phpstan-require-extends KernelTestCase
  */
 trait ContainerServiceTrait
 {
@@ -33,7 +33,7 @@ trait ContainerServiceTrait
      */
     protected function getService(string $class)
     {
-        /** @psalm-var TService */
+        /** @phpstan-var TService */
         return static::getContainer()->get($class); // @phpstan-ignore varTag.nativeType
     }
 

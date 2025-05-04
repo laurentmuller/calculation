@@ -32,7 +32,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: int, 1: int,2?: 1931}>
+     * @phpstan-return \Generator<int, array{0: int, 1: int,2?: 1931}>
      */
     public static function getCompletYears(): \Generator
     {
@@ -52,7 +52,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{\DateTimeInterface, int}>
+     * @phpstan-return \Generator<int, array{\DateTimeInterface, int}>
      */
     public static function getDays(): \Generator
     {
@@ -67,7 +67,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{?\DateTimeInterface, ?string}>
+     * @phpstan-return \Generator<int, array{?\DateTimeInterface, ?string}>
      */
     public static function getFormatFormDate(): \Generator
     {
@@ -81,7 +81,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{\DateTime, string, string}>
+     * @phpstan-return \Generator<int, array{\DateTime, string, string}>
      */
     public static function getModifies(): \Generator
     {
@@ -100,7 +100,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, int}>
+     * @phpstan-return \Generator<int, array{string, int}>
      */
     public static function getMonthNames(): \Generator
     {
@@ -119,7 +119,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{\DateTime, int}>
+     * @phpstan-return \Generator<int, array{\DateTime, int}>
      */
     public static function getMonths(): \Generator
     {
@@ -134,29 +134,29 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{\DateTime, \DateTimeImmutable}>
+     * @phpstan-return \Generator<int, array{\DateTime, \DateTimeImmutable}>
      */
     public static function getRemoveTimes(): \Generator
     {
         $format = 'Y-m-d H:i:s';
-        /** @psalm-var \DateTimeImmutable $expected */
+        /** @phpstan-var \DateTimeImmutable $expected */
         $expected = \DateTimeImmutable::createFromFormat($format, '2013-03-15 00:00:00');
 
-        /** @psalm-var \DateTime $date */
+        /** @phpstan-var \DateTime $date */
         $date = \DateTime::createFromFormat($format, '2013-03-15 00:00:00');
         yield [$date, $expected];
 
-        /** @psalm-var \DateTime $date */
+        /** @phpstan-var \DateTime $date */
         $date = \DateTime::createFromFormat($format, '2013-03-15 01:02:03');
         yield [$date, $expected];
 
-        /** @psalm-var \DateTime $date */
+        /** @phpstan-var \DateTime $date */
         $date = \DateTime::createFromFormat($format, '2013-03-15 23:59:59');
         yield [$date, $expected];
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, int}>
+     * @phpstan-return \Generator<int, array{string, int}>
      */
     public static function getShortMonthNames(): \Generator
     {
@@ -175,7 +175,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: string, 1: int, 2?: 'monday'}>
+     * @phpstan-return \Generator<int, array{0: string, 1: int, 2?: 'monday'}>
      */
     public static function getShortWeekdayNames(): \Generator
     {
@@ -198,7 +198,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: string, 1: int, 2?: 'monday'}>
+     * @phpstan-return \Generator<int, array{0: string, 1: int, 2?: 'monday'}>
      */
     public static function getWeekdayNames(): \Generator
     {
@@ -221,7 +221,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{\DateTime, int}>
+     * @phpstan-return \Generator<int, array{\DateTime, int}>
      */
     public static function getWeeks(): \Generator
     {
@@ -236,7 +236,7 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{\DateTime, int}>
+     * @phpstan-return \Generator<int, array{\DateTime, int}>
      */
     public static function getYears(): \Generator
     {

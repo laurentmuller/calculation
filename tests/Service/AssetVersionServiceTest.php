@@ -40,7 +40,7 @@ class AssetVersionServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: string, 1?: true}>
+     * @phpstan-return \Generator<int, array{0: string, 1?: true}>
      */
     public static function getPaths(): \Generator
     {

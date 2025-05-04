@@ -88,17 +88,17 @@ class ProductRepositoryTest extends KernelServiceTestCase
         self::assertIsArray($parts);
         self::assertCount(3, $parts);
 
-        /** @psalm-var OrderBy $part */
+        /** @phpstan-var OrderBy $part */
         $part = $parts[0];
         self::assertInstanceOf(OrderBy::class, $part);
         self::assertSame('c.code ASC', (string) $part);
 
-        /** @psalm-var OrderBy $part */
+        /** @phpstan-var OrderBy $part */
         $part = $parts[1];
         self::assertInstanceOf(OrderBy::class, $part);
         self::assertSame('g.code ASC', (string) $part);
 
-        /** @psalm-var OrderBy $part */
+        /** @phpstan-var OrderBy $part */
         $part = $parts[2];
         self::assertInstanceOf(OrderBy::class, $part);
         self::assertSame('e.description ASC', (string) $part);

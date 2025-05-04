@@ -37,7 +37,7 @@ class DatabaseTest extends KernelServiceTestCase
     use DatabaseTrait;
 
     /**
-     * @psalm-return \Generator<int, array{class-string<AbstractRepository>, int}>
+     * @phpstan-return \Generator<int, array{class-string<AbstractRepository>, int}>
      *
      * @phpstan-ignore missingType.generics
      */
@@ -57,7 +57,7 @@ class DatabaseTest extends KernelServiceTestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, int}>
+     * @phpstan-return \Generator<int, array{string, int}>
      */
     public static function getTables(): \Generator
     {
@@ -75,7 +75,7 @@ class DatabaseTest extends KernelServiceTestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, RoleInterface::ROLE_*}>
+     * @phpstan-return \Generator<int, array{string, RoleInterface::ROLE_*}>
      */
     public static function getUsers(): \Generator
     {
@@ -86,7 +86,7 @@ class DatabaseTest extends KernelServiceTestCase
     }
 
     /**
-     * @psalm-param class-string<AbstractRepository<EntityInterface>> $className
+     * @phpstan-param class-string<AbstractRepository<EntityInterface>> $className
      */
     #[DataProvider('getRepositories')]
     public function testRepository(string $className, int $expected): void
@@ -107,7 +107,7 @@ class DatabaseTest extends KernelServiceTestCase
     }
 
     /**
-     * @psalm-param RoleInterface::ROLE_* $role
+     * @phpstan-param RoleInterface::ROLE_* $role
      */
     #[DataProvider('getUsers')]
     public function testUser(string $username, string $role): void

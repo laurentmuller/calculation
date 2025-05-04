@@ -29,7 +29,7 @@ abstract class ControllerTestCase extends AuthenticateWebTestCase
      *
      * Each entry must contain a URL, a username, an optional expected result, request method and XML http request.
      *
-     * @psalm-return \Generator<int, array{0: string, ...}>
+     * @phpstan-return \Generator<int, array{0: string, ...}>
      */
     abstract public static function getRoutes(): \Generator;
 

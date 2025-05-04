@@ -51,7 +51,7 @@ class EntityVoterTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, bool}>
+     * @phpstan-return \Generator<int, array{string, bool}>
      */
     public static function getSupportsAttribute(): \Generator
     {
@@ -215,7 +215,7 @@ class EntityVoterTest extends TestCase
     }
 
     /**
-     * @psalm-param RoleInterface::ROLE_* $role
+     * @phpstan-param RoleInterface::ROLE_* $role
      */
     private function getUser(string $role): User
     {

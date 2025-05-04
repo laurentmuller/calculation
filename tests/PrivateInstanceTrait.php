@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Trait to test a private constructor.
  *
- * @psalm-require-extends TestCase
+ * @phpstan-require-extends TestCase
  */
 trait PrivateInstanceTrait
 {

@@ -98,7 +98,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     }
 
     #[\Override]
-    public function __clone()
+    public function __clone(): void
     {
         parent::__clone();
         $this->categories = $this->categories->map(

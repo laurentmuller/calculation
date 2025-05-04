@@ -67,7 +67,7 @@ abstract class EntityControllerTestCase extends ControllerTestCase
     }
 
     /**
-     * @psalm-param class-string $className
+     * @phpstan-param class-string $className
      */
     protected function checkUriWithEmptyEntity(
         string $uri,

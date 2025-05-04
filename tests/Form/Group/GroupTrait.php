@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
- * @psalm-require-extends TestCase
+ * @phpstan-require-extends TestCase
  */
 trait GroupTrait
 {

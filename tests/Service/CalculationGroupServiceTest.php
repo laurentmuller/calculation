@@ -295,15 +295,15 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @psalm-template TEntity of EntityInterface
+     * @phpstan-template TEntity of EntityInterface
      *
-     * @psalm-param class-string<TEntity> $entityName
+     * @phpstan-param class-string<TEntity> $entityName
      *
-     * @psalm-return EntityRepository<TEntity> $repository
+     * @phpstan-return EntityRepository<TEntity> $repository
      */
     protected function initRepository(ObjectManager $manager, string $entityName): EntityRepository
     {
-        /** @psalm-var \App\Repository\AbstractRepository<TEntity> $repository */
+        /** @phpstan-var \App\Repository\AbstractRepository<TEntity> $repository */
         $repository = $manager->getRepository($entityName);
 
         $items = $repository->findAll();

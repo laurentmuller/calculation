@@ -28,7 +28,7 @@ class LogTest extends TestCase
     use DateAssertTrait;
 
     /**
-     * @psalm-return \Generator<int, array{non-empty-string, string}>
+     * @phpstan-return \Generator<int, array{non-empty-string, string}>
      */
     public static function getChannelIcons(): \Generator
     {
@@ -44,7 +44,7 @@ class LogTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{PsrLevel::*, string}>
+     * @phpstan-return \Generator<int, array{PsrLevel::*, string}>
      */
     public static function getLevelColors(): \Generator
     {
@@ -59,7 +59,7 @@ class LogTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{PsrLevel::*, string}>
+     * @phpstan-return \Generator<int, array{PsrLevel::*, string}>
      */
     public static function getLevelIcons(): \Generator
     {
@@ -92,7 +92,7 @@ class LogTest extends TestCase
     }
 
     /**
-     * @psalm-param non-empty-string $channel
+     * @phpstan-param non-empty-string $channel
      */
     #[DataProvider('getChannelIcons')]
     public function testChannelIcon(string $channel, string $expected): void
@@ -212,7 +212,7 @@ class LogTest extends TestCase
     }
 
     /**
-     * @psalm-param PsrLevel::* $level
+     * @phpstan-param PsrLevel::* $level
      */
     #[DataProvider('getLevelColors')]
     public function testLevelColor(string $level, string $expected): void
@@ -224,7 +224,7 @@ class LogTest extends TestCase
     }
 
     /**
-     * @psalm-param PsrLevel::* $level
+     * @phpstan-param PsrLevel::* $level
      */
     #[DataProvider('getLevelIcons')]
     public function testLevelIcon(string $level, string $expected): void

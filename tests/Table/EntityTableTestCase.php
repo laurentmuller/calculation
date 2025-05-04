@@ -54,7 +54,7 @@ abstract class EntityTableTestCase extends TestCase
     }
 
     /**
-     * @psalm-return TEntity[]|array[]
+     * @phpstan-return TEntity[]|array[]
      */
     abstract protected function createEntities(): array;
 
@@ -87,14 +87,14 @@ abstract class EntityTableTestCase extends TestCase
     }
 
     /**
-     * @psalm-return MockObject&TRepository
+     * @phpstan-return MockObject&TRepository
      */
     abstract protected function createMockRepository(MockObject&QueryBuilder $queryBuilder): MockObject&AbstractRepository;
 
     /**
-     * @psalm-param MockObject&TRepository $repository
+     * @phpstan-param MockObject&TRepository $repository
      *
-     * @psalm-return TEntityTable
+     * @phpstan-return TEntityTable
      *
      * @phpstan-ignore-next-line
      */
@@ -117,9 +117,9 @@ abstract class EntityTableTestCase extends TestCase
     }
 
     /**
-     * @psalm-param TEntity[]|array[] $entities
+     * @phpstan-param TEntity[]|array[] $entities
      *
-     * @psalm-return TEntity[]|array[]
+     * @phpstan-return TEntity[]|array[]
      *
      * @throws \ReflectionException
      */
@@ -136,7 +136,7 @@ abstract class EntityTableTestCase extends TestCase
     }
 
     /**
-     * @psalm-param array<string, string|int> $parameters
+     * @phpstan-param array<string, string|int> $parameters
      */
     protected function updateQueryParameters(DataQuery $dataQuery, array $parameters): void
     {

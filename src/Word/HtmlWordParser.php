@@ -76,7 +76,7 @@ class HtmlWordParser
     }
 
     /**
-     * @psalm-return array<string, string>
+     * @return array<string, string>
      */
     private function getBootstrapStyles(): array
     {
@@ -99,7 +99,7 @@ class HtmlWordParser
     }
 
     /**
-     * @psalm-return array<string, string>
+     * @return array<string, string>
      */
     private function getStyles(): array
     {

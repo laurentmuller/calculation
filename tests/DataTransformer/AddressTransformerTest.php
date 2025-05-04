@@ -30,7 +30,7 @@ class AddressTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{mixed}>
+     * @phpstan-return \Generator<int, array{mixed}>
      */
     public static function getReverseTransformInvalid(): \Generator
     {
@@ -40,7 +40,7 @@ class AddressTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{mixed, mixed}>
+     * @phpstan-return \Generator<int, array{mixed, mixed}>
      */
     public static function getReverseTransformValid(): \Generator
     {
@@ -50,7 +50,7 @@ class AddressTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{mixed}>
+     * @phpstan-return \Generator<int, array{mixed}>
      */
     public static function getTransformInvalid(): \Generator
     {
@@ -59,7 +59,7 @@ class AddressTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{mixed, mixed}>
+     * @phpstan-return \Generator<int, array{mixed, mixed}>
      */
     public static function getTransformValid(): \Generator
     {

@@ -20,13 +20,13 @@ use Symfony\Component\HttpFoundation\Session\SessionFactory;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * @psalm-require-extends KernelTestCase
+ * @phpstan-require-extends KernelTestCase
  */
 trait SessionHelperTrait
 {
     protected function getSession(KernelBrowser $client): SessionInterface
     {
-        /** @psalm-var SessionFactory $factory */
+        /** @phpstan-var SessionFactory $factory */
         $factory = static::getContainer()->get('session.factory');
         $session = $factory->createSession();
         $cookieJar = $client->getCookieJar();

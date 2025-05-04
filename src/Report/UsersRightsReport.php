@@ -48,6 +48,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     private readonly ApplicationService $applicationService;
     private ?PdfStyle $bulletStyle = null;
     private ?PdfStyle $entityStyle = null;
+    private ?PdfStyle $italicStyle = null;
     private readonly bool $superAdmin;
 
     /**
@@ -84,6 +85,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         $this->addPage();
         $this->bulletStyle = PdfStyle::getBulletStyle();
         $this->entityStyle = PdfStyle::getCellStyle()->setIndent(2);
+        $this->italicStyle = PdfStyle::default()->setFontItalic();
         $table = $this->createTable();
         $this->outputRoles($table);
         $this->outputUsers($entities, $table);
@@ -151,8 +153,8 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
         // description
         $cell = new PdfCell(
-            text: '- ' . $this->getUserDescription($user),
-            style: PdfStyle::default()
+            text: '(' . $this->getUserDescription($user) . ')',
+            style: $this->italicStyle
         );
         $cell->output(
             parent: $this,

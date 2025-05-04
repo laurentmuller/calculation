@@ -26,7 +26,7 @@ class DataResultsTest extends TestCase
         self::assertSame([], $results->attributes);
         $results->addAttribute('name', 'value');
 
-        /** @psalm-var array<string, mixed> $actual */
+        /** @phpstan-var array<string, mixed> $actual */
         $actual = $results->attributes;
         self::assertCount(1, $actual);
         self::assertSame(['name' => 'value'], $actual);
@@ -38,7 +38,7 @@ class DataResultsTest extends TestCase
         self::assertSame([], $results->customData);
         $results->addCustomData('name', 'value');
 
-        /** @psalm-var array<string, mixed> $actual */
+        /** @phpstan-var array<string, mixed> $actual */
         $actual = $results->customData;
         self::assertCount(1, $actual);
         self::assertSame(['name' => 'value'], $actual);
@@ -75,7 +75,7 @@ class DataResultsTest extends TestCase
         self::assertSame([], $results->params);
         $results->addParameter('name', 'value');
 
-        /** @psalm-var array<string, mixed> $actual */
+        /** @phpstan-var array<string, mixed> $actual */
         $actual = $results->params;
         self::assertCount(1, $actual);
         self::assertSame(['name' => 'value'], $actual);

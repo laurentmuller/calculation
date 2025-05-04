@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 class HtmlListTypeTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<int, array{0: positive-int, 1: string, 2?: string}>
+     * @phpstan-return \Generator<int, array{0: positive-int, 1: string, 2?: string}>
      */
     public static function getLetterValues(): \Generator
     {
@@ -32,7 +32,7 @@ class HtmlListTypeTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: positive-int, 1: string, 2?: string}>
+     * @phpstan-return \Generator<int, array{0: positive-int, 1: string, 2?: string}>
      */
     public static function getNumberValues(): \Generator
     {
@@ -46,7 +46,7 @@ class HtmlListTypeTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: positive-int, 1: string, 2?: string}>
+     * @phpstan-return \Generator<int, array{0: positive-int, 1: string, 2?: string}>
      */
     public static function getRomanValues(): \Generator
     {
@@ -76,7 +76,7 @@ class HtmlListTypeTest extends TestCase
     }
 
     /**
-     * @psalm-param positive-int $value
+     * @phpstan-param positive-int $value
      */
     #[DataProvider('getLetterValues')]
     public function testLetterLower(int $value, string $expected, string $suffix = ''): void
@@ -87,7 +87,7 @@ class HtmlListTypeTest extends TestCase
     }
 
     /**
-     * @psalm-param positive-int $value
+     * @phpstan-param positive-int $value
      */
     #[DataProvider('getLetterValues')]
     public function testLetterUpper(int $value, string $expected, string $suffix = ''): void
@@ -97,7 +97,7 @@ class HtmlListTypeTest extends TestCase
     }
 
     /**
-     * @psalm-param positive-int $value
+     * @phpstan-param positive-int $value
      */
     #[DataProvider('getNumberValues')]
     public function testNumber(int $value, string $expected, string $suffix = ''): void
@@ -107,7 +107,7 @@ class HtmlListTypeTest extends TestCase
     }
 
     /**
-     * @psalm-param positive-int $value
+     * @phpstan-param positive-int $value
      */
     #[DataProvider('getRomanValues')]
     public function testRomanLower(int $value, string $expected, string $suffix = ''): void
@@ -118,7 +118,7 @@ class HtmlListTypeTest extends TestCase
     }
 
     /**
-     * @psalm-param positive-int $value
+     * @phpstan-param positive-int $value
      */
     #[DataProvider('getRomanValues')]
     public function testRomanUpper(int $value, string $expected, string $suffix = ''): void

@@ -51,7 +51,7 @@ class SwissDatabaseTest extends TestCase
         $actual = $this->database->findCity(self::CITY_NAME);
         self::assertCount(1, $actual);
 
-        /** @psalm-var array<string, mixed> $row */
+        /** @phpstan-var array<string, mixed> $row */
         $row = $actual[0];
         self::assertSame(self::CITY_NAME, $row['name']);
         self::assertSame(self::CITY_ZIP, $row['zip']);
@@ -70,7 +70,7 @@ class SwissDatabaseTest extends TestCase
         $actual = $this->database->findStreet(self::STREET_NAME);
         self::assertCount(1, $actual);
 
-        /** @psalm-var array<string, mixed> $row */
+        /** @phpstan-var array<string, mixed> $row */
         $row = $actual[0];
         self::assertSame(self::STREET_NAME, $row['street']);
         self::assertSame(self::CITY_ZIP, $row['zip']);
@@ -104,7 +104,7 @@ class SwissDatabaseTest extends TestCase
         $actual = $this->database->findZip((string) self::CITY_ZIP);
         self::assertCount(1, $actual);
 
-        /** @psalm-var array<string, mixed> $row */
+        /** @phpstan-var array<string, mixed> $row */
         $row = $actual[0];
         self::assertSame(self::CITY_ZIP, $row['zip']);
         self::assertSame(self::CITY_NAME, $row['city']);
@@ -146,7 +146,7 @@ class SwissDatabaseTest extends TestCase
     }
 
     /**
-     * @psalm-return array{0: int, 1: int, 2: string, 3:string}
+     * @phpstan-return array{0: int, 1: int, 2: string, 3:string}
      */
     private function getCity(): array
     {
@@ -159,7 +159,7 @@ class SwissDatabaseTest extends TestCase
     }
 
     /**
-     * @psalm-return array{0: string, 1: string}
+     * @phpstan-return array{0: string, 1: string}
      */
     private function getState(): array
     {
@@ -170,7 +170,7 @@ class SwissDatabaseTest extends TestCase
     }
 
     /**
-     * @psalm-return array{0: int, 1: string}
+     * @phpstan-return array{0: int, 1: string}
      */
     private function getStreet(): array
     {

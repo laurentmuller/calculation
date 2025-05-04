@@ -123,7 +123,7 @@ class TimestampableListenerTest extends TestCase
     }
 
     /**
-     * @psalm-param array<string, EntityInterface> $events
+     * @phpstan-param array<string, EntityInterface> $events
      */
     private function createEvent(array $events = []): OnFlushEventArgs
     {
@@ -141,7 +141,7 @@ class TimestampableListenerTest extends TestCase
     }
 
     /**
-     * @psalm-param array<string, EntityInterface> $events
+     * @phpstan-param array<string, EntityInterface> $events
      */
     private function createMockObjectManager(array $events = []): MockObject&EntityManagerInterface
     {

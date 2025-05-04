@@ -35,7 +35,7 @@ class EntityNameTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @psalm-return \Generator<int, array{string, EntityName}>
+     * @phpstan-return \Generator<int, array{string, EntityName}>
      */
     public static function getLabel(): \Generator
     {
@@ -52,7 +52,7 @@ class EntityNameTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{EntityName, int}>
+     * @phpstan-return \Generator<int, array{EntityName, int}>
      */
     public static function getOffset(): \Generator
     {
@@ -69,7 +69,7 @@ class EntityNameTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{EntityName, string}>
+     * @phpstan-return \Generator<int, array{EntityName, string}>
      */
     public static function getRightsField(): \Generator
     {
@@ -86,7 +86,7 @@ class EntityNameTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, ?EntityName}>
+     * @phpstan-return \Generator<int, array{string, ?EntityName}>
      */
     public static function getTryFromField(): \Generator
     {
@@ -106,7 +106,7 @@ class EntityNameTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{mixed, mixed}>
+     * @phpstan-return \Generator<int, array{mixed, mixed}>
      */
     public static function getTryFromMixed(): \Generator
     {
@@ -150,7 +150,7 @@ class EntityNameTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{EntityName, string}>
+     * @phpstan-return \Generator<int, array{EntityName, string}>
      */
     public static function getValue(): \Generator
     {

@@ -52,7 +52,7 @@ class PlainTypeTest extends TypeTestCase
 
         $expected = 'callback';
         self::assertArrayHasKey('display_value', $view->vars);
-        /** @psalm-var mixed $actual */
+        /** @phpstan-var mixed $actual */
         $actual = $view->vars['display_value'];
         self::assertSame($expected, $actual);
     }
@@ -178,7 +178,7 @@ class PlainTypeTest extends TypeTestCase
             ->createView();
 
         self::assertArrayHasKey('value', $view->vars);
-        /** @psalm-var mixed $actual */
+        /** @phpstan-var mixed $actual */
         $actual = $view->vars['value'];
         self::assertSame($expected, $actual);
 

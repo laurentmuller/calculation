@@ -24,7 +24,7 @@ class ArrayTraitTest extends TestCase
     private const KEY = 'key';
 
     /**
-     * @psalm-return \Generator<int, array{0: array, 1: array, 2?: callable}>
+     * @phpstan-return \Generator<int, array{0: array, 1: array, 2?: callable}>
      */
     public static function getColumnFilterValues(): \Generator
     {
@@ -65,7 +65,7 @@ class ArrayTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: array, 1: float, 2?: float}>
+     * @phpstan-return \Generator<int, array{0: array, 1: float, 2?: float}>
      */
     public static function getColumnMaxValues(): \Generator
     {
@@ -95,7 +95,7 @@ class ArrayTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: array, 1: float, 2?: float}>
+     * @phpstan-return \Generator<int, array{0: array, 1: float, 2?: float}>
      */
     public static function getColumnSumValues(): \Generator
     {
@@ -125,7 +125,7 @@ class ArrayTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{array, array}>
+     * @phpstan-return \Generator<int, array{array, array}>
      */
     public static function getColumnValues(): \Generator
     {
@@ -146,7 +146,7 @@ class ArrayTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{array, array}>
+     * @phpstan-return \Generator<int, array{array, array}>
      */
     public static function getUniqueFilteredValues(): \Generator
     {
@@ -163,7 +163,7 @@ class ArrayTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{array, array, array}>
+     * @phpstan-return \Generator<int, array{array, array, array}>
      */
     public static function getUniqueMergedValues(): \Generator
     {
@@ -199,7 +199,7 @@ class ArrayTraitTest extends TestCase
     }
 
     /**
-     * @psalm-param int<0,2> $mode
+     * @phpstan-param int<0,2> $mode
      */
     #[DataProvider('getColumnFilterValues')]
     public function testColumnFilter(array $values, array $expected, ?callable $callback = null, int $mode = 0): void
@@ -293,7 +293,7 @@ class ArrayTraitTest extends TestCase
     }
 
     /**
-     * @psalm-param 0|1|2 $mode
+     * @phpstan-param 0|1|2 $mode
      */
     #[DataProvider('getUniqueFilteredValues')]
     public function testUniqueFiltered(array $values, array $expected, ?callable $callback = null, int $mode = 0): void
@@ -314,7 +314,7 @@ class ArrayTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return array<int, string>
+     * @phpstan-return array<int, string>
      */
     private function getFindFirstArray(): array
     {

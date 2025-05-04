@@ -35,7 +35,7 @@ class SwitchUserListenerTest extends TestCase
     {
         $request = $this->createRequest();
         $token = $this->createUsernamePasswordToken();
-        /** @psalm-var User $user */
+        /** @phpstan-var User $user */
         $user = $token->getUser();
         $event = new SwitchUserEvent($request, $user);
 
@@ -49,7 +49,7 @@ class SwitchUserListenerTest extends TestCase
     {
         $request = $this->createRequest('_exit');
         $token = $this->createSwitchUserToken();
-        /** @psalm-var User $user */
+        /** @phpstan-var User $user */
         $user = $token->getUser();
         $event = new SwitchUserEvent($request, $user, $token);
 
@@ -63,7 +63,7 @@ class SwitchUserListenerTest extends TestCase
     {
         $request = $this->createRequest('fake');
         $token = $this->createSwitchUserToken();
-        /** @psalm-var User $user */
+        /** @phpstan-var User $user */
         $user = $token->getUser();
         $event = new SwitchUserEvent($request, $user, $token);
 
@@ -84,7 +84,7 @@ class SwitchUserListenerTest extends TestCase
 
     private function createRequest(string $action = ''): MockObject&Request
     {
-        /** @psalm-var InputBag<string> $query */
+        /** @phpstan-var InputBag<string> $query */
         $query = new InputBag(['_switch_user' => $action]);
         $request = $this->createMock(Request::class);
         $request->query = $query;

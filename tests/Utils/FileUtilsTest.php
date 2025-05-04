@@ -24,7 +24,7 @@ class FileUtilsTest extends TestCase
     use PrivateInstanceTrait;
 
     /**
-     * @psalm-return \Generator<int, array{0: string, 1: string, 2?: string, 3?: string}>
+     * @phpstan-return \Generator<int, array{0: string, 1: string, 2?: string, 3?: string}>
      */
     public static function getBuildPaths(): \Generator
     {
@@ -40,7 +40,7 @@ class FileUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: string, 1: string, 2?: true}>
+     * @phpstan-return \Generator<int, array{0: string, 1: string, 2?: true}>
      */
     public static function getExtension(): \Generator
     {
@@ -53,7 +53,7 @@ class FileUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string|\SplFileInfo|int, string}>
+     * @phpstan-return \Generator<int, array{string|\SplFileInfo|int, string}>
      */
     public static function getFormatSize(): \Generator
     {
@@ -88,7 +88,7 @@ class FileUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string|\SplFileInfo, string}>
+     * @phpstan-return \Generator<int, array{string|\SplFileInfo, string}>
      */
     public static function getRealPath(): \Generator
     {

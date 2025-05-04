@@ -57,7 +57,7 @@ abstract class CommandTestCase extends KernelTestCase
     }
 
     /**
-     * @psalm-param string|string[] $expected
+     * @phpstan-param string|string[] $expected
      */
     protected function validate(string $output, string|array $expected): void
     {

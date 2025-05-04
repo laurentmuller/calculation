@@ -18,7 +18,7 @@ use App\Tests\AssertEmptyTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @psalm-import-type ProductType from ProductUpdateResult
+ * @phpstan-import-type ProductType from ProductUpdateResult
  */
 class ProductUpdateResultTest extends TestCase
 {
@@ -52,7 +52,7 @@ class ProductUpdateResultTest extends TestCase
     }
 
     /**
-     * @psalm-return ProductType
+     * @phpstan-return ProductType
      */
     private function createProduct(): array
     {

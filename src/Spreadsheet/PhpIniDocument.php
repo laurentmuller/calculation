@@ -24,7 +24,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 /**
  * Document containing PHP configuration.
  *
- *  @psalm-type EntriesType = array{local: string, master: string}|string
+ * @psalm-type EntriesType = array{local: string, master: string}|string
  */
 class PhpIniDocument extends AbstractDocument
 {

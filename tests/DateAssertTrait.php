@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Trait to compare dates.
  *
- * @psalm-require-extends TestCase
+ * @phpstan-require-extends TestCase
  */
 trait DateAssertTrait
 {

@@ -34,7 +34,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string|int|float|null, string}>
+     * @phpstan-return \Generator<int, array{string|int|float|null, string}>
      */
     public static function getAmounts(): \Generator
     {
@@ -71,7 +71,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, string}>
+     * @phpstan-return \Generator<int, array{string, string}>
      */
     public static function getDateFormatterPatterns(): \Generator
     {
@@ -81,7 +81,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{
+     * @phpstan-return \Generator<int, array{
      *      0: \DateTimeInterface|int|null,
      *      1: string|null,
      *      2?: int<-1,3>|null,
@@ -102,7 +102,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{
+     * @phpstan-return \Generator<int, array{
      *     0: \DateTimeInterface|int|null,
      *     1: string|null,
      *     2?: int<-1,3>|null,
@@ -152,7 +152,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{int|float|string|null, string}>
+     * @phpstan-return \Generator<int, array{int|float|string|null, string}>
      */
     public static function getIds(): \Generator
     {
@@ -181,7 +181,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{\Countable|array|int|float|string|null, string}>
+     * @phpstan-return \Generator<int, array{\Countable|array|int|float|string|null, string}>
      */
     public static function getIntegers(): \Generator
     {
@@ -212,7 +212,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{
+     * @phpstan-return \Generator<int, array{
      *     0: int|float|string|null,
      *     1: string,
      *     2?: bool,
@@ -244,7 +244,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{
+     * @phpstan-return \Generator<int, array{
      *     0: \DateTimeInterface|int|null,
      *     1: string|null,
      *     2?: int<0,3>|null}>
@@ -262,8 +262,8 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-param int<-1,3>|null $dateType
-     * @psalm-param int<-1,3>|null $timeType
+     * @phpstan-param int<-1,3>|null $dateType
+     * @phpstan-param int<-1,3>|null $timeType
      */
     #[DataProvider('getDateFormatterPatterns')]
     public function testDateFormatterPattern(
@@ -306,7 +306,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-param int<-1,3>|null $dateType
+     * @phpstan-param int<-1,3>|null $dateType
      */
     #[DataProvider('getDates')]
     public function testFormatDate(
@@ -321,8 +321,8 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-param int<-1,3>|null $dateType
-     * @psalm-param int<-1,3>|null $timeType
+     * @phpstan-param int<-1,3>|null $dateType
+     * @phpstan-param int<-1,3>|null $timeType
      */
     #[DataProvider('getDateTimes')]
     public function testFormatDateTime(
@@ -353,7 +353,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-param \NumberFormatter::ROUND_* $roundingMode
+     * @phpstan-param \NumberFormatter::ROUND_* $roundingMode
      */
     #[DataProvider('getPercents')]
     public function testFormatPercent(
@@ -375,7 +375,7 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-param int<-1,3>|null $timeType
+     * @phpstan-param int<-1,3>|null $timeType
      */
     #[DataProvider('getTimes')]
     public function testFormatTime(

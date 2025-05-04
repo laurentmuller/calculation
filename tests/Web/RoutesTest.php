@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 class RoutesTest extends AuthenticateWebTestCase
 {
     /**
-     * @psalm-return \Generator<int, array{string, string, int}>
+     * @phpstan-return \Generator<int, array{string, string, int}>
      */
     public static function getRoutes(): \Generator
     {

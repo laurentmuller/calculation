@@ -19,7 +19,7 @@ use App\Service\CommandService;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @psalm-import-type CommandType from CommandService
+ * @phpstan-import-type CommandType from CommandService
  */
 class CommandsReportTest extends TestCase
 {

@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 class ImageSizeTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<int, array{ImageSize, int}>
+     * @phpstan-return \Generator<int, array{ImageSize, int}>
      */
     public static function getValues(): \Generator
     {

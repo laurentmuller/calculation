@@ -36,7 +36,7 @@ class PasswordServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string, StrengthLevel, bool}>
+     * @phpstan-return \Generator<int, array{string, StrengthLevel, bool}>
      */
     public static function getValidations(): \Generator
     {

@@ -126,7 +126,7 @@ class ProductTableTest extends EntityTableTestCase
     }
 
     /**
-     * @psalm-param ProductRepository $repository
+     * @phpstan-param ProductRepository $repository
      *
      * @throws \ReflectionException
      */

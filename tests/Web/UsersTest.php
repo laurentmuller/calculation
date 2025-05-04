@@ -23,7 +23,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 class UsersTest extends AuthenticateWebTestCase
 {
     /**
-     * @psalm-return \Generator<int, array{string}>
+     * @phpstan-return \Generator<int, array{string}>
      */
     public static function getUserExist(): \Generator
     {
@@ -34,7 +34,7 @@ class UsersTest extends AuthenticateWebTestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string}>
+     * @phpstan-return \Generator<int, array{string}>
      */
     public static function getUserNotExist(): \Generator
     {
@@ -42,7 +42,7 @@ class UsersTest extends AuthenticateWebTestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{RoleInterface::ROLE_*}>
+     * @phpstan-return \Generator<int, array{RoleInterface::ROLE_*}>
      */
     public static function getUserRole(): \Generator
     {
@@ -66,7 +66,7 @@ class UsersTest extends AuthenticateWebTestCase
     }
 
     /**
-     * @psalm-param RoleInterface::ROLE_* $username
+     * @phpstan-param RoleInterface::ROLE_* $username
      */
     #[DataProvider('getUserRole')]
     public function testUserRole(string $username): void

@@ -26,7 +26,7 @@ class ColumnFormatTest extends TestCase
     use TranslatorMockTrait;
 
     /**
-     * @psalm-return \Generator<int, array{string, ColumnFormat}>
+     * @phpstan-return \Generator<int, array{string, ColumnFormat}>
      */
     public static function getAlignments(): \Generator
     {

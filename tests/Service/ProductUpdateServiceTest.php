@@ -72,7 +72,7 @@ class ProductUpdateServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{float, float}>
+     * @phpstan-return \Generator<int, array{float, float}>
      */
     public static function getFixedRounded(): \Generator
     {
@@ -87,7 +87,7 @@ class ProductUpdateServiceTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{float, float, float}>
+     * @phpstan-return \Generator<int, array{float, float, float}>
      */
     public static function getPercentRounded(): \Generator
     {
@@ -236,7 +236,7 @@ class ProductUpdateServiceTest extends TestCase
     }
 
     /**
-     * @psalm-param ProductUpdateQuery::UPDATE_* $type
+     * @phpstan-param ProductUpdateQuery::UPDATE_* $type
      */
     private function createQuery(string $type, ?Product $product = null): ProductUpdateQuery
     {

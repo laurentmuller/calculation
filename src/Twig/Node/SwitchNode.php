@@ -19,16 +19,18 @@ use Twig\Node\Node;
 
 /**
  * Class SwitchNode.
- *
- * Based on the rejected Twig pull request: https://github.com/twigphp/Twig/pull/185.
- *
- * @author Pixel & Tonic, Inc. <support@pixelandtonic.com>
- *
- * @since 3.0
  */
 #[YieldReady]
 final class SwitchNode extends Node
 {
+    /**
+     * @param Node[] $nodes
+     */
+    public function __construct(array $nodes, int $lineno)
+    {
+        parent::__construct(nodes: $nodes, lineno: $lineno);
+    }
+
     #[\Override]
     public function compile(Compiler $compiler): void
     {

@@ -16,6 +16,8 @@ namespace App\Twig\TokenParser;
 use App\Twig\Node\CaseNode;
 use App\Twig\Node\SwitchNode;
 use Twig\Error\SyntaxError;
+use Twig\Node\Expression\AbstractExpression;
+use Twig\Node\Expression\Binary\OrBinary;
 use Twig\Node\Node;
 use Twig\Node\Nodes;
 use Twig\Token;
@@ -45,7 +47,6 @@ final class SwitchTokenParser extends AbstractTokenParser
         $lineno = $token->getLine();
         $parser = $this->parser;
         $stream = $parser->getStream();
-        /** @psalm-var array<string, Node> $nodes */
         $nodes = ['value' => $parser->parseExpression()];
 
         $stream->expect(Token::BLOCK_END_TYPE);
@@ -60,18 +61,8 @@ final class SwitchTokenParser extends AbstractTokenParser
             $next = $stream->next();
             switch ($next->getValue()) {
                 case 'case':
-                    $values = [];
-                    while (true) {
-                        /** @psalm-var Node $node */
-                        $node = $parser->parseExpression();
-                        $values[] = $node;
-                        // multiple allowed values?
-                        if ($stream->test(Token::OPERATOR_TYPE, 'or')) {
-                            $stream->next();
-                        } else {
-                            break;
-                        }
-                    }
+                    $expression = $parser->parseExpression();
+                    $values = $this->splitExpression($expression);
                     $stream->expect(Token::BLOCK_END_TYPE);
                     $body = $this->parser->subparse(fn (Token $token): bool => $this->isFork($token));
                     $cases[] = new CaseNode($values, $body);
@@ -93,7 +84,7 @@ final class SwitchTokenParser extends AbstractTokenParser
         $nodes['cases'] = new Nodes($cases);
         $stream->expect(Token::BLOCK_END_TYPE);
 
-        return new SwitchNode($nodes, [], $lineno);
+        return new SwitchNode($nodes, $lineno);
     }
 
     private function isEmptyText(TokenStream $stream): bool
@@ -109,5 +100,23 @@ final class SwitchTokenParser extends AbstractTokenParser
     private function isFork(Token $token): bool
     {
         return $token->test(['case', 'default', 'endswitch']);
+    }
+
+    /**
+     * @return Node[]
+     */
+    private function splitExpression(Node $expression): array
+    {
+        if (!$expression instanceof OrBinary) {
+            return [$expression];
+        }
+
+        $left = $expression->getNode('left');
+        $right = $expression->getNode('right');
+
+        return \array_merge(
+            $this->splitExpression($left),
+            $this->splitExpression($right)
+        );
     }
 }

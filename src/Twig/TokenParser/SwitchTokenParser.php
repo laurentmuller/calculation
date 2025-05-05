@@ -16,7 +16,6 @@ namespace App\Twig\TokenParser;
 use App\Twig\Node\CaseNode;
 use App\Twig\Node\SwitchNode;
 use Twig\Error\SyntaxError;
-use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Expression\Binary\OrBinary;
 use Twig\Node\Node;
 use Twig\Node\Nodes;

@@ -56,7 +56,7 @@ class ThemeService
     }
 
     /**
-     * Returns the selected theme value.
+     * Gets the selected theme value.
      */
     public function getThemeValue(Request $request): string
     {

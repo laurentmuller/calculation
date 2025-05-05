@@ -30,6 +30,11 @@
             </errorLevel>
         </PropertyNotSetInConstructor>
         <ClassMustBeFinal errorLevel="suppress" />
+        <MethodSignatureMustOmitReturnType>
+            <errorLevel type="suppress">
+                <directory name="src/Entity" />
+            </errorLevel>
+        </MethodSignatureMustOmitReturnType>
     </issueHandlers>
 
     <plugins>

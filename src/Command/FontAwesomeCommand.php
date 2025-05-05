@@ -15,6 +15,7 @@ namespace App\Command;
 
 use App\Service\FontAwesomeImageService;
 use App\Utils\FileUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -132,8 +133,9 @@ class FontAwesomeCommand extends Command
             $relativeTarget = $this->getRelativePath($target);
 
             \ksort($aliases);
+            $aliasesContent = $this->encodeJson($aliases);
             $aliasesPath = FileUtils::buildPath($tempDir, FontAwesomeImageService::ALIAS_FILE_NAME);
-            if (!FileUtils::dumpFile($aliasesPath, (string) \json_encode($aliases, \JSON_PRETTY_PRINT))) {
+            if (!FileUtils::dumpFile($aliasesPath, $aliasesContent)) {
                 $io->error(\sprintf('Unable to copy aliases file to the directory: "%s".', $relativeTarget));
 
                 return Command::FAILURE;
@@ -187,6 +189,11 @@ class FontAwesomeCommand extends Command
         $io->error(\sprintf('Unable to dump file: "%s".', $fileName));
 
         return false;
+    }
+
+    private function encodeJson(array $data): string
+    {
+        return StringUtils::encodeJson($data, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES);
     }
 
     /**

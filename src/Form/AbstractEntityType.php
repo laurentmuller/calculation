@@ -30,7 +30,7 @@ abstract class AbstractEntityType extends AbstractHelperType
     /**
      * The entity class name.
      *
-     * @psalm-var class-string<TEntity> $className
+     * @phpstan-var class-string<TEntity> $className
      */
     protected string $className;
 

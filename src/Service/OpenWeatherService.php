@@ -26,7 +26,7 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
  *
  * @see https://openweathermap.org/api
  *
- * @psalm-type OpenWeatherGroupType = array{cnt: int, units: array, list: array<int, array>}
+ * @phpstan-type OpenWeatherGroupType = array{cnt: int, units: array, list: array<int, array>}
  */
 class OpenWeatherService extends AbstractHttpClientService
 {
@@ -167,7 +167,7 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param int              $count the number of results to return or -1 for all
      * @param OpenWeatherUnits $units the unit to use
      *
-     * @psalm-return array{current: array|false, forecast: array|false, daily: array|false}
+     * @phpstan-return array{current: array|false, forecast: array|false, daily: array|false}
      */
     public function all(
         int $id,
@@ -259,7 +259,7 @@ class OpenWeatherService extends AbstractHttpClientService
      *
      * @return array|false the conditions for the given cities, if success; false on error
      *
-     * @psalm-return OpenWeatherGroupType|false
+     * @phpstan-return OpenWeatherGroupType|false
      */
     public function group(array $cityIds, OpenWeatherUnits $units = OpenWeatherUnits::METRIC): array|false
     {
@@ -271,7 +271,7 @@ class OpenWeatherService extends AbstractHttpClientService
             self::PARAM_UNITS => $units,
         ];
 
-        /** @psalm-var OpenWeatherGroupType|false */
+        /** @phpstan-var OpenWeatherGroupType|false */
         return $this->get(self::URI_GROUP, $query);
     }
 
@@ -291,7 +291,7 @@ class OpenWeatherService extends AbstractHttpClientService
      *
      * @return array|false the essential conditions if success; false on error
      *
-     * @psalm-param self::EXCLUDE_* ...$exclude
+     * @phpstan-param self::EXCLUDE_* ...$exclude
      */
     public function oneCall(
         float $latitude,
@@ -357,7 +357,7 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * @throws ExceptionInterface
      *
-     * @psalm-param array{units: string, ...} $query
+     * @phpstan-param array{units: string, ...} $query
      */
     private function doGet(string $uri, array $query, string $hostName): array|false
     {
@@ -390,7 +390,7 @@ class OpenWeatherService extends AbstractHttpClientService
      */
     private function findTimezone(array $data): int
     {
-        /** @psalm-var mixed $value */
+        /** @phpstan-var mixed $value */
         foreach ($data as $key => $value) {
             if ('timezone' === $key) {
                 return (int) $value;
@@ -414,7 +414,7 @@ class OpenWeatherService extends AbstractHttpClientService
      *
      * @return array|false the JSON response on success, false on failure
      *
-     * @psalm-param array{units: OpenWeatherUnits, ...} $query
+     * @phpstan-param array{units: OpenWeatherUnits, ...} $query
      */
     private function get(string $uri, array $query, string $hostName = self::HOST_NAME_V_2_5): array|false
     {
@@ -439,14 +439,14 @@ class OpenWeatherService extends AbstractHttpClientService
     {
         $hours = \intdiv($offset, 3600);
         $minutes = \abs(\intdiv($offset, 60) % 60);
-        /** @psalm-var non-empty-string $timezone */
+        /** @phpstan-var non-empty-string $timezone */
         $timezone = \sprintf('%+03d%02d', $hours, $minutes); // @phpstan-ignore varTag.type
 
         return new \DateTimeZone($timezone);
     }
 
     /**
-     * @psalm-param array<array-key, mixed> $results
+     * @phpstan-param array<array-key, mixed> $results
      */
     private function sortResults(array &$results): void
     {
@@ -459,7 +459,7 @@ class OpenWeatherService extends AbstractHttpClientService
             return $keyA <=> $keyB;
         });
 
-        /** @psalm-var array<array-key, mixed>|scalar $value */
+        /** @phpstan-var array<array-key, mixed>|scalar $value */
         foreach ($results as &$value) {
             if (\is_array($value)) {
                 $this->sortResults($value);

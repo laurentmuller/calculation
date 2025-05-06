@@ -83,11 +83,11 @@ class EntityProvider extends Base implements \Countable
     /**
      * Gets a random entity.
      *
-     * @psalm-return TEntity|null
+     * @phpstan-return TEntity|null
      */
     protected function entity(): ?EntityInterface
     {
-        /** @psalm-var TEntity|null */
+        /** @phpstan-var TEntity|null */
         return static::randomElement($this->getEntities());
     }
 

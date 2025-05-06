@@ -176,7 +176,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
         $query = "SELECT COUNT(1) FROM $table";
         $result = $this->querySingle($query);
 
-        /** @psalm-var int<0, max> */
+        /** @phpstan-var int<0, max> */
         return \is_int($result) ? $result : 0;
     }
 
@@ -257,11 +257,11 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * @param int          $mode controls how the next row will be returned to the caller. This value
      *                           must be one of either SQLITE3_ASSOC (default), SQLITE3_NUM, or SQLITE3_BOTH.
      *
-     * @psalm-template T of array<string, mixed>
+     * @phpstan-template T of array<string, mixed>
      *
-     * @psalm-param int<1,3> $mode
+     * @phpstan-param int<1,3> $mode
      *
-     * @psalm-return list<T>
+     * @phpstan-return list<T>
      *
      * @phpstan-ignore method.templateTypeNotInParameter
      */
@@ -272,14 +272,14 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
             return [];
         }
 
-        /** @psalm-var list<T> $rows */
+        /** @phpstan-var list<T> $rows */
         $rows = [];
         while ($row = $result->fetchArray($mode)) {
             $rows[] = $row;
         }
         $result->finalize();
 
-        /** @psalm-var list<T> */
+        /** @phpstan-var list<T> */
         return $rows;
     }
 
@@ -336,11 +336,11 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * @param int    $mode  controls how the next row will be returned to the caller. This value
      *                      must be one of either SQLITE3_ASSOC (default), SQLITE3_NUM, or SQLITE3_BOTH.
      *
-     * @psalm-template T of array<string, mixed>
+     * @phpstan-template T of array<string, mixed>
      *
-     * @psalm-param int<1,3> $mode $mode
+     * @phpstan-param int<1,3> $mode $mode
      *
-     * @psalm-return array<int, T>
+     * @phpstan-return array<int, T>
      *
      * @phpstan-ignore method.templateTypeNotInParameter
      */
@@ -353,7 +353,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
         $stmt->bindValue(':value', $value);
         $stmt->bindValue(':limit', $limit, \SQLITE3_INTEGER);
 
-        /** @psalm-var array<int, T> */
+        /** @phpstan-var array<int, T> */
         return $this->executeAndFetch($stmt, $mode);
     }
 }

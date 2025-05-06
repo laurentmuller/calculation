@@ -43,7 +43,7 @@ class Category extends AbstractCodeEntity
      *
      * @var Collection<int, Product>
      *
-     * @psalm-var ArrayCollection<int, Product>
+     * @phpstan-var ArrayCollection<int, Product>
      */
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'category', fetch: self::EXTRA_LAZY)]
     private Collection $products;
@@ -53,7 +53,7 @@ class Category extends AbstractCodeEntity
      *
      * @var Collection<int, Task>
      *
-     * @psalm-var ArrayCollection<int, Task>
+     * @phpstan-var ArrayCollection<int, Task>
      */
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'category', fetch: self::EXTRA_LAZY)]
     private Collection $tasks;

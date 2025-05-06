@@ -24,7 +24,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for calculation state entity.
  *
- * @psalm-type QueryCalculationType = array{
+ * @phpstan-type QueryCalculationType = array{
  *      id: int,
  *      code: string,
  *      editable: boolean,
@@ -36,7 +36,7 @@ use Doctrine\Persistence\ManagerRegistry;
  *      margin_amount: float,
  *      percent_calculation: float,
  *      percent_amount: float}
- * @psalm-type DropDownType = array<int, array{
+ * @phpstan-type DropDownType = array<int, array{
  *     id: int,
  *     icon: string,
  *     text: string,
@@ -67,7 +67,7 @@ class CalculationStateRepository extends AbstractRepository
      *
      * @return array the states with the number and the sum of calculations
      *
-     * @psalm-return QueryCalculationType[]
+     * @phpstan-return QueryCalculationType[]
      */
     public function getCalculations(): array
     {
@@ -85,7 +85,7 @@ class CalculationStateRepository extends AbstractRepository
             ->groupBy('s.id')
             ->orderBy('s.code', self::SORT_ASC);
 
-        /** @psalm-var QueryCalculationType[] $result */
+        /** @phpstan-var QueryCalculationType[] $result */
         $result = $builder->getQuery()->getArrayResult();
         $count = $this->getColumnSum($result, 'count');
         $total = $this->getColumnSum($result, 'total');
@@ -104,7 +104,7 @@ class CalculationStateRepository extends AbstractRepository
      *
      * @return array an array grouped by editable with the states
      *
-     * @psalm-return DropDownType
+     * @phpstan-return DropDownType
      */
     public function getDropDown(): array
     {
@@ -120,7 +120,7 @@ class CalculationStateRepository extends AbstractRepository
      *
      * @return array an array grouped by editable with the states
      *
-     * @psalm-return DropDownType
+     * @phpstan-return DropDownType
      */
     public function getDropDownBelow(float $minMargin): array
     {
@@ -256,12 +256,12 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
-     * @psalm-return DropDownType
+     * @phpstan-return DropDownType
      */
     private function mergeDropDown(QueryBuilder $builder): array
     {
         /**
-         * @psalm-var array<array{
+         * @phpstan-var array<array{
          *     id: int,
          *     code: string,
          *     editable: bool}> $values
@@ -271,7 +271,7 @@ class CalculationStateRepository extends AbstractRepository
             return [];
         }
 
-        /** @psalm-var DropDownType $result */
+        /** @phpstan-var DropDownType $result */
         $result = [];
         foreach ($values as $value) {
             $key = $value['editable'] ? 1 : -1;

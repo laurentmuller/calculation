@@ -31,7 +31,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller to display the pivot table.
  *
- * @psalm-import-type PivotType from CalculationRepository
+ * @phpstan-import-type PivotType from CalculationRepository
  */
 #[AsController]
 #[Route(path: '/pivot', name: 'calculation_pivot_')]
@@ -95,7 +95,7 @@ class PivotController extends AbstractController
     /**
      * Gets the pivot dataset.
      *
-     * @psalm-return PivotType[]
+     * @phpstan-return PivotType[]
      */
     private function createDataset(): array
     {

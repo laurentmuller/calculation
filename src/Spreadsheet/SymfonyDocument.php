@@ -20,9 +20,9 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 /**
  * Document containing Symfony configuration.
  *
- * @psalm-import-type RouteType from SymfonyInfoService
- * @psalm-import-type BundleType from SymfonyInfoService
- * @psalm-import-type PackageType from SymfonyInfoService
+ * @phpstan-import-type RouteType from SymfonyInfoService
+ * @phpstan-import-type BundleType from SymfonyInfoService
+ * @phpstan-import-type PackageType from SymfonyInfoService
  */
 class SymfonyDocument extends AbstractDocument
 {
@@ -51,7 +51,7 @@ class SymfonyDocument extends AbstractDocument
     }
 
     /**
-     * @psalm-param BundleType[] $bundles
+     * @phpstan-param BundleType[] $bundles
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
@@ -137,7 +137,7 @@ class SymfonyDocument extends AbstractDocument
     }
 
     /**
-     * @psalm-param array<string, PackageType> $packages
+     * @phpstan-param array<string, PackageType> $packages
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
@@ -172,7 +172,7 @@ class SymfonyDocument extends AbstractDocument
     }
 
     /**
-     * @psalm-param RouteType[] $routes
+     * @phpstan-param RouteType[] $routes
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */

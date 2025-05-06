@@ -25,7 +25,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 /**
  * Service to generate and validate a captcha image.
  *
- * @psalm-type ComputeTextType = array{
+ * @phpstan-type ComputeTextType = array{
  *     char: string,
  *     angle: int,
  *     height: int,
@@ -107,9 +107,9 @@ class CaptchaImageService implements ServiceSubscriberInterface
      *
      * @throws \Exception
      *
-     * @psalm-param positive-int $length
-     * @psalm-param positive-int $width
-     * @psalm-param positive-int $height
+     * @phpstan-param positive-int $length
+     * @phpstan-param positive-int $width
+     * @phpstan-param positive-int $height
      */
     public function generateImage(bool $force = false, int $length = 6, int $width = 150, int $height = 30): ?string
     {
@@ -209,8 +209,8 @@ class CaptchaImageService implements ServiceSubscriberInterface
      *
      * @throws \Exception
      *
-     * @psalm-param positive-int $width
-     * @psalm-param positive-int $height
+     * @phpstan-param positive-int $width
+     * @phpstan-param positive-int $height
      */
     private function createImage(string $text, int $width, int $height): ?ImageService
     {
@@ -294,7 +294,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
 
         $font = $this->font;
         $size = (int) ((float) $height * 0.7);
-        /** @psalm-var non-empty-array<ComputeTextType> $items */
+        /** @phpstan-var non-empty-array<ComputeTextType> $items */
         $items = $this->computeText($image, $size, $font, $text);
         $textHeight = (int) $this->getColumnMax($items, 'height');
         $textWidth = (int) $this->getColumnSum($items, 'width') + (\count($items) - 1) * self::CHAR_SPACE;

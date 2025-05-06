@@ -19,13 +19,13 @@ use App\Entity\CalculationState;
 /**
  * Contains the result of archive calculations.
  *
- * @psalm-type ResultsType = array<string, array{state: CalculationState, calculations: array<Calculation>}>
+ * @phpstan-type ResultsType = array<string, array{state: CalculationState, calculations: array<Calculation>}>
  */
 class CalculationArchiveResult implements \Countable
 {
-    /** @psalm-var int<0, max> */
+    /** @phpstan-var int<0, max> */
     private int $count = 0;
-    /** @psalm-var ResultsType */
+    /** @phpstan-var ResultsType */
     private array $results = [];
 
     /**
@@ -56,9 +56,7 @@ class CalculationArchiveResult implements \Countable
     }
 
     /**
-     * @psalm-return ResultsType
-     *
-     * @psalm-api
+     * @phpstan-return ResultsType
      */
     public function getResults(): array
     {

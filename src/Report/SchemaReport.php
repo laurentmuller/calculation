@@ -30,10 +30,10 @@ use fpdf\Enums\PdfMove;
 /**
  * Report to display database schema.
  *
- * @psalm-import-type SchemaColumnType from SchemaService
- * @psalm-import-type SchemaIndexType from SchemaService
- * @psalm-import-type SchemaAssociationType from SchemaService
- * @psalm-import-type SchemaTableType from SchemaService
+ * @phpstan-import-type SchemaColumnType from SchemaService
+ * @phpstan-import-type SchemaIndexType from SchemaService
+ * @phpstan-import-type SchemaAssociationType from SchemaService
+ * @phpstan-import-type SchemaTableType from SchemaService
  */
 class SchemaReport extends AbstractReport
 {
@@ -44,7 +44,7 @@ class SchemaReport extends AbstractReport
     private ?PdfCell $cellOneToMany = null;
 
     /**
-     * @psalm-var array<string, int>
+     * @phpstan-var array<string, int>
      */
     private array $tableLinks = [];
 
@@ -91,7 +91,7 @@ class SchemaReport extends AbstractReport
 
     private function createTable(string $id, PdfColumn ...$columns): PdfTable
     {
-        /** @psalm-var positive-int $cols */
+        /** @phpstan-var positive-int $cols */
         $cols = \count($columns);
 
         return ReportTable::fromReport($this)
@@ -113,7 +113,7 @@ class SchemaReport extends AbstractReport
     }
 
     /**
-     * @psalm-param SchemaColumnType $column
+     * @phpstan-param SchemaColumnType $column
      */
     private function formatType(array $column): string
     {
@@ -153,7 +153,7 @@ class SchemaReport extends AbstractReport
     }
 
     /**
-     * @psalm-param SchemaAssociationType[] $associations
+     * @phpstan-param SchemaAssociationType[] $associations
      */
     private function outputAssociations(array $associations): void
     {
@@ -183,7 +183,7 @@ class SchemaReport extends AbstractReport
     }
 
     /**
-     * @psalm-param SchemaColumnType[] $columns
+     * @phpstan-param SchemaColumnType[] $columns
      */
     private function outputColumns(array $columns): void
     {
@@ -216,7 +216,7 @@ class SchemaReport extends AbstractReport
     }
 
     /**
-     * @psalm-param SchemaIndexType[] $indexes
+     * @phpstan-param SchemaIndexType[] $indexes
      */
     private function outputIndexes(array $indexes): void
     {
@@ -242,7 +242,7 @@ class SchemaReport extends AbstractReport
     }
 
     /**
-     * @psalm-param SchemaTableType $table
+     * @phpstan-param SchemaTableType $table
      */
     private function outputTable(array $table): void
     {
@@ -259,7 +259,7 @@ class SchemaReport extends AbstractReport
     }
 
     /**
-     * @psalm-param SchemaTableType[] $tables
+     * @phpstan-param SchemaTableType[] $tables
      */
     private function outputTables(array $tables): void
     {

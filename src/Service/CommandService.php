@@ -25,15 +25,15 @@ use Symfony\Contracts\Cache\CacheInterface;
 /**
  * Service to get or run commands.
  *
- * @psalm-type ArgumentType = array{
+ * @phpstan-type ArgumentType = array{
  *     name: string,
  *     is_required: bool,
  *     is_array: bool,
  *     description: string,
- *     default: array|scalar|null,
+ *     default: array<mixed>|scalar|null,
  *     display: string,
  *     arguments: string}
- * @psalm-type OptionType = array{
+ * @phpstan-type OptionType = array{
  *     name: string,
  *     shortcut: string,
  *     name_shortcut: string,
@@ -41,19 +41,19 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     is_value_required: bool,
  *     is_multiple: bool,
  *     description: string,
- *     default: array|scalar|null,
+ *     default: array<mixed>|scalar|null,
  *     display: string,
  *     arguments: string}
- * @psalm-type CommandType = array{
+ * @phpstan-type CommandType = array{
  *     name: string,
  *     description: string,
  *     usage: string[],
  *     help: string,
  *     hidden: bool,
- *     definition: array {
+ *     definition: array{
  *         arguments: array<string, ArgumentType>,
  *         options: array<string, OptionType>}}
- * @psalm-type ContentType = array{
+ * @phpstan-type ContentType = array{
  *     commands:  CommandType[]}
  */
 class CommandService implements \Countable
@@ -141,9 +141,7 @@ class CommandService implements \Countable
     /**
      * Gets the first command.
      *
-     * @psalm-return CommandType|false
-     *
-     * @phpstan-return array|false
+     * @phpstan-return CommandType|false
      */
     public function first(): array|false
     {
@@ -155,9 +153,7 @@ class CommandService implements \Countable
     /**
      * Gets the command for the given name.
      *
-     * @psalm-return CommandType|null
-     *
-     * @phpstan-ignore return.phpDocType
+     * @phpstan-return CommandType|null
      */
     public function getCommand(string $name): ?array
     {
@@ -167,7 +163,7 @@ class CommandService implements \Countable
     /**
      * Gets all commands.
      *
-     * @psalm-return array<string, CommandType>
+     * @phpstan-return array<string, CommandType>
      */
     public function getCommands(): array
     {
@@ -180,13 +176,13 @@ class CommandService implements \Countable
             // remove carriage return
             $content = \str_replace('\r', '', $result->content);
 
-            /** @psalm-var ContentType $decoded */
+            /** @phpstan-var ContentType $decoded */
             $decoded = StringUtils::decodeJson($content);
             $commands = \array_reduce(
                 $decoded['commands'],
                 /**
-                 * @psalm-param array<string, CommandType> $carry
-                 * @psalm-param CommandType $command
+                 * @phpstan-param array<string, CommandType> $carry
+                 * @phpstan-param CommandType $command
                  */
                 function (array $carry, array $command): array {
                     if (!$command['hidden']) {
@@ -209,7 +205,7 @@ class CommandService implements \Countable
      *
      * @param string $default the default name for commands without a name space
      *
-     * @psalm-return array<string, CommandType[]>
+     * @phpstan-return array<string, CommandType[]>
      */
     public function getGroupedCommands(string $default = self::GLOBAL_GROUP): array
     {
@@ -260,7 +256,7 @@ class CommandService implements \Countable
     }
 
     /**
-     * @psalm-param ArgumentType $argument
+     * @phpstan-param ArgumentType $argument
      */
     private function getArgumentHelp(array $argument): string
     {
@@ -284,17 +280,17 @@ class CommandService implements \Countable
     /**
      * @template TValue
      *
-     * @psalm-param callable(CommandType):TValue $callback
+     * @phpstan-param callable(CommandType):TValue $callback
      *
-     * @psalm-return array<string, TValue[]>
+     * @phpstan-return array<string, TValue[]>
      */
     private function getGroupedValues(string $default, callable $callback): array
     {
         return \array_reduce(
             $this->getCommands(),
             /**
-             * @psalm-param array<string, TValue[]> $carry
-             * @psalm-param CommandType $command
+             * @phpstan-param array<string, TValue[]> $carry
+             * @phpstan-param CommandType $command
              */
             function (array $carry, array $command) use ($default, $callback): array {
                 $group = $this->getGroupName($command, $default);
@@ -307,9 +303,7 @@ class CommandService implements \Countable
     }
 
     /**
-     * @psalm-param CommandType $command
-     *
-     * @phpstan-param array $command
+     * @phpstan-param CommandType $command
      */
     private function getGroupName(array $command, string $default): string
     {
@@ -320,7 +314,7 @@ class CommandService implements \Countable
     }
 
     /**
-     * @psalm-param OptionType $option
+     * @phpstan-param OptionType $option
      */
     private function getOptionHelp(array $option): string
     {
@@ -360,13 +354,9 @@ class CommandService implements \Countable
     }
 
     /**
-     * @psalm-param CommandType $command
+     * @phpstan-param CommandType $command
      *
-     * @phpstan-param array $command
-     *
-     * @psalm-return CommandType
-     *
-     * @phpstan-return array
+     * @phpstan-return CommandType
      */
     private function updateCommand(array &$command): array
     {

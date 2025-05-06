@@ -23,9 +23,9 @@ use Symfony\Component\Form\FormView;
 /**
  * Service to build form for a command.
  *
- * @psalm-import-type CommandType from CommandService
- * @psalm-import-type ArgumentType from CommandService
- * @psalm-import-type OptionType from CommandService
+ * @phpstan-import-type CommandType from CommandService
+ * @phpstan-import-type ArgumentType from CommandService
+ * @phpstan-import-type OptionType from CommandService
  */
 readonly class CommandFormService
 {
@@ -56,10 +56,7 @@ readonly class CommandFormService
     /**
      * Create a form for the given command.
      *
-     * @psalm-param CommandType $command
-     * @psalm-param array<string, array|scalar|null> $data
-     *
-     * @phpstan-param array $command
+     * @phpstan-param CommandType $command
      *
      * @phpstan-return FormInterface<mixed>
      */
@@ -83,7 +80,7 @@ readonly class CommandFormService
      *
      * @return FormView[]
      *
-     * @psalm-param self::* $priority
+     * @phpstan-param self::* $priority
      */
     public function filter(FormView $view, int $priority): array
     {
@@ -91,9 +88,7 @@ readonly class CommandFormService
     }
 
     /**
-     * @psalm-param CommandType $command
-     *
-     * @phpstan-param array $command
+     * @phpstan-param CommandType $command
      */
     private function addArguments(FormHelper $helper, array $command, CallbackTransformer $transformer): void
     {
@@ -114,7 +109,7 @@ readonly class CommandFormService
     }
 
     /**
-     * @psalm-param ArgumentType $argument
+     * @phpstan-param ArgumentType $argument
      */
     private function addBoolArgument(
         FormHelper $helper,
@@ -152,7 +147,7 @@ readonly class CommandFormService
     }
 
     /**
-     * @psalm-param OptionType $option
+     * @phpstan-param OptionType $option
      */
     private function addBoolOption(
         FormHelper $helper,
@@ -171,9 +166,7 @@ readonly class CommandFormService
     }
 
     /**
-     * @psalm-param CommandType $command
-     *
-     * @phpstan-param array $command
+     * @phpstan-param CommandType $command
      */
     private function addOptions(FormHelper $helper, array $command, CallbackTransformer $transformer): void
     {
@@ -194,7 +187,7 @@ readonly class CommandFormService
     }
 
     /**
-     * @psalm-param ArgumentType $argument
+     * @phpstan-param ArgumentType $argument
      */
     private function addTextArgument(
         FormHelper $helper,
@@ -237,7 +230,7 @@ readonly class CommandFormService
     }
 
     /**
-     * @psalm-param OptionType $option
+     * @phpstan-param OptionType $option
      */
     private function addTextOption(
         FormHelper $helper,
@@ -260,7 +253,7 @@ readonly class CommandFormService
     private function createDataTransformer(): CallbackTransformer
     {
         return new CallbackTransformer(
-            /** @psalm-param string[] $data */
+            /** @phpstan-param string[] $data */
             static fn (array $data): string => \implode(',', \array_filter($data)),
             static fn (?string $data): array => StringUtils::isString($data) ? \array_map(trim(...), \explode(',', $data)) : []
         );
@@ -272,7 +265,7 @@ readonly class CommandFormService
     }
 
     /**
-     * @psalm-return array<string, mixed>
+     * @phpstan-return array<string, mixed>
      */
     private function getTooltipAttributes(string $title, string $content): array
     {
@@ -287,9 +280,7 @@ readonly class CommandFormService
     }
 
     /**
-     * @psalm-param ArgumentType $argument
-     *
-     * @phpstan-param array $argument
+     * @phpstan-param ArgumentType $argument
      */
     private function isArgumentText(array $argument): bool
     {
@@ -306,9 +297,7 @@ readonly class CommandFormService
     }
 
     /**
-     * @psalm-param OptionType $option
-     *
-     * @phpstan-param array $option
+     * @phpstan-param OptionType $option
      */
     private function isOptionText(array $option): bool
     {

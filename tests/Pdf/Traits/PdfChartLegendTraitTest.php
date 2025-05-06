@@ -21,7 +21,7 @@ use App\Report\AbstractReport;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @psalm-import-type ColorStringType from PdfChartInterface
+ * @phpstan-import-type ColorStringType from PdfChartInterface
  */
 class PdfChartLegendTraitTest extends TestCase
 {
@@ -37,11 +37,7 @@ class PdfChartLegendTraitTest extends TestCase
                 return true;
             }
 
-            /**
-             * @psalm-param ColorStringType[] $legends
-             *
-             * @phpstan-param array<array{color: PdfFillColor|string, label: string, ...}> $legends
-             */
+            /** @phpstan-param ColorStringType[] $legends */
             public function outputLegends(array $legends, bool $horizontal, bool $circle = true): static
             {
                 return $this->legends($legends, $horizontal, circle: $circle);
@@ -73,11 +69,7 @@ class PdfChartLegendTraitTest extends TestCase
                 return true;
             }
 
-            /**
-             * @psalm-param ColorStringType[] $legends
-             *
-             * @phpstan-param array<array{color: PdfFillColor|string, label: string, ...}> $legends
-             */
+            /** @phpstan-param ColorStringType[] $legends */
             public function computeHeights(array $legends, bool $horizontal): float
             {
                 return $this->getLegendsHeight($legends, $horizontal);
@@ -109,11 +101,7 @@ class PdfChartLegendTraitTest extends TestCase
                 return true;
             }
 
-            /**
-             * @psalm-param ColorStringType[] $legends
-             *
-             * @phpstan-param array<array{color: PdfFillColor|string, label: string, ...}> $legends
-             */
+            /** @phpstan-param ColorStringType[] $legends */
             public function outputLegendsHorizontal(array $legends, bool $circle = true): static
             {
                 return $this->legendsHorizontal($legends, circle: $circle);
@@ -144,9 +132,8 @@ class PdfChartLegendTraitTest extends TestCase
             }
 
             /**
-             * @psalm-param ColorStringType[] $legends
-             *
-             * @phpstan-param array<array{color: PdfFillColor|string, label: string, ...}> $legends
+             * @phpstan-param ColorStringType[] $legends
+             * @phpstan-param array $legends
              */
             public function outputLegendsVertical(array $legends, bool $circle = true): static
             {
@@ -177,11 +164,7 @@ class PdfChartLegendTraitTest extends TestCase
                 return true;
             }
 
-            /**
-             * @psalm-param ColorStringType[] $legends
-             *
-             * @phpstan-param array<array{color: PdfFillColor|string, label: string, ...}> $legends
-             */
+            /** @phpstan-param ColorStringType[] $legends */
             public function computeWidths(array $legends, bool $horizontal): float
             {
                 return $this->getLegendsWidth($legends, $horizontal);
@@ -203,9 +186,7 @@ class PdfChartLegendTraitTest extends TestCase
     }
 
     /**
-     * @psalm-return ColorStringType[]
-     *
-     * @phpstan-return array<array{color: PdfFillColor|string, label: string, ...}>
+     * @phpstan-return ColorStringType[]
      */
     private function getLegends(): array
     {

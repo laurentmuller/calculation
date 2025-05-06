@@ -23,7 +23,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *
  * @see https://mermaid.js.org/
  *
- * @psalm-type DiagramType = array{
+ * @phpstan-type DiagramType = array{
  *     name: string,
  *     title: string,
  *     content: string}
@@ -43,7 +43,7 @@ class DiagramService
     /**
      * Gets the diagram file for the given name.
      *
-     * @psalm-return DiagramType|null
+     * @phpstan-return DiagramType|null
      */
     public function getFile(string $name): ?array
     {
@@ -53,7 +53,7 @@ class DiagramService
     /**
      * Gets all diagram files.
      *
-     * @psalm-return array<string, DiagramType>
+     * @phpstan-return array<string, DiagramType>
      */
     public function getFiles(): array
     {
@@ -73,7 +73,7 @@ class DiagramService
     }
 
     /**
-     * @psalm-return array<string, DiagramType>
+     * @phpstan-return array<string, DiagramType>
      */
     private function loadDiagrams(): array
     {

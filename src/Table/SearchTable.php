@@ -24,7 +24,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 /**
  * The search table.
  *
- * @psalm-import-type SearchType from SearchService
+ * @phpstan-import-type SearchType from SearchService
  */
 class SearchTable extends AbstractTable implements ServiceSubscriberInterface
 {
@@ -184,9 +184,9 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     /**
      * Update the item.
      *
-     * @psalm-param SearchType $item
+     * @phpstan-param SearchType $item
      *
-     * @psalm-param-out array{
+     * @phpstan-param-out array{
      *       id: int,
      *       type: string,
      *       content: string,

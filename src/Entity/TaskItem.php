@@ -49,7 +49,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
      *
      * @var Collection<int, TaskItemMargin>
      *
-     * @psalm-var ArrayCollection<int, TaskItemMargin>
+     * @phpstan-var ArrayCollection<int, TaskItemMargin>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(
@@ -123,7 +123,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
         /**
          * @psalm-suppress MixedArgumentTypeCoercion
          *
-         * @psalm-var TaskItemMargin|null
+         * @phpstan-var TaskItemMargin|null
          */
         return $this->margins->findFirst(
             fn (int $key, TaskItemMargin $margin): bool => $margin->contains($quantity)

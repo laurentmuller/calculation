@@ -55,13 +55,13 @@ trait PdfColorTrait
 
     public function getDrawColor(): PdfDrawColor
     {
-        /** @psalm-var PdfDrawColor */
+        /** @phpstan-var PdfDrawColor */
         return PdfDrawColor::create($this->value);
     }
 
     public function getFillColor(): PdfFillColor
     {
-        /** @psalm-var PdfFillColor */
+        /** @phpstan-var PdfFillColor */
         return PdfFillColor::create($this->value);
     }
 
@@ -72,7 +72,7 @@ trait PdfColorTrait
 
     public function getTextColor(): PdfTextColor
     {
-        /** @psalm-var PdfTextColor */
+        /** @phpstan-var PdfTextColor */
         return PdfTextColor::create($this->value);
     }
 

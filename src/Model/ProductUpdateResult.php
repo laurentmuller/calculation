@@ -16,19 +16,19 @@ namespace App\Model;
 /**
  * Contains the result of updated products.
  *
- * @psalm-type ProductType = array{description: string|null, oldPrice: float, newPrice: float, delta: float}
+ * @phpstan-type ProductType = array{description: string|null, oldPrice: float, newPrice: float, delta: float}
  */
 class ProductUpdateResult implements \Countable
 {
     /**
-     * @psalm-var ProductType[]
+     * @phpstan-var ProductType[]
      */
     private array $products = [];
 
     /**
      * Add a product to the list of updated products.
      *
-     * @psalm-param ProductType $values
+     * @phpstan-param ProductType $values
      */
     public function addProduct(array $values): self
     {
@@ -46,7 +46,7 @@ class ProductUpdateResult implements \Countable
     /**
      * Gets the updated products.
      *
-     * @psalm-return ProductType[]
+     * @phpstan-return ProductType[]
      */
     public function getProducts(): array
     {

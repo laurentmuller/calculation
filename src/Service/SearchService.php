@@ -39,7 +39,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 /**
  * Service to search data in all entities.
  *
- * @psalm-type SearchType = array{
+ * @phpstan-type SearchType = array{
  *     id: int,
  *     type: string,
  *     field: string,
@@ -142,7 +142,7 @@ class SearchService implements ServiceSubscriberInterface
      *
      * @return int the number of rows
      *
-     * @psalm-return non-negative-int
+     * @phpstan-return non-negative-int
      */
     public function count(?string $search, ?string $entity = null): int
     {
@@ -201,7 +201,7 @@ class SearchService implements ServiceSubscriberInterface
      *
      * @return array the array of results for the given search (can be empty)
      *
-     * @psalm-return SearchType[]
+     * @phpstan-return SearchType[]
      */
     public function search(?string $search, ?string $entity = null, int $limit = 25, int $offset = 0): array
     {
@@ -344,7 +344,7 @@ class SearchService implements ServiceSubscriberInterface
      * @param string       $field   the field name
      * @param ?string      $content the field content to search in or null to use the field name
      *
-     * @psalm-param class-string<TEntity> $class
+     * @phpstan-param class-string<TEntity> $class
      */
     private function createQueryBuilder(string $class, string $field, ?string $content = null): QueryBuilder
     {
@@ -369,7 +369,7 @@ class SearchService implements ServiceSubscriberInterface
      * @param ?string $entity the entity to search in or null for all
      * @param string  $extra  the SQL statement to add to the default native SELECT SQL statement
      *
-     * @psalm-return SearchType[]
+     * @phpstan-return SearchType[]
      */
     private function getArrayResult(string $search, ?string $entity = null, string $extra = ''): array
     {
@@ -389,7 +389,7 @@ class SearchService implements ServiceSubscriberInterface
         $query = $this->createNativeQuery($sql);
         $query->setParameter(self::SEARCH_PARAM, "%$search%", Types::STRING);
 
-        /** @psalm-var SearchType[] */
+        /** @phpstan-var SearchType[] */
         return $query->getArrayResult();
     }
 
@@ -400,7 +400,7 @@ class SearchService implements ServiceSubscriberInterface
      *
      * @return string the entity name
      *
-     * @psalm-param class-string $class
+     * @phpstan-param class-string $class
      */
     private function getEntityName(string $class): string
     {
@@ -415,7 +415,7 @@ class SearchService implements ServiceSubscriberInterface
      *
      * @return string the key
      *
-     * @psalm-param class-string $class
+     * @phpstan-param class-string $class
      */
     private function getKey(string $class, string $field): string
     {

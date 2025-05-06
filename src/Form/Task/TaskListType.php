@@ -52,24 +52,24 @@ class TaskListType extends AbstractListEntityType
     }
 
     /**
-     * @phpstan-param Options<array> $options
-     *
      * @psalm-param Options $options
+     *
+     * @phpstan-param Options<array> $options
      *
      * @throws \Doctrine\ORM\Exception\NotSupported
      */
     private function getSortedBuilder(Options $options): QueryBuilder
     {
-        /** @psalm-var bool $all */
+        /** @phpstan-var bool $all */
         $all = $options['query_all'];
 
-        /** @psalm-var EntityManagerInterface $manager */
+        /** @phpstan-var EntityManagerInterface $manager */
         $manager = $options['em'];
 
-        /** @psalm-var class-string<Task> $class */
+        /** @phpstan-var class-string<Task> $class */
         $class = $options['class'];
 
-        /** @psalm-var TaskRepository $repository */
+        /** @phpstan-var TaskRepository $repository */
         $repository = $manager->getRepository($class); // @phpstan-ignore varTag.type
 
         return $repository->getSortedBuilder($all);

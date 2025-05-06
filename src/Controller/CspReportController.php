@@ -92,7 +92,7 @@ class CspReportController extends AbstractController
                 return false;
             }
 
-            /** @psalm-var array{csp-report: string[]} $data */
+            /** @phpstan-var array{csp-report: string[]} $data */
             $data = StringUtils::decodeJson($content);
             $context = \array_filter($data['csp-report']);
             if (isset($context['original-policy'])) {

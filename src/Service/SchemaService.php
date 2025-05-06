@@ -33,7 +33,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 /**
  * Service to get database schema information.
  *
- * @psalm-type SchemaColumnType=array{
+ * @phpstan-type SchemaColumnType=array{
  *     name: string,
  *     primary: bool,
  *     unique: bool,
@@ -42,16 +42,16 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     required: bool,
  *     foreign_table: string|null,
  *     default: string}
- * @psalm-type SchemaIndexType=array{
+ * @phpstan-type SchemaIndexType=array{
  *     name: string,
  *     primary: bool,
  *     unique: bool,
  *     columns: string[]}
- * @psalm-type SchemaAssociationType=array{
+ * @phpstan-type SchemaAssociationType=array{
  *     name: string,
  *     inverse: bool,
  *     table: string}
- * @psalm-type SchemaTableType=array{
+ * @phpstan-type SchemaTableType=array{
  *     name: string,
  *     columns: SchemaColumnType[],
  *     indexes: SchemaIndexType[],
@@ -79,7 +79,7 @@ class SchemaService
     private ?Connection $connection = null;
 
     /**
-     * @psalm-var AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
+     * @phpstan-var AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
      */
     private ?AbstractSchemaManager $schemaManager = null;
 
@@ -95,11 +95,11 @@ class SchemaService
      *
      * @param string $name the table's name to get information for
      *
-     * @psalm-return SchemaTableType
+     * @phpstan-return SchemaTableType
      */
     public function getTable(string $name): array
     {
-        /** @psalm-var SchemaTableType */
+        /** @phpstan-var SchemaTableType */
         return $this->getTables(false)[$name] ?? [];
     }
 
@@ -108,7 +108,7 @@ class SchemaService
      *
      * @param bool $updateRecords true to update the number of records and size
      *
-     * @psalm-return array<string, SchemaTableType>
+     * @phpstan-return array<string, SchemaTableType>
      */
     public function getTables(bool $updateRecords = true): array
     {
@@ -139,9 +139,9 @@ class SchemaService
     }
 
     /**
-     * @psalm-param array<string, SchemaTableType> $tables
+     * @phpstan-param array<string, SchemaTableType> $tables
      *
-     * @psalm-return array<string, SchemaTableType>
+     * @phpstan-return array<string, SchemaTableType>
      */
     private function countAll(array $tables): array
     {
@@ -158,7 +158,7 @@ class SchemaService
             $result = $connection->executeQuery($sql);
             $rows = $result->fetchAllAssociative();
 
-            /** @psalm-var array{name: string, records: int, size: int} $row */
+            /** @phpstan-var array{name: string, records: int, size: int} $row */
             foreach ($rows as $row) {
                 $name = $this->mapTableName($row['name']);
                 if (!\array_key_exists($name, $tables)) {
@@ -177,7 +177,7 @@ class SchemaService
     }
 
     /**
-     * @psalm-param SchemaTableType $table
+     * @phpstan-param SchemaTableType $table
      */
     private function countRecords(array $table): int
     {
@@ -197,11 +197,11 @@ class SchemaService
     }
 
     /**
-     * @psalm-return SchemaTableType
+     * @phpstan-return SchemaTableType
      */
     private function createSchemaTable(Table $table): array
     {
-        /** @psalm-var SchemaTableType */
+        /** @phpstan-var SchemaTableType */
         return [
             'name' => $this->mapTableName($table),
             'columns' => $this->getColumns($table),
@@ -229,7 +229,7 @@ class SchemaService
     }
 
     /**
-     * @psalm-return array<SchemaAssociationType>
+     * @phpstan-return array<SchemaAssociationType>
      */
     private function getAssociations(Table $table): array
     {
@@ -259,7 +259,7 @@ class SchemaService
     }
 
     /**
-     * @psalm-return array<SchemaColumnType>
+     * @phpstan-return array<SchemaColumnType>
      */
     private function getColumns(Table $table): array
     {
@@ -306,7 +306,7 @@ class SchemaService
 
     private function getDefaultValue(Column $column): string
     {
-        /** @psalm-var string|null $default */
+        /** @phpstan-var string|null $default */
         $default = $column->getDefault();
         if (!\is_string($default)) {
             return '';
@@ -324,7 +324,7 @@ class SchemaService
     }
 
     /**
-     * @psalm-return array<SchemaIndexType>
+     * @phpstan-return array<SchemaIndexType>
      */
     private function getIndexes(Table $table): array
     {
@@ -341,7 +341,7 @@ class SchemaService
     }
 
     /**
-     * @psalm-return ClassMetadata<object>|null
+     * @phpstan-return ClassMetadata<object>|null
      */
     private function getMetaData(Table|string $name): ?ClassMetadata
     {
@@ -367,7 +367,7 @@ class SchemaService
     }
 
     /**
-     * @psalm-return AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
+     * @phpstan-return AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
      *
      * @throws \Doctrine\DBAL\Exception
      */
@@ -389,7 +389,7 @@ class SchemaService
     }
 
     /**
-     * @psalm-return ClassMetadata<object>|null
+     * @phpstan-return ClassMetadata<object>|null
      */
     private function getTargetMetaData(string $name): ?ClassMetadata
     {
@@ -439,7 +439,7 @@ class SchemaService
     }
 
     /**
-     * @psalm-return array<string, SchemaTableType>
+     * @phpstan-return array<string, SchemaTableType>
      *
      * @throws \Doctrine\DBAL\Exception
      */
@@ -455,7 +455,7 @@ class SchemaService
     }
 
     /**
-     * @psalm-param Table|ClassMetadata<object>|string $name
+     * @phpstan-param Table|ClassMetadata<object>|string $name
      */
     private function mapTableName(Table|ClassMetadata|string $name): string
     {
@@ -472,15 +472,15 @@ class SchemaService
     }
 
     /**
-     * @psalm-param SchemaIndexType[] $indexes
+     * @phpstan-param SchemaIndexType[] $indexes
      *
-     * @psalm-return SchemaIndexType[]
+     * @phpstan-return SchemaIndexType[]
      */
     private function sortIndexes(array &$indexes): array
     {
         /**
-         * @psalm-param SchemaIndexType $a
-         * @psalm-param SchemaIndexType $b
+         * @phpstan-param SchemaIndexType $a
+         * @phpstan-param SchemaIndexType $b
          */
         $callback = static function (array $a, array $b): int {
             if ($a['primary']) {

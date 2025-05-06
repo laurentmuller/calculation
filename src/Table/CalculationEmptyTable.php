@@ -20,7 +20,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Calculation table for empty items.
  *
- * @psalm-import-type CalculationItemType from CalculationRepository
+ * @phpstan-import-type CalculationItemType from CalculationRepository
  */
 class CalculationEmptyTable extends AbstractCalculationItemsTable
 {
@@ -59,9 +59,9 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
     }
 
     /**
-     * @psalm-param self::SORT_* $orderDirection
+     * @phpstan-param self::SORT_* $orderDirection
      *
-     * @psalm-return CalculationItemType[]
+     * @phpstan-return CalculationItemType[]
      */
     #[\Override]
     protected function getEntities(string $orderColumn = 'id', string $orderDirection = self::SORT_DESC): array
@@ -74,7 +74,7 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
     {
         return \array_reduce(
             $items,
-            /** @psalm-param CalculationItemType $item */
+            /** @phpstan-param CalculationItemType $item */
             fn (int $carry, array $item): int => $carry + \count($item['items']),
             0
         );

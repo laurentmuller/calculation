@@ -22,7 +22,7 @@ use App\Utils\FormatUtils;
 /**
  * Service for the calculation timeline.
  *
- * @psalm-type ParametersType=array{
+ * @phpstan-type ParametersType=array{
  *     from: \DateTimeImmutable,
  *     to: \DateTimeImmutable,
  *     interval: string,
@@ -55,7 +55,7 @@ readonly class TimelineService
      *
      * @throws \Exception
      *
-     * @psalm-return ParametersType
+     * @phpstan-return ParametersType
      */
     public function current(?string $date = null, ?string $interval = null): array
     {
@@ -72,7 +72,7 @@ readonly class TimelineService
      *
      * @throws \Exception
      *
-     * @psalm-return ParametersType
+     * @phpstan-return ParametersType
      */
     public function first(?string $interval = null): array
     {
@@ -89,7 +89,7 @@ readonly class TimelineService
      *
      * @throws \Exception
      *
-     * @psalm-return ParametersType
+     * @phpstan-return ParametersType
      */
     public function last(?string $interval = null): array
     {
@@ -164,7 +164,7 @@ readonly class TimelineService
     /**
      * @throws \Exception
      *
-     * @psalm-return ParametersType
+     * @phpstan-return ParametersType
      */
     private function getParameters(
         ?\DateTimeImmutable $today,

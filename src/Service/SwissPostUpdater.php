@@ -33,7 +33,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 /**
  * Service to import zip codes, cities and streets from Switzerland.
  *
- * @psalm-type SwissAddressType =  array{
+ * @phpstan-type SwissAddressType =  array{
  *      0: int,
  *      1: int,
  *      2: int,
@@ -94,7 +94,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     /**
      * Creates a form to select the file to upload.
      *
-     * @psalm-return FormInterface<mixed>
+     * @phpstan-return FormInterface<mixed>
      */
     public function createForm(array $data = []): FormInterface
     {
@@ -163,7 +163,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
 
     private function clean(string $str): string
     {
-        /** @psalm-var string */
+        /** @phpstan-var string */
         return \mb_convert_encoding(\trim($str), 'UTF-8', 'ISO-8859-1');
     }
 
@@ -284,7 +284,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     }
 
     /**
-     * @psalm-param SwissAddressType $data
+     * @phpstan-param SwissAddressType $data
      */
     private function processCity(SwissDatabase $database, array $data): bool
     {
@@ -300,7 +300,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     private function processReader(SwissPostUpdateResult $result, SwissDatabase $database, CSVReader $reader): bool
     {
         $stop_process = false;
-        /** @psalm-var SwissAddressType|null $data */
+        /** @phpstan-var SwissAddressType|null $data */
         foreach ($reader as $data) { // @phpstan-ignore varTag.nativeType
             if ($stop_process || null === $data) {
                 break;
@@ -346,7 +346,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         }
 
         $reader = new CSVReader(file: $filename, separator: ';');
-        /** @psalm-var array{0: string, 1: string} $data */
+        /** @phpstan-var array{0: string, 1: string} $data */
         foreach ($reader as $data) {
             $result->addState($database->insertState($data));
         }
@@ -356,7 +356,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     }
 
     /**
-     * @psalm-param SwissAddressType $data
+     * @phpstan-param SwissAddressType $data
      */
     private function processStreet(SwissDatabase $database, array $data): bool
     {
@@ -368,7 +368,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     }
 
     /**
-     * @psalm-param SwissAddressType $data
+     * @phpstan-param SwissAddressType $data
      */
     private function processValidity(SwissPostUpdateResult $result, array $data): bool
     {

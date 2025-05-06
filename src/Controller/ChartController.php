@@ -36,7 +36,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * The controller for charts.
  *
- * @psalm-import-type QueryCalculationType from CalculationStateRepository
+ * @phpstan-import-type QueryCalculationType from CalculationStateRepository
  */
 #[AsController]
 #[Route(path: '/chart', name: 'chart_')]
@@ -55,7 +55,7 @@ class ChartController extends AbstractController
     {
         $this->checkAccess();
         $months = $this->getMonths($request);
-        /** @psalm-var array{months: int} $parameters */
+        /** @phpstan-var array{months: int} $parameters */
         $parameters = $chart->generate($months);
         $this->setSessionValue(self::KEY_MONTHS, $parameters['months']);
 

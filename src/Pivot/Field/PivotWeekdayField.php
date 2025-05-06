@@ -36,7 +36,7 @@ class PivotWeekdayField extends PivotDateField
     {
         parent::__construct($name, self::PART_WEEK_DAY, $title);
 
-        /** @psalm-var int<1, max> $time */
+        /** @phpstan-var int<1, max> $time */
         $time = \strtotime('this week');
         $firstDay = \strtolower(\date('l', $time));
         $this->names = $short ? DateUtils::getShortWeekdays($firstDay) : DateUtils::getWeekdays($firstDay);

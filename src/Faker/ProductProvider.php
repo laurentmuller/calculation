@@ -152,23 +152,19 @@ class ProductProvider extends EntityProvider
 
     /**
      * Gets a random product's supplier.
-     *
-     * @psalm-api
      */
     public function productSupplier(): ?string
     {
-        /** @psalm-var string|null */
+        /** @phpstan-var string|null */
         return $this->distinctValue('supplier', true);
     }
 
     /**
      * Gets a random product's unit.
-     *
-     * @psalm-api
      */
     public function productUnit(): ?string
     {
-        /** @psalm-var string|null */
+        /** @phpstan-var string|null */
         return $this->distinctValue('unit', true);
     }
 }

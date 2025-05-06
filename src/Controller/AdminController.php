@@ -121,7 +121,7 @@ class AdminController extends AbstractController
         $data = $application->getProperties();
         $form = $this->createForm(ApplicationParametersType::class, $data);
         if ($this->handleRequestForm($request, $form)) {
-            /** @psalm-var array<string, mixed> $data */
+            /** @phpstan-var array<string, mixed> $data */
             $data = $form->getData();
             if ($application->setProperties($data)) {
                 return $this->redirectToHomePage('parameters.success', request: $request);

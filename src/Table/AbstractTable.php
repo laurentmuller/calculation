@@ -22,7 +22,7 @@ use App\Utils\FormatUtils;
 /**
  * The abstract table.
  *
- * @psalm-import-type EntityType from Column
+ * @phpstan-import-type EntityType from Column
  */
 abstract class AbstractTable implements SortModeInterface
 {
@@ -45,9 +45,6 @@ abstract class AbstractTable implements SortModeInterface
         return FormatUtils::formatDate($value);
     }
 
-    /**
-     * @psalm-api
-     */
     public function formatId(int $value): string
     {
         return FormatUtils::formatId($value);
@@ -68,7 +65,7 @@ abstract class AbstractTable implements SortModeInterface
      *
      * @return Column[]
      *
-     * @psalm-return array<int, Column>
+     * @phpstan-return array<int, Column>
      */
     public function getColumns(): array
     {
@@ -76,7 +73,7 @@ abstract class AbstractTable implements SortModeInterface
             $this->columns = $this->createColumns();
         }
 
-        /** @psalm-var array<int, Column> */
+        /** @phpstan-var array<int, Column> */
         return $this->columns;
     }
 
@@ -217,7 +214,7 @@ abstract class AbstractTable implements SortModeInterface
      *
      * @return Column[] the columns
      *
-     * @psalm-return non-empty-array<int, Column>
+     * @phpstan-return non-empty-array<int, Column>
      */
     private function createColumns(): array
     {
@@ -225,7 +222,7 @@ abstract class AbstractTable implements SortModeInterface
         $columns = Column::fromJson($this, $path);
         $columns[] = Column::createColumnAction();
 
-        /** @psalm-var non-empty-array<int, Column> */
+        /** @phpstan-var non-empty-array<int, Column> */
         return $columns;
     }
 

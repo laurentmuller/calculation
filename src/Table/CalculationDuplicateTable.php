@@ -18,7 +18,7 @@ use App\Traits\DuplicateItemsTrait;
 /**
  * Calculation table for duplicate items.
  *
- * @psalm-import-type CalculationItemType from \App\Repository\CalculationRepository
+ * @phpstan-import-type CalculationItemType from \App\Repository\CalculationRepository
  */
 class CalculationDuplicateTable extends AbstractCalculationItemsTable
 {
@@ -40,9 +40,9 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
     }
 
     /**
-     * @psalm-param self::SORT_* $orderDirection
+     * @phpstan-param self::SORT_* $orderDirection
      *
-     * @psalm-return CalculationItemType[]
+     * @phpstan-return CalculationItemType[]
      */
     #[\Override]
     protected function getEntities(string $orderColumn = 'id', string $orderDirection = self::SORT_DESC): array
@@ -51,14 +51,14 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
     }
 
     /**
-     * @psalm-param CalculationItemType[] $items
+     * @phpstan-param CalculationItemType[] $items
      */
     #[\Override]
     protected function getItemsCount(array $items): int
     {
         return \array_reduce(
             $items,
-            /** @psalm-param CalculationItemType $item */
+            /** @phpstan-param CalculationItemType $item */
             function (int $carry, array $item): int {
                 foreach ($item['items'] as $child) {
                     $carry += $child['count'];

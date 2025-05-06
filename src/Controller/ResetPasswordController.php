@@ -120,7 +120,7 @@ class ResetPasswordController extends AbstractController
         }
 
         try {
-            /** @psalm-var User $user */
+            /** @var User $user */
             $user = $this->helper->validateTokenAndFetchUser($token);
         } catch (ResetPasswordExceptionInterface $e) {
             $this->service->handleException($request, $e);

@@ -18,7 +18,7 @@ use App\Repository\CalculationStateRepository;
 /**
  * Trait to get total of calculations by state.
  *
- * @psalm-import-type QueryCalculationType from CalculationStateRepository
+ * @phpstan-import-type QueryCalculationType from CalculationStateRepository
  */
 trait StateTotalsTrait
 {
@@ -26,9 +26,9 @@ trait StateTotalsTrait
     use MathTrait;
 
     /**
-     * @param QueryCalculationType[] $states
+     * @phpstan-param QueryCalculationType[] $states
      *
-     * @return array{
+     * @phpstan-return array{
      *     calculation_count: int,
      *     calculation_percent: float,
      *     items_amount: float,

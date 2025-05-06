@@ -26,6 +26,23 @@ class AES256EncryptorServiceTest extends TestCase
         $this->encryptor = new AES256EncryptorService('fake-key');
     }
 
+    public function testDecryptInvalid(): void
+    {
+        $data = 'invalid spaced data';
+        $actual = $this->encryptor->decrypt($data);
+        self::assertFalse($actual);
+    }
+
+    /**
+     * @throws \JsonException
+     */
+    public function testDecryptJsonInvalid(): void
+    {
+        $data = 'invalid spaced data';
+        $actual = $this->encryptor->decryptJson($data);
+        self::assertFalse($actual);
+    }
+
     public function testEncryptDecryptInt(): void
     {
         $expected = 145_145;

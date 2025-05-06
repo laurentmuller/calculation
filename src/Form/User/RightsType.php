@@ -55,7 +55,7 @@ class RightsType extends AbstractHelperType
 
     private function onPreSetData(PreSetDataEvent $event): void
     {
-        /** @psalm-var mixed $data */
+        /** @phpstan-var mixed $data */
         $data = $event->getData();
         $form = $event->getForm();
         if (!$this->service->hasRole($data, RoleInterface::ROLE_ADMIN)) {

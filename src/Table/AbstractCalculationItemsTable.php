@@ -19,8 +19,8 @@ use App\Utils\FileUtils;
 /**
  * Abstract Calculation table to display items.
  *
- * @psalm-import-type CalculationItemType from CalculationRepository
- * @psalm-import-type CalculationItemEntry from CalculationRepository
+ * @phpstan-import-type CalculationItemType from CalculationRepository
+ * @phpstan-import-type CalculationItemEntry from CalculationRepository
  */
 abstract class AbstractCalculationItemsTable extends AbstractTable implements \Countable
 {
@@ -49,7 +49,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      *
      * @return string the formatted items
      *
-     * @psalm-param CalculationItemEntry[] $items
+     * @phpstan-param CalculationItemEntry[] $items
      */
     abstract protected function formatItems(array $items): string;
 
@@ -65,9 +65,9 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      * @param string $orderColumn    the order column
      * @param string $orderDirection the order direction ('ASC' or 'DESC')
      *
-     * @psalm-param self::SORT_* $orderDirection
+     * @phpstan-param self::SORT_* $orderDirection
      *
-     * @psalm-return CalculationItemType[]
+     * @phpstan-return CalculationItemType[]
      */
     abstract protected function getEntities(string $orderColumn = 'id', string $orderDirection = self::SORT_DESC): array;
 
@@ -76,7 +76,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      *
      * @param array $items the invalid calculation items
      *
-     * @psalm-param CalculationItemType[] $items
+     * @phpstan-param CalculationItemType[] $items
      */
     abstract protected function getItemsCount(array $items): int;
 

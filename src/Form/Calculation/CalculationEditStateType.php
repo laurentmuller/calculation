@@ -93,7 +93,7 @@ class CalculationEditStateType extends AbstractEntityType
 
     private function onPreSetData(PreSetDataEvent $event): void
     {
-        /** @psalm-var Calculation $data */
+        /** @phpstan-var Calculation $data */
         $data = $event->getData();
         $options = [
             'expanded' => true,

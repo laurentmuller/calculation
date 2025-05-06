@@ -25,7 +25,7 @@ use Twig\Environment;
 /**
  * Chart to display calculations by months.
  *
- * @psalm-import-type CalculationByMonthType from CalculationRepository
+ * @phpstan-import-type CalculationByMonthType from CalculationRepository
  */
 class MonthChart extends AbstractHighchart
 {
@@ -138,7 +138,7 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @param CalculationByMonthType[] $series
+     * @phpstan-param CalculationByMonthType[] $series
      *
      * @return int[]
      */
@@ -160,7 +160,7 @@ class MonthChart extends AbstractHighchart
     /**
      * Only y and url values are returned.
      *
-     * @param CalculationByMonthType[] $series
+     * @phpstan-param CalculationByMonthType[] $series
      */
     private function getItemsSeries(array $series): array
     {
@@ -183,7 +183,7 @@ class MonthChart extends AbstractHighchart
     /**
      * The y value, the url and all data needed by the custom tooltip are returned.
      *
-     * @param CalculationByMonthType[] $series
+     * @phpstan-param CalculationByMonthType[] $series
      */
     private function getMarginsSeries(array $series): array
     {
@@ -228,7 +228,7 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @param CalculationByMonthType[] $series
+     * @phpstan-param CalculationByMonthType[] $series
      */
     private function getTotals(array $series): array
     {
@@ -271,7 +271,7 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @param CalculationByMonthType[] $series
+     * @phpstan-param CalculationByMonthType[] $series
      */
     private function setSeries(array $series): void
     {

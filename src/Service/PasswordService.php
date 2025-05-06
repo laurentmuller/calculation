@@ -24,7 +24,7 @@ use ZxcvbnPhp\Zxcvbn;
 /**
  * Service to validate a password with Zxcvbn.
  *
- * @psalm-type ScoreResultType = array{
+ * @phpstan-type ScoreResultType = array{
  *     score: int,
  *     warning?: string,
  *     suggestions?: string[]}
@@ -94,11 +94,11 @@ class PasswordService
     }
 
     /**
-     * @psalm-return ScoreResultType
+     * @phpstan-return ScoreResultType
      */
     private function getPasswordStrength(PasswordQuery $query): array
     {
-        /** @psalm-var array{score: int, feedback: array{warning: string, suggestions: string[]}} $result */
+        /** @phpstan-var array{score: int, feedback: array{warning: string, suggestions: string[]}} $result */
         $result = $this->getService()->passwordStrength($query->password, $query->getInputs());
 
         return \array_merge(
@@ -142,7 +142,7 @@ class PasswordService
     }
 
     /**
-     * @psalm-param ScoreResultType $results
+     * @phpstan-param ScoreResultType $results
      */
     private function validateScoreResults(array $results): ?array
     {

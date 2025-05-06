@@ -20,10 +20,10 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 /**
  * Service to detect and translate texts.
  *
- * @psalm-type TranslatorDetectType = array{
+ * @phpstan-type TranslatorDetectType = array{
  *     tag: string,
  *     name: string|null}
- * @psalm-type TranslatorTranslateType = array{
+ * @phpstan-type TranslatorTranslateType = array{
  *     source: string,
  *     target: string,
  *     from: TranslatorDetectType,
@@ -39,7 +39,7 @@ interface TranslatorServiceInterface
      *
      * @return array|false the detected language; false if not found, or if an error occurs
      *
-     * @psalm-return TranslatorDetectType|false
+     * @phpstan-return TranslatorDetectType|false
      */
     public function detect(string $text): array|false;
 
@@ -69,9 +69,7 @@ interface TranslatorServiceInterface
     /**
      * Returns if the last error is set.
      *
-     * @psalm-assert-if-true HttpClientError $this->getLastError()
-     *
-     * @psalm-api
+     * @phpstan-assert-if-true HttpClientError $this->getLastError()
      */
     public function hasLastError(): bool;
 
@@ -82,7 +80,7 @@ interface TranslatorServiceInterface
      *
      * @return array|false the translated text; false if an error occurs
      *
-     * @psalm-return TranslatorTranslateType|false
+     * @phpstan-return TranslatorTranslateType|false
      */
     public function translate(TranslateQuery $query): array|false;
 }

@@ -31,12 +31,12 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 abstract class AbstractEntityTransformer implements DataTransformerInterface
 {
     /**
-     * @psalm-var class-string<TEntity>
+     * @phpstan-var class-string<TEntity>
      */
     private readonly string $className;
 
     /**
-     * @psalm-param AbstractRepository<TEntity> $repository
+     * @phpstan-param AbstractRepository<TEntity> $repository
      */
     public function __construct(private readonly AbstractRepository $repository)
     {
@@ -46,7 +46,7 @@ abstract class AbstractEntityTransformer implements DataTransformerInterface
     /**
      * @param int|string|null $value
      *
-     * @psalm-return TEntity|null
+     * @phpstan-return TEntity|null
      */
     protected function toEntity(mixed $value): ?EntityInterface
     {

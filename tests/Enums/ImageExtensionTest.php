@@ -20,16 +20,16 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @psalm-import-type SaveOptionsType from ImageExtension
+ * @phpstan-import-type SaveOptionsType from ImageExtension
  */
 class ImageExtensionTest extends TestCase
 {
     /**
-     * @psalm-return \Generator<int, array{ImageExtension, string}>
+     * @phpstan-return \Generator<int, array{ImageExtension, string}>
      */
     public static function getCreateImages(): \Generator
     {
-        /** @psalm-var non-empty-string $dir */
+        /** @phpstan-var non-empty-string $dir */
         $dir = \realpath(__DIR__ . '/../files/images');
         yield [ImageExtension::BMP, $dir . '/example.bmp'];
         yield [ImageExtension::GIF, $dir . '/example.gif'];
@@ -42,7 +42,7 @@ class ImageExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{ImageExtension, string}>
+     * @phpstan-return \Generator<int, array{ImageExtension, string}>
      */
     public static function getFilters(): \Generator
     {
@@ -58,7 +58,7 @@ class ImageExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{ImageExtension, int}>
+     * @phpstan-return \Generator<int, array{ImageExtension, int}>
      */
     public static function getImageTypes(): \Generator
     {
@@ -74,27 +74,24 @@ class ImageExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{ImageExtension, SaveOptionsType}>
-     *
-     * @phpstan-return \Generator<int, array<ImageExtension, array>>
+     * @phpstan-return \Generator<int, array{ImageExtension, SaveOptionsType}>
      */
     public static function getInvalidOptions(): \Generator
     {
         /**
-         * @psalm-var SaveOptionsType $options
+         * @phpstan-var SaveOptionsType $options
          *
          * @phpstan-ignore varTag.nativeType
          */
         $options = ['fake' => 100];
         $values = ImageExtension::cases();
         foreach ($values as $value) {
-            /* @phpstan-ignore generator.valueType */
             yield [$value, $options];
         }
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: int, 1?: ImageExtension}>
+     * @phpstan-return \Generator<int, array{0: int, 1?: ImageExtension}>
      */
     public static function getTryFromTypes(): \Generator
     {
@@ -110,7 +107,7 @@ class ImageExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{ImageExtension, int}>
+     * @phpstan-return \Generator<int, array{ImageExtension, int}>
      */
     public static function getTypes(): \Generator
     {
@@ -126,7 +123,7 @@ class ImageExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: ImageExtension, 1: SaveOptionsType, 2?: false}>
+     * @phpstan-return \Generator<int, array{0: ImageExtension, 1: SaveOptionsType, 2?: false}>
      */
     public static function getValidOptions(): \Generator
     {
@@ -150,7 +147,7 @@ class ImageExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{ImageExtension, string}>
+     * @phpstan-return \Generator<int, array{ImageExtension, string}>
      */
     public static function getValues(): \Generator
     {
@@ -204,7 +201,7 @@ class ImageExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-param SaveOptionsType $options
+     * @phpstan-param SaveOptionsType $options
      */
     #[DataProvider('getInvalidOptions')]
     public function testInvalidOptions(ImageExtension $extension, array $options): void
@@ -251,7 +248,7 @@ class ImageExtensionTest extends TestCase
     }
 
     /**
-     * @psalm-param SaveOptionsType $options
+     * @phpstan-param SaveOptionsType $options
      */
     #[DataProvider('getValidOptions')]
     public function testValidOptions(ImageExtension $extension, array $options, bool $expected = true): void

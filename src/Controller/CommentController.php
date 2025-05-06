@@ -42,7 +42,7 @@ class CommentController extends AbstractController
     #[GetPost(path: '/comment', name: 'comment')]
     public function invoke(Request $request, MailerService $service, LoggerInterface $logger): Response
     {
-        /** @psalm-var User|Address $from */
+        /** @var User|Address $from */
         $from = $this->getUser() ?? $this->getAddressFrom();
         $comment = new Comment(false);
         $comment->setSubject($this->getApplicationName())

@@ -24,7 +24,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 /**
  * The table column.
  *
- * @psalm-type EntityType = EntityInterface|array{id: int, ...}
+ * @phpstan-type EntityType = EntityInterface|array{id: int, ...}
  */
 class Column implements \Stringable, SortModeInterface
 {
@@ -68,7 +68,7 @@ class Column implements \Stringable, SortModeInterface
      *
      * @var string|callable|null
      *
-     * @psalm-var string|callable(mixed, EntityType): string|null
+     * @phpstan-var string|callable(mixed, EntityType): string|null
      */
     private $fieldFormatter;
 
@@ -80,7 +80,7 @@ class Column implements \Stringable, SortModeInterface
     /**
      * The sort order.
      *
-     * @psalm-var self::SORT_*
+     * @phpstan-var self::SORT_*
      */
     private string $order = self::SORT_ASC;
 
@@ -189,9 +189,6 @@ class Column implements \Stringable, SortModeInterface
         return $result;
     }
 
-    /**
-     * @psalm-api
-     */
     public function getCellFormatter(): ?string
     {
         return $this->cellFormatter;
@@ -220,7 +217,7 @@ class Column implements \Stringable, SortModeInterface
     /**
      * Gets the default sorting order.
      *
-     * @psalm-return self::SORT_*
+     * @phpstan-return self::SORT_*
      */
     public function getOrder(): string
     {
@@ -273,12 +270,12 @@ class Column implements \Stringable, SortModeInterface
     /**
      * Map the given entity or array to a string value using this field.
      *
-     * @psalm-param EntityType $objectOrArray the entity or array to map
+     * @phpstan-param EntityType $objectOrArray the entity or array to map
      */
     public function mapValue(EntityInterface|array $objectOrArray): string
     {
         $property = \is_array($objectOrArray) ? $this->property : $this->field;
-        /** @psalm-var mixed $value */
+        /** @phpstan-var mixed $value */
         $value = self::getAccessor()->getValue($objectOrArray, $property);
 
         return $this->formatValue($objectOrArray, $value);
@@ -321,7 +318,7 @@ class Column implements \Stringable, SortModeInterface
     }
 
     /**
-     * @psalm-param string|callable(mixed, EntityType): string|null $fieldFormatter
+     * @phpstan-param string|callable(mixed, EntityType): string|null $fieldFormatter
      */
     public function setFieldFormatter(string|callable|null $fieldFormatter): self
     {
@@ -388,8 +385,8 @@ class Column implements \Stringable, SortModeInterface
     }
 
     /**
-     * @psalm-param EntityType $objectOrArray
-     * @psalm-param mixed      $value
+     * @phpstan-param EntityType $objectOrArray
+     * @phpstan-param mixed      $value
      */
     private function formatValue(EntityInterface|array $objectOrArray, mixed $value): string
     {

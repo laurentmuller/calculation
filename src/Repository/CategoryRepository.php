@@ -23,7 +23,7 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @template-extends AbstractRepository<Category>
  *
- * @psalm-type DropDownType = array<string, array{id: int, categories: array<string, int>}>
+ * @phpstan-type DropDownType = array<string, array{id: int, categories: array<string, int>}>
  */
 class CategoryRepository extends AbstractRepository
 {
@@ -76,7 +76,7 @@ class CategoryRepository extends AbstractRepository
      *
      * <b>Note:</b> Only categories with at least one product are returned.
      *
-     * @psalm-return DropDownType
+     * @phpstan-return DropDownType
      */
     public function getDropDownProducts(): array
     {
@@ -93,7 +93,7 @@ class CategoryRepository extends AbstractRepository
      *
      * @return array an array grouped by group name with the categories
      *
-     * @psalm-return DropDownType
+     * @phpstan-return DropDownType
      */
     public function getDropDownTasks(): array
     {
@@ -109,7 +109,7 @@ class CategoryRepository extends AbstractRepository
      * @param int            $filterType the filter type to apply. One of the FILTER_* constants.
      * @param literal-string $alias      the entity alias
      *
-     * @psalm-param self::FILTER_* $filterType
+     * @phpstan-param self::FILTER_* $filterType
      */
     public function getQueryBuilderByGroup(int $filterType = self::FILTER_NONE, string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -184,11 +184,11 @@ class CategoryRepository extends AbstractRepository
     }
 
     /**
-     * @psalm-return DropDownType
+     * @phpstan-return DropDownType
      */
     private function mergeDropDown(QueryBuilder $builder): array
     {
-        /** @psalm-var array<array{
+        /** @phpstan-var array<array{
          *     group: string,
          *     groupId: int,
          *     code: string,
@@ -199,7 +199,7 @@ class CategoryRepository extends AbstractRepository
             return [];
         }
 
-        /** @psalm-var DropDownType $result */
+        /** @phpstan-var DropDownType $result */
         $result = [];
         foreach ($values as $value) {
             $key = $value['group'];

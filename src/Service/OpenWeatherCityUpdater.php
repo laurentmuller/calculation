@@ -27,7 +27,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Service to import OpenWeatherMap cities.
  *
- * @psalm-type OpenWeatherCityType = array{
+ * @phpstan-type OpenWeatherCityType = array{
  *     id: float,
  *     name: string,
  *     country: string,
@@ -77,7 +77,7 @@ readonly class OpenWeatherCityUpdater
     /**
      * Import data from the given file.
      *
-     * @psalm-return array{result: bool, message: string, valid: int, error: int}
+     * @phpstan-return array{result: bool, message: string, valid: int, error: int}
      */
     public function import(UploadedFile $file): array
     {
@@ -118,7 +118,7 @@ readonly class OpenWeatherCityUpdater
     }
 
     /**
-     * @psalm-return array{result: bool, message: string, valid: int, error: int}
+     * @phpstan-return array{result: bool, message: string, valid: int, error: int}
      */
     private function falseResult(string $message, array $parameters = []): array
     {
@@ -131,7 +131,7 @@ readonly class OpenWeatherCityUpdater
     }
 
     /**
-     * @psalm-return OpenWeatherCityType[]|false
+     * @phpstan-return OpenWeatherCityType[]|false
      */
     private function getFileContent(UploadedFile $file): array|false
     {
@@ -148,7 +148,7 @@ readonly class OpenWeatherCityUpdater
         }
 
         try {
-            /** @psalm-var OpenWeatherCityType[] */
+            /** @phpstan-var OpenWeatherCityType[] */
             return StringUtils::decodeJson($content);
         } catch (\InvalidArgumentException) {
             return false;
@@ -156,9 +156,9 @@ readonly class OpenWeatherCityUpdater
     }
 
     /**
-     * @psalm-param OpenWeatherCityType[] $cities
+     * @phpstan-param OpenWeatherCityType[] $cities
      *
-     * @psalm-return array{0: int, 1: int}
+     * @phpstan-return array{0: int, 1: int}
      */
     private function insertCities(OpenWeatherDatabase $db, array $cities): array
     {

@@ -33,7 +33,7 @@ readonly class PdfTextColor extends PdfRgbColor implements PdfDocumentUpdaterInt
      */
     public static function default(): static
     {
-        /** @psalm-var static */
+        /** @phpstan-var static */
         return static::black();
     }
 }

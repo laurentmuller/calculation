@@ -19,14 +19,14 @@ use App\Traits\DuplicateItemsTrait;
 /**
  * Spreadsheet document for the list of calculations with duplicate items.
  *
- * @psalm-import-type CalculationItemType from \App\Repository\CalculationRepository
+ * @phpstan-import-type CalculationItemType from \App\Repository\CalculationRepository
  */
 class CalculationsDuplicateDocument extends AbstractCalculationItemsDocument
 {
     use DuplicateItemsTrait;
 
     /**
-     * @psalm-param CalculationItemType[] $entities
+     * @phpstan-param CalculationItemType[] $entities
      */
     public function __construct(AbstractController $controller, array $entities)
     {

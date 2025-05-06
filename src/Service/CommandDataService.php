@@ -16,9 +16,9 @@ namespace App\Service;
 /**
  * Service to generate and validate command parameters.
  *
- * @psalm-import-type CommandType from CommandService
- * @psalm-import-type ArgumentType from CommandService
- * @psalm-import-type OptionType from CommandService
+ * @phpstan-import-type CommandType from CommandService
+ * @phpstan-import-type ArgumentType from CommandService
+ * @phpstan-import-type OptionType from CommandService
  */
 class CommandDataService
 {
@@ -35,11 +35,9 @@ class CommandDataService
     /**
      * Create the model (names and default values) for the given command.
      *
-     * @psalm-param CommandType $command
+     * @phpstan-param CommandType $command
      *
-     * @psalm-return array<string, array|scalar|null>
-     *
-     * @phpstan-param array $command
+     * @phpstan-return array<string, array|scalar|null>
      */
     public function createData(array $command): array
     {
@@ -61,12 +59,10 @@ class CommandDataService
     /**
      * Create the command parameters from the given command and data.
      *
-     * @psalm-param CommandType                      $command
-     * @psalm-param array<string, array|scalar|null> $data
+     * @phpstan-param CommandType $command
+     * @phpstan-param array<string, array|scalar|null> $data
      *
      * @psalm-return array<string, array|scalar|null>
-     *
-     * @phpstan-param array $command
      *
      * @throws \LogicException if a parameter name is not found
      */
@@ -116,12 +112,9 @@ class CommandDataService
     /**
      * Validate the model (names) for the given command.
      *
-     * @psalm-param CommandType $command
-     * @psalm-param array<string, array|scalar|null> $data
+     * @phpstan-param CommandType $command
      *
-     * @psalm-return array<string, array|scalar|null>
-     *
-     * @phpstan-param array $command
+     * @phpstan-return array<array-key, mixed>
      */
     public function validateData(array $command, array $data): array
     {
@@ -129,9 +122,7 @@ class CommandDataService
     }
 
     /**
-     * @psalm-param CommandType $command
-     *
-     * @phpstan-param array $command
+     * @phpstan-param CommandType $command
      *
      * @throws \LogicException if the argument name is not found
      */
@@ -147,11 +138,9 @@ class CommandDataService
     }
 
     /**
-     * @psalm-param CommandType $command
+     * @phpstan-param CommandType $command
      *
-     * @phpstan-param array $command
-     *
-     * @psalm-return array|scalar|null
+     * @phpstan-return array|scalar|null
      */
     private function getDefaultValue(array $command, string $key): mixed
     {
@@ -173,9 +162,7 @@ class CommandDataService
     }
 
     /**
-     * @psalm-param CommandType $command
-     *
-     * @phpstan-param array $command
+     * @phpstan-param CommandType $command
      *
      * @throws \LogicException if the option name is not found
      */
@@ -211,9 +198,7 @@ class CommandDataService
     }
 
     /**
-     * @psalm-param CommandType $command
-     *
-     * @phpstan-param array $command
+     * @phpstan-param CommandType $command
      */
     private function validateKey(string $key, array $command): bool
     {

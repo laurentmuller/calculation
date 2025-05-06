@@ -22,11 +22,11 @@ use fpdf\Traits\PdfEllipseTrait;
 /**
  * Trait to draw chart legends.
  *
- * @psalm-import-type ColorStringType from PdfChartInterface
+ * @phpstan-import-type ColorStringType from PdfChartInterface
  *
- * @psalm-require-extends \App\Report\AbstractReport
+ * @phpstan-require-extends \App\Report\AbstractReport
  *
- * @psalm-require-implements PdfChartInterface
+ * @phpstan-require-implements PdfChartInterface
  */
 trait PdfChartLegendTrait
 {
@@ -166,7 +166,7 @@ trait PdfChartLegendTrait
     }
 
     /**
-     * @psalm-param ColorStringType $legend
+     * @phpstan-param ColorStringType $legend
      */
     private function applyLegendColor(array $legend): void
     {
@@ -184,9 +184,9 @@ trait PdfChartLegendTrait
     }
 
     /**
-     * @psalm-param non-empty-array<ColorStringType> $legends
+     * @phpstan-param non-empty-array<ColorStringType> $legends
      *
-     * @psalm-return non-empty-array<float>
+     * @phpstan-return non-empty-array<float>
      */
     private function getLegendWidths(array $legends): array
     {
@@ -196,7 +196,7 @@ trait PdfChartLegendTrait
     }
 
     /**
-     * @psalm-param ColorStringType $legend
+     * @phpstan-param ColorStringType $legend
      */
     private function outputLegend(float $x, float $y, float $radius, array $legend, bool $circle = true): void
     {

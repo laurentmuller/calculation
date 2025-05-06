@@ -28,7 +28,7 @@ use Doctrine\ORM\Tools\Pagination\CountWalker;
  * @template TEntity of EntityInterface
  * @template TRepository of AbstractRepository<TEntity>
  *
- * @psalm-import-type EntityType from Column
+ * @phpstan-import-type EntityType from Column
  */
 abstract class AbstractEntityTable extends AbstractTable
 {
@@ -43,7 +43,7 @@ abstract class AbstractEntityTable extends AbstractTable
     private const JOIN_PART = 'join';
 
     /**
-     * @psalm-param TRepository $repository
+     * @phpstan-param TRepository $repository
      */
     public function __construct(private readonly AbstractRepository $repository)
     {
@@ -113,7 +113,7 @@ abstract class AbstractEntityTable extends AbstractTable
      * @return array<string, string> an array where each key is the field name, and the value is the order
      *                               direction ('asc' or 'desc')
      *
-     * @psalm-return array<string, self::SORT_*>
+     * @phpstan-return array<string, self::SORT_*>
      */
     protected function getDefaultOrder(): array
     {
@@ -121,7 +121,7 @@ abstract class AbstractEntityTable extends AbstractTable
     }
 
     /**
-     * @psalm-return TRepository
+     * @phpstan-return TRepository
      */
     protected function getRepository(): AbstractRepository
     {
@@ -133,7 +133,7 @@ abstract class AbstractEntityTable extends AbstractTable
     {
         $results = parent::handleQuery($query);
         $builder = $this->createQueryBuilder();
-        /** @psalm-var literal-string $alias */
+        /** @phpstan-var literal-string $alias */
         $alias = $builder->getRootAliases()[0];
 
         $results->totalNotFiltered = $results->filtered = $this->count();
@@ -149,7 +149,7 @@ abstract class AbstractEntityTable extends AbstractTable
             $q->setHint(CountWalker::HINT_DISTINCT, false);
         }
 
-        /** @psalm-var EntityType[] $entities */
+        /** @phpstan-var EntityType[] $entities */
         $entities = $q->getResult();
         $this->addSelection($entities, $query, $alias);
         $results->rows = $this->mapEntities($entities);
@@ -196,9 +196,9 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Add the selected entity if any and if it is missing.
      *
-     * @psalm-param EntityType[]   $entities the entities to search in or to update
-     * @psalm-param DataQuery      $query    the query to get values from
-     * @psalm-param literal-string $alias    the entity alias
+     * @phpstan-param EntityType[]   $entities the entities to search in or to update
+     * @phpstan-param DataQuery      $query    the query to get values from
+     * @phpstan-param literal-string $alias    the entity alias
      */
     private function addSelection(array &$entities, DataQuery $query, string $alias): void
     {
@@ -209,13 +209,13 @@ abstract class AbstractEntityTable extends AbstractTable
 
         if ($this->anyMatch(
             $entities,
-            /** @psalm-param EntityType $current */
+            /** @phpstan-param EntityType $current */
             fn (EntityInterface|array $current): bool => $id === $this->getEntityId($current) // @phpstan-ignore argument.type
         )) {
             return;
         }
 
-        /** @psalm-var EntityType|null $entity */
+        /** @phpstan-var EntityType|null $entity */
         $entity = $this->createQueryBuilder($alias)
             ->where($alias . '.id = :id')
             ->setParameter('id', $id, Types::INTEGER)
@@ -249,7 +249,7 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Gets the entity identifier.
      *
-     * @psalm-param EntityType $entity
+     * @phpstan-param EntityType $entity
      */
     private function getEntityId(array|EntityInterface $entity): ?int
     {
@@ -275,8 +275,8 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Update the clause order by.
      *
-     * @psalm-param array<string, string> $orderBy
-     * @psalm-param DataQuery|Column|array<string, string> $value
+     * @phpstan-param array<string, string> $orderBy
+     * @phpstan-param DataQuery|Column|array<string, string> $value
      */
     private function updateOrderBy(array &$orderBy, DataQuery|Column|array $value, string $alias): void
     {
@@ -303,7 +303,7 @@ abstract class AbstractEntityTable extends AbstractTable
     {
         $builder->resetDQLPart(self::GROUP_BY_PART);
 
-        /** @psalm-var array<string, ?Join[]> $part */
+        /** @phpstan-var array<string, ?Join[]> $part */
         $part = $builder->getDQLPart(self::JOIN_PART);
         if (!isset($part[$alias])) {
             return $builder;

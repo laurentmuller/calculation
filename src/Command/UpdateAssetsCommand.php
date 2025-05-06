@@ -26,7 +26,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 /**
  * Command to update JavaScript and CSS dependencies.
  *
- * @psalm-type PluginType = array{
+ * @phpstan-type PluginType = array{
  *     name: string,
  *     display?: string,
  *     version: string,
@@ -36,16 +36,12 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  *     update?: bool,
  *     prefix?: string,
  *     files: string[]}
- * @psalm-type CopyEntryType = array{
- *     source: string,
- *     target: string,
- *     entries: string[]}
- * @psalm-type SourceType = array{
+ * @phpstan-type SourceType = array{
  *     source: string,
  *     format: string,
  *     versionUrl?: string,
  *     versionPaths?: string[]}
- * @psalm-type ConfigurationType = array{
+ * @phpstan-type ConfigurationType = array{
  *     target: string,
  *     plugins: PluginType[],
  *     sources: array<string, SourceType>,
@@ -231,7 +227,7 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @psalm-param string[] $paths
+     * @param string[] $paths
      */
     private function checkVersion(string $url, array $paths, string $name, string $version, string $display): void
     {
@@ -249,7 +245,7 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @psalm-param array<string, string> $prefixes
+     * @param array<string, string> $prefixes
      */
     private function copyFile(string $sourceFile, string $targetFile, string $version, array $prefixes): bool
     {
@@ -278,26 +274,26 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @psalm-param PluginType[] $plugins
+     * @phpstan-param PluginType[] $plugins
      */
     private function countFiles(array $plugins): int
     {
         $plugins = \array_filter(
             $plugins,
-            /** @psalm-param PluginType $plugin */
+            /** @phpstan-param PluginType $plugin */
             fn (array $plugin): bool => !$this->isPluginDisabled($plugin)
         );
 
         return \array_reduce(
             $plugins,
-            /** @psalm-param PluginType $plugin */
+            /** @phpstan-param PluginType $plugin */
             fn (int $carry, array $plugin): int => $carry + \count($plugin['files']),
             0
         );
     }
 
     /**
-     * @psalm-param  ConfigurationType $configuration
+     * @phpstan-param  ConfigurationType $configuration
      */
     private function dryRun(array $configuration, string $target): int
     {
@@ -348,7 +344,7 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @psalm-param array<string, string> $prefixes
+     * @param array<string, string> $prefixes
      */
     private function dumpFile(string $content, string $targetFile, string $version, array $prefixes): bool
     {
@@ -395,11 +391,11 @@ class UpdateAssetsCommand extends Command
                 if (!isset($content[$path])) {
                     return null;
                 }
-                /** @psalm-var array|string $content */
+                /** @var array|string $content */
                 $content = $content[$path];
             }
 
-            /** @psalm-var string */
+            /** @phpstan-var string */
             return $content;
         } catch (\Exception) {
             return null;
@@ -418,7 +414,7 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @psalm-param PluginType $plugin
+     * @phpstan-param PluginType $plugin
      */
     private function getSourceFile(string $source, string $format, array $plugin, string $file): string
     {
@@ -433,7 +429,7 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @psalm-param PluginType $plugin
+     * @phpstan-param PluginType $plugin
      */
     private function getTargetFile(string $target, array $plugin, string $file): string
     {
@@ -459,7 +455,7 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @psalm-param PluginType $plugin
+     * @phpstan-param PluginType $plugin
      */
     private function isPluginDisabled(array $plugin): bool
     {
@@ -467,7 +463,7 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @psalm-param PluginType $plugin
+     * @phpstan-param PluginType $plugin
      */
     private function isPluginUpdate(array $plugin): bool
     {
@@ -475,7 +471,7 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @psalm-return ConfigurationType|null
+     * @phpstan-return ConfigurationType|null
      */
     private function loadConfiguration(string $publicDir): ?array
     {
@@ -486,7 +482,7 @@ class UpdateAssetsCommand extends Command
             return null;
         }
 
-        /** @psalm-var ConfigurationType|null $configuration */
+        /** @phpstan-var ConfigurationType|null $configuration */
         $configuration = $this->loadJson($vendorFile);
 
         if (!\is_array($configuration)) {
@@ -522,7 +518,7 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @psalm-param string[]|string $properties
+     * @param string[]|string $properties
      */
     private function propertyExists(array $var, array|string $properties, bool $log = false): bool
     {

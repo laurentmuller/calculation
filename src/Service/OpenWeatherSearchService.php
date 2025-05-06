@@ -21,7 +21,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 /**
  * Service to search cities for OpenWeatherMap.
  *
- * @psalm-import-type OpenWeatherCityType from OpenWeatherDatabase
+ * @phpstan-import-type OpenWeatherCityType from OpenWeatherDatabase
  */
 class OpenWeatherSearchService
 {
@@ -47,7 +47,7 @@ class OpenWeatherSearchService
      *
      * @return array|false the city, if found; false otherwise
      *
-     * @psalm-return OpenWeatherCityType|false
+     * @phpstan-return OpenWeatherCityType|false
      */
     public function findById(int $id): array|false
     {
@@ -68,7 +68,7 @@ class OpenWeatherSearchService
      * @param string $name  the name of the city to search for
      * @param int    $limit the maximum number of cities to return
      *
-     * @psalm-return array<int, OpenWeatherCityType>
+     * @phpstan-return array<int, OpenWeatherCityType>
      */
     public function search(string $name, int $limit = self::DEFAULT_LIMIT): array
     {
@@ -98,7 +98,7 @@ class OpenWeatherSearchService
     }
 
     /**
-     * @psalm-return array<int, OpenWeatherCityType>
+     * @phpstan-return array<int, OpenWeatherCityType>
      */
     private function doSearch(string $name, int $limit): array
     {
@@ -110,7 +110,7 @@ class OpenWeatherSearchService
 
             $this->formatter->update($results);
 
-            /** @psalm-var array<int, OpenWeatherCityType> */
+            /** @phpstan-var array<int, OpenWeatherCityType> */
             return $results;
         });
     }

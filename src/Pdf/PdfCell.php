@@ -108,6 +108,8 @@ class PdfCell
 
     /**
      * Return a value indicating if this link is valid.
+     *
+     * @phpstan-assert-if-true (non-empty-string|positive-int) $this->link
      */
     public function hasLink(): bool
     {

@@ -90,7 +90,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     /**
      * @var Collection<int, UserProperty>
      *
-     * @psalm-var ArrayCollection<int, UserProperty>
+     * @phpstan-var ArrayCollection<int, UserProperty>
      */
     #[ORM\OneToMany(
         targetEntity: UserProperty::class,
@@ -369,7 +369,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
      */
     public function getUsername(): string
     {
-        /** @psalm-var non-empty-string */
+        /** @phpstan-var non-empty-string */
         return (string) $this->username;
     }
 

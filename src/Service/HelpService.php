@@ -24,28 +24,28 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Service to provide help.
  *
- * @psalm-type HelpActionType = array{
+ * @phpstan-type HelpActionType = array{
  *     id: string,
  *     icon: string,
  *     description: string,
  *     action?: string}
- * @psalm-type HelpLink = array{
+ * @phpstan-type HelpLink = array{
  *     id?: string,
  *     type?: 'dialog'|'entity',
  *     href?: string,
  *     text?: string}
- * @psalm-type HelpForbiddenType = array{
+ * @phpstan-type HelpForbiddenType = array{
  *     image: string|null,
  *     text:string|null,
  *     action: HelpActionType|null}
- * @psalm-type HelpFieldType = array{
+ * @phpstan-type HelpFieldType = array{
  *      name: string,
  *      description: string|null,
  *      type?: string,
  *      length?: int,
  *      required?: bool,
  *      entity?: string}
- * @psalm-type HelpDialogType = array{
+ * @phpstan-type HelpDialogType = array{
  *      id: string,
  *      description: string|null,
  *      name?: string,
@@ -63,7 +63,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *      fields?: HelpFieldType[],
  *      details?: string[],
  *      links?: HelpLink[]}
- * @psalm-type HelpEntityType = array{
+ * @phpstan-type HelpEntityType = array{
  *      id: string,
  *      icon: string,
  *      name?: string,
@@ -73,16 +73,16 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *      fields: HelpFieldType[]|null,
  *      editActions: HelpActionType|null,
  *      links?: HelpLink[]}
- * @psalm-type HelpMenuType = array{
+ * @phpstan-type HelpMenuType = array{
  *      id: string,
  *      description: string|null,
  *      menus: array|null,
  *      action?: string}
- * @psalm-type HelpMainMenuType = array{
+ * @phpstan-type HelpMainMenuType = array{
  *      image: string|null,
  *      description: string|null,
  *      menus: HelpMenuType[]}
- * @psalm-type HelpContentType = array{
+ * @phpstan-type HelpContentType = array{
  *      actions: array<string, HelpActionType>,
  *      dialogs: array<string, HelpDialogType>,
  *      entities: array<string, HelpEntityType>,
@@ -118,7 +118,7 @@ class HelpService
      *
      * @param string $id the action identifier to search for
      *
-     * @psalm-return HelpActionType|null
+     * @phpstan-return HelpActionType|null
      */
     public function findAction(string $id): ?array
     {
@@ -132,7 +132,7 @@ class HelpService
      *
      * @return array|null the dialog, if found; null otherwise
      *
-     * @psalm-return HelpDialogType|null
+     * @phpstan-return HelpDialogType|null
      */
     public function findDialog(string $id): ?array
     {
@@ -146,9 +146,9 @@ class HelpService
      *
      * @return array|null the entity, if found; null otherwise
      *
-     * @psalm-param string|HelpDialogType|null $id
+     * @phpstan-param string|HelpDialogType|null $id
      *
-     * @psalm-return HelpEntityType|null
+     * @phpstan-return HelpEntityType|null
      */
     public function findEntity(string|array|null $id = null): ?array
     {
@@ -165,7 +165,7 @@ class HelpService
     /**
      * Gets actions.
      *
-     * @psalm-return array<string, HelpActionType>
+     * @phpstan-return array<string, HelpActionType>
      */
     public function getActions(): array
     {
@@ -175,7 +175,7 @@ class HelpService
     /**
      * Gets the dialogs.
      *
-     * @psalm-return array<string, HelpDialogType>
+     * @phpstan-return array<string, HelpDialogType>
      */
     public function getDialogs(): array
     {
@@ -183,9 +183,7 @@ class HelpService
     }
 
     /**
-     * @psalm-return array<string, HelpDialogType[]>
-     *
-     * @psalm-api
+     * @phpstan-return array<string, HelpDialogType[]>
      */
     public function getDialogsByGroup(): array
     {
@@ -197,10 +195,10 @@ class HelpService
         return \array_reduce(
             $dialogs,
             /**
-             * @psalm-param array<string, HelpDialogType[]> $carry
-             * @psalm-param HelpDialogType $dialog
+             * @phpstan-param array<string, HelpDialogType[]> $carry
+             * @phpstan-param HelpDialogType $dialog
              *
-             * @psalm-return array<string, HelpDialogType[]>
+             * @phpstan-return array<string, HelpDialogType[]>
              */
             function (array $carry, array $dialog): array {
                 $key = $dialog['group'] ?? '';
@@ -215,7 +213,7 @@ class HelpService
     /**
      * Gets the entities.
      *
-     * @psalm-return array<string, HelpEntityType>
+     * @phpstan-return array<string, HelpEntityType>
      */
     public function getEntities(): array
     {
@@ -233,12 +231,12 @@ class HelpService
     /**
      * Gets the full help content.
      *
-     * @psalm-return HelpContentType
+     * @phpstan-return HelpContentType
      */
     public function getHelp(): array
     {
         try {
-            /** @psalm-var HelpContentType */
+            /** @phpstan-var HelpContentType */
             return $this->cache->get('help', fn (): array => $this->loadHelp());
         } catch (\InvalidArgumentException) {
             return [
@@ -265,7 +263,7 @@ class HelpService
     /**
      * Gets the main (root) menu.
      *
-     * @psalm-return HelpMainMenuType
+     * @phpstan-return HelpMainMenuType
      */
     public function getMainMenu(): array
     {
@@ -277,7 +275,7 @@ class HelpService
      *
      * @return array the main menus, if found; null otherwise
      *
-     * @psalm-return HelpMenuType[]
+     * @phpstan-return HelpMenuType[]
      */
     public function getMainMenus(): array
     {
@@ -293,7 +291,7 @@ class HelpService
     /**
      * Merge the current item with an action, if applicable.
      *
-     * @psalm-param array{action?: string, ...} $item
+     * @phpstan-param array{action?: string, ...} $item
      */
     public function mergeAction(array $item): array
     {
@@ -309,11 +307,11 @@ class HelpService
     }
 
     /**
-     * Sort the given array by 'name' index.
+     * Sort the given array by the 'name' index.
      *
-     * @psalm-template T of array{name?: string, ...}
+     * @phpstan-template T of array{name?: string, ...}
      *
-     * @psalm-param array<array-key, T> $array
+     * @phpstan-param array<array-key, T> $array
      */
     public function sortByName(array &$array): void
     {
@@ -321,7 +319,7 @@ class HelpService
     }
 
     /**
-     * @psalm-param HelpDialogType $dialog
+     * @phpstan-param HelpDialogType $dialog
      */
     private function getDialogGroup(array $dialog): string
     {
@@ -336,11 +334,11 @@ class HelpService
     }
 
     /**
-     * @psalm-return HelpContentType
+     * @phpstan-return HelpContentType
      */
     private function loadHelp(): array
     {
-        /** @psalm-var HelpContentType $help */
+        /** @phpstan-var HelpContentType $help */
         $help = FileUtils::decodeJson($this->file);
         $entities = $help['entities'];
         if ([] !== $entities) {
@@ -355,9 +353,9 @@ class HelpService
     }
 
     /**
-     * @psalm-param HelpDialogType[] $dialogs
+     * @phpstan-param HelpDialogType[] $dialogs
      *
-     * @psalm-return array<string, HelpDialogType>
+     * @phpstan-return array<string, HelpDialogType>
      */
     private function updateDialogs(array $dialogs): array
     {
@@ -370,8 +368,8 @@ class HelpService
         \usort(
             $dialogs,
             /**
-             * @psalm-param HelpDialogType $a
-             * @psalm-param HelpDialogType $b
+             * @phpstan-param HelpDialogType $a
+             * @phpstan-param HelpDialogType $b
              */
             function (array $a, array $b): int {
                 $result = \strnatcmp($a['group'] ?? '', $b['group'] ?? '');
@@ -397,15 +395,15 @@ class HelpService
         /** @phpstan-var array<string, HelpDialogType> */
         return $this->mapToKeyValue(
             $dialogs,
-            /** @psalm-param HelpDialogType $dialog */
+            /** @phpstan-param HelpDialogType $dialog */
             fn (array $dialog): array => [$dialog['id'] => $dialog]
         );
     }
 
     /**
-     * @psalm-param HelpEntityType[] $entities
+     * @phpstan-param HelpEntityType[] $entities
      *
-     * @psalm-return array<string, HelpEntityType>
+     * @phpstan-return array<string, HelpEntityType>
      */
     private function updateEntities(array $entities): array
     {
@@ -417,7 +415,7 @@ class HelpService
         /** @phpstan-var array<string, HelpEntityType> */
         return $this->mapToKeyValue(
             $entities,
-            /** @psalm-param HelpEntityType $entity  */
+            /** @phpstan-param HelpEntityType $entity  */
             fn (array $entity): array => [$entity['id'] => $entity]
         );
     }

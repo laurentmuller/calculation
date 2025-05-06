@@ -36,7 +36,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Report for calculations by states.
  *
- * @psalm-import-type QueryCalculationType from \App\Repository\CalculationStateRepository
+ * @phpstan-import-type QueryCalculationType from \App\Repository\CalculationStateRepository
  *
  * @extends AbstractArrayReport<QueryCalculationType>
  */
@@ -46,12 +46,12 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     use PdfPieChartTrait;
     use StateTotalsTrait;
 
-    /** @psalm-var QueryCalculationType|null */
+    /** @phpstan-var QueryCalculationType|null */
     private ?array $currentEntity = null;
     private float $minMargin;
 
     /**
-     * @psalm-param QueryCalculationType[] $entities
+     * @phpstan-param QueryCalculationType[] $entities
      */
     public function __construct(
         AbstractController $controller,
@@ -125,7 +125,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     }
 
     /**
-     * @psalm-param QueryCalculationType $entity
+     * @phpstan-param QueryCalculationType $entity
      */
     private function applyFillColor(array $entity): bool
     {
@@ -183,7 +183,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     }
 
     /**
-     * @psalm-param \NumberFormatter::ROUND_* $roundingMode
+     * @phpstan-param \NumberFormatter::ROUND_* $roundingMode
      */
     private function getPercentCell(
         float $value,
@@ -212,7 +212,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     }
 
     /**
-     * @psalm-param QueryCalculationType[] $entities
+     * @phpstan-param QueryCalculationType[] $entities
      */
     private function renderChart(array $entities): void
     {
@@ -235,7 +235,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     }
 
     /**
-     * @psalm-param QueryCalculationType[] $entities
+     * @phpstan-param QueryCalculationType[] $entities
      */
     private function renderTable(array $entities): void
     {

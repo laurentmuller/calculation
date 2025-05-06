@@ -19,7 +19,7 @@ use App\Traits\EmptyItemsTrait;
 /**
  * Report for calculations with empty items.
  *
- * @psalm-import-type CalculationItemType from \App\Repository\CalculationRepository
+ * @phpstan-import-type CalculationItemType from \App\Repository\CalculationRepository
  */
 class CalculationsEmptyReport extends AbstractCalculationItemsReport
 {
@@ -36,7 +36,7 @@ class CalculationsEmptyReport extends AbstractCalculationItemsReport
     private readonly string $quantityLabel;
 
     /**
-     * @psalm-param CalculationItemType[] $entities
+     * @phpstan-param CalculationItemType[] $entities
      */
     public function __construct(AbstractController $controller, array $entities)
     {
@@ -53,7 +53,7 @@ class CalculationsEmptyReport extends AbstractCalculationItemsReport
     {
         return \array_reduce(
             $entities,
-            /** @psalm-param CalculationItemType $entity */
+            /** @phpstan-param CalculationItemType $entity */
             fn (int $carry, array $entity): int => $carry + \count($entity['items']),
             0
         );

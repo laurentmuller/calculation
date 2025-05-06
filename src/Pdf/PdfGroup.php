@@ -70,7 +70,7 @@ class PdfGroup implements PdfDocumentUpdaterInterface
      */
     public function getName(): ?string
     {
-        /** @psalm-var mixed $key */
+        /** @phpstan-var mixed $key */
         $key = $this->key;
         if (\is_scalar($key) || (\is_object($key) && \method_exists($key, '__toString'))) {
             return (string) $key;

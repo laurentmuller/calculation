@@ -30,14 +30,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @implements ConstantsInterface<int>
  *
- * @psalm-type GroupType = array{
+ * @phpstan-type GroupType = array{
  *     id: int,
  *     description: string,
  *     amount: float,
  *     margin_percent: float,
  *     margin_amount: float,
  *     total: float}
- * @psalm-type ParametersType = array{
+ * @phpstan-type ParametersType = array{
  *     result: bool,
  *     overall_below: bool,
  *     overall_margin: float,
@@ -46,7 +46,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *     user_margin: float,
  *     groups: GroupType[]}
  *
- * @psalm-import-type QueryGroupType from CalculationQuery
+ * @phpstan-import-type QueryGroupType from CalculationQuery
  */
 class CalculationGroupService implements ConstantsInterface
 {
@@ -107,7 +107,7 @@ class CalculationGroupService implements ConstantsInterface
         $reflection = new \ReflectionClass(self::class);
         $constants = $reflection->getReflectionConstants(\ReflectionClassConstant::IS_PRIVATE);
 
-        /** @psalm-var array<string, int> */
+        /** @phpstan-var array<string, int> */
         return \array_reduce(
             $constants,
             static fn (array $carry, \ReflectionClassConstant $c): array => $carry + [$c->getName() => $c->getValue()],
@@ -118,7 +118,7 @@ class CalculationGroupService implements ConstantsInterface
     /**
      * Creates the total groups, used to render the total view, from the given calculation.
      *
-     * @psalm-return non-empty-array<GroupType>
+     * @phpstan-return non-empty-array<GroupType>
      */
     public function createGroups(Calculation $calculation): array
     {
@@ -144,7 +144,7 @@ class CalculationGroupService implements ConstantsInterface
     /**
      * Creates parameters, used to render the total view, for the given query.
      *
-     * @psalm-return ParametersType
+     * @phpstan-return ParametersType
      */
     public function createParameters(CalculationQuery $query): array
     {
@@ -184,9 +184,9 @@ class CalculationGroupService implements ConstantsInterface
     /**
      * Adjust the user margin to have the desired overall minimum margin.
      *
-     * @psalm-param GroupType[] $groups
+     * @phpstan-param GroupType[] $groups
      *
-     * @psalm-return GroupType[]
+     * @phpstan-return GroupType[]
      */
     private function adjustUserMargin(array $groups): array
     {
@@ -209,9 +209,9 @@ class CalculationGroupService implements ConstantsInterface
     }
 
     /**
-     * @param QueryGroupType[] $queryGroups
+     * @phpstan-param QueryGroupType[] $queryGroups
      *
-     * @return GroupType[]
+     * @phpstan-return GroupType[]
      */
     private function convertQueryGroups(array $queryGroups): array
     {
@@ -251,7 +251,7 @@ class CalculationGroupService implements ConstantsInterface
     /**
      * Creates the group when no data is present.
      *
-     * @psalm-return GroupType
+     * @phpstan-return GroupType
      */
     private function createEmptyGroup(): array
     {
@@ -259,7 +259,7 @@ class CalculationGroupService implements ConstantsInterface
     }
 
     /**
-     * @psalm-return ParametersType
+     * @phpstan-return ParametersType
      */
     private function createEmptyParameters(): array
     {
@@ -275,7 +275,7 @@ class CalculationGroupService implements ConstantsInterface
     }
 
     /**
-     * @psalm-return GroupType
+     * @phpstan-return GroupType
      */
     private function createGroup(
         int $id,
@@ -298,11 +298,11 @@ class CalculationGroupService implements ConstantsInterface
     /**
      * Creates calculation's total groups.
      *
-     * @psalm-param GroupType[] $groups   the group types
-     * @psalm-param float $user_margin    the user margin
-     * @psalm-param ?float $global_margin the global margin or null to compute the new global margin
+     * @phpstan-param GroupType[] $groups   the group types
+     * @phpstan-param float $user_margin    the user margin
+     * @phpstan-param ?float $global_margin the global margin or null to compute the new global margin
      *
-     * @psalm-return non-empty-array<GroupType>
+     * @phpstan-return non-empty-array<GroupType>
      */
     private function createTotalGroups(
         array $groups,
@@ -401,7 +401,7 @@ class CalculationGroupService implements ConstantsInterface
     /**
      * Gets the sum of the group's amount.
      *
-     * @psalm-param GroupType[] $groups
+     * @phpstan-param GroupType[] $groups
      */
     private function getGroupsAmount(array $groups): float
     {
@@ -411,7 +411,7 @@ class CalculationGroupService implements ConstantsInterface
     /**
      * Gets the sum of the group's margin amount.
      *
-     * @psalm-param GroupType[] $groups
+     * @phpstan-param GroupType[] $groups
      */
     private function getGroupsMargin(array $groups): float
     {

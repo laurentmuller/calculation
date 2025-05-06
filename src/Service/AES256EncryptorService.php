@@ -51,11 +51,10 @@ readonly class AES256EncryptorService
         }
 
         return \openssl_decrypt(
-            $decoded,
-            self::CIPHER_METHOD,
-            $this->passphrase,
-            0,
-            $this->initializationVector
+            data: $decoded,
+            cipher_algo: self::CIPHER_METHOD,
+            passphrase: $this->passphrase,
+            iv: $this->initializationVector
         );
     }
 
@@ -75,11 +74,10 @@ readonly class AES256EncryptorService
     public function encrypt(string $data): string|false
     {
         $encrypted = \openssl_encrypt(
-            $data,
-            self::CIPHER_METHOD,
-            $this->passphrase,
-            0,
-            $this->initializationVector
+            data: $data,
+            cipher_algo: self::CIPHER_METHOD,
+            passphrase: $this->passphrase,
+            iv: $this->initializationVector
         );
 
         if (!\is_string($encrypted)) {

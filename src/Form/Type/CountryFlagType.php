@@ -69,15 +69,15 @@ class CountryFlagType extends AbstractType
     }
 
     /**
-     * @phpstan-param Options<array> $options
-     *
      * @psalm-param Options $options
+     *
+     * @phpstan-param Options<array> $options
      */
     private function loadChoices(Options $options): array
     {
-        /** @psalm-var string|null $locale */
+        /** @phpstan-var string|null $locale */
         $locale = $options['choice_translation_locale'];
-        /** @psalm-var bool $flagOnly */
+        /** @phpstan-var bool $flagOnly */
         $flagOnly = $options['only_flag'];
 
         return $this->service->getChoices($locale, $flagOnly);

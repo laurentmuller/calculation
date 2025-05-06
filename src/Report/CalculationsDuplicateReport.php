@@ -19,15 +19,15 @@ use App\Traits\DuplicateItemsTrait;
 /**
  * Report for calculations with duplicate items.
  *
- * @psalm-import-type CalculationItemType from \App\Repository\CalculationRepository
- * @psalm-import-type CalculationItemEntry from \App\Repository\CalculationRepository
+ * @phpstan-import-type CalculationItemType from \App\Repository\CalculationRepository
+ * @phpstan-import-type CalculationItemEntry from \App\Repository\CalculationRepository
  */
 class CalculationsDuplicateReport extends AbstractCalculationItemsReport
 {
     use DuplicateItemsTrait;
 
     /**
-     * @psalm-param CalculationItemType[] $entities
+     * @phpstan-param CalculationItemType[] $entities
      */
     public function __construct(AbstractController $controller, array $entities)
     {
@@ -35,13 +35,13 @@ class CalculationsDuplicateReport extends AbstractCalculationItemsReport
     }
 
     /**
-     * @psalm-param CalculationItemType[] $entities
+     * @phpstan-param CalculationItemType[] $entities
      */
     #[\Override]
     protected function computeItemsCount(array $entities): int
     {
         return \array_reduce($entities, function (int $carry, array $entity): int {
-            /** @psalm-var CalculationItemEntry $item */
+            /** @phpstan-var CalculationItemEntry $item */
             foreach ($entity['items'] as $item) {
                 $carry += $item['count'];
             }

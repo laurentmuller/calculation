@@ -39,7 +39,7 @@ class ProductUpdateQuery extends AbstractSimulateQuery
     /** @var Product[] */
     private array $products = [];
     private bool $round = false;
-    /** @psalm-var ProductUpdateQuery::UPDATE_* */
+    /** @phpstan-var ProductUpdateQuery::UPDATE_* */
     private string $type = self::UPDATE_PERCENT;
 
     /**

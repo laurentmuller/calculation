@@ -351,7 +351,7 @@ abstract class AbstractHtmlChunk
 
         // level
         if (StringUtils::pregMatch('/bookmark-(\d+)/', $class, $matches)) {
-            /** @psalm-var non-negative-int $level */
+            /** @phpstan-var non-negative-int $level */
             $level = (int) $matches[1];
             $this->bookmarkLevel = $level;
             $this->bookmark = true;

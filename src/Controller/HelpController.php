@@ -32,9 +32,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display help.
- *
- * @psalm-import-type HelpDialogType from HelpService
- * @psalm-import-type HelpEntityType from HelpService
  */
 #[AsController]
 #[Route(path: '/help', name: 'help_')]
@@ -197,9 +194,9 @@ class HelpController extends AbstractController
         if (\is_numeric(\end($parts))) {
             \array_pop($parts);
         }
-        /** @psalm-var string $first */
+        /** @phpstan-var string $first */
         $first = \reset($parts);
-        /** @psalm-var string $last */
+        /** @phpstan-var string $last */
         $last = \end($parts);
         if ($first === $last) {
             $last = 'list';

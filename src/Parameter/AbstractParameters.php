@@ -27,8 +27,8 @@ use Symfony\Contracts\Cache\CacheInterface;
  *
  * @template TProperty of AbstractProperty
  *
- * @psalm-type TValue = scalar|array|\BackedEnum|\DateTimeInterface|null
- * @psalm-type TParameter = ParameterInterface|class-string<ParameterInterface>
+ * @phpstan-type TValue = scalar|array|\BackedEnum|\DateTimeInterface|null
+ * @phpstan-type TParameter = ParameterInterface|class-string<ParameterInterface>
  */
 abstract class AbstractParameters
 {
@@ -57,7 +57,7 @@ abstract class AbstractParameters
      *
      * @return array<string, array<string, mixed>>
      *
-     * @psalm-return array<array<string, TValue>>
+     * @phpstan-return array<array<string, TValue>>
      */
     abstract public function getDefaultValues(): array;
 
@@ -111,12 +111,12 @@ abstract class AbstractParameters
     }
 
     /**
-     * @psalm-template T of ParameterInterface
+     * @phpstan-template T of ParameterInterface
      *
-     * @psalm-param class-string<T> $class
-     * @psalm-param T|null $default
+     * @phpstan-param class-string<T> $class
+     * @phpstan-param T|null $default
      *
-     * @psalm-return T
+     * @phpstan-return T
      */
     protected function createParameter(string $class, ?ParameterInterface $default = null): ParameterInterface
     {
@@ -142,14 +142,14 @@ abstract class AbstractParameters
     }
 
     /**
-     * @psalm-return TProperty
+     * @phpstan-return TProperty
      */
     abstract protected function createProperty(string $name): AbstractProperty;
 
     /**
-     * @psalm-param TProperty[]  $properties
+     * @phpstan-param TProperty[]  $properties
      *
-     * @psalm-return TProperty|null
+     * @phpstan-return TProperty|null
      */
     protected function findProperty(array $properties, string $name): ?AbstractProperty
     {
@@ -184,12 +184,12 @@ abstract class AbstractParameters
     }
 
     /**
-     * @psalm-template T of ParameterInterface
+     * @phpstan-template T of ParameterInterface
      *
-     * @psalm-param class-string<T> $class
-     * @psalm-param T|null $default
+     * @phpstan-param class-string<T> $class
+     * @phpstan-param T|null $default
      *
-     * @psalm-return T
+     * @phpstan-return T
      */
     protected function getCachedParameter(string $class, ?ParameterInterface $default = null): ParameterInterface
     {
@@ -201,7 +201,7 @@ abstract class AbstractParameters
     }
 
     /**
-     * @psalm-return TValue
+     * @phpstan-return TValue
      */
     protected function getDefaultPropertyValue(
         MetaData $metaData,
@@ -216,18 +216,18 @@ abstract class AbstractParameters
     }
 
     /**
-     * @psalm-return TValue
+     * @phpstan-return TValue
      */
     protected function getMetaDataDefaultValue(MetaData $metaData): mixed
     {
-        /** @psalm-var TValue */
+        /** @phpstan-var TValue */
         return $metaData->default;
     }
 
     /**
      * @return MetaData[]
      *
-     * @psalm-param TParameter $parameter
+     * @phpstan-param TParameter $parameter
      */
     protected function getMetaDatas(ParameterInterface|string $parameter): array
     {
@@ -250,23 +250,23 @@ abstract class AbstractParameters
     }
 
     /**
-     * @psalm-return TValue
+     * @phpstan-return TValue
      */
     protected function getParameterPropertyValue(
         MetaData $metaData,
         ParameterInterface $parameter,
         PropertyAccessor $accessor
     ): mixed {
-        /** @psalm-var TValue */
+        /** @phpstan-var TValue */
         return $accessor->getValue($parameter, $metaData->property);
     }
 
     /**
      * @return array<string, array<string, mixed>>
      *
-     * @psalm-param TParameter ...$parameters
+     * @phpstan-param TParameter ...$parameters
      *
-     * @psalm-return array<string, array<string, TValue>>
+     * @phpstan-return array<string, array<string, TValue>>
      */
     protected function getParametersDefaultValues(ParameterInterface|string ...$parameters): array
     {
@@ -291,7 +291,7 @@ abstract class AbstractParameters
     /**
      * @return \ReflectionProperty[]
      *
-     * @psalm-param TParameter $parameter
+     * @phpstan-param TParameter $parameter
      */
     protected function getProperties(ParameterInterface|string $parameter): array
     {
@@ -304,7 +304,7 @@ abstract class AbstractParameters
     }
 
     /**
-     * @psalm-return TValue
+     * @phpstan-return TValue
      */
     protected function getPropertyValue(MetaData $metaData, AbstractProperty $property): mixed
     {
@@ -343,7 +343,7 @@ abstract class AbstractParameters
     }
 
     /**
-     * @psalm-return TProperty[]
+     * @phpstan-return TProperty[]
      */
     abstract protected function loadProperties(): array;
 

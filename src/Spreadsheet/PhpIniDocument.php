@@ -24,7 +24,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 /**
  * Document containing PHP configuration.
  *
- * @psalm-type EntriesType = array{local: string, master: string}|string
+ * @phpstan-type EntriesType = array{local: string, master: string}|string
  */
 class PhpIniDocument extends AbstractDocument
 {
@@ -55,7 +55,7 @@ class PhpIniDocument extends AbstractDocument
             'Master Value' => HeaderFormat::left(Alignment::VERTICAL_TOP),
         ]);
 
-        /**  @psalm-var array<string, EntriesType> $entries */
+        /**  @phpstan-var array<string, EntriesType> $entries */
         foreach ($content as $key => $entries) {
             $row = $this->outputGroup($sheet, $row, $key);
             $row = $this->outputEntries($sheet, $row, $entries);
@@ -112,7 +112,7 @@ class PhpIniDocument extends AbstractDocument
     }
 
     /**
-     * @psalm-param array<string, EntriesType> $entries
+     * @phpstan-param array<string, EntriesType> $entries
      */
     private function outputEntries(WorksheetDocument $sheet, int $row, array $entries): int
     {
@@ -158,7 +158,7 @@ class PhpIniDocument extends AbstractDocument
     }
 
     /**
-     * @psalm-param array<string, EntriesType> $entries
+     * @phpstan-param array<string, EntriesType> $entries
      */
     private function sortEntries(array &$entries): void
     {

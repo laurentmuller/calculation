@@ -23,9 +23,9 @@ use App\Service\SymfonyInfoService;
 /**
  * Report containing Symfony configuration.
  *
- * @psalm-import-type RouteType from SymfonyInfoService
- * @psalm-import-type BundleType from SymfonyInfoService
- * @psalm-import-type PackageType from SymfonyInfoService
+ * @phpstan-import-type RouteType from SymfonyInfoService
+ * @phpstan-import-type BundleType from SymfonyInfoService
+ * @phpstan-import-type PackageType from SymfonyInfoService
  */
 class SymfonyReport extends AbstractReport
 {
@@ -74,7 +74,7 @@ class SymfonyReport extends AbstractReport
     }
 
     /**
-     * @psalm-param BundleType[] $bundles
+     * @phpstan-param BundleType[] $bundles
      */
     private function outputBundles(array $bundles): void
     {
@@ -138,7 +138,7 @@ class SymfonyReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array<string, PackageType> $packages
+     * @phpstan-param array<string, PackageType> $packages
      */
     private function outputPackages(string $title, array $packages): void
     {
@@ -167,7 +167,7 @@ class SymfonyReport extends AbstractReport
     }
 
     /**
-     * @psalm-param RouteType[] $routes
+     * @phpstan-param RouteType[] $routes
      */
     private function outputRoutes(string $title, array $routes): void
     {

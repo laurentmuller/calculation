@@ -578,7 +578,7 @@ class PdfTable
         ?PdfStyle $style = null,
         ?PdfTextAlignment $alignment = null
     ): static {
-        /** @psalm-var positive-int $cols */
+        /** @phpstan-var positive-int $cols */
         $cols = $this->getColumnsCount();
 
         return $this->startRow()
@@ -781,7 +781,7 @@ class PdfTable
         }
 
         if ($cell->hasLink()) {
-            /** @psalm-var string|int $link */
+            /** @phpstan-var string|int $link */
             $link = $cell->getLink();
             $linkBounds = (clone $textBounds)->inflate(-$margin);
             $linesCount = \max(1, $parent->getLinesCount($text, $linkBounds->width));

@@ -23,7 +23,7 @@ class HtmlOlChunk extends AbstractHtmlListChunk
     /**
      * The start count.
      *
-     * @psalm-var positive-int
+     * @phpstan-var positive-int
      */
     private int $start = 1;
 

@@ -43,14 +43,14 @@ class UserParametersController extends AbstractController
         $data = $userService->getProperties();
         $form = $this->createForm(UserParametersType::class, $data);
         if ($this->handleRequestForm($request, $form)) {
-            /** @psalm-var array<string, mixed> $data */
+            /** @phpstan-var array<string, mixed> $data */
             $data = $form->getData();
             if ($userService->setProperties($data)) {
                 $this->successTrans('user.parameters.success');
             }
             $response = $this->getUrlGenerator()->redirect($request);
             if (isset($data[PropertyServiceInterface::P_DISPLAY_MODE])) {
-                /** @psalm-var TableView $display */
+                /** @var TableView $display */
                 $display = $data[PropertyServiceInterface::P_DISPLAY_MODE];
                 $this->updateCookie($response, TableInterface::PARAM_VIEW, $display);
             }

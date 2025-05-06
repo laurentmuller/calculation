@@ -41,7 +41,7 @@ class ImportAddressController extends AbstractController
     {
         $form = $updater->createForm();
         if ($this->handleRequestForm($request, $form)) {
-            /** @psalm-var array{file: UploadedFile|string|null, overwrite: bool} $data */
+            /** @phpstan-var array{file: UploadedFile|string|null, overwrite: bool} $data */
             $data = $form->getData();
             $file = $data['file'];
             $overwrite = $data['overwrite'];

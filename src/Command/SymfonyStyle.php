@@ -60,7 +60,7 @@ class SymfonyStyle extends BaseSymfonyStyle
      */
     public function getArrayOption(string $name): array
     {
-        /** @psalm-var string[] */
+        /** @phpstan-var string[] */
         return (array) $this->input->getOption($name);
     }
 

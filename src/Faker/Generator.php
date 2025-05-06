@@ -47,11 +47,11 @@ class Generator extends \Faker\Generator
      *
      * @param class-string<TProvider> $class the provider class name to find
      *
-     * @psalm-return TProvider|null the provider, if found; null otherwise
+     * @phpstan-return TProvider|null the provider, if found; null otherwise
      */
     public function getProvider(string $class): ?Base
     {
-        /** @psalm-var TProvider|null */
+        /** @phpstan-var TProvider|null */
         return $this->findFirst($this->getProviders(), static fn (Base $item): bool => $item instanceof $class);
     }
 }

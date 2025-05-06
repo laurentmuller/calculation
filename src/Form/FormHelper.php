@@ -95,7 +95,7 @@ class FormHelper
     /**
      * The data transformer.
      *
-     * @psalm-var ?DataTransformerInterface<mixed, mixed> $modelTransformer
+     * @phpstan-var ?DataTransformerInterface<mixed, mixed> $modelTransformer
      */
     private ?DataTransformerInterface $modelTransformer = null;
 
@@ -843,7 +843,7 @@ class FormHelper
      */
     public function updateAttributes(array $attributes): self
     {
-        /** @psalm-var mixed $value */
+        /** @phpstan-var mixed $value */
         foreach ($attributes as $name => $value) {
             $this->updateAttribute($name, $value);
         }
@@ -872,7 +872,7 @@ class FormHelper
      */
     public function updateOptions(array $options): self
     {
-        /** @psalm-var mixed $value */
+        /** @phpstan-var mixed $value */
         foreach ($options as $name => $value) {
             $this->updateOption($name, $value);
         }
@@ -901,7 +901,7 @@ class FormHelper
      */
     public function updateRowAttributes(array $attributes): self
     {
-        /** @psalm-var mixed $value */
+        /** @phpstan-var mixed $value */
         foreach ($attributes as $name => $value) {
             $this->updateRowAttribute($name, $value);
         }

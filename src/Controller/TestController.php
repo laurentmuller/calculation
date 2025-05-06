@@ -96,7 +96,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 /**
  * Controller for tests.
  *
- * @psalm-import-type SearchType from SearchService
+ * @phpstan-import-type SearchType from SearchService
  */
 #[AsController]
 #[Route(path: '/test', name: 'test_')]
@@ -154,7 +154,7 @@ class TestController extends AbstractController
 
         if ($this->handleRequestForm($request, $form)) {
             /**
-             * @psalm-var array{
+             * @phpstan-var array{
              *     email: string,
              *     message: string,
              *     importance: Importance,
@@ -215,7 +215,7 @@ class TestController extends AbstractController
             ->setTitle(\sprintf('Etiquette - Avery %s', $label->name));
 
         $sortField = $repository->getSortField(CustomerRepository::NAME_COMPANY_FIELD);
-        /** @psalm-var \App\Entity\Customer[] $customers */
+        /** @phpstan-var \App\Entity\Customer[] $customers */
         $customers = $repository->createDefaultQueryBuilder()
             ->orderBy($sortField, SortModeInterface::SORT_ASC)
             ->setMaxResults(29)
@@ -329,7 +329,7 @@ class TestController extends AbstractController
         $options = PropertyServiceInterface::PASSWORD_OPTIONS;
         $strength = new Strength(StrengthLevel::MEDIUM);
         $listener = function (PreSubmitEvent $event) use ($options, $password, $strength): void {
-            /** @psalm-var array $data */
+            /** @phpstan-var array $data */
             $data = $event->getData();
             foreach ($options as $property => $option) {
                 $password->setOption($option, (bool) ($data[$property] ?? false));
@@ -380,7 +380,7 @@ class TestController extends AbstractController
 
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
-            /** @psalm-var array<string, mixed> $data */
+            /** @phpstan-var array<string, mixed> $data */
             $data = $form->getData();
             $message = $this->trans('password.success');
             $message .= '<ul>';
@@ -389,7 +389,7 @@ class TestController extends AbstractController
                     $message .= '<li>' . $this->trans("password.$property") . '</li>';
                 }
             }
-            /** @psalm-var StrengthLevel $level */
+            /** @phpstan-var StrengthLevel $level */
             $level = $data['level'];
             if (StrengthLevel::NONE !== $level) {
                 $message .= '<li>';
@@ -629,7 +629,7 @@ class TestController extends AbstractController
 
     private function getCategories(EntityManagerInterface $manager): array
     {
-        /** @psalm-var array<int, Category> $categories */
+        /** @phpstan-var array<int, Category> $categories */
         $categories = $manager->getRepository(Category::class)
             ->getQueryBuilderByGroup()
             ->getQuery()
@@ -644,7 +644,7 @@ class TestController extends AbstractController
      */
     private function getCurrencies(): array
     {
-        /** @psalm-var array<int, array{code: string, name: string}> $currencies */
+        /** @phpstan-var array<int, array{code: string, name: string}> $currencies */
         $currencies = \array_map(function (string $code): array {
             $name = \ucfirst(Currencies::getName($code));
             $symbol = Currencies::getSymbol($code);
@@ -661,8 +661,8 @@ class TestController extends AbstractController
         \usort(
             $currencies,
             /**
-             * @psalm-param array{code: string, name: string} $left
-             * @psalm-param array{code: string, name: string} $right
+             * @phpstan-param array{code: string, name: string} $left
+             * @phpstan-param array{code: string, name: string} $right
              */
             static fn (array $left, array $right): int => \strnatcasecmp($left['name'], $right['name'])
         );
@@ -681,7 +681,7 @@ class TestController extends AbstractController
 
     private function getStates(EntityManagerInterface $manager): array
     {
-        /** @psalm-var CalculationState[] $states */
+        /** @phpstan-var CalculationState[] $states */
         $states = $manager->getRepository(CalculationState::class)
             ->getQueryBuilderByEditable()
             ->getQuery()
@@ -696,9 +696,7 @@ class TestController extends AbstractController
     /**
      * @template T of AbstractProperty
      *
-     * @psalm-param AbstractParameters<T> $parameters
-     * @psalm-param class-string<FormTypeInterface> $type
-     *
+     * @phpstan-param AbstractParameters<T> $parameters
      * @phpstan-param class-string<FormTypeInterface<array>> $type
      */
     private function renderParameters(

@@ -18,10 +18,10 @@ use App\Pdf\Colors\PdfFillColor;
 /**
  * Interface to define chart types.
  *
- * @psalm-type ColorStringType = array{color: PdfFillColor|string, label: string, ...}
- * @psalm-type ColorValueType = array{color: PdfFillColor|string, value: float, ...}
- * @psalm-type BarChartRowType = array{label: string, values: ColorValueType[], link?: string|int, ...}
- * @psalm-type BarChartAxisType = array{min?: float, max?: float, step?: float, formatter?: callable(float): string}
+ * @phpstan-type ColorStringType = array{color: PdfFillColor|string, label: string, ...}
+ * @phpstan-type ColorValueType = array{color: PdfFillColor|string, value: float, ...}
+ * @phpstan-type BarChartRowType = array{label: string, values: ColorValueType[], link?: string|int, ...}
+ * @phpstan-type BarChartAxisType = array{min?: float, max?: float, step?: float, formatter?: callable(float): string}
  */
 interface PdfChartInterface
 {

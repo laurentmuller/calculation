@@ -51,7 +51,7 @@ class PivotDateField extends PivotField
     #[\Override]
     public function getValue(array $row): float|int|string|\DateTimeInterface|null
     {
-        /** @psalm-var mixed $value */
+        /** @phpstan-var mixed $value */
         $value = $this->getRowValue($row);
         if ($value instanceof \DateTimeInterface) {
             return $this->doGetValue($value);

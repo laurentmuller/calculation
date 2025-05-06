@@ -105,7 +105,7 @@ class FontAwesomeCommand extends Command
             $io->writeln([\sprintf('Generate files from "%s"...', $relativeSource), '']);
             foreach ($io->progressIterate($content, $count) as $key => $item) {
                 $names = $this->getAliasNames($item);
-                /** @psalm-var string[] $styles */
+                /** @phpstan-var string[] $styles */
                 $styles = $item['styles'];
                 foreach ($styles as $style) {
                     $data = $this->getRawData($style, $item);
@@ -164,12 +164,12 @@ class FontAwesomeCommand extends Command
     }
 
     /**
-     * @psalm-return array<array-key, array>|null
+     * @return array<array-key, array>|null
      */
     private function decodeJson(SymfonyStyle $io, string $file): ?array
     {
         try {
-            /** @psalm-var array<array-key, array> */
+            /** @phpstan-var array<array-key, array> */
             return FileUtils::decodeJson($file);
         } catch (\InvalidArgumentException $e) {
             $io->error($e->getMessage());
@@ -201,13 +201,13 @@ class FontAwesomeCommand extends Command
      */
     private function getAliasNames(array $item): array
     {
-        /** @psalm-var string[] */
+        /** @phpstan-var string[] */
         return $item['aliases']['names'] ?? [];
     }
 
     private function getRawData(string $style, array $item): ?string
     {
-        /** @psalm-var string|null */
+        /** @phpstan-var string|null */
         return $item['svg'][$style]['raw'] ?? null;
     }
 

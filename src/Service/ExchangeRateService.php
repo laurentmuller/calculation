@@ -26,22 +26,22 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @see https://www.exchangerate-api.com/
  *
- * @psalm-type ExchangeRateType = array{
+ * @phpstan-type ExchangeRateType = array{
  *     symbol: string,
  *     name: string,
  *     numericCode: int,
  *     fractionDigits: int,
  *     roundingIncrement: int}
- * @psalm-type ExchangeRateAndDateType = array{
+ * @phpstan-type ExchangeRateAndDateType = array{
  *     rate: float,
  *     next: int|null,
  *     update: int|null}
- * @psalm-type ExchangeQuotaType = array{
+ * @phpstan-type ExchangeQuotaType = array{
  *      allowed: int,
  *      remaining: int,
  *      date: \DateTimeInterface,
  *      documentation: string}
- * @psalm-type ResponseType = array{
+ * @phpstan-type ResponseType = array{
  *     refresh_day_of_month: int,
  *     plan_quota: int,
  *     requests_remaining: int,
@@ -135,7 +135,7 @@ class ExchangeRateService extends AbstractHttpClientService
     /**
      * Gets the deadline, the allowed and the remaining calls.
      *
-     * @psalm-return ExchangeQuotaType|null
+     * @phpstan-return ExchangeQuotaType|null
      */
     public function getQuota(): ?array
     {
@@ -151,8 +151,6 @@ class ExchangeRateService extends AbstractHttpClientService
      * @param string $targetCode the target currency code
      *
      * @return float the exchange rate or 0.0 if an error occurs.
-     *
-     * @psalm-api
      */
     public function getRate(string $baseCode, string $targetCode): float
     {
@@ -169,7 +167,7 @@ class ExchangeRateService extends AbstractHttpClientService
      *
      * @return ?array the exchange rate, the next update and last update dates or null if an error occurs
      *
-     * @psalm-return ExchangeRateAndDateType|null
+     * @phpstan-return ExchangeRateAndDateType|null
      */
     public function getRateAndDates(string $baseCode, string $targetCode): ?array
     {
@@ -183,7 +181,7 @@ class ExchangeRateService extends AbstractHttpClientService
      *
      * @return array the supported currency codes or an empty array if an error occurs
      *
-     * @psalm-return array<string, ExchangeRateType>
+     * @phpstan-return array<string, ExchangeRateType>
      */
     public function getSupportedCodes(): array
     {
@@ -212,7 +210,7 @@ class ExchangeRateService extends AbstractHttpClientService
     }
 
     /**
-     * @psalm-return array<string, float>
+     * @phpstan-return array<string, float>
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
@@ -222,7 +220,7 @@ class ExchangeRateService extends AbstractHttpClientService
         if (!\is_array($response)) {
             return [];
         }
-        /** @psalm-var array<string, float>|null $rates */
+        /** @phpstan-var array<string, float>|null $rates */
         $rates = $response['conversion_rates'] ?? null;
         if (!\is_array($rates)) {
             return [];
@@ -233,13 +231,13 @@ class ExchangeRateService extends AbstractHttpClientService
     }
 
     /**
-     * @psalm-return ExchangeQuotaType|null
+     * @phpstan-return ExchangeQuotaType|null
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     private function doGetQuota(string $url): ?array
     {
-        /** @psalm-var ResponseType|null $response */
+        /** @phpstan-var ResponseType|null $response */
         $response = $this->get($url);
         if (!\is_array($response)) {
             return null;
@@ -262,7 +260,7 @@ class ExchangeRateService extends AbstractHttpClientService
         if (!\is_array($response)) {
             return 0.0;
         }
-        /** @psalm-var float|null $rate */
+        /** @phpstan-var float|null $rate */
         $rate = $response['conversion_rate'] ?? null;
         if (!\is_float($rate)) {
             return 0.0;
@@ -275,7 +273,7 @@ class ExchangeRateService extends AbstractHttpClientService
     /**
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      *
-     * @psalm-return ExchangeRateAndDateType|null
+     * @phpstan-return ExchangeRateAndDateType|null
      */
     private function doGetRateAndDates(string $url): ?array
     {
@@ -283,7 +281,7 @@ class ExchangeRateService extends AbstractHttpClientService
         if (!\is_array($response)) {
             return null;
         }
-        /** @psalm-var float|null $rate */
+        /** @phpstan-var float|null $rate */
         $rate = $response['conversion_rate'] ?? null;
         if (!\is_float($rate)) {
             return null;
@@ -308,7 +306,7 @@ class ExchangeRateService extends AbstractHttpClientService
         if (!\is_array($response)) {
             return [];
         }
-        /** @psalm-var string[]|null $codes */
+        /** @phpstan-var string[]|null $codes */
         $codes = $response['supported_codes'] ?? null;
         if (!\is_array($codes)) {
             return [];
@@ -326,7 +324,7 @@ class ExchangeRateService extends AbstractHttpClientService
     private function get(string $url): ?array
     {
         try {
-            /** @psalm-var array<string, string> $result */
+            /** @phpstan-var array<string, string> $result */
             $result = $this->requestGet($url)->toArray();
             if ($this->isValidResult($result)) {
                 return $result;

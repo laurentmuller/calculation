@@ -16,20 +16,20 @@ namespace App\Model;
 /**
  * Contains the result of updated states, cities and streets.
  *
- * @psalm-type SwissPostResultType = array{state: int, city: int, street: int}
+ * @phpstan-type SwissPostResultType = array{state: int, city: int, street: int}
  */
 class SwissPostUpdateResult
 {
     private ?string $error = null;
-    /** @psalm-var SwissPostResultType */
+    /** @phpstan-var SwissPostResultType */
     private array $invalidEntries = ['state' => 0, 'city' => 0, 'street' => 0];
     private int $invalidEntriesCount = 0;
-    /** @psalm-var SwissPostResultType */
+    /** @phpstan-var SwissPostResultType */
     private array $oldEntries = ['state' => 0, 'city' => 0, 'street' => 0];
     private bool $overwrite = false;
     private string $sourceFile = '';
     private string $sourceName = '';
-    /** @psalm-var SwissPostResultType */
+    /** @phpstan-var SwissPostResultType */
     private array $validEntries = ['state' => 0, 'city' => 0, 'street' => 0];
     private int $validEntriesCount = 0;
     private ?\DateTimeInterface $validity = null;
@@ -69,9 +69,7 @@ class SwissPostUpdateResult
     /**
      * Gets the error entries.
      *
-     * @psalm-return SwissPostResultType
-     *
-     * @psalm-api
+     * @phpstan-return SwissPostResultType
      */
     public function getInvalidEntries(): array
     {
@@ -80,8 +78,6 @@ class SwissPostUpdateResult
 
     /**
      * Gets the total number of invalid entries.
-     *
-     * @psalm-api
      */
     public function getInvalidEntriesCount(): int
     {
@@ -91,9 +87,7 @@ class SwissPostUpdateResult
     /**
      * Gets the existing tables count.
      *
-     * @psalm-return SwissPostResultType
-     *
-     * @psalm-api
+     * @phpstan-return SwissPostResultType
      */
     public function getOldEntries(): array
     {
@@ -102,8 +96,6 @@ class SwissPostUpdateResult
 
     /**
      * Gets the total number of old entries.
-     *
-     * @psalm-api
      */
     public function getOldEntriesCount(): int
     {
@@ -112,8 +104,6 @@ class SwissPostUpdateResult
 
     /**
      * Gets the source (archive) file.
-     *
-     * @psalm-api
      */
     public function getSourceFile(): string
     {
@@ -131,9 +121,7 @@ class SwissPostUpdateResult
     /**
      * Gets the valid entries.
      *
-     * @psalm-return SwissPostResultType
-     *
-     * @psalm-api
+     * @phpstan-return SwissPostResultType
      */
     public function getValidEntries(): array
     {
@@ -142,8 +130,6 @@ class SwissPostUpdateResult
 
     /**
      * Gets the total number of valid entries.
-     *
-     * @psalm-api
      */
     public function getValidEntriesCount(): int
     {
@@ -152,8 +138,6 @@ class SwissPostUpdateResult
 
     /**
      * Gets the validity date.
-     *
-     * @psalm-api
      */
     public function getValidity(): ?\DateTimeInterface
     {
@@ -170,8 +154,6 @@ class SwissPostUpdateResult
 
     /**
      * Returns if the update is valid.
-     *
-     * @psalm-api
      */
     public function isValid(): bool
     {
@@ -180,8 +162,6 @@ class SwissPostUpdateResult
 
     /**
      * Sets the error message.
-     *
-     * @psalm-api
      */
     public function setError(string $error): self
     {
@@ -193,7 +173,7 @@ class SwissPostUpdateResult
     /**
      * Sets the existing tables count.
      *
-     * @psalm-param SwissPostResultType $oldEntries
+     * @phpstan-param SwissPostResultType $oldEntries
      */
     public function setOldEntries(array $oldEntries): self
     {
@@ -204,8 +184,6 @@ class SwissPostUpdateResult
 
     /**
      * Sets the overwritten option.
-     *
-     * @psalm-api
      */
     public function setOverwrite(bool $overwrite): self
     {
@@ -216,8 +194,6 @@ class SwissPostUpdateResult
 
     /**
      * Sets the source (archive) file.
-     *
-     * @psalm-api
      */
     public function setSourceFile(string $sourceFile): self
     {
@@ -228,8 +204,6 @@ class SwissPostUpdateResult
 
     /**
      * Sets the source (archive name) file name.
-     *
-     * @psalm-api
      */
     public function setSourceName(string $sourceName): self
     {
@@ -249,7 +223,7 @@ class SwissPostUpdateResult
     }
 
     /**
-     * @psalm-param 'state'|'city'|'street' $key
+     * @phpstan-param 'state'|'city'|'street' $key
      */
     private function add(bool $valid, string $key): self
     {

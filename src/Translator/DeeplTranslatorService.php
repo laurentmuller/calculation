@@ -27,7 +27,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  *
  * @see https://developers.deepl.com/docs
  *
- * @psalm-type TranslationType = array{detected_source_language: string, text: string}
+ * @phpstan-type TranslationType = array{detected_source_language: string, text: string}
  */
 class DeeplTranslatorService extends AbstractTranslatorService
 {
@@ -100,7 +100,7 @@ class DeeplTranslatorService extends AbstractTranslatorService
             return false;
         }
         if ('' === $query->from) {
-            /** @psalm-var mixed $from */
+            /** @phpstan-var mixed $from */
             $from = $this->getValue($values, '[translations][0][detected_source_language]', false);
             if (\is_string($from)) {
                 $query->from = \strtolower($from);
@@ -162,7 +162,7 @@ class DeeplTranslatorService extends AbstractTranslatorService
      */
     private function cleanLanguages(array $values): array
     {
-        /** @psalm-var string[] $languages */
+        /** @phpstan-var string[] $languages */
         $languages = \array_column($values, 'language');
         $languages = \array_map(strtolower(...), $languages);
 

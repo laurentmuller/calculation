@@ -19,7 +19,7 @@ class LogChannel implements \Countable, \Stringable
 {
     use LogChannelTrait;
 
-    /** @psalm-var int<0, max> */
+    /** @phpstan-var int<0, max> */
     private int $count = 0;
 
     /**

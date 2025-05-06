@@ -46,8 +46,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @extends AbstractArrayReport<CalculationByMonthType>
  *
- * @psalm-import-type CalculationByMonthType from \App\Repository\CalculationRepository
- * @psalm-import-type ColorStringType from PdfChartInterface
+ * @phpstan-import-type CalculationByMonthType from \App\Repository\CalculationRepository
+ * @phpstan-import-type ColorStringType from PdfChartInterface
  */
 class CalculationByMonthReport extends AbstractArrayReport implements PdfChartInterface, PdfDrawCellBackgroundInterface, PdfDrawCellTextInterface, PdfDrawHeadersInterface
 {
@@ -63,17 +63,17 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     private const RECT_MARGIN = 1.25;
     private const RECT_WIDTH = 4.5;
 
-    /** @psalm-var \WeakMap<PdfColorInterface, PdfTextColor>  */
+    /** @phpstan-var \WeakMap<PdfColorInterface, PdfTextColor>  */
     private \WeakMap $colors;
-    /*** @psalm-var CalculationByMonthType|null */
+    /*** @phpstan-var CalculationByMonthType|null */
     private ?array $currentEntity = null;
     private bool $drawHeaders = false;
-    /*** @psalm-var CalculationByMonthType|null */
+    /*** @phpstan-var CalculationByMonthType|null */
     private ?array $lastItem = null;
     private float $minMargin;
 
     /**
-     * @psalm-param CalculationByMonthType[] $entities
+     * @phpstan-param CalculationByMonthType[] $entities
      */
     public function __construct(
         AbstractController $controller,
@@ -176,7 +176,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         $textWidth = $parent->getStringWidth($text) + $parent->getCellMargin();
         $offset = ($bounds->width - $textWidth - self::RECT_WIDTH) / 2.0;
 
-        /** @psalm-var PdfFillColor $color */
+        /** @phpstan-var PdfFillColor $color */
         $color = PdfFillColor::create($colorName->value);
         $color->apply($parent);
 
@@ -200,7 +200,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             return $this->colors[$color] = $color->getTextColor();
         }
 
-        /** @psalm-var PdfTextColor */
+        /** @phpstan-var PdfTextColor */
         return $this->colors[$color];
     }
 
@@ -271,7 +271,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     }
 
     /**
-     * @psalm-param CalculationByMonthType[] $entities
+     * @phpstan-param CalculationByMonthType[] $entities
      */
     private function renderChart(array $entities): void
     {
@@ -302,7 +302,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     }
 
     /**
-     * @psalm-param CalculationByMonthType[] $entities
+     * @phpstan-param CalculationByMonthType[] $entities
      */
     private function renderTable(array $entities): void
     {

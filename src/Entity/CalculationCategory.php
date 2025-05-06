@@ -74,7 +74,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
      *
      * @var Collection<int, CalculationItem>
      *
-     * @psalm-var ArrayCollection<int, CalculationItem>
+     * @phpstan-var ArrayCollection<int, CalculationItem>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(
@@ -303,7 +303,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
             return false;
         }
 
-        /** @psalm-var CalculationItem[] $items */
+        /** @phpstan-var CalculationItem[] $items */
         $items = $this->getSortedCollection($this->items);
 
         $position = 0;

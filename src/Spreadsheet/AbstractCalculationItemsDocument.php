@@ -20,14 +20,14 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 /**
  * Abstract Spreadsheet document for the list of calculations with invalid items.
  *
- * @psalm-import-type CalculationItemType from \App\Repository\CalculationRepository
+ * @phpstan-import-type CalculationItemType from \App\Repository\CalculationRepository
  *
  * @extends AbstractArrayDocument<CalculationItemType>
  */
 abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
 {
     /**
-     * @psalm-param CalculationItemType[] $entities
+     * @phpstan-param CalculationItemType[] $entities
      */
     public function __construct(AbstractController $controller, array $entities, string $title)
     {
@@ -75,7 +75,7 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
      *
      * @return string the formatted items
      *
-     * @psalm-param array<array{
+     * @phpstan-param array<array{
      *          description: string,
      *          quantity: float,
      *          price: float,

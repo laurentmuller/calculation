@@ -33,7 +33,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller for the console commands.
  *
- * @psalm-import-type CommandType from CommandService
+ * @phpstan-import-type CommandType from CommandService
  */
 #[AsController]
 #[Route(path: '/command', name: 'command_')]
@@ -82,7 +82,7 @@ class CommandController extends AbstractController
             return $this->redirectToHomePage('command.list.empty');
         }
 
-        /** @psalm-var ?string $commandName */
+        /** @phpstan-var ?string $commandName */
         $commandName = $name ?? $request->getSession()->get(self::LAST_COMMAND);
         if (\is_string($commandName) && $service->hasCommand($commandName)) {
             $command = $service->getCommand($commandName);
@@ -115,8 +115,8 @@ class CommandController extends AbstractController
             throw $this->createTranslatedNotFoundException('command.list.error', ['%name%' => $name]);
         }
 
-        /** @psalm-var CommandType $command */
-        $command = $service->getCommand($name); // @phpstan-ignore varTag.nativeType
+        /** @phpstan-var CommandType $command */
+        $command = $service->getCommand($name);
         $session = $request->getSession();
         $key = $this->cleanKey('command.execute.' . $name);
         $data = $this->getCommandData($session, $dataService, $key, $command);
@@ -125,7 +125,7 @@ class CommandController extends AbstractController
         $form = $formService->createForm($command, $data);
         if ($this->handleRequestForm($request, $form)) {
             try {
-                /** @psalm-var array<string, array|scalar|null> $data */
+                /** @phpstan-var array<string, array|scalar|null> $data */
                 $data = $form->getData();
                 $session->set($key, $data);
                 $parameters = $dataService->createParameters($command, $data);
@@ -176,11 +176,9 @@ class CommandController extends AbstractController
     }
 
     /**
-     * @psalm-param CommandType $command
+     * @phpstan-param CommandType $command
      *
-     * @psalm-return array<string, array|scalar|null>
-     *
-     * @phpstan-param array $command
+     * @phpstan-return array<string, array|scalar|null>
      */
     private function getCommandData(
         SessionInterface $session,
@@ -189,7 +187,7 @@ class CommandController extends AbstractController
         array $command
     ): array {
         $data = $dataService->createData($command);
-        /** @psalm-var array<string, array|scalar|null> $existing */
+        /** @phpstan-var array<string, array|scalar|null> $existing */
         $existing = (array) $session->get($key, []);
         if ([] === $existing) {
             return $data;

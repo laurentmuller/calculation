@@ -16,14 +16,16 @@ namespace App\Model;
 /**
  * Contains parameters to update the overall total or the user margin of calculations.
  *
- * @psalm-type QueryGroupType = array{id: int, total: float}
+ * @phpstan-type QueryGroupType = array{id: int, total: float}
  */
 readonly class CalculationQuery
 {
     /**
-     * @param bool             $adjust     true to adjust the user's margin to reach the minimum margin
-     * @param float            $userMargin the user margin
-     * @param QueryGroupType[] $groups     the groups containing each the identifier and the total
+     * @param bool  $adjust     true to adjust the user's margin to reach the minimum margin
+     * @param float $userMargin the user margin
+     * @param array $groups     the groups containing each the identifier and the total
+     *
+     * @phpstan-param QueryGroupType[] $groups
      */
     public function __construct(
         public bool $adjust = false,

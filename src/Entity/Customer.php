@@ -101,7 +101,7 @@ class Customer extends AbstractEntity
             return null;
         }
 
-        /** @psalm-var \DateTime $birthday */
+        /** @phpstan-var \DateTime $birthday */
         $birthday = clone $this->birthday;
         $currentDate = new \DateTime();
         $age = DateUtils::getYear($currentDate) - DateUtils::getYear($birthday);

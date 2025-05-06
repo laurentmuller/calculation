@@ -19,7 +19,7 @@ use App\Tests\KernelServiceTestCase;
 use Symfony\Component\Form\FormInterface;
 
 /**
- * @psalm-import-type CommandType from CommandService
+ * @phpstan-import-type CommandType from CommandService
  */
 class CommandFormServiceTest extends KernelServiceTestCase
 {
@@ -102,9 +102,7 @@ class CommandFormServiceTest extends KernelServiceTestCase
     }
 
     /**
-     * @psalm-return CommandType
-     *
-     * @phpstan-return array
+     * @phpstan-return CommandType
      */
     private function getCommand(string $name): array
     {

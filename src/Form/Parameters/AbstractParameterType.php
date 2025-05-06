@@ -42,7 +42,7 @@ abstract class AbstractParameterType extends AbstractHelperType
         }
 
         $children = $view->children;
-        /** @psalm-var mixed $value */
+        /** @phpstan-var mixed $value */
         foreach ($values as $key => $value) {
             if (!\array_key_exists($key, $children)) {
                 continue;
@@ -92,17 +92,17 @@ abstract class AbstractParameterType extends AbstractHelperType
     }
 
     /**
+     * @psalm-param  FormInterface $form
+     *
      * @phpstan-param FormInterface<array> $form
      *
-     * @psalm-param FormInterface $form
-     *
-     * @psalm-return  array<string, mixed>
+     * @phpstan-return  array<string, mixed>
      */
     private function getDefaultValues(FormInterface $form): array
     {
         $config = $form->getRoot()->getConfig();
         $key = $this->getParameterClass()::getCacheKey();
-        /** @psalm-var array<string, array<string, mixed>> $values */
+        /** @phpstan-var array<string, array<string, mixed>> $values */
         $values = $config->getOption(AbstractHelperParametersType::DEFAULT_VALUES, []);
 
         return $values[$key] ?? [];

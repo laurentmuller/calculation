@@ -147,7 +147,7 @@ class UserController extends AbstractEntityController
             return $this->redirectToDefaultRoute($request, $user);
         }
 
-        /** @psalm-var User|Address $from */
+        /** @var User|Address $from */
         $from = $this->getUser() ?? $this->getAddressFrom();
         $comment = new Comment();
         $comment->setSubject($this->getApplicationName())

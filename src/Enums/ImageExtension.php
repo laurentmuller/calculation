@@ -23,12 +23,12 @@ use fpdf\Traits\PdfEnumDefaultTrait;
  *
  * @implements PdfEnumDefaultInterface<ImageExtension>
  *
- * @psalm-type SaveOptionsType = array{
+ * @phpstan-type SaveOptionsType = array{
  *     compressed?: bool,
  *     quality?: int,
  *     filters?: int,
  *     foreground_color?: int|null}
- * @psalm-type AllowedOptionsType = array{
+ * @phpstan-type AllowedOptionsType = array{
  *     compressed?: true,
  *     filters?: int,
  *     foreground_color?: null,
@@ -109,7 +109,7 @@ enum ImageExtension: string implements PdfEnumDefaultInterface
     /**
      * Gets the allowed options to save an image.
      *
-     * @psalm-return AllowedOptionsType
+     * @phpstan-return AllowedOptionsType
      */
     public function getAllowedOptions(): array
     {
@@ -167,7 +167,7 @@ enum ImageExtension: string implements PdfEnumDefaultInterface
      *
      * @throws \InvalidArgumentException if one of the given options is invalid
      *
-     * @psalm-param SaveOptionsType $options
+     * @phpstan-param SaveOptionsType $options
      */
     public function saveImage(\GdImage|ImageService $image, mixed $file = null, array $options = []): bool
     {
@@ -182,7 +182,7 @@ enum ImageExtension: string implements PdfEnumDefaultInterface
             throw new \InvalidArgumentException(\sprintf('Invalid options: %s, allowed options: %s.', \implode(', ', $diff), \implode(', ', $keys)));
         }
 
-        /** @psalm-var array{compressed: bool, quality: int, filters: int, foreground_color: int|null} $options */
+        /** @phpstan-var array{compressed: bool, quality: int, filters: int, foreground_color: int|null} $options */
         $options = \array_merge($allowed, $options);
 
         return match ($this) {

@@ -24,29 +24,29 @@ use fpdf\Traits\PdfRotationTrait;
 /**
  * Trait to draw bar chart.
  *
- * @psalm-import-type ColorValueType from \App\Pdf\Interfaces\PdfChartInterface
- * @psalm-import-type BarChartRowType from \App\Pdf\Interfaces\PdfChartInterface
- * @psalm-import-type BarChartAxisType from \App\Pdf\Interfaces\PdfChartInterface
+ * @phpstan-import-type ColorValueType from \App\Pdf\Interfaces\PdfChartInterface
+ * @phpstan-import-type BarChartRowType from \App\Pdf\Interfaces\PdfChartInterface
+ * @phpstan-import-type BarChartAxisType from \App\Pdf\Interfaces\PdfChartInterface
  *
- * @psalm-type BarChartDataType = array{
+ * @phpstan-type BarChartDataType = array{
  *      color: PdfFillColor,
  *      value: float,
  *      y: float,
  *      h: float}
- * @psalm-type BarChartRowDataType = array{
+ * @phpstan-type BarChartRowDataType = array{
  *      label: string,
  *      link: string|int|null,
  *      width: float,
  *      x: float,
  *      w: float,
  *      values: BarChartDataType[]}
- * @psalm-type BarChartLabelType = array{
+ * @phpstan-type BarChartLabelType = array{
  *     label: string,
  *     width: float}
  *
- * @psalm-require-extends \fpdf\PdfDocument
+ * @phpstan-require-extends \fpdf\PdfDocument
  *
- * @psalm-require-implements \App\Pdf\Interfaces\PdfChartInterface
+ * @phpstan-require-implements \App\Pdf\Interfaces\PdfChartInterface
  */
 trait PdfBarChartTrait
 {
@@ -68,8 +68,8 @@ trait PdfBarChartTrait
      * @param float|null $width  the width or null to use all the printable width
      * @param float|null $height the height or null to use the default value (200)
      *
-     * @psalm-param BarChartRowType[] $rows
-     * @psalm-param BarChartAxisType $axis
+     * @phpstan-param BarChartRowType[] $rows
+     * @phpstan-param BarChartAxisType $axis
      */
     public function renderBarChart(
         array $rows,
@@ -143,9 +143,9 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param BarChartRowType[] $rows
+     * @phpstan-param BarChartRowType[] $rows
      *
-     * @psalm-return BarChartRowDataType[]
+     * @phpstan-return BarChartRowDataType[]
      */
     private function barComputeData(
         array $rows,
@@ -196,8 +196,8 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param non-empty-array<BarChartRowType> $rows
-     * @psalm-param callable(float, float): float $callback
+     * @phpstan-param non-empty-array<BarChartRowType> $rows
+     * @phpstan-param callable(float, float): float $callback
      */
     private function barComputeRowsValues(array $rows, callable $callback): float
     {
@@ -211,7 +211,7 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param BarChartLabelType[] $labels
+     * @phpstan-param BarChartLabelType[] $labels
      */
     private function barDrawAxisX(
         array $labels,
@@ -236,7 +236,7 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param  BarChartLabelType[] $labels
+     * @phpstan-param  BarChartLabelType[] $labels
      */
     private function barDrawAxisY(
         array $labels,
@@ -258,7 +258,7 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param BarChartRowDataType[] $data
+     * @phpstan-param BarChartRowDataType[] $data
      */
     private function barDrawData(array $data): void
     {
@@ -285,7 +285,7 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param ColorValueType $row
+     * @phpstan-param ColorValueType $row
      */
     private function barGetFillColor(array $row): PdfFillColor
     {
@@ -298,9 +298,9 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param non-empty-array<BarChartRowType> $rows
+     * @phpstan-param non-empty-array<BarChartRowType> $rows
      *
-     * @psalm-return non-empty-array<BarChartLabelType>
+     * @phpstan-return non-empty-array<BarChartLabelType>
      */
     private function barGetLabelsX(array $rows): array
     {
@@ -311,13 +311,13 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param callable(float): string $formatter
+     * @phpstan-param callable(float): string $formatter
      *
-     * @psalm-return non-empty-array<BarChartLabelType>
+     * @phpstan-return non-empty-array<BarChartLabelType>
      */
     private function barGetLabelsY(PdfBarScale $scale, callable $formatter): array
     {
-        /** @psalm-var non-empty-array<BarChartLabelType> $result */
+        /** @phpstan-var non-empty-array<BarChartLabelType> $result */
         $result = [];
         foreach (\range($scale->getUpperBound(), $scale->getLowerBound(), -$scale->getTickSpacing()) as $value) {
             $text = $formatter($value);

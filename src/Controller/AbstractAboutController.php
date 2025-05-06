@@ -32,7 +32,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 /**
  * Abstract controller to render a Markdown file.
  *
- * @psalm-import-type TagType from MarkdownService
+ * @phpstan-import-type TagType from MarkdownService
  */
 abstract class AbstractAboutController extends AbstractController
 {
@@ -112,7 +112,7 @@ abstract class AbstractAboutController extends AbstractController
     /**
      * Gets the tags to update.
      *
-     * @psalm-return TagType[]
+     * @phpstan-return TagType[]
      */
     abstract protected function getTags(): array;
 

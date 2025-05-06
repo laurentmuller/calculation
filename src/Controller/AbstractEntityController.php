@@ -191,8 +191,6 @@ abstract class AbstractEntityController extends AbstractController
     {
         /**
          * @phpstan-var class-string<FormTypeInterface<mixed>>
-         *
-         * @psalm-var class-string<FormTypeInterface>
          */
         return \sprintf('App\\Form\\%1$s\\%1$sType', $this->shortName);
     }

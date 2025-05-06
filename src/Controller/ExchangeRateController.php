@@ -27,8 +27,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for the exchange rate service.
- *
- * @psalm-import-type ExchangeRateAndDateType from ExchangeRateService
  */
 #[AsController]
 #[Route(path: '/exchange', name: 'exchange_')]
@@ -54,8 +52,6 @@ class ExchangeRateController extends AbstractController
 
     /**
      * Gets the supported currency codes.
-     *
-     * @psalm-api
      */
     #[Get(path: '/codes', name: 'codes')]
     public function getCodes(): JsonResponse
@@ -72,8 +68,6 @@ class ExchangeRateController extends AbstractController
      * Gets the exchange rates from the given currency code to all the other currencies supported.
      *
      * @param string $code the base currency code
-     *
-     * @psalm-api
      */
     #[Get(path: '/latest/{code}', name: 'latest')]
     public function getLatest(string $code): JsonResponse
@@ -88,8 +82,6 @@ class ExchangeRateController extends AbstractController
 
     /**
      * Gets the exchange rate from the base currency code to the target currency code.
-     *
-     * @psalm-api
      */
     #[Get(path: '/rate', name: 'rate')]
     public function getRate(

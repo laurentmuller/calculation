@@ -18,14 +18,14 @@ use App\Utils\StringUtils;
 /**
  * Trait to format empty items for the table, the PDF report, and the Excel document.
  *
- * @psalm-import-type CalculationItemEntry from \App\Repository\CalculationRepository
+ * @phpstan-import-type CalculationItemEntry from \App\Repository\CalculationRepository
  */
 trait EmptyItemsTrait
 {
     use MathTrait;
 
     /**
-     * @psalm-param CalculationItemEntry[] $items
+     * @phpstan-param CalculationItemEntry[] $items
      */
     public function formatItems(array $items): string
     {

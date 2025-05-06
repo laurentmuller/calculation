@@ -42,7 +42,7 @@ use Symfony\Component\Validator\Constraints\Length;
  *
  * @see https://openweathermap.org/api
  *
- * @psalm-type OpenWeatherSearchType = array{
+ * @phpstan-type OpenWeatherSearchType = array{
  *     query: string,
  *     country: string,
  *     units: OpenWeatherUnits,
@@ -151,7 +151,7 @@ class OpenWeatherController extends AbstractController
             $latitude = $this->getRequestFloat($request, OpenWeatherService::PARAM_LATITUDE);
             $longitude = $this->getRequestFloat($request, OpenWeatherService::PARAM_LONGITUDE);
             $exclude = $this->getRequestString($request, OpenWeatherService::PARAM_EXCLUDE);
-            /** @psalm-var OpenWeatherService::EXCLUDE_*[] $exclude */
+            /** @phpstan-var OpenWeatherService::EXCLUDE_*[] $exclude */
             $exclude = \explode(',', $exclude);
             $response = $this->service->oneCall($latitude, $longitude, $units, ...$exclude);
             if (false === $response) {
@@ -279,7 +279,7 @@ class OpenWeatherController extends AbstractController
         $data = $this->getData($request);
         $form = $this->createSearchForm($data);
         if ($this->handleRequestForm($request, $form)) {
-            /** @psalm-var OpenWeatherSearchType $data */
+            /** @phpstan-var OpenWeatherSearchType $data */
             $data = $form->getData();
             $query = $data[OpenWeatherService::PARAM_QUERY];
             $units = $data[OpenWeatherService::PARAM_UNITS];

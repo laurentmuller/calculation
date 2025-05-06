@@ -181,8 +181,6 @@ class CommandDataServiceTest extends KernelServiceTestCase
 
     /**
      * @phpstan-return CommandType
-     *
-     * @phpstan-ignore return.phpDocType
      */
     private function getCommand(string $name = 'about'): array
     {

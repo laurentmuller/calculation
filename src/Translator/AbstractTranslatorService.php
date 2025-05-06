@@ -22,7 +22,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 /**
  * Abstract translator service.
  *
- * @psalm-import-type TranslatorTranslateType from TranslatorServiceInterface
+ * @phpstan-import-type TranslatorTranslateType from TranslatorServiceInterface
  */
 abstract class AbstractTranslatorService extends AbstractHttpClientService implements TranslatorServiceInterface
 {
@@ -87,7 +87,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     }
 
     /**
-     * @psalm-return TranslatorTranslateType
+     * @phpstan-return TranslatorTranslateType
      */
     protected function createTranslateResults(TranslateQuery $query, string $target): array
     {
@@ -117,7 +117,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     protected function getValue(array $values, string $path, bool $error = true): mixed
     {
         $accessor = $this->getPropertyAccessor();
-        /** @psalm-var mixed $value */
+        /** @phpstan-var mixed $value */
         $value = $accessor->getValue($values, $path);
         if (null === $value && $error) {
             return $this->setLastError(self::ERROR_NOT_FOUND, "Unable to find the value at '$path'.");
@@ -134,7 +134,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     protected function handleError(array $response): bool
     {
         if (isset($response['error'])) {
-            /** @psalm-var array{code: int, message: string} $error */
+            /** @phpstan-var array{code: int, message: string} $error */
             $error = $response['error'];
 
             return $this->setLastError($error['code'], $error['message']);

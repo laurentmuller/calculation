@@ -24,9 +24,9 @@ use fpdf\Enums\PdfTextAlignment;
 /**
  * Report for application commands.
  *
- * @psalm-import-type CommandType from CommandService
- * @psalm-import-type ArgumentType from CommandService
- * @psalm-import-type OptionType from CommandService
+ * @phpstan-import-type CommandType from CommandService
+ * @phpstan-import-type ArgumentType from CommandService
+ * @phpstan-import-type OptionType from CommandService
  *
  * @extends AbstractArrayReport<CommandType[]>
  */
@@ -41,7 +41,7 @@ class CommandsReport extends AbstractArrayReport
         $this->setCellMargin(0.0);
         $this->setTitleTrans('command.list.title');
 
-        /** @psalm-var string $group */
+        /** @phpstan-var string $group */
         foreach ($entities as $group => $commands) {
             $first = true;
             foreach ($commands as $command) {
@@ -76,9 +76,7 @@ class CommandsReport extends AbstractArrayReport
     }
 
     /**
-     * @psalm-param CommandType $command
-     *
-     * @phpstan-param array $command
+     * @phpstan-param CommandType $command
      */
     private function getMaxWidth(array $command): float
     {
@@ -86,13 +84,13 @@ class CommandsReport extends AbstractArrayReport
         $this->applyFixedStyle();
         $width = \array_reduce(
             $command['definition']['arguments'],
-            /** @psalm-param ArgumentType $argument */
+            /** @phpstan-param ArgumentType $argument */
             fn (float $carry, array $argument): float => \max($carry, $this->getStringWidth($argument['name'])),
             $width
         );
         $width = \array_reduce(
             $command['definition']['options'],
-            /** @psalm-param OptionType $option */
+            /** @phpstan-param OptionType $option */
             fn (float $carry, array $option): float => \max($carry, $this->getStringWidth($option['name_shortcut'])),
             $width
         );
@@ -116,7 +114,7 @@ class CommandsReport extends AbstractArrayReport
         }
 
         $offset = 0;
-        /** @psalm-var  array<int, array{0: string, 1: int}> $match */
+        /** @phpstan-var  array<int, array{0: string, 1: int}> $match */
         foreach ($matches as $match) {
             // previous chunk
             $index = $match[0][1];
@@ -138,7 +136,7 @@ class CommandsReport extends AbstractArrayReport
     }
 
     /**
-     * @psalm-param array<string, ArgumentType> $arguments
+     * @phpstan-param array<string, ArgumentType> $arguments
      */
     private function renderArguments(array $arguments, float $width): void
     {
@@ -158,9 +156,7 @@ class CommandsReport extends AbstractArrayReport
     }
 
     /**
-     * @psalm-param CommandType $command
-     *
-     * @phpstan-param array $command
+     * @phpstan-param CommandType $command
      */
     private function renderCommand(array $command): void
     {
@@ -222,7 +218,7 @@ class CommandsReport extends AbstractArrayReport
     }
 
     /**
-     * @psalm-param array<string, OptionType> $options
+     * @phpstan-param array<string, OptionType> $options
      */
     private function renderOptions(array $options, float $width): void
     {
@@ -257,7 +253,7 @@ class CommandsReport extends AbstractArrayReport
         }
 
         $offset = 0;
-        /** @psalm-var  array<int, array{0: string, 1: int}> $match */
+        /** @phpstan-var  array<int, array{0: string, 1: int}> $match */
         foreach ($matches as $match) {
             // previous chunk
             $index = $match[0][1];

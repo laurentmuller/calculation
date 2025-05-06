@@ -71,7 +71,7 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
             }
         }
         if (isset($options['maxsize'])) {
-            /** @psalm-var string|int $maxsize */
+            /** @phpstan-var string|int $maxsize */
             $maxsize = $options['maxsize'];
             $normalizedSize = $this->normalizeSize($maxsize);
             if (null !== $normalizedSize) {
@@ -79,7 +79,7 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
             }
         }
         if (isset($options['maxsizetotal'])) {
-            /** @psalm-var string|int $maxsizetotal */
+            /** @phpstan-var string|int $maxsizetotal */
             $maxsizetotal = $options['maxsizetotal'];
             $normalizedSize = $this->normalizeSize($maxsizetotal);
             if (null !== $normalizedSize) {

@@ -23,9 +23,6 @@ use PHPUnit\Framework\TestCase;
  */
 class CommandsReportTest extends TestCase
 {
-    /**
-     * @psalm-suppress InvalidArgument
-     */
     public function testRender(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -35,6 +32,7 @@ class CommandsReportTest extends TestCase
             'is_required' => false,
             'is_array' => false,
             'description' => 'Description',
+            'default' => 'Default',
             'display' => 'Display',
             'arguments' => 'Arguments',
         ];
@@ -43,6 +41,7 @@ class CommandsReportTest extends TestCase
             'is_required' => false,
             'is_array' => false,
             'description' => '',
+            'default' => 'Default',
             'display' => '',
             'arguments' => '',
         ];

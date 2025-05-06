@@ -154,7 +154,7 @@ abstract class AbstractController extends BaseController
             /**
              * @psalm-suppress MixedAssignment
              *
-             * @psalm-var RequestStack
+             * @phpstan-var RequestStack
              */
             return $this->requestStack = $this->container->get('request_stack');
         } catch (ContainerExceptionInterface $e) {
@@ -437,7 +437,7 @@ abstract class AbstractController extends BaseController
             throw $this->createTranslatedNotFoundException('errors.render_document');
         }
         if (!StringUtils::isString($name) && StringUtils::isString($doc->getTitle())) {
-            /** @psalm-var non-empty-string $name */
+            /** @phpstan-var non-empty-string $name */
             $name = $doc->getTitle();
         }
 
@@ -461,7 +461,7 @@ abstract class AbstractController extends BaseController
             throw $this->createTranslatedNotFoundException('errors.render_document');
         }
         if (!StringUtils::isString($name) && StringUtils::isString($doc->getTitle())) {
-            /** @psalm-var non-empty-string $name */
+            /** @phpstan-var non-empty-string $name */
             $name = $doc->getTitle();
         }
 

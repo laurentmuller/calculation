@@ -24,13 +24,13 @@ class PdfLabel
     /**
      * The number of horizontal labels (columns).
      *
-     * @psalm-var positive-int
+     * @phpstan-var positive-int
      */
     public int $cols = 1;
     /**
      * The font size in points.
      *
-     * @psalm-var positive-int
+     * @phpstan-var positive-int
      */
     public int $fontSize = 9;
     /**
@@ -56,7 +56,7 @@ class PdfLabel
     /**
      * The number of vertical labels (rows).
      *
-     * @psalm-var positive-int
+     * @phpstan-var positive-int
      */
     public int $rows = 1;
     /**

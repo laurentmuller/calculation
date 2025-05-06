@@ -25,7 +25,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * The Simple editor type.
  *
- * @psalm-type ActionType = array{
+ * @phpstan-type ActionType = array{
  *      title?: string|false,
  *      group?: string,
  *      icon?: string,
@@ -80,7 +80,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param ActionType $action
+     * @phpstan-param ActionType $action
      */
     private function filterAction(array $action): bool
     {
@@ -90,12 +90,12 @@ class SimpleEditorType extends AbstractType
     /**
      * Gets the definition of the default actions.
      *
-     * @psalm-return ActionType[]
+     * @phpstan-return ActionType[]
      */
     private function getDefaultActions(): array
     {
         try {
-            /** @psalm-var ActionType[]  */
+            /** @phpstan-var ActionType[]  */
             return FileUtils::decodeJson($this->actionsPath);
         } catch (\InvalidArgumentException) {
             return [];
@@ -113,11 +113,11 @@ class SimpleEditorType extends AbstractType
             return [];
         }
 
-        /** @psalm-var ActionType[] $actions */
+        /** @phpstan-var ActionType[] $actions */
         $actions = $options['actions'] ?? [];
         $actions = \array_filter(
             $actions,
-            /** @psalm-param ActionType $action */
+            /** @phpstan-param ActionType $action */
             fn (array $action): bool => $this->filterAction($action)
         );
         $this->updateActions($actions);
@@ -130,7 +130,7 @@ class SimpleEditorType extends AbstractType
      */
     private function getWidgetClass(FormView $view): string
     {
-        /** @psalm-var string $class */
+        /** @phpstan-var string $class */
         $class = $view->vars['attr']['class'] ?? '';
         $values = \array_filter(\explode(' ', $class));
         $values[] = 'must-validate';
@@ -139,9 +139,9 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param array{actions?: array, ...} $action
+     * @phpstan-param array{actions?: array, ...} $action
      *
-     * @psalm-assert-if-true ActionType[] $action['actions']
+     * @phpstan-assert-if-true ActionType[] $action['actions']
      */
     private function isActions(array $action): bool
     {
@@ -149,9 +149,9 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param ActionType[] $actions
+     * @phpstan-param ActionType[] $actions
      *
-     * @psalm-return ActionType[]
+     * @phpstan-return ActionType[]
      */
     private function updateActions(array &$actions, string $class = 'btn btn-outline-secondary'): array
     {
@@ -171,7 +171,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param ActionType $action
+     * @phpstan-param ActionType $action
      */
     private function updateAttribute(array &$action, string $key): self
     {
@@ -183,7 +183,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param ActionType $action
+     * @phpstan-param ActionType $action
      */
     private function updateClass(array &$action, string $class): self
     {
@@ -199,7 +199,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param ActionType $action
+     * @phpstan-param ActionType $action
      */
     private function updateDropDown(array &$action): void
     {
@@ -214,7 +214,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param ActionType $action
+     * @phpstan-param ActionType $action
      */
     private function updateEnabled(array &$action): self
     {
@@ -222,7 +222,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param ActionType $action
+     * @phpstan-param ActionType $action
      */
     private function updateExec(array &$action): self
     {
@@ -230,7 +230,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param ActionType $action
+     * @phpstan-param ActionType $action
      */
     private function updateIcon(array &$action): self
     {
@@ -242,7 +242,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param ActionType $action
+     * @phpstan-param ActionType $action
      */
     private function updateParameter(array &$action): self
     {
@@ -250,7 +250,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param ActionType $action
+     * @phpstan-param ActionType $action
      */
     private function updateState(array &$action): self
     {
@@ -258,7 +258,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param ActionType $action
+     * @phpstan-param ActionType $action
      */
     private function updateText(array &$action): self
     {
@@ -270,7 +270,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param ActionType $action
+     * @phpstan-param ActionType $action
      */
     private function updateTitle(array &$action): self
     {

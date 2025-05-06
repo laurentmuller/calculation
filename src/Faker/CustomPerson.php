@@ -20,12 +20,12 @@ namespace App\Faker;
  */
 class CustomPerson extends \Faker\Provider\fr_CH\Person
 {
-    /** @psalm-var mixed */
+    /** @phpstan-var mixed */
     protected static $titleFemale = [
         'Madame',
         'Mademoiselle',
     ];
 
-    /** @psalm-var mixed */
+    /** @phpstan-var mixed */
     protected static $titleMale = ['Monsieur'];
 }

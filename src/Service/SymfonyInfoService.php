@@ -32,30 +32,30 @@ use Symfony\Contracts\Cache\CacheInterface;
  * @see https://github.com/symfony/symfony/blob/7.1/src/Symfony/Bundle/FrameworkBundle/Command/AboutCommand.php
  * @see https://github.com/EasyCorp/easy-doc-bundle/blob/master/src/Command/DocCommand.php
  *
- * @psalm-type RouteType = array{
+ * @phpstan-type RouteType = array{
  *     name: string,
  *     path: string,
  *     methods: string}
- * @psalm-type RoutesType = array{
+ * @phpstan-type RoutesType = array{
  *     runtime: array<string, RouteType>,
  *     debug: array<string, RouteType>}
- * @psalm-type PackageSourceType = array{
+ * @phpstan-type PackageSourceType = array{
  *     name: string,
  *     version: string,
  *     description?: string,
  *     homepage?: string,
  *     install-path: string,
  *     support?: array{source?: string}}
- * @psalm-type PackageType = array{
+ * @phpstan-type PackageType = array{
  *     name: string,
  *     version: string,
  *     description: string,
  *     homepage: string|null,
  *     license: string|null}
- * @psalm-type PackagesType = array{
+ * @phpstan-type PackagesType = array{
  *     runtime: array<string, PackageType>,
  *     debug: array<string, PackageType>}
- * @psalm-type BundleType = array{
+ * @phpstan-type BundleType = array{
  *     name: string,
  *     namespace: string,
  *     path: string,
@@ -115,7 +115,7 @@ final readonly class SymfonyInfoService
     /**
      * Gets bundle's information.
      *
-     * @psalm-return array<string, BundleType>
+     * @phpstan-return array<string, BundleType>
      */
     public function getBundles(): array
     {
@@ -260,8 +260,6 @@ final readonly class SymfonyInfoService
 
     /**
      * Get the release date.
-     *
-     * @psalm-api
      */
     public function getReleaseDate(): string
     {
@@ -269,7 +267,7 @@ final readonly class SymfonyInfoService
             $url = \sprintf(self::RELEASE_URL, Kernel::MAJOR_VERSION, Kernel::MINOR_VERSION);
 
             try {
-                /** @psalm-var array{release_date: string, ...} $content */
+                /** @phpstan-var array{release_date: string, ...} $content */
                 $content = FileUtils::decodeJson($url);
                 $date = $content['release_date'];
 
@@ -368,7 +366,7 @@ final readonly class SymfonyInfoService
 
     private function createDate(string $date): \DateTimeImmutable
     {
-        /** @psalm-var \DateTimeImmutable */
+        /** @phpstan-var \DateTimeImmutable */
         return \DateTimeImmutable::createFromFormat('d/m/Y', '01/' . $date);
     }
 
@@ -440,7 +438,7 @@ final readonly class SymfonyInfoService
     }
 
     /**
-     * @psalm-param PackageSourceType $package
+     * @phpstan-param PackageSourceType $package
      */
     private function getLicense(array $package): ?string
     {
@@ -473,7 +471,7 @@ final readonly class SymfonyInfoService
             }
 
             /**
-             * @psalm-var array{
+             * @phpstan-var array{
              *     packages: array<string, PackageSourceType>|null,
              *     dev-package-names: string[]|null
              * } $content
@@ -494,9 +492,9 @@ final readonly class SymfonyInfoService
     private function getRoutes(): array
     {
         return $this->cache->get('routes', function (): array {
-            /** @psalm-var array<string, RouteType> $runtimeRoutes */
+            /** @phpstan-var array<string, RouteType> $runtimeRoutes */
             $runtimeRoutes = [];
-            /** @psalm-var array<string, RouteType> $debugRoutes */
+            /** @phpstan-var array<string, RouteType> $debugRoutes */
             $debugRoutes = [];
             $routes = $this->router->getRouteCollection()->all();
             foreach ($routes as $name => $route) {
@@ -536,10 +534,10 @@ final readonly class SymfonyInfoService
     }
 
     /**
-     * @psalm-param array<string, PackageSourceType> $runtimePackages
-     * @psalm-param string[]                         $debugPackages
+     * @phpstan-param array<string, PackageSourceType> $runtimePackages
+     * @phpstan-param string[]                         $debugPackages
      *
-     * @psalm-return PackagesType
+     * @phpstan-return PackagesType
      */
     private function parsePackages(array $runtimePackages, array $debugPackages): array
     {
@@ -567,7 +565,7 @@ final readonly class SymfonyInfoService
     }
 
     /**
-     * @psalm-return RouteType
+     * @phpstan-return RouteType
      */
     private function parseRoute(string $name, Route $route): array
     {

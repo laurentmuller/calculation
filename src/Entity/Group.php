@@ -42,7 +42,7 @@ class Group extends AbstractCodeEntity
      *
      * @var Collection<int, Category>
      *
-     * @psalm-var ArrayCollection<int, Category>
+     * @phpstan-var ArrayCollection<int, Category>
      */
     #[ORM\OneToMany(
         targetEntity: Category::class,
@@ -59,7 +59,7 @@ class Group extends AbstractCodeEntity
      *
      * @var Collection<int, GroupMargin>
      *
-     * @psalm-var ArrayCollection<int, GroupMargin>
+     * @phpstan-var ArrayCollection<int, GroupMargin>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(
@@ -89,8 +89,6 @@ class Group extends AbstractCodeEntity
 
     /**
      * Add a category.
-     *
-     * @psalm-api
      */
     public function addCategory(Category $category): self
     {
@@ -188,7 +186,7 @@ class Group extends AbstractCodeEntity
         /**
          * @psalm-suppress MixedArgumentTypeCoercion
          *
-         * @psalm-var GroupMargin|null
+         * @phpstan-var GroupMargin|null
          */
         return $this->margins->findFirst(
             fn (int $key, GroupMargin $margin): bool => $margin->contains($amount)
@@ -320,7 +318,7 @@ class Group extends AbstractCodeEntity
         /**
          * @psalm-suppress MixedArgumentTypeCoercion
          *
-         * @psalm-var int
+         * @phpstan-var int
          */
         return $this->categories->reduce($func, 0);
     }

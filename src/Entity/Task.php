@@ -50,7 +50,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
      *
      * @var Collection<int, TaskItem>
      *
-     * @psalm-var ArrayCollection<int, TaskItem>
+     * @phpstan-var ArrayCollection<int, TaskItem>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(
@@ -161,7 +161,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
             return [];
         }
 
-        /** @psalm-var int[] */
+        /** @phpstan-var int[] */
         return $this->items->map(static fn (TaskItem $item): int => (int) $item->getId())->toArray();
     }
 

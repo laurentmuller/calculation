@@ -173,7 +173,7 @@ abstract class AbstractParametersType extends AbstractType
      */
     protected function getDefaultValue(string $name, mixed $default = ''): mixed
     {
-        /** @psalm-var mixed $value */
+        /** @phpstan-var mixed $value */
         $value = $this->defaultValues[$name] ?? $default;
         if ($value instanceof \BackedEnum) {
             return $value->value;

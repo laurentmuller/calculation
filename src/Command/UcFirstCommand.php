@@ -29,7 +29,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 /**
  * Command to set the first character uppercase to fields.
  *
- * @psalm-type EntityType = array{name: string, fields: non-empty-array<string>}
+ * @phpstan-type EntityType = array{name: string, fields: non-empty-array<string>}
  */
 #[AsCommand(name: 'app:uc-first', description: 'Set a first character uppercase to defined fields.')]
 class UcFirstCommand extends Command
@@ -39,10 +39,10 @@ class UcFirstCommand extends Command
     private const OPTION_END_POINT = 'point';
     private const OPTION_FIELD = 'field';
 
-    /** @psalm-var class-string|null */
+    /** @phpstan-var class-string|null */
     private ?string $className = null;
 
-    /** @psalm-var array<class-string, EntityType> */
+    /** @phpstan-var array<class-string, EntityType> */
     private array $entities = [];
 
     private ?string $fieldName = null;
@@ -126,7 +126,7 @@ class UcFirstCommand extends Command
         $question->setMaxAttempts(1)
             ->setErrorMessage('No entity selected.');
 
-        /** @psalm-var ?string $entity */
+        /** @phpstan-var ?string $entity */
         $entity = $io->askQuestion($question);
         if (!\is_string($entity)) {
             return null;
@@ -155,7 +155,7 @@ class UcFirstCommand extends Command
         $question->setMaxAttempts(1)
             ->setErrorMessage("No field selected for the '$name' entity.");
 
-        /** @psalm-var ?string $fieldName */
+        /** @phpstan-var ?string $fieldName */
         $fieldName = $io->askQuestion($question);
         if (!\is_string($fieldName)) {
             return null;
@@ -182,7 +182,7 @@ class UcFirstCommand extends Command
      */
     private function getClassName(SymfonyStyle $io): ?string
     {
-        /** @psalm-var class-string|null $className */
+        /** @phpstan-var class-string|null $className */
         $className = $io->getOption(self::OPTION_CLASS);
         if (null === $className) {
             return $this->askClassName($io);
@@ -202,7 +202,7 @@ class UcFirstCommand extends Command
     }
 
     /**
-     * @psalm-return array<class-string, EntityType>
+     * @phpstan-return array<class-string, EntityType>
      */
     private function getEntities(): array
     {
@@ -287,7 +287,7 @@ class UcFirstCommand extends Command
         $count = 0;
         $accessor = PropertyAccess::createPropertyAccessor();
         foreach ($io->progressIterate($entities) as $entity) {
-            /** @psalm-var string|null $oldValue */
+            /** @phpstan-var string|null $oldValue */
             $oldValue = $accessor->getValue($entity, $this->fieldName);
             $newValue = $this->convert($oldValue, $endPoint);
             if ($oldValue !== $newValue) {

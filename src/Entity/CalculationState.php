@@ -47,7 +47,7 @@ class CalculationState extends AbstractEntity implements ComparableInterface, Ti
      *
      * @var Collection<int, Calculation>
      *
-     * @psalm-var ArrayCollection<int, Calculation>
+     * @phpstan-var ArrayCollection<int, Calculation>
      */
     #[ORM\OneToMany(targetEntity: Calculation::class, mappedBy: 'state', fetch: self::EXTRA_LAZY)]
     private Collection $calculations;

@@ -25,15 +25,15 @@ use fpdf\PdfDocument;
 /**
  * Report for calculations with invalid items.
  *
- * @psalm-import-type CalculationItemEntry from \App\Repository\CalculationRepository
- * @psalm-import-type CalculationItemType from \App\Repository\CalculationRepository
+ * @phpstan-import-type CalculationItemEntry from \App\Repository\CalculationRepository
+ * @phpstan-import-type CalculationItemType from \App\Repository\CalculationRepository
  *
  * @extends AbstractArrayReport<CalculationItemType>
  */
 abstract class AbstractCalculationItemsReport extends AbstractArrayReport
 {
     /**
-     * @psalm-param CalculationItemType[] $entities
+     * @phpstan-param CalculationItemType[] $entities
      */
     protected function __construct(AbstractController $controller, array $entities, string $title, string $description)
     {
@@ -86,7 +86,7 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
      *
      * @return string the formatted items
      *
-     * @psalm-param CalculationItemEntry[] $items
+     * @phpstan-param CalculationItemEntry[] $items
      */
     abstract protected function formatItems(array $items): string;
 

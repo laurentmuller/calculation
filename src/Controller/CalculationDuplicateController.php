@@ -34,7 +34,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller to display and export duplicate items in the calculations.
  *
- * @psalm-import-type CalculationItemType from CalculationRepository
+ * @phpstan-import-type CalculationItemType from CalculationRepository
  */
 #[AsController]
 #[Route(path: '/calculation/duplicate', name: 'calculation_duplicate_')]
@@ -105,7 +105,7 @@ class CalculationDuplicateController extends AbstractController
     /**
      * Gets items to display.
      *
-     * @psalm-return CalculationItemType[]
+     * @phpstan-return CalculationItemType[]
      */
     private function getItems(CalculationRepository $repository): array
     {

@@ -16,7 +16,7 @@ namespace App\Database;
 /**
  * Database to search cites for OpenWeatherMap.
  *
- * @psalm-type OpenWeatherCityType = array{
+ * @phpstan-type OpenWeatherCityType = array{
  *      id: int,
  *      name: string,
  *      country: string,
@@ -127,14 +127,14 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
      *
      * @return array|false the city, if found; false otherwise
      *
-     * @psalm-return OpenWeatherCityType|false
+     * @phpstan-return OpenWeatherCityType|false
      */
     public function findById(int $id): array|false
     {
-        /** @psalm-var \SQLite3Stmt $stmt */
+        /** @phpstan-var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement(self::SEARCH_BY_ID);
         $stmt->bindValue(':id', $id);
-        /** @psalm-var array<int, OpenWeatherCityType> $result */
+        /** @phpstan-var array<int, OpenWeatherCityType> $result */
         $result = $this->executeAndFetch($stmt);
 
         return [] === $result ? false : \reset($result);
@@ -146,7 +146,7 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
      * @param string $name  the name to search for
      * @param int    $limit the maximum number of rows to return
      *
-     * @psalm-return array<int, OpenWeatherCityType>
+     * @phpstan-return array<int, OpenWeatherCityType>
      */
     public function findCity(string $name, int $limit = 25): array
     {
@@ -155,7 +155,7 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
             return $this->findCityCountry($values[0], $values[1], $limit);
         }
 
-        /** @psalm-var array<int, OpenWeatherCityType> */
+        /** @phpstan-var array<int, OpenWeatherCityType> */
         return $this->search(self::SEARCH_CITY, $name, $limit);
     }
 
@@ -166,19 +166,19 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
      * @param string $country the country to search for
      * @param int    $limit   the maximum number of rows to return
      *
-     * @psalm-return array<int, OpenWeatherCityType>
+     * @phpstan-return array<int, OpenWeatherCityType>
      */
     public function findCityCountry(string $city, string $country, int $limit = 25): array
     {
         $city = $this->likeValue($city);
         $country = $this->likeValue($country);
-        /** @psalm-var \SQLite3Stmt $stmt */
+        /** @phpstan-var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement(self::SEARCH_CITY_COUNTRY);
         $stmt->bindValue(':name', $city);
         $stmt->bindValue(':country', $country);
         $stmt->bindValue(':limit', $limit, \SQLITE3_INTEGER);
 
-        /** @psalm-var array<int, OpenWeatherCityType> */
+        /** @phpstan-var array<int, OpenWeatherCityType> */
         return $this->executeAndFetch($stmt);
     }
 
@@ -195,7 +195,7 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
      */
     public function insertCity(int $id, string $name, string $country, float $latitude, float $longitude): bool
     {
-        /** @psalm-var \SQLite3Stmt $stmt */
+        /** @phpstan-var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement(self::INSERT_CITY);
 
         $stmt->bindValue(':id', $id, \SQLITE3_INTEGER);

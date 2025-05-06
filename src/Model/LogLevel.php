@@ -25,11 +25,11 @@ class LogLevel implements \Countable, \Stringable, ComparableInterface
 {
     use LogLevelTrait;
 
-    /** @psalm-var int<0, max> */
+    /** @phpstan-var int<0, max> */
     private int $count = 0;
 
     /**
-     * @psalm-param PsrLevel::* $level
+     * @phpstan-param PsrLevel::* $level
      */
     public function __construct(string $level)
     {

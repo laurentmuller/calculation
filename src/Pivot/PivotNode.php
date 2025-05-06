@@ -40,7 +40,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     /**
      * The sort direction.
      *
-     * @psalm-var self::SORT_*
+     * @phpstan-var self::SORT_*
      */
     private string $sortMode = self::SORT_ASC;
 
@@ -174,7 +174,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     public function findByKeys(array $keys): ?self
     {
         $current = $this;
-        /** @psalm-var mixed $key */
+        /** @phpstan-var mixed $key */
         foreach ($keys as $key) {
             $found = $current->find($key);
             if (!$found instanceof self) {

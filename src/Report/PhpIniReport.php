@@ -25,7 +25,7 @@ use fpdf\Enums\PdfFontStyle;
 /**
  * Report for php.ini.
  *
- * @psalm-type EntriesType = array{local: string, master: string}|string
+ * @phpstan-type EntriesType = array{local: string, master: string}|string
  */
 class PhpIniReport extends AbstractReport
 {
@@ -60,7 +60,7 @@ class PhpIniReport extends AbstractReport
                 PdfColumn::left('Master Value', 30)
             )->outputHeaders();
 
-        /**  @psalm-var array<string, EntriesType> $entries */
+        /**  @phpstan-var array<string, EntriesType> $entries */
         foreach ($content as $key => $entries) {
             $this->outputEntries($table, $key, $entries);
         }
@@ -99,7 +99,7 @@ class PhpIniReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array<string, EntriesType> $entries
+     * @phpstan-param array<string, EntriesType> $entries
      */
     private function outputEntries(PdfGroupTable $table, string $key, array $entries): void
     {
@@ -131,7 +131,7 @@ class PhpIniReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array<string, EntriesType> $entries
+     * @phpstan-param array<string, EntriesType> $entries
      */
     private function sortEntries(array &$entries): void
     {

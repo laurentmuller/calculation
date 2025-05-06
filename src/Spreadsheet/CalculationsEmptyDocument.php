@@ -19,7 +19,7 @@ use App\Traits\EmptyItemsTrait;
 /**
  * Spreadsheet document for the list of calculations with empty items.
  *
- * @psalm-import-type CalculationItemType from \App\Repository\CalculationRepository
+ * @phpstan-import-type CalculationItemType from \App\Repository\CalculationRepository
  */
 class CalculationsEmptyDocument extends AbstractCalculationItemsDocument
 {
@@ -36,7 +36,7 @@ class CalculationsEmptyDocument extends AbstractCalculationItemsDocument
     private readonly string $quantityLabel;
 
     /**
-     * @psalm-param CalculationItemType[] $entities
+     * @phpstan-param CalculationItemType[] $entities
      */
     public function __construct(AbstractController $controller, array $entities)
     {

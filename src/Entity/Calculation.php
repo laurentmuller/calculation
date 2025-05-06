@@ -73,7 +73,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      *
      * @var Collection<int, CalculationGroup>
      *
-     * @psalm-var ArrayCollection<int, CalculationGroup>
+     * @phpstan-var ArrayCollection<int, CalculationGroup>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(
@@ -199,7 +199,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function findCategory(Category $category): CalculationCategory
     {
         // find or create the group
-        /** @psalm-var Group $categoryGroup */
+        /** @phpstan-var Group $categoryGroup */
         $categoryGroup = $category->getGroup();
         $group = $this->findGroup($categoryGroup);
 
@@ -208,7 +208,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         /**
          * @psalm-suppress MixedArgumentTypeCoercion
          *
-         * @psalm-var CalculationCategory|null $first
+         * @phpstan-var CalculationCategory|null $first
          */
         $first = $group->getCategories()->findFirst(
             fn (int $key, CalculationCategory $category): bool => $code === $category->getCode()
@@ -236,7 +236,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         /**
          * @psalm-suppress MixedArgumentTypeCoercion
          *
-         * @psalm-var CalculationGroup|null $first
+         * @phpstan-var CalculationGroup|null $first
          */
         $first = $this->groups->findFirst(
             fn (int $key, CalculationGroup $group): bool => $code === $group->getCode()
@@ -925,7 +925,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         /**
          * @psalm-suppress MixedArgumentTypeCoercion
          *
-         * @psalm-var TValue
+         * @phpstan-var TValue
          */
         return $this->groups->reduce($func, $initial);
     }

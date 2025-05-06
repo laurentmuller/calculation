@@ -30,7 +30,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @template-extends AbstractEntityTable<TEntity, TRepository>
  *
- * @psalm-import-type DropDownType from CategoryRepository
+ * @phpstan-import-type DropDownType from CategoryRepository
  */
 abstract class AbstractCategoryItemTable extends AbstractEntityTable
 {
@@ -40,7 +40,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     final public const PARAM_CATEGORY = 'categoryId';
 
     /**
-     * @psalm-param TRepository $repository
+     * @phpstan-param TRepository $repository
      */
     public function __construct(
         AbstractCategoryItemRepository $repository,
@@ -57,7 +57,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         $result = parent::addSearch($query, $builder, $alias);
         $categoryId = $this->getQueryCategoryId($query);
         if (0 !== $categoryId) {
-            /** @psalm-var string $field */
+            /** @phpstan-var string $field */
             $field = $repository->getSearchFields('category.id', $alias);
             $builder->andWhere($field . '=:' . self::PARAM_CATEGORY)
                 ->setParameter(self::PARAM_CATEGORY, $categoryId, Types::INTEGER);
@@ -66,7 +66,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         }
         $groupId = $this->getQueryGroupId($query);
         if (0 !== $groupId) {
-            /** @psalm-var string $field */
+            /** @phpstan-var string $field */
             $field = $repository->getSearchFields('group.id', $alias);
             $builder->andWhere($field . '=:' . CategoryTable::PARAM_GROUP)
                 ->setParameter(CategoryTable::PARAM_GROUP, $groupId, Types::INTEGER);
@@ -80,7 +80,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     /**
      * Gets drop-down values.
      *
-     * @psalm-return DropDownType
+     * @phpstan-return DropDownType
      */
     abstract protected function getDropDownValues(): array;
 

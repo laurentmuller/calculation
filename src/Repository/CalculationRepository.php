@@ -26,7 +26,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @template-extends AbstractRepository<Calculation>
  *
- * @psalm-type CalculationByMonthType = array{
+ * @phpstan-type CalculationByMonthType = array{
  *        count: int,
  *        items: float,
  *        total: float,
@@ -35,19 +35,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *        margin_percent: float,
  *        margin_amount: float,
  *        date: \DateTimeInterface}
- * @psalm-type CalculationItemEntry = array{
+ * @phpstan-type CalculationItemEntry = array{
  *        description: string,
  *        quantity: float,
  *        price: float,
  *        count: int}
- * @psalm-type CalculationItemType = array{
+ * @phpstan-type CalculationItemType = array{
  *        id: int,
  *        date: \DateTimeInterface,
  *        stateCode: string,
  *        customer: string,
  *        description: string,
  *        items: CalculationItemEntry[]}
- * @psalm-type PivotType = array{
+ * @phpstan-type PivotType = array{
  *        calculation_id: int,
  *        calculation_date: \DateTimeInterface,
  *        calculation_overall_margin: float,
@@ -119,7 +119,7 @@ class CalculationRepository extends AbstractRepository
         $builder = $this->createQueryBuilder('e')
             ->select('COUNT(e.id)');
 
-        /** @psalm-var int<0, max> */
+        /** @phpstan-var int<0, max> */
         return (int) self::addBelowFilter($builder, $minMargin)
             ->getQuery()
             ->getSingleScalarResult();
@@ -142,10 +142,10 @@ class CalculationRepository extends AbstractRepository
             ->groupBy('e.id', 'i.description')
             ->having('COUNT(i.id) > 1')
             ->getDQL();
-        /** @psalm-var literal-string $where */
+        /** @phpstan-var literal-string $where */
         $where = "r.id in($dql)";
 
-        /** @psalm-var int<0, max> */
+        /** @phpstan-var int<0, max> */
         return (int) $this->createQueryBuilder('r')
             ->select('COUNT(r.id)')
             ->where($where)
@@ -170,10 +170,10 @@ class CalculationRepository extends AbstractRepository
             ->where('i.price = 0')
             ->orWhere('i.quantity = 0')
             ->getDQL();
-        /** @psalm-var literal-string $where */
+        /** @phpstan-var literal-string $where */
         $where = "r.id in($dql)";
 
-        /** @psalm-var int<0, max> */
+        /** @phpstan-var int<0, max> */
         return (int) $this->createQueryBuilder('r')
             ->select('COUNT(r.id)')
             ->where($where)
@@ -231,7 +231,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @param int $maxResults the maximum number of results to retrieve (the "limit")
      *
-     * @psalm-return CalculationByMonthType[]
+     * @phpstan-return CalculationByMonthType[]
      */
     public function getByMonth(int $maxResults = 6): array
     {
@@ -249,7 +249,7 @@ class CalculationRepository extends AbstractRepository
         $result = $builder->getQuery()
             ->getArrayResult();
 
-        /** @psalm-var CalculationByMonthType $item */
+        /** @phpstan-var CalculationByMonthType $item */
         foreach ($result as &$item) {
             $item['date'] = $this->convertToDate($item);
             $item['margin_amount'] = $item['total'] - $item['items'];
@@ -280,7 +280,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @return array<int[]> the distinct years and months
      *
-     * @psalm-return array<array{
+     * @phpstan-return array<array{
      *      year: int,
      *      month: int,
      *      year_month: int}>
@@ -306,7 +306,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @return int[] the distinct years and weeks
      *
-     * @psalm-return array<array{
+     * @phpstan-return array<array{
      *      year: int,
      *      month: int,
      *      year_week: int}>
@@ -352,7 +352,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @return Calculation[] the matching calculations
      *
-     * @psalm-return list<Calculation>
+     * @phpstan-return list<Calculation>
      */
     public function getForWeek(int $year, int $week): array
     {
@@ -370,7 +370,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @return Calculation[] the matching calculations
      *
-     * @psalm-return list<Calculation>
+     * @phpstan-return list<Calculation>
      */
     public function getForYear(int $year): array
     {
@@ -402,9 +402,9 @@ class CalculationRepository extends AbstractRepository
      * @param string $orderColumn    the order column
      * @param string $orderDirection the order direction ('ASC' or 'DESC')
      *
-     * @psalm-param self::SORT_* $orderDirection
+     * @phpstan-param self::SORT_* $orderDirection
      *
-     * @psalm-return CalculationItemType[]
+     * @phpstan-return CalculationItemType[]
      */
     public function getItemsDuplicate(string $orderColumn = 'id', string $orderDirection = self::SORT_DESC): array
     {
@@ -435,10 +435,10 @@ class CalculationRepository extends AbstractRepository
         $this->updateOrder($builder, $orderColumn, $orderDirection);
         $items = $builder->getQuery()->getArrayResult();
 
-        /** @psalm-var CalculationItemType[] $result */
+        /** @phpstan-var CalculationItemType[] $result */
         $result = [];
 
-        /** @psalm-var array{
+        /** @phpstan-var array{
          *      calculation_id: int,
          *      calculation_date: \DateTimeInterface,
          *      calculation_customer: string,
@@ -465,9 +465,9 @@ class CalculationRepository extends AbstractRepository
      * @param string $orderColumn    the order column
      * @param string $orderDirection the order direction ('ASC' or 'DESC')
      *
-     * @psalm-param self::SORT_* $orderDirection
+     * @phpstan-param self::SORT_* $orderDirection
      *
-     * @psalm-return CalculationItemType[]
+     * @phpstan-return CalculationItemType[]
      */
     public function getItemsEmpty(string $orderColumn = 'id', string $orderDirection = self::SORT_DESC): array
     {
@@ -500,10 +500,10 @@ class CalculationRepository extends AbstractRepository
         $this->updateOrder($builder, $orderColumn, $orderDirection);
         $items = $builder->getQuery()->getArrayResult();
 
-        /** @psalm-var CalculationItemType[] $result */
+        /** @phpstan-var CalculationItemType[] $result */
         $result = [];
 
-        /** @psalm-var array{
+        /** @phpstan-var array{
          *      calculation_id: int,
          *      calculation_date: \DateTimeInterface,
          *      calculation_customer: string,
@@ -551,13 +551,13 @@ class CalculationRepository extends AbstractRepository
     /**
      * Gets the minimum (first) and maximum (last) dates of calculations.
      *
-     * @psalm-return array{0: ?\DateTimeImmutable, 1: ?\DateTimeImmutable}
+     * @phpstan-return array{0: ?\DateTimeImmutable, 1: ?\DateTimeImmutable}
      *
      * @throws \Exception
      */
     public function getMinMaxDates(): array
     {
-        /** @psalm-var array{MIN_DATE: string|null, MAX_DATE: string|null}|null $values */
+        /** @phpstan-var array{MIN_DATE: string|null, MAX_DATE: string|null}|null $values */
         $values = $this->createQueryBuilder('c')
             ->select('MIN(c.date) as MIN_DATE')
             ->addSelect('MAX(c.date) as MAX_DATE')
@@ -576,7 +576,7 @@ class CalculationRepository extends AbstractRepository
     /**
      * Gets data for the pivot table.
      *
-     * @psalm-return PivotType[]
+     * @phpstan-return PivotType[]
      */
     public function getPivot(): array
     {
@@ -742,7 +742,7 @@ class CalculationRepository extends AbstractRepository
      * @param array $item   the item to get values for creating a new entry result
      * @param array $values the values to add as an item entry
      *
-     * @psalm-param array{
+     * @phpstan-param array{
      *      calculation_id: int,
      *      calculation_date: \DateTimeInterface,
      *      calculation_customer: string,

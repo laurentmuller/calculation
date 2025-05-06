@@ -19,7 +19,7 @@ use App\Entity\TaskItem;
 /**
  * Contains the result of a computed task.
  *
- * @psalm-type ItemType = array{
+ * @phpstan-type ItemType = array{
  *     id: int,
  *     name: string,
  *     value: float,
@@ -29,7 +29,7 @@ use App\Entity\TaskItem;
 class TaskComputeResult implements \JsonSerializable
 {
     /**
-     * @psalm-var ItemType[]
+     * @phpstan-var ItemType[]
      */
     private array $items = [];
     private float $overall = 0;
@@ -57,34 +57,23 @@ class TaskComputeResult implements \JsonSerializable
     }
 
     /**
-     * @psalm-return ItemType[]
-     *
-     * @psalm-api
+     * @phpstan-return ItemType[]
      */
     public function getItems(): array
     {
         return $this->items;
     }
 
-    /**
-     * @psalm-api
-     */
     public function getOverall(): float
     {
         return $this->overall;
     }
 
-    /**
-     * @psalm-api
-     */
     public function getQuantity(): float
     {
         return $this->quantity;
     }
 
-    /**
-     * @psalm-api
-     */
     public function getTask(): Task
     {
         return $this->task;

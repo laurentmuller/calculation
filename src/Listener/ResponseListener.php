@@ -117,7 +117,7 @@ class ResponseListener
         }
 
         try {
-            /** @psalm-var array<string, string[]> $content */
+            /** @phpstan-var array<string, string[]> $content */
             $content = FileUtils::decodeJson($this->file);
             $content = $this->replaceReportUrl($content);
             $content = $this->reduceValues($content);
@@ -132,9 +132,9 @@ class ResponseListener
     }
 
     /**
-     * @psalm-param array<string, string[]> $array
+     * @phpstan-param array<string, string[]> $array
      *
-     * @psalm-return string[]
+     * @phpstan-return string[]
      */
     private function reduceValues(array $array): array
     {
@@ -151,9 +151,9 @@ class ResponseListener
     }
 
     /**
-     * @psalm-param array<string, string[]> $array
+     * @phpstan-param array<string, string[]> $array
      *
-     * @psalm-return array<string, string[]>
+     * @phpstan-return array<string, string[]>
      */
     private function replaceReportUrl(array $array): array
     {

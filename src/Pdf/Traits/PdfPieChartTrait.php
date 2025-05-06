@@ -23,11 +23,11 @@ use fpdf\Traits\PdfSectorTrait;
 /**
  * Trait to draw pie chart.
  *
- * @psalm-import-type ColorValueType from \App\Pdf\Interfaces\PdfChartInterface
+ * @phpstan-import-type ColorValueType from \App\Pdf\Interfaces\PdfChartInterface
  *
- * @psalm-require-extends \App\Report\AbstractReport
+ * @phpstan-require-extends \App\Report\AbstractReport
  *
- * @psalm-require-implements \App\Pdf\Interfaces\PdfChartInterface
+ * @phpstan-require-implements \App\Pdf\Interfaces\PdfChartInterface
  */
 trait PdfPieChartTrait
 {
@@ -84,7 +84,7 @@ trait PdfPieChartTrait
     }
 
     /**
-     * @psalm-param ColorValueType $row
+     * @phpstan-param ColorValueType $row
      */
     private function pieApplyFillColor(array $row): void
     {

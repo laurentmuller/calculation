@@ -22,7 +22,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Service to get IP lookup.
  *
- * @psalm-type IpStackType = array{
+ * @phpstan-type IpStackType = array{
  *     city: ?string,
  *     region_name: ?string,
  *     latitude: ?float,
@@ -79,7 +79,9 @@ class IpStackService extends AbstractHttpClientService
      *
      * @param ?Request $request the request to get the client IP address or null for detecting the IP address
      *
-     * @return IpStackType|null the current Ip information, if success; null on error
+     * @return ?array the current Ip information, if success; null on error
+     *
+     * @phpstan-return IpStackType|null
      */
     public function getIpInfo(?Request $request = null): ?array
     {
@@ -89,14 +91,14 @@ class IpStackService extends AbstractHttpClientService
     }
 
     /**
-     * @psalm-return IpStackType|null
+     * @phpstan-return IpStackType|null
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     private function doGetIpInfo(string $url): ?array
     {
         try {
-            /** @psalm-var IpStackType $response */
+            /** @phpstan-var IpStackType $response */
             $response = $this->requestGet($url)->toArray();
             if ($this->isValidResponse($response)) {
                 return $this->updateResponse($response);
@@ -135,7 +137,7 @@ class IpStackService extends AbstractHttpClientService
     }
 
     /**
-     * @psalm-param IpStackType $response
+     * @phpstan-param IpStackType $response
      */
     private function isValidResponse(array $response): bool
     {
@@ -155,9 +157,9 @@ class IpStackService extends AbstractHttpClientService
     }
 
     /**
-     * @psalm-param IpStackType $response
+     * @phpstan-param IpStackType $response
      *
-     * @psalm-return IpStackType
+     * @phpstan-return IpStackType
      */
     private function updateResponse(array $response): array
     {

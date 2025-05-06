@@ -30,7 +30,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @extends AbstractType<mixed>
  *
- * @psalm-type OptionsType = array{
+ * @phpstan-type OptionsType = array{
  *     hidden_input: bool,
  *     read_only: bool,
  *     disabled: bool,
@@ -102,12 +102,12 @@ class PlainType extends AbstractType
     }
 
     /**
-     * @psalm-param OptionsType $options
+     * @phpstan-param OptionsType $options
      */
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        /** @psalm-var mixed $data */
+        /** @phpstan-var mixed $data */
         $data = $form->getViewData();
         $value = $this->getDataValue($data, $options);
         $display_value = $this->getDisplayValue($data, $options, $value);
@@ -233,7 +233,7 @@ class PlainType extends AbstractType
     }
 
     /**
-     * @psalm-param OptionsType $options
+     * @phpstan-param OptionsType $options
      */
     private function formatArray(array $value, array $options): string
     {
@@ -248,7 +248,7 @@ class PlainType extends AbstractType
     }
 
     /**
-     * @psalm-param OptionsType $options
+     * @phpstan-param OptionsType $options
      */
     private function formatDate(\DateTimeInterface|int|null $value, array $options): string
     {
@@ -261,7 +261,7 @@ class PlainType extends AbstractType
     }
 
     /**
-     * @psalm-param OptionsType $options
+     * @phpstan-param OptionsType $options
      */
     private function formatEmpty(mixed $value, array $options): string
     {
@@ -273,7 +273,7 @@ class PlainType extends AbstractType
     }
 
     /**
-     * @psalm-param OptionsType $options
+     * @phpstan-param OptionsType $options
      */
     private function formatNumber(float|int|string $value, array $options): string
     {
@@ -287,7 +287,7 @@ class PlainType extends AbstractType
     }
 
     /**
-     * @psalm-param OptionsType $options
+     * @phpstan-param OptionsType $options
      */
     private function formatPercent(float|int|string $value, array $options): string
     {
@@ -302,11 +302,11 @@ class PlainType extends AbstractType
     /**
      * @throws TransformationFailedException if the value cannot be mapped to a string
      *
-     * @psalm-param OptionsType $options
+     * @phpstan-param OptionsType $options
      */
     private function getDataValue(mixed $value, array $options): string
     {
-        /** @psalm-var mixed $value */
+        /** @phpstan-var mixed $value */
         $value = $this->transformValue($value, $options);
 
         if (\is_bool($value)) {
@@ -341,7 +341,7 @@ class PlainType extends AbstractType
     }
 
     /**
-     * @psalm-param OptionsType $options
+     * @phpstan-param OptionsType $options
      */
     private function getDisplayValue(mixed $value, array $options, string $default): string
     {
@@ -358,7 +358,7 @@ class PlainType extends AbstractType
     }
 
     /**
-     * @psalm-param OptionsType $options
+     * @phpstan-param OptionsType $options
      */
     private function transformValue(mixed $value, array $options): mixed
     {

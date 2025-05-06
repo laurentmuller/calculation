@@ -20,10 +20,10 @@ namespace App\Faker;
  */
 class CustomPhoneNumber extends \Faker\Provider\fr_CH\PhoneNumber
 {
-    /** @psalm-var mixed */
+    /** @phpstan-var mixed */
     protected static $formats = ['0## ### ## ##'];
 
-    /** @psalm-var array */
+    /** @phpstan-var array */
     protected static $mobileFormats = [
         // Local
         '075 ### ## ##',

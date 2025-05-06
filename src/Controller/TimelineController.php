@@ -26,7 +26,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller to display calculations timeline.
  *
- * @psalm-import-type ParametersType from TimelineService
+ * @phpstan-import-type ParametersType from TimelineService
  */
 #[AsController]
 #[Route(path: '/timeline', name: 'timeline_')]
@@ -121,7 +121,7 @@ class TimelineController extends AbstractController
     }
 
     /**
-     * @psalm-param ParametersType $parameters
+     * @phpstan-param ParametersType $parameters
      */
     private function renderContent(array $parameters): JsonResponse
     {

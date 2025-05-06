@@ -64,7 +64,7 @@ $rules = [
         'separate' => 'bottom'],
     'phpdoc_to_comment' => [
         'allow_before_return_statement' => true,
-        'ignored_tags' => ['phpstan-var', 'psalm-suppress'],
+        'ignored_tags' => ['psalm-var', 'phpstan-var', 'psalm-suppress', 'phpstan-ignore'],
     ],
 ];
 

@@ -25,7 +25,7 @@ use Twig\Environment;
 /**
  * Chart to display calculations by state.
  *
- * @psalm-import-type QueryCalculationType from CalculationStateRepository
+ * @phpstan-import-type QueryCalculationType from CalculationStateRepository
  */
 class StateChart extends AbstractHighchart
 {
@@ -139,7 +139,7 @@ class StateChart extends AbstractHighchart
     }
 
     /**
-     * @psalm-param QueryCalculationType[] $states
+     * @phpstan-param QueryCalculationType[] $states
      */
     private function mapData(array $states): array
     {
@@ -179,7 +179,7 @@ class StateChart extends AbstractHighchart
     }
 
     /**
-     * @psalm-param QueryCalculationType[] $states
+     * @phpstan-param QueryCalculationType[] $states
      */
     private function setSeries(array $states): void
     {

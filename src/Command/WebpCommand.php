@@ -73,7 +73,7 @@ class WebpCommand extends Command
             return Command::INVALID;
         }
 
-        /** @psalm-var mixed $level */
+        /** @phpstan-var mixed $level */
         $level = $io->getOption(self::OPTION_LEVEL);
         if (!$this->validateLevel($io, $level)) {
             return Command::INVALID;

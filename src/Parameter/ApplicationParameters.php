@@ -115,7 +115,7 @@ class ApplicationParameters extends AbstractParameters
 
         // special case for minimum margin
         $key = DefaultParameter::getCacheKey();
-        /** @psalm-var float $minMargin */
+        /** @phpstan-var float $minMargin */
         $minMargin = $values[$key]['minMargin'];
         $values[$key]['minMargin'] = $minMargin * 100.0;
 

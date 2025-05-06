@@ -76,7 +76,7 @@ class SiteMapController extends AbstractController
     private function loadRoutes(array $values): array
     {
         $results = [];
-        /** @psalm-var string|array $value */
+        /** @var string|array $value */
         foreach ($values as $key => $value) {
             if ('route' === $key && \is_string($value)) {
                 $results[] = $value;

@@ -25,13 +25,13 @@ use fpdf\Enums\PdfTextAlignment;
 /**
  * Report for the help documentation.
  *
- * @psalm-import-type HelpActionType from HelpService
- * @psalm-import-type HelpForbiddenType from HelpService
- * @psalm-import-type HelpFieldType from HelpService
- * @psalm-import-type HelpDialogType from HelpService
- * @psalm-import-type HelpEntityType from HelpService
- * @psalm-import-type HelpMainMenuType from HelpService
- * @psalm-import-type HelpMenuType from HelpService
+ * @phpstan-import-type HelpActionType from HelpService
+ * @phpstan-import-type HelpForbiddenType from HelpService
+ * @phpstan-import-type HelpFieldType from HelpService
+ * @phpstan-import-type HelpDialogType from HelpService
+ * @phpstan-import-type HelpEntityType from HelpService
+ * @phpstan-import-type HelpMainMenuType from HelpService
+ * @phpstan-import-type HelpMenuType from HelpService
  */
 class HelpReport extends AbstractReport
 {
@@ -65,22 +65,22 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpDialogType $dialog
+     * @phpstan-param HelpDialogType $dialog
      *
-     * @psalm-return HelpEntityType|null
+     * @phpstan-return HelpEntityType|null
      */
     private function findEntity(array $dialog): ?array
     {
         $id = $dialog['entity'] ?? null;
 
-        /** @psalm-var HelpEntityType|null */
+        /** @phpstan-var HelpEntityType|null */
         return $this->service->findEntity($id);
     }
 
     /**
-     * @psalm-param HelpEntityType|null $entity
+     * @phpstan-param HelpEntityType|null $entity
      *
-     * @psalm-return HelpFieldType[]|null
+     * @phpstan-return HelpFieldType[]|null
      */
     private function findFields(?array $entity): ?array
     {
@@ -88,8 +88,8 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpEntityType $item
-     * @psalm-param HelpFieldType $field
+     * @phpstan-param HelpEntityType $item
+     * @phpstan-param HelpFieldType $field
      */
     private function formatFieldName(array $item, array $field): string
     {
@@ -100,7 +100,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpFieldType $field
+     * @phpstan-param HelpFieldType $field
      */
     private function formatFieldType(array $field): string
     {
@@ -119,7 +119,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpActionType[] $actions
+     * @phpstan-param HelpActionType[] $actions
      */
     private function outputActions(array $actions, string $description): void
     {
@@ -144,7 +144,7 @@ class HelpReport extends AbstractReport
             )->outputHeaders();
 
         foreach ($actions as $action) {
-            /** @psalm-var HelpActionType $action */
+            /** @phpstan-var HelpActionType $action */
             $action = $this->service->mergeAction($action);
             $table->addRow(
                 $this->trans($action['id']),
@@ -154,8 +154,8 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpEntityType $item
-     * @psalm-param HelpFieldType[] $fields
+     * @phpstan-param HelpEntityType $item
+     * @phpstan-param HelpFieldType[] $fields
      */
     private function outputColumns(array $item, array $fields): void
     {
@@ -177,7 +177,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param string[] $constraints
+     * @phpstan-param string[] $constraints
      */
     private function outputConstraints(array $constraints): void
     {
@@ -193,7 +193,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $item
      */
     private function outputDialog(array $item): void
     {
@@ -212,7 +212,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $item
      */
     private function outputDialogDescription(array $item): void
     {
@@ -223,7 +223,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $item
      */
     private function outputDialogDetails(array $item): void
     {
@@ -239,7 +239,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $item
      */
     private function outputDialogEditActions(array $item): void
     {
@@ -250,7 +250,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $item
      */
     private function outputDialogEntityAndFields(array $item): void
     {
@@ -276,7 +276,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $item
      */
     private function outputDialogFields(array $item): void
     {
@@ -309,7 +309,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $item
      */
     private function outputDialogForbidden(array $item): void
     {
@@ -330,7 +330,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $item
      */
     private function outputDialogGlobalActions(array $item): void
     {
@@ -341,7 +341,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $item
      */
     private function outputDialogImage(array $item): void
     {
@@ -354,7 +354,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $item
      */
     private function outputDialogImages(array $item): void
     {
@@ -369,7 +369,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array<string, HelpDialogType[]> $groupedDialogs
+     * @phpstan-param array<string, HelpDialogType[]> $groupedDialogs
      */
     private function outputDialogs(array $groupedDialogs, bool $newPage): bool
     {
@@ -406,7 +406,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpEntityType[] $entities
+     * @phpstan-param HelpEntityType[] $entities
      */
     private function outputEntities(array $entities, bool $newPage): void
     {
@@ -434,7 +434,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpEntityType $item
+     * @phpstan-param HelpEntityType $item
      */
     private function outputEntity(array $item): void
     {
@@ -463,8 +463,8 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpEntityType $item
-     * @psalm-param HelpFieldType[] $fields
+     * @phpstan-param HelpEntityType $item
+     * @phpstan-param HelpFieldType[] $fields
      */
     private function outputFields(array $item, array $fields): void
     {
@@ -513,7 +513,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpMenuType[] $menus
+     * @phpstan-param HelpMenuType[] $menus
      */
     private function outputMainMenus(array $menus): bool
     {
@@ -550,7 +550,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpMenuType[] $menus
+     * @phpstan-param HelpMenuType[] $menus
      */
     private function outputMenus(PdfTable $table, array $menus, int $indent = 0): void
     {
@@ -560,14 +560,14 @@ class HelpReport extends AbstractReport
 
         $style = PdfStyle::getCellStyle()->setIndent($indent);
         foreach ($menus as $menu) {
-            /** @psalm-var HelpMenuType $menu */
+            /** @phpstan-var HelpMenuType $menu */
             $menu = $this->service->mergeAction($menu);
             $table->startRow()
                 ->add($this->splitTrans($menu), style: $style)
                 ->add($menu['description'] ?? null)
                 ->endRow();
 
-            /** @psalm-var HelpMenuType[]|null $sub_menus */
+            /** @phpstan-var HelpMenuType[]|null $sub_menus */
             $sub_menus = $menu['menus'] ?? null;
             if (null !== $sub_menus) {
                 $this->outputMenus($table, $sub_menus, $indent + 4);
@@ -595,7 +595,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array{id: string, ...}|string $item
+     * @phpstan-param array{id: string, ...}|string $item
      */
     private function splitTrans(array|string $item): string
     {

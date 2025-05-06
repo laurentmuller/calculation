@@ -26,7 +26,7 @@ use App\Utils\FormatUtils;
 /**
  * Report outputting HTML color names.
  *
- * @psalm-type ColorType = HtmlColorName|HtmlBootstrapColor|HtmlGrayedColor
+ * @phpstan-type ColorType = HtmlColorName|HtmlBootstrapColor|HtmlGrayedColor
  */
 class HtmlColorsReport extends AbstractReport
 {

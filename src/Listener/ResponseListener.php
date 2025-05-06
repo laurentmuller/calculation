@@ -47,9 +47,10 @@ class ResponseListener
      * The default headers to add.
      */
     private const DEFAULT_HEADERS = [
-        'referrer-policy' => 'same-origin',
+        'Referrer-Policy' => 'same-origin',
+        'Cross-Origin-Opener-Policy' => 'same-origin',
         'X-Content-Type-Options' => 'nosniff',
-        'x-permitted-cross-domain-policies' => 'none',
+        'X-Permitted-Cross-Domain-Policies' => 'none',
     ];
 
     public function __construct(

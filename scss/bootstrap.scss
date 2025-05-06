@@ -129,5 +129,5 @@ html[data-bs-theme=dark] {
     line-height: $input-line-height;
     color: var(--bs-secondary-color);
     background-color: transparent;
-    border: $input-border-width solid $input-border-color;
+    border: $input-border-width $border-style $input-border-color;
 }

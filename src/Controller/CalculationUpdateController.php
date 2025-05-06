@@ -85,9 +85,11 @@ class CalculationUpdateController extends AbstractController
                 'multiple' => true,
                 'expanded' => true,
                 'group_by' => fn (): null => null,
-                'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getEditableQueryBuilder(),
+                'query_builder' => static fn (
+                    CalculationStateRepository $repository
+                ): QueryBuilder => $repository->getEditableQueryBuilder(),
             ])
-            ->labelClass('checkbox-inline')
+            ->labelClass('checkbox-inline checkbox-switch')
             ->add(CalculationStateListType::class);
 
         $helper->addSimulateAndConfirmType($this->getTranslator(), $query->isSimulate());

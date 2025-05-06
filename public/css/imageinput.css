@@ -16,6 +16,8 @@
     width: 200px;
     height: 200px;
     cursor: pointer;
+    background-color: white;
+
 }
 
 .image-input .img-thumbnail > img {

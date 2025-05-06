@@ -112,8 +112,6 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
      * Delete all cities.
      *
      * @return bool true on success
-     *
-     * @psalm-api
      */
     public function deleteCities(): bool
     {

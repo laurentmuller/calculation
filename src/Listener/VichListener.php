@@ -41,8 +41,6 @@ class VichListener
 
     /**
      * Create the small and medium image if applicable.
-     *
-     * @psalm-api
      */
     #[AsEventListener(event: Events::POST_UPLOAD)]
     public function onPostUpload(Event $event): void
@@ -67,8 +65,6 @@ class VichListener
 
     /**
      * Remove the medium and the small images.
-     *
-     * @psalm-api
      */
     #[AsEventListener(event: Events::PRE_REMOVE)]
     public function onPreRemove(Event $event): void
@@ -85,8 +81,6 @@ class VichListener
 
     /**
      * Rename and resize the image.
-     *
-     * @psalm-api
      */
     #[AsEventListener(event: Events::PRE_UPLOAD)]
     public function onPreUpload(Event $event): void

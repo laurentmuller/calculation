@@ -98,8 +98,6 @@ class ProductProvider extends EntityProvider
 
     /**
      * Returns if the given product's description exists.
-     *
-     * @psalm-api
      */
     public function productExist(string $description): bool
     {
@@ -108,8 +106,6 @@ class ProductProvider extends EntityProvider
 
     /**
      * Gets a random product's name.
-     *
-     * @psalm-api
      */
     public function productName(): string
     {

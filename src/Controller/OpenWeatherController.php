@@ -72,8 +72,6 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns the current conditions data for a specific location.
-     *
-     * @psalm-api
      */
     #[Get(path: '/api/current', name: 'api_current')]
     public function apiCurrent(Request $request): JsonResponse
@@ -94,8 +92,6 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns 16 days / daily forecast conditions data for a specific location.
-     *
-     * @psalm-api
      */
     #[Get(path: '/api/daily', name: 'api_daily')]
     public function apiDaily(Request $request): JsonResponse
@@ -117,8 +113,6 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns 5-days / 3-hour forecast conditions data for a specific location.
-     *
-     * @psalm-api
      */
     #[Get(path: '/api/forecast', name: 'api_forecast')]
     public function apiForecast(Request $request): JsonResponse
@@ -140,8 +134,6 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns all essential weather data for a specific location.
-     *
-     * @psalm-api
      */
     #[Get(path: '/api/onecall', name: 'api_onecall')]
     public function apiOneCall(Request $request): JsonResponse
@@ -166,8 +158,6 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns an array of cities that match the query text.
-     *
-     * @psalm-api
      */
     #[Get(path: '/api/search', name: 'api_search')]
     public function apiSearch(Request $request, OpenWeatherSearchService $service): JsonResponse

@@ -77,9 +77,6 @@ class Category extends AbstractCodeEntity
         return $this;
     }
 
-    /**
-     * @psalm-api
-     */
     public function addTask(Task $task): self
     {
         if (!$this->tasks->contains($task)) {
@@ -131,8 +128,6 @@ class Category extends AbstractCodeEntity
 
     /**
      * Gets this code and the group code (if any).
-     *
-     * @psalm-api
      */
     public function getFullCode(): ?string
     {
@@ -173,8 +168,6 @@ class Category extends AbstractCodeEntity
      * Get products.
      *
      * @return Collection<int, Product>
-     *
-     * @psalm-api
      */
     public function getProducts(): Collection
     {
@@ -183,8 +176,6 @@ class Category extends AbstractCodeEntity
 
     /**
      * @return Collection<int, Task>
-     *
-     * @psalm-api
      */
     public function getTasks(): Collection
     {
@@ -209,8 +200,6 @@ class Category extends AbstractCodeEntity
 
     /**
      * Remove a product.
-     *
-     * @psalm-api
      */
     public function removeProduct(Product $product): self
     {
@@ -223,8 +212,6 @@ class Category extends AbstractCodeEntity
 
     /**
      * Remove a task.
-     *
-     * @psalm-api
      */
     public function removeTask(Task $task): self
     {

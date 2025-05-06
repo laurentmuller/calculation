@@ -85,8 +85,6 @@ class PdfGroupTable extends PdfTable
 
     /**
      * Gets the group listener.
-     *
-     * @psalm-api
      */
     public function getGroupListener(): ?PdfGroupListenerInterface
     {

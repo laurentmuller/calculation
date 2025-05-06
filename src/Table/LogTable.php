@@ -51,8 +51,6 @@ class LogTable extends AbstractTable implements \Countable
 
     /**
      * @throws \Twig\Error\Error
-     *
-     * @psalm-api
      */
     public function formatChannel(string $value, Log $log): string
     {
@@ -61,8 +59,6 @@ class LogTable extends AbstractTable implements \Countable
 
     /**
      * Formats the date.
-     *
-     * @psalm-api
      */
     public function formatCreatedAt(\DateTimeInterface $value): string
     {
@@ -71,8 +67,6 @@ class LogTable extends AbstractTable implements \Countable
 
     /**
      * @throws \Twig\Error\Error
-     *
-     * @psalm-api
      */
     public function formatLevel(string $value, Log $log): string
     {

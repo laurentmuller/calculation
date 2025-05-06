@@ -88,8 +88,6 @@ class PivotCell extends AbstractPivotAggregator
      * @param string $separator the separator to use between titles
      *
      * @see PivotNode::getTitles()
-     *
-     * @psalm-api
      */
     public function getColumnTitle(string $separator = PivotTable::PATH_SEPARATOR): string
     {
@@ -102,8 +100,6 @@ class PivotCell extends AbstractPivotAggregator
      * Gets the formatted result.
      *
      * @return mixed the formatted result
-     *
-     * @psalm-api
      */
     public function getFormattedResult(): mixed
     {
@@ -142,8 +138,6 @@ class PivotCell extends AbstractPivotAggregator
      * @param string $separator the separator to use between titles
      *
      * @see PivotNode::getTitles()
-     *
-     * @psalm-api
      */
     public function getRowTitle(string $separator = PivotTable::PATH_SEPARATOR): string
     {

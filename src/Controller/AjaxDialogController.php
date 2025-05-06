@@ -34,8 +34,6 @@ class AjaxDialogController extends AbstractController
 {
     /**
      * Render the edit item dialog template.
-     *
-     * @psalm-api
      */
     #[Get(path: '/dialog/item', name: 'dialog_item')]
     public function dialogItem(): JsonResponse
@@ -49,8 +47,6 @@ class AjaxDialogController extends AbstractController
 
     /**
      * Render the page selection dialog for the data table.
-     *
-     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Get(path: '/dialog/page', name: 'dialog_page')]
@@ -61,8 +57,6 @@ class AjaxDialogController extends AbstractController
 
     /**
      * Render the sort dialog for data table.
-     *
-     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Post(path: '/dialog/sort', name: 'dialog_sort')]
@@ -73,8 +67,6 @@ class AjaxDialogController extends AbstractController
 
     /**
      * Render the edit task dialog template.
-     *
-     * @psalm-api
      */
     #[Get(path: '/dialog/task', name: 'dialog_task')]
     public function dialogTask(TaskRepository $repository): JsonResponse

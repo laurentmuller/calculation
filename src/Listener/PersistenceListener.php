@@ -86,9 +86,6 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
     {
     }
 
-    /**
-     * @psalm-api
-     */
     public function onFlush(OnFlushEventArgs $args): void
     {
         if (!$this->isEnabled()) {

@@ -126,8 +126,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * - Fill color: Black.
      * - Draw color: Black.
      * - Text color: White.
-     *
-     * @psalm-api
      */
     public static function getBlackHeaderStyle(): self
     {
@@ -204,8 +202,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Gets the draw color.
-     *
-     * @psalm-api
      */
     public function getDrawColor(): PdfDrawColor
     {
@@ -214,8 +210,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Gets the fill color.
-     *
-     * @psalm-api
      */
     public function getFillColor(): PdfFillColor
     {
@@ -274,8 +268,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * - Fill color: White.
      * - Draw color: Black.
      * - Text color: Blue.
-     *
-     * @psalm-api
      */
     public static function getLinkStyle(): self
     {
@@ -301,8 +293,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Gets the text color.
-     *
-     * @psalm-api
      */
     public function getTextColor(): PdfTextColor
     {

@@ -54,8 +54,6 @@ enum FlashType: string implements TranslatableEnumInterface
 
     /**
      * Gets the icon.
-     *
-     * @psalm-api
      */
     public function getIcon(): string
     {
@@ -64,8 +62,6 @@ enum FlashType: string implements TranslatableEnumInterface
 
     /**
      * Gets the icon color.
-     *
-     * @psalm-api
      */
     public function getStyle(): string
     {

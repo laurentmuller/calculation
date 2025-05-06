@@ -47,7 +47,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * @extends AbstractArrayReport<CalculationByMonthType>
  *
  * @phpstan-import-type CalculationByMonthType from \App\Repository\CalculationRepository
- * @phpstan-import-type ColorStringType from PdfChartInterface
  */
 class CalculationByMonthReport extends AbstractArrayReport implements PdfChartInterface, PdfDrawCellBackgroundInterface, PdfDrawCellTextInterface, PdfDrawHeadersInterface
 {

@@ -111,8 +111,6 @@ class DataResults implements \JsonSerializable
 
     /**
      * Gets a custom data value for the given name.
-     *
-     * @psalm-api
      */
     public function getCustomData(string $name, mixed $default = null): mixed
     {

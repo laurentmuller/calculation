@@ -16,8 +16,7 @@ namespace App\Tests\Pdf\Traits;
 use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Interfaces\PdfChartInterface;
-use App\Pdf\Traits\PdfChartLegendTrait;
-use App\Report\AbstractReport;
+use App\Tests\Fixture\PdfChartLegendReport;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,168 +26,76 @@ class PdfChartLegendTraitTest extends TestCase
 {
     public function testLegends(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $report = new class($controller) extends AbstractReport implements PdfChartInterface {
-            use PdfChartLegendTrait;
-
-            #[\Override]
-            public function render(): bool
-            {
-                return true;
-            }
-
-            /** @phpstan-param ColorStringType[] $legends */
-            public function outputLegends(array $legends, bool $horizontal, bool $circle = true): static
-            {
-                return $this->legends($legends, $horizontal, circle: $circle);
-            }
-        };
-        $report->resetStyle()
-            ->addPage();
-
-        $report->outputLegends([], true);
-        $report->outputLegends([], false);
-        $legends = $this->getLegends();
-        $report->outputLegends($legends, true);
-        $report->outputLegends($legends, true, false);
-        $report->outputLegends($legends, false);
-        $report->outputLegends($legends, false, false);
+        $report = $this->createReport();
+        $report->legends(legends: [], horizontal: true);
+        $report->legends(legends: [], horizontal: false);
+        $legends = $this->createLegends();
+        $report->legends(legends: $legends, horizontal: true);
+        $report->legends(legends: $legends, horizontal: true, circle: false);
+        $report->legends(legends: $legends, horizontal: false);
+        $report->legends(legends: $legends, horizontal: false, circle: false);
         $actual = $report->render();
         self::assertTrue($actual);
     }
 
     public function testLegendsHeight(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $report = new class($controller) extends AbstractReport implements PdfChartInterface {
-            use PdfChartLegendTrait;
-
-            #[\Override]
-            public function render(): bool
-            {
-                return true;
-            }
-
-            /** @phpstan-param ColorStringType[] $legends */
-            public function computeHeights(array $legends, bool $horizontal): float
-            {
-                return $this->getLegendsHeight($legends, $horizontal);
-            }
-        };
-        $report->resetStyle()
-            ->addPage();
-        $actual = $report->computeHeights([], true);
+        $report = $this->createReport();
+        $actual = $report->getLegendsHeight(legends: [], horizontal: true);
         self::assertSame(0.0, $actual);
-        $actual = $report->computeHeights([], false);
+        $actual = $report->getLegendsHeight(legends: [], horizontal: false);
         self::assertSame(0.0, $actual);
 
-        $legends = $this->getLegends();
-        $actual = $report->computeHeights($legends, true);
+        $legends = $this->createLegends();
+        $actual = $report->getLegendsHeight(legends: $legends, horizontal: true);
         self::assertSame(5.0, $actual);
-        $actual = $report->computeHeights($legends, false);
+        $actual = $report->getLegendsHeight(legends: $legends, horizontal: false);
         self::assertSame(10.0, $actual);
     }
 
     public function testLegendsHorizontal(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $report = new class($controller) extends AbstractReport implements PdfChartInterface {
-            use PdfChartLegendTrait;
-
-            #[\Override]
-            public function render(): bool
-            {
-                return true;
-            }
-
-            /** @phpstan-param ColorStringType[] $legends */
-            public function outputLegendsHorizontal(array $legends, bool $circle = true): static
-            {
-                return $this->legendsHorizontal($legends, circle: $circle);
-            }
-        };
-        $report->resetStyle()
-            ->addPage();
-
-        $report->outputLegendsHorizontal([], true);
-        $report->outputLegendsHorizontal([], false);
-        $legends = $this->getLegends();
-        $report->outputLegendsHorizontal($legends, true);
-        $report->outputLegendsHorizontal($legends, false);
+        $report = $this->createReport();
+        $report->legendsHorizontal(legends: []);
+        $report->legendsHorizontal(legends: [], circle: false);
+        $legends = $this->createLegends();
+        $report->legendsHorizontal(legends: $legends);
+        $report->legendsHorizontal(legends: $legends, circle: false);
         $actual = $report->render();
         self::assertTrue($actual);
     }
 
     public function testLegendsVertical(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $report = new class($controller) extends AbstractReport implements PdfChartInterface {
-            use PdfChartLegendTrait;
-
-            #[\Override]
-            public function render(): bool
-            {
-                return true;
-            }
-
-            /**
-             * @phpstan-param ColorStringType[] $legends
-             * @phpstan-param array $legends
-             */
-            public function outputLegendsVertical(array $legends, bool $circle = true): static
-            {
-                return $this->legendsVertical($legends, circle: $circle);
-            }
-        };
-        $report->resetStyle()
-            ->addPage();
-
-        $report->outputLegendsVertical([], true);
-        $report->outputLegendsVertical([], false);
-        $legends = $this->getLegends();
-        $report->outputLegendsVertical($legends, true);
-        $report->outputLegendsVertical($legends, false);
+        $report = $this->createReport();
+        $report->legendsVertical(legends: []);
+        $report->legendsVertical(legends: [], circle: false);
+        $legends = $this->createLegends();
+        $report->legendsVertical(legends: $legends);
+        $report->legendsVertical(legends: $legends, circle: false);
         $actual = $report->render();
         self::assertTrue($actual);
     }
 
     public function testLegendsWidths(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $report = new class($controller) extends AbstractReport implements PdfChartInterface {
-            use PdfChartLegendTrait;
-
-            #[\Override]
-            public function render(): bool
-            {
-                return true;
-            }
-
-            /** @phpstan-param ColorStringType[] $legends */
-            public function computeWidths(array $legends, bool $horizontal): float
-            {
-                return $this->getLegendsWidth($legends, $horizontal);
-            }
-        };
-        $report->resetStyle()
-            ->addPage();
-
-        $actual = $report->computeWidths([], true);
+        $report = $this->createReport();
+        $actual = $report->getLegendsWidth(legends: [], horizontal: true);
         self::assertSame(0.0, $actual);
-        $actual = $report->computeWidths([], false);
+        $actual = $report->getLegendsWidth(legends: [], horizontal: false);
         self::assertSame(0.0, $actual);
 
-        $legends = $this->getLegends();
-        $actual = $report->computeWidths($legends, true);
+        $legends = $this->createLegends();
+        $actual = $report->getLegendsWidth(legends: $legends, horizontal: true);
         self::assertEqualsWithDelta(27.03, $actual, 0.1);
-        $actual = $report->computeWidths($legends, false);
+        $actual = $report->getLegendsWidth(legends: $legends, horizontal: false);
         self::assertEqualsWithDelta(12.76, $actual, 0.1);
     }
 
     /**
      * @phpstan-return ColorStringType[]
      */
-    private function getLegends(): array
+    private function createLegends(): array
     {
         $legend1 = [
             'color' => PdfFillColor::blue(),
@@ -200,5 +107,15 @@ class PdfChartLegendTraitTest extends TestCase
         ];
 
         return [$legend1, $legend2];
+    }
+
+    private function createReport(): PdfChartLegendReport
+    {
+        $controller = $this->createMock(AbstractController::class);
+        $report = new PdfChartLegendReport($controller);
+        $report->resetStyle()
+            ->addPage();
+
+        return $report;
     }
 }

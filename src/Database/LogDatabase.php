@@ -54,8 +54,6 @@ class LogDatabase extends AbstractDatabase
      * @param Log $log the log to insert
      *
      * @return bool true if success
-     *
-     * @psalm-api
      */
     public function insertLog(Log $log): bool
     {

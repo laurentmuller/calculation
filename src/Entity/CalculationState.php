@@ -120,8 +120,6 @@ class CalculationState extends AbstractEntity implements ComparableInterface, Ti
      * Gets the calculations.
      *
      * @return Collection<int, Calculation>
-     *
-     * @psalm-api
      */
     public function getCalculations(): Collection
     {
@@ -160,8 +158,6 @@ class CalculationState extends AbstractEntity implements ComparableInterface, Ti
 
     /**
      * Returns if this state contains one or more calculations.
-     *
-     * @psalm-api
      */
     public function hasCalculations(): bool
     {

@@ -83,8 +83,6 @@ class Log extends AbstractEntity implements ComparableInterface
 
     /**
      * Gets the message with the context and extra properties if available.
-     *
-     * @psalm-api
      */
     public function formatMessage(SqlFormatter $formatter): string
     {

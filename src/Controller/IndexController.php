@@ -69,8 +69,6 @@ class IndexController extends AbstractController
 
     /**
      * Hide the catalog panel.
-     *
-     * @psalm-api
      */
     #[Post(path: '/hide/catalog', name: '_hide_catalog')]
     public function hideCatalog(Request $request): JsonResponse
@@ -80,8 +78,6 @@ class IndexController extends AbstractController
 
     /**
      * Hide the month panel.
-     *
-     * @psalm-api
      */
     #[Post(path: '/hide/month', name: '_hide_month')]
     public function hideMonth(Request $request): JsonResponse
@@ -91,8 +87,6 @@ class IndexController extends AbstractController
 
     /**
      * Hide the state panel.
-     *
-     * @psalm-api
      */
     #[Post(path: '/hide/state', name: '_hide_state')]
     public function hideState(Request $request): JsonResponse
@@ -154,8 +148,6 @@ class IndexController extends AbstractController
 
     /**
      * Update the numbers of displayed calculations.
-     *
-     * @psalm-api
      */
     #[Post(path: '/update/count', name: '_calculation')]
     public function updateCalculation(Request $request): JsonResponse

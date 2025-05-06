@@ -115,8 +115,6 @@ class Week extends AbstractCalendarItem
      * @param Month $month the month to be tested
      *
      * @return bool true if within; false otherwise
-     *
-     * @psalm-api
      */
     public function isInMonth(Month $month): bool
     {

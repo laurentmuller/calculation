@@ -39,8 +39,6 @@ class AjaxUserController extends AbstractController
 
     /**
      * Check if a username or user e-mail exist.
-     *
-     * @psalm-api
      */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Get(path: '', name: 'both')]
@@ -58,8 +56,6 @@ class AjaxUserController extends AbstractController
 
     /**
      * Check if a user e-mail already exists.
-     *
-     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Get(path: '/email', name: 'email')]
@@ -88,8 +84,6 @@ class AjaxUserController extends AbstractController
 
     /**
      * Check if a username already exists.
-     *
-     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Get(path: '/name', name: 'name')]

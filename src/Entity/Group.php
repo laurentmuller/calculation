@@ -248,8 +248,6 @@ class Group extends AbstractCodeEntity
 
     /**
      * Returns if this group contains one or more products.
-     *
-     * @psalm-api
      */
     public function hasProducts(): bool
     {
@@ -264,8 +262,6 @@ class Group extends AbstractCodeEntity
 
     /**
      * Returns if this category contains one or more tasks.
-     *
-     * @psalm-api
      */
     public function hasTasks(): bool
     {
@@ -280,8 +276,6 @@ class Group extends AbstractCodeEntity
 
     /**
      * Remove a category.
-     *
-     * @psalm-api
      */
     public function removeCategory(Category $category): self
     {
@@ -294,8 +288,6 @@ class Group extends AbstractCodeEntity
 
     /**
      * Remove a margin.
-     *
-     * @psalm-api
      */
     public function removeMargin(GroupMargin $margin): self
     {

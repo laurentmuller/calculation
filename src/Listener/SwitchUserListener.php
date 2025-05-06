@@ -38,9 +38,6 @@ class SwitchUserListener implements ServiceSubscriberInterface
      */
     private const SWITCH_USER = '_switch_user';
 
-    /**
-     * @psalm-api
-     */
     #[AsEventListener(event: SwitchUserEvent::class)]
     public function onSwitchUser(SwitchUserEvent $event): void
     {

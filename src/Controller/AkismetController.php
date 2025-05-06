@@ -34,8 +34,6 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 class AkismetController extends AbstractController
 {
     /**
-     * @psalm-api
-     *
      * @throws ExceptionInterface
      */
     #[Get(path: '/activity', name: 'activity')]
@@ -55,8 +53,6 @@ class AkismetController extends AbstractController
     }
 
     /**
-     * @psalm-api
-     *
      * @throws ExceptionInterface
      */
     #[Get(path: '/spam', name: 'spam')]
@@ -80,8 +76,6 @@ class AkismetController extends AbstractController
     }
 
     /**
-     * @psalm-api
-     *
      * @throws ExceptionInterface
      */
     #[Get(path: '/usage', name: 'usage')]
@@ -95,9 +89,6 @@ class AkismetController extends AbstractController
         return $this->json($results);
     }
 
-    /**
-     * @psalm-api
-     */
     #[Get(path: '/verify', name: 'verify')]
     public function verify(AkismetService $service): JsonResponse
     {

@@ -58,8 +58,6 @@ class CalendarService
      * Gets the calendar model class.
      *
      * @return class-string<Calendar> the calendar model
-     *
-     * @psalm-api
      */
     public function getCalendarModel(): string
     {
@@ -72,8 +70,6 @@ class CalendarService
      * @param class-string<Calendar>|null $calendarModel the calendar model class or null for default
      *
      * @throws CalendarException if the calendar class model does not exist
-     *
-     * @psalm-api
      */
     public function setCalendarModel(?string $calendarModel): self
     {

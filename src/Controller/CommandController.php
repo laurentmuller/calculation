@@ -177,8 +177,6 @@ class CommandController extends AbstractController
 
     /**
      * @phpstan-param CommandType $command
-     *
-     * @phpstan-return array<string, array|scalar|null>
      */
     private function getCommandData(
         SessionInterface $session,

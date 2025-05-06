@@ -83,8 +83,6 @@ class UserService implements PropertyServiceInterface
 
     /**
      * Gets the message attributes.
-     *
-     * @psalm-api
      */
     public function getMessageAttributes(): array
     {

@@ -6,7 +6,7 @@
     "author": "bibi@bibi.nu",
     "type": "commonjs",
     "dependencies": {
-        "bootstrap": "^5.3.4"
+        "bootstrap": "^5.0"
     },
     "scripts": {
         "watch": "sass --watch --no-source-map scss/bootstrap.scss:public/build/css/bootstrap.css",

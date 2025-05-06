@@ -45,8 +45,6 @@ class PdfPdfDrawHeadersEvent
 
     /**
      * Gets the parent's document.
-     *
-     * @psalm-api
      */
     public function getDocument(): PdfDocument
     {

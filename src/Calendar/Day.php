@@ -72,8 +72,6 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
 
     /**
      * Gets the day of the year (0-365).
-     *
-     * @psalm-api
      */
     public function getDayOfYear(): int
     {
@@ -170,8 +168,6 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
 
     /**
      * Returns if this is the first day of the week (Monday).
-     *
-     * @psalm-api
      */
     public function isFirstInWeek(): bool
     {
@@ -184,8 +180,6 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
      * @param Month $month the month to be tested
      *
      * @return bool true if within; false otherwise
-     *
-     * @psalm-api
      */
     public function isInMonth(Month $month): bool
     {
@@ -198,8 +192,6 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
      * @param Week $week the week to be tested
      *
      * @return bool true if within; false otherwise
-     *
-     * @psalm-api
      */
     public function isInWeek(Week $week): bool
     {
@@ -212,8 +204,6 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
      * @param int $year the year to be tested
      *
      * @return bool true if within; false otherwise
-     *
-     * @psalm-api
      */
     public function isInYear(int $year): bool
     {
@@ -222,8 +212,6 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
 
     /**
      * Returns if this is the last day of the week (Sunday).
-     *
-     * @psalm-api
      */
     public function isLastInWeek(): bool
     {
@@ -232,8 +220,6 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
 
     /**
      * Returns if this day is in the weekend (Saturday or Sunday).
-     *
-     * @psalm-api
      */
     public function isWeekend(): bool
     {

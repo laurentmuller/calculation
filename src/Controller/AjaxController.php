@@ -87,8 +87,6 @@ class AjaxController extends AbstractController
 
     /**
      * Gets random text used to display notifications.
-     *
-     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Get(path: '/random/text', name: 'random_text')]
@@ -104,8 +102,6 @@ class AjaxController extends AbstractController
 
     /**
      * Sets a session attribute.
-     *
-     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Post(path: '/session/set', name: 'session_set')]
@@ -122,8 +118,6 @@ class AjaxController extends AbstractController
 
     /**
      * Save table view parameter.
-     *
-     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Post(path: '/save', name: 'save_table')]

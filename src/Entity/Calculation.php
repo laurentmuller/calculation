@@ -522,8 +522,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * Gets sorted groups.
      *
      * @return CalculationGroup[]
-     *
-     * @psalm-api
      */
     public function getSortedGroups(): array
     {
@@ -580,8 +578,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
     /**
      * Get user total margin amount.
-     *
-     * @psalm-api
      */
     public function getUserMarginTotal(): float
     {
@@ -862,8 +858,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * Update the group and category codes.
      *
      * @return int the number of updates
-     *
-     * @psalm-api
      */
     public function updateCodes(): int
     {

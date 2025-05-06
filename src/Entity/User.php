@@ -140,8 +140,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
 
     /**
      * Add a property.
-     *
-     * @psalm-api
      */
     public function addProperty(UserProperty $property): self
     {
@@ -200,8 +198,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
      * @param int $background the background set (only used if the value is between 1 and 2 inclusive)
      *
      * @see https://robohash.org/
-     *
-     * @psalm-api
      */
     public function getAvatar(int $size = 32, int $set = 0, int $background = 0): string
     {
@@ -261,8 +257,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
      * Gets the image file.
      *
      * @return File|UploadedFile
-     *
-     * @psalm-api
      */
     public function getImageFile(): ?File
     {
@@ -271,8 +265,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
 
     /**
      * Gets the image name.
-     *
-     * @psalm-api
      */
     public function getImageName(): ?string
     {
@@ -308,8 +300,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
 
     /**
      * Gets the username and e-mail.
-     *
-     * @psalm-api
      */
     public function getNameAndEmail(): string
     {
@@ -397,8 +387,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
 
     /**
      * Returns a value indicating if this user is verified.
-     *
-     * @psalm-api
      */
     public function isVerified(): bool
     {
@@ -407,8 +395,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
 
     /**
      * Remove a property.
-     *
-     * @psalm-api
      */
     public function removeProperty(UserProperty $property): self
     {
@@ -450,8 +436,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
      *
      * @param ?File $imageFile the file
      * @param bool  $update    true to update the modification date
-     *
-     * @psalm-api
      */
     public function setImageFile(?File $imageFile = null, bool $update = true): self
     {
@@ -465,8 +449,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
 
     /**
      * Sets the image name.
-     *
-     * @psalm-api
      */
     public function setImageName(?string $imageName): self
     {

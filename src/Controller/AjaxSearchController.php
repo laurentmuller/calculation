@@ -39,8 +39,6 @@ class AjaxSearchController extends AbstractController
 {
     /**
      * Search address.
-     *
-     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Get(path: '/address', name: 'address')]
@@ -71,8 +69,6 @@ class AjaxSearchController extends AbstractController
 
     /**
      * Search distinct calculation's customers in existing calculations.
-     *
-     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Get(path: '/customer', name: 'customer')]
@@ -88,8 +84,6 @@ class AjaxSearchController extends AbstractController
 
     /**
      * Search products.
-     *
-     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Get(path: '/product', name: 'product')]
@@ -109,8 +103,6 @@ class AjaxSearchController extends AbstractController
 
     /**
      * Searches distinct products and task suppliers.
-     *
-     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Get(path: '/supplier', name: 'supplier')]
@@ -126,8 +118,6 @@ class AjaxSearchController extends AbstractController
 
     /**
      * Search the distinct customer's titles.
-     *
-     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Get(path: '/title', name: 'title')]
@@ -143,8 +133,6 @@ class AjaxSearchController extends AbstractController
 
     /**
      * Search distinct units from products and tasks.
-     *
-     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Get(path: '/unit', name: 'unit')]

@@ -59,8 +59,6 @@ class GeneratorController extends AbstractController
 
     /**
      * Create one or more calculations with random data.
-     *
-     * @psalm-api
      */
     #[Get(path: '/calculation', name: self::ROUTE_CALCULATION)]
     public function generateCalculations(
@@ -73,8 +71,6 @@ class GeneratorController extends AbstractController
 
     /**
      * Create one or more customers with random data.
-     *
-     * @psalm-api
      */
     #[Get(path: '/customer', name: self::ROUTE_CUSTOMER)]
     public function generateCustomers(
@@ -87,8 +83,6 @@ class GeneratorController extends AbstractController
 
     /**
      * Create one or more products with random data.
-     *
-     * @psalm-api
      */
     #[Get(path: '/product', name: self::ROUTE_PRODUCT)]
     public function generateProducts(

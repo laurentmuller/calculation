@@ -69,9 +69,6 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
         parent::__construct($version);
     }
 
-    /**
-     * @psalm-api
-     */
     public function deleteCache(): bool
     {
         return $this->cache->delete(self::KEY_IMAGES);

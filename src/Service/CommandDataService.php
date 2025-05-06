@@ -113,8 +113,7 @@ class CommandDataService
      * Validate the model (names) for the given command.
      *
      * @phpstan-param CommandType $command
-     *
-     * @phpstan-return array<array-key, mixed>
+     * @phpstan-param array<string, mixed> $data
      */
     public function validateData(array $command, array $data): array
     {

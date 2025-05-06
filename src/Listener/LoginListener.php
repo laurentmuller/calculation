@@ -38,9 +38,6 @@ class LoginListener implements ServiceSubscriberInterface
     ) {
     }
 
-    /**
-     * @psalm-api
-     */
     #[AsEventListener(event: LoginSuccessEvent::class)]
     public function onLoginSuccess(LoginSuccessEvent $event): void
     {

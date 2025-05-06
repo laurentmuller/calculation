@@ -37,10 +37,12 @@ trait PdfChartLegendTrait
     /**
      * Gets the height for the given legends.
      *
-     * @param ColorStringType[] $legends    the legends to get height for
-     * @param bool              $horizontal true for the horizontal legends; false for the vertical legends
+     * @param array $legends    the legends to get height for
+     * @param bool  $horizontal true for the horizontal legends; false for the vertical legends
      *
      * @return float the height used to output all legends or 0 if legends are empty
+     *
+     * @phpstan-param ColorStringType[] $legends
      */
     public function getLegendsHeight(array $legends, bool $horizontal): float
     {
@@ -56,10 +58,12 @@ trait PdfChartLegendTrait
     /**
      * Gets the width for the given legends.
      *
-     * @param ColorStringType[] $legends    the legends to get width for
-     * @param bool              $horizontal true for the horizontal legends; false for the vertical legends
+     * @param array $legends    the legends to get width for
+     * @param bool  $horizontal true for the horizontal legends; false for the vertical legends
      *
      * @return float the width used to output all legends or 0 if legends are empty
+     *
+     * @phpstan-param ColorStringType[] $legends
      */
     public function getLegendsWidth(array $legends, bool $horizontal): float
     {
@@ -81,13 +85,15 @@ trait PdfChartLegendTrait
      * Does nothing if legends are empty.
      * If the horizontal value is false, the position is the same as before after this call.
      *
-     * @param ColorStringType[] $legends    the legends to draw
-     * @param bool              $horizontal true to output legends as a horizontal list; false to output legends as
-     *                                      a vertical list
-     * @param ?float            $x          the abscissa of the legends or null to center the list (horizontal) or
-     *                                      to use current position (vertical)
-     * @param ?float            $y          the ordinate of the legends or null to use the current position
-     * @param bool              $circle     true to draw circle shapes; false to draw square shapes
+     * @param array  $legends    the legends to draw
+     * @param bool   $horizontal true to output legends as a horizontal list; false to output legends as
+     *                           a vertical list
+     * @param ?float $x          the abscissa of the legends or null to center the list (horizontal) or
+     *                           to use current position (vertical)
+     * @param ?float $y          the ordinate of the legends or null to use the current position
+     * @param bool   $circle     true to draw circle shapes; false to draw square shapes
+     *
+     * @phpstan-param ColorStringType[] $legends
      */
     public function legends(array $legends, bool $horizontal, ?float $x = null, ?float $y = null, bool $circle = true): static
     {
@@ -105,10 +111,12 @@ trait PdfChartLegendTrait
      *
      * Does nothing if legends are empty.
      *
-     * @param ColorStringType[] $legends the legends to draw
-     * @param ?float            $x       the abscissa of the legends or null to center the abscissa
-     * @param ?float            $y       the ordinate of the legends or null to use the current ordinate
-     * @param bool              $circle  true to a draw circle shape; false to draw a square shape
+     * @param array  $legends the legends to draw
+     * @param ?float $x       the abscissa of the legends or null to center the abscissa
+     * @param ?float $y       the ordinate of the legends or null to use the current ordinate
+     * @param bool   $circle  true to a draw circle shape; false to draw a square shape
+     *
+     * @phpstan-param ColorStringType[] $legends
      */
     public function legendsHorizontal(array $legends, ?float $x = null, ?float $y = null, bool $circle = true): static
     {
@@ -138,10 +146,12 @@ trait PdfChartLegendTrait
      *
      * Does nothing if legends are empty. After this call, the position is the same as before.
      *
-     * @param ColorStringType[] $legends the legends to draw
-     * @param ?float            $x       the abscissa of the legends or null to use the current abscissa
-     * @param ?float            $y       the ordinate of the legends or null to use the current ordinate
-     * @param bool              $circle  true to draw a circle shape; false to draw a square shape
+     * @param array  $legends the legends to draw
+     * @param ?float $x       the abscissa of the legends or null to use the current abscissa
+     * @param ?float $y       the ordinate of the legends or null to use the current ordinate
+     * @param bool   $circle  true to draw a circle shape; false to draw a square shape
+     *
+     * @phpstan-param ColorStringType[] $legends
      */
     public function legendsVertical(array $legends, ?float $x = null, ?float $y = null, bool $circle = true): static
     {

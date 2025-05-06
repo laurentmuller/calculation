@@ -185,8 +185,6 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
 
     /**
      * Remove a margin.
-     *
-     * @psalm-api
      */
     public function removeMargin(TaskItemMargin $margin): self
     {

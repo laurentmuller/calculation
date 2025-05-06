@@ -188,8 +188,6 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
 
     /**
      * Remove the given item.
-     *
-     * @psalm-api
      */
     public function removeItem(TaskItem $item): self
     {

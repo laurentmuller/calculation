@@ -51,8 +51,6 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
      * @throws \Twig\Error\Error
      *
      * @psalm-param array{id: int} $entity
-     *
-     * @psalm-api
      */
     public function formatCalculations(int $value, array $entity): string
     {
@@ -69,8 +67,6 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
 
     /**
      * Format the editable state.
-     *
-     * @psalm-api
      */
     public function formatEditable(bool $value): string
     {

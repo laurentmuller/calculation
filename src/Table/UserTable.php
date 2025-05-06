@@ -47,8 +47,6 @@ class UserTable extends AbstractEntityTable
 
     /**
      * Translate the user's enabled state.
-     *
-     * @psalm-api
      */
     public function formatEnabled(bool $enabled): string
     {
@@ -59,8 +57,6 @@ class UserTable extends AbstractEntityTable
      * Format the user's image.
      *
      * @throws \Twig\Error\Error
-     *
-     * @psalm-api
      */
     public function formatImage(?string $image, array $user): string
     {
@@ -73,8 +69,6 @@ class UserTable extends AbstractEntityTable
 
     /**
      * Format the last login date.
-     *
-     * @psalm-api
      */
     public function formatLastLogin(?\DateTimeInterface $date): string
     {
@@ -89,8 +83,6 @@ class UserTable extends AbstractEntityTable
      * Format the user's role.
      *
      * @throws \Twig\Error\Error
-     *
-     * @psalm-api
      */
     public function formatRole(?string $role): string
     {

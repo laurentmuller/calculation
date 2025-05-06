@@ -24,8 +24,6 @@ trait RoleTranslatorTrait
 
     /**
      * Gets the role's icon.
-     *
-     * @psalm-api
      */
     public function getRoleIcon(RoleInterface|string $role): string
     {

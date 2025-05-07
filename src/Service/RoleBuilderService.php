@@ -93,7 +93,7 @@ class RoleBuilderService
     }
 
     /**
-     * @psalm-param RoleInterface::ROLE_* $roleName
+     * @phpstan-param RoleInterface::ROLE_* $roleName
      */
     private function getRoleWithAll(string $roleName): Role
     {

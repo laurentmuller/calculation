@@ -163,7 +163,7 @@ class LogsReport extends AbstractReport
     }
 
     /**
-     * @psalm-param PsrLevel::* $level
+     * @phpstan-param PsrLevel::* $level
      */
     private function getLevelColor(string $level): string
     {

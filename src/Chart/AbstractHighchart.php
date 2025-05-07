@@ -94,7 +94,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     /**
      * Sets the chart type.
      *
-     * @psalm-param self::TYPE_* $type
+     * @phpstan-param self::TYPE_* $type
      */
     public function setType(string $type): static
     {

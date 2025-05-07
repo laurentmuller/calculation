@@ -38,9 +38,9 @@ class Parameter
      *
      * @throws \ReflectionException if the class does not exist
      *
-     * @psalm-template T of object
+     * @phpstan-template T of object
      *
-     * @psalm-param T|class-string<T> $objectOrClass
+     * @phpstan-param T|class-string<T> $objectOrClass
      */
     public static function getAttributInstance(object|string $objectOrClass, string $name): ?object
     {
@@ -68,9 +68,9 @@ class Parameter
      *
      * @throws \ReflectionException if the class does not exist
      *
-     * @psalm-template T of object
+     * @phpstan-template T of object
      *
-     * @psalm-param T|class-string<T> $objectOrClass
+     * @phpstan-param T|class-string<T> $objectOrClass
      */
     public static function getDefaultValue(object|string $objectOrClass, string $name): mixed
     {
@@ -88,9 +88,9 @@ class Parameter
      *
      * @throws \ReflectionException if the class does not exist
      *
-     * @psalm-template T of object
+     * @phpstan-template T of object
      *
-     * @psalm-param T|class-string<T> $objectOrClass
+     * @phpstan-param T|class-string<T> $objectOrClass
      */
     public static function getName(object|string $objectOrClass, string $name): ?string
     {
@@ -109,9 +109,9 @@ class Parameter
      *
      * @throws \ReflectionException if the class does not exist
      *
-     * @psalm-template T of object
+     * @phpstan-template T of object
      *
-     * @psalm-param T|class-string<T> $objectOrClass
+     * @phpstan-param T|class-string<T> $objectOrClass
      */
     public static function isDefaultValue(object|string $objectOrClass, string $name, mixed $value = null): bool
     {

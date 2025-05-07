@@ -46,7 +46,7 @@ class CountryFlagService
      */
     public static function getDefaultCode(): string
     {
-        /** @psalm-var string */
+        /** @phpstan-var string */
         return \Locale::getRegion(\Locale::getDefault());
     }
 
@@ -82,10 +82,10 @@ class CountryFlagService
 
     private function getEmojiChar(string $chr): string
     {
-        /** @psalm-var int $order */
+        /** @phpstan-var int $order */
         $order = \mb_ord($chr, 'UTF-8');
 
-        /** @psalm-var string */
+        /** @phpstan-var string */
         return \mb_chr(self::REGIONAL_OFFSET + $order, 'UTF-8');
     }
 }

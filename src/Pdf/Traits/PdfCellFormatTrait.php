@@ -23,7 +23,7 @@ use fpdf\PdfException;
 /**
  * Trait to add cells with formatted values.
  *
- * @psalm-require-extends PdfTable
+ * @phpstan-require-extends PdfTable
  */
 trait PdfCellFormatTrait
 {

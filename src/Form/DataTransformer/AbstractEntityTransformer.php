@@ -67,7 +67,7 @@ abstract class AbstractEntityTransformer implements DataTransformerInterface
     }
 
     /**
-     * @psalm-param EntityInterface|null $value
+     * @phpstan-param EntityInterface|null $value
      */
     protected function toIdentifier(mixed $value): ?int
     {

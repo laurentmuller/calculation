@@ -54,7 +54,7 @@ class DefaultParameterType extends AbstractParameterType
     }
 
     /**
-     * @psalm-return IdentifierTransformer<CalculationState>
+     * @phpstan-return IdentifierTransformer<CalculationState>
      */
     private function getCalculationStateTransformer(): IdentifierTransformer
     {
@@ -62,7 +62,7 @@ class DefaultParameterType extends AbstractParameterType
     }
 
     /**
-     * @psalm-return IdentifierTransformer<Category>
+     * @phpstan-return IdentifierTransformer<Category>
      */
     private function getCategoryTransformer(): IdentifierTransformer
     {

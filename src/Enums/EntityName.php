@@ -114,7 +114,7 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
     {
         return \array_reduce(
             self::cases(),
-            /** @psalm-param array<string, string> $choices */
+            /** @phpstan-param array<string, string> $choices */
             static fn (array $choices, self $type): array => $choices + ['ENTITY_' . $type->name => $type->value],
             [],
         );

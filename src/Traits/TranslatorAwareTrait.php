@@ -19,7 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Extends translator trait within the subscribed service.
  *
- * @psalm-require-implements \Symfony\Contracts\Service\ServiceSubscriberInterface
+ * @phpstan-require-implements \Symfony\Contracts\Service\ServiceSubscriberInterface
  */
 trait TranslatorAwareTrait
 {

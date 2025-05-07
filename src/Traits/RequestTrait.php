@@ -44,9 +44,9 @@ trait RequestTrait
      *
      * @template EnumType of \BackedEnum
      *
-     * @psalm-param EnumType $default
+     * @phpstan-param EnumType $default
      *
-     * @psalm-return EnumType
+     * @phpstan-return EnumType
      */
     protected function getRequestEnum(Request $request, string $key, \BackedEnum $default): \BackedEnum
     {
@@ -80,14 +80,14 @@ trait RequestTrait
     /**
      * Return the request parameter value.
      *
-     * @psalm-return ($default is null ? (scalar|null) : scalar)
+     * @phpstan-return ($default is null ? (scalar|null) : scalar)
      */
     protected function getRequestValue(
         Request $request,
         string $key,
         string|int|float|bool|null $default = null
     ): string|int|float|bool|null {
-        /** @psalm-var scalar */
+        /** @phpstan-var scalar */
         return $this->getRequestBag($request, $key)->get($key, $default);
     }
 

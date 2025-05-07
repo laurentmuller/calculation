@@ -82,7 +82,7 @@ class HtmlWordParser
     {
         return \array_reduce(
             HtmlBootstrapColor::cases(),
-            /** @psalm-param array<string, string> $carry  */
+            /** @phpstan-param array<string, string> $carry  */
             function (array $carry, HtmlBootstrapColor $color): array {
                 $name = \strtolower($color->name);
                 $value = $color->value;

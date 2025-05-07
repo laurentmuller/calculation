@@ -43,7 +43,7 @@ class EntityVoter extends Voter
     #[\Override]
     public function vote(TokenInterface $token, mixed $subject, array $attributes): int
     {
-        /** @psalm-var mixed $attribute */
+        /** @phpstan-var mixed $attribute */
         foreach ($attributes as &$attribute) {
             if ($attribute instanceof EntityPermission) {
                 $attribute = $attribute->name;
@@ -88,7 +88,7 @@ class EntityVoter extends Voter
     }
 
     /**
-     * @psalm-return int[]
+     * @return int[]
      */
     private function getRights(User $user): array
     {

@@ -99,7 +99,7 @@ final class FormatUtils
      *
      * @return string|null the formatted date or null if formatting failed or if the date is null
      *
-     * @psalm-return ($date is null ? (string|null) : string)
+     * @phpstan-return ($date is null ? (string|null) : string)
      */
     public static function formatDate(
         \DateTimeInterface|int|null $date,
@@ -123,7 +123,7 @@ final class FormatUtils
      *
      * @return string|null the formatted date and time or null if formatting failed or if the date is null
      *
-     * @psalm-return ($date is null ? (string|null) : string)
+     * @phpstan-return ($date is null ? (string|null) : string)
      */
     public static function formatDateTime(
         \DateTimeInterface|int|null $date,
@@ -163,7 +163,7 @@ final class FormatUtils
         if (\is_countable($number)) {
             $number = \count($number);
         }
-        /** @psalm-var int|float|string|null $number */
+        /** @phpstan-var int|float|string|null $number */
         $value = self::checkNegativeZero($number);
 
         return (string) self::getNumberFormatter(\NumberFormatter::DECIMAL, 0)->format($value);
@@ -177,7 +177,7 @@ final class FormatUtils
      * @param int                   $decimals     the number of decimals
      * @param int                   $roundingMode the rounding mode
      *
-     * @psalm-param \NumberFormatter::ROUND_* $roundingMode
+     * @phpstan-param \NumberFormatter::ROUND_* $roundingMode
      */
     public static function formatPercent(
         float|int|string|null $number,
@@ -203,7 +203,7 @@ final class FormatUtils
      *
      * @return string|null the formatted time or null if formatting failed or if the date is null
      *
-     * @psalm-return ($date is null ? (string|null) : string)
+     * @phpstan-return ($date is null ? (string|null) : string)
      */
     public static function formatTime(
         \DateTimeInterface|int|null $date,
@@ -256,7 +256,7 @@ final class FormatUtils
      * @param int    $roundingMode  the rounding mode
      * @param string $percentSymbol an optional percent symbol
      *
-     * @psalm-param \NumberFormatter::ROUND_* $roundingMode
+     * @phpstan-param \NumberFormatter::ROUND_* $roundingMode
      */
     public static function getNumberFormatter(
         int $style,

@@ -118,9 +118,9 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
     }
 
     /**
-     * @psalm-param Collection<array-key, object>[] $collections
+     * @phpstan-param Collection<array-key, object>[] $collections
      *
-     * @psalm-return EntityInterface[]
+     * @phpstan-return EntityInterface[]
      */
     private function filterCollections(array $collections): array
     {
@@ -137,9 +137,9 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
     }
 
     /**
-     * @psalm-param array|Collection<array-key, object> $entities
+     * @phpstan-param array|Collection<array-key, object> $entities
      *
-     * @psalm-return EntityInterface[]
+     * @phpstan-return EntityInterface[]
      */
     private function filterEntities(array|Collection $entities, bool $includeChildren = false): array
     {
@@ -230,7 +230,7 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
     }
 
     /**
-     * @psalm-param EntityInterface[] $entities
+     * @param EntityInterface[] $entities
      */
     private function notifyEntities(
         UnitOfWork $unitOfWork,

@@ -20,7 +20,7 @@ use fpdf\Enums\PdfFontName;
 /**
  * Trait for style and font.
  *
- * @psalm-require-extends \fpdf\PdfDocument
+ * @phpstan-require-extends \fpdf\PdfDocument
  */
 trait PdfStyleTrait
 {

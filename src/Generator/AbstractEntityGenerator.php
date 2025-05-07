@@ -92,7 +92,7 @@ abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSub
     abstract protected function getCountMessage(int $count): string;
 
     /**
-     * @psalm-param TEntity $entity
+     * @phpstan-param TEntity $entity
      *
      * @return array<string, mixed>
      */

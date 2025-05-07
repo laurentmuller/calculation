@@ -110,7 +110,7 @@ final class FileUtils
      *
      * @throws \InvalidArgumentException if the file cannot be decoded
      *
-     * @psalm-return ($assoc is true ? array : \stdClass)
+     * @phpstan-return ($assoc is true ? array : \stdClass)
      */
     public static function decodeJson(string|\SplFileInfo $file, bool $assoc = true): array|\stdClass
     {

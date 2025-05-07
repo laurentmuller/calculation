@@ -132,9 +132,8 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Output the user image profile.
      *
-     * @param User|array|null $user the user
-     *
-     * @psalm-param array<string, string|int> $parameters
+     * @param User|array|null           $user       the user
+     * @param array<string, string|int> $parameters
      */
     private function assetImageUser(User|array|null $user, ?string $size = null, array $parameters = []): string|false
     {

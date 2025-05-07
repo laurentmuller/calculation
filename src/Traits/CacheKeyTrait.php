@@ -29,7 +29,7 @@ trait CacheKeyTrait
             return $key;
         }
 
-        /** @psalm-var string[] $reservedCharacters */
+        /** @phpstan-var string[] $reservedCharacters */
         static $reservedCharacters = [];
         if ([] === $reservedCharacters) {
             $reservedCharacters = \str_split(ItemInterface::RESERVED_CHARACTERS);

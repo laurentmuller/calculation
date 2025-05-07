@@ -122,9 +122,9 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
     /**
      * @template TResult
      *
-     * @psalm-param callable(CalculationState): TResult $callback
+     * @phpstan-param callable(CalculationState): TResult $callback
      *
-     * @psalm-return TResult[]
+     * @phpstan-return TResult[]
      */
     private function mapStates(callable $callback): array
     {

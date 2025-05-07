@@ -62,7 +62,7 @@ class CommandDataService
      * @phpstan-param CommandType $command
      * @phpstan-param array<string, array|scalar|null> $data
      *
-     * @psalm-return array<string, array|scalar|null>
+     * @phpstan-return array<string, array|scalar|null>
      *
      * @throws \LogicException if a parameter name is not found
      */

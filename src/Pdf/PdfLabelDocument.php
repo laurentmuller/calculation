@@ -82,7 +82,7 @@ class PdfLabelDocument extends PdfDocument
      *
      * @throws PdfException if the label's font size is invalid
      *
-     * @psalm-param non-negative-int $startIndex
+     * @phpstan-param non-negative-int $startIndex
      */
     public function __construct(PdfLabel $label, int $startIndex = 0)
     {

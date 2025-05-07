@@ -50,7 +50,7 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
      *
      * @throws \Twig\Error\Error
      *
-     * @psalm-param array{id: int} $entity
+     * @phpstan-param array{id: int} $entity
      */
     public function formatCalculations(int $value, array $entity): string
     {

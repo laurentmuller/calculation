@@ -261,9 +261,9 @@ class FormHelper
      *
      * @param string $class the enumeration class
      *
-     * @psalm-template T of \UnitEnum
+     * @template T of \UnitEnum
      *
-     * @psalm-param class-string<T> $class
+     * @phpstan-param class-string<T> $class
      */
     public function addEnumType(string $class): self
     {
@@ -727,10 +727,10 @@ class FormHelper
     /**
      * Sets the model transformer.
      *
-     * @psalm-template TValue
-     * @psalm-template TTransformedValue
+     * @template TValue
+     * @template TTransformedValue
      *
-     * @psalm-param DataTransformerInterface<TValue, TTransformedValue>|null $modelTransformer
+     * @phpstan-param DataTransformerInterface<TValue, TTransformedValue>|null $modelTransformer
      */
     public function modelTransformer(?DataTransformerInterface $modelTransformer): static
     {
@@ -922,7 +922,7 @@ class FormHelper
     /**
      * Add one or more classes. Do nothing if the given class names are empty.
      *
-     * @psalm-param array<string, mixed> $array
+     * @param array<string, mixed> $array
      */
     private function addClasses(array &$array, string $classNames): self
     {

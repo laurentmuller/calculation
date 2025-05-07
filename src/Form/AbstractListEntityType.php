@@ -31,7 +31,7 @@ abstract class AbstractListEntityType extends AbstractType
     use CheckSubClassTrait;
 
     /**
-     * @psalm-param class-string<TEntity> $className
+     * @phpstan-param class-string<TEntity> $className
      *
      * @throws \InvalidArgumentException if the given class name is not a subclass of the AbstractEntity class
      */

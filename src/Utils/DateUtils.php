@@ -62,11 +62,11 @@ final class DateUtils
      *
      * @return \DateTimeInterface the new date
      *
-     * @psalm-template T of \DateTime|\DateTimeImmutable
+     * @phpstan-template T of \DateTime|\DateTimeImmutable
      *
-     * @psalm-param T $date
+     * @phpstan-param T $date
      *
-     * @psalm-return T
+     * @phpstan-return T
      */
     public static function add(\DateTimeInterface $date, \DateInterval|string $interval): \DateTimeInterface
     {
@@ -247,11 +247,11 @@ final class DateUtils
      *
      * @return \DateTimeInterface the modified date
      *
-     * @psalm-template T of \DateTime|\DateTimeImmutable
+     * @phpstan-template T of \DateTime|\DateTimeImmutable
      *
-     * @psalm-param T $date
+     * @phpstan-param T $date
      *
-     * @psalm-return T
+     * @phpstan-return T
      */
     public static function modify(\DateTimeInterface $date, string $modifier): \DateTimeInterface
     {
@@ -261,11 +261,11 @@ final class DateUtils
     /**
      * Remove the time part of the given date.
      *
-     * @psalm-template T of \DateTime|\DateTimeImmutable
+     * @phpstan-template T of \DateTime|\DateTimeImmutable
      *
-     * @psalm-param T $date
+     * @phpstan-param T $date
      *
-     * @psalm-return T
+     * @phpstan-return T
      */
     public static function removeTime(\DateTime|\DateTimeImmutable $date = new \DateTime()): \DateTime|\DateTimeImmutable
     {
@@ -280,11 +280,11 @@ final class DateUtils
      *
      * @return \DateTimeInterface the new date
      *
-     * @psalm-template T of \DateTime|\DateTimeImmutable
+     * @phpstan-template T of \DateTime|\DateTimeImmutable
      *
-     * @psalm-param T $date
+     * @phpstan-param T $date
      *
-     * @psalm-return T
+     * @phpstan-return T
      */
     public static function sub(\DateTimeInterface $date, \DateInterval|string $interval): \DateTimeInterface
     {

@@ -63,7 +63,7 @@ class LogLevel implements \Countable, \Stringable, ComparableInterface
     }
 
     /**
-     * @psalm-param positive-int $value
+     * @phpstan-param positive-int $value
      */
     public function increment(int $value = 1): self
     {
@@ -73,7 +73,7 @@ class LogLevel implements \Countable, \Stringable, ComparableInterface
     }
 
     /**
-     * @psalm-param PsrLevel::* $level
+     * @phpstan-param PsrLevel::* $level
      */
     public static function instance(string $level): self
     {

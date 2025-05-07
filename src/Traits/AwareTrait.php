@@ -43,7 +43,7 @@ trait AwareTrait
         }
 
         try {
-            /** @psalm-var T */
+            /** @phpstan-var T */
             return $this->container->get($id);
         } catch (ContainerExceptionInterface $e) {
             throw $this->createLogicException($class, $id, $e);

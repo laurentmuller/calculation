@@ -16,7 +16,7 @@ namespace App\Traits;
 /**
  * Trait for class implementing <code>DisableListenerInterface</code> interface.
  *
- * @psalm-require-implements \App\Interfaces\DisableListenerInterface
+ * @phpstan-require-implements \App\Interfaces\DisableListenerInterface
  */
 trait DisableListenerTrait
 {

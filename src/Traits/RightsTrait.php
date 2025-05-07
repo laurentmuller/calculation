@@ -142,7 +142,7 @@ trait RightsTrait
     /**
      * Sets the rights.
      *
-     * @psalm-param int[]|null $rights
+     * @param int[]|null $rights
      */
     public function setRights(?array $rights): static
     {

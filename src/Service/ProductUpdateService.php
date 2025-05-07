@@ -59,7 +59,7 @@ class ProductUpdateService implements ServiceSubscriberInterface
     {
         $category = $this->getCategory();
         $products = $this->getProducts($category);
-        /** @psalm-var ProductUpdateQuery::UPDATE_* $type  $type */
+        /** @phpstan-var ProductUpdateQuery::UPDATE_* $type  $type */
         $type = $this->getSessionString(self::KEY_TYPE, ProductUpdateQuery::UPDATE_PERCENT);
 
         $query = new ProductUpdateQuery();

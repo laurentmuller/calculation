@@ -274,7 +274,7 @@ class AkismetService extends AbstractHttpClientService
 
     private function getVerifyParameters(Request $request, string $content, array $options): array
     {
-        /** @psalm-var \App\Entity\User|null $user */
+        /** @phpstan-var \App\Entity\User|null $user */
         $user = $this->security->getUser();
         $headers = $request->headers;
 

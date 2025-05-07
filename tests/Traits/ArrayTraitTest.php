@@ -226,16 +226,16 @@ class ArrayTraitTest extends TestCase
     {
         $array = [];
         $closure = fn (string $value, int $key): bool => 2 === $key;
-        $actual = $this->findFirst($array, $closure);
+        $actual = $this->findFirst($array, $closure); // @phpstan-ignore argument.type
         self::assertNull($actual);
 
-        $array = $this->getFindFirstArray();
+        $array = $this->createArray();
         $closure = fn (string $value, int $key): bool => 10 === $key;
-        $actual = $this->findFirst($array, $closure);
+        $actual = $this->findFirst($array, $closure); // @phpstan-ignore argument.type
         self::assertSame('B', $actual);
 
         $closure = fn (string $value, int $key): bool => 40 === $key;
-        $actual = $this->findFirst($array, $closure);
+        $actual = $this->findFirst($array, $closure); // @phpstan-ignore argument.type
         self::assertNull($actual);
     }
 
@@ -246,7 +246,7 @@ class ArrayTraitTest extends TestCase
         $actual = $this->findFirst($array, $closure);
         self::assertNull($actual);
 
-        $array = $this->getFindFirstArray();
+        $array = $this->createArray();
         $closure = fn (string $value): bool => 'B' === $value;
         $actual = $this->findFirst($array, $closure);
         self::assertSame('B', $actual);
@@ -273,7 +273,7 @@ class ArrayTraitTest extends TestCase
 
     public function testRemoveValue(): void
     {
-        $values = $this->getFindFirstArray();
+        $values = $this->createArray();
         $actual = $this->removeValue($values, 'FAKE');
         self::assertSame($values, $actual);
 
@@ -316,7 +316,7 @@ class ArrayTraitTest extends TestCase
     /**
      * @phpstan-return array<int, string>
      */
-    private function getFindFirstArray(): array
+    private function createArray(): array
     {
         return [0 => 'A', 10 => 'B', 20 => 'C'];
     }

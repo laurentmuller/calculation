@@ -26,7 +26,7 @@ use Symfony\Component\Form\FormView;
 class UrlTypeExtension extends AbstractTypeExtension
 {
     /**
-     * @psalm-param array{default_protocol?: string, ...} $options
+     * @phpstan-param array{default_protocol?: string, ...} $options
      */
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void

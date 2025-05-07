@@ -26,7 +26,7 @@ use App\Repository\AbstractRepository;
 class IdentifierTransformer extends AbstractEntityTransformer
 {
     /**
-     * @psalm-param AbstractRepository<TEntity> $repository
+     * @phpstan-param AbstractRepository<TEntity> $repository
      */
     public function __construct(AbstractRepository $repository)
     {
@@ -34,7 +34,7 @@ class IdentifierTransformer extends AbstractEntityTransformer
     }
 
     /**
-     * @psalm-param EntityInterface|null $value
+     * @phpstan-param EntityInterface|null $value
      */
     #[\Override]
     public function reverseTransform(mixed $value): ?int
@@ -45,7 +45,7 @@ class IdentifierTransformer extends AbstractEntityTransformer
     /**
      * @param int|string|null $value
      *
-     * @psalm-return TEntity|null
+     * @phpstan-return TEntity|null
      */
     #[\Override]
     public function transform(mixed $value): ?EntityInterface

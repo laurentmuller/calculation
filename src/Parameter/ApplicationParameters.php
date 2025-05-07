@@ -187,9 +187,9 @@ class ApplicationParameters extends AbstractParameters
     /**
      * @template TEntity of EntityInterface
      *
-     * @psalm-param class-string<TEntity> $class
+     * @phpstan-param class-string<TEntity> $class
      *
-     * @psalm-return TEntity|null
+     * @phpstan-return TEntity|null
      */
     private function findEntity(string $class, ?int $id): ?EntityInterface
     {

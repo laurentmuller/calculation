@@ -100,7 +100,7 @@ class CalculationsReport extends AbstractArrayReport
     }
 
     /**
-     * @psalm-param Calculation[] $entities
+     * @param Calculation[] $entities
      */
     private function outputEntities(ReportGroupTable $table, array $entities): void
     {
@@ -147,7 +147,7 @@ class CalculationsReport extends AbstractArrayReport
             $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
         }
         $text = $this->translateCount($entities, 'counters.calculations');
-        /** @psalm-var positive-int $columns */
+        /** @phpstan-var positive-int $columns */
         $columns = $table->getColumnsCount() - 3;
         $table->getColumns()[0]
             ->setAlignment(PdfTextAlignment::LEFT)

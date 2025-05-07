@@ -519,7 +519,7 @@ class WorksheetDocument extends Worksheet
      */
     public function setRowValues(int $rowIndex, array $values, int $columnIndex = 1): static
     {
-        /** @psalm-var mixed $value*/
+        /** @phpstan-var mixed $value*/
         foreach ($values as $value) {
             $this->setCellContent($columnIndex++, $rowIndex, $value);
         }
@@ -609,7 +609,7 @@ class WorksheetDocument extends Worksheet
      */
     private function validateTitle(string $title): string
     {
-        /** @psalm-var string[] $invalidChars */
+        /** @phpstan-var string[] $invalidChars */
         $invalidChars = self::getInvalidCharacters();
         $title = \str_replace($invalidChars, '', $title);
         if (StringHelper::countCharacters($title) > self::SHEET_TITLE_MAXIMUM_LENGTH) {

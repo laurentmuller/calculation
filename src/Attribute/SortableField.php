@@ -24,7 +24,7 @@ readonly class SortableField implements SortModeInterface
     /**
      * @param string $order the field order
      *
-     * @psalm-param self::SORT_* $order
+     * @phpstan-param self::SORT_* $order
      */
     public function __construct(public string $order = self::SORT_ASC)
     {
@@ -43,7 +43,7 @@ readonly class SortableField implements SortModeInterface
      *
      * @throws \ReflectionException if the class does not exist
      *
-     * @psalm-param T|class-string<T> $objectOrClass
+     * @phpstan-param T|class-string<T> $objectOrClass
      */
     public static function getOrder(object|string $objectOrClass, string $name): ?string
     {

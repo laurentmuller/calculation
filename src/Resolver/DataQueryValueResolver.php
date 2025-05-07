@@ -77,7 +77,7 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
     private function createQuery(ArgumentMetadata $argument): DataQuery
     {
         if ($argument->hasDefaultValue()) {
-            /** @psalm-var DataQuery */
+            /** @phpstan-var DataQuery */
             return $argument->getDefaultValue();
         }
 
@@ -95,11 +95,11 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
     }
 
     /**
-     * @psalm-return self::SORT_*
+     * @phpstan-return self::SORT_*
      */
     private function getOrder(Request $request, string $prefix): string
     {
-        /** @psalm-var self::SORT_* */
+        /** @phpstan-var self::SORT_* */
         return $this->getCookieString($request, TableInterface::PARAM_ORDER, self::SORT_ASC, $prefix);
     }
 
@@ -148,11 +148,11 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
     }
 
     /**
-     * @psalm-param InputBag<string> $inputBag
+     * @phpstan-param InputBag<string> $inputBag
      */
     private function updateQuery(DataQuery $query, InputBag $inputBag): void
     {
-        /** @psalm-var string[] $keys */
+        /** @var string[] $keys */
         $keys = $inputBag->keys();
         foreach ($keys as $key) {
             match ($key) {
@@ -177,7 +177,7 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
     }
 
     /**
-     * @psalm-return self::SORT_*
+     * @phpstan-return self::SORT_*
      */
     private function validateOrder(string $order): string
     {

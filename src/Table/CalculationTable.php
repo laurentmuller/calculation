@@ -56,7 +56,7 @@ class CalculationTable extends AbstractEntityTable
      *
      * @throws \Twig\Error\Error
      *
-     * @psalm-param array{overallTotal: float} $entity
+     * @phpstan-param array{overallTotal: float} $entity
      */
     public function formatOverallMargin(float $margin, array $entity): string
     {
@@ -73,7 +73,7 @@ class CalculationTable extends AbstractEntityTable
         $result = parent::addSearch($query, $builder, $alias);
         $stateId = $this->getQueryStateId($query);
         if (0 !== $stateId) {
-            /** @psalm-var string $field */
+            /** @phpstan-var string $field */
             $field = $repository->getSearchFields('state.id', $alias);
             $builder->andWhere($field . '=:' . self::PARAM_STATE)
                 ->setParameter(self::PARAM_STATE, $stateId, Types::INTEGER);
@@ -83,7 +83,7 @@ class CalculationTable extends AbstractEntityTable
 
         $stateEditable = $this->getQueryEditable($query);
         if (0 !== $stateEditable) {
-            /** @psalm-var string $field */
+            /** @phpstan-var string $field */
             $field = $repository->getSearchFields('state.editable', $alias);
             $builder->andWhere($field . '=:' . self::PARAM_EDITABLE)
                 ->setParameter(self::PARAM_EDITABLE, $this->isEditable($stateEditable), Types::BOOLEAN);

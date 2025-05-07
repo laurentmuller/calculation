@@ -138,7 +138,7 @@ class BitSet implements \Stringable
      */
     public static function fromBinary(string $bin): self
     {
-        /** @psalm-var int[] $words $words */
+        /** @phpstan-var int[] $words $words */
         $words = (array) \unpack('V*', $bin);
 
         return static::fromArray($words);
@@ -156,7 +156,7 @@ class BitSet implements \Stringable
         if ($remain > 0) {
             $bin = \str_repeat('0', $remain) . $bin;
         }
-        /** @psalm-var int[] $words $words */
+        /** @phpstan-var int[] $words $words */
         $words = [];
         $chunks = \str_split($bin, $size);
         foreach ($chunks as $chunk) {
@@ -269,7 +269,7 @@ class BitSet implements \Stringable
     public function size(): int
     {
         $size = 0;
-        /** @psalm-var int $index */
+        /** @phpstan-var int $index */
         foreach ($this->words as $index => $word) {
             for ($bit = 0; $bit <= self::WORD_BITS; ++$bit) {
                 if (($word & (1 << $bit)) !== 0) {
@@ -318,7 +318,7 @@ class BitSet implements \Stringable
     public function toIndexes(): array
     {
         $result = [];
-        /** @psalm-var int $index */
+        /** @phpstan-var int $index */
         foreach ($this->words as $index => $word) {
             for ($bit = 0; $bit <= self::WORD_BITS; ++$bit) {
                 if (($word & (1 << $bit)) !== 0) {

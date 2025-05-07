@@ -70,7 +70,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
         if (false === $response) {
             return false;
         }
-        /** @psalm-var string|null $tag */
+        /** @phpstan-var string|null $tag */
         $tag = $this->getValue($response, '[data][detections][0][0][language]');
         if (!\is_string($tag)) {
             return false;
@@ -111,13 +111,13 @@ class GoogleTranslatorService extends AbstractTranslatorService
             return false;
         }
 
-        /** @psalm-var string|null $target */
+        /** @phpstan-var string|null $target */
         $target = $this->getValue($response, '[data][translations][0][translatedText]');
         if (!\is_string($target)) {
             return false;
         }
 
-        /** @psalm-var string|null $language */
+        /** @phpstan-var string|null $language */
         $language = $this->getValue($response, '[data][translations][0][detectedSourceLanguage]', false);
         if (\is_string($language)) {
             $query->from = $language;
@@ -148,7 +148,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
         if (false === $response) {
             return false;
         }
-        /** @psalm-var array<array{name: string, language: string}>|false  $languages */
+        /** @phpstan-var array<array{name: string, language: string}>|false  $languages */
         $languages = $this->getValue($response, '[data][languages]');
         if (!\is_array($languages)) {
             return false;

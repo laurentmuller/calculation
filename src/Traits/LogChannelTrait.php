@@ -42,7 +42,7 @@ trait LogChannelTrait
     /**
      * Gets the channel's icon.
      *
-     * @psalm-return non-empty-string
+     * @phpstan-return non-empty-string
      */
     public function getChannel(): string
     {

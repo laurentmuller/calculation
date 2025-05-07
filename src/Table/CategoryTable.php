@@ -58,7 +58,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
      *
      * @throws \Twig\Error\Error
      *
-     * @psalm-param array{id: int} $entity
+     * @phpstan-param array{id: int} $entity
      */
     public function formatProducts(int $value, array $entity): string
     {
@@ -78,7 +78,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
      *
      * @throws \Twig\Error\Error
      *
-     * @psalm-param array{id: int} $entity
+     * @phpstan-param array{id: int} $entity
      */
     public function formatTasks(int $value, array $entity): string
     {
@@ -101,7 +101,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
         if (0 === $groupId) {
             return $result;
         }
-        /** @psalm-var string $field */
+        /** @phpstan-var string $field */
         $field = $this->getRepository()->getSearchFields('group.id', $alias);
         $builder->andWhere($field . '=:' . self::PARAM_GROUP)
             ->setParameter(self::PARAM_GROUP, $groupId, Types::INTEGER);

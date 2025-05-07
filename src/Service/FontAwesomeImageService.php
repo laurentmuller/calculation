@@ -207,7 +207,7 @@ class FontAwesomeImageService
             return [];
         }
 
-        /** @psalm-var array<string, string> */
+        /** @phpstan-var array<string, string> */
         return FileUtils::decodeJson($path);
     }
 

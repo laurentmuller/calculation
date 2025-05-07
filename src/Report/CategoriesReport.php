@@ -35,7 +35,7 @@ class CategoriesReport extends AbstractArrayReport
 
         $this->addPage();
         $table = $this->createTable();
-        /** @psalm-var array<string, Category[]> $groups */
+        /** @var array<string, Category[]> $groups */
         $groups = $this->groupEntities($entities);
         $style = PdfStyle::getCellStyle()->setIndent(2);
 

@@ -57,7 +57,7 @@ enum HtmlListType: string
      *
      * @return string the bullet text or an empty string if the number is not positive
      *
-     * @psalm-param positive-int $number
+     * @phpstan-param positive-int $number
      */
     public function getBulletText(int $number, string $suffix = '.'): string
     {

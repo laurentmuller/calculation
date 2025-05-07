@@ -174,7 +174,7 @@ class CalculationStateController extends AbstractEntityController
     }
 
     /**
-     * @psalm-param CalculationState $item
+     * @phpstan-param CalculationState $item
      */
     #[\Override]
     protected function deleteFromDatabase(EntityInterface $item): void

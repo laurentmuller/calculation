@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Trait for class implementing the <code></code>PositionInterface</code> interface.
  *
- * @psalm-require-implements \App\Interfaces\PositionInterface
+ * @phpstan-require-implements \App\Interfaces\PositionInterface
  */
 trait PositionTrait
 {

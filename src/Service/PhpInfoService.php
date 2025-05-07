@@ -34,7 +34,7 @@ class PhpInfoService
      * @param int $what the output may be customized by passing one or more of the constants bitwise values
      *                  summed together in the optional what parameter
      *
-     * @psalm-return array<string, array<string, array{local: scalar, master: scalar}|scalar>>
+     * @phpstan-return array<string, array<string, array{local: scalar, master: scalar}|scalar>>
      */
     public function asArray(int $what = \INFO_ALL): array
     {
@@ -55,7 +55,7 @@ class PhpInfoService
         $regex3cols = \sprintf('/%1$s\s*%1$s\s*%1$s/i', $regexInfo);
         $regexLine = '/<h2[^>]*>([^<]+)<\/h2>/i';
 
-        /** @psalm-var array<int, string> $array */
+        /** @var array<int, string> $array */
         $array = (array) \preg_split('/(<h2[^>]*>[^<]+<\/h2>)/i', $content, -1, \PREG_SPLIT_DELIM_CAPTURE);
         foreach ($array as $index => $entry) {
             if (StringUtils::pregMatch($regexLine, $entry, $matchs)) {

@@ -104,7 +104,7 @@ readonly class PdfLabelService
         try {
             $serializer = $this->createSerializer();
 
-            /** @psalm-var PdfLabel[] $labels */
+            /** @var PdfLabel[] $labels */
             $labels = $serializer->deserialize($content, PdfLabel::class . '[]', 'json');
 
             return $this->mapToKeyValue(

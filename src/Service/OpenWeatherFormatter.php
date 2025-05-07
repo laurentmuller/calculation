@@ -48,7 +48,7 @@ class OpenWeatherFormatter
      */
     public function update(array &$results, ?\DateTimeZone $timezone = null): void
     {
-        /** @psalm-var mixed $result */
+        /** @phpstan-var mixed $result */
         foreach ($results as $key => &$result) {
             if (\is_array($result)) {
                 $this->update($result, $timezone);
@@ -73,7 +73,7 @@ class OpenWeatherFormatter
     }
 
     /**
-     * @psalm-param array<int<-1,3>> $types
+     * @phpstan-param array<int<-1,3>> $types
      */
     private function formatDate(int $date, array $types, ?\DateTimeZone $timezone = null): string
     {
@@ -82,13 +82,13 @@ class OpenWeatherFormatter
 
     private function getLatitude(array $result): ?float
     {
-        /** @psalm-var float|null */
+        /** @phpstan-var float|null */
         return $result['lat'] ?? $result['latitude'] ?? null;
     }
 
     private function getLongitude(array $result): ?float
     {
-        /** @psalm-var float|null */
+        /** @phpstan-var float|null */
         return $result['lon'] ?? $result['longitude'] ?? null;
     }
 

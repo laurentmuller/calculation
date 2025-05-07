@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Trait to handle a table request.
  *
- * @psalm-require-extends AbstractController
+ * @phpstan-require-extends AbstractController
  */
 trait TableTrait
 {

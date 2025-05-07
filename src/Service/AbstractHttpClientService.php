@@ -93,11 +93,11 @@ abstract class AbstractHttpClientService
     {
         $locale = \Locale::getDefault();
         if ($languageOnly) {
-            /** @psalm-var non-empty-string */
+            /** @phpstan-var non-empty-string */
             return \Locale::getPrimaryLanguage($locale);
         }
 
-        /** @psalm-var non-empty-string */
+        /** @phpstan-var non-empty-string */
         return \Locale::canonicalize($locale);
     }
 
@@ -120,7 +120,7 @@ abstract class AbstractHttpClientService
     /**
      * Returns if the last error is set.
      *
-     * @psalm-assert-if-true HttpClientError $this->lastError
+     * @phpstan-assert-if-true HttpClientError $this->lastError
      */
     public function hasLastError(): bool
     {
@@ -228,7 +228,7 @@ abstract class AbstractHttpClientService
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface when an unsupported option is passed
      *
-     * @psalm-param Request::METHOD_* $method
+     * @phpstan-param Request::METHOD_* $method
      */
     protected function request(string $method, string $url, array $options = []): ResponseInterface
     {

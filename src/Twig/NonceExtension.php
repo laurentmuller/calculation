@@ -40,7 +40,7 @@ final class NonceExtension extends AbstractExtension
     /**
      * Gets the random nonce parameter.
      *
-     * @psalm-param positive-int $length
+     * @phpstan-param positive-int $length
      */
     public function getNonce(?int $length = null): string
     {

@@ -27,7 +27,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class TaskServiceType extends AbstractHelperType
 {
     /**
-     * @psalm-param array{simple_widget: bool, ...} $options
+     * @phpstan-param array{simple_widget: bool, ...} $options
      */
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void

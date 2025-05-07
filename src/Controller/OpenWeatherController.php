@@ -344,7 +344,7 @@ class OpenWeatherController extends AbstractController
     }
 
     /**
-     * @psalm-return FormInterface<mixed>
+     * @phpstan-return FormInterface<mixed>
      */
     private function createSearchForm(array $data): FormInterface
     {
@@ -472,7 +472,7 @@ class OpenWeatherController extends AbstractController
     }
 
     /**
-     * @psalm-param array<int, array> $cities
+     * @param array<int, array> $cities
      */
     private function updateCities(array &$cities, OpenWeatherUnits $units): void
     {

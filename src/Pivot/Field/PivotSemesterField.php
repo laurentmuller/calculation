@@ -37,7 +37,7 @@ class PivotSemesterField extends PivotDateField
     /**
      * Gets the callback used to format a semestre.
      *
-     * @psalm-return callable(int): string|null
+     * @phpstan-return callable(int): string|null
      */
     public function getFormatter(): ?callable
     {
@@ -51,7 +51,7 @@ class PivotSemesterField extends PivotDateField
      *
      * @param ?callable $formatter the optional callback
      *
-     * @psalm-param callable(int): string|null $formatter
+     * @phpstan-param callable(int): string|null $formatter
      */
     public function setFormatter(?callable $formatter): self
     {

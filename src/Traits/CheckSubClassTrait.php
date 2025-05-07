@@ -21,9 +21,9 @@ trait CheckSubClassTrait
     /**
      * Check if the given source is a class or a subclass of the given target class name.
      *
-     * @throws \InvalidArgumentException if checking failed
+     * @param class-string $target
      *
-     * @psalm-param class-string $target
+     * @throws \InvalidArgumentException if checking failed
      */
     public function checkSubClass(string|object $source, string $target): void
     {

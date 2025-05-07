@@ -47,7 +47,7 @@ class HtmlOlChunk extends AbstractHtmlListChunk
     /**
      * Gets the start counting.
      *
-     * @psalm-return positive-int
+     * @phpstan-return positive-int
      */
     public function getStart(): int
     {
@@ -65,7 +65,7 @@ class HtmlOlChunk extends AbstractHtmlListChunk
     /**
      * Sets the start counting (must be positive).
      *
-     * @psalm-param positive-int $start
+     * @phpstan-param positive-int $start
      */
     public function setStart(int $start): self
     {

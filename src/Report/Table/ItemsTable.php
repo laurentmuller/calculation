@@ -53,7 +53,7 @@ class ItemsTable extends ReportGroupTable implements PdfGroupListenerInterface
     #[\Override]
     public function drawGroup(PdfGroupEvent $event): true
     {
-        /** @psalm-var CalculationGroup|CalculationCategory $key */
+        /** @phpstan-var CalculationGroup|CalculationCategory $key */
         $key = $event->getGroupKey();
         if ($key instanceof CalculationGroup) {
             return $this->renderGroup($key);
@@ -165,7 +165,7 @@ class ItemsTable extends ReportGroupTable implements PdfGroupListenerInterface
     }
 
     /**
-     * @psalm-param CalculationItem[] $duplicateItems
+     * @param CalculationItem[] $duplicateItems
      */
     private function renderItem(
         CalculationItem $item,

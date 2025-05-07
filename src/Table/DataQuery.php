@@ -49,7 +49,7 @@ class DataQuery implements SortModeInterface
     /**
      * The sort order ('asc' or 'desc').
      *
-     * @psalm-var self::SORT_*
+     * @phpstan-var self::SORT_*
      */
     #[Assert\Choice([self::SORT_ASC, self::SORT_DESC])]
     public string $order = self::SORT_ASC;
@@ -95,7 +95,7 @@ class DataQuery implements SortModeInterface
     /**
      * Gets values as attributes.
      *
-     * @psalm-return array<string, bool|int|string>
+     * @return array<string, bool|int|string>
      */
     public function attributes(): array
     {
@@ -149,7 +149,7 @@ class DataQuery implements SortModeInterface
     /**
      * Gets values as parameters.
      *
-     * @psalm-return array<string, bool|int|string>
+     * @return array<string, bool|int|string>
      */
     public function params(): array
     {

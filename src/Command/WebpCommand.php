@@ -236,7 +236,7 @@ class WebpCommand extends Command
     }
 
     /**
-     * @psalm-assert-if-true numeric-string $level
+     * @phpstan-assert-if-true numeric-string $level
      */
     private function validateLevel(SymfonyStyle $io, mixed $level): bool
     {

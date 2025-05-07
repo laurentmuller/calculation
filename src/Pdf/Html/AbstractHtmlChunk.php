@@ -36,7 +36,7 @@ abstract class AbstractHtmlChunk
     /**
      * The bookmark level.
      *
-     * @psalm-var non-negative-int
+     * @phpstan-var non-negative-int
      */
     private int $bookmarkLevel = 0;
 
@@ -94,7 +94,7 @@ abstract class AbstractHtmlChunk
     /**
      * Return the bookmark level.
      *
-     * @psalm-return non-negative-int
+     * @phpstan-return non-negative-int
      */
     public function getBookmarkLevel(): int
     {
@@ -248,7 +248,7 @@ abstract class AbstractHtmlChunk
      * @param callable   $callback the callback to call after the font has been set.
      *                             The report is passed as the argument.
      *
-     * @psalm-param callable(HtmlReport):void $callback
+     * @phpstan-param callable(HtmlReport):void $callback
      */
     protected function applyFont(HtmlReport $report, ?PdfFont $font, callable $callback): void
     {
@@ -270,7 +270,7 @@ abstract class AbstractHtmlChunk
      * @param callable   $callback    the callback to call after the margins have been set. The report is passed
      *                                as an argument.
      *
-     * @psalm-param callable(HtmlReport):void $callback
+     * @phpstan-param callable(HtmlReport):void $callback
      */
     protected function applyMargins(HtmlReport $report, float $leftMargin, float $rightMargin, callable $callback): void
     {

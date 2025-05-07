@@ -40,7 +40,7 @@ class Strength extends Constraint
     public string $strength_message = 'password.strength_level';
 
     /**
-     * @psalm-param string[] $groups
+     * @param string[] $groups
      *
      * @throws ConstraintDefinitionException if the minimum parameter is an integer and cannot be parsed to a strength level
      */

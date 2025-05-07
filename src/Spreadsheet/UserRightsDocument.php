@@ -98,7 +98,7 @@ class UserRightsDocument extends AbstractArrayDocument
     }
 
     /**
-     * @psalm-param FlagBag<EntityPermission> $rights
+     * @phpstan-param FlagBag<EntityPermission> $rights
      */
     private function getRightText(FlagBag $rights, EntityPermission $permission): ?string
     {
@@ -122,7 +122,7 @@ class UserRightsDocument extends AbstractArrayDocument
     }
 
     /**
-     * @psalm-param FlagBag<EntityPermission> $rights
+     * @phpstan-param FlagBag<EntityPermission> $rights
      */
     private function outputRights(WorksheetDocument $sheet, EntityName $entity, FlagBag $rights, int $row): void
     {

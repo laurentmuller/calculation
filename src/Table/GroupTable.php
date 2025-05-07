@@ -50,7 +50,7 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
      *
      * @throws \Twig\Error\Error
      *
-     * @psalm-param array{id: int} $entity
+     * @phpstan-param array{id: int} $entity
      */
     public function formatCategories(int $value, array $entity): string
     {
@@ -70,7 +70,7 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
      *
      * @throws \Twig\Error\Error
      *
-     * @psalm-param array{id: int} $entity
+     * @phpstan-param array{id: int} $entity
      */
     public function formatProducts(int $value, array $entity): string
     {
@@ -90,7 +90,7 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
      *
      * @throws \Twig\Error\Error
      *
-     * @psalm-param array{id: int} $entity
+     * @phpstan-param array{id: int} $entity
      */
     public function formatTasks(int $value, array $entity): string
     {

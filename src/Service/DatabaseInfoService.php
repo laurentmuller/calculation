@@ -46,7 +46,7 @@ class DatabaseInfoService
             $this->configuration = [];
 
             try {
-                /** @psalm-var array<array{Variable_name: string, Value: string}> $entries */
+                /** @phpstan-var array<array{Variable_name: string, Value: string}> $entries */
                 $entries = $this->executeQuery('SHOW VARIABLES', true);
                 foreach ($entries as $entry) {
                     $value = $entry['Value'];

@@ -36,7 +36,7 @@ interface RoleInterface
     /**
      * Gets the role.
      *
-     * @psalm-return RoleInterface::ROLE_*
+     * @phpstan-return RoleInterface::ROLE_*
      */
     public function getRole(): string;
 
@@ -45,7 +45,7 @@ interface RoleInterface
      *
      * @return string[]
      *
-     * @psalm-return RoleInterface::ROLE_*[]
+     * @phpstan-return RoleInterface::ROLE_*[]
      */
     public function getRoles(): array;
 
@@ -56,7 +56,7 @@ interface RoleInterface
      *
      * @return bool true if this has a given role
      *
-     * @psalm-param RoleInterface::ROLE_* $role
+     * @phpstan-param RoleInterface::ROLE_* $role
      */
     public function hasRole(string $role): bool;
 

@@ -80,7 +80,7 @@ class BingTranslatorService extends AbstractTranslatorService
             return false;
         }
 
-        /** @psalm-var string|null $tag */
+        /** @phpstan-var string|null $tag */
         $tag = $this->getValue($response, '[0][language]');
         if (!\is_string($tag)) {
             return false;
@@ -121,13 +121,13 @@ class BingTranslatorService extends AbstractTranslatorService
             return false;
         }
 
-        /** @psalm-var string|null $target */
+        /** @phpstan-var string|null $target */
         $target = $this->getValue($response, '[0][translations][0][text]');
         if (!\is_string($target)) {
             return false;
         }
 
-        /** @psalm-var string|null $language */
+        /** @phpstan-var string|null $language */
         $language = $this->getValue($response, '[0][detectedLanguage][language]', false);
         if (\is_string($language)) {
             $query->from = $language;
@@ -162,7 +162,7 @@ class BingTranslatorService extends AbstractTranslatorService
         if (false === $response) {
             return false;
         }
-        /** @psalm-var array<string, array{name: string}>|null  $translation */
+        /** @phpstan-var array<string, array{name: string}>|null  $translation */
         $translation = $this->getValue($response, '[translation]');
         if (!\is_array($translation)) {
             return false;
@@ -179,7 +179,7 @@ class BingTranslatorService extends AbstractTranslatorService
     /**
      * @throws ExceptionInterface
      *
-     * @psalm-param Request::METHOD_* $method
+     * @phpstan-param Request::METHOD_* $method
      */
     private function call(string $uri, array $query = [], array $json = [], string $method = Request::METHOD_POST): array|false
     {

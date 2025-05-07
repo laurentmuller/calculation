@@ -657,10 +657,10 @@ class PdfTable
     }
 
     /**
-     * @psalm-param PdfCell[]   $cells
-     * @psalm-param PdfColumn[] $columns
+     * @param PdfCell[]   $cells
+     * @param PdfColumn[] $columns
      *
-     * @psalm-return array{
+     * @phpstan-return array{
      *     0: string[],
      *     1: PdfStyle[],
      *     2: PdfTextAlignment[],

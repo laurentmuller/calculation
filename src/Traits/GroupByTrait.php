@@ -23,13 +23,13 @@ trait GroupByTrait
      *
      * Any additional keys will be used for grouping the next set of subarrays.
      *
-     * @psalm-template T of array|object
+     * @phpstan-template T of array|object
      *
-     * @psalm-param T[]                              $array
-     * @psalm-param string|int|callable(T):array-key $key
-     * @psalm-param string|int|callable(T):array-key ...$others
+     * @phpstan-param T[]                              $array
+     * @phpstan-param string|int|callable(T):array-key $key
+     * @phpstan-param string|int|callable(T):array-key ...$others
      *
-     * @psalm-return array<array-key, T|mixed>
+     * @phpstan-return array<array-key, T|mixed>
      */
     public function groupBy(array $array, string|int|callable $key, string|int|callable ...$others): array
     {
@@ -46,7 +46,7 @@ trait GroupByTrait
             return $result;
         }
 
-        /** @psalm-var callable(array): array $function */
+        /** @phpstan-var callable(array): array $function */
         $function = [self::class, __FUNCTION__]; // @phpstan-ignore varTag.nativeType
         $slice_args = \array_slice(\func_get_args(), 2);
         foreach ($result as $groupKey => $value) {
@@ -58,7 +58,7 @@ trait GroupByTrait
     }
 
     /**
-     * @psalm-param string|int|(callable(mixed): array-key) $key
+     * @param string|int|(callable(mixed): array-key) $key
      */
     private function getGroupKey(array|object $value, string|int|callable $key): string|int
     {
@@ -67,11 +67,11 @@ trait GroupByTrait
         }
 
         if (\is_array($value)) {
-            /** @psalm-var array-key */
+            /** @phpstan-var array-key */
             return $value[$key];
         }
 
-        /** @psalm-var array-key */
+        /** @phpstan-var array-key */
         return $value->{$key}; // @phpstan-ignore property.dynamicName
     }
 }

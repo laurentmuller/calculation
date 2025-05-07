@@ -99,7 +99,7 @@ readonly class ResetPasswordService
      */
     public function getThrottleAt(ResetPasswordToken $token): \DateTimeInterface
     {
-        /** @psalm-var \DateTime $expireAt */
+        /** @var \DateTime $expireAt */
         $expireAt = clone $token->getExpiresAt();
         $interval = new \DateInterval(self::THROTTLE_OFFSET);
 

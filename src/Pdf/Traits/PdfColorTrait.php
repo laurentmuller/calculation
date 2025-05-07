@@ -22,7 +22,7 @@ use fpdf\PdfDocument;
 /**
  * Trait for class implementing the color interface.
  *
- * @psalm-require-implements PdfColorInterface
+ * @phpstan-require-implements PdfColorInterface
  */
 trait PdfColorTrait
 {

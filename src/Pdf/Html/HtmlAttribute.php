@@ -38,9 +38,9 @@ enum HtmlAttribute: string
     /**
      * @template T of \BackedEnum
      *
-     * @psalm-param T $default
+     * @phpstan-param T $default
      *
-     * @psalm-return T
+     * @phpstan-return T
      */
     public function getEnumValue(\DOMNode $node, \BackedEnum $default): \BackedEnum
     {
@@ -58,7 +58,7 @@ enum HtmlAttribute: string
     }
 
     /**
-     * @psalm-return ($default is null ? (string|null) : string)
+     * @phpstan-return ($default is null ? (string|null) : string)
      */
     public function getValue(\DOMNode $node, ?string $default = null): ?string
     {

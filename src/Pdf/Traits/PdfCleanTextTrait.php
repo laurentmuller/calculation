@@ -18,7 +18,7 @@ use fpdf\PdfDocument;
 /**
  * Trait to clean and encoding output texts.
  *
- * @psalm-require-extends PdfDocument
+ * @phpstan-require-extends PdfDocument
  */
 trait PdfCleanTextTrait
 {

@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Trait for class implementing the TimestampableInterface interface.
  *
- * @psalm-require-implements \App\Interfaces\TimestampableInterface
+ * @phpstan-require-implements \App\Interfaces\TimestampableInterface
  */
 trait TimestampableTrait
 {

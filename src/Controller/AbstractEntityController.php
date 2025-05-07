@@ -64,7 +64,7 @@ abstract class AbstractEntityController extends AbstractController
     private readonly string $shortName;
 
     /**
-     * @psalm-param TRepository $repository
+     * @phpstan-param TRepository $repository
      */
     public function __construct(private readonly AbstractRepository $repository)
     {
@@ -93,8 +93,8 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Delete an entity.
      *
-     * @psalm-param TEntity $item
-     * @psalm-param array{route?: string, ...} $parameters
+     * @phpstan-param TEntity $item
+     * @phpstan-param array{route?: string, ...} $parameters
      */
     protected function deleteEntity(
         Request $request,
@@ -136,7 +136,7 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * This function deletes the given entity from the database.
      *
-     * @psalm-param TEntity $item
+     * @phpstan-param TEntity $item
      */
     protected function deleteFromDatabase(EntityInterface $item): void
     {
@@ -146,8 +146,8 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Edit an entity.
      *
-     * @psalm-param TEntity $item
-     * @psalm-param array{route?: string, ...} $parameters
+     * @phpstan-param TEntity $item
+     * @phpstan-param array{route?: string, ...} $parameters
      */
     protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
@@ -213,8 +213,6 @@ abstract class AbstractEntityController extends AbstractController
      * @param literal-string               $alias        the entity alias
      *
      * @return TEntity[] the entities
-     *
-     * @psalm-return TEntity[]
      */
     protected function getEntities(
         array|string $sortedFields = [],
@@ -230,7 +228,7 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * @psalm-return TRepository
+     * @phpstan-return TRepository
      */
     protected function getRepository(): AbstractRepository
     {
@@ -302,7 +300,7 @@ abstract class AbstractEntityController extends AbstractController
      *
      * Derived class can update the entity before it is saved to the database.
      *
-     * @psalm-param TEntity $item
+     * @phpstan-param TEntity $item
      */
     protected function saveToDatabase(EntityInterface $item): void
     {
@@ -318,7 +316,7 @@ abstract class AbstractEntityController extends AbstractController
      *
      * @throws AccessDeniedException
      *
-     * @psalm-param TEntity $item
+     * @phpstan-param TEntity $item
      */
     protected function showEntity(EntityInterface $item, array $parameters = []): Response
     {
@@ -331,7 +329,7 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Update the parameters by adding the request query values.
      *
-     * @psalm-param array{params?: array, ...} $parameters
+     * @phpstan-param array{params?: array, ...} $parameters
      */
     protected function updateQueryParameters(
         Request $request,

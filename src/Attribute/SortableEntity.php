@@ -25,7 +25,7 @@ readonly class SortableEntity implements SortModeInterface
      * @param string $name  the property name
      * @param string $order the sort order
      *
-     * @psalm-param self::SORT_* $order
+     * @phpstan-param self::SORT_* $order
      */
     public function __construct(public string $name, public string $order = self::SORT_ASC)
     {
@@ -46,7 +46,7 @@ readonly class SortableEntity implements SortModeInterface
      * @throws \ReflectionException if the class does not exist or if the validated parameter
      *                              is true and a property name is not found
      *
-     * @psalm-param T|class-string<T> $objectOrClass
+     * @phpstan-param T|class-string<T> $objectOrClass
      */
     public static function getOrder(object|string $objectOrClass, bool $validate = false): array
     {

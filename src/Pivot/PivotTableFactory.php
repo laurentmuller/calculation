@@ -35,7 +35,7 @@ class PivotTableFactory
     /**
      * The aggregator class name.
      *
-     * @psalm-var class-string<T> $aggregatorClass
+     * @phpstan-var class-string<T> $aggregatorClass
      */
     private string $aggregatorClass;
 
@@ -64,8 +64,8 @@ class PivotTableFactory
     private array $rowFields = [];
 
     /**
-     * @psalm-param array<array<array-key, mixed>> $dataset
-     * @psalm-param class-string<T> $aggregatorClass
+     * @phpstan-param array<array<array-key, mixed>> $dataset
+     * @phpstan-param class-string<T> $aggregatorClass
      *
      * @throws \InvalidArgumentException if the given aggregator class name is not a subclass of the AbstractAggregator class
      */
@@ -128,7 +128,7 @@ class PivotTableFactory
     /**
      * Gets the aggregator class name.
      *
-     * @psalm-return class-string<T>
+     * @phpstan-return class-string<T>
      */
     public function getAggregatorClass(): string
     {
@@ -190,12 +190,12 @@ class PivotTableFactory
     /**
      * Creates a new instance.
      *
-     * @psalm-template E of AbstractAggregator
+     * @phpstan-template E of AbstractAggregator
      *
-     * @psalm-param array<array<array-key, mixed>> $dataset
-     * @psalm-param class-string<E> $aggregatorClass
+     * @phpstan-param array<array<array-key, mixed>> $dataset
+     * @phpstan-param class-string<E> $aggregatorClass
      *
-     * @psalm-return PivotTableFactory<E>
+     * @phpstan-return PivotTableFactory<E>
      */
     public static function instance(array $dataset, string $aggregatorClass = SumAggregator::class, ?string $title = null): self
     {
@@ -319,7 +319,7 @@ class PivotTableFactory
      */
     private function createAggregator(): AbstractAggregator
     {
-        /** @psalm-var T */
+        /** @phpstan-var T */
         return new $this->aggregatorClass();
     }
 
@@ -349,7 +349,7 @@ class PivotTableFactory
     }
 
     /**
-     * @psalm-param PivotField[] $columnFields
+     * @param PivotField[] $columnFields
      */
     private function updateColumnFields(PivotTable $table, array $columnFields): void
     {
@@ -377,7 +377,7 @@ class PivotTableFactory
     }
 
     /**
-     * @psalm-param PivotField[] $rowFields
+     * @param PivotField[] $rowFields
      */
     private function updateRowFields(PivotTable $table, array $rowFields): static
     {

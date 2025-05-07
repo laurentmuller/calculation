@@ -35,7 +35,7 @@ trait ArrayTrait
      * @return bool <code>true</code> if there is at least one element for which the callback returns <code>true</code>,
      *              <code>false</code> otherwise
      *
-     * @psalm-param Closure(TValue, TKey=): bool $callback
+     * @phpstan-param \Closure(TValue, TKey=): bool $callback
      */
     public function anyMatch(array $array, \Closure $callback): bool
     {
@@ -62,7 +62,7 @@ trait ArrayTrait
      * @return TValue|null a value if there is at least one element for which callback returns <code>true</code>,
      *                     null otherwise
      *
-     * @psalm-param Closure(TValue, TKey=): bool $callback
+     * @phpstan-param \Closure(TValue, TKey=): bool $callback
      */
     public function findFirst(array $array, \Closure $callback): mixed
     {
@@ -86,7 +86,7 @@ trait ArrayTrait
     /**
      * Gets filtered values of a single column.
      *
-     * @psalm-param int<0,2> $mode
+     * @phpstan-param int<0,2> $mode
      */
     public function getColumnFilter(array $values, string|int $key, ?callable $callback = null, int $mode = 0): array
     {
@@ -96,11 +96,11 @@ trait ArrayTrait
     /**
      * Gets the maximum value of a single column.
      *
-     * @psalm-template TValue of int|float
+     * @phpstan-template TValue of int|float
      *
-     * @psalm-param TValue $default
+     * @phpstan-param TValue $default
      *
-     * @psalm-return TValue
+     * @phpstan-return TValue
      */
     public function getColumnMax(array $values, string|int $key, int|float $default = 0.0): int|float
     {
@@ -108,21 +108,21 @@ trait ArrayTrait
             return $default;
         }
 
-        /** @psalm-var non-empty-array<TValue> $values */
+        /** @phpstan-var non-empty-array<TValue> $values */
         $values = $this->getColumn($values, $key);
 
-        /** @psalm-var TValue */
+        /** @phpstan-var TValue */
         return \max($values);
     }
 
     /**
      * Gets the sum of a single column.
      *
-     * @psalm-template TValue of int|float
+     * @phpstan-template TValue of int|float
      *
-     * @psalm-param TValue $default
+     * @phpstan-param TValue $default
      *
-     * @psalm-return TValue
+     * @phpstan-return TValue
      */
     public function getColumnSum(array $values, string|int $key, int|float $default = 0.0): int|float
     {
@@ -131,7 +131,7 @@ trait ArrayTrait
         }
         $values = $this->getColumn($values, $key);
 
-        /** @psalm-var TValue */
+        /** @phpstan-var TValue */
         return \array_sum($values);
     }
 
@@ -198,8 +198,8 @@ trait ArrayTrait
      *
      * @return T[]
      *
-     * @psalm-param 0|1|2 $mode
-     * @psalm-param 0|1|2|5 $flags
+     * @phpstan-param 0|1|2 $mode
+     * @phpstan-param 0|1|2|5 $flags
      */
     public function getUniqueFiltered(
         array $values,
@@ -223,7 +223,7 @@ trait ArrayTrait
      *
      * @return T[]
      *
-     * @psalm-param 0|1|2|5 $flags
+     * @phpstan-param 0|1|2|5 $flags
      */
     public function getUniqueMerged(array $first, array $second, int $flags = \SORT_STRING): array
     {
@@ -247,8 +247,8 @@ trait ArrayTrait
         return \array_reduce(
             $array,
             /**
-             * @psalm-param array<TKey, TResult> $carry
-             * @psalm-param TValue $value
+             * @phpstan-param array<TKey, TResult> $carry
+             * @phpstan-param TValue $value
              */
             fn (array $carry, $value): array => $carry + $callable($value),
             []

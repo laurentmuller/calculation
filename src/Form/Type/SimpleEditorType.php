@@ -53,7 +53,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param array{required: bool, ...} $options
+     * @phpstan-param array{required: bool, ...} $options
      */
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
@@ -105,7 +105,7 @@ class SimpleEditorType extends AbstractType
     /**
      * Filters, updates, and groups actions.
      *
-     * @psalm-param array{actions?: array, ...} $options
+     * @phpstan-param array{actions?: array, ...} $options
      */
     private function getGroupedActions(array $options): array
     {

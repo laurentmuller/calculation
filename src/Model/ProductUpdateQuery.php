@@ -111,7 +111,7 @@ class ProductUpdateQuery extends AbstractSimulateQuery
     /**
      * Gets the update type (percent or fixed amount).
      *
-     * @psalm-return ProductUpdateQuery::UPDATE_*
+     * @phpstan-return ProductUpdateQuery::UPDATE_*
      */
     public function getType(): string
     {
@@ -223,7 +223,7 @@ class ProductUpdateQuery extends AbstractSimulateQuery
     /**
      * Sets the update type (percent or fixed amount).
      *
-     * @psalm-param ProductUpdateQuery::UPDATE_* $type
+     * @phpstan-param ProductUpdateQuery::UPDATE_* $type
      */
     public function setType(string $type): self
     {

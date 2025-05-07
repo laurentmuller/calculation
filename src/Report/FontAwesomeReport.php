@@ -78,7 +78,7 @@ class FontAwesomeReport extends AbstractReport
     }
 
     /**
-     * @psalm-return array<string, array<string, string>>
+     * @return array<string, array<string, string>>
      */
     private function getGroupedAliases(): array
     {

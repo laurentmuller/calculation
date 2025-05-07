@@ -66,9 +66,9 @@ class ImageService
      *
      * @return int|false the color identifier on success, false if the allocation failed
      *
-     * @psalm-param int<0, 255> $red
-     * @psalm-param int<0, 255> $green
-     * @psalm-param int<0, 255> $blue
+     * @phpstan-param int<0, 255> $red
+     * @phpstan-param int<0, 255> $green
+     * @phpstan-param int<0, 255> $blue
      */
     public function allocate(int $red, int $green, int $blue): int|false
     {
@@ -92,10 +92,10 @@ class ImageService
      *
      * @return int|false the color identifier on success, false if the allocation failed
      *
-     * @psalm-param int<0, 255> $red
-     * @psalm-param int<0, 255> $green
-     * @psalm-param int<0, 255> $blue
-     * @psalm-param int<0, 127> $alpha
+     * @phpstan-param int<0, 255> $red
+     * @phpstan-param int<0, 255> $green
+     * @phpstan-param int<0, 255> $blue
+     * @phpstan-param int<0, 127> $alpha
      */
     public function allocateAlpha(int $red = 0, int $green = 0, int $blue = 0, int $alpha = 127): int|false
     {
@@ -244,8 +244,8 @@ class ImageService
      *
      * @return ?ImageService an image handler on success, <code>null</code> on error
      *
-     * @psalm-param positive-int $width
-     * @psalm-param positive-int $height
+     * @phpstan-param positive-int $width
+     * @phpstan-param positive-int $height
      */
     public static function fromTrueColor(int $width, int $height): ?self
     {
@@ -316,7 +316,7 @@ class ImageService
      */
     public function resolution(int $default = self::DEFAULT_RESOLUTION): int
     {
-        /** @psalm-var int[]|false $values */
+        /** @phpstan-var int[]|false $values */
         $values = \imageresolution($this->image);
         if (!\is_array($values)) {
             return $default;
@@ -424,7 +424,7 @@ class ImageService
      */
     public function ttfBox(float $size, float $angle, string $fontFile, string $text): array|false
     {
-        /** @psalm-var int[]|false */
+        /** @phpstan-var int[]|false */
         return \imagettfbbox($size, $angle, $fontFile, $text);
     }
 

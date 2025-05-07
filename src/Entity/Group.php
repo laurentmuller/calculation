@@ -299,7 +299,7 @@ class Group extends AbstractCodeEntity
     }
 
     /**
-     * @psalm-param \Closure(int, Category): int $func
+     * @param \Closure(int, Category): int $func
      */
     private function reduceCategories(\Closure $func): int
     {

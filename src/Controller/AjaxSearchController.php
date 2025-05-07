@@ -171,7 +171,7 @@ class AjaxSearchController extends AbstractController
     /**
      * Search distinct values within the given callback.
      *
-     * @psalm-param callable(string, int): array $callback
+     * @param callable(string, int): array $callback
      */
     private function getValuesFromCallback(
         callable $callback,

@@ -20,7 +20,7 @@ use App\Utils\StringUtils;
 /**
  * Trait for class implementing <code>PropertyServiceInterface</code>.
  *
- * @psalm-require-implements \App\Interfaces\PropertyServiceInterface
+ * @phpstan-require-implements \App\Interfaces\PropertyServiceInterface
  *
  * @template TProperty of AbstractProperty
  */
@@ -127,7 +127,7 @@ trait PropertyServiceTrait
      * @param string              $name    the property name to search for
      * @param ?\DateTimeInterface $default the default value if the property is not found
      *
-     * @psalm-return ($default is null ? (\DateTimeInterface|null) : \DateTimeInterface)
+     * @phpstan-return ($default is null ? (\DateTimeInterface|null) : \DateTimeInterface)
      */
     protected function getPropertyDate(string $name, ?\DateTimeInterface $default = null): ?\DateTimeInterface
     {
@@ -147,9 +147,9 @@ trait PropertyServiceTrait
      *
      * @template T of \BackedEnum
      *
-     * @psalm-param T $default
+     * @phpstan-param T $default
      *
-     * @psalm-return T
+     * @phpstan-return T
      */
     protected function getPropertyEnum(string $propertyName, \BackedEnum $default): \BackedEnum
     {
@@ -191,11 +191,11 @@ trait PropertyServiceTrait
      * @param string  $name    the property name to search for
      * @param ?string $default the default value if the property is not found
      *
-     * @psalm-return ($default is null ? (string|null) : string)
+     * @phpstan-return ($default is null ? (string|null) : string)
      */
     protected function getPropertyString(string $name, ?string $default = null): ?string
     {
-        /** @psalm-var string|null $value */
+        /** @phpstan-var string|null $value */
         $value = $this->getCacheValue($name, $default);
 
         return \is_string($value) ? $value : $default;
@@ -231,9 +231,9 @@ trait PropertyServiceTrait
     protected function isPropertiesChanged(array $properties): bool
     {
         $existing = $this->getProperties(false);
-        /** @psalm-var mixed $value */
+        /** @phpstan-var mixed $value */
         foreach ($properties as $key => $value) {
-            /** @psalm-var mixed $oldValue */
+            /** @phpstan-var mixed $oldValue */
             $oldValue = $existing[$key] ?? null;
             if ($value !== $oldValue) {
                 return true;
@@ -246,7 +246,7 @@ trait PropertyServiceTrait
     /**
      * Load entities from the database.
      *
-     * @psalm-return TProperty[]
+     * @phpstan-return TProperty[]
      */
     abstract protected function loadEntities(): array;
 

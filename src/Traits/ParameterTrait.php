@@ -35,9 +35,9 @@ trait ParameterTrait
      *
      * @template EnumType of \BackedEnum
      *
-     * @psalm-param EnumType $default
+     * @phpstan-param EnumType $default
      *
-     * @psalm-return EnumType
+     * @phpstan-return EnumType
      */
     protected function getParamEnum(Request $request, string $key, \BackedEnum $default, string $prefix = ''): \BackedEnum
     {

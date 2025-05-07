@@ -112,7 +112,7 @@ trait MathTrait
      *
      * @return int|float checked value
      *
-     * @psalm-return ($value is float ? float : int)
+     * @phpstan-return ($value is float ? float : int)
      */
     protected function validateRange(int|float $value, int|float $min, int|float $max): int|float
     {

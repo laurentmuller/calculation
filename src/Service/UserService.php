@@ -217,7 +217,7 @@ class UserService implements PropertyServiceInterface
 
         $defaultValues = $this->service->getProperties();
         $existingProperties = $this->getExistingProperties();
-        /** @psalm-var mixed $value */
+        /** @phpstan-var mixed $value */
         foreach ($properties as $key => $value) {
             $this->saveProperty($key, $value, $defaultValues, $existingProperties, $user);
         }
@@ -242,7 +242,7 @@ class UserService implements PropertyServiceInterface
     }
 
     /**
-     * @psalm-return array<string, UserProperty>
+     * @return array<string, UserProperty>
      */
     private function getExistingProperties(): array
     {
@@ -258,8 +258,8 @@ class UserService implements PropertyServiceInterface
     }
 
     /**
-     * @psalm-param array<string, mixed> $defaultValues
-     * @psalm-param array<string, UserProperty> $existingProperties
+     * @param array<string, mixed>        $defaultValues
+     * @param array<string, UserProperty> $existingProperties
      */
     private function saveProperty(
         string $name,

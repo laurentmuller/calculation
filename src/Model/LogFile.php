@@ -126,7 +126,7 @@ class LogFile implements \Countable
     }
 
     /**
-     * @psalm-param PsrLevel::* $name
+     * @phpstan-param PsrLevel::* $name
      */
     private function updateLevels(string $name): void
     {

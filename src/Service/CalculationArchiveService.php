@@ -143,7 +143,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     }
 
     /**
-     * @psalm-param CalculationState[] $sources
+     * @param CalculationState[] $sources
      */
     private function createQueryBuilder(array $sources, ?\DateTimeImmutable $date = null): QueryBuilder
     {
@@ -164,9 +164,9 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     /**
      * Gets the calculations to archive.
      *
-     * @psalm-param CalculationState[] $sources
+     * @param CalculationState[] $sources
      *
-     * @psalm-return Calculation[]
+     * @return Calculation[]
      */
     private function getCalculations(\DateTimeImmutable $date, array $sources): array
     {
@@ -174,7 +174,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
             return [];
         }
 
-        /** @psalm-var Calculation[] */
+        /** @var Calculation[] */
         return $this->createQueryBuilder($sources, $date)
             ->getQuery()
             ->getResult();
@@ -203,7 +203,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     }
 
     /**
-     * @psalm-param CalculationState[] $sources
+     * @param CalculationState[] $sources
      */
     private function getDateMax(array $sources): ?\DateTimeImmutable
     {
@@ -211,7 +211,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     }
 
     /**
-     * @psalm-param CalculationState[] $sources
+     * @param CalculationState[] $sources
      */
     private function getDateMin(array $sources): ?\DateTimeImmutable
     {
@@ -219,7 +219,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     }
 
     /**
-     * @psalm-param CalculationState[] $sources
+     * @param CalculationState[] $sources
      */
     private function getScalarDate(array $sources, string $function): ?\DateTimeImmutable
     {
@@ -233,11 +233,11 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     }
 
     /**
-     * @psalm-return CalculationState[]
+     * @return CalculationState[]
      */
     private function getSources(bool $useSession): array
     {
-        /** @psalm-var CalculationState[] $sources */
+        /** @var CalculationState[] $sources */
         $sources = $this->stateRepository
             ->getEditableQueryBuilder()
             ->getQuery()
@@ -247,7 +247,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
             return $sources;
         }
 
-        /** @psalm-var int[] $ids */
+        /** @var int[] $ids */
         $ids = $this->getSessionValue(self::KEY_SOURCES, []);
         if ([] === $ids) {
             return $sources;

@@ -21,7 +21,7 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
 /**
  * Trait to check grant actions within the subscribed service.
  *
- * @psalm-require-implements \Symfony\Contracts\Service\ServiceSubscriberInterface
+ * @phpstan-require-implements \Symfony\Contracts\Service\ServiceSubscriberInterface
  */
 trait AuthorizationCheckerAwareTrait
 {
@@ -29,7 +29,7 @@ trait AuthorizationCheckerAwareTrait
 
     private ?AuthorizationCheckerInterface $checker = null;
 
-    /** @psalm-var array<string, bool> */
+    /** @phpstan-var array<string, bool> */
     private array $rights = [];
 
     #[SubscribedService]

@@ -21,7 +21,7 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
 /**
  * Trait to manage session values within the subscribed service.
  *
- * @psalm-require-implements \Symfony\Contracts\Service\ServiceSubscriberInterface
+ * @phpstan-require-implements \Symfony\Contracts\Service\ServiceSubscriberInterface
  */
 trait SessionAwareTrait
 {
@@ -62,11 +62,11 @@ trait SessionAwareTrait
      *
      * @return \DateTimeInterface|null the session value, if found; the default value otherwise
      *
-     * @psalm-return ($default is null ? (\DateTimeInterface|null) : \DateTimeInterface)
+     * @phpstan-return ($default is null ? (\DateTimeInterface|null) : \DateTimeInterface)
      */
     protected function getSessionDate(string $key, ?\DateTimeInterface $default = null): ?\DateTimeInterface
     {
-        /** @psalm-var \DateTimeInterface|int|null $value */
+        /** @phpstan-var \DateTimeInterface|int|null $value */
         $value = $this->getSessionValue($key, $default);
         if (\is_int($value)) {
             return (new \DateTime())->setTimestamp($value);
@@ -122,11 +122,11 @@ trait SessionAwareTrait
      *
      * @return string|null the session value, if found; the default value otherwise
      *
-     * @psalm-return ($default is null ? (string|null) : string)
+     * @phpstan-return ($default is null ? (string|null) : string)
      */
     protected function getSessionString(string $key, ?string $default = null): ?string
     {
-        /** @psalm-var string|null $value */
+        /** @phpstan-var string|null $value */
         $value = $this->getSessionValue($key, $default);
 
         return \is_string($value) ? $value : $default;
@@ -218,7 +218,7 @@ trait SessionAwareTrait
      */
     protected function setSessionValues(array $attributes): static
     {
-        /** @psalm-var mixed $value */
+        /** @phpstan-var mixed $value */
         foreach ($attributes as $key => $value) {
             $this->setSessionValue($key, $value);
         }

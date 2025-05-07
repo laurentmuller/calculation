@@ -558,7 +558,7 @@ class ApplicationService implements PropertyServiceInterface
         $repository = $this->getPropertyRepository();
         $existingProperties = $this->getExistingProperties();
 
-        /** @psalm-var mixed $value */
+        /** @phpstan-var mixed $value */
         foreach ($properties as $key => $value) {
             $this->saveProperty($key, $value, $defaultValues, $existingProperties, $repository);
         }
@@ -604,9 +604,9 @@ class ApplicationService implements PropertyServiceInterface
     /**
      * @template TEntity of EntityInterface
      *
-     * @psalm-param class-string<TEntity> $entityName
+     * @phpstan-param class-string<TEntity> $entityName
      *
-     * @psalm-return TEntity|null
+     * @phpstan-return TEntity|null
      */
     private function findEntity(string $propertyName, string $entityName): ?EntityInterface
     {
@@ -620,7 +620,7 @@ class ApplicationService implements PropertyServiceInterface
     }
 
     /**
-     * @psalm-return array<string, GlobalProperty>
+     * @return array<string, GlobalProperty>
      */
     private function getExistingProperties(): array
     {
@@ -636,8 +636,8 @@ class ApplicationService implements PropertyServiceInterface
     }
 
     /**
-     * @psalm-param array<string, mixed> $defaultValues
-     * @psalm-param array<string, GlobalProperty> $existingProperties
+     * @param array<string, mixed>          $defaultValues
+     * @param array<string, GlobalProperty> $existingProperties
      */
     private function saveProperty(
         string $name,

@@ -19,7 +19,7 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
 /**
  * Extends logger trait within the subscribed service.
  *
- * @psalm-require-implements \Symfony\Contracts\Service\ServiceSubscriberInterface
+ * @phpstan-require-implements \Symfony\Contracts\Service\ServiceSubscriberInterface
  */
 trait LoggerAwareTrait
 {

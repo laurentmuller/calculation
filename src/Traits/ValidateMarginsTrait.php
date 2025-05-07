@@ -21,15 +21,15 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 /**
  * Trait to validate margins within a callback.
  *
- * @psalm-template TMarginKey of array-key
- * @psalm-template TMarginValue of MarginInterface
+ * @template TMarginKey of array-key
+ * @template TMarginValue of MarginInterface
  */
 trait ValidateMarginsTrait
 {
     /**
      * Get margins.
      *
-     * @psalm-return Collection<TMarginKey, TMarginValue>
+     * @phpstan-return Collection<TMarginKey, TMarginValue>
      */
     abstract public function getMargins(): Collection;
 

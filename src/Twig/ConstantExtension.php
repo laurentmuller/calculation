@@ -88,7 +88,7 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
     {
         $class = new \ReflectionClass($class);
 
-        /** @psalm-var array<string, string> */
+        /** @var array<string, string> */
         return $class->getConstants(\ReflectionClassConstant::IS_PUBLIC);
     }
 

@@ -74,7 +74,7 @@ class HighlightExtension extends AbstractExtension
         $cloner = $this->getCloner();
         $dumper = $this->getDumper($env);
         $data = $cloner->cloneVar($variable);
-        /** @psalm-var resource $output */
+        /** @var resource $output */
         $output = \fopen('php://memory', 'r+');
         $dumper->dump($data, $output);
         $content = (string) \stream_get_contents($output, -1, 0);

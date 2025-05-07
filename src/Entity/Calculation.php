@@ -318,8 +318,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         return \array_reduce(
             $array,
             /**
-             * @psalm-param CalculationItem[] $current
-             * @psalm-param CalculationItem[] $items
+             * @param CalculationItem[] $current
+             * @param CalculationItem[] $items
              */
             function (array $current, array $items): array {
                 if (\count($items) > 1) {
@@ -903,12 +903,12 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * @psalm-template TValue
+     * @phpstan-template TValue
      *
-     * @psalm-param \Closure(TValue, CalculationGroup): TValue $func
-     * @psalm-param TValue $initial
+     * @phpstan-param \Closure(TValue, CalculationGroup): TValue $func
+     * @phpstan-param TValue $initial
      *
-     * @psalm-return TValue
+     * @phpstan-return TValue
      */
     private function reduceGroups(\Closure $func, mixed $initial): mixed
     {

@@ -24,7 +24,7 @@ trait EnumExtrasTrait
 
     public function getExtraBool(string $key, bool $default = false, bool $throwOnMissingExtra = false): bool
     {
-        /** @psalm-var bool|null $value */
+        /** @phpstan-var bool|null $value */
         $value = $this->getExtra($key, $throwOnMissingExtra);
 
         return \is_bool($value) ? $value : $default;
@@ -32,7 +32,7 @@ trait EnumExtrasTrait
 
     public function getExtraFloat(string $key, float $default = 0.0, bool $throwOnMissingExtra = false): float
     {
-        /** @psalm-var float|null $value */
+        /** @phpstan-var float|null $value */
         $value = $this->getExtra($key, $throwOnMissingExtra);
 
         return \is_float($value) ? $value : $default;
@@ -40,7 +40,7 @@ trait EnumExtrasTrait
 
     public function getExtraInt(string $key, int $default = 0, bool $throwOnMissingExtra = false): int
     {
-        /** @psalm-var int|null $value */
+        /** @phpstan-var int|null $value */
         $value = $this->getExtra($key, $throwOnMissingExtra);
 
         return \is_int($value) ? $value : $default;
@@ -48,7 +48,7 @@ trait EnumExtrasTrait
 
     public function getExtraString(string $key, string $default = '', bool $throwOnMissingExtra = false): string
     {
-        /** @psalm-var string|null $value */
+        /** @phpstan-var string|null $value */
         $value = $this->getExtra($key, $throwOnMissingExtra);
 
         return \is_string($value) ? $value : $default;

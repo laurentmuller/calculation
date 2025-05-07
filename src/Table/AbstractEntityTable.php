@@ -210,7 +210,7 @@ abstract class AbstractEntityTable extends AbstractTable
         if ($this->anyMatch(
             $entities,
             /** @phpstan-param EntityType $current */
-            fn (EntityInterface|array $current): bool => $id === $this->getEntityId($current) // @phpstan-ignore argument.type
+            fn (EntityInterface|array $current): bool => $id === $this->getEntityId($current)
         )) {
             return;
         }

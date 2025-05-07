@@ -38,9 +38,9 @@ trait CookieTrait
      *
      * @template EnumType of \BackedEnum
      *
-     * @psalm-param EnumType $default
+     * @phpstan-param EnumType $default
      *
-     * @psalm-return EnumType
+     * @phpstan-return EnumType
      */
     protected function getCookieEnum(
         Request $request,

@@ -120,7 +120,7 @@ class DataResults implements \JsonSerializable
     /**
      * Gets a parameter value for the given name.
      *
-     * @psalm-return ($default is null ? (bool|string|int|\BackedEnum|null)
+     * @phpstan-return ($default is null ? (bool|string|int|\BackedEnum|null)
      * : ($default is bool ? bool
      * : ($default is string ? string
      * : ($default is int ? int
@@ -128,7 +128,7 @@ class DataResults implements \JsonSerializable
      */
     public function getParameter(string $name, bool|string|int|\BackedEnum|null $default = null): bool|string|int|\BackedEnum|null
     {
-        /** @psalm-var bool|string|int|\BackedEnum|null */
+        /** @phpstan-var bool|string|int|\BackedEnum|null */
         return $this->params[$name] ?? $default;
     }
 

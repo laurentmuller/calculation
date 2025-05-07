@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 trait LogLevelTrait
 {
     /**
-     * @psalm-var PsrLevel::*
+     * @phpstan-var PsrLevel::*
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
@@ -33,7 +33,7 @@ trait LogLevelTrait
     /**
      * Get the level.
      *
-     * @psalm-return PsrLevel::*
+     * @phpstan-return PsrLevel::*
      */
     public function getLevel(): string
     {
@@ -80,7 +80,7 @@ trait LogLevelTrait
     }
 
     /**
-     * @psalm-param PsrLevel::* $level
+     * @phpstan-param PsrLevel::* $level
      */
     public function setLevel(string $level): self
     {

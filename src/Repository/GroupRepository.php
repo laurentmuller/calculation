@@ -63,7 +63,7 @@ class GroupRepository extends AbstractRepository
      *
      * <b>Note:</b> Only groups with at least one category are returned.
      *
-     * @psalm-return array<array{id: int, code: string}>
+     * @phpstan-return array<array{id: int, code: string}>
      */
     public function getDropDown(): array
     {

@@ -187,7 +187,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     }
 
     /**
-     * @psalm-param FlagBag<EntityPermission> $rights
+     * @phpstan-param FlagBag<EntityPermission> $rights
      */
     private function getRightText(FlagBag $rights, EntityPermission $permission): ?string
     {
@@ -220,7 +220,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     }
 
     /**
-     * @psalm-param FlagBag<EntityPermission> $rights
+     * @phpstan-param FlagBag<EntityPermission> $rights
      */
     private function outputRights(PdfGroupTable $table, EntityName $entity, FlagBag $rights): self
     {

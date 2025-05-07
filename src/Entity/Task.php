@@ -139,7 +139,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
         /**
          * @psalm-suppress MixedArgumentTypeCoercion
          *
-         * @psalm-var int<0, max>
+         * @phpstan-var int<0, max>
          */
         return $this->items->reduce(fn (int $carry, TaskItem $item): int => $carry + $item->count(), 0);
     }

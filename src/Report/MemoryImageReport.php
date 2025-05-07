@@ -139,7 +139,7 @@ class MemoryImageReport extends AbstractReport
     }
 
     /**
-     * @psalm-param PsrLevel::* $level
+     * @phpstan-param PsrLevel::* $level
      */
     private function getLevelColor(string $level): ?PdfTextColor
     {
@@ -272,12 +272,12 @@ class MemoryImageReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array<string, FontAwesomeImage> $files
+     * @param array<string, FontAwesomeImage> $files
      */
     private function renderImages(string $title, array $files, bool $color): void
     {
         $this->renderCellTitle($title);
-        /** @psalm-var PsrLevel::* $name */
+        /** @phpstan-var PsrLevel::* $name */
         foreach ($files as $name => $image) {
             if ($color) {
                 $this->getLevelColor($name)?->apply($this);

@@ -98,7 +98,7 @@ readonly class SwissPostService
     }
 
     /**
-     * @psalm-param callable(SwissDatabase): array $callback
+     * @phpstan-param callable(SwissDatabase): array $callback
      */
     private function find(callable $callback): array
     {

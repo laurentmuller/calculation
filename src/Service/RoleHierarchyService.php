@@ -33,13 +33,13 @@ readonly class RoleHierarchyService
      *
      * @return string[] an array, maybe empty, of reachable role names
      *
-     * @psalm-return RoleInterface::ROLE_*[]
+     * @phpstan-return RoleInterface::ROLE_*[]
      */
     public function getReachableRoleNames(mixed $data): array
     {
         $roles = $this->getRoleNames($data);
 
-        /** @psalm-var RoleInterface::ROLE_*[] */
+        /** @phpstan-var RoleInterface::ROLE_*[] */
         return [] === $roles ? $roles : $this->service->getReachableRoleNames($roles);
     }
 
@@ -48,12 +48,12 @@ readonly class RoleHierarchyService
      *
      * @return string[] an array, maybe empty, of role names
      *
-     * @psalm-return RoleInterface::ROLE_*[]
+     * @phpstan-return RoleInterface::ROLE_*[]
      */
     public function getRoleNames(mixed $data): array
     {
         if ($data instanceof UserInterface) {
-            /** @psalm-var RoleInterface::ROLE_*[] */
+            /** @phpstan-var RoleInterface::ROLE_*[] */
             return $data->getRoles();
         }
         if ($data instanceof RoleInterface) {
@@ -71,7 +71,7 @@ readonly class RoleHierarchyService
      *
      * @return bool true if the given data has the given role name; false otherwise
      *
-     * @psalm-param RoleInterface::ROLE_* $role
+     * @phpstan-param RoleInterface::ROLE_* $role
      */
     public function hasRole(mixed $data, string $role): bool
     {

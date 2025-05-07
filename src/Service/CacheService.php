@@ -82,7 +82,7 @@ class CacheService
      */
     private function parseContent(string $content): array
     {
-        /** @psalm-var list<string> $lines */
+        /** @phpstan-var list<string> $lines */
         $lines = \preg_split('/$\R?^/m', \trim($content), flags: \PREG_SPLIT_NO_EMPTY);
         $callback = static fn (string $line): bool => !\str_starts_with($line, '-')
             && !\str_starts_with($line, 'Pool name');
@@ -91,7 +91,7 @@ class CacheService
 
         $results = [];
         foreach ($lines as $line) {
-            /** @psalm-var array{0: string, 1: string} $values */
+            /** @phpstan-var array{0: string, 1: string} $values */
             $values = \explode('.', $line, 2);
             $results[$values[0]][] = $values[1];
         }

@@ -81,12 +81,12 @@ final class StringUtils
      *
      * @see StringUtils::encodeJson()
      *
-     * @psalm-return ($assoc is true ? array : \stdClass)
+     * @phpstan-return ($assoc is true ? array : \stdClass)
      */
     public static function decodeJson(string $value, bool $assoc = true, int $flags = 0): array|\stdClass
     {
         try {
-            /** @psalm-var array|\stdClass */
+            /** @phpstan-var array|\stdClass */
             return \json_decode(json: $value, associative: $assoc, flags: $flags | \JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
             throw new \InvalidArgumentException('Unable to decode value.', $e->getCode(), $e);
@@ -108,7 +108,7 @@ final class StringUtils
     public static function encodeJson(mixed $value, int $flags = 0): string
     {
         try {
-            /** @psalm-var non-empty-string */
+            /** @phpstan-var non-empty-string */
             return \json_encode($value, $flags | \JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
             $message = \sprintf("Unable to encode value '%s'.", \get_debug_type($value));
@@ -154,7 +154,7 @@ final class StringUtils
      *
      * @return string the short name
      *
-     * @psalm-param T|class-string<T> $objectOrClass
+     * @phpstan-param T|class-string<T> $objectOrClass
      */
     public static function getShortName(object|string $objectOrClass): string
     {
@@ -170,7 +170,7 @@ final class StringUtils
     /**
      * Returns if the given string is not null nor is empty.
      *
-     * @psalm-assert-if-true non-empty-string $str
+     * @phpstan-assert-if-true non-empty-string $str
      */
     public static function isString(?string $str): bool
     {
@@ -190,8 +190,8 @@ final class StringUtils
      *
      * @return bool <code>true</code> if the pattern matches the given subject
      *
-     * @psalm-param non-empty-string $pattern
-     * @psalm-param 0|256|512|768 $flags
+     * @phpstan-param non-empty-string $pattern
+     * @phpstan-param 0|256|512|768 $flags
      */
     public static function pregMatch(string $pattern, string $subject, ?array &$matches = null, int $flags = 0, int $offset = 0): bool
     {
@@ -212,8 +212,8 @@ final class StringUtils
      *
      * @return bool <code>true</code> if the pattern matches the given subject
      *
-     * @psalm-param non-empty-string $pattern
-     * @psalm-param int-mask<1, 2, 256, 512> $flags
+     * @phpstan-param non-empty-string $pattern
+     * @phpstan-param int-mask<1, 2, 256, 512> $flags
      */
     public static function pregMatchAll(string $pattern, string $subject, ?array &$matches = null, int $flags = 0, int $offset = 0): bool
     {
@@ -232,7 +232,7 @@ final class StringUtils
      * @param string $subject     the string being searched and replaced on
      * @param int    $limit       the maximum possible replacements for the pattern. Defaults to -1 (no limit).
      *
-     * @psalm-param non-empty-string $pattern
+     * @phpstan-param non-empty-string $pattern
      */
     public static function pregReplace(string $pattern, string $replacement, string $subject, int $limit = -1): string
     {
@@ -249,13 +249,13 @@ final class StringUtils
      *
      * @return string|string[] returns a string or an array with the replaced values
      *
-     * @psalm-param non-empty-array<non-empty-string, string> $values
+     * @phpstan-param non-empty-array<non-empty-string, string> $values
      *
-     * @psalm-return ($subject is string ? string : string[])
+     * @phpstan-return ($subject is string ? string : string[])
      */
     public static function pregReplaceAll(array $values, string|array $subject, int $limit = -1): string|array
     {
-        /** @psalm-var string|string[] */
+        /** @phpstan-var string|string[] */
         return \preg_replace(\array_keys($values), \array_values($values), $subject, $limit); // @phpstan-ignore varTag.type
     }
 
@@ -267,7 +267,7 @@ final class StringUtils
      *
      * @return string|string[] returns a string or an array with the replaced values
      *
-     * @psalm-return ($subject is string ? string : string[])
+     * @phpstan-return ($subject is string ? string : string[])
      */
     public static function replace(array $values, string|array $subject): string|array
     {
@@ -279,7 +279,7 @@ final class StringUtils
      */
     public static function slug(string $string): string
     {
-        /** @psalm-var AsciiSlugger|null $slugger */
+        /** @phpstan-var AsciiSlugger|null $slugger */
         static $slugger = null;
         if (!$slugger instanceof AsciiSlugger) {
             $slugger = new AsciiSlugger();

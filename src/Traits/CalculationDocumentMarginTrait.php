@@ -16,7 +16,7 @@ namespace App\Traits;
 /**
  * Trait to get the overall margin format.
  *
- * @psalm-require-extends \App\Spreadsheet\AbstractDocument
+ * @phpstan-require-extends \App\Spreadsheet\AbstractDocument
  */
 trait CalculationDocumentMarginTrait
 {

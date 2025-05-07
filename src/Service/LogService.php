@@ -122,11 +122,11 @@ class LogService
     }
 
     /**
-     * @psalm-return non-empty-string
+     * @phpstan-return non-empty-string
      */
     private function parseChannel(string $name): string
     {
-        /** @psalm-var non-empty-string */
+        /** @phpstan-var non-empty-string */
         return $name;
     }
 
@@ -174,12 +174,12 @@ class LogService
     /**
      * Decode the given JSON string.
      *
-     * @psalm-return array<string, string>|null
+     * @return array<string, string>|null
      */
     private function parseJson(string $value): ?array
     {
         try {
-            /** @psalm-var array<string, string> */
+            /** @phpstan-var array<string, string> */
             return StringUtils::decodeJson($value);
         } catch (\InvalidArgumentException) {
             return null;
@@ -187,11 +187,11 @@ class LogService
     }
 
     /**
-     * @psalm-return PsrLevel::*
+     * @phpstan-return PsrLevel::*
      */
     private function parseLevel(string $name): string
     {
-        /** @psalm-var PsrLevel::*  */
+        /** @phpstan-var PsrLevel::*  */
         return \strtolower($name);
     }
 

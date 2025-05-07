@@ -46,7 +46,7 @@ class LogChannel implements \Countable, \Stringable
     }
 
     /**
-     * @psalm-param positive-int $value
+     * @phpstan-param positive-int $value
      */
     public function increment(int $value = 1): self
     {

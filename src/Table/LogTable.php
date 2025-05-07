@@ -169,7 +169,7 @@ class LogTable extends AbstractTable implements \Countable
     }
 
     /**
-     * @psalm-param array<string, LogLevel> $levels
+     * @param array<string, LogLevel> $levels
      */
     private function mapLevels(array $levels): array
     {

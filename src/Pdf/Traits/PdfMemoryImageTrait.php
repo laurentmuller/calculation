@@ -20,7 +20,7 @@ use fpdf\PdfException;
 /**
  * Trait to output memory images.
  *
- * @psalm-require-extends PdfDocument
+ * @phpstan-require-extends PdfDocument
  */
 trait PdfMemoryImageTrait
 {
@@ -458,7 +458,7 @@ trait PdfMemoryImageTrait
      *
      * @throws PdfException if the image file does not exist, or if the image cannot be converted
      *
-     * @psalm-param callable(string): (\GdImage|false) $loader
+     * @phpstan-param callable(string): (\GdImage|false) $loader
      */
     protected function imageFromLoader(
         callable $loader,

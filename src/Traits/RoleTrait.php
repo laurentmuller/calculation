@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Trait for class implementing <code>RoleInterface</code>.
  *
- * @psalm-require-implements RoleInterface
+ * @phpstan-require-implements RoleInterface
  */
 trait RoleTrait
 {
@@ -30,7 +30,7 @@ trait RoleTrait
     /**
      * The role name.
      *
-     * @psalm-var RoleInterface::ROLE_*|null
+     * @phpstan-var RoleInterface::ROLE_*|null
      */
     #[Assert\Length(max: 25)]
     #[Assert\Choice([RoleInterface::ROLE_USER, RoleInterface::ROLE_ADMIN, RoleInterface::ROLE_SUPER_ADMIN])]
@@ -42,7 +42,7 @@ trait RoleTrait
      *
      * @see RoleInterface
      *
-     * @psalm-return RoleInterface::ROLE_*
+     * @phpstan-return RoleInterface::ROLE_*
      */
     public function getRole(): string
     {
@@ -54,7 +54,7 @@ trait RoleTrait
      *
      * @see UserInterface
      *
-     * @psalm-return RoleInterface::ROLE_*[]
+     * @phpstan-return RoleInterface::ROLE_*[]
      */
     public function getRoles(): array
     {
@@ -64,7 +64,7 @@ trait RoleTrait
     /**
      * @see RoleInterface
      *
-     * @psalm-param RoleInterface::ROLE_* $role
+     * @phpstan-param RoleInterface::ROLE_* $role
      */
     public function hasRole(string $role): bool
     {
@@ -90,7 +90,7 @@ trait RoleTrait
     /**
      * Sets the role.
      *
-     * @psalm-param RoleInterface::ROLE_*|null $role
+     * @phpstan-param RoleInterface::ROLE_*|null $role
      */
     public function setRole(?string $role): static
     {

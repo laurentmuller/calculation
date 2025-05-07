@@ -134,7 +134,7 @@ class UrlGeneratorService
     /**
      * Gets the request parameters.
      *
-     * @psalm-return array<string, string|int|float|bool>
+     * @return array<string, string|int|float|bool>
      */
     public function routeParams(Request $request, EntityInterface|int|null $id = 0): array
     {
@@ -162,7 +162,7 @@ class UrlGeneratorService
      */
     private function getCaller(array $params): ?string
     {
-        /** @psalm-var string|null $caller */
+        /** @var string|null $caller */
         $caller = $params[self::PARAM_CALLER] ?? null;
         if (!StringUtils::isString($caller)) {
             return null;

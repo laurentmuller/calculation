@@ -157,7 +157,7 @@ readonly class HtmlParser
     }
 
     /**
-     * @psalm-return non-empty-string|null
+     * @phpstan-return non-empty-string|null
      */
     private function trimHtml(): ?string
     {

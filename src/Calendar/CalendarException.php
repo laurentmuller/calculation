@@ -16,6 +16,18 @@ namespace App\Calendar;
 /**
  * Calendar exception.
  */
-class CalendarException extends \Exception
+class CalendarException extends \RuntimeException
 {
+    /**
+     * @phpstan-param string|int ...$values
+     */
+    public static function format(string $format, mixed ...$values): self
+    {
+        return self::instance(\sprintf($format, ...$values));
+    }
+
+    public static function instance(string $message): self
+    {
+        return new self($message);
+    }
 }

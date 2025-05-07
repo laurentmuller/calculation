@@ -27,11 +27,11 @@ class EntityTransformerTest extends TestCase
     use IdTrait;
 
     /**
+     * @phpstan-return \Generator<array-key, array<bool|int|string>>
+     *
      * @psalm-return \Generator<int, array<string|int|null>>
      *
      * @psalm-suppress InvalidReturnType
-     *
-     * @phpstan-return \Generator<array-key, array<bool|int|string>>
      */
     public static function getReverseInvalid(): \Generator
     {
@@ -41,7 +41,7 @@ class EntityTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{string|int|null, mixed}>
+     * @phpstan-return \Generator<int, array{string|int|null, mixed}>
      */
     public static function getReverseValid(): \Generator
     {
@@ -50,11 +50,11 @@ class EntityTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{EntityInterface|null}>
+     * @phpstan-return \Generator<array-key, array<string|bool>>
      *
      * @psalm-suppress InvalidReturnType
      *
-     * @phpstan-return \Generator<array-key, array<string|bool>>
+     * @psalm-return \Generator<int, array{EntityInterface|null}>
      */
     public static function getTransformInvalid(): \Generator
     {
@@ -64,7 +64,7 @@ class EntityTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{EntityInterface|null, mixed}>
+     * @phpstan-return \Generator<int, array{EntityInterface|null, mixed}>
      */
     public static function getTransformValid(): \Generator
     {
@@ -72,7 +72,7 @@ class EntityTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-param string|int|null $value
+     * @phpstan-param string|int|null $value
      */
     #[DataProvider('getReverseInvalid')]
     public function testReverseInvalid(mixed $value): void
@@ -95,7 +95,7 @@ class EntityTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-param string|int|null $value
+     * @phpstan-param string|int|null $value
      *
      * @throws \ReflectionException
      */
@@ -121,7 +121,7 @@ class EntityTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-param EntityInterface|null $value
+     * @phpstan-param EntityInterface|null $value
      */
     #[DataProvider('getTransformInvalid')]
     public function testTransformInvalid(mixed $value): void
@@ -132,7 +132,7 @@ class EntityTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-param EntityInterface|null $value
+     * @phpstan-param EntityInterface|null $value
      *
      * @throws \ReflectionException
      */
@@ -167,7 +167,7 @@ class EntityTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-return EntityTransformer<Group>
+     * @phpstan-return EntityTransformer<Group>
      */
     private function createTransformer(?Group $group = null): EntityTransformer
     {

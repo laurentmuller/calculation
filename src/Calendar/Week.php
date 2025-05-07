@@ -39,7 +39,7 @@ class Week extends AbstractCalendarItem
     public function __construct(Calendar $calendar, protected int $number)
     {
         if ($number < 1 || $number > 53) {
-            throw new CalendarException("The week number $number is not between 1 and 53 inclusive.");
+            throw CalendarException::format('The week number %d is not between 1 and 53 inclusive.', $number);
         }
         $key = self::formatKey($calendar->getYear(), $number);
         parent::__construct($calendar, $key);

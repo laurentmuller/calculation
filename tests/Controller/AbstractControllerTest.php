@@ -16,25 +16,17 @@ namespace App\Tests\Controller;
 use App\Controller\AbstractController;
 use App\Interfaces\PropertyServiceInterface;
 use App\Report\AbstractReport;
-use App\Response\PdfResponse;
-use App\Response\SpreadsheetResponse;
-use App\Response\WordResponse;
-use App\Service\ApplicationService;
 use App\Service\UrlGeneratorService;
 use App\Service\UserService;
 use App\Spreadsheet\AbstractDocument;
-use App\Spreadsheet\SpreadsheetDocument;
+use App\Tests\Fixture\TestController;
 use App\Word\AbstractWordDocument;
-use App\Word\WordDocument;
 use Faker\Container\ContainerException;
-use fpdf\PdfDocument;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Mime\Address;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AbstractControllerTest extends KernelTestCase
@@ -43,7 +35,8 @@ class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $actual = $controller->getAddressFrom();
-        self::assertInstanceOf(Address::class, $actual);
+        self::assertSame('Calculation', $actual->getName());
+        self::assertSame('calculation@bibi.nu', $actual->getAddress());
     }
 
     public function testGetApplicationName(): void
@@ -64,7 +57,7 @@ class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $actual = $controller->getApplicationService();
-        self::assertInstanceOf(ApplicationService::class, $actual);
+        self::assertSame(PropertyServiceInterface::class::DEFAULT_MIN_MARGIN, $actual->getMinMargin());
     }
 
     public function testGetMinMargin(): void
@@ -78,10 +71,11 @@ class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $actual = $controller->getRequestStack();
-        self::assertInstanceOf(RequestStack::class, $actual);
+        self::assertSameClass(RequestStack::class, $actual);
+
         // second time for test caching
         $actual = $controller->getRequestStack();
-        self::assertInstanceOf(RequestStack::class, $actual);
+        self::assertSameClass(RequestStack::class, $actual);
     }
 
     public function testGetRequestStackException(): void
@@ -111,10 +105,11 @@ class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $actual = $controller->getTranslator();
-        self::assertInstanceOf(TranslatorInterface::class, $actual);
+        self::assertSameClass(TranslatorInterface::class, $actual);
+
         // second time for test caching
         $actual = $controller->getTranslator();
-        self::assertInstanceOf(TranslatorInterface::class, $actual);
+        self::assertSameClass(TranslatorInterface::class, $actual);
     }
 
     public function testGetTranslatorException(): void
@@ -135,10 +130,11 @@ class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $actual = $controller->getUrlGenerator();
-        self::assertInstanceOf(UrlGeneratorService::class, $actual);
+        self::assertSameClass(UrlGeneratorService::class, $actual);
+
         // second time for test caching
         $actual = $controller->getUrlGenerator();
-        self::assertInstanceOf(UrlGeneratorService::class, $actual);
+        self::assertSameClass(UrlGeneratorService::class, $actual);
     }
 
     public function testGetUrlGeneratorException(): void
@@ -166,10 +162,11 @@ class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $actual = $controller->getUserService();
-        self::assertInstanceOf(UserService::class, $actual);
+        self::assertSameClass(UserService::class, $actual);
+
         // second time for test caching
         $actual = $controller->getUserService();
-        self::assertInstanceOf(UserService::class, $actual);
+        self::assertSameClass(UserService::class, $actual);
     }
 
     public function testGetUserServiceWithException(): void
@@ -190,11 +187,6 @@ class AbstractControllerTest extends KernelTestCase
                 return false;
             }
         };
-        /**
-         * @psalm-suppress InaccessibleMethod
-         *
-         * @phpstan-ignore method.protected
-         */
         $controller->renderPdfDocument($report);
     }
 
@@ -214,35 +206,30 @@ class AbstractControllerTest extends KernelTestCase
                 return 'Fake';
             }
         };
-        /**
-         * @psalm-suppress InaccessibleMethod
-         *
-         * @phpstan-ignore method.protected
-         */
         $response = $controller->renderPdfDocument($report);
-        self::assertInstanceOf(PdfResponse::class, $response);
+        self::assertTrue($response->isOk());
     }
 
     public function testRedirectToHomePage(): void
     {
         $controller = $this->createController();
-        $actual = $controller->redirectToHomePage();
-        self::assertInstanceOf(RedirectResponse::class, $actual);
+        $response = $controller->redirectToHomePage();
+        self::assertTrue($response->isRedirect());
     }
 
     public function testRedirectToHomePageWithMessage(): void
     {
         $controller = $this->createController();
-        $actual = $controller->redirectToHomePage('id', ['key' => 'value']);
-        self::assertInstanceOf(RedirectResponse::class, $actual);
+        $response = $controller->redirectToHomePage('id', ['key' => 'value']);
+        self::assertTrue($response->isRedirect());
     }
 
     public function testRedirectToHomePageWithRequest(): void
     {
         $request = new Request();
         $controller = $this->createController();
-        $actual = $controller->redirectToHomePage(request: $request);
-        self::assertInstanceOf(RedirectResponse::class, $actual);
+        $response = $controller->redirectToHomePage(request: $request);
+        self::assertTrue($response->isRedirect());
     }
 
     public function testSpreadsheetDocumentWithException(): void
@@ -256,11 +243,6 @@ class AbstractControllerTest extends KernelTestCase
                 return false;
             }
         };
-        /**
-         * @psalm-suppress InaccessibleMethod
-         *
-         * @phpstan-ignore method.protected
-         */
         $controller->renderSpreadsheetDocument($doc);
     }
 
@@ -280,13 +262,8 @@ class AbstractControllerTest extends KernelTestCase
                 return 'Fake';
             }
         };
-        /**
-         * @psalm-suppress InaccessibleMethod
-         *
-         * @phpstan-ignore method.protected
-         */
         $response = $controller->renderSpreadsheetDocument($doc);
-        self::assertInstanceOf(SpreadsheetResponse::class, $response);
+        self::assertTrue($response->isOk());
     }
 
     /**
@@ -303,11 +280,6 @@ class AbstractControllerTest extends KernelTestCase
                 return false;
             }
         };
-        /**
-         * @psalm-suppress InaccessibleMethod
-         *
-         * @phpstan-ignore method.protected
-         */
         $controller->renderWordDocument($doc);
     }
 
@@ -330,50 +302,21 @@ class AbstractControllerTest extends KernelTestCase
                 return 'Fake';
             }
         };
-        /**
-         * @psalm-suppress InaccessibleMethod
-         *
-         * @phpstan-ignore method.protected
-         */
         $response = $controller->renderWordDocument($doc);
-        self::assertInstanceOf(WordResponse::class, $response);
+        self::assertTrue($response->isOk());
     }
 
-    private function createController(): AbstractController
+    /**
+     * @phpstan-param class-string $expected
+     */
+    protected static function assertSameClass(string $expected, object $actual): void
     {
-        return new class(self::getContainer()) extends AbstractController {
-            public function __construct(ContainerInterface $container)
-            {
-                $this->setContainer($container);
-            }
+        self::assertInstanceOf($expected, $actual);
+    }
 
-            #[\Override]
-            public function renderPdfDocument(
-                PdfDocument $doc,
-                bool $inline = true,
-                string $name = ''
-            ): PdfResponse {
-                return parent::renderPdfDocument($doc, $inline, $name);
-            }
-
-            #[\Override]
-            public function renderSpreadsheetDocument(
-                SpreadsheetDocument $doc,
-                bool $inline = true,
-                string $name = ''
-            ): SpreadsheetResponse {
-                return parent::renderSpreadsheetDocument($doc, $inline, $name);
-            }
-
-            #[\Override]
-            public function renderWordDocument(
-                WordDocument $doc,
-                bool $inline = true,
-                string $name = ''
-            ): WordResponse {
-                return parent::renderWordDocument($doc, $inline, $name);
-            }
-        };
+    private function createController(): TestController
+    {
+        return new TestController(self::getContainer());
     }
 
     private function createMockController(): AbstractController

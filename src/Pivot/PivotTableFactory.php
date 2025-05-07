@@ -35,7 +35,7 @@ class PivotTableFactory
     /**
      * The aggregator class name.
      *
-     * @phpstan-var class-string<T> $aggregatorClass
+     * @var class-string<T>
      */
     private string $aggregatorClass;
 

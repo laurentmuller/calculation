@@ -38,8 +38,6 @@ abstract class AbstractHelperType extends AbstractType
     /**
      * Creates the form helper.
      *
-     * @psalm-param FormBuilderInterface $builder
-     *
      * @phpstan-param FormBuilderInterface<mixed> $builder
      */
     protected function createFormHelper(FormBuilderInterface $builder): FormHelper

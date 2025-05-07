@@ -72,7 +72,7 @@ trait ModelTrait
     /**
      * Sets the day model class.
      *
-     * @param class-string<Day>|null $dayModel the day model class or null for default
+     * @param class-string<Day>|null $dayModel the day model class or null to use the default model
      *
      * @throws CalendarException if the day class model does not exist
      */
@@ -86,7 +86,7 @@ trait ModelTrait
     /**
      * Sets the month model class.
      *
-     * @param class-string<Month>|null $monthModel the month model class or null for default
+     * @param class-string<Month>|null $monthModel the month model class or null to use the default model
      *
      * @throws CalendarException if the month class model does not exist
      */
@@ -100,7 +100,7 @@ trait ModelTrait
     /**
      * Sets the week model class.
      *
-     * @param class-string<Week>|null $weekModel the week model class or null for default
+     * @param class-string<Week>|null $weekModel the week model class or null to use the default model
      *
      * @throws CalendarException if the week class model does not exist
      */
@@ -121,16 +121,16 @@ trait ModelTrait
      *
      * @return class-string<T> the class name if no exception
      *
-     * @throws CalendarException if the given class name does not exist or is not an AbstractCalendarItem class
+     * @throws CalendarException if the given class name does not exist or is not a derived class of AbstractCalendarItem
      */
     protected function checkClass(?string $className, string $defaultClass): string
     {
         $name = $className ?? $defaultClass;
         if (!\class_exists($name)) {
-            throw new CalendarException("Class '$name' not found.");
+            throw CalendarException::format("Class '%s' not found.", $name);
         }
         if (!\is_a($name, AbstractCalendarItem::class, true)) {
-            throw new CalendarException("Class '$name' is not a instance of 'AbstractCalendarItem'.");
+            throw CalendarException::format("Class '%s' is not an instance of '%s'.", $name, AbstractCalendarItem::class);
         }
 
         return $name;

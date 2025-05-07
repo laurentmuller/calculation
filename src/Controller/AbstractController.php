@@ -332,7 +332,7 @@ abstract class AbstractController extends BaseController
      *
      * @template T
      *
-     * @psalm-param FormInterface<T> $form the form to validate
+     * @param FormInterface<T> $form the form to validate
      *
      * @see FormInterface::handleRequest()
      * @see FormInterface::isSubmitted()

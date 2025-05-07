@@ -36,7 +36,7 @@ class TextTypeExtension extends AbstractTypeExtension
     ];
 
     /**
-     * @psalm-param array<array-key, mixed> $options
+     * @phpstan-param array<array-key, mixed> $options
      */
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void

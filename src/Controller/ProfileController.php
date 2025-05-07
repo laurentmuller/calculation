@@ -72,9 +72,9 @@ class ProfileController extends AbstractController
     }
 
     /**
-     * @phpstan-param class-string<AbstractEntityType<User>> $type
+     * @template T of AbstractEntityType<User>
      *
-     * @psalm-param class-string $type
+     * @param class-string<T> $type
      */
     private function handleForm(
         User $user,

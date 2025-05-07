@@ -8,6 +8,7 @@
        findUnusedPsalmSuppress="true"
        findUnusedCode="false"
        phpVersion="8.2"
+       forceJit="true"
        errorLevel="1">
 
     <projectFiles>

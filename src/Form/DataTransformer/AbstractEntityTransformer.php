@@ -31,12 +31,12 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 abstract class AbstractEntityTransformer implements DataTransformerInterface
 {
     /**
-     * @phpstan-var class-string<TEntity>
+     * @var class-string<TEntity>
      */
     private readonly string $className;
 
     /**
-     * @phpstan-param AbstractRepository<TEntity> $repository
+     * @param AbstractRepository<TEntity> $repository
      */
     public function __construct(private readonly AbstractRepository $repository)
     {

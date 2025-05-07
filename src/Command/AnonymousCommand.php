@@ -26,7 +26,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command to anonymous customer and description in calculations.
+ * Command to an anonymous customer and description in calculations.
  */
 #[AsCommand(name: 'app:anonymous', description: 'Anonymous customer and description in calculations.')]
 class AnonymousCommand extends Command
@@ -90,7 +90,7 @@ class AnonymousCommand extends Command
     /**
      * @psalm-return Query
      *
-     * @phpstan-return Query<null, mixed>
+     * @phpstan-return Query<Calculation>
      */
     private function createQuery(): Query
     {

@@ -130,7 +130,6 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      *
      * @param int $year the year to generate
      *
-     * @throws \Exception
      * @throws CalendarException
      */
     public function generate(int $year): self
@@ -387,6 +386,8 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      * Create and add a week.
      *
      * @param int $number the week number (1-53)
+     *
+     * @throws CalendarException if the number is not between 1 and 53 inclusive
      */
     private function createWeek(int $number): Week
     {

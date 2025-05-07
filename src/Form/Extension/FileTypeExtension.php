@@ -38,9 +38,9 @@ class FileTypeExtension extends AbstractFileTypeExtension
     }
 
     /**
-     * @phpstan-param FormInterface<array> $form
-     *
      * @psalm-param FormInterface $form
+     *
+     * @phpstan-param FormInterface<array> $form
      *
      * @phpstan-return array<array-key, mixed>
      */

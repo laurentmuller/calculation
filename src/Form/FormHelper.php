@@ -119,8 +119,6 @@ class FormHelper
      *                                          If the prefix is not null, the label is added automatically
      *                                          when the field property is set.
      *
-     * @psalm-param FormBuilderInterface $builder
-     *
      * @phpstan-param FormBuilderInterface<mixed> $builder
      */
     public function __construct(private readonly FormBuilderInterface $builder, ?string $labelPrefix = null)

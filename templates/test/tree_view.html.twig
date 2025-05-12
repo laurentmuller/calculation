@@ -48,7 +48,7 @@
             <div class="col-md-6">
                 <div class="form-group mb-3">
                     <label class="form-label" for="country">Pays</label>
-                    <select id="country" class="form-select" data-url="{{ asset('images/flags/flag_blank.png') }}">
+                    <select id="country" class="form-select" data-path="{{ asset('images/flags/')|split('?')|first }}">
                         {% for key, value in countries -%}
                             <option value="{{ key }}">{{ value }}</option>
                         {%- endfor %}
@@ -135,20 +135,18 @@
             <div class="col-md-6">
                 <div class="form-group mb-3">
                     <label class="form-label" for="product">Article</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fa-regular fa-file-alt"></i></span>
-                        <select id="product" class="form-select">
-                            {% for key, group in products -%}
-                                <optgroup label="{{ key }}">
-                                    {% for product in group -%}
-                                        <option data-price="{{ product.price }}" data-unit="{{ product.unit }}" value="{{ product.id }}">{{ product.description }}</option>
-                                    {% endfor %}
-                                </optgroup>/
-                            {% endfor %}
-                        </select>
-                    </div>
+                    <select id="product">
+                        {% for key, group in products -%}
+                            <optgroup label="{{ key }}">
+                                {% for product in group -%}
+                                    <option data-price="{{ product.price }}" data-unit="{{ product.unit }}" value="{{ product.id }}">{{ product.description }}</option>
+                                {% endfor %}
+                            </optgroup>/
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
+
         </div>
     </div>
     <div class="col-md-8 offset-md-2 my-2">
@@ -188,10 +186,26 @@
 </div>
 <div class="row">
     <div class="col-md-8 offset-md-2 my-2">
-        <div class="row dropdown-input">
-            <div class="col-lg-6 mb-3">
-                <label for="first_name" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="first_name" name="first_name">
+        <div class="row">
+            <div class="col-md-6 my-2">
+                <div class="dropdown-input">
+                    <label for="first_name" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name">
+                </div>
+            </div>
+            <div class="col-md-6 my-2">
+                <div class="form-group mb-3">
+                    <label class="form-label" for="product-picker">Article (tom-select)</label>
+                    <select id="product-picker" class="form-select">
+                        {% for key, group in products -%}
+                            <optgroup label="{{ key }}">
+                                {% for product in group -%}
+                                    <option data-price="{{ product.price }}" data-unit="{{ product.unit }}" value="{{ product.id }}"{% if product.id == 43 %} selected{% endif %}>{{ product.description }}</option>
+                                {% endfor %}
+                            </optgroup>/
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
         </div>
     </div>
@@ -244,17 +258,23 @@
 {%- endblock %}
 {# stylesheets #}
 {% block stylesheets -%}
-{{ asset_css('vendor/currency-flags/currency-flags.css') }}
-{{ asset_css('css/select2.css') }}
-{{ asset_css('css/flags.css') }}
+    {{ asset_css('vendor/currency-flags/currency-flags.css') }}
+    {{ asset_css('vendor/tom-select/css/tom-select.bootstrap5.css') }}
+    {{ asset_css('css/select2.css') }}
+    {{ asset_css('css/tom-select.css') }}
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}
-{{ parent() }}
-{{ asset_js('vendor/select2/js/select2.js') }}
-{{ asset_js('vendor/select2/js/i18n/fr.js') }}
-{{ asset_js('js/plugins/plugin-treeview.js') }}
-{{ asset_js('js/plugins/plugin-drag-modal.js') }}
-{{ asset_js('js/extensions/select2-extensions.js') }}
-{{ asset_js('js/test/treeview.js') }}
+    {{ parent() }}
+    {{ asset_js('vendor/select2/js/select2.js') }}
+    {{ asset_js('vendor/select2/js/i18n/fr.js') }}
+    {{ asset_js('js/extensions/select2-extensions.js') }}
+
+    {{ asset_js('vendor/tom-select/js/tom-select.popular.js') }}
+    {{ asset_js('js/extensions/tom-select-extensions.js') }}
+
+    {{ asset_js('js/plugins/plugin-treeview.js') }}
+    {{ asset_js('js/plugins/plugin-drag-modal.js') }}
+
+    {{ asset_js('js/test/treeview.js') }}
 {% endblock %}

@@ -40,7 +40,7 @@
         {
             "example": "https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/js/bootstrap.bundle.js",
             "name": "bootstrap",
-            "version": "5.3.5",
+            "version": "5.3.6",
             "source": "jsdelivr",
             "prefix": "dist/",
             "files": [
@@ -233,6 +233,15 @@
             "target": "mermaid",
             "files": [
                 "dist/panzoom.js"
+            ]
+        },
+        {
+            "name": "tom-select",
+            "version": "2.4.3",
+            "source": "cdnjs",
+            "files": [
+                "js/tom-select.popular.js",
+                "css/tom-select.bootstrap5.css"
             ]
         }
     ]

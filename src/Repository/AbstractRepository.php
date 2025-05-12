@@ -128,9 +128,9 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
      *
      * @see AbstractRepository::createDefaultQueryBuilder()
      *
-     * @psalm-return Query<int, TEntity>
-     *
      * @phpstan-return Query<null, mixed>
+     *
+     * @psalm-return Query<int, TEntity>
      */
     public function getSearchQuery(
         array $sortedFields = [],

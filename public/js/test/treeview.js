@@ -14,14 +14,21 @@ function formatCountry(country) {
         return text;
     }
 
+    const path = $('#country').data('path');
+    const src = `${path}${id.toLowerCase()}.png`;
     const $img = $('<img/>', {
-        'class': 'me-1 flag flag-' + id.toLowerCase(),
-        'src': $('#country').data('url'),
-        'alt': 'Country'
+        class: 'country-flag me-1',
+        alt: text,
+        src: src,
+        css: {
+            width: '1rem',
+            height: '1rem',
+            'margin-bottom': '1px'
+        }
     });
     const $text = $('<span/>', {
-        'class': 'text-truncate',
-        'text': text
+        class: 'text-truncate',
+        text: text
     });
     return $text.prepend($img);
 }
@@ -172,6 +179,18 @@ function updatePosition($radio) {
     $button.trigger('focus');
 }
 
+function formatTomSelectProduct(data) {
+    'use strict';
+    const price = $.parseFloat(data.price);
+    const priceClass = price ? '' : 'text-danger';
+    const unit = data.unit ? `<span>&nbsp;/&nbsp;${data.unit}</span>` : '';
+    return `<div class="d-flex w-100">
+                <span class="me-auto text-truncate">${data.text}</span>
+                <span class="${priceClass}">${$.formatFloat(price)}</span>
+                ${unit}                            
+            </div>`;
+}
+
 /**
  * Ready function
  */
@@ -314,13 +333,11 @@ $(function () {
         }
     });
     input.addEventListener('show.bs.dropdown', (e) => {
-        window.console.log('show.bs.dropdown', e);
         if (focused || getItems().length === 0) {
             e.preventDefault();
         }
     });
     input.addEventListener('shown.bs.dropdown', (e) => {
-        window.console.log('shown.bs.dropdown', e);
         getItems()[0].focus();
         focused = true;
     });
@@ -334,5 +351,13 @@ $(function () {
             input.select();
             input.focus();
         });
+    });
+
+
+    $('#product-picker').initTomSelect({
+        render: {
+            item: (data) => formatTomSelectProduct(data),
+            option: (data) => formatTomSelectProduct(data),
+        },
     });
 });

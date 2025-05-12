@@ -25,9 +25,7 @@ use Symfony\Component\Mime\Exception\ExceptionInterface;
  */
 class AddressTransformer implements DataTransformerInterface
 {
-    /**
-     * @psalm-param mixed $value
-     */
+    /** @psalm-param mixed $value */
     #[\Override]
     public function reverseTransform(mixed $value): ?Address
     {
@@ -48,9 +46,7 @@ class AddressTransformer implements DataTransformerInterface
         }
     }
 
-    /**
-     * @psalm-param mixed $value
-     */
+    /** @psalm-param mixed $value */
     #[\Override]
     public function transform(mixed $value): ?string
     {

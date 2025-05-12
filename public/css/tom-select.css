@@ -1,0 +1,47 @@
+/*
+ * No radius and default color
+ */
+.ts-dropdown,
+.ts-control,
+.ts-control input {
+    color: var(--bs-body-color);
+    border-radius: 0;
+}
+
+/*
+ * Hide option group separator
+ */
+.ts-dropdown .optgroup::before {
+    display: none;
+}
+
+/*
+ * Highlight selected item
+ */
+.ts-dropdown .selected {
+    color: white;
+    background-color: var(--bs-primary);
+}
+
+/*
+ * indent options
+.ts-dropdown [data-selectable] {
+    margin-left: 1rem;
+}
+*/
+
+/*
+ * Default cursor
+ */
+.ts-wrapper.single.input-active .ts-control {
+    cursor: pointer;
+}
+
+/*
+ * Option group
+ */
+.optgroup-header {
+    font-size: 1rem !important;
+    font-weight: bold;
+    color: var(--bs-secondary);
+}

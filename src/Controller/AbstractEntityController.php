@@ -183,9 +183,9 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Gets the form type class name used to edit an entity.
      *
-     * @psalm-return class-string<FormTypeInterface>
-     *
      * @phpstan-return class-string<FormTypeInterface<mixed>>
+     *
+     * @psalm-return class-string<FormTypeInterface>
      */
     protected function getEditFormType(): string
     {

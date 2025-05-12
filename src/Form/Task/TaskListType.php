@@ -52,9 +52,9 @@ class TaskListType extends AbstractListEntityType
     }
 
     /**
-     * @psalm-param Options $options
-     *
      * @phpstan-param Options<array> $options
+     *
+     * @psalm-param Options $options
      *
      * @throws \Doctrine\ORM\Exception\NotSupported
      */

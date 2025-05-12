@@ -38,11 +38,13 @@ class FileTypeExtension extends AbstractFileTypeExtension
     }
 
     /**
-     * @psalm-param FormInterface $form
-     *
      * @phpstan-param FormInterface<array> $form
      *
      * @phpstan-return array<array-key, mixed>
+     *
+     * @psalm-param FormInterface $form
+     *
+     * @psalm-suppress MixedAssignment
      */
     protected function updateOptions(FormInterface $form, array $options): array
     {
@@ -54,7 +56,6 @@ class FileTypeExtension extends AbstractFileTypeExtension
         $configuration = $parent->getConfig();
         foreach (['placeholder', 'maxfiles', 'maxsize', 'maxsizetotal'] as $name) {
             if ($configuration->hasOption($name)) {
-                /** @psalm-suppress MixedAssignment */
                 $options[$name] = $configuration->getOption($name);
             }
         }

@@ -103,6 +103,8 @@ class PlainType extends AbstractType
 
     /**
      * @phpstan-param OptionsType $options
+     *
+     * @psalm-suppress InvalidPropertyAssignmentValue
      */
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
@@ -112,7 +114,6 @@ class PlainType extends AbstractType
         $value = $this->getDataValue($data, $options);
         $display_value = $this->getDisplayValue($data, $options, $value);
 
-        /** @psalm-suppress InvalidPropertyAssignmentValue */
         $view->vars = \array_replace($view->vars, [
             'value' => $value,
             'display_value' => $display_value,

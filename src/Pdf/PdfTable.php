@@ -666,6 +666,8 @@ class PdfTable
      *     2: PdfTextAlignment[],
      *     3: float[],
      *     4: bool[]}
+     *
+     * @psalm-suppress PossiblyNullReference
      */
     private function computeCells(array $cells, array $columns): array
     {
@@ -679,7 +681,6 @@ class PdfTable
         foreach ($cells as $cell) {
             $texts[] = $cell->getText() ?? '';
             $styles[] = $cell->getStyle() ?? $this->rowStyle ?? $this->getCellStyle();
-            /** @psalm-suppress PossiblyNullReference */
             $aligns[] = $cell->getAlignment() ?? $columns[$index]->getAlignment() ?? PdfTextAlignment::LEFT;
 
             $width = 0.0;

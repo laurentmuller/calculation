@@ -230,12 +230,12 @@ final readonly class SymfonyInfoService
     public function getMaintenanceStatus(): string
     {
         $now = new \DateTimeImmutable();
-        $eol = $this->getEndOfMonth(Kernel::END_OF_LIFE);
-        $eom = $this->getEndOfMonth(Kernel::END_OF_MAINTENANCE);
-        if ($now > $eol) {
+        $endOfLife = $this->getEndOfMonth(Kernel::END_OF_LIFE);
+        if ($now > $endOfLife) {
             return 'Unmaintained';
         }
-        if ($now > $eom) {
+        $endOfMaintenance = $this->getEndOfMonth(Kernel::END_OF_MAINTENANCE);
+        if ($now > $endOfMaintenance) {
             return 'Security Fixes Only';
         }
 
@@ -263,7 +263,7 @@ final readonly class SymfonyInfoService
      */
     public function getReleaseDate(): string
     {
-        return $this->cache->get('release', function (): string {
+        return $this->cache->get('release_date', function (): string {
             $url = \sprintf(self::RELEASE_URL, Kernel::MAJOR_VERSION, Kernel::MINOR_VERSION);
 
             try {
@@ -367,28 +367,14 @@ final readonly class SymfonyInfoService
     private function createDate(string $date): \DateTimeImmutable
     {
         /** @phpstan-var \DateTimeImmutable */
-        return \DateTimeImmutable::createFromFormat('d/m/Y', '01/' . $date);
+        return \DateTimeImmutable::createFromFormat('m/Y', $date);
     }
 
-    /**
-     * Format a date.
-     *
-     * @param string $date the date (month/year) to format
-     */
     private function formatMonthYear(string $date): string
     {
-        return $this->createDate($date)
-            ->format('F Y');
+        return $this->createDate($date)->format('F Y');
     }
 
-    /**
-     * Formats the given path within the given optional base path.
-     *
-     * @param string  $path    the path
-     * @param ?string $baseDir the base (root) path
-     *
-     * @return string the relative path
-     */
     private function formatPath(string $path, ?string $baseDir = null): string
     {
         if (null !== $baseDir) {
@@ -401,9 +387,9 @@ final readonly class SymfonyInfoService
     private function getDaysBeforeExpiration(string $date): string
     {
         $today = new \DateTimeImmutable();
-        $date = $this->getEndOfMonth($date);
+        $endOfMonth = $this->getEndOfMonth($date);
 
-        return $today->diff($date)->format('%R%a days');
+        return $today->diff($endOfMonth)->format('%R%a days');
     }
 
     private function getDirectoryInfo(string $path): string
@@ -415,9 +401,7 @@ final readonly class SymfonyInfoService
     }
 
     /**
-     * Gets empty packages.
-     *
-     * @return PackagesType
+     * @phpstan-return PackagesType
      */
     private function getEmptyPackages(): array
     {
@@ -427,11 +411,6 @@ final readonly class SymfonyInfoService
         ];
     }
 
-    /**
-     * Gets the end of the month date.
-     *
-     * @param string $date the date as month/year format
-     */
     private function getEndOfMonth(string $date): \DateTimeImmutable
     {
         return DateUtils::modify($this->createDate($date), 'last day of this month 23:59:59');
@@ -458,9 +437,7 @@ final readonly class SymfonyInfoService
     }
 
     /**
-     * Gets packages information.
-     *
-     * @return PackagesType
+     * @phpstan-return PackagesType
      */
     private function getPackages(): array
     {
@@ -485,9 +462,7 @@ final readonly class SymfonyInfoService
     }
 
     /**
-     * Gets all routes.
-     *
-     * @return RoutesType
+     * @phpstan-return RoutesType
      */
     private function getRoutes(): array
     {

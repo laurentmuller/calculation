@@ -42,7 +42,7 @@
         $.fn.extend({
 
             /**
-             * Update selection on key press event when selection is not open.
+             * Update selection on the key press event when selection is not open.
              */
             handleSelect2KeyDown: function () {
                 const $this = $(this);

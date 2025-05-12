@@ -180,14 +180,12 @@ class Group extends AbstractCodeEntity
      * @param float $amount the amount to get group margin for
      *
      * @return GroupMargin|null the group margin, if found; null otherwise
+     *
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function findMargin(float $amount): ?GroupMargin
     {
-        /**
-         * @psalm-suppress MixedArgumentTypeCoercion
-         *
-         * @phpstan-var GroupMargin|null
-         */
+        /** @phpstan-var GroupMargin|null */
         return $this->margins->findFirst(
             fn (int $key, GroupMargin $margin): bool => $margin->contains($amount)
         );
@@ -300,6 +298,8 @@ class Group extends AbstractCodeEntity
 
     /**
      * @param \Closure(int, Category): int $func
+     *
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
     private function reduceCategories(\Closure $func): int
     {
@@ -307,11 +307,7 @@ class Group extends AbstractCodeEntity
             return 0;
         }
 
-        /**
-         * @psalm-suppress MixedArgumentTypeCoercion
-         *
-         * @phpstan-var int
-         */
+        /** @phpstan-var int */
         return $this->categories->reduce($func, 0);
     }
 }

@@ -132,15 +132,11 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     /**
      * Gets the number of margins for all items.
      *
-     * @return int<0, max>
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function countMargins(): int
     {
-        /**
-         * @psalm-suppress MixedArgumentTypeCoercion
-         *
-         * @phpstan-var int<0, max>
-         */
+        /** @phpstan-var int */
         return $this->items->reduce(fn (int $carry, TaskItem $item): int => $carry + $item->count(), 0);
     }
 

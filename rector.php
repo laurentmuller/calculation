@@ -17,7 +17,6 @@ use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\SingleMockPropertyTypeRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
-use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\Set\TwigSetList;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector;
 
@@ -33,26 +32,25 @@ return RectorConfig::configure()
         PreferPHPUnitThisCallRector::class,
         SingleMockPropertyTypeRector::class,
         TypedPropertyFromCreateMockAssignRector::class,
-    ])->withSets([
+    ])->withComposerBased(
+        twig: true,
+        doctrine: true,
+        phpunit: true,
+        symfony: true,
+    )->withSets([
         // global
         SetList::PHP_82,
         SetList::CODE_QUALITY,
-        SetList::PRIVATIZATION,
         SetList::INSTANCEOF,
+        SetList::PRIVATIZATION,
         SetList::STRICT_BOOLEANS,
         SetList::TYPE_DECLARATION,
         // Doctrine
-        DoctrineSetList::DOCTRINE_DBAL_40,
-        DoctrineSetList::TYPED_COLLECTIONS,
         DoctrineSetList::DOCTRINE_CODE_QUALITY,
-        DoctrineSetList::DOCTRINE_COLLECTION_22,
+        DoctrineSetList::TYPED_COLLECTIONS,
         // PHP-Unit
         PHPUnitSetList::PHPUNIT_110,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
-        // Symfony
-        SymfonySetList::SYMFONY_72,
-        SymfonySetList::SYMFONY_CODE_QUALITY,
-        SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
         // twig
         TwigSetList::TWIG_24,
         TwigSetList::TWIG_UNDERSCORE_TO_NAMESPACE,
@@ -60,5 +58,5 @@ return RectorConfig::configure()
         // annotations to attributes
         symfony: true,
         doctrine: true,
-        phpunit: true
+        phpunit: true,
     );

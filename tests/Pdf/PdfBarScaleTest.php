@@ -57,61 +57,61 @@ class PdfBarScaleTest extends TestCase
     public function testFixBounds(): void
     {
         $actual = self::createScale(1.0, 1.0);
-        self::assertEqualsWithDelta(0.985, $actual->getLowerBound(), 0.01);
-        self::assertEqualsWithDelta(1.015, $actual->getUpperBound(), 0.01);
-        self::assertSame(0.005, $actual->getTickSpacing());
+        self::assertEqualsWithDelta(0.985, $actual->lowerBound, 0.01);
+        self::assertEqualsWithDelta(1.015, $actual->upperBound, 0.01);
+        self::assertSame(0.005, $actual->tickSpacing);
     }
 
     public function testLowerNegative(): void
     {
         $actual = self::createScale(-1.0, 100.0, 20);
-        self::assertSame(-10.0, $actual->getLowerBound());
-        self::assertSame(110.0, $actual->getUpperBound());
-        self::assertSame(10.0, $actual->getTickSpacing());
+        self::assertSame(-10.0, $actual->lowerBound);
+        self::assertSame(110.0, $actual->upperBound);
+        self::assertSame(10.0, $actual->tickSpacing);
     }
 
     public function testProperties(): void
     {
         $actual = self::createScale(0.0, 100.0, 20);
-        self::assertSame(0.0, $actual->getLowerBound());
-        self::assertSame(110.0, $actual->getUpperBound());
-        self::assertSame(10.0, $actual->getTickSpacing());
+        self::assertSame(0.0, $actual->lowerBound);
+        self::assertSame(110.0, $actual->upperBound);
+        self::assertSame(10.0, $actual->tickSpacing);
     }
 
     #[DataProvider('getValues')]
     public function testScale(PdfBarScale $scale, float $lowerBound, float $upperBound, float $tickSpacing): void
     {
-        self::assertSame($lowerBound, $scale->getLowerBound());
-        self::assertSame($upperBound, $scale->getUpperBound());
-        self::assertSame($tickSpacing, $scale->getTickSpacing());
+        self::assertSame($lowerBound, $scale->lowerBound);
+        self::assertSame($upperBound, $scale->upperBound);
+        self::assertSame($tickSpacing, $scale->tickSpacing);
     }
 
     public function testUpperLessLower(): void
     {
         $actual = self::createScale(100.0, 1.0, 20);
-        self::assertSame(0.0, $actual->getLowerBound());
-        self::assertSame(110.0, $actual->getUpperBound());
-        self::assertSame(10.0, $actual->getTickSpacing());
+        self::assertSame(0.0, $actual->lowerBound);
+        self::assertSame(110.0, $actual->upperBound);
+        self::assertSame(10.0, $actual->tickSpacing);
     }
 
     public function testUpperNegative(): void
     {
         $actual = self::createScale(-100.0, -10.0);
-        self::assertSame(-110.0, $actual->getLowerBound());
-        self::assertSame(0.0, $actual->getUpperBound());
-        self::assertSame(10.0, $actual->getTickSpacing());
+        self::assertSame(-110.0, $actual->lowerBound);
+        self::assertSame(0.0, $actual->upperBound);
+        self::assertSame(10.0, $actual->tickSpacing);
     }
 
     public function testUpperZero(): void
     {
         $actual = self::createScale(-100.0, 0.0);
-        self::assertSame(-120.0, $actual->getLowerBound());
-        self::assertSame(0.0, $actual->getUpperBound());
-        self::assertSame(20.0, $actual->getTickSpacing());
+        self::assertSame(-120.0, $actual->lowerBound);
+        self::assertSame(0.0, $actual->upperBound);
+        self::assertSame(20.0, $actual->tickSpacing);
     }
 
     private static function createScale(float $lowerBound, float $upperBound, int $maxTicks = 10): PdfBarScale
     {
-        return new PdfBarScale($lowerBound, $upperBound, $maxTicks);
+        return PdfBarScale::instance($lowerBound, $upperBound, $maxTicks);
     }
 }

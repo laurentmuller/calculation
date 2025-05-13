@@ -108,8 +108,8 @@ trait PdfBarChartTrait
         $formatter = $axis['formatter'] ?? fn (float $value): string => (string) $value;
 
         // y axis
-        $scale = new PdfBarScale($min, $max);
-        $labelsY = $this->barGetLabelsY($scale, $formatter);
+        $scale = PdfBarScale::instance($min, $max);
+        $labelsY = $scale->getLabels($this, $formatter);
         $widthY = $this->getColumnMax($labelsY, 'width');
 
         // x axis
@@ -157,8 +157,8 @@ trait PdfBarChartTrait
     ): array {
         $result = [];
         $bottom = $y + $h;
-        $min = $scale->getLowerBound();
-        $max = $scale->getUpperBound();
+        $min = $scale->lowerBound;
+        $max = $scale->upperBound;
         $delta = $max - $min;
         $step = self::SEP_BARS + $barWidth;
 
@@ -308,25 +308,5 @@ trait PdfBarChartTrait
             'label' => $row['label'],
             'width' => $this->getStringWidth($row['label']),
         ], $rows);
-    }
-
-    /**
-     * @phpstan-param callable(float): string $formatter
-     *
-     * @phpstan-return non-empty-array<BarChartLabelType>
-     */
-    private function barGetLabelsY(PdfBarScale $scale, callable $formatter): array
-    {
-        /** @phpstan-var non-empty-array<BarChartLabelType> $result */
-        $result = [];
-        foreach (\range($scale->getUpperBound(), $scale->getLowerBound(), -$scale->getTickSpacing()) as $value) {
-            $text = $formatter($value);
-            $result[] = [
-                'label' => $text,
-                'width' => $this->getStringWidth($text),
-            ];
-        }
-
-        return $result;
     }
 }

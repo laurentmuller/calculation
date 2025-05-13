@@ -13,73 +13,70 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use fpdf\PdfDocument;
+
 /**
- * Class to compute axis bounds and step spacing.
+ * Represents a vertical (y) chart axis.
  */
-class PdfBarScale
+readonly class PdfBarScale
 {
-    private float $lowerBound = 0.0;
-    private float $tickSpacing = 10.0;
-    private float $upperBound = 100.0;
-
-    public function __construct(float $lowerBound, float $upperBound, int $maxTicks = 10)
-    {
-        $this->calculate($lowerBound, $upperBound, $maxTicks);
+    /**
+     * @param float $lowerBound  the lower axis bound
+     * @param float $upperBound  the upper axis bound
+     * @param float $tickSpacing the space between ticks
+     */
+    public function __construct(
+        public float $lowerBound = 0.0,
+        public float $upperBound = 100.0,
+        public float $tickSpacing = 10.0
+    ) {
     }
 
-    public function getLowerBound(): float
+    /**
+     * Gets the label's texts and widths.
+     *
+     * @param PdfDocument             $document  the document to get the text width
+     * @param callable(float): string $formatter the callback to format values
+     *
+     * @return non-empty-array<array{label: string, width: float}>
+     */
+    public function getLabels(PdfDocument $document, callable $formatter): array
     {
-        return $this->lowerBound;
-    }
-
-    public function getTickSpacing(): float
-    {
-        return $this->tickSpacing;
-    }
-
-    public function getUpperBound(): float
-    {
-        return $this->upperBound;
-    }
-
-    private function calculate(float $lowerBound, float $upperBound, int $maxTicks): void
-    {
-        [$lowerBound, $upperBound] = $this->fixBounds($lowerBound, $upperBound);
-
-        $maxTicks = \max(2, $maxTicks);
-        $range = $this->calculateValue($upperBound - $lowerBound, false);
-        $this->tickSpacing = $this->calculateValue($range / (float) ($maxTicks - 1), true);
-        $this->lowerBound = \floor($lowerBound / $this->tickSpacing) * $this->tickSpacing;
-        $this->upperBound = \ceil($upperBound / $this->tickSpacing) * $this->tickSpacing;
-    }
-
-    private function calculateValue(float $range, bool $round): float
-    {
-        $exponent = \floor(\log10($range));
-        $fraction = $range / 10.0 ** $exponent;
-        if ($round) {
-            $factor = match (true) {
-                $fraction < 1.5 => 1.0,
-                $fraction < 3.0 => 2.0,
-                $fraction < 7.0 => 5.0,
-                default => 10.0,
-            };
-        } else {
-            $factor = match (true) {
-                $fraction <= 1.0 => 1.0,
-                $fraction <= 2.0 => 2.0,
-                $fraction <= 5.0 => 5.0,
-                default => 10.0,
-            };
+        /** @var non-empty-array<array{label: string, width: float}> $result */
+        $result = [];
+        foreach (\range($this->upperBound, $this->lowerBound, -$this->tickSpacing) as $value) {
+            $text = $formatter($value);
+            $result[] = [
+                'label' => $text,
+                'width' => $document->getStringWidth($text),
+            ];
         }
 
-        return $factor * 10.0 ** $exponent;
+        return $result;
+    }
+
+    /**
+     * Create a new instance.
+     *
+     * @param float $lowerBound the lower axis bound
+     * @param float $upperBound the upper axis bound
+     * @param int   $ticks      the number of ticks
+     */
+    public static function instance(float $lowerBound = 0.0, float $upperBound = 100.0, int $ticks = 10): self
+    {
+        [$lowerBound, $upperBound] = self::roundBounds($lowerBound, $upperBound);
+        $range = self::roundValue($upperBound - $lowerBound, false);
+        $tickSpacing = self::roundValue($range / (float) (\max(2, $ticks) - 1), true);
+        $lowerBound = \floor($lowerBound / $tickSpacing) * $tickSpacing;
+        $upperBound = \ceil($upperBound / $tickSpacing) * $tickSpacing;
+
+        return new self($lowerBound, $upperBound, $tickSpacing);
     }
 
     /**
      * @return array{0: float, 1: float}
      */
-    private function fixBounds(float $lowerBound, float $upperBound): array
+    private static function roundBounds(float $lowerBound, float $upperBound): array
     {
         // same?
         if ($lowerBound === $upperBound) {
@@ -88,9 +85,7 @@ class PdfBarScale
         }
         // lower greater than upper?
         if ($lowerBound > $upperBound) {
-            $temp = $upperBound;
-            $upperBound = $lowerBound;
-            $lowerBound = $temp;
+            [$lowerBound, $upperBound] = [$upperBound, $lowerBound];
         }
         // fix upper
         if ($upperBound > 0.0) {
@@ -114,5 +109,28 @@ class PdfBarScale
         }
 
         return [$lowerBound, $upperBound];
+    }
+
+    private static function roundValue(float $value, bool $roundDown): float
+    {
+        $exponent = \floor(\log10($value));
+        $fraction = $value / 10.0 ** $exponent;
+        $value = 10.0 ** $exponent;
+
+        if ($roundDown) {
+            return match (true) {
+                $fraction < 1.5 => $value,
+                $fraction < 3.0 => 2.0 * $value,
+                $fraction < 7.0 => 5.0 * $value,
+                default => 10.0 * $value,
+            };
+        }
+
+        return match (true) {
+            $fraction <= 1.0 => $value,
+            $fraction <= 2.0 => 2.0 * $value,
+            $fraction <= 5.0 => 5.0 * $value,
+            default => 10.0 * $value,
+        };
     }
 }

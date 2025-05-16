@@ -77,8 +77,8 @@ class LogsDocumentTest extends TestCase
             ->willReturn([$log1, $log2, $log3, $log4, $log5]);
         $logFile->method('getLevels')
             ->willReturn([
-                $log1->getLevel() => $level1,
-                $log2->getLevel() => $level2,
+                'info' => $level1,
+                'alert' => $level2,
             ]);
         $logFile->method('getChannels')
             ->willReturn([

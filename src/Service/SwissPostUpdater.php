@@ -121,9 +121,10 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         if (!$this->validateInput($result, $sourceFile)) {
             return $result;
         }
-        $temp_file = FileUtils::tempFile();
-        if (null === $temp_file) {
-            return $this->setError($result, 'file_temp');
+
+        $tempFile = $this->tempFile($result);
+        if (false === $tempFile) {
+            return $result;
         }
 
         $reader = null;
@@ -142,7 +143,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             if (!$reader instanceof CSVReader) {
                 return $result;
             }
-            $database = $this->openDatabase($temp_file);
+            $database = $this->openDatabase($tempFile);
             if (!$this->processStates($result, $database)) {
                 return $result;
             }
@@ -154,7 +155,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             $this->closeArchive($result, $archive);
             $this->compactDatabase($result, $database);
             $this->closeDatabase($result, $database);
-            $this->renameDatabase($result, $temp_file);
+            $this->renameDatabase($result, $tempFile);
         }
         $this->updateValidity($result);
 
@@ -300,9 +301,9 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     private function processReader(SwissPostUpdateResult $result, SwissDatabase $database, CSVReader $reader): bool
     {
         $stop_process = false;
-        /** @phpstan-var SwissAddressType|null $data */
+        /** @phpstan-var SwissAddressType $data */
         foreach ($reader as $data) { // @phpstan-ignore varTag.nativeType
-            if ($stop_process || null === $data) {
+            if ($stop_process) {
                 break;
             }
             switch ($data[0]) {
@@ -328,9 +329,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         // city or street imported?
         $entries = $result->getValidEntries();
         if (0 === $entries['city'] || 0 === $entries['street']) {
-            $this->setError($result, 'archive_empty', ['%name%' => $result->getSourceName()]);
-
-            return false;
+            return $this->setError($result, 'archive_empty', ['%name%' => $result->getSourceName()]);
         }
 
         return true;
@@ -340,9 +339,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     {
         $filename = FileUtils::buildPath(\dirname($this->getDatabaseName()), self::STATE_FILE);
         if (!FileUtils::exists($filename) || FileUtils::empty($filename)) {
-            $this->setError($result, 'file_states');
-
-            return false;
+            return $this->setError($result, 'file_states');
         }
 
         $reader = new CSVReader(file: $filename, separator: ';');
@@ -380,20 +377,16 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             }
         }
         if (!$validity instanceof \DateTimeInterface) {
-            $this->setError($result, 'validity_none', ['%name%' => $result->getSourceName()]);
-
-            return false;
+            return $this->setError($result, 'validity_none', ['%name%' => $result->getSourceName()]);
         }
         $result->setValidity($validity);
         $lastImport = $this->getLastImport($result);
         if ($lastImport instanceof \DateTimeInterface && $validity <= $lastImport) {
-            $this->setError($result, 'validity_before', [
+            return $this->setError($result, 'validity_before', [
                 '%validity%' => FormatUtils::formatDate($validity, \IntlDateFormatter::LONG),
                 '%import%' => FormatUtils::formatDate($lastImport, \IntlDateFormatter::LONG),
                 '%name%' => $result->getSourceName(),
             ]);
-
-            return false;
         }
 
         return true;
@@ -406,9 +399,21 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         }
     }
 
-    private function setError(SwissPostUpdateResult $result, string $id, array $parameters = []): SwissPostUpdateResult
+    private function setError(SwissPostUpdateResult $result, string $id, array $parameters = []): false
     {
-        return $result->setError($this->trans("swisspost.error.$id", $parameters));
+        $result->setError($this->trans("swisspost.error.$id", $parameters));
+
+        return false;
+    }
+
+    private function tempFile(SwissPostUpdateResult $result): string|false
+    {
+        $file = FileUtils::tempFile();
+        if (null === $file) {
+            return $this->setError($result, 'file_temp');
+        }
+
+        return $file;
     }
 
     private function toggleTransaction(SwissPostUpdateResult $result, SwissDatabase $database): void
@@ -434,34 +439,27 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     private function validateArchive(SwissPostUpdateResult $result, \ZipArchive $archive): bool
     {
         $count = $archive->count();
-        switch ($count) {
-            case 0:
-                $this->setError($result, 'archive_empty', ['%name%' => $result->getSourceName()]);
 
-                return false;
-
-            case 1:
-                return true;
-
-            default:
-                $this->setError($result, 'archive_not_one', ['%name%' => $result->getSourceName(), '%count%' => $count]);
-
-                return false;
-        }
+        return match ($count) {
+            0 => $this->setError($result, 'archive_empty', [
+                '%name%' => $result->getSourceName(),
+            ]),
+            1 => true,
+            default => $this->setError($result, 'archive_not_one', [
+                '%name%' => $result->getSourceName(),
+                '%count%' => $count,
+            ]),
+        };
     }
 
     private function validateInput(SwissPostUpdateResult $result, UploadedFile|string|null $sourceFile): bool
     {
         if (null === $sourceFile || '' === $sourceFile) {
-            $this->setError($result, 'file_none');
-
-            return false;
+            return $this->setError($result, 'file_none');
         }
         if ($sourceFile instanceof UploadedFile) {
             if (!$sourceFile->isValid()) {
-                $this->setError($result, 'file_empty');
-
-                return false;
+                return $this->setError($result, 'file_empty');
             }
 
             $result->setSourceName($sourceFile->getClientOriginalName());
@@ -472,26 +470,20 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         $result->setSourceFile($sourceFile);
 
         if (!FileUtils::exists($sourceFile)) {
-            $this->setError($result, 'file_not_exist');
-
-            return false;
+            return $this->setError($result, 'file_not_exist');
         }
         if (FileUtils::empty($sourceFile)) {
-            $this->setError($result, 'file_empty');
-
-            return false;
+            return $this->setError($result, 'file_empty');
         }
         if (StringUtils::equalIgnoreCase($sourceFile, $this->getDatabaseName())) {
-            $this->setError($result, 'database_open');
-
-            return false;
+            return $this->setError($result, 'database_open');
         }
 
         return true;
     }
 
-    private function validateLength(array $data, int $length): bool
+    private function validateLength(array $data, int $index): bool
     {
-        return \count($data) > $length;
+        return \count($data) > $index;
     }
 }

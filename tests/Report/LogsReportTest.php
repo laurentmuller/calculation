@@ -64,8 +64,8 @@ class LogsReportTest extends TestCase
             ->willReturn([$log1, $log2]);
         $logFile->method('getLevels')
             ->willReturn([
-                $log1->getLevel() => $logLevel1,
-                $log2->getLevel() => $logLevel2,
+                'info' => $logLevel1,
+                'alert' => $logLevel2,
             ]);
         $logFile->method('getChannels')
             ->willReturn([

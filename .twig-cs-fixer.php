@@ -13,14 +13,11 @@ declare(strict_types=1);
 
 use TwigCsFixer\Config\Config;
 
-$cache_dir = __DIR__ . '/var/cache/twig-cs-fixer';
-if (!\file_exists($cache_dir)) {
-    \mkdir($cache_dir, 0o777, true);
-}
+$cacheFile = __DIR__ . '/var/cache/twig-cs-fixer/.twig-cs-fixer.cache';
 
 $config = new Config();
 $config->allowNonFixableRules()
-    ->setCacheFile($cache_dir . '/.twig-cs-fixer.cache')
+    ->setCacheFile($cacheFile)
     ->getFinder()
     ->in('templates');
 

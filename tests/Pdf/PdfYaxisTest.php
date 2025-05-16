@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Pdf;
 
-use App\Pdf\PdfBarScale;
+use App\Pdf\PdfYaxis;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class PdfBarScaleTest extends TestCase
+class PdfYaxisTest extends TestCase
 {
     /**
-     * @phpstan-return \Generator<int, array{PdfBarScale, float, float, float}>
+     * @phpstan-return \Generator<int, array{PdfYaxis, float, float, float}>
      */
     public static function getValues(): \Generator
     {
@@ -79,7 +79,7 @@ class PdfBarScaleTest extends TestCase
     }
 
     #[DataProvider('getValues')]
-    public function testScale(PdfBarScale $scale, float $lowerBound, float $upperBound, float $tickSpacing): void
+    public function testScale(PdfYaxis $scale, float $lowerBound, float $upperBound, float $tickSpacing): void
     {
         self::assertSame($lowerBound, $scale->lowerBound);
         self::assertSame($upperBound, $scale->upperBound);
@@ -110,8 +110,8 @@ class PdfBarScaleTest extends TestCase
         self::assertSame(20.0, $actual->tickSpacing);
     }
 
-    private static function createScale(float $lowerBound, float $upperBound, int $maxTicks = 10): PdfBarScale
+    private static function createScale(float $lowerBound, float $upperBound, int $maxTicks = 10): PdfYaxis
     {
-        return PdfBarScale::instance($lowerBound, $upperBound, $maxTicks);
+        return PdfYaxis::instance($lowerBound, $upperBound, $maxTicks);
     }
 }

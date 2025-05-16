@@ -15,6 +15,7 @@ namespace App\Tests\Pdf\Traits;
 
 use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfFillColor;
+use App\Pdf\Enums\PdfPointStyle;
 use App\Pdf\Interfaces\PdfChartInterface;
 use App\Tests\Fixture\PdfChartLegendReport;
 use PHPUnit\Framework\TestCase;
@@ -31,9 +32,9 @@ class PdfChartLegendTraitTest extends TestCase
         $report->legends(legends: [], horizontal: false);
         $legends = $this->createLegends();
         $report->legends(legends: $legends, horizontal: true);
-        $report->legends(legends: $legends, horizontal: true, circle: false);
+        $report->legends(legends: $legends, horizontal: true, style: PdfPointStyle::SQUARE);
         $report->legends(legends: $legends, horizontal: false);
-        $report->legends(legends: $legends, horizontal: false, circle: false);
+        $report->legends(legends: $legends, horizontal: false, style: PdfPointStyle::SQUARE);
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -57,10 +58,10 @@ class PdfChartLegendTraitTest extends TestCase
     {
         $report = $this->createReport();
         $report->legendsHorizontal(legends: []);
-        $report->legendsHorizontal(legends: [], circle: false);
+        $report->legendsHorizontal(legends: [], style: PdfPointStyle::SQUARE);
         $legends = $this->createLegends();
         $report->legendsHorizontal(legends: $legends);
-        $report->legendsHorizontal(legends: $legends, circle: false);
+        $report->legendsHorizontal(legends: $legends, style: PdfPointStyle::SQUARE);
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -69,10 +70,10 @@ class PdfChartLegendTraitTest extends TestCase
     {
         $report = $this->createReport();
         $report->legendsVertical(legends: []);
-        $report->legendsVertical(legends: [], circle: false);
+        $report->legendsVertical(legends: [], style: PdfPointStyle::SQUARE);
         $legends = $this->createLegends();
         $report->legendsVertical(legends: $legends);
-        $report->legendsVertical(legends: $legends, circle: false);
+        $report->legendsVertical(legends: $legends, style: PdfPointStyle::SQUARE);
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -90,6 +91,19 @@ class PdfChartLegendTraitTest extends TestCase
         self::assertEqualsWithDelta(27.03, $actual, 0.1);
         $actual = $report->getLegendsWidth(legends: $legends, horizontal: false);
         self::assertEqualsWithDelta(12.76, $actual, 0.1);
+    }
+
+    public function testShapes(): void
+    {
+        $report = $this->createReport();
+        $legends = $this->createLegends();
+
+        $styles = PdfPointStyle::cases();
+        foreach ($styles as $style) {
+            $report->legends(legends: $legends, horizontal: true, style: $style);
+            $actual = $report->render();
+            self::assertTrue($actual);
+        }
     }
 
     /**

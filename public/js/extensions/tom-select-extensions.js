@@ -98,8 +98,8 @@ $(function () {
                 e.preventDefault();
                 const value = values[newIndex];
                 console.log('New selection', value, texts[newIndex]);
-                // tomsSelect.setActiveOption(value);
-                tomsSelect.setValue([value], false);
+                // $this.val(value).trigger('change').trigger('input');
+                tomsSelect.setValue(value, true);
             });
         },
 

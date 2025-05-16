@@ -254,14 +254,12 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * Execute the given statement and fetch the result to an associative array.
      *
      * @param \SQLite3Stmt $stmt the statement to execute
-     * @param int          $mode controls how the next row will be returned to the caller. This value
+     * @param int<1,3>     $mode controls how the next row will be returned to the caller. This value
      *                           must be one of either SQLITE3_ASSOC (default), SQLITE3_NUM, or SQLITE3_BOTH.
      *
-     * @phpstan-template T of array<string, mixed>
+     * @template T of array<string, mixed>
      *
-     * @phpstan-param int<1,3> $mode
-     *
-     * @phpstan-return list<T>
+     * @return array<int, T>
      *
      * @phpstan-ignore method.templateTypeNotInParameter
      */
@@ -272,14 +270,14 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
             return [];
         }
 
-        /** @phpstan-var list<T> $rows */
+        /** @var array<int, T> $rows */
         $rows = [];
         while ($row = $result->fetchArray($mode)) {
             $rows[] = $row;
         }
         $result->finalize();
 
-        /** @phpstan-var list<T> */
+        /** @var array<int, T> */
         return $rows;
     }
 
@@ -330,17 +328,15 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * </ul>
      * </p>.
      *
-     * @param string $query the SQL query to prepare
-     * @param string $value the value to search for
-     * @param int    $limit the maximum number of rows to return
-     * @param int    $mode  controls how the next row will be returned to the caller. This value
-     *                      must be one of either SQLITE3_ASSOC (default), SQLITE3_NUM, or SQLITE3_BOTH.
+     * @param string   $query the SQL query to prepare
+     * @param string   $value the value to search for
+     * @param int      $limit the maximum number of rows to return
+     * @param int<1,3> $mode  controls how the next row will be returned to the caller. This value
+     *                        must be one of either SQLITE3_ASSOC (default), SQLITE3_NUM, or SQLITE3_BOTH.
      *
-     * @phpstan-template T of array<string, mixed>
+     * @template T of array<string, mixed>
      *
-     * @phpstan-param int<1,3> $mode $mode
-     *
-     * @phpstan-return array<int, T>
+     * @return array<int, T>
      *
      * @phpstan-ignore method.templateTypeNotInParameter
      */

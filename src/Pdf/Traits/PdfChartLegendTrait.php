@@ -15,23 +15,26 @@ namespace App\Pdf\Traits;
 
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
+use App\Pdf\Enums\PdfPointStyle;
 use App\Pdf\Interfaces\PdfChartInterface;
-use fpdf\Enums\PdfRectangleStyle;
-use fpdf\Traits\PdfEllipseTrait;
+use fpdf\Color\PdfRgbColor;
 
 /**
  * Trait to draw chart legends.
  *
  * @phpstan-import-type ColorStringType from PdfChartInterface
  *
- * @phpstan-require-extends \App\Report\AbstractReport
+ * @phpstan-require-extends \fpdf\PdfDocument
  *
  * @phpstan-require-implements PdfChartInterface
  */
 trait PdfChartLegendTrait
 {
-    use PdfEllipseTrait;
+    use PdfPointStyleTrait;
 
+    /**
+     * The width of separation between legends.
+     */
     private const SEP_WIDTH = 1.5;
 
     /**
@@ -58,20 +61,24 @@ trait PdfChartLegendTrait
     /**
      * Gets the width for the given legends.
      *
-     * @param array $legends    the legends to get width for
-     * @param bool  $horizontal true for the horizontal legends; false for the vertical legends
+     * @param array         $legends    the legends to get width for
+     * @param bool          $horizontal true for the horizontal legends; false for the vertical legends
+     * @param PdfPointStyle $style      the type of shape to draw
      *
      * @return float the width used to output all legends or 0 if legends are empty
      *
      * @phpstan-param ColorStringType[] $legends
      */
-    public function getLegendsWidth(array $legends, bool $horizontal): float
-    {
+    public function getLegendsWidth(
+        array $legends,
+        bool $horizontal,
+        PdfPointStyle $style = PdfPointStyle::CIRCLE
+    ): float {
         if ([] === $legends) {
             return 0.0;
         }
 
-        $widths = $this->getLegendWidths($legends);
+        $widths = $this->getLegendWidths($legends, $style);
         if ($horizontal) {
             return \array_sum($widths) + self::SEP_WIDTH * (float) (\count($legends) - 1);
         }
@@ -85,25 +92,30 @@ trait PdfChartLegendTrait
      * Does nothing if legends are empty.
      * If the horizontal value is false, the position is the same as before after this call.
      *
-     * @param array  $legends    the legends to draw
-     * @param bool   $horizontal true to output legends as a horizontal list; false to output legends as
-     *                           a vertical list
-     * @param ?float $x          the abscissa of the legends or null to center the list (horizontal) or
-     *                           to use current position (vertical)
-     * @param ?float $y          the ordinate of the legends or null to use the current position
-     * @param bool   $circle     true to draw circle shapes; false to draw square shapes
+     * @param array         $legends    the legends to draw
+     * @param bool          $horizontal true to output legends as a horizontal list; false to output legends as
+     *                                  a vertical list
+     * @param ?float        $x          the abscissa of the legends or null to center the list (horizontal) or
+     *                                  to use current position (vertical)
+     * @param ?float        $y          the ordinate of the legends or null to use the current position
+     * @param PdfPointStyle $style      the type of shape to draw
      *
      * @phpstan-param ColorStringType[] $legends
      */
-    public function legends(array $legends, bool $horizontal, ?float $x = null, ?float $y = null, bool $circle = true): static
-    {
+    public function legends(
+        array $legends,
+        bool $horizontal,
+        ?float $x = null,
+        ?float $y = null,
+        PdfPointStyle $style = PdfPointStyle::CIRCLE
+    ): static {
         if ([] === $legends) {
             return $this;
         }
 
         return $horizontal ?
-            $this->legendsHorizontal($legends, $x, $y, $circle) :
-            $this->legendsVertical($legends, $x, $y, $circle);
+            $this->legendsHorizontal($legends, $x, $y, $style) :
+            $this->legendsVertical($legends, $x, $y, $style);
     }
 
     /**
@@ -111,29 +123,34 @@ trait PdfChartLegendTrait
      *
      * Does nothing if legends are empty.
      *
-     * @param array  $legends the legends to draw
-     * @param ?float $x       the abscissa of the legends or null to center the abscissa
-     * @param ?float $y       the ordinate of the legends or null to use the current ordinate
-     * @param bool   $circle  true to a draw circle shape; false to draw a square shape
+     * @param array         $legends the legends to draw
+     * @param ?float        $x       the abscissa of the legends or null to center the abscissa
+     * @param ?float        $y       the ordinate of the legends or null to use the current ordinate
+     * @param PdfPointStyle $style   the type of shape to draw
      *
      * @phpstan-param ColorStringType[] $legends
      */
-    public function legendsHorizontal(array $legends, ?float $x = null, ?float $y = null, bool $circle = true): static
-    {
+    public function legendsHorizontal(
+        array $legends,
+        ?float $x = null,
+        ?float $y = null,
+        PdfPointStyle $style = PdfPointStyle::CIRCLE
+    ): static {
         if ([] === $legends) {
             return $this;
         }
 
-        $widths = $this->getLegendWidths($legends);
+        $widths = $this->getLegendWidths($legends, $style);
         $totalWidth = $this->getLegendsWidth($legends, true);
 
         $y ??= $this->getY();
         $x ??= $this->getLeftMargin() + ($this->getPrintableWidth() - $totalWidth) / 2.0;
+        $width = $this->getPointStyleWidth($style);
+        $height = $this->getPointStyleHeight();
 
-        $radius = $this->getLegendRadius();
         PdfDrawColor::cellBorder()->apply($this);
         foreach ($legends as $index => $legend) {
-            $this->outputLegend($x, $y, $radius, $legend, $circle);
+            $this->outputLegend($x, $y, $width, $height, $legend, $style);
             $x += $widths[$index] + self::SEP_WIDTH;
         }
         $this->resetStyle()->lineBreak();
@@ -146,15 +163,19 @@ trait PdfChartLegendTrait
      *
      * Does nothing if legends are empty. After this call, the position is the same as before.
      *
-     * @param array  $legends the legends to draw
-     * @param ?float $x       the abscissa of the legends or null to use the current abscissa
-     * @param ?float $y       the ordinate of the legends or null to use the current ordinate
-     * @param bool   $circle  true to draw a circle shape; false to draw a square shape
+     * @param array         $legends the legends to draw
+     * @param ?float        $x       the abscissa of the legends or null to use the current abscissa
+     * @param ?float        $y       the ordinate of the legends or null to use the current ordinate
+     * @param PdfPointStyle $style   the type of shape to draw
      *
      * @phpstan-param ColorStringType[] $legends
      */
-    public function legendsVertical(array $legends, ?float $x = null, ?float $y = null, bool $circle = true): static
-    {
+    public function legendsVertical(
+        array $legends,
+        ?float $x = null,
+        ?float $y = null,
+        PdfPointStyle $style = PdfPointStyle::CIRCLE
+    ): static {
         if ([] === $legends) {
             return $this;
         }
@@ -162,11 +183,12 @@ trait PdfChartLegendTrait
         $position = $this->getPosition();
         $x ??= $position->x;
         $y ??= $position->y;
+        $width = $this->getPointStyleWidth($style);
+        $height = $this->getPointStyleHeight();
 
-        $radius = $this->getLegendRadius();
         PdfDrawColor::cellBorder()->apply($this);
         foreach ($legends as $legend) {
-            $this->outputLegend($x, $y, $radius, $legend, $circle);
+            $this->outputLegend($x, $y, $width, $height, $legend, $style);
             $y += self::LINE_HEIGHT;
         }
         $this->resetStyle()
@@ -178,19 +200,18 @@ trait PdfChartLegendTrait
     /**
      * @phpstan-param ColorStringType $legend
      */
-    private function applyLegendColor(array $legend): void
+    private function applyLegendColor(array $legend, PdfPointStyle $shape): void
     {
         $color = $legend['color'];
         if (\is_string($color)) {
-            $color = PdfFillColor::create($color);
+            $color = PdfRgbColor::create($color) ?? PdfRgbColor::darkGray();
         }
-        $color ??= PdfFillColor::darkGray();
+        $color = match ($shape) {
+            PdfPointStyle::CROSS,
+            PdfPointStyle::CROSS_ROTATION => PdfDrawColor::instance($color->red, $color->green, $color->blue),
+            default => PdfFillColor::instance($color->red, $color->green, $color->blue),
+        };
         $color->apply($this);
-    }
-
-    private function getLegendRadius(): float
-    {
-        return (self::LINE_HEIGHT - 2.0 * $this->getCellMargin()) / 2.0;
     }
 
     /**
@@ -198,38 +219,27 @@ trait PdfChartLegendTrait
      *
      * @phpstan-return non-empty-array<float>
      */
-    private function getLegendWidths(array $legends): array
+    private function getLegendWidths(array $legends, PdfPointStyle $style): array
     {
-        $offset = 2.0 * ($this->getLegendRadius() + $this->getCellMargin());
+        $offset = $this->getPointStyleWidth($style) + 2.0 * $this->getCellMargin();
 
-        return \array_map(fn (array $legend): float => $this->getStringWidth($legend['label']) + $offset, $legends);
+        return \array_map(fn (array $legend): float => $offset + $this->getStringWidth($legend['label']), $legends);
     }
 
     /**
      * @phpstan-param ColorStringType $legend
      */
-    private function outputLegend(float $x, float $y, float $radius, array $legend, bool $circle = true): void
-    {
-        $diameter = 2.0 * $radius;
-        $this->applyLegendColor($legend);
-        if ($circle) {
-            $this->circle(
-                $x + $radius,
-                $y + $radius + $this->getCellMargin(),
-                $radius,
-                PdfRectangleStyle::BOTH
-            );
-        } else {
-            $this->rect(
-                $x,
-                $y + $this->getCellMargin(),
-                $diameter,
-                $diameter,
-                PdfRectangleStyle::BOTH
-            );
-        }
-
-        $this->setXY($x + $diameter, $y);
+    private function outputLegend(
+        float $x,
+        float $y,
+        float $width,
+        float $height,
+        array $legend,
+        PdfPointStyle $style
+    ): void {
+        $this->applyLegendColor($legend, $style);
+        $this->outputPointStyle($style, $x, $y + $this->cellMargin, $width, $height);
+        $this->setXY($x + $width, $y);
         $this->cell(text: $legend['label']);
     }
 }

@@ -16,7 +16,6 @@ namespace App\Tests\Calendar;
 use App\Calendar\Calendar;
 use App\Calendar\CalendarException;
 use App\Calendar\CalendarService;
-use App\Entity\Calculation;
 use PHPUnit\Framework\TestCase;
 
 class CalendarServiceTest extends TestCase
@@ -41,22 +40,12 @@ class CalendarServiceTest extends TestCase
     }
 
     /**
-     * @psalm-suppress InvalidArgument
-     */
-    public function testInvalidClass(): void
-    {
-        self::expectException(CalendarException::class);
-        $service = new CalendarService();
-        // @phpstan-ignore argument.type
-        $service->setCalendarModel(Calculation::class);
-    }
-
-    /**
      * @psalm-suppress ArgumentTypeCoercion
      */
     public function testNotExistClass(): void
     {
         self::expectException(CalendarException::class);
+        self::expectExceptionMessage("Class 'fake' not found.");
         $service = new CalendarService();
         // @phpstan-ignore argument.type
         $service->setCalendarModel('fake');

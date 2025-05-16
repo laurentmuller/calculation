@@ -82,7 +82,7 @@ class CacheService
      */
     private function parseContent(string $content): array
     {
-        /** @phpstan-var list<string> $lines */
+        /** @phpstan-var list<non-empty-string> $lines */
         $lines = \preg_split('/$\R?^/m', \trim($content), flags: \PREG_SPLIT_NO_EMPTY);
         $callback = static fn (string $line): bool => !\str_starts_with($line, '-')
             && !\str_starts_with($line, 'Pool name');

@@ -181,8 +181,7 @@ class UpdateAssetsCommand extends Command
                 return Command::FAILURE;
             }
 
-            // @phpstan-ignore method.nonObject
-            $duration = $this->io->formatDuration($startTime);
+            $duration = $this->formatDuration($startTime);
             $this->writeSuccess(
                 \sprintf(
                     'Installed %d plugins and %d files to the directory "%s". Duration: %s.',
@@ -362,6 +361,11 @@ class UpdateAssetsCommand extends Command
         FileUtils::chmod($targetFile, 0o644, false);
 
         return true;
+    }
+
+    private function formatDuration(int $startTime): string
+    {
+        return (string) $this->io?->formatDuration($startTime);
     }
 
     /**

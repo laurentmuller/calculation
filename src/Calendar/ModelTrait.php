@@ -121,16 +121,13 @@ trait ModelTrait
      *
      * @return class-string<T> the class name if no exception
      *
-     * @throws CalendarException if the given class name does not exist or is not a derived class of AbstractCalendarItem
+     * @throws CalendarException if the given class name does not exist
      */
     protected function checkClass(?string $className, string $defaultClass): string
     {
         $name = $className ?? $defaultClass;
         if (!\class_exists($name)) {
             throw CalendarException::format("Class '%s' not found.", $name);
-        }
-        if (!\is_a($name, AbstractCalendarItem::class, true)) {
-            throw CalendarException::format("Class '%s' is not an instance of '%s'.", $name, AbstractCalendarItem::class);
         }
 
         return $name;

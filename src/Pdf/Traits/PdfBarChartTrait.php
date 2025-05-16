@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace App\Pdf\Traits;
 
 use App\Pdf\Colors\PdfFillColor;
-use App\Pdf\PdfBarScale;
 use App\Pdf\PdfStyle;
+use App\Pdf\PdfYaxis;
 use App\Traits\ArrayTrait;
 use fpdf\Enums\PdfRectangleStyle;
 use fpdf\Enums\PdfTextAlignment;
@@ -105,11 +105,10 @@ trait PdfBarChartTrait
         // y axis values
         $min = $axis['min'] ?? $this->barComputeRowsValues($rows, fn (float $a, float $b): float => \min($a, $b));
         $max = $axis['max'] ?? $this->barComputeRowsValues($rows, fn (float $a, float $b): float => \max($a, $b));
-        $formatter = $axis['formatter'] ?? fn (float $value): string => (string) $value;
 
         // y axis
-        $scale = PdfBarScale::instance($min, $max);
-        $labelsY = $scale->getLabels($this, $formatter);
+        $scale = PdfYaxis::instance($min, $max);
+        $labelsY = $scale->getLabels($this, $axis['formatter'] ?? null);
         $widthY = $this->getColumnMax($labelsY, 'width');
 
         // x axis
@@ -153,7 +152,7 @@ trait PdfBarChartTrait
         float $x,
         float $y,
         float $h,
-        PdfBarScale $scale
+        PdfYaxis $scale
     ): array {
         $result = [];
         $bottom = $y + $h;

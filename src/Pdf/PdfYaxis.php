@@ -18,7 +18,7 @@ use fpdf\PdfDocument;
 /**
  * Represents a vertical (y) chart axis.
  */
-readonly class PdfBarScale
+readonly class PdfYaxis
 {
     /**
      * @param float $lowerBound  the lower axis bound
@@ -35,15 +35,17 @@ readonly class PdfBarScale
     /**
      * Gets the label's texts and widths.
      *
-     * @param PdfDocument             $document  the document to get the text width
-     * @param callable(float): string $formatter the callback to format values
+     * @param PdfDocument              $document  the document to get the label widths
+     * @param ?callable(float): string $formatter the callback to format values, if none, values are cast to string
      *
      * @return non-empty-array<array{label: string, width: float}>
      */
-    public function getLabels(PdfDocument $document, callable $formatter): array
+    public function getLabels(PdfDocument $document, ?callable $formatter = null): array
     {
         /** @var non-empty-array<array{label: string, width: float}> $result */
         $result = [];
+
+        $formatter ??= fn (float $value): string => (string) $value;
         foreach (\range($this->upperBound, $this->lowerBound, -$this->tickSpacing) as $value) {
             $text = $formatter($value);
             $result[] = [
@@ -56,11 +58,13 @@ readonly class PdfBarScale
     }
 
     /**
-     * Create a new instance.
+     * Create a new instance. All values are rounded to the nearest multiple of 1, 2, 5 or 10.
      *
-     * @param float $lowerBound the lower axis bound
-     * @param float $upperBound the upper axis bound
-     * @param int   $ticks      the number of ticks
+     * @param float $lowerBound the desired lower axis bound
+     * @param float $upperBound the desired axis bound
+     * @param int   $ticks      the desired number of ticks
+     *
+     * @return self the new instance with rounded values
      */
     public static function instance(float $lowerBound = 0.0, float $upperBound = 100.0, int $ticks = 10): self
     {

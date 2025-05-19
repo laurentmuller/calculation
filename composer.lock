@@ -1806,16 +1806,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "3.0.12",
+            "version": "3.013",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "58e7bd5dfb224f03ac7d271664db3935108938ba"
+                "reference": "88c1572052647e888978f3e4df3e8b395665a79b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/58e7bd5dfb224f03ac7d271664db3935108938ba",
-                "reference": "58e7bd5dfb224f03ac7d271664db3935108938ba",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/88c1572052647e888978f3e4df3e8b395665a79b",
+                "reference": "88c1572052647e888978f3e4df3e8b395665a79b",
                 "shasum": ""
             },
             "require": {
@@ -1865,7 +1865,7 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2025-04-30T11:08:36+00:00"
+            "time": "2025-05-18T15:51:24+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",

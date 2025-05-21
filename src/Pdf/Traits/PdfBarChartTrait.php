@@ -103,8 +103,8 @@ trait PdfBarChartTrait
         $this->setCellMargin(0.0);
 
         // y axis values
-        $min = $axis['min'] ?? $this->barComputeRowsValues($rows, fn (float $a, float $b): float => \min($a, $b));
-        $max = $axis['max'] ?? $this->barComputeRowsValues($rows, fn (float $a, float $b): float => \max($a, $b));
+        $min = $axis['min'] ?? $this->computeBarRowsValues($rows, fn (float $a, float $b): float => \min($a, $b));
+        $max = $axis['max'] ?? $this->computeBarRowsValues($rows, fn (float $a, float $b): float => \max($a, $b));
 
         // y axis
         $scale = PdfYaxis::instance($min, $max);
@@ -112,9 +112,9 @@ trait PdfBarChartTrait
         $widthY = $this->getColumnMax($labelsY, 'width');
 
         // x axis
-        $labelsX = $this->barGetLabelsX($rows);
+        $labelsX = $this->getBarLabelsX($rows);
         $widthX = $this->getColumnMax($labelsX, 'width');
-        $barWidth = $this->barGetBarWidth($rows, $width - $widthY - 1.0);
+        $barWidth = $this->getBarWidth($rows, $width - $widthY - 1.0);
         $rotation = $barWidth < $widthX;
 
         // draw Y axis
@@ -124,16 +124,16 @@ trait PdfBarChartTrait
         } else {
             $height -= self::LINE_HEIGHT;
         }
-        $this->barDrawAxisY($labelsY, $widthY, $x, $y, $width, $height);
+        $this->drawBarAxisY($labelsY, $widthY, $x, $y, $width, $height);
 
         // restrict axis x area
         $x += $widthY + 1.0 + self::SEP_BARS;
         $y += self::LINE_HEIGHT / 2.0;
 
         // draw axis X and data
-        $data = $this->barComputeData($rows, $barWidth, $x, $y, $height, $scale);
-        $this->barDrawAxisX($labelsX, $barWidth, $rotation, $x, $y + $height);
-        $this->barDrawData($data);
+        $data = $this->computeBarData($rows, $barWidth, $x, $y, $height, $scale);
+        $this->drawBarAxisX($labelsX, $barWidth, $rotation, $x, $y + $height);
+        $this->drawBarData($data);
 
         // reset
         $this->setCellMargin($margin);
@@ -146,7 +146,7 @@ trait PdfBarChartTrait
      *
      * @phpstan-return BarChartRowDataType[]
      */
-    private function barComputeData(
+    private function computeBarData(
         array $rows,
         float $barWidth,
         float $x,
@@ -180,7 +180,7 @@ trait PdfBarChartTrait
                     continue;
                 }
                 $entry['values'][] = [
-                    'color' => $this->barGetFillColor($value),
+                    'color' => $this->getBarFillColor($value),
                     'value' => $currentValue,
                     'y' => $startY - $heightValue,
                     'h' => $heightValue,
@@ -198,7 +198,7 @@ trait PdfBarChartTrait
      * @phpstan-param non-empty-array<BarChartRowType> $rows
      * @phpstan-param callable(float, float): float $callback
      */
-    private function barComputeRowsValues(array $rows, callable $callback): float
+    private function computeBarRowsValues(array $rows, callable $callback): float
     {
         $result = null;
         foreach ($rows as $row) {
@@ -212,7 +212,7 @@ trait PdfBarChartTrait
     /**
      * @phpstan-param BarChartLabelType[] $labels
      */
-    private function barDrawAxisX(
+    private function drawBarAxisX(
         array $labels,
         float $barWidth,
         bool $rotation,
@@ -237,7 +237,7 @@ trait PdfBarChartTrait
     /**
      * @phpstan-param  BarChartLabelType[] $labels
      */
-    private function barDrawAxisY(
+    private function drawBarAxisY(
         array $labels,
         float $width,
         float $x,
@@ -259,7 +259,7 @@ trait PdfBarChartTrait
     /**
      * @phpstan-param BarChartRowDataType[] $data
      */
-    private function barDrawData(array $data): void
+    private function drawBarData(array $data): void
     {
         foreach ($data as $row) {
             foreach ($row['values'] as $value) {
@@ -276,24 +276,17 @@ trait PdfBarChartTrait
         }
     }
 
-    private function barGetBarWidth(array $rows, float $width): float
-    {
-        $countRows = (float) \count($rows);
-
-        return ($width - ($countRows + 1.0) * self::SEP_BARS) / $countRows;
-    }
-
     /**
      * @phpstan-param ColorValueType $row
      */
-    private function barGetFillColor(array $row): PdfFillColor
+    private function getBarFillColor(array $row): PdfFillColor
     {
         $color = $row['color'];
         if (\is_string($color)) {
             $color = PdfFillColor::create($color);
         }
 
-        return $color instanceof PdfFillColor ? $color : PdfFillColor::darkGray();
+        return $color ?? PdfFillColor::darkGray();
     }
 
     /**
@@ -301,11 +294,18 @@ trait PdfBarChartTrait
      *
      * @phpstan-return non-empty-array<BarChartLabelType>
      */
-    private function barGetLabelsX(array $rows): array
+    private function getBarLabelsX(array $rows): array
     {
         return \array_map(fn (array $row): array => [
             'label' => $row['label'],
             'width' => $this->getStringWidth($row['label']),
         ], $rows);
+    }
+
+    private function getBarWidth(array $rows, float $width): float
+    {
+        $count = (float) \count($rows);
+
+        return ($width - ($count + 1.0) * self::SEP_BARS) / $count;
     }
 }

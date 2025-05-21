@@ -195,7 +195,7 @@
             </div>
             <div class="col-md-6 my-2">
                 <div class="form-group mb-3">
-                    <label class="form-label" for="product-picker">Article (tom-select)</label>
+                    <label class="form-label" for="product-picker">Article</label>
                     <select id="product-picker" class="form-select">
                         {% for key, group in products -%}
                             <optgroup label="{{ key }}">
@@ -259,9 +259,7 @@
 {# stylesheets #}
 {% block stylesheets -%}
     {{ asset_css('vendor/currency-flags/currency-flags.css') }}
-    {{ asset_css('vendor/tom-select/css/tom-select.bootstrap5.css') }}
     {{ asset_css('css/select2.css') }}
-    {{ asset_css('css/tom-select.css') }}
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}
@@ -269,9 +267,6 @@
     {{ asset_js('vendor/select2/js/select2.js') }}
     {{ asset_js('vendor/select2/js/i18n/fr.js') }}
     {{ asset_js('js/extensions/select2-extensions.js') }}
-
-    {{ asset_js('vendor/tom-select/js/tom-select.popular.js') }}
-    {{ asset_js('js/extensions/tom-select-extensions.js') }}
 
     {{ asset_js('js/plugins/plugin-treeview.js') }}
     {{ asset_js('js/plugins/plugin-drag-modal.js') }}

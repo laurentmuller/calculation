@@ -234,15 +234,6 @@
             "files": [
                 "dist/panzoom.js"
             ]
-        },
-        {
-            "name": "tom-select",
-            "version": "2.4.3",
-            "source": "cdnjs",
-            "files": [
-                "js/tom-select.popular.js",
-                "css/tom-select.bootstrap5.css"
-            ]
         }
     ]
 }

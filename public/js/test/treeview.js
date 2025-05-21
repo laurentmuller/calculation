@@ -139,29 +139,23 @@ function formatProduct(product) {
     'use strict';
     const id = product.id;
     let text = product.text;
+
     if (!id) {
         return text;
     }
 
-    const price = $(product.element).data('price');
-    const unit = $(product.element).data('unit');
-    const $text = $('<span/>', {
-        text: text + ' ('
-    });
-    $text.append($('<span/>', {
-        'text': $.formatFloat(price),
-        'class': price ? '' : 'text-danger'
-    }));
-    if (unit) {
-        $text.append($('<span/>', {
-            'text': ' / ' + unit
-        }));
-    }
-    $text.append($('<span/>', {
-        text: ')'
-    }));
+    const price = $.parseFloat($(product.element).data('price'));
+    const priceClass = price ? '' : 'text-danger';
+    const priceText = $.formatFloat(price);
 
-    return $text;
+    let unit = $(product.element).data('unit');
+    unit = unit ? `<span>&nbsp;/&nbsp;${unit}</span>` : '';
+
+    return $(`<div class="d-flex w-100">
+                <span class="me-auto text-truncate">${text}</span>
+                <span class="${priceClass}">${priceText}</span>
+                ${unit}                            
+            </div>`);
 }
 
 function updatePosition($radio) {
@@ -177,18 +171,6 @@ function updatePosition($radio) {
     $button.find('.position-text').text(text);
     $button.dropdown('hide');
     $button.trigger('focus');
-}
-
-function formatTomSelectProduct(data) {
-    'use strict';
-    const price = $.parseFloat(data.price);
-    const priceClass = price ? '' : 'text-danger';
-    const unit = data.unit ? `<span>&nbsp;/&nbsp;${data.unit}</span>` : '';
-    return `<div class="d-flex w-100">
-                <span class="me-auto text-truncate">${data.text}</span>
-                <span class="${priceClass}">${$.formatFloat(price)}</span>
-                ${unit}                            
-            </div>`;
 }
 
 /**
@@ -337,7 +319,7 @@ $(function () {
             e.preventDefault();
         }
     });
-    input.addEventListener('shown.bs.dropdown', (e) => {
+    input.addEventListener('shown.bs.dropdown', () => {
         getItems()[0].focus();
         focused = true;
     });
@@ -351,13 +333,5 @@ $(function () {
             input.select();
             input.focus();
         });
-    });
-
-
-    $('#product-picker').initTomSelect({
-        render: {
-            item: (data) => formatTomSelectProduct(data),
-            option: (data) => formatTomSelectProduct(data),
-        },
     });
 });

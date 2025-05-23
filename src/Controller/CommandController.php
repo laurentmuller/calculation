@@ -70,7 +70,7 @@ class CommandController extends AbstractController
     /**
      * Show all commands.
      */
-    #[Get(path: '', name: 'all')]
+    #[Get(path: self::INDEX_PATH, name: 'all')]
     public function commands(
         Request $request,
         CommandService $service,
@@ -161,7 +161,7 @@ class CommandController extends AbstractController
     /**
      * Export commands to a PDF document.
      */
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(CommandService $service): Response
     {
         if (0 === $service->count()) {

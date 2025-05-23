@@ -163,7 +163,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         $parent->rect(
             $bounds->x + $margin,
             $bounds->y + $margin,
-            5.0,
+            self::LINE_HEIGHT,
             $bounds->height - 2.0 * $margin,
             PdfRectangleStyle::BOTH
         );

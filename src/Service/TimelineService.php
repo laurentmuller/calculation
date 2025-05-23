@@ -61,7 +61,7 @@ readonly class TimelineService
     {
         $interval ??= self::DEFAULT_INTERVAL;
         [$today, $min_date, $max_date] = $this->getDates();
-        $to = null !== $date ? new \DateTimeImmutable($date) : $max_date;
+        $to = null !== $date ? DateUtils::createDateTimeImmutable($date) : $max_date;
         $from = DateUtils::sub($to, $interval);
 
         return $this->getParameters($today, $from, $to, $interval, $min_date, $max_date);
@@ -127,7 +127,7 @@ readonly class TimelineService
      */
     private function getDates(): array
     {
-        $today = new \DateTimeImmutable('today');
+        $today = DateUtils::createDateTimeImmutable('today');
         [$min_date, $max_date] = $this->getMinMaxDates($today);
         if ($today < $min_date || $today > $max_date) {
             $today = null;

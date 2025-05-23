@@ -229,7 +229,7 @@ final readonly class SymfonyInfoService
      */
     public function getMaintenanceStatus(): string
     {
-        $now = new \DateTimeImmutable();
+        $now = DateUtils::createDateTimeImmutable();
         $endOfLife = $this->getEndOfMonth(Kernel::END_OF_LIFE);
         if ($now > $endOfLife) {
             return 'Unmaintained';
@@ -386,7 +386,7 @@ final readonly class SymfonyInfoService
 
     private function getDaysBeforeExpiration(string $date): string
     {
-        $today = new \DateTimeImmutable();
+        $today = DateUtils::createDateTimeImmutable();
         $endOfMonth = $this->getEndOfMonth($date);
 
         return $today->diff($endOfMonth)->format('%R%a days');

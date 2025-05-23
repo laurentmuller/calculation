@@ -51,7 +51,7 @@ class GlobalMarginController extends AbstractEntityController
         parent::__construct($repository);
     }
 
-    #[GetPost(path: '/edit', name: 'edit')]
+    #[GetPost(path: '/edit', name: self::EDIT_NAME)]
     public function edit(Request $request): Response
     {
         $this->checkPermission(
@@ -77,11 +77,8 @@ class GlobalMarginController extends AbstractEntityController
 
     /**
      * Export the global margins to a Spreadsheet document.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'excel')]
+    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('minimum');
@@ -96,7 +93,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(
         GlobalMarginTable $table,
         LoggerInterface $logger,
@@ -108,10 +105,8 @@ class GlobalMarginController extends AbstractEntityController
 
     /**
      * Export the global margins to a PDF document.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
      */
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('minimum');
@@ -126,7 +121,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Show properties of a global margin.
      */
-    #[Get(path: '/show/{id}', name: 'show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: self::SHOW_PATH, name: self::SHOW_NAME, requirements: self::ID_REQUIREMENT)]
     public function show(GlobalMargin $item): Response
     {
         return $this->showEntity($item);

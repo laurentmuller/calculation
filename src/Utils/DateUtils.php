@@ -71,7 +71,7 @@ final class DateUtils
     public static function add(\DateTimeInterface $date, \DateInterval|string $interval): \DateTimeInterface
     {
         if (\is_string($interval)) {
-            $interval = new \DateInterval($interval);
+            $interval = self::createDateInterval($interval);
         }
 
         return (clone $date)->add($interval);
@@ -99,6 +99,33 @@ final class DateUtils
         return $year;
     }
 
+    public static function createDateInterval(string $interval): \DateInterval
+    {
+        return new \DateInterval($interval);
+    }
+
+    /**
+     * Creates a new date time immutable instance.
+     *
+     * @param string         $datetime a date/time string
+     * @param ?\DateTimeZone $timezone the timezone or null to use the current timezone
+     */
+    public static function createDateTime(string $datetime = 'now', ?\DateTimeZone $timezone = null): \DateTime
+    {
+        return new \DateTime($datetime, $timezone);
+    }
+
+    /**
+     * Creates a new date time instance.
+     *
+     * @param string         $datetime a date/time string
+     * @param ?\DateTimeZone $timezone the timezone or null to use the current timezone
+     */
+    public static function createDateTimeImmutable(string $datetime = 'now', ?\DateTimeZone $timezone = null): \DateTimeImmutable
+    {
+        return new \DateTimeImmutable($datetime, $timezone);
+    }
+
     /**
      * Format the given date (if any) to use within a date type in forms.
      */
@@ -116,7 +143,7 @@ final class DateUtils
      */
     public static function getDay(?\DateTimeInterface $date = null): int
     {
-        $date ??= new \DateTime();
+        $date ??= self::createDateTime();
 
         return (int) $date->format('j');
     }
@@ -130,7 +157,7 @@ final class DateUtils
      */
     public static function getMonth(?\DateTimeInterface $date = null): int
     {
-        $date ??= new \DateTime();
+        $date ??= self::createDateTime();
 
         return (int) $date->format('n');
     }
@@ -202,7 +229,7 @@ final class DateUtils
      */
     public static function getWeek(?\DateTimeInterface $date = null): int
     {
-        $date ??= new \DateTime();
+        $date ??= self::createDateTime();
 
         return (int) $date->format('W');
     }
@@ -234,7 +261,7 @@ final class DateUtils
      */
     public static function getYear(?\DateTimeInterface $date = null): int
     {
-        $date ??= new \DateTime();
+        $date ??= self::createDateTime();
 
         return (int) $date->format('Y');
     }
@@ -263,13 +290,18 @@ final class DateUtils
      *
      * @phpstan-template T of \DateTime|\DateTimeImmutable
      *
-     * @phpstan-param T $date
+     * @phpstan-param T|null $date
      *
-     * @phpstan-return T
+     * @phpstan-return ($date is null ? \DateTime : T)
      */
-    public static function removeTime(\DateTime|\DateTimeImmutable $date = new \DateTime()): \DateTime|\DateTimeImmutable
+    public static function removeTime(\DateTime|\DateTimeImmutable|null $date = null): \DateTime|\DateTimeImmutable
     {
-        return $date->setTime(0, 0);
+        if (null !== $date) {
+            /** @phpstan-var T $date */
+            return $date->setTime(0, 0);
+        }
+
+        return self::createDateTime()->setTime(0, 0);
     }
 
     /**
@@ -289,7 +321,7 @@ final class DateUtils
     public static function sub(\DateTimeInterface $date, \DateInterval|string $interval): \DateTimeInterface
     {
         if (\is_string($interval)) {
-            $interval = new \DateInterval($interval);
+            $interval = self::createDateInterval($interval);
         }
 
         return (clone $date)->sub($interval);
@@ -341,8 +373,8 @@ final class DateUtils
     private static function getMonthNames(string $pattern): array
     {
         $result = [];
-        $date = new \DateTime('2000-01-01');
-        $interval = new \DateInterval('P1M');
+        $date = self::createDateTime('2000-01-01');
+        $interval = self::createDateInterval('P1M');
         $formatter = self::getFormatter($pattern);
         for ($i = 1; $i <= 12; ++$i) {
             $result[$i] = \ucfirst((string) $formatter->format($date));

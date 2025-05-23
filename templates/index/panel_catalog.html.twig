@@ -1,19 +1,24 @@
 {% from 'macros/_icons.html.twig' import icon, link %}
 {% from 'macros/_attributes.html.twig' import attributes %}
 {# macros #}
-{% macro cardEntry(entity, count, list_path, icon) -%}
+{% macro cardEntry(entity, count, index_path, add_path, icon) -%}
 {% set title = entity ~ '.list.title' %}
 {% set counter = 'index.panel_count_' ~ entity %}
 <div class="border index-child m-1">
-    <div class="position-relative p-2">
-        {%- if list_path -%}
-            {{- link(path(list_path), title, 'stretched-link', icon, 'index.panel_title_' ~ entity) -}}
-        {%- else -%}
-            {{- title|trans -}}
-        {%- endif -%}
-        <div class="h4 fw-normal my-1">
-            <span title="{{ counter|trans }}">{{- count|integer -}}</span>
+    <div class="d-flex p-2">
+        <div class="position-relative w-100">
+            {%- if index_path -%}
+                {{- link(href: path(index_path), text: title, class: 'stretched-link', icon: icon, title: 'index.panel_title_' ~ entity) -}}
+            {%- else -%}
+                <span>{{- title|trans -}}</span>
+            {%- endif -%}
+            <div class="h4 fw-normal my-1">
+                <span title="{{ counter|trans }}">{{- count|integer -}}</span>
+            </div>
         </div>
+        {%- if add_path -%}
+            {{- link(href: path(add_path, {caller: path(app.current_route)}), icon: 'file-circle-plus', title: entity ~ '.add.title') -}}
+        {%- endif -%}
     </div>
 </div>
 {%- endmacro %}
@@ -21,12 +26,18 @@
 {%- set panel_key = 'DISPLAY_CATALOG' -%}
 {%- set panel_show = app.request.cookies.boolean(panel_key, true) -%}
 {%- set panel_title = panel_show ? 'common.collapse' : 'common.expand' -%}
-{%- set task_path = is_granted(PERMISSION_LIST, ENTITY_CALCULATION) ? 'task_index' : false -%}
-{%- set group_path = is_granted(PERMISSION_LIST, ENTITY_GROUP) ? 'group_index' : false -%}
-{%- set product_path = is_granted(PERMISSION_LIST, ENTITY_PRODUCT) ? 'product_index' : false -%}
-{%- set category_path = is_granted(PERMISSION_LIST, ENTITY_CATEGORY) ? 'category_index' : false -%}
-{%- set margin_path = is_granted(PERMISSION_LIST, ENTITY_GLOBAL_MARGIN) ? 'globalmargin_index' : false -%}
-{%- set state_path = is_granted(PERMISSION_LIST, ENTITY_CALCULATION) ? 'calculationstate_index' : false -%}
+{# entities #}
+{%- set task_index = is_granted(PERMISSION_LIST, ENTITY_TASK) ? 'task_index' : false -%}
+{%- set task_add = is_granted(PERMISSION_ADD, ENTITY_TASK) ? 'task_add' : false -%}
+{%- set group_index = is_granted(PERMISSION_LIST, ENTITY_GROUP) ? 'group_index' : false -%}
+{%- set group_add = is_granted(PERMISSION_ADD, ENTITY_GROUP) ? 'group_add' : false -%}
+{%- set product_index = is_granted(PERMISSION_LIST, ENTITY_PRODUCT) ? 'product_index' : false -%}
+{%- set product_add = is_granted(PERMISSION_ADD, ENTITY_PRODUCT) ? 'product_add' : false -%}
+{%- set category_index = is_granted(PERMISSION_LIST, ENTITY_CATEGORY) ? 'category_index' : false -%}
+{%- set category_add = is_granted(PERMISSION_ADD, ENTITY_CATEGORY) ? 'category_add' : false -%}
+{%- set state_index = is_granted(PERMISSION_LIST, ENTITY_CALCULATION_STATE) ? 'calculationstate_index' : false -%}
+{%- set state_add = is_granted(PERMISSION_ADD, ENTITY_CALCULATION_STATE) ? 'calculationstate_add' : false -%}
+{%- set margin_index = is_granted(PERMISSION_LIST, ENTITY_GLOBAL_MARGIN) ? 'globalmargin_index' : false -%}
 {%- set header_attributes = header_attributes|merge({
     href: '#' ~ panel_key,
     title: panel_title|trans,
@@ -43,12 +54,12 @@
     </div>
     <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}">
         <div class="card-body index-parent g-0 p-1">
-            {{ _self.cardEntry('product', product_count, product_path, ICON_PRODUCT) }}
-            {{ _self.cardEntry('task', task_count, task_path, ICON_TASK) }}
-            {{ _self.cardEntry('category', category_count, category_path, ICON_CATEGORY) }}
-            {{ _self.cardEntry('group', group_count, group_path, ICON_GROUP) }}
-            {{ _self.cardEntry('calculationstate', state_count, state_path, ICON_CALCULATION_STATE) }}
-            {{ _self.cardEntry('globalmargin', margin_count, margin_path, ICON_GLOBAL_MARGIN) }}
+            {{ _self.cardEntry('product', product_count, product_index, product_add, ICON_PRODUCT) }}
+            {{ _self.cardEntry('task', task_count, task_index, task_add, ICON_TASK) }}
+            {{ _self.cardEntry('category', category_count, category_index, category_add, ICON_CATEGORY) }}
+            {{ _self.cardEntry('group', group_count, group_index, group_add, ICON_GROUP) }}
+            {{ _self.cardEntry('calculationstate', state_count, state_index, state_add, ICON_CALCULATION_STATE) }}
+            {{ _self.cardEntry('globalmargin', margin_count, margin_index, null, ICON_GLOBAL_MARGIN) }}
         </div>
     </div>
 </div>

@@ -40,7 +40,7 @@ class ExchangeRateController extends AbstractController
     /**
      * Display the view.
      */
-    #[Get(path: '', name: 'display')]
+    #[Get(path: self::INDEX_PATH, name: 'display')]
     public function display(): Response
     {
         return $this->render('test/exchange_rate.html.twig', [

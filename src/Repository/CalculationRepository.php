@@ -16,6 +16,7 @@ namespace App\Repository;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Traits\MathTrait;
+use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -552,8 +553,6 @@ class CalculationRepository extends AbstractRepository
      * Gets the minimum (first) and maximum (last) dates of calculations.
      *
      * @phpstan-return array{0: ?\DateTimeImmutable, 1: ?\DateTimeImmutable}
-     *
-     * @throws \Exception
      */
     public function getMinMaxDates(): array
     {
@@ -568,8 +567,8 @@ class CalculationRepository extends AbstractRepository
         }
 
         return [
-            new \DateTimeImmutable($values['MIN_DATE']),
-            new \DateTimeImmutable($values['MAX_DATE']),
+            DateUtils::createDateTimeImmutable($values['MIN_DATE']),
+            DateUtils::createDateTimeImmutable($values['MAX_DATE']),
         ];
     }
 
@@ -674,7 +673,7 @@ class CalculationRepository extends AbstractRepository
 
     private function convertToDate(array $item): \DateTimeInterface
     {
-        return new \DateTime(\sprintf('%s-%s-10', $item['year'], $item['month']));
+        return DateUtils::createDateTime(\sprintf('%s-%s-10', $item['year'], $item['month']));
     }
 
     private function gerMarginPercent(float $total, float $items): float

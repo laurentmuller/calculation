@@ -62,10 +62,6 @@ class ChartController extends AbstractController
         return $this->render('chart/chart_month.html.twig', $parameters);
     }
 
-    /**
-     * @throws BadRequestHttpException
-     * @throws \Exception
-     */
     #[Get(path: '/month/pdf', name: 'month_pdf')]
     public function monthPdf(
         Request $request,

@@ -16,6 +16,7 @@ namespace App\Entity;
 use App\Interfaces\ComparableInterface;
 use App\Traits\LogChannelTrait;
 use App\Traits\LogLevelTrait;
+use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use Doctrine\DBAL\Types\Types;
@@ -65,7 +66,7 @@ class Log extends AbstractEntity implements ComparableInterface
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = DateUtils::createDateTimeImmutable();
     }
 
     #[\Override]

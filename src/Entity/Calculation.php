@@ -20,6 +20,7 @@ use App\Traits\CollectionTrait;
 use App\Traits\MathTrait;
 use App\Traits\TimestampableTrait;
 use App\Types\FixedFloatType;
+use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -114,7 +115,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
     public function __construct()
     {
-        $this->date = new \DateTime();
+        $this->date = DateUtils::createDateTime();
         $this->groups = new ArrayCollection();
     }
 
@@ -122,8 +123,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function __clone(): void
     {
         parent::__clone();
-        $this->date = new \DateTime();
-        $this->createdAt = $this->updatedAt = new \DateTimeImmutable();
+        $this->date = DateUtils::createDateTime();
+        $this->createdAt = $this->updatedAt = DateUtils::createDateTimeImmutable();
         $this->groups = $this->groups->map(
             fn (CalculationGroup $group): CalculationGroup => (clone $group)->setCalculation($this)
         );

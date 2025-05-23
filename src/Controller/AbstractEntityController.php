@@ -33,7 +33,6 @@ use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
@@ -45,6 +44,47 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 abstract class AbstractEntityController extends AbstractController
 {
     use TableTrait;
+
+    /**
+     * The route name to add an entity.
+     */
+    final protected const ADD_NAME = 'add';
+    /**
+     * The path to add an entity.
+     */
+    final protected const ADD_PATH = '/add';
+    /**
+     * The route name to clone an entity.
+     */
+    final protected const CLONE_NAME = 'clone';
+    /**
+     * The path to clone an entity.
+     */
+    final protected const CLONE_PATH = '/clone/{id}';
+    /**
+     * The route name to delete an entity.
+     */
+    final protected const DELETE_NAME = 'delete';
+    /**
+     * The path to delete an entity.
+     */
+    final protected const DELETE_PATH = '/delete/{id}';
+    /**
+     * The route name to edit an entity.
+     */
+    final protected const EDIT_NAME = 'edit';
+    /**
+     * The path to edit an entity.
+     */
+    final protected const EDIT_PATH = '/edit/{id}';
+    /**
+     * The route name to show an entity.
+     */
+    final protected const SHOW_NAME = 'show';
+    /**
+     * The path to show an entity.
+     */
+    final protected const SHOW_PATH = '/show/{id}';
 
     /**
      * The entity class name.
@@ -256,9 +296,6 @@ abstract class AbstractEntityController extends AbstractController
             ->redirect($request, $item, $route ?? $this->getDefaultRoute(), $status);
     }
 
-    /**
-     * @throws AccessDeniedException
-     */
     #[\Override]
     protected function renderPdfDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
     {
@@ -267,10 +304,6 @@ abstract class AbstractEntityController extends AbstractController
         return parent::renderPdfDocument($doc, $inline, $name);
     }
 
-    /**
-     * @throws AccessDeniedException
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     */
     #[\Override]
     protected function renderSpreadsheetDocument(
         SpreadsheetDocument $doc,
@@ -282,11 +315,6 @@ abstract class AbstractEntityController extends AbstractController
         return parent::renderSpreadsheetDocument($doc, $inline, $name);
     }
 
-    /**
-     * @throws AccessDeniedException
-     * @throws NotFoundHttpException
-     * @throws \PhpOffice\PhpWord\Exception\Exception
-     */
     #[\Override]
     protected function renderWordDocument(WordDocument $doc, bool $inline = true, string $name = ''): WordResponse
     {

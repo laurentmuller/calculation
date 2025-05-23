@@ -16,6 +16,7 @@ namespace App\Controller;
 use App\Attribute\Get;
 use App\Interfaces\RoleInterface;
 use App\Service\TimelineService;
+use App\Utils\DateUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -69,7 +70,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(
         TimelineService $service,
         #[MapQueryParameter]
@@ -109,7 +110,7 @@ class TimelineController extends AbstractController
         #[MapQueryParameter]
         string $interval
     ): JsonResponse {
-        $date = new \DateTimeImmutable('today');
+        $date = DateUtils::createDateTimeImmutable('today');
         $parameters = $service->current($this->formatDate($date), $interval);
 
         return $this->renderContent($parameters);

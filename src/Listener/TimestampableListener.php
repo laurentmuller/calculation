@@ -18,6 +18,7 @@ use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Traits\ArrayTrait;
 use App\Traits\DisableListenerTrait;
+use App\Utils\DateUtils;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -57,7 +58,7 @@ class TimestampableListener implements DisableListenerInterface
         }
 
         $user = $this->getUser();
-        $date = new \DateTimeImmutable();
+        $date = DateUtils::createDateTimeImmutable();
         foreach ($entities as $entity) {
             if ($entity->updateTimestampable($date, $user)) {
                 $this->persist($em, $unitOfWork, $entity);

@@ -109,16 +109,13 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         }
     }
 
-    /**
-     * @throws \Exception
-     */
     #[\Override]
     public function __toString(): string
     {
         $year = (int) $this->year;
         $name = StringUtils::getShortName($this);
-        $firstDate = new \DateTimeImmutable(\sprintf('%d-01-01', $year));
-        $lastDate = new \DateTimeImmutable(\sprintf('%d-12-31', $year));
+        $firstDate = DateUtils::createDateTimeImmutable(\sprintf('%d-01-01', $year));
+        $lastDate = DateUtils::createDateTimeImmutable(\sprintf('%d-12-31', $year));
         $first = FormatUtils::formatDate($firstDate);
         $last = FormatUtils::formatDate($lastDate);
 
@@ -137,21 +134,21 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         $this->year = DateUtils::completYear($year);
         $this->key = (string) $this->year;
         $this->reset();
-        $firstYearDate = new \DateTimeImmutable(\sprintf('1 January %d', $this->year));
-        $lastYearDate = new \DateTimeImmutable(\sprintf('31 December %d', $this->year));
-        $firstDate = new \DateTime(\sprintf('first monday of January %s', $this->year));
+        $firstYearDate = DateUtils::createDateTimeImmutable(\sprintf('1 January %d', $this->year));
+        $lastYearDate = DateUtils::createDateTimeImmutable(\sprintf('31 December %d', $this->year));
+        $firstDate = DateUtils::createDateTime(\sprintf('first monday of January %s', $this->year));
         if ($firstDate > $firstYearDate) {
-            $firstDate->sub(new \DateInterval('P1W'));
+            $firstDate = DateUtils::sub($firstDate, 'P1W');
         }
-        $lastDate = new \DateTime(\sprintf('last sunday of December %d', $this->year));
+        $lastDate = DateUtils::createDateTime(\sprintf('last sunday of December %d', $this->year));
         if ($lastDate < $lastYearDate) {
-            $lastDate->add(new \DateInterval('P1W'));
+            $lastDate = DateUtils::add($lastDate, 'P1W');
         }
         /** @var ?Week $currentWeek */
         $currentWeek = null;
         /** @var ?Month $currentMonth */
         $currentMonth = null;
-        $interval = new \DateInterval('P1D');
+        $interval = DateUtils::createDateInterval('P1D');
         while ($firstDate <= $lastDate) {
             $day = $this->createDay($firstDate);
             $monthYear = DateUtils::getYear($firstDate);
@@ -249,7 +246,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     public function getToday(): Day
     {
         if (!$this->today instanceof Day) {
-            $date = new \DateTime('today');
+            $date = DateUtils::createDateTime('today');
             $this->today = new Day($this, $date);
         }
 

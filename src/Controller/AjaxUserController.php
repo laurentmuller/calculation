@@ -41,7 +41,7 @@ class AjaxUserController extends AbstractController
      * Check if a username or user e-mail exist.
      */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Get(path: '', name: 'both')]
+    #[Get(path: self::INDEX_PATH, name: 'both')]
     public function checkBoth(#[MapQueryParameter] ?string $user = null): JsonResponse
     {
         $message = null;

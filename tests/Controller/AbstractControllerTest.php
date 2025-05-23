@@ -266,9 +266,6 @@ class AbstractControllerTest extends KernelTestCase
         self::assertTrue($response->isOk());
     }
 
-    /**
-     * @throws \PhpOffice\PhpWord\Exception\Exception
-     */
     public function testWordDocumentWithException(): void
     {
         self::expectException(NotFoundHttpException::class);
@@ -283,9 +280,6 @@ class AbstractControllerTest extends KernelTestCase
         $controller->renderWordDocument($doc);
     }
 
-    /**
-     * @throws \PhpOffice\PhpWord\Exception\Exception
-     */
     public function testWordDocumentWithTitle(): void
     {
         $controller = $this->createController();

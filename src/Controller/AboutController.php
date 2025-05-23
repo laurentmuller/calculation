@@ -25,7 +25,6 @@ use App\Word\HtmlDocument;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -46,7 +45,7 @@ class AboutController extends AbstractController
     ) {
     }
 
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(
         #[Autowire('%kernel.environment%')]
         string $app_env,
@@ -59,10 +58,7 @@ class AboutController extends AbstractController
         ]);
     }
 
-    /**
-     * @throws NotFoundHttpException
-     */
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(): PdfResponse
     {
         $content = $this->loadContent();
@@ -73,9 +69,6 @@ class AboutController extends AbstractController
         return $this->renderPdfDocument($report);
     }
 
-    /**
-     * @throws NotFoundHttpException|\PhpOffice\PhpWord\Exception\Exception
-     */
     #[Get(path: '/word', name: 'word')]
     public function word(): WordResponse
     {

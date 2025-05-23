@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Utils\DateUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -97,7 +98,7 @@ class AkismetService extends AbstractHttpClientService
      */
     public function activity(?int $year = null, ?int $month = null): array|false
     {
-        $date = new \DateTime('today');
+        $date = DateUtils::createDateTime('today');
         $year ??= (int) $date->format('Y');
         $month ??= (int) $date->format('m');
         $body = [

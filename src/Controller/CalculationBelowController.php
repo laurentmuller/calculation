@@ -45,11 +45,8 @@ class CalculationBelowController extends AbstractController
 
     /**
      * Export the calculations to a Spreadsheet document.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if the report cannot be rendered
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'excel')]
+    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
     public function excel(CalculationRepository $repository): Response
     {
         $minMargin = $this->getMinMargin();
@@ -71,7 +68,7 @@ class CalculationBelowController extends AbstractController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(
         CalculationBelowTable $table,
         LoggerInterface $logger,
@@ -84,7 +81,7 @@ class CalculationBelowController extends AbstractController
     /**
      * Export calculations to a PDF document.
      */
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(CalculationRepository $repository): Response
     {
         $minMargin = $this->getMinMargin();

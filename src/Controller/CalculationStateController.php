@@ -52,18 +52,9 @@ class CalculationStateController extends AbstractEntityController
     }
 
     /**
-     * Add a new calculation state.
-     */
-    #[GetPost(path: '/add', name: 'add')]
-    public function add(Request $request): Response
-    {
-        return $this->editEntity($request, new CalculationState());
-    }
-
-    /**
      * Clone (copy) a calculation state.
      */
-    #[GetPost(path: '/clone/{id}', name: 'clone', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: self::CLONE_PATH, name: self::CLONE_NAME, requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, CalculationState $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -78,7 +69,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Delete a calculation state.
      */
-    #[GetDelete(path: '/delete/{id}', name: 'delete', requirements: self::ID_REQUIREMENT)]
+    #[GetDelete(path: self::DELETE_PATH, name: self::DELETE_NAME, requirements: self::ID_REQUIREMENT)]
     public function delete(
         Request $request,
         CalculationState $item,
@@ -108,21 +99,19 @@ class CalculationStateController extends AbstractEntityController
     }
 
     /**
-     * Edit a calculation state.
+     * Add or edit a calculation state.
      */
-    #[GetPost(path: '/edit/{id}', name: 'edit', requirements: self::ID_REQUIREMENT)]
-    public function edit(Request $request, CalculationState $item): Response
+    #[GetPost(path: self::ADD_PATH, name: self::ADD_NAME)]
+    #[GetPost(path: self::EDIT_PATH, name: self::EDIT_NAME, requirements: self::ID_REQUIREMENT)]
+    public function edit(Request $request, ?CalculationState $item): Response
     {
-        return $this->editEntity($request, $item);
+        return $this->editEntity($request, $item ?? new CalculationState());
     }
 
     /**
      * Export the calculation states to a Spreadsheet document.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'excel')]
+    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('code');
@@ -137,7 +126,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(
         CalculationStateTable $table,
         LoggerInterface $logger,
@@ -149,10 +138,8 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * Export the calculation states to a PDF document.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
      */
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('code');
@@ -167,7 +154,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Show properties of a calculation state.
      */
-    #[Get(path: '/show/{id}', name: 'show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: self::SHOW_PATH, name: self::SHOW_NAME, requirements: self::ID_REQUIREMENT)]
     public function show(CalculationState $item): Response
     {
         return $this->showEntity($item);

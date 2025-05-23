@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace App\Pdf\Traits;
 
 use App\Pdf\Enums\PdfPointStyle;
+use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfRectangleStyle;
+use fpdf\PdfDocument;
 use fpdf\PdfPoint;
 use fpdf\Traits\PdfEllipseTrait;
 use fpdf\Traits\PdfPolygonTrait;
@@ -40,7 +42,7 @@ trait PdfPointStyleTrait
      */
     public function getPointStyleHeight(float $height = self::LINE_HEIGHT): float
     {
-        return $height - 2.0 * $this->getCellMargin();
+        return $height - 2.0 * $this->cellMargin;
     }
 
     /**
@@ -63,14 +65,21 @@ trait PdfPointStyleTrait
     /**
      * Output the given point style.
      *
-     * @param PdfPointStyle $style  the point style to output
-     * @param float         $x      the abscissa
-     * @param float         $y      the ordinate
-     * @param float         $width  the width
-     * @param float         $height the height
+     * @param PdfPointStyle   $style  the point style to output
+     * @param float           $x      the abscissa
+     * @param float           $y      the ordinate
+     * @param float           $width  the width
+     * @param float           $height the height
+     * @param string|int|null $link   a URL or an identifier returned by <code>addLink()</code>
      */
-    public function outputPointStyle(PdfPointStyle $style, float $x, float $y, float $width, float $height): void
-    {
+    public function outputPointStyle(
+        PdfPointStyle $style,
+        float $x,
+        float $y,
+        float $width,
+        float $height,
+        string|int|null $link = null
+    ): void {
         switch ($style) {
             case PdfPointStyle::CIRCLE:
                 $this->outputPointStyleCircle($x, $y, $width, $height);
@@ -95,6 +104,38 @@ trait PdfPointStyleTrait
                 $this->outputPointStyleTriangle($x, $y, $width, $height);
                 break;
         }
+        if (PdfDocument::isLink($link)) {
+            $this->link($x, $y, $width, $height, $link);
+        }
+    }
+
+    /**
+     * Output the given point style and text.
+     *
+     * @param PdfPointStyle   $style the point style to output
+     * @param float           $x     the abscissa
+     * @param float           $y     the ordinate
+     * @param PdfMove         $move  indicates where the current position should go after the call
+     * @param string|int|null $link  a URL or an identifier returned by <code>addLink()</code>
+     */
+    public function outputPointStyleAndText(
+        PdfPointStyle $style,
+        float $x,
+        float $y,
+        string $text,
+        PdfMove $move = PdfMove::RIGHT,
+        string|int|null $link = null
+    ): void {
+        $width = $this->getPointStyleWidth($style);
+        $height = $this->getPointStyleWidth($style);
+        $this->outputPointStyle($style, $x, $y + $this->cellMargin, $width, $height, $link);
+        $this->setXY($x + $width, $y);
+        $this->cell(
+            width: $this->getStringWidth($text),
+            text: $text,
+            move: $move,
+            link: $link
+        );
     }
 
     /**

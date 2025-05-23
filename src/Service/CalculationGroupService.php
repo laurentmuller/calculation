@@ -28,8 +28,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Service to create total groups and update user margin to meet the minimum overall margin.
  *
- * @implements ConstantsInterface<int>
- *
  * @phpstan-type GroupType = array{
  *     id: int,
  *     description: string,

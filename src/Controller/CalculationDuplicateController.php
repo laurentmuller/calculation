@@ -45,10 +45,8 @@ class CalculationDuplicateController extends AbstractController
 
     /**
      * Export the duplicate items to a Spreadsheet document.
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'excel')]
+    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
     public function excel(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);
@@ -64,7 +62,7 @@ class CalculationDuplicateController extends AbstractController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(
         CalculationDuplicateTable $table,
         LoggerInterface $logger,
@@ -77,7 +75,7 @@ class CalculationDuplicateController extends AbstractController
     /**
      * Exports the duplicate items in the calculations.
      */
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);

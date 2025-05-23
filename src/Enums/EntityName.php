@@ -25,7 +25,6 @@ use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
 /**
  * The entity name enumeration.
  *
- * @implements ConstantsInterface<string>
  * @implements EnumSortableInterface<EntityName>
  */
 #[ReadableEnum(suffix: '.name')]

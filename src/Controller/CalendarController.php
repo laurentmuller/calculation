@@ -103,10 +103,9 @@ class CalendarController extends AbstractController
         $previous = $this->previousWeek($yearsWeeks, $year, $week);
         $next = $this->nextWeek($yearsWeeks, $year, $week);
         $currentWeek = $calendar->getWeek(Week::formatKey($year, $week));
-        $startDate = new \DateTime();
+        $startDate = DateUtils::createDateTime();
         $startDate->setISODate($year, $week);
-        $endDate = clone $startDate;
-        $endDate = $endDate->add(new \DateInterval('P6D'));
+        $endDate = DateUtils::add($startDate, 'P6D');
 
         $parameters = [
             'calendar' => $calendar,

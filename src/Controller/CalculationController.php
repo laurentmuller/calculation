@@ -63,30 +63,9 @@ class CalculationController extends AbstractEntityController
     }
 
     /**
-     * Add a new calculation.
-     */
-    #[GetPost(path: '/add', name: 'add')]
-    public function add(Request $request): Response
-    {
-        $item = new Calculation();
-        $application = $this->getApplicationService();
-        $state = $application->getDefaultState();
-        if ($state instanceof CalculationState) {
-            $item->setState($state);
-        }
-        $product = $application->getDefaultProduct();
-        if ($product instanceof Product) {
-            $item->addProduct($product, $application->getDefaultQuantity());
-            $this->updateService->updateCalculation($item);
-        }
-
-        return $this->editEntity($request, $item);
-    }
-
-    /**
      * Edit a copy (cloned) calculation.
      */
-    #[GetPost(path: '/clone/{id}', name: 'clone', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: self::CLONE_PATH, name: self::CLONE_NAME, requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, Calculation $item): Response
     {
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
@@ -104,28 +83,26 @@ class CalculationController extends AbstractEntityController
     /**
      * Delete a calculation.
      */
-    #[GetDelete(path: '/delete/{id}', name: 'delete', requirements: self::ID_REQUIREMENT)]
+    #[GetDelete(path: self::DELETE_PATH, name: self::DELETE_NAME, requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, Calculation $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
     }
 
     /**
-     * Edit a calculation.
+     * Add or edit a calculation.
      */
-    #[GetPost(path: '/edit/{id}', name: 'edit', requirements: self::ID_REQUIREMENT)]
-    public function edit(Request $request, Calculation $item): Response
+    #[GetPost(path: self::ADD_PATH, name: self::ADD_NAME)]
+    #[GetPost(path: self::EDIT_PATH, name: self::EDIT_NAME, requirements: self::ID_REQUIREMENT)]
+    public function edit(Request $request, ?Calculation $item): Response
     {
-        return $this->editEntity($request, $item);
+        return $this->editEntity($request, $item ?? $this->createCalculation());
     }
 
     /**
      * Export the calculations to a Spreadsheet document.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'excel')]
+    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities(['id' => SortModeInterface::SORT_DESC]);
@@ -139,8 +116,6 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Export a single calculation to a Spreadsheet document.
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Get(path: '/excel/{id}', name: 'excel_id', requirements: self::ID_REQUIREMENT)]
     public function excelOne(Calculation $calculation): SpreadsheetResponse
@@ -153,7 +128,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(
         CalculationTable $table,
         LoggerInterface $logger,
@@ -165,10 +140,8 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Export calculations to a PDF document.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
      */
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities([
@@ -200,7 +173,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Show properties of a calculation.
      */
-    #[Get(path: '/show/{id}', name: 'show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: self::SHOW_PATH, name: self::SHOW_NAME, requirements: self::ID_REQUIREMENT)]
     public function show(Calculation $item): Response
     {
         $parameters = [
@@ -263,6 +236,23 @@ class CalculationController extends AbstractEntityController
     {
         $this->updateService->updateCalculation($item);
         parent::saveToDatabase($item);
+    }
+
+    private function createCalculation(): Calculation
+    {
+        $calculation = new Calculation();
+        $application = $this->getApplicationService();
+        $state = $application->getDefaultState();
+        if ($state instanceof CalculationState) {
+            $calculation->setState($state);
+        }
+        $product = $application->getDefaultProduct();
+        if ($product instanceof Product) {
+            $calculation->addProduct($product, $application->getDefaultQuantity());
+            $this->updateService->updateCalculation($calculation);
+        }
+
+        return $calculation;
     }
 
     /**

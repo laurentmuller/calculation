@@ -272,7 +272,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
 
         /** @var array<int, T> $rows */
         $rows = [];
-        while ($row = $result->fetchArray($mode)) {
+        while (false !== ($row = $result->fetchArray($mode))) {
             $rows[] = $row;
         }
         $result->finalize();

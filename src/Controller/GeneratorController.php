@@ -46,7 +46,7 @@ class GeneratorController extends AbstractController
     private const ROUTE_CUSTOMER = '_customer';
     private const ROUTE_PRODUCT = '_product';
 
-    #[GetPost(path: '', name: '')]
+    #[GetPost(path: self::INDEX_PATH, name: '')]
     public function generate(): Response
     {
         $data = $this->getSessionData();

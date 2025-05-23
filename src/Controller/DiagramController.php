@@ -43,7 +43,7 @@ class DiagramController extends AbstractController
     /**
      * Index of the diagram view.
      */
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(Request $request): Response
     {
         $file = $this->findFile($request);

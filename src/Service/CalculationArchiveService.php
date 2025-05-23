@@ -190,7 +190,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         $sources = $this->getSources(false);
         $minDate = $this->getDateMin($sources);
         if (!$minDate instanceof \DateTimeImmutable) {
-            return DateUtils::sub(new \DateTimeImmutable(), 'P6M');
+            return DateUtils::sub(DateUtils::createDateTimeImmutable(), 'P6M');
         }
 
         $minDate = DateUtils::add($minDate, 'P1M');
@@ -229,7 +229,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         /** @var string|null $date */
         $date = $builder->getQuery()->getSingleScalarResult();
 
-        return null === $date ? null : new \DateTimeImmutable($date);
+        return null === $date ? null : DateUtils::createDateTimeImmutable($date);
     }
 
     /**

@@ -61,7 +61,7 @@ class RegistrationController extends AbstractController
     /**
      * Display and process form to register a new user.
      */
-    #[GetPost(path: '', name: self::ROUTE_REGISTER)]
+    #[GetPost(path: self::INDEX_PATH, name: self::ROUTE_REGISTER)]
     public function register(Request $request, AuthenticationUtils $utils): Response
     {
         $user = new User();

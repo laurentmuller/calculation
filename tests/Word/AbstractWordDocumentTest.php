@@ -20,7 +20,6 @@ use App\Service\UserService;
 use App\Tests\TranslatorMockTrait;
 use App\Word\AbstractWordDocument;
 use App\Word\HtmlDocument;
-use PhpOffice\PhpWord\Exception\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,9 +27,6 @@ class AbstractWordDocumentTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @throws Exception
-     */
     public function testDefault(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -46,9 +42,6 @@ class AbstractWordDocumentTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithCustomer(): void
     {
         $cs = $this->createCustomerInformation();
@@ -64,9 +57,6 @@ class AbstractWordDocumentTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithEmptyValues(): void
     {
         $cs = new CustomerInformation();
@@ -74,9 +64,6 @@ class AbstractWordDocumentTest extends TestCase
         $this->render($controller);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithoutEmail(): void
     {
         $cs = $this->createCustomerInformation();
@@ -85,9 +72,6 @@ class AbstractWordDocumentTest extends TestCase
         $this->render($controller);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithoutNameAndTitle(): void
     {
         $cs = $this->createCustomerInformation();
@@ -96,9 +80,6 @@ class AbstractWordDocumentTest extends TestCase
         $this->render($controller, '');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithoutURL(): void
     {
         $cs = $this->createCustomerInformation();
@@ -107,9 +88,6 @@ class AbstractWordDocumentTest extends TestCase
         $this->render($controller);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testWithPrintAddress(): void
     {
         $cs = $this->createCustomerInformation();
@@ -162,9 +140,6 @@ class AbstractWordDocumentTest extends TestCase
         return $controller;
     }
 
-    /**
-     * @throws Exception
-     */
     private function render(MockObject&AbstractController $controller, string $title = 'Title'): void
     {
         $content = <<<XML

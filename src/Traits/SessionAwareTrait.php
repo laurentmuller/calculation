@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Utils\DateUtils;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -69,7 +70,7 @@ trait SessionAwareTrait
         /** @phpstan-var \DateTimeInterface|int|null $value */
         $value = $this->getSessionValue($key, $default);
         if (\is_int($value)) {
-            return (new \DateTime())->setTimestamp($value);
+            return DateUtils::createDateTime()->setTimestamp($value);
         }
 
         return $value;

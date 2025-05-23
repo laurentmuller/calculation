@@ -52,24 +52,9 @@ class ProductController extends AbstractEntityController
     }
 
     /**
-     * Add a product.
-     */
-    #[GetPost(path: '/add', name: 'add')]
-    public function add(Request $request): Response
-    {
-        $item = new Product();
-        $category = $this->getApplicationService()->getDefaultCategory();
-        if ($category instanceof Category) {
-            $item->setCategory($category);
-        }
-
-        return $this->editEntity($request, $item);
-    }
-
-    /**
      * Clone (copy) a product.
      */
-    #[GetPost(path: '/clone/{id}', name: 'clone', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: self::CLONE_PATH, name: self::CLONE_NAME, requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, Product $item): Response
     {
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
@@ -85,28 +70,26 @@ class ProductController extends AbstractEntityController
     /**
      * Delete a product.
      */
-    #[GetDelete(path: '/delete/{id}', name: 'delete', requirements: self::ID_REQUIREMENT)]
+    #[GetDelete(path: self::DELETE_PATH, name: self::DELETE_NAME, requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, Product $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
     }
 
     /**
-     * Edit a product.
+     * Add or edit a product.
      */
-    #[GetPost(path: '/edit/{id}', name: 'edit', requirements: self::ID_REQUIREMENT)]
-    public function edit(Request $request, Product $item): Response
+    #[GetPost(path: self::ADD_PATH, name: self::ADD_NAME)]
+    #[GetPost(path: self::EDIT_PATH, name: self::EDIT_NAME, requirements: self::ID_REQUIREMENT)]
+    public function edit(Request $request, ?Product $item): Response
     {
-        return $this->editEntity($request, $item);
+        return $this->editEntity($request, $item ?? $this->createProduct());
     }
 
     /**
      * Export the products to a Spreadsheet document.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'excel')]
+    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
     public function excel(ProductRepository $repository): SpreadsheetResponse
     {
         $entities = $repository->findByDescription();
@@ -121,7 +104,7 @@ class ProductController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(
         ProductTable $table,
         LoggerInterface $logger,
@@ -133,10 +116,8 @@ class ProductController extends AbstractEntityController
 
     /**
      * Export the products to a PDF document.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no product is found
      */
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(ProductRepository $repository): PdfResponse
     {
         $entities = $repository->findByGroup();
@@ -151,7 +132,7 @@ class ProductController extends AbstractEntityController
     /**
      * Show properties of a product.
      */
-    #[Get(path: '/show/{id}', name: 'show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: self::SHOW_PATH, name: self::SHOW_NAME, requirements: self::ID_REQUIREMENT)]
     public function show(Product $item): Response
     {
         return $this->showEntity($item);
@@ -165,5 +146,16 @@ class ProductController extends AbstractEntityController
     {
         $this->getApplicationService()->updateDeletedProduct($item);
         parent::deleteFromDatabase($item);
+    }
+
+    private function createProduct(): Product
+    {
+        $product = new Product();
+        $category = $this->getApplicationService()->getDefaultCategory();
+        if ($category instanceof Category) {
+            $product->setCategory($category);
+        }
+
+        return $product;
     }
 }

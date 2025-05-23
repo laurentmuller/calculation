@@ -145,12 +145,10 @@ trait PdfChartLegendTrait
 
         $y ??= $this->getY();
         $x ??= $this->getLeftMargin() + ($this->getPrintableWidth() - $totalWidth) / 2.0;
-        $width = $this->getPointStyleWidth($style);
-        $height = $this->getPointStyleHeight();
 
         PdfDrawColor::cellBorder()->apply($this);
         foreach ($legends as $index => $legend) {
-            $this->outputLegend($x, $y, $width, $height, $legend, $style);
+            $this->outputLegend($style, $x, $y, $legend);
             $x += $widths[$index] + self::SEP_WIDTH;
         }
         $this->resetStyle()->lineBreak();
@@ -183,12 +181,10 @@ trait PdfChartLegendTrait
         $position = $this->getPosition();
         $x ??= $position->x;
         $y ??= $position->y;
-        $width = $this->getPointStyleWidth($style);
-        $height = $this->getPointStyleHeight();
 
         PdfDrawColor::cellBorder()->apply($this);
         foreach ($legends as $legend) {
-            $this->outputLegend($x, $y, $width, $height, $legend, $style);
+            $this->outputLegend($style, $x, $y, $legend);
             $y += self::LINE_HEIGHT;
         }
         $this->resetStyle()
@@ -230,16 +226,12 @@ trait PdfChartLegendTrait
      * @phpstan-param ColorStringType $legend
      */
     private function outputLegend(
+        PdfPointStyle $style,
         float $x,
         float $y,
-        float $width,
-        float $height,
-        array $legend,
-        PdfPointStyle $style
+        array $legend
     ): void {
         $this->applyLegendColor($legend, $style);
-        $this->outputPointStyle($style, $x, $y + $this->cellMargin, $width, $height);
-        $this->setXY($x + $width, $y);
-        $this->cell(text: $legend['label']);
+        $this->outputPointStyleAndText($style, $x, $y, $legend['label']);
     }
 }

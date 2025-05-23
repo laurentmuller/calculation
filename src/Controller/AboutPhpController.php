@@ -51,10 +51,7 @@ class AboutPhpController extends AbstractController
         return $this->jsonTrue(['content' => $content]);
     }
 
-    /**
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     */
-    #[Get(path: '/excel', name: 'excel')]
+    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
     public function excel(PhpInfoService $service): SpreadsheetResponse
     {
         $doc = new PhpIniDocument($this, $service);
@@ -62,7 +59,7 @@ class AboutPhpController extends AbstractController
         return $this->renderSpreadsheetDocument($doc);
     }
 
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(PhpInfoService $service): PdfResponse
     {
         $report = new PhpIniReport($this, $service);

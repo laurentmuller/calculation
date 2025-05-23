@@ -45,10 +45,8 @@ class CalculationEmptyController extends AbstractController
 
     /**
      * Export the empty items to a Spreadsheet document.
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'excel')]
+    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
     public function excel(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);
@@ -64,7 +62,7 @@ class CalculationEmptyController extends AbstractController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(
         CalculationEmptyTable $table,
         LoggerInterface $logger,
@@ -77,7 +75,7 @@ class CalculationEmptyController extends AbstractController
     /**
      * Export the calculations where items have the price or the quantity is equal to 0.
      */
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);

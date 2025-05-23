@@ -45,7 +45,7 @@ class PivotController extends AbstractController
     /**
      * Show the pivot data table.
      */
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(): Response
     {
         return $this->render('calculation/calculation_pivot.html.twig', [

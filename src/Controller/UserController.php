@@ -75,18 +75,9 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Add a user.
-     */
-    #[GetPost(path: '/add', name: 'add')]
-    public function add(Request $request): Response
-    {
-        return $this->editEntity($request, new User());
-    }
-
-    /**
      * Delete an user.
      */
-    #[GetDelete(path: '/delete/{id}', name: 'delete', requirements: self::ID_REQUIREMENT)]
+    #[GetDelete(path: self::DELETE_PATH, name: self::DELETE_NAME, requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, User $item, Security $security, LoggerInterface $logger): Response
     {
         if ($this->isConnectedUser($item) || $this->isOriginalUser($item, $security)) {
@@ -99,21 +90,19 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Edit a user.
+     * Add or edit a user.
      */
-    #[GetPost(path: '/edit/{id}', name: 'edit', requirements: self::ID_REQUIREMENT)]
-    public function edit(Request $request, User $item): Response
+    #[GetPost(path: self::ADD_PATH, name: self::ADD_NAME)]
+    #[GetPost(path: self::EDIT_PATH, name: self::EDIT_NAME, requirements: self::ID_REQUIREMENT)]
+    public function edit(Request $request, ?User $item): Response
     {
-        return $this->editEntity($request, $item);
+        return $this->editEntity($request, $item ?? new User());
     }
 
     /**
      * Export the customers to a Spreadsheet document.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'excel')]
+    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
     public function excel(StorageInterface $storage): SpreadsheetResponse
     {
         $entities = $this->getEntitiesByUserName();
@@ -125,7 +114,7 @@ class UserController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(
         UserTable $table,
         LoggerInterface $logger,
@@ -194,10 +183,8 @@ class UserController extends AbstractEntityController
 
     /**
      * Export the users to a PDF document.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(
         StorageInterface $storage,
         FontAwesomeService $service
@@ -316,9 +303,6 @@ class UserController extends AbstractEntityController
 
     /**
      * Export the user access rights to a Spreadsheet document.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Get(path: '/rights/excel', name: 'rights_excel')]
     public function rightsExcel(RoleBuilderService $builder): SpreadsheetResponse
@@ -331,8 +315,6 @@ class UserController extends AbstractEntityController
 
     /**
      * Export user access rights to a PDF document.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     #[Get(path: '/rights/pdf', name: 'rights_pdf')]
     public function rightsPdf(FontAwesomeService $fontAwesomeService, RoleBuilderService $builder): PdfResponse
@@ -378,7 +360,7 @@ class UserController extends AbstractEntityController
     /**
      * Show the properties of a user.
      */
-    #[Get(path: '/show/{id}', name: 'show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: self::SHOW_PATH, name: self::SHOW_NAME, requirements: self::ID_REQUIREMENT)]
     public function show(User $item): Response
     {
         return $this->showEntity($item);

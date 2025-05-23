@@ -15,15 +15,13 @@ namespace App\Interfaces;
 
 /**
  * Interface to get the constant enumerations.
- *
- * @template TValue as (string|int)
  */
 interface ConstantsInterface
 {
     /**
      * Gets the constant enumerations.
      *
-     * @return array<string, TValue>
+     * @return array<string, string|int>
      */
     public static function constants(): array;
 }

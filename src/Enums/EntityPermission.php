@@ -25,7 +25,6 @@ use Elao\Enum\FlagBag;
 /**
  * Entity permission enumeration.
  *
- * @implements ConstantsInterface<string>
  * @implements EnumSortableInterface<EntityPermission>
  */
 #[ReadableEnum(prefix: 'rights.')]

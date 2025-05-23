@@ -32,6 +32,7 @@ use App\Repository\GlobalPropertyRepository;
 use App\Traits\ArrayTrait;
 use App\Traits\MathTrait;
 use App\Traits\PropertyServiceTrait;
+use App\Utils\DateUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -517,26 +518,32 @@ class ApplicationService implements PropertyServiceInterface
 
     /**
      * Set the date of the last archive calculations.
+     *
+     * @param ?\DateTimeInterface $date the date or null to use the current date
      */
-    public function setLastArchiveCalculations(\DateTimeInterface $date = new \DateTime()): bool
+    public function setLastArchiveCalculations(?\DateTimeInterface $date = null): bool
     {
-        return $this->setProperty(PropertyServiceInterface::P_DATE_CALCULATION, $date);
+        return $this->setProperty(PropertyServiceInterface::P_DATE_CALCULATION, $date ?? DateUtils::createDateTime());
     }
 
     /**
      * Set the date of the last update calculations.
+     *
+     * @param ?\DateTimeInterface $date the date or null to use the current date
      */
-    public function setLastUpdateCalculations(\DateTimeInterface $date = new \DateTime()): bool
+    public function setLastUpdateCalculations(?\DateTimeInterface $date = null): bool
     {
-        return $this->setProperty(PropertyServiceInterface::P_UPDATE_CALCULATION, $date);
+        return $this->setProperty(PropertyServiceInterface::P_UPDATE_CALCULATION, $date ?? DateUtils::createDateTime());
     }
 
     /**
      * Set the date of the last update of product prices.
+     *
+     * @param ?\DateTimeInterface $date the date or null to use the current date
      */
-    public function setLastUpdateProducts(\DateTimeInterface $date = new \DateTime()): bool
+    public function setLastUpdateProducts(?\DateTimeInterface $date = null): bool
     {
-        return $this->setProperty(PropertyServiceInterface::P_DATE_PRODUCT, $date);
+        return $this->setProperty(PropertyServiceInterface::P_DATE_PRODUCT, $date ?? DateUtils::createDateTime());
     }
 
     /**

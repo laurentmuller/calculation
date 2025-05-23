@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Word;
 
+use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use PhpOffice\PhpWord\Element\Row;
@@ -75,7 +76,7 @@ class WordFooter extends AbstractHeaderFooter
     {
         $textStyle['alignment'] = Jc::END;
         $cell = $row->addCell($width);
-        $text = FormatUtils::formatDateTime(new \DateTime());
+        $text = FormatUtils::formatDateTime(DateUtils::createDateTime());
         $cell->addText($text, $cellStyle, $textStyle);
     }
 

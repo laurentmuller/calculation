@@ -61,11 +61,34 @@ abstract class AbstractController extends BaseController
      * The home page route name.
      */
     final public const HOME_PAGE = 'homepage';
-
+    /**
+     * The route name for output entities to an Excel document.
+     */
+    final protected const EXCEL_NAME = 'excel';
+    /**
+     * The path to output entities to an Excel document.
+     */
+    final protected const EXCEL_PATH = '/excel';
     /**
      * The route requirement for an entity identifier.
      */
     final protected const ID_REQUIREMENT = ['id' => Requirement::DIGITS];
+    /**
+     * The route name for displaying entities (table).
+     */
+    final protected const INDEX_NAME = 'index';
+    /**
+     * The path for displaying entities (table).
+     */
+    final protected const INDEX_PATH = '';
+    /**
+     * The route name for output entities to a PDF Document.
+     */
+    final protected const PDF_NAME = 'pdf';
+    /**
+     * The path to output entities to a PDF document.
+     */
+    final protected const PDF_PATH = '/pdf';
 
     // services
     private ?UrlGeneratorService $generatorService = null;
@@ -400,8 +423,6 @@ abstract class AbstractController extends BaseController
      *                            available. <code>false</code> to send to the browser and force a file download with
      *                            the name given.
      * @param string      $name   the name of the file (without an extension) or '' to use default ('document')
-     *
-     * @throws NotFoundHttpException
      */
     protected function renderPdfDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
     {
@@ -423,8 +444,6 @@ abstract class AbstractController extends BaseController
      *                                    viewer is used if available.
      *                                    <code>false</code> to send to the browser and force a file download.
      * @param string              $name   the name of the file (without an extension) or '' to use default ('document')
-     *
-     * @throws NotFoundHttpException|\PhpOffice\PhpSpreadsheet\Exception
      */
     protected function renderSpreadsheetDocument(
         SpreadsheetDocument $doc,
@@ -450,8 +469,6 @@ abstract class AbstractController extends BaseController
      *                             if available. <code>false</code> to send to the browser and force a file download
      *                             with the name given.
      * @param string       $name   the name of the file (without an extension) or '' to use default ('document')
-     *
-     * @throws NotFoundHttpException|\PhpOffice\PhpWord\Exception\Exception
      */
     protected function renderWordDocument(WordDocument $doc, bool $inline = true, string $name = ''): WordResponse
     {

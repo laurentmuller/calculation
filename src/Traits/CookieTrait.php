@@ -142,7 +142,7 @@ trait CookieTrait
      */
     private function getCookieExpire(): \DateTimeInterface
     {
-        return DateUtils::modify(new \DateTime(), '+1 year');
+        return DateUtils::modify(DateUtils::createDateTime(), '+1 year');
     }
 
     /**

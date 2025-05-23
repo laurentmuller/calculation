@@ -52,39 +52,28 @@ class CustomerController extends AbstractEntityController
     }
 
     /**
-     * Add a customer.
-     */
-    #[GetPost(path: '/add', name: 'add')]
-    public function add(Request $request): Response
-    {
-        return $this->editEntity($request, new Customer());
-    }
-
-    /**
      * Delete a customer.
      */
-    #[GetDelete(path: '/delete/{id}', name: 'delete', requirements: self::ID_REQUIREMENT)]
+    #[GetDelete(path: self::DELETE_PATH, name: self::DELETE_NAME, requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, Customer $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
     }
 
     /**
-     * Edit a customer.
+     * Add or edit a customer.
      */
-    #[GetPost(path: '/edit/{id}', name: 'edit', requirements: self::ID_REQUIREMENT)]
-    public function edit(Request $request, Customer $item): Response
+    #[GetPost(path: self::ADD_PATH, name: self::ADD_NAME)]
+    #[GetPost(path: self::EDIT_PATH, name: self::EDIT_NAME, requirements: self::ID_REQUIREMENT)]
+    public function edit(Request $request, ?Customer $item): Response
     {
-        return $this->editEntity($request, $item);
+        return $this->editEntity($request, $item ?? new Customer());
     }
 
     /**
      * Export the customers to a Spreadsheet document.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no customer is found
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'excel')]
+    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
     public function excel(CustomerRepository $repository): SpreadsheetResponse
     {
         $entities = $repository->findByNameAndCompany();
@@ -99,7 +88,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(
         CustomerTable $table,
         LoggerInterface $logger,
@@ -111,10 +100,8 @@ class CustomerController extends AbstractEntityController
 
     /**
      * Export the customers to a PDF document.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no customer is found
      */
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(Request $request, CustomerRepository $repository): PdfResponse
     {
         $entities = $repository->findByNameAndCompany();
@@ -130,7 +117,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Show properties of a customer.
      */
-    #[Get(path: '/show/{id}', name: 'show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: self::SHOW_PATH, name: self::SHOW_NAME, requirements: self::ID_REQUIREMENT)]
     public function show(Customer $item): Response
     {
         return $this->showEntity($item);

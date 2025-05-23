@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Parameter;
 
 use App\Attribute\Parameter;
+use App\Utils\DateUtils;
 
 class DateParameter implements ParameterInterface
 {
@@ -52,30 +53,30 @@ class DateParameter implements ParameterInterface
         return $this->updateProducts;
     }
 
-    public function setArchive(\DateTimeInterface $archive = new \DateTime()): self
+    public function setArchive(?\DateTimeInterface $archive = null): self
     {
-        $this->archive = $archive;
+        $this->archive = $archive ?? DateUtils::createDateTime();
 
         return $this;
     }
 
-    public function setImport(\DateTimeInterface $import = new \DateTime()): self
+    public function setImport(?\DateTimeInterface $import = null): self
     {
-        $this->import = $import;
+        $this->import = $import ?? DateUtils::createDateTime();
 
         return $this;
     }
 
-    public function setUpdateCalculations(\DateTimeInterface $updateCalculations = new \DateTime()): self
+    public function setUpdateCalculations(?\DateTimeInterface $updateCalculations = null): self
     {
-        $this->updateCalculations = $updateCalculations;
+        $this->updateCalculations = $updateCalculations ?? DateUtils::createDateTime();
 
         return $this;
     }
 
-    public function setUpdateProducts(\DateTimeInterface $updateProducts = new \DateTime()): self
+    public function setUpdateProducts(?\DateTimeInterface $updateProducts = null): self
     {
-        $this->updateProducts = $updateProducts;
+        $this->updateProducts = $updateProducts ?? DateUtils::createDateTime();
 
         return $this;
     }

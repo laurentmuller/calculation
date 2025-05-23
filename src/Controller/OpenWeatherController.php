@@ -328,7 +328,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Shows the current weather, if applicable, the search cities otherwise.
      */
-    #[Get(path: '', name: 'weather')]
+    #[Get(path: self::INDEX_PATH, name: 'weather')]
     public function weather(Request $request, OpenWeatherSearchService $service): Response
     {
         $id = $this->getCookieId($request);

@@ -34,7 +34,7 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
      */
     public function __construct()
     {
-        $this->date = DateUtils::removeTime(new \DateTimeImmutable());
+        $this->date = DateUtils::removeTime(DateUtils::createDateTimeImmutable());
     }
 
     public function getDate(): \DateTimeImmutable

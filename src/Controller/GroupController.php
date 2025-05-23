@@ -32,7 +32,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -52,18 +51,9 @@ class GroupController extends AbstractEntityController
     }
 
     /**
-     * Add a group.
-     */
-    #[GetPost(path: '/add', name: 'add')]
-    public function add(Request $request): Response
-    {
-        return $this->editEntity($request, new Group());
-    }
-
-    /**
      * Clone (copy) a group.
      */
-    #[GetPost(path: '/clone/{id}', name: 'clone', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: self::CLONE_PATH, name: self::CLONE_NAME, requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, Group $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -79,7 +69,7 @@ class GroupController extends AbstractEntityController
     /**
      * Delete a group.
      */
-    #[GetDelete(path: '/delete/{id}', name: 'delete', requirements: self::ID_REQUIREMENT)]
+    #[GetDelete(path: self::DELETE_PATH, name: self::DELETE_NAME, requirements: self::ID_REQUIREMENT)]
     public function delete(
         Request $request,
         Group $item,
@@ -116,21 +106,19 @@ class GroupController extends AbstractEntityController
     }
 
     /**
-     * Edit a group.
+     * Add or edit a group.
      */
-    #[GetPost(path: '/edit/{id}', name: 'edit', requirements: self::ID_REQUIREMENT)]
-    public function edit(Request $request, Group $item): Response
+    #[GetPost(path: self::ADD_PATH, name: self::ADD_NAME)]
+    #[GetPost(path: self::EDIT_PATH, name: self::EDIT_NAME, requirements: self::ID_REQUIREMENT)]
+    public function edit(Request $request, ?Group $item): Response
     {
-        return $this->editEntity($request, $item);
+        return $this->editEntity($request, $item ?? new Group());
     }
 
     /**
      * Export the groups to a Spreadsheet document.
-     *
-     * @throws NotFoundHttpException
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'excel')]
+    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('code');
@@ -145,7 +133,7 @@ class GroupController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(
         GroupTable $table,
         LoggerInterface $logger,
@@ -157,10 +145,8 @@ class GroupController extends AbstractEntityController
 
     /**
      * Export the groups to a PDF document.
-     *
-     * @throws NotFoundHttpException
      */
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('code');
@@ -175,7 +161,7 @@ class GroupController extends AbstractEntityController
     /**
      * Show properties of a group.
      */
-    #[Get(path: '/show/{id}', name: 'show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: self::SHOW_PATH, name: self::SHOW_NAME, requirements: self::ID_REQUIREMENT)]
     public function show(Group $item): Response
     {
         return $this->showEntity($item);

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Pdf\PdfStyle;
+use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
@@ -96,7 +97,7 @@ class ReportFooter
 
     private function outputDate(float $width): void
     {
-        $text = $this->date ??= FormatUtils::formatDateTime(new \DateTime());
+        $text = $this->date ??= FormatUtils::formatDateTime(DateUtils::createDateTime());
 
         $this->outputCell($text, $width, PdfTextAlignment::RIGHT);
     }

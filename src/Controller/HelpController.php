@@ -148,7 +148,7 @@ class HelpController extends AbstractController
     /**
      * Display help index.
      */
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(): Response
     {
         return $this->render('help/help_index.html.twig', ['service' => $this->service]);
@@ -157,7 +157,7 @@ class HelpController extends AbstractController
     /**
      * Export the help to a PDF document.
      */
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(): PdfResponse
     {
         $doc = new HelpReport($this, $this->service);

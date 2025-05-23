@@ -19,6 +19,7 @@ use App\Interfaces\UserInterface;
 use App\Repository\UserRepository;
 use App\Traits\RoleTrait;
 use App\Traits\TimestampableTrait;
+use App\Utils\DateUtils;
 use App\Utils\FileUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -244,7 +245,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     #[\Override]
     public function getExpiresAt(): \DateTimeInterface
     {
-        return $this->expiresAt ?? new \DateTimeImmutable();
+        return $this->expiresAt ?? DateUtils::createDateTimeImmutable();
     }
 
     #[\Override]
@@ -325,7 +326,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     #[\Override]
     public function getRequestedAt(): \DateTimeInterface
     {
-        return $this->requestedAt ?? new \DateTimeImmutable();
+        return $this->requestedAt ?? DateUtils::createDateTimeImmutable();
     }
 
     public function getSelector(): ?string
@@ -441,7 +442,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     {
         $this->imageFile = $imageFile;
         if ($update) {
-            $this->updatedAt = new \DateTimeImmutable();
+            $this->updatedAt = DateUtils::createDateTimeImmutable();
         }
 
         return $this;
@@ -478,7 +479,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
         $this->expiresAt = $expiresAt;
         $this->selector = $selector;
         $this->hashedToken = $hashedToken;
-        $this->requestedAt = new \DateTimeImmutable();
+        $this->requestedAt = DateUtils::createDateTimeImmutable();
 
         return $this;
     }
@@ -510,7 +511,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
      */
     public function updateLastLogin(): self
     {
-        $this->lastLogin = new \DateTimeImmutable();
+        $this->lastLogin = DateUtils::createDateTimeImmutable();
 
         return $this;
     }

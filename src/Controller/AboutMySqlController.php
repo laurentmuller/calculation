@@ -41,10 +41,7 @@ class AboutMySqlController extends AbstractController
         return $this->jsonTrue(['content' => $content]);
     }
 
-    /**
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     */
-    #[Get(path: '/excel', name: 'excel')]
+    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
     public function excel(DatabaseInfoService $service): SpreadsheetResponse
     {
         $doc = new MySqlDocument($this, $service);
@@ -52,7 +49,7 @@ class AboutMySqlController extends AbstractController
         return $this->renderSpreadsheetDocument($doc);
     }
 
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(DatabaseInfoService $service): PdfResponse
     {
         $report = new MySqlReport($this, $service);

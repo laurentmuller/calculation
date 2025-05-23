@@ -57,9 +57,6 @@ trait GroupByTrait
         return $result;
     }
 
-    /**
-     * @param string|int|(callable(mixed): array-key) $key
-     */
     private function getGroupKey(array|object $value, string|int|callable $key): string|int
     {
         if (\is_callable($key)) {

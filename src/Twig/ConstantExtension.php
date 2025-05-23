@@ -26,8 +26,6 @@ use Twig\Extension\GlobalsInterface;
 
 /**
  * Twig extension to access global constants.
- *
- * @implements ConstantsInterface<string>
  */
 final class ConstantExtension extends AbstractExtension implements ConstantsInterface, GlobalsInterface
 {
@@ -38,6 +36,8 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
     }
 
     /**
+     * This implementation return icons constants.
+     *
      * @return array<string, string>
      */
     #[\Override]
@@ -74,7 +74,7 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
     #[\Override]
     public function getGlobals(): array
     {
-        return $this->cache->get('twig_constant_extension', fn (): array => $this->loadValues());
+        return $this->cache->get('twig_constant_extension', fn (): array => $this->loadConstants());
     }
 
     /**
@@ -97,7 +97,7 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
      *
      * @throws \ReflectionException
      */
-    private function loadValues(): array
+    private function loadConstants(): array
     {
         return \array_merge(
             self::constants(),

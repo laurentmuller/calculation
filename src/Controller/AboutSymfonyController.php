@@ -46,10 +46,7 @@ class AboutSymfonyController extends AbstractController
         return $this->jsonTrue(['content' => $content]);
     }
 
-    /**
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     */
-    #[Get(path: '/excel', name: 'excel')]
+    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
     public function excel(SymfonyInfoService $service): SpreadsheetResponse
     {
         $doc = new SymfonyDocument($this, $service);
@@ -82,7 +79,7 @@ class AboutSymfonyController extends AbstractController
         ]);
     }
 
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(SymfonyInfoService $service): PdfResponse
     {
         $doc = new SymfonyReport($this, $service);

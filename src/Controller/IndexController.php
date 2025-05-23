@@ -99,7 +99,7 @@ class IndexController extends AbstractController
      *
      * @throws \Exception
      */
-    #[Get(path: '', name: '')]
+    #[Get(path: self::INDEX_PATH, name: '')]
     public function index(
         Request $request,
         #[MapQueryParameter]

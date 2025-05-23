@@ -98,10 +98,8 @@ class LogController extends AbstractController
 
     /**
      * Export the logs to a Spreadsheet document.
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'excel')]
+    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
     public function excel(LogService $service): Response
     {
         $logFile = $this->getLogFile($service);
@@ -116,7 +114,7 @@ class LogController extends AbstractController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(
         LogTable $table,
         LoggerInterface $logger,
@@ -129,7 +127,7 @@ class LogController extends AbstractController
     /**
      * Export to PDF the content of the log file.
      */
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(
         LogService $logService,
         FontAwesomeService $service

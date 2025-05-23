@@ -7,11 +7,6 @@
 {%- set message_parameters = {'%size%': size} -%}
 {%- set pools_length = 0 -%}
 {% block card_container_class ' col-md-8 offset-md-2 col-xl-6 offset-xl-3' %}
-{# message #}
-{% block message %}
-    {{ parent() }}
-    <p class="my-2">{{ 'clear_cache.note'|trans|raw }}</p>
-{% endblock %}
 {# body #}
 {% block body -%}
     {{ parent() }}

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Database;
 
 use App\Entity\Log;
+use App\Utils\DateUtils;
 use App\Utils\StringUtils;
 
 /**
@@ -96,7 +97,7 @@ class LogDatabase extends AbstractDatabase
      */
     private function dateToInt(?\DateTimeInterface $date): int
     {
-        $date ??= new \DateTime();
+        $date ??= DateUtils::createDateTime();
 
         return $date->getTimestamp();
     }

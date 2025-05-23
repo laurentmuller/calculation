@@ -240,7 +240,7 @@ class TestController extends AbstractController
     /**
      * Export an HTML page to PDF.
      */
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function exportPdf(): PdfResponse
     {
         $content = $this->renderView('test/html_report.html.twig');
@@ -252,9 +252,6 @@ class TestController extends AbstractController
 
     /**
      * Export an HTML page to Word.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     #[Get(path: '/word', name: 'word')]
     public function exportWord(): WordResponse

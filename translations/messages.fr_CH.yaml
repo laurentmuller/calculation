@@ -275,8 +275,9 @@ category:
         title: Propriétés de la catégorie
 clear_cache:
     title: Vider le cache
-    message: "Êtes-vous sûr de vouloir vider le cache de l'application (taille actuelle : %size%) ?"
-    note: '<b>Note : </b>Cette opération peut durer un certain temps.'
+    message: >
+        Êtes-vous sûr de vouloir vider le cache de l'application (taille actuelle : %size%) ?<br><br>        
+        <b>Note : </b>Cette opération peut durer un certain temps.
     submit: Vider
     list: Liste des caches
     count: 'Nombre de caches : %count%'

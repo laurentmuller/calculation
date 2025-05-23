@@ -103,9 +103,9 @@ class Customer extends AbstractEntity
 
         /** @phpstan-var \DateTime $birthday */
         $birthday = clone $this->birthday;
-        $currentDate = new \DateTime();
+        $currentDate = DateUtils::createDateTime();
         $age = DateUtils::getYear($currentDate) - DateUtils::getYear($birthday);
-        if ($currentDate < $birthday->add(new \DateInterval('P1Y'))) {
+        if ($currentDate < DateUtils::add($birthday, 'P1Y')) {
             --$age;
         }
 

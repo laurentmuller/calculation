@@ -23,6 +23,7 @@ use App\Traits\LoggerAwareTrait;
 use App\Traits\MathTrait;
 use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
+use App\Utils\DateUtils;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -113,7 +114,7 @@ class ProductUpdateService implements ServiceSubscriberInterface
         $percent = $query->isPercent();
         $value = $query->getValue();
         $round = $query->isRound();
-        $date = new \DateTimeImmutable();
+        $date = DateUtils::createDateTimeImmutable();
         $user = $this->getUser();
 
         foreach ($products as $product) {

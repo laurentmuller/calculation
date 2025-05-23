@@ -35,7 +35,7 @@ class SchemaController extends AbstractController
     /**
      * Display information for tables.
      */
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(SchemaService $service): Response
     {
         return $this->render('schema/index.html.twig', [
@@ -46,7 +46,7 @@ class SchemaController extends AbstractController
     /**
      * Export the schema to a PDF document.
      */
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(
         SchemaService $schemaService,
         FontAwesomeImageService $imageService

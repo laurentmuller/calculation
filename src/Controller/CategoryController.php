@@ -35,7 +35,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -55,18 +54,9 @@ class CategoryController extends AbstractEntityController
     }
 
     /**
-     * Add a category.
-     */
-    #[GetPost(path: '/add', name: 'add')]
-    public function add(Request $request): Response
-    {
-        return $this->editEntity($request, new Category());
-    }
-
-    /**
      * Clone (copy) a category.
      */
-    #[GetPost(path: '/clone/{id}', name: 'clone', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: self::CLONE_PATH, name: self::CLONE_NAME, requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, Category $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -82,7 +72,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Delete a category.
      */
-    #[GetDelete(path: '/delete/{id}', name: 'delete', requirements: self::ID_REQUIREMENT)]
+    #[GetDelete(path: self::DELETE_PATH, name: self::DELETE_NAME, requirements: self::ID_REQUIREMENT)]
     public function delete(
         Request $request,
         Category $item,
@@ -123,21 +113,19 @@ class CategoryController extends AbstractEntityController
     }
 
     /**
-     * Edit a category.
+     * Add or edit a category.
      */
-    #[GetPost(path: '/edit/{id}', name: 'edit', requirements: self::ID_REQUIREMENT)]
-    public function edit(Request $request, Category $item): Response
+    #[GetPost(path: self::ADD_PATH, name: self::ADD_NAME)]
+    #[GetPost(path: self::EDIT_PATH, name: self::EDIT_NAME, requirements: self::ID_REQUIREMENT)]
+    public function edit(Request $request, ?Category $item): Response
     {
-        return $this->editEntity($request, $item);
+        return $this->editEntity($request, $item ?? new Category());
     }
 
     /**
      * Export the categories to a Spreadsheet document.
-     *
-     * @throws NotFoundHttpException
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'excel')]
+    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('code');
@@ -152,7 +140,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: '', name: 'index')]
+    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
     public function index(
         CategoryTable $table,
         LoggerInterface $logger,
@@ -164,10 +152,8 @@ class CategoryController extends AbstractEntityController
 
     /**
      * Export the categories to a PDF document.
-     *
-     * @throws NotFoundHttpException if no category is found
      */
-    #[Get(path: '/pdf', name: 'pdf')]
+    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('code');
@@ -182,7 +168,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Show properties of a category.
      */
-    #[Get(path: '/show/{id}', name: 'show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: self::SHOW_PATH, name: self::SHOW_NAME, requirements: self::ID_REQUIREMENT)]
     public function show(Category $item): Response
     {
         return $this->showEntity($item);

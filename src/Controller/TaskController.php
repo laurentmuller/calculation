@@ -13,9 +13,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\GetDelete;
-use App\Attribute\GetPost;
+use App\Attribute\AddEntityRoute;
+use App\Attribute\CloneEntityRoute;
+use App\Attribute\DeleteEntityRoute;
+use App\Attribute\EditEntityRoute;
+use App\Attribute\ExcelRoute;
+use App\Attribute\GetRoute;
+use App\Attribute\IndexRoute;
+use App\Attribute\PdfRoute;
+use App\Attribute\ShowEntityRoute;
 use App\Entity\Category;
 use App\Entity\Task;
 use App\Form\Task\TaskServiceType;
@@ -57,7 +63,7 @@ class TaskController extends AbstractEntityController
     /**
      * Edit a copy (cloned) task.
      */
-    #[GetPost(path: self::CLONE_PATH, name: self::CLONE_NAME, requirements: self::ID_REQUIREMENT)]
+    #[CloneEntityRoute]
     public function clone(Request $request, Task $item): Response
     {
         $name = $this->trans('common.clone_description', ['%description%' => $item->getName()]);
@@ -73,7 +79,7 @@ class TaskController extends AbstractEntityController
     /**
      * Display the page to compute a task.
      */
-    #[Get(path: '/compute/{id?}', name: 'compute', requirements: self::ID_REQUIREMENT)]
+    #[GetRoute(path: '/compute/{id?}', name: 'compute', requirements: self::ID_REQUIREMENT)]
     public function compute(Request $request, TaskService $service, ?Task $task = null): Response
     {
         [$tasks, $task] = $this->getTasks($service, $task);
@@ -99,7 +105,7 @@ class TaskController extends AbstractEntityController
     /**
      * Delete a task.
      */
-    #[GetDelete(path: self::DELETE_PATH, name: self::DELETE_NAME, requirements: self::ID_REQUIREMENT)]
+    #[DeleteEntityRoute]
     public function delete(Request $request, Task $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -108,8 +114,8 @@ class TaskController extends AbstractEntityController
     /**
      * Add or edit a task.
      */
-    #[GetPost(path: self::ADD_PATH, name: self::ADD_NAME)]
-    #[GetPost(path: self::EDIT_PATH, name: self::EDIT_NAME, requirements: self::ID_REQUIREMENT)]
+    #[AddEntityRoute]
+    #[EditEntityRoute]
     public function edit(Request $request, ?Task $item): Response
     {
         return $this->editEntity($request, $item ?? $this->createTask());
@@ -118,7 +124,7 @@ class TaskController extends AbstractEntityController
     /**
      * Export tasks to a Spreadsheet document.
      */
-    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
+    #[ExcelRoute]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('name');
@@ -133,7 +139,7 @@ class TaskController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
+    #[IndexRoute]
     public function index(
         TaskTable $table,
         LoggerInterface $logger,
@@ -146,7 +152,7 @@ class TaskController extends AbstractEntityController
     /**
      * Export tasks to a PDF document.
      */
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('name');
@@ -161,7 +167,7 @@ class TaskController extends AbstractEntityController
     /**
      * Show properties of a task.
      */
-    #[Get(path: self::SHOW_PATH, name: self::SHOW_NAME, requirements: self::ID_REQUIREMENT)]
+    #[ShowEntityRoute]
     public function show(Task $item): Response
     {
         return $this->showEntity($item);

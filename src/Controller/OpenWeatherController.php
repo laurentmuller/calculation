@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\GetPost;
+use App\Attribute\GetPostRoute;
+use App\Attribute\GetRoute;
+use App\Attribute\IndexRoute;
 use App\Enums\OpenWeatherUnits;
 use App\Form\Type\CountryFlagType;
 use App\Interfaces\RoleInterface;
@@ -73,7 +74,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns the current conditions data for a specific location.
      */
-    #[Get(path: '/api/current', name: 'api_current')]
+    #[GetRoute(path: '/api/current', name: 'api_current')]
     public function apiCurrent(Request $request): JsonResponse
     {
         try {
@@ -93,7 +94,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns 16 days / daily forecast conditions data for a specific location.
      */
-    #[Get(path: '/api/daily', name: 'api_daily')]
+    #[GetRoute(path: '/api/daily', name: 'api_daily')]
     public function apiDaily(Request $request): JsonResponse
     {
         try {
@@ -114,7 +115,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns 5-days / 3-hour forecast conditions data for a specific location.
      */
-    #[Get(path: '/api/forecast', name: 'api_forecast')]
+    #[GetRoute(path: '/api/forecast', name: 'api_forecast')]
     public function apiForecast(Request $request): JsonResponse
     {
         try {
@@ -135,7 +136,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns all essential weather data for a specific location.
      */
-    #[Get(path: '/api/onecall', name: 'api_onecall')]
+    #[GetRoute(path: '/api/onecall', name: 'api_onecall')]
     public function apiOneCall(Request $request): JsonResponse
     {
         try {
@@ -159,7 +160,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns an array of cities that match the query text.
      */
-    #[Get(path: '/api/search', name: 'api_search')]
+    #[GetRoute(path: '/api/search', name: 'api_search')]
     public function apiSearch(Request $request, OpenWeatherSearchService $service): JsonResponse
     {
         try {
@@ -211,7 +212,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns the current conditions data for a specific location.
      */
-    #[Get(path: '/current', name: 'current')]
+    #[GetRoute(path: '/current', name: 'current')]
     public function current(Request $request): Response
     {
         $id = $this->getRequestId($request);
@@ -244,7 +245,7 @@ class OpenWeatherController extends AbstractController
      * Data can be downloaded from <a href="https://bulk.openweathermap.org/sample/">sample directory</a>.
      */
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[GetPost(path: '/import', name: 'import')]
+    #[GetPostRoute(path: '/import', name: 'import')]
     public function import(Request $request, OpenWeatherCityUpdater $updater): Response
     {
         $form = $updater->createForm();
@@ -263,7 +264,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Shows the search city view.
      */
-    #[GetPost(path: '/search', name: 'search')]
+    #[GetPostRoute(path: '/search', name: 'search')]
     public function search(Request $request, OpenWeatherSearchService $service): Response
     {
         $data = $this->getData($request);
@@ -328,7 +329,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Shows the current weather, if applicable, the search cities otherwise.
      */
-    #[Get(path: self::INDEX_PATH, name: 'weather')]
+    #[GetRoute(path: IndexRoute::PATH, name: 'weather')]
     public function weather(Request $request, OpenWeatherSearchService $service): Response
     {
         $id = $this->getCookieId($request);

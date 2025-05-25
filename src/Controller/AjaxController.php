@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\Post;
+use App\Attribute\GetRoute;
+use App\Attribute\PostRoute;
 use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
@@ -53,7 +53,7 @@ class AjaxController extends AbstractController
      * Compute a task.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Post(path: '/task', name: 'task')]
+    #[PostRoute(path: '/task', name: 'task')]
     public function computeTask(
         #[ValueResolver(TaskComputeQueryValueResolver::class)]
         TaskComputeQuery $query,
@@ -77,7 +77,7 @@ class AjaxController extends AbstractController
      * Validate a strength password.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Post(path: '/password', name: 'password')]
+    #[PostRoute(path: '/password', name: 'password')]
     public function password(#[MapRequestPayload] PasswordQuery $query, PasswordService $service): JsonResponse
     {
         $results = $service->validate($query);
@@ -89,7 +89,7 @@ class AjaxController extends AbstractController
      * Gets random text used to display notifications.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/random/text', name: 'random_text')]
+    #[GetRoute(path: '/random/text', name: 'random_text')]
     public function randomText(FakerService $service, #[MapQueryParameter] int $maxNbChars = 150): JsonResponse
     {
         $generator = $service->getGenerator();
@@ -104,7 +104,7 @@ class AjaxController extends AbstractController
      * Sets a session attribute.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Post(path: '/session/set', name: 'session_set')]
+    #[PostRoute(path: '/session/set', name: 'session_set')]
     public function saveSession(#[MapRequestPayload] SessionQuery $query): JsonResponse
     {
         try {
@@ -120,7 +120,7 @@ class AjaxController extends AbstractController
      * Save table view parameter.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Post(path: '/save', name: 'save_table')]
+    #[PostRoute(path: '/save', name: 'save_table')]
     public function saveTable(
         Request $request,
         UserService $service

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
+use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -31,7 +31,7 @@ class NavigationController extends AbstractController
     /**
      * Render the horizontal navigation bar (menu bar).
      */
-    #[Get(path: '/horizontal', name: 'horizontal')]
+    #[GetRoute(path: '/horizontal', name: 'horizontal')]
     public function horizontal(): JsonResponse
     {
         return $this->renderNavigation('navigation/horizontal/navigation.html.twig');
@@ -40,7 +40,7 @@ class NavigationController extends AbstractController
     /**
      * Render the vertical navigation bar (sidebar).
      */
-    #[Get(path: '/vertical', name: 'vertical')]
+    #[GetRoute(path: '/vertical', name: 'vertical')]
     public function vertical(): JsonResponse
     {
         return $this->renderNavigation('navigation/vertical/navigation.html.twig');

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetPost;
+use App\Attribute\GetPostRoute;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Interfaces\RoleInterface;
 use App\Model\CalculationUpdateQuery;
@@ -39,7 +39,7 @@ class CalculationUpdateController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[GetPost(path: '/update', name: 'update')]
+    #[GetPostRoute(path: '/update', name: 'update')]
     public function update(Request $request, CalculationUpdateService $service): Response
     {
         $query = $service->createQuery();

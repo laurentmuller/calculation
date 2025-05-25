@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
+use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Service\AkismetService;
 use App\Service\FakerService;
@@ -36,7 +36,7 @@ class AkismetController extends AbstractController
     /**
      * @throws ExceptionInterface
      */
-    #[Get(path: '/activity', name: 'activity')]
+    #[GetRoute(path: '/activity', name: 'activity')]
     public function activity(
         AkismetService $service,
         #[MapQueryParameter]
@@ -55,7 +55,7 @@ class AkismetController extends AbstractController
     /**
      * @throws ExceptionInterface
      */
-    #[Get(path: '/spam', name: 'spam')]
+    #[GetRoute(path: '/spam', name: 'spam')]
     public function spam(
         Request $request,
         AkismetService $service,
@@ -78,7 +78,7 @@ class AkismetController extends AbstractController
     /**
      * @throws ExceptionInterface
      */
-    #[Get(path: '/usage', name: 'usage')]
+    #[GetRoute(path: '/usage', name: 'usage')]
     public function usage(AkismetService $service): JsonResponse
     {
         $results = $service->usage();
@@ -89,7 +89,7 @@ class AkismetController extends AbstractController
         return $this->json($results);
     }
 
-    #[Get(path: '/verify', name: 'verify')]
+    #[GetRoute(path: '/verify', name: 'verify')]
     public function verify(AkismetService $service): JsonResponse
     {
         $result = $service->isValidKey();

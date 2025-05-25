@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
+use App\Attribute\ExcelRoute;
+use App\Attribute\GetRoute;
+use App\Attribute\PdfRoute;
 use App\Interfaces\RoleInterface;
 use App\Report\MySqlReport;
 use App\Response\PdfResponse;
@@ -33,7 +35,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route(path: '/about/mysql', name: 'about_mysql_')]
 class AboutMySqlController extends AbstractController
 {
-    #[Get(path: '/content', name: 'content')]
+    #[GetRoute(path: '/content', name: 'content')]
     public function content(DatabaseInfoService $service): JsonResponse
     {
         $content = $this->renderView('about/mysql_content.html.twig', ['service' => $service]);
@@ -41,7 +43,7 @@ class AboutMySqlController extends AbstractController
         return $this->jsonTrue(['content' => $content]);
     }
 
-    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
+    #[ExcelRoute]
     public function excel(DatabaseInfoService $service): SpreadsheetResponse
     {
         $doc = new MySqlDocument($this, $service);
@@ -49,7 +51,7 @@ class AboutMySqlController extends AbstractController
         return $this->renderSpreadsheetDocument($doc);
     }
 
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function pdf(DatabaseInfoService $service): PdfResponse
     {
         $report = new MySqlReport($this, $service);

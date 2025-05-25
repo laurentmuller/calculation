@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
+use App\Attribute\GetRoute;
 use App\Form\Type\CaptchaImageType;
 use App\Service\CaptchaImageService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,7 +38,7 @@ class CaptchaController extends AbstractController
      *
      * @throws \Exception
      */
-    #[Get(path: '/image', name: 'image')]
+    #[GetRoute(path: '/image', name: 'image')]
     public function image(CaptchaImageService $service): JsonResponse
     {
         $data = $service->generateImage(true);
@@ -56,7 +56,7 @@ class CaptchaController extends AbstractController
     /**
      * Validate a captcha image.
      */
-    #[Get(path: '/validate', name: 'validate')]
+    #[GetRoute(path: '/validate', name: 'validate')]
     public function validate(
         CaptchaImageService $service,
         #[MapQueryParameter]

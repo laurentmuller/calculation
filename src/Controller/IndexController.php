@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\Post;
+use App\Attribute\GetRoute;
+use App\Attribute\IndexRoute;
+use App\Attribute\PostRoute;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
@@ -70,7 +71,7 @@ class IndexController extends AbstractController
     /**
      * Hide the catalog panel.
      */
-    #[Post(path: '/hide/catalog', name: '_hide_catalog')]
+    #[PostRoute(path: '/hide/catalog', name: '_hide_catalog')]
     public function hideCatalog(Request $request): JsonResponse
     {
         return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_CATALOG, 'index.panel_catalog_hide_success');
@@ -79,7 +80,7 @@ class IndexController extends AbstractController
     /**
      * Hide the month panel.
      */
-    #[Post(path: '/hide/month', name: '_hide_month')]
+    #[PostRoute(path: '/hide/month', name: '_hide_month')]
     public function hideMonth(Request $request): JsonResponse
     {
         return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_MONTH, 'index.panel_month_hide_success');
@@ -88,7 +89,7 @@ class IndexController extends AbstractController
     /**
      * Hide the state panel.
      */
-    #[Post(path: '/hide/state', name: '_hide_state')]
+    #[PostRoute(path: '/hide/state', name: '_hide_state')]
     public function hideState(Request $request): JsonResponse
     {
         return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_STATE, 'index.panel_state_hide_success');
@@ -99,7 +100,7 @@ class IndexController extends AbstractController
      *
      * @throws \Exception
      */
-    #[Get(path: self::INDEX_PATH, name: '')]
+    #[GetRoute(path: IndexRoute::PATH, name: '')]
     public function index(
         Request $request,
         #[MapQueryParameter]
@@ -149,7 +150,7 @@ class IndexController extends AbstractController
     /**
      * Update the numbers of displayed calculations.
      */
-    #[Post(path: '/update/count', name: '_calculation')]
+    #[PostRoute(path: '/update/count', name: '_calculation')]
     public function updateCalculation(Request $request): JsonResponse
     {
         $this->checkAjaxRequest($request);

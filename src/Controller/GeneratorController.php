@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\GetPost;
+use App\Attribute\GetPostRoute;
+use App\Attribute\GetRoute;
+use App\Attribute\IndexRoute;
 use App\Generator\CalculationGenerator;
 use App\Generator\CustomerGenerator;
 use App\Generator\ProductGenerator;
@@ -46,7 +47,7 @@ class GeneratorController extends AbstractController
     private const ROUTE_CUSTOMER = '_customer';
     private const ROUTE_PRODUCT = '_product';
 
-    #[GetPost(path: self::INDEX_PATH, name: '')]
+    #[GetPostRoute(path: IndexRoute::PATH, name: '')]
     public function generate(): Response
     {
         $data = $this->getSessionData();
@@ -60,7 +61,7 @@ class GeneratorController extends AbstractController
     /**
      * Create one or more calculations with random data.
      */
-    #[Get(path: '/calculation', name: self::ROUTE_CALCULATION)]
+    #[GetRoute(path: '/calculation', name: self::ROUTE_CALCULATION)]
     public function generateCalculations(
         Request $request,
         CalculationGenerator $generator,
@@ -72,7 +73,7 @@ class GeneratorController extends AbstractController
     /**
      * Create one or more customers with random data.
      */
-    #[Get(path: '/customer', name: self::ROUTE_CUSTOMER)]
+    #[GetRoute(path: '/customer', name: self::ROUTE_CUSTOMER)]
     public function generateCustomers(
         Request $request,
         CustomerGenerator $generator,
@@ -84,7 +85,7 @@ class GeneratorController extends AbstractController
     /**
      * Create one or more products with random data.
      */
-    #[Get(path: '/product', name: self::ROUTE_PRODUCT)]
+    #[GetRoute(path: '/product', name: self::ROUTE_PRODUCT)]
     public function generateProducts(
         Request $request,
         ProductGenerator $generator,

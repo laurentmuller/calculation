@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Attribute\Route;
  * @see Request::METHOD_POST
  */
 #[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
-class GetPost extends Route
+class GetPostRoute extends Route
 {
     /**
      * @param array<string|\Stringable> $requirements

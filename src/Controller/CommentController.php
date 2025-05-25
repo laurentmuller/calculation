@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetPost;
+use App\Attribute\GetPostRoute;
 use App\Entity\User;
 use App\Form\User\UserCommentType;
 use App\Interfaces\RoleInterface;
@@ -39,7 +39,7 @@ class CommentController extends AbstractController
      * Send a comment to the webmaster.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[GetPost(path: '/comment', name: 'comment')]
+    #[GetPostRoute(path: '/comment', name: 'comment')]
     public function invoke(Request $request, MailerService $service, LoggerInterface $logger): Response
     {
         /** @var User|Address $from */

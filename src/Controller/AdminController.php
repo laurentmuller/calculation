@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\GetPost;
+use App\Attribute\GetPostRoute;
+use App\Attribute\GetRoute;
 use App\Enums\EntityPermission;
 use App\Enums\FlashType;
 use App\Form\Admin\ApplicationParametersType;
@@ -50,7 +50,7 @@ class AdminController extends AbstractController
     /**
      * Clear the application cache.
      */
-    #[GetPost(path: '/clear', name: 'clear')]
+    #[GetPostRoute(path: '/clear', name: 'clear')]
     public function clearCache(
         Request $request,
         KernelInterface $kernel,
@@ -93,7 +93,7 @@ class AdminController extends AbstractController
      * @throws \Exception
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
-    #[Get(path: '/dump-sql', name: 'dump_sql')]
+    #[GetRoute(path: '/dump-sql', name: 'dump_sql')]
     public function dumpSql(CommandService $service): Response
     {
         $result = $service->execute('doctrine:schema:update', ['--dump-sql' => true]);
@@ -114,7 +114,7 @@ class AdminController extends AbstractController
     /**
      * Edit the application parameters.
      */
-    #[GetPost(path: '/parameters', name: 'parameters')]
+    #[GetPostRoute(path: '/parameters', name: 'parameters')]
     public function parameters(Request $request): Response
     {
         $application = $this->getApplicationService();
@@ -140,7 +140,7 @@ class AdminController extends AbstractController
      * Edit rights for the administrator role (@see RoleInterface::ROLE_ADMIN).
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
-    #[GetPost(path: '/rights/admin', name: 'rights_admin')]
+    #[GetPostRoute(path: '/rights/admin', name: 'rights_admin')]
     public function rightsAdmin(Request $request, RoleBuilderService $service): Response
     {
         $application = $this->getApplicationService();
@@ -155,7 +155,7 @@ class AdminController extends AbstractController
     /**
      * Edit rights for the user role (@see RoleInterface::ROLE_USER).
      */
-    #[GetPost(path: '/rights/user', name: 'rights_user')]
+    #[GetPostRoute(path: '/rights/user', name: 'rights_user')]
     public function rightsUser(Request $request, RoleBuilderService $service): Response
     {
         $application = $this->getApplicationService();

@@ -13,9 +13,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\GetDelete;
-use App\Attribute\GetPost;
+use App\Attribute\AddEntityRoute;
+use App\Attribute\CloneEntityRoute;
+use App\Attribute\DeleteEntityRoute;
+use App\Attribute\EditEntityRoute;
+use App\Attribute\ExcelRoute;
+use App\Attribute\IndexRoute;
+use App\Attribute\PdfRoute;
+use App\Attribute\ShowEntityRoute;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Interfaces\EntityInterface;
@@ -54,7 +59,7 @@ class ProductController extends AbstractEntityController
     /**
      * Clone (copy) a product.
      */
-    #[GetPost(path: self::CLONE_PATH, name: self::CLONE_NAME, requirements: self::ID_REQUIREMENT)]
+    #[CloneEntityRoute]
     public function clone(Request $request, Product $item): Response
     {
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
@@ -70,7 +75,7 @@ class ProductController extends AbstractEntityController
     /**
      * Delete a product.
      */
-    #[GetDelete(path: self::DELETE_PATH, name: self::DELETE_NAME, requirements: self::ID_REQUIREMENT)]
+    #[DeleteEntityRoute]
     public function delete(Request $request, Product $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -79,8 +84,8 @@ class ProductController extends AbstractEntityController
     /**
      * Add or edit a product.
      */
-    #[GetPost(path: self::ADD_PATH, name: self::ADD_NAME)]
-    #[GetPost(path: self::EDIT_PATH, name: self::EDIT_NAME, requirements: self::ID_REQUIREMENT)]
+    #[AddEntityRoute]
+    #[EditEntityRoute]
     public function edit(Request $request, ?Product $item): Response
     {
         return $this->editEntity($request, $item ?? $this->createProduct());
@@ -89,7 +94,7 @@ class ProductController extends AbstractEntityController
     /**
      * Export the products to a Spreadsheet document.
      */
-    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
+    #[ExcelRoute]
     public function excel(ProductRepository $repository): SpreadsheetResponse
     {
         $entities = $repository->findByDescription();
@@ -104,7 +109,7 @@ class ProductController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
+    #[IndexRoute]
     public function index(
         ProductTable $table,
         LoggerInterface $logger,
@@ -117,7 +122,7 @@ class ProductController extends AbstractEntityController
     /**
      * Export the products to a PDF document.
      */
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function pdf(ProductRepository $repository): PdfResponse
     {
         $entities = $repository->findByGroup();
@@ -132,7 +137,7 @@ class ProductController extends AbstractEntityController
     /**
      * Show properties of a product.
      */
-    #[Get(path: self::SHOW_PATH, name: self::SHOW_NAME, requirements: self::ID_REQUIREMENT)]
+    #[ShowEntityRoute]
     public function show(Product $item): Response
     {
         return $this->showEntity($item);

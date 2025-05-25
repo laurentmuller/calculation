@@ -46,47 +46,6 @@ abstract class AbstractEntityController extends AbstractController
     use TableTrait;
 
     /**
-     * The route name to add an entity.
-     */
-    final protected const ADD_NAME = 'add';
-    /**
-     * The path to add an entity.
-     */
-    final protected const ADD_PATH = '/add';
-    /**
-     * The route name to clone an entity.
-     */
-    final protected const CLONE_NAME = 'clone';
-    /**
-     * The path to clone an entity.
-     */
-    final protected const CLONE_PATH = '/clone/{id}';
-    /**
-     * The route name to delete an entity.
-     */
-    final protected const DELETE_NAME = 'delete';
-    /**
-     * The path to delete an entity.
-     */
-    final protected const DELETE_PATH = '/delete/{id}';
-    /**
-     * The route name to edit an entity.
-     */
-    final protected const EDIT_NAME = 'edit';
-    /**
-     * The path to edit an entity.
-     */
-    final protected const EDIT_PATH = '/edit/{id}';
-    /**
-     * The route name to show an entity.
-     */
-    final protected const SHOW_NAME = 'show';
-    /**
-     * The path to show an entity.
-     */
-    final protected const SHOW_PATH = '/show/{id}';
-
-    /**
      * The entity class name.
      *
      * @var class-string<TEntity>

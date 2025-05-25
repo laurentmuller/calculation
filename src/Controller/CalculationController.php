@@ -13,9 +13,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\GetDelete;
-use App\Attribute\GetPost;
+use App\Attribute\AddEntityRoute;
+use App\Attribute\CloneEntityRoute;
+use App\Attribute\DeleteEntityRoute;
+use App\Attribute\EditEntityRoute;
+use App\Attribute\ExcelRoute;
+use App\Attribute\GetPostRoute;
+use App\Attribute\GetRoute;
+use App\Attribute\IndexRoute;
+use App\Attribute\PdfRoute;
+use App\Attribute\ShowEntityRoute;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Product;
@@ -65,7 +72,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit a copy (cloned) calculation.
      */
-    #[GetPost(path: self::CLONE_PATH, name: self::CLONE_NAME, requirements: self::ID_REQUIREMENT)]
+    #[CloneEntityRoute]
     public function clone(Request $request, Calculation $item): Response
     {
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
@@ -83,7 +90,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Delete a calculation.
      */
-    #[GetDelete(path: self::DELETE_PATH, name: self::DELETE_NAME, requirements: self::ID_REQUIREMENT)]
+    #[DeleteEntityRoute]
     public function delete(Request $request, Calculation $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -92,8 +99,8 @@ class CalculationController extends AbstractEntityController
     /**
      * Add or edit a calculation.
      */
-    #[GetPost(path: self::ADD_PATH, name: self::ADD_NAME)]
-    #[GetPost(path: self::EDIT_PATH, name: self::EDIT_NAME, requirements: self::ID_REQUIREMENT)]
+    #[AddEntityRoute]
+    #[EditEntityRoute]
     public function edit(Request $request, ?Calculation $item): Response
     {
         return $this->editEntity($request, $item ?? $this->createCalculation());
@@ -102,7 +109,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Export the calculations to a Spreadsheet document.
      */
-    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
+    #[ExcelRoute]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities(['id' => SortModeInterface::SORT_DESC]);
@@ -117,7 +124,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Export a single calculation to a Spreadsheet document.
      */
-    #[Get(path: '/excel/{id}', name: 'excel_id', requirements: self::ID_REQUIREMENT)]
+    #[GetRoute(path: '/excel/{id}', name: 'excel_id', requirements: self::ID_REQUIREMENT)]
     public function excelOne(Calculation $calculation): SpreadsheetResponse
     {
         $doc = new CalculationDocument($this, $calculation);
@@ -128,7 +135,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
+    #[IndexRoute]
     public function index(
         CalculationTable $table,
         LoggerInterface $logger,
@@ -141,7 +148,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Export calculations to a PDF document.
      */
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities([
@@ -160,7 +167,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Export a single calculation to a PDF document.
      */
-    #[Get(path: '/pdf/{id}', name: 'pdf_id', requirements: self::ID_REQUIREMENT)]
+    #[GetRoute(path: '/pdf/{id}', name: 'pdf_id', requirements: self::ID_REQUIREMENT)]
     public function pdfOne(Calculation $calculation): PdfResponse
     {
         $minMargin = $this->getMinMargin();
@@ -173,7 +180,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Show properties of a calculation.
      */
-    #[Get(path: self::SHOW_PATH, name: self::SHOW_NAME, requirements: self::ID_REQUIREMENT)]
+    #[ShowEntityRoute]
     public function show(Calculation $item): Response
     {
         $parameters = [
@@ -188,7 +195,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit the state of a calculation.
      */
-    #[GetPost(path: '/state/{id}', name: 'state', requirements: self::ID_REQUIREMENT)]
+    #[GetPostRoute(path: '/state/{id}', name: 'state', requirements: self::ID_REQUIREMENT)]
     public function state(Request $request, Calculation $item): Response
     {
         $form = $this->createForm(CalculationEditStateType::class, $item);

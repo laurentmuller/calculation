@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
+use App\Attribute\ExcelRoute;
+use App\Attribute\IndexRoute;
+use App\Attribute\PdfRoute;
 use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
 use App\Report\CalculationsEmptyReport;
@@ -46,7 +48,7 @@ class CalculationEmptyController extends AbstractController
     /**
      * Export the empty items to a Spreadsheet document.
      */
-    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
+    #[ExcelRoute]
     public function excel(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);
@@ -62,7 +64,7 @@ class CalculationEmptyController extends AbstractController
     /**
      * Render the table view.
      */
-    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
+    #[IndexRoute]
     public function index(
         CalculationEmptyTable $table,
         LoggerInterface $logger,
@@ -75,7 +77,7 @@ class CalculationEmptyController extends AbstractController
     /**
      * Export the calculations where items have the price or the quantity is equal to 0.
      */
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function pdf(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);

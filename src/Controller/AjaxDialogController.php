@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\Post;
+use App\Attribute\GetRoute;
+use App\Attribute\PostRoute;
 use App\Form\Dialog\EditItemDialogType;
 use App\Form\Dialog\EditTaskDialogType;
 use App\Interfaces\RoleInterface;
@@ -35,7 +35,7 @@ class AjaxDialogController extends AbstractController
     /**
      * Render the edit item dialog template.
      */
-    #[Get(path: '/dialog/item', name: 'dialog_item')]
+    #[GetRoute(path: '/dialog/item', name: 'dialog_item')]
     public function dialogItem(): JsonResponse
     {
         $parameters = [
@@ -49,7 +49,7 @@ class AjaxDialogController extends AbstractController
      * Render the page selection dialog for the data table.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/dialog/page', name: 'dialog_page')]
+    #[GetRoute(path: '/dialog/page', name: 'dialog_page')]
     public function dialogPage(): JsonResponse
     {
         return $this->renderDialog('dialog/dialog_table_page.html.twig');
@@ -59,7 +59,7 @@ class AjaxDialogController extends AbstractController
      * Render the sort dialog for data table.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Post(path: '/dialog/sort', name: 'dialog_sort')]
+    #[PostRoute(path: '/dialog/sort', name: 'dialog_sort')]
     public function dialogSort(Request $request): JsonResponse
     {
         return $this->renderDialog('dialog/dialog_table_sort.html.twig', ['columns' => $request->toArray()]);
@@ -68,7 +68,7 @@ class AjaxDialogController extends AbstractController
     /**
      * Render the edit task dialog template.
      */
-    #[Get(path: '/dialog/task', name: 'dialog_task')]
+    #[GetRoute(path: '/dialog/task', name: 'dialog_task')]
     public function dialogTask(TaskRepository $repository): JsonResponse
     {
         $parameters = [

@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
+use App\Attribute\ExcelRoute;
+use App\Attribute\IndexRoute;
+use App\Attribute\PdfRoute;
 use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
 use App\Report\CalculationsDuplicateReport;
@@ -46,7 +48,7 @@ class CalculationDuplicateController extends AbstractController
     /**
      * Export the duplicate items to a Spreadsheet document.
      */
-    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
+    #[ExcelRoute]
     public function excel(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);
@@ -62,7 +64,7 @@ class CalculationDuplicateController extends AbstractController
     /**
      * Render the table view.
      */
-    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
+    #[IndexRoute]
     public function index(
         CalculationDuplicateTable $table,
         LoggerInterface $logger,
@@ -75,7 +77,7 @@ class CalculationDuplicateController extends AbstractController
     /**
      * Exports the duplicate items in the calculations.
      */
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function pdf(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);

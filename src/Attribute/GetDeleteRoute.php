@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Attribute\Route;
  * @see Request::METHOD_DELETE
  */
 #[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
-class GetDelete extends Route
+class GetDeleteRoute extends Route
 {
     /**
      * @param array<string|\Stringable> $requirements

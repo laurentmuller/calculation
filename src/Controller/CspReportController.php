@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
+use App\Attribute\GetRoute;
 use App\Enums\Importance;
 use App\Interfaces\RoleInterface;
 use App\Mime\CspViolationEmail;
@@ -38,7 +38,7 @@ class CspReportController extends AbstractController
      */
     public const ROUTE_NAME = 'log_csp';
 
-    #[Get(path: '/csp', name: self::ROUTE_NAME)]
+    #[GetRoute(path: '/csp', name: self::ROUTE_NAME)]
     public function invoke(LoggerInterface $logger, MailerInterface $mailer): Response
     {
         $context = $this->getContext();

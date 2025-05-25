@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetPost;
+use App\Attribute\GetPostRoute;
 use App\Enums\TableView;
 use App\Form\User\UserParametersType;
 use App\Interfaces\PropertyServiceInterface;
@@ -37,7 +37,7 @@ class UserParametersController extends AbstractController
 {
     use CookieTrait;
 
-    #[GetPost(path: '/parameters', name: 'parameters')]
+    #[GetPostRoute(path: '/parameters', name: 'parameters')]
     public function invoke(Request $request, UserService $userService): Response
     {
         $data = $userService->getProperties();

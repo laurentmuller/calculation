@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
+use App\Attribute\IndexRoute;
+use App\Attribute\PdfRoute;
+use App\Attribute\WordRoute;
 use App\Enums\Environment;
 use App\Interfaces\RoleInterface;
 use App\Report\HtmlReport;
@@ -45,7 +47,7 @@ class AboutController extends AbstractController
     ) {
     }
 
-    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
+    #[IndexRoute]
     public function index(
         #[Autowire('%kernel.environment%')]
         string $app_env,
@@ -58,7 +60,7 @@ class AboutController extends AbstractController
         ]);
     }
 
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function pdf(): PdfResponse
     {
         $content = $this->loadContent();
@@ -69,7 +71,7 @@ class AboutController extends AbstractController
         return $this->renderPdfDocument($report);
     }
 
-    #[Get(path: '/word', name: 'word')]
+    #[WordRoute]
     public function word(): WordResponse
     {
         $content = $this->loadContent();

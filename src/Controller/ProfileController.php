@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetPost;
+use App\Attribute\GetPostRoute;
 use App\Entity\User;
 use App\Form\AbstractEntityType;
 use App\Form\User\ProfileEditType;
@@ -43,7 +43,7 @@ class ProfileController extends AbstractController
     /**
      * Edit the profile.
      */
-    #[GetPost(path: '/edit', name: 'edit')]
+    #[GetPostRoute(path: '/edit', name: 'edit')]
     public function edit(#[CurrentUser] User $user, Request $request): Response
     {
         return $this->handleForm(
@@ -58,7 +58,7 @@ class ProfileController extends AbstractController
     /**
      * Edit the password.
      */
-    #[GetPost(path: '/password', name: 'password')]
+    #[GetPostRoute(path: '/password', name: 'password')]
     public function password(#[CurrentUser] User $user, Request $request, PasswordTooltipService $service): Response
     {
         return $this->handleForm(

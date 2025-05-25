@@ -13,9 +13,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\GetDelete;
-use App\Attribute\GetPost;
+use App\Attribute\AddEntityRoute;
+use App\Attribute\DeleteEntityRoute;
+use App\Attribute\EditEntityRoute;
+use App\Attribute\ExcelRoute;
+use App\Attribute\GetPostRoute;
+use App\Attribute\GetRoute;
+use App\Attribute\IndexRoute;
+use App\Attribute\PdfRoute;
+use App\Attribute\ShowEntityRoute;
 use App\Entity\User;
 use App\Enums\EntityPermission;
 use App\Form\User\ResetAllPasswordType;
@@ -77,7 +83,7 @@ class UserController extends AbstractEntityController
     /**
      * Delete an user.
      */
-    #[GetDelete(path: self::DELETE_PATH, name: self::DELETE_NAME, requirements: self::ID_REQUIREMENT)]
+    #[DeleteEntityRoute]
     public function delete(Request $request, User $item, Security $security, LoggerInterface $logger): Response
     {
         if ($this->isConnectedUser($item) || $this->isOriginalUser($item, $security)) {
@@ -92,8 +98,8 @@ class UserController extends AbstractEntityController
     /**
      * Add or edit a user.
      */
-    #[GetPost(path: self::ADD_PATH, name: self::ADD_NAME)]
-    #[GetPost(path: self::EDIT_PATH, name: self::EDIT_NAME, requirements: self::ID_REQUIREMENT)]
+    #[AddEntityRoute]
+    #[EditEntityRoute]
     public function edit(Request $request, ?User $item): Response
     {
         return $this->editEntity($request, $item ?? new User());
@@ -102,7 +108,7 @@ class UserController extends AbstractEntityController
     /**
      * Export the customers to a Spreadsheet document.
      */
-    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
+    #[ExcelRoute]
     public function excel(StorageInterface $storage): SpreadsheetResponse
     {
         $entities = $this->getEntitiesByUserName();
@@ -114,7 +120,7 @@ class UserController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
+    #[IndexRoute]
     public function index(
         UserTable $table,
         LoggerInterface $logger,
@@ -127,7 +133,7 @@ class UserController extends AbstractEntityController
     /**
      * Send an email from the current user to the selected user.
      */
-    #[GetPost(path: '/message/{id}', name: 'message', requirements: self::ID_REQUIREMENT)]
+    #[GetPostRoute(path: '/message/{id}', name: 'message', requirements: self::ID_REQUIREMENT)]
     public function message(Request $request, User $user, MailerService $service, LoggerInterface $logger): Response
     {
         if ($this->isConnectedUser($user)) {
@@ -164,7 +170,7 @@ class UserController extends AbstractEntityController
     /**
      * Change password for an existing user.
      */
-    #[GetPost(path: '/password/{id}', name: 'password', requirements: self::ID_REQUIREMENT)]
+    #[GetPostRoute(path: '/password/{id}', name: 'password', requirements: self::ID_REQUIREMENT)]
     public function password(Request $request, User $item, PasswordTooltipService $service): Response
     {
         $form = $this->createForm(UserChangePasswordType::class, $item);
@@ -184,7 +190,7 @@ class UserController extends AbstractEntityController
     /**
      * Export the users to a PDF document.
      */
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function pdf(
         StorageInterface $storage,
         FontAwesomeService $service
@@ -198,7 +204,7 @@ class UserController extends AbstractEntityController
     /**
      * Clear all requested reset passwords.
      */
-    #[GetPost(path: '/reset', name: 'reset_all')]
+    #[GetPostRoute(path: '/reset', name: 'reset_all')]
     public function resetAllPasswordRequest(Request $request): Response
     {
         $repository = $this->getRepository();
@@ -235,7 +241,7 @@ class UserController extends AbstractEntityController
     /**
      * Clear the request reset password.
      */
-    #[GetPost(path: '/reset/{id}', name: 'reset', requirements: self::ID_REQUIREMENT)]
+    #[GetPostRoute(path: '/reset/{id}', name: 'reset', requirements: self::ID_REQUIREMENT)]
     public function resetPasswordRequest(Request $request, User $item): Response
     {
         $parameters = ['%name%' => $item];
@@ -262,7 +268,7 @@ class UserController extends AbstractEntityController
     /**
      * Edit user access rights.
      */
-    #[GetPost(path: '/rights/{id}', name: 'rights', requirements: self::ID_REQUIREMENT)]
+    #[GetPostRoute(path: '/rights/{id}', name: 'rights', requirements: self::ID_REQUIREMENT)]
     public function rights(
         Request $request,
         User $item,
@@ -304,7 +310,7 @@ class UserController extends AbstractEntityController
     /**
      * Export the user access rights to a Spreadsheet document.
      */
-    #[Get(path: '/rights/excel', name: 'rights_excel')]
+    #[GetRoute(path: '/rights/excel', name: 'rights_excel')]
     public function rightsExcel(RoleBuilderService $builder): SpreadsheetResponse
     {
         $entities = $this->getEntitiesByUserName();
@@ -316,7 +322,7 @@ class UserController extends AbstractEntityController
     /**
      * Export user access rights to a PDF document.
      */
-    #[Get(path: '/rights/pdf', name: 'rights_pdf')]
+    #[GetRoute(path: '/rights/pdf', name: 'rights_pdf')]
     public function rightsPdf(FontAwesomeService $fontAwesomeService, RoleBuilderService $builder): PdfResponse
     {
         $entities = $this->getEntitiesByUserName();
@@ -328,7 +334,7 @@ class UserController extends AbstractEntityController
     /**
      * Sends an email to the user to reset its password.
      */
-    #[GetPost(path: '/reset/send/{id}', name: 'reset_send', requirements: self::ID_REQUIREMENT)]
+    #[GetPostRoute(path: '/reset/send/{id}', name: 'reset_send', requirements: self::ID_REQUIREMENT)]
     public function sendPasswordRequest(Request $request, User $item, ResetPasswordService $service): Response
     {
         $parameters = ['%name%' => $item];
@@ -360,7 +366,7 @@ class UserController extends AbstractEntityController
     /**
      * Show the properties of a user.
      */
-    #[Get(path: self::SHOW_PATH, name: self::SHOW_NAME, requirements: self::ID_REQUIREMENT)]
+    #[ShowEntityRoute]
     public function show(User $item): Response
     {
         return $this->showEntity($item);

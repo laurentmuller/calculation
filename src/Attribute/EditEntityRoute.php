@@ -13,28 +13,22 @@ declare(strict_types=1);
 
 namespace App\Attribute;
 
-use Symfony\Component\HttpFoundation\Request;
+use App\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * Shortcut route attribute for the 'POST' method.
- *
- * @see Request::METHOD_POST
+ * Shortcut route attribute to edit an entity.
  */
 #[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
-class Post extends Route
+class EditEntityRoute extends GetPostRoute
 {
     /**
-     * @param array<string|\Stringable> $requirements
+     * This route name.
      */
-    public function __construct(string $path, string $name, array $requirements = [])
-    {
-        parent::__construct($path, $name, $requirements);
-    }
+    final public const NAME = 'edit';
 
-    #[\Override]
-    public function getMethods(): array
+    public function __construct()
     {
-        return [Request::METHOD_POST];
+        parent::__construct('/edit/{id}', self::NAME, AbstractController::ID_REQUIREMENT);
     }
 }

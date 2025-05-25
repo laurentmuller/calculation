@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
+use App\Attribute\ExcelRoute;
+use App\Attribute\GetRoute;
+use App\Attribute\PdfRoute;
 use App\Interfaces\RoleInterface;
 use App\Report\PhpIniReport;
 use App\Response\PdfResponse;
@@ -37,7 +39,7 @@ class AboutPhpController extends AbstractController
 {
     use ArrayTrait;
 
-    #[Get(path: '/content', name: 'content')]
+    #[GetRoute(path: '/content', name: 'content')]
     public function content(PhpInfoService $service): JsonResponse
     {
         $parameters = [
@@ -51,7 +53,7 @@ class AboutPhpController extends AbstractController
         return $this->jsonTrue(['content' => $content]);
     }
 
-    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
+    #[ExcelRoute]
     public function excel(PhpInfoService $service): SpreadsheetResponse
     {
         $doc = new PhpIniDocument($this, $service);
@@ -59,7 +61,7 @@ class AboutPhpController extends AbstractController
         return $this->renderSpreadsheetDocument($doc);
     }
 
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function pdf(PhpInfoService $service): PdfResponse
     {
         $report = new PhpIniReport($this, $service);

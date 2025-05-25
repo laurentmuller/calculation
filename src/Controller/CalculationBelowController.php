@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
+use App\Attribute\ExcelRoute;
+use App\Attribute\IndexRoute;
+use App\Attribute\PdfRoute;
 use App\Entity\Calculation;
 use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
@@ -46,7 +48,7 @@ class CalculationBelowController extends AbstractController
     /**
      * Export the calculations to a Spreadsheet document.
      */
-    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
+    #[ExcelRoute]
     public function excel(CalculationRepository $repository): Response
     {
         $minMargin = $this->getMinMargin();
@@ -68,7 +70,7 @@ class CalculationBelowController extends AbstractController
     /**
      * Render the table view.
      */
-    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
+    #[IndexRoute]
     public function index(
         CalculationBelowTable $table,
         LoggerInterface $logger,
@@ -81,7 +83,7 @@ class CalculationBelowController extends AbstractController
     /**
      * Export calculations to a PDF document.
      */
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function pdf(CalculationRepository $repository): Response
     {
         $minMargin = $this->getMinMargin();

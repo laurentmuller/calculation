@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
+use App\Attribute\GetRoute;
+use App\Attribute\IndexRoute;
 use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\UserInterface;
@@ -41,7 +42,7 @@ class AjaxUserController extends AbstractController
      * Check if a username or user e-mail exist.
      */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Get(path: self::INDEX_PATH, name: 'both')]
+    #[GetRoute(path: IndexRoute::PATH, name: 'both')]
     public function checkBoth(#[MapQueryParameter] ?string $user = null): JsonResponse
     {
         $message = null;
@@ -58,7 +59,7 @@ class AjaxUserController extends AbstractController
      * Check if a user e-mail already exists.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/email', name: 'email')]
+    #[GetRoute(path: '/email', name: 'email')]
     public function checkEmail(
         #[MapQueryParameter]
         ?string $email = null,
@@ -86,7 +87,7 @@ class AjaxUserController extends AbstractController
      * Check if a username already exists.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/name', name: 'name')]
+    #[GetRoute(path: '/name', name: 'name')]
     public function checkUsername(
         #[MapQueryParameter]
         ?string $username = null,

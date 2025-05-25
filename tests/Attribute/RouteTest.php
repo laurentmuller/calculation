@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Attribute;
 
-use App\Attribute\Get;
-use App\Attribute\GetDelete;
-use App\Attribute\GetPost;
-use App\Attribute\Post;
+use App\Attribute\GetDeleteRoute;
+use App\Attribute\GetPostRoute;
+use App\Attribute\GetRoute;
+use App\Attribute\PostRoute;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -33,25 +33,25 @@ class RouteTest extends TestCase
 
     public function testGet(): void
     {
-        $route = new Get(self::PATH_VALUE, self::NAME_VALUE, self::REQUIREMENTS);
+        $route = new GetRoute(self::PATH_VALUE, self::NAME_VALUE, self::REQUIREMENTS);
         self::assertSameRoute($route, Request::METHOD_GET);
     }
 
     public function testGetDelete(): void
     {
-        $route = new GetDelete(self::PATH_VALUE, self::NAME_VALUE, self::REQUIREMENTS);
+        $route = new GetDeleteRoute(self::PATH_VALUE, self::NAME_VALUE, self::REQUIREMENTS);
         self::assertSameRoute($route, Request::METHOD_GET, Request::METHOD_DELETE);
     }
 
     public function testGetPost(): void
     {
-        $route = new GetPost(self::PATH_VALUE, self::NAME_VALUE, self::REQUIREMENTS);
+        $route = new GetPostRoute(self::PATH_VALUE, self::NAME_VALUE, self::REQUIREMENTS);
         self::assertSameRoute($route, Request::METHOD_GET, Request::METHOD_POST);
     }
 
     public function testPost(): void
     {
-        $route = new Post(self::PATH_VALUE, self::NAME_VALUE, self::REQUIREMENTS);
+        $route = new PostRoute(self::PATH_VALUE, self::NAME_VALUE, self::REQUIREMENTS);
         self::assertSameRoute($route, Request::METHOD_POST);
     }
 

@@ -13,9 +13,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\GetDelete;
-use App\Attribute\GetPost;
+use App\Attribute\AddEntityRoute;
+use App\Attribute\CloneEntityRoute;
+use App\Attribute\DeleteEntityRoute;
+use App\Attribute\EditEntityRoute;
+use App\Attribute\ExcelRoute;
+use App\Attribute\IndexRoute;
+use App\Attribute\PdfRoute;
+use App\Attribute\ShowEntityRoute;
 use App\Entity\Group;
 use App\Interfaces\RoleInterface;
 use App\Report\GroupsReport;
@@ -53,7 +58,7 @@ class GroupController extends AbstractEntityController
     /**
      * Clone (copy) a group.
      */
-    #[GetPost(path: self::CLONE_PATH, name: self::CLONE_NAME, requirements: self::ID_REQUIREMENT)]
+    #[CloneEntityRoute]
     public function clone(Request $request, Group $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -69,7 +74,7 @@ class GroupController extends AbstractEntityController
     /**
      * Delete a group.
      */
-    #[GetDelete(path: self::DELETE_PATH, name: self::DELETE_NAME, requirements: self::ID_REQUIREMENT)]
+    #[DeleteEntityRoute]
     public function delete(
         Request $request,
         Group $item,
@@ -108,8 +113,8 @@ class GroupController extends AbstractEntityController
     /**
      * Add or edit a group.
      */
-    #[GetPost(path: self::ADD_PATH, name: self::ADD_NAME)]
-    #[GetPost(path: self::EDIT_PATH, name: self::EDIT_NAME, requirements: self::ID_REQUIREMENT)]
+    #[AddEntityRoute]
+    #[EditEntityRoute]
     public function edit(Request $request, ?Group $item): Response
     {
         return $this->editEntity($request, $item ?? new Group());
@@ -118,7 +123,7 @@ class GroupController extends AbstractEntityController
     /**
      * Export the groups to a Spreadsheet document.
      */
-    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
+    #[ExcelRoute]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('code');
@@ -133,7 +138,7 @@ class GroupController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
+    #[IndexRoute]
     public function index(
         GroupTable $table,
         LoggerInterface $logger,
@@ -146,7 +151,7 @@ class GroupController extends AbstractEntityController
     /**
      * Export the groups to a PDF document.
      */
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('code');
@@ -161,7 +166,7 @@ class GroupController extends AbstractEntityController
     /**
      * Show properties of a group.
      */
-    #[Get(path: self::SHOW_PATH, name: self::SHOW_NAME, requirements: self::ID_REQUIREMENT)]
+    #[ShowEntityRoute]
     public function show(Group $item): Response
     {
         return $this->showEntity($item);

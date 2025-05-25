@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
+use App\Attribute\GetRoute;
+use App\Attribute\IndexRoute;
+use App\Attribute\PdfRoute;
+use App\Attribute\WordRoute;
 use App\Interfaces\RoleInterface;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
@@ -47,7 +50,7 @@ abstract class AbstractAboutController extends AbstractController
      * Gets the HTML content as a JSON response.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/content', name: 'content')]
+    #[GetRoute(path: '/content', name: 'content')]
     public function content(): JsonResponse
     {
         $content = $this->loadContent();
@@ -59,7 +62,7 @@ abstract class AbstractAboutController extends AbstractController
      * Render a view with the HTML content.
      */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
+    #[IndexRoute]
     public function index(): Response
     {
         $view = $this->getView();
@@ -73,7 +76,7 @@ abstract class AbstractAboutController extends AbstractController
      * Export the HTML content to a Portable Document Format (*.pdf) file.
      */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function pdf(): PdfResponse
     {
         $title = $this->getTitle();
@@ -88,7 +91,7 @@ abstract class AbstractAboutController extends AbstractController
      * Export the HTML content to a Word 2007 (.docx) document file.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/word', name: 'word')]
+    #[WordRoute]
     public function word(): WordResponse
     {
         $title = $this->getTitle();

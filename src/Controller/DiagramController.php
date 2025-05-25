@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
+use App\Attribute\GetRoute;
+use App\Attribute\IndexRoute;
 use App\Interfaces\RoleInterface;
 use App\Service\DiagramService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -43,7 +44,7 @@ class DiagramController extends AbstractController
     /**
      * Index of the diagram view.
      */
-    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
+    #[IndexRoute]
     public function index(Request $request): Response
     {
         $file = $this->findFile($request);
@@ -60,7 +61,7 @@ class DiagramController extends AbstractController
     /**
      * Load a diagram.
      */
-    #[Get(path: '/load', name: 'load')]
+    #[GetRoute(path: '/load', name: 'load')]
     public function load(Request $request): JsonResponse
     {
         $file = $this->findFile($request);

@@ -13,9 +13,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\GetDelete;
-use App\Attribute\GetPost;
+use App\Attribute\AddEntityRoute;
+use App\Attribute\CloneEntityRoute;
+use App\Attribute\DeleteEntityRoute;
+use App\Attribute\EditEntityRoute;
+use App\Attribute\ExcelRoute;
+use App\Attribute\IndexRoute;
+use App\Attribute\PdfRoute;
+use App\Attribute\ShowEntityRoute;
 use App\Entity\CalculationState;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
@@ -54,7 +59,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Clone (copy) a calculation state.
      */
-    #[GetPost(path: self::CLONE_PATH, name: self::CLONE_NAME, requirements: self::ID_REQUIREMENT)]
+    #[CloneEntityRoute]
     public function clone(Request $request, CalculationState $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -69,7 +74,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Delete a calculation state.
      */
-    #[GetDelete(path: self::DELETE_PATH, name: self::DELETE_NAME, requirements: self::ID_REQUIREMENT)]
+    #[DeleteEntityRoute]
     public function delete(
         Request $request,
         CalculationState $item,
@@ -101,8 +106,8 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Add or edit a calculation state.
      */
-    #[GetPost(path: self::ADD_PATH, name: self::ADD_NAME)]
-    #[GetPost(path: self::EDIT_PATH, name: self::EDIT_NAME, requirements: self::ID_REQUIREMENT)]
+    #[AddEntityRoute]
+    #[EditEntityRoute]
     public function edit(Request $request, ?CalculationState $item): Response
     {
         return $this->editEntity($request, $item ?? new CalculationState());
@@ -111,7 +116,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Export the calculation states to a Spreadsheet document.
      */
-    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
+    #[ExcelRoute]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('code');
@@ -126,7 +131,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
+    #[IndexRoute]
     public function index(
         CalculationStateTable $table,
         LoggerInterface $logger,
@@ -139,7 +144,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Export the calculation states to a PDF document.
      */
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('code');
@@ -154,7 +159,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Show properties of a calculation state.
      */
-    #[Get(path: self::SHOW_PATH, name: self::SHOW_NAME, requirements: self::ID_REQUIREMENT)]
+    #[ShowEntityRoute]
     public function show(CalculationState $item): Response
     {
         return $this->showEntity($item);

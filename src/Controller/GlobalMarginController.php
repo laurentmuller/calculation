@@ -13,8 +13,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\GetPost;
+use App\Attribute\EditEntityRoute;
+use App\Attribute\ExcelRoute;
+use App\Attribute\GetPostRoute;
+use App\Attribute\IndexRoute;
+use App\Attribute\PdfRoute;
+use App\Attribute\ShowEntityRoute;
 use App\Entity\GlobalMargin;
 use App\Enums\EntityPermission;
 use App\Form\GlobalMargin\GlobalMarginsType;
@@ -51,7 +55,7 @@ class GlobalMarginController extends AbstractEntityController
         parent::__construct($repository);
     }
 
-    #[GetPost(path: '/edit', name: self::EDIT_NAME)]
+    #[GetPostRoute(path: '/edit', name: EditEntityRoute::NAME)]
     public function edit(Request $request): Response
     {
         $this->checkPermission(
@@ -78,7 +82,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Export the global margins to a Spreadsheet document.
      */
-    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
+    #[ExcelRoute]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('minimum');
@@ -93,7 +97,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
+    #[IndexRoute]
     public function index(
         GlobalMarginTable $table,
         LoggerInterface $logger,
@@ -106,7 +110,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Export the global margins to a PDF document.
      */
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('minimum');
@@ -121,7 +125,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Show properties of a global margin.
      */
-    #[Get(path: self::SHOW_PATH, name: self::SHOW_NAME, requirements: self::ID_REQUIREMENT)]
+    #[ShowEntityRoute]
     public function show(GlobalMargin $item): Response
     {
         return $this->showEntity($item);

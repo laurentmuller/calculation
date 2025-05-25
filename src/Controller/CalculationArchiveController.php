@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetPost;
+use App\Attribute\GetPostRoute;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Interfaces\RoleInterface;
 use App\Model\CalculationArchiveQuery;
@@ -35,7 +35,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationArchiveController extends AbstractController
 {
-    #[GetPost(path: '/archive', name: 'archive')]
+    #[GetPostRoute(path: '/archive', name: 'archive')]
     public function invoke(Request $request, CalculationArchiveService $service): Response
     {
         if (!$service->isEditableStates()) {

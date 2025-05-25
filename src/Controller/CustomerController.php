@@ -13,9 +13,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\GetDelete;
-use App\Attribute\GetPost;
+use App\Attribute\AddEntityRoute;
+use App\Attribute\DeleteEntityRoute;
+use App\Attribute\EditEntityRoute;
+use App\Attribute\ExcelRoute;
+use App\Attribute\IndexRoute;
+use App\Attribute\PdfRoute;
+use App\Attribute\ShowEntityRoute;
 use App\Entity\Customer;
 use App\Interfaces\RoleInterface;
 use App\Report\CustomersReport;
@@ -54,7 +58,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Delete a customer.
      */
-    #[GetDelete(path: self::DELETE_PATH, name: self::DELETE_NAME, requirements: self::ID_REQUIREMENT)]
+    #[DeleteEntityRoute]
     public function delete(Request $request, Customer $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -63,8 +67,8 @@ class CustomerController extends AbstractEntityController
     /**
      * Add or edit a customer.
      */
-    #[GetPost(path: self::ADD_PATH, name: self::ADD_NAME)]
-    #[GetPost(path: self::EDIT_PATH, name: self::EDIT_NAME, requirements: self::ID_REQUIREMENT)]
+    #[AddEntityRoute]
+    #[EditEntityRoute]
     public function edit(Request $request, ?Customer $item): Response
     {
         return $this->editEntity($request, $item ?? new Customer());
@@ -73,7 +77,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Export the customers to a Spreadsheet document.
      */
-    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
+    #[ExcelRoute]
     public function excel(CustomerRepository $repository): SpreadsheetResponse
     {
         $entities = $repository->findByNameAndCompany();
@@ -88,7 +92,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
+    #[IndexRoute]
     public function index(
         CustomerTable $table,
         LoggerInterface $logger,
@@ -101,7 +105,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Export the customers to a PDF document.
      */
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function pdf(Request $request, CustomerRepository $repository): PdfResponse
     {
         $entities = $repository->findByNameAndCompany();
@@ -117,7 +121,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Show properties of a customer.
      */
-    #[Get(path: self::SHOW_PATH, name: self::SHOW_NAME, requirements: self::ID_REQUIREMENT)]
+    #[ShowEntityRoute]
     public function show(Customer $item): Response
     {
         return $this->showEntity($item);

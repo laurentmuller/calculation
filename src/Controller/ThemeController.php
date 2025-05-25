@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
+use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Service\ThemeService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -30,7 +30,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class ThemeController extends AbstractController
 {
-    #[Get(path: '/dialog', name: 'dialog')]
+    #[GetRoute(path: '/dialog', name: 'dialog')]
     public function dialog(): JsonResponse
     {
         return $this->json(
@@ -38,7 +38,7 @@ class ThemeController extends AbstractController
         );
     }
 
-    #[Get(path: '/save', name: 'save')]
+    #[GetRoute(path: '/save', name: 'save')]
     public function saveTheme(Request $request, ThemeService $service): JsonResponse
     {
         $default = $service->getTheme($request);

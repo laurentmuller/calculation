@@ -62,33 +62,9 @@ abstract class AbstractController extends BaseController
      */
     final public const HOME_PAGE = 'homepage';
     /**
-     * The route name for output entities to an Excel document.
+     * The route requirement for an identifier.
      */
-    final protected const EXCEL_NAME = 'excel';
-    /**
-     * The path to output entities to an Excel document.
-     */
-    final protected const EXCEL_PATH = '/excel';
-    /**
-     * The route requirement for an entity identifier.
-     */
-    final protected const ID_REQUIREMENT = ['id' => Requirement::DIGITS];
-    /**
-     * The route name for displaying entities (table).
-     */
-    final protected const INDEX_NAME = 'index';
-    /**
-     * The path for displaying entities (table).
-     */
-    final protected const INDEX_PATH = '';
-    /**
-     * The route name for output entities to a PDF Document.
-     */
-    final protected const PDF_NAME = 'pdf';
-    /**
-     * The path to output entities to a PDF document.
-     */
-    final protected const PDF_PATH = '/pdf';
+    final public const ID_REQUIREMENT = ['id' => Requirement::DIGITS];
 
     // services
     private ?UrlGeneratorService $generatorService = null;

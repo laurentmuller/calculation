@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Post;
+use App\Attribute\PostRoute;
 use App\Interfaces\RoleInterface;
 use App\Model\CalculationQuery;
 use App\Service\CalculationGroupService;
@@ -32,7 +32,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class AjaxCalculationController extends AbstractController
 {
-    #[Post(path: '/update', name: 'update')]
+    #[PostRoute(path: '/update', name: 'update')]
     public function update(
         CalculationGroupService $service,
         LoggerInterface $logger,

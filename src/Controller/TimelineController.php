@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
+use App\Attribute\GetRoute;
+use App\Attribute\IndexRoute;
 use App\Interfaces\RoleInterface;
 use App\Service\TimelineService;
 use App\Utils\DateUtils;
@@ -40,7 +41,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Get(path: '/content', name: 'content')]
+    #[GetRoute(path: '/content', name: 'content')]
     public function content(
         TimelineService $service,
         #[MapQueryParameter]
@@ -56,7 +57,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Get(path: '/first', name: 'first')]
+    #[GetRoute(path: '/first', name: 'first')]
     public function first(
         TimelineService $service,
         #[MapQueryParameter]
@@ -70,7 +71,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Get(path: self::INDEX_PATH, name: self::INDEX_NAME)]
+    #[IndexRoute]
     public function index(
         TimelineService $service,
         #[MapQueryParameter]
@@ -90,7 +91,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Get(path: '/last', name: 'last')]
+    #[GetRoute(path: '/last', name: 'last')]
     public function last(
         TimelineService $service,
         #[MapQueryParameter]
@@ -104,7 +105,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Get(path: '/today', name: 'today')]
+    #[GetRoute(path: '/today', name: 'today')]
     public function today(
         TimelineService $service,
         #[MapQueryParameter]

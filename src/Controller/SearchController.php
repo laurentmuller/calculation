@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
+use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Resolver\DataQueryValueResolver;
 use App\Table\DataQuery;
@@ -37,7 +37,7 @@ class SearchController extends AbstractController
     /**
      * Render the table view.
      */
-    #[Get(path: '/search', name: 'search')]
+    #[GetRoute(path: '/search', name: 'search')]
     public function search(
         SearchTable $table,
         LoggerInterface $logger,

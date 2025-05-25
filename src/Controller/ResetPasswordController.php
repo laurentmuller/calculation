@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\GetPost;
+use App\Attribute\GetPostRoute;
+use App\Attribute\GetRoute;
+use App\Attribute\IndexRoute;
 use App\Entity\User;
 use App\Form\User\RequestChangePasswordType;
 use App\Form\User\ResetChangePasswordType;
@@ -62,7 +63,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Confirmation page after a user has requested a password reset.
      */
-    #[Get(path: '/check-email', name: self::ROUTE_CHECK)]
+    #[GetRoute(path: '/check-email', name: self::ROUTE_CHECK)]
     public function checkEmail(): Response
     {
         $token = $this->getTokenObjectFromSession() ?? $this->service->generateFakeResetToken();
@@ -78,7 +79,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Display and process the form to request a password reset.
      */
-    #[GetPost(path: self::INDEX_PATH, name: self::ROUTE_REQUEST)]
+    #[GetPostRoute(path: IndexRoute::PATH, name: self::ROUTE_REQUEST)]
     public function request(Request $request, AuthenticationUtils $utils): Response
     {
         $form = $this->createForm(RequestChangePasswordType::class);
@@ -97,7 +98,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Validates and process the reset URL that the user clicked in their email.
      */
-    #[GetPost(path: '/reset/{token}', name: self::ROUTE_RESET)]
+    #[GetPostRoute(path: '/reset/{token}', name: self::ROUTE_RESET)]
     public function reset(
         #[CurrentUser]
         ?User $user,

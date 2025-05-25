@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetPost;
+use App\Attribute\GetPostRoute;
 use App\Entity\Product;
 use App\Form\Category\CategoryListType;
 use App\Interfaces\RoleInterface;
@@ -37,7 +37,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class ProductUpdateController extends AbstractController
 {
-    #[GetPost(path: '/product', name: 'product')]
+    #[GetPostRoute(path: '/product', name: 'product')]
     public function invoke(Request $request, ProductUpdateService $service): Response
     {
         $query = $service->createQuery();

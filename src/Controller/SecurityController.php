@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\GetPost;
+use App\Attribute\GetPostRoute;
+use App\Attribute\GetRoute;
 use App\Entity\User;
 use App\Form\User\UserLoginType;
 use App\Interfaces\RoleInterface;
@@ -34,7 +34,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[GetPost(path: '/login', name: SecurityAttributes::LOGIN_ROUTE)]
+    #[GetPostRoute(path: '/login', name: SecurityAttributes::LOGIN_ROUTE)]
     public function login(#[CurrentUser] ?User $user, AuthenticationUtils $utils): Response
     {
         if ($user instanceof User) {
@@ -52,14 +52,14 @@ class SecurityController extends AbstractController
     }
 
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/logout', name: SecurityAttributes::LOGOUT_ROUTE)]
+    #[GetRoute(path: '/logout', name: SecurityAttributes::LOGOUT_ROUTE)]
     public function logout(): never
     {
         throw new \LogicException('This method should never be reached.');
     }
 
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Get(path: '/logout/success', name: SecurityAttributes::LOGOUT_SUCCESS_ROUTE)]
+    #[GetRoute(path: '/logout/success', name: SecurityAttributes::LOGOUT_SUCCESS_ROUTE)]
     public function logoutSuccess(): RedirectResponse
     {
         $this->successTrans('security.logout.success', ['%app_name%' => $this->getApplicationName()]);

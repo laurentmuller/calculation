@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\GetPost;
+use App\Attribute\GetPostRoute;
+use App\Attribute\GetRoute;
+use App\Attribute\IndexRoute;
+use App\Attribute\PdfRoute;
 use App\Interfaces\RoleInterface;
 use App\Report\CommandsReport;
 use App\Service\CommandDataService;
@@ -47,7 +49,7 @@ class CommandController extends AbstractController
     /**
      * Render a single command.
      */
-    #[Get(path: '/content', name: 'content')]
+    #[GetRoute(path: '/content', name: 'content')]
     public function command(
         #[MapQueryParameter]
         string $name,
@@ -70,7 +72,7 @@ class CommandController extends AbstractController
     /**
      * Show all commands.
      */
-    #[Get(path: self::INDEX_PATH, name: 'all')]
+    #[GetRoute(path: IndexRoute::PATH, name: 'all')]
     public function commands(
         Request $request,
         CommandService $service,
@@ -102,7 +104,7 @@ class CommandController extends AbstractController
     /**
      * Execute a command.
      */
-    #[GetPost(path: '/execute', name: 'execute')]
+    #[GetPostRoute(path: '/execute', name: 'execute')]
     public function execute(
         #[MapQueryParameter]
         string $name,
@@ -161,7 +163,7 @@ class CommandController extends AbstractController
     /**
      * Export commands to a PDF document.
      */
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function pdf(CommandService $service): Response
     {
         if (0 === $service->count()) {

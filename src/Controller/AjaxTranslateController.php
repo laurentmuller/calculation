@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\Post;
+use App\Attribute\GetRoute;
+use App\Attribute\PostRoute;
 use App\Interfaces\RoleInterface;
 use App\Model\HttpClientError;
 use App\Model\TranslateQuery;
@@ -46,7 +46,7 @@ class AjaxTranslateController extends AbstractController
      * @throws ServiceNotFoundException if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/detect', name: 'detect')]
+    #[GetRoute(path: '/detect', name: 'detect')]
     public function detect(
         #[MapQueryParameter]
         ?string $text = null,
@@ -81,7 +81,7 @@ class AjaxTranslateController extends AbstractController
      * @throws ServiceNotFoundException if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/languages', name: 'languages')]
+    #[GetRoute(path: '/languages', name: 'languages')]
     public function languages(#[MapQueryParameter(name: 'service')] ?string $class = null): JsonResponse
     {
         try {
@@ -105,7 +105,7 @@ class AjaxTranslateController extends AbstractController
      * @throws ServiceNotFoundException if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Post(path: '/translate', name: 'translate')]
+    #[PostRoute(path: '/translate', name: 'translate')]
     public function translate(#[MapRequestPayload] TranslateQuery $query): JsonResponse
     {
         if (!StringUtils::isString($query->text)) {

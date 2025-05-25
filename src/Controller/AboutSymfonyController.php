@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
+use App\Attribute\ExcelRoute;
+use App\Attribute\GetRoute;
+use App\Attribute\PdfRoute;
 use App\Interfaces\RoleInterface;
 use App\Report\SymfonyReport;
 use App\Response\PdfResponse;
@@ -38,7 +40,7 @@ use Twig\Extra\Markdown\MarkdownInterface;
 class AboutSymfonyController extends AbstractController
 {
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[Get(path: '/content', name: 'content')]
+    #[GetRoute(path: '/content', name: 'content')]
     public function content(SymfonyInfoService $service): JsonResponse
     {
         $content = $this->renderView('about/symfony_content.html.twig', ['service' => $service]);
@@ -46,7 +48,7 @@ class AboutSymfonyController extends AbstractController
         return $this->jsonTrue(['content' => $content]);
     }
 
-    #[Get(path: self::EXCEL_PATH, name: self::EXCEL_NAME)]
+    #[ExcelRoute]
     public function excel(SymfonyInfoService $service): SpreadsheetResponse
     {
         $doc = new SymfonyDocument($this, $service);
@@ -57,7 +59,7 @@ class AboutSymfonyController extends AbstractController
     /**
      * Gets the license content.
      */
-    #[Get(path: '/license', name: 'license')]
+    #[GetRoute(path: '/license', name: 'license')]
     public function license(
         #[MapQueryParameter]
         string $file,
@@ -79,7 +81,7 @@ class AboutSymfonyController extends AbstractController
         ]);
     }
 
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function pdf(SymfonyInfoService $service): PdfResponse
     {
         $doc = new SymfonyReport($this, $service);

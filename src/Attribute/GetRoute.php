@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Attribute\Route;
  * @see Request::METHOD_GET
  */
 #[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
-class Get extends Route
+class GetRoute extends Route
 {
     /**
      * @param array<string|\Stringable> $requirements

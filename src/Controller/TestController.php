@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\Get;
-use App\Attribute\GetPost;
+use App\Attribute\GetPostRoute;
+use App\Attribute\GetRoute;
+use App\Attribute\PdfRoute;
+use App\Attribute\WordRoute;
 use App\Constraint\Captcha;
 use App\Constraint\Password;
 use App\Constraint\Strength;
@@ -110,7 +112,7 @@ class TestController extends AbstractController
     /**
      * Output a report with HTML and Boostrap colors.
      */
-    #[Get(path: '/colors', name: 'colors')]
+    #[GetRoute(path: '/colors', name: 'colors')]
     public function colors(): PdfResponse
     {
         $report = new HtmlColorsReport($this);
@@ -121,7 +123,7 @@ class TestController extends AbstractController
     /**
      * Test sending notification mail.
      */
-    #[GetPost(path: '/editor', name: 'editor')]
+    #[GetPostRoute(path: '/editor', name: 'editor')]
     public function editor(
         Request $request,
         #[CurrentUser]
@@ -183,7 +185,7 @@ class TestController extends AbstractController
     /**
      * Export a report label.
      */
-    #[Get(path: '/label', name: 'label')]
+    #[GetRoute(path: '/label', name: 'label')]
     public function exportLabel(CustomerRepository $repository, PdfLabelService $service): PdfResponse
     {
         $listener = new class() implements PdfLabelTextListenerInterface {
@@ -240,7 +242,7 @@ class TestController extends AbstractController
     /**
      * Export an HTML page to PDF.
      */
-    #[Get(path: self::PDF_PATH, name: self::PDF_NAME)]
+    #[PdfRoute]
     public function exportPdf(): PdfResponse
     {
         $content = $this->renderView('test/html_report.html.twig');
@@ -253,7 +255,7 @@ class TestController extends AbstractController
     /**
      * Export an HTML page to Word.
      */
-    #[Get(path: '/word', name: 'word')]
+    #[WordRoute]
     public function exportWord(): WordResponse
     {
         $content = $this->renderView('test/html_report.html.twig');
@@ -266,7 +268,7 @@ class TestController extends AbstractController
     /**
      * Output a report with Fontawesome images.
      */
-    #[Get(path: '/fontawesome', name: 'fontawesome')]
+    #[GetRoute(path: '/fontawesome', name: 'fontawesome')]
     public function fontAwesome(FontAwesomeImageService $service): Response
     {
         if (!$service->isSvgSupported() || $service->isImagickException()) {
@@ -284,7 +286,7 @@ class TestController extends AbstractController
     /**
      * Output a report with memory images.
      */
-    #[Get(path: '/memory', name: 'memory')]
+    #[GetRoute(path: '/memory', name: 'memory')]
     public function memoryImage(
         #[Autowire('%kernel.project_dir%/public/images/logo/logo-customer-148x148.png')]
         string $logoFile,
@@ -308,7 +310,7 @@ class TestController extends AbstractController
     /**
      * Test notifications.
      */
-    #[Get(path: '/notifications', name: 'notifications')]
+    #[GetRoute(path: '/notifications', name: 'notifications')]
     public function notifications(): Response
     {
         return $this->render('test/notification.html.twig', ['positions' => MessagePosition::sorted()]);
@@ -319,7 +321,7 @@ class TestController extends AbstractController
      *
      * @throws \Exception
      */
-    #[GetPost(path: '/password', name: 'password')]
+    #[GetPostRoute(path: '/password', name: 'password')]
     public function password(Request $request, CaptchaImageService $service): Response
     {
         $password = new Password(all: true);
@@ -406,7 +408,7 @@ class TestController extends AbstractController
     /**
      * Display the reCaptcha.
      */
-    #[GetPost(path: '/recaptcha', name: 'recaptcha')]
+    #[GetPostRoute(path: '/recaptcha', name: 'recaptcha')]
     public function recaptcha(
         Request $request,
         RecaptchaService $service,
@@ -436,7 +438,7 @@ class TestController extends AbstractController
         return $this->render('test/recaptcha.html.twig', ['form' => $form]);
     }
 
-    #[Get(path: '/search', name: 'search')]
+    #[GetRoute(path: '/search', name: 'search')]
     public function search(Request $request, SearchService $service): JsonResponse
     {
         $query = $this->getRequestString($request, 'query');
@@ -469,7 +471,7 @@ class TestController extends AbstractController
     /**
      * Search zip codes, cities and streets from Switzerland.
      */
-    #[Get(path: '/swiss', name: 'swiss')]
+    #[GetRoute(path: '/swiss', name: 'swiss')]
     public function swiss(Request $request, SwissPostService $service): JsonResponse
     {
         $all = $this->getRequestString($request, 'all');
@@ -504,7 +506,7 @@ class TestController extends AbstractController
         return $this->json($data);
     }
 
-    #[GetPost(path: '/application/parameters', name: 'application_parameter')]
+    #[GetPostRoute(path: '/application/parameters', name: 'application_parameter')]
     public function testApplicationParameters(Request $request, ApplicationParameters $parameters): Response
     {
         $templateParameters = [
@@ -522,7 +524,7 @@ class TestController extends AbstractController
         );
     }
 
-    #[GetPost(path: '/user/parameters', name: 'user_parameter')]
+    #[GetPostRoute(path: '/user/parameters', name: 'user_parameter')]
     public function testUserParameters(Request $request, UserParameters $parameters): Response
     {
         $templateParameters = [
@@ -545,7 +547,7 @@ class TestController extends AbstractController
      *
      * @throws ServiceNotFoundException if the service is not found
      */
-    #[Get(path: '/translate', name: 'translate')]
+    #[GetRoute(path: '/translate', name: 'translate')]
     public function translate(TranslatorFactory $factory): Response
     {
         $service = $factory->getSessionService();
@@ -577,7 +579,7 @@ class TestController extends AbstractController
         return $this->render('test/translate.html.twig', $parameters);
     }
 
-    #[Get(path: '/tree', name: 'tree')]
+    #[GetRoute(path: '/tree', name: 'tree')]
     public function tree(Request $request, GroupRepository $repository, EntityManagerInterface $manager): Response
     {
         if ($request->isXmlHttpRequest()) {

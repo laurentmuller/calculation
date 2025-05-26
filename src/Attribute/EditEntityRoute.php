@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Attribute;
 
-use App\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 
 /**
  * Shortcut route attribute to edit an entity.
@@ -29,6 +29,6 @@ class EditEntityRoute extends GetPostRoute
 
     public function __construct()
     {
-        parent::__construct('/edit/{id}', self::NAME, AbstractController::ID_REQUIREMENT);
+        parent::__construct('/edit/{id}', self::NAME, ['id' => Requirement::DIGITS]);
     }
 }

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Attribute;
 
-use App\Controller\AbstractController;
+use Symfony\Component\Routing\Requirement\Requirement;
 
 /**
  * Shortcut route attribute to show an entity.
@@ -23,6 +23,6 @@ class ShowEntityRoute extends GetRoute
 {
     public function __construct()
     {
-        parent::__construct('/show/{id}', 'show', AbstractController::ID_REQUIREMENT);
+        parent::__construct('/show/{id}', 'show', ['id' => Requirement::DIGITS]);
     }
 }

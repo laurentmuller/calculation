@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Attribute;
 
-use App\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 
 /**
  * Shortcut route attribute to delete an entity.
@@ -24,6 +24,6 @@ class DeleteEntityRoute extends GetDeleteRoute
 {
     public function __construct()
     {
-        parent::__construct('/delete/{id}', 'delete', AbstractController::ID_REQUIREMENT);
+        parent::__construct('/delete/{id}', 'delete', ['id' => Requirement::DIGITS]);
     }
 }

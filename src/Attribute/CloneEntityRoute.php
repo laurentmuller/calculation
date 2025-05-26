@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Attribute;
 
-use App\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 
 /**
  * Shortcut route attribute to clone an entity.
@@ -24,6 +24,6 @@ class CloneEntityRoute extends GetPostRoute
 {
     public function __construct()
     {
-        parent::__construct('/clone/{id}', 'clone', AbstractController::ID_REQUIREMENT);
+        parent::__construct('/clone/{id}', 'clone', ['id' => Requirement::DIGITS]);
     }
 }

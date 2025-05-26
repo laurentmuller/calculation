@@ -43,9 +43,6 @@ trait CalculationTrait
         return $this->addEntity($this->calculation);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function updateCalculation(): void
     {
         if ($this->calculation instanceof Calculation) {

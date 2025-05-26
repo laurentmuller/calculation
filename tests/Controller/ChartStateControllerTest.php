@@ -18,7 +18,7 @@ use App\Tests\EntityTrait\GlobalMarginTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use Symfony\Component\HttpFoundation\Response;
 
-class ChartControllerTest extends ControllerTestCase
+class ChartStateControllerTest extends ControllerTestCase
 {
     use CalculationTrait;
     use GlobalMarginTrait;
@@ -28,8 +28,6 @@ class ChartControllerTest extends ControllerTestCase
     public static function getRoutes(): \Generator
     {
         $routes = [
-            '/chart/month',
-            '/chart/month/pdf',
             '/chart/state',
             '/chart/state/pdf',
         ];

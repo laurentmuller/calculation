@@ -609,7 +609,6 @@ class WorksheetDocument extends Worksheet
      */
     private function validateTitle(string $title): string
     {
-        /** @phpstan-var string[] $invalidChars */
         $invalidChars = self::getInvalidCharacters();
         $title = \str_replace($invalidChars, '', $title);
         if (StringHelper::countCharacters($title) > self::SHEET_TITLE_MAXIMUM_LENGTH) {

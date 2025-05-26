@@ -38,9 +38,6 @@ class PivotControllerTest extends ControllerTestCase
         yield ['/pivot/json', self::ROLE_SUPER_ADMIN];
     }
 
-    /**
-     * @throws \Exception
-     */
     #[\Override]
     protected function addEntities(): void
     {

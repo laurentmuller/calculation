@@ -18,7 +18,6 @@ use App\Repository\UserRepository;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -41,12 +40,13 @@ class LoginListener implements ServiceSubscriberInterface
     #[AsEventListener(event: LoginSuccessEvent::class)]
     public function onLoginSuccess(LoginSuccessEvent $event): void
     {
+        /** @var User $user */
         $user = $event->getUser();
         $this->updateUser($user);
         $this->notify($user);
     }
 
-    private function notify(UserInterface $user): void
+    private function notify(User $user): void
     {
         $params = [
             '%user_name%' => $user->getUserIdentifier(),
@@ -55,11 +55,9 @@ class LoginListener implements ServiceSubscriberInterface
         $this->successTrans('security.login.success', $params);
     }
 
-    private function updateUser(UserInterface $user): void
+    private function updateUser(User $user): void
     {
-        if ($user instanceof User) {
-            $user->updateLastLogin();
-            $this->repository->flush();
-        }
+        $user->updateLastLogin();
+        $this->repository->flush();
     }
 }

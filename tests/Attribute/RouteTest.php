@@ -26,6 +26,7 @@ use App\Attribute\PdfRoute;
 use App\Attribute\PostRoute;
 use App\Attribute\ShowEntityRoute;
 use App\Attribute\WordRoute;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -40,118 +41,175 @@ class RouteTest extends TestCase
     private const PATH_VALUE = '/edit/{id}';
     private const REQUIREMENTS = ['id' => Requirement::DIGITS];
 
-    public function testAddEntityRoute(): void
+    /**
+     * @phpstan-return \Generator<int, array{
+     *     0: Route,
+     *     1: string,
+     *     2: string,
+     *     3: Request::METHOD_*[]|Request::METHOD_*,
+     *     4?: array<string, string>}>
+     */
+    public static function getRoutes(): \Generator
     {
-        $actual = new AddEntityRoute();
-        self::assertSame('add', $actual->getName());
-        self::assertSame('/add', $actual->getPath());
-        self::assertSame([Request::METHOD_GET, Request::METHOD_POST], $actual->getMethods());
-        self::assertSame([], $actual->getRequirements());
-    }
-
-    public function testCloneEntityRoute(): void
-    {
-        $actual = new CloneEntityRoute();
-        self::assertSame('clone', $actual->getName());
-        self::assertSame('/clone/{id}', $actual->getPath());
-        self::assertSame([Request::METHOD_GET, Request::METHOD_POST], $actual->getMethods());
-        self::assertSame(self::REQUIREMENTS, $actual->getRequirements());
-    }
-
-    public function testDeleteEntityRoute(): void
-    {
-        $actual = new DeleteEntityRoute();
-        self::assertSame('delete', $actual->getName());
-        self::assertSame('/delete/{id}', $actual->getPath());
-        self::assertSame([Request::METHOD_GET, Request::METHOD_DELETE], $actual->getMethods());
-        self::assertSame(self::REQUIREMENTS, $actual->getRequirements());
-    }
-
-    public function testEditEntityRoute(): void
-    {
-        $actual = new EditEntityRoute();
-        self::assertSame('edit', $actual->getName());
-        self::assertSame('/edit/{id}', $actual->getPath());
-        self::assertSame([Request::METHOD_GET, Request::METHOD_POST], $actual->getMethods());
-        self::assertSame(self::REQUIREMENTS, $actual->getRequirements());
-    }
-
-    public function testExcelRoute(): void
-    {
-        $actual = new ExcelRoute();
-        self::assertSame('excel', $actual->getName());
-        self::assertSame('/excel', $actual->getPath());
-        self::assertSame([Request::METHOD_GET], $actual->getMethods());
-        self::assertSame([], $actual->getRequirements());
-    }
-
-    public function testGetDeleteRoute(): void
-    {
-        $actual = new GetDeleteRoute(self::PATH_VALUE, self::NAME_VALUE, self::REQUIREMENTS);
-        self::assertSameRoute($actual, Request::METHOD_GET, Request::METHOD_DELETE);
-    }
-
-    public function testGetPostRoute(): void
-    {
-        $actual = new GetPostRoute(self::PATH_VALUE, self::NAME_VALUE, self::REQUIREMENTS);
-        self::assertSameRoute($actual, Request::METHOD_GET, Request::METHOD_POST);
-    }
-
-    public function testGetRoute(): void
-    {
+        $actual = new GetRoute(self::PATH_VALUE, self::NAME_VALUE);
+        yield [
+            $actual,
+            self::PATH_VALUE,
+            self::NAME_VALUE,
+            Request::METHOD_GET,
+        ];
         $actual = new GetRoute(self::PATH_VALUE, self::NAME_VALUE, self::REQUIREMENTS);
-        self::assertSameRoute($actual, Request::METHOD_GET);
-    }
+        yield [
+            $actual,
+            self::PATH_VALUE,
+            self::NAME_VALUE,
+            Request::METHOD_GET,
+            self::REQUIREMENTS,
+        ];
 
-    public function testIndexRoute(): void
-    {
-        $actual = new IndexRoute();
-        self::assertSame('index', $actual->getName());
-        self::assertSame('', $actual->getPath());
-        self::assertSame([Request::METHOD_GET], $actual->getMethods());
-        self::assertSame([], $actual->getRequirements());
-    }
+        $actual = new GetDeleteRoute(self::PATH_VALUE, self::NAME_VALUE);
+        yield [
+            $actual,
+            self::PATH_VALUE,
+            self::NAME_VALUE,
+            [Request::METHOD_GET, Request::METHOD_DELETE],
+        ];
+        $actual = new GetDeleteRoute(self::PATH_VALUE, self::NAME_VALUE, self::REQUIREMENTS);
+        yield [
+            $actual,
+            self::PATH_VALUE,
+            self::NAME_VALUE,
+            [Request::METHOD_GET, Request::METHOD_DELETE],
+            self::REQUIREMENTS,
+        ];
 
-    public function testPdfRoute(): void
-    {
-        $actual = new PdfRoute();
-        self::assertSame('pdf', $actual->getName());
-        self::assertSame('/pdf', $actual->getPath());
-        self::assertSame([Request::METHOD_GET], $actual->getMethods());
-        self::assertSame([], $actual->getRequirements());
-    }
-
-    public function testPostRoute(): void
-    {
+        $actual = new PostRoute(self::PATH_VALUE, self::NAME_VALUE);
+        yield [
+            $actual,
+            self::PATH_VALUE,
+            self::NAME_VALUE,
+            Request::METHOD_POST,
+        ];
         $actual = new PostRoute(self::PATH_VALUE, self::NAME_VALUE, self::REQUIREMENTS);
-        self::assertSameRoute($actual, Request::METHOD_POST);
-    }
+        yield [
+            $actual,
+            self::PATH_VALUE,
+            self::NAME_VALUE,
+            Request::METHOD_POST,
+            self::REQUIREMENTS,
+        ];
 
-    public function testShowEntityRoute(): void
-    {
+        $actual = new GetPostRoute(self::PATH_VALUE, self::NAME_VALUE);
+        yield [
+            $actual,
+            self::PATH_VALUE,
+            self::NAME_VALUE,
+            [Request::METHOD_GET, Request::METHOD_POST],
+        ];
+        $actual = new GetPostRoute(self::PATH_VALUE, self::NAME_VALUE, self::REQUIREMENTS);
+        yield [
+            $actual,
+            self::PATH_VALUE,
+            self::NAME_VALUE,
+            [Request::METHOD_GET, Request::METHOD_POST],
+            self::REQUIREMENTS,
+        ];
+
+        $actual = new AddEntityRoute();
+        yield [
+            $actual,
+            '/add',
+            'add',
+            [Request::METHOD_GET, Request::METHOD_POST],
+        ];
+
+        $actual = new CloneEntityRoute();
+        yield [
+            $actual,
+            '/clone/{id}',
+            'clone',
+            [Request::METHOD_GET, Request::METHOD_POST],
+            self::REQUIREMENTS,
+        ];
+
+        $actual = new DeleteEntityRoute();
+        yield [
+            $actual,
+            '/delete/{id}',
+            'delete',
+            [Request::METHOD_GET, Request::METHOD_DELETE],
+            self::REQUIREMENTS,
+        ];
+
+        $actual = new EditEntityRoute();
+        yield [
+            $actual,
+            '/edit/{id}',
+            'edit',
+            [Request::METHOD_GET, Request::METHOD_POST],
+            self::REQUIREMENTS,
+        ];
+
         $actual = new ShowEntityRoute();
-        self::assertSame('show', $actual->getName());
-        self::assertSame('/show/{id}', $actual->getPath());
-        self::assertSame([Request::METHOD_GET], $actual->getMethods());
-        self::assertSame(self::REQUIREMENTS, $actual->getRequirements());
-    }
+        yield [
+            $actual,
+            '/show/{id}',
+            'show',
+            Request::METHOD_GET,
+            self::REQUIREMENTS,
+        ];
 
-    public function testWordRoute(): void
-    {
+        $actual = new IndexRoute();
+        yield [
+            $actual,
+            '',
+            'index',
+            Request::METHOD_GET,
+        ];
+
+        $actual = new ExcelRoute();
+        yield [
+            $actual,
+            '/excel',
+            'excel',
+            Request::METHOD_GET,
+        ];
+
+        $actual = new PdfRoute();
+        yield [
+            $actual,
+            '/pdf',
+            'pdf',
+            Request::METHOD_GET,
+        ];
+
         $actual = new WordRoute();
-        self::assertSame('word', $actual->getName());
-        self::assertSame('/word', $actual->getPath());
-        self::assertSame([Request::METHOD_GET], $actual->getMethods());
-        self::assertSame([], $actual->getRequirements());
+        yield [
+            $actual,
+            '/word',
+            'word',
+            Request::METHOD_GET,
+        ];
     }
 
-    protected static function assertSameRoute(Route $actual, string ...$methods): void
-    {
-        self::assertSame(self::PATH_VALUE, $actual->getPath());
-        self::assertSame(self::NAME_VALUE, $actual->getName());
-        self::assertSame(self::REQUIREMENTS, $actual->getRequirements());
+    /**
+     * @phpstan-param Request::METHOD_*[]|Request::METHOD_* $methods
+     */
+    #[DataProvider('getRoutes')]
+    public function testRoute(
+        Route $actual,
+        string $path,
+        string $name,
+        array|string $methods,
+        array $requirements = [],
+    ): void {
+        if (\is_string($methods)) {
+            $methods = (array) $methods;
+        }
+        self::assertSame($path, $actual->getPath());
+        self::assertSame($name, $actual->getName());
         self::assertSame($methods, $actual->getMethods());
-
+        self::assertSame($requirements, $actual->getRequirements());
         // check override methods
         $actual->setMethods('fake');
         self::assertSame($methods, $actual->getMethods());

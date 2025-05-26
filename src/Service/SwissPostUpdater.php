@@ -127,20 +127,18 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             return $result;
         }
 
-        $reader = null;
-        $archive = null;
+        $reader = false;
+        $archive = false;
         $database = null;
 
         try {
-            $archive = $this->openArchive($result);
-            if (!$archive instanceof \ZipArchive) {
+            if (false === $archive = $this->openArchive($result)) {
                 return $result;
             }
             if (!$this->validateArchive($result, $archive)) {
                 return $result;
             }
-            $reader = $this->openReader($result, $archive);
-            if (!$reader instanceof CSVReader) {
+            if (false === $reader = $this->openReader($result, $archive)) {
                 return $result;
             }
             $database = $this->openDatabase($tempFile);
@@ -157,9 +155,8 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             $this->closeDatabase($result, $database);
             $this->renameDatabase($result, $tempFile);
         }
-        $this->updateValidity($result);
 
-        return $result;
+        return $this->updateValidity($result);
     }
 
     private function clean(string $str): string
@@ -168,10 +165,12 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         return \mb_convert_encoding(\trim($str), 'UTF-8', 'ISO-8859-1');
     }
 
-    private function closeArchive(SwissPostUpdateResult $result, ?\ZipArchive $archive): void
+    private function closeArchive(SwissPostUpdateResult $result, \ZipArchive|false $archive): void
     {
         try {
-            $archive?->close();
+            if ($archive instanceof \ZipArchive) {
+                $archive->close();
+            }
         } catch (\Throwable $e) {
             $this->logResult($result, 'archive_close', $e);
         }
@@ -186,10 +185,12 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         }
     }
 
-    private function closeReader(SwissPostUpdateResult $result, ?CSVReader $reader): void
+    private function closeReader(SwissPostUpdateResult $result, CSVReader|false $reader): void
     {
         try {
-            $reader?->close();
+            if ($reader instanceof CSVReader) {
+                $reader->close();
+            }
         } catch (\Throwable $e) {
             $this->logResult($result, 'reader_close', $e);
         }
@@ -236,17 +237,15 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         $this->logException($e, $result->getError());
     }
 
-    private function openArchive(SwissPostUpdateResult $result): ?\ZipArchive
+    private function openArchive(SwissPostUpdateResult $result): \ZipArchive|false
     {
         $archive = new \ZipArchive();
         $error = $archive->open($result->getSourceFile());
-        if (\is_int($error)) {
-            $this->setError($result, 'archive_open', [
+        if (true !== $error) {
+            return $this->setError($result, 'archive_open', [
                 '%name%' => $result->getSourceName(),
                 '%error' => $error,
             ]);
-
-            return null;
         }
 
         return $archive;
@@ -260,25 +259,21 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         return $database;
     }
 
-    private function openReader(SwissPostUpdateResult $result, \ZipArchive $archive): ?CSVReader
+    private function openReader(SwissPostUpdateResult $result, \ZipArchive $archive): CSVReader|false
     {
         $name = $archive->getNameIndex(0);
         if (false === $name) {
-            $this->setError($result, 'reader_name', [
+            return $this->setError($result, 'reader_name', [
                 '%name%' => $result->getSourceName(),
             ]);
-
-            return null;
         }
 
         $stream = $archive->getStream($name);
-        if (false === $stream) {
-            $this->setError($result, 'reader_open', [
+        if (!\is_resource($stream)) {
+            return $this->setError($result, 'reader_open', [
                 '%name%' => $result->getSourceName(),
                 '%stream%' => $name,
             ]);
-
-            return null;
         }
 
         return new CSVReader(file: $stream, separator: ';');
@@ -424,16 +419,13 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         }
     }
 
-    private function updateValidity(SwissPostUpdateResult $result): void
+    private function updateValidity(SwissPostUpdateResult $result): SwissPostUpdateResult
     {
-        if (!$result->isValid()) {
-            return;
+        if ($result->isValid() && $result->getValidity() instanceof \DateTimeInterface) {
+            $this->application->setProperty(PropertyServiceInterface::P_DATE_IMPORT, $result->getValidity());
         }
-        $validity = $result->getValidity();
-        if (!$validity instanceof \DateTimeInterface) {
-            return;
-        }
-        $this->application->setProperty(PropertyServiceInterface::P_DATE_IMPORT, $validity);
+
+        return $result;
     }
 
     private function validateArchive(SwissPostUpdateResult $result, \ZipArchive $archive): bool

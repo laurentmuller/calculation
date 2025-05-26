@@ -54,6 +54,16 @@ class MonthChart extends AbstractHighchart
 
     /**
      * Generate the chart data.
+     *
+     * @return array{
+     *     chart: MonthChart,
+     *     data: array,
+     *     months: int,
+     *     totals: array,
+     *     allowed_months: int[],
+     *     min_margin: float,
+     *     color_amount: string,
+     *     color_margin: string}
      */
     public function generate(int $months): array
     {

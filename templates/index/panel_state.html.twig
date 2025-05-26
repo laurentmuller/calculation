@@ -40,7 +40,7 @@
             {{- icon(ICON_CALCULATION_STATE ~ ' ms-1', 'index.panel_state') -}}
         </a>
         {%- if table_path and is_states -%}
-            {{ link(path('chart_state'), null, 'btn btn-link p-0 d-print-none', 'chart-pie fa-fw', 'index.menu_chart_title') }}
+            {{ link(path('chart_state_index'), null, 'btn btn-link p-0 d-print-none', 'chart-pie fa-fw', 'index.menu_chart_title') }}
             {% if is_granted(PERMISSION_EXPORT, ENTITY_CALCULATION) %}
                 {{ linkExternal(path('chart_state_pdf'), null, 'btn btn-link p-0 d-print-none', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
             {% endif %}

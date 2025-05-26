@@ -16,7 +16,7 @@
 {{- _self.item_external(path('calculationstate_excel'), 'calculationstate.list.excel_title', ICON_EXCEL) }}
 {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION) %}
     {{- _self.item_separator() }}
-    {{- _self.item_path(path('chart_state'), 'chart.state.title', 'chart-pie') }}
+    {{- _self.item_path(path('chart_state_index'), 'chart.state.title', 'chart-pie') }}
 {% endif %}
 {%- endblock %}
 

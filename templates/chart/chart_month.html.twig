@@ -39,7 +39,7 @@
     {% if allowed_months|length > 1 %}
         <div class="d-flex-wrap-center ms-sm-auto">
             <label class="form-label mb-0" for="months">{{ 'chart.month.fields.period'|trans }}</label>
-            <select class="form-select form-select-sm w-auto d-print-none" id="months" name="months" data-months="{{ months }}" data-url="{{ url('chart_month') }}">
+            <select class="form-select form-select-sm w-auto d-print-none" id="months" name="months" data-months="{{ months }}" data-url="{{ url('chart_month_index') }}">
             {% for current in allowed_months %}
                 {{ _self.month(current, current == months) }}
             {% endfor %}

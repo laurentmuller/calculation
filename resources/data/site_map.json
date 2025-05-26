@@ -192,12 +192,12 @@
             "icon": "chart-area",
             "entries": [
                 {
-                    "route": "chart_month",
+                    "route": "chart_month_index",
                     "text": "index.menu_graphics_month",
                     "icon": "calendar-alt far"
                 },
                 {
-                    "route": "chart_state",
+                    "route": "chart_state_index",
                     "text": "index.menu_graphics_state",
                     "icon": "flag"
                 }

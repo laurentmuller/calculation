@@ -1,0 +1,62 @@
+<?php
+
+/*
+ * This file is part of the Calculation package.
+ *
+ * (c) bibi.nu <bibi@bibi.nu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace App\Controller;
+
+use App\Attribute\IndexRoute;
+use App\Attribute\PdfRoute;
+use App\Chart\StateChart;
+use App\Entity\Calculation;
+use App\Enums\EntityPermission;
+use App\Interfaces\RoleInterface;
+use App\Report\CalculationByStateReport;
+use App\Repository\CalculationStateRepository;
+use App\Response\PdfResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+/**
+ * The controller for calculations by state chart.
+ */
+#[AsController]
+#[Route(path: '/chart/state', name: 'chart_state_')]
+#[IsGranted(RoleInterface::ROLE_USER)]
+class ChartStateController extends AbstractController
+{
+    #[IndexRoute]
+    public function index(StateChart $chart): Response
+    {
+        $this->checkPermission(EntityPermission::LIST);
+        $parameters = $chart->generate();
+
+        return $this->render('chart/chart_state.html.twig', $parameters);
+    }
+
+    #[PdfRoute]
+    public function pdf(CalculationStateRepository $repository, UrlGeneratorInterface $generator): PdfResponse
+    {
+        $this->checkPermission(EntityPermission::EXPORT);
+        $data = $repository->getCalculations();
+        $report = new CalculationByStateReport($this, $data, $generator);
+
+        return $this->renderPdfDocument($report);
+    }
+
+    private function checkPermission(EntityPermission $permission): void
+    {
+        $this->denyAccessUnlessGranted($permission, Calculation::class);
+    }
+}

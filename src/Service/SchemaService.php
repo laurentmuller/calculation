@@ -337,7 +337,9 @@ class SchemaService
             'columns' => $index->getColumns(),
         ], $indexes);
 
-        return $this->sortIndexes($results);
+        \usort($results, $this->sortIndexes(...));
+
+        return $results;
     }
 
     /**
@@ -472,29 +474,17 @@ class SchemaService
     }
 
     /**
-     * @phpstan-param SchemaIndexType[] $indexes
-     *
-     * @phpstan-return SchemaIndexType[]
+     * @phpstan-param SchemaIndexType $a
+     * @phpstan-param SchemaIndexType $b
      */
-    private function sortIndexes(array &$indexes): array
+    private function sortIndexes(array $a, array $b): int
     {
-        /**
-         * @phpstan-param SchemaIndexType $a
-         * @phpstan-param SchemaIndexType $b
-         */
-        $callback = static function (array $a, array $b): int {
-            if ($a['primary']) {
-                return -1;
-            }
-            if ($b['primary']) {
-                return 1;
-            }
+        // sort first by primary index
+        $result = $b['primary'] <=> $a['primary'];
+        if (0 !== $result) {
+            return $result;
+        }
 
-            return \strnatcmp((string) $a['name'], (string) $b['name']);
-        };
-
-        \usort($indexes, $callback);
-
-        return $indexes;
+        return $a['name'] <=> $b['name'];
     }
 }

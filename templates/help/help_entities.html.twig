@@ -4,12 +4,16 @@
 {# macro #}
 {% macro output_entity(entity) -%}
 {% set href = path('help_entity', {id: entity.id}) %}
-<div class="help-item">
-    <a href="{{ href }}">
-        {%- if entity.icon|default(false) %}{{ icon(entity.icon ~ ' me-1') }}{% endif %}{{ entity.name -}}
-    </a>
-    <p class="mb-0">{{ entity.description }}</p>
-    <hr class="my-2">
+<div class="col help-item">
+    <div class="card p-1 h-100">
+        <div class="card-body p-2">
+            <a href="{{ href }}" class="stretched-link">
+                {%- if entity.icon|default(false) %}{{ icon(entity.icon ~ ' me-1') }}{% endif %}{{ entity.name -}}
+            </a>
+            <hr class="my-2">
+            <p class="mb-0">{{ entity.description }}</p>
+        </div>
+    </div>
 </div>
 {%- endmacro %}
 {# parameters #}
@@ -27,7 +31,7 @@
 {# body #}
 {% block help_body -%}
 <hr class="mt-1">
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-3 row-cols-xxl-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 g-2">
     {% for entity in entities %}
         {{ _self.output_entity(entity) }}
     {% endfor %}

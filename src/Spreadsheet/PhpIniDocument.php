@@ -15,7 +15,6 @@ namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Service\PhpInfoService;
-use App\Utils\StringUtils;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -24,7 +23,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 /**
  * Document containing PHP configuration.
  *
- * @phpstan-type EntriesType = array{local: string, master: string}|string
+ * @phpstan-import-type EntryType from PhpInfoService
+ * @phpstan-import-type EntriesType from PhpInfoService
  */
 class PhpIniDocument extends AbstractDocument
 {
@@ -41,6 +41,7 @@ class PhpIniDocument extends AbstractDocument
         $this->start($this->trans('about.php_version', ['%version%' => $version]));
         $this->setActiveTitle('Configuration', $this->controller);
         $sheet = $this->getActiveSheet();
+
         if ([] === $content) {
             $sheet->setCellContent(1, 1, $this->trans('about.error'))
                 ->finish('A1');
@@ -48,71 +49,62 @@ class PhpIniDocument extends AbstractDocument
             return true;
         }
 
-        \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
-        $row = $sheet->setHeaders([
-            'Directive' => HeaderFormat::left(Alignment::VERTICAL_TOP),
-            'Local Value' => HeaderFormat::left(Alignment::VERTICAL_TOP),
-            'Master Value' => HeaderFormat::left(Alignment::VERTICAL_TOP),
-        ]);
-
-        /**  @phpstan-var array<string, EntriesType> $entries */
+        $row = $this->outputHeaders($sheet);
         foreach ($content as $key => $entries) {
             $row = $this->outputGroup($sheet, $row, $key);
             $row = $this->outputEntries($sheet, $row, $entries);
         }
-
-        $sheet->setWrapText(2)
-            ->setAutoSize(1)
-            ->setColumnWidth(2, 50)
-            ->setColumnWidth(3, 50, true)
-            ->finish();
-
-        $sheet->getPageSetup()
-            ->setFitToWidth(1)
-            ->setFitToHeight(0);
+        $this->updateColumns($sheet);
+        $this->updatePageSetup($sheet);
+        $sheet->finish();
 
         return true;
     }
 
-    private function applyStyle(WorksheetDocument $sheet, int $column, int $row, string $var): self
+    private function applyStyle(WorksheetDocument $sheet, int $column, int $row, string $value): self
     {
         $color = null;
-        if (StringUtils::pregMatch('/#[\dA-Fa-f]{6}/i', $var)) {
-            $color = \substr($var, 1);
-        } elseif (\in_array(
-            \strtolower($var),
-            ['no', 'disabled', 'off', 'no value', PhpInfoService::REDACTED],
-            true
-        )) {
+        $noValue = $this->service->isNoValue($value);
+        if ($this->service->isColor($value)) {
+            $color = \substr($value, 1);
+        } elseif ($noValue || $this->service->isDisabled($value)) {
             $color = '7F7F7F';
         }
-        $italic = StringUtils::equalIgnoreCase('no value', $var);
-        if (null === $color && !$italic) {
+        if (null === $color) {
             return $this;
         }
 
         $font = $sheet->getCell([$column, $row])
             ->getStyle()->getFont();
-        if ($italic) {
+        $font->setColor(new Color($color));
+        if ($noValue) {
             $font->setItalic(true);
-        }
-        if (null !== $color) {
-            $font->setColor(new Color($color));
         }
 
         return $this;
     }
 
-    /**
-     * @param mixed $var the variable to convert
-     */
-    private function convert(mixed $var): string
+    private function convert(float|int|string $var): string
     {
         return \htmlspecialchars_decode((string) $var);
     }
 
     /**
-     * @phpstan-param array<string, EntriesType> $entries
+     * @param array{local: float|int|string, master: float|int|string, ...} $entryValue
+     */
+    private function outputArrayEntry(WorksheetDocument $sheet, int $row, string $keyValue, array $entryValue): void
+    {
+        $local = $this->convert($entryValue['local']);
+        $master = $this->convert($entryValue['master']);
+        $sheet->setCellValue([1, $row], $keyValue)
+            ->setCellValue([2, $row], $local)
+            ->setCellValue([3, $row], $master);
+        $this->applyStyle($sheet, 2, $row, $local)
+            ->applyStyle($sheet, 3, $row, $master);
+    }
+
+    /**
+     * @phpstan-param array<string, EntryType> $entries
      */
     private function outputEntries(WorksheetDocument $sheet, int $row, array $entries): int
     {
@@ -120,21 +112,13 @@ class PhpIniDocument extends AbstractDocument
         $sheet->getPageSetup()
             ->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
 
-        foreach ($entries as $key => $entry) {
-            $keyValue = $this->convert($key);
-            if (\is_array($entry)) {
-                $local = $this->convert(\reset($entry));
-                $master = $this->convert(\end($entry));
-                $sheet->setCellValue([1, $row], $keyValue)
-                    ->setCellValue([2, $row], $local)
-                    ->setCellValue([3, $row], $master);
-                $this->applyStyle($sheet, 2, $row, $local)
-                    ->applyStyle($sheet, 3, $row, $master);
+        /** @phpstan-var EntryType $entryValue */
+        foreach ($entries as $entryKey => $entryValue) {
+            $keyValue = $this->convert($entryKey);
+            if (\is_array($entryValue)) {
+                $this->outputArrayEntry($sheet, $row, $keyValue, $entryValue);
             } else {
-                $entryValue = $this->convert($entry);
-                $sheet->setCellValue([1, $row], $keyValue)
-                    ->setCellValue([2, $row], $entryValue);
-                $this->applyStyle($sheet, 2, $row, $entryValue);
+                $this->outputSingleEntry($sheet, $row, $keyValue, $entryValue);
             }
             ++$row;
         }
@@ -142,9 +126,6 @@ class PhpIniDocument extends AbstractDocument
         return $row;
     }
 
-    /**
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     */
     private function outputGroup(WorksheetDocument $sheet, int $row, string $group): int
     {
         $sheet->setRowValues($row, [$group]);
@@ -157,19 +138,54 @@ class PhpIniDocument extends AbstractDocument
         return $row + 1;
     }
 
+    private function outputHeaders(WorksheetDocument $sheet): int
+    {
+        return $sheet->setHeaders([
+            'Directive' => HeaderFormat::left(Alignment::VERTICAL_TOP),
+            'Local Value' => HeaderFormat::left(Alignment::VERTICAL_TOP),
+            'Master Value' => HeaderFormat::left(Alignment::VERTICAL_TOP),
+        ]);
+    }
+
+    private function outputSingleEntry(
+        WorksheetDocument $sheet,
+        int $row,
+        string $keyValue,
+        float|int|string $entryValue
+    ): void {
+        $value = $this->convert($entryValue);
+        $sheet->setCellValue([1, $row], $keyValue)
+            ->setCellValue([2, $row], $value);
+        $this->applyStyle($sheet, 2, $row, $value);
+    }
+
     /**
-     * @phpstan-param array<string, EntriesType> $entries
+     * @phpstan-param array<string, EntryType> $entries
      */
     private function sortEntries(array &$entries): void
     {
         \uksort($entries, function (string $a, string $b) use ($entries): int {
-            $isArrayA = \is_array($entries[$a]);
-            $isArrayB = \is_array($entries[$b]);
-            if ($isArrayA !== $isArrayB) {
-                return $isArrayA <=> $isArrayB;
+            $result = \is_array($entries[$a]) <=> \is_array($entries[$b]);
+            if (0 !== $result) {
+                return $result;
             }
 
             return \strcasecmp($a, $b);
         });
+    }
+
+    private function updateColumns(WorksheetDocument $sheet): void
+    {
+        $sheet->setWrapText(2)
+            ->setAutoSize(1)
+            ->setColumnWidth(2, 50)
+            ->setColumnWidth(3, 50, true);
+    }
+
+    private function updatePageSetup(WorksheetDocument $sheet): void
+    {
+        $sheet->getPageSetup()
+            ->setFitToWidth(1)
+            ->setFitToHeight(0);
     }
 }

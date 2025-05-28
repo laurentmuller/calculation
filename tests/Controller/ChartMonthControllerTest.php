@@ -46,6 +46,18 @@ class ChartMonthControllerTest extends ControllerTestCase
         }
     }
 
+    public function testIndexInvalidMonth(): void
+    {
+        $route = 'chart/month?count=0';
+        $this->checkRoute($route, self::ROLE_USER, Response::HTTP_BAD_REQUEST);
+    }
+
+    public function testPdfInvalidMonth(): void
+    {
+        $route = 'chart/month/pdf?count=0';
+        $this->checkRoute($route, self::ROLE_USER, Response::HTTP_BAD_REQUEST);
+    }
+
     #[\Override]
     protected function addEntities(): void
     {

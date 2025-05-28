@@ -88,12 +88,6 @@ class HelpServiceTest extends KernelServiceTestCase
         self::assertNotEmpty($actual);
     }
 
-    public function testGetFile(): void
-    {
-        $actual = $this->service->getFile();
-        self::assertStringEndsWith('help.json', $actual);
-    }
-
     public function testGetImagePath(): void
     {
         $actual = $this->service->getImagePath();

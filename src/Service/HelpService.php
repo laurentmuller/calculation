@@ -221,14 +221,6 @@ class HelpService
     }
 
     /**
-     * Gets the absolute path to the JSON help file.
-     */
-    public function getFile(): string
-    {
-        return $this->file;
-    }
-
-    /**
      * Gets the full help content.
      *
      * @phpstan-return HelpContentType
@@ -353,6 +345,27 @@ class HelpService
     }
 
     /**
+     * @phpstan-param HelpDialogType $a
+     * @phpstan-param HelpDialogType $b
+     */
+    private function sortDialogs(array $a, array $b): int
+    {
+        $result = \strnatcmp($a['group'] ?? '', $b['group'] ?? '');
+        if (0 !== $result) {
+            return $result;
+        }
+
+        $idA = $a['id'];
+        $idB = $b['id'];
+        $result = \str_ends_with($idB, '.list.title') <=> \str_ends_with($idA, '.list.title');
+        if (0 !== $result) {
+            return $result;
+        }
+
+        return \strnatcmp($this->trans($idA), $this->trans($idB));
+    }
+
+    /**
      * @phpstan-param HelpDialogType[] $dialogs
      *
      * @phpstan-return array<string, HelpDialogType>
@@ -365,32 +378,7 @@ class HelpService
             $dialog['name'] = $this->trans($dialog['name'] ?? $dialog['id']);
         }
 
-        \usort(
-            $dialogs,
-            /**
-             * @phpstan-param HelpDialogType $a
-             * @phpstan-param HelpDialogType $b
-             */
-            function (array $a, array $b): int {
-                $result = \strnatcmp($a['group'] ?? '', $b['group'] ?? '');
-                if (0 !== $result) {
-                    return $result;
-                }
-
-                $idA = $a['id'];
-                $idB = $b['id'];
-                $isListA = \str_ends_with($idA, '.list.title') ? 0 : 1;
-                $isListB = \str_ends_with($idB, '.list.title') ? 0 : 1;
-                if ($isListA !== $isListB) {
-                    return $isListA <=> $isListB;
-                }
-
-                $nameA = $this->trans($idA);
-                $nameB = $this->trans($idB);
-
-                return \strnatcmp($nameA, $nameB);
-            }
-        );
+        \usort($dialogs, $this->sortDialogs(...));
 
         /** @phpstan-var array<string, HelpDialogType> */
         return $this->mapToKeyValue(

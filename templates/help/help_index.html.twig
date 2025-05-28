@@ -5,21 +5,21 @@
 {% macro output_dialog(dialog, entity) -%}
     {% set href = path('help_dialog', {id: dialog.id}) %}
     {% set icon = dialog.icon|default(entity ? entity.icon|default(false) : false)|default(false) %}
-    <div class="help-item">
-        <a href="{{ href }}">
+    <div class="help-item position-relative">
+        <a href="{{ href }}" class="stretched-link">
             {%- if icon %}{{ icon(icon ~ ' me-1') }}{% endif %}{{ dialog.name -}}
         </a>
-        <p class="mb-1">{{ dialog.description }}</p>
+        <p class="mb-2">{{ dialog.description }}</p>
     </div>
 {%- endmacro %}
 
 {% macro output_entity(entity) -%}
     {% set href = path('help_entity', {id: entity.id}) %}
-    <div class="help-item">
-        <a href="{{ href }}">
+    <div class="help-item position-relative">
+        <a href="{{ href }}" class="stretched-link">
             {%- if entity.icon|default(false) %}{{ icon(entity.icon ~ ' me-1') }}{% endif %}{{ entity.name -}}
         </a>
-        <p class="mb-1">{{ entity.description }}</p>
+        <p class="mb-2">{{ entity.description }}</p>
     </div>
 {%- endmacro %}
 
@@ -45,7 +45,7 @@
             {%- set description = description|default(target.description|default) -%}
         {%- endif -%}
     {%- endif -%}
-    <div class="help-item mb-2">
+    <div class="help-item mb-2{% if not menus and href %} position-relative{% endif %}">
         {% if menus and not href %}
             {% set menu_id = menu.id %}
             <div class="d-flex">
@@ -56,14 +56,14 @@
             <hr class="ms-3 my-1">
             <div id="{{ menu_id }}" class="ms-3 collapse">
                 {% if description %}
-                    <p class="mb-0">{{ description }}</p>
+                    <p class="mb-2">{{ description }}</p>
                 {% endif %}
                 {{ _self.output_menus(menus, service, false) }}
             </div>
         {% else %}
             <p class="mb-0">
                 {%- if href -%}
-                    <a href="{{ href }}">
+                    <a href="{{ href }}" class="stretched-link">
                         {{- output_icon(menu.icon|default(false), menu.name|default(menu.id)) -}}
                     </a>
                 {%- else -%}

@@ -17,16 +17,16 @@ use App\Utils\StringUtils;
 
 /**
  * Utility class to get PHP information.
+ *
+ * @phpstan-type ValueType = float|int|string
+ * @phpstan-type EntryType = array{local: ValueType, master: ValueType}|ValueType
+ * @phpstan-type EntriesType = array<string, array<string, EntryType>>
  */
 class PhpInfoService
 {
-    /**
-     * The replaced string for sensitive parameters.
-     */
-    public const REDACTED = '********';
-
     private const DISABLED = ['off', 'no', 'disabled', 'not enabled'];
     private const ENABLED = ['active', 'on', 'yes', 'enabled', 'supported'];
+    private const REDACTED = '********';
 
     /**
      * Gets PHP information as the array.
@@ -34,7 +34,7 @@ class PhpInfoService
      * @param int $what the output may be customized by passing one or more of the constants bitwise values
      *                  summed together in the optional what parameter
      *
-     * @phpstan-return array<string, array<string, array{local: scalar, master: scalar}|scalar>>
+     * @phpstan-return EntriesType
      */
     public function asArray(int $what = \INFO_ALL): array
     {
@@ -82,6 +82,7 @@ class PhpInfoService
                 }
             }
         }
+        \ksort($result, \SORT_STRING | \SORT_FLAG_CASE);
 
         return $result;
     }
@@ -155,6 +156,33 @@ class PhpInfoService
         return \PHP_VERSION;
     }
 
+    /**
+     * Returns if the given value is a color.
+     */
+    public function isColor(string $value): bool
+    {
+        return StringUtils::pregMatch('/#[\da-f]{6}/i', $value);
+    }
+
+    /**
+     * Returns if the given value is equal to the redacted value or equal to one of this disabled values,
+     * ignoring case consideration.
+     */
+    public function isDisabled(string $value): bool
+    {
+        $value = \strtolower($value);
+
+        return self::REDACTED === $value || \in_array($value, self::DISABLED, true);
+    }
+
+    /**
+     * Returns if the given value is equal to 'no value', ignoring case consideration.
+     */
+    public function isNoValue(string $value): bool
+    {
+        return StringUtils::equalIgnoreCase('no value', $value);
+    }
+
     private function convert(string $var): string|int|float
     {
         if (\in_array(\strtolower($var), self::DISABLED, true)) {
@@ -184,6 +212,7 @@ class PhpInfoService
             $regex = \sprintf("/(<tr.*\['.*%s']<\/td><td.*?>)(.*)(<.*<\/tr>)/mi", $key);
             $content = StringUtils::pregReplace($regex, $subst, $content);
         }
+        $content = \str_replace('no value', 'No value', $content);
         $content = \str_replace(['✘ ', '✔ ', '⊕'], '', $content);
         $content = \str_ireplace(' </td>', '</td>', $content);
 

@@ -19,13 +19,12 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Service\PhpInfoService;
-use App\Utils\StringUtils;
-use fpdf\Enums\PdfFontStyle;
 
 /**
  * Report for php.ini.
  *
- * @phpstan-type EntriesType = array{local: string, master: string}|string
+ * @phpstan-import-type EntryType from PhpInfoService
+ * @phpstan-import-type EntriesType from PhpInfoService
  */
 class PhpIniReport extends AbstractReport
 {
@@ -44,6 +43,7 @@ class PhpIniReport extends AbstractReport
     public function render(): bool
     {
         $this->addPage();
+
         $content = $this->service->asArray();
         if ([] === $content) {
             $this->cell(text: $this->trans('about.error'));
@@ -51,95 +51,106 @@ class PhpIniReport extends AbstractReport
             return true;
         }
 
-        \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
-        $table = PdfGroupTable::instance($this)
+        $table = $this->createTable();
+        foreach ($content as $key => $entries) {
+            $this->outputEntries($table, $key, $entries);
+        }
+        $this->addPageIndex();
+
+        return true;
+    }
+
+    private function convert(float|int|string $value): string
+    {
+        return \htmlspecialchars_decode((string) $value);
+    }
+
+    private function createTable(): PdfGroupTable
+    {
+        return PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left('Directive', 40),
                 PdfColumn::left('Local Value', 30),
                 PdfColumn::left('Master Value', 30)
             )->outputHeaders();
-
-        /**  @phpstan-var array<string, EntriesType> $entries */
-        foreach ($content as $key => $entries) {
-            $this->outputEntries($table, $key, $entries);
-        }
-
-        return true;
     }
 
-    private function convert(mixed $var): string
-    {
-        return \htmlspecialchars_decode((string) $var);
-    }
-
-    private function getCellStyle(string $var): ?PdfStyle
+    private function getCellStyle(string $value): ?PdfStyle
     {
         $color = null;
-        $style = PdfFontStyle::REGULAR;
-        if (StringUtils::pregMatch('/#[\dA-Fa-f]{6}/i', $var)) {
-            $color = PdfTextColor::create($var);
-        } elseif (\in_array(
-            \strtolower($var),
-            ['no', 'disabled', 'off', 'no value', PhpInfoService::REDACTED],
-            true
-        )) {
+        $noValue = $this->service->isNoValue($value);
+        if ($this->service->isColor($value)) {
+            $color = PdfTextColor::create($value);
+        } elseif ($noValue || $this->service->isDisabled($value)) {
             $color = PdfTextColor::darkGray();
-        }
-        if (StringUtils::equalIgnoreCase('no value', $var)) {
-            $style = PdfFontStyle::ITALIC;
         }
         if (!$color instanceof PdfTextColor) {
             return null;
         }
 
-        return PdfStyle::getCellStyle()
-            ->setTextColor($color)
-            ->setFontStyle($style);
+        $style = PdfStyle::getCellStyle()
+            ->setTextColor($color);
+        if ($noValue) {
+            $style->setFontItalic(true);
+        }
+
+        return $style;
     }
 
     /**
-     * @phpstan-param array<string, EntriesType> $entries
+     * @param array{local: float|int|string, master: float|int|string, ...} $entryValue
+     */
+    private function outputArrayEntry(PdfGroupTable $table, string $keyValue, array $entryValue): void
+    {
+        $local = $this->convert($entryValue['local']);
+        $master = $this->convert($entryValue['master']);
+        $table->startRow()
+            ->add($keyValue)
+            ->add($local, style: $this->getCellStyle($local))
+            ->add($master, style: $this->getCellStyle($master))
+            ->endRow();
+    }
+
+    /**
+     * @phpstan-param array<string, EntryType> $entries
      */
     private function outputEntries(PdfGroupTable $table, string $key, array $entries): void
     {
-        if ([] === $entries) {
-            return;
-        }
-
         $this->addBookmark($key);
         $table->setGroupKey($key);
         $this->sortEntries($entries);
 
+        /** @phpstan-var EntryType $entryValue */
         foreach ($entries as $entryKey => $entryValue) {
+            $keyValue = $this->convert($entryKey);
             if (\is_array($entryValue)) {
-                $local = $this->convert($entryValue['local']);
-                $master = $this->convert($entryValue['master']);
-                $table->startRow()
-                    ->add($this->convert($entryKey))
-                    ->add($local, style: $this->getCellStyle($local))
-                    ->add($master, style: $this->getCellStyle($master))
-                    ->endRow();
+                $this->outputArrayEntry($table, $keyValue, $entryValue);
             } else {
-                $value = $this->convert($entryValue);
-                $table->startRow()
-                    ->add($this->convert($entryKey))
-                    ->add($value, 2, $this->getCellStyle($value))
-                    ->endRow();
+                $this->outputSingleEntry($table, $keyValue, $entryValue);
             }
         }
+        $this->resetStyle();
+    }
+
+    private function outputSingleEntry(PdfGroupTable $table, string $keyValue, float|int|string $entryValue): void
+    {
+        $value = $this->convert($entryValue);
+        $table->startRow()
+            ->add($keyValue)
+            ->add($value, 2, $this->getCellStyle($value))
+            ->endRow();
     }
 
     /**
-     * @phpstan-param array<string, EntriesType> $entries
+     * @phpstan-param array<string, EntryType> $entries
      */
     private function sortEntries(array &$entries): void
     {
         \uksort($entries, function (string $a, string $b) use ($entries): int {
-            $isArrayA = \is_array($entries[$a]);
-            $isArrayB = \is_array($entries[$b]);
-            if ($isArrayA !== $isArrayB) {
-                return $isArrayA <=> $isArrayB;
+            $result = \is_array($entries[$a]) <=> \is_array($entries[$b]);
+            if (0 !== $result) {
+                return $result;
             }
 
             return \strcasecmp($a, $b);

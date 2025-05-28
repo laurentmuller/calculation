@@ -24,7 +24,7 @@ use fpdf\Traits\PdfPolygonTrait;
 /**
  * Trait to compute and output shapes.
  *
- * @phpstan-require-extends \fpdf\PdfDocument
+ * @phpstan-require-extends PdfDocument
  *
  * @see PdfPointStyle
  */
@@ -82,30 +82,27 @@ trait PdfPointStyleTrait
     ): void {
         switch ($style) {
             case PdfPointStyle::CIRCLE:
-                $this->outputPointStyleCircle($x, $y, $width, $height);
+                $this->outputPointStyleCircle($x, $y, $width, $height, $link);
                 break;
             case PdfPointStyle::CROSS:
-                $this->outputPointStyleCross($x, $y, $width, $height);
+                $this->outputPointStyleCross($x, $y, $width, $height, $link);
                 break;
             case PdfPointStyle::CROSS_ROTATION:
-                $this->outputPointStyleCrossRotation($x, $y, $width, $height);
+                $this->outputPointStyleCrossRotation($x, $y, $width, $height, $link);
                 break;
             case PdfPointStyle::DIAMOND:
-                $this->outputPointStyleDiamond($x, $y, $width, $height);
+                $this->outputPointStyleDiamond($x, $y, $width, $height, $link);
                 break;
             case PdfPointStyle::ELLIPSE:
-                $this->outputPointStyleEllipse($x, $y, $width, $height);
+                $this->outputPointStyleEllipse($x, $y, $width, $height, $link);
                 break;
             case PdfPointStyle::RECTANGLE:
             case PdfPointStyle::SQUARE:
-                $this->outputPointStyleRectangle($x, $y, $width, $height);
+                $this->outputPointStyleRectangle($x, $y, $width, $height, $link);
                 break;
             case PdfPointStyle::TRIANGLE:
-                $this->outputPointStyleTriangle($x, $y, $width, $height);
+                $this->outputPointStyleTriangle($x, $y, $width, $height, $link);
                 break;
-        }
-        if (PdfDocument::isLink($link)) {
-            $this->link($x, $y, $width, $height, $link);
         }
     }
 
@@ -141,13 +138,19 @@ trait PdfPointStyleTrait
     /**
      * Output the circle point style.
      *
-     * @param float $x      the abscissa
-     * @param float $y      the ordinate
-     * @param float $width  the width
-     * @param float $height the height
+     * @param float           $x      the abscissa
+     * @param float           $y      the ordinate
+     * @param float           $width  the width
+     * @param float           $height the height
+     * @param string|int|null $link   a URL or an identifier returned by <code>addLink()</code>
      */
-    public function outputPointStyleCircle(float $x, float $y, float $width, float $height): void
-    {
+    public function outputPointStyleCircle(
+        float $x,
+        float $y,
+        float $width,
+        float $height,
+        string|int|null $link = null
+    ): void {
         $radius = \min($width, $height) / 2.0;
         $this->circle(
             $x + $width / 2.0,
@@ -155,18 +158,25 @@ trait PdfPointStyleTrait
             $radius,
             PdfRectangleStyle::BOTH
         );
+        $this->outputPointStyleLink($x, $y, $width, $height, $link);
     }
 
     /**
      * Output the circle point style.
      *
-     * @param float $x      the abscissa
-     * @param float $y      the ordinate
-     * @param float $width  the width
-     * @param float $height the height
+     * @param float           $x      the abscissa
+     * @param float           $y      the ordinate
+     * @param float           $width  the width
+     * @param float           $height the height
+     * @param string|int|null $link   a URL or an identifier returned by <code>addLink()</code>
      */
-    public function outputPointStyleCross(float $x, float $y, float $width, float $height): void
-    {
+    public function outputPointStyleCross(
+        float $x,
+        float $y,
+        float $width,
+        float $height,
+        string|int|null $link = null
+    ): void {
         $size = .5;
         $oldLine = $this->lineWidth;
         $this->setLineWidth($size);
@@ -185,18 +195,25 @@ trait PdfPointStyleTrait
             $y + $height - $size / 2.0
         );
         $this->setLineWidth($oldLine);
+        $this->outputPointStyleLink($x, $y, $width, $height, $link);
     }
 
     /**
      * Output the cross-rotation point style.
      *
-     * @param float $x      the abscissa
-     * @param float $y      the ordinate
-     * @param float $width  the width
-     * @param float $height the height
+     * @param float           $x      the abscissa
+     * @param float           $y      the ordinate
+     * @param float           $width  the width
+     * @param float           $height the height
+     * @param string|int|null $link   a URL or an identifier returned by <code>addLink()</code>
      */
-    public function outputPointStyleCrossRotation(float $x, float $y, float $width, float $height): void
-    {
+    public function outputPointStyleCrossRotation(
+        float $x,
+        float $y,
+        float $width,
+        float $height,
+        string|int|null $link = null
+    ): void {
         $size = .5;
         $oldLine = $this->getLineWidth();
         $this->setLineWidth($size);
@@ -213,18 +230,25 @@ trait PdfPointStyleTrait
             $y + $size
         );
         $this->setLineWidth($oldLine);
+        $this->outputPointStyleLink($x, $y, $width, $height, $link);
     }
 
     /**
      * Output the diamond point style.
      *
-     * @param float $x      the abscissa
-     * @param float $y      the ordinate
-     * @param float $width  the width
-     * @param float $height the height
+     * @param float           $x      the abscissa
+     * @param float           $y      the ordinate
+     * @param float           $width  the width
+     * @param float           $height the height
+     * @param string|int|null $link   a URL or an identifier returned by <code>addLink()</code>
      */
-    public function outputPointStyleDiamond(float $x, float $y, float $width, float $height): void
-    {
+    public function outputPointStyleDiamond(
+        float $x,
+        float $y,
+        float $width,
+        float $height,
+        string|int|null $link = null
+    ): void {
         $points = [
             new PdfPoint($x + $width / 2.0, $y),
             new PdfPoint($x + $width, $y + $height / 2.0),
@@ -232,18 +256,25 @@ trait PdfPointStyleTrait
             new PdfPoint($x, $y + $height / 2.0),
         ];
         $this->polygon($points, PdfRectangleStyle::BOTH);
+        $this->outputPointStyleLink($x, $y, $width, $height, $link);
     }
 
     /**
      * Output the ellipse point style.
      *
-     * @param float $x      the abscissa
-     * @param float $y      the ordinate
-     * @param float $width  the width
-     * @param float $height the height
+     * @param float           $x      the abscissa
+     * @param float           $y      the ordinate
+     * @param float           $width  the width
+     * @param float           $height the height
+     * @param string|int|null $link   a URL or an identifier returned by <code>addLink()</code>
      */
-    public function outputPointStyleEllipse(float $x, float $y, float $width, float $height): void
-    {
+    public function outputPointStyleEllipse(
+        float $x,
+        float $y,
+        float $width,
+        float $height,
+        string|int|null $link = null
+    ): void {
         $rx = $width / 2.0;
         $ry = $height / 2.0;
         $this->ellipse(
@@ -253,18 +284,25 @@ trait PdfPointStyleTrait
             $ry,
             PdfRectangleStyle::BOTH
         );
+        $this->outputPointStyleLink($x, $y, $width, $height, $link);
     }
 
     /**
      * Output the rectangle point style.
      *
-     * @param float $x      the abscissa
-     * @param float $y      the ordinate
-     * @param float $width  the width
-     * @param float $height the height
+     * @param float           $x      the abscissa
+     * @param float           $y      the ordinate
+     * @param float           $width  the width
+     * @param float           $height the height
+     * @param string|int|null $link   a URL or an identifier returned by <code>addLink()</code>
      */
-    public function outputPointStyleRectangle(float $x, float $y, float $width, float $height): void
-    {
+    public function outputPointStyleRectangle(
+        float $x,
+        float $y,
+        float $width,
+        float $height,
+        string|int|null $link = null
+    ): void {
         $this->rect(
             $x,
             $y,
@@ -272,23 +310,43 @@ trait PdfPointStyleTrait
             $height,
             PdfRectangleStyle::BOTH
         );
+        $this->outputPointStyleLink($x, $y, $width, $height, $link);
     }
 
     /**
      * Output the triangle point style.
      *
-     * @param float $x      the abscissa
-     * @param float $y      the ordinate
-     * @param float $width  the width
-     * @param float $height the height
+     * @param float           $x      the abscissa
+     * @param float           $y      the ordinate
+     * @param float           $width  the width
+     * @param float           $height the height
+     * @param string|int|null $link   a URL or an identifier returned by <code>addLink()</code>
      */
-    public function outputPointStyleTriangle(float $x, float $y, float $width, float $height): void
-    {
+    public function outputPointStyleTriangle(
+        float $x,
+        float $y,
+        float $width,
+        float $height,
+        string|int|null $link = null
+    ): void {
         $points = [
             new PdfPoint($x + $width / 2.0, $y),
             new PdfPoint($x + $width, $y + $height),
             new PdfPoint($x, $y + $height),
         ];
         $this->polygon($points, PdfRectangleStyle::BOTH);
+        $this->outputPointStyleLink($x, $y, $width, $height, $link);
+    }
+
+    private function outputPointStyleLink(
+        float $x,
+        float $y,
+        float $width,
+        float $height,
+        string|int|null $link = null
+    ): void {
+        if (PdfDocument::isLink($link)) {
+            $this->link($x, $y, $width, $height, $link);
+        }
     }
 }

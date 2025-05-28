@@ -639,11 +639,11 @@ class TestController extends AbstractController
     }
 
     /**
-     * @return array<int, array{code: string, name: string}>
+     * @return array<array{code: string, name: string}>
      */
     private function getCurrencies(): array
     {
-        /** @phpstan-var array<int, array{code: string, name: string}> $currencies */
+        /** @phpstan-var array<array{code: string, name: string}> $currencies */
         $currencies = \array_map(function (string $code): array {
             $name = \ucfirst(Currencies::getName($code));
             $symbol = Currencies::getSymbol($code);
@@ -653,18 +653,13 @@ class TestController extends AbstractController
                 'name' => "$name - $symbol",
             ];
         }, Currencies::getCurrencyCodes());
+
         $currencies = \array_filter(
             $currencies,
             static fn (array $currency): bool => !StringUtils::pregMatch('/\d|\(/', $currency['name'])
         );
-        \usort(
-            $currencies,
-            /**
-             * @phpstan-param array{code: string, name: string} $left
-             * @phpstan-param array{code: string, name: string} $right
-             */
-            static fn (array $left, array $right): int => \strnatcasecmp($left['name'], $right['name'])
-        );
+
+        \usort($currencies, $this->sortCurrencies(...));
 
         return $currencies;
     }
@@ -721,5 +716,14 @@ class TestController extends AbstractController
         $templateParameters['form'] = $form;
 
         return $this->render('test/parameter.html.twig', $templateParameters);
+    }
+
+    /**
+     * @phpstan-param array{code: string, name: string} $a
+     * @phpstan-param array{code: string, name: string} $b
+     */
+    private function sortCurrencies(array $a, array $b): int
+    {
+        return \strnatcasecmp($a['name'], $b['name']);
     }
 }

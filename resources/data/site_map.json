@@ -310,6 +310,11 @@
                     "route": "user_comment",
                     "text": "user.comment.title",
                     "icon": "envelope far"
+                },
+                {
+                    "route": "help_index",
+                    "text": "help.title",
+                    "icon": "question-circle"
                 }
             ]
         }

@@ -942,9 +942,9 @@
                 "description": "Menu afficher lorsque l'utilisateur est connecté à l'application.",
                 "menus": [
                     {
-                        "id": "theme.title",
-                        "icon": "circle-half-stroke",
-                        "description": "Permet d'appliquer un thème clair ou sombre sur ce site."
+                        "id": "index.logout",
+                        "icon": "sign-out-alt",
+                        "description": "Lien permettant de se déconnecter de l'application."
                     },
                     {
                         "id": "profile.edit.title",
@@ -990,6 +990,11 @@
                         "icon": "info-circle",
                         "description": "Page affichant des informations sur l'application.",
                         "dialog": "about.title"
+                    },
+                    {
+                        "id": "theme.title",
+                        "icon": "circle-half-stroke",
+                        "description": "Permet d'appliquer un thème clair ou sombre sur ce site."
                     }
                 ]
             }

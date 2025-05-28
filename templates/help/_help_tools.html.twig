@@ -60,7 +60,7 @@
 
 {% macro output_icon(icon, text) -%}
 {% from 'macros/_icons.html.twig' import icon %}
-{{- icon(icon ? icon ~ ' me-1' : null, text) -}}
+{{- icon(icon, text) -}}
 {%- endmacro %}
 
 {% macro home_button() -%}

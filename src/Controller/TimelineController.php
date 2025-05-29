@@ -20,7 +20,6 @@ use App\Service\TimelineService;
 use App\Utils\DateUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -30,7 +29,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  *
  * @phpstan-import-type ParametersType from TimelineService
  */
-#[AsController]
 #[Route(path: '/timeline', name: 'timeline_')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class TimelineController extends AbstractController

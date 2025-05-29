@@ -24,7 +24,6 @@ use App\Repository\CalculationRepository;
 use App\Response\PdfResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -33,7 +32,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * The controller for calculations by month chart.
  */
-#[AsController]
 #[Route(path: '/chart/month', name: 'chart_month_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class ChartMonthController extends AbstractController

@@ -18,13 +18,11 @@ use App\Interfaces\RoleInterface;
 use App\Service\IpStackService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for IP stack service.
  */
-#[AsController]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class IpStackController extends AbstractController
 {

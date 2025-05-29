@@ -28,7 +28,6 @@ use App\Traits\TableTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -38,7 +37,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  *
  * @phpstan-import-type CalculationItemType from CalculationRepository
  */
-#[AsController]
 #[Route(path: '/calculation/duplicate', name: 'calculation_duplicate_')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationDuplicateController extends AbstractController

@@ -32,7 +32,6 @@ use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
@@ -42,7 +41,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller for all XMLHttpRequest (Ajax) calls.
  */
-#[AsController]
 #[Route(path: '/ajax', name: 'ajax_')]
 class AjaxController extends AbstractController
 {

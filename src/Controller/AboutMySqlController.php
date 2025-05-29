@@ -23,14 +23,12 @@ use App\Response\SpreadsheetResponse;
 use App\Service\DatabaseInfoService;
 use App\Spreadsheet\MySqlDocument;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to output MySQL information.
  */
-#[AsController]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 #[Route(path: '/about/mysql', name: 'about_mysql_')]
 class AboutMySqlController extends AbstractController

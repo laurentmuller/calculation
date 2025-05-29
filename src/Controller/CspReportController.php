@@ -20,7 +20,6 @@ use App\Mime\CspViolationEmail;
 use App\Utils\StringUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -29,7 +28,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller to send CSP violations by e-mail.
  */
-#[AsController]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CspReportController extends AbstractController
 {

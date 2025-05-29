@@ -26,14 +26,12 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to generate entities.
  */
-#[AsController]
 #[Route(path: '/generate', name: self::PREFIX)]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class GeneratorController extends AbstractController

@@ -25,7 +25,6 @@ use App\Spreadsheet\SymfonyDocument;
 use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -34,7 +33,6 @@ use Twig\Extra\Markdown\MarkdownInterface;
 /**
  * Controller to output symfony information.
  */
-#[AsController]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 #[Route(path: '/about/symfony', name: 'about_symfony_')]
 class AboutSymfonyController extends AbstractController

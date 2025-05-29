@@ -21,14 +21,12 @@ use App\Table\SearchTable;
 use App\Traits\TableTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display the search page.
  */
-#[AsController]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class SearchController extends AbstractController
 {

@@ -27,7 +27,6 @@ use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -35,7 +34,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller to display help.
  */
-#[AsController]
 #[Route(path: '/help', name: 'help_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class HelpController extends AbstractController

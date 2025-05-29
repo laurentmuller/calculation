@@ -22,14 +22,12 @@ use App\Response\PdfResponse;
 use App\Service\FontAwesomeImageService;
 use App\Service\SchemaService;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display the database schema.
  */
-#[AsController]
 #[Route(path: '/schema', name: 'schema_')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class SchemaController extends AbstractController

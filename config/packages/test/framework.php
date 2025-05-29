@@ -16,9 +16,6 @@ use Symfony\Config\FrameworkConfig;
 return static function (FrameworkConfig $config): void {
     $config->test(true);
 
-    $config->profiler()
-        ->collect(false);
-
     $config->session()
         ->storageFactoryId('session.storage.factory.mock_file');
 

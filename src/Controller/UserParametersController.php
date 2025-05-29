@@ -23,14 +23,12 @@ use App\Service\UserService;
 use App\Traits\CookieTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to edit user preferences.
  */
-#[AsController]
 #[Route(path: '/user', name: 'user_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class UserParametersController extends AbstractController

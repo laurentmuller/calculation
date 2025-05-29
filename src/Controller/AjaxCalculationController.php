@@ -19,7 +19,6 @@ use App\Model\CalculationQuery;
 use App\Service\CalculationGroupService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -27,7 +26,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller to update calculation's total or the user margin within XMLHttpRequest (Ajax) calls.
  */
-#[AsController]
 #[Route(path: '/calculation', name: 'calculation_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class AjaxCalculationController extends AbstractController

@@ -23,7 +23,6 @@ use App\Service\PasswordTooltipService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -31,7 +30,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller for the user profile.
  */
-#[AsController]
 #[Route(path: '/user/profile', name: 'user_profile_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class ProfileController extends AbstractController

@@ -25,52 +25,30 @@ use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Bridge\Twig\Extension\WebLinkExtension;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\Attribute\AsTwigFunction;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 /**
  * Twig extension for assets.
  */
-final class FunctionExtension extends AbstractExtension
+final readonly class FunctionExtension
 {
     use ImageSizeTrait;
 
-    private readonly string $publicDir;
+    private string $publicDir;
 
     public function __construct(
         #[Autowire('%kernel.project_dir%/public')]
         string $publicDir,
         #[Autowire(service: 'twig.extension.assets')]
-        private readonly AssetExtension $assetExtension,
+        private AssetExtension $assetExtension,
         #[Autowire(service: 'twig.extension.weblink')]
-        private readonly WebLinkExtension $webLinkExtension,
-        private readonly NonceService $nonceService,
-        private readonly UploaderHelper $uploaderHelper,
-        private readonly UrlGeneratorService $urlGeneratorService,
+        private WebLinkExtension $webLinkExtension,
+        private NonceService $nonceService,
+        private UploaderHelper $uploaderHelper,
+        private UrlGeneratorService $urlGeneratorService,
     ) {
         $this->publicDir = FileUtils::normalize($publicDir);
-    }
-
-    #[\Override]
-    public function getFunctions(): array
-    {
-        $options = ['is_safe' => ['html']];
-
-        return [
-            // assets
-            new TwigFunction('asset_exists', $this->assetExists(...)),
-            new TwigFunction('asset_js', $this->assetJs(...), $options),
-            new TwigFunction('asset_css', $this->assetCss(...), $options),
-            new TwigFunction('asset_icon', $this->assetIcon(...), $options),
-            new TwigFunction('asset_image', $this->assetImage(...), $options),
-            new TwigFunction('asset_image_user', $this->assetImageUser(...), $options),
-            new TwigFunction('preload_css', $this->preloadCss(...), $options),
-
-            // routes
-            new TwigFunction('cancel_url', $this->cancelUrl(...)),
-            new TwigFunction('route_params', $this->routeParams(...)),
-        ];
     }
 
     /**
@@ -78,7 +56,8 @@ final class FunctionExtension extends AbstractExtension
      *
      * @param array<string, string|int> $parameters
      */
-    private function assetCss(string $path, array $parameters = []): string
+    #[AsTwigFunction(name: 'asset_css', isSafe: ['html'])]
+    public function assetCss(string $path, array $parameters = []): string
     {
         $parameters = \array_merge([
             'href' => $this->getAssetUrl($path),
@@ -92,7 +71,8 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Checks if the given asset path exists.
      */
-    private function assetExists(?string $path = null): bool
+    #[AsTwigFunction(name: 'asset_exists')]
+    public function assetExists(?string $path = null): bool
     {
         $file = $this->getRealPath($path);
         if (!StringUtils::isString($file)) {
@@ -105,7 +85,8 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Gets an application icon.
      */
-    private function assetIcon(int $size): string
+    #[AsTwigFunction(name: 'asset_icon', isSafe: ['html'])]
+    public function assetIcon(int $size): string
     {
         $path = \sprintf('images/icons/favicon-%1$dx%1$d.png', $size);
 
@@ -117,7 +98,8 @@ final class FunctionExtension extends AbstractExtension
      *
      * @param array<string, string|int> $parameters
      */
-    private function assetImage(string $path, array $parameters = []): string
+    #[AsTwigFunction(name: 'asset_image', isSafe: ['html'])]
+    public function assetImage(string $path, array $parameters = []): string
     {
         [$width, $height] = $this->imageSize($path);
         $parameters = \array_merge([
@@ -135,7 +117,8 @@ final class FunctionExtension extends AbstractExtension
      * @param User|array|null           $user       the user
      * @param array<string, string|int> $parameters
      */
-    private function assetImageUser(User|array|null $user, ?string $size = null, array $parameters = []): string|false
+    #[AsTwigFunction(name: 'asset_image_user', isSafe: ['html'])]
+    public function assetImageUser(User|array|null $user, ?string $size = null, array $parameters = []): string|false
     {
         if (null === $user || [] === $user) {
             return false;
@@ -159,7 +142,8 @@ final class FunctionExtension extends AbstractExtension
      *
      * @param array<string, string|int> $parameters
      */
-    private function assetJs(string $path, array $parameters = []): string
+    #[AsTwigFunction(name: 'asset_js', isSafe: ['html'])]
+    public function assetJs(string $path, array $parameters = []): string
     {
         $parameters = \array_merge([
             'src' => $this->getAssetUrl($path),
@@ -172,12 +156,41 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Gets the cancel URL.
      */
-    private function cancelUrl(
+    #[AsTwigFunction(name: 'cancel_url')]
+    public function cancelUrl(
         Request $request,
         EntityInterface|int|null $id = 0,
         string $defaultRoute = AbstractController::HOME_PAGE
     ): string {
         return $this->urlGeneratorService->cancelUrl($request, $id, $defaultRoute);
+    }
+
+    /**
+     * Output a preload style sheet tag within a nonce token.
+     *
+     * @param array<string, string|int> $parameters
+     */
+    #[AsTwigFunction(name: 'preload_css', isSafe: ['html'])]
+    public function preloadCss(string $path, array $parameters = []): string
+    {
+        $url = $this->getAssetUrl($path);
+        $href = $this->webLinkExtension->preload($url, ['as' => 'style']);
+        $parameters = \array_merge([
+            'rel' => 'preload',
+            'href' => $href,
+            'as' => 'style',
+        ], $parameters);
+
+        return $this->assetCss($path, $parameters);
+    }
+
+    /**
+     * Gets the route parameters.
+     */
+    #[AsTwigFunction(name: 'route_params')]
+    public function routeParams(Request $request, EntityInterface|int|null $id = 0): array
+    {
+        return $this->urlGeneratorService->routeParams($request, $id);
     }
 
     /**
@@ -223,24 +236,6 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Output a preload style sheet tag within a nonce token.
-     *
-     * @param array<string, string|int> $parameters
-     */
-    private function preloadCss(string $path, array $parameters = []): string
-    {
-        $url = $this->getAssetUrl($path);
-        $href = $this->webLinkExtension->preload($url, ['as' => 'style']);
-        $parameters = \array_merge([
-            'rel' => 'preload',
-            'href' => $href,
-            'as' => 'style',
-        ], $parameters);
-
-        return $this->assetCss($path, $parameters);
-    }
-
-    /**
      * Reduce parameters.
      *
      * @param array<string, string|int> $parameters
@@ -250,13 +245,5 @@ final class FunctionExtension extends AbstractExtension
         $callback = static fn (string $key, string|int $value): string => \sprintf('%s="%s"', $key, \htmlspecialchars((string) $value));
 
         return \implode(' ', \array_map($callback, \array_keys($parameters), \array_values($parameters)));
-    }
-
-    /**
-     * Gets the route parameters.
-     */
-    private function routeParams(Request $request, EntityInterface|int|null $id = 0): array
-    {
-        return $this->urlGeneratorService->routeParams($request, $id);
     }
 }

@@ -19,14 +19,13 @@ use Doctrine\SqlFormatter\HtmlHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
+use Twig\Attribute\AsTwigFilter;
 use Twig\Environment;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
 
 /**
  * Twig extension to export and highlight variables.
  */
-class HighlightExtension extends AbstractExtension
+class HighlightExtension
 {
     /**
      * @const array<non-empty-string, string>
@@ -51,21 +50,8 @@ class HighlightExtension extends AbstractExtension
     private ?HtmlDumper $dumper = null;
     private ?SqlFormatter $sqlFormatter = null;
 
-    #[\Override]
-    public function getFilters(): array
-    {
-        return [
-            new TwigFilter('var_export_php', $this->exportPhp(...), [
-                'needs_environment' => true,
-                'is_safe' => ['html'],
-            ]),
-            new TwigFilter('var_export_sql', $this->exportSql(...), [
-                'is_safe' => ['html'],
-            ]),
-        ];
-    }
-
-    private function exportPhp(Environment $env, mixed $variable, string $id = ''): ?string
+    #[AsTwigFilter(name: 'var_export_php', needsEnvironment: true, isSafe: ['html'])]
+    public function exportPhp(Environment $env, mixed $variable, string $id = ''): ?string
     {
         if (null === $variable || '' === $variable) {
             return null;
@@ -86,7 +72,8 @@ class HighlightExtension extends AbstractExtension
         return StringUtils::trim($content);
     }
 
-    private function exportSql(?string $sql): ?string
+    #[AsTwigFilter(name: 'var_export_sql', isSafe: ['html'])]
+    public function exportSql(?string $sql): ?string
     {
         if (!StringUtils::isString($sql)) {
             return null;

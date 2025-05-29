@@ -17,7 +17,6 @@ use App\Attribute\GetRoute;
 use App\Form\Type\CaptchaImageType;
 use App\Service\CaptchaImageService;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
@@ -28,7 +27,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  *
  * @see CaptchaImageType
  */
-#[AsController]
 #[Route(path: '/captcha', name: 'captcha_')]
 #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
 class CaptchaController extends AbstractController

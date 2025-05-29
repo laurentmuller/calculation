@@ -18,14 +18,12 @@ use App\Interfaces\RoleInterface;
 use App\Service\ThemeService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for website theme.
  */
-#[AsController]
 #[Route(path: '/theme', name: 'theme_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class ThemeController extends AbstractController

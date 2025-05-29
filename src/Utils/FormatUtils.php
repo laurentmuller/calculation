@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Utils;
 
+use Twig\Attribute\AsTwigFilter;
+
 /**
  * Utility class for default formats.
  */
@@ -81,6 +83,7 @@ final class FormatUtils
     /**
      * Format a number for the current locale with 2 decimals (Ex: 2312.5 > 2'312.50).
      */
+    #[AsTwigFilter(name: 'amount')]
     public static function formatAmount(float|int|string|null $number): string
     {
         $value = self::checkNegativeZero($number);
@@ -148,6 +151,7 @@ final class FormatUtils
     /**
      * Format an integer identifier with 0 left paddings (Ex: 123 > 000123).
      */
+    #[AsTwigFilter(name: 'identifier')]
     public static function formatId(float|int|string|null $number): string
     {
         $value = self::checkNegativeZero($number);
@@ -158,6 +162,7 @@ final class FormatUtils
     /**
      * Format a number for the current locale with no decimal (Ex: 2312.2 > 2'312).
      */
+    #[AsTwigFilter(name: 'integer')]
     public static function formatInt(\Countable|array|int|float|string|null $number): string
     {
         if (\is_countable($number)) {
@@ -179,6 +184,7 @@ final class FormatUtils
      *
      * @phpstan-param \NumberFormatter::ROUND_* $roundingMode
      */
+    #[AsTwigFilter(name: 'percent')]
     public static function formatPercent(
         float|int|string|null $number,
         bool $includeSign = true,

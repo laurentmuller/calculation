@@ -84,7 +84,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Currencies;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -100,7 +99,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  *
  * @phpstan-import-type SearchType from SearchService
  */
-#[AsController]
 #[Route(path: '/test', name: 'test_')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class TestController extends AbstractController

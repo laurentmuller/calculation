@@ -35,7 +35,7 @@ class SymfonyStyleTest extends TestCase
     {
         $style = $this->createStyle();
         $actual = $style->formatDuration(\time() - 4000);
-        self::assertSame('1 hr', $actual);
+        self::assertSame('1 h', $actual);
     }
 
     public function testGetArrayOption(): void

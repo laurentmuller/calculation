@@ -22,7 +22,6 @@ use App\Service\MailerService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
@@ -31,7 +30,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller to send comments to the webmaster.
  */
-#[AsController]
 #[Route(path: '/user', name: 'user_')]
 class CommentController extends AbstractController
 {

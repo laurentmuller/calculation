@@ -33,7 +33,6 @@ use App\Table\DataQuery;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -45,7 +44,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  *
  * @template-extends AbstractEntityController<Customer, CustomerRepository>
  */
-#[AsController]
 #[Route(path: '/customer', name: 'customer_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CustomerController extends AbstractEntityController

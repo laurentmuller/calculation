@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use Symfony\Component\Intl\Countries;
+use Twig\Attribute\AsTwigFilter;
 
 /**
  * Service to get Emoji country flags.
@@ -61,6 +62,7 @@ class CountryFlagService
      *
      * @see Countries::exists()
      */
+    #[AsTwigFilter(name: 'flag_emoji')]
     public function getFlag(string $alpha2Code, bool $validate = true): string
     {
         if (Countries::exists($alpha2Code)) {

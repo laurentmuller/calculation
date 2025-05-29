@@ -35,7 +35,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -45,7 +44,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller to display the home page.
  */
-#[AsController]
 #[Route(path: '/', name: self::HOME_PAGE)]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class IndexController extends AbstractController

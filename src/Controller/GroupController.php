@@ -35,7 +35,6 @@ use App\Table\GroupTable;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -45,7 +44,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  *
  * @template-extends AbstractEntityController<Group, GroupRepository>
  */
-#[AsController]
 #[Route(path: '/group', name: 'group_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class GroupController extends AbstractEntityController

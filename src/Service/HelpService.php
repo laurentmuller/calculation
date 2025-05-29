@@ -18,6 +18,7 @@ use App\Traits\TranslatorTrait;
 use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -50,13 +51,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *      description: string|null,
  *      name?: string,
  *      icon?: string,
- *      group?: string,
+ *      group: string,
  *      image: string|null,
  *      images?: string[],
- *      displayEntityColumns: true|null,
- *      displayEntityFields: true|null,
- *      displayEntityActions: true|null,
- *      entity: string|null,
+ *      displayEntityColumns: bool|null,
+ *      displayEntityFields: bool|null,
+ *      displayEntityActions: bool|null,
+ *      entity?: string,
  *      editActions: HelpActionType[]|null,
  *      globalActions: HelpActionType[]|null,
  *      forbidden: HelpForbiddenType|null,
@@ -82,11 +83,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *      image: string|null,
  *      description: string|null,
  *      menus: HelpMenuType[]}
- * @phpstan-type HelpContentType = array{
- *      actions: array<string, HelpActionType>,
- *      dialogs: array<string, HelpDialogType>,
- *      entities: array<string, HelpEntityType>,
- *      mainMenu: HelpMainMenuType}
  */
 class HelpService
 {
@@ -99,12 +95,12 @@ class HelpService
     final public const IMAGES_EXT = '.png';
 
     /**
-     * @param string $file      the absolute path to the JSON help file
-     * @param string $imagePath the absolute path to images
+     * @param string $jsonPath  the absolute path to JSON files
+     * @param string $imagePath the absolute path to image files
      */
     public function __construct(
-        #[Autowire('%kernel.project_dir%/public/help/help.json')]
-        private readonly string $file,
+        #[Autowire('%kernel.project_dir%/public/help')]
+        private readonly string $jsonPath,
         #[Autowire('%kernel.project_dir%/public/help/images')]
         private readonly string $imagePath,
         #[Target('calculation.help')]
@@ -146,14 +142,14 @@ class HelpService
      *
      * @return array|null the entity, if found; null otherwise
      *
-     * @phpstan-param string|HelpDialogType|null $id
+     * @phpstan-param string|array{entity?: string|null, ...}|null $id
      *
      * @phpstan-return HelpEntityType|null
      */
     public function findEntity(string|array|null $id = null): ?array
     {
         if (\is_array($id)) {
-            $id = $id['entity'] ?? '';
+            $id = $id['entity'] ?? null;
         }
         if (null === $id || '' === $id) {
             return null;
@@ -169,7 +165,7 @@ class HelpService
      */
     public function getActions(): array
     {
-        return $this->getHelp()['actions'];
+        return $this->cache->get('help_actions', fn (): array => $this->loadActions());
     }
 
     /**
@@ -179,7 +175,8 @@ class HelpService
      */
     public function getDialogs(): array
     {
-        return $this->getHelp()['dialogs'];
+        /** @phpstan-var array<string, HelpDialogType> */
+        return $this->cache->get('help_dialogs', fn (): array => $this->loadDialogs());
     }
 
     /**
@@ -201,7 +198,7 @@ class HelpService
              * @phpstan-return array<string, HelpDialogType[]>
              */
             function (array $carry, array $dialog): array {
-                $key = $dialog['group'] ?? '';
+                $key = $dialog['group'];
                 $carry[$key][] = $dialog;
 
                 return $carry;
@@ -217,31 +214,8 @@ class HelpService
      */
     public function getEntities(): array
     {
-        return $this->getHelp()['entities'];
-    }
-
-    /**
-     * Gets the full help content.
-     *
-     * @phpstan-return HelpContentType
-     */
-    public function getHelp(): array
-    {
-        try {
-            /** @phpstan-var HelpContentType */
-            return $this->cache->get('help', fn (): array => $this->loadHelp());
-        } catch (\InvalidArgumentException) {
-            return [
-                'actions' => [],
-                'dialogs' => [],
-                'entities' => [],
-                'mainMenu' => [
-                    'image' => null,
-                    'description' => null,
-                    'menus' => [],
-                ],
-            ];
-        }
+        /** @phpstan-var array<string, HelpEntityType> */
+        return $this->cache->get('help_entities', fn (): array => $this->loadEntities());
     }
 
     /**
@@ -253,19 +227,17 @@ class HelpService
     }
 
     /**
-     * Gets the main (root) menu.
+     * Gets the root menu.
      *
      * @phpstan-return HelpMainMenuType
      */
     public function getMainMenu(): array
     {
-        return $this->getHelp()['mainMenu'];
+        return $this->cache->get('help_main_menu', fn (): array => $this->loadMainMenu());
     }
 
     /**
-     * Gets the main (root) menus.
-     *
-     * @return array the main menus, if found; null otherwise
+     * Gets the root menus.
      *
      * @phpstan-return HelpMenuType[]
      */
@@ -311,46 +283,12 @@ class HelpService
     }
 
     /**
-     * @phpstan-param HelpDialogType $dialog
-     */
-    private function getDialogGroup(array $dialog): string
-    {
-        if (isset($dialog['group']) && '' !== $dialog['group']) {
-            return $dialog['group'];
-        }
-        if (isset($dialog['entity']) && '' !== $dialog['entity']) {
-            return $dialog['entity'] . '.name';
-        }
-
-        return $dialog['id'];
-    }
-
-    /**
-     * @phpstan-return HelpContentType
-     */
-    private function loadHelp(): array
-    {
-        /** @phpstan-var HelpContentType $help */
-        $help = FileUtils::decodeJson($this->file);
-        $entities = $help['entities'];
-        if ([] !== $entities) {
-            $help['entities'] = $this->updateEntities($entities);
-        }
-        $dialogs = $help['dialogs'];
-        if ([] !== $dialogs) {
-            $help['dialogs'] = $this->updateDialogs($dialogs);
-        }
-
-        return $help;
-    }
-
-    /**
      * @phpstan-param HelpDialogType $a
      * @phpstan-param HelpDialogType $b
      */
-    private function sortDialogs(array $a, array $b): int
+    private function compareDialogs(array $a, array $b): int
     {
-        $result = \strnatcmp($a['group'] ?? '', $b['group'] ?? '');
+        $result = \strnatcmp($a['group'], $b['group']);
         if (0 !== $result) {
             return $result;
         }
@@ -366,45 +304,89 @@ class HelpService
     }
 
     /**
-     * @phpstan-param HelpDialogType[] $dialogs
-     *
-     * @phpstan-return array<string, HelpDialogType>
+     * @phpstan-param HelpEntityType $a
+     * @phpstan-param HelpEntityType $b
      */
-    private function updateDialogs(array $dialogs): array
+    private function compareEntities(array $a, array $b): int
     {
-        foreach ($dialogs as &$dialog) {
-            $group = $this->getDialogGroup($dialog);
-            $dialog['group'] = $this->trans($group);
-            $dialog['name'] = $this->trans($dialog['name'] ?? $dialog['id']);
+        return ($a['name'] ?? '') <=> ($b['name'] ?? '');
+    }
+
+    private function decodeJson(string $filename): array
+    {
+        $path = Path::join($this->jsonPath, $filename);
+
+        try {
+            return FileUtils::decodeJson($path);
+        } catch (\InvalidArgumentException) {
+            return [];
         }
-
-        \usort($dialogs, $this->sortDialogs(...));
-
-        /** @phpstan-var array<string, HelpDialogType> */
-        return $this->mapToKeyValue(
-            $dialogs,
-            /** @phpstan-param HelpDialogType $dialog */
-            fn (array $dialog): array => [$dialog['id'] => $dialog]
-        );
     }
 
     /**
-     * @phpstan-param HelpEntityType[] $entities
-     *
+     * @phpstan-return array<string, HelpActionType>
+     */
+    private function loadActions(): array
+    {
+        /** @phpstan-var array<string, HelpActionType> */
+        return $this->decodeJson('actions.json');
+    }
+
+    /**
+     * @phpstan-return array<string, HelpDialogType>
+     */
+    private function loadDialogs(): array
+    {
+        /** @phpstan-var array<string, HelpDialogType> $dialogs */
+        $dialogs = $this->decodeJson('dialogs.json');
+        $this->updateDialogs($dialogs);
+
+        return $dialogs;
+    }
+
+    /**
      * @phpstan-return array<string, HelpEntityType>
      */
-    private function updateEntities(array $entities): array
+    private function loadEntities(): array
     {
-        foreach ($entities as &$entity) {
+        /** @phpstan-var array<string, HelpEntityType> $entities */
+        $entities = $this->decodeJson('entities.json');
+        $this->updateEntities($entities);
+
+        return $entities;
+    }
+
+    /**
+     * @phpstan-return HelpMainMenuType
+     */
+    private function loadMainMenu(): array
+    {
+        /** @phpstan-var HelpMainMenuType */
+        return $this->decodeJson('main_menu.json');
+    }
+
+    /**
+     * @phpstan-param array<string, HelpDialogType> $dialogs
+     */
+    private function updateDialogs(array &$dialogs): void
+    {
+        foreach ($dialogs as $key => &$dialog) {
+            $dialog['id'] = $key;
+            $dialog['group'] = $this->trans($dialog['group']);
+            $dialog['name'] = $this->trans($dialog['name'] ?? $dialog['id']);
+        }
+        \uasort($dialogs, $this->compareDialogs(...));
+    }
+
+    /**
+     * @phpstan-param array<string, HelpEntityType> $entities
+     */
+    private function updateEntities(array &$entities): void
+    {
+        foreach ($entities as $key => &$entity) {
+            $entity['id'] = $key;
             $entity['name'] = $this->trans($entity['id'] . '.name');
         }
-        $this->sortByName($entities);
-
-        /** @phpstan-var array<string, HelpEntityType> */
-        return $this->mapToKeyValue(
-            $entities,
-            /** @phpstan-param HelpEntityType $entity  */
-            fn (array $entity): array => [$entity['id'] => $entity]
-        );
+        \uasort($entities, $this->compareEntities(...));
     }
 }

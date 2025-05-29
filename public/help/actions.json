@@ -1,0 +1,110 @@
+{
+    "back_home": {
+        "description": "Retourne à la page précédente ou à la page principale de l'application (page d'accueil).",
+        "dialog": "index.title",
+        "icon": "home",
+        "id": "index.title"
+    },
+    "back_ok": {
+        "description": "Retourne à la page précédente.",
+        "id": "common.button_ok"
+    },
+    "cancel_delete": {
+        "description": "Annule la suppression et retourne à la page précédente.",
+        "id": "common.button_cancel"
+    },
+    "delete_forbidden": {
+        "description": "Retourne à la page précédente sans supprimer l'objet.",
+        "icon": "chevron-left",
+        "id": "common.button_back_list"
+    },
+    "entity_add": {
+        "description": "Affiche la page de création d'un nouvel objet.",
+        "icon": "file far",
+        "id": "common.button_add"
+    },
+    "entity_clone": {
+        "description": "Crée un nouvel objet en copiant les valeurs d'un objet existant et affiche la page de création.",
+        "icon": "copy far",
+        "id": "common.button_clone"
+    },
+    "entity_delete": {
+        "description": "Affiche la page de suppression de l'objet.",
+        "icon": "times",
+        "id": "common.button_delete"
+    },
+    "entity_edit": {
+        "description": "Affiche la page d'édition de l'objet.",
+        "icon": "pencil",
+        "id": "common.button_edit"
+    },
+    "entity_show": {
+        "description": "Affiche la page des propriétés de l'objet.",
+        "icon": "display"
+    },
+    "list_clear": {
+        "description": "Efface tous les critères de recherche et les filtres.",
+        "icon": "eraser",
+        "id": "help.actions.clear"
+    },
+    "list_custom": {
+        "description": "Menu permettant d'afficher les objets sous forme de mosaïque.",
+        "icon": "grip-horizontal",
+        "id": "table_view.custom"
+    },
+    "list_excel": {
+        "description": "Exporte les données vers format Microsoft® Excel®.",
+        "icon": "file-excel far"
+    },
+    "list_page": {
+        "description": "Affiche une boîte de dialog permettant de sélectionner une page à afficher.",
+        "dialog": "datatable.dialog_title",
+        "icon": "arrow-up-right-dots",
+        "id": "datatable.dialog_title"
+    },
+    "list_pdf": {
+        "description": "Exporte les données vers le format de document portable (PDF).",
+        "icon": "file-pdf far"
+    },
+    "list_search": {
+        "description": "Zone de text pour rechercher les données.",
+        "icon": "pen-to-square",
+        "id": "help.actions.search"
+    },
+    "list_size": {
+        "description": "Permet de définir le nombre d'éléments à afficher.",
+        "icon": "list-ol",
+        "id": "help.actions.pages"
+    },
+    "list_sort": {
+        "description": "Affiche une boîte de dialog permettant de trier les objets.",
+        "dialog": "list.sort_title",
+        "icon": "sort-amount-down-alt",
+        "id": "list.sort_title"
+    },
+    "list_table": {
+        "description": "Menu permettant d'afficher les objets sous forme tabulaire.",
+        "icon": "table",
+        "id": "table_view.table"
+    },
+    "send": {
+        "description": "Envoie le message et retourne à la page précédente ou à la page principale de l'application (page d'accueil).",
+        "id": "common.button_send"
+    },
+    "submit_add": {
+        "description": "Ajoute le nouvel objet et retourne à la page précédente.",
+        "id": "common.button_submit_add"
+    },
+    "submit_cancel": {
+        "description": "Annule les modifications et retourne à la page précédente.",
+        "id": "common.button_cancel"
+    },
+    "submit_delete": {
+        "description": "Supprime l'objet et retourne à la page précédente.",
+        "id": "common.button_delete"
+    },
+    "submit_ok": {
+        "description": "Enregistre les modifications et retourne à la page précédente.",
+        "id": "common.button_submit_edit"
+    }
+}

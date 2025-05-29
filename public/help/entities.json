@@ -1,0 +1,637 @@
+{
+    "calculation": {
+        "actions": [
+            {
+                "action": "entity_show",
+                "id": "calculation.show.title"
+            },
+            {
+                "action": "entity_edit",
+                "id": "calculation.edit.title_short"
+            },
+            {
+                "action": "entity_delete",
+                "id": "calculation.delete.title"
+            },
+            {
+                "action": "entity_add",
+                "id": "calculation.add.title"
+            },
+            {
+                "action": "entity_clone",
+                "id": "calculation.clone.title"
+            },
+            {
+                "description": "Affiche la page de modification du statut de la calculation.",
+                "icon": "flag far",
+                "id": "calculation.list.state_title"
+            },
+            {
+                "action": "list_pdf",
+                "description": "Exporte la calculation vers le format de document portable (PDF).",
+                "id": "calculation.list.pdf_single_title"
+            },
+            {
+                "action": "list_excel",
+                "description": "Exporte la calculation vers le format Microsoft® Excel®.",
+                "id": "calculation.list.excel_single_title"
+            }
+        ],
+        "description": "Représente une calculation.",
+        "fields": [
+            {
+                "description": "Numéro unique identifiant la calculation. Ce numéro est généré automatiquement par l'application.",
+                "name": "id",
+                "type": "identifier"
+            },
+            {
+                "description": "Date de la calculation. La valeur par défaut est la date du jour.",
+                "name": "date",
+                "type": "date"
+            },
+            {
+                "description": "Nom du client.",
+                "length": "255",
+                "name": "customer"
+            },
+            {
+                "description": "Description de la calculation.",
+                "length": "255",
+                "name": "description"
+            },
+            {
+                "description": "Statut de la calculation.",
+                "entity": "calculationstate",
+                "name": "state",
+                "type": "reference"
+            },
+            {
+                "description": "Montant total des articles.",
+                "name": "itemsTotal",
+                "required": false,
+                "type": "amount"
+            },
+            {
+                "description": "Marge globale calculée automatiquement par le programme en fonction du montant total des articles.",
+                "name": "globalMargin",
+                "required": false,
+                "type": "percent"
+            },
+            {
+                "description": "Montant total net de la calculation.",
+                "name": "totalNet",
+                "required": false,
+                "type": "amount"
+            },
+            {
+                "description": "Marge de l'utilisateur à appliquer à la calculation.",
+                "name": "userMargin",
+                "required": false,
+                "type": "percent"
+            },
+            {
+                "description": "Total général de la calculation.",
+                "name": "overallTotal",
+                "required": false,
+                "type": "amount"
+            },
+            {
+                "description": "Date et nom de l'utilisateur qui a crée la calculation.",
+                "name": "created",
+                "required": false
+            },
+            {
+                "description": "Date et nom de l'utilisateur qui a modifié la calculation en dernier.",
+                "name": "updated",
+                "required": false
+            }
+        ],
+        "icon": "calculator",
+        "links": [
+            {
+                "id": "calculation.list.title",
+                "type": "dialog"
+            }
+        ]
+    },
+    "calculationstate": {
+        "actions": [
+            {
+                "action": "entity_show",
+                "id": "calculationstate.show.title"
+            },
+            {
+                "action": "entity_edit",
+                "id": "calculationstate.edit.title"
+            },
+            {
+                "action": "entity_delete",
+                "id": "calculationstate.delete.title"
+            },
+            {
+                "action": "entity_add",
+                "id": "calculationstate.add.title"
+            },
+            {
+                "action": "entity_clone",
+                "dialog": "calculationstate.clone.title"
+            }
+        ],
+        "constraints": [
+            "Le nom du statut doit être unique à travers tout le catalogue."
+        ],
+        "description": "Représente le statut d'une calculation.",
+        "fields": [
+            {
+                "description": "Nom du statut.",
+                "length": "30",
+                "name": "code"
+            },
+            {
+                "description": "Description du statut.",
+                "length": "255",
+                "name": "description",
+                "required": false
+            },
+            {
+                "description": "Définit si une calculation avec ce statut peut être modifiée.",
+                "name": "editable",
+                "type": "boolean"
+            },
+            {
+                "description": "Couleur utilisée dans interface utilisateur (UI).",
+                "length": "10",
+                "name": "color"
+            },
+            {
+                "description": "Liste des calculations appartenant à ce statut.",
+                "entity": "calculation",
+                "name": "calculations",
+                "required": false,
+                "type": "collection"
+            }
+        ],
+        "icon": "flag far",
+        "links": [
+            {
+                "id": "calculationstate.list.title",
+                "type": "dialog"
+            }
+        ]
+    },
+    "category": {
+        "actions": [
+            {
+                "action": "entity_show",
+                "id": "category.show.title"
+            },
+            {
+                "action": "entity_edit",
+                "id": "category.edit.title"
+            },
+            {
+                "action": "entity_delete",
+                "id": "category.delete.title"
+            },
+            {
+                "action": "entity_add",
+                "id": "category.add.title"
+            },
+            {
+                "action": "entity_clone",
+                "dialog": "category.clone.title"
+            }
+        ],
+        "constraints": [
+            "Le nom de la catégorie doit être unique à travers tout le catalogue."
+        ],
+        "description": "Représente un catégorie du catalogue. Elle contient une liste d'articles et de tâches.",
+        "fields": [
+            {
+                "description": "Nom de la catégorie.",
+                "length": "30",
+                "name": "code"
+            },
+            {
+                "description": "Groupe à laquelle appartient la catégorie.",
+                "entity": "group",
+                "name": "group",
+                "type": "reference"
+            },
+            {
+                "description": "Description de la catégorie.",
+                "length": "255",
+                "name": "description",
+                "required": false
+            },
+            {
+                "description": "Liste des articles appartenant à cette catégorie.",
+                "entity": "product",
+                "name": "products",
+                "required": false,
+                "type": "collection"
+            },
+            {
+                "description": "Liste des tâches appartenant à cette catégorie.",
+                "entity": "task",
+                "name": "tasks",
+                "required": false,
+                "type": "collection"
+            }
+        ],
+        "icon": "folder far",
+        "links": [
+            {
+                "id": "category.list.title",
+                "type": "dialog"
+            }
+        ]
+    },
+    "globalmargin": {
+        "actions": [
+            {
+                "action": "entity_show",
+                "description": "Affiche la page des propriétés de la marge globale.",
+                "id": "globalmargin.show.title"
+            },
+            {
+                "action": "entity_edit",
+                "description": "Affiche la page d'édition des marges globales.",
+                "id": "globalmargin.edit.title"
+            }
+        ],
+        "constraints": [
+            "La valeur minimale d'une marge ne doit pas chevaucher une marge existante.",
+            "La valeur maximale d'une marge ne doit pas chevaucher une marge existante.",
+            "La valeur maximale d'une marge doit être supérieure à la valeur minimale.",
+            "La valeur minimale d'une marge doit être égale à la valeur maximal de la marge précédente.",
+            "La valeur maximale d'une marge doit être égale à la valeur minimale de la marge suivante."
+        ],
+        "description": "Représente une marge globale à appliquer aux calculations.",
+        "fields": [
+            {
+                "description": "Valeur minimale (inclus) pour laquelle la marge est appliquée.",
+                "name": "minimum",
+                "type": "amount"
+            },
+            {
+                "description": "Valeur maximale (exclus) pour laquelle la marge est appliquée.",
+                "name": "maximum",
+                "type": "amount"
+            },
+            {
+                "description": "Marge à appliquer à la calculation.",
+                "name": "margin",
+                "type": "percent"
+            }
+        ],
+        "icon": "percent",
+        "links": [
+            {
+                "id": "globalmargin.list.title",
+                "type": "dialog"
+            }
+        ]
+    },
+    "group": {
+        "actions": [
+            {
+                "action": "entity_show",
+                "id": "group.show.title"
+            },
+            {
+                "action": "entity_edit",
+                "id": "group.edit.title"
+            },
+            {
+                "action": "entity_delete",
+                "id": "group.delete.title"
+            },
+            {
+                "action": "entity_add",
+                "id": "group.add.title"
+            },
+            {
+                "action": "entity_clone",
+                "dialog": "group.clone.title"
+            }
+        ],
+        "constraints": [
+            "Le nom du groupe doit être unique à travers tout le catalogue."
+        ],
+        "description": "Représente un groupe du catalogue. Il contient une liste de catégories et de marges à appliquer aux calculations.",
+        "fields": [
+            {
+                "description": "Nom du groupe.",
+                "length": "30",
+                "name": "code"
+            },
+            {
+                "description": "Description du groupe.",
+                "length": "255",
+                "name": "description",
+                "required": false
+            },
+            {
+                "description": "Liste de marges à appliquer à un groupe d'articles d'une calculation.",
+                "name": "margins",
+                "required": false,
+                "type": "collection"
+            },
+            {
+                "description": "Liste de catégories appartenant à ce groupe.",
+                "entity": "category",
+                "name": "categories",
+                "required": false,
+                "type": "collection"
+            }
+        ],
+        "icon": "code-branch",
+        "links": [
+            {
+                "id": "group.list.title",
+                "type": "dialog"
+            }
+        ]
+    },
+    "log": {
+        "actions": [
+            {
+                "action": "entity_show",
+                "id": "log.show.title"
+            }
+        ],
+        "description": "Représente une entrée dans le journal de l'application.",
+        "fields": [
+            {
+                "description": "Date de création de l'entrée.",
+                "name": "createdAt",
+                "required": true,
+                "type": "date"
+            },
+            {
+                "description": "Message d'information, d'avertissement ou d'erreur.",
+                "name": "message",
+                "required": true
+            },
+            {
+                "description": "Niveau d'erreur.",
+                "name": "level",
+                "required": true
+            },
+            {
+                "description": "Nom du canal.",
+                "name": "channel",
+                "required": true,
+                "type": "text"
+            },
+            {
+                "description": "Nom de l'utilisateur ayant générer l'entrée.",
+                "name": "user",
+                "required": false
+            },
+            {
+                "description": "Contexte d'information, d'avertissement ou d'erreur.",
+                "name": "context",
+                "required": false
+            }
+        ],
+        "icon": "book",
+        "links": [
+            {
+                "id": "log.list.title",
+                "type": "dialog"
+            }
+        ]
+    },
+    "product": {
+        "actions": [
+            {
+                "action": "entity_show",
+                "dialog": "product.show.title",
+                "id": "product.show.title"
+            },
+            {
+                "action": "entity_edit",
+                "dialog": "product.edit.title",
+                "id": "product.edit.title"
+            },
+            {
+                "action": "entity_delete",
+                "dialog": "product.delete.title",
+                "id": "product.delete.title"
+            },
+            {
+                "action": "entity_add",
+                "dialog": "product.add.title",
+                "id": "product.add.title"
+            },
+            {
+                "action": "entity_clone",
+                "dialog": "product.clone.title"
+            }
+        ],
+        "constraints": [
+            "La description de l'article doit être unique à travers tout le catalogue."
+        ],
+        "description": "Représente un article du catalogue.",
+        "fields": [
+            {
+                "description": "Description de l'article.",
+                "length": "255",
+                "name": "description"
+            },
+            {
+                "description": "Groupe au quel appartient l'article.",
+                "entity": "group",
+                "name": "group",
+                "type": "reference"
+            },
+            {
+                "description": "Catégorie à laquelle appartient l'article.",
+                "entity": "category",
+                "name": "category",
+                "type": "reference"
+            },
+            {
+                "description": "Prix unitaire de l'article.",
+                "name": "price",
+                "type": "amount"
+            },
+            {
+                "description": "Unité de l'article.",
+                "length": "30",
+                "name": "unit",
+                "required": false
+            },
+            {
+                "description": "Nom du fournisseur de l'article.",
+                "length": "255",
+                "name": "supplier",
+                "required": false
+            }
+        ],
+        "icon": "file-alt far",
+        "links": [
+            {
+                "id": "product.list.title",
+                "type": "dialog"
+            }
+        ]
+    },
+    "task": {
+        "actions": [
+            {
+                "action": "entity_show",
+                "id": "task.show.title"
+            },
+            {
+                "action": "entity_edit",
+                "id": "task.edit.title"
+            },
+            {
+                "action": "entity_delete",
+                "id": "task.delete.title"
+            },
+            {
+                "action": "entity_add",
+                "id": "task.add.title"
+            },
+            {
+                "action": "entity_clone",
+                "dialog": "task.clone.title"
+            },
+            {
+                "description": "Permet de simuler le calcul d'une tâche.",
+                "icon": "keyboard",
+                "id": "task_compute.title"
+            }
+        ],
+        "constraints": [
+            "Le nom de la tâche doit être unique à travers tout le catalogue.",
+            "Le nom des opérations de chaque tâche doit être unique."
+        ],
+        "description": "Représente une tâche du catalogue. Une tâche regroupe une ou plusieurs opérations. Chaque opération contient une ou plusieurs marges.",
+        "fields": [
+            {
+                "description": "Description de la tâche.",
+                "length": "255",
+                "name": "name"
+            },
+            {
+                "description": "Catégorie à laquelle appartient la tâche.",
+                "entity": "category",
+                "name": "category",
+                "type": "reference"
+            },
+            {
+                "description": "Unité de la tâche.",
+                "length": "30",
+                "name": "unit",
+                "required": false
+            },
+            {
+                "description": "Nombre d'opérations appartenant à cette tâche.",
+                "name": "items",
+                "required": false,
+                "type": "collection"
+            }
+        ],
+        "icon": "tasks",
+        "links": [
+            {
+                "id": "task.list.title",
+                "type": "dialog"
+            }
+        ]
+    },
+    "user": {
+        "actions": [
+            {
+                "action": "entity_show",
+                "id": "user.show.title"
+            },
+            {
+                "action": "entity_edit",
+                "id": "user.edit.title"
+            },
+            {
+                "action": "entity_delete",
+                "id": "user.delete.title"
+            },
+            {
+                "action": "entity_add",
+                "id": "user.add.title"
+            },
+            {
+                "description": "Page permettant de modifier le mot de passe de l'utilisateur.",
+                "icon": "unlock-alt",
+                "id": "user.change_password.title"
+            },
+            {
+                "description": "Page permettant d'envoyer un message pour permettre à l'utilisateur sélectionné de changer son mot de passe.",
+                "icon": "envelope-circle-check fas",
+                "id": "user.send.title"
+            },
+            {
+                "description": "Page permettant de définir les droits d'accès à l'application.",
+                "icon": "unlock",
+                "id": "user.rights.title"
+            },
+            {
+                "description": "Page permettant d'envoyer un message à l'utilisateur.",
+                "icon": "envelope far",
+                "id": "user.message.title"
+            }
+        ],
+        "description": "Représente un utilisateur de l'application.",
+        "fields": [
+            {
+                "description": "Image du profile.",
+                "name": "imageFile",
+                "required": false,
+                "type": "image"
+            },
+            {
+                "description": "Nom utilisé pour la connexion à l'application.",
+                "length": "180",
+                "name": "username"
+            },
+            {
+                "description": "Mot de passe utilisé pour la connexion à l'application.",
+                "length": "255",
+                "name": "password"
+            },
+            {
+                "description": "Adresse électronique.",
+                "length": "180",
+                "name": "email"
+            },
+            {
+                "description": "Rôle utilisé pour définir les droits d'accès à l'application.",
+                "name": "role",
+                "required": true,
+                "type": "reference"
+            },
+            {
+                "description": "Définit si l'utilisateur est activé ou désactivé.",
+                "name": "enabled",
+                "required": true,
+                "type": "boolean"
+            },
+            {
+                "description": "Date et heure de la dernière connexion à l'application.",
+                "name": "lastLogin",
+                "required": false,
+                "type": "date"
+            }
+        ],
+        "icon": "user far",
+        "links": [
+            {
+                "id": "user.list.title",
+                "type": "dialog"
+            }
+        ]
+    }
+}

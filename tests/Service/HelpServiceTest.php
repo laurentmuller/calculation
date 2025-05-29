@@ -33,6 +33,7 @@ class HelpServiceTest extends KernelServiceTestCase
     {
         $actual = $this->service->findAction('list_search');
         self::assertNotEmpty($actual);
+
         $actual = $this->service->findAction('fake_value_to_search');
         self::assertNull($actual);
     }
@@ -41,25 +42,28 @@ class HelpServiceTest extends KernelServiceTestCase
     {
         $actual = $this->service->findDialog('index.title');
         self::assertNotEmpty($actual);
+
         $actual = $this->service->findDialog('fake_value_to_search');
         self::assertNull($actual);
     }
 
-    /**
-     * @psalm-suppress InvalidArgument
-     */
     public function testFindEntity(): void
     {
         $actual = $this->service->findEntity('product');
         self::assertNotEmpty($actual);
-        // @phpstan-ignore argument.type
+
         $actual = $this->service->findEntity(['entity' => 'product']);
         self::assertNotEmpty($actual);
-        // @phpstan-ignore argument.type
+
         $actual = $this->service->findEntity([]);
         self::assertNull($actual);
+
+        $actual = $this->service->findEntity(['entity' => null]);
+        self::assertNull($actual);
+
         $actual = $this->service->findEntity('fake_value_to_search');
         self::assertNull($actual);
+
         $actual = $this->service->findEntity();
         self::assertNull($actual);
     }
@@ -97,7 +101,7 @@ class HelpServiceTest extends KernelServiceTestCase
     public function testGetMainMenu(): void
     {
         $actual = $this->service->getMainMenu();
-        self::assertNotEmpty($actual);
+        self::assertNotEmpty($actual['menus']);
     }
 
     public function testGetMainMenus(): void
@@ -106,28 +110,28 @@ class HelpServiceTest extends KernelServiceTestCase
         self::assertNotEmpty($actual);
     }
 
-    public function testHelp(): void
+    public function testInvalidPath(): void
     {
-        $help = $this->service->getHelp();
-        self::assertNotEmpty($help);
-    }
-
-    public function testInvalidFile(): void
-    {
-        $file = __FILE__;
-        $imagePath = __DIR__;
         $cache = $this->getService(CacheInterface::class);
         $translator = $this->createMock(TranslatorInterface::class);
-        $service = new HelpService($file, $imagePath, $cache, $translator);
+        $service = new HelpService(__DIR__, __DIR__, $cache, $translator);
 
-        $help = $service->getHelp();
-        self::assertEmpty($help['actions']);
-        self::assertEmpty($help['dialogs']);
-        self::assertEmpty($help['entities']);
-        self::assertNull($help['mainMenu']['image']);
-        self::assertNull($help['mainMenu']['description']);
-        self::assertEmpty($help['mainMenu']['menus']);
-        self::assertEmpty($service->getDialogsByGroup());
+        $actual = $service->getActions();
+        self::assertEmpty($actual);
+
+        $actual = $service->getDialogs();
+        self::assertEmpty($actual);
+
+        $actual = $service->getDialogsByGroup();
+        self::assertEmpty($actual);
+
+        $actual = $service->getEntities();
+        self::assertEmpty($actual);
+
+        $actual = $service->getMainMenu();
+        self::assertArrayNotHasKey('image', $actual);
+        self::assertArrayNotHasKey('description', $actual);
+        self::assertArrayNotHasKey('menus', $actual);
     }
 
     public function testMergeAction(): void
@@ -146,5 +150,19 @@ class HelpServiceTest extends KernelServiceTestCase
         self::assertArrayHasKey('id', $actual);
         self::assertArrayHasKey('icon', $actual);
         self::assertArrayHasKey('description', $actual);
+    }
+
+    public function testSortByName(): void
+    {
+        $expected = [
+            0 => ['name' => 'A'],
+            1 => ['name' => 'B'],
+        ];
+        $actual = [
+            1 => ['name' => 'B'],
+            0 => ['name' => 'A'],
+        ];
+        $this->service->sortByName($actual);
+        self::assertSame($expected, $actual);
     }
 }

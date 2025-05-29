@@ -1,0 +1,240 @@
+{
+    "image": "navigation",
+    "description": "Le menu principal (barre de navigation) est une partie de l'interface d'utilisateur permettant de parcourir les pages du site.",
+    "menus": [
+        {
+            "id": "help.main_menu",
+            "icon": "sitemap",
+            "description": "",
+            "menus": [
+                {
+                    "action": "back_home",
+                    "description": "Page principale de l'application."
+                },
+                {
+                    "id": "calculation.list.title",
+                    "icon": "calculator",
+                    "description": "Gestion des calculations.",
+                    "dialog": "calculation.list.title"
+                }
+            ]
+        },
+        {
+            "id": "index.menu_data",
+            "icon": "database",
+            "description": "Menu d'accès aux données du catalogue.",
+            "menus": [
+                {
+                    "id": "product.list.title",
+                    "icon": "file-alt far",
+                    "description": "Gestion des articles du catalogue.",
+                    "dialog": "product.list.title"
+                },
+                {
+                    "id": "task.list.title",
+                    "icon": "tasks",
+                    "description": "Gestion des tâches du catalogue.",
+                    "dialog": "task.list.title"
+                },
+                {
+                    "id": "category.list.title",
+                    "icon": "folder far",
+                    "description": "Gestion des catégories du catalogue.",
+                    "dialog": "category.list.title"
+                },
+                {
+                    "id": "group.list.title",
+                    "icon": "code-branch",
+                    "description": "Gestion des groupes du catalogue.",
+                    "dialog": "group.list.title"
+                },
+                {
+                    "id": "calculationstate.list.title",
+                    "icon": "flag far",
+                    "description": "Gestion des statuts du catalogue.",
+                    "dialog": "calculationstate.list.title"
+                },
+                {
+                    "id": "globalmargin.list.title",
+                    "icon": "percent",
+                    "description": "Gestion des marge globales du catalogue.",
+                    "dialog": "globalmargin.list.title"
+                }
+            ]
+        },
+        {
+            "id": "index.menu_graphics",
+            "icon": "chart-area",
+            "description": "Menu d'accès aux statistiques.",
+            "menus": [
+                {
+                    "id": "chart.month.title",
+                    "icon": "calendar-alt far",
+                    "description": "Page affichant un graphique des calculations par mois.",
+                    "dialog": "chart.month.title"
+                },
+                {
+                    "id": "chart.state.title",
+                    "icon": "flag far",
+                    "description": "Page affichant un graphique des calculations par statut.",
+                    "dialog": "chart.state.title"
+                }
+            ]
+        },
+        {
+            "id": "index.menu_tools",
+            "icon": "tools",
+            "description": "Menu d'accès aux outils de l'application.",
+            "menus": [
+                {
+                    "id": "search.title",
+                    "icon": "search",
+                    "description": "Page pour rechercher des données dans le catalogue.",
+                    "dialog": "search.title"
+                },
+                {
+                    "id": "below.title",
+                    "icon": "percent",
+                    "description": "Page pour afficher les calculations contenant une marge globale inférieure au seuil définit.",
+                    "dialog": "below.title"
+                },
+                {
+                    "id": "duplicate.title",
+                    "icon": "copy far",
+                    "description": "Page pour afficher les calculations contenant le même article plus d'une fois.",
+                    "dialog": "duplicate.title"
+                },
+                {
+                    "id": "empty.title",
+                    "icon": "file-code far",
+                    "description": "Page pour afficher les calculations contenant un article avec une quantité ou un prix égale à 0.",
+                    "dialog": "empty.title"
+                },
+                {
+                    "id": "task_compute.title",
+                    "icon": "keyboard",
+                    "description": "Page pour calculer une tâche.",
+                    "dialog": "task_compute.title"
+                }
+            ]
+        },
+        {
+            "id": "index.menu_admin",
+            "icon": "gear",
+            "description": "Menu réservé aux administrateurs du site.",
+            "menus": [
+                {
+                    "id": "product.update.title",
+                    "icon": "file-alt far",
+                    "description": "Page pour mettre à jour le prix des articles.",
+                    "dialog": "product.update.title"
+                },
+                {
+                    "id": "calculation.update.title",
+                    "icon": "pencil",
+                    "description": "Page pour recalculer et mettre à jour le total général des calculations.",
+                    "dialog": "calculation.update.title"
+                },
+                {
+                    "id": "archive.title",
+                    "icon": "file-alt far",
+                    "description": "Page pour archiver des calculations.",
+                    "dialog": "archive.title"
+                },
+                {
+                    "id": "user.list.title",
+                    "icon": "user",
+                    "description": "Gestion des utilisateurs.",
+                    "dialog": "user.list.title"
+                },
+                {
+                    "id": "index.menu_rights_user",
+                    "icon": "user-check",
+                    "description": "Page pour définir les droits d'accès à l'application pour les utilisateurs.",
+                    "dialog": "index.menu_rights_user"
+                },
+                {
+                    "id": "index.menu_rights_admin",
+                    "icon": "user-shield",
+                    "description": "Page pour définir les droits d'accès à l'application pour les administrateurs.",
+                    "dialog": "index.menu_rights_admin"
+                },
+                {
+                    "id": "parameters.title",
+                    "icon": "cogs",
+                    "description": "Page pour définir les paramètres globaux de l'application.",
+                    "dialog": "parameters.title"
+                },
+                {
+                    "id": "log.list.title",
+                    "icon": "book",
+                    "description": "Affiche les entrées du journal de l'application.",
+                    "dialog": "log.list.title"
+                },
+                {
+                    "id": "clear_cache.title",
+                    "icon": "times",
+                    "description": "Page pour de vider le cache de l'application.",
+                    "dialog": "clear_cache.title"
+                }
+            ]
+        },
+        {
+            "id": "user.name",
+            "icon": "user",
+            "description": "Menu afficher lorsque l'utilisateur est connecté à l'application.",
+            "menus": [
+                {
+                    "id": "theme.title",
+                    "icon": "circle-half-stroke",
+                    "description": "Permet d'appliquer un thème clair ou sombre sur ce site."
+                },
+                {
+                    "id": "profile.edit.title",
+                    "icon": "user-pen",
+                    "dialog": "profile.edit.title",
+                    "description": "Page permettant de modifier son profile."
+                },
+                {
+                    "id": "profile.password.title",
+                    "icon": "unlock-alt",
+                    "dialog": "profile.password.title",
+                    "description": "Page permettant de modifier son mot de passe."
+                },
+                {
+                    "id": "user.parameters.title",
+                    "icon": "user-gear",
+                    "description": "Page permettant de modifier ses préférence dans l'application.",
+                    "dialog": "user.parameters.title"
+                },
+                {
+                    "id": "help.labels.switch",
+                    "icon": "location-arrow",
+                    "description": "Permet de basculer entre le mode Production et le mode Développement."
+                },
+                {
+                    "id": "index.menu_site_map",
+                    "icon": "sitemap",
+                    "description": "Affiche le plan du site."
+                },
+                {
+                    "id": "user.comment.title",
+                    "icon": "envelope far",
+                    "description": "Page pour envoyer un commentaire à l'administrateur du site.",
+                    "dialog": "user.comment.title"
+                },
+                {
+                    "id": "help.title",
+                    "icon": "question-circle",
+                    "description": "Page affichant l'aide de l'application (page actuelle)."
+                },
+                {
+                    "id": "about.title",
+                    "icon": "info-circle",
+                    "description": "Page affichant des informations sur l'application.",
+                    "dialog": "about.title"
+                }
+            ]
+        }
+    ]
+}

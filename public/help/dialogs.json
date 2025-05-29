@@ -1,0 +1,1956 @@
+{
+    "about.title": {
+        "group": "Utilisateur (connecté)",
+        "image": "about/about_list",
+        "icon": "info-circle",
+        "description": "Cette page affiche des informations sur l'application tel que son nom, sa version ou son environnent.",
+        "name": "A propos de"
+    },
+    "archive.result.description": {
+        "group": "Administration",
+        "entity": "calculation",
+        "image": "admin/admin_archive_result",
+        "icon": "calendar-xmark far",
+        "description": "Cette page affiche le résultat de l'archivage des calculations.",
+        "editActions": [
+            {
+                "action": "back_home"
+            },
+            {
+                "id": "archive.result.new_archive",
+                "description": "Retourne à la page d'archivage des calculations.",
+                "dialog": "archive.title"
+            }
+        ],
+        "links": [
+            {
+                "id": "archive.title",
+                "type": "dialog"
+            },
+            {
+                "id": "calculation.update.title",
+                "type": "dialog"
+            },
+            {
+                "id": "calculation.list.title",
+                "type": "dialog"
+            }
+        ],
+        "name": "Résultat de l'archivage des calculations."
+    },
+    "archive.title": {
+        "group": "Administration",
+        "entity": "calculation",
+        "image": "admin/admin_archive_query",
+        "icon": "calendar-xmark far",
+        "description": "Cette page vous permet d'archiver des calculations en modifiant leur statut. Cette page n'est accessible qu'aux administrateurs.",
+        "editActions": [
+            {
+                "id": "archive.edit.submit",
+                "description": "Met à jour le statut des calculations et affiche les résultats de la mise à jour.",
+                "dialog": "archive.result.description"
+            },
+            {
+                "id": "common.button_cancel",
+                "icon": "",
+                "action": "back_home"
+            }
+        ],
+        "links": [
+            {
+                "id": "archive.result.description",
+                "type": "dialog"
+            },
+            {
+                "id": "calculation.update.title",
+                "type": "dialog"
+            },
+            {
+                "id": "calculation.list.title",
+                "type": "dialog"
+            }
+        ],
+        "name": "Archiver des calculations"
+    },
+    "below.title": {
+        "group": "Outils",
+        "image": "calculation/calculation_below",
+        "icon": "percent",
+        "entity": "calculation",
+        "description": "Cette page affiche les calculations contenant une marge globale inférieure à la marge définit dans les paramètres de l'application. Cette page n'est accessible qu'aux administrateurs.",
+        "fields": [
+            {
+                "name": "calculation.fields.id",
+                "description": "Numéro unique identifiant la calculation."
+            },
+            {
+                "name": "calculation.fields.date",
+                "description": "Date de la calculation. La valeur par défaut est la date du jour."
+            },
+            {
+                "name": "calculation.fields.state",
+                "description": "Statut de la calculation."
+            },
+            {
+                "name": "calculation.fields.customer",
+                "description": "Nom du client."
+            },
+            {
+                "name": "calculation.fields.description",
+                "description": "Description de la calculation."
+            },
+            {
+                "name": "calculation.fields.margin",
+                "description": "Marge globale inférieure."
+            },
+            {
+                "name": "calculation.fields.total",
+                "description": "Total général de la calculation.",
+                "type": "amount",
+                "required": false
+            }
+        ],
+        "links": [
+            {
+                "id": "duplicate.title",
+                "type": "dialog"
+            },
+            {
+                "id": "empty.title",
+                "type": "dialog"
+            }
+        ],
+        "name": "Marges insuffisantes"
+    },
+    "calculation.add.title": {
+        "entity": "calculation",
+        "image": "calculation/calculation_add",
+        "description": "Cette page permet de créer une nouvelle calculation.",
+        "displayEntityFields": true,
+        "editActions": [
+            {
+                "action": "submit_add"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "details": [
+            "Cette page est divisée en trois parties",
+            "- La partie principale contient les données générales de la calculation.",
+            "- La deuxième partie contient la liste des articles.",
+            "- La troisième partie contient le résumé des marges et des totaux."
+        ],
+        "images": [
+            "calculation/calculation_add_2",
+            "calculation/calculation_add_1"
+        ],
+        "group": "Calculation",
+        "name": "Nouvelle calculation"
+    },
+    "calculation.clone.title": {
+        "entity": "calculation",
+        "image": "calculation/calculation_clone",
+        "icon": "copy far",
+        "description": "Cette page permet de créer une nouvelle calculation en copiant les valeurs d'une calculation existante.",
+        "displayEntityFields": true,
+        "editActions": [
+            {
+                "action": "submit_add"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "details": [
+            "Cette page est divisée en trois parties",
+            "- La partie principale contient les données générales de la calculation.",
+            "- La deuxième partie contient la liste des articles.",
+            "- La troisième partie contient le résumé des marges et des totaux."
+        ],
+        "images": [
+            "calculation/calculation_clone_2",
+            "calculation/calculation_clone_1"
+        ],
+        "group": "Calculation",
+        "name": "Copie d'une calculation"
+    },
+    "calculation.delete.title": {
+        "entity": "calculation",
+        "image": "calculation/calculation_delete",
+        "icon": "times",
+        "description": "Cette page permet de confirmer la suppression d'une calculation.",
+        "editActions": [
+            {
+                "action": "submit_delete"
+            },
+            {
+                "action": "cancel_delete"
+            }
+        ],
+        "group": "Calculation",
+        "name": "Supprimer la calculation"
+    },
+    "calculation.edit.title_short": {
+        "entity": "calculation",
+        "image": "calculation/calculation_edit",
+        "description": "Cette page permet de modifier une calculation.",
+        "displayEntityFields": true,
+        "editActions": [
+            {
+                "action": "submit_ok"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "details": [
+            "Cette page est divisée en trois parties",
+            "- La partie principale contient les données générales de la calculation.",
+            "- La deuxième partie contient la liste des articles.",
+            "- La troisième partie contient le résumé des marges et des totaux."
+        ],
+        "images": [
+            "calculation/calculation_edit_2",
+            "calculation/calculation_edit_1"
+        ],
+        "group": "Calculation",
+        "name": "Modifier la calculation"
+    },
+    "calculation.list.state_title": {
+        "entity": "calculation",
+        "image": "calculation/calculation_state",
+        "description": "Cette page permet de modifier le statut d'une calculation.",
+        "editActions": [
+            {
+                "action": "submit_ok"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Calculation",
+        "name": "Modifier le statut"
+    },
+    "calculation.list.title": {
+        "entity": "calculation",
+        "image": "calculation/calculation_list",
+        "description": "Gestion des calculations.",
+        "displayEntityColumns": true,
+        "displayEntityActions": true,
+        "globalActions": [
+            {
+                "action": "list_search"
+            },
+            {
+                "id": "calculationstate.name",
+                "icon": "flag far",
+                "description": "Menu déroulant permettant de filtrer les calculations selon un statut."
+            },
+            {
+                "action": "list_clear"
+            },
+            {
+                "action": "list_size"
+            },
+            {
+                "action": "list_table"
+            },
+            {
+                "action": "list_custom"
+            },
+            {
+                "action": "list_page"
+            },
+            {
+                "action": "list_sort"
+            },
+            {
+                "id": "calculation.list.pdf_title",
+                "action": "list_pdf"
+            },
+            {
+                "id": "calculation.list.excel_title",
+                "action": "list_excel"
+            },
+            {
+                "id": "archive.title",
+                "icon": "calendar-xmark far",
+                "description": "Affiche la page permettant d'archiver des calculations en modifiant leur statut."
+            },
+            {
+                "id": "calculation.update.title",
+                "icon": "pencil",
+                "description": "Affiche la page permettant de recalculer et de mettre à jour le total général des calculations."
+            }
+        ],
+        "group": "Calculation",
+        "name": "Calculations"
+    },
+    "calculation.result.description": {
+        "group": "Administration",
+        "icon": "pencil",
+        "image": "admin/admin_update_result",
+        "description": "Cette page affiche les résultats de la mise à jour des calculations. Cette page n'est accessible qu'aux administrateurs.",
+        "entity": "calculation",
+        "editActions": [
+            {
+                "action": "back_home"
+            },
+            {
+                "id": "calculation.result.update",
+                "description": "Retourne à la page de mise à jour des calculations.",
+                "dialog": "calculation.update.title"
+            }
+        ],
+        "links": [
+            {
+                "id": "calculation.update.title",
+                "type": "dialog"
+            },
+            {
+                "id": "archive.title",
+                "type": "dialog"
+            },
+            {
+                "id": "calculation.list.title",
+                "type": "dialog"
+            }
+        ],
+        "name": "Résultat de la mise à jour des calculations."
+    },
+    "calculation.show.title": {
+        "entity": "calculation",
+        "image": "calculation/calculation_show",
+        "icon": "display",
+        "description": "Cette page affiche les propriétés de la calculation.",
+        "editActions": [
+            {
+                "action": "back_ok"
+            },
+            {
+                "action": "entity_edit",
+                "dialog": "calculation.edit.title_short"
+            },
+            {
+                "action": "entity_delete",
+                "dialog": "calculation.delete.title"
+            },
+            {
+                "id": "common.button_pdf",
+                "action": "list_pdf",
+                "description": "Exporte la calculation vers le format de document portable (PDF)."
+            }
+        ],
+        "group": "Calculation",
+        "name": "Propriétés de la calculation"
+    },
+    "calculation.update.title": {
+        "group": "Administration",
+        "icon": "pencil",
+        "image": "admin/admin_update_query",
+        "entity": "calculation",
+        "description": "Cette page vous permet de recalculer et de mettre à jour le total général des calculations. Cette page n'est accessible qu'aux administrateurs.",
+        "editActions": [
+            {
+                "id": "calculation.update.submit",
+                "action": "submit_ok",
+                "description": "Met à jour le total général des calculations et affiche le résultat.",
+                "dialog": "calculation.result.description"
+            },
+            {
+                "id": "common.button_cancel",
+                "icon": "",
+                "action": "back_home"
+            }
+        ],
+        "links": [
+            {
+                "id": "calculation.result.description",
+                "type": "dialog"
+            },
+            {
+                "id": "archive.title",
+                "type": "dialog"
+            },
+            {
+                "id": "calculation.list.title",
+                "type": "dialog"
+            }
+        ],
+        "name": "Mise à jour des calculations"
+    },
+    "calculationstate.add.title": {
+        "entity": "calculationstate",
+        "image": "calculationstate/calculationstate_add",
+        "description": "Cette page permet de créer un nouveau statut.",
+        "displayEntityFields": true,
+        "editActions": [
+            {
+                "action": "submit_add"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Statut",
+        "name": "Nouveau statut"
+    },
+    "calculationstate.clone.title": {
+        "entity": "calculationstate",
+        "image": "calculationstate/calculationstate_clone",
+        "icon": "copy far",
+        "description": "Cette page permet de créer un nouveau statut en copiant les valeurs d'un statut existant.",
+        "editActions": [
+            {
+                "action": "submit_add"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Statut",
+        "name": "Copie d'un statut"
+    },
+    "calculationstate.delete.title": {
+        "entity": "calculationstate",
+        "image": "calculationstate/calculationstate_delete",
+        "forbidden": {
+            "image": "calculationstate/calculationstate_delete_forbidden",
+            "text": "Si le statut sélectionnée ne peut pas être supprimée, l'avertissement ci-dessous est affiché.",
+            "action": {
+                "action": "delete_forbidden"
+            }
+        },
+        "icon": "times",
+        "description": "Cette page permet de confirmer la suppression d'un statut.",
+        "editActions": [
+            {
+                "action": "submit_delete"
+            },
+            {
+                "action": "cancel_delete"
+            }
+        ],
+        "group": "Statut",
+        "name": "Supprimer le statut"
+    },
+    "calculationstate.edit.title": {
+        "entity": "calculationstate",
+        "image": "calculationstate/calculationstate_edit",
+        "description": "Cette page permet de modifier un statut.",
+        "displayEntityFields": true,
+        "editActions": [
+            {
+                "action": "submit_ok"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Statut",
+        "name": "Modifier le statut"
+    },
+    "calculationstate.list.title": {
+        "entity": "calculationstate",
+        "image": "calculationstate/calculationstate_list",
+        "description": "Gestion des statuts.",
+        "displayEntityColumns": true,
+        "displayEntityActions": true,
+        "globalActions": [
+            {
+                "action": "list_search"
+            },
+            {
+                "action": "list_clear"
+            },
+            {
+                "action": "list_size"
+            },
+            {
+                "action": "list_table"
+            },
+            {
+                "action": "list_custom"
+            },
+            {
+                "action": "list_page"
+            },
+            {
+                "action": "list_sort"
+            },
+            {
+                "id": "calculationstate.list.pdf_title",
+                "action": "list_pdf"
+            },
+            {
+                "id": "calculationstate.list.excel_title",
+                "action": "list_excel"
+            }
+        ],
+        "group": "Statut",
+        "name": "Statuts"
+    },
+    "calculationstate.show.title": {
+        "entity": "calculationstate",
+        "image": "calculationstate/calculationstate_show",
+        "icon": "display",
+        "description": "Cette page affiche les propriétés du statut.",
+        "editActions": [
+            {
+                "action": "back_ok"
+            },
+            {
+                "action": "entity_edit",
+                "dialog": "calculationstate.edit.title"
+            },
+            {
+                "action": "entity_delete",
+                "dialog": "calculationstate.delete.title"
+            }
+        ],
+        "group": "Statut",
+        "name": "Propriétés du statut"
+    },
+    "category.add.title": {
+        "entity": "category",
+        "image": "category/category_add",
+        "description": "Cette page permet de créer une nouvelle catégorie.",
+        "displayEntityFields": true,
+        "editActions": [
+            {
+                "action": "submit_add"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Catégorie",
+        "name": "Nouvelle catégorie"
+    },
+    "category.clone.title": {
+        "entity": "category",
+        "image": "category/category_clone",
+        "icon": "copy far",
+        "description": "Cette page permet de créer une nouvelle catégorie en copiant les valeurs d'une catégorie existante.",
+        "editActions": [
+            {
+                "action": "submit_add"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Catégorie",
+        "name": "Copie d'une catégorie"
+    },
+    "category.delete.title": {
+        "entity": "category",
+        "image": "category/category_delete",
+        "forbidden": {
+            "image": "category/category_delete_forbidden",
+            "text": "Si la catégorie sélectionnée ne peut pas être supprimée, l'avertissement ci-dessous est affiché.",
+            "action": {
+                "action": "delete_forbidden"
+            }
+        },
+        "icon": "times",
+        "description": "Cette page permet de confirmer la suppression d'une catégorie.",
+        "editActions": [
+            {
+                "action": "submit_delete"
+            },
+            {
+                "action": "cancel_delete"
+            }
+        ],
+        "group": "Catégorie",
+        "name": "Supprimer la catégorie"
+    },
+    "category.edit.title": {
+        "entity": "category",
+        "image": "category/category_edit",
+        "description": "Cette page permet de modifier une catégorie.",
+        "displayEntityFields": true,
+        "editActions": [
+            {
+                "action": "submit_ok"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Catégorie",
+        "name": "Modifier la catégorie"
+    },
+    "category.list.title": {
+        "entity": "category",
+        "image": "category/category_list",
+        "description": "Gestion des catégories du catalogue.",
+        "displayEntityColumns": true,
+        "displayEntityActions": true,
+        "globalActions": [
+            {
+                "action": "list_search"
+            },
+            {
+                "id": "group.name",
+                "icon": "code-branch",
+                "description": "Menu déroulant permettant de filtrer les catégories selon un groupe."
+            },
+            {
+                "action": "list_clear"
+            },
+            {
+                "action": "list_size"
+            },
+            {
+                "action": "list_table"
+            },
+            {
+                "action": "list_custom"
+            },
+            {
+                "action": "list_page"
+            },
+            {
+                "action": "list_sort"
+            },
+            {
+                "id": "category.list.pdf_title",
+                "action": "list_pdf"
+            },
+            {
+                "id": "category.list.excel_title",
+                "action": "list_excel"
+            }
+        ],
+        "group": "Catégorie",
+        "name": "Catégories"
+    },
+    "category.show.title": {
+        "entity": "category",
+        "image": "category/category_show",
+        "icon": "display",
+        "description": "Cette page affiche les propriétés de la catégorie.",
+        "editActions": [
+            {
+                "action": "back_ok"
+            },
+            {
+                "action": "entity_edit",
+                "dialog": "category.edit.title"
+            },
+            {
+                "action": "entity_delete",
+                "dialog": "category.delete.title"
+            }
+        ],
+        "group": "Catégorie",
+        "name": "Propriétés de la catégorie"
+    },
+    "chart.month.title": {
+        "image": "chart/chart_month",
+        "group": "Statistiques",
+        "icon": "calendar-alt far",
+        "description": "Cette page affiche un graphique et un tableau des calculations par mois.",
+        "editActions": [
+            {
+                "action": "back_home"
+            },
+            {
+                "id": "common.button_pdf",
+                "icon": "file-pdf",
+                "description": "Exporte le graphique et les données vers le format de document portable (PDF)."
+            }
+        ],
+        "links": [
+            {
+                "id": "chart.state.title",
+                "type": "dialog"
+            }
+        ],
+        "fields": [
+            {
+                "name": "chart.month.fields.month",
+                "description": "Mois et année (clé de regroupement).",
+                "required": false
+            },
+            {
+                "name": "calculation.list.title",
+                "description": "Nombre de calculations.",
+                "type": "quantity",
+                "required": false
+            },
+            {
+                "name": "calculationgroup.fields.amount",
+                "description": "Montant net des calculations.",
+                "type": "quantity",
+                "required": false
+            },
+            {
+                "name": "calculation.fields.margin",
+                "description": "Marge (valeur et pourcentage) des calculations.",
+                "type": "amount",
+                "required": false
+            },
+            {
+                "name": "calculation.fields.total",
+                "description": "Montant total des calculations.",
+                "type": "amount",
+                "required": false
+            }
+        ],
+        "name": "Calculations par mois"
+    },
+    "chart.state.title": {
+        "image": "chart/chart_state",
+        "group": "Statistiques",
+        "icon": "flag far",
+        "description": "Cette page affiche un graphique et un tableau des calculations par statut.",
+        "editActions": [
+            {
+                "action": "back_home"
+            },
+            {
+                "id": "common.button_pdf",
+                "icon": "file-pdf",
+                "description": "Exporte le graphique et les données vers le format de document portable (PDF)."
+            }
+        ],
+        "fields": [
+            {
+                "name": "calculation.fields.state",
+                "description": "Statut de la calculation (clé de regroupement)."
+            },
+            {
+                "name": "calculation.list.title",
+                "description": "Nombre (valeur et pourcentage) des calculations."
+            },
+            {
+                "name": "calculationgroup.fields.amount",
+                "description": "Montant net des calculations."
+            },
+            {
+                "name": "calculation.fields.margin",
+                "description": "Marge (valeur et pourcentage) des calculations."
+            },
+            {
+                "name": "calculation.fields.total",
+                "description": "Total (valeur et pourcentage) des calculations."
+            }
+        ],
+        "links": [
+            {
+                "id": "chart.month.title",
+                "type": "dialog"
+            }
+        ],
+        "name": "Calculations par statut"
+    },
+    "clear_cache.title": {
+        "group": "Administration",
+        "icon": "times",
+        "image": "admin/admin_clear",
+        "description": "Cette page permet de vider le cache de l'application. Cette page n'est accessible qu'aux administrateurs.",
+        "editActions": [
+            {
+                "id": "clear_cache.submit",
+                "description": "Vide le cache de l'application et retourne à la page principale de l'application (page d'accueil).",
+                "dialog": "index.title"
+            },
+            {
+                "id": "common.button_cancel",
+                "icon": "",
+                "description": "Retourne à la page principale de l'application (page d'accueil) sans vider le cache.",
+                "dialog": "index.title"
+            }
+        ],
+        "name": "Vider le cache"
+    },
+    "datatable.dialog_title": {
+        "group": "Dialogue",
+        "image": "dialog_page",
+        "icon": "arrow-up-right-dots",
+        "description": "Cette boîte de dialogue permet de sélectionner une page de la table.",
+        "editActions": [
+            {
+                "id": "common.button_ok",
+                "description": "Sélectionne la page et ferme la boîte de dialogue"
+            },
+            {
+                "id": "common.button_cancel",
+                "description": "Ferme la boîte de dialogue en affichant la page actuellement sélectionnée."
+            }
+        ],
+        "links": [
+            {
+                "id": "list.sort_title",
+                "type": "dialog"
+            }
+        ],
+        "name": "Sélectionner une page"
+    },
+    "duplicate.title": {
+        "group": "Outils",
+        "image": "calculation/calculation_duplicate",
+        "icon": "copy far",
+        "entity": "calculation",
+        "description": "Cette page affiche les calculations contenant le même article plus d'une fois. Cette page n'est accessible qu'aux administrateurs.",
+        "fields": [
+            {
+                "name": "calculation.fields.id",
+                "description": "Numéro unique identifiant la calculation."
+            },
+            {
+                "name": "calculation.fields.date",
+                "description": "Date de la calculation. La valeur par défaut est la date du jour."
+            },
+            {
+                "name": "calculation.fields.state",
+                "description": "Statut de la calculation."
+            },
+            {
+                "name": "calculation.fields.customer",
+                "description": "Nom du client."
+            },
+            {
+                "name": "calculation.fields.description",
+                "description": "Description de la calculation."
+            },
+            {
+                "name": "product.list.title",
+                "description": "Nom des articles étant présent plus d'une fois."
+            }
+        ],
+        "links": [
+            {
+                "id": "below.title",
+                "type": "dialog"
+            },
+            {
+                "id": "empty.title",
+                "type": "dialog"
+            }
+        ],
+        "name": "Articles à double"
+    },
+    "empty.title": {
+        "group": "Outils",
+        "image": "calculation/calculation_empty",
+        "icon": "file-code far",
+        "entity": "calculation",
+        "description": "Cette page affiche les calculations contenant contenant un article avec une quantité ou un prix égale à 0. Cette page n'est accessible qu'aux administrateurs.",
+        "fields": [
+            {
+                "name": "calculation.fields.id",
+                "description": "Numéro unique identifiant la calculation."
+            },
+            {
+                "name": "calculation.fields.date",
+                "description": "Date de la calculation. La valeur par défaut est la date du jour."
+            },
+            {
+                "name": "calculation.fields.state",
+                "description": "Statut de la calculation."
+            },
+            {
+                "name": "calculation.fields.customer",
+                "description": "Nom du client."
+            },
+            {
+                "name": "calculation.fields.description",
+                "description": "Description de la calculation."
+            },
+            {
+                "name": "product.list.title",
+                "description": "Nom des articles ayant une quantité ou un prix égale à 0."
+            }
+        ],
+        "links": [
+            {
+                "id": "below.title",
+                "type": "dialog"
+            },
+            {
+                "id": "duplicate.title",
+                "type": "dialog"
+            }
+        ],
+        "name": "Articles vides"
+    },
+    "globalmargin.edit.title": {
+        "entity": "globalmargin",
+        "image": "globalmargin/globalmargin_edit",
+        "description": "Cette page permet de modifier les marges globales.",
+        "displayEntityFields": true,
+        "editActions": [
+            {
+                "action": "submit_ok"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "links": [
+            {
+                "id": "globalmargin.list.title",
+                "type": "dialog"
+            }
+        ],
+        "group": "Marge globale",
+        "name": "Modifier les marges globales"
+    },
+    "globalmargin.list.title": {
+        "entity": "globalmargin",
+        "image": "globalmargin/globalmargin_list",
+        "description": "Gestion des marges globales du catalogue.",
+        "displayEntityColumns": true,
+        "displayEntityActions": true,
+        "globalActions": [
+            {
+                "id": "globalmargin.edit.title",
+                "action": "entity_edit",
+                "description": "Affiche la page d'édition des marges globales."
+            },
+            {
+                "action": "list_table"
+            },
+            {
+                "action": "list_custom"
+            },
+            {
+                "action": "list_sort"
+            },
+            {
+                "id": "group.list.pdf_title",
+                "action": "list_pdf"
+            },
+            {
+                "id": "group.list.excel_title",
+                "action": "list_excel"
+            }
+        ],
+        "group": "Marge globale",
+        "name": "Marges globales"
+    },
+    "globalmargin.show.title": {
+        "entity": "globalmargin",
+        "image": "globalmargin/globalmargin_show",
+        "icon": "display",
+        "description": "Cette page affiche les propriétés de la marge globale.",
+        "editActions": [
+            {
+                "action": "back_ok"
+            },
+            {
+                "action": "entity_edit",
+                "description": "Affiche la page d'édition des marges globales.",
+                "dialog": "globalmargin.edit.title"
+            }
+        ],
+        "links": [
+            {
+                "id": "globalmargin.list.title",
+                "type": "dialog"
+            }
+        ],
+        "group": "Marge globale",
+        "name": "Propriétés de la marge globale"
+    },
+    "group.add.title": {
+        "entity": "group",
+        "image": "group/group_add",
+        "description": "Cette page permet de créer un nouveau groupe.",
+        "displayEntityFields": true,
+        "editActions": [
+            {
+                "action": "submit_add"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Groupe",
+        "name": "Nouveau groupe"
+    },
+    "group.clone.title": {
+        "entity": "group",
+        "image": "group/group_clone",
+        "icon": "copy far",
+        "description": "Cette page permet de créer un nouveau groupe en copiant les valeurs d'un groupe existant.",
+        "editActions": [
+            {
+                "action": "submit_add"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Groupe",
+        "name": "Copie d'un groupe"
+    },
+    "group.delete.title": {
+        "entity": "group",
+        "image": "group/group_delete",
+        "icon": "times",
+        "description": "Cette page permet de confirmer la suppression d'un groupe.",
+        "editActions": [
+            {
+                "action": "submit_delete"
+            },
+            {
+                "action": "cancel_delete"
+            }
+        ],
+        "forbidden": {
+            "image": "group/group_delete_forbidden",
+            "text": "Si le groupe sélectionné ne peut pas être supprimé, l'avertissement ci-dessous est affiché.",
+            "action": {
+                "action": "delete_forbidden"
+            }
+        },
+        "group": "Groupe",
+        "name": "Supprimer le groupe"
+    },
+    "group.edit.title": {
+        "entity": "group",
+        "image": "group/group_edit",
+        "description": "Cette page permet de modifier un groupe.",
+        "displayEntityFields": true,
+        "editActions": [
+            {
+                "action": "submit_ok"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Groupe",
+        "name": "Modifier le groupe"
+    },
+    "group.list.title": {
+        "entity": "group",
+        "image": "group/group_list",
+        "description": "Gestion des groupes du catalogue.",
+        "displayEntityColumns": true,
+        "displayEntityActions": true,
+        "globalActions": [
+            {
+                "action": "list_search"
+            },
+            {
+                "action": "list_clear"
+            },
+            {
+                "action": "list_size"
+            },
+            {
+                "action": "list_table"
+            },
+            {
+                "action": "list_custom"
+            },
+            {
+                "action": "list_page"
+            },
+            {
+                "action": "list_sort"
+            },
+            {
+                "id": "group.list.pdf_title",
+                "action": "list_pdf"
+            },
+            {
+                "id": "group.list.excel_title",
+                "action": "list_excel"
+            }
+        ],
+        "group": "Groupe",
+        "name": "Groupes"
+    },
+    "group.show.title": {
+        "entity": "group",
+        "image": "group/group_show",
+        "icon": "display",
+        "description": "Cette page affiche les propriétés du groupe.",
+        "editActions": [
+            {
+                "action": "back_ok"
+            },
+            {
+                "action": "entity_edit",
+                "dialog": "group.edit.title"
+            },
+            {
+                "action": "entity_delete",
+                "dialog": "group.delete.title"
+            }
+        ],
+        "group": "Groupe",
+        "name": "Propriétés du groupe"
+    },
+    "index.menu_rights_admin": {
+        "group": "Administration",
+        "icon": "user-shield",
+        "image": "admin/admin_list",
+        "description": "Cette page définit les droits d'accès par défaut à l'application pour les administrateurs. Cette page n'est accessible qu'aux administrateurs du site.",
+        "editActions": [
+            {
+                "action": "submit_ok"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "links": [
+            {
+                "id": "index.menu_rights_user",
+                "type": "dialog"
+            }
+        ],
+        "name": "Droits d'accès de l'administrateur"
+    },
+    "index.menu_rights_user": {
+        "group": "Administration",
+        "icon": "user-check",
+        "image": "admin/admin_user",
+        "description": "Cette page définit les droits d'accès par défaut à l'application pour les utilisateurs. Cette page n'est accessible qu'aux administrateurs.",
+        "editActions": [
+            {
+                "action": "submit_ok"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "links": [
+            {
+                "id": "index.menu_rights_admin",
+                "type": "dialog"
+            }
+        ],
+        "name": "Droits d'accès de l'utilisateur"
+    },
+    "index.title": {
+        "image": "index",
+        "icon": "home",
+        "description": "Page principale de l'application.",
+        "details": [
+            "Cette page est divisée en quatre parties :",
+            "- La première partie contient la liste des dernières calculations.",
+            "- La deuxième partie contient la liste des calculations regroupées par mois.",
+            "- La troisième partie contient la liste des calculations regroupées par status.",
+            "- La dernière partie contient le nombre d'objets dans le catalogue (base de données)."
+        ],
+        "images": [
+            "index_1",
+            "index_2",
+            "index_3"
+        ],
+        "group": "Accueil",
+        "name": "Accueil"
+    },
+    "list.sort_title": {
+        "group": "Dialogue",
+        "image": "dialog_sort",
+        "icon": "sort-amount-down-alt",
+        "description": "Cette boîte de dialogue permet de trier les données de la table.",
+        "editActions": [
+            {
+                "id": "common.button_ok",
+                "description": "Trie les données et ferme la boîte de dialogue."
+            },
+            {
+                "id": "list.sort_default_title",
+                "description": "Trie les données selon l'ordre par défaut et ferme la boîte de dialogue."
+            },
+            {
+                "id": "common.button_cancel",
+                "description": "Ferme la boîte de dialogue en conservant le tri actuel."
+            }
+        ],
+        "links": [
+            {
+                "id": "datatable.dialog_title",
+                "type": "dialog"
+            }
+        ],
+        "name": "Trier les données"
+    },
+    "log.delete.title": {
+        "group": "Administration",
+        "entity": "log",
+        "image": "log/log_delete",
+        "icon": "times",
+        "description": "Cette page permet de confirmer la suppression du journal de l'application. Cette page n'est accessible qu'aux administrateurs.",
+        "editActions": [
+            {
+                "id": "common.button_delete",
+                "description": "Supprime le journal et retourne à la page principale du site."
+            },
+            {
+                "action": "submit_cancel",
+                "dialog": "log.list.title"
+            }
+        ],
+        "name": "Supprimer le journal"
+    },
+    "log.list.title": {
+        "group": "Administration",
+        "icon": "book",
+        "entity": "log",
+        "image": "log/log_list",
+        "description": "Affiche les entrées du journal de l'application. Cette page n'est accessible qu'aux administrateurs.",
+        "displayEntityColumns": true,
+        "displayEntityActions": true,
+        "globalActions": [
+            {
+                "action": "list_search"
+            },
+            {
+                "id": "log.fields.channel",
+                "icon": "layer-group",
+                "description": "Menu déroulant permettant de filtrer les entrées du journal selon un canal."
+            },
+            {
+                "id": "log.fields.level",
+                "icon": "tools",
+                "description": "Menu déroulant permettant de filtrer les entrées du journal selon un niveau."
+            },
+            {
+                "action": "list_clear"
+            },
+            {
+                "action": "list_size"
+            },
+            {
+                "action": "list_table"
+            },
+            {
+                "action": "list_custom"
+            },
+            {
+                "action": "list_page"
+            },
+            {
+                "action": "list_sort"
+            },
+            {
+                "id": "common.button_refresh",
+                "icon": "sync-alt",
+                "description": "Actualise la liste des entrées du journal."
+            },
+            {
+                "id": "log.delete.title",
+                "icon": "times",
+                "description": "Supprime la liste des entrées du journal."
+            },
+            {
+                "id": "log.list.pdf_title",
+                "action": "list_pdf"
+            },
+            {
+                "id": "log.list.excel_title",
+                "action": "list_excel"
+            }
+        ],
+        "name": "Journal de l'application"
+    },
+    "log.show.title": {
+        "group": "Administration",
+        "entity": "log",
+        "image": "log/log_show",
+        "icon": "display",
+        "displayEntityColumns": true,
+        "description": "Cette page affiche les propriétés d'une entrée dans le journal de l'application. Cette page n'est accessible qu'aux administrateurs.",
+        "editActions": [
+            {
+                "action": "back_ok",
+                "dialog": "log.list.title"
+            }
+        ],
+        "name": "Propriétés de l'entrée du journal"
+    },
+    "parameters.title": {
+        "group": "Administration",
+        "image": "admin/admin_parameters",
+        "icon": "cogs",
+        "description": "Cette page affiche les paramètres globaux de l'application. Cette page n'est accessible qu'aux administrateurs.",
+        "editActions": [
+            {
+                "action": "submit_ok"
+            },
+            {
+                "action": "submit_cancel"
+            },
+            {
+                "id": "parameters.default",
+                "description": "Remplace les paramètres par leurs valeurs par défaut."
+            }
+        ],
+        "name": "Paramètres"
+    },
+    "product.add.title": {
+        "entity": "product",
+        "image": "product/product_add",
+        "description": "Cette page permet de créer un nouvel article.",
+        "displayEntityFields": true,
+        "editActions": [
+            {
+                "action": "submit_add"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Article",
+        "name": "Nouvel article"
+    },
+    "product.clone.title": {
+        "entity": "product",
+        "image": "product/product_clone",
+        "icon": "copy far",
+        "description": "Cette page permet de créer un nouvel article en copiant les valeurs d'un article existant.",
+        "editActions": [
+            {
+                "action": "submit_add"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Article",
+        "name": "Copie d'un article"
+    },
+    "product.delete.title": {
+        "entity": "product",
+        "image": "product/product_delete",
+        "icon": "times",
+        "description": "Cette page permet de confirmer la suppression d'un article.",
+        "editActions": [
+            {
+                "action": "submit_delete"
+            },
+            {
+                "action": "cancel_delete"
+            }
+        ],
+        "group": "Article",
+        "name": "Supprimer l'article"
+    },
+    "product.edit.title": {
+        "entity": "product",
+        "image": "product/product_edit",
+        "description": "Cette page permet de modifier un article.",
+        "displayEntityFields": true,
+        "editActions": [
+            {
+                "action": "submit_ok"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Article",
+        "name": "Modifier l'article"
+    },
+    "product.list.title": {
+        "entity": "product",
+        "image": "product/product_list",
+        "description": "Gestion des articles du catalogue.",
+        "displayEntityColumns": true,
+        "displayEntityActions": true,
+        "globalActions": [
+            {
+                "action": "list_search"
+            },
+            {
+                "id": "category.name",
+                "icon": "folder far",
+                "description": "Menu déroulant permettant de filtrer les articles selon un groupe ou une catégorie."
+            },
+            {
+                "action": "list_clear"
+            },
+            {
+                "action": "list_size"
+            },
+            {
+                "action": "list_table"
+            },
+            {
+                "action": "list_custom"
+            },
+            {
+                "action": "list_page"
+            },
+            {
+                "action": "list_sort"
+            },
+            {
+                "id": "product.list.pdf_title",
+                "action": "list_pdf"
+            },
+            {
+                "id": "product.list.excel_title",
+                "action": "list_excel"
+            },
+            {
+                "id": "product.update.title",
+                "description": "Affiche la page de mise jour du prix des articles pour une catégorie.",
+                "dialog": "product.update.title"
+            }
+        ],
+        "group": "Article",
+        "name": "Articles"
+    },
+    "product.result.description": {
+        "group": "Administration",
+        "image": "admin/admin_product_result",
+        "icon": "file-alt far",
+        "entity": "product",
+        "description": "Cette page affiche le résultat de la mise à jour des articles.",
+        "editActions": [
+            {
+                "action": "back_home"
+            },
+            {
+                "id": "product.update.title",
+                "label": "product.result.new_update",
+                "description": "Retourne à la page de mise à jour des articles."
+            }
+        ],
+        "links": [
+            {
+                "id": "product.update.title",
+                "type": "dialog"
+            }
+        ],
+        "name": "Résultats de la mise à jour des articles."
+    },
+    "product.show.title": {
+        "entity": "product",
+        "image": "product/product_show",
+        "icon": "display",
+        "description": "Cette page affiche les propriétés de l'article.",
+        "editActions": [
+            {
+                "action": "back_ok"
+            },
+            {
+                "action": "entity_edit",
+                "dialog": "product.edit.title"
+            },
+            {
+                "action": "entity_delete",
+                "dialog": "product.delete.title"
+            }
+        ],
+        "group": "Article",
+        "name": "Propriétés de l'article"
+    },
+    "product.update.title": {
+        "group": "Administration",
+        "image": "admin/admin_product_query",
+        "icon": "file-alt far",
+        "entity": "product",
+        "description": "Cette page permet de mettre jour le prix des articles pour une catégorie. Cette page n'est accessible qu'aux administrateurs.",
+        "editActions": [
+            {
+                "id": "product.update.submit",
+                "description": "Met à jour le prix des articles et affiche les résultats de la mise à jour.",
+                "dialog": "product.result.description"
+            },
+            {
+                "id": "common.button_cancel",
+                "icon": "",
+                "action": "back_home",
+                "dialog": "index.title"
+            }
+        ],
+        "links": [
+            {
+                "id": "product.result.description",
+                "type": "dialog"
+            },
+            {
+                "id": "product.list.title",
+                "type": "dialog"
+            }
+        ],
+        "name": "Mise à jour des articles"
+    },
+    "profile.edit.title": {
+        "group": "Utilisateur (connecté)",
+        "image": "profile/profile_edit",
+        "entity": "user",
+        "icon": "user-pen",
+        "description": "Cette page permet de modifier son profile.",
+        "editActions": [
+            {
+                "id": "common.button_ok",
+                "action": "submit_ok"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "links": [
+            {
+                "id": "profile.password.title",
+                "type": "dialog"
+            },
+            {
+                "id": "user.parameters.title",
+                "type": "dialog"
+            }
+        ],
+        "name": "Modifier le profil"
+    },
+    "profile.password.title": {
+        "group": "Utilisateur (connecté)",
+        "image": "profile/profile_change-password",
+        "entity": "user",
+        "icon": "unlock-alt",
+        "description": "Cette page permet de modifier son mot de passe.",
+        "editActions": [
+            {
+                "id": "common.button_ok",
+                "action": "submit_ok"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "links": [
+            {
+                "id": "profile.edit.title",
+                "type": "dialog"
+            },
+            {
+                "id": "user.parameters.title",
+                "type": "dialog"
+            }
+        ],
+        "name": "Modifier le mot de passe"
+    },
+    "search.title": {
+        "group": "Outils",
+        "image": "search/search_list",
+        "description": "Permet de rechercher des données dans le catalogue (base de données).",
+        "globalActions": [
+            {
+                "action": "list_search"
+            },
+            {
+                "id": "search.entity",
+                "icon": "database",
+                "description": "Menu déroulant permettant de filtrer les objets."
+            },
+            {
+                "action": "list_clear"
+            },
+            {
+                "action": "list_size"
+            },
+            {
+                "action": "list_table"
+            },
+            {
+                "action": "list_custom"
+            },
+            {
+                "action": "list_page"
+            },
+            {
+                "action": "list_sort"
+            }
+        ],
+        "fields": [
+            {
+                "name": "search.fields.entity",
+                "description": "Nom de l'objet.",
+                "type": "reference",
+                "required": false
+            },
+            {
+                "name": "search.fields.field",
+                "description": "Nom du champ.",
+                "required": false
+            },
+            {
+                "name": "search.fields.content",
+                "description": "Contenu du champ.",
+                "required": false
+            }
+        ],
+        "name": "Rechercher"
+    },
+    "task.add.title": {
+        "entity": "task",
+        "image": "task/task_add",
+        "description": "Cette page permet de créer un nouvelle tâche.",
+        "displayEntityFields": true,
+        "editActions": [
+            {
+                "action": "submit_add"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Tâche",
+        "name": "Nouvelle tâche"
+    },
+    "task.clone.title": {
+        "entity": "task",
+        "image": "task/task_clone",
+        "icon": "copy far",
+        "description": "Cette page permet de créer une nouvelle tâche en copiant les valeurs d'une tâche existante.",
+        "editActions": [
+            {
+                "action": "submit_add"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Tâche",
+        "name": "Copie d'une tâche"
+    },
+    "task.delete.title": {
+        "entity": "task",
+        "image": "task/task_delete",
+        "icon": "times",
+        "description": "Cette page permet de confirmer la suppression d'une tâche.",
+        "editActions": [
+            {
+                "action": "submit_delete"
+            },
+            {
+                "action": "cancel_delete"
+            }
+        ],
+        "group": "Tâche",
+        "name": "Supprimer la tâche"
+    },
+    "task.edit.title": {
+        "entity": "task",
+        "image": "task/task_edit",
+        "description": "Cette page permet de modifier une tâche.",
+        "displayEntityFields": true,
+        "editActions": [
+            {
+                "action": "submit_ok"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Tâche",
+        "name": "Modifier la tâche"
+    },
+    "task.list.title": {
+        "entity": "task",
+        "image": "task/task_list",
+        "description": "Gestion des tâches du catalogue.",
+        "displayEntityColumns": true,
+        "displayEntityActions": true,
+        "globalActions": [
+            {
+                "action": "list_search"
+            },
+            {
+                "id": "category.name",
+                "icon": "folder far",
+                "description": "Menu déroulant permettant de filtrer les tâches selon un groupe ou une catégorie."
+            },
+            {
+                "action": "list_clear"
+            },
+            {
+                "action": "list_size"
+            },
+            {
+                "action": "list_table"
+            },
+            {
+                "action": "list_custom"
+            },
+            {
+                "action": "list_page"
+            },
+            {
+                "action": "list_sort"
+            },
+            {
+                "id": "task.list.pdf_title",
+                "action": "list_pdf"
+            },
+            {
+                "id": "task.list.excel_title",
+                "action": "list_pdf"
+            }
+        ],
+        "group": "Tâche",
+        "name": "Tâches"
+    },
+    "task.show.title": {
+        "entity": "task",
+        "image": "task/task_show",
+        "icon": "display",
+        "description": "Cette page affiche les propriétés de la tâche.",
+        "editActions": [
+            {
+                "action": "back_ok"
+            },
+            {
+                "action": "entity_edit",
+                "dialog": "task.edit.title"
+            },
+            {
+                "action": "entity_delete",
+                "dialog": "task.delete.title"
+            }
+        ],
+        "group": "Tâche",
+        "name": "Propriétés de la tâche"
+    },
+    "task_compute.title": {
+        "entity": "task",
+        "image": "task/task_compute",
+        "icon": "keyboard",
+        "description": "Permet de calculer une tâche.",
+        "details": [
+            "L'utilisateur doit sélectionner une <b>tâche</b>, une <b>quantité</b> et une ou plusieurs <b>opérations</b>.",
+            "Le programme recalcule automatiquement le <b>totale générale</b> à chaque changement."
+        ],
+        "editActions": [
+            {
+                "action": "back_home"
+            }
+        ],
+        "group": "Tâche",
+        "name": "Calculer une tâche"
+    },
+    "user.add.title": {
+        "entity": "user",
+        "image": "user/user_add",
+        "description": "Cette page permet de créer un nouvel utilisateur.",
+        "displayEntityFields": true,
+        "editActions": [
+            {
+                "action": "submit_add"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Utilisateur",
+        "name": "Nouvel utilisateur"
+    },
+    "user.change_password.title": {
+        "image": "user/user_password",
+        "icon": "unlock-alt",
+        "entity": "user",
+        "description": "Cette page permet de modifier le mot de passe de l'utilisateur.",
+        "editActions": [
+            {
+                "action": "submit_ok"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Utilisateur",
+        "name": "Modifier le mot de passe"
+    },
+    "user.comment.title": {
+        "group": "Utilisateur (connecté)",
+        "image": "user/user_comment",
+        "entity": "user",
+        "description": "Cette page permet d'envoyer un commentaire à l'administrateur du site.",
+        "editActions": [
+            {
+                "action": "send"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "name": "Commentaires"
+    },
+    "user.delete.title": {
+        "entity": "user",
+        "image": "user/user_delete",
+        "icon": "times",
+        "description": "Cette page permet de confirmer la suppression d'un utilisateur.",
+        "editActions": [
+            {
+                "action": "submit_delete"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Utilisateur",
+        "name": "Supprimer l'utilisateur"
+    },
+    "user.edit.title": {
+        "entity": "user",
+        "image": "user/user_edit",
+        "description": "Cette page permet de modifier un utilisateur.",
+        "displayEntityFields": true,
+        "editActions": [
+            {
+                "action": "submit_ok"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Utilisateur",
+        "name": "Modifier l'utilisateur"
+    },
+    "user.list.title": {
+        "entity": "user",
+        "image": "user/user_list",
+        "description": "Affiche la liste des utilisateurs. Cette page n'est accessible qu'aux administrateurs.",
+        "displayEntityColumns": true,
+        "displayEntityActions": true,
+        "globalActions": [
+            {
+                "action": "list_search"
+            },
+            {
+                "action": "list_clear"
+            },
+            {
+                "action": "list_size"
+            },
+            {
+                "action": "list_table"
+            },
+            {
+                "action": "list_custom"
+            },
+            {
+                "action": "list_page"
+            },
+            {
+                "action": "list_sort"
+            },
+            {
+                "id": "user.list.pdf_title",
+                "action": "list_pdf"
+            },
+            {
+                "id": "user.list.excel_title",
+                "action": "list_excel"
+            }
+        ],
+        "group": "Utilisateur",
+        "name": "Utilisateurs"
+    },
+    "user.message.title": {
+        "image": "user/user_message",
+        "entity": "user",
+        "description": "Cette page permet d'envoyer un message à l'utilisateur sélectionné.",
+        "editActions": [
+            {
+                "action": "send"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Utilisateur",
+        "name": "Envoyer un message"
+    },
+    "user.parameters.title": {
+        "group": "Utilisateur (connecté)",
+        "image": "user/user_parameters",
+        "entity": "user",
+        "icon": "user-gear",
+        "description": "Cette page permet de modifier ses préférence dans l'application.",
+        "editActions": [
+            {
+                "id": "common.button_ok",
+                "action": "submit_ok"
+            },
+            {
+                "action": "submit_cancel"
+            },
+            {
+                "id": "parameters.default",
+                "description": "Remplace les paramètres par leurs valeurs par défaut."
+            }
+        ],
+        "links": [
+            {
+                "id": "profile.password.title",
+                "type": "dialog"
+            },
+            {
+                "id": "profile.edit.title",
+                "type": "dialog"
+            }
+        ],
+        "name": "Préférences"
+    },
+    "user.rights.title": {
+        "image": "user/user_rights",
+        "icon": "unlock",
+        "entity": "user",
+        "description": "Cette page permet de définir les droits d'accès à l'application pour l'utilisateur.",
+        "editActions": [
+            {
+                "action": "submit_ok"
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Utilisateur",
+        "name": "Droits d'accès"
+    },
+    "user.send.title": {
+        "icon": "envelope-circle-check fas",
+        "image": "user/user_send",
+        "entity": "user",
+        "description": "Cette page permet d'envoyer un message pour permettre à l'utilisateur sélectionné de changer son mot de passe.",
+        "editActions": [
+            {
+                "id": "user.send.submit",
+                "description": "Renvoie un message et retourne à la page précédente."
+            },
+            {
+                "action": "submit_cancel"
+            }
+        ],
+        "group": "Utilisateur",
+        "name": "Renvoyer une demande de mot de passe"
+    },
+    "user.show.title": {
+        "entity": "user",
+        "image": "user/user_show",
+        "icon": "display",
+        "description": "Cette page affiche les propriétés de l'utilisateur.",
+        "editActions": [
+            {
+                "action": "back_ok"
+            },
+            {
+                "action": "entity_edit",
+                "dialog": "user.edit.title"
+            },
+            {
+                "action": "entity_delete",
+                "dialog": "user.delete.title"
+            }
+        ],
+        "group": "Utilisateur",
+        "name": "Propriétés de l'utilisateur"
+    }
+}

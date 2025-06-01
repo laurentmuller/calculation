@@ -29,7 +29,7 @@ class GlobalMarginsTest extends TestCase
      */
     public function testAddMargin(): void
     {
-        $margins = new GlobalMargins();
+        $margins = GlobalMargins::instance();
         self::assertEmptyCountable($margins);
 
         $margin = $this->createMargin();
@@ -44,16 +44,16 @@ class GlobalMarginsTest extends TestCase
      */
     public function testConstruct(): void
     {
-        $margins = new GlobalMargins();
+        $margins = GlobalMargins::instance();
         self::assertEmptyCountable($margins);
 
-        $margins = new GlobalMargins([$this->createMargin()]);
+        $margins = GlobalMargins::instance([$this->createMargin()]);
         self::assertCount(1, $margins);
     }
 
     public function testCount(): void
     {
-        $margins = new GlobalMargins();
+        $margins = GlobalMargins::instance();
         self::assertEmptyCountable($margins);
     }
 
@@ -62,7 +62,7 @@ class GlobalMarginsTest extends TestCase
      */
     public function testGetMargins(): void
     {
-        $margins = new GlobalMargins();
+        $margins = GlobalMargins::instance();
         $actual = $margins->getMargins();
         self::assertEmptyCountable($actual);
         $margins->addMargin($this->createMargin());
@@ -75,7 +75,7 @@ class GlobalMarginsTest extends TestCase
      */
     public function testRemoveMargin(): void
     {
-        $margins = new GlobalMargins();
+        $margins = GlobalMargins::instance();
         $margin = $this->createMargin();
         self::assertEmptyCountable($margins);
         $margins->removeMargin($margin);

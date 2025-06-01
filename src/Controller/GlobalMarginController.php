@@ -64,7 +64,7 @@ class GlobalMarginController extends AbstractEntityController
 
         $repository = $this->getRepository();
         $oldMargins = $repository->findByMinimum();
-        $root = new GlobalMargins($oldMargins);
+        $root = GlobalMargins::instance($oldMargins);
         $form = $this->createForm(GlobalMarginsType::class, $root);
         if ($this->handleRequestForm($request, $form)) {
             $this->updateMargins($repository, $oldMargins, $root->toArray());

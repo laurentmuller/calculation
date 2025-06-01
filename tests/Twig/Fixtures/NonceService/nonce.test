@@ -1,8 +1,8 @@
 --TEST--
 "nonce" function test
 --TEMPLATE--
-{{ csp_nonce() }}
+{{ csp_nonce()|length }}
 --DATA--
 return []
 --EXPECT--
-nonce
+40

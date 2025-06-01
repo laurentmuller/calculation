@@ -112,7 +112,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     public function addCategory(CalculationCategory $category): self
     {
         if (!$this->contains($category)) {
-            $this->categories[] = $category;
+            $this->categories->add($category);
             $category->setGroup($this);
         }
 

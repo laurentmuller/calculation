@@ -30,7 +30,11 @@ use Symfony\Component\Finder\SplFileInfo;
 /**
  * Command to convert images to Webp format.
  */
-#[AsCommand(name: 'app:update-images', description: 'Convert images, from the given directory, to the WebP format.')]
+#[AsCommand(
+    name: 'app:update-images',
+    description: 'Convert images, from the given directory, to the WebP format.',
+    help: 'The <info>%command.name%</info> command convert images, from the given directory, to the <href=https://en.wikipedia.org/wiki/WebP>WebP</> format.'
+)]
 class WebpCommand extends Command
 {
     use MathTrait;
@@ -54,7 +58,6 @@ class WebpCommand extends Command
         $this->addOption(self::OPTION_LEVEL, 'l', InputOption::VALUE_REQUIRED, 'The level (depth) to search in directory.', 0);
         $this->addOption(self::OPTION_OVERWRITE, 'o', InputOption::VALUE_NONE, 'Overwrite existing files.');
         $this->addOption(self::OPTION_DRY_RUN, 'd', InputOption::VALUE_NONE, 'Simulate conversion without generate images.');
-        $this->setHelp('The <info>%command.name%</info> command convert images, from the given directory, to the <href=https://en.wikipedia.org/wiki/WebP>WebP</> format.');
     }
 
     #[\Override]

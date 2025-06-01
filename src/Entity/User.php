@@ -145,7 +145,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     public function addProperty(UserProperty $property): self
     {
         if (!$this->contains($property)) {
-            $this->properties[] = $property;
+            $this->properties->add($property);
             $property->setUser($this);
         }
 

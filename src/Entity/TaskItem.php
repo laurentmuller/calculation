@@ -91,7 +91,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
     public function addMargin(TaskItemMargin $margin): self
     {
         if (!$this->margins->contains($margin)) {
-            $this->margins[] = $margin;
+            $this->margins->add($margin);
             $margin->setTaskItem($this);
         }
 

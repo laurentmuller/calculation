@@ -87,7 +87,7 @@ class ValidateMarginsTraitTest extends ConstraintValidatorTestCase
 
     private function createGlobalMargins(GlobalMargin ...$margins): GlobalMargins
     {
-        return new GlobalMargins($margins);
+        return GlobalMargins::instance($margins);
     }
 
     private function createMargin(float $minimum = 0.0, float $maximum = 1.0): GlobalMargin

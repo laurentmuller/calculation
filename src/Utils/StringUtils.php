@@ -161,8 +161,7 @@ final class StringUtils
         try {
             return (new \ReflectionClass($objectOrClass))->getShortName();
         } catch (\ReflectionException $e) {
-            $type = \is_object($objectOrClass) ? \get_debug_type($objectOrClass) : $objectOrClass;
-            $message = \sprintf("Unable to get short name for '%s'.", $type);
+            $message = \sprintf("Unable to get short name for '%s'.", \get_debug_type($objectOrClass));
             throw new \RuntimeException($message, $e->getCode(), $e);
         }
     }

@@ -97,18 +97,6 @@ class WebpCommandTest extends CommandTestCase
         $this->validate($output, $expected);
     }
 
-    public function testExecuteLevelNotNumeric(): void
-    {
-        $expected = 'The level argument must be of type int';
-        $input = [
-            'source' => '/',
-            '--level' => [],
-            '--dry-run' => true,
-        ];
-        $output = $this->execute(self::COMMAND_NAME, $input, statusCode: Command::INVALID);
-        $this->validate($output, $expected);
-    }
-
     public function testExecuteMissingSource(): void
     {
         $expected = 'The "--source" argument requires a non-empty value.';

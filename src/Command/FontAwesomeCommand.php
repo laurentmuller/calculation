@@ -16,62 +16,35 @@ namespace App\Command;
 use App\Service\FontAwesomeImageService;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
+use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-/**
- * Command to copy SVG files and aliases from the font-awesome package.
- */
 #[AsCommand(name: 'app:fontawesome', description: 'Copy SVG files and aliases from the font-awesome package.')]
-class FontAwesomeCommand extends Command
+class FontAwesomeCommand
 {
     private const DEFAULT_SOURCE = 'vendor/fortawesome/font-awesome/metadata/icons.json';
     private const DEFAULT_TARGET = 'resources/fontawesome';
-    private const DRY_RUN_OPTION = 'dry-run';
-    private const SOURCE_ARGUMENT = 'source';
-    private const TARGET_ARGUMENT = 'target';
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir
     ) {
-        parent::__construct();
     }
 
-    #[\Override]
-    protected function configure(): void
-    {
-        $this->addArgument(
-            name: self::SOURCE_ARGUMENT,
-            mode: InputArgument::OPTIONAL,
-            description: 'The JSON source file, relative to the project directory, where to get metadata informations.',
-            default: self::DEFAULT_SOURCE
-        );
-        $this->addArgument(
-            name: self::TARGET_ARGUMENT,
-            mode: InputArgument::OPTIONAL,
-            description: 'The target directory, relative to the project directory, where to generate SVG files.',
-            default: self::DEFAULT_TARGET
-        );
-        $this->addOption(
-            name: self::DRY_RUN_OPTION,
-            shortcut: 'd',
-            mode: InputOption::VALUE_NONE,
-            description: 'Run the command without making changes (simulate files generation).'
-        );
-    }
-
-    #[\Override]
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        $io = new SymfonyStyle($input, $output);
-
-        $source = $this->getSourceFile($io);
+    public function __invoke(
+        SymfonyStyle $io,
+        #[Argument(description: 'The JSON source file, relative to the project directory, where to get metadata informations.', )]
+        ?string $source = null,
+        #[Argument(description: 'The target directory, relative to the project directory, where to generate SVG files.', )]
+        ?string $target = null,
+        #[Option(description: 'Run the command without making changes (simulate files generation).', name: 'dry-run', shortcut: 'd')]
+        bool $dryRun = false
+    ): int {
+        $source = FileUtils::buildPath($this->projectDir, $source ?? self::DEFAULT_SOURCE);
         $relativeSource = $this->getRelativePath($source);
         if (!FileUtils::isFile($source)) {
             $io->error(\sprintf('Unable to find JSON source file: "%s".', $relativeSource));
@@ -98,10 +71,9 @@ class FontAwesomeCommand extends Command
             return Command::FAILURE;
         }
 
-        $aliases = [];
-
         try {
             $files = 0;
+            $aliases = [];
             $io->writeln([\sprintf('Generate files from "%s"...', $relativeSource), '']);
             foreach ($io->progressIterate($content, $count) as $key => $item) {
                 $names = $this->getAliasNames($item);
@@ -113,7 +85,7 @@ class FontAwesomeCommand extends Command
                         continue;
                     }
                     if (!$this->dumpFile($io, $tempDir, $style, $key, $data)) {
-                        return self::FAILURE;
+                        return Command::FAILURE;
                     }
                     ++$files;
 
@@ -125,11 +97,13 @@ class FontAwesomeCommand extends Command
             }
 
             $countAliases = \count($aliases);
-            if ($this->isDryRun($io, $files, $countAliases, $count)) {
+            if ($dryRun) {
+                $io->success(\sprintf('Simulate successfully %d files, %d aliases from %d sources.', $files, $countAliases, $count));
+
                 return Command::SUCCESS;
             }
 
-            $target = $this->getTargetDirectory($io);
+            $target = FileUtils::buildPath($this->projectDir, $target ?? self::DEFAULT_TARGET);
             $relativeTarget = $this->getRelativePath($target);
 
             \ksort($aliases);
@@ -222,39 +196,8 @@ class FontAwesomeCommand extends Command
         return FileUtils::makePathRelative($path, $this->projectDir) . $name;
     }
 
-    private function getSourceFile(SymfonyStyle $io): string
-    {
-        $source = $io->getStringArgument(self::SOURCE_ARGUMENT);
-        if ('' === $source) {
-            $source = self::DEFAULT_SOURCE;
-        }
-
-        return FileUtils::buildPath($this->projectDir, $source);
-    }
-
     private function getSvgFileName(string $style, string|int $name): string
     {
         return \sprintf('%s/%s%s', $style, $name, FontAwesomeImageService::SVG_EXTENSION);
-    }
-
-    private function getTargetDirectory(SymfonyStyle $io): string
-    {
-        $target = $io->getStringArgument(self::TARGET_ARGUMENT);
-        if ('' === $target) {
-            $target = self::DEFAULT_TARGET;
-        }
-
-        return FileUtils::buildPath($this->projectDir, $target);
-    }
-
-    private function isDryRun(SymfonyStyle $io, int $files, int $aliases, int $count): bool
-    {
-        if (!$io->getBoolOption(self::DRY_RUN_OPTION)) {
-            return false;
-        }
-
-        $io->success(\sprintf('Simulate successfully %d files, %d aliases from %d sources.', $files, $aliases, $count));
-
-        return true;
     }
 }

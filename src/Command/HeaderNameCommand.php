@@ -14,85 +14,53 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Utils\FileUtils;
+use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
-/**
- * Command to add the relative path, as comment, to the first line of files.
- */
 #[AsCommand(name: 'app:header:name', description: 'Add the relative path, as comment, to the first line of files.')]
-class HeaderNameCommand extends Command
+class HeaderNameCommand
 {
-    private const ARGUMENT_PATH = 'path';
     private const HEADERS_MAPPING = [
         'css' => '/* %path% */',
         'js' => '/* %path% */',
         'twig' => '{# %path% #}',
     ];
+
     private const NEW_LINE = "\n";
-    private const OPTION_DEPTH = 'depth';
-    private const OPTION_DRY_RUN = 'dry-run';
-    private const OPTION_PATTERN = 'pattern';
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir
     ) {
-        parent::__construct();
     }
 
-    #[\Override]
-    protected function configure(): void
-    {
-        $this->addArgument(
-            self::ARGUMENT_PATH,
-            InputOption::VALUE_REQUIRED,
-            'The path, relative to the project directory, where to search in.',
-            '/'
-        );
-        $this->addOption(
-            self::OPTION_PATTERN,
-            null,
-            InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-            'The file extensions to search for.',
-            \array_keys(self::HEADERS_MAPPING)
-        );
-        $this->addOption(
-            self::OPTION_DEPTH,
-            null,
-            InputOption::VALUE_REQUIRED,
-            'The depth search in the directory or -1 for all.',
-            -1
-        );
-        $this->addOption(
-            self::OPTION_DRY_RUN,
-            'd',
-            InputOption::VALUE_NONE,
-            'Simulate update without modify files.'
-        );
-    }
-
-    #[\Override]
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        $io = new SymfonyStyle($input, $output);
-        $patterns = $io->getArrayOption(self::OPTION_PATTERN);
+    /**
+     * @param string[]|null $patterns
+     */
+    public function __invoke(
+        SymfonyStyle $io,
+        #[Argument(description: 'The path, relative to the project directory, where to search in.')]
+        string $path = '/',
+        #[Option(description: 'The file extensions to search for or null for all css, js and twig files.')]
+        ?array $patterns = null,
+        #[Option(description: 'The depth search in the directory or -1 for all.')]
+        int $depth = -1,
+        #[Option(description: 'Simulate update without modify files.', name: 'dry-run', shortcut: 'd')]
+        bool $dryRun = false
+    ): int {
+        $patterns ??= \array_keys(self::HEADERS_MAPPING);
         if (!$this->validatePatterns($io, $patterns)) {
             return Command::INVALID;
         }
 
-        $depth = $io->getIntOption(self::OPTION_DEPTH);
-        $dryRun = $io->getBoolOption(self::OPTION_DRY_RUN);
-        $path = $io->getStringArgument(self::ARGUMENT_PATH);
         $fullPath = FileUtils::buildPath($this->projectDir, $path);
-
         $finder = $this->createFinder($fullPath, $patterns, $depth);
         if (!$this->hasResults($io, $finder, $path)) {
             return Command::SUCCESS;

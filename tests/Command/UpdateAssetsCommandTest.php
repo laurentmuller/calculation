@@ -13,11 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Command\UpdateAssetsCommand;
-use App\Service\EnvironmentService;
 use App\Utils\FileUtils;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Tester\CommandTester;
 
 class UpdateAssetsCommandTest extends CommandTestCase
 {
@@ -150,11 +147,15 @@ class UpdateAssetsCommandTest extends CommandTestCase
 
     private function executeInvalidCommand(string $projectDir): void
     {
-        $service = new EnvironmentService('test');
-        $command = new UpdateAssetsCommand($projectDir, $service);
-        $tester = new CommandTester($command);
-        $result = $tester->execute([]);
-        self::assertSame(Command::INVALID, $result);
+        $input = [
+            '--directory' => $projectDir,
+        ];
+        $expected = Command::INVALID;
+        $this->execute(
+            name: self::COMMAND_NAME,
+            input: $input,
+            statusCode: $expected
+        );
     }
 
     private function removeFile(string $file): void

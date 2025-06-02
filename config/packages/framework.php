@@ -45,4 +45,7 @@ return static function (FrameworkConfig $config): void {
     $config->form()
         ->csrfProtection()
         ->fieldName('csrf_token');
+
+    $config->propertyInfo()
+        ->withConstructorExtractor(true);
 };

@@ -17,7 +17,7 @@
         </div>
     </div>
     {% if (is_strength) %}
-        <div id="{{ form.vars.id }}_passwordStrength" class="password-strength-container d-print-none" style="margin-left: 46px; margin-right: 46px;"></div>
+        <div id="{{ field_id(form) }}_passwordStrength" class="password-strength-container d-print-none" style="margin-left: 46px; margin-right: 46px;"></div>
     {%- endif %}
 {%- endblock %}
 
@@ -211,8 +211,7 @@
 
 {% block simple_editor_widget -%}
     {%- set type = type|default('hidden') -%}
-    {%- set editor_id = form.vars.id ~ '_editor' -%}
-    <div class="simple-editor form-control p-0" id="{{ editor_id }}">
+    <div class="simple-editor form-control p-0" id="{{ field_id(form) }}_editor">
         <div class="simple-editor-toolbar btn-toolbar border-bottom d-print-none" role="toolbar">
             {{ _self.simple_editor_groups(groups|default({})) }}
         </div>

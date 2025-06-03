@@ -50,7 +50,11 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 #[AsCommand(name: 'app:update-assets', description: 'Update Javascript and CSS dependencies.')]
 class UpdateAssetsCommand
 {
-    private const VENDOR_FILE_NAME = 'vendor.json';
+    /**
+     * The vendor file name to load.
+     */
+    public const VENDOR_FILE_NAME = 'vendor.json';
+
     private const VERSION_PATTERN = '/asset-version\s*(\d*\.\d*\.\d*)/m';
 
     public function __construct(
@@ -62,16 +66,18 @@ class UpdateAssetsCommand
 
     public function __invoke(
         SymfonyStyle $io,
-        #[Option(description: 'The root directory or null to use the project directory.', name: 'directory')]
-        ?string $projectDir = null,
+        #[Option(description: 'The root directory or null to use the project directory.')]
+        ?string $directory = null,
+        #[Option(description: 'The configuration file.')]
+        string $file = self::VENDOR_FILE_NAME,
         #[Option(description: 'Check only for version update without replacing files.', name: 'dry-run', shortcut: 'd')]
         bool $dryRun = false
     ): int {
-        $publicDir = $this->getPublicDir($io, $projectDir);
+        $publicDir = $this->getPublicDir($io, $directory ?? $this->projectDir);
         if (null === $publicDir) {
             return Command::INVALID;
         }
-        $configuration = $this->loadConfiguration($io, $publicDir);
+        $configuration = $this->loadConfiguration($io, $publicDir, $file);
         if (null === $configuration) {
             return Command::INVALID;
         }
@@ -128,9 +134,9 @@ class UpdateAssetsCommand
                 $source = $definition['source'];
                 $format = $definition['format'];
                 $this->writeVerbose($io, \sprintf('Install  : %s %s', $display, $version));
-                foreach ($files as $file) {
-                    $sourceFile = $this->getSourceFile($source, $format, $plugin, $file);
-                    $targetFile = $this->getTargetFile($targetTemp, $plugin, $file);
+                foreach ($files as $entry) {
+                    $sourceFile = $this->getSourceFile($source, $format, $plugin, $entry);
+                    $targetFile = $this->getTargetFile($targetTemp, $plugin, $entry);
                     if (!$this->copyFile($io, $sourceFile, $targetFile, $version, $prefixes)) {
                         return Command::FAILURE;
                     }
@@ -235,7 +241,7 @@ class UpdateAssetsCommand
             $this->writeln(
                 $io,
                 \sprintf(
-                    'The plugin "%s" version "%s" can be update to the new version "%s".',
+                    'The plugin "%s" version "%s" can be updated to the new version "%s".',
                     $display,
                     $version,
                     $newVersion
@@ -428,9 +434,8 @@ class UpdateAssetsCommand
         return [];
     }
 
-    private function getPublicDir(SymfonyStyle $io, ?string $projectDir): ?string
+    private function getPublicDir(SymfonyStyle $io, string $projectDir): ?string
     {
-        $projectDir ??= $this->projectDir;
         $publicDir = FileUtils::buildPath($projectDir, 'public');
         if (FileUtils::exists($publicDir)) {
             return $publicDir;
@@ -500,9 +505,9 @@ class UpdateAssetsCommand
     /**
      * @phpstan-return ConfigurationType|null
      */
-    private function loadConfiguration(SymfonyStyle $io, string $publicDir): ?array
+    private function loadConfiguration(SymfonyStyle $io, string $publicDir, string $file): ?array
     {
-        $vendorFile = FileUtils::buildPath($publicDir, self::VENDOR_FILE_NAME);
+        $vendorFile = FileUtils::buildPath($publicDir, $file);
         if (!FileUtils::exists($vendorFile)) {
             $this->writeVerbose($io, \sprintf('The file "%s" does not exist.', $vendorFile));
 

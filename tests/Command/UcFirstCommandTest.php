@@ -46,7 +46,10 @@ class UcFirstCommandTest extends CommandTestCase
     {
         $this->getCalculation(customer: 'customer');
 
-        $expected = 'Updated 1 values successfully.';
+        $expected = [
+            'Updated 1 values of 1 entities successfully.',
+            'Duration',
+        ];
         $input = [
             '--class' => Calculation::class,
             '--field' => 'customer',
@@ -60,8 +63,9 @@ class UcFirstCommandTest extends CommandTestCase
         $this->getCalculation(customer: 'customer');
 
         $expected = [
-            'Updated 1 values successfully.',
+            'Updated 1 values of 1 entities successfully.',
             'No change saved to database.',
+            'Duration:',
         ];
         $input = [
             '--class' => Calculation::class,
@@ -74,7 +78,10 @@ class UcFirstCommandTest extends CommandTestCase
 
     public function testExecuteEmpty(): void
     {
-        $expected = 'No value updated.';
+        $expected = [
+            'No entities found.',
+            'Duration:',
+        ];
         $input = [
             '--class' => Calculation::class,
             '--field' => 'customer',
@@ -85,7 +92,10 @@ class UcFirstCommandTest extends CommandTestCase
 
     public function testExecuteEmptyDryRun(): void
     {
-        $expected = 'No value updated.';
+        $expected = [
+            'No entities found.',
+            'Duration:',
+        ];
         $input = [
             '--class' => Calculation::class,
             '--field' => 'customer',
@@ -105,38 +115,28 @@ class UcFirstCommandTest extends CommandTestCase
 
     public function testInvalidClassName(): void
     {
-        $expected = "Unable to find the entity 'fake'.";
+        $expected = "Unable to find the 'fake' entity.";
         $input = [
             '--class' => 'fake',
             '--field' => 'fake',
             '--dry-run' => true,
         ];
-        $options = ['interactive' => false];
+        $options = [
+            'interactive' => false,
+        ];
         $output = $this->execute(self::COMMAND_NAME, $input, $options, Command::INVALID);
         $this->validate($output, $expected);
     }
 
     public function testInvalidFieldName(): void
     {
-        $expected = "Unable to find field 'fake' for the entity 'App\Entity\Calculation'.";
+        $expected = "Unable to find the field 'fake' for the entity 'App\Entity\Calculation'.";
         $input = [
             '--class' => Calculation::class,
             '--field' => 'fake',
             '--dry-run' => true,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input, [], Command::INVALID);
-        $this->validate($output, $expected);
-    }
-
-    public function testNoFieldNameNoInteractive(): void
-    {
-        $expected = "No field selected for the entity 'App\Entity\Calculation'.";
-        $input = [
-            '--class' => Calculation::class,
-            '--dry-run' => true,
-        ];
-        $options = ['interactive' => false];
-        $output = $this->execute(self::COMMAND_NAME, $input, $options, Command::INVALID);
         $this->validate($output, $expected);
     }
 

@@ -38,9 +38,9 @@ class HeaderNameCommandTest extends CommandTestCase
     {
         $expected = [
             self::DATA_PATH,
-            'Simulate',
-            'Skipped 2',
-            'Updated 2',
+            'Updated: 2',
+            'Skipped: 2',
+            'The update was simulated without changing the content of the files.',
         ];
         $input = [
             '--dry-run' => true,
@@ -56,9 +56,9 @@ class HeaderNameCommandTest extends CommandTestCase
     {
         $expected = [
             self::DATA_PATH,
-            'Simulate',
-            'Skipped 2',
-            'Updated 2',
+            'Updated: 2',
+            'Skipped: 2',
+            'The update was simulated without changing the content of the files.',
         ];
         $input = [
             '--dry-run' => true,
@@ -109,8 +109,8 @@ class HeaderNameCommandTest extends CommandTestCase
     {
         $expected = [
             self::DATA_PATH,
-            'Skipped 2',
-            'Updated 2',
+            'Updated: 2',
+            'Skipped: 2',
             'tests/files/css/no_header.css',
             'tests/files/css/old_header.css',
         ];

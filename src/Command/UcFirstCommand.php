@@ -17,13 +17,10 @@ use App\Interfaces\EntityInterface;
 use App\Service\SuspendEventListenerService;
 use App\Utils\StringUtils;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\Mapping\ClassMetadata;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Helper;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -31,8 +28,8 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 /**
  * @phpstan-type EntityType = array{name: string, fields: non-empty-array<string>}
  */
-#[AsCommand(name: 'app:uc-first', description: 'Convert the first character to uppercase for the defined entity and field.')]
-class UcFirstCommand extends Command
+#[AsCommand(name: 'app:uc-first', description: 'Convert the first character to uppercase for the given entity and field.')]
+class UcFirstCommand
 {
     /** @phpstan-var array<class-string, EntityType> */
     private array $entities = [];
@@ -41,7 +38,6 @@ class UcFirstCommand extends Command
         private readonly SuspendEventListenerService $listener,
         private readonly EntityManagerInterface $manager
     ) {
-        parent::__construct();
     }
 
     public function __invoke(
@@ -55,57 +51,16 @@ class UcFirstCommand extends Command
         #[Option(description: 'Simulate update without flush change to the database.', name: 'dry-run', shortcut: 'd')]
         bool $dryRun = false
     ): int {
-        if (!$this->validateClass($io, $class)) {
-            return Command::INVALID;
-        }
-        if (!$this->validateField($io, $class, $field)) {
-            return Command::INVALID;
-        }
-
-        $class = $this->updateClass($class);
-        $field = $this->updateField($class, $field);
-        $this->listener->suspendListeners(function () use ($io, $class, $field, $point, $dryRun): void {
-            $startTime = \time();
-            $count = $this->update($io, $class, $field, $point);
-            $io->newLine();
-            if (0 === $count) {
-                $io->info(\sprintf('No value updated. Duration: %s.', $this->formatDuration($startTime)));
-            } elseif ($dryRun) {
-                $io->success(\sprintf(
-                    'Updated %d values successfully. No change saved to database. Duration: %s.',
-                    $count,
-                    $this->formatDuration($startTime)
-                ));
-            } else {
-                $this->manager->flush();
-                $io->success(\sprintf(
-                    'Updated %d values successfully. Duration: %s.',
-                    $count,
-                    $this->formatDuration($startTime)
-                ));
-            }
-        });
-
-        return Command::SUCCESS;
-    }
-
-    #[\Override]
-    protected function interact(InputInterface $input, OutputInterface $output): void
-    {
-        $io = new SymfonyStyle($input, $output);
-
-        /** @phpstan-var class-string|null $class */
-        $class = $input->getOption('class');
+        $class = $this->validateClass($io, $class);
         if (!StringUtils::isString($class)) {
-            $class = $this->askClassName($io);
-            $input->setOption('class', $class);
+            return Command::INVALID;
+        }
+        $field = $this->validateField($io, $class, $field);
+        if (!StringUtils::isString($field)) {
+            return Command::INVALID;
         }
 
-        /** @var string|null $field */
-        $field = $input->getOption('field');
-        if (StringUtils::isString($class) && !StringUtils::isString($field)) {
-            $input->setOption('field', $this->askFieldName($io, $class));
-        }
+        return $this->listener->suspendListeners(fn (): int => $this->update($io, $class, $field, $point, $dryRun));
     }
 
     /**
@@ -114,7 +69,8 @@ class UcFirstCommand extends Command
     private function askClassName(SymfonyStyle $io): ?string
     {
         $entities = $this->getEntities();
-        $question = new ChoiceQuestion('Select an entity:', \array_column($entities, 'name'));
+        $choices = \array_column($entities, 'name');
+        $question = new ChoiceQuestion('Select an entity:', $choices);
         $question->setMaxAttempts(1)
             ->setErrorMessage('No entity selected.');
 
@@ -140,7 +96,8 @@ class UcFirstCommand extends Command
     {
         $entry = $this->getEntities()[$class];
         $name = $entry['name'];
-        $question = new ChoiceQuestion("Select a field name for the '$name' entity:", $entry['fields'], 0);
+        $choices = $entry['fields'];
+        $question = new ChoiceQuestion("Select a field name for the '$name' entity:", $choices, 0);
         $question->setMaxAttempts(1)
             ->setErrorMessage("No field selected for the '$name' entity.");
 
@@ -182,19 +139,22 @@ class UcFirstCommand extends Command
 
         $allMetadata = $this->manager->getMetadataFactory()->getAllMetadata();
         foreach ($allMetadata as $metadata) {
-            /** @var \ReflectionClass<\Stringable> $class */
+            /** @phpstan-var \ReflectionClass<\Stringable> $class */
             $class = $metadata->getReflectionClass();
             if ($class->isAbstract() || !$class->implementsInterface(EntityInterface::class)) {
                 continue;
             }
 
-            $fields = $this->getFields($metadata);
+            $fields = \array_filter(
+                $metadata->getFieldNames(),
+                static fn (string $field): bool => 'string' === $metadata->getTypeOfField($field)
+            );
             if ([] === $fields) {
                 continue;
             }
 
-            $name = $metadata->getName();
-            $this->entities[$name] = [
+            \sort($fields);
+            $this->entities[$metadata->getName()] = [
                 'name' => $class->getShortName(),
                 'fields' => $fields,
             ];
@@ -205,36 +165,22 @@ class UcFirstCommand extends Command
     }
 
     /**
-     * @return string[]
-     *
-     * @phpstan-template T of object
-     *
-     * @phpstan-param ClassMetadata<T> $metadata
-     */
-    private function getFields(ClassMetadata $metadata): array
-    {
-        $names = \array_filter(
-            $metadata->getFieldNames(),
-            fn (string $field): bool => 'string' === $metadata->getTypeOfField($field)
-        );
-        \sort($names);
-
-        return $names;
-    }
-
-    /**
      * @phpstan-param class-string $class
      */
-    private function update(SymfonyStyle $io, string $class, string $field, bool $point): int
+    private function update(SymfonyStyle $io, string $class, string $field, bool $point, bool $dryRun): int
     {
+        $startTime = \time();
         $entities = $this->manager->getRepository($class)->findAll();
         if ([] === $entities) {
-            return 0;
+            $io->info(\sprintf('No entities found. Duration: %s.', $this->formatDuration($startTime)));
+
+            return Command::SUCCESS;
         }
 
         $count = 0;
+        $total = \count($entities);
         $accessor = PropertyAccess::createPropertyAccessor();
-        foreach ($io->progressIterate($entities) as $entity) {
+        foreach ($io->progressIterate($entities, $total) as $entity) {
             /** @phpstan-var string|null $oldValue */
             $oldValue = $accessor->getValue($entity, $field);
             $newValue = $this->convert($oldValue, $point);
@@ -244,88 +190,85 @@ class UcFirstCommand extends Command
             }
         }
 
-        return $count;
+        if (0 === $count) {
+            $io->info(
+                \sprintf(
+                    'No value updated of %d entities. Duration: %s.',
+                    $total,
+                    $this->formatDuration($startTime)
+                )
+            );
+
+            return Command::SUCCESS;
+        }
+
+        $message = \sprintf(
+            'Updated %d values of %d entities successfully. Duration: %s.',
+            $count,
+            $total,
+            $this->formatDuration($startTime)
+        );
+        if ($dryRun) {
+            $io->success($message . ' No change saved to database.');
+
+            return Command::SUCCESS;
+        }
+
+        $this->manager->flush();
+        $io->success($message);
+
+        return Command::SUCCESS;
     }
 
     /**
-     * @phpstan-param class-string $class
+     * @phpstan-param string|null $class
      *
-     * @phpstan-return class-string
+     * @phpstan-return class-string|null
      */
-    private function updateClass(string $class): string
+    private function validateClass(SymfonyStyle $io, ?string $class): ?string
     {
-        $entities = $this->getEntities();
-        foreach ($entities as $key => $value) {
-            if (StringUtils::equalIgnoreCase($key, $class)
-                || StringUtils::equalIgnoreCase($value['name'], $class)) {
-                return $key;
-            }
+        if (!StringUtils::isString($class)) {
+            $class = $this->askClassName($io);
         }
-
-        return $class;
-    }
-
-    /**
-     * @phpstan-param class-string $class
-     */
-    private function updateField(string $class, string $field): string
-    {
-        $entity = $this->getEntities()[$class];
-        foreach ($entity['fields'] as $value) {
-            if (StringUtils::equalIgnoreCase($value, $field)) {
-                return $value;
-            }
-        }
-
-        return $field;
-    }
-
-    /**
-     * @phpstan-assert-if-true class-string $class
-     */
-    private function validateClass(SymfonyStyle $io, ?string $class): bool
-    {
         if (!StringUtils::isString($class)) {
             $io->error('No entity selected.');
 
-            return false;
+            return null;
         }
 
         $entities = $this->getEntities();
         foreach ($entities as $key => $entity) {
             if (StringUtils::equalIgnoreCase($key, $class)
                 || StringUtils::equalIgnoreCase($entity['name'], $class)) {
-                return true;
+                return $key;
             }
         }
+        $io->error("Unable to find the '$class' entity.");
 
-        $io->error("Unable to find the entity '$class'.");
-
-        return false;
+        return null;
     }
 
     /**
      * @phpstan-param class-string $class
-     *
-     * @phpstan-assert-if-true non-empty-string $field
      */
-    private function validateField(SymfonyStyle $io, string $class, ?string $field): bool
+    private function validateField(SymfonyStyle $io, string $class, ?string $field): ?string
     {
+        if (!StringUtils::isString($field)) {
+            $field = $this->askFieldName($io, $class);
+        }
         if (!StringUtils::isString($field)) {
             $io->error("No field selected for the entity '$class'.");
 
-            return false;
+            return null;
         }
-
         $entity = $this->getEntities()[$class];
         foreach ($entity['fields'] as $value) {
             if (StringUtils::equalIgnoreCase($value, $field)) {
-                return true;
+                return $value;
             }
         }
+        $io->error("Unable to find the field '$field' for the entity '$class'.");
 
-        $io->error("Unable to find field '$field' for the entity '$class'.");
-
-        return false;
+        return null;
     }
 }

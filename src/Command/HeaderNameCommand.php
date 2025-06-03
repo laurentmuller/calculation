@@ -35,10 +35,13 @@ class HeaderNameCommand
 
     private const NEW_LINE = "\n";
 
+    private readonly string $projectDir;
+
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
-        private readonly string $projectDir
+        string $projectDir
     ) {
+        $this->projectDir = FileUtils::normalize($projectDir);
     }
 
     /**
@@ -69,7 +72,7 @@ class HeaderNameCommand
         $skip = 0;
         $update = 0;
         $files = [];
-        $io->writeln(\sprintf('Finding files in directory "%s":', $path));
+        $io->block(\sprintf('Update files in directory: "%s"', $path));
         foreach ($io->progressIterate($finder) as $file) {
             $modelPath = $this->getModelPath($file);
             $modelHeader = $this->getModelHeader($file);
@@ -90,11 +93,11 @@ class HeaderNameCommand
             $io->listing($files);
         }
 
+        $message = \sprintf('Updated: %d, Skipped: %d.', $update, $skip);
         if ($dryRun) {
-            $io->success(\sprintf('Simulate: Skipped %d, Updated %d.', $skip, $update));
-        } else {
-            $io->success(\sprintf('Skipped %d, Updated %d.', $skip, $update));
+            $message .= ' The update was simulated without changing the content of the files.';
         }
+        $io->success($message);
 
         return Command::SUCCESS;
     }
@@ -123,10 +126,7 @@ class HeaderNameCommand
 
     private function getModelPath(SplFileInfo $file): string
     {
-        $root = FileUtils::normalize($this->projectDir);
-        $path = FileUtils::normalize($file->getRealPath());
-
-        return Path::makeRelative($path, $root);
+        return Path::makeRelative($file->getPathname(), $this->projectDir);
     }
 
     /**
@@ -145,7 +145,7 @@ class HeaderNameCommand
             return true;
         }
 
-        $io->comment(\sprintf('No file found in directory "%s".', $path));
+        $io->note(\sprintf('No file found in directory "%s".', $path));
 
         return false;
     }

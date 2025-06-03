@@ -81,25 +81,7 @@ class HeaderNameCommandTest extends CommandTestCase
             '"js_invalid"',
         ];
         $input = [
-            '--pattern' => ['css_invalid', 'js_invalid'],
-            'path' => self::DATA_PATH,
-        ];
-
-        $output = $this->execute(self::COMMAND_NAME, $input, [], Command::INVALID);
-        $this->validate($output, $expected);
-    }
-
-    public function testNoPattern(): void
-    {
-        $expected = [
-            'No pattern defined.',
-            'Allowed values:',
-            '"css"',
-            '"js"',
-            '"twig"',
-        ];
-        $input = [
-            '--pattern' => [],
+            '--patterns' => ['css_invalid', 'js_invalid'],
             'path' => self::DATA_PATH,
         ];
 
@@ -114,7 +96,7 @@ class HeaderNameCommandTest extends CommandTestCase
             'No file found in directory',
         ];
         $input = [
-            '--pattern' => 'js',
+            '--patterns' => ['js'],
             '--dry-run' => true,
             'path' => self::DATA_PATH,
         ];
@@ -133,7 +115,7 @@ class HeaderNameCommandTest extends CommandTestCase
             'tests/files/css/old_header.css',
         ];
         $input = [
-            '--pattern' => 'css',
+            '--patterns' => ['css'],
             'path' => self::DATA_PATH,
         ];
 

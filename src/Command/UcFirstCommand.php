@@ -299,7 +299,7 @@ class UcFirstCommand extends Command
             }
         }
 
-        $io->error("The entity $class not found.");
+        $io->error("Unable to find the entity '$class'.");
 
         return false;
     }
@@ -312,7 +312,7 @@ class UcFirstCommand extends Command
     private function validateField(SymfonyStyle $io, string $class, ?string $field): bool
     {
         if (!StringUtils::isString($field)) {
-            $io->error(\sprintf('No field selected for the entity "%s".', $class));
+            $io->error("No field selected for the entity '$class'.");
 
             return false;
         }
@@ -324,7 +324,7 @@ class UcFirstCommand extends Command
             }
         }
 
-        $io->error("The field $field for entity $class not found.");
+        $io->error("Unable to find field '$field' for the entity '$class'.");
 
         return false;
     }

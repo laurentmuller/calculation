@@ -183,15 +183,6 @@ class HeaderNameCommand
     private function validatePatterns(SymfonyStyle $io, array $patterns): bool
     {
         $keys = \array_keys(self::HEADERS_MAPPING);
-        if ([] === $patterns) {
-            $io->error(\sprintf(
-                'No pattern defined. Allowed values: "%s".',
-                \implode('", "', $keys)
-            ));
-
-            return false;
-        }
-
         $diff = \array_diff($patterns, $keys);
         if ([] !== $diff) {
             $io->error(\sprintf(

@@ -32,6 +32,16 @@ class UcFirstCommandTest extends CommandTestCase
         $this->deleteEntitiesByClass(Calculation::class);
     }
 
+    public function testAskFieldName(): void
+    {
+        $expected = "Select a field name for the 'Calculation' entity:";
+        $input = [
+            '--class' => Calculation::class,
+        ];
+        $output = $this->execute(self::COMMAND_NAME, $input);
+        $this->validate($output, $expected);
+    }
+
     public function testExecute(): void
     {
         $this->getCalculation(customer: 'customer');
@@ -62,18 +72,6 @@ class UcFirstCommandTest extends CommandTestCase
         $this->validate($output, $expected);
     }
 
-    public function testExecuteDryRunEmpty(): void
-    {
-        $expected = 'No value updated.';
-        $input = [
-            '--class' => Calculation::class,
-            '--field' => 'customer',
-            '--dry-run' => true,
-        ];
-        $output = $this->execute(self::COMMAND_NAME, $input);
-        $this->validate($output, $expected);
-    }
-
     public function testExecuteEmpty(): void
     {
         $expected = 'No value updated.';
@@ -85,9 +83,23 @@ class UcFirstCommandTest extends CommandTestCase
         $this->validate($output, $expected);
     }
 
+    public function testExecuteEmptyDryRun(): void
+    {
+        $expected = 'No value updated.';
+        $input = [
+            '--class' => Calculation::class,
+            '--field' => 'customer',
+            '--dry-run' => true,
+        ];
+        $output = $this->execute(self::COMMAND_NAME, $input);
+        $this->validate($output, $expected);
+    }
+
     public function testExecuteMissingClass(): void
     {
-        $input = ['--field' => 'customer'];
+        $input = [
+            '--field' => 'customer',
+        ];
         $this->executeMissingInput(self::COMMAND_NAME, $input);
     }
 
@@ -96,21 +108,35 @@ class UcFirstCommandTest extends CommandTestCase
         $expected = "Unable to find the entity 'fake'.";
         $input = [
             '--class' => 'fake',
+            '--field' => 'fake',
             '--dry-run' => true,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input, [], Command::INVALID);
+        $options = ['interactive' => false];
+        $output = $this->execute(self::COMMAND_NAME, $input, $options, Command::INVALID);
         $this->validate($output, $expected);
     }
 
     public function testInvalidFieldName(): void
     {
-        $expected = "Unable to find the field 'fake' for the 'Calculation' entity.";
+        $expected = "Unable to find field 'fake' for the entity 'App\Entity\Calculation'.";
         $input = [
             '--class' => Calculation::class,
             '--field' => 'fake',
             '--dry-run' => true,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input, [], Command::INVALID);
+        $this->validate($output, $expected);
+    }
+
+    public function testNoFieldNameNoInteractive(): void
+    {
+        $expected = "No field selected for the entity 'App\Entity\Calculation'.";
+        $input = [
+            '--class' => Calculation::class,
+            '--dry-run' => true,
+        ];
+        $options = ['interactive' => false];
+        $output = $this->execute(self::COMMAND_NAME, $input, $options, Command::INVALID);
         $this->validate($output, $expected);
     }
 

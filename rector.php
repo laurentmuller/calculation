@@ -20,7 +20,6 @@ use Rector\PHPUnit\CodeQuality\Rector\Class_\SingleMockPropertyTypeRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\TwigSetList;
-use Rector\Symfony\Symfony73\Rector\Class_\InvokableCommandInputAttributeRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector;
 
 return RectorConfig::configure()
@@ -37,7 +36,6 @@ return RectorConfig::configure()
         TypedPropertyFromCreateMockAssignRector::class,
         NarrowArrayCollectionToCollectionRector::class,
         RemoveIsArrayOnCollectionRector::class,
-        InvokableCommandInputAttributeRector::class,
     ])->withComposerBased(
         twig: true,
         doctrine: true,

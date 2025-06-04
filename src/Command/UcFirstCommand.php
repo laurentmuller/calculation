@@ -17,6 +17,7 @@ use App\Interfaces\EntityInterface;
 use App\Service\SuspendEventListenerService;
 use App\Utils\StringUtils;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
@@ -59,8 +60,12 @@ class UcFirstCommand
         if (!StringUtils::isString($field)) {
             return Command::INVALID;
         }
+        $total = $this->count($io, $class);
+        if (0 === $total) {
+            return Command::SUCCESS;
+        }
 
-        return $this->listener->suspendListeners(fn (): int => $this->update($io, $class, $field, $point, $dryRun));
+        return $this->listener->suspendListeners(fn (): int => $this->update($io, $class, $field, $total, $point, $dryRun));
     }
 
     /**
@@ -123,6 +128,34 @@ class UcFirstCommand
         return $str;
     }
 
+    /**
+     * @phpstan-param class-string $class
+     */
+    private function count(SymfonyStyle $io, string $class): int
+    {
+        $count = $this->manager->getRepository($class)
+            ->count();
+        if (0 === $count) {
+            $io->info('No entity to update.');
+        }
+
+        return $count;
+    }
+
+    /**
+     * @phpstan-param class-string $class
+     *
+     * @psalm-return Query
+     *
+     * @phpstan-return Query<EntityInterface>
+     */
+    private function createQuery(string $class): Query
+    {
+        return $this->manager->getRepository($class)
+            ->createQueryBuilder('e')
+            ->getQuery();
+    }
+
     private function formatDuration(int $time): string
     {
         return Helper::formatTime(\time() - $time);
@@ -167,20 +200,14 @@ class UcFirstCommand
     /**
      * @phpstan-param class-string $class
      */
-    private function update(SymfonyStyle $io, string $class, string $field, bool $point, bool $dryRun): int
+    private function update(SymfonyStyle $io, string $class, string $field, int $total, bool $point, bool $dryRun): int
     {
-        $startTime = \time();
-        $entities = $this->manager->getRepository($class)->findAll();
-        if ([] === $entities) {
-            $io->info(\sprintf('No entities found. Duration: %s.', $this->formatDuration($startTime)));
-
-            return Command::SUCCESS;
-        }
-
         $count = 0;
-        $total = \count($entities);
+        $startTime = \time();
+        $query = $this->createQuery($class);
         $accessor = PropertyAccess::createPropertyAccessor();
-        foreach ($io->progressIterate($entities, $total) as $entity) {
+        /** @phpstan-var EntityInterface $entity */
+        foreach ($io->progressIterate($query->toIterable(), $total) as $entity) {
             /** @phpstan-var string|null $oldValue */
             $oldValue = $accessor->getValue($entity, $field);
             $newValue = $this->convert($oldValue, $point);

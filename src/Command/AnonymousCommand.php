@@ -22,16 +22,17 @@ use Doctrine\ORM\Query;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(name: 'app:anonymous', description: 'Anonymous customer and description in calculations.')]
-readonly class AnonymousCommand
+class AnonymousCommand
 {
+    use WatchTrait;
+
     public function __construct(
-        private SuspendEventListenerService $listener,
-        private CalculationRepository $repository,
-        private FakerService $service
+        private readonly SuspendEventListenerService $listener,
+        private readonly CalculationRepository $repository,
+        private readonly FakerService $service
     ) {
     }
 
@@ -75,14 +76,9 @@ readonly class AnonymousCommand
             ->getQuery();
     }
 
-    private function formatDuration(int $time): string
-    {
-        return Helper::formatTime(\time() - $time);
-    }
-
     private function update(SymfonyStyle $io, int $count, bool $dryRun): int
     {
-        $time = \time();
+        $this->start();
         $company = true;
         $query = $this->createQuery();
         $generator = $this->createGenerator();
@@ -94,11 +90,11 @@ readonly class AnonymousCommand
         }
         $io->writeln('End update calculations.');
         if ($dryRun) {
-            $io->success(\sprintf('Simulate updated %d calculations. Duration: %s.', $count, $this->formatDuration($time)));
+            $io->success(\sprintf('Simulate updated %d calculations. %s.', $count, $this->stop()));
         } else {
             $io->writeln('Save change to database.');
             $this->repository->flush();
-            $io->success(\sprintf('Updated %d calculations successfully. Duration: %s.', $count, $this->formatDuration($time)));
+            $io->success(\sprintf('Updated %d calculations successfully. %s.', $count, $this->stop()));
         }
 
         return Command::SUCCESS;

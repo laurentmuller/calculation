@@ -27,6 +27,8 @@ use Symfony\Component\Finder\SplFileInfo;
 #[AsCommand(name: 'app:header:name', description: 'Add the relative path, as comment, to the first line of files.')]
 class HeaderNameCommand
 {
+    use WatchTrait;
+
     private const HEADERS_MAPPING = [
         'css' => '/* %path% */',
         'js' => '/* %path% */',
@@ -72,6 +74,7 @@ class HeaderNameCommand
         $skip = 0;
         $update = 0;
         $files = [];
+        $this->start();
         $io->block(\sprintf('Update files in directory: "%s"', $path));
         foreach ($io->progressIterate($finder) as $file) {
             $modelPath = $this->getModelPath($file);
@@ -93,9 +96,9 @@ class HeaderNameCommand
             $io->listing($files);
         }
 
-        $message = \sprintf('Updated: %d, Skipped: %d.', $update, $skip);
+        $message = \sprintf('Updated: %d, Skipped: %d, %s.', $update, $skip, $this->stop());
         if ($dryRun) {
-            $message .= ' The update was simulated without changing the content of the files.';
+            $message .= "\nThe update was simulated without changing the content of the files.";
         }
         $io->success($message);
 

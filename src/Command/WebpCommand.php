@@ -22,7 +22,6 @@ use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Finder;
@@ -36,6 +35,7 @@ use Symfony\Component\Finder\SplFileInfo;
 class WebpCommand
 {
     use MathTrait;
+    use WatchTrait;
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
@@ -79,7 +79,7 @@ class WebpCommand
         $success = 0;
         $oldSize = 0;
         $newSize = 0;
-        $startTime = \time();
+        $this->start();
         $this->writeVerbose($io, \sprintf('Process images in "%s"', $source));
 
         foreach ($finder as $file) {
@@ -131,15 +131,17 @@ class WebpCommand
         }
 
         $percent = $this->safeDivide($newSize - $oldSize, $oldSize);
+        $title = $percent > 0 ? 'extension!' : 'reduction';
         $message = \sprintf(
-            'Conversion: %s, Skip: %s, Error: %s, Old Size: %s, New Size: %s, Size reduction: %s, Duration: %s.',
+            'Conversion: %s, Skip: %s, Error: %s, Old Size: %s, New Size: %s, Size %s: %s, %s.',
             FormatUtils::formatInt($success),
             FormatUtils::formatInt($skip),
             FormatUtils::formatInt($error),
-            FormatUtils::formatInt($oldSize),
-            FormatUtils::formatInt($newSize),
+            FileUtils::formatSize($oldSize),
+            FileUtils::formatSize($newSize),
+            $title,
             FormatUtils::formatPercent($percent, decimals: 1),
-            $this->formatDuration($startTime)
+            $this->stop()
         );
         if (0 !== $error) {
             $io->error($message);
@@ -167,11 +169,6 @@ class WebpCommand
             ->depth($depth)
             ->files()
             ->name($extensions);
-    }
-
-    private function formatDuration(int $time): string
-    {
-        return Helper::formatTime(\time() - $time);
     }
 
     private function getImageExtension(SplFileInfo $file): ?ImageExtension

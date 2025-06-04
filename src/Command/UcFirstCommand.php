@@ -21,7 +21,6 @@ use Doctrine\ORM\Query;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -32,6 +31,8 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 #[AsCommand(name: 'app:uc-first', description: 'Convert the first character to uppercase for the given entity and field.')]
 class UcFirstCommand
 {
+    use WatchTrait;
+
     /** @phpstan-var array<class-string, EntityType> */
     private array $entities = [];
 
@@ -65,7 +66,9 @@ class UcFirstCommand
             return Command::SUCCESS;
         }
 
-        return $this->listener->suspendListeners(fn (): int => $this->update($io, $class, $field, $total, $point, $dryRun));
+        return $this->listener->suspendListeners(
+            fn (): int => $this->update($io, $class, $field, $total, $point, $dryRun)
+        );
     }
 
     /**
@@ -133,8 +136,7 @@ class UcFirstCommand
      */
     private function count(SymfonyStyle $io, string $class): int
     {
-        $count = $this->manager->getRepository($class)
-            ->count();
+        $count = $this->manager->getRepository($class)->count();
         if (0 === $count) {
             $io->info('No entity to update.');
         }
@@ -154,11 +156,6 @@ class UcFirstCommand
         return $this->manager->getRepository($class)
             ->createQueryBuilder('e')
             ->getQuery();
-    }
-
-    private function formatDuration(int $time): string
-    {
-        return Helper::formatTime(\time() - $time);
     }
 
     /**
@@ -203,7 +200,7 @@ class UcFirstCommand
     private function update(SymfonyStyle $io, string $class, string $field, int $total, bool $point, bool $dryRun): int
     {
         $count = 0;
-        $startTime = \time();
+        $this->start();
         $query = $this->createQuery($class);
         $accessor = PropertyAccess::createPropertyAccessor();
         /** @phpstan-var EntityInterface $entity */
@@ -218,11 +215,11 @@ class UcFirstCommand
         }
 
         if (0 === $count) {
-            $io->info(
+            $io->success(
                 \sprintf(
-                    'No value updated of %d entities. Duration: %s.',
+                    'No value updated of %d entities. %s.',
                     $total,
-                    $this->formatDuration($startTime)
+                    $this->stop()
                 )
             );
 
@@ -230,13 +227,13 @@ class UcFirstCommand
         }
 
         $message = \sprintf(
-            'Updated %d values of %d entities successfully. Duration: %s.',
+            'Updated %d values of %d entities successfully. %s.',
             $count,
             $total,
-            $this->formatDuration($startTime)
+            $this->stop()
         );
         if ($dryRun) {
-            $io->success($message . ' No change saved to database.');
+            $io->success($message . "\nNo change saved to database.");
 
             return Command::SUCCESS;
         }

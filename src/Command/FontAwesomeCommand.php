@@ -26,6 +26,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 #[AsCommand(name: 'app:fontawesome', description: 'Copy SVG files and aliases from the font-awesome package.')]
 class FontAwesomeCommand
 {
+    use WatchTrait;
+
     private const DEFAULT_SOURCE = 'vendor/fortawesome/font-awesome/metadata/icons.json';
     private const DEFAULT_TARGET = 'resources/fontawesome';
 
@@ -74,6 +76,7 @@ class FontAwesomeCommand
         try {
             $files = 0;
             $aliases = [];
+            $this->start();
             $io->writeln([\sprintf('Generate files from "%s"...', $relativeSource), '']);
             foreach ($io->progressIterate($content, $count) as $key => $item) {
                 $names = $this->getAliasNames($item);
@@ -98,7 +101,15 @@ class FontAwesomeCommand
 
             $countAliases = \count($aliases);
             if ($dryRun) {
-                $io->success(\sprintf('Simulate successfully %d files, %d aliases from %d sources.', $files, $countAliases, $count));
+                $io->success(
+                    \sprintf(
+                        'Simulate successfully %d files, %d aliases from %d sources. %s.',
+                        $files,
+                        $countAliases,
+                        $count,
+                        $this->stop()
+                    )
+                );
 
                 return Command::SUCCESS;
             }
@@ -124,10 +135,11 @@ class FontAwesomeCommand
 
             $io->success(
                 \sprintf(
-                    'Generate successfully %d files, %d aliases from %d sources.',
+                    'Generate successfully %d files, %d aliases from %d sources. %s.',
                     $files,
                     $countAliases,
-                    $count
+                    $count,
+                    $this->stop()
                 )
             );
 

@@ -19,7 +19,6 @@ use App\Utils\StringUtils;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -50,6 +49,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 #[AsCommand(name: 'app:update-assets', description: 'Update Javascript and CSS dependencies.')]
 class UpdateAssetsCommand
 {
+    use WatchTrait;
+
     /**
      * The vendor file name to load.
      */
@@ -95,9 +96,9 @@ class UpdateAssetsCommand
             return Command::FAILURE;
         }
 
+        $this->start();
         $countFiles = 0;
         $countPlugins = 0;
-        $startTime = \time();
         $plugins = $configuration['plugins'];
         $prefixes = $this->getPrefixes($io, $configuration);
 
@@ -173,14 +174,13 @@ class UpdateAssetsCommand
                 return Command::FAILURE;
             }
 
-            $duration = $this->formatDuration($startTime);
             $io->success(
                 \sprintf(
-                    'Installed %d plugins and %d files to the directory "%s". Duration: %s.',
+                    'Installed %d plugins and %d files to the directory "%s". %s.',
                     $countPlugins,
                     $countFiles,
                     $target,
-                    $duration
+                    $this->stop()
                 )
             );
 
@@ -309,7 +309,7 @@ class UpdateAssetsCommand
      */
     private function dryRun(SymfonyStyle $io, array $configuration, string $target): int
     {
-        $startTime = \time();
+        $this->start();
         $this->writeln($io, 'Check versions:');
         $pattern = '%s %-30s %-12s %s';
 
@@ -361,8 +361,7 @@ class UpdateAssetsCommand
             }
         }
 
-        $duration = $this->formatDuration($startTime);
-        $io->success(\sprintf('Checked versions successfully. Duration: %s.', $duration));
+        $io->success(\sprintf('Checked versions successfully. %s.', $this->stop()));
 
         return Command::SUCCESS;
     }
@@ -391,11 +390,6 @@ class UpdateAssetsCommand
         FileUtils::chmod($targetFile, 0o644, false);
 
         return true;
-    }
-
-    private function formatDuration(int $time): string
-    {
-        return Helper::formatTime(\time() - $time);
     }
 
     /**

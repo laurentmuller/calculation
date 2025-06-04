@@ -78,10 +78,7 @@ class UcFirstCommandTest extends CommandTestCase
 
     public function testExecuteEmpty(): void
     {
-        $expected = [
-            'No entities found.',
-            'Duration:',
-        ];
+        $expected = 'No entity to update.';
         $input = [
             '--class' => Calculation::class,
             '--field' => 'customer',
@@ -92,10 +89,7 @@ class UcFirstCommandTest extends CommandTestCase
 
     public function testExecuteEmptyDryRun(): void
     {
-        $expected = [
-            'No entities found.',
-            'Duration:',
-        ];
+        $expected = 'No entity to update.';
         $input = [
             '--class' => Calculation::class,
             '--field' => 'customer',

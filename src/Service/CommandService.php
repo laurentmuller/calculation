@@ -53,8 +53,6 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     definition: array{
  *         arguments: array<string, ArgumentType>,
  *         options: array<string, OptionType>}}
- * @phpstan-type ContentType = array{
- *     commands:  CommandType[]}
  */
 class CommandService implements \Countable
 {
@@ -132,7 +130,7 @@ class CommandService implements \Countable
 
         $application = $this->createApplication($catchExceptions, $catchErrors);
         $status = $application->run($input, $output);
-        $content = $output->fetch();
+        $content = $this->trimOutput($output->fetch());
         unset($application);
 
         return new CommandResult($status, $content);
@@ -167,37 +165,7 @@ class CommandService implements \Countable
      */
     public function getCommands(): array
     {
-        return $this->cache->get('cache.command.service', function (): array {
-            $result = $this->execute('list', ['--format' => 'json']);
-            if (!$result->isSuccess()) {
-                return [];
-            }
-
-            // remove carriage return
-            $content = \str_replace('\r', '', $result->content);
-
-            /** @phpstan-var ContentType $decoded */
-            $decoded = StringUtils::decodeJson($content);
-            $commands = \array_reduce(
-                $decoded['commands'],
-                /**
-                 * @phpstan-param array<string, CommandType> $carry
-                 * @phpstan-param CommandType $command
-                 */
-                function (array $carry, array $command): array {
-                    if (!$command['hidden']) {
-                        $name = $command['name'];
-                        $carry[$name] = $this->updateCommand($command);
-                    }
-
-                    return $carry;
-                },
-                []
-            );
-            \ksort($commands);
-
-            return $commands;
-        });
+        return $this->cache->get('cache.command.service', fn (): array => $this->loadCommands());
     }
 
     /**
@@ -342,6 +310,42 @@ class CommandService implements \Countable
         return \sprintf($format, $shortcut, $name);
     }
 
+    /**
+     * @phpstan-return array<string, CommandType>
+     */
+    private function loadCommands(): array
+    {
+        $result = $this->execute('list', ['--format' => 'json']);
+        if (!$result->isSuccess()) {
+            return [];
+        }
+
+        // remove carriage return
+        $content = \str_replace('\r', '', $result->content);
+
+        /** @phpstan-var array{commands: CommandType[]} $decoded */
+        $decoded = StringUtils::decodeJson($content);
+        $commands = \array_reduce(
+            $decoded['commands'],
+            /**
+             * @phpstan-param array<string, CommandType> $carry
+             * @phpstan-param CommandType $command
+             */
+            function (array $carry, array $command): array {
+                if (!$command['hidden']) {
+                    $name = $command['name'];
+                    $carry[$name] = $this->updateCommand($command);
+                }
+
+                return $carry;
+            },
+            []
+        );
+        \ksort($commands);
+
+        return $commands;
+    }
+
     private function replaceHelp(string $help): string
     {
         if (!StringUtils::isString($help)) {
@@ -353,12 +357,19 @@ class CommandService implements \Countable
         return StringUtils::replace(self::HELP_REPLACE, $help);
     }
 
+    private function trimOutput(string $output): string
+    {
+        $lines = \array_map(\rtrim(...), \explode("\n", \rtrim($output)));
+
+        return \implode("\n", $lines);
+    }
+
     /**
      * @phpstan-param CommandType $command
      *
      * @phpstan-return CommandType
      */
-    private function updateCommand(array &$command): array
+    private function updateCommand(array $command): array
     {
         $arguments = &$command['definition']['arguments'];
         $command['help'] = $command['help'] === $command['description'] ? '' : $this->replaceHelp($command['help']);

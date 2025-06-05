@@ -28,17 +28,16 @@ function updateExecute() {
 }
 
 /**
- * Load the given command.
- *
- * @param {string } name the command name to load.
+ * Load the command data.
  */
-function loadContent(name) {
+function loadContent() {
     'use strict';
-    const url = $('#command').data('url').replace('query', name);
+    const $command = $('#command');
+    const url = $command.data('url').replace('query', $command.val());
     $.get(url, function (response) {
         if (response.result) {
             $('.btn-execute').fadeIn();
-            $('.content').html(response.content).fadeIn();
+            $('#content').replaceWith(response.content).fadeIn();
             const url = new URL(location);
             url.searchParams.set('name', name);
             window.history.pushState({'name': name}, '', url);
@@ -47,7 +46,7 @@ function loadContent(name) {
         } else {
             $('.content').fadeOut();
             $('.btn-execute').fadeOut();
-            const title = $(".card-title").text();
+            const title = $('.card-title').text();
             Toaster.notify(Toaster.NotificationTypes.DANGER, response.message, title);
         }
     });
@@ -60,7 +59,7 @@ $(function () {
     'use strict';
     const $command = $('#command');
     const callback = () => {
-        loadContent($command.val());
+        loadContent();
     };
     $command.on('input', function () {
         disposePopover();

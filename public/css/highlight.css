@@ -13,7 +13,6 @@ pre.highlight-php {
     position: relative;
     word-break: break-all;
     margin: 0;
-    background: none;
     color: #CC7832;
 }
 
@@ -40,10 +39,6 @@ pre.highlight-php .highlight-php-index {
 }
 
 /* PHP light (copied from HtmlDumper light mode) */
-.pre-scrollable-highlight-php {
-    background-color: initial;
-}
-
 pre.highlight-php .highlight-php-note {
     color: #6897BB
 }
@@ -73,15 +68,6 @@ pre.highlight-php .highlight-php-ellipsis {
 }
 
 /* PHP Dark (copied from HtmlDumper dark mode) */
-html[data-bs-theme=dark] .pre-scrollable-highlight-php {
-    background-color: #18171B;
-}
-
-html[data-bs-theme=dark] pre.highlight-php {
-    background-color: #18171B;
-    color: #FF8400;
-}
-
 html[data-bs-theme=dark] pre.highlight-php .highlight-php-str {
     color: #56DB3A
 }

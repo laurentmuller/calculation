@@ -215,7 +215,7 @@
         <div class="simple-editor-toolbar btn-toolbar border-bottom d-print-none" role="toolbar">
             {{ _self.simple_editor_groups(groups|default({})) }}
         </div>
-        <div class="simple-editor-content small-scrollbar" contenteditable="true"></div>
+        <div class="simple-editor-content scrollbar-thin" contenteditable="true"></div>
         {{- block('form_widget_simple') -}}
     </div>
 {%- endblock %}

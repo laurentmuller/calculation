@@ -1,100 +1,117 @@
 {# macros #}
 {% macro outputEntry(text) -%}
-    <p class="mb-1 horizontal-line">{{ text|trans }}</p>
+    <div class="horizontal-line mb-1">{{ text|trans }}</div>
 {% endmacro %}
-{% macro outputRow(name, description, arguments, popover) -%}
-<div class="row">
-    <div class="col-md-4 col-lg-3 text-success text-nowrap" data-bs-title="{{ name|trim }}" data-content="{{ popover|e }}">
-        <pre class="mb-0">{{ name }}</pre>
-    </div>
-    <div class="col-md-8 col-lg-9">
-        {{- description|raw }} {{ arguments|raw -}}
-    </div>
-    </div>
-{% endmacro %}
-{% macro tooltipArgument(argument) -%}
-<div class="mx-2 mt-1">
-    <table class="table table-sm">
-        <tr>
-            <td>Required</td>
-            <td>:</td>
-            <td>{{ argument.is_required|json_encode }}</td>
-        </tr>
-        <tr>
-            <td>Array</td>
-            <td>:</td>
-            <td>{{ argument.is_array|json_encode }}</td>
-        </tr>
-        {%- if argument.display -%}
-            <tr>
-                <td>Default</td>
-                <td>:</td>
-                <td class="text-secondary">{{ argument.display }}</td>
-            </tr>
-        {% endif %}
-    </table>
-</div>
-{% endmacro %}
-{% macro tooltipOption(option) -%}
-<div class="mx-2 mt-1">
-    <table class="table table-sm">
-        <tr>
-            <td>Accept Value</td>
-            <td>:</td>
-            <td>{{ option.accept_value|json_encode }}</td>
-        </tr>
-        <tr>
-            <td>Value Required</td>
-            <td>:</td>
-            <td>{{ option.is_value_required|json_encode }}</td>
-        </tr>
-        <tr>
-            <td>Multiple</td>
-            <td>:</td>
-            <td>{{ option.is_multiple|json_encode }}</td>
-        </tr>
-        {% if option.accept_value and option.display %}
-            <tr>
-                <td>Default</td>
-                <td>:</td>
-                <td class="text-secondary">{{ option.display }}</td>
-            </tr>
-        {% endif %}
-    </table>
-</div>
 
+{% macro outputEntry2(text, target) -%}
+    <div id="dropdown-{{ target }}" class="drop-down-icon-left cursor-pointer horizontal-line" data-bs-toggle="collapse"
+         data-bs-target="#{{ target }}" aria-expanded="true" aria-controls="{{ target }}">
+        {{ text|trans }}
+    </div>
 {% endmacro %}
+
+{% macro outputRow(name, description, arguments, popover) -%}
+    <div class="row">
+        <div class="col-md-4 col-lg-3 text-success text-nowrap" data-bs-title="{{ name|trim }}"
+             data-content="{{ popover|e }}">
+            <pre class="mb-0">{{ name }}</pre>
+        </div>
+        <div class="col-md-8 col-lg-9">
+            {{- description|raw }} {{ arguments|raw -}}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro tooltipArgument(argument) -%}
+    <div class="mx-2 mt-1">
+        <table class="table table-sm">
+            <tr>
+                <td>Required</td>
+                <td>:</td>
+                <td>{{ argument.is_required|json_encode }}</td>
+            </tr>
+            <tr>
+                <td>Array</td>
+                <td>:</td>
+                <td>{{ argument.is_array|json_encode }}</td>
+            </tr>
+            {%- if argument.display -%}
+                <tr>
+                    <td>Default</td>
+                    <td>:</td>
+                    <td class="text-secondary">{{ argument.display }}</td>
+                </tr>
+            {% endif %}
+        </table>
+    </div>
+{% endmacro %}
+
+{% macro tooltipOption(option) -%}
+    <div class="mx-2 mt-1">
+        <table class="table table-sm">
+            <tr>
+                <td>Accept Value</td>
+                <td>:</td>
+                <td>{{ option.accept_value|json_encode }}</td>
+            </tr>
+            <tr>
+                <td>Value Required</td>
+                <td>:</td>
+                <td>{{ option.is_value_required|json_encode }}</td>
+            </tr>
+            <tr>
+                <td>Multiple</td>
+                <td>:</td>
+                <td>{{ option.is_multiple|json_encode }}</td>
+            </tr>
+            {% if option.accept_value and option.display %}
+                <tr>
+                    <td>Default</td>
+                    <td>:</td>
+                    <td class="text-secondary">{{ option.display }}</td>
+                </tr>
+            {% endif %}
+        </table>
+    </div>
+{% endmacro %}
+
 {# content #}
-<div class="content">
-{# description #}
-{% if command.description %}
-    {{ _self.outputEntry('command.list.fields.description') }}
-    <p class="ms-2">{{ command.description }}</p>
-{% endif %}
-{# usage #}
-{% if command.usage|length %}
-    {{ _self.outputEntry('command.list.fields.usage') }}
-    {% for usage in command.usage %}
-        <pre class="ms-2 fs-6">{{ usage }}</pre>
-    {% endfor %}
-{% endif %}
-{# arguments #}
-{% if command.definition.arguments|length %}
-    {{ _self.outputEntry('command.list.fields.arguments') }}
-    {% for argument in command.definition.arguments %}
-        {{ _self.outputRow(argument.name, argument.description, argument.arguments, _self.tooltipArgument(argument)) }}
-    {% endfor %}
-{% endif %}
-{# options #}
-{% if command.definition.options|length %}
-    {{ _self.outputEntry('command.list.fields.options') }}
-    {% for option in command.definition.options %}
-        {{ _self.outputRow(option.name_shortcut, option.description, option.arguments, _self.tooltipOption(option)) }}
-    {% endfor %}
-{% endif %}
-{# help #}
-{% if command.help %}
-    {{ _self.outputEntry('command.list.fields.help') }}
-    <pre class="ms-2 mb-0 text-wrap">{{ command.help|raw|nl2br }}</pre>
-{% endif %}
+<div id="content">
+    {# description #}
+    {% if command.description %}
+        {{ _self.outputEntry('command.list.fields.description') }}
+        <p class="ms-3">{{ command.description }}</p>
+    {% endif %}
+    {# usage #}
+    {% if command.usage|length %}
+        {{ _self.outputEntry('command.list.fields.usage') }}
+        {% for usage in command.usage %}
+            <pre class="ms-3 fs-6">{{ usage }}</pre>
+        {% endfor %}
+    {% endif %}
+    {# arguments #}
+    {% if command.definition.arguments|length %}
+        {{ _self.outputEntry('command.list.fields.arguments') }}
+        <div class="ms-3 mt-2 collapse show">
+            {% for argument in command.definition.arguments %}
+                {{ _self.outputRow(argument.name, argument.description, argument.arguments, _self.tooltipArgument(argument)) }}
+            {% endfor %}
+        </div>
+    {% endif %}
+    {# options #}
+    {% if command.definition.options|length %}
+        {{ _self.outputEntry('command.list.fields.options') }}
+        <div class="ms-3 mt-2 collapse show">
+            {% for option in command.definition.options %}
+                {{ _self.outputRow(option.name_shortcut, option.description, option.arguments, _self.tooltipOption(option)) }}
+            {% endfor %}
+        </div>
+    {% endif %}
+    {# help #}
+    {% if command.help %}
+        {{ _self.outputEntry('command.list.fields.help') }}
+        <div class="ms-3 mt-2 collapse show">
+            <pre class="mb-0 text-wrap">{{ command.help|raw|nl2br }}</pre>
+        </div>
+    {% endif %}
 </div>

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Utils\FileUtils;
+use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
@@ -31,10 +31,20 @@ trait WatchTrait
     protected function stop(): string
     {
         $event = $this->getStopwatch()->stop('run');
-        $duration = \sprintf('%d ms', $event->getDuration());
-        $memory = FileUtils::formatSize($event->getMemory());
+        $duration = $this->formatDuration($event->getDuration());
+        $memory = $this->formatMemory($event->getMemory());
 
         return \sprintf('Duration: %s, Memory: %s', $duration, $memory);
+    }
+
+    private function formatDuration(float $duration): string
+    {
+        return Helper::formatTime($duration / 1000.0);
+    }
+
+    private function formatMemory(int $memory): string
+    {
+        return Helper::formatMemory($memory);
     }
 
     private function getStopwatch(): Stopwatch

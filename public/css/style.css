@@ -594,43 +594,6 @@ table.table-fixed-header th {
     font-weight: bolder !important;
 }
 
-/* small scrollbar */
-.small-scrollbar {
-    overflow: auto;
-}
-
-.small-scrollbar::-webkit-scrollbar {
-    visibility: hidden;
-    -webkit-appearance: none;
-    width: 6px;
-    height: 6px;
-    background-color: transparent;
-}
-
-.small-scrollbar::-webkit-scrollbar-thumb {
-    visibility: hidden;
-    background-color: var(--bs-secondary-bg-subtle);
-}
-
-html[data-bs-theme=dark] .small-scrollbar::-webkit-scrollbar-thumb {
-    background-color: var(--bs-secondary-bg);
-}
-
-.small-scrollbar:hover::-webkit-scrollbar,
-.small-scrollbar:hover::-webkit-scrollbar-thumb,
-.small-scrollbar:focus::-webkit-scrollbar,
-.small-scrollbar:focus::-webkit-scrollbar-thumb {
-    visibility: visible;
-}
-
-.small-scrollbar::-webkit-scrollbar-corner {
-    background-color: var(--bs-secondary-bg-subtle);
-}
-
-html[data-bs-theme=dark] .small-scrollbar::-webkit-scrollbar-corner {
-    background-color: var(--bs-secondary-bg);
-}
-
 .card-footer hr.card-footer-line {
     margin: 0.5rem calc(-1 * var(--bs-card-cap-padding-x)) 0.25rem;
 }
@@ -659,7 +622,7 @@ table.table-no-end-line tfoot tr:last-child td {
 
 .pre-scrollable {
     max-height: 340px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 /* remove left space when no label is displayed */
@@ -897,4 +860,12 @@ body.status-bar .grecaptcha-badge {
 .accordion.accordion-no-background .accordion-button:not(.collapsed) {
     color: inherit;
     background-color: inherit;
+}
+
+/* scrollbar */
+.scrollbar-none {
+    scrollbar-width: none;
+}
+.scrollbar-thin {
+    scrollbar-width: thin;
 }

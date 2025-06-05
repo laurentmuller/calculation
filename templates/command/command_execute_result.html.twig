@@ -17,14 +17,14 @@
 {% if parameters|length %}
     <div class="mb-3">
         <span class="form-label">{{ 'command.list.fields.arguments'|trans }}</span>
-        <div class="border pre-scrollable pre-scrollable-highlight-php small-scrollbar font-monospace">
+        <div class="border pre-scrollable pre-scrollable-highlight-php scrollbar-thin font-monospace">
             {{ parameters|var_export_php }}
         </div>
     </div>
 {% endif %}
 {# content #}
 <span class="form-label">{{ 'command.result.message'|trans }}</span>
-<pre id="result" class="border p-2 mb-0 small-scrollbar pre-scrollable">
+<pre id="result" class="border p-2 mb-0 scrollbar-thin pre-scrollable">
     {{- result.content|default('command.result.empty'|trans)|raw -}}
 </pre>
 {# error #}

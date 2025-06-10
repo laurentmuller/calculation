@@ -65,7 +65,10 @@ class CommandController extends AbstractController
 
         $command = $service->getCommand($name);
         $session->set(self::LAST_COMMAND, $name);
+
         $view = $this->renderView('command/_command.htm.twig', ['command' => $command]);
+        $lines = \array_map(\trim(...), \explode("\n", \trim($view)));
+        $view = \implode('', \array_filter($lines));
 
         return $this->jsonTrue(['content' => $view]);
     }

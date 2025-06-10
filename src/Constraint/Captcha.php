@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Constraint;
 
 use App\Service\CaptchaImageService;
+use Symfony\Component\Validator\Attribute\HasNamedArguments;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -40,6 +41,7 @@ class Captcha extends Constraint
     /**
      * @param string[] $groups
      */
+    #[HasNamedArguments]
     public function __construct(
         ?int $timeout = null,
         ?array $options = null,

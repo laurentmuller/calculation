@@ -2,18 +2,9 @@
 {% macro outputEntry(text) -%}
     <div class="horizontal-line mb-1">{{ text|trans }}</div>
 {% endmacro %}
-
-{% macro outputEntry2(text, target) -%}
-    <div id="dropdown-{{ target }}" class="drop-down-icon-left cursor-pointer horizontal-line" data-bs-toggle="collapse"
-         data-bs-target="#{{ target }}" aria-expanded="true" aria-controls="{{ target }}">
-        {{ text|trans }}
-    </div>
-{% endmacro %}
-
 {% macro outputRow(name, description, arguments, popover) -%}
     <div class="row">
-        <div class="col-md-4 col-lg-3 text-success text-nowrap" data-bs-title="{{ name|trim }}"
-             data-content="{{ popover|e }}">
+        <div class="col-md-4 col-lg-3 text-success text-nowrap" data-bs-title="{{ name|trim }}" data-content="{{ popover|e }}">
             <pre class="mb-0">{{ name }}</pre>
         </div>
         <div class="col-md-8 col-lg-9">
@@ -21,7 +12,6 @@
         </div>
     </div>
 {% endmacro %}
-
 {% macro tooltipArgument(argument) -%}
     <div class="mx-2 mt-1">
         <table class="table table-sm">
@@ -45,7 +35,6 @@
         </table>
     </div>
 {% endmacro %}
-
 {% macro tooltipOption(option) -%}
     <div class="mx-2 mt-1">
         <table class="table table-sm">
@@ -74,7 +63,6 @@
         </table>
     </div>
 {% endmacro %}
-
 {# content #}
 <div id="content">
     {# description #}
@@ -92,7 +80,7 @@
     {# arguments #}
     {% if command.definition.arguments|length %}
         {{ _self.outputEntry('command.list.fields.arguments') }}
-        <div class="ms-3 mt-2 collapse show">
+        <div class="ms-3 mt-2">
             {% for argument in command.definition.arguments %}
                 {{ _self.outputRow(argument.name, argument.description, argument.arguments, _self.tooltipArgument(argument)) }}
             {% endfor %}
@@ -101,7 +89,7 @@
     {# options #}
     {% if command.definition.options|length %}
         {{ _self.outputEntry('command.list.fields.options') }}
-        <div class="ms-3 mt-2 collapse show">
+        <div class="ms-3 mt-2">
             {% for option in command.definition.options %}
                 {{ _self.outputRow(option.name_shortcut, option.description, option.arguments, _self.tooltipOption(option)) }}
             {% endfor %}
@@ -110,7 +98,7 @@
     {# help #}
     {% if command.help %}
         {{ _self.outputEntry('command.list.fields.help') }}
-        <div class="ms-3 mt-2 collapse show">
+        <div class="ms-3 mt-2">
             <pre class="mb-0 text-wrap">{{ command.help|raw|nl2br }}</pre>
         </div>
     {% endif %}

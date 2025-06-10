@@ -275,7 +275,7 @@ readonly class CommandFormService
             'data-bs-html' => 'true',
             'data-bs-trigger' => 'hover',
             'data-bs-toggle' => 'popover',
-            'data-bs-placement' => 'left',
+            'data-bs-placement' => 'top',
         ];
     }
 

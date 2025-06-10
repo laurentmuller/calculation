@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Constraint;
 
+use Symfony\Component\Validator\Attribute\HasNamedArguments;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\InvalidOptionsException;
 
@@ -98,6 +99,7 @@ class Password extends Constraint
     /**
      * @param string[] $groups
      */
+    #[HasNamedArguments]
     public function __construct(
         ?bool $all = null,
         ?bool $letters = null,

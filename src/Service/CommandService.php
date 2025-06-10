@@ -30,7 +30,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     is_required: bool,
  *     is_array: bool,
  *     description: string,
- *     default: array<mixed>|scalar|null,
+ *     default: array|scalar|null,
  *     display: string,
  *     arguments: string}
  * @phpstan-type OptionType = array{
@@ -41,7 +41,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     is_value_required: bool,
  *     is_multiple: bool,
  *     description: string,
- *     default: array<mixed>|scalar|null,
+ *     default: array|scalar|null,
  *     display: string,
  *     arguments: string}
  * @phpstan-type CommandType = array{

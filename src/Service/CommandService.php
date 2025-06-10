@@ -45,14 +45,23 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     display: string,
  *     arguments: string}
  * @phpstan-type CommandType = array{
- *     name: string,
- *     description: string,
- *     usage: string[],
- *     help: string,
- *     hidden: bool,
- *     definition: array{
- *         arguments: array<string, ArgumentType>,
- *         options: array<string, OptionType>}}
+ *      name: string,
+ *      description: string,
+ *      usage: string[],
+ *      help: string,
+ *      hidden: bool,
+ *      arguments: array<string, ArgumentType>,
+ *      options: array<string, OptionType>}
+ * @phpstan-type CommandSourceType = array{
+ *      name: string,
+ *      description: string,
+ *      usage: string[],
+ *      help: string,
+ *      hidden: bool,
+ *      definition: array{
+ *          arguments: array<string, ArgumentType>,
+ *          options: array<string, OptionType>}
+ *     }
  */
 class CommandService implements \Countable
 {
@@ -61,17 +70,19 @@ class CommandService implements \Countable
      */
     public const GLOBAL_GROUP = '_global';
 
-    private const HELP_REPLACE = [
+    private const CONSOLE_REPLACE = [
         // development
-        '/development/public/index.php' => 'bin/console',
-        '/bin/console/command' => 'bin/console',
+        '/development/public/index.php',
+        '/bin/console/command',
         // production
-        '/calculation/public/index.php' => 'bin/console',
+        '/calculation/public/index.php',
         // local development
-        '/index.php/command/execute' => 'bin/console',
-        '/index.php/command/pdf' => 'bin/console',
-        '/index.php/command' => 'bin/console',
-        // classes
+        '/index.php/command/execute',
+        '/index.php/command/pdf',
+        '/index.php/command',
+    ];
+
+    private const HELP_REPLACE = [
         '<info>' => '<span class="text-success">',
         '<error>' => '<span class="text-danger">',
         '<comment>' => '<span class="text-secondary">',
@@ -130,7 +141,7 @@ class CommandService implements \Countable
 
         $application = $this->createApplication($catchExceptions, $catchErrors);
         $status = $application->run($input, $output);
-        $content = $this->trimOutput($output->fetch());
+        $content = $this->updateOutput($output->fetch());
         unset($application);
 
         return new CommandResult($status, $content);
@@ -321,15 +332,15 @@ class CommandService implements \Countable
         }
 
         // remove carriage return
-        $content = \str_replace('\r', '', $result->content);
+        $content = \str_replace("\r", '', $result->content);
 
-        /** @phpstan-var array{commands: CommandType[]} $decoded */
+        /** @phpstan-var array{commands: CommandSourceType[]} $decoded */
         $decoded = StringUtils::decodeJson($content);
         $commands = \array_reduce(
             $decoded['commands'],
             /**
              * @phpstan-param array<string, CommandType> $carry
-             * @phpstan-param CommandType $command
+             * @phpstan-param CommandSourceType $command
              */
             function (array $carry, array $command): array {
                 if (!$command['hidden']) {
@@ -346,6 +357,11 @@ class CommandService implements \Countable
         return $commands;
     }
 
+    private function replaceConsole(string $subject): string
+    {
+        return \str_replace(self::CONSOLE_REPLACE, 'bin/console', $subject);
+    }
+
     private function replaceHelp(string $help): string
     {
         if (!StringUtils::isString($help)) {
@@ -353,43 +369,52 @@ class CommandService implements \Countable
         }
 
         $help = StringUtils::pregReplaceAll(self::HREF_REPLACE, $help);
+        $help = StringUtils::replace(self::HELP_REPLACE, $help);
 
-        return StringUtils::replace(self::HELP_REPLACE, $help);
-    }
-
-    private function trimOutput(string $output): string
-    {
-        $lines = \array_map(\rtrim(...), \explode("\n", \rtrim($output)));
-
-        return \implode("\n", $lines);
+        return $this->replaceConsole($help);
     }
 
     /**
-     * @phpstan-param CommandType $command
+     * @phpstan-param CommandSourceType $command
      *
      * @phpstan-return CommandType
      */
     private function updateCommand(array $command): array
     {
-        $arguments = &$command['definition']['arguments'];
+        $arguments = $command['definition']['arguments'];
+        foreach ($arguments as &$argument) {
+            $argument['description'] = $this->replaceHelp($argument['description']);
+            $argument['display'] = $this->encodeDefaultValue($argument['default']);
+            $argument['arguments'] = $this->getArgumentHelp($argument);
+        }
+        $command['arguments'] = $arguments;
+
+        $options = $command['definition']['options'];
+        foreach ($options as &$option) {
+            $option['description'] = $this->replaceHelp($option['description']);
+            $option['display'] = $this->encodeDefaultValue($option['default']);
+            $option['arguments'] = $this->getOptionHelp($option);
+            $option['name_shortcut'] = $this->getOptionNameAndShortcut($option['name'], $option['shortcut']);
+        }
+        $command['options'] = $options;
+
         $command['help'] = $command['help'] === $command['description'] ? '' : $this->replaceHelp($command['help']);
         if (0 === \count($arguments)) {
             $command['usage'] = [\sprintf('%s [options]', $command['name'])];
         } else {
             $command['usage'] = StringUtils::pregReplaceAll(self::USAGE_REPLACE, $command['usage']);
         }
-        foreach ($arguments as &$argument) {
-            $argument['description'] = $this->replaceHelp($argument['description']);
-            $argument['display'] = $this->encodeDefaultValue($argument['default']);
-            $argument['arguments'] = $this->getArgumentHelp($argument);
-        }
-        foreach ($command['definition']['options'] as &$option) {
-            $option['description'] = $this->replaceHelp($option['description']);
-            $option['display'] = $this->encodeDefaultValue($option['default']);
-            $option['arguments'] = $this->getOptionHelp($option);
-            $option['name_shortcut'] = $this->getOptionNameAndShortcut($option['name'], $option['shortcut']);
-        }
+        unset($command['definition']);
 
         return $command;
+    }
+
+    private function updateOutput(string $output): string
+    {
+        $output = $this->replaceConsole($output);
+        $output = \str_replace("\r", '', $output);
+        $lines = \array_map(\rtrim(...), \explode("\n", \rtrim($output)));
+
+        return \implode("\n", $lines);
     }
 }

@@ -43,12 +43,12 @@ class CommandDataService
     {
         $data = [];
 
-        foreach ($command['definition']['arguments'] as $key => $argument) {
+        foreach ($command['arguments'] as $key => $argument) {
             $name = self::getArgumentKey($key);
             $data[$name] = $argument['default'];
         }
 
-        foreach ($command['definition']['options'] as $key => $option) {
+        foreach ($command['options'] as $key => $option) {
             $name = self::getOptionKey($key);
             $data[$name] = $option['default'];
         }
@@ -128,7 +128,7 @@ class CommandDataService
     private function getArgumentName(array $command, string $key): string
     {
         $key = $this->trimArgumentPrefix($key);
-        $arguments = $command['definition']['arguments'];
+        $arguments = $command['arguments'];
         if (!\array_key_exists($key, $arguments)) {
             throw new \LogicException("Unable to find the argument '$key'.");
         }
@@ -145,15 +145,15 @@ class CommandDataService
     {
         if ($this->isArgumentPrefix($key)) {
             $key = $this->trimArgumentPrefix($key);
-            if (\array_key_exists($key, $command['definition']['arguments'])) {
-                return $command['definition']['arguments'][$key]['default'];
+            if (\array_key_exists($key, $command['arguments'])) {
+                return $command['arguments'][$key]['default'];
             }
         }
 
         if ($this->isOptionPrefix($key)) {
             $key = $this->trimOptionPrefix($key);
-            if (\array_key_exists($key, $command['definition']['options'])) {
-                return $command['definition']['options'][$key]['default'];
+            if (\array_key_exists($key, $command['options'])) {
+                return $command['options'][$key]['default'];
             }
         }
 
@@ -168,7 +168,7 @@ class CommandDataService
     private function getOptionName(array $command, string $key): string
     {
         $key = $this->trimOptionPrefix($key);
-        $options = $command['definition']['options'];
+        $options = $command['options'];
         if (!\array_key_exists($key, $options)) {
             throw new \LogicException("Unable to find the option '$key'.");
         }
@@ -202,11 +202,11 @@ class CommandDataService
     private function validateKey(string $key, array $command): bool
     {
         if ($this->isArgumentPrefix($key)) {
-            return \array_key_exists($this->trimArgumentPrefix($key), $command['definition']['arguments']);
+            return \array_key_exists($this->trimArgumentPrefix($key), $command['arguments']);
         }
 
         if ($this->isOptionPrefix($key)) {
-            return \array_key_exists($this->trimOptionPrefix($key), $command['definition']['options']);
+            return \array_key_exists($this->trimOptionPrefix($key), $command['options']);
         }
 
         return false;

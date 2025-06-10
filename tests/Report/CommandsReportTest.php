@@ -63,13 +63,11 @@ class CommandsReportTest extends TestCase
             'usage' => ['Usage 1', 'Usage 2'],
             'help' => '<a href="https://symfony.com>storing-uuids-in-databases">database</a>. The <span class="info">list</span>.',
             'hidden' => false,
-            'definition' => [
-                'arguments' => [
-                    'Argument1' => $argument1,
-                    'Argument2' => $argument2,
-                ],
-                'options' => ['Option' => $option],
+            'arguments' => [
+                'Argument1' => $argument1,
+                'Argument2' => $argument2,
             ],
+            'options' => ['Option' => $option],
         ];
         $command2 = [
             'name' => 'Command2',
@@ -77,10 +75,8 @@ class CommandsReportTest extends TestCase
             'usage' => [],
             'help' => '',
             'hidden' => false,
-            'definition' => [
-                'arguments' => [],
-                'options' => [],
-            ],
+            'arguments' => [],
+            'options' => [],
         ];
         $commands = [$command1, $command2];
         $report = new CommandsReport($controller, ['Group' => $commands]);

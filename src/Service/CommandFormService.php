@@ -92,7 +92,7 @@ readonly class CommandFormService
      */
     private function addArguments(FormHelper $helper, array $command, CallbackTransformer $transformer): void
     {
-        foreach ($command['definition']['arguments'] as $key => $argument) {
+        foreach ($command['arguments'] as $key => $argument) {
             if ($this->isArgumentText($argument)) {
                 if ($argument['is_array']) {
                     $this->addTextArgument($helper, $key, $argument, $transformer);
@@ -170,7 +170,7 @@ readonly class CommandFormService
      */
     private function addOptions(FormHelper $helper, array $command, CallbackTransformer $transformer): void
     {
-        foreach ($command['definition']['options'] as $key => $option) {
+        foreach ($command['options'] as $key => $option) {
             if ($this->isOptionText($option)) {
                 if ($option['is_multiple']) {
                     $this->addTextOption($helper, $key, $option, $transformer);

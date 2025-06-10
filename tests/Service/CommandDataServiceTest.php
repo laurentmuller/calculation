@@ -89,10 +89,8 @@ class CommandDataServiceTest extends KernelServiceTestCase
             'usage' => [],
             'help' => 'fake',
             'hidden' => false,
-            'definition' => [
-                'arguments' => ['fake' => $argument],
-                'options' => [],
-            ],
+            'arguments' => ['fake' => $argument],
+            'options' => [],
         ];
         $dataService = $this->getCommandDataService();
         self::expectException(\LogicException::class);
@@ -121,10 +119,8 @@ class CommandDataServiceTest extends KernelServiceTestCase
             'usage' => [],
             'help' => 'fake',
             'hidden' => false,
-            'definition' => [
-                'arguments' => [],
-                'options' => ['fake' => $option],
-            ],
+            'arguments' => [],
+            'options' => ['fake' => $option],
         ];
         $dataService = $this->getCommandDataService();
         self::expectException(\LogicException::class);
@@ -167,10 +163,8 @@ class CommandDataServiceTest extends KernelServiceTestCase
             'usage' => [],
             'help' => 'fake',
             'hidden' => false,
-            'definition' => [
-                'arguments' => [],
-                'options' => [],
-            ],
+            'arguments' => [],
+            'options' => [],
         ];
         $dataService = $this->getCommandDataService();
         $actual = $dataService->validateData($command, [

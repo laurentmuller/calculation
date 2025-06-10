@@ -38,24 +38,37 @@ class UpdateAssetsCommandTest extends CommandTestCase
         }
     }
 
-    public function testExecute(): void
+    public function testExecuteDryRunVerbose(): void
     {
         $expected = [
-            '[OK]',
-            'Installed',
-            'plugins',
-            'files',
-            'directory',
-            '/public/vendor',
+            'Check versions:',
+            'jquery',
+            'bootstrap',
+            'font-awesome',
+            'jquery-validate',
+            'highcharts',
+            'html5sortable',
+            'mark.js',
+            'zxcvbn',
+            'jquery-contextmenu',
+            'clipboard.js',
+            'bootstrap-table',
+            'select2',
+            'select2-bootstrap-5-theme',
+            'currency-flags',
+            'font-mfizz',
+        ];
+        $input = [
+            '--dry-run' => true,
         ];
         $options = [
-            'verbosity' => OutputInterface::VERBOSITY_VERY_VERBOSE,
+            'verbosity' => OutputInterface::VERBOSITY_VERBOSE,
         ];
-        $output = $this->execute(self::COMMAND_NAME, [], $options);
+        $output = $this->execute(self::COMMAND_NAME, $input, $options);
         $this->validate($output, $expected);
     }
 
-    public function testExecuteDryRun(): void
+    public function testExecuteDryRunVeryVerbose(): void
     {
         $expected = [
             'Check versions:',
@@ -82,6 +95,40 @@ class UpdateAssetsCommandTest extends CommandTestCase
             'verbosity' => OutputInterface::VERBOSITY_VERY_VERBOSE,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input, $options);
+        $this->validate($output, $expected);
+    }
+
+    public function testExecuteVerbose(): void
+    {
+        $expected = [
+            '[OK]',
+            'Installed',
+            'plugins',
+            'files',
+            'directory',
+            '/public/vendor',
+        ];
+        $options = [
+            'verbosity' => OutputInterface::VERBOSITY_VERBOSE,
+        ];
+        $output = $this->execute(self::COMMAND_NAME, [], $options);
+        $this->validate($output, $expected);
+    }
+
+    public function testExecuteVeryVerbose(): void
+    {
+        $expected = [
+            '[OK]',
+            'Installed',
+            'plugins',
+            'files',
+            'directory',
+            '/public/vendor',
+        ];
+        $options = [
+            'verbosity' => OutputInterface::VERBOSITY_VERY_VERBOSE,
+        ];
+        $output = $this->execute(self::COMMAND_NAME, [], $options);
         $this->validate($output, $expected);
     }
 

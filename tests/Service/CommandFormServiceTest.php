@@ -40,10 +40,8 @@ class CommandFormServiceTest extends KernelServiceTestCase
             'usage' => [],
             'help' => 'fake',
             'hidden' => false,
-            'definition' => [
-                'arguments' => ['fake' => $argument],
-                'options' => [],
-            ],
+            'arguments' => ['fake' => $argument],
+            'options' => [],
         ];
         $service = $this->getCommandFormService();
         $actual = $service->createForm($command, []);

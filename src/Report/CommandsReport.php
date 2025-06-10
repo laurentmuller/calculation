@@ -83,13 +83,13 @@ class CommandsReport extends AbstractArrayReport
         $width = 0.0;
         $this->applyFixedStyle();
         $width = \array_reduce(
-            $command['definition']['arguments'],
+            $command['arguments'],
             /** @phpstan-param ArgumentType $argument */
             fn (float $carry, array $argument): float => \max($carry, $this->getStringWidth($argument['name'])),
             $width
         );
         $width = \array_reduce(
-            $command['definition']['options'],
+            $command['options'],
             /** @phpstan-param OptionType $option */
             fn (float $carry, array $option): float => \max($carry, $this->getStringWidth($option['name_shortcut'])),
             $width
@@ -166,8 +166,8 @@ class CommandsReport extends AbstractArrayReport
         $this->renderDescription($command['description']);
         $this->renderUsage($command['usage']);
         $width = $this->getMaxWidth($command);
-        $this->renderArguments($command['definition']['arguments'], $width);
-        $this->renderOptions($command['definition']['options'], $width);
+        $this->renderArguments($command['arguments'], $width);
+        $this->renderOptions($command['options'], $width);
         $this->renderHelp($command['help']);
     }
 

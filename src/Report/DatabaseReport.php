@@ -21,16 +21,18 @@ use App\Pdf\PdfStyle;
 use App\Service\DatabaseInfoService;
 
 /**
- * Report for MySql.
+ * Report containing database configuration.
  */
-class MySqlReport extends AbstractReport
+class DatabaseReport extends AbstractReport
 {
+    private const DISABLED_VALUES = ['off', 'no', 'false', 'disabled'];
+
     private ?PdfStyle $style = null;
 
     public function __construct(AbstractController $controller, private readonly DatabaseInfoService $service)
     {
         parent::__construct($controller);
-        $this->setTitleTrans('about.mysql_version', ['%version%' => $this->service->getVersion()]);
+        $this->setTitleTrans('about.database');
     }
 
     #[\Override]
@@ -58,15 +60,11 @@ class MySqlReport extends AbstractReport
 
     private function getStyle(string $value): ?PdfStyle
     {
-        if (!\in_array(\strtolower($value), ['off', 'no', 'false', 'disabled'], true)) {
+        if (!\in_array(\strtolower($value), self::DISABLED_VALUES, true)) {
             return null;
         }
 
-        if (!$this->style instanceof PdfStyle) {
-            $this->style = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGray());
-        }
-
-        return $this->style;
+        return $this->style ??= PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGray());
     }
 
     /**
@@ -82,10 +80,9 @@ class MySqlReport extends AbstractReport
         $table->setGroupKey($title);
 
         foreach ($values as $key => $value) {
-            $style = $this->getStyle($value);
             $table->startRow()
-                ->add($key)
-                ->add($value, style: $style)
+                ->add(text: $key)
+                ->add(text: $value, style: $this->getStyle($value))
                 ->endRow();
         }
     }

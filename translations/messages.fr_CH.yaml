@@ -14,8 +14,8 @@ about:
     error: Erreur lors du chargement des informations.
     extern_link: Accéder au site
     loading: Recherche des informations...
-    mysql: Configuration de MySQL
-    mysql_version: Configuration de MySQL v%version%
+    database: Configuration de la base de données
+    database_version: Configuration de la base de données v%version%
     php: Configuration de PHP
     php_version: Configuration de PHP v%version%
     policy: Politique de confidentialité

@@ -18,10 +18,12 @@ use App\Service\DatabaseInfoService;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 
 /**
- * Document containing MySql configuration.
+ * Document containing database configuration.
  */
-class MySqlDocument extends AbstractDocument
+class DatabaseDocument extends AbstractDocument
 {
+    private const DISABLED_VALUES = ['off', 'no', 'false', 'disabled'];
+
     public function __construct(AbstractController $controller, private readonly DatabaseInfoService $service)
     {
         parent::__construct($controller);
@@ -36,8 +38,8 @@ class MySqlDocument extends AbstractDocument
             return false;
         }
 
-        $color = new Color('7F7F7F');
-        $this->start($this->trans('about.mysql_version', ['%version%' => $this->service->getVersion()]));
+        $color = new Color('A9A9A9');
+        $this->start($this->trans('about.database'));
         $sheet = $this->getActiveSheet();
         if ($this->outputArray($sheet, 'Database', $database, $color)) {
             $sheet = $this->createSheet();
@@ -50,7 +52,7 @@ class MySqlDocument extends AbstractDocument
 
     private function applyStyle(WorksheetDocument $sheet, int $row, string $value, Color $color): void
     {
-        if (!\in_array(\strtolower($value), ['off', 'no', 'false', 'disabled'], true)) {
+        if (!\in_array(\strtolower($value), self::DISABLED_VALUES, true)) {
             return;
         }
         $sheet->getCell([2, $row])
@@ -79,7 +81,8 @@ class MySqlDocument extends AbstractDocument
             $this->applyStyle($sheet, $row, $value, $color);
             ++$row;
         }
-        $sheet->setAutoSize(1, 2)
+        $sheet->setAutoSize(1)
+            ->setColumnWidth(2, 100, true)
             ->finish();
 
         return true;

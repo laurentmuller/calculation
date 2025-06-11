@@ -79,11 +79,13 @@ class DatabaseInfoService
     public function getDatabase(): array
     {
         if (null === $this->database) {
-            $this->database = [];
+            $this->database = [
+                'Server' => $this->isMariaDB() ? 'MariaDB' : 'MySql',
+            ];
 
             try {
                 $params = $this->getConnection()->getParams();
-                foreach (['dbname', 'host', 'port', 'driver', 'serverVersion', 'charset'] as $key) {
+                foreach (['serverVersion', 'dbname', 'host', 'port', 'driver', 'charset'] as $key) {
                     $value = $params[$key] ?? null;
                     if (\is_scalar($value)) {
                         $key = match ($key) {
@@ -119,6 +121,14 @@ class DatabaseInfoService
         }
 
         return $this->version;
+    }
+
+    /**
+     * Returns if the database is MariaDB (true) or MySql (false).
+     */
+    public function isMariaDB(): bool
+    {
+        return false !== \stripos($this->getVersion(), 'mariadb');
     }
 
     /**

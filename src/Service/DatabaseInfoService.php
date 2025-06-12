@@ -23,6 +23,9 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class DatabaseInfoService
 {
+    private const DISABLED_VALUES = ['off', 'no', 'false', 'disabled'];
+    private const ENABLED_VALUES = ['on', 'yes', 'true', 'enabled'];
+
     /** @var array<string, string>|null */
     private ?array $configuration = null;
 
@@ -79,11 +82,13 @@ class DatabaseInfoService
     public function getDatabase(): array
     {
         if (null === $this->database) {
-            $this->database = [];
+            $this->database = [
+                'Server' => $this->isMariaDB() ? 'MariaDB' : 'MySql',
+            ];
 
             try {
                 $params = $this->getConnection()->getParams();
-                foreach (['dbname', 'host', 'port', 'driver', 'serverVersion', 'charset'] as $key) {
+                foreach (['serverVersion', 'dbname', 'host', 'port', 'driver', 'charset'] as $key) {
                     $value = $params[$key] ?? null;
                     if (\is_scalar($value)) {
                         $key = match ($key) {
@@ -119,6 +124,30 @@ class DatabaseInfoService
         }
 
         return $this->version;
+    }
+
+    /**
+     * Returns if the given value represents a disabled value.
+     */
+    public function isDisabledValue(string $value): bool
+    {
+        return \in_array(\strtolower($value), self::DISABLED_VALUES, true);
+    }
+
+    /**
+     * Returns if the given value represents an enabled value.
+     */
+    public function isEnabledValue(string $value): bool
+    {
+        return \in_array(\strtolower($value), self::ENABLED_VALUES, true);
+    }
+
+    /**
+     * Returns if the database is MariaDB (true) or MySql (false).
+     */
+    public function isMariaDB(): bool
+    {
+        return false !== \stripos($this->getVersion(), 'mariadb');
     }
 
     /**

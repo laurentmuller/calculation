@@ -21,13 +21,17 @@ use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Bridge\Twig\Extension\WebLinkExtension;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Twig\Extension\AttributeExtension;
+use Twig\RuntimeLoader\RuntimeLoaderInterface;
 use Vich\UploaderBundle\Storage\StorageInterface;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
-class FunctionExtensionTest extends IntegrationTestCase
+class FunctionExtensionTest extends IntegrationTestCase implements RuntimeLoaderInterface
 {
+    private FunctionExtension $extension;
+
     #[\Override]
-    protected function getExtensions(): array
+    protected function setUp(): void
     {
         $webDir = __DIR__ . '/../../public';
         $assetExtension = $this->createAssetExtension();
@@ -36,7 +40,7 @@ class FunctionExtensionTest extends IntegrationTestCase
         $uploaderHelper = $this->createUploaderHelper();
         $urlGeneratorService = $this->createUrlGeneratorService();
 
-        $extension = new FunctionExtension(
+        $this->extension = new FunctionExtension(
             $webDir,
             $assetExtension,
             $webLinkExtension,
@@ -44,14 +48,34 @@ class FunctionExtensionTest extends IntegrationTestCase
             $uploaderHelper,
             $urlGeneratorService
         );
+    }
 
-        return [$extension];
+    #[\Override]
+    public function load(string $class): ?object
+    {
+        if (FunctionExtension::class === $class) {
+            return $this->extension;
+        }
+
+        return null;
+    }
+
+    #[\Override]
+    protected function getExtensions(): array
+    {
+        return [new AttributeExtension(FunctionExtension::class)];
     }
 
     #[\Override]
     protected function getFixturesDir(): string
     {
         return __DIR__ . '/Fixtures/FunctionExtension';
+    }
+
+    #[\Override]
+    protected function getRuntimeLoaders(): array
+    {
+        return [$this];
     }
 
     private function createAssetExtension(): AssetExtension

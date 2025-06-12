@@ -93,7 +93,7 @@ class Group extends AbstractCodeEntity
     public function addCategory(Category $category): self
     {
         if (!$this->categories->contains($category)) {
-            $this->categories[] = $category;
+            $this->categories->add($category);
             $category->setGroup($this);
         }
 
@@ -106,7 +106,7 @@ class Group extends AbstractCodeEntity
     public function addMargin(GroupMargin $margin): self
     {
         if (!$this->margins->contains($margin)) {
-            $this->margins[] = $margin;
+            $this->margins->add($margin);
             $margin->setGroup($this);
         }
 

@@ -11,11 +11,12 @@
     "scripts": {
         "watch": "sass --watch --no-source-map scss/bootstrap.scss:public/build/css/bootstrap.css",
         "build": "sass --no-source-map scss:public/build/css",
-        "stylelint": "npx stylelint public/css/*.css"
+        "stylelint": "npx stylelint public/css/*.css",
+        "outdated": "npm outdated"
     },
     "devDependencies": {
         "stylelint": "^16.0",
-        "stylelint-config-standard": "^37.0"
+        "stylelint-config-standard": "^38.0"
     },
     "jshintConfig": {
         "esversion": 9,

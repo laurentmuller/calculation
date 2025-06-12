@@ -21,16 +21,17 @@ use App\Pdf\PdfStyle;
 use App\Service\DatabaseInfoService;
 
 /**
- * Report for MySql.
+ * Report containing database configuration.
  */
-class MySqlReport extends AbstractReport
+class DatabaseReport extends AbstractReport
 {
-    private ?PdfStyle $style = null;
+    private ?PdfStyle $disableStyle = null;
+    private ?PdfStyle $enableStyle = null;
 
     public function __construct(AbstractController $controller, private readonly DatabaseInfoService $service)
     {
         parent::__construct($controller);
-        $this->setTitleTrans('about.mysql_version', ['%version%' => $this->service->getVersion()]);
+        $this->setTitleTrans('about.database');
     }
 
     #[\Override]
@@ -58,15 +59,14 @@ class MySqlReport extends AbstractReport
 
     private function getStyle(string $value): ?PdfStyle
     {
-        if (!\in_array(\strtolower($value), ['off', 'no', 'false', 'disabled'], true)) {
-            return null;
+        if ($this->service->isEnabledValue($value)) {
+            return $this->enableStyle ??= PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGreen());
+        }
+        if ($this->service->isDisabledValue($value)) {
+            return $this->disableStyle ??= PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGray());
         }
 
-        if (!$this->style instanceof PdfStyle) {
-            $this->style = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGray());
-        }
-
-        return $this->style;
+        return null;
     }
 
     /**
@@ -78,14 +78,11 @@ class MySqlReport extends AbstractReport
             return;
         }
 
-        $this->addBookmark($title);
         $table->setGroupKey($title);
-
         foreach ($values as $key => $value) {
-            $style = $this->getStyle($value);
             $table->startRow()
-                ->add($key)
-                ->add($value, style: $style)
+                ->add(text: $key)
+                ->add(text: $value, style: $this->getStyle($value))
                 ->endRow();
         }
     }

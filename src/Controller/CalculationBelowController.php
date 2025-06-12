@@ -30,7 +30,6 @@ use App\Utils\FormatUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -38,7 +37,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller for calculations where margins are below the minimum.
  */
-#[AsController]
 #[Route(path: '/calculation/below', name: 'calculation_below_')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationBelowController extends AbstractController

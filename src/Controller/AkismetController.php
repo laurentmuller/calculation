@@ -19,7 +19,6 @@ use App\Service\AkismetService;
 use App\Service\FakerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -28,7 +27,6 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 /**
  * Controller for the Askimet service.
  */
-#[AsController]
 #[Route(path: '/akismet', name: 'akismet_')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class AkismetController extends AbstractController

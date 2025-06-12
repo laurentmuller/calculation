@@ -21,7 +21,6 @@ use App\Interfaces\UserInterface;
 use App\Repository\UserRepository;
 use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
@@ -30,7 +29,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller for user XMLHttpRequest (Ajax) calls.
  */
-#[AsController]
 #[Route(path: '/ajax/check/user', name: 'ajax_check_user_')]
 class AjaxUserController extends AbstractController
 {

@@ -90,7 +90,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     public function addItem(TaskItem $item): self
     {
         if (!$this->items->contains($item)) {
-            $this->items[] = $item;
+            $this->items->add($item);
             $item->setTask($this);
         }
 

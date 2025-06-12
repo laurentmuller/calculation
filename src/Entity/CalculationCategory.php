@@ -106,7 +106,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, Comparab
     public function addItem(CalculationItem $item): self
     {
         if (!$this->contains($item)) {
-            $this->items[] = $item;
+            $this->items->add($item);
             $item->setCategory($this);
         }
 

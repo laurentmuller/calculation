@@ -271,8 +271,6 @@ class UserTest extends EntityValidatorTestCase
     public function testPasswordRequest(): void
     {
         $user = new User();
-        $user->eraseCredentials();
-
         $selector = 'selector';
         $hashedToken = 'hashedToken';
         $expiresAt = new \DateTimeImmutable();

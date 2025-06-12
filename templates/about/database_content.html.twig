@@ -1,14 +1,15 @@
 {% import 'about/_about_macro.html.twig' as tools %}
-{# parameters #}
-{% set enabled_values = ['On', 'Yes', 'True', 'Enabled'] %}
-{% set disabled_values = ['Off', 'No', 'False', 'Disabled'] %}
 {# content #}
 <div class="phpversion">
     <table id="data-table-mysql" class="table table-sm mb-0">
         <tbody>
             <tr class="h">
                 <td colspan="2" class="position-relative">
-                    {{- tools.content_header_link('https://www.mysql.com', service.version, 'mysql') -}}
+                    {% if service.mariaDB %}
+                        {{- tools.content_header_link('https://mariadb.org', service.version, 'mariadb') -}}
+                    {% else %}
+                        {{- tools.content_header_link('https://www.mysql.com', service.version, 'mysql') -}}
+                    {% endif %}
                 </td>
             </tr>
             {{ tools.headerInfo('Database') }}
@@ -17,9 +18,9 @@
             {% endfor %}
             {{ tools.headerInfo('Configuration') }}
              {% for key, value in service.configuration %}
-                 {% if value in enabled_values %}
+                 {% if service.enabledValue(value) %}
                     {{ tools.rowInfoBoolean(key, value, true) }}
-                 {% elseif value in disabled_values %}
+                 {% elseif service.disabledValue(value) %}
                      {{ tools.rowInfoBoolean(key, value, false) }}
                  {% else %}
                      {{ tools.rowInfo(key, value) }}

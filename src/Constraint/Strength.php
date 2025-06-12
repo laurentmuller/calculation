@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Constraint;
 
 use App\Enums\StrengthLevel;
+use Symfony\Component\Validator\Attribute\HasNamedArguments;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 
@@ -44,6 +45,7 @@ class Strength extends Constraint
      *
      * @throws ConstraintDefinitionException if the minimum parameter is an integer and cannot be parsed to a strength level
      */
+    #[HasNamedArguments]
     public function __construct(
         StrengthLevel|int $minimum = StrengthLevel::NONE,
         public ?string $userNamePath = null,

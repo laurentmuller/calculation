@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Set\DoctrineSetList;
+use Rector\Doctrine\TypedCollections\Rector\ClassMethod\NarrowArrayCollectionToCollectionRector;
+use Rector\Doctrine\TypedCollections\Rector\If_\RemoveIsArrayOnCollectionRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\SingleMockPropertyTypeRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
@@ -32,6 +34,8 @@ return RectorConfig::configure()
         PreferPHPUnitThisCallRector::class,
         SingleMockPropertyTypeRector::class,
         TypedPropertyFromCreateMockAssignRector::class,
+        NarrowArrayCollectionToCollectionRector::class,
+        RemoveIsArrayOnCollectionRector::class,
     ])->withComposerBased(
         twig: true,
         doctrine: true,

@@ -26,6 +26,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 class EntityVoterTest extends TestCase
@@ -159,9 +160,9 @@ class EntityVoterTest extends TestCase
     {
         $voter = new class($this->application) extends EntityVoter {
             #[\Override]
-            public function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+            public function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
             {
-                return parent::voteOnAttribute($attribute, $subject, $token);
+                return parent::voteOnAttribute($attribute, $subject, $token, $vote);
             }
         };
 

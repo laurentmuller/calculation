@@ -17,28 +17,26 @@ use App\Attribute\ExcelRoute;
 use App\Attribute\GetRoute;
 use App\Attribute\PdfRoute;
 use App\Interfaces\RoleInterface;
-use App\Report\MySqlReport;
+use App\Report\DatabaseReport;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\DatabaseInfoService;
-use App\Spreadsheet\MySqlDocument;
+use App\Spreadsheet\DatabaseDocument;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
- * Controller to output MySQL information.
+ * Controller to output database information.
  */
-#[AsController]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
-#[Route(path: '/about/mysql', name: 'about_mysql_')]
-class AboutMySqlController extends AbstractController
+#[Route(path: '/about/database', name: 'about_database_')]
+class AboutDatabaseController extends AbstractController
 {
     #[GetRoute(path: '/content', name: 'content')]
     public function content(DatabaseInfoService $service): JsonResponse
     {
-        $content = $this->renderView('about/mysql_content.html.twig', ['service' => $service]);
+        $content = $this->renderView('about/database_content.html.twig', ['service' => $service]);
 
         return $this->jsonTrue(['content' => $content]);
     }
@@ -46,7 +44,7 @@ class AboutMySqlController extends AbstractController
     #[ExcelRoute]
     public function excel(DatabaseInfoService $service): SpreadsheetResponse
     {
-        $doc = new MySqlDocument($this, $service);
+        $doc = new DatabaseDocument($this, $service);
 
         return $this->renderSpreadsheetDocument($doc);
     }
@@ -54,7 +52,7 @@ class AboutMySqlController extends AbstractController
     #[PdfRoute]
     public function pdf(DatabaseInfoService $service): PdfResponse
     {
-        $report = new MySqlReport($this, $service);
+        $report = new DatabaseReport($this, $service);
 
         return $this->renderPdfDocument($report);
     }

@@ -23,7 +23,6 @@ use App\Translator\TranslatorServiceInterface;
 use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
@@ -32,7 +31,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller for translation XMLHttpRequest (Ajax) calls.
  */
-#[AsController]
 #[Route(path: '/ajax', name: 'ajax_')]
 class AjaxTranslateController extends AbstractController
 {

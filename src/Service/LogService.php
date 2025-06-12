@@ -124,10 +124,10 @@ class LogService
     /**
      * @phpstan-return non-empty-string
      */
-    private function parseChannel(string $name): string
+    private function parseChannel(string $value): string
     {
         /** @phpstan-var non-empty-string */
-        return $name;
+        return $value;
     }
 
     /**
@@ -160,8 +160,8 @@ class LogService
             }
             $log = Log::instance($key)
                 ->setCreatedAt($date)
-                ->setLevel($this->parseLevel($values[2]))
                 ->setChannel($this->parseChannel($values[1]))
+                ->setLevel($this->parseLevel($values[2]))
                 ->setMessage($this->parseMessage($values[3]))
                 ->setContext($this->parseJson($values[4]))
                 ->setExtra($this->parseJson($values[5]));
@@ -189,10 +189,10 @@ class LogService
     /**
      * @phpstan-return PsrLevel::*
      */
-    private function parseLevel(string $name): string
+    private function parseLevel(string $value): string
     {
         /** @phpstan-var PsrLevel::*  */
-        return \strtolower($name);
+        return \strtolower($value);
     }
 
     private function parseMessage(string $value): string

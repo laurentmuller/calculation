@@ -1,0 +1,25 @@
+{
+    "sources": {
+        "cdnjs": {
+            "source": "https://cdnjs.cloudflare.com/ajax/libs/",
+            "format": "{source}{name}/{version}/{file}",
+            "versionUrl": "https://api.cdnjs.com/libraries/{name}?fields=version",
+            "versionPaths": [
+                "version"
+            ]
+        }
+    },
+    "target": "vendor/",
+    "prefixes": {
+        "js": "/** asset-version $version */\n\n",
+        "css": "/** asset-version $version */\n\n"
+    },
+    "plugins": [
+        {
+            "name": "jquery",
+            "version": "3.7.1",
+            "source": "cdnjs",
+            "files": []
+        }
+    ]
+}

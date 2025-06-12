@@ -25,7 +25,6 @@ use App\Utils\StringUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -33,7 +32,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller for search XMLHttpRequest (Ajax) calls.
  */
-#[AsController]
 #[Route(path: '/ajax/search', name: 'ajax_search_')]
 class AjaxSearchController extends AbstractController
 {

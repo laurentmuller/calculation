@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Spreadsheet;
+namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
+use App\Report\DatabaseReport;
 use App\Service\DatabaseInfoService;
-use App\Spreadsheet\MySqlDocument;
 use PHPUnit\Framework\TestCase;
 
-class MySqlDocumentTest extends TestCase
+class DatabaseReportTest extends TestCase
 {
     public function testRender(): void
     {
@@ -53,7 +53,7 @@ class MySqlDocumentTest extends TestCase
         self::assertTrue($actual);
     }
 
-    private function createDocument(array $database, array $configuration): MySqlDocument
+    private function createDocument(array $database, array $configuration): DatabaseReport
     {
         $controller = $this->createMock(AbstractController::class);
         $service = $this->createMock(DatabaseInfoService::class);
@@ -62,6 +62,6 @@ class MySqlDocumentTest extends TestCase
         $service->method('getConfiguration')
             ->willReturn($configuration);
 
-        return new MySqlDocument($controller, $service);
+        return new DatabaseReport($controller, $service);
     }
 }

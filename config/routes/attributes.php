@@ -19,8 +19,8 @@ return static function (RoutingConfigurator $config): void {
     $config->import(Kernel::class, 'attribute');
 
     if ('dev' === $config->env()) {
-        $config->import('@FrameworkBundle/Resources/config/routing/errors.xml')->prefix('/_error');
-        $config->import('@WebProfilerBundle/Resources/config/routing/wdt.xml')->prefix('/_wdt');
-        $config->import('@WebProfilerBundle/Resources/config/routing/profiler.xml')->prefix('/_profiler');
+        $config->import('@FrameworkBundle/Resources/config/routing/errors.php')->prefix('/_error');
+        $config->import('@WebProfilerBundle/Resources/config/routing/wdt.php')->prefix('/_wdt');
+        $config->import('@WebProfilerBundle/Resources/config/routing/profiler.php')->prefix('/_profiler');
     }
 };

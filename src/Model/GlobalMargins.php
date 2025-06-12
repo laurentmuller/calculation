@@ -30,17 +30,12 @@ class GlobalMargins implements \Countable
     use ValidateMarginsTrait;
 
     /**
-     * @var Collection<int, GlobalMargin>
+     * @param Collection<int, GlobalMargin> $margins
      */
-    #[Assert\Valid]
-    private Collection $margins;
-
-    /**
-     * @param GlobalMargin[] $margins
-     */
-    public function __construct(array $margins = [])
-    {
-        $this->margins = new ArrayCollection($margins);
+    public function __construct(
+        #[Assert\Valid]
+        private readonly Collection $margins
+    ) {
     }
 
     /**
@@ -49,7 +44,7 @@ class GlobalMargins implements \Countable
     public function addMargin(GlobalMargin $margin): self
     {
         if (!$this->margins->contains($margin)) {
-            $this->margins[] = $margin;
+            $this->margins->add($margin);
         }
 
         return $this;
@@ -70,6 +65,14 @@ class GlobalMargins implements \Countable
     public function getMargins(): Collection
     {
         return $this->margins;
+    }
+
+    /**
+     * @param GlobalMargin[] $margins
+     */
+    public static function instance(array $margins = []): self
+    {
+        return new self(new ArrayCollection($margins));
     }
 
     /**

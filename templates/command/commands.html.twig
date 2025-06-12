@@ -4,17 +4,16 @@
 {%- set title = 'command.list.title' -%}
 {%- set title_icon = 'code' -%}
 {%- set title_description = 'command.list.description' -%}
-{%- set selection = command.name -%}
 {% block card_container_class ' col col-xl-10 offset-xl-1' %}
 {# body #}
 {% block card_body %}
 <div class="mb-3">
     <label for="command" class="form-label">{{ 'command.list.fields.command'|trans }}</label>
     <select id="command" name="command" class="form-select" data-url="{{ path('command_content', {name: 'query'}) }}">
-    {% for key, names in groups %}
+    {% for key, names in commands %}
         <optgroup label="{{ key }}">
         {% for name in names %}
-            <option{% if name == selection %} selected{% endif %}>{{ name }}</option>
+            <option{% if name == command.name %} selected{% endif %}>{{ name }}</option>
         {% endfor %}
         </optgroup>
     {% endfor %}
@@ -35,5 +34,5 @@
 {# javascripts #}
 {% block javascripts %}
     {{ parent() }}
-    {{ asset_js('js/application/commands.js') }}
+    {{ asset_js('js/application/command_list.js') }}
 {%- endblock %}

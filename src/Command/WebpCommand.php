@@ -18,68 +18,56 @@ use App\Traits\MathTrait;
 use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
+use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
-/**
- * Command to convert images to Webp format.
- */
-#[AsCommand(name: 'app:update-images', description: 'Convert images, from the given directory, to the WebP format.')]
-class WebpCommand extends Command
+#[AsCommand(
+    name: 'app:update-images',
+    description: 'Convert images, from the given directory, to the WebP format.',
+    help: 'The <info>%command.name%</info> command convert images, from the given directory, to the <href=https://en.wikipedia.org/wiki/WebP>WebP</> format.'
+)]
+class WebpCommand
 {
     use MathTrait;
-
-    private const OPTION_DRY_RUN = 'dry-run';
-    private const OPTION_LEVEL = 'level';
-    private const OPTION_OVERWRITE = 'overwrite';
-    private const SOURCE_ARGUMENT = 'source';
+    use WatchTrait;
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir
     ) {
-        parent::__construct();
     }
 
-    #[\Override]
-    protected function configure(): void
-    {
-        $this->addArgument(self::SOURCE_ARGUMENT, InputOption::VALUE_REQUIRED, 'The source directory relative to the project directory.');
-        $this->addOption(self::OPTION_LEVEL, 'l', InputOption::VALUE_REQUIRED, 'The level (depth) to search in directory.', 0);
-        $this->addOption(self::OPTION_OVERWRITE, 'o', InputOption::VALUE_NONE, 'Overwrite existing files.');
-        $this->addOption(self::OPTION_DRY_RUN, 'd', InputOption::VALUE_NONE, 'Simulate conversion without generate images.');
-        $this->setHelp('The <info>%command.name%</info> command convert images, from the given directory, to the <href=https://en.wikipedia.org/wiki/WebP>WebP</> format.');
-    }
-
-    #[\Override]
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        $io = new SymfonyStyle($input, $output);
-        $source = StringUtils::trim($io->getStringArgument(self::SOURCE_ARGUMENT));
-        if (null === $source) {
-            $io->error('The "--source" argument requires a non-empty value.');
-
+    public function __invoke(
+        SymfonyStyle $io,
+        #[Argument(description: 'The source directory relative to the project directory.')]
+        ?string $source = null,
+        #[Option(description: 'The level (depth) to search in directory.', shortcut: 'l')]
+        int $level = 0,
+        #[Option(description: 'Overwrite existing files.', shortcut: 'o')]
+        bool $overwrite = false,
+        #[Option(description: 'Simulate conversion without generate images.', name: 'dry-run', shortcut: 'd')]
+        bool $dryRun = false
+    ): int {
+        if (!$this->validateSource($io, $source)) {
             return Command::INVALID;
         }
 
         $fullPath = FileUtils::buildPath($this->projectDir, $source);
-        if (!$this->validateSource($io, $fullPath)) {
+        if (!$this->validateFullPath($io, $fullPath)) {
             return Command::INVALID;
         }
 
-        /** @phpstan-var mixed $level */
-        $level = $io->getOption(self::OPTION_LEVEL);
         if (!$this->validateLevel($io, $level)) {
             return Command::INVALID;
         }
 
-        $finder = $this->createFinder($fullPath, (int) $level);
+        $finder = $this->createFinder($fullPath, $level);
         if (!$finder->hasResults()) {
             $io->warning(\sprintf('No image found in directory "%s".', $source));
 
@@ -91,9 +79,7 @@ class WebpCommand extends Command
         $success = 0;
         $oldSize = 0;
         $newSize = 0;
-        $startTime = \time();
-        $dry_run = $io->getBoolOption(self::OPTION_DRY_RUN);
-        $overwrite = $io->getBoolOption(self::OPTION_OVERWRITE);
+        $this->start();
         $this->writeVerbose($io, \sprintf('Process images in "%s"', $source));
 
         foreach ($finder as $file) {
@@ -126,7 +112,7 @@ class WebpCommand extends Command
                 continue;
             }
 
-            if ($dry_run) {
+            if ($dryRun) {
                 $this->writeVerbose($io, \sprintf('Save : %s (Simulate)', $targetName));
                 [$result, $size] = $this->saveImage($image);
             } else {
@@ -145,15 +131,17 @@ class WebpCommand extends Command
         }
 
         $percent = $this->safeDivide($newSize - $oldSize, $oldSize);
+        $title = $percent > 0 ? 'extension!' : 'reduction';
         $message = \sprintf(
-            'Conversion: %s, Skip: %s, Error: %s, Old Size: %s, New Size: %s, Size reduction: %s, Duration: %s.',
+            'Conversion: %s, Skip: %s, Error: %s, Old Size: %s, New Size: %s, Size %s: %s, %s.',
             FormatUtils::formatInt($success),
             FormatUtils::formatInt($skip),
             FormatUtils::formatInt($error),
-            FormatUtils::formatInt($oldSize),
-            FormatUtils::formatInt($newSize),
+            FileUtils::formatSize($oldSize),
+            FileUtils::formatSize($newSize),
+            $title,
             FormatUtils::formatPercent($percent, decimals: 1),
-            $io->formatDuration($startTime)
+            $this->stop()
         );
         if (0 !== $error) {
             $io->error($message);
@@ -235,26 +223,7 @@ class WebpCommand extends Command
         }
     }
 
-    /**
-     * @phpstan-assert-if-true numeric-string $level
-     */
-    private function validateLevel(SymfonyStyle $io, mixed $level): bool
-    {
-        if (!\is_numeric($level)) {
-            $io->error(\sprintf('The level argument must be of type int, %s given.', \get_debug_type($level)));
-
-            return false;
-        }
-        if ((int) $level < 0) {
-            $io->error(\sprintf('The level argument must be greater than or equal to 0, %d given.', $level));
-
-            return false;
-        }
-
-        return true;
-    }
-
-    private function validateSource(SymfonyStyle $io, string $path): bool
+    private function validateFullPath(SymfonyStyle $io, string $path): bool
     {
         if (!FileUtils::exists($path)) {
             $io->error(\sprintf('Unable to find the source directory: "%s".', $path));
@@ -263,6 +232,34 @@ class WebpCommand extends Command
         }
         if (!FileUtils::isDir($path)) {
             $io->error(\sprintf('The source "%s" is not a directory.', $path));
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @phpstan-assert-if-true non-negative-int $level
+     */
+    private function validateLevel(SymfonyStyle $io, int $level): bool
+    {
+        if ($level < 0) {
+            $io->error(\sprintf('The level argument must be greater than or equal to 0, %d given.', $level));
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @phpstan-assert-if-true non-empty-string $source
+     */
+    private function validateSource(SymfonyStyle $io, ?string $source): bool
+    {
+        if (!StringUtils::isString($source)) {
+            $io->error('The "--source" argument requires a non-empty value.');
 
             return false;
         }

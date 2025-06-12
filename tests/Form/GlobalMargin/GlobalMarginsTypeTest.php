@@ -37,9 +37,9 @@ class GlobalMarginsTypeTest extends TypeTestCase
         $formData = [
             'margins' => new ArrayCollection(),
         ];
-        $model = new GlobalMargins();
+        $model = GlobalMargins::instance();
         $form = $this->factory->create(GlobalMarginsType::class, $model);
-        $expected = new GlobalMargins();
+        $expected = GlobalMargins::instance();
         $form->submit($formData);
         self::assertTrue($form->isSynchronized());
         self::assertEqualsCanonicalizing($expected, $model);

@@ -17,16 +17,15 @@ use App\Traits\TranslatorTrait;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Attribute\AsTwigFilter;
 use Twig\Environment;
 use Twig\Error\RuntimeError;
-use Twig\Extension\AbstractExtension;
 use Twig\Extension\CoreExtension;
-use Twig\TwigFilter;
 
 /**
  * Twig extension to format dates, numbers or boolean values.
  */
-final class FormatExtension extends AbstractExtension
+final class FormatExtension
 {
     use TranslatorTrait;
 
@@ -52,6 +51,7 @@ final class FormatExtension extends AbstractExtension
      * @param ?string $false     the text to use when the value is <code>false</code> or <code>null</code> to use default
      * @param bool    $translate <code>true</code> to translate texts
      */
+    #[AsTwigFilter(name: 'boolean')]
     public function formatBoolean(bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string
     {
         if ($value) {
@@ -68,35 +68,6 @@ final class FormatExtension extends AbstractExtension
         return $this->trans('common.value_false');
     }
 
-    #[\Override]
-    public function getFilters(): array
-    {
-        $options = ['needs_environment' => true];
-
-        return [
-            new TwigFilter('identifier', FormatUtils::formatId(...)),
-            new TwigFilter('integer', FormatUtils::formatInt(...)),
-            new TwigFilter('amount', FormatUtils::formatAmount(...)),
-            new TwigFilter('percent', FormatUtils::formatPercent(...)),
-            new TwigFilter('boolean', $this->formatBoolean(...)),
-
-            new TwigFilter('locale_datetime', $this->dateTimeFilter(...), $options),
-            new TwigFilter('locale_date', $this->dateFilter(...), $options),
-            new TwigFilter('locale_time', $this->timeFilter(...), $options),
-        ];
-    }
-
-    #[\Override]
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
-    }
-
-    private function convertDate(Environment $env, \DateTimeInterface|string|null $date): \DateTime|\DateTimeImmutable
-    {
-        return $this->getCoreExtension($env)->convertDate($date);
-    }
-
     /**
      * Formats a date for the current locale; ignoring the time part.
      *
@@ -109,13 +80,14 @@ final class FormatExtension extends AbstractExtension
      *
      * @throws RuntimeError if the date format is invalid
      */
-    private function dateFilter(
+    #[AsTwigFilter(name: 'locale_date', needsEnvironment: true)]
+    public function formatDate(
         Environment $env,
         \DateTimeInterface|string|null $date,
         ?string $dateFormat = null,
         ?string $pattern = null
     ): string {
-        return $this->dateTimeFilter($env, $date, $dateFormat, 'none', $pattern);
+        return $this->formatDateTime($env, $date, $dateFormat, 'none', $pattern);
     }
 
     /**
@@ -131,7 +103,8 @@ final class FormatExtension extends AbstractExtension
      *
      * @throws RuntimeError if the date format or the time format is invalid
      */
-    private function dateTimeFilter(
+    #[AsTwigFilter(name: 'locale_datetime', needsEnvironment: true)]
+    public function formatDateTime(
         Environment $env,
         \DateTimeInterface|string|null $date,
         ?string $dateFormat = null,
@@ -151,15 +124,6 @@ final class FormatExtension extends AbstractExtension
         return FormatUtils::formatDateTime($date, $dateType, $timeType, $pattern);
     }
 
-    private function getCoreExtension(Environment $env): CoreExtension
-    {
-        if (!$this->extension instanceof CoreExtension) {
-            $this->extension = $env->getExtension(CoreExtension::class);
-        }
-
-        return $this->extension;
-    }
-
     /**
      * Formats a time for the current locale; ignoring the date part.
      *
@@ -172,13 +136,34 @@ final class FormatExtension extends AbstractExtension
      *
      * @throws RuntimeError if the time format is invalid
      */
-    private function timeFilter(
+    #[AsTwigFilter(name: 'locale_time', needsEnvironment: true)]
+    public function formatTime(
         Environment $env,
         \DateTimeInterface|string|null $date,
         ?string $timeFormat = null,
         ?string $pattern = null
     ): string {
-        return $this->dateTimeFilter($env, $date, 'none', $timeFormat, $pattern);
+        return $this->formatDateTime($env, $date, 'none', $timeFormat, $pattern);
+    }
+
+    #[\Override]
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
+    }
+
+    private function convertDate(Environment $env, \DateTimeInterface|string|null $date): \DateTime|\DateTimeImmutable
+    {
+        return $this->getCoreExtension($env)->convertDate($date);
+    }
+
+    private function getCoreExtension(Environment $env): CoreExtension
+    {
+        if (!$this->extension instanceof CoreExtension) {
+            $this->extension = $env->getExtension(CoreExtension::class);
+        }
+
+        return $this->extension;
     }
 
     /**

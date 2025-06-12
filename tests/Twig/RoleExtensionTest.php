@@ -20,16 +20,25 @@ class RoleExtensionTest extends IntegrationTestCase
 {
     use TranslatorMockTrait;
 
+    private RoleExtension $extension;
+
+    #[\Override]
+    protected function setUp(): void
+    {
+        $this->extension = new RoleExtension($this->createMockTranslator());
+    }
+
     public function testGetTranslator(): void
     {
-        $extension = new RoleExtension($this->createMockTranslator());
-        self::assertNotNull($extension->getTranslator());
+        $translator = $this->extension->getTranslator();
+        $actual = $translator->trans('about.title');
+        self::assertSame('about.title', $actual);
     }
 
     #[\Override]
     protected function getExtensions(): array
     {
-        return [new RoleExtension($this->createMockTranslator())];
+        return [$this->extension];
     }
 
     #[\Override]

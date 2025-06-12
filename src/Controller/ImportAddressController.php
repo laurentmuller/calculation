@@ -19,14 +19,12 @@ use App\Service\SwissPostUpdater;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to import Switzerland address.
  */
-#[AsController]
 #[Route(path: '/admin', name: 'admin_')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class ImportAddressController extends AbstractController

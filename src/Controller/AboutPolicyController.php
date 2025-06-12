@@ -13,13 +13,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Controller to output policy information.
  */
-#[AsController]
 #[Route(path: '/about/policy', name: 'about_policy_')]
 class AboutPolicyController extends AbstractAboutController
 {

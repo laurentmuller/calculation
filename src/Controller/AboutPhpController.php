@@ -25,14 +25,12 @@ use App\Spreadsheet\PhpIniDocument;
 use App\Traits\ArrayTrait;
 use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to output PHP information.
  */
-#[AsController]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 #[Route(path: '/about/php', name: 'about_php_')]
 class AboutPhpController extends AbstractController

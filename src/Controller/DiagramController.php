@@ -20,7 +20,6 @@ use App\Service\DiagramService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -29,7 +28,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  *
  * @see https://mermaid.js.org/
  */
-#[AsController]
 #[Route(path: '/diagram', name: 'diagram_')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class DiagramController extends AbstractController

@@ -14,85 +14,58 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Utils\FileUtils;
+use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
-/**
- * Command to add the relative path, as comment, to the first line of files.
- */
 #[AsCommand(name: 'app:header:name', description: 'Add the relative path, as comment, to the first line of files.')]
-class HeaderNameCommand extends Command
+class HeaderNameCommand
 {
-    private const ARGUMENT_PATH = 'path';
+    use WatchTrait;
+
     private const HEADERS_MAPPING = [
         'css' => '/* %path% */',
         'js' => '/* %path% */',
         'twig' => '{# %path% #}',
     ];
+
     private const NEW_LINE = "\n";
-    private const OPTION_DEPTH = 'depth';
-    private const OPTION_DRY_RUN = 'dry-run';
-    private const OPTION_PATTERN = 'pattern';
+
+    private readonly string $projectDir;
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
-        private readonly string $projectDir
+        string $projectDir
     ) {
-        parent::__construct();
+        $this->projectDir = FileUtils::normalize($projectDir);
     }
 
-    #[\Override]
-    protected function configure(): void
-    {
-        $this->addArgument(
-            self::ARGUMENT_PATH,
-            InputOption::VALUE_REQUIRED,
-            'The path, relative to the project directory, where to search in.',
-            '/'
-        );
-        $this->addOption(
-            self::OPTION_PATTERN,
-            null,
-            InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-            'The file extensions to search for.',
-            \array_keys(self::HEADERS_MAPPING)
-        );
-        $this->addOption(
-            self::OPTION_DEPTH,
-            null,
-            InputOption::VALUE_REQUIRED,
-            'The depth search in the directory or -1 for all.',
-            -1
-        );
-        $this->addOption(
-            self::OPTION_DRY_RUN,
-            'd',
-            InputOption::VALUE_NONE,
-            'Simulate update without modify files.'
-        );
-    }
-
-    #[\Override]
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        $io = new SymfonyStyle($input, $output);
-        $patterns = $io->getArrayOption(self::OPTION_PATTERN);
+    /**
+     * @param string[]|null $patterns
+     */
+    public function __invoke(
+        SymfonyStyle $io,
+        #[Argument(description: 'The path, relative to the project directory, where to search in.')]
+        string $path = '/',
+        #[Option(description: 'The file extensions to search for or null for all css, js and twig files.')]
+        ?array $patterns = null,
+        #[Option(description: 'The depth search in the directory or -1 for all.')]
+        int $depth = -1,
+        #[Option(description: 'Simulate update without modify files.', name: 'dry-run', shortcut: 'd')]
+        bool $dryRun = false
+    ): int {
+        $patterns ??= \array_keys(self::HEADERS_MAPPING);
         if (!$this->validatePatterns($io, $patterns)) {
             return Command::INVALID;
         }
 
-        $depth = $io->getIntOption(self::OPTION_DEPTH);
-        $dryRun = $io->getBoolOption(self::OPTION_DRY_RUN);
-        $path = $io->getStringArgument(self::ARGUMENT_PATH);
         $fullPath = FileUtils::buildPath($this->projectDir, $path);
-
         $finder = $this->createFinder($fullPath, $patterns, $depth);
         if (!$this->hasResults($io, $finder, $path)) {
             return Command::SUCCESS;
@@ -101,7 +74,8 @@ class HeaderNameCommand extends Command
         $skip = 0;
         $update = 0;
         $files = [];
-        $io->writeln(\sprintf('Finding files in directory "%s":', $path));
+        $this->start();
+        $io->block(\sprintf('Update files in directory: "%s"', $path));
         foreach ($io->progressIterate($finder) as $file) {
             $modelPath = $this->getModelPath($file);
             $modelHeader = $this->getModelHeader($file);
@@ -122,11 +96,11 @@ class HeaderNameCommand extends Command
             $io->listing($files);
         }
 
+        $message = \sprintf('Updated: %d, Skipped: %d, %s.', $update, $skip, $this->stop());
         if ($dryRun) {
-            $io->success(\sprintf('Simulate: Skipped %d, Updated %d.', $skip, $update));
-        } else {
-            $io->success(\sprintf('Skipped %d, Updated %d.', $skip, $update));
+            $message .= "\nThe update was simulated without changing the content of the files.";
         }
+        $io->success($message);
 
         return Command::SUCCESS;
     }
@@ -155,10 +129,7 @@ class HeaderNameCommand extends Command
 
     private function getModelPath(SplFileInfo $file): string
     {
-        $root = FileUtils::normalize($this->projectDir);
-        $path = FileUtils::normalize($file->getRealPath());
-
-        return Path::makeRelative($path, $root);
+        return Path::makeRelative($file->getPathname(), $this->projectDir);
     }
 
     /**
@@ -177,7 +148,7 @@ class HeaderNameCommand extends Command
             return true;
         }
 
-        $io->comment(\sprintf('No file found in directory "%s".', $path));
+        $io->note(\sprintf('No file found in directory "%s".', $path));
 
         return false;
     }
@@ -215,15 +186,6 @@ class HeaderNameCommand extends Command
     private function validatePatterns(SymfonyStyle $io, array $patterns): bool
     {
         $keys = \array_keys(self::HEADERS_MAPPING);
-        if ([] === $patterns) {
-            $io->error(\sprintf(
-                'No pattern defined. Allowed values: "%s".',
-                \implode('", "', $keys)
-            ));
-
-            return false;
-        }
-
         $diff = \array_diff($patterns, $keys);
         if ([] !== $diff) {
             $io->error(\sprintf(

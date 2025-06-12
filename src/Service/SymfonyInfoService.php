@@ -375,26 +375,20 @@ final readonly class SymfonyInfoService
         return $this->createDate($date)->format('F Y');
     }
 
-    private function formatPath(string $path, ?string $baseDir = null): string
-    {
-        if (null !== $baseDir) {
-            return FileUtils::makePathRelative($path, $baseDir, true);
-        }
-
-        return FileUtils::normalizeDirectory($path);
-    }
-
     private function getDaysBeforeExpiration(string $date): string
     {
         $today = DateUtils::createDateTimeImmutable();
         $endOfMonth = $this->getEndOfMonth($date);
+        if ($endOfMonth < $today) {
+            return 'Expired';
+        }
 
         return $today->diff($endOfMonth)->format('%R%a days');
     }
 
     private function getDirectoryInfo(string $path): string
     {
-        $relativePath = $this->formatPath($path, $this->projectDir);
+        $relativePath = FileUtils::makePathRelative($path, $this->projectDir, true);
         $size = FileUtils::formatSize($path);
 
         return \sprintf('%s (%s)', $relativePath, $size);
@@ -443,10 +437,6 @@ final readonly class SymfonyInfoService
     {
         return $this->cache->get('packages', function (): array {
             $path = FileUtils::buildPath($this->projectDir, self::PACKAGE_FILE_NAME);
-            if (!FileUtils::exists($path)) {
-                return $this->getEmptyPackages();
-            }
-
             /**
              * @phpstan-var array{
              *     packages: array<string, PackageSourceType>|null,
@@ -517,10 +507,6 @@ final readonly class SymfonyInfoService
     private function parsePackages(array $runtimePackages, array $debugPackages): array
     {
         $result = $this->getEmptyPackages();
-        if ([] === $runtimePackages && [] === $debugPackages) {
-            return $result;
-        }
-
         foreach ($runtimePackages as $package) {
             $name = $package['name'];
             $entry = [

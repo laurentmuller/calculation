@@ -54,7 +54,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
@@ -70,7 +69,6 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  *
  * @template-extends AbstractEntityController<User, UserRepository>
  */
-#[AsController]
 #[Route(path: '/user', name: 'user_')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class UserController extends AbstractEntityController

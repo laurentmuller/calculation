@@ -26,7 +26,6 @@ use App\Interfaces\RoleInterface;
 use App\Repository\CalculationRepository;
 use App\Utils\DateUtils;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
@@ -35,7 +34,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller to display calendar.
  */
-#[AsController]
 #[Route(path: '/calendar', name: 'calendar_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CalendarController extends AbstractController

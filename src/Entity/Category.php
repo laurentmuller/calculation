@@ -70,7 +70,7 @@ class Category extends AbstractCodeEntity
     public function addProduct(Product $product): self
     {
         if (!$this->products->contains($product)) {
-            $this->products[] = $product;
+            $this->products->add($product);
             $product->setCategory($this);
         }
 
@@ -80,7 +80,7 @@ class Category extends AbstractCodeEntity
     public function addTask(Task $task): self
     {
         if (!$this->tasks->contains($task)) {
-            $this->tasks[] = $task;
+            $this->tasks->add($task);
             $task->setCategory($this);
         }
 

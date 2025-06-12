@@ -18,14 +18,12 @@ use App\Interfaces\RoleInterface;
 use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display the site map.
  */
-#[AsController]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class SiteMapController extends AbstractController
 {

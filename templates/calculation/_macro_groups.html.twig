@@ -13,7 +13,7 @@
         <th class="rowlink-skip bg-body-tertiary actions d-print-none">
             {# menu #}
             <div class="dropdown position-static">
-                {%- set menu_id = 'dropdownMenuGroup_' ~ group.vars.id -%}
+                {%- set menu_id = 'dropdownMenuGroup_' ~ field_id(group) -%}
                     {{ dropdownEllipsis(menu_id) }}
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="{{ menu_id }}">
                     {{ dropdownItemButton('calculation.edit.delete_group', ICON_DELETE, 'btn-delete-group') }}

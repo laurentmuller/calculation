@@ -47,7 +47,7 @@ class UserNamer implements NamerInterface
     }
 
     #[\Override]
-    public function name($object, PropertyMapping $mapping): string
+    public function name(object $object, PropertyMapping $mapping): string
     {
         return self::getBaseName($object, ImageSize::DEFAULT, ImageExtension::PNG);
     }

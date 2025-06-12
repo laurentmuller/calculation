@@ -32,7 +32,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -50,7 +49,6 @@ use Symfony\Component\Validator\Constraints\Length;
  *     limit: int,
  *     cnt: int}
  */
-#[AsController]
 #[Route(path: '/openweather', name: 'openweather_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class OpenWeatherController extends AbstractController
@@ -351,7 +349,7 @@ class OpenWeatherController extends AbstractController
     {
         $helper = $this->createFormHelper('openweather.search.', $data);
         $helper->field(OpenWeatherService::PARAM_QUERY)
-            ->constraints(new Length(['min' => 2]))
+            ->constraints(new Length(min: 2))
             ->updateAttributes(['placeholder' => 'openweather.search.place_holder', 'minlength' => 2])
             ->add(SearchType::class);
         $helper->field(self::PARAM_COUNTRY)

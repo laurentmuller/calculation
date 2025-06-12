@@ -35,7 +35,6 @@ use App\Table\GlobalMarginTable;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -45,7 +44,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  *
  * @template-extends AbstractEntityController<GlobalMargin, GlobalMarginRepository>
  */
-#[AsController]
 #[Route(path: '/globalmargin', name: 'globalmargin_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class GlobalMarginController extends AbstractEntityController
@@ -66,7 +64,7 @@ class GlobalMarginController extends AbstractEntityController
 
         $repository = $this->getRepository();
         $oldMargins = $repository->findByMinimum();
-        $root = new GlobalMargins($oldMargins);
+        $root = GlobalMargins::instance($oldMargins);
         $form = $this->createForm(GlobalMarginsType::class, $root);
         if ($this->handleRequestForm($request, $form)) {
             $this->updateMargins($repository, $oldMargins, $root->toArray());

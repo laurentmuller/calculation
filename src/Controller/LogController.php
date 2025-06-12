@@ -37,7 +37,6 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -45,7 +44,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * The log controller.
  */
-#[AsController]
 #[Route(path: '/log', name: 'log_')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class LogController extends AbstractController

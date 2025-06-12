@@ -29,7 +29,7 @@ abstract class AbstractStreamedResponse extends StreamedResponse implements Mime
     public function __construct(?callable $callback = null, bool $inline = true, string $name = '')
     {
         $headers = $this->buildHeaders($name, $inline);
-        parent::__construct(callback: $callback, headers: $headers);
+        parent::__construct(callbackOrChunks: $callback, headers: $headers);
     }
 
     #[\Override]

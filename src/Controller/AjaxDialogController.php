@@ -21,14 +21,12 @@ use App\Interfaces\RoleInterface;
 use App\Repository\TaskRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to render dialog views within an XMLHttpRequest (Ajax) call.
  */
-#[AsController]
 #[Route(path: '/ajax', name: 'ajax_')]
 class AjaxDialogController extends AbstractController
 {

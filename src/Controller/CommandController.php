@@ -23,11 +23,11 @@ use App\Service\CommandDataService;
 use App\Service\CommandFormService;
 use App\Service\CommandService;
 use App\Traits\CacheKeyTrait;
+use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -37,7 +37,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  *
  * @phpstan-import-type CommandType from CommandService
  */
-#[AsController]
 #[Route(path: '/command', name: 'command_')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class CommandController extends AbstractController
@@ -48,13 +47,15 @@ class CommandController extends AbstractController
 
     /**
      * Render a single command.
+     *
+     * MapQueryString
      */
     #[GetRoute(path: '/content', name: 'content')]
     public function command(
         #[MapQueryParameter]
         string $name,
-        Request $request,
-        CommandService $service
+        CommandService $service,
+        SessionInterface $session,
     ): JsonResponse {
         if (!$service->hasCommand($name)) {
             return $this->jsonFalse([
@@ -63,8 +64,11 @@ class CommandController extends AbstractController
         }
 
         $command = $service->getCommand($name);
-        $request->getSession()->set(self::LAST_COMMAND, $name);
+        $session->set(self::LAST_COMMAND, $name);
+
         $view = $this->renderView('command/_command.htm.twig', ['command' => $command]);
+        $lines = \array_map(\trim(...), \explode("\n", \trim($view)));
+        $view = \implode('', \array_filter($lines));
 
         return $this->jsonTrue(['content' => $view]);
     }
@@ -74,28 +78,29 @@ class CommandController extends AbstractController
      */
     #[GetRoute(path: IndexRoute::PATH, name: 'all')]
     public function commands(
-        Request $request,
         CommandService $service,
+        SessionInterface $session,
         #[MapQueryParameter]
-        ?string $name = null
+        ?string $name = null,
     ): Response {
         $count = $service->count();
         if (0 === $count) {
             return $this->redirectToHomePage('command.list.empty');
         }
 
-        /** @phpstan-var ?string $commandName */
-        $commandName = $name ?? $request->getSession()->get(self::LAST_COMMAND);
-        if (\is_string($commandName) && $service->hasCommand($commandName)) {
-            $command = $service->getCommand($commandName);
+        $name ??= (string) $session->get(self::LAST_COMMAND);
+        if (StringUtils::isString($name) && $service->hasCommand($name)) {
+            $command = $service->getCommand($name);
         } else {
             $command = $service->first();
         }
+        $session->set(self::LAST_COMMAND, $name);
         $root = $this->trans('command.list.available');
+        $commands = $service->getGroupedNames($root);
         $parameters = [
-            'count' => $count,
+            'commands' => $commands,
             'command' => $command,
-            'groups' => $service->getGroupedNames($root),
+            'count' => $count,
         ];
 
         return $this->render('command/commands.html.twig', $parameters);
@@ -133,7 +138,7 @@ class CommandController extends AbstractController
                 $parameters = $dataService->createParameters($command, $data);
                 $result = $service->execute($name, $parameters);
 
-                return $this->render('command/command_execute_result.html.twig', [
+                return $this->render('command/command_result.html.twig', [
                     'parameters' => $parameters,
                     'command' => $command,
                     'result' => $result,
@@ -157,7 +162,7 @@ class CommandController extends AbstractController
             'form' => $view,
         ];
 
-        return $this->render('command/command_execute_query.html.twig', $parameters);
+        return $this->render('command/command_query.html.twig', $parameters);
     }
 
     /**

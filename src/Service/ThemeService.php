@@ -18,6 +18,7 @@ use App\Traits\CookieTrait;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Attribute\AsTwigFunction;
 
 /**
  * Service to manage user theme.
@@ -40,6 +41,7 @@ class ThemeService
     /**
      * Gets the selected theme from cookies.
      */
+    #[AsTwigFunction(name: 'theme')]
     public function getTheme(Request $request): Theme
     {
         return $this->getCookieEnum($request, self::KEY_THEME, Theme::getDefault());
@@ -50,6 +52,7 @@ class ThemeService
      *
      * @return Theme[]
      */
+    #[AsTwigFunction(name: 'themes')]
     public function getThemes(): array
     {
         return Theme::sorted();
@@ -58,6 +61,7 @@ class ThemeService
     /**
      * Gets the selected theme value.
      */
+    #[AsTwigFunction(name: 'theme_value')]
     public function getThemeValue(Request $request): string
     {
         return $this->getTheme($request)->value;
@@ -66,6 +70,7 @@ class ThemeService
     /**
      * Returns if the dark theme is selected.
      */
+    #[AsTwigFunction(name: 'is_dark_theme')]
     public function isDarkTheme(Request $request): bool
     {
         return Theme::DARK === $this->getTheme($request);

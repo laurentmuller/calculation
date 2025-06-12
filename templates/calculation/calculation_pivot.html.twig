@@ -2,7 +2,7 @@
 {% from 'macros/_icons.html.twig' import icon %}
 {# macros #}
 {% macro format(value) -%}
-{{ is_int(value) ? value|integer : value|amount }}
+{{ value matches '/^\\d+$/' ? value|integer : value|amount }}
 {%- endmacro %}
 
 {% macro colspan(value) -%}

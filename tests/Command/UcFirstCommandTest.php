@@ -32,11 +32,24 @@ class UcFirstCommandTest extends CommandTestCase
         $this->deleteEntitiesByClass(Calculation::class);
     }
 
+    public function testAskFieldName(): void
+    {
+        $expected = "Select a field name for the 'Calculation' entity:";
+        $input = [
+            '--class' => Calculation::class,
+        ];
+        $output = $this->execute(self::COMMAND_NAME, $input);
+        $this->validate($output, $expected);
+    }
+
     public function testExecute(): void
     {
         $this->getCalculation(customer: 'customer');
 
-        $expected = 'Updated 1 values successfully.';
+        $expected = [
+            'Updated 1 values of 1 entities successfully.',
+            'Duration',
+        ];
         $input = [
             '--class' => Calculation::class,
             '--field' => 'customer',
@@ -50,21 +63,10 @@ class UcFirstCommandTest extends CommandTestCase
         $this->getCalculation(customer: 'customer');
 
         $expected = [
-            'Updated 1 values successfully.',
+            'Updated 1 values of 1 entities successfully.',
             'No change saved to database.',
+            'Duration:',
         ];
-        $input = [
-            '--class' => Calculation::class,
-            '--field' => 'customer',
-            '--dry-run' => true,
-        ];
-        $output = $this->execute(self::COMMAND_NAME, $input);
-        $this->validate($output, $expected);
-    }
-
-    public function testExecuteDryRunEmpty(): void
-    {
-        $expected = 'No value updated.';
         $input = [
             '--class' => Calculation::class,
             '--field' => 'customer',
@@ -76,7 +78,7 @@ class UcFirstCommandTest extends CommandTestCase
 
     public function testExecuteEmpty(): void
     {
-        $expected = 'No value updated.';
+        $expected = 'No entity to update.';
         $input = [
             '--class' => Calculation::class,
             '--field' => 'customer',
@@ -85,26 +87,44 @@ class UcFirstCommandTest extends CommandTestCase
         $this->validate($output, $expected);
     }
 
+    public function testExecuteEmptyDryRun(): void
+    {
+        $expected = 'No entity to update.';
+        $input = [
+            '--class' => Calculation::class,
+            '--field' => 'customer',
+            '--dry-run' => true,
+        ];
+        $output = $this->execute(self::COMMAND_NAME, $input);
+        $this->validate($output, $expected);
+    }
+
     public function testExecuteMissingClass(): void
     {
-        $input = ['--field' => 'customer'];
+        $input = [
+            '--field' => 'customer',
+        ];
         $this->executeMissingInput(self::COMMAND_NAME, $input);
     }
 
     public function testInvalidClassName(): void
     {
-        $expected = "Unable to find the entity 'fake'.";
+        $expected = "Unable to find the 'fake' entity.";
         $input = [
             '--class' => 'fake',
+            '--field' => 'fake',
             '--dry-run' => true,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input, [], Command::INVALID);
+        $options = [
+            'interactive' => false,
+        ];
+        $output = $this->execute(self::COMMAND_NAME, $input, $options, Command::INVALID);
         $this->validate($output, $expected);
     }
 
     public function testInvalidFieldName(): void
     {
-        $expected = "Unable to find the field 'fake' for the 'Calculation' entity.";
+        $expected = "Unable to find the field 'fake' for the entity 'App\Entity\Calculation'.";
         $input = [
             '--class' => Calculation::class,
             '--field' => 'fake',

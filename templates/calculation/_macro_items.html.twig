@@ -16,14 +16,14 @@
         <td class="text-unit">{{ item.unit.vars.value }}</td>
         <td class="text-editable text-currency rowlink-skip cursor-text"
             title="{{ 'calculation.edit.price.title'|trans }}"
-            data-target="#{{ item.price.vars.id }}"
+            data-target="#{{ field_id(item.price) }}"
             data-tooltip-edit="{{ 'calculation.edit.price.tooltip'|trans }}"
             data-tooltip-error="{{ 'calculation.edit.price.error'|trans }}">
             {{- item.price.vars.value|amount -}}
         </td>
         <td class="text-editable text-currency rowlink-skip cursor-text"
             title="{{ 'calculation.edit.quantity.title'|trans }}"
-            data-target="#{{ item.quantity.vars.id }}"
+            data-target="#{{ field_id(item.quantity) }}"
             data-tooltip-edit="{{ 'calculation.edit.quantity.tooltip'|trans }}"
             data-tooltip-error="{{ 'calculation.edit.quantity.error'|trans }}">
             {{- item.quantity.vars.value|amount -}}
@@ -31,7 +31,7 @@
         <td class="text-currency">{{ item.total.vars.value|amount }}</td>
         <td class="actions d-print-none rowlink-skip">
             <div class="dropdown position-static">
-                {%- set menu_id = 'dropdownMenuItem_' ~ item.vars.id -%}
+                {%- set menu_id = 'dropdownMenuItem_' ~ field_id(item) -%}
                 {{ dropdownEllipsis(menu_id) }}
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="{{ menu_id }}">
                     {{ dropdownItemButton('calculation.edit.edit_item', ICON_EDIT, 'btn-default btn-edit-item') }}

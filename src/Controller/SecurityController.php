@@ -21,7 +21,6 @@ use App\Interfaces\RoleInterface;
 use App\Security\SecurityAttributes;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -30,7 +29,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 /**
  * Controller for login user.
  */
-#[AsController]
 class SecurityController extends AbstractController
 {
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]

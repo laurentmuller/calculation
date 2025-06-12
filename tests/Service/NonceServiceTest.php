@@ -20,23 +20,20 @@ class NonceServiceTest extends TestCase
 {
     private NonceService $service;
 
-    /**
-     * @throws \Exception
-     */
     #[\Override]
     protected function setUp(): void
     {
         $this->service = new NonceService();
     }
 
-    public function testCsp(): void
+    public function testCspNonce(): void
     {
         $nonce = $this->service->getNonce();
-        $csp = $this->service->getCspNonce();
-        self::stringStartsWith("'nonce-")->evaluate($csp);
-        self::stringEndsWith("'")->evaluate($csp);
-        self::stringContains($nonce)->evaluate($csp);
-        self::assertSame("'nonce-" . $nonce . "'", $csp);
+        $cspNonce = $this->service->getCspNonce();
+        self::assertStringStartsWith("'nonce-", $cspNonce);
+        self::assertStringEndsWith("'", $cspNonce);
+        self::assertStringContainsString($nonce, $cspNonce);
+        self::assertSame("'nonce-" . $nonce . "'", $cspNonce);
     }
 
     public function testLength32(): void

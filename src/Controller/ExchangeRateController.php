@@ -21,7 +21,6 @@ use App\Utils\FormatUtils;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -29,7 +28,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller for the exchange rate service.
  */
-#[AsController]
 #[Route(path: '/exchange', name: 'exchange_')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class ExchangeRateController extends AbstractController

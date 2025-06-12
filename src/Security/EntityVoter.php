@@ -19,6 +19,7 @@ use App\Enums\EntityPermission;
 use App\Service\ApplicationService;
 use App\Traits\MathTrait;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
@@ -41,7 +42,7 @@ class EntityVoter extends Voter
     }
 
     #[\Override]
-    public function vote(TokenInterface $token, mixed $subject, array $attributes): int
+    public function vote(TokenInterface $token, mixed $subject, array $attributes, ?Vote $vote = null): int
     {
         /** @phpstan-var mixed $attribute */
         foreach ($attributes as &$attribute) {
@@ -50,7 +51,7 @@ class EntityVoter extends Voter
             }
         }
 
-        return parent::vote($token, $subject, $attributes);
+        return parent::vote($token, $subject, $attributes, $vote);
     }
 
     #[\Override]
@@ -60,7 +61,7 @@ class EntityVoter extends Voter
     }
 
     #[\Override]
-    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         $user = $this->getUser($token);
         if (!$user instanceof User) {

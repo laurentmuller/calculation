@@ -22,7 +22,8 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
  */
 class DatabaseDocument extends AbstractDocument
 {
-    private const DISABLED_VALUES = ['off', 'no', 'false', 'disabled'];
+    private ?Color $disabledColor = null;
+    private ?Color $enabledColor = null;
 
     public function __construct(AbstractController $controller, private readonly DatabaseInfoService $service)
     {
@@ -38,26 +39,37 @@ class DatabaseDocument extends AbstractDocument
             return false;
         }
 
-        $color = new Color('A9A9A9');
         $this->start($this->trans('about.database'));
         $sheet = $this->getActiveSheet();
-        if ($this->outputArray($sheet, 'Database', $database, $color)) {
+        if ($this->outputArray($sheet, 'Database', $database)) {
             $sheet = $this->createSheet();
         }
-        $this->outputArray($sheet, 'Configuration', $configuration, $color);
+        $this->outputArray($sheet, 'Configuration', $configuration);
         $this->setActiveSheetIndex(0);
 
         return true;
     }
 
-    private function applyStyle(WorksheetDocument $sheet, int $row, string $value, Color $color): void
+    private function applyStyle(WorksheetDocument $sheet, int $row, string $value): void
     {
-        if (!\in_array(\strtolower($value), self::DISABLED_VALUES, true)) {
-            return;
+        $color = $this->getColor($value);
+        if ($color instanceof Color) {
+            $sheet->getCell([2, $row])
+                ->getStyle()->getFont()
+                ->setColor($color);
         }
-        $sheet->getCell([2, $row])
-            ->getStyle()->getFont()
-            ->setColor($color);
+    }
+
+    private function getColor(string $value): ?Color
+    {
+        if ($this->service->isEnabledValue($value)) {
+            return $this->enabledColor ??= new Color('008000');
+        }
+        if ($this->service->isDisabledValue($value)) {
+            return $this->disabledColor ??= new Color('A9A9A9');
+        }
+
+        return null;
     }
 
     /**
@@ -65,7 +77,7 @@ class DatabaseDocument extends AbstractDocument
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    private function outputArray(WorksheetDocument $sheet, string $title, array $values, Color $color): bool
+    private function outputArray(WorksheetDocument $sheet, string $title, array $values): bool
     {
         if ([] === $values) {
             return false;
@@ -78,7 +90,7 @@ class DatabaseDocument extends AbstractDocument
         ]);
         foreach ($values as $key => $value) {
             $sheet->setRowValues($row, [$key, $value]);
-            $this->applyStyle($sheet, $row, $value, $color);
+            $this->applyStyle($sheet, $row, $value);
             ++$row;
         }
         $sheet->setAutoSize(1)

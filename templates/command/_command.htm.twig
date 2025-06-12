@@ -68,7 +68,7 @@
     {# options #}
     {% if command.options|length %}
         {{ _self.outputTitleLine('command.list.fields.options') }}
-        <div class="ms-3 mt-2">
+        <div class="ms-3 mt-2 mb-3">
             {% for option in command.options %}
                 {{ _self.outputPopoverRow(option.name_shortcut, option.description, option.arguments, _self.tooltipOption(option)) }}
             {% endfor %}

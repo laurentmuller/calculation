@@ -138,7 +138,7 @@ class CommandController extends AbstractController
                 $parameters = $dataService->createParameters($command, $data);
                 $result = $service->execute($name, $parameters);
 
-                return $this->render('command/command_execute_result.html.twig', [
+                return $this->render('command/command_result.html.twig', [
                     'parameters' => $parameters,
                     'command' => $command,
                     'result' => $result,
@@ -162,7 +162,7 @@ class CommandController extends AbstractController
             'form' => $view,
         ];
 
-        return $this->render('command/command_execute_query.html.twig', $parameters);
+        return $this->render('command/command_query.html.twig', $parameters);
     }
 
     /**

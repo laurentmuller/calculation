@@ -332,7 +332,7 @@ class CommandService implements \Countable
         }
 
         // remove carriage return
-        $content = \str_replace("\r", '', $result->content);
+        $content = $this->replaceCarriageReturn($result->content);
 
         /** @phpstan-var array{commands: CommandSourceType[]} $decoded */
         $decoded = StringUtils::decodeJson($content);
@@ -357,12 +357,53 @@ class CommandService implements \Countable
         return $commands;
     }
 
+    private function replaceCarriageReturn(string $subject): string
+    {
+        return \str_replace("\r", '', $subject);
+    }
+
     private function replaceConsole(string $subject): string
     {
         return \str_replace(self::CONSOLE_REPLACE, 'bin/console', $subject);
     }
 
-    private function replaceHelp(string $help): string
+    /**
+     * @phpstan-param array<string, ArgumentType> $arguments
+     *
+     * @phpstan-return array<string, ArgumentType>
+     */
+    private function updateArguments(array $arguments): array
+    {
+        foreach ($arguments as &$argument) {
+            $argument['description'] = $this->updateHelp($argument['description']);
+            $argument['display'] = $this->encodeDefaultValue($argument['default']);
+            $argument['arguments'] = $this->getArgumentHelp($argument);
+        }
+
+        return $arguments;
+    }
+
+    /**
+     * @phpstan-param CommandSourceType $command
+     *
+     * @phpstan-return CommandType
+     */
+    private function updateCommand(array $command): array
+    {
+        $command['arguments'] = $this->updateArguments($command['definition']['arguments']);
+        $command['options'] = $this->updateOptions($command['definition']['options']);
+        $command['help'] = $command['help'] === $command['description'] ? '' : $this->updateHelp($command['help']);
+        if (0 === \count($command['arguments'])) {
+            $command['usage'] = [\sprintf('%s [options]', $command['name'])];
+        } else {
+            $command['usage'] = StringUtils::pregReplaceAll(self::USAGE_REPLACE, $command['usage']);
+        }
+        unset($command['definition']);
+
+        return $command;
+    }
+
+    private function updateHelp(string $help): string
     {
         if (!StringUtils::isString($help)) {
             return $help;
@@ -375,44 +416,26 @@ class CommandService implements \Countable
     }
 
     /**
-     * @phpstan-param CommandSourceType $command
+     * @phpstan-param array<string, OptionType> $options
      *
-     * @phpstan-return CommandType
+     * @phpstan-return array<string, OptionType>
      */
-    private function updateCommand(array $command): array
+    private function updateOptions(array $options): array
     {
-        $arguments = $command['definition']['arguments'];
-        foreach ($arguments as &$argument) {
-            $argument['description'] = $this->replaceHelp($argument['description']);
-            $argument['display'] = $this->encodeDefaultValue($argument['default']);
-            $argument['arguments'] = $this->getArgumentHelp($argument);
-        }
-        $command['arguments'] = $arguments;
-
-        $options = $command['definition']['options'];
         foreach ($options as &$option) {
-            $option['description'] = $this->replaceHelp($option['description']);
+            $option['description'] = $this->updateHelp($option['description']);
             $option['display'] = $this->encodeDefaultValue($option['default']);
             $option['arguments'] = $this->getOptionHelp($option);
             $option['name_shortcut'] = $this->getOptionNameAndShortcut($option['name'], $option['shortcut']);
         }
-        $command['options'] = $options;
 
-        $command['help'] = $command['help'] === $command['description'] ? '' : $this->replaceHelp($command['help']);
-        if (0 === \count($arguments)) {
-            $command['usage'] = [\sprintf('%s [options]', $command['name'])];
-        } else {
-            $command['usage'] = StringUtils::pregReplaceAll(self::USAGE_REPLACE, $command['usage']);
-        }
-        unset($command['definition']);
-
-        return $command;
+        return $options;
     }
 
     private function updateOutput(string $output): string
     {
         $output = $this->replaceConsole($output);
-        $output = \str_replace("\r", '', $output);
+        $output = $this->replaceCarriageReturn($output);
         $lines = \array_map(\rtrim(...), \explode("\n", \rtrim($output)));
 
         return \implode("\n", $lines);

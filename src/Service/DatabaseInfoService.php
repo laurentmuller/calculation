@@ -23,6 +23,9 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class DatabaseInfoService
 {
+    private const DISABLED_VALUES = ['off', 'no', 'false', 'disabled'];
+    private const ENABLED_VALUES = ['on', 'yes', 'true', 'enabled'];
+
     /** @var array<string, string>|null */
     private ?array $configuration = null;
 
@@ -121,6 +124,22 @@ class DatabaseInfoService
         }
 
         return $this->version;
+    }
+
+    /**
+     * Returns if the given value represents a disabled value.
+     */
+    public function isDisabledValue(string $value): bool
+    {
+        return \in_array(\strtolower($value), self::DISABLED_VALUES, true);
+    }
+
+    /**
+     * Returns if the given value represents an enabled value.
+     */
+    public function isEnabledValue(string $value): bool
+    {
+        return \in_array(\strtolower($value), self::ENABLED_VALUES, true);
     }
 
     /**

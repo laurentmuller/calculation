@@ -1,7 +1,4 @@
 {% import 'about/_about_macro.html.twig' as tools %}
-{# parameters #}
-{% set enabled_values = ['On', 'Yes', 'True', 'Enabled'] %}
-{% set disabled_values = ['Off', 'No', 'False', 'Disabled'] %}
 {# content #}
 <div class="phpversion">
     <table id="data-table-mysql" class="table table-sm mb-0">
@@ -21,9 +18,9 @@
             {% endfor %}
             {{ tools.headerInfo('Configuration') }}
              {% for key, value in service.configuration %}
-                 {% if value in enabled_values %}
+                 {% if service.enabledValue(value) %}
                     {{ tools.rowInfoBoolean(key, value, true) }}
-                 {% elseif value in disabled_values %}
+                 {% elseif service.disabledValue(value) %}
                      {{ tools.rowInfoBoolean(key, value, false) }}
                  {% else %}
                      {{ tools.rowInfo(key, value) }}

@@ -10,10 +10,10 @@
     {% set suggestion = 'http_error_404.suggestion'|trans({'%url%': path('homepage')}) %}
 {% case 500 %}
     {% set description = 'http_error_500.description'|trans %}
-    {% set suggestion = 'http_error_500.suggestion'|trans({'%url%': path('homepage')}) %}
+    {%- set suggestion = 'http_error.suggestion'|trans({'%url%': path('homepage')}) -%}
 {% case 503 %}
     {% set description = 'http_error_503.description'|trans %}
-    {% set suggestion = 'http_error_503.suggestion'|trans({'%url%': path('homepage')}) %}
+    {%- set suggestion = 'http_error.suggestion'|trans({'%url%': path('homepage')}) -%}
 {%- endswitch %}
 {# message #}
 {% block error_message -%}

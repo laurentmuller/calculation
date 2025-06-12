@@ -19,26 +19,26 @@
 {% block card_container_class is_exception ? '' : ' col-xl-8 offset-xl-2' %}
 {# body #}
 {% block card_body %}
-<p>
+<p id="error-message">
 {% block error_message -%}
-    {{ description|default('')|raw }} {{ suggestion|default('')|raw }}
+    {{- description|default('')|raw }} {{ suggestion|default('')|raw -}}
 {%- endblock %}
 </p>
 <div class="d-flex-wrap-center d-print-none">
-    <p class="mb-0 flex-fill">{{ 'error_page.link'|trans({'%mailto%': mailer_user_email, '%subject%': app_name_version|url_encode})|raw }}</p>
     {% if is_exception %}
         <a data-bs-toggle="collapse" href="#exception-detail" class="drop-down-icon-left" aria-expanded="false" aria-controls="exception-detail">
             {{ 'error_page.details'|trans }}
         </a>
     {% endif %}
+    <p class="mb-0 ms-auto ">{{ 'error_page.link'|trans({'%mailto%': mailer_user_email, '%subject%': app_name_version|url_encode})|raw }}</p>
 </div>
 {% if is_exception %}
 <div id="exception-detail" class="collapse mt-3">
-    <table id="exception-table" class="table table-bordered table-exception table-sm mb-0">
+    <table id="exception-table" class="table table-exception table-sm border-top  mb-0">
         <thead>
-            <tr class="border-danger">
-                <th class="text-bg-danger fw-normal property">{{ 'error_page.property'|trans }}</th>
-                <th class="text-bg-danger fw-normal value">{{ 'error_page.value'|trans }}</th>
+            <tr>
+                <th class="property">{{ 'error_page.property'|trans }}</th>
+                <th class="value">{{ 'error_page.value'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -106,4 +106,17 @@
 {% else %}
     {{ homepage() }}
 {% endif %}
+    <button type="button" class="btn btn-copy btn-form btn-success"
+            data-clipboard-action="copy"
+            data-clipboard-target="#exception-detail"
+            data-success="{{ 'common.copy_success'|trans }}"
+            data-error="{{ 'common.copy_error'|trans }}">
+        {{- 'common.button_copy'|trans -}}
+    </button>
+{% endblock %}
+{# javascripts #}
+{% block javascripts %}
+    {{ parent() }}
+    {{ asset_js('vendor/clipboard/clipboard.js') }}
+    {{ asset_js('js/application/errror.js') }}
 {% endblock %}

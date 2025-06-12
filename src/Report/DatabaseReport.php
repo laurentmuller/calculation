@@ -25,9 +25,8 @@ use App\Service\DatabaseInfoService;
  */
 class DatabaseReport extends AbstractReport
 {
-    private const DISABLED_VALUES = ['off', 'no', 'false', 'disabled'];
-
-    private ?PdfStyle $style = null;
+    private ?PdfStyle $disableStyle = null;
+    private ?PdfStyle $enableStyle = null;
 
     public function __construct(AbstractController $controller, private readonly DatabaseInfoService $service)
     {
@@ -60,11 +59,14 @@ class DatabaseReport extends AbstractReport
 
     private function getStyle(string $value): ?PdfStyle
     {
-        if (!\in_array(\strtolower($value), self::DISABLED_VALUES, true)) {
-            return null;
+        if ($this->service->isEnabledValue($value)) {
+            return $this->enableStyle ??= PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGreen());
+        }
+        if ($this->service->isDisabledValue($value)) {
+            return $this->disableStyle ??= PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGray());
         }
 
-        return $this->style ??= PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGray());
+        return null;
     }
 
     /**
@@ -76,9 +78,7 @@ class DatabaseReport extends AbstractReport
             return;
         }
 
-        $this->addBookmark($title);
         $table->setGroupKey($title);
-
         foreach ($values as $key => $value) {
             $table->startRow()
                 ->add(text: $key)

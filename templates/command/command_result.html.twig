@@ -4,6 +4,7 @@
 {%- set title = 'command.result.title' -%}
 {%- set title_icon = 'code' -%}
 {%- set title_description = 'command.result.description' -%}
+{% block card_container_class ' col col-xl-10 offset-xl-1' %}
 {%- set is_error = not result.success -%}
 {# class #}
 {% block card_class is_error ? ' border-danger' : '' %}

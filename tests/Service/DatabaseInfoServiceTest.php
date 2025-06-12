@@ -18,6 +18,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Statement;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,6 +34,53 @@ class DatabaseInfoServiceTest extends TestCase
         'serverVersion' => '5.7.40',
         'charset' => 'utf8mb4',
     ];
+
+    /**
+     * @phpstan-return \Generator<int, array{0: string, 1: bool}>
+     */
+    public static function getDisabledValues(): \Generator
+    {
+        yield ['oFf', true];
+        yield ['off', true];
+        yield ['no', true];
+        yield ['false', true];
+        yield ['disabled', true];
+        yield ['', false];
+        yield ['yes', false];
+    }
+
+    /**
+     * @phpstan-return \Generator<int, array{0: string, 1: bool}>
+     */
+    public static function getEnabledValues(): \Generator
+    {
+        yield ['oN', true];
+        yield ['on', true];
+        yield ['yes', true];
+        yield ['true', true];
+        yield ['enabled', true];
+        yield ['', false];
+        yield ['disabled', false];
+        yield ['no', false];
+    }
+
+    #[DataProvider('getDisabledValues')]
+    public function testDisabledValue(string $value, bool $expected): void
+    {
+        $manager = $this->createMock(EntityManagerInterface::class);
+        $service = new DatabaseInfoService($manager);
+        $actual = $service->isDisabledValue($value);
+        self::assertSame($expected, $actual);
+    }
+
+    #[DataProvider('getEnabledValues')]
+    public function testEnabledValue(string $value, bool $expected): void
+    {
+        $manager = $this->createMock(EntityManagerInterface::class);
+        $service = new DatabaseInfoService($manager);
+        $actual = $service->isEnabledValue($value);
+        self::assertSame($expected, $actual);
+    }
 
     public function testGetConfiguration(): void
     {

@@ -866,6 +866,7 @@ body.status-bar .grecaptcha-badge {
 .scrollbar-none {
     scrollbar-width: none;
 }
+
 .scrollbar-thin {
     scrollbar-width: thin;
 }

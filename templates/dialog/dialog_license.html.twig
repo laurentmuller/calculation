@@ -1,12 +1,12 @@
 {% from 'macros/_icons.html.twig' import modal_title, modal_close_button %}
 {% set dialog_id = 'license-modal' %}
 <div class="modal fade" id="{{ dialog_id }}" tabindex="-1" aria-labelledby="modal-license-title" aria-hidden="true"
-     data-load-error="{{ 'about.dialog.not_found'|trans }}"
+     data-error="{{ 'about.dialog.not_found'|trans }}"
      data-url="{{ path('about_symfony_license') }}">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                {{- modal_title('modal-license-title', 'book-open-reader', 'about.dialog.title', dialog_id) -}}
+                {{- modal_title('modal-license-title', 'book-open-reader', 'about.licence', dialog_id) -}}
             </div>
             <div class="modal-body">
                 <div class="border pre-scrollable scrollbar-thin">

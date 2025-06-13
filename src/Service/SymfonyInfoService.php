@@ -18,7 +18,6 @@ use App\Utils\DateUtils;
 use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Intl\Locales;
@@ -69,7 +68,7 @@ final readonly class SymfonyInfoService
     // the array key for runtime packages and routes
     private const KEY_RUNTIME = 'runtime';
     // the pattern to search the license file
-    private const LICENSE_PATTERN = '/license(\.txt|\.md)?$/i';
+    private const LICENSE_PATTERN = '/{license{*},LICENSE{*}}';
     // the JSON file containing composer information
     private const PACKAGE_FILE_NAME = '/vendor/composer/installed.json';
     // the release information URL
@@ -415,16 +414,11 @@ final readonly class SymfonyInfoService
      */
     private function getLicense(array $package): ?string
     {
-        $dir = FileUtils::buildPath(
-            $this->projectDir,
-            'vendor/composer',
-            $package['install-path']
-        );
-        $finder = Finder::create()
-            ->in($dir)->depth(0)->files()
-            ->name(self::LICENSE_PATTERN);
-        foreach ($finder as $file) {
-            return FileUtils::makePathRelative($file->getRealPath(), $this->projectDir);
+        $path = FileUtils::buildPath($this->projectDir, 'vendor/composer', $package['install-path']);
+        $pattern = $path . self::LICENSE_PATTERN;
+        $files = \glob($pattern, \GLOB_BRACE | \GLOB_NOSORT);
+        if (\is_array($files) && [] !== $files) {
+            return FileUtils::makePathRelative($files[0], $this->projectDir);
         }
 
         return null;

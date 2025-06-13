@@ -250,6 +250,12 @@ class FileUtilsTest extends TestCase
         $expected = 'videos/';
         $actual = FileUtils::makePathRelative('/tmp/videos', '/tmp');
         self::assertSame($expected, $actual);
+
+        $endPath = __FILE__;
+        $startPath = __DIR__;
+        $expected = \basename($endPath);
+        $actual = FileUtils::makePathRelative($endPath, $startPath);
+        self::assertSame($expected, $actual);
     }
 
     public function testMirror(): void
@@ -308,10 +314,17 @@ class FileUtilsTest extends TestCase
         self::assertPrivateInstance(FileUtils::class);
     }
 
-    public function testReadFileInvalid(): void
+    public function testReadFileInvalidDirectory(): void
     {
         $expected = '';
         $actual = FileUtils::readFile(__DIR__);
+        self::assertSame($expected, $actual);
+    }
+
+    public function testReadFileInvalidUrl(): void
+    {
+        $expected = '';
+        $actual = FileUtils::readFile('https://example.com/fake.txt');
         self::assertSame($expected, $actual);
     }
 
@@ -375,14 +388,32 @@ class FileUtilsTest extends TestCase
 
     public function testTempDir(): void
     {
-        $dir = FileUtils::tempDir(__DIR__);
-        self::assertNotNull($dir);
+        $actual = FileUtils::tempDir(__DIR__);
+        self::assertNotNull($actual);
+    }
+
+    public function testTempDirInvalid(): void
+    {
+        $actual = FileUtils::tempDir('b:/');
+        self::assertNull($actual);
+    }
+
+    public function testTempDirInvalidUrl(): void
+    {
+        $actual = FileUtils::tempDir('https://example.com');
+        self::assertNull($actual);
     }
 
     public function testTempFile(): void
     {
         $dir = FileUtils::tempFile(__DIR__);
         self::assertNotNull($dir);
+    }
+
+    public function testTempFileInvalid(): void
+    {
+        $actual = FileUtils::tempFile(dir: 'https://example.com');
+        self::assertNull($actual);
     }
 
     private static function getEmptyFile(): string

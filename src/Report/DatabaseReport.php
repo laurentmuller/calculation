@@ -16,8 +16,8 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
+use App\Pdf\PdfTable;
 use App\Service\DatabaseInfoService;
 
 /**
@@ -31,7 +31,7 @@ class DatabaseReport extends AbstractReport
     public function __construct(AbstractController $controller, private readonly DatabaseInfoService $service)
     {
         parent::__construct($controller);
-        $this->setTitleTrans('about.database');
+        $this->setTitleTrans(id: 'about.database', isUTF8: true);
     }
 
     #[\Override]
@@ -44,8 +44,7 @@ class DatabaseReport extends AbstractReport
         }
 
         $this->addPage();
-        $table = PdfGroupTable::instance($this)
-            ->setGroupStyle(PdfStyle::getHeaderStyle())
+        $table = PdfTable::instance($this)
             ->addColumns(
                 PdfColumn::left('Name', 40),
                 PdfColumn::left('Value', 60)
@@ -72,13 +71,13 @@ class DatabaseReport extends AbstractReport
     /**
      * @param array<string, string> $values
      */
-    private function outputArray(PdfGroupTable $table, string $title, array $values): void
+    private function outputArray(PdfTable $table, string $title, array $values): void
     {
         if ([] === $values) {
             return;
         }
 
-        $table->setGroupKey($title);
+        $table->singleLine($title, PdfStyle::getHeaderStyle());
         foreach ($values as $key => $value) {
             $table->startRow()
                 ->add(text: $key)

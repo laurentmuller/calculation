@@ -14,8 +14,7 @@ about:
     error: Erreur lors du chargement des informations.
     extern_link: Accéder au site
     loading: Recherche des informations...
-    database: Configuration de la base de données
-    database_version: Configuration de la base de données v%version%
+    database: Configuration des données
     php: Configuration de PHP
     php_version: Configuration de PHP v%version%
     policy: Politique de confidentialité
@@ -25,7 +24,6 @@ about:
     version: Version %version%
     licence: Accord de licence
     dialog:
-        title: Accord de licence
         display: Afficher l'accord de licence
         not_found: Impossible de trouver l'accord de licence.
         not_loaded: Impossible de charger l'accord de licence.

@@ -67,18 +67,21 @@
                 content = $row.data('content');
             }
             $('#license-content').html(content);
-            $('#license-modal').one('hidden.bs.modal', function () {
+
+            // modal dialog
+            const $dialog = $('#license-modal');
+            $dialog.one('hidden.bs.modal', function () {
                 $row.find('.link-license').scrollInViewport().trigger('focus');
             }).modal('show');
 
             // clipboard
             $('#license-modal .btn-copy').copyClipboard({
-                title: $('#modal-license-title').text(),
-                copySuccess: function (e) {
-                    $(e.trigger).parents('#license-modal').modal('hide');
+                title: $('#modal-license-title').text().trim(),
+                copySuccess: function () {
+                    $dialog.modal('hide');
                 },
-                copyError: function (e) {
-                    $(e.trigger).parents('#license-modal').modal('hide');
+                copyError: function () {
+                    $dialog.modal('hide');
                 }
             });
         }
@@ -138,7 +141,7 @@
                     return;
                 }
                 $this.remove();
-                const message = response.message || $modal.data('load-error');
+                const message = response.message || $modal.data('error');
                 notifyWarning(message);
             });
         });

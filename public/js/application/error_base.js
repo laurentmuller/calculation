@@ -1,10 +1,4 @@
-/* globals Toaster */
-
-/**
- * @typedef CopyEvent
- * @type {object}
- * @property {function} clearSelection
- */
+/* globals Toaster, ClipboardJS */
 
 /**
  * @return {string}
@@ -37,10 +31,9 @@ function getException() {
     range.selectNodeContents(table);
     selection.removeAllRanges();
     selection.addRange(range);
-    // const text = selection.toString().trim();
-    // selection.removeAllRanges();
-    // return text;
-    return selection.toString().trim();
+    const text = selection.toString().trim();
+    selection.removeAllRanges();
+    return text;
 }
 
 /**
@@ -52,22 +45,14 @@ function notify(type, message) {
     Toaster.notify(type, message, getTitle());
 }
 
-/**
- * @param {CopyEvent} e
- */
-function copySuccess(e) {
+function copySuccess() {
     'use strict';
-    e.clearSelection();
     const message = $('.btn-copy').data('success');
     notify(Toaster.NotificationTypes.SUCCESS, message);
 }
 
-/**
- * @param {CopyEvent} e
- */
-function copyError(e) {
+function copyError() {
     'use strict';
-    e.clearSelection();
     const message = $('.btn-copy').data('error');
     notify(Toaster.NotificationTypes.ERROR, message);
 }

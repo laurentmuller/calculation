@@ -246,6 +246,9 @@ final class FileUtils
     public static function makePathRelative(string $endPath, string $startPath, bool $normalize = false): string
     {
         $result = self::getFilesystem()->makePathRelative($endPath, $startPath);
+        if (\is_file($endPath)) {
+            $result = \rtrim($result, '/');
+        }
 
         return $normalize ? self::normalizeDirectory($result) : $result;
     }
@@ -425,20 +428,17 @@ final class FileUtils
      */
     public static function tempDir(?string $dir = null, string $prefix = 'tmp', bool $deleteOnExit = true): ?string
     {
-        try {
-            $dir ??= \sys_get_temp_dir();
-            $base = self::buildPath($dir, $prefix);
-            for ($i = 0; $i < 10; ++$i) {
-                $file = $base . \uniqid((string) \mt_rand(), true);
-                if (!self::exists($file) && self::mkdir($file)) {
-                    if ($deleteOnExit) {
-                        \register_shutdown_function(fn (): bool => self::remove($file));
-                    }
-
-                    return $file;
+        $dir ??= \sys_get_temp_dir();
+        $base = self::buildPath($dir, $prefix);
+        for ($i = 0; $i < 10; ++$i) {
+            $file = $base . \uniqid((string) \mt_rand(), true);
+            if (!self::exists($file) && self::mkdir($file)) {
+                if ($deleteOnExit) {
+                    \register_shutdown_function(fn (): bool => self::remove($file));
                 }
+
+                return $file;
             }
-        } catch (IOException) {
         }
 
         return null;

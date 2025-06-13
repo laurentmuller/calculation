@@ -23,26 +23,26 @@
     <tr>
         <th>Name</th>
         <th class="text-id">Version</th>
-        <th>Description</th>
-        <th>&nbsp;</th>
+        <th colspan="3">Description</th>
     </tr>
 </thead>
 {% endmacro %}
 {% macro rowPackage(package) -%}
-<tr{% if package.license %} data-license="{{ package.license }}"{% endif %}>
-    <td class="e">
-        {{- package.name -}}
-        {%- if package.homepage -%}
-            {{- linkExternal(package.homepage, '', 'mx-1 d-print-none', 'arrow-up-right-from-square', 'about.extern_link') -}}
-        {%- endif -%}
-    </td>
-    <td class="text-id">{{ package.version }}</td>
+{%- set license = package.license|default(false) -%}
+<tr{% if license %} data-license="{{ license }}"{% endif %}>
+    <td class="e">{{- package.name -}}</td>
+    <td class="text-id">{{- package.version -}}</td>
     <td class="text">{{ package.description }}</td>
-    {% if package.license %}
-        <td>{{ link('#', '', 'link-license', 'book-open-reader', 'about.dialog.display') }}</td>
+    {% if license %}
+        <td>{{ link(href: '#', class: 'd-print-none link-license', icon: 'book-open-reader', title: 'about.dialog.display') }}</td>
     {% else %}
         <td>&nbsp;</td>
     {% endif %}
+    {%- if package.homepage -%}
+        <td>{{ linkExternal(href: package.homepage, class: 'd-print-none', icon: 'arrow-up-right-from-square', title: 'about.extern_link') }}</td>
+    {% else %}
+        <td>&nbsp;</td>
+    {%- endif -%}
 </tr>
 {%- endmacro %}
 {% macro headerRoute() -%}

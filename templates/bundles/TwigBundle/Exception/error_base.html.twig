@@ -108,7 +108,6 @@
 {% endif %}
     <button type="button" class="btn btn-copy btn-form btn-success"
             data-clipboard-action="copy"
-            data-clipboard-target="#exception-detail"
             data-success="{{ 'common.copy_success'|trans }}"
             data-error="{{ 'common.copy_error'|trans }}">
         {{- 'common.button_copy'|trans -}}
@@ -118,5 +117,5 @@
 {% block javascripts %}
     {{ parent() }}
     {{ asset_js('vendor/clipboard/clipboard.js') }}
-    {{ asset_js('js/application/errror.js') }}
+    {{ asset_js('js/application/error_base.js') }}
 {% endblock %}

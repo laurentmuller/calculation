@@ -6,7 +6,7 @@
 /**
  * Vendor Files
  */
-<!--#include file="../../vendor/jquery-mark/jquery.mark.js" -->
+<!--#include file="../../build/jquery-mark/jquery.mark.js" -->
 
 /**
  * Specific Files

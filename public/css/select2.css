@@ -1,6 +1,6 @@
 @import 'style.css';
-@import '../vendor/select2/css/select2.css';
-@import '../vendor/select2/css/select2-bootstrap-5-theme.css';
+@import '../build/select2/css/select2.css';
+@import '../build/select2/css/select2-bootstrap-5-theme.css';
 
 /* stylelint-disable selector-class-pattern */
 .select2-container--bootstrap-5 .select2-selection {

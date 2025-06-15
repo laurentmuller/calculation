@@ -86,7 +86,7 @@
 {% block javascripts %}
 {% if is_js_debug %}
     {{ parent() }}
-    {{ asset_js('vendor/clipboard/clipboard.js') }}
+    {{ asset_js('build/clipboard/clipboard.js') }}
     {{ asset_js('js/plugins/plugin-copy.js') }}
     {{ asset_js('js/application/about.js') }}
 {%- else -%}

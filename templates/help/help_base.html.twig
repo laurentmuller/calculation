@@ -26,7 +26,7 @@
 {% block javascripts %}
     {% if is_js_debug %}
         {{ parent() }}
-        {{ asset_js('vendor/jquery-mark/jquery.mark.js') }}
+        {{ asset_js('build/jquery-mark/jquery.mark.js') }}
         {{ asset_js('js/application/help.js') }}
     {% else %}
         {{- asset_js('js/compiled/help.js') }}

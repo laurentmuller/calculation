@@ -1,0 +1,111 @@
+{
+    "copyFiles": [
+        {
+            "from": "node_modules/bootstrap/dist/js/bootstrap.bundle.js",
+            "to": "public/build/bootstrap/"
+        },
+        {
+            "from": [
+                "node_modules/bootstrap-table/dist/bootstrap-table.js",
+                "node_modules/bootstrap-table/dist/bootstrap-table.css"
+            ],
+            "to": "public/build/bootstrap-table/"
+        },
+        {
+            "from": "node_modules/bootstrap-table/dist/extensions/defer-url/bootstrap-table-defer-url.js",
+            "to": "public/build/bootstrap-table/bootstrap-table-defer-url.js"
+        },
+        {
+            "from": "node_modules/bootstrap-table/dist/extensions/custom-view/bootstrap-table-custom-view.js",
+            "to": "public/build/bootstrap-table/bootstrap-table-custom-view.js"
+        },
+        {
+            "from": "node_modules/clipboard/dist/clipboard.js",
+            "to": "public/build/clipboard/"
+        },
+        {
+            "from": "node_modules/currency-flags/dist/currency-flags.css",
+            "to": "public/build/currency-flags/"
+        },
+        {
+            "from": "node_modules/@fortawesome/fontawesome-free/css/all.css",
+            "to": "public/build/font-awesome/css/all.css"
+        },
+        {
+            "from": "node_modules/@fortawesome/fontawesome-free/webfonts/*",
+            "to": "public/build/font-awesome/webfonts/"
+        },
+        {
+            "from": "node_modules/font-mfizz/dist/*.{css,eot,svg,ttf,woff}",
+            "to": "public/build/font-mfizz/"
+        },
+        {
+            "from": "node_modules/highcharts/highcharts.js",
+            "to": "public/build/highcharts/"
+        },
+        {
+            "from": "node_modules/html-to-image/dist/html-to-image.js",
+            "to": "public/build/html-to-image/"
+        },
+        {
+            "from": "node_modules/html5sortable/dist/html5sortable.js",
+            "to": "public/build/html5sortable/"
+        },
+        {
+            "from": "node_modules/jquery/dist/jquery.js",
+            "to": "public/build/jquery/"
+        },
+        {
+            "from": [
+                "node_modules/jquery-contextmenu/dist/jquery.ui.position.js",
+                "node_modules/jquery-contextmenu/dist/jquery.contextMenu.js",
+                "node_modules/jquery-contextmenu/dist/jquery.contextMenu.css",
+                "node_modules/jquery-contextmenu/dist/font/*"
+            ],
+            "to": "public/build/jquery-contextmenu/"
+        },
+        {
+            "from": "node_modules/mark.js/dist/jquery.mark.js",
+            "to": "public/build/jquery-mark/"
+        },
+        {
+            "from": [
+                "node_modules/jquery-validation/dist/jquery.validate.js",
+                "node_modules/jquery-validation/dist/additional-methods.js"
+            ],
+            "to": "public/build/jquery-validation/"
+        },
+        {
+            "from": "node_modules/jquery-validation/dist/localization/messages_fr.js",
+            "to": "public/build/jquery-validation/messages_fr.js"
+        },
+        {
+            "from": "node_modules/mermaid/dist/mermaid.js",
+            "to": "public/build/mermaid/"
+        },
+        {
+            "from": "node_modules/@panzoom/panzoom/dist/panzoom.js",
+            "to": "public/build/panzoom/"
+        },
+        {
+            "from": [
+                "node_modules/select2/dist/js/select2.js",
+                "node_modules/select2/dist/css/select2.css",
+                "node_modules/select2/dist/js/i18n/fr.js"
+            ],
+            "to": "public/build/select2/js/"
+        },
+        {
+            "from": "node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css",
+            "to": "public/build/select2/css/"
+        },
+        {
+            "from": "node_modules/zxcvbn/dist/zxcvbn.js",
+            "to": "public/build/zxcvbn/"
+        }
+    ],
+    "copyFilesSettings": {
+        "whenFileExists": "overwrite",
+        "removeSourceMappingURL": true
+    }
+}

@@ -8,11 +8,12 @@
 /**
  * Vendor Files
  */
-<!--#include file="../../vendor/jquery-mark/jquery.mark.js" -->
-<!--#include file="../../vendor/bootstrap-table/bootstrap-table.js" -->
-<!--#include file="../../vendor/bootstrap-table/bootstrap-table-defer-url.js" -->
-<!--#include file="../../vendor/bootstrap-table/bootstrap-table-custom-view.js" -->
-<!--#include file="../../vendor/jquery-contextmenu/jquery.contextMenu.js" -->
+<!--#include file="../../build/jquery-mark/jquery.mark.js" -->
+<!--#include file="../../build/bootstrap-table/bootstrap-table.js" -->
+<!--#include file="../../build/bootstrap-table/bootstrap-table-defer-url.js" -->
+<!--#include file="../../build/bootstrap-table/bootstrap-table-custom-view.js" -->
+<!--#include file="../../build/jquery-contextmenu/jquery.contextMenu.js" -->
+<!--#include file="../../build/jquery-contextmenu/jquery.ui.position.js" -->
 
 /**
  * Plugin Files

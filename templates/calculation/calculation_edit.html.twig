@@ -80,11 +80,12 @@
         {{ parent() }}
         {{ asset_js('js/application/calculation_error.js') }}
         {% if editable %}
-            {{ asset_js('vendor/jquery-validate/jquery.validate.js') }}
-            {{ asset_js('vendor/jquery-validate/additional-methods.js') }}
-            {{ asset_js('vendor/jquery-validate/messages_fr.js') }}
-            {{ asset_js('vendor/html5sortable/html5sortable.js') }}
-            {{ asset_js('vendor/jquery-contextmenu/jquery.contextMenu.js') }}
+            {{ asset_js('build/jquery-validation/jquery.validate.js') }}
+            {{ asset_js('build/jquery-validation/additional-methods.js') }}
+            {{ asset_js('build/jquery-validation/messages_fr.js') }}
+            {{ asset_js('build/html5sortable/html5sortable.js') }}
+            {{ asset_js('build/jquery-contextmenu/jquery.contextMenu.js') }}
+            {{ asset_js('build/jquery-contextmenu/jquery.ui.position.js') }}
             {{ asset_js('js/extensions/contextmenu-extensions.js') }}
             {{ asset_js('js/extensions/validator-extensions.js') }}
             {{ asset_js('js/extensions/validator-extensions-fr.js') }}

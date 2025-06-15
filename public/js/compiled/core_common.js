@@ -1,8 +1,8 @@
 /**
  * Vendors Files
  */
-<!--#include file="../../vendor/jquery/jquery.js" -->
-<!--#include file="../../vendor/bootstrap/js/bootstrap.bundle.js" -->
+<!--#include file="../../build/jquery/jquery.js" -->
+<!--#include file="../../build/bootstrap/bootstrap.bundle.js" -->
 
 /**
  * Extensions files

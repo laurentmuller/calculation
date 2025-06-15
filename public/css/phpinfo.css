@@ -1,5 +1,5 @@
 @import 'style.css';
-@import '../vendor/font-mfizz/font-mfizz.css';
+@import '../build/font-mfizz/font-mfizz.css';
 
 .phpversion table {
     margin-bottom: 0;

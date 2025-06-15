@@ -6,7 +6,7 @@
 /**
  * Vendor Files
  */
-<!--#include file="../../vendor/zxcvbn/zxcvbn.js" -->
+<!--#include file="../../build/zxcvbn/zxcvbn.js" -->
 
 /**
  * Plugin Files

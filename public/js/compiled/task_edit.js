@@ -6,7 +6,7 @@
 /**
  * Vendor Files
  */
-<!--#include file="../../vendor/html5sortable/html5sortable.js" -->
+<!--#include file="../../build/html5sortable/html5sortable.js" -->
 
 /**
  * Plugin Files

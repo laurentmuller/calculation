@@ -1,5 +1,5 @@
 @import 'style.css';
-@import '../vendor/jquery-contextmenu/jquery.contextMenu.css';
+@import '../build/jquery-contextmenu/jquery.contextMenu.css';
 
 @media (width >= 1200px) {
     .col-xl-4 {

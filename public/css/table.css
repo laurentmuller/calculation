@@ -1,6 +1,6 @@
 @import 'style.css';
-@import '../vendor/bootstrap-table/bootstrap-table.css';
-@import '../vendor/jquery-contextmenu/jquery.contextMenu.css';
+@import '../build/bootstrap-table/bootstrap-table.css';
+@import '../build/jquery-contextmenu/jquery.contextMenu.css';
 
 /* global styles */
 .bootstrap-table .fixed-table-container .fixed-table-body .table {

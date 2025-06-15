@@ -33,7 +33,7 @@
 {% block javascripts %}
 {% if is_js_debug %}
     {{ parent() }}
-    {{ asset_js('vendor/highcharts/highcharts.js') }}
+    {{ asset_js('build/highcharts/highcharts.js') }}
     {{ asset_js('js/plugins/plugin-rowlink.js') }}
     {{ asset_js('js/application/chart.js') }}
 {% else %}

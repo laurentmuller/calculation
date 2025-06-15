@@ -6,9 +6,9 @@
 /**
  * Vendor Files
  */
-<!--#include file="../../vendor/jquery-validate/jquery.validate.js" -->
-<!--#include file="../../vendor/jquery-validate/additional-methods.js" -->
-<!--#include file="../../vendor/jquery-validate/messages_fr.js" -->
+<!--#include file="../../build/jquery-validation/jquery.validate.js" -->
+<!--#include file="../../build/jquery-validation/additional-methods.js" -->
+<!--#include file="../../build/jquery-validation/messages_fr.js" -->
 
 /**
  * Extensions

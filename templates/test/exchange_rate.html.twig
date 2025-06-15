@@ -93,14 +93,14 @@
 {%- endblock %}
 {# stylesheets #}
 {% block stylesheets %}
-{{ asset_css('vendor/currency-flags/currency-flags.css') }}
+{{ asset_css('build/currency-flags/currency-flags.css') }}
 {{ asset_css('css/select2.css') }}
 {%- endblock -%}
 {# javascripts #}
 {% block javascripts %}
 {{ parent() }}
-{{ asset_js('vendor/select2/js/select2.js') }}
-{{ asset_js('vendor/select2/js/i18n/fr.js') }}
+{{ asset_js('build/select2/js/select2.js') }}
+{{ asset_js('build/select2/js/i18n/fr.js') }}
 {{ asset_js('js/extensions/select2-extensions.js') }}
 {{ asset_js('js/test/exchange-rate.js') }}
 {%- endblock %}

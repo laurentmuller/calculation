@@ -3,7 +3,7 @@
 /**
  * Vendor Files
  */
-<!--#include file="../../vendor/clipboard/clipboard.js" -->
+<!--#include file="../../build/clipboard/clipboard.js" -->
 
 /**
  * Dependencies

@@ -6,8 +6,8 @@
 /**
  * Vendor Files
  */
-<!--#include file="../../vendor/mermaid/mermaid.js" -->
-<!--#include file="../../vendor/mermaid/panzoom.js" -->
+<!--#include file="../../build/mermaid/mermaid.js" -->
+<!--#include file="../../build/panzoom/panzoom.js" -->
 
 /**
  * Specific Files

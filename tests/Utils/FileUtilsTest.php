@@ -394,6 +394,9 @@ class FileUtilsTest extends TestCase
 
     public function testTempDirInvalid(): void
     {
+        if ($this->isLinux()) {
+            self::markTestSkipped('Unable to test under Linux.');
+        }
         $actual = FileUtils::tempDir('b:/');
         self::assertNull($actual);
     }

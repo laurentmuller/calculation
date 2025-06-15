@@ -6,7 +6,8 @@
 /**
  * Vendor Files
  */
-<!--#include file="../../vendor/jquery-contextmenu/jquery.contextMenu.js" -->
+<!--#include file="../../build/jquery-contextmenu/jquery.contextMenu.js" -->
+<!--#include file="../../build/jquery-contextmenu/jquery.ui.position.js" -->
 
 /**
  * ../plugins files

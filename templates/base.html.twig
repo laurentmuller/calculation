@@ -43,10 +43,10 @@
     <link rel="apple-touch-icon" sizes="152x152" href="{{ asset_icon(152) }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset_icon(180) }}">
     {# stylesheets #}
-    {{ preload_css('build/css/bootstrap.css') }}
-    {{ preload_css('vendor/font-awesome/css/all.css') }}
-    {{ asset_css('build/css/bootstrap.css') }}
-    {{ asset_css('vendor/font-awesome/css/all.css') }}
+    {{ preload_css('build/bootstrap/bootstrap.css') }}
+    {{ preload_css('build/font-awesome/css/all.css') }}
+    {{ asset_css('build/bootstrap/bootstrap.css') }}
+    {{ asset_css('build/font-awesome/css/all.css') }}
     {% block stylesheets %}
         {{ asset_css('css/style.css') }}
     {% endblock %}
@@ -88,8 +88,8 @@
 <noscript>{{ 'common.no_script_support'|trans }}</noscript>
 {% block javascripts %}
     {% if is_js_debug %}
-        {{ asset_js('vendor/jquery/jquery.js') }}
-        {{ asset_js('vendor/bootstrap/js/bootstrap.bundle.js') }}
+        {{ asset_js('build/jquery/jquery.js') }}
+        {{ asset_js('build/bootstrap/bootstrap.bundle.js') }}
         {{ asset_js('js/extensions/array-extensions.js') }}
         {{ asset_js('js/extensions/jquery-extensions.js') }}
         {{ asset_js('js/extensions/string-extensions.js') }}

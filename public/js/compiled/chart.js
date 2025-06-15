@@ -6,7 +6,7 @@
 /**
  * Vendor Files
  */
-<!--#include file="../../vendor/highcharts/highcharts.js" -->
+<!--#include file="../../build/highcharts/highcharts.js" -->
 
 /**
  * Plugin Files

@@ -20,20 +20,16 @@ use PHPUnit\Framework\TestCase;
 
 class DatabaseReportTest extends TestCase
 {
-    public function testRender(): void
-    {
-        $database = [
-            'Name' => 'Database',
-            'Version' => '5.7.32',
-        ];
-        $configuration = [
-            'Key' => 'Value',
-            'Off' => 'off',
-        ];
-        $document = $this->createDocument($database, $configuration);
-        $actual = $document->render();
-        self::assertTrue($actual);
-    }
+    public const CONFIGURATION = [
+        'Key' => 'Value',
+        'On' => 'on',
+        'Off' => 'off',
+    ];
+
+    public const DATABASE = [
+        'Name' => 'Database',
+        'Version' => '5.7.32',
+    ];
 
     public function testRenderEmpty(): void
     {
@@ -42,13 +38,23 @@ class DatabaseReportTest extends TestCase
         self::assertFalse($actual);
     }
 
+    public function testRenderNoConfiguration(): void
+    {
+        $document = $this->createDocument(self::DATABASE, []);
+        $actual = $document->render();
+        self::assertTrue($actual);
+    }
+
     public function testRenderNoDatabase(): void
     {
-        $configuration = [
-            'Key' => 'Value',
-            'Off' => 'off',
-        ];
-        $document = $this->createDocument([], $configuration);
+        $document = $this->createDocument([], self::CONFIGURATION);
+        $actual = $document->render();
+        self::assertTrue($actual);
+    }
+
+    public function testRenderSuccess(): void
+    {
+        $document = $this->createDocument(self::DATABASE, self::CONFIGURATION);
         $actual = $document->render();
         self::assertTrue($actual);
     }
@@ -61,6 +67,10 @@ class DatabaseReportTest extends TestCase
             ->willReturn($database);
         $service->method('getConfiguration')
             ->willReturn($configuration);
+        $service->method('isEnabledValue')
+            ->willReturnCallback(fn (string $value): bool => 'on' === $value);
+        $service->method('isDisabledValue')
+            ->willReturnCallback(fn (string $value): bool => 'off' === $value);
 
         return new DatabaseReport($controller, $service);
     }

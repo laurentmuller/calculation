@@ -20,39 +20,46 @@ use PHPUnit\Framework\TestCase;
 
 class PhpIniReportTest extends TestCase
 {
-    public function testRender(): void
+    public function testRenderEmpty(): void
     {
-        $data = [
-            'bcmath' => [
-                'Single' => 'Enabled',
-                'Disabled' => 'disabled',
-                'Color' => '#FF8000',
-                'No Value' => 'no value',
-                'Both Values' => [
-                    'local' => 0,
-                    'master' => 1,
-                ],
-            ],
-            'Empty' => [],
-        ];
-        $controller = $this->createMock(AbstractController::class);
-        $service = $this->createMock(PhpInfoService::class);
-        $service->method('asArray')
-            ->willReturn($data);
-
-        $report = new PhpIniReport($controller, $service);
+        $report = $this->createReport([]);
         $actual = $report->render();
         self::assertTrue($actual);
     }
 
-    public function testRenderEmpty(): void
+    public function testRenderSuccess(): void
+    {
+        $data = [
+            'First Group' => [
+                'single' => 'single',
+                'disabled' => 'disabled',
+                'no value' => 'no value',
+                'entry' => ['local' => 'local', 'master' => 'master'],
+                'color' => ['local' => '#FF8000', 'master' => '#0000BB'],
+            ],
+            'Second Group' => [
+                'other' => 'other',
+            ],
+            'Empty' => [],
+        ];
+        $report = $this->createReport($data);
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
+    private function createReport(array $data): PhpIniReport
     {
         $controller = $this->createMock(AbstractController::class);
         $service = $this->createMock(PhpInfoService::class);
+        $service->method('getVersion')
+            ->willReturn(\PHP_VERSION);
         $service->method('asArray')
-            ->willReturn([]);
-        $report = new PhpIniReport($controller, $service);
-        $actual = $report->render();
-        self::assertTrue($actual);
+            ->willReturn($data);
+        $service->method('isNoValue')
+            ->willReturnCallback(fn (string $value): bool => 'no value' === $value);
+        $service->method('isColor')
+            ->willReturnCallback(fn (string $value): bool => \str_starts_with($value, '#'));
+
+        return new PhpIniReport($controller, $service);
     }
 }

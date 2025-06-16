@@ -20,7 +20,14 @@ use PHPUnit\Framework\TestCase;
 
 class PhpIniDocumentTest extends TestCase
 {
-    public function testRender(): void
+    public function testRenderEmpty(): void
+    {
+        $document = $this->createDocument([]);
+        $actual = $document->render();
+        self::assertTrue($actual);
+    }
+
+    public function testRenderSuccess(): void
     {
         $data = [
             'First Group' => [
@@ -33,22 +40,13 @@ class PhpIniDocumentTest extends TestCase
             'Second Group' => [
                 'other' => 'other',
             ],
+            'Empty' => [],
         ];
         $document = $this->createDocument($data);
         $actual = $document->render();
         self::assertTrue($actual);
     }
 
-    public function testRenderEmpty(): void
-    {
-        $document = $this->createDocument([]);
-        $actual = $document->render();
-        self::assertTrue($actual);
-    }
-
-    /**
-     * @phpstan-param array<string, array<string, array{local: scalar, master: scalar}|scalar>> $data
-     */
     private function createDocument(array $data): PhpIniDocument
     {
         $controller = $this->createMock(AbstractController::class);
@@ -57,6 +55,10 @@ class PhpIniDocumentTest extends TestCase
             ->willReturn(\PHP_VERSION);
         $service->method('asArray')
             ->willReturn($data);
+        $service->method('isNoValue')
+            ->willReturnCallback(fn (string $value): bool => 'no value' === $value);
+        $service->method('isColor')
+            ->willReturnCallback(fn (string $value): bool => \str_starts_with($value, '#'));
 
         return new PhpIniDocument($controller, $service);
     }

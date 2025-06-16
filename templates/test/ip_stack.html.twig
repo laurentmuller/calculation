@@ -56,6 +56,7 @@
     {{ _self.output_header('Générale') }}
     {{ _self.output_row('Adresse IP', results.ip|default(false)) }}
     {{ _self.output_row('Type', results.type|default(false)) }}
+    {{ _self.output_row("Nom d'hôte", results.hostname|default(false)) }}
     {{ _self.output_header('Position') }}
     {{ _self.output_row('Continent', results.continent_name|default(false)) }}
     {{ _self.output_country(results.country_name|default(false), results.location.country_flag_emoji|default(false)) }}

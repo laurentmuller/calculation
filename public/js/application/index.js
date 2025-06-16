@@ -312,13 +312,17 @@
             // remove separators
             $('#calculations .dropdown-menu').removeSeparators();
 
-            // handle key down event
-            const $body = $('body');
+            // handle key down event include context-menu
+            const $body = $(document.body);
             const handler = createKeydownHandler($calculations);
             const selector = ':input, .btn, .dropdown-item, .rowlink-skip, .modal, a';
             $body.on('focus', selector, function () {
                 $body.off('keydown', handler);
+            }).on('contextmenu', function () {
+                $body.off('keydown', handler);
             }).on('blur', selector, function () {
+                $body.on('keydown', handler);
+            }).on('contextmenu:hide', function () {
                 $body.on('keydown', handler);
             }).on('keydown', handler);
         }

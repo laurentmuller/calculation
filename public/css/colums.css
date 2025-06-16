@@ -8,6 +8,16 @@
     padding-left: 0.45rem !important;
 }
 
+th.text-border::before {
+    content: "";
+    position: absolute;
+    left: -0.2rem;
+    top: 0;
+    bottom: 0;
+    width: 0.2rem;
+    border-left: 0.2rem solid var(--bs-light-bg-subtle) !important;
+}
+
 .text-currency {
     text-align: right;
     width: 90px;

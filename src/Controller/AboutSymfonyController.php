@@ -61,9 +61,9 @@ class AboutSymfonyController extends AbstractController
     public function license(
         #[MapQueryParameter]
         string $file,
-        MarkdownInterface $markdown,
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
+        MarkdownInterface $markdown,
     ): JsonResponse {
         $file = FileUtils::buildPath($projectDir, $file);
         if (!FileUtils::exists($file)) {

@@ -378,6 +378,13 @@ function initializeContextMenus($table) {
         return true;
     };
     $table.getTableContainer().initContextMenu(selector, hideMenus);
+
+    // key handler
+    $(document.body).on('contextmenu', function () {
+        $table.disableKeys();
+    }).on('contextmenu:hide', function () {
+        $table.enableKeys();
+    });
 }
 
 /**

@@ -94,7 +94,7 @@ abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSub
     /**
      * @phpstan-param TEntity $entity
      *
-     * @return array<string, mixed>
+     * @return array<string, string|null>
      */
     abstract protected function mapEntity(EntityInterface $entity): array;
 

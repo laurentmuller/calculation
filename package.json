@@ -35,9 +35,9 @@
         "update": "npm update",
         "outdated": "npm outdated",
         "stylelint": "npx stylelint public/css/*.css",
-        "clean": "del-cli public/build",
-        "generate": "sass --no-source-map scss:public/build/bootstrap",
-        "copy": "copy-files-from-to --config package-copy.json",
+        "clean": "del-cli public/build -f",
+        "generate": "sass scss:public/build/bootstrap -q --no-source-map",
+        "copy": "copy-files-from-to --config package-copy.json --silent",
         "build": "npm-run-all clean generate copy"
     },
     "jshintConfig": {

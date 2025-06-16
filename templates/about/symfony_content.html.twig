@@ -1,5 +1,5 @@
 {% import 'about/_about_macro.html.twig' as tools %}
-{% from 'macros/_icons.html.twig' import linkExternal, link %}
+{% from 'macros/_icons.html.twig' import linkExternal, link, icon %}
 {# macros #}
 {% macro headerLinkInfo(title, id, countable = null) -%}
 <div class="border-bottom" id="{{ id }}-header">
@@ -28,21 +28,26 @@
 </thead>
 {% endmacro %}
 {% macro rowPackage(package) -%}
-{%- set license = package.license|default(false) -%}
-<tr{% if license %} data-license="{{ license }}"{% endif %}>
+<tr>
     <td class="e">{{- package.name -}}</td>
     <td class="text-id">{{- package.version -}}</td>
     <td class="text">{{ package.description }}</td>
-    {% if license %}
-        <td>{{ link(href: '#', class: 'd-print-none link-license', icon: 'book-open-reader', title: 'about.dialog.display') }}</td>
-    {% else %}
-        <td>&nbsp;</td>
-    {% endif %}
-    {%- if package.homepage -%}
-        <td>{{ linkExternal(href: package.homepage, class: 'd-print-none', icon: 'arrow-up-right-from-square', title: 'about.extern_link') }}</td>
-    {% else %}
-        <td>&nbsp;</td>
-    {%- endif -%}
+    <td>
+        {%- if package.license -%}
+            <a href="#" class="d-print-none link-license" title="{{ 'about.dialog.display'|trans }}" data-file="{{ package.license }}">
+                {{- icon('book-open-reader') -}}
+            </a>
+        {%- else -%}
+            &nbsp;
+        {%- endif -%}
+    </td>
+    <td>
+        {%- if package.homepage -%}
+            {{- linkExternal(href: package.homepage, class: 'd-print-none', icon: 'arrow-up-right-from-square', title: 'about.extern_link') -}}
+        {%- else -%}
+            &nbsp;
+        {%- endif -%}
+    </td>
 </tr>
 {%- endmacro %}
 {% macro headerRoute() -%}

@@ -10,7 +10,7 @@
      */
     function notifyWarning(message) {
         const type = Toaster.NotificationTypes.WARNING;
-        const title = $('#main .card-title').text();
+        const title = $('#license-modal .modal-header').text().trim();
         Toaster.notify(type, message, title);
     }
 
@@ -60,18 +60,18 @@
          *  @param {string} [content]
          */
         displayLicense: function (content) {
-            const $row = $(this);
+            const $link = $(this);
             if (content) {
-                $row.data('content', content);
+                $link.data('content', content);
             } else {
-                content = $row.data('content');
+                content = $link.data('content');
             }
             $('#license-content').html(content);
 
             // modal dialog
             const $dialog = $('#license-modal');
             $dialog.one('hidden.bs.modal', function () {
-                $row.find('.link-license').scrollInViewport().trigger('focus');
+                $link.scrollInViewport().trigger('focus');
             }).modal('show');
 
             // clipboard
@@ -117,31 +117,29 @@
         }).on('click', '#license-modal a', function (e) {
             e.preventDefault();
             window.open(e.target.href, '_blank');
-        }).on('click', 'tr[data-license] .link-license', function (e) {
+        }).on('click', '.link-license[data-file]', function (e) {
             e.preventDefault();
             const $this = $(this);
-            /** @type {JQuery|HTMLElement|*} */
-            const $row = $this.parents('tr');
-            if ($row.data('content')) {
-                $row.displayLicense();
+            if ($this.data('content')) {
+                $this.displayLicense();
                 return;
             }
             const $modal = $('#license-modal');
-            const file = $row.data('license');
+            const file = $this.data('file');
             const url = $modal.data('url');
             if (!file || !url) {
-                $this.remove();
+                $this.fadeOut();
                 const message = $modal.data('load-error');
                 notifyWarning(message);
                 return;
             }
             $.getJSON(url, {'file': file}, function (response) {
                 if (response.result && response.content) {
-                    $row.displayLicense(response.content);
+                    $this.displayLicense(response.content);
                     return;
                 }
-                $this.remove();
-                const message = response.message || $modal.data('error');
+                $this.fadeOut();
+                const message = response.message || $modal.data('found-error');
                 notifyWarning(message);
             });
         });

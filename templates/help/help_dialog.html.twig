@@ -157,15 +157,14 @@
     {% if image %}{{- output_image(image, false) -}}{% endif %}
     {% if action %}
         <p class="mt-2 mb-0">{{ 'help.labels.edit_actions'|trans }}</p>
-        {{ output_table_actions({action}, service) }}
+        {{ output_table_actions([action], service) }}
     {% endif %}
 {%- endif %}
 {# links and entity #}
 {% set links = dialog.links|default([]) %}
 {# entity #}
 {% if dialog.entity|default(false) -%}
-    {% set link = {id: dialog.entity, type: 'entity'} %}
-    {% set links = links|merge({link}) %}
+    {% set links = links|merge({id: dialog.entity, type: 'entity'}) %}
 {%- endif %}
 {% if links|length -%}
     {{ output_links(links, service) }}

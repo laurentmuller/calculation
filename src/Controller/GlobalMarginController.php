@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\EditEntityRoute;
 use App\Attribute\ExcelRoute;
 use App\Attribute\GetPostRoute;
 use App\Attribute\IndexRoute;
@@ -53,7 +52,7 @@ class GlobalMarginController extends AbstractEntityController
         parent::__construct($repository);
     }
 
-    #[GetPostRoute(path: '/edit', name: EditEntityRoute::NAME)]
+    #[GetPostRoute(path: '/edit', name: 'edit')]
     public function edit(Request $request): Response
     {
         $this->checkPermission(

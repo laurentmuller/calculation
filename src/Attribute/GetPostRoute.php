@@ -30,12 +30,11 @@ class GetPostRoute extends Route
      */
     public function __construct(string $path, string $name, array $requirements = [])
     {
-        parent::__construct($path, $name, $requirements);
-    }
-
-    #[\Override]
-    public function getMethods(): array
-    {
-        return [Request::METHOD_GET, Request::METHOD_POST];
+        parent::__construct(
+            path: $path,
+            name: $name,
+            requirements: $requirements,
+            methods: [Request::METHOD_GET, Request::METHOD_POST]
+        );
     }
 }

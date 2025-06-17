@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Attribute;
 
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
 /**
@@ -22,13 +21,8 @@ use Symfony\Component\Routing\Requirement\Requirement;
 #[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
 class EditEntityRoute extends GetPostRoute
 {
-    /**
-     * This route name.
-     */
-    final public const NAME = 'edit';
-
     public function __construct()
     {
-        parent::__construct('/edit/{id}', self::NAME, ['id' => Requirement::DIGITS]);
+        parent::__construct('/edit/{id}', 'edit', ['id' => Requirement::DIGITS]);
     }
 }

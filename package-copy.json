@@ -13,11 +13,11 @@
         },
         {
             "from": "node_modules/bootstrap-table/dist/extensions/defer-url/bootstrap-table-defer-url.js",
-            "to": "public/build/bootstrap-table/bootstrap-table-defer-url.js"
+            "to": "public/build/bootstrap-table/"
         },
         {
             "from": "node_modules/bootstrap-table/dist/extensions/custom-view/bootstrap-table-custom-view.js",
-            "to": "public/build/bootstrap-table/bootstrap-table-custom-view.js"
+            "to": "public/build/bootstrap-table/"
         },
         {
             "from": "node_modules/clipboard/dist/clipboard.js",
@@ -28,12 +28,11 @@
             "to": "public/build/currency-flags/"
         },
         {
-            "from": "node_modules/@fortawesome/fontawesome-free/css/all.css",
-            "to": "public/build/font-awesome/css/all.css"
-        },
-        {
-            "from": "node_modules/@fortawesome/fontawesome-free/webfonts/*",
-            "to": "public/build/font-awesome/webfonts/"
+            "from": [
+                "node_modules/@fortawesome/fontawesome-free/css/all.css",
+                "node_modules/@fortawesome/fontawesome-free/webfonts/*"
+            ],
+            "to": "public/build/font-awesome/css"
         },
         {
             "from": "node_modules/font-mfizz/dist/*.{css,eot,svg,ttf,woff}",
@@ -77,7 +76,7 @@
         },
         {
             "from": "node_modules/jquery-validation/dist/localization/messages_fr.js",
-            "to": "public/build/jquery-validation/messages_fr.js"
+            "to": "public/build/jquery-validation/"
         },
         {
             "from": "node_modules/mermaid/dist/mermaid.js",
@@ -90,8 +89,8 @@
         {
             "from": [
                 "node_modules/select2/dist/js/select2.js",
-                "node_modules/select2/dist/css/select2.css",
-                "node_modules/select2/dist/js/i18n/fr.js"
+                "node_modules/select2/dist/js/i18n/fr.js",
+                "node_modules/select2/dist/css/select2.css"
             ],
             "to": "public/build/select2/js/"
         },

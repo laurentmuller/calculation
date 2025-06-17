@@ -1,9 +1,11 @@
 {% extends 'chart/chart_base.html.twig' %}
 {# add a month option #}
 {% macro month(value, selected) -%}
-<option value="{{ value }}"{% if selected %} selected{% endif %}>
-    {{- 'counters.months'|trans({count: value}) -}}
-</option>
+<li>
+    <a href="{{ path('chart_month_index', {count: value}) }}" class="dropdown-item{% if selected %} active{% endif %}">
+        {{- 'counters.months'|trans({count: value}) -}}
+    </a>
+</li>
 {%- endmacro %}
 {# format the value with arrow #}
 {% macro cell_value(value, previous, user_percent = false) -%}
@@ -37,13 +39,15 @@
 <div class="d-flex-wrap-center">
     {{ parent() }}
     {% if allowed_months|length > 1 %}
-        <div class="d-flex-wrap-center ms-sm-auto">
-            <label class="form-label mb-0" for="months">{{ 'chart.month.fields.period'|trans }}</label>
-            <select class="form-select form-select-sm w-auto d-print-none" id="months" name="months" data-months="{{ months }}" data-url="{{ url('chart_month_index') }}">
-            {% for current in allowed_months %}
-                {{ _self.month(current, current == months) }}
-            {% endfor %}
-            </select>
+        <div class="dropdown ms-sm-auto">
+            <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{- 'chart.month.fields.period'|trans -}}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-sm">
+                {% for current in allowed_months %}
+                    {{ _self.month(current, current == months) }}
+                {% endfor %}
+            </ul>
         </div>
     {% endif %}
 </div>

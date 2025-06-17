@@ -299,18 +299,12 @@ abstract class AbstractController extends BaseController
      * {inheritDoc}.
      */
     #[\Override]
-    protected function denyAccessUnlessGranted(
-        mixed $attribute,
-        mixed $subject = null,
-        string $message = ''
-    ): void {
+    protected function denyAccessUnlessGranted(mixed $attribute, mixed $subject = null, ?string $message = null): void
+    {
         if ($attribute instanceof EntityPermission) {
             $attribute = $attribute->name;
         }
-        if ('' === $message) {
-            $message = $this->trans('http_error_403.description');
-        }
-
+        $message ??= $this->trans('http_error_403.description');
         parent::denyAccessUnlessGranted($attribute, $subject, $message);
     }
 

@@ -20,7 +20,7 @@ namespace App\Attribute;
 class IndexRoute extends GetRoute
 {
     /**
-     * This path.
+     * This route path.
      */
     final public const PATH = '';
 

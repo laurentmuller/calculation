@@ -1535,7 +1535,7 @@ chart:
     month:
         title: Calculations par mois
         row: Afficher les calculations pour %name%
-        tooltip: '<b>Note :</b> Cliquez sur une colonne du graphique ou une ligne de la table pour afficher la liste correspondante des calculations.'
+        tooltip: '<b>Note :</b> Cliquez sur une colonne du graphique ou une ligne de la table pour afficher les calculations correspondantes.'
         error: Le nombre de mois à afficher doit être positif.
         fields:
             month: Mois
@@ -1543,7 +1543,7 @@ chart:
     state:
         title: Calculations par statut
         row: Afficher les calculations pour le statut %name%
-        tooltip: '<b>Note :</b> Cliquez sur un secteur du graphique ou une ligne de la table pour afficher la liste correspondante des calculations.'
+        tooltip: '<b>Note :</b> Cliquez sur un secteur du graphique ou une ligne de la table pour afficher les calculations correspondantes.'
 command:
     list:
         title: Commandes

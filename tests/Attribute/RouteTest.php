@@ -210,8 +210,5 @@ class RouteTest extends TestCase
         self::assertSame($name, $actual->getName());
         self::assertSame($methods, $actual->getMethods());
         self::assertSame($requirements, $actual->getRequirements());
-        // check override methods
-        $actual->setMethods('fake');
-        self::assertSame($methods, $actual->getMethods());
     }
 }

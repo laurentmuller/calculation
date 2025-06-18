@@ -47,7 +47,7 @@ class HelpReport extends AbstractReport
     public function __construct(AbstractController $controller, private readonly HelpService $service)
     {
         parent::__construct($controller);
-        $this->setTitleTrans('help.title');
+        $this->setTranslatedTitle('help.title');
         $this->defaultStyle = PdfStyle::default();
         $this->headerStyle = PdfStyle::getHeaderStyle();
     }

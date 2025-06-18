@@ -17,7 +17,7 @@ use App\Enums\EntityName;
 use App\Form\AbstractHelperType;
 use App\Form\FormHelper;
 use App\Interfaces\RoleInterface;
-use App\Service\RoleHierarchyService;
+use App\Service\RoleService;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\Event\PreSetDataEvent;
 
@@ -29,7 +29,7 @@ class RightsType extends AbstractHelperType
     public function __construct(
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
-        private readonly RoleHierarchyService $service
+        protected readonly RoleService $service
     ) {
     }
 
@@ -46,6 +46,18 @@ class RightsType extends AbstractHelperType
         $helper->listenerPreSetData($this->onPreSetData(...));
     }
 
+    protected function translateEnabled(string $enabled): string
+    {
+        $enabled = \filter_var($enabled, \FILTER_VALIDATE_BOOLEAN);
+
+        return $this->service->translateEnabled($enabled);
+    }
+
+    protected function translateRole(RoleInterface|string $role): string
+    {
+        return $this->service->translateRole($role);
+    }
+
     private function addRightType(FormHelper $helper, EntityName $entity): void
     {
         $helper->field($entity->getRightsField())
@@ -55,7 +67,7 @@ class RightsType extends AbstractHelperType
 
     private function onPreSetData(PreSetDataEvent $event): void
     {
-        /** @phpstan-var mixed $data */
+        /** @phpstan-var ?RoleInterface $data */
         $data = $event->getData();
         $form = $event->getForm();
         if (!$this->service->hasRole($data, RoleInterface::ROLE_ADMIN)) {

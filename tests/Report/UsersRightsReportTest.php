@@ -20,6 +20,7 @@ use App\Report\UsersRightsReport;
 use App\Service\ApplicationService;
 use App\Service\FontAwesomeService;
 use App\Service\RoleBuilderService;
+use App\Service\RoleService;
 use PHPUnit\Framework\TestCase;
 
 class UsersRightsReportTest extends TestCase
@@ -37,14 +38,20 @@ class UsersRightsReportTest extends TestCase
         $controller = $this->createMock(AbstractController::class);
         $controller->method('getApplicationService')
             ->willReturn($application);
-
+        $roleService = $this->createMock(RoleService::class);
         $fontAwesomeService = $this->createMock(FontAwesomeService::class);
 
         $user = new User();
         $user->setUsername('UserName')
             ->setRole(RoleInterface::ROLE_SUPER_ADMIN);
 
-        $report = new UsersRightsReport($controller, [$user], $fontAwesomeService, $roleBuilderService);
+        $report = new UsersRightsReport(
+            $controller,
+            [$user],
+            $roleService,
+            $fontAwesomeService,
+            $roleBuilderService
+        );
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -52,10 +59,17 @@ class UsersRightsReportTest extends TestCase
     public function testRenderEmpty(): void
     {
         $controller = $this->createMock(AbstractController::class);
+        $roleService = $this->createMock(RoleService::class);
         $fontAwesomeService = $this->createMock(FontAwesomeService::class);
         $roleBuilderService = $this->createMock(RoleBuilderService::class);
 
-        $report = new UsersRightsReport($controller, [], $fontAwesomeService, $roleBuilderService);
+        $report = new UsersRightsReport(
+            $controller,
+            [],
+            $roleService,
+            $fontAwesomeService,
+            $roleBuilderService
+        );
         $actual = $report->render();
         self::assertFalse($actual);
     }

@@ -142,8 +142,10 @@ abstract class AbstractReport extends PdfDocument
      *                                                             (may also be an object that can be cast to string)
      * @param array                                    $parameters an array of parameters for the message
      */
-    public function setDescriptionTrans(string|\Stringable|TranslatableInterface $id, array $parameters = []): static
-    {
+    public function setTranslatedDescription(
+        string|\Stringable|TranslatableInterface $id,
+        array $parameters = []
+    ): static {
         $description = $this->trans($id, $parameters);
         $this->getHeader()->setDescription($description);
 
@@ -159,7 +161,7 @@ abstract class AbstractReport extends PdfDocument
      * @param bool                                     $isUTF8     indicates if the title is encoded in
      *                                                             ISO-8859-1 (false) or UTF-8 (true)
      */
-    public function setTitleTrans(
+    public function setTranslatedTitle(
         string|\Stringable|TranslatableInterface $id,
         array $parameters = [],
         bool $isUTF8 = false

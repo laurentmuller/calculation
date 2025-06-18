@@ -49,7 +49,7 @@ class HeaderNameCommandTest extends CommandTestCase
         ];
 
         $output = $this->execute(self::COMMAND_NAME, $input);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testDryRun(): void
@@ -66,7 +66,7 @@ class HeaderNameCommandTest extends CommandTestCase
         ];
 
         $output = $this->execute(self::COMMAND_NAME, $input);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testInvalidPattern(): void
@@ -86,7 +86,7 @@ class HeaderNameCommandTest extends CommandTestCase
         ];
 
         $output = $this->execute(self::COMMAND_NAME, $input, [], Command::INVALID);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testNoResult(): void
@@ -102,7 +102,7 @@ class HeaderNameCommandTest extends CommandTestCase
         ];
 
         $output = $this->execute(self::COMMAND_NAME, $input);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testSetContent(): void
@@ -120,7 +120,7 @@ class HeaderNameCommandTest extends CommandTestCase
         ];
 
         $output = $this->execute(self::COMMAND_NAME, $input);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     private function replaceCssContents(): void

@@ -39,7 +39,7 @@ class UcFirstCommandTest extends CommandTestCase
             '--class' => Calculation::class,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testExecute(): void
@@ -55,7 +55,7 @@ class UcFirstCommandTest extends CommandTestCase
             '--field' => 'customer',
         ];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testExecuteDryRun(): void
@@ -73,7 +73,7 @@ class UcFirstCommandTest extends CommandTestCase
             '--dry-run' => true,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testExecuteEmpty(): void
@@ -84,7 +84,7 @@ class UcFirstCommandTest extends CommandTestCase
             '--field' => 'customer',
         ];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testExecuteEmptyDryRun(): void
@@ -96,7 +96,7 @@ class UcFirstCommandTest extends CommandTestCase
             '--dry-run' => true,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testExecuteMissingClass(): void
@@ -119,7 +119,7 @@ class UcFirstCommandTest extends CommandTestCase
             'interactive' => false,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input, $options, Command::INVALID);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testInvalidFieldName(): void
@@ -131,7 +131,7 @@ class UcFirstCommandTest extends CommandTestCase
             '--dry-run' => true,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input, [], Command::INVALID);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testNotInteractive(): void

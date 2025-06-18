@@ -237,11 +237,13 @@ class ApplicationServiceTest extends KernelServiceTestCase
     {
         $service = $this->getApplicationService();
         self::assertFalse($service->isQrCode());
+
         $actual = $service->setProperty(PropertyServiceInterface::P_QR_CODE, true);
         self::assertTrue($actual);
         self::assertTrue($service->isQrCode());
 
-        $service->removeProperty(PropertyServiceInterface::P_QR_CODE);
+        $actual = $service->removeProperty(PropertyServiceInterface::P_QR_CODE);
+        self::assertTrue($actual);
         self::assertFalse($service->isQrCode());
     }
 

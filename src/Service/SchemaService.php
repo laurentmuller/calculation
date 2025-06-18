@@ -57,7 +57,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     indexes: SchemaIndexType[],
  *     associations: SchemaAssociationType[],
  *     records: int,
- *     size: float,
+ *     size: int,
  *     sql_rows: string}
  */
 class SchemaService
@@ -68,8 +68,8 @@ class SchemaService
     private const SQL_ALL = <<<SQL_QUERY
             SELECT
                 TABLE_NAME AS 'name',
-                TABLE_ROWS as 'records',
-                (data_length + index_length) AS 'size'
+                TABLE_ROWS  AS 'records',
+                (data_length + index_length) / 1024 AS 'size'
             FROM
                 information_schema.tables
             WHERE
@@ -161,11 +161,10 @@ class SchemaService
             /** @phpstan-var array{name: string, records: int, size: int} $row */
             foreach ($rows as $row) {
                 $name = $this->mapTableName($row['name']);
-                if (!\array_key_exists($name, $tables)) {
-                    continue;
+                if (\array_key_exists($name, $tables)) {
+                    $tables[$name]['records'] = $row['records'];
+                    $tables[$name]['size'] = $row['size'];
                 }
-                $tables[$name]['records'] = $row['records'];
-                $tables[$name]['size'] = (float) $row['size'] / 1024.0;
             }
         } catch (\Doctrine\DBAL\Exception) {
             // ignore
@@ -201,14 +200,13 @@ class SchemaService
      */
     private function createSchemaTable(Table $table): array
     {
-        /** @phpstan-var SchemaTableType */
         return [
             'name' => $this->mapTableName($table),
             'columns' => $this->getColumns($table),
             'indexes' => $this->getIndexes($table),
             'associations' => $this->getAssociations($table),
             'records' => 0,
-            'size' => 0.0,
+            'size' => 0,
             'sql_rows' => $this->getSqlCounter($table),
         ];
     }
@@ -313,14 +311,14 @@ class SchemaService
         }
 
         $type = $column->getType();
-        if ($type instanceof BooleanType) {
-            return StringUtils::encodeJson(\filter_var($default, \FILTER_VALIDATE_BOOLEAN));
-        }
         if ($type instanceof FloatType && '0' === $default) {
             return '0.00';
         }
+        if ($type instanceof BooleanType) {
+            $default = StringUtils::encodeJson(\filter_var($default, \FILTER_VALIDATE_BOOLEAN));
+        }
 
-        return $default;
+        return StringUtils::capitalize(\trim($default, "'"));
     }
 
     /**
@@ -331,7 +329,7 @@ class SchemaService
         $indexes = $table->getIndexes();
 
         $results = \array_map(fn (Index $index): array => [
-            'name' => \strtolower($index->getName()),
+            'name' => $index->getName(),
             'primary' => $index->isPrimary(),
             'unique' => $index->isUnique(),
             'columns' => $index->getColumns(),
@@ -415,8 +413,8 @@ class SchemaService
     private function isMySQLPlatform(): bool
     {
         try {
-            $connection = $this->getConnection();
-            $platform = $connection->getDatabasePlatform();
+            $platform = $this->getConnection()
+                ->getDatabasePlatform();
 
             return $platform instanceof AbstractMySQLPlatform;
         } catch (\Doctrine\DBAL\Exception) {

@@ -83,7 +83,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     ) {
         $orientation = \count($entities) > 12 ? PdfOrientation::LANDSCAPE : PdfOrientation::PORTRAIT;
         parent::__construct($controller, $entities, $orientation);
-        $this->setTitleTrans('chart.month.title');
+        $this->setTranslatedTitle('chart.month.title');
         $this->minMargin = $controller->getMinMargin();
         $this->colors = new \WeakMap();
     }

@@ -15,6 +15,7 @@ namespace App\Tests\Controller;
 
 use App\Enums\EntityPermission;
 use App\Interfaces\PropertyServiceInterface;
+use App\Service\ApplicationService;
 use App\Service\CacheService;
 use App\Service\DictionaryService;
 use Symfony\Component\HttpFoundation\Response;
@@ -133,14 +134,30 @@ class AdminControllerTest extends ControllerTestCase
         $this->checkForm('admin/rights/user');
     }
 
-    public function testRightUserWithChanges(): void
+    public function testRightUserNoChange(): void
     {
-        $count = \count(EntityPermission::cases());
-        $values = \array_fill(0, $count, true);
+        $service = self::getService(ApplicationService::class);
+        $service->removeProperty(PropertyServiceInterface::P_USER_RIGHTS);
 
+        $values = $this->getPermissionValues();
+        $values[0] = $values[1] = $values[5] = true;
         $this->checkForm(
             uri: 'admin/rights/user',
             data: ['role_rights[GlobalMarginRights]' => $values]
         );
+    }
+
+    public function testRightUserWithChanges(): void
+    {
+        $values = $this->getPermissionValues();
+        $this->checkForm(
+            uri: 'admin/rights/user',
+            data: ['role_rights[GlobalMarginRights]' => $values]
+        );
+    }
+
+    private function getPermissionValues(): array
+    {
+        return \array_fill(0, \count(EntityPermission::cases()), false);
     }
 }

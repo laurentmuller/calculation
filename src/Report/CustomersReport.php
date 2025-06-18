@@ -37,13 +37,13 @@ class CustomersReport extends AbstractArrayReport
     public function __construct(AbstractController $controller, array $entities, private readonly bool $grouped = true)
     {
         parent::__construct($controller, $entities, PdfOrientation::LANDSCAPE);
+        $this->setTranslatedTitle('customer.list.title');
         $this->other = $this->trans('report.other');
     }
 
     #[\Override]
     protected function doRender(array $entities): bool
     {
-        $this->setTitleTrans('customer.list.title');
         $this->addPage();
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())

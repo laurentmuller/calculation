@@ -25,7 +25,7 @@ class GlobalMarginsReport extends AbstractArrayReport
     #[\Override]
     protected function doRender(array $entities): bool
     {
-        $this->setTitleTrans('globalmargin.list.title');
+        $this->setTranslatedTitle('globalmargin.list.title');
         $this->addPage();
 
         $table = $this->createTable();

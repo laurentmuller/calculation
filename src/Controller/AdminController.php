@@ -26,7 +26,7 @@ use App\Service\ApplicationService;
 use App\Service\CacheService;
 use App\Service\CommandService;
 use App\Service\RoleBuilderService;
-use App\Traits\RoleTranslatorTrait;
+use App\Service\RoleService;
 use App\Utils\FileUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -43,8 +43,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class AdminController extends AbstractController
 {
-    use RoleTranslatorTrait;
-
     /**
      * Clear the application cache.
      */
@@ -135,78 +133,94 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Edit rights for the administrator role (@see RoleInterface::ROLE_ADMIN).
+     * Edit rights for the administrator role.
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[GetPostRoute(path: '/rights/admin', name: 'rights_admin')]
-    public function rightsAdmin(Request $request, RoleBuilderService $service): Response
-    {
+    public function rightsAdmin(
+        Request $request,
+        RoleService $roleService,
+        RoleBuilderService $roleBuilderService
+    ): Response {
         $application = $this->getApplicationService();
-        $roleName = RoleInterface::ROLE_ADMIN;
-        $rights = $application->getAdminRights();
-        $default = $service->getRoleAdmin();
-        $property = PropertyServiceInterface::P_ADMIN_RIGHTS;
+        $role = $this->createRole(
+            $roleService,
+            RoleInterface::ROLE_ADMIN,
+            $application->getAdminRights()
+        );
 
-        return $this->editRights($request, $application, $roleName, $rights, $default, $property);
+        return $this->editRights(
+            $request,
+            $application,
+            $role,
+            $roleBuilderService->getRoleAdmin(),
+            PropertyServiceInterface::P_ADMIN_RIGHTS
+        );
     }
 
     /**
-     * Edit rights for the user role (@see RoleInterface::ROLE_USER).
+     * Edit rights for the user role.
      */
     #[GetPostRoute(path: '/rights/user', name: 'rights_user')]
-    public function rightsUser(Request $request, RoleBuilderService $service): Response
-    {
+    public function rightsUser(
+        Request $request,
+        RoleService $roleService,
+        RoleBuilderService $roleBuilderService
+    ): Response {
         $application = $this->getApplicationService();
-        $roleName = RoleInterface::ROLE_USER;
-        $rights = $application->getUserRights();
-        $default = $service->getRoleUser();
-        $property = PropertyServiceInterface::P_USER_RIGHTS;
+        $role = $this->createRole(
+            $roleService,
+            RoleInterface::ROLE_USER,
+            $application->getUserRights()
+        );
 
-        return $this->editRights($request, $application, $roleName, $rights, $default, $property);
+        return $this->editRights(
+            $request,
+            $application,
+            $role,
+            $roleBuilderService->getRoleUser(),
+            PropertyServiceInterface::P_USER_RIGHTS
+        );
     }
 
     /**
      * @param int[] $rights
      *
-     * @phpstan-param RoleInterface::ROLE_* $roleName
+     * @phpstan-param RoleInterface::ROLE_* $role
      */
-    private function createRole(string $roleName, array $rights): Role
+    private function createRole(RoleService $roleService, string $role, array $rights): Role
     {
-        $role = new Role($roleName);
-
-        return $role->setName($this->translateRole($roleName))
-            ->setRights($rights);
+        return new Role($role, $roleService->translateRole($role), $rights);
     }
 
     /**
-     * Edit rights for the given role name.
-     *
-     * @param int[] $rights
-     *
-     * @phpstan-param RoleInterface::ROLE_* $roleName
+     * Edit rights for the given role.
      */
     private function editRights(
         Request $request,
         ApplicationService $application,
-        string $roleName,
-        array $rights,
+        Role $role,
         Role $default,
         string $property
     ): Response {
-        $role = $this->createRole($roleName, $rights);
         $form = $this->createForm(RoleRightsType::class, $role);
         if ($this->handleRequestForm($request, $form)) {
-            if ($role->getRights() === $default->getRights()) {
-                $application->removeProperty($property);
+            $rights = $role->getRights();
+            if ($rights === $default->getRights()) {
+                $result = $application->removeProperty($property);
             } else {
-                $application->setProperty($property, $role->getRights());
+                $result = $application->setProperty($property, $rights);
             }
 
-            return $this->redirectToHomePage(
-                'admin.rights.success',
-                ['%name%' => $role->getName()],
-                request: $request
-            );
+            if ($result) {
+                return $this->redirectToHomePage(
+                    id: 'admin.rights.success',
+                    parameters: ['%name%' => $role->getName()],
+                    request: $request
+                );
+            }
+
+            return $this->redirectToHomePage(request: $request);
         }
 
         return $this->render('admin/role_rights.html.twig', [

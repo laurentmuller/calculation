@@ -21,8 +21,8 @@ use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
+use App\Service\RoleService;
 use App\Traits\ArrayTrait;
-use App\Traits\RoleTranslatorTrait;
 use Elao\Enum\FlagBag;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
 
@@ -34,7 +34,6 @@ use PhpOffice\PhpSpreadsheet\RichText\RichText;
 class UserRightsDocument extends AbstractArrayDocument
 {
     use ArrayTrait;
-    use RoleTranslatorTrait;
 
     private readonly ApplicationService $applicationService;
     private readonly bool $superAdmin;
@@ -45,7 +44,8 @@ class UserRightsDocument extends AbstractArrayDocument
     public function __construct(
         AbstractController $controller,
         array $entities,
-        private readonly RoleBuilderService $service
+        private readonly RoleService $roleService,
+        private readonly RoleBuilderService $roleBuilderService
     ) {
         parent::__construct($controller, $entities);
         $this->applicationService = $controller->getApplicationService();
@@ -107,7 +107,7 @@ class UserRightsDocument extends AbstractArrayDocument
 
     private function outputEntityName(WorksheetDocument $sheet, Role|User $entity, int $row): void
     {
-        $role = $this->translateRole($entity);
+        $role = $this->roleService->translateRole($entity);
         if ($entity instanceof User) {
             $text = $entity->getUserIdentifier();
             $description = $entity->isEnabled() ? $role : $this->trans('common.value_disabled');
@@ -149,7 +149,7 @@ class UserRightsDocument extends AbstractArrayDocument
     private function outputRoles(WorksheetDocument $sheet, int &$row): void
     {
         if ($this->superAdmin) {
-            $this->outputRole($sheet, $this->service->getRoleSuperAdmin(), $row);
+            $this->outputRole($sheet, $this->roleBuilderService->getRoleSuperAdmin(), $row);
         }
         $service = $this->controller->getApplicationService();
         $this->outputRole($sheet, $service->getAdminRole(), $row);
@@ -159,7 +159,7 @@ class UserRightsDocument extends AbstractArrayDocument
     private function outputUser(WorksheetDocument $sheet, User $user, int &$row): void
     {
         if (!$user->isOverwrite()) {
-            $rights = $this->service->getRole($user)->getRights();
+            $rights = $this->roleBuilderService->getRole($user)->getRights();
             $user->setRights($rights);
         }
         $this->outputRole($sheet, $user, $row);

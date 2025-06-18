@@ -27,7 +27,7 @@ class ProductsReport extends AbstractArrayReport
     #[\Override]
     protected function doRender(array $entities): bool
     {
-        $this->setTitleTrans('product.list.title');
+        $this->setTranslatedTitle('product.list.title');
         $this->addPage();
         $table = $this->createTable();
         $redStyle = PdfStyle::getCellStyle()

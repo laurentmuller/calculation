@@ -15,8 +15,8 @@ namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Entity\User;
+use App\Service\RoleService;
 use App\Traits\ImageSizeTrait;
-use App\Traits\RoleTranslatorTrait;
 use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
@@ -33,13 +33,16 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 class UsersDocument extends AbstractArrayDocument
 {
     use ImageSizeTrait;
-    use RoleTranslatorTrait;
 
     /**
      * @param User[] $entities
      */
-    public function __construct(AbstractController $controller, array $entities, private readonly StorageInterface $storage)
-    {
+    public function __construct(
+        AbstractController $controller,
+        array $entities,
+        private readonly RoleService $roleService,
+        private readonly StorageInterface $storage
+    ) {
         parent::__construct($controller, $entities);
     }
 
@@ -61,14 +64,15 @@ class UsersDocument extends AbstractArrayDocument
             'user.fields.enabled' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
             'user.fields.lastLogin' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
         ]);
-        $sheet->setFormatBoolean(5, 'common.value_enabled', 'common.value_disabled', true);
+        $sheet->setFormatBoolean(5, 'common.value_enabled', 'common.value_disabled', true)
+            ->setColumnAlignment(5, Alignment::HORIZONTAL_LEFT);
 
         foreach ($entities as $entity) {
             $sheet->setRowValues($row, [
                 null,
                 $entity->getUserIdentifier(),
                 $entity->getEmail(),
-                $this->translateRole($entity),
+                $this->roleService->translateRole($entity),
                 $entity->isEnabled(),
                 $this->formatLastLogin($entity->getLastLogin()),
             ]);

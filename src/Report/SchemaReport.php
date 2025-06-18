@@ -15,6 +15,7 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Model\FontAwesomeImage;
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFontAwesomeCell;
@@ -39,9 +40,9 @@ class SchemaReport extends AbstractReport
 {
     use ArrayTrait;
 
-    private ?PdfStyle $booleanStyle = null;
-    private ?PdfCell $cellManyToOne = null;
-    private ?PdfCell $cellOneToMany = null;
+    private ?PdfCell $booleanCell = null;
+    private ?PdfCell $manyToOneCell = null;
+    private ?PdfCell $oneToManyCell = null;
 
     /**
      * @phpstan-var array<string, int>
@@ -54,8 +55,8 @@ class SchemaReport extends AbstractReport
         private readonly FontAwesomeImageService $imageService
     ) {
         parent::__construct($controller);
-        $this->setTitleTrans(id: 'schema.name', isUTF8: true);
-        $this->setDescriptionTrans('schema.description');
+        $this->setTranslatedTitle(id: 'schema.name', isUTF8: true)
+            ->setTranslatedDescription('schema.description');
     }
 
     #[\Override]
@@ -67,8 +68,6 @@ class SchemaReport extends AbstractReport
         }
 
         $this->addPage();
-        $this->booleanStyle = PdfStyle::getCellStyle()
-            ->setFontName(PdfFontName::ZAPFDINGBATS);
         $this->createLinks(\array_keys($tables));
         $this->outputTables($tables);
         foreach ($tables as $table) {
@@ -104,12 +103,7 @@ class SchemaReport extends AbstractReport
 
     private function findLink(?string $name): ?int
     {
-        return $this->tableLinks[$name ?? ''] ?? null;
-    }
-
-    private function formatBool(bool $value): ?string
-    {
-        return $value ? '3' : null;
+        return $this->tableLinks[$name] ?? null;
     }
 
     /**
@@ -123,6 +117,21 @@ class SchemaReport extends AbstractReport
         return $length > 0 ? \sprintf('%s(%d)', $type, $length) : $type;
     }
 
+    private function getBooleanCell(bool $value): ?PdfCell
+    {
+        if (!$value) {
+            return null;
+        }
+        if ($this->booleanCell instanceof PdfCell) {
+            return $this->booleanCell;
+        }
+        $style = PdfStyle::getCellStyle()
+            ->setFontName(PdfFontName::ZAPFDINGBATS)
+            ->setTextColor(PdfTextColor::darkGreen());
+
+        return $this->booleanCell = new PdfCell(text: '3', style: $style);
+    }
+
     private function getCellImage(string $id, string $icon): PdfCell
     {
         $text = $this->trans('schema.table.' . $id);
@@ -134,22 +143,22 @@ class SchemaReport extends AbstractReport
         return new PdfCell($text);
     }
 
-    private function getCellManyToOne(): PdfCell
+    private function getManyToOneCell(): PdfCell
     {
-        if (!$this->cellManyToOne instanceof PdfCell) {
-            $this->cellManyToOne = $this->getCellImage('many_to_one', 'arrow-right-from-bracket');
+        if ($this->manyToOneCell instanceof PdfCell) {
+            return $this->manyToOneCell;
         }
 
-        return $this->cellManyToOne;
+        return $this->manyToOneCell = $this->getCellImage('many_to_one', 'arrow-right-from-bracket');
     }
 
-    private function getCellOneToMany(): PdfCell
+    private function getOneToManyCell(): PdfCell
     {
-        if (!$this->cellOneToMany instanceof PdfCell) {
-            $this->cellOneToMany = $this->getCellImage('one_to_many', 'arrow-right-to-bracket');
+        if ($this->oneToManyCell instanceof PdfCell) {
+            return $this->oneToManyCell;
         }
 
-        return $this->cellOneToMany;
+        return $this->oneToManyCell = $this->getCellImage('one_to_many', 'arrow-right-to-bracket');
     }
 
     /**
@@ -160,6 +169,7 @@ class SchemaReport extends AbstractReport
         if ([] === $associations) {
             return;
         }
+
         $table = $this->createTable(
             'schema.fields.associations',
             $this->leftColumn('schema.fields.name', 100),
@@ -173,7 +183,7 @@ class SchemaReport extends AbstractReport
             $table->startRow()
                 ->add($association['name'])
                 ->add($association['table'])
-                ->addCell($association['inverse'] ? $this->getCellOneToMany() : $this->getCellManyToOne())
+                ->addCell($association['inverse'] ? $this->getOneToManyCell() : $this->getManyToOneCell())
                 ->endRow();
             $link = $this->findLink($association['table']);
             if (self::isLink($link)) {
@@ -185,11 +195,12 @@ class SchemaReport extends AbstractReport
     /**
      * @phpstan-param SchemaColumnType[] $columns
      */
-    private function outputColumns(array $columns): void
+    private function outputColumns(array $columns): static
     {
         if ([] === $columns) {
-            return;
+            return $this;
         }
+
         $table = $this->createTable(
             'schema.fields.columns',
             $this->leftColumn('schema.fields.name', 100),
@@ -201,28 +212,30 @@ class SchemaReport extends AbstractReport
         foreach ($columns as $column) {
             $x = $this->getX();
             $y = $this->getY();
-            $table->startRow()
-                ->add($column['name'])
-                ->add($this->formatType($column))
-                ->add($this->formatBool($column['required']), style: $this->booleanStyle)
-                ->add($column['default'])
-                ->endRow();
+            $table->addRow(
+                $column['name'],
+                $this->formatType($column),
+                $this->getBooleanCell($column['required']),
+                $column['default']
+            );
             $link = $this->findLink($column['foreign_table']);
             if (self::isLink($link)) {
                 $this->link($x, $y, $width, $this->getY() - $y, $link);
             }
         }
-        $this->lineBreak();
+
+        return $this->lineBreak();
     }
 
     /**
      * @phpstan-param SchemaIndexType[] $indexes
      */
-    private function outputIndexes(array $indexes): void
+    private function outputIndexes(array $indexes): static
     {
         if ([] === $indexes) {
-            return;
+            return $this;
         }
+
         $table = $this->createTable(
             'schema.fields.indexes',
             $this->leftColumn('schema.fields.name', 100),
@@ -231,14 +244,15 @@ class SchemaReport extends AbstractReport
             $this->centerColumn('schema.fields.unique', 30, true),
         );
         foreach ($indexes as $index) {
-            $table->startRow()
-                ->add($index['name'])
-                ->add(\implode(', ', $index['columns']))
-                ->add($this->formatBool($index['primary']), style: $this->booleanStyle)
-                ->add($this->formatBool($index['unique']), style: $this->booleanStyle)
-                ->endRow();
+            $table->addRow(
+                $index['name'],
+                \implode(', ', $index['columns']),
+                $this->getBooleanCell($index['primary']),
+                $this->getBooleanCell($index['unique'])
+            );
         }
-        $this->lineBreak();
+
+        return $this->lineBreak();
     }
 
     /**
@@ -252,10 +266,10 @@ class SchemaReport extends AbstractReport
         if (\is_int($link)) {
             $this->setLink($link);
         }
-        $this->outputTitle('schema.table.title', ['%name%' => $name]);
-        $this->outputColumns($table['columns']);
-        $this->outputIndexes($table['indexes']);
-        $this->outputAssociations($table['associations']);
+        $this->outputTitle($name, 1)
+            ->outputColumns($table['columns'])
+            ->outputIndexes($table['indexes'])
+            ->outputAssociations($table['associations']);
     }
 
     /**
@@ -263,7 +277,7 @@ class SchemaReport extends AbstractReport
      */
     private function outputTables(array $tables): void
     {
-        $this->outputTitle('schema.index.title');
+        $this->outputTitle($this->trans('schema.index.title'));
         $instance = ReportTable::fromReport($this)
             ->addColumns(
                 $this->leftColumn('schema.fields.name', 100),
@@ -277,28 +291,32 @@ class SchemaReport extends AbstractReport
         foreach ($tables as $table) {
             $x = $this->getX();
             $y = $this->getY();
+            $name = $table['name'];
             $instance->startRow()
-                ->add($table['name'])
+                ->add($name)
                 ->addCellInt($table['columns'])
                 ->addCellInt($table['records'])
-                ->addCellAmount($table['size'])
+                ->addCellInt($table['size'])
                 ->addCellInt($table['indexes'])
                 ->addCellInt($table['associations'])
                 ->endRow();
-            $link = $this->findLink($table['name']);
+            $link = $this->findLink($name);
             if (self::isLink($link)) {
                 $this->link($x, $y, $width, $this->getY() - $y, $link);
             }
         }
     }
 
-    private function outputTitle(string $id, array $parameters = []): void
+    /**
+     * @param int<0, max> $level
+     */
+    private function outputTitle(string $text, int $level = 0): static
     {
-        $text = $this->trans($id, $parameters);
         PdfStyle::default()->setFontBold()->apply($this);
-        $this->addBookmark(text: $text, currentY: false);
-        $this->useCellMargin(fn (): static => $this->cell(text: $text, move: PdfMove::NEW_LINE));
-        $this->lineBreak($this->getCellMargin());
-        $this->resetStyle();
+
+        return $this->addBookmark(text: $text, level: $level, currentY: false)
+            ->useCellMargin(fn (): static => $this->cell(text: $text, move: PdfMove::NEW_LINE))
+            ->lineBreak($this->getCellMargin())
+            ->resetStyle();
     }
 }

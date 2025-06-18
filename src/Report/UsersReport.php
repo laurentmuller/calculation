@@ -21,7 +21,7 @@ use App\Pdf\PdfImageCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Service\FontAwesomeService;
-use App\Traits\RoleTranslatorTrait;
+use App\Service\RoleService;
 use App\Utils\FormatUtils;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
@@ -32,8 +32,6 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  */
 class UsersReport extends AbstractArrayReport
 {
-    use RoleTranslatorTrait;
-
     /**
      * @var array<string, PdfCell>
      */
@@ -45,16 +43,17 @@ class UsersReport extends AbstractArrayReport
     public function __construct(
         AbstractController $controller,
         array $entities,
+        private readonly RoleService $roleService,
         private readonly StorageInterface $storage,
-        private readonly FontAwesomeService $service
+        private readonly FontAwesomeService $fontAwesomeService
     ) {
         parent::__construct($controller, $entities);
+        $this->setTranslatedTitle('user.list.title');
     }
 
     #[\Override]
     protected function doRender(array $entities): bool
     {
-        $this->setTitleTrans('user.list.title');
         $disabledStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::red());
         $enabledStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGreen());
 
@@ -126,9 +125,9 @@ class UsersReport extends AbstractArrayReport
             return $this->cells[$role];
         }
 
-        $icon = $this->getRoleIcon($role);
-        $text = $this->translateRole($role);
-        $cell = $this->service->getFontAwesomeCell(icon: $icon, text: $text) ?? new PdfCell($text);
+        $icon = $this->roleService->getRoleIcon($role);
+        $text = $this->roleService->translateRole($role);
+        $cell = $this->fontAwesomeService->getFontAwesomeCell(icon: $icon, text: $text) ?? new PdfCell($text);
 
         return $this->cells[$role] = $cell;
     }

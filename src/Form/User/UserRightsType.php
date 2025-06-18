@@ -15,7 +15,6 @@ namespace App\Form\User;
 
 use App\Entity\User;
 use App\Form\FormHelper;
-use App\Traits\RoleTranslatorTrait;
 use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
@@ -26,7 +25,6 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
  */
 class UserRightsType extends RightsType implements ServiceSubscriberInterface
 {
-    use RoleTranslatorTrait;
     use ServiceMethodsSubscriberTrait;
     use TranslatorAwareTrait;
 
@@ -58,12 +56,5 @@ class UserRightsType extends RightsType implements ServiceSubscriberInterface
     protected function getLabelPrefix(): ?string
     {
         return 'user.fields.';
-    }
-
-    private function translateEnabled(string $enabled): string
-    {
-        $enabled = \filter_var($enabled, \FILTER_VALIDATE_BOOLEAN);
-
-        return $this->trans($enabled ? 'common.value_enabled' : 'common.value_disabled');
     }
 }

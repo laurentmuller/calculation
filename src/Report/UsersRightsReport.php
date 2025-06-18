@@ -28,8 +28,8 @@ use App\Pdf\PdfTable;
 use App\Service\ApplicationService;
 use App\Service\FontAwesomeService;
 use App\Service\RoleBuilderService;
+use App\Service\RoleService;
 use App\Traits\ArrayTrait;
-use App\Traits\RoleTranslatorTrait;
 use Elao\Enum\FlagBag;
 use fpdf\Enums\PdfMove;
 use fpdf\PdfBorder;
@@ -43,7 +43,6 @@ use fpdf\PdfRectangle;
 class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerInterface
 {
     use ArrayTrait;
-    use RoleTranslatorTrait;
 
     private readonly ApplicationService $applicationService;
     private ?PdfStyle $bulletStyle = null;
@@ -57,12 +56,13 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     public function __construct(
         AbstractController $controller,
         array $entities,
+        private readonly RoleService $roleService,
         private readonly FontAwesomeService $fontAwesomeService,
         private readonly RoleBuilderService $roleBuilderService
     ) {
         parent::__construct($controller, $entities);
-        $this->setTitleTrans('user.rights.title', [], true)
-            ->setDescriptionTrans('user.rights.description');
+        $this->setTranslatedTitle(id: 'user.rights.title', isUTF8: true)
+            ->setTranslatedDescription('user.rights.description');
         $this->applicationService = $controller->getApplicationService();
         $this->superAdmin = $this->anyMatch($entities, static fn (User $user): bool => $user->isSuperAdmin());
     }
@@ -183,7 +183,9 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
     private function getEntityText(Role|User $entity): string
     {
-        return $entity instanceof User ? $entity->getUserIdentifier() : $this->translateRole($entity);
+        return $entity instanceof User
+            ? $entity->getUserIdentifier()
+            : $this->roleService->translateRole($entity);
     }
 
     /**
@@ -202,10 +204,9 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         int $cols,
         ?PdfStyle $style = null
     ): PdfCell {
-        $icon = $this->getRoleIcon($entity);
         $text = $this->getEntityText($entity);
         $cell = $this->fontAwesomeService->getFontAwesomeCell(
-            icon: $icon,
+            icon: $this->roleService->getRoleIcon($entity),
             text: $text,
             cols: $cols,
             style: $style
@@ -216,7 +217,9 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
     private function getUserDescription(User $user): string
     {
-        return $user->isEnabled() ? $this->translateRole($user) : $this->trans('common.value_disabled');
+        return $user->isEnabled()
+            ? $this->roleService->translateRole($user)
+            : $this->trans('common.value_disabled');
     }
 
     /**

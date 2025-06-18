@@ -17,6 +17,7 @@ use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\UserRepository;
+use App\Service\RoleService;
 use App\Table\DataQuery;
 use App\Table\UserTable;
 use App\Tests\TranslatorMockTrait;
@@ -111,10 +112,11 @@ class UserTableTest extends EntityTableTestCase
     protected function createTable(AbstractRepository $repository): UserTable
     {
         $translator = $this->createMockTranslator();
+        $roleService = $this->createMock(RoleService::class);
         $twig = $this->createMock(Environment::class);
         $security = $this->createMockSecurity();
 
-        return new UserTable($repository, $translator, $twig, $security);
+        return new UserTable($repository, $roleService, $translator, $twig, $security);
     }
 
     private function createMockSecurity(): MockObject&Security

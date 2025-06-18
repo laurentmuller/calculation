@@ -24,14 +24,16 @@ class Role implements \Stringable, RoleInterface
     use RoleTrait;
 
     /**
-     * @param string  $role the role
-     * @param ?string $name the optional name
+     * @param string  $role   the role
+     * @param ?string $name   the optional name
+     * @param ?int[]  $rights the optional rights
      *
      * @phpstan-param RoleInterface::ROLE_* $role
      */
-    public function __construct(string $role, protected ?string $name = null)
+    public function __construct(string $role, protected ?string $name = null, ?array $rights = null)
     {
         $this->role = $role;
+        $this->setRights($rights);
     }
 
     #[\Override]

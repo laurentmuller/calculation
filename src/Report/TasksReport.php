@@ -51,7 +51,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
     #[\Override]
     protected function doRender(array $entities): bool
     {
-        $this->setTitleTrans('task.list.title', [], true);
+        $this->setTranslatedTitle(id: 'task.list.title', isUTF8: true);
         $this->addPage();
         $table = $this->createTable();
         $table->getGroupStyle()->setFontBold();

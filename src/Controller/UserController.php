@@ -43,7 +43,7 @@ use App\Service\MailerService;
 use App\Service\PasswordTooltipService;
 use App\Service\ResetPasswordService;
 use App\Service\RoleBuilderService;
-use App\Service\RoleHierarchyService;
+use App\Service\RoleService;
 use App\Spreadsheet\UserRightsDocument;
 use App\Spreadsheet\UsersDocument;
 use App\Table\DataQuery;
@@ -107,10 +107,10 @@ class UserController extends AbstractEntityController
      * Export the customers to a Spreadsheet document.
      */
     #[ExcelRoute]
-    public function excel(StorageInterface $storage): SpreadsheetResponse
+    public function excel(RoleService $roleService, StorageInterface $storage): SpreadsheetResponse
     {
         $entities = $this->getEntitiesByUserName();
-        $doc = new UsersDocument($this, $entities, $storage);
+        $doc = new UsersDocument($this, $entities, $roleService, $storage);
 
         return $this->renderSpreadsheetDocument($doc);
     }
@@ -190,11 +190,12 @@ class UserController extends AbstractEntityController
      */
     #[PdfRoute]
     public function pdf(
+        RoleService $roleService,
         StorageInterface $storage,
-        FontAwesomeService $service
+        FontAwesomeService $fontAwesomeService
     ): PdfResponse {
         $entities = $this->getEntitiesByUserName();
-        $doc = new UsersReport($this, $entities, $storage, $service);
+        $doc = new UsersReport($this, $entities, $roleService, $storage, $fontAwesomeService);
 
         return $this->renderPdfDocument($doc);
     }
@@ -270,8 +271,8 @@ class UserController extends AbstractEntityController
     public function rights(
         Request $request,
         User $item,
+        RoleService $service,
         RoleBuilderService $builder,
-        RoleHierarchyService $service,
         EntityManagerInterface $manager
     ): Response {
         if ($this->isConnectedUser($item) && !$service->hasRole($item, RoleInterface::ROLE_SUPER_ADMIN)) {
@@ -309,10 +310,10 @@ class UserController extends AbstractEntityController
      * Export the user access rights to a Spreadsheet document.
      */
     #[GetRoute(path: '/rights/excel', name: 'rights_excel')]
-    public function rightsExcel(RoleBuilderService $builder): SpreadsheetResponse
+    public function rightsExcel(RoleService $roleService, RoleBuilderService $roleBuilderService): SpreadsheetResponse
     {
         $entities = $this->getEntitiesByUserName();
-        $doc = new UserRightsDocument($this, $entities, $builder);
+        $doc = new UserRightsDocument($this, $entities, $roleService, $roleBuilderService);
 
         return $this->renderSpreadsheetDocument($doc);
     }
@@ -321,10 +322,13 @@ class UserController extends AbstractEntityController
      * Export user access rights to a PDF document.
      */
     #[GetRoute(path: '/rights/pdf', name: 'rights_pdf')]
-    public function rightsPdf(FontAwesomeService $fontAwesomeService, RoleBuilderService $builder): PdfResponse
-    {
+    public function rightsPdf(
+        RoleService $roleService,
+        FontAwesomeService $fontAwesomeService,
+        RoleBuilderService $roleBuilderService
+    ): PdfResponse {
         $entities = $this->getEntitiesByUserName();
-        $doc = new UsersRightsReport($this, $entities, $fontAwesomeService, $builder);
+        $doc = new UsersRightsReport($this, $entities, $roleService, $fontAwesomeService, $roleBuilderService);
 
         return $this->renderPdfDocument($doc);
     }

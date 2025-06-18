@@ -31,7 +31,7 @@ class CategoriesReport extends AbstractArrayReport
     #[\Override]
     protected function doRender(array $entities): bool
     {
-        $this->setTitleTrans('category.list.title', [], true);
+        $this->setTranslatedTitle(id: 'category.list.title', isUTF8: true);
 
         $this->addPage();
         $table = $this->createTable();

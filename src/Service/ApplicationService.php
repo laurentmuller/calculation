@@ -504,16 +504,18 @@ class ApplicationService implements PropertyServiceInterface
     /**
      * Remove the give property.
      */
-    public function removeProperty(string $name): self
+    public function removeProperty(string $name): bool
     {
         $repository = $this->getPropertyRepository();
         $property = $repository->findOneByName($name);
         if ($property instanceof GlobalProperty) {
             $repository->remove($property);
             $this->updateAdapter();
+
+            return true;
         }
 
-        return $this;
+        return false;
     }
 
     /**

@@ -59,7 +59,7 @@ class CalculationsReport extends AbstractArrayReport
     {
         parent::__construct($controller, $entities, PdfOrientation::LANDSCAPE);
         $this->minMargin = $controller->getMinMargin();
-        $this->setTitleTrans('calculation.list.title');
+        $this->setTranslatedTitle('calculation.list.title');
     }
 
     #[\Override]

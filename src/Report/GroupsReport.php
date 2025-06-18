@@ -37,7 +37,7 @@ class GroupsReport extends AbstractArrayReport
         array $entities
     ) {
         parent::__construct($controller, $entities, PdfOrientation::LANDSCAPE);
-        $this->setTitleTrans('group.list.title');
+        $this->setTranslatedTitle('group.list.title');
     }
 
     #[\Override]

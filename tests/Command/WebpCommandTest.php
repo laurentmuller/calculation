@@ -28,7 +28,7 @@ class WebpCommandTest extends CommandTestCase
             '--dry-run' => true,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testExecuteDrySuccess(): void
@@ -43,7 +43,7 @@ class WebpCommandTest extends CommandTestCase
             '--dry-run' => true,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testExecuteImageInvalid(): void
@@ -63,7 +63,7 @@ class WebpCommandTest extends CommandTestCase
         ];
         $input = ['source' => $source];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testExecuteInvalidLevel(): void
@@ -75,7 +75,7 @@ class WebpCommandTest extends CommandTestCase
             '--dry-run' => true,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input, statusCode: Command::INVALID);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testExecuteInvalidPath(): void
@@ -83,7 +83,7 @@ class WebpCommandTest extends CommandTestCase
         $expected = 'Unable to find the source directory';
         $input = ['source' => '/fake/fake/fake'];
         $output = $this->execute(self::COMMAND_NAME, $input, statusCode: Command::INVALID);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testExecuteIsNotDirectory(): void
@@ -94,14 +94,14 @@ class WebpCommandTest extends CommandTestCase
         ];
         $input = ['source' => '/tests/bootstrap.php'];
         $output = $this->execute(self::COMMAND_NAME, $input, statusCode: Command::INVALID);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testExecuteMissingSource(): void
     {
         $expected = 'The "--source" argument requires a non-empty value.';
         $output = $this->execute(self::COMMAND_NAME, statusCode: Command::INVALID);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 
     public function testExecuteSuccess(): void
@@ -121,6 +121,6 @@ class WebpCommandTest extends CommandTestCase
         ];
         $input = ['source' => $source];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        $this->validate($output, $expected);
+        self::assertOutputContainsString($expected, $output);
     }
 }

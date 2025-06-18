@@ -31,12 +31,11 @@ class PhpIniReport extends AbstractReport
     public function __construct(AbstractController $controller, private readonly PhpInfoService $service)
     {
         parent::__construct($controller);
+        $this->setTranslatedTitle('about.php_version', ['%version%' => $this->service->getVersion()]);
         $file = \php_ini_loaded_file();
         if (\is_string($file)) {
-            $this->setDescriptionTrans('log.list.file', ['%file%' => $file]);
+            $this->setTranslatedDescription('log.list.file', ['%file%' => $file]);
         }
-        $version = $this->service->getVersion();
-        $this->setTitleTrans('about.php_version', ['%version%' => $version]);
     }
 
     #[\Override]

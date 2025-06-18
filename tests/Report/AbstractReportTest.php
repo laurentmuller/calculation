@@ -32,7 +32,7 @@ class AbstractReportTest extends TestCase
     public function testDescriptionTrans(): void
     {
         $report = $this->createReport();
-        $report->setDescriptionTrans('id');
+        $report->setTranslatedDescription('id');
         $actual = $report->render();
         self::assertTrue($actual);
     }
@@ -56,7 +56,7 @@ class AbstractReportTest extends TestCase
     public function testTitleTrans(): void
     {
         $report = $this->createReport();
-        $report->setTitleTrans('id');
+        $report->setTranslatedTitle('id');
         $actual = $report->render();
         self::assertTrue($actual);
     }

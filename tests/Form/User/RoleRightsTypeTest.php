@@ -16,7 +16,7 @@ namespace App\Tests\Form\User;
 use App\Form\Type\PlainType;
 use App\Form\User\RoleRightsType;
 use App\Interfaces\RoleInterface;
-use App\Service\RoleHierarchyService;
+use App\Service\RoleService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -53,7 +53,8 @@ class RoleRightsTypeTest extends TypeTestCase
         $roleHierarchy = $this->createMock(RoleHierarchyInterface::class);
         $roleHierarchy->method('getReachableRoleNames')
             ->willReturn([RoleInterface::ROLE_ADMIN]);
-        $service = new RoleHierarchyService($roleHierarchy);
+        $translator = $this->createMockTranslator();
+        $service = new RoleService($roleHierarchy, $translator);
 
         return [
             new RoleRightsType(false, $service),

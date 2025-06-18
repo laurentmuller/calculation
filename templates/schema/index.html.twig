@@ -27,7 +27,7 @@
                     <td class="w-100 text-nowrap"><a href="{{ path('schema_table', {name: name}) }}">{{ name }}</a></td>
                     <td class="text-currency">{{ table.columns|integer }}</td>
                     <td class="text-currency">{{ table.records|integer }}</td>
-                    <td class="text-currency">{{ table.size|amount }}</td>
+                    <td class="text-currency">{{ table.size|integer }}</td>
                     <td class="text-currency">{{ table.indexes|integer }}</td>
                     <td class="text-currency">{{ table.associations|integer }}</td>
                 </tr>

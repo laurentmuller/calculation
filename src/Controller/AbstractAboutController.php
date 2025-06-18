@@ -82,7 +82,7 @@ abstract class AbstractAboutController extends AbstractController
         $title = $this->getTitle();
         $content = $this->loadContent();
         $report = new HtmlReport($this, $content);
-        $report->setTitleTrans($title, isUTF8: true);
+        $report->setTranslatedTitle($title, isUTF8: true);
 
         return $this->renderPdfDocument($report);
     }

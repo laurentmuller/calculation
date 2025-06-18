@@ -48,6 +48,11 @@ class CalculationReport extends AbstractReport
         private readonly string $qrcode
     ) {
         parent::__construct($controller);
+        $this->setTranslatedTitle(
+            'calculation.edit.title',
+            ['%id%' => $calculation->getFormattedId()],
+            true
+        );
     }
 
     /**
@@ -80,7 +85,6 @@ class CalculationReport extends AbstractReport
     public function render(): bool
     {
         $calculation = $this->calculation;
-        $this->renderTitle($calculation);
         $this->addPage();
         if ($calculation->isEmpty()) {
             return $this->renderEmpty($calculation);
@@ -229,14 +233,5 @@ class CalculationReport extends AbstractReport
             $this->cell(width: $width, text: $updated, align: PdfTextAlignment::RIGHT);
         });
         $this->resetStyle();
-    }
-
-    /**
-     * Set the title.
-     */
-    private function renderTitle(Calculation $calculation): void
-    {
-        $id = $calculation->getFormattedId();
-        $this->setTitleTrans('calculation.edit.title', ['%id%' => $id], true);
     }
 }

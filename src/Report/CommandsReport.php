@@ -39,7 +39,7 @@ class CommandsReport extends AbstractArrayReport
     protected function doRender(array $entities): bool
     {
         $this->setCellMargin(0.0);
-        $this->setTitleTrans('command.list.title');
+        $this->setTranslatedTitle('command.list.title');
 
         /** @phpstan-var string $group */
         foreach ($entities as $group => $commands) {

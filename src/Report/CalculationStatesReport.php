@@ -49,7 +49,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
     #[\Override]
     protected function doRender(array $entities): bool
     {
-        $this->setTitleTrans('calculationstate.list.title');
+        $this->setTranslatedTitle('calculationstate.list.title');
 
         $this->addPage();
         $table = $this->createTable();

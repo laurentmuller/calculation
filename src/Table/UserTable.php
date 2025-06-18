@@ -17,7 +17,7 @@ use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\UserRepository;
-use App\Traits\RoleTranslatorTrait;
+use App\Service\RoleService;
 use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
@@ -34,10 +34,9 @@ use Twig\Environment;
  */
 class UserTable extends AbstractEntityTable
 {
-    use RoleTranslatorTrait;
-
     public function __construct(
         UserRepository $repository,
+        private readonly RoleService $roleService,
         private readonly TranslatorInterface $translator,
         private readonly Environment $twig,
         private readonly Security $security
@@ -50,7 +49,7 @@ class UserTable extends AbstractEntityTable
      */
     public function formatEnabled(bool $enabled): string
     {
-        return $this->trans($enabled ? 'common.value_enabled' : 'common.value_disabled');
+        return $this->translator->trans($enabled ? 'common.value_enabled' : 'common.value_disabled');
     }
 
     /**
@@ -76,7 +75,7 @@ class UserTable extends AbstractEntityTable
             return FormatUtils::formatDateTime($date);
         }
 
-        return $this->trans('common.value_none');
+        return $this->translator->trans('common.value_none');
     }
 
     /**
@@ -89,14 +88,8 @@ class UserTable extends AbstractEntityTable
         $role ??= RoleInterface::ROLE_USER;
 
         return $this->twig->render('macros/_cell_user_role.html.twig', [
-            'role' => $this->translateRole($role),
-            'icon' => $this->getRoleIcon($role)]);
-    }
-
-    #[\Override]
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
+            'role' => $this->roleService->translateRole($role),
+            'icon' => $this->roleService->getRoleIcon($role)]);
     }
 
     #[\Override]

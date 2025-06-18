@@ -64,7 +64,7 @@ class AboutController extends AbstractController
         $content = $this->loadContent();
         $parameters = ['%app_name%' => $this->getApplication()];
         $report = new HtmlReport($this, $content);
-        $report->setTitleTrans('index.menu_info', $parameters, true);
+        $report->setTranslatedTitle('index.menu_info', $parameters, true);
 
         return $this->renderPdfDocument($report);
     }

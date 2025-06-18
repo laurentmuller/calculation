@@ -19,6 +19,7 @@ use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
@@ -30,7 +31,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 /**
  * Extends the worksheet class with shortcuts to render cells.
  *
- *  Note: All work sheets are instance of  {@link SpreadsheetDocument}.
+ *  Note: All work sheets are instance of {@link SpreadsheetDocument}.
  */
 class WorksheetDocument extends Worksheet
 {
@@ -265,6 +266,21 @@ class WorksheetDocument extends Worksheet
     }
 
     /**
+     * Set the horizontal alignement for the given column.
+     *
+     * @param int    $columnIndex         the one-based column index (1 = 'A' - First column)
+     * @param string $horizontalAlignment the horizontal alignement (one of the Alignment::HORIZONTAL_*)
+     */
+    public function setColumnAlignment(int $columnIndex, string $horizontalAlignment): static
+    {
+        $this->getColumnStyleFromIndex($columnIndex)
+            ->getAlignment()
+            ->setHorizontal($horizontalAlignment);
+
+        return $this;
+    }
+
+    /**
      * Add conditionals to the given column.
      *
      * @param int $columnIndex the one-based column index (1 = 'A' - First column)
@@ -356,13 +372,13 @@ class WorksheetDocument extends Worksheet
      * Sets the boolean format for the given column.
      *
      * @param int    $columnIndex the one-based column index (1 = 'A' - First column)
-     * @param string $true        the value to display when <code>true</code>
-     * @param string $false       the value to display when <code>false</code>
+     * @param string $true        the value to display for <code>true</code>
+     * @param string $false       the value to display for <code>false</code>
      * @param bool   $translate   <code>true</code> to translate values
      */
     public function setFormatBoolean(int $columnIndex, string $true, string $false, bool $translate = false): static
     {
-        $key = "$false-$true";
+        $key = \sprintf('%s-%s', $true, $false);
         if (!\array_key_exists($key, $this->booleanFormats)) {
             if ($translate) {
                 $true = $this->trans($true);
@@ -370,7 +386,7 @@ class WorksheetDocument extends Worksheet
             }
             $true = \str_replace('"', "''", $true);
             $false = \str_replace('"', "''", $false);
-            $format = "\"$true\";;\"$false\";@";
+            $format = \sprintf('"%s";;"%s";@', $true, $false);
             $this->booleanFormats[$key] = $format;
         } else {
             $format = $this->booleanFormats[$key];

@@ -28,7 +28,7 @@ class FontAwesomeCommandTest extends CommandTestCase
             input: $input,
             statusCode: Command::FAILURE
         );
-        $this->validate($output, 'Unable to decode value.');
+        self::assertOutputContainsString('Unable to decode value.', $output);
     }
 
     public function testRawEmpty(): void
@@ -42,7 +42,7 @@ class FontAwesomeCommandTest extends CommandTestCase
                 name: self::COMMAND_NAME,
                 input: $input,
             );
-            $this->validate($output, 'Generate successfully 1 files, 2 aliases from 1 sources.');
+            self::assertOutputContainsString('Generate successfully 1 files, 2 aliases from 1 sources.', $output);
         } finally {
             FileUtils::remove(__DIR__ . '/temp');
         }
@@ -60,7 +60,7 @@ class FontAwesomeCommandTest extends CommandTestCase
                 name: self::COMMAND_NAME,
                 input: $input,
             );
-            $this->validate($output, 'Simulate successfully 2 files, 4 aliases from 1 sources.');
+            self::assertOutputContainsString('Simulate successfully 2 files, 4 aliases from 1 sources.', $output);
         } finally {
             FileUtils::remove(__DIR__ . '/temp');
         }
@@ -73,7 +73,7 @@ class FontAwesomeCommandTest extends CommandTestCase
             name: self::COMMAND_NAME,
             input: $input,
         );
-        $this->validate($output, 'No image found:');
+        self::assertOutputContainsString('No image found:', $output);
     }
 
     public function testSourceInvalid(): void
@@ -84,7 +84,7 @@ class FontAwesomeCommandTest extends CommandTestCase
             input: $input,
             statusCode: Command::INVALID
         );
-        $this->validate($output, 'Unable to find JSON source file:');
+        self::assertOutputContainsString('Unable to find JSON source file:', $output);
     }
 
     public function testSuccess(): void
@@ -98,7 +98,7 @@ class FontAwesomeCommandTest extends CommandTestCase
                 name: self::COMMAND_NAME,
                 input: $input,
             );
-            $this->validate($output, 'Generate successfully 2 files, 4 aliases from 1 sources.');
+            self::assertOutputContainsString('Generate successfully 2 files, 4 aliases from 1 sources.', $output);
         } finally {
             FileUtils::remove(__DIR__ . '/temp');
         }

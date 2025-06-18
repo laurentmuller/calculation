@@ -15,6 +15,7 @@ namespace App\Tests\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Entity\User;
+use App\Service\RoleService;
 use App\Spreadsheet\UsersDocument;
 use PHPUnit\Framework\TestCase;
 use Vich\UploaderBundle\Storage\StorageInterface;
@@ -23,8 +24,20 @@ class UsersDocumentTest extends TestCase
 {
     public function testRender(): void
     {
+        $controller = $this->createMock(AbstractController::class);
+        $users = $this->createUsers();
+        $roleService = $this->createMock(RoleService::class);
         $storage = $this->createMock(StorageInterface::class);
+        $document = new UsersDocument($controller, $users, $roleService, $storage);
+        $actual = $document->render();
+        self::assertTrue($actual);
+    }
 
+    /**
+     * @return User[]
+     */
+    private function createUsers(): array
+    {
         $user1 = new User();
         $user1->updateLastLogin();
 
@@ -32,9 +45,6 @@ class UsersDocumentTest extends TestCase
         $user2->method('getImagePath')
             ->willReturn(__DIR__ . '/../files/images/example.png');
 
-        $controller = $this->createMock(AbstractController::class);
-        $document = new UsersDocument($controller, [$user1, $user2], $storage);
-        $actual = $document->render();
-        self::assertTrue($actual);
+        return [$user1, $user2];
     }
 }

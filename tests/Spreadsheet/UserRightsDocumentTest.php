@@ -18,6 +18,7 @@ use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
+use App\Service\RoleService;
 use App\Spreadsheet\UserRightsDocument;
 use PHPUnit\Framework\TestCase;
 
@@ -25,13 +26,14 @@ class UserRightsDocumentTest extends TestCase
 {
     public function testRender(): void
     {
-        $service = new RoleBuilderService();
+        $roleService = $this->createMock(RoleService::class);
+        $roleBuilderService = new RoleBuilderService();
 
         $application = $this->createMock(ApplicationService::class);
         $application->method('getAdminRole')
-            ->willReturn($service->getRoleAdmin());
+            ->willReturn($roleBuilderService->getRoleAdmin());
         $application->method('getUserRole')
-            ->willReturn($service->getRoleUser());
+            ->willReturn($roleBuilderService->getRoleUser());
 
         $controller = $this->createMock(AbstractController::class);
         $controller->method('getApplicationService')
@@ -41,8 +43,12 @@ class UserRightsDocumentTest extends TestCase
         $user->setUsername('UserName')
             ->setRole(RoleInterface::ROLE_SUPER_ADMIN);
 
-        $controller = $this->createMock(AbstractController::class);
-        $document = new UserRightsDocument($controller, [$user], $service);
+        $document = new UserRightsDocument(
+            $controller,
+            [$user],
+            $roleService,
+            $roleBuilderService
+        );
         $actual = $document->render();
         self::assertTrue($actual);
     }
@@ -50,9 +56,10 @@ class UserRightsDocumentTest extends TestCase
     public function testRenderEmpty(): void
     {
         $controller = $this->createMock(AbstractController::class);
-        $service = $this->createMock(RoleBuilderService::class);
+        $roleService = $this->createMock(RoleService::class);
+        $roleBuilderService = $this->createMock(RoleBuilderService::class);
 
-        $report = new UserRightsDocument($controller, [], $service);
+        $report = new UserRightsDocument($controller, [], $roleService, $roleBuilderService);
         $actual = $report->render();
         self::assertFalse($actual);
     }

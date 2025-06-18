@@ -59,7 +59,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         private readonly UrlGeneratorInterface $generator
     ) {
         parent::__construct($controller, $entities);
-        $this->setTitleTrans('chart.state.title');
+        $this->setTranslatedTitle('chart.state.title');
         $this->minMargin = $controller->getMinMargin();
     }
 

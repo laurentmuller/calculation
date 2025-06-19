@@ -1,3 +1,14 @@
+(function ($) {
+    'use strict';
+    /**
+     * Gets the default value.
+     * @return {boolean}
+     */
+    $.fn.getDefaultValue = function () {
+        return JSON.parse($(this).data('default') || 'false');
+    };
+}(jQuery));
+
 /**
  * Finds a checkbox within the given parent.
  *
@@ -20,6 +31,35 @@ function findCheckBox($parent) {
 function getAllCheckboxes() {
     'use strict';
     return $('#table-edit :checkbox');
+}
+
+/**
+ * Returns if a value is not the default.
+ * @return {boolean}
+ */
+function isDefaultValues() {
+    'use strict';
+    let changed = false;
+    getAllCheckboxes().each(function () {
+        const $this = $(this);
+        if ($this.isChecked() !== $this.getDefaultValue()) {
+            changed = true;
+            return false;
+        }
+    });
+    const $overwrite = $('#user_rights_overwrite');
+    if (!changed && $overwrite.length) {
+        changed = $overwrite.isChecked() !== $overwrite.getDefaultValue();
+    }
+    return changed;
+}
+
+/**
+ * Update the default action.
+ */
+function updateDefaultAction() {
+    'use strict';
+    $('#default').toggleDisabled(!isDefaultValues());
 }
 
 /**
@@ -52,6 +92,7 @@ function updateCheckBoxes($parent, callback) {
     $inputs.forEach(function ($input) {
         $input.setChecked(newValue);
     });
+    updateDefaultAction();
 }
 
 /**
@@ -91,7 +132,7 @@ function onOverwriteClick($element) {
     const disabled = !$element.isChecked();
     getAllCheckboxes().toggleDisabled(disabled);
     $('#all, #none, #toggle, .link-col, .link-row').toggleDisabled(disabled);
-
+    updateDefaultAction();
 }
 
 /**
@@ -102,6 +143,7 @@ function onOverwriteClick($element) {
 function updateAllCheckboxes(checked) {
     'use strict';
     getAllCheckboxes().setChecked(checked);
+    updateDefaultAction();
 }
 
 /**
@@ -110,6 +152,7 @@ function updateAllCheckboxes(checked) {
 function toggleAllCheckboxes() {
     'use strict';
     getAllCheckboxes().toggleChecked();
+    updateDefaultAction();
 }
 
 /**
@@ -119,13 +162,14 @@ function setDefaultValues() {
     'use strict';
     getAllCheckboxes().each(function () {
         const $this = $(this);
-        $this.setChecked($this.data('default') || false);
+        $this.setChecked($this.getDefaultValue());
     });
     const $overwrite = $('#user_rights_overwrite');
     if ($overwrite.length) {
-        $overwrite.setChecked($overwrite.data('default') || false);
+        $overwrite.setChecked($overwrite.getDefaultValue());
         onOverwriteClick($overwrite);
     }
+    updateDefaultAction();
 }
 
 /**
@@ -133,10 +177,8 @@ function setDefaultValues() {
  */
 $(function () {
     'use strict';
-
     // validation
     $('form').initValidator();
-
     // bind events
     $('#all').on('click', function () {
         updateAllCheckboxes(true);
@@ -159,4 +201,9 @@ $(function () {
     $('#user_rights_overwrite').on('click', function () {
         onOverwriteClick($(this));
     });
+    getAllCheckboxes().on('click', function () {
+        updateDefaultAction();
+    });
+    // update
+    updateDefaultAction();
 });

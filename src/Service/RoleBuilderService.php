@@ -78,16 +78,16 @@ class RoleBuilderService
         $none = EntityPermission::getNonePermission();
         $default = EntityPermission::getDefaultPermission();
         $role = new Role(RoleInterface::ROLE_USER);
-        $role->CalculationRights = $all;
-        $role->CalculationStateRights = $default;
-        $role->GroupRights = $default;
-        $role->CategoryRights = $default;
-        $role->ProductRights = $default;
-        $role->TaskRights = $default;
-        $role->GlobalMarginRights = $default;
-        $role->UserRights = $none;
-        $role->LogRights = $none;
-        $role->CustomerRights = $default;
+        $role->setPermission(EntityName::CALCULATION, $all);
+        $role->setPermission(EntityName::CALCULATION_STATE, $default);
+        $role->setPermission(EntityName::GROUP, $default);
+        $role->setPermission(EntityName::CATEGORY, $default);
+        $role->setPermission(EntityName::PRODUCT, $default);
+        $role->setPermission(EntityName::TASK, $default);
+        $role->setPermission(EntityName::CUSTOMER, $default);
+        $role->setPermission(EntityName::GLOBAL_MARGIN, $default);
+        $role->setPermission(EntityName::USER, $none);
+        $role->setPermission(EntityName::LOG, $none);
 
         return $role;
     }
@@ -98,11 +98,10 @@ class RoleBuilderService
     private function getRoleWithAll(string $roleName): Role
     {
         $role = new Role($roleName);
-        $entities = EntityName::sorted();
+        $entities = EntityName::cases();
         $all = EntityPermission::getAllPermission();
         foreach ($entities as $entity) {
-            $field = $entity->getRightsField();
-            $role->__set($field, $all);
+            $role->setPermission($entity, $all);
         }
 
         return $role;

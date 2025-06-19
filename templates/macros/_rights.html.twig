@@ -57,20 +57,27 @@
 </div>
 {% endmacro %}
 
+{% macro action(id, icon, text, overwrite) %}
+{% from 'macros/_icons.html.twig' import icon %}
+<li>
+    <button type="button" id="{{ id }}" class="dropdown-item"{%- if not overwrite -%} disabled{%- endif -%}>
+        {{- icon(icon ~ ' fa-fw', 'user.rights.' ~ text) -}}
+    </button>
+</li>
+{% endmacro %}
+
 {% macro actions(overwrite = true) %}
-{%- set button_class = 'btn btn-secondary' -%}
-<div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
-    <button type="button" id="all" class="{{ button_class }}" title="{{ 'user.rights.all_title'|trans }}"{%- if not overwrite -%} disabled{%- endif -%}>
-        <i class="fa-fw fa-solid fa-check-circle"></i>
+{% from 'macros/_icons.html.twig' import icon %}
+<div class="dropdown">
+    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        {{ icon('bars', 'common.actions') }}
     </button>
-    <button type="button" id="none" class="{{ button_class }}" title="{{ 'user.rights.none_title'|trans }}"{%- if not overwrite -%} disabled{%- endif -%}>
-        <i class="fa-fw fa-solid fa-times-circle"></i>
-    </button>
-    <button type="button" id="toggle" class="{{ button_class }}" title="{{ 'user.rights.toggle_title'|trans }}" {%- if not overwrite -%} disabled{%- endif -%}>
-        <i class="fa-fw fa-solid fa-arrows-turn-to-dots"></i>
-    </button>
-    <button type="button" id="default" class="{{ button_class }}" title="{{ 'user.rights.default_title'|trans }}">
-        <i class="fa-fw fa-solid fa-list-check"></i>
-    </button>
+    <ul class="dropdown-menu dropdown-menu-end">
+        {{ _self.action('all', 'check-circle', 'all_title', overwrite) }}
+        {{ _self.action('none', 'times-circle', 'none_title', overwrite) }}
+        {{ _self.action('toggle', 'right-left', 'toggle_title', overwrite) }}
+        <li><hr class="dropdown-divider"></li>
+        {{ _self.action('default', 'rotate-left', 'default_title', true) }}
+    </ul>
 </div>
 {% endmacro %}

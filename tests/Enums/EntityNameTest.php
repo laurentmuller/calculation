@@ -35,6 +35,23 @@ class EntityNameTest extends TestCase
     use TranslatorMockTrait;
 
     /**
+     * @phpstan-return \Generator<int, array{EntityName, string}>
+     */
+    public static function getFormFields(): \Generator
+    {
+        yield [EntityName::CALCULATION, 'CalculationRights'];
+        yield [EntityName::CALCULATION_STATE, 'CalculationStateRights'];
+        yield [EntityName::CATEGORY, 'CategoryRights'];
+        yield [EntityName::CUSTOMER, 'CustomerRights'];
+        yield [EntityName::GLOBAL_MARGIN, 'GlobalMarginRights'];
+        yield [EntityName::GROUP, 'GroupRights'];
+        yield [EntityName::LOG, 'LogRights'];
+        yield [EntityName::PRODUCT, 'ProductRights'];
+        yield [EntityName::TASK, 'TaskRights'];
+        yield [EntityName::USER, 'UserRights'];
+    }
+
+    /**
      * @phpstan-return \Generator<int, array{string, EntityName}>
      */
     public static function getLabel(): \Generator
@@ -66,23 +83,6 @@ class EntityNameTest extends TestCase
         yield [EntityName::PRODUCT, 7];
         yield [EntityName::TASK, 8];
         yield [EntityName::USER, 9];
-    }
-
-    /**
-     * @phpstan-return \Generator<int, array{EntityName, string}>
-     */
-    public static function getRightsField(): \Generator
-    {
-        yield [EntityName::CALCULATION, 'CalculationRights'];
-        yield [EntityName::CALCULATION_STATE, 'CalculationStateRights'];
-        yield [EntityName::CATEGORY, 'CategoryRights'];
-        yield [EntityName::CUSTOMER, 'CustomerRights'];
-        yield [EntityName::GLOBAL_MARGIN, 'GlobalMarginRights'];
-        yield [EntityName::GROUP, 'GroupRights'];
-        yield [EntityName::LOG, 'LogRights'];
-        yield [EntityName::PRODUCT, 'ProductRights'];
-        yield [EntityName::TASK, 'TaskRights'];
-        yield [EntityName::USER, 'UserRights'];
     }
 
     /**
@@ -185,6 +185,13 @@ class EntityNameTest extends TestCase
         self::assertCount($expected, EntityName::sorted());
     }
 
+    #[DataProvider('getFormFields')]
+    public function testFormField(EntityName $entityName, string $expected): void
+    {
+        $actual = $entityName->getFormField();
+        self::assertSame($expected, $actual);
+    }
+
     #[DataProvider('getLabel')]
     public function testLabel(string $expected, EntityName $entity): void
     {
@@ -196,13 +203,6 @@ class EntityNameTest extends TestCase
     public function testOffset(EntityName $entityName, int $expected): void
     {
         $actual = $entityName->offset();
-        self::assertSame($expected, $actual);
-    }
-
-    #[DataProvider('getRightsField')]
-    public function testRightsField(EntityName $entityName, string $expected): void
-    {
-        $actual = $entityName->getRightsField();
         self::assertSame($expected, $actual);
     }
 

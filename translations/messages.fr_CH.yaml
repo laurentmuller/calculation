@@ -1422,17 +1422,17 @@ user:
         submit: Renvoyer
     rights:
         title: Droits d'accès
-        all_title: Accorder tous les droits d'accès
-        col_title: Activer ou désactiver tous les droits d'accès pour cette action
-        connected: Impossible de modifier les droits d'accès de l'utilisateur actuellement connecté !
-        default_title: Rétablir les droits d'accès aux valeurs par défaut
         description: Définition des droits d'accès à l'application.
-        none_title: N'accorder aucun droit d'accès
-        row_title: Activer ou désactiver tous les droits d'accès pour cet objet
-        success: Les droits d'accès de l'utilisateur <b>%name%</b> ont été mis à jour avec succès.
-        table_title: Objet / Action
-        toggle_title: Inverser les droits d'accès
         action: Modifier les droits d'accès
+        table_title: Objet / Action
+        toggle_title: Inverser les droits
+        all_title: Accorder tous les droits
+        none_title: Supprimer tous les droits
+        default_title: Rétablir les valeurs par défaut
+        col_title: Activer ou désactiver tous les droits d'accès pour cette action
+        row_title: Activer ou désactiver tous les droits d'accès pour cet objet
+        connected: Impossible de modifier les droits d'accès de l'utilisateur actuellement connecté !
+        success: Les droits d'accès de l'utilisateur <b>%name%</b> ont été mis à jour avec succès.
     roles:
         name: Rôles
         admin: Administrateur

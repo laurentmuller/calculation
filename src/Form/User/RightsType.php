@@ -41,7 +41,7 @@ class RightsType extends AbstractHelperType
     {
         $entities = EntityName::sorted();
         foreach ($entities as $entity) {
-            $this->addRightType($helper, $entity);
+            $this->addEntityPermissionType($helper, $entity);
         }
         $helper->listenerPreSetData($this->onPreSetData(...));
     }
@@ -58,11 +58,11 @@ class RightsType extends AbstractHelperType
         return $this->service->translateRole($role);
     }
 
-    private function addRightType(FormHelper $helper, EntityName $entity): void
+    private function addEntityPermissionType(FormHelper $helper, EntityName $entity): void
     {
-        $helper->field($entity->getRightsField())
+        $helper->field($entity->getFormField())
             ->label($entity)
-            ->add(AttributeRightType::class);
+            ->add(EntityPermissionType::class);
     }
 
     private function onPreSetData(PreSetDataEvent $event): void
@@ -71,11 +71,11 @@ class RightsType extends AbstractHelperType
         $data = $event->getData();
         $form = $event->getForm();
         if (!$this->service->hasRole($data, RoleInterface::ROLE_ADMIN)) {
-            $form->remove(EntityName::LOG->getRightsField());
-            $form->remove(EntityName::USER->getRightsField());
+            $form->remove(EntityName::LOG->getFormField());
+            $form->remove(EntityName::USER->getFormField());
         }
         if (!$this->debug) {
-            $form->remove(EntityName::CUSTOMER->getRightsField());
+            $form->remove(EntityName::CUSTOMER->getFormField());
         }
     }
 }

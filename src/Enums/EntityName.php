@@ -99,9 +99,9 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
     private const ENTITY_PREFIX = 'Entity';
 
     /**
-     * The right's suffix.
+     * The form suffix.
      */
-    private const RIGHTS_SUFFIX = 'Rights';
+    private const FORM_SUFFIX = 'Rights';
 
     /**
      * Gets this enumeration as constants.
@@ -120,13 +120,13 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
     }
 
     /**
-     * Gets rights field name.
+     * Gets the form field name.
      */
-    public function getRightsField(): string
+    public function getFormField(): string
     {
         $value = \substr($this->value, \strlen(self::ENTITY_PREFIX));
 
-        return $value . self::RIGHTS_SUFFIX;
+        return $value . self::FORM_SUFFIX;
     }
 
     /**
@@ -162,10 +162,10 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
      */
     public static function tryFromField(string $field): ?self
     {
-        if (!\str_ends_with($field, self::RIGHTS_SUFFIX)) {
+        if (!\str_ends_with($field, self::FORM_SUFFIX)) {
             return null;
         }
-        $field = self::ENTITY_PREFIX . \substr($field, 0, -\strlen(self::RIGHTS_SUFFIX));
+        $field = self::ENTITY_PREFIX . \substr($field, 0, -\strlen(self::FORM_SUFFIX));
 
         return self::tryFrom($field);
     }

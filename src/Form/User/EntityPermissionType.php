@@ -23,7 +23,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @extends AbstractType<FlagBagType>
  */
-class AttributeRightType extends AbstractType
+class EntityPermissionType extends AbstractType
 {
     #[\Override]
     public function configureOptions(OptionsResolver $resolver): void

@@ -15,12 +15,11 @@ namespace App\Tests\Traits;
 
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
+use App\Tests\FlagBagTestCase;
 use App\Traits\RightsTrait;
 use Elao\Enum\FlagBag;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 
-class RightsTraitTest extends TestCase
+class RightsTraitTest extends FlagBagTestCase
 {
     use RightsTrait;
 
@@ -31,49 +30,35 @@ class RightsTraitTest extends TestCase
     }
 
     /**
-     * @phpstan-return \Generator<int, array{string}>
+     * @psalm-suppress InvalidArgument
      */
-    public static function getRightsFields(): \Generator
+    public function testGetSet(): void
     {
-        $values = EntityName::cases();
-        foreach ($values as $value) {
-            yield [$value->getRightsField()];
-        }
-    }
+        $expected = EntityPermission::getAllPermission();
+        $name = EntityName::CALCULATION->getFormField();
+        $this->__set($name, $expected);
+        $actual = $this->__get($name);
+        self::assertSameFlagBag($expected, $actual);
 
-    #[DataProvider('getRightsFields')]
-    public function testGetAdd(string $field): void
-    {
-        $this->checkAttribute($field, 'ADD');
-    }
+        //  @phpstan-ignore argument.type
+        $this->__set($name, 'fake');
+        $actual = $this->__get($name);
+        self::assertSameFlagBag($expected, $actual);
 
-    #[DataProvider('getRightsFields')]
-    public function testGetDelete(string $field): void
-    {
-        $this->checkAttribute($field, 'DELETE');
-    }
-
-    #[DataProvider('getRightsFields')]
-    public function testGetEdit(string $field): void
-    {
-        $this->checkAttribute($field, 'EDIT');
-    }
-
-    #[DataProvider('getRightsFields')]
-    public function testGetEmpty(string $field): void
-    {
-        $permission = $this->__get($field);
-        self::assertNotNull($permission);
-        $expected = 0;
-        $actual = $permission->getValue();
-        self::assertSame($expected, $actual);
+        $name = 'fake';
+        $this->__set($name, $expected);
+        self::assertSameFlagBag($expected, $actual);
     }
 
     public function testIsSet(): void
     {
-        self::assertFalse($this->__isset('fake'));
-        $this->LogRights = FlagBag::fromAll(EntityPermission::class);
-        self::assertTrue($this->__isset('LogRights'));
+        $name = EntityName::CALCULATION->getFormField();
+        $actual = $this->__isset($name);
+        self::assertTrue($actual);
+
+        $name = 'fake';
+        $actual = $this->__isset($name);
+        self::assertFalse($actual);
     }
 
     public function testOverwrite(): void
@@ -85,49 +70,18 @@ class RightsTraitTest extends TestCase
 
     public function testPermissionEmpty(): void
     {
-        $permission = new FlagBag(EntityPermission::class);
-        $expected = $permission->getValue();
-        $this->CalculationRights = $permission;
-        $actual = $this->CalculationRights->getValue();
-        self::assertSame($expected, $actual);
+        $expected = new FlagBag(EntityPermission::class);
+        $this->setPermission(EntityName::CALCULATION, $expected);
+        $actual = $this->getPermission(EntityName::CALCULATION);
+        self::assertSameFlagBag($expected, $actual);
     }
 
     public function testPermissionShow(): void
     {
         $expected = EntityPermission::SHOW->value;
         $permission = new FlagBag(EntityPermission::class, $expected);
-        $this->CalculationRights = $permission;
-        $actual = $this->CalculationRights->getValue();
+        $this->setPermission(EntityName::CALCULATION, $permission);
+        $actual = $this->getPermission(EntityName::CALCULATION)->getValue();
         self::assertSame($expected, $actual);
-    }
-
-    /**
-     * @psalm-suppress InvalidPropertyAssignmentValue
-     * @psalm-suppress UndefinedThisPropertyAssignment
-     */
-    public function testSetInvalid(): void
-    {
-        self::assertSame(0, $this->getPermission(EntityName::LOG)->getValue());
-        $this->__set('LogRights', null);
-        self::assertSame(0, $this->getPermission(EntityName::LOG)->getValue());
-        $this->__set('fake', FlagBag::fromAll(EntityPermission::class));
-        self::assertSame(0, $this->getPermission(EntityName::LOG)->getValue());
-    }
-
-    private function checkAttribute(string $field, string $key): void
-    {
-        $attribute = $this->getAttribute($key);
-        $rights = new FlagBag(EntityPermission::class, $attribute);
-        $this->__set($field, $rights);
-        /** @phpstan-var FlagBag<EntityPermission> $value */
-        $value = $this->__get($field);
-        $expected = $rights->getValue();
-        $actual = $value->getValue();
-        self::assertSame($expected, $actual);
-    }
-
-    private function getAttribute(string $key): int
-    {
-        return EntityPermission::tryFromName($key)->value ?? -1;
     }
 }

@@ -50,9 +50,12 @@ trait RightsTrait
     private ?array $rights = null;
 
     /**
+     * NB: The mixed value must be returned. If not, ProxyHelper class will raise an exception.
+     * This will no more the case with PHP 8.4.
+     *
      * @return FlagBag<EntityPermission>|null
      */
-    public function __get(string $name): ?FlagBag
+    public function __get(string $name): mixed
     {
         $entity = EntityName::tryFromField($name);
 

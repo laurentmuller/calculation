@@ -15,11 +15,13 @@ namespace App\Tests\Form\User;
 
 use App\Entity\User;
 use App\Form\Type\PlainType;
+use App\Form\User\RightsType;
 use App\Form\User\UserRightsType;
 use App\Interfaces\RoleInterface;
 use App\Service\RoleService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
@@ -73,13 +75,14 @@ class UserRightsTypeTest extends TypeTestCase
             ->willReturn([RoleInterface::ROLE_ADMIN]);
         $translator = $this->createMockTranslator();
         $service = new RoleService($roleHierarchy, $translator);
+        $userRightsType = new UserRightsType($service);
 
-        $translator = $this->createMockTranslator();
-        $type = new UserRightsType(false, $service);
-        $type->setTranslator($translator);
+        $security = $this->createMock(Security::class);
+        $rightsType = new RightsType(false, $security);
 
         return [
-            $type,
+            $rightsType,
+            $userRightsType,
             new PlainType($translator),
         ];
     }

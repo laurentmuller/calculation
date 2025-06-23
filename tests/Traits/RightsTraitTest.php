@@ -15,13 +15,16 @@ namespace App\Tests\Traits;
 
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
+use App\Interfaces\RoleInterface;
 use App\Tests\FlagBagTestCase;
 use App\Traits\RightsTrait;
+use App\Traits\RoleTrait;
 use Elao\Enum\FlagBag;
 
-class RightsTraitTest extends FlagBagTestCase
+class RightsTraitTest extends FlagBagTestCase implements RoleInterface
 {
     use RightsTrait;
+    use RoleTrait;
 
     #[\Override]
     protected function setUp(): void

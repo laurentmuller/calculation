@@ -15,6 +15,7 @@ namespace App\Traits;
 
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
+use App\Interfaces\RoleInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Elao\Enum\FlagBag;
@@ -32,6 +33,8 @@ use Elao\Enum\FlagBag;
  * @property FlagBag<EntityPermission> $UserRights             the permissions for users.
  * @property FlagBag<EntityPermission> $LogRights              the permissions for logs.
  * @property FlagBag<EntityPermission> $CustomerRights         the permissions for customers.
+ *
+ * @phpstan-require-implements RoleInterface
  */
 trait RightsTrait
 {

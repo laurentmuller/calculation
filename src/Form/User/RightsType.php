@@ -14,68 +14,99 @@ declare(strict_types=1);
 namespace App\Form\User;
 
 use App\Enums\EntityName;
-use App\Form\AbstractHelperType;
-use App\Form\FormHelper;
+use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
-use App\Service\RoleService;
+use Elao\Enum\FlagBag;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\Form\Event\PreSetDataEvent;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * The access rights type.
+ *
+ * @extends AbstractType<mixed>
  */
-class RightsType extends AbstractHelperType
+class RightsType extends AbstractType
 {
     public function __construct(
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
-        protected readonly RoleService $service
+        private readonly Security $security,
     ) {
     }
 
-    /**
-     * Add fields to the given helper.
-     */
     #[\Override]
-    protected function addFormFields(FormHelper $helper): void
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $entities = EntityName::sorted();
         foreach ($entities as $entity) {
-            $this->addEntityPermissionType($helper, $entity);
+            if (!$this->isGranted($entity)) {
+                continue;
+            }
+            $this->addEntityPermissionType($builder, $entity);
         }
-        $helper->listenerPreSetData($this->onPreSetData(...));
     }
 
-    protected function translateEnabled(string $enabled): string
+    /**
+     * @phpstan-param FormBuilderInterface<mixed> $builder
+     */
+    private function addEntityPermissionType(FormBuilderInterface $builder, EntityName $entity): void
     {
-        $enabled = \filter_var($enabled, \FILTER_VALIDATE_BOOLEAN);
-
-        return $this->service->translateEnabled($enabled);
+        $builder->add(
+            $entity->getFormField(),
+            EntityPermissionType::class,
+            [
+                'label' => $entity,
+                /**
+                 * @phpstan-param int[] $object
+                 */
+                'getter' => fn (array $object): FlagBag => $this->getValue($entity, $object),
+                /**
+                 * @phpstan-param int[] $object
+                 * @phpstan-param FlagBag<EntityPermission> $value
+                 */
+                'setter' => fn (array &$object, FlagBag $value) => $this->setValue($entity, $object, $value),
+            ]
+        );
     }
 
-    protected function translateRole(RoleInterface|string $role): string
+    /**
+     * @phpstan-param int[] $object
+     *
+     * @phpstan-return FlagBag<EntityPermission>
+     */
+    private function getValue(EntityName $entity, array $object): FlagBag
     {
-        return $this->service->translateRole($role);
+        $offset = $entity->offset();
+        $value = $object[$offset];
+
+        return new FlagBag(EntityPermission::class, $value);
     }
 
-    private function addEntityPermissionType(FormHelper $helper, EntityName $entity): void
+    private function isGranted(EntityName $entityName): bool
     {
-        $helper->field($entity->getFormField())
-            ->label($entity)
-            ->add(EntityPermissionType::class);
+        return match ($entityName) {
+            EntityName::CALCULATION,
+            EntityName::CALCULATION_STATE,
+            EntityName::CATEGORY,
+            EntityName::GLOBAL_MARGIN,
+            EntityName::GROUP,
+            EntityName::PRODUCT,
+            EntityName::TASK => true,
+            EntityName::CUSTOMER => $this->debug,
+            EntityName::LOG,
+            EntityName::USER => $this->security->isGranted(RoleInterface::ROLE_ADMIN),
+        };
     }
 
-    private function onPreSetData(PreSetDataEvent $event): void
+    /**
+     * @phpstan-param int[] $object
+     * @phpstan-param FlagBag<EntityPermission> $value
+     */
+    private function setValue(EntityName $entity, array &$object, FlagBag $value): void
     {
-        /** @phpstan-var ?RoleInterface $data */
-        $data = $event->getData();
-        $form = $event->getForm();
-        if (!$this->service->hasRole($data, RoleInterface::ROLE_ADMIN)) {
-            $form->remove(EntityName::LOG->getFormField());
-            $form->remove(EntityName::USER->getFormField());
-        }
-        if (!$this->debug) {
-            $form->remove(EntityName::CUSTOMER->getFormField());
-        }
+        $offset = $entity->offset();
+        $object[$offset] = $value->getValue();
     }
 }

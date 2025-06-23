@@ -36,21 +36,21 @@
            </tr>
         </thead>
         <tbody>
-            {{ _self.row(form.CalculationRights, default.CalculationRights, overwrite) }}
-            {{ _self.row(form.ProductRights, default.ProductRights, overwrite) }}
-            {{ _self.row(form.TaskRights, default.TaskRights, overwrite) }}
-            {{ _self.row(form.CategoryRights, default.CategoryRights, overwrite) }}
-            {{ _self.row(form.GroupRights, default.GroupRights, overwrite) }}
-            {{ _self.row(form.CalculationStateRights, default.CalculationStateRights, overwrite) }}
-            {{ _self.row(form.GlobalMarginRights, default.GlobalMarginRights, overwrite) }}
-            {%- if form.CustomerRights is defined -%}
-                {{ _self.row(form.CustomerRights, default.CustomerRights, overwrite) }}
+            {{ _self.row(form.rights.CalculationRights, default.CalculationRights, overwrite) }}
+            {{ _self.row(form.rights.ProductRights, default.ProductRights, overwrite) }}
+            {{ _self.row(form.rights.TaskRights, default.TaskRights, overwrite) }}
+            {{ _self.row(form.rights.CategoryRights, default.CategoryRights, overwrite) }}
+            {{ _self.row(form.rights.GroupRights, default.GroupRights, overwrite) }}
+            {{ _self.row(form.rights.CalculationStateRights, default.CalculationStateRights, overwrite) }}
+            {{ _self.row(form.rights.GlobalMarginRights, default.GlobalMarginRights, overwrite) }}
+            {%- if form.rights.CustomerRights is defined -%}
+                {{ _self.row(form.rights.CustomerRights, default.CustomerRights, overwrite) }}
             {%- endif -%}
-            {%- if form.UserRights is defined -%}
-                {{ _self.row(form.UserRights, default.UserRights, overwrite) }}
+            {%- if form.rights.UserRights is defined -%}
+                {{ _self.row(form.rights.UserRights, default.UserRights, overwrite) }}
             {%- endif -%}
-            {%- if form.LogRights is defined -%}
-                {{ _self.row(form.LogRights, default.LogRights, overwrite) }}
+            {%- if form.rights.LogRights is defined -%}
+                {{ _self.row(form.rights.LogRights, default.LogRights, overwrite) }}
             {%- endif -%}
         </tbody>
     </table>

@@ -13,19 +13,28 @@ declare(strict_types=1);
 
 namespace App\Form\User;
 
+use App\Form\AbstractHelperType;
 use App\Form\FormHelper;
+use App\Model\Role;
 
 /**
  * Role rights type.
  */
-class RoleRightsType extends RightsType
+class RoleRightsType extends AbstractHelperType
 {
     #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
-        parent::addFormFields($helper);
         $helper->field('name')
             ->label('user.fields.role')
             ->addPlainType();
+        $helper->field('rights')
+            ->add(RightsType::class);
+    }
+
+    #[\Override]
+    protected function getLabelPrefix(): ?string
+    {
+        return 'user.fields.';
     }
 }

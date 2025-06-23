@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace App\Interfaces;
 
+use App\Enums\EntityName;
+use App\Enums\EntityPermission;
+use Elao\Enum\FlagBag;
+
 /**
  * Class implementing this interface deals with role names.
  */
@@ -32,6 +36,13 @@ interface RoleInterface
      * The user role name (default).
      */
     final public const ROLE_USER = 'ROLE_USER';
+
+    /**
+     * Gets the permission for the given entity name.
+     *
+     * @return FlagBag<EntityPermission>
+     */
+    public function getPermission(EntityName $entity): FlagBag;
 
     /**
      * Gets the role.
@@ -69,4 +80,11 @@ interface RoleInterface
      * Tells if this has the super admin role.
      */
     public function isSuperAdmin(): bool;
+
+    /**
+     * Sets the permission for the given entity name.
+     *
+     * @param FlagBag<EntityPermission> $permission
+     */
+    public function setPermission(EntityName $entity, FlagBag $permission): static;
 }

@@ -23,17 +23,6 @@ use Elao\Enum\FlagBag;
 /**
  * Trait to set or get access rights.
  *
- * @property FlagBag<EntityPermission> $CalculationRights      the permissions for calculations.
- * @property FlagBag<EntityPermission> $CalculationStateRights the permissions for calculation state.
- * @property FlagBag<EntityPermission> $GroupRights            the permissions for groups.
- * @property FlagBag<EntityPermission> $CategoryRights         the permissions for categories.
- * @property FlagBag<EntityPermission> $ProductRights          the permissions for products.
- * @property FlagBag<EntityPermission> $TaskRights             the permissions for tasks.
- * @property FlagBag<EntityPermission> $GlobalMarginRights     the permissions for global margins.
- * @property FlagBag<EntityPermission> $UserRights             the permissions for users.
- * @property FlagBag<EntityPermission> $LogRights              the permissions for logs.
- * @property FlagBag<EntityPermission> $CustomerRights         the permissions for customers.
- *
  * @phpstan-require-implements RoleInterface
  */
 trait RightsTrait
@@ -53,39 +42,6 @@ trait RightsTrait
     private ?array $rights = null;
 
     /**
-     * NB: The mixed value must be returned. If not, ProxyHelper class will raise an exception.
-     * This will no more the case with PHP 8.4.
-     *
-     * @return FlagBag<EntityPermission>|null
-     */
-    public function __get(string $name): mixed
-    {
-        $entity = EntityName::tryFromField($name);
-
-        return $entity instanceof EntityName ? $this->getPermission($entity) : null;
-    }
-
-    public function __isset(string $name): bool
-    {
-        return EntityName::tryFromField($name) instanceof EntityName;
-    }
-
-    /**
-     * @param FlagBag<EntityPermission>|null $value
-     */
-    public function __set(string $name, mixed $value): void
-    {
-        if (!$value instanceof FlagBag) {
-            return;
-        }
-        $entity = EntityName::tryFromField($name);
-        if (!$entity instanceof EntityName) {
-            return;
-        }
-        $this->setPermission($entity, $value);
-    }
-
-    /**
      * Gets the permission for the given entity name.
      *
      * @return FlagBag<EntityPermission>
@@ -97,6 +53,21 @@ trait RightsTrait
         $value = $rights[$offset];
 
         return new FlagBag(EntityPermission::class, $value);
+    }
+
+    /**
+     * Gets all permissions.
+     *
+     * @return array<string, FlagBag<EntityPermission>>
+     */
+    public function getPermissions(): array
+    {
+        return \array_reduce(
+            EntityName::sorted(),
+            /** @param array<string, FlagBag<EntityPermission>> $carry */
+            fn (array $carry, EntityName $name) => $carry + [$name->getFormField() => $this->getPermission($name)],
+            []
+        );
     }
 
     /**
@@ -150,7 +121,7 @@ trait RightsTrait
      */
     public function setRights(?array $rights): static
     {
-        $this->rights = null === $rights || [] === $rights || 0 === \array_sum($rights) ? null : $rights;
+        $this->rights = 0 === \array_sum($rights ?? []) ? null : $rights;
 
         return $this;
     }

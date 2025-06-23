@@ -117,6 +117,15 @@ class RoleServiceTest extends TestCase
         self::assertSame($actual, $expected);
     }
 
+    public function testRoleIconAndName(): void
+    {
+        $service = $this->createService();
+        $role = new Role(RoleInterface::ROLE_USER);
+        $actual = $service->getRoleIconAndName($role);
+        $expected = '<i class="me-1 fa-solid fa-user"></i>user.roles.user';
+        self::assertSame($expected, $actual);
+    }
+
     public function testTranslateEnabled(): void
     {
         $service = $this->createService();

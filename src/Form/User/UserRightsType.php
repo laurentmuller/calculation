@@ -14,20 +14,14 @@ declare(strict_types=1);
 namespace App\Form\User;
 
 use App\Entity\User;
-use App\Form\AbstractHelperType;
 use App\Form\FormHelper;
-use App\Service\RoleService;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * User rights type.
  */
-class UserRightsType extends AbstractHelperType
+class UserRightsType extends AbstractRightsType
 {
-    public function __construct(private readonly RoleService $service)
-    {
-    }
-
     #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -39,23 +33,13 @@ class UserRightsType extends AbstractHelperType
     {
         $helper->field('username')
             ->addPlainType();
-        $helper->field('role')
-            ->updateOption('value_transformer', $this->translateRole(...))
-            ->addPlainType();
         $helper->field('enabled')
             ->updateOption('value_transformer', $this->translateEnabled(...))
             ->addPlainType();
         $helper->field('overwrite')
-            ->rowClass('mt-3')
             ->addCheckboxType();
-        $helper->field('rights')
-            ->add(RightsType::class);
-    }
-
-    #[\Override]
-    protected function getLabelPrefix(): ?string
-    {
-        return 'user.fields.';
+        $this->addRoleType($helper);
+        $this->addRightsType($helper);
     }
 
     private function translateEnabled(string $value): string
@@ -63,10 +47,5 @@ class UserRightsType extends AbstractHelperType
         $enabled = \filter_var($value, \FILTER_VALIDATE_BOOLEAN);
 
         return $this->service->translateEnabled($enabled);
-    }
-
-    private function translateRole(string $role): string
-    {
-        return $this->service->translateRole($role);
     }
 }

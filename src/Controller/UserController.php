@@ -300,9 +300,9 @@ class UserController extends AbstractEntityController
         return $this->render('user/user_rights.html.twig', [
             'item' => $item,
             'form' => $form,
-            'default' => $default,
             'params' => ['id' => $item->getId()],
-            'permissions' => EntityPermission::sorted(),
+            'default' => $default,
+            'entities' => EntityPermission::sorted(),
         ]);
     }
 

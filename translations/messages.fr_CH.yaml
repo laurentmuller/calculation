@@ -1372,8 +1372,7 @@ user:
         role: Rôle
         subject: Objet
         toAddress: Destinataire
-        username: Nom d'utilisateur
-        username_short: Nom
+        username: Nom
         password: Mot de passe
     image:
         failure: Une erreur s'est produite lors du redimensionnement de l'image.

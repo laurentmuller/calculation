@@ -17,7 +17,7 @@
 {% block property_body %}
 {{ property('user.fields.username', item.username) }}
 {{ email(item.email, null, 'user.fields.email') }}
-{{ property('user.fields.role', '<i class="' ~ item|role_icon ~ ' me-1"></i>' ~ item|trans_role) }}
+{{ property('user.fields.role', item|role_icon_name) }}
 {%- set value = (item.enabled ? 'common.value_enabled' : 'common.value_disabled')|trans -%}
 {{ property('user.fields.enabled', value, item.enabled ? 'text-success' : 'text-danger') }}
 {{ property('user.fields.lastLogin', item.lastLogin ? item.lastLogin|locale_datetime : 'common.value_none'|trans) }}

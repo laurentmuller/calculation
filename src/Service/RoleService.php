@@ -49,7 +49,6 @@ readonly class RoleService
     /**
      * Gets the role's icon.
      */
-    #[AsTwigFilter('role_icon')]
     public function getRoleIcon(RoleInterface|string $role): string
     {
         if ($role instanceof RoleInterface) {
@@ -61,6 +60,19 @@ readonly class RoleService
             RoleInterface::ROLE_ADMIN => 'fa-solid fa-user-shield',
             default => 'fa-solid fa-user',
         };
+    }
+
+    /**
+     * Gets the icon and the translated role.
+     */
+    #[AsTwigFilter('role_icon_name')]
+    public function getRoleIconAndName(RoleInterface|string $role): string
+    {
+        return \sprintf(
+            '<i class="me-1 %s"></i>%s',
+            $this->getRoleIcon($role),
+            $this->translateRole($role)
+        );
     }
 
     /**
@@ -97,7 +109,7 @@ readonly class RoleService
     }
 
     /**
-     * Translate the enable state.
+     * Translate the enabled state.
      */
     public function translateEnabled(bool $enabled): string
     {
@@ -107,7 +119,6 @@ readonly class RoleService
     /**
      * Gets the translated role.
      */
-    #[AsTwigFilter('trans_role')]
     public function translateRole(RoleInterface|string $role): string
     {
         if ($role instanceof RoleInterface) {

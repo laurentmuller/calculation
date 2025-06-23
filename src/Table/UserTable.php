@@ -80,16 +80,10 @@ class UserTable extends AbstractEntityTable
 
     /**
      * Format the user's role.
-     *
-     * @throws \Twig\Error\Error
      */
     public function formatRole(?string $role): string
     {
-        $role ??= RoleInterface::ROLE_USER;
-
-        return $this->twig->render('macros/_cell_user_role.html.twig', [
-            'role' => $this->roleService->translateRole($role),
-            'icon' => $this->roleService->getRoleIcon($role)]);
+        return $this->roleService->getRoleIconAndName($role ?? RoleInterface::ROLE_USER);
     }
 
     #[\Override]

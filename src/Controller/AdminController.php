@@ -26,7 +26,6 @@ use App\Service\ApplicationService;
 use App\Service\CacheService;
 use App\Service\CommandService;
 use App\Service\RoleBuilderService;
-use App\Service\RoleService;
 use App\Utils\FileUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -139,12 +138,10 @@ class AdminController extends AbstractController
     #[GetPostRoute(path: '/rights/admin', name: 'rights_admin')]
     public function rightsAdmin(
         Request $request,
-        RoleService $roleService,
-        RoleBuilderService $roleBuilderService
+        RoleBuilderService $service
     ): Response {
         $application = $this->getApplicationService();
         $role = $this->createRole(
-            $roleService,
             RoleInterface::ROLE_ADMIN,
             $application->getAdminRights()
         );
@@ -153,7 +150,7 @@ class AdminController extends AbstractController
             $request,
             $application,
             $role,
-            $roleBuilderService->getRoleAdmin(),
+            $service->getRoleAdmin(),
             PropertyServiceInterface::P_ADMIN_RIGHTS
         );
     }
@@ -164,12 +161,10 @@ class AdminController extends AbstractController
     #[GetPostRoute(path: '/rights/user', name: 'rights_user')]
     public function rightsUser(
         Request $request,
-        RoleService $roleService,
-        RoleBuilderService $roleBuilderService
+        RoleBuilderService $service
     ): Response {
         $application = $this->getApplicationService();
         $role = $this->createRole(
-            $roleService,
             RoleInterface::ROLE_USER,
             $application->getUserRights()
         );
@@ -178,7 +173,7 @@ class AdminController extends AbstractController
             $request,
             $application,
             $role,
-            $roleBuilderService->getRoleUser(),
+            $service->getRoleUser(),
             PropertyServiceInterface::P_USER_RIGHTS
         );
     }
@@ -188,9 +183,9 @@ class AdminController extends AbstractController
      *
      * @phpstan-param RoleInterface::ROLE_* $role
      */
-    private function createRole(RoleService $roleService, string $role, array $rights): Role
+    private function createRole(string $role, array $rights): Role
     {
-        return new Role($role, $roleService->translateRole($role), $rights);
+        return new Role(role: $role, rights: $rights);
     }
 
     /**
@@ -225,9 +220,9 @@ class AdminController extends AbstractController
 
         return $this->render('admin/role_rights.html.twig', [
             'form' => $form,
-            'default' => $default,
             'is_admin' => $role->isAdmin(),
-            'permissions' => EntityPermission::sorted(),
+            'default' => $default,
+            'entities' => EntityPermission::sorted(),
         ]);
     }
 }

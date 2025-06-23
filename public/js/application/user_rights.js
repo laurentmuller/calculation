@@ -131,7 +131,7 @@ function onOverwriteClick($element) {
     'use strict';
     const disabled = !$element.isChecked();
     getAllCheckboxes().toggleDisabled(disabled);
-    $('#all, #none, #toggle, .link-col, .link-row').toggleDisabled(disabled);
+    $('#all, #none, #toggle, .btn-row, .btn-col').toggleDisabled(disabled);
     updateDefaultAction();
 }
 
@@ -179,6 +179,7 @@ $(function () {
     'use strict';
     // validation
     $('form').initValidator();
+
     // bind events
     $('#all').on('click', function () {
         updateAllCheckboxes(true);
@@ -192,10 +193,10 @@ $(function () {
     $('#default').on('click', function () {
         setDefaultValues();
     });
-    $('.link-col').on('click', function () {
+    $('.btn-col').on('click', function () {
         onColumnClick($(this));
     });
-    $('.link-row').on('click', function () {
+    $('.btn-row').on('click', function () {
         onRowClick($(this));
     });
     $('#user_rights_overwrite').on('click', function () {
@@ -204,6 +205,7 @@ $(function () {
     getAllCheckboxes().on('click', function () {
         updateDefaultAction();
     });
+
     // update
     updateDefaultAction();
 });

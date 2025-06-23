@@ -23,7 +23,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * The access rights type.
+ * The access permissions type.
  *
  * @extends AbstractType<mixed>
  */
@@ -39,11 +39,8 @@ class RightsType extends AbstractType
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $entities = EntityName::sorted();
+        $entities = $this->getEntityNames();
         foreach ($entities as $entity) {
-            if (!$this->isGranted($entity)) {
-                continue;
-            }
             $this->addEntityPermissionType($builder, $entity);
         }
     }
@@ -53,6 +50,7 @@ class RightsType extends AbstractType
      */
     private function addEntityPermissionType(FormBuilderInterface $builder, EntityName $entity): void
     {
+        $offset = $entity->offset();
         $builder->add(
             $entity->getFormField(),
             EntityPermissionType::class,
@@ -61,14 +59,22 @@ class RightsType extends AbstractType
                 /**
                  * @phpstan-param int[] $object
                  */
-                'getter' => fn (array $object): FlagBag => $this->getValue($entity, $object),
+                'getter' => fn (array $object): FlagBag => $this->getOffsetValue($offset, $object),
                 /**
                  * @phpstan-param int[] $object
                  * @phpstan-param FlagBag<EntityPermission> $value
                  */
-                'setter' => fn (array &$object, FlagBag $value) => $this->setValue($entity, $object, $value),
+                'setter' => fn (array &$object, FlagBag $value) => $this->setOffsetValue($offset, $object, $value),
             ]
         );
+    }
+
+    /**
+     * @phpstan-return EntityName[]
+     */
+    private function getEntityNames(): array
+    {
+        return \array_filter(EntityName::sorted(), $this->isGranted(...));
     }
 
     /**
@@ -76,12 +82,9 @@ class RightsType extends AbstractType
      *
      * @phpstan-return FlagBag<EntityPermission>
      */
-    private function getValue(EntityName $entity, array $object): FlagBag
+    private function getOffsetValue(int $offset, array $object): FlagBag
     {
-        $offset = $entity->offset();
-        $value = $object[$offset];
-
-        return new FlagBag(EntityPermission::class, $value);
+        return new FlagBag(EntityPermission::class, $object[$offset]);
     }
 
     private function isGranted(EntityName $entityName): bool
@@ -101,12 +104,11 @@ class RightsType extends AbstractType
     }
 
     /**
-     * @phpstan-param int[] $object
+     * @phpstan-param int[]                     $object
      * @phpstan-param FlagBag<EntityPermission> $value
      */
-    private function setValue(EntityName $entity, array &$object, FlagBag $value): void
+    private function setOffsetValue(int $offset, array &$object, FlagBag $value): void
     {
-        $offset = $entity->offset();
         $object[$offset] = $value->getValue();
     }
 }

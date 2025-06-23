@@ -37,7 +37,7 @@ class UserRightsTypeTest extends TypeTestCase
             ->setRole(RoleInterface::ROLE_ADMIN);
         $data = [
             'username' => 'username',
-            'role' => 'user.roles.admin',
+            'role' => '<i class="me-1 fa-solid fa-user-shield"></i>user.roles.admin',
             'enabled' => 'common.value_enabled',
             'overwrite' => '1',
         ];

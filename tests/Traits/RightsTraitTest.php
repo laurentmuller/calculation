@@ -32,38 +32,6 @@ class RightsTraitTest extends FlagBagTestCase implements RoleInterface
         $this->rights = null;
     }
 
-    /**
-     * @psalm-suppress InvalidArgument
-     */
-    public function testGetSet(): void
-    {
-        $expected = EntityPermission::getAllPermission();
-        $name = EntityName::CALCULATION->getFormField();
-        $this->__set($name, $expected);
-        $actual = $this->__get($name);
-        self::assertSameFlagBag($expected, $actual);
-
-        //  @phpstan-ignore argument.type
-        $this->__set($name, 'fake');
-        $actual = $this->__get($name);
-        self::assertSameFlagBag($expected, $actual);
-
-        $name = 'fake';
-        $this->__set($name, $expected);
-        self::assertSameFlagBag($expected, $actual);
-    }
-
-    public function testIsSet(): void
-    {
-        $name = EntityName::CALCULATION->getFormField();
-        $actual = $this->__isset($name);
-        self::assertTrue($actual);
-
-        $name = 'fake';
-        $actual = $this->__isset($name);
-        self::assertFalse($actual);
-    }
-
     public function testOverwrite(): void
     {
         self::assertFalse($this->isOverwrite());

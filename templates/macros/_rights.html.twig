@@ -1,17 +1,21 @@
 {# macros #}
 {% macro header(permission, overwrite) %}
-<th>
-    <button type="button" class="btn btn-link btn-col p-0" title="{{ 'user.rights.col_title'|trans }}"{%- if not overwrite -%} disabled{%- endif -%}>{{ permission|trans }}</button>
+<th class="text-center">
+    <button type="button" class="btn btn-link btn-col p-0" title="{{ 'user.rights.col_title'|trans }}"{%- if not overwrite -%} disabled{%- endif -%}>
+        {{- permission|trans -}}
+    </button>
 </th>
 {%- endmacro %}
 
-{% macro row(entries, default, overwrite) -%}
+{% macro row(entries, permission, overwrite) -%}
 <tr class="text-center">
     <td class="text-start">
-        <button type="button" class="btn btn-link btn-row p-0" title="{{ 'user.rights.row_title'|trans }}"{%- if not overwrite -%} disabled{%- endif -%}>{{ entries.vars.label|trans }}</button>
+        <button type="button" class="btn btn-link btn-row p-0" title="{{ 'user.rights.row_title'|trans }}"{%- if not overwrite -%} disabled{%- endif -%}>
+            {{- entries.vars.label|trans -}}
+        </button>
     </td>
     {% for entry in entries %}
-        {%- set checked = default.hasBits(entry.vars.value) -%}
+        {%- set checked = permission.hasBits(entry.vars.value) -%}
         {%- set attr = {'data-default': checked|json_encode, class: 'form-check-no-label'} -%}
         {%- if not overwrite -%}
             {%- set attr = attr|merge({disabled: 'disabled', checked: checked}) -%}
@@ -21,36 +25,36 @@
 </tr>
 {%- endmacro %}
 
-{% macro table(rights, default, entities, overwrite = true) %}
+{% macro table(rights, permissions, entities, overwrite = true) %}
 {% from 'macros/_icons.html.twig' import icon %}
 <div class="table-responsive mb-3">
     <table class="table table-bordered table-list" id="table-edit">
         <thead>
-           <tr class="text-center">
-               <th class="text-start text-nowrap fw-normal">
-                   {{- icon('arrow-down me-1', 'user.rights.table_title') }}{{ icon('arrow-right ms-1') -}}
-               </th>
-               {% for entity in entities %}
-                   {{ _self.header(entity, overwrite) }}
+            <tr class="text-center">
+                <th class="text-start text-nowrap fw-normal">
+                    {{- icon('arrow-down me-1', 'user.rights.table_title') }}{{ icon('arrow-right ms-1') -}}
+                </th>
+                {% for entity in entities %}
+                    {{ _self.header(entity, overwrite) }}
                 {% endfor %}
-           </tr>
+            </tr>
         </thead>
         <tbody>
-            {{ _self.row(rights.CalculationRights, default.CalculationRights, overwrite) }}
-            {{ _self.row(rights.ProductRights, default.ProductRights, overwrite) }}
-            {{ _self.row(rights.TaskRights, default.TaskRights, overwrite) }}
-            {{ _self.row(rights.CategoryRights, default.CategoryRights, overwrite) }}
-            {{ _self.row(rights.GroupRights, default.GroupRights, overwrite) }}
-            {{ _self.row(rights.CalculationStateRights, default.CalculationStateRights, overwrite) }}
-            {{ _self.row(rights.GlobalMarginRights, default.GlobalMarginRights, overwrite) }}
-            {%- if rights.CustomerRights is defined -%}
-                {{ _self.row(rights.CustomerRights, default.CustomerRights, overwrite) }}
+            {{ _self.row(rights.Calculation, permissions.Calculation, overwrite) }}
+            {{ _self.row(rights.Product, permissions.Product, overwrite) }}
+            {{ _self.row(rights.Task, permissions.Task, overwrite) }}
+            {{ _self.row(rights.Category, permissions.Category, overwrite) }}
+            {{ _self.row(rights.Group, permissions.Group, overwrite) }}
+            {{ _self.row(rights.CalculationState, permissions.CalculationState, overwrite) }}
+            {{ _self.row(rights.GlobalMargin, permissions.GlobalMargin, overwrite) }}
+            {%- if rights.Customer is defined -%}
+                {{ _self.row(rights.Customer, permissions.Customer, overwrite) }}
             {%- endif -%}
-            {%- if rights.UserRights is defined -%}
-                {{ _self.row(rights.UserRights, default.UserRights, overwrite) }}
+            {%- if rights.User is defined -%}
+                {{ _self.row(rights.User, permissions.User, overwrite) }}
             {%- endif -%}
-            {%- if rights.LogRights is defined -%}
-                {{ _self.row(rights.LogRights, default.LogRights, overwrite) }}
+            {%- if rights.Log is defined -%}
+                {{ _self.row(rights.Log, permissions.Log, overwrite) }}
             {%- endif -%}
         </tbody>
     </table>
@@ -70,7 +74,7 @@
 {% from 'macros/_icons.html.twig' import icon %}
 <div class="dropdown">
     <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-        {{- icon('bars', 'common.actions') -}}
+        {{- icon('bars', 'common.actions') }}
     </button>
     <ul class="dropdown-menu dropdown-menu-end">
         {{ _self.action('all', 'check-circle', overwrite) }}

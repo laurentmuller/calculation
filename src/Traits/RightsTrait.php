@@ -58,7 +58,7 @@ trait RightsTrait
     /**
      * Gets all permissions.
      *
-     * @return array<string, FlagBag<EntityPermission>>
+     * @return array<string, FlagBag<EntityPermission>> an array where keys are the form field name
      */
     public function getPermissions(): array
     {

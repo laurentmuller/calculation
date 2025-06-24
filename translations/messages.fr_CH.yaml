@@ -1417,7 +1417,10 @@ user:
         error: Un ou plusieurs utilisateurs doivent être sélectionnés.
     send:
         title: Renvoyer une demande de mot de passe
-        message: Êtes-vous sûr de vouloir renvoyer une nouvelle demande de mot de passe pour l'utilisateur <b>%name%</b> ?
+        message: |
+            Cette action envoie un message électronique (e-mail) permettant à l'utilisateur <b>%name%</b> de modifier son mot de passe.
+            
+            Êtes-vous sûr de vouloir renvoyer une nouvelle demande ?
         submit: Renvoyer
     rights:
         title: Droits d'accès

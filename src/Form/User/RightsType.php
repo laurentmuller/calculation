@@ -25,7 +25,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 /**
  * The access permissions type.
  *
- * @extends AbstractType<mixed>
+ * @extends AbstractType<EntityPermission[]>
  */
 class RightsType extends AbstractType
 {
@@ -61,7 +61,7 @@ class RightsType extends AbstractType
                  */
                 'getter' => fn (array $object): FlagBag => $this->getOffsetValue($offset, $object),
                 /**
-                 * @phpstan-param int[] $object
+                 * @phpstan-param int[]                     $object
                  * @phpstan-param FlagBag<EntityPermission> $value
                  */
                 'setter' => fn (array &$object, FlagBag $value) => $this->setOffsetValue($offset, $object, $value),

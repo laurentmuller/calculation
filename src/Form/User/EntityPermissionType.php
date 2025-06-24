@@ -30,7 +30,6 @@ class EntityPermissionType extends AbstractType
     {
         $resolver->setDefaults([
             'expanded' => true,
-            'multiple' => true,
             'required' => false,
             'choice_label' => false,
             'class' => EntityPermission::class,

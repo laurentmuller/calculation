@@ -13,7 +13,7 @@
 {% block card_body -%}
     {% block message %}
         {% if message is defined %}
-            <p class="my-2">{{ message|trans(message_parameters|default({}))|raw }}</p>
+            <p class="my-2">{{ message|trans(message_parameters|default({}))|raw|nl2br }}</p>
         {% endif %}
     {% endblock %}
 {{ parent() }}

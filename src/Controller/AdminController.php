@@ -136,21 +136,17 @@ class AdminController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[GetPostRoute(path: '/rights/admin', name: 'rights_admin')]
-    public function rightsAdmin(
-        Request $request,
-        RoleBuilderService $service
-    ): Response {
+    public function rightsAdmin(Request $request, RoleBuilderService $service): Response
+    {
         $application = $this->getApplicationService();
-        $role = $this->createRole(
-            RoleInterface::ROLE_ADMIN,
-            $application->getAdminRights()
-        );
+        $role = $application->getAdminRole();
+        $default = $service->getRoleAdmin();
 
         return $this->editRights(
             $request,
-            $application,
             $role,
-            $service->getRoleAdmin(),
+            $default,
+            $application,
             PropertyServiceInterface::P_ADMIN_RIGHTS
         );
     }
@@ -159,21 +155,17 @@ class AdminController extends AbstractController
      * Edit rights for the user role.
      */
     #[GetPostRoute(path: '/rights/user', name: 'rights_user')]
-    public function rightsUser(
-        Request $request,
-        RoleBuilderService $service
-    ): Response {
+    public function rightsUser(Request $request, RoleBuilderService $service): Response
+    {
         $application = $this->getApplicationService();
-        $role = $this->createRole(
-            RoleInterface::ROLE_USER,
-            $application->getUserRights()
-        );
+        $role = $application->getUserRole();
+        $default = $service->getRoleUser();
 
         return $this->editRights(
             $request,
-            $application,
             $role,
-            $service->getRoleUser(),
+            $default,
+            $application,
             PropertyServiceInterface::P_USER_RIGHTS
         );
     }
@@ -193,9 +185,9 @@ class AdminController extends AbstractController
      */
     private function editRights(
         Request $request,
-        ApplicationService $application,
         Role $role,
         Role $default,
+        ApplicationService $application,
         string $property
     ): Response {
         $form = $this->createForm(RoleRightsType::class, $role);

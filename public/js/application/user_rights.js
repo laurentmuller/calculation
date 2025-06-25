@@ -1,12 +1,31 @@
 (function ($) {
     'use strict';
+
     /**
-     * Gets the default value.
+     * Gets this default value.
      * @return {boolean}
      */
     $.fn.getDefaultValue = function () {
         return JSON.parse($(this).data('default') || 'false');
     };
+
+    /**
+     * Reset this to the default value.
+     */
+    $.fn.resetValue = function () {
+        const $this = $(this);
+        $this.setChecked($this.getDefaultValue());
+    };
+
+    /**
+     * Returns a value indicating if this has changed (not has the default value).
+     * @returns {boolean}
+     */
+    $.fn.isValueChanged = function () {
+        const $this = $(this);
+        return $this.isChecked() !== $this.getDefaultValue();
+    };
+
 }(jQuery));
 
 /**
@@ -41,15 +60,14 @@ function isDefaultValues() {
     'use strict';
     let changed = false;
     getAllCheckboxes().each(function () {
-        const $this = $(this);
-        if ($this.isChecked() !== $this.getDefaultValue()) {
+        if ($(this).isValueChanged()) {
             changed = true;
             return false;
         }
     });
     const $overwrite = $('#user_rights_overwrite');
     if (!changed && $overwrite.length) {
-        changed = $overwrite.isChecked() !== $overwrite.getDefaultValue();
+        changed = $overwrite.isValueChanged();
     }
     return changed;
 }
@@ -161,15 +179,15 @@ function toggleAllCheckboxes() {
 function setDefaultValues() {
     'use strict';
     getAllCheckboxes().each(function () {
-        const $this = $(this);
-        $this.setChecked($this.getDefaultValue());
+        $(this).resetValue();
     });
     const $overwrite = $('#user_rights_overwrite');
     if ($overwrite.length) {
-        $overwrite.setChecked($overwrite.getDefaultValue());
+        $overwrite.resetValue();
         onOverwriteClick($overwrite);
+    } else {
+        updateDefaultAction();
     }
-    updateDefaultAction();
 }
 
 /**

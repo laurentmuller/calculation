@@ -1,6 +1,6 @@
 {# macros #}
 {% macro header(permission, overwrite) %}
-<th class="text-center">
+<th>
     <button type="button" class="btn btn-link btn-col p-0" title="{{ 'user.rights.col_title'|trans }}"{%- if not overwrite -%} disabled{%- endif -%}>
         {{- permission|trans -}}
     </button>
@@ -74,7 +74,7 @@
 {% from 'macros/_icons.html.twig' import icon %}
 <div class="dropdown">
     <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-        {{- icon('bars', 'common.actions') }}
+        {{ icon('bars', 'common.actions') }}
     </button>
     <ul class="dropdown-menu dropdown-menu-end">
         {{ _self.action('all', 'check-circle', overwrite) }}

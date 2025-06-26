@@ -617,7 +617,6 @@ color_picker:
     advanced_text: Avancé...
     custom_text: Personnalisé
 index:
-    change_password: Modifier le mot de passe
     disabled: <b>%username%</b>, vous ne pouvez pas accéder à ce site car votre profil a été désactivé.<br><br>Veuillez demander à votre supérieur hiérarchique de vous octroyer les droits nécessaires ou à l'administrateur du site de réactiver votre compte.
     login: Connexion
     logout: Déconnexion
@@ -1372,8 +1371,7 @@ user:
         role: Rôle
         subject: Objet
         toAddress: Destinataire
-        username: Nom d'utilisateur
-        username_short: Nom
+        username: Nom
         password: Mot de passe
     image:
         failure: Une erreur s'est produite lors du redimensionnement de l'image.
@@ -1418,7 +1416,10 @@ user:
         error: Un ou plusieurs utilisateurs doivent être sélectionnés.
     send:
         title: Renvoyer une demande de mot de passe
-        message: Êtes-vous sûr de vouloir renvoyer une nouvelle demande de mot de passe pour l'utilisateur <b>%name%</b> ?
+        message: |
+            Cette action envoie un message électronique (e-mail) permettant à l'utilisateur <b>%name%</b> de modifier son mot de passe.
+            
+            Êtes-vous sûr de vouloir renvoyer une nouvelle demande ?
         submit: Renvoyer
     rights:
         title: Droits d'accès

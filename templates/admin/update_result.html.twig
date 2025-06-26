@@ -64,8 +64,8 @@
                                     <tr>
                                         <td class="text-id text-border" style="{{ stateCss(value.color) }}">{{ value.id|identifier }}</td>
                                         <td class="text-date">{{ value.date|locale_date }}</td>
-                                        <td class="text-nowrap">{{ value.customer }}</td>
-                                        <td class="text-nowrap">{{ value.description }}</td>
+                                        <td class="text-truncate" style="max-width: 100px;">{{ value.customer }}</td>
+                                        <td class="text-truncate" style="max-width: 100px;">{{ value.description }}</td>
                                         <td class="text-currency">{{ value.old_value|amount }}</td>
                                         <td class="text-currency">{{ value.new_value|amount }}</td>
                                         <td class="text-currency">{{ value.delta|amount }}</td>

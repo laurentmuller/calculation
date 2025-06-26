@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Twig\Extension\AttributeExtension;
 use Twig\RuntimeLoader\RuntimeLoaderInterface;
 
-class RoleHierarchyServiceTest extends IntegrationTestCase implements RuntimeLoaderInterface
+class RoleServiceTest extends IntegrationTestCase implements RuntimeLoaderInterface
 {
     use TranslatorMockTrait;
 

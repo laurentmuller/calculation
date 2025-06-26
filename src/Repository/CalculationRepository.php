@@ -228,7 +228,7 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
-     * Gets calculations grouped by years and months reversed.
+     * Gets the calculations grouped by years and months sorted by date in descending order.
      *
      * @param int $maxResults the maximum number of results to retrieve (the "limit")
      *
@@ -531,6 +531,9 @@ class CalculationRepository extends AbstractRepository
 
     /**
      * Gets the last calculations.
+     *
+     * @param int            $maxResults the maximum number of calculations to retrieve (the "limit")
+     * @param ?UserInterface $user       if not null, returns the user's last calculations
      */
     public function getLastCalculations(int $maxResults, ?UserInterface $user = null): array
     {

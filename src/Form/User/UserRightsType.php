@@ -15,46 +15,37 @@ namespace App\Form\User;
 
 use App\Entity\User;
 use App\Form\FormHelper;
-use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
  * User rights type.
  */
-class UserRightsType extends RightsType implements ServiceSubscriberInterface
+class UserRightsType extends AbstractRightsType
 {
-    use ServiceMethodsSubscriberTrait;
-    use TranslatorAwareTrait;
-
     #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
-        parent::configureOptions($resolver);
         $resolver->setDefault('data_class', User::class);
     }
 
     #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
-        parent::addFormFields($helper);
         $helper->field('username')
-            ->addPlainType();
-        $helper->field('role')
-            ->updateOption('value_transformer', $this->translateRole(...))
             ->addPlainType();
         $helper->field('enabled')
             ->updateOption('value_transformer', $this->translateEnabled(...))
             ->addPlainType();
         $helper->field('overwrite')
-            ->rowClass('mt-3')
             ->addCheckboxType();
+        $this->addRoleType($helper);
+        $this->addRightsType($helper);
     }
 
-    #[\Override]
-    protected function getLabelPrefix(): ?string
+    private function translateEnabled(string $value): string
     {
-        return 'user.fields.';
+        $enabled = \filter_var($value, \FILTER_VALIDATE_BOOLEAN);
+
+        return $this->service->translateEnabled($enabled);
     }
 }

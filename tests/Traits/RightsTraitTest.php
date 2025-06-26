@@ -15,50 +15,21 @@ namespace App\Tests\Traits;
 
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
+use App\Interfaces\RoleInterface;
 use App\Tests\FlagBagTestCase;
 use App\Traits\RightsTrait;
+use App\Traits\RoleTrait;
 use Elao\Enum\FlagBag;
 
-class RightsTraitTest extends FlagBagTestCase
+class RightsTraitTest extends FlagBagTestCase implements RoleInterface
 {
     use RightsTrait;
+    use RoleTrait;
 
     #[\Override]
     protected function setUp(): void
     {
         $this->rights = null;
-    }
-
-    /**
-     * @psalm-suppress InvalidArgument
-     */
-    public function testGetSet(): void
-    {
-        $expected = EntityPermission::getAllPermission();
-        $name = EntityName::CALCULATION->getFormField();
-        $this->__set($name, $expected);
-        $actual = $this->__get($name);
-        self::assertSameFlagBag($expected, $actual);
-
-        //  @phpstan-ignore argument.type
-        $this->__set($name, 'fake');
-        $actual = $this->__get($name);
-        self::assertSameFlagBag($expected, $actual);
-
-        $name = 'fake';
-        $this->__set($name, $expected);
-        self::assertSameFlagBag($expected, $actual);
-    }
-
-    public function testIsSet(): void
-    {
-        $name = EntityName::CALCULATION->getFormField();
-        $actual = $this->__isset($name);
-        self::assertTrue($actual);
-
-        $name = 'fake';
-        $actual = $this->__isset($name);
-        self::assertFalse($actual);
     }
 
     public function testOverwrite(): void

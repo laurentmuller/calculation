@@ -15,7 +15,7 @@ Ce contrat a pour but de régler les compétences d'utilisation (licence) de
 l'application dans le cadre de la conclusion d'un abonnement en toutes ses
 formes. Les contenus du contrat acceptés au moment de la conclusion de
 l'abonnement (description de la prestation, conditions générales et
-dispositions cadre de la communication électronique des données) sont partie
+dispositions cadre de la communication électronique des données) font partie
 intégrante de la relation contractuelle. Dans le cas d'utilisations contraires
 ou divergentes de l'application, les conditions de ce contrat de licence priment
 sur les autres éléments contractuels.

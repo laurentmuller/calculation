@@ -14,68 +14,101 @@ declare(strict_types=1);
 namespace App\Form\User;
 
 use App\Enums\EntityName;
-use App\Form\AbstractHelperType;
-use App\Form\FormHelper;
+use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
-use App\Service\RoleService;
+use Elao\Enum\FlagBag;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\Form\Event\PreSetDataEvent;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * The access rights type.
+ * The access permissions type.
+ *
+ * @extends AbstractType<EntityPermission[]>
  */
-class RightsType extends AbstractHelperType
+class RightsType extends AbstractType
 {
     public function __construct(
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
-        protected readonly RoleService $service
+        private readonly Security $security,
     ) {
     }
 
-    /**
-     * Add fields to the given helper.
-     */
     #[\Override]
-    protected function addFormFields(FormHelper $helper): void
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $entities = EntityName::sorted();
+        $entities = $this->getEntityNames();
         foreach ($entities as $entity) {
-            $this->addEntityPermissionType($helper, $entity);
+            $this->addEntityPermissionType($builder, $entity);
         }
-        $helper->listenerPreSetData($this->onPreSetData(...));
     }
 
-    protected function translateEnabled(string $enabled): string
+    /**
+     * @phpstan-param FormBuilderInterface<mixed> $builder
+     */
+    private function addEntityPermissionType(FormBuilderInterface $builder, EntityName $entity): void
     {
-        $enabled = \filter_var($enabled, \FILTER_VALIDATE_BOOLEAN);
-
-        return $this->service->translateEnabled($enabled);
+        $offset = $entity->offset();
+        $builder->add(
+            $entity->getFormField(),
+            EntityPermissionType::class,
+            [
+                'label' => $entity,
+                /**
+                 * @phpstan-param int[] $object
+                 */
+                'getter' => fn (array $object): FlagBag => $this->getOffsetValue($offset, $object),
+                /**
+                 * @phpstan-param int[]                     $object
+                 * @phpstan-param FlagBag<EntityPermission> $value
+                 */
+                'setter' => fn (array &$object, FlagBag $value) => $this->setOffsetValue($offset, $object, $value),
+            ]
+        );
     }
 
-    protected function translateRole(RoleInterface|string $role): string
+    /**
+     * @phpstan-return EntityName[]
+     */
+    private function getEntityNames(): array
     {
-        return $this->service->translateRole($role);
+        return \array_filter(EntityName::sorted(), $this->isGranted(...));
     }
 
-    private function addEntityPermissionType(FormHelper $helper, EntityName $entity): void
+    /**
+     * @phpstan-param int[] $object
+     *
+     * @phpstan-return FlagBag<EntityPermission>
+     */
+    private function getOffsetValue(int $offset, array $object): FlagBag
     {
-        $helper->field($entity->getFormField())
-            ->label($entity)
-            ->add(EntityPermissionType::class);
+        return new FlagBag(EntityPermission::class, $object[$offset]);
     }
 
-    private function onPreSetData(PreSetDataEvent $event): void
+    private function isGranted(EntityName $entityName): bool
     {
-        /** @phpstan-var ?RoleInterface $data */
-        $data = $event->getData();
-        $form = $event->getForm();
-        if (!$this->service->hasRole($data, RoleInterface::ROLE_ADMIN)) {
-            $form->remove(EntityName::LOG->getFormField());
-            $form->remove(EntityName::USER->getFormField());
-        }
-        if (!$this->debug) {
-            $form->remove(EntityName::CUSTOMER->getFormField());
-        }
+        return match ($entityName) {
+            EntityName::CALCULATION,
+            EntityName::CALCULATION_STATE,
+            EntityName::CATEGORY,
+            EntityName::GLOBAL_MARGIN,
+            EntityName::GROUP,
+            EntityName::PRODUCT,
+            EntityName::TASK => true,
+            EntityName::CUSTOMER => $this->debug,
+            EntityName::LOG,
+            EntityName::USER => $this->security->isGranted(RoleInterface::ROLE_ADMIN),
+        };
+    }
+
+    /**
+     * @phpstan-param int[]                     $object
+     * @phpstan-param FlagBag<EntityPermission> $value
+     */
+    private function setOffsetValue(int $offset, array &$object, FlagBag $value): void
+    {
+        $object[$offset] = $value->getValue();
     }
 }

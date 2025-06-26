@@ -18,14 +18,12 @@ use App\Form\FormHelper;
 /**
  * Role rights type.
  */
-class RoleRightsType extends RightsType
+class RoleRightsType extends AbstractRightsType
 {
     #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
-        parent::addFormFields($helper);
-        $helper->field('name')
-            ->label('user.fields.role')
-            ->addPlainType();
+        $this->addRoleType($helper, 'name');
+        $this->addRightsType($helper);
     }
 }

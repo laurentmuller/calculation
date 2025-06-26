@@ -39,16 +39,16 @@ class EntityNameTest extends TestCase
      */
     public static function getFormFields(): \Generator
     {
-        yield [EntityName::CALCULATION, 'CalculationRights'];
-        yield [EntityName::CALCULATION_STATE, 'CalculationStateRights'];
-        yield [EntityName::CATEGORY, 'CategoryRights'];
-        yield [EntityName::CUSTOMER, 'CustomerRights'];
-        yield [EntityName::GLOBAL_MARGIN, 'GlobalMarginRights'];
-        yield [EntityName::GROUP, 'GroupRights'];
-        yield [EntityName::LOG, 'LogRights'];
-        yield [EntityName::PRODUCT, 'ProductRights'];
-        yield [EntityName::TASK, 'TaskRights'];
-        yield [EntityName::USER, 'UserRights'];
+        yield [EntityName::CALCULATION, 'Calculation'];
+        yield [EntityName::CALCULATION_STATE, 'CalculationState'];
+        yield [EntityName::CATEGORY, 'Category'];
+        yield [EntityName::CUSTOMER, 'Customer'];
+        yield [EntityName::GLOBAL_MARGIN, 'GlobalMargin'];
+        yield [EntityName::GROUP, 'Group'];
+        yield [EntityName::LOG, 'Log'];
+        yield [EntityName::PRODUCT, 'Product'];
+        yield [EntityName::TASK, 'Task'];
+        yield [EntityName::USER, 'User'];
     }
 
     /**
@@ -83,26 +83,6 @@ class EntityNameTest extends TestCase
         yield [EntityName::PRODUCT, 7];
         yield [EntityName::TASK, 8];
         yield [EntityName::USER, 9];
-    }
-
-    /**
-     * @phpstan-return \Generator<int, array{string, ?EntityName}>
-     */
-    public static function getTryFromField(): \Generator
-    {
-        yield ['', null];
-        yield ['Fake', null];
-        yield ['Rights', null];
-        yield ['CalculationRights', EntityName::CALCULATION];
-        yield ['CalculationStateRights', EntityName::CALCULATION_STATE];
-        yield ['CategoryRights', EntityName::CATEGORY];
-        yield ['CustomerRights', EntityName::CUSTOMER];
-        yield ['GlobalMarginRights', EntityName::GLOBAL_MARGIN];
-        yield ['GroupRights', EntityName::GROUP];
-        yield ['LogRights', EntityName::LOG];
-        yield ['ProductRights', EntityName::PRODUCT];
-        yield ['TaskRights', EntityName::TASK];
-        yield ['UserRights', EntityName::USER];
     }
 
     /**
@@ -230,17 +210,6 @@ class EntityNameTest extends TestCase
         $translator = $this->createMockTranslator();
         $actual = $entity->trans($translator);
         self::assertSame($expected, $actual);
-    }
-
-    #[DataProvider('getTryFromField')]
-    public function testTryFromField(string $field, ?EntityName $expected): void
-    {
-        $actual = EntityName::tryFromField($field);
-        if ($expected instanceof EntityName) {
-            self::assertSame($expected, $actual);
-        } else {
-            self::assertNull($actual);
-        }
     }
 
     #[DataProvider('getTryFromMixed')]

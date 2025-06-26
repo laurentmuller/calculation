@@ -57,8 +57,8 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         AbstractController $controller,
         array $entities,
         private readonly RoleService $roleService,
-        private readonly FontAwesomeService $fontAwesomeService,
-        private readonly RoleBuilderService $roleBuilderService
+        private readonly RoleBuilderService $roleBuilderService,
+        private readonly FontAwesomeService $fontAwesomeService
     ) {
         parent::__construct($controller, $entities);
         $this->setTranslatedTitle(id: 'user.rights.title', isUTF8: true)

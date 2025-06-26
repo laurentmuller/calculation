@@ -311,15 +311,15 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         return \array_reduce(
             $array,
             /**
-             * @param CalculationItem[] $current
+             * @param CalculationItem[] $carry
              * @param CalculationItem[] $items
              */
-            function (array $current, array $items): array {
+            function (array $carry, array $items): array {
                 if (\count($items) > 1) {
-                    return \array_merge($current, \array_values($items));
+                    return \array_merge($carry, \array_values($items));
                 }
 
-                return $current;
+                return $carry;
             },
             []
         );

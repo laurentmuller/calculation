@@ -99,11 +99,6 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
     private const ENTITY_PREFIX = 'Entity';
 
     /**
-     * The form suffix.
-     */
-    private const FORM_SUFFIX = 'Rights';
-
-    /**
      * Gets this enumeration as constants.
      *
      * @return array<string, string>
@@ -113,8 +108,8 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
     {
         return \array_reduce(
             self::cases(),
-            /** @phpstan-param array<string, string> $choices */
-            static fn (array $choices, self $type): array => $choices + ['ENTITY_' . $type->name => $type->value],
+            /** @phpstan-param array<string, string> $carry */
+            static fn (array $carry, self $type): array => $carry + ['ENTITY_' . $type->name => $type->value],
             [],
         );
     }
@@ -124,9 +119,7 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
      */
     public function getFormField(): string
     {
-        $value = \substr($this->value, \strlen(self::ENTITY_PREFIX));
-
-        return $value . self::FORM_SUFFIX;
+        return \substr($this->value, \strlen(self::ENTITY_PREFIX));
     }
 
     /**
@@ -155,19 +148,6 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
             self::CUSTOMER,
             self::LOG,
         ];
-    }
-
-    /**
-     * Find an entity name from the given field name.
-     */
-    public static function tryFromField(string $field): ?self
-    {
-        if (!\str_ends_with($field, self::FORM_SUFFIX)) {
-            return null;
-        }
-        $field = self::ENTITY_PREFIX . \substr($field, 0, -\strlen(self::FORM_SUFFIX));
-
-        return self::tryFrom($field);
     }
 
     /**

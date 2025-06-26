@@ -54,12 +54,12 @@
     </div>
     <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}">
         <div class="card-body index-parent g-0 p-1">
-            {{ _self.cardEntry('product', product_count, product_index, product_add, ICON_PRODUCT) }}
-            {{ _self.cardEntry('task', task_count, task_index, task_add, ICON_TASK) }}
-            {{ _self.cardEntry('category', category_count, category_index, category_add, ICON_CATEGORY) }}
-            {{ _self.cardEntry('group', group_count, group_index, group_add, ICON_GROUP) }}
-            {{ _self.cardEntry('calculationstate', state_count, state_index, state_add, ICON_CALCULATION_STATE) }}
-            {{ _self.cardEntry('globalmargin', margin_count, margin_index, null, ICON_GLOBAL_MARGIN) }}
+            {{ _self.cardEntry('product', catalog.product, product_index, product_add, ICON_PRODUCT) }}
+            {{ _self.cardEntry('task', catalog.task, task_index, task_add, ICON_TASK) }}
+            {{ _self.cardEntry('category', catalog.category, category_index, category_add, ICON_CATEGORY) }}
+            {{ _self.cardEntry('group', catalog.group, group_index, group_add, ICON_GROUP) }}
+            {{ _self.cardEntry('calculationstate', catalog.calculationState, state_index, state_add, ICON_CALCULATION_STATE) }}
+            {{ _self.cardEntry('globalmargin', catalog.globalMargin, margin_index, null, ICON_GLOBAL_MARGIN) }}
         </div>
     </div>
 </div>

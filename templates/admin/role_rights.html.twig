@@ -1,9 +1,8 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% import 'macros/_rights.html.twig' as rights %}
 {# parameters #}
-{%- set is_admin = is_granted(ROLE_ADMIN) -%}
 {%- set title = is_admin ? 'index.menu_rights_admin' : 'index.menu_rights_user' -%}
-{%- set title_icon = is_admin ? 'user-shield' : 'user-check' -%}
+{%- set title_icon = 'unlock' -%}
 {%- set title_description = 'user.rights.description' -%}
 {%- set show_required = false -%}
 {# classes #}
@@ -11,18 +10,14 @@
 {# header #}
 {% block card_header %}
 <div class="d-flex-wrap-center">
-    <div class="me-auto">
-        {{ parent() }}
-    </div>
-    <div>
-        {{ rights.actions() }}
-    </div>
+    <div class="me-auto">{{ parent() }}</div>
+    <div>{{ rights.actions() }}</div>
 </div>
 {%- endblock %}
 {# body #}
 {% block card_body %}
 {{ form_row(form.name) }}
-{{ rights.table(form, default, permissions) }}
+{{ rights.table(form.rights, default.permissions, entities) }}
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}

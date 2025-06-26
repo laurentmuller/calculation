@@ -13,7 +13,7 @@
     },
     {
         "field": "username",
-        "title": "user.fields.username_short",
+        "title": "user.fields.username",
         "default": true,
         "class": "text-user-name"
     },

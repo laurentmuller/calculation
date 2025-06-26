@@ -17,6 +17,7 @@ use App\Interfaces\EntityInterface;
 use App\Utils\FormatUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,7 +29,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * This is useful for forms where certain field needs to be shown but not editable.
  * If the 'expanded' option is set to true, a div tag is added around the span tag.
  *
- * @extends AbstractType<mixed>
+ * @extends AbstractType<HiddenType>
  *
  * @phpstan-type OptionsType = array{
  *     hidden_input: bool,

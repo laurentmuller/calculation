@@ -10,13 +10,9 @@
 {% block card_container_class '' %}
 {# header #}
 {% block card_header %}
-<div class="d-flex align-items-center">
-    <div class="me-auto">
-        {{ parent() }}
-    </div>
-    <div>
-        {{ rights.actions(overwrite) }}
-    </div>
+<div class="d-flex-wrap-center">
+    <div class="me-auto">{{ parent() }}</div>
+    <div>{{ rights.actions(overwrite) }}</div>
 </div>
 {%- endblock %}
 {# body #}
@@ -32,7 +28,7 @@
         {{ form_row(form.enabled) }}
     </div>
 </div>
-{{ rights.table(form, default, permissions, overwrite) }}
+{{ rights.table(form.rights, default.permissions, entities, overwrite) }}
 {{ form_row(form.overwrite, {attr: {'data-default': default.overwrite|json_encode}}) }}
 {% endblock %}
 {# javascripts #}

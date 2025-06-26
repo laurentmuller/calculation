@@ -47,7 +47,7 @@ Lorsque vous utilisez notre application, il est possible que nous vous
 demandions de nous fournir certaines données personnelles nominatives qui
 peuvent servir à vous contacter ou à vous identifier ("Données à caractère
 personnel"). Les données personnelles nominatives peuvent comprendre, mais de
-manière non limitative :
+manière non limitative
 
 - L'adresse électronique (e-mail).
 - Le nom de famille et le prénom.
@@ -63,7 +63,7 @@ version du navigateur, les pages de notre application que vous consultez, la
 date et l'heure de votre visite, le temps passé sur ces pages, les identifiants
 uniques de dispositifs ainsi que d'autres données de diagnostic.
 
-#### Suivi et données de cookies
+#### Cookies de suivi
 
 Nous avons recours à des cookies et à d'autres technologies de suivi similaires
 pour effectuer un suivi des activités effectuées dans notre application, et nous
@@ -81,7 +81,7 @@ avertir lorsqu'un cookie est envoyé. Toutefois, si vous n'acceptez pas les
 cookies, il se peut que vous ne puissiez pas utiliser certains éléments de notre
 application.
 
-Exemples de cookies que nous utilisons :
+Exemples de cookies que nous utilisons
 
 - **Cookies de session.** Nous utilisons des cookies de session pour faire
   fonctionner notre application.
@@ -94,7 +94,7 @@ Exemples de cookies que nous utilisons :
 
 ## Utilisation des données
 
-Le fournisseur utilise les données recueillies à des diverses fins :
+Le fournisseur utilise les données recueillies à des diverses fins
 
 - Pour fournir et assurer notre application.
 - Pour vous faire part des changements apportés à notre application.
@@ -133,7 +133,7 @@ de vos données et d'autres données personnelles.
 ### Exigences légales
 
 Le fournisseur peut communiquer vos données à caractère personnel si elle estime
-de bonne foi que cela est nécessaire pour :
+de bonne foi que cela est nécessaire pour
 
 - S'acquitter d'une obligation légale.
 - Protéger et défendre les droits ou les biens du fournisseur.

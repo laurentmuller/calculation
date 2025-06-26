@@ -31,6 +31,7 @@ use App\Form\User\UserRightsType;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\Comment;
+use App\Model\Role;
 use App\Report\UsersReport;
 use App\Report\UsersRightsReport;
 use App\Repository\AbstractRepository;
@@ -48,7 +49,6 @@ use App\Spreadsheet\UserRightsDocument;
 use App\Spreadsheet\UsersDocument;
 use App\Table\DataQuery;
 use App\Table\UserTable;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -272,8 +272,7 @@ class UserController extends AbstractEntityController
         Request $request,
         User $item,
         RoleService $service,
-        RoleBuilderService $builder,
-        EntityManagerInterface $manager
+        RoleBuilderService $builder
     ): Response {
         if ($this->isConnectedUser($item) && !$service->hasRole($item, RoleInterface::ROLE_SUPER_ADMIN)) {
             $this->warningTrans('user.rights.connected');
@@ -281,7 +280,7 @@ class UserController extends AbstractEntityController
             return $this->redirectToDefaultRoute($request, $item);
         }
 
-        $default = $builder->getRole($item);
+        $default = $this->getDefaultRole($builder, $item);
         $form = $this->createForm(UserRightsType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
             // same as default?
@@ -291,18 +290,16 @@ class UserController extends AbstractEntityController
                     $item->setOverwrite(false);
                 }
             }
-
-            $manager->flush();
+            $this->getRepository()->flush();
 
             return $this->redirectToDefaultRoute($request, $item);
         }
 
         return $this->render('user/user_rights.html.twig', [
-            'item' => $item,
             'form' => $form,
+            'item' => $item,
             'default' => $default,
-            'params' => ['id' => $item->getId()],
-            'permissions' => EntityPermission::sorted(),
+            'entities' => EntityPermission::sorted(),
         ]);
     }
 
@@ -324,11 +321,11 @@ class UserController extends AbstractEntityController
     #[GetRoute(path: '/rights/pdf', name: 'rights_pdf')]
     public function rightsPdf(
         RoleService $roleService,
-        FontAwesomeService $fontAwesomeService,
-        RoleBuilderService $roleBuilderService
+        RoleBuilderService $roleBuilderService,
+        FontAwesomeService $fontAwesomeService
     ): PdfResponse {
         $entities = $this->getEntitiesByUserName();
-        $doc = new UsersRightsReport($this, $entities, $roleService, $fontAwesomeService, $roleBuilderService);
+        $doc = new UsersRightsReport($this, $entities, $roleService, $roleBuilderService, $fontAwesomeService);
 
         return $this->renderPdfDocument($doc);
     }
@@ -396,6 +393,23 @@ class UserController extends AbstractEntityController
         }
 
         return parent::getEntities($sortedFields, $criteria, $alias);
+    }
+
+    private function getDefaultRole(RoleBuilderService $builder, User $user): Role
+    {
+        if ($user->isSuperAdmin()) {
+            return $builder->getRole($user);
+        }
+        if ($user->isAdmin()) {
+            return $this->getApplicationService()
+                ->getAdminRole();
+        }
+        if ($user->isEnabled()) {
+            return $this->getApplicationService()
+                ->getUserRole();
+        }
+
+        return $builder->getRole($user);
     }
 
     /**

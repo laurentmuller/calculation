@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace App\Tests\Form\User;
 
 use App\Form\Type\PlainType;
+use App\Form\User\RightsType;
 use App\Form\User\RoleRightsType;
 use App\Interfaces\RoleInterface;
 use App\Service\RoleService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
@@ -50,14 +52,19 @@ class RoleRightsTypeTest extends TypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
+        $security = $this->createMock(Security::class);
+        $rightsType = new RightsType(false, $security);
+
         $roleHierarchy = $this->createMock(RoleHierarchyInterface::class);
         $roleHierarchy->method('getReachableRoleNames')
             ->willReturn([RoleInterface::ROLE_ADMIN]);
         $translator = $this->createMockTranslator();
         $service = new RoleService($roleHierarchy, $translator);
+        $roleRightsType = new RoleRightsType($service);
 
         return [
-            new RoleRightsType(false, $service),
+            $rightsType,
+            $roleRightsType,
             new PlainType($this->createMockTranslator()),
         ];
     }

@@ -16,29 +16,19 @@ namespace App\Controller;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PostRoute;
-use App\Entity\Calculation;
-use App\Entity\CalculationState;
-use App\Entity\Category;
-use App\Entity\GlobalMargin;
-use App\Entity\Group;
-use App\Entity\Product;
-use App\Entity\Task;
 use App\Enums\TableView;
 use App\Form\Parameters\AbstractParametersType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
-use App\Traits\ArrayTrait;
-use App\Traits\MathTrait;
+use App\Service\IndexService;
 use App\Traits\ParameterTrait;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -48,8 +38,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class IndexController extends AbstractController
 {
-    use ArrayTrait;
-    use MathTrait;
     use ParameterTrait;
 
     /**
@@ -61,10 +49,6 @@ class IndexController extends AbstractController
      * The restriction query parameter.
      */
     final public const PARAM_RESTRICT = 'restrict';
-
-    public function __construct(private readonly EntityManagerInterface $manager)
-    {
-    }
 
     /**
      * Hide the catalog panel.
@@ -101,41 +85,41 @@ class IndexController extends AbstractController
     #[GetRoute(path: IndexRoute::PATH, name: '')]
     public function index(
         Request $request,
+        IndexService $indexService,
         #[MapQueryParameter]
         ?bool $restrict = null,
         #[MapQueryParameter]
         ?bool $custom = null
     ): Response {
-        $service = $this->getUserService();
+        $userService = $this->getUserService();
         $restrict ??= $this->getCookieBoolean($request, self::PARAM_RESTRICT);
         if (null === $custom) {
-            $view = $this->getCookieEnum($request, TableInterface::PARAM_VIEW, $service->getDisplayMode());
+            $view = $this->getCookieEnum($request, TableInterface::PARAM_VIEW, $userService->getDisplayMode());
         } else {
             $view = $custom ? TableView::CUSTOM : TableView::TABLE;
-            $service->setProperty(PropertyServiceInterface::P_DISPLAY_MODE, $view);
+            $userService->setProperty(PropertyServiceInterface::P_DISPLAY_MODE, $view);
         }
 
+        $maxResults = $userService->getCalculations();
         $user = $restrict ? $this->getUser() : null;
+        $calculations = $indexService->getLastCalculations($maxResults, $user);
+
         $parameters = [
             'min_margin' => $this->getMinMargin(),
-            'calculations' => $this->getCalculations($service->getCalculations(), $user),
+            'calculations' => $calculations,
             'calculations_range' => AbstractParametersType::getCalculationRange(),
             self::PARAM_CUSTOM => TableView::CUSTOM === $view,
             self::PARAM_RESTRICT => $restrict,
         ];
-        if ($service->isPanelState()) {
-            $parameters['states'] = $this->getStates();
+
+        if ($userService->isPanelState()) {
+            $parameters['states'] = $indexService->getCalculationByStates();
         }
-        if ($service->isPanelMonth()) {
-            $parameters['months'] = $this->getMonths();
+        if ($userService->isPanelMonth()) {
+            $parameters['months'] = $indexService->getCalculationByMonths();
         }
-        if ($service->isPanelCatalog()) {
-            $parameters['product_count'] = $this->count(Product::class);
-            $parameters['task_count'] = $this->count(Task::class);
-            $parameters['category_count'] = $this->count(Category::class);
-            $parameters['group_count'] = $this->count(Group::class);
-            $parameters['state_count'] = $this->count(CalculationState::class);
-            $parameters['margin_count'] = $this->count(GlobalMargin::class);
+        if ($userService->isPanelCatalog()) {
+            $parameters['catalog'] = $indexService->getCatalog();
         }
 
         $response = $this->render('index/index.html.twig', $parameters);
@@ -177,50 +161,6 @@ class IndexController extends AbstractController
         if (!$request->isXmlHttpRequest()) {
             throw new BadRequestHttpException('Invalid request format.');
         }
-    }
-
-    /**
-     * @param class-string $className
-     */
-    private function count(string $className): int
-    {
-        return $this->manager->getRepository($className)->count();
-    }
-
-    private function getCalculations(int $maxResults, ?UserInterface $user): array
-    {
-        return $this->manager->getRepository(Calculation::class)
-            ->getLastCalculations($maxResults, $user);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    private function getMonths(): array
-    {
-        return $this->manager->getRepository(Calculation::class)
-            ->getByMonth();
-    }
-
-    private function getStates(): array
-    {
-        $results = $this->manager->getRepository(CalculationState::class)
-            ->getCalculations();
-        $count = $this->getColumnSum($results, 'count');
-        $total = $this->getColumnSum($results, 'total');
-        $items = $this->getColumnSum($results, 'items');
-        $margin = $this->safeDivide($total, $items);
-
-        $results[] = [
-            'id' => 0,
-            'code' => $this->trans('calculation.fields.total'),
-            'color' => false,
-            'count' => $count,
-            'total' => $total,
-            'margin_percent' => $margin,
-        ];
-
-        return $results;
     }
 
     private function hidePanel(Request $request, string $key, string $id): JsonResponse

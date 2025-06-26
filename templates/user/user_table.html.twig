@@ -31,7 +31,7 @@
 {% block edit_actions -%}
 {{- _self.item_path(path('user_edit', params), 'user.edit.title', ICON_EDIT, edit_class) }}
 {{- _self.item_path(path('user_rights', params), 'user.rights.action', 'unlock', 'btn-rights') }}
-{{- _self.item_path(path('user_password', params), 'index.change_password', 'unlock-alt', 'btn-password') }}
+{{- _self.item_path(path('user_password', params), 'user.change_password.title', 'unlock-alt', 'btn-password') }}
 {%- endblock %}
 
 {% block delete_actions -%}

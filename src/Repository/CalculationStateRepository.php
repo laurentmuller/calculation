@@ -85,16 +85,16 @@ class CalculationStateRepository extends AbstractRepository
             ->groupBy('s.id')
             ->orderBy('s.code', self::SORT_ASC);
 
-        /** @phpstan-var QueryCalculationType[] $result */
-        $result = $builder->getQuery()->getArrayResult();
-        $count = $this->getColumnSum($result, 'count');
-        $total = $this->getColumnSum($result, 'total');
-        foreach ($result as &$data) {
-            $data['percent_calculation'] = $this->round($this->safeDivide($data['count'], $count), 5);
-            $data['percent_amount'] = $this->round($this->safeDivide($data['total'], $total), 5);
+        /** @phpstan-var QueryCalculationType[] $rows */
+        $rows = $builder->getQuery()->getArrayResult();
+        $count = $this->getColumnSum($rows, 'count');
+        $total = $this->getColumnSum($rows, 'total');
+        foreach ($rows as &$row) {
+            $row['percent_calculation'] = $this->round($this->safeDivide($row['count'], $count), 5);
+            $row['percent_amount'] = $this->round($this->safeDivide($row['total'], $total), 5);
         }
 
-        return $result;
+        return $rows;
     }
 
     /**

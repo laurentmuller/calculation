@@ -49,8 +49,8 @@ class UsersRightsReportTest extends TestCase
             $controller,
             [$user],
             $roleService,
-            $fontAwesomeService,
-            $roleBuilderService
+            $roleBuilderService,
+            $fontAwesomeService
         );
         $actual = $report->render();
         self::assertTrue($actual);
@@ -67,8 +67,8 @@ class UsersRightsReportTest extends TestCase
             $controller,
             [],
             $roleService,
-            $fontAwesomeService,
-            $roleBuilderService
+            $roleBuilderService,
+            $fontAwesomeService
         );
         $actual = $report->render();
         self::assertFalse($actual);

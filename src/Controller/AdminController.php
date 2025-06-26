@@ -171,16 +171,6 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @param int[] $rights
-     *
-     * @phpstan-param RoleInterface::ROLE_* $role
-     */
-    private function createRole(string $role, array $rights): Role
-    {
-        return new Role(role: $role, rights: $rights);
-    }
-
-    /**
      * Edit rights for the given role.
      */
     private function editRights(

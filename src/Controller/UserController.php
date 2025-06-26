@@ -321,11 +321,11 @@ class UserController extends AbstractEntityController
     #[GetRoute(path: '/rights/pdf', name: 'rights_pdf')]
     public function rightsPdf(
         RoleService $roleService,
-        FontAwesomeService $fontAwesomeService,
-        RoleBuilderService $roleBuilderService
+        RoleBuilderService $roleBuilderService,
+        FontAwesomeService $fontAwesomeService
     ): PdfResponse {
         $entities = $this->getEntitiesByUserName();
-        $doc = new UsersRightsReport($this, $entities, $roleService, $fontAwesomeService, $roleBuilderService);
+        $doc = new UsersRightsReport($this, $entities, $roleService, $roleBuilderService, $fontAwesomeService);
 
         return $this->renderPdfDocument($doc);
     }

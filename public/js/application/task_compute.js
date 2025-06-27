@@ -214,7 +214,7 @@ $(function () {
         submitHandler: (form) => submitForm(form),
         rules: {
             quantity: {
-                greaterThanValue: 0
+                greaterThanEqualValue: 0
             }
         }
     };

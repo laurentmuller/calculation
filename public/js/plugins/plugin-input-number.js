@@ -69,8 +69,7 @@ $(function () {
 
             // add handlers
             const $element = this.$element;
-            $element.on('blur', this.updateProxy)
-                .on('change', this.updateProxy);
+            $element.on('blur change', this.updateProxy);
             if ($element[0].selectionStart === null) {
                 $element.on('input', this.inputProxy);
             } else {

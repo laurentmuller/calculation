@@ -17,6 +17,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\ResetPasswordService;
 use App\Service\UserExceptionService;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +31,17 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
 class UserControllerTest extends EntityControllerTestCase
 {
+    /**
+     * @phpstan-return \Generator<int, array{0: int}>
+     */
+    public static function getRoleIds(): \Generator
+    {
+        yield [self::ID_USER];
+        yield [self::ID_ADMIN];
+        yield [self::ID_SUPER_ADMIN];
+        yield [self::ID_DISABLE];
+    }
+
     #[\Override]
     public static function getRoutes(): \Generator
     {
@@ -169,12 +181,16 @@ class UserControllerTest extends EntityControllerTestCase
 
     public function testRightsNoChange(): void
     {
+        $data = [
+            'user_rights[overwrite]' => 1,
+        ];
+
         $this->loginUsername(self::ROLE_SUPER_ADMIN);
         $uri = \sprintf('/user/rights/%d', self::ID_USER);
         $this->client->request(Request::METHOD_POST, $uri);
         $name = $this->getService(TranslatorInterface::class)
             ->trans('common.button_ok');
-        $this->client->submitForm($name);
+        $this->client->submitForm($name, $data);
         $this->client->followRedirect();
         self::assertResponseIsSuccessful();
     }
@@ -198,6 +214,15 @@ class UserControllerTest extends EntityControllerTestCase
             ->trans('common.button_ok');
         $this->client->submitForm($name, $data);
         $this->client->followRedirect();
+        self::assertResponseIsSuccessful();
+    }
+
+    #[DataProvider('getRoleIds')]
+    public function testRightsWithRole(int $id): void
+    {
+        $this->loginUsername(self::ROLE_SUPER_ADMIN);
+        $uri = \sprintf('/user/rights/%d', $id);
+        $this->client->request(Request::METHOD_POST, $uri);
         self::assertResponseIsSuccessful();
     }
 

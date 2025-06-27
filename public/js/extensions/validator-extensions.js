@@ -629,7 +629,7 @@
          * check if contains a lesser value
          */
         $.validator.addMethod('lessThanValue', function (value, element, param) {
-            return this.optional(element) || value > param;
+            return this.optional(element) || value < param;
         }, 'The field must contain a lesser value.');
 
         /*

@@ -24,7 +24,7 @@ readonly class TaskComputeQuery
     public function __construct(
         #[Assert\Positive]
         public int $id,
-        #[Assert\Positive]
+        #[Assert\PositiveOrZero]
         public float $quantity = 1.0,
         /** @var int[] */
         #[Assert\All([

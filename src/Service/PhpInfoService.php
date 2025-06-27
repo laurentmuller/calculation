@@ -149,6 +149,19 @@ class PhpInfoService
     }
 
     /**
+     * Gets the loaded extensions.
+     *
+     * @return string[]
+     */
+    public function getLoadedExtensions(): array
+    {
+        $extensions = \array_map(strtolower(...), \get_loaded_extensions());
+        \sort($extensions);
+
+        return $extensions;
+    }
+
+    /**
      * Gets the PHP version.
      */
     public function getVersion(): string

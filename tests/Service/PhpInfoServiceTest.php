@@ -14,35 +14,102 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\PhpInfoService;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class PhpInfoServiceTest extends TestCase
 {
+    private PhpInfoService $service;
+
+    #[\Override]
+    protected function setUp(): void
+    {
+        $this->service = new PhpInfoService();
+    }
+
+    /**
+     * @return \Generator<int, array{0: string, 1: bool}>
+     */
+    public static function getColors(): \Generator
+    {
+        yield ['#0f0f0f', true];
+        yield ['#0F0F0F', true];
+        yield ['#000000', true];
+        yield ['000000', false];
+        yield ['fake', false];
+    }
+
+    /**
+     * @return \Generator<int, array{0: string, 1: bool}>
+     */
+    public static function getDisabledValues(): \Generator
+    {
+        yield ['off', true];
+        yield ['OFF', true];
+        yield ['no', true];
+        yield ['disabled', true];
+        yield ['not enabled', true];
+        yield ['fake', false];
+    }
+
+    /**
+     * @return \Generator<int, array{0: string, 1: bool}>
+     */
+    public static function getNoValues(): \Generator
+    {
+        yield ['no value', true];
+        yield ['NO VALUE', true];
+        yield ['fake', false];
+    }
+
     public function testAsArray(): void
     {
-        $service = new PhpInfoService();
-        $actual = $service->asArray();
+        $actual = $this->service->asArray();
         self::assertEmpty($actual);
     }
 
     public function testAsHtml(): void
     {
-        $service = new PhpInfoService();
-        $actual = $service->asHtml();
+        $actual = $this->service->asHtml();
         self::assertNotEmpty($actual);
     }
 
     public function testAsText(): void
     {
-        $service = new PhpInfoService();
-        $actual = $service->asText();
+        $actual = $this->service->asText();
+        self::assertNotEmpty($actual);
+    }
+
+    public function testGetLoadedExtensions(): void
+    {
+        $actual = $this->service->getLoadedExtensions();
         self::assertNotEmpty($actual);
     }
 
     public function testGetVersion(): void
     {
-        $service = new PhpInfoService();
-        $actual = $service->getVersion();
+        $actual = $this->service->getVersion();
         self::assertSame(\PHP_VERSION, $actual);
+    }
+
+    #[DataProvider('getColors')]
+    public function testIsColor(string $value, bool $expected): void
+    {
+        $actual = $this->service->isColor($value);
+        self::assertSame($expected, $actual);
+    }
+
+    #[DataProvider('getDisabledValues')]
+    public function testIsDisabled(string $value, bool $expected): void
+    {
+        $actual = $this->service->isDisabled($value);
+        self::assertSame($expected, $actual);
+    }
+
+    #[DataProvider('getNoValues')]
+    public function testIsNoValue(string $value, bool $expected): void
+    {
+        $actual = $this->service->isNoValue($value);
+        self::assertSame($expected, $actual);
     }
 }

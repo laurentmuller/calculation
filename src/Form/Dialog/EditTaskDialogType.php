@@ -45,6 +45,7 @@ class EditTaskDialogType extends AbstractHelperType
             ->addTextType();
 
         $helper->field('quantity')
+            ->updateAttribute('min', 0)
             ->addNumberType();
     }
 

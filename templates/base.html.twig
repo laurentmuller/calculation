@@ -12,36 +12,11 @@
 <html lang="{{ app.request.locale|replace({_: '-'}) }}" data-bs-theme="{{ theme_value(app.request) }}">
 {# head #}
 <head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-name" content="{{ app_name }}">
-    <meta name="description" content="{{ app_description }}">
-    <meta name="theme-color" content="#212529">
-    <meta name="msapplication-TileColor" content="#212529">
-    <meta name="msapplication-TileImage" content="{{ asset_icon(144) }}">
-    <meta name="msapplication-config" content="{{ asset('browserconfig.xml') }}"/>
-    <meta property="og:title" content="{{ page_title }}"/>
-    <meta property="og:image" content="{{ asset_icon(144) }}"/>
-    <meta property="og:url" content="{{ app.request.uri }}"/>
-    <meta property="og:description" content="{{ app_description }}">
-    <meta property="og:type" content="website"/>
+    {# links #}
+    {{ include('meta_links.html.twig') }}
+    {{ include('icon_links.html.twig') }}
     <title>{{ page_title }}</title>
     <link rel="manifest" type="application/manifest+json" href="{{ asset('site.webmanifest') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset_icon(16) }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset_icon(32) }}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset_icon(96) }}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset_icon(192) }}">
-    <link rel="icon" type="image/png" sizes="256x256" href="{{ asset_icon(256) }}">
-    <link rel="apple-touch-icon" sizes="57x57" href="{{ asset_icon(57) }}">
-    <link rel="apple-touch-icon" sizes="60x60" href="{{ asset_icon(60) }}">
-    <link rel="apple-touch-icon" sizes="72x72" href="{{ asset_icon(72) }}">
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset_icon(76) }}">
-    <link rel="apple-touch-icon" sizes="114x114" href="{{ asset_icon(114) }}">
-    <link rel="apple-touch-icon" sizes="120x120" href="{{ asset_icon(120) }}">
-    <link rel="apple-touch-icon" sizes="144x144" href="{{ asset_icon(144) }}">
-    <link rel="apple-touch-icon" sizes="152x152" href="{{ asset_icon(152) }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset_icon(180) }}">
     {# stylesheets #}
     {{ preload_css('build/bootstrap/bootstrap.css') }}
     {{ preload_css('build/font-awesome/css/all.css') }}

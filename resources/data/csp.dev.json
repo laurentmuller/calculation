@@ -29,7 +29,8 @@
         "https://api.iconify.design"
     ],
     "connect-src": [
-        "'self'"
+        "'self'",
+        "https://www.google.com"
     ],
     "frame-src": [
         "'self'",

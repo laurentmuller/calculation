@@ -40,7 +40,7 @@ class AssetVersionServiceTest extends TestCase
     }
 
     /**
-     * @phpstan-return \Generator<int, array{0: string, 1?: true}>
+     * @phpstan-return \Generator<int, array{0: string, 1?: true|int}>
      */
     public static function getPaths(): \Generator
     {
@@ -50,13 +50,16 @@ class AssetVersionServiceTest extends TestCase
         yield ['/images'];
         yield ['/images/'];
         yield ['images/users/', true];
-        yield ['images/users/fake.png', true];
+
+        $path = __DIR__ . '/../files/lock/public/images/users/fake.png';
+        $value = (int) \filemtime($path);
+        yield ['images/users/fake.png', $value];
     }
 
     #[DataProvider('getPaths')]
-    public function testApplyVersion(string $path, bool $isImage = false): void
+    public function testApplyVersion(string $path, bool|int $value = false): void
     {
-        $version = $this->getVersion($isImage);
+        $version = $this->getVersion($value);
         $expected = \sprintf('%s?%s', $path, $version);
         $actual = $this->service->applyVersion($path);
         self::assertSame($expected, $actual);
@@ -69,15 +72,19 @@ class AssetVersionServiceTest extends TestCase
     }
 
     #[DataProvider('getPaths')]
-    public function testPath(string $path, bool $isImage = false): void
+    public function testPath(string $path, bool|int $value = false): void
     {
-        $expected = $this->getVersion($isImage);
+        $expected = $this->getVersion($value);
         $actual = $this->service->getVersion($path);
         self::assertSame($expected, $actual);
     }
 
-    private function getVersion(bool $isImage): string
+    private function getVersion(bool|int $value): string
     {
-        return $isImage ? $this->imagesVersion : $this->defaultVersion;
+        if (\is_int($value)) {
+            return (string) $value;
+        }
+
+        return $value ? $this->imagesVersion : $this->defaultVersion;
     }
 }

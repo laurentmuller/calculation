@@ -18,7 +18,20 @@
 
 .phpversion tr.h th,
 .phpversion td.e {
-    width: 33%;
+    width: 30%;
+}
+
+/* one value */
+.phpversion td.v:nth-child(2):nth-last-child(1) {
+    width: 70%;
+}
+
+/* two values */
+.phpversion td.v:nth-child(2):nth-last-child(2),
+.phpversion td.v:nth-child(3):nth-last-child(1),
+.phpversion td.d:nth-child(2):nth-last-child(2),
+.phpversion td.d:nth-child(3):nth-last-child(1) {
+    width: 35%;
 }
 
 .phpversion td.f {

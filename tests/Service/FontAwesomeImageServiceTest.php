@@ -16,7 +16,6 @@ namespace App\Tests\Service;
 use App\Model\FontAwesomeImage;
 use App\Service\FontAwesomeImageService;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class FontAwesomeImageServiceTest extends TestCase
@@ -42,13 +41,6 @@ class FontAwesomeImageServiceTest extends TestCase
     public function testInvalidFile(): void
     {
         $this->checkImageIsInvalid(__DIR__, 'fake');
-    }
-
-    public function testLogger(): void
-    {
-        $service = $this->createService(__DIR__);
-        $actual = $service->getLogger();
-        self::assertInstanceOf(NullLogger::class, $actual);
     }
 
     public function testSvgDirectory(): void
@@ -125,8 +117,7 @@ class FontAwesomeImageServiceTest extends TestCase
     {
         return new FontAwesomeImageService(
             $svgDirectory,
-            new ArrayAdapter(),
-            new NullLogger()
+            new ArrayAdapter()
         );
     }
 

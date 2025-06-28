@@ -46,7 +46,6 @@ class SwissPostServiceTest extends TestCase
         $actual = $this->service
             ->findAll('1753');
         self::assertCount(1, $actual);
-        self::assertIsArray($actual[0]);
 
         $actual = $actual[0];
         self::assertArrayHasKey('street', $actual);
@@ -68,11 +67,10 @@ class SwissPostServiceTest extends TestCase
         $actual = $this->service
             ->findCity('matran');
         self::assertCount(1, $actual);
-        self::assertIsArray($actual[0]);
 
         $actual = $actual[0];
-        self::assertArrayHasKey('name', $actual);
         self::assertArrayHasKey('zip', $actual);
+        self::assertArrayHasKey('city', $actual);
         self::assertArrayHasKey('state', $actual);
         self::assertArrayHasKey('display', $actual);
     }
@@ -84,12 +82,35 @@ class SwissPostServiceTest extends TestCase
         self::assertEmpty($actual);
     }
 
+    public function testFindFound(): void
+    {
+        $parameters = [
+            'city' => '',
+            'street' => '',
+            'zip' => '1753',
+        ];
+        $actual = $this->service
+            ->find($parameters);
+        self::assertCount(1, $actual);
+    }
+
+    public function testFindNotFound(): void
+    {
+        $parameters = [
+            'city' => '',
+            'street' => '',
+            'zip' => '',
+        ];
+        $actual = $this->service
+            ->find($parameters);
+        self::assertEmpty($actual);
+    }
+
     public function testFindStreetFound(): void
     {
         $actual = $this->service
             ->findStreet('route de berne');
         self::assertCount(1, $actual);
-        self::assertIsArray($actual[0]);
 
         $actual = $actual[0];
         self::assertArrayHasKey('street', $actual);
@@ -111,7 +132,6 @@ class SwissPostServiceTest extends TestCase
         $actual = $this->service
             ->findZip('1753');
         self::assertCount(1, $actual);
-        self::assertIsArray($actual[0]);
 
         $actual = $actual[0];
         self::assertArrayHasKey('zip', $actual);

@@ -70,29 +70,29 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
 
     public function testImport2FilesInZip(): void
     {
-        $path = __DIR__ . '/../files/zip/two_files.zip';
-        $actual = $this->service->import($path, false);
+        $sourceFile = __DIR__ . '/../files/zip/two_files.zip';
+        $actual = $this->service->import($sourceFile, false);
         self::assertFalse($actual->isValid());
     }
 
     public function testImportEmptyZip(): void
     {
-        $path = __DIR__ . '/../files/zip/empty.zip';
-        $actual = $this->service->import($path, false);
+        $sourceFile = __DIR__ . '/../files/zip/empty.zip';
+        $actual = $this->service->import($sourceFile, false);
         self::assertFalse($actual->isValid());
     }
 
     public function testImportFileContentEmpty(): void
     {
-        $path = __DIR__ . '/../files/zip/small_post_address_empty.zip';
-        $actual = $this->service->import($path, false);
+        $sourceFile = __DIR__ . '/../files/zip/small_post_address_empty.zip';
+        $actual = $this->service->import($sourceFile, false);
         self::assertFalse($actual->isValid());
     }
 
     public function testImportFileEmpty(): void
     {
-        $path = __DIR__ . '/../files/txt/empty.txt';
-        $actual = $this->service->import($path, false);
+        $sourceFile = __DIR__ . '/../files/txt/empty.txt';
+        $actual = $this->service->import($sourceFile, false);
         self::assertFalse($actual->isValid());
     }
 
@@ -113,19 +113,22 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
 
     public function testImportNoFile(): void
     {
-        $actual = $this->service->import('', false);
+        $sourceFile = '';
+        $actual = $this->service->import($sourceFile, false);
         self::assertFalse($actual->isValid());
     }
 
     public function testImportNotArchive(): void
     {
-        $actual = $this->service->import(__FILE__, false);
+        $sourceFile = __FILE__;
+        $actual = $this->service->import($sourceFile, false);
         self::assertFalse($actual->isValid());
     }
 
     public function testImportSameAsDatabase(): void
     {
-        $actual = $this->service->import($this->databaseName, false);
+        $sourceFile = $this->databaseName;
+        $actual = $this->service->import($sourceFile, false);
         self::assertFalse($actual->isValid());
     }
 
@@ -142,8 +145,8 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
         $this->service->setTranslator($translator)
             ->setLogger($logger);
 
-        $path = __DIR__ . '/../files/zip/small_post_address.zip';
-        $actual = $this->service->import($path, false);
+        $sourceFile = __DIR__ . '/../files/zip/small_post_address.zip';
+        $actual = $this->service->import($sourceFile, false);
         self::assertFalse($actual->isValid());
     }
 
@@ -152,8 +155,8 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
         $date = new \DateTime('2024-01-17');
         $this->application->method('getLastImport')
             ->willReturn($date);
-        $path = __DIR__ . '/../files/zip/small_post_address.zip';
-        $actual = $this->service->import($path, false);
+        $sourceFile = __DIR__ . '/../files/zip/small_post_address.zip';
+        $actual = $this->service->import($sourceFile, false);
         self::assertTrue($actual->isValid());
 
         $entries = $actual->getValidEntries();
@@ -169,8 +172,8 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
 
     public function testImportSuccessOverwrite(): void
     {
-        $path = __DIR__ . '/../files/zip/small_post_address.zip';
-        $actual = $this->service->import($path, true);
+        $sourceFile = __DIR__ . '/../files/zip/small_post_address.zip';
+        $actual = $this->service->import($sourceFile, true);
         self::assertTrue($actual->isValid());
 
         $entries = $actual->getValidEntries();
@@ -184,13 +187,26 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
         self::assertSame(0, $entries['street']);
     }
 
+    public function testImportUploadedFile(): void
+    {
+        $path = __DIR__ . '/../files/zip/small_post_address.zip';
+        $originalName = \basename($path);
+        $sourceFile = new UploadedFile(
+            path: $path,
+            originalName: $originalName,
+            test: true
+        );
+        $actual = $this->service->import($sourceFile, false);
+        self::assertTrue($actual->isValid());
+    }
+
     public function testImportValidityOlder(): void
     {
         $date = new \DateTime('2024-07-17');
         $this->application->method('getLastImport')
             ->willReturn($date);
-        $path = __DIR__ . '/../files/zip/small_post_address.zip';
-        $actual = $this->service->import($path, false);
+        $sourceFile = __DIR__ . '/../files/zip/small_post_address.zip';
+        $actual = $this->service->import($sourceFile, false);
         self::assertFalse($actual->isValid());
     }
 }

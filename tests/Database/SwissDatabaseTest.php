@@ -51,10 +51,9 @@ class SwissDatabaseTest extends TestCase
         $actual = $this->database->findCity(self::CITY_NAME);
         self::assertCount(1, $actual);
 
-        /** @phpstan-var array<string, mixed> $row */
         $row = $actual[0];
-        self::assertSame(self::CITY_NAME, $row['name']);
         self::assertSame(self::CITY_ZIP, $row['zip']);
+        self::assertSame(self::CITY_NAME, $row['city']);
         self::assertSame(self::STATE_NAME, $row['state']);
     }
 
@@ -70,7 +69,6 @@ class SwissDatabaseTest extends TestCase
         $actual = $this->database->findStreet(self::STREET_NAME);
         self::assertCount(1, $actual);
 
-        /** @phpstan-var array<string, mixed> $row */
         $row = $actual[0];
         self::assertSame(self::STREET_NAME, $row['street']);
         self::assertSame(self::CITY_ZIP, $row['zip']);
@@ -104,7 +102,6 @@ class SwissDatabaseTest extends TestCase
         $actual = $this->database->findZip((string) self::CITY_ZIP);
         self::assertCount(1, $actual);
 
-        /** @phpstan-var array<string, mixed> $row */
         $row = $actual[0];
         self::assertSame(self::CITY_ZIP, $row['zip']);
         self::assertSame(self::CITY_NAME, $row['city']);

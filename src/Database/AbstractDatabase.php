@@ -93,9 +93,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     public function beginTransaction(): bool
     {
         if (!$this->transaction && $this->exec('BEGIN TRANSACTION;')) {
-            $this->transaction = true;
-
-            return true;
+            return $this->transaction = true;
         }
 
         return false;

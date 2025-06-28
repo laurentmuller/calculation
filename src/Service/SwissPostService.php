@@ -18,6 +18,9 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Service to search zip codes, cities and streets from Switzerland.
+ *
+ * @phpstan-import-type SearchStreetType from SwissDatabase
+ * @phpstan-import-type SearchZipCityType from SwissDatabase
  */
 readonly class SwissPostService
 {
@@ -28,42 +31,61 @@ readonly class SwissPostService
     }
 
     /**
+     * Find values by the given parameters.
+     *
+     * @param array{street: string, zip:string, city: string} $parameters the search parameters
+     * @param int                                             $limit      the maximum number of rows to return
+     *
+     * @phpstan-return SearchStreetType[]
+     */
+    public function find(array $parameters, int $limit = 25): array
+    {
+        return $this->findValues(fn (SwissDatabase $db): array => $db->find($parameters, $limit));
+    }
+
+    /**
      * Finds values by searching in streets, zip codes and cities.
      *
      * @param string $value the value to search for
      * @param int    $limit the maximum number of rows to return
      *
      * @return array an array, maybe empty, of matching values
+     *
+     * @phpstan-return SearchStreetType[]
      */
     public function findAll(string $value, int $limit = 25): array
     {
-        return $this->find(fn (SwissDatabase $db): array => $db->findAll($value, $limit));
+        return $this->findValues(fn (SwissDatabase $db): array => $db->findAll($value, $limit));
     }
 
     /**
      * Finds cities by name.
      *
-     * @param string $name  the name to search for
+     * @param string $name  the city name to search for
      * @param int    $limit the maximum number of rows to return
      *
      * @return array an array, maybe empty, of matching cities
+     *
+     * @phpstan-return SearchZipCityType[]
      */
     public function findCity(string $name, int $limit = 25): array
     {
-        return $this->find(fn (SwissDatabase $db): array => $db->findCity($name, $limit));
+        return $this->findValues(fn (SwissDatabase $db): array => $db->findCity($name, $limit));
     }
 
     /**
      * Finds street by name.
      *
-     * @param string $name  the name to search for
+     * @param string $name  the street name to search for
      * @param int    $limit the maximum number of rows to return
      *
      * @return array an array, maybe empty, of matching streets
+     *
+     * @phpstan-return SearchStreetType[]
      */
     public function findStreet(string $name, int $limit = 25): array
     {
-        return $this->find(fn (SwissDatabase $db): array => $db->findStreet($name, $limit));
+        return $this->findValues(fn (SwissDatabase $db): array => $db->findStreet($name, $limit));
     }
 
     /**
@@ -73,10 +95,12 @@ readonly class SwissPostService
      * @param int    $limit the maximum number of rows to return
      *
      * @return array an array, maybe empty, of matching zip codes
+     *
+     * @phpstan-return SearchZipCityType[]
      */
     public function findZip(string $zip, int $limit = 25): array
     {
-        return $this->find(fn (SwissDatabase $db): array => $db->findZip($zip, $limit));
+        return $this->findValues(fn (SwissDatabase $db): array => $db->findZip($zip, $limit));
     }
 
     /**
@@ -98,9 +122,13 @@ readonly class SwissPostService
     }
 
     /**
-     * @phpstan-param callable(SwissDatabase): array $callback
+     * @template T of array
+     *
+     * @phpstan-param callable(SwissDatabase): T[] $callback
+     *
+     * @phpstan-return T[]
      */
-    private function find(callable $callback): array
+    private function findValues(callable $callback): array
     {
         $db = $this->getDatabase();
         $result = $callback($db);

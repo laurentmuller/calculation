@@ -295,11 +295,7 @@ class SchemaService
 
     private function getConnection(): Connection
     {
-        if (!$this->connection instanceof Connection) {
-            $this->connection = $this->manager->getConnection();
-        }
-
-        return $this->connection;
+        return $this->connection ??= $this->manager->getConnection();
     }
 
     private function getDefaultValue(Column $column): string
@@ -373,11 +369,7 @@ class SchemaService
      */
     private function getSchemaManager(): AbstractSchemaManager
     {
-        if (!$this->schemaManager instanceof AbstractSchemaManager) {
-            $this->schemaManager = $this->getConnection()->createSchemaManager();
-        }
-
-        return $this->schemaManager;
+        return $this->schemaManager ??= $this->getConnection()->createSchemaManager();
     }
 
     private function getSqlCounter(Table $table): string

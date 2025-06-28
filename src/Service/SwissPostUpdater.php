@@ -127,18 +127,18 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             return $result;
         }
 
-        $reader = false;
-        $archive = false;
+        $reader = null;
+        $archive = null;
         $database = null;
 
         try {
-            if (false === $archive = $this->openArchive($result)) {
+            if (!($archive = $this->openArchive($result)) instanceof \ZipArchive) {
                 return $result;
             }
             if (!$this->validateArchive($result, $archive)) {
                 return $result;
             }
-            if (false === $reader = $this->openReader($result, $archive)) {
+            if (!($reader = $this->openReader($result, $archive)) instanceof CSVReader) {
                 return $result;
             }
             $database = $this->openDatabase($tempFile);
@@ -149,9 +149,8 @@ class SwissPostUpdater implements ServiceSubscriberInterface
                 return $result;
             }
         } finally {
-            $this->closeReader($result, $reader);
-            $this->closeArchive($result, $archive);
-            $this->compactDatabase($result, $database);
+            $this->closeReader($reader);
+            $this->closeArchive($archive);
             $this->closeDatabase($result, $database);
             $this->renameDatabase($result, $tempFile);
         }
@@ -165,46 +164,22 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         return \mb_convert_encoding(\trim($str), 'UTF-8', 'ISO-8859-1');
     }
 
-    private function closeArchive(SwissPostUpdateResult $result, \ZipArchive|false $archive): void
+    private function closeArchive(?\ZipArchive $archive): void
     {
-        try {
-            if ($archive instanceof \ZipArchive) {
-                $archive->close();
-            }
-        } catch (\Throwable $e) {
-            $this->logResult($result, 'archive_close', $e);
-        }
+        $archive?->close();
     }
 
     private function closeDatabase(SwissPostUpdateResult $result, ?SwissDatabase $database): void
     {
-        try {
+        if ($result->isValid()) {
+            $database?->compact();
             $database?->close();
-        } catch (\Throwable $e) {
-            $this->logResult($result, 'database_close', $e);
         }
     }
 
-    private function closeReader(SwissPostUpdateResult $result, CSVReader|false $reader): void
+    private function closeReader(?CSVReader $reader): void
     {
-        try {
-            if ($reader instanceof CSVReader) {
-                $reader->close();
-            }
-        } catch (\Throwable $e) {
-            $this->logResult($result, 'reader_close', $e);
-        }
-    }
-
-    private function compactDatabase(SwissPostUpdateResult $result, ?SwissDatabase $database): void
-    {
-        try {
-            if ($result->isValid()) {
-                $database?->compact();
-            }
-        } catch (\Throwable $e) {
-            $this->logResult($result, 'database_compact', $e);
-        }
+        $reader?->close();
     }
 
     private function getDatabaseName(): string
@@ -231,21 +206,17 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         return $this->service->getTablesCount();
     }
 
-    private function logResult(SwissPostUpdateResult $result, string $id, \Throwable $e): void
-    {
-        $this->setError($result, $id);
-        $this->logException($e, $result->getError());
-    }
-
-    private function openArchive(SwissPostUpdateResult $result): \ZipArchive|false
+    private function openArchive(SwissPostUpdateResult $result): ?\ZipArchive
     {
         $archive = new \ZipArchive();
         $error = $archive->open($result->getSourceFile());
         if (true !== $error) {
-            return $this->setError($result, 'archive_open', [
+            $this->setError($result, 'archive_open', [
                 '%name%' => $result->getSourceName(),
                 '%error' => $error,
             ]);
+
+            return null;
         }
 
         return $archive;
@@ -259,21 +230,25 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         return $database;
     }
 
-    private function openReader(SwissPostUpdateResult $result, \ZipArchive $archive): CSVReader|false
+    private function openReader(SwissPostUpdateResult $result, \ZipArchive $archive): ?CSVReader
     {
         $name = $archive->getNameIndex(0);
         if (false === $name) {
-            return $this->setError($result, 'reader_name', [
+            $this->setError($result, 'reader_name', [
                 '%name%' => $result->getSourceName(),
             ]);
+
+            return null;
         }
 
         $stream = $archive->getStream($name);
         if (!\is_resource($stream)) {
-            return $this->setError($result, 'reader_open', [
+            $this->setError($result, 'reader_open', [
                 '%name%' => $result->getSourceName(),
                 '%stream%' => $name,
             ]);
+
+            return null;
         }
 
         return new CSVReader(file: $stream, separator: ';');

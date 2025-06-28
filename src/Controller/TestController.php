@@ -84,6 +84,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Currencies;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -437,12 +438,17 @@ class TestController extends AbstractController
     }
 
     #[GetRoute(path: '/search', name: 'search')]
-    public function search(Request $request, SearchService $service): JsonResponse
-    {
-        $query = $this->getRequestString($request, 'query');
-        $entity = $this->getRequestString($request, 'entity');
-        $limit = $this->getRequestInt($request, 'limit', 25);
-        $offset = $this->getRequestInt($request, 'offset');
+    public function search(
+        SearchService $service,
+        #[MapQueryParameter]
+        ?string $query = null,
+        #[MapQueryParameter]
+        ?string $entity = null,
+        #[MapQueryParameter]
+        int $limit = 25,
+        #[MapQueryParameter]
+        int $offset = 0
+    ): JsonResponse {
         $count = $service->count($query, $entity);
         $results = $service->search($query, $entity, $limit, $offset);
         foreach ($results as &$row) {
@@ -470,28 +476,30 @@ class TestController extends AbstractController
      * Search zip codes, cities and streets from Switzerland.
      */
     #[GetRoute(path: '/swiss', name: 'swiss')]
-    public function swiss(Request $request, SwissPostService $service): JsonResponse
-    {
-        $all = $this->getRequestString($request, 'all');
-        $zip = $this->getRequestString($request, 'zip');
-        $city = $this->getRequestString($request, 'city');
-        $street = $this->getRequestString($request, 'street');
-        $limit = $this->getRequestInt($request, 'limit', 25);
+    public function swiss(
+        SwissPostService $service,
+        #[MapQueryParameter]
+        string $all = '',
+        #[MapQueryParameter]
+        string $zip = '',
+        #[MapQueryParameter]
+        string $city = '',
+        #[MapQueryParameter]
+        string $street = '',
+        #[MapQueryParameter]
+        int $limit = 25
+    ): JsonResponse {
         if ('' !== $all) {
             $query = $all;
             $rows = $service->findAll($all, $limit);
-        } elseif ('' !== $zip) {
-            $query = $zip;
-            $rows = $service->findZip($zip, $limit);
-        } elseif ('' !== $city) {
-            $query = $city;
-            $rows = $service->findCity($city, $limit);
-        } elseif ('' !== $street) {
-            $query = $street;
-            $rows = $service->findStreet($street, $limit);
         } else {
-            $query = '';
-            $rows = [];
+            $parameters = [
+                'street' => $street,
+                'zip' => $zip,
+                'city' => $city,
+            ];
+            $query = \implode(', ', \array_filter($parameters));
+            $rows = $service->find($parameters, $limit);
         }
         $data = [
             'result' => [] !== $rows,

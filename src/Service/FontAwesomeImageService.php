@@ -15,10 +15,8 @@ namespace App\Service;
 
 use App\Model\FontAwesomeImage;
 use App\Traits\CacheKeyTrait;
-use App\Traits\LoggerTrait;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Filesystem\Path;
@@ -31,7 +29,6 @@ use Symfony\Contracts\Cache\ItemInterface;
 class FontAwesomeImageService
 {
     use CacheKeyTrait;
-    use LoggerTrait;
 
     /**
      * The JSON file containing aliases.
@@ -63,8 +60,7 @@ class FontAwesomeImageService
         #[Autowire('%kernel.project_dir%/resources/fontawesome')]
         private readonly string $svgDirectory,
         #[Target('calculation.fontawesome')]
-        private readonly CacheInterface $cache,
-        private readonly LoggerInterface $logger,
+        private readonly CacheInterface $cache
     ) {
     }
 
@@ -106,12 +102,6 @@ class FontAwesomeImageService
             $key,
             fn (ItemInterface $item, bool &$save): ?FontAwesomeImage => $this->loadImage($path, $color, $item, $save)
         );
-    }
-
-    #[\Override]
-    public function getLogger(): LoggerInterface
-    {
-        return $this->logger;
     }
 
     /**
@@ -213,15 +203,9 @@ class FontAwesomeImageService
 
     private function loadImage(string $path, string $color, ItemInterface $item, bool &$save): ?FontAwesomeImage
     {
-        $save = false;
-        $content = \file_get_contents($path);
-        if (!\is_string($content)) {
-            $this->logError(\sprintf('Unable to read the file "%s".', $path));
-
-            return null;
-        }
-
         try {
+            $save = false;
+            $content = (string) \file_get_contents($path);
             $content = self::SVG_PREFIX . $this->replaceFillColor($content, $color);
             $image = $this->convert($content);
             $item->set($image);
@@ -229,11 +213,7 @@ class FontAwesomeImageService
 
             return $image;
         } catch (\Exception $e) {
-            if ($e instanceof \ImagickException) {
-                $this->imagickException = true;
-            } else {
-                $this->logException($e, \sprintf('Unable to load image "%s".', $path));
-            }
+            $this->imagickException = $e instanceof \ImagickException;
 
             return null;
         }

@@ -15,6 +15,18 @@ namespace App\Database;
 
 /**
  * SQLite database for zip codes, cities and streets of Switzerland.
+ *
+ * @phpstan-type SearchStreetType = array{
+ *       street: string,
+ *       zip: int,
+ *       city: string,
+ *       state: string,
+ *       display: string}
+ * @phpstan-type SearchZipCityType = array{
+ *       zip: int,
+ *       city: string,
+ *       state: string,
+ *       display: string}
  */
 class SwissDatabase extends AbstractDatabase
 {
@@ -88,6 +100,34 @@ class SwissDatabase extends AbstractDatabase
         sql;
 
     /**
+     * SQL statement to find by multiple criterias.
+     *
+     * @var string
+     */
+    private const SEARCH = <<<'sql'
+        SELECT
+            street.name as street,
+            city.zip,
+            city.name as city,
+            state.name as state,
+            printf('%s, %s %s', street.name, city.zip, city.name) as display
+        FROM street
+        INNER JOIN city on street.city_id = city.id
+        INNER JOIN state on city.state_id = state.id
+        WHERE
+            street.name LIKE :street
+            AND
+            city.zip LIKE :zip
+            AND
+            city.name LIKE :city
+        ORDER BY
+            street.name,
+            city.zip,
+            city.name
+        LIMIT :limit
+        sql;
+
+    /**
      * SQL statement to find all.
      *
      * @var string
@@ -121,8 +161,8 @@ class SwissDatabase extends AbstractDatabase
      */
     private const SEARCH_CITY = <<<'sql'
         SELECT
-            city.name,
             city.zip,
+            city.name as city,
             state.name as state,
             printf('%s, %s', city.name, city.zip) as display
         FROM city
@@ -178,15 +218,45 @@ class SwissDatabase extends AbstractDatabase
         sql;
 
     /**
+     * Finds values by the given parameters.
+     *
+     * @param array{zip:string, city: string, street: string} $parameters the search parameters
+     * @param int                                             $limit      the maximum number of rows to return
+     *
+     * @return array an array, maybe empty, of matching values
+     *
+     * @phpstan-return SearchStreetType[]
+     */
+    public function find(array $parameters, int $limit = 25): array
+    {
+        if ([] === \array_filter($parameters)) {
+            return [];
+        }
+
+        /** @var \SQLite3Stmt $stmt */
+        $stmt = $this->getStatement(self::SEARCH);
+        $stmt->bindValue(':zip', $this->likeValue($parameters['zip']));
+        $stmt->bindValue(':city', $this->likeValue($parameters['city']));
+        $stmt->bindValue(':street', $this->likeValue($parameters['street']));
+        $stmt->bindValue(':limit', $limit, \SQLITE3_INTEGER);
+
+        /** @psalm-var SearchStreetType[] */
+        return $this->executeAndFetch($stmt);
+    }
+
+    /**
      * Finds values by searching in streets, zip codes and cities.
      *
      * @param string $value the value to search for
      * @param int    $limit the maximum number of rows to return
      *
      * @return array an array, maybe empty, of matching values
+     *
+     * @phpstan-return SearchStreetType[]
      */
     public function findAll(string $value, int $limit = 25): array
     {
+        /** @psalm-var SearchStreetType[] */
         return $this->search(self::SEARCH_ALL, $value, $limit);
     }
 
@@ -197,9 +267,12 @@ class SwissDatabase extends AbstractDatabase
      * @param int    $limit the maximum number of rows to return
      *
      * @return array an array, maybe empty, of matching cities
+     *
+     * @phpstan-return SearchZipCityType[]
      */
     public function findCity(string $city, int $limit = 25): array
     {
+        /** @psalm-var SearchZipCityType[] */
         return $this->search(self::SEARCH_CITY, $city, $limit);
     }
 
@@ -210,9 +283,12 @@ class SwissDatabase extends AbstractDatabase
      * @param int    $limit  the maximum number of rows to return
      *
      * @return array an array, maybe empty, of matching cities
+     *
+     * @phpstan-return SearchStreetType[]
      */
     public function findStreet(string $street, int $limit = 25): array
     {
+        /** @psalm-var SearchStreetType[] */
         return $this->search(self::SEARCH_STREET, $street, $limit);
     }
 
@@ -223,9 +299,12 @@ class SwissDatabase extends AbstractDatabase
      * @param int    $limit the maximum number of rows to return
      *
      * @return array an array, maybe empty, of matching cities
+     *
+     * @phpstan-return SearchZipCityType[]
      */
     public function findZip(string $zip, int $limit = 25): array
     {
+        /** @psalm-var SearchZipCityType[] */
         return $this->search(self::SEARCH_ZIP, $zip, $limit);
     }
 
@@ -246,24 +325,14 @@ class SwissDatabase extends AbstractDatabase
     /**
      * Insert a city.
      *
-     * @param array{0: int, 1: int, 2: string, 3:string} $data the data to insert with the following values:
-     *                                                         <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
-     *                                                         <tr>
-     *                                                         <th>Index</th><th>Type</th><th>Description</th>
-     *                                                         </tr>
-     *                                                         <tr>
-     *                                                         <td>0</td><td>integer</td><td>The city identifier (primary key).</td>
-     *                                                         </tr>
-     *                                                         <tr>
-     *                                                         <td>1</td><td>integer</td><td>The zip code.</td>
-     *                                                         </tr>
-     *                                                         <tr>
-     *                                                         <td>2</td><td>string</td><td>The city name.</td>
-     *                                                         </tr>
-     *                                                         <tr>
-     *                                                         <td>3</td><td>string</td><td>The state (canton).</td>
-     *                                                         </tr>
-     *                                                         </table>
+     * The data has the following meaning:
+     *
+     * - 0: The city identifier (primary key).
+     * - 1: The zip code.
+     * - 2: The city name.
+     * - 3: The state (canton).
+     *
+     * @param array{0: int, 1: int, 2: string, 3:string} $data the data to insert
      *
      * @return bool true if success
      */
@@ -285,18 +354,12 @@ class SwissDatabase extends AbstractDatabase
     /**
      * Insert a state.
      *
-     * @phpstan-param array{0: string, 1: string} $data the data to insert with the following values:
-     *                                          <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
-     *                                          <tr>
-     *                                          <th>Index</th><th>Type</th><th>Description</th>
-     *                                          </tr>
-     *                                          <tr>
-     *                                          <td>0</td><td>string</td><td>The state identifier (primary key).</td>
-     *                                          </tr>
-     *                                          <tr>
-     *                                          <td>1</td><td>string</td><td>The state name.</td>
-     *                                          </tr>
-     *                                          </table>
+     * The data has the following meaning:
+     *
+     *  - 0: The state identifier (primary key).
+     *  - 1: The state name.
+     *
+     * @phpstan-param array{0: string, 1: string} $data the data to insert
      *
      * @return bool true if success
      */
@@ -316,18 +379,12 @@ class SwissDatabase extends AbstractDatabase
     /**
      * Insert a street.
      *
-     * @phpstan-param array{0: int, 1: string} $data the data to insert with the following values:
-     *                                       <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
-     *                                       <tr>
-     *                                       <th>Index</th><th>Type</th><th>Description</th>
-     *                                       </tr>
-     *                                       <tr>
-     *                                       <td>0</td><td>integer</td><td>The city identifier (foreign key).</td>
-     *                                       </tr>
-     *                                       <tr>
-     *                                       <td>1</td><td>string</td><td>The street name.</td>
-     *                                       </tr>
-     *                                       </table>
+     *  The data has the following meaning:
+     *
+     *  - 0: The city identifier (foreign key).
+     *  - 1: The street name.
+     *
+     * @phpstan-param array{0: int, 1: string} $data the data to insert
      *
      * @return bool true if success
      */

@@ -72,7 +72,7 @@ $(function () {
 
     // city typeahead
     $city.initTypeahead($.extend({}, defaultOptions, {
-        valueField: 'name',
+        valueField: 'city',
         ajax: {
             url: addressUrl,
             preDispatch: function (query) {

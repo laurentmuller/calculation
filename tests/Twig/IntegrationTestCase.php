@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of the Calculation package.
+ *
+ * (c) bibi.nu <bibi@bibi.nu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 /*
  * This file is part of the Calculation package.
@@ -249,7 +257,7 @@ abstract class IntegrationTestCase extends TestCase
         if (!\file_exists($uri)) {
             throw new \InvalidArgumentException('Unable to open the file.');
         }
-        \register_shutdown_function(fn (): bool => \unlink($uri));
+        \register_shutdown_function(fn () => $this->unlink($uri));
         \fwrite($stream, \sprintf('<?php %s;', $code));
         $vars = (array) include $uri;
         \fclose($stream);
@@ -341,5 +349,12 @@ abstract class IntegrationTestCase extends TestCase
         }
 
         return $templates;
+    }
+
+    private function unlink(string $path): void
+    {
+        if (\file_exists($path)) {
+            \unlink($path);
+        }
     }
 }

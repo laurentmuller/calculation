@@ -93,9 +93,10 @@ class IndexService implements DisableListenerInterface
      */
     public function getCalculationByMonths(int $maxResults = 6): array
     {
-        $key = \sprintf('calculations.months.%d', $maxResults);
-
-        return $this->cache->get($key, fn (): array => $this->loadCalculationsByMonths($maxResults));
+        return $this->cache->get(
+            \sprintf('calculations.months.%d', $maxResults),
+            fn (): array => $this->loadCalculationsByMonths($maxResults)
+        );
     }
 
     /**
@@ -132,20 +133,18 @@ class IndexService implements DisableListenerInterface
     public function getLastCalculations(int $maxResults, ?UserInterface $user): array
     {
         $id = $this->cleanKey($user?->getUserIdentifier() ?? 'all');
-        $key = \sprintf('calculations.last.%d.%s', $maxResults, $id);
 
-        return $this->cache->get($key, fn (): array => $this->loadLastCalculations($maxResults, $user));
+        return $this->cache->get(
+            \sprintf('calculations.last.%d.%s', $maxResults, $id),
+            fn (): array => $this->loadLastCalculations($maxResults, $user)
+        );
     }
 
     public function onFlush(OnFlushEventArgs $args): void
     {
-        if (!$this->isEnabled()) {
-            return;
+        if ($this->isEnabled() && $this->isScheduledEntities($args)) {
+            $this->clear();
         }
-        if (!$this->isScheduledEntities($args)) {
-            return;
-        }
-        $this->clear();
     }
 
     /**
@@ -153,9 +152,10 @@ class IndexService implements DisableListenerInterface
      */
     private function count(string $className): int
     {
-        $key = $this->cleanKey($className);
-
-        return $this->cache->get($key, fn (): int => $this->manager->getRepository($className)->count());
+        return $this->cache->get(
+            $this->cleanKey($className),
+            fn (): int => $this->manager->getRepository($className)->count()
+        );
     }
 
     private function isScheduledEntities(OnFlushEventArgs $args): bool

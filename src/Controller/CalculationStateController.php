@@ -81,21 +81,7 @@ class CalculationStateController extends AbstractEntityController
     ): Response {
         $count = $repository->countStateReferences($item);
         if (0 !== $count) {
-            $display = $item->getDisplay();
-            $calculations = $this->trans('counters.calculations_lower', ['count' => $count]);
-            $message = $this->trans('calculationstate.delete.failure', [
-                '%name%' => $display,
-                '%calculations%' => $calculations,
-            ]);
-            $parameters = [
-                'title' => 'calculationstate.delete.title',
-                'message' => $message,
-                'item' => $item,
-                'back_page' => $this->getDefaultRoute(),
-                'back_text' => 'common.button_back_list',
-            ];
-
-            return $this->render('cards/card_warning.html.twig', $parameters);
+            return $this->showDeleteWarning($request, $item, $count);
         }
 
         return $this->deleteEntity($request, $item, $logger);
@@ -171,5 +157,27 @@ class CalculationStateController extends AbstractEntityController
     {
         $this->getApplicationService()->updateDeletedState($item);
         parent::deleteFromDatabase($item);
+    }
+
+    private function showDeleteWarning(
+        Request $request,
+        CalculationState $item,
+        int $count
+    ): Response {
+        $calculations = $this->trans('counters.calculations_lower', ['count' => $count]);
+        $message = $this->trans('calculationstate.delete.failure', [
+            '%name%' => $item->getDisplay(),
+            '%calculations%' => $calculations,
+        ]);
+        $parameters = [
+            'title' => 'calculationstate.delete.title',
+            'message' => $message,
+            'item' => $item,
+            'back_page' => $this->getDefaultRoute(),
+            'back_text' => 'common.button_back_list',
+        ];
+        $this->updateQueryParameters($request, $parameters, $item);
+
+        return $this->render('cards/card_warning.html.twig', $parameters);
     }
 }

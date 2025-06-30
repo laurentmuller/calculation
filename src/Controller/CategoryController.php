@@ -88,28 +88,7 @@ class CategoryController extends AbstractEntityController
         $products = $productRepository->countCategoryReferences($item);
         $calculations = $categoryRepository->countCategoryReferences($item);
         if (0 !== $tasks || 0 !== $products || 0 !== $calculations) {
-            $items = [];
-            if (0 !== $calculations) {
-                $items[] = $this->trans('counters.calculations', ['count' => $calculations]);
-            }
-            if (0 !== $products) {
-                $items[] = $this->trans('counters.products', ['count' => $products]);
-            }
-            if (0 !== $tasks) {
-                $items[] = $this->trans('counters.tasks', ['count' => $tasks]);
-            }
-            $message = $this->trans('category.delete.failure', ['%name%' => $item->getDisplay()]);
-            $parameters = [
-                'title' => 'category.delete.title',
-                'message' => $message,
-                'item' => $item,
-                'items' => $items,
-                'back_page' => $this->getDefaultRoute(),
-                'back_text' => 'common.button_back_list',
-            ];
-            $this->updateQueryParameters($request, $parameters, $item);
-
-            return $this->render('cards/card_warning.html.twig', $parameters);
+            return $this->showDeleteWarning($request, $item, $tasks, $products, $calculations);
         }
 
         return $this->deleteEntity($request, $item, $logger);
@@ -185,5 +164,36 @@ class CategoryController extends AbstractEntityController
     {
         $this->getApplicationService()->updateDeletedCategory($item);
         parent::deleteFromDatabase($item);
+    }
+
+    private function showDeleteWarning(
+        Request $request,
+        Category $item,
+        int $tasks,
+        int $products,
+        int $calculations
+    ): Response {
+        $items = [];
+        if (0 !== $calculations) {
+            $items[] = $this->trans('counters.calculations', ['count' => $calculations]);
+        }
+        if (0 !== $products) {
+            $items[] = $this->trans('counters.products', ['count' => $products]);
+        }
+        if (0 !== $tasks) {
+            $items[] = $this->trans('counters.tasks', ['count' => $tasks]);
+        }
+        $message = $this->trans('category.delete.failure', ['%name%' => $item->getDisplay()]);
+        $parameters = [
+            'title' => 'category.delete.title',
+            'message' => $message,
+            'item' => $item,
+            'items' => $items,
+            'back_page' => $this->getDefaultRoute(),
+            'back_text' => 'common.button_back_list',
+        ];
+        $this->updateQueryParameters($request, $parameters, $item);
+
+        return $this->render('cards/card_warning.html.twig', $parameters);
     }
 }

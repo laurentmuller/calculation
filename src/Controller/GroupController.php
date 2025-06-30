@@ -79,30 +79,10 @@ class GroupController extends AbstractEntityController
         CalculationGroupRepository $groupRepository,
         LoggerInterface $logger
     ): Response {
-        // external references?
         $categories = $item->countCategories();
         $calculations = $groupRepository->countGroupReferences($item);
         if (0 !== $categories || 0 !== $calculations) {
-            $items = [];
-            if (0 !== $categories) {
-                $items[] = $this->trans('counters.categories', ['count' => $categories]);
-            }
-            if (0 !== $calculations) {
-                $items[] = $this->trans('counters.calculations', ['count' => $calculations]);
-            }
-            $message = $this->trans('group.delete.failure', ['%name%' => $item->getDisplay()]);
-
-            $parameters = [
-                'title' => 'group.delete.title',
-                'message' => $message,
-                'item' => $item,
-                'items' => $items,
-                'back_page' => $this->getDefaultRoute(),
-                'back_text' => 'common.button_back_list',
-            ];
-            $this->updateQueryParameters($request, $parameters, $item);
-
-            return $this->render('cards/card_warning.html.twig', $parameters);
+            return $this->showDeleteWarning($request, $item, $categories, $calculations);
         }
 
         return $this->deleteEntity($request, $item, $logger);
@@ -168,5 +148,33 @@ class GroupController extends AbstractEntityController
     public function show(Group $item): Response
     {
         return $this->showEntity($item);
+    }
+
+    private function showDeleteWarning(
+        Request $request,
+        Group $item,
+        int $categories,
+        int $calculations
+    ): Response {
+        $items = [];
+        if (0 !== $categories) {
+            $items[] = $this->trans('counters.categories', ['count' => $categories]);
+        }
+        if (0 !== $calculations) {
+            $items[] = $this->trans('counters.calculations', ['count' => $calculations]);
+        }
+        $message = $this->trans('group.delete.failure', ['%name%' => $item->getDisplay()]);
+
+        $parameters = [
+            'title' => 'group.delete.title',
+            'message' => $message,
+            'item' => $item,
+            'items' => $items,
+            'back_page' => $this->getDefaultRoute(),
+            'back_text' => 'common.button_back_list',
+        ];
+        $this->updateQueryParameters($request, $parameters, $item);
+
+        return $this->render('cards/card_warning.html.twig', $parameters);
     }
 }

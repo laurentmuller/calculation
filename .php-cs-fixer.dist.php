@@ -84,6 +84,7 @@ $config = new Config();
 return $config
     ->setCacheFile(__DIR__ . '/var/cache/php-cs-fixer/.php-cs-fixer.cache')
     ->setParallelConfig(ParallelConfigFactory::detect())
+    ->setUnsupportedPhpVersionAllowed(false)
     ->setRiskyAllowed(true)
     ->setFinder($finder)
     ->setRules($rules);

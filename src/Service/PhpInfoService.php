@@ -31,14 +31,11 @@ class PhpInfoService
     /**
      * Gets PHP information as the array.
      *
-     * @param int $what the output may be customized by passing one or more of the constants bitwise values
-     *                  summed together in the optional what parameter
-     *
      * @phpstan-return EntriesType
      */
-    public function asArray(int $what = \INFO_ALL): array
+    public function asArray(): array
     {
-        $content = $this->asText($what);
+        $content = $this->asText();
         $content = \strip_tags($content, '<h2><th><td>');
         $content = StringUtils::pregReplaceAll(
             [
@@ -89,14 +86,10 @@ class PhpInfoService
 
     /**
      * Gets PHP information as HTML.
-     *
-     * @param int $what the output may be customized by passing one or more of the constants bitwise values
-     *                  summed together in the optional what parameter
      */
-    public function asHtml(int $what = \INFO_ALL): string
+    public function asHtml(): string
     {
-        $info = $this->asText($what);
-
+        $info = $this->asText();
         $info = StringUtils::pregReplace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
         $info = StringUtils::pregReplace('/<a\s(.+?)>(.+?)<\/a>/mi', '<p>$2</p>', $info);
         $info = \str_ireplace('background-color: white; text-align: center', '', $info);
@@ -134,14 +127,11 @@ class PhpInfoService
 
     /**
      * Gets PHP information as text (raw data).
-     *
-     * @param int $what the output may be customized by passing one or more of the constants bitwise values
-     *                  summed together in the optional what parameter
      */
-    public function asText(int $what = \INFO_ALL): string
+    public function asText(): string
     {
         \ob_start();
-        \phpinfo($what);
+        \phpinfo();
         $content = (string) \ob_get_contents();
         \ob_end_clean();
 

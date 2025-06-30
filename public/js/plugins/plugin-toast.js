@@ -297,7 +297,7 @@
                 case positions.CENTER_CENTER:
                 case positions.CENTER_RIGHT:
                     return false;
-                default: // BOTTOM_XXX
+                default: // ALL BOTTOM
                     return true;
             }
         },
@@ -545,19 +545,15 @@
             if (!options.progress) {
                 return;
             }
-            let className = `bg-${options.type}`;
-            if (options.type === this.NotificationTypes.DARK && this._isDarkTheme()) {
-                className = 'bg-body-secondary';
-            }
             const $bar = $('<div/>', {
-                class: `progress-bar overflow-hidden ${className}`,
+                class: `progress-bar overflow-hidden bg-${options.type}`,
                 role: 'progressbar',
+                'aria-valuenow': '0',
                 'aria-valuemin': '0',
-                'aria-valuemax': '100',
-                'aria-valuenow': '1000',
+                'aria-valuemax': '100'
             });
             const $progress = $('<div/>', {
-                class: 'progress bg-transparent rounded-0 rounded-bottom',
+                class: 'progress bg-transparent rounded-0',
                 css: {
                     height: `${options.progress}px`
                 },
@@ -579,8 +575,8 @@
             if (options.progress && options.timeout > 200) {
                 const $progress = $toast.find('.progress-bar');
                 if ($progress.length) {
-                    $toast.on('show.bs.toast', function () {
-                        $progress.animate({width: '100%'}, options.timeout - 200);
+                    $toast.on('shown.bs.toast', function () {
+                        $progress.css('animation-duration', `${options.timeout}ms`);
                     });
                 }
             }

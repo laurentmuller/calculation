@@ -173,8 +173,8 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     {
         if ($result->isValid()) {
             $database?->compact();
-            $database?->close();
         }
+        $database?->close();
     }
 
     private function closeReader(?CSVReader $reader): void

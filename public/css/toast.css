@@ -95,6 +95,20 @@ html[data-bs-theme=dark] .toast-plugin .toast.border-dark {
     border-color: var(--bs-border-color) !important;
 }
 
+/* progress-bar */
+html[data-bs-theme=dark] .toast-plugin .progress-bar.bg-dark {
+    background-color: var(--bs-border-color) !important;
+}
+
+.toast-plugin .progress-bar {
+    animation-name: toast-plugin-progress;
+}
+
+@keyframes toast-plugin-progress {
+    0% {width: 0}
+    100% {width: 100%}
+}
+
 /* margins */
 body:not(.sidebar-show) .toast-plugin.top-left,
 body:not(.sidebar-show) .toast-plugin.top-center,

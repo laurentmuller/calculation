@@ -37,10 +37,13 @@ class HtmlTextChunk extends AbstractHtmlChunk
         HtmlTag::LIST_ITEM,
     ];
 
-    /**
-     * The text.
-     */
-    private ?string $text = null;
+    public function __construct(
+        ?HtmlParentChunk $parent = null,
+        ?string $className = null,
+        private readonly string $text = ''
+    ) {
+        parent::__construct(HtmlTag::TEXT, $parent, $className);
+    }
 
     #[\Override]
     public function isNewLine(): bool
@@ -50,7 +53,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
         if ($parent instanceof HtmlParentChunk) {
             $index = $this->index();
             $count = $parent->count();
-            if (-1 !== $index && $index < $count - 1) {
+            if ($index >= 0 && $index < $count - 1) {
                 $next = $parent->getChildren()[$index + 1];
 
                 return $next->is(HtmlTag::LIST_ORDERED, HtmlTag::LIST_UNORDERED);
@@ -61,18 +64,8 @@ class HtmlTextChunk extends AbstractHtmlChunk
         return parent::isNewLine();
     }
 
-    /**
-     * Sets the text.
-     */
-    public function setText(?string $text): self
-    {
-        $this->text = $text;
-
-        return $this;
-    }
-
     #[\Override]
-    protected function getOutputText(): ?string
+    protected function getOutputText(): string
     {
         return $this->text;
     }

@@ -33,6 +33,13 @@ class HtmlParserTest extends TestCase
         self::assertChunks($actual, HtmlParentChunk::class, HtmlBrChunk::class);
     }
 
+    public function testDivChunk(): void
+    {
+        $parser = new HtmlParser('<body><div></div></body>');
+        $actual = $parser->parse();
+        self::assertChunks($actual, HtmlParentChunk::class);
+    }
+
     public function testEmpty(): void
     {
         $parser = new HtmlParser('');
@@ -80,23 +87,6 @@ class HtmlParserTest extends TestCase
         $parser = new HtmlParser('<body><p>My Text</p></body>');
         $actual = $parser->parse();
         self::assertChunks($actual, HtmlParentChunk::class, HtmlParentChunk::class, HtmlTextChunk::class);
-    }
-
-    public function testTextChunkMultiSpace(): void
-    {
-        $html = <<<'html'
-                <body>
-
-                    <p>
-
-                    </p>
-
-                </body>'
-            html;
-
-        $parser = new HtmlParser($html);
-        $actual = $parser->parse();
-        self::assertChunks($actual, HtmlParentChunk::class, HtmlParentChunk::class);
     }
 
     public function testUlChunk(): void

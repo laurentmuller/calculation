@@ -16,13 +16,11 @@ namespace App\Tests\Model;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Model\CalculationArchiveResult;
-use App\Tests\AssertEmptyTrait;
 use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\TestCase;
 
 class CalculationArchiveResultTest extends TestCase
 {
-    use AssertEmptyTrait;
     use IdTrait;
 
     /**
@@ -48,7 +46,7 @@ class CalculationArchiveResultTest extends TestCase
         self::assertSame($expected, $actual);
 
         $result->reset();
-        self::assertEmptyCountable($result);
+        self::assertCount(0, $result);
         self::assertEmpty($result->getResults());
         self::assertFalse($result->isValid());
 
@@ -60,7 +58,7 @@ class CalculationArchiveResultTest extends TestCase
     public function testConstructor(): void
     {
         $result = new CalculationArchiveResult();
-        self::assertEmptyCountable($result);
+        self::assertCount(0, $result);
         self::assertEmpty($result->getResults());
         self::assertFalse($result->isValid());
     }

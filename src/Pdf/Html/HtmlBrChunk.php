@@ -18,6 +18,11 @@ namespace App\Pdf\Html;
  */
 class HtmlBrChunk extends AbstractHtmlChunk
 {
+    public function __construct(?HtmlParentChunk $parent = null, ?string $className = null)
+    {
+        parent::__construct(HtmlTag::LINE_BREAK, $parent, $className);
+    }
+
     #[\Override]
     public function isNewLine(): bool
     {

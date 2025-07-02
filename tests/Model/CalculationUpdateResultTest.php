@@ -16,20 +16,18 @@ namespace App\Tests\Model;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Model\CalculationUpdateResult;
-use App\Tests\AssertEmptyTrait;
 use App\Tests\Entity\IdTrait;
 use App\Utils\DateUtils;
 use PHPUnit\Framework\TestCase;
 
 class CalculationUpdateResultTest extends TestCase
 {
-    use AssertEmptyTrait;
     use IdTrait;
 
     public function testEmpty(): void
     {
         $result = new CalculationUpdateResult();
-        self::assertEmptyCountable($result);
+        self::assertCount(0, $result);
         self::assertEmpty($result->getResults());
         self::assertFalse($result->isValid());
     }

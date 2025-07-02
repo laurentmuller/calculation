@@ -14,15 +14,12 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\LogLevel;
-use App\Tests\AssertEmptyTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
 
 class LogLevelTest extends TestCase
 {
-    use AssertEmptyTrait;
-
     /**
      * @phpstan-return \Generator<int, array{PsrLevel::*, string}>
      */
@@ -56,7 +53,7 @@ class LogLevelTest extends TestCase
     public function testIncrement(): void
     {
         $logLevel = LogLevel::instance(PsrLevel::WARNING);
-        self::assertEmptyCountable($logLevel);
+        self::assertCount(0, $logLevel);
         $logLevel->increment();
         self::assertCount(1, $logLevel);
         $logLevel->increment(2);
@@ -70,7 +67,7 @@ class LogLevelTest extends TestCase
         self::assertSame($expected, $logLevel->getLevel());
         self::assertSame($expected, $logLevel->__toString());
         self::assertSame('Warning', $logLevel->getLevelTitle());
-        self::assertEmptyCountable($logLevel);
+        self::assertCount(0, $logLevel);
     }
 
     /**

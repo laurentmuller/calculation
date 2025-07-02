@@ -117,16 +117,17 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     #[\Override]
     public function isNewLine(): bool
     {
-        $name = \strtolower($this->getName());
-
-        return match (HtmlTag::tryFrom($name)) {
+        return match ($this->getTag()) {
             HtmlTag::H1,
             HtmlTag::H2,
             HtmlTag::H3,
             HtmlTag::H4,
             HtmlTag::H5,
             HtmlTag::H6,
+            HtmlTag::DESCRIPTION_TERM,
+            HtmlTag::DESCRIPTION_DETAIL,
             HtmlTag::PARAGRAPH => true,
+
             HtmlTag::LIST_ITEM => !self::isLastNewLine($this),
             default => parent::isNewLine(),
         };

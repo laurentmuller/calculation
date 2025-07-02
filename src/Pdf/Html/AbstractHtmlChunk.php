@@ -48,23 +48,18 @@ abstract class AbstractHtmlChunk
     private array $classes = [];
 
     /**
-     * The parent chunk.
-     */
-    private ?HtmlParentChunk $parent = null;
-
-    /**
      * The style.
      */
     private ?HtmlStyle $style = null;
 
     /**
-     * @param string           $name      the tag name
+     * @param HtmlTag          $tag       the tag type
      * @param ?HtmlParentChunk $parent    the parent chunk
      * @param ?string          $className the class name
      */
     public function __construct(
-        private readonly string $name,
-        ?HtmlParentChunk $parent = null,
+        private readonly HtmlTag $tag,
+        private ?HtmlParentChunk $parent = null,
         ?string $className = null
     ) {
         $parent?->add($this);
@@ -118,14 +113,6 @@ abstract class AbstractHtmlChunk
     }
 
     /**
-     * Gets the tag name.
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
      * Gets the parent.
      */
     public function getParent(): ?HtmlParentChunk
@@ -147,6 +134,14 @@ abstract class AbstractHtmlChunk
     public function getStyle(): ?HtmlStyle
     {
         return $this->style;
+    }
+
+    /**
+     * Gets the tag.
+     */
+    public function getTag(): HtmlTag
+    {
+        return $this->tag;
     }
 
     /**
@@ -176,17 +171,11 @@ abstract class AbstractHtmlChunk
     }
 
     /**
-     * Returns if this name matches one of the given tags, ignoring case consideration.
+     * Returns if this tag matches one of the given tags.
      */
     public function is(HtmlTag ...$tags): bool
     {
-        foreach ($tags as $tag) {
-            if ($tag->match($this->name)) {
-                return true;
-            }
-        }
-
-        return false;
+        return \in_array($this->tag, $tags, true);
     }
 
     /**
@@ -359,7 +348,7 @@ abstract class AbstractHtmlChunk
     }
 
     /**
-     * Update this bookmark and style, depending on the tag name and classes.
+     * Update this bookmark and style, depending on the tag and classes.
      */
     private function updateStyle(): static
     {
@@ -377,8 +366,8 @@ abstract class AbstractHtmlChunk
             }
         }
 
-        // create style from name if none
-        $style ??= HtmlTag::getStyle($this->name);
+        // create style from tag if none
+        $style ??= $this->tag->style();
 
         // update
         if ($style instanceof HtmlStyle) {

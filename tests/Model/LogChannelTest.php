@@ -14,14 +14,11 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\LogChannel;
-use App\Tests\AssertEmptyTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class LogChannelTest extends TestCase
 {
-    use AssertEmptyTrait;
-
     /**
      * @phpstan-return \Generator<int, array{non-empty-string, string}>
      */
@@ -53,7 +50,7 @@ class LogChannelTest extends TestCase
     public function testIncrement(): void
     {
         $logChannel = LogChannel::instance('channel');
-        self::assertEmptyCountable($logChannel);
+        self::assertCount(0, $logChannel);
         $logChannel->increment();
         self::assertCount(1, $logChannel);
         $logChannel->increment(2);
@@ -66,6 +63,6 @@ class LogChannelTest extends TestCase
         self::assertSame('channel', $logChannel->getChannel());
         self::assertSame('channel', $logChannel->__toString());
         self::assertSame('Channel', $logChannel->getChannelTitle());
-        self::assertEmptyCountable($logChannel);
+        self::assertCount(0, $logChannel);
     }
 }

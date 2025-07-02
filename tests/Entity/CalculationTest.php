@@ -22,12 +22,10 @@ use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\GroupMargin;
 use App\Entity\Product;
-use App\Tests\AssertEmptyTrait;
 use App\Utils\FormatUtils;
 
 class CalculationTest extends EntityValidatorTestCase
 {
-    use AssertEmptyTrait;
     use IdTrait;
 
     public function testAddProduct(): void
@@ -103,10 +101,10 @@ class CalculationTest extends EntityValidatorTestCase
         $entity->setCategory($category, true);
         self::assertNotNull($entity->getCategory());
 
-        self::assertEmptyCountable($entity);
+        self::assertCount(0, $entity);
         $item = new CalculationItem();
         $entity->removeItem($item);
-        self::assertEmptyCountable($entity);
+        self::assertCount(0, $entity);
     }
 
     /**
@@ -374,9 +372,9 @@ class CalculationTest extends EntityValidatorTestCase
         self::assertNotNull($entity->getGroup());
 
         $category = new CalculationCategory();
-        self::assertEmptyCountable($entity);
+        self::assertCount(0, $entity);
         $entity->removeCategory($category);
-        self::assertEmptyCountable($entity);
+        self::assertCount(0, $entity);
 
         $calculation = new Calculation();
         self::assertEmpty($calculation->getGroups());

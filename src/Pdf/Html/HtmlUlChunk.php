@@ -18,6 +18,11 @@ namespace App\Pdf\Html;
  */
 class HtmlUlChunk extends AbstractHtmlListChunk
 {
+    public function __construct(?HtmlParentChunk $parent = null, ?string $className = null)
+    {
+        parent::__construct(HtmlTag::LIST_UNORDERED, $parent, $className);
+    }
+
     #[\Override]
     public function getBulletLast(): string
     {

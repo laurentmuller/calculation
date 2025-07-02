@@ -14,14 +14,11 @@ declare(strict_types=1);
 namespace App\Tests\Database;
 
 use App\Database\AbstractDatabase;
-use App\Tests\AssertEmptyTrait;
 use App\Tests\Fixture\Database;
 use PHPUnit\Framework\TestCase;
 
 class AbstractDatabaseTest extends TestCase
 {
-    use AssertEmptyTrait;
-
     private Database $database;
 
     #[\Override]
@@ -128,7 +125,7 @@ class AbstractDatabaseTest extends TestCase
     {
         $query = 'SELECT * FROM sy_User WHERE sy_User.username LIKE :value LIMIT :limit';
         $actual = $this->database->search($query, 'fake value', 10);
-        self::assertEmptyCountable($actual);
+        self::assertCount(0, $actual);
 
         $actual = $this->database->search($query, 'ROLE_ADMIN', 10);
         self::assertCount(1, $actual);

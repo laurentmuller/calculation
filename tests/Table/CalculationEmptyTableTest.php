@@ -17,20 +17,18 @@ use App\Entity\Calculation;
 use App\Repository\CalculationRepository;
 use App\Table\CalculationEmptyTable;
 use App\Table\DataQuery;
-use App\Tests\AssertEmptyTrait;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CalculationEmptyTableTest extends TestCase
 {
-    use AssertEmptyTrait;
     use TranslatorMockTrait;
 
     public function testDefault(): void
     {
         $table = $this->createTable();
-        self::assertEmptyCountable($table);
+        self::assertCount(0, $table);
         self::assertSame(Calculation::class, $table->getEntityClassName());
         self::assertInstanceOf(CalculationRepository::class, $table->getRepository());
         self::assertSame('empty.empty', $table->getEmptyMessage());

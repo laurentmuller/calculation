@@ -15,14 +15,12 @@ namespace App\Tests\Model;
 
 use App\Entity\Log;
 use App\Model\LogFile;
-use App\Tests\AssertEmptyTrait;
 use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 
 class LogFileTest extends TestCase
 {
-    use AssertEmptyTrait;
     use IdTrait;
 
     private LogFile $file;
@@ -38,7 +36,7 @@ class LogFileTest extends TestCase
      */
     public function testAddLog(): void
     {
-        self::assertEmptyCountable($this->file);
+        self::assertCount(0, $this->file);
         self::assertEmpty($this->file->getLevels());
         self::assertEmpty($this->file->getChannels());
 

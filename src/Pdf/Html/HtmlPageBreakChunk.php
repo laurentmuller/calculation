@@ -20,6 +20,11 @@ use App\Report\HtmlReport;
  */
 class HtmlPageBreakChunk extends AbstractHtmlChunk
 {
+    public function __construct(?HtmlParentChunk $parent = null, ?string $className = null)
+    {
+        parent::__construct(HtmlTag::PAGE_BREAK, $parent, $className);
+    }
+
     #[\Override]
     public function output(HtmlReport $report): void
     {

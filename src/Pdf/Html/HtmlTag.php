@@ -44,6 +44,22 @@ enum HtmlTag: string
      */
     #[EnumCase(extras: ['font-name' => 'courier', 'text-color' => '#FF0000'])]
     case CODE = 'code';
+    /**
+     * The description details tag name.
+     */
+    #[EnumCase(extras: ['bottom-margin' => 2.0])]
+    case DESCRIPTION_DETAIL = 'dd';
+
+    /**
+     * The description list tag name.
+     */
+    case DESCRIPTION_LIST = 'dl';
+
+    /**
+     * The description term tag name.
+     */
+    #[EnumCase(extras: ['font-bold' => true])]
+    case DESCRIPTION_TERM = 'dt';
 
     /**
      * The emphasis element.
@@ -134,7 +150,6 @@ enum HtmlTag: string
      */
     #[EnumCase(extras: ['bottom-margin' => 2.0])]
     case PARAGRAPH = 'p';
-
     /**
      * The sample output element.
      */

@@ -295,7 +295,7 @@ class HtmlStyle extends PdfStyle
 
     private function updateFont(string $class): self
     {
-        match ($class) {
+        return match ($class) {
             'fw-normal',
             'fst-normal' => $this->resetFont(),
             'fw-bold',
@@ -310,10 +310,8 @@ class HtmlStyle extends PdfStyle
             'fs-4' => $this->setFontSize(HtmlTag::H4->getFontSize()),
             'fs-5' => $this->setFontSize(HtmlTag::H5->getFontSize()),
             'fs-6' => $this->setFontSize(HtmlTag::H6->getFontSize()),
-            default => null,
+            default => $this,
         };
-
-        return $this;
     }
 
     private function updateMargins(string $class): self

@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace App\Tests\Pdf\Html;
 
 use App\Pdf\Html\HtmlBrChunk;
-use App\Pdf\Html\HtmlTag;
 use PHPUnit\Framework\TestCase;
 
 class HtmlBrChunkTest extends TestCase
 {
     public function testIsNewLine(): void
     {
-        $chunk = new HtmlBrChunk(HtmlTag::LINE_BREAK->value);
+        $chunk = new HtmlBrChunk();
         self::assertTrue($chunk->isNewLine());
     }
 }

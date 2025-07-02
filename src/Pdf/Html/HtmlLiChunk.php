@@ -24,6 +24,11 @@ use fpdf\PdfDocument;
  */
 class HtmlLiChunk extends HtmlParentChunk
 {
+    public function __construct(?HtmlParentChunk $parent = null, ?string $className = null)
+    {
+        parent::__construct(HtmlTag::LIST_ITEM, $parent, $className);
+    }
+
     #[\Override]
     public function outputChildren(HtmlReport $report): void
     {

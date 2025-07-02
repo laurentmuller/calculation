@@ -21,16 +21,16 @@ namespace App\Pdf\Html;
 class HtmlOlChunk extends AbstractHtmlListChunk
 {
     /**
-     * The start count.
-     *
-     * @phpstan-var positive-int
+     * @phpstan-param  positive-int $start
      */
-    private int $start = 1;
-
-    /**
-     * The numbered type.
-     */
-    private HtmlListType $type = HtmlListType::NUMBER;
+    public function __construct(
+        ?HtmlParentChunk $parent = null,
+        ?string $className = null,
+        private readonly int $start = 1,
+        private readonly HtmlListType $type = HtmlListType::NUMBER
+    ) {
+        parent::__construct(HtmlTag::LIST_ORDERED, $parent, $className);
+    }
 
     #[\Override]
     public function getBulletLast(): string
@@ -60,28 +60,6 @@ class HtmlOlChunk extends AbstractHtmlListChunk
     public function getType(): HtmlListType
     {
         return $this->type;
-    }
-
-    /**
-     * Sets the start counting (must be positive).
-     *
-     * @phpstan-param positive-int $start
-     */
-    public function setStart(int $start): self
-    {
-        $this->start = $start;
-
-        return $this;
-    }
-
-    /**
-     * Sets the numbered type.
-     */
-    public function setType(HtmlListType $type): self
-    {
-        $this->type = $type;
-
-        return $this;
     }
 
     private function getText(int $number): string

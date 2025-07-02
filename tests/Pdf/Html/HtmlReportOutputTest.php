@@ -35,7 +35,7 @@ class HtmlReportOutputTest extends TestCase
     public function testHtmlLiChunkNoParent(): void
     {
         $report = $this->createReport();
-        $chunk = new HtmlLiChunk('li');
+        $chunk = new HtmlLiChunk();
         $chunk->output($report);
         self::assertSame(1, $report->getPage());
     }
@@ -43,12 +43,11 @@ class HtmlReportOutputTest extends TestCase
     public function testHtmlLiChunkWithStyle(): void
     {
         $report = $this->createReport();
-        $textChunk = new HtmlTextChunk('#text');
-        $textChunk->setText('Text');
+        $textChunk = new HtmlTextChunk(text: 'Text');
         $textChunk->setStyle(HtmlStyle::default()->setFontBold());
-        $liChunk = new HtmlLiChunk('li');
+        $liChunk = new HtmlLiChunk();
         $liChunk->add($textChunk);
-        $parent = new HtmlOlChunk('ol');
+        $parent = new HtmlOlChunk();
         $parent->add($liChunk);
         $parent->setStyle(HtmlStyle::default()->setLeftMargin(10)
             ->setRightMargin(10));
@@ -59,9 +58,9 @@ class HtmlReportOutputTest extends TestCase
     public function testHtmlOlChunk(): void
     {
         $report = $this->createReport();
-        $chunk = new HtmlOlChunk('ol');
-        $chunk->add(new HtmlLiChunk('li'));
-        $chunk->add(new HtmlLiChunk('li'));
+        $chunk = new HtmlOlChunk();
+        $chunk->add(new HtmlLiChunk());
+        $chunk->add(new HtmlLiChunk());
         $chunk->output($report);
         self::assertSame(1, $report->getPage());
     }
@@ -69,7 +68,7 @@ class HtmlReportOutputTest extends TestCase
     public function testHtmlPageBreakChunk(): void
     {
         $report = $this->createReport();
-        $chunk = new HtmlPageBreakChunk('tag');
+        $chunk = new HtmlPageBreakChunk();
         $chunk->output($report);
         self::assertSame(2, $report->getPage());
     }
@@ -77,17 +76,15 @@ class HtmlReportOutputTest extends TestCase
     public function testHtmlTextChunk(): void
     {
         $report = $this->createReport();
-        $chunk = new HtmlTextChunk('#text');
-        $chunk->setText('Text');
+        $chunk = new HtmlTextChunk(text: 'Text');
         $chunk->output($report);
         self::assertSame(1, $report->getPage());
 
         $style = HtmlStyle::default();
         $style->setAlignment(PdfTextAlignment::RIGHT);
-        $parent = new HtmlParentChunk('h1', null, 'bookmark-0');
+        $parent = new HtmlParentChunk(tag: HtmlTag::H1, className: 'bookmark-0');
         $parent->setStyle($style);
-        $chunk = new HtmlTextChunk('#text');
-        $chunk->setText('Text');
+        $chunk = new HtmlTextChunk(text: 'Text');
         $parent->add($chunk);
         $parent->output($report);
         self::assertSame(1, $report->getPage());
@@ -96,25 +93,25 @@ class HtmlReportOutputTest extends TestCase
     public function testHtmlUlChunk(): void
     {
         $report = $this->createReport();
-        $chunk = new HtmlUlChunk('ol');
-        $chunk->add(new HtmlLiChunk('li'));
-        $chunk->add(new HtmlLiChunk('li'));
+        $chunk = new HtmlUlChunk();
+        $chunk->add(new HtmlLiChunk());
+        $chunk->add(new HtmlLiChunk());
         $chunk->output($report);
         self::assertSame(1, $report->getPage());
     }
 
-    public function testOuputWithBorder(): void
+    public function testOutputWithBorder(): void
     {
         $report = $this->createReport();
-        $chunk = new HtmlParentChunk('div');
+        $chunk = new HtmlParentChunk(HtmlTag::PARAGRAPH);
         $chunk->setStyle(HtmlStyle::default()->setBorder(PdfBorder::all()));
-        $text = new HtmlTextChunk(HtmlTag::TEXT->value);
-        $text->setText('Text');
+        $text = new HtmlTextChunk(text: 'Text');
         $chunk->add($text);
         $chunk->output($report);
 
         $report->setX(200);
-        $text->setText('Very long text to use multi-cell function in the report.');
+        $text = new HtmlTextChunk(text: 'Very long text to use multi-cell function in the report.');
+        $chunk->add($text);
         $chunk->output($report);
 
         self::assertSame(2, $report->getPage());

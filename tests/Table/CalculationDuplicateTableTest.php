@@ -17,18 +17,15 @@ use App\Entity\Calculation;
 use App\Repository\CalculationRepository;
 use App\Table\CalculationDuplicateTable;
 use App\Table\DataQuery;
-use App\Tests\AssertEmptyTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CalculationDuplicateTableTest extends TestCase
 {
-    use AssertEmptyTrait;
-
     public function testDefault(): void
     {
         $table = $this->createTable();
-        self::assertEmptyCountable($table);
+        self::assertCount(0, $table);
         self::assertSame(Calculation::class, $table->getEntityClassName());
         self::assertInstanceOf(CalculationRepository::class, $table->getRepository());
         self::assertSame('duplicate.empty', $table->getEmptyMessage());

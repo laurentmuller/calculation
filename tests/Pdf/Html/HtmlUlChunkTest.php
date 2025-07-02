@@ -16,34 +16,31 @@ namespace App\Tests\Pdf\Html;
 use App\Pdf\Html\HtmlBrChunk;
 use App\Pdf\Html\HtmlLiChunk;
 use App\Pdf\Html\HtmlUlChunk;
-use App\Tests\AssertEmptyTrait;
 use PHPUnit\Framework\TestCase;
 
 class HtmlUlChunkTest extends TestCase
 {
-    use AssertEmptyTrait;
-
     public function testAdd(): void
     {
-        $ulChunk = new HtmlUlChunk('ul');
-        self::assertEmptyCountable($ulChunk);
-        $ulChunk->add(new HtmlBrChunk('br'));
-        self::assertEmptyCountable($ulChunk);
-        $ulChunk->add(new HtmlLiChunk('li'));
-        self::assertCount(1, $ulChunk);
+        $chunk = new HtmlUlChunk();
+        self::assertCount(0, $chunk);
+        $chunk->add(new HtmlBrChunk());
+        self::assertCount(0, $chunk);
+        $chunk->add(new HtmlLiChunk());
+        self::assertCount(1, $chunk);
     }
 
     public function testBulletLast(): void
     {
-        $ulChunk = new HtmlUlChunk('name');
-        $actual = $ulChunk->getBulletLast();
+        $chunk = new HtmlUlChunk();
+        $actual = $chunk->getBulletLast();
         self::assertSame(\chr(149), $actual);
     }
 
     public function testBulletText(): void
     {
-        $ulChunk = new HtmlUlChunk('ul');
-        $liChunk = new HtmlLiChunk('li');
+        $ulChunk = new HtmlUlChunk();
+        $liChunk = new HtmlLiChunk();
         $actual = $ulChunk->getBulletText($liChunk);
         self::assertSame(\chr(149), $actual);
     }

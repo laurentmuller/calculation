@@ -169,11 +169,11 @@ class CategoryController extends AbstractEntityController
     private function countReferences(EntityManagerInterface $entityManager, Category $item): array
     {
         return \array_filter([
-            'products' => $entityManager->getRepository(Product::class)
+            'counters.products' => $entityManager->getRepository(Product::class)
                 ->countCategoryReferences($item),
-            'tasks' => $entityManager->getRepository(Task::class)
+            'counters.tasks' => $entityManager->getRepository(Task::class)
                 ->countCategoryReferences($item),
-            'calculations' => $entityManager->getRepository(CalculationCategory::class)
+            'counters.calculations' => $entityManager->getRepository(CalculationCategory::class)
                 ->countCategoryReferences($item),
         ]);
     }
@@ -185,7 +185,7 @@ class CategoryController extends AbstractEntityController
     {
         $message = $this->trans('category.delete.failure', ['%name%' => $item]);
         $items = \array_map(
-            fn (string $id, int $count): string => $this->trans('counters.' . $id, ['count' => $count]),
+            fn (string $id, int $count): string => $this->trans($id, ['count' => $count]),
             \array_keys($references),
             \array_values($references)
         );

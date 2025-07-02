@@ -22,20 +22,20 @@ class HtmlOlChunkTest extends TestCase
 {
     public function testGetBulletLast(): void
     {
-        $olChunk = new HtmlOlChunk('ol');
+        $olChunk = new HtmlOlChunk();
         $actual = $olChunk->getBulletLast();
         self::assertSame('1.', $actual);
 
-        $olChunk->add(new HtmlLiChunk('li'));
-        $olChunk->add(new HtmlLiChunk('li'));
+        $olChunk->add(new HtmlLiChunk());
+        $olChunk->add(new HtmlLiChunk());
         $actual = $olChunk->getBulletLast();
         self::assertSame('2.', $actual);
     }
 
     public function testGetBulletText(): void
     {
-        $olChunk = new HtmlOlChunk('ol');
-        $liChunk1 = new HtmlLiChunk('li');
+        $olChunk = new HtmlOlChunk();
+        $liChunk1 = new HtmlLiChunk();
         $actual = $olChunk->getBulletText($liChunk1);
         self::assertSame('1.', $actual);
 
@@ -43,7 +43,7 @@ class HtmlOlChunkTest extends TestCase
         $actual = $olChunk->getBulletText($liChunk1);
         self::assertSame('1.', $actual);
 
-        $liChunk2 = new HtmlLiChunk('li');
+        $liChunk2 = new HtmlLiChunk();
         $olChunk->add($liChunk2);
         $actual = $olChunk->getBulletText($liChunk2);
         self::assertSame('2.', $actual);
@@ -51,11 +51,11 @@ class HtmlOlChunkTest extends TestCase
 
     public function testGetStart(): void
     {
-        $olChunk = new HtmlOlChunk('ol');
+        $olChunk = new HtmlOlChunk();
         $actual = $olChunk->getStart();
         self::assertSame(1, $actual);
 
-        $olChunk->setStart(2);
+        $olChunk = new HtmlOlChunk(start: 2);
         $actual = $olChunk->getStart();
         self::assertSame(2, $actual);
     }
@@ -63,12 +63,12 @@ class HtmlOlChunkTest extends TestCase
     public function testType(): void
     {
         $expected = HtmlListType::NUMBER;
-        $olChunk = new HtmlOlChunk('ol');
+        $olChunk = new HtmlOlChunk();
         $actual = $olChunk->getType();
         self::assertSame($expected, $actual);
 
         $expected = HtmlListType::LETTER_LOWER;
-        $olChunk->setType($expected);
+        $olChunk = new HtmlOlChunk(type: $expected);
         $actual = $olChunk->getType();
         self::assertSame($expected, $actual);
     }

@@ -159,13 +159,13 @@ class GroupController extends AbstractEntityController
     private function countReferences(EntityManagerInterface $entityManager, Group $item): array
     {
         return \array_filter([
-            'categories' => $entityManager->getRepository(Category::class)
+            'counters.categories' => $entityManager->getRepository(Category::class)
                 ->countGroupReferences($item),
-            'products' => $entityManager->getRepository(Product::class)
+            'counters.products' => $entityManager->getRepository(Product::class)
                 ->countGroupReferences($item),
-            'tasks' => $entityManager->getRepository(Task::class)
+            'counters.tasks' => $entityManager->getRepository(Task::class)
                 ->countGroupReferences($item),
-            'calculations' => $entityManager->getRepository(CalculationGroup::class)
+            'counters.calculations' => $entityManager->getRepository(CalculationGroup::class)
                 ->countGroupReferences($item),
         ]);
     }
@@ -177,7 +177,7 @@ class GroupController extends AbstractEntityController
     {
         $message = $this->trans('group.delete.failure', ['%name%' => $item]);
         $items = \array_map(
-            fn (string $id, int $count): string => $this->trans('counters.' . $id, ['count' => $count]),
+            fn (string $id, int $count): string => $this->trans($id, ['count' => $count]),
             \array_keys($references),
             \array_values($references)
         );

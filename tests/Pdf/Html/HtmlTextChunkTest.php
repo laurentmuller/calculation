@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Pdf\Html;
 
-use App\Pdf\Html\HtmlLiChunk;
+use App\Pdf\Html\HtmlOlChunk;
 use App\Pdf\Html\HtmlParentChunk;
 use App\Pdf\Html\HtmlStyle;
 use App\Pdf\Html\HtmlTag;
@@ -24,7 +24,7 @@ class HtmlTextChunkTest extends TestCase
 {
     public function testHtmlBookmark(): void
     {
-        $chunk = new HtmlTextChunk('#text');
+        $chunk = new HtmlTextChunk();
         self::assertFalse($chunk->isBookmark());
         $chunk->setClassName('bookmark');
         self::assertTrue($chunk->isBookmark());
@@ -32,32 +32,23 @@ class HtmlTextChunkTest extends TestCase
 
     public function testIsNewLine(): void
     {
-        $chunk = new HtmlTextChunk(HtmlTag::TEXT->value);
-        $chunk->setText('Text');
-
+        $chunk = new HtmlTextChunk();
         $actual = $chunk->isNewLine();
         self::assertFalse($actual);
 
-        $parent = new HtmlParentChunk(HtmlTag::PARAGRAPH->value);
+        $parent = new HtmlParentChunk(HtmlTag::PARAGRAPH);
         $parent->add($chunk);
         $actual = $chunk->isNewLine();
         self::assertFalse($actual);
 
-        $liChunk = new HtmlLiChunk(HtmlTag::LIST_ORDERED->value);
-        $liChunk->add($chunk);
-        $liChunk->add(new HtmlLiChunk(HtmlTag::LIST_ORDERED->value));
-
-        $parent = new HtmlParentChunk(HtmlTag::PARAGRAPH->value);
-        $parent->add($liChunk);
-
+        $parent->add(new HtmlOlChunk());
         $actual = $chunk->isNewLine();
         self::assertTrue($actual);
     }
 
     public function testStyle(): void
     {
-        $chunk = new HtmlTextChunk(HtmlTag::TEXT->value);
-        $chunk->setText('Text');
+        $chunk = new HtmlTextChunk(text: 'Text');
         self::assertNull($chunk->getStyle());
         self::assertFalse($chunk->hasStyle());
         $chunk->setStyle(HtmlStyle::default());

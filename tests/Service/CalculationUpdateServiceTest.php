@@ -18,7 +18,6 @@ use App\Entity\Group;
 use App\Entity\GroupMargin;
 use App\Entity\Product;
 use App\Service\CalculationUpdateService;
-use App\Tests\AssertEmptyTrait;
 use App\Tests\DatabaseTrait;
 use App\Tests\DateAssertTrait;
 use App\Tests\EntityTrait\CalculationTrait;
@@ -31,7 +30,6 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 class CalculationUpdateServiceTest extends AuthenticateWebTestCase
 {
-    use AssertEmptyTrait;
     use CalculationTrait;
     use DatabaseTrait;
     use DateAssertTrait;
@@ -43,6 +41,9 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         parent::tearDown();
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testCreateQuery(): void
     {
         $service = $this->getService(CalculationUpdateService::class);
@@ -95,6 +96,9 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertSame($expected, $actual);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testUpdateEmptyState(): void
     {
         $this->loginUsername(self::ROLE_ADMIN);
@@ -102,10 +106,13 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         $query = $service->createQuery();
         $result = $service->update($query);
         self::assertEmpty($result->getResults());
-        self::assertEmptyCountable($result);
+        self::assertCount(0, $result);
         self::assertFalse($result->isValid());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testUpdateNoCalculation(): void
     {
         $this->getCalculationState();
@@ -114,11 +121,14 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         $query = $service->createQuery();
 
         $result = $service->update($query);
-        self::assertEmptyCountable($result);
+        self::assertCount(0, $result);
         self::assertEmpty($result->getResults());
         self::assertFalse($result->isValid());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testUpdateOne(): void
     {
         $date = $this->getDate();
@@ -140,6 +150,9 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertTrue($result->isValid());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testUpdateOneCalculationNoState(): void
     {
         $date = $this->getDate();
@@ -154,11 +167,14 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         $query = $service->createQuery();
 
         $result = $service->update($query);
-        self::assertEmptyCountable($result);
+        self::assertCount(0, $result);
         self::assertEmpty($result->getResults());
         self::assertFalse($result->isValid());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testUpdateOneNoSimulate(): void
     {
         $date = $this->getDate();
@@ -179,6 +195,9 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertTrue($result->isValid());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testUpdateTotalNotEmpty(): void
     {
         $group = new Group();

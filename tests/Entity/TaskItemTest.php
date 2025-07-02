@@ -18,11 +18,9 @@ use App\Entity\Group;
 use App\Entity\Task;
 use App\Entity\TaskItem;
 use App\Entity\TaskItemMargin;
-use App\Tests\AssertEmptyTrait;
 
 class TaskItemTest extends EntityValidatorTestCase
 {
-    use AssertEmptyTrait;
     use IdTrait;
 
     /**
@@ -127,7 +125,7 @@ class TaskItemTest extends EntityValidatorTestCase
     public function testTaskMargin(): void
     {
         $item = new TaskItem();
-        self::assertEmptyCountable($item);
+        self::assertCount(0, $item);
         self::assertEmpty($item->getMargins());
         self::assertTrue($item->isEmpty());
 
@@ -142,7 +140,7 @@ class TaskItemTest extends EntityValidatorTestCase
         self::assertCount(1, $item);
 
         $item->removeMargin($margin);
-        self::assertEmptyCountable($item);
+        self::assertCount(0, $item);
         self::assertEmpty($item->getMargins());
         self::assertTrue($item->isEmpty());
     }

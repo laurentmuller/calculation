@@ -21,10 +21,13 @@ use App\Attribute\ExcelRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
+use App\Entity\CalculationGroup;
+use App\Entity\Category;
 use App\Entity\Group;
+use App\Entity\Product;
+use App\Entity\Task;
 use App\Interfaces\RoleInterface;
 use App\Report\GroupsReport;
-use App\Repository\CalculationGroupRepository;
 use App\Repository\GroupRepository;
 use App\Resolver\DataQueryValueResolver;
 use App\Response\PdfResponse;
@@ -32,6 +35,7 @@ use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\GroupsDocument;
 use App\Table\DataQuery;
 use App\Table\GroupTable;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,13 +80,12 @@ class GroupController extends AbstractEntityController
     public function delete(
         Request $request,
         Group $item,
-        CalculationGroupRepository $groupRepository,
+        EntityManagerInterface $entityManager,
         LoggerInterface $logger
     ): Response {
-        $categories = $item->countCategories();
-        $calculations = $groupRepository->countGroupReferences($item);
-        if (0 !== $categories || 0 !== $calculations) {
-            return $this->showDeleteWarning($request, $item, $categories, $calculations);
+        $references = $this->countReferences($entityManager, $item);
+        if ([] !== $references) {
+            return $this->showDeleteWarning($item, $references);
         }
 
         return $this->deleteEntity($request, $item, $logger);
@@ -150,21 +153,34 @@ class GroupController extends AbstractEntityController
         return $this->showEntity($item);
     }
 
-    private function showDeleteWarning(
-        Request $request,
-        Group $item,
-        int $categories,
-        int $calculations
-    ): Response {
-        $items = [];
-        if (0 !== $categories) {
-            $items[] = $this->trans('counters.categories', ['count' => $categories]);
-        }
-        if (0 !== $calculations) {
-            $items[] = $this->trans('counters.calculations', ['count' => $calculations]);
-        }
-        $message = $this->trans('group.delete.failure', ['%name%' => $item->getDisplay()]);
+    /**
+     * @return array<string, int>
+     */
+    private function countReferences(EntityManagerInterface $entityManager, Group $item): array
+    {
+        return \array_filter([
+            'categories' => $entityManager->getRepository(Category::class)
+                ->countGroupReferences($item),
+            'products' => $entityManager->getRepository(Product::class)
+                ->countGroupReferences($item),
+            'tasks' => $entityManager->getRepository(Task::class)
+                ->countGroupReferences($item),
+            'calculations' => $entityManager->getRepository(CalculationGroup::class)
+                ->countGroupReferences($item),
+        ]);
+    }
 
+    /**
+     * @param array<string, int> $references
+     */
+    private function showDeleteWarning(Group $item, array $references): Response
+    {
+        $message = $this->trans('group.delete.failure', ['%name%' => $item]);
+        $items = \array_map(
+            fn (string $id, int $count): string => $this->trans('counters.' . $id, ['count' => $count]),
+            \array_keys($references),
+            \array_values($references)
+        );
         $parameters = [
             'title' => 'group.delete.title',
             'message' => $message,
@@ -173,7 +189,6 @@ class GroupController extends AbstractEntityController
             'back_page' => $this->getDefaultRoute(),
             'back_text' => 'common.button_back_list',
         ];
-        $this->updateQueryParameters($request, $parameters, $item);
 
         return $this->render('cards/card_warning.html.twig', $parameters);
     }

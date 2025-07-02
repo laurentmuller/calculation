@@ -2,11 +2,8 @@
 {%- set title_parameters = title_parameters|default({}) -%}
 {%- set page_title = app_name ~ (title is defined ? ' - ' ~ title|trans(title_parameters) : '') -%}
 {%- set sidebar_show = app.user and app.user.enabled and app.request.cookies.boolean('MENU_SIDEBAR_SHOW') -%}
-{%- set status_bar = status_bar is defined ? status_bar : app.user and app.user.enabled and user_service.statusBar -%}
-{%- set body_class = sidebar_show ? 'sidebar-show' : '' -%}
-{%- if status_bar %}
-    {% set body_class = (body_class ~ ' status-bar')|trim %}
-{% endif %}
+{%- set statusbar_show = statusbar_show is defined ? statusbar_show : app.user and app.user.enabled and user_service.statusBar -%}
+{%- set body_class = [sidebar_show ? 'sidebar-show' : '', statusbar_show ? 'status-bar' : '']|join(' ')|trim -%}
 {%- set is_js_debug = app.debug -%}
 <!DOCTYPE html>
 <html lang="{{ app.request.locale|replace({_: '-'}) }}" data-bs-theme="{{ theme_value(app.request) }}">
@@ -58,7 +55,7 @@
     {% block back_to_top -%}{{ include('back_to_top.html.twig') }}{%- endblock %}
 </div>
 {# footer #}
-{% block footer -%}{% if status_bar %}{{ include('footer.html.twig') }}{% endif %}{%- endblock %}
+{% block footer -%}{% if statusbar_show %}{{ include('footer.html.twig') }}{% endif %}{%- endblock %}
 {# java scripts #}
 <noscript>{{ 'common.no_script_support'|trans }}</noscript>
 {% block javascripts %}

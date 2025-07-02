@@ -51,11 +51,8 @@ trait AuthorizationCheckerAwareTrait
     protected function isGranted(EntityPermission|string $action, EntityName|string $subject): bool
     {
         $key = $this->getGrantedKey($action, $subject);
-        if (isset($this->rights[$key])) {
-            return $this->rights[$key];
-        }
 
-        return $this->rights[$key] = $this->getChecker()->isGranted($action, $subject);
+        return $this->rights[$key] ??= $this->getChecker()->isGranted($action, $subject);
     }
 
     /**

@@ -25,7 +25,7 @@ class PdfFontAwesomeCell extends AbstractPdfImageCell
     /**
      * The image data.
      */
-    private ImageData $imageData;
+    private readonly ImageData $imageData;
 
     /**
      * The image size.

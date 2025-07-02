@@ -295,46 +295,23 @@ class HtmlStyle extends PdfStyle
 
     private function updateFont(string $class): self
     {
-        switch ($class) {
-            case 'fw-normal':
-            case 'fst-normal':
-                $this->resetFont();
-                break;
-            case 'fw-bold':
-            case 'fw-bolder':
-                $this->setFontBold(true);
-                break;
-            case 'fst-italic':
-                $this->setFontItalic(true);
-                break;
-            case 'text-decoration-underline':
-                $this->setFontUnderline(true);
-                break;
-            case 'text-decoration-none':
-                $this->setFontStyle($this->getFont()->getStyle()->removeUnderLine());
-                break;
-            case 'font-monospace':
-                $this->setFontName(PdfFontName::COURIER);
-                break;
-            case 'fs-1':
-                $this->setFontSize(HtmlTag::H1->getFontSize());
-                break;
-            case 'fs-2':
-                $this->setFontSize(HtmlTag::H2->getFontSize());
-                break;
-            case 'fs-3':
-                $this->setFontSize(HtmlTag::H3->getFontSize());
-                break;
-            case 'fs-4':
-                $this->setFontSize(HtmlTag::H4->getFontSize());
-                break;
-            case 'fs-5':
-                $this->setFontSize(HtmlTag::H5->getFontSize());
-                break;
-            case 'fs-6':
-                $this->setFontSize(HtmlTag::H6->getFontSize());
-                break;
-        }
+        match ($class) {
+            'fw-normal',
+            'fst-normal' => $this->resetFont(),
+            'fw-bold',
+            'fw-bolder' => $this->setFontBold(true),
+            'fst-italic' => $this->setFontItalic(true),
+            'text-decoration-underline' => $this->setFontUnderline(true),
+            'text-decoration-none' => $this->setFontStyle($this->getFont()->getStyle()->removeUnderLine()),
+            'font-monospace' => $this->setFontName(PdfFontName::COURIER),
+            'fs-1' => $this->setFontSize(HtmlTag::H1->getFontSize()),
+            'fs-2' => $this->setFontSize(HtmlTag::H2->getFontSize()),
+            'fs-3' => $this->setFontSize(HtmlTag::H3->getFontSize()),
+            'fs-4' => $this->setFontSize(HtmlTag::H4->getFontSize()),
+            'fs-5' => $this->setFontSize(HtmlTag::H5->getFontSize()),
+            'fs-6' => $this->setFontSize(HtmlTag::H6->getFontSize()),
+            default => null,
+        };
 
         return $this;
     }

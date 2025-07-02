@@ -521,7 +521,7 @@
                 role: 'alert',
                 'aria-atomic': 'true',
                 'aria-live': 'assertive',
-                class: `toast border-${options.type}`,
+                class: `toast fade border-${options.type}`,
                 css: {
                     'max-width': options.containerWidth,
                     'flex-basis': options.containerWidth

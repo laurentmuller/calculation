@@ -81,7 +81,7 @@ class CalculationStateController extends AbstractEntityController
     ): Response {
         $count = $repository->countStateReferences($item);
         if (0 !== $count) {
-            return $this->showDeleteWarning($request, $item, $count);
+            return $this->showDeleteWarning($item, $count);
         }
 
         return $this->deleteEntity($request, $item, $logger);
@@ -159,24 +159,18 @@ class CalculationStateController extends AbstractEntityController
         parent::deleteFromDatabase($item);
     }
 
-    private function showDeleteWarning(
-        Request $request,
-        CalculationState $item,
-        int $count
-    ): Response {
-        $calculations = $this->trans('counters.calculations_lower', ['count' => $count]);
-        $message = $this->trans('calculationstate.delete.failure', [
-            '%name%' => $item->getDisplay(),
-            '%calculations%' => $calculations,
-        ]);
+    private function showDeleteWarning(CalculationState $item, int $count): Response
+    {
+        $message = $this->trans('calculationstate.delete.failure', ['%name%' => $item]);
+        $items = [$this->trans('counters.calculations', ['count' => $count])];
         $parameters = [
             'title' => 'calculationstate.delete.title',
             'message' => $message,
             'item' => $item,
+            'items' => $items,
             'back_page' => $this->getDefaultRoute(),
             'back_text' => 'common.button_back_list',
         ];
-        $this->updateQueryParameters($request, $parameters, $item);
 
         return $this->render('cards/card_warning.html.twig', $parameters);
     }

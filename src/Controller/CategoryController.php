@@ -21,20 +21,21 @@ use App\Attribute\ExcelRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
+use App\Entity\CalculationCategory;
 use App\Entity\Category;
+use App\Entity\Product;
+use App\Entity\Task;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Report\CategoriesReport;
-use App\Repository\CalculationCategoryRepository;
 use App\Repository\CategoryRepository;
-use App\Repository\ProductRepository;
-use App\Repository\TaskRepository;
 use App\Resolver\DataQueryValueResolver;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\CategoriesDocument;
 use App\Table\CategoryTable;
 use App\Table\DataQuery;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -79,16 +80,12 @@ class CategoryController extends AbstractEntityController
     public function delete(
         Request $request,
         Category $item,
-        TaskRepository $taskRepository,
-        ProductRepository $productRepository,
-        CalculationCategoryRepository $categoryRepository,
+        EntityManagerInterface $entityManager,
         LoggerInterface $logger
     ): Response {
-        $tasks = $taskRepository->countCategoryReferences($item);
-        $products = $productRepository->countCategoryReferences($item);
-        $calculations = $categoryRepository->countCategoryReferences($item);
-        if (0 !== $tasks || 0 !== $products || 0 !== $calculations) {
-            return $this->showDeleteWarning($request, $item, $tasks, $products, $calculations);
+        $references = $this->countReferences($entityManager, $item);
+        if ([] !== $references) {
+            return $this->showDeleteWarning($item, $references);
         }
 
         return $this->deleteEntity($request, $item, $logger);
@@ -166,24 +163,32 @@ class CategoryController extends AbstractEntityController
         parent::deleteFromDatabase($item);
     }
 
-    private function showDeleteWarning(
-        Request $request,
-        Category $item,
-        int $tasks,
-        int $products,
-        int $calculations
-    ): Response {
-        $items = [];
-        if (0 !== $calculations) {
-            $items[] = $this->trans('counters.calculations', ['count' => $calculations]);
-        }
-        if (0 !== $products) {
-            $items[] = $this->trans('counters.products', ['count' => $products]);
-        }
-        if (0 !== $tasks) {
-            $items[] = $this->trans('counters.tasks', ['count' => $tasks]);
-        }
-        $message = $this->trans('category.delete.failure', ['%name%' => $item->getDisplay()]);
+    /**
+     * @return array<string, int>
+     */
+    private function countReferences(EntityManagerInterface $entityManager, Category $item): array
+    {
+        return \array_filter([
+            'products' => $entityManager->getRepository(Product::class)
+                ->countCategoryReferences($item),
+            'tasks' => $entityManager->getRepository(Task::class)
+                ->countCategoryReferences($item),
+            'calculations' => $entityManager->getRepository(CalculationCategory::class)
+                ->countCategoryReferences($item),
+        ]);
+    }
+
+    /**
+     * @param array<string, int> $references
+     */
+    private function showDeleteWarning(Category $item, array $references): Response
+    {
+        $message = $this->trans('category.delete.failure', ['%name%' => $item]);
+        $items = \array_map(
+            fn (string $id, int $count): string => $this->trans('counters.' . $id, ['count' => $count]),
+            \array_keys($references),
+            \array_values($references)
+        );
         $parameters = [
             'title' => 'category.delete.title',
             'message' => $message,
@@ -192,7 +197,6 @@ class CategoryController extends AbstractEntityController
             'back_page' => $this->getDefaultRoute(),
             'back_text' => 'common.button_back_list',
         ];
-        $this->updateQueryParameters($request, $parameters, $item);
 
         return $this->render('cards/card_warning.html.twig', $parameters);
     }

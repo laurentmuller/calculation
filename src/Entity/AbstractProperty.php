@@ -35,14 +35,6 @@ abstract class AbstractProperty extends AbstractEntity
     final public const TRUE_VALUE = 1;
 
     /**
-     * The property name.
-     */
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 50)]
-    #[ORM\Column(length: 50)]
-    protected ?string $name;
-
-    /**
      * The property value.
      */
     #[Assert\NotBlank]
@@ -51,11 +43,14 @@ abstract class AbstractProperty extends AbstractEntity
     protected ?string $value = null;
 
     /**
-     * @param ?string $name the optional name
+     * @param ?string $name the property name
      */
-    public function __construct(?string $name = null)
-    {
-        $this->name = $name;
+    public function __construct(
+        #[Assert\NotBlank]
+        #[Assert\Length(max: 50)]
+        #[ORM\Column(length: 50)]
+        protected ?string $name = null
+    ) {
     }
 
     /**

@@ -43,7 +43,7 @@ class MailerServiceTest extends TestCase
 
         $service = $this->createService();
         $service->sendComment($comment);
-        self::assertTrue(true);
+        self::expectNotToPerformAssertions();
     }
 
     /**
@@ -62,7 +62,7 @@ class MailerServiceTest extends TestCase
             Importance::LOW,
             [$this->createAttachement()]
         );
-        self::assertTrue(true);
+        self::expectNotToPerformAssertions();
     }
 
     private function createAttachement(): UploadedFile

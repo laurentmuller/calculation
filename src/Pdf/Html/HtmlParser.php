@@ -112,6 +112,7 @@ readonly class HtmlParser
                 $parent = $this->parseNodeElement($name, $parent, $className, $node);
                 break;
             case \XML_TEXT_NODE:
+                /** @phpstan-var \DOMText $node */
                 $this->parseNodeText($name, $parent, $className, $node);
                 break;
         }
@@ -143,11 +144,8 @@ readonly class HtmlParser
         }
     }
 
-    private function parseNodeText(string $name, HtmlParentChunk $parent, ?string $className, \DOMNode $node): void
+    private function parseNodeText(string $name, HtmlParentChunk $parent, ?string $className, \DOMText $node): void
     {
-        if (!$node instanceof \DOMText) {
-            return;
-        }
         $text = $node->wholeText;
         if ('' === $text || (' ' === $text && $parent->isEmpty())) {
             return;
@@ -165,14 +163,12 @@ readonly class HtmlParser
         if (null === $content) {
             return null;
         }
-        $content = StringUtils::trim(StringUtils::pregReplace('/\r\n|\n|\r/m', '', $content));
-        if (null === $content) {
-            return null;
-        }
-        $content = StringUtils::trim(StringUtils::pregReplace('/\s\s+/m', ' ', $content));
-        if (null === $content) {
-            return null;
-        }
+
+        /** @phpstan-var list<string> $lines */
+        $lines = \preg_split('/\r\n|\r|\n/', $content);
+        $lines = \array_filter(\array_map(trim(...), $lines));
+        $content = \implode('', $lines);
+        $content = StringUtils::pregReplace('/\s\s+/m', ' ', $content);
 
         return '<?xml encoding="UTF-8">' . $content;
     }

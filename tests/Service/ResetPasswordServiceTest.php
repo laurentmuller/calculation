@@ -45,7 +45,7 @@ class ResetPasswordServiceTest extends TestCase
         $helper = $this->createResetPasswordHelper();
         $service = $this->createService($helper);
         $service->flush();
-        self::assertTrue(true);
+        self::expectNotToPerformAssertions();
     }
 
     public function testGenerateFakeResetToken(): void
@@ -88,7 +88,7 @@ class ResetPasswordServiceTest extends TestCase
         $helper = $this->createResetPasswordHelper();
         $service = $this->createService($helper);
         $service->handleException(new Request(), new ExpiredSignatureException());
-        self::assertTrue(true);
+        self::expectNotToPerformAssertions();
     }
 
     /**

@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Category;
+use App\Entity\Group;
 use App\Traits\GroupByTrait;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -62,6 +64,24 @@ class CategoryRepository extends AbstractRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Category::class);
+    }
+
+    /**
+     * Count the number of categories for the given group.
+     *
+     * @param Group $group the group to search for
+     *
+     * @return int the number of categories
+     */
+    public function countGroupReferences(Group $group): int
+    {
+        return (int) $this->createQueryBuilder('e')
+            ->select('DISTINCT COUNT(g.id)')
+            ->innerJoin('e.group', 'g')
+            ->where('e.group = :group')
+            ->setParameter('group', $group->getId(), Types::INTEGER)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder

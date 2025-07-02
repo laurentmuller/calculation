@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Set\DoctrineSetList;
-use Rector\Doctrine\TypedCollections\Rector\ClassMethod\NarrowArrayCollectionToCollectionRector;
-use Rector\Doctrine\TypedCollections\Rector\If_\RemoveIsArrayOnCollectionRector;
+use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\SingleMockPropertyTypeRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
@@ -34,13 +33,16 @@ return RectorConfig::configure()
         PreferPHPUnitThisCallRector::class,
         SingleMockPropertyTypeRector::class,
         TypedPropertyFromCreateMockAssignRector::class,
-        NarrowArrayCollectionToCollectionRector::class,
-        RemoveIsArrayOnCollectionRector::class,
+        StringClassNameToClassConstantRector::class => [
+            __DIR__ . '/tests/Traits/CheckSubClassTraitTest.php',
+        ],
     ])->withComposerBased(
         twig: true,
         doctrine: true,
         phpunit: true,
         symfony: true,
+    )->withPhpSets(
+        php82: true
     )->withSets([
         // global
         SetList::PHP_82,
@@ -58,9 +60,4 @@ return RectorConfig::configure()
         // twig
         TwigSetList::TWIG_24,
         TwigSetList::TWIG_UNDERSCORE_TO_NAMESPACE,
-    ])->withAttributesSets(
-        // annotations to attributes
-        symfony: true,
-        doctrine: true,
-        phpunit: true,
-    );
+    ])->withAttributesSets();

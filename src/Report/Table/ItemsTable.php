@@ -36,8 +36,8 @@ class ItemsTable extends ReportGroupTable implements PdfGroupListenerInterface
     private const INDENT = 4;
 
     private readonly Calculation $calculation;
-    private PdfStyle $groupStyle;
-    private PdfStyle $rowStyle;
+    private readonly PdfStyle $groupStyle;
+    private readonly PdfStyle $rowStyle;
 
     public function __construct(CalculationReport $parent)
     {

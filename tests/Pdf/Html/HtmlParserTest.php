@@ -82,6 +82,23 @@ class HtmlParserTest extends TestCase
         self::assertChunks($actual, HtmlParentChunk::class, HtmlParentChunk::class, HtmlTextChunk::class);
     }
 
+    public function testTextChunkMultiSpace(): void
+    {
+        $html = <<<'html'
+                <body>
+
+                    <p>
+
+                    </p>
+
+                </body>'
+            html;
+
+        $parser = new HtmlParser($html);
+        $actual = $parser->parse();
+        self::assertChunks($actual, HtmlParentChunk::class, HtmlParentChunk::class);
+    }
+
     public function testUlChunk(): void
     {
         $parser = new HtmlParser('<body><ul></ul></body>');

@@ -51,6 +51,6 @@ class CheckSubClassTraitTest extends TestCase
             $this->expectException(\InvalidArgumentException::class);
         }
         $this->checkSubClass($source, $target);
-        $this->expectNotToPerformAssertions();
+        self::expectNotToPerformAssertions();
     }
 }

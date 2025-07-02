@@ -15,26 +15,33 @@ namespace App\Tests\Traits;
 
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
-use App\Tests\KernelServiceTestCase;
 use App\Traits\AuthorizationCheckerAwareTrait;
+use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-class AuthorizationCheckerKernelServiceTest extends KernelServiceTestCase
+class AuthorizationCheckerAwareTraitTest extends TestCase implements ServiceSubscriberInterface
 {
     use AuthorizationCheckerAwareTrait;
+
+    public ContainerInterface $container;
 
     #[\Override]
     protected function setUp(): void
     {
-        parent::setUp();
-        $checker = $this->getService(AuthorizationCheckerInterface::class);
-        $this->setChecker($checker);
+        $this->container = $this->createMock(ContainerInterface::class);
+        $this->setChecker($this->createMock(AuthorizationCheckerInterface::class));
+    }
+
+    #[\Override]
+    public static function getSubscribedServices(): array
+    {
+        return [];
     }
 
     public function testIsGranted(): void
     {
-        $actual = $this->isGranted(EntityPermission::ADD, EntityName::CALCULATION);
-        self::assertFalse($actual);
         $actual = $this->isGranted(EntityPermission::ADD, EntityName::CALCULATION);
         self::assertFalse($actual);
     }

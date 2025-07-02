@@ -10,13 +10,14 @@
 {# classes #}
 {% block card_class ' border-warning' %}
 {% block card_header_class ' text-bg-warning' %}
+{% block card_container_class ' col-xl-6 offset-xl-3' %}
 {# body #}
 {% block card_body %}
 <p class="my-2">
     {{- message|default('http_error_500.description'|trans)|raw -}}
 </p>
 {%- if items|default(false) and items|length -%}
-    <ul class="mt-2 ms-5">
+    <ul class="ps-5">
         {% for item in items -%}
             <li>{{ item|raw }}</li>
         {%- endfor %}

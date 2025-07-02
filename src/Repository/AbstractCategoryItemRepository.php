@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Category;
+use App\Entity\Group;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 
@@ -49,6 +50,18 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
             ->select('COUNT(e.id)')
             ->where('e.category = :category')
             ->setParameter('category', $category->getId(), Types::INTEGER)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function countGroupReferences(Group $group): int
+    {
+        return (int) $this->createQueryBuilder('e')
+            ->select('DISTINCT COUNT(e.id)')
+            ->innerJoin('e.category', 'c')
+            ->innerJoin('c.group', 'g')
+            ->where('g.id = :group')
+            ->setParameter('group', $group->getId(), Types::INTEGER)
             ->getQuery()
             ->getSingleScalarResult();
     }

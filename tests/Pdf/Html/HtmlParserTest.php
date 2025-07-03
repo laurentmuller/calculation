@@ -108,7 +108,7 @@ class HtmlParserTest extends TestCase
             if ($index < $last && $actual instanceof HtmlParentChunk) {
                 self::assertNotEmpty($actual->getChildren());
                 self::assertCount(1, $actual->getChildren());
-                $actual = $actual->getChildren()[0];
+                $actual = $actual->getChild(0);
             }
             ++$index;
         }

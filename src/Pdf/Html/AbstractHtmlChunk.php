@@ -161,9 +161,9 @@ abstract class AbstractHtmlChunk
     }
 
     /**
-     * Gets index of this chunk.
+     * Gets the index of this chunk.
      *
-     * @return int the index; or -1 if is root
+     * @return int the index; or -1 if it is the root chunk (no parent)
      */
     public function index(): int
     {

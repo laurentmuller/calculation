@@ -159,11 +159,7 @@ final class FormatExtension
 
     private function getCoreExtension(Environment $env): CoreExtension
     {
-        if (!$this->extension instanceof CoreExtension) {
-            $this->extension = $env->getExtension(CoreExtension::class);
-        }
-
-        return $this->extension;
+        return $this->extension ??= $env->getExtension(CoreExtension::class);
     }
 
     /**

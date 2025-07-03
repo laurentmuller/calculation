@@ -145,20 +145,12 @@ class SchemaReport extends AbstractReport
 
     private function getManyToOneCell(): PdfCell
     {
-        if ($this->manyToOneCell instanceof PdfCell) {
-            return $this->manyToOneCell;
-        }
-
-        return $this->manyToOneCell = $this->getCellImage('many_to_one', 'arrow-right-from-bracket');
+        return $this->manyToOneCell ??= $this->getCellImage('many_to_one', 'arrow-right-from-bracket');
     }
 
     private function getOneToManyCell(): PdfCell
     {
-        if ($this->oneToManyCell instanceof PdfCell) {
-            return $this->oneToManyCell;
-        }
-
-        return $this->oneToManyCell = $this->getCellImage('one_to_many', 'arrow-right-to-bracket');
+        return $this->oneToManyCell ??= $this->getCellImage('one_to_many', 'arrow-right-to-bracket');
     }
 
     /**

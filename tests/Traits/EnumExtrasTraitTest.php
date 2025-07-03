@@ -15,6 +15,7 @@ namespace App\Tests\Traits;
 
 use App\Enums\TableView;
 use App\Pdf\Html\HtmlTag;
+use fpdf\Enums\PdfFontName;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -27,6 +28,15 @@ class EnumExtrasTraitTest extends TestCase
     {
         yield [HtmlTag::H1, 'font-bold', true];
         yield [HtmlTag::H1, 'fake-key', true, true];
+    }
+
+    /**
+     * @phpstan-return \Generator<int, array{0: HtmlTag, 1: string, 2: PdfFontName, 3?: true}>
+     */
+    public static function getExtraEnum(): \Generator
+    {
+        yield [HtmlTag::KEYBOARD, 'font-name', PdfFontName::COURIER];
+        yield [HtmlTag::H1, 'fake-key', PdfFontName::COURIER, true];
     }
 
     /**
@@ -52,7 +62,7 @@ class EnumExtrasTraitTest extends TestCase
      */
     public static function getExtraString(): \Generator
     {
-        yield [HtmlTag::KEYBOARD, 'font-name', 'courier'];
+        yield [HtmlTag::CODE, 'text-color', '#FF0000'];
         yield [HtmlTag::KEYBOARD, 'fake-key', 'courier', true];
     }
 
@@ -63,6 +73,16 @@ class EnumExtrasTraitTest extends TestCase
             $this->expectException(\InvalidArgumentException::class);
         }
         $actual = $tag->getExtraBool($key, throwOnMissingExtra: true);
+        self::assertSame($expected, $actual);
+    }
+
+    #[DataProvider('getExtraEnum')]
+    public function testExtraEnum(HtmlTag $tag, string $key, PdfFontName $expected, bool $exception = false): void
+    {
+        if ($exception) {
+            $this->expectException(\InvalidArgumentException::class);
+        }
+        $actual = $tag->getExtraEnum($key, $expected, true);
         self::assertSame($expected, $actual);
     }
 

@@ -42,7 +42,7 @@ enum HtmlTag: string
     /**
      * The inline code element.
      */
-    #[EnumCase(extras: ['font-name' => 'courier', 'text-color' => '#FF0000'])]
+    #[EnumCase(extras: ['font-name' => PdfFontName::COURIER, 'text-color' => '#FF0000'])]
     case CODE = 'code';
     /**
      * The description details tag name.
@@ -112,7 +112,7 @@ enum HtmlTag: string
     /**
      * The keyboard input element.
      */
-    #[EnumCase(extras: ['font-name' => 'courier'])]
+    #[EnumCase(extras: ['font-name' => PdfFontName::COURIER])]
     case KEYBOARD = 'kbd';
 
     /**
@@ -153,7 +153,7 @@ enum HtmlTag: string
     /**
      * The sample output element.
      */
-    #[EnumCase(extras: ['font-name' => 'courier'])]
+    #[EnumCase(extras: ['font-name' => PdfFontName::COURIER])]
     case SAMPLE = 'samp';
 
     /**
@@ -183,20 +183,15 @@ enum HtmlTag: string
     /**
      * The variable element.
      */
-    #[EnumCase(extras: ['font-name' => 'courier', 'font-italic' => true])]
+    #[EnumCase(extras: ['font-name' => PdfFontName::COURIER, 'font-italic' => true])]
     case VARIABLE = 'var';
 
     /**
-     * Find the first node for this tag value.
+     * Find the first node in the given document for this tag value.
      */
     public function findFirst(\DOMDocument $document): ?\DOMNode
     {
-        $elements = $document->getElementsByTagName($this->value);
-        if (0 !== $elements->length) {
-            return $elements->item(0);
-        }
-
-        return null;
+        return $document->getElementsByTagName($this->value)->item(0);
     }
 
     /**
@@ -224,7 +219,7 @@ enum HtmlTag: string
     }
 
     /**
-     * Gets the style for this tag.
+     * Gets the default style for this tag.
      */
     public function style(): ?HtmlStyle
     {
@@ -247,15 +242,9 @@ enum HtmlTag: string
 
     private function getFont(): PdfFont
     {
-        $font = PdfFont::default();
-        $fontName = PdfFontName::tryFromFamily($this->getExtraString('font-name'));
-        if ($fontName instanceof PdfFontName) {
-            $font->setName($fontName);
-        }
-        $fontSize = $this->getFontSize();
-        if (PdfFont::DEFAULT_SIZE !== $fontSize) {
-            $font->setSize($fontSize);
-        }
+        $font = PdfFont::default()
+            ->setSize($this->getFontSize())
+            ->setName($this->getFontName());
         if ($this->getExtraBool('font-bold')) {
             $font->bold(true);
         }
@@ -269,13 +258,15 @@ enum HtmlTag: string
         return $font;
     }
 
+    private function getFontName(): PdfFontName
+    {
+        return $this->getExtraEnum('font-name', PdfFont::DEFAULT_NAME);
+    }
+
     private function getTextColor(): ?PdfTextColor
     {
         $textColor = $this->getExtraString('text-color');
-        if ('' === $textColor) {
-            return null;
-        }
 
-        return PdfTextColor::create($textColor);
+        return '' !== $textColor ? PdfTextColor::create($textColor) : null;
     }
 }

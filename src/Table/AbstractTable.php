@@ -139,12 +139,9 @@ abstract class AbstractTable implements SortModeInterface
     protected function getDefaultColumn(): ?Column
     {
         $columns = $this->getColumns();
-        $column = $this->findFirst($columns, static fn (Column $column): bool => $column->isDefault());
-        if ($column instanceof Column) {
-            return $column;
-        }
 
-        return $this->findFirst($columns, static fn (Column $column): bool => $column->isVisible());
+        return $this->findFirst($columns, static fn (Column $column): bool => $column->isDefault())
+            ?? $this->findFirst($columns, static fn (Column $column): bool => $column->isVisible());
     }
 
     /**

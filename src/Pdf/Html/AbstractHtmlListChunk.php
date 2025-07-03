@@ -15,25 +15,11 @@ namespace App\Pdf\Html;
 
 /**
  * Abstract chunk for HTML ordered (ol) or unordered (ul) list.
+ *
+ * Only child instance of HtmlLiChunk can be added.
  */
 abstract class AbstractHtmlListChunk extends HtmlParentChunk
 {
-    /**
-     * Adds a child to this collection of children.
-     *
-     * Do nothing if the child is already in this collection,
-     * or if the child is not an instance of HtmlLiChunk
-     */
-    #[\Override]
-    public function add(AbstractHtmlChunk $child): static
-    {
-        if ($child instanceof HtmlLiChunk) {
-            parent::add($child);
-        }
-
-        return $this;
-    }
-
     /**
      * Gets the bullet text for the last child (if any).
      */
@@ -43,4 +29,10 @@ abstract class AbstractHtmlListChunk extends HtmlParentChunk
      * Gets the bullet text for the given child.
      */
     abstract public function getBulletText(HtmlLiChunk $chunk): string;
+
+    #[\Override]
+    protected function isValidChild(AbstractHtmlChunk $child): bool
+    {
+        return parent::isValidChild($child) && $child instanceof HtmlLiChunk;
+    }
 }

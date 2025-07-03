@@ -44,24 +44,6 @@ class HtmlOlChunk extends AbstractHtmlListChunk
         return $this->getText($this->start + $this->indexOf($chunk));
     }
 
-    /**
-     * Gets the start counting.
-     *
-     * @phpstan-return positive-int
-     */
-    public function getStart(): int
-    {
-        return $this->start;
-    }
-
-    /**
-     * Gets the numbered type.
-     */
-    public function getType(): HtmlListType
-    {
-        return $this->type;
-    }
-
     private function getText(int $number): string
     {
         return $this->type->getBulletText(\max($number, $this->start));

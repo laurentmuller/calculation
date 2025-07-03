@@ -41,9 +41,7 @@ class UserProvider extends EntityProvider
      */
     public function userName(): ?string
     {
-        $user = $this->user();
-
-        return ($user instanceof User) ? $user->getUserIdentifier() : null;
+        return $this->user()?->getUserIdentifier();
     }
 
     #[\Override]

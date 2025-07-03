@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
+use App\Utils\FormatUtils;
+
 /**
  * Ordered list type enumeration.
  *
@@ -70,6 +72,15 @@ enum HtmlListType: string
         };
     }
 
+    private function toLetter(int $number): string
+    {
+        if ($number <= 26) {
+            return \chr(64 + $number);
+        }
+
+        return \str_repeat('A', \intdiv($number, 26)) . self::toLetter($number % 26);
+    }
+
     /**
      * Converts the value to lower letters.
      *
@@ -80,7 +91,7 @@ enum HtmlListType: string
      */
     private function toLetterLower(int $number, string $suffix): string
     {
-        return \strtolower($this->toLetterUpper($number, $suffix));
+        return \strtolower($this->toLetter($number)) . $suffix;
     }
 
     /**
@@ -93,11 +104,7 @@ enum HtmlListType: string
      */
     private function toLetterUpper(int $number, string $suffix): string
     {
-        if ($number <= 26) {
-            return \chr(64 + $number) . $suffix;
-        }
-
-        return \str_repeat('A', \intdiv($number, 26)) . self::toLetterUpper($number % 26, $suffix);
+        return $this->toLetter($number) . $suffix;
     }
 
     /**
@@ -116,7 +123,7 @@ enum HtmlListType: string
     /**
      * Converts the value to a lower roman number.
      *
-     * <b>N.B.:</b> Returns an empty string if the number is greater than 3999.
+     * <b>N.B.:</b> Returns an empty string if the number is smaller than 1 or is greater than 3999.
      *
      * @param int    $number the value to convert
      * @param string $suffix the suffix to append
@@ -125,13 +132,15 @@ enum HtmlListType: string
      */
     private function toRomanLower(int $number, string $suffix): string
     {
-        return \strtolower($this->toRomanUpper($number, $suffix));
+        $value = FormatUtils::formatRoman($number);
+
+        return '' === $value ? $value : \strtolower($value) . $suffix;
     }
 
     /**
      * Converts the value to an upper roman number.
      *
-     * <b>N.B.:</b> Returns an empty string if the number is greater than 3999.
+     * <b>N.B.:</b> Returns an empty string if the number is smaller than 1 or is greater than 3999.
      *
      * @param int    $number the value to convert
      * @param string $suffix the suffix to append
@@ -140,11 +149,8 @@ enum HtmlListType: string
      */
     private function toRomanUpper(int $number, string $suffix): string
     {
-        if ($number > 3999) {
-            return '';
-        }
-        $formatter = new \NumberFormatter('@numbers=roman', \NumberFormatter::DEFAULT_STYLE);
+        $value = FormatUtils::formatRoman($number);
 
-        return $formatter->format($number) . $suffix;
+        return '' === $value ? $value : $value . $suffix;
     }
 }

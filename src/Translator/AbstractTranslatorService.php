@@ -116,9 +116,8 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      */
     protected function getValue(array $values, string $path, bool $error = true): mixed
     {
-        $accessor = $this->getPropertyAccessor();
         /** @phpstan-var mixed $value */
-        $value = $accessor->getValue($values, $path);
+        $value = $this->getPropertyAccessor()->getValue($values, $path);
         if (null === $value && $error) {
             return $this->setLastError(self::ERROR_NOT_FOUND, "Unable to find the value at '$path'.");
         }
@@ -171,12 +170,8 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
 
     private function getPropertyAccessor(): PropertyAccessorInterface
     {
-        if (!$this->accessor instanceof PropertyAccessorInterface) {
-            $this->accessor = PropertyAccess::createPropertyAccessorBuilder()
-                ->disableExceptionOnInvalidPropertyPath()
-                ->getPropertyAccessor();
-        }
-
-        return $this->accessor;
+        return $this->accessor ??= PropertyAccess::createPropertyAccessorBuilder()
+            ->disableExceptionOnInvalidPropertyPath()
+            ->getPropertyAccessor();
     }
 }

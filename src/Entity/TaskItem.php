@@ -139,9 +139,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
      */
     public function findValue(float $quantity): float
     {
-        $margin = $this->findMargin($quantity);
-
-        return $margin instanceof TaskItemMargin ? $margin->getValue() : 0;
+        return $this->findMargin($quantity)?->getValue() ?? 0.0;
     }
 
     #[\Override]

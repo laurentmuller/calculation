@@ -73,8 +73,11 @@ final class DateUtils
         if (\is_string($interval)) {
             $interval = self::createDateInterval($interval);
         }
+        if ($date instanceof \DateTime) {
+            $date = (clone $date);
+        }
 
-        return (clone $date)->add($interval);
+        return $date->add($interval);
     }
 
     /**
@@ -324,7 +327,11 @@ final class DateUtils
             $interval = self::createDateInterval($interval);
         }
 
-        return (clone $date)->sub($interval);
+        if ($date instanceof \DateTime) {
+            $date = (clone $date);
+        }
+
+        return $date->sub($interval);
     }
 
     /**

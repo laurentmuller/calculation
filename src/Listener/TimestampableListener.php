@@ -25,7 +25,6 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\UnitOfWork;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -114,12 +113,7 @@ class TimestampableListener implements DisableListenerInterface
 
     private function getUser(): string
     {
-        $user = $this->security->getUser();
-        if ($user instanceof UserInterface) {
-            return $user->getUserIdentifier();
-        }
-
-        return $this->emptyUser;
+        return $this->security->getUser()?->getUserIdentifier() ?? $this->emptyUser;
     }
 
     private function persist(EntityManagerInterface $em, UnitOfWork $unitOfWork, TimestampableInterface $entity): void

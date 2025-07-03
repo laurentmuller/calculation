@@ -54,7 +54,8 @@ class HtmlTextChunk extends AbstractHtmlChunk
             $index = $this->index();
             $count = $parent->count();
             if ($index >= 0 && $index < $count - 1) {
-                $next = $parent->getChildren()[$index + 1];
+                /** @phpstan-var AbstractHtmlChunk $next */
+                $next = $parent->getChild($index + 1);
 
                 return $next->is(HtmlTag::LIST_ORDERED, HtmlTag::LIST_UNORDERED);
             }

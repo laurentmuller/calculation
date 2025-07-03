@@ -30,6 +30,21 @@ trait EnumExtrasTrait
         return \is_bool($value) ? $value : $default;
     }
 
+    /**
+     * @template TEnum of \UnitEnum
+     *
+     * @phpstan-param TEnum $default
+     *
+     * @phpstan-return TEnum
+     */
+    public function getExtraEnum(string $key, \UnitEnum $default, bool $throwOnMissingExtra = false): \UnitEnum
+    {
+        /** @phpstan-var TEnum|null $value */
+        $value = $this->getExtra($key, $throwOnMissingExtra);
+
+        return $value instanceof $default ? $value : $default;
+    }
+
     public function getExtraFloat(string $key, float $default = 0.0, bool $throwOnMissingExtra = false): float
     {
         /** @phpstan-var float|null $value */

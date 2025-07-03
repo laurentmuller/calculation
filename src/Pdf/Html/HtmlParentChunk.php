@@ -45,7 +45,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
      */
     public function add(AbstractHtmlChunk $child): static
     {
-        if (!\in_array($child, $this->children, true)) {
+        if ($this->isValidChild($child)) {
             $child->setParent($this);
             $this->children[] = $child;
         }
@@ -76,12 +76,22 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
                 continue;
             }
             $chunk = $child->findChild(...$tags);
-            if ($chunk  instanceof AbstractHtmlChunk) {
+            if ($chunk instanceof AbstractHtmlChunk) {
                 return $chunk;
             }
         }
 
         return null;
+    }
+
+    /**
+     * Gets the child at the given index.
+     *
+     * @return ?AbstractHtmlChunk the child, if valid index; null otherwise
+     */
+    public function getChild(int $index): ?AbstractHtmlChunk
+    {
+        return $this->children[$index] ?? null;
     }
 
     /**
@@ -101,9 +111,10 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
      */
     public function indexOf(AbstractHtmlChunk $chunk): int
     {
+        /** @phpstan-var int|false $index */
         $index = \array_search($chunk, $this->children, true);
 
-        return false === $index ? -1 : (int) $index;
+        return false === $index ? -1 : $index;
     }
 
     /**
@@ -158,22 +169,6 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     }
 
     /**
-     * Remove a child from this collection of children. Do nothing if the child is not in this collection.
-     */
-    public function remove(AbstractHtmlChunk $child): static
-    {
-        $index = $this->indexOf($child);
-        if (-1 === $index) {
-            return $this;
-        }
-
-        $child->setParent(null);
-        unset($this->children[$index]);
-
-        return $this;
-    }
-
-    /**
      * Returns if the last child, if any, has a new line.
      */
     protected static function isLastNewLine(self $parent): bool
@@ -187,6 +182,18 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
         }
 
         return $child instanceof self && $child::isLastNewLine($child);
+    }
+
+    /**
+     * Gets a value indicating if the given child can be added.
+     *
+     * @param AbstractHtmlChunk $child the child to add
+     *
+     * @return bool true if the child can be added
+     */
+    protected function isValidChild(AbstractHtmlChunk $child): bool
+    {
+        return !\in_array($child, $this->children, true);
     }
 
     private function doOutput(HtmlReport $report): void

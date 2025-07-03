@@ -402,11 +402,7 @@ class Column implements \Stringable, SortModeInterface
 
     private static function getAccessor(): PropertyAccessorInterface
     {
-        if (!self::$accessor instanceof PropertyAccessorInterface) {
-            return self::$accessor = PropertyAccess::createPropertyAccessor();
-        }
-
-        return self::$accessor;
+        return self::$accessor ??= PropertyAccess::createPropertyAccessor();
     }
 
     /**

@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 /**
- * Represents a description list chunk.
+ * A specialized chunk for HTML description list chunk (dl).
+ *
+ * Only child instance of description term (dt) or description detail (dd) can be added.
  */
 class HtmlDescriptionListChunk extends HtmlParentChunk
 {
@@ -23,20 +25,9 @@ class HtmlDescriptionListChunk extends HtmlParentChunk
         parent::__construct(HtmlTag::DESCRIPTION_LIST, $parent, $className);
     }
 
-    /**
-     * Adds a child to this collection of children.
-     *
-     * Do nothing if the child is already in this collection,
-     * or if the child tag is not an instance of description term or description detail.
-     */
     #[\Override]
-    public function add(AbstractHtmlChunk $child): static
+    protected function isValidChild(AbstractHtmlChunk $child): bool
     {
-        $tag = $child->getTag();
-        if (HtmlTag::DESCRIPTION_TERM === $tag || HtmlTag::DESCRIPTION_DETAIL === $tag) {
-            parent::add($child);
-        }
-
-        return $this;
+        return parent::isValidChild($child) && $child->is(HtmlTag::DESCRIPTION_TERM, HtmlTag::DESCRIPTION_DETAIL);
     }
 }

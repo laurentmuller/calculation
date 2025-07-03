@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Pdf\Html;
 
 use App\Pdf\Html\HtmlLiChunk;
-use App\Pdf\Html\HtmlListType;
 use App\Pdf\Html\HtmlOlChunk;
 use PHPUnit\Framework\TestCase;
 
@@ -47,29 +46,5 @@ class HtmlOlChunkTest extends TestCase
         $olChunk->add($liChunk2);
         $actual = $olChunk->getBulletText($liChunk2);
         self::assertSame('2.', $actual);
-    }
-
-    public function testGetStart(): void
-    {
-        $olChunk = new HtmlOlChunk();
-        $actual = $olChunk->getStart();
-        self::assertSame(1, $actual);
-
-        $olChunk = new HtmlOlChunk(start: 2);
-        $actual = $olChunk->getStart();
-        self::assertSame(2, $actual);
-    }
-
-    public function testType(): void
-    {
-        $expected = HtmlListType::NUMBER;
-        $olChunk = new HtmlOlChunk();
-        $actual = $olChunk->getType();
-        self::assertSame($expected, $actual);
-
-        $expected = HtmlListType::LETTER_LOWER;
-        $olChunk = new HtmlOlChunk(type: $expected);
-        $actual = $olChunk->getType();
-        self::assertSame($expected, $actual);
     }
 }

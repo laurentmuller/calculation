@@ -16,7 +16,7 @@ namespace App\Utils;
 use Twig\Attribute\AsTwigFilter;
 
 /**
- * Utility class for default formats.
+ * Utility class for format dates and numbers.
  */
 final class FormatUtils
 {
@@ -73,6 +73,11 @@ final class FormatUtils
      * @var \NumberFormatter[]
      */
     private static array $numberFormatters = [];
+
+    /**
+     * The formatter for roman numeral.
+     */
+    private static ?\NumberFormatter $romanFormatter = null;
 
     // prevent instance creation
     private function __construct()
@@ -154,22 +159,18 @@ final class FormatUtils
     #[AsTwigFilter(name: 'identifier')]
     public static function formatId(float|int|string|null $number): string
     {
-        $value = self::checkNegativeZero($number);
-
-        return \sprintf('%06d', $value);
+        return \sprintf('%06d', self::checkNegativeZero($number));
     }
 
     /**
      * Format a number for the current locale with no decimal (Ex: 2312.2 > 2'312).
+     *
+     * @psalm-suppress PossiblyInvalidArgument
      */
     #[AsTwigFilter(name: 'integer')]
     public static function formatInt(\Countable|array|int|float|string|null $number): string
     {
-        if (\is_countable($number)) {
-            $number = \count($number);
-        }
-        /** @phpstan-var int|float|string|null $number */
-        $value = self::checkNegativeZero($number);
+        $value = self::checkNegativeZero(\is_countable($number) ? \count($number) : $number);
 
         return (string) self::getNumberFormatter(\NumberFormatter::DECIMAL, 0)->format($value);
     }
@@ -196,6 +197,21 @@ final class FormatUtils
         $value = self::checkNegativeZero($number);
 
         return (string) $formatter->format($value);
+    }
+
+    /**
+     * Format the given value to roman numeral.
+     *
+     * <b>N.B.:</b> Returns an empty string if the number is smaller than 1 or is greater than 3999.
+     */
+    public static function formatRoman(float|int|string|null $number): string
+    {
+        $value = (int) $number;
+        if ($value < 1 || $value > 3999) {
+            return '';
+        }
+
+        return (string) self::getRomanFormatter()->format($value);
     }
 
     /**
@@ -282,6 +298,14 @@ final class FormatUtils
         }
 
         return self::$numberFormatters[$hash];
+    }
+
+    /**
+     * Gets the formatter used format values to roman numeral.
+     */
+    public static function getRomanFormatter(): \NumberFormatter
+    {
+        return self::$romanFormatter ??= new \NumberFormatter('@numbers=roman', \NumberFormatter::DECIMAL);
     }
 
     private static function checkNegativeZero(int|float|string|null $number): float

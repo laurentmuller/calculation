@@ -147,13 +147,9 @@ abstract class AbstractController extends BaseController
      */
     public function getRequestStack(): RequestStack
     {
-        if ($this->requestStack instanceof RequestStack) {
-            return $this->requestStack;
-        }
-
         try {
             /** @phpstan-var RequestStack */
-            return $this->requestStack = $this->container->get('request_stack');
+            return $this->requestStack ??= $this->container->get('request_stack');
         } catch (ContainerExceptionInterface $e) {
             throw new \LogicException($e->getMessage(), $e->getCode(), $e);
         }
@@ -177,12 +173,8 @@ abstract class AbstractController extends BaseController
      */
     public function getTranslator(): TranslatorInterface
     {
-        if ($this->translator instanceof TranslatorInterface) {
-            return $this->translator;
-        }
-
         try {
-            return $this->translator = $this->container->get(TranslatorInterface::class);
+            return $this->translator ??= $this->container->get(TranslatorInterface::class);
         } catch (ContainerExceptionInterface $e) {
             throw new \LogicException($e->getMessage(), $e->getCode(), $e);
         }
@@ -195,12 +187,8 @@ abstract class AbstractController extends BaseController
      */
     public function getUrlGenerator(): UrlGeneratorService
     {
-        if ($this->generatorService instanceof UrlGeneratorService) {
-            return $this->generatorService;
-        }
-
         try {
-            return $this->generatorService = $this->container->get(UrlGeneratorService::class);
+            return $this->generatorService ??= $this->container->get(UrlGeneratorService::class);
         } catch (ContainerExceptionInterface $e) {
             throw new \LogicException(\sprintf('Unable to get the "%s" service,', UserService::class), $e->getCode(), $e);
         }
@@ -223,12 +211,8 @@ abstract class AbstractController extends BaseController
      */
     public function getUserService(): UserService
     {
-        if ($this->userService instanceof UserService) {
-            return $this->userService;
-        }
-
         try {
-            return $this->userService = $this->container->get(UserService::class);
+            return $this->userService ??= $this->container->get(UserService::class);
         } catch (ContainerExceptionInterface $e) {
             throw new \LogicException(\sprintf('Unable to get the "%s" service,', UserService::class), $e->getCode(), $e);
         }

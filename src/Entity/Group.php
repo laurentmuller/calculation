@@ -202,9 +202,7 @@ class Group extends AbstractCodeEntity
      */
     public function findPercent(float $amount): float
     {
-        $margin = $this->findMargin($amount);
-
-        return $margin instanceof GroupMargin ? $margin->getMargin() : 0;
+        return $this->findMargin($amount)?->getMargin() ?? 0.0;
     }
 
     /**

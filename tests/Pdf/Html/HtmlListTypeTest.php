@@ -22,13 +22,31 @@ class HtmlListTypeTest extends TestCase
     /**
      * @phpstan-return \Generator<int, array{0: positive-int, 1: string, 2?: string}>
      */
-    public static function getLetterValues(): \Generator
+    public static function getLetterLower(): \Generator
+    {
+        yield [1, 'a'];
+        yield [1, 'a.', '.'];
+        yield [26, 'z'];
+        yield [27, 'aa'];
+        yield [53, 'aaa'];
+
+        yield [1, 'a.lower', '.lower'];
+        yield [1, 'a.UPPER', '.UPPER'];
+    }
+
+    /**
+     * @phpstan-return \Generator<int, array{0: positive-int, 1: string, 2?: string}>
+     */
+    public static function getLetterUpper(): \Generator
     {
         yield [1, 'A'];
         yield [1, 'A.', '.'];
         yield [26, 'Z'];
         yield [27, 'AA'];
         yield [53, 'AAA'];
+
+        yield [1, 'A.lower', '.lower'];
+        yield [1, 'A.UPPER', '.UPPER'];
     }
 
     /**
@@ -42,13 +60,47 @@ class HtmlListTypeTest extends TestCase
         yield [10, '10.', '.'];
         yield [1000, '1000'];
         yield [1000, '1000.', '.'];
-        yield [1000, '1000.suffix', '.suffix'];
+        yield [1000, '1000.lower', '.lower'];
+        yield [1000, '1000.UPPER', '.UPPER'];
     }
 
     /**
      * @phpstan-return \Generator<int, array{0: positive-int, 1: string, 2?: string}>
      */
-    public static function getRomanValues(): \Generator
+    public static function getRomanLower(): \Generator
+    {
+        yield [4000, ''];
+        yield [4000, '', '.'];
+        yield [1000, 'm'];
+        yield [1000, 'm.', '.'];
+        yield [900, 'cm'];
+        yield [500, 'd'];
+        yield [400, 'cd'];
+        yield [100, 'c'];
+        yield [90, 'xc'];
+        yield [50, 'l'];
+        yield [40, 'xl'];
+        yield [10, 'x'];
+        yield [9, 'ix'];
+        yield [5, 'v'];
+        yield [4, 'iv'];
+        yield [1, 'i'];
+        yield [8, 'viii'];
+        yield [13, 'xiii'];
+        yield [14, 'xiv'];
+        yield [123, 'cxxiii'];
+        yield [2004, 'mmiv'];
+        yield [2355, 'mmccclv'];
+        yield [3999, 'mmmcmxcix'];
+
+        yield [1, 'i.lower', '.lower'];
+        yield [1, 'i.UPPER', '.UPPER'];
+    }
+
+    /**
+     * @phpstan-return \Generator<int, array{0: positive-int, 1: string, 2?: string}>
+     */
+    public static function getRomanUpper(): \Generator
     {
         yield [4000, ''];
         yield [4000, '', '.'];
@@ -73,15 +125,17 @@ class HtmlListTypeTest extends TestCase
         yield [2004, 'MMIV'];
         yield [2355, 'MMCCCLV'];
         yield [3999, 'MMMCMXCIX'];
+
+        yield [1, 'I.lower', '.lower'];
+        yield [1, 'I.UPPER', '.UPPER'];
     }
 
     /**
      * @phpstan-param positive-int $value
      */
-    #[DataProvider('getLetterValues')]
+    #[DataProvider('getLetterLower')]
     public function testLetterLower(int $value, string $expected, string $suffix = ''): void
     {
-        $expected = \strtolower($expected);
         $actual = HtmlListType::LETTER_LOWER->getBulletText($value, $suffix);
         self::assertSame($expected, $actual);
     }
@@ -89,7 +143,7 @@ class HtmlListTypeTest extends TestCase
     /**
      * @phpstan-param positive-int $value
      */
-    #[DataProvider('getLetterValues')]
+    #[DataProvider('getLetterUpper')]
     public function testLetterUpper(int $value, string $expected, string $suffix = ''): void
     {
         $actual = HtmlListType::LETTER_UPPER->getBulletText($value, $suffix);
@@ -109,10 +163,9 @@ class HtmlListTypeTest extends TestCase
     /**
      * @phpstan-param positive-int $value
      */
-    #[DataProvider('getRomanValues')]
+    #[DataProvider('getRomanLower')]
     public function testRomanLower(int $value, string $expected, string $suffix = ''): void
     {
-        $expected = \strtolower($expected);
         $actual = HtmlListType::ROMAN_LOWER->getBulletText($value, $suffix);
         self::assertSame($expected, $actual);
     }
@@ -120,7 +173,7 @@ class HtmlListTypeTest extends TestCase
     /**
      * @phpstan-param positive-int $value
      */
-    #[DataProvider('getRomanValues')]
+    #[DataProvider('getRomanUpper')]
     public function testRomanUpper(int $value, string $expected, string $suffix = ''): void
     {
         $actual = HtmlListType::ROMAN_UPPER->getBulletText($value, $suffix);

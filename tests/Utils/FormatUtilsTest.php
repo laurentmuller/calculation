@@ -244,6 +244,39 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
+     * @phpstan-return \Generator<int, array{int|float|string|null, string}>
+     */
+    public static function getRomans(): \Generator
+    {
+        yield [null, ''];
+        yield ['', ''];
+        yield ['fake', ''];
+        yield [-1, ''];
+        yield [0, ''];
+        yield [4000, ''];
+
+        yield [1.0, 'I'];
+        yield ['1', 'I'];
+
+        yield [1, 'I'];
+        yield [2, 'II'];
+        yield [3, 'III'];
+        yield [4, 'IV'];
+        yield [5, 'V'];
+        yield [6, 'VI'];
+        yield [7, 'VII'];
+        yield [8, 'VIII'];
+        yield [9, 'IX'];
+
+        yield [10, 'X'];
+        yield [50, 'L'];
+        yield [100, 'C'];
+        yield [1000, 'M'];
+
+        yield [3999, 'MMMCMXCIX'];
+    }
+
+    /**
      * @phpstan-return \Generator<int, array{
      *     0: \DateTimeInterface|int|null,
      *     1: string|null,
@@ -372,6 +405,13 @@ class FormatUtilsTest extends TestCase
 
         $ends_with = \str_ends_with($actual, self::PERCENT_SYMBOL);
         self::assertSame($ends_with, $contains);
+    }
+
+    #[DataProvider('getRomans')]
+    public function testFormatRoman(int|float|string|null $number, string $expected): void
+    {
+        $actual = FormatUtils::formatRoman($number);
+        self::assertSame($expected, $actual);
     }
 
     /**

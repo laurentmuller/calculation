@@ -86,17 +86,14 @@ class HtmlParentChunkTest extends TestCase
         self::assertNotNull($actual);
     }
 
-    public function testRemove(): void
+    public function testGetChild(): void
     {
         $actual = new HtmlParentChunk(HtmlTag::BODY);
-        $chunk = new HtmlPageBreakChunk();
+        self::assertNull($actual->getChild(0));
 
-        $actual->add($chunk);
-        self::assertCount(1, $actual);
-        $actual->remove($chunk);
-        self::assertCount(0, $actual);
-
-        $actual->remove($chunk);
-        self::assertCount(0, $actual);
+        $actual->add(new HtmlPageBreakChunk());
+        self::assertNull($actual->getChild(-1));
+        self::assertNotNull($actual->getChild(0));
+        self::assertNull($actual->getChild(1));
     }
 }

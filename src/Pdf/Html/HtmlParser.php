@@ -41,7 +41,7 @@ readonly class HtmlParser
 
         $document = $this->loadDocument($source);
         $body = HtmlTag::BODY->findFirst($document);
-        if (!$body instanceof \DOMNode) {
+        if (!$body instanceof \DOMElement) {
             return null;
         }
 
@@ -68,11 +68,8 @@ readonly class HtmlParser
         return new HtmlLiChunk($parent, $className);
     }
 
-    private function createOlChunk(
-        HtmlParentChunk $parent,
-        ?string $className,
-        \DOMNode $node
-    ): HtmlOlChunk {
+    private function createOlChunk(HtmlParentChunk $parent, ?string $className, \DOMNode $node): HtmlOlChunk
+    {
         /** @phpstan-var positive-int $start */
         $start = HtmlAttribute::LIST_START->getIntValue($node, 1);
         $type = HtmlAttribute::LIST_TYPE->getEnumValue($node, HtmlListType::NUMBER);
@@ -107,26 +104,18 @@ readonly class HtmlParser
 
     private function parseNode(HtmlParentChunk $parent, \DOMNode $node): void
     {
-        $name = $node->nodeName;
         $className = HtmlAttribute::CLASS_NAME->getValue($node);
-        switch ($node->nodeType) {
-            case \XML_ELEMENT_NODE:
-                $parent = $this->parseNodeElement($name, $parent, $className, $node);
-                break;
-            case \XML_TEXT_NODE:
-                /** @phpstan-var \DOMText $node */
-                $this->parseNodeText($parent, $className, $node);
-                break;
+        if ($node instanceof \DOMElement) {
+            $name = \strtolower($node->nodeName);
+            $parent = $this->parseNodeElement($name, $parent, $className, $node);
+        } elseif ($node instanceof \DOMText) {
+            $this->parseNodeText($parent, $className, $node);
         }
         $this->parseNodes($parent, $node);
     }
 
-    private function parseNodeElement(
-        string $name,
-        HtmlParentChunk $parent,
-        ?string $className,
-        \DOMNode $node
-    ): HtmlParentChunk {
+    private function parseNodeElement(string $name, HtmlParentChunk $parent, ?string $className, \DOMElement $node): HtmlParentChunk
+    {
         if (HtmlTag::PAGE_BREAK->match((string) $className)) {
             return $this->createPageBreakChunk($parent);
         }
@@ -152,7 +141,11 @@ readonly class HtmlParser
 
     private function parseNodeText(HtmlParentChunk $parent, ?string $className, \DOMText $node): void
     {
-        new HtmlTextChunk($parent, $className, $node->wholeText);
+        $text = $node->wholeText;
+        if ('' === \trim($text) && $parent->isEmpty()) {
+            return;
+        }
+        new HtmlTextChunk($parent, $className, $text);
     }
 
     private function trimHtml(): ?string

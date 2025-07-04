@@ -23,6 +23,7 @@ use App\Tests\DateAssertTrait;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\Web\AuthenticateWebTestCase;
 use App\Utils\DateUtils;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -54,11 +55,11 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
 
         $expected = $this->getDateFrom();
         $actual = $query->getDateFrom();
-        self::assertSameDate($expected, $actual);
+        self::assertTimestampEquals($expected, $actual);
 
         $expected = $this->getDate();
         $actual = $query->getDate();
-        self::assertSameDate($expected, $actual);
+        self::assertTimestampEquals($expected, $actual);
 
         $expected = $this->getInterval();
         $actual = $query->getInterval();
@@ -86,8 +87,8 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         $expected = $this->getDate();
         /** @phpstan-var mixed $actual */
         $actual = $session->get('calculation.update.date');
-        self::assertInstanceOf(\DateTimeInterface::class, $actual);
-        self::assertSameDate($expected, $actual);
+        self::assertInstanceOf(DatePoint::class, $actual);
+        self::assertTimestampEquals($expected, $actual);
 
         $expected = $this->getInterval();
         /** @phpstan-var mixed $actual */
@@ -236,7 +237,7 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertTrue($result->isValid());
     }
 
-    private function getDate(): \DateTimeInterface
+    private function getDate(): DatePoint
     {
         return DateUtils::removeTime();
     }
@@ -244,7 +245,7 @@ class CalculationUpdateServiceTest extends AuthenticateWebTestCase
     /**
      * @throws \Exception
      */
-    private function getDateFrom(): \DateTimeInterface
+    private function getDateFrom(): DatePoint
     {
         return DateUtils::sub(DateUtils::removeTime(), $this->getInterval());
     }

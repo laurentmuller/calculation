@@ -15,6 +15,7 @@ namespace App\Form\Type;
 
 use App\Interfaces\EntityInterface;
 use App\Utils\FormatUtils;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -252,7 +253,7 @@ class PlainType extends AbstractType
     /**
      * @phpstan-param OptionsType $options
      */
-    private function formatDate(\DateTimeInterface|int|null $value, array $options): string
+    private function formatDate(DatePoint|int|null $value, array $options): string
     {
         return (string) FormatUtils::formatDateTime(
             $value,
@@ -327,7 +328,7 @@ class PlainType extends AbstractType
             return $value->getDisplay();
         }
 
-        if ($value instanceof \DateTimeInterface) {
+        if ($value instanceof DatePoint) {
             return $this->formatDate($value, $options);
         }
 

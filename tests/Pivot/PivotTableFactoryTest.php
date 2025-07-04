@@ -20,6 +20,7 @@ use App\Pivot\Field\PivotFieldFactory;
 use App\Pivot\PivotTable;
 use App\Pivot\PivotTableFactory;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 
 class PivotTableFactoryTest extends TestCase
 {
@@ -118,7 +119,7 @@ class PivotTableFactoryTest extends TestCase
     {
         $row1 = [
             'id' => 1,
-            'date' => new \DateTime('2024-05-10'),
+            'date' => new DatePoint('2024-05-10'),
             'state' => 'State 1',
             'group' => 'Group 1',
             'category' => 'Category 1',
@@ -126,7 +127,7 @@ class PivotTableFactoryTest extends TestCase
         ];
         $row2 = [
             'id' => 1,
-            'date' => new \DateTime('2024-05-10'),
+            'date' => new DatePoint('2024-05-10'),
             'state' => 'State 2',
             'group' => 'Group 2',
             'category' => 'Category 2',

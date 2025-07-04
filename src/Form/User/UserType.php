@@ -17,6 +17,7 @@ use App\Entity\User;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
 use App\Utils\FormatUtils;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Form\Event\PreSetDataEvent;
 
 /**
@@ -69,9 +70,9 @@ class UserType extends AbstractEntityType
     /**
      * Format the last login date.
      */
-    private function formatLastLogin(\DateTimeInterface|string $lastLogin): ?string
+    private function formatLastLogin(DatePoint|string $lastLogin): ?string
     {
-        if ($lastLogin instanceof \DateTimeInterface) {
+        if ($lastLogin instanceof DatePoint) {
             return FormatUtils::formatDateTime($lastLogin);
         }
 

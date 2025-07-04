@@ -18,6 +18,7 @@ use App\Form\Type\PlainType;
 use App\Tests\Fixture\DataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -67,7 +68,7 @@ class PlainTypeTest extends TypeTestCase
 
     public function testWithDateWithDateAndTime(): void
     {
-        $data = new \DateTime('2024-06-10 12:22:03');
+        $data = new DatePoint('2024-06-10 12:22:03');
         $expected = '10.06.2024 12:22';
         $options = [
             'date_format' => null,
@@ -79,7 +80,7 @@ class PlainTypeTest extends TypeTestCase
 
     public function testWithDateWithDateOnly(): void
     {
-        $data = new \DateTime('2024-06-10 12:22:03');
+        $data = new DatePoint('2024-06-10 12:22:03');
         $expected = '10.06.2024';
         $options = [
             'date_format' => null,
@@ -91,7 +92,7 @@ class PlainTypeTest extends TypeTestCase
 
     public function testWithDateWithTimeOnly(): void
     {
-        $data = new \DateTime('2024-06-10 12:22:03');
+        $data = new DatePoint('2024-06-10 12:22:03');
         $expected = '12:22';
         $options = [
             'date_format' => PlainType::FORMAT_NONE,

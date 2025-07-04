@@ -20,6 +20,7 @@ use App\Tests\KernelServiceTestCase;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -152,7 +153,7 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
 
     public function testImportSuccess(): void
     {
-        $date = new \DateTime('2024-01-17');
+        $date = new DatePoint('2024-01-17');
         $this->application->method('getLastImport')
             ->willReturn($date);
         $sourceFile = __DIR__ . '/../files/zip/small_post_address.zip';
@@ -202,7 +203,7 @@ class SwissPostUpdaterTest extends KernelServiceTestCase
 
     public function testImportValidityOlder(): void
     {
-        $date = new \DateTime('2024-07-17');
+        $date = new DatePoint('2024-07-17');
         $this->application->method('getLastImport')
             ->willReturn($date);
         $sourceFile = __DIR__ . '/../files/zip/small_post_address.zip';

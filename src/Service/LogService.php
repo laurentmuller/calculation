@@ -22,6 +22,7 @@ use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel as PsrLevel;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -133,9 +134,13 @@ class LogService
     /**
      * Gets the log date.
      */
-    private function parseDate(string $value): \DateTimeImmutable|false
+    private function parseDate(string $value): ?DatePoint
     {
-        return \DateTimeImmutable::createFromFormat(self::DATE_FORMAT, $value);
+        try {
+            return DatePoint::createFromFormat(self::DATE_FORMAT, $value);
+        } catch (\DateMalformedStringException) {
+            return null;
+        }
     }
 
     /**
@@ -155,7 +160,7 @@ class LogService
                 continue;
             }
             $date = $this->parseDate($values[0]);
-            if (false === $date) {
+            if (!$date instanceof DatePoint) {
                 continue;
             }
             $log = Log::instance($key)

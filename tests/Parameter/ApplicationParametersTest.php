@@ -30,10 +30,23 @@ use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Clock\DatePoint;
 
 class ApplicationParametersTest extends TestCase
 {
     use IdTrait;
+
+    public function testDatePoint(): void
+    {
+        $date = new DatePoint();
+        $property = GlobalProperty::instance('last_import')
+            ->setValue($date);
+        $parameters = $this->createApplication([$property]);
+        $parameters->getDate()
+            ->setArchive($date);
+        $actual = $parameters->save();
+        self::assertTrue($actual);
+    }
 
     public function testEnumInt(): void
     {
@@ -262,9 +275,9 @@ class ApplicationParametersTest extends TestCase
             ->willReturn($product);
 
         $callback = fn (string $class): AbstractRepository => match ($class) {
+            Product::class => $productRepository,
             Category::class => $categoryRepository,
             CalculationState::class => $stateRepository,
-            Product::class => $productRepository,
             default => $propertyRepository,
         };
 

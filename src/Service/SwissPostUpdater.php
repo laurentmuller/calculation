@@ -24,6 +24,7 @@ use App\Utils\DateUtils;
 use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -187,7 +188,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         return $this->service->getDatabaseName();
     }
 
-    private function getLastImport(SwissPostUpdateResult $result): ?\DateTimeInterface
+    private function getLastImport(SwissPostUpdateResult $result): ?DatePoint
     {
         if ($result->isOverwrite() || !FileUtils::exists($this->getDatabaseName())) {
             return null;
@@ -341,17 +342,15 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     {
         $validity = null;
         if ($this->validateLength($data, 1)) {
-            $validity = \DateTime::createFromFormat(self::DATE_PATTERN, (string) $data[1]);
-            if ($validity instanceof \DateTime) {
-                $validity = DateUtils::removeTime($validity);
-            }
+            $validity = DatePoint::createFromFormat(self::DATE_PATTERN, (string) $data[1]);
+            $validity = DateUtils::removeTime($validity);
         }
-        if (!$validity instanceof \DateTimeInterface) {
+        if (!$validity instanceof DatePoint) {
             return $this->setError($result, 'validity_none', ['%name%' => $result->getSourceName()]);
         }
         $result->setValidity($validity);
         $lastImport = $this->getLastImport($result);
-        if ($lastImport instanceof \DateTimeInterface && $validity <= $lastImport) {
+        if ($lastImport instanceof DatePoint && $validity <= $lastImport) {
             return $this->setError($result, 'validity_before', [
                 '%validity%' => FormatUtils::formatDate($validity, \IntlDateFormatter::LONG),
                 '%import%' => FormatUtils::formatDate($lastImport, \IntlDateFormatter::LONG),
@@ -396,7 +395,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
 
     private function updateValidity(SwissPostUpdateResult $result): SwissPostUpdateResult
     {
-        if ($result->isValid() && $result->getValidity() instanceof \DateTimeInterface) {
+        if ($result->isValid() && $result->getValidity() instanceof DatePoint) {
             $this->application->setProperty(PropertyServiceInterface::P_DATE_IMPORT, $result->getValidity());
         }
 

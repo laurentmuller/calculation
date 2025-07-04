@@ -18,6 +18,7 @@ use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Traits\ArrayTrait;
 use App\Utils\FormatUtils;
+use Symfony\Component\Clock\DatePoint;
 
 /**
  * The abstract table.
@@ -40,7 +41,7 @@ abstract class AbstractTable implements SortModeInterface
         return FormatUtils::formatAmount($value);
     }
 
-    public function formatDate(\DateTimeInterface $value): string
+    public function formatDate(DatePoint $value): string
     {
         return FormatUtils::formatDate($value);
     }

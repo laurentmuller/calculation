@@ -16,6 +16,7 @@ namespace App\Service;
 use App\Enums\Environment;
 use App\Utils\DateUtils;
 use App\Utils\FileUtils;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpKernel\Kernel;
@@ -228,7 +229,7 @@ final readonly class SymfonyInfoService
      */
     public function getMaintenanceStatus(): string
     {
-        $now = DateUtils::createDateTimeImmutable();
+        $now = DateUtils::createDateTime();
         $endOfLife = $this->getEndOfMonth(Kernel::END_OF_LIFE);
         if ($now > $endOfLife) {
             return 'Unmaintained';
@@ -363,10 +364,9 @@ final readonly class SymfonyInfoService
         return $description;
     }
 
-    private function createDate(string $date): \DateTimeImmutable
+    private function createDate(string $date): DatePoint
     {
-        /** @phpstan-var \DateTimeImmutable */
-        return \DateTimeImmutable::createFromFormat('m/Y', $date);
+        return DatePoint::createFromFormat('m/Y', $date);
     }
 
     private function formatMonthYear(string $date): string
@@ -376,7 +376,7 @@ final readonly class SymfonyInfoService
 
     private function getDaysBeforeExpiration(string $date): string
     {
-        $today = DateUtils::createDateTimeImmutable();
+        $today = DateUtils::createDateTime();
         $endOfMonth = $this->getEndOfMonth($date);
         if ($endOfMonth < $today) {
             return 'Expired';
@@ -404,7 +404,7 @@ final readonly class SymfonyInfoService
         ];
     }
 
-    private function getEndOfMonth(string $date): \DateTimeImmutable
+    private function getEndOfMonth(string $date): DatePoint
     {
         return DateUtils::modify($this->createDate($date), 'last day of this month 23:59:59');
     }

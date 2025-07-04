@@ -19,6 +19,7 @@ use App\Service\ApplicationService;
 use App\Traits\ArrayTrait;
 use App\Utils\FormatUtils;
 use HighchartsBundle\Highcharts\ChartExpression;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
@@ -123,7 +124,7 @@ class MonthChart extends AbstractHighchart
         return \max(1, $count);
     }
 
-    private function formatDate(\DateTimeInterface $date): string
+    private function formatDate(DatePoint $date): string
     {
         return FormatUtils::formatDate($date, \IntlDateFormatter::NONE, 'MMMM Y');
     }
@@ -257,7 +258,7 @@ class MonthChart extends AbstractHighchart
         ];
     }
 
-    private function getURL(\DateTimeInterface $date): string
+    private function getURL(DatePoint $date): string
     {
         return $this->generator->generate('calculation_index', [
             'search' => $date->format('m.Y'),

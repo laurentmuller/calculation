@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Utils;
 
+use Symfony\Component\Clock\DatePoint;
+
 /**
  * Utility class for dates.
  *
@@ -23,30 +25,30 @@ final class DateUtils
     /**
      * The month names.
      *
-     * @var array<int, string>
+     * @var array<int, string>|null
      */
-    private static array $monthNames = [];
+    private static ?array $monthNames = null;
 
     /**
      * The short month names.
      *
-     * @var array<int, string>
+     * @var array<int, string>|null
      */
-    private static array $shortMonthNames = [];
+    private static ?array $shortMonthNames = null;
 
     /**
      * The short week day names.
      *
-     * @var array<string, array<int, string>>
+     * @var array<string, array<int, string>>|null
      */
-    private static array $shortWeekNames = [];
+    private static ?array $shortWeekNames = null;
 
     /**
      * The week day names.
      *
-     * @var array<string, array<int, string>>
+     * @var array<string, array<int, string>>|null
      */
-    private static array $weekNames = [];
+    private static ?array $weekNames = null;
 
     // prevent instance creation
     private function __construct()
@@ -57,24 +59,15 @@ final class DateUtils
     /**
      * Returns a new date with the given interval added.
      *
-     * @param \DateTimeInterface   $date     the date
+     * @param DatePoint            $date     the date
      * @param \DateInterval|string $interval the interval to add
      *
-     * @return \DateTimeInterface the new date
-     *
-     * @phpstan-template T of \DateTime|\DateTimeImmutable
-     *
-     * @phpstan-param T $date
-     *
-     * @phpstan-return T
+     * @return DatePoint the new date
      */
-    public static function add(\DateTimeInterface $date, \DateInterval|string $interval): \DateTimeInterface
+    public static function add(DatePoint $date, \DateInterval|string $interval): DatePoint
     {
         if (\is_string($interval)) {
             $interval = self::createDateInterval($interval);
-        }
-        if ($date instanceof \DateTime) {
-            $date = (clone $date);
         }
 
         return $date->add($interval);
@@ -113,26 +106,15 @@ final class DateUtils
      * @param string         $datetime a date/time string
      * @param ?\DateTimeZone $timezone the timezone or null to use the current timezone
      */
-    public static function createDateTime(string $datetime = 'now', ?\DateTimeZone $timezone = null): \DateTime
+    public static function createDateTime(string $datetime = 'now', ?\DateTimeZone $timezone = null): DatePoint
     {
-        return new \DateTime($datetime, $timezone);
-    }
-
-    /**
-     * Creates a new date time instance.
-     *
-     * @param string         $datetime a date/time string
-     * @param ?\DateTimeZone $timezone the timezone or null to use the current timezone
-     */
-    public static function createDateTimeImmutable(string $datetime = 'now', ?\DateTimeZone $timezone = null): \DateTimeImmutable
-    {
-        return new \DateTimeImmutable($datetime, $timezone);
+        return new DatePoint($datetime, $timezone);
     }
 
     /**
      * Format the given date (if any) to use within a date type in forms.
      */
-    public static function formatFormDate(?\DateTimeInterface $date): ?string
+    public static function formatFormDate(?DatePoint $date): ?string
     {
         return $date?->format('Y-m-d');
     }
@@ -140,28 +122,20 @@ final class DateUtils
     /**
      * Gets the numeric representation of a day of the month for the given date.
      *
-     * @param ?\DateTimeInterface $date the date to get day for or <code>null</code> to use the current date
-     *
      * @return int value 1 through 31
      */
-    public static function getDay(?\DateTimeInterface $date = null): int
+    public static function getDay(DatePoint $date = new DatePoint()): int
     {
-        $date ??= self::createDateTime();
-
         return (int) $date->format('j');
     }
 
     /**
      * Gets the numeric representation of a month for the given date.
      *
-     * @param ?\DateTimeInterface $date the date to get month for or <code>null</code> to use the current date
-     *
      * @return int value 1 through 12
      */
-    public static function getMonth(?\DateTimeInterface $date = null): int
+    public static function getMonth(DatePoint $date = new DatePoint()): int
     {
-        $date ??= self::createDateTime();
-
         return (int) $date->format('n');
     }
 
@@ -176,11 +150,7 @@ final class DateUtils
      */
     public static function getMonths(): array
     {
-        if ([] === self::$monthNames) {
-            self::$monthNames = self::getMonthNames('MMMM');
-        }
-
-        return self::$monthNames;
+        return self::$monthNames ??= self::getMonthNames('MMMM');
     }
 
     /**
@@ -194,11 +164,7 @@ final class DateUtils
      */
     public static function getShortMonths(): array
     {
-        if ([] === self::$shortMonthNames) {
-            self::$shortMonthNames = self::getMonthNames('MMM');
-        }
-
-        return self::$shortMonthNames;
+        return self::$shortMonthNames ??= self::getMonthNames('MMM');
     }
 
     /**
@@ -214,11 +180,7 @@ final class DateUtils
      */
     public static function getShortWeekdays(string $firstDay = 'monday'): array
     {
-        if (!isset(self::$shortWeekNames[$firstDay])) {
-            self::$shortWeekNames[$firstDay] = self::getDayNames('eee', $firstDay);
-        }
-
-        return self::$shortWeekNames[$firstDay];
+        return self::$shortWeekNames[$firstDay] ??= self::getDayNames('eee', $firstDay);
     }
 
     /**
@@ -226,14 +188,12 @@ final class DateUtils
      *
      * The weeks are starting on Monday.
      *
-     * @param ?\DateTimeInterface $date the date to get week for or <code>null</code> to use the current date
+     * @param DatePoint $date the date to get week for
      *
      * @return int value 1 through 53
      */
-    public static function getWeek(?\DateTimeInterface $date = null): int
+    public static function getWeek(DatePoint $date = new DatePoint()): int
     {
-        $date ??= self::createDateTime();
-
         return (int) $date->format('W');
     }
 
@@ -250,100 +210,61 @@ final class DateUtils
      */
     public static function getWeekdays(string $firstDay = 'monday'): array
     {
-        if (!isset(self::$weekNames[$firstDay])) {
-            self::$weekNames[$firstDay] = self::getDayNames('eeee', $firstDay);
-        }
-
-        return self::$weekNames[$firstDay];
+        return self::$weekNames[$firstDay] ??= self::getDayNames('eeee', $firstDay);
     }
 
     /**
      * Gets the full numeric representation of a year with 4 digits for the given date.
      *
-     * @param ?\DateTimeInterface $date the date to get year for or <code>null</code> to use the current date
+     * @param DatePoint $date the date to get year for or <code>null</code> to use the current date
      */
-    public static function getYear(?\DateTimeInterface $date = null): int
+    public static function getYear(DatePoint $date = new DatePoint()): int
     {
-        $date ??= self::createDateTime();
-
         return (int) $date->format('Y');
     }
 
     /**
      * Alters the timestamp of the given date.
      *
-     * @param \DateTimeInterface $date     the date to modify
-     * @param string             $modifier a date/time string
+     * @param DatePoint $date     the date to modify
+     * @param string    $modifier a date/time string
      *
-     * @return \DateTimeInterface the modified date
-     *
-     * @phpstan-template T of \DateTime|\DateTimeImmutable
-     *
-     * @phpstan-param T $date
-     *
-     * @phpstan-return T
+     * @return DatePoint the modified date
      */
-    public static function modify(\DateTimeInterface $date, string $modifier): \DateTimeInterface
+    public static function modify(DatePoint $date, string $modifier): DatePoint
     {
-        return (clone $date)->modify($modifier);
+        return $date->modify($modifier);
     }
 
     /**
      * Remove the time part of the given date.
-     *
-     * @phpstan-template T of \DateTime|\DateTimeImmutable
-     *
-     * @phpstan-param T|null $date
-     *
-     * @phpstan-return ($date is null ? \DateTime : T)
      */
-    public static function removeTime(\DateTime|\DateTimeImmutable|null $date = null): \DateTime|\DateTimeImmutable
+    public static function removeTime(DatePoint $date = new DatePoint()): DatePoint
     {
-        if (null !== $date) {
-            /** @phpstan-var T $date */
-            return $date->setTime(0, 0);
-        }
-
-        return self::createDateTime()->setTime(0, 0);
+        return $date->setTime(0, 0);
     }
 
     /**
      * Returns a new date with the given interval subtracted.
      *
-     * @param \DateTimeInterface   $date     the date
+     * @param DatePoint            $date     the date
      * @param \DateInterval|string $interval the date interval to subtract
-     *
-     * @return \DateTimeInterface the new date
-     *
-     * @phpstan-template T of \DateTime|\DateTimeImmutable
-     *
-     * @phpstan-param T $date
-     *
-     * @phpstan-return T
      */
-    public static function sub(\DateTimeInterface $date, \DateInterval|string $interval): \DateTimeInterface
+    public static function sub(DatePoint $date, \DateInterval|string $interval): DatePoint
     {
         if (\is_string($interval)) {
             $interval = self::createDateInterval($interval);
-        }
-
-        if ($date instanceof \DateTime) {
-            $date = (clone $date);
         }
 
         return $date->sub($interval);
     }
 
     /**
-     * Convert the given date to a <code>\DateTimeImmutable</code>.
+     * Convert the given date to a <code>DatePoint</code>.
      */
-    public static function toDateTimeImmutable(\DateTimeInterface $date): \DateTimeImmutable
+    public static function toDatePoint(\DateTimeInterface $date): DatePoint
     {
-        if ($date instanceof \DateTimeImmutable) {
-            return $date;
-        }
-
-        return \DateTimeImmutable::createFromInterface($date);
+        return $date instanceof DatePoint ? $date : DatePoint::createFromInterface($date);
     }
 
     /**

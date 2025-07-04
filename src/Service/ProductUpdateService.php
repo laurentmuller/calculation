@@ -114,7 +114,7 @@ class ProductUpdateService implements ServiceSubscriberInterface
         $percent = $query->isPercent();
         $value = $query->getValue();
         $round = $query->isRound();
-        $date = DateUtils::createDateTimeImmutable();
+        $date = DateUtils::createDateTime();
         $user = $this->getUser();
 
         foreach ($products as $product) {

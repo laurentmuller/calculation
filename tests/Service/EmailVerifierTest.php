@@ -21,6 +21,7 @@ use App\Tests\Entity\IdTrait;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\UriSigner;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -74,7 +75,7 @@ class EmailVerifierTest extends TestCase
 
     private function createMockVerifyEmailHelper(): MockObject&VerifyEmailHelperInterface
     {
-        $date = new \DateTime();
+        $date = new DatePoint();
         $component = new VerifyEmailSignatureComponents($date, 'uri', $date->getTimestamp());
         $helper = $this->createMock(VerifyEmailHelperInterface::class);
         $helper->method('generateSignature')

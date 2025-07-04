@@ -22,6 +22,7 @@ use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\UnexpectedResponseException;
 use Symfony\Component\Mailer\MailerInterface;
@@ -167,7 +168,7 @@ class ResetPasswordServiceTest extends TestCase
 
     private function createResetPasswordToken(?\DateTime $date = null): ResetPasswordToken
     {
-        $date ??= new \DateTime();
+        $date ??= new DatePoint();
 
         return new ResetPasswordToken('token', $date, $date->getTimestamp());
     }

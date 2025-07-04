@@ -76,7 +76,7 @@ class CalculationArchiveController extends AbstractController
                 'min' => $service->getDateMinConstraint(),
                 'max' => $service->getDateMaxConstraint(),
             ])
-            ->addDateType();
+            ->addDatePointType();
 
         $helper->field('sources')
             ->updateOptions([

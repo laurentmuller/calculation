@@ -16,6 +16,7 @@ namespace App\Model;
 use App\Entity\CalculationState;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -23,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class CalculationArchiveQuery extends AbstractSimulateQuery
 {
-    private \DateTimeInterface $date;
+    private DatePoint $date;
 
     /** @var CalculationState[] */
     #[Assert\Count(min: 1)]
@@ -39,7 +40,7 @@ class CalculationArchiveQuery extends AbstractSimulateQuery
         $this->date = DateUtils::sub(DateUtils::removeTime(), 'P6M');
     }
 
-    public function getDate(): \DateTimeInterface
+    public function getDate(): DatePoint
     {
         return $this->date;
     }
@@ -87,7 +88,7 @@ class CalculationArchiveQuery extends AbstractSimulateQuery
         return $this->target?->getId();
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setDate(DatePoint $date): self
     {
         $this->date = $date;
 

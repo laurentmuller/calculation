@@ -21,6 +21,7 @@ use App\Faker\ProductProvider;
 use App\Interfaces\EntityInterface;
 use App\Service\CalculationUpdateService;
 use App\Service\FakerService;
+use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -73,7 +74,7 @@ class CalculationGenerator extends AbstractEntityGenerator
 
     private function createEntity(int $min, int $max, Generator $generator): Calculation
     {
-        $date = $generator->dateTimeBetween('today', 'last day of next month');
+        $date = DateUtils::toDatePoint($generator->dateTimeBetween('today', 'last day of next month'));
         $entity = $this->generateEntity($min, $max, $generator)
             ->setDescription($generator->catchPhrase())
             ->setUserMargin($generator->randomFloat(2, 0, 0.1))

@@ -35,7 +35,7 @@ class CalculationType extends AbstractEntityType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('date')
-            ->addDateType();
+            ->addDatePointType();
 
         $helper->field('customer')
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)

@@ -15,6 +15,7 @@ namespace App\Traits;
 
 use App\Utils\DateUtils;
 use fpdf\Interfaces\PdfEnumDefaultInterface;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -140,7 +141,7 @@ trait CookieTrait
     /**
      * Gets the cookie expiration date. The default value is now plus 1 year.
      */
-    private function getCookieExpire(): \DateTimeInterface
+    private function getCookieExpire(): DatePoint
     {
         return DateUtils::modify(DateUtils::createDateTime(), '+1 year');
     }

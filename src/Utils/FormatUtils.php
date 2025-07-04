@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Utils;
 
+use Symfony\Component\Clock\DatePoint;
 use Twig\Attribute\AsTwigFilter;
 
 /**
@@ -99,18 +100,18 @@ final class FormatUtils
     /**
      * Format a date for the current locale; ignoring the time part.
      *
-     * @param \DateTimeInterface|int|null $date     the date to format
-     * @param int<-1,3>|null              $dateType the type of date formatting, one of the format types
-     *                                              constants or null to use default
-     * @param ?string                     $pattern  the optional pattern to use when formatting
-     * @param \DateTimeZone|string|null   $timezone the timezone identifier
+     * @param DatePoint|int|null        $date     the date to format
+     * @param int<-1,3>|null            $dateType the type of date formatting, one of the format types
+     *                                            constants or null to use default
+     * @param ?string                   $pattern  the optional pattern to use when formatting
+     * @param \DateTimeZone|string|null $timezone the timezone identifier
      *
      * @return string|null the formatted date or null if formatting failed or if the date is null
      *
      * @phpstan-return ($date is null ? (string|null) : string)
      */
     public static function formatDate(
-        \DateTimeInterface|int|null $date,
+        DatePoint|int|null $date,
         ?int $dateType = null,
         ?string $pattern = null,
         \DateTimeZone|string|null $timezone = null
@@ -121,20 +122,20 @@ final class FormatUtils
     /**
      * Format a date and time for the current locale.
      *
-     * @param \DateTimeInterface|int|null $date     the date and time to format
-     * @param int<-1,3>|null              $dateType the type of date formatting, one of the format types
-     *                                              constants or null to use default
-     * @param int<-1,3>|null              $timeType the type of time formatting, one of the format type constants or
-     *                                              null to use default
-     * @param ?string                     $pattern  the optional pattern to use when formatting
-     * @param \DateTimeZone|string|null   $timezone the timezone identifier
+     * @param DatePoint|int|null        $date     the date and time to format
+     * @param int<-1,3>|null            $dateType the type of date formatting, one of the format types
+     *                                            constants or null to use default
+     * @param int<-1,3>|null            $timeType the type of time formatting, one of the format type constants or
+     *                                            null to use default
+     * @param ?string                   $pattern  the optional pattern to use when formatting
+     * @param \DateTimeZone|string|null $timezone the timezone identifier
      *
      * @return string|null the formatted date and time or null if formatting failed or if the date is null
      *
      * @phpstan-return ($date is null ? (string|null) : string)
      */
     public static function formatDateTime(
-        \DateTimeInterface|int|null $date,
+        DatePoint|int|null $date,
         ?int $dateType = null,
         ?int $timeType = null,
         ?string $pattern = null,
@@ -217,18 +218,18 @@ final class FormatUtils
     /**
      * Format a time for the current locale; ignoring the date part.
      *
-     * @param \DateTimeInterface|int|null $date     the time to format
-     * @param int<-1,3>|null              $timeType the type of date formatting, one of the format types
-     *                                              constants or null to use default
-     * @param ?string                     $pattern  the optional pattern to use when formatting
-     * @param \DateTimeZone|string|null   $timezone the timezone identifier
+     * @param DatePoint|int|null        $date     the time to format
+     * @param int<-1,3>|null            $timeType the type of date formatting, one of the format types
+     *                                            constants or null to use default
+     * @param ?string                   $pattern  the optional pattern to use when formatting
+     * @param \DateTimeZone|string|null $timezone the timezone identifier
      *
      * @return string|null the formatted time or null if formatting failed or if the date is null
      *
      * @phpstan-return ($date is null ? (string|null) : string)
      */
     public static function formatTime(
-        \DateTimeInterface|int|null $date,
+        DatePoint|int|null $date,
         ?int $timeType = null,
         ?string $pattern = null,
         \DateTimeZone|string|null $timezone = null,

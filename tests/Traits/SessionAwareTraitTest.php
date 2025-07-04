@@ -17,6 +17,7 @@ use App\Traits\SessionAwareTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -55,7 +56,7 @@ class SessionAwareTraitTest extends TestCase implements ServiceSubscriberInterfa
             ->willReturn(1);
         $this->initializeRequestStack($session);
         $actual = $this->getSessionDate('date');
-        self::assertInstanceOf(\DateTime::class, $actual);
+        self::assertInstanceOf(DatePoint::class, $actual);
         self::assertSame(1, $actual->getTimestamp());
     }
 

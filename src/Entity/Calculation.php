@@ -25,8 +25,9 @@ use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\DatePointType;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -52,8 +53,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * The date.
      */
     #[Assert\NotNull]
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private \DateTimeInterface $date;
+    #[ORM\Column(type: DatePointType::NAME)]
+    private DatePoint $date;
 
     /**
      * The description.
@@ -124,7 +125,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     {
         parent::__clone();
         $this->date = DateUtils::createDateTime();
-        $this->createdAt = $this->updatedAt = DateUtils::createDateTimeImmutable();
+        $this->createdAt = $this->updatedAt = DateUtils::createDateTime();
         $this->groups = $this->groups->map(
             fn (CalculationGroup $group): CalculationGroup => (clone $group)->setCalculation($this)
         );
@@ -267,7 +268,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Get date.
      */
-    public function getDate(): \DateTimeInterface
+    public function getDate(): DatePoint
     {
         return $this->date;
     }
@@ -759,7 +760,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Set date.
      */
-    public function setDate(\DateTimeInterface $date): self
+    public function setDate(DatePoint $date): self
     {
         $this->date = $date;
 

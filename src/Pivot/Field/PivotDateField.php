@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Pivot\Field;
 
+use Symfony\Component\Clock\DatePoint;
+
 /**
  * Field for a date.
  */
@@ -49,11 +51,11 @@ class PivotDateField extends PivotField
     }
 
     #[\Override]
-    public function getValue(array $row): float|int|string|\DateTimeInterface|null
+    public function getValue(array $row): float|int|string|DatePoint|null
     {
         /** @phpstan-var mixed $value */
         $value = $this->getRowValue($row);
-        if ($value instanceof \DateTimeInterface) {
+        if ($value instanceof DatePoint) {
             return $this->doGetValue($value);
         }
 
@@ -63,7 +65,7 @@ class PivotDateField extends PivotField
     /**
      * Gets the value for the given date.
      */
-    protected function doGetValue(\DateTimeInterface $date): int
+    protected function doGetValue(DatePoint $date): int
     {
         return (int) $date->format($this->format);
     }

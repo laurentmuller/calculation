@@ -16,6 +16,7 @@ namespace App\Service;
 use App\Traits\ArrayTrait;
 use App\Utils\DateUtils;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Intl\Currencies;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -39,7 +40,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * @phpstan-type ExchangeQuotaType = array{
  *      allowed: int,
  *      remaining: int,
- *      date: \DateTimeInterface,
+ *      date: DatePoint,
  *      documentation: string}
  * @phpstan-type ResponseType = array{
  *     refresh_day_of_month: int,
@@ -196,7 +197,7 @@ class ExchangeRateService extends AbstractHttpClientService
         return [self::BASE_URI => $this->endpoint];
     }
 
-    private function computeNextDate(int $day): \DateTimeInterface
+    private function computeNextDate(int $day): DatePoint
     {
         $date = DateUtils::removeTime();
         $year = DateUtils::getYear($date);

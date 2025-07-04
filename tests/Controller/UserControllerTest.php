@@ -19,6 +19,7 @@ use App\Service\ResetPasswordService;
 use App\Service\UserExceptionService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportException;
@@ -264,7 +265,7 @@ class UserControllerTest extends EntityControllerTestCase
 
     public function testSendPasswordRequestSendException(): void
     {
-        $date = new \DateTime();
+        $date = new DatePoint();
         $token = new ResetPasswordToken('token', $date, $date->getTimestamp());
         $helper = $this->createMock(ResetPasswordHelperInterface::class);
         $helper->method('generateResetToken')
@@ -299,7 +300,7 @@ class UserControllerTest extends EntityControllerTestCase
     {
         $user = $this->loadUser($username);
         self::assertNotNull($user);
-        $expiresAt = \DateTimeImmutable::createFromInterface(new \DateTime());
+        $expiresAt = new DatePoint();
         $user->setResetPasswordRequest($expiresAt, 'selector', 'hashedToken');
         $this->addEntity($user);
 

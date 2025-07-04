@@ -18,6 +18,7 @@ use App\Repository\CalculationRepository;
 use App\Service\TimelineService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 
 class TimelineServiceTest extends TestCase
 {
@@ -72,13 +73,13 @@ class TimelineServiceTest extends TestCase
 
     private function createMockRepository(?Calculation $calculation = null): MockObject&CalculationRepository
     {
-        $date = new \DateTimeImmutable('today');
+        $date = new DatePoint('today');
         $repository = $this->createMock(CalculationRepository::class);
 
         if ($calculation instanceof Calculation) {
             $repository->method('getByInterval')
                 ->willReturn([$calculation]);
-            $date = \DateTimeImmutable::createFromInterface($calculation->getDate());
+            $date = $calculation->getDate();
         }
 
         $repository->method('getMinMaxDates')

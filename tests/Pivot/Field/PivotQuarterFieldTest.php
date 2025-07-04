@@ -15,6 +15,7 @@ namespace App\Tests\Pivot\Field;
 
 use App\Pivot\Field\PivotQuarterField;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 
 class PivotQuarterFieldTest extends TestCase
 {
@@ -61,7 +62,7 @@ class PivotQuarterFieldTest extends TestCase
         $actual = $field->getValue([]);
         self::assertNull($actual);
 
-        $date = new \DateTime('2024-04-01');
+        $date = new DatePoint('2024-04-01');
         $row = ['name' => $date];
         $actual = $field->getValue($row);
         self::assertSame(2, $actual);

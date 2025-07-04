@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Parameter;
 
 use App\Parameter\DateParameter;
+use Symfony\Component\Clock\DatePoint;
 
 /**
  * @extends ParameterTestCase<DateParameter>
@@ -50,7 +51,7 @@ class DateParameterTest extends ParameterTestCase
 
     public function testSetValue(): void
     {
-        $date = new \DateTime();
+        $date = new DatePoint();
         $this->parameter->setArchive($date);
         self::assertSame($date, $this->parameter->getArchive());
         $this->parameter->setImport($date);

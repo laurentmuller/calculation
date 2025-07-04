@@ -17,7 +17,8 @@ use App\Interfaces\EntityInterface;
 use App\Repository\AbstractRepository;
 use Doctrine\ORM\Proxy\DefaultProxyClassNameResolver;
 use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
+use Symfony\Component\Form\Exception\InvalidArgumentException;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 /**
  * Abstract data transformer to convert entities and identifiers.
@@ -55,12 +56,12 @@ abstract class AbstractEntityTransformer implements DataTransformerInterface
         }
 
         if (!\is_numeric($value)) {
-            throw new TransformationFailedException(\sprintf('A "numeric" value expected, a "%s" given.', \get_debug_type($value)));
+            throw new UnexpectedTypeException($value, 'numeric');
         }
 
         $entity = $this->repository->find((int) $value);
         if (null === $entity || !$this->validate($entity)) {
-            throw new TransformationFailedException(\sprintf('Unable to find a "%s" for the value "%s".', $this->className, $value));
+            throw new InvalidArgumentException(\sprintf('Unable to find a "%s" for the value "%s".', $this->className, $value));
         }
 
         return $entity;
@@ -76,7 +77,7 @@ abstract class AbstractEntityTransformer implements DataTransformerInterface
         }
 
         if (!$this->validate($value)) {
-            throw new TransformationFailedException(\sprintf('A "%s" expected, a "%s" given.', $this->className, \get_debug_type($value)));
+            throw new UnexpectedTypeException($value, $this->className);
         }
 
         return $value->getId();

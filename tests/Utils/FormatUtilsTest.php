@@ -18,6 +18,7 @@ use App\Tests\PrivateInstanceTrait;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 
 class FormatUtilsTest extends TestCase
 {
@@ -82,7 +83,7 @@ class FormatUtilsTest extends TestCase
 
     /**
      * @phpstan-return \Generator<int, array{
-     *      0: \DateTimeInterface|int|null,
+     *      0: DatePoint|int|null,
      *      1: string|null,
      *      2?: int<-1,3>|null,
      *      3?: string|null}>
@@ -103,7 +104,7 @@ class FormatUtilsTest extends TestCase
 
     /**
      * @phpstan-return \Generator<int, array{
-     *     0: \DateTimeInterface|int|null,
+     *     0: DatePoint|int|null,
      *     1: string|null,
      *     2?: int<-1,3>|null,
      *     3?: int<-1,3>|null}>
@@ -278,7 +279,7 @@ class FormatUtilsTest extends TestCase
 
     /**
      * @phpstan-return \Generator<int, array{
-     *     0: \DateTimeInterface|int|null,
+     *     0: DatePoint|int|null,
      *     1: string|null,
      *     2?: int<0,3>|null}>
      */
@@ -343,7 +344,7 @@ class FormatUtilsTest extends TestCase
      */
     #[DataProvider('getDates')]
     public function testFormatDate(
-        \DateTimeInterface|int|null $date,
+        DatePoint|int|null $date,
         ?string $expected,
         ?int $dateType = null,
         ?string $pattern = null
@@ -359,7 +360,7 @@ class FormatUtilsTest extends TestCase
      */
     #[DataProvider('getDateTimes')]
     public function testFormatDateTime(
-        \DateTimeInterface|int|null $date,
+        DatePoint|int|null $date,
         ?string $expected,
         ?int $dateType = null,
         ?int $timeType = null,
@@ -419,7 +420,7 @@ class FormatUtilsTest extends TestCase
      */
     #[DataProvider('getTimes')]
     public function testFormatTime(
-        \DateTimeInterface|int|null $date,
+        DatePoint|int|null $date,
         ?string $expected,
         ?int $timeType = null,
         ?string $pattern = null
@@ -457,8 +458,8 @@ class FormatUtilsTest extends TestCase
         self::assertSame(\IntlDateFormatter::SHORT, FormatUtils::TIME_TYPE);
     }
 
-    private static function createDate(): \DateTimeInterface
+    private static function createDate(): DatePoint
     {
-        return new \DateTime(self::DATE_TIME, new \DateTimeZone(FormatUtils::DEFAULT_TIME_ZONE));
+        return new DatePoint(self::DATE_TIME, new \DateTimeZone(FormatUtils::DEFAULT_TIME_ZONE));
     }
 }

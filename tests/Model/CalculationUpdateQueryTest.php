@@ -20,6 +20,7 @@ use App\Tests\Entity\IdTrait;
 use App\Utils\DateUtils;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
@@ -37,7 +38,7 @@ class CalculationUpdateQueryTest extends TestCase
 
         $expected = $this->getDate();
         $actual = $query->getDate();
-        self::assertSameDate($expected, $actual);
+        self::assertTimestampEquals($expected, $actual);
 
         self::assertTrue($query->isSimulate());
 
@@ -47,7 +48,7 @@ class CalculationUpdateQueryTest extends TestCase
 
         $expected = $this->getDateFrom();
         $actual = $query->getDateFrom();
-        self::assertSameDate($expected, $actual);
+        self::assertTimestampEquals($expected, $actual);
     }
 
     /**
@@ -63,12 +64,12 @@ class CalculationUpdateQueryTest extends TestCase
 
         $expected = $this->getDateFrom();
         $actual = $query->getDateFrom();
-        self::assertSameDate($expected, $actual);
+        self::assertTimestampEquals($expected, $actual);
 
         $expected = $this->getDate();
         $query->setDate($expected);
         $actual = $query->getDate();
-        self::assertSameDate($expected, $actual);
+        self::assertTimestampEquals($expected, $actual);
     }
 
     /**
@@ -94,7 +95,7 @@ class CalculationUpdateQueryTest extends TestCase
      */
     public function testValidationInvalidDate(): void
     {
-        $date = DateUtils::add(DateUtils::removeTime(new \DateTimeImmutable()), 'P1D');
+        $date = DateUtils::add(DateUtils::removeTime(new DatePoint()), 'P1D');
         $query = new CalculationUpdateQuery();
         $query->setDate($date);
 
@@ -138,15 +139,15 @@ class CalculationUpdateQueryTest extends TestCase
         return $context;
     }
 
-    private function getDate(): \DateTimeImmutable
+    private function getDate(): DatePoint
     {
-        return DateUtils::removeTime(new \DateTimeImmutable());
+        return DateUtils::removeTime();
     }
 
     /**
      * @throws \Exception
      */
-    private function getDateFrom(): \DateTimeInterface
+    private function getDateFrom(): DatePoint
     {
         return DateUtils::sub(DateUtils::removeTime(), $this->getInterval());
     }

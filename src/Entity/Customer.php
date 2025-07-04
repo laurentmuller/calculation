@@ -17,9 +17,10 @@ use App\Repository\CustomerRepository;
 use App\Service\CountryFlagService;
 use App\Utils\DateUtils;
 use App\Utils\StringUtils;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\DatePointType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
@@ -37,8 +38,8 @@ class Customer extends AbstractEntity
     private ?string $address = null;
 
     #[Assert\Date]
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $birthday = null;
+    #[ORM\Column(type: DatePointType::NAME, nullable: true)]
+    private ?DatePoint $birthday = null;
 
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
@@ -97,15 +98,13 @@ class Customer extends AbstractEntity
      */
     public function getAge(): ?int
     {
-        if (!$this->birthday instanceof \DateTimeInterface) {
+        if (!$this->birthday instanceof DatePoint) {
             return null;
         }
 
-        /** @phpstan-var \DateTime $birthday */
-        $birthday = clone $this->birthday;
         $currentDate = DateUtils::createDateTime();
-        $age = DateUtils::getYear($currentDate) - DateUtils::getYear($birthday);
-        if ($currentDate < DateUtils::add($birthday, 'P1Y')) {
+        $age = DateUtils::getYear($currentDate) - DateUtils::getYear($this->birthday);
+        if ($currentDate < DateUtils::add($this->birthday, 'P1Y')) {
             --$age;
         }
 
@@ -115,7 +114,7 @@ class Customer extends AbstractEntity
     /**
      * Get birthday.
      */
-    public function getBirthday(): ?\DateTimeInterface
+    public function getBirthday(): ?DatePoint
     {
         return $this->birthday;
     }
@@ -259,7 +258,7 @@ class Customer extends AbstractEntity
     /**
      * Set birthday.
      */
-    public function setBirthday(?\DateTimeInterface $birthday): self
+    public function setBirthday(?DatePoint $birthday): self
     {
         $this->birthday = $birthday;
 

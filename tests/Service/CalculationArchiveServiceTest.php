@@ -28,6 +28,7 @@ use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -59,12 +60,12 @@ class CalculationArchiveServiceTest extends TestCase
         self::assertEmpty($actual->getSources());
         self::assertEmpty($actual->getSourcesId());
         self::assertNull($actual->getTarget());
-        self::assertInstanceOf(\DateTimeImmutable::class, $actual->getDate());
+        self::assertInstanceOf(DatePoint::class, $actual->getDate());
     }
 
     public function testCreateQueryWithDate(): void
     {
-        $expected = new \DateTime('2024-02-01');
+        $expected = new DatePoint('2024-02-01');
         $stateEditable = new CalculationState();
         $stateEditable->setCode('editable')
             ->setEditable(true);
@@ -72,17 +73,18 @@ class CalculationArchiveServiceTest extends TestCase
         $this->setCalculationDate('2024-03-01');
         $service = $this->createService();
         $actual = $service->createQuery();
-        self::assertSameDate($expected, $actual->getDate());
+        self::assertTimestampEquals($expected, $actual->getDate());
     }
 
     public function testCreateQueryWithSessionDate(): void
     {
-        $expected = new \DateTime('2024-01-01');
+        $expected = new DatePoint('2024-01-01');
         $this->session->set('archive.date', $expected);
         $this->setCalculationStates();
         $service = $this->createService();
-        $actual = $service->createQuery();
-        self::assertSame($expected, $actual->getDate());
+        $query = $service->createQuery();
+        $actual = $query->getDate();
+        self::assertDateEquals($expected, $actual);
     }
 
     /**
@@ -137,7 +139,7 @@ class CalculationArchiveServiceTest extends TestCase
         $actual = $service->createQuery();
         self::assertCount(1, $actual->getSources());
         self::assertSame([$stateEditable], $actual->getSources());
-        self::assertInstanceOf(\DateTimeImmutable::class, $actual->getDate());
+        self::assertInstanceOf(DatePoint::class, $actual->getDate());
     }
 
     public function testGetDateMaxConstraintDate(): void

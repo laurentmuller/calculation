@@ -15,6 +15,7 @@ namespace App\Tests\Entity;
 
 use App\Entity\Customer;
 use App\Utils\DateUtils;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Validator\Constraints\IsNullValidator;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
@@ -34,7 +35,7 @@ class CustomerTest extends ConstraintValidatorTestCase
         $customer = new Customer();
         self::assertNull($customer->getAge());
 
-        $currentDate = new \DateTime();
+        $currentDate = new DatePoint();
 
         $birthday = DateUtils::sub($currentDate, 'P1Y');
         $customer->setBirthday(clone $birthday);

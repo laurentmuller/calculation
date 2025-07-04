@@ -16,6 +16,7 @@ namespace App\Database;
 use App\Entity\Log;
 use App\Utils\DateUtils;
 use App\Utils\StringUtils;
+use Symfony\Component\Clock\DatePoint;
 
 /**
  * SQLite database for logs.
@@ -95,7 +96,7 @@ class LogDatabase extends AbstractDatabase
     /**
      * Converts a date to an integer.
      */
-    private function dateToInt(?\DateTimeInterface $date): int
+    private function dateToInt(?DatePoint $date): int
     {
         $date ??= DateUtils::createDateTime();
 

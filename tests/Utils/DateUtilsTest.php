@@ -19,6 +19,7 @@ use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 
 class DateUtilsTest extends TestCase
 {
@@ -52,40 +53,40 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @phpstan-return \Generator<int, array{\DateTimeInterface, int}>
+     * @phpstan-return \Generator<int, array{DatePoint, int}>
      */
     public static function getDays(): \Generator
     {
         // today
-        $date = new \DateTime();
+        $date = new DatePoint();
         $day = (int) $date->format('j');
         yield [$date, $day];
 
         foreach (\range(1, 31) as $index) {
-            yield [new \DateTime("2022-01-$index"), $index];
+            yield [new DatePoint("2022-01-$index"), $index];
         }
     }
 
     /**
-     * @phpstan-return \Generator<int, array{?\DateTimeInterface, ?string}>
+     * @phpstan-return \Generator<int, array{?DatePoint, ?string}>
      */
     public static function getFormatFormDate(): \Generator
     {
         yield [null, null];
-        yield [new \DateTime('2022-1-1'), '2022-01-01'];
-        yield [new \DateTime('2022-9-9'), '2022-09-09'];
-        yield [new \DateTime('2022-01-01'), '2022-01-01'];
-        yield [new \DateTime('2022-12-31'), '2022-12-31'];
-        yield [new \DateTime('22-12-31'), '2022-12-31'];
-        yield [new \DateTime('22-2-1'), '2022-02-01'];
+        yield [new DatePoint('2022-1-1'), '2022-01-01'];
+        yield [new DatePoint('2022-9-9'), '2022-09-09'];
+        yield [new DatePoint('2022-01-01'), '2022-01-01'];
+        yield [new DatePoint('2022-12-31'), '2022-12-31'];
+        yield [new DatePoint('22-12-31'), '2022-12-31'];
+        yield [new DatePoint('22-2-1'), '2022-02-01'];
     }
 
     /**
-     * @phpstan-return \Generator<int, array{\DateTime, string, string}>
+     * @phpstan-return \Generator<int, array{DatePoint, string, string}>
      */
     public static function getModifies(): \Generator
     {
-        $date = new \DateTime('2024-01-10');
+        $date = new DatePoint('2024-01-10');
 
         yield [$date, '+1 day', '2024-01-11'];
         yield [$date, '-1 day', '2024-01-09'];
@@ -119,39 +120,35 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @phpstan-return \Generator<int, array{\DateTime, int}>
+     * @phpstan-return \Generator<int, array{DatePoint, int}>
      */
     public static function getMonths(): \Generator
     {
         // today
-        $date = new \DateTime();
+        $date = new DatePoint();
         $month = (int) $date->format('n');
         yield [$date, $month];
 
         foreach (\range(1, 12) as $index) {
-            yield [new \DateTime("2015-$index-01"), $index];
+            yield [new DatePoint("2015-$index-01"), $index];
         }
     }
 
     /**
-     * @phpstan-return \Generator<int, array{\DateTime, \DateTimeImmutable}>
+     * @phpstan-return \Generator<int, array{DatePoint, DatePoint}>
      */
     public static function getRemoveTimes(): \Generator
     {
         $format = 'Y-m-d H:i:s';
-        /** @phpstan-var \DateTimeImmutable $expected */
-        $expected = \DateTimeImmutable::createFromFormat($format, '2013-03-15 00:00:00');
+        $expected = DatePoint::createFromFormat($format, '2013-03-15 00:00:00');
 
-        /** @phpstan-var \DateTime $date */
-        $date = \DateTime::createFromFormat($format, '2013-03-15 00:00:00');
+        $date = DatePoint::createFromFormat($format, '2013-03-15 00:00:00');
         yield [$date, $expected];
 
-        /** @phpstan-var \DateTime $date */
-        $date = \DateTime::createFromFormat($format, '2013-03-15 01:02:03');
+        $date = DatePoint::createFromFormat($format, '2013-03-15 01:02:03');
         yield [$date, $expected];
 
-        /** @phpstan-var \DateTime $date */
-        $date = \DateTime::createFromFormat($format, '2013-03-15 23:59:59');
+        $date = DatePoint::createFromFormat($format, '2013-03-15 23:59:59');
         yield [$date, $expected];
     }
 
@@ -221,32 +218,32 @@ class DateUtilsTest extends TestCase
     }
 
     /**
-     * @phpstan-return \Generator<int, array{\DateTime, int}>
+     * @phpstan-return \Generator<int, array{DatePoint, int}>
      */
     public static function getWeeks(): \Generator
     {
         // today
-        $date = new \DateTime();
+        $date = new DatePoint();
         $week = (int) $date->format('W');
         yield [$date, $week];
 
-        yield [new \DateTime('2023-04-14'), 15];
-        yield [new \DateTime('2023-04-21'), 16];
-        yield [new \DateTime('2023-04-28'), 17];
+        yield [new DatePoint('2023-04-14'), 15];
+        yield [new DatePoint('2023-04-21'), 16];
+        yield [new DatePoint('2023-04-28'), 17];
     }
 
     /**
-     * @phpstan-return \Generator<int, array{\DateTime, int}>
+     * @phpstan-return \Generator<int, array{DatePoint, int}>
      */
     public static function getYears(): \Generator
     {
         // today
-        $date = new \DateTime();
+        $date = new DatePoint();
         $year = (int) $date->format('Y');
         yield [$date, $year];
 
         foreach (\range(2000, 2012) as $index) {
-            yield [new \DateTime("$index-01-01"), $index];
+            yield [new DatePoint("$index-01-01"), $index];
         }
     }
 
@@ -255,7 +252,7 @@ class DateUtilsTest extends TestCase
      */
     public function testAddByInterval(): void
     {
-        $date = new \DateTime('2020-01-10');
+        $date = new DatePoint('2020-01-10');
         $interval = new \DateInterval('P1W');
         $add = DateUtils::add($date, $interval);
         self::assertSame('2020-01-17', $add->format('Y-m-d'));
@@ -266,7 +263,7 @@ class DateUtilsTest extends TestCase
      */
     public function testAddByString(): void
     {
-        $date = new \DateTime('2020-01-10');
+        $date = new DatePoint('2020-01-10');
         $add = DateUtils::add($date, 'P1W');
         self::assertSame('2020-01-17', $add->format('Y-m-d'));
     }
@@ -280,13 +277,13 @@ class DateUtilsTest extends TestCase
 
     public function testCompletYearWithDefault(): void
     {
-        $expected = (int) (new \DateTime())->format('Y');
+        $expected = (int) (new DatePoint())->format('Y');
         $actual = DateUtils::completYear();
         self::assertSame($expected, $actual);
     }
 
     #[DataProvider('getFormatFormDate')]
-    public function testFormatFormDate(?\DateTimeInterface $date, ?string $expected): void
+    public function testFormatFormDate(?DatePoint $date, ?string $expected): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $actual = DateUtils::formatFormDate($date);
@@ -294,7 +291,7 @@ class DateUtilsTest extends TestCase
     }
 
     #[DataProvider('getDays')]
-    public function testGetDay(\DateTimeInterface $date, int $expected): void
+    public function testGetDay(DatePoint $date, int $expected): void
     {
         $actual = DateUtils::getDay($date);
         self::assertSame($expected, $actual);
@@ -303,54 +300,54 @@ class DateUtilsTest extends TestCase
     public function testGetDefaultDay(): void
     {
         $actual = DateUtils::getDay();
-        $expected = (int) (new \DateTime())->format('j');
+        $expected = (int) (new DatePoint())->format('j');
         self::assertSame($expected, $actual);
     }
 
     public function testGetDefaultMonth(): void
     {
         $actual = DateUtils::getMonth();
-        $expected = (int) (new \DateTime())->format('n');
+        $expected = (int) (new DatePoint())->format('n');
         self::assertSame($expected, $actual);
     }
 
     public function testGetDefaultWeek(): void
     {
         $actual = DateUtils::getWeek();
-        $expected = (int) (new \DateTime())->format('W');
+        $expected = (int) (new DatePoint())->format('W');
         self::assertSame($expected, $actual);
     }
 
     public function testGetDefaultYear(): void
     {
         $actual = DateUtils::getYear();
-        $expected = (int) (new \DateTime())->format('Y');
+        $expected = (int) (new DatePoint())->format('Y');
         self::assertSame($expected, $actual);
     }
 
     #[DataProvider('getMonths')]
-    public function testGetMonth(\DateTimeInterface $date, int $expected): void
+    public function testGetMonth(DatePoint $date, int $expected): void
     {
         $actual = DateUtils::getMonth($date);
         self::assertSame($expected, $actual);
     }
 
     #[DataProvider('getWeeks')]
-    public function testGetWeek(\DateTimeInterface $date, int $expected): void
+    public function testGetWeek(DatePoint $date, int $expected): void
     {
         $actual = DateUtils::getWeek($date);
         self::assertSame($expected, $actual);
     }
 
     #[DataProvider('getYears')]
-    public function testGetYear(\DateTimeInterface $date, int $expected): void
+    public function testGetYear(DatePoint $date, int $expected): void
     {
         $actual = DateUtils::getYear($date);
         self::assertSame($expected, $actual);
     }
 
     #[DataProvider('getModifies')]
-    public function testModify(\DateTime $date, string $modifier, string $expected): void
+    public function testModify(DatePoint $date, string $modifier, string $expected): void
     {
         $date = DateUtils::modify($date, $modifier);
         $actual = $date->format('Y-m-d');
@@ -381,10 +378,10 @@ class DateUtilsTest extends TestCase
     }
 
     #[DataProvider('getRemoveTimes')]
-    public function testRemoveTime(\DateTime|\DateTimeImmutable $date, \DateTimeInterface $expected): void
+    public function testRemoveTime(DatePoint $date, DatePoint $expected): void
     {
         $actual = DateUtils::removeTime($date);
-        self::assertSameDate($expected, $actual);
+        self::assertTimestampEquals($expected, $actual);
     }
 
     #[DataProvider('getShortMonthNames')]
@@ -422,7 +419,7 @@ class DateUtilsTest extends TestCase
      */
     public function testSubByInterval(): void
     {
-        $date = new \DateTime('2020-01-10');
+        $date = new DatePoint('2020-01-10');
         $interval = new \DateInterval('P1W');
         $add = DateUtils::sub($date, $interval);
         self::assertSame('2020-01-03', $add->format('Y-m-d'));
@@ -433,20 +430,20 @@ class DateUtilsTest extends TestCase
      */
     public function testSubByString(): void
     {
-        $date = new \DateTime('2020-01-10');
+        $date = new DatePoint('2020-01-10');
         $add = DateUtils::sub($date, 'P1W');
         self::assertSame('2020-01-03', $add->format('Y-m-d'));
     }
 
-    public function testToDateTimeImmutable(): void
+    public function testToDatePoint(): void
     {
-        $date = new \DateTimeImmutable();
-        $actual = DateUtils::toDateTimeImmutable($date);
-        self::assertSame($date, $actual);
-
         $date = new \DateTime();
-        $actual = DateUtils::toDateTimeImmutable($date);
-        self::assertSameDate($date, $actual);
+        $actual = DateUtils::toDatePoint($date);
+        self::assertTimestampEquals($date, $actual);
+
+        $date = new DatePoint();
+        $actual = DateUtils::toDatePoint($date);
+        self::assertTimestampEquals($date, $actual);
     }
 
     #[DataProvider('getWeekdayNames')]

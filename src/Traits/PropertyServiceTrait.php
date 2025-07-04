@@ -16,6 +16,7 @@ namespace App\Traits;
 use App\Entity\AbstractProperty;
 use App\Enums\EntityAction;
 use App\Utils\StringUtils;
+use Symfony\Component\Clock\DatePoint;
 
 /**
  * Trait for class implementing <code>PropertyServiceInterface</code>.
@@ -124,19 +125,14 @@ trait PropertyServiceTrait
     /**
      * Gets a date property.
      *
-     * @param string              $name    the property name to search for
-     * @param ?\DateTimeInterface $default the default value if the property is not found
-     *
-     * @phpstan-return ($default is null ? (\DateTimeInterface|null) : \DateTimeInterface)
+     * @param string     $name    the property name to search for
+     * @param ?DatePoint $default the default value if the property is not found
      */
-    protected function getPropertyDate(string $name, ?\DateTimeInterface $default = null): ?\DateTimeInterface
+    protected function getPropertyDate(string $name, ?DatePoint $default = null): ?DatePoint
     {
         $timestamp = $this->getPropertyInteger($name);
         if (AbstractProperty::FALSE_VALUE !== $timestamp) {
-            $date = \DateTime::createFromFormat('U', (string) $timestamp);
-            if ($date instanceof \DateTime) {
-                return $date;
-            }
+            return DatePoint::createFromFormat('U', (string) $timestamp);
         }
 
         return $default;

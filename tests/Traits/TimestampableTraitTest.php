@@ -16,6 +16,7 @@ namespace App\Tests\Traits;
 use App\Interfaces\TimestampableInterface;
 use App\Traits\TimestampableTrait;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 
 class TimestampableTraitTest extends TestCase implements TimestampableInterface
 {
@@ -70,7 +71,7 @@ class TimestampableTraitTest extends TestCase implements TimestampableInterface
     public function testCreatedMessageWithValues(): void
     {
         $this->createdBy = null;
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DatePoint();
         $message = $this->getCreatedMessage();
         $actual = $message->getMessage();
         self::assertSame('common.entity_created', $actual);
@@ -78,7 +79,7 @@ class TimestampableTraitTest extends TestCase implements TimestampableInterface
         self::assertCount(1, $actual);
 
         $this->createdBy = 'user';
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DatePoint();
         $message = $this->getCreatedMessage();
         $actual = $message->getMessage();
         self::assertSame('common.entity_created', $actual);
@@ -122,7 +123,7 @@ class TimestampableTraitTest extends TestCase implements TimestampableInterface
     public function testUpdatedMessageWithValues(): void
     {
         $this->updatedBy = null;
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->updatedAt = new DatePoint();
         $message = $this->getUpdatedMessage();
         $actual = $message->getMessage();
         self::assertSame('common.entity_updated', $actual);
@@ -130,7 +131,7 @@ class TimestampableTraitTest extends TestCase implements TimestampableInterface
         self::assertCount(1, $actual);
 
         $this->updatedBy = 'user';
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->updatedAt = new DatePoint();
         $actual = $message->getMessage();
         self::assertSame('common.entity_updated', $actual);
         $actual = $message->getParameters();
@@ -151,7 +152,7 @@ class TimestampableTraitTest extends TestCase implements TimestampableInterface
     public function testUpdateTimestampable(): void
     {
         $user = 'user';
-        $date = new \DateTimeImmutable('2024-05-24');
+        $date = new DatePoint('2024-05-24');
         $actual = $this->updateTimestampable($date, $user);
 
         self::assertTrue($actual);

@@ -21,6 +21,7 @@ use App\Repository\UserRepository;
 use App\Traits\LoggerTrait;
 use App\Utils\DateUtils;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -97,10 +98,9 @@ readonly class ResetPasswordService
     /**
      * Gets the throttle expire date.
      */
-    public function getThrottleAt(ResetPasswordToken $token): \DateTimeInterface
+    public function getThrottleAt(ResetPasswordToken $token): DatePoint
     {
-        /** @phpstan-var \DateTime $expireAt */
-        $expireAt = $token->getExpiresAt();
+        $expireAt = DateUtils::toDatePoint($token->getExpiresAt());
         $interval = DateUtils::createDateInterval(self::THROTTLE_OFFSET);
 
         return DateUtils::sub($expireAt, $interval);
@@ -170,7 +170,7 @@ readonly class ResetPasswordService
             ->context([
                 'token' => $token->getToken(),
                 'username' => $user->getUserIdentifier(),
-                'expires_date' => $token->getExpiresAt(),
+                'expires_date' => $this->getExpiresAt($token),
                 'expires_life_time' => $this->getExpiresLifeTime($token),
                 'throttle_date' => $this->getThrottleAt($token),
                 'throttle_life_time' => $this->getThrottleLifeTime(),
@@ -180,6 +180,11 @@ readonly class ResetPasswordService
     private function getAddressFrom(): Address
     {
         return new Address($this->mailerUserEmail, $this->mailerUserName);
+    }
+
+    private function getExpiresAt(ResetPasswordToken $token): DatePoint
+    {
+        return DatePoint::createFromInterface($token->getExpiresAt());
     }
 
     private function getResetAction(ResetPasswordToken $token): string

@@ -19,6 +19,7 @@ use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -57,7 +58,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
         string $hashedToken
     ): ResetPasswordRequestInterface {
         return $user->setResetPasswordRequest(
-            DateUtils::toDateTimeImmutable($expiresAt),
+            DateUtils::toDatePoint($expiresAt),
             $selector,
             $hashedToken
         );
@@ -96,7 +97,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
      *
      * @phpstan-param User $user
      */
-    public function getMostRecentNonExpiredRequestDate(object $user): ?\DateTimeInterface
+    public function getMostRecentNonExpiredRequestDate(object $user): ?DatePoint
     {
         return $user->isExpired() ? null : $user->getRequestedAt();
     }
@@ -211,7 +212,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
      */
     public function removeExpiredResetPasswordRequests(): int
     {
-        $time = DateUtils::createDateTimeImmutable('-1 week');
+        $time = DateUtils::createDateTime('-1 week');
         $query = $this->createQueryBuilder('e')
             ->update()
             ->set('e.selector', 'NULL')

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Pivot\Field;
 
+use Symfony\Component\Clock\DatePoint;
+
 /**
  * Represents a pivot field.
  */
@@ -72,7 +74,7 @@ class PivotField implements \JsonSerializable
      *
      * @param array $row the dataset row
      */
-    public function getValue(array $row): float|int|string|\DateTimeInterface|null
+    public function getValue(array $row): float|int|string|DatePoint|null
     {
         /** @phpstan-var mixed $value */
         $value = $this->getRowValue($row);

@@ -16,6 +16,7 @@ namespace App\Tests\Service;
 use App\Service\UserExceptionService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -56,7 +57,7 @@ class UserExceptionServiceTest extends TestCase
         // reset password
         yield [new ExpiredResetPasswordTokenException(), 'reset_expired_reset_password_token'];
         yield [new InvalidResetPasswordTokenException(), 'reset_invalid_reset_password_token'];
-        yield [new TooManyPasswordRequestsException(new \DateTime('2000-01-01')), 'reset_too_many_password_request', 1];
+        yield [new TooManyPasswordRequestsException(new DatePoint('2000-01-01')), 'reset_too_many_password_request', 1];
         // mailer
         yield [new TransportException(), 'send_email_error'];
         // other

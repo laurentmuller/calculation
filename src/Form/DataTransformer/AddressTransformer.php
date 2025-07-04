@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace App\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
+use Symfony\Component\Form\Exception\InvalidArgumentException;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Exception\ExceptionInterface;
 
@@ -25,7 +26,7 @@ use Symfony\Component\Mime\Exception\ExceptionInterface;
  */
 class AddressTransformer implements DataTransformerInterface
 {
-    /** @psalm-param mixed $value */
+    /** @phpstan-param mixed $value */
     #[\Override]
     public function reverseTransform(mixed $value): ?Address
     {
@@ -34,29 +35,26 @@ class AddressTransformer implements DataTransformerInterface
         }
 
         if (!\is_string($value)) {
-            $message = \sprintf('A "string" expected, a "%s" given.', \get_debug_type($value));
-            throw new TransformationFailedException($message);
+            throw new UnexpectedTypeException($value, 'string');
         }
 
         try {
             return Address::create($value);
         } catch (ExceptionInterface $e) {
-            $message = \sprintf('Unable to parse the address for the value "%s".', $value);
-            throw new TransformationFailedException($message, $e->getCode(), $e);
+            throw new InvalidArgumentException(\sprintf('Unable to parse the address for the value "%s".', $value), $e->getCode(), $e);
         }
     }
 
-    /** @psalm-param mixed $value */
+    /** @phpstan-param mixed $value */
     #[\Override]
     public function transform(mixed $value): ?string
     {
-        if (null === $value) {
+        if (null === $value || '' === $value) {
             return null;
         }
 
         if (!$value instanceof Address) {
-            $message = \sprintf('An Address expected, a "%s" given.', \get_debug_type($value));
-            throw new TransformationFailedException($message);
+            throw new UnexpectedTypeException($value, Address::class);
         }
 
         return \htmlentities(\str_replace('"', '', $value->toString()));

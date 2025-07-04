@@ -24,6 +24,7 @@ use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Clock\DatePoint;
 
 class CalculationRepositoryTest extends KernelServiceTestCase
 {
@@ -100,8 +101,8 @@ class CalculationRepositoryTest extends KernelServiceTestCase
 
     public function testGetByInterval(): void
     {
-        $from = new \DateTimeImmutable();
-        $to = new \DateTimeImmutable();
+        $from = new DatePoint();
+        $to = new DatePoint();
         $actual = $this->repository->getByInterval($from, $to);
         self::assertEmpty($actual);
     }
@@ -222,7 +223,7 @@ class CalculationRepositoryTest extends KernelServiceTestCase
         self::assertNull($actual[0]);
         self::assertNull($actual[1]);
 
-        $date = new \DateTime('2024-01-01');
+        $date = new DatePoint('2024-01-01');
         $calculation = $this->getCalculation();
         $calculation->setDate($date);
         $this->addEntity($calculation);
@@ -231,8 +232,8 @@ class CalculationRepositoryTest extends KernelServiceTestCase
 
         $actual = $this->repository->getMinMaxDates();
         self::assertCount(2, $actual);
-        self::assertSameDate($expected, $actual[0]);
-        self::assertSameDate($expected, $actual[1]);
+        self::assertTimestampEquals($expected, $actual[0]);
+        self::assertTimestampEquals($expected, $actual[1]);
     }
 
     public function testGetPivot(): void

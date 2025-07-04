@@ -16,8 +16,9 @@ namespace App\Traits;
 use App\Interfaces\UserInterface;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\DatePointType;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -31,8 +32,8 @@ trait TimestampableTrait
     /**
      * The creation date.
      */
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[ORM\Column(type: DatePointType::NAME, nullable: true)]
+    private ?DatePoint $createdAt = null;
 
     /**
      * The creation username.
@@ -44,8 +45,8 @@ trait TimestampableTrait
     /**
      * The updated date.
      */
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeImmutable $updatedAt = null;
+    #[ORM\Column(type: DatePointType::NAME, nullable: true)]
+    private ?DatePoint $updatedAt = null;
 
     /**
      * The updated username.
@@ -54,7 +55,7 @@ trait TimestampableTrait
     #[ORM\Column(length: UserInterface::MAX_USERNAME_LENGTH, nullable: true)]
     private ?string $updatedBy = null;
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DatePoint
     {
         return $this->createdAt;
     }
@@ -74,7 +75,7 @@ trait TimestampableTrait
         return new TranslatableMessage('common.entity_created', ['%content%' => $content]);
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DatePoint
     {
         return $this->updatedAt;
     }
@@ -97,7 +98,7 @@ trait TimestampableTrait
     /**
      * Update the created and modified date and user.
      */
-    public function updateTimestampable(\DateTimeImmutable $date, string $user): bool
+    public function updateTimestampable(DatePoint $date, string $user): bool
     {
         $changed = false;
         if ($this->isNew()) {
@@ -122,9 +123,9 @@ trait TimestampableTrait
         return $changed;
     }
 
-    private function getContentMessage(?\DateTimeImmutable $date, ?string $user): TranslatableMessage
+    private function getContentMessage(?DatePoint $date, ?string $user): TranslatableMessage
     {
-        if (!$date instanceof \DateTimeImmutable && null === $user) {
+        if (!$date instanceof DatePoint && null === $user) {
             return new TranslatableMessage('common.entity_empty');
         }
 
@@ -134,9 +135,9 @@ trait TimestampableTrait
         ]);
     }
 
-    private function getDateMessage(?\DateTimeImmutable $date): string|TranslatableMessage
+    private function getDateMessage(?DatePoint $date): string|TranslatableMessage
     {
-        if ($date instanceof \DateTimeImmutable) {
+        if ($date instanceof DatePoint) {
             return FormatUtils::formatDateTime($date);
         }
 

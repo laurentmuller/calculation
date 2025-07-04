@@ -18,6 +18,7 @@ use App\Calendar\CalendarException;
 use App\Calendar\Month;
 use App\Calendar\Week;
 use App\Utils\FormatUtils;
+use Symfony\Component\Clock\DatePoint;
 
 class CalendarTest extends CalendarTestCase
 {
@@ -38,8 +39,8 @@ class CalendarTest extends CalendarTestCase
         $calendar = new Calendar();
         $calendar->generate(2024);
 
-        $start = new \DateTime('2024-01-01');
-        $end = new \DateTime('2025-01-05');
+        $start = new DatePoint('2024-01-01');
+        $end = new DatePoint('2025-01-05');
         $interval = (int) $start->diff($end)->days + 1;
 
         self::assertCount($interval, $calendar->getDays());
@@ -57,11 +58,11 @@ class CalendarTest extends CalendarTestCase
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $calendar = $this->createCalendar();
-        $date = new \DateTime('2024-01-01');
+        $date = new DatePoint('2024-01-01');
         $actual = $calendar->getDay($date);
         self::assertNotNull($actual);
 
-        $date = new \DateTime('2025-01-31');
+        $date = new DatePoint('2025-01-31');
         $actual = $calendar->getDay($date);
         self::assertNull($actual);
     }
@@ -77,11 +78,11 @@ class CalendarTest extends CalendarTestCase
         $actual = $calendar->getMonth(13);
         self::assertNull($actual);
 
-        $date = new \DateTime('2024-01-10');
+        $date = new DatePoint('2024-01-10');
         $actual = $calendar->getMonth($date);
         self::assertNotNull($actual);
 
-        $date = new \DateTime('2000-01-01');
+        $date = new DatePoint('2000-01-01');
         $actual = $calendar->getMonth($date);
         self::assertNull($actual);
     }
@@ -122,9 +123,9 @@ class CalendarTest extends CalendarTestCase
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $calendar = $this->createCalendar();
 
-        $expected = new \DateTime('today');
+        $expected = new DatePoint('today');
         $actual = $calendar->getToday();
-        self::assertSameDate($expected, $actual->getDate());
+        self::assertDateTimeEquals($expected, $actual->getDate());
     }
 
     public function testGetWeek(): void
@@ -138,11 +139,11 @@ class CalendarTest extends CalendarTestCase
         $actual = $calendar->getWeek(100);
         self::assertNull($actual);
 
-        $date = new \DateTime('2024-01-10');
+        $date = new DatePoint('2024-01-10');
         $actual = $calendar->getWeek($date);
         self::assertNotNull($actual);
 
-        $date = new \DateTime('2000-01-01');
+        $date = new DatePoint('2000-01-01');
         $actual = $calendar->getWeek($date);
         self::assertNull($actual);
     }

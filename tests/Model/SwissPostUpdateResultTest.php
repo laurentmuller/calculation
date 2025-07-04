@@ -16,6 +16,7 @@ namespace App\Tests\Model;
 use App\Model\SwissPostUpdateResult;
 use App\Tests\DateAssertTrait;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 
 class SwissPostUpdateResultTest extends TestCase
 {
@@ -103,9 +104,9 @@ class SwissPostUpdateResultTest extends TestCase
 
     public function testValidity(): void
     {
-        $expected = new \DateTime();
+        $expected = new DatePoint();
         $result = new SwissPostUpdateResult();
         $result->setValidity($expected);
-        self::assertSameDate($expected, $result->getValidity());
+        self::assertTimestampEquals($expected, $result->getValidity());
     }
 }

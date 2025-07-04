@@ -16,6 +16,7 @@ namespace App\Tests\Entity;
 use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Utils\DateUtils;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Exception\MappingNotFoundException;
 use Vich\UploaderBundle\Storage\StorageInterface;
@@ -237,14 +238,14 @@ class UserTest extends EntityValidatorTestCase
         $user = new User();
         self::assertTrue($user->isExpired());
 
-        $expiresAt = new \DateTimeImmutable();
+        $expiresAt = new DatePoint();
         $expiresAt = DateUtils::sub($expiresAt, 'P7D');
         $user->setResetPasswordRequest($expiresAt, '', '');
         self::assertTrue($user->isExpired());
 
-        $expiresAt = new \DateTimeImmutable();
+        $expiresAt = new DatePoint();
         $expiresAt = DateUtils::add($expiresAt, 'P7D');
-        $expiresAt = \DateTimeImmutable::createFromInterface($expiresAt);
+        $expiresAt = DatePoint::createFromInterface($expiresAt);
         $user->setResetPasswordRequest($expiresAt, '', '');
         self::assertFalse($user->isExpired());
     }
@@ -273,7 +274,7 @@ class UserTest extends EntityValidatorTestCase
         $user = new User();
         $selector = 'selector';
         $hashedToken = 'hashedToken';
-        $expiresAt = new \DateTimeImmutable();
+        $expiresAt = new DatePoint();
         $user->setResetPasswordRequest($expiresAt, $selector, $hashedToken);
         self::assertSame($expiresAt, $user->getExpiresAt());
         self::assertSame($selector, $user->getSelector());

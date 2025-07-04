@@ -16,6 +16,7 @@ namespace App\Tests\Calendar;
 use App\Calendar\CalendarException;
 use App\Calendar\Week;
 use App\Utils\FormatUtils;
+use Symfony\Component\Clock\DatePoint;
 
 class WeekTest extends CalendarTestCase
 {
@@ -30,11 +31,11 @@ class WeekTest extends CalendarTestCase
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $week = $this->createWeek();
-        $date = new \DateTime('2024-01-01');
+        $date = new DatePoint('2024-01-01');
         $actual = $week->getDay($date);
         self::assertNotNull($actual);
 
-        $date = new \DateTime('2025-01-31');
+        $date = new DatePoint('2025-01-31');
         $actual = $week->getDay($date);
         self::assertNull($actual);
     }

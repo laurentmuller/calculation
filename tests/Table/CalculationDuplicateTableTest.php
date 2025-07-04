@@ -19,6 +19,7 @@ use App\Table\CalculationDuplicateTable;
 use App\Table\DataQuery;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 
 class CalculationDuplicateTableTest extends TestCase
 {
@@ -73,7 +74,7 @@ class CalculationDuplicateTableTest extends TestCase
     {
         return [
             'id' => 1,
-            'date' => new \DateTime('2024-02-02'),
+            'date' => new DatePoint('2024-02-02'),
             'stateCode' => 'stateCode',
             'customer' => 'customer',
             'description' => 'description',

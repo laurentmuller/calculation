@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\Utils\DateUtils;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -58,19 +58,23 @@ trait SessionAwareTrait
     /**
      * Gets a session attribute, as date value.
      *
-     * @param string                  $key     the attribute name
-     * @param \DateTimeInterface|null $default the default value if not found
+     * @param string         $key     the attribute name
+     * @param DatePoint|null $default the default value if not found
      *
-     * @return \DateTimeInterface|null the session value, if found; the default value otherwise
+     * @return DatePoint|null the session value, if found; the default value otherwise
      *
-     * @phpstan-return ($default is null ? (\DateTimeInterface|null) : \DateTimeInterface)
+     * @phpstan-return ($default is null ? (DatePoint|null) : DatePoint)
      */
-    protected function getSessionDate(string $key, ?\DateTimeInterface $default = null): ?\DateTimeInterface
+    protected function getSessionDate(string $key, ?DatePoint $default = null): ?DatePoint
     {
-        /** @phpstan-var \DateTimeInterface|int|null $value */
+        /** @phpstan-var DatePoint|int|null $value */
         $value = $this->getSessionValue($key, $default);
         if (\is_int($value)) {
-            return DateUtils::createDateTime()->setTimestamp($value);
+            return DatePoint::createFromTimestamp($value);
+        }
+
+        if ($value instanceof \DateTimeInterface) {
+            return DatePoint::createFromInterface($value);
         }
 
         return $value;

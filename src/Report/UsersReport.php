@@ -23,6 +23,7 @@ use App\Pdf\PdfTable;
 use App\Service\FontAwesomeService;
 use App\Service\RoleService;
 use App\Utils\FormatUtils;
+use Symfony\Component\Clock\DatePoint;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 /**
@@ -87,9 +88,9 @@ class UsersReport extends AbstractArrayReport
     /**
      * Format the last login date.
      */
-    private function formatLastLogin(?\DateTimeInterface $date): string
+    private function formatLastLogin(?DatePoint $date): string
     {
-        if ($date instanceof \DateTimeInterface) {
+        if ($date instanceof DatePoint) {
             return FormatUtils::formatDateTime($date);
         }
 

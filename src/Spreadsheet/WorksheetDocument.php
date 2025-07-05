@@ -27,6 +27,7 @@ use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Symfony\Component\Clock\DatePoint;
 
 /**
  * Extends the worksheet class with shortcuts to render cells.
@@ -183,7 +184,7 @@ class WorksheetDocument extends Worksheet
         if (null === $value || '' === $value) {
             return $this;
         }
-        if ($value instanceof \DateTimeInterface) {
+        if ($value instanceof DatePoint) {
             $value = Date::PHPToExcel($value);
         } elseif (\is_bool($value)) {
             $value = (int) $value;

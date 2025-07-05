@@ -15,6 +15,7 @@ namespace App\Tests\Pivot\Field;
 
 use App\Pivot\Field\PivotSemesterField;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 
 class PivotSemesterFieldTest extends TestCase
 {
@@ -55,7 +56,7 @@ class PivotSemesterFieldTest extends TestCase
         $actual = $field->getValue([]);
         self::assertNull($actual);
 
-        $date = new \DateTime('2024-04-01');
+        $date = new DatePoint('2024-04-01');
         $row = ['name' => $date];
         $actual = $field->getValue($row);
         self::assertSame(1, $actual);

@@ -14,20 +14,20 @@ declare(strict_types=1);
 namespace App\Parameter;
 
 use App\Attribute\Parameter;
-use App\Utils\DateUtils;
+use Symfony\Component\Clock\DatePoint;
 
 class DateParameter implements ParameterInterface
 {
     #[Parameter('archive_calculation')]
-    private ?\DateTimeInterface $archive = null;
+    private ?DatePoint $archive = null;
     #[Parameter('last_import')]
-    private ?\DateTimeInterface $import = null;
+    private ?DatePoint $import = null;
     #[Parameter('update_calculation')]
-    private ?\DateTimeInterface $updateCalculations = null;
+    private ?DatePoint $updateCalculations = null;
     #[Parameter('update_product')]
-    private ?\DateTimeInterface $updateProducts = null;
+    private ?DatePoint $updateProducts = null;
 
-    public function getArchive(): ?\DateTimeInterface
+    public function getArchive(): ?DatePoint
     {
         return $this->archive;
     }
@@ -38,45 +38,45 @@ class DateParameter implements ParameterInterface
         return 'parameter_date';
     }
 
-    public function getImport(): ?\DateTimeInterface
+    public function getImport(): ?DatePoint
     {
         return $this->import;
     }
 
-    public function getUpdateCalculations(): ?\DateTimeInterface
+    public function getUpdateCalculations(): ?DatePoint
     {
         return $this->updateCalculations;
     }
 
-    public function getUpdateProducts(): ?\DateTimeInterface
+    public function getUpdateProducts(): ?DatePoint
     {
         return $this->updateProducts;
     }
 
-    public function setArchive(?\DateTimeInterface $archive = null): self
+    public function setArchive(?DatePoint $archive = new DatePoint()): self
     {
-        $this->archive = $archive ?? DateUtils::createDateTime();
+        $this->archive = $archive;
 
         return $this;
     }
 
-    public function setImport(?\DateTimeInterface $import = null): self
+    public function setImport(?DatePoint $import = new DatePoint()): self
     {
-        $this->import = $import ?? DateUtils::createDateTime();
+        $this->import = $import;
 
         return $this;
     }
 
-    public function setUpdateCalculations(?\DateTimeInterface $updateCalculations = null): self
+    public function setUpdateCalculations(?DatePoint $updateCalculations = new DatePoint()): self
     {
-        $this->updateCalculations = $updateCalculations ?? DateUtils::createDateTime();
+        $this->updateCalculations = $updateCalculations;
 
         return $this;
     }
 
-    public function setUpdateProducts(?\DateTimeInterface $updateProducts = null): self
+    public function setUpdateProducts(?DatePoint $updateProducts = new DatePoint()): self
     {
-        $this->updateProducts = $updateProducts ?? DateUtils::createDateTime();
+        $this->updateProducts = $updateProducts;
 
         return $this;
     }

@@ -19,6 +19,7 @@ use App\Enums\EntityPermission;
 use App\Enums\Theme;
 use App\Tests\DateAssertTrait;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 
 class AbstractPropertyTest extends TestCase
 {
@@ -81,14 +82,14 @@ class AbstractPropertyTest extends TestCase
      */
     public function testDate(): void
     {
-        $date = new \DateTimeImmutable();
+        $date = new DatePoint();
         $entity = $this->getEntity();
         self::assertNull($entity->getDate());
         $entity->setDate($date);
         $actual = $entity->getDate();
         // @phpstan-ignore staticMethod.impossibleType
         self::assertNotNull($actual);
-        self::assertSameDate($date, $actual);
+        self::assertTimestampEquals($date, $actual);
     }
 
     /**
@@ -143,11 +144,11 @@ class AbstractPropertyTest extends TestCase
         $entity->setValue($array);
         self::assertSame($array, $entity->getArray());
 
-        $date = new \DateTimeImmutable();
+        $date = new DatePoint();
         $entity->setValue($date);
         $actual = $entity->getDate();
         self::assertNotNull($actual);
-        self::assertSameDate($date, $actual);
+        self::assertTimestampEquals($date, $actual);
 
         $category = new Category();
         self::setId($category, 10);

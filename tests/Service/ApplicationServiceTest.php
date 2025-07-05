@@ -33,6 +33,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\Exception\InvalidArgumentException;
+use Symfony\Component\Clock\DatePoint;
 
 class ApplicationServiceTest extends KernelServiceTestCase
 {
@@ -156,37 +157,37 @@ class ApplicationServiceTest extends KernelServiceTestCase
         $service = $this->getApplicationService();
         self::assertNull($service->getLastArchiveCalculations());
 
-        $expected = new \DateTime();
+        $expected = new DatePoint();
         $service->setLastArchiveCalculations($expected);
 
         $actual = $service->getLastArchiveCalculations();
         // @phpstan-ignore staticMethod.impossibleType
         self::assertNotNull($actual);
-        self::assertSameDate($expected, $actual);
+        self::assertTimestampEquals($expected, $actual);
     }
 
     public function testLastUpdateCalculations(): void
     {
         $service = $this->getApplicationService();
         self::assertNull($service->getLastUpdateCalculations());
-        $expected = new \DateTime();
+        $expected = new DatePoint();
         $service->setLastUpdateCalculations($expected);
         $actual = $service->getLastUpdateCalculations();
         // @phpstan-ignore staticMethod.impossibleType
         self::assertNotNull($actual);
-        self::assertSameDate($expected, $actual);
+        self::assertTimestampEquals($expected, $actual);
     }
 
     public function testLastUpdateProducts(): void
     {
         $service = $this->getApplicationService();
         self::assertNull($service->getLastUpdateProducts());
-        $expected = new \DateTime();
+        $expected = new DatePoint();
         $service->setLastUpdateProducts($expected);
         $actual = $service->getLastUpdateProducts();
         // @phpstan-ignore staticMethod.impossibleType
         self::assertNotNull($actual);
-        self::assertSameDate($expected, $actual);
+        self::assertTimestampEquals($expected, $actual);
     }
 
     public function testMessage(): void

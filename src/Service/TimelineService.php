@@ -18,17 +18,18 @@ use App\Repository\CalculationRepository;
 use App\Traits\GroupByTrait;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
+use Symfony\Component\Clock\DatePoint;
 
 /**
  * Service for the calculation timeline.
  *
  * @phpstan-type ParametersType=array{
- *     from: \DateTimeImmutable,
- *     to: \DateTimeImmutable,
+ *     from: DatePoint,
+ *     to: DatePoint,
  *     interval: string,
  *     date: string,
- *     min_date: \DateTimeImmutable,
- *     max_date: \DateTimeImmutable,
+ *     min_date: DatePoint,
+ *     max_date: DatePoint,
  *     today: ?string,
  *     previous: ?string,
  *     next: ?string,
@@ -61,7 +62,7 @@ readonly class TimelineService
     {
         $interval ??= self::DEFAULT_INTERVAL;
         [$today, $min_date, $max_date] = $this->getDates();
-        $to = null !== $date ? DateUtils::createDateTimeImmutable($date) : $max_date;
+        $to = null !== $date ? DateUtils::createDatePoint($date) : $max_date;
         $from = DateUtils::sub($to, $interval);
 
         return $this->getParameters($today, $from, $to, $interval, $min_date, $max_date);
@@ -104,7 +105,7 @@ readonly class TimelineService
     /**
      * @return array{0: int, 1: array<string, Calculation[]>}
      */
-    private function getCalculations(\DateTimeImmutable $from, \DateTimeImmutable $to): array
+    private function getCalculations(DatePoint $from, DatePoint $to): array
     {
         $calculations = $this->repository->getByInterval($from, $to);
         if ([] === $calculations) {
@@ -121,13 +122,13 @@ readonly class TimelineService
     }
 
     /**
-     * @return array{0: \DateTimeImmutable|null, 1: \DateTimeImmutable, 2: \DateTimeImmutable}
+     * @return array{0: DatePoint|null, 1: DatePoint, 2: DatePoint}
      *
      * @throws \Exception
      */
     private function getDates(): array
     {
-        $today = DateUtils::createDateTimeImmutable('today');
+        $today = DateUtils::createDatePoint('today');
         [$min_date, $max_date] = $this->getMinMaxDates($today);
         if ($today < $min_date || $today > $max_date) {
             $today = null;
@@ -137,11 +138,11 @@ readonly class TimelineService
     }
 
     /**
-     * @return array{0: \DateTimeImmutable, 1: \DateTimeImmutable}
+     * @return array{0: DatePoint, 1: DatePoint}
      *
      * @throws \Exception
      */
-    private function getMinMaxDates(\DateTimeImmutable $default): array
+    private function getMinMaxDates(DatePoint $default): array
     {
         [$min_date, $max_date] = $this->repository->getMinMaxDates();
 
@@ -152,10 +153,10 @@ readonly class TimelineService
      * @throws \Exception
      */
     private function getNextDate(
-        \DateTimeImmutable $date,
+        DatePoint $date,
         string $interval,
-        \DateTimeImmutable $max_date
-    ): ?\DateTimeImmutable {
+        DatePoint $max_date
+    ): ?DatePoint {
         $nextDate = DateUtils::add($date, $interval);
 
         return $nextDate > $max_date ? null : $nextDate;
@@ -167,12 +168,12 @@ readonly class TimelineService
      * @phpstan-return ParametersType
      */
     private function getParameters(
-        ?\DateTimeImmutable $today,
-        \DateTimeImmutable $from,
-        \DateTimeImmutable $to,
+        ?DatePoint $today,
+        DatePoint $from,
+        DatePoint $to,
         string $interval,
-        \DateTimeImmutable $min_date,
-        \DateTimeImmutable $max_date
+        DatePoint $min_date,
+        DatePoint $max_date
     ): array {
         $previous = $this->getPreviousDate($to, $interval, $min_date);
         $next = $this->getNextDate($to, $interval, $max_date);
@@ -200,10 +201,10 @@ readonly class TimelineService
      * @throws \Exception
      */
     private function getPreviousDate(
-        \DateTimeImmutable $date,
+        DatePoint $date,
         string $interval,
-        \DateTimeImmutable $min_date
-    ): ?\DateTimeImmutable {
+        DatePoint $min_date
+    ): ?DatePoint {
         $previous = DateUtils::sub($date, $interval);
 
         return $previous <= $min_date ? null : $previous;

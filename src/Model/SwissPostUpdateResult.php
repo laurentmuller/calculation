@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use Symfony\Component\Clock\DatePoint;
+
 /**
  * Contains the result of updated states, cities and streets.
  *
@@ -32,7 +34,7 @@ class SwissPostUpdateResult
     /** @phpstan-var SwissPostResultType */
     private array $validEntries = ['state' => 0, 'city' => 0, 'street' => 0];
     private int $validEntriesCount = 0;
-    private ?\DateTimeInterface $validity = null;
+    private ?DatePoint $validity = null;
 
     /**
      * Adds a parsed city to the results.
@@ -139,7 +141,7 @@ class SwissPostUpdateResult
     /**
      * Gets the validity date.
      */
-    public function getValidity(): ?\DateTimeInterface
+    public function getValidity(): ?DatePoint
     {
         return $this->validity;
     }
@@ -215,7 +217,7 @@ class SwissPostUpdateResult
     /**
      * Sets the validity date.
      */
-    public function setValidity(\DateTimeInterface $validity): self
+    public function setValidity(DatePoint $validity): self
     {
         $this->validity = $validity;
 

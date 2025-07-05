@@ -24,6 +24,7 @@ use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Twig\Environment;
@@ -77,7 +78,7 @@ class UserTableTest extends EntityTableTestCase
             'email' => 'email1',
             'role' => RoleInterface::ROLE_USER,
             'enabled' => true,
-            'lastLogin' => new \DateTime(),
+            'lastLogin' => new DatePoint(),
             'hashedToken' => 'hashedToken1',
         ];
         $admin = [

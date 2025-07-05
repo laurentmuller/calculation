@@ -39,6 +39,7 @@ use fpdf\Enums\PdfOrientation;
 use fpdf\Enums\PdfRectangleStyle;
 use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfRectangle;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -204,7 +205,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         return $this->colors[$color];
     }
 
-    private function getDateCell(\DateTimeInterface $date, bool $forTable): string
+    private function getDateCell(DatePoint $date, bool $forTable): string
     {
         $pattern = $forTable ? self::PATTERN_TABLE : self::PATTERN_CHART;
 
@@ -221,7 +222,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         return $style;
     }
 
-    private function getURL(\DateTimeInterface $date): string
+    private function getURL(DatePoint $date): string
     {
         $parameters = ['search' => $date->format('m.Y')];
 

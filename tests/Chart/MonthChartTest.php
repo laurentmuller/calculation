@@ -19,6 +19,7 @@ use App\Service\ApplicationService;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -99,7 +100,7 @@ class MonthChartTest extends TestCase
             'month' => 6,
             'margin_percent' => 0.25,
             'margin_amount' => 50.0,
-            'date' => new \DateTime('2024-6-05'),
+            'date' => new DatePoint('2024-6-05'),
         ];
 
         $value1 = [
@@ -110,7 +111,7 @@ class MonthChartTest extends TestCase
             'month' => 6,
             'margin_percent' => -0.25,
             'margin_amount' => 50.0,
-            'date' => new \DateTime('2024-6-05'),
+            'date' => new DatePoint('2024-6-05'),
         ];
 
         return [$value0, $value1];

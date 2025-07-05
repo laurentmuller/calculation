@@ -21,6 +21,7 @@ use App\Service\LogService;
 use App\Utils\FileUtils;
 use App\Utils\LogFilter;
 use App\Utils\LogSorter;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -60,7 +61,7 @@ class LogTable extends AbstractTable implements \Countable
     /**
      * Formats the date.
      */
-    public function formatCreatedAt(\DateTimeInterface $value): string
+    public function formatCreatedAt(DatePoint $value): string
     {
         return Log::formatDate($value);
     }

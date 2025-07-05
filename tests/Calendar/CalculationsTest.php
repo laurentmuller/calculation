@@ -18,6 +18,7 @@ use App\Calendar\CalculationsMonth;
 use App\Calendar\CalculationsWeek;
 use App\Calendar\Calendar;
 use App\Entity\Calculation;
+use Symfony\Component\Clock\DatePoint;
 
 class CalculationsTest extends CalendarTestCase
 {
@@ -71,7 +72,7 @@ class CalculationsTest extends CalendarTestCase
 
     private function createCalculationsDay(): CalculationsDay
     {
-        $date = new \DateTime('2024-01-01');
+        $date = new DatePoint('2024-01-01');
 
         return new CalculationsDay($this->calendar, $date);
     }

@@ -23,6 +23,7 @@ use App\Utils\StringUtils;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
+use Symfony\Component\Clock\DatePoint;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 /**
@@ -124,9 +125,9 @@ class UsersDocument extends AbstractArrayDocument
     /**
      * Format the last login date.
      */
-    private function formatLastLogin(?\DateTimeInterface $date): string
+    private function formatLastLogin(?DatePoint $date): string
     {
-        if ($date instanceof \DateTimeInterface) {
+        if ($date instanceof DatePoint) {
             return FormatUtils::formatDateTime($date);
         }
 

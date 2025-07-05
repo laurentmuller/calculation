@@ -17,6 +17,7 @@ use App\Attribute\Parameter;
 use App\Entity\AbstractProperty;
 use App\Repository\AbstractRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -27,7 +28,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *
  * @template TProperty of AbstractProperty
  *
- * @phpstan-type TValue = scalar|array|\BackedEnum|\DateTimeInterface|null
+ * @phpstan-type TValue = scalar|array|\BackedEnum|DatePoint|null
  * @phpstan-type TParameter = ParameterInterface|class-string<ParameterInterface>
  */
 abstract class AbstractParameters
@@ -314,7 +315,7 @@ abstract class AbstractParameters
             'float' === $metaData->type => $property->getFloat(),
             'int' === $metaData->type => $property->getInteger(),
             'string' === $metaData->type => $property->getValue(),
-            'DateTimeInterface' === $metaData->type => $property->getDate(),
+            DatePoint::class === $metaData->type => $property->getDate(),
             $metaData->isEnumTypeInt() => $this->getBackedEnumInt($metaData->type, $property),
             $metaData->isEnumTypeString() => $this->getBackedEnumString($metaData->type, $property),
             default => throw new \LogicException(\sprintf('Unsupported type "%s" for property "%s".', $metaData->type, $metaData->property))

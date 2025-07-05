@@ -19,6 +19,7 @@ use App\Calendar\Month;
 use App\Calendar\Week;
 use App\Tests\DateAssertTrait;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 
 abstract class CalendarTestCase extends TestCase
 {
@@ -32,7 +33,7 @@ abstract class CalendarTestCase extends TestCase
     protected function createDay(string $datetime = '2024-01-01', int $year = 2024): Day
     {
         $calendar = $this->createCalendar($year);
-        $date = new \DateTime($datetime);
+        $date = new DatePoint($datetime);
 
         return new Day($calendar, $date);
     }

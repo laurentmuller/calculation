@@ -22,6 +22,7 @@ use Doctrine\SqlFormatter\SqlFormatter;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
+use Symfony\Component\Clock\DatePoint;
 
 class LogTest extends TestCase
 {
@@ -108,7 +109,7 @@ class LogTest extends TestCase
      */
     public function testCompare(): void
     {
-        $date = new \DateTimeImmutable();
+        $date = new DatePoint();
         $log1 = new Log();
         $log1->setCreatedAt($date);
         $log2 = new Log();
@@ -187,7 +188,7 @@ class LogTest extends TestCase
 
     public function testFormattedDate(): void
     {
-        $date = new \DateTimeImmutable();
+        $date = new DatePoint();
         $log = new Log();
         $log->setCreatedAt($date);
         $expected = FormatUtils::formatDateTime($date, \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM);
@@ -237,11 +238,11 @@ class LogTest extends TestCase
 
     public function testTimestamp(): void
     {
-        $expected = new \DateTimeImmutable();
+        $expected = new DatePoint();
         $log = new Log();
         $log->setCreatedAt($expected);
         $actual = $log->getTimestamp();
-        self::assertSameDate($expected, $actual);
+        self::assertTimestampEquals($expected, $actual);
     }
 
     public function testUser(): void

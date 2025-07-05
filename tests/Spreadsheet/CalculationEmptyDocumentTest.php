@@ -16,6 +16,7 @@ namespace App\Tests\Spreadsheet;
 use App\Controller\AbstractController;
 use App\Spreadsheet\CalculationsEmptyDocument;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 
 class CalculationEmptyDocumentTest extends TestCase
 {
@@ -23,7 +24,7 @@ class CalculationEmptyDocumentTest extends TestCase
     {
         $data = [
             'id' => 1,
-            'date' => new \DateTime(),
+            'date' => new DatePoint(),
             'stateCode' => 'stateCode',
             'customer' => 'customer',
             'description' => 'description',

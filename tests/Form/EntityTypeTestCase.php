@@ -18,6 +18,7 @@ use App\Form\Extension\TextTypeExtension;
 use App\Form\Extension\UrlTypeExtension;
 use App\Form\Extension\VichImageTypeExtension;
 use App\Interfaces\EntityInterface;
+use App\Tests\DateAssertTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -29,6 +30,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  */
 abstract class EntityTypeTestCase extends TypeTestCase
 {
+    use DateAssertTrait;
     use PreloadedExtensionsTrait;
 
     /**
@@ -37,11 +39,6 @@ abstract class EntityTypeTestCase extends TypeTestCase
     public function testSubmitValidData(): void
     {
         $this->submitValidData();
-    }
-
-    protected static function assertDateEquals(\DateTimeInterface $expected, \DateTimeInterface $actual): void
-    {
-        self::assertSame($expected->format('Y-m-d'), $actual->format('Y-m-d'));
     }
 
     /**

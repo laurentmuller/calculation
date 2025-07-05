@@ -97,7 +97,7 @@ class ReportFooter
 
     private function outputDate(float $width): void
     {
-        $text = $this->date ??= FormatUtils::formatDateTime(DateUtils::createDateTime());
+        $text = $this->date ??= FormatUtils::formatDateTime(DateUtils::createDatePoint());
 
         $this->outputCell($text, $width, PdfTextAlignment::RIGHT);
     }

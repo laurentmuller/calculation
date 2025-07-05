@@ -16,6 +16,7 @@ namespace App\Calendar;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
+use Symfony\Component\Clock\DatePoint;
 
 /**
  * Represents a single day with a date.
@@ -30,18 +31,12 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     final public const KEY_FORMAT = 'Y.m.d';
 
     /**
-     * The date.
-     */
-    private readonly \DateTimeImmutable $date;
-
-    /**
      * @param Calendar  $calendar the parent calendar
-     * @param \DateTime $date     the date
+     * @param DatePoint $date     the date
      */
-    public function __construct(Calendar $calendar, \DateTimeInterface $date)
+    public function __construct(Calendar $calendar, private readonly DatePoint $date)
     {
-        $this->date = \DateTimeImmutable::createFromMutable($date);
-        $key = $date->format(self::KEY_FORMAT);
+        $key = $this->date->format(self::KEY_FORMAT);
         parent::__construct($calendar, $key);
     }
 
@@ -65,7 +60,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     /**
      * Gets the date.
      */
-    public function getDate(): \DateTimeImmutable
+    public function getDate(): DatePoint
     {
         return $this->date;
     }

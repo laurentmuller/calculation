@@ -16,6 +16,7 @@ namespace App\Twig;
 use App\Traits\TranslatorTrait;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Attribute\AsTwigFilter;
 use Twig\Environment;
@@ -71,10 +72,10 @@ final class FormatExtension
     /**
      * Formats a date for the current locale; ignoring the time part.
      *
-     * @param Environment                    $env        the Twig environment
-     * @param \DateTimeInterface|string|null $date       the date
-     * @param string|null                    $dateFormat the date format
-     * @param string|null                    $pattern    the optional pattern to use when formatting
+     * @param Environment           $env        the Twig environment
+     * @param DatePoint|string|null $date       the date
+     * @param string|null           $dateFormat the date format
+     * @param string|null           $pattern    the optional pattern to use when formatting
      *
      * @return string the formatted date
      *
@@ -83,7 +84,7 @@ final class FormatExtension
     #[AsTwigFilter(name: 'locale_date', needsEnvironment: true)]
     public function formatDate(
         Environment $env,
-        \DateTimeInterface|string|null $date,
+        DatePoint|string|null $date,
         ?string $dateFormat = null,
         ?string $pattern = null
     ): string {
@@ -93,11 +94,11 @@ final class FormatExtension
     /**
      * Formats a date and time for the current locale.
      *
-     * @param Environment                    $env        the Twig environment
-     * @param \DateTimeInterface|string|null $date       the date
-     * @param string|null                    $dateFormat the date format
-     * @param string|null                    $timeFormat the time format
-     * @param string|null                    $pattern    the optional pattern to use when formatting
+     * @param Environment           $env        the Twig environment
+     * @param DatePoint|string|null $date       the date
+     * @param string|null           $dateFormat the date format
+     * @param string|null           $timeFormat the time format
+     * @param string|null           $pattern    the optional pattern to use when formatting
      *
      * @return string the formatted date
      *
@@ -106,7 +107,7 @@ final class FormatExtension
     #[AsTwigFilter(name: 'locale_datetime', needsEnvironment: true)]
     public function formatDateTime(
         Environment $env,
-        \DateTimeInterface|string|null $date,
+        DatePoint|string|null $date,
         ?string $dateFormat = null,
         ?string $timeFormat = null,
         ?string $pattern = null
@@ -127,10 +128,10 @@ final class FormatExtension
     /**
      * Formats a time for the current locale; ignoring the date part.
      *
-     * @param Environment                    $env        the Twig environment
-     * @param \DateTimeInterface|string|null $date       the date
-     * @param string|null                    $timeFormat the time format
-     * @param string|null                    $pattern    the optional pattern to use when formatting
+     * @param Environment           $env        the Twig environment
+     * @param DatePoint|string|null $date       the date
+     * @param string|null           $timeFormat the time format
+     * @param string|null           $pattern    the optional pattern to use when formatting
      *
      * @return string the formatted date
      *
@@ -139,7 +140,7 @@ final class FormatExtension
     #[AsTwigFilter(name: 'locale_time', needsEnvironment: true)]
     public function formatTime(
         Environment $env,
-        \DateTimeInterface|string|null $date,
+        DatePoint|string|null $date,
         ?string $timeFormat = null,
         ?string $pattern = null
     ): string {
@@ -152,9 +153,11 @@ final class FormatExtension
         return $this->translator;
     }
 
-    private function convertDate(Environment $env, \DateTimeInterface|string|null $date): \DateTime|\DateTimeImmutable
+    private function convertDate(Environment $env, \DateTimeInterface|string|null $date): DatePoint
     {
-        return $this->getCoreExtension($env)->convertDate($date);
+        $date = $this->getCoreExtension($env)->convertDate($date);
+
+        return DatePoint::createFromInterface($date);
     }
 
     private function getCoreExtension(Environment $env): CoreExtension

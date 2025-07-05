@@ -18,6 +18,7 @@ use App\Repository\UserRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\InMemoryUser;
@@ -41,7 +42,7 @@ class UserRepositoryTest extends KernelServiceTestCase
         $user = $this->getUser();
         $actual = $this->repository->createResetPasswordRequest(
             $user,
-            new \DateTimeImmutable(),
+            new DatePoint(),
             'selector',
             'hashedToken'
         );

@@ -20,7 +20,7 @@ use App\Repository\GroupRepository;
 use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Form\Exception\TransformationFailedException;
+use Symfony\Component\Form\Exception\InvalidArgumentException;
 
 class IdentifierTransformerTest extends TestCase
 {
@@ -77,7 +77,7 @@ class IdentifierTransformerTest extends TestCase
     #[DataProvider('getReverseInvalid')]
     public function testReverseInvalid(mixed $value): void
     {
-        $this->expectException(TransformationFailedException::class);
+        $this->expectException(InvalidArgumentException::class);
         $transformer = $this->createTransformer();
         $transformer->reverseTransform($value);
     }
@@ -124,7 +124,7 @@ class IdentifierTransformerTest extends TestCase
     #[DataProvider('getTransformInvalid')]
     public function testTransformInvalid(mixed $value): void
     {
-        $this->expectException(TransformationFailedException::class);
+        $this->expectException(InvalidArgumentException::class);
         $transformer = $this->createTransformer();
         $transformer->transform($value);
     }

@@ -44,7 +44,7 @@ class CalculationArchiveQueryTest extends TestCase
     {
         $date = DateUtils::sub(DateUtils::removeTime(), 'P6M');
         $query = new CalculationArchiveQuery();
-        self::assertSameDate($date, $query->getDate());
+        self::assertTimestampEquals($date, $query->getDate());
 
         $date = DateUtils::sub(DateUtils::removeTime(), 'P6D');
         $query->setDate($date);

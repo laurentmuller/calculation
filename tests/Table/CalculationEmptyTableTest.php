@@ -20,6 +20,7 @@ use App\Table\DataQuery;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 
 class CalculationEmptyTableTest extends TestCase
 {
@@ -79,7 +80,7 @@ class CalculationEmptyTableTest extends TestCase
     {
         return [
             'id' => 1,
-            'date' => new \DateTime('2024-02-02'),
+            'date' => new DatePoint('2024-02-02'),
             'stateCode' => 'stateCode',
             'customer' => 'customer',
             'description' => 'description',

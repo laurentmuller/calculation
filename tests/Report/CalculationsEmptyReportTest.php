@@ -16,6 +16,7 @@ namespace App\Tests\Report;
 use App\Controller\AbstractController;
 use App\Report\CalculationsEmptyReport;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 
 class CalculationsEmptyReportTest extends TestCase
 {
@@ -24,7 +25,7 @@ class CalculationsEmptyReportTest extends TestCase
         $controller = $this->createMock(AbstractController::class);
         $data = [
             'id' => 1,
-            'date' => new \DateTime(),
+            'date' => new DatePoint(),
             'stateCode' => 'stateCode',
             'customer' => 'customer',
             'description' => 'description',

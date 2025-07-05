@@ -16,7 +16,7 @@ namespace App\Tests\DataTransformer;
 use App\Form\DataTransformer\AddressTransformer;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Form\Exception\TransformationFailedException;
+use Symfony\Component\Form\Exception\InvalidArgumentException;
 use Symfony\Component\Mime\Address;
 
 class AddressTransformerTest extends TestCase
@@ -71,7 +71,7 @@ class AddressTransformerTest extends TestCase
     #[DataProvider('getReverseTransformInvalid')]
     public function testReverseTransformInvalid(mixed $value): void
     {
-        $this->expectException(TransformationFailedException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->transformer->reverseTransform($value);
     }
 
@@ -85,7 +85,7 @@ class AddressTransformerTest extends TestCase
     #[DataProvider('getTransformInvalid')]
     public function testTransformInvalid(mixed $value): void
     {
-        $this->expectException(TransformationFailedException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->transformer->transform($value);
     }
 

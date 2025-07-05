@@ -22,6 +22,7 @@ use App\Form\User\ResetChangePasswordType;
 use App\Security\LoginFormAuthenticator;
 use App\Service\ResetPasswordService;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,7 +68,7 @@ class ResetPasswordController extends AbstractController
         $token = $this->getTokenObjectFromSession() ?? $this->service->generateFakeResetToken();
 
         return $this->render('reset_password/check_email.html.twig', [
-            'expires_date' => $token->getExpiresAt(),
+            'expires_date' => $this->getExpiresAt($token),
             'expires_life_time' => $this->service->getExpiresLifeTime($token),
             'throttle_date' => $this->service->getThrottleAt($token),
             'throttle_life_time' => $this->service->getThrottleLifeTime(),
@@ -137,6 +138,11 @@ class ResetPasswordController extends AbstractController
         }
 
         return $this->render('reset_password/reset.html.twig', ['form' => $form]);
+    }
+
+    private function getExpiresAt(ResetPasswordToken $token): DatePoint
+    {
+        return DatePoint::createFromInterface($token->getExpiresAt());
     }
 
     private function redirectAfterReset(Security $security, User $user): Response

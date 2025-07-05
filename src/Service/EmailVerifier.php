@@ -16,6 +16,7 @@ namespace App\Service;
 use App\Entity\User;
 use App\Mime\RegistrationEmail;
 use App\Repository\UserRepository;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -56,7 +57,7 @@ readonly class EmailVerifier
         $signature = $this->generateSignature($routeName, $user);
         $email->context([
             'username' => $user->getUserIdentifier(),
-            'expires_date' => $signature->getExpiresAt(),
+            'expires_date' => $this->getExpiresAt($signature),
             'expires_life_time' => $this->getExpiresLifeTime($signature),
         ])->action($this->trans('registration.action'), $signature->getSignedUrl());
 
@@ -70,6 +71,11 @@ readonly class EmailVerifier
         $parameters = ['id' => $id];
 
         return $this->helper->generateSignature($routeName, $id, $email, $parameters);
+    }
+
+    private function getExpiresAt(VerifyEmailSignatureComponents $signature): DatePoint
+    {
+        return DatePoint::createFromInterface($signature->getExpiresAt());
     }
 
     private function getExpiresLifeTime(VerifyEmailSignatureComponents $signature): string

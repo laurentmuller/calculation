@@ -16,6 +16,7 @@ namespace App\Entity;
 use App\Interfaces\EntityInterface;
 use App\Utils\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -79,14 +80,11 @@ abstract class AbstractProperty extends AbstractEntity
     /**
      * Gets this property value as date.
      */
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?DatePoint
     {
         $timestamp = $this->getInteger();
         if (self::FALSE_VALUE !== $timestamp) {
-            $date = \DateTime::createFromFormat('U', (string) $timestamp);
-            if ($date instanceof \DateTime) {
-                return $date;
-            }
+            return DatePoint::createFromTimestamp($timestamp);
         }
 
         return null;
@@ -149,9 +147,9 @@ abstract class AbstractProperty extends AbstractEntity
     /**
      * Sets the property value as date.
      */
-    public function setDate(?\DateTimeInterface $value): static
+    public function setDate(?DatePoint $value): static
     {
-        return $this->setInteger($value instanceof \DateTimeInterface ? $value->getTimestamp() : self::FALSE_VALUE);
+        return $this->setInteger($value instanceof DatePoint ? $value->getTimestamp() : self::FALSE_VALUE);
     }
 
     /**
@@ -206,7 +204,7 @@ abstract class AbstractProperty extends AbstractEntity
         if (\is_array($value)) {
             return $this->setArray($value);
         }
-        if ($value instanceof \DateTimeInterface) {
+        if ($value instanceof DatePoint) {
             return $this->setDate($value);
         }
         if ($value instanceof EntityInterface) {

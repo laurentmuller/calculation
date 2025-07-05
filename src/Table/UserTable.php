@@ -23,6 +23,7 @@ use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -69,9 +70,9 @@ class UserTable extends AbstractEntityTable
     /**
      * Format the last login date.
      */
-    public function formatLastLogin(?\DateTimeInterface $date): string
+    public function formatLastLogin(?DatePoint $date): string
     {
-        if ($date instanceof \DateTimeInterface) {
+        if ($date instanceof DatePoint) {
             return FormatUtils::formatDateTime($date);
         }
 

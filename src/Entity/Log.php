@@ -22,6 +22,7 @@ use App\Utils\StringUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\SqlFormatter\SqlFormatter;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -51,7 +52,7 @@ class Log extends AbstractEntity implements ComparableInterface
 
     #[Assert\NotNull]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    private \DateTimeImmutable $createdAt;
+    private DatePoint $createdAt;
 
     /**
      * @var ?array<string, string>
@@ -66,7 +67,7 @@ class Log extends AbstractEntity implements ComparableInterface
 
     public function __construct()
     {
-        $this->createdAt = DateUtils::createDateTimeImmutable();
+        $this->createdAt = DateUtils::createDatePoint();
     }
 
     #[\Override]
@@ -77,7 +78,7 @@ class Log extends AbstractEntity implements ComparableInterface
         return 0 !== $result ? $result : $this->getId() <=> $other->getId();
     }
 
-    public static function formatDate(\DateTimeInterface $date): string
+    public static function formatDate(DatePoint $date): string
     {
         return FormatUtils::formatDateTime($date, \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM);
     }
@@ -106,7 +107,7 @@ class Log extends AbstractEntity implements ComparableInterface
         return $this->context;
     }
 
-    public function getCreatedAt(): \DateTimeImmutable
+    public function getCreatedAt(): DatePoint
     {
         return $this->createdAt;
     }
@@ -169,7 +170,7 @@ class Log extends AbstractEntity implements ComparableInterface
         return $this;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(DatePoint $createdAt): self
     {
         $this->createdAt = $createdAt;
 

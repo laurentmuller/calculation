@@ -23,9 +23,10 @@ use App\Utils\DateUtils;
 use App\Utils\FileUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\DatePointType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Address;
@@ -60,8 +61,8 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     #[ORM\Column(options: ['default' => true])]
     private bool $enabled = true;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeImmutable $expiresAt = null;
+    #[ORM\Column(type: DatePointType::NAME, nullable: true)]
+    private ?DatePoint $expiresAt = null;
 
     #[Assert\Length(max: 100)]
     #[ORM\Column(length: 100, nullable: true)]
@@ -81,8 +82,8 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     #[ORM\Column(nullable: true)]
     private ?string $imageName = null;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeImmutable $lastLogin = null;
+    #[ORM\Column(type: DatePointType::NAME, nullable: true)]
+    private ?DatePoint $lastLogin = null;
 
     #[Assert\NotBlank]
     #[ORM\Column]
@@ -102,8 +103,8 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     )]
     private Collection $properties;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeImmutable $requestedAt = null;
+    #[ORM\Column(type: DatePointType::NAME, nullable: true)]
+    private ?DatePoint $requestedAt = null;
 
     #[Assert\Length(max: 20)]
     #[ORM\Column(length: 20, nullable: true)]
@@ -244,9 +245,9 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     }
 
     #[\Override]
-    public function getExpiresAt(): \DateTimeInterface
+    public function getExpiresAt(): DatePoint
     {
-        return $this->expiresAt ?? DateUtils::createDateTimeImmutable();
+        return $this->expiresAt ?? DateUtils::createDatePoint();
     }
 
     #[\Override]
@@ -295,7 +296,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     /**
      * Gets the date of the last login.
      */
-    public function getLastLogin(): ?\DateTimeInterface
+    public function getLastLogin(): ?DatePoint
     {
         return $this->lastLogin;
     }
@@ -325,9 +326,9 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     }
 
     #[\Override]
-    public function getRequestedAt(): \DateTimeInterface
+    public function getRequestedAt(): DatePoint
     {
-        return $this->requestedAt ?? DateUtils::createDateTimeImmutable();
+        return $this->requestedAt ?? DateUtils::createDatePoint();
     }
 
     public function getSelector(): ?string
@@ -376,7 +377,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     #[\Override]
     public function isExpired(): bool
     {
-        return !$this->expiresAt instanceof \DateTimeInterface || $this->expiresAt->getTimestamp() <= \time();
+        return !$this->expiresAt instanceof DatePoint || $this->expiresAt->getTimestamp() <= \time();
     }
 
     /**
@@ -443,7 +444,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     {
         $this->imageFile = $imageFile;
         if ($update) {
-            $this->updatedAt = DateUtils::createDateTimeImmutable();
+            $this->updatedAt = DateUtils::createDatePoint();
         }
 
         return $this;
@@ -475,12 +476,12 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
      * @param string $selector    a non-hashed random string used to fetch a request from persistence
      * @param string $hashedToken the hashed token used to verify a reset request
      */
-    public function setResetPasswordRequest(\DateTimeImmutable $expiresAt, string $selector, string $hashedToken): self
+    public function setResetPasswordRequest(DatePoint $expiresAt, string $selector, string $hashedToken): self
     {
         $this->expiresAt = $expiresAt;
         $this->selector = $selector;
         $this->hashedToken = $hashedToken;
-        $this->requestedAt = DateUtils::createDateTimeImmutable();
+        $this->requestedAt = DateUtils::createDatePoint();
 
         return $this;
     }
@@ -512,7 +513,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
      */
     public function updateLastLogin(): self
     {
-        $this->lastLogin = DateUtils::createDateTimeImmutable();
+        $this->lastLogin = DateUtils::createDatePoint();
 
         return $this;
     }

@@ -15,6 +15,7 @@ namespace App\Model;
 
 use App\Entity\CalculationState;
 use App\Utils\DateUtils;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
@@ -23,7 +24,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 class CalculationUpdateQuery extends AbstractSimulateQuery
 {
-    private \DateTimeImmutable $date;
+    private DatePoint $date;
     private string $interval = 'P1M';
     /** @var CalculationState[] */
     #[Assert\Count(min: 1)]
@@ -34,10 +35,10 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
      */
     public function __construct()
     {
-        $this->date = DateUtils::removeTime(DateUtils::createDateTimeImmutable());
+        $this->date = DateUtils::removeTime();
     }
 
-    public function getDate(): \DateTimeImmutable
+    public function getDate(): DatePoint
     {
         return $this->date;
     }
@@ -45,7 +46,7 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
     /**
      * @throws \Exception
      */
-    public function getDateFrom(): \DateTimeImmutable
+    public function getDateFrom(): DatePoint
     {
         return DateUtils::sub($this->date, $this->interval);
     }
@@ -79,7 +80,7 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
         return $this->mapStates(static fn (CalculationState $state): int => (int) $state->getId());
     }
 
-    public function setDate(\DateTimeImmutable $date): self
+    public function setDate(DatePoint $date): self
     {
         $this->date = $date;
 

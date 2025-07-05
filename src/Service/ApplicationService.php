@@ -34,6 +34,7 @@ use App\Traits\MathTrait;
 use App\Traits\PropertyServiceTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 
@@ -246,7 +247,7 @@ class ApplicationService implements PropertyServiceInterface
     /**
      * Gets the last archive calculations date.
      */
-    public function getLastArchiveCalculations(): ?\DateTimeInterface
+    public function getLastArchiveCalculations(): ?DatePoint
     {
         return $this->getPropertyDate(self::P_DATE_CALCULATION);
     }
@@ -254,7 +255,7 @@ class ApplicationService implements PropertyServiceInterface
     /**
      * Gets the last import of Swiss cities.
      */
-    public function getLastImport(): ?\DateTimeInterface
+    public function getLastImport(): ?DatePoint
     {
         return $this->getPropertyDate(self::P_DATE_IMPORT);
     }
@@ -262,7 +263,7 @@ class ApplicationService implements PropertyServiceInterface
     /**
      * Gets the last update calculations date.
      */
-    public function getLastUpdateCalculations(): ?\DateTimeInterface
+    public function getLastUpdateCalculations(): ?DatePoint
     {
         return $this->getPropertyDate(self::P_UPDATE_CALCULATION);
     }
@@ -270,7 +271,7 @@ class ApplicationService implements PropertyServiceInterface
     /**
      * Gets the last products update.
      */
-    public function getLastUpdateProducts(): ?\DateTimeInterface
+    public function getLastUpdateProducts(): ?DatePoint
     {
         return $this->getPropertyDate(self::P_DATE_PRODUCT);
     }
@@ -520,7 +521,7 @@ class ApplicationService implements PropertyServiceInterface
     /**
      * Set the date of the last archive calculations.
      */
-    public function setLastArchiveCalculations(\DateTimeInterface $date = new \DateTime()): bool
+    public function setLastArchiveCalculations(DatePoint $date = new DatePoint()): bool
     {
         return $this->setProperty(PropertyServiceInterface::P_DATE_CALCULATION, $date);
     }
@@ -528,7 +529,7 @@ class ApplicationService implements PropertyServiceInterface
     /**
      * Set the date of the last update calculations.
      */
-    public function setLastUpdateCalculations(\DateTimeInterface $date = new \DateTime()): bool
+    public function setLastUpdateCalculations(DatePoint $date = new DatePoint()): bool
     {
         return $this->setProperty(PropertyServiceInterface::P_UPDATE_CALCULATION, $date);
     }
@@ -536,7 +537,7 @@ class ApplicationService implements PropertyServiceInterface
     /**
      * Set the date of the last update of product prices.
      */
-    public function setLastUpdateProducts(\DateTimeInterface $date = new \DateTime()): bool
+    public function setLastUpdateProducts(DatePoint $date = new DatePoint()): bool
     {
         return $this->setProperty(PropertyServiceInterface::P_DATE_PRODUCT, $date);
     }

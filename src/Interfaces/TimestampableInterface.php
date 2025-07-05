@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Interfaces;
 
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Translation\TranslatableMessage;
 
 /**
@@ -23,7 +24,7 @@ interface TimestampableInterface extends EntityInterface
     /**
      * Gets the creation date.
      */
-    public function getCreatedAt(): ?\DateTimeInterface;
+    public function getCreatedAt(): ?DatePoint;
 
     /**
      * Gets the creation username.
@@ -40,7 +41,7 @@ interface TimestampableInterface extends EntityInterface
     /**
      * Gets the updated date.
      */
-    public function getUpdatedAt(): ?\DateTimeInterface;
+    public function getUpdatedAt(): ?DatePoint;
 
     /**
      * Gets the updated username.
@@ -59,5 +60,5 @@ interface TimestampableInterface extends EntityInterface
      *
      * @return bool true if the existing values are modified
      */
-    public function updateTimestampable(\DateTimeImmutable $date, string $user): bool;
+    public function updateTimestampable(DatePoint $date, string $user): bool;
 }

@@ -98,7 +98,7 @@ class AkismetService extends AbstractHttpClientService
      */
     public function activity(?int $year = null, ?int $month = null): array|false
     {
-        $date = DateUtils::createDateTime('today');
+        $date = DateUtils::createDatePoint('today');
         $year ??= (int) $date->format('Y');
         $month ??= (int) $date->format('m');
         $body = [

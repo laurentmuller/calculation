@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Pivot\Field;
 
+use Symfony\Component\Clock\DatePoint;
+
 /**
  * The pivot field that extracts quarter (1 or 4).
  */
@@ -61,7 +63,7 @@ class PivotQuarterField extends PivotDateField
     }
 
     #[\Override]
-    protected function doGetValue(\DateTimeInterface $date): int
+    protected function doGetValue(DatePoint $date): int
     {
         $value = parent::doGetValue($date);
 

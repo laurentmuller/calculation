@@ -26,6 +26,7 @@ use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\FormatUtils;
 use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
@@ -169,11 +170,9 @@ class CalculationUpdateService implements ServiceSubscriberInterface
             ->getResult();
     }
 
-    private function getDate(\DateTimeImmutable $default): \DateTimeImmutable
+    private function getDate(DatePoint $default): DatePoint
     {
-        $date = $this->getSessionDate(self::KEY_DATE, $default);
-
-        return $date instanceof \DateTimeImmutable ? $date : $default;
+        return $this->getSessionDate(self::KEY_DATE, $default);
     }
 
     /**

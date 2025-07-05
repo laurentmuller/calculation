@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Calendar;
 
+use Symfony\Component\Clock\DatePoint;
+
 /**
  * Trait to manage an array of days.
  */
@@ -38,15 +40,15 @@ trait DaysTrait
     /**
      * Gets the day for the given key.
      *
-     * @param \DateTimeInterface|string $key the day key. Can be an integer, a date time interface or a formatted date ('Y.m.d').
+     * @param DatePoint|string $key the day key. Can be an integer, a date time interface or a formatted date ('Y.m.d').
      *
      * @return Day|null the day, if found, null otherwise
      *
      * @see Day::KEY_FORMAT
      */
-    public function getDay(\DateTimeInterface|string $key): ?Day
+    public function getDay(DatePoint|string $key): ?Day
     {
-        if ($key instanceof \DateTimeInterface) {
+        if ($key instanceof DatePoint) {
             $key = $key->format(Day::KEY_FORMAT);
         }
 
@@ -66,7 +68,7 @@ trait DaysTrait
     /**
      * Gets the first date or null if empty.
      */
-    public function getFirstDate(): ?\DateTimeImmutable
+    public function getFirstDate(): ?DatePoint
     {
         return $this->getFirstDay()?->getDate();
     }
@@ -82,7 +84,7 @@ trait DaysTrait
     /**
      * Gets the last date or null if empty.
      */
-    public function getLastDate(): ?\DateTimeImmutable
+    public function getLastDate(): ?DatePoint
     {
         return $this->getLastDay()?->getDate();
     }

@@ -16,6 +16,7 @@ namespace App\Calendar;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
+use Symfony\Component\Clock\DatePoint;
 
 /**
  * Represents a calendar for a specified year.
@@ -114,8 +115,8 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     {
         $year = (int) $this->year;
         $name = StringUtils::getShortName($this);
-        $firstDate = DateUtils::createDateTimeImmutable(\sprintf('%d-01-01', $year));
-        $lastDate = DateUtils::createDateTimeImmutable(\sprintf('%d-12-31', $year));
+        $firstDate = DateUtils::createDatePoint(\sprintf('%d-01-01', $year));
+        $lastDate = DateUtils::createDatePoint(\sprintf('%d-12-31', $year));
         $first = FormatUtils::formatDate($firstDate);
         $last = FormatUtils::formatDate($lastDate);
 
@@ -134,13 +135,13 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         $this->year = DateUtils::completYear($year);
         $this->key = (string) $this->year;
         $this->reset();
-        $firstYearDate = DateUtils::createDateTimeImmutable(\sprintf('1 January %d', $this->year));
-        $lastYearDate = DateUtils::createDateTimeImmutable(\sprintf('31 December %d', $this->year));
-        $firstDate = DateUtils::createDateTime(\sprintf('first monday of January %s', $this->year));
+        $firstYearDate = DateUtils::createDatePoint(\sprintf('1 January %d', $this->year));
+        $lastYearDate = DateUtils::createDatePoint(\sprintf('31 December %d', $this->year));
+        $firstDate = DateUtils::createDatePoint(\sprintf('first monday of January %s', $this->year));
         if ($firstDate > $firstYearDate) {
             $firstDate = DateUtils::sub($firstDate, 'P1W');
         }
-        $lastDate = DateUtils::createDateTime(\sprintf('last sunday of December %d', $this->year));
+        $lastDate = DateUtils::createDatePoint(\sprintf('last sunday of December %d', $this->year));
         if ($lastDate < $lastYearDate) {
             $lastDate = DateUtils::add($lastDate, 'P1W');
         }
@@ -164,7 +165,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
                 $currentWeek = $this->createWeek($weekNumber);
             }
             $currentWeek->addDay($day);
-            $firstDate->add($interval);
+            $firstDate = $firstDate->add($interval);
         }
 
         return $this;
@@ -173,15 +174,15 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     /**
      * Gets the month for the given key.
      *
-     * @param \DateTimeInterface|int|string $key the month key. Can be an integer (1-12), a date time interface or a formatted date ('Y.m').
+     * @param DatePoint|int|string $key the month key. Can be an integer (1-12), a date time interface or a formatted date ('Y.m').
      *
      * @return Month|null the month, if found, null otherwise
      *
      * @see Month::KEY_FORMAT
      */
-    public function getMonth(\DateTimeInterface|int|string $key): ?Month
+    public function getMonth(DatePoint|int|string $key): ?Month
     {
-        if ($key instanceof \DateTimeInterface) {
+        if ($key instanceof DatePoint) {
             $key = $key->format(Month::KEY_FORMAT);
         }
         if (\is_int($key)) {
@@ -246,7 +247,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     public function getToday(): Day
     {
         if (!$this->today instanceof Day) {
-            $date = DateUtils::createDateTime('today');
+            $date = DateUtils::createDatePoint('today');
             $this->today = new Day($this, $date);
         }
 
@@ -256,16 +257,16 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     /**
      * Gets the week for the given key.
      *
-     * @param \DateTimeInterface|int|string $key the week key. Can be an integer (1-53), a date time interface
-     *                                           or a formatted date ('Y.W').
+     * @param DatePoint|int|string $key the week key. Can be an integer (1-53), a date time interface
+     *                                  or a formatted date ('Y.W').
      *
      * @return Week|null the week, if found, null otherwise
      *
      * @see Week::KEY_FORMAT
      */
-    public function getWeek(\DateTimeInterface|int|string $key): ?Week
+    public function getWeek(DatePoint|int|string $key): ?Week
     {
-        if ($key instanceof \DateTimeInterface) {
+        if ($key instanceof DatePoint) {
             $key = $key->format(Week::KEY_FORMAT);
         }
         foreach ($this->weeks as $week) {
@@ -354,9 +355,9 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     /**
      * Create and add a day.
      *
-     * @param \DateTime $date the day date
+     * @param DatePoint $date the day date
      */
-    private function createDay(\DateTimeInterface $date): Day
+    private function createDay(DatePoint $date): Day
     {
         $day = new $this->dayModel($this, $date);
         $this->addDay($day);

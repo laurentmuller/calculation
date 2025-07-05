@@ -16,6 +16,7 @@ namespace App\Tests\Report;
 use App\Controller\AbstractController;
 use App\Report\CalculationByMonthReport;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -35,7 +36,7 @@ class CalculationByMonthReportTest extends TestCase
                 'month' => 3,
                 'margin_percent' => 0.15,
                 'margin_amount' => 7.0,
-                'date' => new \DateTime(),
+                'date' => new DatePoint(),
             ];
         }
         $report = $this->createReport($entities);
@@ -53,7 +54,7 @@ class CalculationByMonthReportTest extends TestCase
             'month' => 1,
             'margin_percent' => 0.1,
             'margin_amount' => 5.0,
-            'date' => new \DateTime(),
+            'date' => new DatePoint(),
         ];
         $data2 = [
             'count' => 10,
@@ -63,7 +64,7 @@ class CalculationByMonthReportTest extends TestCase
             'month' => 2,
             'margin_percent' => 0.2,
             'margin_amount' => 10.0,
-            'date' => new \DateTime(),
+            'date' => new DatePoint(),
         ];
         $data3 = [
             'count' => 5,
@@ -73,7 +74,7 @@ class CalculationByMonthReportTest extends TestCase
             'month' => 3,
             'margin_percent' => 0.15,
             'margin_amount' => 7.0,
-            'date' => new \DateTime(),
+            'date' => new DatePoint(),
         ];
         $data4 = [
             'count' => 5,
@@ -83,7 +84,7 @@ class CalculationByMonthReportTest extends TestCase
             'month' => 3,
             'margin_percent' => 0.15,
             'margin_amount' => 7.0,
-            'date' => new \DateTime(),
+            'date' => new DatePoint(),
         ];
         $entities = [$data1, $data2, $data3, $data4];
         $report = $this->createReport($entities);

@@ -20,6 +20,7 @@ use Monolog\LogRecord;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Clock\DatePoint;
 
 class UserRequestProcessorTest extends TestCase
 {
@@ -53,7 +54,7 @@ class UserRequestProcessorTest extends TestCase
     private function createRecord(): LogRecord
     {
         return new LogRecord(
-            new \DateTimeImmutable(),
+            new DatePoint(),
             'channel',
             Level::Debug,
             'message'

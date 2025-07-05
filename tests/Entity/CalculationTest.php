@@ -23,6 +23,7 @@ use App\Entity\Group;
 use App\Entity\GroupMargin;
 use App\Entity\Product;
 use App\Utils\FormatUtils;
+use Symfony\Component\Clock\DatePoint;
 
 class CalculationTest extends EntityValidatorTestCase
 {
@@ -310,7 +311,7 @@ class CalculationTest extends EntityValidatorTestCase
         self::assertTrue($calculation->isEditable());
         self::assertTrue($calculation->isEmpty());
 
-        $date = new \DateTime();
+        $date = new DatePoint();
         $calculation->setDate($date);
         self::assertSame($date, $calculation->getDate());
 
@@ -340,7 +341,7 @@ class CalculationTest extends EntityValidatorTestCase
 
     public function testFormattedDate(): void
     {
-        $date = new \DateTimeImmutable('2000-01-01');
+        $date = new DatePoint('2000-01-01');
         $calculation = new Calculation();
         $calculation->setDate($date);
         $actual = $calculation->getFormattedDate();

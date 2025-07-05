@@ -180,11 +180,11 @@ class FormHelperTest extends TypeTestCase
         self::assertSameOption($actual, 'mapped', false);
     }
 
-    public function testDateType(): void
+    public function testDatePointType(): void
     {
         $helper = $this->getFormHelper();
         $actual = $helper->field(self::FIELD)
-            ->addDateType()
+            ->addDatePointType()
             ->createForm();
         self::assertCount(1, $actual);
         self::assertSameType($actual, DateType::class);

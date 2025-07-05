@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Calendar;
 
 use App\Utils\FormatUtils;
+use Symfony\Component\Clock\DatePoint;
 
 class DayTest extends CalendarTestCase
 {
@@ -28,10 +29,10 @@ class DayTest extends CalendarTestCase
     public function testGetDate(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
-        $expected = new \DateTime('2024-01-01');
+        $expected = new DatePoint('2024-01-01');
         $day = $this->createDay();
         $actual = $day->getDate();
-        self::assertSameDate($expected, $actual);
+        self::assertTimestampEquals($expected, $actual);
     }
 
     public function testGetDayOfYear(): void
@@ -79,8 +80,8 @@ class DayTest extends CalendarTestCase
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $day = $this->createDay();
         $actual = $day->getTimestamp();
-        $expected = new \DateTime('2024-01-01');
-        self::assertSameDate($expected, $actual);
+        $expected = new DatePoint('2024-01-01');
+        self::assertTimestampEquals($expected, $actual);
     }
 
     public function testGetWeek(): void

@@ -22,6 +22,7 @@ use App\Table\CalculationBelowTable;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\Clock\DatePoint;
 use Twig\Environment;
 
 /**
@@ -52,7 +53,7 @@ class CalculationBelowTableTest extends EntityTableTestCase
     {
         $entityEditable = [
             'id' => 1,
-            'date' => new \DateTime('2024-11-10'),
+            'date' => new DatePoint('2024-11-10'),
             'customer' => 'customer',
             'description' => 'description',
             'overallTotal' => 1000.0,
@@ -63,7 +64,7 @@ class CalculationBelowTableTest extends EntityTableTestCase
         ];
         $entityNotEditable = [
             'id' => 2,
-            'date' => new \DateTime('2024-11-10'),
+            'date' => new DatePoint('2024-11-10'),
             'customer' => 'customer',
             'description' => 'description',
             'overallTotal' => 1000.0,

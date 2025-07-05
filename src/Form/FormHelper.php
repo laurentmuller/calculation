@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Form\DataTransformer\DatePointToDateTimeTransformer;
 use App\Form\Type\CurrentPasswordType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
@@ -235,11 +236,11 @@ class FormHelper
     }
 
     /**
-     * Add a date type to the builder and reset all values to the default.
+     * Add a date type, mapping a DatePoint, to the builder and reset all values to the default.
      */
-    public function addDateType(): self
+    public function addDatePointType(): self
     {
-        return $this->updateOption('widget', 'single_text')
+        return $this->modelTransformer(new DatePointToDateTimeTransformer())
             ->add(DateType::class);
     }
 

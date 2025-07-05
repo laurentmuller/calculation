@@ -25,6 +25,7 @@ use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
@@ -70,7 +71,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         $sources = $this->getSources(false);
         $date = $this->getDateMax($sources);
 
-        return $date instanceof \DateTimeImmutable ? DateUtils::formatFormDate(DateUtils::sub($date, 'P1M')) : null;
+        return $date instanceof DatePoint ? DateUtils::formatFormDate(DateUtils::sub($date, 'P1M')) : null;
     }
 
     /**
@@ -81,7 +82,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         $sources = $this->getSources(false);
         $date = $this->getDateMin($sources);
 
-        return $date instanceof \DateTimeImmutable ? DateUtils::formatFormDate($date) : null;
+        return $date instanceof DatePoint ? DateUtils::formatFormDate($date) : null;
     }
 
     /**
@@ -120,7 +121,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     {
         $target = $query->getTarget();
         $sources = $query->getSources();
-        $date = DateUtils::toDateTimeImmutable($query->getDate());
+        $date = $query->getDate();
 
         $result = new CalculationArchiveResult();
         $calculations = $this->getCalculations($date, $sources);
@@ -145,7 +146,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     /**
      * @param CalculationState[] $sources
      */
-    private function createQueryBuilder(array $sources, ?\DateTimeImmutable $date = null): QueryBuilder
+    private function createQueryBuilder(array $sources, ?DatePoint $date = null): QueryBuilder
     {
         $builder = $this->calculationRepository
             ->createQueryBuilder('c');
@@ -153,7 +154,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
             $builder->andWhere('c.state IN (:states)')
                 ->setParameter('states', $sources);
         }
-        if ($date instanceof \DateTimeImmutable) {
+        if ($date instanceof DatePoint) {
             $builder->andWhere('c.date <= :date')
                 ->setParameter('date', $date, Types::DATETIME_IMMUTABLE);
         }
@@ -168,7 +169,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
      *
      * @return Calculation[]
      */
-    private function getCalculations(\DateTimeImmutable $date, array $sources): array
+    private function getCalculations(DatePoint $date, array $sources): array
     {
         if ([] === $sources) {
             return [];
@@ -180,22 +181,22 @@ class CalculationArchiveService implements ServiceSubscriberInterface
             ->getResult();
     }
 
-    private function getDate(): \DateTimeInterface
+    private function getDate(): DatePoint
     {
         $date = $this->getSessionDate(self::KEY_DATE);
-        if ($date instanceof \DateTimeInterface) {
+        if ($date instanceof DatePoint) {
             return $date;
         }
 
         $sources = $this->getSources(false);
         $minDate = $this->getDateMin($sources);
-        if (!$minDate instanceof \DateTimeImmutable) {
-            return DateUtils::sub(DateUtils::createDateTimeImmutable(), 'P6M');
+        if (!$minDate instanceof DatePoint) {
+            return DateUtils::sub(DateUtils::createDatePoint(), 'P6M');
         }
 
         $minDate = DateUtils::add($minDate, 'P1M');
         $maxDate = $this->getDateMax($sources);
-        if ($maxDate instanceof \DateTimeImmutable && $minDate >= $maxDate) {
+        if ($maxDate instanceof DatePoint && $minDate >= $maxDate) {
             return DateUtils::sub($maxDate, 'P1M');
         }
 
@@ -205,7 +206,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     /**
      * @param CalculationState[] $sources
      */
-    private function getDateMax(array $sources): ?\DateTimeImmutable
+    private function getDateMax(array $sources): ?DatePoint
     {
         return $this->getScalarDate($sources, 'MAX');
     }
@@ -213,7 +214,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     /**
      * @param CalculationState[] $sources
      */
-    private function getDateMin(array $sources): ?\DateTimeImmutable
+    private function getDateMin(array $sources): ?DatePoint
     {
         return $this->getScalarDate($sources, 'MIN');
     }
@@ -221,7 +222,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     /**
      * @param CalculationState[] $sources
      */
-    private function getScalarDate(array $sources, string $function): ?\DateTimeImmutable
+    private function getScalarDate(array $sources, string $function): ?DatePoint
     {
         $builder = $this->createQueryBuilder($sources)
             ->select(\sprintf('%s(c.date)', $function));
@@ -229,7 +230,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         /** @var string|null $date */
         $date = $builder->getQuery()->getSingleScalarResult();
 
-        return null === $date ? null : DateUtils::createDateTimeImmutable($date);
+        return null === $date ? null : DateUtils::createDatePoint($date);
     }
 
     /**

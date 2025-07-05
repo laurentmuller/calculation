@@ -20,6 +20,7 @@ use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -35,7 +36,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *        month: int,
  *        margin_percent: float,
  *        margin_amount: float,
- *        date: \DateTimeInterface}
+ *        date: DatePoint}
  * @phpstan-type CalculationItemEntry = array{
  *        description: string,
  *        quantity: float,
@@ -43,14 +44,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *        count: int}
  * @phpstan-type CalculationItemType = array{
  *        id: int,
- *        date: \DateTimeInterface,
+ *        date: DatePoint,
  *        stateCode: string,
  *        customer: string,
  *        description: string,
  *        items: CalculationItemEntry[]}
  * @phpstan-type PivotType = array{
  *        calculation_id: int,
- *        calculation_date: \DateTimeInterface,
+ *        calculation_date: DatePoint,
  *        calculation_overall_margin: float,
  *        calculation_overall_total: float,
  *        calculation_state: string,
@@ -209,12 +210,12 @@ class CalculationRepository extends AbstractRepository
     /**
      * Gets calculation for the given date range.
      *
-     * @param \DateTimeImmutable $from the start date (exclusive)
-     * @param \DateTimeImmutable $to   the end date (inclusive)
+     * @param DatePoint $from the start date (exclusive)
+     * @param DatePoint $to   the end date (inclusive)
      *
      * @return Calculation[] an array, maybe empty, of calculations
      */
-    public function getByInterval(\DateTimeImmutable $from, \DateTimeImmutable $to): array
+    public function getByInterval(DatePoint $from, DatePoint $to): array
     {
         return $this->createQueryBuilder('c')
             ->where('c.date > :from')
@@ -441,7 +442,7 @@ class CalculationRepository extends AbstractRepository
 
         /** @phpstan-var array{
          *      calculation_id: int,
-         *      calculation_date: \DateTimeInterface,
+         *      calculation_date: DatePoint,
          *      calculation_customer: string,
          *      calculation_description: string,
          *      calculation_state: string,
@@ -506,7 +507,7 @@ class CalculationRepository extends AbstractRepository
 
         /** @phpstan-var array{
          *      calculation_id: int,
-         *      calculation_date: \DateTimeInterface,
+         *      calculation_date: DatePoint,
          *      calculation_customer: string,
          *      calculation_description: string,
          *      calculation_state: string,
@@ -555,7 +556,7 @@ class CalculationRepository extends AbstractRepository
     /**
      * Gets the minimum (first) and maximum (last) dates of calculations.
      *
-     * @phpstan-return array{0: ?\DateTimeImmutable, 1: ?\DateTimeImmutable}
+     * @phpstan-return array{0: ?DatePoint, 1: ?DatePoint}
      */
     public function getMinMaxDates(): array
     {
@@ -570,8 +571,8 @@ class CalculationRepository extends AbstractRepository
         }
 
         return [
-            DateUtils::createDateTimeImmutable($values['MIN_DATE']),
-            DateUtils::createDateTimeImmutable($values['MAX_DATE']),
+            DateUtils::createDatePoint($values['MIN_DATE']),
+            DateUtils::createDatePoint($values['MAX_DATE']),
         ];
     }
 
@@ -674,9 +675,9 @@ class CalculationRepository extends AbstractRepository
             ->groupBy("$alias.id");
     }
 
-    private function convertToDate(array $item): \DateTimeInterface
+    private function convertToDate(array $item): DatePoint
     {
-        return DateUtils::createDateTime(\sprintf('%s-%s-10', $item['year'], $item['month']));
+        return DateUtils::createDatePoint(\sprintf('%s-%s-10', $item['year'], $item['month']));
     }
 
     private function gerMarginPercent(float $total, float $items): float
@@ -746,7 +747,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @phpstan-param array{
      *      calculation_id: int,
-     *      calculation_date: \DateTimeInterface,
+     *      calculation_date: DatePoint,
      *      calculation_customer: string,
      *      calculation_description: string,
      *      calculation_state: string,

@@ -150,6 +150,10 @@ class DateUtilsTest extends TestCase
 
         $date = DatePoint::createFromFormat($format, '2013-03-15 23:59:59');
         yield [$date, $expected];
+
+        $format = 'Y-m-d H:i:s.v';
+        $expected = DatePoint::createFromFormat($format, '2013-03-15 00:00:00.123');
+        yield [$date, $expected];
     }
 
     /**

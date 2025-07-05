@@ -247,7 +247,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     #[\Override]
     public function getExpiresAt(): DatePoint
     {
-        return $this->expiresAt ?? DateUtils::createDateTime();
+        return $this->expiresAt ?? DateUtils::createDatePoint();
     }
 
     #[\Override]
@@ -328,7 +328,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     #[\Override]
     public function getRequestedAt(): DatePoint
     {
-        return $this->requestedAt ?? DateUtils::createDateTime();
+        return $this->requestedAt ?? DateUtils::createDatePoint();
     }
 
     public function getSelector(): ?string
@@ -444,7 +444,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     {
         $this->imageFile = $imageFile;
         if ($update) {
-            $this->updatedAt = DateUtils::createDateTime();
+            $this->updatedAt = DateUtils::createDatePoint();
         }
 
         return $this;
@@ -481,7 +481,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
         $this->expiresAt = $expiresAt;
         $this->selector = $selector;
         $this->hashedToken = $hashedToken;
-        $this->requestedAt = DateUtils::createDateTime();
+        $this->requestedAt = DateUtils::createDatePoint();
 
         return $this;
     }
@@ -513,7 +513,7 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
      */
     public function updateLastLogin(): self
     {
-        $this->lastLogin = DateUtils::createDateTime();
+        $this->lastLogin = DateUtils::createDatePoint();
 
         return $this;
     }

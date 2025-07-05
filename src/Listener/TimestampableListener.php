@@ -57,7 +57,7 @@ class TimestampableListener implements DisableListenerInterface
         }
 
         $user = $this->getUser();
-        $date = DateUtils::createDateTime();
+        $date = DateUtils::createDatePoint();
         foreach ($entities as $entity) {
             if ($entity->updateTimestampable($date, $user)) {
                 $this->persist($em, $unitOfWork, $entity);

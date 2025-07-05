@@ -110,7 +110,7 @@ class TimelineController extends AbstractController
         #[MapQueryParameter]
         string $interval
     ): JsonResponse {
-        $date = DateUtils::createDateTime('today');
+        $date = DateUtils::createDatePoint('today');
         $parameters = $service->current($this->formatDate($date), $interval);
 
         return $this->renderContent($parameters);

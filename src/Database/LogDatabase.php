@@ -98,7 +98,7 @@ class LogDatabase extends AbstractDatabase
      */
     private function dateToInt(?DatePoint $date): int
     {
-        $date ??= DateUtils::createDateTime();
+        $date ??= DateUtils::createDatePoint();
 
         return $date->getTimestamp();
     }

@@ -102,7 +102,7 @@ class Customer extends AbstractEntity
             return null;
         }
 
-        $currentDate = DateUtils::createDateTime();
+        $currentDate = DateUtils::createDatePoint();
         $age = DateUtils::getYear($currentDate) - DateUtils::getYear($this->birthday);
         if ($currentDate < DateUtils::add($this->birthday, 'P1Y')) {
             --$age;

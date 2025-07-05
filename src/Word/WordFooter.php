@@ -76,7 +76,7 @@ class WordFooter extends AbstractHeaderFooter
     {
         $textStyle['alignment'] = Jc::END;
         $cell = $row->addCell($width);
-        $text = FormatUtils::formatDateTime(DateUtils::createDateTime());
+        $text = FormatUtils::formatDateTime(DateUtils::createDatePoint());
         $cell->addText($text, $cellStyle, $textStyle);
     }
 

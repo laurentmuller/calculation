@@ -212,7 +212,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
      */
     public function removeExpiredResetPasswordRequests(): int
     {
-        $time = DateUtils::createDateTime('-1 week');
+        $time = DateUtils::createDatePoint('-1 week');
         $query = $this->createQueryBuilder('e')
             ->update()
             ->set('e.selector', 'NULL')

@@ -571,8 +571,8 @@ class CalculationRepository extends AbstractRepository
         }
 
         return [
-            DateUtils::createDateTime($values['MIN_DATE']),
-            DateUtils::createDateTime($values['MAX_DATE']),
+            DateUtils::createDatePoint($values['MIN_DATE']),
+            DateUtils::createDatePoint($values['MAX_DATE']),
         ];
     }
 
@@ -677,7 +677,7 @@ class CalculationRepository extends AbstractRepository
 
     private function convertToDate(array $item): DatePoint
     {
-        return DateUtils::createDateTime(\sprintf('%s-%s-10', $item['year'], $item['month']));
+        return DateUtils::createDatePoint(\sprintf('%s-%s-10', $item['year'], $item['month']));
     }
 
     private function gerMarginPercent(float $total, float $items): float

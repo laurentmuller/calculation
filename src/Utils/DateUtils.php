@@ -57,12 +57,10 @@ final class DateUtils
     }
 
     /**
-     * Returns a new date with the given interval added.
+     * Returns a new date point with the given interval added.
      *
-     * @param DatePoint            $date     the date
+     * @param DatePoint            $date     the date point
      * @param \DateInterval|string $interval the interval to add
-     *
-     * @return DatePoint the new date
      */
     public static function add(DatePoint $date, \DateInterval|string $interval): DatePoint
     {
@@ -95,24 +93,27 @@ final class DateUtils
         return $year;
     }
 
+    /**
+     * Create a date interval.
+     */
     public static function createDateInterval(string $interval): \DateInterval
     {
         return new \DateInterval($interval);
     }
 
     /**
-     * Creates a new date time immutable instance.
+     * Creates a new date point instance.
      *
      * @param string         $datetime a date/time string
      * @param ?\DateTimeZone $timezone the timezone or null to use the current timezone
      */
-    public static function createDateTime(string $datetime = 'now', ?\DateTimeZone $timezone = null): DatePoint
+    public static function createDatePoint(string $datetime = 'now', ?\DateTimeZone $timezone = null): DatePoint
     {
         return new DatePoint($datetime, $timezone);
     }
 
     /**
-     * Format the given date (if any) to use within a date type in forms.
+     * Format the given date point (if any) to use within a date type in forms.
      */
     public static function formatFormDate(?DatePoint $date): ?string
     {
@@ -120,7 +121,7 @@ final class DateUtils
     }
 
     /**
-     * Gets the numeric representation of a day of the month for the given date.
+     * Gets the numeric representation of a day of the month for the given date point.
      *
      * @return int value 1 through 31
      */
@@ -130,7 +131,7 @@ final class DateUtils
     }
 
     /**
-     * Gets the numeric representation of a month for the given date.
+     * Gets the numeric representation of a month for the given date point.
      *
      * @return int value 1 through 12
      */
@@ -184,7 +185,7 @@ final class DateUtils
     }
 
     /**
-     * Gets the ISO 8601 week number of year for the given date.
+     * Gets the ISO 8601 week number of year for the given date point.
      *
      * The weeks are starting on Monday.
      *
@@ -214,7 +215,7 @@ final class DateUtils
     }
 
     /**
-     * Gets the full numeric representation of a year with 4 digits for the given date.
+     * Gets the full numeric representation of a year with 4 digits for the given date point.
      *
      * @param DatePoint $date the date to get year for or <code>null</code> to use the current date
      */
@@ -224,7 +225,7 @@ final class DateUtils
     }
 
     /**
-     * Alters the timestamp of the given date.
+     * Alters the timestamp of the given date point.
      *
      * @param DatePoint $date     the date to modify
      * @param string    $modifier a date/time string
@@ -237,7 +238,7 @@ final class DateUtils
     }
 
     /**
-     * Remove the time part of the given date.
+     * Remove the time part of the given date point.
      */
     public static function removeTime(DatePoint $date = new DatePoint()): DatePoint
     {
@@ -245,9 +246,9 @@ final class DateUtils
     }
 
     /**
-     * Returns a new date with the given interval subtracted.
+     * Returns a new date point with the given interval subtracted.
      *
-     * @param DatePoint            $date     the date
+     * @param DatePoint            $date     the date point
      * @param \DateInterval|string $interval the date interval to subtract
      */
     public static function sub(DatePoint $date, \DateInterval|string $interval): DatePoint
@@ -260,7 +261,7 @@ final class DateUtils
     }
 
     /**
-     * Convert the given date to a <code>DatePoint</code>.
+     * Convert the given date interface to a date point.
      */
     public static function toDatePoint(\DateTimeInterface $date): DatePoint
     {
@@ -294,14 +295,12 @@ final class DateUtils
     }
 
     /**
-     * Gets the month names.
-     *
      * @return array<int, string>
      */
     private static function getMonthNames(string $pattern): array
     {
         $result = [];
-        $date = self::createDateTime('2000-01-01');
+        $date = self::createDatePoint('2000-01-01');
         $interval = self::createDateInterval('P1M');
         $formatter = self::getFormatter($pattern);
         for ($i = 1; $i <= 12; ++$i) {

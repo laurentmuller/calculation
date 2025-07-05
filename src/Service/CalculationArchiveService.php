@@ -191,7 +191,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         $sources = $this->getSources(false);
         $minDate = $this->getDateMin($sources);
         if (!$minDate instanceof DatePoint) {
-            return DateUtils::sub(DateUtils::createDateTime(), 'P6M');
+            return DateUtils::sub(DateUtils::createDatePoint(), 'P6M');
         }
 
         $minDate = DateUtils::add($minDate, 'P1M');
@@ -230,7 +230,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         /** @var string|null $date */
         $date = $builder->getQuery()->getSingleScalarResult();
 
-        return null === $date ? null : DateUtils::createDateTime($date);
+        return null === $date ? null : DateUtils::createDatePoint($date);
     }
 
     /**

@@ -115,8 +115,8 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     {
         $year = (int) $this->year;
         $name = StringUtils::getShortName($this);
-        $firstDate = DateUtils::createDateTime(\sprintf('%d-01-01', $year));
-        $lastDate = DateUtils::createDateTime(\sprintf('%d-12-31', $year));
+        $firstDate = DateUtils::createDatePoint(\sprintf('%d-01-01', $year));
+        $lastDate = DateUtils::createDatePoint(\sprintf('%d-12-31', $year));
         $first = FormatUtils::formatDate($firstDate);
         $last = FormatUtils::formatDate($lastDate);
 
@@ -135,13 +135,13 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         $this->year = DateUtils::completYear($year);
         $this->key = (string) $this->year;
         $this->reset();
-        $firstYearDate = DateUtils::createDateTime(\sprintf('1 January %d', $this->year));
-        $lastYearDate = DateUtils::createDateTime(\sprintf('31 December %d', $this->year));
-        $firstDate = DateUtils::createDateTime(\sprintf('first monday of January %s', $this->year));
+        $firstYearDate = DateUtils::createDatePoint(\sprintf('1 January %d', $this->year));
+        $lastYearDate = DateUtils::createDatePoint(\sprintf('31 December %d', $this->year));
+        $firstDate = DateUtils::createDatePoint(\sprintf('first monday of January %s', $this->year));
         if ($firstDate > $firstYearDate) {
             $firstDate = DateUtils::sub($firstDate, 'P1W');
         }
-        $lastDate = DateUtils::createDateTime(\sprintf('last sunday of December %d', $this->year));
+        $lastDate = DateUtils::createDatePoint(\sprintf('last sunday of December %d', $this->year));
         if ($lastDate < $lastYearDate) {
             $lastDate = DateUtils::add($lastDate, 'P1W');
         }
@@ -247,7 +247,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     public function getToday(): Day
     {
         if (!$this->today instanceof Day) {
-            $date = DateUtils::createDateTime('today');
+            $date = DateUtils::createDatePoint('today');
             $this->today = new Day($this, $date);
         }
 

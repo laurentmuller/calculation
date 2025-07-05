@@ -67,7 +67,7 @@ class Log extends AbstractEntity implements ComparableInterface
 
     public function __construct()
     {
-        $this->createdAt = DateUtils::createDateTime();
+        $this->createdAt = DateUtils::createDatePoint();
     }
 
     #[\Override]

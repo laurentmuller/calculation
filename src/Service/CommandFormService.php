@@ -78,9 +78,9 @@ readonly class CommandFormService
      * @param FormView $view     the view to get filtered children
      * @param int      $priority the priority
      *
-     * @return FormView[]
-     *
      * @phpstan-param self::* $priority
+     *
+     * @return FormView[]
      */
     public function filter(FormView $view, int $priority): array
     {

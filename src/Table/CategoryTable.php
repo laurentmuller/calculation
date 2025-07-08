@@ -56,9 +56,9 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     /**
      * Formatter for the product column.
      *
-     * @throws \Twig\Error\Error
-     *
      * @phpstan-param array{id: int} $entity
+     *
+     * @throws \Twig\Error\Error
      */
     public function formatProducts(int $value, array $entity): string
     {
@@ -76,9 +76,9 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     /**
      * Formatter for the task column.
      *
-     * @throws \Twig\Error\Error
-     *
      * @phpstan-param array{id: int} $entity
+     *
+     * @throws \Twig\Error\Error
      */
     public function formatTasks(int $value, array $entity): string
     {

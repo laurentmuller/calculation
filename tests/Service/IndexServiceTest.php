@@ -46,7 +46,13 @@ class IndexServiceTest extends KernelServiceTestCase
     public function testGetCalculationByStates(): void
     {
         $actual = $this->service->getCalculationByStates();
-        self::assertCount(1, $actual);
+        self::assertCount(0, $actual);
+
+        $items = $actual->items;
+        self::assertCount(0, $items);
+
+        $total = $actual->total;
+        self::assertSame(0, $total->count);
     }
 
     public function testGetCatalog(): void

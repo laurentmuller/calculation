@@ -442,12 +442,6 @@
                 "name": "description"
             },
             {
-                "description": "Groupe au quel appartient l'article.",
-                "entity": "group",
-                "name": "group",
-                "type": "reference"
-            },
-            {
                 "description": "Catégorie à laquelle appartient l'article.",
                 "entity": "category",
                 "name": "category",

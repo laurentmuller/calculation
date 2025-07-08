@@ -32,10 +32,10 @@ trait ArrayTrait
      *                                      <code>true</code> is returned immediately
      *                                      and the callback will not be called for further elements.
      *
+     * @phpstan-param \Closure(TValue, TKey=): bool $callback
+     *
      * @return bool <code>true</code> if there is at least one element for which the callback returns <code>true</code>,
      *              <code>false</code> otherwise
-     *
-     * @phpstan-param \Closure(TValue, TKey=): bool $callback
      */
     public function anyMatch(array $array, \Closure $callback): bool
     {
@@ -59,10 +59,10 @@ trait ArrayTrait
      *                                      The first parameter contains the value ($value), the second parameter
      *                                      contains the corresponding key ($key).
      *
+     * @phpstan-param \Closure(TValue, TKey=): bool $callback
+     *
      * @return TValue|null a value if there is at least one element for which callback returns <code>true</code>,
      *                     null otherwise
-     *
-     * @phpstan-param \Closure(TValue, TKey=): bool $callback
      */
     public function findFirst(array $array, \Closure $callback): mixed
     {
@@ -196,10 +196,10 @@ trait ArrayTrait
      *                                </ul>
      * @param int           $flags    the flags to be used to modify the comparison behavior
      *
-     * @return T[]
-     *
      * @phpstan-param 0|1|2 $mode
      * @phpstan-param 0|1|2|5 $flags
+     *
+     * @return T[]
      */
     public function getUniqueFiltered(
         array $values,
@@ -221,9 +221,9 @@ trait ArrayTrait
      * @param T[] $second the second array to merge
      * @param int $flags  the flags to be used to modify the comparison behavior
      *
-     * @return T[]
-     *
      * @phpstan-param 0|1|2|5 $flags
+     *
+     * @return T[]
      */
     public function getUniqueMerged(array $first, array $second, int $flags = \SORT_STRING): array
     {

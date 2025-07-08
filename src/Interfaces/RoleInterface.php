@@ -65,9 +65,9 @@ interface RoleInterface
      *
      * @param string $role the role name to be tested
      *
-     * @return bool true if this has a given role
-     *
      * @phpstan-param self::ROLE_* $role
+     *
+     * @return bool true if this has a given role
      */
     public function hasRole(string $role): bool;
 

@@ -147,9 +147,9 @@ class UcFirstCommand
     /**
      * @phpstan-param class-string $class
      *
-     * @psalm-return Query
-     *
      * @phpstan-return Query<EntityInterface>
+     *
+     * @psalm-return Query
      */
     private function createQuery(string $class): Query
     {

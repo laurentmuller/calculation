@@ -289,9 +289,9 @@ class OpenWeatherService extends AbstractHttpClientService
      *                                     </ul>
      * @param OpenWeatherUnits $units      the unit to use
      *
-     * @return array|false the essential conditions if success; false on error
-     *
      * @phpstan-param self::EXCLUDE_* ...$exclude
+     *
+     * @return array|false the essential conditions if success; false on error
      */
     public function oneCall(
         float $latitude,
@@ -355,9 +355,9 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * @throws ExceptionInterface
-     *
      * @phpstan-param array{units: string, ...} $query
+     *
+     * @throws ExceptionInterface
      */
     private function doGet(string $uri, array $query, string $hostName): array|false
     {
@@ -412,9 +412,9 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param array  $query    an associative array of query string values to add to the request
      * @param string $hostName the host name (API version) to use
      *
-     * @return array|false the JSON response on success, false on failure
-     *
      * @phpstan-param array{units: OpenWeatherUnits, ...} $query
+     *
+     * @return array|false the JSON response on success, false on failure
      */
     private function get(string $uri, array $query, string $hostName = self::HOST_NAME_V_2_5): array|false
     {

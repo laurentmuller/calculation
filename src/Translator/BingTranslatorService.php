@@ -177,9 +177,9 @@ class BingTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * @throws ExceptionInterface
-     *
      * @phpstan-param Request::METHOD_* $method
+     *
+     * @throws ExceptionInterface
      */
     private function call(string $uri, array $query = [], array $json = [], string $method = Request::METHOD_POST): array|false
     {

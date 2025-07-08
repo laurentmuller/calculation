@@ -14,19 +14,17 @@ declare(strict_types=1);
 namespace App\Tests\Chart;
 
 use App\Chart\MonthChart;
+use App\Model\CalculationsMonth;
+use App\Model\CalculationsMonthItem;
 use App\Repository\CalculationRepository;
 use App\Service\ApplicationService;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
-/**
- * @phpstan-import-type CalculationByMonthType from CalculationRepository
- */
 class MonthChartTest extends TestCase
 {
     use TranslatorMockTrait;
@@ -51,20 +49,24 @@ class MonthChartTest extends TestCase
     {
         $this->repository->method('countDistinctMonths')
             ->willReturn(11);
+        $this->repository->method('getByMonth')
+            ->willReturn($this->createEmptyCalculationsMonth());
 
         $chart = $this->createChart();
         $chart->generate(1);
-        self::assertInstanceOf(MonthChart::class, $chart);
+        self::expectNotToPerformAssertions();
     }
 
     public function testWithOneMonth(): void
     {
         $this->repository->method('countDistinctMonths')
             ->willReturn(1);
+        $this->repository->method('getByMonth')
+            ->willReturn($this->createEmptyCalculationsMonth());
 
         $chart = $this->createChart();
         $chart->generate(1);
-        self::assertInstanceOf(MonthChart::class, $chart);
+        self::expectNotToPerformAssertions();
     }
 
     public function testWithSeries(): void
@@ -72,11 +74,32 @@ class MonthChartTest extends TestCase
         $this->repository->method('countDistinctMonths')
             ->willReturn(6);
         $this->repository->method('getByMonth')
-            ->willReturn($this->createSeries());
+            ->willReturn($this->createCalculationsMonth());
 
         $chart = $this->createChart();
         $chart->generate(6);
-        self::assertInstanceOf(MonthChart::class, $chart);
+        self::expectNotToPerformAssertions();
+    }
+
+    private function createCalculationsMonth(): CalculationsMonth
+    {
+        $items = [
+            new CalculationsMonthItem(
+                count: 1,
+                items: 100.0,
+                total: 200,
+                year: 2024,
+                month: 6
+            ),
+            new CalculationsMonthItem(
+                count: 1,
+                items: 100.0,
+                total: 200,
+                year: 2024,
+                month: 6
+            )];
+
+        return new CalculationsMonth($items);
     }
 
     private function createChart(): MonthChart
@@ -87,33 +110,8 @@ class MonthChartTest extends TestCase
         return $chart;
     }
 
-    /**
-     * @phpstan-return CalculationByMonthType[]
-     */
-    private function createSeries(): array
+    private function createEmptyCalculationsMonth(): CalculationsMonth
     {
-        $value0 = [
-            'count' => 1,
-            'items' => 100.0,
-            'total' => 200,
-            'year' => 2024,
-            'month' => 6,
-            'margin_percent' => 0.25,
-            'margin_amount' => 50.0,
-            'date' => new DatePoint('2024-6-05'),
-        ];
-
-        $value1 = [
-            'count' => 1,
-            'items' => 100.0,
-            'total' => 200,
-            'year' => 2024,
-            'month' => 6,
-            'margin_percent' => -0.25,
-            'margin_amount' => 50.0,
-            'date' => new DatePoint('2024-6-05'),
-        ];
-
-        return [$value0, $value1];
+        return new CalculationsMonth([]);
     }
 }

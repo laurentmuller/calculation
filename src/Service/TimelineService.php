@@ -54,9 +54,9 @@ readonly class TimelineService
     /**
      * Gets the calculations for the given date and period.
      *
-     * @throws \Exception
-     *
      * @phpstan-return ParametersType
+     *
+     * @throws \Exception
      */
     public function current(?string $date = null, ?string $interval = null): array
     {
@@ -71,9 +71,9 @@ readonly class TimelineService
     /**
      * Gets the first calculations for the given period.
      *
-     * @throws \Exception
-     *
      * @phpstan-return ParametersType
+     *
+     * @throws \Exception
      */
     public function first(?string $interval = null): array
     {
@@ -88,9 +88,9 @@ readonly class TimelineService
     /**
      * Gets the last calculations for the given period.
      *
-     * @throws \Exception
-     *
      * @phpstan-return ParametersType
+     *
+     * @throws \Exception
      */
     public function last(?string $interval = null): array
     {
@@ -163,9 +163,9 @@ readonly class TimelineService
     }
 
     /**
-     * @throws \Exception
-     *
      * @phpstan-return ParametersType
+     *
+     * @throws \Exception
      */
     private function getParameters(
         ?DatePoint $today,

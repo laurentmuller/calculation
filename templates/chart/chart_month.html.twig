@@ -38,13 +38,13 @@
 {% block card_header %}
 <div class="d-flex-wrap-center">
     {{ parent() }}
-    {% if allowed_months|length > 1 %}
+    {% if allowedMonths|length > 1 %}
         <div class="dropdown ms-sm-auto">
             <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 {{- 'chart.month.fields.period'|trans -}}
             </button>
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-sm">
-                {% for current in allowed_months %}
+                {% for current in allowedMonths %}
                     {{ _self.month(current, current == months) }}
                 {% endfor %}
             </ul>
@@ -60,13 +60,13 @@
         <th class="text-currency">{{ 'calculation.list.title'|trans }}</th>
         <th class="text-center">
             <div class="d-flex align-items-center justify-content-center">
-                <span class="border me-1" style="width: 1.25rem; height: 0.75rem; background: {{ color_amount }};"></span>
+                <span class="border me-1" style="width: 1.25rem; height: 0.75rem; background: {{ colorAmount }};"></span>
                 <span class="ms-auto">{{ 'calculationgroup.fields.amount'|trans }}</span>
             </div>
         </th>
         <th class="text-center" colspan="2">
             <div class="d-flex align-items-center justify-content-center">
-                <span class="border me-1" style="width: 1.25rem; height: 0.75rem; background: {{ color_margin }};"></span>
+                <span class="border me-1" style="width: 1.25rem; height: 0.75rem; background: {{ colorMargin }};"></span>
                 <span>{{ 'calculation.fields.margin'|trans }}</span>
             </div>
         </th>
@@ -88,11 +88,11 @@
                 {{- _self.cell_value(item.items|round, last_items|default) -}}
             </td>
             <td class="text-currency position-relative ps-4">
-                {{- _self.cell_value(item.margin_amount|round, last_amount|default) -}}
+                {{- _self.cell_value(item.marginAmount|round, last_amount|default) -}}
             </td>
-            <td class="text-percent position-relative ps-4{{ _self.margin_below_class(item.margin_percent, min_margin) }}"
-                    {{ _self.margin_below_tooltip(item.margin_percent, min_margin) }}>
-                {{- _self.cell_value(item.margin_percent|round(2, 'floor'), last_percent|default, true) -}}
+            <td class="text-percent position-relative ps-4{{ _self.margin_below_class(item.marginPercent, minMargin) }}"
+                    {{ _self.margin_below_tooltip(item.marginPercent, minMargin) }}>
+                {{- _self.cell_value(item.marginPercent|round(2, 'floor'), last_percent|default, true) -}}
             </td>
             <td class="text-currency position-relative ps-4">
                 {{- _self.cell_value(item.total|round, last_total|default) -}}
@@ -100,8 +100,8 @@
         </tr>
         {%- set last_count = item.count|round -%}
         {%- set last_items = item.items|round -%}
-        {%- set last_amount = item.margin_amount|round -%}
-        {%- set last_percent = item.margin_percent|round(2, 'floor') -%}
+        {%- set last_amount = item.marginAmount|round -%}
+        {%- set last_percent = item.marginPercent|round(2, 'floor') -%}
         {%- set last_total = item.total|round -%}
     {% endfor -%}
     <tr title="{{ 'chart.row_all'|trans }}" class="fw-bold">
@@ -110,9 +110,9 @@
         </td>
         <td class="text-currency">{{ totals.count|integer }}</td>
         <td class="text-currency">{{ totals.items|integer }}</td>
-        <td class="text-currency">{{ totals.margin_amount|integer }}</td>
-        <td class="text-percent{{ _self.margin_below_class(totals.margin_percent, min_margin) }}"
-                {{- _self.margin_below_tooltip(totals.margin_percent, min_margin) }}>{{ totals.margin_percent|percent -}}
+        <td class="text-currency">{{ totals.marginAmount|integer }}</td>
+        <td class="text-percent{{ _self.margin_below_class(totals.marginPercent, minMargin) }}"
+                {{- _self.margin_below_tooltip(totals.marginPercent, minMargin) }}>{{ totals.marginPercent|percent -}}
         </td>
         <td class="text-currency">{{ totals.total|integer }}</td>
     </tr>

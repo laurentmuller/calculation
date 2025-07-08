@@ -27,7 +27,6 @@ class CalendarServiceTest extends TestCase
     {
         $service = new CalendarService();
         $actual = $service->generate();
-        self::assertInstanceOf(Calendar::class, $actual);
         self::assertSame(Calendar::DEFAULT_DAY_MODEL, $actual->getDayModel());
         self::assertSame(Calendar::DEFAULT_WEEK_MODEL, $actual->getWeekModel());
         self::assertSame(Calendar::DEFAULT_MONTH_MODEL, $actual->getMonthModel());

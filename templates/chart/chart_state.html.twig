@@ -27,31 +27,31 @@
             </a>
         </td>
         <td class="text-currency">{{ item.count|integer }}</td>
-        <td class="text-percent">{{ item.percent_calculation|percent(true, 2, 5) }}</td>
+        <td class="text-percent">{{ item.calculationsPercent|percent(true, 2, 5) }}</td>
         <td class="text-currency">{{ item.items|amount }}</td>
-        <td class="text-currency">{{ item.margin_amount|amount }}</td>
-        <td class="text-percent{{ _self.margin_below_class(item.margin_percent, min_margin) }}"
-                {{ _self.margin_below_tooltip(item.margin_percent, min_margin) }}>
-            {{- item.margin_percent|percent -}}
+        <td class="text-currency">{{ item.marginAmount|amount }}</td>
+        <td class="text-percent{{ _self.margin_below_class(item.marginPercent, minMargin) }}"
+                {{ _self.margin_below_tooltip(item.marginPercent, minMargin) }}>
+            {{- item.marginPercent|percent -}}
         </td>
         <td class="text-currency">{{ item.total|amount }}</td>
-        <td class="text-percent">{{ item.percent_amount|percent(true, 2, 5) }}</td>
+        <td class="text-percent">{{ item.totalPercent|percent(true, 2, 5) }}</td>
     </tr>
     {% endfor -%}
     <tr title="{{ 'chart.row_all'|trans }}" class="fw-bold">
         <td class="text-nowrap">
             <a href="{{ path(list_path) }}">{{ 'calculation.fields.total'|trans }}</a>
         </td>
-        <td class="text-currency">{{ totals.calculation_count|integer }}</td>
-        <td class="text-percent">{{ totals.calculation_percent|percent(true, 2, 5) }}</td>
-        <td class="text-currency">{{ totals.items_amount|amount }}</td>
-        <td class="text-currency">{{ totals.margin_amount|amount }}</td>
-        <td class="text-percent{{ _self.margin_below_class(totals.margin_percent, min_margin) }}"
-                {{ _self.margin_below_tooltip(totals.margin_percent, min_margin) }}>
-            {{- totals.margin_percent|percent -}}
+        <td class="text-currency">{{ total.count|integer }}</td>
+        <td class="text-percent">{{ 1.0|percent(true, 2, 5) }}</td>
+        <td class="text-currency">{{ total.items|amount }}</td>
+        <td class="text-currency">{{ total.marginAmount|amount }}</td>
+        <td class="text-percent{{ _self.margin_below_class(total.marginPercent, minMargin) }}"
+                {{ _self.margin_below_tooltip(total.marginPercent, minMargin) }}>
+            {{- total.marginPercent|percent -}}
         </td>
-        <td class="text-currency">{{ totals.total_amount|amount }}</td>
-        <td class="text-percent">{{ totals.total_percent|percent(true, 2, 5) }}</td>
+        <td class="text-currency">{{ total.total|amount }}</td>
+        <td class="text-percent">{{ 1.0|percent(true, 2, 5) }}</td>
     </tr>
 </tbody>
 {% endblock %}

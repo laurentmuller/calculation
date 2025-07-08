@@ -39,11 +39,11 @@ readonly class SortableField implements SortModeInterface
      *                                     the class to reflect, or an object
      * @param string        $name          the property name to get order for
      *
+     * @phpstan-param T|class-string<T> $objectOrClass
+     *
      * @return ?string the default order or null if no attribute is found
      *
      * @throws \ReflectionException if the class does not exist
-     *
-     * @phpstan-param T|class-string<T> $objectOrClass
      */
     public static function getOrder(object|string $objectOrClass, string $name): ?string
     {

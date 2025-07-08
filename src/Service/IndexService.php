@@ -40,10 +40,10 @@ use App\Entity\Product;
 use App\Entity\Task;
 use App\Interfaces\DisableListenerInterface;
 use App\Interfaces\EntityInterface;
-use App\Traits\ArrayTrait;
+use App\Model\CalculationsMonth;
+use App\Model\CalculationsState;
 use App\Traits\CacheKeyTrait;
 use App\Traits\DisableListenerTrait;
-use App\Traits\MathTrait;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -53,7 +53,6 @@ use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\NamespacedPoolInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to cache computed entities for the home page (index page).
@@ -61,17 +60,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AsDoctrineListener(Events::onFlush)]
 class IndexService implements DisableListenerInterface
 {
-    use ArrayTrait;
     use CacheKeyTrait;
     use DisableListenerTrait;
-    use MathTrait;
 
     private CacheItemPoolInterface&CacheInterface&NamespacedPoolInterface $cache;
 
     /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
     public function __construct(
         private readonly EntityManagerInterface $manager,
-        private readonly TranslatorInterface $translator,
         #[Target('calculation.application')]
         CacheItemPoolInterface&CacheInterface&NamespacedPoolInterface $cache
     ) {
@@ -91,20 +87,23 @@ class IndexService implements DisableListenerInterface
      *
      * @param int $maxResults the maximum number of results to retrieve (the "limit")
      */
-    public function getCalculationByMonths(int $maxResults = 6): array
+    public function getCalculationByMonths(int $maxResults = 6): CalculationsMonth
     {
         return $this->cache->get(
             \sprintf('calculations.months.%d', $maxResults),
-            fn (): array => $this->loadCalculationsByMonths($maxResults)
+            fn (): CalculationsMonth => $this->loadCalculationsByMonths($maxResults)
         );
     }
 
     /**
      * Gets calculations grouped by state.
      */
-    public function getCalculationByStates(): array
+    public function getCalculationByStates(): CalculationsState
     {
-        return $this->cache->get('calculations.states', fn (): array => $this->loadCalculationsByStates());
+        return $this->cache->get(
+            'calculations.states',
+            fn (): CalculationsState => $this->loadCalculationsByStates()
+        );
     }
 
     /**
@@ -167,31 +166,16 @@ class IndexService implements DisableListenerInterface
             || [] !== $unitOfWork->getScheduledEntityUpdates();
     }
 
-    private function loadCalculationsByMonths(int $maxResults): array
+    private function loadCalculationsByMonths(int $maxResults): CalculationsMonth
     {
         return $this->manager->getRepository(Calculation::class)
             ->getByMonth($maxResults);
     }
 
-    private function loadCalculationsByStates(): array
+    private function loadCalculationsByStates(): CalculationsState
     {
-        $results = $this->manager->getRepository(CalculationState::class)
+        return $this->manager->getRepository(CalculationState::class)
             ->getCalculations();
-        $count = $this->getColumnSum($results, 'count');
-        $total = $this->getColumnSum($results, 'total');
-        $items = $this->getColumnSum($results, 'items');
-        $margin = $this->safeDivide($total, $items);
-
-        $results[] = [
-            'id' => 0,
-            'code' => $this->translator->trans('calculation.fields.total'),
-            'color' => false,
-            'count' => $count,
-            'total' => $total,
-            'margin_percent' => $margin,
-        ];
-
-        return $results;
     }
 
     private function loadLastCalculations(int $maxResults, ?UserInterface $user): array

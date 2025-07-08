@@ -163,11 +163,11 @@ enum ImageExtension: string implements PdfEnumDefaultInterface
      *                                         image stream will be output directly.
      * @param array<string, int|bool> $options additional options to use
      *
+     * @phpstan-param SaveOptionsType $options
+     *
      * @return bool true on success or false on failure
      *
      * @throws \InvalidArgumentException if one of the given options is invalid
-     *
-     * @phpstan-param SaveOptionsType $options
      */
     public function saveImage(\GdImage|ImageService $image, mixed $file = null, array $options = []): bool
     {

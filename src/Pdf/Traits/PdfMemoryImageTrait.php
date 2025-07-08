@@ -456,9 +456,9 @@ trait PdfMemoryImageTrait
      *                                </ul>
      * @param string|int|null $link   the URL or an identifier returned by the <code>addLink()</code> function
      *
-     * @throws PdfException if the image file does not exist, or if the image cannot be converted
-     *
      * @phpstan-param callable(string): (\GdImage|false) $loader
+     *
+     * @throws PdfException if the image file does not exist, or if the image cannot be converted
      */
     protected function imageFromLoader(
         callable $loader,

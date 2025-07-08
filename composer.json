@@ -178,6 +178,7 @@
         "app-stan": "vendor-bin/phpstan/vendor/bin/phpstan analyse --configuration phpstan.neon --memory-limit 2G",
         "app-test": "vendor/bin/phpunit",
         "app-markdown": "markdownlint-cli2",
+        "app-dump-dev": "composer dump-autoload --dev",
         "app-all": [
             "@app-lint",
             "@app-fixer",

@@ -15,7 +15,7 @@ namespace App\Controller;
 
 use App\Attribute\PostRoute;
 use App\Interfaces\RoleInterface;
-use App\Model\CalculationQuery;
+use App\Model\CalculationAdjustQuery;
 use App\Service\CalculationGroupService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,7 +35,7 @@ class AjaxCalculationController extends AbstractController
         CalculationGroupService $service,
         LoggerInterface $logger,
         #[MapRequestPayload]
-        CalculationQuery $query = new CalculationQuery()
+        CalculationAdjustQuery $query = new CalculationAdjustQuery()
     ): JsonResponse {
         try {
             $parameters = $service->createParameters($query);

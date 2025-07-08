@@ -64,11 +64,11 @@ class ImageService
      * @param int $green the value of the green component
      * @param int $blue  the value of the blue component
      *
-     * @return int|false the color identifier on success, false if the allocation failed
-     *
      * @phpstan-param int<0, 255> $red
      * @phpstan-param int<0, 255> $green
      * @phpstan-param int<0, 255> $blue
+     *
+     * @return int|false the color identifier on success, false if the allocation failed
      */
     public function allocate(int $red, int $green, int $blue): int|false
     {
@@ -90,12 +90,12 @@ class ImageService
      * @param int $blue  the value of the blue component
      * @param int $alpha a value between 0 and 127
      *
-     * @return int|false the color identifier on success, false if the allocation failed
-     *
      * @phpstan-param int<0, 255> $red
      * @phpstan-param int<0, 255> $green
      * @phpstan-param int<0, 255> $blue
      * @phpstan-param int<0, 127> $alpha
+     *
+     * @return int|false the color identifier on success, false if the allocation failed
      */
     public function allocateAlpha(int $red = 0, int $green = 0, int $blue = 0, int $alpha = 127): int|false
     {
@@ -242,10 +242,10 @@ class ImageService
      * @param int $width  the image width
      * @param int $height the image height
      *
-     * @return ?ImageService an image handler on success, <code>null</code> on error
-     *
      * @phpstan-param positive-int $width
      * @phpstan-param positive-int $height
+     *
+     * @return ?ImageService an image handler on success, <code>null</code> on error
      */
     public static function fromTrueColor(int $width, int $height): ?self
     {

@@ -129,9 +129,9 @@ readonly class MarkdownService
      * @param array  $tags    the tags
      * @param string $content the HTML content to update
      *
-     * @return string the updated content
-     *
      * @phpstan-param TagType[] $tags
+     *
+     * @return string the updated content
      */
     public function updateTags(array $tags, string $content): string
     {

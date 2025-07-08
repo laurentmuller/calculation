@@ -81,12 +81,18 @@ trait MathTrait
      *
      * @param ?float $val       the value to round
      * @param int    $precision the number of decimal digits to round to
+     * @param int    $mode      the rounding mode
      *
-     * @return float the rounded value or 0 if the value is empty
+     * @phpstan-param int<1,4> $mode
+     *
+     * @return float the rounded value or 0.0 if the value is null
      */
-    protected function round(?float $val, int $precision = FormatUtils::FRACTION_DIGITS): float
-    {
-        return null === $val ? 0.0 : \round($val, $precision, \PHP_ROUND_HALF_DOWN);
+    protected function round(
+        ?float $val,
+        int $precision = FormatUtils::FRACTION_DIGITS,
+        int $mode = \PHP_ROUND_HALF_DOWN
+    ): float {
+        return null === $val ? 0.0 : \round($val, $precision, $mode);
     }
 
     /**

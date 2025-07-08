@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\CalculationState;
+use App\Model\CalculationsState;
+use App\Model\CalculationsStateItem;
 use App\Traits\ArrayTrait;
 use App\Traits\GroupByTrait;
 use App\Traits\MathTrait;
@@ -24,18 +26,6 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for calculation state entity.
  *
- * @phpstan-type QueryCalculationType = array{
- *      id: int,
- *      code: string,
- *      editable: boolean,
- *      color: string,
- *      count: int,
- *      items: float,
- *      total: float,
- *      margin_percent: float,
- *      margin_amount: float,
- *      percent_calculation: float,
- *      percent_amount: float}
  * @phpstan-type DropDownType = array<int, array{
  *     id: int,
  *     icon: string,
@@ -64,37 +54,31 @@ class CalculationStateRepository extends AbstractRepository
      * Gets states with the calculation statistics.
      *
      * <b>Note:</b> Only states with at least one calculation are returned.
-     *
-     * @return array the states with the number and the sum of calculations
-     *
-     * @phpstan-return QueryCalculationType[]
      */
-    public function getCalculations(): array
+    public function getCalculations(): CalculationsState
     {
         $builder = $this->createQueryBuilder('s')
-            ->select('s.id')
-            ->addSelect('s.code')
-            ->addSelect('s.editable')
-            ->addSelect('s.color')
-            ->addSelect('COUNT(c.id) as count')
-            ->addSelect('ROUND(SUM(c.itemsTotal), 2) as items')
-            ->addSelect('ROUND(SUM(c.overallTotal), 2) as total')
-            ->addSelect('ROUND(SUM(c.overallTotal) / sum(c.itemsTotal), 4) as margin_percent')
-            ->addSelect('ROUND(SUM(c.overallTotal) - sum(c.itemsTotal), 2) as margin_amount')
+            ->select(\sprintf(
+                'NEW %s(
+                    s.id,
+                    s.code,
+                    s.editable,
+                    s.color,
+                    COUNT(c.id),
+                    ROUND(SUM(c.itemsTotal), 2),
+                    ROUND(SUM(c.overallTotal), 2)
+                )',
+                CalculationsStateItem::class
+            ))
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')
             ->orderBy('s.code', self::SORT_ASC);
 
-        /** @phpstan-var QueryCalculationType[] $rows */
-        $rows = $builder->getQuery()->getArrayResult();
-        $count = $this->getColumnSum($rows, 'count');
-        $total = $this->getColumnSum($rows, 'total');
-        foreach ($rows as &$row) {
-            $row['percent_calculation'] = $this->round($this->safeDivide($row['count'], $count), 5);
-            $row['percent_amount'] = $this->round($this->safeDivide($row['total'], $total), 5);
-        }
+        /** @var CalculationsStateItem[] $items */
+        $items = $builder->getQuery()
+            ->getResult();
 
-        return $rows;
+        return new CalculationsState($items);
     }
 
     /**

@@ -160,13 +160,10 @@
         {{ output_table_actions([action], service) }}
     {% endif %}
 {%- endif %}
-{# links and entity #}
+{# links #}
 {% set links = dialog.links|default([]) %}
-{# entity #}
-{% if dialog.entity|default(false) -%}
-    {% set links = links|merge({id: dialog.entity, type: 'entity'}) %}
+{% if dialog.entity|default -%}
+    {% set links = links|merge({entity: {id: dialog.entity, type: 'entity'}}) %}
 {%- endif %}
-{% if links|length -%}
-    {{ output_links(links, service) }}
-{%- endif %}
+{{ output_links(links, service) }}
 {%- endblock %}

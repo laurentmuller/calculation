@@ -47,7 +47,7 @@ class CalculationStateRepositoryTest extends KernelServiceTestCase
     public function testGetCalculations(): void
     {
         $actual = $this->repository->getCalculations();
-        self::assertEmpty($actual);
+        self::assertCount(0, $actual);
 
         $this->getCalculation();
         $actual = $this->repository->getCalculations();

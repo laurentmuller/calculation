@@ -48,9 +48,9 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
     /**
      * Formatter for the category column.
      *
-     * @throws \Twig\Error\Error
-     *
      * @phpstan-param array{id: int} $entity
+     *
+     * @throws \Twig\Error\Error
      */
     public function formatCategories(int $value, array $entity): string
     {
@@ -68,9 +68,9 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
     /**
      * Formatter for the product column.
      *
-     * @throws \Twig\Error\Error
-     *
      * @phpstan-param array{id: int} $entity
+     *
+     * @throws \Twig\Error\Error
      */
     public function formatProducts(int $value, array $entity): string
     {
@@ -88,9 +88,9 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
     /**
      * Formatter for the task column.
      *
-     * @throws \Twig\Error\Error
-     *
      * @phpstan-param array{id: int} $entity
+     *
+     * @throws \Twig\Error\Error
      */
     public function formatTasks(int $value, array $entity): string
     {

@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Model\CalculationsState;
+use App\Model\CalculationsStateItem;
+use App\Model\CalculationsTotal;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Events\PdfCellTextEvent;
@@ -27,7 +30,6 @@ use App\Pdf\Traits\PdfChartLegendTrait;
 use App\Pdf\Traits\PdfPieChartTrait;
 use App\Report\Table\ReportTable;
 use App\Table\CalculationTable;
-use App\Traits\StateTotalsTrait;
 use App\Utils\FormatUtils;
 use fpdf\Enums\PdfRectangleStyle;
 use fpdf\Enums\PdfTextAlignment;
@@ -36,37 +38,32 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Report for calculations by states.
  *
- * @phpstan-import-type QueryCalculationType from \App\Repository\CalculationStateRepository
- *
- * @extends AbstractArrayReport<QueryCalculationType>
+ * @extends AbstractArrayReport<CalculationsStateItem>
  */
 class CalculationByStateReport extends AbstractArrayReport implements PdfChartInterface, PdfDrawCellTextInterface, PdfDrawHeadersInterface
 {
     use PdfChartLegendTrait;
     use PdfPieChartTrait;
-    use StateTotalsTrait;
 
-    /** @phpstan-var QueryCalculationType|null */
-    private ?array $currentEntity = null;
+    private ?CalculationsStateItem $currentEntity = null;
     private float $minMargin;
+    private CalculationsTotal $total;
 
-    /**
-     * @phpstan-param QueryCalculationType[] $entities
-     */
     public function __construct(
         AbstractController $controller,
-        array $entities,
+        CalculationsState $state,
         private readonly UrlGeneratorInterface $generator
     ) {
-        parent::__construct($controller, $entities);
+        parent::__construct($controller, $state->items);
         $this->setTranslatedTitle('chart.state.title');
         $this->minMargin = $controller->getMinMargin();
+        $this->total = $state->total;
     }
 
     #[\Override]
     public function drawCellText(PdfCellTextEvent $event): bool
     {
-        if (0 !== $event->index || null === $this->currentEntity) {
+        if (0 !== $event->index || !$this->currentEntity instanceof CalculationsStateItem) {
             return false;
         }
         if (!$this->applyFillColor($this->currentEntity)) {
@@ -124,12 +121,9 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         return true;
     }
 
-    /**
-     * @phpstan-param QueryCalculationType $entity
-     */
-    private function applyFillColor(array $entity): bool
+    private function applyFillColor(CalculationsStateItem $entity): bool
     {
-        $color = PdfFillColor::create($entity['color']);
+        $color = PdfFillColor::create($entity->color);
         if (!$color instanceof PdfFillColor) {
             return false;
         }
@@ -182,17 +176,13 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         );
     }
 
-    /**
-     * @phpstan-param \NumberFormatter::ROUND_* $roundingMode
-     */
     private function getPercentCell(
         float $value,
         int $decimals = 2,
         bool $useStyle = false,
-        bool $bold = false,
-        int $roundingMode = \NumberFormatter::ROUND_HALFDOWN
+        bool $bold = false
     ): PdfCell {
-        $text = FormatUtils::formatPercent($value, true, $decimals, $roundingMode);
+        $text = FormatUtils::formatPercent($value, true, $decimals);
         $style = $bold ? PdfStyle::getHeaderStyle() : PdfStyle::getCellStyle();
         if ($useStyle && $this->isMinMargin($value)) {
             $style->setTextColor(PdfTextColor::red());
@@ -212,7 +202,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     }
 
     /**
-     * @phpstan-param QueryCalculationType[] $entities
+     * @phpstan-param CalculationsStateItem[] $entities
      */
     private function renderChart(array $entities): void
     {
@@ -222,10 +212,10 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         $radius = $printableWidth / 4.0;
         $centerX = $margin + $printableWidth / 2.0;
         $centerY = $top + $radius;
-        $rows = \array_map(fn (array $entity): array => [
-            'label' => $entity['code'],
-            'color' => $entity['color'],
-            'value' => $entity['percent_amount'],
+        $rows = \array_map(fn (CalculationsStateItem $entity): array => [
+            'label' => $entity->code,
+            'color' => $entity->color,
+            'value' => $entity->total,
         ], $entities);
 
         $this->renderPieChart($centerX, $centerY, $radius, $rows);
@@ -235,7 +225,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     }
 
     /**
-     * @phpstan-param QueryCalculationType[] $entities
+     * @phpstan-param CalculationsStateItem[] $entities
      */
     private function renderTable(array $entities): void
     {
@@ -246,31 +236,31 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
             $y = $this->getY();
             $this->currentEntity = $entity;
             $table->startRow()
-                ->add($entity['code'])
-                ->addCellInt($entity['count'])
-                ->addCell($this->getPercentCell($entity['percent_calculation']))
-                ->addCellAmount($entity['items'])
-                ->addCellAmount($entity['margin_amount'])
-                ->addCell($this->getPercentCell($entity['margin_percent'], 0, true))
-                ->addCellAmount($entity['total'])
-                ->addCell($this->getPercentCell($entity['percent_amount']))
+                ->add($entity->code)
+                ->addCellInt($entity->count)
+                ->addCell($this->getPercentCell($entity->calculationsPercent))
+                ->addCellAmount($entity->items)
+                ->addCellAmount($entity->marginAmount)
+                ->addCell($this->getPercentCell($entity->marginPercent, 0, true))
+                ->addCellAmount($entity->total)
+                ->addCell($this->getPercentCell($entity->totalPercent))
                 ->endRow();
-            $link = $this->getURL($entity['id']);
+            $link = $this->getURL($entity->id);
             $this->link($x, $y, $width, $this->getY() - $y, $link);
         }
         $this->currentEntity = null;
 
-        // totals
-        $totals = $this->getStateTotals($entities);
+        // total
+        $total = $this->total;
         $table->startHeaderRow()
             ->addCellTrans('calculation.fields.total')
-            ->addCellInt($totals['calculation_count'])
-            ->addCell($this->getPercentCell($totals['calculation_percent'], bold: true))
-            ->addCellAmount($totals['items_amount'])
-            ->addCellAmount($totals['margin_amount'])
-            ->addCell($this->getPercentCell($totals['margin_percent'], 0, bold: true, roundingMode: \NumberFormatter::ROUND_DOWN))
-            ->addCellAmount($totals['total_amount'])
-            ->addCell($this->getPercentCell($totals['total_percent'], bold: true))
+            ->addCellInt($total->count)
+            ->addCell($this->getPercentCell(1.0, bold: true))
+            ->addCellAmount($total->items)
+            ->addCellAmount($total->marginAmount)
+            ->addCell($this->getPercentCell($total->marginPercent, 0, bold: true))
+            ->addCellAmount($total->total)
+            ->addCell($this->getPercentCell(1.0, bold: true))
             ->endRow();
     }
 }

@@ -103,13 +103,13 @@ class CaptchaImageService implements ServiceSubscriberInterface
      * @param int  $width  the image width
      * @param int  $height the image height
      *
-     * @return ?string the image encoded with base 64 or null if the image cannot be created
-     *
-     * @throws \Exception
-     *
      * @phpstan-param positive-int $length
      * @phpstan-param positive-int $width
      * @phpstan-param positive-int $height
+     *
+     * @return ?string the image encoded with base 64 or null if the image cannot be created
+     *
+     * @throws \Exception
      */
     public function generateImage(bool $force = false, int $length = 6, int $width = 150, int $height = 30): ?string
     {
@@ -207,10 +207,10 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * Create an image.
      *
-     * @throws \Exception
-     *
      * @phpstan-param positive-int $width
      * @phpstan-param positive-int $height
+     *
+     * @throws \Exception
      */
     private function createImage(string $text, int $width, int $height): ?ImageService
     {

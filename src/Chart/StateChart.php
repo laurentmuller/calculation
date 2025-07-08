@@ -13,24 +13,20 @@ declare(strict_types=1);
 
 namespace App\Chart;
 
+use App\Model\CalculationsStateItem;
+use App\Model\CalculationsTotal;
 use App\Repository\CalculationStateRepository;
 use App\Service\ApplicationService;
 use App\Table\CalculationTable;
-use App\Traits\StateTotalsTrait;
 use App\Utils\FormatUtils;
-use HighchartsBundle\Highcharts\ChartExpression;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
 /**
  * Chart to display calculations by state.
- *
- * @phpstan-import-type QueryCalculationType from CalculationStateRepository
  */
 class StateChart extends AbstractHighchart
 {
-    use StateTotalsTrait;
-
     private const TEMPLATE_NAME = 'chart/_state_tooltip.js.twig';
 
     public function __construct(
@@ -44,23 +40,31 @@ class StateChart extends AbstractHighchart
 
     /**
      * Generate the chart data.
+     *
+     * @return array{
+     *     chart: StateChart,
+     *     data: CalculationsStateItem[],
+     *     total: CalculationsTotal,
+     *     minMargin: float}
      */
     public function generate(): array
     {
-        $states = $this->repository->getCalculations();
+        $calculationsState = $this->repository->getCalculations();
+        $items = $calculationsState->items;
+        $total = $calculationsState->total;
 
         $this->setType(self::TYPE_PIE)
             ->hideTitle()
             ->setPlotOptions()
             ->setTooltipOptions()
-            ->setColors($states)
-            ->setSeries($states);
+            ->setColors($items)
+            ->setSeries($items);
 
         return [
             'chart' => $this,
-            'data' => $states,
-            'totals' => $this->getStateTotals($states),
-            'min_margin' => $this->getMinMargin(),
+            'data' => $items,
+            'total' => $total,
+            'minMargin' => $this->getMinMargin(),
         ];
     }
 
@@ -80,21 +84,6 @@ class StateChart extends AbstractHighchart
     private function formatPercent(float $value): string
     {
         return FormatUtils::formatPercent($value, true, 2, \NumberFormatter::ROUND_HALFEVEN);
-    }
-
-    private function getClickExpression(): ChartExpression
-    {
-        return ChartExpression::instance('function() {location.href = this.url;}');
-    }
-
-    private function getMarginColor(float $value): string
-    {
-        $minMargin = $this->getMinMargin();
-        if (!$this->isFloatZero($value) && $value < $minMargin) {
-            return 'var(--bs-danger)';
-        }
-
-        return 'inherit';
     }
 
     private function getPieOptions(): array
@@ -120,14 +109,14 @@ class StateChart extends AbstractHighchart
             'keys' => [
                 'name',
                 'y',
-                'calculations',
-                'calculations_percent',
-                'net_amount',
-                'margin_percent',
-                'margin_amount',
-                'margin_color',
-                'total_amount',
-                'total_percent',
+                'count',
+                'calculationsPercent',
+                'items',
+                'marginAmount',
+                'marginPercent',
+                'marginColor',
+                'totalPercent',
+                'totalAmount',
                 'url',
             ],
         ];
@@ -139,31 +128,31 @@ class StateChart extends AbstractHighchart
     }
 
     /**
-     * @phpstan-param QueryCalculationType[] $states
+     * @phpstan-param CalculationsStateItem[] $items
      */
-    private function mapData(array $states): array
+    private function mapData(array $items): array
     {
-        return \array_map(fn (array $state): array => [
-            'name' => $state['code'],
-            'y' => $state['total'],
-            'calculations' => FormatUtils::formatInt($state['count']),
-            'calculations_percent' => $this->formatPercent($state['percent_calculation']),
-            'net_amount' => FormatUtils::formatInt($state['items']),
-            'margin_percent' => FormatUtils::formatPercent($state['margin_percent']),
-            'margin_amount' => FormatUtils::formatInt($state['margin_amount']),
-            'margin_color' => $this->getMarginColor($state['margin_percent']),
-            'total_amount' => FormatUtils::formatInt($state['total']),
-            'total_percent' => $this->formatPercent($state['percent_amount']),
-            'url' => $this->getURL($state['id']),
-        ], $states);
+        return \array_map(fn (CalculationsStateItem $entry): array => [
+            'name' => $entry->code,
+            'y' => $entry->total,
+            'count' => FormatUtils::formatInt($entry->count),
+            'calculationsPercent' => $this->formatPercent($entry->calculationsPercent),
+            'items' => FormatUtils::formatInt($entry->items),
+            'marginPercent' => FormatUtils::formatPercent($entry->marginPercent),
+            'marginAmount' => FormatUtils::formatInt($entry->marginAmount),
+            'marginColor' => $this->getMarginColor($entry->marginPercent),
+            'totalAmount' => FormatUtils::formatInt($entry->total),
+            'totalPercent' => $this->formatPercent($entry->totalPercent),
+            'url' => $this->getURL($entry->id),
+        ], $items);
     }
 
     /**
-     * @param QueryCalculationType[] $states
+     * @param CalculationsStateItem[] $items
      */
-    private function setColors(array $states): self
+    private function setColors(array $items): self
     {
-        $this->colors = \array_map(static fn (array $state): string => $state['color'], $states);
+        $this->colors = \array_map(static fn (CalculationsStateItem $state): string => $state->color, $items);
 
         return $this;
     }
@@ -179,13 +168,13 @@ class StateChart extends AbstractHighchart
     }
 
     /**
-     * @phpstan-param QueryCalculationType[] $states
+     * @phpstan-param CalculationsStateItem[] $items
      */
-    private function setSeries(array $states): void
+    private function setSeries(array $items): void
     {
         $this->series->merge([
             [
-                'data' => $this->mapData($states),
+                'data' => $this->mapData($items),
                 'name' => $this->trans('chart.state.title'),
             ],
         ]);

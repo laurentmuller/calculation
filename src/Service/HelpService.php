@@ -140,9 +140,9 @@ class HelpService
      *
      * @param string|array|null $id the entity identifier or the dialog array to search for
      *
-     * @return array|null the entity, if found; null otherwise
-     *
      * @phpstan-param string|array{entity?: string|null, ...}|null $id
+     *
+     * @return array|null the entity, if found; null otherwise
      *
      * @phpstan-return HelpEntityType|null
      */

@@ -224,11 +224,11 @@ abstract class AbstractHttpClientService
      * @param string $url     the URL request
      * @param array  $options the additional options to add to the request
      *
+     * @phpstan-param Request::METHOD_* $method
+     *
      * @return ResponseInterface the response
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface when an unsupported option is passed
-     *
-     * @phpstan-param Request::METHOD_* $method
      */
     protected function request(string $method, string $url, array $options = []): ResponseInterface
     {

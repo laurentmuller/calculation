@@ -1,66 +1,66 @@
 {# macros for help templates #}
 {% macro output_type(field) -%}
-{%- set type = ('help.types.' ~ field.type|default('text'))|trans -%}
-{%- set length = field.length|default(false) -%}
-{{ type }}{% if length %} ({{ length }}){% endif %}
+    {%- set type = ('help.types.' ~ field.type|default('text'))|trans -%}
+    {%- set length = field.length|default(false) -%}
+    {{ type }}{% if length %} ({{ length }}){% endif %}
 {%- endmacro %}
 
 {% macro output_required(field) -%}
-{%- set required = field.required is defined ? field.required : true -%}
-{% if required %}
-    <i class="text-success fa-solid fa-check"></i>
-{% endif %}
+    {%- set required = field.required is defined ? field.required : true -%}
+    {% if required %}
+        <i class="text-success fa-solid fa-check"></i>
+    {% endif %}
 {%- endmacro %}
 
 {% macro output_image(path, screenshot = true) -%}
-{%- set full_path = 'help/images/' ~ path ~ constant('App\\Service\\HelpService::IMAGES_EXT') -%}
-{% if asset_exists(full_path) %}
-    {% if screenshot %}<p class="mb-2">{{ 'help.labels.screenshot'|trans }}</p>{% endif %}
-    {{ asset_image(full_path, {class: 'img-fluid', alt: 'help.labels.screenshot'|trans}) }}
-{% endif %}
+    {%- set full_path = 'help/images/' ~ path ~ constant('App\\Service\\HelpService::IMAGES_EXT') -%}
+    {% if asset_exists(full_path) %}
+        {% if screenshot %}<p class="mb-2">{{ 'help.labels.screenshot'|trans }}</p>{% endif %}
+        {{ asset_image(full_path, {class: 'img-fluid', alt: 'help.labels.screenshot'|trans}) }}
+    {% endif %}
 {%- endmacro %}
 
 {% macro output_table_actions(actions, service) -%}
-<div class="table-responsive">
-    <table class="table table-sm w-100">
-        <thead>
+    <div class="table-responsive">
+        <table class="table table-sm w-100">
+            <thead>
             <tr>
                 <th class="text-nowrap">{{ 'help.fields.action'|trans }}</th>
                 <th class="w-100">{{ 'help.fields.description'|trans }}</th>
             </tr>
-        </thead>
-        <tbody>
-        {% for action in actions %}
-            {{ _self.output_row_action(action, service) }}
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+            {% for action in actions %}
+                {{ _self.output_row_action(action, service) }}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {%- endmacro %}
 
 {% macro output_row_action(action, service) -%}
-{% if action.action|default(false) %}
-    {%- set action = service.mergeAction(action) -%}
-{% endif %}
-{%- set dialog = service.findDialog(action.dialog|default(action.id)) -%}
-{%- set href = dialog ? path('help_dialog', {id: dialog.id}) : false -%}
-{%- set icon = action.icon|default(false) -%}
-{%- set text = action.label|default(action.id) -%}
-<tr>
-    <td class="text-nowrap">
-        {%- if href -%}
-            <a href="{{ href }}">{{ _self.output_icon(icon, text) }}</a>
-        {%- else -%}
-            {{- _self.output_icon(icon, text) -}}
-        {%- endif -%}
-    </td>
-    <td class="w-100">{{ action.description }}</td>
-</tr>
+    {% if action.action|default(false) %}
+        {%- set action = service.mergeAction(action) -%}
+    {% endif %}
+    {%- set dialog = service.findDialog(action.dialog|default(action.id)) -%}
+    {%- set href = dialog ? path('help_dialog', {id: dialog.id}) : false -%}
+    {%- set icon = action.icon|default(false) -%}
+    {%- set text = action.label|default(action.id) -%}
+    <tr>
+        <td class="text-nowrap">
+            {%- if href -%}
+                <a href="{{ href }}">{{ _self.output_icon(icon, text) }}</a>
+            {%- else -%}
+                {{- _self.output_icon(icon, text) -}}
+            {%- endif -%}
+        </td>
+        <td class="w-100">{{ action.description }}</td>
+    </tr>
 {%- endmacro %}
 
 {% macro output_icon(icon, text) -%}
-{% from 'macros/_icons.html.twig' import icon %}
-{{- icon(icon, text) -}}
+    {% from 'macros/_icons.html.twig' import icon %}
+    {{- icon(icon, text) -}}
 {%- endmacro %}
 
 {% macro home_button() -%}
@@ -84,27 +84,33 @@
 {% endmacro %}
 
 {% macro output_links(links, service) -%}
-{% if links -%}
-<p class="mb-0">{{ 'help.labels.see_also'|trans }}</p>
-<ul>
-    {% for link in links %}
-        {% set type = link.type|default %}
-        {% if type == 'dialog' %}
-            {%- set dialog = service.findDialog(link.id) -%}
-            {% if dialog %}
-                {%- set href = path('help_dialog', {id: dialog.id}) -%}
-                <li><a href="{{ href }}">{{ dialog.name }}</a></li>
-            {% endif %}
-        {% elseif type == 'entity' %}
-            {%- set entity = service.findEntity(link.id) -%}
-            {% if entity %}
-                {%- set href = path('help_entity', {id: entity.id}) -%}
-                <li><a href="{{ href }}">{{ entity.name }}</a></li>
-            {% endif %}
-        {% elseif link.href is defined and link.text is defined %}
-            <li><a href="{{ link.href }}">{{ _self.output_icon(null, link.text) }}</a></li>
-        {% endif %}
-    {% endfor %}
-</ul>
-{%- endif %}
+    {% if links|length -%}
+        <p class="mb-0">{{ 'help.labels.see_also'|trans }}</p>
+        <ul>
+            {% for link in links %}
+                {% set type = link.type|default %}
+                {% if type == 'dialog' %}
+                    {%- set dialog = service.findDialog(link.id) -%}
+                    {% if dialog %}
+                        {%- set href = path('help_dialog', {id: dialog.id}) -%}
+                        <li>
+                            <a href="{{ href }}">{{- _self.output_icon('window-maximize far', dialog.name) -}}</a>
+                        </li>
+                    {% endif %}
+                {% elseif type == 'entity' %}
+                    {%- set entity = service.findEntity(link.id) -%}
+                    {% if entity %}
+                        {%- set href = path('help_entity', {id: entity.id}) -%}
+                        <li>
+                            <a href="{{ href }}">{{- _self.output_icon('database', entity.name) -}}</a>
+                        </li>
+                    {% endif %}
+                {% elseif link.href is defined and link.text is defined %}
+                    <li>
+                        <a href="{{ link.href }}">{{- _self.output_icon('link', link.text) -}}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {%- endif %}
 {%- endmacro %}

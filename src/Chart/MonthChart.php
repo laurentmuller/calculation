@@ -13,25 +13,21 @@ declare(strict_types=1);
 
 namespace App\Chart;
 
+use App\Model\CalculationsMonthItem;
+use App\Model\CalculationsTotal;
 use App\Pdf\Html\HtmlColorName;
 use App\Repository\CalculationRepository;
 use App\Service\ApplicationService;
-use App\Traits\ArrayTrait;
 use App\Utils\FormatUtils;
 use HighchartsBundle\Highcharts\ChartExpression;
-use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
 /**
  * Chart to display calculations by months.
- *
- * @phpstan-import-type CalculationByMonthType from CalculationRepository
  */
 class MonthChart extends AbstractHighchart
 {
-    use ArrayTrait;
-
     /**
      * The HTML color name for amounts.
      */
@@ -58,39 +54,40 @@ class MonthChart extends AbstractHighchart
      *
      * @return array{
      *     chart: MonthChart,
-     *     data: array,
      *     months: int,
-     *     totals: array,
-     *     allowed_months: int[],
-     *     min_margin: float,
-     *     color_amount: string,
-     *     color_margin: string}
+     *     data: CalculationsMonthItem[],
+     *     totals: CalculationsTotal,
+     *     allowedMonths: int[],
+     *     minMargin: float,
+     *     colorAmount: string,
+     *     colorMargin: string}
      */
     public function generate(int $months): array
     {
         $allowedMonths = $this->getAllowedMonths();
         $months = $this->checkMonth($months, $allowedMonths);
-        $series = $this->repository->getByMonth($months);
-        $categories = $this->getCategories($series);
+        $calculationMonths = $this->repository->getByMonth($months);
+        $items = $calculationMonths->items;
+        $total = $calculationMonths->total;
 
         $this->setType(self::TYPE_COLUMN)
             ->hideTitle()
             ->setPlotOptions()
             ->setLegendOptions()
             ->setTooltipOptions()
-            ->setXAxis($categories)
-            ->setYAxis()
-            ->setSeries($series);
+            ->setSeries($items)
+            ->setXAxis($items)
+            ->setYAxis();
 
         return [
             'chart' => $this,
-            'data' => $series,
             'months' => $months,
-            'totals' => $this->getTotals($series),
-            'allowed_months' => $allowedMonths,
-            'min_margin' => $this->getMinMargin(),
-            'color_amount' => self::COLOR_AMOUNT->value,
-            'color_margin' => self::COLOR_MARGIN->value,
+            'data' => $items,
+            'totals' => $total,
+            'allowedMonths' => $allowedMonths,
+            'minMargin' => $this->getMinMargin(),
+            'colorAmount' => self::COLOR_AMOUNT->value,
+            'colorMargin' => self::COLOR_MARGIN->value,
         ];
     }
 
@@ -98,10 +95,9 @@ class MonthChart extends AbstractHighchart
     protected function setTooltipOptions(): static
     {
         parent::setTooltipOptions();
-
         $context = [
-            'color_amount' => self::COLOR_AMOUNT->value,
-            'color_margin' => self::COLOR_MARGIN->value,
+            'colorAmount' => self::COLOR_AMOUNT->value,
+            'colorMargin' => self::COLOR_MARGIN->value,
         ];
         $this->tooltip->merge([
             'shared' => true,
@@ -124,11 +120,6 @@ class MonthChart extends AbstractHighchart
         return \max(1, $count);
     }
 
-    private function formatDate(DatePoint $date): string
-    {
-        return FormatUtils::formatDate($date, \IntlDateFormatter::NONE, 'MMMM Y');
-    }
-
     /**
      * @return int[]
      */
@@ -149,18 +140,13 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @phpstan-param CalculationByMonthType[] $series
+     * @param CalculationsMonthItem[] $items
      *
      * @return int[]
      */
-    private function getCategories(array $series): array
+    private function getCategories(array $items): array
     {
-        return \array_map(static fn (array $item): int => $item['date']->getTimestamp() * 1000, $series);
-    }
-
-    private function getClickExpression(): ChartExpression
-    {
-        return ChartExpression::instance('function() {location.href = this.url;}');
+        return \array_map(static fn (CalculationsMonthItem $item): int => $item->date->getTimestamp() * 1000, $items);
     }
 
     private function getFormatterExpression(): ChartExpression
@@ -171,44 +157,34 @@ class MonthChart extends AbstractHighchart
     /**
      * Only y and url values are returned.
      *
-     * @phpstan-param CalculationByMonthType[] $series
+     * @param CalculationsMonthItem[] $items
      */
-    private function getItemsSeries(array $series): array
+    private function getItemsSeries(array $items): array
     {
-        return \array_map(fn (array $item): array => [
-            'y' => $item['items'],
-            'url' => $this->getURL($item['date']),
-        ], $series);
-    }
-
-    private function getMarginColor(float $value): string
-    {
-        $minMargin = $this->getMinMargin();
-        if (!$this->isFloatZero($value) && $value < $minMargin) {
-            return 'var(--bs-danger)';
-        }
-
-        return 'inherit';
+        return \array_map(fn (CalculationsMonthItem $item): array => [
+            'y' => $item->items,
+            'url' => $this->getURL($item),
+        ], $items);
     }
 
     /**
      * The y value, the url and all data needed by the custom tooltip are returned.
      *
-     * @phpstan-param CalculationByMonthType[] $series
+     * @param CalculationsMonthItem[] $items
      */
-    private function getMarginsSeries(array $series): array
+    private function getMarginsSeries(array $items): array
     {
-        return \array_map(fn (array $item): array => [
-            'y' => $item['margin_amount'],
-            'date' => $this->formatDate($item['date']),
-            'calculations' => FormatUtils::formatInt($item['count']),
-            'net_amount' => FormatUtils::formatInt($item['items']),
-            'margin_percent' => FormatUtils::formatPercent($item['margin_percent']),
-            'margin_amount' => FormatUtils::formatInt($item['margin_amount']),
-            'margin_color' => $this->getMarginColor($item['margin_percent']),
-            'total_amount' => FormatUtils::formatInt($item['total']),
-            'url' => $this->getURL($item['date']),
-        ], $series);
+        return \array_map(fn (CalculationsMonthItem $item): array => [
+            'y' => $item->marginAmount,
+            'date' => $item->formatDate(),
+            'count' => FormatUtils::formatInt($item->count),
+            'items' => FormatUtils::formatInt($item->items),
+            'marginAmount' => FormatUtils::formatInt($item->marginAmount),
+            'marginPercent' => FormatUtils::formatPercent($item->marginPercent),
+            'marginColor' => $this->getMarginColor($item->marginPercent),
+            'totalAmount' => FormatUtils::formatInt($item->total),
+            'url' => $this->getURL($item),
+        ], $items);
     }
 
     private function getSeriesOptions(): array
@@ -227,41 +203,21 @@ class MonthChart extends AbstractHighchart
             'keys' => [
                 'y',
                 'date',
-                'calculations',
-                'net_amount',
-                'margin_percent',
-                'margin_amount',
-                'margin_color',
-                'total_amount',
+                'count',
+                'items',
+                'marginAmount',
+                'marginPercent',
+                'marginColor',
+                'totalAmount',
                 'url',
             ],
         ];
     }
 
-    /**
-     * @phpstan-param CalculationByMonthType[] $series
-     */
-    private function getTotals(array $series): array
-    {
-        $count = $this->getColumnSum($series, 'count');
-        $total = $this->getColumnSum($series, 'total');
-        $items = $this->getColumnSum($series, 'items');
-        $margin_percent = $this->round($this->safeDivide($total, $items), 4);
-        $margin_amount = $total - $items;
-
-        return [
-            'count' => $count,
-            'items' => $items,
-            'margin_percent' => $margin_percent,
-            'margin_amount' => $margin_amount,
-            'total' => $total,
-        ];
-    }
-
-    private function getURL(DatePoint $date): string
+    private function getURL(CalculationsMonthItem $item): string
     {
         return $this->generator->generate('calculation_index', [
-            'search' => $date->format('m.Y'),
+            'search' => $item->getSearchDate(),
         ]);
     }
 
@@ -282,26 +238,32 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @phpstan-param CalculationByMonthType[] $series
+     * @phpstan-param CalculationsMonthItem[] $items
      */
-    private function setSeries(array $series): void
+    private function setSeries(array $items): self
     {
         $this->series->merge([
             [
                 'name' => $this->trans('calculation.fields.margin'),
-                'data' => $this->getMarginsSeries($series),
+                'data' => $this->getMarginsSeries($items),
                 'color' => self::COLOR_MARGIN->value,
             ],
             [
                 'name' => $this->trans('calculationgroup.fields.amount'),
-                'data' => $this->getItemsSeries($series),
+                'data' => $this->getItemsSeries($items),
                 'color' => self::COLOR_AMOUNT->value,
             ],
         ]);
+
+        return $this;
     }
 
-    private function setXAxis(array $categories): self
+    /**
+     * @param CalculationsMonthItem[] $items
+     */
+    private function setXAxis(array $items): self
     {
+        $categories = $this->getCategories($items);
         $this->xAxis->merge([
             'type' => 'datetime',
             'categories' => $categories,
@@ -313,7 +275,7 @@ class MonthChart extends AbstractHighchart
         return $this;
     }
 
-    private function setYAxis(): self
+    private function setYAxis(): void
     {
         $this->yAxis->merge([
             'labels' => [
@@ -323,7 +285,5 @@ class MonthChart extends AbstractHighchart
                 'text' => null,
             ],
         ]);
-
-        return $this;
     }
 }

@@ -20,7 +20,7 @@ use App\Entity\Group;
 use App\Entity\GroupMargin;
 use App\Entity\Product;
 use App\Interfaces\EntityInterface;
-use App\Model\CalculationQuery;
+use App\Model\CalculationAdjustQuery;
 use App\Repository\GlobalMarginRepository;
 use App\Repository\GroupMarginRepository;
 use App\Repository\GroupRepository;
@@ -49,7 +49,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
      */
     public function testAdjustUserMargin(): void
     {
-        $query = new CalculationQuery(
+        $query = new CalculationAdjustQuery(
             adjust: true,
             userMargin: -0.99,
             groups: [
@@ -100,7 +100,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
 
     public function testCreateGroupsFromDataEmpty(): void
     {
-        $query = new CalculationQuery();
+        $query = new CalculationAdjustQuery();
         $service = $this->createCalculationService();
         $actual = $service->createParameters($query);
         self::assertCount(7, $actual);
@@ -112,7 +112,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
      */
     public function testCreateGroupsFromQuery(): void
     {
-        $query = new CalculationQuery(
+        $query = new CalculationAdjustQuery(
             adjust: false,
             userMargin: 0.05,
             groups: [
@@ -132,7 +132,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
      */
     public function testCreateGroupsFromQueryEmpty(): void
     {
-        $query = new CalculationQuery(
+        $query = new CalculationAdjustQuery(
             adjust: false,
             userMargin: 0.05,
             groups: []
@@ -147,7 +147,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
 
     public function testCreateGroupsFromQueryGroupNotFound(): void
     {
-        $query = new CalculationQuery(
+        $query = new CalculationAdjustQuery(
             adjust: false,
             userMargin: 0.05,
             groups: [
@@ -166,7 +166,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
      */
     public function testCreateGroupsFromQueryGroupTotalZero(): void
     {
-        $query = new CalculationQuery(
+        $query = new CalculationAdjustQuery(
             adjust: false,
             userMargin: 0.05,
             groups: [

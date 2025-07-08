@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
-use App\Pdf\PdfLabel;
 use App\Service\PdfLabelService;
 use fpdf\PdfException;
 use PHPUnit\Framework\TestCase;
@@ -75,8 +74,8 @@ class PdfLabelServiceTest extends TestCase
     public function testGetValid(): void
     {
         $service = $this->createService();
-        $actual = $service->get('3422');
-        self::assertInstanceOf(PdfLabel::class, $actual);
+        $service->get('3422');
+        self::expectNotToPerformAssertions();
     }
 
     public function testHas(): void

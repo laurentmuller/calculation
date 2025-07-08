@@ -15,7 +15,6 @@
 {%- set fields = entity.fields|default(false) -%}
 {%- set actions = entity.actions|default(false) -%}
 {%- set constraints = entity.constraints|default(false) -%}
-{%- set links = entity.links|default(false) -%}
 {# title #}
 {% block help_title -%}
 {{- output_icon(entity.icon|default(false), entity_name) -}}
@@ -82,7 +81,5 @@
     {{ output_table_actions(actions, service) }}
 {% endif %}
 {# links #}
-{% if links -%}
-    {{ output_links(links, service) }}
-{%- endif %}
+{{ output_links(entity.links|default([]), service) }}
 {%- endblock %}

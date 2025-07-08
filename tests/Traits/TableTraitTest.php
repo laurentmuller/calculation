@@ -107,7 +107,6 @@ class TableTraitTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $query = new DataQuery();
         $template = '';
-
         self::expectException(AccessDeniedException::class);
         $this->handleTableRequest(
             $table,
@@ -126,14 +125,12 @@ class TableTraitTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $query = new DataQuery();
         $template = '';
-
         $actual = $this->handleTableRequest(
             $table,
             $logger,
             $query,
             $template
         );
-
         self::assertInstanceOf(Response::class, $actual);
     }
 
@@ -144,14 +141,13 @@ class TableTraitTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $query = new DataQuery();
         $template = '';
-
-        $actual = $this->handleTableRequest(
+        $this->handleTableRequest(
             $table,
             $logger,
             $query,
             $template
         );
-        self::assertInstanceOf(Response::class, $actual);
+        self::expectNotToPerformAssertions();
     }
 
     public function testThrowExceptionJson(): void
@@ -162,14 +158,12 @@ class TableTraitTest extends TestCase
         $query = new DataQuery();
         $query->callback = true;
         $template = '';
-
         $actual = $this->handleTableRequest(
             $table,
             $logger,
             $query,
             $template
         );
-
         self::assertInstanceOf(JsonResponse::class, $actual);
     }
 
@@ -180,7 +174,6 @@ class TableTraitTest extends TestCase
         $query = new DataQuery();
         $query->callback = true;
         $template = '';
-
         $actual = $this->handleTableRequest(
             $table,
             $logger,
@@ -197,14 +190,12 @@ class TableTraitTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $query = new DataQuery();
         $template = '';
-
-        $actual = $this->handleTableRequest(
+        $this->handleTableRequest(
             $table,
             $logger,
             $query,
             $template
         );
-
-        self::assertInstanceOf(Response::class, $actual);
+        self::expectNotToPerformAssertions();
     }
 }

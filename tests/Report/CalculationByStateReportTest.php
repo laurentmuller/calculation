@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
+use App\Model\CalculationsState;
+use App\Model\CalculationsStateItem;
 use App\Report\CalculationByStateReport;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -26,34 +28,28 @@ class CalculationByStateReportTest extends TestCase
         $controller->method('getMinMargin')
             ->willReturn(1.1);
         $generator = $this->createMock(UrlGeneratorInterface::class);
-        $data1 = [
-            'id' => 1,
-            'code' => 'Code1',
-            'editable' => true,
-            'color' => 'red',
-            'count' => 1,
-            'items' => 1.0,
-            'total' => 2.0,
-            'margin_percent' => 1.0,
-            'margin_amount' => 1.0,
-            'percent_calculation' => 1.0,
-            'percent_amount' => 1.0,
+        $items = [
+            new CalculationsStateItem(
+                id: 1,
+                code: 'Code1',
+                editable: true,
+                color: 'red',
+                count: 1,
+                items: 1.0,
+                total: 2.0
+            ),
+            new CalculationsStateItem(
+                id: 2,
+                code: 'Code2',
+                editable: false,
+                color: 'black',
+                count: 1,
+                items: 1.0,
+                total: 2.0
+            ),
         ];
-        $data2 = [
-            'id' => 1,
-            'code' => 'Code1',
-            'editable' => true,
-            'color' => 'black',
-            'count' => 1,
-            'items' => 1.0,
-            'total' => 2.0,
-            'margin_percent' => 1.0,
-            'margin_amount' => 1.0,
-            'percent_calculation' => 1.0,
-            'percent_amount' => 1.0,
-        ];
-        $entities = [$data1, $data2];
-        $report = new CalculationByStateReport($controller, $entities, $generator);
+        $state = new CalculationsState($items);
+        $report = new CalculationByStateReport($controller, $state, $generator);
         $actual = $report->render();
         self::assertTrue($actual);
     }

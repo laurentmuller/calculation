@@ -14,94 +14,79 @@ declare(strict_types=1);
 namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
+use App\Model\CalculationsMonth;
+use App\Model\CalculationsMonthItem;
 use App\Report\CalculationByMonthReport;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-/**
- * @phpstan-import-type CalculationByMonthType from \App\Repository\CalculationRepository
- */
 class CalculationByMonthReportTest extends TestCase
 {
     public function testNewPage(): void
     {
-        $entities = [];
+        $items = [];
         for ($i = 0; $i <= 15; ++$i) {
-            $entities[] = [
-                'count' => 5,
-                'items' => 15.0,
-                'total' => 35.0,
-                'year' => 2024,
-                'month' => 3,
-                'margin_percent' => 0.15,
-                'margin_amount' => 7.0,
-                'date' => new DatePoint(),
-            ];
+            $items[] = new CalculationsMonthItem(
+                count: 5,
+                items: 15.0,
+                total: 35.0,
+                year: 2024,
+                month: 3
+            );
         }
-        $report = $this->createReport($entities);
+        $report = $this->createReport($items);
         $actual = $report->render();
         self::assertTrue($actual);
     }
 
     public function testRender(): void
     {
-        $data1 = [
-            'count' => 1,
-            'items' => 10.0,
-            'total' => 20.0,
-            'year' => 2024,
-            'month' => 1,
-            'margin_percent' => 0.1,
-            'margin_amount' => 5.0,
-            'date' => new DatePoint(),
+        $items = [
+            new CalculationsMonthItem(
+                count: 1,
+                items: 10.0,
+                total: 20.0,
+                year: 2024,
+                month: 1
+            ),
+            new CalculationsMonthItem(
+                count: 10,
+                items: 20.0,
+                total: 40.0,
+                year: 2024,
+                month: 2
+            ),
+            new CalculationsMonthItem(
+                count: 5,
+                items: 15.0,
+                total: 35.0,
+                year: 2024,
+                month: 3
+            ),
+            new CalculationsMonthItem(
+                count: 5,
+                items: 15.0,
+                total: 35.0,
+                year: 2024,
+                month: 3
+            ),
         ];
-        $data2 = [
-            'count' => 10,
-            'items' => 20.0,
-            'total' => 40.0,
-            'year' => 2024,
-            'month' => 2,
-            'margin_percent' => 0.2,
-            'margin_amount' => 10.0,
-            'date' => new DatePoint(),
-        ];
-        $data3 = [
-            'count' => 5,
-            'items' => 15.0,
-            'total' => 35.0,
-            'year' => 2024,
-            'month' => 3,
-            'margin_percent' => 0.15,
-            'margin_amount' => 7.0,
-            'date' => new DatePoint(),
-        ];
-        $data4 = [
-            'count' => 5,
-            'items' => 15.0,
-            'total' => 35.0,
-            'year' => 2024,
-            'month' => 3,
-            'margin_percent' => 0.15,
-            'margin_amount' => 7.0,
-            'date' => new DatePoint(),
-        ];
-        $entities = [$data1, $data2, $data3, $data4];
-        $report = $this->createReport($entities);
+        $report = $this->createReport($items);
         $actual = $report->render();
         self::assertTrue($actual);
     }
 
     /**
-     * @phpstan-param CalculationByMonthType[] $entities
+     * @param CalculationsMonthItem[] $items
      */
-    private function createReport(array $entities): CalculationByMonthReport
+    private function createReport(array $items): CalculationByMonthReport
     {
         $controller = $this->createMock(AbstractController::class);
         $controller->method('getMinMargin')
             ->willReturn(1.1);
         $generator = $this->createMock(UrlGeneratorInterface::class);
+        $month = new CalculationsMonth($items);
 
-        return new CalculationByMonthReport($controller, $entities, $generator);
+        return new CalculationByMonthReport($controller, $month, $generator);
     }
 }

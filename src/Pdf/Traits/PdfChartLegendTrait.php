@@ -43,9 +43,9 @@ trait PdfChartLegendTrait
      * @param array $legends    the legends to get height for
      * @param bool  $horizontal true for the horizontal legends; false for the vertical legends
      *
-     * @return float the height used to output all legends or 0 if legends are empty
-     *
      * @phpstan-param ColorStringType[] $legends
+     *
+     * @return float the height used to output all legends or 0 if legends are empty
      */
     public function getLegendsHeight(array $legends, bool $horizontal): float
     {
@@ -65,9 +65,9 @@ trait PdfChartLegendTrait
      * @param bool          $horizontal true for the horizontal legends; false for the vertical legends
      * @param PdfPointStyle $style      the type of shape to draw
      *
-     * @return float the width used to output all legends or 0 if legends are empty
-     *
      * @phpstan-param ColorStringType[] $legends
+     *
+     * @return float the width used to output all legends or 0 if legends are empty
      */
     public function getLegendsWidth(
         array $legends,

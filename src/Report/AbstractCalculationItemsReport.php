@@ -84,9 +84,9 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
      *
      * @param array $items the calculation items
      *
-     * @return string the formatted items
-     *
      * @phpstan-param CalculationItemEntry[] $items
+     *
+     * @return string the formatted items
      */
     abstract protected function formatItems(array $items): string;
 

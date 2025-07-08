@@ -34,13 +34,13 @@ class Parameter
      *                                     the class to reflect, or an object
      * @param string        $name          the property name to get an instance for
      *
-     * @return self|null the attribute instance, if found; null otherwise
-     *
-     * @throws \ReflectionException if the class does not exist
-     *
      * @phpstan-template T of object
      *
      * @phpstan-param T|class-string<T> $objectOrClass
+     *
+     * @return self|null the attribute instance, if found; null otherwise
+     *
+     * @throws \ReflectionException if the class does not exist
      */
     public static function getAttributInstance(object|string $objectOrClass, string $name): ?object
     {
@@ -64,13 +64,13 @@ class Parameter
      *                                     the class to reflect, or an object
      * @param string        $name          the property name to get the default value for
      *
-     * @return mixed the default value
-     *
-     * @throws \ReflectionException if the class does not exist
-     *
      * @phpstan-template T of object
      *
      * @phpstan-param T|class-string<T> $objectOrClass
+     *
+     * @return mixed the default value
+     *
+     * @throws \ReflectionException if the class does not exist
      */
     public static function getDefaultValue(object|string $objectOrClass, string $name): mixed
     {
@@ -84,13 +84,13 @@ class Parameter
      *                                     the class to reflect, or an object
      * @param string        $name          the property name to get the parameter name for
      *
-     * @return ?string the parameter name or null if no attribute is found
-     *
-     * @throws \ReflectionException if the class does not exist
-     *
      * @phpstan-template T of object
      *
      * @phpstan-param T|class-string<T> $objectOrClass
+     *
+     * @return ?string the parameter name or null if no attribute is found
+     *
+     * @throws \ReflectionException if the class does not exist
      */
     public static function getName(object|string $objectOrClass, string $name): ?string
     {
@@ -105,13 +105,13 @@ class Parameter
      * @param string        $name          the property name to get the default value for
      * @param mixed         $value         the value to compare with default
      *
-     * @return bool true if default value; false otherwise
-     *
-     * @throws \ReflectionException if the class does not exist
-     *
      * @phpstan-template T of object
      *
      * @phpstan-param T|class-string<T> $objectOrClass
+     *
+     * @return bool true if default value; false otherwise
+     *
+     * @throws \ReflectionException if the class does not exist
      */
     public static function isDefaultValue(object|string $objectOrClass, string $name, mixed $value = null): bool
     {

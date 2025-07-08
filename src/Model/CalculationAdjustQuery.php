@@ -18,7 +18,7 @@ namespace App\Model;
  *
  * @phpstan-type QueryGroupType = array{id: int, total: float}
  */
-readonly class CalculationQuery
+readonly class CalculationAdjustQuery
 {
     /**
      * @param bool  $adjust     true to adjust the user's margin to reach the minimum margin

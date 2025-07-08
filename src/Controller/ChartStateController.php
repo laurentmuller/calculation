@@ -47,8 +47,8 @@ class ChartStateController extends AbstractController
     public function pdf(CalculationStateRepository $repository, UrlGeneratorInterface $generator): PdfResponse
     {
         $this->checkPermission(EntityPermission::EXPORT);
-        $data = $repository->getCalculations();
-        $report = new CalculationByStateReport($this, $data, $generator);
+        $state = $repository->getCalculations();
+        $report = new CalculationByStateReport($this, $state, $generator);
 
         return $this->renderPdfDocument($report);
     }

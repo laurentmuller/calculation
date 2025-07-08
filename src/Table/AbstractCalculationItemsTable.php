@@ -47,9 +47,9 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      *
      * @param array $items the invalid calculation items
      *
-     * @return string the formatted items
-     *
      * @phpstan-param CalculationItemEntry[] $items
+     *
+     * @return string the formatted items
      */
     abstract protected function formatItems(array $items): string;
 

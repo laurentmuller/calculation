@@ -61,8 +61,8 @@ class ChartMonthController extends AbstractController
     ): PdfResponse {
         $this->checkPermission(EntityPermission::EXPORT);
         $count = $this->validateCount($count);
-        $data = $repository->getByMonth($count);
-        $report = new CalculationByMonthReport($this, $data, $generator);
+        $month = $repository->getByMonth($count);
+        $report = new CalculationByMonthReport($this, $month, $generator);
 
         return $this->renderPdfDocument($report);
     }

@@ -77,11 +77,11 @@ final class StringUtils
      *
      * @return array|\stdClass the decoded value in the appropriate PHP type
      *
-     * @throws \InvalidArgumentException if the value cannot be decoded
-     *
      * @see StringUtils::encodeJson()
      *
      * @phpstan-return ($assoc is true ? array : \stdClass)
+     *
+     * @throws \InvalidArgumentException if the value cannot be decoded
      */
     public static function decodeJson(string $value, bool $assoc = true, int $flags = 0): array|\stdClass
     {
@@ -152,9 +152,9 @@ final class StringUtils
      * @param object|string $objectOrClass either a string containing the name of
      *                                     the class to reflect, or an object
      *
-     * @return string the short name
-     *
      * @phpstan-param T|class-string<T> $objectOrClass
+     *
+     * @return string the short name
      */
     public static function getShortName(object|string $objectOrClass): string
     {
@@ -187,10 +187,10 @@ final class StringUtils
      * @param int $flags  can be a combination of flags
      * @param int $offset to specify the place from which to start the search
      *
-     * @return bool <code>true</code> if the pattern matches the given subject
-     *
      * @phpstan-param non-empty-string $pattern
      * @phpstan-param 0|256|512|768 $flags
+     *
+     * @return bool <code>true</code> if the pattern matches the given subject
      *
      * @psalm-suppress ReferenceConstraintViolation
      */
@@ -210,10 +210,10 @@ final class StringUtils
      * @param int $flags  can be a combination of flags
      * @param int $offset to specify the place from which to start the search
      *
-     * @return bool <code>true</code> if the pattern matches the given subject
-     *
      * @phpstan-param non-empty-string $pattern
      * @phpstan-param int-mask<1, 2, 256, 512> $flags
+     *
+     * @return bool <code>true</code> if the pattern matches the given subject
      *
      * @psalm-suppress ReferenceConstraintViolation
      */
@@ -248,9 +248,9 @@ final class StringUtils
      * @param int                   $limit   the maximum possible replacements for each pattern in each subject string.
      *                                       Defaults to -1 (no limit).
      *
-     * @return string|string[] returns a string or an array with the replaced values
-     *
      * @phpstan-param non-empty-array<non-empty-string, string> $values
+     *
+     * @return string|string[] returns a string or an array with the replaced values
      *
      * @phpstan-return ($subject is string ? string : string[])
      */

@@ -3,23 +3,23 @@
 {% from 'macros/_attributes.html.twig' import attributes %}
 {% from 'index/_macros.html.twig' import margin as macros_margin, empty as macros_empty %}
 {# macros #}
-{% macro cardEntry(month, list_path, min_margin) -%}
+{% macro cardEntry(item, list_path, min_margin) -%}
 <div class="border index-child m-1">
     <div class="position-relative body-tooltip p-2">
-        {%- set text = month.date|locale_date('none', 'MMMM Y') -%}
+        {%- set text = item.date|locale_date('none', 'MMMM Y') -%}
         {%- if list_path -%}
             {%- set list_title = 'index.panel_month_title'|trans({'%month%': text}) -%}
-            <a href="{{ path(list_path, {search: month.date|locale_date('none', 'MM.Y')}) }}" class="stretched-link" title="{{ list_title }}">
+            <a href="{{ path(list_path, {search: item.date|locale_date('none', 'MM.Y')}) }}" class="stretched-link" title="{{ list_title }}">
                 {{- text -}}
             </a>
         {%- else -%}
             <span>{{ text }}</span>
         {%- endif -%}
         <div class="h4 fw-normal my-1">
-            <span title="{{ 'index.panel_title_total'|trans }}">{{- month.total|integer }}</span> {{ macros_margin(month.margin_percent, min_margin) -}}
+            <span title="{{ 'index.panel_title_total'|trans }}">{{- item.total|integer }}</span> {{ macros_margin(item.marginPercent, min_margin) -}}
         </div>
         <p class="mb-0" title="{{ 'index.panel_title_count'|trans }}">
-            {{- 'counters.calculations'|trans({count: month.count}) -}}
+            {{- 'counters.calculations'|trans({count: item.count}) -}}
         </p>
     </div>
 </div>
@@ -53,8 +53,8 @@
     <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}">
     {% if is_months %}
         <div class="card-body index-parent g-0 p-1">
-            {% for month in months %}
-                {{ _self.cardEntry(month, list_path, min_margin) }}
+            {% for item in months.items %}
+                {{ _self.cardEntry(item, list_path, min_margin) }}
             {% endfor %}
         </div>
     {% else %}

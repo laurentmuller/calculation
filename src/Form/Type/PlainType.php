@@ -303,9 +303,9 @@ class PlainType extends AbstractType
     }
 
     /**
-     * @throws TransformationFailedException if the value cannot be mapped to a string
-     *
      * @phpstan-param OptionsType $options
+     *
+     * @throws TransformationFailedException if the value cannot be mapped to a string
      */
     private function getDataValue(mixed $value, array $options): string
     {

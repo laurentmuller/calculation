@@ -54,9 +54,9 @@ class CalculationTable extends AbstractEntityTable
     /**
      * Render the overall margin column.
      *
-     * @throws \Twig\Error\Error
-     *
      * @phpstan-param array{overallTotal: float} $entity
+     *
+     * @throws \Twig\Error\Error
      */
     public function formatOverallMargin(float $margin, array $entity): string
     {

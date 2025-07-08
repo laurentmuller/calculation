@@ -73,13 +73,13 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
      *
      * @param array $items the calculation items
      *
-     * @return string the formatted items
-     *
      * @phpstan-param array<array{
      *          description: string,
      *          quantity: float,
      *          price: float,
      *          count: int}> $items
+     *
+     * @return string the formatted items
      */
     abstract protected function formatItems(array $items): string;
 }

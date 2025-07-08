@@ -108,9 +108,9 @@ final class FileUtils
      *
      * @return array|\stdClass the decoded file content in the appropriate PHP type
      *
-     * @throws \InvalidArgumentException if the file cannot be decoded
-     *
      * @phpstan-return ($assoc is true ? array : \stdClass)
+     *
+     * @throws \InvalidArgumentException if the file cannot be decoded
      */
     public static function decodeJson(string|\SplFileInfo $file, bool $assoc = true): array|\stdClass
     {

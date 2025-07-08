@@ -301,9 +301,9 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Show properties of an entity.
      *
-     * @throws AccessDeniedException
-     *
      * @phpstan-param TEntity $item
+     *
+     * @throws AccessDeniedException
      */
     protected function showEntity(EntityInterface $item, array $parameters = []): Response
     {

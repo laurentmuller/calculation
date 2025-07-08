@@ -146,6 +146,11 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
         return 'var(--bs-border-color)';
     }
 
+    protected function getClickExpression(): ChartExpression
+    {
+        return ChartExpression::instance('function() {location.href = this.url;}');
+    }
+
     /**
      * Gets the font style for the given color and for the optional font size.
      *
@@ -185,6 +190,15 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
         return [
             'color' => 'var(--bs-link-hover-color)',
         ];
+    }
+
+    protected function getMarginColor(float $value): string
+    {
+        if (!$this->isFloatZero($value) && $value < $this->getMinMargin()) {
+            return 'var(--bs-danger)';
+        }
+
+        return 'inherit';
     }
 
     /**

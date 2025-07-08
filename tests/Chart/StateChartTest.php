@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Chart;
 
 use App\Chart\StateChart;
+use App\Model\CalculationsState;
+use App\Model\CalculationsStateItem;
 use App\Repository\CalculationStateRepository;
 use App\Service\ApplicationService;
 use App\Tests\TranslatorMockTrait;
@@ -23,9 +25,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
-/**
- * @phpstan-import-type QueryCalculationType from CalculationStateRepository
- */
 class StateChartTest extends TestCase
 {
     use TranslatorMockTrait;
@@ -48,19 +47,47 @@ class StateChartTest extends TestCase
 
     public function testWithoutData(): void
     {
+        $this->repository->method('getCalculations')
+            ->willReturn(new CalculationsState([]));
         $chart = $this->createChart();
         $chart->generate();
-        self::assertInstanceOf(StateChart::class, $chart);
+        self::expectNotToPerformAssertions();
     }
 
     public function testWithSeries(): void
     {
         $this->repository->method('getCalculations')
-            ->willReturn($this->createSeries());
+            ->willReturn($this->createCalculationsState());
 
         $chart = $this->createChart();
         $chart->generate();
-        self::assertInstanceOf(StateChart::class, $chart);
+        self::expectNotToPerformAssertions();
+    }
+
+    private function createCalculationsState(): CalculationsState
+    {
+        $items = [
+            new CalculationsStateItem(
+                id: 1,
+                code: 'code1',
+                editable: true,
+                color: 'red',
+                count: 1,
+                items: 100.0,
+                total: 200,
+            ),
+            new CalculationsStateItem(
+                id: 2,
+                code: 'code2',
+                editable: false,
+                color: 'pink',
+                count: 1,
+                items: 100.0,
+                total: 200,
+            ),
+        ];
+
+        return new CalculationsState($items);
     }
 
     private function createChart(): StateChart
@@ -69,41 +96,5 @@ class StateChartTest extends TestCase
         $chart->setTranslator($this->translator);
 
         return $chart;
-    }
-
-    /**
-     * @phpstan-return QueryCalculationType[]
-     */
-    private function createSeries(): array
-    {
-        $value0 = [
-            'id' => 1,
-            'code' => 'code1',
-            'editable' => true,
-            'color' => 'red',
-            'count' => 1,
-            'items' => 100.0,
-            'total' => 200,
-            'margin_percent' => 0.25,
-            'margin_amount' => 50.0,
-            'percent_calculation' => 0.25,
-            'percent_amount' => 0.25,
-        ];
-
-        $value1 = [
-            'id' => 2,
-            'code' => 'code2',
-            'editable' => false,
-            'color' => 'pink',
-            'count' => 1,
-            'items' => 100.0,
-            'total' => 200,
-            'margin_percent' => -0.25,
-            'margin_amount' => 50.0,
-            'percent_calculation' => 0.25,
-            'percent_amount' => 0.25,
-        ];
-
-        return [$value0, $value1];
     }
 }

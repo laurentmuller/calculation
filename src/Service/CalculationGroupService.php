@@ -18,7 +18,7 @@ use App\Entity\CalculationGroup;
 use App\Entity\Group;
 use App\Interfaces\ConstantsInterface;
 use App\Interfaces\EntityInterface;
-use App\Model\CalculationQuery;
+use App\Model\CalculationAdjustQuery;
 use App\Repository\GlobalMarginRepository;
 use App\Repository\GroupMarginRepository;
 use App\Repository\GroupRepository;
@@ -44,7 +44,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *     user_margin: float,
  *     groups: GroupType[]}
  *
- * @phpstan-import-type QueryGroupType from CalculationQuery
+ * @phpstan-import-type QueryGroupType from CalculationAdjustQuery
  */
 class CalculationGroupService implements ConstantsInterface
 {
@@ -144,7 +144,7 @@ class CalculationGroupService implements ConstantsInterface
      *
      * @phpstan-return ParametersType
      */
-    public function createParameters(CalculationQuery $query): array
+    public function createParameters(CalculationAdjustQuery $query): array
     {
         if ([] === $query->groups) {
             return $this->createEmptyParameters();

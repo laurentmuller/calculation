@@ -36,7 +36,7 @@ class VichListenerTest extends TestCase
         $event = $this->createEvent();
         $listener = $this->createListener();
         $listener->onPostUpload($event);
-        self::assertInstanceOf(Event::class, $event);
+        self::expectNotToPerformAssertions();
     }
 
     public function testPostUploadNewFile(): void
@@ -50,7 +50,7 @@ class VichListenerTest extends TestCase
             $event = $this->createEvent($file);
             $listener = $this->createListener();
             $listener->onPostUpload($event);
-            self::assertInstanceOf(Event::class, $event);
+            self::expectNotToPerformAssertions();
         } finally {
             FileUtils::remove($path . 'USER_000000_192.jpg');
         }
@@ -62,7 +62,7 @@ class VichListenerTest extends TestCase
         $event = $this->createEvent($file);
         $listener = $this->createListener();
         $listener->onPostUpload($event);
-        self::assertInstanceOf(Event::class, $event);
+        self::expectNotToPerformAssertions();
     }
 
     public function testPreRemove(): void
@@ -70,7 +70,7 @@ class VichListenerTest extends TestCase
         $event = $this->createEvent();
         $listener = $this->createListener();
         $listener->onPreRemove($event);
-        self::assertInstanceOf(Event::class, $event);
+        self::expectNotToPerformAssertions();
     }
 
     public function testPreUploadInvalidFile(): void
@@ -78,7 +78,7 @@ class VichListenerTest extends TestCase
         $event = $this->createEvent();
         $listener = $this->createListener();
         $listener->onPreUpload($event);
-        self::assertInstanceOf(Event::class, $event);
+        self::expectNotToPerformAssertions();
     }
 
     public function testPreUploadValidFile(): void
@@ -87,7 +87,7 @@ class VichListenerTest extends TestCase
         $event = $this->createEvent($file);
         $listener = $this->createListener();
         $listener->onPreUpload($event);
-        self::assertInstanceOf(Event::class, $event);
+        self::expectNotToPerformAssertions();
     }
 
     /**
@@ -107,7 +107,7 @@ class VichListenerTest extends TestCase
         $event = $this->createEvent($file, $namer);
         $listener = $this->createListener();
         $listener->onPreUpload($event);
-        self::assertInstanceOf(Event::class, $event);
+        self::expectNotToPerformAssertions();
     }
 
     /**

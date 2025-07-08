@@ -1,19 +1,22 @@
-/* global Highcharts */
 /**
  * @typedef Point
+ * @type {object}
  * @property {string} color
- * @property {string} calculations
- * @property {string} calculations_percent
- * @property {string} net_amount
- * @property {string} margin_percent
- * @property {string} margin_amount
- * @property {string} margin_color
- * @property {string} total_amount
- * @property {string} total_percent
+ * @property {string} name
+ * @property {string} count
+ * @property {string} calculationsPercent
+ * @property {string} items
+ * @property {string} marginAmount
+ * @property {string} marginPercent
+ * @property {string} marginColor
+ * @property {string} totalPercent
+ * @property {string} totalAmount
  */
 function renderTooltip () {
-    /** @var Point point */
+    'use strict';
+    /** @type Point point */
     const point = this.point;
+    console.log(point);
     let html = '<table class="m-1">';
     html +=
         '<tr>' +
@@ -32,31 +35,31 @@ function renderTooltip () {
         '<tr>' +
         '<td>{{ 'calculation.list.title'|trans }}</td>' +
         '<td class="px-1">:</td>' +
-        '<td class="text-calculation">' + point.calculations + '</td>' +
-        '<td class="text-calculation ps-3">' + point.calculations_percent + '</td>' +
+        '<td class="text-calculation">' + point.count + '</td>' +
+        '<td class="text-calculation ps-3">' + point.calculationsPercent + '</td>' +
         '</tr>';
     html += '<tr><td colspan="4"><hr class="my-1"></td></tr>';
     html +=
         '<tr>' +
         '<td>{{ 'calculationgroup.fields.amount'|trans }}</td>' +
         '<td class="px-1">:</td>' +
-        '<td class="text-calculation">' + point.net_amount + '</td>' +
+        '<td class="text-calculation">' + point.items + '</td>' +
         '<td class="text-calculation">&nbsp;</td>' +
         '</tr>';
     html +=
         '<tr>' +
         '<td>{{ 'calculation.fields.margin'|trans }}</td>' +
         '<td class="px-1">:</td>' +
-        '<td class="text-calculation">' + point.margin_amount + '</td>' +
-        '<td class="text-calculation" style="color:'+ point.margin_color + '">' + point.margin_percent + '</td>' +
+        '<td class="text-calculation">' + point.marginAmount + '</td>' +
+        '<td class="text-calculation" style="color:'+ point.marginColor + '">' + point.marginPercent + '</td>' +
         '</tr>';
     html += '<tr><td colspan="4"><hr class="my-1"></td></tr>';
     html +=
         '<tr>' +
         '<th>{{ 'calculation.fields.total'|trans }}</th>' +
         '<th class="px-1">:</th>' +
-        '<th class="text-calculation">' + point.total_amount + '</th>' +
-        '<th class="text-calculation ps-3">' + point.total_percent + '</th>' +
+        '<th class="text-calculation">' + point.totalAmount + '</th>' +
+        '<th class="text-calculation ps-3">' + point.totalPercent + '</th>' +
         '</tr>';
     html += '</table>';
     return html;

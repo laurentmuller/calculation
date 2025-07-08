@@ -97,9 +97,9 @@ readonly class RoleService
      * @param ?RoleInterface $role     the data to get role names
      * @param string         $roleName the role name to verify
      *
-     * @return bool true if the given data has the given role name; false otherwise
-     *
      * @phpstan-param RoleInterface::ROLE_* $roleName
+     *
+     * @return bool true if the given data has the given role name; false otherwise
      */
     public function hasRole(?RoleInterface $role, string $roleName): bool
     {

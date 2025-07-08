@@ -48,9 +48,9 @@ abstract class AbstractParametersType extends AbstractType
     }
 
     /**
-     * @psalm-param FormBuilderInterface $builder
-     *
      * @phpstan-param FormBuilderInterface<mixed> $builder
+     *
+     * @psalm-param FormBuilderInterface $builder
      */
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void

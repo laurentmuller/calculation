@@ -24,7 +24,6 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
-use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
@@ -361,8 +360,7 @@ class WorksheetDocumentTest extends TestCase
         $sheet->setCellContent(3, 1, new DatePoint());
         $sheet->setCellContent(4, 1, 'Fake');
 
-        $actual = $sheet->getColumnStyleFromIndex(0);
-        self::assertInstanceOf(Style::class, $actual);
+        $sheet->getColumnStyleFromIndex(0);
         self::assertInstanceOf(SpreadsheetDocument::class, $sheet->getParent());
         $actual = $sheet->getPercentFormat();
         self::assertSame(NumberFormat::FORMAT_PERCENTAGE, $actual);

@@ -94,9 +94,9 @@ abstract class AbstractParameterType extends AbstractHelperType
     /**
      * @phpstan-param FormInterface<array> $form
      *
-     * @phpstan-return  array<string, mixed>
-     *
      * @psalm-param  FormInterface $form
+     *
+     * @phpstan-return  array<string, mixed>
      */
     private function getDefaultValues(FormInterface $form): array
     {

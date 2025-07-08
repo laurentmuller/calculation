@@ -226,9 +226,9 @@ abstract class AbstractParameters
     }
 
     /**
-     * @return MetaData[]
-     *
      * @phpstan-param TParameter $parameter
+     *
+     * @return MetaData[]
      */
     protected function getMetaDatas(ParameterInterface|string $parameter): array
     {
@@ -263,9 +263,9 @@ abstract class AbstractParameters
     }
 
     /**
-     * @return array<string, array<string, mixed>>
-     *
      * @phpstan-param TParameter ...$parameters
+     *
+     * @return array<string, array<string, mixed>>
      *
      * @phpstan-return array<string, array<string, TValue>>
      */
@@ -290,9 +290,9 @@ abstract class AbstractParameters
     }
 
     /**
-     * @return \ReflectionProperty[]
-     *
      * @phpstan-param TParameter $parameter
+     *
+     * @return \ReflectionProperty[]
      */
     protected function getProperties(ParameterInterface|string $parameter): array
     {

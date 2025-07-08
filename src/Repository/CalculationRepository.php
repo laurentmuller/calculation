@@ -15,7 +15,8 @@ namespace App\Repository;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
-use App\Traits\MathTrait;
+use App\Model\CalculationsMonth;
+use App\Model\CalculationsMonthItem;
 use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
@@ -28,15 +29,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @template-extends AbstractRepository<Calculation>
  *
- * @phpstan-type CalculationByMonthType = array{
- *        count: int,
- *        items: float,
- *        total: float,
- *        year: int,
- *        month: int,
- *        margin_percent: float,
- *        margin_amount: float,
- *        date: DatePoint}
  * @phpstan-type CalculationItemEntry = array{
  *        description: string,
  *        quantity: float,
@@ -65,8 +57,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class CalculationRepository extends AbstractRepository
 {
-    use MathTrait;
-
     /**
      * The alias for the state entity.
      */
@@ -232,10 +222,8 @@ class CalculationRepository extends AbstractRepository
      * Gets the calculations grouped by years and months sorted by date in descending order.
      *
      * @param int $maxResults the maximum number of results to retrieve (the "limit")
-     *
-     * @phpstan-return CalculationByMonthType[]
      */
-    public function getByMonth(int $maxResults = 6): array
+    public function getByMonth(int $maxResults = 6): CalculationsMonth
     {
         $builder = $this->createQueryBuilder('c')
             ->select('COUNT(c.id) as count')
@@ -248,17 +236,16 @@ class CalculationRepository extends AbstractRepository
             ->addOrderBy('month', self::SORT_DESC)
             ->setMaxResults($maxResults);
 
-        $result = $builder->getQuery()
-            ->getArrayResult();
+        $result = \array_reverse($builder->getQuery()->getArrayResult());
+        $items = \array_map(fn (array $row): CalculationsMonthItem => new CalculationsMonthItem(
+            $row['count'],
+            $row['items'],
+            $row['total'],
+            $row['year'],
+            $row['month']
+        ), $result);
 
-        /** @phpstan-var CalculationByMonthType $item */
-        foreach ($result as &$item) {
-            $item['date'] = $this->convertToDate($item);
-            $item['margin_amount'] = $item['total'] - $item['items'];
-            $item['margin_percent'] = $this->gerMarginPercent($item['total'], $item['items']);
-        }
-
-        return \array_reverse($result);
+        return new CalculationsMonth($items);
     }
 
     /**
@@ -673,16 +660,6 @@ class CalculationRepository extends AbstractRepository
             ->addSelect(self::STATE_ALIAS . '.editable as stateEditable')
             ->innerJoin("$alias.state", self::STATE_ALIAS)
             ->groupBy("$alias.id");
-    }
-
-    private function convertToDate(array $item): DatePoint
-    {
-        return DateUtils::createDatePoint(\sprintf('%s-%s-10', $item['year'], $item['month']));
-    }
-
-    private function gerMarginPercent(float $total, float $items): float
-    {
-        return $this->isFloatZero($items) ? 0.0 : $this->round($total / $items, 4);
     }
 
     /**

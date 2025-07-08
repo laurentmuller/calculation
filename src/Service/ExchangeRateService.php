@@ -272,9 +272,9 @@ class ExchangeRateService extends AbstractHttpClientService
     }
 
     /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     *
      * @phpstan-return ExchangeRateAndDateType|null
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     private function doGetRateAndDates(string $url): ?array
     {

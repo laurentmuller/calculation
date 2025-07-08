@@ -49,6 +49,6 @@ class LoggerTraitTest extends TestCase
         $this->logInfo('info');
         $this->logNotice('notice');
         $this->logWarning('warning');
-        self::assertInstanceOf(LoggerInterface::class, $this->logger);
+        self::expectNotToPerformAssertions();
     }
 }

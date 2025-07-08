@@ -15,6 +15,8 @@ namespace App\Report;
 
 use App\Chart\MonthChart;
 use App\Controller\AbstractController;
+use App\Model\CalculationsMonth;
+use App\Model\CalculationsMonthItem;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Events\PdfCellBackgroundEvent;
@@ -32,7 +34,6 @@ use App\Pdf\PdfStyle;
 use App\Pdf\Traits\PdfBarChartTrait;
 use App\Pdf\Traits\PdfChartLegendTrait;
 use App\Report\Table\ReportTable;
-use App\Traits\ArrayTrait;
 use App\Utils\FormatUtils;
 use fpdf\Enums\PdfFontName;
 use fpdf\Enums\PdfOrientation;
@@ -45,13 +46,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Report for calculations by months.
  *
- * @extends AbstractArrayReport<CalculationByMonthType>
- *
- * @phpstan-import-type CalculationByMonthType from \App\Repository\CalculationRepository
+ * @extends AbstractArrayReport<CalculationsMonthItem>
  */
 class CalculationByMonthReport extends AbstractArrayReport implements PdfChartInterface, PdfDrawCellBackgroundInterface, PdfDrawCellTextInterface, PdfDrawHeadersInterface
 {
-    use ArrayTrait;
     use PdfBarChartTrait;
     use PdfChartLegendTrait;
 
@@ -65,25 +63,21 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
 
     /** @phpstan-var \WeakMap<PdfColorInterface, PdfTextColor>  */
     private \WeakMap $colors;
-    /*** @phpstan-var CalculationByMonthType|null */
-    private ?array $currentEntity = null;
+    private ?CalculationsMonthItem $currentItem = null;
     private bool $drawHeaders = false;
-    /*** @phpstan-var CalculationByMonthType|null */
-    private ?array $lastItem = null;
+    private ?CalculationsMonthItem $lastItem = null;
     private float $minMargin;
 
     /**
-     * @phpstan-param CalculationByMonthType[] $entities
-     *
      * @psalm-suppress PropertyTypeCoercion
      */
     public function __construct(
         AbstractController $controller,
-        array $entities,
+        private readonly CalculationsMonth $month,
         private readonly UrlGeneratorInterface $generator
     ) {
-        $orientation = \count($entities) > 12 ? PdfOrientation::LANDSCAPE : PdfOrientation::PORTRAIT;
-        parent::__construct($controller, $entities, $orientation);
+        $orientation = $month->count() > 12 ? PdfOrientation::LANDSCAPE : PdfOrientation::PORTRAIT;
+        parent::__construct($controller, $month->items, $orientation);
         $this->setTranslatedTitle('chart.month.title');
         $this->minMargin = $controller->getMinMargin();
         $this->colors = new \WeakMap();
@@ -92,12 +86,37 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     #[\Override]
     public function drawCellBackground(PdfCellBackgroundEvent $event): bool
     {
+        if (!$this->lastItem instanceof CalculationsMonthItem || !$this->currentItem instanceof CalculationsMonthItem) {
+            return false;
+        }
+
         return match ($event->index) {
-            1 => $this->outputArrow($event->bounds, 'count'),
-            2 => $this->outputArrow($event->bounds, 'items'),
-            3 => $this->outputArrow($event->bounds, 'margin_amount'),
-            4 => $this->outputArrow($event->bounds, 'margin_percent', true),
-            5 => $this->outputArrow($event->bounds, 'total'),
+            1 => $this->outputArrow(
+                $event->bounds,
+                $this->lastItem->count,
+                $this->currentItem->count
+            ),
+            2 => $this->outputArrow(
+                $event->bounds,
+                $this->lastItem->items,
+                $this->currentItem->items
+            ),
+            3 => $this->outputArrow(
+                $event->bounds,
+                $this->lastItem->marginAmount,
+                $this->currentItem->marginAmount
+            ),
+            4 => $this->outputArrow(
+                $event->bounds,
+                $this->lastItem->marginPercent,
+                $this->currentItem->marginPercent,
+                true
+            ),
+            5 => $this->outputArrow(
+                $event->bounds,
+                $this->lastItem->total,
+                $this->currentItem->total
+            ),
             default => false
         };
     }
@@ -234,16 +253,16 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         return !$this->isFloatZero($value) && $value < $this->minMargin;
     }
 
-    private function outputArrow(PdfRectangle $bounds, string $key, bool $percent = false): false
-    {
-        if (null === $this->lastItem || null === $this->currentEntity) {
-            return false;
-        }
-
+    private function outputArrow(
+        PdfRectangle $bounds,
+        float $lastValue,
+        float $currentValue,
+        bool $percent = false
+    ): false {
         $rotate = false;
         $precision = $percent ? 2 : 0;
-        $oldValue = $this->roundValue((float) $this->lastItem[$key], $precision);
-        $newValue = $this->roundValue((float) $this->currentEntity[$key], $precision);
+        $oldValue = $this->roundValue($lastValue, $precision);
+        $newValue = $this->roundValue($currentValue, $precision);
         if ($oldValue < $newValue) {
             $chr = \chr(self::ARROW_UP);
             $color = HtmlBootstrapColor::SUCCESS;
@@ -272,7 +291,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     }
 
     /**
-     * @phpstan-param CalculationByMonthType[] $entities
+     * @param CalculationsMonthItem[] $entities
      */
     private function renderChart(array $entities): void
     {
@@ -282,12 +301,12 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         if ($newPage) {
             $h = $this->pageBreakTrigger - $top - 2.0 * self::LINE_HEIGHT;
         }
-        $rows = \array_map(fn (array $entity): array => [
-            'link' => $this->getURL($entity['date']),
-            'label' => $this->cleanText($this->getDateCell($entity['date'], false)),
+        $rows = \array_map(fn (CalculationsMonthItem $entity): array => [
+            'link' => $this->getURL($entity->date),
+            'label' => $this->cleanText($this->getDateCell($entity->date, false)),
             'values' => [
-                ['color' => MonthChart::COLOR_AMOUNT->value, 'value' => $entity['items']],
-                ['color' => MonthChart::COLOR_MARGIN->value, 'value' => $entity['margin_amount']],
+                ['color' => MonthChart::COLOR_AMOUNT->value, 'value' => $entity->items],
+                ['color' => MonthChart::COLOR_MARGIN->value, 'value' => $entity->marginAmount],
             ],
         ], $entities);
         $axis = [
@@ -303,7 +322,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     }
 
     /**
-     * @phpstan-param CalculationByMonthType[] $entities
+     * @param CalculationsMonthItem[] $entities
      */
     private function renderTable(array $entities): void
     {
@@ -315,38 +334,35 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         foreach ($entities as $entity) {
             $x = $this->getX();
             $y = $this->getY();
-            $this->currentEntity = $entity;
-            $margin = $entity['margin_percent'];
+            $this->currentItem = $entity;
+            $margin = $entity->marginPercent;
             $table->startRow()
-                ->add($this->getDateCell($entity['date'], true))
-                ->addCellInt($entity['count'])
-                ->addCellInt($entity['items'])
-                ->addCellInt($entity['margin_amount'])
+                ->add($this->getDateCell($entity->date, true))
+                ->addCellInt($entity->count)
+                ->addCellInt($entity->items)
+                ->addCellInt($entity->marginAmount)
                 ->addCellPercent($margin, style: $this->getPercentStyle($margin))
-                ->addCellInt($entity['total'])
+                ->addCellInt($entity->total)
                 ->endRow();
-            $link = $this->getURL($entity['date']);
+            $link = $this->getURL($entity->date);
             $this->link($x, $y, $width, $this->getY() - $y, $link);
             $this->lastItem = $entity;
         }
-        $this->currentEntity = $this->lastItem = null;
+        $this->currentItem = $this->lastItem = null;
         $table->setBackgroundListener(null)
             ->setHeadersListener(null)
             ->setTextListener(null);
 
         // total
-        $count = $this->getColumnSum($entities, 'count');
-        $items = $this->getColumnSum($entities, 'items');
-        $total = $this->getColumnSum($entities, 'total');
-        $net = $total - $items;
-        $margin = 1.0 + $this->safeDivide($net, $items);
+        $total = $this->month->total;
+        $margin = $total->marginPercent;
         $table->startHeaderRow()
             ->addCellTrans('calculation.fields.total')
-            ->addCellInt($count)
-            ->addCellInt($items)
-            ->addCellInt($net)
+            ->addCellInt($total->count)
+            ->addCellInt($total->items)
+            ->addCellInt($total->marginAmount)
             ->addCellPercent($margin, style: $this->getPercentStyle($margin, true))
-            ->addCellInt($total)
+            ->addCellInt($total->total)
             ->endRow();
     }
 

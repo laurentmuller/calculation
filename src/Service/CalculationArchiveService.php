@@ -23,8 +23,8 @@ use App\Traits\LoggerAwareTrait;
 use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Bridge\Doctrine\Types\DatePointType;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -156,7 +156,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         }
         if ($date instanceof DatePoint) {
             $builder->andWhere('c.date <= :date')
-                ->setParameter('date', $date, Types::DATETIME_IMMUTABLE);
+                ->setParameter('date', $date, DatePointType::NAME);
         }
 
         return $builder;

@@ -37,6 +37,11 @@ class CalculationsMonthItem extends CalculationsTotal
         return FormatUtils::formatDate($this->date, \IntlDateFormatter::NONE, 'MMMM Y');
     }
 
+    public function getMilliseconds(): int
+    {
+        return $this->date->getTimestamp() * 1000;
+    }
+
     public function getSearchDate(): string
     {
         return $this->date->format('m.Y');

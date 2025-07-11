@@ -7,7 +7,7 @@
     output_required,
     output_table_actions,
     output_links %}
-{% from 'macros/_icons.html.twig' import link %}
+{% from 'macros/_icons.html.twig' import linkExternal %}
 {# parameters #}
 {%- set entity_name = entity.id ~ '.name' -%}
 {%- set title = 'help.title_name' -%}
@@ -26,6 +26,12 @@
     {{ parent() }}
     {{ dialogs_button() }}
     {{ entities_button() }}
+    {{ linkExternal(
+        href: path('help_pdf_entity', {id: entity.id}),
+        class: 'btn btn-outline-secondary',
+        icon: ICON_PDF,
+        title: 'common.button_export_pdf')
+    }}
 {% endblock %}
 {# body #}
 {% block help_body -%}

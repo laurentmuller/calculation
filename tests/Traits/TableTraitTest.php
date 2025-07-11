@@ -93,7 +93,7 @@ class TableTraitTest extends TestCase
 
     public function render(string $view, array $parameters = []): Response
     {
-        return new Response($view);
+        return new Response(content: $view, headers: $parameters);
     }
 
     public function testDenyAccess(): void
@@ -131,7 +131,7 @@ class TableTraitTest extends TestCase
             $query,
             $template
         );
-        self::assertInstanceOf(Response::class, $actual);
+        self::assertNotInstanceOf(JsonResponse::class, $actual);
     }
 
     public function testThrowException(): void

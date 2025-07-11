@@ -108,8 +108,9 @@ readonly class TimelineService
     private function getCalculations(DatePoint $from, DatePoint $to): array
     {
         $calculations = $this->repository->getByInterval($from, $to);
-        if ([] === $calculations) {
-            return [0, []];
+        $count = \count($calculations);
+        if (0 === $count) {
+            return [$count, []];
         }
 
         /** @var array<string, Calculation[]> $grouped */
@@ -118,7 +119,7 @@ readonly class TimelineService
             static fn (Calculation $c): string => FormatUtils::formatDate($c->getDate(), \IntlDateFormatter::LONG)
         );
 
-        return [\count($calculations), $grouped];
+        return [$count, $grouped];
     }
 
     /**

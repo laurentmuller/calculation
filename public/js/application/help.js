@@ -65,12 +65,6 @@
             className: 'text-success',
             separateWordSearch: false,
             each: function (element) {
-                // const selector = '.help-item:first';
-                // let $parent = $(element).parents(selector);
-                // while ($parent.length) {
-                //     //$parent.children('.collapse:not(.show)').collapse('show');
-                //     $parent = $parent.parents(selector);
-                // }
                 $(element).parents('.help-item').showItems();
             },
             done: function () {

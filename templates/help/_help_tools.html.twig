@@ -16,7 +16,7 @@
     {%- set full_path = 'help/images/' ~ path ~ constant('App\\Service\\HelpService::IMAGES_EXT') -%}
     {% if asset_exists(full_path) %}
         {% if screenshot %}<p class="mb-2">{{ 'help.labels.screenshot'|trans }}</p>{% endif %}
-        {{ asset_image(full_path, {class: 'img-fluid', alt: 'help.labels.screenshot'|trans}) }}
+        {{ asset_image(full_path, {class: 'img-fluid rounded-3', alt: 'help.labels.screenshot'|trans}) }}
     {% endif %}
 {%- endmacro %}
 
@@ -75,7 +75,7 @@
 
 {% macro dialogs_button() %}
     {% from 'macros/_icons.html.twig' import link %}
-    {{ link(path('help_dialogs'), '', 'btn btn-outline-secondary', 'window-maximize far', 'help.dialog_menu') }}
+    {{ link(path('help_dialogs'), '', 'btn btn-outline-secondary', 'file-code', 'help.dialog_menu') }}
 {% endmacro %}
 
 {% macro entities_button() %}
@@ -94,7 +94,7 @@
                     {% if dialog %}
                         {%- set href = path('help_dialog', {id: dialog.id}) -%}
                         <li>
-                            <a href="{{ href }}">{{- _self.output_icon('window-maximize far', dialog.name) -}}</a>
+                            <a href="{{ href }}">{{- _self.output_icon('file-code far', dialog.name) -}}</a>
                         </li>
                     {% endif %}
                 {% elseif type == 'entity' %}

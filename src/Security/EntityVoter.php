@@ -16,6 +16,7 @@ namespace App\Security;
 use App\Entity\User;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
+use App\Interfaces\RoleInterface;
 use App\Service\ApplicationService;
 use App\Traits\MathTrait;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -63,29 +64,73 @@ class EntityVoter extends Voter
     #[\Override]
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
-        $user = $this->getUser($token);
+        $user = $this->getUser($token, $vote);
         if (!$user instanceof User) {
             return false;
         }
-        if ($user->isSuperAdmin()) {
+        if ($this->isSuperAdmin($user, $vote)) {
             return true;
         }
-
-        $permission = EntityPermission::tryFromName($attribute);
-        if (!$permission instanceof EntityPermission) {
+        $entityPermission = $this->getEntityPermission($attribute, $vote);
+        if (!$entityPermission instanceof EntityPermission) {
             return false;
         }
+        $entityName = $this->getEntityName($subject, $vote);
+        if (!$entityName instanceof EntityName) {
+            return false;
+        }
+
+        $result = $this->isAllowed($user, $entityName, $entityPermission);
+        if ($result) {
+            $this->addReason(
+                $vote,
+                'User "%s" has the "%s" permission on "%s".',
+                $user->getUsername(),
+                $entityPermission->name,
+                $entityName->name
+            );
+        } else {
+            $this->addReason(
+                $vote,
+                'User "%s" does not have the "%s" permission on "%s".',
+                $user->getUsername(),
+                $entityPermission->name,
+                $entityName->name
+            );
+        }
+
+        return $result;
+    }
+
+    private function addReason(?Vote $vote, string $reason, string ...$parameters): null
+    {
+        $vote?->addReason(\sprintf($reason, ...$parameters));
+
+        return null;
+    }
+
+    private function getEntityName(mixed $subject, ?Vote $vote): ?EntityName
+    {
         $name = EntityName::tryFromMixed($subject);
         if (!$name instanceof EntityName) {
-            return false;
+            return $this->addReason(
+                $vote,
+                'Subject "%s" is not a valid entity name.',
+                \is_scalar($subject) || $subject instanceof \Stringable ? (string) $subject : \get_debug_type($subject)
+            );
         }
 
-        $rights = $this->getRights($user);
-        $offset = $name->offset();
-        $value = $rights[$offset];
-        $mask = $permission->value;
+        return $name;
+    }
 
-        return $this->isBitSet($value, $mask);
+    private function getEntityPermission(string $attribute, ?Vote $vote = null): ?EntityPermission
+    {
+        $permission = EntityPermission::tryFromName($attribute);
+        if (!$permission instanceof EntityPermission) {
+            return $this->addReason($vote, 'Attribute "%s" is not a valid entity permission.', $attribute);
+        }
+
+        return $permission;
     }
 
     /**
@@ -103,10 +148,41 @@ class EntityVoter extends Voter
         return $this->service->getUserRights();
     }
 
-    private function getUser(TokenInterface $token): ?User
+    private function getUser(TokenInterface $token, ?Vote $vote): ?User
     {
         $user = $token->getUser();
+        if (!$user instanceof User) {
+            return $this->addReason($vote, 'Token does not contains an instance of User.');
+        }
+        if (!$user->isEnabled()) {
+            return $this->addReason($vote, 'User "%s" is disabled.', $user->getUsername());
+        }
 
-        return $user instanceof User && $user->isEnabled() ? $user : null;
+        return $user;
+    }
+
+    private function isAllowed(User $user, EntityName $entityName, EntityPermission $entityPermission): bool
+    {
+        $rights = $this->getRights($user);
+        $value = $rights[$entityName->offset()];
+        $mask = $entityPermission->value;
+
+        return $this->isBitSet($value, $mask);
+    }
+
+    private function isSuperAdmin(User $user, ?Vote $vote): bool
+    {
+        if ($user->isSuperAdmin()) {
+            $this->addReason(
+                $vote,
+                'User "%s" has "%s" role.',
+                $user->getUsername(),
+                RoleInterface::ROLE_SUPER_ADMIN
+            );
+
+            return true;
+        }
+
+        return false;
     }
 }

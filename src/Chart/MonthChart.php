@@ -146,7 +146,7 @@ class MonthChart extends AbstractHighchart
      */
     private function getCategories(array $items): array
     {
-        return \array_map(static fn (CalculationsMonthItem $item): int => $item->date->getTimestamp() * 1000, $items);
+        return \array_map(static fn (CalculationsMonthItem $item): int => $item->getMilliseconds(), $items);
     }
 
     private function getFormatterExpression(): ChartExpression

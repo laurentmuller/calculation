@@ -16,9 +16,9 @@ namespace App\Repository;
 use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Utils\DateUtils;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Types\DatePointType;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -220,7 +220,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
             ->set('e.requestedAt', 'NULL')
             ->set('e.expiresAt', 'NULL')
             ->where('e.expiresAt <= :time')
-            ->setParameter('time', $time, Types::DATETIME_IMMUTABLE)
+            ->setParameter('time', $time, DatePointType::NAME)
             ->getQuery();
 
         return (int) $query->execute();

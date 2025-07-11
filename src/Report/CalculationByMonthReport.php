@@ -241,9 +241,9 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         return $style;
     }
 
-    private function getURL(DatePoint $date): string
+    private function getURL(CalculationsMonthItem $item): string
     {
-        $parameters = ['search' => $date->format('m.Y')];
+        $parameters = ['search' => $item->getSearchDate()];
 
         return $this->generator->generate('calculation_index', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
     }
@@ -302,7 +302,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             $h = $this->pageBreakTrigger - $top - 2.0 * self::LINE_HEIGHT;
         }
         $rows = \array_map(fn (CalculationsMonthItem $entity): array => [
-            'link' => $this->getURL($entity->date),
+            'link' => $this->getURL($entity),
             'label' => $this->cleanText($this->getDateCell($entity->date, false)),
             'values' => [
                 ['color' => MonthChart::COLOR_AMOUNT->value, 'value' => $entity->items],
@@ -344,7 +344,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
                 ->addCellPercent($margin, style: $this->getPercentStyle($margin))
                 ->addCellInt($entity->total)
                 ->endRow();
-            $link = $this->getURL($entity->date);
+            $link = $this->getURL($entity);
             $this->link($x, $y, $width, $this->getY() - $y, $link);
             $this->lastItem = $entity;
         }

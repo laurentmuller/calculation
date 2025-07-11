@@ -42,6 +42,8 @@ class HelpControllerTest extends ControllerTestCase
             '/help/entities',
             '/help/entity/category',
             '/help/pdf',
+            '/help/pdf/entity/log',
+            '/help/pdf/dialog/user.rights.title',
         ];
 
         foreach ($routes as $route) {
@@ -130,6 +132,16 @@ class HelpControllerTest extends ControllerTestCase
         foreach ($this->getImages() as $file) {
             self::assertFileExists($file);
         }
+    }
+
+    public function testPdfDialogNotFound(): void
+    {
+        $this->checkRoute('/help/pdf/dialog/fake_dialog_fake', self::ROLE_USER, Response::HTTP_NOT_FOUND);
+    }
+
+    public function testPdfEntityNotFound(): void
+    {
+        $this->checkRoute('/help/pdf/entity/fake_entity_fake', self::ROLE_USER, Response::HTTP_NOT_FOUND);
     }
 
     public function testUnusedImages(): void

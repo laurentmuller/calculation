@@ -18,7 +18,6 @@ use App\Tests\KernelServiceTestCase;
 use App\Tests\TranslatorMockTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LogServiceTest extends KernelServiceTestCase
 {
@@ -64,13 +63,15 @@ class LogServiceTest extends KernelServiceTestCase
     public function testGetLogger(): void
     {
         $actual = $this->service->getLogger();
-        self::assertInstanceOf(LoggerInterface::class, $actual);
+        $actual->debug('Fake message.');
+        self::expectNotToPerformAssertions();
     }
 
     public function testGetTranslator(): void
     {
         $actual = $this->service->getTranslator();
-        self::assertInstanceOf(TranslatorInterface::class, $actual);
+        $actual->trans('about.title');
+        self::expectNotToPerformAssertions();
     }
 
     public function testIsFileValid(): void

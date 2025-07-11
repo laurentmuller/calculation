@@ -219,6 +219,16 @@ class HelpService
     }
 
     /**
+     * Gets the absolute path of the given image.
+     *
+     * @param string $image the image name to get the path for
+     */
+    public function getImageFile(string $image): string
+    {
+        return FileUtils::buildPath($this->imagePath, $image . self::IMAGES_EXT);
+    }
+
+    /**
      * Gets the absolute root path to the images.
      */
     public function getImagePath(): string

@@ -101,9 +101,8 @@ readonly class ResetPasswordService
     public function getThrottleAt(ResetPasswordToken $token): DatePoint
     {
         $expireAt = DateUtils::toDatePoint($token->getExpiresAt());
-        $interval = DateUtils::createDateInterval(self::THROTTLE_OFFSET);
 
-        return DateUtils::sub($expireAt, $interval);
+        return DateUtils::sub($expireAt, self::THROTTLE_OFFSET);
     }
 
     /**

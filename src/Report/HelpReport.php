@@ -32,6 +32,7 @@ use fpdf\Enums\PdfTextAlignment;
  * @phpstan-import-type HelpEntityType from HelpService
  * @phpstan-import-type HelpMainMenuType from HelpService
  * @phpstan-import-type HelpMenuType from HelpService
+ * @phpstan-import-type HelpLink from HelpService
  */
 class HelpReport extends AbstractReport
 {
@@ -41,13 +42,17 @@ class HelpReport extends AbstractReport
     private readonly PdfStyle $headerStyle;
 
     /**
-     * @param AbstractController $controller the parent controller
-     * @param HelpService        $service    the help service
+     * @phpstan-param HelpDialogType|null $dialog
+     * @phpstan-param HelpEntityType|null $entity
      */
-    public function __construct(AbstractController $controller, private readonly HelpService $service)
-    {
+    public function __construct(
+        AbstractController $controller,
+        private readonly HelpService $service,
+        private readonly ?array $dialog = null,
+        private readonly ?array $entity = null
+    ) {
         parent::__construct($controller);
-        $this->setTranslatedTitle('help.title');
+        $this->setTitle($this->buildTitle(), true);
         $this->defaultStyle = PdfStyle::default();
         $this->headerStyle = PdfStyle::getHeaderStyle();
     }
@@ -55,13 +60,59 @@ class HelpReport extends AbstractReport
     #[\Override]
     public function render(): bool
     {
-        $service = $this->service;
-        $newPage = $this->outputMainMenus($service->getMainMenus());
-        $newPage = $this->outputDialogs($service->getDialogsByGroup(), $newPage);
-        $this->outputEntities($service->getEntities(), $newPage);
-        $this->addPageIndex();
+        $this->outputMainMenus();
+        $this->outputDialogs();
+        $this->outputEntities();
+        if (!$this->isFilter()) {
+            $this->addPageIndex();
+        }
 
         return true;
+    }
+
+    private function buildTitle(): string
+    {
+        $title = $this->trans('help.title');
+        if ($this->isFilterDialog()) {
+            return $title . ' - ' . $this->getDialogTitle($this->dialog);
+        }
+        if ($this->isFilterEntity()) {
+            return $title . ' - ' . $this->getEntityTitle($this->entity);
+        }
+
+        return $title;
+    }
+
+    /**
+     * @phpstan-return array<string, HelpDialogType[]>
+     */
+    private function filterDialogs(): array
+    {
+        if ($this->isFilterDialog()) {
+            return [
+                $this->dialog['group'] => [$this->dialog],
+            ];
+        }
+        if ($this->isFilterEntity()) {
+            return [];
+        }
+
+        return $this->service->getDialogsByGroup();
+    }
+
+    /**
+     * @phpstan-return HelpEntityType[]
+     */
+    private function filterEntities(): array
+    {
+        if ($this->isFilterEntity()) {
+            return [$this->entity];
+        }
+        if ($this->isFilterDialog()) {
+            return [];
+        }
+
+        return $this->service->getEntities();
     }
 
     /**
@@ -71,10 +122,7 @@ class HelpReport extends AbstractReport
      */
     private function findEntity(array $dialog): ?array
     {
-        $id = $dialog['entity'] ?? null;
-
-        /** @phpstan-var HelpEntityType|null */
-        return $this->service->findEntity($id);
+        return $this->service->findEntity($dialog);
     }
 
     /**
@@ -88,12 +136,12 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @phpstan-param HelpEntityType $item
+     * @phpstan-param HelpEntityType $entity
      * @phpstan-param HelpFieldType $field
      */
-    private function formatFieldName(array $item, array $field): string
+    private function formatFieldName(array $entity, array $field): string
     {
-        $id = $item['id'];
+        $id = $entity['id'];
         $name = $field['name'];
 
         return $this->trans("$id.fields.$name");
@@ -119,6 +167,43 @@ class HelpReport extends AbstractReport
     }
 
     /**
+     * @phpstan-param HelpDialogType $dialog
+     */
+    private function getDialogTitle(array $dialog): string
+    {
+        return $this->trans($dialog['id']);
+    }
+
+    /**
+     * @phpstan-param HelpEntityType $entity
+     */
+    private function getEntityTitle(array $entity): string
+    {
+        return $this->trans($entity['id'] . '.name');
+    }
+
+    private function isFilter(): bool
+    {
+        return $this->isFilterDialog() || $this->isFilterEntity();
+    }
+
+    /**
+     * @phpstan-assert-if-true !null $this->dialog
+     */
+    private function isFilterDialog(): bool
+    {
+        return null !== $this->dialog;
+    }
+
+    /**
+     * @phpstan-assert-if-true !null $this->entity
+     */
+    private function isFilterEntity(): bool
+    {
+        return null !== $this->entity;
+    }
+
+    /**
      * @phpstan-param HelpActionType[] $actions
      */
     private function outputActions(array $actions, string $description): void
@@ -131,10 +216,10 @@ class HelpReport extends AbstractReport
             $lines += $this->getLinesCount($description);
         }
         $height = (float) $lines * self::LINE_HEIGHT + 3.0;
-        if (!$this->isPrintable($height)) {
-            $this->addPage();
-        } else {
+        if ($this->isPrintable($height)) {
             $this->lineBreak(3);
+        } else {
+            $this->addPage();
         }
         $this->outputText($description);
         $table = PdfTable::instance($this)
@@ -154,80 +239,43 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @phpstan-param HelpEntityType $item
-     * @phpstan-param HelpFieldType[] $fields
+     * @phpstan-param HelpDialogType|HelpEntityType $item
      */
-    private function outputColumns(array $item, array $fields): void
+    private function outputDescription(array $item): void
     {
-        if ([] === $fields) {
-            return;
-        }
-
-        $table = PdfTable::instance($this)
-            ->addColumns(
-                $this->leftColumn('help.fields.column', 30, true),
-                $this->leftColumn('help.fields.description', 50)
-            )->outputHeaders();
-        foreach ($fields as $field) {
-            $table->addRow(
-                $this->formatFieldName($item, $field),
-                $field['description']
-            );
+        $description = $item['description'] ?? '';
+        if ('' !== $description) {
+            $this->multiCell(text: $description);
         }
     }
 
     /**
-     * @phpstan-param string[] $constraints
+     * @phpstan-param HelpDialogType $dialog
      */
-    private function outputConstraints(array $constraints): void
+    private function outputDialog(array $dialog): void
     {
-        if ([] === $constraints) {
-            return;
+        $title = $this->getDialogTitle($dialog);
+        if (!$this->isFilterDialog()) {
+            $this->addBookmark($title, true, 2, false);
         }
-        $margin = $this->getLeftMargin();
-        $this->setLeftMargin($margin + 4.0);
-        foreach ($constraints as $constraint) {
-            $this->multiCell(text: \strip_tags("- $constraint"), align: PdfTextAlignment::LEFT);
-        }
-        $this->setLeftMargin($margin);
+        $this->outputTitle($title);
+        $this->outputDescription($dialog);
+        $this->outputDialogImage($dialog);
+        $this->outputDialogImages($dialog);
+        $this->outputDialogDetails($dialog);
+        $this->outputDialogFields($dialog);
+        $this->outputDialogEntityAndFields($dialog);
+        $this->outputDialogEditActions($dialog);
+        $this->outputDialogGlobalActions($dialog);
+        $this->outputDialogForbidden($dialog);
     }
 
     /**
-     * @phpstan-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $dialog
      */
-    private function outputDialog(array $item): void
+    private function outputDialogDetails(array $dialog): void
     {
-        $name = $this->splitTrans($item);
-        $this->addBookmark($name, true, 2, false);
-        $this->outputTitle($name);
-        $this->outputDialogDescription($item);
-        $this->outputDialogImage($item);
-        $this->outputDialogImages($item);
-        $this->outputDialogDetails($item);
-        $this->outputDialogFields($item);
-        $this->outputDialogEntityAndFields($item);
-        $this->outputDialogEditActions($item);
-        $this->outputDialogGlobalActions($item);
-        $this->outputDialogForbidden($item);
-    }
-
-    /**
-     * @phpstan-param HelpDialogType $item
-     */
-    private function outputDialogDescription(array $item): void
-    {
-        if (!isset($item['description'])) {
-            return;
-        }
-        $this->multiCell(text: $item['description']);
-    }
-
-    /**
-     * @phpstan-param HelpDialogType $item
-     */
-    private function outputDialogDetails(array $item): void
-    {
-        $details = $item['details'] ?? [];
+        $details = $dialog['details'] ?? [];
         if ([] === $details) {
             return;
         }
@@ -239,48 +287,44 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @phpstan-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $dialog
      */
-    private function outputDialogEditActions(array $item): void
+    private function outputDialogEditActions(array $dialog): void
     {
-        if (!isset($item['editActions'])) {
-            return;
-        }
-        $this->outputActions($item['editActions'], 'help.labels.edit_actions');
+        $this->outputActions($dialog['editActions'] ?? [], 'help.labels.edit_actions');
     }
 
     /**
-     * @phpstan-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $dialog
      */
-    private function outputDialogEntityAndFields(array $item): void
+    private function outputDialogEntityAndFields(array $dialog): void
     {
-        $entity = $this->findEntity($item);
+        $entity = $this->findEntity($dialog);
         $fields = $this->findFields($entity);
         if (null === $entity || null === $fields) {
             return;
         }
-        if (isset($item['displayEntityColumns'])) {
+        if ($dialog['displayEntityColumns'] ?? false) {
             $this->lineBreak(3);
             $this->outputText('help.labels.edit_columns');
-            $this->outputColumns($entity, $fields);
+            $this->outputEntityColumns($entity, $fields);
         }
-        if (isset($item['displayEntityFields'])) {
+        if ($dialog['displayEntityFields'] ?? false) {
             $this->lineBreak(3);
             $this->outputText('help.labels.edit_fields');
-            $this->outputFields($entity, $fields);
+            $this->outputEntityFields($entity, $fields);
         }
-        $displayEntityActions = $item['displayEntityActions'] ?? false;
-        if ($displayEntityActions && isset($entity['actions'])) {
-            $this->outputActions($entity['actions'], 'help.labels.entity_actions');
+        if ($dialog['displayEntityActions'] ?? false) {
+            $this->outputActions($entity['actions'] ?? [], 'help.labels.entity_actions');
         }
     }
 
     /**
-     * @phpstan-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $dialog
      */
-    private function outputDialogFields(array $item): void
+    private function outputDialogFields(array $dialog): void
     {
-        $fields = $item['fields'] ?? [];
+        $fields = $dialog['fields'] ?? [];
         if ([] === $fields) {
             return;
         }
@@ -302,21 +346,21 @@ class HelpReport extends AbstractReport
             )->outputHeaders();
         foreach ($fields as $field) {
             $table->addRow(
-                $this->splitTrans($field['name']),
+                $this->trans($field['name']),
                 $field['description'],
             );
         }
     }
 
     /**
-     * @phpstan-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $dialog
      */
-    private function outputDialogForbidden(array $item): void
+    private function outputDialogForbidden(array $dialog): void
     {
-        if (!isset($item['forbidden'])) {
+        if (!isset($dialog['forbidden'])) {
             return;
         }
-        $forbidden = $item['forbidden'];
+        $forbidden = $dialog['forbidden'];
         $this->lineBreak(3);
         $text = $forbidden['text'] ?? $this->trans('help.labels.forbidden_text');
         $this->outputText($text, false);
@@ -330,35 +374,32 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @phpstan-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $dialog
      */
-    private function outputDialogGlobalActions(array $item): void
+    private function outputDialogGlobalActions(array $dialog): void
     {
-        if (!isset($item['globalActions'])) {
-            return;
-        }
-        $this->outputActions($item['globalActions'], 'help.labels.global_actions');
+        $this->outputActions($dialog['globalActions'] ?? [], 'help.labels.global_actions');
     }
 
     /**
-     * @phpstan-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $dialog
      */
-    private function outputDialogImage(array $item): void
+    private function outputDialogImage(array $dialog): void
     {
-        if (!isset($item['image'])) {
+        if (!isset($dialog['image'])) {
             return;
         }
         $this->lineBreak(3);
         $this->outputText('help.labels.screenshot');
-        $this->outputImage($item['image']);
+        $this->outputImage($dialog['image']);
     }
 
     /**
-     * @phpstan-param HelpDialogType $item
+     * @phpstan-param HelpDialogType $dialog
      */
-    private function outputDialogImages(array $item): void
+    private function outputDialogImages(array $dialog): void
     {
-        $images = $item['images'] ?? [];
+        $images = $dialog['images'] ?? [];
         if ([] === $images) {
             return;
         }
@@ -368,105 +409,148 @@ class HelpReport extends AbstractReport
         }
     }
 
-    /**
-     * @phpstan-param array<string, HelpDialogType[]> $groupedDialogs
-     */
-    private function outputDialogs(array $groupedDialogs, bool $newPage): bool
+    private function outputDialogs(): void
     {
+        $groupedDialogs = $this->filterDialogs();
         if ([] === $groupedDialogs) {
-            return false;
+            return;
         }
 
-        if ($newPage) {
+        $pageAdded = false;
+        $addBookmark = !$this->isFilterDialog();
+        if ($addBookmark) {
             $this->addPage();
-            $newPage = false;
+            $pageAdded = true;
+            $title = $this->trans('help.dialog_menu');
+            $this->addBookmark($title, true, 0, false);
+            $this->outputTitle($title, 12);
+            $this->outputLine();
         }
-
-        $id = 'help.dialog_menu';
-        $this->addBookmark($this->trans($id), true, 0, false);
-        $this->outputTitle($id, 12);
-        $this->outputLine();
 
         foreach ($groupedDialogs as $group => $dialogs) {
-            if ($newPage) {
-                $this->addPage();
-                $newPage = false;
+            if ($addBookmark) {
+                if (!$pageAdded) {
+                    $this->addPage();
+                    $pageAdded = true;
+                }
+                $this->addBookmark($group, true, 1, false);
             }
-            $this->addBookmark($group, true, 1, false);
             foreach ($dialogs as $dialog) {
-                if ($newPage) {
+                if (!$pageAdded) {
                     $this->addPage();
                 }
+                $pageAdded = false;
                 $this->outputDialog($dialog);
-                $newPage = true;
             }
         }
-
-        return true;
     }
 
-    /**
-     * @phpstan-param HelpEntityType[] $entities
-     */
-    private function outputEntities(array $entities, bool $newPage): void
+    private function outputEntities(): void
     {
+        $entities = $this->filterEntities();
         if ([] === $entities) {
             return;
         }
 
-        if ($newPage) {
+        $pageAdded = false;
+        if (!$this->isFilterEntity()) {
             $this->addPage();
-            $newPage = false;
+            $pageAdded = true;
+            $title = $this->trans('help.entity_menu');
+            $this->addBookmark($title, true, 0, false);
+            $this->outputTitle($title, 12);
+            $this->outputLine();
         }
 
-        $id = 'help.entity_menu';
-        $this->addBookmark($this->trans($id), true, 0, false);
-        $this->outputTitle($id, 12);
-        $this->outputLine();
-
         foreach ($entities as $entity) {
-            if ($newPage) {
+            if (!$pageAdded) {
                 $this->addPage();
             }
+            $pageAdded = false;
             $this->outputEntity($entity);
-            $newPage = true;
         }
     }
 
     /**
-     * @phpstan-param HelpEntityType $item
+     * @phpstan-param HelpEntityType $entity
      */
-    private function outputEntity(array $item): void
+    private function outputEntity(array $entity): void
     {
-        $id = $item['id'] . '.name';
-        $this->addBookmark($this->trans($id), true, 1, false);
-        $this->outputTitle($id);
-        if (isset($item['description'])) {
-            $this->multiCell(text: $item['description']);
+        $title = $this->getEntityTitle($entity);
+        if (!$this->isFilterEntity()) {
+            $this->addBookmark($title, true, 1, false);
         }
-        $fields = $this->findFields($item);
+        $this->outputTitle($title);
+        $this->outputDescription($entity);
+        $fields = $this->findFields($entity);
         if (null !== $fields) {
             $this->lineBreak(3);
             $this->outputText('help.labels.edit_fields');
-            $this->outputFields($item, $fields);
+            $this->outputEntityFields($entity, $fields);
         } else {
             $this->outputText('help.labels.entity_empty');
         }
-        if (isset($item['constraints'])) {
-            $this->lineBreak(3);
-            $this->outputText('help.labels.constraints');
-            $this->outputConstraints($item['constraints']);
+        $this->outputEntityConstraints($entity);
+        $this->outputEntityActions($entity);
+    }
+
+    /**
+     * @phpstan-param HelpEntityType $entity
+     */
+    private function outputEntityActions(array $entity): void
+    {
+        $this->outputActions($entity['actions'] ?? [], 'help.labels.entity_actions');
+    }
+
+    /**
+     * @phpstan-param HelpEntityType $entity
+     * @phpstan-param HelpFieldType[] $fields
+     */
+    private function outputEntityColumns(array $entity, array $fields): void
+    {
+        if ([] === $fields) {
+            return;
         }
-        if (isset($item['actions'])) {
-            $this->outputActions($item['actions'], 'help.labels.entity_actions');
+
+        $table = PdfTable::instance($this)
+            ->addColumns(
+                $this->leftColumn('help.fields.column', 30, true),
+                $this->leftColumn('help.fields.description', 50)
+            )->outputHeaders();
+        foreach ($fields as $field) {
+            $table->addRow(
+                $this->formatFieldName($entity, $field),
+                $field['description']
+            );
         }
     }
 
     /**
-     * @phpstan-param HelpEntityType $item
+     * @phpstan-param HelpEntityType $entity
+     */
+    private function outputEntityConstraints(array $entity): void
+    {
+        $constraints = $entity['constraints'] ?? [];
+        if ([] === $constraints) {
+            return;
+        }
+
+        $this->lineBreak(3);
+        $this->outputText('help.labels.constraints');
+
+        $margin = $this->getLeftMargin();
+        $this->setLeftMargin($margin + 4.0);
+        foreach ($constraints as $constraint) {
+            $this->multiCell(text: \strip_tags("- $constraint"), align: PdfTextAlignment::LEFT);
+        }
+        $this->setLeftMargin($margin);
+    }
+
+    /**
+     * @phpstan-param HelpEntityType $entity
      * @phpstan-param HelpFieldType[] $fields
      */
-    private function outputFields(array $item, array $fields): void
+    private function outputEntityFields(array $entity, array $fields): void
     {
         if ([] === $fields) {
             return;
@@ -482,7 +566,7 @@ class HelpReport extends AbstractReport
 
         foreach ($fields as $field) {
             $table->addRow(
-                $this->formatFieldName($item, $field),
+                $this->formatFieldName($entity, $field),
                 $field['description'],
                 $this->formatFieldType($field),
                 $this->formatRequired($field['required'] ?? true)
@@ -492,16 +576,15 @@ class HelpReport extends AbstractReport
 
     private function outputImage(string $image): void
     {
-        $file = FileUtils::buildPath($this->service->getImagePath(), $image . HelpService::IMAGES_EXT);
+        $file = $this->service->getImageFile($image);
         if (!FileUtils::exists($file)) {
             return;
         }
-        $size = $this->getImageSize($file);
-        if (0 === $size[0]) {
+        $width = $this->getImageSize($file)[0];
+        if (0 === $width) {
             return;
         }
-        $width = $this->pixels2UserUnit($size[0]);
-        $width = \min($width, $this->getPrintableWidth());
+        $width = \min($this->pixels2UserUnit($width), $this->getPrintableWidth());
         $this->image(file: $file, width: $width);
     }
 
@@ -509,22 +592,23 @@ class HelpReport extends AbstractReport
     {
         PdfDrawColor::cellBorder()->apply($this);
         $this->horizontalLine();
-        PdfStyle::default()->apply($this);
+        $this->defaultStyle->apply($this);
     }
 
-    /**
-     * @phpstan-param HelpMenuType[] $menus
-     */
-    private function outputMainMenus(array $menus): bool
+    private function outputMainMenus(): void
     {
+        if ($this->isFilter()) {
+            return;
+        }
+        $menus = $this->service->getMainMenus();
         if ([] === $menus) {
-            return false;
+            return;
         }
 
         $this->addPage();
-        $id = 'help.main_menu';
-        $this->addBookmark($this->trans($id), true, 0, false);
-        $this->outputTitle($id, 12);
+        $title = $this->trans('help.main_menu');
+        $this->addBookmark($title, true, 0, false);
+        $this->outputTitle($title, 12);
         $this->outputLine();
 
         $rootMenu = $this->service->getMainMenu();
@@ -545,8 +629,6 @@ class HelpReport extends AbstractReport
                 $this->leftColumn('help.fields.description', 50)
             )->outputHeaders();
         $this->outputMenus($table, $menus);
-
-        return true;
     }
 
     /**
@@ -554,59 +636,36 @@ class HelpReport extends AbstractReport
      */
     private function outputMenus(PdfTable $table, array $menus, int $indent = 0): void
     {
-        if ([] === $menus) {
-            return;
+        $style = PdfStyle::getCellStyle()
+            ->setIndent($indent);
+        if (0 === $indent) {
+            $style->setFontBold(true);
         }
 
-        $style = PdfStyle::getCellStyle()->setIndent($indent);
         foreach ($menus as $menu) {
             /** @phpstan-var HelpMenuType $menu */
             $menu = $this->service->mergeAction($menu);
             $table->startRow()
-                ->add($this->splitTrans($menu), style: $style)
+                ->add($this->trans($menu['id']), style: $style)
                 ->add($menu['description'] ?? null)
                 ->endRow();
-
-            /** @phpstan-var HelpMenuType[]|null $sub_menus */
-            $sub_menus = $menu['menus'] ?? null;
-            if (null !== $sub_menus) {
-                $this->outputMenus($table, $sub_menus, $indent + 4);
+            /** @phpstan-var HelpMenuType[] $subMenus */
+            $subMenus = $menu['menus'] ?? [];
+            if ([] !== $subMenus) {
+                $this->outputMenus($table, $subMenus, $indent + 4);
             }
         }
     }
 
     private function outputText(string $id, bool $translate = true): void
     {
-        if ('' === $id) {
-            return;
-        }
-
-        if ($translate) {
-            $id = $this->splitTrans($id);
-        }
-        $this->multiCell(text: $id);
+        $this->multiCell(text: $translate ? $this->trans($id) : $id);
     }
 
-    private function outputTitle(string $id, float $size = 10): void
+    private function outputTitle(string $title, float $size = 10): void
     {
         $this->headerStyle->setFontSize($size)->apply($this);
-        $this->outputText($id);
+        $this->outputText($title, false);
         $this->defaultStyle->apply($this);
-    }
-
-    /**
-     * @phpstan-param array{id: string, ...}|string $item
-     */
-    private function splitTrans(array|string $item): string
-    {
-        if (\is_array($item)) {
-            $item = $item['id'];
-        }
-        $values = \explode('|', $item);
-        if (2 === \count($values)) {
-            return $this->trans($values[0], [], $values[1]);
-        }
-
-        return $this->trans($values[0]);
     }
 }

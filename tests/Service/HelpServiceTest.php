@@ -14,19 +14,22 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\HelpService;
-use App\Tests\KernelServiceTestCase;
-use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 
-class HelpServiceTest extends KernelServiceTestCase
+class HelpServiceTest extends TestCase
 {
+    use TranslatorMockTrait;
+
     private HelpService $service;
 
     #[\Override]
     protected function setUp(): void
     {
-        parent::setUp();
-        $this->service = $this->getService(HelpService::class);
+        $jsonPath = __DIR__ . '/../../public/help';
+        $imagePath = $jsonPath . '/images';
+        $this->service = $this->createService($jsonPath, $imagePath);
     }
 
     public function testFindAction(): void
@@ -92,10 +95,16 @@ class HelpServiceTest extends KernelServiceTestCase
         self::assertNotEmpty($actual);
     }
 
+    public function testGetImageFile(): void
+    {
+        $actual = $this->service->getImageFile('fake');
+        self::assertStringEndsWith('/public/help/images/fake.png', $actual);
+    }
+
     public function testGetImagePath(): void
     {
         $actual = $this->service->getImagePath();
-        self::assertStringEndsWith('/images', $actual);
+        self::assertStringEndsWith('/public/help/images', $actual);
     }
 
     public function testGetMainMenu(): void
@@ -112,9 +121,7 @@ class HelpServiceTest extends KernelServiceTestCase
 
     public function testInvalidPath(): void
     {
-        $cache = $this->getService(CacheInterface::class);
-        $translator = $this->createMock(TranslatorInterface::class);
-        $service = new HelpService(__DIR__, __DIR__, $cache, $translator);
+        $service = $this->createService(__DIR__, __DIR__);
 
         $actual = $service->getActions();
         self::assertEmpty($actual);
@@ -164,5 +171,15 @@ class HelpServiceTest extends KernelServiceTestCase
         ];
         $this->service->sortByName($actual);
         self::assertSame($expected, $actual);
+    }
+
+    private function createService(string $jsonPath, string $imagePath): HelpService
+    {
+        return new HelpService(
+            $jsonPath,
+            $imagePath,
+            new NullAdapter(),
+            $this->createMockTranslator()
+        );
     }
 }

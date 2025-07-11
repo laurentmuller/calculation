@@ -21,6 +21,9 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Schema\Index;
+use Doctrine\DBAL\Schema\Index\IndexedColumn;
+use Doctrine\DBAL\Schema\Index\IndexType;
+use Doctrine\DBAL\Schema\Name;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\FloatType;
@@ -133,7 +136,7 @@ class SchemaService
      *
      * @throws \Doctrine\DBAL\Exception
      */
-    public function tableExists(string $name): bool
+    public function §tableExists(string $name): bool
     {
         return $this->getSchemaManager()->tableExists($name);
     }
@@ -217,9 +220,9 @@ class SchemaService
     private function findForeignTableName(string $name, array $foreignKeys): ?string
     {
         foreach ($foreignKeys as $foreignKey) {
-            $columns = $foreignKey->getLocalColumns();
+            $columns = $this->mapNames($foreignKey->getReferencingColumnNames());
             if (\in_array($name, $columns, true)) {
-                return $this->mapTableName($foreignKey->getForeignTableName());
+                return $this->mapName($foreignKey->getReferencedTableName());
             }
         }
 
@@ -246,7 +249,7 @@ class SchemaService
             if ($targetData instanceof ClassMetadata) {
                 $inverse = $data->isAssociationInverseSide($name);
                 $result[] = [
-                    'name' => $name,
+                    'name' => \ucfirst($name),
                     'inverse' => $inverse,
                     'table' => $this->mapTableName($targetData),
                 ];
@@ -258,6 +261,8 @@ class SchemaService
 
     /**
      * @phpstan-return array<SchemaColumnType>
+     *
+     * @psalm-suppress InternalMethod
      */
     private function getColumns(Table $table): array
     {
@@ -266,7 +271,7 @@ class SchemaService
         $primaryKeys = $this->getPrimaryKeys($table);
 
         return \array_map(function (Column $column) use ($primaryKeys, $indexes, $foreignKeys): array {
-            $name = $column->getName();
+            $name = \strtolower($column->getName());
             $primary = \in_array($name, $primaryKeys, true);
             $unique = $this->isIndexUnique($name, $indexes);
             $foreignTable = $this->findForeignTableName($name, $foreignKeys);
@@ -319,17 +324,25 @@ class SchemaService
 
     /**
      * @phpstan-return array<SchemaIndexType>
+     *
+     * @psalm-suppress InternalMethod
      */
     private function getIndexes(Table $table): array
     {
         $indexes = $table->getIndexes();
+        $primaryColumns = $this->mapNames($table->getPrimaryKeyConstraint()?->getColumnNames() ?? []);
+        $results = \array_map(function (Index $index) use ($primaryColumns): array {
+            $columns = $this->mapIndexColumns($index);
+            $primary = $columns === $primaryColumns;
+            $unique = IndexType::UNIQUE === $index->getType();
 
-        $results = \array_map(fn (Index $index): array => [
-            'name' => $index->getName(),
-            'primary' => $index->isPrimary(),
-            'unique' => $index->isUnique(),
-            'columns' => $index->getColumns(),
-        ], $indexes);
+            return [
+                'name' => $index->getName(),
+                'primary' => $primary,
+                'unique' => $unique,
+                'columns' => $columns,
+            ];
+        }, $indexes);
 
         \usort($results, $this->sortIndexes(...));
 
@@ -359,7 +372,7 @@ class SchemaService
      */
     private function getPrimaryKeys(Table $table): array
     {
-        return $table->getPrimaryKey()?->getColumns() ?? [];
+        return $this->mapNames($table->getPrimaryKeyConstraint()?->getColumnNames() ?? []);
     }
 
     /**
@@ -372,6 +385,9 @@ class SchemaService
         return $this->schemaManager ??= $this->getConnection()->createSchemaManager();
     }
 
+    /**
+     * @psalm-suppress InternalMethod
+     */
     private function getSqlCounter(Table $table): string
     {
         $name = $table->getName();
@@ -394,8 +410,8 @@ class SchemaService
     private function isIndexUnique(string $name, array $indexes): bool
     {
         foreach ($indexes as $index) {
-            if (\in_array($name, $index->getColumns(), true)) {
-                return $index->isUnique();
+            if (\in_array($name, $this->mapIndexColumns($index), true)) {
+                return IndexType::UNIQUE === $index->getType();
             }
         }
 
@@ -426,7 +442,7 @@ class SchemaService
 
         return $this->mapToKeyValue(
             $datas,
-            fn (ClassMetadata $data): array => [$data->table['name'] => $data]
+            fn (ClassMetadata $data): array => [\strtolower($data->table['name']) => $data]
         );
     }
 
@@ -447,12 +463,42 @@ class SchemaService
     }
 
     /**
-     * @phpstan-param Table|ClassMetadata<object>|string $name
+     * @return array<string>
      */
-    private function mapTableName(Table|ClassMetadata|string $name): string
+    private function mapIndexColumns(Index $index): array
+    {
+        return \array_map(
+            fn (IndexedColumn $column): string => $this->mapName($column->getColumnName()),
+            $index->getIndexedColumns()
+        );
+    }
+
+    private function mapName(Name $name): string
+    {
+        return \strtolower($name->toString());
+    }
+
+    /**
+     * @param array<Name> $names
+     *
+     * @return string[]
+     */
+    private function mapNames(array $names): array
+    {
+        return \array_map(fn (Name $name): string => $this->mapName($name), $names);
+    }
+
+    /**
+     * @phpstan-param Table|ClassMetadata<object>|string $name
+     *
+     * @psalm-suppress InternalMethod
+     */
+    private function mapTableName(Table|Name|ClassMetadata|string $name): string
     {
         if ($name instanceof Table) {
             $name = $name->getName();
+        } elseif ($name instanceof Name) {
+            $name = $name->toString();
         } elseif ($name instanceof ClassMetadata) {
             $name = $name->table['name'];
         }
@@ -460,7 +506,7 @@ class SchemaService
         return $this->findFirst(
             \array_keys($this->getMetaDatas()),
             fn (string $value): bool => StringUtils::equalIgnoreCase($value, $name)
-        ) ?? $name;
+        ) ?? \strtolower($name);
     }
 
     /**

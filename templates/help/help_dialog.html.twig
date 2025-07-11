@@ -1,5 +1,5 @@
 {% extends 'help/help_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import link %}
+{% from 'macros/_icons.html.twig' import linkExternal %}
 {% from 'help/_help_tools.html.twig' import
     output_icon,
     output_type,
@@ -99,6 +99,12 @@
     {{ dialogs_button() }}
     {{ entities_button() }}
     {{ parent() }}
+    {{ linkExternal(
+        href: path('help_pdf_dialog', {id: dialog.id}),
+        class: 'btn btn-outline-secondary',
+        icon: ICON_PDF,
+        title: 'common.button_export_pdf')
+    }}
 {% endblock %}
 {# body #}
 {% block help_body -%}

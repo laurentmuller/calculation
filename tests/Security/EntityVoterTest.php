@@ -65,8 +65,8 @@ class EntityVoterTest extends TestCase
     public function testAbstainAttribute(): void
     {
         $user = $this->getDefaultUser();
-        $attribute = 'FakeAttribute';
         $subject = Calculation::class;
+        $attribute = 'FakeAttribute';
         $expected = VoterInterface::ACCESS_ABSTAIN;
         $this->assertVote($user, $subject, $attribute, $expected);
     }
@@ -74,8 +74,8 @@ class EntityVoterTest extends TestCase
     public function testAbstainSubject(): void
     {
         $user = $this->getDefaultUser();
-        $attribute = 'ADD';
-        $subject = static::class;
+        $subject = self::class;
+        $attribute = EntityPermission::ADD;
         $expected = VoterInterface::ACCESS_ABSTAIN;
         $this->assertVote($user, $subject, $attribute, $expected);
     }
@@ -85,9 +85,8 @@ class EntityVoterTest extends TestCase
         $role = $this->builder->getRoleAdmin();
         $user = $this->getAdminUser()
             ->setRights($role->getRights());
-
-        $attribute = 'ADD';
         $subject = User::class;
+        $attribute = EntityPermission::ADD;
         $expected = VoterInterface::ACCESS_GRANTED;
         $this->assertVote($user, $subject, $attribute, $expected);
     }
@@ -98,9 +97,8 @@ class EntityVoterTest extends TestCase
         $user = $this->getAdminUser()
             ->setRights($role->getRights())
             ->setOverwrite(true);
-
-        $attribute = 'ADD';
         $subject = User::class;
+        $attribute = EntityPermission::ADD;
         $expected = VoterInterface::ACCESS_GRANTED;
         $this->assertVote($user, $subject, $attribute, $expected);
     }
@@ -108,31 +106,44 @@ class EntityVoterTest extends TestCase
     public function testDisable(): void
     {
         $user = $this->getDisableUser();
-        $attribute = 'ADD';
         $subject = Calculation::class;
+        $attribute = EntityPermission::ADD;
         $expected = VoterInterface::ACCESS_DENIED;
         $this->assertVote($user, $subject, $attribute, $expected);
     }
 
-    public function testEntityName(): void
+    public function testInvalidAttribute(): void
     {
         $user = $this->getAdminUser();
+        $subject = EntityName::CALCULATION;
+        $attribute = 'fake';
         $expected = VoterInterface::ACCESS_ABSTAIN;
-        $this->assertVote($user, EntityName::CALCULATION, 'fake', $expected);
+        $this->assertVote($user, $subject, $attribute, $expected);
     }
 
-    public function testEntityPermission(): void
+    public function testInvalidSubject(): void
     {
         $user = $this->getAdminUser();
+        $subject = 'fake';
+        $attribute = EntityPermission::ADD;
         $expected = VoterInterface::ACCESS_ABSTAIN;
-        $this->assertVote($user, 'fake', EntityPermission::ADD, $expected);
+        $this->assertVote($user, $subject, $attribute, $expected);
+    }
+
+    public function testNotUserInstance(): void
+    {
+        $token = $this->createMock(TokenInterface::class);
+        $subject = EntityName::PRODUCT;
+        $attribute = EntityPermission::LIST;
+        $actual = $this->voter->vote($token, $subject, [$attribute], new Vote());
+        self::assertSame(VoterInterface::ACCESS_DENIED, $actual);
     }
 
     public function testSuperAdmin(): void
     {
         $user = $this->getSuperAdminUser();
-        $attribute = 'ADD';
         $subject = Calculation::class;
+        $attribute = EntityPermission::ADD;
         $expected = VoterInterface::ACCESS_GRANTED;
         $this->assertVote($user, $subject, $attribute, $expected);
     }
@@ -150,9 +161,18 @@ class EntityVoterTest extends TestCase
         $user = $this->getDefaultUser()
             ->setRights($role->getRights());
 
-        $attribute = 'ADD';
         $subject = Calculation::class;
+        $attribute = EntityPermission::ADD;
         $expected = VoterInterface::ACCESS_GRANTED;
+        $this->assertVote($user, $subject, $attribute, $expected);
+    }
+
+    public function testUserDenied(): void
+    {
+        $user = $this->getDefaultUser();
+        $subject = User::class;
+        $attribute = EntityPermission::ADD;
+        $expected = VoterInterface::ACCESS_DENIED;
         $this->assertVote($user, $subject, $attribute, $expected);
     }
 
@@ -162,7 +182,7 @@ class EntityVoterTest extends TestCase
             #[\Override]
             public function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
             {
-                return parent::voteOnAttribute($attribute, $subject, $token, $vote);
+                return parent::voteOnAttribute($attribute, $subject, $token, $vote ?? new Vote());
             }
         };
 
@@ -188,10 +208,13 @@ class EntityVoterTest extends TestCase
         self::assertFalse($actual);
     }
 
-    private function assertVote(User $user, mixed $subject, mixed $attribute, mixed $expected): void
+    /**
+     * @phpstan-param VoterInterface::ACCESS_* $expected
+     */
+    private function assertVote(User $user, mixed $subject, mixed $attribute, int $expected): void
     {
         $token = $this->getUserToken($user);
-        $actual = $this->voter->vote($token, $subject, [$attribute]);
+        $actual = $this->voter->vote($token, $subject, [$attribute], new Vote());
         self::assertSame($expected, $actual);
     }
 
@@ -221,9 +244,9 @@ class EntityVoterTest extends TestCase
     private function getUser(string $role): User
     {
         $user = new User();
-        $user->setRole($role);
 
-        return $user;
+        return $user->setUsername($role)
+            ->setRole($role);
     }
 
     private function getUserToken(User $user): UsernamePasswordToken

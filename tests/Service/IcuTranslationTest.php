@@ -14,19 +14,17 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Tests\KernelServiceTestCase;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class to test ICU translations.
  */
-#[\PHPUnit\Framework\Attributes\CoversNothing]
+#[CoversNothing]
 class IcuTranslationTest extends KernelServiceTestCase
 {
     private TranslatorInterface $translator;
 
-    /**
-     * @throws \Exception
-     */
     #[\Override]
     protected function setUp(): void
     {

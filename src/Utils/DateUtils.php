@@ -60,7 +60,7 @@ final class DateUtils
      * Returns a new date point with the given interval added.
      *
      * @param DatePoint            $date     the date point
-     * @param \DateInterval|string $interval the interval to add
+     * @param \DateInterval|string $interval the date interval to add
      */
     public static function add(DatePoint $date, \DateInterval|string $interval): DatePoint
     {

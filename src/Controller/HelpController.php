@@ -33,6 +33,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display help.
+ *
+ * @phpstan-import-type HelpDialogType from HelpService
+ * @phpstan-import-type HelpEntityType from HelpService
  */
 #[Route(path: '/help', name: 'help_')]
 #[IsGranted(RoleInterface::ROLE_USER)]
@@ -160,10 +163,29 @@ class HelpController extends AbstractController
     #[PdfRoute]
     public function pdf(): PdfResponse
     {
-        $doc = new HelpReport($this, $this->service);
-        $name = $this->trans('help.title_name', ['%name%' => $this->getApplicationName()]);
+        return $this->renderPdf();
+    }
 
-        return $this->renderPdfDocument(doc: $doc, name: $name);
+    #[GetRoute(path: '/pdf/dialog/{id}', name: 'pdf_dialog')]
+    public function pdfDialog(string $id): PdfResponse
+    {
+        $dialog = $this->service->findDialog($id);
+        if (null === $dialog) {
+            throw $this->createTranslatedNotFoundException('help.errors.page_not_found', ['%id%' => $id]);
+        }
+
+        return $this->renderPdf(dialog: $dialog);
+    }
+
+    #[GetRoute(path: '/pdf/entity/{id}', name: 'pdf_entity')]
+    public function pdfEntity(string $id): PdfResponse
+    {
+        $entity = $this->service->findEntity($id);
+        if (null === $entity) {
+            throw $this->createTranslatedNotFoundException('help.errors.page_not_found', ['%id%' => $id]);
+        }
+
+        return $this->renderPdf(entity: $entity);
     }
 
     private function getTargetImage(HelpDownloadQuery $query): ?string
@@ -207,5 +229,16 @@ class HelpController extends AbstractController
         }
 
         return \sprintf('%s/%s.png', $first, $name);
+    }
+
+    /**
+     * @phpstan-param HelpDialogType|null $dialog
+     * @phpstan-param HelpEntityType|null $entity
+     */
+    private function renderPdf(?array $dialog = null, ?array $entity = null): PdfResponse
+    {
+        $doc = new HelpReport($this, $this->service, $dialog, $entity);
+
+        return $this->renderPdfDocument(doc: $doc);
     }
 }

@@ -21,6 +21,7 @@ use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Types\DatePointType;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -210,8 +211,8 @@ class CalculationRepository extends AbstractRepository
         return $this->createQueryBuilder('c')
             ->where('c.date > :from')
             ->andWhere('c.date <= :to')
-            ->setParameter('from', $from, Types::DATETIME_IMMUTABLE)
-            ->setParameter('to', $to, Types::DATETIME_IMMUTABLE)
+            ->setParameter('from', $from, DatePointType::NAME)
+            ->setParameter('to', $to, DatePointType::NAME)
             ->orderBy('c.date', self::SORT_DESC)
             ->addOrderBy('c.id', self::SORT_DESC)
             ->getQuery()

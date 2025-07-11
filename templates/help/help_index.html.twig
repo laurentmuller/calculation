@@ -126,7 +126,7 @@
         {# dialogs #}
         {% set groups = service.getDialogsByGroup() %}
         <div class="col-xl-4 col-lg-6 items">
-            {{ _self.output_header('window-maximize far', 'help.dialog_menu') }}
+            {{ _self.output_header('file-code far', 'help.dialog_menu') }}
             {% for group, dialogs in groups %}
                 {% set group_id = 'group-' ~ loop.index %}
                 <div class="help-item">

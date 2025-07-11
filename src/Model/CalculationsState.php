@@ -37,7 +37,7 @@ class CalculationsState implements \Countable
     /**
      * Generate a new total instance for these items.
      *
-     * The totals of these items are also updated.
+     * The percentages of these items are also updated.
      */
     private function generate(): CalculationsTotal
     {

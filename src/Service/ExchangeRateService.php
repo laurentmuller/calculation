@@ -204,7 +204,7 @@ class ExchangeRateService extends AbstractHttpClientService
         $month = DateUtils::getMonth($date);
         $date->setDate($year, $month, $day);
         if ($day < DateUtils::getDay($date)) {
-            return DateUtils::add($date, '+1 month');
+            return DateUtils::add($date, 'P1M');
         }
 
         return $date;

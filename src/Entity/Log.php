@@ -22,6 +22,7 @@ use App\Utils\StringUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\SqlFormatter\SqlFormatter;
+use Symfony\Bridge\Doctrine\Types\DatePointType;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -51,7 +52,7 @@ class Log extends AbstractEntity implements ComparableInterface
     private ?array $context = null;
 
     #[Assert\NotNull]
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[ORM\Column(type: DatePointType::NAME)]
     private DatePoint $createdAt;
 
     /**

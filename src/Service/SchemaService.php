@@ -136,7 +136,7 @@ class SchemaService
      *
      * @throws \Doctrine\DBAL\Exception
      */
-    public function §tableExists(string $name): bool
+    public function tableExists(string $name): bool
     {
         return $this->getSchemaManager()->tableExists($name);
     }

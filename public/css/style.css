@@ -455,7 +455,7 @@ input[type=number] {
 
 /* Toggle icon (angle-right) before the element */
 .drop-down-icon-left::before {
-    font-family: "Font Awesome 6 Free", sans-serif;
+    font-family: "Font Awesome 7 Free", sans-serif;
     font-weight: 900;
     float: left;
     margin-right: 6px;
@@ -479,7 +479,7 @@ input[type=number] {
 }
 
 .drop-down-icon-right::after {
-    font-family: "Font Awesome 6 Free", sans-serif;
+    font-family: "Font Awesome 7 Free", sans-serif;
     font-weight: 900;
     float: right;
     margin-left: 6px;
@@ -683,7 +683,7 @@ a.disabled {
 }
 
 .dropdown-item-checked-right::after {
-    font-family: "Font Awesome 6 Free", sans-serif;
+    font-family: "Font Awesome 7 Free", sans-serif;
     font-weight: 900;
     content: '\f00c';
     margin-left: 0.5rem;

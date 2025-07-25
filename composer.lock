@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b1a279f2171b7a8bf63162ee6e451f25",
+    "content-hash": "1f91b89f10264ff50d8c0558dd1a6e8e",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -442,16 +442,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "4.3.0",
+            "version": "4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "5fe09532be619202d59c70956c6fb20e97933ee3"
+                "reference": "ac336c95ea9e13433d56ca81c308b39db0e1a2a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/5fe09532be619202d59c70956c6fb20e97933ee3",
-                "reference": "5fe09532be619202d59c70956c6fb20e97933ee3",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/ac336c95ea9e13433d56ca81c308b39db0e1a2a7",
+                "reference": "ac336c95ea9e13433d56ca81c308b39db0e1a2a7",
                 "shasum": ""
             },
             "require": {
@@ -528,7 +528,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/4.3.0"
+                "source": "https://github.com/doctrine/dbal/tree/4.3.1"
             },
             "funding": [
                 {
@@ -544,7 +544,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-06-16T19:31:04+00:00"
+            "time": "2025-07-22T10:09:51+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -1443,16 +1443,16 @@
         },
         {
             "name": "endroid/qr-code",
-            "version": "6.0.8",
+            "version": "6.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/endroid/qr-code.git",
-                "reference": "8102273afbcd5e3d95f1faaab2c5aa31e3637f61"
+                "reference": "21e888e8597440b2205e2e5c484b6c8e556bcd1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/qr-code/zipball/8102273afbcd5e3d95f1faaab2c5aa31e3637f61",
-                "reference": "8102273afbcd5e3d95f1faaab2c5aa31e3637f61",
+                "url": "https://api.github.com/repos/endroid/qr-code/zipball/21e888e8597440b2205e2e5c484b6c8e556bcd1a",
+                "reference": "21e888e8597440b2205e2e5c484b6c8e556bcd1a",
                 "shasum": ""
             },
             "require": {
@@ -1503,7 +1503,7 @@
             ],
             "support": {
                 "issues": "https://github.com/endroid/qr-code/issues",
-                "source": "https://github.com/endroid/qr-code/tree/6.0.8"
+                "source": "https://github.com/endroid/qr-code/tree/6.0.9"
             },
             "funding": [
                 {
@@ -1511,7 +1511,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-05-10T14:28:45+00:00"
+            "time": "2025-07-13T19:59:45+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -2333,16 +2333,16 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "4.4.0",
+            "version": "4.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "747ccd1b443e85e0cfc0d52acf50e4d15ef959eb"
+                "reference": "2ea9786632e6fac1aee601b6e426bcc723d8ce13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/747ccd1b443e85e0cfc0d52acf50e4d15ef959eb",
-                "reference": "747ccd1b443e85e0cfc0d52acf50e4d15ef959eb",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/2ea9786632e6fac1aee601b6e426bcc723d8ce13",
+                "reference": "2ea9786632e6fac1aee601b6e426bcc723d8ce13",
                 "shasum": ""
             },
             "require": {
@@ -2433,9 +2433,9 @@
             ],
             "support": {
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
-                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/4.4.0"
+                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/4.5.0"
             },
-            "time": "2025-06-23T01:23:23+00:00"
+            "time": "2025-07-24T05:15:59+00:00"
         },
         {
             "name": "phpoffice/phpword",
@@ -8506,16 +8506,16 @@
         },
         {
             "name": "fortawesome/font-awesome",
-            "version": "6.7.2",
+            "version": "7.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FortAwesome/Font-Awesome.git",
-                "reference": "af620534bfc3c2d4cbefcfeec29603bbe7809e64"
+                "reference": "14189d0495198ec3846a59d100ef12f64f36c435"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/af620534bfc3c2d4cbefcfeec29603bbe7809e64",
-                "reference": "af620534bfc3c2d4cbefcfeec29603bbe7809e64",
+                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/14189d0495198ec3846a59d100ef12f64f36c435",
+                "reference": "14189d0495198ec3846a59d100ef12f64f36c435",
                 "shasum": ""
             },
             "type": "library",
@@ -8547,20 +8547,20 @@
                 "issues": "https://github.com/FortAwesome/Font-Awesome/issues",
                 "source": "https://github.com/FortAwesome/Font-Awesome"
             },
-            "time": "2024-12-16T21:31:56+00:00"
+            "time": "2025-07-22T16:06:19+00:00"
         },
         {
             "name": "masterminds/html5",
-            "version": "2.9.0",
+            "version": "2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Masterminds/html5-php.git",
-                "reference": "f5ac2c0b0a2eefca70b2ce32a5809992227e75a6"
+                "reference": "fcf91eb64359852f00d921887b219479b4f21251"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/f5ac2c0b0a2eefca70b2ce32a5809992227e75a6",
-                "reference": "f5ac2c0b0a2eefca70b2ce32a5809992227e75a6",
+                "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/fcf91eb64359852f00d921887b219479b4f21251",
+                "reference": "fcf91eb64359852f00d921887b219479b4f21251",
                 "shasum": ""
             },
             "require": {
@@ -8612,9 +8612,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Masterminds/html5-php/issues",
-                "source": "https://github.com/Masterminds/html5-php/tree/2.9.0"
+                "source": "https://github.com/Masterminds/html5-php/tree/2.10.0"
             },
-            "time": "2024-03-31T07:05:07+00:00"
+            "time": "2025-07-25T09:04:22+00:00"
         },
         {
             "name": "myclabs/deep-copy",

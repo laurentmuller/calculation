@@ -96,14 +96,11 @@ class SchemaService
     /**
      * Get information for the given table.
      *
-     * @param string $name the table's name to get information for
-     *
-     * @phpstan-return SchemaTableType
+     * @phpstan-return SchemaTableType|array<array-key, mixed>
      */
     public function getTable(string $name): array
     {
-        /** @phpstan-var SchemaTableType */
-        return $this->getTables(false)[$name] ?? [];
+        return $this->getTables(false)[\strtolower($name)] ?? [];
     }
 
     /**
@@ -133,12 +130,10 @@ class SchemaService
 
     /**
      * Returns if the given table exists.
-     *
-     * @throws \Doctrine\DBAL\Exception
      */
     public function tableExists(string $name): bool
     {
-        return $this->getSchemaManager()->tableExists($name);
+        return [] !== $this->getTable($name);
     }
 
     /**

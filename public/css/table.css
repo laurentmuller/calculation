@@ -63,7 +63,7 @@
 }
 
 .bootstrap-table .fixed-table-container .table thead th .sortable::after {
-    font-family: "Font Awesome 6 Free", sans-serif;
+    font-family: "Font Awesome 7 Free", sans-serif;
     font-weight: 900;
     padding-left: 0.35rem;
     opacity: 0.3;

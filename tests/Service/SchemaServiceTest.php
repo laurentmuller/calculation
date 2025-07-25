@@ -82,8 +82,9 @@ class SchemaServiceTest extends KernelServiceTestCase
 
     public function testGetTable(): void
     {
-        $actual = $this->service->getTable('sy_Group');
-        self::assertSame('sy_Group', $actual['name']);
+        $name = 'sy_group';
+        $actual = $this->service->getTable($name);
+        self::assertSame($name, $actual['name']);
     }
 
     public function testGetTables(): void

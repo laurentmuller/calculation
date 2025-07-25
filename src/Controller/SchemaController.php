@@ -64,16 +64,12 @@ class SchemaController extends AbstractController
     #[GetRoute(path: '/{name}', name: 'table')]
     public function table(string $name, SchemaService $service): Response
     {
-        try {
-            if ($service->tableExists($name)) {
-                return $this->render('schema/table.html.twig', $service->getTable($name));
-            }
-
-            $this->warningTrans('schema.table.error', ['%name%' => $name]);
-
-            return $this->redirectToRoute('schema_index');
-        } catch (\Doctrine\DBAL\Exception $e) {
-            throw $this->createTranslatedNotFoundException('schema.table.error', ['%name%' => $name], $e);
+        if ($service->tableExists($name)) {
+            return $this->render('schema/table.html.twig', $service->getTable($name));
         }
+
+        $this->warningTrans('schema.table.error', ['%name%' => $name]);
+
+        return $this->redirectToRoute('schema_index');
     }
 }

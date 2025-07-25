@@ -115,7 +115,7 @@ body:not(.sidebar-show) .navbar-horizontal {
 }
 
 .navbar-vertical .nav-link-toggle::after {
-    font-family: "Font Awesome 6 Free", sans-serif;
+    font-family: "Font Awesome 7 Free", sans-serif;
     font-weight: 900;
     float: right;
     margin-left: 6px;
@@ -184,8 +184,12 @@ html[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
  */
 .show-sidebar,
 .hide-sidebar {
-    padding: 0 0.5rem;
+    padding: 0 0.15rem;
     border-radius: 50%;
+
+}
+
+.show-sidebar {
     margin-top: 3px;
 }
 

@@ -91,6 +91,23 @@ class ResponseListenerTest extends TestCase
         self::assertStringContainsString(CspReportController::ROUTE_NAME, $actual);
     }
 
+    public function testSecureHeaders(): void
+    {
+        $file = $this->getCspFile();
+        $listener = $this->createListener($file);
+        $request = $this->createMock(Request::class);
+        $request->expects(self::once())
+            ->method('isSecure')
+            ->willReturn(true);
+        $event = $this->createEvent(request: $request);
+        $listener->onKernelResponse($event);
+
+        $key = 'Strict-Transport-Security';
+        $value = 'max-age=63072000; includeSubDomains; preload';
+        $headers = $event->getResponse()->headers;
+        self::assertHeader($headers, $key, $value);
+    }
+
     protected static function assertHeader(ResponseHeaderBag $headers, string $key, string $value): void
     {
         self::assertTrue($headers->has($key));
@@ -112,10 +129,12 @@ class ResponseListenerTest extends TestCase
         }
     }
 
-    private function createEvent(int $requestType = HttpKernelInterface::MAIN_REQUEST): ResponseEvent
-    {
+    private function createEvent(
+        int $requestType = HttpKernelInterface::MAIN_REQUEST,
+        ?Request $request = null
+    ): ResponseEvent {
         $kernel = $this->createMock(HttpKernelInterface::class);
-        $request = new Request();
+        $request ??= new Request();
         $response = new Response();
 
         return new ResponseEvent($kernel, $request, $requestType, $response);

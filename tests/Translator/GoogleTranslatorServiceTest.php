@@ -96,8 +96,6 @@ class GoogleTranslatorServiceTest extends TestCase
 
     /**
      * @throws \ReflectionException
-     *
-     * @psalm-suppress UnusedMethodCall
      */
     public function testGetDefaultOptions(): void
     {
@@ -106,7 +104,6 @@ class GoogleTranslatorServiceTest extends TestCase
         $translator->setClient($client);
         $class = new \ReflectionClass($translator);
         $method = $class->getMethod('getDefaultOptions');
-        $method->setAccessible(true);
         $actual = $method->invoke($translator);
         self::assertIsArray($actual);
     }

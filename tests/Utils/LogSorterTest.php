@@ -100,7 +100,6 @@ class LogSorterTest extends TestCase
             ->setExtra(['user' => 'user1']);
         $log2 = Log::instance(2)
             ->setExtra(['user' => 'user2']);
-
         $logs = [$log1, $log2];
 
         $sorter = new LogSorter('user', true);
@@ -114,6 +113,17 @@ class LogSorterTest extends TestCase
         $sorter = new LogSorter('createdAt', false);
         $sorter->sort($logs);
         self::assertSame([], $logs);
+    }
+
+    public function testSortSameLogs(): void
+    {
+        $log = Log::instance(1)
+            ->setCreatedAt(new DatePoint());
+        $logs = [$log, $log];
+
+        $sorter = new LogSorter('channel', false);
+        $sorter->sort($logs);
+        self::assertSame([$log, $log], $logs);
     }
 
     public function testWithoutFieldSorter(): void

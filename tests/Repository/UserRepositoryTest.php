@@ -18,6 +18,7 @@ use App\Repository\UserRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -65,6 +66,14 @@ class UserRepositoryTest extends KernelServiceTestCase
 
         $actual = $this->repository->findByUsername('ROLE_USER');
         self::assertNotNull($actual);
+    }
+
+    public function testFindByUsernameFail(): void
+    {
+        $registry = $this->createMock(ManagerRegistry::class);
+        $repository = new UserRepository($registry);
+        $actual = $repository->findByUsername('test');
+        self::assertNull($actual);
     }
 
     public function testFindByUserNameOrEmail(): void

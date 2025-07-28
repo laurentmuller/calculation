@@ -134,8 +134,6 @@ class BingTranslatorServiceTest extends TestCase
 
     /**
      * @throws \ReflectionException
-     *
-     * @psalm-suppress UnusedMethodCall
      */
     public function testGetDefaultOptions(): void
     {
@@ -144,7 +142,6 @@ class BingTranslatorServiceTest extends TestCase
         $translator->setClient($client);
         $class = new \ReflectionClass($translator);
         $method = $class->getMethod('getDefaultOptions');
-        $method->setAccessible(true);
         $actual = $method->invoke($translator);
         self::assertIsArray($actual);
     }

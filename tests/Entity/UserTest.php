@@ -160,6 +160,16 @@ class UserTest extends EntityValidatorTestCase
         self::assertFalse($user->isEnabled());
     }
 
+    /**
+     * @psalm-suppress DeprecatedMethod
+     */
+    public function testEraseCredentials(): void
+    {
+        $user = new User();
+        $user->eraseCredentials(); // @phpstan-ignore method.deprecated
+        self::assertNull($user->getPassword());
+    }
+
     public function testImageFile(): void
     {
         $user = new User();

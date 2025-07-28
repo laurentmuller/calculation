@@ -130,13 +130,13 @@ class PivotNodeTest extends TestCase
         $actual = $parent->getChildrenAtLevel(0);
         self::assertSame([$parent], $actual);
 
-        $child = $this->createChildNode($parent);
+        $child1 = $this->createChildNode($parent, 'child1');
         $actual = $parent->getChildrenAtLevel(1);
-        self::assertSame([$child], $actual);
+        self::assertSame([$child1], $actual);
 
-        $this->createChildNode($child, 'sub-child');
-        $actual = $parent->getChildrenAtLevel(1);
-        self::assertSame([$child], $actual);
+        $child2 = $this->createChildNode($child1, 'child2');
+        $actual = $parent->getChildrenAtLevel(2);
+        self::assertSame([$child2], $actual);
     }
 
     public function testGetKeys(): void
@@ -323,6 +323,16 @@ class PivotNodeTest extends TestCase
         $parent->setSortMode(SortModeInterface::SORT_DESC);
         $child = $this->createChildNode($parent);
         self::assertSame($parent, $child->getParent());
+    }
+
+    public function testSortDescendingMultiple(): void
+    {
+        $parent = $this->createNode();
+        $parent->setSortMode(SortModeInterface::SORT_DESC);
+        $child1 = $this->createChildNode($parent, 'child1');
+        $child2 = $this->createChildNode($parent, 'child2');
+        self::assertSame($parent, $child1->getParent());
+        self::assertSame($parent, $child2->getParent());
     }
 
     public function testToString(): void

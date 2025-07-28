@@ -20,6 +20,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
+use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
@@ -40,8 +41,6 @@ class DeeplTranslatorServiceTest extends TestCase
 
     /**
      * @throws \ReflectionException
-     *
-     * @psalm-suppress UnusedMethodCall
      */
     public function testGetDefaultOptions(): void
     {
@@ -50,7 +49,6 @@ class DeeplTranslatorServiceTest extends TestCase
         $translator->setClient($client);
         $class = new \ReflectionClass($translator);
         $method = $class->getMethod('getDefaultOptions');
-        $method->setAccessible(true);
         $actual = $method->invoke($translator);
         self::assertIsArray($actual);
     }
@@ -110,6 +108,21 @@ class DeeplTranslatorServiceTest extends TestCase
         $actual = $translator->getLanguages();
         self::assertIsArray($actual);
         self::assertCount(2, $actual);
+    }
+
+    /**
+     * @throws ExceptionInterface
+     */
+    public function testTranslateEmptyBody(): void
+    {
+        $response = new MockResponse(
+            body: '',
+            info: ['http_code' => 403]
+        );
+        $translator = $this->createTranslator($response);
+        $query = new TranslateQuery('en', 'fr', 'text');
+        $actual = $translator->translate($query);
+        self::assertFalse($actual);
     }
 
     /**
@@ -182,7 +195,7 @@ class DeeplTranslatorServiceTest extends TestCase
         self::assertIsArray($actual);
     }
 
-    private function createTranslator(JsonMockResponse ...$responses): DeeplTranslatorService
+    private function createTranslator(MockResponse ...$responses): DeeplTranslatorService
     {
         $key = 'fake';
         $cache = new ArrayAdapter();

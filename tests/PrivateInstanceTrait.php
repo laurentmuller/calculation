@@ -26,15 +26,12 @@ trait PrivateInstanceTrait
      * @param class-string $class
      *
      * @throws \ReflectionException
-     *
-     * @psalm-suppress UnusedMethodCall
      */
     public static function assertPrivateInstance(string $class): void
     {
         $reflectionClass = new \ReflectionClass($class);
         $constructor = $reflectionClass->getConstructor();
         self::assertNotNull($constructor);
-        $constructor->setAccessible(true);
         $object = $reflectionClass->newInstanceWithoutConstructor();
         $constructor->invoke($object);
         self::assertInstanceOf($class, $object);

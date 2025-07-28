@@ -125,7 +125,7 @@ class ProductProviderTest extends TestCase
     private function createProvider(Product ...$entities): ProductProvider
     {
         $entity = [] === $entities ? null : $entities[0];
-        $values = [] === $entities ? [] : \array_map(fn (
+        $values = [] === $entities ? [] : \array_map(static fn (
             Product $product
         ): string => (string) $product->getDescription(), $entities);
 

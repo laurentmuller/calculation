@@ -56,9 +56,9 @@ class PhpIniDocumentTest extends TestCase
         $service->method('asArray')
             ->willReturn($data);
         $service->method('isNoValue')
-            ->willReturnCallback(fn (string $value): bool => 'no value' === $value);
+            ->willReturnCallback(static fn (string $value): bool => 'no value' === $value);
         $service->method('isColor')
-            ->willReturnCallback(fn (string $value): bool => \str_starts_with($value, '#'));
+            ->willReturnCallback(static fn (string $value): bool => \str_starts_with($value, '#'));
 
         return new PhpIniDocument($controller, $service);
     }

@@ -396,7 +396,7 @@ class SchemaService
      */
     private function getTargetMetaData(string $name): ?ClassMetadata
     {
-        return $this->findFirst($this->getMetaDatas(), fn (ClassMetadata $data): bool => $data->getName() === $name);
+        return $this->findFirst($this->getMetaDatas(), static fn (ClassMetadata $data): bool => $data->getName() === $name);
     }
 
     /**
@@ -437,7 +437,7 @@ class SchemaService
 
         return $this->mapToKeyValue(
             $datas,
-            fn (ClassMetadata $data): array => [\strtolower($data->table['name']) => $data]
+            static fn (ClassMetadata $data): array => [\strtolower($data->table['name']) => $data]
         );
     }
 
@@ -500,7 +500,7 @@ class SchemaService
 
         return $this->findFirst(
             \array_keys($this->getMetaDatas()),
-            fn (string $value): bool => StringUtils::equalIgnoreCase($value, $name)
+            static fn (string $value): bool => StringUtils::equalIgnoreCase($value, $name)
         ) ?? \strtolower($name);
     }
 

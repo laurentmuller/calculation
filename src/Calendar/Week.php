@@ -77,7 +77,7 @@ class Week extends AbstractCalendarItem
         $lastDate = $this->getLastDate();
         $months = $this->calendar->getMonths();
 
-        return \array_filter($months, function (Month $month) use ($firstDate, $lastDate): bool {
+        return \array_filter($months, static function (Month $month) use ($firstDate, $lastDate): bool {
             $monthFirst = $month->getFirstDate();
             if ($firstDate < $monthFirst && $lastDate < $monthFirst) {
                 return false;

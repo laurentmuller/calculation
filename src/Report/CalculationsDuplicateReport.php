@@ -40,7 +40,7 @@ class CalculationsDuplicateReport extends AbstractCalculationItemsReport
     #[\Override]
     protected function computeItemsCount(array $entities): int
     {
-        return \array_reduce($entities, function (int $carry, array $entity): int {
+        return \array_reduce($entities, static function (int $carry, array $entity): int {
             /** @phpstan-var CalculationItemEntry $item */
             foreach ($entity['items'] as $item) {
                 $carry += $item['count'];

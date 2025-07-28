@@ -225,7 +225,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
      */
     protected function addPrefixes(string $alias, array $names): array
     {
-        return \array_map(fn (string $name): string => "$alias.$name", $names);
+        return \array_map(static fn (string $name): string => "$alias.$name", $names);
     }
 
     /**
@@ -239,7 +239,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
      */
     protected function concat(string $alias, array $fields, string $default = ''): string
     {
-        $values = \array_map(fn (string $field): string => "COALESCE($alias.$field, '$default')", $fields);
+        $values = \array_map(static fn (string $field): string => "COALESCE($alias.$field, '$default')", $fields);
 
         return \sprintf('CONCAT(%s)', \implode(',', $values));
     }

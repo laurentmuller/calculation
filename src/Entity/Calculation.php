@@ -209,7 +209,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         $code = $category->getCode();
         /** @phpstan-var CalculationCategory|null $first */
         $first = $group->getCategories()->findFirst(
-            fn (int $key, CalculationCategory $category): bool => $code === $category->getCode()
+            static fn (int $key, CalculationCategory $category): bool => $code === $category->getCode()
         );
         if ($first instanceof CalculationCategory) {
             return $first;
@@ -233,7 +233,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         $code = $group->getCode();
         /** @phpstan-var CalculationGroup|null $first */
         $first = $this->groups->findFirst(
-            fn (int $key, CalculationGroup $group): bool => $code === $group->getCode()
+            static fn (int $key, CalculationGroup $group): bool => $code === $group->getCode()
         );
         if ($first instanceof CalculationGroup) {
             return $first;
@@ -315,7 +315,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
              * @param CalculationItem[] $carry
              * @param CalculationItem[] $items
              */
-            function (array $carry, array $items): array {
+            static function (array $carry, array $items): array {
                 if (\count($items) > 1) {
                     return \array_merge($carry, \array_values($items));
                 }

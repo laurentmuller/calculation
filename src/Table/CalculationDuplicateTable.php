@@ -59,7 +59,7 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
         return \array_reduce(
             $items,
             /** @phpstan-param CalculationItemType $item */
-            function (int $carry, array $item): int {
+            static function (int $carry, array $item): int {
                 foreach ($item['items'] as $child) {
                     $carry += $child['count'];
                 }

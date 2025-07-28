@@ -146,7 +146,7 @@ class PhpIniReport extends AbstractReport
      */
     private function sortEntries(array &$entries): void
     {
-        \uksort($entries, function (string $a, string $b) use ($entries): int {
+        \uksort($entries, static function (string $a, string $b) use ($entries): int {
             $result = \is_array($entries[$a]) <=> \is_array($entries[$b]);
             if (0 !== $result) {
                 return $result;

@@ -187,7 +187,7 @@ class Group extends AbstractCodeEntity
     {
         /** @phpstan-var GroupMargin|null */
         return $this->margins->findFirst(
-            fn (int $key, GroupMargin $margin): bool => $margin->contains($amount)
+            static fn (int $key, GroupMargin $margin): bool => $margin->contains($amount)
         );
     }
 

@@ -32,7 +32,7 @@ trait DuplicateItemsTrait
         }
 
         $result = \array_map(
-            fn (array $item): string => \sprintf('%s (%d)', $item['description'], $item['count']),
+            static fn (array $item): string => \sprintf('%s (%d)', $item['description'], $item['count']),
             $items
         );
 

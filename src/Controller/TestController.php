@@ -326,7 +326,7 @@ class TestController extends AbstractController
         $password = new Password(all: true);
         $options = PropertyServiceInterface::PASSWORD_OPTIONS;
         $strength = new Strength(StrengthLevel::MEDIUM);
-        $listener = function (PreSubmitEvent $event) use ($options, $password, $strength): void {
+        $listener = static function (PreSubmitEvent $event) use ($options, $password, $strength): void {
             /** @phpstan-var array $data */
             $data = $event->getData();
             foreach ($options as $property => $option) {
@@ -650,7 +650,7 @@ class TestController extends AbstractController
     private function getCurrencies(): array
     {
         /** @phpstan-var array<array{code: string, name: string}> $currencies */
-        $currencies = \array_map(function (string $code): array {
+        $currencies = \array_map(static function (string $code): array {
             $name = \ucfirst(Currencies::getName($code));
             $symbol = Currencies::getSymbol($code);
 

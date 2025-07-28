@@ -33,7 +33,7 @@ trait VichImageTypeTrait
 {
     protected function createVichImageType(): VichImageType
     {
-        $callback = fn (?User $user): ?string => $user?->getImageName();
+        $callback = static fn (?User $user): ?string => $user?->getImageName();
         $storage = $this->createMock(StorageInterface::class);
         $storage->method('resolveUri')
             ->willReturnCallback($callback);

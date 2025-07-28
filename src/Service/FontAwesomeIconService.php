@@ -137,6 +137,6 @@ class FontAwesomeIconService
             return [];
         }
 
-        return \array_map(fn (string $value): string => \str_replace('fa-', '', $value), \array_values($values));
+        return \array_map(static fn (string $value): string => \str_replace('fa-', '', $value), \array_values($values));
     }
 }

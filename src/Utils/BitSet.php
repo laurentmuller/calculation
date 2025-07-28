@@ -304,7 +304,7 @@ class BitSet implements \Stringable
     public function toBinary2(): string
     {
         $format = \sprintf('%%0%db', \PHP_INT_SIZE * 4);
-        $callback = fn (string $carry, int $value): string => \sprintf($format, $value) . $carry;
+        $callback = static fn (string $carry, int $value): string => \sprintf($format, $value) . $carry;
         $result = \array_reduce($this->words, $callback, '');
 
         return \ltrim($result, '0');

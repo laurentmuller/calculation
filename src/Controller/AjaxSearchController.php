@@ -93,7 +93,7 @@ class AjaxSearchController extends AbstractController
         ?int $limit = null
     ): JsonResponse {
         return $this->getValuesFromCallback(
-            fn (string $query, int $limit): array => $repository->search($query, $limit),
+            static fn (string $query, int $limit): array => $repository->search($query, $limit),
             $query,
             $limit
         );
@@ -219,7 +219,7 @@ class AjaxSearchController extends AbstractController
     private function getValuesFromRepository(AbstractRepository $repository, string $field, ?string $query = null, ?int $limit = null): JsonResponse
     {
         return $this->getValuesFromCallback(
-            fn (string $query, int $limit): array => $repository->getDistinctValues($field, $query, $limit),
+            static fn (string $query, int $limit): array => $repository->getDistinctValues($field, $query, $limit),
             $query,
             $limit
         );

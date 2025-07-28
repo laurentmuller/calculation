@@ -38,7 +38,7 @@ class ProductListType extends AbstractListEntityType
         $resolver->setDefaults([
             'choice_label' => 'description',
             'group_by' => $this->getGroupBy(...),
-            'query_builder' => fn (ProductRepository $repository): QueryBuilder => $repository->getQueryBuilderByCategory(),
+            'query_builder' => static fn (ProductRepository $repository): QueryBuilder => $repository->getQueryBuilderByCategory(),
         ]);
     }
 

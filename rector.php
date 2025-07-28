@@ -11,6 +11,8 @@
 
 declare(strict_types=1);
 
+use Rector\CodingStyle\Rector\ArrowFunction\StaticArrowFunctionRector;
+use Rector\CodingStyle\Rector\Closure\StaticClosureRector;
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
@@ -60,4 +62,11 @@ return RectorConfig::configure()
         // twig
         TwigSetList::TWIG_24,
         TwigSetList::TWIG_UNDERSCORE_TO_NAMESPACE,
-    ])->withAttributesSets();
+    ])->withAttributesSets(
+        symfony: true,
+        doctrine: true,
+        phpunit: true,
+    )->withRules([
+        StaticClosureRector::class,
+        StaticArrowFunctionRector::class,
+    ]);

@@ -90,7 +90,7 @@ class HtmlLiChunk extends HtmlParentChunk
         }
 
         if (StringUtils::isString($text)) {
-            $this->applyFont($report, $this->findFont(), function (HtmlReport $report) use (&$width, $text): void {
+            $this->applyFont($report, $this->findFont(), static function (HtmlReport $report) use (&$width, $text): void {
                 $width = $report->getStringWidth($text);
             });
         }

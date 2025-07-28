@@ -169,7 +169,7 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
                 $columns[$field] = 1;
             }
         }
-        \usort($items, function (array $a, array $b) use ($columns): int {
+        \usort($items, static function (array $a, array $b) use ($columns): int {
             foreach ($columns as $key => $order) {
                 $result = \strnatcasecmp((string) $a[$key], (string) $b[$key]);
                 if (0 !== $result) {

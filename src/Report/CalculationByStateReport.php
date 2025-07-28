@@ -212,7 +212,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         $radius = $printableWidth / 4.0;
         $centerX = $margin + $printableWidth / 2.0;
         $centerY = $top + $radius;
-        $rows = \array_map(fn (CalculationsStateItem $entity): array => [
+        $rows = \array_map(static fn (CalculationsStateItem $entity): array => [
             'label' => $entity->code,
             'color' => $entity->color,
             'value' => $entity->total,

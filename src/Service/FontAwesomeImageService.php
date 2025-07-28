@@ -136,7 +136,7 @@ class FontAwesomeImageService
      */
     public function isSvgSupported(): bool
     {
-        return $this->cache->get('svg_supported', fn (): bool => 0 !== \count(\Imagick::queryFormats('SVG')));
+        return $this->cache->get('svg_supported', static fn (): bool => 0 !== \count(\Imagick::queryFormats('SVG')));
     }
 
     private function convert(string $content): FontAwesomeImage

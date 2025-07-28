@@ -109,7 +109,7 @@ readonly class PdfLabelService
 
             return $this->mapToKeyValue(
                 $labels,
-                fn (PdfLabel $label) => [$label->name => $label]
+                static fn (PdfLabel $label) => [$label->name => $label]
             );
         } catch (\Exception $e) {
             $message = \sprintf('Unable to deserialize the content of the file "%s".', $file);

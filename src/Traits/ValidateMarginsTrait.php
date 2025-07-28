@@ -43,7 +43,7 @@ trait ValidateMarginsTrait
 
         $values = $margins->toArray();
         if (\count($values) > 1) {
-            \uasort($values, fn (MarginInterface $a, MarginInterface $b): int => $a->getMinimum() <=> $b->getMinimum());
+            \uasort($values, static fn (MarginInterface $a, MarginInterface $b): int => $a->getMinimum() <=> $b->getMinimum());
         }
 
         $lastMax = null;

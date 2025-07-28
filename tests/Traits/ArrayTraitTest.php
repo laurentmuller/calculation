@@ -55,11 +55,11 @@ class ArrayTraitTest extends TestCase
             [self::KEY => 3.0],
             [self::KEY => 4.0],
         ];
-        $callback = fn (float $value): bool => $value < 4.0;
+        $callback = static fn (float $value): bool => $value < 4.0;
         $expected = [1.0, 2.0, 3.0];
         yield [$values, $expected, $callback];
 
-        $callback = fn (float $value): bool => $value >= 4.0;
+        $callback = static fn (float $value): bool => $value >= 4.0;
         $expected = [3 => 4.0];
         yield [$values, $expected, $callback];
     }
@@ -180,7 +180,7 @@ class ArrayTraitTest extends TestCase
 
     public function testAnyMatch(): void
     {
-        $closure = fn (int $value): bool => 2 === $value;
+        $closure = static fn (int $value): bool => 2 === $value;
 
         $array = [];
         $actual = $this->anyMatch($array, $closure);
@@ -225,16 +225,16 @@ class ArrayTraitTest extends TestCase
     public function testFindFirstWithKey(): void
     {
         $array = [];
-        $closure = fn (string $value, int $key): bool => 2 === $key;
+        $closure = static fn (string $value, int $key): bool => 2 === $key;
         $actual = $this->findFirst($array, $closure); // @phpstan-ignore argument.type
         self::assertNull($actual);
 
         $array = $this->createArray();
-        $closure = fn (string $value, int $key): bool => 10 === $key;
+        $closure = static fn (string $value, int $key): bool => 10 === $key;
         $actual = $this->findFirst($array, $closure); // @phpstan-ignore argument.type
         self::assertSame('B', $actual);
 
-        $closure = fn (string $value, int $key): bool => 40 === $key;
+        $closure = static fn (string $value, int $key): bool => 40 === $key;
         $actual = $this->findFirst($array, $closure); // @phpstan-ignore argument.type
         self::assertNull($actual);
     }
@@ -242,16 +242,16 @@ class ArrayTraitTest extends TestCase
     public function testFindFirstWithValue(): void
     {
         $array = [];
-        $closure = fn (string $value): bool => 'A' === $value;
+        $closure = static fn (string $value): bool => 'A' === $value;
         $actual = $this->findFirst($array, $closure);
         self::assertNull($actual);
 
         $array = $this->createArray();
-        $closure = fn (string $value): bool => 'B' === $value;
+        $closure = static fn (string $value): bool => 'B' === $value;
         $actual = $this->findFirst($array, $closure);
         self::assertSame('B', $actual);
 
-        $closure = fn (string $value): bool => '4' === $value;
+        $closure = static fn (string $value): bool => '4' === $value;
         $actual = $this->findFirst($array, $closure);
         self::assertNull($actual);
     }
@@ -266,7 +266,7 @@ class ArrayTraitTest extends TestCase
         ];
         $actual = $this->mapToKeyValue(
             $values,
-            fn (array $entry): array => [$entry['key'] => $entry['value']]
+            static fn (array $entry): array => [$entry['key'] => $entry['value']]
         );
         self::assertSame(['My Key' => 'My Value'], $actual);
     }

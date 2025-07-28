@@ -159,8 +159,8 @@ class WebpCommand
 
     private function createFinder(string $path, int $level): Finder
     {
-        $filtered = \array_filter(ImageExtension::cases(), fn (ImageExtension $e): bool => ImageExtension::WEBP !== $e);
-        $extensions = \array_map(fn (ImageExtension $e): string => $e->getFilter(), $filtered);
+        $filtered = \array_filter(ImageExtension::cases(), static fn (ImageExtension $e): bool => ImageExtension::WEBP !== $e);
+        $extensions = \array_map(static fn (ImageExtension $e): string => $e->getFilter(), $filtered);
         $depth = "<= $level";
 
         return Finder::create()

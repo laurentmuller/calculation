@@ -254,7 +254,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
             return $sources;
         }
 
-        return \array_filter($sources, fn (CalculationState $state): bool => \in_array($state->getId(), $ids, true));
+        return \array_filter($sources, static fn (CalculationState $state): bool => \in_array($state->getId(), $ids, true));
     }
 
     private function getTarget(): ?CalculationState

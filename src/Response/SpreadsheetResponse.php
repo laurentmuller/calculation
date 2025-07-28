@@ -34,7 +34,7 @@ class SpreadsheetResponse extends AbstractStreamedResponse
      */
     public function __construct(SpreadsheetDocument $doc, bool $inline = true, string $name = '')
     {
-        $callback = fn (): null => IOFactory::createWriter($doc, IOFactory::WRITER_XLSX)->save('php://output');
+        $callback = static fn (): null => IOFactory::createWriter($doc, IOFactory::WRITER_XLSX)->save('php://output');
         parent::__construct($callback, $inline, $name);
     }
 

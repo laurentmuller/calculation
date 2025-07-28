@@ -82,7 +82,7 @@ class CalculationUpdateController extends AbstractController
             ->updateOptions([
                 'multiple' => true,
                 'expanded' => true,
-                'group_by' => fn (): null => null,
+                'group_by' => static fn (): null => null,
                 'query_builder' => static fn (
                     CalculationStateRepository $repository
                 ): QueryBuilder => $repository->getEditableQueryBuilder(),

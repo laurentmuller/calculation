@@ -629,7 +629,7 @@ class ApplicationService implements PropertyServiceInterface
     {
         return $this->mapToKeyValue(
             $this->loadEntities(),
-            fn (GlobalProperty $property): array => [$property->getName() => $property],
+            static fn (GlobalProperty $property): array => [$property->getName() => $property],
         );
     }
 

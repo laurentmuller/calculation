@@ -236,7 +236,7 @@ abstract class AbstractTable implements SortModeInterface
     {
         return $this->mapToKeyValue(
             $columns,
-            fn (Column $column): array => [$column->getAlias() => $column->mapValue($objectOrArray)]
+            static fn (Column $column): array => [$column->getAlias() => $column->mapValue($objectOrArray)]
         );
     }
 }

@@ -197,7 +197,7 @@ class HelpService
              *
              * @phpstan-return array<string, HelpDialogType[]>
              */
-            function (array $carry, array $dialog): array {
+            static function (array $carry, array $dialog): array {
                 $key = $dialog['group'];
                 $carry[$key][] = $dialog;
 
@@ -289,7 +289,7 @@ class HelpService
      */
     public function sortByName(array &$array): void
     {
-        \uasort($array, fn (array $a, array $b): int => ($a['name'] ?? '') <=> ($b['name'] ?? ''));
+        \uasort($array, static fn (array $a, array $b): int => ($a['name'] ?? '') <=> ($b['name'] ?? ''));
     }
 
     /**

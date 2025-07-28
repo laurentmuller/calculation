@@ -76,7 +76,7 @@ final class FormatUtils
     private static array $numberFormatters = [];
 
     /**
-     * The formatter for roman numeral.
+     * The formatter for a roman numeral.
      */
     private static ?\NumberFormatter $romanFormatter = null;
 
@@ -201,7 +201,7 @@ final class FormatUtils
     }
 
     /**
-     * Format the given value to roman numeral.
+     * Format the given value to a roman numeral.
      *
      * <b>N.B.:</b> Returns an empty string if the number is smaller than 1 or is greater than 3999.
      */
@@ -302,7 +302,7 @@ final class FormatUtils
     }
 
     /**
-     * Gets the formatter used format values to roman numeral.
+     * Gets the formatter used format values to a roman numeral.
      */
     public static function getRomanFormatter(): \NumberFormatter
     {
@@ -319,7 +319,7 @@ final class FormatUtils
     private static function hashCode(\DateTimeZone|string|int|null ...$values): string
     {
         $values = \array_map(
-            fn (mixed $value): string => $value instanceof \DateTimeZone ? $value->getName() : (string) $value,
+            static fn (mixed $value): string => $value instanceof \DateTimeZone ? $value->getName() : (string) $value,
             $values
         );
 

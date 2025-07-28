@@ -209,7 +209,7 @@ class CalendarController extends AbstractController
     {
         $yearMonth = $year * 1000 + $month;
         /** @phpstan-var array<int[]> $filtered */
-        $filtered = \array_filter($yearsMonths, fn (array $current): bool => $current['year_month'] > $yearMonth);
+        $filtered = \array_filter($yearsMonths, static fn (array $current): bool => $current['year_month'] > $yearMonth);
 
         return \reset($filtered);
     }
@@ -227,7 +227,7 @@ class CalendarController extends AbstractController
     {
         $yearWeek = $year * 1000 + $week;
         /** @phpstan-var array<int[]> $filtered */
-        $filtered = \array_filter($yearsWeeks, fn (array $current): bool => $current['year_week'] > $yearWeek);
+        $filtered = \array_filter($yearsWeeks, static fn (array $current): bool => $current['year_week'] > $yearWeek);
 
         return \reset($filtered);
     }
@@ -242,7 +242,7 @@ class CalendarController extends AbstractController
      */
     private function nextYear(array $years, int $year): int|false
     {
-        $filtered = \array_filter($years, fn (int $current): bool => $current > $year);
+        $filtered = \array_filter($years, static fn (int $current): bool => $current > $year);
 
         return \reset($filtered);
     }
@@ -260,7 +260,7 @@ class CalendarController extends AbstractController
     {
         $yearMonth = $year * 1000 + $month;
         /** @phpstan-var array<int[]> $filtered */
-        $filtered = \array_filter($yearsMonths, fn (array $current): bool => $current['year_month'] < $yearMonth);
+        $filtered = \array_filter($yearsMonths, static fn (array $current): bool => $current['year_month'] < $yearMonth);
 
         return \reset($filtered);
     }
@@ -278,7 +278,7 @@ class CalendarController extends AbstractController
     {
         $yearWeek = $year * 1000 + $week;
         /** @phpstan-var array<int[]> $filtered */
-        $filtered = \array_filter($yearsWeeks, fn (array $current): bool => $current['year_week'] < $yearWeek);
+        $filtered = \array_filter($yearsWeeks, static fn (array $current): bool => $current['year_week'] < $yearWeek);
 
         return \reset($filtered);
     }
@@ -293,7 +293,7 @@ class CalendarController extends AbstractController
      */
     private function previousYear(array $years, int $year): int|false
     {
-        $filtered = \array_filter($years, fn (int $current): bool => $current < $year);
+        $filtered = \array_filter($years, static fn (int $current): bool => $current < $year);
 
         return \end($filtered);
     }
@@ -314,7 +314,7 @@ class CalendarController extends AbstractController
         if ($year !== $todayYear || $month !== $todayMonth) {
             $yearMonth = $todayYear * 1000 + $todayMonth;
             /** @phpstan-var array<int[]> $filtered */
-            $filtered = \array_filter($yearsMonths, fn (array $current): bool => $current['year_month'] === $yearMonth);
+            $filtered = \array_filter($yearsMonths, static fn (array $current): bool => $current['year_month'] === $yearMonth);
 
             return \reset($filtered);
         }
@@ -338,7 +338,7 @@ class CalendarController extends AbstractController
         if ($year !== $todayYear || $week !== $todayWeek) {
             $yearWeek = $year * 1000 + $week;
             /** @phpstan-var array<int[]> $filtered */
-            $filtered = \array_filter($yearsWeeks, fn (array $current): bool => $current['year_week'] === $yearWeek);
+            $filtered = \array_filter($yearsWeeks, static fn (array $current): bool => $current['year_week'] === $yearWeek);
 
             return \reset($filtered);
         }

@@ -54,7 +54,7 @@ class ProductGeneratorTest extends GeneratorTestCase
         $manager = $this->createMock(EntityManagerInterface::class);
         $generator = $this->createMock(Generator::class);
         $generator->method('__call')
-            ->willReturnCallback(function (string $name) use (&$count): string|bool|null {
+            ->willReturnCallback(static function (string $name) use (&$count): string|bool|null {
                 return match ($name) {
                     'productName' => 'Fake Name',
                     'productExist' => 1 === ++$count,

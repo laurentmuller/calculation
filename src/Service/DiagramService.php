@@ -93,7 +93,7 @@ class DiagramService
                 'content' => $content,
             ];
         }
-        \uasort($files, fn (array $a, array $b): int => $a['title'] <=> $b['title']);
+        \uasort($files, static fn (array $a, array $b): int => $a['title'] <=> $b['title']);
 
         return $files;
     }

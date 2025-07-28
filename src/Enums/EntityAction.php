@@ -69,6 +69,6 @@ enum EntityAction: string implements EnumSortableInterface, PdfEnumDefaultInterf
      */
     public static function values(): array
     {
-        return \array_map(fn (self $action): string => $action->value, self::sorted());
+        return \array_map(static fn (self $action): string => $action->value, self::sorted());
     }
 }

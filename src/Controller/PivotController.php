@@ -61,7 +61,7 @@ class PivotController extends AbstractController
     public function toCsv(): CsvResponse
     {
         $dataset = $this->createDataset();
-        $callback = function () use ($dataset): void {
+        $callback = static function () use ($dataset): void {
             if ([] !== $dataset) {
                 /** @var resource $handle */
                 $handle = \fopen('php://output', 'w+');

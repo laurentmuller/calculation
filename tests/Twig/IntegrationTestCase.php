@@ -111,7 +111,7 @@ abstract class IntegrationTestCase extends TestCase
 
             try {
                 \set_error_handler(
-                    function (int $type, string $message) use (&$deprecations): bool {
+                    static function (int $type, string $message) use (&$deprecations): bool {
                         if (\E_USER_DEPRECATED === $type) {
                             $deprecations[] = $message;
 

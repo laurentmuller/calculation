@@ -59,7 +59,7 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
         );
         $this->imagesPath = $this->cache->get(
             'key_images_path',
-            fn (): string => FileUtils::buildPath($projectDir, 'public', self::IMAGES_PATH)
+            static fn (): string => FileUtils::buildPath($projectDir, 'public', self::IMAGES_PATH)
         );
         $this->imagesVersion = $this->cache->get(
             'key_images_version',

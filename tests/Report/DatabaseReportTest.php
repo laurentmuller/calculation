@@ -68,9 +68,9 @@ class DatabaseReportTest extends TestCase
         $service->method('getConfiguration')
             ->willReturn($configuration);
         $service->method('isEnabledValue')
-            ->willReturnCallback(fn (string $value): bool => 'on' === $value);
+            ->willReturnCallback(static fn (string $value): bool => 'on' === $value);
         $service->method('isDisabledValue')
-            ->willReturnCallback(fn (string $value): bool => 'off' === $value);
+            ->willReturnCallback(static fn (string $value): bool => 'off' === $value);
 
         return new DatabaseReport($controller, $service);
     }

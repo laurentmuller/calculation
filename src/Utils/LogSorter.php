@@ -60,7 +60,7 @@ readonly class LogSorter
 
         if (self::COLUMN_DATE === $this->field) {
             // date and identifier ascending
-            $sorter = fn (Log $a, Log $b): int => $a->compare($b);
+            $sorter = static fn (Log $a, Log $b): int => $a->compare($b);
         } else {
             $sorter = $this->getCompositeSorter(
                 $this->getFieldSorter(),
@@ -79,7 +79,7 @@ readonly class LogSorter
      */
     private function getCompositeSorter(\Closure ...$sorters): \Closure
     {
-        return function (Log $a, Log $b) use ($sorters): int {
+        return static function (Log $a, Log $b) use ($sorters): int {
             foreach ($sorters as $sorter) {
                 $result = $sorter($a, $b);
                 if (0 !== $result) {

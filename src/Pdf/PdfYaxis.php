@@ -45,7 +45,7 @@ readonly class PdfYaxis
         /** @var non-empty-array<array{label: string, width: float}> $result */
         $result = [];
 
-        $formatter ??= fn (float $value): string => (string) $value;
+        $formatter ??= static fn (float $value): string => (string) $value;
         foreach (\range($this->upperBound, $this->lowerBound, -$this->tickSpacing) as $value) {
             $text = $formatter($value);
             $result[] = [

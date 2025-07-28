@@ -140,7 +140,7 @@ class GeneratorController extends AbstractController
             return $generator->generate($count, true);
         }
 
-        return $service->suspendListeners(fn (): JsonResponse => $generator->generate($count, false));
+        return $service->suspendListeners(static fn (): JsonResponse => $generator->generate($count, false));
     }
 
     /**

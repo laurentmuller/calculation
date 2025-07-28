@@ -154,7 +154,7 @@ class HelpControllerTest extends ControllerTestCase
 
         $diff = \array_diff($actual, $expected);
         if ([] !== $diff) {
-            $diff = \array_map(fn (string $file): string => \basename($file), $diff);
+            $diff = \array_map(static fn (string $file): string => \basename($file), $diff);
             self::markTestSkipped("Not all images have been implemented in help:\n" . \implode("\n", $diff));
         }
 

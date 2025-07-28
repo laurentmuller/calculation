@@ -274,7 +274,7 @@ class ApplicationParametersTest extends TestCase
         $productRepository->method('find')
             ->willReturn($product);
 
-        $callback = fn (string $class): AbstractRepository => match ($class) {
+        $callback = static fn (string $class): AbstractRepository => match ($class) {
             Product::class => $productRepository,
             Category::class => $categoryRepository,
             CalculationState::class => $stateRepository,

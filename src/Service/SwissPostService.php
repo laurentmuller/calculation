@@ -40,7 +40,7 @@ readonly class SwissPostService
      */
     public function find(array $parameters, int $limit = 25): array
     {
-        return $this->findValues(fn (SwissDatabase $db): array => $db->find($parameters, $limit));
+        return $this->findValues(static fn (SwissDatabase $db): array => $db->find($parameters, $limit));
     }
 
     /**
@@ -55,7 +55,7 @@ readonly class SwissPostService
      */
     public function findAll(string $value, int $limit = 25): array
     {
-        return $this->findValues(fn (SwissDatabase $db): array => $db->findAll($value, $limit));
+        return $this->findValues(static fn (SwissDatabase $db): array => $db->findAll($value, $limit));
     }
 
     /**
@@ -70,7 +70,7 @@ readonly class SwissPostService
      */
     public function findCity(string $name, int $limit = 25): array
     {
-        return $this->findValues(fn (SwissDatabase $db): array => $db->findCity($name, $limit));
+        return $this->findValues(static fn (SwissDatabase $db): array => $db->findCity($name, $limit));
     }
 
     /**
@@ -85,7 +85,7 @@ readonly class SwissPostService
      */
     public function findStreet(string $name, int $limit = 25): array
     {
-        return $this->findValues(fn (SwissDatabase $db): array => $db->findStreet($name, $limit));
+        return $this->findValues(static fn (SwissDatabase $db): array => $db->findStreet($name, $limit));
     }
 
     /**
@@ -100,7 +100,7 @@ readonly class SwissPostService
      */
     public function findZip(string $zip, int $limit = 25): array
     {
-        return $this->findValues(fn (SwissDatabase $db): array => $db->findZip($zip, $limit));
+        return $this->findValues(static fn (SwissDatabase $db): array => $db->findZip($zip, $limit));
     }
 
     /**

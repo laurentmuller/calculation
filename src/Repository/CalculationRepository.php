@@ -238,7 +238,7 @@ class CalculationRepository extends AbstractRepository
             ->setMaxResults($maxResults);
 
         $result = \array_reverse($builder->getQuery()->getArrayResult());
-        $items = \array_map(fn (array $row): CalculationsMonthItem => new CalculationsMonthItem(
+        $items = \array_map(static fn (array $row): CalculationsMonthItem => new CalculationsMonthItem(
             $row['count'],
             $row['items'],
             $row['total'],

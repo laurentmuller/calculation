@@ -250,7 +250,7 @@ trait ArrayTrait
              * @phpstan-param array<TKey, TResult> $carry
              * @phpstan-param TValue $value
              */
-            fn (array $carry, $value): array => $carry + $callable($value),
+            static fn (array $carry, $value): array => $carry + $callable($value),
             []
         );
     }
@@ -267,6 +267,6 @@ trait ArrayTrait
      */
     public function removeValue(array $values, mixed $value): array
     {
-        return \array_filter($values, fn (mixed $item): bool => $item !== $value);
+        return \array_filter($values, static fn (mixed $item): bool => $item !== $value);
     }
 }

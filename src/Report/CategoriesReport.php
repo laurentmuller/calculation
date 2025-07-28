@@ -98,7 +98,7 @@ class CategoriesReport extends AbstractArrayReport
     private function groupEntities(array $entities): array
     {
         $default = $this->trans('report.other');
-        $callback = fn (Category $category): string => $category->getGroupCode() ?? $default;
+        $callback = static fn (Category $category): string => $category->getGroupCode() ?? $default;
 
         return $this->groupBy($entities, $callback);
     }

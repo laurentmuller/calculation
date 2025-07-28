@@ -103,8 +103,8 @@ trait PdfBarChartTrait
         $this->setCellMargin(0.0);
 
         // y axis values
-        $min = $axis['min'] ?? $this->computeBarRowsValues($rows, fn (float $a, float $b): float => \min($a, $b));
-        $max = $axis['max'] ?? $this->computeBarRowsValues($rows, fn (float $a, float $b): float => \max($a, $b));
+        $min = $axis['min'] ?? $this->computeBarRowsValues($rows, static fn (float $a, float $b): float => \min($a, $b));
+        $max = $axis['max'] ?? $this->computeBarRowsValues($rows, static fn (float $a, float $b): float => \max($a, $b));
 
         // y axis
         $scale = PdfYaxis::instance($min, $max);

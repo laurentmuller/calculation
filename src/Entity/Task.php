@@ -137,7 +137,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
     public function countMargins(): int
     {
         /** @phpstan-var int */
-        return $this->items->reduce(fn (int $carry, TaskItem $item): int => $carry + $item->count(), 0);
+        return $this->items->reduce(static fn (int $carry, TaskItem $item): int => $carry + $item->count(), 0);
     }
 
     #[\Override]

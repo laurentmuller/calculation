@@ -175,7 +175,7 @@ class ResponseListener
         );
 
         return \array_map(
-            fn (array $subject): array => \str_replace('%report%', $reportUrl, $subject),
+            static fn (array $subject): array => \str_replace('%report%', $reportUrl, $subject),
             $array
         );
     }

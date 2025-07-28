@@ -156,7 +156,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     {
         return $this->findFirst(
             $this->children,
-            fn (PivotNode $child): bool => $child->equalsKey($key)
+            static fn (PivotNode $child): bool => $child->equalsKey($key)
         );
     }
 
@@ -360,7 +360,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
 
         return \implode(
             $separator,
-            \array_map(fn (mixed $value): string => (string) $value, $this->getKeys())
+            \array_map(static fn (mixed $value): string => (string) $value, $this->getKeys())
         );
     }
 

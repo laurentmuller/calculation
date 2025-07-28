@@ -455,7 +455,7 @@ class PdfTable
             }
         }
 
-        return $this->addHeaderRow(...\array_map(fn (PdfColumn $c): ?string => $c->getText(), $this->columns));
+        return $this->addHeaderRow(...\array_map(static fn (PdfColumn $c): ?string => $c->getText(), $this->columns));
     }
 
     /**

@@ -77,8 +77,8 @@ class TaskServiceType extends AbstractHelperType
             'hidden_input' => true,
             'attr' => ['class' => 'skip-reset'],
             'label' => 'task_compute.fields.task',
-            'value_transformer' => fn (Task $task): ?int => $task->getId(),
-            'display_transformer' => fn (Task $task): ?string => $task->getName(),
+            'value_transformer' => static fn (Task $task): ?int => $task->getId(),
+            'display_transformer' => static fn (Task $task): ?string => $task->getName(),
         ];
     }
 }

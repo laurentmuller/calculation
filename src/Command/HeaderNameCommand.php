@@ -139,7 +139,7 @@ class HeaderNameCommand
      */
     private function getPatterns(array $patterns): array
     {
-        return \array_map(fn (string $value): string => \sprintf('*.%s', $value), $patterns);
+        return \array_map(static fn (string $value): string => \sprintf('*.%s', $value), $patterns);
     }
 
     private function hasResults(SymfonyStyle $io, Finder $finder, string $path): bool

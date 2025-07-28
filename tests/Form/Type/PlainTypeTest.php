@@ -47,7 +47,7 @@ class PlainTypeTest extends TypeTestCase
     {
         $data = 'fake';
         $expected = 'fake';
-        $callback = fn (): string => 'callback';
+        $callback = static fn (): string => 'callback';
         $options = ['display_transformer' => $callback];
         $view = $this->validateViewValue($data, $expected, $options);
 
@@ -61,7 +61,7 @@ class PlainTypeTest extends TypeTestCase
     public function testWithBoolWithValueTransformer(): void
     {
         $expected = 'common.value_true';
-        $callback = fn (): bool => true;
+        $callback = static fn (): bool => true;
         $options = ['value_transformer' => $callback];
         $this->validateViewValue(true, $expected, $options);
     }
@@ -113,7 +113,7 @@ class PlainTypeTest extends TypeTestCase
     {
         $data = '';
         $expected = 'callback';
-        $callback = fn (): string => 'callback';
+        $callback = static fn (): string => 'callback';
         $options = ['empty_value' => $callback];
         $this->validateViewValue($data, $expected, $options);
     }

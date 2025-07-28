@@ -37,7 +37,7 @@ class GroupListType extends AbstractListEntityType
         parent::configureOptions($resolver);
         $resolver->setDefaults([
             'choice_label' => 'code',
-            'query_builder' => fn (GroupRepository $repository): QueryBuilder => $repository->getSortedBuilder(),
+            'query_builder' => static fn (GroupRepository $repository): QueryBuilder => $repository->getSortedBuilder(),
         ]);
     }
 }

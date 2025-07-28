@@ -476,7 +476,7 @@ class OpenWeatherController extends AbstractController
     private function updateCities(array &$cities, OpenWeatherUnits $units): void
     {
         $maxGroup = OpenWeatherService::MAX_GROUP;
-        $ids = \array_map(fn (array $city): int => (int) $city['id'], $cities);
+        $ids = \array_map(static fn (array $city): int => (int) $city['id'], $cities);
         for ($i = 0, $len = \count($ids); $i < $len; $i += $maxGroup) {
             $cityIds = \array_slice($ids, $i, $maxGroup);
             $group = $this->service->group($cityIds, $units);

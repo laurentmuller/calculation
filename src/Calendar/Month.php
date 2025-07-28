@@ -106,7 +106,7 @@ class Month extends AbstractCalendarItem implements \Stringable
         $lastDate = $this->getLastDate();
         $weeks = $this->calendar->getWeeks();
 
-        return \array_filter($weeks, function (Week $week) use ($firstDate, $lastDate): bool {
+        return \array_filter($weeks, static function (Week $week) use ($firstDate, $lastDate): bool {
             $weekFirst = $week->getFirstDate();
             if ($firstDate < $weekFirst && $lastDate < $weekFirst) {
                 return false;

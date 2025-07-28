@@ -27,7 +27,7 @@ class PivotSemesterFieldTest extends TestCase
 
     public function testFormatter(): void
     {
-        $formatter = fn (int $semester): string => (string) $semester;
+        $formatter = static fn (int $semester): string => (string) $semester;
         $field = new PivotSemesterField('name');
         $field->setFormatter($formatter);
         self::assertSame($formatter, $field->getFormatter());

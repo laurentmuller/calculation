@@ -311,7 +311,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         ], $entities);
         $axis = [
             'min' => 0,
-            'formatter' => fn (float $value): string => FormatUtils::formatInt($value),
+            'formatter' => static fn (float $value): string => FormatUtils::formatInt($value),
         ];
         $this->renderBarChart(rows: $rows, axis: $axis, y: $top + self::LINE_HEIGHT, height: $h);
         if ($newPage) {

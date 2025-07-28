@@ -43,7 +43,7 @@ class CategoryListType extends AbstractListEntityType
                 'data-group-id' => $category->getGroupId(),
                 'data-group-code' => $category->getGroupCode(),
             ],
-            'query_builder' => fn (CategoryRepository $repository): QueryBuilder => $repository->getQueryBuilderByGroup(),
+            'query_builder' => static fn (CategoryRepository $repository): QueryBuilder => $repository->getQueryBuilderByGroup(),
         ]);
     }
 }

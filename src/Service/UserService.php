@@ -248,7 +248,7 @@ class UserService implements PropertyServiceInterface
     {
         return $this->mapToKeyValue(
             $this->loadEntities(),
-            fn (UserProperty $property): array => [$property->getName() => $property]
+            static fn (UserProperty $property): array => [$property->getName() => $property]
         );
     }
 

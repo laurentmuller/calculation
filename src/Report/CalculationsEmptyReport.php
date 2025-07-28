@@ -54,7 +54,7 @@ class CalculationsEmptyReport extends AbstractCalculationItemsReport
         return \array_reduce(
             $entities,
             /** @phpstan-param CalculationItemType $entity */
-            fn (int $carry, array $entity): int => $carry + \count($entity['items']),
+            static fn (int $carry, array $entity): int => $carry + \count($entity['items']),
             0
         );
     }

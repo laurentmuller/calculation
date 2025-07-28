@@ -124,7 +124,7 @@ class TaskItem extends AbstractEntity implements \Countable, ComparableInterface
     {
         /** @phpstan-var TaskItemMargin|null */
         return $this->margins->findFirst(
-            fn (int $key, TaskItemMargin $margin): bool => $margin->contains($quantity)
+            static fn (int $key, TaskItemMargin $margin): bool => $margin->contains($quantity)
         );
     }
 

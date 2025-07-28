@@ -306,7 +306,7 @@ class FormHelperTest extends TypeTestCase
 
     public function testListenerPreSetData(): void
     {
-        $listener = fn (): null => null;
+        $listener = static fn (): null => null;
         $helper = $this->getFormHelper();
         $actual = $helper->field(self::FIELD)
             ->listenerPreSetData($listener)
@@ -320,7 +320,7 @@ class FormHelperTest extends TypeTestCase
 
     public function testListenerPreSubmit(): void
     {
-        $listener = fn (): null => null;
+        $listener = static fn (): null => null;
         $helper = $this->getFormHelper();
         $actual = $helper->field(self::FIELD)
             ->listenerPreSubmit($listener)

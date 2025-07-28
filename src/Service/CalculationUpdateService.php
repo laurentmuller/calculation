@@ -203,7 +203,7 @@ class CalculationUpdateService implements ServiceSubscriberInterface
             /** @var int[] $ids */
             $ids = $this->getSessionValue(self::KEY_STATES, []);
             if ([] !== $ids) {
-                return \array_filter($sources, fn (CalculationState $state): bool => \in_array($state->getId(), $ids, true));
+                return \array_filter($sources, static fn (CalculationState $state): bool => \in_array($state->getId(), $ids, true));
             }
         }
 

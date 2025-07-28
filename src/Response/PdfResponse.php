@@ -34,7 +34,7 @@ class PdfResponse extends AbstractStreamedResponse
      */
     public function __construct(PdfDocument $doc, bool $inline = true, string $name = '')
     {
-        $callback = fn (): string => $doc->output(PdfDestination::FILE, 'php://output');
+        $callback = static fn (): string => $doc->output(PdfDestination::FILE, 'php://output');
         parent::__construct($callback, $inline, $name);
     }
 

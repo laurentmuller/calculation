@@ -161,7 +161,7 @@ class ColumnTest extends TestCase
             'id' => 1,
             'field' => 'value',
         ];
-        $callback = fn (string $value): string => 'prefix.' . $value;
+        $callback = static fn (string $value): string => 'prefix.' . $value;
         $column = Column::instance('field')
             ->setFieldFormatter($callback);
         $actual = $column->mapValue($data);

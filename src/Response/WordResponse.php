@@ -32,7 +32,7 @@ class WordResponse extends AbstractStreamedResponse
      */
     public function __construct(WordDocument $doc, bool $inline = true, string $name = '')
     {
-        $callback = fn (): null => IOFactory::createWriter($doc)->save('php://output');
+        $callback = static fn (): null => IOFactory::createWriter($doc)->save('php://output');
         parent::__construct($callback, $inline, $name);
     }
 

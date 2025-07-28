@@ -51,7 +51,7 @@ class OpenWeatherSearchService
      */
     public function findById(int $id): array|false
     {
-        return $this->call(fn (OpenWeatherDatabase $db): array|false => $db->findById($id));
+        return $this->call(static fn (OpenWeatherDatabase $db): array|false => $db->findById($id));
     }
 
     /**

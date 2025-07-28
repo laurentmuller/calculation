@@ -82,30 +82,27 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     private function getPassword(Request $request): string
     {
-        $password = $request->request->getString(SecurityAttributes::PASSWORD_FIELD);
-        if ('' === $password) {
-            throw new CustomUserMessageAuthenticationException('authenticator.empty_password');
+        return $this->getRequestField($request, SecurityAttributes::PASSWORD_FIELD, 'authenticator.empty_password');
+    }
+
+    private function getRequestField(Request $request, string $field, string $error): string
+    {
+        $value = $request->request->getString($field);
+        if ('' === $value) {
+            throw new CustomUserMessageAuthenticationException($error);
         }
 
-        return $password;
+        return $value;
     }
 
     private function getToken(Request $request): string
     {
-        $token = $request->request->getString(SecurityAttributes::LOGIN_TOKEN);
-        if ('' === $token) {
-            throw new CustomUserMessageAuthenticationException('authenticator.empty_token');
-        }
-
-        return $token;
+        return $this->getRequestField($request, SecurityAttributes::LOGIN_TOKEN, 'authenticator.empty_token');
     }
 
     private function getUserIdentifier(Request $request): string
     {
-        $userIdentifier = \trim($request->request->getString(SecurityAttributes::USER_FIELD));
-        if ('' === $userIdentifier) {
-            throw new CustomUserMessageAuthenticationException('authenticator.empty_user');
-        }
+        $userIdentifier = $this->getRequestField($request, SecurityAttributes::USER_FIELD, 'authenticator.empty_user');
         if ($request->hasSession()) {
             $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $userIdentifier);
         }
@@ -118,9 +115,8 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         if (!$this->applicationService->isDisplayCaptcha()) {
             return;
         }
-
-        $captcha = $request->request->getString(SecurityAttributes::CAPTCHA_FIELD);
-        if ('' === $captcha || !$this->captchaImageService->validateToken($captcha)) {
+        $captcha = $this->getRequestField($request, SecurityAttributes::CAPTCHA_FIELD, 'captcha.empty');
+        if (!$this->captchaImageService->validateToken($captcha)) {
             throw new CustomUserMessageAuthenticationException('captcha.invalid');
         }
         if (!$this->captchaImageService->validateTimeout()) {

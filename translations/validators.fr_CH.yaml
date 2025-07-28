@@ -1,5 +1,6 @@
 captcha:
     generate: Impossible de générer une nouvelle image.
+    empty: Le code de contrôle est requis.
     invalid: Le code de contrôle est invalide.
     timeout: Le délai d'attente est atteint. Essayez de recharger la page ou de générer une nouvelle image.
 category:

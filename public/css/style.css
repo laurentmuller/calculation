@@ -453,7 +453,7 @@ input[type=number] {
     margin: auto auto auto 0.5rem;
 }
 
-/* Toggle icon (angle-right) before the element */
+/* Toggle icon before the element */
 .drop-down-icon-left::before {
     font-family: "Font Awesome 7 Free", sans-serif;
     font-weight: 900;
@@ -473,9 +473,13 @@ input[type=number] {
     transform: rotate(90deg);
 }
 
-/* Toggle icon (angle-left) after the element */
+/* Toggle icon after the element */
 .drop-down-icon-right {
     flex: 1 1 auto !important;
+}
+
+.drop-down-icon-right.text-end  {
+    flex: none !important;
 }
 
 .drop-down-icon-right::after {
@@ -488,7 +492,7 @@ input[type=number] {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .drop-down-icon-right::before {
+    .drop-down-icon-right::after {
         transition: none;
     }
 }

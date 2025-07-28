@@ -77,7 +77,11 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
      */
     public function findByUsername(string $username): ?User
     {
-        return $this->findOneBy(['username' => $username]);
+        try {
+            return $this->findOneBy(['username' => $username]);
+        } catch (\Throwable) {
+            return null;
+        }
     }
 
     /**
@@ -103,7 +107,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     }
 
     /**
-     * Gets users where reset password was requested.
+     * Gets users where the reset password was requested.
      *
      * @return User[]
      */
@@ -186,10 +190,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     {
         $user = $this->findByUsername($identifier);
         if (!$user instanceof User) {
-            $e = new UserNotFoundException(\sprintf('User "%s" not found.', $identifier));
-            $e->setUserIdentifier($identifier);
-
-            throw $e;
+            throw $this->createUserNotFoundException($identifier);
         }
 
         return $user;
@@ -276,5 +277,13 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     {
         return $this->createQueryBuilder('e')
             ->where('e.hashedToken IS NOT NULL');
+    }
+
+    private function createUserNotFoundException(string $identifier): UserNotFoundException
+    {
+        $e = new UserNotFoundException(\sprintf('User "%s" not found.', $identifier));
+        $e->setUserIdentifier($identifier);
+
+        return $e;
     }
 }

@@ -35,6 +35,7 @@ use Symfony\Contracts\Cache\ItemInterface;
  * @see https://securityheaders.com/
  * @see https://github.com/aidantwoods/SecureHeaders
  * @see https://www.sentrium.co.uk/labs/application-security-101-http-headers
+ * @see https://developer.chrome.com/docs/lighthouse/best-practices/has-hsts
  */
 class ResponseListener
 {
@@ -51,6 +52,13 @@ class ResponseListener
         'Cross-Origin-Opener-Policy' => 'same-origin',
         'X-Content-Type-Options' => 'nosniff',
         'X-Permitted-Cross-Domain-Policies' => 'none',
+    ];
+
+    /**
+     * The headers to add for secure request.
+     */
+    private const SECURE_HEADERS = [
+        'Strict-Transport-Security' => 'max-age=63072000; includeSubDomains; preload',
     ];
 
     public function __construct(
@@ -73,12 +81,16 @@ class ResponseListener
             return;
         }
 
-        if ($this->debug && $this->isDevFirewall($event->getRequest())) {
+        $request = $event->getRequest();
+        if ($this->isDevFirewall($request)) {
             return;
         }
 
         $headers = $event->getResponse()->headers;
         $headers->add(self::DEFAULT_HEADERS);
+        if ($request->isSecure()) {
+            $headers->add(self::SECURE_HEADERS);
+        }
 
         $csp = $this->buildCSP();
         if ('' !== $csp) {
@@ -106,7 +118,7 @@ class ResponseListener
 
     private function isDevFirewall(Request $request): bool
     {
-        return SecurityAttributes::DEV_FIREWALL === $this->security->getFirewallConfig($request)?->getName();
+        return $this->debug && SecurityAttributes::DEV_FIREWALL === $this->security->getFirewallConfig($request)?->getName();
     }
 
     private function loadCSP(ItemInterface $item, bool &$save): string

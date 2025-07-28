@@ -63,10 +63,7 @@ class LoginFormAuthenticatorTest extends TestCase
             'login_token' => 'token',
         ];
         $request = self::createRequest(values: $values);
-
-        self::expectException(CustomUserMessageAuthenticationException::class);
-        self::expectExceptionMessage('authenticator.empty_password');
-        $authenticator->authenticate($request);
+        $this->validateException($request, $authenticator, 'authenticator.empty_password');
     }
 
     public function testAuthenticateEmptyToken(): void
@@ -81,10 +78,7 @@ class LoginFormAuthenticatorTest extends TestCase
             'login_token' => '',
         ];
         $request = self::createRequest(values: $values);
-
-        self::expectException(CustomUserMessageAuthenticationException::class);
-        self::expectExceptionMessage('authenticator.empty_token');
-        $authenticator->authenticate($request);
+        $this->validateException($request, $authenticator, 'authenticator.empty_token');
     }
 
     public function testAuthenticateEmptyUserName(): void
@@ -99,10 +93,7 @@ class LoginFormAuthenticatorTest extends TestCase
             'login_token' => 'token',
         ];
         $request = self::createRequest(values: $values);
-
-        self::expectException(CustomUserMessageAuthenticationException::class);
-        self::expectExceptionMessage('authenticator.empty_user');
-        $authenticator->authenticate($request);
+        $this->validateException($request, $authenticator, 'authenticator.empty_user');
     }
 
     public function testAuthenticateSuccess(): void
@@ -152,13 +143,10 @@ class LoginFormAuthenticatorTest extends TestCase
             'captcha' => '',
         ];
         $request = self::createRequest(values: $values);
-
-        self::expectException(CustomUserMessageAuthenticationException::class);
-        self::expectExceptionMessage('captcha.invalid');
-        $authenticator->authenticate($request);
+        $this->validateException($request, $authenticator, 'captcha.empty');
     }
 
-    public function testCaptchaNotDisplay(): void
+    public function testCaptchaHidden(): void
     {
         $applicationService = $this->createMock(ApplicationService::class);
         $applicationService->method('isDisplayCaptcha')
@@ -176,14 +164,14 @@ class LoginFormAuthenticatorTest extends TestCase
         $this->validatePassport($passport);
     }
 
-    public function testCaptchaTimeout(): void
+    public function testCaptchaInvalid(): void
     {
         $applicationService = $this->createMock(ApplicationService::class);
         $applicationService->method('isDisplayCaptcha')
             ->willReturn(true);
         $captchaImageService = $this->createMock(CaptchaImageService::class);
         $captchaImageService->method('validateToken')
-            ->willReturn(true);
+            ->willReturn(false);
 
         $authenticator = $this->createAuthenticator(
             applicationService: $applicationService,
@@ -196,10 +184,32 @@ class LoginFormAuthenticatorTest extends TestCase
             'captcha' => 'captcha',
         ];
         $request = self::createRequest(values: $values);
+        $this->validateException($request, $authenticator, 'captcha.invalid');
+    }
 
-        self::expectException(CustomUserMessageAuthenticationException::class);
-        self::expectExceptionMessage('captcha.timeout');
-        $authenticator->authenticate($request);
+    public function testCaptchaTimeout(): void
+    {
+        $applicationService = $this->createMock(ApplicationService::class);
+        $applicationService->method('isDisplayCaptcha')
+            ->willReturn(true);
+        $captchaImageService = $this->createMock(CaptchaImageService::class);
+        $captchaImageService->method('validateToken')
+            ->willReturn(true);
+        $captchaImageService->method('validateTimeout')
+            ->willReturn(false);
+
+        $authenticator = $this->createAuthenticator(
+            applicationService: $applicationService,
+            captchaImageService: $captchaImageService
+        );
+        $values = [
+            'username' => 'username',
+            'password' => 'password',
+            'login_token' => 'token',
+            'captcha' => 'captcha',
+        ];
+        $request = self::createRequest(values: $values);
+        $this->validateException($request, $authenticator, 'captcha.timeout');
     }
 
     public function testGetLoginUrl(): void
@@ -273,6 +283,13 @@ class LoginFormAuthenticatorTest extends TestCase
         $request->headers->set('Content-Type', $contentType);
 
         return $request;
+    }
+
+    private function validateException(Request $request, LoginFormAuthenticator $authenticator, string $message): void
+    {
+        self::expectException(CustomUserMessageAuthenticationException::class);
+        self::expectExceptionMessage($message);
+        $authenticator->authenticate($request);
     }
 
     private function validatePassport(Passport $passport): void

@@ -48,6 +48,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Attribute\AsTwigFilter;
 
 /**
  * Provides common features needed in controllers.
@@ -152,9 +153,16 @@ abstract class AbstractController extends BaseController
     /**
      * Convert the given file to a path relative to the project directory.
      */
+    #[AsTwigFilter('relative_path')]
     public function getRelativePath(string $file): string
     {
-        return FileUtils::makePathRelative($file, $this->getProjectDir());
+        $file = FileUtils::normalize($file);
+        $projectDir = FileUtils::normalize($this->getProjectDir());
+        if (StringUtils::startWith($file, $projectDir)) {
+            return \ltrim(\substr($file, \strlen($projectDir)), '/');
+        }
+
+        return $file;
     }
 
     /**

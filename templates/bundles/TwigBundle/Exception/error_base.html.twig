@@ -55,7 +55,7 @@
             {% if exception.file|default %}
                 <tr>
                     <td>{{ 'error_page.fields.file'|trans }}</td>
-                    <td>{{ exception.file|file_relative }}</td>
+                    <td>{{ exception.file|relative_path }}</td>
                 </tr>
             {% endif %}
             {% if exception.line|default %}
@@ -75,7 +75,7 @@
                     <td>{{ loop.index0 }}</td>
                     <td>
                         {% if trace.file %}
-                            <span>{{ trace.file|file_relative }}</span>
+                            <span>{{ trace.file|relative_path }}</span>
                         {% endif -%}
                         {% if trace.short_class|default %}
                             <span>{{ trace.short_class }}</span>

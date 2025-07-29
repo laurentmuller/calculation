@@ -11,7 +11,7 @@
 {%- set allow_delete = false -%}
 {# header actions #}
 {% block header_actions %}
-<small>{{ 'log.list.file'|trans({'%file%': customData.file|file_relative}) }}</small>
+<small>{{ 'log.list.file'|trans({'%file%': customData.file|relative_path}) }}</small>
 {% endblock %}
 {# toolbar actions #}
 {% block toolbar_actions -%}

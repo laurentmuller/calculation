@@ -5,6 +5,10 @@
             "to": "public/build/bootstrap/"
         },
         {
+            "from": "node_modules/bootstrap/dist/js/bootstrap.bundle.js.map",
+            "to": "public/build/bootstrap/"
+        },
+        {
             "from": [
                 "node_modules/bootstrap-table/dist/bootstrap-table.js",
                 "node_modules/bootstrap-table/dist/bootstrap-table.css"

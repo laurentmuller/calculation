@@ -15,6 +15,7 @@ namespace App\Tests\Table;
 
 use App\Interfaces\EntityInterface;
 use App\Repository\AbstractRepository;
+use App\Service\IndexService;
 use App\Table\AbstractEntityTable;
 use App\Table\DataQuery;
 use App\Tests\Entity\IdTrait;
@@ -57,6 +58,22 @@ abstract class EntityTableTestCase extends TestCase
      * @phpstan-return TEntity[]|array[]
      */
     abstract protected function createEntities(): array;
+
+    protected function createMockIndexService(int $count = 1): MockObject&IndexService
+    {
+        $service = $this->createMock(IndexService::class);
+        $service->method('getCatalog')
+            ->willReturn([
+                'task' => $count,
+                'group' => $count,
+                'product' => $count,
+                'category' => $count,
+                'globalMargin' => $count,
+                'calculationState' => $count,
+            ]);
+
+        return $service;
+    }
 
     /**
      * @phpstan-return MockObject&Query<array-key, mixed>

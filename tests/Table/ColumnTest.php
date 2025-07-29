@@ -15,6 +15,7 @@ namespace App\Tests\Table;
 
 use App\Interfaces\SortModeInterface;
 use App\Repository\GlobalMarginRepository;
+use App\Service\IndexService;
 use App\Table\Column;
 use App\Table\GlobalMarginTable;
 use PHPUnit\Framework\TestCase;
@@ -178,7 +179,12 @@ class ColumnTest extends TestCase
     private function createTable(): GlobalMarginTable
     {
         $repository = $this->createMock(GlobalMarginRepository::class);
+        $service = $this->createMock(IndexService::class);
+        $service->method('getCatalog')
+            ->willReturn([
+                'globalMargin' => 1,
+            ]);
 
-        return new GlobalMarginTable($repository);
+        return new GlobalMarginTable($repository, $service);
     }
 }

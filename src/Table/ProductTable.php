@@ -18,6 +18,7 @@ use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use App\Repository\ProductRepository;
+use App\Service\IndexService;
 use App\Utils\FileUtils;
 use Doctrine\ORM\QueryBuilder;
 
@@ -31,9 +32,16 @@ class ProductTable extends AbstractCategoryItemTable
     public function __construct(
         ProductRepository $repository,
         CategoryRepository $categoryRepository,
-        GroupRepository $groupRepository
+        GroupRepository $groupRepository,
+        private readonly IndexService $indexService
     ) {
         parent::__construct($repository, $categoryRepository, $groupRepository);
+    }
+
+    #[\Override]
+    protected function count(): int
+    {
+        return $this->indexService->getCatalog()['product'];
     }
 
     #[\Override]

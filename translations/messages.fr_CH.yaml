@@ -430,18 +430,20 @@ environment:
     switch: Basculer en mode %name%
 error_page:
     default_title: Erreur
+    title: Erreur %status_code%
     description: Une erreur est survenue dans l'exécution du programme.
     details: Détails de l'erreur
+    no_trace: Aucune traçe disponible
+    link: N'hésitez pas à <a href="mailto:%mailto%?subject=%subject%">contacter le responsable</a> du site pour signaler cette erreur.
     fields:
+        property: Propriété
+        value: Valeur
         code: Code
         file: Fichier
         line: Ligne
         message: Message
+        call: Fichier / Fonction
         trace: Trace
-    link: N'hésitez pas à <a href="mailto:%mailto%?subject=%subject%">contacter le responsable</a> du site pour signaler cette erreur.
-    property: Propriété
-    title: Erreur %status_code%
-    value: Valeur
 errors:
     invalid_request: La demande Http est invalide.
     item_not_found: Impossible de retrouver l'objet '%class%' No %id% dans la base de données.

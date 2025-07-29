@@ -44,7 +44,6 @@ return static function (TwigConfig $config): void {
         'app_owner_city' => '%app_owner_city%',
         'app_description' => '%app_description%',
         'app_mode' => '%app_mode%',
-        'app_project_dir' => '%kernel.project_dir%',
         'cookie_path' => '%cookie_path%',
         'mailer_user_email' => '%mailer_user_email%',
         'link_dev' => '%link_dev%',

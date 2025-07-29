@@ -15,6 +15,7 @@ namespace App\Table;
 
 use App\Entity\GlobalMargin;
 use App\Repository\GlobalMarginRepository;
+use App\Service\IndexService;
 use App\Utils\FileUtils;
 
 /**
@@ -24,9 +25,17 @@ use App\Utils\FileUtils;
  */
 class GlobalMarginTable extends AbstractEntityTable
 {
-    public function __construct(GlobalMarginRepository $repository)
-    {
+    public function __construct(
+        GlobalMarginRepository $repository,
+        private readonly IndexService $indexService
+    ) {
         parent::__construct($repository);
+    }
+
+    #[\Override]
+    protected function count(): int
+    {
+        return $this->indexService->getCatalog()['globalMargin'];
     }
 
     #[\Override]

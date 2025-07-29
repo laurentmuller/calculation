@@ -20,6 +20,7 @@ use App\Entity\Task;
 use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
+use App\Service\IndexService;
 use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Traits\TableCellTrait;
 use App\Utils\FileUtils;
@@ -48,7 +49,8 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     public function __construct(
         CategoryRepository $repository,
         protected readonly Environment $twig,
-        private readonly GroupRepository $groupRepository
+        private readonly GroupRepository $groupRepository,
+        private readonly IndexService $indexService
     ) {
         parent::__construct($repository);
     }
@@ -107,6 +109,12 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
             ->setParameter(self::PARAM_GROUP, $groupId, Types::INTEGER);
 
         return true;
+    }
+
+    #[\Override]
+    protected function count(): int
+    {
+        return $this->indexService->getCatalog()['category'];
     }
 
     #[\Override]

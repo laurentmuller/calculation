@@ -17,6 +17,7 @@ use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationStateRepository;
+use App\Service\IndexService;
 use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Traits\TableCellTrait;
 use App\Traits\TranslatorAwareTrait;
@@ -40,7 +41,8 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
 
     public function __construct(
         CalculationStateRepository $repository,
-        protected readonly Environment $twig
+        protected readonly Environment $twig,
+        private readonly IndexService $indexService
     ) {
         parent::__construct($repository);
     }
@@ -75,6 +77,12 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
         }
 
         return $this->trans('common.value_false');
+    }
+
+    #[\Override]
+    protected function count(): int
+    {
+        return $this->indexService->getCatalog()['calculationState'];
     }
 
     #[\Override]

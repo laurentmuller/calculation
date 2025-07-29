@@ -1,10 +1,6 @@
 {% extends 'cards/card_base.html.twig' %}
 {# imports #}
 {% from 'macros/_icons.html.twig' import link, homepage %}
-{# macros #}
-{% macro trimFile(file) -%}
-{{ file|slice(app_project_dir|length) }}
-{%- endmacro %}
 {# parameters #}
 {%- set title_icon = 'exclamation-circle' -%}
 {% if not title is defined %}
@@ -38,47 +34,48 @@
 </div>
 {% if is_exception %}
 <div id="exception-detail" class="collapse mt-3">
-    <table id="exception-table" class="table table-exception table-sm border-top mb-0">
+    <table id="exception-table" class="table table-exception table-no-end-line table-sm mb-0">
         <thead>
             <tr>
-                <th class="property">{{ 'error_page.property'|trans }}</th>
-                <th class="value">{{ 'error_page.value'|trans }}</th>
+                <th>{{ 'error_page.fields.property'|trans }}</th>
+                <th>{{ 'error_page.fields.value'|trans }}</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td class="property">{{ 'error_page.fields.message'|trans }}</td>
-                <td class="value">{{ exception.message }}</td>
+                <td>{{ 'error_page.fields.message'|trans }}</td>
+                <td>{{ exception.message }}</td>
             </tr>
             {% if exception.code|default %}
                 <tr>
-                    <td class="property">{{ 'error_page.fields.code'|trans }}</td>
-                    <td class="value">{{ exception.code }}</td>
+                    <td>{{ 'error_page.fields.code'|trans }}</td>
+                    <td>{{ exception.code }}</td>
                 </tr>
             {% endif %}
             {% if exception.file|default %}
                 <tr>
-                    <td class="property">{{ 'error_page.fields.file'|trans }}</td>
-                    <td class="value">{{ _self.trimFile(exception.file) }}</td>
+                    <td>{{ 'error_page.fields.file'|trans }}</td>
+                    <td>{{ exception.file|file_relative }}</td>
                 </tr>
             {% endif %}
             {% if exception.line|default %}
                 <tr>
-                    <td class="property">{{ 'error_page.fields.line'|trans }}</td>
-                    <td class="value">{{ exception.line }}</td>
+                    <td>{{ 'error_page.fields.line'|trans }}</td>
+                    <td>{{ exception.line }}</td>
                 </tr>
             {% endif %}
+            <tr>
+                <th>{{ 'error_page.fields.trace'|trans }}</th>
+                <th>{{ 'error_page.fields.call'|trans }}</th>
+            </tr>
+            {% set line = 'error_page.fields.line'|trans|lower %}
             {% set traces = traces|default(exception.trace|default({})) %}
             {% for trace in traces %}
-                {% set trace_file = trace.file|default(trace.class|default(false)) %}
                 <tr>
-                    {% if loop.index0 == 0 %}
-                        <td class="property" rowspan="{{ traces|length }}">{{ 'error_page.fields.trace'|trans }}</td>
-                    {% endif %}
-                    <td class="value">
-                        <span>{{ loop.index0 }}.</span>
-                        {% if trace_file %}
-                            <span>{{ _self.trimFile(trace_file) }}</span>
+                    <td>{{ loop.index0 }}</td>
+                    <td>
+                        {% if trace.file %}
+                            <span>{{ trace.file|file_relative }}</span>
                         {% endif -%}
                         {% if trace.short_class|default %}
                             <span>{{ trace.short_class }}</span>
@@ -87,13 +84,15 @@
                             <span>{{ trace.type }}</span>
                         {% endif -%}
                         {% if trace.function|default %}
-                            <span class="text-danger">{{ trace.function }}</span>
+                            <span class="text-warning">{{ trace.function }}</span>
                         {% endif -%}
                         {% if trace.line|default %}
-                            <span class="text-body-secondary">(line {{ trace.line }})</span>
+                            <span class="text-body-secondary">({{ line }} {{ trace.line }})</span>
                         {% endif -%}
                     </td>
                 </tr>
+            {% else %}
+                <tr><td colspan="2">{{ 'error_page.no_trace'|trans }}</td></tr>
             {% endfor %}
         </tbody>
     </table>

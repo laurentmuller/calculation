@@ -42,7 +42,7 @@ class MemoryImageReportTest extends TestCase
     public function testRender(): void
     {
         $controller = $this->createMock(AbstractController::class);
-        $image = __DIR__ . '/../files/images/example.png';
+        $image = $this->getTestFile();
         $report = new MemoryImageReport($controller, $image);
         $actual = $report->render();
         self::assertTrue($actual);
@@ -51,7 +51,7 @@ class MemoryImageReportTest extends TestCase
     public function testRenderWithIconFile(): void
     {
         $controller = $this->createMock(AbstractController::class);
-        $iconFile = __DIR__ . '/../../public/images/icons/favicon-114x114.png';
+        $iconFile = $this->getImageFile('icons/favicon-114x114.png');
         $report = new MemoryImageReport($controller, iconFile: $iconFile);
         $actual = $report->render();
         self::assertTrue($actual);
@@ -68,7 +68,7 @@ class MemoryImageReportTest extends TestCase
     public function testRenderWithLogoFile(): void
     {
         $controller = $this->createMock(AbstractController::class);
-        $logoFile = __DIR__ . '/../../public/images/icons/favicon-114x114.png';
+        $logoFile = $this->getImageFile('icons/favicon-114x114.png');
         $report = new MemoryImageReport($controller, logoFile: $logoFile);
         $actual = $report->render();
         self::assertTrue($actual);
@@ -77,7 +77,7 @@ class MemoryImageReportTest extends TestCase
     public function testRenderWithScreenshot(): void
     {
         $controller = $this->createMock(AbstractController::class);
-        $screenshotFile = __DIR__ . '/../../public/images/screenshots/home_light.png';
+        $screenshotFile = $this->getImageFile('screenshots/home_light.png');
         $report = new MemoryImageReport($controller, screenshotFile: $screenshotFile);
         $actual = $report->render();
         self::assertTrue($actual);
@@ -95,6 +95,22 @@ class MemoryImageReportTest extends TestCase
         self::assertTrue($actual);
     }
 
+    public function testWithAllImages(): void
+    {
+        $logoFile = $this->getImageFile('logo/logo-customer-148x148.png');
+        $iconFile = $this->getImageFile('icons/favicon-144x144.png');
+        $screenshotFile = $this->getImageFile('screenshots/home_light.png');
+        $controller = $this->createMock(AbstractController::class);
+        $report = new MemoryImageReport(
+            controller: $controller,
+            logoFile: $logoFile,
+            iconFile: $iconFile,
+            screenshotFile: $screenshotFile,
+        );
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
     public function testWithNoArgument(): void
     {
         $controller = $this->createMock(AbstractController::class);
@@ -105,10 +121,26 @@ class MemoryImageReportTest extends TestCase
 
     private function getImage(): FontAwesomeImage
     {
-        $path = __DIR__ . '/../files/images/example.png';
+        $path = $this->getTestFile();
         $content = \file_get_contents($path);
         self::assertIsString($content);
 
         return new FontAwesomeImage($content, 64, 64, 96);
+    }
+
+    private function getImageFile(string $name): string
+    {
+        $file = __DIR__ . '/../../public/images/' . $name;
+        self::assertFileExists($file);
+
+        return $file;
+    }
+
+    private function getTestFile(): string
+    {
+        $file = __DIR__ . '/../files/images/example.png';
+        self::assertFileExists($file);
+
+        return $file;
     }
 }

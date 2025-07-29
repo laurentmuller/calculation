@@ -75,6 +75,8 @@ class GlobalMarginTableTest extends EntityTableTestCase
     #[\Override]
     protected function createTable(AbstractRepository $repository): GlobalMarginTable
     {
-        return new GlobalMarginTable($repository);
+        $service = $this->createMockIndexService();
+
+        return new GlobalMarginTable($repository, $service);
     }
 }

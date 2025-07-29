@@ -61,8 +61,9 @@ class GroupTableTest extends EntityTableTestCase
     {
         $twig = $this->createMock(Environment::class);
         $checker = $this->createMock(AuthorizationCheckerInterface::class);
+        $service = $this->createMockIndexService();
 
-        $table = new GroupTable($repository, $twig);
+        $table = new GroupTable($repository, $twig, $service);
         $table->setChecker($checker);
 
         return $table;

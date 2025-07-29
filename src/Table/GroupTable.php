@@ -19,6 +19,7 @@ use App\Entity\Product;
 use App\Entity\Task;
 use App\Repository\AbstractRepository;
 use App\Repository\GroupRepository;
+use App\Service\IndexService;
 use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Traits\TableCellTrait;
 use App\Utils\FileUtils;
@@ -40,7 +41,8 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
 
     public function __construct(
         GroupRepository $repository,
-        protected readonly Environment $twig
+        protected readonly Environment $twig,
+        private readonly IndexService $indexService
     ) {
         parent::__construct($repository);
     }
@@ -103,6 +105,12 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
             $route,
             CategoryTable::PARAM_GROUP
         );
+    }
+
+    #[\Override]
+    protected function count(): int
+    {
+        return $this->indexService->getCatalog()['group'];
     }
 
     #[\Override]

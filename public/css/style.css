@@ -157,28 +157,6 @@ a.btn-list {
     margin-bottom: 0;
 }
 
-/* exception table */
-.table-exception td {
-    word-break: break-word;
-    hyphens: auto;
-}
-
-.table-exception th.property,
-.table-exception td.property {
-    width: 15%;
-    background-color: transparent;
-}
-
-.table-exception th.value,
-.table-exception td.value {
-    width: 85%;
-    background-color: transparent;
-}
-
-.table-exception td samp {
-    font-size: 14px;
-}
-
 .table tbody + tbody {
     border-top-style: none;
 }

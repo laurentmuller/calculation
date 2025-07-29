@@ -64,8 +64,9 @@ class LogsReport extends AbstractReport
         private readonly FontAwesomeService $service
     ) {
         parent::__construct($controller, PdfOrientation::LANDSCAPE);
+        $file = $controller->getRelativePath($this->logFile->getFile());
         $this->setTranslatedTitle('log.title')
-            ->setTranslatedDescription('log.list.file', ['%file%' => $this->logFile->getFile()]);
+            ->setTranslatedDescription('log.list.file', ['%file%' => $file]);
     }
 
     #[\Override]

@@ -9,24 +9,6 @@
  * file that was distributed with this source code.
  */
 
-/*
- * This file is part of the Calculation package.
- *
- * (c) bibi.nu <bibi@bibi.nu>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-/*
- * This file is part of the Calculation package.
- *
- * (c) bibi.nu <bibi@bibi.nu>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 declare(strict_types=1);
 
 namespace App\Service;
@@ -46,7 +28,6 @@ use App\Traits\CacheKeyTrait;
 use App\Traits\DisableListenerTrait;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -55,9 +36,9 @@ use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\NamespacedPoolInterface;
 
 /**
- * Service to cache computed entities for the home page (index page).
+ * Service to cache computed values for the home page (index page).
  */
-#[AsDoctrineListener(Events::onFlush)]
+#[AsDoctrineListener(Events::postFlush)]
 class IndexService implements DisableListenerInterface
 {
     use CacheKeyTrait;
@@ -139,9 +120,9 @@ class IndexService implements DisableListenerInterface
         );
     }
 
-    public function onFlush(OnFlushEventArgs $args): void
+    public function postFlush(): void
     {
-        if ($this->isEnabled() && $this->isScheduledEntities($args)) {
+        if ($this->isEnabled()) {
             $this->clear();
         }
     }
@@ -155,15 +136,6 @@ class IndexService implements DisableListenerInterface
             $this->cleanKey($className),
             fn (): int => $this->manager->getRepository($className)->count()
         );
-    }
-
-    private function isScheduledEntities(OnFlushEventArgs $args): bool
-    {
-        $unitOfWork = $args->getObjectManager()->getUnitOfWork();
-
-        return [] !== $unitOfWork->getScheduledEntityInsertions()
-            || [] !== $unitOfWork->getScheduledEntityDeletions()
-            || [] !== $unitOfWork->getScheduledEntityUpdates();
     }
 
     private function loadCalculationsByMonths(int $maxResults): CalculationsMonth

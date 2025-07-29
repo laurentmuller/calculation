@@ -22,13 +22,13 @@
 {% block body -%}
     {% if enabled %}
         {{ include('index/panel_calculation.html.twig') }}
-        {% if user_service.panelMonth %}
-            {{ include('index/panel_month.html.twig') }}
+        {% if months is defined %}
+            {{ include ('index/panel_month.html.twig') }}
         {% endif %}
-        {% if user_service.panelState %}
+        {% if states is defined %}
             {{ include('index/panel_state.html.twig') }}
         {% endif %}
-        {% if user_service.panelCatalog %}
+        {% if catalog is defined %}
             {{ include('index/panel_catalog.html.twig') }}
         {% endif %}
         {{ include('user/user_switch.html.twig') }}

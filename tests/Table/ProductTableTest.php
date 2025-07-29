@@ -151,6 +151,8 @@ class ProductTableTest extends EntityTableTestCase
                 ->willReturn($category);
         }
 
-        return new ProductTable($repository, $categoryRepository, $groupRepository);
+        $service = $this->createMockIndexService();
+
+        return new ProductTable($repository, $categoryRepository, $groupRepository, $service);
     }
 }

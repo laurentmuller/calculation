@@ -29,6 +29,7 @@ use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\ExceptionContextTrait;
 use App\Traits\RequestTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
+use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use App\Word\AbstractWordDocument;
 use App\Word\WordDocument;
@@ -61,6 +62,7 @@ abstract class AbstractController extends BaseController
      * The home page route name.
      */
     final public const HOME_PAGE = 'homepage';
+
     /**
      * The route requirement for an identifier.
      */
@@ -75,9 +77,9 @@ abstract class AbstractController extends BaseController
      */
     public function getAddressFrom(): Address
     {
-        /** @var string $email */
+        /** @phpstan-var string $email */
         $email = $this->getParameter('mailer_user_email');
-        /** @var string $name */
+        /** @phpstan-var string $name */
         $name = $this->getParameter('mailer_user_name');
 
         return new Address($email, $name);
@@ -88,7 +90,7 @@ abstract class AbstractController extends BaseController
      */
     public function getApplication(): string
     {
-        /** @var string */
+        /** @phpstan-var string */
         return $this->getParameter('app_name');
     }
 
@@ -97,7 +99,7 @@ abstract class AbstractController extends BaseController
      */
     public function getApplicationName(): string
     {
-        /** @var string */
+        /** @phpstan-var string */
         return $this->getParameter('app_name_version');
     }
 
@@ -106,7 +108,7 @@ abstract class AbstractController extends BaseController
      */
     public function getApplicationOwnerUrl(): string
     {
-        /** @var string */
+        /** @phpstan-var string */
         return $this->getParameter('app_owner_url');
     }
 
@@ -136,6 +138,23 @@ abstract class AbstractController extends BaseController
     public function getMinMargin(): float
     {
         return $this->getApplicationService()->getMinMargin();
+    }
+
+    /**
+     * Gets the project (root) directory.
+     */
+    public function getProjectDir(): string
+    {
+        /** @phpstan-var string */
+        return $this->getParameter('kernel.project_dir');
+    }
+
+    /**
+     * Convert the given file to a path relative to the project directory.
+     */
+    public function getRelativePath(string $file): string
+    {
+        return FileUtils::makePathRelative($file, $this->getProjectDir());
     }
 
     /**
@@ -297,7 +316,7 @@ abstract class AbstractController extends BaseController
      */
     protected function getCookiePath(): string
     {
-        /** @var string */
+        /** @phpstan-var string */
         return $this->getParameter('cookie_path');
     }
 

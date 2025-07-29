@@ -140,6 +140,8 @@ class TaskTableTest extends EntityTableTestCase
                 ->willReturn($category);
         }
 
-        return new TaskTable($repository, $categoryRepository, $groupRepository);
+        $service = $this->createMockIndexService();
+
+        return new TaskTable($repository, $categoryRepository, $groupRepository, $service);
     }
 }

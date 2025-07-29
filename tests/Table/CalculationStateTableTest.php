@@ -72,8 +72,9 @@ class CalculationStateTableTest extends EntityTableTestCase
         $twig = $this->createMock(Environment::class);
         $translator = $this->createMockTranslator();
         $checker = $this->createMock(AuthorizationCheckerInterface::class);
+        $service = $this->createMockIndexService();
 
-        $table = new CalculationStateTable($repository, $twig);
+        $table = new CalculationStateTable($repository, $twig, $service);
         $table->setTranslator($translator);
         $table->setChecker($checker);
 

@@ -60,6 +60,7 @@ class LogController extends AbstractController
         if (null === $file || FileUtils::empty($file)) {
             return $this->getEmptyResponse();
         }
+
         $form = $this->createForm(FormType::class);
         if ($this->handleRequestForm($request, $form)) {
             try {
@@ -74,9 +75,10 @@ class LogController extends AbstractController
                 $service->clearCache();
             }
         }
+
         $parameters = [
             'form' => $form,
-            'file' => $file,
+            'file' => $this->getRelativePath($file),
             'size' => FileUtils::formatSize($file),
             'entries' => FileUtils::getLinesCount($file),
             'route' => $this->getDefaultRoute($request),

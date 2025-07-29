@@ -22,6 +22,7 @@ use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
 use App\Service\IndexService;
+use App\Service\UserService;
 use App\Traits\ParameterTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -79,30 +80,20 @@ class IndexController extends AbstractController
 
     /**
      * Display the home page.
-     *
-     * @throws \Exception
      */
     #[GetRoute(path: IndexRoute::PATH, name: '')]
     public function index(
         Request $request,
         IndexService $indexService,
         #[MapQueryParameter]
-        ?bool $restrict = null,
+        ?bool $custom = null,
         #[MapQueryParameter]
-        ?bool $custom = null
+        ?bool $restrict = null
     ): Response {
         $userService = $this->getUserService();
+        $view = $this->getTableView($request, $userService, $custom);
         $restrict ??= $this->getCookieBoolean($request, self::PARAM_RESTRICT);
-        if (null === $custom) {
-            $view = $this->getCookieEnum($request, TableInterface::PARAM_VIEW, $userService->getDisplayMode());
-        } else {
-            $view = $custom ? TableView::CUSTOM : TableView::TABLE;
-            $userService->setProperty(PropertyServiceInterface::P_DISPLAY_MODE, $view);
-        }
-
-        $maxResults = $userService->getCalculations();
-        $user = $restrict ? $this->getUser() : null;
-        $calculations = $indexService->getLastCalculations($maxResults, $user);
+        $calculations = $this->getLastCalculations($userService, $indexService, $restrict);
 
         $parameters = [
             'min_margin' => $this->getMinMargin(),
@@ -112,11 +103,11 @@ class IndexController extends AbstractController
             self::PARAM_RESTRICT => $restrict,
         ];
 
-        if ($userService->isPanelState()) {
-            $parameters['states'] = $indexService->getCalculationByStates();
-        }
         if ($userService->isPanelMonth()) {
             $parameters['months'] = $indexService->getCalculationByMonths();
+        }
+        if ($userService->isPanelState()) {
+            $parameters['states'] = $indexService->getCalculationByStates();
         }
         if ($userService->isPanelCatalog()) {
             $parameters['catalog'] = $indexService->getCatalog();
@@ -161,6 +152,26 @@ class IndexController extends AbstractController
         if (!$request->isXmlHttpRequest()) {
             throw new BadRequestHttpException('Invalid request format.');
         }
+    }
+
+    private function getLastCalculations(UserService $userService, IndexService $indexService, bool $restrict): array
+    {
+        $maxResults = $userService->getCalculations();
+        $user = $restrict ? $this->getUser() : null;
+
+        return $indexService->getLastCalculations($maxResults, $user);
+    }
+
+    private function getTableView(Request $request, UserService $userService, ?bool $custom): TableView
+    {
+        if (null === $custom) {
+            return $this->getCookieEnum($request, TableInterface::PARAM_VIEW, $userService->getDisplayMode());
+        }
+
+        $view = $custom ? TableView::CUSTOM : TableView::TABLE;
+        $userService->setProperty(PropertyServiceInterface::P_DISPLAY_MODE, $view);
+
+        return $view;
     }
 
     private function hidePanel(Request $request, string $key, string $id): JsonResponse

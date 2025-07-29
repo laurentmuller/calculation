@@ -94,8 +94,9 @@ class CategoryTableTest extends EntityTableTestCase
         $twig = $this->createMock(Environment::class);
         $groupRepository = $this->createMock(GroupRepository::class);
         $checker = $this->createMock(AuthorizationCheckerInterface::class);
+        $service = $this->createMockIndexService();
 
-        $table = new CategoryTable($repository, $twig, $groupRepository);
+        $table = new CategoryTable($repository, $twig, $groupRepository, $service);
         $table->setChecker($checker);
 
         return $table;

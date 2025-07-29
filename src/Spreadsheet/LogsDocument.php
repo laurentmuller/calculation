@@ -36,9 +36,8 @@ class LogsDocument extends AbstractDocument
     public function __construct(AbstractController $controller, private readonly LogFile $logFile)
     {
         parent::__construct($controller);
-        $this->setDescriptionTrans('log.list.file', [
-            '%file%' => $this->logFile->getFile(),
-        ]);
+        $file = $controller->getRelativePath($this->logFile->getFile());
+        $this->setDescriptionTrans('log.list.file', ['%file%' => $file]);
     }
 
     #[\Override]

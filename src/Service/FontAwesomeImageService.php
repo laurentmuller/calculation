@@ -47,8 +47,6 @@ class FontAwesomeImageService
 
     private const IMAGE_FORMAT = 'png24';
     private const SVG_PREFIX = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
-    private const SVG_REPLACE = '<svg fill="%s" ';
-    private const SVG_SEARCH = '<svg ';
     private const TARGET_SIZE = 64;
     private const TRANSPARENT_COLOR = 'white';
     private const VIEW_BOX_PATTERN = '/viewBox="(\d+\s+){2}(?\'width\'\d+)\s+(?\'height\'\d+)"/mi';
@@ -206,7 +204,7 @@ class FontAwesomeImageService
         try {
             $save = false;
             $content = (string) \file_get_contents($path);
-            $content = self::SVG_PREFIX . $this->replaceFillColor($content, $color);
+            $content = self::SVG_PREFIX . $this->replaceCurrentColor($content, $color);
             $image = $this->convert($content);
             $item->set($image);
             $save = true;
@@ -230,9 +228,9 @@ class FontAwesomeImageService
         return $aliases[$path] ?? $path;
     }
 
-    private function replaceFillColor(string $content, string $color): string
+    private function replaceCurrentColor(string $content, string $color): string
     {
-        return \str_replace(self::SVG_SEARCH, \sprintf(self::SVG_REPLACE, $color), $content);
+        return \str_replace('currentColor', $color, $content);
     }
 
     private function roundSize(float $dividend, float $divisor): int

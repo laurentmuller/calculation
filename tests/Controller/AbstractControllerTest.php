@@ -67,6 +67,22 @@ class AbstractControllerTest extends KernelTestCase
         self::assertSame(PropertyServiceInterface::class::DEFAULT_MIN_MARGIN, $actual);
     }
 
+    public function testGetRelativePathFound(): void
+    {
+        $expected = 'tests/Controller';
+        $controller = $this->createController();
+        $actual = $controller->getRelativePath(__DIR__);
+        self::assertSame($expected, $actual);
+    }
+
+    public function testGetRelativePathNotFound(): void
+    {
+        $path = 'fake_dir/fake.txt';
+        $controller = $this->createController();
+        $actual = $controller->getRelativePath($path);
+        self::assertSame($path, $actual);
+    }
+
     public function testGetRequestStack(): void
     {
         $controller = $this->createController();

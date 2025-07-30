@@ -247,7 +247,7 @@ class FileUtilsTest extends TestCase
 
     public function testMakePathRelative(): void
     {
-        $expected = 'videos/';
+        $expected = 'videos';
         $actual = FileUtils::makePathRelative('/tmp/videos', '/tmp');
         self::assertSame($expected, $actual);
 
@@ -296,13 +296,6 @@ class FileUtilsTest extends TestCase
     {
         $expected = 'C:/Temp/';
         $actual = FileUtils::normalize('C:\\Temp\\');
-        self::assertSame($expected, $actual);
-    }
-
-    public function testNormalizeDirectory(): void
-    {
-        $expected = \sprintf('C:%sTemp', \DIRECTORY_SEPARATOR);
-        $actual = FileUtils::normalizeDirectory('C:\\Temp');
         self::assertSame($expected, $actual);
     }
 

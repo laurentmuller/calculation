@@ -243,14 +243,9 @@ final class FileUtils
      *
      * @throws \InvalidArgumentException if the end path or the start path is not absolute
      */
-    public static function makePathRelative(string $endPath, string $startPath, bool $normalize = false): string
+    public static function makePathRelative(string $endPath, string $startPath): string
     {
-        $result = self::getFilesystem()->makePathRelative($endPath, $startPath);
-        if (\is_file($endPath)) {
-            $result = \rtrim($result, '/');
-        }
-
-        return $normalize ? self::normalizeDirectory($result) : $result;
+        return \rtrim(self::getFilesystem()->makePathRelative($endPath, $startPath), '/');
     }
 
     /**
@@ -303,18 +298,6 @@ final class FileUtils
     public static function normalize(string|\SplFileInfo $file): string
     {
         return Path::normalize(self::realPath($file));
-    }
-
-    /**
-     * Replace all slashes and backslashes by the directory separator.
-     *
-     * This method does not remove invalid or dot path segments. Consequently, it is much
-     * more efficient and should be used whenever the given path is known to be a valid,
-     * absolute system path.
-     */
-    public static function normalizeDirectory(string $path): string
-    {
-        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $path);
     }
 
     /**

@@ -81,7 +81,7 @@ class LogService
      */
     public function getFileName(): string
     {
-        return FileUtils::normalizeDirectory($this->fileName);
+        return FileUtils::normalize($this->fileName);
     }
 
     /**

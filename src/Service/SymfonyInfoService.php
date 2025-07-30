@@ -91,7 +91,7 @@ final readonly class SymfonyInfoService
         #[Autowire('%app_mode%')]
         string $app_mode
     ) {
-        $this->projectDir = FileUtils::normalizeDirectory($projectDir);
+        $this->projectDir = FileUtils::normalize($projectDir);
         $this->environment = Environment::fromKernel($this->kernel);
         $this->mode = Environment::from($app_mode);
     }
@@ -387,7 +387,8 @@ final readonly class SymfonyInfoService
 
     private function getDirectoryInfo(string $path): string
     {
-        $relativePath = FileUtils::makePathRelative($path, $this->projectDir, true);
+        $path = FileUtils::normalize($path);
+        $relativePath = FileUtils::makePathRelative($path, $this->projectDir);
         $size = FileUtils::formatSize($path);
 
         return \sprintf('%s (%s)', $relativePath, $size);

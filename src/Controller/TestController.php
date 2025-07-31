@@ -25,7 +25,6 @@ use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\User;
-use App\Enums\FlashType;
 use App\Enums\Importance;
 use App\Enums\MessagePosition;
 use App\Enums\StrengthLevel;
@@ -270,13 +269,6 @@ class TestController extends AbstractController
     #[GetRoute(path: '/fontawesome', name: 'fontawesome')]
     public function fontAwesome(FontAwesomeImageService $service): Response
     {
-        if (!$service->isSvgSupported() || $service->isImagickException()) {
-            return $this->redirectToHomePage(
-                id: 'test.fontawesome_error',
-                type: FlashType::WARNING
-            );
-        }
-
         $report = new FontAwesomeReport($this, $service);
 
         return $this->renderPdfDocument($report);

@@ -1,17 +1,12 @@
 {
     "copyFiles": [
         {
-            "from": "node_modules/bootstrap/dist/js/bootstrap.bundle.js",
-            "to": "public/build/bootstrap/"
-        },
-        {
-            "from": "node_modules/bootstrap/dist/js/bootstrap.bundle.js.map",
+            "from": "node_modules/bootstrap/dist/js/bootstrap.bundle.{js,js.map}",
             "to": "public/build/bootstrap/"
         },
         {
             "from": [
-                "node_modules/bootstrap-table/dist/bootstrap-table.js",
-                "node_modules/bootstrap-table/dist/bootstrap-table.css"
+                "node_modules/bootstrap-table/dist/bootstrap-table.{js,css}"
             ],
             "to": "public/build/bootstrap-table/"
         },
@@ -61,8 +56,7 @@
         {
             "from": [
                 "node_modules/jquery-contextmenu/dist/jquery.ui.position.js",
-                "node_modules/jquery-contextmenu/dist/jquery.contextMenu.js",
-                "node_modules/jquery-contextmenu/dist/jquery.contextMenu.css",
+                "node_modules/jquery-contextmenu/dist/jquery.contextMenu.{js,css}",
                 "node_modules/jquery-contextmenu/dist/font/*"
             ],
             "to": "public/build/jquery-contextmenu/"

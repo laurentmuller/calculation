@@ -18,92 +18,53 @@ use App\Model\FontAwesomeImage;
 use App\Report\FontAwesomeReport;
 use App\Service\FontAwesomeImageService;
 use App\Utils\FileUtils;
+use fpdf\PdfException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class FontAwesomeReportTest extends TestCase
 {
-    public function testIsException(): void
+    public function testRenderWithException(): void
     {
-        $controller = $this->createMock(AbstractController::class);
-        $service = $this->createMock(FontAwesomeImageService::class);
-        $service->method('isSvgSupported')
-            ->willReturn(false);
-        $service->method('isImagickException')
-            ->willReturn(true);
-        $service->method('getSvgDirectory')
-            ->willReturn(__DIR__);
-
-        $report = new FontAwesomeReport($controller, $service);
-        $actual = $report->render();
-        self::assertTrue($actual);
+        self::expectException(PdfException::class);
+        $report = $this->createReport(null);
+        $report->render();
     }
 
-    public function testRenderAliases(): void
+    public function testRenderWithSuccess(): void
     {
         $image = $this->createImage();
-        $svgDirectory = $this->getSvgDirectory();
-        $controller = $this->createMock(AbstractController::class);
-        $service = $this->createMock(FontAwesomeImageService::class);
-        $service->method('getImage')
-            ->willReturn($image);
-        $service->method('getSvgDirectory')
-            ->willReturn($svgDirectory);
-        $service->method('isSvgSupported')
-            ->willReturn(true);
-        $service->method('isImagickException')
-            ->willReturn(false);
-        $service->method('getAliases')
-            ->willReturn(['key' => 'value']);
-
-        $report = new FontAwesomeReport($controller, $service);
-        $actual = $report->render();
-        self::assertTrue($actual);
-    }
-
-    public function testRenderImages(): void
-    {
-        $image = $this->createImage();
-        $svgDirectory = $this->getSvgDirectory();
-        $controller = $this->createMock(AbstractController::class);
-        $service = $this->createMock(FontAwesomeImageService::class);
-        $service->method('getImage')
-            ->willReturn($image);
-        $service->method('getSvgDirectory')
-            ->willReturn($svgDirectory);
-
-        $report = new FontAwesomeReport($controller, $service);
-        $actual = $report->render();
-        self::assertTrue($actual);
-    }
-
-    public function testRenderNoAlias(): void
-    {
-        $image = $this->createImage();
-        $svgDirectory = $this->getSvgDirectory();
-        $controller = $this->createMock(AbstractController::class);
-        $service = $this->createMock(FontAwesomeImageService::class);
-        $service->method('getImage')
-            ->willReturn($image);
-        $service->method('getSvgDirectory')
-            ->willReturn($svgDirectory);
-        $service->method('isSvgSupported')
-            ->willReturn(true);
-        $service->method('isImagickException')
-            ->willReturn(false);
-        $service->method('getAliases')
-            ->willReturn([]);
-
-        $report = new FontAwesomeReport($controller, $service);
+        $report = $this->createReport($image);
         $actual = $report->render();
         self::assertTrue($actual);
     }
 
     private function createImage(): FontAwesomeImage
     {
-        $path = $this->getSvgDirectory() . '/example.png';
-        $content = FileUtils::readFile($path);
+        $file = $this->getSvgDirectory() . '/example.png';
+        $content = FileUtils::readFile($file);
 
         return new FontAwesomeImage($content, 124, 147, 96);
+    }
+
+    private function createReport(?FontAwesomeImage $image): FontAwesomeReport
+    {
+        $controller = $this->createMock(AbstractController::class);
+        $service = $this->createService($image);
+
+        return new FontAwesomeReport($controller, $service);
+    }
+
+    private function createService(?FontAwesomeImage $image): MockObject&FontAwesomeImageService
+    {
+        $svgDirectory = $this->getSvgDirectory();
+        $service = $this->createMock(FontAwesomeImageService::class);
+        $service->method('getSvgDirectory')
+            ->willReturn($svgDirectory);
+        $service->method('getImage')
+            ->willReturn($image);
+
+        return $service;
     }
 
     private function getSvgDirectory(): string

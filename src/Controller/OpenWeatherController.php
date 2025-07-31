@@ -30,6 +30,7 @@ use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -222,16 +223,11 @@ class OpenWeatherController extends AbstractController
         $response = $this->render('openweather/weather.htm.twig', $values);
 
         if (false !== $values['current']) {
-            $values = [
+            $this->updateDataCookies($response, [
                 OpenWeatherService::PARAM_ID => $id,
                 OpenWeatherService::PARAM_UNITS => $units,
                 OpenWeatherService::PARAM_COUNT => $count,
-            ];
-            $this->updateCookies(
-                $response,
-                $values,
-                self::PREFIX_KEY
-            );
+            ]);
         }
 
         return $response;
@@ -283,21 +279,8 @@ class OpenWeatherController extends AbstractController
 
             $cities = $service->search($name, $limit);
             if ([] !== $cities) {
-                // only one?
                 if (1 === \count($cities)) {
-                    $response = $this->redirectToRoute('openweather_current', [
-                        OpenWeatherService::PARAM_ID => \reset($cities)['id'],
-                        OpenWeatherService::PARAM_UNITS => $units->value,
-                        OpenWeatherService::PARAM_COUNT => $count,
-                    ]);
-
-                    $this->updateCookies(
-                        $response,
-                        $data,
-                        self::PREFIX_KEY
-                    );
-
-                    return $response;
+                    return $this->redirectToCurrent(\reset($cities), $units, $count, $data);
                 }
 
                 $this->updateCities($cities, $units);
@@ -308,12 +291,9 @@ class OpenWeatherController extends AbstractController
                 'cities' => $cities,
                 'units' => $units,
                 'count' => $count,
+                'last_id' => $this->getCookieId($request, $service),
             ]);
-            $this->updateCookies(
-                $response,
-                $data,
-                self::PREFIX_KEY
-            );
+            $this->updateDataCookies($response, $data);
 
             return $response;
         }
@@ -321,6 +301,7 @@ class OpenWeatherController extends AbstractController
         return $this->render('openweather/search_city.html.twig', [
             'form' => $form,
             'count' => $data[OpenWeatherService::PARAM_COUNT],
+            'last_id' => $this->getCookieId($request, $service),
         ]);
     }
 
@@ -330,8 +311,8 @@ class OpenWeatherController extends AbstractController
     #[GetRoute(path: IndexRoute::PATH, name: 'weather')]
     public function weather(Request $request, OpenWeatherSearchService $service): Response
     {
-        $id = $this->getCookieId($request);
-        if (0 !== $id && false !== $service->findById($id)) {
+        $id = $this->getCookieId($request, $service);
+        if (null !== $id) {
             return $this->redirectToRoute('openweather_current', [
                 OpenWeatherService::PARAM_ID => $id,
                 OpenWeatherService::PARAM_UNITS => $this->getCookieUnits($request)->value,
@@ -389,14 +370,19 @@ class OpenWeatherController extends AbstractController
         );
     }
 
-    private function getCookieId(Request $request): int
+    private function getCookieId(Request $request, OpenWeatherSearchService $service): ?int
     {
-        return $this->getCookieInt(
+        $id = $this->getCookieInt(
             $request,
             OpenWeatherService::PARAM_ID,
             $this->getRequestId($request),
             self::PREFIX_KEY
         );
+        if (0 !== $id && false !== $service->findById($id)) {
+            return $id;
+        }
+
+        return null;
     }
 
     private function getCookieLimit(Request $request): int
@@ -471,6 +457,21 @@ class OpenWeatherController extends AbstractController
     }
 
     /**
+     * @param array<string, string|bool|int|float|\BackedEnum|null> $data
+     */
+    private function redirectToCurrent(array $city, OpenWeatherUnits $units, int $count, array $data): RedirectResponse
+    {
+        $response = $this->redirectToRoute('openweather_current', [
+            OpenWeatherService::PARAM_ID => $city['id'],
+            OpenWeatherService::PARAM_UNITS => $units->value,
+            OpenWeatherService::PARAM_COUNT => $count,
+        ]);
+        $this->updateDataCookies($response, $data);
+
+        return $response;
+    }
+
+    /**
      * @param array<int, array> $cities
      */
     private function updateCities(array &$cities, OpenWeatherUnits $units): void
@@ -489,5 +490,13 @@ class OpenWeatherController extends AbstractController
                 $cities[$index]['units'] = $groupUnits;
             }
         }
+    }
+
+    /**
+     * @param array<string, string|bool|int|float|\BackedEnum|null> $data
+     */
+    private function updateDataCookies(Response $response, array $data): void
+    {
+        $this->updateCookies($response, $data, self::PREFIX_KEY);
     }
 }

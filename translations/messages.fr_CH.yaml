@@ -1283,7 +1283,6 @@ test:
     use_notification: Utiliser une notification.
     ip_stack: Adresse IP
     fontawesome: Font Awesome (PDF)
-    fontawesome_error: La librairie Imagick ne support pas les images SVG.
 theme:
     title: Thème
     help: Appliquer un thème sur ce site

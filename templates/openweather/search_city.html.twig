@@ -7,8 +7,8 @@
 {%- set submit_text = 'common.button_search' -%}
 {%- set submit_title = 'openweather.search.submit' -%}
 {%- set city = app.session.get('openweather.city', false) -%}
-{%- set units = app.session.get('openweather.units', 'metric') -%}
-{%- set cancel_path = city ? path('openweather_weather', {city: city, units: units}) : null -%}
+{%- set units = app.session.get('openweather.units', enum('App\\Enums\\OpenWeatherUnits').getDefault().value) -%}
+{%- set cancel_path = last_id ? path('openweather_weather', {id: last_id, units: units, count: count}) : null -%}
 {# body #}
 {% block card_body %}
 <div class="row">

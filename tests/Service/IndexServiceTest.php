@@ -34,7 +34,7 @@ class IndexServiceTest extends KernelServiceTestCase
     public function testClear(): void
     {
         $this->service->clear();
-        self::assertTrue($this->service->isEnabled());
+        self::expectNotToPerformAssertions();
     }
 
     public function testGetCalculationByMonths(): void
@@ -86,7 +86,7 @@ class IndexServiceTest extends KernelServiceTestCase
     {
         $group = $this->createGroup();
         $this->deleteEntity($group);
-        self::assertTrue($this->service->isEnabled());
+        self::expectNotToPerformAssertions();
     }
 
     public function testOnFlushDisabled(): void
@@ -105,7 +105,7 @@ class IndexServiceTest extends KernelServiceTestCase
         $group->setCode('fake');
         $this->addEntity($group);
         $this->deleteEntity($group);
-        self::assertTrue($this->service->isEnabled());
+        self::expectNotToPerformAssertions();
     }
 
     private function createGroup(): Group

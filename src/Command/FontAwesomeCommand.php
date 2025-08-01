@@ -95,6 +95,7 @@ class FontAwesomeCommand
                     $svgTargetFile = FileUtils::buildPath($tempDir, $svgFileName);
                     if (!FileUtils::copy($svgFullPath, $svgTargetFile)) {
                         $io->error(\sprintf('Unable to copy file: "%s".', $svgFileName));
+
                         return Command::FAILURE;
                     }
 

@@ -42,7 +42,7 @@ class FontAwesomeCommandTest extends CommandTestCase
                 name: self::COMMAND_NAME,
                 input: $input,
             );
-            self::assertOutputContainsString('Generate successfully 1 files, 2 aliases from 1 sources.', $output);
+            self::assertOutputContainsString('Generate images successfully: 2 files, 4 aliases from 1 sources.', $output);
         } finally {
             FileUtils::remove(__DIR__ . '/temp');
         }
@@ -60,7 +60,7 @@ class FontAwesomeCommandTest extends CommandTestCase
                 name: self::COMMAND_NAME,
                 input: $input,
             );
-            self::assertOutputContainsString('Simulate successfully 2 files, 4 aliases from 1 sources.', $output);
+            self::assertOutputContainsString('Simulate command successfully: 2 files, 4 aliases from 1 sources.', $output);
         } finally {
             FileUtils::remove(__DIR__ . '/temp');
         }
@@ -98,7 +98,7 @@ class FontAwesomeCommandTest extends CommandTestCase
                 name: self::COMMAND_NAME,
                 input: $input,
             );
-            self::assertOutputContainsString('Generate successfully 2 files, 4 aliases from 1 sources.', $output);
+            self::assertOutputContainsString('Generate images successfully: 2 files, 4 aliases from 1 sources.', $output);
         } finally {
             FileUtils::remove(__DIR__ . '/temp');
         }

@@ -30,6 +30,7 @@ class FontAwesomeCommand
 
     private const DEFAULT_SOURCE = 'vendor/fortawesome/font-awesome/metadata/icons.json';
     private const DEFAULT_TARGET = 'resources/fontawesome';
+    private const SVG_SOURCE = 'vendor/fortawesome/font-awesome/svgs-full';
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
@@ -41,7 +42,7 @@ class FontAwesomeCommand
         SymfonyStyle $io,
         #[Argument(description: 'The JSON source file, relative to the project directory, where to get metadata informations.', )]
         ?string $source = null,
-        #[Argument(description: 'The target directory, relative to the project directory, where to generate SVG files.', )]
+        #[Argument(description: 'The target directory, relative to the project directory, where to copy SVG files.', )]
         ?string $target = null,
         #[Option(description: 'Run the command without making changes (simulate files generation).', name: 'dry-run', shortcut: 'd')]
         bool $dryRun = false
@@ -79,22 +80,28 @@ class FontAwesomeCommand
             $this->start();
             $io->writeln([\sprintf('Generate files from "%s"...', $relativeSource), '']);
             foreach ($io->progressIterate($content, $count) as $key => $item) {
-                $names = $this->getAliasNames($item);
+                $aliasNames = $this->getAliasNames($item);
                 /** @phpstan-var string[] $styles */
                 $styles = $item['styles'];
                 foreach ($styles as $style) {
-                    $data = $this->getRawData($style, $item);
-                    if (null === $data) {
-                        continue;
-                    }
-                    if (!$this->dumpFile($io, $tempDir, $style, $key, $data)) {
+                    $svgFileName = $this->getSvgFileName($style, $key);
+                    $svgFullPath = $this->getSvgFullPath($svgFileName);
+                    if (!FileUtils::isFile($svgFullPath)) {
+                        $io->error(\sprintf('Unable to find SVG file: "%s".', $svgFileName));
+
                         return Command::FAILURE;
                     }
-                    ++$files;
 
-                    foreach ($names as $name) {
-                        $aliasKey = $this->getSvgFileName($style, $name);
-                        $aliases[$aliasKey] = $this->getSvgFileName($style, $key);
+                    $svgTargetFile = FileUtils::buildPath($tempDir, $svgFileName);
+                    if (!FileUtils::copy($svgFullPath, $svgTargetFile)) {
+                        $io->error(\sprintf('Unable to copy file: "%s".', $svgFileName));
+                        return Command::FAILURE;
+                    }
+
+                    ++$files;
+                    foreach ($aliasNames as $aliasName) {
+                        $aliasKey = $this->getSvgFileName($style, $aliasName);
+                        $aliases[$aliasKey] = $svgFileName;
                     }
                 }
             }
@@ -103,7 +110,7 @@ class FontAwesomeCommand
             if ($dryRun) {
                 $io->success(
                     \sprintf(
-                        'Simulate successfully %d files, %d aliases from %d sources. %s.',
+                        'Simulate command successfully: %d files, %d aliases from %d sources. %s.',
                         $files,
                         $countAliases,
                         $count,
@@ -135,7 +142,7 @@ class FontAwesomeCommand
 
             $io->success(
                 \sprintf(
-                    'Generate successfully %d files, %d aliases from %d sources. %s.',
+                    'Generate images successfully: %d files, %d aliases from %d sources. %s.',
                     $files,
                     $countAliases,
                     $count,
@@ -164,19 +171,6 @@ class FontAwesomeCommand
         }
     }
 
-    private function dumpFile(SymfonyStyle $io, string $path, string $style, string|int $name, string $content): bool
-    {
-        $fileName = $this->getSvgFileName($style, $name);
-        $target = FileUtils::buildPath($path, $fileName);
-        if (FileUtils::dumpFile($target, $content)) {
-            return true;
-        }
-
-        $io->error(\sprintf('Unable to dump file: "%s".', $fileName));
-
-        return false;
-    }
-
     private function encodeJson(array $data): string
     {
         return StringUtils::encodeJson($data, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES);
@@ -189,12 +183,6 @@ class FontAwesomeCommand
     {
         /** @phpstan-var string[] */
         return $item['aliases']['names'] ?? [];
-    }
-
-    private function getRawData(string $style, array $item): ?string
-    {
-        /** @phpstan-var string|null */
-        return $item['svg'][$style]['raw'] ?? null;
     }
 
     private function getRelativePath(string $path): string
@@ -211,5 +199,10 @@ class FontAwesomeCommand
     private function getSvgFileName(string $style, string|int $name): string
     {
         return \sprintf('%s/%s%s', $style, $name, FontAwesomeImageService::SVG_EXTENSION);
+    }
+
+    private function getSvgFullPath(string $name): string
+    {
+        return FileUtils::buildPath($this->projectDir, self::SVG_SOURCE, $name);
     }
 }

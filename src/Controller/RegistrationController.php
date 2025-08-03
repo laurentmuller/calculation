@@ -19,7 +19,7 @@ use App\Attribute\IndexRoute;
 use App\Entity\User;
 use App\Enums\Importance;
 use App\Form\User\UserRegistrationType;
-use App\Mime\RegistrationEmail;
+use App\Mime\NotificationEmail;
 use App\Repository\UserRepository;
 use App\Service\EmailVerifier;
 use App\Service\UserExceptionService;
@@ -31,6 +31,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Translation\TranslatableMessage;
 
 /**
  * Controller to register a new user.
@@ -108,13 +109,13 @@ class RegistrationController extends AbstractController
         return $this->redirectToHomePage('registration.confirmed', ['%username%' => $user->getUserIdentifier()]);
     }
 
-    private function createEmail(User $user): RegistrationEmail
+    private function createEmail(User $user): NotificationEmail
     {
-        return RegistrationEmail::create()
+        return NotificationEmail::create($this->getTranslator(), 'notification/registration.html.twig')
             ->to($user->getEmailAddress())
             ->from($this->getAddressFrom())
-            ->subject($this->trans('registration.subject'))
-            ->updateImportance(Importance::MEDIUM, $this->getTranslator());
+            ->subject(new TranslatableMessage('registration.subject'))
+            ->importance(Importance::MEDIUM);
     }
 
     private function findUser(Request $request): ?User

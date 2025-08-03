@@ -16,7 +16,7 @@ namespace App\Controller;
 use App\Attribute\GetRoute;
 use App\Enums\Importance;
 use App\Interfaces\RoleInterface;
-use App\Mime\CspViolationEmail;
+use App\Mime\NotificationEmail;
 use App\Utils\StringUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,6 +24,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Translation\TranslatableMessage;
 
 /**
  * Controller to send CSP violations by e-mail.
@@ -47,7 +48,7 @@ class CspReportController extends AbstractController
         try {
             $message = $this->trans('notification.csp_title');
             $logger->error($message, $context);
-            $this->sendNotification($message, $context, $mailer);
+            $this->sendNotification($context, $mailer);
         } catch (TransportExceptionInterface $e) {
             $message = $this->trans('notification.csp_error');
             $context = $this->getExceptionContext($e);
@@ -106,15 +107,15 @@ class CspReportController extends AbstractController
     /**
      * @throws TransportExceptionInterface
      */
-    private function sendNotification(string $subject, array $context, MailerInterface $mailer): void
+    private function sendNotification(array $context, MailerInterface $mailer): void
     {
-        $notification = CspViolationEmail::create()
-            ->subject($subject)
+        $notification = NotificationEmail::create($this->getTranslator(), 'notification/csp_violation.html.twig')
+            ->subject(new TranslatableMessage('notification.csp_title'))
             ->to($this->getAddressFrom())
             ->from($this->getAddressFrom())
             ->context(['context' => $context])
             ->action($this->trans('index.title'), $this->getActionUrl())
-            ->updateImportance(Importance::HIGH, $this->getTranslator());
+            ->importance(Importance::HIGH);
 
         $mailer->send($notification);
     }

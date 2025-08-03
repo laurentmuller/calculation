@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Entity\User;
-use App\Mime\RegistrationEmail;
+use App\Mime\NotificationEmail;
 use App\Repository\UserRepository;
 use App\Service\EmailVerifier;
 use App\Tests\Entity\IdTrait;
@@ -68,7 +68,7 @@ class EmailVerifierTest extends TestCase
         $service = new EmailVerifier($helper, $mailer, $repository, $translator);
 
         $user = $this->createUser();
-        $email = RegistrationEmail::create();
+        $email = NotificationEmail::create($translator);
         $service->sendEmail('route', $user, $email);
         self::assertFalse($user->isVerified());
     }

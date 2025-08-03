@@ -18,7 +18,7 @@ use Symfony\Bridge\Twig\Mime\NotificationEmail as BaseNotificationEmail;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Header\HeaderInterface;
 use Symfony\Component\Mime\Header\Headers;
-use Symfony\Component\Mime\Part\AbstractPart;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -30,10 +30,9 @@ class NotificationEmail extends BaseNotificationEmail
 {
     private ?string $importance = null;
 
-    public function __construct(?Headers $headers = null, ?AbstractPart $body = null)
+    public function __construct(private readonly TranslatorInterface $translator)
     {
-        parent::__construct($headers, $body);
-        $this->htmlTemplate('notification/notification.html.twig');
+        parent::__construct();
     }
 
     /**
@@ -68,9 +67,11 @@ class NotificationEmail extends BaseNotificationEmail
         return $this;
     }
 
-    public static function create(?Headers $headers = null, ?AbstractPart $body = null): static
-    {
-        return new static($headers, $body);
+    public static function create(
+        TranslatorInterface $translator,
+        string $template = 'notification/notification.html.twig'
+    ): self {
+        return (new self($translator))->htmlTemplate($template);
     }
 
     #[\Override]
@@ -102,13 +103,30 @@ class NotificationEmail extends BaseNotificationEmail
         return $headers;
     }
 
-    /**
-     * Set translated importance.
-     */
-    public function updateImportance(Importance $importance, TranslatorInterface $translator): static
+    #[\Override]
+    public function importance(string|Importance $importance): static
     {
-        $this->importance = $translator->trans($importance->getReadableFull());
+        if (\is_string($importance)) {
+            $importance = Importance::tryFrom($importance) ?? $importance;
+        }
+        if ($importance instanceof Importance) {
+            $value = $importance->value;
+            $this->importance = $importance->transFull($this->translator);
+        } else {
+            $value = $importance;
+            $this->importance = null;
+        }
 
-        return parent::importance($importance->value);
+        return parent::importance($value);
+    }
+
+    #[\Override]
+    public function subject(string|TranslatableMessage $subject): static
+    {
+        if ($subject instanceof TranslatableMessage) {
+            $subject = $subject->trans($this->translator);
+        }
+
+        return parent::subject($subject);
     }
 }

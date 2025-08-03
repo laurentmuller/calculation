@@ -113,7 +113,7 @@ class LogsReport extends AbstractReport
     private function getCell(
         string $text,
         string $icon,
-        string $color = FontAwesomeImageService::COLOR_BLACK
+        string $color = FontAwesomeImageService::BLACK_COLOR
     ): PdfFontAwesomeCell|string {
         $key = \sprintf('%s_%s_%s', $text, $icon, $color);
         if (isset($this->cells[$key])) {
@@ -171,7 +171,7 @@ class LogsReport extends AbstractReport
         }
 
         $levelColor = LogLevel::instance($level)->getLevelColor();
-        $color = HtmlBootstrapColor::parseTextColor($levelColor)?->asHex('#') ?? FontAwesomeImageService::COLOR_BLACK;
+        $color = HtmlBootstrapColor::parseTextColor($levelColor)?->asHex('#') ?? FontAwesomeImageService::BLACK_COLOR;
 
         return $this->colors[$level] = $color;
     }

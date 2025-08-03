@@ -16,7 +16,7 @@ namespace App\Service;
 use App\Controller\ResetPasswordController;
 use App\Entity\User;
 use App\Enums\Importance;
-use App\Mime\ResetPasswordEmail;
+use App\Mime\NotificationEmail;
 use App\Repository\UserRepository;
 use App\Traits\LoggerTrait;
 use App\Utils\DateUtils;
@@ -28,6 +28,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
@@ -158,13 +159,13 @@ readonly class ResetPasswordService
         }
     }
 
-    private function createEmail(User $user, ResetPasswordToken $token): ResetPasswordEmail
+    private function createEmail(User $user, ResetPasswordToken $token): NotificationEmail
     {
-        return ResetPasswordEmail::create()
+        return NotificationEmail::create($this->translator, 'notification/reset_password.html.twig')
             ->to($user->getEmailAddress())
             ->from($this->getAddressFrom())
-            ->subject($this->trans('resetting.request.title'))
-            ->updateImportance(Importance::HIGH, $this->translator)
+            ->subject(new TranslatableMessage('resetting.request.title'))
+            ->importance(Importance::HIGH)
             ->action($this->trans('resetting.request.submit'), $this->getResetAction($token))
             ->context([
                 'token' => $token->getToken(),

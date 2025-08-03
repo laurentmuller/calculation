@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace App\Tests\Mime;
 
 use App\Enums\Importance;
-use App\Mime\CspViolationEmail;
 use App\Mime\NotificationEmail;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class NotificationEmailTest extends TestCase
 {
@@ -26,79 +26,120 @@ class NotificationEmailTest extends TestCase
 
     public function testAttachFromUploadedFile(): void
     {
-        $mail = CspViolationEmail::create();
-        $mail->attachFromUploadedFile(null);
-        self::assertEmpty($mail->getAttachments());
+        $email = $this->createNotificationEmail();
+        $email->attachFromUploadedFile(null);
+        self::assertEmpty($email->getAttachments());
 
-        $file = new UploadedFile(
-            path: __FILE__,
-            originalName: \basename(__FILE__),
-            test: true
-        );
-        $mail->attachFromUploadedFile($file);
-        self::assertCount(1, $mail->getAttachments());
+        $file = $this->createUploadedFile();
+        $email->attachFromUploadedFile($file);
+        self::assertCount(1, $email->getAttachments());
     }
 
     public function testAttachFromUploadedFiles(): void
     {
-        $mail = CspViolationEmail::create();
-        self::assertEmpty($mail->getAttachments());
+        $email = $this->createNotificationEmail();
+        self::assertEmpty($email->getAttachments());
 
-        $file = new UploadedFile(
-            path: __FILE__,
-            originalName: \basename(__FILE__),
-            test: true
-        );
-        $mail->attachFromUploadedFiles(null, $file);
-        self::assertCount(1, $mail->getAttachments());
+        $file = $this->createUploadedFile();
+        $email->attachFromUploadedFiles(null, $file);
+        self::assertCount(1, $email->getAttachments());
     }
 
-    public function testConstructor(): void
+    public function testDefaultTemplate(): void
     {
-        $actual = NotificationEmail::create()
-            ->getHtmlTemplate();
+        $email = $this->createNotificationEmail();
         $expected = 'notification/notification.html.twig';
+        $actual = $email->getHtmlTemplate();
         self::assertSame($expected, $actual);
     }
 
-    public function testPreparedHeaders(): void
+    public function testImportanceAsEnum(): void
     {
-        $mail = NotificationEmail::create();
-        $translator = $this->createMockTranslator();
-        $mail->subject('subject')
-            ->from('fake@fake.com')
-            ->to('fake@fake.com');
-        $mail->updateImportance(Importance::MEDIUM, $translator);
-        $headers = $mail->getPreparedHeaders();
-
-        $actual = $headers->getHeaderBody('Subject');
-        $expected = 'subject - importance.medium_full';
-        self::assertSame($expected, $actual);
-    }
-
-    public function testPreparedHeadersNoSubject(): void
-    {
-        $mail = NotificationEmail::create();
-        $mail->from('fake@fake.com')
-            ->to('fake@fake.com');
-        $headers = $mail->getPreparedHeaders();
-
-        $actual = $headers->getHeaderBody('Subject');
-        $expected = '[LOW] ';
-        self::assertSame($expected, $actual);
-    }
-
-    public function testUpdate(): void
-    {
-        $mail = NotificationEmail::create();
-        $translator = $this->createMockTranslator();
-        $mail->updateImportance(Importance::MEDIUM, $translator);
-        $context = $mail->getContext();
+        $email = $this->createNotificationEmail();
+        $email->importance(Importance::MEDIUM);
+        $context = $email->getContext();
 
         self::assertArrayHasKey('importance', $context);
         self::assertSame('medium', $context['importance']);
 
         self::assertArrayHasKey('importance_text', $context);
         self::assertSame('importance.medium_full', $context['importance_text']);
+    }
+
+    public function testImportanceAsEnumValue(): void
+    {
+        $email = $this->createNotificationEmail();
+        $email->importance(Importance::MEDIUM->value);
+        $context = $email->getContext();
+
+        self::assertArrayHasKey('importance', $context);
+        self::assertSame('medium', $context['importance']);
+
+        self::assertArrayHasKey('importance_text', $context);
+        self::assertSame('importance.medium_full', $context['importance_text']);
+    }
+
+    public function testImportanceAsOtherString(): void
+    {
+        $email = $this->createNotificationEmail();
+        $email->importance('fake');
+        $context = $email->getContext();
+
+        self::assertArrayHasKey('importance', $context);
+        self::assertSame('fake', $context['importance']);
+        self::assertArrayNotHasKey('importance_text', $context);
+    }
+
+    public function testPreparedHeadersWithoutSubject(): void
+    {
+        $email = $this->createNotificationEmail();
+        $email->from('fake@fake.com')
+            ->to('fake@fake.com');
+        $headers = $email->getPreparedHeaders();
+
+        $expected = '[LOW] ';
+        $actual = $headers->getHeaderBody('Subject');
+        self::assertSame($expected, $actual);
+    }
+
+    public function testPreparedHeadersWithSubject(): void
+    {
+        $email = $this->createNotificationEmail();
+        $email->subject('subject')
+            ->from('fake@fake.com')
+            ->to('fake@fake.com');
+        $email->importance(Importance::MEDIUM);
+        $headers = $email->getPreparedHeaders();
+
+        $expected = 'subject - importance.medium_full';
+        $actual = $headers->getHeaderBody('Subject');
+        self::assertSame($expected, $actual);
+    }
+
+    public function testTranslatableSubject(): void
+    {
+        $email = $this->createNotificationEmail();
+        $email->subject(new TranslatableMessage('user.comment.title'));
+        $email->from('fake@fake.com')
+            ->to('fake@fake.com');
+        $headers = $email->getPreparedHeaders();
+
+        $expected = '[LOW] user.comment.title';
+        $actual = $headers->getHeaderBody('Subject');
+        self::assertSame($expected, $actual);
+    }
+
+    private function createNotificationEmail(): NotificationEmail
+    {
+        return NotificationEmail::create($this->createMockTranslator());
+    }
+
+    private function createUploadedFile(): UploadedFile
+    {
+        return new UploadedFile(
+            path: __FILE__,
+            originalName: \basename(__FILE__),
+            test: true
+        );
     }
 }

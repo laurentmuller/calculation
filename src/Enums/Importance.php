@@ -20,6 +20,7 @@ use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
 use fpdf\Interfaces\PdfEnumDefaultInterface;
 use fpdf\Traits\PdfEnumDefaultTrait;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The notification email importance enumeration.
@@ -55,7 +56,7 @@ enum Importance: string implements EnumSortableInterface, PdfEnumDefaultInterfac
     case URGENT = 'urgent';
 
     /**
-     * Gets the full human representation of the value (to be translated).
+     * Gets the fully human representation of the value (to be translated).
      */
     public function getReadableFull(): string
     {
@@ -74,5 +75,13 @@ enum Importance: string implements EnumSortableInterface, PdfEnumDefaultInterfac
             self::HIGH,
             self::URGENT,
         ];
+    }
+
+    /**
+     * Gets the full translated human representation of the value.
+     */
+    public function transFull(TranslatorInterface $translator, ?string $locale = null): string
+    {
+        return $translator->trans($this->getReadableFull(), [], $locale);
     }
 }

@@ -102,6 +102,14 @@ class ImportanceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    #[DataProvider('getLabelsFull')]
+    public function testTranslateFull(string $expected, Importance $importance): void
+    {
+        $translator = $this->createMockTranslator();
+        $actual = $importance->transFull($translator);
+        self::assertSame($expected, $actual);
+    }
+
     #[DataProvider('getValues')]
     public function testValue(Importance $importance, string $expected): void
     {

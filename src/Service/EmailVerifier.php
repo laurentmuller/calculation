@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\User;
-use App\Mime\RegistrationEmail;
+use App\Mime\NotificationEmail;
 use App\Repository\UserRepository;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,14 +52,16 @@ readonly class EmailVerifier
      *
      * @throws TransportExceptionInterface
      */
-    public function sendEmail(string $routeName, User $user, RegistrationEmail $email): void
+    public function sendEmail(string $routeName, User $user, NotificationEmail $email): void
     {
         $signature = $this->generateSignature($routeName, $user);
+        $actionText = $this->trans('registration.action');
+        $actionUrl = $signature->getSignedUrl();
         $email->context([
             'username' => $user->getUserIdentifier(),
             'expires_date' => $this->getExpiresAt($signature),
             'expires_life_time' => $this->getExpiresLifeTime($signature),
-        ])->action($this->trans('registration.action'), $signature->getSignedUrl());
+        ])->action($actionText, $actionUrl);
 
         $this->mailer->send($email);
     }

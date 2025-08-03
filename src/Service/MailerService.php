@@ -23,6 +23,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extra\Markdown\MarkdownInterface;
 
@@ -79,11 +80,9 @@ readonly class MailerService
         $notification = $this->createNotification($importance)
             ->from($fromEmail)
             ->to($toUser->getEmailAddress())
-            ->subject($this->trans('user.comment.title'))
-            ->markdown($this->convert($message));
-        foreach ($attachments as $attachment) {
-            $notification->attachFromUploadedFile($attachment);
-        }
+            ->subject(new TranslatableMessage('user.comment.title'))
+            ->markdown($this->convert($message))
+            ->attachFromUploadedFiles(...$attachments);
 
         $this->send($notification);
     }
@@ -95,14 +94,17 @@ readonly class MailerService
 
     private function createNotification(Importance $importance): NotificationEmail
     {
-        return NotificationEmail::create()
+        return NotificationEmail::create($this->translator)
             ->action($this->trans('index.title'), $this->getHomeUrl())
-            ->updateImportance($importance, $this->translator);
+            ->importance($importance);
     }
 
     private function getHomeUrl(): string
     {
-        return $this->generator->generate(AbstractController::HOME_PAGE, [], UrlGeneratorInterface::ABSOLUTE_URL);
+        return $this->generator->generate(
+            name: AbstractController::HOME_PAGE,
+            referenceType: UrlGeneratorInterface::ABSOLUTE_URL
+        );
     }
 
     /**

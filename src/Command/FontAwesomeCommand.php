@@ -15,7 +15,6 @@ namespace App\Command;
 
 use App\Service\FontAwesomeImageService;
 use App\Utils\FileUtils;
-use App\Utils\StringUtils;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
@@ -76,11 +75,9 @@ class FontAwesomeCommand
 
         try {
             $files = 0;
-            $aliases = [];
             $this->start();
             $io->writeln([\sprintf('Generate files from "%s"...', $relativeSource), '']);
             foreach ($io->progressIterate($content, $count) as $key => $item) {
-                $aliasNames = $this->getAliasNames($item);
                 /** @phpstan-var string[] $styles */
                 $styles = $item['styles'];
                 foreach ($styles as $style) {
@@ -100,20 +97,14 @@ class FontAwesomeCommand
                     }
 
                     ++$files;
-                    foreach ($aliasNames as $aliasName) {
-                        $aliasKey = $this->getSvgFileName($style, $aliasName);
-                        $aliases[$aliasKey] = $svgFileName;
-                    }
                 }
             }
 
-            $countAliases = \count($aliases);
             if ($dryRun) {
                 $io->success(
                     \sprintf(
-                        'Simulate command successfully: %d files, %d aliases from %d sources. %s.',
+                        'Simulate command successfully: %d files from %d sources. %s.',
                         $files,
-                        $countAliases,
                         $count,
                         $this->stop()
                     )
@@ -125,15 +116,6 @@ class FontAwesomeCommand
             $target = FileUtils::buildPath($this->projectDir, $target ?? self::DEFAULT_TARGET);
             $relativeTarget = $this->getRelativePath($target);
 
-            \ksort($aliases);
-            $aliasesContent = $this->encodeJson($aliases);
-            $aliasesPath = FileUtils::buildPath($tempDir, FontAwesomeImageService::ALIAS_FILE_NAME);
-            if (!FileUtils::dumpFile($aliasesPath, $aliasesContent)) {
-                $io->error(\sprintf('Unable to copy aliases file to the directory: "%s".', $relativeTarget));
-
-                return Command::FAILURE;
-            }
-
             $io->writeln(\sprintf('Copy files to "%s"...', $relativeTarget));
             if (!FileUtils::mirror($tempDir, $target, delete: true)) {
                 $io->error(\sprintf('Unable to copy %d files to the directory: "%s".', $count, $relativeTarget));
@@ -143,9 +125,8 @@ class FontAwesomeCommand
 
             $io->success(
                 \sprintf(
-                    'Generate images successfully: %d files, %d aliases from %d sources. %s.',
+                    'Generate images successfully: %d files from %d sources. %s.',
                     $files,
-                    $countAliases,
                     $count,
                     $this->stop()
                 )
@@ -170,20 +151,6 @@ class FontAwesomeCommand
 
             return null;
         }
-    }
-
-    private function encodeJson(array $data): string
-    {
-        return StringUtils::encodeJson($data, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getAliasNames(array $item): array
-    {
-        /** @phpstan-var string[] */
-        return $item['aliases']['names'] ?? [];
     }
 
     private function getRelativePath(string $path): string

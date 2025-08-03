@@ -19,7 +19,6 @@ use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
-use Symfony\Component\Filesystem\Path;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
@@ -31,14 +30,9 @@ class FontAwesomeImageService
     use CacheKeyTrait;
 
     /**
-     * The JSON file containing aliases.
+     * The default black color.
      */
-    public const ALIAS_FILE_NAME = 'aliases.json';
-
-    /**
-     * The black color.
-     */
-    public const COLOR_BLACK = 'black';
+    public const BLACK_COLOR = 'black';
 
     /**
      * The SVG file extension (including the dot character).
@@ -63,16 +57,6 @@ class FontAwesomeImageService
     }
 
     /**
-     * Gets the icon aliases.
-     *
-     * @return array<string, string> the aliases where the key is the alias name and the value is the existing file
-     */
-    public function getAliases(): array
-    {
-        return $this->cache->get('aliases_json', fn (): array => $this->loadAliases());
-    }
-
-    /**
      * Gets a Font Awesome image.
      *
      * @param string  $relativePath the relative file path to the SVG directory.
@@ -93,7 +77,7 @@ class FontAwesomeImageService
             return null;
         }
 
-        $color ??= self::COLOR_BLACK;
+        $color ??= self::BLACK_COLOR;
         $key = $this->cleanKey(\sprintf('%s_%s', $relativePath, $color));
 
         return $this->cache->get(
@@ -185,20 +169,6 @@ class FontAwesomeImageService
         return $this->cache->get('svg_directory', fn (): bool => FileUtils::isDir($this->svgDirectory));
     }
 
-    /**
-     * @return array<string, string>
-     */
-    private function loadAliases(): array
-    {
-        $path = FileUtils::buildPath($this->svgDirectory, self::ALIAS_FILE_NAME);
-        if (!FileUtils::exists($path)) {
-            return [];
-        }
-
-        /** @phpstan-var array<string, string> */
-        return FileUtils::decodeJson($path);
-    }
-
     private function loadImage(string $path, string $color, ItemInterface $item, bool &$save): ?FontAwesomeImage
     {
         try {
@@ -222,10 +192,8 @@ class FontAwesomeImageService
         if (!\str_ends_with($path, self::SVG_EXTENSION)) {
             $path .= self::SVG_EXTENSION;
         }
-        $path = Path::normalize($path);
-        $aliases = $this->getAliases();
 
-        return $aliases[$path] ?? $path;
+        return FileUtils::normalize($path);
     }
 
     private function replaceCurrentColor(string $content, string $color): string

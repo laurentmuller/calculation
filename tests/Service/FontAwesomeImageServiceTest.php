@@ -20,14 +20,6 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class FontAwesomeImageServiceTest extends TestCase
 {
-    public function testAliases(): void
-    {
-        $svgDirectory = __DIR__ . '/../files/json';
-        $service = $this->createService($svgDirectory);
-        $actual = $service->getAliases();
-        self::assertCount(2, $actual);
-    }
-
     public function testInvalidDirectory(): void
     {
         $this->checkImageIsInvalid('fake', 'fake', false);

@@ -12,3 +12,7 @@ rules:
         enabled: false
     symfony.verbose_logging_in_production:
         enabled: false
+    php.invalid_typehint:
+        enabled: false
+    php.missing_return_typehint:
+        enabled: false

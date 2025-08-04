@@ -17,6 +17,8 @@ rules:
         enabled: false
     php.missing_return_typehint:
         enabled: false
+    php.invalid_return_typehint:
+        enabled: false
     php.invalid_call:
         enabled: false
     php.invalid_instantiation:

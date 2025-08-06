@@ -14,44 +14,21 @@ declare(strict_types=1);
 namespace App\Tests\Twig;
 
 use App\Service\NonceService;
-use Twig\Extension\AttributeExtension;
-use Twig\RuntimeLoader\RuntimeLoaderInterface;
 
-class NonceServiceTest extends IntegrationTestCase implements RuntimeLoaderInterface
+/**
+ * @extends RuntimeTestCase<NonceService>
+ */
+class NonceServiceTest extends RuntimeTestCase
 {
-    private NonceService $service;
-
     #[\Override]
-    protected function setUp(): void
+    protected function createService(): object
     {
-        $this->service = new NonceService();
-    }
-
-    #[\Override]
-    public function load(string $class): ?object
-    {
-        if (NonceService::class === $class) {
-            return $this->service;
-        }
-
-        return null;
-    }
-
-    #[\Override]
-    protected function getExtensions(): array
-    {
-        return [new AttributeExtension(NonceService::class)];
+        return new NonceService();
     }
 
     #[\Override]
     protected function getFixturesDir(): string
     {
         return __DIR__ . '/Fixtures/NonceService';
-    }
-
-    #[\Override]
-    protected function getRuntimeLoaders(): array
-    {
-        return [$this];
     }
 }

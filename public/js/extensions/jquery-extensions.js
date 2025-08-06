@@ -338,7 +338,7 @@
             },
 
             /**
-             * Sets the checkbox checked value.
+             * Sets the checkbox-checked value.
              *
              * @param {boolean} checked - the checked value to set.
              * @return {jQuery} The element for chaining.
@@ -509,7 +509,7 @@
             },
 
             /**
-             * Drop first, last and all 2 consecutive separators in a drop-down menu.
+             * Drop first, last, and all 2 consecutive separators in a drop-down menu.
              *
              * @return {jQuery} - the element for chaining.
              */
@@ -550,6 +550,15 @@
         });
         $(document).ajaxStop(function () {
             $('*').css('cursor', '');
+        });
+
+        /**
+         * --------- Global modal dialog functions -----------
+         */
+        window.addEventListener('hide.bs.modal', () => {
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
         });
     });
 }(jQuery));

@@ -17,7 +17,7 @@
             </div>
         </div>
         {%- if add_path -%}
-            {{- link(href: path(add_path, {caller: path(app.current_route)}), class: 'align-self-start', icon: 'plus fa-fw', title: entity ~ '.add.title') -}}
+            {{- link(href: path(add_path, {caller: path(app.current_route)}), icon: 'pen-to-square fa-fw', title: entity ~ '.add.title') -}}
         {%- endif -%}
     </div>
 </div>

@@ -56,7 +56,7 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
             'ICON_TASK' => 'tasks',
             'ICON_USER' => 'user far',
             // action
-            'ICON_SHOW' => 'display',
+            'ICON_SHOW' => 'wrench',
             'ICON_ADD' => 'file far',
             'ICON_EDIT' => 'pencil',
             'ICON_DELETE' => 'trash-can',

@@ -16,49 +16,26 @@ namespace App\Tests\Twig;
 use App\Service\RoleService;
 use App\Tests\TranslatorMockTrait;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
-use Twig\Extension\AttributeExtension;
-use Twig\RuntimeLoader\RuntimeLoaderInterface;
 
-class RoleServiceTest extends IntegrationTestCase implements RuntimeLoaderInterface
+/**
+ * @extends RuntimeTestCase<RoleService>
+ */
+class RoleServiceTest extends RuntimeTestCase
 {
     use TranslatorMockTrait;
 
-    private RoleService $service;
-
     #[\Override]
-    protected function setUp(): void
+    protected function createService(): object
     {
-        $this->service = new RoleService(
+        return new RoleService(
             $this->createMock(RoleHierarchyInterface::class),
             $this->createMockTranslator()
         );
     }
 
     #[\Override]
-    public function load(string $class): ?object
-    {
-        if (RoleService::class === $class) {
-            return $this->service;
-        }
-
-        return null;
-    }
-
-    #[\Override]
-    protected function getExtensions(): array
-    {
-        return [new AttributeExtension(RoleService::class)];
-    }
-
-    #[\Override]
     protected function getFixturesDir(): string
     {
         return __DIR__ . '/Fixtures/RoleService';
-    }
-
-    #[\Override]
-    protected function getRuntimeLoaders(): array
-    {
-        return [$this];
     }
 }

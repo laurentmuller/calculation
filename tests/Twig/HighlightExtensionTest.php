@@ -14,44 +14,21 @@ declare(strict_types=1);
 namespace App\Tests\Twig;
 
 use App\Twig\HighlightExtension;
-use Twig\Extension\AttributeExtension;
-use Twig\RuntimeLoader\RuntimeLoaderInterface;
 
-class HighlightExtensionTest extends IntegrationTestCase implements RuntimeLoaderInterface
+/**
+ * @extends RuntimeTestCase<HighlightExtension>
+ */
+class HighlightExtensionTest extends RuntimeTestCase
 {
-    private HighlightExtension $extension;
-
     #[\Override]
-    protected function setUp(): void
+    protected function createService(): object
     {
-        $this->extension = new HighlightExtension();
-    }
-
-    #[\Override]
-    public function load(string $class): ?object
-    {
-        if (HighlightExtension::class === $class) {
-            return $this->extension;
-        }
-
-        return null;
-    }
-
-    #[\Override]
-    protected function getExtensions(): array
-    {
-        return [new AttributeExtension(HighlightExtension::class)];
+        return new HighlightExtension();
     }
 
     #[\Override]
     protected function getFixturesDir(): string
     {
         return __DIR__ . '/Fixtures/HighlightExtension';
-    }
-
-    #[\Override]
-    protected function getRuntimeLoaders(): array
-    {
-        return [$this];
     }
 }

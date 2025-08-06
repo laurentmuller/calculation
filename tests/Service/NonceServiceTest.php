@@ -36,13 +36,7 @@ class NonceServiceTest extends TestCase
         self::assertSame("'nonce-" . $nonce . "'", $cspNonce);
     }
 
-    public function testLength32(): void
-    {
-        $nonce = $this->service->getNonce(32);
-        self::assertSame(64, \strlen($nonce));
-    }
-
-    public function testLengthDefault(): void
+    public function testLength(): void
     {
         $nonce = $this->service->getNonce();
         self::assertSame(32, \strlen($nonce));

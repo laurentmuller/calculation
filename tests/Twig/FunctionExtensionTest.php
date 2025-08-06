@@ -21,17 +21,16 @@ use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Bridge\Twig\Extension\WebLinkExtension;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Twig\Extension\AttributeExtension;
-use Twig\RuntimeLoader\RuntimeLoaderInterface;
 use Vich\UploaderBundle\Storage\StorageInterface;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
-class FunctionExtensionTest extends IntegrationTestCase implements RuntimeLoaderInterface
+/**
+ * @extends RuntimeTestCase<FunctionExtension>
+ */
+class FunctionExtensionTest extends RuntimeTestCase
 {
-    private FunctionExtension $extension;
-
     #[\Override]
-    protected function setUp(): void
+    protected function createService(): object
     {
         $webDir = __DIR__ . '/../../public';
         $assetExtension = $this->createAssetExtension();
@@ -40,7 +39,7 @@ class FunctionExtensionTest extends IntegrationTestCase implements RuntimeLoader
         $uploaderHelper = $this->createUploaderHelper();
         $urlGeneratorService = $this->createUrlGeneratorService();
 
-        $this->extension = new FunctionExtension(
+        return new FunctionExtension(
             $webDir,
             $assetExtension,
             $webLinkExtension,
@@ -51,31 +50,9 @@ class FunctionExtensionTest extends IntegrationTestCase implements RuntimeLoader
     }
 
     #[\Override]
-    public function load(string $class): ?object
-    {
-        if (FunctionExtension::class === $class) {
-            return $this->extension;
-        }
-
-        return null;
-    }
-
-    #[\Override]
-    protected function getExtensions(): array
-    {
-        return [new AttributeExtension(FunctionExtension::class)];
-    }
-
-    #[\Override]
     protected function getFixturesDir(): string
     {
         return __DIR__ . '/Fixtures/FunctionExtension';
-    }
-
-    #[\Override]
-    protected function getRuntimeLoaders(): array
-    {
-        return [$this];
     }
 
     private function createAssetExtension(): AssetExtension

@@ -14,44 +14,21 @@ declare(strict_types=1);
 namespace App\Tests\Twig;
 
 use App\Service\CountryFlagService;
-use Twig\Extension\AttributeExtension;
-use Twig\RuntimeLoader\RuntimeLoaderInterface;
 
-class CountryFlagServiceTest extends IntegrationTestCase implements RuntimeLoaderInterface
+/**
+ * @extends RuntimeTestCase<CountryFlagService>
+ */
+class CountryFlagServiceTest extends RuntimeTestCase
 {
-    private CountryFlagService $service;
-
     #[\Override]
-    protected function setUp(): void
+    protected function createService(): object
     {
-        $this->service = new CountryFlagService();
-    }
-
-    #[\Override]
-    public function load(string $class): ?object
-    {
-        if (CountryFlagService::class === $class) {
-            return $this->service;
-        }
-
-        return null;
-    }
-
-    #[\Override]
-    protected function getExtensions(): array
-    {
-        return [new AttributeExtension(CountryFlagService::class)];
+        return new CountryFlagService();
     }
 
     #[\Override]
     protected function getFixturesDir(): string
     {
         return __DIR__ . '/Fixtures/CountryFlagService';
-    }
-
-    #[\Override]
-    protected function getRuntimeLoaders(): array
-    {
-        return [$this];
     }
 }

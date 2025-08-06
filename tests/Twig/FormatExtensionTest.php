@@ -18,28 +18,18 @@ use App\Twig\FormatExtension;
 use App\Utils\FormatUtils;
 use Twig\Error\Error;
 use Twig\Extension\AttributeExtension;
-use Twig\RuntimeLoader\RuntimeLoaderInterface;
 
-class FormatExtensionTest extends IntegrationTestCase implements RuntimeLoaderInterface
+/**
+ * @extends RuntimeTestCase<FormatExtension>
+ */
+class FormatExtensionTest extends RuntimeTestCase
 {
     use TranslatorMockTrait;
 
-    private FormatExtension $extension;
-
     #[\Override]
-    protected function setUp(): void
+    protected function createService(): object
     {
-        $this->extension = new FormatExtension($this->createMockTranslator());
-    }
-
-    #[\Override]
-    public function load(string $class): ?object
-    {
-        if (FormatExtension::class === $class) {
-            return $this->extension;
-        }
-
-        return null;
+        return new FormatExtension($this->createMockTranslator());
     }
 
     /**
@@ -62,21 +52,14 @@ class FormatExtensionTest extends IntegrationTestCase implements RuntimeLoaderIn
     #[\Override]
     protected function getExtensions(): array
     {
-        return [
-            new AttributeExtension(FormatExtension::class),
+        return \array_merge(parent::getExtensions(), [
             new AttributeExtension(FormatUtils::class),
-        ];
+        ]);
     }
 
     #[\Override]
     protected function getFixturesDir(): string
     {
         return __DIR__ . '/Fixtures/FormatExtension';
-    }
-
-    #[\Override]
-    protected function getRuntimeLoaders(): array
-    {
-        return [$this];
     }
 }

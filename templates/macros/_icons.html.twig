@@ -75,21 +75,9 @@
 </li>
 {%- endmacro %}
 
-{% macro dropdownEllipsis(id = null, title = 'common.actions', class = 'btn btn-sm border-0 pt-0') -%}
-{% if not ('btn-outline' in class) %}
-    {% set class = (class ~ ' btn-outline-secondary')|trim %}
-{% endif %}
-<button type="button" class="{{ class }}"{% if id %} id="{{ id }}"{% endif %} data-bs-toggle="dropdown" aria-expanded="false" title="{{ title|trans }}">
+{% macro dropdownEllipsis(id = null) -%}
+<button type="button" class="btn btn-sm btn-outline-secondary border-0 px-1"{% if id %} id="{{ id }}"{% endif %} data-bs-toggle="dropdown" aria-expanded="false" title="{{ 'common.actions'|trans }}">
     {{- _self.icon('ellipsis-v') -}}
-</button>
-{%- endmacro %}
-
-{% macro dropdownBars(id, title = 'common.actions', class = 'btn btn-sm border-0 py-0') -%}
-{% if not ('btn-' in class) %}
-    {% set class = (class ~ ' btn-secondary')|trim %}
-{% endif %}
-<button type="button" class="{{ class }}" id="{{ id }}" data-bs-toggle="dropdown" aria-expanded="false" title="{{ title|trans }}">
-    {{- _self.icon('bars') -}}
 </button>
 {%- endmacro %}
 

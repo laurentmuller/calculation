@@ -79,9 +79,9 @@ class WebpCommand
         $success = 0;
         $oldSize = 0;
         $newSize = 0;
+
         $this->start();
         $this->writeVerbose($io, \sprintf('Process images in "%s"', $source));
-
         foreach ($finder as $file) {
             $path = $file->getRealPath();
             $name = $file->getFilename();
@@ -194,7 +194,7 @@ class WebpCommand
     }
 
     /**
-     * @return array{0: bool, 1: int}
+     * @return array{0: bool, 1: non-negative-int}
      */
     private function saveImage(\GdImage $image, ?string $path = null): array
     {

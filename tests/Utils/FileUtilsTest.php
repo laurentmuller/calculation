@@ -53,38 +53,53 @@ class FileUtilsTest extends TestCase
     }
 
     /**
-     * @phpstan-return \Generator<int, array{string|\SplFileInfo|int, string}>
+     * @phpstan-return \Generator<int, array{string|\SplFileInfo|non-negative-int, string}>
+     *
+     * @psalm-suppress MoreSpecificReturnType
      */
     public static function getFormatSize(): \Generator
     {
         $kb = 1024;
         $mb = $kb * $kb;
         $gb = $mb * $kb;
-        $empty = 'Empty';
+        $empty = '0 B';
+
+        $emptyFile = self::getEmptyFile();
+        $fakeFile = __DIR__ . '/fake.txt';
 
         $linesFile = self::getLinesFile();
         $lineSize = (int) \filesize($linesFile);
+        $lineText = \sprintf('%d B', $lineSize);
 
-        $thisSize = \round((int) \filesize(__FILE__) / $kb);
-        $thisText = \sprintf('%d KB', $thisSize);
-        yield [$linesFile, \sprintf('%d B', $lineSize)];
-        yield [$lineSize, \sprintf('%d B', $lineSize)];
-        yield ["D:\zzz_aaa", $empty];
-        yield [self::getEmptyFile(), $empty];
+        $thisSize = \floor((int) \filesize(__FILE__) / $kb);
+        $thisText = \sprintf('%d KiB', $thisSize);
+
         yield [0, $empty];
+        yield [$fakeFile, $empty];
+        yield [$emptyFile, $empty];
+
+        yield [$lineSize, $lineText];
+        yield [$linesFile, $lineText];
+
         yield [1, '1 B'];
+        yield [100, '100 B'];
+        yield [1000, '1000 B'];
+
+        yield [$kb, '1 KiB'];
         yield [$kb - 1, '1023 B'];
-        yield [$kb, '1 KB'];
-        yield [$kb * 2, '2 KB'];
-        yield [$mb - 1, '1024 KB'];
-        yield [$mb, '1.0 MB'];
-        yield [$mb * 2, '2.0 MB'];
-        yield [$gb - 1, '1024.0 MB'];
-        yield [$gb, '1.0 GB'];
-        yield [$gb * 2, '2.0 GB'];
-        yield [$gb * $kb, '1.0 TB'];
+        yield [$kb * 2, '2 KiB'];
+
+        yield [$mb, '1.0 MiB'];
+        yield [$mb - 1, '1023 KiB'];
+        yield [$mb * 2, '2.0 MiB'];
+
+        yield [$gb, '1.0 GiB'];
+        yield [$gb - 1, '1024.0 MiB'];
+        yield [$gb * 2, '2.0 GiB'];
+
+        yield [$gb * $kb, '1024.0 GiB'];
+
         yield [__FILE__, $thisText];
-        yield [new \SplFileInfo("D:\zzz_aaa"), $empty];
     }
 
     /**
@@ -208,6 +223,9 @@ class FileUtilsTest extends TestCase
         }
     }
 
+    /**
+     * @phpstan-param string|\SplFileInfo|non-negative-int $path
+     */
     #[DataProvider('getFormatSize')]
     public function testFormatSize(string|\SplFileInfo|int $path, string $expected): void
     {

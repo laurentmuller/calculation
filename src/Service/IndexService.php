@@ -20,12 +20,10 @@ use App\Entity\GlobalMargin;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
-use App\Interfaces\DisableListenerInterface;
 use App\Interfaces\EntityInterface;
 use App\Model\CalculationsMonth;
 use App\Model\CalculationsState;
 use App\Traits\CacheKeyTrait;
-use App\Traits\DisableListenerTrait;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -40,10 +38,9 @@ use Symfony\Contracts\Cache\NamespacedPoolInterface;
  * Service to cache computed values for the home page (index page).
  */
 #[AsDoctrineListener(Events::onFlush)]
-class IndexService implements DisableListenerInterface
+class IndexService
 {
     use CacheKeyTrait;
-    use DisableListenerTrait;
 
     private CacheItemPoolInterface&CacheInterface&NamespacedPoolInterface $cache;
 
@@ -123,13 +120,9 @@ class IndexService implements DisableListenerInterface
 
     public function onFlush(OnFlushEventArgs $args): void
     {
-        if (!$this->isEnabled()) {
-            return;
+        if ($this->isScheduledEntities($args)) {
+            $this->clear();
         }
-        if (!$this->isScheduledEntities($args)) {
-            return;
-        }
-        $this->clear();
     }
 
     /**

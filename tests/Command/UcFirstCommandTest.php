@@ -34,69 +34,64 @@ class UcFirstCommandTest extends CommandTestCase
 
     public function testAskFieldName(): void
     {
-        $expected = "Select a field name for the 'Calculation' entity:";
         $input = [
             '--class' => Calculation::class,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString($output, "Select a field name for the 'Calculation' entity:");
     }
 
     public function testExecute(): void
     {
         $this->getCalculation(customer: 'customer');
-
-        $expected = [
-            'Updated 1 values of 1 entities successfully.',
-            'Duration',
-        ];
         $input = [
             '--class' => Calculation::class,
             '--field' => 'customer',
         ];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString(
+            $output,
+            'Updated 1 values of 1 entities successfully.',
+            'Duration'
+        );
     }
 
     public function testExecuteDryRun(): void
     {
         $this->getCalculation(customer: 'customer');
-
-        $expected = [
-            'Updated 1 values of 1 entities successfully.',
-            'No change saved to database.',
-            'Duration:',
-        ];
         $input = [
             '--class' => Calculation::class,
             '--field' => 'customer',
             '--dry-run' => true,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString(
+            $output,
+            'Updated 1 values of 1 entities successfully.',
+            'No change saved to database.',
+            'Duration:'
+        );
     }
 
     public function testExecuteEmpty(): void
     {
-        $expected = 'No entity to update.';
         $input = [
             '--class' => Calculation::class,
             '--field' => 'customer',
         ];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString($output, 'No entity to update.');
     }
 
     public function testExecuteEmptyDryRun(): void
     {
-        $expected = 'No entity to update.';
         $input = [
             '--class' => Calculation::class,
             '--field' => 'customer',
             '--dry-run' => true,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString($output, 'No entity to update.');
     }
 
     public function testExecuteMissingClass(): void
@@ -109,7 +104,6 @@ class UcFirstCommandTest extends CommandTestCase
 
     public function testInvalidClassName(): void
     {
-        $expected = "Unable to find the 'fake' entity.";
         $input = [
             '--class' => 'fake',
             '--field' => 'fake',
@@ -119,19 +113,21 @@ class UcFirstCommandTest extends CommandTestCase
             'interactive' => false,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input, $options, Command::INVALID);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString($output, "Unable to find the 'fake' entity.");
     }
 
     public function testInvalidFieldName(): void
     {
-        $expected = "Unable to find the field 'fake' for the entity 'App\Entity\Calculation'.";
         $input = [
             '--class' => Calculation::class,
             '--field' => 'fake',
             '--dry-run' => true,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input, [], Command::INVALID);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString(
+            $output,
+            "Unable to find the field 'fake' for the entity 'App\Entity\Calculation'."
+        );
     }
 
     public function testNotInteractive(): void

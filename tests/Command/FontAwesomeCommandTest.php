@@ -28,7 +28,11 @@ class FontAwesomeCommandTest extends CommandTestCase
             input: $input,
             statusCode: Command::FAILURE
         );
-        self::assertOutputContainsString('Unable to decode value.', $output);
+        self::assertOutputContainsString(
+            $output,
+            'Unable to get content of the JSON source file:',
+            'fontawesome_invalid.json'
+        );
     }
 
     public function testRawEmpty(): void
@@ -42,7 +46,11 @@ class FontAwesomeCommandTest extends CommandTestCase
                 name: self::COMMAND_NAME,
                 input: $input,
             );
-            self::assertOutputContainsString('Generate images successfully: 2 files from 1 sources.', $output);
+            self::assertOutputContainsString(
+                $output,
+                'Generate images successfully: 2 files from 1 sources.',
+                'fontawesome_raw_empty.json'
+            );
         } finally {
             FileUtils::remove(__DIR__ . '/temp');
         }
@@ -60,7 +68,11 @@ class FontAwesomeCommandTest extends CommandTestCase
                 name: self::COMMAND_NAME,
                 input: $input,
             );
-            self::assertOutputContainsString('Simulate command successfully: 2 files from 1 sources.', $output);
+            self::assertOutputContainsString(
+                $output,
+                'Simulate command successfully: 2 files from 1 sources.',
+                'fontawesome_valid.json'
+            );
         } finally {
             FileUtils::remove(__DIR__ . '/temp');
         }
@@ -72,8 +84,13 @@ class FontAwesomeCommandTest extends CommandTestCase
         $output = $this->execute(
             name: self::COMMAND_NAME,
             input: $input,
+            statusCode: Command::FAILURE
         );
-        self::assertOutputContainsString('No image found:', $output);
+        self::assertOutputContainsString(
+            $output,
+            'No image found:',
+            'fontawesome_empty.json'
+        );
     }
 
     public function testSourceInvalid(): void
@@ -82,9 +99,13 @@ class FontAwesomeCommandTest extends CommandTestCase
         $output = $this->execute(
             name: self::COMMAND_NAME,
             input: $input,
-            statusCode: Command::INVALID
+            statusCode: Command::FAILURE
         );
-        self::assertOutputContainsString('Unable to find JSON source file:', $output);
+        self::assertOutputContainsString(
+            $output,
+            'Unable to find JSON source file:',
+            'fake'
+        );
     }
 
     public function testSuccess(): void
@@ -98,7 +119,11 @@ class FontAwesomeCommandTest extends CommandTestCase
                 name: self::COMMAND_NAME,
                 input: $input,
             );
-            self::assertOutputContainsString('Generate images successfully: 2 files from 1 sources.', $output);
+            self::assertOutputContainsString(
+                $output,
+                'Generate images successfully: 2 files from 1 sources.',
+                'fontawesome_valid.json'
+            );
         } finally {
             FileUtils::remove(__DIR__ . '/temp');
         }

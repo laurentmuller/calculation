@@ -43,34 +43,30 @@ class FontAwesomeCommand
         ?string $source = null,
         #[Argument(description: 'The target directory, relative to the project directory, where to copy SVG files.', )]
         ?string $target = null,
-        #[Option(description: 'Run the command without making changes (simulate files generation).', name: 'dry-run', shortcut: 'd')]
+        #[Option(description: 'Run the command without making changes (simulate copying SVG files).', name: 'dry-run', shortcut: 'd')]
         bool $dryRun = false
     ): int {
         $source = FileUtils::buildPath($this->projectDir, $source ?? self::DEFAULT_SOURCE);
         $relativeSource = $this->getRelativePath($source);
         if (!FileUtils::isFile($source)) {
-            $io->error(\sprintf('Unable to find JSON source file: "%s".', $relativeSource));
-
-            return Command::INVALID;
+            return $this->error($io, 'Unable to find JSON source file: "%s".', $relativeSource);
         }
 
-        $content = $this->decodeJson($io, $source);
-        if (!\is_array($content)) {
-            return Command::FAILURE;
+        try {
+            /** @phpstan-var array<array-key, array> $content */
+            $content = FileUtils::decodeJson($source);
+        } catch (\InvalidArgumentException) {
+            return $this->error($io, 'Unable to get content of the JSON source file: "%s".', $relativeSource);
         }
 
         $count = \count($content);
         if (0 === $count) {
-            $io->warning(\sprintf('No image found: "%s".', $relativeSource));
-
-            return Command::SUCCESS;
+            return $this->error($io, 'No image found: "%s".', $relativeSource);
         }
 
         $tempDir = FileUtils::tempDir();
         if (!\is_string($tempDir)) {
-            $io->error('Unable to create the temporary directory.');
-
-            return Command::FAILURE;
+            return $this->error($io, 'Unable to create the temporary directory.');
         }
 
         try {
@@ -82,86 +78,54 @@ class FontAwesomeCommand
                 $styles = $item['styles'];
                 foreach ($styles as $style) {
                     $svgFileName = $this->getSvgFileName($style, $key);
-                    $svgFullPath = $this->getSvgFullPath($svgFileName);
-                    if (!FileUtils::isFile($svgFullPath)) {
-                        $io->error(\sprintf('Unable to find SVG file: "%s".', $svgFileName));
-
-                        return Command::FAILURE;
-                    }
-
+                    $svgFilePath = $this->getSvgFilePath($svgFileName);
                     $svgTargetFile = FileUtils::buildPath($tempDir, $svgFileName);
-                    if (!FileUtils::copy($svgFullPath, $svgTargetFile)) {
-                        $io->error(\sprintf('Unable to copy file: "%s".', $svgFileName));
-
-                        return Command::FAILURE;
+                    if (!FileUtils::copy($svgFilePath, $svgTargetFile)) {
+                        return $this->error($io, 'Unable to copy file: "%s".', $svgFileName);
                     }
-
                     ++$files;
                 }
             }
 
             if ($dryRun) {
-                $io->success(
-                    \sprintf(
-                        'Simulate command successfully: %d files from %d sources. %s.',
-                        $files,
-                        $count,
-                        $this->stop()
-                    )
+                return $this->success(
+                    $io,
+                    'Simulate command successfully: %d files from %d sources. %s.',
+                    $files,
+                    $count,
+                    $this->stop()
                 );
-
-                return Command::SUCCESS;
             }
 
             $target = FileUtils::buildPath($this->projectDir, $target ?? self::DEFAULT_TARGET);
             $relativeTarget = $this->getRelativePath($target);
-
             $io->writeln(\sprintf('Copy files to "%s"...', $relativeTarget));
-            if (!FileUtils::mirror($tempDir, $target, delete: true)) {
-                $io->error(\sprintf('Unable to copy %d files to the directory: "%s".', $count, $relativeTarget));
-
-                return Command::FAILURE;
+            if (!FileUtils::mirror(origin: $tempDir, target: $target, delete: true)) {
+                return $this->error($io, 'Unable to copy %d files to the directory: "%s".', $count, $relativeTarget);
             }
 
-            $io->success(
-                \sprintf(
-                    'Generate images successfully: %d files from %d sources. %s.',
-                    $files,
-                    $count,
-                    $this->stop()
-                )
+            return $this->success(
+                $io,
+                'Generate images successfully: %d files from %d sources. %s.',
+                $files,
+                $count,
+                $this->stop()
             );
-
-            return Command::SUCCESS;
         } finally {
             FileUtils::remove($tempDir);
         }
     }
 
-    /**
-     * @return array<array-key, array>|null
-     */
-    private function decodeJson(SymfonyStyle $io, string $file): ?array
+    private function error(SymfonyStyle $io, string $message, string|int ...$parameters): int
     {
-        try {
-            /** @phpstan-var array<array-key, array> */
-            return FileUtils::decodeJson($file);
-        } catch (\InvalidArgumentException $e) {
-            $io->error($e->getMessage());
+        $io->error(\sprintf($message, ...$parameters));
 
-            return null;
-        }
+        return Command::FAILURE;
     }
 
     private function getRelativePath(string $path): string
     {
-        $name = '';
-        if (FileUtils::isFile($path)) {
-            $name = \basename($path);
-            $path = \dirname($path);
-        }
-
-        return FileUtils::makePathRelative($path, $this->projectDir) . $name;
+        return FileUtils::makePathRelative($path, $this->projectDir);
     }
 
     private function getSvgFileName(string $style, string|int $name): string
@@ -169,8 +133,15 @@ class FontAwesomeCommand
         return \sprintf('%s/%s%s', $style, $name, FontAwesomeImageService::SVG_EXTENSION);
     }
 
-    private function getSvgFullPath(string $name): string
+    private function getSvgFilePath(string $svgFileName): string
     {
-        return FileUtils::buildPath($this->projectDir, self::SVG_SOURCE, $name);
+        return FileUtils::buildPath($this->projectDir, self::SVG_SOURCE, $svgFileName);
+    }
+
+    private function success(SymfonyStyle $io, string $message, string|int ...$parameters): int
+    {
+        $io->success(\sprintf($message, ...$parameters));
+
+        return Command::SUCCESS;
     }
 }

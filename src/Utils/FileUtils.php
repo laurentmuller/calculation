@@ -14,24 +14,17 @@ declare(strict_types=1);
 namespace App\Utils;
 
 use App\Enums\ImageExtension;
+use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Utility class for files.
  */
 final class FileUtils
 {
-    private const SIZES = [
-        '%.0f B',
-        '%.0f KB',
-        '%.1f MB',
-        '%.1f GB',
-        '%.1f TB',
-        '%.1f PB',
-    ];
-
     private static ?Filesystem $filesystem = null;
 
     // prevent instance creation
@@ -167,17 +160,14 @@ final class FileUtils
 
     /**
      * Formats the size of the given path.
+     *
+     * @phpstan-param string|\SplFileInfo|non-negative-int $path
      */
     public static function formatSize(string|\SplFileInfo|int $path): string
     {
         $size = \is_int($path) ? $path : self::size($path);
-        if (0 === $size) {
-            return 'Empty';
-        }
 
-        $index = (int) \floor(\log($size) / \log(1024));
-
-        return \sprintf(self::SIZES[$index], $size / 1024 ** $index);
+        return Helper::formatMemory($size);
     }
 
     /**
@@ -371,9 +361,9 @@ final class FileUtils
     }
 
     /**
-     * Gets the size, in bytes, of the given path.
+     * Gets the size, in bytes, of the given file.
      *
-     * @param string|\SplFileInfo $file the file or directory path
+     * @phpstan-return non-negative-int
      */
     public static function size(string|\SplFileInfo $file): int
     {
@@ -381,21 +371,21 @@ final class FileUtils
         if (!self::exists($file)) {
             return 0;
         }
+
         if (self::isFile($file)) {
+            /** @phpstan-var non-negative-int */
             return (int) \filesize($file);
         }
 
         $size = 0;
-        $flags = \FilesystemIterator::SKIP_DOTS;
-        $innerIterator = new \RecursiveDirectoryIterator($file, $flags);
-        $outerIterator = new \RecursiveIteratorIterator($innerIterator);
-        /** @var \SplFileInfo $child */
-        foreach ($outerIterator as $child) {
+        $finder = (new Finder())->in($file)->files();
+        foreach ($finder as $child) {
             if ($child->isReadable()) {
-                $size += $child->getSize();
+                $size += (int) $child->getSize();
             }
         }
 
+        /** @phpstan-var non-negative-int */
         return $size;
     }
 

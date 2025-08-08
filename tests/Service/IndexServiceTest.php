@@ -89,16 +89,6 @@ class IndexServiceTest extends KernelServiceTestCase
         self::expectNotToPerformAssertions();
     }
 
-    public function testOnFlushDisabled(): void
-    {
-        $this->service->setEnabled(false);
-        self::assertFalse($this->service->isEnabled());
-        $group = $this->createGroup();
-        $this->deleteEntity($group);
-        $this->service->setEnabled(true);
-        self::assertTrue($this->service->isEnabled());
-    }
-
     public function testOnFlushNoChange(): void
     {
         $group = $this->createGroup();

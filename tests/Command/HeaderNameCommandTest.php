@@ -36,91 +36,86 @@ class HeaderNameCommandTest extends CommandTestCase
 
     public function testDepth(): void
     {
-        $expected = [
-            self::DATA_PATH,
-            'Updated: 2',
-            'Skipped: 2',
-            'The update was simulated without changing the content of the files.',
-        ];
         $input = [
             '--dry-run' => true,
             '--depth' => 0,
             'path' => self::DATA_PATH,
         ];
-
         $output = $this->execute(self::COMMAND_NAME, $input);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString(
+            $output,
+            self::DATA_PATH,
+            'Updated: 2',
+            'Skipped: 2',
+            'The update was simulated without changing the content of the files.'
+        );
     }
 
     public function testDryRun(): void
     {
-        $expected = [
-            self::DATA_PATH,
-            'Updated: 2',
-            'Skipped: 2',
-            'The update was simulated without changing the content of the files.',
-        ];
         $input = [
             '--dry-run' => true,
             'path' => self::DATA_PATH,
         ];
-
         $output = $this->execute(self::COMMAND_NAME, $input);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString(
+            $output,
+            self::DATA_PATH,
+            'Updated: 2',
+            'Skipped: 2',
+            'The update was simulated without changing the content of the files.'
+        );
     }
 
     public function testInvalidPattern(): void
     {
-        $expected = [
+        $input = [
+            '--patterns' => ['css_invalid', 'js_invalid'],
+            'path' => self::DATA_PATH,
+        ];
+        $output = $this->execute(self::COMMAND_NAME, $input, [], Command::INVALID);
+        self::assertOutputContainsString(
+            $output,
             'Invalid patterns:',
             'Allowed values:',
             '"css"',
             '"js"',
             '"twig"',
             '"css_invalid"',
-            '"js_invalid"',
-        ];
-        $input = [
-            '--patterns' => ['css_invalid', 'js_invalid'],
-            'path' => self::DATA_PATH,
-        ];
-
-        $output = $this->execute(self::COMMAND_NAME, $input, [], Command::INVALID);
-        self::assertOutputContainsString($expected, $output);
+            '"js_invalid"'
+        );
     }
 
     public function testNoResult(): void
     {
-        $expected = [
-            self::DATA_PATH,
-            'No file found in directory',
-        ];
         $input = [
             '--patterns' => ['js'],
             '--dry-run' => true,
             'path' => self::DATA_PATH,
         ];
-
         $output = $this->execute(self::COMMAND_NAME, $input);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString(
+            $output,
+            self::DATA_PATH,
+            'No file found in directory'
+        );
     }
 
     public function testSetContent(): void
     {
-        $expected = [
-            self::DATA_PATH,
-            'Updated: 2',
-            'Skipped: 2',
-            'tests/files/css/no_header.css',
-            'tests/files/css/old_header.css',
-        ];
         $input = [
             '--patterns' => ['css'],
             'path' => self::DATA_PATH,
         ];
-
         $output = $this->execute(self::COMMAND_NAME, $input);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString(
+            $output,
+            self::DATA_PATH,
+            'Updated: 2',
+            'Skipped: 2',
+            'tests/files/css/no_header.css',
+            'tests/files/css/old_header.css'
+        );
     }
 
     private function replaceCssContents(): void

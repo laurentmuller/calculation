@@ -34,46 +34,42 @@ class AnonymousCommandTest extends CommandTestCase
     public function testExecute(): void
     {
         $this->getCalculation();
-
-        $expected = [
+        $output = $this->execute(self::COMMAND_NAME);
+        self::assertOutputContainsString(
+            $output,
             'Start update calculations',
             'End update calculations.',
             'Save change to database.',
             'Updated',
             'successfully',
             'Duration',
-        ];
-        $output = $this->execute(self::COMMAND_NAME);
-        self::assertOutputContainsString($expected, $output);
+        );
     }
 
     public function testExecuteDryRun(): void
     {
         $this->getCalculation();
-
-        $expected = [
+        $input = ['--dry-run' => true];
+        $output = $this->execute(self::COMMAND_NAME, $input);
+        self::assertOutputContainsString(
+            $output,
             'Start update calculations',
             'End update calculations.',
             'Simulate updated',
-            'Duration',
-        ];
-        $input = ['--dry-run' => true];
-        $output = $this->execute(self::COMMAND_NAME, $input);
-        self::assertOutputContainsString($expected, $output);
+            'Duration'
+        );
     }
 
     public function testExecuteDryRunEmpty(): void
     {
-        $expected = 'No calculation to update.';
         $input = ['--dry-run' => true];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString($output, 'No calculation to update.');
     }
 
     public function testExecuteEmpty(): void
     {
-        $expected = 'No calculation to update.';
         $output = $this->execute(self::COMMAND_NAME);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString($output, 'No calculation to update.');
     }
 }

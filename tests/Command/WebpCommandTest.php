@@ -22,28 +22,27 @@ class WebpCommandTest extends CommandTestCase
 
     public function testExecuteDryRunNoImage(): void
     {
-        $expected = 'No image found in directory';
         $input = [
             'source' => '/',
             '--dry-run' => true,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString($output, 'No image found in directory');
     }
 
     public function testExecuteDrySuccess(): void
     {
-        $expected = [
-            'Conversion: 1',
-            'Error: 0',
-            'Skip: 0',
-        ];
         $input = [
             'source' => '/tests/files/public/images/users',
             '--dry-run' => true,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString(
+            $output,
+            'Conversion: 1',
+            'Error: 0',
+            'Skip: 0'
+        );
     }
 
     public function testExecuteImageInvalid(): void
@@ -55,53 +54,49 @@ class WebpCommandTest extends CommandTestCase
         $target = FileUtils::buildPath($path, $name);
         self::assertTrue(FileUtils::copy($source, $target));
         $source = FileUtils::makePathRelative($path, __DIR__ . '/../..');
-
-        $expected = [
-            'Conversion: 0',
-            'Error: 0',
-            'Skip: 0',
-        ];
         $input = ['source' => $source];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString(
+            $output,
+            'Conversion: 0',
+            'Error: 0',
+            'Skip: 0'
+        );
     }
 
     public function testExecuteInvalidLevel(): void
     {
-        $expected = 'The level argument must be greater than or equal to 0';
         $input = [
             'source' => '/',
             '--level' => -1,
             '--dry-run' => true,
         ];
         $output = $this->execute(self::COMMAND_NAME, $input, statusCode: Command::INVALID);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString($output, 'The level argument must be greater than or equal to 0');
     }
 
     public function testExecuteInvalidPath(): void
     {
-        $expected = 'Unable to find the source directory';
         $input = ['source' => '/fake/fake/fake'];
         $output = $this->execute(self::COMMAND_NAME, $input, statusCode: Command::INVALID);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString($output, 'Unable to find the source directory');
     }
 
     public function testExecuteIsNotDirectory(): void
     {
-        $expected = [
-            'The source',
-            'is not a directory',
-        ];
         $input = ['source' => '/tests/bootstrap.php'];
         $output = $this->execute(self::COMMAND_NAME, $input, statusCode: Command::INVALID);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString(
+            $output,
+            'The source',
+            'is not a directory'
+        );
     }
 
     public function testExecuteMissingSource(): void
     {
-        $expected = 'The "--source" argument requires a non-empty value.';
         $output = $this->execute(self::COMMAND_NAME, statusCode: Command::INVALID);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString($output, 'The "--source" argument requires a non-empty value.');
     }
 
     public function testExecuteSuccess(): void
@@ -113,14 +108,13 @@ class WebpCommandTest extends CommandTestCase
         $target = FileUtils::buildPath($path, $name);
         self::assertTrue(FileUtils::copy($source, $target));
         $source = FileUtils::makePathRelative($path, __DIR__ . '/../..');
-
-        $expected = [
-            'Conversion: 1',
-            'Error: 0',
-            'Skip: 0',
-        ];
         $input = ['source' => $source];
         $output = $this->execute(self::COMMAND_NAME, $input);
-        self::assertOutputContainsString($expected, $output);
+        self::assertOutputContainsString(
+            $output,
+            'Conversion: 1',
+            'Error: 0',
+            'Skip: 0'
+        );
     }
 }

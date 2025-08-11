@@ -17,7 +17,7 @@ Object.defineProperty(String.prototype, 'clean', {
 /*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'indexOfIgnoreCase', {
     /**
-     * Returns the index of the first occurrence in this string, ignoring case, of the specified value.
+     * Returns the index of the first occurrence in this string, ignoring case considerations of the specified value.
      * @param {string} value the value to search for.
      * @param {int} fromIndex the index at which to start the search (optional); the default value is 0.
      * @return {int} the index of the first occurrence, or -1 if not found.
@@ -33,7 +33,7 @@ Object.defineProperty(String.prototype, 'indexOfIgnoreCase', {
 /*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'equalsIgnoreCase', {
     /**
-     * Check if the given value is equal to this string, ignoring case.
+     * Check if the given value is equal to this string, ignoring case considerations.
      * @param {string} value the value to compare with.
      * @return {boolean} true if equal.
      */

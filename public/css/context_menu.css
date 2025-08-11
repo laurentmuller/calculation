@@ -1,46 +1,44 @@
 .context-menu-list {
-    background-color: inherit !important;
-    -webkit-box-shadow: inherit !important;
-    -moz-box-shadow: inherit !important;
-    -o-box-shadow: inherit !important;
-    box-shadow: inherit !important;
-    border: var(--bs-border-width) solid var(--bs-border-color-translucent) !important;
+    display: none;
+    position: absolute;
     padding: 0.5rem 0 !important;
+    background-color: inherit;
+    z-index: var(--bs-dropdown-zindex);
+    min-width: var(--bs-dropdown-min-width);
+    border-radius: var(--bs-border-radius);
+    border: var(--bs-border-width) solid var(--bs-border-color-translucent) !important;
 }
 
 .context-menu-item {
-    color: var(--bs-dropdown-link-color) !important;
-    background-color: transparent !important;
+    width: 100%;
+    display: block;
     padding: 0.25rem 1rem !important;
+    color: var(--bs-dropdown-link-color);
 }
 
 .context-menu-item.context-menu-disabled {
-    color: var(--bs-tertiary-color);
+    cursor: default;
     pointer-events: none;
     background-color: transparent;
+    color: var(--bs-tertiary-color);
 }
 
 .context-menu-item.context-menu-hover {
+    cursor: pointer;
     color: var(--bs-body-color) !important;
     background-color: var(--bs-tertiary-bg) !important;
 }
 
 .context-menu-separator {
-    margin-top: 0.15em !important;
+    height: 0;
+    opacity: 1;
+    overflow: hidden;
+    margin-top: 0.15rem;
+    margin-bottom: 0.4rem;
+    padding: var(--bs-dropdown-item-padding-y) var(--bs-dropdown-item-padding-x);
     border-bottom: 1px solid var(--bs-border-color-translucent) !important;
 }
 
 .context-menu-item .dropdown-header {
-    color: #6c757d !important;
+    color: var(--bs-dropdown-header-color);
 }
-
-/* stylelint-disable selector-class-pattern */
-.context-menu-icon.context-menu-icon--fa5 i,
-.context-menu-icon.context-menu-icon--fa5 svg {
-    position: inherit !important;
-    color: inherit !important;
-    left: inherit !important;
-    top: inherit !important;
-    margin-right: 0.3rem;
-}
-/* stylelint-enable selector-class-pattern */

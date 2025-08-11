@@ -56,8 +56,7 @@
         {
             "from": [
                 "node_modules/jquery-contextmenu/dist/jquery.ui.position.js",
-                "node_modules/jquery-contextmenu/dist/jquery.contextMenu.{js,css}",
-                "node_modules/jquery-contextmenu/dist/font/*"
+                "node_modules/jquery-contextmenu/dist/jquery.contextMenu.js"
             ],
             "to": "public/build/jquery-contextmenu/"
         },

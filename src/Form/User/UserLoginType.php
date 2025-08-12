@@ -43,7 +43,7 @@ class UserLoginType extends AbstractUserCaptchaType
     }
 
     #[\Override]
-    protected function getLabelPrefix(): ?string
+    protected function getLabelPrefix(): string
     {
         return 'security.login.';
     }

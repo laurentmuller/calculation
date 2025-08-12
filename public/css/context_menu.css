@@ -1,11 +1,11 @@
 .context-menu-list {
     display: none;
+    list-style: none;
     position: absolute;
     padding: 0.5rem 0 !important;
     background-color: inherit;
     z-index: var(--bs-dropdown-zindex);
     min-width: var(--bs-dropdown-min-width);
-    border-radius: var(--bs-border-radius);
     border: var(--bs-border-width) solid var(--bs-border-color-translucent) !important;
 }
 

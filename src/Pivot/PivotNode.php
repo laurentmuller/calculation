@@ -469,7 +469,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     }
 
     #[\Override]
-    public function jsonSerialize(): ?array
+    public function jsonSerialize(): array
     {
         return \array_filter([
             'key' => $this->key,

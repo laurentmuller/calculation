@@ -4,7 +4,7 @@
     {%- set id = calculation.id -%}
     {%- set is_editable = calculation.stateEditable -%}
     {%- set params = route_params(app.request, id)|merge({caller: caller}) -%}
-    {% set class_name = 'row-item border text-border h-100 px-2 py-1' %}
+    {% set class_name = 'row-item cursor-default border text-border h-100 px-2 py-1' %}
     {% if id == selection %}
         {% set class_name = class_name ~ ' table-primary' %}
     {% endif %}
@@ -12,9 +12,10 @@
         {% set class_name = class_name ~ ' text-body-secondary' %}
     {% endif %}
     <div class="col mb-2 px-1">
+        {% set context = edit_page or state_page or show_page %}
         <div data-id="{{ id }}" class="{{ class_name }}" style="{{ stateCss(calculation.stateColor) }}">
-            <div class="d-flex-no-wrap-center context-menu-skip">
-                <div class="text-truncate fw-bold flex-fill">
+            <div class="d-flex-no-wrap-center{% if context %} context-menu-skip{% endif %}">
+                <div class="text-truncate fw-bold flex-fill{% if context %} context-menu-skip{% endif %}">
                     {% if edit_page or state_page %}
                         {% set edit_route = is_editable ? edit_page : state_page %}
                         {% set edit_title = is_editable ? 'calculation.edit.title_short' : 'calculation.list.state_title' %}
@@ -35,28 +36,28 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="text-truncate user-select-none">
+            <div class="text-truncate">
                 <span title="{{ 'calculation.fields.date'|trans }}">{{- calculation.date|locale_date }}</span>
                 <span>&nbsp;/&nbsp;</span>
                 <span title="{{ 'calculation.fields.state'|trans }}">{{ calculation.stateCode -}}</span>
             </div>
-            <div class="text-truncate user-select-none" title="{{ 'calculation.fields.customer'|trans }}">
+            <div class="text-truncate" title="{{ 'calculation.fields.customer'|trans }}">
                 {{- calculation.customer -}}
             </div>
-            <div class="text-truncate user-select-none" title="{{ 'calculation.fields.description'|trans }}">
+            <div class="text-truncate" title="{{ 'calculation.fields.description'|trans }}">
                 {{- calculation.description -}}
             </div>
-            <hr class="mt-2 mb-1">
+            <hr class="my-1">
             <div class="d-flex-wrap-center">
                 {%- if calculation.overallTotal and calculation.overallMargin < min_margin -%}
                     {%- set overall_title = 'calculation.list.margin_below'|trans({'%margin%': calculation.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
-                    <div class="user-select-none text-danger has-tooltip" title="{{ overall_title }}">
+                    <div class="text-danger has-tooltip" title="{{ overall_title }}">
                         {{ calculation.overallMargin|percent }}
                     </div>
                 {% else %}
-                    <div class="user-select-none" title="{{ 'calculation.fields.globalMargin'|trans }}">{{ calculation.overallMargin|percent }}</div>
+                    <div title="{{ 'calculation.fields.globalMargin'|trans }}">{{ calculation.overallMargin|percent }}</div>
                 {% endif %}
-                <div class="user-select-none ms-auto" title="{{ 'calculation.fields.overallTotal'|trans }}">{{ calculation.overallTotal|amount }}</div>
+                <div class="ms-auto" title="{{ 'calculation.fields.overallTotal'|trans }}">{{ calculation.overallTotal|amount }}</div>
             </div>
         </div>
     </div>

@@ -223,6 +223,9 @@ const MenuBuilder = class { /* exported MenuBuilder */
                         items: items,
                         zIndex: 1000,
                         autoHide: true,
+                        animation: {
+                            duration: 0
+                        },
                         callback: function (key, options, e) {
                             const item = options.items[key];
                             if (item && item.link && item.link.length) {

@@ -14,18 +14,18 @@
                 {% set class_name = class_name ~ ' text-body-secondary' %}
             {% endif %}
             <tr data-id="{{ id }}" class="{{ class_name }}">
-                <td class="text-id text-border user-select-none" style="{{ stateCss(calculation.stateColor) }}">{{- calculation.id|identifier -}}</td>
-                <td class="text-date user-select-none">{{ calculation.date|locale_date }}</td>
-                <td class="text-state user-select-none">{{ calculation.stateCode }}</td>
-                <td class="text-customer text-cell user-select-none">{{ calculation.customer }}</td>
-                <td class="text-description text-cell user-select-none">{{ calculation.description }}</td>
+                <td class="text-id text-border" style="{{ stateCss(calculation.stateColor) }}">{{- calculation.id|identifier -}}</td>
+                <td class="text-date">{{ calculation.date|locale_date }}</td>
+                <td class="text-state">{{ calculation.stateCode }}</td>
+                <td class="text-customer text-cell">{{ calculation.customer }}</td>
+                <td class="text-description text-cell">{{ calculation.description }}</td>
                 {%- if calculation.overallTotal and calculation.overallMargin < min_margin -%}
                     {%- set overall_title = 'calculation.list.margin_below'|trans({'%margin%': calculation.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
-                    <td class="text-percent user-select-none text-danger has-tooltip" title="{{ overall_title }}">{{ calculation.overallMargin|percent }}</td>
+                    <td class="text-percent text-danger has-tooltip" title="{{ overall_title }}">{{ calculation.overallMargin|percent }}</td>
                 {%- else -%}
-                    <td class="text-percent user-select-none">{{ calculation.overallMargin|percent }}</td>
+                    <td class="text-percent">{{ calculation.overallMargin|percent }}</td>
                 {%- endif -%}
-                <td class="text-currency user-select-none">{{ calculation.overallTotal|amount }}</td>
+                <td class="text-currency">{{ calculation.overallTotal|amount }}</td>
                 {%- if is_drop_down -%}
                     <td class="actions context-menu-skip rowlink-skip d-print-none">
                         {{ include('index/_calculation_menu.html.twig') }}

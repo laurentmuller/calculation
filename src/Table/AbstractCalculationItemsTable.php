@@ -29,7 +29,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
     }
 
     #[\Override]
-    public function getEntityClassName(): ?string
+    public function getEntityClassName(): string
     {
         return $this->repository->getClassName();
     }

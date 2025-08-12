@@ -81,7 +81,7 @@ class LogTable extends AbstractTable implements \Countable
     }
 
     #[\Override]
-    public function getEntityClassName(): ?string
+    public function getEntityClassName(): string
     {
         return Log::class;
     }

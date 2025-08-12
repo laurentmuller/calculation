@@ -258,12 +258,10 @@ class PivotNodeTest extends TestCase
     {
         $node = $this->createNode();
         $actual = $node->jsonSerialize();
-        self::assertIsArray($actual);
         self::assertCount(1, $actual);
 
         $node->setTitle('title');
         $actual = $node->jsonSerialize();
-        self::assertIsArray($actual);
         self::assertCount(2, $actual);
     }
 

@@ -51,6 +51,9 @@ abstract class AbstractEntityType extends AbstractHelperType
         $resolver->setDefault('data_class', $this->className);
     }
 
+    /**
+     * @phpstan-ignore return.unusedType
+     */
     #[\Override]
     protected function getLabelPrefix(): ?string
     {

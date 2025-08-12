@@ -50,7 +50,7 @@ abstract class AbstractEntityTable extends AbstractTable
     }
 
     #[\Override]
-    public function getEntityClassName(): ?string
+    public function getEntityClassName(): string
     {
         return $this->repository->getClassName();
     }

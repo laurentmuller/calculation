@@ -41,7 +41,7 @@ abstract class AbstractRightsType extends AbstractHelperType
     }
 
     #[\Override]
-    protected function getLabelPrefix(): ?string
+    protected function getLabelPrefix(): string
     {
         return 'user.fields.';
     }

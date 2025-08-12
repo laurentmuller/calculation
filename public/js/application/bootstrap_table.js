@@ -372,7 +372,19 @@ function initializeKeyHandler($table) {
  */
 function initializeContextMenus($table) {
     'use strict';
-    const selector = '.table-primary td:not(.rowlink-skip), .table-primary div:not(.rowlink-skip)';
+    const tableClass = [
+        '.bootstrap-table',
+        'table',
+        '.table-primary',
+        'td:not(:has(.rowlink-skip))'
+    ].join(' ');
+    const cardClass = [
+        '.bootstrap-table',
+        '.fixed-table-custom-view',
+        '.table-primary',
+        'div:not(:has(.rowlink-skip, .item-link))'
+    ].join(' ');
+    const selector = [tableClass, cardClass].join(',');
     const hideMenus = function () {
         $.hideDropDownMenus();
         return true;
@@ -385,6 +397,9 @@ function initializeContextMenus($table) {
     }).on('contextmenu:hide', function () {
         $table.enableKeys();
     });
+
+    window.console.log(selector);
+    window.console.log($(selector));
 }
 
 /**

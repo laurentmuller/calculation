@@ -303,7 +303,7 @@
                 selectRow($(this));
             }).on('dblclick', '.row-item', function (e) {
                 editRow($(this), e);
-            }).on('focus', '.item-link,button[data-bs-toggle="dropdown"]', function () {
+            }).on('focus', '.item-link, button[data-bs-toggle="dropdown"]', function () {
                 selectRow($(this));
             }).initContextMenu('.row-item td:not(.context-menu-skip),.row-item div:not(.context-menu-skip)', function () {
                 selectRow($(this));

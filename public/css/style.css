@@ -40,7 +40,7 @@ body:not(.sidebar-show) .page-content {
 .navbar-vertical::after {
     top: 0;
     right: 0;
-    content: "";
+    content: '';
     height: 100%;
     position: absolute;
     border-right: var(--bs-border-width) solid var(--bs-border-color);
@@ -88,7 +88,7 @@ footer span {
 
 /* required */
 .required:not(.form-check-label)::after {
-    content: "*";
+    content: '*';
     color: var(--bs-danger);
 }
 
@@ -175,7 +175,7 @@ span.state-color {
     label.required::after,
     legend.required::after,
     th.required::after {
-        content: "";
+        content: '';
     }
 
     a:hover, a:visited, a:link, a:active {
@@ -255,28 +255,28 @@ body.status-bar .btn-back-to-top {
 
 /* calculation (duplicate items, empty values and below margin) */
 .duplicate-cell::after {
-    content: " (D) ";
+    content: ' (D) ';
     color: var(--bs-danger);
     font-size: x-small;
     vertical-align: super;
 }
 
 .duplicate-footer::before {
-    content: " (D) ";
+    content: ' (D) ';
     color: var(--bs-danger);
     font-size: smaller;
     vertical-align: super;
 }
 
 .empty-cell::before {
-    content: " (V) ";
+    content: ' (V) ';
     color: var(--bs-danger);
     font-size: x-small;
     vertical-align: super;
 }
 
 .empty-footer::before {
-    content: " (V) ";
+    content: ' (V) ';
     color: var(--bs-danger);
     font-size: smaller;
     vertical-align: super;
@@ -298,6 +298,10 @@ textarea.fixed {
 }
 
 /* cursors */
+.cursor-default {
+    cursor: default !important;
+}
+
 .cursor-wait {
     cursor: wait !important;
 }
@@ -322,6 +326,10 @@ textarea.fixed {
     cursor: cell;
 }
 
+.cursor-context-menu {
+    cursor: context-menu !important;
+}
+
 /* Remove spin buttons for number type */
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
@@ -335,7 +343,7 @@ input[type=number] {
 
 /* Custom file input */
 .custom-file-input:lang(fr) ~ .custom-file-label::after {
-    content: "Parcourir";
+    content: 'Parcourir';
 }
 
 .custom-file-input {
@@ -424,7 +432,7 @@ input[type=number] {
 }
 
 .horizontal-line::after {
-    content: "";
+    content: '';
     flex: 1 1;
     display: inline-block;
     border-bottom: 1px solid var(--bs-border-color) !important;
@@ -433,11 +441,11 @@ input[type=number] {
 
 /* Toggle icon before the element */
 .drop-down-icon-left::before {
-    font-family: "Font Awesome 7 Free", sans-serif;
+    font-family: 'Font Awesome 7 Free', sans-serif;
     font-weight: 900;
     float: left;
     margin-right: 6px;
-    content: "\f105";
+    content: '\f105';
     transition: transform var(--sidebar-delay) ease-in-out;
 }
 
@@ -456,16 +464,16 @@ input[type=number] {
     flex: 1 1 auto !important;
 }
 
-.drop-down-icon-right.text-end  {
+.drop-down-icon-right.text-end {
     flex: none !important;
 }
 
 .drop-down-icon-right::after {
-    font-family: "Font Awesome 7 Free", sans-serif;
+    font-family: 'Font Awesome 7 Free', sans-serif;
     font-weight: 900;
     float: right;
     margin-left: 6px;
-    content: "\f104";
+    content: '\f104';
     transition: transform var(--sidebar-delay) ease-in-out;
 }
 
@@ -506,7 +514,7 @@ tr.strikeout-danger td::before {
     left: 0;
     top: 50%;
     width: 100%;
-    content: " ";
+    content: ' ';
     position: absolute;
     border-bottom: 1px solid var(--bs-danger);
 }
@@ -591,7 +599,7 @@ table.table-fixed-header th {
 }
 
 .flag-emoji {
-    font-family: NotoColorEmojiLimited, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-family: NotoColorEmojiLimited, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 /* remove last line */
@@ -665,7 +673,7 @@ a.disabled {
 }
 
 .dropdown-item-checked-right::after {
-    font-family: "Font Awesome 7 Free", sans-serif;
+    font-family: 'Font Awesome 7 Free', sans-serif;
     font-weight: 900;
     content: '\f00c';
     margin-left: 0.5rem;

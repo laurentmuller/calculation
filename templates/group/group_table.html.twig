@@ -61,16 +61,16 @@
 {% block custom_view_body -%}
 {{ _self.property_value('%description%') }}
 {{ _self.property_line() }}
-<div class="row">
-    <div class="col-4 user-select-none">{{ 'group.fields.margins'|trans }}</div>
-    <div class="col-2 user-select-none">%margins%</div>
-    <div class="col-4 user-select-none">{{ 'group.fields.categories'|trans }}</div>
-    <div class="col-2 user-select-none">%categories%</div>
+<div class="row g-0">
+    <div class="col-4">{{ 'group.fields.margins'|trans }}</div>
+    <div class="col-2">%margins%</div>
+    <div class="col-4">{{ 'group.fields.categories'|trans }}</div>
+    <div class="col-2">%categories%</div>
 </div>
-<div class="row">
-    <div class="col-4 user-select-none">{{ 'category.fields.products'|trans }}</div>
-    <div class="col-2 user-select-none">%products%</div>
-    <div class="col-4 user-select-none">{{ 'category.fields.tasks'|trans }}</div>
-    <div class="col-2 user-select-none">%tasks%</div>
+<div class="row g-0">
+    <div class="col-4">{{ 'category.fields.products'|trans }}</div>
+    <div class="col-2">%products%</div>
+    <div class="col-4">{{ 'category.fields.tasks'|trans }}</div>
+    <div class="col-2">%tasks%</div>
 </div>
 {%- endblock %}

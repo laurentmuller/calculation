@@ -21,6 +21,7 @@ use App\Utils\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use fpdf\Color\PdfRgbColor;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -154,6 +155,14 @@ class CalculationState extends AbstractEntity implements ComparableInterface, Ti
     public function getDisplay(): string
     {
         return (string) $this->getCode();
+    }
+
+    /**
+     * Gets this color as a PdfRgbColor object.
+     */
+    public function getRgbColor(): ?PdfRgbColor
+    {
+        return PdfRgbColor::create($this->color);
     }
 
     /**

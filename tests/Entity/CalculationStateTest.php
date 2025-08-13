@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Entity;
 
 use App\Entity\CalculationState;
+use fpdf\Color\PdfRgbColor;
 
 class CalculationStateTest extends EntityValidatorTestCase
 {
@@ -111,6 +112,21 @@ class CalculationStateTest extends EntityValidatorTestCase
         } finally {
             $this->deleteEntity($first);
         }
+    }
+
+    public function testRgbColor(): void
+    {
+        $state = new CalculationState();
+        $expected = PdfRgbColor::black();
+        $actual = $state->getRgbColor();
+        self::assertInstanceOf(PdfRgbColor::class, $actual);
+        self::assertTrue($expected->equals($actual));
+
+        $state->setColor('#010203');
+        $expected = new PdfRgbColor(1, 2, 3);
+        $actual = $state->getRgbColor();
+        self::assertInstanceOf(PdfRgbColor::class, $actual);
+        self::assertTrue($expected->equals($actual));
     }
 
     public function testValid(): void

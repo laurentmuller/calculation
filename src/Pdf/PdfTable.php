@@ -17,6 +17,7 @@ use App\Pdf\Events\PdfCellBackgroundEvent;
 use App\Pdf\Events\PdfCellBorderEvent;
 use App\Pdf\Events\PdfCellTextEvent;
 use App\Pdf\Events\PdfPdfDrawHeadersEvent;
+use App\Pdf\Interfaces\PdfCellOutputInterface;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
@@ -765,20 +766,20 @@ class PdfTable
         $parent->setPosition($position);
         $margin = $parent->getCellMargin();
         $textBounds = clone $bounds;
-        $line_height = PdfDocument::LINE_HEIGHT;
+        $lineHeight = PdfDocument::LINE_HEIGHT;
 
-        if ($cell instanceof AbstractPdfImageCell) {
+        if ($cell instanceof PdfCellOutputInterface) {
             $cell->output($parent, clone $textBounds, $alignment);
         } else {
             if (!$style->getFont()->isDefaultSize()) {
-                $line_height = $parent->getFontSize() + 2.0 * $margin;
+                $lineHeight = $parent->getFontSize() + 2.0 * $margin;
             }
             $indent = $style->getIndent();
             if ($indent > 0) {
                 $parent->setX($position->x + $indent);
                 $textBounds->indent($indent);
             }
-            $this->drawCellText($parent, $index, $textBounds, $text, $alignment, $line_height);
+            $this->drawCellText($parent, $index, $textBounds, $text, $alignment, $lineHeight);
         }
 
         if ($cell->hasLink()) {
@@ -787,7 +788,7 @@ class PdfTable
             $linkBounds = (clone $textBounds)->inflate(-$margin);
             $linesCount = \max(1, $parent->getLinesCount($text, $linkBounds->width));
             $linkBounds->width = \min($linkBounds->width, $parent->getStringWidth($text));
-            $linkBounds->height = \min($linkBounds->height, (float) $linesCount * $line_height - 2.0 * $margin);
+            $linkBounds->height = \min($linkBounds->height, (float) $linesCount * $lineHeight - 2.0 * $margin);
             $parent->link($linkBounds->x, $linkBounds->y, $linkBounds->width, $linkBounds->height, $link);
         }
 

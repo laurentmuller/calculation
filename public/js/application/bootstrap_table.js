@@ -397,9 +397,6 @@ function initializeContextMenus($table) {
     }).on('contextmenu:hide', function () {
         $table.enableKeys();
     });
-
-    window.console.log(selector);
-    window.console.log($(selector));
 }
 
 /**

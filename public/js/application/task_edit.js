@@ -390,7 +390,4 @@ $(function () {
     // initialize validation
     addMarginsMethods();
     $form.initValidator();
-
-    // $('#task_name').on('keydown', (e) =>  window.console.log(e.key));
-
 });

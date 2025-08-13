@@ -72,7 +72,6 @@
              */
             updateLink: function (row, params) {
                 const $link = $(this);
-                // console.log($link.attr('href'));
                 const regex = /\bid=\d+/i;
                 const values = $link.attr('href').split('?');
                 values[0] = values[0].replace(/\/\d+/, '/' + row.action);

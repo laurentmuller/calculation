@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Pdf\Interfaces\PdfCellOutputInterface;
 use App\Utils\StringUtils;
 use fpdf\Enums\PdfMove;
 use fpdf\Enums\PdfTextAlignment;
@@ -22,7 +23,7 @@ use fpdf\PdfRectangle;
 /**
  * An abstract specialized cell containing an image and an optional text.
  */
-abstract class AbstractPdfImageCell extends PdfCell
+abstract class AbstractPdfImageCell extends PdfCell implements PdfCellOutputInterface
 {
     /**
      * Override the default behavior by adding this image width.

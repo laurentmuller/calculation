@@ -14,38 +14,17 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\CalculationState;
-use App\Pdf\Colors\PdfFillColor;
-use App\Pdf\Events\PdfCellBackgroundEvent;
-use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
-use App\Pdf\PdfStyle;
+use App\Pdf\PdfBackgroundCell;
 use App\Report\Table\ReportTable;
-use fpdf\Enums\PdfRectangleStyle;
+use fpdf\Color\PdfRgbColor;
 
 /**
  * Report for the list of calculation states.
  *
  * @extends AbstractArrayReport<CalculationState>
  */
-class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCellBackgroundInterface
+class CalculationStatesReport extends AbstractArrayReport
 {
-    private ?CalculationState $currentState = null;
-
-    #[\Override]
-    public function drawCellBackground(PdfCellBackgroundEvent $event): bool
-    {
-        if (3 !== $event->index || !$this->currentState instanceof CalculationState) {
-            return false;
-        }
-
-        $parent = $event->getDocument();
-        $margin = $parent->getCellMargin();
-        $bounds = $event->bounds->inflateXY(-3.0 * $margin, -$margin);
-        $bounds->height = self::LINE_HEIGHT - 2.0 * $margin;
-        $parent->rectangle($bounds, PdfRectangleStyle::BOTH);
-
-        return true;
-    }
-
     #[\Override]
     protected function doRender(array $entities): bool
     {
@@ -56,15 +35,13 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
 
         $total = 0;
         foreach ($entities as $entity) {
-            $this->currentState = $entity;
             $table->startRow()
                 ->add($entity->getCode())
                 ->add($entity->getDescription())
-                ->add($this->formatEditable($entity->isEditable()))
-                ->add(style: $this->getColorStyle($entity))
+                ->add($this->formatEditable($entity))
+                ->addCell($this->getColorCell($entity))
                 ->addCellInt($entity->countCalculations())
                 ->endRow();
-            $this->currentState = null;
             $total += $entity->countCalculations();
         }
 
@@ -79,7 +56,6 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
     private function createTable(): ReportTable
     {
         return ReportTable::fromReport($this)
-            ->setBackgroundListener($this)
             ->addColumns(
                 $this->leftColumn('calculationstate.fields.code', 20),
                 $this->leftColumn('calculationstate.fields.description', 80),
@@ -89,25 +65,13 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
             )->outputHeaders();
     }
 
-    private function formatEditable(bool $editable): string
+    private function formatEditable(CalculationState $entity): string
     {
-        return $this->trans($editable ? 'common.value_true' : 'common.value_false');
+        return $this->trans($entity->isEditable() ? 'common.value_true' : 'common.value_false');
     }
 
-    /**
-     * Gets the cell style for the given state color.
-     *
-     * @param CalculationState $state the state to get style for
-     *
-     * @return PdfStyle|null the style, if applicable, null otherwise
-     */
-    private function getColorStyle(CalculationState $state): ?PdfStyle
+    private function getColorCell(CalculationState $state): PdfBackgroundCell
     {
-        $color = PdfFillColor::create($state->getColor());
-        if ($color instanceof PdfFillColor) {
-            return PdfStyle::getCellStyle()->setFillColor($color);
-        }
-
-        return null;
+        return new PdfBackgroundCell($state->getRgbColor() ?? PdfRgbColor::white());
     }
 }

@@ -44,6 +44,23 @@
     </ul>
 </div>
 {%- endblock %}
+{% block _default_state_widget -%}
+    <div class="input-group">
+        <span class="input-group-text"><i class="fa-regular fa-flag"></i></span>
+        {{ block('choice_widget') }}
+    </div>
+{%- endblock %}
+{% block _default_category_widget -%}
+    <div class="input-group">
+        <span class="input-group-text"><i class="fa-regular fa-folder"></i></span>
+        {{ block('choice_widget') }}
+    </div>
+{%- endblock %}
+{% block _default_product_widget -%}
+    <div class="input-group"><span class="input-group-text"><i class="fa-regular fa-file-alt"></i></span>
+        {{ block('choice_widget') }}
+    </div>
+{%- endblock %}
 {# parameters #}
 {%- set cancel_path = path('homepage') -%}
 {%- set form_attr = form_attr|default({})|merge({'data-random': url('ajax_random_text'), 'data-failure': 'parameters.failure'|trans}) -%}
@@ -58,8 +75,7 @@
     </button>
     <ul class="dropdown-menu">
         <li>
-            <button type="button"
-                    class="dropdown-item btn-item-visible">{{- 'parameters.default_visible'|trans -}}</button>
+            <button type="button" class="dropdown-item btn-item-visible">{{- 'parameters.default_visible'|trans -}}</button>
         </li>
         <li>
             <button type="button" class="dropdown-item btn-item-all">{{- 'parameters.default_all'|trans -}}</button>

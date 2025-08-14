@@ -37,17 +37,15 @@
 {%- endmacro %}
 
 {% macro dropdownItem(href, text, icon = null, parameters = []) -%}
-<li>{{ _self.link(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, parameters) }}</li>
+<li>
+    {{- _self.link(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, parameters) -}}
+</li>
 {%- endmacro %}
 
 {% macro dropdownItemExternal(href, text, icon = null, parameters = []) -%}
-{{- _self.linkExternal(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, parameters) -}}
-{%- endmacro %}
-
-{% macro dropdownItemWithId(href, text, icon = null, id, disabled, parameters = []) -%}
-<a href="{{ href }}" class="dropdown-item rowlink-skip{% if disabled %} disabled {% endif %}" id="{{ id }}">
-    {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, parameters) -}}
-</a>
+<li>
+    {{- _self.linkExternal(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, parameters) -}}
+</li>
 {%- endmacro %}
 
 {% macro dropdownItemWithClass(href, text, icon = null, class, hidden, parameters = []) -%}

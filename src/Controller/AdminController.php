@@ -113,8 +113,7 @@ class AdminController extends AbstractController
     public function parameters(Request $request): Response
     {
         $application = $this->getApplicationService();
-        $data = $application->getProperties();
-        $form = $this->createForm(ApplicationParametersType::class, $data);
+        $form = $this->createForm(ApplicationParametersType::class, $application->getProperties());
         if ($this->handleRequestForm($request, $form)) {
             /** @phpstan-var array<string, mixed> $data */
             $data = $form->getData();

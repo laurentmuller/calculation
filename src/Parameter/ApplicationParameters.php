@@ -193,11 +193,6 @@ class ApplicationParameters extends AbstractParameters
      */
     private function findEntity(string $class, ?int $id): ?EntityInterface
     {
-        if (null === $id) {
-            return null;
-        }
-
-        return $this->manager->getRepository($class)
-            ->find($id);
+        return null === $id ? null : $this->manager->getRepository($class)->find($id);
     }
 }

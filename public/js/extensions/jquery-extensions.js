@@ -251,50 +251,6 @@
             },
 
             /**
-             * Create a timer interval within the element.
-             * Callback function parameters can be given after the callback and timeout values.
-             *
-             * @param {function} callback - The callback function that will be executed.
-             * @param {int} timeout - The intervals (in milliseconds) on how often to execute the callback.
-             * @return {jQuery} The jQuery element for chaining.
-             */
-            createInterval: function (callback, timeout) {
-                const $element = $(this);
-                const args = Array.prototype.slice.call(arguments, 2);
-                const id = setInterval(callback, timeout, ...args);
-                return $element.data('interval', id);
-            },
-
-            /**
-             * Clear the existing timer interval (if any) of the element.
-             *
-             * @return {jQuery} The element for chaining.
-             */
-            removeInterval: function () {
-                return $(this).each(function () {
-                    const $element = $(this);
-                    const interval = $element.data('interval');
-                    if (interval) {
-                        clearInterval(interval);
-                        $element.removeData('interval');
-                    }
-                });
-            },
-
-            /**
-             * Clear the existing timer interval (if any) and create a new timer interval within the element.
-             * Callback function parameters can be given after the callback and timeout values.
-             *
-             * @param {function} _callback - The callback function that will be executed.
-             * @param {int} _timeout - The intervals (in milliseconds) on how often to execute the callback.
-             * @return {jQuery} The element for chaining.
-             */
-            updateInterval: function (_callback, _timeout) {
-                const args = Array.prototype.slice.call(arguments, 2);
-                $(this).removeInterval().createInterval(_callback, _timeout, ...args);
-            },
-
-            /**
              * Sets or gets the value as integer.
              *
              * @param {number|string} [value] - if present the value to set; otherwise return the value.
@@ -362,47 +318,6 @@
             },
 
             /**
-             * Returns the first file (if any) from an input type file.
-             *
-             * @return {file|boolean} The first selected file, if any; false if none or if not valid.
-             */
-            getInputFile: function () {
-                // check files
-                const files = $(this).getInputFiles();
-                if (!files.length) {
-                    return false;
-                }
-
-                // check the type (copied from accept method)
-                let type = $(this).attr('accept') || false;
-                if (type) {
-                    type = type.replace(/[\-\[\]\/\{\}\(\)\+\?\.\\\^\$\|]/g, '\\$&')
-                        .replace(/,/g, '|')
-                        .replace(/\/\*/g, '/.*');
-                    const pattern = `.?(${type})$`;
-                    const regex = new RegExp(pattern, 'i');
-                    for (let i = 0, len = files.length; i < len; i++) {
-                        if (!files[i].type.match(regex)) {
-                            return false;
-                        }
-                    }
-                }
-
-                // OK
-                return files[0];
-            },
-
-            /**
-             * Returns the files (if any) from an input type file.
-             *
-             * @return {Array.<File>} The selected files, if any; an empty array otherwise.
-             */
-            getInputFiles: function () {
-                const files = this[0].files;
-                return files && files.length ? files : [];
-            },
-
-            /**
              * Select content and set focus.
              *
              * @return {jQuery} The element for chaining.
@@ -441,34 +356,6 @@
             findExists: function (selector) {
                 const $elements = $(this).find(selector);
                 return $elements.length ? $elements : null;
-            },
-
-            /**
-             * Remove all 'data' attributes.
-             *
-             * @return {jQuery} The element for chaining.
-             */
-            removeDataAttributes: function () {
-                return $(this).each(function () {
-                    const $element = $(this);
-                    $.each($element.data(), function (key) {
-                        $element.removeAttr('data-' + key.dasherize());
-                    });
-                });
-            },
-
-            /**
-             * Remove duplicate classes.
-             *
-             * @return {jQuery} The element for chaining.
-             */
-            removeDuplicateClasses: function () {
-                return this.each(function (_index, element) {
-                    const $this = $(element);
-                    const source = $this.attr('class');
-                    const target = source.split(' ').unique();
-                    $this.attr('class', target.join(' '));
-                });
             },
 
             /**

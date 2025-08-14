@@ -13,10 +13,10 @@
          */
         getContextMenuItems: function () {
             const $elements = $(this).parents('.row-item:first').find('.dropdown-menu').children();
-            const builder = new MenuBuilder({
-                classSelector: 'btn-default'
-            });
-            return builder.fill($elements).getItems();
+            return new MenuBuilder({
+                classSelector: 'btn-default',
+                elements: $elements
+            }).getItems();
         }
     });
 

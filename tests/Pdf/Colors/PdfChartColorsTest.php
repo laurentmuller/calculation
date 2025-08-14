@@ -44,6 +44,13 @@ class PdfChartColorsTest extends TestCase
         yield [54, 162, 235]; // blue
     }
 
+    public function testCount(): void
+    {
+        $expected = 7;
+        $actual = self::$colors->count();
+        self::assertSame($expected, $actual);
+    }
+
     #[DataProvider('getColors')]
     public function testNext(int $red, int $green, int $blue): void
     {

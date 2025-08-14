@@ -1231,10 +1231,10 @@
          */
         getContextMenuItems: function () {
             const $elements = $(this).getParentRow().find('.dropdown-menu').children();
-            const builder = new MenuBuilder({
-                classSelector: 'btn-default'
-            });
-            return builder.fill($elements).getItems();
+            return new MenuBuilder({
+                classSelector: 'btn-default',
+                elements: $elements
+            }).getItems();
         },
     });
 

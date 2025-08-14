@@ -11,6 +11,9 @@ const MenuBuilder = class { /* exported MenuBuilder */
         this.index = 0;
         this.items = {};
         this.options = $.extend(true, {}, options);
+        if (this.options.elements) {
+            this.fill(this.options.elements);
+        }
     }
 
     /**
@@ -203,6 +206,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
          * Initialize the context menu.
          *
          * @param {string}  selector - the selector matching the elements to trigger on.
+         *
          * @param {function} [fnShow] - the function called when the context menu is shown.
          * @param {function} [fnHide] - the function called when the context menu is hidden.
          * @param {Object} [options] - the context menu options to override.

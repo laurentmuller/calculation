@@ -476,10 +476,10 @@ function showSortDialog($table, $button) {
             /** @type {jQuery|HTMLElement|*} */
             const $parent = $this.parents('.custom-item, tr');
             const $elements = $parent.find('.dropdown-menu').children();
-            const builder = new MenuBuilder({
-                classSelector: 'btn-default'
-            });
-            return builder.fill($elements).getItems();
+            return new MenuBuilder({
+                classSelector: 'btn-default',
+                elements: $elements
+            }).getItems();
         }
     });
 

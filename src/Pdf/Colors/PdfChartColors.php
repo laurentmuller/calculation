@@ -18,7 +18,7 @@ use fpdf\Color\PdfRgbColor;
 /**
  * A predefined set of chart colors.
  */
-class PdfChartColors
+class PdfChartColors implements \Countable
 {
     private const COLORS = [
         [54, 162, 235], // blue
@@ -43,15 +43,21 @@ class PdfChartColors
     private int $index = 0;
 
     /**
+     * Gets the number of predefined colors.
+     */
+    #[\Override]
+    public function count(): int
+    {
+        return \count(self::COLORS);
+    }
+
+    /**
      * Gets the next color.
      */
     public function next(): PdfRgbColor
     {
-        if (!isset($this->colors[$this->index])) {
-            $this->colors[$this->index] = new PdfRgbColor(...self::COLORS[$this->index]);
-        }
-        $color = $this->colors[$this->index];
-        $this->index = ($this->index + 1) % \count(self::COLORS);
+        $color = $this->colors[$this->index] ??= new PdfRgbColor(...self::COLORS[$this->index]);
+        $this->index = ++$this->index % $this->count();
 
         return $color;
     }

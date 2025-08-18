@@ -1,6 +1,5 @@
 {# vendor/symfony/twig-bridge/Resources/views/Form #}
 {% extends 'bootstrap_5_layout.html.twig' %}
-
 {# override password widget with an addon to show or hide the password within jQuery #}
 {% block password_widget -%}
     {% set is_strength = 'password-strength' in attr.class|default('') %}

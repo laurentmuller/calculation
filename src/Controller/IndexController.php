@@ -88,12 +88,15 @@ class IndexController extends AbstractController
         #[MapQueryParameter]
         ?bool $custom = null,
         #[MapQueryParameter]
-        ?bool $restrict = null
+        ?bool $restrict = null,
+        #[MapQueryParameter]
+        ?int $count = null
     ): Response {
         $userService = $this->getUserService();
         $view = $this->getTableView($request, $userService, $custom);
         $restrict ??= $this->getCookieBoolean($request, self::PARAM_RESTRICT);
-        $calculations = $this->getLastCalculations($userService, $indexService, $restrict);
+        $count = $this->getCount($userService, $count);
+        $calculations = $this->getLastCalculations($indexService, $count, $restrict);
 
         $parameters = [
             'min_margin' => $this->getMinMargin(),
@@ -101,6 +104,7 @@ class IndexController extends AbstractController
             'calculations_range' => AbstractParametersType::getCalculationRange(),
             self::PARAM_CUSTOM => TableView::CUSTOM === $view,
             self::PARAM_RESTRICT => $restrict,
+            'count' => $count,
         ];
 
         if ($userService->isPanelMonth()) {
@@ -120,23 +124,6 @@ class IndexController extends AbstractController
         return $response;
     }
 
-    /**
-     * Update the numbers of displayed calculations.
-     */
-    #[PostRoute(path: '/update/count', name: '_calculation')]
-    public function updateCalculation(Request $request): JsonResponse
-    {
-        $this->checkAjaxRequest($request);
-        $service = $this->getUserService();
-        $default = $service->getCalculations();
-        $count = $this->getRequestInt($request, 'count', $default);
-        if ($default !== $count) {
-            $service->setProperty(PropertyServiceInterface::P_CALCULATIONS, $count);
-        }
-
-        return $this->sendJsonMessage('index.panel_table_count_success');
-    }
-
     #[\Override]
     protected function getSessionKey(string $key): string
     {
@@ -154,9 +141,19 @@ class IndexController extends AbstractController
         }
     }
 
-    private function getLastCalculations(UserService $userService, IndexService $indexService, bool $restrict): array
+    private function getCount(UserService $userService, ?int $count): int
     {
-        $maxResults = $userService->getCalculations();
+        if (null === $count || !\in_array($count, AbstractParametersType::getCalculationRange(), true)) {
+            return $userService->getCalculations();
+        }
+
+        $userService->setProperty(PropertyServiceInterface::P_CALCULATIONS, $count);
+
+        return $count;
+    }
+
+    private function getLastCalculations(IndexService $indexService, int $maxResults, bool $restrict): array
+    {
         $user = $restrict ? $this->getUser() : null;
 
         return $indexService->getLastCalculations($maxResults, $user);

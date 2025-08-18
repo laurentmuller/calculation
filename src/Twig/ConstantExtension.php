@@ -65,6 +65,9 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
             'ICON_PDF' => 'file-pdf far',
             'ICON_EXCEL' => 'file-excel far',
             'ICON_WORD' => 'file-word far',
+            // view
+            'ICON_VIEW_TABLE' => 'table-list',
+            'ICON_VIEW_CUSTOM' => 'grip-horizontal',
         ];
     }
 

@@ -103,10 +103,10 @@
 <hr class="my-1">
 {%- endmacro %}
 {# output a drop-down view item #}
-{% macro button_view(text, icon, view, selection) %}
+{% macro button_view(icon, view, selection) %}
 <li>
     <button type="button" class="dropdown-item dropdown-menu-view{% if view == selection %} dropdown-item-checked-right{% endif %}" data-value="{{ view }}">
-        {{- icon(icon ~ ' fa-fw', text) -}}
+        {{- icon(icon ~ ' fa-fw', 'table_view.' ~ view) -}}
     </button>
 </li>
 {%- endmacro %}
@@ -219,8 +219,8 @@
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="button_other_actions">
                 {# display mode #}
                 {% block display_mode %}
-                    {{ _self.button_view('table_view.table', 'table', 'table', params.view) }}
-                    {{ _self.button_view('table_view.custom', 'grip-horizontal', 'custom', params.view) }}
+                    {{ _self.button_view(ICON_VIEW_TABLE, 'table', params.view) }}
+                    {{ _self.button_view(ICON_VIEW_CUSTOM, 'custom', params.view) }}
                 {%- endblock %}
                 {% if sortable %}
                     {{ _self.item_separator() }}

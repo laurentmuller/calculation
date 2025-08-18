@@ -1,19 +1,54 @@
-{% from 'macros/_icons.html.twig' import icon, link %}
+{# import #}
+{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, link %}
 {% from 'macros/_attributes.html.twig' import attributes %}
+{# macros #}
+{% macro button_view(icon, view, selection, value) %}
+<li>
+    <button type="button" class="dropdown-item dropdown-item-view{% if view == selection %} dropdown-item-checked-right{% endif %}" data-value="{{ value|json_encode }}">
+        {{- icon(icon ~ ' fa-fw', 'table_view.' ~ view) -}}
+    </button>
+</li>
+{%- endmacro %}
+{% macro button_counter(value, selection) %}
+<li>
+    <button class="dropdown-item dropdown-item-counter{% if value == selection %} dropdown-item-checked-right{% endif %}" data-value="{{ value }}" >
+        {{- 'counters.calculations'|trans({count: value}) -}}
+    </button>
+</li>
+{%- endmacro %}
+{# parameters #}
 {%- set header_attributes = header_attributes|merge({
     href: '#' ~ panel_key,
     title: panel_title|trans,
     'aria-expanded': panel_show|json_encode}) -%}
-<div class="card-header d-flex-wrap-center">
+<div id="card-header-calculation" class="card-header d-flex-wrap-center">
     <a{{ attributes(header_attributes) }}>
         {{- icon(ICON_CALCULATION ~ ' ms-1', 'index.panel_table_title') -}}
     </a>
-    {%- if add_page -%}
-        {%- set add_params = route_params(app.request)|merge({caller: caller}) -%}
-        {%- set add_path = path(add_page, add_params) -%}
-        <a href="{{ add_path }}" class="btn btn-link p-0 d-print-none" role="button">
-            <i class="fa-fw fa-solid fa-file-circle-plus d-md-none" title="{{ 'calculation.add.title'|trans }}"></i>
-            <span class="d-none d-md-block">{{- 'calculation.add.title'|trans -}}</span>
-        </a>
-    {%- endif -%}
+    <div class="btn-group btn-group-sm d-print-none" role="group">
+        {%- if add_page -%}
+            {%- set add_params = route_params(app.request)|merge({caller: caller}) -%}
+            {%- set add_path = path(add_page, add_params) -%}
+            <a href="{{ add_path }}" class="btn btn-outline-secondary" role="button" title="{{ 'calculation.add.title'|trans }}">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+        {%- endif -%}
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" title="{{- 'common.actions'|trans -}}" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            {{ _self.button_view(ICON_VIEW_TABLE, 'table', not custom, false) }}
+            {{ _self.button_view(ICON_VIEW_CUSTOM, 'custom', custom, true) }}
+            {{ dropdownSeparator() }}
+            <li>
+                <button type="button" class="dropdown-item dropdown-item-restrict{% if restrict %} dropdown-item-checked-right{% endif %}">
+                    {{- icon('user fa-fw far', 'index.panel_table_user') -}}
+                </button>
+            </li>
+            {{ dropdownSeparator() }}
+            {% for counter in calculations_range %}
+                {{ _self.button_counter(counter, count) }}
+            {% endfor %}
+        </ul>
+    </div>
 </div>

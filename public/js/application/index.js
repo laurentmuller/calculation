@@ -17,40 +17,37 @@
                 classSelector: 'btn-default',
                 elements: $elements
             }).getItems();
+        },
+
+        /**
+         * Returns if this has the right-checked class.
+         *
+         * @returns {bool}
+         */
+        isRightChecked: function () {
+            return $(this).hasClass('dropdown-item-checked-right');
         }
     });
 
     /**
-     * @param {jQuery} $input
-     * @return {boolean}
-     */
-    function isDefaultValue($input) {
-        const oldValue = $input.data('value');
-        const newValue = $input.isChecked();
-        return oldValue === newValue;
-    }
-
-    /**
-     * Handle the restriction and custom checkboxes.
+     * Handle the calculations view
      */
     function updateView() {
-        const $custom = $('#custom');
-        const $restrict = $('#restrict');
-        if (isDefaultValue($custom) && isDefaultValue($restrict)) {
-            return;
-        }
-
         const params = {
-            custom: $custom.isChecked(),
-            restrict: $restrict.isChecked(),
+            restrict: $('.dropdown-item-restrict').hasClass('dropdown-item-checked-right'),
+            custom: $('.dropdown-item-view.dropdown-item-checked-right').data('value'),
         };
+        const count = $('.dropdown-item-counter.dropdown-item-checked-right').data('value');
+        if (count) {
+            params.count = count;
+        }
         const id = $('.row-item.table-primary').data('id');
         if (id) {
             params.id = id;
         }
-
-        const root = $('.card-footer-content').data('url');
+        const root = $('#DISPLAY_CALCULATION').data('url');
         const url = root + '?' + $.param(params);
+        $('*').css('cursor', 'wait');
         window.location.assign(url);
     }
 
@@ -207,7 +204,7 @@
     /**
      * Hide a panel.
      *
-     * @param {JQuery} $source - the source event.
+     * @param {jQuery} $source - the source event.
      */
     function hidePanel($source) {
         const $card = $source.parents('.card');
@@ -218,30 +215,6 @@
                 $card.remove();
                 Toaster.info(message, title);
             });
-        });
-    }
-
-    /**
-     * Update the displayed calculations.
-     *
-     * @param {Event} e - the source event.
-     */
-    function updateCounter(e) {
-        const $this = $(e.currentTarget);
-        if ($this.hasClass('active')) {
-            return;
-        }
-
-        const count = $this.data('value');
-        const $parent = $this.parents('.dropdown');
-        const $card = $this.parents('.card');
-        const title = $card.find('.card-title').text();
-        $parent.find('.dropdown-toggle').text(count);
-
-        const url = $parent.data('path');
-        $.post(url, {'count': count}, function (message) {
-            window.location.reload();
-            Toaster.info(message, title);
         });
     }
 
@@ -334,14 +307,6 @@
             html: true
         });
 
-        // handle checkbox options
-        const $options = $('#restrict, #custom');
-        if ($options.length) {
-            $options.on('input', function () {
-                $(this).updateTimer(updateView, 450);
-            });
-        }
-
         // handle hide panels
         const $panels = $('.hide-panel');
         if ($panels.length) {
@@ -351,16 +316,32 @@
         }
 
         // update displayed calculations
-        const $counters = $('.dropdown-item-counter');
-        if ($counters.length) {
-            $counters.on('click', function (e) {
-                updateCounter(e);
-            });
-            const $parent = $counters.parents('.dropdown');
-            $parent.on('shown.bs.dropdown', function () {
-                $parent.find('.active').trigger('focus');
-            });
-        }
+        $('.dropdown-item-counter').on('click', function () {
+            const $this = $(this);
+            if ($this.isRightChecked()) {
+                return;
+            }
+            $('.dropdown-item-counter.dropdown-item-checked-right').removeClass('dropdown-item-checked-right');
+            $this.addClass('dropdown-item-checked-right');
+            updateView();
+        });
+
+        // update restrict calculations
+        $('.dropdown-item-restrict').on('click', function () {
+            $(this).toggleClass('dropdown-item-checked-right');
+            updateView();
+        });
+
+        // update calculations view
+        $('.dropdown-item-view').on('click', function () {
+            const $this = $(this);
+            if ($this.isRightChecked()) {
+                return;
+            }
+            $('.dropdown-item-view.dropdown-item-checked-right').removeClass('dropdown-item-checked-right');
+            $this.addClass('dropdown-item-checked-right');
+            updateView();
+        });
 
         // initialize collapse panels
         $('.card a.drop-down-icon-left[data-bs-toggle="collapse"]').each(function () {

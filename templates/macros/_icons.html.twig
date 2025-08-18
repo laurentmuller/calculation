@@ -128,18 +128,6 @@
 {{- _self.linkExternal(app_owner_url, 'footer.copyright', class, null, 'footer.copyright_title', parameters) -}}
 {%- endmacro %}
 
-{% macro dropdownItemCard(route_name, parameters = []) -%}
-{% if route_name %}{{ _self.dropdownItem(path(route_name, parameters), 'common.button_card', 'grip-horizontal') }}{% endif %}
-{%- endmacro %}
-
-{% macro dropdownItemTable(route_name, parameters = []) -%}
-{% if route_name %}{{ _self.dropdownItem(path(route_name, parameters), 'common.button_table', 'table') }}{% endif %}
-{%- endmacro %}
-
-{% macro linkTable(route_name, parameters = []) -%}
-{% if route_name %}{{ _self.link(path(route_name, parameters), '', 'btn btn-secondary', 'table', 'common.button_table') }}{% endif %}
-{%- endmacro %}
-
 {% macro modal_title(id, icon_title, text_title, data_target = false) %}
     <h5 class="modal-title"{% if id %} id="{{ id }}{% endif %}">{{ _self.icon(icon_title, text_title) }}</h5>
     {{- _self.modal_close_button(data_target: data_target) -}}

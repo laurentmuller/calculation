@@ -31,18 +31,17 @@
 {# content #}
 <div class="card card-collapse mb-2">
     {{ include('index/_calculation_header.html.twig') }}
-    <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}">
-        <div class="card-body {% if is_calculations %}p-2{% else %}g-0 p-1{% endif %}">
-            {% if is_calculations %}
+    <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}" data-url="{{ url('homepage') }}">
+        {% if is_calculations %}
+            <div class="card-body {% if is_calculations %}p-2{% else %}g-0 p-1{% endif %}">
                 {% if custom %}
                     {{- include('index/_calculation_card.html.twig') }}
                 {% else %}
                     {{- include('index/_calculation_table.html.twig') }}
                 {% endif %}
-            {%- else -%}
-                {{ macros.empty() }}
-            {%- endif -%}
-        </div>
-        {{ include('index/_calculation_footer.html.twig') }}
+            </div>
+        {%- else -%}
+            {{ macros.empty() }}
+        {%- endif -%}
     </div>
 </div>

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Utils;
 
 use App\Entity\Calculation;
+use App\Entity\User;
 use App\Tests\PrivateInstanceTrait;
 use App\Utils\StringUtils;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -44,6 +45,26 @@ class StringUtilsTest extends TestCase
         yield ['my home', 'My home'];
         yield ['my Home', 'My home'];
         yield ['my HOME', 'My home'];
+    }
+
+    /**
+     * @phpstan-return \Generator<int, array{mixed, string}>
+     */
+    public static function getDebugType(): \Generator
+    {
+        yield [null, 'null'];
+        yield ['', 'string'];
+        yield ['fake', 'fake'];
+        yield [1000, '1000'];
+        yield [1.25, '1.25'];
+        yield [new User(), User::class];
+        yield [User::class, User::class];
+        yield [new \stdClass(), 'stdClass'];
+        yield [[], 'array'];
+        yield [[1, 2], 'array'];
+        yield [true, 'true'];
+        yield [false, 'false'];
+        yield [new class() {}, 'class@anonymous'];
     }
 
     /**
@@ -233,6 +254,13 @@ class StringUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    #[DataProvider('getDebugType')]
+    public function testGetDebugType(mixed $value, string $expected): void
+    {
+        $actual = StringUtils::getDebugType($value);
+        self::assertSame($expected, $actual);
+    }
+
     public function testGetShortNameInvalid(): void
     {
         /**
@@ -319,6 +347,22 @@ class StringUtilsTest extends TestCase
     {
         $actual = StringUtils::slug('Wôrķšƥáçè ~~sèťtïñğš~~');
         self::assertSame('Workspace-settings', $actual);
+    }
+
+    public function testSplitLines(): void
+    {
+        $content = <<<text
+            First Line
+            Second Line
+
+            Third Line
+            text;
+
+        $lines = StringUtils::splitLines($content);
+        self::assertCount(4, $lines);
+
+        $lines = StringUtils::splitLines($content, true);
+        self::assertCount(3, $lines);
     }
 
     #[DataProvider('getStartWith')]

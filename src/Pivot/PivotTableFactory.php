@@ -17,6 +17,7 @@ use App\Pivot\Aggregator\AbstractAggregator;
 use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotField;
 use App\Traits\CheckSubClassTrait;
+use App\Utils\StringUtils;
 
 /**
  * Factory to create a pivot table.
@@ -304,9 +305,7 @@ class PivotTableFactory
         $result = [];
         foreach ($fields as $field) {
             if (!$field instanceof PivotField) {
-                $expected = PivotField::class;
-                $given = \get_debug_type($field);
-                throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given', $expected, $given));
+                throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given', PivotField::class, StringUtils::getDebugType($field)));
             }
             $result[] = $field;
         }

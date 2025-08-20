@@ -91,7 +91,7 @@ readonly class OpenWeatherCityUpdater
                 ]);
             }
 
-            $temp_name = FileUtils::tempFile('sql');
+            $temp_name = FileUtils::tempFile();
             if (null === $temp_name) {
                 return $this->falseResult('swisspost.error.temp_file');
             }

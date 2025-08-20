@@ -420,13 +420,13 @@ class FileUtilsTest extends TestCase
 
     public function testTempFile(): void
     {
-        $dir = FileUtils::tempFile(__DIR__);
+        $dir = FileUtils::tempFile(prefix: __DIR__);
         self::assertNotNull($dir);
     }
 
     public function testTempFileInvalid(): void
     {
-        $actual = FileUtils::tempFile(dir: 'https://example.com');
+        $actual = FileUtils::tempFile(dir: 'https://example.com', prefix: 'https://example.com');
         self::assertNull($actual);
     }
 

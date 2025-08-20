@@ -19,6 +19,7 @@ use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Service\ApplicationService;
 use App\Traits\MathTrait;
+use App\Utils\StringUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -116,7 +117,7 @@ class EntityVoter extends Voter
             return $this->addReason(
                 $vote,
                 'Subject "%s" is not a valid entity name.',
-                \is_scalar($subject) || $subject instanceof \Stringable ? (string) $subject : \get_debug_type($subject)
+                StringUtils::getDebugType($subject)
             );
         }
 

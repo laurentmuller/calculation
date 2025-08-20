@@ -15,6 +15,7 @@ namespace App\Constraint;
 
 use App\Enums\StrengthLevel;
 use App\Traits\StrengthLevelTranslatorTrait;
+use App\Utils\StringUtils;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -105,7 +106,7 @@ class StrengthValidator extends AbstractConstraintValidator
         try {
             return (string) $this->propertyAccessor->getValue($object, $path);
         } catch (NoSuchPropertyException $e) {
-            throw new ConstraintDefinitionException(message: \sprintf('Invalid property path "%s" for "%s".', $path, \get_debug_type($object)), previous: $e);
+            throw new ConstraintDefinitionException(\sprintf('Invalid property path "%s" for "%s".', $path, StringUtils::getDebugType($object)), $e->getCode(), $e);
         }
     }
 }

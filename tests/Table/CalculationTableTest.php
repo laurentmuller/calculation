@@ -163,7 +163,7 @@ class CalculationTableTest extends EntityTableTestCase
     }
 
     /**
-     * @phpstan-param  CalculationRepository $repository
+     * @phpstan-param CalculationRepository $repository
      *
      * @throws \ReflectionException
      */

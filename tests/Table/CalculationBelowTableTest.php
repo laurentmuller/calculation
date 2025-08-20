@@ -103,7 +103,7 @@ class CalculationBelowTableTest extends EntityTableTestCase
     }
 
     /**
-     * @phpstan-param  CalculationRepository $repository
+     * @phpstan-param CalculationRepository $repository
      */
     #[\Override]
     protected function createTable(AbstractRepository $repository): CalculationBelowTable

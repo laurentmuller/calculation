@@ -1,0 +1,5 @@
+{% if isMail %}
+    {{ form_row(form.toAddress) }}
+{% else %}
+    {{ form_row(form.fromAddress) }}
+{% endif %}

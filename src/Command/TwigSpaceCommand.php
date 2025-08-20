@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
-#[AsCommand(name: 'app:twig-space', description: 'Replace consecutive spaces in Twig templates.')]
+#[AsCommand(name: 'app:twig-space', description: 'Trim consecutive spaces in Twig templates.')]
 class TwigSpaceCommand
 {
     use WatchTrait;
@@ -61,40 +61,25 @@ class TwigSpaceCommand
             if (!StringUtils::pregMatch(self::PATTERN, $content)) {
                 continue;
             }
+            ++$count;
             $io->text($file->getRelativePathname());
-            $content = $this->updateContent($io, $dryRun, $file->getContents());
-            if (!$dryRun && !$this->setContents($io, $file, $content)) {
+            if ($dryRun) {
+                $this->outputContent($io, $content);
+            } elseif (!$this->updateContent($io, $file, $content)) {
                 return Command::FAILURE;
             }
-            ++$count;
         }
 
         if (0 === $count) {
-            return $this->success(
-                $io,
-                'No template updated from directory "%s". %s.',
-                $path,
-                $this->stop()
-            );
+            $message = 'No template updated';
+        } elseif ($dryRun) {
+            $message = 'Simulate updated %2$d template(s) successfully';
+        } else {
+            $message = 'Updated %2$d template(s) successfully';
         }
+        $io->success(\sprintf($message . ' from "%1$s" directory. %3$s.', $path, $count, $this->stop()));
 
-        if ($dryRun) {
-            return $this->success(
-                $io,
-                'Simulate updated %d template(s) successfully from "%s" directory. %s.',
-                $count,
-                $path,
-                $this->stop()
-            );
-        }
-
-        return $this->success(
-            $io,
-            'Updated %d template(s) successfully from "%s" directory. %s.',
-            $count,
-            $path,
-            $this->stop()
-        );
+        return Command::SUCCESS;
     }
 
     private function createFinder(string $fullPath): Finder
@@ -106,39 +91,38 @@ class TwigSpaceCommand
             ->name('*.twig');
     }
 
-    private function setContents(SymfonyStyle $io, SplFileInfo $file, string $content): bool
+    private function formatLine(int $key, string $line, array $matches): string
     {
-        if (!FileUtils::dumpFile($file, $content)) {
-            $io->error(\sprintf('Unable to set content of the template "%s".', $file->getRelativePathname()));
-
-            return false;
+        /** @phpstan-var array{string, int} $match */
+        foreach (\array_reverse($matches) as $match) {
+            $offset = $match[1] + 1;
+            $length = \strlen($match[0]) - 2;
+            $replace = \sprintf('<fg=red>%s</>', \str_repeat('·', $length));
+            $line = \substr_replace($line, $replace, $offset, $length);
         }
 
-        return true;
+        return \sprintf('  - Line %-3d: %s', $key, \rtrim($line));
     }
 
-    private function success(SymfonyStyle $io, string $message, string|int ...$parameters): int
+    private function outputContent(SymfonyStyle $io, string $content): void
     {
-        $io->success(\sprintf($message, ...$parameters));
-
-        return Command::SUCCESS;
-    }
-
-    private function updateContent(SymfonyStyle $io, bool $dryRun, string $content): string
-    {
-        $lines = \explode("\n", $content);
-        foreach ($lines as $key => &$line) {
-            if (!StringUtils::pregMatch(self::PATTERN, $line, $matches, \PREG_OFFSET_CAPTURE)) {
-                continue;
+        $lines = StringUtils::splitLines($content);
+        foreach ($lines as $key => $line) {
+            if ('' !== $line && StringUtils::pregMatchAll(self::PATTERN, $line, $matches, \PREG_OFFSET_CAPTURE)) {
+                $io->text($this->formatLine($key, $line, $matches[0]));
             }
-            $io->text(\sprintf('%4d:%-3d: %s', $key, $matches[1][1], \trim($line)));
-            if ($dryRun) {
-                continue;
-            }
-            $line = StringUtils::pregReplace(self::PATTERN, self::REPLACEMENT, $line);
         }
+    }
 
-        return \implode("\n", $lines);
+    private function updateContent(SymfonyStyle $io, SplFileInfo $file, string $content): bool
+    {
+        $content = StringUtils::pregReplace(self::PATTERN, self::REPLACEMENT, $content);
+        if (FileUtils::dumpFile($file, $content)) {
+            return true;
+        }
+        $io->error(\sprintf('Unable to set content of the template "%s".', $file->getRelativePathname()));
+
+        return false;
     }
 
     private function validateFullPath(SymfonyStyle $io, string $fullPath): bool

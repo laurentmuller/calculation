@@ -172,7 +172,7 @@ class PdfLabelDocument extends PdfDocument
     private function getLabelY(string $text): float
     {
         $y = $this->label->getOffsetY($this->currentRow);
-        $lines = \count(\explode(StringUtils::NEW_LINE, $text));
+        $lines = \count(StringUtils::splitLines($text));
         $height = (float) $lines * $this->lineHeight;
 
         return $y + ($this->label->height - $height) / 2.0;
@@ -213,7 +213,7 @@ class PdfLabelDocument extends PdfDocument
             return;
         }
 
-        $texts = \explode(StringUtils::NEW_LINE, $text);
+        $texts = StringUtils::splitLines($text);
         $lines = \count($texts);
         foreach ($texts as $index => $value) {
             $this->setXY($x, $y);

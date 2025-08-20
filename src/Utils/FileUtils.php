@@ -394,7 +394,7 @@ final class FileUtils
      *
      * @param ?string $dir          the directory where the temporary directory will be created or null to use
      *                              the directory path used for temporary files
-     * @param string  $prefix       The prefix of the generated temporary directory
+     * @param string  $prefix       the prefix of the generated temporary directory
      * @param bool    $deleteOnExit if true, the directory is deleted at the end of the script
      *
      * @return ?string the new temporary directory; null on failure
@@ -404,14 +404,16 @@ final class FileUtils
         $dir ??= \sys_get_temp_dir();
         $base = self::buildPath($dir, $prefix);
         for ($i = 0; $i < 10; ++$i) {
-            $file = $base . \uniqid((string) \mt_rand(), true);
-            if (!self::exists($file) && self::mkdir($file)) {
-                if ($deleteOnExit) {
-                    \register_shutdown_function(static fn (): bool => self::remove($file));
-                }
-
-                return $file;
+            $path = \sprintf('%s_%d', $base, \mt_rand());
+            if (self::exists($path) || !self::mkdir($path)) {
+                continue;
             }
+            $path = self::realPath($path);
+            if ($deleteOnExit) {
+                \register_shutdown_function(static fn (): bool => self::remove($path));
+            }
+
+            return $path;
         }
 
         return null;
@@ -420,20 +422,20 @@ final class FileUtils
     /**
      * Create the temporary file in the given directory with a unique name.
      *
-     * @param string  $prefix       the prefix of the generated temporary file name. Note: Windows uses only the first
-     *                              three characters of prefix.
-     * @param bool    $deleteOnExit if true, the file is deleted at the end of the script
-     * @param string  $suffix       The suffix of the generated temporary filename
-     * @param ?string $dir          the directory where the temporary file will be created or null to use
+     * @param ?string $dir          the directory where the temporary directory will be created or null to use
      *                              the directory path used for temporary files
+     * @param string  $prefix       the prefix of the generated temporary filename.
+     *                              Note: Windows uses only the first three characters of prefix
+     * @param string  $suffix       the suffix of the generated temporary filename
+     * @param bool    $deleteOnExit if true, the file is deleted at the end of the script
      *
-     * @return ?string the new temporary file name (with the path); null on failure
+     * @return ?string the new temporary file with the path; null on failure
      */
     public static function tempFile(
+        ?string $dir = null,
         string $prefix = 'tmp',
-        bool $deleteOnExit = true,
         string $suffix = '',
-        ?string $dir = null
+        bool $deleteOnExit = true
     ): ?string {
         try {
             $dir ??= \sys_get_temp_dir();

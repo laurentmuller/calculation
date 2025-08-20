@@ -111,8 +111,7 @@ final class StringUtils
             /** @phpstan-var non-empty-string */
             return \json_encode($value, $flags | \JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
-            $message = \sprintf("Unable to encode value '%s'.", \get_debug_type($value));
-            throw new \InvalidArgumentException($message, $e->getCode(), $e);
+            throw new \InvalidArgumentException(\sprintf("Unable to encode value '%s'.", self::getDebugType($value)), $e->getCode(), $e);
         }
     }
 
@@ -145,12 +144,28 @@ final class StringUtils
     }
 
     /**
+     * Gets the scalar or the debug type of the given value.
+     *
+     * @return string the scalar value, if applicable, the debug type otherwise
+     */
+    public static function getDebugType(mixed $value): string
+    {
+        if (\is_bool($value)) {
+            return (string) \json_encode($value);
+        }
+        if ('' !== $value && \is_scalar($value)) {
+            return (string) $value;
+        }
+
+        return \get_debug_type($value);
+    }
+
+    /**
      * Gets the short class name of the given variable.
      *
      * @template T of object
      *
-     * @param object|string $objectOrClass either a string containing the name of
-     *                                     the class to reflect, or an object
+     * @param object|string $objectOrClass either a string containing the name of the class to reflect, or an object
      *
      * @phpstan-param T|class-string<T> $objectOrClass
      *
@@ -161,8 +176,7 @@ final class StringUtils
         try {
             return (new \ReflectionClass($objectOrClass))->getShortName();
         } catch (\ReflectionException $e) {
-            $message = \sprintf("Unable to get short name for '%s'.", \get_debug_type($objectOrClass));
-            throw new \RuntimeException($message, $e->getCode(), $e);
+            throw new \RuntimeException(\sprintf("Unable to get short name for '%s'.", self::getDebugType($objectOrClass)), $e->getCode(), $e);
         }
     }
 
@@ -194,8 +208,13 @@ final class StringUtils
      *
      * @psalm-suppress ReferenceConstraintViolation
      */
-    public static function pregMatch(string $pattern, string $subject, ?array &$matches = null, int $flags = 0, int $offset = 0): bool
-    {
+    public static function pregMatch(
+        string $pattern,
+        string $subject,
+        ?array &$matches = null,
+        int $flags = 0,
+        int $offset = 0
+    ): bool {
         return 1 === \preg_match($pattern, $subject, $matches, $flags, $offset); // @phpstan-ignore paramOut.type
     }
 
@@ -217,8 +236,13 @@ final class StringUtils
      *
      * @psalm-suppress ReferenceConstraintViolation
      */
-    public static function pregMatchAll(string $pattern, string $subject, ?array &$matches = null, int $flags = 0, int $offset = 0): bool
-    {
+    public static function pregMatchAll(
+        string $pattern,
+        string $subject,
+        ?array &$matches = null,
+        int $flags = 0,
+        int $offset = 0
+    ): bool {
         /** @phpstan-ignore paramOut.type */
         $result = \preg_match_all($pattern, $subject, $matches, $flags, $offset);
 
@@ -245,8 +269,7 @@ final class StringUtils
      *
      * @param array<string, string> $values  an array where key is the pattern, and value is the replacement term
      * @param string|string[]       $subject the string or array being searched and replaced on
-     * @param int                   $limit   the maximum possible replacements for each pattern in each subject string.
-     *                                       Defaults to -1 (no limit).
+     *                                       Defaults to -1 (no limit)
      *
      * @phpstan-param non-empty-array<non-empty-string, string> $values
      *
@@ -287,6 +310,21 @@ final class StringUtils
         }
 
         return $slugger->slug($string)->toString();
+    }
+
+    /**
+     * Split the given string by new line characters.
+     *
+     * @param bool $skipEmptyLines if true, only non-empty lines will be returned
+     *
+     * @return list<string>
+     */
+    public static function splitLines(string $string, bool $skipEmptyLines = false): array
+    {
+        $flags = $skipEmptyLines ? \PREG_SPLIT_NO_EMPTY : 0;
+
+        /** @phpstan-var list<string> */
+        return \preg_split(pattern: '/(\r\n|\n|\r)/', subject: $string, flags: $flags);
     }
 
     /**

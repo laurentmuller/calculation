@@ -57,7 +57,7 @@ class PhpInfoService
         foreach ($array as $index => $entry) {
             if (StringUtils::pregMatch($regexLine, $entry, $matchs)) {
                 $name = \trim($matchs[1]);
-                $vals = \explode(StringUtils::NEW_LINE, $array[$index + 1]);
+                $vals = StringUtils::splitLines($array[$index + 1]);
                 foreach ($vals as $val) {
                     if (StringUtils::pregMatch($regex3cols, $val, $matchs)) {
                         // 3 columns

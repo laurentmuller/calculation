@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Utils\StringUtils;
+
 /**
  * Trait to check subclass parameter.
  */
@@ -28,8 +30,7 @@ trait CheckSubClassTrait
     public function checkSubClass(string|object $source, string $target): void
     {
         if (!\is_a($source, $target, true) && !\is_subclass_of($source, $target)) {
-            $type = \is_string($source) ? $source : \get_debug_type($source);
-            throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given.', $target, $type));
+            throw new \InvalidArgumentException(\sprintf('%s expected, %s given.', $target, StringUtils::getDebugType($source)));
         }
     }
 }

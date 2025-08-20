@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Model\CustomerInformation;
+use App\Utils\StringUtils;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -150,7 +151,7 @@ class WorksheetDocument extends Worksheet
     public function rebindParent(Spreadsheet $parent): static
     {
         if (!$parent instanceof SpreadsheetDocument) {
-            throw new Exception(\sprintf('%s expected, %s given.', SpreadsheetDocument::class, \get_debug_type($parent)));
+            throw new Exception(\sprintf('%s expected, %s given.', SpreadsheetDocument::class, StringUtils::getDebugType($parent)));
         }
 
         return parent::rebindParent($parent);

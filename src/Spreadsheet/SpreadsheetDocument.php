@@ -384,7 +384,7 @@ class SpreadsheetDocument extends Spreadsheet
     protected function validateSheet(Worksheet $sheet): WorksheetDocument
     {
         if (!$sheet instanceof WorksheetDocument) {
-            throw new Exception(\sprintf('%s expected, %s given.', WorksheetDocument::class, \get_debug_type($sheet)));
+            throw new Exception(\sprintf('%s expected, %s given.', WorksheetDocument::class, StringUtils::getDebugType($sheet)));
         }
 
         return $sheet;

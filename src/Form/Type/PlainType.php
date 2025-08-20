@@ -15,6 +15,7 @@ namespace App\Form\Type;
 
 use App\Interfaces\EntityInterface;
 use App\Utils\FormatUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -340,7 +341,7 @@ class PlainType extends AbstractType
             return (string) $value;
         }
 
-        throw new TransformationFailedException(\sprintf('Unable to map the instance of "%s" to a string.', \get_debug_type($value)));
+        throw new TransformationFailedException(\sprintf('Unable to map the instance of "%s" to a string.', StringUtils::getDebugType($value)));
     }
 
     /**

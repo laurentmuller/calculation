@@ -20,6 +20,7 @@ ECHO ----- PHP-RECTOR ----------------------------------------------------------
 .\vendor-bin\rector\vendor\bin\rector.bat --dry-run --config=rector.php                  && ^
 ECHO ----- PHP-TWIG-CS-FIXER ----------------------------------------------------------- && ^
 .\vendor-bin\twig-cs-fixer\vendor\bin\twig-cs-fixer.bat lint --config=.twig-cs-fixer.php && ^
+php bin/console app:twig-space -d                                                        && ^
 ECHO ----- PHP-UNIT -------------------------------------------------------------------- && ^
 .\vendor\bin\phpunit.bat
 SET STA__TIME=%TIME: =0%

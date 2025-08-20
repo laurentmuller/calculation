@@ -16,6 +16,7 @@ namespace App\Repository;
 use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Utils\DateUtils;
+use App\Utils\StringUtils;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\DatePointType;
@@ -202,7 +203,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     public function refreshUser(UserInterface $user): User
     {
         if (!$user instanceof User) {
-            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', \get_debug_type($user)));
+            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', StringUtils::getDebugType($user)));
         }
 
         return $this->loadUserByIdentifier($user->getUsername());

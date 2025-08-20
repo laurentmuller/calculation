@@ -235,7 +235,7 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @phpstan-param  BarChartLabelType[] $labels
+     * @phpstan-param BarChartLabelType[] $labels
      */
     private function drawBarAxisY(
         array $labels,

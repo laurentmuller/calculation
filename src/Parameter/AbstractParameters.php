@@ -16,6 +16,7 @@ namespace App\Parameter;
 use App\Attribute\Parameter;
 use App\Entity\AbstractProperty;
 use App\Repository\AbstractRepository;
+use App\Utils\StringUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -328,8 +329,7 @@ abstract class AbstractParameters
         try {
             return (new \ReflectionClass($parameter))->getProperties(\ReflectionProperty::IS_PRIVATE);
         } catch (\ReflectionException $e) {
-            $type = \is_string($parameter) ? $parameter : \get_debug_type($parameter);
-            throw new \LogicException(\sprintf('Unable to get properties for "%s".', $type), $e->getCode(), $e);
+            throw new \LogicException(\sprintf('Unable to get properties for "%s".', StringUtils::getDebugType($parameter)), $e->getCode(), $e);
         }
     }
 

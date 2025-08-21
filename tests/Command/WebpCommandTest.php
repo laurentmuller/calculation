@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use App\Utils\FileUtils;
-use Symfony\Component\Console\Command\Command;
 
 class WebpCommandTest extends CommandTestCase
 {
@@ -26,7 +25,7 @@ class WebpCommandTest extends CommandTestCase
             'source' => '/',
             '--dry-run' => true,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString($output, 'No image found in directory');
     }
 
@@ -36,7 +35,7 @@ class WebpCommandTest extends CommandTestCase
             'source' => '/tests/files/public/images/users',
             '--dry-run' => true,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString(
             $output,
             'Conversion: 1',
@@ -55,7 +54,7 @@ class WebpCommandTest extends CommandTestCase
         self::assertTrue(FileUtils::copy($source, $target));
         $source = FileUtils::makePathRelative($path, __DIR__ . '/../..');
         $input = ['source' => $source];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString(
             $output,
             'Conversion: 0',
@@ -71,21 +70,21 @@ class WebpCommandTest extends CommandTestCase
             '--level' => -1,
             '--dry-run' => true,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input, statusCode: Command::INVALID);
+        $output = $this->executeInvalid($input);
         self::assertOutputContainsString($output, 'The level argument must be greater than or equal to 0');
     }
 
     public function testExecuteInvalidPath(): void
     {
         $input = ['source' => '/fake/fake/fake'];
-        $output = $this->execute(self::COMMAND_NAME, $input, statusCode: Command::INVALID);
+        $output = $this->executeInvalid($input);
         self::assertOutputContainsString($output, 'Unable to find the source directory');
     }
 
     public function testExecuteIsNotDirectory(): void
     {
         $input = ['source' => '/tests/bootstrap.php'];
-        $output = $this->execute(self::COMMAND_NAME, $input, statusCode: Command::INVALID);
+        $output = $this->executeInvalid($input);
         self::assertOutputContainsString(
             $output,
             'The source',
@@ -95,7 +94,7 @@ class WebpCommandTest extends CommandTestCase
 
     public function testExecuteMissingSource(): void
     {
-        $output = $this->execute(self::COMMAND_NAME, statusCode: Command::INVALID);
+        $output = $this->executeInvalid();
         self::assertOutputContainsString($output, 'The "--source" argument requires a non-empty value.');
     }
 
@@ -109,12 +108,18 @@ class WebpCommandTest extends CommandTestCase
         self::assertTrue(FileUtils::copy($source, $target));
         $source = FileUtils::makePathRelative($path, __DIR__ . '/../..');
         $input = ['source' => $source];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString(
             $output,
             'Conversion: 1',
             'Error: 0',
             'Skip: 0'
         );
+    }
+
+    #[\Override]
+    protected function getCommandName(): string
+    {
+        return self::COMMAND_NAME;
     }
 }

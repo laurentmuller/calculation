@@ -16,7 +16,7 @@ namespace App\Tests\Command;
 use App\Entity\Calculation;
 use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\CalculationTrait;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\MissingInputException;
 
 class UcFirstCommandTest extends CommandTestCase
 {
@@ -37,7 +37,7 @@ class UcFirstCommandTest extends CommandTestCase
         $input = [
             '--class' => Calculation::class,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString($output, "Select a field name for the 'Calculation' entity:");
     }
 
@@ -48,7 +48,7 @@ class UcFirstCommandTest extends CommandTestCase
             '--class' => Calculation::class,
             '--field' => 'customer',
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString(
             $output,
             'Updated 1 values of 1 entities successfully.',
@@ -64,7 +64,7 @@ class UcFirstCommandTest extends CommandTestCase
             '--field' => 'customer',
             '--dry-run' => true,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString(
             $output,
             'Updated 1 values of 1 entities successfully.',
@@ -79,7 +79,7 @@ class UcFirstCommandTest extends CommandTestCase
             '--class' => Calculation::class,
             '--field' => 'customer',
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString($output, 'No entity to update.');
     }
 
@@ -90,7 +90,7 @@ class UcFirstCommandTest extends CommandTestCase
             '--field' => 'customer',
             '--dry-run' => true,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString($output, 'No entity to update.');
     }
 
@@ -99,7 +99,8 @@ class UcFirstCommandTest extends CommandTestCase
         $input = [
             '--field' => 'customer',
         ];
-        $this->executeMissingInput(self::COMMAND_NAME, $input);
+        self::expectException(MissingInputException::class);
+        $this->execute($input);
     }
 
     public function testInvalidClassName(): void
@@ -112,7 +113,7 @@ class UcFirstCommandTest extends CommandTestCase
         $options = [
             'interactive' => false,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input, $options, Command::INVALID);
+        $output = $this->executeInvalid($input, $options);
         self::assertOutputContainsString($output, "Unable to find the 'fake' entity.");
     }
 
@@ -123,7 +124,7 @@ class UcFirstCommandTest extends CommandTestCase
             '--field' => 'fake',
             '--dry-run' => true,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input, [], Command::INVALID);
+        $output = $this->executeInvalid($input);
         self::assertOutputContainsString(
             $output,
             "Unable to find the field 'fake' for the entity 'App\Entity\Calculation'."
@@ -133,6 +134,12 @@ class UcFirstCommandTest extends CommandTestCase
     public function testNotInteractive(): void
     {
         $options = ['interactive' => false];
-        $this->execute(self::COMMAND_NAME, [], $options, Command::INVALID);
+        $this->executeInvalid(options: $options);
+    }
+
+    #[\Override]
+    protected function getCommandName(): string
+    {
+        return self::COMMAND_NAME;
     }
 }

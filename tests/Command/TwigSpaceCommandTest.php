@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use App\Utils\FileUtils;
-use Symfony\Component\Console\Command\Command;
 
 class TwigSpaceCommandTest extends CommandTestCase
 {
@@ -27,14 +26,14 @@ class TwigSpaceCommandTest extends CommandTestCase
             'path' => $path,
             '--dry-run' => true,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString(
             $output,
             '[OK]',
             'Simulate updated 1 template(s) successfully',
             'Line',
             '··',
-            $path
+            \basename($path)
         );
     }
 
@@ -45,30 +44,44 @@ class TwigSpaceCommandTest extends CommandTestCase
             'path' => $path,
             '--dry-run' => true,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString(
             $output,
             '[OK]',
             'No template updated',
-            $path
+            \basename($path)
         );
     }
 
-    public function testFullPathInvalid(): void
+    public function testFullPathIsNotDirectory(): void
     {
+        $baseName = \basename(__FILE__);
+        $path = FileUtils::buildPath('tests/Command', $baseName);
         $input = [
-            'path' => 'fake_path',
+            'path' => $path,
         ];
-        $output = $this->execute(
-            name: self::COMMAND_NAME,
-            input: $input,
-            statusCode: Command::INVALID
+        $output = $this->executeInvalid($input);
+        self::assertOutputContainsString(
+            $output,
+            '[ERROR]',
+            'The template path',
+            'is not a directory',
+            $baseName
         );
+    }
+
+    public function testFullPathNotExist(): void
+    {
+        $path = 'fake_path';
+        $input = [
+            'path' => $path,
+        ];
+        $output = $this->executeInvalid($input);
         self::assertOutputContainsString(
             $output,
             '[ERROR]',
             'Unable to find the template path',
-            'fake_path'
+            $path
         );
     }
 
@@ -77,35 +90,11 @@ class TwigSpaceCommandTest extends CommandTestCase
         $input = [
             'path' => '',
         ];
-        $output = $this->execute(
-            name: self::COMMAND_NAME,
-            input: $input,
-            statusCode: Command::INVALID
-        );
+        $output = $this->executeInvalid($input);
         self::assertOutputContainsString(
             $output,
             '[ERROR]',
             'The templates path can no be empty.'
-        );
-    }
-
-    public function testPathInvalid(): void
-    {
-        $path = FileUtils::buildPath('tests/Command', \basename(__FILE__));
-        $input = [
-            'path' => $path,
-        ];
-        $output = $this->execute(
-            name: self::COMMAND_NAME,
-            input: $input,
-            statusCode: Command::INVALID
-        );
-        self::assertOutputContainsString(
-            $output,
-            '[ERROR]',
-            'The template path',
-            'is not a directory',
-            $path
         );
     }
 
@@ -115,12 +104,12 @@ class TwigSpaceCommandTest extends CommandTestCase
         $input = [
             'path' => $path,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString(
             $output,
             '[OK]',
             'Updated 1 template(s) successfully',
-            $path
+            \basename($path)
         );
     }
 
@@ -130,24 +119,28 @@ class TwigSpaceCommandTest extends CommandTestCase
         $input = [
             'path' => $path,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString(
             $output,
             '[OK]',
             'No template updated',
-            $path
+            \basename($path)
         );
+    }
+
+    #[\Override]
+    protected function getCommandName(): string
+    {
+        return self::COMMAND_NAME;
     }
 
     private function copyTemplate(string $template): string
     {
-        $dir = FileUtils::tempDir(__DIR__);
-        self::assertIsString($dir);
-
+        $tempDirectory = $this->createTempDirectory();
         $originFile = FileUtils::buildPath(__DIR__, '/../files/twig/', $template);
-        $targetFile = FileUtils::buildPath($dir, $template);
+        $targetFile = FileUtils::buildPath($tempDirectory, $template);
         self::assertTrue(FileUtils::copy($originFile, $targetFile, true));
 
-        return FileUtils::buildPath('tests/Command/', FileUtils::makePathRelative($dir, __DIR__));
+        return FileUtils::buildPath('tests/Command', \basename($tempDirectory));
     }
 }

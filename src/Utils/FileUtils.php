@@ -402,9 +402,8 @@ final class FileUtils
     public static function tempDir(?string $dir = null, string $prefix = 'tmp', bool $deleteOnExit = true): ?string
     {
         $dir ??= \sys_get_temp_dir();
-        $base = self::buildPath($dir, $prefix);
         for ($i = 0; $i < 10; ++$i) {
-            $path = \sprintf('%s_%d', $base, \mt_rand());
+            $path = \sprintf('%s/%s_%d', $dir, $prefix, \mt_rand());
             if (self::exists($path) || !self::mkdir($path)) {
                 continue;
             }

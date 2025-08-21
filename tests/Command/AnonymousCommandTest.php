@@ -34,7 +34,7 @@ class AnonymousCommandTest extends CommandTestCase
     public function testExecute(): void
     {
         $this->getCalculation();
-        $output = $this->execute(self::COMMAND_NAME);
+        $output = $this->execute();
         self::assertOutputContainsString(
             $output,
             'Start update calculations',
@@ -50,7 +50,7 @@ class AnonymousCommandTest extends CommandTestCase
     {
         $this->getCalculation();
         $input = ['--dry-run' => true];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString(
             $output,
             'Start update calculations',
@@ -63,13 +63,19 @@ class AnonymousCommandTest extends CommandTestCase
     public function testExecuteDryRunEmpty(): void
     {
         $input = ['--dry-run' => true];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString($output, 'No calculation to update.');
     }
 
     public function testExecuteEmpty(): void
     {
-        $output = $this->execute(self::COMMAND_NAME);
+        $output = $this->execute();
         self::assertOutputContainsString($output, 'No calculation to update.');
+    }
+
+    #[\Override]
+    protected function getCommandName(): string
+    {
+        return self::COMMAND_NAME;
     }
 }

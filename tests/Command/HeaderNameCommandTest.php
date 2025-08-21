@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use Symfony\Component\Console\Command\Command;
-
 class HeaderNameCommandTest extends CommandTestCase
 {
     private const COMMAND_NAME = 'app:header:name';
@@ -41,7 +39,7 @@ class HeaderNameCommandTest extends CommandTestCase
             '--depth' => 0,
             'path' => self::DATA_PATH,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString(
             $output,
             self::DATA_PATH,
@@ -57,7 +55,7 @@ class HeaderNameCommandTest extends CommandTestCase
             '--dry-run' => true,
             'path' => self::DATA_PATH,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString(
             $output,
             self::DATA_PATH,
@@ -73,7 +71,7 @@ class HeaderNameCommandTest extends CommandTestCase
             '--patterns' => ['css_invalid', 'js_invalid'],
             'path' => self::DATA_PATH,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input, [], Command::INVALID);
+        $output = $this->executeInvalid($input);
         self::assertOutputContainsString(
             $output,
             'Invalid patterns:',
@@ -93,7 +91,7 @@ class HeaderNameCommandTest extends CommandTestCase
             '--dry-run' => true,
             'path' => self::DATA_PATH,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString(
             $output,
             self::DATA_PATH,
@@ -107,7 +105,7 @@ class HeaderNameCommandTest extends CommandTestCase
             '--patterns' => ['css'],
             'path' => self::DATA_PATH,
         ];
-        $output = $this->execute(self::COMMAND_NAME, $input);
+        $output = $this->execute($input);
         self::assertOutputContainsString(
             $output,
             self::DATA_PATH,
@@ -116,6 +114,12 @@ class HeaderNameCommandTest extends CommandTestCase
             'tests/files/css/no_header.css',
             'tests/files/css/old_header.css'
         );
+    }
+
+    #[\Override]
+    protected function getCommandName(): string
+    {
+        return self::COMMAND_NAME;
     }
 
     private function replaceCssContents(): void

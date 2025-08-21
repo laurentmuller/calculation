@@ -13,17 +13,17 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
+use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\MissingInputException;
 use Symfony\Component\Console\Tester\CommandTester;
 
 abstract class CommandTestCase extends KernelTestCase
 {
     private const OUTPUT_REPLACE = [
-        '/\r|\n/' => '',
+        '/\n/' => '',
         '/\s+/' => ' ',
     ];
 
@@ -35,25 +35,36 @@ abstract class CommandTestCase extends KernelTestCase
         }
     }
 
-    protected function execute(
-        string $name,
-        array $input = [],
-        array $options = [],
-        int $statusCode = Command::SUCCESS
-    ): string {
+    protected function createTempDirectory(): string
+    {
+        $tempDir = (string) FileUtils::tempDir(__DIR__);
+        $startPath = \dirname(__DIR__, 2);
+
+        return FileUtils::makePathRelative($tempDir, $startPath);
+    }
+
+    protected function execute(array $input = [], array $options = [], int $statusCode = Command::SUCCESS): string
+    {
         $kernel = self::bootKernel();
         $application = new Application($kernel);
-        $command = $application->find($name);
+        $name = $this->getCommandName();
+        $command = $application->get($name);
         $tester = new CommandTester($command);
         $result = $tester->execute($input, $options);
         self::assertSame($statusCode, $result);
 
-        return $tester->getDisplay();
+        return $tester->getDisplay(true);
     }
 
-    protected function executeMissingInput(string $name, array $input = []): void
+    protected function executeFailure(array $input = [], array $options = []): string
     {
-        self::expectException(MissingInputException::class);
-        $this->execute($name, $input);
+        return $this->execute($input, $options, Command::FAILURE);
     }
+
+    protected function executeInvalid(array $input = [], array $options = []): string
+    {
+        return $this->execute($input, $options, Command::INVALID);
+    }
+
+    abstract protected function getCommandName(): string;
 }

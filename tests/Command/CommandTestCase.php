@@ -27,6 +27,13 @@ abstract class CommandTestCase extends KernelTestCase
         '/\s+/' => ' ',
     ];
 
+    #[\Override]
+    public static function setUpBeforeClass(): void
+    {
+        \putenv('COLUMNS=360');
+        parent::setUpBeforeClass();
+    }
+
     protected static function assertOutputContainsString(string $actual, string ...$expected): void
     {
         $actual = StringUtils::pregReplaceAll(self::OUTPUT_REPLACE, $actual);

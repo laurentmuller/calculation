@@ -24,6 +24,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
+use Twig\Error\Error;
 
 class LogTableTest extends TestCase
 {
@@ -31,6 +32,39 @@ class LogTableTest extends TestCase
     {
         $this->processEmptyMessage(0, 'log.list.empty');
         $this->processEmptyMessage(1, null);
+    }
+
+    /**
+     * @throws Error
+     */
+    public function testFormatChannel(): void
+    {
+        $log = Log::instance();
+        $table = $this->createTableWithoutData();
+        $expected = 'macros/_cell_log_channel.html.twig';
+        $actual = $table->formatChannel('', $log);
+        self::assertStringContainsString($expected, $actual);
+    }
+
+    public function testFormatCreatedAt(): void
+    {
+        $log = Log::instance();
+        $table = $this->createTableWithoutData();
+        $expected = $log->getFormattedDate();
+        $actual = $table->formatCreatedAt($log->getCreatedAt());
+        self::assertSame($expected, $actual);
+    }
+
+    /**
+     * @throws Error
+     */
+    public function testFormatLevel(): void
+    {
+        $log = Log::instance();
+        $table = $this->createTableWithoutData();
+        $expected = 'macros/_cell_log_level.html.twig';
+        $actual = $table->formatLevel('', $log);
+        self::assertStringContainsString($expected, $actual);
     }
 
     public function testGetEntityClassName(): void
@@ -187,6 +221,8 @@ class LogTableTest extends TestCase
             ->willReturn($file);
 
         $twig = $this->createMock(Environment::class);
+        $twig->method('render')
+            ->willReturnArgument(0);
 
         return new LogTable($service, $twig);
     }
@@ -214,6 +250,8 @@ class LogTableTest extends TestCase
             ->willReturn($file);
 
         $twig = $this->createMock(Environment::class);
+        $twig->method('render')
+            ->willReturnArgument(0);
 
         return new LogTable($service, $twig);
     }

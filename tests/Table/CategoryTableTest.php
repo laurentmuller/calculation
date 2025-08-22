@@ -17,18 +17,44 @@ use App\Entity\Category;
 use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
+use App\Service\IndexService;
 use App\Table\CategoryTable;
 use App\Table\DataQuery;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Twig\Environment;
+use Twig\Error\Error;
 
 /**
  * @extends EntityTableTestCase<Category, CategoryRepository, CategoryTable>
  */
 class CategoryTableTest extends EntityTableTestCase
 {
+    /**
+     * @throws Error
+     */
+    public function testFormats(): void
+    {
+        $twig = $this->createMock(Environment::class);
+        $twig->method('render')
+            ->willReturnArgument(0);
+        $table = new CategoryTable(
+            $this->createMock(CategoryRepository::class),
+            $twig,
+            $this->createMock(GroupRepository::class),
+            $this->createMock(IndexService::class),
+        );
+        $table->setChecker($this->createMock(AuthorizationCheckerInterface::class));
+
+        $expected = 'macros/_cell_table_link.html.twig';
+        $actual = $table->formatProducts(0, ['id' => 1]);
+        self::assertSame($expected, $actual);
+
+        $actual = $table->formatTasks(0, ['id' => 1]);
+        self::assertSame($expected, $actual);
+    }
+
     /**
      * @throws \ReflectionException
      */

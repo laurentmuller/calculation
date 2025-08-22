@@ -259,9 +259,9 @@ class CommandService implements \Countable
     /**
      * @template TValue
      *
-     * @phpstan-param callable(CommandType):TValue $callback
+     * @param callable(CommandType):TValue $callback
      *
-     * @phpstan-return array<string, TValue[]>
+     * @return array<string, TValue[]>
      */
     private function getGroupedValues(string $default, callable $callback): array
     {

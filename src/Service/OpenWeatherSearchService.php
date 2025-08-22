@@ -78,7 +78,7 @@ class OpenWeatherSearchService
     }
 
     /**
-     * @template TResult
+     * @template TResult of mixed
      *
      * @param callable(OpenWeatherDatabase): TResult $callable
      *

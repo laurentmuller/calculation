@@ -124,9 +124,9 @@ readonly class SwissPostService
     /**
      * @template T of array
      *
-     * @phpstan-param callable(SwissDatabase): T[] $callback
+     * @param callable(SwissDatabase): (T[]) $callback
      *
-     * @phpstan-return T[]
+     * @return T[]
      */
     private function findValues(callable $callback): array
     {

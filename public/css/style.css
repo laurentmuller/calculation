@@ -14,12 +14,6 @@
     margin-top: 1rem;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .page-content {
-        transition: none;
-    }
-}
-
 body.sidebar-show .page-content {
     width: calc(100% - var(--sidebar-width));
     margin-left: var(--sidebar-width);
@@ -29,10 +23,35 @@ body:not(.sidebar-show) .page-content {
     width: 100%;
 }
 
+@media (prefers-reduced-motion: reduce) {
+    footer,
+    .page-content,
+    .drop-down-icon-left::before,
+    .drop-down-icon-right::after {
+        transition: none;
+    }
+}
+
 @media print {
+    .container,
     .page-content {
         width: 100%;
-        margin: 0;
+        min-width: 100%;
+        margin: 0 !important;
+    }
+
+    .required::after {
+        content: '';
+    }
+
+    .navbar-vertical {
+        width: 0 !important;
+        min-width: 0 !important;
+    }
+
+    .navbar-horizontal {
+        height: 0 !important;
+        margin-left: 0 !important;
     }
 }
 
@@ -60,12 +79,6 @@ footer {
     transition: all var(--sidebar-delay) ease-in-out;
 }
 
-
-@media (prefers-reduced-motion: reduce) {
-    footer {
-        transition: none;
-    }
-}
 
 body.sidebar-show footer {
     left: var(--sidebar-width);
@@ -167,20 +180,6 @@ span.state-color {
     height: 1rem;
     display: inline-block;
     vertical-align: middle;
-}
-
-/* print media */
-@media print {
-    span.required::after,
-    label.required::after,
-    legend.required::after,
-    th.required::after {
-        content: '';
-    }
-
-    a:hover, a:visited, a:link, a:active {
-        text-decoration: none;
-    }
 }
 
 /* bottom width for header in bordered table */
@@ -337,10 +336,6 @@ input[type=number]::-webkit-inner-spin-button {
     margin: 0;
 }
 
-input[type=number] {
-    -moz-appearance: textfield;
-}
-
 /* Custom file input */
 .custom-file-input:lang(fr) ~ .custom-file-label::after {
     content: 'Parcourir';
@@ -449,11 +444,6 @@ input[type=number] {
     transition: transform var(--sidebar-delay) ease-in-out;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .drop-down-icon-left::before {
-        transition: none;
-    }
-}
 
 .drop-down-icon-left[aria-expanded=true]::before {
     transform: rotate(90deg);
@@ -477,11 +467,6 @@ input[type=number] {
     transition: transform var(--sidebar-delay) ease-in-out;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .drop-down-icon-right::after {
-        transition: none;
-    }
-}
 
 .drop-down-icon-right[aria-expanded=true]::after {
     transform: rotate(-90deg);

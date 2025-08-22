@@ -16,17 +16,45 @@ namespace App\Tests\Table;
 use App\Entity\Group;
 use App\Repository\AbstractRepository;
 use App\Repository\GroupRepository;
+use App\Service\IndexService;
 use App\Table\GroupTable;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Twig\Environment;
+use Twig\Error\Error;
 
 /**
  * @extends EntityTableTestCase<Group, GroupRepository, GroupTable>
  */
 class GroupTableTest extends EntityTableTestCase
 {
+    /**
+     * @throws Error
+     */
+    public function testFormats(): void
+    {
+        $twig = $this->createMock(Environment::class);
+        $twig->method('render')
+            ->willReturnArgument(0);
+        $table = new GroupTable(
+            $this->createMock(GroupRepository::class),
+            $twig,
+            $this->createMock(IndexService::class),
+        );
+        $table->setChecker($this->createMock(AuthorizationCheckerInterface::class));
+
+        $expected = 'macros/_cell_table_link.html.twig';
+        $actual = $table->formatProducts(0, ['id' => 1]);
+        self::assertSame($expected, $actual);
+
+        $actual = $table->formatCategories(0, ['id' => 1]);
+        self::assertSame($expected, $actual);
+
+        $actual = $table->formatTasks(0, ['id' => 1]);
+        self::assertSame($expected, $actual);
+    }
+
     #[\Override]
     protected function createEntities(): array
     {
@@ -60,11 +88,9 @@ class GroupTableTest extends EntityTableTestCase
     protected function createTable(AbstractRepository $repository): GroupTable
     {
         $twig = $this->createMock(Environment::class);
-        $checker = $this->createMock(AuthorizationCheckerInterface::class);
         $service = $this->createMockIndexService();
-
         $table = new GroupTable($repository, $twig, $service);
-        $table->setChecker($checker);
+        $table->setChecker($this->createMock(AuthorizationCheckerInterface::class));
 
         return $table;
     }

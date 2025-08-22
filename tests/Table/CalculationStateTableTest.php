@@ -16,12 +16,14 @@ namespace App\Tests\Table;
 use App\Entity\CalculationState;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationStateRepository;
+use App\Service\IndexService;
 use App\Table\CalculationStateTable;
 use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Twig\Environment;
+use Twig\Error\Error;
 
 /**
  * @extends EntityTableTestCase<CalculationState, CalculationStateRepository, CalculationStateTable>
@@ -29,6 +31,44 @@ use Twig\Environment;
 class CalculationStateTableTest extends EntityTableTestCase
 {
     use TranslatorMockTrait;
+
+    /**
+     * @throws Error
+     */
+    public function testFormatCalculations(): void
+    {
+        $twig = $this->createMock(Environment::class);
+        $twig->method('render')
+            ->willReturnArgument(0);
+        $table = new CalculationStateTable(
+            $this->createMock(CalculationStateRepository::class),
+            $twig,
+            $this->createMock(IndexService::class)
+        );
+        $table->setChecker($this->createMock(AuthorizationCheckerInterface::class));
+        $table->setTranslator($this->createMockTranslator());
+
+        $expected = 'macros/_cell_table_link.html.twig';
+        $actual = $table->formatCalculations(1, ['id' => 1]);
+        self::assertSame($expected, $actual);
+    }
+
+    public function testFormatEditable(): void
+    {
+        $table = new CalculationStateTable(
+            $this->createMock(CalculationStateRepository::class),
+            $this->createMock(Environment::class),
+            $this->createMock(IndexService::class)
+        );
+        $table->setChecker($this->createMock(AuthorizationCheckerInterface::class));
+        $table->setTranslator($this->createMockTranslator());
+
+        $actual = $table->formatEditable(true);
+        self::assertSame('common.value_true', $actual);
+
+        $actual = $table->formatEditable(false);
+        self::assertSame('common.value_false', $actual);
+    }
 
     #[\Override]
     protected function createEntities(): array

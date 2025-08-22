@@ -30,6 +30,8 @@ readonly class LogSorter
     /**
      * @param string $field     the field to sort
      * @param bool   $ascending true to sort in ascending mode false to sort in descending mode
+     *
+     * @phpstan-param self::COLUMN_* $field
      */
     public function __construct(private string $field, private bool $ascending)
     {
@@ -37,6 +39,8 @@ readonly class LogSorter
 
     /**
      * Returns if the given field and ascending mode is the default sort.
+     *
+     * @phpstan-param self::COLUMN_* $field
      *
      * @return bool <code>true</code> if this sort is in date descending; <code>false</code> otherwise
      */

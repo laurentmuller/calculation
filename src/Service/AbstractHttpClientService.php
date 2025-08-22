@@ -152,9 +152,9 @@ abstract class AbstractHttpClientService
     /**
      * Gets the value from this cache for the given key.
      *
-     * @template T
+     * @template T of mixed
      *
-     * @param (callable():T) $callback the callback to call when the value is not in the cache
+     * @param callable():T $callback the callback to call when the value is not in the cache
      *
      * @return T
      */
@@ -190,10 +190,10 @@ abstract class AbstractHttpClientService
     /**
      * Gets the value from this cache for the given URL.
      *
-     * @template T
+     * @template T of mixed
      *
-     * @param string         $url      the URL for which to return the corresponding value
-     * @param (callable():T) $callback the callback to call when the value is not in the cache
+     * @param string       $url      the URL for which to return the corresponding value
+     * @param callable():T $callback the callback to call when the value is not in the cache
      *
      * @return T the value, if found; the default otherwise
      */

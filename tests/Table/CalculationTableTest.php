@@ -25,6 +25,7 @@ use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Clock\DatePoint;
 use Twig\Environment;
+use Twig\Error\Error;
 
 /**
  * @extends EntityTableTestCase<Calculation, CalculationRepository, CalculationTable>
@@ -40,6 +41,25 @@ class CalculationTableTest extends EntityTableTestCase
         parent::setUp();
         $this->id = 0;
         $this->stateId = 0;
+    }
+
+    /**
+     * @throws Error
+     */
+    public function testFormatOverallMargin(): void
+    {
+        $twig = $this->createMock(Environment::class);
+        $twig->method('render')
+            ->willReturnArgument(0);
+        $table = new CalculationTable(
+            $this->createMock(CalculationRepository::class),
+            $this->createMock(CalculationStateRepository::class),
+            $twig,
+        );
+
+        $expected = 'macros/_cell_calculation_margin.html.twig';
+        $actual = $table->formatOverallMargin(0.0, ['overallTotal' => 0.0]);
+        self::assertSame($expected, $actual);
     }
 
     /**

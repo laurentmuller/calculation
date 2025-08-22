@@ -30,7 +30,7 @@ enum HtmlBootstrapColor: string implements PdfColorInterface
 
     case DANGER = '#DC3545';
     case DARK = '#212529';
-    case INFO = '#0DCAF0';
+    case INFO = '#9EC5FE';
     case LIGHT = '#F8F9FA';
     case PRIMARY = '#0D6EFD';
     case SECONDARY = '#6C757D';

@@ -79,7 +79,7 @@ class SuspendEventListenerService
     /**
      * Disabled listeners, call the given function and enabled listeners.
      *
-     * @template TResult
+     * @template TResult of mixed
      *
      * @param callable():TResult $callback the function to call while listeners are disabled
      *

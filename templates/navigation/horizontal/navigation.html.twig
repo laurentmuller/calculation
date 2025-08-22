@@ -13,7 +13,7 @@
 -%}
 {%- set is_dark_navigation = app.user and user_service.darkNavigation -%}
 {# horizontal navigation #}
-<nav class="navbar navbar-horizontal navbar-expand-lg bg-body-tertiary border-bottom ps-2 z-3"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
+<nav class="navbar navbar-horizontal navbar-expand-lg bg-body-tertiary d-print-none border-bottom ps-2 z-3"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
     <div class="container-fluid ps-0">
         {# toggle navigation #}
         <button class="btn btn-outline-secondary show-sidebar me-2" title="{{ 'index.sidebar_show'|trans }}">

@@ -68,7 +68,7 @@ class Column implements \Stringable, SortModeInterface
      *
      * @var ?callable
      *
-     * @phpstan-var (callable(mixed, EntityType): string)|null
+     * @phpstan-var callable(mixed, EntityType): string|null
      */
     private $fieldFormatter;
 
@@ -210,7 +210,7 @@ class Column implements \Stringable, SortModeInterface
     }
 
     /**
-     * @phpstan-return (callable(mixed, EntityType): string)|null
+     * @return callable(mixed, EntityType): string|null
      */
     public function getFieldFormatter(): ?callable
     {
@@ -321,7 +321,7 @@ class Column implements \Stringable, SortModeInterface
     }
 
     /**
-     * @phpstan-param (callable(mixed, EntityType): string)|null $fieldFormatter
+     * @param callable(mixed, EntityType): string|null $fieldFormatter
      */
     public function setFieldFormatter(?callable $fieldFormatter): self
     {

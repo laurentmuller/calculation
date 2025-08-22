@@ -49,8 +49,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *     time_format: self::FORMAT_*|null,
  *     date_pattern: string|null,
  *     empty_value: callable(mixed):string|string|null,
- *     display_transformer: (callable(mixed):(string|null))|null,
- *     value_transformer: (callable(mixed):mixed)|null,
+ *     display_transformer: callable(mixed):(string|null)|null,
+ *     value_transformer: callable(mixed):mixed|null,
  *     ...}
  */
 class PlainType extends AbstractType

@@ -21,6 +21,7 @@ use App\Service\RoleService;
 use App\Table\DataQuery;
 use App\Table\UserTable;
 use App\Tests\TranslatorMockTrait;
+use App\Utils\FormatUtils;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -28,6 +29,7 @@ use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Twig\Environment;
+use Twig\Error\Error;
 
 /**
  * @extends EntityTableTestCase<User, UserRepository, UserTable>
@@ -47,6 +49,59 @@ class UserTableTest extends EntityTableTestCase
     {
         parent::setUp();
         $this->state = self::TOKEN_DEFAULT;
+    }
+
+    public function testFormatEnabled(): void
+    {
+        $table = $this->createTableWithMock();
+
+        $actual = $table->formatEnabled(true);
+        self::assertSame('common.value_enabled', $actual);
+
+        $actual = $table->formatEnabled(false);
+        self::assertSame('common.value_disabled', $actual);
+    }
+
+    /**
+     * @throws Error
+     */
+    public function testFormatImage(): void
+    {
+        $twig = $this->createMock(Environment::class);
+        $twig->method('render')
+            ->willReturnArgument(0);
+        $table = $this->createTableWithMock(twig: $twig);
+
+        $actual = $table->formatImage(null, []);
+        self::assertSame('', $actual);
+
+        $expected = 'macros/_cell_user_image.html.twig';
+        $actual = $table->formatImage('image', []);
+        self::assertSame($expected, $actual);
+    }
+
+    public function testFormatLastLogin(): void
+    {
+        $date = new DatePoint();
+        $table = $this->createTableWithMock();
+
+        $actual = $table->formatLastLogin(null);
+        self::assertSame('common.value_none', $actual);
+
+        $actual = $table->formatLastLogin($date);
+        $expected = FormatUtils::formatDateTime($date);
+        self::assertSame($expected, $actual);
+    }
+
+    public function testFormatRole(): void
+    {
+        $roleService = $this->createMock(RoleService::class);
+        $roleService->method('getRoleIconAndName')
+            ->willReturn('role');
+        $table = $this->createTableWithMock(roleService: $roleService);
+
+        $actual = $table->formatRole(null);
+        self::assertSame('role', $actual);
     }
 
     /**
@@ -144,5 +199,18 @@ class UserTableTest extends EntityTableTestCase
             ->willReturn($token);
 
         return $security;
+    }
+
+    private function createTableWithMock(
+        ?Environment $twig = null,
+        ?RoleService $roleService = null,
+    ): UserTable {
+        return new UserTable(
+            $this->createMock(UserRepository::class),
+            $roleService ?? $this->createMock(RoleService::class),
+            $this->createMockTranslator(),
+            $twig ?? $this->createMock(Environment::class),
+            $this->createMock(Security::class)
+        );
     }
 }

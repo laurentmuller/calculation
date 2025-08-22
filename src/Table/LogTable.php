@@ -193,11 +193,13 @@ class LogTable extends AbstractTable implements \Countable
      */
     private function sort(DataQuery $query, array &$entities): void
     {
+        /** @phpstan-var ''|LogSorter::COLUMN_* $field */
         $field = $query->sort;
         $ascending = self::SORT_ASC === $query->order;
-        if ('' !== $field && !LogSorter::isDefaultSort($field, $ascending)) {
-            $sorter = new LogSorter($field, $ascending);
-            $sorter->sort($entities);
+        if ('' === $field || LogSorter::isDefaultSort($field, $ascending)) {
+            return;
         }
+        $sorter = new LogSorter($field, $ascending);
+        $sorter->sort($entities);
     }
 }

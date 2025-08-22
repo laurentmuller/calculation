@@ -30,7 +30,7 @@ class HtmlBootstrapColorTest extends TestCase
     {
         yield [HtmlBootstrapColor::DANGER, '#DC3545'];
         yield [HtmlBootstrapColor::DARK, '#212529'];
-        yield [HtmlBootstrapColor::INFO, '#0DCAF0'];
+        yield [HtmlBootstrapColor::INFO, '#9EC5FE'];
         yield [HtmlBootstrapColor::LIGHT, '#F8F9FA'];
         yield [HtmlBootstrapColor::PRIMARY, '#0D6EFD'];
         yield [HtmlBootstrapColor::SECONDARY, '#6C757D'];
@@ -108,7 +108,7 @@ class HtmlBootstrapColorTest extends TestCase
     {
         yield [HtmlBootstrapColor::DANGER, 'DC3545'];
         yield [HtmlBootstrapColor::DARK, '212529'];
-        yield [HtmlBootstrapColor::INFO, '0DCAF0'];
+        yield [HtmlBootstrapColor::INFO, '9EC5FE'];
         yield [HtmlBootstrapColor::LIGHT, 'F8F9FA'];
         yield [HtmlBootstrapColor::PRIMARY, '0D6EFD'];
         yield [HtmlBootstrapColor::SECONDARY, '6C757D'];

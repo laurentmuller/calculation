@@ -292,7 +292,7 @@ class CommandsReport extends AbstractArrayReport
         $this->renderHeader('command.list.fields.usage');
         $this->indent();
         $this->applyFixedStyle(9.5);
-        $this->cell(text: \implode("\n", $usage), move: PdfMove::NEW_LINE);
+        $this->cell(text: \implode(StringUtils::NEW_LINE, $usage), move: PdfMove::NEW_LINE);
         $this->resetStyle();
         $this->lineBreak(1.0);
     }

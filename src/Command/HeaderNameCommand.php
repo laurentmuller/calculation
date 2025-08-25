@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Utils\FileUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
@@ -34,8 +35,6 @@ class HeaderNameCommand
         'js' => '/* %path% */',
         'twig' => '{# %path% #}',
     ];
-
-    private const NEW_LINE = "\n";
 
     private readonly string $projectDir;
 
@@ -164,7 +163,7 @@ class HeaderNameCommand
             return false;
         }
 
-        $lines = \explode(self::NEW_LINE, $content);
+        $lines = \explode(StringUtils::NEW_LINE, $content);
         $line = \str_replace('%path%', $path, $header);
         if ($lines[0] === $line) {
             return false;
@@ -177,7 +176,7 @@ class HeaderNameCommand
             \array_unshift($lines, $line);
         }
 
-        return \implode(self::NEW_LINE, $lines);
+        return \implode(StringUtils::NEW_LINE, $lines);
     }
 
     /**

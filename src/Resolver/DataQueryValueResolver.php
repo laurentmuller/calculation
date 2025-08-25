@@ -127,7 +127,7 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
     {
         $str = '';
         foreach ($errors as $error) {
-            $str .= $this->formatError($error->getPropertyPath(), $error->getMessage()) . "\n";
+            $str .= $this->formatError($error->getPropertyPath(), $error->getMessage()) . StringUtils::NEW_LINE;
         }
 
         return \rtrim($str);

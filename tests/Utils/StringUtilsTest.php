@@ -360,8 +360,19 @@ class StringUtilsTest extends TestCase
 
         $lines = StringUtils::splitLines($content);
         self::assertCount(4, $lines);
-
         $lines = StringUtils::splitLines($content, true);
+        self::assertCount(3, $lines);
+
+        $value = \str_replace("\n", "\r\n", $content);
+        $lines = StringUtils::splitLines($value);
+        self::assertCount(4, $lines);
+        $lines = StringUtils::splitLines($value, true);
+        self::assertCount(3, $lines);
+
+        $value = \str_replace("\n", "\r", $content);
+        $lines = StringUtils::splitLines($value);
+        self::assertCount(4, $lines);
+        $lines = StringUtils::splitLines($value, true);
         self::assertCount(3, $lines);
     }
 

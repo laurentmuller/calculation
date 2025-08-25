@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Traits\ArrayTrait;
+use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -82,8 +83,7 @@ class CacheService
      */
     private function parseContent(string $content): array
     {
-        /** @phpstan-var list<non-empty-string> $lines */
-        $lines = \preg_split('/$\R?^/m', \trim($content), flags: \PREG_SPLIT_NO_EMPTY);
+        $lines = StringUtils::splitLines(\trim($content), true);
         $callback = static fn (string $line): bool => !\str_starts_with($line, '-')
             && !\str_starts_with($line, 'Pool name');
 

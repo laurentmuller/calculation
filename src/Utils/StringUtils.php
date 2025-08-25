@@ -313,7 +313,7 @@ final class StringUtils
     }
 
     /**
-     * Split the given string by new line characters.
+     * Split the given string by any Unicode newline sequence.
      *
      * @param bool $skipEmptyLines if true, only non-empty lines will be returned
      *
@@ -324,7 +324,7 @@ final class StringUtils
         $flags = $skipEmptyLines ? \PREG_SPLIT_NO_EMPTY : 0;
 
         /** @phpstan-var list<string> */
-        return \preg_split(pattern: '/(\r\n|\n|\r)/', subject: $string, flags: $flags);
+        return \preg_split(pattern: '/\R/', subject: $string, flags: $flags);
     }
 
     /**

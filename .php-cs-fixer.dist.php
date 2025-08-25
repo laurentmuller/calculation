@@ -53,7 +53,7 @@ $rules = [
     'ordered_class_elements' => ['sort_algorithm' => 'alpha'],
     'attribute_empty_parentheses' => ['use_parentheses' => false],
     'doctrine_annotation_array_assignment' => ['operator' => '='],
-    'native_function_invocation' => ['include' => ['@internal', 'all']],
+    'native_function_invocation' => ['include' => ['@internal', '@all', '@compiler_optimized']],
     'php_unit_test_case_static_method_calls' => ['call_type' => 'self'],
     'new_with_braces' => ['anonymous_class' => true, 'named_class' => true],
     'ordered_imports' => ['imports_order' => ['const', 'class', 'function']],

@@ -9,7 +9,7 @@
 }
 
 th.text-border::before {
-    content: "";
+    content: '';
     position: absolute;
     left: -0.2rem;
     top: 0;
@@ -97,8 +97,8 @@ th.text-border::before {
 
 .text-image span.user-image {
     display: flex;
-    width: 32px;
-    height: 32px;
+    width: 2rem;
+    height: 2rem;
     margin-left: auto !important;
     margin-right: auto !important;;
     align-items: center;
@@ -111,8 +111,8 @@ th.text-border::before {
 
 .card-view-value span.user-image {
     display: flex;
-    width: 32px;
-    height: 32px;
+    width: 2rem;
+    height: 2rem;
     margin-left: 0;
     margin-right: auto;
     align-items: center;
@@ -126,8 +126,8 @@ th.text-border::before {
 .custom-item span.user-image {
     display: inline-flex;
     align-items: center;
-    width: 32px;
-    height: 32px;
+    width: 2rem;
+    height: 2rem;
     margin-right: 0.25rem;
 }
 
@@ -135,6 +135,12 @@ th.text-border::before {
     margin-left: auto;
     margin-right: auto;
     align-content: center;
+}
+
+span.user-image-empty {
+    width: 1.75rem;
+    height: 1.75rem;
+    line-height: 1.2rem;
 }
 
 .text-user-name {

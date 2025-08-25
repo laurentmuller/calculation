@@ -1,5 +1,6 @@
-{%- set image = asset_image_user(user, '032', {
-    class: 'rounded-1',
-    title: 'user.image.title'|trans,
-    alt: 'user.fields.imageFile'|trans}) -%}
-{%- if image -%}<span class="user-image bg-white rounded-1">{{ image|raw }}</span>{%- endif -%}
+{%- set image = asset_image_user(user, '032', {class: 'rounded-1', title: 'user.image.title'|trans, alt: 'user.fields.imageFile'|trans}) -%}
+{%- if image -%}
+    <span class="user-image bg-white rounded-1">{{ image|raw }}</span>
+{%- else -%}
+    <span class="badge rounded-circle text-bg-secondary user-image-empty me-1">{{ user.username[:2]|upper }}</span>
+{%- endif -%}

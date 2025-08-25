@@ -72,9 +72,6 @@ class UserTableTest extends EntityTableTestCase
             ->willReturnArgument(0);
         $table = $this->createTableWithMock(twig: $twig);
 
-        $actual = $table->formatImage(null, []);
-        self::assertSame('', $actual);
-
         $expected = 'macros/_cell_user_image.html.twig';
         $actual = $table->formatImage('image', []);
         self::assertSame($expected, $actual);

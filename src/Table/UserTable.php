@@ -20,7 +20,6 @@ use App\Repository\UserRepository;
 use App\Service\RoleService;
 use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
-use App\Utils\StringUtils;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Clock\DatePoint;
@@ -60,11 +59,7 @@ class UserTable extends AbstractEntityTable
      */
     public function formatImage(?string $image, array $user): string
     {
-        if (StringUtils::isString($image)) {
-            return $this->twig->render('macros/_cell_user_image.html.twig', ['user' => $user]);
-        }
-
-        return '';
+        return $this->twig->render('macros/_cell_user_image.html.twig', ['user' => $user]);
     }
 
     /**

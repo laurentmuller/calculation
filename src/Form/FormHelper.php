@@ -457,23 +457,19 @@ class FormHelper
     /**
      * Add a True/False choice type to the builder and reset all values to the default.
      *
-     * @param string           $trueText    the translatable text to use for the "True" value
-     * @param string           $falseText   the translatable text to use for the "False" value
-     * @param string|bool|null $translation determines if the choice values should be translated and in which
-     *                                      translation domain
+     * @param string $trueLabel  the translatable text to use when the value is true
+     * @param string $falseLabel the translatable text to use when the value is false
      */
     public function addTrueFalseType(
-        string $trueText = 'common.value_true',
-        string $falseText = 'common.value_false',
-        string|bool|null $translation = true
+        string $trueLabel = 'common.value_true',
+        string $falseLabel = 'common.value_false'
     ): self {
-        return $this->updateOption('choices', [$trueText => true, $falseText => false])
-            ->updateOption('choice_translation_domain', $translation)
+        return $this->updateOption('choices', [$trueLabel => true, $falseLabel => false])
             ->add(ChoiceType::class);
     }
 
     /**
-     * Add an Url type to the builder and reset all values to the default.
+     * Add a URL type to the builder and reset all values to the default.
      *
      * @param string  $protocol If a value is submitted, that doesn't begin with some protocol,
      *                          (http://, ftp://, etc.), this protocol will be prepended to

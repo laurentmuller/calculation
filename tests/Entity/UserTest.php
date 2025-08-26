@@ -32,33 +32,6 @@ class UserTest extends EntityValidatorTestCase
         self::assertCount(1, $user->getProperties());
     }
 
-    public function testAvatar(): void
-    {
-        $user = new User();
-
-        $actual = $user->getAvatar(0);
-        self::assertSame('https://robohash.org/', $actual);
-
-        $actual = $user->getAvatar();
-        self::assertSame('https://robohash.org/?size=32x32', $actual);
-
-        $actual = $user->getAvatar(16);
-        self::assertSame('https://robohash.org/?size=16x16', $actual);
-
-        $actual = $user->getAvatar(set: 2);
-        self::assertSame('https://robohash.org/?size=32x32&set=set2', $actual);
-
-        $actual = $user->getAvatar(background: 2);
-        self::assertSame('https://robohash.org/?size=32x32&bgset=bg2', $actual);
-
-        $actual = $user->getAvatar(32, 2, 2);
-        self::assertSame('https://robohash.org/?size=32x32&set=set2&bgset=bg2', $actual);
-
-        $user->setUsername('user');
-        $actual = $user->getAvatar(0);
-        self::assertSame('https://robohash.org/user', $actual);
-    }
-
     public function testCompare(): void
     {
         $item1 = new User();

@@ -193,35 +193,6 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
         return $this;
     }
 
-    /**
-     * Gets the URL of the avatar image.
-     *
-     * @param int $size       the image size (only used if the value is greater than 0)
-     * @param int $set        the image set (only used if the value is between 2 and 5 inclusive)
-     * @param int $background the background set (only used if the value is between 1 and 2 inclusive)
-     *
-     * @see https://robohash.org/
-     */
-    public function getAvatar(int $size = 32, int $set = 0, int $background = 0): string
-    {
-        $query = [];
-        if ($size > 0) {
-            $query['size'] = \sprintf('%dx%d', $size, $size);
-        }
-        if (\in_array($set, \range(2, 5), true)) {
-            $query['set'] = \sprintf('set%d', $set);
-        }
-        if (\in_array($background, \range(1, 2), true)) {
-            $query['bgset'] = \sprintf('bg%d', $background);
-        }
-        $url = 'https://robohash.org/' . \urlencode($this->getUserIdentifier());
-        if ([] !== $query) {
-            return $url . '?' . \http_build_query($query);
-        }
-
-        return $url;
-    }
-
     #[\Override]
     public function getDisplay(): string
     {

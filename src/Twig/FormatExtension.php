@@ -47,26 +47,17 @@ final class FormatExtension
     /**
      * Filter to format a boolean value.
      *
-     * @param bool    $value     the value to format
-     * @param ?string $true      the text to use when the value is <code>true</code> or <code>null</code> to use default
-     * @param ?string $false     the text to use when the value is <code>false</code> or <code>null</code> to use default
-     * @param bool    $translate <code>true</code> to translate texts
+     * @param bool   $value      the value to format
+     * @param string $trueLabel  the translatable text to use when the value is true
+     * @param string $falseLabel the translatable text to use when the value is false
      */
     #[AsTwigFilter(name: 'boolean')]
-    public function formatBoolean(bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string
-    {
-        if ($value) {
-            if (null !== $true) {
-                return $translate ? $this->trans($true) : $true;
-            }
-
-            return $this->trans('common.value_true');
-        }
-        if (null !== $false) {
-            return $translate ? $this->trans($false) : $false;
-        }
-
-        return $this->trans('common.value_false');
+    public function formatBoolean(
+        bool $value,
+        string $trueLabel = 'common.value_true',
+        string $falseLabel = 'common.value_false'
+    ): string {
+        return $this->trans($value ? $trueLabel : $falseLabel);
     }
 
     /**

@@ -96,31 +96,17 @@ th.text-border::before {
 }
 
 .text-image span.user-image {
-    display: flex;
+    display: inline-block;
     width: 2rem;
     height: 2rem;
-    margin-left: auto !important;
-    margin-right: auto !important;;
     align-items: center;
-}
-
-.text-image span.user-image img {
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .card-view-value span.user-image {
     display: flex;
     width: 2rem;
     height: 2rem;
-    margin-left: 0;
-    margin-right: auto;
     align-items: center;
-}
-
-.card-view-value span.user-image img {
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .custom-item span.user-image {
@@ -138,9 +124,9 @@ th.text-border::before {
 }
 
 span.user-image-empty {
-    width: 1.75rem;
-    height: 1.75rem;
-    line-height: 1.2rem;
+    width: 2rem;
+    height: 2rem;
+    line-height: 1.4rem;
 }
 
 .text-user-name {

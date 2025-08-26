@@ -72,11 +72,7 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
      */
     public function formatEditable(bool $value): string
     {
-        if ($value) {
-            return $this->trans('common.value_true');
-        }
-
-        return $this->trans('common.value_false');
+        return $this->trans($value ? 'common.value_true' : 'common.value_false');
     }
 
     #[\Override]

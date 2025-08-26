@@ -170,7 +170,8 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
             ->addSelect("$alias.role")
             ->addSelect("$alias.enabled")
             ->addSelect("$alias.lastLogin")
-            ->addSelect("$alias.hashedToken");
+            ->addSelect("$alias.hashedToken")
+            ->addSelect("UPPER(SUBSTRING($alias.username, 1, 2)) as initials");
     }
 
     /**

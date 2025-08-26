@@ -4,7 +4,7 @@
         {%- if image -%}
             {{- image|raw -}}
         {%- else -%}
-            <span class="badge rounded-circle text-bg-secondary user-image-empty">{{ app.user.username[:2]|upper }}</span>
+            <span class="badge rounded-circle text-bg-secondary user-image-empty">{{ app.user.initials }}</span>
         {%- endif -%}
         <span class="d-lg-none ms-2">{{ app.user.userIdentifier }}</span>
     </button>

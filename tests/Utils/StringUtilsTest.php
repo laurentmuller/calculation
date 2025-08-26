@@ -377,9 +377,9 @@ class StringUtilsTest extends TestCase
     }
 
     #[DataProvider('getStartWith')]
-    public function testStartWith(string $haystack, string $needle, bool $ignore_case, bool $expected): void
+    public function testStartWith(string $string, string $prefix, bool $ignoreCase, bool $expected): void
     {
-        $actual = StringUtils::startWith($haystack, $needle, $ignore_case);
+        $actual = StringUtils::startWith($string, $prefix, $ignoreCase);
         self::assertSame($expected, $actual);
     }
 

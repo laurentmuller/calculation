@@ -25,9 +25,7 @@ return static function (DoctrineConfig $config): void {
         ->datetimeFunction('week', DbFunction\Week::class)
         ->datetimeFunction('year', DbFunction\Year::class);
 
-    $dql->numericFunction('ceil', DbFunction\Ceil::class)
-        ->numericFunction('floor', DbFunction\Floor::class)
-        ->numericFunction('round', DbFunction\Round::class);
+    $dql->numericFunction('round', DbFunction\Round::class);
 
     $dql->stringFunction('ifelse', DbFunction\IfElse::class)
         ->stringFunction('ifnull', DbFunction\IfNull::class);

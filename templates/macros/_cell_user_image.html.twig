@@ -2,5 +2,5 @@
 {%- if image -%}
     <span class="user-image bg-white rounded-1">{{ image|raw }}</span>
 {%- else -%}
-    <span class="badge rounded-circle text-bg-secondary user-image-empty me-1">{{ user.username[:2]|upper }}</span>
+    <span class="badge rounded-circle text-bg-secondary user-image-empty me-1">{{ user.initials }}</span>
 {%- endif -%}

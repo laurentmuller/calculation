@@ -1374,6 +1374,7 @@ user:
         toAddress: Destinataire
         username: Nom
         password: Mot de passe
+        initials: Initiales
     image:
         failure: Une erreur s'est produite lors du redimensionnement de l'image.
         success: L'image du profil de l'utilisateur <b>%name%</b> a été mise à jour avec succès.

@@ -24,6 +24,8 @@
 {%- set image = asset_image_user(item, '096', {alt: 'user.fields.imageFile'|trans, title: 'user.image.title'|trans, class: 'rounded-1 avatar-lg'}) -%}
 {%- if image -%}
     {{ property('user.fields.imageFile', image) }}
+{%- else -%}
+    {{ property('user.fields.initials', item.initials) }}
 {%- endif -%}
 {{ timestampable_properties(item) }}
 {% endblock %}

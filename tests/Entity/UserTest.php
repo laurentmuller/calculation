@@ -204,6 +204,17 @@ class UserTest extends EntityValidatorTestCase
         self::assertSame($file, $user->getImagePath($storage));
     }
 
+    public function testInitials(): void
+    {
+        $user = new User();
+        $actual = $user->getInitials();
+        self::assertSame('', $actual);
+
+        $user->setUsername('username');
+        $actual = $user->getInitials();
+        self::assertSame('US', $actual);
+    }
+
     public function testInvalidAll(): void
     {
         $user = new User();

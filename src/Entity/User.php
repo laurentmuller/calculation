@@ -294,6 +294,14 @@ class User extends AbstractEntity implements ComparableInterface, TimestampableI
     }
 
     /**
+     * Gets the initials (2 first upper letters).
+     */
+    public function getInitials(): string
+    {
+        return \strtoupper(\substr((string) $this->username, 0, 2));
+    }
+
+    /**
      * Gets the date of the last login.
      */
     public function getLastLogin(): ?DatePoint

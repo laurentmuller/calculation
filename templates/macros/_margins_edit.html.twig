@@ -25,8 +25,8 @@
         {% endif %}
         </div>
     </td>
-    <td class="actions align-top pt-2 d-print-none">
-        <button type="button" class="btn btn-sm btn-outline-danger btn-edit btn-delete-margin" title="{{ 'group.edit.delete_margin'|trans }}">
+    <td class="delete-margin d-print-none">
+        <button type="button" class="btn btn-sm btn-outline-danger btn-edit btn-delete-margin py-2" title="{{ 'group.edit.delete_margin'|trans }}">
             {{- icon(ICON_DELETE) -}}
         </button>
     </td>
@@ -42,7 +42,7 @@
         <button type="button" class="p-0 btn btn-link btn-add">
             {{- 'group.edit.add_margin'|trans -}}
         </button>
-        <button type="button" class="p-0 btn btn-link btn-sort {% if margins|length < 2 %} disabled{% endif %}" title="{{ 'group.edit.sort_margins'|trans }}">
+        <button type="button" class="p-0 btn btn-link btn-sort" title="{{ 'group.edit.sort_margins'|trans }}" disabled>
             <i class="fa-solid fa-sort-numeric-up fa-fw"></i>
         </button>
     </div>

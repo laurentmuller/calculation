@@ -20,6 +20,9 @@ use Twig\Attribute\AsTwigFunction;
  */
 class AvatarService
 {
+    private const ALLOWED_BACKGROUND = [1, 2];
+    private const ALLOWED_SET = [1, 2, 3, 4, 5];
+
     /**
      * Gets the avatar URL image for the given name.
      *
@@ -39,10 +42,10 @@ class AvatarService
         if ($size > 0) {
             $query['size'] = \sprintf('%dx%d', $size, $size);
         }
-        if (\in_array($set, \range(1, 5), true)) {
+        if (\in_array($set, self::ALLOWED_SET, true)) {
             $query['set'] = \sprintf('set%d', $set);
         }
-        if (\in_array($background, \range(1, 2), true)) {
+        if (\in_array($background, self::ALLOWED_BACKGROUND, true)) {
             $query['bgset'] = \sprintf('bg%d', $background);
         }
         $url = \sprintf('https://robohash.org/%s', \urlencode($name));

@@ -21,13 +21,15 @@ use App\Form\Parameters\AbstractParametersType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
+use App\Model\IndexQuery;
 use App\Service\IndexService;
 use App\Service\UserService;
 use App\Traits\ParameterTrait;
+use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -50,6 +52,31 @@ class IndexController extends AbstractController
      * The restriction query parameter.
      */
     final public const PARAM_RESTRICT = 'restrict';
+
+    /**
+     * The view parameter.
+     */
+    private const PARAM_VIEW = TableInterface::PARAM_VIEW;
+
+    /**
+     * Gets the displayed calculations.
+     */
+    #[GetRoute(path: '/content', name: '_content')]
+    public function getCalculations(
+        IndexService $indexService,
+        UserService $userService,
+        Request $request,
+        #[MapQueryString]
+        IndexQuery $query
+    ): JsonResponse {
+        $this->checkAjaxRequest($request);
+        $parameters = $this->getParameters($indexService, $userService, $request, $query);
+        $content = $this->renderContent($parameters);
+        $response = $this->json($content);
+        $this->saveParameters($response, $parameters);
+
+        return $response;
+    }
 
     /**
      * Hide the catalog panel.
@@ -83,30 +110,13 @@ class IndexController extends AbstractController
      */
     #[GetRoute(path: IndexRoute::PATH, name: '')]
     public function index(
-        Request $request,
         IndexService $indexService,
-        #[MapQueryParameter]
-        ?bool $custom = null,
-        #[MapQueryParameter]
-        ?bool $restrict = null,
-        #[MapQueryParameter]
-        ?int $count = null
+        UserService $userService,
+        Request $request,
+        #[MapQueryString]
+        IndexQuery $query
     ): Response {
-        $userService = $this->getUserService();
-        $view = $this->getTableView($request, $userService, $custom);
-        $restrict ??= $this->getCookieBoolean($request, self::PARAM_RESTRICT);
-        $count = $this->getCount($userService, $count);
-        $calculations = $this->getLastCalculations($indexService, $count, $restrict);
-
-        $parameters = [
-            'min_margin' => $this->getMinMargin(),
-            'calculations' => $calculations,
-            'calculations_range' => AbstractParametersType::getCalculationRange(),
-            self::PARAM_CUSTOM => TableView::CUSTOM === $view,
-            self::PARAM_RESTRICT => $restrict,
-            'count' => $count,
-        ];
-
+        $parameters = $this->getParameters($indexService, $userService, $request, $query);
         if ($userService->isPanelMonth()) {
             $parameters['months'] = $indexService->getCalculationByMonths();
         }
@@ -116,10 +126,8 @@ class IndexController extends AbstractController
         if ($userService->isPanelCatalog()) {
             $parameters['catalog'] = $indexService->getCatalog();
         }
-
         $response = $this->render('index/index.html.twig', $parameters);
-        $this->updateCookie($response, self::PARAM_RESTRICT, $restrict);
-        $this->updateCookie($response, TableInterface::PARAM_VIEW, $view);
+        $this->saveParameters($response, $parameters);
 
         return $response;
     }
@@ -143,7 +151,7 @@ class IndexController extends AbstractController
 
     private function getCount(UserService $userService, ?int $count): int
     {
-        if (null === $count || !\in_array($count, AbstractParametersType::getCalculationRange(), true)) {
+        if (null === $count || !\in_array($count, AbstractParametersType::CALCULATIONS_RANGE, true)) {
             return $userService->getCalculations();
         }
 
@@ -159,10 +167,35 @@ class IndexController extends AbstractController
         return $indexService->getLastCalculations($maxResults, $user);
     }
 
+    /**
+     * @phpstan-return array{restrict: bool, view: TableView,  ...}
+     */
+    private function getParameters(
+        IndexService $indexService,
+        UserService $userService,
+        Request $request,
+        IndexQuery $query
+    ): array {
+        $view = $this->getTableView($request, $userService, $query->custom);
+        $restrict = $query->restrict ?? $this->getCookieBoolean($request, self::PARAM_RESTRICT);
+        $count = $this->getCount($userService, $query->count);
+        $calculations = $this->getLastCalculations($indexService, $count, $restrict);
+
+        return [
+            'count' => $count,
+            'calculations' => $calculations,
+            'min_margin' => $this->getMinMargin(),
+            'calculations_range' => AbstractParametersType::CALCULATIONS_RANGE,
+            self::PARAM_VIEW => $view,
+            self::PARAM_RESTRICT => $restrict,
+            self::PARAM_CUSTOM => TableView::CUSTOM === $view,
+        ];
+    }
+
     private function getTableView(Request $request, UserService $userService, ?bool $custom): TableView
     {
         if (null === $custom) {
-            return $this->getCookieEnum($request, TableInterface::PARAM_VIEW, $userService->getDisplayMode());
+            return $this->getCookieEnum($request, self::PARAM_VIEW, $userService->getDisplayMode());
         }
 
         $view = $custom ? TableView::CUSTOM : TableView::TABLE;
@@ -176,11 +209,22 @@ class IndexController extends AbstractController
         $this->checkAjaxRequest($request);
         $this->getUserService()->setProperty($key, false);
 
-        return $this->sendJsonMessage($id);
+        return $this->json($this->trans($id));
     }
 
-    private function sendJsonMessage(string $id): JsonResponse
+    private function renderContent(array $parameters): string
     {
-        return $this->json($this->trans($id));
+        $content = $this->renderView('index/_calculation_content.html.twig', $parameters);
+
+        return StringUtils::pregReplace('/\s+/', ' ', $content);
+    }
+
+    /**
+     * @phpstan-param array{restrict: bool, view: TableView,  ...} $parameters
+     */
+    private function saveParameters(Response $response, array $parameters): void
+    {
+        $this->updateCookie($response, self::PARAM_VIEW, $parameters[self::PARAM_VIEW]);
+        $this->updateCookie($response, self::PARAM_RESTRICT, $parameters[self::PARAM_RESTRICT]);
     }
 }

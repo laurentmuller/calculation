@@ -1,6 +1,6 @@
 {% from 'macros/_icons.html.twig' import icon, link, linkExternal %}
 {% from 'macros/_attributes.html.twig' import attributes %}
-{% from 'index/_macros.html.twig' import margin as macros_margin, empty as macros_empty %}
+{% from 'index/_macros.html.twig' import margin as macros_margin, empty_content %}
 {# macros #}
 {% macro cardEntry(state, table_path, parameters, min_margin) -%}
 {% from 'macros/_properties.html.twig' import stateCss %}
@@ -60,7 +60,7 @@
         {{ _self.cardEntry(states.total, table_path, {}, min_margin) }}
         </div>
     {% else %}
-        {{ macros_empty() }}
+        {{ empty_content() }}
     {% endif %}
     </div>
 </div>

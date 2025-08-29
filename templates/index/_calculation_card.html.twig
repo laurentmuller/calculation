@@ -52,7 +52,7 @@
                 {%- if calculation.overallTotal and calculation.overallMargin < min_margin -%}
                     {%- set overall_title = 'calculation.list.margin_below'|trans({'%margin%': calculation.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
                     <div class="text-danger has-tooltip" title="{{ overall_title }}">
-                        {{ calculation.overallMargin|percent }}
+                        {{- calculation.overallMargin|percent -}}
                     </div>
                 {% else %}
                     <div title="{{ 'calculation.fields.globalMargin'|trans }}">{{ calculation.overallMargin|percent }}</div>

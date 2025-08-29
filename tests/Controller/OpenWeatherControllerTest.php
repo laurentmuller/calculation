@@ -185,10 +185,22 @@ class OpenWeatherControllerTest extends ControllerTestCase
             'latitude' => 46.802368,
             'longitude' => 7.15128,
         ];
-        $service = $this->createMock(OpenWeatherSearchService::class);
-        $service->method('search')
+
+        $searchService = $this->createMock(OpenWeatherSearchService::class);
+        $searchService->method('search')
             ->willReturn([$city1, $city2]);
-        $this->setService(OpenWeatherSearchService::class, $service);
+        $this->setService(OpenWeatherSearchService::class, $searchService);
+
+        $group = [
+            'cnt' => 2,
+            'units' => [],
+            'list' => [],
+        ];
+        $service = $this->createMock(OpenWeatherService::class);
+        $service->method('group')
+            ->willReturn($group);
+        $this->setService(OpenWeatherService::class, $service);
+
 
         $data = [
             'form[query]' => 'Le Mouret',

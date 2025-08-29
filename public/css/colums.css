@@ -209,3 +209,9 @@ span.user-image-empty {
 .f-400 {
     width: 400px;
 }
+
+/* delete margin button */
+.delete-margin {
+    padding-top: 0.375rem !important;
+    width: 30px;
+}

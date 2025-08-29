@@ -1,5 +1,6 @@
 /*  globals
     getSortedMargins,
+    isSortedMargins,
     addMarginsMethods,
     validateOtherMargins,
     getMinimumInput,
@@ -19,26 +20,39 @@ function getMarginSelector() {
 }
 
 /**
+ * Update the sort button.
+ */
+function updateSortButton() {
+    const $body = $('#data-table-edit > tbody');
+    $('.btn-sort').toggleDisabled(isSortedMargins($body));
+}
+
+/**
  * Update the user interface.
  */
 function updateUI() {
     'use strict';
     // initialize the number input formats
-    $(getMinimumSelector()).inputNumberFormat();
-    $(getMaximumSelector()).inputNumberFormat();
-    $(getMarginSelector()).inputNumberFormat({
-        decimal: 0,
-        decimalAuto: 0
-    });
+    $(getMinimumSelector()).on('change', updateSortButton)
+        .inputNumberFormat();
+    $(getMaximumSelector()).on('change', updateSortButton)
+        .inputNumberFormat();
+    $(getMarginSelector()).on('change', updateSortButton)
+        .inputNumberFormat({
+            decimal: 0,
+            decimalAuto: 0
+        });
     // show/hide elements
     const $table = $('#data-table-edit');
     const rows = $table.find('tbody > tr').length;
     $table.toggleClass('d-none', rows === 0);
-    $('.btn-sort').toggleDisabled(rows < 2);
     $('#empty_margins').toggleClass('d-none', rows > 0);
+    updateSortButton();
+
     // update edit message
     $('#edit-form :input:first').trigger('input');
 }
+
 
 /**
  * Gets the maximum value of the maximum column.
@@ -111,15 +125,16 @@ function removeMargin($caller) {
 
 /**
  * Sorts the margins.
+ *
  * @return {jQuery} the sorted rows.
  */
 function sortMargins() {
     'use strict';
     const $table = $('#data-table-edit');
-    /** @type {JQuery|HTMLElement|*} */
     const $body = $table.find('tbody');
     if ($body.children('tr').length > 1) {
         getSortedMargins($body).appendTo($body);
+        updateSortButton();
     }
 }
 

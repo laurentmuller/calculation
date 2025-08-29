@@ -1,6 +1,7 @@
 /*  globals
     sortable,
     getSortedMargins,
+    isSortedMargins,
     addMarginsMethods,
     validateOtherMargins,
     getMinimumInput, getMaximumInput,
@@ -18,14 +19,33 @@ function getValueSelector() {
 }
 
 /**
+ * Update the sort button.
+ *
+ * @param {jQuery} $element
+ */
+function updateSortButton($element) {
+    'use strict';
+    const $table = $element.closest('.table-edit');
+    const $body = $table.find('tbody');
+    const $button = $table.parents('.item').find('.btn-sort-margin');
+    $button.toggleDisabled(isSortedMargins($body));
+}
+
+/**
  * Update the user interface.
  */
 function updateUI() {
     'use strict';
     // initialize the number and first char
-    $(getMinimumSelector()).inputNumberFormat();
-    $(getMaximumSelector()).inputNumberFormat();
-    $(getValueSelector()).inputNumberFormat();
+    $(getMinimumSelector()).on('change', function () {
+        updateSortButton($(this));
+    }).inputNumberFormat();
+    $(getMaximumSelector()).on('change', function () {
+        updateSortButton($(this));
+    }).inputNumberFormat();
+    $(getValueSelector()).on('change', function () {
+        updateSortButton($(this));
+    }).inputNumberFormat();
 
     // update tables
     $('#items .table-edit').each(function () {
@@ -34,7 +54,7 @@ function updateUI() {
         const rows = $table.find('tbody > tr').length;
         $table.toggleClass('d-none', rows === 0);
         $table.next('.empty-margins').toggleClass('d-none', rows !== 0);
-        $table.parents('.item').find('.btn-sort-margin').toggleDisabled(rows < 2);
+        updateSortButton($table);
     });
     const $items = $('#items .item');
     $('.empty-items').toggleClass('d-none', $items.length !== 0);

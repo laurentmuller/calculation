@@ -1,7 +1,7 @@
 {# import #}
 {% from 'macros/_icons.html.twig' import icon, link, linkExternal %}
 {% from 'macros/_attributes.html.twig' import attributes %}
-{% from 'index/_macros.html.twig' import margin as macros_margin, empty as macros_empty %}
+{% from 'index/_macros.html.twig' import margin as macros_margin, empty_content %}
 {# macros #}
 {% macro cardEntry(item, list_path, min_margin) -%}
 <div class="border index-child m-1">
@@ -58,7 +58,7 @@
             {% endfor %}
         </div>
     {% else %}
-        {{ macros_empty() }}
+        {{ empty_content() }}
     {% endif %}
     </div>
 </div>

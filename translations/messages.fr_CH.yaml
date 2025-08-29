@@ -638,11 +638,11 @@ index:
     menu_graphics_month: Calculations par mois
     menu_graphics_state: Calculations par statut
     panel_catalog: Catalogue
-    panel_catalog_hide: Supprimer le catalogue de la page d'accueil
+    panel_catalog_hide: Masquer le catalogue de la page d'accueil
     panel_catalog_hide_success: Le catalogue a été masqué
     panel_month: Calculations par mois
     panel_month_title: Afficher les calculations pour %month%
-    panel_month_hide: Supprimer les calculations par mois de la page d'accueil
+    panel_month_hide: Masquer les calculations par mois de la page d'accueil
     panel_month_hide_success: Les calculations par mois ont été masquées
     panel_table_title: Dernières calculations
     panel_table_count: Nombre de calculations affichées
@@ -652,7 +652,7 @@ index:
     panel_state: Calculations par statut
     panel_state_title: Afficher les calculations pour le statut %code%
     panel_state_title_all: Afficher toutes les calculations
-    panel_state_hide: Supprimer les calculations par statut de la page d'accueil
+    panel_state_hide: Masquer les calculations par statut de la page d'accueil
     panel_state_hide_success: Les calculations par statut ont été masquées
     panel_title_total: Montant total des calculations
     panel_title_count: Nombre de calculations

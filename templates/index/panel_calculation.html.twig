@@ -1,47 +1,14 @@
-{% import 'index/_macros.html.twig' as macros %}
-{# parameters #}
+{# panel parameters #}
 {%- set panel_key = 'DISPLAY_CALCULATION' -%}
 {%- set panel_show = app.request.cookies.boolean(panel_key, true) -%}
 {%- set panel_title = panel_show ? 'common.collapse' : 'common.expand' -%}
-
-{%- set caller = path(app.current_route) -%}
-{%- set selection = app.request.get('id', 0) -%}
-{# page actions #}
-{%- set object_type = ENTITY_CALCULATION -%}
-{%- set add_page = is_granted(PERMISSION_ADD, object_type) ? 'calculation_add' : null -%}
-{%- set clone_page = is_granted(PERMISSION_ADD, object_type) ? 'calculation_clone' : null -%}
-{%- set edit_page = is_granted(PERMISSION_EDIT, object_type) ? 'calculation_edit' : null -%}
-{%- set state_page = is_granted(PERMISSION_EDIT, object_type) ? 'calculation_state' : null -%}
-{%- set delete_page = is_granted(PERMISSION_DELETE, object_type) ? 'calculation_delete' : null -%}
-{%- set show_page = is_granted(PERMISSION_SHOW, object_type) ? 'calculation_show' : null -%}
-{%- set single_page_pdf = is_granted(PERMISSION_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
-{%- set single_page_excel = is_granted(PERMISSION_EXPORT, object_type) ? 'calculation_excel_id' : null -%}
-{# default actions #}
-{%- set row_none = user_service.actionNone -%}
-{%- set row_edit = edit_page and user_service.actionEdit -%}
-{%- set row_show = show_page and user_service.actionShow -%}
-{% if not row_none and not row_edit and show_page %}
-    {%- set row_show = true %}
-{% elseif not row_show and not row_none and edit_page %}
-    {%- set row_edit = true -%}
-{% endif %}
-{%- set row_link = not row_none and (edit_page or show_page) -%}
-{%- set is_drop_down = add_page or edit_page or delete_page or show_page or single_page_pdf -%}
-{%- set is_calculations = calculations|length -%}
-{# content #}
+{# header parameters #}
+{%- set caller = path('homepage') -%}
+{%- set add_page = is_granted(PERMISSION_ADD, ENTITY_CALCULATION) ? 'calculation_add' : null -%}
+{# card #}
 <div class="card card-collapse mb-2">
     {{ include('index/_calculation_header.html.twig') }}
-    <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}" data-url="{{ url('homepage') }}">
-        {% if is_calculations %}
-            <div class="card-body {% if is_calculations %}p-2{% else %}g-0 p-1{% endif %}">
-                {% if custom %}
-                    {{- include('index/_calculation_card.html.twig') }}
-                {% else %}
-                    {{- include('index/_calculation_table.html.twig') }}
-                {% endif %}
-            </div>
-        {%- else -%}
-            {{ macros.empty() }}
-        {%- endif -%}
+    <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}" data-url="{{ url('homepage_content') }}">
+        {{ include('index/_calculation_content.html.twig') }}
     </div>
 </div>

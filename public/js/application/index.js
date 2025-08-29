@@ -14,8 +14,7 @@
         getContextMenuItems: function () {
             const $elements = $(this).parents('.row-item:first').find('.dropdown-menu').children();
             return new MenuBuilder({
-                classSelector: 'btn-default',
-                elements: $elements
+                classSelector: 'btn-default', elements: $elements
             }).getItems();
         },
 
@@ -26,29 +25,161 @@
          */
         isRightChecked: function () {
             return $(this).hasClass('dropdown-item-checked-right');
+        },
+
+        /**
+         * Add the right-checked class.
+         *
+         * @returns {jQuery}
+         */
+        setRightChecked: function () {
+            return $(this).addClass('dropdown-item-checked-right');
+        },
+
+
+        /**
+         * Remove the right-checked class.
+         *
+         * @returns {jQuery}
+         */
+        removeRightChecked: function () {
+            return $(this).removeClass('dropdown-item-checked-right');
+        },
+
+        /**
+         * Disabled the key handler for calculations.
+         */
+        disableKeyHandler: function () {
+            const $this = $(this);
+            const keyHandler = $this.data('key.handler');
+            if (keyHandler) {
+                $('body').off('.calculations');
+            }
+            return $this;
+        },
+
+        /**
+         * Enabled the key handler for calculations.
+         */
+        enableKeysHandler: function () {
+            const $this = $(this);
+            /** @param {KeyboardEvent} e */
+            const keyHandler = function (e) {
+                if ((e.key === '' || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
+                    return;
+                }
+                const $rows = $this.find('.row-item');
+                if ($rows.length === 0) {
+                    return;
+                }
+                const $selection = $this.find('.row-item.table-primary');
+                switch (e.key) {
+                    case 'Enter':
+                        onKeyEnter(e, $selection);
+                        break;
+                    case 'Delete':
+                        onKeyDelete(e, $selection);
+                        break;
+                    case 'Home':
+                        onKeyHome(e, $selection, $this);
+                        break;
+                    case 'End':
+                        onKeyEnd(e, $selection, $this);
+                        break;
+                    case '-':
+                    case 'ArrowLeft':
+                    case 'ArrowUp':
+                        onKeyPrevious(e, $selection, $rows);
+                        break;
+                    case '+':
+                    case 'ArrowRight':
+                    case 'ArrowDown':
+                        onKeyNext(e, $selection, $rows);
+                        break;
+                }
+            };
+            $this.disableKeyHandler()
+                .data('key.handler', keyHandler);
+
+            const $body = $('body');
+            const selector = ':input, .btn, .dropdown-item, .rowlink-skip, .modal, a';
+            $body.on('focus.calculations', selector, function () {
+                $body.off('keydown', keyHandler);
+            }).on('blur.calculations', selector, function () {
+                $body.on('keydown', keyHandler);
+            }).on('contextmenu.calculations', function () {
+                $body.off('keydown', keyHandler);
+            }).on('contextmenu:hide.calculations', function () {
+                $body.on('keydown', keyHandler);
+            }).on('keydown.calculations', keyHandler);
         }
     });
 
     /**
      * Handle the calculations view
      */
+    function handleCalculations() {
+        // find calculations
+        const $calculations = $('#calculations');
+        if ($calculations.length === 0 || $calculations.find('.row-item').length === 0) {
+            return;
+        }
+
+        // set selection
+        let $selection = $calculations.find('.row-item.table-primary');
+        if ($selection.length === 0) {
+            $selection = $calculations.find('.row-item:first').addClass('table-primary');
+        }
+        $selection.scrollInViewport();
+
+        // handle table events and context menu
+        $calculations.on('mousedown', '.row-item', function (e) {
+            switch (e.button) {
+                case 0:
+                    selectRow($(this));
+                    break;
+                case 2:
+                    $.hideDropDownMenus();
+                    break;
+            }
+        }).on('click', '.row-item [data-bs-toggle="dropdown"]', function () {
+            selectRow($(this));
+        }).on('dblclick', '.row-item', function (e) {
+            editRow($(this), e);
+        }).on('focus', '.item-link, button[data-bs-toggle="dropdown"]', function () {
+            selectRow($(this));
+        }).initContextMenu('.row-item td:not(.context-menu-skip),.row-item div:not(.context-menu-skip)', function () {
+            selectRow($(this));
+        });
+
+        // remove separators
+        $calculations.find('.dropdown-menu').removeSeparators();
+
+        // handle key down event
+        $calculations.enableKeysHandler();
+    }
+
+    /**
+     * Update the calculations view
+     */
     function updateView() {
+        // disable key handler
+        $('#calculations').disableKeyHandler();
+
+        // build parameters
         const params = {
             restrict: $('.dropdown-item-restrict').hasClass('dropdown-item-checked-right'),
             custom: $('.dropdown-item-view.dropdown-item-checked-right').data('value'),
+            count: $('.dropdown-item-counter.dropdown-item-checked-right').data('value'),
+            id: $('.row-item.table-primary').data('id') || 0
         };
-        const count = $('.dropdown-item-counter.dropdown-item-checked-right').data('value');
-        if (count) {
-            params.count = count;
-        }
-        const id = $('.row-item.table-primary').data('id');
-        if (id) {
-            params.id = id;
-        }
-        const root = $('#DISPLAY_CALCULATION').data('url');
-        const url = root + '?' + $.param(params);
-        $('*').css('cursor', 'wait');
-        window.location.assign(url);
+
+        // get and update content
+        const url = $('#DISPLAY_CALCULATION').data('url');
+        $.getJSON(url, params, function (data) {
+            $('#DISPLAY_CALCULATION .card-body').replaceWith(data);
+            handleCalculations();
+        });
     }
 
     /**
@@ -157,51 +288,6 @@
     }
 
     /**
-     * Creates the key down handler for the calculation table.
-     *
-     * @param {jQuery} $parent - the parent to handle.
-     * @return {(function(*): void)}
-     */
-    function createKeydownHandler($parent) {
-        /** @param {KeyboardEvent} e */
-        // eslint-disable-next-line
-        return function (e) {
-            if ((e.key === 0 || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
-                return;
-            }
-            const $rows = $parent.find('.row-item');
-            if ($rows.length === 0) {
-                return;
-            }
-            const $selection = $parent.find('.row-item.table-primary');
-            switch (e.key) {
-                case 'Enter':
-                    onKeyEnter(e, $selection);
-                    break;
-                case 'Delete':
-                    onKeyDelete(e, $selection);
-                    break;
-                case 'Home':
-                    onKeyHome(e, $selection, $parent);
-                    break;
-                case 'End':
-                    onKeyEnd(e, $selection, $parent);
-                    break;
-                case '-':
-                case 'ArrowLeft':
-                case 'ArrowUp':
-                    onKeyPrevious(e, $selection, $rows);
-                    break;
-                case '+':
-                case 'ArrowRight':
-                case 'ArrowDown':
-                    onKeyNext(e, $selection, $rows);
-                    break;
-            }
-        };
-    }
-
-    /**
      * Hide a panel.
      *
      * @param {jQuery} $source - the source event.
@@ -252,53 +338,8 @@
      * Ready function
      */
     $(function () {
-        // handle table
-        const $calculations = $('#calculations');
-        if ($calculations.length && $calculations.find('.row-item').length) {
-            // select
-            let $selection = $calculations.find('.row-item.table-primary');
-            if ($selection.length === 0) {
-                $selection = $calculations.find('.row-item:first').addClass('table-primary');
-            }
-            $selection.scrollInViewport();
-
-            // handle table events and context menu
-            $calculations.on('mousedown', '.row-item', function (e) {
-                switch (e.button) {
-                    case 0:
-                        selectRow($(this));
-                        break;
-                    case 2:
-                        $.hideDropDownMenus();
-                        break;
-                }
-            }).on('click', '.row-item [data-bs-toggle="dropdown"]', function () {
-                selectRow($(this));
-            }).on('dblclick', '.row-item', function (e) {
-                editRow($(this), e);
-            }).on('focus', '.item-link, button[data-bs-toggle="dropdown"]', function () {
-                selectRow($(this));
-            }).initContextMenu('.row-item td:not(.context-menu-skip),.row-item div:not(.context-menu-skip)', function () {
-                selectRow($(this));
-            });
-
-            // remove separators
-            $('#calculations .dropdown-menu').removeSeparators();
-
-            // handle key down event include context-menu
-            const $body = $(document.body);
-            const handler = createKeydownHandler($calculations);
-            const selector = ':input, .btn, .dropdown-item, .rowlink-skip, .modal, a';
-            $body.on('focus', selector, function () {
-                $body.off('keydown', handler);
-            }).on('contextmenu', function () {
-                $body.off('keydown', handler);
-            }).on('blur', selector, function () {
-                $body.on('keydown', handler);
-            }).on('contextmenu:hide', function () {
-                $body.on('keydown', handler);
-            }).on('keydown', handler);
-        }
+        // handle calculations
+        handleCalculations();
 
         // enable tooltips
         $('.card-body').tooltip({
@@ -321,8 +362,8 @@
             if ($this.isRightChecked()) {
                 return;
             }
-            $('.dropdown-item-counter.dropdown-item-checked-right').removeClass('dropdown-item-checked-right');
-            $this.addClass('dropdown-item-checked-right');
+            $('.dropdown-item-counter.dropdown-item-checked-right').removeRightChecked();
+            $this.setRightChecked();
             updateView();
         });
 
@@ -338,8 +379,8 @@
             if ($this.isRightChecked()) {
                 return;
             }
-            $('.dropdown-item-view.dropdown-item-checked-right').removeClass('dropdown-item-checked-right');
-            $this.addClass('dropdown-item-checked-right');
+            $('.dropdown-item-view.dropdown-item-checked-right').removeRightChecked();
+            $this.setRightChecked();
             updateView();
         });
 

@@ -98,7 +98,7 @@ function translate(form, notification) {
             } else {
                 const label = $form.data('detected').replace('%name%', data.from.name);
                 $labelDetected.text(label);
-                if (data.from.tag && fromValue !== '' && fromValue !== data.from.tag) {
+                if (data.from.tag && fromValue !== data.from.tag) {
                     $form.data('changing', true);
                     $from.val(data.from.tag).trigger('change');
                     handleSelection();

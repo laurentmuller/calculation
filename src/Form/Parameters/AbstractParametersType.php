@@ -35,6 +35,11 @@ abstract class AbstractParametersType extends AbstractType
 {
     use TranslatorTrait;
 
+    /**
+     * The displayed calculations range.
+     */
+    final public const CALCULATIONS_RANGE = [4, 8, 12, 16, 20];
+
     private const LABEL_PREFIX = 'parameters.fields.';
 
     /**
@@ -72,7 +77,7 @@ abstract class AbstractParametersType extends AbstractType
      */
     public static function getCalculationRange(): array
     {
-        return \range(4, 20, 4);
+        return [4, 8, 12, 16, 20];
     }
 
     #[\Override]
@@ -126,7 +131,7 @@ abstract class AbstractParametersType extends AbstractType
                 'choice_translation_domain' => false,
                 'expanded' => true,
             ])
-            ->addChoiceType($this->getCalculationChoices());
+            ->addChoiceType($this->getCalculationsChoice());
 
         $this->addOption($helper, PropertyServiceInterface::P_STATUS_BAR);
         $this->addOption($helper, PropertyServiceInterface::P_DARK_NAVIGATION);
@@ -201,13 +206,11 @@ abstract class AbstractParametersType extends AbstractType
     }
 
     /**
-     * Gets the displayed calculations choices.
+     * Gets the displayed calculations choice.
      */
-    private function getCalculationChoices(): array
+    private function getCalculationsChoice(): array
     {
-        $values = self::getCalculationRange();
-
-        return \array_combine($values, $values);
+        return \array_combine(self::CALCULATIONS_RANGE, self::CALCULATIONS_RANGE);
     }
 
     /**

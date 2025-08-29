@@ -59,7 +59,7 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
             'ICON_SHOW' => 'wrench',
             'ICON_ADD' => 'file far',
             'ICON_EDIT' => 'pencil',
-            'ICON_DELETE' => 'trash-can',
+            'ICON_DELETE' => 'xmark',
             'ICON_COPY' => 'copy far',
             // export
             'ICON_PDF' => 'file-pdf far',

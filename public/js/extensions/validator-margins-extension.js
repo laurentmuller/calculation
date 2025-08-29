@@ -88,6 +88,7 @@ function getMaximumInput(row) {
 function getSortedMargins($element) {
     'use strict';
     const $rows = $element.closest('tbody').children('tr');
+    //const $rows = $element.find('tbody > tr');
     if ($rows.length < 2) {
         return $rows;
     }
@@ -98,6 +99,34 @@ function getSortedMargins($element) {
         }
         return getMaximumInput(rowA) - getMaximumInput(rowB);
     });
+}
+
+/**
+ * Gets a value indicating if the margins are sorted.
+ *
+ * @param {jQuery<HTMLInputElement>} $element the element to get rows from.
+ * @return {boolean} true if sorted; false otherwise.
+ */
+function isSortedMargins($element) {
+    'use strict';
+    const $rows = $element.closest('tbody').children('tr');
+    if ($rows.length < 2) {
+        return true;
+    }
+    let sorted = true;
+    let lastMinimum = 0;
+    let lastMaximum = 0;
+    $rows.each(function (index, row) {
+        const minimum = getMinimumInput(row);
+        const maximum = getMaximumInput(row);
+        if (minimum < lastMinimum || maximum < lastMaximum) {
+            sorted = false;
+            return false;
+        }
+        lastMinimum = minimum;
+        lastMaximum = maximum;
+    });
+    return sorted;
 }
 
 /**

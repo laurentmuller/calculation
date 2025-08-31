@@ -169,7 +169,7 @@ class OpenWeatherControllerTest extends ControllerTestCase
 
     public function testSearchMultiple(): void
     {
-        $city1 = [
+        $cityFound = [
             'id' => 2660717,
             'name' => 'Bern',
             'country' => 'CH',
@@ -177,30 +177,33 @@ class OpenWeatherControllerTest extends ControllerTestCase
             'latitude' => 46.666672,
             'longitude' => 7.16667,
         ];
-        $city2 = [
-            'id' => 2660718,
-            'name' => 'Fribourg',
-            'country' => 'CH',
-            'country_name' => 'Switzerland',
-            'latitude' => 46.802368,
-            'longitude' => 7.15128,
+        $search = [$cityFound, $cityFound];
+
+        $current = [
+            'weather' => [
+                'icon_small' => 'icon_small',
+                'description' => 'description',
+            ],
+            'main' => [
+                'temp' => 10.0,
+            ],
+        ];
+        $group = [
+            'units' => [
+                'temperature' => '°C',
+            ],
+            'list' => [$current, $current],
         ];
 
         $searchService = $this->createMock(OpenWeatherSearchService::class);
         $searchService->method('search')
-            ->willReturn([$city1, $city2]);
+            ->willReturn($search);
         $this->setService(OpenWeatherSearchService::class, $searchService);
 
-        $group = [
-            'cnt' => 2,
-            'units' => [],
-            'list' => [],
-        ];
         $service = $this->createMock(OpenWeatherService::class);
         $service->method('group')
             ->willReturn($group);
         $this->setService(OpenWeatherService::class, $service);
-
 
         $data = [
             'form[query]' => 'Le Mouret',

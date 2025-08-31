@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\BadgeInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\PasswordUpgradeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
@@ -49,15 +50,11 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $password = $this->getPassword($request);
         $token = $this->getToken($request);
 
-        return new Passport(
-            new UserBadge($userIdentifier, $this->repository->loadUserByIdentifier(...)),
-            new PasswordCredentials($password),
-            [
-                new RememberMeBadge(),
-                new PasswordUpgradeBadge($password, $this->repository),
-                new CsrfTokenBadge(SecurityAttributes::AUTHENTICATE_TOKEN, $token),
-            ]
-        );
+        $userBadge = $this->createUserBadge($userIdentifier);
+        $credentials = $this->createPasswordCredentials($password);
+        $badges = $this->createBadges($password, $token);
+
+        return new Passport($userBadge, $credentials, $badges);
     }
 
     #[\Override]
@@ -78,6 +75,28 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     protected function getLoginUrl(Request $request): string
     {
         return $this->httpUtils->generateUri($request, SecurityAttributes::LOGIN_ROUTE);
+    }
+
+    /**
+     * @return BadgeInterface[]
+     */
+    private function createBadges(string $password, string $token): array
+    {
+        return [
+            new RememberMeBadge(),
+            new PasswordUpgradeBadge($password, $this->repository),
+            new CsrfTokenBadge(SecurityAttributes::AUTHENTICATE_TOKEN, $token),
+        ];
+    }
+
+    private function createPasswordCredentials(string $password): PasswordCredentials
+    {
+        return new PasswordCredentials($password);
+    }
+
+    private function createUserBadge(string $userIdentifier): UserBadge
+    {
+        return new UserBadge($userIdentifier, $this->repository->loadUserByIdentifier(...));
     }
 
     private function getPassword(Request $request): string

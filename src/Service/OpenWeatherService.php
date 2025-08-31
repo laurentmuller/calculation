@@ -26,7 +26,7 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
  *
  * @see https://openweathermap.org/api
  *
- * @phpstan-type OpenWeatherGroupType = array{cnt: int, units: array, list: array<int, array>}
+ * @phpstan-type OpenWeatherGroupType = array{units: array, list: array<int, array>}
  */
 class OpenWeatherService extends AbstractHttpClientService
 {
@@ -134,11 +134,6 @@ class OpenWeatherService extends AbstractHttpClientService
      * The 5 days / 3 hours forecast URI.
      */
     private const URI_FORECAST = 'forecast';
-
-    /**
-     * Current condition URI for a group (multiple cities).
-     */
-    private const URI_GROUP = 'group';
 
     /**
      * One call condition URI.
@@ -266,13 +261,44 @@ class OpenWeatherService extends AbstractHttpClientService
         if (\count($cityIds) > self::MAX_GROUP) {
             throw new \InvalidArgumentException('The number of city identifiers is greater than 20.');
         }
-        $query = [
-            self::PARAM_ID => \implode(',', $cityIds),
-            self::PARAM_UNITS => $units,
-        ];
 
-        /** @phpstan-var OpenWeatherGroupType|false */
-        return $this->get(self::URI_GROUP, $query);
+        $responses = [];
+        foreach ($cityIds as $cityId) {
+            $options = [
+                self::BASE_URI => self::HOST_NAME_V_2_5,
+                self::QUERY => [
+                    self::PARAM_ID => $cityId,
+                    self::PARAM_UNITS => $units->value,
+                ],
+            ];
+            $responses[] = $this->requestGet(self::URI_CURRENT, $options);
+        }
+
+        $list = [];
+        $client = $this->getClient();
+        foreach ($client->stream($responses) as $response => $chunk) {
+            if ($chunk->isLast()) {
+                $values = $response->toArray(false);
+                if (!$this->checkErrorCode($values)) {
+                    return false;
+                }
+                $list[] = $values;
+            }
+        }
+
+        // update
+        foreach ($list as &$result) {
+            $offset = $this->findTimezone($result);
+            $timezone = $this->offsetToTimZone($offset);
+            $this->formatter->update($result, $timezone);
+            $this->addUnits($result, $units);
+            $this->sortResults($result);
+        }
+
+        return [
+            'units' => $this->getUnits($units),
+            'list' => $list,
+        ];
     }
 
     /**
@@ -330,15 +356,7 @@ class OpenWeatherService extends AbstractHttpClientService
      */
     private function addUnits(array &$data, OpenWeatherUnits $units): void
     {
-        $data['units'] = [
-            'system' => $units->value,
-            'speed' => $units->getSpeed(),
-            'temperature' => $units->getDegree(),
-            'pressure' => 'hPa',
-            'degree' => '°',
-            'percent' => '%',
-            'volume' => 'mm',
-        ];
+        $data['units'] = $this->getUnits($units);
     }
 
     /**
@@ -430,6 +448,19 @@ class OpenWeatherService extends AbstractHttpClientService
     private function getCacheKey(string $url, array $query): string
     {
         return $url . '?' . \http_build_query($query);
+    }
+
+    private function getUnits(OpenWeatherUnits $units): array
+    {
+        return [
+            'system' => $units->value,
+            'speed' => $units->getSpeed(),
+            'temperature' => $units->getDegree(),
+            'pressure' => 'hPa',
+            'degree' => '°',
+            'percent' => '%',
+            'volume' => 'mm',
+        ];
     }
 
     /**

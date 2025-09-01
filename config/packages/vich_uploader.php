@@ -18,6 +18,5 @@ return static function (VichUploaderConfig $config): void {
     $config->dbDriver('orm')
         ->mappings('user_image')
         ->namer(UserNamer::class)
-        ->uriPrefix('/images/users')
-        ->uploadDestination('%kernel.project_dir%/public/images/users');
+        ->uriPrefix('/images/users');
 };

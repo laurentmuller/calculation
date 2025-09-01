@@ -37,6 +37,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 /**
  * Controller for the OpenWeatherMap API.
@@ -257,6 +258,8 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Shows the search city view.
+     *
+     * @throws ExceptionInterface
      */
     #[GetPostRoute(path: '/search', name: 'search')]
     public function search(Request $request, OpenWeatherSearchService $service): Response
@@ -473,6 +476,8 @@ class OpenWeatherController extends AbstractController
 
     /**
      * @param array<int, array> $cities
+     *
+     * @throws ExceptionInterface
      */
     private function updateCities(array &$cities, OpenWeatherUnits $units): void
     {

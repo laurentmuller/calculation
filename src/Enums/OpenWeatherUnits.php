@@ -23,7 +23,7 @@ use fpdf\Interfaces\PdfEnumDefaultInterface;
 use fpdf\Traits\PdfEnumDefaultTrait;
 
 /**
- * OpenWeatherMap unit enumeration.
+ * OpenWeatherMap units enumeration.
  *
  * @implements PdfEnumDefaultInterface<OpenWeatherUnits>
  * @implements EnumSortableInterface<OpenWeatherUnits>
@@ -45,6 +45,24 @@ enum OpenWeatherUnits: string implements EnumSortableInterface, PdfEnumDefaultIn
      */
     #[EnumCase(extras: ['degree' => '°C', 'speed' => 'm/s', PdfEnumDefaultInterface::NAME => true])]
     case METRIC = 'metric';
+
+    /**
+     * Gets this attributes.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'system' => $this->value,
+            'speed' => $this->getSpeed(),
+            'temperature' => $this->getDegree(),
+            'pressure' => 'hPa',
+            'degree' => '°',
+            'percent' => '%',
+            'volume' => 'mm',
+        ];
+    }
 
     /**
      * Gets the degree units.

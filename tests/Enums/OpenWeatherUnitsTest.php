@@ -23,6 +23,38 @@ class OpenWeatherUnitsTest extends TestCase
     use TranslatorMockTrait;
 
     /**
+     * @phpstan-return \Generator<int, array{OpenWeatherUnits, array<string, string>}>
+     */
+    public static function getAttributes(): \Generator
+    {
+        yield [
+            OpenWeatherUnits::IMPERIAL,
+            [
+                'system' => 'imperial',
+                'speed' => 'mph',
+                'temperature' => '°F',
+                'pressure' => 'hPa',
+                'degree' => '°',
+                'percent' => '%',
+                'volume' => 'mm',
+            ],
+        ];
+
+        yield [
+            OpenWeatherUnits::METRIC,
+            [
+                'system' => 'metric',
+                'speed' => 'm/s',
+                'temperature' => '°C',
+                'pressure' => 'hPa',
+                'degree' => '°',
+                'percent' => '%',
+                'volume' => 'mm',
+            ],
+        ];
+    }
+
+    /**
      * @phpstan-return \Generator<int, array{string, OpenWeatherUnits}>
      */
     public static function getDegrees(): \Generator
@@ -56,6 +88,13 @@ class OpenWeatherUnitsTest extends TestCase
     {
         yield ['imperial', OpenWeatherUnits::IMPERIAL];
         yield ['metric', OpenWeatherUnits::METRIC];
+    }
+
+    #[DataProvider('getAttributes')]
+    public function testAttributes(OpenWeatherUnits $units, array $expected): void
+    {
+        $actual = $units->attributes();
+        self::assertSame($expected, $actual);
     }
 
     public function testCount(): void

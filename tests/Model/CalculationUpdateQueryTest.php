@@ -115,10 +115,9 @@ class CalculationUpdateQueryTest extends TestCase
 
     private function getContext(bool $expectedViolation): MockObject&ExecutionContextInterface
     {
-        $context = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
+        $context = $this->createMock(ExecutionContextInterface::class);
         if ($expectedViolation) {
-            $violation = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)
-                ->getMock();
+            $violation = $this->createMock(ConstraintViolationBuilderInterface::class);
             $violation->expects(self::any())
                 ->method('setParameter')
                 ->willReturn($violation);

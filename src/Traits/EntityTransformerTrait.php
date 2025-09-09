@@ -11,38 +11,24 @@
 
 declare(strict_types=1);
 
-namespace App\Form\DataTransformer;
+namespace App\Traits;
 
 use App\Interfaces\EntityInterface;
-use App\Repository\AbstractRepository;
 use Doctrine\ORM\Proxy\DefaultProxyClassNameResolver;
-use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\InvalidArgumentException;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 /**
- * Abstract data transformer to convert entities and identifiers.
+ * Trait to convert an entity to or from an identifier (integer).
  *
  * @template TEntity of EntityInterface
- * @template TValue of TEntity|int
- * @template TTransformedValue of TEntity|int
- *
- * @template-implements DataTransformerInterface<TValue, TTransformedValue>
  */
-abstract class AbstractEntityTransformer implements DataTransformerInterface
+trait EntityTransformerTrait
 {
     /**
-     * @var class-string<TEntity>
+     * @var class-string
      */
     private readonly string $className;
-
-    /**
-     * @param AbstractRepository<TEntity> $repository
-     */
-    public function __construct(private readonly AbstractRepository $repository)
-    {
-        $this->className = $this->repository->getClassName();
-    }
 
     /**
      * @param int|string|null $value
@@ -83,7 +69,7 @@ abstract class AbstractEntityTransformer implements DataTransformerInterface
         return $value->getId();
     }
 
-    protected function validate(mixed $entity): bool
+    private function validate(mixed $entity): bool
     {
         return \is_object($entity) && $this->className === DefaultProxyClassNameResolver::getClass($entity);
     }

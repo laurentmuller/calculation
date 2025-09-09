@@ -442,16 +442,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "4.3.2",
+            "version": "4.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "7669f131d43b880de168b2d2df9687d152d6c762"
+                "reference": "231959669bb2173194c95636eae7f1b41b2a8b19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/7669f131d43b880de168b2d2df9687d152d6c762",
-                "reference": "7669f131d43b880de168b2d2df9687d152d6c762",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/231959669bb2173194c95636eae7f1b41b2a8b19",
+                "reference": "231959669bb2173194c95636eae7f1b41b2a8b19",
                 "shasum": ""
             },
             "require": {
@@ -461,10 +461,10 @@
                 "psr/log": "^1|^2|^3"
             },
             "require-dev": {
-                "doctrine/coding-standard": "13.0.0",
+                "doctrine/coding-standard": "13.0.1",
                 "fig/log-test": "^1",
                 "jetbrains/phpstorm-stubs": "2023.2",
-                "phpstan/phpstan": "2.1.17",
+                "phpstan/phpstan": "2.1.22",
                 "phpstan/phpstan-phpunit": "2.0.6",
                 "phpstan/phpstan-strict-rules": "^2",
                 "phpunit/phpunit": "11.5.23",
@@ -528,7 +528,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/4.3.2"
+                "source": "https://github.com/doctrine/dbal/tree/4.3.3"
             },
             "funding": [
                 {
@@ -544,7 +544,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-08-05T13:30:38+00:00"
+            "time": "2025-09-04T23:52:42+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -596,16 +596,16 @@
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "2.15.1",
+            "version": "2.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "5a305c5e776f9d3eb87f5b94d40d50aff439211d"
+                "reference": "152d5083f0cd205a278131dc4351a8c94d007fe1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/5a305c5e776f9d3eb87f5b94d40d50aff439211d",
-                "reference": "5a305c5e776f9d3eb87f5b94d40d50aff439211d",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/152d5083f0cd205a278131dc4351a8c94d007fe1",
+                "reference": "152d5083f0cd205a278131dc4351a8c94d007fe1",
                 "shasum": ""
             },
             "require": {
@@ -642,6 +642,7 @@
                 "phpunit/phpunit": "^9.6.22",
                 "psr/log": "^1.1.4 || ^2.0 || ^3.0",
                 "symfony/doctrine-messenger": "^6.4 || ^7.0",
+                "symfony/expression-language": "^6.4 || ^7.0",
                 "symfony/messenger": "^6.4 || ^7.0",
                 "symfony/phpunit-bridge": "^7.2",
                 "symfony/property-info": "^6.4 || ^7.0",
@@ -698,7 +699,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/DoctrineBundle/issues",
-                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.15.1"
+                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.16.1"
             },
             "funding": [
                 {
@@ -714,7 +715,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-07-30T15:48:28+00:00"
+            "time": "2025-09-05T15:24:53+00:00"
         },
         {
             "name": "doctrine/event-manager",
@@ -1351,16 +1352,16 @@
         },
         {
             "name": "elao/enum",
-            "version": "v2.5.2",
+            "version": "v2.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Elao/PhpEnums.git",
-                "reference": "0e67f9baff2d8e40291218f2e24e94ef8b8caa55"
+                "reference": "a1e09f8c781e383071f5257661be9af485c665a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elao/PhpEnums/zipball/0e67f9baff2d8e40291218f2e24e94ef8b8caa55",
-                "reference": "0e67f9baff2d8e40291218f2e24e94ef8b8caa55",
+                "url": "https://api.github.com/repos/Elao/PhpEnums/zipball/a1e09f8c781e383071f5257661be9af485c665a4",
+                "reference": "a1e09f8c781e383071f5257661be9af485c665a4",
                 "shasum": ""
             },
             "require": {
@@ -1428,7 +1429,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Elao/PhpEnums/issues",
-                "source": "https://github.com/Elao/PhpEnums/tree/v2.5.2"
+                "source": "https://github.com/Elao/PhpEnums/tree/v2.5.3"
             },
             "funding": [
                 {
@@ -1436,7 +1437,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-20T12:56:25+00:00"
+            "time": "2025-06-06T06:50:35+00:00"
         },
         {
             "name": "endroid/qr-code",
@@ -1803,16 +1804,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "3.0.15",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "3613bb25976ea8427fd6d9c68d0ff5ddb39aba62"
+                "reference": "ba20de360143a1cc88ede7edcc67424029c8281d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/3613bb25976ea8427fd6d9c68d0ff5ddb39aba62",
-                "reference": "3613bb25976ea8427fd6d9c68d0ff5ddb39aba62",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/ba20de360143a1cc88ede7edcc67424029c8281d",
+                "reference": "ba20de360143a1cc88ede7edcc67424029c8281d",
                 "shasum": ""
             },
             "require": {
@@ -1820,6 +1821,7 @@
                 "ext-gd": "*",
                 "ext-iconv": "*",
                 "ext-intl": "*",
+                "ext-mbstring": "*",
                 "ext-zlib": "*",
                 "php": "^8.2"
             },
@@ -1862,7 +1864,7 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2025-07-10T05:31:47+00:00"
+            "time": "2025-09-04T05:40:00+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",
@@ -8728,16 +8730,16 @@
         },
         {
             "name": "fortawesome/font-awesome",
-            "version": "7.0.0",
+            "version": "7.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FortAwesome/Font-Awesome.git",
-                "reference": "14189d0495198ec3846a59d100ef12f64f36c435"
+                "reference": "b476ed9aeef6ff16accd275eca515d4e08c3e724"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/14189d0495198ec3846a59d100ef12f64f36c435",
-                "reference": "14189d0495198ec3846a59d100ef12f64f36c435",
+                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/b476ed9aeef6ff16accd275eca515d4e08c3e724",
+                "reference": "b476ed9aeef6ff16accd275eca515d4e08c3e724",
                 "shasum": ""
             },
             "type": "library",
@@ -8769,7 +8771,7 @@
                 "issues": "https://github.com/FortAwesome/Font-Awesome/issues",
                 "source": "https://github.com/FortAwesome/Font-Awesome"
             },
-            "time": "2025-07-22T16:06:19+00:00"
+            "time": "2025-09-02T19:42:02+00:00"
         },
         {
             "name": "masterminds/html5",
@@ -9411,16 +9413,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "11.5.35",
+            "version": "11.5.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "d341ee94ee5007b286fc7907b383aae6b5b3cc91"
+                "reference": "264a87c7ef68b1ab9af7172357740dc266df5957"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d341ee94ee5007b286fc7907b383aae6b5b3cc91",
-                "reference": "d341ee94ee5007b286fc7907b383aae6b5b3cc91",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/264a87c7ef68b1ab9af7172357740dc266df5957",
+                "reference": "264a87c7ef68b1ab9af7172357740dc266df5957",
                 "shasum": ""
             },
             "require": {
@@ -9492,7 +9494,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.35"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.36"
             },
             "funding": [
                 {
@@ -9516,7 +9518,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-08-28T05:13:54+00:00"
+            "time": "2025-09-03T06:24:17+00:00"
         },
         {
             "name": "sebastian/cli-parser",

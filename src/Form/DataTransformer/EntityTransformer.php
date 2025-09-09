@@ -15,22 +15,29 @@ namespace App\Form\DataTransformer;
 
 use App\Interfaces\EntityInterface;
 use App\Repository\AbstractRepository;
+use App\Traits\EntityTransformerTrait;
+use Symfony\Component\Form\DataTransformerInterface;
 
 /**
- * Data transformer to convert entity to identifier.
+ * Data transformer to convert an entity to an identifier (integer).
  *
  * @template TEntity of EntityInterface
  *
- * @extends AbstractEntityTransformer<TEntity, TEntity, int>
+ * @implements DataTransformerInterface<TEntity, int>
  */
-class EntityTransformer extends AbstractEntityTransformer
+readonly class EntityTransformer implements DataTransformerInterface
 {
+    /**
+     * @use EntityTransformerTrait<TEntity>
+     */
+    use EntityTransformerTrait;
+
     /**
      * @phpstan-param AbstractRepository<TEntity> $repository
      */
-    public function __construct(AbstractRepository $repository)
+    public function __construct(protected AbstractRepository $repository)
     {
-        parent::__construct($repository);
+        $this->className = $this->repository->getClassName();
     }
 
     /**

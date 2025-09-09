@@ -204,9 +204,10 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         int $cols,
         ?PdfStyle $style = null
     ): PdfCell {
+        $icon = $this->roleService->getRoleIcon($entity);
         $text = $this->getEntityText($entity);
         $cell = $this->fontAwesomeService->getFontAwesomeCell(
-            icon: $this->roleService->getRoleIcon($entity),
+            icon: $icon,
             text: $text,
             cols: $cols,
             style: $style

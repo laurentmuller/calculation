@@ -34,6 +34,7 @@ readonly class FontAwesomeService
      *
      * @param string            $icon      the icon class to convert
      * @param ?string           $color     the foreground color to apply or <code>null</code> for black color
+     * @param int               $size      the image size
      * @param ?string           $text      the cell text
      * @param positive-int      $cols      the cell columns span
      * @param ?PdfStyle         $style     the cell style
@@ -45,6 +46,7 @@ readonly class FontAwesomeService
     public function getFontAwesomeCell(
         string $icon,
         ?string $color = null,
+        int $size = 11,
         ?string $text = null,
         int $cols = 1,
         ?PdfStyle $style = null,
@@ -63,6 +65,7 @@ readonly class FontAwesomeService
         return new PdfFontAwesomeCell(
             image: $image,
             text: $text,
+            size: $size,
             cols: $cols,
             style: $style,
             alignment: $alignment,

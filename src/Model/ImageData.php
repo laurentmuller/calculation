@@ -14,10 +14,13 @@ declare(strict_types=1);
 namespace App\Model;
 
 /**
- * Contains information about image data.
+ * Contains information about an image data.
  */
 class ImageData
 {
+    /** @var array{0: int, 1: int}|false|null */
+    private array|false|null $size = null;
+
     /**
      * @param string  $data     the image data
      * @param ?string $mimeType the image mime type
@@ -78,6 +81,21 @@ class ImageData
         }
 
         return $this->mimeType;
+    }
+
+    /**
+     * Gets the image size.
+     *
+     * @return array{0: int, 1: int}|false the image width and height, if applicable; false otherwise
+     */
+    public function getSize(): array|false
+    {
+        if (null === $this->size) {
+            $size = \getimagesizefromstring($this->data);
+            $this->size = \is_array($size) ? [$size[0], $size[1]] : false;
+        }
+
+        return $this->size;
     }
 
     /**

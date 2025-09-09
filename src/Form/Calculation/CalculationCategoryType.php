@@ -26,26 +26,21 @@ use App\Repository\CategoryRepository;
  */
 class CalculationCategoryType extends AbstractEntityType
 {
-    /**
-     * @var EntityTransformer<\App\Entity\Category>
-     */
-    private readonly EntityTransformer $transformer;
-
-    public function __construct(CategoryRepository $repository)
+    public function __construct(private readonly CategoryRepository $repository)
     {
         parent::__construct(CalculationCategory::class);
-        $this->transformer = new EntityTransformer($repository);
     }
 
     #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('category')
-            ->modelTransformer($this->transformer)
-            ->addHiddenType()
-            ->field('code')->addHiddenType()
-            ->field('position')->addHiddenType();
-
+            ->modelTransformer(new EntityTransformer($this->repository))
+            ->addHiddenType();
+        $helper->field('code')
+            ->addHiddenType();
+        $helper->field('position')
+            ->addHiddenType();
         $helper->field('items')
             ->updateOption('prototype_name', '__itemIndex__')
             ->addCollectionType(CalculationItemType::class);

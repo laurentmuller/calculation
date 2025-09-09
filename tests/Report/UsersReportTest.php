@@ -15,6 +15,7 @@ namespace App\Tests\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\User;
+use App\Interfaces\RoleInterface;
 use App\Report\UsersReport;
 use App\Service\FontAwesomeService;
 use App\Service\RoleService;
@@ -23,28 +24,67 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 
 class UsersReportTest extends TestCase
 {
-    public function testRender(): void
+    public function testWithImageGreater(): void
+    {
+        $defaultImage = __DIR__ . '/../../public/images/flags/ad.png';
+        $report = $this->createReport($defaultImage);
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
+    public function testWithImageInvalid(): void
+    {
+        $defaultImage = __DIR__ . '/fake.png';
+        $report = $this->createReport($defaultImage);
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
+    public function testWithImageSame(): void
+    {
+        $defaultImage = __DIR__ . '/../../public/images/flags/ch.png';
+        $report = $this->createReport($defaultImage);
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
+    public function testWithImageSmaller(): void
+    {
+        $defaultImage = __DIR__ . '/../../public/images/avatar.png';
+        $report = $this->createReport($defaultImage);
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
+    public function testWithoutImage(): void
+    {
+        $report = $this->createReport();
+        $actual = $report->render();
+        self::assertTrue($actual);
+    }
+
+    private function createReport(?string $imagePath = null): UsersReport
     {
         $controller = $this->createMock(AbstractController::class);
         $roleService = $this->createMock(RoleService::class);
         $storage = $this->createMock(StorageInterface::class);
-        $fontAwesomeService = $this->createMock(FontAwesomeService::class);
+        $fontService = $this->createMock(FontAwesomeService::class);
 
         $user1 = new User();
         $user1->updateLastLogin();
 
         $user2 = $this->createMock(User::class);
+        $user2->method('getRole')
+            ->willReturn(RoleInterface::ROLE_USER);
         $user2->method('getImagePath')
-            ->willReturn(__DIR__ . '/../files/images/example.png');
+            ->willReturn($imagePath);
 
-        $report = new UsersReport(
+        return new UsersReport(
             $controller,
             [$user1, $user2],
-            $roleService,
             $storage,
-            $fontAwesomeService
+            $roleService,
+            $fontService
         );
-        $actual = $report->render();
-        self::assertTrue($actual);
     }
 }

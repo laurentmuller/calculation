@@ -33,17 +33,16 @@ readonly class EntityTransformer implements DataTransformerInterface
     use EntityTransformerTrait;
 
     /**
-     * @phpstan-param AbstractRepository<TEntity> $repository
+     * @param AbstractRepository<TEntity> $repository
      */
     public function __construct(protected AbstractRepository $repository)
     {
-        $this->className = $this->repository->getClassName();
     }
 
     /**
      * @param int|string|null $value
      *
-     * @phpstan-return TEntity|null
+     * @return TEntity|null
      */
     #[\Override]
     public function reverseTransform(mixed $value): ?EntityInterface
@@ -52,7 +51,7 @@ readonly class EntityTransformer implements DataTransformerInterface
     }
 
     /**
-     * @phpstan-param EntityInterface|null $value
+     * @param EntityInterface|null $value
      */
     #[\Override]
     public function transform(mixed $value): ?int

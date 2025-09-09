@@ -110,16 +110,13 @@ class LogsReport extends AbstractReport
             ->outputHeaders();
     }
 
-    private function getCell(
-        string $text,
-        string $icon,
-        string $color = FontAwesomeImageService::BLACK_COLOR
-    ): PdfFontAwesomeCell|string {
-        $key = \sprintf('%s_%s_%s', $text, $icon, $color);
+    private function getCell(string $text, string $icon, ?string $color = null): PdfFontAwesomeCell|string
+    {
+        $key = \sprintf('%s_%s_%s', $text, $icon, $color ?? '');
         if (isset($this->cells[$key])) {
             return $this->cells[$key];
         }
-        $cell = $this->service->getFontAwesomeCell($icon, $color, $text) ?? $text;
+        $cell = $this->service->getFontAwesomeCell(icon: $icon, color: $color, text: $text) ?? $text;
 
         return $this->cells[$key] = $cell;
     }

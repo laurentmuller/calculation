@@ -26,14 +26,9 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
 trait EntityTransformerTrait
 {
     /**
-     * @var class-string
-     */
-    private readonly string $className;
-
-    /**
      * @param int|string|null $value
      *
-     * @phpstan-return TEntity|null
+     * @return TEntity|null
      */
     protected function toEntity(mixed $value): ?EntityInterface
     {
@@ -47,14 +42,14 @@ trait EntityTransformerTrait
 
         $entity = $this->repository->find((int) $value);
         if (null === $entity || !$this->validate($entity)) {
-            throw new InvalidArgumentException(\sprintf('Unable to find a "%s" for the value "%s".', $this->className, $value));
+            throw new InvalidArgumentException(\sprintf('Unable to find a "%s" for the value "%s".', $this->getClassName(), $value));
         }
 
         return $entity;
     }
 
     /**
-     * @phpstan-param EntityInterface|null $value
+     * @param EntityInterface|null $value
      */
     protected function toIdentifier(mixed $value): ?int
     {
@@ -63,14 +58,22 @@ trait EntityTransformerTrait
         }
 
         if (!$this->validate($value)) {
-            throw new UnexpectedTypeException($value, $this->className);
+            throw new UnexpectedTypeException($value, $this->getClassName());
         }
 
         return $value->getId();
     }
 
+    /**
+     * @return class-string<TEntity>
+     */
+    private function getClassName(): string
+    {
+        return $this->repository->getClassName();
+    }
+
     private function validate(mixed $entity): bool
     {
-        return \is_object($entity) && $this->className === DefaultProxyClassNameResolver::getClass($entity);
+        return \is_object($entity) && $this->getClassName() === DefaultProxyClassNameResolver::getClass($entity);
     }
 }

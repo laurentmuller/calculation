@@ -32,12 +32,16 @@ class CalculationItemType extends AbstractEntityType
     #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
-        $helper->field('description')->addHiddenType()
-            ->field('unit')->addHiddenType()
-            ->field('price')->addHiddenType()
-            ->field('quantity')->addHiddenType()
-            ->field('position')->addHiddenType();
-
+        $helper->field('description')
+            ->addHiddenType();
+        $helper->field('unit')
+            ->addHiddenType();
+        $helper->field('price')
+            ->addHiddenType();
+        $helper->field('quantity')
+            ->addHiddenType();
+        $helper->field('position')
+            ->addHiddenType();
         $helper->field('total')
             ->disabled()
             ->addHiddenType();

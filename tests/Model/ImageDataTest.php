@@ -37,5 +37,10 @@ class ImageDataTest extends TestCase
         $actual = $imageData->getFileName();
         $expected = 'data://image/png;base64,' . \base64_encode($content);
         self::assertSame($expected, $actual);
+
+        $actual = $imageData->getSize();
+        self::assertIsArray($actual);
+        self::assertSame(124, $actual[0]);
+        self::assertSame(147, $actual[1]);
     }
 }

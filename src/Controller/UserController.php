@@ -190,12 +190,12 @@ class UserController extends AbstractEntityController
      */
     #[PdfRoute]
     public function pdf(
-        RoleService $roleService,
         StorageInterface $storage,
-        FontAwesomeService $fontAwesomeService
+        RoleService $roleService,
+        FontAwesomeService $fontService,
     ): PdfResponse {
         $entities = $this->getEntitiesByUserName();
-        $doc = new UsersReport($this, $entities, $roleService, $storage, $fontAwesomeService);
+        $doc = new UsersReport($this, $entities, $storage, $roleService, $fontService);
 
         return $this->renderPdfDocument($doc);
     }

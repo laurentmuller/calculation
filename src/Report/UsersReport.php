@@ -15,6 +15,7 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\User;
+use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfImageCell;
@@ -22,6 +23,7 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Service\FontAwesomeService;
 use App\Service\RoleService;
+use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
 use Symfony\Component\Clock\DatePoint;
 use Vich\UploaderBundle\Storage\StorageInterface;
@@ -33,10 +35,13 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  */
 class UsersReport extends AbstractArrayReport
 {
-    /**
-     * @var array<string, PdfCell>
-     */
-    private array $cells = [];
+    private const IMAGE_SIZE = 48;
+
+    private ?PdfCell $defaultCell = null;
+    private ?PdfStyle $disabledStyle = null;
+    private ?PdfStyle $enabledStyle = null;
+    /** @var array<string, PdfCell> */
+    private array $roleCells = [];
 
     /**
      * @param User[] $entities
@@ -44,27 +49,32 @@ class UsersReport extends AbstractArrayReport
     public function __construct(
         AbstractController $controller,
         array $entities,
-        private readonly RoleService $roleService,
         private readonly StorageInterface $storage,
-        private readonly FontAwesomeService $fontAwesomeService
+        private readonly RoleService $roleService,
+        private readonly FontAwesomeService $fontService,
     ) {
         parent::__construct($controller, $entities);
-        $this->setTranslatedTitle('user.list.title');
     }
 
     #[\Override]
     protected function doRender(array $entities): bool
     {
-        $disabledStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::red());
-        $enabledStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGreen());
+        $this->setTranslatedTitle('user.list.title');
 
         $this->addPage();
+        $this->createStyles();
         $table = $this->createTable();
         foreach ($entities as $entity) {
-            $this->outputEntity($table, $entity, $enabledStyle, $disabledStyle);
+            $this->outputEntity($table, $entity);
         }
 
         return $this->renderCount($table, $entities, 'counters.users');
+    }
+
+    private function createStyles(): void
+    {
+        $this->disabledStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::red());
+        $this->enabledStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGreen());
     }
 
     private function createTable(): PdfTable
@@ -74,9 +84,9 @@ class UsersReport extends AbstractArrayReport
                 $this->centerColumn('user.fields.imageFile', 18, true),
                 $this->leftColumn('user.fields.username', 25),
                 $this->leftColumn('user.fields.email', 35),
-                $this->leftColumn('user.fields.role', 40, true),
+                $this->leftColumn('user.fields.role', 39, true),
                 $this->leftColumn('user.fields.enabled', 18, true),
-                $this->leftColumn('user.fields.lastLogin', 30, true)
+                $this->leftColumn('user.fields.lastLogin', 28, true)
             )->outputHeaders();
     }
 
@@ -97,47 +107,58 @@ class UsersReport extends AbstractArrayReport
         return $this->trans('common.value_none');
     }
 
+    private function getDefaultImageCell(): PdfCell
+    {
+        if ($this->defaultCell instanceof PdfCell) {
+            return $this->defaultCell;
+        }
+        $color = PdfDrawColor::cellBorder()->asHex('#');
+        $this->defaultCell = $this->fontService->getFontAwesomeCell(
+            icon: 'fa-solid fa-user-slash',
+            color: $color,
+            size: self::IMAGE_SIZE
+        ) ?? new PdfCell();
+
+        return $this->defaultCell;
+    }
+
     /**
      * Gets the image cell for the given user.
      */
     private function getImageCell(User $user): PdfCell
     {
         $path = $user->getImagePath($this->storage);
-        if (null === $path) {
-            return new PdfCell();
+        if (null === $path || !FileUtils::exists($path)) {
+            return $this->getDefaultImageCell();
         }
-        $size = 64;
         $cell = new PdfImageCell($path);
         [$width, $height] = $cell->getOriginalSize();
         if ($width > $height) {
-            return $cell->resize(width: $size);
-        }
-        if ($width < $height || $width !== $size) {
-            return $cell->resize(height: $size);
+            return $cell->resize(width: self::IMAGE_SIZE);
         }
 
-        return $cell;
+        return $cell->resize(height: self::IMAGE_SIZE);
     }
 
     private function getRoleCell(User $user): PdfCell
     {
         $role = $user->getRole();
-        if (isset($this->cells[$role])) {
-            return $this->cells[$role];
+        if (isset($this->roleCells[$role])) {
+            return $this->roleCells[$role];
         }
 
         $icon = $this->roleService->getRoleIcon($role);
         $text = $this->roleService->translateRole($role);
-        $cell = $this->fontAwesomeService->getFontAwesomeCell(icon: $icon, text: $text) ?? new PdfCell($text);
+        $cell = $this->fontService->getFontAwesomeCell(icon: $icon, text: $text) ?? new PdfCell($text);
 
-        return $this->cells[$role] = $cell;
+        return $this->roleCells[$role] = $cell;
     }
 
-    private function outputEntity(PdfTable $table, User $entity, PdfStyle $enabledStyle, PdfStyle $disabledStyle): void
+    private function outputEntity(PdfTable $table, User $entity): void
     {
         $enabled = $entity->isEnabled();
         $editableText = $this->formatEditable($enabled);
-        $editableStyle = $enabled ? $enabledStyle : $disabledStyle;
+        $editableStyle = $enabled ? $this->enabledStyle : $this->disabledStyle;
 
         $table->startRow()
             ->addCell($this->getImageCell($entity))

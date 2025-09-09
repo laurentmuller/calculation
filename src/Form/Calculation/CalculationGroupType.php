@@ -26,26 +26,21 @@ use App\Repository\GroupRepository;
  */
 class CalculationGroupType extends AbstractEntityType
 {
-    /**
-     * @var EntityTransformer<\App\Entity\Group>
-     */
-    private readonly EntityTransformer $transformer;
-
-    public function __construct(GroupRepository $repository)
+    public function __construct(private readonly GroupRepository $repository)
     {
         parent::__construct(CalculationGroup::class);
-        $this->transformer = new EntityTransformer($repository);
     }
 
     #[\Override]
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('group')
-            ->modelTransformer($this->transformer)
-            ->addHiddenType()
-            ->field('code')->addHiddenType()
-            ->field('position')->addHiddenType();
-
+            ->modelTransformer(new EntityTransformer($this->repository))
+            ->addHiddenType();
+        $helper->field('code')
+            ->addHiddenType();
+        $helper->field('position')
+            ->addHiddenType();
         $helper->field('categories')
             ->updateOption('prototype_name', '__categoryIndex__')
             ->addCollectionType(CalculationCategoryType::class);

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6622992db826abb64364ec1ae0e4c0d5",
+    "content-hash": "9de5685e5fc479d0daec882aa2fa5c45",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2332,16 +2332,16 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "4.5.0",
+            "version": "5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "2ea9786632e6fac1aee601b6e426bcc723d8ce13"
+                "reference": "fd26e45a814e94ae2aad0df757d9d1739c4bf2e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/2ea9786632e6fac1aee601b6e426bcc723d8ce13",
-                "reference": "2ea9786632e6fac1aee601b6e426bcc723d8ce13",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/fd26e45a814e94ae2aad0df757d9d1739c4bf2e0",
+                "reference": "fd26e45a814e94ae2aad0df757d9d1739c4bf2e0",
                 "shasum": ""
             },
             "require": {
@@ -2432,9 +2432,9 @@
             ],
             "support": {
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
-                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/4.5.0"
+                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/5.1.0"
             },
-            "time": "2025-07-24T05:15:59+00:00"
+            "time": "2025-09-04T05:34:49+00:00"
         },
         {
             "name": "phpoffice/phpword",

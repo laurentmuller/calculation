@@ -18,6 +18,7 @@ use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\SingleMockPropertyTypeRector;
+use Rector\PHPUnit\CodeQuality\Rector\MethodCall\ScalarArgumentToExpectedParamTypeRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\TwigSetList;
@@ -38,6 +39,8 @@ return RectorConfig::configure()
         StringClassNameToClassConstantRector::class => [
             __DIR__ . '/tests/Traits/CheckSubClassTraitTest.php',
         ],
+        // Can be removed when https://github.com/rectorphp/rector-phpunit/pull/548 is released
+        ScalarArgumentToExpectedParamTypeRector::class,
     ])->withComposerBased(
         twig: true,
         doctrine: true,

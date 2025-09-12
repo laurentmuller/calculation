@@ -280,7 +280,7 @@ final class StringUtils
     public static function pregReplaceAll(array $values, string|array $subject, int $limit = -1): string|array
     {
         /** @phpstan-var string|string[] */
-        return \preg_replace(\array_keys($values), \array_values($values), $subject, $limit); // @phpstan-ignore varTag.type
+        return \preg_replace(\array_keys($values), \array_values($values), $subject, $limit);
     }
 
     /**

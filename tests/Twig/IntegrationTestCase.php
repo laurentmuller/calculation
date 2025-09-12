@@ -253,9 +253,8 @@ abstract class IntegrationTestCase extends TestCase
             throw new \InvalidArgumentException('Unable to evaluate the code.');
         }
 
-        /** @phpstan-ignore offsetAccess.notFound */
-        $uri = \stream_get_meta_data($stream)['uri'];
-        if (!\file_exists($uri)) {
+        $uri = \stream_get_meta_data($stream)['uri'] ?? '';
+        if (!\file_exists($uri) || '' === $uri) {
             throw new \InvalidArgumentException('Unable to open the file.');
         }
         \register_shutdown_function(fn () => $this->unlink($uri));

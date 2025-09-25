@@ -15,14 +15,12 @@ namespace App\Tests\Traits;
 
 use App\Traits\AwareTrait;
 use Faker\Container\ContainerException;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;
 
-class AwareTraitTest extends TestCase
+class AwareTraitTest extends AwareTraitTestCase
 {
     use AwareTrait;
-
-    private ?ContainerInterface $container = null;
 
     public function testGetWithException(): void
     {
@@ -31,10 +29,11 @@ class AwareTraitTest extends TestCase
         self::expectException(\LogicException::class);
         self::expectExceptionMessageMatches('/Unable to find service.*/');
 
-        $this->container = $this->createMock(ContainerInterface::class);
-        $this->container->method('has')
+        /** @var MockObject&ContainerInterface $container */
+        $container = $this->container;
+        $container->method('has')
             ->willReturn(true);
-        $this->container->method('get')
+        $container->method('get')
             ->willThrowException(new ContainerException(code: $code));
         $this->getContainerService(__FUNCTION__, self::class);
     }
@@ -45,18 +44,20 @@ class AwareTraitTest extends TestCase
         self::expectException(\LogicException::class);
         self::expectExceptionMessageMatches('/Unable to find service.*/');
 
-        $this->container = $this->createMock(ContainerInterface::class);
-        $this->container->method('has')
+        /** @var MockObject&ContainerInterface $container */
+        $container = $this->container;
+        $container->method('has')
             ->willReturn(false);
         $this->getContainerService(__FUNCTION__, self::class);
     }
 
     public function testWithoutException(): void
     {
-        $this->container = $this->createMock(ContainerInterface::class);
-        $this->container->method('has')
+        /** @var MockObject&ContainerInterface $container */
+        $container = $this->container;
+        $container->method('has')
             ->willReturn(true);
-        $this->container->method('get')
+        $container->method('get')
             ->willReturn($this);
         $actual = $this->getContainerService(__FUNCTION__, self::class);
         self::assertSame($this, $actual);

@@ -66,7 +66,7 @@ class AbstractEntityTest extends TestCase
      */
     private function getEntity(?int $id = null): AbstractEntity
     {
-        $entity = new class() extends AbstractEntity {};
+        $entity = new class extends AbstractEntity {};
         if (\is_int($id)) {
             return self::setId($entity, $id);
         }

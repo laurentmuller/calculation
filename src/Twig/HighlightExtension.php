@@ -28,7 +28,7 @@ use Twig\Environment;
 class HighlightExtension
 {
     /**
-     * @const array<non-empty-string, string>
+     * @var array<non-empty-string, string>
      */
     private const PHP_PATTERNS = [
         '/title="(.*?)"/i' => '',

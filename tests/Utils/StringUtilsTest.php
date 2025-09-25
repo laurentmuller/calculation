@@ -64,7 +64,7 @@ class StringUtilsTest extends TestCase
         yield [[1, 2], 'array'];
         yield [true, 'true'];
         yield [false, 'false'];
-        yield [new class() {}, 'class@anonymous'];
+        yield [new class {}, 'class@anonymous'];
     }
 
     /**

@@ -23,7 +23,7 @@ class ParameterTest extends TestCase
      */
     public function testGetDefaultValueNotNull(): void
     {
-        $testedClass = new class() {
+        $testedClass = new class {
             #[Parameter('parameter_name', 123456)]
             public string $field = '';
         };
@@ -37,7 +37,7 @@ class ParameterTest extends TestCase
      */
     public function testGetDefaultValueNull(): void
     {
-        $testedClass = new class() {
+        $testedClass = new class {
             #[Parameter('parameter_name')]
             public string $field = '';
         };
@@ -51,7 +51,7 @@ class ParameterTest extends TestCase
      */
     public function testGetInstance(): void
     {
-        $testedClass = new class() {
+        $testedClass = new class {
             #[Parameter('parameter_name', 12346)]
             public string $field = '';
         };
@@ -65,7 +65,7 @@ class ParameterTest extends TestCase
      */
     public function testGetInstanceNoAttribute(): void
     {
-        $testedClass = new class() {
+        $testedClass = new class {
             public string $field = '';
         };
 
@@ -78,7 +78,7 @@ class ParameterTest extends TestCase
      */
     public function testGetInstancePropertyNoFound(): void
     {
-        $testedClass = new class() {
+        $testedClass = new class {
             #[Parameter('parameter_name')]
             public string $field = '';
         };
@@ -92,7 +92,7 @@ class ParameterTest extends TestCase
      */
     public function testGetName(): void
     {
-        $testedClass = new class() {
+        $testedClass = new class {
             #[Parameter('parameter_name')]
             public string $field = '';
         };
@@ -106,7 +106,7 @@ class ParameterTest extends TestCase
      */
     public function testIsDefaultValueFalse(): void
     {
-        $testedClass = new class() {
+        $testedClass = new class {
             #[Parameter('parameter_name', 12346)]
             public string $field = '';
         };
@@ -120,7 +120,7 @@ class ParameterTest extends TestCase
      */
     public function testIsDefaultValueTrue(): void
     {
-        $testedClass = new class() {
+        $testedClass = new class {
             #[Parameter('parameter_name', 12346)]
             public string $field = '';
         };

@@ -172,7 +172,7 @@ class AbstractPropertyTest extends TestCase
      */
     private function getEntity(?int $id = null): AbstractProperty
     {
-        $entity = new class() extends AbstractProperty {};
+        $entity = new class extends AbstractProperty {};
         if (\is_int($id)) {
             return self::setId($entity, $id);
         }

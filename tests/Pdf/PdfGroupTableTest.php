@@ -49,7 +49,7 @@ class PdfGroupTableTest extends TestCase
     {
         $table = $this->createTable();
         $table->getParent()->addPage();
-        $listener = new class() implements PdfGroupListenerInterface {
+        $listener = new class implements PdfGroupListenerInterface {
             #[\Override]
             public function drawGroup(PdfGroupEvent $event): bool
             {

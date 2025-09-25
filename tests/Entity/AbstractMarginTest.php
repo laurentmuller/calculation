@@ -68,7 +68,7 @@ class AbstractMarginTest extends TestCase
 
     private function getEntity(float $minimum = 0.0, float $maximum = 0.0, float $margin = 1.0): AbstractMargin
     {
-        $entity = new class() extends AbstractMargin {
+        $entity = new class extends AbstractMargin {
         };
         $entity->setMinimum($minimum)
             ->setMaximum($maximum)

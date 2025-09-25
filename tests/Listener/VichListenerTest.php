@@ -95,7 +95,7 @@ class VichListenerTest extends TestCase
      */
     public function testPreUploadWithEmptyNamer(): void
     {
-        $namer = new class() implements NamerInterface {
+        $namer = new class implements NamerInterface {
             #[\Override]
             public function name(object $object, PropertyMapping $mapping): string
             {

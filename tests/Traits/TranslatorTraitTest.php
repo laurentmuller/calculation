@@ -54,7 +54,7 @@ class TranslatorTraitTest extends TestCase
 
     public function testNoBagTranslator(): void
     {
-        $translator = new class() implements TranslatorInterface {
+        $translator = new class implements TranslatorInterface {
             use TranslatorTrait;
 
             #[\Override]

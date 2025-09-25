@@ -39,25 +39,14 @@ trait AwareTrait
     {
         $id = \sprintf('%s::%s', self::class, $function);
         if (!$this->container->has($id)) {
-            throw $this->createLogicException($class, $id);
+            throw new \LogicException(\sprintf('Unable to find service "%s" from "%s".', $class, $id));
         }
 
         try {
             /** @phpstan-var T */
             return $this->container->get($id);
         } catch (ContainerExceptionInterface $e) {
-            throw $this->createLogicException($class, $id, $e);
+            throw new \LogicException(\sprintf('Unable to find service "%s" from "%s".', $class, $id), $e->getCode(), $e);
         }
-    }
-
-    private function createLogicException(
-        string $class,
-        string $id,
-        ?ContainerExceptionInterface $previous = null
-    ): \LogicException {
-        $message = \sprintf('Unable to find service "%s" from "%s".', $class, $id);
-        $code = $previous instanceof \Throwable ? $previous->getCode() : 0;
-
-        return new \LogicException($message, $code, $previous);
     }
 }

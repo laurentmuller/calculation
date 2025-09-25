@@ -16,28 +16,17 @@ namespace App\Tests\Traits;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Traits\AuthorizationCheckerAwareTrait;
-use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-class AuthorizationCheckerAwareTraitTest extends TestCase implements ServiceSubscriberInterface
+class AuthorizationCheckerAwareTraitTest extends AwareTraitTestCase
 {
     use AuthorizationCheckerAwareTrait;
-
-    public ContainerInterface $container;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->container = $this->createMock(ContainerInterface::class);
+        parent::setUp();
         $this->setChecker($this->createMock(AuthorizationCheckerInterface::class));
-    }
-
-    #[\Override]
-    public static function getSubscribedServices(): array
-    {
-        return [];
     }
 
     public function testIsGranted(): void

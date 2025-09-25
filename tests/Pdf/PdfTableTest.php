@@ -130,7 +130,7 @@ class PdfTableTest extends TestCase
         $table = $this->createTable()
             ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
-        $listener = new class() implements PdfDrawCellBackgroundInterface {
+        $listener = new class implements PdfDrawCellBackgroundInterface {
             #[\Override]
             public function drawCellBackground(PdfCellBackgroundEvent $event): bool
             {
@@ -149,7 +149,7 @@ class PdfTableTest extends TestCase
         $table = $this->createTable()
             ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
-        $listener = new class() implements PdfDrawCellBorderInterface {
+        $listener = new class implements PdfDrawCellBorderInterface {
             #[\Override]
             public function drawCellBorder(PdfCellBorderEvent $event): bool
             {
@@ -297,7 +297,7 @@ class PdfTableTest extends TestCase
         $table = $this->createTable()
             ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
-        $listener = new class() implements PdfDrawHeadersInterface {
+        $listener = new class implements PdfDrawHeadersInterface {
             #[\Override]
             public function drawHeaders(PdfPdfDrawHeadersEvent $event): bool
             {
@@ -437,7 +437,7 @@ class PdfTableTest extends TestCase
         $table = $this->createTable()
             ->addColumn(new PdfColumn());
         $table->getParent()->addPage();
-        $listener = new class() implements PdfDrawCellTextInterface {
+        $listener = new class implements PdfDrawCellTextInterface {
             #[\Override]
             public function drawCellText(PdfCellTextEvent $event): bool
             {

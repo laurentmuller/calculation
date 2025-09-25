@@ -99,7 +99,7 @@ class PdfMemoryImageTraitTest extends TestCase
 
     public function testInvalidLoader(): void
     {
-        $doc = new class() extends PdfImageDocument {
+        $doc = new class extends PdfImageDocument {
             public function loadInvalidImage(): void
             {
                 $this->imageFromLoader(

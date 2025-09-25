@@ -73,7 +73,7 @@ class PdfLabelDocumentTest extends TestCase
 
     public function testListener(): void
     {
-        $listener = new class() implements PdfLabelTextListenerInterface {
+        $listener = new class implements PdfLabelTextListenerInterface {
             #[\Override]
             public function drawLabelText(PdfLabelTextEvent $event): bool
             {

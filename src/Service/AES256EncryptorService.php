@@ -39,8 +39,9 @@ readonly class AES256EncryptorService
         }
 
         $this->passphrase = \md5($key);
+        /** @phpstan-var int $len */
         $len = \openssl_cipher_iv_length(self::CIPHER_METHOD);
-        $this->initializationVector = \substr($key, 0, (int) $len);
+        $this->initializationVector = \substr($key, 0, $len);
     }
 
     public function decrypt(string $data): string|false

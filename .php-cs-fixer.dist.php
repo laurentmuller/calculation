@@ -28,12 +28,14 @@ $rules = [
     // --------------------------------------------------------------
     //  Rule sets
     // --------------------------------------------------------------
+    '@auto' => true,
+    '@auto:risky' => true,
     '@Symfony' => true,
     '@Symfony:risky' => true,
-    '@PHP82Migration' => true,
-    '@PHP82Migration:risky' => true,
+    '@PHP8x2Migration' => true,
+    '@PHP8x2Migration:risky' => true,
     '@DoctrineAnnotation' => true,
-    '@PHPUnit100Migration:risky' => true,
+    '@PHPUnit10x0Migration:risky' => true,
 
     // --------------------------------------------------------------
     //  Rules override
@@ -55,13 +57,10 @@ $rules = [
     'doctrine_annotation_array_assignment' => ['operator' => '='],
     'native_function_invocation' => ['include' => ['@internal', '@all', '@compiler_optimized']],
     'php_unit_test_case_static_method_calls' => ['call_type' => 'self'],
-    'new_with_braces' => ['anonymous_class' => true, 'named_class' => true],
+    'new_with_braces' => ['anonymous_class' => false, 'named_class' => true],
     'ordered_imports' => ['imports_order' => ['const', 'class', 'function']],
     'blank_line_before_statement' => ['statements' => ['declare', 'try', 'return']],
-    'header_comment' => [
-        'header' => $comment,
-        'location' => 'after_open',
-        'separate' => 'bottom'],
+    'header_comment' => ['header' => $comment, 'location' => 'after_open'],
     'phpdoc_to_comment' => [
         'allow_before_return_statement' => true,
         'ignored_tags' => ['psalm-var', 'psalm-suppress', 'phpstan-var', 'phpstan-param', 'phpstan-ignore'],
@@ -69,10 +68,11 @@ $rules = [
 ];
 
 $finder = Finder::create()
-    ->in(__DIR__ . '/config')
-    ->in(__DIR__ . '/src')
-    ->in(__DIR__ . '/tests')
-    ->append([
+    ->in([
+        __DIR__ . '/config',
+        __DIR__ . '/src',
+        __DIR__ . '/tests',
+    ])->append([
         __FILE__,
         __DIR__ . '/public/index.php',
         __DIR__ . '/.twig-cs-fixer.php',

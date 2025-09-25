@@ -24,7 +24,7 @@ class SortableFieldTest extends TestCase
      */
     public function testSortAscending(): void
     {
-        $testedClass = new class() {
+        $testedClass = new class {
             #[SortableField]
             public string $field = '';
         };
@@ -39,7 +39,7 @@ class SortableFieldTest extends TestCase
      */
     public function testSortDescending(): void
     {
-        $testedClass = new class() {
+        $testedClass = new class {
             #[SortableField(SortModeInterface::SORT_DESC)]
             public string $field = '';
         };
@@ -54,7 +54,7 @@ class SortableFieldTest extends TestCase
      */
     public function testSortNotFound(): void
     {
-        $testedClass = new class() {
+        $testedClass = new class {
             public string $field = '';
         };
 
@@ -67,7 +67,7 @@ class SortableFieldTest extends TestCase
      */
     public function testSortNull(): void
     {
-        $testedClass = new class() {
+        $testedClass = new class {
             public string $field = '';
         };
 

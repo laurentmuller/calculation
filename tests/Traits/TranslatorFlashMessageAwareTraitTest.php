@@ -15,23 +15,18 @@ namespace App\Tests\Traits;
 
 use App\Tests\TranslatorMockTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
-use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-class TranslatorFlashMessageAwareTraitTest extends TestCase implements ServiceSubscriberInterface
+class TranslatorFlashMessageAwareTraitTest extends AwareTraitTestCase
 {
     use TranslatorFlashMessageAwareTrait;
     use TranslatorMockTrait;
 
-    public ContainerInterface $container;
-
     #[\Override]
     protected function setUp(): void
     {
-        $this->container = $this->createMock(ContainerInterface::class);
+        parent::setUp();
 
         $session = new Session();
         $requestStack = $this->createMock(RequestStack::class);
@@ -41,12 +36,6 @@ class TranslatorFlashMessageAwareTraitTest extends TestCase implements ServiceSu
 
         $translator = $this->createMockTranslator();
         $this->setTranslator($translator);
-    }
-
-    #[\Override]
-    public static function getSubscribedServices(): array
-    {
-        return [];
     }
 
     public function testErrorTrans(): void

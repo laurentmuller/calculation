@@ -15,31 +15,14 @@ namespace App\Tests\Traits;
 
 use App\Traits\SessionAwareTrait;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-class SessionAwareTraitTest extends TestCase implements ServiceSubscriberInterface
+class SessionAwareTraitTest extends AwareTraitTestCase
 {
     use SessionAwareTrait;
-
-    public ContainerInterface $container;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        $this->container = $this->createMock(ContainerInterface::class);
-    }
-
-    #[\Override]
-    public static function getSubscribedServices(): array
-    {
-        return [];
-    }
 
     public function testGetSession(): void
     {

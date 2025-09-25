@@ -81,7 +81,7 @@ trait SessionAwareTrait
     }
 
     /**
-     * Gets a session attribute, as float value.
+     * Gets a session attribute, as a float value.
      *
      * @param string $key     the attribute name
      * @param float  $default the default value if not found

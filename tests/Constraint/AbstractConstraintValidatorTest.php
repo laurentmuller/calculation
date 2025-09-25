@@ -76,7 +76,7 @@ class AbstractConstraintValidatorTest extends ConstraintValidatorTestCase
     #[\Override]
     protected function createValidator(): AbstractConstraintValidator
     {
-        return new class() extends AbstractConstraintValidator {
+        return new class extends AbstractConstraintValidator {
             public function __construct()
             {
                 parent::__construct(Password::class);

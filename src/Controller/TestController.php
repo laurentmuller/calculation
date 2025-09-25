@@ -186,7 +186,7 @@ class TestController extends AbstractController
     #[GetRoute(path: '/label', name: 'label')]
     public function exportLabel(CustomerRepository $repository, PdfLabelService $service): PdfResponse
     {
-        $listener = new class() implements PdfLabelTextListenerInterface {
+        $listener = new class implements PdfLabelTextListenerInterface {
             #[\Override]
             public function drawLabelText(PdfLabelTextEvent $event): bool
             {

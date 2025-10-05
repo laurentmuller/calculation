@@ -132,9 +132,10 @@ $(function () {
             this.ajaxErrorProxy = (jqXHR, textStatus, errorThrown) => this._ajaxError(jqXHR, textStatus, errorThrown);
 
             // create the menu
+            /** @type {jQuery} */
             this.$menu = $(this.options.menu).insertAfter(this.$element);
 
-            // add dropdown attribute
+            // add the dropdown attribute
             this.$element.attr('data-bs-toggle', 'dropdown');
 
             // bind events
@@ -142,7 +143,7 @@ $(function () {
         }
 
         /**
-         * Start listen events.
+         * Start listen.
          * @return {Typeahead} this instance for chaining.
          * @private
          */
@@ -382,7 +383,7 @@ $(function () {
          * @private
          */
         _ajaxExecute() {
-            // cancel last call if already in progress
+            // cancel the last call if already in progress
             this._abortAjax();
             const query = this.query;
             const data = this._isFunction(this.ajax.preDispatch) ?

@@ -78,6 +78,7 @@
         "symfony/twig-bundle": "7.3.*",
         "symfony/validator": "7.3.*",
         "symfony/web-link": "7.3.*",
+        "symfony/yaml": "7.3.*",
         "symfonycasts/reset-password-bundle": "^1.0",
         "symfonycasts/verify-email-bundle": "^1.0",
         "twig/cssinliner-extra": "^3.0",

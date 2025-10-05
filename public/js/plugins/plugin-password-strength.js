@@ -212,7 +212,7 @@ $(function () {
          * Gets or create the progress bars container.
          *
          * @param {Object} options - the plugin options.
-         * @return {jQuery|null} the progress bar container or null if none.
+         * @return {jQuery|null} the progress bar container or null if none found.
          * @private
          */
         _getProgress(options) {

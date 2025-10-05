@@ -25,6 +25,7 @@ $(function () {
          * @param {Object|string} [options] - the plugin options.
          */
         constructor(element, options) {
+            /** @var {jQuery<HTMLElement>} $element */
             this.$element = $(element);
             this.options = $.extend(true, CellEdit.DEFAULTS, this.$element.data(), options);
             this._init();
@@ -298,7 +299,7 @@ $(function () {
         }
 
         /**
-         * Check if the given value is function.
+         * Check if the given value is a function.
          * @param {*} value
          * @return {function|boolean}
          * @private

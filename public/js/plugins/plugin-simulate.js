@@ -1,5 +1,5 @@
 /**
- * Plugin to force user to confirm an operation.
+ * Plugin to force the user to confirm an operation.
  */
 $(function () {
     'use strict';

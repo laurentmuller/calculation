@@ -26,10 +26,10 @@ use App\Service\SymfonyInfoService;
  * @phpstan-import-type RouteType from SymfonyInfoService
  * @phpstan-import-type BundleType from SymfonyInfoService
  * @phpstan-import-type PackageType from SymfonyInfoService
+ * @phpstan-import-type DirectoryType from SymfonyInfoService
  */
 class SymfonyReport extends AbstractReport
 {
-    private readonly bool $debug;
     private ?PdfStyle $style = null;
 
     public function __construct(
@@ -38,7 +38,6 @@ class SymfonyReport extends AbstractReport
     ) {
         parent::__construct($controller);
         $this->setTranslatedTitle('about.symfony_version', ['%version%' => $service->getVersion()]);
-        $this->debug = $controller->getApplicationService()->isDebug();
     }
 
     #[\Override]
@@ -98,14 +97,26 @@ class SymfonyReport extends AbstractReport
         }
     }
 
+    /**
+     * @phpstan-param DirectoryType $info
+     */
+    private function outputDirectoryRow(PdfGroupTable $table, array $info): self
+    {
+        return $this->outputRow(
+            $table,
+            $info['name'],
+            \sprintf('%s (%s)', $info['relative'], $info['size'])
+        );
+    }
+
     private function outputInfo(SymfonyInfoService $info): void
     {
         $this->addBookmark('Kernel');
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
-                PdfColumn::left('Name', 30),
-                PdfColumn::left('Value', 70)
+                PdfColumn::left('Name', 42),
+                PdfColumn::left('Value', 85)
             );
         $table->setGroupKey('Kernel')->outputHeaders();
         $this->outputRow($table, 'Environment', $this->trans($info->getEnvironment()))
@@ -120,21 +131,21 @@ class SymfonyReport extends AbstractReport
         $this->outputRow($table, 'Intl Locale', $info->getLocaleName())
             ->outputRow($table, 'Timezone', $info->getTimeZone())
             ->outputRow($table, 'Charset', $info->getCharset())
-            ->outputRow($table, 'Architecture', $info->getArchitecture());
+            ->outputRow($table, 'Architecture', $info->getArchitecture())
+            ->outputRowEnabled($table, 'Debug', $info->isDebug());
 
         $this->addBookmark('Extensions', false, 1);
         $table->setGroupKey('Extensions');
-        $this->outputRowEnabled($table, 'Debug', $this->debug)
-            ->outputRowEnabled($table, 'OP Cache', $info->isZendCacheLoaded())
-            ->outputRowEnabled($table, 'APCu', $info->isApcuLoaded())
-            ->outputRowEnabled($table, 'Xdebug', $info->isXdebugLoaded());
+        $this->outputRowEnabled($table, 'OPCache', $info->isOpCacheEnabled(), $info->getOpCacheStatus())
+            ->outputRowEnabled($table, 'APCu', $info->isApcuEnabled(), $info->getApcuStatus())
+            ->outputRowEnabled($table, 'Xdebug', $info->isXdebugEnabled(), $info->getXdebugStatus());
 
         $this->addBookmark('Directories', false, 1);
         $table->setGroupKey('Directories');
         $this->outputRow($table, 'Project', $info->getProjectDir())
-            ->outputRow($table, 'Logs', $info->getLogInfo())
-            ->outputRow($table, 'Cache', $info->getCacheInfo())
-            ->outputRow($table, 'Build', $info->getBuildInfo());
+            ->outputDirectoryRow($table, $info->getCacheInfo())
+            ->outputDirectoryRow($table, $info->getBuildInfo())
+            ->outputDirectoryRow($table, $info->getLogInfo());
     }
 
     /**
@@ -202,10 +213,10 @@ class SymfonyReport extends AbstractReport
         return $this;
     }
 
-    private function outputRowEnabled(PdfGroupTable $table, string $key, bool $enabled): self
+    private function outputRowEnabled(PdfGroupTable $table, string $key, bool $enabled, ?string $text = null): self
     {
         $style = $this->getStyle($enabled);
-        $text = $enabled ? 'Enabled' : 'Disabled';
+        $text ??= $enabled ? SymfonyInfoService::LABEL_ENABLED : SymfonyInfoService::LABEL_DISABLED;
         $table->startRow()
             ->add($key)
             ->add($text, style: $style)

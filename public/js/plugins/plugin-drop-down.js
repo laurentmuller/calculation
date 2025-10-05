@@ -147,7 +147,7 @@ $(function () {
             }
             let text = $textElement.text().trim();
 
-            // select first item if no value or no selection
+            // select the first item if no value or no selection
             if (!value || !$selection) {
                 $selection = $items.first();
             }

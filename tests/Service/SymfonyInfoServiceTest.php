@@ -39,8 +39,11 @@ class SymfonyInfoServiceTest extends KernelServiceTestCase
     public function testGetBuildInfo(): void
     {
         $actual = $this->service->getBuildInfo();
-        self::assertStringContainsString('var', $actual);
-        self::assertStringContainsString('cache', $actual);
+        self::assertArrayHasKey('name', $actual);
+        self::assertArrayHasKey('path', $actual);
+        self::assertArrayHasKey('relative', $actual);
+        self::assertArrayHasKey('size', $actual);
+        self::assertSame('Build', $actual['name']);
     }
 
     public function testGetBundles(): void
@@ -52,8 +55,11 @@ class SymfonyInfoServiceTest extends KernelServiceTestCase
     public function testGetCacheInfo(): void
     {
         $actual = $this->service->getCacheInfo();
-        self::assertStringContainsString('var', $actual);
-        self::assertStringContainsString('cache', $actual);
+        self::assertArrayHasKey('name', $actual);
+        self::assertArrayHasKey('path', $actual);
+        self::assertArrayHasKey('relative', $actual);
+        self::assertArrayHasKey('size', $actual);
+        self::assertSame('Cache', $actual['name']);
     }
 
     public function testGetCharset(): void
@@ -72,6 +78,12 @@ class SymfonyInfoServiceTest extends KernelServiceTestCase
     {
         $actual = $this->service->getDebugRoutes();
         self::assertEmpty($actual);
+    }
+
+    public function testGetDebugStatus(): void
+    {
+        $actual = $this->service->getDebugStatus();
+        self::assertSame(SymfonyInfoService::LABEL_DISABLED, $actual);
     }
 
     public function testGetEndOfLife(): void
@@ -106,8 +118,11 @@ class SymfonyInfoServiceTest extends KernelServiceTestCase
     public function testGetLogInfo(): void
     {
         $actual = $this->service->getLogInfo();
-        self::assertStringContainsString('var', $actual);
-        self::assertStringContainsString('log', $actual);
+        self::assertArrayHasKey('name', $actual);
+        self::assertArrayHasKey('path', $actual);
+        self::assertArrayHasKey('relative', $actual);
+        self::assertArrayHasKey('size', $actual);
+        self::assertSame('Logs', $actual['name']);
     }
 
     public function testGetMaintenanceStatus(): void
@@ -160,10 +175,10 @@ class SymfonyInfoServiceTest extends KernelServiceTestCase
         self::assertSame(Kernel::VERSION, $actual);
     }
 
-    public function testIsApcuLoaded(): void
+    public function testIsApcuEnabled(): void
     {
         $expected = $this->isExtensionLoaded('apcu', 'apc.enabled');
-        $actual = $this->service->isApcuLoaded();
+        $actual = $this->service->isApcuEnabled();
         self::assertSame($expected, $actual);
     }
 
@@ -181,17 +196,17 @@ class SymfonyInfoServiceTest extends KernelServiceTestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testIsXdebugLoaded(): void
+    public function testIsXdebugEnabled(): void
     {
         $expected = $this->isExtensionLoaded('xdebug');
-        $actual = $this->service->isXdebugLoaded();
+        $actual = $this->service->isXdebugEnabled();
         self::assertSame($expected, $actual);
     }
 
-    public function testIsZendCacheLoaded(): void
+    public function testIsZendCacheEnabled(): void
     {
         $expected = $this->isExtensionLoaded('Zend OPcache', 'opcache.enable');
-        $actual = $this->service->isZendCacheLoaded();
+        $actual = $this->service->isOpCacheEnabled();
         self::assertSame($expected, $actual);
     }
 

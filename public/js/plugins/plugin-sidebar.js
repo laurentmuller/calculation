@@ -334,7 +334,7 @@ $(function () {
         }
 
         /**
-         * Add active class to the selected url (if any).
+         * Add the active class to the selected url (if any).
          * @private
          */
         _highlightPath() {
@@ -510,7 +510,7 @@ $(function () {
         menuPrefix: 'MENU_SIDEBAR_',
         // the timeout to display/hide sidebar automatically (0 = disabled)
         timeout: 1500,
-        // the minimum client width to hide sidebar
+        // the minimum client width to hide the sidebar
         minWidth: 1200,
         // texts
         showMenu: 'Expand menu',

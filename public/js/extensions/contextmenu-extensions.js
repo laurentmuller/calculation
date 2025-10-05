@@ -91,7 +91,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
      * @return {Object} The items.
      */
     getItems() {
-        // remove first and last separators (if any)
+        // remove the first and last separators (if any)
         while (this.isSeparator(this.getFirstKey())) {
             delete this.items[this.getFirstKey()];
         }

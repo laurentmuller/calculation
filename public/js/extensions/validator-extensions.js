@@ -75,7 +75,7 @@
             },
 
             /**
-             * Initialize simple file input.
+             * Initialize a simple file input.
              *
              * @return {jQuery} the caller for chaining.
              */

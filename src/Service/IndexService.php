@@ -20,7 +20,6 @@ use App\Entity\GlobalMargin;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
-use App\Interfaces\EntityInterface;
 use App\Model\CalculationsMonth;
 use App\Model\CalculationsState;
 use App\Traits\CacheKeyTrait;
@@ -42,7 +41,16 @@ class IndexService
 {
     use CacheKeyTrait;
 
-    private CacheItemPoolInterface&CacheInterface&NamespacedPoolInterface $cache;
+    private const CATALOG = [
+        'task' => Task::class,
+        'group' => Group::class,
+        'product' => Product::class,
+        'category' => Category::class,
+        'globalMargin' => GlobalMargin::class,
+        'calculationState' => CalculationState::class,
+    ];
+
+    private readonly CacheItemPoolInterface&CacheInterface&NamespacedPoolInterface $cache;
 
     /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
     public function __construct(
@@ -69,7 +77,7 @@ class IndexService
     public function getCalculationByMonths(int $maxResults = 6): CalculationsMonth
     {
         return $this->cache->get(
-            \sprintf('calculations.months.%d', $maxResults),
+            \sprintf('index.calculations.months.%d', $maxResults),
             fn (): CalculationsMonth => $this->loadCalculationsByMonths($maxResults)
         );
     }
@@ -80,26 +88,22 @@ class IndexService
     public function getCalculationByStates(): CalculationsState
     {
         return $this->cache->get(
-            'calculations.states',
+            'index.calculations.states',
             fn (): CalculationsState => $this->loadCalculationsByStates()
         );
     }
 
     /**
-     * Gets the number entities.
+     * Gets the number of entities.
      *
      * @return array<string, int>
      */
     public function getCatalog(): array
     {
-        return [
-            'task' => $this->count(Task::class),
-            'group' => $this->count(Group::class),
-            'product' => $this->count(Product::class),
-            'category' => $this->count(Category::class),
-            'globalMargin' => $this->count(GlobalMargin::class),
-            'calculationState' => $this->count(CalculationState::class),
-        ];
+        return $this->cache->get(
+            'index.catalog',
+            fn (): array => $this->loadCatalog()
+        );
     }
 
     /**
@@ -113,7 +117,7 @@ class IndexService
         $id = $this->cleanKey($user?->getUserIdentifier() ?? 'all');
 
         return $this->cache->get(
-            \sprintf('calculations.last.%d.%s', $maxResults, $id),
+            \sprintf('index.calculations.last.%d.%s', $maxResults, $id),
             fn (): array => $this->loadLastCalculations($maxResults, $user)
         );
     }
@@ -126,14 +130,11 @@ class IndexService
     }
 
     /**
-     * @param class-string<EntityInterface> $className
+     * @param class-string $className
      */
     private function count(string $className): int
     {
-        return $this->cache->get(
-            $this->cleanKey($className),
-            fn (): int => $this->manager->getRepository($className)->count()
-        );
+        return $this->manager->getRepository($className)->count();
     }
 
     private function isScheduledEntities(OnFlushEventArgs $args): bool
@@ -155,6 +156,17 @@ class IndexService
     {
         return $this->manager->getRepository(CalculationState::class)
             ->getCalculations();
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    private function loadCatalog(): array
+    {
+        return \array_replace(
+            self::CATALOG,
+            \array_map(fn (string $className): int => $this->count($className), self::CATALOG)
+        );
     }
 
     private function loadLastCalculations(int $maxResults, ?UserInterface $user): array

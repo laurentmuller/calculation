@@ -6,7 +6,7 @@
  * @property {number} pageNumber - the current page number.
  * @property {number} totalPages - the total numbers of pages.
  * @property {number} pageSize - the page size.
- * @property {number[]} pageList - the pages list.
+ * @property {number[]} pageList - the list of allowed pages.
  * @property {string} rowClass - the row class.
  * @property {string} rowSelector - the row selector.
  * @property {string} customSelector - the custom view selector.
@@ -150,7 +150,7 @@
 
                 // settings
                 const defaults = {
-                    // select row on click
+                    // select the row on click
                     onClickRow: function (_row, $element) {
                         $element.updateRow($this);
                         $this.enableKeys();
@@ -172,7 +172,7 @@
                         $this.css('opacity', 1);
                         const isData = data.length !== 0;
                         if (isData) {
-                            // select first row if none
+                            // select the first row if none
                             if (!$this.getSelection()) {
                                 $this.selectFirstRow();
                             }
@@ -261,7 +261,7 @@
                         $(this).updateRow($this);
                     }
                 });
-                // handle items in custom view
+                // handle items in the custom view
                 $this.getTableContainer().on('mousedown', '.custom-item', function () {
                     $(this).updateCustomRow($this);
                 }).on('focus', '.custom-item a.item-link,.custom-item button[data-bs-toggle="dropdown"]', function () {
@@ -401,7 +401,7 @@
             },
 
             /**
-             * Get the loaded data (rows) of table when this method is called.
+             * Get the loaded data (rows) of the table when this method is called.
              *
              * @return {Object[]} the loaded data.
              */
@@ -729,7 +729,7 @@
             },
 
             /**
-             * Select the previous row and if no row is available, the previous page is displayed.
+             * Select the previous row, and if no row is available, the previous page is displayed.
              *
              * @return {boolean} true if the previous row is selected.
              */
@@ -748,7 +748,7 @@
             },
 
             /**
-             * Select the next row and if no row is available, the next page is displayed.
+             * Select the next row, and if no row is available, the next page is displayed.
              *
              * @return {boolean} true if the next row is selected.
              */
@@ -913,7 +913,7 @@
             },
 
             /**
-             * Hide the empty data message in custom view.
+             * Hide the empty data message in the custom view.
              */
             hideCustomViewMessage: function () {
                 const $view = $(this).getCustomView();
@@ -923,7 +923,7 @@
             },
 
             /**
-             * Show the empty data message in custom view.
+             * Show the empty data message in the custom view.
              */
             showCustomViewMessage: function () {
                 const $this = $(this);

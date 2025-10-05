@@ -378,7 +378,7 @@ final class FileUtils
         }
 
         $size = 0;
-        $finder = (new Finder())->in($file)->files();
+        $finder = Finder::create()->in($file)->files();
         foreach ($finder as $child) {
             if ($child->isReadable()) {
                 $size += (int) $child->getSize();

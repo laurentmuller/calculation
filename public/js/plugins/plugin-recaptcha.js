@@ -76,7 +76,7 @@ $(function () {
         }
 
         /**
-         * Trigger submit event for the parent's form.
+         * Triggers submit event for the parent's form.
          * @private
          */
         _dispatchSubmit() {

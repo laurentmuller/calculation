@@ -15,7 +15,7 @@ $(function () {
         rowSelector: 'table-primary',
 
         beforeContextMenuRow: function () {
-            // return false here to prevent menu showing
+            // return false here to prevent showing the menu
         },
 
         // Event default handlers
@@ -133,7 +133,7 @@ $(function () {
             return position;
         }
 
-        // Bind click on menu item
+        // Bind click on within the menu item
         $menu.find('li').off('click.contextmenu').on('click.contextmenu', function () {
             const rowData = that.data[$menu.data('index')];
             that.trigger('contextmenu-item', rowData, $(this));

@@ -74,6 +74,13 @@
     </tr>
     </thead>
 {% endmacro %}
+{% macro rowDirectory(directory) -%}
+    <tr>
+        <td class="e">{{ directory.name }}</td>
+        <td class="v">{{ directory.relative }}</td>
+        <td class="v text-percent">{{ directory.size }}</td>
+    </tr>
+{%- endmacro %}
 {# parameters #}
 {%- set bundles = service.bundles -%}
 {%- set runtime_packages = service.runtimePackages -%}
@@ -108,10 +115,11 @@
             <table class="table table-sm mb-0">
                 {{ _self.headerNameValue() }}
                 <tbody>
-                {{ tools.rowInfo('Locale', service.localeName) }}
+                {{ tools.rowInfo('Intl Locale', service.localeName) }}
                 {{ tools.rowInfo('Timezone', service.timezone) }}
                 {{ tools.rowInfo('Charset', service.charset) }}
                 {{ tools.rowInfo('Architecture', service.architecture) }}
+                {{ tools.rowInfoBoolean('Debug', service.debugStatus, service.debug) }}
                 </tbody>
             </table>
         </div>
@@ -121,10 +129,9 @@
             <table class="table table-sm mb-0">
                 {{ _self.headerNameValue() }}
                 <tbody>
-                {{ tools.rowInfoBoolean('Debug', app.debug ? 'Enabled' : 'Disabled', app.debug) }}
-                {{ tools.rowInfoBoolean('OP Cache', service.zendCacheLoaded ? 'Enabled' : 'Disabled', service.zendCacheLoaded) }}
-                {{ tools.rowInfoBoolean('APCu', service.apcuLoaded ? 'Enabled' : 'Disabled', service.apcuLoaded) }}
-                {{ tools.rowInfoBoolean('Xdebug', service.xdebugLoaded ? 'Enabled' : 'Disabled', service.xdebugLoaded) }}
+                {{ tools.rowInfoBoolean('OPcache', service.opCacheStatus, service.opCacheEnabled) }}
+                {{ tools.rowInfoBoolean('APCu', service.apcuStatus, service.apcuEnabled) }}
+                {{ tools.rowInfoBoolean('Xdebug', service.xDebugStatus, service.xdebugEnabled) }}
                 </tbody>
             </table>
         </div>
@@ -132,12 +139,21 @@
         {{ _self.headerLinkInfo('Directories', 'directories') }}
         <div class="collapse ps-lg-3" id="directories" aria-labelledby="directories-header" data-bs-parent="#symfonyAccordion">
             <table class="table table-sm mb-0">
-                {{ _self.headerNameValue() }}
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Path</th>
+                    <th class="text-percent">Size</th>
+                </tr>
+                </thead>
                 <tbody>
-                {{ tools.rowInfo('Project', service.projectDir) }}
-                {{ tools.rowInfo('Logs', service.logInfo) }}
-                {{ tools.rowInfo('Cache', service.cacheInfo) }}
-                {{ tools.rowInfo('Build', service.buildInfo) }}
+                <tr>
+                    <td class="e">Project</td>
+                    <td class="v" colspan="2">{{ service.projectDir }}</td>
+                </tr>
+                {{ _self.rowDirectory(service.cacheInfo) }}
+                {{ _self.rowDirectory(service.buildInfo) }}
+                {{ _self.rowDirectory(service.logInfo) }}
                 </tbody>
             </table>
         </div>

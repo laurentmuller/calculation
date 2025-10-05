@@ -453,11 +453,11 @@ $(function () {
         input: '.form-check-input',
         // the title message selector in the modal dialog
         title: '.modal-title',
-        // the success data message selector in dialog
+        // the success data message selector in the dialog
         success: 'success',
         // the OK button selector in the modal dialog
         ok: '.btn-ok',
-        // the choose color mode selector in the modal dialog
+        // the choosing color mode selector in the modal dialog
         settings: '.btn-settings',
         // the data key for the icon class
         icon: 'class',

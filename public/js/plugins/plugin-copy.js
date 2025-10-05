@@ -58,7 +58,7 @@ $(function () {
          * @private
          */
         _init() {
-            if (ClipboardJS && ClipboardJS.isSupported('copy')) {
+            if (ClipboardJS && ClipboardJS.isSupported()) {
                 this.proxySuccess = (e) => this._onCopySuccess(e);
                 this.proxyError = (e) => this._onCopyError(e);
                 this.clipboard = new ClipboardJS(this.$element[0]);

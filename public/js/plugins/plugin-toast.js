@@ -103,7 +103,7 @@
         },
 
         /**
-         * Display a toast with primary style.
+         * Display a toast with the primary style.
          *
          * @param {string} message - The message.
          * @param {string} [title] - The title.
@@ -115,7 +115,7 @@
         },
 
         /**
-         * Display a toast with secondary style.
+         * Display a toast with the secondary style.
          *
          * @param {string} message - The message.
          * @param {string} [title] - The title.
@@ -127,7 +127,7 @@
         },
 
         /**
-         * Display a toast with dark style.
+         * Display a toast with the dark style.
          *
          * @param {string} message - The message.
          * @param {string} [title] - The title.
@@ -297,7 +297,7 @@
                 case positions.CENTER_CENTER:
                 case positions.CENTER_RIGHT:
                     return false;
-                default: // ALL BOTTOM
+                default: // bottom positions
                     return true;
             }
         },

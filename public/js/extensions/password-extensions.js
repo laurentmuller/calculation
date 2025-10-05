@@ -47,7 +47,7 @@ $(function () {
                 const $parent = $element.parents('.form-group');
                 const id = $element.attr('id') + '_passwordStrength';
 
-                // find or create UI container
+                // find or create a UI container
                 let $container = $parent.find('#' + id);
                 if ($container.length === 0) {
                     $container = $('<div/>', {

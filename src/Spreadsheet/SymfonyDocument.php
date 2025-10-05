@@ -23,6 +23,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
  * @phpstan-import-type RouteType from SymfonyInfoService
  * @phpstan-import-type BundleType from SymfonyInfoService
  * @phpstan-import-type PackageType from SymfonyInfoService
+ * @phpstan-import-type DirectoryType from SymfonyInfoService
  */
 class SymfonyDocument extends AbstractDocument
 {
@@ -77,6 +78,19 @@ class SymfonyDocument extends AbstractDocument
     }
 
     /**
+     * @phpstan-param DirectoryType $info
+     */
+    private function outputDirectoryRow(WorksheetDocument $sheet, int $row, array $info): self
+    {
+        return $this->outputRow(
+            $sheet,
+            $row,
+            $info['name'],
+            \sprintf('%s (%s)', $info['relative'], $info['size'])
+        );
+    }
+
+    /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     private function outputGroup(WorksheetDocument $sheet, int $row, string $group): self
@@ -93,7 +107,6 @@ class SymfonyDocument extends AbstractDocument
      */
     private function outputInfo(SymfonyInfoService $info): void
     {
-        $app = $this->controller->getApplicationService();
         $this->setActiveTitle('Symfony', $this->controller);
         $sheet = $this->getActiveSheet();
         $row = $sheet->setHeaders([
@@ -112,19 +125,19 @@ class SymfonyDocument extends AbstractDocument
             ->outputRow($sheet, $row++, 'Intl Locale', $info->getLocaleName())
             ->outputRow($sheet, $row++, 'Timezone', $info->getTimeZone())
             ->outputRow($sheet, $row++, 'Charset', $info->getCharset())
-            ->outputRow($sheet, $row++, 'Architecture', $info->getArchitecture());
+            ->outputRow($sheet, $row++, 'Architecture', $info->getArchitecture())
+            ->outputRowEnabled($sheet, $row++, 'Debug', $info->isDebug());
 
         $this->outputGroup($sheet, $row++, 'Extensions')
-            ->outputRowEnabled($sheet, $row++, 'Debug', $app->isDebug())
-            ->outputRowEnabled($sheet, $row++, 'OP Cache', $info->isZendCacheLoaded())
-            ->outputRowEnabled($sheet, $row++, 'APCu', $info->isApcuLoaded())
-            ->outputRowEnabled($sheet, $row++, 'Xdebug', $info->isXdebugLoaded());
+            ->outputRowEnabled($sheet, $row++, 'OPCache', $info->isOpCacheEnabled(), $info->getOpCacheStatus())
+            ->outputRowEnabled($sheet, $row++, 'APCu', $info->isApcuEnabled(), $info->getApcuStatus())
+            ->outputRowEnabled($sheet, $row++, 'Xdebug', $info->isXdebugEnabled(), $info->getXdebugStatus());
 
         $this->outputGroup($sheet, $row++, 'Directories')
             ->outputRow($sheet, $row++, 'Project', $info->getProjectDir())
-            ->outputRow($sheet, $row++, 'Logs', $info->getLogInfo())
-            ->outputRow($sheet, $row, 'Cache', $info->getCacheInfo())
-            ->outputRow($sheet, $row, 'Build', $info->getBuildInfo());
+            ->outputDirectoryRow($sheet, $row++, $info->getCacheInfo())
+            ->outputDirectoryRow($sheet, $row++, $info->getBuildInfo())
+            ->outputDirectoryRow($sheet, $row, $info->getLogInfo());
 
         $sheet->setAutoSize(1, 2)
             ->finish();
@@ -207,8 +220,10 @@ class SymfonyDocument extends AbstractDocument
         return $this;
     }
 
-    private function outputRowEnabled(WorksheetDocument $sheet, int $row, string $key, bool $enabled): self
+    private function outputRowEnabled(WorksheetDocument $sheet, int $row, string $key, bool $enabled, ?string $text = null): self
     {
-        return $this->outputRow($sheet, $row, $key, $enabled ? 'Enabled' : 'Disabled');
+        $text ??= $enabled ? SymfonyInfoService::LABEL_ENABLED : SymfonyInfoService::LABEL_DISABLED;
+
+        return $this->outputRow($sheet, $row, $key, $text);
     }
 }

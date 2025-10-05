@@ -151,7 +151,7 @@ $(function () {
         }
 
         /**
-         * Handle the delete button click event.
+         * Handle the delete button click.
          *
          * @param {Event} e - the source event.
          * @private

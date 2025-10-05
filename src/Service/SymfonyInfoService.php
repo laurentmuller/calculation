@@ -61,9 +61,18 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     path: string,
  *     package: string,
  *     size: string}
+ * @phpstan-type DirectoryType = array{
+ *     name: string,
+ *     path: string,
+ *     relative: string,
+ *     size: string}
  */
 final readonly class SymfonyInfoService
 {
+    public const LABEL_DISABLED = 'Disabled';
+    public const LABEL_ENABLED = 'Enabled';
+    public const LABEL_NOT_INSTALLED = 'Not installed';
+
     // the array key for debug packages and routes
     private const KEY_DEBUG = 'debug';
     // the array key for runtime packages and routes
@@ -97,6 +106,14 @@ final readonly class SymfonyInfoService
     }
 
     /**
+     * Returns the 'apcu' status.
+     */
+    public function getApcuStatus(): string
+    {
+        return $this->getExtensionStatus('apcu', 'apc.enabled');
+    }
+
+    /**
      * Get architecture.
      */
     public function getArchitecture(): string
@@ -106,10 +123,12 @@ final readonly class SymfonyInfoService
 
     /**
      * Gets the build directory path and the formatted size.
+     *
+     * @phpstan-return DirectoryType
      */
-    public function getBuildInfo(): string
+    public function getBuildInfo(): array
     {
-        return $this->getDirectoryInfo($this->kernel->getBuildDir());
+        return $this->getDirectoryInfo('Build', $this->kernel->getBuildDir());
     }
 
     /**
@@ -128,7 +147,7 @@ final readonly class SymfonyInfoService
                 $bundles[$key] = [
                     'name' => $key,
                     'namespace' => $bundleObject->getNamespace(),
-                    'path' => $this->makePathRelative($path, $projectDir),
+                    'path' => $this->makePathRelative($path),
                     'package' => $this->makePathRelative($path, $vendorDir),
                     'size' => FileUtils::formatSize($path),
                 ];
@@ -141,10 +160,12 @@ final readonly class SymfonyInfoService
 
     /**
      * Gets the cache directory path and the formatted size.
+     *
+     * @phpstan-return DirectoryType
      */
-    public function getCacheInfo(): string
+    public function getCacheInfo(): array
     {
-        return $this->getDirectoryInfo($this->kernel->getCacheDir());
+        return $this->getDirectoryInfo('Cache', $this->kernel->getCacheDir());
     }
 
     /**
@@ -173,6 +194,14 @@ final readonly class SymfonyInfoService
     public function getDebugRoutes(): array
     {
         return $this->getRoutes()[self::KEY_DEBUG];
+    }
+
+    /**
+     * Returns the 'debug' status.
+     */
+    public function getDebugStatus(): string
+    {
+        return $this->isDebug() ? self::LABEL_ENABLED : self::LABEL_DISABLED;
     }
 
     /**
@@ -213,15 +242,17 @@ final readonly class SymfonyInfoService
         $locale = \Locale::getDefault();
         $name = Locales::getName($locale, 'en');
 
-        return "$name - $locale";
+        return \sprintf('%s - %s', $name, $locale);
     }
 
     /**
      * Gets the log directory path and the formatted size.
+     *
+     * @phpstan-return DirectoryType
      */
-    public function getLogInfo(): string
+    public function getLogInfo(): array
     {
-        return $this->getDirectoryInfo($this->kernel->getLogDir());
+        return $this->getDirectoryInfo('Logs', $this->kernel->getLogDir());
     }
 
     /**
@@ -248,6 +279,14 @@ final readonly class SymfonyInfoService
     public function getMode(): Environment
     {
         return $this->mode;
+    }
+
+    /**
+     * Returns the 'Zend OPcache' status.
+     */
+    public function getOpCacheStatus(): string
+    {
+        return $this->getExtensionStatus('Zend OPcache', 'opcache.enable');
     }
 
     /**
@@ -315,11 +354,26 @@ final readonly class SymfonyInfoService
     }
 
     /**
+     * Returns the 'xdebug' status.
+     */
+    public function getXdebugStatus(): string
+    {
+        if (!\extension_loaded('xdebug')) {
+            return self::LABEL_NOT_INSTALLED;
+        }
+        $xdebugMode = \ini_get('xdebug.mode');
+        $disabled = false === $xdebugMode || 'off' === $xdebugMode;
+
+        /** @phpstan-var string $xdebugMode */
+        return $disabled ? self::LABEL_DISABLED : \sprintf('%s (%s)', self::LABEL_ENABLED, $xdebugMode);
+    }
+
+    /**
      * Returns if the 'apcu' extension is loaded and enabled.
      */
-    public function isApcuLoaded(): bool
+    public function isApcuEnabled(): bool
     {
-        return $this->isExtensionLoaded('apcu', 'apc.enabled');
+        return \str_starts_with($this->getApcuStatus(), self::LABEL_ENABLED);
     }
 
     /**
@@ -340,19 +394,19 @@ final readonly class SymfonyInfoService
     }
 
     /**
-     * Returns if the 'xdebug' extension is loaded.
+     * Returns if the 'Zend OP cache' extension is loaded and enabled.
      */
-    public function isXdebugLoaded(): bool
+    public function isOpCacheEnabled(): bool
     {
-        return $this->isExtensionLoaded('xdebug');
+        return \str_starts_with($this->getOpCacheStatus(), self::LABEL_ENABLED);
     }
 
     /**
-     * Returns if the 'Zend OP cache' extension is loaded and enabled.
+     * Returns if the 'xdebug' extension is loaded and enabled.
      */
-    public function isZendCacheLoaded(): bool
+    public function isXdebugEnabled(): bool
     {
-        return $this->isExtensionLoaded('Zend OPcache', 'opcache.enable');
+        return \str_starts_with($this->getXdebugStatus(), self::LABEL_ENABLED);
     }
 
     private function cleanDescription(string $description): string
@@ -385,13 +439,19 @@ final readonly class SymfonyInfoService
         return $today->diff($endOfMonth)->format('%R%a days');
     }
 
-    private function getDirectoryInfo(string $path): string
+    /**
+     * @phpstan-return DirectoryType
+     */
+    private function getDirectoryInfo(string $name, string $path): array
     {
         $path = FileUtils::normalize($path);
-        $relativePath = FileUtils::makePathRelative($path, $this->projectDir);
-        $size = FileUtils::formatSize($path);
 
-        return \sprintf('%s (%s)', $relativePath, $size);
+        return [
+            'name' => $name,
+            'path' => $path,
+            'relative' => $this->makePathRelative($path),
+            'size' => FileUtils::formatSize($path),
+        ];
     }
 
     /**
@@ -410,6 +470,15 @@ final readonly class SymfonyInfoService
         return DateUtils::modify($this->createDate($date), 'last day of this month 23:59:59');
     }
 
+    private function getExtensionStatus(string $extension, string $enabled): string
+    {
+        if (!\extension_loaded($extension)) {
+            return self::LABEL_NOT_INSTALLED;
+        }
+
+        return \filter_var(\ini_get($enabled), \FILTER_VALIDATE_BOOLEAN) ? self::LABEL_ENABLED : self::LABEL_DISABLED;
+    }
+
     /**
      * @phpstan-param PackageSourceType $package
      */
@@ -423,7 +492,7 @@ final readonly class SymfonyInfoService
         );
         $files = \glob($pattern, \GLOB_BRACE | \GLOB_NOSORT);
         if (\is_array($files) && [] !== $files) {
-            return FileUtils::makePathRelative($files[0], $this->projectDir);
+            return $this->makePathRelative($files[0]);
         }
 
         return null;
@@ -483,18 +552,9 @@ final readonly class SymfonyInfoService
         return \str_starts_with($name, '_');
     }
 
-    private function isExtensionLoaded(string $extension, string $enabled = ''): bool
+    private function makePathRelative(string $endPath, ?string $startPath = null): string
     {
-        if (!\extension_loaded($extension)) {
-            return false;
-        }
-
-        return '' === $enabled || \filter_var(\ini_get($enabled), \FILTER_VALIDATE_BOOLEAN);
-    }
-
-    private function makePathRelative(string $endPath, string $startPath): string
-    {
-        return \rtrim(FileUtils::makePathRelative($endPath, $startPath), '/src');
+        return \rtrim(FileUtils::makePathRelative($endPath, $startPath ?? $this->projectDir), '/src');
     }
 
     /**
@@ -534,7 +594,7 @@ final readonly class SymfonyInfoService
         return [
             'name' => $name,
             'path' => $route->getPath(),
-            'methods' => [] === $methods ? 'ANY' : \implode('|', $methods),
+            'methods' => [] === $methods ? 'ANY' : \implode(', ', $methods),
         ];
     }
 }

@@ -448,7 +448,7 @@ $(function () {
                     break;
                 }
 
-                case 'ArrowRight': { // expand or select first child
+                case 'ArrowRight': { // expand or select the first child
                     const $group = $target.next('.list-group:first:not(:visible)');
                     if ($group.length) {
                         this._toggleGroup($group);

@@ -3,6 +3,122 @@
     'use strict';
 
     /**
+     * Update the selection.
+     *
+     * @param {jQuery} $oldSelection - the old selection.
+     * @param {jQuery} $newSelection - the new selection.
+     */
+    function toggleSelection($oldSelection, $newSelection) {
+        if (!$oldSelection.is($newSelection)) {
+            $oldSelection.removeClass('table-primary');
+            $newSelection.addClass('table-primary').scrollInViewport();
+        }
+    }
+
+    /**
+     * Edit the given row.
+     *
+     * @param {jQuery} $source - the source to find row to select.
+     * @param {KeyboardEvent} e - the event
+     */
+    function editRow($source, e) {
+        const $link = $source.find('.btn-default');
+        if ($link.length) {
+            $link[0].click();
+            e.preventDefault();
+        }
+    }
+
+    /**
+     * @param {KeyboardEvent} e
+     * @param {jQuery} $selection
+     */
+    function onKeyEnter(e, $selection) {
+        editRow($selection, e);
+    }
+
+    /**
+     * @param {KeyboardEvent} e
+     * @param {jQuery} $selection
+     * @param {jQuery} $parent
+     */
+    function onKeyHome(e, $selection, $parent) {
+        const $first = $parent.find('.row-item:first');
+        toggleSelection($selection, $first);
+        e.preventDefault();
+    }
+
+    /**
+     * @param {KeyboardEvent} e
+     * @param {jQuery} $selection
+     * @param {jQuery} $parent
+     */
+    function onKeyEnd(e, $selection, $parent) {
+        const $last = $parent.find('.row-item:last');
+        toggleSelection($selection, $last);
+        e.preventDefault();
+    }
+
+    /**
+     * @param {KeyboardEvent} e
+     * @param {jQuery} $selection
+     * @param {jQuery} $rows
+     */
+    function onKeyPrevious(e, $selection, $rows) {
+        const index = $selection.length ? $rows.index($selection) - 1 : $rows.length - 1;
+        const $prev = $rows.eq(index);
+        const $last = $rows.eq($rows.length - 1);
+        if ($prev.length) {
+            toggleSelection($selection, $prev);
+            e.preventDefault();
+        } else if ($last.length) {
+            toggleSelection($selection, $last);
+            e.preventDefault();
+        }
+    }
+
+    /**
+     * @param {KeyboardEvent} e
+     * @param {jQuery} $selection
+     * @param {jQuery} $rows
+     */
+    function onKeyNext(e, $selection, $rows) {
+        const index = $selection.length ? $rows.index($selection) + 1 : 0;
+        const $next = $rows.eq(index);
+        const $first = $rows.eq(0);
+        if ($next.length) {
+            toggleSelection($selection, $next);
+            e.preventDefault();
+        } else if ($first.length) {
+            toggleSelection($selection, $first);
+            e.preventDefault();
+        }
+    }
+
+    /**
+     * @param {KeyboardEvent} e
+     * @param {jQuery} $selection
+     */
+    function onKeyDelete(e, $selection) {
+        const $link = $selection.find('.btn-delete');
+        if ($link.length) {
+            e.preventDefault();
+            $link[0].click();
+        }
+    }
+
+    /**
+     * Select a row.
+     *
+     * @param {jQuery} $source - the source to find row to select.
+     */
+    function selectRow($source) {
+        const $oldSelection = $('#calculations .row-item.table-primary');
+        const $newSelection = $source.closest('.row-item');
+        toggleSelection($oldSelection, $newSelection);
+    }
+
+    /**
      * -------------- jQuery extensions --------------
      */
     $.fn.extend({
@@ -184,111 +300,6 @@
     }
 
     /**
-     * Update the selection.
-     *
-     * @param {jQuery} $oldSelection - the old selection.
-     * @param {jQuery} $newSelection - the new selection.
-     */
-    function toggleSelection($oldSelection, $newSelection) {
-        if (!$oldSelection.is($newSelection)) {
-            $oldSelection.removeClass('table-primary');
-            $newSelection.addClass('table-primary').scrollInViewport();
-        }
-    }
-
-    /**
-     * Edit the given row.
-     *
-     * @param {jQuery} $source - the source to find row to select.
-     * @param {KeyboardEvent} e - the optional event
-     */
-    function editRow($source, e) {
-        const $link = $source.find('.btn-default');
-        if ($link.length) {
-            $link[0].click();
-            e.preventDefault();
-        }
-    }
-
-    /**
-     * @param {KeyboardEvent} e
-     * @param {jQuery} $selection
-     */
-    function onKeyEnter(e, $selection) {
-        editRow($selection, e);
-    }
-
-    /**
-     * @param {KeyboardEvent} e
-     * @param {jQuery} $selection
-     * @param {jQuery} $parent
-     */
-    function onKeyHome(e, $selection, $parent) {
-        const $first = $parent.find('.row-item:first');
-        toggleSelection($selection, $first);
-        e.preventDefault();
-    }
-
-    /**
-     * @param {KeyboardEvent} e
-     * @param {jQuery} $selection
-     * @param {jQuery} $parent
-     */
-    function onKeyEnd(e, $selection, $parent) {
-        const $last = $parent.find('.row-item:last');
-        toggleSelection($selection, $last);
-        e.preventDefault();
-    }
-
-    /**
-     * @param {KeyboardEvent} e
-     * @param {jQuery} $selection
-     * @param {jQuery} $rows
-     */
-    function onKeyPrevious(e, $selection, $rows) {
-        const index = $selection.length ? $rows.index($selection) - 1 : $rows.length - 1;
-        const $prev = $rows.eq(index);
-        const $last = $rows.eq($rows.length - 1);
-        if ($prev.length) {
-            toggleSelection($selection, $prev);
-            e.preventDefault();
-        } else if ($last.length) {
-            toggleSelection($selection, $last);
-            e.preventDefault();
-        }
-    }
-
-    /**
-     * @param {KeyboardEvent} e
-     * @param {jQuery} $selection
-     * @param {jQuery} $rows
-     */
-    function onKeyNext(e, $selection, $rows) {
-        const index = $selection.length ? $rows.index($selection) + 1 : 0;
-        const $next = $rows.eq(index);
-        const $first = $rows.eq(0);
-        if ($next.length) {
-            toggleSelection($selection, $next);
-            e.preventDefault();
-        } else if ($first.length) {
-            toggleSelection($selection, $first);
-            e.preventDefault();
-        }
-    }
-
-    /**
-     * @param {KeyboardEvent} e
-     * @param {jQuery} $selection
-     */
-    function onKeyDelete(e, $selection) {
-        const $link = $selection.find('.btn-delete');
-        if ($link.length) {
-            e.preventDefault();
-            $link[0].click();
-        }
-    }
-
-    /**
      * Hide a panel.
      *
      * @param {jQuery} $source - the source event.
@@ -305,16 +316,6 @@
         });
     }
 
-    /**
-     * Select a row.
-     *
-     * @param {jQuery} $source - the source to find row to select.
-     */
-    function selectRow($source) {
-        const $oldSelection = $('#calculations .row-item.table-primary');
-        const $newSelection = $source.closest('.row-item');
-        toggleSelection($oldSelection, $newSelection);
-    }
 
     /**
      * Handle a collapse panel.

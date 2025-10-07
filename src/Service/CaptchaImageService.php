@@ -26,10 +26,10 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
  * Service to generate and validate a captcha image.
  *
  * @phpstan-type ComputeTextType = array{
- *     char: string,
+ *     char: non-empty-string,
  *     angle: int,
- *     height: int,
- *     width: int}
+ *     width: int,
+ *     height: int}
  */
 class CaptchaImageService implements ServiceSubscriberInterface
 {
@@ -187,10 +187,15 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * Compute the text layout.
      *
+     * @phpstan-param non-empty-string $text
+     *
+     * @phpstan-return non-empty-list<ComputeTextType>
+     *
      * @throws \Exception
      */
     private function computeText(ImageService $image, float $size, string $font, string $text): array
     {
+        /** @phpstan-var non-empty-list<ComputeTextType> */
         return \array_map(static function (string $char) use ($image, $size, $font): array {
             $angle = \random_int(-8, 8);
             [$width, $height] = $image->ttfSize($size, $angle, $font, $char);
@@ -207,6 +212,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * Create an image.
      *
+     * @phpstan-param non-empty-string $text
      * @phpstan-param positive-int $width
      * @phpstan-param positive-int $height
      *
@@ -283,6 +289,8 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * Draws the image text.
      *
+     * @phpstan-param non-empty-string $text
+     *
      * @throws \Exception
      */
     private function drawText(ImageService $image, int $width, int $height, string $text): void
@@ -294,12 +302,9 @@ class CaptchaImageService implements ServiceSubscriberInterface
 
         $font = $this->font;
         $size = (int) ((float) $height * 0.7);
-        /** @phpstan-var non-empty-array<ComputeTextType> $items */
         $items = $this->computeText($image, $size, $font, $text);
-        $textHeight = (int) $this->getColumnMax($items, 'height');
-        $textWidth = (int) $this->getColumnSum($items, 'width') + (\count($items) - 1) * self::CHAR_SPACE;
-        $x = \intdiv($width - $textWidth, 2);
-        $y = \intdiv($height - $textHeight, 2) + $size;
+        $x = \intdiv($width - $this->getTextWidth($items), 2);
+        $y = \intdiv($height - $this->getTextHeight($items), 2) + $size;
         foreach ($items as $item) {
             $image->ttfText($size, $item['angle'], $x, $y, $color, $font, $item['char']);
             $x += $item['width'] + self::CHAR_SPACE;
@@ -321,12 +326,31 @@ class CaptchaImageService implements ServiceSubscriberInterface
 
     /**
      * Generate a random string.
+     *
+     * @phpstan-return non-empty-string
      */
     private function generateRandomString(int $length): string
     {
         $length = $this->validateRange($length, 2, \strlen(self::ALLOWED_VALUES));
         $result = \str_shuffle(self::ALLOWED_VALUES);
 
+        /** @phpstan-var non-empty-string */
         return \substr($result, 0, $length);
+    }
+
+    /**
+     * @phpstan-param non-empty-list<ComputeTextType> $items
+     */
+    private function getTextHeight(array $items): int
+    {
+        return (int) $this->getColumnMax($items, 'height');
+    }
+
+    /**
+     * @phpstan-param non-empty-list<ComputeTextType> $items
+     */
+    private function getTextWidth(array $items): int
+    {
+        return (int) $this->getColumnSum($items, 'width') + (\count($items) - 1) * self::CHAR_SPACE;
     }
 }

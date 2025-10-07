@@ -138,20 +138,16 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
         string $alias = self::DEFAULT_ALIAS
     ): Query {
         $builder = $this->createDefaultQueryBuilder($alias);
-        if ([] !== $criteria) {
-            foreach ($criteria as $criterion) {
-                if ($criterion instanceof Criteria) {
-                    $builder->addCriteria($criterion);
-                } else {
-                    $builder->andWhere($criterion);
-                }
+        foreach ($criteria as $criterion) {
+            if ($criterion instanceof Criteria) {
+                $builder->addCriteria($criterion);
+            } else {
+                $builder->andWhere($criterion);
             }
         }
-        if ([] !== $sortedFields) {
-            foreach ($sortedFields as $name => $order) {
-                $field = $this->getSortField($name, $alias);
-                $builder->addOrderBy($field, $order);
-            }
+        foreach ($sortedFields as $name => $order) {
+            $field = $this->getSortField($name, $alias);
+            $builder->addOrderBy($field, $order);
         }
 
         /** @phpstan-var Query<null, mixed> */

@@ -55,7 +55,7 @@ class CacheService
     {
         return $this->cache->get(
             'cache.pools',
-            fn (ItemInterface $item, bool &$save): array => $this->loadContent($item, $save)
+            fn (ItemInterface $item, bool &$save): array => $this->loadContent($save)
         );
     }
 
@@ -64,7 +64,7 @@ class CacheService
      *
      * @throws \Exception
      */
-    private function loadContent(ItemInterface $item, bool &$save): array
+    private function loadContent(bool &$save): array
     {
         $save = false;
         $result = $this->service->execute('cache:pool:list');
@@ -72,7 +72,6 @@ class CacheService
             return [];
         }
         $content = $this->parseContent($result->content);
-        $item->set($content);
         $save = true;
 
         return $content;

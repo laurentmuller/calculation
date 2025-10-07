@@ -39,14 +39,10 @@ use Symfony\Contracts\Cache\ItemInterface;
  */
 class ResponseListener
 {
-    /**
-     * The CSP header key.
-     */
+    // the CSP header key
     private const CSP_HEADER = 'Content-Security-Policy';
 
-    /**
-     * The default headers to add.
-     */
+    // the default headers to add
     private const DEFAULT_HEADERS = [
         'Referrer-Policy' => 'same-origin',
         'Cross-Origin-Opener-Policy' => 'same-origin',
@@ -54,9 +50,13 @@ class ResponseListener
         'X-Permitted-Cross-Domain-Policies' => 'none',
     ];
 
-    /**
-     * The headers to add for secure request.
-     */
+    // the Nonce search parameter
+    private const NONCE_PARAMETER = '%nonce%';
+
+    // the Report search parameter
+    private const REPORT_PARAMETER = '%report%';
+
+    // the headers to add for secure request.
     private const SECURE_HEADERS = [
         'Strict-Transport-Security' => 'max-age=63072000; includeSubDomains; preload',
     ];
@@ -93,60 +93,61 @@ class ResponseListener
         }
 
         $csp = $this->buildCSP();
-        if ('' !== $csp) {
+        if (null !== $csp) {
             $headers->set(self::CSP_HEADER, $csp);
         }
     }
 
-    private function buildCSP(): string
+    private function buildCSP(): ?string
     {
         $csp = $this->getCSP();
-        if ('' === $csp) {
-            return $csp;
-        }
 
-        return $this->replaceNonce($csp);
+        return null === $csp ? null : $this->replaceNonce($csp);
     }
 
-    private function getCSP(): string
+    private function getCSP(): ?string
     {
         return $this->cache->get(
             'csp_content',
-            fn (ItemInterface $item, bool &$save): string => $this->loadCSP($item, $save)
+            fn (ItemInterface $item, bool &$save): ?string => $this->loadCSP($save)
         );
+    }
+
+    private function getFirewallName(Request $request): ?string
+    {
+        return $this->security->getFirewallConfig($request)?->getName();
     }
 
     private function isDevFirewall(Request $request): bool
     {
-        return $this->debug && SecurityAttributes::DEV_FIREWALL === $this->security->getFirewallConfig($request)?->getName();
+        return $this->debug && SecurityAttributes::DEV_FIREWALL === $this->getFirewallName($request);
     }
 
-    private function loadCSP(ItemInterface $item, bool &$save): string
+    private function loadCSP(bool &$save): ?string
     {
         $save = false;
         if (!FileUtils::exists($this->file)) {
-            return '';
+            return null;
         }
 
         try {
-            /** @phpstan-var array<string, string[]> $content */
+            /** @var array<string, string[]> $content */
             $content = FileUtils::decodeJson($this->file);
             $content = $this->replaceReportUrl($content);
             $content = $this->reduceValues($content);
             $csp = \implode('', $content);
-            $item->set($csp);
             $save = true;
 
             return $csp;
         } catch (\InvalidArgumentException) {
-            return '';
+            return null;
         }
     }
 
     /**
-     * @phpstan-param array<string, string[]> $array
+     * @param array<string, string[]> $array
      *
-     * @phpstan-return string[]
+     * @return string[]
      */
     private function reduceValues(array $array): array
     {
@@ -159,13 +160,13 @@ class ResponseListener
 
     private function replaceNonce(string $csp): string
     {
-        return \str_replace('%nonce%', $this->service->getCspNonce(), $csp);
+        return \str_replace(self::NONCE_PARAMETER, $this->service->getCspNonce(), $csp);
     }
 
     /**
-     * @phpstan-param array<string, string[]> $array
+     * @param array<string, string[]> $array
      *
-     * @phpstan-return array<string, string[]>
+     * @return array<string, string[]>
      */
     private function replaceReportUrl(array $array): array
     {
@@ -175,7 +176,7 @@ class ResponseListener
         );
 
         return \array_map(
-            static fn (array $subject): array => \str_replace('%report%', $reportUrl, $subject),
+            static fn (array $subject): array => \str_replace(self::REPORT_PARAMETER, $reportUrl, $subject),
             $array
         );
     }

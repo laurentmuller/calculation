@@ -81,7 +81,7 @@ trait PdfColorTrait
      */
     private function hexdec(string $value, int $offset): int
     {
-        /** @var int<0, 255> */
+        /** @phpstan-var int<0, 255> */
         return (int) \hexdec(\substr($value, $offset, 2));
     }
 }

@@ -268,14 +268,14 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
             return [];
         }
 
-        /** @var array<int, T> $rows */
+        /** phpstan-var array<int, T> $rows */
         $rows = [];
         while (false !== ($row = $result->fetchArray($mode))) {
             $rows[] = $row;
         }
         $result->finalize();
 
-        /** @var array<int, T> */
+        /** @phpstan-var array<int, T> */
         return $rows;
     }
 

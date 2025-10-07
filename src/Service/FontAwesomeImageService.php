@@ -82,7 +82,7 @@ class FontAwesomeImageService
 
         return $this->cache->get(
             $key,
-            fn (ItemInterface $item, bool &$save): ?FontAwesomeImage => $this->loadImage($path, $color, $item, $save)
+            fn (ItemInterface $item, bool &$save): ?FontAwesomeImage => $this->loadImage($path, $color, $save)
         );
     }
 
@@ -169,14 +169,13 @@ class FontAwesomeImageService
         return $this->cache->get('svg_directory', fn (): bool => FileUtils::isDir($this->svgDirectory));
     }
 
-    private function loadImage(string $path, string $color, ItemInterface $item, bool &$save): ?FontAwesomeImage
+    private function loadImage(string $path, string $color, bool &$save): ?FontAwesomeImage
     {
         try {
             $save = false;
             $content = (string) \file_get_contents($path);
             $content = self::SVG_PREFIX . $this->replaceCurrentColor($content, $color);
             $image = $this->convert($content);
-            $item->set($image);
             $save = true;
 
             return $image;

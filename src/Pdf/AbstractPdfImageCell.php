@@ -35,9 +35,8 @@ abstract class AbstractPdfImageCell extends PdfCell implements PdfCellOutputInte
         if (StringUtils::isString($this->getText())) {
             $width += $parent->getCellMargin();
         }
-        $width += $parent->pixels2UserUnit($this->getWidth());
 
-        return $width;
+        return $width + $parent->pixels2UserUnit($this->getWidth());
     }
 
     /**

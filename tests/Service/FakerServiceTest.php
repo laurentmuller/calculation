@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
+use App\Entity\CalculationState;
+use App\Entity\Category;
+use App\Entity\Product;
+use App\Entity\User;
 use App\Faker\CalculationStateProvider;
 use App\Faker\CategoryProvider;
 use App\Faker\CustomAddress;
@@ -22,15 +26,22 @@ use App\Faker\CustomPhoneNumber;
 use App\Faker\Generator;
 use App\Faker\ProductProvider;
 use App\Faker\UserProvider;
+use App\Repository\AbstractRepository;
+use App\Repository\CalculationStateRepository;
+use App\Repository\CategoryRepository;
+use App\Repository\ProductRepository;
+use App\Repository\UserRepository;
 use App\Service\FakerService;
-use App\Tests\KernelServiceTestCase;
+use Doctrine\ORM\EntityManagerInterface;
 use Faker\Provider\Base;
+use PHPUnit\Framework\TestCase;
 
-class FakerServiceTest extends KernelServiceTestCase
+class FakerServiceTest extends TestCase
 {
     public function testProviders(): void
     {
-        $service = $this->getService(FakerService::class);
+        $manager = $this->createEntityManager();
+        $service = new FakerService($manager);
         $generator = $service->getGenerator();
 
         self::assertProviderExist($generator, CustomPerson::class);
@@ -53,5 +64,20 @@ class FakerServiceTest extends KernelServiceTestCase
         $provider = $generator->getProvider($class);
         self::assertNotNull($provider);
         self::assertInstanceOf($class, $provider);
+    }
+
+    private function createEntityManager(): EntityManagerInterface
+    {
+        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager->method('getRepository')
+            ->willReturnCallback(fn (string $className): AbstractRepository => match ($className) {
+                User::class => $this->createMock(UserRepository::class),
+                Product::class => $this->createMock(ProductRepository::class),
+                Category::class => $this->createMock(CategoryRepository::class),
+                CalculationState::class => $this->createMock(CalculationStateRepository::class),
+                default => throw new \LogicException('Unexpected repository: ' . $className),
+            });
+
+        return $manager;
     }
 }

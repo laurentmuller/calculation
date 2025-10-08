@@ -13,32 +13,64 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
+use App\Model\CommandResult;
 use App\Service\CacheService;
-use App\Tests\KernelServiceTestCase;
+use App\Service\CommandService;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Console\Command\Command;
 
-class CacheServiceTest extends KernelServiceTestCase
+class CacheServiceTest extends TestCase
 {
-    private CacheService $service;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->service = $this->getService(CacheService::class);
-    }
-
     /**
      * @throws \Exception
      */
     public function testClear(): void
     {
-        $actual = $this->service->clear();
+        $result = new CommandResult(Command::SUCCESS, '');
+        $service = $this->createService($result);
+        $actual = $service->clear();
         self::assertTrue($actual);
     }
 
-    public function testList(): void
+    public function testEmptyList(): void
     {
-        $actual = $this->service->list();
+        $result = new CommandResult(Command::FAILURE, '');
+        $service = $this->createService($result);
+        $actual = $service->list();
+        self::assertEmpty($actual);
+    }
+
+    public function testNotEmptyList(): void
+    {
+        $content = <<<CONTENT
+                 ------------------------------------------------------------------ 
+                  Pool name                                                         
+                 ------------------------------------------------------------------ 
+                  cache.doctrine.orm.default.result                                 
+                  cache.doctrine.orm.default.query   
+            CONTENT;
+
+        $result = new CommandResult(Command::SUCCESS, $content);
+        $service = $this->createService($result);
+
+        $actual = $service->list();
         self::assertNotEmpty($actual);
+        self::assertArrayHasKey('cache', $actual);
+
+        $actual = $actual['cache'];
+        self::assertCount(2, $actual);
+        self::assertContains('doctrine.orm.default.result', $actual);
+        self::assertContains('doctrine.orm.default.query', $actual);
+    }
+
+    private function createService(CommandResult $result): CacheService
+    {
+        $service = $this->createMock(CommandService::class);
+        $service->expects(self::once())
+            ->method('execute')
+            ->willReturn($result);
+
+        return new CacheService($service, new ArrayAdapter());
     }
 }

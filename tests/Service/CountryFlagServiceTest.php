@@ -41,14 +41,6 @@ class CountryFlagServiceTest extends TestCase
     }
 
     /**
-     * @phpstan-return \Generator<int, array{string, string, bool, bool}>
-     */
-    public static function getFlagsInvalid(): \Generator
-    {
-        yield ['ZZ', '', true, true];
-    }
-
-    /**
      * @phpstan-return \Generator<int, array{0: string, 1: string, 2?: bool}>
      */
     public static function getFlagsValid(): \Generator
@@ -73,21 +65,23 @@ class CountryFlagServiceTest extends TestCase
     #[DataProvider('getDefaultCodes')]
     public function testDefaultCode(string $locale, string $expected): void
     {
-        \Locale::setDefault($locale);
+        $actual = \Locale::setDefault($locale);
+        self::assertTrue($actual);
+
         $actual = CountryFlagService::getDefaultCode();
         self::assertSame($expected, $actual);
     }
 
-    #[DataProvider('getFlagsInvalid')]
-    public function testGetFlag(string $alpha2Code, string $expected, bool $validate = true): void
+    public function testGetFlagInvalid(): void
     {
+        $alpha2Code = 'ZZ';
         self::expectException(\InvalidArgumentException::class);
         self::expectExceptionMessage("Invalid country code: '$alpha2Code'.");
-        $this->service->getFlag($alpha2Code, $validate);
+        $this->service->getFlag($alpha2Code);
     }
 
     #[DataProvider('getFlagsValid')]
-    public function testGetFlagsValid(string $alpha2Code, string $expected, bool $validate = true): void
+    public function testGetFlagValid(string $alpha2Code, string $expected, bool $validate = true): void
     {
         $actual = $this->service->getFlag($alpha2Code, $validate);
         self::assertSame($expected, $actual);

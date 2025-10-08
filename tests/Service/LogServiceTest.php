@@ -13,94 +13,53 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
+use App\Entity\Log;
 use App\Service\LogService;
-use App\Tests\KernelServiceTestCase;
-use App\Tests\TranslatorMockTrait;
-use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-class LogServiceTest extends KernelServiceTestCase
+class LogServiceTest extends TestCase
 {
-    use TranslatorMockTrait;
-
-    private LogService $service;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->service = $this->getService(LogService::class);
-    }
-
     public function testClearCache(): void
     {
-        $this->logDebug();
-        $this->service->getLogFile();
-        $actual = $this->service->clearCache();
-        self::assertSame($actual, $this->service);
+        $fileName = 'fake.log';
+        $service = $this->createService($fileName);
+        $actual = $service->clearCache();
+        self::assertSame($actual, $service);
     }
 
     public function testGetFileName(): void
     {
-        $kernel = self::$kernel;
-        self::assertNotNull($kernel);
-        $expected = $kernel->getEnvironment() . '.log';
-        $actual = $this->service->getFileName();
-        self::assertStringEndsWith($expected, $actual);
+        $fileName = 'fake.log';
+        $service = $this->createService($fileName);
+        $actual = $service->getFileName();
+        self::assertSame('fake.log', $actual);
     }
 
-    public function testGetLogFile(): void
+    public function testLogFileValid(): void
     {
-        $this->logDebug();
-        $this->service->clearCache();
-        $actual = $this->service->getLogFile();
-        self::assertNotNull($actual);
-
-        $actual = $this->service->getLog(0);
-        self::assertNotNull($actual);
-    }
-
-    public function testGetLogger(): void
-    {
-        $actual = $this->service->getLogger();
-        $actual->debug('Fake message.');
-        self::expectNotToPerformAssertions();
-    }
-
-    public function testGetTranslator(): void
-    {
-        $actual = $this->service->getTranslator();
-        $actual->trans('about.title');
-        self::expectNotToPerformAssertions();
-    }
-
-    public function testIsFileValid(): void
-    {
-        $this->logDebug();
-        $actual = $this->service->isFileValid();
+        $fileName = __DIR__ . '/../files/log/log_valid.txt';
+        $service = $this->createService($fileName);
+        $actual = $service->isFileValid();
         self::assertTrue($actual);
+        $actual = $service->getLogFile();
+        self::assertNotNull($actual);
+        $actual = $service->getLog(0);
+        self::assertInstanceOf(Log::class, $actual);
     }
 
     public function testParseFileInvalid(): void
     {
-        $fileName = 'fake';
-        $logger = $this->createMock(LoggerInterface::class);
-        $translator = $this->createMockTranslator();
-        $cache = new ArrayAdapter();
-        $service = new LogService($fileName, $logger, $translator, $cache);
-
+        $fileName = 'fake.log';
+        $service = $this->createService($fileName);
         $actual = $service->getLogFile();
         self::assertNull($actual);
     }
 
     public function testParseInvalidCSV(): void
     {
-        $fileName = __DIR__ . '/../files/txt/log_invalid_csv.txt';
-        $logger = $this->createMock(LoggerInterface::class);
-        $translator = $this->createMockTranslator();
-        $cache = new ArrayAdapter();
-        $service = new LogService($fileName, $logger, $translator, $cache);
-
+        $fileName = __DIR__ . '/../files/log/log_invalid_csv.txt';
+        $service = $this->createService($fileName);
         $actual = $service->getLogFile();
         self::assertNotNull($actual);
         self::assertCount(0, $actual);
@@ -108,20 +67,15 @@ class LogServiceTest extends KernelServiceTestCase
 
     public function testParseInvalidJSON(): void
     {
-        $fileName = __DIR__ . '/../files/txt/log_invalid_json.txt';
-        $logger = $this->createMock(LoggerInterface::class);
-        $translator = $this->createMockTranslator();
-        $cache = new ArrayAdapter();
-        $service = new LogService($fileName, $logger, $translator, $cache);
-
+        $fileName = __DIR__ . '/../files/log/log_invalid_json.txt';
+        $service = $this->createService($fileName);
         $actual = $service->getLogFile();
         self::assertNotNull($actual);
         self::assertCount(1, $actual);
     }
 
-    private function logDebug(): void
+    private function createService(string $fileName): LogService
     {
-        $logger = $this->getService(LoggerInterface::class);
-        $logger->debug('Test entry.');
+        return new LogService($fileName, new ArrayAdapter());
     }
 }

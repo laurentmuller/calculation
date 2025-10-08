@@ -143,6 +143,8 @@ final class FileUtils
     /**
      * Returns if the given file is empty (size = 0).
      *
+     * If the file does not exist, return 0.
+     *
      * @param string|\SplFileInfo $file the file or directory path
      */
     public static function empty(string|\SplFileInfo $file): bool

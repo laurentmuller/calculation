@@ -16,26 +16,19 @@ namespace App\Service;
 use App\Entity\Log;
 use App\Model\LogFile;
 use App\Reader\CSVReader;
-use App\Traits\LoggerTrait;
-use App\Traits\TranslatorTrait;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
-use Psr\Log\LoggerInterface;
-use Psr\Log\LogLevel as PsrLevel;
+use Psr\Log\LogLevel;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Service to read and cache the log file.
+ * Service to parse and cache the log file.
  */
 class LogService
 {
-    use LoggerTrait;
-    use TranslatorTrait;
-
     /**
      * The date format.
      */
@@ -46,24 +39,22 @@ class LogService
      */
     public const FORMATTER_NAME = 'monolog.application.formatter';
 
-    /**
-     * The key for the cache result.
-     */
+    // The key to cache the log file.
     private const KEY_CACHE = 'log_file';
 
-    /**
-     * The values separator.
-     */
-    private const VALUES_SEP = '|';
+    // the file name
+    private readonly string $fileName;
+    // the file valid state
+    private readonly bool $fileValid;
 
     public function __construct(
         #[Autowire('%kernel.logs_dir%/%kernel.environment%.log')]
-        private readonly string $fileName,
-        private readonly LoggerInterface $logger,
-        private readonly TranslatorInterface $translator,
+        string $fileName,
         #[Target('calculation.log')]
         private readonly CacheInterface $cache
     ) {
+        $this->fileName = FileUtils::normalize($fileName);
+        $this->fileValid = !FileUtils::empty($fileName);
     }
 
     /**
@@ -77,15 +68,15 @@ class LogService
     }
 
     /**
-     * Gets the file name.
+     * Gets the log file name.
      */
     public function getFileName(): string
     {
-        return FileUtils::normalize($this->fileName);
+        return $this->fileName;
     }
 
     /**
-     * Gets the given log.
+     * Gets the given log entry.
      */
     public function getLog(int $id): ?Log
     {
@@ -93,33 +84,23 @@ class LogService
     }
 
     /**
-     * Gets the parsed log file.
+     * Gets the parsed log file or null if the log file name is not valid.
      */
     public function getLogFile(): ?LogFile
     {
-        return $this->cache->get(self::KEY_CACHE, fn (): ?LogFile => $this->parseFile());
-    }
+        if ($this->fileValid) {
+            return $this->cache->get(self::KEY_CACHE, fn (): LogFile => $this->parseFile());
+        }
 
-    #[\Override]
-    public function getLogger(): LoggerInterface
-    {
-        return $this->logger;
-    }
-
-    #[\Override]
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
+        return null;
     }
 
     /**
      * Checks if the log file name exists and is not empty.
-     *
-     * @return bool true if valid
      */
     public function isFileValid(): bool
     {
-        return FileUtils::exists($this->fileName) && !FileUtils::empty($this->fileName);
+        return $this->fileValid;
     }
 
     /**
@@ -131,9 +112,6 @@ class LogService
         return $value;
     }
 
-    /**
-     * Gets the log date.
-     */
     private function parseDate(string $value): ?DatePoint
     {
         try {
@@ -143,17 +121,10 @@ class LogService
         }
     }
 
-    /**
-     * Gets the log file.
-     */
-    private function parseFile(): ?LogFile
+    private function parseFile(): LogFile
     {
-        if (!$this->isFileValid()) {
-            return null;
-        }
-
-        $file = new LogFile($this->getFileName());
-        $reader = new CSVReader(file: $this->fileName, separator: self::VALUES_SEP);
+        $file = new LogFile($this->fileName);
+        $reader = new CSVReader(file: $this->fileName, separator: '|');
 
         foreach ($reader as $key => $values) {
             if (6 !== \count($values)) {
@@ -177,9 +148,7 @@ class LogService
     }
 
     /**
-     * Decode the given JSON string.
-     *
-     * @return array<string, string>|null
+     * @phpstan-return array<string, string>|null
      */
     private function parseJson(string $value): ?array
     {
@@ -192,11 +161,11 @@ class LogService
     }
 
     /**
-     * @phpstan-return PsrLevel::*
+     * @phpstan-return LogLevel::*
      */
     private function parseLevel(string $value): string
     {
-        /** @phpstan-var PsrLevel::*  */
+        /** @phpstan-var LogLevel::*  */
         return \strtolower($value);
     }
 

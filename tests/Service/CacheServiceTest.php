@@ -44,11 +44,11 @@ class CacheServiceTest extends TestCase
     public function testNotEmptyList(): void
     {
         $content = <<<CONTENT
-                 ------------------------------------------------------------------ 
-                  Pool name                                                         
-                 ------------------------------------------------------------------ 
-                  cache.doctrine.orm.default.result                                 
-                  cache.doctrine.orm.default.query   
+                 ------------------------------------------------------------------
+                  Pool name
+                 ------------------------------------------------------------------
+                  cache.doctrine.orm.default.result
+                  cache.doctrine.orm.default.query
             CONTENT;
 
         $result = new CommandResult(Command::SUCCESS, $content);

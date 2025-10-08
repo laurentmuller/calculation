@@ -17,22 +17,16 @@ use App\Entity\Group;
 use App\Interfaces\EntityInterface;
 use App\Service\UrlGeneratorService;
 use App\Tests\Entity\IdTrait;
-use App\Tests\KernelServiceTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class UrlGeneratorServiceTest extends KernelServiceTestCase
+class UrlGeneratorServiceTest extends TestCase
 {
     use IdTrait;
-
-    private UrlGeneratorService $service;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->service = $this->getService(UrlGeneratorService::class);
-    }
 
     /**
      * @phpstan-return \Generator<int, array{0: string, 1: string, 2?: array}>
@@ -75,29 +69,46 @@ class UrlGeneratorServiceTest extends KernelServiceTestCase
     #[DataProvider('getRequests')]
     public function testCancelUrl(Request $request, string $expected, EntityInterface|int|null $id = 0): void
     {
-        $actual = $this->service->cancelUrl($request, $id);
+        $generator = $this->createGenerator($expected);
+        $service = new UrlGeneratorService($generator);
+        $actual = $service->cancelUrl($request, $id);
         self::assertStringContainsString($expected, $actual);
     }
 
     #[DataProvider('getGenerates')]
     public function testGenerate(string $name, string $expected, array $parameters = []): void
     {
-        $actual = $this->service->generate($name, $parameters);
+        $generator = $this->createGenerator($expected);
+        $service = new UrlGeneratorService($generator);
+        $actual = $service->generate($name, $parameters);
         self::assertStringContainsString($expected, $actual);
     }
 
     #[DataProvider('getRequests')]
     public function testRedirect(Request $request, string $expected, EntityInterface|int|null $id = 0): void
     {
-        $actual = $this->service->redirect($request, $id);
-        self::assertSame(302, $actual->getStatusCode());
+        $generator = $this->createGenerator($expected);
+        $service = new UrlGeneratorService($generator);
+        $actual = $service->redirect($request, $id);
+        self::assertSame(Response::HTTP_FOUND, $actual->getStatusCode());
         self::assertStringContainsString($expected, $actual->getTargetUrl());
     }
 
     #[DataProvider('getRouteParams')]
     public function testRouteParams(Request $request, array $expected, EntityInterface|int|null $id = 0): void
     {
-        $actual = $this->service->routeParams($request, $id);
+        $generator = $this->createGenerator();
+        $service = new UrlGeneratorService($generator);
+        $actual = $service->routeParams($request, $id);
         self::assertSame($expected, $actual);
+    }
+
+    private function createGenerator(string $expected = ''): MockObject&UrlGeneratorInterface
+    {
+        $generator = $this->createMock(UrlGeneratorInterface::class);
+        $generator->method('generate')
+            ->willReturn($expected);
+
+        return $generator;
     }
 }

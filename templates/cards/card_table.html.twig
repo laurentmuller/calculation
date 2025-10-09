@@ -142,7 +142,7 @@
 {%- set limit = params.limit|default(20) -%}
 {%- set is_page_list = pageList is defined and pageList|length > 1 -%}
 {%- set attributes = attributes|default({})|merge({
-    classes: 'table table-hover table-list table-no-end-line table-sm',
+    classes: 'table table-hover table-sm',
     'row-class': row_selector,
     'row-selector': 'tbody .' ~ row_selector,
     'custom-selector': '.custom-item.' ~ row_selector,
@@ -174,7 +174,7 @@
 }) -%}
 {# classes #}
 {% block card_container_class '' %}
-{% block card_body_class ' px-3 pt-0 pb-1' %}
+{% block card_body_class ' px-3 pt-0 pb-3' %}
 {# header #}
 {% block card_header %}
 <div class="d-flex-wrap-center">

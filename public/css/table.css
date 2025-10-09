@@ -34,17 +34,6 @@
     text-align: left;
 }
 
-/* reset padding headers */
-.bootstrap-table .fixed-table-container .table thead th.text-border::before {
-    content: "";
-    position: absolute;
-    left: -0.2rem;
-    top: 0;
-    bottom: 0;
-    width: 0.2rem;
-    border-left: 0.2rem solid var(--bs-light-bg-subtle) !important;
-}
-
 /* reset color for colored headers */
 .bootstrap-table .fixed-table-container .table thead th.text-danger {
     color: inherit !important;
@@ -62,23 +51,23 @@
 }
 
 .bootstrap-table .fixed-table-container .table thead th .sortable::after {
-    font-family: "Font Awesome 7 Free", sans-serif;
+    font-family: 'Font Awesome 7 Free', sans-serif;
     font-weight: 900;
     padding-left: 0.35rem;
     opacity: 0.3;
 }
 
 .bootstrap-table .fixed-table-container .table thead th .both::after {
-    content: "\f0dc";
+    content: '\f0dc';
 }
 
 .bootstrap-table .fixed-table-container .table thead th .asc::after {
-    content: "\f0d8";
+    content: '\f0d8';
     opacity: 1;
 }
 
 .bootstrap-table .fixed-table-container .table thead th .desc::after {
-    content: "\f0d7";
+    content: '\f0d7';
     opacity: 1;
 }
 

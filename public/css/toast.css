@@ -105,8 +105,12 @@ html[data-bs-theme=dark] .toast-plugin .progress-bar.bg-dark {
 }
 
 @keyframes toast-plugin-progress {
-    0% {width: 0}
-    100% {width: 100%}
+    0% {
+        width: 0
+    }
+    100% {
+        width: 100%
+    }
 }
 
 /* margins */

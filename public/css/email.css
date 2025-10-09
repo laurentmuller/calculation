@@ -23,8 +23,8 @@ table.body.wrapper {
     border-right: 1px solid #f3f3f3;
     border-bottom: 1px solid #f3f3f3;
 }
-/* stylelint-enable selector-class-pattern */
 
+/* stylelint-enable selector-class-pattern */
 td,
 a {
     line-height: 100%;

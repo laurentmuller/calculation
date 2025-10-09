@@ -170,6 +170,10 @@
                     onPostBody: function (data) {
                         // remove opacity
                         $this.css('opacity', 1);
+                        // remove header text-border class
+                        $this.find('th.text-border').removeClass('text-border');
+
+                        // data ?
                         const isData = data.length !== 0;
                         if (isData) {
                             // select the first row if none

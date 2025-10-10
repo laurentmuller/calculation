@@ -8,8 +8,9 @@
         "title": "log.fields.createdAt",
         "default": true,
         "order": "desc",
-        "class": "date",
-        "fieldFormatter": "formatCreatedAt"
+        "class": "date text-border",
+        "fieldFormatter": "formatCreatedAt",
+        "styleFormatter": "classBorderColor"
     },
     {
         "field": "message",
@@ -32,5 +33,10 @@
         "field": "user",
         "title": "log.fields.user",
         "class": "user"
+    },
+    {
+        "field": "levelBorder",
+        "alias": "color",
+        "visible": false
     }
 ]

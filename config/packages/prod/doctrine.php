@@ -14,20 +14,16 @@ declare(strict_types=1);
 use Symfony\Config\DoctrineConfig;
 
 return static function (DoctrineConfig $config): void {
-    $config->orm()
-        ->autoGenerateProxyClasses(false);
+    $orm = $config->orm();
+    $orm->autoGenerateProxyClasses(false);
 
-    $manager = $config->orm()
-        ->entityManager('default');
-
+    $manager = $orm->entityManager('default');
     $manager->metadataCacheDriver()
         ->type('pool')
         ->pool('doctrine.metadata');
-
     $manager->queryCacheDriver()
         ->type('pool')
         ->pool('doctrine.query');
-
     $manager->resultCacheDriver()
         ->type('pool')
         ->pool('doctrine.result');

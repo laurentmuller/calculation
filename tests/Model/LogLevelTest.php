@@ -23,6 +23,21 @@ class LogLevelTest extends TestCase
     /**
      * @phpstan-return \Generator<int, array{PsrLevel::*, string}>
      */
+    public static function getLevelBorders(): \Generator
+    {
+        yield [PsrLevel::EMERGENCY, 'text-border-danger'];
+        yield [PsrLevel::ALERT, 'text-border-danger'];
+        yield [PsrLevel::CRITICAL, 'text-border-danger'];
+        yield [PsrLevel::ERROR, 'text-border-danger'];
+        yield [PsrLevel::WARNING, 'text-border-warning'];
+        yield [PsrLevel::NOTICE, 'text-border-info'];
+        yield [PsrLevel::INFO, 'text-border-info'];
+        yield [PsrLevel::DEBUG, 'text-border-secondary'];
+    }
+
+    /**
+     * @phpstan-return \Generator<int, array{PsrLevel::*, string}>
+     */
     public static function getLevelColors(): \Generator
     {
         yield [PsrLevel::EMERGENCY, 'text-danger'];
@@ -68,6 +83,17 @@ class LogLevelTest extends TestCase
         self::assertSame($expected, $logLevel->__toString());
         self::assertSame('Warning', $logLevel->getLevelTitle());
         self::assertCount(0, $logLevel);
+    }
+
+    /**
+     * @phpstan-param PsrLevel::* $level
+     */
+    #[DataProvider('getLevelBorders')]
+    public function testLevelBorder(string $level, string $expected): void
+    {
+        $logLevel = LogLevel::instance($level);
+        $actual = $logLevel->getLevelBorder();
+        self::assertSame($expected, $actual);
     }
 
     /**

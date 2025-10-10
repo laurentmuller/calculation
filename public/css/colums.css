@@ -7,6 +7,23 @@
     padding-left: 0.45rem !important;
     border-left-style: solid !important;
     border-left-width: 0.2rem !important;
+    border-left-color: transparent;
+}
+
+.text-border-danger {
+    border-left-color: var(--bs-danger) !important;
+}
+
+.text-border-warning {
+    border-left-color: var(--bs-warning) !important;
+}
+
+.text-border-secondary {
+    border-left-color: var(--bs-secondary) !important;
+}
+
+.text-border-info {
+    border-left-color: var(--bs-info) !important;
 }
 
 .text-currency {

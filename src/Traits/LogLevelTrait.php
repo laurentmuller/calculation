@@ -41,19 +41,19 @@ trait LogLevelTrait
     }
 
     /**
+     * Get the level border color class.
+     */
+    public function getLevelBorder(): string
+    {
+        return $this->getColor('text-border-');
+    }
+
+    /**
      * Get the level color class.
      */
     public function getLevelColor(): string
     {
-        return match ($this->level) {
-            PsrLevel::ALERT,
-            PsrLevel::CRITICAL,
-            PsrLevel::EMERGENCY,
-            PsrLevel::ERROR => 'text-danger',
-            PsrLevel::WARNING => 'text-warning',
-            PsrLevel::DEBUG => 'text-secondary',
-            default => 'text-info'
-        };
+        return $this->getColor('text-');
     }
 
     /**
@@ -87,5 +87,18 @@ trait LogLevelTrait
         $this->level = $level;
 
         return $this;
+    }
+
+    private function getColor(string $prefix): string
+    {
+        return $prefix . match ($this->level) {
+            PsrLevel::ALERT,
+            PsrLevel::CRITICAL,
+            PsrLevel::EMERGENCY,
+            PsrLevel::ERROR => 'danger',
+            PsrLevel::WARNING => 'warning',
+            PsrLevel::DEBUG => 'secondary',
+            default => 'info'
+        };
     }
 }

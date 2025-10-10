@@ -19,25 +19,20 @@ return static function (DoctrineConfig $config): void {
     $dbal->connection('default')
         ->url('%env(resolve:DATABASE_URL)%')
         ->profilingCollectBacktrace('%kernel.debug%');
-
     $dbal->type(FixedFloatType::NAME)
         ->class(FixedFloatType::class);
 
     $orm = $config->orm();
     $orm->autoGenerateProxyClasses(true)
         ->proxyDir('%kernel.cache_dir%/doctrine/orm/Proxies');
-
     $orm->controllerResolver()
         ->autoMapping(false);
 
     $manager = $orm->entityManager('default');
-    $manager->autoMapping(true)
-        ->validateXmlMapping(true)
-        ->reportFieldsWhereDeclared(true)
-        ->namingStrategy('doctrine.orm.naming_strategy.underscore_number_aware');
-
+    $manager->namingStrategy('doctrine.orm.naming_strategy.underscore_number_aware');
     $manager->mapping('App')
-        ->alias('App')
+        ->type('attribute')
+        ->dir('%kernel.project_dir%/src/Entity')
         ->prefix('App\Entity')
-        ->dir('%kernel.project_dir%/src/Entity');
+        ->alias('App');
 };

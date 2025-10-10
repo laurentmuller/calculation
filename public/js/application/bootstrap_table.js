@@ -85,6 +85,23 @@ window.styleBorderColor = function (_value, row) {
     };
 };
 
+
+/**
+ * Cell style for a text border column (calculation or status).
+ *
+ * @param {number} _value the field value.
+ * @param {Object} row the record data.
+ * @returns {Object} the cell style.
+ */
+window.classBorderColor = function (_value, row) {
+    'use strict';
+    if (!row.color) {
+        return {};
+    }
+    return {
+        classes: row.color
+    };
+};
 /**
  * Cell class for the product price.
  *
@@ -608,8 +625,11 @@ function showSortDialog($table, $button) {
             onRenderCustomView: function (_$table, row, $item) {
                 // update border color
                 if (row.color) {
-                    const style = `border-left-color: ${row.color} !important`;
-                    $item.attr('style', style);
+                    if (row.color.indexOf('text-border') !== -1) {
+                        $item.addClass('text-border ' + row.color);
+                    } else {
+                        $item[0].style.setProperty('border-left-color', row.color, 'important');
+                    }
                 }
 
                 // text-muted

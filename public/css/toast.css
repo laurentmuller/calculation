@@ -108,6 +108,7 @@ html[data-bs-theme=dark] .toast-plugin .progress-bar.bg-dark {
     0% {
         width: 0
     }
+
     100% {
         width: 100%
     }

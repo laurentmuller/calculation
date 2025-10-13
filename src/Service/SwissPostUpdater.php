@@ -133,13 +133,15 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         $database = null;
 
         try {
-            if (!($archive = $this->openArchive($result)) instanceof \ZipArchive) {
+            $archive = $this->openArchive($result);
+            if (!$archive instanceof \ZipArchive) {
                 return $result;
             }
             if (!$this->validateArchive($result, $archive)) {
                 return $result;
             }
-            if (!($reader = $this->openReader($result, $archive)) instanceof CSVReader) {
+            $reader = $this->openReader($result, $archive);
+            if (!$reader instanceof CSVReader) {
                 return $result;
             }
             $database = $this->openDatabase($tempFile);

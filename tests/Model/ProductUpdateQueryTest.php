@@ -89,7 +89,7 @@ class ProductUpdateQueryTest extends TestCase
         $query = new ProductUpdateQuery();
         self::assertTrue($query->isPercent());
         self::assertFalse($query->isFixed());
-        $query->setType($query::UPDATE_FIXED);
+        $query->setType(ProductUpdateQuery::UPDATE_FIXED);
         self::assertFalse($query->isPercent());
         self::assertTrue($query->isFixed());
     }

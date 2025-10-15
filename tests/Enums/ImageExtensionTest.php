@@ -170,10 +170,7 @@ class ImageExtensionTest extends TestCase
     #[DataProvider('getCreateImages')]
     public function testCreateImage(ImageExtension $extension, string $filename): void
     {
-        if (!\file_exists($filename)) {
-            self::markTestSkipped("Unable to find the image file: $filename.");
-        }
-
+        self::assertFileExists($filename);
         $image = $extension->createImage($filename);
         self::assertInstanceOf(\GdImage::class, $image);
         \imagedestroy($image);

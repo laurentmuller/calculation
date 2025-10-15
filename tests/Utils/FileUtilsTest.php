@@ -181,10 +181,7 @@ class FileUtilsTest extends TestCase
 
     public function testDumpFileInvalid(): void
     {
-        if ($this->isLinux()) {
-            self::markTestSkipped('Unable to test under Linux.');
-        }
-        $file = $this->getFakeFile();
+        $file = '///.txt';
         $actual = FileUtils::dumpFile($file, 'fake');
         self::assertFalse($actual);
     }
@@ -302,10 +299,7 @@ class FileUtilsTest extends TestCase
 
     public function testMkdirInvalid(): void
     {
-        if ($this->isLinux()) {
-            self::markTestSkipped('Unable to test under Linux.');
-        }
-        $file = $this->getFakeDir();
+        $file = '///.txt';
         $actual = FileUtils::mkdir($file);
         self::assertFalse($actual);
     }
@@ -405,10 +399,7 @@ class FileUtilsTest extends TestCase
 
     public function testTempDirInvalid(): void
     {
-        if ($this->isLinux()) {
-            self::markTestSkipped('Unable to test under Linux.');
-        }
-        $actual = FileUtils::tempDir('b:/');
+        $actual = FileUtils::tempDir('///.txt');
         self::assertNull($actual);
     }
 
@@ -453,10 +444,5 @@ class FileUtilsTest extends TestCase
     private static function getLinesFile(): string
     {
         return __DIR__ . '/../files/txt/lines_count.txt';
-    }
-
-    private function isLinux(): bool
-    {
-        return \DIRECTORY_SEPARATOR !== '\\';
     }
 }

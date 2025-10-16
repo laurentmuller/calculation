@@ -133,7 +133,7 @@ abstract class IntegrationTestCase extends TestCase
                     return;
                 }
 
-                throw new Error(\sprintf('%s: %s', $e::class, $e->getMessage()), -1, null, $e);
+                throw new Error(message: \sprintf('%s: %s', $e::class, $e->getMessage()), previous: $e);
             } finally {
                 \restore_error_handler();
             }
@@ -148,13 +148,13 @@ abstract class IntegrationTestCase extends TestCase
 
                     return;
                 }
-                $e = new Error(\sprintf('%s: %s', $e::class, $e->getMessage()), -1, null, $e);
+                $e = new Error(message: \sprintf('%s: %s', $e::class, $e->getMessage()), previous: $e);
                 $output = \trim(\sprintf('%s: %s', $e::class, $e->getMessage()));
             }
 
             if (false !== $exception) {
-                [$class] = \explode(':', $exception);
-                self::assertThat(null, new Exception($class));
+                [$className] = \explode(':', $exception);
+                self::assertThat(null, new Exception($className));
             }
 
             $expected = \trim($match[3], "\n ");
@@ -162,7 +162,7 @@ abstract class IntegrationTestCase extends TestCase
                 \printf("Compiled templates that failed on case %d:\n", $index + 1);
                 foreach (\array_keys($templates) as $name) {
                     echo "Template: $name\n";
-                    echo $twig->compile($twig->parse($twig->tokenize($twig->getLoader()->getSourceContext($name))));
+                    echo $this->compile($twig, $name);
                 }
             }
             self::assertSame($expected, $output, $message . ' (in ' . $file . ')');
@@ -209,6 +209,19 @@ abstract class IntegrationTestCase extends TestCase
     protected function getTwigTests(): array
     {
         return [];
+    }
+
+    /**
+     * @throws Error
+     */
+    private function compile(Environment $twig, string $name): string
+    {
+        $loader = $twig->getLoader();
+        $context = $loader->getSourceContext($name);
+        $stream = $twig->tokenize($context);
+        $node = $twig->parse($stream);
+
+        return $twig->compile($node);
     }
 
     /**

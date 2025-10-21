@@ -45,6 +45,9 @@
 {% block stylesheets -%}
     {{ preload_css(enabled ? 'css/calculation.css' : 'css/center.css') }}
     {{ asset_css(enabled ? 'css/calculation.css' : 'css/center.css') }}
+    <style nonce="{{ csp_nonce() }}">
+        {{- css_border() }}
+    </style>
 {%- endblock %}
 {# javascripts #}
 {% block javascripts -%}

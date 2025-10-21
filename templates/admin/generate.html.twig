@@ -22,7 +22,7 @@
 {{ form_row(form.simulate) }}
 {{ form_row(form.confirm) }}
 {# results message #}
-<div id="message-result" class="alert alert-success mb-0" style="display: none;">
+<div id="message-result" class="alert alert-success mb-0 d-none">
     <div class="hstack">
         <p id="message" class="mb-0 me-auto">{{ 'generate.error.empty'|trans }}</p>
         <a href="#modal-result" class="alert-link stretched-link" data-bs-toggle="modal" title="{{ 'generate.result_link'|trans }}">

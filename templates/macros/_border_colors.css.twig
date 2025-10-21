@@ -1,0 +1,8 @@
+{% for state in states %}
+.state-border-{{ state.id }} {
+    border-left-color: {{ state.color|default('#000000')|raw }} !important;
+}
+.state-background-{{ state.id }} {
+    background-color: {{ state.color|default('#000000')|raw }} !important;
+}
+{% endfor %}

@@ -8,7 +8,7 @@
         "title": "calculationstate.fields.code",
         "default": true,
         "class": "text-code text-border text-nowrap",
-        "styleFormatter": "styleBorderColor"
+        "styleFormatter": "styleStateBorderClass"
     },
     {
         "field": "description",
@@ -31,12 +31,13 @@
         "fieldFormatter": "formatCalculations"
     },
     {
-        "field": "color",
+        "field": "editable",
+        "alias": "textMuted",
         "visible": false
     },
     {
-        "field": "editable",
-        "alias": "textMuted",
+        "field": "id",
+        "alias": "colorId",
         "visible": false
     }
 ]

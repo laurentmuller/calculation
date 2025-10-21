@@ -5,7 +5,7 @@
         "order": "desc",
         "class": "text-id text-border",
         "fieldFormatter": "formatId",
-        "styleFormatter": "styleBorderColor",
+        "styleFormatter": "styleStateBorderClass",
         "numeric": true
     },
     {
@@ -46,13 +46,13 @@
         "numeric": true
     },
     {
-        "field": "stateColor",
-        "alias": "color",
+        "field": "stateEditable",
+        "alias": "textMuted",
         "visible": false
     },
     {
-        "field": "stateEditable",
-        "alias": "textMuted",
+        "field": "stateId",
+        "alias": "colorId",
         "visible": false
     }
 ]

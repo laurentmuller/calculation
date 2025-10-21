@@ -415,10 +415,16 @@ class ExchangeRateService extends AbstractHttpClientService
         /** @var string[] $codes */
         $codes = $this->getColumnFilter($codes, 0, Currencies::exists(...));
 
-        // remove XCG (Caribbean guilder)
-        $key = \array_search('XCG', $codes, true);
-        if (false !== $key) {
-            unset($codes[$key]);
+        // remove invalid codes
+        $invalidCodes = [
+            'XCG', // Caribbean guilder
+            'CNH', // Chinese Yuan Renminbi Offshore
+        ];
+        foreach ($invalidCodes as $code) {
+            $key = \array_search($code, $codes, true);
+            if (false !== $key) {
+                unset($codes[$key]);
+            }
         }
 
         $result = $this->mapToKeyValue($codes, fn (string $code): array => [$code => $this->mapCode($code)]);

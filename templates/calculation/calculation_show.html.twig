@@ -129,7 +129,7 @@
 {{ property('calculation.fields.date', item.date|locale_date) }}
 <tr>
     <td class="w-25">{{ 'calculation.fields.state'|trans }}</td>
-    <td class="w-75"><span class="state-color me-2 mb-1" style="background-color: {{ item.state.color|default('transparent') }};"></span>{{ item.stateCode }}</td>
+    <td class="w-75"><span class="state-color me-1 mb-1 state-background-{{ item.state.id }}"></span>{{ item.stateCode }}</td>
 </tr>
 {{ timestampable_properties(item) }}
 {% if item.empty %}
@@ -156,3 +156,10 @@
     {{ asset_js('js/compiled/calculation_error.js') }}
 {% endif %}
 {% endblock %}
+{# stylesheets #}
+{% block stylesheets -%}
+    {{ parent() }}
+    <style nonce="{{ csp_nonce() }}">
+        {{- css_border() }}
+    </style>
+{%- endblock %}

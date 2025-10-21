@@ -1,4 +1,3 @@
-{% from 'macros/_properties.html.twig' import stateCss %}
 <div class="table-responsive">
     <table id="calculations" class="table table-hover table-sm m-0">
         <tbody{% if row_link %} data-link="row" class="rowlink" data-target="a.btn-default"{% endif %}>
@@ -14,7 +13,7 @@
                 {% set class_name = class_name ~ ' text-body-secondary' %}
             {% endif %}
             <tr data-id="{{ id }}" class="{{ class_name }}">
-                <td class="text-id text-border" style="{{ stateCss(calculation.stateColor) }}">{{- calculation.id|identifier -}}</td>
+                <td class="text-id text-border state-border-{{ calculation.stateId }}">{{- calculation.id|identifier -}}</td>
                 <td class="text-date">{{ calculation.date|locale_date }}</td>
                 <td class="text-state">{{ calculation.stateCode }}</td>
                 <td class="text-customer text-cell">{{ calculation.customer }}</td>

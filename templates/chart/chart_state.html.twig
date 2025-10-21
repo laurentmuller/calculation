@@ -1,5 +1,4 @@
 {% extends 'chart/chart_base.html.twig' %}
-{% from 'macros/_properties.html.twig' import stateCss %}
 {# parameters #}
 {%- set title = 'chart.state.title' -%}
 {%- set title_icon = ICON_CALCULATION_STATE -%}
@@ -22,7 +21,7 @@
     <tr title="{{ 'chart.state.row'|trans({'%name%': item.code}) }}">
         <td class="text-nowrap">
             <a class="d-flex align-items-center" href="{{ path(list_path, {stateId: item.id}) }}">
-                <span class="border me-1" style="width: 1.5rem; height: 1rem; background: {{ item.color }}"></span>
+                <span class="border state-color me-1" style="background: {{ item.color }}"></span>
                 <span>{{ item.code }}</span>
             </a>
         </td>
@@ -59,4 +58,11 @@
 {% block card_body %}
     {{ parent() }}
     <p class="small mb-0">{{ 'chart.state.tooltip'|trans|raw }}</p>
+{%- endblock %}
+{# stylesheets #}
+{% block stylesheets -%}
+    {{ parent() }}
+    <style nonce="{{ csp_nonce() }}">
+        {{- css_border() }}
+    </style>
 {%- endblock %}

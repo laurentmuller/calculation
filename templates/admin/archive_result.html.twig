@@ -1,6 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
 {% from 'macros/_icons.html.twig' import link, homepage, sitemap, modal_title, modal_close_button %}
-{% from 'macros/_properties.html.twig' import stateCss %}
 {# macro #}
 {% macro add_line_info(name, value) -%}
     <tr>
@@ -28,7 +27,7 @@
                 </tr>
                 {% for key, value in results %}
                     <tr>
-                        <td class="text-border" style="{{ stateCss(value.state.color) }}">{{ key }}</td>
+                        <td class="text-border state-border-{{ value.state.id }}">{{ key }}</td>
                         <td class="text-end">{{ value.calculations|integer }}</td>
                     </tr>
                 {% endfor %}
@@ -60,16 +59,15 @@
                         <div class="overflow-auto table-fixed-header scrollbar-thin border">
                             <table class="table table-hover table-no-end-line table-sm mb-0">
                                 <tbody>
-                                {%- set border = ' border-top-0' -%}
                                 {% for key, value in results %}
-                                    {%- set style = stateCss(value.state.color) -%}
+                                    {%- set text_border = 'text-border state-border-' ~ value.state.id %}
                                     <tr>
-                                        <th class="text-border{{ border }}" colspan="4" style="{{ style }}">{{ key }}</th>
-                                        <th class="text-currency{{ border }}" colspan="2">{{ 'counters.calculations'|trans({count: value.calculations|length}) }}</th>
+                                        <th class="border-top-0 {{ text_border }}" colspan="4">{{ key }}</th>
+                                        <th class="border-top-0 text-currency" colspan="2">{{ 'counters.calculations'|trans({count: value.calculations|length}) }}</th>
                                     </tr>
                                     {% for calculation in value.calculations %}
                                         <tr>
-                                            <td class="text-id text-border" style="{{ style }}">{{ calculation.id|identifier }}</td>
+                                            <td class="text-id {{ text_border }}">{{ calculation.id|identifier }}</td>
                                             <td class="text-date">{{ calculation.date|locale_date }}</td>
                                             <td class="text-nowrap">{{ calculation.customer }}</td>
                                             <td class="text-nowrap">{{ calculation.description }}</td>
@@ -110,3 +108,10 @@
         {{ sitemap() }}
     </div>
 {% endblock %}
+{# stylesheets #}
+{% block stylesheets -%}
+    {{ parent() }}
+    <style nonce="{{ csp_nonce() }}">
+        {{- css_border() }}
+    </style>
+{%- endblock %}

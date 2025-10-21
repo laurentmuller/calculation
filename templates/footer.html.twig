@@ -2,7 +2,7 @@
 {%- set is_dark_navigation = app.user and user_service.darkNavigation -%}
 <footer class="navbar navbar-footer bg-body-tertiary border-top py-1 justify-content-md-end fixed-bottom small d-print-none"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
     <div class="navbar-nav flex-row">
-        <span class="navbar-text text-truncate text-danger border-end border-secondary" id="footer-message" style="display: none;">
+        <span class="navbar-text text-truncate text-danger border-end border-secondary d-none" id="footer-message">
             {{- 'common.data_changed'|trans -}}
         </span>
         <a class="nav-link text-truncate border-end border-secondary{% if app.current_route == 'about' %} active{% endif %}" href="{{ path('about_index') }}" title="{{ 'footer.about_title'|trans }}">

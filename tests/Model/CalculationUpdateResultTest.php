@@ -59,7 +59,7 @@ class CalculationUpdateResultTest extends TestCase
         $expected = [
             [
                 'id' => 1,
-                'color' => CalculationState::DEFAULT_COLOR,
+                'stateId' => 1,
                 'date' => $date,
                 'customer' => 'customer',
                 'description' => 'description',

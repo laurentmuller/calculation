@@ -427,6 +427,20 @@
                     }
                 });
             },
+
+            /**
+             * Replace the d-none class by the display none style.
+             *
+             * @return {jQuery} - the element for chaining.
+             */
+            replaceDisplayNone: function () {
+                return this.each(function () {
+                    const $this = $(this);
+                    if ($this.hasClass('d-none')) {
+                        $this.css('display', 'none').removeClass('d-none');
+                    }
+                });
+            }
         });
 
         /**

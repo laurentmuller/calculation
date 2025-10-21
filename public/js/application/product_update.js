@@ -6,7 +6,7 @@
 function getProducts(id) {
     'use strict';
     id = id || $('#form_category').val();
-    return $('#form_products :checkbox[data-category="' + id + '"]');
+    return $(`#form_products :checkbox[data-category="${id}"]`);
 }
 
 /**
@@ -53,11 +53,13 @@ function getSelectableProducts() {
 /**
  * Validate the product's selection.
  *
+ * @param {Object} validator the validator.
  * @returns {boolean} - true if valid.
  */
-function validateProducts() {
+function validateProducts(validator) {
     'use strict';
-    return $("#form_allProducts").validate();
+    return validator.form();
+    //return $('#form_allProducts').validate();
 }
 
 /**
@@ -135,7 +137,7 @@ $(function () {
     const $percent = $('#form_percent');
     const $category = $('#form_category');
     const $allProducts = $('#form_allProducts');
-    const $alert = $('#alert');
+    const $alert = $('#alert').replaceDisplayNone();
     const $overFlow = $('#overflow-table');
 
     // number inputs
@@ -143,26 +145,27 @@ $(function () {
 
     // add custom method for product selection
     $.validator.addMethod('checkProducts', function () {
-        if (getSelectableProducts().length === 0) {
-            $overFlow.hide();
-            $alert.show(250);
-        } else {
+        const anySelection = getSelectableProducts().length !== 0;
+        if (anySelection) {
             $alert.hide();
             $overFlow.show(250);
+        } else {
+            $overFlow.hide();
+            $alert.show(250);
         }
-        return getSelectedProducts().length !== 0;
+        return anySelection;
     }, $allProducts.data('error'));
 
     // validation
-    $('#edit-form').simulate().initValidator({
+    const validator = $('#edit-form').simulate().initValidator({
         rules: {
             'form[percent]': {
                 notEqualToZero: true,
-                required: "#form_type_percent:checked"
+                required: '#form_type_percent:checked'
             },
             'form[fixed]': {
                 notEqualToZero: true,
-                required: "#form_type_fixed:checked"
+                required: '#form_type_fixed:checked'
             },
             'form[allProducts]': {
                 checkProducts: true
@@ -173,7 +176,7 @@ $(function () {
                 $('#form_products :checkbox').setChecked(false);
             } else {
                 const id = $category.val();
-                $('#form_products :checkbox[data-category!="' + id + '"]').setChecked(false);
+                $(`#form_products :checkbox[data-category!="${id}"]`).setChecked(false);
             }
             $(form).showSubmit();
             form.submit();
@@ -194,7 +197,7 @@ $(function () {
         }
         hideEmptyPrices();
         updatePrices();
-        validateProducts();
+        validateProducts(validator);
     });
 
     $('#form_percent, #form_fixed, #form_round').on('input', updatePrices);
@@ -202,9 +205,9 @@ $(function () {
     $category.on('input', function () {
         // update visibility
         const id = $(this).val();
-        $('#form_products tbody tr[data-category="' + id + '"]').removeClass('d-none')
+        $(`#form_products tbody tr[data-category="${id}"]`).removeClass('d-none')
             .find(':checkbox').addClass('selectable');
-        $('#form_products tbody tr[data-category!="' + id + '"]').addClass('d-none')
+        $(`#form_products tbody tr[data-category!="${id}"]`).addClass('d-none')
             .find(':checkbox').removeClass('selectable');
 
         // select all if none
@@ -213,7 +216,7 @@ $(function () {
             $products.setChecked(true);
         }
         hideEmptyPrices();
-        validateProducts();
+        validateProducts(validator);
         updatePrices();
     });
     $category.trigger('input');
@@ -223,10 +226,10 @@ $(function () {
         const $target = $(e.target);
         if (e.button === 0 && !$target.is(':checkbox') && !$target.is('label') && !isAllProducts()) {
             $(this).closest('tr').find(':checkbox').toggleChecked().trigger('focus');
-            validateProducts();
+            validateProducts(validator);
         }
     }).on('click', ':checkbox', function () {
-        validateProducts();
+        validateProducts(validator);
     });
 
     $allProducts.on('click', function () {
@@ -234,19 +237,19 @@ $(function () {
         $('#form_products :checkbox').toggleDisabled(disabled);
         $('#form_products tbody tr').toggleClass('text-secondary', disabled);
         updateButtons();
-        validateProducts();
+        validateProducts(validator);
     });
 
     $('#btn-all').on('click', function () {
         getProducts().setChecked(true);
-        validateProducts();
+        validateProducts(validator);
     });
     $('#btn-none').on('click', function () {
         getProducts().setChecked(false);
-        validateProducts();
+        validateProducts(validator);
     });
     $('#btn-reverse').on('click', function () {
         getProducts().toggleChecked();
-        validateProducts();
+        validateProducts(validator);
     });
 });

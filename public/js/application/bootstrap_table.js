@@ -1,6 +1,12 @@
 /* globals Toaster, MenuBuilder, bootstrap */
 
 /**
+ * @typedef {Object} RowType
+ * @property {number} [colorId] the color identifier
+ * @property {number} [textMuted] the color identifier
+ */
+
+/**
  * Formatter for the custom view.
  *
  * @param {Object[]} data the rows to format.
@@ -22,7 +28,7 @@ window.customViewFormatter = function (data) {
         Object.keys(row).forEach(function (key) {
             html = html.replaceAll(`%${key}%`, row[key] || undefinedText);
         });
-        // apply format functions
+        // apply functions
         let match = regex.exec(html);
         while (match !== null) {
             let value = undefinedText;
@@ -67,7 +73,24 @@ window.formatProductClass = function (row) {
 };
 
 /**
- * Cell style for a text border column (calculation or status).
+ * Cell class for the state color.
+ *
+ * @param {number} _value the field value.
+ * @param {RowType} row the record data.
+ * @returns {Object} the cell classes.
+ */
+window.styleStateBorderClass = function (_value, row) {
+    'use strict';
+    if (!row.colorId) {
+        return {};
+    }
+    return {
+        classes: `state-border-${row.colorId}`
+    };
+};
+
+/**
+ * Cell class for log
  *
  * @param {number} _value the field value.
  * @param {Object} row the record data.
@@ -79,29 +102,10 @@ window.styleBorderColor = function (_value, row) {
         return {};
     }
     return {
-        css: {
-            'border-left-color': row.color
-        }
-    };
-};
-
-
-/**
- * Cell style for a text border column (calculation or status).
- *
- * @param {number} _value the field value.
- * @param {Object} row the record data.
- * @returns {Object} the cell style.
- */
-window.classBorderColor = function (_value, row) {
-    'use strict';
-    if (!row.color) {
-        return {};
-    }
-    return {
         classes: row.color
     };
 };
+
 /**
  * Cell class for the product price.
  *
@@ -113,18 +117,16 @@ window.styleProductPrice = function (value) {
     if ($.parseFloat(value) !== 0) {
         return {};
     }
+
     return {
-        css: {
-            color: 'var(--bs-danger)'
-        }
+        classes: 'text-danger'
     };
 };
 
 /**
  * Row classes for the text muted.
  *
- * @param {Object} row the record data.
- * @param {String} row.textMuted the text muted value
+ * @param {RowType} row the record data.
  * @param {int} index the row index.
  * @returns {Object} the row classes.
  */
@@ -389,18 +391,8 @@ function initializeKeyHandler($table) {
  */
 function initializeContextMenus($table) {
     'use strict';
-    const tableClass = [
-        '.bootstrap-table',
-        'table',
-        '.table-primary',
-        'td:not(:has(.rowlink-skip))'
-    ].join(' ');
-    const cardClass = [
-        '.bootstrap-table',
-        '.fixed-table-custom-view',
-        '.table-primary',
-        'div:not(:has(.rowlink-skip, .item-link))'
-    ].join(' ');
+    const tableClass = ['.bootstrap-table', 'table', '.table-primary', 'td:not(:has(.rowlink-skip))'].join(' ');
+    const cardClass = ['.bootstrap-table', '.fixed-table-custom-view', '.table-primary', 'div:not(:has(.rowlink-skip, .item-link))'].join(' ');
     const selector = [tableClass, cardClass].join(',');
     const hideMenus = function () {
         $.hideDropDownMenus();
@@ -426,9 +418,7 @@ function initializeDangerTooltips($table) {
     const selector = $table.data('danger-tooltip-selector');
     if (selector) {
         $table.getTableContainer().tooltip({
-            customClass: 'tooltip-danger',
-            selector: selector,
-            html: true
+            customClass: 'tooltip-danger', selector: selector, html: true
         });
     }
 }
@@ -494,8 +484,7 @@ function showSortDialog($table, $button) {
             const $parent = $this.parents('.custom-item, tr');
             const $elements = $parent.find('.dropdown-menu').children();
             return new MenuBuilder({
-                classSelector: 'btn-default',
-                elements: $elements
+                classSelector: 'btn-default', elements: $elements
             }).getItems();
         }
     });
@@ -524,8 +513,7 @@ function showSortDialog($table, $button) {
         // initialize table
         const options = {
             draggableModal: {
-                marginBottom: $('footer:visible').length ? $('footer').outerHeight() : 0,
-                focusOnShow: true
+                marginBottom: $('footer:visible').length ? $('footer').outerHeight() : 0, focusOnShow: true
             },
 
             /**
@@ -561,9 +549,7 @@ function showSortDialog($table, $button) {
                         // build items
                         const $pages = pageList.map(function (page) {
                             const $page = $('<button/>', {
-                                'class': 'dropdown-page dropdown-item',
-                                'data-value': page,
-                                'text': page
+                                'class': 'dropdown-page dropdown-item', 'data-value': page, 'text': page
                             });
                             if (page === options.pageSize) {
                                 $page.addClass('active');
@@ -622,9 +608,20 @@ function showSortDialog($table, $button) {
                 $table.hideCustomViewMessage();
             },
 
+            /**
+             *
+             * @param {jQuery} _$table
+             * @param {RowType} row
+             * @param {jQuery} $item
+             */
             onRenderCustomView: function (_$table, row, $item) {
                 // update border color
-                if (row.color) {
+                if (row.colorId) {
+                    const borderClass = window.styleStateBorderClass(0, row);
+                    if (borderClass) {
+                        $item.addClass(borderClass.classes);
+                    }
+                } else if (row.color) {
                     if (row.color.indexOf('text-border') !== -1) {
                         $item.addClass('text-border ' + row.color);
                     } else {
@@ -634,6 +631,7 @@ function showSortDialog($table, $button) {
 
                 // text-muted
                 if (row.textMuted) {
+                    // const borderClass = window.styleTextMuted(row, 0);
                     const value = $.parseInt(row.textMuted);
                     if (value === 0) {
                         $item.addClass('text-body-secondary');

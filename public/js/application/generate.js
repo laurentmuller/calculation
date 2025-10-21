@@ -176,6 +176,7 @@ function generate() {
  */
 $(function () {
     'use strict';
+    $('#message-result').replaceDisplayNone();
     $('#modal-result').on('hide.bs.modal', function () {
         $('#overflow').scrollTop(0);
     });

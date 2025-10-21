@@ -54,3 +54,10 @@
 {{ _self.property_line() }}
 {{ _self.property_value('%items%', 'text-danger') }}
 {%- endblock %}
+
+{% block stylesheets -%}
+    {{ parent() }}
+    <style nonce="{{ csp_nonce() }}">
+        {{- css_border() }}
+    </style>
+{%- endblock %}

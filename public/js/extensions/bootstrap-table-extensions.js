@@ -169,7 +169,7 @@
                      */
                     onPostBody: function (data) {
                         // remove opacity
-                        $this.css('opacity', 1);
+                        $this.removeClass('opacity-0');
                         // remove header text-border class
                         $this.find('th.text-border').removeClass('text-border');
 

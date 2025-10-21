@@ -10,7 +10,7 @@
         "order": "desc",
         "class": "date text-border",
         "fieldFormatter": "formatCreatedAt",
-        "styleFormatter": "classBorderColor"
+        "styleFormatter": "styleBorderColor"
     },
     {
         "field": "message",

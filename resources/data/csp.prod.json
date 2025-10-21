@@ -9,7 +9,8 @@
         "'none'"
     ],
     "default-src": [
-        "'self'"
+        "'self'",
+        "https"
     ],
     "form-action": [
         "'self'"
@@ -21,7 +22,8 @@
         "'self'"
     ],
     "script-src": [
-        "%nonce%"
+        "%nonce%",
+        "'script-dynamic'"
     ],
     "script-src-elem": [
         "%nonce%",

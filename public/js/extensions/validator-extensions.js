@@ -160,7 +160,7 @@
              * @param {function} [options.highlight]
              * @param {function} [options.unhighlight]
              * @param {function} [options.invalidHandler]
-             * @returns the validator.
+             * @returns {Object} the validator.
              */
             initValidator: function (options) {
                 // get options
@@ -339,6 +339,7 @@
                 if (settings.showModification) {
                     const $message = $('#footer-message');
                     if ($message.length) {
+                        $message.replaceDisplayNone();
                         const data = $that.serialize();
                         $that.find(':input').on('change input', function () {
                             if ($that.serialize() === data) {

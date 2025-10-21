@@ -26,7 +26,7 @@
     <div class="col-md-5">
         <div class="form-group mb-3">
             <label class="form-label required" for="baseCode">{{ 'exchange_rate.source'|trans }}</label>
-            <select class="form-select" id="baseCode" name="baseCode" required="required" style="width: 100% !important;">
+            <select class="form-select w-100" id="baseCode" name="baseCode" required="required">
                 {{ _self.fillCodes(codes, 'CHF') }}
             </select>
         </div>
@@ -42,7 +42,7 @@
     <div class="col-md-5">
         <div class="form-group mb-3">
             <label class="form-label required" for="targetCode">{{ 'exchange_rate.target'|trans }}</label>
-            <select class="form-select" id="targetCode" name="targetCode" required="required" style="width: 100% !important;">
+            <select class="form-select w-100" id="targetCode" name="targetCode" required="required">
                 {{ _self.fillCodes(codes, 'EUR') }}
             </select>
         </div>

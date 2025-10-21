@@ -61,3 +61,10 @@
 {{ _self.property_row('calculationstate.fields.editable', '%editable%') }}
 {{ _self.property_row('calculationstate.fields.calculations', '%calculations%') }}
 {%- endblock %}
+
+{% block stylesheets -%}
+    {{ parent() }}
+    <style nonce="{{ csp_nonce() }}">
+        {{- css_border() }}
+    </style>
+{%- endblock %}

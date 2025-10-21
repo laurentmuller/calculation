@@ -547,6 +547,14 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
+     * Gets the state identifier.
+     */
+    public function getStateId(): ?int
+    {
+        return $this->state?->getId();
+    }
+
+    /**
      * Get total net. This is the total of the groups multiplied by the global margin.
      */
     public function getTotalNet(): float

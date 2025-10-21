@@ -2,7 +2,7 @@
 {%- set is_dark_navigation = app.user and user_service.darkNavigation -%}
 {% if app.user and not app.request.cookies.boolean(key) %}
     {% from 'macros/_icons.html.twig' import link %}
-    <footer class="navbar navbar-footer bg-body-tertiary py-1 justify-content-md-end fixed-bottom small d-print-none" style="z-index: 1031;"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
+    <footer class="navbar navbar-footer bg-body-tertiary py-1 justify-content-md-end fixed-bottom small d-print-none"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
         <span class="navbar-text pe-0"> {{- 'cookie_banner.message'|trans }}</span>
         {{ link(path('about_policy_index'), 'cookie_banner.link', 'flex-fill ', title: 'cookie_banner.link_title') }}
         {{ link(path('policy_accept'), 'cookie_banner.accept', 'px-3', title: 'cookie_banner.accept_title') }}

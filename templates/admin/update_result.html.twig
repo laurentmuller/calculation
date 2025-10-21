@@ -1,6 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
 {% from 'macros/_icons.html.twig' import link, homepage, sitemap, modal_title, modal_close_button %}
-{% from 'macros/_properties.html.twig' import stateCss %}
 {# macro #}
 {% macro add_line_info(name, value) -%}
     <tr>
@@ -62,10 +61,10 @@
                                 <tbody>
                                 {% for value in result.results %}
                                     <tr>
-                                        <td class="text-id text-border" style="{{ stateCss(value.color) }}">{{ value.id|identifier }}</td>
+                                        <td class="text-id text-border state-border-{{ value.stateId }}">{{ value.id|identifier }}</td>
                                         <td class="text-date">{{ value.date|locale_date }}</td>
-                                        <td class="text-truncate" style="max-width: 100px;">{{ value.customer }}</td>
-                                        <td class="text-truncate" style="max-width: 100px;">{{ value.description }}</td>
+                                        <td class="text-truncate mw-100">{{ value.customer }}</td>
+                                        <td class="text-truncate mw-100">{{ value.description }}</td>
                                         <td class="text-currency">{{ value.old_value|amount }}</td>
                                         <td class="text-currency">{{ value.new_value|amount }}</td>
                                         <td class="text-currency">{{ value.delta|amount }}</td>
@@ -95,3 +94,10 @@
         {{ sitemap() }}
     </div>
 {% endblock %}
+{# stylesheets #}
+{% block stylesheets -%}
+    {{ parent() }}
+    <style nonce="{{ csp_nonce() }}">
+        {{- css_border() }}
+    </style>
+{%- endblock %}

@@ -32,7 +32,7 @@ class CalculationUpdateResult implements \Countable
     {
         $this->results[] = [
             'id' => $calculation->getId(),
-            'color' => $calculation->getStateColor(),
+            'stateId' => $calculation->getStateId(),
             'date' => $calculation->getDate(),
             'customer' => $calculation->getCustomer(),
             'description' => $calculation->getDescription(),

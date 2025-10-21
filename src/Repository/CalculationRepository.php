@@ -406,6 +406,7 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('e.description  as calculation_description')
 
             // state
+            ->addSelect('s.id           as calculation_state_id')
             ->addSelect('s.code         as calculation_state')
             ->addSelect('s.color        as calculation_color')
             ->addSelect('s.editable     as calculation_editable')
@@ -433,6 +434,7 @@ class CalculationRepository extends AbstractRepository
          *      calculation_date: DatePoint,
          *      calculation_customer: string,
          *      calculation_description: string,
+         *      calculation_state_id: int,
          *      calculation_state: string,
          *      calculation_color: string,
          *      calculation_editable: bool,
@@ -469,6 +471,7 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('e.description  as calculation_description')
 
             // state
+            ->addSelect('s.id           as calculation_state_id')
             ->addSelect('s.code         as calculation_state')
             ->addSelect('s.color        as calculation_color')
             ->addSelect('s.editable     as calculation_editable')
@@ -498,6 +501,7 @@ class CalculationRepository extends AbstractRepository
          *      calculation_date: DatePoint,
          *      calculation_customer: string,
          *      calculation_description: string,
+         *      calculation_state_id: int,
          *      calculation_state: string,
          *      calculation_color: string,
          *      calculation_editable: bool,
@@ -656,6 +660,7 @@ class CalculationRepository extends AbstractRepository
             ->addSelect("$alias.description")
             ->addSelect("$alias.overallTotal")
             ->addSelect($this->getOverallMargin($alias, 100) . ' as overallMargin')
+            ->addSelect(self::STATE_ALIAS . '.id as stateId')
             ->addSelect(self::STATE_ALIAS . '.code as stateCode')
             ->addSelect(self::STATE_ALIAS . '.color as stateColor')
             ->addSelect(self::STATE_ALIAS . '.editable as stateEditable')
@@ -728,6 +733,7 @@ class CalculationRepository extends AbstractRepository
      *      calculation_date: DatePoint,
      *      calculation_customer: string,
      *      calculation_description: string,
+     *      calculation_state_id: int,
      *      calculation_state: string,
      *      calculation_color: string,
      *      calculation_editable: bool
@@ -742,6 +748,7 @@ class CalculationRepository extends AbstractRepository
                 'date' => $item['calculation_date'],
                 'customer' => $item['calculation_customer'],
                 'description' => $item['calculation_description'],
+                'stateId' => $item['calculation_state_id'],
                 'stateCode' => $item['calculation_state'],
                 'stateColor' => $item['calculation_color'],
                 'stateEditable' => $item['calculation_editable'],

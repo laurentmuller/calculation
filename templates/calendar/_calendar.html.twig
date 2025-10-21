@@ -16,11 +16,10 @@
 {%- endmacro %}
 
 {% macro dataRow(calculation, extra_class = '') %}
-{% from 'macros/_properties.html.twig' import stateCss %}
 {% set extra_class = ('text-nowrap ' ~ (extra_class|default('')))|trim %}
 {% set margin_class = user_service.application.marginBelow(calculation) ? 'text-percent text-danger' : 'text-percent' %}
 <tr>
-    <td class="text-id text-border" style="{{ stateCss(calculation.stateColor) }}">{{ calculation.id|identifier }}</td>
+    <td class="text-id text-border state-border-{{ calculation.stateId }}">{{ calculation.id|identifier }}</td>
     <td class="text-state">{{ calculation.state.code }}</td>
     <td class="{{ extra_class }}">{{ calculation.customer }}</td>
     <td class="{{ extra_class }}">{{ calculation.description }}</td>

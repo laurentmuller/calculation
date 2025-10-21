@@ -74,6 +74,9 @@
 {# stylesheets #}
 {% block stylesheets -%}
 {{ parent() }}
+<style nonce="{{ csp_nonce() }}">
+    {{- css_border() }}
+</style>
 {{ asset_css('css/calendar.css') }}
 {% endblock %}
 {# javascripts #}

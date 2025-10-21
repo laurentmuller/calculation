@@ -90,3 +90,10 @@
 {{ _self.property_line() }}
 {{ _self.property_both('%overallMargin%', '%overallTotal%', '', 'text-end') }}
 {%- endblock %}
+
+{% block stylesheets -%}
+    {{ parent() }}
+    <style nonce="{{ csp_nonce() }}">
+        {{- css_border() }}
+    </style>
+{%- endblock %}

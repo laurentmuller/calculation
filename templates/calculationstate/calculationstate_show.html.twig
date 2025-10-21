@@ -16,7 +16,14 @@
 {{ property('calculationstate.fields.calculations', 'counters.calculations'|trans({count: item.countCalculations})) }}
 <tr>
     <td class="w-25">{{ 'calculationstate.fields.color'|trans }}</td>
-    <td class="w-75"><span class="state-color border border-secondary" style="background-color: {{ item.color|default('transparent') }};"></span></td>
+    <td class="w-75"><span class="state-color state-background-{{ item.id }}"></span></td>
 </tr>
 {{ timestampable_properties(item) }}
 {% endblock %}
+{# stylesheets #}
+{% block stylesheets -%}
+    {{ parent() }}
+    <style nonce="{{ csp_nonce() }}">
+        {{- css_border() }}
+    </style>
+{%- endblock %}

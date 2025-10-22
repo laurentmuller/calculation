@@ -37,9 +37,9 @@
 </tr>
 {%- endmacro %}
 
-{% macro content_header_link(url, version, icon, margin_left = false) -%}
+{% macro content_header_link(url, version, icon, margin_negative = false) -%}
 <i class="icon-about icon-{{ icon }}"></i>
-<a href="{{ url }}" target="_blank" rel="noopener noreferrer" class="stretched-link text-reset" title="{{ 'about.extern_link'|trans }}"{% if margin_left %} style="margin-left: {{ margin_left }}px"{% endif %}>
+<a href="{{ url }}" target="_blank" rel="noopener noreferrer" class="stretched-link text-reset{% if margin_negative %} ms-n3{% endif %}" title="{{ 'about.extern_link'|trans }}">
     <span class="h1">{{ 'about.version'|trans({'%version%': version}) }}</span>
 </a>
 {%- endmacro %}

@@ -851,3 +851,8 @@ body.status-bar .grecaptcha-badge {
 .scrollbar-thin {
     scrollbar-width: thin;
 }
+
+/* help */
+#help-search {
+    width: 8rem;
+}

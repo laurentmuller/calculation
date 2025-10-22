@@ -53,18 +53,18 @@ enum FlashType: string implements TranslatableEnumInterface
     case WARNING = 'warning';
 
     /**
-     * Gets the icon.
+     * Gets the icon color.
+     */
+    public function getColor(): string
+    {
+        return \sprintf('text-%s', $this->value);
+    }
+
+    /**
+     * Gets the Font Awesome icon.
      */
     public function getIcon(): string
     {
         return $this->getExtraString('icon');
-    }
-
-    /**
-     * Gets the icon color.
-     */
-    public function getStyle(): string
-    {
-        return \sprintf('var(--bs-%s)', $this->value);
     }
 }

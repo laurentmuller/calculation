@@ -1,7 +1,7 @@
 {% import 'about/_about_macro.html.twig' as tools %}
 <div class="phpversion">
     <div class="border-bottom position-relative pb-1">
-        {{- tools.content_header_link('https://www.php.net', version, 'php-alt', -15) -}}
+        {{- tools.content_header_link('https://www.php.net', version, 'php-alt', true) -}}
     </div>
     {{ phpInfo|raw }}
     <table id="data-table-extra" class="table table-sm mb-0">

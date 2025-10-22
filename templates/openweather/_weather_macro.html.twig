@@ -37,6 +37,6 @@
 
 {% macro value_wind(description, degrees, unit) -%}
 <span title="{{ 'openweather.fields.wind_deg_title'|trans({'%value%': _self.value_no_sep(degrees, unit)}) }}">
-    <i class="fa-solid fa-location-arrow fa-rotate-by text-success me-2" style="--fa-rotate-angle: {{ degrees - 45 }}deg;"></i>{{ description -}}
+    <i class="fa-solid fa-location-arrow fa-rotate-by text-success me-2" data-rotate="{{ degrees - 45 }}deg"></i>{{ description -}}
 </span>
 {%- endmacro %}

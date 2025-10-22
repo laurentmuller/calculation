@@ -37,7 +37,7 @@
         {% for type in types %}
             <li>
                 <button class="dropdown-item dropdown-notify" type="button" data-value="{{ type.value }}">
-                    <i class="me-1 {{ type.icon }}" style="color: {{ type.style }}"></i>{{- type|trans -}}
+                    <i class="me-1 {{ type.icon }} {{ type.color }}"></i>{{- type|trans -}}
                 </button>
             </li>
         {% endfor %}

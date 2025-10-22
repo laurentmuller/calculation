@@ -25,6 +25,17 @@ class FlashTypeTest extends TestCase
     /**
      * @phpstan-return \Generator<int, array{FlashType, string}>
      */
+    public static function getColors(): \Generator
+    {
+        yield [FlashType::DANGER, 'text-danger'];
+        yield [FlashType::INFO, 'text-info'];
+        yield [FlashType::SUCCESS, 'text-success'];
+        yield [FlashType::WARNING, 'text-warning'];
+    }
+
+    /**
+     * @phpstan-return \Generator<int, array{FlashType, string}>
+     */
     public static function getIcons(): \Generator
     {
         yield [FlashType::DANGER, 'fas fa-lg fa-exclamation-triangle'];
@@ -47,23 +58,19 @@ class FlashTypeTest extends TestCase
     /**
      * @phpstan-return \Generator<int, array{FlashType, string}>
      */
-    public static function getStyles(): \Generator
-    {
-        yield [FlashType::DANGER, 'var(--bs-danger)'];
-        yield [FlashType::INFO, 'var(--bs-info)'];
-        yield [FlashType::SUCCESS, 'var(--bs-success)'];
-        yield [FlashType::WARNING, 'var(--bs-warning)'];
-    }
-
-    /**
-     * @phpstan-return \Generator<int, array{FlashType, string}>
-     */
     public static function getValues(): \Generator
     {
         yield [FlashType::DANGER, 'danger'];
         yield [FlashType::INFO, 'info'];
         yield [FlashType::SUCCESS, 'success'];
         yield [FlashType::WARNING, 'warning'];
+    }
+
+    #[DataProvider('getColors')]
+    public function testColor(FlashType $type, string $expected): void
+    {
+        $actual = $type->getColor();
+        self::assertSame($expected, $actual);
     }
 
     public function testCount(): void
@@ -82,13 +89,6 @@ class FlashTypeTest extends TestCase
     public function testLabel(FlashType $type, string $expected): void
     {
         $actual = $type->getReadable();
-        self::assertSame($expected, $actual);
-    }
-
-    #[DataProvider('getStyles')]
-    public function testStyle(FlashType $type, string $expected): void
-    {
-        $actual = $type->getStyle();
         self::assertSame($expected, $actual);
     }
 

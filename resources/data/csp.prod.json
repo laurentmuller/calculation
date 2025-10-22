@@ -23,7 +23,7 @@
     ],
     "script-src": [
         "%nonce%",
-        "'script-dynamic'"
+        "'strict-dynamic'"
     ],
     "script-src-elem": [
         "%nonce%",

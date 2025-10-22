@@ -1,0 +1,14 @@
+@import 'style.css';
+
+.chart-item {
+    width: 1.25rem;
+    height: 0.75rem;
+}
+
+.month-amount {
+    background-color: seagreen;
+}
+
+.month-margin {
+    background-color: indianred;
+}

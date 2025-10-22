@@ -5,7 +5,9 @@
 <div class="row g-0">
     <div class="col col-md-8 offset-md-2 mb-2">
         <div class="d-flex-wrap-center">
-            <div class="flex-fill"><h4>{% block help_title -%}{%- endblock %}</h4></div>
+            <div class="me-auto">
+                <h4>{% block help_title -%}{%- endblock %}</h4>
+            </div>
             <div class="d-print-none">
                 <div class="input-group input-group-sm">
                     {% block help_home -%}{{ home_button() }}{%- endblock %}

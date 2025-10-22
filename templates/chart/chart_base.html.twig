@@ -29,6 +29,10 @@
     {{ sitemap() }}
 </div>
 {%- endblock %}
+{# stylesheets #}
+{% block stylesheets -%}
+    {{ asset_css('css/chart.css') }}
+{% endblock %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}

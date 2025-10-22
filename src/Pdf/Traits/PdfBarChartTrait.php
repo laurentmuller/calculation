@@ -103,8 +103,8 @@ trait PdfBarChartTrait
         $this->setCellMargin(0.0);
 
         // y axis values
-        $min = $axis['min'] ?? $this->computeBarRowsValues($rows, static fn (float $a, float $b): float => \min($a, $b));
-        $max = $axis['max'] ?? $this->computeBarRowsValues($rows, static fn (float $a, float $b): float => \max($a, $b));
+        $min = $axis['min'] ?? $this->computeBarRowsValues($rows, $this->min(...));
+        $max = $axis['max'] ?? $this->computeBarRowsValues($rows, $this->max(...));
 
         // y axis
         $scale = PdfYaxis::instance($min, $max);
@@ -202,8 +202,8 @@ trait PdfBarChartTrait
     {
         $result = null;
         foreach ($rows as $row) {
-            $values = $this->getColumnSum($row['values'], 'value');
-            $result = null === $result ? $values : $callback($result, $values);
+            $sum = $this->getColumnSum($row['values'], 'value');
+            $result = null === $result ? $sum : $callback($result, $sum);
         }
 
         return $result;
@@ -307,5 +307,15 @@ trait PdfBarChartTrait
         $count = (float) \count($rows);
 
         return ($width - ($count + 1.0) * self::SEP_BARS) / $count;
+    }
+
+    private function max(float $a, float $b): float
+    {
+        return \max($a, $b);
+    }
+
+    private function min(float $a, float $b): float
+    {
+        return \min($a, $b);
     }
 }

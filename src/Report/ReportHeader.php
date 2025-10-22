@@ -104,7 +104,7 @@ class ReportHeader
      */
     public function output(): void
     {
-        $this->parent->useCellMargin(fn () => $this->outputHeader());
+        $this->parent->useCellMargin($this->outputHeader(...));
     }
 
     /**

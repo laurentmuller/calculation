@@ -166,7 +166,7 @@ class DeeplTranslatorService extends AbstractTranslatorService
         $languages = \array_column($values, 'language');
         $languages = \array_map(strtolower(...), $languages);
 
-        return \array_filter($languages, static fn (string $language): bool => Languages::exists($language));
+        return \array_filter($languages, Languages::exists(...));
     }
 
     private function getLanguageName(string $language): string

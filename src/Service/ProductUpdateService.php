@@ -136,7 +136,7 @@ class ProductUpdateService implements ServiceSubscriberInterface
             return $result;
         }
 
-        $this->service->suspendListeners(fn () => $this->productRepository->flush());
+        $this->service->suspendListeners($this->productRepository->flush(...));
         $this->logResult($query, $result);
 
         return $result;

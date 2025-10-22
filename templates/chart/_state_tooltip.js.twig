@@ -1,14 +1,14 @@
 /**
  * @typedef Point
  * @type {object}
- * @property {string} color
+ * @property {string} id
  * @property {string} name
  * @property {string} count
  * @property {string} calculationsPercent
  * @property {string} items
  * @property {string} marginAmount
  * @property {string} marginPercent
- * @property {string} marginColor
+ * @property {string} marginClass
  * @property {string} totalPercent
  * @property {string} totalAmount
  */
@@ -23,7 +23,7 @@ function renderTooltip () {
         '<th class="px-1">:</th>' +
         '<th class="text-calculation">' +
             '<div class="d-flex align-items-center">' +
-                '<span class="border me-1" style="width: 1rem; height: 0.75rem; background:' + point.color + '"></span>' +
+                '<span class="border chart-item state-background-' + point.id + ' me-1"></span>' +
                 '<span>' + point.name + '</span>' +
             '</div>' +
         '</th>' +
@@ -50,7 +50,7 @@ function renderTooltip () {
         '<td>{{ 'calculation.fields.margin'|trans }}</td>' +
         '<td class="px-1">:</td>' +
         '<td class="text-calculation">' + point.marginAmount + '</td>' +
-        '<td class="text-calculation" style="color:'+ point.marginColor + '">' + point.marginPercent + '</td>' +
+        '<td class="text-calculation ' + point.marginClass + '">' + point.marginPercent + '</td>' +
         '</tr>';
     html += '<tr><td colspan="4"><hr class="my-1"></td></tr>';
     html +=

@@ -181,7 +181,7 @@ class MonthChart extends AbstractHighchart
             'items' => FormatUtils::formatInt($item->items),
             'marginAmount' => FormatUtils::formatInt($item->marginAmount),
             'marginPercent' => FormatUtils::formatPercent($item->marginPercent),
-            'marginColor' => $this->getMarginColor($item->marginPercent),
+            'marginClass' => $this->getMarginClass($item->marginPercent),
             'totalAmount' => FormatUtils::formatInt($item->total),
             'url' => $this->getURL($item),
         ], $items);

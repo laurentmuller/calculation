@@ -208,7 +208,8 @@ class PivotTableFactory
      */
     public function isValid(): bool
     {
-        return [] !== $this->dataset && [] !== $this->columnFields && [] !== $this->rowFields && $this->dataField instanceof PivotField;
+        return !\in_array([], [$this->dataset, $this->columnFields, $this->rowFields], true)
+            && $this->dataField instanceof PivotField;
     }
 
     /**

@@ -115,11 +115,7 @@ class SimpleEditorType extends AbstractType
 
         /** @phpstan-var ActionType[] $actions */
         $actions = $options['actions'] ?? [];
-        $actions = \array_filter(
-            $actions,
-            /** @phpstan-param ActionType $action */
-            fn (array $action): bool => $this->filterAction($action)
-        );
+        $actions = \array_filter($actions, $this->filterAction(...));
         $this->updateActions($actions);
 
         return $this->groupBy($actions, static fn (array $action): string => $action['group'] ?? 'default');

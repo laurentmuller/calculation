@@ -77,7 +77,7 @@ final class ConstantExtension extends AbstractExtension implements ConstantsInte
     #[\Override]
     public function getGlobals(): array
     {
-        return $this->cache->get('twig_constant_extension', fn (): array => $this->loadConstants());
+        return $this->cache->get('twig_constant_extension', $this->loadConstants(...));
     }
 
     /**

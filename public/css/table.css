@@ -44,6 +44,10 @@
     padding-right: 0 !important;
 }
 
+.bootstrap-table .fixed-table-container .table thead th:has(.sortable):hover {
+    color: var(--bs-link-hover-color) !important;
+}
+
 .bootstrap-table .fixed-table-container .table thead th .both,
 .bootstrap-table .fixed-table-container .table thead th .asc,
 .bootstrap-table .fixed-table-container .table thead th .desc {

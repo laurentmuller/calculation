@@ -856,3 +856,8 @@ body.status-bar .grecaptcha-badge {
 #help-search {
     width: 8rem;
 }
+
+/* display column (color picker) */
+.d-table-column {
+    display: table-column !important;
+}

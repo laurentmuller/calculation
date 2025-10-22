@@ -156,7 +156,7 @@
                 <div class="dropdown dropdown-position">
                     {% set current = user_service.messagePosition %}
                     <button type="button" class="btn-position form-control d-flex align-items-center dropdown-toggle" data-value="{{ current.value }}" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="position-icon me-2"><i class="{{ current.icon }}" style="--fa-rotate-angle: {{ current.angle }}deg;"></i></span>
+                        <span class="position-icon me-2"><i class="{{ current.icon }}" data-rotate="{{ current.angle }}deg"></i></span>
                         <span class="position-text flex-fill text-start">{{- current|trans -}}</span>
                     </button>
                     <table class="dropdown-menu w-auto table table-borderless mb-0 px-2">
@@ -166,8 +166,8 @@
                                 {% set id = 'btn-check-dropdown-' ~ position.value %}
                                 <div class="form-check ps-0">
                                     <input type="radio" class="btn-check" name="btn-check" id="{{ id }}" value="{{ position.value }}" autocomplete="off"{% if current == position %} checked{% endif %}>
-                                    <label class="btn btn-outline-secondary" for="{{ id }}" style="width: 3rem;" title="{{- position|trans -}}">
-                                        <i class="{{ position.icon }}" style="--fa-rotate-angle: {{ position.angle }}deg;"></i>
+                                    <label class="btn btn-outline-secondary" for="{{ id }}" title="{{- position|trans -}}">
+                                        <i class="{{ position.icon }}" data-rotate="{{ position.angle }}deg"></i>
                                     </label>
                                 </div>
                             </td>

@@ -112,7 +112,7 @@ class SchemaService
      */
     public function getTables(bool $updateRecords = true): array
     {
-        $tables = $this->cache->get('tables', fn (): array => $this->loadTables());
+        $tables = $this->cache->get('tables', $this->loadTables(...));
         if (!$updateRecords) {
             return $tables;
         }
@@ -480,7 +480,7 @@ class SchemaService
      */
     private function mapNames(array $names): array
     {
-        return \array_map(fn (Name $name): string => $this->mapName($name), $names);
+        return \array_map($this->mapName(...), $names);
     }
 
     /**

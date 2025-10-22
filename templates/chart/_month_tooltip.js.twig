@@ -5,8 +5,8 @@
  * @property {string} count
  * @property {string} items
  * @property {string} marginAmount
- * @property {string} marginColor
  * @property {string} marginPercent
+ * @property {string} marginClass
  * @property {string} totalAmount
  */
 function renderTooltip () {
@@ -34,7 +34,7 @@ function renderTooltip () {
             '<tr>' +
             '<td class="text-category">' +
                 '<div class="d-flex align-items-center">' +
-                    '<span class="border me-1" style="width: 1rem; height: 0.75rem; background:{{ colorAmount }}"></span>' +
+                    '<span class="border chart-item month-amount me-1"></span>' +
                     '<span>{{ 'calculationgroup.fields.amount'|trans }}</span>' +
                 '</div>' +
             '</td>' +
@@ -46,13 +46,13 @@ function renderTooltip () {
             '<tr>' +
             '<td class="text-category">' +
                 '<div class="d-flex align-items-center">' +
-                    '<span class="border me-1" style="width: 1rem; height: 0.75rem; background:{{ colorMargin }}"></span>' +
+                    '<span class="border chart-item month-margin me-1"></span>' +
                     '<span>{{ 'calculation.fields.margin'|trans }}</span>' +
                 '</div>' +
             '</td>' +
             '<td class="px-1">:</td>' +
             '<td class="text-calculation">' + point.marginAmount + '</td>' +
-            '<td class="text-calculation ps-3" style="color:'+ point.marginColor + '">' + point.marginPercent + '</td>' +
+            '<td class="text-calculation ' + point.marginClass + ' ps-3">' + point.marginPercent + '</td>' +
             '</tr>';
         html += '<tr><td colspan="4"><hr class="my-1"></td></tr>';
         html +=

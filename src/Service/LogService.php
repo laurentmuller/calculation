@@ -89,7 +89,7 @@ class LogService
     public function getLogFile(): ?LogFile
     {
         if ($this->fileValid) {
-            return $this->cache->get(self::KEY_CACHE, fn (): LogFile => $this->parseFile());
+            return $this->cache->get(self::KEY_CACHE, $this->parseFile(...));
         }
 
         return null;

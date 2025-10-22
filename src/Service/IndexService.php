@@ -87,10 +87,7 @@ class IndexService
      */
     public function getCalculationByStates(): CalculationsState
     {
-        return $this->cache->get(
-            'index.calculations.states',
-            fn (): CalculationsState => $this->loadCalculationsByStates()
-        );
+        return $this->cache->get('index.calculations.states', $this->loadCalculationsByStates(...));
     }
 
     /**
@@ -100,26 +97,21 @@ class IndexService
      */
     public function getCatalog(): array
     {
-        return $this->cache->get(
-            'index.catalog',
-            fn (): array => $this->loadCatalog()
-        );
+        return $this->cache->get('index.catalog', $this->loadCatalog(...));
     }
 
     /**
-     * Gets the last calculations.
+     * Gets the last created or modified calculations.
      *
      * @param int            $maxResults the maximum number of calculations to retrieve (the "limit")
-     * @param ?UserInterface $user       if not null, returns the user's last calculations
+     * @param ?UserInterface $user       if not null, returns the user's calculations
      */
     public function getLastCalculations(int $maxResults, ?UserInterface $user): array
     {
-        $id = $this->cleanKey($user?->getUserIdentifier() ?? 'all');
+        $id = $this->cleanKey($user?->getUserIdentifier() ?? '--all--');
+        $key = \sprintf('index.calculations.last.%d.%s', $maxResults, $id);
 
-        return $this->cache->get(
-            \sprintf('index.calculations.last.%d.%s', $maxResults, $id),
-            fn (): array => $this->loadLastCalculations($maxResults, $user)
-        );
+        return $this->cache->get($key, fn (): array => $this->loadLastCalculations($maxResults, $user));
     }
 
     public function onFlush(OnFlushEventArgs $args): void
@@ -132,7 +124,7 @@ class IndexService
     /**
      * @param class-string $className
      */
-    private function count(string $className): int
+    private function countEntities(string $className): int
     {
         return $this->manager->getRepository($className)->count();
     }
@@ -163,10 +155,7 @@ class IndexService
      */
     private function loadCatalog(): array
     {
-        return \array_replace(
-            self::CATALOG,
-            \array_map(fn (string $className): int => $this->count($className), self::CATALOG)
-        );
+        return \array_replace(self::CATALOG, \array_map($this->countEntities(...), self::CATALOG));
     }
 
     private function loadLastCalculations(int $maxResults, ?UserInterface $user): array

@@ -56,7 +56,7 @@ class ReportFooter
      */
     public function output(): void
     {
-        $this->parent->useCellMargin(fn () => $this->outputFooter());
+        $this->parent->useCellMargin($this->outputFooter(...));
     }
 
     /**

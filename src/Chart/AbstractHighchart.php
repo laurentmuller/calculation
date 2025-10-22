@@ -192,13 +192,16 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
         ];
     }
 
-    protected function getMarginColor(float $value): string
+    /**
+     * Gets the minimum margin class.
+     */
+    protected function getMarginClass(float $value): string
     {
         if (!$this->isFloatZero($value) && $value < $this->getMinMargin()) {
-            return 'var(--bs-danger)';
+            return 'text-danger';
         }
 
-        return 'inherit';
+        return '';
     }
 
     /**

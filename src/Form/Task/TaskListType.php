@@ -44,7 +44,7 @@ class TaskListType extends AbstractListEntityType
                 'data-category-id' => $task->getCategoryId(),
                 'data-unit' => $task->getUnit(),
             ],
-            'query_builder' => fn (Options $options): QueryBuilder => $this->getSortedBuilder($options),
+            'query_builder' => $this->getSortedBuilder(...),
             'query_all' => false,
         ]);
         $resolver->setAllowedTypes('query_all', 'bool');

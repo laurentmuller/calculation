@@ -14,7 +14,9 @@ $(function () {
         if ($div.length === 0 || $div.data('initialized')) {
             return;
         }
-        $div.data('initialized', true);
+        $div.data('initialized', true)
+            .replaceDisplayNone();
+
         const formSize = 150;
         const breakPoint = 992;
         const $input = $('#search-input-horizontal');

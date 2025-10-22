@@ -176,7 +176,7 @@ class CommandService implements \Countable
      */
     public function getCommands(): array
     {
-        return $this->cache->get('cache.command.service', fn (): array => $this->loadCommands());
+        return $this->cache->get('cache.command.service', $this->loadCommands(...));
     }
 
     /**

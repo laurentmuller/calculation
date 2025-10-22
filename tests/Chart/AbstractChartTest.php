@@ -79,6 +79,31 @@ class AbstractChartTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testGetMarginClass(): void
+    {
+        $application = $this->createMock(ApplicationService::class);
+        $application->method('getMinMargin')
+            ->willReturn(1.0);
+
+        $generator = $this->createMock(UrlGeneratorInterface::class);
+        $twig = $this->createMock(Environment::class);
+        $chart = new class($application, $generator, $twig) extends AbstractHighchart {
+            #[\Override]
+            public function getMarginClass(float $value): string
+            {
+                return parent::getMarginClass($value);
+            }
+        };
+
+        $expected = 'text-danger';
+        $actual = $chart->getMarginClass(0.9);
+        self::assertSame($expected, $actual);
+
+        $expected = '';
+        $actual = $chart->getMarginClass(2.0);
+        self::assertSame($expected, $actual);
+    }
+
     public function testGetMinMargin(): void
     {
         $expected = 1.1;
@@ -96,31 +121,6 @@ class AbstractChartTest extends TestCase
         };
 
         $actual = $chart->getMinMargin();
-        self::assertSame($expected, $actual);
-    }
-
-    public function testGetMinMarginColor(): void
-    {
-        $application = $this->createMock(ApplicationService::class);
-        $application->method('getMinMargin')
-            ->willReturn(1.0);
-
-        $generator = $this->createMock(UrlGeneratorInterface::class);
-        $twig = $this->createMock(Environment::class);
-        $chart = new class($application, $generator, $twig) extends AbstractHighchart {
-            #[\Override]
-            public function getMarginColor(float $value): string
-            {
-                return parent::getMarginColor($value);
-            }
-        };
-
-        $expected = 'var(--bs-danger)';
-        $actual = $chart->getMarginColor(0.9);
-        self::assertSame($expected, $actual);
-
-        $expected = 'inherit';
-        $actual = $chart->getMarginColor(2.0);
         self::assertSame($expected, $actual);
     }
 

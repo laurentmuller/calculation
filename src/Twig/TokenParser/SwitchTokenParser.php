@@ -63,13 +63,13 @@ final class SwitchTokenParser extends AbstractTokenParser
                     $expression = $parser->parseExpression();
                     $values = $this->splitExpression($expression);
                     $stream->expect(Token::BLOCK_END_TYPE);
-                    $body = $this->parser->subparse(fn (Token $token): bool => $this->isFork($token));
+                    $body = $this->parser->subparse($this->isFork(...));
                     $cases[] = new CaseNode($values, $body);
                     break;
 
                 case 'default':
                     $stream->expect(Token::BLOCK_END_TYPE);
-                    $nodes['default'] = $this->parser->subparse(fn (Token $token): bool => $this->isEnd($token));
+                    $nodes['default'] = $this->parser->subparse($this->isEnd(...));
                     break;
 
                 case 'endswitch':

@@ -215,7 +215,7 @@ class UserChangePasswordTypeTest extends EntityTypeTestCase
     {
         $service = $this->createMock(Zxcvbn::class);
         $service->method('passwordStrength')
-            ->willReturnCallback(fn (): array => $this->getScore());
+            ->willReturnCallback($this->getScore(...));
 
         $factory = $this->createMock(ZxcvbnFactoryInterface::class);
         $factory->method('createZxcvbn')

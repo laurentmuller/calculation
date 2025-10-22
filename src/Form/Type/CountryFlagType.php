@@ -38,11 +38,9 @@ class CountryFlagType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $defaultCode = CountryFlagService::getDefaultCode();
-        $loader = fn (Options $options): ChoiceLoaderInterface => $this->getChoiceLoader($options);
-
         $resolver->setDefaults([
             'attr' => ['class' => self::FLAG_CLASS],
-            'choice_loader' => $loader,
+            'choice_loader' => $this->getChoiceLoader(...),
             'empty_data' => $defaultCode,
             'preferred_choices' => [$defaultCode],
             'duplicate_preferred_choices' => false,

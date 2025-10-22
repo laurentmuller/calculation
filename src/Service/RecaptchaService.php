@@ -148,7 +148,7 @@ class RecaptchaService
             return [$this->translateError('unknown-error')];
         }
 
-        return \array_map(fn (string $code): string => $this->translateError($code), $codes);
+        return \array_map($this->translateError(...), $codes);
     }
 
     /**

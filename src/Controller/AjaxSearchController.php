@@ -92,11 +92,7 @@ class AjaxSearchController extends AbstractController
         #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
         ?int $limit = null
     ): JsonResponse {
-        return $this->getValuesFromCallback(
-            static fn (string $query, int $limit): array => $repository->search($query, $limit),
-            $query,
-            $limit
-        );
+        return $this->getValuesFromCallback($repository->search(...), $query, $limit);
     }
 
     /**

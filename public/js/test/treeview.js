@@ -334,4 +334,10 @@ $(function () {
             input.focus();
         });
     });
+
+    // rotate arrow icons
+    $('.fa-rotate-by').each(function () {
+        const $this = $(this);
+        $this.css('--fa-rotate-angle', $this.data('rotate'));
+    });
 });

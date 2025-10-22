@@ -57,7 +57,7 @@ class DiagramService
      */
     public function getFiles(): array
     {
-        return $this->cache->get('diagram_files', fn (): array => $this->loadDiagrams());
+        return $this->cache->get('diagram_files', $this->loadDiagrams(...));
     }
 
     private function findTitle(string $content, string $name): string

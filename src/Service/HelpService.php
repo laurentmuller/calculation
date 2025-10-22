@@ -165,7 +165,8 @@ class HelpService
      */
     public function getActions(): array
     {
-        return $this->cache->get('help_actions', fn (): array => $this->loadActions());
+        /** @phpstan-var array<string, HelpActionType> */
+        return $this->cache->get('help_actions', $this->loadActions(...));
     }
 
     /**
@@ -176,7 +177,7 @@ class HelpService
     public function getDialogs(): array
     {
         /** @phpstan-var array<string, HelpDialogType> */
-        return $this->cache->get('help_dialogs', fn (): array => $this->loadDialogs());
+        return $this->cache->get('help_dialogs', $this->loadDialogs(...));
     }
 
     /**
@@ -215,7 +216,7 @@ class HelpService
     public function getEntities(): array
     {
         /** @phpstan-var array<string, HelpEntityType> */
-        return $this->cache->get('help_entities', fn (): array => $this->loadEntities());
+        return $this->cache->get('help_entities', $this->loadEntities(...));
     }
 
     /**
@@ -243,7 +244,7 @@ class HelpService
      */
     public function getMainMenu(): array
     {
-        return $this->cache->get('help_main_menu', fn (): array => $this->loadMainMenu());
+        return $this->cache->get('help_main_menu', $this->loadMainMenu(...));
     }
 
     /**

@@ -147,12 +147,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     #[\Override]
     public function output(HtmlReport $report): void
     {
-        $this->applyMargins(
-            $report,
-            $this->getLeftMargin(),
-            $this->getRightMargin(),
-            fn (HtmlReport $report) => $this->doOutput($report)
-        );
+        $this->applyMargins($report, $this->getLeftMargin(), $this->getRightMargin(), $this->doOutput(...));
     }
 
     /**

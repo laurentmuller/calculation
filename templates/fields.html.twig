@@ -47,8 +47,7 @@
         {%- set type = type|default('color') -%}
         {%- set attr = attr|default({})|merge({
             tabindex: -1,
-            style: 'display:table-column',
-            class: (required ? ' must-validate' : ''),
+            class: (required ? 'd-table-column must-validate' : 'd-table-column'),
             'data-custom-text': 'color_picker.custom_text'|trans,
             'data-advanced-text': 'color_picker.advanced_text'|trans,
         }) -%}

@@ -7,31 +7,32 @@
 {% block card_container_class '' %}
 {% block card_footer_class ' d-none' %}
 {% block card_body_class ' p-1' %}
+{% block card_header_class ' d-flex-wrap-center' %}
 {# header #}
 {% block card_header %}
-<div class="d-flex-wrap-center">
-    {{ parent() }}
-    <label class="form-label mb-0 ms-auto d-print-none" for="diagrams">{{ 'diagram.list'|trans }}</label>
+    <div class="me-auto">{{ parent() }}</div>
     <div class="d-flex-wrap-center">
-        <div class="input-group input-group-sm d-print-none">
-            <select class="form-select form-select-sm w-auto" id="diagrams" name="diagrams">
-                {% for key, value in files %}
-                    <option value="{{ key }}"{% if file.name == key %} selected{% endif %}>{{ value }}</option>
-                {% endfor %}
-            </select>
-            <span class="input-group-text text-center d-inline w-60" id="zoom" title="{{ 'diagram.zoom'|trans }}">100 %</span>
-            <button type="button" class="btn btn-outline-secondary btn-zoom-in" title="{{ 'diagram.zoom_in'|trans }}">
-                <i class="fa-solid fa-magnifying-glass-plus"></i>
-            </button>
-            <button type="button" class="btn btn-outline-secondary btn-reset" title="{{ 'diagram.reset'|trans }}">
-                <i class="fa-solid fa-arrows-to-dot"></i>
-            </button>
-            <button type="button" class="btn btn-outline-secondary btn-zoom-out" title="{{ 'diagram.zoom_out'|trans }}">
-                <i class="fa-solid fa-magnifying-glass-minus"></i>
-            </button>
+        <label class="form-label d-print-none mb-0" for="diagrams">{{ 'diagram.list'|trans }}</label>
+        <div class="d-print-none">
+            <div class="input-group input-group-sm">
+                <select class="form-select form-select-sm w-auto" id="diagrams" name="diagrams">
+                    {% for key, value in files %}
+                        <option value="{{ key }}"{% if file.name == key %} selected{% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+                <span class="input-group-text text-center d-inline" id="zoom" title="{{ 'diagram.zoom'|trans }}">100 %</span>
+                <button type="button" class="btn btn-outline-secondary btn-zoom-in" title="{{ 'diagram.zoom_in'|trans }}">
+                    <i class="fa-solid fa-magnifying-glass-plus"></i>
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-reset" title="{{ 'diagram.reset'|trans }}">
+                    <i class="fa-solid fa-arrows-to-dot"></i>
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-zoom-out" title="{{ 'diagram.zoom_out'|trans }}">
+                    <i class="fa-solid fa-magnifying-glass-minus"></i>
+                </button>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
 {# body #}
 {% block card_body -%}

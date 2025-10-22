@@ -31,11 +31,11 @@ body:not(.sidebar-show) .diagram {
     cursor: initial;
 }
 
+.diagram svg .error-text,
 .diagram svg .error-icon {
     fill: var(--bs-danger) !important;
 }
 
 .diagram svg .error-text {
-    fill: var(--bs-danger) !important;
     stroke: var(--bs-danger) !important;
 }

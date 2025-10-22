@@ -107,8 +107,9 @@ class StateChart extends AbstractHighchart
     {
         return [
             'keys' => [
-                'name',
                 'y',
+                'id',
+                'name',
                 'count',
                 'calculationsPercent',
                 'items',
@@ -133,14 +134,15 @@ class StateChart extends AbstractHighchart
     private function mapData(array $items): array
     {
         return \array_map(fn (CalculationsStateItem $entry): array => [
-            'name' => $entry->code,
             'y' => $entry->total,
+            'id' => $entry->id,
+            'name' => $entry->code,
             'count' => FormatUtils::formatInt($entry->count),
             'calculationsPercent' => $this->formatPercent($entry->calculationsPercent),
             'items' => FormatUtils::formatInt($entry->items),
             'marginPercent' => FormatUtils::formatPercent($entry->marginPercent),
             'marginAmount' => FormatUtils::formatInt($entry->marginAmount),
-            'marginColor' => $this->getMarginColor($entry->marginPercent),
+            'marginClass' => $this->getMarginClass($entry->marginPercent),
             'totalAmount' => FormatUtils::formatInt($entry->total),
             'totalPercent' => $this->formatPercent($entry->totalPercent),
             'url' => $this->getURL($entry->id),
@@ -174,8 +176,8 @@ class StateChart extends AbstractHighchart
     {
         $this->series->merge([
             [
-                'data' => $this->mapData($items),
                 'name' => $this->trans('chart.state.title'),
+                'data' => $this->mapData($items),
             ],
         ]);
     }

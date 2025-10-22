@@ -167,7 +167,7 @@ class CalculationTableTest extends EntityTableTestCase
     {
         $query = parent::createMockQuery($entities);
         $query->method('getOneOrNullResult')
-            ->willReturnCallback(fn (): ?array => $this->getOneOrNullResult());
+            ->willReturnCallback($this->getOneOrNullResult(...));
 
         return $query;
     }

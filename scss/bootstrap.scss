@@ -3,6 +3,8 @@ $enable-rounded: false;
 $enable-validation-icons: false;
 $enable-negative-margins: true;
 $tooltip-opacity: 1.0;
+$accordion-padding-x: 1rem;
+$accordion-icon-width: 1rem;
 $info: #9EC5FE; // blue-200
 
 @import "../node_modules/bootstrap/scss/bootstrap";

@@ -102,9 +102,9 @@ trait PdfBarChartTrait
         $margin = $this->getCellMargin();
         $this->setCellMargin(0.0);
 
-        // y axis values
-        $min = $axis['min'] ?? $this->computeBarRowsValues($rows, $this->min(...));
-        $max = $axis['max'] ?? $this->computeBarRowsValues($rows, $this->max(...));
+        // y range
+        $min = $axis['min'] ?? \min($this->getRowsValues($rows));
+        $max = $axis['max'] ?? \max($this->getRowsValues($rows));
 
         // y axis
         $scale = PdfYaxis::instance($min, $max);
@@ -189,21 +189,6 @@ trait PdfBarChartTrait
             }
             $result[] = $entry;
             $currentX += $step;
-        }
-
-        return $result;
-    }
-
-    /**
-     * @phpstan-param non-empty-array<BarChartRowType> $rows
-     * @phpstan-param callable(float, float): float $callback
-     */
-    private function computeBarRowsValues(array $rows, callable $callback): float
-    {
-        $result = null;
-        foreach ($rows as $row) {
-            $sum = $this->getColumnSum($row['values'], 'value');
-            $result = null === $result ? $sum : $callback($result, $sum);
         }
 
         return $result;
@@ -309,13 +294,13 @@ trait PdfBarChartTrait
         return ($width - ($count + 1.0) * self::SEP_BARS) / $count;
     }
 
-    private function max(float $a, float $b): float
+    /**
+     * @phpstan-param non-empty-array<BarChartRowType> $rows
+     *
+     * @phpstan-return non-empty-array<float>
+     */
+    private function getRowsValues(array $rows): array
     {
-        return \max($a, $b);
-    }
-
-    private function min(float $a, float $b): float
-    {
-        return \min($a, $b);
+        return \array_map(fn (array $row): float => $this->getColumnSum($row['values'], 'value'), $rows);
     }
 }

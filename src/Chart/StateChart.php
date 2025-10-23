@@ -73,9 +73,9 @@ class StateChart extends AbstractHighchart
     {
         parent::setTooltipOptions();
         $this->tooltip->merge([
-            'shared' => true,
-            'useHTML' => true,
             'formatter' => $this->createTemplateExpression(self::TEMPLATE_NAME),
+            'useHTML' => true,
+            'shared' => true,
         ]);
 
         return $this;
@@ -129,7 +129,7 @@ class StateChart extends AbstractHighchart
     }
 
     /**
-     * @phpstan-param CalculationsStateItem[] $items
+     * @param CalculationsStateItem[] $items
      */
     private function mapData(array $items): array
     {

@@ -436,18 +436,23 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 /* Toggle icon before the element */
-.drop-down-icon-left::before {
-    font-family: 'Font Awesome 7 Free', sans-serif;
+.drop-down-icon-left::before,
+.drop-down-icon-right::after {
     font-weight: 900;
-    float: left;
-    margin-right: 6px;
-    content: '\f105';
+    font-family: 'Font Awesome 7 Free', sans-serif;
     transition: transform var(--sidebar-delay) ease-in-out;
 }
 
+.drop-down-icon-left::before {
+    float: left;
+    margin-left: 8px;
+    margin-right: 8px;
+    content: '\f105';
+}
 
 .drop-down-icon-left[aria-expanded=true]::before {
     transform: rotate(90deg);
+
 }
 
 /* Toggle icon after the element */
@@ -460,19 +465,15 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .drop-down-icon-right::after {
-    font-family: 'Font Awesome 7 Free', sans-serif;
-    font-weight: 900;
     float: right;
-    margin-left: 6px;
+    margin-left: auto;
+    margin-right: 8px;
     content: '\f104';
-    transition: transform var(--sidebar-delay) ease-in-out;
 }
-
 
 .drop-down-icon-right[aria-expanded=true]::after {
     transform: rotate(-90deg);
 }
-
 
 /* reset the table hover row */
 .table-hover tbody tr.not-hover:hover {
@@ -860,4 +861,18 @@ body.status-bar .grecaptcha-badge {
 /* display column (color picker) */
 .d-table-column {
     display: table-column !important;
+}
+
+/* chart */
+.chart-item {
+    width: 1.25rem;
+    height: 0.75rem;
+}
+
+.month-amount {
+    background-color: seagreen;
+}
+
+.month-margin {
+    background-color: indianred;
 }

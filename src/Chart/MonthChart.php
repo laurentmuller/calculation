@@ -54,13 +54,11 @@ class MonthChart extends AbstractHighchart
      *
      * @return array{
      *     chart: MonthChart,
-     *     months: int,
      *     data: CalculationsMonthItem[],
+     *     months: int,
      *     totals: CalculationsTotal,
      *     allowedMonths: int[],
-     *     minMargin: float,
-     *     colorAmount: string,
-     *     colorMargin: string}
+     *     minMargin: float}
      */
     public function generate(int $months): array
     {
@@ -68,7 +66,6 @@ class MonthChart extends AbstractHighchart
         $months = $this->checkMonth($months, $allowedMonths);
         $calculationMonths = $this->repository->getByMonth($months);
         $items = $calculationMonths->items;
-        $total = $calculationMonths->total;
 
         $this->setType(self::TYPE_COLUMN)
             ->hideTitle()
@@ -81,13 +78,11 @@ class MonthChart extends AbstractHighchart
 
         return [
             'chart' => $this,
-            'months' => $months,
             'data' => $items,
-            'totals' => $total,
+            'months' => $months,
+            'totals' => $calculationMonths->total,
             'allowedMonths' => $allowedMonths,
             'minMargin' => $this->getMinMargin(),
-            'colorAmount' => self::COLOR_AMOUNT->value,
-            'colorMargin' => self::COLOR_MARGIN->value,
         ];
     }
 
@@ -95,14 +90,10 @@ class MonthChart extends AbstractHighchart
     protected function setTooltipOptions(): static
     {
         parent::setTooltipOptions();
-        $context = [
-            'colorAmount' => self::COLOR_AMOUNT->value,
-            'colorMargin' => self::COLOR_MARGIN->value,
-        ];
         $this->tooltip->merge([
-            'shared' => true,
+            'formatter' => $this->createTemplateExpression(self::TEMPLATE_NAME),
             'useHTML' => true,
-            'formatter' => $this->createTemplateExpression(self::TEMPLATE_NAME, $context),
+            'shared' => true,
         ]);
 
         return $this;

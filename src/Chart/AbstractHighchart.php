@@ -76,17 +76,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
      */
     public function hideTitle(): static
     {
-        return $this->setTitle(null);
-    }
-
-    /**
-     * Sets the chart title.
-     *
-     * @param ?string $title the title to set or null to hide
-     */
-    public function setTitle(?string $title): static
-    {
-        $this->title['text'] = $title;
+        $this->title['text'] = null;
 
         return $this;
     }
@@ -152,7 +142,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets the font style for the given color and for the optional font size.
+     * Gets the font style for the given color and the optional font size.
      *
      * @param ?string $fontSize the font size or null to use the body font size
      *
@@ -254,6 +244,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
             'backgroundColor' => 'var(--bs-light)',
             'style' => $this->getFontStyle('0.75rem'),
             'borderColor' => $this->getBorderColor(),
+            'borderRadius' => 0,
         ]);
 
         return $this;

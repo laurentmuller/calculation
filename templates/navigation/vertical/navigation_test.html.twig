@@ -63,8 +63,10 @@
                     <ul class="dropdown-menu d-block border-0 pt-0">
                         {{ dropdownItem(path('schema_index'), 'schema.index.title', 'table') }}
                         {{ dropdownItem(path('diagram_index'), 'diagram.title', 'diagram-project') }}
-                        {{ dropdownItem(path('admin_dump_sql'), 'admin.dump_sql.title', 'database') }}
+                        {{ dropdownSeparator() }}
                         {{ dropdownItem(path('command_all'), 'command.list.title', 'code') }}
+                        {{ dropdownSeparator() }}
+                        {{ dropdownItem(path('admin_dump_sql'), 'admin.dump_sql.title', 'database') }}
                         {{ dropdownItem(path('admin_import'), 'swisspost.title', 'download') }}
                         {{ dropdownItem(path('generate'), 'generate.title', 'random') }}
                     </ul>

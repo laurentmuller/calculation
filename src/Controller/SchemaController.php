@@ -47,19 +47,13 @@ class SchemaController extends AbstractController
      * Export the schema to a PDF document.
      */
     #[PdfRoute]
-    public function pdf(
-        SchemaService $schemaService,
-        FontAwesomeImageService $imageService
-    ): PdfResponse {
-        $report = new SchemaReport($this, $schemaService, $imageService);
-
-        return $this->renderPdfDocument($report);
+    public function pdf(SchemaService $schemaService, FontAwesomeImageService $imageService): PdfResponse
+    {
+        return $this->renderPdfDocument(new SchemaReport($this, $schemaService, $imageService));
     }
 
     /**
      * Display information for the given table name.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     #[GetRoute(path: '/{name}', name: 'table')]
     public function table(string $name, SchemaService $service): Response

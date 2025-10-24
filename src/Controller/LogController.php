@@ -110,9 +110,8 @@ class LogController extends AbstractController
         if (!$logFile instanceof LogFile) {
             return $this->getEmptyResponse();
         }
-        $doc = new LogsDocument($this, $logFile);
 
-        return $this->renderSpreadsheetDocument($doc);
+        return $this->renderSpreadsheetDocument(new LogsDocument($this, $logFile));
     }
 
     /**
@@ -140,9 +139,8 @@ class LogController extends AbstractController
         if (!$logFile instanceof LogFile) {
             return $this->getEmptyResponse();
         }
-        $doc = new LogsReport($this, $logFile, $service);
 
-        return $this->renderPdfDocument($doc);
+        return $this->renderPdfDocument(new LogsReport($this, $logFile, $service));
     }
 
     /**

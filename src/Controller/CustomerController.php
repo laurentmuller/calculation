@@ -82,9 +82,8 @@ class CustomerController extends AbstractEntityController
         if ([] === $entities) {
             throw $this->createTranslatedNotFoundException('customer.list.empty');
         }
-        $doc = new CustomersDocument($this, $entities);
 
-        return $this->renderSpreadsheetDocument($doc);
+        return $this->renderSpreadsheetDocument(new CustomersDocument($this, $entities));
     }
 
     /**
@@ -111,9 +110,8 @@ class CustomerController extends AbstractEntityController
             throw $this->createTranslatedNotFoundException('customer.list.empty');
         }
         $grouped = $this->getRequestBoolean($request, 'grouped', true);
-        $report = new CustomersReport($this, $entities, $grouped);
 
-        return $this->renderPdfDocument($report);
+        return $this->renderPdfDocument(new CustomersReport($this, $entities, $grouped));
     }
 
     /**

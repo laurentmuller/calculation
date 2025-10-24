@@ -44,16 +44,12 @@ class AboutDatabaseController extends AbstractController
     #[ExcelRoute]
     public function excel(DatabaseInfoService $service): SpreadsheetResponse
     {
-        $doc = new DatabaseDocument($this, $service);
-
-        return $this->renderSpreadsheetDocument($doc);
+        return $this->renderSpreadsheetDocument(new DatabaseDocument($this, $service));
     }
 
     #[PdfRoute]
     public function pdf(DatabaseInfoService $service): PdfResponse
     {
-        $report = new DatabaseReport($this, $service);
-
-        return $this->renderPdfDocument($report);
+        return $this->renderPdfDocument(new DatabaseReport($this, $service));
     }
 }

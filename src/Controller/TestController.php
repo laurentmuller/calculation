@@ -113,9 +113,7 @@ class TestController extends AbstractController
     #[GetRoute(path: '/colors', name: 'colors')]
     public function colors(): PdfResponse
     {
-        $report = new HtmlColorsReport($this);
-
-        return $this->renderPdfDocument($report);
+        return $this->renderPdfDocument(new HtmlColorsReport($this));
     }
 
     /**
@@ -269,9 +267,7 @@ class TestController extends AbstractController
     #[GetRoute(path: '/fontawesome', name: 'fontawesome')]
     public function fontAwesome(FontAwesomeImageService $service): Response
     {
-        $report = new FontAwesomeReport($this, $service);
-
-        return $this->renderPdfDocument($report);
+        return $this->renderPdfDocument(new FontAwesomeReport($this, $service));
     }
 
     /**

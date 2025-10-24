@@ -56,11 +56,8 @@ class CalculationBelowController extends AbstractController
         }
         $items = $this->getItems($repository, $minMargin);
         $doc = new CalculationsDocument($this, $items);
-        $doc->setTitleTrans('below.title');
-        $doc->setDescriptionTrans(
-            'below.description',
-            ['%margin%' => FormatUtils::formatPercent($minMargin)]
-        );
+        $doc->setDescriptionTrans('below.description', ['%margin%' => FormatUtils::formatPercent($minMargin)])
+            ->setTitleTrans('below.title');
 
         return $this->renderSpreadsheetDocument($doc);
     }
@@ -91,11 +88,8 @@ class CalculationBelowController extends AbstractController
         }
         $items = $this->getItems($repository, $minMargin);
         $doc = new CalculationsBelowReport($this, $items);
-        $doc->setTranslatedTitle('below.title');
-        $doc->setTranslatedDescription(
-            'below.description',
-            ['%margin%' => FormatUtils::formatPercent($minMargin)]
-        );
+        $doc->setTranslatedDescription('below.description', ['%margin%' => FormatUtils::formatPercent($minMargin)])
+            ->setTranslatedTitle('below.title');
 
         return $this->renderPdfDocument($doc);
     }

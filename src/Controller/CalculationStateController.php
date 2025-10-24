@@ -107,9 +107,8 @@ class CalculationStateController extends AbstractEntityController
         if ([] === $entities) {
             throw $this->createTranslatedNotFoundException('calculationstate.list.empty');
         }
-        $doc = new CalculationStatesDocument($this, $entities);
 
-        return $this->renderSpreadsheetDocument($doc);
+        return $this->renderSpreadsheetDocument(new CalculationStatesDocument($this, $entities));
     }
 
     /**
@@ -135,9 +134,8 @@ class CalculationStateController extends AbstractEntityController
         if ([] === $entities) {
             throw $this->createTranslatedNotFoundException('calculationstate.list.empty');
         }
-        $doc = new CalculationStatesReport($this, $entities);
 
-        return $this->renderPdfDocument($doc);
+        return $this->renderPdfDocument(new CalculationStatesReport($this, $entities));
     }
 
     /**

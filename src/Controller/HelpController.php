@@ -237,8 +237,6 @@ class HelpController extends AbstractController
      */
     private function renderPdf(?array $dialog = null, ?array $entity = null): PdfResponse
     {
-        $doc = new HelpReport($this, $this->service, $dialog, $entity);
-
-        return $this->renderPdfDocument(doc: $doc);
+        return $this->renderPdfDocument(new HelpReport($this, $this->service, $dialog, $entity));
     }
 }

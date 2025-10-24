@@ -54,9 +54,8 @@ class CalculationDuplicateController extends AbstractController
             return $response;
         }
         $items = $this->getItems($repository);
-        $doc = new CalculationsDuplicateDocument($this, $items);
 
-        return $this->renderSpreadsheetDocument($doc);
+        return $this->renderSpreadsheetDocument(new CalculationsDuplicateDocument($this, $items));
     }
 
     /**
@@ -83,9 +82,8 @@ class CalculationDuplicateController extends AbstractController
             return $response;
         }
         $items = $this->getItems($repository);
-        $doc = new CalculationsDuplicateReport($this, $items);
 
-        return $this->renderPdfDocument($doc);
+        return $this->renderPdfDocument(new CalculationsDuplicateReport($this, $items));
     }
 
     /**

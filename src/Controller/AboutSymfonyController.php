@@ -49,9 +49,7 @@ class AboutSymfonyController extends AbstractController
     #[ExcelRoute]
     public function excel(SymfonyInfoService $service): SpreadsheetResponse
     {
-        $doc = new SymfonyDocument($this, $service);
-
-        return $this->renderSpreadsheetDocument($doc);
+        return $this->renderSpreadsheetDocument(new SymfonyDocument($this, $service));
     }
 
     /**
@@ -82,8 +80,6 @@ class AboutSymfonyController extends AbstractController
     #[PdfRoute]
     public function pdf(SymfonyInfoService $service): PdfResponse
     {
-        $doc = new SymfonyReport($this, $service);
-
-        return $this->renderPdfDocument($doc);
+        return $this->renderPdfDocument(new SymfonyReport($this, $service));
     }
 }

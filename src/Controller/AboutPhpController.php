@@ -49,16 +49,12 @@ class AboutPhpController extends AbstractController
     #[ExcelRoute]
     public function excel(PhpInfoService $service): SpreadsheetResponse
     {
-        $doc = new PhpIniDocument($this, $service);
-
-        return $this->renderSpreadsheetDocument($doc);
+        return $this->renderSpreadsheetDocument(new PhpIniDocument($this, $service));
     }
 
     #[PdfRoute]
     public function pdf(PhpInfoService $service): PdfResponse
     {
-        $report = new PhpIniReport($this, $service);
-
-        return $this->renderPdfDocument($report);
+        return $this->renderPdfDocument(new PhpIniReport($this, $service));
     }
 }

@@ -86,9 +86,8 @@ class GlobalMarginController extends AbstractEntityController
         if ([] === $entities) {
             throw $this->createTranslatedNotFoundException('globalmargin.list.empty');
         }
-        $doc = new GlobalMarginsDocument($this, $entities);
 
-        return $this->renderSpreadsheetDocument($doc);
+        return $this->renderSpreadsheetDocument(new GlobalMarginsDocument($this, $entities));
     }
 
     /**
@@ -114,9 +113,8 @@ class GlobalMarginController extends AbstractEntityController
         if ([] === $entities) {
             throw $this->createTranslatedNotFoundException('globalmargin.list.empty');
         }
-        $report = new GlobalMarginsReport($this, $entities);
 
-        return $this->renderPdfDocument($report);
+        return $this->renderPdfDocument(new GlobalMarginsReport($this, $entities));
     }
 
     /**

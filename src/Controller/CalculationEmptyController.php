@@ -54,9 +54,8 @@ class CalculationEmptyController extends AbstractController
             return $response;
         }
         $items = $this->getItems($repository);
-        $doc = new CalculationsEmptyDocument($this, $items);
 
-        return $this->renderSpreadsheetDocument($doc);
+        return $this->renderSpreadsheetDocument(new CalculationsEmptyDocument($this, $items));
     }
 
     /**
@@ -83,9 +82,8 @@ class CalculationEmptyController extends AbstractController
             return $response;
         }
         $items = $this->getItems($repository);
-        $doc = new CalculationsEmptyReport($this, $items);
 
-        return $this->renderPdfDocument($doc);
+        return $this->renderPdfDocument(new CalculationsEmptyReport($this, $items));
     }
 
     /**

@@ -99,9 +99,8 @@ class ProductController extends AbstractEntityController
         if ([] === $entities) {
             throw $this->createTranslatedNotFoundException('product.list.empty');
         }
-        $doc = new ProductsDocument($this, $entities);
 
-        return $this->renderSpreadsheetDocument($doc);
+        return $this->renderSpreadsheetDocument(new ProductsDocument($this, $entities));
     }
 
     /**
@@ -127,9 +126,8 @@ class ProductController extends AbstractEntityController
         if ([] === $entities) {
             throw $this->createTranslatedNotFoundException('product.list.empty');
         }
-        $doc = new ProductsReport($this, $entities);
 
-        return $this->renderPdfDocument($doc);
+        return $this->renderPdfDocument(new ProductsReport($this, $entities));
     }
 
     /**

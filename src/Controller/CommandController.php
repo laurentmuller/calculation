@@ -177,9 +177,8 @@ class CommandController extends AbstractController
 
         $root = $this->trans('command.list.available');
         $groups = $service->getGroupedCommands($root);
-        $report = new CommandsReport($this, $groups);
 
-        return $this->renderPdfDocument($report);
+        return $this->renderPdfDocument(new CommandsReport($this, $groups));
     }
 
     /**

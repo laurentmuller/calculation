@@ -110,9 +110,8 @@ class UserController extends AbstractEntityController
     public function excel(RoleService $roleService, StorageInterface $storage): SpreadsheetResponse
     {
         $entities = $this->getEntitiesByUserName();
-        $doc = new UsersDocument($this, $entities, $roleService, $storage);
 
-        return $this->renderSpreadsheetDocument($doc);
+        return $this->renderSpreadsheetDocument(new UsersDocument($this, $entities, $roleService, $storage));
     }
 
     /**
@@ -195,9 +194,8 @@ class UserController extends AbstractEntityController
         FontAwesomeService $fontService,
     ): PdfResponse {
         $entities = $this->getEntitiesByUserName();
-        $doc = new UsersReport($this, $entities, $storage, $roleService, $fontService);
 
-        return $this->renderPdfDocument($doc);
+        return $this->renderPdfDocument(new UsersReport($this, $entities, $storage, $roleService, $fontService));
     }
 
     /**
@@ -310,9 +308,10 @@ class UserController extends AbstractEntityController
     public function rightsExcel(RoleService $roleService, RoleBuilderService $roleBuilderService): SpreadsheetResponse
     {
         $entities = $this->getEntitiesByUserName();
-        $doc = new UserRightsDocument($this, $entities, $roleService, $roleBuilderService);
 
-        return $this->renderSpreadsheetDocument($doc);
+        return $this->renderSpreadsheetDocument(
+            new UserRightsDocument($this, $entities, $roleService, $roleBuilderService)
+        );
     }
 
     /**
@@ -325,9 +324,10 @@ class UserController extends AbstractEntityController
         FontAwesomeService $fontAwesomeService
     ): PdfResponse {
         $entities = $this->getEntitiesByUserName();
-        $doc = new UsersRightsReport($this, $entities, $roleService, $roleBuilderService, $fontAwesomeService);
 
-        return $this->renderPdfDocument($doc);
+        return $this->renderPdfDocument(
+            new UsersRightsReport($this, $entities, $roleService, $roleBuilderService, $fontAwesomeService)
+        );
     }
 
     /**

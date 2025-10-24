@@ -114,9 +114,8 @@ class CalculationController extends AbstractEntityController
         if ([] === $entities) {
             throw $this->createTranslatedNotFoundException('calculation.list.empty');
         }
-        $doc = new CalculationsDocument($this, $entities);
 
-        return $this->renderSpreadsheetDocument($doc);
+        return $this->renderSpreadsheetDocument(new CalculationsDocument($this, $entities));
     }
 
     /**
@@ -125,9 +124,7 @@ class CalculationController extends AbstractEntityController
     #[GetRoute(path: '/excel/{id}', name: 'excel_id', requirements: self::ID_REQUIREMENT)]
     public function excelOne(Calculation $calculation): SpreadsheetResponse
     {
-        $doc = new CalculationDocument($this, $calculation);
-
-        return $this->renderSpreadsheetDocument($doc);
+        return $this->renderSpreadsheetDocument(new CalculationDocument($this, $calculation));
     }
 
     /**
@@ -157,9 +154,8 @@ class CalculationController extends AbstractEntityController
         if ([] === $entities) {
             throw $this->createTranslatedNotFoundException('calculation.list.empty');
         }
-        $doc = new CalculationsReport($this, $entities);
 
-        return $this->renderPdfDocument($doc);
+        return $this->renderPdfDocument(new CalculationsReport($this, $entities));
     }
 
     /**
@@ -170,9 +166,8 @@ class CalculationController extends AbstractEntityController
     {
         $minMargin = $this->getMinMargin();
         $qrcode = $this->getQrCode($calculation);
-        $doc = new CalculationReport($this, $calculation, $minMargin, $qrcode);
 
-        return $this->renderPdfDocument($doc);
+        return $this->renderPdfDocument(new CalculationReport($this, $calculation, $minMargin, $qrcode));
     }
 
     /**

@@ -14,45 +14,60 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Entity\Group;
+use App\Model\CalculationsMonth;
+use App\Model\CalculationsState;
+use App\Repository\CalculationRepository;
+use App\Repository\CalculationStateRepository;
 use App\Service\IndexService;
-use App\Tests\DatabaseTrait;
-use App\Tests\KernelServiceTestCase;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\UnitOfWork;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-class IndexServiceTest extends KernelServiceTestCase
+class IndexServiceTest extends TestCase
 {
-    use DatabaseTrait;
-
-    private IndexService $service;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->service = self::getService(IndexService::class);
-    }
-
     public function testClear(): void
     {
-        $this->service->clear();
+        $this->createService()->clear();
         self::expectNotToPerformAssertions();
     }
 
     public function testGetCalculationByMonths(): void
     {
-        $actual = $this->service->getCalculationByMonths();
+        $result = new CalculationsMonth([]);
+        $repository = $this->createMock(CalculationRepository::class);
+        $repository->expects(self::once())
+            ->method('getByMonth')
+            ->willReturn($result);
+
+        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager->expects(self::once())
+            ->method('getRepository')
+            ->willReturn($repository);
+
+        $service = $this->createService($manager);
+        $actual = $service->getCalculationByMonths();
         self::assertCount(0, $actual);
     }
 
     public function testGetCalculationByStates(): void
     {
-        $actual = $this->service->getCalculationByStates();
+        $result = new CalculationsState([]);
+        $repository = $this->createMock(CalculationStateRepository::class);
+        $repository->expects(self::once())
+            ->method('getCalculations')
+            ->willReturn($result);
+
+        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager->expects(self::once())
+            ->method('getRepository')
+            ->willReturn($repository);
+
+        $service = $this->createService($manager);
+        $actual = $service->getCalculationByStates();
         self::assertCount(0, $actual);
-
-        $items = $actual->items;
-        self::assertCount(0, $items);
-
-        $total = $actual->total;
-        self::assertSame(0, $total->count);
     }
 
     public function testGetCatalog(): void
@@ -65,11 +80,18 @@ class IndexServiceTest extends KernelServiceTestCase
             'globalMargin',
             'calculationState',
         ];
-        $actual = $this->service->getCatalog();
 
-        $expected = \count($keys);
-        self::assertCount($expected, $actual);
+        $repository = $this->createMock(EntityRepository::class);
+        $repository->method('count')
+            ->willReturn(0);
 
+        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager->method('getRepository')
+            ->willReturn($repository);
+
+        $service = $this->createService($manager);
+        $actual = $service->getCatalog();
+        self::assertCount(\count($keys), $actual);
         foreach ($keys as $key) {
             self::assertArrayHasKey($key, $actual);
             self::assertSame(0, $actual[$key]);
@@ -78,31 +100,46 @@ class IndexServiceTest extends KernelServiceTestCase
 
     public function testGetLastCalculations(): void
     {
-        $actual = $this->service->getLastCalculations(6, null);
+        $repository = $this->createMock(CalculationRepository::class);
+        $repository->expects(self::once())
+            ->method('getLastCalculations')
+            ->willReturn([]);
+
+        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager->expects(self::once())
+            ->method('getRepository')
+            ->willReturn($repository);
+
+        $service = $this->createService($manager);
+        $actual = $service->getLastCalculations(6);
         self::assertCount(0, $actual);
     }
 
-    public function testOnFlushDefault(): void
+    public function testOnFlush(): void
     {
-        $group = $this->createGroup();
-        $this->deleteEntity($group);
-        self::expectNotToPerformAssertions();
+        $unitOfWork = $this->createMock(UnitOfWork::class);
+        $unitOfWork->expects(self::once())
+            ->method('getScheduledEntityInsertions')
+            ->willReturn([new Group()]);
+
+        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager->expects(self::once())
+            ->method('getUnitOfWork')
+            ->willReturn($unitOfWork);
+
+        $args = $this->createMock(OnFlushEventArgs::class);
+        $args->expects(self::once())
+            ->method('getObjectManager')
+            ->willReturn($manager);
+
+        $service = $this->createService($manager);
+        $service->onFlush($args);
     }
 
-    public function testOnFlushNoChange(): void
+    private function createService(?EntityManagerInterface $manager = null): IndexService
     {
-        $group = $this->createGroup();
-        $group->setCode('fake');
-        $this->addEntity($group);
-        $this->deleteEntity($group);
-        self::expectNotToPerformAssertions();
-    }
+        $manager ??= $this->createMock(EntityManagerInterface::class);
 
-    private function createGroup(): Group
-    {
-        $group = new Group();
-        $group->setCode('fake');
-
-        return $this->addEntity($group);
+        return new IndexService($manager, new ArrayAdapter());
     }
 }

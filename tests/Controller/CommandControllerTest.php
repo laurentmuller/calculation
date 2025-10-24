@@ -58,4 +58,14 @@ class CommandControllerTest extends ControllerTestCase
             Response::HTTP_NOT_FOUND,
         ];
     }
+
+    public function testExecute(): void
+    {
+        $this->checkForm(
+            uri: '/command/execute?name=about',
+            id: 'command.execute.title',
+            userName: self::ROLE_SUPER_ADMIN,
+            followRedirect: false
+        );
+    }
 }

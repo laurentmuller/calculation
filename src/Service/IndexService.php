@@ -106,7 +106,7 @@ class IndexService
      * @param int            $maxResults the maximum number of calculations to retrieve (the "limit")
      * @param ?UserInterface $user       if not null, returns the user's calculations
      */
-    public function getLastCalculations(int $maxResults, ?UserInterface $user): array
+    public function getLastCalculations(int $maxResults, ?UserInterface $user = null): array
     {
         $id = $this->cleanKey($user?->getUserIdentifier() ?? '--all--');
         $key = \sprintf('index.calculations.last.%d.%s', $maxResults, $id);

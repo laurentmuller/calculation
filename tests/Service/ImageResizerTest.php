@@ -15,32 +15,35 @@ namespace App\Tests\Service;
 
 use App\Enums\ImageSize;
 use App\Service\ImageResizer;
-use App\Tests\KernelServiceTestCase;
+use App\Tests\TranslatorMockTrait;
 use App\Utils\FileUtils;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-class ImageResizerTest extends KernelServiceTestCase
+class ImageResizerTest extends TestCase
 {
-    private ImageResizer $service;
+    use TranslatorMockTrait;
 
     #[\Override]
-    protected function setUp(): void
+    protected function tearDown(): void
     {
-        parent::setUp();
-        $this->service = $this->getService(ImageResizer::class);
+        FileUtils::remove($this->getTarget());
     }
 
     public function testResizeDefault(): void
     {
         $source = $this->getSource();
         $target = $this->getTarget();
-        $actual = $this->service->resizeDefault($source, $target);
+        $service = $this->createService();
+        $actual = $service->resizeDefault($source, $target);
         self::assertTrue($actual);
         self::assertImageValid($target, 192);
     }
 
     public function testResizeInvalidFile(): void
     {
-        $actual = $this->service->resize(__FILE__, $this->getTarget(), ImageSize::DEFAULT);
+        $service = $this->createService();
+        $actual = $service->resize(__FILE__, $this->getTarget(), ImageSize::DEFAULT);
         self::assertFalse($actual);
     }
 
@@ -48,7 +51,8 @@ class ImageResizerTest extends KernelServiceTestCase
     {
         $source = $this->getSource();
         $target = $this->getTarget();
-        $actual = $this->service->resizeMedium($source, $target);
+        $service = $this->createService();
+        $actual = $service->resizeMedium($source, $target);
         self::assertTrue($actual);
         self::assertImageValid($target, 96);
     }
@@ -57,7 +61,8 @@ class ImageResizerTest extends KernelServiceTestCase
     {
         $source = $this->getSource();
         $target = $this->getTarget();
-        $actual = $this->service->resizeSmall($source, $target);
+        $service = $this->createService();
+        $actual = $service->resizeSmall($source, $target);
         self::assertTrue($actual);
         self::assertImageValid($target, 32);
     }
@@ -66,22 +71,28 @@ class ImageResizerTest extends KernelServiceTestCase
     {
         $source = __DIR__ . '/../files/images/example.png';
         $target = $this->getTarget();
-        $actual = $this->service->resizeDefault($source, $target);
+        $service = $this->createService();
+        $actual = $service->resizeDefault($source, $target);
         self::assertTrue($actual);
         self::assertImageValid($target, 161, 192);
     }
 
     protected static function assertImageValid(string $target, int $width, ?int $height = null): void
     {
-        try {
-            $image = \imagecreatefrompng($target);
-            self::assertInstanceOf(\GdImage::class, $image);
-            self::assertSame($width, \imagesx($image));
-            self::assertSame($height ?? $width, \imagesy($image));
-            \imagedestroy($image);
-        } finally {
-            FileUtils::remove($target);
-        }
+        $image = \imagecreatefrompng($target);
+        self::assertInstanceOf(\GdImage::class, $image);
+        self::assertSame($width, \imagesx($image));
+        self::assertSame($height ?? $width, \imagesy($image));
+        \imagedestroy($image);
+    }
+
+    private function createService(): ImageResizer
+    {
+        $service = new ImageResizer();
+        $service->setTranslator($this->createMockTranslator());
+        $service->setLogger($this->createMock(LoggerInterface::class));
+
+        return $service;
     }
 
     private function getSource(): string

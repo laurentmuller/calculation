@@ -256,14 +256,14 @@ trait ArrayTrait
     }
 
     /**
-     * Remove elements of the given array that are equal to the given value.
+     * Filter the given array by removing the given element.
      *
      * @template T
      *
-     * @param T[] $values the array to update
+     * @param T[] $values the array to filter
      * @param T   $value  the value to remove
      *
-     * @return T[]
+     * @return T[] the array without the given element, if found
      */
     public function removeValue(array $values, mixed $value): array
     {

@@ -16,6 +16,7 @@ namespace App\Service;
 use App\Traits\ArrayTrait;
 use App\Utils\StringUtils;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;
@@ -67,17 +68,17 @@ class SchemaService
 {
     use ArrayTrait;
 
-    // Query to get records and sizes (MySQL platform)
-    private const SQL_ALL = <<<SQL_QUERY
+    // Query to get records and sizes for MySQL platform
+    private const SQL_ALL = <<<SQL
             SELECT
-                TABLE_NAME AS 'name',
-                TABLE_ROWS  AS 'records',
-                (data_length + index_length) / 1024 AS 'size'
+                TABLE_NAME AS name,
+                TABLE_ROWS AS records,
+                (data_length + index_length) / 1024 AS size
             FROM
                 information_schema.tables
             WHERE
                 table_schema = '%database%';
-        SQL_QUERY;
+        SQL;
 
     private ?Connection $connection = null;
 
@@ -129,7 +130,7 @@ class SchemaService
     }
 
     /**
-     * Returns if the given table exists.
+     * Returns if the given table name exists.
      */
     public function tableExists(string $name): bool
     {
@@ -152,7 +153,7 @@ class SchemaService
                 return $tables;
             }
 
-            $sql = \str_replace('%database%', $database, self::SQL_ALL);
+            $sql = $this->getSqlAll($database);
             $result = $connection->executeQuery($sql);
             $rows = $result->fetchAllAssociative();
 
@@ -164,7 +165,7 @@ class SchemaService
                     $tables[$name]['size'] = $row['size'];
                 }
             }
-        } catch (\Doctrine\DBAL\Exception) {
+        } catch (Exception) {
             // ignore
         } finally {
             $result?->free();
@@ -186,7 +187,7 @@ class SchemaService
                 ->executeQuery($sql);
 
             return (int) $result->fetchOne();
-        } catch (\Doctrine\DBAL\Exception) {
+        } catch (Exception) {
             return 0;
         } finally {
             $result?->free();
@@ -288,7 +289,7 @@ class SchemaService
     {
         try {
             return Type::getTypeRegistry()->lookupName($column->getType());
-        } catch (\Doctrine\DBAL\Exception) {
+        } catch (Exception) {
             return 'unknown';
         }
     }
@@ -373,11 +374,16 @@ class SchemaService
     /**
      * @phpstan-return AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
      *
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      */
     private function getSchemaManager(): AbstractSchemaManager
     {
         return $this->schemaManager ??= $this->getConnection()->createSchemaManager();
+    }
+
+    private function getSqlAll(string $database): string
+    {
+        return \trim((string) \preg_replace('/\s+/', ' ', \str_replace('%database%', $database, self::SQL_ALL)));
     }
 
     /**
@@ -385,10 +391,10 @@ class SchemaService
      */
     private function getSqlCounter(Table $table): string
     {
-        $name = $table->getName();
-        $column = (string) \array_key_first($table->getColumns());
+        $tableName = $table->getName();
+        $columnName = $table->getColumns()[0]->getName();
 
-        return "SELECT COUNT($column) AS TOTAL FROM $name";
+        return \sprintf('SELECT COUNT(%s) AS TOTAL FROM %s', $columnName, $tableName);
     }
 
     /**
@@ -420,7 +426,7 @@ class SchemaService
                 ->getDatabasePlatform();
 
             return $platform instanceof AbstractMySQLPlatform;
-        } catch (\Doctrine\DBAL\Exception) {
+        } catch (Exception) {
             return false;
         }
     }
@@ -444,7 +450,7 @@ class SchemaService
     /**
      * @phpstan-return array<string, SchemaTableType>
      *
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      */
     private function loadTables(): array
     {
@@ -492,8 +498,6 @@ class SchemaService
     {
         if ($name instanceof Table) {
             $name = $name->getName();
-        } elseif ($name instanceof Name) {
-            $name = $name->toString();
         } elseif ($name instanceof ClassMetadata) {
             $name = $name->table['name'];
         }
@@ -505,12 +509,13 @@ class SchemaService
     }
 
     /**
+     * Compare indexes by primary keys in reverse order, then by names.
+     *
      * @phpstan-param SchemaIndexType $a
      * @phpstan-param SchemaIndexType $b
      */
     private function sortIndexes(array $a, array $b): int
     {
-        // sort first by primary index
         $result = $b['primary'] <=> $a['primary'];
         if (0 !== $result) {
             return $result;

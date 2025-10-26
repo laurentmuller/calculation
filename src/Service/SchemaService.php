@@ -257,8 +257,6 @@ class SchemaService
 
     /**
      * @phpstan-return array<SchemaColumnType>
-     *
-     * @psalm-suppress InternalMethod
      */
     private function getColumns(Table $table): array
     {
@@ -320,8 +318,6 @@ class SchemaService
 
     /**
      * @phpstan-return array<SchemaIndexType>
-     *
-     * @psalm-suppress InternalMethod
      */
     private function getIndexes(Table $table): array
     {
@@ -386,9 +382,6 @@ class SchemaService
         return \trim((string) \preg_replace('/\s+/', ' ', \str_replace('%database%', $database, self::SQL_ALL)));
     }
 
-    /**
-     * @psalm-suppress InternalMethod
-     */
     private function getSqlCounter(Table $table): string
     {
         $tableName = $table->getName();
@@ -491,8 +484,6 @@ class SchemaService
 
     /**
      * @phpstan-param Table|ClassMetadata<object>|string $name
-     *
-     * @psalm-suppress InternalMethod
      */
     private function mapTableName(Table|Name|ClassMetadata|string $name): string
     {

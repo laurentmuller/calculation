@@ -88,7 +88,7 @@ class CategoryControllerTest extends EntityControllerTestCase
         $this->getProduct();
         $category = $this->getCategory();
         $calculation = $this->getCalculation();
-        $calculation->findCategory($category);
+        $calculation->findOrCreateCategory($category);
         $this->addEntity($calculation);
 
         $userName = self::ROLE_ADMIN;

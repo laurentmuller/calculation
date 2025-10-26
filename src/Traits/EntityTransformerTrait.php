@@ -19,7 +19,7 @@ use Symfony\Component\Form\Exception\InvalidArgumentException;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 /**
- * Trait to convert an entity to or from an identifier (integer).
+ * Trait to convert an entity to or from an integer.
  *
  * @template TEntity of EntityInterface
  */

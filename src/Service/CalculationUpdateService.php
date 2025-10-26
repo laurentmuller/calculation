@@ -157,7 +157,7 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     private function getCalculations(CalculationUpdateQuery $query): array
     {
         $expr = Criteria::expr();
-        $criteria = Criteria::create()
+        $criteria = Criteria::create(true)
             ->andWhere($expr->in('state', $query->getStates()))
             ->andWhere($expr->gte('date', $query->getDateFrom()))
             ->andWhere($expr->lte('date', $query->getDate()));

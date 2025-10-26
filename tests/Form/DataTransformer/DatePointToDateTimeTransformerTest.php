@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\DataTransformer;
+namespace App\Tests\Form\DataTransformer;
 
 use App\Form\DataTransformer\DatePointToDateTimeTransformer;
 use App\Tests\DateAssertTrait;

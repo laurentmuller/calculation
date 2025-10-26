@@ -97,7 +97,7 @@ class CalculationGenerator extends AbstractEntityGenerator
             }
             $category = $product->getCategory();
             if ($category instanceof Category) {
-                $entity->findCategory($category)->addItem($item);
+                $entity->findOrCreateCategory($category)->addItem($item);
             }
         }
 

@@ -20,7 +20,6 @@ use App\Tests\EntityTrait\GlobalMarginTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping\MappingException;
-use Doctrine\ORM\Query;
 
 class GlobalMarginRepositoryTest extends KernelServiceTestCase
 {
@@ -112,10 +111,10 @@ class GlobalMarginRepositoryTest extends KernelServiceTestCase
         ];
         $criteria = [
             'minimum > 0',
-            new Criteria(),
+            Criteria::create(true),
         ];
-        $actual = $this->repository->getSearchQuery($sortedFields, $criteria);
-        self::assertInstanceOf(Query::class, $actual);
+        $this->repository->getSearchQuery($sortedFields, $criteria);
+        self::expectNotToPerformAssertions();
     }
 
     /**

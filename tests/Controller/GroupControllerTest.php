@@ -82,7 +82,7 @@ class GroupControllerTest extends EntityControllerTestCase
         $this->getCategory();
         $group = $this->getGroup();
         $calculation = $this->getCalculation();
-        $calculation->findGroup($group);
+        $calculation->findOrCreateGroup($group);
         $this->addEntity($calculation);
 
         $userName = self::ROLE_ADMIN;

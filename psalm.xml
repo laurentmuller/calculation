@@ -30,12 +30,23 @@
                 <referencedProperty name="Symfony\Component\HttpFoundation\Response::$version"/>
             </errorLevel>
         </PropertyNotSetInConstructor>
-        <ClassMustBeFinal errorLevel="suppress" />
+        <ClassMustBeFinal errorLevel="suppress"/>
         <MethodSignatureMustOmitReturnType>
             <errorLevel type="suppress">
-                <directory name="src/Entity" />
+                <directory name="src/Entity"/>
             </errorLevel>
         </MethodSignatureMustOmitReturnType>
+        <TooManyArguments>
+            <errorLevel type="suppress">
+                <referencedFunction name="Doctrine\Common\Collections\Criteria::create"/>
+            </errorLevel>
+        </TooManyArguments>
+        <InternalMethod>
+            <errorLevel type="suppress">
+                <file name="src/Service/DatabaseInfoService.php"/>
+                <file name="src/Service/SchemaService.php"/>
+            </errorLevel>
+        </InternalMethod>
     </issueHandlers>
 
     <plugins>

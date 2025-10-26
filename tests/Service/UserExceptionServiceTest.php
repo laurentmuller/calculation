@@ -46,26 +46,25 @@ class UserExceptionServiceTest extends TestCase
     }
 
     /**
-     * @phpstan-return \Generator<int, array{0: \Throwable, 1: string, 2?: 1}>
+     * @phpstan-return \Generator<int, array{0: \Exception, 1: string, 2?: 1}>
      */
     public static function getExceptions(): \Generator
     {
-        // register user
-        yield [new ExpiredSignatureException(), 'registration_expired_signature'];
-        yield [new InvalidSignatureException(), 'registration_invalid_signature'];
-        yield [new WrongEmailVerifyException(), 'registration_wrong_email_verify'];
+        // user registration
+        yield [new ExpiredSignatureException(), 'registration.expired_signature'];
+        yield [new InvalidSignatureException(), 'registration.invalid_signature'];
+        yield [new WrongEmailVerifyException(), 'registration.wrong_email_verify'];
         // reset password
-        yield [new ExpiredResetPasswordTokenException(), 'reset_expired_reset_password_token'];
-        yield [new InvalidResetPasswordTokenException(), 'reset_invalid_reset_password_token'];
-        yield [new TooManyPasswordRequestsException(new DatePoint('2000-01-01')), 'reset_too_many_password_request', 1];
-        // mailer
-        yield [new TransportException(), 'send_email_error'];
-        // other
-        yield [new \Exception(), 'error_unknown'];
+        yield [new ExpiredResetPasswordTokenException(), 'reset.expired_reset_password_token'];
+        yield [new InvalidResetPasswordTokenException(), 'reset.invalid_reset_password_token'];
+        yield [new TooManyPasswordRequestsException(new DatePoint('2000-01-01')), 'reset.too_many_password_request', 1];
+        // error
+        yield [new TransportException(), 'error.send_email'];
+        yield [new \Exception(), 'error.unknown'];
     }
 
     #[DataProvider('getExceptions')]
-    public function testException(\Throwable $e, string $message, int $messageData = 0): void
+    public function testException(\Exception $e, string $message, int $messageData = 0): void
     {
         $result = $this->mapException($e);
         self::assertSame(0, $result->getCode());
@@ -75,7 +74,7 @@ class UserExceptionServiceTest extends TestCase
         self::assertInstanceOf($e::class, $result->getPrevious());
     }
 
-    private function mapException(\Throwable $e): CustomUserMessageAuthenticationException
+    private function mapException(\Exception $e): CustomUserMessageAuthenticationException
     {
         $this->service->handleException($this->request, $e);
         $result = $this->request->getSession()->get(SecurityRequestAttributes::AUTHENTICATION_ERROR);

@@ -62,19 +62,19 @@ class UserExceptionService
     {
         $message = match (true) {
             // register user
-            $e instanceof ExpiredSignatureException => 'registration_expired_signature',
-            $e instanceof InvalidSignatureException => 'registration_invalid_signature',
-            $e instanceof WrongEmailVerifyException => 'registration_wrong_email_verify',
+            $e instanceof ExpiredSignatureException => 'registration.expired_signature',
+            $e instanceof InvalidSignatureException => 'registration.invalid_signature',
+            $e instanceof WrongEmailVerifyException => 'registration.wrong_email_verify',
             $e instanceof VerifyEmailExceptionInterface => $e->getReason(),
             // reset password
-            $e instanceof ExpiredResetPasswordTokenException => 'reset_expired_reset_password_token',
-            $e instanceof InvalidResetPasswordTokenException => 'reset_invalid_reset_password_token',
-            $e instanceof TooManyPasswordRequestsException => 'reset_too_many_password_request',
+            $e instanceof ExpiredResetPasswordTokenException => 'reset.expired_reset_password_token',
+            $e instanceof InvalidResetPasswordTokenException => 'reset.invalid_reset_password_token',
+            $e instanceof TooManyPasswordRequestsException => 'reset.too_many_password_request',
             $e instanceof ResetPasswordExceptionInterface => $e->getReason(),
             // mailer
-            $e instanceof TransportExceptionInterface => 'send_email_error',
+            $e instanceof TransportExceptionInterface => 'error.send_email',
             // other
-            default => 'error_unknown'
+            default => 'error.unknown'
         };
 
         $parameters = match (true) {

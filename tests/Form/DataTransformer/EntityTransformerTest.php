@@ -11,51 +11,27 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\DataTransformer;
+namespace App\Tests\Form\DataTransformer;
 
 use App\Entity\Group;
-use App\Form\DataTransformer\IdentifierTransformer;
+use App\Form\DataTransformer\EntityTransformer;
 use App\Interfaces\EntityInterface;
-use App\Repository\GroupRepository;
-use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Exception\InvalidArgumentException;
 
-class IdentifierTransformerTest extends TestCase
+/**
+ * @extends EntityTransformerTestCase<Group, int>
+ */
+class EntityTransformerTest extends EntityTransformerTestCase
 {
-    use IdTrait;
-
     /**
-     * @phpstan-return \Generator<array-key, array<string|bool>>
+     * @phpstan-return \Generator<int, array<bool|int|string>>
      *
-     * @psalm-return \Generator<int, array<EntityInterface|null>>
+     * @psalm-return \Generator<int, array<string|int|null>>
      *
      * @psalm-suppress InvalidReturnType
      */
     public static function getReverseInvalid(): \Generator
-    {
-        yield [''];
-        yield [true];
-        yield ['fake'];
-    }
-
-    /**
-     * @phpstan-return \Generator<int, array{?EntityInterface, mixed}>
-     */
-    public static function getReverseValid(): \Generator
-    {
-        yield [null, null];
-    }
-
-    /**
-     * @phpstan-return \Generator<array-key, array<bool|int|string>>
-     *
-     * @psalm-return \Generator<int, array{int|string|null}>
-     *
-     * @psalm-suppress InvalidReturnType
-     */
-    public static function getTransformInvalid(): \Generator
     {
         yield [true];
         yield [-1];
@@ -63,16 +39,41 @@ class IdentifierTransformerTest extends TestCase
     }
 
     /**
-     * @phpstan-return \Generator<int, array{int|string|null, mixed}>
+     * @phpstan-return \Generator<int, array{string|int|null, mixed}>
      */
-    public static function getTransformValid(): \Generator
+    public static function getReverseValid(): \Generator
     {
         yield [null, null];
         yield ['', null];
     }
 
     /**
-     * @phpstan-param EntityInterface|null $value
+     * @phpstan-return \Generator<int, array<string|bool>>
+     *
+     * @psalm-return \Generator<int, array{EntityInterface|null}>
+     *
+     * @psalm-suppress InvalidReturnType
+     */
+    public static function getTransformInvalid(): \Generator
+    {
+        yield [''];
+        yield [true];
+        yield ['fake'];
+    }
+
+    /**
+     * @phpstan-return \Generator<int, array{?Group, ?int}>
+     */
+    public static function getTransformValid(): \Generator
+    {
+        yield [null, null];
+
+        $group = self::setId(new Group());
+        yield [$group, $group->getId()];
+    }
+
+    /**
+     * @phpstan-param string|int|null $value
      */
     #[DataProvider('getReverseInvalid')]
     public function testReverseInvalid(mixed $value): void
@@ -89,12 +90,13 @@ class IdentifierTransformerTest extends TestCase
     {
         $group = $this->createGroup();
         $transformer = $this->createTransformer($group);
-        $actual = $transformer->reverseTransform($group);
-        self::assertSame($group->getId(), $actual);
+        $value = $group->getId();
+        $actual = $transformer->reverseTransform($value);
+        self::assertSame($group, $actual);
     }
 
     /**
-     * @phpstan-param EntityInterface|null $value
+     * @phpstan-param string|int|null $value
      *
      * @throws \ReflectionException
      */
@@ -114,12 +116,13 @@ class IdentifierTransformerTest extends TestCase
     {
         $group = $this->createGroup();
         $transformer = $this->createTransformer($group);
-        $actual = $transformer->transform($group->getId());
-        self::assertSame($group, $actual);
+        $actual = $transformer->transform($group);
+        $expected = $group->getId();
+        self::assertSame($expected, $actual);
     }
 
     /**
-     * @phpstan-param int|string|null $value
+     * @phpstan-param EntityInterface|null $value
      */
     #[DataProvider('getTransformInvalid')]
     public function testTransformInvalid(mixed $value): void
@@ -130,7 +133,7 @@ class IdentifierTransformerTest extends TestCase
     }
 
     /**
-     * @phpstan-param int|string|null $value
+     * @phpstan-param EntityInterface|null $value
      *
      * @throws \ReflectionException
      */
@@ -144,31 +147,11 @@ class IdentifierTransformerTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @phpstan-return EntityTransformer<Group>
      */
-    private function createGroup(): Group
+    #[\Override]
+    protected function createTransformer(?Group $group = null): EntityTransformer
     {
-        $group = new Group();
-
-        return self::setId($group);
-    }
-
-    private function createRepository(?Group $group = null): GroupRepository
-    {
-        $repository = $this->createMock(GroupRepository::class);
-        $repository->method('find')
-            ->willReturn($group);
-        $repository->method('getClassName')
-            ->willReturn(Group::class);
-
-        return $repository;
-    }
-
-    /**
-     * @phpstan-return IdentifierTransformer<Group>
-     */
-    private function createTransformer(?Group $group = null): IdentifierTransformer
-    {
-        return new IdentifierTransformer($this->createRepository($group));
+        return new EntityTransformer($this->createRepository($group));
     }
 }

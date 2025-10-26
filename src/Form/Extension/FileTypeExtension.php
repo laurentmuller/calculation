@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Form\Extension;
 
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\FormConfigInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 
@@ -48,12 +49,11 @@ class FileTypeExtension extends AbstractFileTypeExtension
      */
     protected function updateOptions(FormInterface $form, array $options): array
     {
-        $parent = $form->getParent();
-        if (!$parent instanceof FormInterface) {
+        $configuration = $form->getParent()?->getConfig();
+        if (!$configuration instanceof FormConfigInterface) {
             return $options;
         }
 
-        $configuration = $parent->getConfig();
         foreach (['placeholder', 'maxfiles', 'maxsize', 'maxsizetotal'] as $name) {
             if ($configuration->hasOption($name)) {
                 $options[$name] = $configuration->getOption($name);

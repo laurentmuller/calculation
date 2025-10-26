@@ -85,7 +85,7 @@
 
 {% macro button_submit(text = 'common.button_ok', class = 'btn-primary', parameters = []) -%}
 {% from 'macros/_attributes.html.twig' import attributes %}
-{%- set parameters = parameters|merge({type: 'submit', class: ('btn btn-form btn-submit ' ~ class)|trim, role: 'button'}) -%}
+{%- set parameters = parameters|merge({type: 'submit', role: 'button', class: ('btn btn-form btn-submit ' ~ class)|trim}) -%}
 <button{{ attributes(parameters) }}>{{ text|trans }}</button>
 {%- endmacro %}
 

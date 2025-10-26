@@ -155,7 +155,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         /** @var Category $category */
         $category = $product->getCategory();
         $item = CalculationItem::create($product)->setQuantity($quantity);
-        $newCategory = $this->findCategory($category);
+        $newCategory = $this->findOrCreateCategory($category);
         $newCategory->addItem($item);
         $newCategory->update();
 
@@ -196,30 +196,15 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Finds or create a calculation category for the given category.
      *
-     * @psalm-suppress MixedArgumentTypeCoercion
+     * The calculation group is also created if needed.
      */
-    public function findCategory(Category $category): CalculationCategory
+    public function findOrCreateCategory(Category $category): CalculationCategory
     {
-        // find or create the group
         /** @phpstan-var Group $categoryGroup */
         $categoryGroup = $category->getGroup();
-        $group = $this->findGroup($categoryGroup);
+        $calculationGroup = $this->findOrCreateGroup($categoryGroup);
 
-        // find category
-        $code = $category->getCode();
-        /** @phpstan-var CalculationCategory|null $first */
-        $first = $group->getCategories()->findFirst(
-            static fn (int $key, CalculationCategory $category): bool => $code === $category->getCode()
-        );
-        if ($first instanceof CalculationCategory) {
-            return $first;
-        }
-
-        // create category
-        $newCategory = CalculationCategory::create($category);
-        $group->addCategory($newCategory);
-
-        return $newCategory;
+        return $calculationGroup->findOrCreateCategory($category);
     }
 
     /**
@@ -227,23 +212,21 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      *
      * @psalm-suppress MixedArgumentTypeCoercion
      */
-    public function findGroup(Group $group): CalculationGroup
+    public function findOrCreateGroup(Group $group): CalculationGroup
     {
-        // find the group
         $code = $group->getCode();
-        /** @phpstan-var CalculationGroup|null $first */
-        $first = $this->groups->findFirst(
+        /** @phpstan-var CalculationGroup|null $calculationGroup */
+        $calculationGroup = $this->groups->findFirst(
             static fn (int $key, CalculationGroup $group): bool => $code === $group->getCode()
         );
-        if ($first instanceof CalculationGroup) {
-            return $first;
+        if ($calculationGroup instanceof CalculationGroup) {
+            return $calculationGroup;
         }
 
-        // create the group
-        $newGroup = CalculationGroup::create($group);
-        $this->addGroup($newGroup);
+        $calculationGroup = CalculationGroup::create($group);
+        $this->addGroup($calculationGroup);
 
-        return $newGroup;
+        return $calculationGroup;
     }
 
     /**
@@ -258,7 +241,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get customer.
+     * Get the customer.
      */
     public function getCustomer(): ?string
     {
@@ -266,7 +249,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get date.
+     * Get the date.
      */
     public function getDate(): DatePoint
     {
@@ -274,7 +257,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get description.
+     * Get the description.
      */
     public function getDescription(): ?string
     {
@@ -366,7 +349,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get global margin.
+     * Get the global margin.
      */
     public function getGlobalMargin(): float
     {
@@ -374,7 +357,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get global margin amount.
+     * Get the global margin amount.
      */
     public function getGlobalMarginAmount(): float
     {
@@ -523,7 +506,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get state.
+     * Get the state.
      */
     public function getState(): ?CalculationState
     {
@@ -555,7 +538,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get total net. This is the total of the groups multiplied by the global margin.
+     * Get the total net. This is the total of the groups multiplied by the global margin.
      */
     public function getTotalNet(): float
     {
@@ -563,7 +546,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get user margin.
+     * Get the user margin.
      */
     public function getUserMargin(): float
     {
@@ -571,7 +554,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get user margin amount.
+     * Get the user margin amount.
      */
     public function getUserMarginAmount(): float
     {
@@ -579,7 +562,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get user total margin amount.
+     * Get the user total margin amount.
      */
     public function getUserMarginTotal(): float
     {

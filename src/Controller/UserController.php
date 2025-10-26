@@ -342,11 +342,11 @@ class UserController extends AbstractEntityController
             $this->removeResetPasswordRequest($item);
             $result = $service->sendEmail($request, $item);
             if (false === $result) {
-                $this->warningTrans('reset_user_not_found', $parameters, 'security');
+                $this->warningTrans('reset.user_not_found', $parameters, 'security');
             } elseif (!$result instanceof ResetPasswordToken) {
-                $this->warningTrans('reset_token_not_found', $parameters, 'security');
+                $this->warningTrans('reset.token_not_found', $parameters, 'security');
             } else {
-                $this->successTrans('reset_token_send', $parameters, 'security');
+                $this->successTrans('reset.token_send', $parameters, 'security');
             }
 
             return $this->redirectToDefaultRoute($request, $item);

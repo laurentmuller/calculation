@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\DataTransformer;
+namespace App\Tests\Form\DataTransformer;
 
 use App\Form\DataTransformer\AddressTransformer;
 use PHPUnit\Framework\Attributes\DataProvider;

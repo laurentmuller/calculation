@@ -159,6 +159,28 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
     }
 
     /**
+     * Finds or create a calculation category for the given category.
+     *
+     * @psalm-suppress MixedArgumentTypeCoercion
+     */
+    public function findOrCreateCategory(Category $category): CalculationCategory
+    {
+        $code = $category->getCode();
+        /** @phpstan-var CalculationCategory|null $calculationCategory */
+        $calculationCategory = $this->categories->findFirst(
+            static fn (int $key, CalculationCategory $category): bool => $code === $category->getCode()
+        );
+        if ($calculationCategory instanceof CalculationCategory) {
+            return $calculationCategory;
+        }
+
+        $calculationCategory = CalculationCategory::create($category);
+        $this->addCategory($calculationCategory);
+
+        return $calculationCategory;
+    }
+
+    /**
      * Get the total amount.
      */
     public function getAmount(): float

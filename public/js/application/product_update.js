@@ -58,8 +58,8 @@ function getSelectableProducts() {
  */
 function validateProducts(validator) {
     'use strict';
-    return validator.form();
-    //return $('#form_allProducts').validate();
+    return validator.checkForm();
+    // return validator.form();
 }
 
 /**
@@ -143,7 +143,7 @@ $(function () {
     // number inputs
     $fixed.inputNumberFormat();
 
-    // add custom method for product selection
+    // add a custom method for product selection
     $.validator.addMethod('checkProducts', function () {
         const anySelection = getSelectableProducts().length !== 0;
         if (anySelection) {

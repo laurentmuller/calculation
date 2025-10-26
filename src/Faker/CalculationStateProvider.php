@@ -19,7 +19,7 @@ use App\Repository\CalculationStateRepository;
 /**
  * Calculation state provider.
  *
- * @template-extends EntityProvider<CalculationState>
+ * @extends EntityProvider<CalculationState>
  */
 class CalculationStateProvider extends EntityProvider
 {

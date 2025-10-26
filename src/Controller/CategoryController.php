@@ -46,7 +46,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * The controller for category entities.
  *
- * @template-extends AbstractEntityController<Category, CategoryRepository>
+ * @extends AbstractEntityController<Category, CategoryRepository>
  */
 #[Route(path: '/category', name: 'category_')]
 #[IsGranted(RoleInterface::ROLE_USER)]

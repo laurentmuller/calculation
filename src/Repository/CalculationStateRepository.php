@@ -32,7 +32,7 @@ use Doctrine\Persistence\ManagerRegistry;
  *     text: string,
  *     states: array<string, int>}>
  *
- * @template-extends AbstractRepository<CalculationState>
+ * @extends AbstractRepository<CalculationState>
  */
 class CalculationStateRepository extends AbstractRepository
 {

@@ -28,7 +28,7 @@ use Doctrine\ORM\QueryBuilder;
  * @template TEntity of AbstractCategoryItemEntity
  * @template TRepository of AbstractCategoryItemRepository<TEntity>
  *
- * @template-extends AbstractEntityTable<TEntity, TRepository>
+ * @extends AbstractEntityTable<TEntity, TRepository>
  *
  * @phpstan-import-type DropDownType from CategoryRepository
  */

@@ -28,7 +28,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @template TEntity of EntityInterface
  *
- * @template-extends ServiceEntityRepository<TEntity>
+ * @extends ServiceEntityRepository<TEntity>
  */
 abstract class AbstractRepository extends ServiceEntityRepository implements SortModeInterface
 {

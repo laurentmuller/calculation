@@ -25,7 +25,7 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * The product table.
  *
- * @template-extends AbstractCategoryItemTable<Product, ProductRepository>
+ * @extends AbstractCategoryItemTable<Product, ProductRepository>
  */
 class ProductTable extends AbstractCategoryItemTable
 {

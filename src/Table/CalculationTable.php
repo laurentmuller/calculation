@@ -27,7 +27,7 @@ use Twig\Environment;
 /**
  * The calculation table.
  *
- * @template-extends AbstractEntityTable<Calculation, CalculationRepository>
+ * @extends AbstractEntityTable<Calculation, CalculationRepository>
  */
 class CalculationTable extends AbstractEntityTable
 {

@@ -20,7 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for task entity.
  *
- * @template-extends AbstractCategoryItemRepository<Task>
+ * @extends AbstractCategoryItemRepository<Task>
  */
 class TaskRepository extends AbstractCategoryItemRepository
 {

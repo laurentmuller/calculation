@@ -34,7 +34,7 @@ use SymfonyCasts\Bundle\ResetPassword\Persistence\ResetPasswordRequestRepository
 /**
  * Repository for user entity.
  *
- * @template-extends AbstractRepository<User>
+ * @extends AbstractRepository<User>
  *
  * @implements UserProviderInterface<User>
  */

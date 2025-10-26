@@ -22,7 +22,7 @@ use App\Repository\GroupRepository;
 /**
  * Calculation group edit type.
  *
- * @template-extends AbstractEntityType<CalculationGroup>
+ * @extends AbstractEntityType<CalculationGroup>
  */
 class CalculationGroupType extends AbstractEntityType
 {

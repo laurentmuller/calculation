@@ -30,7 +30,7 @@ use Twig\Environment;
 /**
  * The calculation state table.
  *
- * @template-extends AbstractEntityTable<CalculationState, CalculationStateRepository>
+ * @extends AbstractEntityTable<CalculationState, CalculationStateRepository>
  */
 class CalculationStateTable extends AbstractEntityTable implements ServiceSubscriberInterface
 {

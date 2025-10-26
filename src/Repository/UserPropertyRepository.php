@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Repository for user's property entity.
  *
- * @template-extends AbstractRepository<UserProperty>
+ * @extends AbstractRepository<UserProperty>
  */
 class UserPropertyRepository extends AbstractRepository
 {

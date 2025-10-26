@@ -21,7 +21,7 @@ use App\Interfaces\EntityInterface;
 /**
  * Group edit type.
  *
- * @template-extends AbstractEntityType<Group>
+ * @extends AbstractEntityType<Group>
  */
 class GroupType extends AbstractEntityType
 {

@@ -67,7 +67,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 /**
  * The controller for user entities.
  *
- * @template-extends AbstractEntityController<User, UserRepository>
+ * @extends AbstractEntityController<User, UserRepository>
  */
 #[Route(path: '/user', name: 'user_')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]

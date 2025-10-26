@@ -19,7 +19,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for customer entity.
  *
- * @template-extends AbstractRepository<Customer>
+ * @extends AbstractRepository<Customer>
  */
 class CustomerRepository extends AbstractRepository
 {

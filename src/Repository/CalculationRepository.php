@@ -28,7 +28,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Repository for calculation entity.
  *
- * @template-extends AbstractRepository<Calculation>
+ * @extends AbstractRepository<Calculation>
  *
  * @phpstan-type CalculationItemEntry = array{
  *        description: string,

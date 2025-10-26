@@ -22,7 +22,7 @@ use App\Interfaces\EntityInterface;
 /**
  * Task edit type.
  *
- * @template-extends AbstractEntityType<Task>
+ * @extends AbstractEntityType<Task>
  */
 class TaskType extends AbstractEntityType
 {

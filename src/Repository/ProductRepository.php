@@ -22,7 +22,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for product entity.
  *
- * @template-extends AbstractCategoryItemRepository<Product>
+ * @extends AbstractCategoryItemRepository<Product>
  */
 class ProductRepository extends AbstractCategoryItemRepository
 {

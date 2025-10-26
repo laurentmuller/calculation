@@ -20,7 +20,7 @@ use App\Utils\FileUtils;
 /**
  * The customer table.
  *
- * @template-extends AbstractEntityTable<Customer, CustomerRepository>
+ * @extends AbstractEntityTable<Customer, CustomerRepository>
  */
 class CustomerTable extends AbstractEntityTable
 {

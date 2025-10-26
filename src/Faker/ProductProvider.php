@@ -19,7 +19,7 @@ use App\Repository\ProductRepository;
 /**
  * Product provider.
  *
- * @template-extends EntityProvider<Product>
+ * @extends EntityProvider<Product>
  */
 class ProductProvider extends EntityProvider
 {

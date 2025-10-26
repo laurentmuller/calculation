@@ -43,7 +43,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * The controller for product entities.
  *
- * @template-extends AbstractEntityController<Product, ProductRepository>
+ * @extends AbstractEntityController<Product, ProductRepository>
  */
 #[Route(path: '/product', name: 'product_')]
 #[IsGranted(RoleInterface::ROLE_USER)]

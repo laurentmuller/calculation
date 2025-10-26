@@ -47,7 +47,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * The controller for task entities.
  *
- * @template-extends AbstractEntityController<Task, TaskRepository>
+ * @extends AbstractEntityController<Task, TaskRepository>
  */
 #[Route(path: '/task', name: 'task_')]
 #[IsGranted(RoleInterface::ROLE_USER)]

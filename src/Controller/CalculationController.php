@@ -53,7 +53,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller for calculation entities.
  *
- * @template-extends AbstractEntityController<Calculation, CalculationRepository>
+ * @extends AbstractEntityController<Calculation, CalculationRepository>
  */
 #[Route(path: '/calculation', name: 'calculation_')]
 #[IsGranted(RoleInterface::ROLE_USER)]

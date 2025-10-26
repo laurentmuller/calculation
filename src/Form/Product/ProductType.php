@@ -22,7 +22,7 @@ use App\Interfaces\EntityInterface;
 /**
  * Product edit type.
  *
- * @template-extends AbstractEntityType<Product>
+ * @extends AbstractEntityType<Product>
  */
 class ProductType extends AbstractEntityType
 {

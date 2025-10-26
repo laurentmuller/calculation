@@ -19,7 +19,7 @@ use App\Repository\UserRepository;
 /**
  * User provider.
  *
- * @template-extends EntityProvider<User>
+ * @extends EntityProvider<User>
  */
 class UserProvider extends EntityProvider
 {

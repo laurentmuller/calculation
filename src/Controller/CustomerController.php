@@ -42,7 +42,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  *
  * @see Customer
  *
- * @template-extends AbstractEntityController<Customer, CustomerRepository>
+ * @extends AbstractEntityController<Customer, CustomerRepository>
  */
 #[Route(path: '/customer', name: 'customer_')]
 #[IsGranted(RoleInterface::ROLE_USER)]

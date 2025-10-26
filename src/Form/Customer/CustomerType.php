@@ -22,7 +22,7 @@ use App\Interfaces\EntityInterface;
 /**
  * Customer edit type.
  *
- * @template-extends AbstractEntityType<Customer>
+ * @extends AbstractEntityType<Customer>
  */
 class CustomerType extends AbstractEntityType
 {

@@ -25,7 +25,7 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * The task table.
  *
- * @template-extends AbstractCategoryItemTable<Task, TaskRepository>
+ * @extends AbstractCategoryItemTable<Task, TaskRepository>
  */
 class TaskTable extends AbstractCategoryItemTable
 {

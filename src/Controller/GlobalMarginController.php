@@ -41,7 +41,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * The controller for global margins entities.
  *
- * @template-extends AbstractEntityController<GlobalMargin, GlobalMarginRepository>
+ * @extends AbstractEntityController<GlobalMargin, GlobalMarginRepository>
  */
 #[Route(path: '/globalmargin', name: 'globalmargin_')]
 #[IsGranted(RoleInterface::ROLE_USER)]

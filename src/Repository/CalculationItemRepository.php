@@ -19,7 +19,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for calculation item entity.
  *
- * @template-extends AbstractRepository<CalculationItem>
+ * @extends AbstractRepository<CalculationItem>
  */
 class CalculationItemRepository extends AbstractRepository
 {

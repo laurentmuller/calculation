@@ -19,7 +19,7 @@ use App\Form\AbstractMarginType;
 /**
  * Global margin edit type.
  *
- * @template-extends AbstractMarginType<GlobalMargin>
+ * @extends AbstractMarginType<GlobalMargin>
  */
 class GlobalMarginType extends AbstractMarginType
 {

@@ -31,7 +31,7 @@ use Twig\Environment;
 /**
  * The group table.
  *
- * @template-extends AbstractEntityTable<Group, GroupRepository>
+ * @extends AbstractEntityTable<Group, GroupRepository>
  */
 class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterface
 {

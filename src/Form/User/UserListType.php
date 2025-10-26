@@ -22,7 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Type to display a list of users.
  *
- * @template-extends AbstractListEntityType<User>
+ * @extends AbstractListEntityType<User>
  */
 class UserListType extends AbstractListEntityType
 {

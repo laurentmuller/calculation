@@ -19,7 +19,7 @@ use App\Repository\CategoryRepository;
 /**
  * Category provider.
  *
- * @template-extends EntityProvider<Category>
+ * @extends EntityProvider<Category>
  */
 class CategoryProvider extends EntityProvider
 {

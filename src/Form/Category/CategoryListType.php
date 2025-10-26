@@ -22,7 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Type to display a list of categories grouped by groups.
  *
- * @template-extends AbstractListEntityType<Category>
+ * @extends AbstractListEntityType<Category>
  */
 class CategoryListType extends AbstractListEntityType
 {

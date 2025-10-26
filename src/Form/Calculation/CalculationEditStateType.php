@@ -26,7 +26,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Edit calculation state type.
  *
- * @template-extends AbstractEntityType<Calculation>
+ * @extends AbstractEntityType<Calculation>
  */
 class CalculationEditStateType extends AbstractEntityType
 {

@@ -33,7 +33,7 @@ use Twig\Environment;
 /**
  * The category table.
  *
- * @template-extends AbstractEntityTable<Category, CategoryRepository>
+ * @extends AbstractEntityTable<Category, CategoryRepository>
  */
 class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInterface
 {

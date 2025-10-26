@@ -22,7 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Type to display a list of products grouped by groups and categories.
  *
- * @template-extends AbstractListEntityType<Product>
+ * @extends AbstractListEntityType<Product>
  */
 class ProductListType extends AbstractListEntityType
 {

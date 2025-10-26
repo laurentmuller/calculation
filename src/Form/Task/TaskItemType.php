@@ -21,7 +21,7 @@ use App\Interfaces\EntityInterface;
 /**
  * Task item edit type.
  *
- * @template-extends AbstractEntityType<TaskItem>
+ * @extends AbstractEntityType<TaskItem>
  */
 class TaskItemType extends AbstractEntityType
 {

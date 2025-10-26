@@ -22,7 +22,7 @@ use App\Interfaces\EntityInterface;
 /**
  * Calculation edit type.
  *
- * @template-extends AbstractEntityType<Calculation>
+ * @extends AbstractEntityType<Calculation>
  */
 class CalculationType extends AbstractEntityType
 {

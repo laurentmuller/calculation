@@ -21,7 +21,7 @@ use App\Interfaces\EntityInterface;
 /**
  * Calculation state edit type.
  *
- * @template-extends AbstractEntityType<CalculationState>
+ * @extends AbstractEntityType<CalculationState>
  */
 class CalculationStateType extends AbstractEntityType
 {

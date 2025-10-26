@@ -23,7 +23,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for category entity.
  *
- * @template-extends AbstractRepository<Category>
+ * @extends AbstractRepository<Category>
  *
  * @phpstan-type DropDownType = array<string, array{id: int, categories: array<string, int>}>
  */

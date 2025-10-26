@@ -21,7 +21,7 @@ use App\Utils\FileUtils;
 /**
  * The global margins table.
  *
- * @template-extends AbstractEntityTable<GlobalMargin, GlobalMarginRepository>
+ * @extends AbstractEntityTable<GlobalMargin, GlobalMarginRepository>
  */
 class GlobalMarginTable extends AbstractEntityTable
 {

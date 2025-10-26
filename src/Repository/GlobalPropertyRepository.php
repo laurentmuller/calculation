@@ -19,7 +19,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for global property entity.
  *
- * @template-extends AbstractRepository<GlobalProperty>
+ * @extends AbstractRepository<GlobalProperty>
  */
 class GlobalPropertyRepository extends AbstractRepository
 {

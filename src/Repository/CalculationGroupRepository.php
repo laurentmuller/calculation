@@ -21,7 +21,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for calculation group entity.
  *
- * @template-extends AbstractRepository<CalculationGroup>
+ * @extends AbstractRepository<CalculationGroup>
  */
 class CalculationGroupRepository extends AbstractRepository
 {

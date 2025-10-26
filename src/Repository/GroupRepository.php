@@ -20,7 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for group entity.
  *
- * @template-extends AbstractRepository<Group>
+ * @extends AbstractRepository<Group>
  */
 class GroupRepository extends AbstractRepository
 {

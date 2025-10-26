@@ -46,7 +46,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * The controller for group entities.
  *
- * @template-extends AbstractEntityController<Group, GroupRepository>
+ * @extends AbstractEntityController<Group, GroupRepository>
  */
 #[Route(path: '/group', name: 'group_')]
 #[IsGranted(RoleInterface::ROLE_USER)]

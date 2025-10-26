@@ -22,7 +22,7 @@ use App\Repository\CategoryRepository;
 /**
  * Calculation category edit type.
  *
- * @template-extends AbstractEntityType<CalculationCategory>
+ * @extends AbstractEntityType<CalculationCategory>
  */
 class CalculationCategoryType extends AbstractEntityType
 {

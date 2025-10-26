@@ -23,7 +23,7 @@ use Symfony\Component\Form\Event\PreSetDataEvent;
 /**
  * User edit type.
  *
- * @template-extends AbstractEntityType<User>
+ * @extends AbstractEntityType<User>
  */
 class UserType extends AbstractEntityType
 {

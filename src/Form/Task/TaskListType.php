@@ -23,7 +23,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Type to display a list of tasks.
  *
- * @template-extends AbstractListEntityType<Task>
+ * @extends AbstractListEntityType<Task>
  */
 class TaskListType extends AbstractListEntityType
 {

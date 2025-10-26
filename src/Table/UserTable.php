@@ -30,7 +30,7 @@ use Twig\Environment;
 /**
  * The user table.
  *
- * @template-extends AbstractEntityTable<User, UserRepository>
+ * @extends AbstractEntityTable<User, UserRepository>
  */
 class UserTable extends AbstractEntityTable
 {

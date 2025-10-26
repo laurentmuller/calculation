@@ -23,7 +23,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @template T of \App\Entity\AbstractCategoryItemEntity
  *
- * @template-extends AbstractRepository<T>
+ * @extends AbstractRepository<T>
  */
 abstract class AbstractCategoryItemRepository extends AbstractRepository
 {

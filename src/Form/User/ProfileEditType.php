@@ -20,7 +20,7 @@ use App\Form\FormHelper;
 /**
  * Type to update the user profile.
  *
- * @template-extends AbstractEntityType<User>
+ * @extends AbstractEntityType<User>
  */
 class ProfileEditType extends AbstractEntityType
 {

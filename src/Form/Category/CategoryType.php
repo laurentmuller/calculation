@@ -22,7 +22,7 @@ use App\Interfaces\EntityInterface;
 /**
  * Category edit type.
  *
- * @template-extends AbstractEntityType<Category>
+ * @extends AbstractEntityType<Category>
  */
 class CategoryType extends AbstractEntityType
 {

@@ -298,7 +298,7 @@
             "entries": [
                 {
                     "route": "about_licence_index",
-                    "text": "about.licence",
+                    "text": "about.dialog_licence.title",
                     "icon": "info-circle"
                 },
                 {

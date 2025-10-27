@@ -1,32 +1,40 @@
+application:
+    name: Application
+    version: Version
+    description: Description
+    environment: Environnement
+    mode: Mode d'exécution
+    owner: Concepteur
+    github: Code source
+    github_url: GitHub
+    customer: Client
 about:
     title: A propos de
-    app_customer: Client
-    app_customer_email: E-mail
-    app_customer_phone: Téléphone
-    app_environment: Environnement
-    app_mode: Mode d'exécution
-    app_name: Application
-    app_owner: Concepteur
-    app_description: Description
-    app_version: Version
-    app_github: Code source
-    app_github_url: GitHub
+    version: Version %version%
     error: Erreur lors du chargement des informations.
     extern_link: Accéder au site
     loading: Recherche des informations...
-    database: Configuration des données
-    php: Configuration de PHP
-    php_version: Configuration de PHP v%version%
-    policy: Politique de confidentialité
-    policy_short: Confidentialité
-    symfony: Configuration de Symfony
-    symfony_version: Configuration de Symfony v%version%
-    version: Version %version%
-    licence: Accord de licence
-    dialog:
+    database:
+        title: Configuration des données
+        version: Configuration des données v%version%
+    php:
+        title: Configuration de PHP
+        version: Configuration de PHP v%version%
+    symfony:
+        title: Configuration de Symfony
+        version: Configuration de Symfony v%version%
+    policy:
+        title: Politique de confidentialité
+    licence:
+        title: Accord de licence
         display: Afficher l'accord de licence
         not_found: Impossible de trouver l'accord de licence.
         not_loaded: Impossible de charger l'accord de licence.
+    package:
+        title: Dépendances du paquet
+        display: Afficher les dépendances du paquet
+        not_found: 'Impossible de trouver le paquet: "%name%".'
+        not_loaded: Impossible de charger le paquet.
 admin:
     rights:
         title: Droits d'accès

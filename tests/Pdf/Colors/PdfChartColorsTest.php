@@ -20,12 +20,12 @@ use PHPUnit\Framework\TestCase;
 
 class PdfChartColorsTest extends TestCase
 {
-    private static PdfChartColors $colors;
+    private PdfChartColors $colors;
 
     #[\Override]
-    public static function setUpBeforeClass(): void
+    protected function setUp(): void
     {
-        self::$colors = new PdfChartColors();
+        $this->colors = new PdfChartColors();
     }
 
     /**
@@ -47,14 +47,14 @@ class PdfChartColorsTest extends TestCase
     public function testCount(): void
     {
         $expected = 7;
-        $actual = self::$colors->count();
+        $actual = $this->colors->count();
         self::assertSame($expected, $actual);
     }
 
     #[DataProvider('getColors')]
     public function testNext(int $red, int $green, int $blue): void
     {
-        $actual = self::$colors->next();
+        $actual = $this->colors->next();
         self::assertSameColor($actual, $red, $green, $blue);
     }
 

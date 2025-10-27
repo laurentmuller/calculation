@@ -1,23 +1,23 @@
 {% from 'macros/_icons.html.twig' import modal_title, modal_close_button %}
-{% set dialog_id = 'license-modal' %}
-<div class="modal fade" id="{{ dialog_id }}" tabindex="-1" aria-labelledby="modal-license-title" aria-hidden="true"
-     data-found-error="{{ 'about.licence.not_found'|trans }}"
-     data-load-error="{{ 'about.licence.not_loaded'|trans }}">
+{% set dialog_id = 'package-modal' %}
+<div class="modal fade" id="{{ dialog_id }}" tabindex="-1" aria-labelledby="modal-package-title" aria-hidden="true"
+     data-found-error="{{ 'about.package.not_found'|trans }}"
+     data-load-error="{{ 'about.package.not_loaded'|trans }}">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                {{- modal_title('modal-license-title', 'book-open-reader', 'about.licence.title', dialog_id) -}}
+                {{- modal_title('modal-package-title', 'file-code', 'about.package.title', dialog_id) -}}
             </div>
             <div class="modal-body">
                 <div class="border pre-scrollable scrollbar-thin">
-                    <div id="license-content" class="p-2 overflow-hidden"></div>
+                    <div id="package-content" class="p-2 overflow-hidden"></div>
                 </div>
             </div>
             <div class="modal-footer justify-content-start">
                 <button type="button" class="btn btn-form btn-primary btn-copy"
                         data-success="{{ 'common.copy_success'|trans }}"
                         data-error="{{ 'common.copy_error'|trans }}"
-                        data-clipboard-target="#license-content">
+                        data-clipboard-target="#package-content">
                     {{- 'common.button_copy'|trans -}}
                 </button>
                 {{- modal_close_button(for_header: false, data_target: dialog_id) }}

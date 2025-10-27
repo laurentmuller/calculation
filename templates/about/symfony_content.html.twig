@@ -23,27 +23,47 @@
     <tr>
         <th>Name</th>
         <th class="text-id">Version</th>
-        <th colspan="3">Description</th>
+        <th colspan="4">Description</th>
     </tr>
 </thead>
 {% endmacro %}
 {% macro rowPackage(package) -%}
 <tr>
-    <td class="e">{{- package.name -}}</td>
-    <td class="text-id">{{- package.version -}}</td>
+    <td class="e">{{ package.name }}</td>
+    <td class="text-id">{{ package.version }}</td>
     <td class="text">{{ package.description }}</td>
     <td>
         {%- if package.license -%}
-            <a href="#" class="d-print-none link-license" title="{{ 'about.dialog.display'|trans }}" data-file="{{ package.license }}">
-                {{- icon('book-open-reader') -}}
-            </a>
+            {{- link(
+                href: path('about_symfony_license', {file: package.license}),
+                class: 'd-print-none link-license',
+                icon: 'book-open-reader',
+                title: 'about.licence.display')
+            -}}
+        {%- else -%}
+            &nbsp;
+        {%- endif -%}
+    </td>
+    <td>
+        {%- if package.production|length or package.development|length -%}
+            {{- link(
+                href: path('about_symfony_package', {name: package.name}),
+                class: 'd-print-none link-package',
+                icon: 'file-code',
+                title: 'about.package.display')
+            -}}
         {%- else -%}
             &nbsp;
         {%- endif -%}
     </td>
     <td>
         {%- if package.homepage -%}
-            {{- linkExternal(href: package.homepage, class: 'd-print-none', icon: 'arrow-up-right-from-square', title: 'about.extern_link') -}}
+            {{- linkExternal(
+                href: package.homepage,
+                class: 'd-print-none',
+                icon: 'arrow-up-right-from-square',
+                title: 'about.extern_link')
+            -}}
         {%- else -%}
             &nbsp;
         {%- endif -%}
@@ -89,7 +109,7 @@
 {%- set debug_routes = service.debugRoutes -%}
 {# content #}
 <div class="phpversion">
-    <table id="data-table-symfony" class="table table-sm mb-0">
+    <table id="data-table-symfony" class="table table-sm table-hover mb-0">
         <tbody>
             <tr class="h">
                 <td colspan="2" class="position-relative">
@@ -112,7 +132,7 @@
         {# parameters #}
         {{ _self.headerLinkInfo('Parameters', 'parameters') }}
         <div class="collapse ps-lg-3" id="parameters" aria-labelledby="parameters-header" data-bs-parent="#symfonyAccordion">
-            <table class="table table-sm mb-0">
+            <table class="table table-sm table-hover mb-0">
                 {{ _self.headerNameValue() }}
                 <tbody>
                 {{ tools.rowInfo('Intl Locale', service.localeName) }}
@@ -126,7 +146,7 @@
         {# extensions #}
         {{ _self.headerLinkInfo('Extensions', 'extensions') }}
         <div class="collapse ps-lg-3" id="extensions" aria-labelledby="extensions-header" data-bs-parent="#symfonyAccordion">
-            <table class="table table-sm mb-0">
+            <table class="table table-sm table-hover mb-0">
                 {{ _self.headerNameValue() }}
                 <tbody>
                 {{ tools.rowInfoBoolean('OPcache', service.opCacheStatus, service.opCacheEnabled) }}
@@ -138,7 +158,7 @@
         {# directories #}
         {{ _self.headerLinkInfo('Directories', 'directories') }}
         <div class="collapse ps-lg-3" id="directories" aria-labelledby="directories-header" data-bs-parent="#symfonyAccordion">
-            <table class="table table-sm mb-0">
+            <table class="table table-sm table-hover mb-0">
                 <thead>
                 <tr>
                     <th>Name</th>
@@ -161,7 +181,7 @@
         {% if bundles|length %}
             {{ _self.headerLinkInfo('Bundles', 'bundles', bundles) }}
             <div class="collapse ps-lg-3" id="bundles" aria-labelledby="bundles-header" data-bs-parent="#symfonyAccordion">
-                <table class="table table-sm mb-0">
+                <table class="table table-sm table-hover mb-0">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -181,7 +201,7 @@
         {% if runtime_packages|length %}
             {{ _self.headerLinkInfo('Packages', 'runtime-packages', runtime_packages) }}
             <div class="accordion-collapse collapse ps-lg-3 table-responsive" id="runtime-packages" aria-labelledby="runtime-packages-header" data-bs-parent="#symfonyAccordion">
-                <table class="table table-no-end-line table-sm mb-0">
+                <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerPackage() }}
                     <tbody>
                     {% for package in runtime_packages %}
@@ -195,7 +215,7 @@
         {% if debug_packages|length %}
             {{ _self.headerLinkInfo('Debug Packages', 'dev-packages', debug_packages) }}
             <div class="accordion-collapse collapse ps-lg-3" id="dev-packages" aria-labelledby="dev-packages-header" data-bs-parent="#symfonyAccordion">
-                <table class="table table-no-end-line table-sm mb-0">
+                <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerPackage() }}
                     <tbody>
                     {% for package in debug_packages %}
@@ -209,7 +229,7 @@
         {% if runtime_routes|length %}
             {{ _self.headerLinkInfo('Routes', 'runtime-routes', runtime_routes) }}
             <div class="accordion-collapse collapse ps-lg-3" id="runtime-routes" aria-labelledby="runtime-routes-header" data-bs-parent="#symfonyAccordion">
-                <table class="table table-no-end-line table-sm mb-0">
+                <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerRoute() }}
                     <tbody>
                     {% for route in runtime_routes %}
@@ -223,7 +243,7 @@
         {% if debug_routes|length %}
             {{ _self.headerLinkInfo('Debug Routes', 'debug-routes', debug_routes) }}
             <div class="accordion-collapse collapse ps-lg-3" id="debug-routes" aria-labelledby="debug-routes-header" data-bs-parent="#symfonyAccordion">
-                <table class="table table-no-end-line table-sm mb-0">
+                <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerRoute() }}
                     <tbody>
                     {% for route in debug_routes %}
@@ -236,3 +256,4 @@
      </div>
 </div>
 {{ include('dialog/dialog_license.html.twig') }}
+{{ include('dialog/dialog_package.html.twig') }}

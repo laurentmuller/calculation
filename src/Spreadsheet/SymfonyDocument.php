@@ -37,15 +37,15 @@ class SymfonyDocument extends AbstractDocument
     #[\Override]
     public function render(): bool
     {
-        $info = $this->service;
-        $this->start($this->trans('about.symfony_version', ['%version%' => $info->getVersion()]));
+        $service = $this->service;
+        $this->start($this->trans('about.symfony.version', ['%version%' => $service->getVersion()]));
         $this->setActiveTitle('Configuration', $this->controller);
-        $this->outputInfo($info);
-        $this->outputBundles($info->getBundles());
-        $this->outputPackages('Packages', $info->getRuntimePackages());
-        $this->outputPackages('Debug Packages', $info->getDebugPackages());
-        $this->outputRoutes('Routes', $info->getRuntimeRoutes());
-        $this->outputRoutes('Debug Routes', $info->getDebugRoutes());
+        $this->outputInfo($service);
+        $this->outputBundles($service->getBundles());
+        $this->outputPackages('Packages', $service->getRuntimePackages());
+        $this->outputPackages('Debug Packages', $service->getDebugPackages());
+        $this->outputRoutes('Routes', $service->getRuntimeRoutes());
+        $this->outputRoutes('Debug Routes', $service->getDebugRoutes());
         $this->setActiveSheetIndex(0);
 
         return true;

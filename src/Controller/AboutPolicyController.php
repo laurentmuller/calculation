@@ -45,7 +45,7 @@ class AboutPolicyController extends AbstractAboutController
     #[\Override]
     protected function getTitle(): string
     {
-        return 'about.policy';
+        return 'about.policy.title';
     }
 
     #[\Override]

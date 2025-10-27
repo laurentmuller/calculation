@@ -10,7 +10,7 @@
      */
     function notifyWarning(message) {
         const type = Toaster.NotificationTypes.WARNING;
-        const title = $('#license-modal .modal-header').text().trim();
+        const title = $('.card-title:first').text().trim();
         Toaster.notify(type, message, title);
     }
 
@@ -84,6 +84,36 @@
                     $dialog.modal('hide');
                 }
             });
+        },
+
+        /**
+         *  @param {string} [content]
+         */
+        displayPackage: function (content) {
+            const $link = $(this);
+            if (content) {
+                $link.data('package', content);
+            } else {
+                content = $link.data('package');
+            }
+            $('#package-content').html(content);
+
+            // modal dialog
+            const $dialog = $('#package-modal');
+            $dialog.one('hidden.bs.modal', function () {
+                $link.scrollInViewport().trigger('focus');
+            }).modal('show');
+
+            // clipboard
+            $('#package-modal .btn-copy').copyClipboard({
+                title: $('#modal-package-title').text().trim(),
+                copySuccess: function () {
+                    $dialog.modal('hide');
+                },
+                copyError: function () {
+                    $dialog.modal('hide');
+                }
+            });
         }
     });
 
@@ -111,13 +141,12 @@
             $(e.target).updateTitle(expandTitle);
         });
 
-        // license
-        $accordion.on('hide.bs.modal', '#license-modal', function () {
-            $('#license-modal .pre-scrollable').scrollTop(0);
+        $accordion.on('hide.bs.modal', '.modal', function () {
+            $('.modal .pre-scrollable').scrollTop(0);
         }).on('click', '#license-modal a', function (e) {
             e.preventDefault();
             window.open(e.target.href, '_blank');
-        }).on('click', '.link-license[data-file]', function (e) {
+        }).on('click', '.link-license', function (e) {
             e.preventDefault();
             const $this = $(this);
             if ($this.data('content')) {
@@ -125,22 +154,41 @@
                 return;
             }
             const $modal = $('#license-modal');
-            const file = $this.data('file');
-            const url = $modal.data('url');
-            if (!file || !url) {
+            const url = $this.attr('href');
+            if (!url || '#' === url) {
                 $this.fadeOut();
-                const message = $modal.data('load-error');
-                notifyWarning(message);
+                notifyWarning($modal.data('load-error'));
                 return;
             }
-            $.getJSON(url, {'file': file}, function (response) {
+            $.getJSON(url, function (response) {
                 if (response.result && response.content) {
                     $this.displayLicense(response.content);
                     return;
                 }
                 $this.fadeOut();
-                const message = response.message || $modal.data('found-error');
-                notifyWarning(message);
+                notifyWarning(response.message || $modal.data('found-error'));
+            });
+        }).on('click', '.link-package', function (e) {
+            e.preventDefault();
+            const $this = $(this);
+            if ($this.data('package')) {
+                $this.displayPackage();
+                return;
+            }
+            const $modal = $('#package-modal');
+            const url = $this.attr('href');
+            if (!url || '#' === url) {
+                $this.fadeOut();
+                notifyWarning($modal.data('load-error'));
+                return;
+            }
+            $.getJSON(url, function (response) {
+                if (response.result && response.content) {
+                    $this.displayPackage(response.content);
+                    return;
+                }
+                $this.fadeOut();
+                notifyWarning(response.message || $modal.data('found-error'));
             });
         });
     });

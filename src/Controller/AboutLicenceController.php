@@ -43,7 +43,7 @@ class AboutLicenceController extends AbstractAboutController
     #[\Override]
     protected function getTitle(): string
     {
-        return 'about.licence';
+        return 'about.licence.title';
     }
 
     #[\Override]

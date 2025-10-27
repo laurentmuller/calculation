@@ -45,13 +45,17 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     description?: string,
  *     homepage?: string,
  *     install-path: string,
- *     support?: array{source?: string}}
+ *     support?: array{source?: string},
+ *     require?: array<string, string>,
+ *     require-dev?: array<string, string>}
  * @phpstan-type PackageType = array{
  *     name: string,
  *     version: string,
  *     description: string,
  *     homepage: string|null,
- *     license: string|null}
+ *     license: string|null,
+ *     production: array<string, string>,
+ *     development: array<string, string>}
  * @phpstan-type PackagesType = array{
  *     runtime: array<string, PackageType>,
  *     debug: array<string, PackageType>}
@@ -290,6 +294,18 @@ final readonly class SymfonyInfoService
     }
 
     /**
+     * Gets the package for the given name.
+     *
+     * @phpstan-return PackageType|null
+     */
+    public function getPackage(string $name): ?array
+    {
+        $packages = $this->getPackages();
+
+        return $packages[self::KEY_RUNTIME][$name] ?? $packages[self::KEY_DEBUG][$name] ?? null;
+    }
+
+    /**
      * Gets the project directory path.
      */
     public function getProjectDir(): string
@@ -409,15 +425,6 @@ final readonly class SymfonyInfoService
         return \str_starts_with($this->getXdebugStatus(), self::LABEL_ENABLED);
     }
 
-    private function cleanDescription(string $description): string
-    {
-        if ('' !== $description && !\str_ends_with($description, '.')) {
-            return $description . '.';
-        }
-
-        return $description;
-    }
-
     private function createDate(string $date): DatePoint
     {
         return DatePoint::createFromFormat('m/Y', $date);
@@ -482,7 +489,38 @@ final readonly class SymfonyInfoService
     /**
      * @phpstan-param PackageSourceType $package
      */
-    private function getLicense(array $package): ?string
+    private function getPackageDescription(array $package): string
+    {
+        $description = $package['description'] ?? '';
+        if ('' === $description || \str_ends_with($description, '.')) {
+            return $description;
+        }
+
+        return $description . '.';
+    }
+
+    /**
+     * @phpstan-param PackageSourceType $package
+     *
+     * @return array<string, string>
+     */
+    private function getPackageDevelopment(array $package): array
+    {
+        return $package['require-dev'] ?? [];
+    }
+
+    /**
+     * @phpstan-param PackageSourceType $package
+     */
+    private function getPackageHomepage(array $package): ?string
+    {
+        return $package['homepage'] ?? $package['support']['source'] ?? null;
+    }
+
+    /**
+     * @phpstan-param PackageSourceType $package
+     */
+    private function getPackageLicense(array $package): ?string
     {
         $pattern = FileUtils::buildPath(
             $this->projectDir,
@@ -496,6 +534,16 @@ final readonly class SymfonyInfoService
         }
 
         return null;
+    }
+
+    /**
+     * @phpstan-param PackageSourceType $package
+     *
+     * @return array<string, string>
+     */
+    private function getPackageProduction(array $package): array
+    {
+        return $package['require'] ?? [];
     }
 
     /**
@@ -517,6 +565,14 @@ final readonly class SymfonyInfoService
 
             return $this->parsePackages($runtimePackages, $debugPackages);
         });
+    }
+
+    /**
+     * @phpstan-param PackageSourceType $package
+     */
+    private function getPackageVersion(array $package): string
+    {
+        return \ltrim($package['version'], 'v');
     }
 
     /**
@@ -570,10 +626,12 @@ final readonly class SymfonyInfoService
             $name = $package['name'];
             $entry = [
                 'name' => $name,
-                'license' => $this->getLicense($package),
-                'version' => \ltrim($package['version'], 'v'),
-                'description' => $this->cleanDescription($package['description'] ?? ''),
-                'homepage' => $package['homepage'] ?? $package['support']['source'] ?? null,
+                'version' => $this->getPackageVersion($package),
+                'license' => $this->getPackageLicense($package),
+                'homepage' => $this->getPackageHomepage($package),
+                'description' => $this->getPackageDescription($package),
+                'production' => $this->getPackageProduction($package),
+                'development' => $this->getPackageDevelopment($package),
             ];
             $type = \in_array($name, $debugPackages, true) ? self::KEY_DEBUG : self::KEY_RUNTIME;
             $result[$type][$name] = $entry;

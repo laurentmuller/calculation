@@ -31,7 +31,7 @@ class DatabaseReport extends AbstractReport
     public function __construct(AbstractController $controller, private readonly DatabaseInfoService $service)
     {
         parent::__construct($controller);
-        $this->setTranslatedTitle(id: 'about.database', isUTF8: true);
+        $this->setTranslatedTitle('about.database.version', ['%version%' => $service->getVersion()], true);
     }
 
     #[\Override]

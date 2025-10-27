@@ -1,7 +1,7 @@
 {% extends 'cards/card_base.html.twig' %}
 {% from 'macros/_icons.html.twig' import link, homepage, sitemap, button_pdf, button_word %}
 {# parameters #}
-{%- set title = 'about.policy' -%}
+{%- set title = 'about.policy.title' -%}
 {%- set title_icon = 'info-circle' -%}
 {%- set accepted = app.request.cookies.boolean(constant('App\\Controller\\PolicyController::POLICY_ACCEPTED')) -%}
 {%- set is_remembered = is_granted(IS_AUTHENTICATED_REMEMBERED) -%}
@@ -28,7 +28,7 @@
     {{ sitemap() }}
     {% set caller = app.request.query.string('caller') %}
     {% set params = caller ? {caller: caller} : {} %}
-    {{ link(path('about_licence_index', params), 'about.licence', 'btn btn-form btn-secondary') }}
+    {{ link(path('about_licence_index', params), 'about.licence.title', 'btn btn-form btn-secondary') }}
     {{ button_pdf('about_policy_pdf') }}
     {{ button_word('about_policy_word') }}
 </div>

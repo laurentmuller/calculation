@@ -37,7 +37,7 @@ class SymfonyReport extends AbstractReport
         private readonly SymfonyInfoService $service
     ) {
         parent::__construct($controller);
-        $this->setTranslatedTitle('about.symfony_version', ['%version%' => $service->getVersion()]);
+        $this->setTranslatedTitle('about.symfony.version', ['%version%' => $service->getVersion()]);
     }
 
     #[\Override]

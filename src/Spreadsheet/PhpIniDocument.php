@@ -38,7 +38,7 @@ class PhpIniDocument extends AbstractDocument
     {
         $content = $this->service->asArray();
         $version = $this->service->getVersion();
-        $this->start($this->trans('about.php_version', ['%version%' => $version]));
+        $this->start($this->trans('about.php.version', ['%version%' => $version]));
         $this->setActiveTitle('Configuration', $this->controller);
         $sheet = $this->getActiveSheet();
 

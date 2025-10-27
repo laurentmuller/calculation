@@ -33,13 +33,14 @@ class DatabaseDocument extends AbstractDocument
     #[\Override]
     public function render(): bool
     {
-        $database = $this->service->getDatabase();
-        $configuration = $this->service->getConfiguration();
+        $service = $this->service;
+        $database = $service->getDatabase();
+        $configuration = $service->getConfiguration();
         if ([] === $database && [] === $configuration) {
             return false;
         }
 
-        $this->start($this->trans('about.database'));
+        $this->start($this->trans('about.database.version', ['%version%' => $service->getVersion()]));
         $sheet = $this->getActiveSheet();
         if ($this->outputArray($sheet, 'Database', $database)) {
             $sheet = $this->createSheet();

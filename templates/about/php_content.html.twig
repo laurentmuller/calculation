@@ -4,7 +4,7 @@
         {{- tools.content_header_link('https://www.php.net', version, 'php-alt', true) -}}
     </div>
     {{ phpInfo|raw }}
-    <table id="data-table-extra" class="table table-sm mb-0">
+    <table id="data-table-extra" class="table table-sm table-hover mb-0">
         <tbody>
             {{ tools.headerInfo('Configuration') }}
             {{ tools.rowInfo('Loaded Extensions', extensions) }}

@@ -32,6 +32,8 @@ use Twig\Extra\Markdown\MarkdownInterface;
 
 /**
  * Controller to output symfony information.
+ *
+ * @phpstan-import-type PackageType from SymfonyInfoService
  */
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 #[Route(path: '/about/symfony', name: 'about_symfony_')]
@@ -65,21 +67,66 @@ class AboutSymfonyController extends AbstractController
     ): JsonResponse {
         $file = FileUtils::buildPath($projectDir, $file);
         if (!FileUtils::exists($file)) {
-            return $this->jsonFalse(['message' => $this->trans('about.dialog.not_found')]);
+            return $this->jsonFalse(['message' => $this->trans('about.licence.not_found')]);
         }
         $content = FileUtils::readFile($file);
         if ('' === $content) {
-            return $this->jsonFalse(['message' => $this->trans('about.dialog.not_loaded')]);
+            return $this->jsonFalse(['message' => $this->trans('about.licence.not_loaded')]);
         }
 
-        return $this->jsonTrue([
-            'content' => $markdown->convert($content),
-        ]);
+        return $this->jsonTrue(['content' => $markdown->convert($content)]);
+    }
+
+    /**
+     * Gets the package definition.
+     */
+    #[GetRoute(path: '/package', name: 'package')]
+    public function package(
+        #[MapQueryParameter]
+        string $name,
+        SymfonyInfoService $service,
+        MarkdownInterface $markdown,
+    ): JsonResponse {
+        $package = $service->getPackage($name);
+        if (null === $package) {
+            return $this->jsonFalse(['message' => $this->trans('about.package.not_found', ['%name%' => $name])]);
+        }
+
+        $content = $this->buildMarkdownPackage($package);
+
+        return $this->jsonTrue(['content' => $markdown->convert($content)]);
     }
 
     #[PdfRoute]
     public function pdf(SymfonyInfoService $service): PdfResponse
     {
         return $this->renderPdfDocument(new SymfonyReport($this, $service));
+    }
+
+    /**
+     * @phpstan-param PackageType $package
+     */
+    private function buildMarkdownPackage(array $package): string
+    {
+        return \sprintf("**%s** *v%s*\n***", $package['name'], $package['version'])
+            . $this->implodeValues('Production', $package['production'])
+            . $this->implodeValues('Development', $package['development']);
+    }
+
+    /**
+     * @phpstan-param array<string, string> $values
+     */
+    private function implodeValues(string $title, array $values): string
+    {
+        if ([] === $values) {
+            return '';
+        }
+        $values = \array_map(
+            static fn (string $key, string $version): string => \sprintf('- `%s: %s`', $key, $version),
+            \array_keys($values),
+            \array_values($values)
+        );
+
+        return \sprintf("\n\n**%s**\n\n%s", $title, \implode("\n", $values));
     }
 }

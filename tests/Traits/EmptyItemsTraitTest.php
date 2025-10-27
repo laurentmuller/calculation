@@ -16,7 +16,7 @@ namespace App\Tests\Traits;
 use App\Traits\EmptyItemsTrait;
 use PHPUnit\Framework\TestCase;
 
-class EmptyItemsTraitTest extends TestCase
+final class EmptyItemsTraitTest extends TestCase
 {
     use EmptyItemsTrait;
 

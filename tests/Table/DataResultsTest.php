@@ -18,7 +18,7 @@ use App\Table\DataResults;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class DataResultsTest extends TestCase
+final class DataResultsTest extends TestCase
 {
     public function testAttribute(): void
     {

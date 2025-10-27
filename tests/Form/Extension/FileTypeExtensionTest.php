@@ -20,7 +20,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
-class FileTypeExtensionTest extends TypeTestCase
+final class FileTypeExtensionTest extends TypeTestCase
 {
     public function testFormViewWithMaxFiles(): void
     {
@@ -180,20 +180,6 @@ class FileTypeExtensionTest extends TypeTestCase
     }
 
     /**
-     * @phpstan-return FormInterface<mixed>
-     */
-    protected function createForm(array $options = []): FormInterface
-    {
-        return $this->factory->create(FileType::class, null, $options);
-    }
-
-    protected function createView(array $options = []): FormView
-    {
-        return $this->createForm($options)
-            ->createView();
-    }
-
-    /**
      * @return FileTypeExtension[]
      */
     #[\Override]
@@ -202,5 +188,19 @@ class FileTypeExtensionTest extends TypeTestCase
         return [
             new FileTypeExtension(),
         ];
+    }
+
+    /**
+     * @phpstan-return FormInterface<mixed>
+     */
+    private function createForm(array $options = []): FormInterface
+    {
+        return $this->factory->create(FileType::class, null, $options);
+    }
+
+    private function createView(array $options = []): FormView
+    {
+        return $this->createForm($options)
+            ->createView();
     }
 }

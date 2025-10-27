@@ -20,7 +20,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @extends AlphaCaptchaTestCase<VowelCaptcha>
  */
-class VowelCaptchaTest extends AlphaCaptchaTestCase
+final class VowelCaptchaTest extends AlphaCaptchaTestCase
 {
     #[\Override]
     protected function createCaptcha(DictionaryService $service, TranslatorInterface $translator): VowelCaptcha

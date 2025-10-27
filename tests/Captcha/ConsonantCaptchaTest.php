@@ -20,7 +20,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @extends AlphaCaptchaTestCase<ConsonantCaptcha>
  */
-class ConsonantCaptchaTest extends AlphaCaptchaTestCase
+final class ConsonantCaptchaTest extends AlphaCaptchaTestCase
 {
     public function testNegativeIndex(): void
     {

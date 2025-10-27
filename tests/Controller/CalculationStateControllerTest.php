@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class CalculationStateControllerTest extends EntityControllerTestCase
+final class CalculationStateControllerTest extends EntityControllerTestCase
 {
     use CalculationTrait;
 

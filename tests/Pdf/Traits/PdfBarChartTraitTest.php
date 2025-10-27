@@ -20,7 +20,7 @@ use App\Pdf\Traits\PdfBarChartTrait;
 use App\Report\AbstractReport;
 use PHPUnit\Framework\TestCase;
 
-class PdfBarChartTraitTest extends TestCase
+final class PdfBarChartTraitTest extends TestCase
 {
     public function testEmpty(): void
     {

@@ -18,7 +18,7 @@ use App\Parameter\CustomerParameter;
 /**
  * @extends ParameterTestCase<CustomerParameter>
  */
-class CustomerParameterTest extends ParameterTestCase
+final class CustomerParameterTest extends ParameterTestCase
 {
     #[\Override]
     public static function getParameterNames(): \Generator

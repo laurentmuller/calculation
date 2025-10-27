@@ -18,7 +18,7 @@ use App\Traits\TableCellTrait;
 use Twig\Environment;
 use Twig\Error\Error;
 
-class TableCellTraitTest extends KernelServiceTestCase
+final class TableCellTraitTest extends KernelServiceTestCase
 {
     use TableCellTrait;
 

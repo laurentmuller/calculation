@@ -21,7 +21,7 @@ use App\Service\FontAwesomeService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class FontAwesomeServiceTest extends TestCase
+final class FontAwesomeServiceTest extends TestCase
 {
     public function testCellImageNull(): void
     {

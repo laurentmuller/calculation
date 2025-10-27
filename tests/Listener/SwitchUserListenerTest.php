@@ -27,7 +27,7 @@ use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
 
-class SwitchUserListenerTest extends TestCase
+final class SwitchUserListenerTest extends TestCase
 {
     use TranslatorMockTrait;
 

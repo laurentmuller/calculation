@@ -17,7 +17,7 @@ use App\Pivot\Field\PivotField;
 use App\Pivot\Field\PivotMethod;
 use PHPUnit\Framework\TestCase;
 
-class PivotFieldTest extends TestCase
+final class PivotFieldTest extends TestCase
 {
     public function testConstructor(): void
     {

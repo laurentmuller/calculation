@@ -18,7 +18,7 @@ use App\Repository\GlobalPropertyRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
 
-class GlobalPropertyRepositoryTest extends KernelServiceTestCase
+final class GlobalPropertyRepositoryTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
 

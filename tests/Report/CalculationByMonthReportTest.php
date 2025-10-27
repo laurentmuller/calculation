@@ -20,7 +20,7 @@ use App\Report\CalculationByMonthReport;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class CalculationByMonthReportTest extends TestCase
+final class CalculationByMonthReportTest extends TestCase
 {
     public function testNewPage(): void
     {

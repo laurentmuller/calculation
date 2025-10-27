@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class CategoryControllerTest extends EntityControllerTestCase
+final class CategoryControllerTest extends EntityControllerTestCase
 {
     use CalculationTrait;
     use CategoryTrait;

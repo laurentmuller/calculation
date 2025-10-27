@@ -18,7 +18,7 @@ use App\Model\GlobalMargins;
 use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\TestCase;
 
-class GlobalMarginsTest extends TestCase
+final class GlobalMarginsTest extends TestCase
 {
     use IdTrait;
 

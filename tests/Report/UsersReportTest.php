@@ -22,7 +22,7 @@ use App\Service\RoleService;
 use PHPUnit\Framework\TestCase;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
-class UsersReportTest extends TestCase
+final class UsersReportTest extends TestCase
 {
     public function testWithImageGreater(): void
     {

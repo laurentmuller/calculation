@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-class SiteMapControllerTest extends ControllerTestCase
+final class SiteMapControllerTest extends ControllerTestCase
 {
     #[\Override]
     public static function getRoutes(): \Generator

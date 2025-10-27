@@ -18,7 +18,7 @@ use App\Tests\EntityTrait\TaskItemTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AjaxControllerTest extends ControllerTestCase
+final class AjaxControllerTest extends ControllerTestCase
 {
     use TaskItemTrait;
 
@@ -148,7 +148,7 @@ class AjaxControllerTest extends ControllerTestCase
             xmlHttpRequest: true,
             parameters: $parameters
         );
-        self::assertContentException($content);
+        $this->assertContentException($content);
     }
 
     public function testSaveSessionSuccess(): void
@@ -165,7 +165,7 @@ class AjaxControllerTest extends ControllerTestCase
             xmlHttpRequest: true,
             parameters: $parameters
         );
-        self::assertContentValid($content);
+        $this->assertContentValid($content);
     }
 
     public function testSaveTable(): void
@@ -181,10 +181,22 @@ class AjaxControllerTest extends ControllerTestCase
             xmlHttpRequest: true,
             parameters: $parameters
         );
-        self::assertContentValid($content);
+        $this->assertContentValid($content);
     }
 
-    protected static function assertContentException(string|false $content): void
+    #[\Override]
+    protected function deleteEntities(): void
+    {
+        $this->deleteTaskItem();
+    }
+
+    #[\Override]
+    protected function mustDeleteEntities(): bool
+    {
+        return true;
+    }
+
+    private function assertContentException(string|false $content): void
     {
         self::assertIsString($content);
         $actual = \json_decode($content, true);
@@ -201,24 +213,12 @@ class AjaxControllerTest extends ControllerTestCase
         self::assertIsArray($actual['exception']);
     }
 
-    protected static function assertContentValid(string|false $content): void
+    private function assertContentValid(string|false $content): void
     {
         self::assertIsString($content);
         $actual = \json_decode($content, true);
         self::assertIsBool($actual);
         self::assertTrue($actual);
-    }
-
-    #[\Override]
-    protected function deleteEntities(): void
-    {
-        $this->deleteTaskItem();
-    }
-
-    #[\Override]
-    protected function mustDeleteEntities(): bool
-    {
-        return true;
     }
 
     private function checkTaskRequest(array $parameters, int $expected): void

@@ -17,7 +17,7 @@ use App\Pdf\Html\HtmlListType;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class HtmlListTypeTest extends TestCase
+final class HtmlListTypeTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{0: positive-int, 1: string, 2?: string}>

@@ -16,7 +16,7 @@ namespace App\Tests\Model;
 use App\Model\HttpClientError;
 use PHPUnit\Framework\TestCase;
 
-class HttpClientErrorTest extends TestCase
+final class HttpClientErrorTest extends TestCase
 {
     public function testConstructor(): void
     {

@@ -34,7 +34,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class DataQueryValueResolverTest extends TestCase
+final class DataQueryValueResolverTest extends TestCase
 {
     use TranslatorMockTrait;
 

@@ -20,7 +20,7 @@ use App\Tests\Form\EntityTypeTestCase;
 /**
  * @extends EntityTypeTestCase<User, ProfileEditType>
  */
-class ProfileEditTypeTest extends EntityTypeTestCase
+final class ProfileEditTypeTest extends EntityTypeTestCase
 {
     use VichImageTypeTrait;
 

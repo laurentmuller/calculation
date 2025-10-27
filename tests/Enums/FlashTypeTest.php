@@ -18,7 +18,7 @@ use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class FlashTypeTest extends TestCase
+final class FlashTypeTest extends TestCase
 {
     use TranslatorMockTrait;
 

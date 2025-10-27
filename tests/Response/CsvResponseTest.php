@@ -16,7 +16,7 @@ namespace App\Tests\Response;
 use App\Response\CsvResponse;
 use PHPUnit\Framework\TestCase;
 
-class CsvResponseTest extends TestCase
+final class CsvResponseTest extends TestCase
 {
     public function testGetFileExtension(): void
     {

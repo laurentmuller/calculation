@@ -18,7 +18,7 @@ use App\Service\CountryFlagService;
 /**
  * @extends RuntimeTestCase<CountryFlagService>
  */
-class CountryFlagServiceTest extends RuntimeTestCase
+final class CountryFlagServiceTest extends RuntimeTestCase
 {
     #[\Override]
     protected function createService(): object

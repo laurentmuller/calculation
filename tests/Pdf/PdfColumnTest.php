@@ -17,7 +17,7 @@ use App\Pdf\PdfColumn;
 use fpdf\Enums\PdfTextAlignment;
 use PHPUnit\Framework\TestCase;
 
-class PdfColumnTest extends TestCase
+final class PdfColumnTest extends TestCase
 {
     public function testAlignment(): void
     {

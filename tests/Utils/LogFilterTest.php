@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
 use Symfony\Component\Clock\DatePoint;
 
-class LogFilterTest extends TestCase
+final class LogFilterTest extends TestCase
 {
     public function testFilterByChannel(): void
     {

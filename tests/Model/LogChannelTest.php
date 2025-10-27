@@ -17,7 +17,7 @@ use App\Model\LogChannel;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class LogChannelTest extends TestCase
+final class LogChannelTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{non-empty-string, string}>

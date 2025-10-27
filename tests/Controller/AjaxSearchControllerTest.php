@@ -15,7 +15,7 @@ namespace App\Tests\Controller;
 
 use App\Tests\EntityTrait\ProductTrait;
 
-class AjaxSearchControllerTest extends ControllerTestCase
+final class AjaxSearchControllerTest extends ControllerTestCase
 {
     use ProductTrait;
 

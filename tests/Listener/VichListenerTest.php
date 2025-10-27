@@ -27,7 +27,7 @@ use Vich\UploaderBundle\Event\Event;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
 use Vich\UploaderBundle\Naming\NamerInterface;
 
-class VichListenerTest extends TestCase
+final class VichListenerTest extends TestCase
 {
     use TranslatorMockTrait;
 

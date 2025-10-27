@@ -23,7 +23,7 @@ use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
-class GoogleTranslatorServiceTest extends TestCase
+final class GoogleTranslatorServiceTest extends TestCase
 {
     /**
      * @throws ExceptionInterface

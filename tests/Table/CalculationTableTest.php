@@ -30,7 +30,7 @@ use Twig\Error\Error;
 /**
  * @extends EntityTableTestCase<Calculation, CalculationRepository, CalculationTable>
  */
-class CalculationTableTest extends EntityTableTestCase
+final class CalculationTableTest extends EntityTableTestCase
 {
     private int $id;
     private int $stateId;

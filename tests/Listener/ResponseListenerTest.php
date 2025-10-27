@@ -29,8 +29,29 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class ResponseListenerTest extends TestCase
+final class ResponseListenerTest extends TestCase
 {
+    public static function assertHeader(ResponseHeaderBag $headers, string $key, string $value): void
+    {
+        self::assertTrue($headers->has($key));
+        self::assertSame($headers->get($key), $value);
+    }
+
+    public static function assertResponse(Response $response, bool $cspSuccess, bool $headersSuccess): void
+    {
+        $headers = $response->headers;
+
+        // CSP header
+        self::assertSame($cspSuccess, $headers->has('Content-Security-Policy'));
+
+        // default headers
+        if ($headersSuccess) {
+            self::assertHeader($headers, 'referrer-policy', 'same-origin');
+            self::assertHeader($headers, 'X-Content-Type-Options', 'nosniff');
+            self::assertHeader($headers, 'x-permitted-cross-domain-policies', 'none');
+        }
+    }
+
     public function testDebugDevFirewall(): void
     {
         $file = $this->getCspFile();
@@ -106,27 +127,6 @@ class ResponseListenerTest extends TestCase
         $value = 'max-age=63072000; includeSubDomains; preload';
         $headers = $event->getResponse()->headers;
         self::assertHeader($headers, $key, $value);
-    }
-
-    protected static function assertHeader(ResponseHeaderBag $headers, string $key, string $value): void
-    {
-        self::assertTrue($headers->has($key));
-        self::assertSame($headers->get($key), $value);
-    }
-
-    protected static function assertResponse(Response $response, bool $cspSuccess, bool $headersSuccess): void
-    {
-        $headers = $response->headers;
-
-        // CSP header
-        self::assertSame($cspSuccess, $headers->has('Content-Security-Policy'));
-
-        // default headers
-        if ($headersSuccess) {
-            self::assertHeader($headers, 'referrer-policy', 'same-origin');
-            self::assertHeader($headers, 'X-Content-Type-Options', 'nosniff');
-            self::assertHeader($headers, 'x-permitted-cross-domain-policies', 'none');
-        }
     }
 
     private function createEvent(

@@ -26,7 +26,7 @@ use Doctrine\ORM\UnitOfWork;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-class IndexServiceTest extends TestCase
+final class IndexServiceTest extends TestCase
 {
     public function testClear(): void
     {

@@ -27,7 +27,7 @@ use App\Tests\KernelServiceTestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-class UserServiceTest extends KernelServiceTestCase
+final class UserServiceTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
 

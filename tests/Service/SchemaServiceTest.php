@@ -42,7 +42,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-class SchemaServiceTest extends TestCase
+final class SchemaServiceTest extends TestCase
 {
     private const TABLE_PROPERTY = 'property';
     private const TABLE_USER = 'user';

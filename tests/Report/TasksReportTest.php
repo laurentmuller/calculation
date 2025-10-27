@@ -22,7 +22,7 @@ use App\Entity\TaskItemMargin;
 use App\Report\TasksReport;
 use PHPUnit\Framework\TestCase;
 
-class TasksReportTest extends TestCase
+final class TasksReportTest extends TestCase
 {
     public function testRender(): void
     {

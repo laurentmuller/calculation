@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Translation\TranslatableMessage;
 
-class NotificationEmailTest extends TestCase
+final class NotificationEmailTest extends TestCase
 {
     use TranslatorMockTrait;
 

@@ -20,7 +20,7 @@ use App\Utils\StringUtils;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class StringUtilsTest extends TestCase
+final class StringUtilsTest extends TestCase
 {
     use PrivateInstanceTrait;
 

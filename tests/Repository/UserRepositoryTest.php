@@ -25,7 +25,7 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\InMemoryUser;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 
-class UserRepositoryTest extends KernelServiceTestCase
+final class UserRepositoryTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
 

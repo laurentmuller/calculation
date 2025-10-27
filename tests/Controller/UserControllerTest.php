@@ -30,7 +30,7 @@ use SymfonyCasts\Bundle\ResetPassword\Exception\FakeRepositoryException;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
-class UserControllerTest extends EntityControllerTestCase
+final class UserControllerTest extends EntityControllerTestCase
 {
     /**
      * @phpstan-return \Generator<int, array{0: int}>

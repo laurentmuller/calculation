@@ -18,7 +18,7 @@ use App\Entity\Group;
 use App\Entity\Product;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class ProductTest extends EntityValidatorTestCase
+final class ProductTest extends EntityValidatorTestCase
 {
     /**
      * @phpstan-return \Generator<int, array{float, float}>

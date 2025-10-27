@@ -16,7 +16,7 @@ namespace App\Tests\Entity;
 use App\Entity\Group;
 use App\Entity\GroupMargin;
 
-class GroupMarginsTest extends EntityValidatorTestCase
+final class GroupMarginsTest extends EntityValidatorTestCase
 {
     public function testInvalidMargin(): void
     {

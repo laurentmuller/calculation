@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extra\Markdown\MarkdownInterface;
 
-class CommentControllerTest extends ControllerTestCase
+final class CommentControllerTest extends ControllerTestCase
 {
     #[\Override]
     public static function getRoutes(): \Generator

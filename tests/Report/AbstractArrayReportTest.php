@@ -17,7 +17,7 @@ use App\Controller\AbstractController;
 use App\Report\AbstractArrayReport;
 use PHPUnit\Framework\TestCase;
 
-class AbstractArrayReportTest extends TestCase
+final class AbstractArrayReportTest extends TestCase
 {
     public function testRender(): void
     {

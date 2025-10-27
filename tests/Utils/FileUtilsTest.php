@@ -19,7 +19,7 @@ use App\Utils\FileUtils;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class FileUtilsTest extends TestCase
+final class FileUtilsTest extends TestCase
 {
     use PrivateInstanceTrait;
 

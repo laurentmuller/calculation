@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-class FontAwesomeCommandTest extends CommandTestCase
+final class FontAwesomeCommandTest extends CommandTestCase
 {
     private const COMMAND_NAME = 'app:fontawesome';
 

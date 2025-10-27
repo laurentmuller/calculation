@@ -18,7 +18,7 @@ use App\Service\DatabaseInfoService;
 use App\Spreadsheet\DatabaseDocument;
 use PHPUnit\Framework\TestCase;
 
-class DatabaseDocumentTest extends TestCase
+final class DatabaseDocumentTest extends TestCase
 {
     public const CONFIGURATION = [
         'Key' => 'Value',

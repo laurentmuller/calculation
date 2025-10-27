@@ -26,7 +26,7 @@ use ZxcvbnPhp\Zxcvbn;
 /**
  * @extends ConstraintValidatorTestCase<StrengthValidator>
  */
-class StrengthValidatorTest extends ConstraintValidatorTestCase
+final class StrengthValidatorTest extends ConstraintValidatorTestCase
 {
     use TranslatorMockTrait;
 

@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Filesystem\Path;
 
-class AssetVersionServiceTest extends TestCase
+final class AssetVersionServiceTest extends TestCase
 {
     private string $defaultVersion;
     private string $imagesVersion;

@@ -19,7 +19,7 @@ use App\Service\ApplicationService;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
 
-class CalculationControllerTest extends EntityControllerTestCase
+final class CalculationControllerTest extends EntityControllerTestCase
 {
     use CalculationTrait;
     use ProductTrait;

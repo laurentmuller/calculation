@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Exception\InvalidArgumentException;
 use Symfony\Component\Mime\Address;
 
-class AddressTransformerTest extends TestCase
+final class AddressTransformerTest extends TestCase
 {
     private AddressTransformer $transformer;
 

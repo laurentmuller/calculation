@@ -20,7 +20,7 @@ use App\Pivot\PivotNode;
 use App\Pivot\PivotTable;
 use PHPUnit\Framework\TestCase;
 
-class PivotTableTest extends TestCase
+final class PivotTableTest extends TestCase
 {
     public function testAddCell(): void
     {

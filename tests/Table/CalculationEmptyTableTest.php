@@ -22,7 +22,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 
-class CalculationEmptyTableTest extends TestCase
+final class CalculationEmptyTableTest extends TestCase
 {
     use TranslatorMockTrait;
 

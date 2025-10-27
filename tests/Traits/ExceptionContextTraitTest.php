@@ -16,7 +16,7 @@ namespace App\Tests\Traits;
 use App\Traits\ExceptionContextTrait;
 use PHPUnit\Framework\TestCase;
 
-class ExceptionContextTraitTest extends TestCase
+final class ExceptionContextTraitTest extends TestCase
 {
     use ExceptionContextTrait;
 

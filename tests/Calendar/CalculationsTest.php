@@ -20,7 +20,7 @@ use App\Calendar\Calendar;
 use App\Entity\Calculation;
 use Symfony\Component\Clock\DatePoint;
 
-class CalculationsTest extends CalendarTestCase
+final class CalculationsTest extends CalendarTestCase
 {
     private Calendar $calendar;
 

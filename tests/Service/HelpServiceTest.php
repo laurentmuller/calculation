@@ -18,7 +18,7 @@ use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\NullAdapter;
 
-class HelpServiceTest extends TestCase
+final class HelpServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 

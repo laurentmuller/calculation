@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
-class LoginListenerTest extends TestCase
+final class LoginListenerTest extends TestCase
 {
     use TranslatorMockTrait;
 

@@ -18,7 +18,7 @@ use App\Enums\EntityPermission;
 use App\Traits\AuthorizationCheckerAwareTrait;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class AuthorizationCheckerAwareTraitTest extends AwareTraitTestCase
+final class AuthorizationCheckerAwareTraitTest extends AwareTraitTestCase
 {
     use AuthorizationCheckerAwareTrait;
 

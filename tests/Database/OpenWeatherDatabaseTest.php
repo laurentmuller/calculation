@@ -17,7 +17,7 @@ use App\Database\AbstractDatabase;
 use App\Database\OpenWeatherDatabase;
 use PHPUnit\Framework\TestCase;
 
-class OpenWeatherDatabaseTest extends TestCase
+final class OpenWeatherDatabaseTest extends TestCase
 {
     private const COUNTRY = 'USA';
     private const ID = 1;

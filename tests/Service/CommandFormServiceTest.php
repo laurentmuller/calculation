@@ -21,7 +21,7 @@ use Symfony\Component\Form\FormInterface;
 /**
  * @phpstan-import-type CommandType from CommandService
  */
-class CommandFormServiceTest extends KernelServiceTestCase
+final class CommandFormServiceTest extends KernelServiceTestCase
 {
     public function testBoolArgument(): void
     {

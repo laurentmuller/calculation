@@ -19,7 +19,7 @@ use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class EntityActionTest extends TestCase
+final class EntityActionTest extends TestCase
 {
     use TranslatorMockTrait;
 

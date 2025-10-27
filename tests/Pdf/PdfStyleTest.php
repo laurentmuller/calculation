@@ -25,7 +25,7 @@ use fpdf\PdfBorder;
 use fpdf\PdfDocument;
 use PHPUnit\Framework\TestCase;
 
-class PdfStyleTest extends TestCase
+final class PdfStyleTest extends TestCase
 {
     public function testApply(): void
     {

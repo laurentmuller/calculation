@@ -18,7 +18,7 @@ use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use Symfony\Component\HttpFoundation\Response;
 
-class CalculationDuplicateControllerTest extends ControllerTestCase
+final class CalculationDuplicateControllerTest extends ControllerTestCase
 {
     use CalculationTrait;
     use ProductTrait;

@@ -21,7 +21,7 @@ use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
-class CalculationArchiveQueryTest extends TestCase
+final class CalculationArchiveQueryTest extends TestCase
 {
     use DateAssertTrait;
     use IdTrait;

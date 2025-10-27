@@ -19,7 +19,7 @@ use App\Utils\StringUtils;
 use PHPUnit\Framework\TestCase;
 use Twig\Extra\Markdown\MarkdownInterface;
 
-class MarkdownServiceTest extends TestCase
+final class MarkdownServiceTest extends TestCase
 {
     public function testAddTagClass(): void
     {

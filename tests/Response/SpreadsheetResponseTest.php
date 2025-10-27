@@ -18,7 +18,7 @@ use App\Spreadsheet\SpreadsheetDocument;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\TestCase;
 
-class SpreadsheetResponseTest extends TestCase
+final class SpreadsheetResponseTest extends TestCase
 {
     use TranslatorMockTrait;
 

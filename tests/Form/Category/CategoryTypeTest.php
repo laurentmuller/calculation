@@ -22,7 +22,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 /**
  * @extends EntityTypeTestCase<Category, CategoryType>
  */
-class CategoryTypeTest extends EntityTypeTestCase
+final class CategoryTypeTest extends EntityTypeTestCase
 {
     use GroupTrait;
 

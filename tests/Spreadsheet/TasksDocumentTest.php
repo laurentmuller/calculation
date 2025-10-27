@@ -22,7 +22,7 @@ use App\Entity\TaskItemMargin;
 use App\Spreadsheet\TasksDocument;
 use PHPUnit\Framework\TestCase;
 
-class TasksDocumentTest extends TestCase
+final class TasksDocumentTest extends TestCase
 {
     public function testRender(): void
     {

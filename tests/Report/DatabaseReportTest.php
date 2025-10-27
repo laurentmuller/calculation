@@ -18,7 +18,7 @@ use App\Report\DatabaseReport;
 use App\Service\DatabaseInfoService;
 use PHPUnit\Framework\TestCase;
 
-class DatabaseReportTest extends TestCase
+final class DatabaseReportTest extends TestCase
 {
     public const CONFIGURATION = [
         'Key' => 'Value',

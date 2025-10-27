@@ -20,7 +20,7 @@ use App\Calendar\Week;
 use App\Utils\FormatUtils;
 use Symfony\Component\Clock\DatePoint;
 
-class CalendarTest extends CalendarTestCase
+final class CalendarTest extends CalendarTestCase
 {
     public function testConstructorEmpty(): void
     {

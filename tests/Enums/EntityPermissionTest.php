@@ -19,7 +19,7 @@ use Elao\Enum\FlagBag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class EntityPermissionTest extends TestCase
+final class EntityPermissionTest extends TestCase
 {
     use TranslatorMockTrait;
 

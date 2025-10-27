@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @phpstan-import-type ProductType from ProductUpdateResult
  */
-class ProductUpdateResultTest extends TestCase
+final class ProductUpdateResultTest extends TestCase
 {
     public function testAddProduct(): void
     {

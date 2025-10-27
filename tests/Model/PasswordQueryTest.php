@@ -17,7 +17,7 @@ use App\Enums\StrengthLevel;
 use App\Model\PasswordQuery;
 use PHPUnit\Framework\TestCase;
 
-class PasswordQueryTest extends TestCase
+final class PasswordQueryTest extends TestCase
 {
     public function testConstruct(): void
     {

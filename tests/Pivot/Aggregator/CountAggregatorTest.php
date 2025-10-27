@@ -16,7 +16,7 @@ namespace App\Tests\Pivot\Aggregator;
 use App\Pivot\Aggregator\CountAggregator;
 use PHPUnit\Framework\TestCase;
 
-class CountAggregatorTest extends TestCase
+final class CountAggregatorTest extends TestCase
 {
     public function testAdd(): void
     {

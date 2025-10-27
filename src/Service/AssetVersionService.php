@@ -34,8 +34,9 @@ use Symfony\Contracts\Cache\CacheInterface;
  * <li>For user images folder ('images/users'), use the modification time of the image.</li>
  * </ul>
  */
-#[AsEntityListener(event: Events::postUpdate, method: 'deleteCache', lazy: true, entity: User::class)]
 #[AsEntityListener(event: Events::postPersist, method: 'deleteCache', lazy: true, entity: User::class)]
+#[AsEntityListener(event: Events::postUpdate, method: 'deleteCache', lazy: true, entity: User::class)]
+#[AsEntityListener(event: Events::postRemove, method: 'deleteCache', lazy: true, entity: User::class)]
 class AssetVersionService extends StaticVersionStrategy implements DisableListenerInterface
 {
     use DisableListenerTrait;

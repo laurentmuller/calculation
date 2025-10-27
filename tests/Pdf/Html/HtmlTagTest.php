@@ -20,7 +20,7 @@ use fpdf\Enums\PdfFontName;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class HtmlTagTest extends TestCase
+final class HtmlTagTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{HtmlTag, string, bool}>
@@ -119,7 +119,7 @@ class HtmlTagTest extends TestCase
             ->setFontSize(2.5 * 9.0);
         $actual = HtmlTag::getStyle('h1');
         self::assertNotNull($actual);
-        self::assertSameStyle($style, $actual);
+        $this->assertSameStyle($style, $actual);
     }
 
     #[DataProvider('getMatches')]
@@ -132,10 +132,10 @@ class HtmlTagTest extends TestCase
     #[DataProvider('getStyles')]
     public function testStyle(HtmlTag $tag, ?HtmlStyle $expected): void
     {
-        self::assertSameStyle($expected, $tag);
+        $this->assertSameStyle($expected, $tag);
     }
 
-    protected static function assertSameStyle(?HtmlStyle $expected, HtmlTag|HtmlStyle $tagOrStyle): void
+    private function assertSameStyle(?HtmlStyle $expected, HtmlTag|HtmlStyle $tagOrStyle): void
     {
         $actual = $tagOrStyle instanceof HtmlStyle ? $tagOrStyle : $tagOrStyle->style();
         if (!$expected instanceof HtmlStyle) {

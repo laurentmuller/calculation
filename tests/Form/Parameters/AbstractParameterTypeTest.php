@@ -19,7 +19,7 @@ use App\Tests\Fixture\FixtureParameter;
 use App\Tests\Fixture\FixtureParametersType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class AbstractParameterTypeTest extends TypeTestCase
+final class AbstractParameterTypeTest extends TypeTestCase
 {
     public function testWithAllOptions(): void
     {

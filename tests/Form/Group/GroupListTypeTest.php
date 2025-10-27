@@ -19,7 +19,7 @@ use App\Tests\Form\PreloadedExtensionsTrait;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class GroupListTypeTest extends TypeTestCase
+final class GroupListTypeTest extends TypeTestCase
 {
     use GroupTrait;
     use PreloadedExtensionsTrait;

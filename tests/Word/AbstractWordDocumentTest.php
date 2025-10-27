@@ -23,7 +23,7 @@ use App\Word\HtmlDocument;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class AbstractWordDocumentTest extends TestCase
+final class AbstractWordDocumentTest extends TestCase
 {
     use TranslatorMockTrait;
 

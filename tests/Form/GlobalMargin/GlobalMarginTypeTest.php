@@ -20,7 +20,7 @@ use App\Tests\Form\EntityTypeTestCase;
 /**
  * @extends EntityTypeTestCase<GlobalMargin, GlobalMarginType>
  */
-class GlobalMarginTypeTest extends EntityTypeTestCase
+final class GlobalMarginTypeTest extends EntityTypeTestCase
 {
     #[\Override]
     protected function getData(): array

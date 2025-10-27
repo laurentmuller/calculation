@@ -18,7 +18,7 @@ use App\Entity\Category;
 use App\Entity\Group;
 use PHPUnit\Framework\TestCase;
 
-class AbstractCategoryItemEntityTest extends TestCase
+final class AbstractCategoryItemEntityTest extends TestCase
 {
     use IdTrait;
 

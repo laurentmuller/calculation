@@ -23,7 +23,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * @extends EntityTableTestCase<Customer, CustomerRepository, CustomerTable>
  */
-class CustomerTableTest extends EntityTableTestCase
+final class CustomerTableTest extends EntityTableTestCase
 {
     #[\Override]
     protected function createEntities(): array

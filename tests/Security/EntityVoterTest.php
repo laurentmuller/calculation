@@ -29,7 +29,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
-class EntityVoterTest extends TestCase
+final class EntityVoterTest extends TestCase
 {
     private MockObject&ApplicationService $application;
     private RoleBuilderService $builder;

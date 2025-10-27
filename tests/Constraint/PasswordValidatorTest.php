@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 /**
  * @extends ConstraintValidatorTestCase<PasswordValidator>
  */
-class PasswordValidatorTest extends ConstraintValidatorTestCase
+final class PasswordValidatorTest extends ConstraintValidatorTestCase
 {
     /**
      * @phpstan-return \Generator<int, array{string, array<string, bool>, string, string}>

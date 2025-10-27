@@ -25,7 +25,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extra\Markdown\MarkdownInterface;
 
-class MailerServiceTest extends TestCase
+final class MailerServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 

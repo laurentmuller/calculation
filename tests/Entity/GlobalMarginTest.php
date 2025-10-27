@@ -15,7 +15,7 @@ namespace App\Tests\Entity;
 
 use App\Entity\GlobalMargin;
 
-class GlobalMarginTest extends EntityValidatorTestCase
+final class GlobalMarginTest extends EntityValidatorTestCase
 {
     public function testAllLessZero(): void
     {

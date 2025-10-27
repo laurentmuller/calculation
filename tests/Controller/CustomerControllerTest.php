@@ -16,7 +16,7 @@ namespace App\Tests\Controller;
 use App\Entity\Customer;
 use Symfony\Component\HttpFoundation\Response;
 
-class CustomerControllerTest extends EntityControllerTestCase
+final class CustomerControllerTest extends EntityControllerTestCase
 {
     private ?Customer $customer = null;
 

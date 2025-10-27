@@ -20,7 +20,7 @@ use App\Tests\TranslatorMockTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
-class VichImageTypeExtensionTest extends TypeTestCase
+final class VichImageTypeExtensionTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
     use TranslatorMockTrait;

@@ -19,7 +19,7 @@ use App\Entity\Task;
 use App\Entity\TaskItem;
 use App\Entity\TaskItemMargin;
 
-class TaskItemTest extends EntityValidatorTestCase
+final class TaskItemTest extends EntityValidatorTestCase
 {
     use IdTrait;
 

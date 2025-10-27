@@ -18,7 +18,7 @@ use App\Service\SymfonyInfoService;
 use App\Spreadsheet\SymfonyDocument;
 use App\Tests\KernelServiceTestCase;
 
-class SymfonyDocumentTest extends KernelServiceTestCase
+final class SymfonyDocumentTest extends KernelServiceTestCase
 {
     public function testRender(): void
     {

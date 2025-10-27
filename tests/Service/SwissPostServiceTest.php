@@ -16,7 +16,7 @@ namespace App\Tests\Service;
 use App\Service\SwissPostService;
 use PHPUnit\Framework\TestCase;
 
-class SwissPostServiceTest extends TestCase
+final class SwissPostServiceTest extends TestCase
 {
     private string $databaseName;
     private SwissPostService $service;

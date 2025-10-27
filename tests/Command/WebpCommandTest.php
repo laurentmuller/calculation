@@ -15,7 +15,7 @@ namespace App\Tests\Command;
 
 use App\Utils\FileUtils;
 
-class WebpCommandTest extends CommandTestCase
+final class WebpCommandTest extends CommandTestCase
 {
     private const COMMAND_NAME = 'app:update-images';
 

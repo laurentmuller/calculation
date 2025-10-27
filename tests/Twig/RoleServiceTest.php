@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 /**
  * @extends RuntimeTestCase<RoleService>
  */
-class RoleServiceTest extends RuntimeTestCase
+final class RoleServiceTest extends RuntimeTestCase
 {
     use TranslatorMockTrait;
 

@@ -21,7 +21,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @extends EntityTypeTestCase<TaskItem, TaskItemType>
  */
-class TaskItemTypeTest extends EntityTypeTestCase
+final class TaskItemTypeTest extends EntityTypeTestCase
 {
     #[\Override]
     protected function getData(): array

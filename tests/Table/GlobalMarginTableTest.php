@@ -24,7 +24,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * @extends EntityTableTestCase<GlobalMargin, GlobalMarginRepository, GlobalMarginTable>
  */
-class GlobalMarginTableTest extends EntityTableTestCase
+final class GlobalMarginTableTest extends EntityTableTestCase
 {
     public function testGetEntityClassName(): void
     {

@@ -27,7 +27,7 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 /**
  * @extends RuntimeTestCase<FunctionExtension>
  */
-class FunctionExtensionTest extends RuntimeTestCase
+final class FunctionExtensionTest extends RuntimeTestCase
 {
     #[\Override]
     protected function createService(): object

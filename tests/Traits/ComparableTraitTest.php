@@ -17,7 +17,7 @@ use App\Entity\Product;
 use App\Traits\ComparableTrait;
 use PHPUnit\Framework\TestCase;
 
-class ComparableTraitTest extends TestCase
+final class ComparableTraitTest extends TestCase
 {
     use ComparableTrait;
 

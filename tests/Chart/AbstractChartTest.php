@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 use Twig\Error\Error;
 
-class AbstractChartTest extends TestCase
+final class AbstractChartTest extends TestCase
 {
     public function testCreateInvalidTemplateExpression(): void
     {

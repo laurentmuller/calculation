@@ -28,7 +28,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 
-class TimestampableListenerTest extends TestCase
+final class TimestampableListenerTest extends TestCase
 {
     use TranslatorMockTrait;
 
@@ -66,7 +66,7 @@ class TimestampableListenerTest extends TestCase
 
         $listener = $this->createListener(false);
         $listener->onFlush($event);
-        self::assertEntityUpdated($task, 'common.entity_empty_user');
+        $this->assertEntityUpdated($task, 'common.entity_empty_user');
     }
 
     public function testNoEntity(): void
@@ -95,7 +95,7 @@ class TimestampableListenerTest extends TestCase
 
         $listener = $this->createListener();
         $listener->onFlush($event);
-        self::assertEntityUpdated($task);
+        $this->assertEntityUpdated($task);
     }
 
     public function testUpdateWithChild(): void
@@ -107,10 +107,10 @@ class TimestampableListenerTest extends TestCase
 
         $listener = $this->createListener();
         $listener->onFlush($event);
-        self::assertEntityUpdated($task);
+        $this->assertEntityUpdated($task);
     }
 
-    protected static function assertEntityUpdated(
+    private function assertEntityUpdated(
         TimestampableInterface $entity,
         string $userName = self::USER_NAME
     ): void {

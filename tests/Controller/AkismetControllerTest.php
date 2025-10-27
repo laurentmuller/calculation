@@ -15,7 +15,7 @@ namespace App\Tests\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class AkismetControllerTest extends ControllerTestCase
+final class AkismetControllerTest extends ControllerTestCase
 {
     #[\Override]
     public static function getRoutes(): \Generator

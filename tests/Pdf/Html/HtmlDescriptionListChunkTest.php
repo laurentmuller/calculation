@@ -19,7 +19,7 @@ use App\Pdf\Html\HtmlTag;
 use App\Pdf\Html\HtmlTextChunk;
 use PHPUnit\Framework\TestCase;
 
-class HtmlDescriptionListChunkTest extends TestCase
+final class HtmlDescriptionListChunkTest extends TestCase
 {
     public function testAdd(): void
     {

@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\NullAdapter;
 
-class ConstantExtensionTest extends TestCase
+final class ConstantExtensionTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{string, string}>
@@ -83,28 +83,28 @@ class ConstantExtensionTest extends TestCase
     #[DataProvider('getAuthenticatedVoterConstants')]
     public function testAuthenticatedVoterConstants(string $key, string $expected): void
     {
-        self::assertIsSameConstant($key, $expected);
+        $this->assertIsSameConstant($key, $expected);
     }
 
     #[DataProvider('getCalculationServiceConstants')]
     public function testCalculationServiceConstants(string $key, int $expected): void
     {
-        self::assertIsSameConstant($key, $expected);
+        $this->assertIsSameConstant($key, $expected);
     }
 
     #[DataProvider('getEntityVoterConstants')]
     public function testEntityVoterConstants(string $key, string $expected): void
     {
-        self::assertIsSameConstant($key, $expected);
+        $this->assertIsSameConstant($key, $expected);
     }
 
     #[DataProvider('getRoleConstants')]
     public function testRoleConstants(string $key, string $expected): void
     {
-        self::assertIsSameConstant($key, $expected);
+        $this->assertIsSameConstant($key, $expected);
     }
 
-    protected static function assertIsSameConstant(string $key, string|int $expected): void
+    private function assertIsSameConstant(string $key, string|int $expected): void
     {
         $extension = new ConstantExtension(new NullAdapter());
         $globals = $extension->getGlobals();

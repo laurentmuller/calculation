@@ -18,7 +18,7 @@ use App\Service\FontAwesomeImageService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-class FontAwesomeImageServiceTest extends TestCase
+final class FontAwesomeImageServiceTest extends TestCase
 {
     public function testInvalidDirectory(): void
     {

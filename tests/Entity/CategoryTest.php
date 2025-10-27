@@ -18,7 +18,7 @@ use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
 
-class CategoryTest extends EntityValidatorTestCase
+final class CategoryTest extends EntityValidatorTestCase
 {
     public function testClone(): void
     {

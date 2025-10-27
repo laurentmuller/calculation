@@ -22,7 +22,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @extends EntityTypeTestCase<Task, TaskType>
  */
-class TaskTypeTest extends EntityTypeTestCase
+final class TaskTypeTest extends EntityTypeTestCase
 {
     use CategoryTrait;
 

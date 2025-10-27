@@ -20,7 +20,7 @@ use App\Parameter\DisplayParameter;
 /**
  * @extends ParameterTestCase<DisplayParameter>
  */
-class DisplayParameterTest extends ParameterTestCase
+final class DisplayParameterTest extends ParameterTestCase
 {
     #[\Override]
     public static function getParameterNames(): \Generator

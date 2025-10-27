@@ -19,7 +19,7 @@ use App\Tests\KernelServiceTestCase;
 use App\Utils\FormatUtils;
 use Symfony\Component\HttpKernel\Kernel;
 
-class SymfonyInfoServiceTest extends KernelServiceTestCase
+final class SymfonyInfoServiceTest extends KernelServiceTestCase
 {
     private SymfonyInfoService $service;
 

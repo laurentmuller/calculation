@@ -18,7 +18,7 @@ use App\Entity\Customer;
 use App\Spreadsheet\CustomersDocument;
 use PHPUnit\Framework\TestCase;
 
-class CustomersDocumentTest extends TestCase
+final class CustomersDocumentTest extends TestCase
 {
     public function testRender(): void
     {

@@ -21,7 +21,7 @@ use App\Traits\RightsTrait;
 use App\Traits\RoleTrait;
 use Elao\Enum\FlagBag;
 
-class RightsTraitTest extends FlagBagTestCase implements RoleInterface
+final class RightsTraitTest extends FlagBagTestCase implements RoleInterface
 {
     use RightsTrait;
     use RoleTrait;

@@ -35,7 +35,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\Exception\InvalidArgumentException;
 use Symfony\Component\Clock\DatePoint;
 
-class ApplicationServiceTest extends KernelServiceTestCase
+final class ApplicationServiceTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
     use DateAssertTrait;

@@ -17,7 +17,7 @@ use App\Model\CustomerInformation;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\TestCase;
 
-class CustomerInformationTest extends TestCase
+final class CustomerInformationTest extends TestCase
 {
     use TranslatorMockTrait;
 

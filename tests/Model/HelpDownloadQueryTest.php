@@ -16,7 +16,7 @@ namespace App\Tests\Model;
 use App\Model\HelpDownloadQuery;
 use PHPUnit\Framework\TestCase;
 
-class HelpDownloadQueryTest extends TestCase
+final class HelpDownloadQueryTest extends TestCase
 {
     public function testProperties(): void
     {

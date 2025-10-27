@@ -19,7 +19,7 @@ use App\Tests\Form\PreloadedExtensionsTrait;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class CategoryListTypeTest extends TypeTestCase
+final class CategoryListTypeTest extends TypeTestCase
 {
     use CategoryTrait;
     use PreloadedExtensionsTrait;

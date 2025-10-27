@@ -16,7 +16,7 @@ namespace App\Tests\Service;
 use App\Service\DictionaryService;
 use PHPUnit\Framework\TestCase;
 
-class DictionaryServiceTest extends TestCase
+final class DictionaryServiceTest extends TestCase
 {
     public function testGetRandomWord(): void
     {

@@ -19,7 +19,7 @@ use App\Tests\EntityTrait\TaskTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\QueryBuilder;
 
-class TaskRepositoryTest extends KernelServiceTestCase
+final class TaskRepositoryTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
     use TaskTrait;

@@ -16,7 +16,7 @@ namespace App\Tests\Entity;
 use App\Entity\CalculationState;
 use fpdf\Color\PdfRgbColor;
 
-class CalculationStateTest extends EntityValidatorTestCase
+final class CalculationStateTest extends EntityValidatorTestCase
 {
     public function testCalculations(): void
     {

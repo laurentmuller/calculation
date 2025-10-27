@@ -17,7 +17,7 @@ use App\Service\DiagramService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-class DiagramServiceTest extends TestCase
+final class DiagramServiceTest extends TestCase
 {
     private DiagramService $service;
 

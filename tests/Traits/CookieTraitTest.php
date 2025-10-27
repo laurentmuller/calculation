@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CookieTraitTest extends TestCase
+final class CookieTraitTest extends TestCase
 {
     use CookieTrait;
 
@@ -97,6 +97,21 @@ class CookieTraitTest extends TestCase
         $response = $this->createResponse();
         $this->updateCookie($response, 'KEY', Theme::getDefault());
         self::assertSame('', $response->getContent());
+    }
+
+    public function testUpdateCookies(): void
+    {
+        $values = [
+            'str' => 'value1',
+            'bool' => true,
+            'int' => 10,
+            'float' => 10.0,
+            'enum' => Theme::DARK,
+            'null' => null,
+        ];
+        $response = $this->createResponse();
+        $this->updateCookies($response, $values);
+        self::expectNotToPerformAssertions();
     }
 
     #[\Override]

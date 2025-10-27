@@ -23,7 +23,7 @@ use App\Service\TaskService;
 use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\TestCase;
 
-class TaskServiceTest extends TestCase
+final class TaskServiceTest extends TestCase
 {
     use IdTrait;
 

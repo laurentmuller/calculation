@@ -19,7 +19,7 @@ use App\Entity\Group;
 use App\Spreadsheet\CategoriesDocument;
 use PHPUnit\Framework\TestCase;
 
-class CategoriesDocumentTest extends TestCase
+final class CategoriesDocumentTest extends TestCase
 {
     public function testRender(): void
     {

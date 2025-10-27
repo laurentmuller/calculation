@@ -17,7 +17,7 @@ use App\Controller\AbstractController;
 use App\Word\HtmlDocument;
 use PHPUnit\Framework\TestCase;
 
-class HtmlDocumentTest extends TestCase
+final class HtmlDocumentTest extends TestCase
 {
     /**
      * @throws \PhpOffice\PhpWord\Exception\Exception

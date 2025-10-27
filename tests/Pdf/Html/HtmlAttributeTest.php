@@ -18,7 +18,7 @@ use App\Enums\StrengthLevel;
 use App\Pdf\Html\HtmlAttribute;
 use PHPUnit\Framework\TestCase;
 
-class HtmlAttributeTest extends TestCase
+final class HtmlAttributeTest extends TestCase
 {
     /**
      * @throws \DOMException

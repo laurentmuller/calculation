@@ -29,7 +29,7 @@ use Twig\Error\Error;
 /**
  * @extends EntityTableTestCase<Category, CategoryRepository, CategoryTable>
  */
-class CategoryTableTest extends EntityTableTestCase
+final class CategoryTableTest extends EntityTableTestCase
 {
     /**
      * @throws Error

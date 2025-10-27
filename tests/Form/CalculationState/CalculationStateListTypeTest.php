@@ -20,7 +20,7 @@ use App\Tests\TranslatorMockTrait;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class CalculationStateListTypeTest extends TypeTestCase
+final class CalculationStateListTypeTest extends TypeTestCase
 {
     use CalculationStateTrait;
     use PreloadedExtensionsTrait;

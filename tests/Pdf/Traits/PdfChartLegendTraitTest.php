@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @phpstan-import-type ColorStringType from PdfChartInterface
  */
-class PdfChartLegendTraitTest extends TestCase
+final class PdfChartLegendTraitTest extends TestCase
 {
     public function testLegends(): void
     {

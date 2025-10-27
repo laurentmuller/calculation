@@ -22,7 +22,7 @@ use App\Tests\EntityTrait\ProductTrait;
 /**
  * @extends GeneratorTestCase<CalculationGenerator>
  */
-class CalculationGeneratorTest extends GeneratorTestCase
+final class CalculationGeneratorTest extends GeneratorTestCase
 {
     use CalculationStateTrait;
     use ProductTrait;

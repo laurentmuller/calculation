@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Console\Command\Command;
 
-class CacheServiceTest extends TestCase
+final class CacheServiceTest extends TestCase
 {
     /**
      * @throws \Exception

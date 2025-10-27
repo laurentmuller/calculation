@@ -20,7 +20,7 @@ use App\Service\CacheService;
 use App\Service\DictionaryService;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminControllerTest extends ControllerTestCase
+final class AdminControllerTest extends ControllerTestCase
 {
     #[\Override]
     public static function getRoutes(): \Generator

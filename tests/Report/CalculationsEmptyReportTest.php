@@ -18,7 +18,7 @@ use App\Report\CalculationsEmptyReport;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 
-class CalculationsEmptyReportTest extends TestCase
+final class CalculationsEmptyReportTest extends TestCase
 {
     public function testRender(): void
     {

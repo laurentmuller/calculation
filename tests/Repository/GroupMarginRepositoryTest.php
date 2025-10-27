@@ -18,7 +18,7 @@ use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\GroupTrait;
 use App\Tests\KernelServiceTestCase;
 
-class GroupMarginRepositoryTest extends KernelServiceTestCase
+final class GroupMarginRepositoryTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
     use GroupTrait;

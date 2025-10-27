@@ -17,7 +17,7 @@ use App\Response\PdfResponse;
 use fpdf\PdfDocument;
 use PHPUnit\Framework\TestCase;
 
-class PdfResponseTest extends TestCase
+final class PdfResponseTest extends TestCase
 {
     public function testGetAttachmentMimeType(): void
     {

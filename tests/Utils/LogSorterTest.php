@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use Symfony\Component\Clock\DatePoint;
 
-class LogSorterTest extends TestCase
+final class LogSorterTest extends TestCase
 {
     public function testIsDefaultSort(): void
     {

@@ -16,7 +16,7 @@ namespace App\Tests\Calendar;
 use App\Utils\FormatUtils;
 use Symfony\Component\Clock\DatePoint;
 
-class DayTest extends CalendarTestCase
+final class DayTest extends CalendarTestCase
 {
     public function testFormat(): void
     {

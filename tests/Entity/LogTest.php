@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
 use Symfony\Component\Clock\DatePoint;
 
-class LogTest extends TestCase
+final class LogTest extends TestCase
 {
     use DateAssertTrait;
 
@@ -255,7 +255,7 @@ class LogTest extends TestCase
         self::assertSame($expected, $log->getUser());
     }
 
-    protected function createSqlFormatter(): SqlFormatter
+    private function createSqlFormatter(): SqlFormatter
     {
         return new SqlFormatter(new NullHighlighter());
     }

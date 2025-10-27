@@ -19,7 +19,7 @@ use App\Service\ApplicationService;
 use App\Tests\EntityTrait\TaskItemTrait;
 use Symfony\Component\HttpFoundation\Response;
 
-class TaskControllerTest extends EntityControllerTestCase
+final class TaskControllerTest extends EntityControllerTestCase
 {
     use TaskItemTrait;
 

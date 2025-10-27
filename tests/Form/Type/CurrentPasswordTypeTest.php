@@ -16,7 +16,7 @@ namespace App\Tests\Form\Type;
 use App\Form\Type\CurrentPasswordType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class CurrentPasswordTypeTest extends TypeTestCase
+final class CurrentPasswordTypeTest extends TypeTestCase
 {
     public function testFormView(): void
     {

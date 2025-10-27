@@ -17,7 +17,7 @@ use App\Service\PhpInfoService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class PhpInfoServiceTest extends TestCase
+final class PhpInfoServiceTest extends TestCase
 {
     private PhpInfoService $service;
 

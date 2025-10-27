@@ -18,7 +18,7 @@ use Faker\Container\ContainerException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;
 
-class AwareTraitTest extends AwareTraitTestCase
+final class AwareTraitTest extends AwareTraitTestCase
 {
     use AwareTrait;
 

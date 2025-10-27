@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-class HeaderNameCommandTest extends CommandTestCase
+final class HeaderNameCommandTest extends CommandTestCase
 {
     private const COMMAND_NAME = 'app:header:name';
     private const DATA_PATH = '/tests/files/css';

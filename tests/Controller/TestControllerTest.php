@@ -15,7 +15,7 @@ namespace App\Tests\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class TestControllerTest extends ControllerTestCase
+final class TestControllerTest extends ControllerTestCase
 {
     private const ROUTES = [
         'editor',

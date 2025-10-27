@@ -17,7 +17,7 @@ use App\Form\Extension\UrlTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class UrlTypeExtensionTest extends TypeTestCase
+final class UrlTypeExtensionTest extends TypeTestCase
 {
     public function testFormViewWithDefaultProtocol(): void
     {

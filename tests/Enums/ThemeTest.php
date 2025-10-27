@@ -18,7 +18,7 @@ use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class ThemeTest extends TestCase
+final class ThemeTest extends TestCase
 {
     use TranslatorMockTrait;
 

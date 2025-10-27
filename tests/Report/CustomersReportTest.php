@@ -18,7 +18,7 @@ use App\Entity\Customer;
 use App\Report\CustomersReport;
 use PHPUnit\Framework\TestCase;
 
-class CustomersReportTest extends TestCase
+final class CustomersReportTest extends TestCase
 {
     public function testRenderGrouped(): void
     {

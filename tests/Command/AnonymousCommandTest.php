@@ -17,7 +17,7 @@ use App\Entity\Calculation;
 use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\CalculationTrait;
 
-class AnonymousCommandTest extends CommandTestCase
+final class AnonymousCommandTest extends CommandTestCase
 {
     use CalculationTrait;
     use DatabaseTrait;

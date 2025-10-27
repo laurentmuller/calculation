@@ -34,7 +34,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class LoginFormAuthenticatorTest extends TestCase
+final class LoginFormAuthenticatorTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{Request, bool}>

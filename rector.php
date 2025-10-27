@@ -20,7 +20,6 @@ use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRecto
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\SingleMockPropertyTypeRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
-use Rector\Privatization\Rector\Class_\FinalizeTestCaseClassRector;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\TwigSetList;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector;
@@ -34,8 +33,6 @@ return RectorConfig::configure()
         __DIR__ . '/tests',
         __DIR__ . '/public',
     ])->withSkip([
-        // must be removed!
-        FinalizeTestCaseClassRector::class,
         PreferPHPUnitThisCallRector::class,
         SingleMockPropertyTypeRector::class,
         TypedPropertyFromCreateMockAssignRector::class,

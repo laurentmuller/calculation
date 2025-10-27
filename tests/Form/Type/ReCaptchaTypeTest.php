@@ -22,7 +22,7 @@ use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class ReCaptchaTypeTest extends TypeTestCase
+final class ReCaptchaTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
 

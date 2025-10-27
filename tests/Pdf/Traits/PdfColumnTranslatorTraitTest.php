@@ -19,7 +19,7 @@ use App\Pdf\PdfTable;
 use App\Report\AbstractReport;
 use PHPUnit\Framework\TestCase;
 
-class PdfColumnTranslatorTraitTest extends TestCase
+final class PdfColumnTranslatorTraitTest extends TestCase
 {
     public function testColumns(): void
     {

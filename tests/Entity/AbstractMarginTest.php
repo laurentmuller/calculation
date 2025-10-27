@@ -16,7 +16,7 @@ namespace App\Tests\Entity;
 use App\Entity\AbstractMargin;
 use PHPUnit\Framework\TestCase;
 
-class AbstractMarginTest extends TestCase
+final class AbstractMarginTest extends TestCase
 {
     public function testContains(): void
     {

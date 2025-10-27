@@ -33,7 +33,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Util\VerifyEmailQueryUtility;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelper;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
-class EmailVerifierTest extends TestCase
+final class EmailVerifierTest extends TestCase
 {
     use IdTrait;
     use TranslatorMockTrait;

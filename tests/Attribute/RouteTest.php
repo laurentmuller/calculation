@@ -35,7 +35,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 /**
  * Unit test for route attributes.
  */
-class RouteTest extends TestCase
+final class RouteTest extends TestCase
 {
     private const NAME_VALUE = 'value_edit';
     private const PATH_VALUE = '/edit/{id}';

@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Translator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class TranslatorTraitTest extends TestCase
+final class TranslatorTraitTest extends TestCase
 {
     use TranslatorMockTrait;
     use TranslatorTrait;

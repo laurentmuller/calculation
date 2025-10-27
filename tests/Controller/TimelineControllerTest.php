@@ -17,7 +17,7 @@ use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use Symfony\Component\HttpFoundation\Response;
 
-class TimelineControllerTest extends ControllerTestCase
+final class TimelineControllerTest extends ControllerTestCase
 {
     use CalculationTrait;
     use ProductTrait;

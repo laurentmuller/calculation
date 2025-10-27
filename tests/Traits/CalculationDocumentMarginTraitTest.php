@@ -18,7 +18,7 @@ use App\Spreadsheet\AbstractDocument;
 use App\Traits\CalculationDocumentMarginTrait;
 use PHPUnit\Framework\TestCase;
 
-class CalculationDocumentMarginTraitTest extends TestCase
+final class CalculationDocumentMarginTraitTest extends TestCase
 {
     public function testMarginFormat(): void
     {

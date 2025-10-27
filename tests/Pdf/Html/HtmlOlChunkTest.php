@@ -17,7 +17,7 @@ use App\Pdf\Html\HtmlLiChunk;
 use App\Pdf\Html\HtmlOlChunk;
 use PHPUnit\Framework\TestCase;
 
-class HtmlOlChunkTest extends TestCase
+final class HtmlOlChunkTest extends TestCase
 {
     public function testGetBulletLast(): void
     {

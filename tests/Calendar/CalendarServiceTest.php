@@ -18,7 +18,7 @@ use App\Calendar\CalendarException;
 use App\Calendar\CalendarService;
 use PHPUnit\Framework\TestCase;
 
-class CalendarServiceTest extends TestCase
+final class CalendarServiceTest extends TestCase
 {
     /**
      * @throws CalendarException

@@ -20,7 +20,7 @@ use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 
-class AbstractTableTest extends TestCase
+final class AbstractTableTest extends TestCase
 {
     public function testAllowedPageListAll(): void
     {

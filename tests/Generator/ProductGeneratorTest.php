@@ -22,7 +22,7 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * @extends GeneratorTestCase<ProductGenerator>
  */
-class ProductGeneratorTest extends GeneratorTestCase
+final class ProductGeneratorTest extends GeneratorTestCase
 {
     use CategoryTrait;
 

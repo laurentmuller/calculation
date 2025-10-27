@@ -17,7 +17,7 @@ use App\Traits\ArrayTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class ArrayTraitTest extends TestCase
+final class ArrayTraitTest extends TestCase
 {
     use ArrayTrait;
 

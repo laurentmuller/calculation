@@ -19,7 +19,7 @@ use App\Model\CalculationArchiveResult;
 use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\TestCase;
 
-class CalculationArchiveResultTest extends TestCase
+final class CalculationArchiveResultTest extends TestCase
 {
     use IdTrait;
 

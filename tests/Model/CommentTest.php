@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Address;
 
-class CommentTest extends TestCase
+final class CommentTest extends TestCase
 {
     public function testConstructor(): void
     {

@@ -18,7 +18,7 @@ use App\Traits\TranslatorFlashMessageAwareTrait;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 
-class TranslatorFlashMessageAwareTraitTest extends AwareTraitTestCase
+final class TranslatorFlashMessageAwareTraitTest extends AwareTraitTestCase
 {
     use TranslatorFlashMessageAwareTrait;
     use TranslatorMockTrait;

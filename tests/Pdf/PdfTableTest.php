@@ -32,7 +32,7 @@ use fpdf\PdfDocument;
 use fpdf\PdfException;
 use PHPUnit\Framework\TestCase;
 
-class PdfTableTest extends TestCase
+final class PdfTableTest extends TestCase
 {
     public function testAddCellNone(): void
     {

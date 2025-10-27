@@ -16,7 +16,7 @@ namespace App\Tests\Service;
 use App\Service\NonceService;
 use PHPUnit\Framework\TestCase;
 
-class NonceServiceTest extends TestCase
+final class NonceServiceTest extends TestCase
 {
     private NonceService $service;
 

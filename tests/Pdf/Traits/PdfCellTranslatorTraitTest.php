@@ -24,7 +24,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class PdfCellTranslatorTraitTest extends TestCase
+final class PdfCellTranslatorTraitTest extends TestCase
 {
     use TranslatorMockTrait;
 

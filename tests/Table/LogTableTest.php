@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 use Twig\Error\Error;
 
-class LogTableTest extends TestCase
+final class LogTableTest extends TestCase
 {
     public function testEmptyMessage(): void
     {

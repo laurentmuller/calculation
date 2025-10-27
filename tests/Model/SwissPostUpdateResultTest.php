@@ -18,7 +18,7 @@ use App\Tests\DateAssertTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 
-class SwissPostUpdateResultTest extends TestCase
+final class SwissPostUpdateResultTest extends TestCase
 {
     use DateAssertTrait;
 

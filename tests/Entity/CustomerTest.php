@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 /**
  * @extends ConstraintValidatorTestCase<IsNullValidator>
  */
-class CustomerTest extends ConstraintValidatorTestCase
+final class CustomerTest extends ConstraintValidatorTestCase
 {
     use IdTrait;
 

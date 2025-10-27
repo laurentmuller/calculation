@@ -18,7 +18,7 @@ use App\Tests\Fixture\PdfImageDocument;
 use fpdf\PdfException;
 use PHPUnit\Framework\TestCase;
 
-class PdfMemoryImageTraitTest extends TestCase
+final class PdfMemoryImageTraitTest extends TestCase
 {
     public function testImageAvif(): void
     {

@@ -18,7 +18,7 @@ use App\Service\PhpInfoService;
 use App\Spreadsheet\PhpIniDocument;
 use PHPUnit\Framework\TestCase;
 
-class PhpIniDocumentTest extends TestCase
+final class PhpIniDocumentTest extends TestCase
 {
     public function testRenderEmpty(): void
     {

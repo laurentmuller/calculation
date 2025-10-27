@@ -20,7 +20,7 @@ use App\Repository\CalculationStateRepository;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
-class CalculationStateProviderTest extends TestCase
+final class CalculationStateProviderTest extends TestCase
 {
     public function testWithEntity(): void
     {

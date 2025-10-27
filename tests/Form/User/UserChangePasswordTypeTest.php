@@ -35,7 +35,7 @@ use ZxcvbnPhp\Zxcvbn;
 /**
  * @extends EntityTypeTestCase<User, UserChangePasswordType>
  */
-class UserChangePasswordTypeTest extends EntityTypeTestCase
+final class UserChangePasswordTypeTest extends EntityTypeTestCase
 {
     use PasswordHasherExtensionTrait;
     use TranslatorMockTrait;

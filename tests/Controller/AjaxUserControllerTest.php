@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class AjaxUserControllerTest extends AuthenticateWebTestCase
+final class AjaxUserControllerTest extends AuthenticateWebTestCase
 {
     private ?TranslatorInterface $translator = null;
 

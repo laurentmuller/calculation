@@ -19,7 +19,7 @@ use App\Service\ApplicationService;
 use App\Tests\EntityTrait\ProductTrait;
 use Symfony\Component\HttpFoundation\Response;
 
-class ProductControllerTest extends EntityControllerTestCase
+final class ProductControllerTest extends EntityControllerTestCase
 {
     use ProductTrait;
 

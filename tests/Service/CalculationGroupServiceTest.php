@@ -33,7 +33,7 @@ use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectManager;
 
-class CalculationGroupServiceTest extends KernelServiceTestCase
+final class CalculationGroupServiceTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
     use IdTrait;
@@ -203,7 +203,7 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
         self::assertSame(-7, $constants['ROW_OVERALL_TOTAL']);
     }
 
-    protected function createCalculationService(
+    private function createCalculationService(
         ?Group $group = null,
         ?float $groupMargin = null,
         ?float $globalMargin = null,
@@ -221,98 +221,6 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
             $application,
             $translator
         );
-    }
-
-    protected function echo(string $name, mixed $value): void
-    {
-        if (\is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'))) {
-            echo \sprintf("\n%-15s: %s", $name, (string) $value);
-        }
-    }
-
-    protected function init(): Product
-    {
-        $manager = $this->getManager();
-        $this->initGlobalMargins($manager);
-        $category = $this->initCategories($manager);
-
-        return $this->initProducts($manager, $category);
-    }
-
-    protected function initCategories(ObjectManager $manager): Category
-    {
-        $this->initRepository($manager, GroupMargin::class);
-        $this->initRepository($manager, Category::class);
-        $this->initRepository($manager, Group::class);
-
-        $group = new Group();
-        $group->setCode('Test');
-
-        $margin = new GroupMargin();
-        $margin->setMinimum(0)
-            ->setMaximum(1_000_000)
-            ->setMargin(self::MARGIN_PERCENT);
-        $group->addMargin($margin);
-
-        $category = new Category();
-        $category->setCode('Test')
-            ->setGroup($group);
-
-        $manager->persist($group);
-        $manager->persist($margin);
-        $manager->persist($category);
-        $manager->flush();
-
-        return $category;
-    }
-
-    protected function initGlobalMargins(ObjectManager $manager): void
-    {
-        $this->initRepository($manager, GlobalMargin::class);
-
-        $margin = new GlobalMargin();
-        $margin->setMinimum(0)
-            ->setMaximum(1_000_000)
-            ->setMargin(self::MARGIN_PERCENT);
-        $manager->persist($margin);
-
-        $manager->flush();
-    }
-
-    protected function initProducts(ObjectManager $manager, Category $category): Product
-    {
-        $this->initRepository($manager, Product::class);
-
-        $product = new Product();
-        $product->setDescription('Product Test')
-            ->setPrice(self::PRODUCT_PRICE)
-            ->setCategory($category);
-
-        $manager->persist($product);
-        $manager->flush();
-
-        return $product;
-    }
-
-    /**
-     * @phpstan-template TEntity of EntityInterface
-     *
-     * @phpstan-param class-string<TEntity> $entityName
-     *
-     * @phpstan-return EntityRepository<TEntity> $repository
-     */
-    protected function initRepository(ObjectManager $manager, string $entityName): EntityRepository
-    {
-        /** @phpstan-var \App\Repository\AbstractRepository<TEntity> $repository */
-        $repository = $manager->getRepository($entityName);
-
-        $items = $repository->findAll();
-        foreach ($items as $item) {
-            $manager->remove($item);
-        }
-        $manager->flush();
-
-        return $repository;
     }
 
     private function createGlobalMarginRepository(?float $globalMargin = null): GlobalMarginRepository
@@ -357,6 +265,91 @@ class CalculationGroupServiceTest extends KernelServiceTestCase
         $repository = $this->createMock(GroupRepository::class);
         $repository->method('find')
             ->willReturn($group);
+
+        return $repository;
+    }
+
+    private function init(): Product
+    {
+        $manager = $this->getManager();
+        $this->initGlobalMargins($manager);
+        $category = $this->initCategories($manager);
+
+        return $this->initProducts($manager, $category);
+    }
+
+    private function initCategories(ObjectManager $manager): Category
+    {
+        $this->initRepository($manager, GroupMargin::class);
+        $this->initRepository($manager, Category::class);
+        $this->initRepository($manager, Group::class);
+
+        $group = new Group();
+        $group->setCode('Test');
+
+        $margin = new GroupMargin();
+        $margin->setMinimum(0)
+            ->setMaximum(1_000_000)
+            ->setMargin(self::MARGIN_PERCENT);
+        $group->addMargin($margin);
+
+        $category = new Category();
+        $category->setCode('Test')
+            ->setGroup($group);
+
+        $manager->persist($group);
+        $manager->persist($margin);
+        $manager->persist($category);
+        $manager->flush();
+
+        return $category;
+    }
+
+    private function initGlobalMargins(ObjectManager $manager): void
+    {
+        $this->initRepository($manager, GlobalMargin::class);
+
+        $margin = new GlobalMargin();
+        $margin->setMinimum(0)
+            ->setMaximum(1_000_000)
+            ->setMargin(self::MARGIN_PERCENT);
+        $manager->persist($margin);
+
+        $manager->flush();
+    }
+
+    private function initProducts(ObjectManager $manager, Category $category): Product
+    {
+        $this->initRepository($manager, Product::class);
+
+        $product = new Product();
+        $product->setDescription('Product Test')
+            ->setPrice(self::PRODUCT_PRICE)
+            ->setCategory($category);
+
+        $manager->persist($product);
+        $manager->flush();
+
+        return $product;
+    }
+
+    /**
+     * @phpstan-template TEntity of EntityInterface
+     *
+     * @phpstan-param class-string<TEntity> $entityName
+     *
+     * @phpstan-return EntityRepository<TEntity> $repository
+     */
+    private function initRepository(ObjectManager $manager, string $entityName): EntityRepository
+    {
+        /** @phpstan-var \App\Repository\AbstractRepository<TEntity> $repository */
+        $repository = $manager->getRepository($entityName);
+
+        $items = $repository->findAll();
+        foreach ($items as $item) {
+            $manager->remove($item);
+        }
+        $manager->flush();
 
         return $repository;
     }

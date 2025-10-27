@@ -24,7 +24,7 @@ use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class SwissPostUpdaterTest extends KernelServiceTestCase
+final class SwissPostUpdaterTest extends KernelServiceTestCase
 {
     use TranslatorMockTrait;
 

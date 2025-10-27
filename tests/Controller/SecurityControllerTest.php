@@ -16,7 +16,7 @@ namespace App\Tests\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
-class SecurityControllerTest extends ControllerTestCase
+final class SecurityControllerTest extends ControllerTestCase
 {
     #[\Override]
     public static function getRoutes(): \Generator

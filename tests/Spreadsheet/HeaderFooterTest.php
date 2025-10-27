@@ -19,7 +19,7 @@ use App\Spreadsheet\WorksheetDocument;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\TestCase;
 
-class HeaderFooterTest extends TestCase
+final class HeaderFooterTest extends TestCase
 {
     use TranslatorMockTrait;
 

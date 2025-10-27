@@ -20,7 +20,7 @@ use App\Tests\DatabaseTrait;
 use App\Tests\Entity\IdTrait;
 use App\Tests\KernelServiceTestCase;
 
-class UserPropertyRepositoryTest extends KernelServiceTestCase
+final class UserPropertyRepositoryTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
     use IdTrait;

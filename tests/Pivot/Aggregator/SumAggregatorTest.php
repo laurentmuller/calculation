@@ -16,7 +16,7 @@ namespace App\Tests\Pivot\Aggregator;
 use App\Pivot\Aggregator\SumAggregator;
 use PHPUnit\Framework\TestCase;
 
-class SumAggregatorTest extends TestCase
+final class SumAggregatorTest extends TestCase
 {
     public function testAdd(): void
     {

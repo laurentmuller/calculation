@@ -19,7 +19,7 @@ use App\Parameter\MessageParameter;
 /**
  * @extends ParameterTestCase<MessageParameter>
  */
-class MessageParameterTest extends ParameterTestCase
+final class MessageParameterTest extends ParameterTestCase
 {
     #[\Override]
     public static function getParameterNames(): \Generator

@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
-class CalculationUpdateServiceTest extends AuthenticateWebTestCase
+final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
 {
     use CalculationTrait;
     use DatabaseTrait;

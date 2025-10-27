@@ -19,7 +19,7 @@ use App\Tests\Form\PreloadedExtensionsTrait;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class UserListTypeTest extends TypeTestCase
+final class UserListTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
     use UserTrait;

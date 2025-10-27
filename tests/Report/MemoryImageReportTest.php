@@ -20,7 +20,7 @@ use App\Service\FontAwesomeService;
 use fpdf\PdfException;
 use PHPUnit\Framework\TestCase;
 
-class MemoryImageReportTest extends TestCase
+final class MemoryImageReportTest extends TestCase
 {
     public function testEmptyImage(): void
     {

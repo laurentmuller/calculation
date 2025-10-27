@@ -16,7 +16,7 @@ namespace App\Tests\Word;
 use App\Word\WordDocument;
 use PHPUnit\Framework\TestCase;
 
-class WordDocumentTest extends TestCase
+final class WordDocumentTest extends TestCase
 {
     public function testWordDocument(): void
     {

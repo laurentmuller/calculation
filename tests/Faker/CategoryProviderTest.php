@@ -20,7 +20,7 @@ use App\Repository\CategoryRepository;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
-class CategoryProviderTest extends TestCase
+final class CategoryProviderTest extends TestCase
 {
     public function testWithEntity(): void
     {

@@ -20,7 +20,7 @@ use App\Pdf\Html\HtmlTag;
 use App\Pdf\Html\HtmlTextChunk;
 use PHPUnit\Framework\TestCase;
 
-class HtmlTextChunkTest extends TestCase
+final class HtmlTextChunkTest extends TestCase
 {
     public function testHtmlBookmark(): void
     {

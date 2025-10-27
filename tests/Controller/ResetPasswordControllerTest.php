@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use SymfonyCasts\Bundle\ResetPassword\Exception\FakeRepositoryException;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
-class ResetPasswordControllerTest extends ControllerTestCase
+final class ResetPasswordControllerTest extends ControllerTestCase
 {
     use SessionHelperTrait;
 

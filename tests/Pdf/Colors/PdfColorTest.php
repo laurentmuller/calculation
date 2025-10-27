@@ -20,7 +20,7 @@ use fpdf\Color\PdfRgbColor;
 use fpdf\PdfDocument;
 use PHPUnit\Framework\TestCase;
 
-class PdfColorTest extends TestCase
+final class PdfColorTest extends TestCase
 {
     public function testApply(): void
     {
@@ -35,20 +35,20 @@ class PdfColorTest extends TestCase
     public function testCellBorder(): void
     {
         $color = PdfDrawColor::cellBorder();
-        self::assertEqualValues($color, 221, 221, 221);
+        $this->assertEqualValues($color, 221, 221, 221);
     }
 
     public function testDefaultColors(): void
     {
-        self::assertEqualColor(PdfDrawColor::black(), PdfDrawColor::default());
-        self::assertEqualColor(PdfFillColor::white(), PdfFillColor::default());
-        self::assertEqualColor(PdfTextColor::black(), PdfTextColor::default());
+        $this->assertEqualColor(PdfDrawColor::black(), PdfDrawColor::default());
+        $this->assertEqualColor(PdfFillColor::white(), PdfFillColor::default());
+        $this->assertEqualColor(PdfTextColor::black(), PdfTextColor::default());
     }
 
     public function testHeader(): void
     {
         $color = PdfFillColor::header();
-        self::assertEqualValues($color, 245, 245, 245);
+        $this->assertEqualValues($color, 245, 245, 245);
     }
 
     public function testIsFillColor(): void
@@ -59,12 +59,12 @@ class PdfColorTest extends TestCase
         self::assertFalse($fill->isFillColor());
     }
 
-    protected static function assertEqualColor(PdfRgbColor $color1, PdfRgbColor $color2): void
+    private function assertEqualColor(PdfRgbColor $color1, PdfRgbColor $color2): void
     {
         self::assertTrue($color1->equals($color2));
     }
 
-    protected static function assertEqualValues(PdfRgbColor $color, int $red, int $green, int $blue): void
+    private function assertEqualValues(PdfRgbColor $color, int $red, int $green, int $blue): void
     {
         self::assertSame($color->red, $red);
         self::assertSame($color->green, $green);

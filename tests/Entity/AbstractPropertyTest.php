@@ -21,7 +21,7 @@ use App\Tests\DateAssertTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 
-class AbstractPropertyTest extends TestCase
+final class AbstractPropertyTest extends TestCase
 {
     use DateAssertTrait;
     use IdTrait;

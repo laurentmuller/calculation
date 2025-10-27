@@ -19,7 +19,7 @@ use App\Parameter\SecurityParameter;
 /**
  * @extends ParameterTestCase<SecurityParameter>
  */
-class SecurityParameterTest extends ParameterTestCase
+final class SecurityParameterTest extends ParameterTestCase
 {
     #[\Override]
     public static function getParameterNames(): \Generator

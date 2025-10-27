@@ -16,7 +16,7 @@ namespace App\Tests\Attribute;
 use App\Attribute\Parameter;
 use PHPUnit\Framework\TestCase;
 
-class ParameterTest extends TestCase
+final class ParameterTest extends TestCase
 {
     /**
      * @throws \ReflectionException

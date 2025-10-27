@@ -17,7 +17,7 @@ use App\Entity\GlobalMargin;
 use App\Tests\EntityTrait\GlobalMarginTrait;
 use Symfony\Component\HttpFoundation\Response;
 
-class GlobalMarginControllerTest extends EntityControllerTestCase
+final class GlobalMarginControllerTest extends EntityControllerTestCase
 {
     use GlobalMarginTrait;
 

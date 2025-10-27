@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @phpstan-type UtilsType = array{id: int, value: string}
  */
-class GroupByTraitTest extends TestCase
+final class GroupByTraitTest extends TestCase
 {
     use GroupByTrait;
 

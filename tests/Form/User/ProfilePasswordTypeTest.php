@@ -25,7 +25,7 @@ use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 /**
  * @extends EntityTypeTestCase<User, ProfilePasswordType>
  */
-class ProfilePasswordTypeTest extends EntityTypeTestCase
+final class ProfilePasswordTypeTest extends EntityTypeTestCase
 {
     use PasswordHasherExtensionTrait;
     use ValidatorExtensionTrait;

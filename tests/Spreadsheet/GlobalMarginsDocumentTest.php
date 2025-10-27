@@ -18,7 +18,7 @@ use App\Entity\GlobalMargin;
 use App\Spreadsheet\GlobalMarginsDocument;
 use PHPUnit\Framework\TestCase;
 
-class GlobalMarginsDocumentTest extends TestCase
+final class GlobalMarginsDocumentTest extends TestCase
 {
     public function testRender(): void
     {

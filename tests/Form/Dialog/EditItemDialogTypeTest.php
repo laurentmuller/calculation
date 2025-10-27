@@ -18,7 +18,7 @@ use App\Tests\Form\Category\CategoryTrait;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class EditItemDialogTypeTest extends TypeTestCase
+final class EditItemDialogTypeTest extends TypeTestCase
 {
     use CategoryTrait;
     use PreloadedExtensionsTrait;

@@ -21,7 +21,7 @@ use App\Tests\Form\EntityTypeTestCase;
 /**
  * @extends EntityTypeTestCase<Product, ProductType>
  */
-class ProductTypeTest extends EntityTypeTestCase
+final class ProductTypeTest extends EntityTypeTestCase
 {
     use CategoryTrait;
 

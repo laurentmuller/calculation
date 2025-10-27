@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class SearchTableTest extends TestCase
+final class SearchTableTest extends TestCase
 {
     use TranslatorMockTrait;
 

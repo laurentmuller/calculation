@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @phpstan-import-type CommandType from CommandService
  */
-class CommandsReportTest extends TestCase
+final class CommandsReportTest extends TestCase
 {
     public function testRender(): void
     {

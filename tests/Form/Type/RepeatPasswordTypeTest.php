@@ -17,7 +17,7 @@ use App\Form\Type\RepeatPasswordType;
 use App\Tests\Form\User\PasswordHasherExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class RepeatPasswordTypeTest extends TypeTestCase
+final class RepeatPasswordTypeTest extends TypeTestCase
 {
     use PasswordHasherExtensionTrait;
 

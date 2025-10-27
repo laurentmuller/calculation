@@ -18,7 +18,7 @@ use App\Calendar\Month;
 use App\Utils\FormatUtils;
 use Symfony\Component\Clock\DatePoint;
 
-class MonthTest extends CalendarTestCase
+final class MonthTest extends CalendarTestCase
 {
     public function testFormatKey(): void
     {

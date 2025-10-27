@@ -19,7 +19,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class HelpControllerTest extends ControllerTestCase
+final class HelpControllerTest extends ControllerTestCase
 {
     private const IMAGES_PATH = 'public/help/images';
 

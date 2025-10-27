@@ -19,7 +19,7 @@ use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class TaskServiceTypeTest extends TypeTestCase
+final class TaskServiceTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
     use TaskTrait;

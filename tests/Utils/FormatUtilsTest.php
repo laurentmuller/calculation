@@ -20,7 +20,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 
-class FormatUtilsTest extends TestCase
+final class FormatUtilsTest extends TestCase
 {
     use PrivateInstanceTrait;
 

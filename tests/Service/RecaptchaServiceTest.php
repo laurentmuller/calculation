@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use ReCaptcha\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-class RecaptchaServiceTest extends TestCase
+final class RecaptchaServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 

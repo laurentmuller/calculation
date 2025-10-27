@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AjaxCalculationControllerTest extends ControllerTestCase
+final class AjaxCalculationControllerTest extends ControllerTestCase
 {
     use CalculationTrait;
 

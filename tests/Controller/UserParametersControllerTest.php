@@ -16,7 +16,7 @@ namespace App\Tests\Controller;
 use App\Enums\MessagePosition;
 use App\Interfaces\PropertyServiceInterface;
 
-class UserParametersControllerTest extends ControllerTestCase
+final class UserParametersControllerTest extends ControllerTestCase
 {
     #[\Override]
     public static function getRoutes(): \Generator

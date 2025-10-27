@@ -18,7 +18,7 @@ use App\Service\SuspendEventListenerService;
 use App\Traits\DisableListenerTrait;
 use PHPUnit\Framework\TestCase;
 
-class SuspendEventListenerServiceTest extends TestCase implements DisableListenerInterface
+final class SuspendEventListenerServiceTest extends TestCase implements DisableListenerInterface
 {
     use DisableListenerTrait;
 

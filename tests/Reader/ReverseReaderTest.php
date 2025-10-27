@@ -16,7 +16,7 @@ namespace App\Tests\Reader;
 use App\Reader\ReverseReader;
 use PHPUnit\Framework\TestCase;
 
-class ReverseReaderTest extends TestCase
+final class ReverseReaderTest extends TestCase
 {
     public function testFileExist(): void
     {

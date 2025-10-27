@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
-class CaptchaImageServiceTest extends TestCase
+final class CaptchaImageServiceTest extends TestCase
 {
     private Session $session;
 

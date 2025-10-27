@@ -16,7 +16,7 @@ namespace App\Tests\Pdf\Html;
 use App\Pdf\Html\HtmlBrChunk;
 use PHPUnit\Framework\TestCase;
 
-class HtmlBrChunkTest extends TestCase
+final class HtmlBrChunkTest extends TestCase
 {
     public function testIsNewLine(): void
     {

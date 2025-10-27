@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\UnexpectedResponseException;
 use Symfony\Component\Mailer\MailerInterface;
 
-class CspReportControllerTest extends ControllerTestCase
+final class CspReportControllerTest extends ControllerTestCase
 {
     #[\Override]
     public static function getRoutes(): \Generator

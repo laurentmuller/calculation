@@ -23,7 +23,7 @@ use App\Service\RoleBuilderService;
 use App\Service\RoleService;
 use PHPUnit\Framework\TestCase;
 
-class UsersRightsReportTest extends TestCase
+final class UsersRightsReportTest extends TestCase
 {
     public function testRender(): void
     {

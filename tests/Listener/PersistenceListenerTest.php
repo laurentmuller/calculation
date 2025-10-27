@@ -30,7 +30,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class PersistenceListenerTest extends TestCase
+final class PersistenceListenerTest extends TestCase
 {
     use TranslatorMockTrait;
 

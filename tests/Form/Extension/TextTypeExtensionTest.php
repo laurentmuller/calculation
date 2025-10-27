@@ -17,7 +17,7 @@ use App\Form\Extension\TextTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class TextTypeExtensionTest extends TypeTestCase
+final class TextTypeExtensionTest extends TypeTestCase
 {
     public function testFormViewWithAllValues(): void
     {

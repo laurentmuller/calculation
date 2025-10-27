@@ -20,7 +20,7 @@ use App\Table\Column;
 use App\Table\GlobalMarginTable;
 use PHPUnit\Framework\TestCase;
 
-class ColumnTest extends TestCase
+final class ColumnTest extends TestCase
 {
     public function testCreateColumnAction(): void
     {

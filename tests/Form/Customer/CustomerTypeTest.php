@@ -22,7 +22,7 @@ use App\Tests\Form\EntityTypeTestCase;
 /**
  * @extends EntityTypeTestCase<Customer, CustomerType>
  */
-class CustomerTypeTest extends EntityTypeTestCase
+final class CustomerTypeTest extends EntityTypeTestCase
 {
     #[\Override]
     protected function getData(): array

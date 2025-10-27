@@ -18,7 +18,7 @@ use App\Service\EnvironmentService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class EnvironmentServiceTest extends TestCase
+final class EnvironmentServiceTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{string, Environment}>

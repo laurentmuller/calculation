@@ -19,7 +19,7 @@ use fpdf\Enums\PdfUnit;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-class PdfLabelTest extends TestCase
+final class PdfLabelTest extends TestCase
 {
     public function testOffsetX(): void
     {

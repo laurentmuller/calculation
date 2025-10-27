@@ -16,7 +16,7 @@ namespace App\Tests\Controller;
 use App\Service\IpStackService;
 use Symfony\Component\HttpFoundation\Response;
 
-class IpStackControllerTest extends ControllerTestCase
+final class IpStackControllerTest extends ControllerTestCase
 {
     #[\Override]
     public static function getRoutes(): \Generator

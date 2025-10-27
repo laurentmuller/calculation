@@ -25,7 +25,7 @@ use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class IpStackServiceTest extends TestCase
+final class IpStackServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 
@@ -40,7 +40,7 @@ class IpStackServiceTest extends TestCase
         $service->setClient($client);
         $actual = $service->getIpInfo();
         self::assertEmpty($actual);
-        self::assertError($service);
+        $this->assertError($service);
     }
 
     public function testGetIpInfoSuccess(): void
@@ -87,10 +87,10 @@ class IpStackServiceTest extends TestCase
         $service = $this->createService();
         $service->setClient($client);
         $service->getIpInfo();
-        self::assertError($service, 'unknown');
+        $this->assertError($service, 'unknown');
     }
 
-    protected static function assertError(IpStackService $service, string $message = self::ERROR_MESSAGE): void
+    private function assertError(IpStackService $service, string $message = self::ERROR_MESSAGE): void
     {
         $actual = $service->getLastError();
         self::assertInstanceOf(HttpClientError::class, $actual);

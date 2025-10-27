@@ -28,7 +28,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * @extends EntityTableTestCase<Product, ProductRepository, ProductTable>
  */
-class ProductTableTest extends EntityTableTestCase
+final class ProductTableTest extends EntityTableTestCase
 {
     private int $categoryId;
     private int $groupId;

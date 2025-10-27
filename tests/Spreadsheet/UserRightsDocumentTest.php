@@ -22,7 +22,7 @@ use App\Service\RoleService;
 use App\Spreadsheet\UserRightsDocument;
 use PHPUnit\Framework\TestCase;
 
-class UserRightsDocumentTest extends TestCase
+final class UserRightsDocumentTest extends TestCase
 {
     public function testRender(): void
     {

@@ -26,7 +26,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 /**
  * @extends EntityTypeTestCase<User, UserType>
  */
-class UserTypeTest extends EntityTypeTestCase
+final class UserTypeTest extends EntityTypeTestCase
 {
     use PasswordHasherExtensionTrait;
     use TranslatorMockTrait;

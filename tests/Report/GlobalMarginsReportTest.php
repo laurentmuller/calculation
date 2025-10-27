@@ -18,7 +18,7 @@ use App\Entity\GlobalMargin;
 use App\Report\GlobalMarginsReport;
 use PHPUnit\Framework\TestCase;
 
-class GlobalMarginsReportTest extends TestCase
+final class GlobalMarginsReportTest extends TestCase
 {
     public function testRender(): void
     {

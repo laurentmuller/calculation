@@ -18,7 +18,7 @@ use App\Entity\Group;
 use App\Entity\Task;
 use App\Entity\TaskItem;
 
-class TaskTest extends EntityValidatorTestCase
+final class TaskTest extends EntityValidatorTestCase
 {
     use IdTrait;
 

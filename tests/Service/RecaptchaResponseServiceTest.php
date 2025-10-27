@@ -17,7 +17,7 @@ use App\Service\RecaptchaResponseService;
 use PHPUnit\Framework\TestCase;
 use ReCaptcha\Response;
 
-class RecaptchaResponseServiceTest extends TestCase
+final class RecaptchaResponseServiceTest extends TestCase
 {
     public function testFormatSuccess(): void
     {

@@ -17,7 +17,7 @@ use App\Service\FontAwesomeIconService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class FontAwesomeIconServiceTest extends TestCase
+final class FontAwesomeIconServiceTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{string, ?string}>

@@ -22,7 +22,7 @@ use Symfony\Component\Form\Exception\InvalidArgumentException;
 /**
  * @extends EntityTransformerTestCase<int, Group>
  */
-class IdentifierTransformerTest extends EntityTransformerTestCase
+final class IdentifierTransformerTest extends EntityTransformerTestCase
 {
     /**
      * @phpstan-return \Generator<int, array<string|bool>>

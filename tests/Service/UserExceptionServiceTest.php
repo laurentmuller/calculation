@@ -30,7 +30,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\ExpiredSignatureException;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\InvalidSignatureException;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\WrongEmailVerifyException;
 
-class UserExceptionServiceTest extends TestCase
+final class UserExceptionServiceTest extends TestCase
 {
     private Request $request;
     private UserExceptionService $service;

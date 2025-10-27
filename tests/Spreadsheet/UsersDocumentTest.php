@@ -20,7 +20,7 @@ use App\Spreadsheet\UsersDocument;
 use PHPUnit\Framework\TestCase;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
-class UsersDocumentTest extends TestCase
+final class UsersDocumentTest extends TestCase
 {
     public function testRender(): void
     {

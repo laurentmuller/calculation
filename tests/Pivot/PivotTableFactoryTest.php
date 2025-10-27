@@ -22,7 +22,7 @@ use App\Pivot\PivotTableFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 
-class PivotTableFactoryTest extends TestCase
+final class PivotTableFactoryTest extends TestCase
 {
     /**
      * @psalm-suppress InvalidArgument

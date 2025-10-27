@@ -24,7 +24,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
-class DeeplTranslatorServiceTest extends TestCase
+final class DeeplTranslatorServiceTest extends TestCase
 {
     public function testDetectFalse(): void
     {

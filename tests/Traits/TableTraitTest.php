@@ -34,7 +34,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @phpstan-ignore class.missingExtends
  */
-class TableTraitTest extends TestCase
+final class TableTraitTest extends TestCase
 {
     use ExceptionContextTrait;
     use TableTrait;

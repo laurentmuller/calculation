@@ -25,7 +25,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class TaskComputeQueryValueResolverTest extends TestCase
+final class TaskComputeQueryValueResolverTest extends TestCase
 {
     public function testDefault(): void
     {

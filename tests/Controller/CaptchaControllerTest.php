@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
-class CaptchaControllerTest extends ControllerTestCase
+final class CaptchaControllerTest extends ControllerTestCase
 {
     use TranslatorMockTrait;
 

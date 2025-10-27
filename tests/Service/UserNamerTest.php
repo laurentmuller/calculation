@@ -21,7 +21,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
 
-class UserNamerTest extends TestCase
+final class UserNamerTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{0: string, 1: int, 2: ImageSize, 3?: string|ImageExtension}>

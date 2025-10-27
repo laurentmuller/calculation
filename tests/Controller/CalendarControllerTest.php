@@ -17,7 +17,7 @@ use App\Entity\Calculation;
 use App\Tests\EntityTrait\CalculationTrait;
 use Symfony\Component\HttpFoundation\Response;
 
-class CalendarControllerTest extends ControllerTestCase
+final class CalendarControllerTest extends ControllerTestCase
 {
     use CalculationTrait;
 

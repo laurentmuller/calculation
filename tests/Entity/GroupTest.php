@@ -19,7 +19,7 @@ use App\Entity\GroupMargin;
 use App\Entity\Product;
 use App\Entity\Task;
 
-class GroupTest extends EntityValidatorTestCase
+final class GroupTest extends EntityValidatorTestCase
 {
     use IdTrait;
 

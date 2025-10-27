@@ -17,7 +17,7 @@ use App\Attribute\SortableField;
 use App\Interfaces\SortModeInterface;
 use PHPUnit\Framework\TestCase;
 
-class SortableFieldTest extends TestCase
+final class SortableFieldTest extends TestCase
 {
     /**
      * @throws \ReflectionException

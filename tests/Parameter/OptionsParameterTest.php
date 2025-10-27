@@ -18,7 +18,7 @@ use App\Parameter\OptionsParameter;
 /**
  * @extends ParameterTestCase<OptionsParameter>
  */
-class OptionsParameterTest extends ParameterTestCase
+final class OptionsParameterTest extends ParameterTestCase
 {
     #[\Override]
     public static function getParameterNames(): \Generator

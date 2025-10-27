@@ -18,7 +18,7 @@ use App\Database\LogDatabase;
 use App\Entity\Log;
 use PHPUnit\Framework\TestCase;
 
-class LogDatabaseTest extends TestCase
+final class LogDatabaseTest extends TestCase
 {
     public function testInsertLog(): void
     {

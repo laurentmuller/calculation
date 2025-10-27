@@ -20,7 +20,7 @@ use App\Report\CalculationByStateReport;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class CalculationByStateReportTest extends TestCase
+final class CalculationByStateReportTest extends TestCase
 {
     public function testRender(): void
     {

@@ -34,7 +34,7 @@ use Twig\Error\Error;
 /**
  * @extends EntityTableTestCase<User, UserRepository, UserTable>
  */
-class UserTableTest extends EntityTableTestCase
+final class UserTableTest extends EntityTableTestCase
 {
     use TranslatorMockTrait;
 

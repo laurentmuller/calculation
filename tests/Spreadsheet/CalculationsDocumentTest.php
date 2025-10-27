@@ -19,7 +19,7 @@ use App\Spreadsheet\CalculationsDocument;
 use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\TestCase;
 
-class CalculationsDocumentTest extends TestCase
+final class CalculationsDocumentTest extends TestCase
 {
     use IdTrait;
 

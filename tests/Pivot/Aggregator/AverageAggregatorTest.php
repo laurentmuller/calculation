@@ -16,7 +16,7 @@ namespace App\Tests\Pivot\Aggregator;
 use App\Pivot\Aggregator\AverageAggregator;
 use PHPUnit\Framework\TestCase;
 
-class AverageAggregatorTest extends TestCase
+final class AverageAggregatorTest extends TestCase
 {
     public function testAdd(): void
     {

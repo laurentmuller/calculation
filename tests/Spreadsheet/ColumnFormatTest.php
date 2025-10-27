@@ -21,7 +21,7 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class ColumnFormatTest extends TestCase
+final class ColumnFormatTest extends TestCase
 {
     use TranslatorMockTrait;
 

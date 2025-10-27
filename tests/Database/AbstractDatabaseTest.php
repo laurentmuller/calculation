@@ -17,7 +17,7 @@ use App\Database\AbstractDatabase;
 use App\Tests\Fixture\Database;
 use PHPUnit\Framework\TestCase;
 
-class AbstractDatabaseTest extends TestCase
+final class AbstractDatabaseTest extends TestCase
 {
     private Database $database;
 

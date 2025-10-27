@@ -23,7 +23,7 @@ use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfDocument;
 use PHPUnit\Framework\TestCase;
 
-class PdfGroupTableTest extends TestCase
+final class PdfGroupTableTest extends TestCase
 {
     public function testCheckNewPage(): void
     {

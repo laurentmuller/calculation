@@ -17,7 +17,7 @@ use App\Model\CommandResult;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 
-class CommandResultTest extends TestCase
+final class CommandResultTest extends TestCase
 {
     public function testProperties(): void
     {

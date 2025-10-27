@@ -21,7 +21,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Style;
 use PHPUnit\Framework\TestCase;
 
-class HeaderFormatTest extends TestCase
+final class HeaderFormatTest extends TestCase
 {
     use TranslatorMockTrait;
 

@@ -20,7 +20,7 @@ use App\Tests\Form\PreloadedExtensionsTrait;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class RoleChoiceTypeTest extends TypeTestCase
+final class RoleChoiceTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
 

@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class AbstractControllerTest extends KernelTestCase
+final class AbstractControllerTest extends KernelTestCase
 {
     public function testGetAddressFrom(): void
     {
@@ -87,11 +87,11 @@ class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $actual = $controller->getRequestStack();
-        self::assertSameClass(RequestStack::class, $actual);
+        $this->assertSameClass(RequestStack::class, $actual);
 
         // second time for test caching
         $actual = $controller->getRequestStack();
-        self::assertSameClass(RequestStack::class, $actual);
+        $this->assertSameClass(RequestStack::class, $actual);
     }
 
     public function testGetRequestStackException(): void
@@ -121,11 +121,11 @@ class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $actual = $controller->getTranslator();
-        self::assertSameClass(TranslatorInterface::class, $actual);
+        $this->assertSameClass(TranslatorInterface::class, $actual);
 
         // second time for test caching
         $actual = $controller->getTranslator();
-        self::assertSameClass(TranslatorInterface::class, $actual);
+        $this->assertSameClass(TranslatorInterface::class, $actual);
     }
 
     public function testGetTranslatorException(): void
@@ -146,11 +146,11 @@ class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $actual = $controller->getUrlGenerator();
-        self::assertSameClass(UrlGeneratorService::class, $actual);
+        $this->assertSameClass(UrlGeneratorService::class, $actual);
 
         // second time for test caching
         $actual = $controller->getUrlGenerator();
-        self::assertSameClass(UrlGeneratorService::class, $actual);
+        $this->assertSameClass(UrlGeneratorService::class, $actual);
     }
 
     public function testGetUrlGeneratorException(): void
@@ -178,11 +178,11 @@ class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $actual = $controller->getUserService();
-        self::assertSameClass(UserService::class, $actual);
+        $this->assertSameClass(UserService::class, $actual);
 
         // second time for test caching
         $actual = $controller->getUserService();
-        self::assertSameClass(UserService::class, $actual);
+        $this->assertSameClass(UserService::class, $actual);
     }
 
     public function testGetUserServiceWithException(): void
@@ -319,7 +319,7 @@ class AbstractControllerTest extends KernelTestCase
     /**
      * @phpstan-param class-string $expected
      */
-    protected static function assertSameClass(string $expected, object $actual): void
+    private function assertSameClass(string $expected, object $actual): void
     {
         self::assertInstanceOf($expected, $actual);
     }

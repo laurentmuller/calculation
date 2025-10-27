@@ -18,7 +18,7 @@ use App\Service\CountryFlagService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class CountryFlagTypeTest extends TypeTestCase
+final class CountryFlagTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
 

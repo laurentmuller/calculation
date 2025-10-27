@@ -23,7 +23,7 @@ use App\Utils\DateUtils;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
 
-class LogsDocumentTest extends TestCase
+final class LogsDocumentTest extends TestCase
 {
     public function testEmpty(): void
     {

@@ -17,7 +17,7 @@ use App\Entity\GroupMargin;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
 
-class PivotControllerTest extends ControllerTestCase
+final class PivotControllerTest extends ControllerTestCase
 {
     use CalculationTrait;
     use ProductTrait;

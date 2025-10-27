@@ -19,7 +19,7 @@ use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class StrengthLevelTest extends TestCase
+final class StrengthLevelTest extends TestCase
 {
     use TranslatorMockTrait;
 

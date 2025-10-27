@@ -20,7 +20,7 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\TestCase;
 
-class AbstractEntityTableTest extends TestCase
+final class AbstractEntityTableTest extends TestCase
 {
     public function testHandleQuery(): void
     {

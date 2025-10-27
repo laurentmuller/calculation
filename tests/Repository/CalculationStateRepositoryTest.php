@@ -22,7 +22,7 @@ use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\QueryBuilder;
 
-class CalculationStateRepositoryTest extends KernelServiceTestCase
+final class CalculationStateRepositoryTest extends KernelServiceTestCase
 {
     use CalculationStateTrait;
     use CalculationTrait;

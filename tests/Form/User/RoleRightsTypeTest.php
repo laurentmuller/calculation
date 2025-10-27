@@ -24,7 +24,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
-class RoleRightsTypeTest extends TypeTestCase
+final class RoleRightsTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
     use TranslatorMockTrait;

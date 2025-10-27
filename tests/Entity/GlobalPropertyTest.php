@@ -15,7 +15,7 @@ namespace App\Tests\Entity;
 
 use App\Entity\GlobalProperty;
 
-class GlobalPropertyTest extends EntityValidatorTestCase
+final class GlobalPropertyTest extends EntityValidatorTestCase
 {
     public function testDuplicate(): void
     {

@@ -17,7 +17,7 @@ use App\Pdf\PdfYaxis;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class PdfYaxisTest extends TestCase
+final class PdfYaxisTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{PdfYaxis, float, float, float}>

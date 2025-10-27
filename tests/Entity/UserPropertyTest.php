@@ -17,7 +17,7 @@ use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Repository\UserPropertyRepository;
 
-class UserPropertyTest extends EntityValidatorTestCase
+final class UserPropertyTest extends EntityValidatorTestCase
 {
     public function testDuplicate(): void
     {

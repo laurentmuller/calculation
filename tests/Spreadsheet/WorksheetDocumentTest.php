@@ -28,7 +28,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 
-class WorksheetDocumentTest extends TestCase
+final class WorksheetDocumentTest extends TestCase
 {
     use TranslatorMockTrait;
 

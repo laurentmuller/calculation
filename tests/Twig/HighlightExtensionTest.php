@@ -18,7 +18,7 @@ use App\Twig\HighlightExtension;
 /**
  * @extends RuntimeTestCase<HighlightExtension>
  */
-class HighlightExtensionTest extends RuntimeTestCase
+final class HighlightExtensionTest extends RuntimeTestCase
 {
     #[\Override]
     protected function createService(): object

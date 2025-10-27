@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as PsrLevel;
 
-class LogLevelTest extends TestCase
+final class LogLevelTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{PsrLevel::*, string}>

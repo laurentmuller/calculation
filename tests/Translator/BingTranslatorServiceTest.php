@@ -24,7 +24,7 @@ use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
-class BingTranslatorServiceTest extends TestCase
+final class BingTranslatorServiceTest extends TestCase
 {
     /**
      * @throws ExceptionInterface

@@ -22,7 +22,7 @@ use App\Report\CalculationReport;
 use Endroid\QrCode\Exception\ValidationException;
 use PHPUnit\Framework\TestCase;
 
-class CalculationReportTest extends TestCase
+final class CalculationReportTest extends TestCase
 {
     /**
      * @throws ValidationException

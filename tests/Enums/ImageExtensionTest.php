@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @phpstan-import-type SaveOptionsType from ImageExtension
  */
-class ImageExtensionTest extends TestCase
+final class ImageExtensionTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{ImageExtension, string}>

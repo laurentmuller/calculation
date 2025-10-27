@@ -17,7 +17,7 @@ use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AjaxDialogControllerTest extends ControllerTestCase
+final class AjaxDialogControllerTest extends ControllerTestCase
 {
     #[\Override]
     public static function getRoutes(): \Generator

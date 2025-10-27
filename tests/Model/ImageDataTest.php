@@ -16,7 +16,7 @@ namespace App\Tests\Model;
 use App\Model\ImageData;
 use PHPUnit\Framework\TestCase;
 
-class ImageDataTest extends TestCase
+final class ImageDataTest extends TestCase
 {
     public function testValidData(): void
     {

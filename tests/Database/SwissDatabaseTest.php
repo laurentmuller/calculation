@@ -17,7 +17,7 @@ use App\Database\AbstractDatabase;
 use App\Database\SwissDatabase;
 use PHPUnit\Framework\TestCase;
 
-class SwissDatabaseTest extends TestCase
+final class SwissDatabaseTest extends TestCase
 {
     private const CITY_ID = 1;
     private const CITY_NAME = 'New-York';

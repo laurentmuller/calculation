@@ -18,7 +18,7 @@ use fpdf\PdfException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-class PdfLabelServiceTest extends TestCase
+final class PdfLabelServiceTest extends TestCase
 {
     public function testAll(): void
     {

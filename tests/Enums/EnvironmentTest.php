@@ -19,7 +19,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-class EnvironmentTest extends TestCase
+final class EnvironmentTest extends TestCase
 {
     use TranslatorMockTrait;
 

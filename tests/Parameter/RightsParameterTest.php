@@ -18,7 +18,7 @@ use App\Parameter\RightsParameter;
 /**
  * @extends ParameterTestCase<RightsParameter>
  */
-class RightsParameterTest extends ParameterTestCase
+final class RightsParameterTest extends ParameterTestCase
 {
     #[\Override]
     public static function getParameterNames(): \Generator

@@ -22,7 +22,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class SearchServiceTest extends KernelServiceTestCase
+final class SearchServiceTest extends KernelServiceTestCase
 {
     use CalculationTrait;
     use DatabaseTrait;

@@ -24,7 +24,7 @@ use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class UserCommentTypeTest extends TypeTestCase
+final class UserCommentTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
     use TranslatorMockTrait;

@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-class UserParametersTest extends TestCase
+final class UserParametersTest extends TestCase
 {
     public function testGetDefaultValues(): void
     {

@@ -20,7 +20,7 @@ use App\Entity\Product;
 use App\Spreadsheet\ProductsDocument;
 use PHPUnit\Framework\TestCase;
 
-class ProductsDocumentTest extends TestCase
+final class ProductsDocumentTest extends TestCase
 {
     public function testRender(): void
     {

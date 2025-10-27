@@ -28,7 +28,7 @@ use fpdf\Enums\PdfTextAlignment;
 use fpdf\PdfBorder;
 use PHPUnit\Framework\TestCase;
 
-class HtmlReportOutputTest extends TestCase
+final class HtmlReportOutputTest extends TestCase
 {
     use TranslatorMockTrait;
 

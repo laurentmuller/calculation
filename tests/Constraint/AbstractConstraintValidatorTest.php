@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 /**
  * @extends ConstraintValidatorTestCase<AbstractConstraintValidator>
  */
-class AbstractConstraintValidatorTest extends ConstraintValidatorTestCase
+final class AbstractConstraintValidatorTest extends ConstraintValidatorTestCase
 {
     public function testEmptyIsValid(): void
     {

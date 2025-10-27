@@ -17,7 +17,7 @@ use App\Entity\Task;
 use App\Entity\TaskItem;
 use App\Entity\TaskItemMargin;
 
-class TaskItemMarginTest extends EntityValidatorTestCase
+final class TaskItemMarginTest extends EntityValidatorTestCase
 {
     public function testAllLessZero(): void
     {

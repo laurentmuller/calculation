@@ -30,7 +30,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class ApplicationParametersTypeTest extends TypeTestCase
+final class ApplicationParametersTypeTest extends TypeTestCase
 {
     use CalculationStateTrait;
     use CategoryTrait;

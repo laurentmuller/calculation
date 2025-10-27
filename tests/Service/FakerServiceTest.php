@@ -36,7 +36,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Faker\Provider\Base;
 use PHPUnit\Framework\TestCase;
 
-class FakerServiceTest extends TestCase
+final class FakerServiceTest extends TestCase
 {
     public function testProviders(): void
     {
@@ -44,14 +44,14 @@ class FakerServiceTest extends TestCase
         $service = new FakerService($manager);
         $generator = $service->getGenerator();
 
-        self::assertProviderExist($generator, CustomPerson::class);
-        self::assertProviderExist($generator, CustomCompany::class);
-        self::assertProviderExist($generator, CustomAddress::class);
-        self::assertProviderExist($generator, CustomPhoneNumber::class);
-        self::assertProviderExist($generator, UserProvider::class);
-        self::assertProviderExist($generator, ProductProvider::class);
-        self::assertProviderExist($generator, CategoryProvider::class);
-        self::assertProviderExist($generator, CalculationStateProvider::class);
+        $this->assertProviderExist($generator, CustomPerson::class);
+        $this->assertProviderExist($generator, CustomCompany::class);
+        $this->assertProviderExist($generator, CustomAddress::class);
+        $this->assertProviderExist($generator, CustomPhoneNumber::class);
+        $this->assertProviderExist($generator, UserProvider::class);
+        $this->assertProviderExist($generator, ProductProvider::class);
+        $this->assertProviderExist($generator, CategoryProvider::class);
+        $this->assertProviderExist($generator, CalculationStateProvider::class);
     }
 
     /**
@@ -59,7 +59,7 @@ class FakerServiceTest extends TestCase
      *
      * @param class-string<TProvider> $class
      */
-    protected static function assertProviderExist(Generator $generator, string $class): void
+    private function assertProviderExist(Generator $generator, string $class): void
     {
         $provider = $generator->getProvider($class);
         self::assertNotNull($provider);

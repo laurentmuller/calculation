@@ -28,7 +28,7 @@ use Twig\Environment;
 /**
  * @extends EntityTableTestCase<Calculation, CalculationRepository, CalculationBelowTable>
  */
-class CalculationBelowTableTest extends EntityTableTestCase
+final class CalculationBelowTableTest extends EntityTableTestCase
 {
     private int $countItemsBelow;
 

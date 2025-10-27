@@ -17,7 +17,7 @@ use App\Controller\AbstractController;
 use App\Report\HtmlReport;
 use PHPUnit\Framework\TestCase;
 
-class HtmlReportTest extends TestCase
+final class HtmlReportTest extends TestCase
 {
     public function testRender(): void
     {

@@ -21,7 +21,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 
-class DateUtilsTest extends TestCase
+final class DateUtilsTest extends TestCase
 {
     use DateAssertTrait;
     use PrivateInstanceTrait;

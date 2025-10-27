@@ -4,7 +4,7 @@
 (() => {
     'use strict';
     const icons = document.querySelectorAll('i.fa-rotate-by');
-    icons.forEach(icon => {
+    icons.forEach((icon) => {
         icon.style.setProperty('--fa-rotate-angle', icon.dataset.rotate);
     });
 })();

@@ -30,7 +30,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 /**
  * @extends EntityTypeTestCase<Calculation, CalculationType>
  */
-class CalculationTypeTest extends EntityTypeTestCase
+final class CalculationTypeTest extends EntityTypeTestCase
 {
     use CalculationStateTrait;
     use TranslatorMockTrait;

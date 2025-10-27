@@ -16,7 +16,7 @@ namespace App\Tests\Service;
 use App\Service\AvatarService;
 use PHPUnit\Framework\TestCase;
 
-class AvatarServiceTest extends TestCase
+final class AvatarServiceTest extends TestCase
 {
     public function testGetURL(): void
     {

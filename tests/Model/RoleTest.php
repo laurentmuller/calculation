@@ -17,7 +17,7 @@ use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use PHPUnit\Framework\TestCase;
 
-class RoleTest extends TestCase
+final class RoleTest extends TestCase
 {
     public function testGetName(): void
     {

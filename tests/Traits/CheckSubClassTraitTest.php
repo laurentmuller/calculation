@@ -20,7 +20,7 @@ use App\Traits\CheckSubClassTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class CheckSubClassTraitTest extends TestCase
+final class CheckSubClassTraitTest extends TestCase
 {
     use CheckSubClassTrait;
 

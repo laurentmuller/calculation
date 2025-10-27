@@ -19,7 +19,7 @@ use App\Service\OpenWeatherService;
 use App\Utils\FileUtils;
 use Symfony\Component\HttpFoundation\Response;
 
-class OpenWeatherControllerTest extends ControllerTestCase
+final class OpenWeatherControllerTest extends ControllerTestCase
 {
     private const CITY_ID = 7286311;
 

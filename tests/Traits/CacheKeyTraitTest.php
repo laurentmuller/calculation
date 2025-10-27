@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Cache\ItemInterface;
 
-class CacheKeyTraitTest extends TestCase
+final class CacheKeyTraitTest extends TestCase
 {
     use CacheKeyTrait;
 

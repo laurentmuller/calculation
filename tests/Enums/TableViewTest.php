@@ -19,7 +19,7 @@ use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class TableViewTest extends TestCase
+final class TableViewTest extends TestCase
 {
     use TranslatorMockTrait;
 

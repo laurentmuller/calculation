@@ -21,7 +21,7 @@ use App\Entity\CalculationItem;
 use App\Spreadsheet\CalculationDocument;
 use PHPUnit\Framework\TestCase;
 
-class CalculationDocumentTest extends TestCase
+final class CalculationDocumentTest extends TestCase
 {
     public function testRender(): void
     {

@@ -20,7 +20,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-class CommandServiceTest extends KernelServiceTestCase
+final class CommandServiceTest extends KernelServiceTestCase
 {
     public function testCount(): void
     {

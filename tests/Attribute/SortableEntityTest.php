@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 #[SortableEntity(name: 'descending', order: SortModeInterface::SORT_DESC)]
 #[SortableEntity(name: 'ascending')]
-class SortableEntityTest extends TestCase
+final class SortableEntityTest extends TestCase
 {
     public string $ascending = '';
 

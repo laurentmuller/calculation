@@ -16,7 +16,7 @@ namespace App\Tests\Model;
 use App\Model\TranslateQuery;
 use PHPUnit\Framework\TestCase;
 
-class TranslateQueryTest extends TestCase
+final class TranslateQueryTest extends TestCase
 {
     public function testWithDefaultValues(): void
     {

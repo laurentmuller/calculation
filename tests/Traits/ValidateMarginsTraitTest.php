@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 /**
  * @extends ConstraintValidatorTestCase<LengthValidator>
  */
-class ValidateMarginsTraitTest extends ConstraintValidatorTestCase
+final class ValidateMarginsTraitTest extends ConstraintValidatorTestCase
 {
     public function testMaximumGreaterMinimum(): void
     {

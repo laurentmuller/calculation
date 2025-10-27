@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Intl\Countries;
 
-class CountryFlagServiceTest extends TestCase
+final class CountryFlagServiceTest extends TestCase
 {
     private CountryFlagService $service;
 

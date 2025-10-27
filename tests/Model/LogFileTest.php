@@ -19,7 +19,7 @@ use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 
-class LogFileTest extends TestCase
+final class LogFileTest extends TestCase
 {
     use IdTrait;
 

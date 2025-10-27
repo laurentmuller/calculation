@@ -20,7 +20,7 @@ use App\Utils\FileUtils;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class ImageResizerTest extends TestCase
+final class ImageResizerTest extends TestCase
 {
     use TranslatorMockTrait;
 
@@ -37,7 +37,7 @@ class ImageResizerTest extends TestCase
         $service = $this->createService();
         $actual = $service->resizeDefault($source, $target);
         self::assertTrue($actual);
-        self::assertImageValid($target, 192);
+        $this->assertImageValid($target, 192);
     }
 
     public function testResizeInvalidFile(): void
@@ -54,7 +54,7 @@ class ImageResizerTest extends TestCase
         $service = $this->createService();
         $actual = $service->resizeMedium($source, $target);
         self::assertTrue($actual);
-        self::assertImageValid($target, 96);
+        $this->assertImageValid($target, 96);
     }
 
     public function testResizeSmall(): void
@@ -64,7 +64,7 @@ class ImageResizerTest extends TestCase
         $service = $this->createService();
         $actual = $service->resizeSmall($source, $target);
         self::assertTrue($actual);
-        self::assertImageValid($target, 32);
+        $this->assertImageValid($target, 32);
     }
 
     public function testResizeWidthGreaterHeight(): void
@@ -74,10 +74,10 @@ class ImageResizerTest extends TestCase
         $service = $this->createService();
         $actual = $service->resizeDefault($source, $target);
         self::assertTrue($actual);
-        self::assertImageValid($target, 161, 192);
+        $this->assertImageValid($target, 161, 192);
     }
 
-    protected static function assertImageValid(string $target, int $width, ?int $height = null): void
+    private function assertImageValid(string $target, int $width, ?int $height = null): void
     {
         $image = \imagecreatefrompng($target);
         self::assertInstanceOf(\GdImage::class, $image);

@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 
-class SessionAwareTraitTest extends AwareTraitTestCase
+final class SessionAwareTraitTest extends AwareTraitTestCase
 {
     use SessionAwareTrait;
 

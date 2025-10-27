@@ -22,7 +22,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ReportGroupTableTest extends TestCase
+final class ReportGroupTableTest extends TestCase
 {
     use TranslatorMockTrait;
 

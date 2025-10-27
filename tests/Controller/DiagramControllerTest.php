@@ -15,7 +15,7 @@ namespace App\Tests\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class DiagramControllerTest extends ControllerTestCase
+final class DiagramControllerTest extends ControllerTestCase
 {
     #[\Override]
     public static function getRoutes(): \Generator

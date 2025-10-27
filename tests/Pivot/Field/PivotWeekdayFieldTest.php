@@ -17,7 +17,7 @@ use App\Pivot\Field\PivotWeekdayField;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
-class PivotWeekdayFieldTest extends TestCase
+final class PivotWeekdayFieldTest extends TestCase
 {
     public function testConstructor(): void
     {

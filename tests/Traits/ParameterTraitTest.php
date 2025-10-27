@@ -18,7 +18,7 @@ use App\Traits\ParameterTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class ParameterTraitTest extends TestCase
+final class ParameterTraitTest extends TestCase
 {
     use ParameterTrait;
 

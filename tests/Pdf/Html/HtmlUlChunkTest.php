@@ -18,7 +18,7 @@ use App\Pdf\Html\HtmlLiChunk;
 use App\Pdf\Html\HtmlUlChunk;
 use PHPUnit\Framework\TestCase;
 
-class HtmlUlChunkTest extends TestCase
+final class HtmlUlChunkTest extends TestCase
 {
     public function testAdd(): void
     {

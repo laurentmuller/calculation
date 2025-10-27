@@ -18,7 +18,7 @@ use App\Service\LogService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-class LogServiceTest extends TestCase
+final class LogServiceTest extends TestCase
 {
     public function testClearCache(): void
     {

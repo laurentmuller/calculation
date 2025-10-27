@@ -19,7 +19,7 @@ use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\Form\Task\TaskTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class EditTaskDialogTypeTest extends TypeTestCase
+final class EditTaskDialogTypeTest extends TypeTestCase
 {
     use CategoryTrait;
     use PreloadedExtensionsTrait;

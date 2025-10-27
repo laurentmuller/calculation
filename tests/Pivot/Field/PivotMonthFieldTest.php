@@ -18,7 +18,7 @@ use App\Pivot\Field\PivotMonthField;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
-class PivotMonthFieldTest extends TestCase
+final class PivotMonthFieldTest extends TestCase
 {
     public function testConstructor(): void
     {

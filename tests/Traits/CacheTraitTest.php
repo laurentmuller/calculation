@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-class CacheTraitTest extends TestCase
+final class CacheTraitTest extends TestCase
 {
     use CacheTrait;
 

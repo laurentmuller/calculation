@@ -19,7 +19,7 @@ use App\Tests\TranslatorMockTrait;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
-class OpenWeatherFormatterTest extends TestCase
+final class OpenWeatherFormatterTest extends TestCase
 {
     use TranslatorMockTrait;
 

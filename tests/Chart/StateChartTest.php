@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
-class StateChartTest extends TestCase
+final class StateChartTest extends TestCase
 {
     use TranslatorMockTrait;
 

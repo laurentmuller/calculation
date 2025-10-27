@@ -18,7 +18,7 @@ use App\Parameter\HomePageParameter;
 /**
  * @extends ParameterTestCase<HomePageParameter>
  */
-class HomePageParameterTest extends ParameterTestCase
+final class HomePageParameterTest extends ParameterTestCase
 {
     #[\Override]
     public static function getParameterNames(): \Generator

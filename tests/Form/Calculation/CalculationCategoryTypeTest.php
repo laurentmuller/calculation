@@ -22,7 +22,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @extends EntityTypeTestCase<CalculationCategory, CalculationCategoryType>
  */
-class CalculationCategoryTypeTest extends EntityTypeTestCase
+final class CalculationCategoryTypeTest extends EntityTypeTestCase
 {
     #[\Override]
     protected function getData(): array

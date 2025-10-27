@@ -19,7 +19,7 @@ use App\Entity\Group;
 use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 
-class GeneratorControllerTest extends ControllerTestCase
+final class GeneratorControllerTest extends ControllerTestCase
 {
     private static ?Category $category = null;
     private static ?Group $group = null;

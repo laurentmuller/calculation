@@ -16,7 +16,7 @@ namespace App\Tests\Reader;
 use App\Reader\CSVReader;
 use PHPUnit\Framework\TestCase;
 
-class CSVReaderTest extends TestCase
+final class CSVReaderTest extends TestCase
 {
     private const VALUES_SEP = '|';
 

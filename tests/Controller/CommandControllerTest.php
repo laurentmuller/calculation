@@ -16,7 +16,7 @@ namespace App\Tests\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CommandControllerTest extends ControllerTestCase
+final class CommandControllerTest extends ControllerTestCase
 {
     private const ROUTES = [
         '/command',

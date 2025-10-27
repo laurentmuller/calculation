@@ -16,7 +16,7 @@ namespace App\Tests\Pivot\Field;
 use App\Pivot\Field\PivotMethod;
 use PHPUnit\Framework\TestCase;
 
-class PivotMethodTest extends TestCase
+final class PivotMethodTest extends TestCase
 {
     public function testConvertFloat(): void
     {

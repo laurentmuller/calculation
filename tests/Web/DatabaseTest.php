@@ -32,7 +32,7 @@ use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class DatabaseTest extends KernelServiceTestCase
+final class DatabaseTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
 

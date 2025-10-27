@@ -18,7 +18,7 @@ use App\Model\GlobalMargins;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class GlobalMarginsTypeTest extends TypeTestCase
+final class GlobalMarginsTypeTest extends TypeTestCase
 {
     public function testFormView(): void
     {

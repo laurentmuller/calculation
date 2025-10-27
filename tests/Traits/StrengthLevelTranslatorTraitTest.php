@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class StrengthLevelTranslatorTraitTest extends TestCase
+final class StrengthLevelTranslatorTraitTest extends TestCase
 {
     use StrengthLevelTranslatorTrait;
     use TranslatorMockTrait;
@@ -65,7 +65,7 @@ class StrengthLevelTranslatorTraitTest extends TestCase
     {
         $validator = $this->createMock(ValidatorInterface::class);
         $root = new \stdClass();
-        $translator = $this->getTranslator();
+        $translator = $this->translator;
         $context = new ExecutionContext($validator, $root, $translator);
         $constraint = new Strength();
         $minimum = StrengthLevel::MEDIUM;

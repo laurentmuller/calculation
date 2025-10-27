@@ -22,7 +22,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
-class RoleServiceTest extends TestCase
+final class RoleServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 

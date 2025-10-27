@@ -20,7 +20,7 @@ use App\Entity\Product;
 use App\Report\ProductsReport;
 use PHPUnit\Framework\TestCase;
 
-class ProductsReportTest extends TestCase
+final class ProductsReportTest extends TestCase
 {
     public function testRender(): void
     {

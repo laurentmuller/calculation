@@ -21,7 +21,7 @@ use App\Repository\ProductRepository;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
-class ProductProviderTest extends TestCase
+final class ProductProviderTest extends TestCase
 {
     public function testProductName(): void
     {

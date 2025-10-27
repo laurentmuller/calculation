@@ -20,7 +20,7 @@ use App\Repository\UserRepository;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
-class UserProviderTest extends TestCase
+final class UserProviderTest extends TestCase
 {
     public function testWithEntity(): void
     {

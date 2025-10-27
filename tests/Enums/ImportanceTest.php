@@ -18,7 +18,7 @@ use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class ImportanceTest extends TestCase
+final class ImportanceTest extends TestCase
 {
     use TranslatorMockTrait;
 

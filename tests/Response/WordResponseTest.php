@@ -17,7 +17,7 @@ use App\Response\WordResponse;
 use App\Word\WordDocument;
 use PHPUnit\Framework\TestCase;
 
-class WordResponseTest extends TestCase
+final class WordResponseTest extends TestCase
 {
     public function testGetFileExtension(): void
     {

@@ -20,7 +20,7 @@ use Doctrine\DBAL\Types\Type;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class FixedFloatTypeTest extends TestCase
+final class FixedFloatTypeTest extends TestCase
 {
     #[\Override]
     public static function setUpBeforeClass(): void

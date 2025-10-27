@@ -18,7 +18,7 @@ use App\Pdf\Html\HtmlParentChunk;
 use App\Pdf\Html\HtmlTag;
 use PHPUnit\Framework\TestCase;
 
-class HtmlParentChunkTest extends TestCase
+final class HtmlParentChunkTest extends TestCase
 {
     public function testAdd(): void
     {

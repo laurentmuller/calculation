@@ -19,7 +19,7 @@ use App\Entity\GroupMargin;
 use App\Spreadsheet\GroupsDocument;
 use PHPUnit\Framework\TestCase;
 
-class GroupsDocumentTest extends TestCase
+final class GroupsDocumentTest extends TestCase
 {
     public function testRenderWithMargins(): void
     {

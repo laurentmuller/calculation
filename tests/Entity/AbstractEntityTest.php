@@ -16,7 +16,7 @@ namespace App\Tests\Entity;
 use App\Entity\AbstractEntity;
 use PHPUnit\Framework\TestCase;
 
-class AbstractEntityTest extends TestCase
+final class AbstractEntityTest extends TestCase
 {
     use IdTrait;
 

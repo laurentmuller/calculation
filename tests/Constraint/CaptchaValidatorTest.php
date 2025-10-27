@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 /**
  * @extends ConstraintValidatorTestCase<CaptchaValidator>
  */
-class CaptchaValidatorTest extends ConstraintValidatorTestCase
+final class CaptchaValidatorTest extends ConstraintValidatorTestCase
 {
     public function testEmptyIsValid(): void
     {

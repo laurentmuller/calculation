@@ -18,7 +18,7 @@ use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class PositionServiceTest extends TestCase
+final class PositionServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 

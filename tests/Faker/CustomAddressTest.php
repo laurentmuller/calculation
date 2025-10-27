@@ -18,7 +18,7 @@ use App\Faker\Factory;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
-class CustomAddressTest extends TestCase
+final class CustomAddressTest extends TestCase
 {
     public function testCustomAddress(): void
     {

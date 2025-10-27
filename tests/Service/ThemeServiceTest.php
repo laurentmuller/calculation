@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ThemeServiceTest extends TestCase
+final class ThemeServiceTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{Request, bool}>

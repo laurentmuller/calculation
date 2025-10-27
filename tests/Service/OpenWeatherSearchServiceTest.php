@@ -20,7 +20,7 @@ use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-class OpenWeatherSearchServiceTest extends TestCase
+final class OpenWeatherSearchServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 

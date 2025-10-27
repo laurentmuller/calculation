@@ -15,7 +15,7 @@ namespace App\Tests\Twig;
 
 use App\Twig\SwitchExtension;
 
-class SwitchExtensionTest extends IntegrationTestCase
+final class SwitchExtensionTest extends IntegrationTestCase
 {
     #[\Override]
     protected function getExtensions(): array

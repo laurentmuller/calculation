@@ -18,7 +18,7 @@ use App\Tests\EntityTrait\GlobalMarginTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use Symfony\Component\HttpFoundation\Response;
 
-class ChartMonthControllerTest extends ControllerTestCase
+final class ChartMonthControllerTest extends ControllerTestCase
 {
     use CalculationTrait;
     use GlobalMarginTrait;

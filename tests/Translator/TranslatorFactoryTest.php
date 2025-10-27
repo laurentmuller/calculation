@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Contracts\Cache\CacheInterface;
 
-class TranslatorFactoryTest extends TestCase
+final class TranslatorFactoryTest extends TestCase
 {
     private MockObject&RequestStack $requestStack;
 

@@ -17,7 +17,7 @@ use App\Service\ImageService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Path;
 
-class ImageServiceTest extends TestCase
+final class ImageServiceTest extends TestCase
 {
     public function testAllocate(): void
     {

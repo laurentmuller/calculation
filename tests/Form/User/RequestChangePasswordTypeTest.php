@@ -24,7 +24,7 @@ use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class RequestChangePasswordTypeTest extends TypeTestCase
+final class RequestChangePasswordTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
     use ValidatorExtensionTrait;

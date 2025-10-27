@@ -21,7 +21,7 @@ use App\Tests\KernelServiceTestCase;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping\MappingException;
 
-class GlobalMarginRepositoryTest extends KernelServiceTestCase
+final class GlobalMarginRepositoryTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
     use GlobalMarginTrait;

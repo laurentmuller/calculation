@@ -21,7 +21,7 @@ use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PHPUnit\Framework\TestCase;
 
-class SpreadsheetDocumentTest extends TestCase
+final class SpreadsheetDocumentTest extends TestCase
 {
     use TranslatorMockTrait;
 

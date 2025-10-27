@@ -18,7 +18,7 @@ use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\CalculationTrait;
 use Symfony\Component\Console\Exception\MissingInputException;
 
-class UcFirstCommandTest extends CommandTestCase
+final class UcFirstCommandTest extends CommandTestCase
 {
     use CalculationTrait;
     use DatabaseTrait;

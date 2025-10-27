@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
-class AkismetServiceTest extends TestCase
+final class AkismetServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 

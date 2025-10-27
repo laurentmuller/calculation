@@ -20,7 +20,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  * Test class for user's roles.
  */
 #[\PHPUnit\Framework\Attributes\CoversNothing]
-class UsersTest extends AuthenticateWebTestCase
+final class UsersTest extends AuthenticateWebTestCase
 {
     /**
      * @phpstan-return \Generator<int, array{string}>

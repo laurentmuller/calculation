@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @phpstan-import-type ColorValueType from PdfChartInterface
  */
-class PdfPieChartTraitTest extends TestCase
+final class PdfPieChartTraitTest extends TestCase
 {
     public function testCounterClockwise(): void
     {

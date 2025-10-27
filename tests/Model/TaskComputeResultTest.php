@@ -20,7 +20,7 @@ use App\Model\TaskComputeResult;
 use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\TestCase;
 
-class TaskComputeResultTest extends TestCase
+final class TaskComputeResultTest extends TestCase
 {
     use IdTrait;
 

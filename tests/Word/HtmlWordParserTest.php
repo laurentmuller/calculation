@@ -17,7 +17,7 @@ use App\Word\HtmlWordParser;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class HtmlWordParserTest extends TestCase
+final class HtmlWordParserTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{string, string}>
@@ -79,19 +79,19 @@ class HtmlWordParserTest extends TestCase
     #[DataProvider('getClassToStyles')]
     public function testClassToStyle(string $class, string $expected): void
     {
-        self::assertParserContainsClass($expected, $class);
+        $this->assertParserContainsClass($expected, $class);
     }
 
     #[DataProvider('getBorders')]
     public function testParseBorder(string $class, string $expected): void
     {
-        self::assertParserContainsClass($expected, $class);
+        $this->assertParserContainsClass($expected, $class);
     }
 
     public function testParseClassEmpty(): void
     {
         $content = '<h4 class="">Header Content</h4>';
-        self::assertParserContainsString('h4', $content);
+        $this->assertParserContainsString('h4', $content);
     }
 
     public function testParseEmpty(): void
@@ -104,22 +104,22 @@ class HtmlWordParserTest extends TestCase
     #[DataProvider('getMargins')]
     public function testParseMargins(string $class, string $expected): void
     {
-        self::assertParserContainsClass($expected, $class);
+        $this->assertParserContainsClass($expected, $class);
     }
 
     public function testParseMultiClassEmpty(): void
     {
         $content = '<h4 class="  ">Header Content</h4>';
-        self::assertParserContainsString('h4', $content);
+        $this->assertParserContainsString('h4', $content);
     }
 
-    protected static function assertParserContainsClass(string $expected, string $class): void
+    private function assertParserContainsClass(string $expected, string $class): void
     {
         $content = \sprintf('<h4 class="%s">Header Content</h4>', $class);
-        self::assertParserContainsString($expected, $content);
+        $this->assertParserContainsString($expected, $content);
     }
 
-    protected static function assertParserContainsString(string $expected, string $content): void
+    private function assertParserContainsString(string $expected, string $content): void
     {
         $parser = new HtmlWordParser();
         $actual = $parser->parse($content);

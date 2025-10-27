@@ -19,7 +19,7 @@ use App\Interfaces\TableInterface;
 use App\Table\DataQuery;
 use PHPUnit\Framework\TestCase;
 
-class DataQueryTest extends TestCase
+final class DataQueryTest extends TestCase
 {
     public function testAttributes(): void
     {

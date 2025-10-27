@@ -18,7 +18,7 @@ use App\Repository\CalculationStateRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CalculationArchiveControllerTest extends ControllerTestCase
+final class CalculationArchiveControllerTest extends ControllerTestCase
 {
     private ?CalculationState $editState = null;
     private ?CalculationState $notEditSate = null;

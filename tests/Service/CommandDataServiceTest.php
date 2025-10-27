@@ -20,7 +20,7 @@ use App\Tests\KernelServiceTestCase;
 /**
  * @phpstan-import-type CommandType from CommandService
  */
-class CommandDataServiceTest extends KernelServiceTestCase
+final class CommandDataServiceTest extends KernelServiceTestCase
 {
     public function testCreateData(): void
     {

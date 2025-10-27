@@ -26,7 +26,7 @@ use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Clock\DatePoint;
 
-class CalculationRepositoryTest extends KernelServiceTestCase
+final class CalculationRepositoryTest extends KernelServiceTestCase
 {
     use CalculationTrait;
     use DatabaseTrait;

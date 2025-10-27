@@ -19,7 +19,7 @@ use App\Pivot\Aggregator\CountAggregator;
 use App\Pivot\PivotNode;
 use PHPUnit\Framework\TestCase;
 
-class PivotNodeTest extends TestCase
+final class PivotNodeTest extends TestCase
 {
     public function testAdd(): void
     {

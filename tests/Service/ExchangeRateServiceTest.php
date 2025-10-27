@@ -23,7 +23,7 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
-class ExchangeRateServiceTest extends TestCase
+final class ExchangeRateServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 
@@ -38,7 +38,7 @@ class ExchangeRateServiceTest extends TestCase
         $service->setClient($client);
         $actual = $service->getLatest('chf');
         self::assertEmpty($actual);
-        self::assertError($service);
+        $this->assertError($service);
     }
 
     public function testGetLatestSuccess(): void
@@ -83,7 +83,7 @@ class ExchangeRateServiceTest extends TestCase
         $service->setClient($client);
         $actual = $service->getQuota();
         self::assertNull($actual);
-        self::assertError($service);
+        $this->assertError($service);
     }
 
     public function testGetQuotaSuccess(): void
@@ -119,7 +119,7 @@ class ExchangeRateServiceTest extends TestCase
         $service->setClient($client);
         $actual = $service->getRateAndDates('CHF', 'USD');
         self::assertNull($actual);
-        self::assertError($service);
+        $this->assertError($service);
     }
 
     public function testGetRateAndDatesSuccess(): void
@@ -168,7 +168,7 @@ class ExchangeRateServiceTest extends TestCase
         $service->setClient($client);
         $actual = $service->getRate('CHF', 'USD');
         self::assertSame(0.0, $actual);
-        self::assertError($service);
+        $this->assertError($service);
     }
 
     public function testGetRateSuccess(): void
@@ -208,7 +208,7 @@ class ExchangeRateServiceTest extends TestCase
         $service->setClient($client);
         $actual = $service->getSupportedCodes();
         self::assertEmpty($actual);
-        self::assertError($service);
+        $this->assertError($service);
     }
 
     public function testGetSupportedCodesSuccess(): void
@@ -266,10 +266,10 @@ class ExchangeRateServiceTest extends TestCase
         $service = $this->createService();
         $service->setClient($client);
         $service->getQuota();
-        self::assertError($service, 'unknown');
+        $this->assertError($service, 'unknown');
     }
 
-    protected static function assertError(ExchangeRateService $service, string $message = self::ERROR_MESSAGE): void
+    private function assertError(ExchangeRateService $service, string $message = self::ERROR_MESSAGE): void
     {
         $actual = $service->getLastError();
         self::assertInstanceOf(HttpClientError::class, $actual);

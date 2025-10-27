@@ -18,7 +18,7 @@ use App\Entity\CalculationState;
 use App\Report\CalculationStatesReport;
 use PHPUnit\Framework\TestCase;
 
-class CalculationStatesReportTest extends TestCase
+final class CalculationStatesReportTest extends TestCase
 {
     public function testRender(): void
     {

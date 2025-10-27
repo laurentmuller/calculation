@@ -25,7 +25,7 @@ use App\Entity\Product;
 use App\Utils\FormatUtils;
 use Symfony\Component\Clock\DatePoint;
 
-class CalculationTest extends EntityValidatorTestCase
+final class CalculationTest extends EntityValidatorTestCase
 {
     use IdTrait;
 

@@ -19,7 +19,7 @@ use App\Pdf\PdfTable;
 use App\Report\AbstractReport;
 use PHPUnit\Framework\TestCase;
 
-class AbstractReportTest extends TestCase
+final class AbstractReportTest extends TestCase
 {
     public function testAddPageIndex(): void
     {

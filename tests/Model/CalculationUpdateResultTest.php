@@ -20,7 +20,7 @@ use App\Tests\Entity\IdTrait;
 use App\Utils\DateUtils;
 use PHPUnit\Framework\TestCase;
 
-class CalculationUpdateResultTest extends TestCase
+final class CalculationUpdateResultTest extends TestCase
 {
     use IdTrait;
 

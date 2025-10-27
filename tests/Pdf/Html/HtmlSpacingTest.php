@@ -17,7 +17,7 @@ use App\Pdf\Html\HtmlSpacing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class HtmlSpacingTest extends TestCase
+final class HtmlSpacingTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{string}>

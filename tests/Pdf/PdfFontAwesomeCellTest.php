@@ -21,7 +21,7 @@ use fpdf\Enums\PdfMove;
 use fpdf\PdfRectangle;
 use PHPUnit\Framework\TestCase;
 
-class PdfFontAwesomeCellTest extends TestCase
+final class PdfFontAwesomeCellTest extends TestCase
 {
     public function testIconCell(): void
     {

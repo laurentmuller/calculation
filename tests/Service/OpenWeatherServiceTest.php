@@ -16,7 +16,7 @@ namespace App\Tests\Service;
 use App\Service\OpenWeatherService;
 use App\Tests\KernelServiceTestCase;
 
-class OpenWeatherServiceTest extends KernelServiceTestCase
+final class OpenWeatherServiceTest extends KernelServiceTestCase
 {
     private const CITY_INVALID = 0;
     private const CITY_VALID = 2_660_718;

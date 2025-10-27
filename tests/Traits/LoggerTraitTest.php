@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
-class LoggerTraitTest extends TestCase
+final class LoggerTraitTest extends TestCase
 {
     use LoggerTrait;
 

@@ -21,7 +21,7 @@ use fpdf\PdfDocument;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class HtmlBootstrapColorTest extends TestCase
+final class HtmlBootstrapColorTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{HtmlBootstrapColor, string}>

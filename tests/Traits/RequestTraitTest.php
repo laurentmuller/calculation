@@ -18,7 +18,7 @@ use App\Traits\RequestTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class RequestTraitTest extends TestCase
+final class RequestTraitTest extends TestCase
 {
     use RequestTrait;
 

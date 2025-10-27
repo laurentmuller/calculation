@@ -30,7 +30,7 @@ use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class EntityNameTest extends TestCase
+final class EntityNameTest extends TestCase
 {
     use TranslatorMockTrait;
 

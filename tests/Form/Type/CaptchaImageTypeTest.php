@@ -18,7 +18,7 @@ use App\Tests\Form\PreloadedExtensionsTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class CaptchaImageTypeTest extends TypeTestCase
+final class CaptchaImageTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
 

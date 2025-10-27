@@ -17,7 +17,7 @@ use App\Faker\Factory;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
-class FactoryTest extends TestCase
+final class FactoryTest extends TestCase
 {
     public function testCreate(): void
     {

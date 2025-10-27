@@ -17,7 +17,7 @@ use App\Controller\AbstractController;
 use App\Report\HtmlColorsReport;
 use PHPUnit\Framework\TestCase;
 
-class HtmlColorsReportTest extends TestCase
+final class HtmlColorsReportTest extends TestCase
 {
     public function testReport(): void
     {

@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes\Depends;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-class LogControllerTest extends ControllerTestCase
+final class LogControllerTest extends ControllerTestCase
 {
     #[\Override]
     protected function setUp(): void

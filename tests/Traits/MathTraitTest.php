@@ -17,7 +17,7 @@ use App\Traits\MathTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class MathTraitTest extends TestCase
+final class MathTraitTest extends TestCase
 {
     use MathTrait;
 

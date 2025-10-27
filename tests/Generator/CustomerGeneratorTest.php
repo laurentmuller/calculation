@@ -18,7 +18,7 @@ use App\Generator\CustomerGenerator;
 /**
  * @extends GeneratorTestCase<CustomerGenerator>
  */
-class CustomerGeneratorTest extends GeneratorTestCase
+final class CustomerGeneratorTest extends GeneratorTestCase
 {
     public function testNegativeCount(): void
     {

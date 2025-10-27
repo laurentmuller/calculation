@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Unit test for users and routes.
  */
 #[\PHPUnit\Framework\Attributes\CoversNothing]
-class RoutesTest extends AuthenticateWebTestCase
+final class RoutesTest extends AuthenticateWebTestCase
 {
     /**
      * @phpstan-return \Generator<int, array{string, string, int}>

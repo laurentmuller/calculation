@@ -19,7 +19,7 @@ use App\Tests\Form\PreloadedExtensionsTrait;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class ProductListTypeTest extends TypeTestCase
+final class ProductListTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
     use ProductTrait;

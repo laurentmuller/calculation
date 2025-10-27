@@ -18,7 +18,7 @@ use App\Report\PhpIniReport;
 use App\Service\PhpInfoService;
 use PHPUnit\Framework\TestCase;
 
-class PhpIniReportTest extends TestCase
+final class PhpIniReportTest extends TestCase
 {
     public function testRenderEmpty(): void
     {

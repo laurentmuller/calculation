@@ -22,7 +22,7 @@ use fpdf\PdfException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class FontAwesomeReportTest extends TestCase
+final class FontAwesomeReportTest extends TestCase
 {
     public function testRenderWithException(): void
     {

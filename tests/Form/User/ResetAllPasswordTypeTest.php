@@ -21,7 +21,7 @@ use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class ResetAllPasswordTypeTest extends TypeTestCase
+final class ResetAllPasswordTypeTest extends TypeTestCase
 {
     use IdTrait;
     use PreloadedExtensionsTrait;

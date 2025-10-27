@@ -19,7 +19,7 @@ use App\Translator\TranslatorServiceInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 
-class AjaxTranslateControllerTest extends ControllerTestCase
+final class AjaxTranslateControllerTest extends ControllerTestCase
 {
     #[\Override]
     public static function getRoutes(): \Generator

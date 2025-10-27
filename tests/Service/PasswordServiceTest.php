@@ -23,7 +23,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ZxcvbnPhp\Zxcvbn;
 
-class PasswordServiceTest extends TestCase
+final class PasswordServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 

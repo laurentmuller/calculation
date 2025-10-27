@@ -16,7 +16,7 @@ namespace App\Tests\Pdf\Enums;
 use App\Pdf\Enums\PdfImageType;
 use PHPUnit\Framework\TestCase;
 
-class PdfImageTypeTest extends TestCase
+final class PdfImageTypeTest extends TestCase
 {
     public function testCount(): void
     {

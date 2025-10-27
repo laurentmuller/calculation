@@ -17,7 +17,7 @@ use App\Repository\CustomerRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
 
-class CustomerRepositoryTest extends KernelServiceTestCase
+final class CustomerRepositoryTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
 

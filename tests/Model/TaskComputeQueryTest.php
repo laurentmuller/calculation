@@ -18,7 +18,7 @@ use App\Model\TaskComputeQuery;
 use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\TestCase;
 
-class TaskComputeQueryTest extends TestCase
+final class TaskComputeQueryTest extends TestCase
 {
     use IdTrait;
 

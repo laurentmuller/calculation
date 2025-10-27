@@ -21,7 +21,7 @@ use App\Tests\EntityTrait\CategoryTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\QueryBuilder;
 
-class GroupRepositoryTest extends KernelServiceTestCase
+final class GroupRepositoryTest extends KernelServiceTestCase
 {
     use CategoryTrait;
     use DatabaseTrait;

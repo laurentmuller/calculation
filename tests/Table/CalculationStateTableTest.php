@@ -28,7 +28,7 @@ use Twig\Error\Error;
 /**
  * @extends EntityTableTestCase<CalculationState, CalculationStateRepository, CalculationStateTable>
  */
-class CalculationStateTableTest extends EntityTableTestCase
+final class CalculationStateTableTest extends EntityTableTestCase
 {
     use TranslatorMockTrait;
 

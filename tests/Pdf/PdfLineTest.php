@@ -17,7 +17,7 @@ use App\Pdf\PdfLine;
 use fpdf\PdfDocument;
 use PHPUnit\Framework\TestCase;
 
-class PdfLineTest extends TestCase
+final class PdfLineTest extends TestCase
 {
     public function testApply(): void
     {

@@ -16,7 +16,7 @@ namespace App\Tests\Model;
 use App\Model\FontAwesomeImage;
 use PHPUnit\Framework\TestCase;
 
-class FontAwesomeImageTest extends TestCase
+final class FontAwesomeImageTest extends TestCase
 {
     public function testConstructor(): void
     {

@@ -19,7 +19,7 @@ use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class MessagePositionTest extends TestCase
+final class MessagePositionTest extends TestCase
 {
     use TranslatorMockTrait;
 

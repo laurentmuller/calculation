@@ -18,7 +18,7 @@ use fpdf\Color\PdfRgbColor;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class PdfChartColorsTest extends TestCase
+final class PdfChartColorsTest extends TestCase
 {
     /**
      * @return \Generator<int, array{PdfChartColors, int, int, int}>
@@ -49,20 +49,20 @@ class PdfChartColorsTest extends TestCase
     public function testNext(PdfChartColors $colors, int $red, int $green, int $blue): void
     {
         $actual = $colors->next();
-        self::assertSameColor($actual, $red, $green, $blue);
+        $this->assertSameColor($actual, $red, $green, $blue);
     }
 
     public function testReset(): void
     {
         $colors = new PdfChartColors();
         $actual = $colors->next();
-        self::assertSameColor($actual, 54, 162, 235);
+        $this->assertSameColor($actual, 54, 162, 235);
         $colors->reset();
         $actual = $colors->next();
-        self::assertSameColor($actual, 54, 162, 235);
+        $this->assertSameColor($actual, 54, 162, 235);
     }
 
-    protected static function assertSameColor(PdfRgbColor $actual, int $red, int $green, int $blue): void
+    private function assertSameColor(PdfRgbColor $actual, int $red, int $green, int $blue): void
     {
         self::assertSame($red, $actual->red);
         self::assertSame($green, $actual->green);

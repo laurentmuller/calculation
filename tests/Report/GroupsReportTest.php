@@ -19,7 +19,7 @@ use App\Entity\GroupMargin;
 use App\Report\GroupsReport;
 use PHPUnit\Framework\TestCase;
 
-class GroupsReportTest extends TestCase
+final class GroupsReportTest extends TestCase
 {
     public function testRender(): void
     {

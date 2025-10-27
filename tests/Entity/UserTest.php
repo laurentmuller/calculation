@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Exception\MappingNotFoundException;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
-class UserTest extends EntityValidatorTestCase
+final class UserTest extends EntityValidatorTestCase
 {
     public function testAddProperty(): void
     {

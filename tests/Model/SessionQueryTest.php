@@ -16,7 +16,7 @@ namespace App\Tests\Model;
 use App\Model\SessionQuery;
 use PHPUnit\Framework\TestCase;
 
-class SessionQueryTest extends TestCase
+final class SessionQueryTest extends TestCase
 {
     /**
      * @throws \JsonException

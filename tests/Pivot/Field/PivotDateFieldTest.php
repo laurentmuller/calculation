@@ -17,7 +17,7 @@ use App\Pivot\Field\PivotDateField;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 
-class PivotDateFieldTest extends TestCase
+final class PivotDateFieldTest extends TestCase
 {
     public function testConstructor(): void
     {

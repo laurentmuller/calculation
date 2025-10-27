@@ -24,7 +24,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @extends EntityTypeTestCase<CalculationGroup, CalculationGroupType>
  */
-class CalculationGroupTypeTest extends EntityTypeTestCase
+final class CalculationGroupTypeTest extends EntityTypeTestCase
 {
     #[\Override]
     protected function getData(): array

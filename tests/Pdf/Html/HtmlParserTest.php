@@ -24,20 +24,20 @@ use App\Pdf\Html\HtmlTextChunk;
 use App\Pdf\Html\HtmlUlChunk;
 use PHPUnit\Framework\TestCase;
 
-class HtmlParserTest extends TestCase
+final class HtmlParserTest extends TestCase
 {
     public function testBrChunk(): void
     {
         $parser = new HtmlParser('<body><br></body>');
         $actual = $parser->parse();
-        self::assertChunks($actual, HtmlParentChunk::class, HtmlBrChunk::class);
+        $this->assertChunks($actual, HtmlParentChunk::class, HtmlBrChunk::class);
     }
 
     public function testDivChunk(): void
     {
         $parser = new HtmlParser('<body><div></div></body>');
         $actual = $parser->parse();
-        self::assertChunks($actual, HtmlParentChunk::class);
+        $this->assertChunks($actual, HtmlParentChunk::class);
     }
 
     public function testEmpty(): void
@@ -58,7 +58,7 @@ class HtmlParserTest extends TestCase
     {
         $parser = new HtmlParser('<body><li></li></body>');
         $actual = $parser->parse();
-        self::assertChunks($actual, HtmlParentChunk::class, HtmlLiChunk::class);
+        $this->assertChunks($actual, HtmlParentChunk::class, HtmlLiChunk::class);
     }
 
     public function testNoBody(): void
@@ -72,34 +72,34 @@ class HtmlParserTest extends TestCase
     {
         $parser = new HtmlParser('<body><ol></ol></body>');
         $actual = $parser->parse();
-        self::assertChunks($actual, HtmlParentChunk::class, HtmlOlChunk::class);
+        $this->assertChunks($actual, HtmlParentChunk::class, HtmlOlChunk::class);
     }
 
     public function testPageBreakChunk(): void
     {
         $parser = new HtmlParser('<body><div class="page-break"></div></body>');
         $actual = $parser->parse();
-        self::assertChunks($actual, HtmlParentChunk::class, HtmlPageBreakChunk::class);
+        $this->assertChunks($actual, HtmlParentChunk::class, HtmlPageBreakChunk::class);
     }
 
     public function testTextChunk(): void
     {
         $parser = new HtmlParser('<body><p>My Text</p></body>');
         $actual = $parser->parse();
-        self::assertChunks($actual, HtmlParentChunk::class, HtmlParentChunk::class, HtmlTextChunk::class);
+        $this->assertChunks($actual, HtmlParentChunk::class, HtmlParentChunk::class, HtmlTextChunk::class);
     }
 
     public function testUlChunk(): void
     {
         $parser = new HtmlParser('<body><ul></ul></body>');
         $actual = $parser->parse();
-        self::assertChunks($actual, HtmlParentChunk::class, HtmlUlChunk::class);
+        $this->assertChunks($actual, HtmlParentChunk::class, HtmlUlChunk::class);
     }
 
     /**
      * @phpstan-param class-string<AbstractHtmlChunk> ...$classes
      */
-    protected static function assertChunks(mixed $actual, string ...$classes): void
+    private function assertChunks(mixed $actual, string ...$classes): void
     {
         $index = 0;
         $last = \count($classes) - 1;

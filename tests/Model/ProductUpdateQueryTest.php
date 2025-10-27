@@ -20,7 +20,7 @@ use App\Model\ProductUpdateQuery;
 use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\TestCase;
 
-class ProductUpdateQueryTest extends TestCase
+final class ProductUpdateQueryTest extends TestCase
 {
     use IdTrait;
 

@@ -24,7 +24,7 @@ use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class UserLoginTypeTest extends TypeTestCase
+final class UserLoginTypeTest extends TypeTestCase
 {
     use PasswordHasherExtensionTrait;
     use PreloadedExtensionsTrait;

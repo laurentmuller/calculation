@@ -18,7 +18,7 @@ use App\Calendar\Week;
 use App\Utils\FormatUtils;
 use Symfony\Component\Clock\DatePoint;
 
-class WeekTest extends CalendarTestCase
+final class WeekTest extends CalendarTestCase
 {
     public function testFormatKey(): void
     {

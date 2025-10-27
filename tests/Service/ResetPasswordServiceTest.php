@@ -36,7 +36,7 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 use SymfonyCasts\Bundle\ResetPassword\Util\ResetPasswordCleaner;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\ExpiredSignatureException;
 
-class ResetPasswordServiceTest extends TestCase
+final class ResetPasswordServiceTest extends TestCase
 {
     use IdTrait;
     use TranslatorMockTrait;

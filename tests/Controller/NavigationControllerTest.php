@@ -16,7 +16,7 @@ namespace App\Tests\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class NavigationControllerTest extends ControllerTestCase
+final class NavigationControllerTest extends ControllerTestCase
 {
     #[\Override]
     public static function getRoutes(): \Generator

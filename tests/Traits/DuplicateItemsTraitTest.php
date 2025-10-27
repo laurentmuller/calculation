@@ -16,7 +16,7 @@ namespace App\Tests\Traits;
 use App\Traits\DuplicateItemsTrait;
 use PHPUnit\Framework\TestCase;
 
-class DuplicateItemsTraitTest extends TestCase
+final class DuplicateItemsTraitTest extends TestCase
 {
     use DuplicateItemsTrait;
 

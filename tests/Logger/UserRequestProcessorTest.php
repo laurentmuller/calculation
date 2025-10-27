@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Clock\DatePoint;
 
-class UserRequestProcessorTest extends TestCase
+final class UserRequestProcessorTest extends TestCase
 {
     public function testInvokeWithoutUser(): void
     {

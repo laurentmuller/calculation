@@ -17,7 +17,7 @@ use App\Enums\ImageSize;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class ImageSizeTest extends TestCase
+final class ImageSizeTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{ImageSize, int}>

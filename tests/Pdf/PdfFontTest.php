@@ -19,7 +19,7 @@ use fpdf\Enums\PdfFontStyle;
 use fpdf\PdfDocument;
 use PHPUnit\Framework\TestCase;
 
-class PdfFontTest extends TestCase
+final class PdfFontTest extends TestCase
 {
     public function testApply(): void
     {

@@ -25,7 +25,7 @@ use fpdf\PdfBorder;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class HtmlStyleTest extends TestCase
+final class HtmlStyleTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{string, PdfTextAlignment}>
@@ -89,7 +89,7 @@ class HtmlStyleTest extends TestCase
         $actual = HtmlStyle::default();
         $expected = 15.0;
         $actual->setMargins($expected);
-        self::assertSameMargins($actual, $expected);
+        $this->assertSameMargins($actual, $expected);
     }
 
     #[DataProvider('getMargins')]
@@ -112,7 +112,7 @@ class HtmlStyleTest extends TestCase
     {
         $actual = HtmlStyle::default();
         self::assertSame(PdfTextAlignment::LEFT, $actual->getAlignment());
-        self::assertSameMargins($actual);
+        $this->assertSameMargins($actual);
     }
 
     public function testReset(): void
@@ -123,10 +123,10 @@ class HtmlStyleTest extends TestCase
         $actual->setLeftMargin($expected);
         $actual->setRightMargin($expected);
         $actual->setTopMargin($expected);
-        self::assertSameMargins($actual, $expected);
+        $this->assertSameMargins($actual, $expected);
 
         $actual->reset();
-        self::assertSameMargins($actual);
+        $this->assertSameMargins($actual);
     }
 
     public function testUpdateAlignment(): void
@@ -163,7 +163,7 @@ class HtmlStyleTest extends TestCase
     {
         $actual = HtmlStyle::default();
         $actual->update('');
-        self::assertSameMargins($actual);
+        $this->assertSameMargins($actual);
     }
 
     public function testUpdateFont(): void
@@ -234,10 +234,10 @@ class HtmlStyleTest extends TestCase
         $expected = 1.0;
         $actual = HtmlStyle::default();
         $actual->update('m-1');
-        self::assertSameMargins($actual, $expected);
+        $this->assertSameMargins($actual, $expected);
     }
 
-    protected static function assertSameMargins(HtmlStyle $actual, float $expected = 0.0): void
+    private function assertSameMargins(HtmlStyle $actual, float $expected = 0.0): void
     {
         self::assertSame($expected, $actual->getBottomMargin());
         self::assertSame($expected, $actual->getLeftMargin());

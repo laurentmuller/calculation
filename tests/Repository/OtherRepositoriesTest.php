@@ -26,7 +26,7 @@ use App\Tests\DatabaseTrait;
 use App\Tests\Entity\IdTrait;
 use App\Tests\KernelServiceTestCase;
 
-class OtherRepositoriesTest extends KernelServiceTestCase
+final class OtherRepositoriesTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
     use IdTrait;
@@ -70,7 +70,7 @@ class OtherRepositoriesTest extends KernelServiceTestCase
      *
      * @param class-string<AbstractRepository<TEntity>> $class
      */
-    protected function findAll(string $class): void
+    private function findAll(string $class): void
     {
         $repository = $this->getService($class);
         $actual = $repository->findAll();

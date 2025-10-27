@@ -32,7 +32,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Clock\DatePoint;
 
-class ApplicationParametersTest extends TestCase
+final class ApplicationParametersTest extends TestCase
 {
     use IdTrait;
 

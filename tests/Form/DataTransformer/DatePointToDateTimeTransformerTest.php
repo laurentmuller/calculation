@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
-class DatePointToDateTimeTransformerTest extends TestCase
+final class DatePointToDateTimeTransformerTest extends TestCase
 {
     use DateAssertTrait;
 

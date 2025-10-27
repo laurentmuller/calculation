@@ -20,7 +20,7 @@ use App\Tests\Form\EntityTypeTestCase;
 /**
  * @extends EntityTypeTestCase<CalculationState, CalculationStateType>
  */
-class CalculationStateTypeTest extends EntityTypeTestCase
+final class CalculationStateTypeTest extends EntityTypeTestCase
 {
     #[\Override]
     protected function getData(): array

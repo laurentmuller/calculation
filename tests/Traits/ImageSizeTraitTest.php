@@ -17,7 +17,7 @@ use App\Traits\ImageSizeTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class ImageSizeTraitTest extends TestCase
+final class ImageSizeTraitTest extends TestCase
 {
     use ImageSizeTrait;
 

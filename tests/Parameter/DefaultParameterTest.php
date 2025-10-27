@@ -19,7 +19,7 @@ use App\Parameter\DefaultParameter;
 /**
  * @extends ParameterTestCase<DefaultParameter>
  */
-class DefaultParameterTest extends ParameterTestCase
+final class DefaultParameterTest extends ParameterTestCase
 {
     #[\Override]
     public static function getParameterNames(): \Generator

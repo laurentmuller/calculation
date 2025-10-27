@@ -18,7 +18,7 @@ use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class OpenWeatherUnitsTest extends TestCase
+final class OpenWeatherUnitsTest extends TestCase
 {
     use TranslatorMockTrait;
 

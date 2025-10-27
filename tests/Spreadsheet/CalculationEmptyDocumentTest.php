@@ -18,7 +18,7 @@ use App\Spreadsheet\CalculationsEmptyDocument;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 
-class CalculationEmptyDocumentTest extends TestCase
+final class CalculationEmptyDocumentTest extends TestCase
 {
     public function testRender(): void
     {

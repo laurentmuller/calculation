@@ -19,7 +19,7 @@ use fpdf\Enums\PdfFontName;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class EnumExtrasTraitTest extends TestCase
+final class EnumExtrasTraitTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{0: HtmlTag, 1: string, 2: bool, 3?: true}>

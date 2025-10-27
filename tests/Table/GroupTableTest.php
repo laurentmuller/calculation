@@ -27,7 +27,7 @@ use Twig\Error\Error;
 /**
  * @extends EntityTableTestCase<Group, GroupRepository, GroupTable>
  */
-class GroupTableTest extends EntityTableTestCase
+final class GroupTableTest extends EntityTableTestCase
 {
     /**
      * @throws Error

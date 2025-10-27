@@ -19,7 +19,7 @@ use App\Pivot\PivotCell;
 use App\Pivot\PivotNode;
 use PHPUnit\Framework\TestCase;
 
-class PivotCellTest extends TestCase
+final class PivotCellTest extends TestCase
 {
     public function testConstructor(): void
     {

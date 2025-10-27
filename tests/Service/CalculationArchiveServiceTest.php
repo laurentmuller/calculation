@@ -34,7 +34,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
-class CalculationArchiveServiceTest extends TestCase
+final class CalculationArchiveServiceTest extends TestCase
 {
     use DateAssertTrait;
     use IdTrait;

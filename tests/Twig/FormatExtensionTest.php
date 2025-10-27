@@ -22,7 +22,7 @@ use Twig\Extension\AttributeExtension;
 /**
  * @extends RuntimeTestCase<FormatExtension>
  */
-class FormatExtensionTest extends RuntimeTestCase
+final class FormatExtensionTest extends RuntimeTestCase
 {
     use TranslatorMockTrait;
 

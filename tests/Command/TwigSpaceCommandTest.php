@@ -15,7 +15,7 @@ namespace App\Tests\Command;
 
 use App\Utils\FileUtils;
 
-class TwigSpaceCommandTest extends CommandTestCase
+final class TwigSpaceCommandTest extends CommandTestCase
 {
     private const COMMAND_NAME = 'app:twig-space';
 

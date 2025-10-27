@@ -19,7 +19,7 @@ use App\Tests\Form\PreloadedExtensionsTrait;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class TaskListTypeTest extends TypeTestCase
+final class TaskListTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
     use TaskTrait;

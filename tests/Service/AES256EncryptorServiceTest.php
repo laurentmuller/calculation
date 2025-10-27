@@ -16,7 +16,7 @@ namespace App\Tests\Service;
 use App\Service\AES256EncryptorService;
 use PHPUnit\Framework\TestCase;
 
-class AES256EncryptorServiceTest extends TestCase
+final class AES256EncryptorServiceTest extends TestCase
 {
     private AES256EncryptorService $encryptor;
 

@@ -19,7 +19,7 @@ use Symfony\Component\Clock\DatePoint;
 /**
  * @extends ParameterTestCase<DateParameter>
  */
-class DateParameterTest extends ParameterTestCase
+final class DateParameterTest extends ParameterTestCase
 {
     #[\Override]
     public static function getParameterNames(): \Generator

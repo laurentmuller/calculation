@@ -22,7 +22,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class PasswordTooltipServiceTest extends TestCase
+final class PasswordTooltipServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 

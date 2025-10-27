@@ -24,7 +24,7 @@ use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
-class CalculationUpdateQueryTest extends TestCase
+final class CalculationUpdateQueryTest extends TestCase
 {
     use DateAssertTrait;
     use IdTrait;

@@ -18,7 +18,7 @@ use App\Pdf\PdfStyle;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class PdfCellTest extends TestCase
+final class PdfCellTest extends TestCase
 {
     /**
      * @phpstan-return \Generator<int, array{string|int|null, bool}>

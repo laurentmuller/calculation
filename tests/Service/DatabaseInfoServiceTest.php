@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 
 use function PHPUnit\Framework\assertSame;
 
-class DatabaseInfoServiceTest extends TestCase
+final class DatabaseInfoServiceTest extends TestCase
 {
     private const PARAMS = [
         'dbname' => 'database',

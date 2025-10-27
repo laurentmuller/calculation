@@ -19,7 +19,7 @@ use App\Entity\Group;
 use App\Report\CategoriesReport;
 use PHPUnit\Framework\TestCase;
 
-class CategoriesReportTest extends TestCase
+final class CategoriesReportTest extends TestCase
 {
     public function testRender(): void
     {

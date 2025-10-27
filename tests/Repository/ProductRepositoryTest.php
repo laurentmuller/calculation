@@ -19,7 +19,7 @@ use App\Tests\EntityTrait\ProductTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\Query\Expr\OrderBy;
 
-class ProductRepositoryTest extends KernelServiceTestCase
+final class ProductRepositoryTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
     use ProductTrait;

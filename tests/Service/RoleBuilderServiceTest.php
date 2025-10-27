@@ -21,7 +21,7 @@ use App\Model\Role;
 use App\Service\RoleBuilderService;
 use App\Tests\FlagBagTestCase;
 
-class RoleBuilderServiceTest extends FlagBagTestCase
+final class RoleBuilderServiceTest extends FlagBagTestCase
 {
     private RoleBuilderService $service;
 
@@ -36,7 +36,7 @@ class RoleBuilderServiceTest extends FlagBagTestCase
         $user = new User();
         $user->setRole(RoleInterface::ROLE_ADMIN);
         $role = $this->service->getRole($user);
-        self::assertRoleAdmin($role);
+        $this->assertRoleAdmin($role);
     }
 
     public function testGetRoleDisabled(): void
@@ -44,7 +44,7 @@ class RoleBuilderServiceTest extends FlagBagTestCase
         $user = new User();
         $user->setEnabled(false);
         $role = $this->service->getRole($user);
-        self::assertRoleDisabled($role);
+        $this->assertRoleDisabled($role);
     }
 
     public function testGetRoleSuperAdmin(): void
@@ -52,7 +52,7 @@ class RoleBuilderServiceTest extends FlagBagTestCase
         $user = new User();
         $user->setRole(RoleInterface::ROLE_SUPER_ADMIN);
         $role = $this->service->getRole($user);
-        self::assertRoleSuperAdmin($role);
+        $this->assertRoleSuperAdmin($role);
     }
 
     public function testGetRoleUser(): void
@@ -60,34 +60,34 @@ class RoleBuilderServiceTest extends FlagBagTestCase
         $user = new User();
         $user->setRole(RoleInterface::ROLE_USER);
         $role = $this->service->getRole($user);
-        self::assertRoleUser($role);
+        $this->assertRoleUser($role);
     }
 
     public function testRoleAdmin(): void
     {
         $role = $this->service->getRoleAdmin();
-        self::assertRoleAdmin($role);
+        $this->assertRoleAdmin($role);
     }
 
     public function testRoleDisabled(): void
     {
         $role = $this->service->getRoleDisabled();
-        self::assertRoleDisabled($role);
+        $this->assertRoleDisabled($role);
     }
 
     public function testRoleSuperAdmin(): void
     {
         $role = $this->service->getRoleSuperAdmin();
-        self::assertRoleSuperAdmin($role);
+        $this->assertRoleSuperAdmin($role);
     }
 
     public function testRoleUser(): void
     {
         $role = $this->service->getRoleUser();
-        self::assertRoleUser($role);
+        $this->assertRoleUser($role);
     }
 
-    protected static function assertRoleAdmin(Role $role): void
+    private function assertRoleAdmin(Role $role): void
     {
         $entities = EntityName::cases();
         $permission = EntityPermission::getAllPermission();
@@ -100,7 +100,7 @@ class RoleBuilderServiceTest extends FlagBagTestCase
         }
     }
 
-    protected static function assertRoleDisabled(Role $role): void
+    private function assertRoleDisabled(Role $role): void
     {
         $entities = EntityName::cases();
         $permission = EntityPermission::getNonePermission();
@@ -113,7 +113,7 @@ class RoleBuilderServiceTest extends FlagBagTestCase
         }
     }
 
-    protected static function assertRoleSuperAdmin(Role $role): void
+    private function assertRoleSuperAdmin(Role $role): void
     {
         $entities = EntityName::cases();
         $permission = EntityPermission::getAllPermission();
@@ -126,7 +126,7 @@ class RoleBuilderServiceTest extends FlagBagTestCase
         }
     }
 
-    protected static function assertRoleUser(Role $role): void
+    private function assertRoleUser(Role $role): void
     {
         $all = EntityPermission::getAllPermission();
         $none = EntityPermission::getNonePermission();

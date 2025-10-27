@@ -18,7 +18,7 @@ use App\Service\ExchangeRateService;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
 
-class ExchangeRateControllerTest extends ControllerTestCase
+final class ExchangeRateControllerTest extends ControllerTestCase
 {
     #[\Override]
     public static function getRoutes(): \Generator

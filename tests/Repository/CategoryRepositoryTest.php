@@ -24,7 +24,7 @@ use App\Tests\EntityTrait\TaskTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\QueryBuilder;
 
-class CategoryRepositoryTest extends KernelServiceTestCase
+final class CategoryRepositoryTest extends KernelServiceTestCase
 {
     use CategoryTrait;
     use DatabaseTrait;

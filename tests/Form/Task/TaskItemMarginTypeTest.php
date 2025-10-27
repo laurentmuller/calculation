@@ -20,7 +20,7 @@ use App\Tests\Form\EntityTypeTestCase;
 /**
  * @extends EntityTypeTestCase<TaskItemMargin, TaskItemMarginType>
  */
-class TaskItemMarginTypeTest extends EntityTypeTestCase
+final class TaskItemMarginTypeTest extends EntityTypeTestCase
 {
     #[\Override]
     protected function getData(): array

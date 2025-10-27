@@ -21,7 +21,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SimpleEditorTypeTest extends TypeTestCase
+final class SimpleEditorTypeTest extends TypeTestCase
 {
     use PreloadedExtensionsTrait;
 

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-class SearchControllerTest extends ControllerTestCase
+final class SearchControllerTest extends ControllerTestCase
 {
     #[\Override]
     public static function getRoutes(): \Generator

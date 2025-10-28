@@ -323,6 +323,8 @@ class CommandService implements \Countable
 
     /**
      * @phpstan-return array<string, CommandType>
+     *
+     * @throws \Exception
      */
     private function loadCommands(): array
     {
@@ -342,14 +344,7 @@ class CommandService implements \Countable
              * @phpstan-param array<string, CommandType> $carry
              * @phpstan-param CommandSourceType $command
              */
-            function (array $carry, array $command): array {
-                if (!$command['hidden']) {
-                    $name = $command['name'];
-                    $carry[$name] = $this->updateCommand($command);
-                }
-
-                return $carry;
-            },
+            fn (array $carry, array $command): array => $command['hidden'] ? $carry : $carry + [$command['name'] => $this->updateCommand($command)],
             []
         );
         \ksort($commands);

@@ -6,7 +6,7 @@
     /**
      * Notify a warning message.
      *
-     * @param {string} message
+     * @param {string} message the message to display.
      */
     function notifyWarning(message) {
         const type = Toaster.NotificationTypes.WARNING;
@@ -16,6 +16,9 @@
 
     // jQuery extensions
     $.fn.extend({
+        /**
+         * Load and replace the HTML content.
+         */
         loadContent: function () {
             const $this = $(this);
             if ($this.data('loaded')) {
@@ -38,6 +41,9 @@
             });
         },
 
+        /**
+         * Shows the loading error message.
+         */
         showError: function () {
             const $this = $(this);
             if ($this.data('error')) {
@@ -50,15 +56,17 @@
         },
 
         /**
-         * @param {string} title
+         * Update the toggle title.
+         * @param {string} title the new title.
          */
         updateTitle: function (title) {
             $(this).prev('div').find('[data-bs-toggle]').attr('title', title);
         },
 
         /**
-         * @param {JQuery|any} $dialog
-         * @param {string} content
+         * Display the modal dialog with the given content.
+         * @param {JQuery|any} $dialog the modal dialog.
+         * @param {string} content the HTML content to display
          */
         displayDialogContent: function ($dialog, content) {
             const $this = $(this);
@@ -73,14 +81,14 @@
         },
 
         /**
-         * @param {Event} e
-         * @param {string} attribute
-         * @param {string} modalSelector
+         * Load the modal dialog content.
+         * @param {Event} e the source event.
+         * @param {string} attribute the attribute name.
          */
-        loadModalContent: function (e, attribute, modalSelector) {
+        loadModalContent: function (e, attribute) {
             e.preventDefault();
             const $this = $(e.currentTarget);
-            const $dialog = $(modalSelector);
+            const $dialog = $(`#${attribute}-modal`);
             const content = $this.data(attribute);
             if (content) {
                 $this.displayDialogContent($dialog, content);
@@ -130,9 +138,9 @@
             e.preventDefault();
             window.open(e.target.href, '_blank');
         }).on('click', '.link-license', function (e) {
-            $(this).loadModalContent(e, 'license', '#license-modal');
+            $(this).loadModalContent(e, 'license');
         }).on('click', '.link-package', function (e) {
-            $(this).loadModalContent(e, 'package', '#package-modal');
+            $(this).loadModalContent(e, 'package');
         });
     });
 }(jQuery));

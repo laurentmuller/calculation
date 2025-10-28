@@ -39,5 +39,11 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
 
         $query = '/about/symfony/license?file=tests/files/txt/empty.txt';
         yield [$query, self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
+
+        $query = '/about/symfony/package?name=fake';
+        yield [$query, self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
+
+        $query = 'about/symfony/package?name=symfony/cache-contracts';
+        yield [$query, self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
     }
 }

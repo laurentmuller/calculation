@@ -57,26 +57,20 @@
         },
 
         /**
-         *  @param {string} [content]
+         * @param {JQuery} $dialog
+         * @param {string} content
          */
-        displayLicense: function (content) {
-            const $link = $(this);
-            if (content) {
-                $link.data('content', content);
-            } else {
-                content = $link.data('content');
-            }
-            $('#license-content').html(content);
-
-            // modal dialog
-            const $dialog = $('#license-modal');
+        displayModalContent: function ($dialog, content) {
+            const $this = $(this);
+            // content
+            $dialog.find('.modal-data').html(content);
+            // show modal dialog
             $dialog.one('hidden.bs.modal', function () {
-                $link.scrollInViewport().trigger('focus');
+                $this.scrollInViewport().trigger('focus');
             }).modal('show');
-
             // clipboard
-            $('#license-modal .btn-copy').copyClipboard({
-                title: $('#modal-license-title').text().trim(),
+            $dialog.find('.btn-copy').copyClipboard({
+                title: $dialog.find('.modal-title').text().trim(),
                 copySuccess: function () {
                     $dialog.modal('hide');
                 },
@@ -87,32 +81,29 @@
         },
 
         /**
-         *  @param {string} [content]
+         * @param {Event} e
+         * @param {string} attribute
+         * @param {string} modalSelector
          */
-        displayPackage: function (content) {
-            const $link = $(this);
+        loadModalContent: function (e, attribute, modalSelector) {
+            e.preventDefault();
+            const $this = $(this);
+            const $dialog = $(modalSelector);
+            const content = $this.data(attribute);
             if (content) {
-                $link.data('package', content);
-            } else {
-                content = $link.data('package');
+                $this.displayModalContent($dialog, content);
+                return;
             }
-            $('#package-content').html(content);
-
-            // modal dialog
-            const $dialog = $('#package-modal');
-            $dialog.one('hidden.bs.modal', function () {
-                $link.scrollInViewport().trigger('focus');
-            }).modal('show');
-
-            // clipboard
-            $('#package-modal .btn-copy').copyClipboard({
-                title: $('#modal-package-title').text().trim(),
-                copySuccess: function () {
-                    $dialog.modal('hide');
-                },
-                copyError: function () {
-                    $dialog.modal('hide');
+            const url = $this.attr('href');
+            $.getJSON(url, function (response) {
+                const content = response.result && response.content;
+                if (content) {
+                    $this.data(attribute, content);
+                    $this.displayModalContent($dialog, content);
+                    return;
                 }
+                $this.fadeOut();
+                notifyWarning(response.message || $dialog.data('found-error'));
             });
         }
     });
@@ -143,53 +134,13 @@
 
         $accordion.on('hide.bs.modal', '.modal', function () {
             $('.modal .pre-scrollable').scrollTop(0);
-        }).on('click', '#license-modal a', function (e) {
+        }).on('click', '.modal-data a', function (e) {
             e.preventDefault();
             window.open(e.target.href, '_blank');
         }).on('click', '.link-license', function (e) {
-            e.preventDefault();
-            const $this = $(this);
-            if ($this.data('content')) {
-                $this.displayLicense();
-                return;
-            }
-            const $modal = $('#license-modal');
-            const url = $this.attr('href');
-            if (!url || '#' === url) {
-                $this.fadeOut();
-                notifyWarning($modal.data('load-error'));
-                return;
-            }
-            $.getJSON(url, function (response) {
-                if (response.result && response.content) {
-                    $this.displayLicense(response.content);
-                    return;
-                }
-                $this.fadeOut();
-                notifyWarning(response.message || $modal.data('found-error'));
-            });
+            $(this).loadModalContent(e, 'license', '#license-modal');
         }).on('click', '.link-package', function (e) {
-            e.preventDefault();
-            const $this = $(this);
-            if ($this.data('package')) {
-                $this.displayPackage();
-                return;
-            }
-            const $modal = $('#package-modal');
-            const url = $this.attr('href');
-            if (!url || '#' === url) {
-                $this.fadeOut();
-                notifyWarning($modal.data('load-error'));
-                return;
-            }
-            $.getJSON(url, function (response) {
-                if (response.result && response.content) {
-                    $this.displayPackage(response.content);
-                    return;
-                }
-                $this.fadeOut();
-                notifyWarning(response.message || $modal.data('found-error'));
-            });
+            $(this).loadModalContent(e, 'package', '#package-modal');
         });
     });
 }(jQuery));

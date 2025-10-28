@@ -17,7 +17,7 @@
     <div class="card-body collapse" id="{{ id }}" data-bs-parent="#aboutAccordion">
         <div class="collapse-content" data-url="{{ route }}">
             <div class="alert py-0 mb-0" role="alert">
-                <span class="spinner-border spinner-border-sm me-2" role="status"></span><span>{{ 'about.loading'|trans }}</span>
+                <span class="spinner-border spinner-border-sm me-2" role="status"></span><span>{{ 'about.load.message'|trans }}</span>
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
 {# card body #}
 {% block card_body %}
 {# application #}
-<div id="configuration" class="phpversion" data-collapse="{{ 'common.collapse'|trans }}" data-expand="{{ 'common.expand'|trans }}" data-error="{{ 'about.error'|trans }}">
+<div id="configuration" class="phpversion" data-collapse="{{ 'common.collapse'|trans }}" data-expand="{{ 'common.expand'|trans }}" data-error="{{ 'about.load.error'|trans }}">
     <table id="data-table-application" class="table table-sm table-hover mb-0">
         <tbody>
             <tr class="h">

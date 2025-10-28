@@ -1,4 +1,4 @@
-{% from 'macros/_icons.html.twig' import modal_title, modal_close_button %}
+{% from 'macros/_icons.html.twig' import modal_title, modal_close_button, button_copy %}
 {% set dialog_id = 'license-modal' %}
 <div class="modal fade" id="{{ dialog_id }}" tabindex="-1" aria-labelledby="modal-license-title" aria-hidden="true"
      data-found-error="{{ 'about.licence.not_found'|trans }}"
@@ -14,12 +14,7 @@
                 </div>
             </div>
             <div class="modal-footer justify-content-start">
-                <button type="button" class="btn btn-form btn-primary btn-copy"
-                        data-success="{{ 'common.copy_success'|trans }}"
-                        data-error="{{ 'common.copy_error'|trans }}"
-                        data-clipboard-target="#license-content">
-                    {{- 'common.button_copy'|trans -}}
-                </button>
+                {{ button_copy(target: '#license-content', class: 'btn-primary', hide_modal: true) }}
                 {{- modal_close_button(for_header: false, data_target: dialog_id) }}
             </div>
         </div>

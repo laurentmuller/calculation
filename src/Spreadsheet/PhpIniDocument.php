@@ -43,7 +43,7 @@ class PhpIniDocument extends AbstractDocument
         $sheet = $this->getActiveSheet();
 
         if ([] === $content) {
-            $sheet->setCellContent(1, 1, $this->trans('about.error'))
+            $sheet->setCellContent(1, 1, $this->trans('about.load.error'))
                 ->finish('A1');
 
             return true;

@@ -1,4 +1,4 @@
-{% from 'macros/_icons.html.twig' import modal_title, modal_close_button %}
+{% from 'macros/_icons.html.twig' import modal_title, modal_close_button, button_copy %}
 {% set raw_data = raw_data|default(false) %}
 {% set dialog_id = id|default('raw_data_modal') %}
 {% set raw_data_id = raw_data_id|default(dialog_id ~ '_highlight') %}
@@ -25,10 +25,7 @@
             </div>
             <div class="modal-footer justify-content-start">
                 {% if raw_data and allow_copy is defined and allow_copy %}
-                    <button type="button" class="btn btn-form btn-primary btn-copy"
-                            data-success="{{ 'common.copy_success'|trans }}"
-                            data-error="{{ 'common.copy_error'|trans }}"
-                            data-clipboard-target="#{{ raw_data_id }}">{{ 'common.button_copy'|trans }}</button>
+                    {{ button_copy(target: '#' ~ raw_data_id, class: 'btn-primary', hide_modal: true) }}
                 {% endif %}
                 {{- modal_close_button(for_header: false, data_target: dialog_id) }}
             </div>

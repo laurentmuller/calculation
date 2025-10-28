@@ -248,9 +248,7 @@ $(function () {
     $fromTo.initSelect2();
 
     // clipboard
-    $('.btn-copy').copyClipboard({
-        title: $('.card-title').text()
-    });
+    $('.btn-copy').copyClipboard();
 
     // bind events
     $('.btn-exchange').on('click', function () {

@@ -45,7 +45,7 @@ class PhpIniReport extends AbstractReport
 
         $content = $this->service->asArray();
         if ([] === $content) {
-            $this->cell(text: $this->trans('about.error'));
+            $this->cell(text: $this->trans('about.load.error'));
 
             return true;
         }

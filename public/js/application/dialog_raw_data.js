@@ -3,15 +3,7 @@
  */
 $(function () {
     'use strict';
-    $('.modal-raw-data .btn-copy').copyClipboard({
-        title: $('.card-title:first').text(),
-        copySuccess: function (e) {
-            $(e.trigger).parents('.modal-raw-data').modal('hide');
-        },
-        copyError: function (e) {
-            $(e.trigger).parents('.modal-raw-data').modal('hide');
-        }
-    });
+    $('.modal-raw-data .btn-copy').copyClipboard();
     $('.modal.modal-raw-data').on('hide.bs.modal', function () {
         $(this).find('.pre-scrollable').scrollTop(0);
     });

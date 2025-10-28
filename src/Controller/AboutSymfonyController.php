@@ -89,7 +89,7 @@ class AboutSymfonyController extends AbstractController
     ): JsonResponse {
         $package = $service->getPackage($name);
         if (null === $package) {
-            return $this->jsonFalse(['message' => $this->trans('about.package.not_found', ['%name%' => $name])]);
+            return $this->jsonFalse(['message' => $this->trans('about.package.not_found')]);
         }
 
         $content = $this->buildMarkdownPackage($package);

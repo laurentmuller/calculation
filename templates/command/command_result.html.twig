@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import link %}
+{% from 'macros/_icons.html.twig' import link, button_copy %}
 {# parameters #}
 {%- set title = 'command.result.title' -%}
 {%- set title_icon = 'code' -%}
@@ -39,10 +39,7 @@
     {{ link(path('command_all', {name: command.name}), 'command.list.title', 'btn btn-form btn-primary') }}
     {{ link(path('command_execute', {name: command.name}), 'command.result.re_run', 'btn btn-form btn-warning') }}
     {% if result.content %}
-        <button type="button" class="btn btn-form btn-success btn-copy"
-                data-success="{{ 'common.copy_success'|trans }}"
-                data-error="{{ 'common.copy_error'|trans }}"
-                data-clipboard-target="#result">{{ 'common.button_copy'|trans }}</button>
+        {{ button_copy('#result') }}
     {% endif %}
 </div>
 {% endblock %}

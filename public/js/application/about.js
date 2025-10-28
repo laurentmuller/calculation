@@ -57,10 +57,10 @@
         },
 
         /**
-         * @param {JQuery} $dialog
+         * @param {JQuery|any} $dialog
          * @param {string} content
          */
-        displayModalContent: function ($dialog, content) {
+        displayDialogContent: function ($dialog, content) {
             const $this = $(this);
             // content
             $dialog.find('.modal-data').html(content);
@@ -69,15 +69,7 @@
                 $this.scrollInViewport().trigger('focus');
             }).modal('show');
             // clipboard
-            $dialog.find('.btn-copy').copyClipboard({
-                title: $dialog.find('.modal-title').text().trim(),
-                copySuccess: function () {
-                    $dialog.modal('hide');
-                },
-                copyError: function () {
-                    $dialog.modal('hide');
-                }
-            });
+            $dialog.find('.btn-copy').copyClipboard();
         },
 
         /**
@@ -87,11 +79,11 @@
          */
         loadModalContent: function (e, attribute, modalSelector) {
             e.preventDefault();
-            const $this = $(this);
+            const $this = $(e.currentTarget);
             const $dialog = $(modalSelector);
             const content = $this.data(attribute);
             if (content) {
-                $this.displayModalContent($dialog, content);
+                $this.displayDialogContent($dialog, content);
                 return;
             }
             const url = $this.attr('href');
@@ -99,7 +91,7 @@
                 const content = response.result && response.content;
                 if (content) {
                     $this.data(attribute, content);
-                    $this.displayModalContent($dialog, content);
+                    $this.displayDialogContent($dialog, content);
                     return;
                 }
                 $this.fadeOut();

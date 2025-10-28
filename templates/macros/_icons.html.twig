@@ -164,3 +164,14 @@
     {{ _self.link(caller, 'index.menu_site_map', 'btn btn-form btn-outline-success') }}
 {% endif %}
 {% endmacro %}
+
+{% macro button_copy(target, class = 'btn-success', hide_modal = false) %}
+<button type="button" class="btn btn-copy btn-form {{ class }}"
+        data-success="{{ 'common.copy_success'|trans }}"
+        data-error="{{ 'common.copy_error'|trans }}"
+        data-title="{{ 'common.copy_title'|trans }}"
+        data-hide-modal="{{ hide_modal|json_encode }}"
+        {% if target %} data-clipboard-target="{{ target }}"{% endif %}>
+    {{- 'common.button_copy'|trans -}}
+</button>
+{% endmacro %}

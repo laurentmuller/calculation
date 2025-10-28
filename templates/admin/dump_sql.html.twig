@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import homepage %}
+{% from 'macros/_icons.html.twig' import homepage, button_copy %}
 {# parameters #}
 {%- set title = 'admin.dump_sql.title' -%}
 {%- set title_icon = 'database' -%}
@@ -14,10 +14,7 @@
 {# footer #}
 {% block card_footer %}
     {{ homepage() }}
-    <button type="button" class="btn btn-form btn-success btn-copy"
-            data-error="{{ 'common.copy_error'|trans }}"
-            data-success="{{ 'common.copy_success'|trans }}"
-            data-clipboard-target=".highlight.highlight-sql">{{ 'common.button_copy'|trans }}</button>
+    {{ button_copy('.highlight.highlight-sql') }}
 {% endblock %}
 {# stylesheets #}
 {% block stylesheets %}

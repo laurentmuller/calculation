@@ -1,6 +1,6 @@
 {% extends 'cards/card_edit.html.twig' %}
 {# macros #}
-{% from 'macros/_icons.html.twig' import apiLink %}
+{% from 'macros/_icons.html.twig' import apiLink, button_copy %}
 {% macro fillLanguages(languages, language = false) %}
 {% for key, value in languages -%}
     <option value="{{ value }}"{% if value == language %} selected{% endif %}>{{ key }}</option>
@@ -82,11 +82,8 @@
 {% endblock %}
 {# action form #}
 {% block actions_form -%}
-{{ parent() }}
-<button type="button" class="btn btn-form btn-success btn-copy" disabled
-        data-success="{{ 'common.copy_success'|trans }}"
-        data-error="{{ 'common.copy_error'|trans }}"
-        data-clipboard-target="#result">{{ 'common.button_copy'|trans }}</button>
+    {{ parent() }}
+    {{ button_copy('#result') }}
 {%- endblock %}
 {# stylesheets #}
 {% block stylesheets %}

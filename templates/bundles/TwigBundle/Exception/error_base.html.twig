@@ -1,6 +1,6 @@
 {% extends 'cards/card_base.html.twig' %}
 {# imports #}
-{% from 'macros/_icons.html.twig' import link, homepage %}
+{% from 'macros/_icons.html.twig' import link, homepage, button_copy %}
 {# parameters #}
 {%- set title_icon = 'exclamation-circle' -%}
 {% if not title is defined %}
@@ -107,16 +107,12 @@
 {% else %}
     {{ homepage() }}
 {% endif %}
-    <button type="button" class="btn btn-copy btn-form btn-success"
-            data-clipboard-action="copy"
-            data-success="{{ 'common.copy_success'|trans }}"
-            data-error="{{ 'common.copy_error'|trans }}">
-        {{- 'common.button_copy'|trans -}}
-    </button>
+    {{ button_copy(false) }}
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}
     {{ parent() }}
     {{ asset_js('build/clipboard/clipboard.js') }}
+    {{ asset_js('js/plugins/plugin-copy.js') }}
     {{ asset_js('js/application/error_base.js') }}
 {% endblock %}

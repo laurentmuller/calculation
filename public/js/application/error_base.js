@@ -45,37 +45,20 @@ function notify(type, message) {
     Toaster.notify(type, message, getTitle());
 }
 
-function copySuccess() {
-    'use strict';
-    const message = $('.btn-copy').data('success');
-    notify(Toaster.NotificationTypes.SUCCESS, message);
-}
-
-function copyError() {
-    'use strict';
-    const message = $('.btn-copy').data('error');
-    notify(Toaster.NotificationTypes.ERROR, message);
-}
-
 /**
  * Ready function
  */
 $(function () {
     'use strict';
-    if (ClipboardJS && ClipboardJS.isSupported('copy')) {
-        const clipboard = new ClipboardJS('.btn-copy', {
-            text: function () {
-                const text = getTitle() + '\n\n' + getMessage();
-                const exception = getException();
-                if (exception) {
-                    return text + '\n\n' + exception;
-                }
-                return text;
+    // clipboard
+    $('.btn-copy').copyClipboard({
+        text: function () {
+            const text = getTitle() + '\n\n' + getMessage();
+            const exception = getException();
+            if (exception) {
+                return text + '\n\n' + exception;
             }
-        });
-        clipboard.on('success', copySuccess);
-        clipboard.on('error', copyError);
-    } else {
-        $('.btn-copy').fadeOut();
-    }
+            return text;
+        }
+    });
 });

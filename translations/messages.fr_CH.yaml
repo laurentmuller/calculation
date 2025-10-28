@@ -11,9 +11,10 @@ application:
 about:
     title: A propos de
     version: Version %version%
-    error: Erreur lors du chargement des informations.
     extern_link: Accéder au site
-    loading: Recherche des informations...
+    load:
+        message: Recherche des informations...
+        error: Erreur lors du chargement des informations.
     database:
         title: Configuration des données
         version: Configuration des données v%version%
@@ -33,8 +34,8 @@ about:
     package:
         title: Dépendances du paquet
         display: Afficher les dépendances du paquet
-        not_found: 'Impossible de trouver le paquet: "%name%".'
-        not_loaded: Impossible de charger le paquet.
+        not_found: Impossible de trouver les dépendances du paquet.
+        not_loaded: Impossible de charger les dépendances du paquet.
 admin:
     rights:
         title: Droits d'accès
@@ -354,6 +355,7 @@ common:
     data_changed: Données modifiées
     api_documentation: Documentation (API)
     api_documentation_help: Accéder à la documentation de l'interface d'application
+    copy_title: Copie dans le presse-papiers.
     copy_success: Les données ont été copiées avec succès dans le presse-papiers.
     copy_error: Une erreur s'est produite lors de la copie des données dans le presse-papiers.
     expand: Afficher le contenu

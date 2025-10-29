@@ -1,5 +1,5 @@
 {% import 'about/_about_macro.html.twig' as tools %}
-{% from 'macros/_icons.html.twig' import linkExternal, link, icon %}
+{% from 'macros/_icons.html.twig' import linkExternal, link, icon, dropdownEllipsis, dropdownItemExternal, dropdownItemWithClass, dropdownSeparator %}
 {# macros #}
 {% macro headerLinkInfo(title, id, countable = null) -%}
 <div class="border-bottom" id="{{ id }}-header">
@@ -33,40 +33,39 @@
     <td class="text-id">{{ package.version }}</td>
     <td class="text">{{ package.description }}</td>
     <td>
-        {%- if package.license -%}
-            {{- link(
-                href: path('about_symfony_license', {file: package.license}),
-                class: 'd-print-none link-license',
-                icon: 'book-open-reader',
-                title: 'about.licence.display')
-            -}}
+        {%- if package.license or package.production|length or package.development|length or package.homepage -%}
+            <div class="dropdown">
+                {{ dropdownEllipsis() }}
+                <ul class="dropdown-menu dropdown-menu-end">
+                    {%- if package.license -%}
+                        {{- dropdownItemWithClass(
+                            href: path('about_symfony_license', {name: package.name}),
+                            text: 'about.licence.display',
+                            icon: 'book-open-reader',
+                            class: 'link-license')
+                        -}}
+                    {% endif %}
+                    {%- if package.production|length or package.development|length -%}
+                        {{- dropdownItemWithClass(
+                            href: path('about_symfony_package', {name: package.name}),
+                            text: 'about.package.display',
+                            icon: 'file-code',
+                            class: 'link-package')
+                        -}}
+                    {% endif %}
+                    {%- if package.homepage -%}
+                        {{ dropdownSeparator() }}
+                        {{- dropdownItemExternal(
+                            href: package.homepage,
+                            text: 'about.extern_link',
+                            icon: 'arrow-up-right-from-square')
+                        -}}
+                    {% endif %}
+                </ul>
+            </div>
         {%- else -%}
             &nbsp;
-        {%- endif -%}
-    </td>
-    <td>
-        {%- if package.production|length or package.development|length -%}
-            {{- link(
-                href: path('about_symfony_package', {name: package.name}),
-                class: 'd-print-none link-package',
-                icon: 'file-code',
-                title: 'about.package.display')
-            -}}
-        {%- else -%}
-            &nbsp;
-        {%- endif -%}
-    </td>
-    <td>
-        {%- if package.homepage -%}
-            {{- linkExternal(
-                href: package.homepage,
-                class: 'd-print-none',
-                icon: 'arrow-up-right-from-square',
-                title: 'about.extern_link')
-            -}}
-        {%- else -%}
-            &nbsp;
-        {%- endif -%}
+        {% endif %}
     </td>
 </tr>
 {%- endmacro %}

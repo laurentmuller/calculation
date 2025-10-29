@@ -16,6 +16,7 @@ namespace App\Controller;
 use App\Attribute\ExcelRoute;
 use App\Attribute\GetRoute;
 use App\Attribute\PdfRoute;
+use App\Enums\Environment;
 use App\Interfaces\RoleInterface;
 use App\Report\SymfonyReport;
 use App\Response\PdfResponse;
@@ -23,7 +24,6 @@ use App\Response\SpreadsheetResponse;
 use App\Service\SymfonyInfoService;
 use App\Spreadsheet\SymfonyDocument;
 use App\Utils\FileUtils;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
@@ -55,24 +55,20 @@ class AboutSymfonyController extends AbstractController
     }
 
     /**
-     * Gets the license content.
+     * Gets the package license.
      */
     #[GetRoute(path: '/license', name: 'license')]
     public function license(
         #[MapQueryParameter]
-        string $file,
-        #[Autowire('%kernel.project_dir%')]
-        string $projectDir,
+        string $name,
+        SymfonyInfoService $service,
         MarkdownInterface $markdown,
     ): JsonResponse {
-        $file = FileUtils::buildPath($projectDir, $file);
-        if (!FileUtils::exists($file)) {
+        $package = $service->getPackage($name);
+        if (null === $package || null === $package['license']) {
             return $this->jsonFalse(['message' => $this->trans('about.licence.not_found')]);
         }
-        $content = FileUtils::readFile($file);
-        if ('' === $content) {
-            return $this->jsonFalse(['message' => $this->trans('about.licence.not_loaded')]);
-        }
+        $content = $this->getMarkdownLicense($package);
 
         return $this->jsonTrue(['content' => $markdown->convert($content)]);
     }
@@ -92,7 +88,7 @@ class AboutSymfonyController extends AbstractController
             return $this->jsonFalse(['message' => $this->trans('about.package.not_found')]);
         }
 
-        $content = $this->buildMarkdownPackage($package);
+        $content = $this->getMarkdownPackage($package);
 
         return $this->jsonTrue(['content' => $markdown->convert($content)]);
     }
@@ -106,27 +102,50 @@ class AboutSymfonyController extends AbstractController
     /**
      * @phpstan-param PackageType $package
      */
-    private function buildMarkdownPackage(array $package): string
+    private function getMarkdownLicense(array $package): string
     {
-        return \sprintf("**%s** *v%s*\n***", $package['name'], $package['version'])
-            . $this->implodeValues('Production', $package['production'])
-            . $this->implodeValues('Development', $package['development']);
+        return $this->implodeHeader($package)
+            . FileUtils::readFile((string) $package['license']);
+    }
+
+    /**
+     * @phpstan-param PackageType $package
+     */
+    private function getMarkdownPackage(array $package): string
+    {
+        return $this->implodeHeader($package)
+            . $this->implodeValues(Environment::PRODUCTION, $package['production'])
+            . $this->implodeValues(Environment::DEVELOPMENT, $package['development']);
+    }
+
+    /**
+     * @phpstan-param PackageType $package
+     */
+    private function implodeHeader(array $package): string
+    {
+        return \sprintf(
+            "**%s**\n\n*Version %s - %s*\n***\n",
+            $package['name'],
+            $package['version'],
+            $package['time']
+        );
     }
 
     /**
      * @phpstan-param array<string, string> $values
      */
-    private function implodeValues(string $title, array $values): string
+    private function implodeValues(Environment $environment, array $values): string
     {
         if ([] === $values) {
             return '';
         }
         $values = \array_map(
-            static fn (string $key, string $version): string => \sprintf('- `%s: %s`', $key, $version),
+            static fn (string $key, string $version): string => \sprintf('- %s : `%s`', $key, $version),
             \array_keys($values),
             \array_values($values)
         );
+        $title = $environment->trans($this->getTranslator());
 
-        return \sprintf("\n\n**%s**\n\n%s", $title, \implode("\n", $values));
+        return \sprintf("\n\n%s\n\n%s", $title, \implode("\n", $values));
     }
 }

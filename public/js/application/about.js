@@ -72,16 +72,17 @@
             const $this = $(this);
             // content
             $dialog.find('.modal-data').html(content);
-            // show modal dialog
-            $dialog.one('hidden.bs.modal', function () {
-                $this.scrollInViewport().trigger('focus');
-            }).modal('show');
             // clipboard
             $dialog.find('.btn-copy').copyClipboard();
+            // show modal dialog
+            $dialog.one('hidden.bs.modal', function () {
+                $this.trigger('focus');
+            }).modal('show');
+            //$dialog.modal('show');
         },
 
         /**
-         * Load the modal dialog content.
+         * Load the content and display it in the modal dialog.
          * @param {Event} e the source event.
          * @param {string} attribute the attribute name.
          */

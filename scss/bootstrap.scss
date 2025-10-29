@@ -1,12 +1,15 @@
-// override variables
+// state
 $enable-rounded: false;
 $enable-validation-icons: false;
 $enable-negative-margins: true;
-$tooltip-opacity: 1.0;
+// variables
 $accordion-padding-x: 1rem;
 $accordion-icon-width: 1rem;
 $link-decoration: none;
-$info: #cfe2ff;
+$tooltip-opacity: 1.0;
+// colors
+$info: #9ec5fe;
+$code-color: #dc3545;
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 

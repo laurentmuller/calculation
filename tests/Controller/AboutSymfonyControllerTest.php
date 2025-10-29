@@ -31,19 +31,12 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
         yield ['/about/symfony/pdf', self::ROLE_ADMIN];
         yield ['/about/symfony/pdf', self::ROLE_SUPER_ADMIN];
 
-        $query = '/about/symfony/license?file=vendor/symfony/runtime/LICENSE';
-        yield [$query, self::ROLE_SUPER_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
+        $query = '/about/symfony/license?name=';
+        yield [$query . 'symfony/cache-contracts', self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
+        yield [$query . 'fake', self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
 
-        $query = '/about/symfony/license?file=fake';
-        yield [$query, self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
-
-        $query = '/about/symfony/license?file=tests/files/txt/empty.txt';
-        yield [$query, self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
-
-        $query = '/about/symfony/package?name=fake';
-        yield [$query, self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
-
-        $query = 'about/symfony/package?name=symfony/cache-contracts';
-        yield [$query, self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
+        $query = '/about/symfony/package?name=';
+        yield [$query . 'symfony/cache-contracts', self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
+        yield [$query . 'fake', self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
     }
 }

@@ -16,6 +16,7 @@ namespace App\Service;
 use App\Enums\Environment;
 use App\Utils\DateUtils;
 use App\Utils\FileUtils;
+use App\Utils\FormatUtils;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -45,6 +46,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     description?: string,
  *     homepage?: string,
  *     install-path: string,
+ *     time: string,
  *     support?: array{source?: string},
  *     require?: array<string, string>,
  *     require-dev?: array<string, string>}
@@ -54,6 +56,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     description: string,
  *     homepage: string|null,
  *     license: string|null,
+ *     time: string,
  *     production: array<string, string>,
  *     development: array<string, string>}
  * @phpstan-type PackagesType = array{
@@ -73,23 +76,35 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 final readonly class SymfonyInfoService
 {
+    /**
+     * The disabled label.
+     */
     public const LABEL_DISABLED = 'Disabled';
-    public const LABEL_ENABLED = 'Enabled';
-    public const LABEL_NOT_INSTALLED = 'Not installed';
 
+    /**
+     * The enabled label.
+     */
+    public const LABEL_ENABLED = 'Enabled';
+
+    /**
+     * The not installed label.
+     */
+    public const LABEL_NOT_INSTALLED = 'Not installed';
     // the array key for debug packages and routes
     private const KEY_DEBUG = 'debug';
     // the array key for runtime packages and routes
     private const KEY_RUNTIME = 'runtime';
-    // the pattern to search the license file
+    // the pattern to search license files
     private const LICENSE_PATTERN = '{license{*},LICENSE{*}}';
-    // the JSON file containing composer information
-    private const PACKAGE_FILE_NAME = '/vendor/composer/installed.json';
+
+    // the JSON package definitions file
+    private const PACKAGE_FILE = 'installed.json';
     // the release information URL
     private const RELEASE_URL = 'https://symfony.com/releases/%s.%s.json';
     // the unknown label
     private const UNKNOWN = 'Unknown';
 
+    private string $composerDir;
     private Environment $environment;
     private Environment $mode;
     private string $projectDir;
@@ -105,6 +120,7 @@ final readonly class SymfonyInfoService
         string $app_mode
     ) {
         $this->projectDir = FileUtils::normalize($projectDir);
+        $this->composerDir = FileUtils::buildPath($projectDir, 'vendor', 'composer');
         $this->environment = Environment::fromKernel($this->kernel);
         $this->mode = Environment::from($app_mode);
     }
@@ -509,6 +525,11 @@ final readonly class SymfonyInfoService
         return $package['require-dev'] ?? [];
     }
 
+    private function getPackageFile(): string
+    {
+        return FileUtils::buildPath($this->composerDir, self::PACKAGE_FILE);
+    }
+
     /**
      * @phpstan-param PackageSourceType $package
      */
@@ -522,15 +543,10 @@ final readonly class SymfonyInfoService
      */
     private function getPackageLicense(array $package): ?string
     {
-        $pattern = FileUtils::buildPath(
-            $this->projectDir,
-            'vendor/composer',
-            $package['install-path'],
-            self::LICENSE_PATTERN
-        );
+        $pattern = FileUtils::buildPath($this->composerDir, $package['install-path'], self::LICENSE_PATTERN);
         $files = \glob($pattern, \GLOB_BRACE | \GLOB_NOSORT);
         if (\is_array($files) && [] !== $files) {
-            return $this->makePathRelative($files[0]);
+            return $files[0];
         }
 
         return null;
@@ -552,19 +568,26 @@ final readonly class SymfonyInfoService
     private function getPackages(): array
     {
         return $this->cache->get('packages', function (): array {
-            $path = FileUtils::buildPath($this->projectDir, self::PACKAGE_FILE_NAME);
             /**
              * @phpstan-var array{
              *     packages: array<string, PackageSourceType>|null,
              *     dev-package-names: string[]|null
              * } $content
              */
-            $content = FileUtils::decodeJson($path);
+            $content = FileUtils::decodeJson($this->getPackageFile());
             $runtimePackages = $content['packages'] ?? [];
             $debugPackages = $content['dev-package-names'] ?? [];
 
             return $this->parsePackages($runtimePackages, $debugPackages);
         });
+    }
+
+    /**
+     * @phpstan-param PackageSourceType $package
+     */
+    private function getPackageTime(array $package): string
+    {
+        return FormatUtils::formatDateTime(new DatePoint($package['time']));
     }
 
     /**
@@ -630,6 +653,7 @@ final readonly class SymfonyInfoService
                 'license' => $this->getPackageLicense($package),
                 'homepage' => $this->getPackageHomepage($package),
                 'description' => $this->getPackageDescription($package),
+                'time' => $this->getPackageTime($package),
                 'production' => $this->getPackageProduction($package),
                 'development' => $this->getPackageDevelopment($package),
             ];

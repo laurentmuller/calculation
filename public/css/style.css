@@ -466,7 +466,7 @@ input[type=number]::-webkit-inner-spin-button {
 
 .drop-down-icon-right::after {
     float: right;
-    margin-left: 8px;
+    margin-left: auto;
     margin-right: 8px;
     content: '\f104';
 }
@@ -644,11 +644,6 @@ table.table-no-end-line tfoot tr:last-child td {
 }
 
 /* override default behavior */
-a,
-.btn-link {
-    text-decoration: none;
-}
-
 a.disabled {
     pointer-events: none;
     color: var(--bs-tertiary-color);

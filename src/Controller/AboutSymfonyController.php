@@ -21,6 +21,10 @@ use App\Interfaces\RoleInterface;
 use App\Report\SymfonyReport;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
+use App\Service\BundleInfoService;
+use App\Service\KernelInfoService;
+use App\Service\PackageInfoService;
+use App\Service\RouteInfoService;
 use App\Service\SymfonyInfoService;
 use App\Spreadsheet\SymfonyDocument;
 use App\Utils\FileUtils;
@@ -33,7 +37,7 @@ use Twig\Extra\Markdown\MarkdownInterface;
 /**
  * Controller to output symfony information.
  *
- * @phpstan-import-type PackageType from SymfonyInfoService
+ * @phpstan-import-type PackageType from PackageInfoService
  */
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 #[Route(path: '/about/symfony', name: 'about_symfony_')]
@@ -41,17 +45,42 @@ class AboutSymfonyController extends AbstractController
 {
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[GetRoute(path: '/content', name: 'content')]
-    public function content(SymfonyInfoService $service): JsonResponse
-    {
-        $content = $this->renderView('about/symfony_content.html.twig', ['service' => $service]);
+    public function content(
+        BundleInfoService $bundleService,
+        KernelInfoService $kernelService,
+        PackageInfoService $packageService,
+        RouteInfoService $routeService,
+        SymfonyInfoService $symfonyService
+    ): JsonResponse {
+        $content = $this->renderView('about/symfony_content.html.twig', [
+            'kernelService' => $kernelService,
+            'bundleService' => $bundleService,
+            'routeService' => $routeService,
+            'packageService' => $packageService,
+            'symfonyService' => $symfonyService,
+        ]);
 
         return $this->jsonTrue(['content' => $content]);
     }
 
     #[ExcelRoute]
-    public function excel(SymfonyInfoService $service): SpreadsheetResponse
-    {
-        return $this->renderSpreadsheetDocument(new SymfonyDocument($this, $service));
+    public function excel(
+        BundleInfoService $bundleService,
+        KernelInfoService $kernelService,
+        PackageInfoService $packageService,
+        RouteInfoService $routeService,
+        SymfonyInfoService $symfonyService
+    ): SpreadsheetResponse {
+        $doc = new SymfonyDocument(
+            $this,
+            $bundleService,
+            $kernelService,
+            $routeService,
+            $packageService,
+            $symfonyService
+        );
+
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**
@@ -61,7 +90,7 @@ class AboutSymfonyController extends AbstractController
     public function license(
         #[MapQueryParameter]
         string $name,
-        SymfonyInfoService $service,
+        PackageInfoService $service,
         MarkdownInterface $markdown,
     ): JsonResponse {
         $package = $service->getPackage($name);
@@ -80,7 +109,7 @@ class AboutSymfonyController extends AbstractController
     public function package(
         #[MapQueryParameter]
         string $name,
-        SymfonyInfoService $service,
+        PackageInfoService $service,
         MarkdownInterface $markdown,
     ): JsonResponse {
         $package = $service->getPackage($name);
@@ -94,9 +123,23 @@ class AboutSymfonyController extends AbstractController
     }
 
     #[PdfRoute]
-    public function pdf(SymfonyInfoService $service): PdfResponse
-    {
-        return $this->renderPdfDocument(new SymfonyReport($this, $service));
+    public function pdf(
+        BundleInfoService $bundleService,
+        KernelInfoService $kernelService,
+        PackageInfoService $packageService,
+        RouteInfoService $routeService,
+        SymfonyInfoService $symfonyService
+    ): PdfResponse {
+        $doc = new SymfonyReport(
+            $this,
+            $bundleService,
+            $kernelService,
+            $routeService,
+            $packageService,
+            $symfonyService
+        );
+
+        return $this->renderPdfDocument($doc);
     }
 
     /**

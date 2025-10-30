@@ -23,7 +23,7 @@
     <tr>
         <th>Name</th>
         <th class="text-id">Version</th>
-        <th colspan="4">Description</th>
+        <th colspan="2">Description</th>
     </tr>
 </thead>
 {% endmacro %}
@@ -74,7 +74,7 @@
     <tr>
         <th>Name</th>
         <th>Path</th>
-        <th class="text-state">Method</th>
+        <th class="v text-state">Method</th>
     </tr>
 </thead>
 {%- endmacro %}
@@ -100,29 +100,23 @@
         <td class="v text-percent">{{ directory.size }}</td>
     </tr>
 {%- endmacro %}
-{# parameters #}
-{%- set bundles = service.bundles -%}
-{%- set runtime_packages = service.runtimePackages -%}
-{%- set debug_packages = service.debugPackages -%}
-{%- set runtime_routes = service.runtimeRoutes -%}
-{%- set debug_routes = service.debugRoutes -%}
 {# content #}
 <div class="phpversion">
     <table id="data-table-symfony" class="table table-sm table-hover mb-0">
         <tbody>
             <tr class="h">
                 <td colspan="2" class="position-relative">
-                    {{- tools.content_header_link('https://symfony.com', service.version, 'symfony') -}}
+                    {{- tools.content_header_link('https://symfony.com', symfonyService.version, 'symfony') -}}
                 </td>
             </tr>
             {{ tools.headerInfo('Kernel') }}
-            {{ tools.rowInfo('Environment', service.environment|trans) }}
-            {{ tools.rowInfo('Running Mode', service.mode|trans) }}
-            {{ tools.rowInfo('Status', service.maintenanceStatus) }}
-            {{ tools.rowInfo('Release', service.releaseDate) }}
-            {{ tools.rowInfoBoolean('Long-Term support', service.longTermSupport|boolean) }}
-            {{ tools.rowInfo('End of maintenance', service.endOfMaintenance) }}
-            {{ tools.rowInfo('End of product life', service.endOfLife) }}
+            {{ tools.rowInfo('Environment', kernelService.environment|trans) }}
+            {{ tools.rowInfo('Running Mode', kernelService.mode|trans) }}
+            {{ tools.rowInfo('Status', symfonyService.maintenanceStatus) }}
+            {{ tools.rowInfo('Release', symfonyService.releaseDate) }}
+            {{ tools.rowInfoBoolean('Long-Term support', symfonyService.longTermSupport|boolean) }}
+            {{ tools.rowInfo('End of maintenance', symfonyService.endOfMaintenance) }}
+            {{ tools.rowInfo('End of product life', symfonyService.endOfLife) }}
         </tbody>
     </table>
     {# Configuration #}
@@ -134,11 +128,10 @@
             <table class="table table-sm table-hover mb-0">
                 {{ _self.headerNameValue() }}
                 <tbody>
-                {{ tools.rowInfo('Intl Locale', service.localeName) }}
-                {{ tools.rowInfo('Timezone', service.timezone) }}
-                {{ tools.rowInfo('Charset', service.charset) }}
-                {{ tools.rowInfo('Architecture', service.architecture) }}
-                {{ tools.rowInfoBoolean('Debug', service.debugStatus, service.debug) }}
+                {{ tools.rowInfo('Architecture', symfonyService.architecture) }}
+                {{ tools.rowInfo('Charset', kernelService.charset) }}
+                {{ tools.rowInfo('Intl Locale', symfonyService.localeName) }}
+                {{ tools.rowInfo('Timezone', symfonyService.timezone) }}
                 </tbody>
             </table>
         </div>
@@ -148,9 +141,10 @@
             <table class="table table-sm table-hover mb-0">
                 {{ _self.headerNameValue() }}
                 <tbody>
-                {{ tools.rowInfoBoolean('OPcache', service.opCacheStatus, service.opCacheEnabled) }}
-                {{ tools.rowInfoBoolean('APCu', service.apcuStatus, service.apcuEnabled) }}
-                {{ tools.rowInfoBoolean('Xdebug', service.xDebugStatus, service.xdebugEnabled) }}
+                {{ tools.rowInfoBoolean('APCu', symfonyService.apcuStatus, symfonyService.apcuEnabled) }}
+                {{ tools.rowInfoBoolean('Debug', kernelService.debugStatus, kernelService.debug) }}
+                {{ tools.rowInfoBoolean('OPcache', symfonyService.opCacheStatus, symfonyService.opCacheEnabled) }}
+                {{ tools.rowInfoBoolean('Xdebug', symfonyService.xDebugStatus, symfonyService.xdebugEnabled) }}
                 </tbody>
             </table>
         </div>
@@ -168,15 +162,16 @@
                 <tbody>
                 <tr>
                     <td class="e">Project</td>
-                    <td class="v" colspan="2">{{ service.projectDir }}</td>
+                    <td class="v" colspan="2">{{ kernelService.projectDir }}</td>
                 </tr>
-                {{ _self.rowDirectory(service.cacheInfo) }}
-                {{ _self.rowDirectory(service.buildInfo) }}
-                {{ _self.rowDirectory(service.logInfo) }}
+                {{ _self.rowDirectory(kernelService.cacheInfo) }}
+                {{ _self.rowDirectory(kernelService.buildInfo) }}
+                {{ _self.rowDirectory(kernelService.logInfo) }}
                 </tbody>
             </table>
         </div>
         {# bundles #}
+        {%- set bundles = bundleService.bundles -%}
         {% if bundles|length %}
             {{ _self.headerLinkInfo('Bundles', 'bundles', bundles) }}
             <div class="collapse ps-lg-3" id="bundles" aria-labelledby="bundles-header" data-bs-parent="#symfonyAccordion">
@@ -189,7 +184,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {% for bundle in service.bundles %}
+                    {% for bundle in bundles %}
                         {{ _self.rowBundle(bundle) }}
                     {% endfor %}
                     </tbody>
@@ -197,13 +192,14 @@
             </div>
         {% endif %}
         {# runtime packages #}
-        {% if runtime_packages|length %}
-            {{ _self.headerLinkInfo('Packages', 'runtime-packages', runtime_packages) }}
+        {%- set packages = packageService.runtimePackages -%}
+        {% if packages|length %}
+            {{ _self.headerLinkInfo('Packages', 'runtime-packages', packages) }}
             <div class="accordion-collapse collapse ps-lg-3 table-responsive" id="runtime-packages" aria-labelledby="runtime-packages-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerPackage() }}
                     <tbody>
-                    {% for package in runtime_packages %}
+                    {% for package in packages %}
                         {{ _self.rowPackage(package) }}
                     {% endfor %}
                     </tbody>
@@ -211,13 +207,14 @@
             </div>
         {% endif %}
         {# debug packages #}
-        {% if debug_packages|length %}
-            {{ _self.headerLinkInfo('Debug Packages', 'dev-packages', debug_packages) }}
+        {%- set packages = packageService.debugPackages -%}
+        {% if packages|length %}
+            {{ _self.headerLinkInfo('Debug Packages', 'dev-packages', packages) }}
             <div class="accordion-collapse collapse ps-lg-3" id="dev-packages" aria-labelledby="dev-packages-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerPackage() }}
                     <tbody>
-                    {% for package in debug_packages %}
+                    {% for package in packages %}
                         {{ _self.rowPackage(package) }}
                     {% endfor %}
                     </tbody>
@@ -225,13 +222,14 @@
             </div>
         {% endif %}
         {# runtime routes #}
-        {% if runtime_routes|length %}
-            {{ _self.headerLinkInfo('Routes', 'runtime-routes', runtime_routes) }}
+        {%- set routes = routeService.runtimeRoutes -%}
+        {% if routes|length %}
+            {{ _self.headerLinkInfo('Routes', 'runtime-routes', routes) }}
             <div class="accordion-collapse collapse ps-lg-3" id="runtime-routes" aria-labelledby="runtime-routes-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerRoute() }}
                     <tbody>
-                    {% for route in runtime_routes %}
+                    {% for route in routes %}
                         {{ _self.rowRoute(route) }}
                     {% endfor %}
                     </tbody>
@@ -239,13 +237,14 @@
             </div>
         {% endif %}
         {# debug routes #}
-        {% if debug_routes|length %}
-            {{ _self.headerLinkInfo('Debug Routes', 'debug-routes', debug_routes) }}
+        {%- set routes = routeService.debugRoutes -%}
+        {% if routes|length %}
+            {{ _self.headerLinkInfo('Debug Routes', 'debug-routes', routes) }}
             <div class="accordion-collapse collapse ps-lg-3" id="debug-routes" aria-labelledby="debug-routes-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm table-hover mb-0">
                     {{ _self.headerRoute() }}
                     <tbody>
-                    {% for route in debug_routes %}
+                    {% for route in routes %}
                         {{ _self.rowRoute(route) }}
                     {% endfor %}
                     </tbody>

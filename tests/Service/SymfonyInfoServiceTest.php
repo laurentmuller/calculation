@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
-use App\Enums\Environment;
 use App\Service\SymfonyInfoService;
 use App\Tests\KernelServiceTestCase;
 use App\Utils\FormatUtils;
@@ -36,56 +35,6 @@ final class SymfonyInfoServiceTest extends KernelServiceTestCase
         self::assertSame('64 bits', $actual);
     }
 
-    public function testGetBuildInfo(): void
-    {
-        $actual = $this->service->getBuildInfo();
-        self::assertArrayHasKey('name', $actual);
-        self::assertArrayHasKey('path', $actual);
-        self::assertArrayHasKey('relative', $actual);
-        self::assertArrayHasKey('size', $actual);
-        self::assertSame('Build', $actual['name']);
-    }
-
-    public function testGetBundles(): void
-    {
-        $actual = $this->service->getBundles();
-        self::assertNotEmpty($actual);
-    }
-
-    public function testGetCacheInfo(): void
-    {
-        $actual = $this->service->getCacheInfo();
-        self::assertArrayHasKey('name', $actual);
-        self::assertArrayHasKey('path', $actual);
-        self::assertArrayHasKey('relative', $actual);
-        self::assertArrayHasKey('size', $actual);
-        self::assertSame('Cache', $actual['name']);
-    }
-
-    public function testGetCharset(): void
-    {
-        $actual = $this->service->getCharset();
-        self::assertSame('UTF-8', $actual);
-    }
-
-    public function testGetDebugPackages(): void
-    {
-        $actual = $this->service->getDebugPackages();
-        self::assertNotEmpty($actual);
-    }
-
-    public function testGetDebugRoutes(): void
-    {
-        $actual = $this->service->getDebugRoutes();
-        self::assertEmpty($actual);
-    }
-
-    public function testGetDebugStatus(): void
-    {
-        $actual = $this->service->getDebugStatus();
-        self::assertSame(SymfonyInfoService::LABEL_DISABLED, $actual);
-    }
-
     public function testGetEndOfLife(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
@@ -102,27 +51,11 @@ final class SymfonyInfoServiceTest extends KernelServiceTestCase
         self::assertStringContainsString($year, $actual);
     }
 
-    public function testGetEnvironment(): void
-    {
-        $actual = $this->service->getEnvironment();
-        self::assertSame(Environment::TEST, $actual);
-    }
-
     public function testGetLocaleName(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $actual = $this->service->getLocaleName();
         self::assertStringContainsString(FormatUtils::DEFAULT_LOCALE, $actual);
-    }
-
-    public function testGetLogInfo(): void
-    {
-        $actual = $this->service->getLogInfo();
-        self::assertArrayHasKey('name', $actual);
-        self::assertArrayHasKey('path', $actual);
-        self::assertArrayHasKey('relative', $actual);
-        self::assertArrayHasKey('size', $actual);
-        self::assertSame('Logs', $actual['name']);
     }
 
     public function testGetMaintenanceStatus(): void
@@ -131,35 +64,11 @@ final class SymfonyInfoServiceTest extends KernelServiceTestCase
         self::assertNotEmpty($actual);
     }
 
-    public function testGetMode(): void
-    {
-        $actual = $this->service->getMode();
-        self::assertSame(Environment::TEST, $actual);
-    }
-
-    public function testGetProjectDir(): void
-    {
-        $actual = $this->service->getProjectDir();
-        self::assertStringContainsString('calculation', $actual);
-    }
-
     public function testGetReleaseDate(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $actual = $this->service->getReleaseDate();
         self::assertMatchesRegularExpression('/\d{4}/', $actual);
-    }
-
-    public function testGetRuntimePackages(): void
-    {
-        $actual = $this->service->getRuntimePackages();
-        self::assertNotEmpty($actual);
-    }
-
-    public function testGetRuntimeRoutes(): void
-    {
-        $actual = $this->service->getRuntimeRoutes();
-        self::assertNotEmpty($actual);
     }
 
     public function testGetTimeZone(): void
@@ -180,12 +89,6 @@ final class SymfonyInfoServiceTest extends KernelServiceTestCase
         $expected = $this->isExtensionLoaded('apcu', 'apc.enabled');
         $actual = $this->service->isApcuEnabled();
         self::assertSame($expected, $actual);
-    }
-
-    public function testIsDebug(): void
-    {
-        $actual = $this->service->isDebug();
-        self::assertFalse($actual);
     }
 
     public function testIsLongTermSupport(): void

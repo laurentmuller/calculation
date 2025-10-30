@@ -14,22 +14,30 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
+use App\Service\BundleInfoService;
+use App\Service\KernelInfoService;
+use App\Service\PackageInfoService;
+use App\Service\RouteInfoService;
 use App\Service\SymfonyInfoService;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
  * Document containing Symfony configuration.
  *
- * @phpstan-import-type RouteType from SymfonyInfoService
- * @phpstan-import-type BundleType from SymfonyInfoService
- * @phpstan-import-type PackageType from SymfonyInfoService
- * @phpstan-import-type DirectoryType from SymfonyInfoService
+ * @phpstan-import-type RouteType from RouteInfoService
+ * @phpstan-import-type BundleType from BundleInfoService
+ * @phpstan-import-type PackageType from PackageInfoService
+ * @phpstan-import-type DirectoryType from KernelInfoService
  */
 class SymfonyDocument extends AbstractDocument
 {
     public function __construct(
         AbstractController $controller,
-        private readonly SymfonyInfoService $service
+        private readonly BundleInfoService $bundleService,
+        private readonly KernelInfoService $kernelService,
+        private readonly RouteInfoService $routeService,
+        private readonly PackageInfoService $packageService,
+        private readonly SymfonyInfoService $symfonyService
     ) {
         parent::__construct($controller);
     }
@@ -37,27 +45,26 @@ class SymfonyDocument extends AbstractDocument
     #[\Override]
     public function render(): bool
     {
-        $service = $this->service;
-        $this->start($this->trans('about.symfony.version', ['%version%' => $service->getVersion()]));
+        $symfonyService = $this->symfonyService;
+        $this->start($this->trans('about.symfony.version', ['%version%' => $symfonyService->getVersion()]));
         $this->setActiveTitle('Configuration', $this->controller);
-        $this->outputInfo($service);
-        $this->outputBundles($service->getBundles());
-        $this->outputPackages('Packages', $service->getRuntimePackages());
-        $this->outputPackages('Debug Packages', $service->getDebugPackages());
-        $this->outputRoutes('Routes', $service->getRuntimeRoutes());
-        $this->outputRoutes('Debug Routes', $service->getDebugRoutes());
+        $this->outputInfo();
+        $this->outputBundles();
+        $this->outputPackages('Packages', $this->packageService->getRuntimePackages());
+        $this->outputPackages('Debug Packages', $this->packageService->getDebugPackages());
+        $this->outputRoutes('Routes', $this->routeService->getRuntimeRoutes());
+        $this->outputRoutes('Debug Routes', $this->routeService->getDebugRoutes());
         $this->setActiveSheetIndex(0);
 
         return true;
     }
 
     /**
-     * @phpstan-param BundleType[] $bundles
-     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    private function outputBundles(array $bundles): void
+    private function outputBundles(): void
     {
+        $bundles = $this->bundleService->getBundles();
         if ([] === $bundles) {
             return;
         }
@@ -105,8 +112,10 @@ class SymfonyDocument extends AbstractDocument
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    private function outputInfo(SymfonyInfoService $info): void
+    private function outputInfo(): void
     {
+        $symfonyService = $this->symfonyService;
+        $kernelService = $this->kernelService;
         $this->setActiveTitle('Symfony', $this->controller);
         $sheet = $this->getActiveSheet();
         $row = $sheet->setHeaders([
@@ -114,30 +123,30 @@ class SymfonyDocument extends AbstractDocument
             'Value' => HeaderFormat::instance(),
         ]);
         $this->outputGroup($sheet, $row++, 'Kernel')
-            ->outputRow($sheet, $row++, 'Environment', $this->trans($info->getEnvironment()))
-            ->outputRow($sheet, $row++, 'Running Mode', $this->trans($info->getMode()))
-            ->outputRow($sheet, $row++, 'Version status', $info->getMaintenanceStatus())
-            ->outputRowEnabled($sheet, $row++, 'Long-Term support', $info->isLongTermSupport())
-            ->outputRow($sheet, $row++, 'End of maintenance', $info->getEndOfMaintenance())
-            ->outputRow($sheet, $row++, 'End of product life', $info->getEndOfLife());
+            ->outputRow($sheet, $row++, 'Environment', $this->trans($kernelService->getEnvironment()))
+            ->outputRow($sheet, $row++, 'Running Mode', $this->trans($kernelService->getMode()))
+            ->outputRow($sheet, $row++, 'Version status', $symfonyService->getMaintenanceStatus())
+            ->outputRowEnabled($sheet, $row++, 'Long-Term support', $symfonyService->isLongTermSupport())
+            ->outputRow($sheet, $row++, 'End of maintenance', $symfonyService->getEndOfMaintenance())
+            ->outputRow($sheet, $row++, 'End of product life', $symfonyService->getEndOfLife());
 
         $this->outputGroup($sheet, $row++, 'Parameters')
-            ->outputRow($sheet, $row++, 'Intl Locale', $info->getLocaleName())
-            ->outputRow($sheet, $row++, 'Timezone', $info->getTimeZone())
-            ->outputRow($sheet, $row++, 'Charset', $info->getCharset())
-            ->outputRow($sheet, $row++, 'Architecture', $info->getArchitecture())
-            ->outputRowEnabled($sheet, $row++, 'Debug', $info->isDebug());
+            ->outputRow($sheet, $row++, 'Architecture', $symfonyService->getArchitecture())
+            ->outputRow($sheet, $row++, 'Charset', $kernelService->getCharset())
+            ->outputRow($sheet, $row++, 'Intl Locale', $symfonyService->getLocaleName())
+            ->outputRow($sheet, $row++, 'Timezone', $symfonyService->getTimeZone());
 
         $this->outputGroup($sheet, $row++, 'Extensions')
-            ->outputRowEnabled($sheet, $row++, 'OPCache', $info->isOpCacheEnabled(), $info->getOpCacheStatus())
-            ->outputRowEnabled($sheet, $row++, 'APCu', $info->isApcuEnabled(), $info->getApcuStatus())
-            ->outputRowEnabled($sheet, $row++, 'Xdebug', $info->isXdebugEnabled(), $info->getXdebugStatus());
+            ->outputRowEnabled($sheet, $row++, 'APCu', $symfonyService->isApcuEnabled(), $symfonyService->getApcuStatus())
+            ->outputRowEnabled($sheet, $row++, 'Debug', $kernelService->isDebug())
+            ->outputRowEnabled($sheet, $row++, 'OPCache', $symfonyService->isOpCacheEnabled(), $symfonyService->getOpCacheStatus())
+            ->outputRowEnabled($sheet, $row++, 'Xdebug', $symfonyService->isXdebugEnabled(), $symfonyService->getXdebugStatus());
 
         $this->outputGroup($sheet, $row++, 'Directories')
-            ->outputRow($sheet, $row++, 'Project', $info->getProjectDir())
-            ->outputDirectoryRow($sheet, $row++, $info->getCacheInfo())
-            ->outputDirectoryRow($sheet, $row++, $info->getBuildInfo())
-            ->outputDirectoryRow($sheet, $row, $info->getLogInfo());
+            ->outputRow($sheet, $row++, 'Project', $kernelService->getProjectDir())
+            ->outputDirectoryRow($sheet, $row++, $kernelService->getCacheInfo())
+            ->outputDirectoryRow($sheet, $row++, $kernelService->getBuildInfo())
+            ->outputDirectoryRow($sheet, $row, $kernelService->getLogInfo());
 
         $sheet->setAutoSize(1, 2)
             ->finish();

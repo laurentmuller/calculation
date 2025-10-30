@@ -18,15 +18,19 @@ use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
+use App\Service\BundleInfoService;
+use App\Service\KernelInfoService;
+use App\Service\PackageInfoService;
+use App\Service\RouteInfoService;
 use App\Service\SymfonyInfoService;
 
 /**
  * Report containing Symfony configuration.
  *
- * @phpstan-import-type RouteType from SymfonyInfoService
- * @phpstan-import-type BundleType from SymfonyInfoService
- * @phpstan-import-type PackageType from SymfonyInfoService
- * @phpstan-import-type DirectoryType from SymfonyInfoService
+ * @phpstan-import-type RouteType from RouteInfoService
+ * @phpstan-import-type BundleType from BundleInfoService
+ * @phpstan-import-type PackageType from PackageInfoService
+ * @phpstan-import-type DirectoryType from KernelInfoService
  */
 class SymfonyReport extends AbstractReport
 {
@@ -34,23 +38,26 @@ class SymfonyReport extends AbstractReport
 
     public function __construct(
         AbstractController $controller,
-        private readonly SymfonyInfoService $service
+        private readonly BundleInfoService $bundleService,
+        private readonly KernelInfoService $kernelService,
+        private readonly RouteInfoService $routeService,
+        private readonly PackageInfoService $packageService,
+        private readonly SymfonyInfoService $symfonyService
     ) {
         parent::__construct($controller);
-        $this->setTranslatedTitle('about.symfony.version', ['%version%' => $service->getVersion()]);
+        $this->setTranslatedTitle('about.symfony.version', ['%version%' => $symfonyService->getVersion()]);
     }
 
     #[\Override]
     public function render(): bool
     {
         $this->addPage();
-        $this->outputInfo($this->service);
-        $info = $this->service;
-        $this->outputBundles($info->getBundles());
-        $this->outputPackages('Packages', $info->getRuntimePackages());
-        $this->outputPackages('Debug Packages', $info->getDebugPackages());
-        $this->outputRoutes('Routes', $info->getRuntimeRoutes());
-        $this->outputRoutes('Debug Routes', $info->getDebugRoutes());
+        $this->outputInfo();
+        $this->outputBundles();
+        $this->outputPackages('Packages', $this->packageService->getRuntimePackages());
+        $this->outputPackages('Debug Packages', $this->packageService->getDebugPackages());
+        $this->outputRoutes('Routes', $this->routeService->getRuntimeRoutes());
+        $this->outputRoutes('Debug Routes', $this->routeService->getDebugRoutes());
 
         return true;
     }
@@ -72,11 +79,9 @@ class SymfonyReport extends AbstractReport
         $this->lineBreak(self::LINE_HEIGHT / 2.0);
     }
 
-    /**
-     * @phpstan-param BundleType[] $bundles
-     */
-    private function outputBundles(array $bundles): void
+    private function outputBundles(): void
     {
+        $bundles = $this->bundleService->getBundles();
         if ([] === $bundles) {
             return;
         }
@@ -109,8 +114,11 @@ class SymfonyReport extends AbstractReport
         );
     }
 
-    private function outputInfo(SymfonyInfoService $info): void
+    private function outputInfo(): void
     {
+        $symfonyService = $this->symfonyService;
+        $kernelService = $this->kernelService;
+
         $this->addBookmark('Kernel');
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
@@ -119,33 +127,33 @@ class SymfonyReport extends AbstractReport
                 PdfColumn::left('Value', 85)
             );
         $table->setGroupKey('Kernel')->outputHeaders();
-        $this->outputRow($table, 'Environment', $this->trans($info->getEnvironment()))
-            ->outputRow($table, 'Running Mode', $this->trans($info->getMode()))
-            ->outputRow($table, 'Version status', $info->getMaintenanceStatus())
-            ->outputRowEnabled($table, 'Long-Term support', $info->isLongTermSupport())
-            ->outputRow($table, 'End of maintenance', $info->getEndOfMaintenance())
-            ->outputRow($table, 'End of product life', $info->getEndOfLife());
+        $this->outputRow($table, 'Environment', $this->trans($kernelService->getEnvironment()))
+            ->outputRow($table, 'Running Mode', $this->trans($kernelService->getMode()))
+            ->outputRow($table, 'Version status', $symfonyService->getMaintenanceStatus())
+            ->outputRowEnabled($table, 'Long-Term support', $symfonyService->isLongTermSupport())
+            ->outputRow($table, 'End of maintenance', $symfonyService->getEndOfMaintenance())
+            ->outputRow($table, 'End of product life', $symfonyService->getEndOfLife());
 
         $this->addBookmark('Parameters', false, 1);
         $table->setGroupKey('Parameters');
-        $this->outputRow($table, 'Intl Locale', $info->getLocaleName())
-            ->outputRow($table, 'Timezone', $info->getTimeZone())
-            ->outputRow($table, 'Charset', $info->getCharset())
-            ->outputRow($table, 'Architecture', $info->getArchitecture())
-            ->outputRowEnabled($table, 'Debug', $info->isDebug());
+        $this->outputRow($table, 'Architecture', $symfonyService->getArchitecture())
+            ->outputRow($table, 'Charset', $kernelService->getCharset())
+            ->outputRow($table, 'Intl Locale', $symfonyService->getLocaleName())
+            ->outputRow($table, 'Timezone', $symfonyService->getTimeZone());
 
         $this->addBookmark('Extensions', false, 1);
         $table->setGroupKey('Extensions');
-        $this->outputRowEnabled($table, 'OPCache', $info->isOpCacheEnabled(), $info->getOpCacheStatus())
-            ->outputRowEnabled($table, 'APCu', $info->isApcuEnabled(), $info->getApcuStatus())
-            ->outputRowEnabled($table, 'Xdebug', $info->isXdebugEnabled(), $info->getXdebugStatus());
+        $this->outputRowEnabled($table, 'APCu', $symfonyService->isApcuEnabled(), $symfonyService->getApcuStatus())
+            ->outputRowEnabled($table, 'Debug', $kernelService->isDebug())
+            ->outputRowEnabled($table, 'OPCache', $symfonyService->isOpCacheEnabled(), $symfonyService->getOpCacheStatus())
+            ->outputRowEnabled($table, 'Xdebug', $symfonyService->isXdebugEnabled(), $symfonyService->getXdebugStatus());
 
         $this->addBookmark('Directories', false, 1);
         $table->setGroupKey('Directories');
-        $this->outputRow($table, 'Project', $info->getProjectDir())
-            ->outputDirectoryRow($table, $info->getCacheInfo())
-            ->outputDirectoryRow($table, $info->getBuildInfo())
-            ->outputDirectoryRow($table, $info->getLogInfo());
+        $this->outputRow($table, 'Project', $kernelService->getProjectDir())
+            ->outputDirectoryRow($table, $kernelService->getCacheInfo())
+            ->outputDirectoryRow($table, $kernelService->getBuildInfo())
+            ->outputDirectoryRow($table, $kernelService->getLogInfo());
     }
 
     /**

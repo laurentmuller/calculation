@@ -13,68 +13,21 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Enums\Environment;
 use App\Utils\DateUtils;
 use App\Utils\FileUtils;
-use App\Utils\FormatUtils;
 use Symfony\Component\Clock\DatePoint;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Intl\Locales;
-use Symfony\Component\Routing\Route;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
- * Utility class to get Symfony information.
+ * Service to get information about Symfony.
  *
  * @see https://github.com/symfony/symfony/blob/7.1/src/Symfony/Bundle/FrameworkBundle/Command/AboutCommand.php
  * @see https://github.com/EasyCorp/easy-doc-bundle/blob/master/src/Command/DocCommand.php
- *
- * @phpstan-type RouteType = array{
- *     name: string,
- *     path: string,
- *     methods: string}
- * @phpstan-type RoutesType = array{
- *     runtime: array<string, RouteType>,
- *     debug: array<string, RouteType>}
- * @phpstan-type PackageSourceType = array{
- *     name: string,
- *     version: string,
- *     description?: string,
- *     homepage?: string,
- *     install-path: string,
- *     time: string,
- *     support?: array{source?: string},
- *     require?: array<string, string>,
- *     require-dev?: array<string, string>}
- * @phpstan-type PackageType = array{
- *     name: string,
- *     version: string,
- *     description: string,
- *     homepage: string|null,
- *     license: string|null,
- *     time: string,
- *     production: array<string, string>,
- *     development: array<string, string>}
- * @phpstan-type PackagesType = array{
- *     runtime: array<string, PackageType>,
- *     debug: array<string, PackageType>}
- * @phpstan-type BundleType = array{
- *     name: string,
- *     namespace: string,
- *     path: string,
- *     package: string,
- *     size: string}
- * @phpstan-type DirectoryType = array{
- *     name: string,
- *     path: string,
- *     relative: string,
- *     size: string}
  */
-final readonly class SymfonyInfoService
+class SymfonyInfoService
 {
     /**
      * The disabled label.
@@ -90,39 +43,16 @@ final readonly class SymfonyInfoService
      * The not installed label.
      */
     public const LABEL_NOT_INSTALLED = 'Not installed';
-    // the array key for debug packages and routes
-    private const KEY_DEBUG = 'debug';
-    // the array key for runtime packages and routes
-    private const KEY_RUNTIME = 'runtime';
-    // the pattern to search license files
-    private const LICENSE_PATTERN = '{license{*},LICENSE{*}}';
 
-    // the JSON package definitions file
-    private const PACKAGE_FILE = 'installed.json';
     // the release information URL
     private const RELEASE_URL = 'https://symfony.com/releases/%s.%s.json';
     // the unknown label
     private const UNKNOWN = 'Unknown';
 
-    private string $composerDir;
-    private Environment $environment;
-    private Environment $mode;
-    private string $projectDir;
-
     public function __construct(
-        private KernelInterface $kernel,
-        private RouterInterface $router,
         #[Target('calculation.symfony')]
-        private CacheInterface $cache,
-        #[Autowire('%kernel.project_dir%')]
-        string $projectDir,
-        #[Autowire('%app_mode%')]
-        string $app_mode
+        private readonly CacheInterface $cache,
     ) {
-        $this->projectDir = FileUtils::normalize($projectDir);
-        $this->composerDir = FileUtils::buildPath($projectDir, 'vendor', 'composer');
-        $this->environment = Environment::fromKernel($this->kernel);
-        $this->mode = Environment::from($app_mode);
     }
 
     /**
@@ -139,89 +69,6 @@ final readonly class SymfonyInfoService
     public function getArchitecture(): string
     {
         return \sprintf('%d bits', \PHP_INT_SIZE * 8);
-    }
-
-    /**
-     * Gets the build directory path and the formatted size.
-     *
-     * @phpstan-return DirectoryType
-     */
-    public function getBuildInfo(): array
-    {
-        return $this->getDirectoryInfo('Build', $this->kernel->getBuildDir());
-    }
-
-    /**
-     * Gets bundle's information.
-     *
-     * @phpstan-return array<string, BundleType>
-     */
-    public function getBundles(): array
-    {
-        return $this->cache->get('bundles', function (): array {
-            $bundles = [];
-            $projectDir = $this->projectDir;
-            $vendorDir = FileUtils::buildPath($projectDir, 'vendor');
-            foreach ($this->kernel->getBundles() as $key => $bundleObject) {
-                $path = $bundleObject->getPath();
-                $bundles[$key] = [
-                    'name' => $key,
-                    'namespace' => $bundleObject->getNamespace(),
-                    'path' => $this->makePathRelative($path),
-                    'package' => $this->makePathRelative($path, $vendorDir),
-                    'size' => FileUtils::formatSize($path),
-                ];
-            }
-            \ksort($bundles);
-
-            return $bundles;
-        });
-    }
-
-    /**
-     * Gets the cache directory path and the formatted size.
-     *
-     * @phpstan-return DirectoryType
-     */
-    public function getCacheInfo(): array
-    {
-        return $this->getDirectoryInfo('Cache', $this->kernel->getCacheDir());
-    }
-
-    /**
-     * Gets the charset of the application.
-     */
-    public function getCharset(): string
-    {
-        return $this->kernel->getCharset();
-    }
-
-    /**
-     * Gets the debug packages.
-     *
-     * @return array<string, PackageType>
-     */
-    public function getDebugPackages(): array
-    {
-        return $this->getPackages()[self::KEY_DEBUG];
-    }
-
-    /**
-     * Gets debug routes.
-     *
-     * @return array<string, RouteType>
-     */
-    public function getDebugRoutes(): array
-    {
-        return $this->getRoutes()[self::KEY_DEBUG];
-    }
-
-    /**
-     * Returns the 'debug' status.
-     */
-    public function getDebugStatus(): string
-    {
-        return $this->isDebug() ? self::LABEL_ENABLED : self::LABEL_DISABLED;
     }
 
     /**
@@ -247,14 +94,6 @@ final readonly class SymfonyInfoService
     }
 
     /**
-     * Gets the kernel environment.
-     */
-    public function getEnvironment(): Environment
-    {
-        return $this->environment;
-    }
-
-    /**
      * Get the local name.
      */
     public function getLocaleName(): string
@@ -263,16 +102,6 @@ final readonly class SymfonyInfoService
         $name = Locales::getName($locale, 'en');
 
         return \sprintf('%s - %s', $name, $locale);
-    }
-
-    /**
-     * Gets the log directory path and the formatted size.
-     *
-     * @phpstan-return DirectoryType
-     */
-    public function getLogInfo(): array
-    {
-        return $this->getDirectoryInfo('Logs', $this->kernel->getLogDir());
     }
 
     /**
@@ -294,14 +123,6 @@ final readonly class SymfonyInfoService
     }
 
     /**
-     * Gets the application mode.
-     */
-    public function getMode(): Environment
-    {
-        return $this->mode;
-    }
-
-    /**
      * Returns the 'Zend OPcache' status.
      */
     public function getOpCacheStatus(): string
@@ -310,63 +131,11 @@ final readonly class SymfonyInfoService
     }
 
     /**
-     * Gets the package for the given name.
-     *
-     * @phpstan-return PackageType|null
-     */
-    public function getPackage(string $name): ?array
-    {
-        $packages = $this->getPackages();
-
-        return $packages[self::KEY_RUNTIME][$name] ?? $packages[self::KEY_DEBUG][$name] ?? null;
-    }
-
-    /**
-     * Gets the project directory path.
-     */
-    public function getProjectDir(): string
-    {
-        return $this->projectDir;
-    }
-
-    /**
      * Get the release date.
      */
     public function getReleaseDate(): string
     {
-        return $this->cache->get('release_date', function (): string {
-            $url = \sprintf(self::RELEASE_URL, Kernel::MAJOR_VERSION, Kernel::MINOR_VERSION);
-
-            try {
-                /** @phpstan-var array{release_date: string, ...} $content */
-                $content = FileUtils::decodeJson($url);
-                $date = $content['release_date'];
-
-                return $this->formatMonthYear($date);
-            } catch (\InvalidArgumentException) {
-                return self::UNKNOWN;
-            }
-        });
-    }
-
-    /**
-     * Gets the runtime packages.
-     *
-     * @return array<string, PackageType>
-     */
-    public function getRuntimePackages(): array
-    {
-        return $this->getPackages()[self::KEY_RUNTIME];
-    }
-
-    /**
-     * Gets runtime routes.
-     *
-     * @return array<string, RouteType>
-     */
-    public function getRuntimeRoutes(): array
-    {
-        return $this->getRoutes()[self::KEY_RUNTIME];
+        return $this->cache->get('release_date', $this->loadReleaseDate(...));
     }
 
     /**
@@ -406,14 +175,6 @@ final readonly class SymfonyInfoService
     public function isApcuEnabled(): bool
     {
         return \str_starts_with($this->getApcuStatus(), self::LABEL_ENABLED);
-    }
-
-    /**
-     * Gets if debug mode is enabled.
-     */
-    public function isDebug(): bool
-    {
-        return $this->kernel->isDebug();
     }
 
     /**
@@ -462,32 +223,6 @@ final readonly class SymfonyInfoService
         return $today->diff($endOfMonth)->format('%R%a days');
     }
 
-    /**
-     * @phpstan-return DirectoryType
-     */
-    private function getDirectoryInfo(string $name, string $path): array
-    {
-        $path = FileUtils::normalize($path);
-
-        return [
-            'name' => $name,
-            'path' => $path,
-            'relative' => $this->makePathRelative($path),
-            'size' => FileUtils::formatSize($path),
-        ];
-    }
-
-    /**
-     * @phpstan-return PackagesType
-     */
-    private function getEmptyPackages(): array
-    {
-        return [
-            self::KEY_RUNTIME => [],
-            self::KEY_DEBUG => [],
-        ];
-    }
-
     private function getEndOfMonth(string $date): DatePoint
     {
         return DateUtils::modify($this->createDate($date), 'last day of this month 23:59:59');
@@ -502,181 +237,18 @@ final readonly class SymfonyInfoService
         return \filter_var(\ini_get($enabled), \FILTER_VALIDATE_BOOLEAN) ? self::LABEL_ENABLED : self::LABEL_DISABLED;
     }
 
-    /**
-     * @phpstan-param PackageSourceType $package
-     */
-    private function getPackageDescription(array $package): string
+    private function loadReleaseDate(): string
     {
-        $description = $package['description'] ?? '';
-        if ('' === $description || \str_ends_with($description, '.')) {
-            return $description;
+        $url = \sprintf(self::RELEASE_URL, Kernel::MAJOR_VERSION, Kernel::MINOR_VERSION);
+
+        try {
+            /** @phpstan-var array{release_date: string, ...} $content */
+            $content = FileUtils::decodeJson($url);
+            $date = $content['release_date'];
+
+            return $this->formatMonthYear($date);
+        } catch (\InvalidArgumentException) {
+            return self::UNKNOWN;
         }
-
-        return $description . '.';
-    }
-
-    /**
-     * @phpstan-param PackageSourceType $package
-     *
-     * @return array<string, string>
-     */
-    private function getPackageDevelopment(array $package): array
-    {
-        return $package['require-dev'] ?? [];
-    }
-
-    private function getPackageFile(): string
-    {
-        return FileUtils::buildPath($this->composerDir, self::PACKAGE_FILE);
-    }
-
-    /**
-     * @phpstan-param PackageSourceType $package
-     */
-    private function getPackageHomepage(array $package): ?string
-    {
-        return $package['homepage'] ?? $package['support']['source'] ?? null;
-    }
-
-    /**
-     * @phpstan-param PackageSourceType $package
-     */
-    private function getPackageLicense(array $package): ?string
-    {
-        $pattern = FileUtils::buildPath($this->composerDir, $package['install-path'], self::LICENSE_PATTERN);
-        $files = \glob($pattern, \GLOB_BRACE | \GLOB_NOSORT);
-        if (\is_array($files) && [] !== $files) {
-            return $files[0];
-        }
-
-        return null;
-    }
-
-    /**
-     * @phpstan-param PackageSourceType $package
-     *
-     * @return array<string, string>
-     */
-    private function getPackageProduction(array $package): array
-    {
-        return $package['require'] ?? [];
-    }
-
-    /**
-     * @phpstan-return PackagesType
-     */
-    private function getPackages(): array
-    {
-        return $this->cache->get('packages', function (): array {
-            /**
-             * @phpstan-var array{
-             *     packages: array<string, PackageSourceType>|null,
-             *     dev-package-names: string[]|null
-             * } $content
-             */
-            $content = FileUtils::decodeJson($this->getPackageFile());
-            $runtimePackages = $content['packages'] ?? [];
-            $debugPackages = $content['dev-package-names'] ?? [];
-
-            return $this->parsePackages($runtimePackages, $debugPackages);
-        });
-    }
-
-    /**
-     * @phpstan-param PackageSourceType $package
-     */
-    private function getPackageTime(array $package): string
-    {
-        return FormatUtils::formatDateTime(new DatePoint($package['time']));
-    }
-
-    /**
-     * @phpstan-param PackageSourceType $package
-     */
-    private function getPackageVersion(array $package): string
-    {
-        return \ltrim($package['version'], 'v');
-    }
-
-    /**
-     * @phpstan-return RoutesType
-     */
-    private function getRoutes(): array
-    {
-        return $this->cache->get('routes', function (): array {
-            /** @phpstan-var array<string, RouteType> $runtimeRoutes */
-            $runtimeRoutes = [];
-            /** @phpstan-var array<string, RouteType> $debugRoutes */
-            $debugRoutes = [];
-            $routes = $this->router->getRouteCollection()->all();
-            foreach ($routes as $name => $route) {
-                if ($this->isDebugRoute($name)) {
-                    $debugRoutes[$name] = $this->parseRoute($name, $route);
-                } else {
-                    $runtimeRoutes[$name] = $this->parseRoute($name, $route);
-                }
-            }
-            \ksort($runtimeRoutes);
-            \ksort($debugRoutes);
-
-            return [
-                self::KEY_RUNTIME => $runtimeRoutes,
-                self::KEY_DEBUG => $debugRoutes,
-            ];
-        });
-    }
-
-    private function isDebugRoute(string $name): bool
-    {
-        return \str_starts_with($name, '_');
-    }
-
-    private function makePathRelative(string $endPath, ?string $startPath = null): string
-    {
-        return \rtrim(FileUtils::makePathRelative($endPath, $startPath ?? $this->projectDir), '/src');
-    }
-
-    /**
-     * @phpstan-param array<string, PackageSourceType> $runtimePackages
-     * @phpstan-param string[]                         $debugPackages
-     *
-     * @phpstan-return PackagesType
-     */
-    private function parsePackages(array $runtimePackages, array $debugPackages): array
-    {
-        $result = $this->getEmptyPackages();
-        foreach ($runtimePackages as $package) {
-            $name = $package['name'];
-            $entry = [
-                'name' => $name,
-                'version' => $this->getPackageVersion($package),
-                'license' => $this->getPackageLicense($package),
-                'homepage' => $this->getPackageHomepage($package),
-                'description' => $this->getPackageDescription($package),
-                'time' => $this->getPackageTime($package),
-                'production' => $this->getPackageProduction($package),
-                'development' => $this->getPackageDevelopment($package),
-            ];
-            $type = \in_array($name, $debugPackages, true) ? self::KEY_DEBUG : self::KEY_RUNTIME;
-            $result[$type][$name] = $entry;
-        }
-        \ksort($result[self::KEY_RUNTIME]);
-        \ksort($result[self::KEY_DEBUG]);
-
-        return $result;
-    }
-
-    /**
-     * @phpstan-return RouteType
-     */
-    private function parseRoute(string $name, Route $route): array
-    {
-        $methods = $route->getMethods();
-
-        return [
-            'name' => $name,
-            'path' => $route->getPath(),
-            'methods' => [] === $methods ? 'ANY' : \implode(', ', $methods),
-        ];
     }
 }

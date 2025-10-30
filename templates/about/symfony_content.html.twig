@@ -33,32 +33,34 @@
     <td class="text-id">{{ package.version }}</td>
     <td class="text">{{ package.description }}</td>
     <td>
-        {%- if package.license or package.production|length or package.development|length or package.homepage -%}
+        {%- if package.homepage or package.license or package.production|length or package.development|length -%}
             <div class="dropdown">
                 {{ dropdownEllipsis() }}
                 <ul class="dropdown-menu dropdown-menu-end">
-                    {%- if package.license -%}
-                        {{- dropdownItemWithClass(
-                            href: path('about_symfony_license', {name: package.name}),
-                            text: 'about.licence.display',
-                            icon: 'book-open-reader',
-                            class: 'link-license')
-                        -}}
-                    {% endif %}
-                    {%- if package.production|length or package.development|length -%}
-                        {{- dropdownItemWithClass(
-                            href: path('about_symfony_package', {name: package.name}),
-                            text: 'about.package.display',
-                            icon: 'file-code',
-                            class: 'link-package')
-                        -}}
-                    {% endif %}
                     {%- if package.homepage -%}
-                        {{ dropdownSeparator() }}
                         {{- dropdownItemExternal(
                             href: package.homepage,
                             text: 'about.extern_link',
-                            icon: 'arrow-up-right-from-square')
+                            icon: 'arrow-up-right-from-square fa-fw')
+                        -}}
+                        {%- if package.license or package.production|length or package.development|length -%}
+                            {{ dropdownSeparator() }}
+                        {% endif %}
+                    {% endif %}
+                    {%- if package.license -%}
+                        {{- dropdownItemWithClass(
+                            href: path('about_symfony_license', {name: package.name}),
+                            text: 'about.licence.title',
+                            icon: 'book-open-reader fa-fw',
+                            class: 'link-license')
+                        -}}
+                    {% endif %}
+                    {%- if package.development|length -%}
+                        {{- dropdownItemWithClass(
+                            href: path('about_symfony_package', {name: package.name}),
+                            text: 'about.package.title',
+                            icon: 'file-code fa-fw',
+                            class: 'link-package')
                         -}}
                     {% endif %}
                 </ul>

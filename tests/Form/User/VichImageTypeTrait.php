@@ -38,14 +38,9 @@ trait VichImageTypeTrait
         $storage->method('resolveUri')
             ->willReturnCallback($callback);
         $handler = $this->createUploadHandler($storage);
+        $factory = $this->createPropertyMappingFactory();
 
-        return new VichImageType(
-            $storage,
-            $handler,
-            $this->createPropertyMappingFactory(),
-            null,
-            null
-        );
+        return new VichImageType($storage, $handler, $factory);
     }
 
     /**

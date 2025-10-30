@@ -50,10 +50,10 @@ class PackageInfoService
     private const LICENSE_PATTERN = '{license{*},LICENSE{*}}';
 
     public function __construct(
-        #[Target('calculation.symfony')]
-        private readonly CacheInterface $cache,
         #[Autowire('%kernel.project_dir%/vendor/composer')]
         private readonly string $path,
+        #[Target('calculation.symfony')]
+        private readonly CacheInterface $cache,
     ) {
     }
 

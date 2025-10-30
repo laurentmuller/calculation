@@ -14,43 +14,63 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\PackageInfoService;
-use App\Tests\KernelServiceTestCase;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-final class PackageInfoServiceTest extends KernelServiceTestCase
+final class PackageInfoServiceTest extends TestCase
 {
-    private PackageInfoService $service;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->service = $this->getService(PackageInfoService::class);
-    }
-
     public function testGetDebugPackages(): void
     {
-        $actual = $this->service->getDebugPackages();
+        $service = $this->createService();
+        $actual = $service->getDebugPackages();
         self::assertNotEmpty($actual);
     }
 
     public function testGetPackage(): void
     {
-        $actual = $this->service->getPackage('symfony/mime');
+        $service = $this->createService();
+        $actual = $service->getPackage('symfony/mime');
         self::assertIsArray($actual);
 
-        $actual = $this->service->getPackage('fake/fake');
+        $actual = $service->getPackage('fake/fake');
         self::assertNull($actual);
     }
 
     public function testGetPackages(): void
     {
-        $actual = $this->service->getPackages();
+        $service = $this->createService();
+        $actual = $service->getPackages();
         self::assertNotEmpty($actual);
     }
 
     public function testGetRuntimePackages(): void
     {
-        $actual = $this->service->getRuntimePackages();
+        $service = $this->createService();
+        $actual = $service->getRuntimePackages();
         self::assertNotEmpty($actual);
+    }
+
+    public function testLicenseFound(): void
+    {
+        $service = $this->createService();
+        $package = $service->getPackage('symfony/mime');
+        self::assertIsArray($package);
+        self::assertNull($package['license']);
+    }
+
+    public function testLicenseNotFound(): void
+    {
+        $service = $this->createService();
+        $package = $service->getPackage('symfony/mime');
+        self::assertIsArray($package);
+        self::assertNull($package['license']);
+    }
+
+    private function createService(): PackageInfoService
+    {
+        $path = __DIR__ . '/../files/json/';
+        $cache = new ArrayAdapter();
+
+        return new PackageInfoService($path, $cache);
     }
 }

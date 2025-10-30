@@ -28,12 +28,10 @@ about:
         title: Politique de confidentialité
     licence:
         title: Accord de licence
-        display: Afficher l'accord de licence
         not_found: Impossible de trouver l'accord de licence.
         not_loaded: Impossible de charger l'accord de licence.
     package:
         title: Dépendances du paquet
-        display: Afficher les dépendances du paquet
         not_found: Impossible de trouver les dépendances du paquet.
         not_loaded: Impossible de charger les dépendances du paquet.
 admin:

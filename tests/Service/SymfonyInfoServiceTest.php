@@ -14,31 +14,25 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\SymfonyInfoService;
-use App\Tests\KernelServiceTestCase;
 use App\Utils\FormatUtils;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\HttpKernel\Kernel;
 
-final class SymfonyInfoServiceTest extends KernelServiceTestCase
+final class SymfonyInfoServiceTest extends TestCase
 {
-    private SymfonyInfoService $service;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->service = $this->getService(SymfonyInfoService::class);
-    }
-
     public function testGetArchitecture(): void
     {
-        $actual = $this->service->getArchitecture();
+        $service = $this->createService();
+        $actual = $service->getArchitecture();
         self::assertSame('64 bits', $actual);
     }
 
     public function testGetEndOfLife(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
-        $actual = $this->service->getEndOfLife();
+        $service = $this->createService();
+        $actual = $service->getEndOfLife();
         $year = \explode('/', Kernel::END_OF_LIFE)[1];
         self::assertStringContainsString($year, $actual);
     }
@@ -46,7 +40,8 @@ final class SymfonyInfoServiceTest extends KernelServiceTestCase
     public function testGetEndOfMaintenance(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
-        $actual = $this->service->getEndOfMaintenance();
+        $service = $this->createService();
+        $actual = $service->getEndOfMaintenance();
         $year = \explode('/', Kernel::END_OF_MAINTENANCE)[1];
         self::assertStringContainsString($year, $actual);
     }
@@ -54,63 +49,77 @@ final class SymfonyInfoServiceTest extends KernelServiceTestCase
     public function testGetLocaleName(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
-        $actual = $this->service->getLocaleName();
+        $service = $this->createService();
+        $actual = $service->getLocaleName();
         self::assertStringContainsString(FormatUtils::DEFAULT_LOCALE, $actual);
     }
 
     public function testGetMaintenanceStatus(): void
     {
-        $actual = $this->service->getMaintenanceStatus();
+        $service = $this->createService();
+        $actual = $service->getMaintenanceStatus();
         self::assertNotEmpty($actual);
     }
 
     public function testGetReleaseDate(): void
     {
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
-        $actual = $this->service->getReleaseDate();
+        $service = $this->createService();
+        $actual = $service->getReleaseDate();
         self::assertMatchesRegularExpression('/\d{4}/', $actual);
     }
 
     public function testGetTimeZone(): void
     {
+        $service = $this->createService();
         $expected = \date_default_timezone_get();
-        $actual = $this->service->getTimeZone();
+        $actual = $service->getTimeZone();
         self::assertSame($expected, $actual);
     }
 
     public function testGetVersion(): void
     {
-        $actual = $this->service->getVersion();
+        $service = $this->createService();
+        $actual = $service->getVersion();
         self::assertSame(Kernel::VERSION, $actual);
     }
 
     public function testIsApcuEnabled(): void
     {
+        $service = $this->createService();
         $expected = $this->isExtensionLoaded('apcu', 'apc.enabled');
-        $actual = $this->service->isApcuEnabled();
+        $actual = $service->isApcuEnabled();
         self::assertSame($expected, $actual);
     }
 
     public function testIsLongTermSupport(): void
     {
+        $service = $this->createService();
         // @phpstan-ignore identical.alwaysFalse
         $expected = (4 <=> Kernel::MINOR_VERSION) === 0;
-        $actual = $this->service->isLongTermSupport();
+        $actual = $service->isLongTermSupport();
         self::assertSame($expected, $actual);
     }
 
     public function testIsXdebugEnabled(): void
     {
+        $service = $this->createService();
         $expected = $this->isExtensionLoaded('xdebug');
-        $actual = $this->service->isXdebugEnabled();
+        $actual = $service->isXdebugEnabled();
         self::assertSame($expected, $actual);
     }
 
     public function testIsZendCacheEnabled(): void
     {
+        $service = $this->createService();
         $expected = $this->isExtensionLoaded('Zend OPcache', 'opcache.enable');
-        $actual = $this->service->isOpCacheEnabled();
+        $actual = $service->isOpCacheEnabled();
         self::assertSame($expected, $actual);
+    }
+
+    private function createService(): SymfonyInfoService
+    {
+        return new SymfonyInfoService(new ArrayAdapter());
     }
 
     private function isExtensionLoaded(string $extension, string $enabled = ''): bool

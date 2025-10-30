@@ -14,28 +14,48 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\RouteInfoService;
-use App\Tests\KernelServiceTestCase;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\RouterInterface;
 
-final class RouteInfoServiceTest extends KernelServiceTestCase
+final class RouteInfoServiceTest extends TestCase
 {
-    private RouteInfoService $service;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->service = $this->getService(RouteInfoService::class);
-    }
-
     public function testGetDebugRoutes(): void
     {
-        $actual = $this->service->getDebugRoutes();
-        self::assertEmpty($actual);
+        $service = $this->createService();
+        $actual = $service->getDebugRoutes();
+        self::assertCount(1, $actual);
+    }
+
+    public function testGetRoutes(): void
+    {
+        $service = $this->createService();
+        $actual = $service->getRoutes();
+        self::assertCount(2, $actual);
     }
 
     public function testGetRuntimeRoutes(): void
     {
-        $actual = $this->service->getRuntimeRoutes();
-        self::assertNotEmpty($actual);
+        $service = $this->createService();
+        $actual = $service->getRuntimeRoutes();
+        self::assertCount(1, $actual);
+    }
+
+    private function createService(): RouteInfoService
+    {
+        $routes = [
+            'index' => new Route('home'),
+            '_profiler' => new Route('_profiler'),
+        ];
+        $collection = $this->createMock(RouteCollection::class);
+        $collection->method('all')
+            ->willReturn($routes);
+        $router = $this->createMock(RouterInterface::class);
+        $router->method('getRouteCollection')
+            ->willReturn($collection);
+
+        return new RouteInfoService($router, new ArrayAdapter());
     }
 }

@@ -14,26 +14,16 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\SearchService;
-use App\Tests\DatabaseTrait;
-use App\Tests\EntityTrait\CalculationTrait;
-use App\Tests\KernelServiceTestCase;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NativeQuery;
+use Doctrine\ORM\QueryBuilder;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-final class SearchServiceTest extends KernelServiceTestCase
+final class SearchServiceTest extends TestCase
 {
-    use CalculationTrait;
-    use DatabaseTrait;
-
-    #[\Override]
-    protected function tearDown(): void
-    {
-        $this->deleteCalculation();
-        parent::tearDown();
-    }
-
     public function testCount(): void
     {
         $service = $this->createSearchService();
@@ -43,7 +33,7 @@ final class SearchServiceTest extends KernelServiceTestCase
         $actual = $service->count('fake');
         self::assertSame(0, $actual);
 
-        $this->getCalculation();
+        $service = $this->createSearchService(entity: true);
         $actual = $service->count('customer');
         self::assertSame(1, $actual);
 
@@ -94,7 +84,7 @@ final class SearchServiceTest extends KernelServiceTestCase
 
     public function testGetEntitiesWithDebug(): void
     {
-        $service = $this->createSearchService(true);
+        $service = $this->createSearchService(debug: true);
         $actual = $service->getEntities();
         self::assertArrayHasKey('customer', $actual);
         self::assertSame('customer.name', $actual['customer']);
@@ -109,7 +99,7 @@ final class SearchServiceTest extends KernelServiceTestCase
         $actual = $service->search('fake');
         self::assertEmpty($actual);
 
-        $this->getCalculation();
+        $service = $this->createSearchService(entity: true);
         $actual = $service->search('customer');
         self::assertCount(1, $actual);
 
@@ -119,32 +109,64 @@ final class SearchServiceTest extends KernelServiceTestCase
         $actual = $service->search('customer', 'calculation', -1);
         self::assertCount(1, $actual);
 
+        $service = $this->createSearchService();
         $actual = $service->search('customer', 'fake_entity');
         self::assertEmpty($actual);
     }
 
     public function testSearchNotGranted(): void
     {
-        $service = $this->createSearchService(true, false);
+        $service = $this->createSearchService(debug: true, granted: false);
         $actual = $service->search('fake');
         self::assertEmpty($actual);
     }
 
     public function testSearchWithDebug(): void
     {
-        $this->getCalculation();
-        $service = $this->createSearchService(true);
+        $service = $this->createSearchService(debug: true, entity: true);
         $actual = $service->search('customer');
         self::assertCount(1, $actual);
     }
 
-    private function createSearchService(bool $debug = false, bool $granted = true): SearchService
+    private function createEntityManager(bool $entity = false): EntityManagerInterface
     {
+        $results = [];
+        if ($entity) {
+            $results[] = [
+                'id' => 1,
+                'type' => 'product',
+                'field' => 'name',
+                'content' => 'Content',
+                'entityName' => 'Product',
+                'fieldName' => 'product.name',
+            ];
+        }
+        $nativeQuery = $this->createMock(NativeQuery::class);
+        $nativeQuery->method('getArrayResult')
+            ->willReturn($results);
+
+        $manager = $this->createMock(EntityManagerInterface::class);
+        $manager->method('createNativeQuery')
+            ->willReturn($nativeQuery);
+
+        $queryBuilder = $this->createMock(QueryBuilder::class);
+        $manager->method('createQueryBuilder')
+            ->willReturn($queryBuilder);
+
+        return $manager;
+    }
+
+    private function createSearchService(
+        bool $debug = false,
+        bool $granted = true,
+        bool $entity = false
+    ): SearchService {
         $checker = $this->createMock(AuthorizationCheckerInterface::class);
         $checker->method('isGranted')
             ->willReturn($granted);
         $cache = new ArrayAdapter();
-        $manager = $this->getService(EntityManagerInterface::class);
+        // $manager = $this->getService(EntityManagerInterface::class);
+        $manager = $this->createEntityManager($entity);
         $service = new SearchService($manager, $debug, $cache);
         $service->setChecker($checker);
 

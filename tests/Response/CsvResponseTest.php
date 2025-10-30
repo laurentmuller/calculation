@@ -20,7 +20,7 @@ final class CsvResponseTest extends TestCase
 {
     public function testGetFileExtension(): void
     {
-        $response = new CsvResponse(null);
+        $response = new CsvResponse();
         self::assertSame('csv', $response->getFileExtension());
     }
 }

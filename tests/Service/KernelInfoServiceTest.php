@@ -16,70 +16,88 @@ namespace App\Tests\Service;
 use App\Enums\Environment;
 use App\Service\KernelInfoService;
 use App\Service\SymfonyInfoService;
-use App\Tests\KernelServiceTestCase;
+use App\Utils\FileUtils;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpKernel\KernelInterface;
 
-final class KernelInfoServiceTest extends KernelServiceTestCase
+final class KernelInfoServiceTest extends TestCase
 {
-    private KernelInfoService $service;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->service = $this->getService(KernelInfoService::class);
-    }
+    private const CHARSET = 'utf-8';
+    private const ENVIRONMENT = Environment::TEST;
 
     public function testGetBuildInfo(): void
     {
-        $actual = $this->service->getBuildInfo();
+        $service = $this->createService();
+        $actual = $service->getBuildInfo();
         self::assertSame('Build', $actual['name']);
     }
 
     public function testGetCacheInfo(): void
     {
-        $actual = $this->service->getCacheInfo();
+        $service = $this->createService();
+        $actual = $service->getCacheInfo();
         self::assertSame('Cache', $actual['name']);
     }
 
     public function testGetCharset(): void
     {
-        $actual = $this->service->getCharset();
-        self::assertSame('UTF-8', $actual);
+        $service = $this->createService();
+        $actual = $service->getCharset();
+        self::assertSame(self::CHARSET, $actual);
     }
 
     public function testGetDebugStatus(): void
     {
-        $actual = $this->service->getDebugStatus();
+        $service = $this->createService();
+        $actual = $service->getDebugStatus();
         self::assertSame(SymfonyInfoService::LABEL_DISABLED, $actual);
     }
 
     public function testGetEnvironment(): void
     {
-        $actual = $this->service->getEnvironment();
-        self::assertSame(Environment::TEST, $actual);
+        $service = $this->createService();
+        $actual = $service->getEnvironment();
+        self::assertSame(self::ENVIRONMENT, $actual);
     }
 
     public function testGetLogInfo(): void
     {
-        $actual = $this->service->getLogInfo();
+        $service = $this->createService();
+        $actual = $service->getLogInfo();
         self::assertSame('Logs', $actual['name']);
     }
 
     public function testGetMode(): void
     {
-        $actual = $this->service->getMode();
-        self::assertSame(Environment::TEST, $actual);
+        $service = $this->createService();
+        $actual = $service->getMode();
+        self::assertSame(self::ENVIRONMENT, $actual);
     }
 
     public function testGetProjectDir(): void
     {
-        $actual = $this->service->getProjectDir();
-        self::assertStringContainsString('calculation', $actual);
+        $service = $this->createService();
+        $actual = $service->getProjectDir();
+        $expected = FileUtils::normalize(__DIR__);
+        self::assertSame($expected, $actual);
     }
 
     public function testIsDebug(): void
     {
-        $actual = $this->service->isDebug();
+        $service = $this->createService();
+        $actual = $service->isDebug();
         self::assertFalse($actual);
+    }
+
+    private function createService(): KernelInfoService
+    {
+        $mode = self::ENVIRONMENT->value;
+        $kernel = $this->createMock(KernelInterface::class);
+        $kernel->method('getEnvironment')
+            ->willReturn($mode);
+        $kernel->method('getCharset')
+            ->willReturn(self::CHARSET);
+
+        return new KernelInfoService($kernel, __DIR__, $mode);
     }
 }

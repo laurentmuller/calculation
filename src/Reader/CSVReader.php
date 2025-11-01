@@ -32,7 +32,7 @@ class CSVReader extends AbstractReader
     /**
      * @param \SplFileInfo|string|resource $file      the CSV file to open or an opened resource
      * @param bool                         $binary    true to open the file with binary mode
-     * @param int                          $length    the line length.
+     * @param int<0, max>                  $length    the line length.
      *                                                Must be greater than the longest line (in characters) to be found
      *                                                in the CSV file (allowing for trailing line-end characters).
      *                                                Setting it to 0, the maximum line length is not limited, which is
@@ -40,8 +40,6 @@ class CSVReader extends AbstractReader
      * @param string                       $separator the field delimiter (one character only)
      * @param string                       $enclosure the field enclosure character (one character only)
      * @param string                       $escape    the escape character (one character only)
-     *
-     * @phpstan-param int<0, max> $length
      */
     public function __construct(
         mixed $file,
@@ -52,6 +50,31 @@ class CSVReader extends AbstractReader
         private readonly string $escape = '\\'
     ) {
         parent::__construct($file, $binary);
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * @param \SplFileInfo|string|resource $file      the CSV file to open or an opened resource
+     * @param bool                         $binary    true to open the file with binary mode
+     * @param int<0, max>                  $length    the line length.
+     *                                                Must be greater than the longest line (in characters) to be found
+     *                                                in the CSV file (allowing for trailing line-end characters).
+     *                                                Setting it to 0, the maximum line length is not limited, which is
+     *                                                slightly slower.
+     * @param string                       $separator the field delimiter (one character only)
+     * @param string                       $enclosure the field enclosure character (one character only)
+     * @param string                       $escape    the escape character (one character only)
+     */
+    public static function instance(
+        mixed $file,
+        bool $binary = false,
+        int $length = 0,
+        string $separator = ',',
+        string $enclosure = '"',
+        string $escape = '\\'
+    ): self {
+        return new self($file, $binary, $length, $separator, $enclosure, $escape);
     }
 
     #[\Override]

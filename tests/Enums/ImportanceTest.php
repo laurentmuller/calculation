@@ -36,12 +36,12 @@ final class ImportanceTest extends TestCase
     /**
      * @phpstan-return \Generator<int, array{string, Importance}>
      */
-    public static function getLabelsFull(): \Generator
+    public static function getLabelsTitle(): \Generator
     {
-        yield ['importance.high_full', Importance::HIGH];
-        yield ['importance.low_full', Importance::LOW];
-        yield ['importance.medium_full', Importance::MEDIUM];
-        yield ['importance.urgent_full', Importance::URGENT];
+        yield ['importance.high_title', Importance::HIGH];
+        yield ['importance.low_title', Importance::LOW];
+        yield ['importance.medium_title', Importance::MEDIUM];
+        yield ['importance.urgent_title', Importance::URGENT];
     }
 
     /**
@@ -75,13 +75,6 @@ final class ImportanceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[DataProvider('getLabelsFull')]
-    public function testLabelFull(string $expected, Importance $importance): void
-    {
-        $actual = $importance->getReadableFull();
-        self::assertSame($expected, $actual);
-    }
-
     public function testSorted(): void
     {
         $expected = [
@@ -102,11 +95,11 @@ final class ImportanceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[DataProvider('getLabelsFull')]
-    public function testTranslateFull(string $expected, Importance $importance): void
+    #[DataProvider('getLabelsTitle')]
+    public function testTranslateTitle(string $expected, Importance $importance): void
     {
         $translator = $this->createMockTranslator();
-        $actual = $importance->transFull($translator);
+        $actual = $importance->transTitle($translator);
         self::assertSame($expected, $actual);
     }
 

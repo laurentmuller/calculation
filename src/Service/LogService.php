@@ -39,6 +39,11 @@ class LogService
      */
     public const FORMATTER_NAME = 'monolog.application.formatter';
 
+    /**
+     * The values separator.
+     */
+    public const SEPARATOR = '|';
+
     // The key to cache the log file.
     private const KEY_CACHE = 'log_file';
 
@@ -124,7 +129,7 @@ class LogService
     private function parseFile(): LogFile
     {
         $file = new LogFile($this->fileName);
-        $reader = new CSVReader(file: $this->fileName, separator: '|');
+        $reader = CSVReader::instance(file: $this->fileName, separator: self::SEPARATOR);
 
         foreach ($reader as $key => $values) {
             if (6 !== \count($values)) {

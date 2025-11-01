@@ -85,7 +85,6 @@ class CacheService
         $lines = StringUtils::splitLines(\trim($content), true);
         $callback = static fn (string $line): bool => !\str_starts_with($line, '-')
             && !\str_starts_with($line, 'Pool name');
-
         $lines = $this->getSorted($this->getFiltered(\array_map(trim(...), $lines), $callback));
 
         $results = [];

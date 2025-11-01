@@ -85,7 +85,9 @@ return static function (ContainerConfigurator $config): void {
         ]);
 
     // custom line formatter
-    $format = "%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n";
+    $fields = ['datetime', 'channel', 'level_name', 'message', 'context', 'extra'];
+    $fields = \array_map(static fn (string $field): string => '%%' . $field . '%%', $fields);
+    $format = \implode(LogService::SEPARATOR, $fields) . "\n";
     $services->set(LogService::FORMATTER_NAME, LineFormatter::class)
         ->args([$format, LogService::DATE_FORMAT])
         ->call('setBasePath', ['%kernel.project_dir%']);

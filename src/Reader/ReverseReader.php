@@ -40,12 +40,14 @@ class ReverseReader extends AbstractReader
     private const LINE_FEED = "\n";
 
     /**
+     * Creates a new instance.
+     *
      * @param \SplFileInfo|string $file   the file to open
      * @param bool                $binary true to open the file with binary mode
      */
-    public function __construct(\SplFileInfo|string $file, bool $binary = false)
+    public static function instance(\SplFileInfo|string $file, bool $binary = false): self
     {
-        parent::__construct($file, $binary);
+        return new self($file, $binary);
     }
 
     #[\Override]
@@ -57,30 +59,26 @@ class ReverseReader extends AbstractReader
 
         while (!$hasLine) {
             // move
-            if (0 === \ftell($stream)) {
-                \fseek($stream, -1, \SEEK_END);
-            } else {
-                \fseek($stream, -2, \SEEK_CUR);
-            }
+            0 === \ftell($stream) ? \fseek($stream, -1, \SEEK_END) : \fseek($stream, -2, \SEEK_CUR);
+            // read
             $char = \fgetc($stream);
-            if (false === $char) {
-                $hasLine = true;
-            } elseif (self::LINE_FEED === $char || self::CARRIAGE_RETURN === $char) {
-                if ($started) {
+            switch ($char) {
+                case false:
                     $hasLine = true;
-                } else {
-                    $started = true;
-                }
-            } elseif ($started) {
-                $line .= $char;
+                    break;
+                case self::LINE_FEED:
+                case self::CARRIAGE_RETURN:
+                    $started ? $hasLine = true : $started = true;
+                    break;
+                default:
+                    if ($started) {
+                        $line = $char . $line;
+                    }
+                    break;
             }
         }
         \fseek($stream, 1, \SEEK_CUR);
 
-        if ('' !== $line) {
-            return \strrev($line);
-        }
-
-        return null;
+        return '' === $line ? null : $line;
     }
 }

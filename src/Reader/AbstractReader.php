@@ -72,13 +72,16 @@ abstract class AbstractReader implements \IteratorAggregate
     #[\Override]
     public function getIterator(): \Generator
     {
-        while (\is_resource($this->stream) && !\feof($this->stream) && null !== $data = $this->getNextData($this->stream)) {
+        while (\is_resource($this->stream) && !\feof($this->stream)
+                    && null !== $data = $this->getNextData($this->stream)) {
             yield $data;
         }
     }
 
     /**
-     * Returns if the resource file is open.
+     * Returns if this underlying resource file is open.
+     *
+     * @phpstan-assert-if-true resource $this->stream
      */
     public function isOpen(): bool
     {

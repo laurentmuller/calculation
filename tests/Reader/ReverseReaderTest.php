@@ -53,6 +53,6 @@ final class ReverseReaderTest extends TestCase
     {
         $filename = $this->getFileName();
 
-        return new ReverseReader($filename);
+        return ReverseReader::instance($filename);
     }
 }

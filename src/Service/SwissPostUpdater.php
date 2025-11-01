@@ -254,7 +254,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             return null;
         }
 
-        return new CSVReader(file: $stream, separator: ';');
+        return CSVReader::instance(file: $stream, separator: ';');
     }
 
     /**
@@ -315,7 +315,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             return $this->setError($result, 'file_states');
         }
 
-        $reader = new CSVReader(file: $filename, separator: ';');
+        $reader = CSVReader::instance(file: $filename, separator: ';');
         /** @phpstan-var array{0: string, 1: string} $data */
         foreach ($reader as $data) {
             $result->addState($database->insertState($data));

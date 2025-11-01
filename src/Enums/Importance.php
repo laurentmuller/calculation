@@ -56,14 +56,6 @@ enum Importance: string implements EnumSortableInterface, PdfEnumDefaultInterfac
     case URGENT = 'urgent';
 
     /**
-     * Gets the fully human representation of the value (to be translated).
-     */
-    public function getReadableFull(): string
-    {
-        return $this->getReadable() . '_full';
-    }
-
-    /**
      * @return Importance[]
      */
     #[\Override]
@@ -78,10 +70,10 @@ enum Importance: string implements EnumSortableInterface, PdfEnumDefaultInterfac
     }
 
     /**
-     * Gets the full translated human representation of the value.
+     * Gets the translated title human representation of the value.
      */
-    public function transFull(TranslatorInterface $translator, ?string $locale = null): string
+    public function transTitle(TranslatorInterface $translator, ?string $locale = null): string
     {
-        return $translator->trans($this->getReadableFull(), [], $locale);
+        return $translator->trans(id: \sprintf('%s_title', $this->getReadable()), locale: $locale);
     }
 }

@@ -111,7 +111,7 @@ class NotificationEmail extends BaseNotificationEmail
         }
         if ($importance instanceof Importance) {
             $value = $importance->value;
-            $this->importance = $importance->transFull($this->translator);
+            $this->importance = $importance->transTitle($this->translator);
         } else {
             $value = $importance;
             $this->importance = null;

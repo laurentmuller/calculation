@@ -1520,13 +1520,13 @@ entity_action:
 importance:
     name: Importance
     low: Basse
-    low_full: Importance basse
     medium: Moyenne
-    medium_full: Importance moyenne
     high: Haute
-    high_full: Importance haute
     urgent: Urgente
-    urgent_full: Urgent !
+    low_title: Importance basse
+    medium_title: Importance moyenne
+    high_title: Importance haute
+    urgent_title: Urgent !
 background:
     danger: Danger
     dark: Foncé

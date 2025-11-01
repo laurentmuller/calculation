@@ -63,7 +63,7 @@ final class NotificationEmailTest extends TestCase
         self::assertSame('medium', $context['importance']);
 
         self::assertArrayHasKey('importance_text', $context);
-        self::assertSame('importance.medium_full', $context['importance_text']);
+        self::assertSame('importance.medium_title', $context['importance_text']);
     }
 
     public function testImportanceAsEnumValue(): void
@@ -76,7 +76,7 @@ final class NotificationEmailTest extends TestCase
         self::assertSame('medium', $context['importance']);
 
         self::assertArrayHasKey('importance_text', $context);
-        self::assertSame('importance.medium_full', $context['importance_text']);
+        self::assertSame('importance.medium_title', $context['importance_text']);
     }
 
     public function testImportanceAsOtherString(): void
@@ -111,7 +111,7 @@ final class NotificationEmailTest extends TestCase
         $email->importance(Importance::MEDIUM);
         $headers = $email->getPreparedHeaders();
 
-        $expected = 'subject - importance.medium_full';
+        $expected = 'subject - importance.medium_title';
         $actual = $headers->getHeaderBody('Subject');
         self::assertSame($expected, $actual);
     }

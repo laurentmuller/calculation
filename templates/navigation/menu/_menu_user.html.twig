@@ -15,10 +15,6 @@
     {{ dropdownItem(path('user_profile_password'), 'profile.password.title', 'unlock') }}
     {{ dropdownSeparator() }}
     {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
-    {% if is_granted(IS_IMPERSONATOR) -%}
-        {{ dropdownSeparator() }}
-        {{ dropdownItem(impersonation_exit_path(path('user_index', {id: app.user.id|default(0)})), 'user.switch.exit.title', 'user-slash') }}
-    {% endif %}
     {% if app_mode == 'dev' -%}
         {{ dropdownSeparator() }}
         {{ dropdownItem(link_prod, 'environment.switch', 'location-arrow', {'%name%': 'environment.prod'|trans}) }}
@@ -37,5 +33,9 @@
     {% if not user_service.statusBar %}
         {{ dropdownSeparator() }}
         {{ dropdownItem(path('about_index'), 'index.menu_info', 'info-circle', {'%app_name%': app_name}) }}
+    {% endif %}
+    {% if is_granted(IS_IMPERSONATOR) -%}
+        {{ dropdownSeparator() }}
+        {{ dropdownItem(impersonation_exit_path(path('user_index', {id: app.user.id|default(0)})), 'user.switch.exit.title', 'user-slash') }}
     {% endif %}
 </ul>

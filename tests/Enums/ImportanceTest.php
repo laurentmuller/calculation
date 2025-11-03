@@ -99,7 +99,7 @@ final class ImportanceTest extends TestCase
     public function testTranslateTitle(string $expected, Importance $importance): void
     {
         $translator = $this->createMockTranslator();
-        $actual = $importance->transTitle($translator);
+        $actual = $importance->translateTitle($translator);
         self::assertSame($expected, $actual);
     }
 

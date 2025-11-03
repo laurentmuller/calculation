@@ -1,14 +1,14 @@
 {% from 'macros/_icons.html.twig' import icon, link %}
 {% from 'macros/_attributes.html.twig' import attributes %}
 {# macros #}
-{% macro cardEntry(entity, count, index_path, add_path, icon) -%}
+{% macro cardEntry(entity, count, index_route, add_route, icon) -%}
 {% set title = entity ~ '.list.title' %}
 {% set counter = 'index.panel_count_' ~ entity %}
 <div class="border index-child m-1">
     <div class="d-flex p-2">
         <div class="position-relative w-100">
-            {%- if index_path -%}
-                {{- link(href: path(index_path), text: title, icon: icon, class: 'stretched-link', title: 'index.panel_title_' ~ entity) -}}
+            {%- if index_route -%}
+                {{- link(href: path(index_route), text: title, icon: icon, class: 'stretched-link', title: 'index.panel_title_' ~ entity) -}}
             {%- else -%}
                 <span>{{- title|trans -}}</span>
             {%- endif -%}
@@ -16,8 +16,8 @@
                 <span title="{{ counter|trans }}">{{- count|integer -}}</span>
             </div>
         </div>
-        {%- if add_path -%}
-            {{- link(href: path(add_path, {caller: path(app.current_route)}), icon: 'pen-to-square fa-fw', title: entity ~ '.add.title') -}}
+        {%- if add_route -%}
+            {{- link(href: path(add_route, {caller: path(app.current_route)}), icon: 'pen-to-square fa-fw', title: entity ~ '.add.title') -}}
         {%- endif -%}
     </div>
 </div>

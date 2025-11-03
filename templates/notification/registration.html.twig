@@ -1,50 +1,44 @@
 {% extends 'notification/notification.html.twig' %}
-{# content #}
-{% block content %}
-<container>
-    <row>
-        <columns>
-            Bonjour <b>{{ username }}</b>,
-        </columns>
-    </row>
-</container>
-<container>
-    <row>
-        <columns>
-            Merci de vous être connecté à notre application. Nous sommes très heureux de vous compter parmi nous.
-        </columns>
-    </row>
-</container>
-<container>
-    <row>
-        <columns>
-            Veuillez confirmer votre adresse électronique en cliquant sur le bouton ci-dessous.
-        </columns>
-    </row>
-</container>
-<container>
-    <row>
-        <columns>
-            Si vous avez des questions ou si vous rencontrez des problèmes, n'hésitez pas à contacter l'<a href="mailto:{{ mailer_user_email }}?subject={{ app_name_version }}">administrateur du site</a>.
-        </columns>
-    </row>
-</container>
-<container>
-    <row>
-        <columns>
-            <b>Remarque :</b>
-            <ul>
-                <li>Ce lien expire dans {{ expires_life_time }} (à {{ expires_date|locale_time('short') }}).</li>
-            </ul>
-        </columns>
-    </row>
-</container>
-<container>
-    <row>
-        <columns>
-            Cordialement,<br>
-            L'équipe de {{ app_name }}
-        </columns>
-    </row>
-</container>
+{% block content_title %}
+    <container>
+        <row>
+            <columns>
+                Bonjour <b>{{ username }}</b>,
+            </columns>
+        </row>
+    </container>
+{% endblock %}
+{% block content_body %}
+    <container>
+        <row>
+            <columns>
+                Merci de vous être connecté à notre application. Nous sommes très heureux de vous compter parmi nous.
+            </columns>
+        </row>
+    </container>
+    <container>
+        <row>
+            <columns>
+                Veuillez confirmer votre adresse électronique en cliquant sur le bouton ci-dessous.
+            </columns>
+        </row>
+    </container>
+    <container>
+        <row>
+            <columns>
+                Si vous avez des questions ou si vous rencontrez des problèmes, n'hésitez pas à contacter l'<a
+                        href="mailto:{{ mailer_user_email }}?subject={{ app_name_version }}">administrateur du site</a>.
+            </columns>
+        </row>
+    </container>
+    <container>
+        <row>
+            <columns>
+                <b>Remarque :</b>
+                <ul>
+                    <li>Ce lien expire dans {{ expires_life_time }} (à {{ expires_date|locale_time('short') }}).</li>
+                </ul>
+            </columns>
+        </row>
+    </container>
 {% endblock %}

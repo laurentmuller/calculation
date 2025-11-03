@@ -137,7 +137,7 @@ $(function () {
             /** @type {JQuery<HTMLSpanElement>|any} */
             const $iconElement = $element.find(options.iconClass);
             /** @type {JQuery<HTMLSpanElement>|any} */
-            const $textElement = $element.find(options.textClass);
+            const $textElement = $element.findExists(options.textClass) || $element;
 
             // default values
             /** @type {JQuery<HTMLSpanElement>|any} */
@@ -167,7 +167,11 @@ $(function () {
             // text
             if (options.copyText) {
                 if (value) {
-                    text = $selection.find(options.textClass).text().trim() || text;
+                    if ($selection.findExists(options.textClass)) {
+                        text = $selection.findExists(options.textClass).text().trim() || text;
+                    } else {
+                        text = $selection.text().trim() || text;
+                    }
                 } else {
                     text = $element.data('default') || text;
                 }

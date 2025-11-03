@@ -161,7 +161,7 @@ readonly class ResetPasswordService
 
     private function createEmail(User $user, ResetPasswordToken $token): NotificationEmail
     {
-        return NotificationEmail::create($this->translator, 'notification/reset_password.html.twig')
+        return NotificationEmail::instance($this->translator, 'notification/reset_password.html.twig')
             ->to($user->getEmailAddress())
             ->from($this->getAddressFrom())
             ->subject(new TranslatableMessage('resetting.request.title'))

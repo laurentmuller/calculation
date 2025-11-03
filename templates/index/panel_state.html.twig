@@ -2,14 +2,14 @@
 {% from 'macros/_attributes.html.twig' import attributes %}
 {% from 'index/_macros.html.twig' import margin as macros_margin, empty_content %}
 {# macros #}
-{% macro cardEntry(state, table_path, parameters, min_margin) -%}
+{% macro cardEntry(state, index_route, parameters, min_margin) -%}
 {% set color = state.color|default %}
 {% set code = state.code|default('calculation.fields.total'|trans) %}
 <div class="border index-child m-1{% if color %} text-border state-border-{{ state.id }}{% endif %}">
     <div class="position-relative body-tooltip p-2">
-        {%- if table_path -%}
+        {%- if index_route -%}
             {%- set list_title = parameters|length ? 'index.panel_state_title'|trans({'%code%': state.code}) : 'index.panel_state_title_all'|trans -%}
-            <a href="{{ path(table_path, parameters) }}" title="{{ list_title }}" class="stretched-link">
+            <a href="{{ path(index_route, parameters) }}" title="{{ list_title }}" class="stretched-link">
                 {{- code -}}
             </a>
         {%- else -%}

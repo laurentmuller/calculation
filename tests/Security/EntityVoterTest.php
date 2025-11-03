@@ -18,7 +18,9 @@ use App\Entity\User;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
+use App\Model\Role;
 use App\Security\EntityVoter;
+use App\Security\SecurityAttributes;
 use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -83,8 +85,7 @@ final class EntityVoterTest extends TestCase
     public function testAdmin(): void
     {
         $role = $this->builder->getRoleAdmin();
-        $user = $this->getAdminUser()
-            ->setRights($role->getRights());
+        $user = $this->getAdminUser($role);
         $subject = User::class;
         $attribute = EntityPermission::ADD;
         $expected = VoterInterface::ACCESS_GRANTED;
@@ -94,8 +95,7 @@ final class EntityVoterTest extends TestCase
     public function testAdminOverwrite(): void
     {
         $role = $this->builder->getRoleAdmin();
-        $user = $this->getAdminUser()
-            ->setRights($role->getRights())
+        $user = $this->getAdminUser($role)
             ->setOverwrite(true);
         $subject = User::class;
         $attribute = EntityPermission::ADD;
@@ -158,8 +158,7 @@ final class EntityVoterTest extends TestCase
     public function testUser(): void
     {
         $role = $this->builder->getRoleUser();
-        $user = $this->getDefaultUser()
-            ->setRights($role->getRights());
+        $user = $this->getDefaultUser($role);
 
         $subject = Calculation::class;
         $attribute = EntityPermission::ADD;
@@ -187,45 +186,48 @@ final class EntityVoterTest extends TestCase
         };
 
         $role = $this->builder->getRoleUser();
-        $user = $this->getDefaultUser()
-            ->setRights($role->getRights());
+        $user = $this->getDefaultUser($role);
         $token = $this->getUserToken($user);
 
-        $args = [
-            'fake',
-            EntityName::CALCULATION->name,
-            $token,
-        ];
-        $actual = $voter->voteOnAttribute(...$args);
+        $actual = $voter->voteOnAttribute('fake', EntityName::CALCULATION->name, $token);
         self::assertFalse($actual);
 
-        $args = [
-            EntityPermission::ADD->name,
-            'fake',
-            $token,
-        ];
-        $actual = $voter->voteOnAttribute(...$args);
+        $actual = $voter->voteOnAttribute(EntityPermission::ADD->name, 'fake', $token);
         self::assertFalse($actual);
     }
 
     /**
      * @phpstan-param VoterInterface::ACCESS_* $expected
      */
-    private function assertVote(User $user, mixed $subject, mixed $attribute, int $expected): void
-    {
+    private function assertVote(
+        User $user,
+        EntityName|string $subject,
+        EntityPermission|string $attribute,
+        int $expected
+    ): void {
         $token = $this->getUserToken($user);
         $actual = $this->voter->vote($token, $subject, [$attribute], new Vote());
         self::assertSame($expected, $actual);
     }
 
-    private function getAdminUser(): User
+    private function getAdminUser(?Role $role = null): User
     {
-        return $this->getUser(RoleInterface::ROLE_ADMIN);
+        $user = $this->getUser(RoleInterface::ROLE_ADMIN);
+        if ($role instanceof Role) {
+            $user->setRights($role->getRights());
+        }
+
+        return $user;
     }
 
-    private function getDefaultUser(): User
+    private function getDefaultUser(?Role $role = null): User
     {
-        return $this->getUser(RoleInterface::ROLE_USER);
+        $user = $this->getUser(RoleInterface::ROLE_USER);
+        if ($role instanceof Role) {
+            $user->setRights($role->getRights());
+        }
+
+        return $user;
     }
 
     private function getDisableUser(): User
@@ -251,6 +253,6 @@ final class EntityVoterTest extends TestCase
 
     private function getUserToken(User $user): UsernamePasswordToken
     {
-        return new UsernamePasswordToken($user, 'main', $user->getRoles());
+        return new UsernamePasswordToken($user, SecurityAttributes::MAIN_FIREWALL, $user->getRoles());
     }
 }

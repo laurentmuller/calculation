@@ -16,7 +16,6 @@ namespace App\Security;
 use App\Entity\User;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
-use App\Interfaces\RoleInterface;
 use App\Service\ApplicationService;
 use App\Traits\MathTrait;
 use App\Utils\StringUtils;
@@ -40,7 +39,7 @@ class EntityVoter extends Voter
     #[\Override]
     public function supportsAttribute(string $attribute): bool
     {
-        return EntityPermission::tryFromName($attribute) instanceof EntityPermission;
+        return $this->getEntityPermission($attribute) instanceof EntityPermission;
     }
 
     #[\Override]
@@ -59,7 +58,7 @@ class EntityVoter extends Voter
     #[\Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return $this->supportsAttribute($attribute) && EntityName::tryFromMixed($subject) instanceof EntityName;
+        return $this->supportsAttribute($attribute) && $this->getEntityName($subject) instanceof EntityName;
     }
 
     #[\Override]
@@ -69,7 +68,7 @@ class EntityVoter extends Voter
         if (!$user instanceof User) {
             return false;
         }
-        if ($this->isSuperAdmin($user, $vote)) {
+        if ($user->isSuperAdmin()) {
             return true;
         }
         $entityPermission = $this->getEntityPermission($attribute, $vote);
@@ -80,27 +79,19 @@ class EntityVoter extends Voter
         if (!$entityName instanceof EntityName) {
             return false;
         }
-
-        $result = $this->isAllowed($user, $entityName, $entityPermission);
-        if ($result) {
-            $this->addReason(
-                $vote,
-                'User "%s" has the "%s" permission on "%s".',
-                $user->getUsername(),
-                $entityPermission->name,
-                $entityName->name
-            );
-        } else {
-            $this->addReason(
-                $vote,
-                'User "%s" does not have the "%s" permission on "%s".',
-                $user->getUsername(),
-                $entityPermission->name,
-                $entityName->name
-            );
+        if ($this->isAllowed($user, $entityName, $entityPermission)) {
+            return true;
         }
 
-        return $result;
+        $this->addReason(
+            $vote,
+            'The logged in user "%s" does not have the "%s" permission on "%s".',
+            $user->getUsername(),
+            $entityPermission->name,
+            $entityName->name
+        );
+
+        return false;
     }
 
     private function addReason(?Vote $vote, string $reason, string ...$parameters): null
@@ -110,7 +101,7 @@ class EntityVoter extends Voter
         return null;
     }
 
-    private function getEntityName(mixed $subject, ?Vote $vote): ?EntityName
+    private function getEntityName(mixed $subject, ?Vote $vote = null): ?EntityName
     {
         $name = EntityName::tryFromMixed($subject);
         if (!$name instanceof EntityName) {
@@ -153,10 +144,10 @@ class EntityVoter extends Voter
     {
         $user = $token->getUser();
         if (!$user instanceof User) {
-            return $this->addReason($vote, 'Token does not contains an instance of User.');
+            return $this->addReason($vote, 'The authentication token does not contains an instance of User.');
         }
         if (!$user->isEnabled()) {
-            return $this->addReason($vote, 'User "%s" is disabled.', $user->getUsername());
+            return $this->addReason($vote, 'The logged in user "%s" is disabled.', $user->getUsername());
         }
 
         return $user;
@@ -169,21 +160,5 @@ class EntityVoter extends Voter
         $mask = $entityPermission->value;
 
         return $this->isBitSet($value, $mask);
-    }
-
-    private function isSuperAdmin(User $user, ?Vote $vote): bool
-    {
-        if ($user->isSuperAdmin()) {
-            $this->addReason(
-                $vote,
-                'User "%s" has "%s" role.',
-                $user->getUsername(),
-                RoleInterface::ROLE_SUPER_ADMIN
-            );
-
-            return true;
-        }
-
-        return false;
     }
 }

@@ -95,8 +95,7 @@ final class SymfonyInfoServiceTest extends TestCase
     public function testIsLongTermSupport(): void
     {
         $service = $this->createService();
-        // @phpstan-ignore identical.alwaysFalse
-        $expected = (4 <=> Kernel::MINOR_VERSION) === 0;
+        $expected = (4 <=> Kernel::MINOR_VERSION) === 0; // @phpstan-ignore identical.alwaysFalse
         $actual = $service->isLongTermSupport();
         self::assertSame($expected, $actual);
     }

@@ -21,16 +21,16 @@ use fpdf\Enums\PdfTextAlignment;
 class PdfColumn
 {
     /**
-     * @param ?string           $text      the column text
-     * @param float             $width     the column width
-     * @param ?PdfTextAlignment $alignment the column alignment
-     * @param bool              $fixed     true if the column width is fixed.
-     *                                     This property is used only if the parent's table uses all the document width.
+     * @param ?string          $text      the column text
+     * @param float            $width     the column width
+     * @param PdfTextAlignment $alignment the column alignment
+     * @param bool             $fixed     true if the column width is fixed.
+     *                                    This property is used only if the parent's table uses all the document width.
      */
     public function __construct(
         private ?string $text = null,
         private float $width = 0.0,
-        private ?PdfTextAlignment $alignment = PdfTextAlignment::LEFT,
+        private PdfTextAlignment $alignment = PdfTextAlignment::LEFT,
         private bool $fixed = false
     ) {
     }
@@ -53,7 +53,7 @@ class PdfColumn
     /**
      * Gets the cell alignment.
      */
-    public function getAlignment(): ?PdfTextAlignment
+    public function getAlignment(): PdfTextAlignment
     {
         return $this->alignment;
     }
@@ -121,7 +121,7 @@ class PdfColumn
     /**
      * Sets the column alignment.
      */
-    public function setAlignment(?PdfTextAlignment $alignment): self
+    public function setAlignment(PdfTextAlignment $alignment): self
     {
         $this->alignment = $alignment;
 

@@ -55,45 +55,41 @@ final class NotificationEmailTest extends TestCase
 
     public function testImportanceAsEnum(): void
     {
-        $email = $this->createNotificationEmail();
-        $email->importance(Importance::MEDIUM);
+        $email = $this->createNotificationEmail()
+            ->importance(Importance::MEDIUM);
         $context = $email->getContext();
-
         self::assertArrayHasKey('importance', $context);
         self::assertSame('medium', $context['importance']);
-
         self::assertArrayHasKey('importance_text', $context);
         self::assertSame('importance.medium_title', $context['importance_text']);
     }
 
     public function testImportanceAsEnumValue(): void
     {
-        $email = $this->createNotificationEmail();
-        $email->importance(Importance::MEDIUM->value);
+        $email = $this->createNotificationEmail()
+            ->importance(Importance::MEDIUM->value);
         $context = $email->getContext();
-
         self::assertArrayHasKey('importance', $context);
         self::assertSame('medium', $context['importance']);
-
         self::assertArrayHasKey('importance_text', $context);
         self::assertSame('importance.medium_title', $context['importance_text']);
     }
 
-    public function testImportanceAsOtherString(): void
+    /**
+     * @psalm-suppress InvalidArgument
+     */
+    public function testImportanceInvalid(): void
     {
-        $email = $this->createNotificationEmail();
-        $email->importance('fake');
-        $context = $email->getContext();
-
-        self::assertArrayHasKey('importance', $context);
-        self::assertSame('fake', $context['importance']);
-        self::assertArrayNotHasKey('importance_text', $context);
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Invalid importance value: "fake".');
+        $this->createNotificationEmail()
+            ->importance('fake'); // @phpstan-ignore argument.type
     }
 
     public function testPreparedHeadersWithoutSubject(): void
     {
-        $email = $this->createNotificationEmail();
-        $email->from('fake@fake.com')
+        $email = $this->createNotificationEmail()
+            ->from('fake@fake.com')
             ->to('fake@fake.com');
         $headers = $email->getPreparedHeaders();
 
@@ -104,8 +100,8 @@ final class NotificationEmailTest extends TestCase
 
     public function testPreparedHeadersWithSubject(): void
     {
-        $email = $this->createNotificationEmail();
-        $email->subject('subject')
+        $email = $this->createNotificationEmail()
+            ->subject('subject')
             ->from('fake@fake.com')
             ->to('fake@fake.com');
         $email->importance(Importance::MEDIUM);
@@ -118,9 +114,9 @@ final class NotificationEmailTest extends TestCase
 
     public function testTranslatableSubject(): void
     {
-        $email = $this->createNotificationEmail();
-        $email->subject(new TranslatableMessage('user.comment.title'));
-        $email->from('fake@fake.com')
+        $email = $this->createNotificationEmail()
+            ->subject(new TranslatableMessage('user.comment.title'))
+            ->from('fake@fake.com')
             ->to('fake@fake.com');
         $headers = $email->getPreparedHeaders();
 
@@ -131,7 +127,7 @@ final class NotificationEmailTest extends TestCase
 
     private function createNotificationEmail(): NotificationEmail
     {
-        return NotificationEmail::create($this->createMockTranslator());
+        return NotificationEmail::instance($this->createMockTranslator());
     }
 
     private function createUploadedFile(): UploadedFile

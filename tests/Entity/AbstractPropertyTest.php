@@ -36,12 +36,9 @@ final class AbstractPropertyTest extends TestCase
         $expected = [1, 'string', true];
         $entity->setArray($expected);
         $actual = $entity->getArray();
-        // @phpstan-ignore staticMethod.impossibleType
-        self::assertIsArray($actual);
-        // @phpstan-ignore staticMethod.impossibleType
-        self::assertCount(3, $actual);
-        // @phpstan-ignore staticMethod.impossibleType
-        self::assertSame($expected, $actual);
+        self::assertIsArray($actual); // @phpstan-ignore staticMethod.impossibleType
+        self::assertCount(3, $actual); // @phpstan-ignore staticMethod.impossibleType
+        self::assertSame($expected, $actual); // @phpstan-ignore staticMethod.impossibleType
 
         $entity->setValue('{invalidJson');
         self::assertNull($entity->getArray());
@@ -87,8 +84,7 @@ final class AbstractPropertyTest extends TestCase
         self::assertNull($entity->getDate());
         $entity->setDate($date);
         $actual = $entity->getDate();
-        // @phpstan-ignore staticMethod.impossibleType
-        self::assertNotNull($actual);
+        self::assertNotNull($actual); // @phpstan-ignore staticMethod.impossibleType
         self::assertTimestampEquals($date, $actual);
     }
 

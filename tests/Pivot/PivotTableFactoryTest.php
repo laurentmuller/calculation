@@ -31,8 +31,7 @@ final class PivotTableFactoryTest extends TestCase
     {
         self::expectException(\InvalidArgumentException::class);
         $factory = PivotTableFactory::instance([]);
-        /* @phpstan-ignore argument.type */
-        $factory->setColumnFields([new Calculation()]);
+        $factory->setColumnFields([new Calculation()]); // @phpstan-ignore argument.type
     }
 
     public function testConstructor(): void

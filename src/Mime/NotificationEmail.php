@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Mime;
 
 use App\Enums\Importance;
+use App\Utils\StringUtils;
 use Symfony\Bridge\Twig\Mime\NotificationEmail as BaseNotificationEmail;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Header\HeaderInterface;
@@ -67,18 +68,11 @@ class NotificationEmail extends BaseNotificationEmail
         return $this;
     }
 
-    public static function create(
-        TranslatorInterface $translator,
-        string $template = 'notification/notification.html.twig'
-    ): self {
-        return (new self($translator))->htmlTemplate($template);
-    }
-
     #[\Override]
     public function getContext(): array
     {
         $context = parent::getContext();
-        if (null !== $this->importance) {
+        if (StringUtils::isString($this->importance)) {
             $context['importance_text'] = $this->importance;
         }
 
@@ -90,7 +84,7 @@ class NotificationEmail extends BaseNotificationEmail
     {
         $subject = $this->getSubject();
         $headers = parent::getPreparedHeaders();
-        if (null === $subject || null === $this->importance) {
+        if (!StringUtils::isString($subject) || !StringUtils::isString($this->importance)) {
             return $headers;
         }
 
@@ -103,21 +97,39 @@ class NotificationEmail extends BaseNotificationEmail
         return $headers;
     }
 
+    /**
+     * @phpstan-param Importance|self::IMPORTANCE_* $importance
+     *
+     * @throws \InvalidArgumentException if the importance is a string and cannot be translated to the corresponding enumeration
+     *
+     * @psalm-suppress MoreSpecificImplementedParamType
+     */
     #[\Override]
-    public function importance(string|Importance $importance): static
+    public function importance(Importance|string $importance): static
     {
         if (\is_string($importance)) {
-            $importance = Importance::tryFrom($importance) ?? $importance;
+            try {
+                $importance = Importance::from($importance);
+            } catch (\ValueError $e) {
+                /** @phpstan-var string $importance */
+                throw new \InvalidArgumentException(\sprintf('Invalid importance value: "%s".', $importance), $e->getCode(), $e);
+            }
         }
-        if ($importance instanceof Importance) {
-            $value = $importance->value;
-            $this->importance = $importance->transTitle($this->translator);
-        } else {
-            $value = $importance;
-            $this->importance = null;
-        }
+        $this->importance = $importance->translateTitle($this->translator);
 
-        return parent::importance($value);
+        return parent::importance($importance->value);
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * @phpstan-param non-empty-string $template
+     */
+    public static function instance(
+        TranslatorInterface $translator,
+        string $template = 'notification/notification.html.twig'
+    ): static {
+        return (new static($translator))->htmlTemplate($template);
     }
 
     #[\Override]

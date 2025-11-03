@@ -68,7 +68,7 @@ final class EmailVerifierTest extends TestCase
         $service = new EmailVerifier($helper, $mailer, $repository, $translator);
 
         $user = $this->createUser();
-        $email = NotificationEmail::create($translator);
+        $email = NotificationEmail::instance($translator);
         $service->sendEmail('route', $user, $email);
         self::assertFalse($user->isVerified());
     }

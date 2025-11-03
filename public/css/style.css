@@ -466,7 +466,7 @@ input[type=number]::-webkit-inner-spin-button {
 
 .drop-down-icon-right::after {
     float: right;
-    margin-left: auto;
+    margin-left: 8px;
     margin-right: 8px;
     content: '\f104';
 }

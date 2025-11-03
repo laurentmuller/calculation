@@ -23,6 +23,21 @@
         </row>
     </container>
 {% endblock %}
+{# content #}
+{% block content %}
+    {% block content_title %}{% endblock %}
+    {% block content_body %}{% endblock %}
+    {% block content_footer %}
+        <container>
+            <row>
+                <columns>
+                    Cordialement,<br>
+                    L'équipe de {{ app_name }}
+                </columns>
+            </row>
+        </container>
+    {% endblock %}
+{% endblock %}
 {# exception #}
 {% block exception %}
     {% if exception %}

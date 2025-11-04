@@ -3,6 +3,7 @@
 /**
  * @typedef {Object} RowType
  * @property {number} [colorId] the color identifier
+ * @property {string} [color] the color identifier
  * @property {number} [textMuted] the color identifier
  */
 
@@ -93,7 +94,7 @@ window.styleStateBorderClass = function (_value, row) {
  * Cell class for log
  *
  * @param {number} _value the field value.
- * @param {Object} row the record data.
+ * @param {RowType} row the record data.
  * @returns {Object} the cell style.
  */
 window.styleBorderColor = function (_value, row) {
@@ -145,7 +146,7 @@ window.styleTextMuted = function (row, index) {
 /**
  * Remove the given action by removing the parent's list entry.
  *
- * @param {jQuery} $action the action to remove.
+ * @param {jQuery|any} $action the action to remove.
  * @param {String} [divider] the previous divider, if any; to remove.
  */
 function removeAction($action, divider) {
@@ -292,9 +293,9 @@ function updateSearchAction($table, row, _$element, $action) {
  * Update the edit calculation action.
  *
  * @param {jQuery} _$table the parent table.
- * @param {Object} row the row data.
- * @param {jQuery} $element the table row.
- * @param {jQuery} $action the action to update
+ * @param {RowType} row the row data.
+ * @param {jQuery|any} $element the table row.
+ * @param {jQuery|any} $action the action to update
  */
 function updateCalculationEditAction(_$table, row, $element, $action) {
     'use strict';
@@ -427,7 +428,7 @@ function initializeDangerTooltips($table) {
  * Show the page selection dialog.
  *
  * @param {jQueryTable} $table the data table.
- * @param {jQuery} $button the caller button.
+ * @param {jQuery|any} $button the caller button.
  * @param {jQuery} [$source] the source page link.
  */
 function showPageDialog($table, $button, $source) {
@@ -449,7 +450,7 @@ function showPageDialog($table, $button, $source) {
  * Show the sort field dialog.
  *
  * @param {jQueryTable} $table the data table.
- * @param {jQuery} $button the caller button.
+ * @param {jQuery|any} $button the caller button.
  */
 function showSortDialog($table, $button) {
     'use strict';
@@ -502,12 +503,12 @@ function showSortDialog($table, $button) {
         const $searchMinimum = $('#search_minimum');
 
         // handle drop-down input buttons
-        const inputs = $('.dropdown-toggle.dropdown-input').dropdown().on('input', function () {
+        const inputs = $('.dropdown-input').dropDownInput().on('input', function () {
             $table.refresh({
                 pageNumber: 1
             });
         }).map(function () {
-            return $(this).data($.DropDown.NAME);
+            return $(this).data($.DropDownInput.NAME);
         });
 
         // initialize table
@@ -612,7 +613,7 @@ function showSortDialog($table, $button) {
              *
              * @param {jQuery} _$table
              * @param {RowType} row
-             * @param {jQuery} $item
+             * @param {jQuery|any} $item
              */
             onRenderCustomView: function (_$table, row, $item) {
                 // update border color
@@ -733,7 +734,7 @@ function showSortDialog($table, $button) {
 
         // handle the page button
         if ($pageButton.length) {
-            $pageButton.dropdown().on('input', function (e, value) {
+            $pageButton.dropDownInput().on('input', function (e, value) {
                 $table.refresh({
                     pageSize: value
                 });

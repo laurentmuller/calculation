@@ -30,20 +30,14 @@ abstract class AbstractReader implements \IteratorAggregate
     private mixed $stream;
 
     /**
-     * @param \SplFileInfo|string|resource $file   the file to open or an opened resource
-     * @param bool                         $binary true to open the file with binary mode
+     * @param \SplFileInfo|string|resource $file the file to open or an opened resource
      */
-    public function __construct(mixed $file, bool $binary = false)
+    public function __construct(mixed $file)
     {
         if ($file instanceof \SplFileInfo) {
             $file = $file->getPathname();
         }
-        if (\is_string($file)) {
-            $mode = $binary ? 'rb' : 'r';
-            $this->stream = \fopen($file, $mode);
-        } else {
-            $this->stream = $file;
-        }
+        $this->stream = \is_string($file) ? \fopen($file, 'r') : $file;
     }
 
     /**

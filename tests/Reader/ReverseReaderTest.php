@@ -18,13 +18,6 @@ use PHPUnit\Framework\TestCase;
 
 final class ReverseReaderTest extends TestCase
 {
-    public function testFileExist(): void
-    {
-        $filename = $this->getFileName();
-        self::assertFileExists($filename);
-        self::assertFileIsReadable($filename);
-    }
-
     public function testIsOpen(): void
     {
         $reader = $this->getReader();
@@ -51,8 +44,6 @@ final class ReverseReaderTest extends TestCase
 
     private function getReader(): ReverseReader
     {
-        $filename = $this->getFileName();
-
-        return ReverseReader::instance($filename);
+        return ReverseReader::instance($this->getFileName());
     }
 }

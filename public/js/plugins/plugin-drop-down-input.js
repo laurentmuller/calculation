@@ -12,11 +12,11 @@ $(function () {
      * Plugin name.
      * @type {{NAME: string}}
      */
-    $.DropDown = {
+    $.DropDownInput = {
         'NAME': 'bs.drop-down'
     };
 
-    const DropDown = class {
+    const DropDownInput = class {
         // -----------------------------
         // public functions
         // -----------------------------
@@ -29,7 +29,7 @@ $(function () {
          */
         constructor(element, options) {
             this.$element = $(element);
-            this.options = $.extend(true, {}, DropDown.DEFAULTS, this.$element.data(), options);
+            this.options = $.extend(true, {}, DropDownInput.DEFAULTS, this.$element.data(), options);
             this._init();
         }
 
@@ -43,7 +43,7 @@ $(function () {
             if (this.$dropdown.length) {
                 this.$dropdown.off('shown.bs.dropdown', this.menuShowProxy);
             }
-            this.$element.removeData($.DropDown.NAME);
+            this.$element.removeData($.DropDownInput.NAME);
         }
 
         /**
@@ -126,7 +126,7 @@ $(function () {
         /**
          * Sets the selected value.
          * @param {any} [value] - the value to set.
-         * @param {jQuery} [$selection] - the selected drop-down item.
+         * @param {jQuery|any} [$selection] - the selected drop-down item.
          * @private
          */
         _updateValue(value, $selection) {
@@ -134,9 +134,9 @@ $(function () {
             const $element = this.$element;
             const className = options.selectionClass;
             const $items = this.$menu.find('.dropdown-item').removeClass(className);
-            /** @type {JQuery<HTMLSpanElement>|any} */
+            /** @type {JQuery<HTMLElement>|any} */
             const $iconElement = $element.find(options.iconClass);
-            /** @type {JQuery<HTMLSpanElement>|any} */
+            /** @type {JQuery<HTMLElement>|any} */
             const $textElement = $element.findExists(options.textClass) || $element;
 
             // default values
@@ -167,11 +167,7 @@ $(function () {
             // text
             if (options.copyText) {
                 if (value) {
-                    if ($selection.findExists(options.textClass)) {
-                        text = $selection.findExists(options.textClass).text().trim() || text;
-                    } else {
-                        text = $selection.text().trim() || text;
-                    }
+                    text = ($selection.findExists(options.textClass) || $selection).text().trim() || text;
                 } else {
                     text = $element.data('default') || text;
                 }
@@ -182,12 +178,15 @@ $(function () {
             $textElement.text(text);
             $element.data('value', value).trigger('input', value);
         }
+
+
     };
+
 
     // -----------------------------------
     // Default options
     // -----------------------------------
-    DropDown.DEFAULTS = {
+    DropDownInput.DEFAULTS = {
         copyText: true,
         copyIcon: true,
         resetIcon: true,
@@ -199,23 +198,24 @@ $(function () {
     // -----------------------------------
     // DropDown plugin definition
     // -----------------------------------
-    const oldDropDown = $.fn.dropdown;
-    $.fn.dropdown = function (options) {
+    const oldDropDownInput = $.fn.dropDownInput;
+    //
+    $.fn.dropDownInput = function (options) {
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data($.DropDown.NAME)) {
+            if (!$this.data($.DropDownInput.NAME)) {
                 const settings = typeof options === 'object' && options;
-                $this.data($.DropDown.NAME, new DropDown(this, settings));
+                $this.data($.DropDownInput.NAME, new DropDownInput(this, settings));
             }
         });
     };
-    $.fn.dropdown.Constructor = DropDown;
+    $.fn.dropDownInput.Constructor = DropDownInput;
 
     // -----------------------------------
     // DropDown no conflict
     // -----------------------------------
-    $.fn.dropdown.noConflict = function () {
-        $.fn.dropdown = oldDropDown;
+    $.fn.dropDownInput.noConflict = function () {
+        $.fn.dropDownInput = oldDropDownInput;
         return this;
     };
 });

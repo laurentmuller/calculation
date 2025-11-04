@@ -30,24 +30,13 @@ namespace App\Reader;
 class ReverseReader extends AbstractReader
 {
     /**
-     * The carriage return character.
-     */
-    private const CARRIAGE_RETURN = "\r";
-
-    /**
-     * The line feed character.
-     */
-    private const LINE_FEED = "\n";
-
-    /**
      * Creates a new instance.
      *
-     * @param \SplFileInfo|string $file   the file to open
-     * @param bool                $binary true to open the file with binary mode
+     * @param \SplFileInfo|string|resource $file the file to open
      */
-    public static function instance(\SplFileInfo|string $file, bool $binary = false): self
+    public static function instance(mixed $file): self
     {
-        return new self($file, $binary);
+        return new self($file);
     }
 
     #[\Override]
@@ -66,8 +55,8 @@ class ReverseReader extends AbstractReader
                 case false:
                     $hasLine = true;
                     break;
-                case self::LINE_FEED:
-                case self::CARRIAGE_RETURN:
+                case "\n": // line feed
+                case "\r": // carriage return
                     $started ? $hasLine = true : $started = true;
                     break;
                 default:

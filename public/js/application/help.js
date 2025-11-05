@@ -1,33 +1,37 @@
-/* global bootstrap */
 (function ($) {
     'use strict';
+    /**
+     * jQuery functions extensions
+     */
+    $.fn.extend({
+        showItems: function (e) {
+            if (e) {
+                e.preventDefault();
+            }
+            $(this).find('.collapse:not(.show)').collapse('show');
+        },
+
+        hideItems: function (e) {
+            if (e) {
+                e.preventDefault();
+            }
+            $(this).find('.collapse.show').collapse('hide');
+        },
+
+        toggleItems: function (e) {
+            if (e) {
+                e.preventDefault();
+            }
+            $(this).find('.collapse').collapse('toggle');
+        },
+    });
+
     /**
      * Ready function
      */
     $(function () {
         let searching = false;
-        $.fn.extend({
-            showItems: function (e) {
-                if (e) {
-                    e.preventDefault();
-                }
-                $(this).find('.collapse:not(.show)').collapse('show');
-            },
 
-            hideItems: function (e) {
-                if (e) {
-                    e.preventDefault();
-                }
-                $(this).find('.collapse.show').collapse('hide');
-            },
-
-            toggleItems: function (e) {
-                if (e) {
-                    e.preventDefault();
-                }
-                $(this).find('.collapse').collapse('toggle');
-            },
-        });
 
         // expand/collapse
         $('.btn-expand-all').on('click', function () {

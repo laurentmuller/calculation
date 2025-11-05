@@ -1,64 +1,55 @@
-/* globals Toaster, ClipboardJS */
-
-/**
- * @return {string}
- */
-function getTitle() {
+(function ($) {
     'use strict';
-    return $('.card-title').text().trim();
-}
+    /**
+     * jQuery functions extensions
+     */
+    $.fn.extend({
+        /** @return {string} */
+        getTitle: function () {
+            return $(this).find('.card-title').text().trim();
+        },
 
-/**
- * @return {string}
- */
-function getMessage() {
-    'use strict';
-    return $('#error-message').text().trim();
-}
+        /** @return {string} */
+        getMessage: function () {
+            return $(this).find('#error-message').text().trim();
+        },
 
-/**
- * @return {string|null}
- */
-function getException() {
-    'use strict';
-    const table = document.getElementById('exception-table');
-    if (!table || !table.checkVisibility()) {
-        return null;
-    }
-
-    const selection = window.getSelection();
-    const range = document.createRange();
-    range.selectNodeContents(table);
-    selection.removeAllRanges();
-    selection.addRange(range);
-    const text = selection.toString().trim();
-    selection.removeAllRanges();
-    return text;
-}
-
-/**
- * @param {string} type
- * @param {string} message
- */
-function notify(type, message) {
-    'use strict';
-    Toaster.notify(type, message, getTitle());
-}
-
-/**
- * Ready function
- */
-$(function () {
-    'use strict';
-    // clipboard
-    $('.btn-copy').copyClipboard({
-        text: function () {
-            const text = getTitle() + '\n\n' + getMessage();
-            const exception = getException();
-            if (exception) {
-                return text + '\n\n' + exception;
+        /** @return {string|null} */
+        getException: function () {
+            const $table = $(this).find('#exception-table');
+            if (!$table.length) {
+                return null;
             }
+            const table = $table[0];
+            if (!table.checkVisibility()) {
+                return null;
+            }
+            const selection = window.getSelection();
+            const range = document.createRange();
+            range.selectNodeContents(table);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            const text = selection.toString().trim();
+            selection.removeAllRanges();
             return text;
         }
     });
-});
+
+    /**
+     * Ready function
+     */
+    $(function () {
+        // clipboard
+        $('.btn-copy').copyClipboard({
+            text: function (element) {
+                const $card = $(element).parents('.card');
+                const text = $card.getTitle() + '\n\n' + $card.getMessage();
+                const exception = $card.getException();
+                if (exception) {
+                    return text + '\n\n' + exception;
+                }
+                return text;
+            }
+        });
+    });
+}(jQuery));

@@ -74,21 +74,21 @@
                 <tr>
                     <td>{{ loop.index0 }}</td>
                     <td>
-                        {% if trace.file %}
-                            <span>{{ trace.file|relative_path }}</span>
-                        {% endif -%}
-                        {% if trace.short_class|default %}
-                            <span>{{ trace.short_class }}</span>
-                        {% endif -%}
-                        {% if trace.type|default %}
-                            <span>{{ trace.type }}</span>
-                        {% endif -%}
-                        {% if trace.function|default %}
-                            <span class="text-warning">{{ trace.function }}</span>
-                        {% endif -%}
-                        {% if trace.line|default %}
-                            <span class="text-body-secondary">({{ line }} {{ trace.line }})</span>
-                        {% endif -%}
+                        {%- if trace.file -%}
+                            <span class="me-1">{{ trace.file|relative_path }}</span>
+                        {%- endif -%}
+                        {%- if trace.short_class|default -%}
+                            <span class="text-warning">{{ trace.short_class }}</span>
+                        {%- endif -%}
+                        {%- if trace.type|default -%}
+                            <span class="text-body-secondary">{{ trace.type }}</span>
+                        {%- endif -%}
+                        {%- if trace.function|default -%}
+                            <span class="text-danger">{{ trace.function }}</span>
+                        {%- endif -%}
+                        {%- if trace.line|default -%}
+                            <span class="text-body-secondary{% if trace.function|default %} ms-1{% endif %}">{{ 'error_page.fields.line_number'|trans({'%line%': trace.line}) }}</span>
+                        {%- endif -%}
                     </td>
                 </tr>
             {% else %}

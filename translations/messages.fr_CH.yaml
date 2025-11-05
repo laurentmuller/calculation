@@ -449,6 +449,7 @@ error_page:
         code: Code
         file: Fichier
         line: Ligne
+        line_number: (ligne %line%)
         message: Message
         call: Fichier / Fonction
         trace: Trace

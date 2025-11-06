@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Reader;
 
 use App\Reader\CSVReader;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 final class CSVReaderTest extends TestCase
@@ -77,6 +78,29 @@ final class CSVReaderTest extends TestCase
         }
         $reader->close();
         self::assertSame(4, $lines);
+    }
+
+    /**
+     * @param int<1, max> $lines
+     */
+    #[TestWith([1, 1])]
+    #[TestWith([4, 4])]
+    #[TestWith([10, 4])]
+    public function testSkip(int $lines, int $expected): void
+    {
+        $reader = $this->getReader();
+        $actual = $reader->skip($lines);
+        self::assertSame($expected, $actual);
+    }
+
+    public function testSkipAndKeys(): void
+    {
+        $reader = $this->getReader();
+        $index = $reader->skip();
+        self::assertSame(1, $index);
+        foreach ($reader as $key => $data) {
+            self::assertSame($index++, $key);
+        }
     }
 
     public function testWithFileInfo(): void

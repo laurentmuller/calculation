@@ -47,6 +47,11 @@
                 <file name="src/Service/SchemaService.php"/>
             </errorLevel>
         </InternalMethod>
+        <UnusedForeachValue>
+            <errorLevel type="suppress">
+                <directory name="tests/Reader"/>
+            </errorLevel>
+        </UnusedForeachValue>
     </issueHandlers>
 
     <plugins>

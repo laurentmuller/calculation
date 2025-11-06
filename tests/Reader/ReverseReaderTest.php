@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Reader;
 
 use App\Reader\ReverseReader;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 final class ReverseReaderTest extends TestCase
@@ -35,6 +36,29 @@ final class ReverseReaderTest extends TestCase
             --$index;
         }
         $reader->close();
+    }
+
+    /**
+     * @param int<1, max> $lines
+     */
+    #[TestWith([1, 1])]
+    #[TestWith([3, 3])]
+    #[TestWith([10, 3])]
+    public function testSkip(int $lines, int $expected): void
+    {
+        $reader = $this->getReader();
+        $actual = $reader->skip($lines);
+        self::assertSame($expected, $actual);
+    }
+
+    public function testSkipAndKeys(): void
+    {
+        $reader = $this->getReader();
+        $index = $reader->skip();
+        self::assertSame(1, $index);
+        foreach ($reader as $key => $data) {
+            self::assertSame($index++, $key);
+        }
     }
 
     private function getFileName(): string

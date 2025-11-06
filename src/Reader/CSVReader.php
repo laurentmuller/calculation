@@ -100,7 +100,7 @@ class CSVReader extends AbstractReader
     }
 
     #[\Override]
-    protected function getNextData($stream): ?array
+    protected function nextData($stream): ?array
     {
         $data = \fgetcsv($stream, $this->length, $this->separator, $this->enclosure, $this->escape);
 

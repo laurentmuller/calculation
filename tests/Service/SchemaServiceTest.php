@@ -239,9 +239,6 @@ final class SchemaServiceTest extends TestCase
         return $metadataFactory;
     }
 
-    /**
-     * @psalm-suppress InternalMethod
-     */
     private function createPropertyTable(): Table
     {
         $columns = [
@@ -304,9 +301,6 @@ final class SchemaServiceTest extends TestCase
         ];
     }
 
-    /**
-     * @psalm-suppress InternalMethod
-     */
     private function createUserTable(): Table
     {
         $columns = [

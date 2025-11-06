@@ -209,8 +209,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
     /**
      * Finds or create a calculation group for the given group.
-     *
-     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function findOrCreateGroup(Group $group): CalculationGroup
     {
@@ -894,8 +892,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * @phpstan-param TValue $initial
      *
      * @phpstan-return TValue
-     *
-     * @psalm-suppress MixedArgumentTypeCoercion
      */
     private function reduceGroups(\Closure $func, mixed $initial): mixed
     {

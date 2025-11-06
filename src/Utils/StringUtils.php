@@ -205,8 +205,6 @@ final class StringUtils
      * @phpstan-param 0|256|512|768 $flags
      *
      * @return bool <code>true</code> if the pattern matches the given subject
-     *
-     * @psalm-suppress ReferenceConstraintViolation
      */
     public static function pregMatch(
         string $pattern,
@@ -233,8 +231,6 @@ final class StringUtils
      * @phpstan-param int-mask<1, 2, 256, 512> $flags
      *
      * @return bool <code>true</code> if the pattern matches the given subject
-     *
-     * @psalm-suppress ReferenceConstraintViolation
      */
     public static function pregMatchAll(
         string $pattern,

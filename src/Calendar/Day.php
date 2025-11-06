@@ -20,8 +20,6 @@ use Symfony\Component\Clock\DatePoint;
 
 /**
  * Represents a single day with a date.
- *
- * @psalm-consistent-constructor
  */
 class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
 {

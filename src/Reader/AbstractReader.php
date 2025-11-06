@@ -110,8 +110,6 @@ abstract class AbstractReader implements \IteratorAggregate
      * @return bool true if this stream is valid
      *
      * @phpstan-assert-if-true resource $this->stream
-     *
-     * @psalm-assert resource $this->stream
      */
     protected function isValid(): bool
     {

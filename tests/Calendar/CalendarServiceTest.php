@@ -38,9 +38,6 @@ final class CalendarServiceTest extends TestCase
         self::assertSame(Calendar::class, $service->getCalendarModel());
     }
 
-    /**
-     * @psalm-suppress ArgumentTypeCoercion
-     */
     public function testNotExistClass(): void
     {
         self::expectException(CalendarException::class);

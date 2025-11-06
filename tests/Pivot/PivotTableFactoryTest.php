@@ -24,9 +24,6 @@ use Symfony\Component\Clock\DatePoint;
 
 final class PivotTableFactoryTest extends TestCase
 {
-    /**
-     * @psalm-suppress InvalidArgument
-     */
     public function testCheckFieldsInvalid(): void
     {
         self::expectException(\InvalidArgumentException::class);
@@ -48,9 +45,6 @@ final class PivotTableFactoryTest extends TestCase
         self::assertNull($factory->create());
     }
 
-    /**
-     * @psalm-suppress InvalidArgument
-     */
     public function testConstructorInvalidAggregator(): void
     {
         self::expectException(\InvalidArgumentException::class);

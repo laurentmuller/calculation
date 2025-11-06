@@ -30,8 +30,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @psalm-suppress ExtensionRequirementViolation
- *
  * @phpstan-ignore class.missingExtends
  */
 final class TableTraitTest extends TestCase

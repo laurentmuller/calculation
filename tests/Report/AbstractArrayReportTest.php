@@ -31,8 +31,6 @@ final class AbstractArrayReportTest extends TestCase
     }
 
     /**
-     * @psalm-suppress MissingTemplateParam
-     *
      * @phpstan-ignore missingType.generics
      */
     private function createReport(array $entities = []): AbstractArrayReport

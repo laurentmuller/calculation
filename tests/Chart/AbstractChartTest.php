@@ -187,9 +187,6 @@ final class AbstractChartTest extends TestCase
         ], $chart->tooltip['style']);
     }
 
-    /**
-     * @psalm-suppress DocblockTypeContradiction
-     */
     public function testType(): void
     {
         $application = $this->createMock(ApplicationService::class);

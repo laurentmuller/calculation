@@ -225,7 +225,7 @@ class SwissDatabase extends AbstractDatabase
      *
      * @return array an array, maybe empty, of matching values
      *
-     * @phpstan-return SearchStreetType[]
+     * @phpstan-return array<int, SearchStreetType>
      */
     public function find(array $parameters, int $limit = 25): array
     {
@@ -240,7 +240,7 @@ class SwissDatabase extends AbstractDatabase
         $stmt->bindValue(':street', $this->likeValue($parameters['street']));
         $stmt->bindValue(':limit', $limit, \SQLITE3_INTEGER);
 
-        /** @psalm-var SearchStreetType[] */
+        /** @phpstan-var array<int, SearchStreetType> */
         return $this->executeAndFetch($stmt);
     }
 
@@ -252,11 +252,11 @@ class SwissDatabase extends AbstractDatabase
      *
      * @return array an array, maybe empty, of matching values
      *
-     * @phpstan-return SearchStreetType[]
+     * @phpstan-return array<int, SearchStreetType>
      */
     public function findAll(string $value, int $limit = 25): array
     {
-        /** @psalm-var SearchStreetType[] */
+        /** @phpstan-var array<int, SearchStreetType> */
         return $this->search(self::SEARCH_ALL, $value, $limit);
     }
 
@@ -268,11 +268,11 @@ class SwissDatabase extends AbstractDatabase
      *
      * @return array an array, maybe empty, of matching cities
      *
-     * @phpstan-return SearchZipCityType[]
+     * @phpstan-return array<int, SearchZipCityType>
      */
     public function findCity(string $city, int $limit = 25): array
     {
-        /** @psalm-var SearchZipCityType[] */
+        /** @phpstan-var array<int, SearchZipCityType> */
         return $this->search(self::SEARCH_CITY, $city, $limit);
     }
 
@@ -284,11 +284,11 @@ class SwissDatabase extends AbstractDatabase
      *
      * @return array an array, maybe empty, of matching cities
      *
-     * @phpstan-return SearchStreetType[]
+     * @phpstan-return array<int, SearchStreetType>
      */
     public function findStreet(string $street, int $limit = 25): array
     {
-        /** @psalm-var SearchStreetType[] */
+        /** @phpstan-var array<int, SearchStreetType> */
         return $this->search(self::SEARCH_STREET, $street, $limit);
     }
 
@@ -300,11 +300,11 @@ class SwissDatabase extends AbstractDatabase
      *
      * @return array an array, maybe empty, of matching cities
      *
-     * @phpstan-return SearchZipCityType[]
+     * @phpstan-return array<int, SearchZipCityType>
      */
     public function findZip(string $zip, int $limit = 25): array
     {
-        /** @psalm-var SearchZipCityType[] */
+        /** @phpstan-var array<int, SearchZipCityType> */
         return $this->search(self::SEARCH_ZIP, $zip, $limit);
     }
 

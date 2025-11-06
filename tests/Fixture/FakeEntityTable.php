@@ -19,8 +19,6 @@ use App\Table\DataQuery;
 use App\Table\DataResults;
 
 /**
- * @psalm-suppress MissingTemplateParam
- *
  * @phpstan-ignore missingType.generics
  */
 class FakeEntityTable extends AbstractEntityTable

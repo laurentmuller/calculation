@@ -20,8 +20,6 @@ use Symfony\Component\Clock\DatePoint;
 
 /**
  * Represents a calendar for a specified year.
- *
- * @psalm-consistent-constructor
  */
 class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterface, WeekDaysInterface
 {

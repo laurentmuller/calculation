@@ -131,8 +131,6 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
 
     /**
      * Gets the number of margins for all items.
-     *
-     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function countMargins(): int
     {

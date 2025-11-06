@@ -24,14 +24,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Extends the NotificationEmail class with the translated subject and custom footer.
- *
- * @psalm-consistent-constructor
  */
 class NotificationEmail extends BaseNotificationEmail
 {
     private ?string $importance = null;
 
-    public function __construct(private readonly TranslatorInterface $translator)
+    final public function __construct(private readonly TranslatorInterface $translator)
     {
         parent::__construct();
     }
@@ -101,8 +99,6 @@ class NotificationEmail extends BaseNotificationEmail
      * @phpstan-param Importance|self::IMPORTANCE_* $importance
      *
      * @throws \InvalidArgumentException if the importance is a string and cannot be translated to the corresponding enumeration
-     *
-     * @psalm-suppress MoreSpecificImplementedParamType
      */
     #[\Override]
     public function importance(Importance|string $importance): static

@@ -133,9 +133,6 @@ final class UserTest extends EntityValidatorTestCase
         self::assertFalse($user->isEnabled());
     }
 
-    /**
-     * @psalm-suppress DeprecatedMethod
-     */
     public function testEraseCredentials(): void
     {
         $user = new User();

@@ -22,8 +22,6 @@ final class HtmlAttributeTest extends TestCase
 {
     /**
      * @throws \DOMException
-     *
-     * @psalm-suppress RedundantConditionGivenDocblockType
      */
     public function testGetEnumValueInt(): void
     {
@@ -37,8 +35,6 @@ final class HtmlAttributeTest extends TestCase
 
     /**
      * @throws \DOMException
-     *
-     * @psalm-suppress RedundantConditionGivenDocblockType
      */
     public function testGetEnumValueString(): void
     {

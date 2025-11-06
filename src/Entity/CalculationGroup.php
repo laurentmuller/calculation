@@ -160,8 +160,6 @@ class CalculationGroup extends AbstractEntity implements \Countable, ComparableI
 
     /**
      * Finds or create a calculation category for the given category.
-     *
-     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function findOrCreateCategory(Category $category): CalculationCategory
     {

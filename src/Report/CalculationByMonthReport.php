@@ -68,9 +68,6 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     private ?CalculationsMonthItem $lastItem = null;
     private float $minMargin;
 
-    /**
-     * @psalm-suppress PropertyTypeCoercion
-     */
     public function __construct(
         AbstractController $controller,
         private readonly CalculationsMonth $month,

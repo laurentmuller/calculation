@@ -29,9 +29,6 @@ final class ParameterTraitTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @psalm-suppress RedundantConditionGivenDocblockType
-     */
     public function testParameterEnum(): void
     {
         $request = $this->createRequest();

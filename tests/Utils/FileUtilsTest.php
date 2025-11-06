@@ -54,8 +54,6 @@ final class FileUtilsTest extends TestCase
 
     /**
      * @phpstan-return \Generator<int, array{string|\SplFileInfo|non-negative-int, string}>
-     *
-     * @psalm-suppress MoreSpecificReturnType
      */
     public static function getFormatSize(): \Generator
     {

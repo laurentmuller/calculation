@@ -58,8 +58,6 @@ class CountryFlagType extends AbstractType
 
     /**
      * @phpstan-param Options<array> $options
-     *
-     * @psalm-param Options $options
      */
     private function getChoiceLoader(Options $options): ChoiceLoaderInterface
     {
@@ -68,8 +66,6 @@ class CountryFlagType extends AbstractType
 
     /**
      * @phpstan-param Options<array> $options
-     *
-     * @psalm-param Options $options
      */
     private function loadChoices(Options $options): array
     {

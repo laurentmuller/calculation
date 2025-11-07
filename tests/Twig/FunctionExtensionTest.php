@@ -16,7 +16,6 @@ namespace App\Tests\Twig;
 use App\Service\NonceService;
 use App\Service\UrlGeneratorService;
 use App\Twig\FunctionExtension;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Bridge\Twig\Extension\WebLinkExtension;
 use Symfony\Component\Asset\Packages;
@@ -30,22 +29,15 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 final class FunctionExtensionTest extends RuntimeTestCase
 {
     #[\Override]
-    protected function createService(): object
+    protected function createService(): FunctionExtension
     {
-        $webDir = __DIR__ . '/../../public';
-        $assetExtension = $this->createAssetExtension();
-        $webLinkExtension = $this->createWebLinkExtension();
-        $nonceService = $this->createNonceService();
-        $uploaderHelper = $this->createUploaderHelper();
-        $urlGeneratorService = $this->createUrlGeneratorService();
-
         return new FunctionExtension(
-            $webDir,
-            $assetExtension,
-            $webLinkExtension,
-            $nonceService,
-            $uploaderHelper,
-            $urlGeneratorService
+            $this->getPublicDir(),
+            $this->createAssetExtension(),
+            $this->createWebLinkExtension(),
+            $this->createNonceService(),
+            $this->createUploaderHelper(),
+            $this->createUrlGeneratorService()
         );
     }
 
@@ -64,7 +56,7 @@ final class FunctionExtensionTest extends RuntimeTestCase
         return new AssetExtension($packages);
     }
 
-    private function createNonceService(): MockObject&NonceService
+    private function createNonceService(): NonceService
     {
         $service = $this->createMock(NonceService::class);
         $service->method('getCspNonce')
@@ -77,7 +69,7 @@ final class FunctionExtensionTest extends RuntimeTestCase
 
     private function createUploaderHelper(): UploaderHelper
     {
-        $callback = static fn (object|array|null $value): mixed => null !== $value ? ((array) $value)[0] : null;
+        $callback = static fn (mixed $value): mixed => \is_array($value) ? $value[0] : null;
         $storage = $this->createMock(StorageInterface::class);
         $storage->method('resolveUri')
             ->willReturnCallback($callback);
@@ -85,7 +77,7 @@ final class FunctionExtensionTest extends RuntimeTestCase
         return new UploaderHelper($storage);
     }
 
-    private function createUrlGeneratorService(): MockObject&UrlGeneratorService
+    private function createUrlGeneratorService(): UrlGeneratorService
     {
         $generator = $this->createMock(UrlGeneratorService::class);
         $generator->method('routeParams')
@@ -98,8 +90,11 @@ final class FunctionExtensionTest extends RuntimeTestCase
 
     private function createWebLinkExtension(): WebLinkExtension
     {
-        $stack = $this->createMock(RequestStack::class);
+        return new WebLinkExtension($this->createMock(RequestStack::class));
+    }
 
-        return new WebLinkExtension($stack);
+    private function getPublicDir(): string
+    {
+        return __DIR__ . '/../../public';
     }
 }

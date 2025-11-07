@@ -27,7 +27,7 @@ final class FormatExtensionTest extends RuntimeTestCase
     use TranslatorMockTrait;
 
     #[\Override]
-    protected function createService(): object
+    protected function createService(): FormatExtension
     {
         return new FormatExtension($this->createMockTranslator());
     }
@@ -52,9 +52,7 @@ final class FormatExtensionTest extends RuntimeTestCase
     #[\Override]
     protected function getExtensions(): array
     {
-        return \array_merge(parent::getExtensions(), [
-            new AttributeExtension(FormatUtils::class),
-        ]);
+        return \array_merge(parent::getExtensions(), [new AttributeExtension(FormatUtils::class)]);
     }
 
     #[\Override]

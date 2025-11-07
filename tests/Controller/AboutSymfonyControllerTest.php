@@ -35,7 +35,7 @@ final class AboutSymfonyControllerTest extends ControllerTestCase
         yield [$query . 'symfony/cache-contracts', self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
         yield [$query . 'fake', self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
 
-        $query = '/about/symfony/package?name=';
+        $query = '/about/symfony/dependency?name=';
         yield [$query . 'symfony/cache-contracts', self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
         yield [$query . 'fake', self::ROLE_ADMIN, Response::HTTP_OK, Request::METHOD_GET, true];
     }

@@ -249,33 +249,25 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     abstract protected function createSchema(): void;
 
     /**
-     * Execute the given statement and fetch the result to an associative array.
+     * Execute the given statement and fetch with SQLITE3_ASSOC flag the result to an associative array.
      *
      * @param \SQLite3Stmt $stmt the statement to execute
-     * @param int<1,3>     $mode controls how the next row will be returned to the caller. This value
-     *                           must be one of either SQLITE3_ASSOC (default), SQLITE3_NUM, or SQLITE3_BOTH.
      *
-     * @template T of array<string, mixed>
-     *
-     * @return array<int, T>
-     *
-     * @phpstan-ignore method.templateTypeNotInParameter
+     * @return array<array<string, mixed>>
      */
-    protected function executeAndFetch(\SQLite3Stmt $stmt, int $mode = \SQLITE3_ASSOC): array
+    protected function executeAndFetch(\SQLite3Stmt $stmt): array
     {
         $result = $stmt->execute();
         if (!$result instanceof \SQLite3Result) {
             return [];
         }
 
-        /** phpstan-var array<int, T> $rows */
         $rows = [];
-        while (false !== ($row = $result->fetchArray($mode))) {
+        while (false !== ($row = $result->fetchArray(\SQLITE3_ASSOC))) {
             $rows[] = $row;
         }
         $result->finalize();
 
-        /** @phpstan-var array<int, T> */
         return $rows;
     }
 
@@ -313,7 +305,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      */
     protected function likeValue(string $value): string
     {
-        return '%' . \trim($value) . '%';
+        return '%' . \trim($value, " \n\r\t\v\0%") . '%';
     }
 
     /**
@@ -326,28 +318,19 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * </ul>
      * </p>.
      *
-     * @param string   $query the SQL query to prepare
-     * @param string   $value the value to search for
-     * @param int      $limit the maximum number of rows to return
-     * @param int<1,3> $mode  controls how the next row will be returned to the caller. This value
-     *                        must be one of either SQLITE3_ASSOC (default), SQLITE3_NUM, or SQLITE3_BOTH.
+     * @param string $query the SQL query to prepare
+     * @param string $value the value to search for
+     * @param int    $limit the maximum number of rows to return
      *
-     * @template T of array<string, mixed>
-     *
-     * @return array<int, T>
-     *
-     * @phpstan-ignore method.templateTypeNotInParameter
+     * @return array<array<string, mixed>>
      */
-    protected function search(string $query, string $value, int $limit, int $mode = \SQLITE3_ASSOC): array
+    protected function search(string $query, string $value, int $limit): array
     {
-        $value = $this->likeValue($value);
-
         /** @var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement($query);
-        $stmt->bindValue(':value', $value);
+        $stmt->bindValue(':value', $this->likeValue($value));
         $stmt->bindValue(':limit', $limit, \SQLITE3_INTEGER);
 
-        /** @phpstan-var array<int, T> */
-        return $this->executeAndFetch($stmt, $mode);
+        return $this->executeAndFetch($stmt);
     }
 }

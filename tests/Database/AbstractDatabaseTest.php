@@ -70,7 +70,7 @@ final class AbstractDatabaseTest extends TestCase
 
     public function testCreateInvalidIndex(): void
     {
-        $actual = $this->database->createIndex('sy_Calculation', 'fake');
+        $actual = @$this->database->createIndex('sy_Calculation', 'fake');
         self::assertFalse($actual);
     }
 
@@ -85,14 +85,14 @@ final class AbstractDatabaseTest extends TestCase
         $query = 'SELECT * FROM sy_User WHERE sy_User.username LIKE :value LIMIT :limit';
         $stmt = $this->database->prepare($query);
         self::assertInstanceOf(\SQLite3Stmt::class, $stmt);
-        $actual = $this->database->executeAndFetch($stmt);
+        $actual = @$this->database->executeAndFetch($stmt);
         self::assertEmpty($actual);
     }
 
     public function testInvalidStatement(): void
     {
         $query = 'SELECT * FROM sy_NotFound';
-        $stmt = $this->database->getStatement($query);
+        $stmt = @$this->database->getStatement($query);
         self::assertNull($stmt);
     }
 
@@ -102,6 +102,12 @@ final class AbstractDatabaseTest extends TestCase
         $actual = $this->database->likeValue('value');
         self::assertSame($expected, $actual);
         $actual = $this->database->likeValue(' value ');
+        self::assertSame($expected, $actual);
+        $actual = $this->database->likeValue('% value ');
+        self::assertSame($expected, $actual);
+        $actual = $this->database->likeValue('value %');
+        self::assertSame($expected, $actual);
+        $actual = $this->database->likeValue('%value%');
         self::assertSame($expected, $actual);
     }
 

@@ -21,7 +21,7 @@ use App\Service\NonceService;
 final class NonceServiceTest extends RuntimeTestCase
 {
     #[\Override]
-    protected function createService(): object
+    protected function createService(): NonceService
     {
         return new NonceService();
     }

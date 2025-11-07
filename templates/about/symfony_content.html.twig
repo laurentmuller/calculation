@@ -33,7 +33,9 @@
     <td class="text-id">{{ package.version }}</td>
     <td class="text">{{ package.description }}</td>
     <td>
-        {%- if package.homepage or package.license or package.production|length or package.development|length -%}
+        {%- set is_info = package.homepage or package.license -%}
+        {%- set is_dependance = package.production|length or package.development|length -%}
+        {%- if is_info or is_dependance -%}
             <div class="dropdown">
                 {{ dropdownEllipsis() }}
                 <ul class="dropdown-menu dropdown-menu-end">
@@ -43,9 +45,7 @@
                             text: 'about.extern_link',
                             icon: 'arrow-up-right-from-square fa-fw')
                         -}}
-                        {%- if package.license or package.production|length or package.development|length -%}
-                            {{ dropdownSeparator() }}
-                        {% endif %}
+
                     {% endif %}
                     {%- if package.license -%}
                         {{- dropdownItemWithClass(
@@ -55,9 +55,12 @@
                             class: 'link-license')
                         -}}
                     {% endif %}
-                    {%- if package.development|length -%}
+                    {%- if is_info and is_dependance -%}
+                        {{ dropdownSeparator() }}
+                    {% endif %}
+                    {%- if is_dependance -%}
                         {{- dropdownItemWithClass(
-                            href: path('about_symfony_package', {name: package.name}),
+                            href: path('about_symfony_dependency', {name: package.name}),
                             text: 'about.package.title',
                             icon: 'file-code fa-fw',
                             class: 'link-package')

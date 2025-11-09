@@ -12,7 +12,7 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une
 ## Versions
 
 [![Application](https://img.shields.io/badge/Application-3.0.0-blue)](https://github.com/laurentmuller/calculation)
-[![Symfony](https://img.shields.io/badge/Symfony-7.3.5-informational?logo=symfony)](https://symfony.com)
+[![Symfony](https://img.shields.io/badge/Symfony-7.3.6-informational?logo=symfony)](https://symfony.com)
 [![PHP](https://img.shields.io/badge/PHP-8.2.29-informational?logo=php)](https://www.php.net)
 [![MySQL](https://img.shields.io/badge/MySQL-5.7.32-informational?logo=mysql)](https://www.mysql.com)
 [![Apache](https://img.shields.io/badge/Apache-2.4.51-informational?logo=apache)](https://httpd.apache.org)
@@ -23,7 +23,6 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une
 [![SymfonyInsight](https://insight.symfony.com/projects/b3a90438-77e0-4811-a8df-7ad782a9b62a/mini.svg)](https://insight.symfony.com/projects/b3a90438-77e0-4811-a8df-7ad782a9b62a)
 [![Codacy](https://app.codacy.com/project/badge/Grade/47008d380fac4a3ea891c7bd72bddd58)](https://app.codacy.com/gh/laurentmuller/calculation/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![PHP-Stan](https://img.shields.io/badge/PHPStan-Level%208-brightgreen.svg?style=flat&logo=php)](https://phpstan.org/blog/find-bugs-in-your-code-without-writing-tests)
-[![Psalm](https://img.shields.io/badge/Psalm-Level%201-brightgreen.svg?style=flat)](https://psalm.dev/docs/running_psalm/installation/)
 [![CodeFactor](https://www.codefactor.io/repository/github/laurentmuller/calculation/badge)](https://www.codefactor.io/repository/github/laurentmuller/calculation)
 [![Codecov](https://codecov.io/gh/laurentmuller/calculation/branch/master/graph/badge.svg?token=Y3IVKXW82W)](https://codecov.io/gh/laurentmuller/calculation)
 

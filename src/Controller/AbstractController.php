@@ -169,8 +169,6 @@ abstract class AbstractController extends BaseController
      * Gets the request stack.
      *
      * @throws \LogicException if the service cannot be found
-     *
-     * @psalm-suppress MixedAssignment
      */
     public function getRequestStack(): RequestStack
     {

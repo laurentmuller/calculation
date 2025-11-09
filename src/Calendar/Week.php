@@ -18,8 +18,6 @@ use App\Utils\StringUtils;
 
 /**
  * Represents a week with a calendar and an array of days.
- *
- * @psalm-consistent-constructor
  */
 class Week extends AbstractCalendarItem
 {

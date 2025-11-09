@@ -90,9 +90,6 @@ final class VichListenerTest extends TestCase
         self::expectNotToPerformAssertions();
     }
 
-    /**
-     * @psalm-suppress MissingTemplateParam
-     */
     public function testPreUploadWithEmptyNamer(): void
     {
         $namer = new class implements NamerInterface {

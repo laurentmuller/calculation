@@ -69,8 +69,6 @@ final class AbstractConstraintValidatorTest extends ConstraintValidatorTestCase
     }
 
     /**
-     * @psalm-suppress MissingTemplateParam
-     *
      * @phpstan-ignore missingType.generics
      */
     #[\Override]

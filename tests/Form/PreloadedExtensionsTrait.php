@@ -41,8 +41,6 @@ trait PreloadedExtensionsTrait
 
     /**
      * @phpstan-return FormTypeInterface<mixed>[]
-     *
-     * @psalm-return FormTypeInterface[]
      */
     abstract protected function getPreloadedExtensions(): array;
 }

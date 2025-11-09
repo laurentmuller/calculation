@@ -33,8 +33,6 @@ readonly class MetaData
     }
 
     /**
-     * @psalm-assert-if-true class-string<\BackedEnum<int>> $this->type
-     *
      * @phpstan-assert-if-true class-string<\BackedEnum> $this->type
      */
     public function isEnumTypeInt(): bool
@@ -43,8 +41,6 @@ readonly class MetaData
     }
 
     /**
-     * @psalm-assert-if-true class-string<\BackedEnum<string>> $this->type
-     *
      * @phpstan-assert-if-true class-string<\BackedEnum> $this->type
      */
     public function isEnumTypeString(): bool

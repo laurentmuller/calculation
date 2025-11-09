@@ -142,8 +142,6 @@ class ReCaptchaType extends AbstractType implements EventSubscriberInterface
 
     /**
      * @phpstan-param FormConfigInterface<array> $config
-     *
-     * @psalm-param FormConfigInterface $config
      */
     private function updateService(FormConfigInterface $config): void
     {

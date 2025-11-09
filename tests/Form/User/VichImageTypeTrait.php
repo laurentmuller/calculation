@@ -43,10 +43,6 @@ trait VichImageTypeTrait
         return new VichImageType($storage, $handler, $factory);
     }
 
-    /**
-     * @psalm-suppress InternalClass
-     * @psalm-suppress InternalMethod
-     */
     private function createPropertyMappingFactory(): PropertyMappingFactory
     {
         $factory = $this->createMock(AdvancedMetadataFactoryInterface::class);

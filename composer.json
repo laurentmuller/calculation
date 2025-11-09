@@ -175,7 +175,6 @@
         "app-rector-fix": "vendor-bin/rector/vendor/bin/rector process --config rector.php",
         "app-twig": "vendor-bin/twig-cs-fixer/vendor/bin/twig-cs-fixer lint --config=.twig-cs-fixer.php",
         "app-twig-fix": "vendor-bin/twig-cs-fixer/vendor/bin/twig-cs-fixer lint --fix --config=.twig-cs-fixer.php",
-        "app-psalm": "vendor-bin/psalm/vendor/bin/psalm --config psalm.xml",
         "app-stan": "vendor-bin/phpstan/vendor/bin/phpstan analyse --configuration phpstan.neon --memory-limit 2G",
         "app-test": "vendor/bin/phpunit",
         "app-markdown": "markdownlint-cli2",
@@ -183,7 +182,6 @@
         "app-all": [
             "@app-lint",
             "@app-fixer",
-            "@app-psalm",
             "@app-stan",
             "@app-rector",
             "@app-twig",

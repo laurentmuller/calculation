@@ -32,8 +32,6 @@ class SwissDatabase extends AbstractDatabase
 {
     /**
      * SQL statement to create the city table.
-     *
-     * @var string
      */
     private const CREATE_CITY = <<<'sql'
         CREATE TABLE IF NOT EXISTS city (
@@ -46,8 +44,6 @@ class SwissDatabase extends AbstractDatabase
 
     /**
      * SQL statement to create the state (canton) table.
-     *
-     * @var string
      */
     private const CREATE_STATE = <<<'sql'
         CREATE TABLE IF NOT EXISTS state (
@@ -58,8 +54,6 @@ class SwissDatabase extends AbstractDatabase
 
     /**
      * SQL statement to create the street table.
-     *
-     * @var string
      */
     private const CREATE_STREET = <<<'sql'
         CREATE TABLE IF NOT EXISTS street (
@@ -71,8 +65,6 @@ class SwissDatabase extends AbstractDatabase
 
     /**
      * SQL statement to add a city into the table.
-     *
-     * @var string
      */
     private const INSERT_CITY = <<<'sql'
         INSERT INTO city(id, zip, name, state_id)
@@ -81,8 +73,6 @@ class SwissDatabase extends AbstractDatabase
 
     /**
      * SQL statement to add a state into the table.
-     *
-     * @var string
      */
     private const INSERT_STATE = <<<'sql'
         INSERT INTO state(id, name)
@@ -91,8 +81,6 @@ class SwissDatabase extends AbstractDatabase
 
     /**
      * SQL statement to add a street into the table.
-     *
-     * @var string
      */
     private const INSERT_STREET = <<<'sql'
         INSERT INTO street(city_id, name)
@@ -101,8 +89,6 @@ class SwissDatabase extends AbstractDatabase
 
     /**
      * SQL statement to find by multiple criterias.
-     *
-     * @var string
      */
     private const SEARCH = <<<'sql'
         SELECT
@@ -129,8 +115,6 @@ class SwissDatabase extends AbstractDatabase
 
     /**
      * SQL statement to find all.
-     *
-     * @var string
      */
     private const SEARCH_ALL = <<<'sql'
         SELECT
@@ -154,10 +138,9 @@ class SwissDatabase extends AbstractDatabase
             city.name
         LIMIT :limit
         sql;
+
     /**
      * SQL statement to find a city.
-     *
-     * @var string
      */
     private const SEARCH_CITY = <<<'sql'
         SELECT
@@ -199,8 +182,6 @@ class SwissDatabase extends AbstractDatabase
 
     /**
      * SQL statement to find a zip code.
-     *
-     * @var string
      */
     private const SEARCH_ZIP = <<<'sql'
         SELECT
@@ -240,7 +221,7 @@ class SwissDatabase extends AbstractDatabase
         $stmt->bindValue(':street', $this->likeValue($parameters['street']));
         $stmt->bindValue(':limit', $limit, \SQLITE3_INTEGER);
 
-        /** @psalm-var SearchStreetType[] */
+        /** @phpstan-var SearchStreetType[] */
         return $this->executeAndFetch($stmt);
     }
 
@@ -256,7 +237,7 @@ class SwissDatabase extends AbstractDatabase
      */
     public function findAll(string $value, int $limit = 25): array
     {
-        /** @psalm-var SearchStreetType[] */
+        /** @phpstan-var SearchStreetType[] */
         return $this->search(self::SEARCH_ALL, $value, $limit);
     }
 
@@ -272,7 +253,7 @@ class SwissDatabase extends AbstractDatabase
      */
     public function findCity(string $city, int $limit = 25): array
     {
-        /** @psalm-var SearchZipCityType[] */
+        /** @phpstan-var SearchZipCityType[] */
         return $this->search(self::SEARCH_CITY, $city, $limit);
     }
 
@@ -288,7 +269,7 @@ class SwissDatabase extends AbstractDatabase
      */
     public function findStreet(string $street, int $limit = 25): array
     {
-        /** @psalm-var SearchStreetType[] */
+        /** @phpstan-var SearchStreetType[] */
         return $this->search(self::SEARCH_STREET, $street, $limit);
     }
 
@@ -304,7 +285,7 @@ class SwissDatabase extends AbstractDatabase
      */
     public function findZip(string $zip, int $limit = 25): array
     {
-        /** @psalm-var SearchZipCityType[] */
+        /** @phpstan-var SearchZipCityType[] */
         return $this->search(self::SEARCH_ZIP, $zip, $limit);
     }
 

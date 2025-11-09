@@ -25,7 +25,7 @@ final class RoleServiceTest extends RuntimeTestCase
     use TranslatorMockTrait;
 
     #[\Override]
-    protected function createService(): object
+    protected function createService(): RoleService
     {
         return new RoleService(
             $this->createMock(RoleHierarchyInterface::class),

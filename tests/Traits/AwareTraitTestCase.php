@@ -13,16 +13,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 abstract class AwareTraitTestCase extends TestCase implements ServiceSubscriberInterface
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject&ContainerInterface
-     */
-    public ContainerInterface $container;
+    public MockObject&ContainerInterface $container;
 
     #[\Override]
     protected function setUp(): void

@@ -57,10 +57,6 @@ final class StrengthLevelTranslatorTraitTest extends TestCase
         return $this->translator;
     }
 
-    /**
-     * @psalm-suppress InternalClass
-     * @psalm-suppress InternalMethod
-     */
     public function testAddStrengthLevelViolation(): void
     {
         $validator = $this->createMock(ValidatorInterface::class);

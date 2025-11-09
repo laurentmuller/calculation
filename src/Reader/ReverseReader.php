@@ -16,15 +16,6 @@ namespace App\Reader;
 /**
  * Class to get the file content on the fly, line by line; in the reverse order (last line first).
  *
- * Example:
- *
- * <code>
- * $reader = new ReverseReader("path/to/file_name.txt");
- * foreach ($reader as $line) {
- *     echo $line . "\n";
- * }
- * </code>
- *
  * @extends AbstractReader<string>
  */
 class ReverseReader extends AbstractReader
@@ -40,7 +31,7 @@ class ReverseReader extends AbstractReader
     }
 
     #[\Override]
-    protected function getNextData($stream): ?string
+    protected function nextData($stream): ?string
     {
         $line = '';
         $started = false;

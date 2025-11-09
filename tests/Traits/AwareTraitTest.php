@@ -15,8 +15,6 @@ namespace App\Tests\Traits;
 
 use App\Traits\AwareTrait;
 use Faker\Container\ContainerException;
-use PHPUnit\Framework\MockObject\MockObject;
-use Psr\Container\ContainerInterface;
 
 final class AwareTraitTest extends AwareTraitTestCase
 {
@@ -29,11 +27,9 @@ final class AwareTraitTest extends AwareTraitTestCase
         self::expectException(\LogicException::class);
         self::expectExceptionMessageMatches('/Unable to find service.*/');
 
-        /** @var MockObject&ContainerInterface $container */
-        $container = $this->container;
-        $container->method('has')
+        $this->container->method('has')
             ->willReturn(true);
-        $container->method('get')
+        $this->container->method('get')
             ->willThrowException(new ContainerException(code: $code));
         $this->getContainerService(__FUNCTION__, self::class);
     }
@@ -44,20 +40,16 @@ final class AwareTraitTest extends AwareTraitTestCase
         self::expectException(\LogicException::class);
         self::expectExceptionMessageMatches('/Unable to find service.*/');
 
-        /** @var MockObject&ContainerInterface $container */
-        $container = $this->container;
-        $container->method('has')
+        $this->container->method('has')
             ->willReturn(false);
         $this->getContainerService(__FUNCTION__, self::class);
     }
 
     public function testWithoutException(): void
     {
-        /** @var MockObject&ContainerInterface $container */
-        $container = $this->container;
-        $container->method('has')
+        $this->container->method('has')
             ->willReturn(true);
-        $container->method('get')
+        $this->container->method('get')
             ->willReturn($this);
         $actual = $this->getContainerService(__FUNCTION__, self::class);
         self::assertSame($this, $actual);

@@ -165,8 +165,6 @@ final class FormatUtils
 
     /**
      * Format a number for the current locale with no decimal (Ex: 2312.2 > 2'312).
-     *
-     * @psalm-suppress PossiblyInvalidArgument
      */
     #[AsTwigFilter(name: 'integer')]
     public static function formatInt(\Countable|array|int|float|string|null $number): string

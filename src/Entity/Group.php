@@ -180,8 +180,6 @@ class Group extends AbstractCodeEntity
      * @param float $amount the amount to get group margin for
      *
      * @return GroupMargin|null the group margin, if found; null otherwise
-     *
-     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function findMargin(float $amount): ?GroupMargin
     {
@@ -296,8 +294,6 @@ class Group extends AbstractCodeEntity
 
     /**
      * @param \Closure(int, Category): int $func
-     *
-     * @psalm-suppress MixedArgumentTypeCoercion
      */
     private function reduceCategories(\Closure $func): int
     {

@@ -64,10 +64,6 @@ final class RequestTraitTest extends TestCase
         self::assertTrue($actual);
     }
 
-    /**
-     * @psalm-suppress RedundantConditionGivenDocblockType
-     * @psalm-suppress DocblockTypeContradiction
-     */
     public function testRequestEnum(): void
     {
         $request = $this->createRequest();

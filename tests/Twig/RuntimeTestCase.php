@@ -38,11 +38,7 @@ abstract class RuntimeTestCase extends IntegrationTestCase implements RuntimeLoa
     #[\Override]
     public function load(string $class): ?object
     {
-        if ($this->service::class === $class) {
-            return $this->service;
-        }
-
-        return null;
+        return $this->getServiceClass() === $class ? $this->service : null;
     }
 
     /**
@@ -53,12 +49,20 @@ abstract class RuntimeTestCase extends IntegrationTestCase implements RuntimeLoa
     #[\Override]
     protected function getExtensions(): array
     {
-        return [new AttributeExtension($this->service::class)];
+        return [new AttributeExtension($this->getServiceClass())];
     }
 
     #[\Override]
     protected function getRuntimeLoaders(): array
     {
         return [$this];
+    }
+
+    /**
+     * @return class-string<TService>
+     */
+    protected function getServiceClass(): string
+    {
+        return $this->service::class;
     }
 }

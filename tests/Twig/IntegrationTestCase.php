@@ -77,9 +77,6 @@ abstract class IntegrationTestCase extends TestCase
      * @param array<int, string[]>  $outputs
      *
      * @throws Error
-     *
-     * @psalm-suppress InternalClass
-     * @psalm-suppress InternalMethod
      */
     protected function doIntegrationTest(
         string $file,

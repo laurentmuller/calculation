@@ -54,7 +54,7 @@ final class WebpCommandTest extends CommandTestCase
         self::assertTrue(FileUtils::copy($source, $target));
         $source = FileUtils::makePathRelative($path, __DIR__ . '/../..');
         $input = ['source' => $source];
-        $output = $this->execute($input);
+        $output = @$this->execute($input);
         self::assertOutputContainsString(
             $output,
             'Conversion: 0',

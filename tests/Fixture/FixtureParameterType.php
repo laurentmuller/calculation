@@ -17,9 +17,6 @@ use App\Enums\EntityAction;
 use App\Form\FormHelper;
 use App\Form\Parameters\AbstractParameterType;
 
-/**
- * @psalm-suppress MissingTemplateParam
- */
 class FixtureParameterType extends AbstractParameterType
 {
     #[\Override]

@@ -132,7 +132,7 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
         /** @phpstan-var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement(self::SEARCH_BY_ID);
         $stmt->bindValue(':id', $id);
-        /** @phpstan-var array<int, OpenWeatherCityType> $result */
+        /** @phpstan-var OpenWeatherCityType[] $result */
         $result = $this->executeAndFetch($stmt);
 
         return [] === $result ? false : \reset($result);
@@ -144,7 +144,7 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
      * @param string $name  the name to search for
      * @param int    $limit the maximum number of rows to return
      *
-     * @phpstan-return array<int, OpenWeatherCityType>
+     * @phpstan-return OpenWeatherCityType[]
      */
     public function findCity(string $name, int $limit = 25): array
     {
@@ -153,7 +153,7 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
             return $this->findCityCountry($values[0], $values[1], $limit);
         }
 
-        /** @phpstan-var array<int, OpenWeatherCityType> */
+        /** @phpstan-var OpenWeatherCityType[] */
         return $this->search(self::SEARCH_CITY, $name, $limit);
     }
 
@@ -164,19 +164,17 @@ class OpenWeatherDatabase extends AbstractDatabase implements \Countable
      * @param string $country the country to search for
      * @param int    $limit   the maximum number of rows to return
      *
-     * @phpstan-return array<int, OpenWeatherCityType>
+     * @phpstan-return OpenWeatherCityType[]
      */
     public function findCityCountry(string $city, string $country, int $limit = 25): array
     {
-        $city = $this->likeValue($city);
-        $country = $this->likeValue($country);
         /** @phpstan-var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement(self::SEARCH_CITY_COUNTRY);
-        $stmt->bindValue(':name', $city);
-        $stmt->bindValue(':country', $country);
+        $stmt->bindValue(':name', $this->likeValue($city));
+        $stmt->bindValue(':country', $this->likeValue($country));
         $stmt->bindValue(':limit', $limit, \SQLITE3_INTEGER);
 
-        /** @phpstan-var array<int, OpenWeatherCityType> */
+        /** @phpstan-var OpenWeatherCityType[] */
         return $this->executeAndFetch($stmt);
     }
 

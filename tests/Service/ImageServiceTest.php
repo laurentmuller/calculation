@@ -97,7 +97,7 @@ final class ImageServiceTest extends TestCase
         self::assertNull($service);
 
         $file = Path::normalize(__DIR__ . '/../files/images/example_invalid.png');
-        $service = ImageService::fromFile($file);
+        $service = @ImageService::fromFile($file);
         self::assertNull($service);
     }
 
@@ -189,7 +189,7 @@ final class ImageServiceTest extends TestCase
     {
         $service = ImageService::fromTrueColor(100, 200);
         self::assertNotNull($service);
-        $actual = $service->ttfSize(10.0, 0.0, Path::normalize(__FILE__), 'text');
+        $actual = @$service->ttfSize(10.0, 0.0, Path::normalize(__FILE__), 'text');
         self::assertNotEmpty($actual);
         self::assertCount(2, $actual);
         self::assertSame(0, $actual[0]);

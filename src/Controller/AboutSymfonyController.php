@@ -63,6 +63,25 @@ class AboutSymfonyController extends AbstractController
         return $this->jsonTrue(['content' => $content]);
     }
 
+    /**
+     * Gets the package dependencies (runtime and development).
+     */
+    #[GetRoute(path: '/dependency', name: 'dependency')]
+    public function dependency(
+        #[MapQueryParameter]
+        string $name,
+        PackageInfoService $service,
+        MarkdownInterface $markdown,
+    ): JsonResponse {
+        $package = $service->getPackage($name);
+        if (null === $package || ([] === $package['production'] && [] === $package['development'])) {
+            return $this->jsonFalse(['message' => $this->trans('about.package.not_found')]);
+        }
+        $content = $this->getMarkdownDependency($markdown, $package);
+
+        return $this->jsonTrue(['content' => $content]);
+    }
+
     #[ExcelRoute]
     public function excel(
         BundleInfoService $bundleService,
@@ -97,29 +116,9 @@ class AboutSymfonyController extends AbstractController
         if (null === $package || null === $package['license']) {
             return $this->jsonFalse(['message' => $this->trans('about.licence.not_found')]);
         }
-        $content = $this->getMarkdownLicense($package);
+        $content = $this->getMarkdownLicense($markdown, $package);
 
-        return $this->jsonTrue(['content' => $markdown->convert($content)]);
-    }
-
-    /**
-     * Gets the package definition.
-     */
-    #[GetRoute(path: '/package', name: 'package')]
-    public function package(
-        #[MapQueryParameter]
-        string $name,
-        PackageInfoService $service,
-        MarkdownInterface $markdown,
-    ): JsonResponse {
-        $package = $service->getPackage($name);
-        if (null === $package) {
-            return $this->jsonFalse(['message' => $this->trans('about.package.not_found')]);
-        }
-
-        $content = $this->getMarkdownPackage($package);
-
-        return $this->jsonTrue(['content' => $markdown->convert($content)]);
+        return $this->jsonTrue(['content' => $content]);
     }
 
     #[PdfRoute]
@@ -145,20 +144,25 @@ class AboutSymfonyController extends AbstractController
     /**
      * @phpstan-param PackageType $package
      */
-    private function getMarkdownLicense(array $package): string
+    private function getMarkdownDependency(MarkdownInterface $markdown, array $package): string
     {
-        return $this->implodeHeader($package)
-            . FileUtils::readFile((string) $package['license']);
+        $content = $this->implodeHeader($package)
+            . $this->implodeValues(Environment::PRODUCTION, $package['production'])
+            . $this->implodeValues(Environment::DEVELOPMENT, $package['development']);
+
+        return $markdown->convert($content);
     }
 
     /**
      * @phpstan-param PackageType $package
      */
-    private function getMarkdownPackage(array $package): string
+    private function getMarkdownLicense(MarkdownInterface $markdown, array $package): string
     {
-        return $this->implodeHeader($package)
-            . $this->implodeValues(Environment::PRODUCTION, $package['production'])
-            . $this->implodeValues(Environment::DEVELOPMENT, $package['development']);
+        $content = $this->implodeHeader($package)
+            . FileUtils::readFile((string) $package['license']);
+        $content = $markdown->convert($content);
+
+        return \strip_tags($content, '<p><h1><h2><h3><h4><h5><h6><em><strong><code><hr>');
     }
 
     /**
@@ -167,7 +171,7 @@ class AboutSymfonyController extends AbstractController
     private function implodeHeader(array $package): string
     {
         return \sprintf(
-            "**%s**\n\n*Version %s - %s*\n***\n",
+            "##### %s\n\nVersion %s - %s\n***\n",
             $package['name'],
             $package['version'],
             $package['time']

@@ -21,7 +21,7 @@ use App\Service\CountryFlagService;
 final class CountryFlagServiceTest extends RuntimeTestCase
 {
     #[\Override]
-    protected function createService(): object
+    protected function createService(): CountryFlagService
     {
         return new CountryFlagService();
     }

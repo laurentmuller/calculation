@@ -70,19 +70,12 @@ class Database extends AbstractDatabase
     /**
      * Make public for tests.
      *
-     * @template T of array<string, mixed>
-     *
-     * @param int<1,3> $mode
-     *
-     * @return array<int, T>
-     *
-     * @phpstan-ignore method.templateTypeNotInParameter
+     * @return array<array<string, mixed>>
      */
     #[\Override]
-    public function executeAndFetch(\SQLite3Stmt $stmt, int $mode = \SQLITE3_ASSOC): array
+    public function executeAndFetch(\SQLite3Stmt $stmt): array
     {
-        /** @var array<int, T> */
-        return parent::executeAndFetch($stmt, $mode);
+        return parent::executeAndFetch($stmt);
     }
 
     /**
@@ -120,19 +113,12 @@ class Database extends AbstractDatabase
     /**
      * Make public for tests.
      *
-     * @template T of array<string, mixed>
-     *
-     * @param int<1,3> $mode
-     *
-     * @return array<int, T>
-     *
-     * @phpstan-ignore method.templateTypeNotInParameter
+     * @return array<array<string, mixed>>
      */
     #[\Override]
-    public function search(string $query, string $value, int $limit, int $mode = \SQLITE3_ASSOC): array
+    public function search(string $query, string $value, int $limit): array
     {
-        /** @var array<int, T> */
-        return parent::search($query, $value, $limit, $mode);
+        return parent::search($query, $value, $limit);
     }
 
     #[\Override]

@@ -62,7 +62,7 @@ final class PdfMemoryImageTraitTest extends TestCase
         self::assertInstanceOf(\GdImage::class, $image);
         $doc = new PdfImageDocument();
         \imagedestroy($image);
-        $doc->imageGD($image);
+        @$doc->imageGD($image);
     }
 
     public function testImageWbmp(): void

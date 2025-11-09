@@ -26,10 +26,6 @@ final class EntityTransformerTest extends EntityTransformerTestCase
 {
     /**
      * @phpstan-return \Generator<int, array<bool|int|string>>
-     *
-     * @psalm-return \Generator<int, array<string|int|null>>
-     *
-     * @psalm-suppress InvalidReturnType
      */
     public static function getReverseInvalid(): \Generator
     {
@@ -49,10 +45,6 @@ final class EntityTransformerTest extends EntityTransformerTestCase
 
     /**
      * @phpstan-return \Generator<int, array<string|bool>>
-     *
-     * @psalm-return \Generator<int, array{EntityInterface|null}>
-     *
-     * @psalm-suppress InvalidReturnType
      */
     public static function getTransformInvalid(): \Generator
     {

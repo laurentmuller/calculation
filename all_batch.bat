@@ -12,8 +12,6 @@ ECHO ----- MARKDOWN ------------------------------------------------------------
 markdownlint-cli2                                                                        && ^
 ECHO ----- PHP-CS-FIXER ---------------------------------------------------------------- && ^
 .\vendor-bin\php-cs-fixer\vendor\bin\php-cs-fixer.bat fix --diff --dry-run               && ^
-ECHO ----- PHP-PSALM ------------------------------------------------------------------- && ^
-.\vendor-bin\psalm\vendor\bin\psalm.bat --config=psalm.xml                               && ^
 ECHO ----- PHP-STAN -------------------------------------------------------------------- && ^
 .\vendor-bin\phpstan\vendor\bin\phpstan.bat analyse --memory-limit=2G                    && ^
 ECHO ----- PHP-RECTOR ------------------------------------------------------------------ && ^

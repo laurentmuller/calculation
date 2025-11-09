@@ -75,9 +75,6 @@ final class NotificationEmailTest extends TestCase
         self::assertSame('importance.medium_title', $context['importance_text']);
     }
 
-    /**
-     * @psalm-suppress InvalidArgument
-     */
     public function testImportanceInvalid(): void
     {
         self::expectException(\InvalidArgumentException::class);

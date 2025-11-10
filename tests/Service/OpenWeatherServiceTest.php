@@ -33,10 +33,6 @@ final class OpenWeatherServiceTest extends KernelServiceTestCase
     public function testAll(): void
     {
         $actual = $this->service->all(self::CITY_VALID);
-        self::assertArrayHasKey('current', $actual);
-        self::assertArrayHasKey('forecast', $actual);
-        self::assertArrayHasKey('daily', $actual);
-
         $current = $actual['current'];
         self::assertIsArray($current);
         self::assertSame(self::CITY_VALID, $current['id']);
@@ -47,9 +43,6 @@ final class OpenWeatherServiceTest extends KernelServiceTestCase
     public function testAllInvalid(): void
     {
         $actual = $this->service->all(self::CITY_INVALID);
-        self::assertArrayHasKey('current', $actual);
-        self::assertArrayHasKey('forecast', $actual);
-        self::assertArrayHasKey('daily', $actual);
         self::assertFalse($actual['current']);
         self::assertFalse($actual['forecast']);
         self::assertFalse($actual['daily']);
@@ -121,8 +114,6 @@ final class OpenWeatherServiceTest extends KernelServiceTestCase
         $cityIds = [self::CITY_VALID];
         $result = $this->service->group($cityIds);
         self::assertIsArray($result);
-        self::assertArrayHasKey('list', $result);
-        self::assertArrayHasKey('units', $result);
 
         $list = $result['list'];
         self::assertCount(1, $list);
@@ -136,18 +127,38 @@ final class OpenWeatherServiceTest extends KernelServiceTestCase
         $this->validateResult($firstList, false);
     }
 
+    public function testGroupInvalidCity(): void
+    {
+        $cityIds = [self::CITY_INVALID];
+        $result = $this->service->group($cityIds);
+        self::assertFalse($result);
+    }
+
     public function testGroupInvalidCount(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->service->group(\range(0, 25));
+        $this->expectExceptionMessage('Allowed cities: 20, 25 given.');
+        $this->service->group(\range(1, 25));
     }
 
     public function testOneCall(): void
+    {
+        $actual = $this->service->oneCall(0.00, 0.00);
+        self::assertIsArray($actual);
+        self::assertArrayHasKey('current', $actual);
+        self::assertArrayHasKey('daily', $actual);
+        self::assertArrayHasKey('hourly', $actual);
+        self::assertArrayHasKey('minutely', $actual);
+    }
+
+    public function testOneCallExcludeDaily(): void
     {
         $actual = $this->service->oneCall(0.00, 0.00, exclude: 'daily');
         self::assertIsArray($actual);
         self::assertArrayHasKey('current', $actual);
         self::assertArrayNotHasKey('daily', $actual);
+        self::assertArrayHasKey('hourly', $actual);
+        self::assertArrayHasKey('minutely', $actual);
     }
 
     private function validateCoord(array $data): void

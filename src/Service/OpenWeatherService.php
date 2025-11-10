@@ -14,12 +14,11 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Enums\OpenWeatherUnits;
-use phpDocumentor\Reflection\DocBlock\Tags\See;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
@@ -142,6 +141,11 @@ class OpenWeatherService extends AbstractHttpClientService
     private const URI_ONECALL = 'onecall';
 
     /**
+     * The user data parameter name.
+     */
+    private const USER_DATA = 'user_data';
+
+    /**
      * @throws \InvalidArgumentException if the API key is not defined, is null or empty
      */
     public function __construct(
@@ -170,11 +174,9 @@ class OpenWeatherService extends AbstractHttpClientService
         int $count = self::DEFAULT_COUNT,
         OpenWeatherUnits $units = OpenWeatherUnits::METRIC
     ): array {
-        return [
-            'current' => $this->current($id, $units),
-            'forecast' => $this->forecast($id, $count, $units),
-            'daily' => $this->daily($id, $count, $units),
-        ];
+        $key = \sprintf('all-%d-%d-%s', $id, $count, $units->value);
+
+        return $this->getCacheValue($key, fn (): array => $this->doGetAll($id, $count, $units));
     }
 
     /**
@@ -187,12 +189,9 @@ class OpenWeatherService extends AbstractHttpClientService
      */
     public function current(int $id, OpenWeatherUnits $units = OpenWeatherUnits::METRIC): array|false
     {
-        $query = [
-            self::PARAM_ID => $id,
-            self::PARAM_UNITS => $units,
-        ];
+        $key = \sprintf('current-%d-%s', $id, $units->value);
 
-        return $this->get(self::URI_CURRENT, $query);
+        return $this->getCacheValue($key, fn (): array|false => $this->doGetCurrent($id, $units));
     }
 
     /**
@@ -209,13 +208,9 @@ class OpenWeatherService extends AbstractHttpClientService
         int $count = self::DEFAULT_COUNT,
         OpenWeatherUnits $units = OpenWeatherUnits::METRIC
     ): array|false {
-        $query = [
-            self::PARAM_ID => $id,
-            self::PARAM_UNITS => $units,
-            self::PARAM_COUNT => $count,
-        ];
+        $key = \sprintf('daily-%d-%d-%s', $id, $count, $units->value);
 
-        return $this->get(self::URI_DAILY, $query);
+        return $this->getCacheValue($key, fn (): array|false => $this->doGetDaily($id, $count, $units));
     }
 
     /**
@@ -232,13 +227,9 @@ class OpenWeatherService extends AbstractHttpClientService
         int $count = self::DEFAULT_COUNT,
         OpenWeatherUnits $units = OpenWeatherUnits::METRIC
     ): array|false {
-        $query = [
-            self::PARAM_ID => $id,
-            self::PARAM_UNITS => $units,
-            self::PARAM_COUNT => $count,
-        ];
+        $key = \sprintf('forecast-%d-%d-%s', $id, $count, $units->value);
 
-        return $this->get(self::URI_FORECAST, $query);
+        return $this->getCacheValue($key, fn (): array|false => $this->doGetForecast($id, $count, $units));
     }
 
     #[\Override]
@@ -256,16 +247,19 @@ class OpenWeatherService extends AbstractHttpClientService
      * @return array|false the conditions for the given cities, if success; false on error
      *
      * @phpstan-return OpenWeatherGroupType|false
+     *
+     * @throws \InvalidArgumentException if the number of cities is greater than 20
      */
     public function group(array $cityIds, OpenWeatherUnits $units = OpenWeatherUnits::METRIC): array|false
     {
-        if (\count($cityIds) > self::MAX_GROUP) {
-            throw new \InvalidArgumentException('The number of city identifiers is greater than 20.');
+        $count = \count($cityIds);
+        if ($count > self::MAX_GROUP) {
+            throw new \InvalidArgumentException(\sprintf('Allowed cities: %d, %d given.', self::MAX_GROUP, $count));
         }
 
         $key = 'group-' . \implode('-', $cityIds);
 
-        return $this->getCacheValue($key, fn (): array|false => $this->doGroup($cityIds, $units));
+        return $this->getCacheValue($key, fn (): array|false => $this->doGetGroup($cityIds, $units));
     }
 
     /**
@@ -286,16 +280,12 @@ class OpenWeatherService extends AbstractHttpClientService
         OpenWeatherUnits $units = OpenWeatherUnits::METRIC,
         string ...$exclude
     ): array|false {
-        $query = [
-            self::PARAM_LATITUDE => $latitude,
-            self::PARAM_LONGITUDE => $longitude,
-            self::PARAM_UNITS => $units,
-        ];
-        if ([] !== $exclude) {
-            $query['exclude'] = \implode(',', $exclude);
-        }
+        $key = \sprintf('oneCall-%f-%f-%s-%s', $latitude, $longitude, $units->value, \implode(',', $exclude));
 
-        return $this->get(self::URI_ONECALL, $query, self::HOST_NAME_V_3_0);
+        return $this->getCacheValue(
+            $key,
+            fn (): array|false => $this->doGetOneCall($latitude, $longitude, $units, ...$exclude)
+        );
     }
 
     #[\Override]
@@ -323,17 +313,60 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * @phpstan-param array{units: string, ...} $query
+     * Returns the current, the hourly and daily forecasts conditions data for a specific location.
      *
-     * @throws ExceptionInterface
+     * @phpstan-return array{current: array|false, forecast: array|false, daily: array|false}
      */
-    private function doGet(string $uri, array $query, string $hostName): array|false
+    private function doGetAll(
+        int $id,
+        int $count = self::DEFAULT_COUNT,
+        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+    ): array {
+        $responses = [
+            $this->getRequestCurrent($id, $units),
+            $this->getRequestForecast($id, $count, $units),
+            $this->getRequestDaily($id, $count, $units),
+        ];
+
+        $results = [];
+        foreach ($this->getClient()->stream($responses) as $response => $chunk) {
+            $key = (string) $response->getInfo(self::USER_DATA);
+            if ($chunk->isFirst() && Response::HTTP_OK !== $response->getStatusCode()) {
+                $results[$key] = false;
+                continue;
+            }
+            if ($chunk->isLast()) {
+                $results[$key] = $this->parseResponse($response, $units);
+            }
+        }
+
+        /** @phpstan-var array{current: array|false, forecast: array|false, daily: array|false} $results */
+        return $results;
+    }
+
+    private function doGetCurrent(int $id, OpenWeatherUnits $units = OpenWeatherUnits::METRIC): array|false
     {
-        $response = $this->requestGet($uri, [
-            self::BASE_URI => $hostName,
-            self::QUERY => $query,
-        ]);
-        $units = OpenWeatherUnits::from($query[self::PARAM_UNITS]);
+        $response = $this->getRequestCurrent($id, $units);
+
+        return $this->parseResponse($response, $units);
+    }
+
+    private function doGetDaily(
+        int $id,
+        int $count = self::DEFAULT_COUNT,
+        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+    ): array|false {
+        $response = $this->getRequestDaily($id, $count, $units);
+
+        return $this->parseResponse($response, $units);
+    }
+
+    private function doGetForecast(
+        int $id,
+        int $count = self::DEFAULT_COUNT,
+        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+    ): array|false {
+        $response = $this->getRequestForecast($id, $count, $units);
 
         return $this->parseResponse($response, $units);
     }
@@ -342,29 +375,20 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param int[] $cityIds
      *
      * @phpstan-return OpenWeatherGroupType|false
-     *
-     * @throws ExceptionInterface
      */
-    private function doGroup(array $cityIds, OpenWeatherUnits $units): array|false
+    private function doGetGroup(array $cityIds, OpenWeatherUnits $units): array|false
     {
-        $options = [
-            self::BASE_URI => self::HOST_NAME_V_2_5,
-            self::QUERY => [
-                self::PARAM_UNITS => $units->value,
-            ],
-        ];
         $responses = \array_map(
-            function (int $cityId) use ($options): ResponseInterface {
-                $options[self::QUERY][self::PARAM_ID] = $cityId;
-
-                return $this->requestGet(self::URI_CURRENT, $options);
-            },
+            fn (int $cityId): ResponseInterface => $this->getRequestCurrent($cityId, $units),
             $cityIds
         );
 
         $list = [];
         $client = $this->getClient();
         foreach ($client->stream($responses) as $response => $chunk) {
+            if ($chunk->isFirst() && Response::HTTP_OK !== $response->getStatusCode()) {
+                return false;
+            }
             if ($chunk->isLast()) {
                 $value = $this->parseResponse($response, $units);
                 if (false === $value) {
@@ -380,21 +404,31 @@ class OpenWeatherService extends AbstractHttpClientService
         ];
     }
 
+    private function doGetOneCall(
+        float $latitude,
+        float $longitude,
+        OpenWeatherUnits $units = OpenWeatherUnits::METRIC,
+        string ...$exclude
+    ): array|false {
+        $response = $this->getRequestOneCall($latitude, $longitude, $units, ...$exclude);
+
+        return $this->parseResponse($response, $units);
+    }
+
     /**
      * Finds the time zone (shift in seconds from UTC).
      *
-     * @param array $data the data search in
+     * @param array<string, mixed> $data the data search in
      *
      * @return int the offset, if found; 0 otherwise
      */
-    private function findTimezone(array $data): int
+    private function findTimezoneOffset(array $data): int
     {
-        /** @phpstan-var mixed $value */
         foreach ($data as $key => $value) {
             if ('timezone' === $key) {
                 return (int) $value;
             } elseif (\is_array($value)) {
-                $timeZone = $this->findTimezone($value);
+                $timeZone = $this->findTimezoneOffset($value);
                 if (0 !== $timeZone) {
                     return $timeZone;
                 }
@@ -404,54 +438,87 @@ class OpenWeatherService extends AbstractHttpClientService
         return 0;
     }
 
-    /**
-     * Make an HTTP-GET call.
-     *
-     * @param string $uri      the uri to append to the host name
-     * @param array  $query    an associative array of query string values to add to the request
-     * @param string $hostName the host name (API version) to use
-     *
-     * @phpstan-param array{units: OpenWeatherUnits, ...} $query
-     *
-     * @return array|false the JSON response on success, false on failure
-     */
-    private function get(string $uri, array $query, string $hostName = self::HOST_NAME_V_2_5): array|false
-    {
-        $query['units'] = $query['units']->value;
-        $key = $this->getCacheKey($hostName . $uri, $query);
-
-        return $this->getUrlCacheValue($key, fn (): array|false => $this->doGet($uri, $query, $hostName));
+    private function getRequestCurrent(
+        int $id,
+        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+    ): ResponseInterface {
+        return $this->getClient()->request(Request::METHOD_GET, self::URI_CURRENT, [
+            self::USER_DATA => 'current',
+            self::BASE_URI => self::HOST_NAME_V_2_5,
+            self::QUERY => [
+                self::PARAM_ID => $id,
+                self::PARAM_UNITS => $units->value,
+            ],
+        ]);
     }
 
-    /**
-     * Gets the cache key for the given url and query parameters.
-     */
-    private function getCacheKey(string $url, array $query): string
-    {
-        return $url . '?' . \http_build_query($query);
+    private function getRequestDaily(
+        int $id,
+        int $count = self::DEFAULT_COUNT,
+        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+    ): ResponseInterface {
+        return $this->getClient()->request(Request::METHOD_GET, self::URI_DAILY, [
+            self::USER_DATA => 'daily',
+            self::BASE_URI => self::HOST_NAME_V_2_5,
+            self::QUERY => [
+                self::PARAM_ID => $id,
+                self::PARAM_COUNT => $count,
+                self::PARAM_UNITS => $units->value,
+            ],
+        ]);
+    }
+
+    private function getRequestForecast(
+        int $id,
+        int $count = self::DEFAULT_COUNT,
+        OpenWeatherUnits $units = OpenWeatherUnits::METRIC
+    ): ResponseInterface {
+        return $this->getClient()->request(Request::METHOD_GET, self::URI_FORECAST, [
+            self::USER_DATA => 'forecast',
+            self::BASE_URI => self::HOST_NAME_V_2_5,
+            self::QUERY => [
+                self::PARAM_ID => $id,
+                self::PARAM_COUNT => $count,
+                self::PARAM_UNITS => $units->value,
+            ],
+        ]);
+    }
+
+    private function getRequestOneCall(
+        float $latitude,
+        float $longitude,
+        OpenWeatherUnits $units = OpenWeatherUnits::METRIC,
+        string ...$exclude
+    ): ResponseInterface {
+        return $this->getClient()->request(Request::METHOD_GET, self::URI_ONECALL, [
+            self::USER_DATA => 'oneCall',
+            self::BASE_URI => self::HOST_NAME_V_3_0,
+            self::QUERY => [
+                self::PARAM_LATITUDE => $latitude,
+                self::PARAM_LONGITUDE => $longitude,
+                self::PARAM_UNITS => $units->value,
+                self::PARAM_EXCLUDE => \implode(',', $exclude),
+            ],
+        ]);
     }
 
     /**
      * Converts the given offset, in seconds, to a time zone.
      */
-    private function offsetToTimZone(int $offset): \DateTimeZone
+    private function offsetToTimeZone(int $offset): \DateTimeZone
     {
         return $this->getCacheValue(
             \sprintf('time_zone_%d', $offset),
-            static function () use ($offset): \DateTimeZone {
-                $hours = \intdiv($offset, 3600);
-                $minutes = \abs(\intdiv($offset, 60) % 60);
-                /** @phpstan-var non-empty-string $timezone */
-                $timezone = \sprintf('%+03d%02d', $hours, $minutes); // @phpstan-ignore varTag.type
-
-                return new \DateTimeZone($timezone);
-            }
+            static fn (): \DateTimeZone => new \DateTimeZone(
+                \sprintf(
+                    '%+03d%02d',
+                    \intdiv($offset, 3600),
+                    \abs(\intdiv($offset, 60) % 60)
+                )
+            )
         );
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     private function parseResponse(ResponseInterface $response, OpenWeatherUnits $units): array|false
     {
         $result = $response->toArray(false);
@@ -459,8 +526,8 @@ class OpenWeatherService extends AbstractHttpClientService
             return false;
         }
 
-        $offset = $this->findTimezone($result);
-        $timezone = $this->offsetToTimZone($offset);
+        $offset = $this->findTimezoneOffset($result);
+        $timezone = $this->offsetToTimeZone($offset);
         $this->formatter->update($result, $timezone);
         $result['units'] = $units->attributes();
         $this->sortResults($result);
@@ -475,11 +542,8 @@ class OpenWeatherService extends AbstractHttpClientService
     {
         \uksort($results, static function (string|int $keyA, string|int $keyB) use ($results): int {
             $result = \is_array($results[$keyA]) <=> \is_array($results[$keyB]);
-            if (0 !== $result) {
-                return $result;
-            }
 
-            return $keyA <=> $keyB;
+            return 0 !== $result ? $result : $keyA <=> $keyB;
         });
 
         /** @phpstan-var array<array-key, mixed>|scalar $value */

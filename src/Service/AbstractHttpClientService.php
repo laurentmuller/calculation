@@ -144,9 +144,7 @@ abstract class AbstractHttpClientService
      */
     protected function createClient(): HttpClientInterface
     {
-        $options = $this->getDefaultOptions();
-
-        return HttpClient::create($options);
+        return HttpClient::create($this->getDefaultOptions());
     }
 
     /**

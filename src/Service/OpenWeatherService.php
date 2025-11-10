@@ -292,6 +292,7 @@ class OpenWeatherService extends AbstractHttpClientService
     protected function getDefaultOptions(): array
     {
         return [
+            self::BASE_URI => self::HOST_NAME_V_2_5,
             self::QUERY => [
                 'appid' => $this->key,
                 'lang' => self::getAcceptLanguage(),
@@ -305,11 +306,9 @@ class OpenWeatherService extends AbstractHttpClientService
     private function checkErrorCode(array $result): bool
     {
         $code = (int) ($result['cod'] ?? Response::HTTP_OK);
-        if (Response::HTTP_OK !== $code) {
-            return $this->setLastError($code, (string) $result['message']);
-        }
 
-        return true;
+        // @phpstan-ignore booleanOr.rightAlwaysFalse
+        return Response::HTTP_OK === $code || $this->setLastError($code, (string) $result['message']);
     }
 
     /**
@@ -444,7 +443,6 @@ class OpenWeatherService extends AbstractHttpClientService
     ): ResponseInterface {
         return $this->getClient()->request(Request::METHOD_GET, self::URI_CURRENT, [
             self::USER_DATA => 'current',
-            self::BASE_URI => self::HOST_NAME_V_2_5,
             self::QUERY => [
                 self::PARAM_ID => $id,
                 self::PARAM_UNITS => $units->value,
@@ -459,7 +457,6 @@ class OpenWeatherService extends AbstractHttpClientService
     ): ResponseInterface {
         return $this->getClient()->request(Request::METHOD_GET, self::URI_DAILY, [
             self::USER_DATA => 'daily',
-            self::BASE_URI => self::HOST_NAME_V_2_5,
             self::QUERY => [
                 self::PARAM_ID => $id,
                 self::PARAM_COUNT => $count,
@@ -475,7 +472,6 @@ class OpenWeatherService extends AbstractHttpClientService
     ): ResponseInterface {
         return $this->getClient()->request(Request::METHOD_GET, self::URI_FORECAST, [
             self::USER_DATA => 'forecast',
-            self::BASE_URI => self::HOST_NAME_V_2_5,
             self::QUERY => [
                 self::PARAM_ID => $id,
                 self::PARAM_COUNT => $count,
@@ -546,7 +542,6 @@ class OpenWeatherService extends AbstractHttpClientService
             return 0 !== $result ? $result : $keyA <=> $keyB;
         });
 
-        /** @phpstan-var array<array-key, mixed>|scalar $value */
         foreach ($results as &$value) {
             if (\is_array($value)) {
                 $this->sortResults($value);

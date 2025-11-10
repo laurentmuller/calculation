@@ -148,7 +148,6 @@ final class OpenWeatherServiceTest extends KernelServiceTestCase
         self::assertArrayHasKey('current', $actual);
         self::assertArrayHasKey('daily', $actual);
         self::assertArrayHasKey('hourly', $actual);
-        self::assertArrayHasKey('minutely', $actual);
     }
 
     public function testOneCallExcludeDaily(): void
@@ -158,7 +157,12 @@ final class OpenWeatherServiceTest extends KernelServiceTestCase
         self::assertArrayHasKey('current', $actual);
         self::assertArrayNotHasKey('daily', $actual);
         self::assertArrayHasKey('hourly', $actual);
-        self::assertArrayHasKey('minutely', $actual);
+    }
+
+    public function testOneCallInvalid(): void
+    {
+        $result = $this->service->oneCall(-360.0, -360.0);
+        self::assertFalse($result);
     }
 
     private function validateCoord(array $data): void

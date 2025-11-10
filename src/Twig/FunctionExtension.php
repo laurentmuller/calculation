@@ -13,18 +13,14 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use App\Controller\AbstractController;
 use App\Entity\User;
-use App\Interfaces\EntityInterface;
 use App\Service\NonceService;
-use App\Service\UrlGeneratorService;
 use App\Traits\ImageSizeTrait;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Bridge\Twig\Extension\WebLinkExtension;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\HttpFoundation\Request;
 use Twig\Attribute\AsTwigFunction;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
@@ -46,7 +42,6 @@ final readonly class FunctionExtension
         private WebLinkExtension $webLinkExtension,
         private NonceService $nonceService,
         private UploaderHelper $uploaderHelper,
-        private UrlGeneratorService $urlGeneratorService,
     ) {
         $this->publicDir = FileUtils::normalize($publicDir);
     }
@@ -154,18 +149,6 @@ final readonly class FunctionExtension
     }
 
     /**
-     * Gets the cancel URL.
-     */
-    #[AsTwigFunction(name: 'cancel_url')]
-    public function cancelUrl(
-        Request $request,
-        EntityInterface|int|null $id = 0,
-        string $defaultRoute = AbstractController::HOME_PAGE
-    ): string {
-        return $this->urlGeneratorService->cancelUrl($request, $id, $defaultRoute);
-    }
-
-    /**
      * Output a preload style sheet tag within a nonce token.
      *
      * @param array<string, string|int> $parameters
@@ -182,15 +165,6 @@ final readonly class FunctionExtension
         ], $parameters);
 
         return $this->assetCss($path, $parameters);
-    }
-
-    /**
-     * Gets the route parameters.
-     */
-    #[AsTwigFunction(name: 'route_params')]
-    public function routeParams(Request $request, EntityInterface|int|null $id = 0): array
-    {
-        return $this->urlGeneratorService->routeParams($request, $id);
     }
 
     /**
@@ -216,11 +190,8 @@ final readonly class FunctionExtension
         }
         $path = FileUtils::buildPath($this->publicDir, $path);
         $file = \realpath($path);
-        if (false === $file) {
-            return null;
-        }
 
-        return FileUtils::normalize($file);
+        return false === $file ? null : FileUtils::normalize($file);
     }
 
     /**

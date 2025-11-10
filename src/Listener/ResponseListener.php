@@ -16,6 +16,7 @@ namespace App\Listener;
 use App\Controller\CspReportController;
 use App\Security\SecurityAttributes;
 use App\Service\NonceService;
+use App\Traits\ArrayTrait;
 use App\Utils\FileUtils;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -39,6 +40,8 @@ use Symfony\Contracts\Cache\ItemInterface;
  */
 class ResponseListener
 {
+    use ArrayTrait;
+
     // the CSP header key
     private const CSP_HEADER = 'Content-Security-Policy';
 
@@ -151,10 +154,9 @@ class ResponseListener
      */
     private function reduceValues(array $array): array
     {
-        return \array_map(
-            static fn (string $key, array $values): string => \sprintf('%s %s;', $key, \implode(' ', $values)),
-            \array_keys($array),
-            \array_values($array)
+        return $this->mapKeyAndValue(
+            $array,
+            static fn (string $key, array $values): string => \sprintf('%s %s;', $key, \implode(' ', $values))
         );
     }
 

@@ -99,10 +99,7 @@ trait RequestTrait
         if ($request->request->has($key)) {
             return $request->request;
         }
-        if ($request->attributes->has($key)) {
-            return $request->attributes;
-        }
 
-        return new ParameterBag();
+        return $request->attributes->has($key) ? $request->attributes : new ParameterBag();
     }
 }

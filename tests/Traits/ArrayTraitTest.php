@@ -256,6 +256,20 @@ final class ArrayTraitTest extends TestCase
         self::assertNull($actual);
     }
 
+    public function testMapKeyAndValue(): void
+    {
+        $actual = $this->mapKeyAndValue(
+            $this->createArray(),
+            static fn (int $key, string $value): string => \sprintf('%02d: %s', $key, $value)
+        );
+        $expected = [
+            '00: A',
+            '10: B',
+            '20: C',
+        ];
+        self::assertSame($expected, $actual);
+    }
+
     public function testMapToKeyValue(): void
     {
         $values = [

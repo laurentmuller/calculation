@@ -35,6 +35,7 @@ use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\CategoriesDocument;
 use App\Table\CategoryTable;
 use App\Table\DataQuery;
+use App\Traits\ArrayTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,6 +53,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CategoryController extends AbstractEntityController
 {
+    use ArrayTrait;
+
     public function __construct(CategoryRepository $repository)
     {
         parent::__construct($repository);
@@ -182,10 +185,9 @@ class CategoryController extends AbstractEntityController
     private function showDeleteWarning(Category $item, array $references): Response
     {
         $message = $this->trans('category.delete.failure', ['%name%' => $item]);
-        $items = \array_map(
-            fn (string $id, int $count): string => $this->trans($id, ['count' => $count]),
-            \array_keys($references),
-            \array_values($references)
+        $items = $this->mapKeyAndValue(
+            $references,
+            fn (string $id, int $count): string => $this->trans($id, ['count' => $count])
         );
         $parameters = [
             'title' => 'category.delete.title',

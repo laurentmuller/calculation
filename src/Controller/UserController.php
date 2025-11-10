@@ -206,14 +206,16 @@ class UserController extends AbstractEntityController
     {
         $repository = $this->getRepository();
         $users = $repository->getResettableUsers();
-        $generator = $this->getUrlGenerator();
-        if ([] === $users) {
+        $count = \count($users);
+        if (0 === $count) {
             $this->warningTrans('user.reset_all.empty');
 
             return $this->redirectToDefaultRoute($request);
         }
-        if (1 === \count($users)) {
-            $params = $generator->routeParams($request, \reset($users));
+
+        if (1 === $count) {
+            $params = $this->getUrlGenerator()
+                ->routeParams($request, \reset($users));
 
             return $this->redirectToRoute('user_reset', $params);
         }

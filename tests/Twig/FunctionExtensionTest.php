@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Twig;
 
 use App\Service\NonceService;
-use App\Service\UrlGeneratorService;
 use App\Twig\FunctionExtension;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Bridge\Twig\Extension\WebLinkExtension;
@@ -37,7 +36,6 @@ final class FunctionExtensionTest extends RuntimeTestCase
             $this->createWebLinkExtension(),
             $this->createNonceService(),
             $this->createUploaderHelper(),
-            $this->createUrlGeneratorService()
         );
     }
 
@@ -75,17 +73,6 @@ final class FunctionExtensionTest extends RuntimeTestCase
             ->willReturnCallback($callback);
 
         return new UploaderHelper($storage);
-    }
-
-    private function createUrlGeneratorService(): UrlGeneratorService
-    {
-        $generator = $this->createMock(UrlGeneratorService::class);
-        $generator->method('routeParams')
-            ->willReturn([]);
-        $generator->method('cancelUrl')
-            ->willReturn('cancelUrl');
-
-        return $generator;
     }
 
     private function createWebLinkExtension(): WebLinkExtension

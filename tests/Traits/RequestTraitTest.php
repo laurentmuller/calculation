@@ -159,8 +159,17 @@ final class RequestTraitTest extends TestCase
         $query = $this->mapValues($query);
         $request = $this->mapValues($request);
         $attributes = $this->mapValues($attributes);
+        $method = Request::METHOD_HEAD;
+        if ([] !== $query) {
+            $method = Request::METHOD_GET;
+        }
+        if ([] !== $request) {
+            $method = Request::METHOD_POST;
+        }
+        $request = new Request(query: $query, request: $request, attributes: $attributes);
+        $request->setMethod($method);
 
-        return new Request(query: $query, request: $request, attributes: $attributes);
+        return $request;
     }
 
     /**

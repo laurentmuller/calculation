@@ -22,18 +22,21 @@ use App\Table\CalculationTable;
 use App\Table\CategoryTable;
 use App\Table\LogTable;
 use App\Table\SearchTable;
+use App\Traits\ArrayTrait;
 use App\Traits\RequestTrait;
 use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Attribute\AsTwigFunction;
 
 /**
  * Service to generate URL and parameters.
  */
 class UrlGeneratorService
 {
+    use ArrayTrait;
     use RequestTrait;
 
     /**
@@ -47,11 +50,9 @@ class UrlGeneratorService
     private const PARAMETER_NAMES = [
         // global
         self::PARAM_CALLER,
-
         // index page
         IndexController::PARAM_CUSTOM,
         IndexController::PARAM_RESTRICT,
-
         // bootstrap-table
         TableInterface::PARAM_ID,
         TableInterface::PARAM_SEARCH,
@@ -60,16 +61,15 @@ class UrlGeneratorService
         TableInterface::PARAM_OFFSET,
         TableInterface::PARAM_VIEW,
         TableInterface::PARAM_LIMIT,
-
-        // tables
+        // log table
         LogTable::PARAM_LEVEL,
         LogTable::PARAM_CHANNEL,
-
+        // entity tables
         CategoryTable::PARAM_GROUP,
         CalculationTable::PARAM_STATE,
         CalculationTable::PARAM_EDITABLE,
         AbstractCategoryItemTable::PARAM_CATEGORY,
-
+        // search table
         SearchTable::PARAM_ENTITY,
     ];
 
@@ -79,54 +79,64 @@ class UrlGeneratorService
 
     /**
      * Generate the cancel URL.
+     *
+     * @param Request                  $request       the request to get parameters
+     * @param EntityInterface|int|null $id            the entity identifier
+     * @param string                   $routeName     the default route name
+     * @param int                      $referenceType the reference type (absolute or relative)
      */
+    #[AsTwigFunction(name: 'cancel_url')]
     public function cancelUrl(
         Request $request,
         EntityInterface|int|null $id = 0,
-        string $defaultRoute = AbstractController::HOME_PAGE,
+        string $routeName = AbstractController::HOME_PAGE,
         int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH
     ): string {
         $params = $this->routeParams($request, $id);
         $caller = $this->getCaller($params);
-        if (null !== $caller) {
-            unset($params[self::PARAM_CALLER]);
-            if ([] !== $params) {
-                $caller .= \str_contains($caller, '?') ? '&' : '?';
-                $caller .= \http_build_query($params);
-            }
-
+        if (null === $caller) {
+            return $this->generate($routeName, $params, $referenceType);
+        }
+        unset($params[self::PARAM_CALLER]);
+        if ([] === $params) {
             return $caller;
         }
+        $separator = \str_contains($caller, '?') ? '&' : '?';
 
-        return $this->generate($defaultRoute, $params, $referenceType);
+        return $caller . $separator . \http_build_query($params);
     }
 
     /**
      * Generates a URL or path for a specific route based on the given parameters.
      *
-     * @param string $name          the route name
+     * @param string $routeName     the route name
      * @param array  $parameters    the parameters that reference placeholders in the route pattern
-     * @param int    $referenceType the reference type
+     * @param int    $referenceType the reference type (absolute or relative)
      */
     public function generate(
-        string $name,
+        string $routeName,
         array $parameters = [],
         int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH
     ): string {
-        return $this->generator->generate($name, $parameters, $referenceType);
+        return $this->generator->generate($routeName, $parameters, $referenceType);
     }
 
     /**
      * Generate the cancel URL and returns a redirect response.
+     *
+     * @param Request                  $request       the request to get parameters
+     * @param EntityInterface|int|null $id            the entity identifier
+     * @param string                   $routeName     the default route name
+     * @param int                      $referenceType the reference type (absolute or relative)
      */
     public function redirect(
         Request $request,
         EntityInterface|int|null $id = 0,
-        string $defaultRoute = AbstractController::HOME_PAGE,
+        string $routeName = AbstractController::HOME_PAGE,
         int $status = Response::HTTP_FOUND,
         int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH
     ): RedirectResponse {
-        $url = $this->cancelUrl($request, $id, $defaultRoute, $referenceType);
+        $url = $this->cancelUrl($request, $id, $routeName, $referenceType);
 
         return new RedirectResponse($url, $status);
     }
@@ -134,25 +144,24 @@ class UrlGeneratorService
     /**
      * Gets the request parameters.
      *
+     * @param Request                  $request the request to get parameters
+     * @param EntityInterface|int|null $id      the entity identifier
+     *
      * @return array<string, string|int|float|bool>
      */
+    #[AsTwigFunction(name: 'route_params')]
     public function routeParams(Request $request, EntityInterface|int|null $id = 0): array
     {
-        $params = [];
-        foreach (self::PARAMETER_NAMES as $name) {
-            $value = $this->getRequestValue($request, $name);
-            if (null !== $value) {
-                $params[$name] = $value;
-            }
-        }
-        if ($id instanceof EntityInterface) {
-            $id = $id->getId();
-        }
-        if (null !== $id && 0 !== $id) {
-            $params['id'] = $id;
+        $params = $this->mapToKeyValue(
+            self::PARAMETER_NAMES,
+            fn (string $name): array => [$name => $this->getRequestValue($request, $name)]
+        );
+        $entityId = $this->getEntityId($id);
+        if (0 !== $entityId) {
+            $params[TableInterface::PARAM_ID] = $entityId;
         }
 
-        return $params;
+        return \array_filter($params);
     }
 
     /**
@@ -162,12 +171,17 @@ class UrlGeneratorService
      */
     private function getCaller(array $params): ?string
     {
-        /** @var string|null $caller */
+        /** @var ?string $caller */
         $caller = $params[self::PARAM_CALLER] ?? null;
         if (!StringUtils::isString($caller)) {
             return null;
         }
 
         return '/' === $caller ? $caller : \rtrim($caller, '/');
+    }
+
+    private function getEntityId(EntityInterface|int|null $id): int
+    {
+        return (int) ($id instanceof EntityInterface ? $id->getId() : $id);
     }
 }

@@ -27,6 +27,7 @@ use App\Service\PackageInfoService;
 use App\Service\RouteInfoService;
 use App\Service\SymfonyInfoService;
 use App\Spreadsheet\SymfonyDocument;
+use App\Traits\ArrayTrait;
 use App\Utils\FileUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
@@ -43,6 +44,8 @@ use Twig\Extra\Markdown\MarkdownInterface;
 #[Route(path: '/about/symfony', name: 'about_symfony_')]
 class AboutSymfonyController extends AbstractController
 {
+    use ArrayTrait;
+
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[GetRoute(path: '/content', name: 'content')]
     public function content(
@@ -186,10 +189,9 @@ class AboutSymfonyController extends AbstractController
         if ([] === $values) {
             return '';
         }
-        $values = \array_map(
-            static fn (string $key, string $version): string => \sprintf('- %s : `%s`', $key, $version),
-            \array_keys($values),
-            \array_values($values)
+        $values = $this->mapKeyAndValue(
+            $values,
+            static fn (string $key, string $version): string => \sprintf('- %s : `%s`', $key, $version)
         );
         $title = $environment->trans($this->getTranslator());
 

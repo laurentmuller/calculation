@@ -231,7 +231,23 @@ trait ArrayTrait
     }
 
     /**
-     * Maps the given array to keys and values pairs using the given callback.
+     * Maps each keys and values of the given array to a string using the given callback.
+     *
+     * @template TKey of array-key
+     * @template TValue
+     *
+     * @param array<TKey, TValue>            $array    the array to map
+     * @param callable(TKey, TValue): string $callable the callback to get the single value
+     *
+     * @return string[] the mapped array
+     */
+    public function mapKeyAndValue(array $array, callable $callable): array
+    {
+        return \array_map($callable, \array_keys($array), \array_values($array));
+    }
+
+    /**
+     * Maps the given array of each key and value pair to a single value using the given callback.
      *
      * @template TKey of array-key
      * @template TValue

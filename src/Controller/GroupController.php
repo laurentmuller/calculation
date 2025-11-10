@@ -35,6 +35,7 @@ use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\GroupsDocument;
 use App\Table\DataQuery;
 use App\Table\GroupTable;
+use App\Traits\ArrayTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,6 +53,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class GroupController extends AbstractEntityController
 {
+    use ArrayTrait;
+
     public function __construct(GroupRepository $repository)
     {
         parent::__construct($repository);
@@ -174,10 +177,9 @@ class GroupController extends AbstractEntityController
     private function showDeleteWarning(Group $item, array $references): Response
     {
         $message = $this->trans('group.delete.failure', ['%name%' => $item]);
-        $items = \array_map(
-            fn (string $id, int $count): string => $this->trans($id, ['count' => $count]),
-            \array_keys($references),
-            \array_values($references)
+        $items = $this->mapKeyAndValue(
+            $references,
+            fn (string $id, int $count): string => $this->trans($id, ['count' => $count])
         );
         $parameters = [
             'title' => 'group.delete.title',

@@ -17,6 +17,9 @@ use App\Enums\EntityAction;
 use App\Form\FormHelper;
 use App\Form\Parameters\AbstractParameterType;
 
+/**
+ * @extends AbstractParameterType<FixtureParameter>
+ */
 class FixtureParameterType extends AbstractParameterType
 {
     #[\Override]

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Form\Admin;
 
+use App\Entity\GlobalProperty;
 use App\Enums\StrengthLevel;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Form\Category\CategoryListType;
@@ -26,6 +27,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Type for application parameters.
+ *
+ * @extends AbstractParametersType<GlobalProperty>
  */
 class ApplicationParametersType extends AbstractParametersType
 {

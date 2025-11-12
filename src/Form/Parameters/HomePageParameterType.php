@@ -16,6 +16,9 @@ namespace App\Form\Parameters;
 use App\Form\FormHelper;
 use App\Parameter\HomePageParameter;
 
+/**
+ * @extends AbstractParameterType<HomePageParameter>
+ */
 class HomePageParameterType extends AbstractParameterType
 {
     #[\Override]

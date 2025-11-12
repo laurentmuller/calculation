@@ -22,6 +22,9 @@ use App\Form\FormHelper;
 use App\Parameter\DefaultParameter;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * @extends AbstractParameterType<DefaultParameter>
+ */
 class DefaultParameterType extends AbstractParameterType
 {
     public function __construct(private readonly EntityManagerInterface $manager)

@@ -15,9 +15,12 @@ namespace App\Form\GlobalMargin;
 
 use App\Form\AbstractHelperType;
 use App\Form\FormHelper;
+use App\Model\GlobalMargins;
 
 /**
  * Type to edit all global margins.
+ *
+ * @extends AbstractHelperType<GlobalMargins>
  */
 class GlobalMarginsType extends AbstractHelperType
 {

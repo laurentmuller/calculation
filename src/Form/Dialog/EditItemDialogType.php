@@ -19,6 +19,8 @@ use App\Form\FormHelper;
 
 /**
  * Type to edit a calculation item in a dialog.
+ *
+ * @extends AbstractHelperType<mixed>
  */
 class EditItemDialogType extends AbstractHelperType
 {

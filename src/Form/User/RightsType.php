@@ -46,7 +46,7 @@ class RightsType extends AbstractType
     }
 
     /**
-     * @phpstan-param FormBuilderInterface<mixed> $builder
+     * @phpstan-param FormBuilderInterface<EntityPermission[]|null> $builder
      */
     private function addEntityPermissionType(FormBuilderInterface $builder, EntityName $entity): void
     {

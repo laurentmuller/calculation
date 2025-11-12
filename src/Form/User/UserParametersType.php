@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Form\User;
 
+use App\Entity\UserProperty;
 use App\Form\FormHelper;
 use App\Form\Parameters\AbstractParametersType;
 use App\Service\ApplicationService;
@@ -21,6 +22,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Type for user parameters.
+ *
+ * @extends AbstractParametersType<UserProperty>
  */
 class UserParametersType extends AbstractParametersType
 {

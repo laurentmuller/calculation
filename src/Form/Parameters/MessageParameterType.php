@@ -18,6 +18,9 @@ use App\Form\FormHelper;
 use App\Parameter\MessageParameter;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @extends AbstractParameterType<MessageParameter>
+ */
 class MessageParameterType extends AbstractParameterType
 {
     public function __construct(private readonly TranslatorInterface $translator)

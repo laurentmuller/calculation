@@ -19,7 +19,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 /**
  * Abstract type to use within the <code>FormHelper</code>.
  *
- * @extends AbstractType<mixed>
+ * @template TData
+ *
+ * @extends AbstractType<TData>
  */
 abstract class AbstractHelperType extends AbstractType
 {
@@ -38,7 +40,7 @@ abstract class AbstractHelperType extends AbstractType
     /**
      * Creates the form helper.
      *
-     * @phpstan-param FormBuilderInterface<mixed> $builder
+     * @phpstan-param FormBuilderInterface<TData|null> $builder
      */
     protected function createFormHelper(FormBuilderInterface $builder): FormHelper
     {

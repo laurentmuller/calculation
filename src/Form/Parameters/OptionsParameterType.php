@@ -16,6 +16,9 @@ namespace App\Form\Parameters;
 use App\Form\FormHelper;
 use App\Parameter\OptionsParameter;
 
+/**
+ * @extends AbstractParameterType<OptionsParameter>
+ */
 class OptionsParameterType extends AbstractParameterType
 {
     #[\Override]

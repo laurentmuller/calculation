@@ -22,6 +22,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Abstract type for a parameter.
+ *
+ * @template TParameter of ParameterInterface
+ *
+ * @extends AbstractHelperType<TParameter>
  */
 abstract class AbstractParameterType extends AbstractHelperType
 {
@@ -92,9 +96,9 @@ abstract class AbstractParameterType extends AbstractHelperType
     }
 
     /**
-     * @phpstan-param FormInterface<array> $form
+     * @param FormInterface<TParameter> $form
      *
-     * @phpstan-return array<string, mixed>
+     * @return array<string, mixed>
      */
     private function getDefaultValues(FormInterface $form): array
     {

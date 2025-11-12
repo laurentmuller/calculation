@@ -19,6 +19,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * User rights type.
+ *
+ * @extends AbstractRightsType<User>
  */
 class UserRightsType extends AbstractRightsType
 {

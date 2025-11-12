@@ -14,9 +14,12 @@ declare(strict_types=1);
 namespace App\Form\User;
 
 use App\Form\FormHelper;
+use App\Model\Role;
 
 /**
  * Role rights type.
+ *
+ * @extends AbstractRightsType<Role>
  */
 class RoleRightsType extends AbstractRightsType
 {

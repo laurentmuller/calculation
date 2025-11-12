@@ -582,6 +582,16 @@ final class FormHelperTest extends TypeTestCase
         $this->assertSameType($actual, VichImageType::class);
     }
 
+    public function testWidgetClassDuplicate(): void
+    {
+        $helper = $this->getFormHelper();
+        $actual = $helper->field(self::FIELD)
+            ->widgetClass('form-check form-check')
+            ->addTextType()
+            ->createForm();
+        $this->assertSameAttribute($actual, 'class', 'form-check');
+    }
+
     public function testWidgetClassEmpty(): void
     {
         $helper = $this->getFormHelper();

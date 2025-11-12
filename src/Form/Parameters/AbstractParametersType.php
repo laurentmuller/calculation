@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Form\Parameters;
 
+use App\Entity\AbstractProperty;
 use App\Enums\EntityAction;
 use App\Enums\MessagePosition;
 use App\Enums\TableView;
@@ -23,13 +24,14 @@ use App\Traits\TranslatorTrait;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Abstract parameters type.
  *
- * @extends AbstractType<FormTypeInterface>
+ * @template TProperty of AbstractProperty
+ *
+ * @extends AbstractType<TProperty[]>
  */
 abstract class AbstractParametersType extends AbstractType
 {
@@ -53,7 +55,7 @@ abstract class AbstractParametersType extends AbstractType
     }
 
     /**
-     * @phpstan-param FormBuilderInterface<mixed> $builder
+     * @phpstan-param FormBuilderInterface<TProperty[]|null> $builder
      */
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void

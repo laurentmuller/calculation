@@ -20,6 +20,9 @@ use App\Form\Product\ProductListType;
 use App\Parameter\ProductParameter;
 use App\Repository\ProductRepository;
 
+/**
+ * @extends AbstractParameterType<ProductParameter>
+ */
 class ProductParameterType extends AbstractParameterType
 {
     public function __construct(private readonly ProductRepository $repository)

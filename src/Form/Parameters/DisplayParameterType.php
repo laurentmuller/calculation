@@ -18,6 +18,9 @@ use App\Enums\TableView;
 use App\Form\FormHelper;
 use App\Parameter\DisplayParameter;
 
+/**
+ * @extends AbstractParameterType<DisplayParameter>
+ */
 class DisplayParameterType extends AbstractParameterType
 {
     #[\Override]

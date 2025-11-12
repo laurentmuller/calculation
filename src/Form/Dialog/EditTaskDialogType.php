@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Form\Dialog;
 
+use App\Entity\Task;
 use App\Form\AbstractHelperType;
 use App\Form\Category\CategoryListType;
 use App\Form\FormHelper;
@@ -20,6 +21,8 @@ use App\Form\Task\TaskListType;
 
 /**
  * Type to edit a calculation task in a dialog.
+ *
+ * @extends AbstractHelperType<mixed>
  */
 class EditTaskDialogType extends AbstractHelperType
 {

@@ -16,6 +16,9 @@ namespace App\Form\Parameters;
 use App\Form\FormHelper;
 use App\Parameter\CustomerParameter;
 
+/**
+ * @extends AbstractParameterType<CustomerParameter>
+ */
 class CustomerParameterType extends AbstractParameterType
 {
     #[\Override]

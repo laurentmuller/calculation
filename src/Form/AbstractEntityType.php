@@ -22,6 +22,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Type to edit a <code>EntityInterface</code> class.
  *
  * @template TEntity of EntityInterface
+ *
+ * @extends AbstractHelperType<TEntity>
  */
 abstract class AbstractEntityType extends AbstractHelperType
 {
@@ -57,8 +59,6 @@ abstract class AbstractEntityType extends AbstractHelperType
     #[\Override]
     protected function getLabelPrefix(): ?string
     {
-        $name = \strtolower(StringUtils::getShortName($this->className));
-
-        return "$name.fields.";
+        return \strtolower(StringUtils::getShortName($this->className)) . '.fields.';
     }
 }

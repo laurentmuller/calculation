@@ -17,12 +17,15 @@ use App\Entity\Task;
 use App\Form\AbstractHelperType;
 use App\Form\FormHelper;
 use App\Form\Type\PlainType;
+use App\Model\TaskComputeQuery;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Type to compute a task.
+ *
+ * @extends AbstractHelperType<TaskComputeQuery>
  */
 class TaskServiceType extends AbstractHelperType
 {

@@ -33,7 +33,7 @@ class UserCommentType extends AbstractType
     }
 
     /**
-     * @phpstan-param FormBuilderInterface<mixed> $builder
+     * @phpstan-param FormBuilderInterface<Comment|null> $builder
      */
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void

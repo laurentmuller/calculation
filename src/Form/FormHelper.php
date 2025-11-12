@@ -138,10 +138,9 @@ class FormHelper
      */
     public function add(string $type): self
     {
-        $field = $this->field;
-        $this->builder->add($field, $type, $this->getOptions());
+        $this->builder->add($this->field, $type, $this->getOptions());
         if ($this->modelTransformer instanceof DataTransformerInterface) {
-            $this->builder->get($field)->addModelTransformer($this->modelTransformer);
+            $this->builder->get($this->field)->addModelTransformer($this->modelTransformer);
         }
 
         return $this->reset();
@@ -952,10 +951,7 @@ class FormHelper
             'help_attr' => $this->helpAttributes,
             'label_attr' => $this->labelAttributes,
         ]);
-        foreach ($attributes as $name => $value) {
-            $this->options[$name] = $value;
-        }
 
-        return $this->options;
+        return \array_merge($this->options, $attributes);
     }
 }

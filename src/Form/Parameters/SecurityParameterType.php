@@ -17,6 +17,9 @@ use App\Enums\StrengthLevel;
 use App\Form\FormHelper;
 use App\Parameter\SecurityParameter;
 
+/**
+ * @extends AbstractParameterType<SecurityParameter>
+ */
 class SecurityParameterType extends AbstractParameterType
 {
     #[\Override]

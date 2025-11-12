@@ -19,6 +19,10 @@ use App\Service\RoleService;
 
 /**
  * Abstract class to edit permissions rights.
+ *
+ * @template TModel
+ *
+ * @extends AbstractHelperType<TModel>
  */
 abstract class AbstractRightsType extends AbstractHelperType
 {

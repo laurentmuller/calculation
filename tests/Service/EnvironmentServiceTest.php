@@ -20,9 +20,6 @@ use PHPUnit\Framework\TestCase;
 
 final class EnvironmentServiceTest extends TestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{string, Environment}>
-     */
     public static function getEnvironment(): \Generator
     {
         yield ['dev', Environment::DEVELOPMENT];
@@ -30,9 +27,6 @@ final class EnvironmentServiceTest extends TestCase
         yield ['test', Environment::TEST];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, bool}>
-     */
     public static function getIsDevelopment(): \Generator
     {
         yield ['dev', true];
@@ -40,9 +34,6 @@ final class EnvironmentServiceTest extends TestCase
         yield ['test', false];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, bool}>
-     */
     public static function getIsProduction(): \Generator
     {
         yield ['dev', false];
@@ -50,9 +41,6 @@ final class EnvironmentServiceTest extends TestCase
         yield ['test', false];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, bool}>
-     */
     public static function getIsTest(): \Generator
     {
         yield ['dev', false];

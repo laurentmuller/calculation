@@ -25,9 +25,6 @@ final class ColumnFormatTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{string, ColumnFormat}>
-     */
     public static function getAlignments(): \Generator
     {
         yield [Alignment::HORIZONTAL_RIGHT, ColumnFormat::AMOUNT];

@@ -25,9 +25,6 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
  */
 final class PasswordValidatorTest extends ConstraintValidatorTestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{string, array<string, bool>, string, string}>
-     */
     public static function getInvalidValues(): \Generator
     {
         yield ['abc', ['case_diff' => true], 'password.case_diff', Password::CASE_DIFF_ERROR];
@@ -38,9 +35,6 @@ final class PasswordValidatorTest extends ConstraintValidatorTestCase
         yield ['123', ['special_char' => true], 'password.special_char', Password::SPECIAL_CHAR_ERROR];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string}>
-     */
     public static function getOptions(): \Generator
     {
         foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $option) {
@@ -49,9 +43,6 @@ final class PasswordValidatorTest extends ConstraintValidatorTestCase
         yield ['all'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, string}>
-     */
     public static function getValidValues(): \Generator
     {
         yield ['ABC abc', 'case_diff'];

@@ -20,9 +20,6 @@ use PHPUnit\Framework\TestCase;
 
 final class PdfChartColorsTest extends TestCase
 {
-    /**
-     * @return \Generator<int, array{PdfChartColors, int, int, int}>
-     */
     public static function getColors(): \Generator
     {
         $colors = new PdfChartColors();

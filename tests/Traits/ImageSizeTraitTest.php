@@ -21,9 +21,6 @@ final class ImageSizeTraitTest extends TestCase
 {
     use ImageSizeTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{string, array}>
-     */
     public static function getSizes(): \Generator
     {
         yield ['', [0, 0]];

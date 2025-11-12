@@ -19,9 +19,6 @@ use PHPUnit\Framework\TestCase;
 
 final class HtmlListTypeTest extends TestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{0: positive-int, 1: string, 2?: string}>
-     */
     public static function getLetterLower(): \Generator
     {
         yield [1, 'a'];
@@ -34,9 +31,6 @@ final class HtmlListTypeTest extends TestCase
         yield [1, 'a.UPPER', '.UPPER'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: positive-int, 1: string, 2?: string}>
-     */
     public static function getLetterUpper(): \Generator
     {
         yield [1, 'A'];
@@ -49,9 +43,6 @@ final class HtmlListTypeTest extends TestCase
         yield [1, 'A.UPPER', '.UPPER'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: positive-int, 1: string, 2?: string}>
-     */
     public static function getNumberValues(): \Generator
     {
         yield [1, '1'];
@@ -64,9 +55,6 @@ final class HtmlListTypeTest extends TestCase
         yield [1000, '1000.UPPER', '.UPPER'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: positive-int, 1: string, 2?: string}>
-     */
     public static function getRomanLower(): \Generator
     {
         yield [4000, ''];
@@ -97,9 +85,6 @@ final class HtmlListTypeTest extends TestCase
         yield [1, 'i.UPPER', '.UPPER'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: positive-int, 1: string, 2?: string}>
-     */
     public static function getRomanUpper(): \Generator
     {
         yield [4000, ''];

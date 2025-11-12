@@ -1,5 +1,6 @@
 parameters:
     level: 8
+    phpVersion: 80300 # to check check missing override method attribute
     tmpDir: var/cache/phpstan
     paths:
         - src
@@ -39,6 +40,8 @@ parameters:
             message: '#Call to static method .* will always evaluate to true.#'
             path: tests/*
         -
-            message: '#@extends contains generic type#'
-            identifier: generics.notGeneric
-            path: src/Form/Extension/*
+            message: '#Call to static method PHPUnit\\Framework\\Assert::assertCount#'
+            identifier: staticMethod.impossibleType
+            paths:
+                - tests/Entity/CalculationTest.php
+                - tests/Mime/NotificationEmailTest.php

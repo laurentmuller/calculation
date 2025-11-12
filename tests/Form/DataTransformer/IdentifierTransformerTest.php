@@ -24,9 +24,6 @@ use Symfony\Component\Form\Exception\InvalidArgumentException;
  */
 final class IdentifierTransformerTest extends EntityTransformerTestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array<string|bool>>
-     */
     public static function getReverseInvalid(): \Generator
     {
         yield [''];
@@ -34,9 +31,6 @@ final class IdentifierTransformerTest extends EntityTransformerTestCase
         yield ['fake'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{?Group, ?int}>
-     */
     public static function getReverseValid(): \Generator
     {
         yield [null, null];
@@ -45,9 +39,6 @@ final class IdentifierTransformerTest extends EntityTransformerTestCase
         yield [$group, $group->getId()];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array<bool|int|string>>
-     */
     public static function getTransformInvalid(): \Generator
     {
         yield [true];
@@ -55,9 +46,6 @@ final class IdentifierTransformerTest extends EntityTransformerTestCase
         yield ['fake'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{int|string|null, mixed}>
-     */
     public static function getTransformValid(): \Generator
     {
         yield [null, null];

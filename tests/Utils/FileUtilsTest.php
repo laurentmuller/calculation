@@ -23,9 +23,6 @@ final class FileUtilsTest extends TestCase
 {
     use PrivateInstanceTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{0: string, 1: string, 2?: string, 3?: string}>
-     */
     public static function getBuildPaths(): \Generator
     {
         yield ['', ''];
@@ -39,9 +36,6 @@ final class FileUtilsTest extends TestCase
         yield ['home/test/value', 'home', 'test', 'value/'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: string, 1: string, 2?: true}>
-     */
     public static function getExtension(): \Generator
     {
         yield ['', ''];
@@ -52,9 +46,6 @@ final class FileUtilsTest extends TestCase
         yield ['file.TXT', 'txt', true];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string|\SplFileInfo|non-negative-int, string}>
-     */
     public static function getFormatSize(): \Generator
     {
         $kb = 1024;
@@ -100,9 +91,6 @@ final class FileUtilsTest extends TestCase
         yield [__FILE__, $thisText];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string|\SplFileInfo, string}>
-     */
     public static function getRealPath(): \Generator
     {
         yield [__DIR__, __DIR__];

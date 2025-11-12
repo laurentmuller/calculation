@@ -23,18 +23,12 @@ final class EntityActionTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{EntityAction, EntityAction}>
-     */
     public static function getDefault(): \Generator
     {
         yield [EntityAction::getDefault(), EntityAction::EDIT];
         yield [PropertyServiceInterface::DEFAULT_ACTION, EntityAction::EDIT];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, EntityAction}>
-     */
     public static function getLabel(): \Generator
     {
         yield ['entity_action.edit', EntityAction::EDIT];
@@ -42,9 +36,6 @@ final class EntityActionTest extends TestCase
         yield ['entity_action.none', EntityAction::NONE];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{EntityAction, string}>
-     */
     public static function getValues(): \Generator
     {
         yield [EntityAction::NONE, 'none'];

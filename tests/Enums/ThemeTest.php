@@ -22,9 +22,6 @@ final class ThemeTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{Theme, string}>
-     */
     public static function getHelps(): \Generator
     {
         yield [Theme::AUTO, 'theme.auto.help'];
@@ -32,9 +29,6 @@ final class ThemeTest extends TestCase
         yield [Theme::LIGHT, 'theme.light.help'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{Theme, string}>
-     */
     public static function getIcons(): \Generator
     {
         yield [Theme::AUTO, 'fa-solid fa-circle-half-stroke'];
@@ -42,9 +36,6 @@ final class ThemeTest extends TestCase
         yield [Theme::LIGHT, 'fa-regular fa-sun'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{Theme, string}>
-     */
     public static function getLabels(): \Generator
     {
         yield [Theme::AUTO, 'theme.auto.name'];
@@ -52,9 +43,6 @@ final class ThemeTest extends TestCase
         yield [Theme::LIGHT, 'theme.light.name'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{Theme, string}>
-     */
     public static function getSuccess(): \Generator
     {
         yield [Theme::AUTO, 'theme.auto.success'];
@@ -62,9 +50,6 @@ final class ThemeTest extends TestCase
         yield [Theme::LIGHT, 'theme.light.success'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{Theme, string}>
-     */
     public static function getThumbnails(): \Generator
     {
         yield [Theme::AUTO, 'images/themes/theme_auto.png'];
@@ -72,9 +57,6 @@ final class ThemeTest extends TestCase
         yield [Theme::LIGHT, 'images/themes/theme_light.png'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{Theme, string}>
-     */
     public static function getTranslates(): \Generator
     {
         yield [Theme::AUTO, 'theme.auto.name'];
@@ -82,9 +64,6 @@ final class ThemeTest extends TestCase
         yield [Theme::LIGHT, 'theme.light.name'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{Theme, string}>
-     */
     public static function getValues(): \Generator
     {
         yield [Theme::AUTO, 'auto'];

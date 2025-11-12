@@ -71,9 +71,6 @@ final class ProductUpdateServiceTest extends TestCase
         $this->session->set('product.update.category', 1);
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{float, float}>
-     */
     public static function getFixedRounded(): \Generator
     {
         yield [1.00, 2.00];
@@ -86,9 +83,6 @@ final class ProductUpdateServiceTest extends TestCase
         yield [1.05, 2.05];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{float, float, float}>
-     */
     public static function getPercentRounded(): \Generator
     {
         $price = 18.8;

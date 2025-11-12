@@ -21,8 +21,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Extends the text type by allowing to add input groups (prepend and/or append).
- *
- * @extends AbstractTypeExtension<TextType>
  */
 class TextTypeExtension extends AbstractTypeExtension
 {

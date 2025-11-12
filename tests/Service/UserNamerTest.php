@@ -23,9 +23,6 @@ use Vich\UploaderBundle\Mapping\PropertyMapping;
 
 final class UserNamerTest extends TestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{0: string, 1: int, 2: ImageSize, 3?: string|ImageExtension}>
-     */
     public static function getBaseNames(): \Generator
     {
         yield ['USER_000001_192', 1, ImageSize::DEFAULT];

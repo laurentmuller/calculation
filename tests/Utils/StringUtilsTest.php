@@ -24,9 +24,6 @@ final class StringUtilsTest extends TestCase
 {
     use PrivateInstanceTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{string, string}>
-     */
     public static function getAscii(): \Generator
     {
         yield ['home', 'home'];
@@ -35,9 +32,6 @@ final class StringUtilsTest extends TestCase
         yield ['спасибо', 'spasibo'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, string}>
-     */
     public static function getCapitalize(): \Generator
     {
         yield ['home', 'Home'];
@@ -47,9 +41,6 @@ final class StringUtilsTest extends TestCase
         yield ['my HOME', 'My home'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{mixed, string}>
-     */
     public static function getDebugType(): \Generator
     {
         yield [null, 'null'];
@@ -67,9 +58,6 @@ final class StringUtilsTest extends TestCase
         yield [new class {}, 'class@anonymous'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: string, 1: string, 2?: false}>
-     */
     public static function getEqualIgnoreCase(): \Generator
     {
         yield ['home', 'Home'];
@@ -77,9 +65,6 @@ final class StringUtilsTest extends TestCase
         yield ['a', 'b', false];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{mixed, mixed}>
-     */
     public static function getExportVar(): \Generator
     {
         yield [null, 'NULL'];
@@ -93,9 +78,6 @@ final class StringUtilsTest extends TestCase
         yield [['key' => 'value'], self::getVarArray()];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{?string, bool}>
-     */
     public static function getIsString(): \Generator
     {
         yield [null, false];
@@ -103,9 +85,6 @@ final class StringUtilsTest extends TestCase
         yield ['my home', true];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{non-empty-string, string, bool}>
-     */
     public static function getPregMatch(): \Generator
     {
         yield ['/\d+/', '1234', true];
@@ -115,9 +94,6 @@ final class StringUtilsTest extends TestCase
         yield ['/(foo)(bar)(baz)/', 'foobaz', false];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{non-empty-string, string, bool}>
-     */
     public static function getPregMatchAll(): \Generator
     {
         yield ['/\d+/', '1234', true];
@@ -128,27 +104,18 @@ final class StringUtilsTest extends TestCase
         yield ['/(foo)(bar)(baz)/', 'foobaz', false];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{non-empty-string, string, string, string}>
-     */
     public static function getPregReplace(): \Generator
     {
         yield ['/\d+/', '', '1234', ''];
         yield ['/\d+/', '', 'FAKE', 'FAKE'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{non-empty-array<non-empty-string, string>, string, string}>
-     */
     public static function getPregReplaceAll(): \Generator
     {
         yield [['/\d+/' => ''], '1234', ''];
         yield [['/\d+/' => ''], 'FAKE', 'FAKE'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{object|class-string, string}>
-     */
     public static function getShortNameValid(): \Generator
     {
         yield [self::class, 'StringUtilsTest'];
@@ -156,9 +123,6 @@ final class StringUtilsTest extends TestCase
         yield [new Calculation(), 'Calculation'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, string, bool, bool}>
-     */
     public static function getStartWith(): \Generator
     {
         yield ['fake', '', false, false];
@@ -167,9 +131,6 @@ final class StringUtilsTest extends TestCase
         yield ['fake', 'FA', true, true];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, ?string}>
-     */
     public static function getTrim(): \Generator
     {
         yield ['', null];

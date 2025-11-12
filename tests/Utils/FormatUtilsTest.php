@@ -34,9 +34,6 @@ final class FormatUtilsTest extends TestCase
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string|int|float|null, string}>
-     */
     public static function getAmounts(): \Generator
     {
         yield [null, '0.00'];
@@ -71,9 +68,6 @@ final class FormatUtilsTest extends TestCase
         yield [0.116, '0.12'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, string}>
-     */
     public static function getDateFormatterPatterns(): \Generator
     {
         yield ['dd/mm/yy', 'dd/mm/yyyy'];
@@ -81,13 +75,6 @@ final class FormatUtilsTest extends TestCase
         yield ['d/m/yy', 'd/m/yyyy'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{
-     *      0: DatePoint|int|null,
-     *      1: string|null,
-     *      2?: int<-1,3>|null,
-     *      3?: string|null}>
-     */
     public static function getDates(): \Generator
     {
         $date = self::createDate();
@@ -103,12 +90,6 @@ final class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @phpstan-return \Generator<int, array{
-     *     0: DatePoint|int|null,
-     *     1: string|null,
-     *     2?: int<-1,3>|null,
-     *     3?: int<-1,3>|null}>
-     *
      * @throws \Exception
      */
     public static function getDateTimes(): \Generator
@@ -152,9 +133,6 @@ final class FormatUtilsTest extends TestCase
         yield [self::TIME_STAMP, '20.02.2022 12:59'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{int|float|string|null, string}>
-     */
     public static function getIds(): \Generator
     {
         yield [null, '000000'];
@@ -181,9 +159,6 @@ final class FormatUtilsTest extends TestCase
         yield [-123456, '-123456'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{\Countable|array|int|float|string|null, string}>
-     */
     public static function getIntegers(): \Generator
     {
         yield [null, '0'];
@@ -212,13 +187,6 @@ final class FormatUtilsTest extends TestCase
         yield [new LogFile(''), '0'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{
-     *     0: int|float|string|null,
-     *     1: string,
-     *     2?: bool,
-     *     3?: \NumberFormatter::ROUND_*}>
-     */
     public static function getPercents(): \Generator
     {
         yield [null, '0%'];
@@ -244,9 +212,6 @@ final class FormatUtilsTest extends TestCase
         yield [0.15, '15%'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{int|float|string|null, string}>
-     */
     public static function getRomans(): \Generator
     {
         yield [null, ''];
@@ -277,12 +242,6 @@ final class FormatUtilsTest extends TestCase
         yield [3999, 'MMMCMXCIX'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{
-     *     0: DatePoint|int|null,
-     *     1: string|null,
-     *     2?: int<0,3>|null}>
-     */
     public static function getTimes(): \Generator
     {
         $date = self::createDate();

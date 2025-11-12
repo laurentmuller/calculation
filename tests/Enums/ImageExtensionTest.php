@@ -24,9 +24,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class ImageExtensionTest extends TestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{ImageExtension, string}>
-     */
     public static function getCreateImages(): \Generator
     {
         /** @phpstan-var non-empty-string $dir */
@@ -41,9 +38,6 @@ final class ImageExtensionTest extends TestCase
         yield [ImageExtension::XPM, $dir . '/example.xpm'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{ImageExtension, string}>
-     */
     public static function getFilters(): \Generator
     {
         yield [ImageExtension::BMP, '*.bmp'];
@@ -57,9 +51,6 @@ final class ImageExtensionTest extends TestCase
         yield [ImageExtension::XPM, '*.xpm'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{ImageExtension, int}>
-     */
     public static function getImageTypes(): \Generator
     {
         yield [ImageExtension::BMP,  \IMAGETYPE_BMP];
@@ -73,9 +64,6 @@ final class ImageExtensionTest extends TestCase
         yield [ImageExtension::XPM,  \IMAGETYPE_UNKNOWN];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{ImageExtension, SaveOptionsType}>
-     */
     public static function getInvalidOptions(): \Generator
     {
         /**
@@ -90,9 +78,6 @@ final class ImageExtensionTest extends TestCase
         }
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: int, 1?: ImageExtension}>
-     */
     public static function getTryFromTypes(): \Generator
     {
         yield [\IMAGETYPE_BMP, ImageExtension::BMP];
@@ -106,9 +91,6 @@ final class ImageExtensionTest extends TestCase
         yield [-1];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{ImageExtension, int}>
-     */
     public static function getTypes(): \Generator
     {
         yield [ImageExtension::BMP, \IMAGETYPE_BMP];
@@ -122,9 +104,6 @@ final class ImageExtensionTest extends TestCase
         yield [ImageExtension::XPM, \IMAGETYPE_UNKNOWN];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: ImageExtension, 1: SaveOptionsType, 2?: false}>
-     */
     public static function getValidOptions(): \Generator
     {
         yield [ImageExtension::BMP, ['compressed' => true]];
@@ -146,9 +125,6 @@ final class ImageExtensionTest extends TestCase
         yield [ImageExtension::XPM, [], false];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{ImageExtension, string}>
-     */
     public static function getValues(): \Generator
     {
         yield [ImageExtension::BMP, 'bmp'];

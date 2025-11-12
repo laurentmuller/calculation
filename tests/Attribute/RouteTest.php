@@ -41,14 +41,6 @@ final class RouteTest extends TestCase
     private const PATH_VALUE = '/edit/{id}';
     private const REQUIREMENTS = ['id' => Requirement::DIGITS];
 
-    /**
-     * @phpstan-return \Generator<int, array{
-     *     0: Route,
-     *     1: string,
-     *     2: string,
-     *     3: Request::METHOD_*[]|Request::METHOD_*,
-     *     4?: array<string, string>}>
-     */
     public static function getRoutes(): \Generator
     {
         $actual = new GetRoute(self::PATH_VALUE, self::NAME_VALUE);

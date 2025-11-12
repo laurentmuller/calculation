@@ -20,9 +20,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 final class ProductTest extends EntityValidatorTestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{float, float}>
-     */
     public static function getPrices(): \Generator
     {
         yield [1.245, 1.24];

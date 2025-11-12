@@ -23,9 +23,6 @@ final class MessagePositionTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{MessagePosition, int}>
-     */
     public static function getAngle(): \Generator
     {
         yield [MessagePosition::TOP_LEFT, 315];
@@ -39,18 +36,12 @@ final class MessagePositionTest extends TestCase
         yield [MessagePosition::BOTTOM_RIGHT, 135];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{MessagePosition, MessagePosition}>
-     */
     public static function getDefault(): \Generator
     {
         yield [MessagePosition::getDefault(), MessagePosition::BOTTOM_RIGHT];
         yield [PropertyServiceInterface::DEFAULT_MESSAGE_POSITION, MessagePosition::BOTTOM_RIGHT];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{MessagePosition, string}>
-     */
     public static function getIcon(): \Generator
     {
         yield [MessagePosition::TOP_LEFT, 'fa-solid fa-arrow-up fa-rotate-by'];
@@ -64,9 +55,6 @@ final class MessagePositionTest extends TestCase
         yield [MessagePosition::BOTTOM_RIGHT, 'fa-solid fa-arrow-up fa-rotate-by'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{MessagePosition, string}>
-     */
     public static function getLabel(): \Generator
     {
         yield [MessagePosition::TOP_LEFT, 'top-left'];
@@ -80,9 +68,6 @@ final class MessagePositionTest extends TestCase
         yield [MessagePosition::BOTTOM_RIGHT, 'bottom-right'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{MessagePosition, string}>
-     */
     public static function getTranslation(): \Generator
     {
         yield [MessagePosition::TOP_LEFT, 'message_position.top-left'];

@@ -24,9 +24,6 @@ final class CheckSubClassTraitTest extends TestCase
 {
     use CheckSubClassTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{0: string|object, 1: class-string, 2?: true}>
-     */
     public static function getSubClass(): \Generator
     {
         yield [Calculation::class, Calculation::class];

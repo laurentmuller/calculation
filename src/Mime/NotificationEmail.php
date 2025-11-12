@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace App\Mime;
 
+use App\Entity\User;
 use App\Enums\Importance;
 use App\Utils\StringUtils;
 use Symfony\Bridge\Twig\Mime\NotificationEmail as BaseNotificationEmail;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Header\HeaderInterface;
 use Symfony\Component\Mime\Header\Headers;
 use Symfony\Component\Translation\TranslatableMessage;
@@ -24,6 +26,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Extends the NotificationEmail class with the translated subject and custom footer.
+ *
+ * Each address parameter can be also a user.
  */
 class NotificationEmail extends BaseNotificationEmail
 {
@@ -32,6 +36,36 @@ class NotificationEmail extends BaseNotificationEmail
     final public function __construct(private readonly TranslatorInterface $translator)
     {
         parent::__construct();
+    }
+
+    #[\Override]
+    public function addBcc(string|Address|User ...$addresses): static
+    {
+        return parent::addBcc(...$this->convertAddresses(...$addresses));
+    }
+
+    #[\Override]
+    public function addCc(string|Address|User ...$addresses): static
+    {
+        return parent::addCc(...$this->convertAddresses(...$addresses));
+    }
+
+    #[\Override]
+    public function addFrom(string|Address|User ...$addresses): static
+    {
+        return parent::addFrom(...$this->convertAddresses(...$addresses));
+    }
+
+    #[\Override]
+    public function addReplyTo(string|Address|User ...$addresses): static
+    {
+        return parent::addReplyTo(...$this->convertAddresses(...$addresses));
+    }
+
+    #[\Override]
+    public function addTo(string|Address|User ...$addresses): static
+    {
+        return parent::addTo(...$this->convertAddresses(...$addresses));
     }
 
     /**
@@ -64,6 +98,24 @@ class NotificationEmail extends BaseNotificationEmail
         }
 
         return $this;
+    }
+
+    #[\Override]
+    public function bcc(string|Address|User ...$addresses): static
+    {
+        return parent::bcc(...$this->convertAddresses(...$addresses));
+    }
+
+    #[\Override]
+    public function cc(string|Address ...$addresses): static
+    {
+        return parent::cc(...$this->convertAddresses(...$addresses));
+    }
+
+    #[\Override]
+    public function from(string|Address|User ...$addresses): static
+    {
+        return parent::from(...$this->convertAddresses(...$addresses));
     }
 
     #[\Override]
@@ -129,6 +181,12 @@ class NotificationEmail extends BaseNotificationEmail
     }
 
     #[\Override]
+    public function replyTo(string|Address|User ...$addresses): static
+    {
+        return parent::replyTo(...$this->convertAddresses(...$addresses));
+    }
+
+    #[\Override]
     public function subject(string|TranslatableMessage $subject): static
     {
         if ($subject instanceof TranslatableMessage) {
@@ -136,5 +194,22 @@ class NotificationEmail extends BaseNotificationEmail
         }
 
         return parent::subject($subject);
+    }
+
+    #[\Override]
+    public function to(string|Address|User ...$addresses): static
+    {
+        return parent::to(...$this->convertAddresses(...$addresses));
+    }
+
+    /**
+     * @return array<string|Address>
+     */
+    private function convertAddresses(string|Address|User ...$addresses): array
+    {
+        return \array_map(
+            static fn (string|Address|User $address): string|Address => $address instanceof User ? $address->getEmailAddress() : $address,
+            $addresses
+        );
     }
 }

@@ -22,9 +22,6 @@ final class FlashTypeTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{FlashType, string}>
-     */
     public static function getColors(): \Generator
     {
         yield [FlashType::DANGER, 'text-danger'];
@@ -33,9 +30,6 @@ final class FlashTypeTest extends TestCase
         yield [FlashType::WARNING, 'text-warning'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{FlashType, string}>
-     */
     public static function getIcons(): \Generator
     {
         yield [FlashType::DANGER, 'fas fa-lg fa-exclamation-triangle'];
@@ -44,9 +38,6 @@ final class FlashTypeTest extends TestCase
         yield [FlashType::WARNING, 'fas fa-lg fa-exclamation-circle'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{FlashType, string}>
-     */
     public static function getLabels(): \Generator
     {
         yield [FlashType::DANGER, 'flash_bag.danger'];
@@ -55,9 +46,6 @@ final class FlashTypeTest extends TestCase
         yield [FlashType::WARNING, 'flash_bag.warning'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{FlashType, string}>
-     */
     public static function getValues(): \Generator
     {
         yield [FlashType::DANGER, 'danger'];

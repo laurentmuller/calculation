@@ -34,9 +34,6 @@ final class EntityNameTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{EntityName, string}>
-     */
     public static function getFormFields(): \Generator
     {
         yield [EntityName::CALCULATION, 'Calculation'];
@@ -51,9 +48,6 @@ final class EntityNameTest extends TestCase
         yield [EntityName::USER, 'User'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, EntityName}>
-     */
     public static function getLabel(): \Generator
     {
         yield ['calculation.name', EntityName::CALCULATION];
@@ -68,9 +62,6 @@ final class EntityNameTest extends TestCase
         yield ['user.name', EntityName::USER];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{EntityName, int}>
-     */
     public static function getOffset(): \Generator
     {
         yield [EntityName::CALCULATION, 0];
@@ -85,9 +76,6 @@ final class EntityNameTest extends TestCase
         yield [EntityName::USER, 9];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{mixed, mixed}>
-     */
     public static function getTryFromMixed(): \Generator
     {
         yield [null, null];
@@ -129,9 +117,6 @@ final class EntityNameTest extends TestCase
         yield [EntityName::CALCULATION, EntityName::CALCULATION];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{EntityName, string}>
-     */
     public static function getValue(): \Generator
     {
         yield [EntityName::CALCULATION, 'EntityCalculation'];

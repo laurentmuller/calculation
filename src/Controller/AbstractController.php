@@ -176,7 +176,7 @@ abstract class AbstractController extends BaseController
             /** @phpstan-var RequestStack */
             return $this->requestStack ??= $this->container->get('request_stack');
         } catch (ContainerExceptionInterface $e) {
-            throw new \LogicException($e->getMessage(), $e->getCode(), $e);
+            throw new \LogicException(\sprintf('Unable to get the "%s" service,', RequestStack::class), $e->getCode(), $e);
         }
     }
 
@@ -196,12 +196,13 @@ abstract class AbstractController extends BaseController
      *
      * @throws \LogicException if the service cannot be found
      */
+    #[\Override]
     public function getTranslator(): TranslatorInterface
     {
         try {
             return $this->translator ??= $this->container->get(TranslatorInterface::class);
         } catch (ContainerExceptionInterface $e) {
-            throw new \LogicException($e->getMessage(), $e->getCode(), $e);
+            throw new \LogicException(\sprintf('Unable to get the "%s" service,', TranslatorInterface::class), $e->getCode(), $e);
         }
     }
 
@@ -215,7 +216,7 @@ abstract class AbstractController extends BaseController
         try {
             return $this->generatorService ??= $this->container->get(UrlGeneratorService::class);
         } catch (ContainerExceptionInterface $e) {
-            throw new \LogicException(\sprintf('Unable to get the "%s" service,', UserService::class), $e->getCode(), $e);
+            throw new \LogicException(\sprintf('Unable to get the "%s" service,', UrlGeneratorService::class), $e->getCode(), $e);
         }
     }
 

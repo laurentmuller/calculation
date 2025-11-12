@@ -34,14 +34,8 @@ abstract class ParameterTestCase extends TestCase
         $this->parameter = $this->createParameter();
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, string}>
-     */
     abstract public static function getParameterNames(): \Generator;
 
-    /**
-     * @phpstan-return \Generator<int, array{string, mixed}>
-     */
     abstract public static function getParameterValues(): \Generator;
 
     /**

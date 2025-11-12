@@ -201,9 +201,6 @@ final class HelpControllerTest extends ControllerTestCase
         return Path::canonicalize($full_path);
     }
 
-    /**
-     * @phpstan-return \Generator<string>
-     */
     private function getImages(): \Generator
     {
         $extension = HelpService::IMAGES_EXT;

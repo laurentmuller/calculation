@@ -28,9 +28,6 @@ final class LogTest extends TestCase
 {
     use DateAssertTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{non-empty-string, string}>
-     */
     public static function getChannelIcons(): \Generator
     {
         yield ['application', 'fa-fw fa-solid fa-laptop-code'];
@@ -44,9 +41,6 @@ final class LogTest extends TestCase
         yield ['deprecation', 'fa-fw fa-solid fa-bug'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{PsrLevel::*, string}>
-     */
     public static function getLevelColors(): \Generator
     {
         yield [PsrLevel::EMERGENCY, 'text-danger'];
@@ -59,9 +53,6 @@ final class LogTest extends TestCase
         yield [PsrLevel::DEBUG, 'text-secondary'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{PsrLevel::*, string}>
-     */
     public static function getLevelIcons(): \Generator
     {
         yield [PsrLevel::EMERGENCY, 'fa-fw fa-solid fa-circle-exclamation'];

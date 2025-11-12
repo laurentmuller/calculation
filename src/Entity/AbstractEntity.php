@@ -38,6 +38,7 @@ abstract class AbstractEntity implements EntityInterface
         $this->id = null;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->getDisplay();

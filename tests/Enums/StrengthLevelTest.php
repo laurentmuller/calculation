@@ -23,18 +23,12 @@ final class StrengthLevelTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{StrengthLevel, StrengthLevel}>
-     */
     public static function getDefault(): \Generator
     {
         yield [StrengthLevel::getDefault(), StrengthLevel::NONE];
         yield [PropertyServiceInterface::DEFAULT_STRENGTH_LEVEL, StrengthLevel::NONE];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, StrengthLevel}>
-     */
     public static function getLabels(): \Generator
     {
         yield ['strength_level.medium', StrengthLevel::MEDIUM];
@@ -45,9 +39,6 @@ final class StrengthLevelTest extends TestCase
         yield ['strength_level.weak', StrengthLevel::WEAK];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{int, StrengthLevel}>
-     */
     public static function getPercents(): \Generator
     {
         yield [0, StrengthLevel::NONE];
@@ -58,9 +49,6 @@ final class StrengthLevelTest extends TestCase
         yield [100, StrengthLevel::VERY_STRONG];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{StrengthLevel, StrengthLevel|int, bool}>
-     */
     public static function getSmallerValues(): \Generator
     {
         yield [StrengthLevel::NONE, StrengthLevel::VERY_WEAK, true];
@@ -73,9 +61,6 @@ final class StrengthLevelTest extends TestCase
         yield [StrengthLevel::VERY_WEAK, -1, false];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{StrengthLevel, int}>
-     */
     public static function getValues(): \Generator
     {
         yield [StrengthLevel::NONE, -1];

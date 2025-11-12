@@ -36,9 +36,6 @@ use Symfony\Component\Security\Http\HttpUtils;
 
 final class LoginFormAuthenticatorTest extends TestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{Request, bool}>
-     */
     public static function getSupports(): \Generator
     {
         $request = self::createRequest(method: Request::METHOD_GET);

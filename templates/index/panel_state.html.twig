@@ -3,25 +3,24 @@
 {% from 'index/_macros.html.twig' import margin as macros_margin, empty_content %}
 {# macros #}
 {% macro cardEntry(state, index_route, parameters, min_margin) -%}
-{% set color = state.color|default %}
+{% set color = state.color|default(false) %}
 {% set code = state.code|default('calculation.fields.total'|trans) %}
-<div class="border index-child m-1{% if color %} text-border state-border-{{ state.id }}{% endif %}">
-    <div class="position-relative body-tooltip p-2">
-        {%- if index_route -%}
-            {%- set list_title = parameters|length ? 'index.panel_state_title'|trans({'%code%': state.code}) : 'index.panel_state_title_all'|trans -%}
-            <a href="{{ path(index_route, parameters) }}" title="{{ list_title }}" class="stretched-link">
-                {{- code -}}
-            </a>
-        {%- else -%}
-            <span>{{ code }}</span>
-        {%- endif -%}
-        <div class="h4 fw-normal my-1">
-            <span title="{{ 'index.panel_title_total'|trans }}">{{- state.total|integer }}</span> {{ macros_margin(state.marginPercent, min_margin) -}}
-        </div>
-        <p class="mb-0" title="{{ 'index.panel_title_count'|trans }}">
-            {{- 'counters.calculations'|trans({count: state.count}) -}}
-        </p>
-    </div>
+<div class="border index-child item-hover p-2 m-1{% if color %} text-border state-border-{{ state.id }}{% endif %}">
+    {%- if index_route -%}
+        {%- set index_title = parameters|length ? 'index.panel_state_title'|trans({'%code%': state.code}) : 'index.panel_state_title_all'|trans -%}
+        <a href="{{ path(index_route, parameters) }}" title="{{ index_title }}">
+            {{- code -}}
+        </a>
+    {%- else -%}
+        <div>{{ code }}</div>
+    {%- endif -%}
+    <h4 class="fw-normal my-1">
+        <span title="{{ 'index.panel_title_total'|trans }}">{{- state.total|integer }}</span>
+        {{ macros_margin(state.marginPercent, min_margin) }}
+    </h4>
+    <p class="mb-0" title="{{ 'index.panel_title_count'|trans }}">
+        {{- 'counters.calculations'|trans({count: state.count}) -}}
+    </p>
 </div>
 {%- endmacro %}
 {# parameters #}
@@ -51,15 +50,15 @@
         </button>
     </div>
     <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}">
-    {% if is_states %}
-        <div class="card-body index-parent g-0 p-1">
-        {% for state in states.items %}
-            {{ _self.cardEntry(state, table_path, {stateId: state.id}, min_margin) }}
-        {% endfor %}
-        {{ _self.cardEntry(states.total, table_path, {}, min_margin) }}
-        </div>
-    {% else %}
-        {{ empty_content() }}
-    {% endif %}
+        {% if is_states %}
+            <div class="card-body index-parent g-0 p-1">
+            {% for state in states.items %}
+                {{ _self.cardEntry(state, table_path, {stateId: state.id}, min_margin) }}
+            {% endfor %}
+            {{ _self.cardEntry(states.total, table_path, {}, min_margin) }}
+            </div>
+        {% else %}
+            {{ empty_content() }}
+        {% endif %}
     </div>
 </div>

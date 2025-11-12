@@ -8,9 +8,9 @@
 {# body #}
 {% block card_body %}
 {% if isMail %}
-    {{ form_row(form.toAddress) }}
+    {{ form_row(form.to) }}
 {% else %}
-    {{ form_row(form.fromAddress) }}
+    {{ form_row(form.from) }}
 {% endif %}
 <div class="row">
     <div class="col-md-8">

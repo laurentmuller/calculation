@@ -22,9 +22,6 @@ final class OpenWeatherUnitsTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{OpenWeatherUnits, array<string, string>}>
-     */
     public static function getAttributes(): \Generator
     {
         yield [
@@ -54,36 +51,24 @@ final class OpenWeatherUnitsTest extends TestCase
         ];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, OpenWeatherUnits}>
-     */
     public static function getDegrees(): \Generator
     {
         yield ['°F', OpenWeatherUnits::IMPERIAL];
         yield ['°C', OpenWeatherUnits::METRIC];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, OpenWeatherUnits}>
-     */
     public static function getLabels(): \Generator
     {
         yield ['openweather.current.imperial.text', OpenWeatherUnits::IMPERIAL];
         yield ['openweather.current.metric.text', OpenWeatherUnits::METRIC];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, OpenWeatherUnits}>
-     */
     public static function getSpeeds(): \Generator
     {
         yield ['mph', OpenWeatherUnits::IMPERIAL];
         yield ['m/s', OpenWeatherUnits::METRIC];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, OpenWeatherUnits}>
-     */
     public static function getValues(): \Generator
     {
         yield ['imperial', OpenWeatherUnits::IMPERIAL];

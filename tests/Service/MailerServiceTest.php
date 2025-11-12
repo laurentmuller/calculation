@@ -35,8 +35,8 @@ final class MailerServiceTest extends TestCase
     public function testSendComment(): void
     {
         $comment = new Comment();
-        $comment->setFromAddress('from@example.com')
-            ->setToAddress('to@example.com')
+        $comment->setFrom('from@example.com')
+            ->setTo('to@example.com')
             ->setSubject('subject')
             ->setMessage('message')
             ->setAttachments([$this->createAttachement()]);

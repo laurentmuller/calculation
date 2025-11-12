@@ -2,24 +2,26 @@
 {% from 'macros/_attributes.html.twig' import attributes %}
 {# macros #}
 {% macro cardEntry(entity, count, index_route, add_route, icon) -%}
-{% set title = entity ~ '.list.title' %}
-{% set counter = 'index.panel_count_' ~ entity %}
-<div class="border index-child m-1">
-    <div class="d-flex p-2">
-        <div class="position-relative w-100">
+{% set entity_text = entity ~ '.list.title' %}
+{% set entity_title = 'index.panel_title_' ~ entity %}
+{% set counter_title = 'index.panel_count_' ~ entity %}
+ {% set add_title = entity ~ '.add.title' %}
+<div class="border index-child item-hover p-2 m-1">
+    <div class="d-flex">
+        <div class="me-auto">
             {%- if index_route -%}
-                {{- link(href: path(index_route), text: title, icon: icon, class: 'stretched-link', title: 'index.panel_title_' ~ entity) -}}
+                {{- link(href: path(index_route), text: entity_text, icon: icon, title: entity_title) -}}
             {%- else -%}
-                <span>{{- title|trans -}}</span>
+                <div>{{ entity|trans }}</div>
             {%- endif -%}
-            <div class="h4 fw-normal my-1">
-                <span title="{{ counter|trans }}">{{- count|integer -}}</span>
-            </div>
         </div>
         {%- if add_route -%}
-            {{- link(href: path(add_route, {caller: path(app.current_route)}), icon: 'pen-to-square fa-fw', title: entity ~ '.add.title') -}}
+            {{- link(href: path(add_route, {caller: path(app.current_route)}), icon: 'pen-to-square fa-fw', title: add_title) -}}
         {%- endif -%}
     </div>
+    <h4 class="fw-normal my-0">
+        <span title="{{ counter_title|trans }}">{{- count|integer -}}</span>
+    </h4>
 </div>
 {%- endmacro %}
 {# parameters #}

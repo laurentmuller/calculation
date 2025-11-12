@@ -20,9 +20,6 @@ use Symfony\Component\Cache\Adapter\NullAdapter;
 
 final class ConstantExtensionTest extends TestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{string, string}>
-     */
     public static function getAuthenticatedVoterConstants(): \Generator
     {
         yield ['IS_AUTHENTICATED_FULLY', 'IS_AUTHENTICATED_FULLY'];
@@ -33,9 +30,6 @@ final class ConstantExtensionTest extends TestCase
         yield ['PUBLIC_ACCESS', 'PUBLIC_ACCESS'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, int}>
-     */
     public static function getCalculationServiceConstants(): \Generator
     {
         yield ['ROW_EMPTY', -1];
@@ -47,9 +41,6 @@ final class ConstantExtensionTest extends TestCase
         yield ['ROW_OVERALL_TOTAL', -7];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, string}>
-     */
     public static function getEntityVoterConstants(): \Generator
     {
         yield ['PERMISSION_ADD', 'ADD'];
@@ -70,9 +61,6 @@ final class ConstantExtensionTest extends TestCase
         yield ['ENTITY_USER', 'EntityUser'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, string}>
-     */
     public static function getRoleConstants(): \Generator
     {
         yield ['ROLE_ADMIN', 'ROLE_ADMIN'];

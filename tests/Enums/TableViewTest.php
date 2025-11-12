@@ -23,18 +23,12 @@ final class TableViewTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{TableView, TableView}>
-     */
     public static function getDefault(): \Generator
     {
         yield [TableView::getDefault(), TableView::TABLE];
         yield [PropertyServiceInterface::DEFAULT_DISPLAY_MODE, TableView::TABLE];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{TableView, string}>
-     */
     public static function getValues(): \Generator
     {
         yield [TableView::TABLE, 'table'];

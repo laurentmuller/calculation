@@ -20,9 +20,6 @@ use Psr\Log\LogLevel as PsrLevel;
 
 final class LogLevelTest extends TestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{PsrLevel::*, string}>
-     */
     public static function getLevelBorders(): \Generator
     {
         yield [PsrLevel::EMERGENCY, 'text-border-danger'];
@@ -35,9 +32,6 @@ final class LogLevelTest extends TestCase
         yield [PsrLevel::DEBUG, 'text-border-secondary'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{PsrLevel::*, string}>
-     */
     public static function getLevelColors(): \Generator
     {
         yield [PsrLevel::EMERGENCY, 'text-danger'];
@@ -50,9 +44,6 @@ final class LogLevelTest extends TestCase
         yield [PsrLevel::DEBUG, 'text-secondary'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{PsrLevel::*, string}>
-     */
     public static function getLevelIcons(): \Generator
     {
         yield [PsrLevel::EMERGENCY, 'fa-fw fa-solid fa-circle-exclamation'];

@@ -30,11 +30,11 @@ final class CommentTest extends TestCase
         self::assertFalse($comment->isMail());
 
         self::assertSame([], $comment->getAttachments());
-        self::assertNull($comment->getFromAddress());
+        self::assertNull($comment->getFrom());
         self::assertSame(Importance::getDefault(), $comment->getImportance());
         self::assertNull($comment->getMessage());
         self::assertNull($comment->getSubject());
-        self::assertNull($comment->getToAddress());
+        self::assertNull($comment->getTo());
     }
 
     public function testProperties(): void
@@ -63,40 +63,40 @@ final class CommentTest extends TestCase
         self::assertSame($expected, $comment->getAttachments());
     }
 
-    public function testSetFromAddress(): void
+    public function testSetFrom(): void
     {
         $comment = new Comment();
-        $comment->setFromAddress('test@test.com');
+        $comment->setFrom('test@test.com');
         $expected = new Address('test@test.com');
-        $actual = $comment->getFromAddress();
+        $actual = $comment->getFrom();
         self::assertEqualsCanonicalizing($expected, $actual);
 
-        $comment->setFromAddress(Address::create('test@test.com'));
-        $actual = $comment->getFromAddress();
+        $comment->setFrom(Address::create('test@test.com'));
+        $actual = $comment->getFrom();
         self::assertEqualsCanonicalizing($expected, $actual);
 
         $user = $this->createUser();
-        $comment->setFromAddress($user);
-        $actual = $comment->getFromAddress();
+        $comment->setFrom($user);
+        $actual = $comment->getFrom();
         $expected = $user->getEmailAddress();
         self::assertEqualsCanonicalizing($expected, $actual);
     }
 
-    public function testSetToAddress(): void
+    public function testSetTo(): void
     {
         $comment = new Comment();
-        $comment->setToAddress('test@test.com');
+        $comment->setTo('test@test.com');
         $expected = new Address('test@test.com');
-        $actual = $comment->getToAddress();
+        $actual = $comment->getTo();
         self::assertEqualsCanonicalizing($expected, $actual);
 
-        $comment->setToAddress(Address::create('test@test.com'));
-        $actual = $comment->getToAddress();
+        $comment->setTo(Address::create('test@test.com'));
+        $actual = $comment->getTo();
         self::assertEqualsCanonicalizing($expected, $actual);
 
         $user = $this->createUser();
-        $comment->setToAddress($user);
-        $actual = $comment->getToAddress();
+        $comment->setTo($user);
+        $actual = $comment->getTo();
         $expected = $user->getEmailAddress();
         self::assertEqualsCanonicalizing($expected, $actual);
     }

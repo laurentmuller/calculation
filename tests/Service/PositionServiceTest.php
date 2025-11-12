@@ -22,9 +22,6 @@ final class PositionServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{float, string}>
-     */
     public static function getDirections(): \Generator
     {
         yield [0, 'N'];
@@ -47,9 +44,6 @@ final class PositionServiceTest extends TestCase
         yield [361, 'N'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{int, string}>
-     */
     public static function getFormatDirections(): \Generator
     {
         yield [0, 'openweather.direction.N'];
@@ -58,9 +52,6 @@ final class PositionServiceTest extends TestCase
         yield [270, 'openweather.direction.W'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: float, 1: string, 2?: true}>
-     */
     public static function getLatitudes(): \Generator
     {
         yield [-91.0, '', true];
@@ -70,9 +61,6 @@ final class PositionServiceTest extends TestCase
         yield [91.0, '', true];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: float, 1: string, 2?: true}>
-     */
     public static function getLongitudes(): \Generator
     {
         yield [-181.0, '', true];
@@ -82,9 +70,6 @@ final class PositionServiceTest extends TestCase
         yield [181.0, '', true];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: float, 1: float, 2: string, 3?: true}>
-     */
     public static function getPositions(): \Generator
     {
         yield [-90.0, -180.0, '90° 0\' 0" openweather.direction.S, 180° 0\' 0" openweather.direction.W'];

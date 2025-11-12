@@ -191,6 +191,7 @@ class CalculationRepository extends AbstractRepository
             ->getSingleScalarResult();
     }
 
+    #[\Override]
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return parent::createDefaultQueryBuilder($alias)
@@ -607,6 +608,7 @@ class CalculationRepository extends AbstractRepository
         return $builder->getQuery()->getArrayResult();
     }
 
+    #[\Override]
     public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS): array|string
     {
         return match ($field) {
@@ -623,6 +625,7 @@ class CalculationRepository extends AbstractRepository
         };
     }
 
+    #[\Override]
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return match ($field) {

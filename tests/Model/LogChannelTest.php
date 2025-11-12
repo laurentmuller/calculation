@@ -19,9 +19,6 @@ use PHPUnit\Framework\TestCase;
 
 final class LogChannelTest extends TestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{non-empty-string, string}>
-     */
     public static function getChannelIcons(): \Generator
     {
         yield ['application', 'fa-fw fa-solid fa-laptop-code'];

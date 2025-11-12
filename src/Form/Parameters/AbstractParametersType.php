@@ -68,16 +68,6 @@ abstract class AbstractParametersType extends AbstractType
         return '';
     }
 
-    /**
-     * Gets the displayed calculation range.
-     *
-     * @return int[]
-     */
-    public static function getCalculationRange(): array
-    {
-        return [4, 8, 12, 16, 20];
-    }
-
     #[\Override]
     public function getTranslator(): TranslatorInterface
     {

@@ -34,6 +34,7 @@ class TaskRepository extends AbstractCategoryItemRepository
         parent::__construct($registry, Task::class);
     }
 
+    #[\Override]
     public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS): array|string
     {
         return match ($field) {

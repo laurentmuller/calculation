@@ -17,15 +17,21 @@ use App\Entity\User;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
+use App\Repository\CalculationCategoryRepository;
 use App\Repository\CalculationGroupRepository;
 use App\Repository\CalculationItemRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\CustomerRepository;
 use App\Repository\GlobalMarginRepository;
+use App\Repository\GlobalPropertyRepository;
 use App\Repository\GroupMarginRepository;
 use App\Repository\GroupRepository;
 use App\Repository\ProductRepository;
+use App\Repository\TaskItemMarginRepository;
+use App\Repository\TaskItemRepository;
+use App\Repository\TaskRepository;
 use App\Repository\UserPropertyRepository;
 use App\Repository\UserRepository;
 use App\Tests\DatabaseTrait;
@@ -36,47 +42,51 @@ final class DatabaseTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{class-string<AbstractRepository>, int}>
-     *
-     * @phpstan-ignore missingType.generics
-     */
+    private const PROPERTIES_COUNT = 1;
+    private const USERS_COUNT = 4;
+
     public static function getRepositories(): \Generator
     {
-        yield [GroupRepository::class, 0];
-        yield [CategoryRepository::class, 0];
-        yield [GroupMarginRepository::class, 0];
-        yield [ProductRepository::class, 0];
-        yield [CalculationStateRepository::class, 0];
-        yield [CalculationRepository::class, 0];
-        yield [CalculationGroupRepository::class, 0];
-        yield [CalculationItemRepository::class, 0];
-        yield [GlobalMarginRepository::class, 0];
-        yield [UserPropertyRepository::class, 0];
-        yield [UserRepository::class, 4];
+        yield [CalculationCategoryRepository::class];
+        yield [CalculationGroupRepository::class];
+        yield [CalculationItemRepository::class];
+        yield [CalculationRepository::class];
+        yield [CalculationStateRepository::class];
+        yield [CategoryRepository::class];
+        yield [CustomerRepository::class];
+        yield [GlobalMarginRepository::class];
+        yield [GlobalPropertyRepository::class, self::PROPERTIES_COUNT];
+        yield [GroupMarginRepository::class];
+        yield [GroupRepository::class];
+        yield [ProductRepository::class];
+        yield [TaskItemMarginRepository::class];
+        yield [TaskItemRepository::class];
+        yield [TaskRepository::class];
+        yield [UserPropertyRepository::class];
+        yield [UserRepository::class, self::USERS_COUNT];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, int}>
-     */
     public static function getTables(): \Generator
     {
-        yield ['sy_Group', 0];
-        yield ['sy_Category', 0];
-        yield ['sy_GroupMargin', 0];
-        yield ['sy_Product', 0];
-        yield ['sy_CalculationState', 0];
-        yield ['sy_Calculation', 0];
-        yield ['sy_CalculationGroup', 0];
-        yield ['sy_CalculationItem', 0];
-        yield ['sy_GlobalMargin', 0];
-        yield ['sy_Property', 1];
-        yield ['sy_User', 4];
+        yield ['sy_CalculationCategory'];
+        yield ['sy_CalculationGroup'];
+        yield ['sy_CalculationItem'];
+        yield ['sy_Calculation'];
+        yield ['sy_CalculationState'];
+        yield ['sy_Category'];
+        yield ['sy_Customer'];
+        yield ['sy_GlobalMargin'];
+        yield ['sy_Property', self::PROPERTIES_COUNT]; // GlobalProperty
+        yield ['sy_GroupMargin'];
+        yield ['sy_Group'];
+        yield ['sy_Product'];
+        yield ['sy_TaskItemMargin'];
+        yield ['sy_TaskItem'];
+        yield ['sy_Task'];
+        yield ['sy_UserProperty'];
+        yield ['sy_User', self::USERS_COUNT];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, RoleInterface::ROLE_*}>
-     */
     public static function getUsers(): \Generator
     {
         yield [AuthenticateWebTestCase::ROLE_USER, RoleInterface::ROLE_USER];
@@ -86,18 +96,22 @@ final class DatabaseTest extends KernelServiceTestCase
     }
 
     /**
-     * @phpstan-param class-string<AbstractRepository<EntityInterface>> $className
+     * @template TEntity of EntityInterface
+     * @template TRepository of AbstractRepository<TEntity>
+     *
+     * @param class-string<TRepository> $className
      */
     #[DataProvider('getRepositories')]
-    public function testRepository(string $className, int $expected): void
+    public function testRepository(string $className, int $expected = 0): void
     {
+        /** @var TRepository $repository */
         $repository = $this->getService($className);
         $result = $repository->findAll();
         self::assertCount($expected, $result);
     }
 
     #[DataProvider('getTables')]
-    public function testTable(string $tableName, int $expected): void
+    public function testTable(string $tableName, int $expected = 0): void
     {
         $database = self::$database;
         self::assertNotNull($database);

@@ -22,9 +22,6 @@ final class CacheKeyTraitTest extends TestCase
 {
     use CacheKeyTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{string, string}>
-     */
     public static function getCleanKeys(): \Generator
     {
         yield ['', ''];

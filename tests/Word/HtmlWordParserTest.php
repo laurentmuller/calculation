@@ -19,9 +19,6 @@ use PHPUnit\Framework\TestCase;
 
 final class HtmlWordParserTest extends TestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{string, string}>
-     */
     public static function getBorders(): \Generator
     {
         yield ['border', 'border:1px #808080 solid;'];
@@ -38,9 +35,6 @@ final class HtmlWordParserTest extends TestCase
         yield ['border-bottom-0', 'border-bottom:0 #000000 none;'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, string}>
-     */
     public static function getClassToStyles(): \Generator
     {
         yield ['text-start', 'text-align:left;'];
@@ -55,9 +49,6 @@ final class HtmlWordParserTest extends TestCase
         yield ['page-break', 'page-break-after:always;'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, string}>
-     */
     public static function getMargins(): \Generator
     {
         yield ['m-0', '0;'];

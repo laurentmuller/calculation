@@ -22,6 +22,7 @@ final class TimestampableTraitTest extends TestCase implements TimestampableInte
 {
     use TimestampableTrait;
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->getDisplay();

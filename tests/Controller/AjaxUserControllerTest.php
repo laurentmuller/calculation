@@ -23,9 +23,6 @@ final class AjaxUserControllerTest extends AuthenticateWebTestCase
 {
     private ?TranslatorInterface $translator = null;
 
-    /**
-     * @phpstan-return \Generator<int, array{0: bool|non-empty-string, 1?: string, 2?: 1}>
-     */
     public static function getEmails(): \Generator
     {
         yield [true, 'myemail_fake_zz@myemail.com'];
@@ -36,9 +33,6 @@ final class AjaxUserControllerTest extends AuthenticateWebTestCase
         yield ['email.already_used', 'ROLE_SUPER_ADMIN@TEST.COM'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: bool|string, 1?: string, 2?: 1}>
-     */
     public static function getNames(): \Generator
     {
         yield [true, 'myEmail_fake_zz'];
@@ -49,9 +43,6 @@ final class AjaxUserControllerTest extends AuthenticateWebTestCase
         yield ['username.already_used', 'ROLE_SUPER_ADMIN'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: bool|string, 1?: string}>
-     */
     public static function getUsers(): \Generator
     {
         yield ['username.blank'];

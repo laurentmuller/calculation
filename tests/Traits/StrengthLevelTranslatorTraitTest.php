@@ -36,9 +36,6 @@ final class StrengthLevelTranslatorTraitTest extends TestCase
         $this->translator = $this->createMockTranslator();
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{int, string}>
-     */
     public static function getTranslateLevels(): \Generator
     {
         yield [-2, 'none'];

@@ -183,6 +183,7 @@ class CalculationStateRepository extends AbstractRepository
             ->orderBy($field, self::SORT_ASC);
     }
 
+    #[\Override]
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return match ($field) {

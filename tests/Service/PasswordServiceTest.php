@@ -27,9 +27,6 @@ final class PasswordServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{string, StrengthLevel, bool}>
-     */
     public static function getValidations(): \Generator
     {
         yield ['', StrengthLevel::NONE, false];

@@ -26,9 +26,6 @@ final class RoleServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{RoleInterface|string, string}>
-     */
     public static function getRoleIcons(): \Generator
     {
         yield [RoleInterface::ROLE_USER, 'fa-solid fa-user'];
@@ -45,9 +42,6 @@ final class RoleServiceTest extends TestCase
         yield [self::createUser(RoleInterface::ROLE_SUPER_ADMIN), 'fa-solid fa-user-gear'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{RoleInterface|string, string}>
-     */
     public static function getTranslateRoles(): \Generator
     {
         yield [RoleInterface::ROLE_USER, 'user.roles.user'];

@@ -23,9 +23,6 @@ final class EnvironmentTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{Environment, bool}>
-     */
     public static function getIsDevelopment(): \Generator
     {
         yield [Environment::DEVELOPMENT, true];
@@ -33,9 +30,6 @@ final class EnvironmentTest extends TestCase
         yield [Environment::TEST, false];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{Environment, bool}>
-     */
     public static function getIsProduction(): \Generator
     {
         yield [Environment::DEVELOPMENT, false];
@@ -43,9 +37,6 @@ final class EnvironmentTest extends TestCase
         yield [Environment::TEST, false];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{Environment, bool}>
-     */
     public static function getIsTest(): \Generator
     {
         yield [Environment::DEVELOPMENT, false];
@@ -53,9 +44,6 @@ final class EnvironmentTest extends TestCase
         yield [Environment::TEST, true];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{Environment, string}>
-     */
     public static function getLabels(): \Generator
     {
         yield [Environment::DEVELOPMENT, 'environment.dev'];
@@ -63,9 +51,6 @@ final class EnvironmentTest extends TestCase
         yield [Environment::TEST, 'environment.test'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{Environment, string}>
-     */
     public static function getValues(): \Generator
     {
         yield [Environment::DEVELOPMENT, 'dev'];

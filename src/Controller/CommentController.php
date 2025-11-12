@@ -44,8 +44,8 @@ class CommentController extends AbstractController
         $from = $this->getUser() ?? $this->getAddressFrom();
         $comment = new Comment(false);
         $comment->setSubject($this->getApplicationName())
-            ->setFromAddress($from)
-            ->setToAddress($this->getAddressFrom());
+            ->setFrom($from)
+            ->setTo($this->getAddressFrom());
         $form = $this->createForm(UserCommentType::class, $comment);
         if ($this->handleRequestForm($request, $form)) {
             try {

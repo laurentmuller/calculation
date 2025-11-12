@@ -45,9 +45,6 @@ final class UserExceptionServiceTest extends TestCase
         $this->request->setSession($session);
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: \Exception, 1: string, 2?: 1}>
-     */
     public static function getExceptions(): \Generator
     {
         // user registration

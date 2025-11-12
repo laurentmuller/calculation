@@ -35,9 +35,6 @@ final class DatabaseInfoServiceTest extends TestCase
         'charset' => 'utf8mb4',
     ];
 
-    /**
-     * @phpstan-return \Generator<int, array{0: string, 1: bool}>
-     */
     public static function getDisabledValues(): \Generator
     {
         yield ['oFf', true];
@@ -49,9 +46,6 @@ final class DatabaseInfoServiceTest extends TestCase
         yield ['yes', false];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: string, 1: bool}>
-     */
     public static function getEnabledValues(): \Generator
     {
         yield ['oN', true];

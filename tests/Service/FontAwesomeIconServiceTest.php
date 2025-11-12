@@ -19,9 +19,6 @@ use PHPUnit\Framework\TestCase;
 
 final class FontAwesomeIconServiceTest extends TestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{string, ?string}>
-     */
     public static function getIcons(): \Generator
     {
         yield ['', null];

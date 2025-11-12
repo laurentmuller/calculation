@@ -3,32 +3,31 @@
 {% from 'macros/_attributes.html.twig' import attributes %}
 {% from 'index/_macros.html.twig' import margin as macros_margin, empty_content %}
 {# macros #}
-{% macro cardEntry(item, list_path, min_margin) -%}
-<div class="border index-child m-1">
-    <div class="position-relative body-tooltip p-2">
-        {%- set text = item.date|locale_date('none', 'MMMM Y') -%}
-        {%- if list_path -%}
-            {%- set list_title = 'index.panel_month_title'|trans({'%month%': text}) -%}
-            <a href="{{ path(list_path, {search: item.date|locale_date('none', 'MM.Y')}) }}" class="stretched-link" title="{{ list_title }}">
-                {{- text -}}
-            </a>
-        {%- else -%}
-            <span>{{ text }}</span>
-        {%- endif -%}
-        <div class="h4 fw-normal my-1">
-            <span title="{{ 'index.panel_title_total'|trans }}">{{- item.total|integer }}</span> {{ macros_margin(item.marginPercent, min_margin) -}}
-        </div>
-        <p class="mb-0" title="{{ 'index.panel_title_count'|trans }}">
-            {{- 'counters.calculations'|trans({count: item.count}) -}}
-        </p>
-    </div>
+{% macro cardEntry(item, route_name, min_margin) -%}
+{%- set text = item.date|locale_date('none', 'MMMM Y') -%}
+<div class="border index-child item-hover p-2 m-1">
+    {%- if route_name -%}
+        {%- set route_title = 'index.panel_month_title'|trans({'%month%': text}) -%}
+        <a href="{{ path(route_name, {search: item.date|locale_date('none', 'MM.Y')}) }}" title="{{ route_title }}">
+            {{- text -}}
+        </a>
+    {%- else -%}
+        <div>{{ text }}</div>
+    {%- endif -%}
+    <h4 class="fw-normal my-1">
+        <span title="{{ 'index.panel_title_total'|trans }}">{{- item.total|integer }}</span>
+        {{ macros_margin(item.marginPercent, min_margin) }}
+    </h4>
+    <p class="mb-0" title="{{ 'index.panel_title_count'|trans }}">
+        {{- 'counters.calculations'|trans({count: item.count}) -}}
+    </p>
 </div>
 {%- endmacro %}
 {# parameters #}
 {%- set panel_key = 'DISPLAY_MONTH' -%}
 {%- set panel_show = app.request.cookies.boolean(panel_key, true) -%}
 {%- set panel_title = panel_show ? 'common.collapse' : 'common.expand' -%}
-{%- set list_path = is_granted(PERMISSION_LIST, ENTITY_CALCULATION) ? 'calculation_index' : false -%}
+{%- set route_name = is_granted(PERMISSION_LIST, ENTITY_CALCULATION) ? 'calculation_index' : false -%}
 {%- set is_months = months|length -%}
 {%- set header_attributes = header_attributes|merge({
     href: '#' ~ panel_key,
@@ -40,7 +39,7 @@
         <a{{ attributes(header_attributes) }}>
             {{- icon('calendar-alt ms-1 far', 'index.panel_month') -}}
         </a>
-        {%- if list_path and is_months -%}
+        {%- if route_name and is_months -%}
             {{ link(path('chart_month_index'), null, 'btn btn-link p-0 d-print-none', 'chart-column fa-fw', 'index.menu_chart_title') }}
             {% if is_granted(PERMISSION_EXPORT, ENTITY_CALCULATION) %}
                 {{ linkExternal(path('chart_month_pdf', {count: months|length}), null, 'btn btn-link p-0 d-print-none', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
@@ -51,14 +50,14 @@
         </button>
     </div>
     <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}">
-    {% if is_months %}
-        <div class="card-body index-parent g-0 p-1">
-            {% for item in months.items %}
-                {{ _self.cardEntry(item, list_path, min_margin) }}
-            {% endfor %}
-        </div>
-    {% else %}
-        {{ empty_content() }}
-    {% endif %}
+        {% if is_months %}
+            <div class="card-body index-parent g-0 p-1">
+                {% for item in months.items %}
+                    {{ _self.cardEntry(item, route_name, min_margin) }}
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ empty_content() }}
+        {% endif %}
     </div>
 </div>

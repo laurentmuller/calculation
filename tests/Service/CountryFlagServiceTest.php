@@ -28,9 +28,6 @@ final class CountryFlagServiceTest extends TestCase
         $this->service = new CountryFlagService();
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, string}>
-     */
     public static function getDefaultCodes(): \Generator
     {
         yield ['en-US', 'US'];
@@ -40,9 +37,6 @@ final class CountryFlagServiceTest extends TestCase
         yield ['zh_Hans_MO', 'MO'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: string, 1: string, 2?: bool}>
-     */
     public static function getFlagsValid(): \Generator
     {
         yield ['CH', '🇨🇭'];

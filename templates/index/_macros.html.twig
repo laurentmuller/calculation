@@ -5,9 +5,11 @@
     {%- set class_name = 'text-danger has-tooltip' -%}
 {% else %}
     {%- set overall_title = 'calculation.fields.globalMargin'|trans -%}
-    {%- set class_name = '' -%}
+    {%- set class_name = false -%}
 {%- endif -%}
-<sup title="{{ overall_title }}" class="{{ class_name }}"><small>{{ margin|percent }}</small></sup>
+<sup title="{{ overall_title }}"{% if class_name %} class="{{ class_name }}"{% endif %}>
+    <small>{{ margin|percent }}</small>
+</sup>
 {%- endmacro %}
 
 {% macro empty_content() %}

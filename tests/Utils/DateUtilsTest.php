@@ -32,9 +32,6 @@ final class DateUtilsTest extends TestCase
         \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: int, 1: int,2?: 1931}>
-     */
     public static function getCompletYears(): \Generator
     {
         yield [29, 2029];
@@ -52,9 +49,6 @@ final class DateUtilsTest extends TestCase
         yield [31, 2031, 1931];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{DatePoint, int}>
-     */
     public static function getDays(): \Generator
     {
         // today
@@ -67,9 +61,6 @@ final class DateUtilsTest extends TestCase
         }
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{?DatePoint, ?string}>
-     */
     public static function getFormatFormDate(): \Generator
     {
         yield [null, null];
@@ -81,9 +72,6 @@ final class DateUtilsTest extends TestCase
         yield [new DatePoint('22-2-1'), '2022-02-01'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{DatePoint, string, string}>
-     */
     public static function getModifies(): \Generator
     {
         $date = new DatePoint('2024-01-10');
@@ -100,9 +88,6 @@ final class DateUtilsTest extends TestCase
         yield [$date, 'July 1st, 2023', '2023-07-01'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, int}>
-     */
     public static function getMonthNames(): \Generator
     {
         yield ['Janvier', 1];
@@ -119,9 +104,6 @@ final class DateUtilsTest extends TestCase
         yield ['Décembre', 12];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{DatePoint, int}>
-     */
     public static function getMonths(): \Generator
     {
         // today
@@ -134,9 +116,6 @@ final class DateUtilsTest extends TestCase
         }
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{DatePoint, DatePoint}>
-     */
     public static function getRemoveTimes(): \Generator
     {
         $format = 'Y-m-d H:i:s';
@@ -156,9 +135,6 @@ final class DateUtilsTest extends TestCase
         yield [$date, $expected];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, int}>
-     */
     public static function getShortMonthNames(): \Generator
     {
         yield ['Janv.', 1];
@@ -175,9 +151,6 @@ final class DateUtilsTest extends TestCase
         yield ['Déc.', 12];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: string, 1: int, 2?: 'monday'}>
-     */
     public static function getShortWeekdayNames(): \Generator
     {
         // default (sunday)
@@ -198,9 +171,6 @@ final class DateUtilsTest extends TestCase
         yield ['Dim.', 7, 'monday'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: string, 1: int, 2?: 'monday'}>
-     */
     public static function getWeekdayNames(): \Generator
     {
         // default (sunday)
@@ -221,9 +191,6 @@ final class DateUtilsTest extends TestCase
         yield ['Dimanche', 7, 'monday'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{DatePoint, int}>
-     */
     public static function getWeeks(): \Generator
     {
         // today
@@ -236,9 +203,6 @@ final class DateUtilsTest extends TestCase
         yield [new DatePoint('2023-04-28'), 17];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{DatePoint, int}>
-     */
     public static function getYears(): \Generator
     {
         // today

@@ -22,9 +22,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 #[\PHPUnit\Framework\Attributes\CoversNothing]
 final class UsersTest extends AuthenticateWebTestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{string}>
-     */
     public static function getUserExist(): \Generator
     {
         yield [self::ROLE_USER];
@@ -33,17 +30,11 @@ final class UsersTest extends AuthenticateWebTestCase
         yield [self::ROLE_DISABLED];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string}>
-     */
     public static function getUserNotExist(): \Generator
     {
         yield [self::ROLE_FAKE];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{RoleInterface::ROLE_*}>
-     */
     public static function getUserRole(): \Generator
     {
         yield [self::ROLE_USER];

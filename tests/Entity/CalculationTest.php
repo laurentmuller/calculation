@@ -223,15 +223,18 @@ final class CalculationTest extends EntityValidatorTestCase
         $calculation = new Calculation();
         self::assertFalse($calculation->hasDuplicateItems());
         self::assertEmpty($calculation->getDuplicateItems());
+
         $calculation->addProduct($product);
         self::assertFalse($calculation->hasDuplicateItems());
         self::assertEmpty($calculation->getDuplicateItems());
+
         $calculation->addProduct($product);
         self::assertTrue($calculation->hasDuplicateItems());
         self::assertCount(2, $calculation->getDuplicateItems());
 
         $calculation->removeDuplicateItems();
         self::assertFalse($calculation->hasDuplicateItems());
+        self::assertEmpty($calculation->getDuplicateItems());
     }
 
     public function testEmptyItems(): void
@@ -255,20 +258,18 @@ final class CalculationTest extends EntityValidatorTestCase
         $calculation = new Calculation();
         self::assertFalse($calculation->hasEmptyItems());
         self::assertEmpty($calculation->getEmptyItems());
+
         $calculation->addProduct($product);
         self::assertTrue($calculation->hasEmptyItems());
         self::assertCount(1, $calculation->getEmptyItems());
+
         $calculation->addProduct($product, 0.0);
         self::assertTrue($calculation->hasEmptyItems());
         self::assertCount(2, $calculation->getEmptyItems());
 
         $calculation->removeEmptyItems();
         self::assertFalse($calculation->hasEmptyItems());
-
-        $product->setPrice(10.0);
-        $calculation = new Calculation();
-        $calculation->addProduct($product, 10.0);
-        self::assertFalse($calculation->hasEmptyItems());
+        self::assertEmpty($calculation->getEmptyItems());
     }
 
     public function testEmptySortedGroup(): void

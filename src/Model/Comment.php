@@ -37,7 +37,7 @@ class Comment
      * The address from.
      */
     #[Assert\NotNull]
-    private ?Address $fromAddress = null;
+    private ?Address $from = null;
 
     /*
      * The importance.
@@ -61,7 +61,7 @@ class Comment
      * The address to.
      */
     #[Assert\NotNull]
-    private ?Address $toAddress = null;
+    private ?Address $to = null;
 
     /**
      * @param bool $mail true to send an email, false to send a comment
@@ -84,9 +84,9 @@ class Comment
     /**
      * Gets the "from" address.
      */
-    public function getFromAddress(): ?Address
+    public function getFrom(): ?Address
     {
-        return $this->fromAddress;
+        return $this->from;
     }
 
     public function getImportance(): Importance
@@ -113,9 +113,9 @@ class Comment
     /**
      * Gets the "to" address.
      */
-    public function getToAddress(): ?Address
+    public function getTo(): ?Address
     {
-        return $this->toAddress;
+        return $this->to;
     }
 
     /**
@@ -145,13 +145,9 @@ class Comment
      *
      * @throws \InvalidArgumentException if the parameter is not an instanceof of Address, User or string
      */
-    public function setFromAddress(Address|User|string $fromAddress): self
+    public function setFrom(Address|User|string $fromAddress): self
     {
-        if ($fromAddress instanceof User) {
-            $this->fromAddress = $fromAddress->getEmailAddress();
-        } else {
-            $this->fromAddress = Address::create($fromAddress);
-        }
+        $this->from = $this->convertAddress($fromAddress);
 
         return $this;
     }
@@ -188,14 +184,15 @@ class Comment
      *
      * @throws \InvalidArgumentException if the parameter is not an instanceof of Address, User or string
      */
-    public function setToAddress(Address|User|string $toAddress): self
+    public function setTo(Address|User|string $toAddress): self
     {
-        if ($toAddress instanceof User) {
-            $this->toAddress = $toAddress->getEmailAddress();
-        } else {
-            $this->toAddress = Address::create($toAddress);
-        }
+        $this->to = $this->convertAddress($toAddress);
 
         return $this;
+    }
+
+    private function convertAddress(string|Address|User $address): Address
+    {
+        return $address instanceof User ? $address->getEmailAddress() : Address::create($address);
     }
 }

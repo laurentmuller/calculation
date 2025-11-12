@@ -28,7 +28,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extra\Markdown\MarkdownInterface;
 
 /**
- * Service to send notifications.
+ * Service to send comments and notifications.
  */
 readonly class MailerService
 {
@@ -43,22 +43,15 @@ readonly class MailerService
     /**
      * Send a comment.
      *
-     * @throws TransportExceptionInterface if an exception occurs while sending the notification
+     * @throws TransportExceptionInterface if an exception occurs while sending the comment
      */
     public function sendComment(Comment $comment): void
     {
-        $notification = $this->createNotification($comment->getImportance());
-        $notification->subject((string) $comment->getSubject())
-            ->markdown($this->convert((string) $comment->getMessage()))
-            ->attachFromUploadedFiles(...$comment->getAttachments());
-        $address = $comment->getFromAddress();
-        if ($address instanceof Address) {
-            $notification->from($address);
-        }
-        $address = $comment->getToAddress();
-        if ($address instanceof Address) {
-            $notification->to($address);
-        }
+        $notification = $this->createNotification($comment->getImportance(), (string) $comment->getMessage())
+            ->attachFromUploadedFiles(...$comment->getAttachments())
+            ->subject((string) $comment->getSubject())
+            ->from($comment->getFrom()) // @phpstan-ignore argument.type
+            ->to($comment->getTo()); // @phpstan-ignore argument.type
 
         $this->send($notification);
     }
@@ -71,40 +64,45 @@ readonly class MailerService
      * @throws TransportExceptionInterface if an exception occurs while sending the notification
      */
     public function sendNotification(
-        string $fromEmail,
-        User $toUser,
+        string|Address|User $from,
+        string|Address|User $to,
         string $message,
         Importance $importance = Importance::LOW,
         array $attachments = []
     ): void {
-        $notification = $this->createNotification($importance)
-            ->from($fromEmail)
-            ->to($toUser->getEmailAddress())
+        $notification = $this->createNotification($importance, $message)
             ->subject(new TranslatableMessage('user.comment.title'))
-            ->markdown($this->convert($message))
-            ->attachFromUploadedFiles(...$attachments);
+            ->attachFromUploadedFiles(...$attachments)
+            ->from($from)
+            ->to($to);
 
         $this->send($notification);
     }
 
-    private function convert(string $message): string
-    {
-        return $this->markdown->convert($message);
-    }
-
-    private function createNotification(Importance $importance): NotificationEmail
+    private function createNotification(Importance $importance, string $message): NotificationEmail
     {
         return NotificationEmail::instance($this->translator)
-            ->action($this->trans('index.title'), $this->getHomeUrl())
+            ->action($this->getActionText(), $this->getActionURL())
+            ->markdown($this->getMarkdown($message))
             ->importance($importance);
     }
 
-    private function getHomeUrl(): string
+    private function getActionText(): string
+    {
+        return $this->translator->trans('index.title');
+    }
+
+    private function getActionURL(): string
     {
         return $this->generator->generate(
             name: AbstractController::HOME_PAGE,
             referenceType: UrlGeneratorInterface::ABSOLUTE_URL
         );
+    }
+
+    private function getMarkdown(string $message): string
+    {
+        return $this->markdown->convert($message);
     }
 
     /**
@@ -113,10 +111,5 @@ readonly class MailerService
     private function send(NotificationEmail $notification): void
     {
         $this->mailer->send($notification);
-    }
-
-    private function trans(string $id): string
-    {
-        return $this->translator->trans($id);
     }
 }

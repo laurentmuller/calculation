@@ -28,18 +28,12 @@ final class UrlGeneratorServiceTest extends TestCase
 {
     use IdTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{0: string, 1: string, 2?: array}>
-     */
     public static function getGenerates(): \Generator
     {
         yield ['homepage', '/'];
         yield ['product_edit', '/product/edit/10', ['id' => 10]];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: Request, 1: string, 2?: EntityInterface|int}>
-     */
     public static function getRequests(): \Generator
     {
         yield [new Request(), '/'];
@@ -49,11 +43,6 @@ final class UrlGeneratorServiceTest extends TestCase
         yield [new Request(['caller' => 'products', 'sort' => 'asc']), 'products?sort=asc'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: Request, 1: array, 2?: EntityInterface|int}>
-     *
-     * @throws \ReflectionException
-     */
     public static function getRouteParams(): \Generator
     {
         yield [new Request(), []];

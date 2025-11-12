@@ -39,9 +39,6 @@ final class AssetVersionServiceTest extends TestCase
         $this->service = new AssetVersionService($projectDir, new EnvironmentService('test'), new ArrayAdapter());
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: string, 1?: true|int}>
-     */
     public static function getPaths(): \Generator
     {
         yield [''];

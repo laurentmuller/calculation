@@ -145,27 +145,25 @@ class TestController extends AbstractController
                 'multiple' => true,
                 'maxfiles' => 3,
                 'maxsize' => '10mi',
-                'maxsizetotal' => '30mi', ])
+                'maxsizetotal' => '30mi'])
             ->notRequired()
             ->addFileType();
         $form = $helper->createForm();
 
         if ($this->handleRequestForm($request, $form)) {
             /**
-             * @phpstan-var array{
-             *     email: string,
-             *     message: string,
-             *     importance: Importance,
-             *     attachments: UploadedFile[]}  $data
+             * @var array{email: string, message: string, importance: Importance, attachments: UploadedFile[]} $data
              */
             $data = $form->getData();
-            $email = $data['email'];
-            $message = $data['message'];
-            $importance = $data['importance'];
-            $attachments = $data['attachments'];
 
             try {
-                $service->sendNotification($email, $user, $message, $importance, $attachments);
+                $service->sendNotification(
+                    $data['email'],
+                    $user,
+                    $data['message'],
+                    $data['importance'],
+                    $data['attachments']
+                );
 
                 return $this->redirectToHomePage('user.comment.success');
             } catch (TransportExceptionInterface $e) {

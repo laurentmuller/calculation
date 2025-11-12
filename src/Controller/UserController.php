@@ -143,8 +143,8 @@ class UserController extends AbstractEntityController
         $from = $this->getUser() ?? $this->getAddressFrom();
         $comment = new Comment();
         $comment->setSubject($this->getApplicationName())
-            ->setFromAddress($from)
-            ->setToAddress($user);
+            ->setFrom($from)
+            ->setTo($user);
         $form = $this->createForm(UserCommentType::class, $comment);
         if ($this->handleRequestForm($request, $form)) {
             try {

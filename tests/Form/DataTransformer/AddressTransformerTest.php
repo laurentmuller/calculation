@@ -29,9 +29,6 @@ final class AddressTransformerTest extends TestCase
         $this->transformer = new AddressTransformer();
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{mixed}>
-     */
     public static function getReverseTransformInvalid(): \Generator
     {
         yield [true];
@@ -39,9 +36,6 @@ final class AddressTransformerTest extends TestCase
         yield ['email-invalid'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{mixed, mixed}>
-     */
     public static function getReverseTransformValid(): \Generator
     {
         yield [null, null];
@@ -49,18 +43,12 @@ final class AddressTransformerTest extends TestCase
         yield ['username <user@root.com>', new Address('user@root.com', 'username')];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{mixed}>
-     */
     public static function getTransformInvalid(): \Generator
     {
         yield [true];
         yield [25];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{mixed, mixed}>
-     */
     public static function getTransformValid(): \Generator
     {
         yield [null, null];

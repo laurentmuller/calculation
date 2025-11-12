@@ -52,6 +52,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
      *
      * @phpstan-param User $user
      */
+    #[\Override]
     public function createResetPasswordRequest(
         object $user,
         \DateTimeInterface $expiresAt,
@@ -102,6 +103,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
      *
      * @phpstan-param User $user
      */
+    #[\Override]
     public function getMostRecentNonExpiredRequestDate(object $user): ?DatePoint
     {
         return $user->isExpired() ? null : $user->getRequestedAt();
@@ -133,6 +135,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
             ->orderBy($field, self::SORT_ASC);
     }
 
+    #[\Override]
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return match ($field) {
@@ -188,6 +191,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     /**
      * @see UserProviderInterface
      */
+    #[\Override]
     public function loadUserByIdentifier(string $identifier): User
     {
         $user = $this->findByUsername($identifier);
@@ -201,6 +205,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     /**
      * @see UserProviderInterface
      */
+    #[\Override]
     public function refreshUser(UserInterface $user): User
     {
         if (!$user instanceof User) {
@@ -213,6 +218,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     /**
      * @see ResetPasswordRequestRepositoryInterface
      */
+    #[\Override]
     public function removeExpiredResetPasswordRequests(): int
     {
         $time = DateUtils::createDatePoint('-1 week');
@@ -234,6 +240,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
      *
      * @phpstan-param User $resetPasswordRequest
      */
+    #[\Override]
     public function removeResetPasswordRequest(ResetPasswordRequestInterface $resetPasswordRequest): void
     {
         $this->resetPasswordRequest($resetPasswordRequest);
@@ -259,6 +266,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     /**
      * @see UserProviderInterface
      */
+    #[\Override]
     public function supportsClass(string $class): bool
     {
         return User::class === $class;
@@ -269,6 +277,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
      *
      * @phpstan-param User $user
      */
+    #[\Override]
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         $user->setPassword($newHashedPassword);

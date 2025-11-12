@@ -53,9 +53,6 @@ final class EntityVoterTest extends TestCase
         $this->voter = new EntityVoter($this->application);
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, bool}>
-     */
     public static function getSupportsAttribute(): \Generator
     {
         yield ['add', true];

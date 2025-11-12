@@ -24,6 +24,41 @@ final class NotificationEmailTest extends TestCase
 {
     use TranslatorMockTrait;
 
+    public function testAddBcc(): void
+    {
+        $email = $this->createNotificationEmail();
+        $email->addBcc('fake@fake.com');
+        self::assertCount(1, $email->getBcc());
+    }
+
+    public function testAddCc(): void
+    {
+        $email = $this->createNotificationEmail();
+        $email->addCc('fake@fake.com');
+        self::assertCount(1, $email->getCc());
+    }
+
+    public function testAddFrom(): void
+    {
+        $email = $this->createNotificationEmail();
+        $email->addFrom('fake@fake.com');
+        self::assertCount(1, $email->getFrom());
+    }
+
+    public function testAddReplyTo(): void
+    {
+        $email = $this->createNotificationEmail();
+        $email->addReplyTo('fake@fake.com');
+        self::assertCount(1, $email->getReplyTo());
+    }
+
+    public function testAddTo(): void
+    {
+        $email = $this->createNotificationEmail();
+        $email->addTo('fake@fake.com');
+        self::assertCount(1, $email->getTo());
+    }
+
     public function testAttachFromUploadedFile(): void
     {
         $email = $this->createNotificationEmail();
@@ -43,6 +78,20 @@ final class NotificationEmailTest extends TestCase
         $file = $this->createUploadedFile();
         $email->attachFromUploadedFiles(null, $file);
         self::assertCount(1, $email->getAttachments());
+    }
+
+    public function testBcc(): void
+    {
+        $email = $this->createNotificationEmail();
+        $email->bcc('fake@fake.com');
+        self::assertCount(1, $email->getBcc());
+    }
+
+    public function testCc(): void
+    {
+        $email = $this->createNotificationEmail();
+        $email->cc('fake@fake.com');
+        self::assertCount(1, $email->getCc());
     }
 
     public function testDefaultTemplate(): void
@@ -107,6 +156,13 @@ final class NotificationEmailTest extends TestCase
         $expected = 'subject - importance.medium_title';
         $actual = $headers->getHeaderBody('Subject');
         self::assertSame($expected, $actual);
+    }
+
+    public function testReplyTo(): void
+    {
+        $email = $this->createNotificationEmail();
+        $email->replyTo('fake@fake.com');
+        self::assertCount(1, $email->getReplyTo());
     }
 
     public function testTranslatableSubject(): void

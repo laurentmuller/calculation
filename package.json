@@ -34,7 +34,7 @@
     "scripts": {
         "outdated": "npm outdated",
         "update": "npm update",
-        "stylelint": "npx stylelint public/css/*.css",
+        "stylelint": "npx stylelint -f verbose public/css/*.css",
         "clean": "del-cli public/build -f",
         "generate": "sass scss:public/build/bootstrap -q --no-source-map",
         "copy": "copy-files-from-to --config package-copy.json",

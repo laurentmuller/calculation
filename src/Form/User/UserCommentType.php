@@ -24,7 +24,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 /**
  * Type to send a comment.
  *
- * @extends AbstractType<\Symfony\Component\Form\FormTypeInterface>
+ * @extends AbstractType<Comment>
  */
 class UserCommentType extends AbstractType
 {
@@ -42,7 +42,7 @@ class UserCommentType extends AbstractType
 
         /** @var Comment $data */
         $data = $options['data'];
-        $address = $data->isMail() ? 'toAddress' : 'fromAddress';
+        $address = $data->isMail() ? 'to' : 'from';
         $helper->field($address)
             ->modelTransformer($this->transformer)
             ->addPlainType();

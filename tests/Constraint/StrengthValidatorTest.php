@@ -32,18 +32,12 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
 
     private const EMPTY_MESSAGE = 'empty';
 
-    /**
-     * @phpstan-return \Generator<int, array{int}>
-     */
     public static function getStrengthInvalids(): \Generator
     {
         yield [-2];
         yield [5];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{StrengthLevel|int}>
-     */
     public static function getStrengthLevels(): \Generator
     {
         $levels = StrengthLevel::cases();
@@ -53,9 +47,6 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
         }
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, int, bool}>
-     */
     public static function getStrengths(): \Generator
     {
         for ($i = -1; $i < 5; ++$i) {

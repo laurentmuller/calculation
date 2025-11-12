@@ -32,9 +32,6 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
 final class UserControllerTest extends EntityControllerTestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{0: int}>
-     */
     public static function getRoleIds(): \Generator
     {
         yield [self::ID_USER];

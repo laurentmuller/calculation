@@ -23,9 +23,6 @@ final class EntityPermissionTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{EntityPermission, string}>
-     */
     public static function getLabel(): \Generator
     {
         yield [EntityPermission::ADD, 'rights.add'];
@@ -36,9 +33,6 @@ final class EntityPermissionTest extends TestCase
         yield [EntityPermission::SHOW, 'rights.show'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{?EntityPermission, string}>
-     */
     public static function getTryFromName(): \Generator
     {
         yield [EntityPermission::ADD, 'add'];
@@ -54,9 +48,6 @@ final class EntityPermissionTest extends TestCase
         yield [null, 'FAKE'];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{EntityPermission, int}>
-     */
     public static function getValue(): \Generator
     {
         yield [EntityPermission::ADD, 1];

@@ -22,9 +22,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ThemeServiceTest extends TestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{Request, bool}>
-     */
     public static function getIsDarkTheme(): \Generator
     {
         yield [self::createRequest(), false];
@@ -33,9 +30,6 @@ final class ThemeServiceTest extends TestCase
         yield [self::createRequest('light'), false];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{Request, Theme}>
-     */
     public static function getThemes(): \Generator
     {
         yield [self::createRequest(), Theme::AUTO];
@@ -44,9 +38,6 @@ final class ThemeServiceTest extends TestCase
         yield [self::createRequest('light'), Theme::LIGHT];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{Request, string}>
-     */
     public static function getThemeValues(): \Generator
     {
         yield [self::createRequest(), 'auto'];

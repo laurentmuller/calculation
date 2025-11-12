@@ -27,9 +27,6 @@ final class PhpInfoServiceTest extends TestCase
         $this->service = new PhpInfoService();
     }
 
-    /**
-     * @return \Generator<int, array{0: string, 1: bool}>
-     */
     public static function getColors(): \Generator
     {
         yield ['#0f0f0f', true];
@@ -39,9 +36,6 @@ final class PhpInfoServiceTest extends TestCase
         yield ['fake', false];
     }
 
-    /**
-     * @return \Generator<int, array{0: string, 1: bool}>
-     */
     public static function getDisabledValues(): \Generator
     {
         yield ['off', true];
@@ -52,9 +46,6 @@ final class PhpInfoServiceTest extends TestCase
         yield ['fake', false];
     }
 
-    /**
-     * @return \Generator<int, array{0: string, 1: bool}>
-     */
     public static function getNoValues(): \Generator
     {
         yield ['no value', true];

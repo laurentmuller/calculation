@@ -23,9 +23,6 @@ use Symfony\Component\HttpFoundation\Response;
 #[\PHPUnit\Framework\Attributes\CoversNothing]
 final class RoutesTest extends AuthenticateWebTestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{string, string, int}>
-     */
     public static function getRoutes(): \Generator
     {
         // not exist

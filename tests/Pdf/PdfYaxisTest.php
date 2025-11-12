@@ -19,9 +19,6 @@ use PHPUnit\Framework\TestCase;
 
 final class PdfYaxisTest extends TestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{PdfYaxis, float, float, float}>
-     */
     public static function getValues(): \Generator
     {
         yield [self::createScale(0.0, 9.0), 0.0, 10.0,  1.0];

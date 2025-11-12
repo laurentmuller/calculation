@@ -22,9 +22,6 @@ final class ImportanceTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    /**
-     * @phpstan-return \Generator<int, array{string, Importance}>
-     */
     public static function getLabels(): \Generator
     {
         yield ['importance.high', Importance::HIGH];
@@ -33,9 +30,6 @@ final class ImportanceTest extends TestCase
         yield ['importance.urgent', Importance::URGENT];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string, Importance}>
-     */
     public static function getLabelsTitle(): \Generator
     {
         yield ['importance.high_title', Importance::HIGH];
@@ -44,9 +38,6 @@ final class ImportanceTest extends TestCase
         yield ['importance.urgent_title', Importance::URGENT];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{Importance, string}>
-     */
     public static function getValues(): \Generator
     {
         yield [Importance::HIGH, 'high'];

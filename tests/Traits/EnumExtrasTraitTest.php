@@ -21,45 +21,30 @@ use PHPUnit\Framework\TestCase;
 
 final class EnumExtrasTraitTest extends TestCase
 {
-    /**
-     * @phpstan-return \Generator<int, array{0: HtmlTag, 1: string, 2: bool, 3?: true}>
-     */
     public static function getExtraBool(): \Generator
     {
         yield [HtmlTag::H1, 'font-bold', true];
         yield [HtmlTag::H1, 'fake-key', true, true];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: HtmlTag, 1: string, 2: PdfFontName, 3?: true}>
-     */
     public static function getExtraEnum(): \Generator
     {
         yield [HtmlTag::KEYBOARD, 'font-name', PdfFontName::COURIER];
         yield [HtmlTag::H1, 'fake-key', PdfFontName::COURIER, true];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: HtmlTag, 1: string, 2: float, 3?: true}>
-     */
     public static function getExtraFloat(): \Generator
     {
         yield [HtmlTag::H1, 'font-size', 2.5];
         yield [HtmlTag::H1, 'fake-key', 2.5, true];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: TableView, 1: string, 2: int, 3?: true}>
-     */
     public static function getExtraInt(): \Generator
     {
         yield [TableView::TABLE, 'page-size', 20];
         yield [TableView::TABLE, 'fake-key', 20, true];
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{0: HtmlTag, 1: string, 2: string, 3?: true}>
-     */
     public static function getExtraString(): \Generator
     {
         yield [HtmlTag::CODE, 'text-color', '#FF0000'];

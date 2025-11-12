@@ -30,9 +30,6 @@ final class FixedFloatTypeTest extends TestCase
         }
     }
 
-    /**
-     * @phpstan-return \Generator<int, array{string|float|int|null, float}>
-     */
     public static function getValues(): \Generator
     {
         yield [null, 0.0];

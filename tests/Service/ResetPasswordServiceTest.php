@@ -19,7 +19,6 @@ use App\Service\ResetPasswordService;
 use App\Service\UserExceptionService;
 use App\Tests\Entity\IdTrait;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\DatePoint;
@@ -113,7 +112,7 @@ final class ResetPasswordServiceTest extends TestCase
      */
     public function testSendEmailWithTokenException(): void
     {
-        $helper = $this->createMockResetPasswordHelper();
+        $helper = $this->createMock(ResetPasswordHelperInterface::class);
         $helper->method('generateResetToken')
             ->willThrowException(new InvalidResetPasswordTokenException());
         $user = $this->createUser();
@@ -144,12 +143,7 @@ final class ResetPasswordServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
-    private function createMockResetPasswordHelper(): MockObject&ResetPasswordHelperInterface
-    {
-        return $this->createMock(ResetPasswordHelperInterface::class);
-    }
-
-    private function createResetPasswordHelper(): ResetPasswordHelperInterface
+    private function createResetPasswordHelper(): ResetPasswordHelper
     {
         $generator = $this->createMock(ResetPasswordTokenGenerator::class);
         $cleaner = $this->createMock(ResetPasswordCleaner::class);

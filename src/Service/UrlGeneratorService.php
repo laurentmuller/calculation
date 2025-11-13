@@ -101,9 +101,8 @@ class UrlGeneratorService
         if ([] === $params) {
             return $caller;
         }
-        $separator = \str_contains($caller, '?') ? '&' : '?';
 
-        return $caller . $separator . \http_build_query($params);
+        return $caller . '?' . \http_build_query($params);
     }
 
     /**
@@ -173,11 +172,8 @@ class UrlGeneratorService
     {
         /** @var ?string $caller */
         $caller = $params[self::PARAM_CALLER] ?? null;
-        if (!StringUtils::isString($caller)) {
-            return null;
-        }
 
-        return '/' === $caller ? $caller : \rtrim($caller, '/');
+        return StringUtils::isString($caller) ? $caller : null;
     }
 
     private function getEntityId(EntityInterface|int|null $id): int

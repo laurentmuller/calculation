@@ -14,15 +14,11 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Pdf\PdfLabel;
-use App\Traits\ArrayTrait;
+use App\Traits\CacheKeyTrait;
 use App\Utils\FileUtils;
+use fpdf\Enums\PdfPageSize;
+use fpdf\Enums\PdfUnit;
 use fpdf\PdfException;
-use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
-use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -30,7 +26,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 readonly class PdfLabelService
 {
-    use ArrayTrait;
+    use CacheKeyTrait;
 
     public function __construct(private CacheInterface $cache)
     {
@@ -47,7 +43,9 @@ readonly class PdfLabelService
      */
     public function all(?string $file = null): array
     {
-        return $this->cache->get('service.labels', fn (): array => $this->loadLabels($file));
+        $key = $this->cleanKey(\sprintf('service.labels.%s', $file ?? 'default'));
+
+        return $this->cache->get($key, fn (): array => $this->loadLabels($file));
     }
 
     /**
@@ -70,20 +68,6 @@ readonly class PdfLabelService
         return \array_key_exists($name, $this->all());
     }
 
-    private function createSerializer(): Serializer
-    {
-        $normalizers = [
-            new BackedEnumNormalizer(),
-            new ObjectNormalizer(propertyTypeExtractor: new ReflectionExtractor()),
-            new ArrayDenormalizer(),
-        ];
-        $encoders = [
-            new JsonEncoder(),
-        ];
-
-        return new Serializer($normalizers, $encoders);
-    }
-
     /**
      * @return array<string, PdfLabel>
      *
@@ -92,28 +76,34 @@ readonly class PdfLabelService
     private function loadLabels(?string $file = null): array
     {
         $file ??= __DIR__ . '/../../resources/data/labels.json';
-        if (!FileUtils::exists($file)) {
-            throw PdfException::format('Unable to find the file "%s".', $file);
-        }
-
-        $content = FileUtils::readFile($file);
-        if ('' === $content) {
-            throw PdfException::format('Unable to get content of the file "%s".', $file);
-        }
 
         try {
-            $serializer = $this->createSerializer();
-
-            /** @var PdfLabel[] $labels */
-            $labels = $serializer->deserialize($content, PdfLabel::class . '[]', 'json');
-
-            return $this->mapToKeyValue(
-                $labels,
-                static fn (PdfLabel $label): array => [$label->name => $label]
+            return \array_reduce(
+                FileUtils::decodeJson($file),
+                fn (array $carry, array $source): array => $carry + $this->mapSource($source),
+                []
             );
         } catch (\Exception $e) {
-            $message = \sprintf('Unable to deserialize the content of the file "%s".', $file);
-            throw PdfException::instance($message, $e);
+            throw PdfException::instance(\sprintf('Unable to deserialize the content of the file "%s".', $file), $e);
         }
+    }
+
+    private function mapSource(array $source): array
+    {
+        $label = new PdfLabel();
+        $label->name = $source['name'];
+        $label->pageSize = PdfPageSize::from($source['pageSize']);
+        $label->unit = PdfUnit::from($source['unit']);
+        $label->marginLeft = $source['marginLeft'];
+        $label->marginTop = $source['marginTop'];
+        $label->cols = $source['cols'];
+        $label->rows = $source['rows'];
+        $label->spaceX = $source['spaceX'];
+        $label->spaceY = $source['spaceY'];
+        $label->width = $source['width'];
+        $label->height = $source['height'];
+        $label->fontSize = $source['fontSize'];
+
+        return [$label->name => $label];
     }
 }

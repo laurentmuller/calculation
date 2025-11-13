@@ -25,6 +25,14 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 final class PdfLabelDocumentTest extends TestCase
 {
+    private PdfLabelService $service;
+
+    #[\Override]
+    protected function setUp(): void
+    {
+        $this->service = new PdfLabelService(new ArrayAdapter());
+    }
+
     public function testAddLabels(): void
     {
         $label = $this->getLabel('5160');
@@ -92,8 +100,6 @@ final class PdfLabelDocumentTest extends TestCase
 
     private function getLabel(string $name): PdfLabel
     {
-        $service = new PdfLabelService(new ArrayAdapter());
-
-        return $service->get($name);
+        return $this->service->get($name);
     }
 }

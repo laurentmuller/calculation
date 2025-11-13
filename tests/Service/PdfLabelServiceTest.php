@@ -22,14 +22,7 @@ final class PdfLabelServiceTest extends TestCase
 {
     public function testAll(): void
     {
-        $service = $this->createService();
-        $actual = $service->all();
-        self::assertNotEmpty($actual);
-    }
-
-    public function testAllWithDefaultFile(): void
-    {
-        $service = $this->createService();
+        $service = $this->createLabelService();
         $actual = $service->all();
         self::assertNotEmpty($actual);
     }
@@ -38,54 +31,55 @@ final class PdfLabelServiceTest extends TestCase
     {
         $file = __DIR__ . '/../files/txt/empty.txt';
         self::expectException(PdfException::class);
-        $service = $this->createService();
+        $service = $this->createLabelService();
         $service->all($file);
     }
 
     public function testAllWithGivenFile(): void
     {
         $file = __DIR__ . '/../../resources/data/labels.json';
-        $service = $this->createService();
+        $service = $this->createLabelService();
         $actual = $service->all($file);
         self::assertNotEmpty($actual);
     }
 
     public function testAllWithInvalidFile(): void
     {
+        $file = __FILE__;
         self::expectException(PdfException::class);
-        $service = $this->createService();
-        $service->all(__FILE__);
+        $service = $this->createLabelService();
+        $service->all($file);
     }
 
     public function testAllWithNotExistFile(): void
     {
         self::expectException(PdfException::class);
-        $service = $this->createService();
+        $service = $this->createLabelService();
         $service->all('fake');
     }
 
     public function testGetInvalid(): void
     {
         self::expectException(PdfException::class);
-        $service = $this->createService();
+        $service = $this->createLabelService();
         $service->get('fake');
     }
 
     public function testGetValid(): void
     {
-        $service = $this->createService();
+        $service = $this->createLabelService();
         $service->get('3422');
         self::expectNotToPerformAssertions();
     }
 
     public function testHas(): void
     {
-        $service = $this->createService();
+        $service = $this->createLabelService();
         self::assertTrue($service->has('3422'));
         self::assertFalse($service->has('fake'));
     }
 
-    private function createService(): PdfLabelService
+    private function createLabelService(): PdfLabelService
     {
         return new PdfLabelService(new ArrayAdapter());
     }

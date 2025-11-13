@@ -27,12 +27,12 @@ use Symfony\Contracts\Cache\CacheInterface;
  *      debug: bool,
  *      methods: string}
  */
-class RouteInfoService
+readonly class RouteInfoService
 {
     public function __construct(
-        private readonly RouterInterface $router,
+        private RouterInterface $router,
         #[Target('calculation.symfony')]
-        private readonly CacheInterface $cache,
+        private CacheInterface $cache,
     ) {
     }
 
@@ -77,8 +77,7 @@ class RouteInfoService
         $result = [];
         $routes = $this->router->getRouteCollection()->all();
         foreach ($routes as $name => $route) {
-            $debug = $this->isDebugRoute($name);
-            $result[$name] = $this->parseRoute($name, $debug, $route);
+            $result[$name] = $this->parseRoute($name, $route);
         }
 
         return $result;
@@ -87,14 +86,14 @@ class RouteInfoService
     /**
      * @phpstan-return RouteType
      */
-    private function parseRoute(string $name, bool $debug, Route $route): array
+    private function parseRoute(string $name, Route $route): array
     {
         $methods = $route->getMethods();
 
         return [
             'name' => $name,
-            'debug' => $debug,
             'path' => $route->getPath(),
+            'debug' => $this->isDebugRoute($name),
             'methods' => [] === $methods ? 'ANY' : \implode(', ', $methods),
         ];
     }

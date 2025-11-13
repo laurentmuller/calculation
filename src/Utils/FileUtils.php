@@ -44,7 +44,7 @@ final class FileUtils
     /**
      * Changes the extension of the given file.
      */
-    public static function changeExtension(string|\SplFileInfo $file, string|ImageExtension $extension): string
+    public static function changeExtension(string $file, string|ImageExtension $extension): string
     {
         if ($extension instanceof ImageExtension) {
             $extension = $extension->value;
@@ -96,8 +96,8 @@ final class FileUtils
     /**
      * Decode the given file as JSON.
      *
-     * @param string|\SplFileInfo $file  the path or URL to the file
-     * @param bool                $assoc when true, returned objects will be converted into associative arrays
+     * @param string $file  the path or URL to the file
+     * @param bool   $assoc when true, returned objects will be converted into associative arrays
      *
      * @return array|\stdClass the decoded file content in the appropriate PHP type
      *
@@ -105,7 +105,7 @@ final class FileUtils
      *
      * @throws \InvalidArgumentException if the file cannot be decoded
      */
-    public static function decodeJson(string|\SplFileInfo $file, bool $assoc = true): array|\stdClass
+    public static function decodeJson(string $file, bool $assoc = true): array|\stdClass
     {
         $file = self::realPath($file);
 
@@ -124,12 +124,12 @@ final class FileUtils
     /**
      * Atomically dumps content into a file.
      *
-     * @param \SplFileInfo|string $file    the file to write to
-     * @param resource|string     $content the data to write into the file
+     * @param string          $file    the file to write to
+     * @param resource|string $content the data to write into the file
      *
      * @return bool true on success, false on failure
      */
-    public static function dumpFile(string|\SplFileInfo $file, mixed $content): bool
+    public static function dumpFile(string $file, mixed $content): bool
     {
         try {
             self::getFilesystem()->dumpFile(self::realPath($file), $content);
@@ -145,9 +145,9 @@ final class FileUtils
      *
      * If the file does not exist, return 0.
      *
-     * @param string|\SplFileInfo $file the file or directory path
+     * @param string $file the file or directory path
      */
-    public static function empty(string|\SplFileInfo $file): bool
+    public static function empty(string $file): bool
     {
         return 0 === self::size($file);
     }
@@ -155,7 +155,7 @@ final class FileUtils
     /**
      * Checks the existence of the given file.
      */
-    public static function exists(string|\SplFileInfo $file): bool
+    public static function exists(string $file): bool
     {
         return self::getFilesystem()->exists(self::realPath($file));
     }
@@ -163,9 +163,9 @@ final class FileUtils
     /**
      * Formats the size of the given path.
      *
-     * @phpstan-param string|\SplFileInfo|non-negative-int $path
+     * @phpstan-param string|int $path
      */
-    public static function formatSize(string|\SplFileInfo|int $path): string
+    public static function formatSize(string|int $path): string
     {
         $size = \is_int($path) ? $path : self::size($path);
 
@@ -177,7 +177,7 @@ final class FileUtils
      *
      * @param bool $forceLowerCase forces the extension to be lower-case
      */
-    public static function getExtension(string|\SplFileInfo $file, bool $forceLowerCase = false): string
+    public static function getExtension(string $file, bool $forceLowerCase = false): string
     {
         return Path::getExtension(self::realPath($file), $forceLowerCase);
     }
@@ -217,7 +217,7 @@ final class FileUtils
     /**
      * Tells whether the given file is a directory.
      */
-    public static function isDir(string|\SplFileInfo $file): bool
+    public static function isDir(string $file): bool
     {
         return \is_dir(self::realPath($file));
     }
@@ -225,7 +225,7 @@ final class FileUtils
     /**
      * Tells whether the given file is a regular file.
      */
-    public static function isFile(string|\SplFileInfo $file): bool
+    public static function isFile(string $file): bool
     {
         return \is_file(self::realPath($file));
     }
@@ -287,7 +287,7 @@ final class FileUtils
      * more efficient and should be used whenever the given path is known to be a valid,
      * absolute system path.
      */
-    public static function normalize(string|\SplFileInfo $file): string
+    public static function normalize(string $file): string
     {
         return Path::normalize(self::realPath($file));
     }
@@ -297,7 +297,7 @@ final class FileUtils
      *
      * @return string the content of the file; an empty string ("") on error
      */
-    public static function readFile(string|\SplFileInfo $file): string
+    public static function readFile(string $file): string
     {
         $file = self::realPath($file);
         if (!self::isFile($file) && !self::validateURL($file)) {
@@ -314,11 +314,8 @@ final class FileUtils
     /**
      * Gets the real path of the given file.
      */
-    public static function realPath(string|\SplFileInfo $file): string
+    public static function realPath(string $file): string
     {
-        if ($file instanceof \SplFileInfo) {
-            $file = $file->getPathname();
-        }
         $path = \realpath($file);
 
         return \is_string($path) ? $path : $file;
@@ -327,7 +324,7 @@ final class FileUtils
     /**
      * Deletes a file or a directory.
      */
-    public static function remove(string|\SplFileInfo $file): bool
+    public static function remove(string $file): bool
     {
         try {
             $file = self::realPath($file);
@@ -364,10 +361,8 @@ final class FileUtils
 
     /**
      * Gets the size, in bytes, of the given file.
-     *
-     * @phpstan-return non-negative-int
      */
-    public static function size(string|\SplFileInfo $file): int
+    public static function size(string $file): int
     {
         $file = self::realPath($file);
         if (!self::exists($file)) {
@@ -375,7 +370,6 @@ final class FileUtils
         }
 
         if (self::isFile($file)) {
-            /** @phpstan-var non-negative-int */
             return (int) \filesize($file);
         }
 
@@ -387,7 +381,6 @@ final class FileUtils
             }
         }
 
-        /** @phpstan-var non-negative-int */
         return $size;
     }
 

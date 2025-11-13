@@ -4,7 +4,9 @@
 {%- set title = title|default('calculation.list.title') -%}
 {%- set title_icon = title_icon|default(ICON_CALCULATION) -%}
 {%- set object_type = ENTITY_CALCULATION -%}
+{#
 {%- set attributes = attributes|default({})|merge({'danger-tooltip-selector': 'span.has-tooltip'}) -%}
+#}
 {# header actions #}
 {% block header_actions -%}
 {% if allow_add %}<a class="add-link p-0" href="{{ path('calculation_add', params) }}">{{ 'calculation.add.title'|trans }}</a>{% endif %}

@@ -58,7 +58,7 @@ class VichListener
             $file = $this->rename($mapping, $user, $file);
         }
 
-        $source = FileUtils::realPath($file);
+        $source = $file->getRealPath();
         $this->resizer->resizeMedium($source, $this->buildPath($user, ImageSize::MEDIUM, $file));
         $this->resizer->resizeSmall($source, $this->buildPath($user, ImageSize::SMALL, $file));
     }
@@ -100,7 +100,7 @@ class VichListener
         }
 
         // resize
-        $source = FileUtils::realPath($file);
+        $source = $file->getRealPath();
         $this->resizer->resizeDefault($source, $source);
 
         // rename extension if not PNG

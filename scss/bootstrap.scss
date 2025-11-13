@@ -1,15 +1,15 @@
 // state
-$enable-rounded: false;
-$enable-validation-icons: false;
-$enable-negative-margins: true;
+$enable-rounded:            false;
+$enable-validation-icons:   false;
+$enable-negative-margins:   true;
 // variables
-$accordion-padding-x: 1rem;
-$accordion-icon-width: 1rem;
-$link-decoration: none;
-$tooltip-opacity: 1.0;
+$accordion-padding-x:       1rem;
+$accordion-icon-width:      1rem;
+$link-decoration:           none;
+$tooltip-opacity:           1.0;
 // colors
-$info: #9ec5fe;
-$code-color: #dc3545;
+$info:                      #9ec5fe;
+$code-color:                #dc3545;
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 

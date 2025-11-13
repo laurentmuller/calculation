@@ -23,7 +23,7 @@ class ReverseReader extends AbstractReader
     /**
      * Creates a new instance.
      *
-     * @param \SplFileInfo|string|resource $file the file to open
+     * @param string|resource $file the file to open
      */
     public static function instance(mixed $file): self
     {

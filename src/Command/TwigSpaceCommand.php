@@ -117,7 +117,7 @@ class TwigSpaceCommand
     private function updateContent(SymfonyStyle $io, SplFileInfo $file, string $content): bool
     {
         $content = StringUtils::pregReplace(self::PATTERN, self::REPLACEMENT, $content);
-        if (!FileUtils::dumpFile($file, $content)) {
+        if (!FileUtils::dumpFile($file->getPathname(), $content)) {
             $io->error(\sprintf('Unable to set content of the template "%s".', $file->getRelativePathname()));
 
             return false;

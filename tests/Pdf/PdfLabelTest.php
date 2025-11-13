@@ -32,18 +32,18 @@ final class PdfLabelTest extends TestCase
     public function testOffsetX(): void
     {
         $label = $this->getLabel('5160');
-        $actual = $label->getOffsetX(0);
+        $actual = $label->offsetX(0);
         self::assertEqualsWithDelta(1.762, $actual, 0.01);
-        $actual = $label->getOffsetX(1);
+        $actual = $label->offsetX(1);
         self::assertEqualsWithDelta(1.762 + 3.175 + 66.675, $actual, 0.01);
     }
 
     public function testOffsetY(): void
     {
         $label = $this->getLabel('5160');
-        $actual = $label->getOffsetY(0);
+        $actual = $label->offsetY(0);
         self::assertEqualsWithDelta(10.7, $actual, 0.01);
-        $actual = $label->getOffsetY(1);
+        $actual = $label->offsetY(1);
         self::assertEqualsWithDelta(10.7 + 0.0 + 25.4, $actual, 0.01);
     }
 
@@ -70,6 +70,13 @@ final class PdfLabelTest extends TestCase
         $label = $this->getLabel('5160');
         $actual = $label->size();
         self::assertSame(30, $actual);
+    }
+
+    public function testToString(): void
+    {
+        $label = $this->getLabel('5160');
+        $actual = (string) $label;
+        self::assertSame('5160', $actual);
     }
 
     private function getLabel(string $name): PdfLabel

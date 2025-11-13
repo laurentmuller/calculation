@@ -1022,8 +1022,10 @@
 
                 $range.on('input', function () {
                     const value = $range.intVal();
-                    const title = $this.formatPages($range.data('options'), value);
-                    const records = $this.formatRecords($range.data('options'), value);
+                    /** @type {Object} */
+                    const options = $range.data('options');
+                    const title = $this.formatPages(options, value);
+                    const records = $this.formatRecords(options, value);
                     $range.attr('title', title);
                     $labelLabel.text(title);
                     $labelRecord.text(records);

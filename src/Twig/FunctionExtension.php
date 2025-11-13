@@ -188,10 +188,9 @@ final readonly class FunctionExtension
         if (!StringUtils::isString($path)) {
             return null;
         }
-        $path = FileUtils::buildPath($this->publicDir, $path);
-        $file = \realpath($path);
+        $file = FileUtils::buildPath($this->publicDir, $path);
 
-        return false === $file ? null : FileUtils::normalize($file);
+        return FileUtils::exists($file) ? $file : null;
     }
 
     /**

@@ -138,7 +138,8 @@ readonly class OpenWeatherCityUpdater
         if (!$file->isValid()) {
             return false;
         }
-        $content = FileUtils::readFile($file);
+
+        $content = FileUtils::readFile($file->getPathname());
         if ('' === $content) {
             return false;
         }

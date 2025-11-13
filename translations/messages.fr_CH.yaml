@@ -8,6 +8,7 @@ application:
     github: Code source
     github_url: GitHub
     customer: Client
+    deploy: Déploiement
 about:
     title: A propos de
     version: Version %version%

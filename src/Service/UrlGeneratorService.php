@@ -173,7 +173,7 @@ class UrlGeneratorService
         /** @var ?string $caller */
         $caller = $params[self::PARAM_CALLER] ?? null;
 
-        return StringUtils::isString($caller) ? $caller : null;
+        return StringUtils::trim($caller);
     }
 
     private function getEntityId(EntityInterface|int|null $id): int

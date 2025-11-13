@@ -36,17 +36,17 @@ class CSVReader extends AbstractReader
     public const DEFAULT_SEPARATOR = ',';
 
     /**
-     * @param \SplFileInfo|string|resource $file      the CSV file to open or an opened resource
-     * @param int<0, max>                  $length    the line length.
-     *                                                Must be greater than the longest line (in characters) to be found
-     *                                                in the CSV file (allowing for trailing line-end characters).
-     *                                                Setting it to 0, the maximum line length is not limited, which is
-     *                                                slightly slower.
-     * @param string                       $separator the field delimiter. It must be a single byte character.
-     * @param string                       $enclosure the field enclosure character. It must be a single byte character.
-     * @param string                       $escape    the escape character. It must be a single byte character or
-     *                                                the empty string. The empty string ("")  disables the proprietary
-     *                                                escape mechanism.
+     * @param string|resource $file      the CSV file to open or an opened resource
+     * @param int<0, max>     $length    the line length.
+     *                                   Must be greater than the longest line (in characters) to be found
+     *                                   in the CSV file (allowing for trailing line-end characters).
+     *                                   Setting it to 0, the maximum line length is not limited, which is
+     *                                   slightly slower.
+     * @param string          $separator the field delimiter. It must be a single byte character.
+     * @param string          $enclosure the field enclosure character. It must be a single byte character.
+     * @param string          $escape    the escape character. It must be a single byte character or
+     *                                   the empty string. The empty string ("")  disables the proprietary
+     *                                   escape mechanism.
      *
      * @throws \InvalidArgumentException if the separator or the enclosure is not a single byte character,
      *                                   or if the escape is not a single byte character or is not empty
@@ -74,17 +74,17 @@ class CSVReader extends AbstractReader
     /**
      * Creates a new instance.
      *
-     * @param \SplFileInfo|string|resource $file      the CSV file to open or an opened resource
-     * @param int<0, max>                  $length    the line length.
-     *                                                Must be greater than the longest line (in characters) to be found
-     *                                                in the CSV file (allowing for trailing line-end characters).
-     *                                                Setting it to 0, the maximum line length is not limited, which is
-     *                                                slightly slower.
-     * @param string                       $separator the field delimiter. It must be a single byte character.
-     * @param string                       $enclosure the field enclosure character. It must be a single byte character.
-     * @param string                       $escape    the escape character. It must be a single byte character or
-     *                                                the empty string.
-     *                                                The empty string ("")  disables the proprietary
+     * @param string|resource $file      the CSV file to open or an opened resource
+     * @param int<0, max>     $length    the line length.
+     *                                   Must be greater than the longest line (in characters) to be found
+     *                                   in the CSV file (allowing for trailing line-end characters).
+     *                                   Setting it to 0, the maximum line length is not limited, which is
+     *                                   slightly slower.
+     * @param string          $separator the field delimiter. It must be a single byte character.
+     * @param string          $enclosure the field enclosure character. It must be a single byte character.
+     * @param string          $escape    the escape character. It must be a single byte character or
+     *                                   the empty string.
+     *                                   The empty string ("")  disables the proprietary
      *
      * @throws \InvalidArgumentException if the separator or the enclosure is not a single byte character,
      *                                   or if the escape is not a single byte character or is not empty

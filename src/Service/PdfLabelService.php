@@ -92,16 +92,21 @@ readonly class PdfLabelService
     {
         $label = new PdfLabel();
         $label->name = $source['name'];
-        $label->pageSize = PdfPageSize::from($source['pageSize']);
         $label->unit = PdfUnit::from($source['unit']);
+        $label->pageSize = PdfPageSize::from($source['pageSize']);
+
         $label->marginLeft = $source['marginLeft'];
         $label->marginTop = $source['marginTop'];
+
         $label->cols = $source['cols'];
         $label->rows = $source['rows'];
+
         $label->spaceX = $source['spaceX'];
         $label->spaceY = $source['spaceY'];
+
         $label->width = $source['width'];
         $label->height = $source['height'];
+
         $label->fontSize = $source['fontSize'];
 
         return [$label->name => $label];

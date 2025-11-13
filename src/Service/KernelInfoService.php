@@ -27,14 +27,14 @@ use Symfony\Component\HttpKernel\KernelInterface;
  *      relative: string,
  *      size: string}
  */
-class KernelInfoService
+readonly class KernelInfoService
 {
-    private readonly Environment $environment;
-    private readonly Environment $mode;
-    private readonly string $projectDir;
+    private Environment $environment;
+    private Environment $mode;
+    private string $projectDir;
 
     public function __construct(
-        private readonly KernelInterface $kernel,
+        private KernelInterface $kernel,
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
         #[Autowire('%app_mode%')]

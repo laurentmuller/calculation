@@ -416,12 +416,11 @@ function initializeContextMenus($table) {
  */
 function initializeDangerTooltips($table) {
     'use strict';
-    const selector = $table.data('danger-tooltip-selector');
-    if (selector) {
-        $table.getTableContainer().tooltip({
-            customClass: 'tooltip-danger', selector: selector, html: true
-        });
-    }
+    $table.getTableContainer().tooltip({
+        customClass: 'tooltip-danger',
+        selector: '.has-tooltip',
+        html: true
+    });
 }
 
 /**

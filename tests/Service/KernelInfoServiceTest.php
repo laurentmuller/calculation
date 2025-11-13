@@ -91,12 +91,21 @@ final class KernelInfoServiceTest extends TestCase
 
     private function createService(): KernelInfoService
     {
+        $dir = __DIR__;
         $mode = self::ENVIRONMENT->value;
+
         $kernel = $this->createMock(KernelInterface::class);
         $kernel->method('getEnvironment')
             ->willReturn($mode);
         $kernel->method('getCharset')
             ->willReturn(self::CHARSET);
+
+        $kernel->method('getBuildDir')
+            ->willReturn($dir);
+        $kernel->method('getCacheDir')
+            ->willReturn($dir);
+        $kernel->method('getLogDir')
+            ->willReturn($dir);
 
         return new KernelInfoService($kernel, __DIR__, $mode);
     }

@@ -28,15 +28,15 @@ class CustomerParameter implements ParameterInterface
     #[Parameter('customer_email')]
     private ?string $email = null;
 
-    #[Assert\Url]
+    #[Assert\Url(requireTld: true)]
     #[Parameter('customer_facebook')]
     private ?string $facebook = null;
 
-    #[Assert\Url]
+    #[Assert\Url(requireTld: true)]
     #[Parameter('customer_instagram')]
     private ?string $instagram = null;
 
-    #[Assert\Url]
+    #[Assert\Url(requireTld: true)]
     #[Parameter('customer_linkedin')]
     private ?string $linkedin = null;
 
@@ -47,7 +47,7 @@ class CustomerParameter implements ParameterInterface
     #[Parameter('customer_phone')]
     private ?string $phone = null;
 
-    #[Assert\Url]
+    #[Assert\Url(requireTld: true)]
     #[Parameter('customer_url')]
     private ?string $url = null;
 

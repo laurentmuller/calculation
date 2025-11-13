@@ -95,8 +95,6 @@ final class FileUtilsTest extends TestCase
     {
         yield [__DIR__, __DIR__];
         yield [__FILE__, __FILE__];
-        yield [new \SplFileInfo(__DIR__), __DIR__];
-        yield [new \SplFileInfo(__FILE__), __FILE__];
     }
 
     #[DataProvider('getBuildPaths')]
@@ -207,10 +205,10 @@ final class FileUtilsTest extends TestCase
     }
 
     /**
-     * @phpstan-param string|\SplFileInfo|non-negative-int $path
+     * @phpstan-param string|non-negative-int $path
      */
     #[DataProvider('getFormatSize')]
-    public function testFormatSize(string|\SplFileInfo|int $path, string $expected): void
+    public function testFormatSize(string|int $path, string $expected): void
     {
         $actual = FileUtils::formatSize($path);
         self::assertSame($expected, $actual);
@@ -326,7 +324,7 @@ final class FileUtilsTest extends TestCase
     }
 
     #[DataProvider('getRealPath')]
-    public function testRealPath(string|\SplFileInfo $file, string $expected): void
+    public function testRealPath(string $file, string $expected): void
     {
         $actual = FileUtils::realPath($file);
         self::assertSame($expected, $actual);

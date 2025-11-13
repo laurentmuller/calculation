@@ -254,7 +254,7 @@ class TestController extends AbstractController
     {
         $content = $this->renderView('test/html_report.html.twig');
         $doc = new HtmlDocument($this, $content);
-        $doc->setTitleTrans('test.html');
+        $doc->setTranslatedTitle('test.html');
 
         return $this->renderWordDocument($doc);
     }

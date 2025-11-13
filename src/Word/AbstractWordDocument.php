@@ -63,15 +63,12 @@ abstract class AbstractWordDocument extends WordDocument
     /**
      * Sets the title to be translated.
      *
-     * @param string  $id         the message identifier (may also be an object that can be cast to string)
-     * @param array   $parameters an array of parameters for the message
-     * @param ?string $domain     the domain for the message or null to use the default
+     * @param string $id         the message identifier (may also be an object that can be cast to string)
+     * @param array  $parameters an array of parameters for the message
      */
-    public function setTitleTrans(string $id, array $parameters = [], ?string $domain = null): static
+    public function setTranslatedTitle(string $id, array $parameters = []): static
     {
-        $title = $this->trans($id, $parameters, $domain);
-
-        return $this->setTitle($title);
+        return $this->setTitle($this->trans($id, $parameters));
     }
 
     /**

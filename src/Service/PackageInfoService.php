@@ -44,16 +44,16 @@ use Symfony\Contracts\Cache\CacheInterface;
  *      require?: array<string, string>,
  *      require-dev?: array<string, string>}
  */
-class PackageInfoService
+readonly class PackageInfoService
 {
     private const JSON_FILE = 'installed.json';
     private const LICENSE_PATTERN = '{license{*},LICENSE{*}}';
 
     public function __construct(
         #[Autowire('%kernel.project_dir%/vendor/composer')]
-        private readonly string $path,
+        private string $path,
         #[Target('calculation.symfony')]
-        private readonly CacheInterface $cache,
+        private CacheInterface $cache,
     ) {
     }
 

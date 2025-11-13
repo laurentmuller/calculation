@@ -97,7 +97,7 @@ abstract class AbstractAboutController extends AbstractController
         $title = $this->getTitle();
         $content = $this->loadContent();
         $doc = new HtmlDocument($this, $content);
-        $doc->setTitleTrans($title);
+        $doc->setTranslatedTitle($title);
 
         return $this->renderWordDocument($doc);
     }

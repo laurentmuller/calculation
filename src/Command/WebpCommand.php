@@ -183,7 +183,7 @@ class WebpCommand
 
     private function getTargetFile(SplFileInfo $info): string
     {
-        return FileUtils::changeExtension($info, ImageExtension::WEBP);
+        return FileUtils::changeExtension($info->getPathname(), ImageExtension::WEBP);
     }
 
     private function isImage(string $path): bool
@@ -194,7 +194,7 @@ class WebpCommand
     }
 
     /**
-     * @return array{0: bool, 1: non-negative-int}
+     * @return array{0: bool, 1: int}
      */
     private function saveImage(\GdImage $image, ?string $path = null): array
     {

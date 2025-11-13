@@ -103,14 +103,6 @@ final class CSVReaderTest extends TestCase
         }
     }
 
-    public function testWithFileInfo(): void
-    {
-        $file = new \SplFileInfo($this->getFileName());
-        $reader = CSVReader::instance($file);
-        self::assertTrue($reader->isOpen());
-        $reader->close();
-    }
-
     public function testWithFileResource(): void
     {
         $resource = null;

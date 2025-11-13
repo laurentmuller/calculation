@@ -37,7 +37,7 @@ final class AbstractWordDocumentTest extends TestCase
                 return true;
             }
         };
-        $doc->setTitleTrans('id');
+        $doc->setTranslatedTitle('id');
         $actual = $doc->render();
         self::assertTrue($actual);
     }

@@ -27,7 +27,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  * @see https://github.com/symfony/symfony/blob/7.1/src/Symfony/Bundle/FrameworkBundle/Command/AboutCommand.php
  * @see https://github.com/EasyCorp/easy-doc-bundle/blob/master/src/Command/DocCommand.php
  */
-class SymfonyInfoService
+readonly class SymfonyInfoService
 {
     /**
      * The disabled label.
@@ -51,7 +51,7 @@ class SymfonyInfoService
 
     public function __construct(
         #[Target('calculation.symfony')]
-        private readonly CacheInterface $cache,
+        private CacheInterface $cache,
     ) {
     }
 

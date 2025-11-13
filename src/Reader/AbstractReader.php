@@ -35,13 +35,10 @@ abstract class AbstractReader implements \IteratorAggregate
     private mixed $stream;
 
     /**
-     * @param \SplFileInfo|string|resource $file the file to open or an opened resource
+     * @param string|resource $file the file to open or an opened resource
      */
     public function __construct(mixed $file)
     {
-        if ($file instanceof \SplFileInfo) {
-            $file = $file->getPathname();
-        }
         $this->stream = \is_string($file) ? \fopen($file, 'r') : $file;
     }
 

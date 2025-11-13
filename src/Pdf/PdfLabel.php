@@ -19,7 +19,7 @@ use fpdf\Enums\PdfUnit;
 /**
  * Contains label layout.
  */
-class PdfLabel
+class PdfLabel implements \Stringable
 {
     /**
      * The number of horizontal labels (columns).
@@ -76,10 +76,16 @@ class PdfLabel
      */
     public float $width = 0.0;
 
+    #[\Override]
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
     /**
      * Gets the horizontal offset for the given column.
      */
-    public function getOffsetX(int $column): float
+    public function offsetX(int $column): float
     {
         return $this->marginLeft + (float) $column * ($this->width + $this->spaceX);
     }
@@ -87,7 +93,7 @@ class PdfLabel
     /**
      * Gets the vertical offset for the given row.
      */
-    public function getOffsetY(int $row): float
+    public function offsetY(int $row): float
     {
         return $this->marginTop + (float) $row * ($this->height + $this->spaceY);
     }
@@ -101,11 +107,21 @@ class PdfLabel
      */
     public function scaleToMillimeters(): self
     {
-        if (PdfUnit::MILLIMETER === $this->unit) {
+        return $this->scaleToUnit(PdfUnit::MILLIMETER);
+    }
+
+    /**
+     * Clone this instance and convert values to the given target unit.
+     *
+     * Returns this instance if this unit is the same as the given target unit.
+     */
+    public function scaleToUnit(PdfUnit $targetUnit): self
+    {
+        if ($targetUnit === $this->unit) {
             return $this;
         }
 
-        $factor = $this->getScaleFactor();
+        $factor = $this->unit->getScaleFactor() / $targetUnit->getScaleFactor();
 
         $copy = clone $this;
         $copy->unit = PdfUnit::MILLIMETER;
@@ -125,10 +141,5 @@ class PdfLabel
     public function size(): int
     {
         return $this->cols * $this->rows;
-    }
-
-    private function getScaleFactor(): float
-    {
-        return $this->unit->getScaleFactor() / PdfUnit::MILLIMETER->getScaleFactor();
     }
 }

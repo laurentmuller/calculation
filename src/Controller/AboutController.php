@@ -16,7 +16,6 @@ namespace App\Controller;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Attribute\WordRoute;
-use App\Enums\Environment;
 use App\Interfaces\RoleInterface;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
@@ -46,15 +45,10 @@ class AboutController extends AbstractController
     }
 
     #[IndexRoute]
-    public function index(
-        #[Autowire('%kernel.environment%')]
-        string $app_env,
-        #[Autowire('%app_mode%')]
-        string $app_mode
-    ): Response {
+    public function index(): Response
+    {
         return $this->render('about/about.html.twig', [
-            'env' => Environment::from($app_env),
-            'mode' => Environment::from($app_mode),
+            'deploy' => $this->getDeploy(),
         ]);
     }
 
@@ -75,7 +69,7 @@ class AboutController extends AbstractController
         $content = $this->loadContent();
         $parameters = ['%app_name%' => $this->getApplication()];
         $doc = new HtmlDocument($this, $content);
-        $doc->setTitleTrans('index.menu_info', $parameters);
+        $doc->setTranslatedTitle('index.menu_info', $parameters);
 
         return $this->renderWordDocument($doc);
     }
@@ -93,6 +87,11 @@ class AboutController extends AbstractController
         $content = $this->service->updateTags($tags, $content);
 
         return $this->service->addTagClass('p', 'text-justify', $content);
+    }
+
+    private function getDeploy(): int
+    {
+        return (int) \filemtime(FileUtils::buildPath($this->projectDir, 'composer.lock'));
     }
 
     private function loadContent(): string

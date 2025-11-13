@@ -97,8 +97,9 @@ class PdfLabelDocument extends PdfDocument
             ->setMargins(0, 0)
             ->setCellMargin(0);
 
-        $this->currentCol = $startIndex % $this->label->cols;
-        $this->currentRow = \intdiv($startIndex % $this->label->size(), $this->label->cols);
+        $cols = $this->label->cols;
+        $this->currentCol = $startIndex % $cols;
+        $this->currentRow = \intdiv($startIndex % $this->label->size(), $cols);
     }
 
     /**
@@ -112,8 +113,12 @@ class PdfLabelDocument extends PdfDocument
             $this->currentRow = 0;
             $this->addPage();
         }
-        $this->outputLabelText($text);
-        $this->outputLabelBorder();
+        if ('' !== $text) {
+            $this->outputLabelText($text);
+        }
+        if ($this->labelBorder) {
+            $this->outputLabelBorder();
+        }
         if (++$this->currentCol === $this->label->cols) {
             $this->currentCol = 0;
             ++$this->currentRow;
@@ -163,7 +168,7 @@ class PdfLabelDocument extends PdfDocument
      */
     private function getLabelX(): float
     {
-        return $this->label->getOffsetX($this->currentCol) + self::PADDING;
+        return $this->label->offsetX($this->currentCol) + self::PADDING;
     }
 
     /**
@@ -171,7 +176,7 @@ class PdfLabelDocument extends PdfDocument
      */
     private function getLabelY(string $text): float
     {
-        $y = $this->label->getOffsetY($this->currentRow);
+        $y = $this->label->offsetY($this->currentRow);
         $lines = \count(StringUtils::splitLines($text));
         $height = (float) $lines * $this->lineHeight;
 
@@ -183,13 +188,9 @@ class PdfLabelDocument extends PdfDocument
      */
     private function outputLabelBorder(): void
     {
-        if (!$this->labelBorder) {
-            return;
-        }
-
         PdfDrawColor::cellBorder()->apply($this);
-        $x = $this->label->getOffsetX($this->currentCol);
-        $y = $this->label->getOffsetY($this->currentRow);
+        $x = $this->label->offsetX($this->currentCol);
+        $y = $this->label->offsetY($this->currentRow);
         $this->dashedRect($x, $y, $this->label->width, $this->label->height, 1.0);
     }
 
@@ -198,10 +199,6 @@ class PdfLabelDocument extends PdfDocument
      */
     private function outputLabelText(string $text): void
     {
-        if ('' === $text) {
-            return;
-        }
-
         $x = $this->getLabelX();
         $y = $this->getLabelY($text);
         $height = $this->lineHeight;

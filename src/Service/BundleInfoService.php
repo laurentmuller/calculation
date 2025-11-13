@@ -29,14 +29,14 @@ use Symfony\Contracts\Cache\CacheInterface;
  *      package: string,
  *      size: string}
  */
-class BundleInfoService
+readonly class BundleInfoService
 {
-    private readonly string $projectDir;
+    private string $projectDir;
 
     public function __construct(
-        private readonly KernelInterface $kernel,
+        private KernelInterface $kernel,
         #[Target('calculation.symfony')]
-        private readonly CacheInterface $cache,
+        private CacheInterface $cache,
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
     ) {

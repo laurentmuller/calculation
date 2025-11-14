@@ -280,6 +280,18 @@
     }
 
     /**
+     * Initialize danger tooltips.
+     */
+    function handleDangerTooltips() {
+        $('.card-body .has-tooltip')
+            .tooltip('dispose')
+            .tooltip({
+                customClass: 'tooltip-danger',
+                html: true
+            });
+    }
+
+    /**
      * Update the calculations view
      */
     function updateView() {
@@ -339,18 +351,6 @@
             $link.attr('title', $link.data('expand'));
             Cookie.setValue(key, false, path);
         });
-    }
-
-    /**
-     * Initialize danger tooltips.
-     */
-    function handleDangerTooltips() {
-        $('.card-body .has-tooltip')
-            .tooltip('dispose')
-            .tooltip({
-                customClass: 'tooltip-danger',
-                html: true
-            });
     }
 
     /**

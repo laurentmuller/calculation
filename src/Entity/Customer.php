@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\CustomerRepository;
-use App\Service\CountryFlagService;
 use App\Utils\DateUtils;
 use App\Utils\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\DatePointType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Clock\DatePoint;
+use Symfony\Component\Intl\Countries;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
@@ -37,7 +37,6 @@ class Customer extends AbstractEntity
     #[ORM\Column(nullable: true)]
     private ?string $address = null;
 
-    #[Assert\Date]
     #[ORM\Column(type: DatePointType::NAME, nullable: true)]
     private ?DatePoint $birthday = null;
 
@@ -51,7 +50,7 @@ class Customer extends AbstractEntity
 
     #[Assert\Length(max: 100)]
     #[ORM\Column(length: 100, nullable: true)]
-    private ?string $country;
+    private ?string $country = 'CH';
 
     #[Assert\Email]
     #[Assert\Length(max: 100)]
@@ -80,11 +79,6 @@ class Customer extends AbstractEntity
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $zipCode = null;
 
-    public function __construct()
-    {
-        $this->country = CountryFlagService::getDefaultCode();
-    }
-
     /**
      * Get address.
      */
@@ -102,13 +96,11 @@ class Customer extends AbstractEntity
             return null;
         }
 
-        $currentDate = DateUtils::createDatePoint();
-        $age = DateUtils::getYear($currentDate) - DateUtils::getYear($this->birthday);
-        if ($currentDate < DateUtils::add($this->birthday, 'P1Y')) {
-            --$age;
-        }
+        $today = DateUtils::createDate();
+        $age = DateUtils::getYear($today) - DateUtils::getYear($this->birthday);
+        $previous = DateUtils::sub($today, \sprintf('P%dY', $age));
 
-        return $age;
+        return $this->birthday > $previous ? --$age : $age;
     }
 
     /**
@@ -141,6 +133,14 @@ class Customer extends AbstractEntity
     public function getCountry(): ?string
     {
         return $this->country;
+    }
+
+    /**
+     * Get the country name.
+     */
+    public function getCountryName(): ?string
+    {
+        return Countries::getNames()[$this->country ?? 'CH'];
     }
 
     #[\Override]
@@ -260,6 +260,9 @@ class Customer extends AbstractEntity
      */
     public function setBirthday(?DatePoint $birthday): self
     {
+        if ($birthday instanceof DatePoint) {
+            $birthday = DateUtils::removeTime($birthday);
+        }
         $this->birthday = $birthday;
 
         return $this;

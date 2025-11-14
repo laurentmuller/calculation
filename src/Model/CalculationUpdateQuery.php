@@ -35,7 +35,7 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
      */
     public function __construct()
     {
-        $this->date = DateUtils::removeTime();
+        $this->date = DateUtils::createDate();
     }
 
     public function getDate(): DatePoint
@@ -111,7 +111,7 @@ class CalculationUpdateQuery extends AbstractSimulateQuery
     public function validate(ExecutionContextInterface $context): void
     {
         // before or equal as today?
-        if ($this->date <= DateUtils::removeTime()) {
+        if ($this->date <= DateUtils::createDate()) {
             return;
         }
 

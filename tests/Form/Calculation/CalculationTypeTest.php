@@ -39,7 +39,7 @@ final class CalculationTypeTest extends EntityTypeTestCase
     protected function getData(): array
     {
         return [
-            'date' => DateUtils::removeTime(),
+            'date' => DateUtils::createDate(),
             'customer' => 'customer',
             'description' => 'description',
             'userMargin' => 0.0,

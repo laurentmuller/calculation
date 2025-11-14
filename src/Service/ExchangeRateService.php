@@ -199,7 +199,7 @@ class ExchangeRateService extends AbstractHttpClientService
 
     private function computeNextDate(int $day): DatePoint
     {
-        $date = DateUtils::removeTime();
+        $date = DateUtils::createDate();
         $year = DateUtils::getYear($date);
         $month = DateUtils::getMonth($date);
         $date = $date->setDate($year, $month, $day);

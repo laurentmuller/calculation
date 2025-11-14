@@ -57,7 +57,7 @@ final class CalculationEditStateTypeTest extends EntityTypeTestCase
     protected function getData(): array
     {
         return [
-            'date' => DateUtils::removeTime(),
+            'date' => DateUtils::createDate(),
             'state' => null,
         ];
     }

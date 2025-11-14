@@ -65,8 +65,8 @@ final class FormatExtension
      *
      * @param Environment           $env        the Twig environment
      * @param DatePoint|string|null $date       the date
-     * @param string|null           $dateFormat the date format
-     * @param string|null           $pattern    the optional pattern to use when formatting
+     * @param ?string               $dateFormat the date format
+     * @param ?string               $pattern    the optional pattern to use when formatting
      *
      * @return string the formatted date
      *
@@ -87,9 +87,9 @@ final class FormatExtension
      *
      * @param Environment           $env        the Twig environment
      * @param DatePoint|string|null $date       the date
-     * @param string|null           $dateFormat the date format
-     * @param string|null           $timeFormat the time format
-     * @param string|null           $pattern    the optional pattern to use when formatting
+     * @param ?string               $dateFormat the date format
+     * @param ?string               $timeFormat the time format
+     * @param ?string               $pattern    the optional pattern to use when formatting
      *
      * @return string the formatted date
      *
@@ -121,8 +121,8 @@ final class FormatExtension
      *
      * @param Environment           $env        the Twig environment
      * @param DatePoint|string|null $date       the date
-     * @param string|null           $timeFormat the time format
-     * @param string|null           $pattern    the optional pattern to use when formatting
+     * @param ?string               $timeFormat the time format
+     * @param ?string               $pattern    the optional pattern to use when formatting
      *
      * @return string the formatted date
      *
@@ -168,12 +168,12 @@ final class FormatExtension
         if (null === $format || '' === $format) {
             return null;
         }
-        if (!isset(self::DATE_FORMATS[$format])) {
-            $formats = \implode('", "', \array_keys(self::DATE_FORMATS));
-            $message = \sprintf('The date/time type "%s" does not exist. Allowed values are: "%s".', $format, $formats);
-            throw new RuntimeError($message);
+        if (isset(self::DATE_FORMATS[$format])) {
+            return self::DATE_FORMATS[$format];
         }
 
-        return self::DATE_FORMATS[$format];
+        $formats = \implode('", "', \array_keys(self::DATE_FORMATS));
+        $message = \sprintf('The date/time type "%s" does not exist. Allowed values are: "%s".', $format, $formats);
+        throw new RuntimeError($message);
     }
 }

@@ -95,7 +95,7 @@ final class CalculationUpdateQueryTest extends TestCase
      */
     public function testValidationInvalidDate(): void
     {
-        $date = DateUtils::add(DateUtils::removeTime(new DatePoint()), 'P1D');
+        $date = DateUtils::add(DateUtils::createDate(), 'P1D');
         $query = new CalculationUpdateQuery();
         $query->setDate($date);
 
@@ -140,7 +140,7 @@ final class CalculationUpdateQueryTest extends TestCase
 
     private function getDate(): DatePoint
     {
-        return DateUtils::removeTime();
+        return DateUtils::createDate();
     }
 
     /**
@@ -148,7 +148,7 @@ final class CalculationUpdateQueryTest extends TestCase
      */
     private function getDateFrom(): DatePoint
     {
-        return DateUtils::sub(DateUtils::removeTime(), $this->getInterval());
+        return DateUtils::sub(DateUtils::createDate(), $this->getInterval());
     }
 
     private function getInterval(): string

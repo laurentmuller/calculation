@@ -26,6 +26,15 @@ final class FormatExtensionTest extends RuntimeTestCase
 {
     use TranslatorMockTrait;
 
+    public function testFormatBoolean(): void
+    {
+        $extension = $this->createService();
+        $actual = $extension->formatBoolean(true);
+        self::assertSame('common.value_true', $actual);
+        $actual = $extension->formatBoolean(false);
+        self::assertSame('common.value_false', $actual);
+    }
+
     #[\Override]
     protected function createService(): FormatExtension
     {

@@ -69,7 +69,7 @@ class CountryFlagService
             return $this->getEmojiChar($alpha2Code[0]) . $this->getEmojiChar($alpha2Code[1]);
         }
         if ($validate) {
-            throw new \InvalidArgumentException("Invalid country code: '$alpha2Code'.");
+            throw new \InvalidArgumentException(\sprintf('Invalid country code: "%s".', $alpha2Code));
         }
 
         return '';

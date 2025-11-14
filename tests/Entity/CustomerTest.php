@@ -15,7 +15,7 @@ namespace App\Tests\Entity;
 
 use App\Entity\Customer;
 use App\Utils\DateUtils;
-use Symfony\Component\Clock\DatePoint;
+use App\Utils\FormatUtils;
 use Symfony\Component\Validator\Constraints\IsNullValidator;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
@@ -35,24 +35,25 @@ final class CustomerTest extends ConstraintValidatorTestCase
         $customer = new Customer();
         self::assertNull($customer->getAge());
 
-        $currentDate = new DatePoint();
-
+        $currentDate = DateUtils::createDate();
         $birthday = DateUtils::sub($currentDate, 'P1Y');
         $customer->setBirthday(clone $birthday);
-
-        $age = $customer->getAge();
-        self::assertSame(1, $age); // @phpstan-ignore-line
+        /** @phpstan-var int|null $actual */
+        $actual = $customer->getAge();
+        self::assertIsInt($actual);
+        self::assertSame(1, $actual);
 
         $birthday = DateUtils::add($birthday, 'P1D');
         $customer->setBirthday(clone $birthday);
-
-        $age = $customer->getAge();
-        self::assertSame(0, $age); // @phpstan-ignore-line
+        /** @phpstan-var int|null $actual */
+        $actual = $customer->getAge();
+        self::assertIsInt($actual);
+        self::assertSame(0, $actual);
     }
 
     public function testConstruct(): void
     {
-        \Locale::setDefault('fr-CH');
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
         $customer = new Customer();
         self::assertNull($customer->getId());
         self::assertNull($customer->getAddress());
@@ -61,6 +62,7 @@ final class CustomerTest extends ConstraintValidatorTestCase
         self::assertNull($customer->getCity());
         self::assertNull($customer->getCompany());
         self::assertSame('CH', $customer->getCountry());
+        self::assertSame('Suisse', $customer->getCountryName());
         self::assertNull($customer->getEmail());
         self::assertNull($customer->getFirstName());
         self::assertNull($customer->getLastName());

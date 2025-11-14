@@ -71,7 +71,7 @@ class CalculationUpdateController extends AbstractController
     {
         $helper = $this->createFormHelper('calculation.update.', $query);
         $helper->field('date')
-            ->updateAttribute('max', DateUtils::formatFormDate(DateUtils::removeTime()))
+            ->updateAttribute('max', DateUtils::formatFormDate(DateUtils::createDate()))
             ->addDatePointType();
 
         $helper->field('interval')

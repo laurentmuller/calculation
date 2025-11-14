@@ -12,10 +12,11 @@
 {{ property('customer.fields.title', item.title) }}
 {{ property('customer.fields.firstName', item.firstName) }}
 {{ property('customer.fields.lastName', item.lastName) }}
-{{ property('customer.fields.company', item.company) }}
+ {{ property('customer.fields.company', item.company) }}
 {{ property('customer.fields.address', item.address) }}
 {{ property('customer.fields.zipCode', item.zipCode) }}
 {{ property('customer.fields.city', item.city) }}
+{{ property('customer.fields.country', item.countryName) }}
 {{ email(item.email, null, 'customer.fields.email') }}
 {{ externalLink(href: item.webSite, name: 'customer.fields.webSite') }}
 {% endblock %}

@@ -41,7 +41,7 @@ final class CalculationUpdateResultTest extends TestCase
         $state->setCode('code');
         self::setId($state);
 
-        $date = DateUtils::removeTime();
+        $date = DateUtils::createDate();
         $calculation = new Calculation();
         $calculation->setState($state)
             ->setDate($date)

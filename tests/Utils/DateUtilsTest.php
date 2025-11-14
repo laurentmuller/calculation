@@ -250,6 +250,13 @@ final class DateUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testCreateDate(): void
+    {
+        $expected = new DatePoint('2020-01-10');
+        $actual = DateUtils::createDate('2020-01-10 10:10:10');
+        self::assertTimestampEquals($expected, $actual);
+    }
+
     #[DataProvider('getFormatFormDate')]
     public function testFormatFormDate(?DatePoint $date, ?string $expected): void
     {

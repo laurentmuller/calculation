@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\CountryFlagService;
+use App\Utils\FormatUtils;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Intl\Countries;
@@ -64,13 +65,15 @@ final class CountryFlagServiceTest extends TestCase
 
         $actual = CountryFlagService::getDefaultCode();
         self::assertSame($expected, $actual);
+
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
     }
 
     public function testGetFlagInvalid(): void
     {
         $alpha2Code = 'ZZ';
         self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage("Invalid country code: '$alpha2Code'.");
+        self::expectExceptionMessage('Invalid country code: "' . $alpha2Code . '".');
         $this->service->getFlag($alpha2Code);
     }
 

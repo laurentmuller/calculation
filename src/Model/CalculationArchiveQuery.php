@@ -37,7 +37,7 @@ class CalculationArchiveQuery extends AbstractSimulateQuery
      */
     public function __construct()
     {
-        $this->date = DateUtils::sub(DateUtils::removeTime(), 'P6M');
+        $this->date = DateUtils::sub(DateUtils::createDate(), 'P6M');
     }
 
     public function getDate(): DatePoint

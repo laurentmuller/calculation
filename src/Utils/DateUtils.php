@@ -94,6 +94,17 @@ final class DateUtils
     }
 
     /**
+     * Creates a new date point instance without the time part.
+     *
+     * @param string         $datetime a date/time string
+     * @param ?\DateTimeZone $timezone the timezone or null to use the current timezone
+     */
+    public static function createDate(string $datetime = 'now', ?\DateTimeZone $timezone = null): DatePoint
+    {
+        return self::removeTime(self::createDatePoint($datetime, $timezone));
+    }
+
+    /**
      * Create a date interval.
      */
     public static function createDateInterval(string $interval): \DateInterval

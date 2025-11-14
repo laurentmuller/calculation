@@ -239,7 +239,7 @@ final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
 
     private function getDate(): DatePoint
     {
-        return DateUtils::removeTime();
+        return DateUtils::createDate();
     }
 
     /**
@@ -247,7 +247,7 @@ final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
      */
     private function getDateFrom(): DatePoint
     {
-        return DateUtils::sub(DateUtils::removeTime(), $this->getInterval());
+        return DateUtils::sub(DateUtils::createDate(), $this->getInterval());
     }
 
     private function getInterval(): string

@@ -38,6 +38,7 @@ class ProductListType extends AbstractListEntityType
         $resolver->setDefaults([
             'choice_label' => 'description',
             'group_by' => $this->getGroupBy(...),
+            'prepend_icon' => 'fa-regular fa-file-alt',
             'query_builder' => static fn (ProductRepository $repository): QueryBuilder => $repository->getQueryBuilderByCategory(),
         ]);
     }

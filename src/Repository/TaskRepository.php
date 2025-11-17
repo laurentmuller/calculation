@@ -49,9 +49,9 @@ class TaskRepository extends AbstractCategoryItemRepository
     /**
      * Gets the query builder for the list of tasks sorted by name.
      *
-     * @param bool           $all   true to return all, false to return only tasks that contains at least one operation
-     *                              with one margin
-     * @param literal-string $alias the entity alias
+     * @param bool   $all   true to return all, false to return only tasks that contains at least one operation
+     *                      with one margin
+     * @param string $alias the entity alias
      */
     public function getSortedBuilder(bool $all = true, string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -70,9 +70,9 @@ class TaskRepository extends AbstractCategoryItemRepository
     /**
      * Gets the list of tasks sorted by name.
      *
-     * @param bool           $all   true to return all, false to return only tasks that contains at least one operation
-     *                              with one margin
-     * @param literal-string $alias the entity alias
+     * @param bool   $all   true to return all, false to return only tasks that contains at least one operation
+     *                      with one margin
+     * @param string $alias the entity alias
      *
      * @return Task[]
      */
@@ -86,7 +86,7 @@ class TaskRepository extends AbstractCategoryItemRepository
     /**
      * Gets the query builder for the table.
      *
-     * @param literal-string $alias the entity alias
+     * @param string $alias the entity alias
      */
     public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {

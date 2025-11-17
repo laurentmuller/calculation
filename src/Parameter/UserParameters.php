@@ -42,10 +42,7 @@ class UserParameters extends AbstractParameters
     public function getDefaultValues(): array
     {
         return $this->getParametersDefaultValues(
-            $this->application->getDisplay(),
-            $this->application->getHomePage(),
-            $this->application->getMessage(),
-            $this->application->getOptions(),
+            ...$this->getApplicationParameters()
         );
     }
 
@@ -100,17 +97,15 @@ class UserParameters extends AbstractParameters
     #[\Override]
     public function save(): bool
     {
-        return $this->saveParameters([
-            $this->display,
-            $this->homePage,
-            $this->message,
-            $this->options,
-        ], [
-            $this->application->getDisplay(),
-            $this->application->getHomePage(),
-            $this->application->getMessage(),
-            $this->application->getOptions(),
-        ]);
+        return $this->saveParameters(
+            [
+                DisplayParameter::class => $this->display,
+                HomePageParameter::class => $this->homePage,
+                MessageParameter::class => $this->message,
+                OptionsParameter::class => $this->options,
+            ],
+            $this->getApplicationParameters()
+        );
     }
 
     #[\Override]
@@ -140,5 +135,18 @@ class UserParameters extends AbstractParameters
 
         return $this->getRepository()
             ->findByUser($user);
+    }
+
+    /**
+     * @return array<string, ParameterInterface>
+     */
+    private function getApplicationParameters(): array
+    {
+        return [
+            DisplayParameter::class => $this->application->getDisplay(),
+            HomePageParameter::class => $this->application->getHomePage(),
+            MessageParameter::class => $this->application->getMessage(),
+            OptionsParameter::class => $this->application->getOptions(),
+        ];
     }
 }

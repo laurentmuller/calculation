@@ -107,7 +107,7 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
     /**
      * Create the query builder for the table.
      *
-     * @param literal-string $alias the entity alias
+     * @param string $alias the entity alias
      */
     protected function createTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {

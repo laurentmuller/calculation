@@ -24,7 +24,6 @@ trait EnumExtrasTrait
 
     public function getExtraBool(string $key, bool $default = false, bool $throwOnMissingExtra = false): bool
     {
-        /** @phpstan-var bool|null $value */
         $value = $this->getExtra($key, $throwOnMissingExtra);
 
         return \is_bool($value) ? $value : $default;
@@ -39,7 +38,6 @@ trait EnumExtrasTrait
      */
     public function getExtraEnum(string $key, \UnitEnum $default, bool $throwOnMissingExtra = false): \UnitEnum
     {
-        /** @phpstan-var TEnum|null $value */
         $value = $this->getExtra($key, $throwOnMissingExtra);
 
         return $value instanceof $default ? $value : $default;
@@ -47,7 +45,6 @@ trait EnumExtrasTrait
 
     public function getExtraFloat(string $key, float $default = 0.0, bool $throwOnMissingExtra = false): float
     {
-        /** @phpstan-var float|null $value */
         $value = $this->getExtra($key, $throwOnMissingExtra);
 
         return \is_float($value) ? $value : $default;
@@ -63,7 +60,6 @@ trait EnumExtrasTrait
 
     public function getExtraString(string $key, string $default = '', bool $throwOnMissingExtra = false): string
     {
-        /** @phpstan-var string|null $value */
         $value = $this->getExtra($key, $throwOnMissingExtra);
 
         return \is_string($value) ? $value : $default;

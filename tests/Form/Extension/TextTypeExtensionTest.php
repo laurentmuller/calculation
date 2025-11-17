@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Form\Extension;
 
-use App\Form\Extension\TextTypeExtension;
+use App\Form\Extension\InputGroupTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
@@ -53,13 +53,13 @@ final class TextTypeExtensionTest extends TypeTestCase
     }
 
     /**
-     * @return TextTypeExtension[]
+     * @return InputGroupTypeExtension[]
      */
     #[\Override]
     protected function getTypeExtensions(): array
     {
         return [
-            new TextTypeExtension(),
+            new InputGroupTypeExtension(),
         ];
     }
 }

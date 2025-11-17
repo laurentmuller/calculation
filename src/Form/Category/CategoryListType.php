@@ -39,6 +39,7 @@ class CategoryListType extends AbstractListEntityType
         $resolver->setDefaults([
             'choice_label' => 'code',
             'group_by' => 'groupCode',
+            'prepend_icon' => 'fa-regular fa-folder',
             'choice_attr' => static fn (Category $category): array => [
                 'data-group-id' => $category->getGroupId(),
                 'data-group-code' => $category->getGroupCode(),

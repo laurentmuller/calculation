@@ -53,7 +53,6 @@ class PivotDateField extends PivotField
     #[\Override]
     public function getValue(array $row): float|int|string|DatePoint|null
     {
-        /** @phpstan-var mixed $value */
         $value = $this->getRowValue($row);
         if ($value instanceof DatePoint) {
             return $this->doGetValue($value);

@@ -76,7 +76,6 @@ class PivotField implements \JsonSerializable
      */
     public function getValue(array $row): float|int|string|DatePoint|null
     {
-        /** @phpstan-var mixed $value */
         $value = $this->getRowValue($row);
 
         if (\is_scalar($value)) {

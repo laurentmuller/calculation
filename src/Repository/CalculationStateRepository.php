@@ -128,7 +128,7 @@ class CalculationStateRepository extends AbstractRepository
     /**
      * Gets query builder for the state where editable is true.
      *
-     * @param literal-string $alias the entity alias
+     * @param string $alias the entity alias
      */
     public function getEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -147,7 +147,7 @@ class CalculationStateRepository extends AbstractRepository
     /**
      * Gets query builder for the state where editable is false.
      *
-     * @param literal-string $alias the entity alias
+     * @param string $alias the entity alias
      */
     public function getNotEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -158,7 +158,7 @@ class CalculationStateRepository extends AbstractRepository
     /**
      * Gets the query builder for the list of states sorted by the editable and code fields.
      *
-     * @param literal-string $alias the entity alias
+     * @param string $alias the entity alias
      */
     public function getQueryBuilderByEditable(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -173,7 +173,7 @@ class CalculationStateRepository extends AbstractRepository
     /**
      * Gets the query builder for the list of states sorted by code.
      *
-     * @param literal-string $alias the entity alias
+     * @param string $alias the entity alias
      */
     public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -195,7 +195,7 @@ class CalculationStateRepository extends AbstractRepository
     /**
      * Gets the query builder for the table.
      *
-     * @param literal-string $alias the entity alias
+     * @param string $alias the entity alias
      */
     public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {

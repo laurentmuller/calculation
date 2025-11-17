@@ -135,7 +135,6 @@ class CalculationRepository extends AbstractRepository
             ->groupBy('e.id', 'i.description')
             ->having('COUNT(i.id) > 1')
             ->getDQL();
-        /** @phpstan-var literal-string $where */
         $where = "r.id in($dql)";
 
         /** @phpstan-var int<0, max> */
@@ -163,7 +162,6 @@ class CalculationRepository extends AbstractRepository
             ->where('i.price = 0')
             ->orWhere('i.quantity = 0')
             ->getDQL();
-        /** @phpstan-var literal-string $where */
         $where = "r.id in($dql)";
 
         /** @phpstan-var int<0, max> */
@@ -652,7 +650,7 @@ class CalculationRepository extends AbstractRepository
     /**
      * Gets the query builder for the table.
      *
-     * @param literal-string $alias the entity alias
+     * @param string $alias the entity alias
      */
     public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {

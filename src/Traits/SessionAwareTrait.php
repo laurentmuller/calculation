@@ -67,7 +67,6 @@ trait SessionAwareTrait
      */
     protected function getSessionDate(string $key, ?DatePoint $default = null): ?DatePoint
     {
-        /** @phpstan-var DatePoint|int|null $value */
         $value = $this->getSessionValue($key, $default);
         if (\is_int($value)) {
             return DatePoint::createFromTimestamp($value);
@@ -223,7 +222,6 @@ trait SessionAwareTrait
      */
     protected function setSessionValues(array $attributes): static
     {
-        /** @phpstan-var mixed $value */
         foreach ($attributes as $key => $value) {
             $this->setSessionValue($key, $value);
         }

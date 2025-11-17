@@ -847,18 +847,18 @@ parameters:
         customer_zip_city: NPA / Localité
         customer_contacts: Contact
         customer_phone: Téléphone
-        customer_phone_title: Passer un appel téléphonique au client
+        customer_phone_title: Passer un appel téléphonique
         customer_email: E-mail
-        customer_email_title: Envoyer un message électronique au client
+        customer_email_title: Envoyer un message électronique
         customer_url: Site internet
-        customer_url_title: Accéder au site internet du client
+        customer_url_title: Accéder au site internet
         customer_social: Site et réseaux sociaux
         customer_linkedin: LinkedIn
-        customer_linkedin_title: Accéder au profile LinkedIn du client
+        customer_linkedin_title: Accéder au profile LinkedIn
         customer_instagram: Instagram
-        customer_instagram_title: Accéder au profile Instagram du client
+        customer_instagram_title: Accéder au profile Instagram
         customer_facebook: Facebook
-        customer_facebook_title: Accéder au profile Facebook du client
+        customer_facebook_title: Accéder au profile Facebook
         default_category: Catégorie
         default_product: Article
         default_product_edit: Éditer l'article lors de l'affichage de la nouvelle calculation

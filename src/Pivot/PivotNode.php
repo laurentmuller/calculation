@@ -170,7 +170,6 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     public function findByKeys(array $keys): ?self
     {
         $current = $this;
-        /** @phpstan-var mixed $key */
         foreach ($keys as $key) {
             $found = $current->find($key);
             if (!$found instanceof self) {

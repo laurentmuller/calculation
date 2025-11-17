@@ -40,7 +40,7 @@ abstract class AbstractRightsType extends AbstractHelperType
     {
         $helper->field($field)
             ->label('user.fields.role')
-            ->updateOption('value_transformer', $this->translateRole(...))
+            ->updateOption('value_transformer', $this->service->getRoleIconAndName(...))
             ->addPlainType();
     }
 
@@ -48,10 +48,5 @@ abstract class AbstractRightsType extends AbstractHelperType
     protected function getLabelPrefix(): string
     {
         return 'user.fields.';
-    }
-
-    private function translateRole(string $role): string
-    {
-        return $this->service->getRoleIconAndName($role);
     }
 }

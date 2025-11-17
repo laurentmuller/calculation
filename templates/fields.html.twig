@@ -95,6 +95,30 @@
     {% endif %}
 {%- endblock form_widget_simple %}
 
+{%- block choice_widget_collapsed -%}
+    {% set prepend_icon = (prepend_icon|default('') ~ ' ' ~ prepend_class|default(''))|trim %}
+    {% set prepend_title = prepend_title|default(false) %}
+    {% set append_icon = (append_icon|default('') ~ ' ' ~ append_class|default(''))|trim %}
+    {% set append_title = append_title|default(false) %}
+    {% if prepend_icon or append_icon %}
+        <div class="input-group">
+            {% if prepend_icon %}
+                <div class="input-group-text"{% if prepend_title %} title="{{ prepend_title|trans }}"{% endif %}>
+                    <i class="fa-fw {{ prepend_icon }}"></i>
+                </div>
+            {% endif %}
+            {{- parent() -}}
+            {% if append_icon %}
+                <div class="input-group-text"{% if append_title %} title="{{ append_title|trans }}"{% endif %}>
+                    <i class="fa-fw {{ append_icon }}"></i>
+                </div>
+            {% endif %}
+        </div>
+    {% else %}
+        {{- parent() -}}
+    {% endif %}
+{%- endblock -%}
+
 {# use image-input style #}
 {% block file_widget -%}
     {%- if thumbnail|default(false) -%}

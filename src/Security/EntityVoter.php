@@ -45,7 +45,6 @@ class EntityVoter extends Voter
     #[\Override]
     public function vote(TokenInterface $token, mixed $subject, array $attributes, ?Vote $vote = null): int
     {
-        /** @phpstan-var mixed $attribute */
         foreach ($attributes as &$attribute) {
             if ($attribute instanceof EntityPermission) {
                 $attribute = $attribute->name;

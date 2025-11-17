@@ -92,7 +92,7 @@ class ProductRepository extends AbstractCategoryItemRepository
     /**
      * Gets the query builder for the table.
      *
-     * @param literal-string $alias the entity alias
+     * @param string $alias the entity alias
      */
     public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {

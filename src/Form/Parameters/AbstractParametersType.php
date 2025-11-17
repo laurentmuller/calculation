@@ -90,11 +90,13 @@ abstract class AbstractParametersType extends AbstractType
     {
         $key = PropertyServiceInterface::P_DISPLAY_MODE;
         $helper->field($key)
+            ->updateOption('prepend_icon', 'fa-solid fa-computer')
             ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->addEnumType(TableView::class);
 
         $key = PropertyServiceInterface::P_EDIT_ACTION;
         $helper->field($key)
+            ->updateOption('prepend_icon', 'fa-solid fa-terminal')
             ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->addEnumType(EntityAction::class);
     }
@@ -131,11 +133,13 @@ abstract class AbstractParametersType extends AbstractType
     {
         $key = PropertyServiceInterface::P_MESSAGE_POSITION;
         $helper->field($key)
+            ->updateOption('prepend_icon', 'fa-solid fa-crosshairs')
             ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->addEnumType(MessagePosition::class);
 
         $key = PropertyServiceInterface::P_MESSAGE_TIMEOUT;
         $helper->field($key)
+            ->updateOption('prepend_icon', 'fa-solid fa-alarm-clock')
             ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->updateOption('choice_translation_domain', false)
             ->addChoiceType($this->getTimeoutChoice());
@@ -168,7 +172,6 @@ abstract class AbstractParametersType extends AbstractType
      */
     protected function getDefaultValue(string $name, mixed $default = ''): mixed
     {
-        /** @phpstan-var mixed $value */
         $value = $this->defaultValues[$name] ?? $default;
         if ($value instanceof \BackedEnum) {
             return $value->value;

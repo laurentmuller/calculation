@@ -79,15 +79,12 @@ trait RequestTrait
 
     /**
      * Return the request parameter value.
-     *
-     * @phpstan-return ($default is null ? (scalar|null) : scalar)
      */
     protected function getRequestValue(
         Request $request,
         string $key,
         string|int|float|bool|null $default = null
     ): string|int|float|bool|null {
-        /** @phpstan-var scalar */
         return $this->getRequestBag($request, $key)->get($key, $default);
     }
 

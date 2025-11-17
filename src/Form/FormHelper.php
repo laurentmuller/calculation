@@ -837,7 +837,6 @@ class FormHelper
      */
     public function updateAttributes(array $attributes): self
     {
-        /** @phpstan-var mixed $value */
         foreach ($attributes as $name => $value) {
             $this->updateAttribute($name, $value);
         }
@@ -866,7 +865,6 @@ class FormHelper
      */
     public function updateOptions(array $options): self
     {
-        /** @phpstan-var mixed $value */
         foreach ($options as $name => $value) {
             $this->updateOption($name, $value);
         }
@@ -895,7 +893,6 @@ class FormHelper
      */
     public function updateRowAttributes(array $attributes): self
     {
-        /** @phpstan-var mixed $value */
         foreach ($attributes as $name => $value) {
             $this->updateRowAttribute($name, $value);
         }

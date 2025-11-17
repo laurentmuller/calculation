@@ -111,7 +111,6 @@ trait ArrayTrait
         /** @phpstan-var non-empty-array<TValue> $values */
         $values = $this->getColumn($values, $key);
 
-        /** @phpstan-var TValue */
         return \max($values);
     }
 
@@ -122,7 +121,7 @@ trait ArrayTrait
      *
      * @phpstan-param TValue $default
      *
-     * @phpstan-return TValue
+     * @phpstan-return ($default is int ? int : float)
      */
     public function getColumnSum(array $values, string|int $key, int|float $default = 0.0): int|float
     {
@@ -131,7 +130,6 @@ trait ArrayTrait
         }
         $values = $this->getColumn($values, $key);
 
-        /** @phpstan-var TValue */
         return \array_sum($values);
     }
 

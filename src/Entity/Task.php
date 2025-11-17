@@ -134,7 +134,6 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
      */
     public function countMargins(): int
     {
-        /** @phpstan-var int */
         return $this->items->reduce(static fn (int $carry, TaskItem $item): int => $carry + $item->count(), 0);
     }
 
@@ -155,7 +154,6 @@ class Task extends AbstractCategoryItemEntity implements \Countable, ComparableI
             return [];
         }
 
-        /** @phpstan-var int[] */
         return $this->items->map(static fn (TaskItem $item): int => (int) $item->getId())->toArray();
     }
 

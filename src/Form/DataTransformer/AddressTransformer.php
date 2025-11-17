@@ -26,11 +26,13 @@ use Symfony\Component\Mime\Exception\ExceptionInterface;
  */
 class AddressTransformer implements DataTransformerInterface
 {
-    /** @phpstan-param mixed $value */
+    /**
+     * @phpstan-param mixed $value
+     */
     #[\Override]
     public function reverseTransform(mixed $value): ?Address
     {
-        if (null === $value || '' === $value) {
+        if (null === $value) {
             return null;
         }
 
@@ -45,11 +47,13 @@ class AddressTransformer implements DataTransformerInterface
         }
     }
 
-    /** @phpstan-param mixed $value */
+    /**
+     * @phpstan-param mixed $value
+     */
     #[\Override]
     public function transform(mixed $value): ?string
     {
-        if (null === $value || '' === $value) {
+        if (null === $value) {
             return null;
         }
 

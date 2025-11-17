@@ -316,15 +316,16 @@ class PivotTableFactory
 
     /**
      * Creates an aggregator.
+     *
+     * @return T
      */
     private function createAggregator(): AbstractAggregator
     {
-        /** @phpstan-var T */
         return new $this->aggregatorClass();
     }
 
     /**
-     * Find or create a node and update value.
+     * Find or create a node and update the value.
      *
      * @param PivotField[] $fields
      */

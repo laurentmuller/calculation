@@ -100,7 +100,6 @@ class DeeplTranslatorService extends AbstractTranslatorService
             return false;
         }
         if ('' === $query->from) {
-            /** @phpstan-var mixed $from */
             $from = $this->getValue($values, '[translations][0][detected_source_language]', false);
             if (\is_string($from)) {
                 $query->from = \strtolower($from);

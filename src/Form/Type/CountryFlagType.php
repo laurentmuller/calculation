@@ -46,7 +46,8 @@ class CountryFlagType extends AbstractType
             'duplicate_preferred_choices' => false,
             'only_flag' => false,
             'separator' => '─────────────────────────────',
-        ])->setAllowedTypes('choice_translation_locale', ['string', 'null'])
+        ]);
+        $resolver->setAllowedTypes('choice_translation_locale', ['string', 'null'])
             ->setAllowedTypes('only_flag', 'boolean');
     }
 
@@ -57,7 +58,7 @@ class CountryFlagType extends AbstractType
     }
 
     /**
-     * @phpstan-param Options<array> $options
+     * @param Options<array> $options
      */
     private function getChoiceLoader(Options $options): ChoiceLoaderInterface
     {
@@ -65,13 +66,13 @@ class CountryFlagType extends AbstractType
     }
 
     /**
-     * @phpstan-param Options<array> $options
+     * @param Options<array> $options
      */
     private function loadChoices(Options $options): array
     {
-        /** @phpstan-var string|null $locale */
+        /** @var string|null $locale */
         $locale = $options['choice_translation_locale'];
-        /** @phpstan-var bool $flagOnly */
+        /** @var bool $flagOnly */
         $flagOnly = $options['only_flag'];
 
         return $this->service->getChoices($locale, $flagOnly);

@@ -70,7 +70,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
         if (false === $response) {
             return false;
         }
-        /** @phpstan-var string|null $tag */
         $tag = $this->getValue($response, '[data][detections][0][0][language]');
         if (!\is_string($tag)) {
             return false;
@@ -117,7 +116,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
             return false;
         }
 
-        /** @phpstan-var string|null $language */
         $language = $this->getValue($response, '[data][translations][0][detectedSourceLanguage]', false);
         if (\is_string($language)) {
             $query->from = $language;

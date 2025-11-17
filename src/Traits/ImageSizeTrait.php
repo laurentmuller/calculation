@@ -29,7 +29,6 @@ trait ImageSizeTrait
             return [0, 0];
         }
 
-        /** @phpstan-var int[]|false $size */
         $size = \getimagesize($filename);
         if (\is_array($size)) {
             return [$size[0], $size[1]];

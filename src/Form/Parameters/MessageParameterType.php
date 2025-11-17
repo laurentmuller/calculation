@@ -31,10 +31,12 @@ class MessageParameterType extends AbstractParameterType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('position')
+            ->updateOption('prepend_icon', 'fa-solid fa-crosshairs')
             ->label('parameters.fields.message_position')
             ->addEnumType(MessagePosition::class);
 
         $helper->field('timeout')
+            ->updateOption('prepend_icon', 'fa-solid fa-alarm-clock')
             ->label('parameters.fields.message_timeout')
             ->updateOption('choice_translation_domain', false)
             ->addChoiceType($this->getTimeoutChoice());
@@ -58,29 +60,37 @@ class MessageParameterType extends AbstractParameterType
 
     /**
      * Gets the message progress height choices.
+     *
+     * @return array<string, int>
      */
     private function getProgressChoice(): array
     {
-        $result = [];
-        foreach (\range(0, 5) as $pixel) {
-            $key = $this->translator->trans('counters.pixels', ['%count%' => $pixel]);
-            $result[$key] = $pixel;
-        }
-
-        return $result;
+        return \array_reduce(
+            \range(0, 5),
+            fn (array $carry, int $pixel): array => $carry + $this->transCount('counters.pixels', $pixel),
+            []
+        );
     }
 
     /**
      * Gets the message timeout choices.
+     *
+     * @return array<string, int>
      */
     private function getTimeoutChoice(): array
     {
-        $result = [];
-        foreach (\range(1, 5) as $second) {
-            $key = $this->translator->trans('counters.seconds', ['%count%' => $second]);
-            $result[$key] = $second * 1000;
-        }
+        return \array_reduce(
+            \range(1, 5),
+            fn (array $carry, int $second): array => $carry + $this->transCount('counters.seconds', $second, 1000),
+            []
+        );
+    }
 
-        return $result;
+    /**
+     * @return array<string, int>
+     */
+    private function transCount(string $id, int $count, int $multiplier = 1): array
+    {
+        return [$this->translator->trans($id, ['%count%' => $count]) => $count * $multiplier];
     }
 }

@@ -31,12 +31,6 @@ final class DatePointToDateTimeTransformerTest extends TestCase
         $this->transformer = new DatePointToDateTimeTransformer();
     }
 
-    public function testReverseEmpty(): void
-    {
-        $actual = $this->transformer->reverseTransform('');
-        self::assertNull($actual);
-    }
-
     public function testReverseInvalid(): void
     {
         self::expectException(UnexpectedTypeException::class);
@@ -55,12 +49,6 @@ final class DatePointToDateTimeTransformerTest extends TestCase
         $actual = $this->transformer->reverseTransform($expected);
         self::assertInstanceOf(\DateTimeInterface::class, $actual);
         self::assertDateTimeEquals($expected, $actual);
-    }
-
-    public function testTransformEmpty(): void
-    {
-        $actual = $this->transformer->transform('');
-        self::assertNull($actual);
     }
 
     public function testTransformInvalid(): void

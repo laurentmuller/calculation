@@ -80,7 +80,6 @@ class BingTranslatorService extends AbstractTranslatorService
             return false;
         }
 
-        /** @phpstan-var string|null $tag */
         $tag = $this->getValue($response, '[0][language]');
         if (!\is_string($tag)) {
             return false;
@@ -127,7 +126,6 @@ class BingTranslatorService extends AbstractTranslatorService
             return false;
         }
 
-        /** @phpstan-var string|null $language */
         $language = $this->getValue($response, '[0][detectedLanguage][language]', false);
         if (\is_string($language)) {
             $query->from = $language;

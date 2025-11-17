@@ -424,7 +424,6 @@ class ImageService
      */
     public function ttfBox(float $size, float $angle, string $fontFile, string $text): array|false
     {
-        /** @phpstan-var int[]|false */
         return \imagettfbbox($size, $angle, $fontFile, $text);
     }
 

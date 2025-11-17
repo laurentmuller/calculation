@@ -128,7 +128,6 @@ class DataResults implements \JsonSerializable
      */
     public function getParameter(string $name, bool|string|int|\BackedEnum|null $default = null): bool|string|int|\BackedEnum|null
     {
-        /** @phpstan-var bool|string|int|\BackedEnum|null */
         return $this->params[$name] ?? $default;
     }
 

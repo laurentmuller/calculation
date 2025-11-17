@@ -82,7 +82,7 @@ class GroupRepository extends AbstractRepository
     /**
      * Gets the query builder for the list of groups sorted by code.
      *
-     * @param literal-string $alias the entity alias
+     * @param string $alias the entity alias
      */
     public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -95,7 +95,7 @@ class GroupRepository extends AbstractRepository
     /**
      * Gets the query builder for the table.
      *
-     * @param literal-string $alias the entity alias
+     * @param string $alias the entity alias
      */
     public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {

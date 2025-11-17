@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Form\User;
 
 use App\Entity\User;
-use App\Form\Extension\TextTypeExtension;
+use App\Form\Extension\InputGroupTypeExtension;
 use App\Form\Type\CaptchaImageType;
 use App\Form\User\UserRegistrationType;
 use App\Service\ApplicationService;
@@ -101,13 +101,13 @@ final class UserRegistrationTypeTest extends TypeTestCase
     }
 
     /**
-     * @return TextTypeExtension[]
+     * @return InputGroupTypeExtension[]
      */
     #[\Override]
     protected function getTypeExtensions(): array
     {
         return [
-            new TextTypeExtension(),
+            new InputGroupTypeExtension(),
         ];
     }
 }

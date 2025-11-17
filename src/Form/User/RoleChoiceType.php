@@ -16,6 +16,7 @@ namespace App\Form\User;
 use App\Form\AbstractChoiceType;
 use App\Interfaces\RoleInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * A single role choice type.
@@ -24,6 +25,13 @@ class RoleChoiceType extends AbstractChoiceType
 {
     public function __construct(private readonly Security $security)
     {
+    }
+
+    #[\Override]
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        parent::configureOptions($resolver);
+        $resolver->setDefault('prepend_icon', 'fa-solid fa-user-tag');
     }
 
     #[\Override]

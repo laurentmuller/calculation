@@ -16,7 +16,7 @@ namespace App\Tests\Form;
 use App\Enums\MessagePosition;
 use App\Form\DataTransformer\AddressTransformer;
 use App\Form\Extension\FileTypeExtension;
-use App\Form\Extension\TextTypeExtension;
+use App\Form\Extension\InputGroupTypeExtension;
 use App\Form\Extension\UrlTypeExtension;
 use App\Form\Extension\VichImageTypeExtension;
 use App\Form\FormHelper;
@@ -636,7 +636,7 @@ final class FormHelperTest extends TypeTestCase
     /**
      * @return array{
      *     FileTypeExtension,
-     *     TextTypeExtension,
+     *     InputGroupTypeExtension,
      *     UrlTypeExtension,
      *     VichImageTypeExtension
      * }
@@ -646,7 +646,7 @@ final class FormHelperTest extends TypeTestCase
     {
         return [
             new FileTypeExtension(),
-            new TextTypeExtension(),
+            new InputGroupTypeExtension(),
             new UrlTypeExtension(),
             new VichImageTypeExtension(),
         ];

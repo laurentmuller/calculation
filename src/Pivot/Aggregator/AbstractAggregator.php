@@ -35,7 +35,6 @@ abstract class AbstractAggregator implements \JsonSerializable, \Stringable
     public function __toString(): string
     {
         $name = StringUtils::getShortName($this);
-        /** @phpstan-var mixed $value */
         $value = $this->getFormattedResult();
 
         return \sprintf('%s(%s)', $name, (string) $value);

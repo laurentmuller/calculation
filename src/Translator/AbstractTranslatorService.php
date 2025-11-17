@@ -114,7 +114,6 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      */
     protected function getValue(array $values, string $path, bool $error = true): mixed
     {
-        /** @phpstan-var mixed $value */
         $value = $this->getPropertyAccessor()->getValue($values, $path);
         if (null === $value && $error) {
             return $this->setLastError(self::ERROR_NOT_FOUND, "Unable to find the value at '$path'.");

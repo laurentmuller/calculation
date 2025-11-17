@@ -31,14 +31,16 @@ class MessageParameter implements ParameterInterface
     #[Parameter('message_position', MessagePosition::BOTTOM_RIGHT)]
     private MessagePosition $position = MessagePosition::BOTTOM_RIGHT;
 
-    #[Assert\GreaterThanOrEqual(0)]
+    #[Assert\DivisibleBy(1)]
+    #[Assert\Range(min: 0, max: 5)]
     #[Parameter('message_progress', 1)]
     private int $progress = 1;
 
     #[Parameter('message_sub_title', false)]
     private bool $subTitle = false;
 
-    #[Assert\GreaterThanOrEqual(1000)]
+    #[Assert\DivisibleBy(1000)]
+    #[Assert\Range(min: 1000, max: 5000)]
     #[Parameter('message_timeout', 4000)]
     private int $timeout = 4000;
 

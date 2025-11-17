@@ -127,8 +127,8 @@ class CategoryRepository extends AbstractRepository
     /**
      * Gets the query builder for the list of categories sorted by the parent's group code and then by the code.
      *
-     * @param int            $filterType the filter type to apply. One of the FILTER_* constants.
-     * @param literal-string $alias      the entity alias
+     * @param int    $filterType the filter type to apply. One of the FILTER_* constants.
+     * @param string $alias      the entity alias
      *
      * @phpstan-param self::FILTER_* $filterType
      */
@@ -173,7 +173,7 @@ class CategoryRepository extends AbstractRepository
     /**
      * Gets the query builder for the table.
      *
-     * @param literal-string $alias the entity alias
+     * @param string $alias the entity alias
      */
     public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {

@@ -58,9 +58,9 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Adds the search clause.
      *
-     * @param DataQuery      $query   the data query
-     * @param QueryBuilder   $builder the query builder to update
-     * @param literal-string $alias   the root alias
+     * @param DataQuery    $query   the data query
+     * @param QueryBuilder $builder the query builder to update
+     * @param string       $alias   the root alias
      *
      * @return bool true if a search clause is added to the query builder
      */
@@ -100,7 +100,7 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Creates the query builder.
      *
-     * @param literal-string $alias the entity alias
+     * @param string $alias the entity alias
      */
     protected function createQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
@@ -133,7 +133,7 @@ abstract class AbstractEntityTable extends AbstractTable
     {
         $results = parent::handleQuery($query);
         $builder = $this->createQueryBuilder();
-        /** @phpstan-var literal-string $alias */
+        /** @phpstan-var string $alias */
         $alias = $builder->getRootAliases()[0];
 
         $results->totalNotFiltered = $results->filtered = $this->count();
@@ -172,9 +172,9 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Add the clause order by.
      *
-     * @param DataQuery      $query   the data query
-     * @param QueryBuilder   $builder the query builder to update
-     * @param literal-string $alias   the root alias
+     * @param DataQuery    $query   the data query
+     * @param QueryBuilder $builder the query builder to update
+     * @param string       $alias   the root alias
      */
     private function addOrderBy(DataQuery $query, QueryBuilder $builder, string $alias): void
     {
@@ -198,7 +198,7 @@ abstract class AbstractEntityTable extends AbstractTable
      *
      * @phpstan-param EntityType[]   $entities the entities to search in or to update
      * @phpstan-param DataQuery      $query    the query to get values from
-     * @phpstan-param literal-string $alias    the entity alias
+     * @phpstan-param string $alias    the entity alias
      */
     private function addSelection(array &$entities, DataQuery $query, string $alias): void
     {
@@ -234,8 +234,8 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Count the number of filtered entities.
      *
-     * @param QueryBuilder   $builder the source builder
-     * @param literal-string $alias   the root alias
+     * @param QueryBuilder $builder the source builder
+     * @param string       $alias   the root alias
      */
     private function countFiltered(QueryBuilder $builder, string $alias): int
     {
@@ -297,7 +297,7 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Remove the group by and left join parts of the given builder.
      *
-     * @param literal-string $alias the root alias
+     * @param string $alias the root alias
      */
     private function updateParts(QueryBuilder $builder, string $alias): QueryBuilder
     {

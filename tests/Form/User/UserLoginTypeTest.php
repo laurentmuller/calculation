@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Form\User;
 
-use App\Form\Extension\TextTypeExtension;
+use App\Form\Extension\InputGroupTypeExtension;
 use App\Form\Type\CaptchaImageType;
 use App\Form\Type\CurrentPasswordType;
 use App\Form\User\UserLoginType;
@@ -62,13 +62,13 @@ final class UserLoginTypeTest extends TypeTestCase
     }
 
     /**
-     * @return TextTypeExtension[]
+     * @return InputGroupTypeExtension[]
      */
     #[\Override]
     protected function getTypeExtensions(): array
     {
         return [
-            new TextTypeExtension(),
+            new InputGroupTypeExtension(),
         ];
     }
 }

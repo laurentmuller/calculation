@@ -102,7 +102,7 @@ class ApplicationParameters extends AbstractParameters
     #[\Override]
     public function getDefaultValues(): array
     {
-        // the customer and date parameters are omitted because default values are null
+        // the customer and date parameters are omitted because all default values are null
         $values = $this->getParametersDefaultValues(
             DefaultParameter::class,
             DisplayParameter::class,
@@ -114,10 +114,8 @@ class ApplicationParameters extends AbstractParameters
         );
 
         // special case for minimum margin
-        $key = DefaultParameter::getCacheKey();
-        /** @phpstan-var float $minMargin */
-        $minMargin = $values[$key]['minMargin'];
-        $values[$key]['minMargin'] = $minMargin * 100.0;
+        /** @phpstan-var array<string, array{minMargin: float, ...}> $values */
+        $values[DefaultParameter::getCacheKey()]['minMargin'] *= 100.0;
 
         return $values;
     }
@@ -152,16 +150,17 @@ class ApplicationParameters extends AbstractParameters
     public function save(): bool
     {
         return $this->saveParameters([
-            $this->customer,
-            $this->date,
-            $this->default,
-            $this->display,
-            $this->homePage,
-            $this->message,
-            $this->options,
-            $this->product,
-            $this->rights,
-            $this->security,
+            DisplayParameter::class => $this->display,
+            HomePageParameter::class => $this->homePage,
+            MessageParameter::class => $this->message,
+            OptionsParameter::class => $this->options,
+
+            CustomerParameter::class => $this->customer,
+            DateParameter::class => $this->date,
+            DefaultParameter::class => $this->default,
+            ProductParameter::class => $this->product,
+            RightsParameter::class => $this->rights,
+            SecurityParameter::class => $this->security,
         ]);
     }
 

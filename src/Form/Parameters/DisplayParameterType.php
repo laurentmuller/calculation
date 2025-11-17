@@ -27,10 +27,12 @@ class DisplayParameterType extends AbstractParameterType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('displayMode')
+            ->updateOption('prepend_icon', 'fa-solid fa-computer')
             ->label('parameters.fields.display_mode')
             ->addEnumType(TableView::class);
 
         $helper->field('editAction')
+            ->updateOption('prepend_icon', 'fa-solid fa-terminal')
             ->label('parameters.fields.edit_action')
             ->addEnumType(EntityAction::class);
     }

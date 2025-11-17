@@ -13,8 +13,12 @@ declare(strict_types=1);
 
 namespace App\Parameter;
 
+use App\Attribute\Parameter;
+
 /**
  * Contains parameter meta-data.
+ *
+ * @phpstan-import-type TValue from Parameter
  */
 readonly class MetaData
 {
@@ -23,6 +27,8 @@ readonly class MetaData
      * @param string $property the property name
      * @param string $type     the property type
      * @param mixed  $default  the default value
+     *
+     * @phpstan-param TValue $default
      */
     public function __construct(
         public string $name,
@@ -54,6 +60,8 @@ readonly class MetaData
             return null;
         }
 
-        return (string) (new \ReflectionEnum($this->type))->getBackingType();
+        $class = new \ReflectionEnum($this->type);
+
+        return (string) $class->getBackingType();
     }
 }

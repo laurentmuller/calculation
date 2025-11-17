@@ -537,7 +537,6 @@ class WorksheetDocument extends Worksheet
      */
     public function setRowValues(int $rowIndex, array $values, int $columnIndex = 1): static
     {
-        /** @phpstan-var mixed $value*/
         foreach ($values as $value) {
             $this->setCellContent($columnIndex++, $rowIndex, $value);
         }

@@ -217,7 +217,6 @@ class UserService implements PropertyServiceInterface
 
         $defaultValues = $this->service->getProperties();
         $existingProperties = $this->getExistingProperties();
-        /** @phpstan-var mixed $value */
         foreach ($properties as $key => $value) {
             $this->saveProperty($key, $value, $defaultValues, $existingProperties, $user);
         }

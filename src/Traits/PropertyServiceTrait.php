@@ -191,7 +191,6 @@ trait PropertyServiceTrait
      */
     protected function getPropertyString(string $name, ?string $default = null): ?string
     {
-        /** @phpstan-var string|null $value */
         $value = $this->getCacheValue($name, $default);
 
         return \is_string($value) ? $value : $default;
@@ -227,7 +226,6 @@ trait PropertyServiceTrait
     protected function isPropertiesChanged(array $properties): bool
     {
         $existing = $this->getProperties(false);
-        /** @phpstan-var mixed $value */
         foreach ($properties as $key => $value) {
             /** @phpstan-var mixed $oldValue */
             $oldValue = $existing[$key] ?? null;

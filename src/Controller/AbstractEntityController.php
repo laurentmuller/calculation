@@ -182,11 +182,11 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Gets the form type class name used to edit an entity.
      *
-     * @phpstan-return class-string<FormTypeInterface<mixed>>
+     * @phpstan-return class-string<FormTypeInterface<TEntity>>
      */
     protected function getEditFormType(): string
     {
-        /** @phpstan-var class-string<FormTypeInterface<mixed>> */
+        /** @phpstan-var class-string<FormTypeInterface<TEntity>> */
         return \sprintf('App\\Form\\%1$s\\%1$sType', $this->shortName);
     }
 
@@ -205,7 +205,7 @@ abstract class AbstractEntityController extends AbstractController
      *                                                   the sort mode ('ASC' or 'DESC') or a string for a single
      *                                                   ascending sorted field
      * @param array<Criteria|string>       $criteria     the filter criteria
-     * @param literal-string               $alias        the entity alias
+     * @param string                       $alias        the entity alias
      *
      * @return TEntity[] the entities
      */

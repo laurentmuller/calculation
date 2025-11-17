@@ -17,7 +17,7 @@ use App\Entity\User;
 use App\Enums\TableView;
 use App\Form\Admin\ApplicationParametersType;
 use App\Form\CalculationState\CalculationStateListType;
-use App\Form\Extension\TextTypeExtension;
+use App\Form\Extension\InputGroupTypeExtension;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Service\ApplicationService;
@@ -91,13 +91,13 @@ final class ApplicationParametersTypeTest extends TypeTestCase
     }
 
     /**
-     * @return TextTypeExtension[]
+     * @return InputGroupTypeExtension[]
      */
     #[\Override]
     protected function getTypeExtensions(): array
     {
         return [
-            new TextTypeExtension(),
+            new InputGroupTypeExtension(),
         ];
     }
 }

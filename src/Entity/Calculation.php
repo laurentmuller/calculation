@@ -899,7 +899,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
             return $initial;
         }
 
-        /** @phpstan-var TValue */
         return $this->groups->reduce($func, $initial);
     }
 

@@ -13,8 +13,12 @@ declare(strict_types=1);
 
 namespace App\Attribute;
 
+use Symfony\Component\Clock\DatePoint;
+
 /**
  * Attribute to define a parameter name and an optional default value.
+ *
+ * @phpstan-type TValue = scalar|array|\BackedEnum|DatePoint|null
  */
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
 class Parameter
@@ -22,6 +26,8 @@ class Parameter
     /**
      * @param string $name    the property name
      * @param mixed  $default the default value
+     *
+     * @phpstan-param TValue $default
      */
     public function __construct(public string $name, public mixed $default = null)
     {
@@ -60,8 +66,7 @@ class Parameter
     /**
      * Gets the default value of the parameter.
      *
-     * @param object|string $objectOrClass either a string containing the name of
-     *                                     the class to reflect, or an object
+     * @param object|string $objectOrClass either a string containing the name of the class to reflect, or an object
      * @param string        $name          the property name to get the default value for
      *
      * @phpstan-template T of object
@@ -69,6 +74,8 @@ class Parameter
      * @phpstan-param T|class-string<T> $objectOrClass
      *
      * @return mixed the default value
+     *
+     * @phpstan-return TValue
      *
      * @throws \ReflectionException if the class does not exist
      */

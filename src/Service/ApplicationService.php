@@ -561,7 +561,6 @@ class ApplicationService implements PropertyServiceInterface
         $repository = $this->getPropertyRepository();
         $existingProperties = $this->getExistingProperties();
 
-        /** @phpstan-var mixed $value */
         foreach ($properties as $key => $value) {
             $this->saveProperty($key, $value, $defaultValues, $existingProperties, $repository);
         }

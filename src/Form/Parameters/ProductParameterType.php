@@ -33,15 +33,16 @@ class ProductParameterType extends AbstractParameterType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('productId')
+            ->updateOption('placeholder', 'parameters.placeholders.default_product')
             ->modelTransformer($this->getProductTransformer())
             ->label('parameters.fields.default_product')
-            ->notRequired()
-            ->widgetClass('must-validate')
-            ->updateOption('placeholder', 'parameters.placeholders.default_product')
             ->updateAttribute('data-default', '')
+            ->widgetClass('must-validate')
+            ->notRequired()
             ->add(ProductListType::class);
 
         $helper->field('quantity')
+            ->updateOption('append_icon', 'fa-solid fa-plus-minus')
             ->label('parameters.fields.default_product_quantity')
             ->widgetClass('input-number')
             ->addNumberType();

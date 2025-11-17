@@ -89,15 +89,16 @@ class ApplicationParametersType extends AbstractParametersType
     {
         $key = PropertyServiceInterface::P_PRODUCT_DEFAULT;
         $helper->field($key)
-            ->notRequired()
-            ->widgetClass('must-validate')
             ->updateOption('placeholder', 'parameters.placeholders.' . $key)
             ->updateAttribute('data-default', '')
+            ->widgetClass('must-validate')
+            ->notRequired()
             ->add(ProductListType::class);
 
         $key = PropertyServiceInterface::P_PRODUCT_QUANTITY;
         $helper->field($key)
             ->updateAttribute('data-default', (float) $this->getDefaultValue($key))
+            ->updateOption('append_icon', 'fa-solid fa-plus-minus')
             ->widgetClass('input-number')
             ->addNumberType();
 

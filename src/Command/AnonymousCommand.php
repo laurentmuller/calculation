@@ -81,7 +81,6 @@ class AnonymousCommand
         $query = $this->createQuery();
         $generator = $this->createGenerator();
         $io->writeln("Start update calculations\n");
-        /** @phpstan-var Calculation $calculation */
         foreach ($io->progressIterate($query->toIterable(), $count) as $calculation) {
             $this->updateCalculation($generator, $calculation, $company);
             $company = !$company;

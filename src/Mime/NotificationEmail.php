@@ -159,7 +159,6 @@ class NotificationEmail extends BaseNotificationEmail
             try {
                 $importance = Importance::from($importance);
             } catch (\ValueError $e) {
-                /** @phpstan-var string $importance */
                 throw new \InvalidArgumentException(\sprintf('Invalid importance value: "%s".', $importance), $e->getCode(), $e);
             }
         }

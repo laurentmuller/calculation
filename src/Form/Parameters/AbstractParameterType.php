@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Form\Parameters;
 
+use App\Attribute\Parameter;
 use App\Form\AbstractHelperType;
 use App\Form\FormHelper;
 use App\Parameter\ParameterInterface;
@@ -26,6 +27,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @template TParameter of ParameterInterface
  *
  * @extends AbstractHelperType<TParameter>
+ *
+ * @phpstan-import-type TValue from Parameter
  */
 abstract class AbstractParameterType extends AbstractHelperType
 {
@@ -46,7 +49,6 @@ abstract class AbstractParameterType extends AbstractHelperType
         }
 
         $children = $view->children;
-        /** @phpstan-var mixed $value */
         foreach ($values as $key => $value) {
             if (!\array_key_exists($key, $children)) {
                 continue;
@@ -83,6 +85,9 @@ abstract class AbstractParameterType extends AbstractHelperType
      */
     abstract protected function getParameterClass(): string;
 
+    /**
+     * @phpstan-param TValue $value
+     */
     private function convertValue(mixed $value): mixed
     {
         if ($value instanceof \BackedEnum) {
@@ -104,7 +109,7 @@ abstract class AbstractParameterType extends AbstractHelperType
     {
         $config = $form->getRoot()->getConfig();
         $key = $this->getParameterClass()::getCacheKey();
-        /** @phpstan-var array<string, array<string, mixed>> $values */
+        /** @phpstan-var array<string, array<string, TValue>> $values */
         $values = $config->getOption(AbstractHelperParametersType::DEFAULT_VALUES, []);
 
         return $values[$key] ?? [];

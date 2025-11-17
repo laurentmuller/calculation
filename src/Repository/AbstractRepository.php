@@ -40,7 +40,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
     /**
      * Creates a default query builder.
      *
-     * @param literal-string $alias the entity alias
+     * @param string $alias the entity alias
      */
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -124,7 +124,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
      * @param array<string, string>  $sortedFields the sorted fields where key is the field name, and value is the sort
      *                                             mode ('ASC' or 'DESC')
      * @param array<Criteria|string> $criteria     the filter criteria (the where clause)
-     * @param literal-string         $alias        the entity alias
+     * @param string                 $alias        the entity alias
      *
      * @see AbstractRepository::createDefaultQueryBuilder()
      *

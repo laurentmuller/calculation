@@ -278,7 +278,6 @@ class Column implements \Stringable, SortModeInterface
     public function mapValue(EntityInterface|array $objectOrArray): string
     {
         $property = \is_array($objectOrArray) ? $this->property : $this->field;
-        /** @phpstan-var mixed $value */
         $value = self::getAccessor()->getValue($objectOrArray, $property);
 
         return $this->formatValue($objectOrArray, $value);

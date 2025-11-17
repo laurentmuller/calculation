@@ -82,7 +82,6 @@ class UcFirstCommand
         $question->setMaxAttempts(1)
             ->setErrorMessage('No entity selected.');
 
-        /** @phpstan-var ?string $class */
         $class = $io->askQuestion($question);
         if (!StringUtils::isString($class)) {
             return null;
@@ -201,9 +200,7 @@ class UcFirstCommand
         $this->start();
         $query = $this->createQuery($class);
         $accessor = PropertyAccess::createPropertyAccessor();
-        /** @phpstan-var EntityInterface $entity */
         foreach ($io->progressIterate($query->toIterable(), $total) as $entity) {
-            /** @phpstan-var string|null $oldValue */
             $oldValue = $accessor->getValue($entity, $field);
             $newValue = $this->convert($oldValue, $point);
             if ($oldValue !== $newValue) {

@@ -24,11 +24,13 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
  */
 class DatePointToDateTimeTransformer implements DataTransformerInterface
 {
-    /** @phpstan-param mixed $value */
+    /**
+     * @phpstan-param mixed $value
+     */
     #[\Override]
     public function reverseTransform(mixed $value): ?DatePoint
     {
-        if (null === $value || '' === $value) {
+        if (null === $value) {
             return null;
         }
 
@@ -39,11 +41,13 @@ class DatePointToDateTimeTransformer implements DataTransformerInterface
         return DatePoint::createFromMutable($value);
     }
 
-    /** @phpstan-param mixed $value */
+    /**
+     * @phpstan-param mixed $value
+     */
     #[\Override]
     public function transform(mixed $value): ?\DateTime
     {
-        if (null === $value || '' === $value) {
+        if (null === $value) {
             return null;
         }
 

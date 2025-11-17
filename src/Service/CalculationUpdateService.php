@@ -162,7 +162,6 @@ class CalculationUpdateService implements ServiceSubscriberInterface
             ->andWhere($expr->gte('date', $query->getDateFrom()))
             ->andWhere($expr->lte('date', $query->getDate()));
 
-        /** @phpstan-var Calculation[] */
         return $this->calculationRepository
             ->createQueryBuilder('c')
             ->addCriteria($criteria)

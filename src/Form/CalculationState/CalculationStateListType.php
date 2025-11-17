@@ -38,6 +38,7 @@ class CalculationStateListType extends AbstractListEntityType
         parent::configureOptions($resolver);
         $resolver->setDefaults([
             'choice_label' => 'code',
+            'prepend_icon' => 'fa-regular fa-flag',
             'group_by' => $this->translateEditable(...),
             'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getQueryBuilderByEditable(),
         ]);

@@ -48,7 +48,6 @@ class OpenWeatherFormatter
      */
     public function update(array &$results, ?\DateTimeZone $timezone = null): void
     {
-        /** @phpstan-var mixed $result */
         foreach ($results as $key => &$result) {
             if (\is_array($result)) {
                 $this->update($result, $timezone);

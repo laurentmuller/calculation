@@ -77,7 +77,6 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
     private function createQuery(ArgumentMetadata $argument): DataQuery
     {
         if ($argument->hasDefaultValue()) {
-            /** @phpstan-var DataQuery */
             return $argument->getDefaultValue();
         }
 

@@ -105,7 +105,6 @@ class CalculationGroupService implements ConstantsInterface
         $reflection = new \ReflectionClass(self::class);
         $constants = $reflection->getReflectionConstants(\ReflectionClassConstant::IS_PRIVATE);
 
-        /** @phpstan-var array<string, int> */
         return \array_reduce(
             $constants,
             static fn (array $carry, \ReflectionClassConstant $c): array => $carry + [$c->getName() => $c->getValue()],

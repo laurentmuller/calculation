@@ -86,7 +86,6 @@ final class StringUtils
     public static function decodeJson(string $value, bool $assoc = true, int $flags = 0): array|\stdClass
     {
         try {
-            /** @phpstan-var array|\stdClass */
             return \json_decode(json: $value, associative: $assoc, flags: $flags | \JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
             throw new \InvalidArgumentException('Unable to decode value.', $e->getCode(), $e);

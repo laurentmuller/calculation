@@ -28,10 +28,6 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class UserCommentType extends AbstractType
 {
-    public function __construct(private readonly AddressTransformer $transformer)
-    {
-    }
-
     /**
      * @phpstan-param FormBuilderInterface<Comment|null> $builder
      */
@@ -44,7 +40,7 @@ class UserCommentType extends AbstractType
         $data = $options['data'];
         $address = $data->isMail() ? 'to' : 'from';
         $helper->field($address)
-            ->modelTransformer($this->transformer)
+            ->modelTransformer(new AddressTransformer())
             ->addPlainType();
 
         $helper->field('subject')

@@ -11,7 +11,8 @@
             <i class="fa-fw fa-solid fa-lock"></i>
         </div>
         {{ parent() }}
-        <div class="input-group-text btn btn-password btn-outline-secondary{% if not value %} disabled{% endif %}" title="{{ 'common.toggle_password'|trans }}">
+        <div class="input-group-text btn btn-password btn-outline-secondary{% if not value %} disabled{% endif %}"
+             title="{{ 'common.toggle_password'|trans }}">
             <i class="fa-fw fa-regular fa-eye"></i>
         </div>
     </div>
@@ -19,28 +20,38 @@
         <div id="{{ field_id(form) }}_passwordStrength" class="password-strength-container d-print-none"></div>
     {%- endif %}
 {%- endblock %}
-
-{# plain widget text #}
+{# plain label #}
 {% block plain_label -%}
     {%- set element = 'span' -%}
     {{ block('form_label') }}
 {%- endblock %}
-
+{# plain widget #}
 {% block plain_widget -%}
     {% set display_value = display_value|default('&nbsp;') %}
     {% if expanded %}
+        {# add input group if applicable #}
+        {% set prepend_icon = (prepend_icon|default('') ~ ' ' ~ prepend_class|default(''))|trim %}
+        {% set append_icon = (append_icon|default('') ~ ' ' ~ append_class|default(''))|trim %}
         {% set class = (attr.class|default('') ~ ' form-control-read-only')|trim %}
+        {% if prepend_icon or append_icon %}
+            <div class="input-group">
+            {{ _self.input_group_text(prepend_icon, prepend_title|default(false)) }}
+        {% endif %}
         <div class="{{ class }}"{% if not hidden_input %}{{ block('widget_container_attributes') }}{% endif %}>
             <span{% if text_class %} class="{{ text_class }}"{% endif %}>{{ display_value|raw }}</span>
         </div>
+        {% if prepend_icon or append_icon %}
+            {{ _self.input_group_text(append_icon, append_title|default(false)) }}
+            </div>
+        {% endif %}
     {% else %}
         <span>{{ display_value|raw }}</span>
     {% endif %}
     {% if hidden_input %}
+        {% set prepend_icon, append_icon = false, false %}
         {{ block('hidden_widget') }}
     {% endif %}
 {%- endblock %}
-
 {# color widget #}
 {% block color_widget -%}
     {%- if 'color-picker' in attr.class|default('') -%}
@@ -69,56 +80,34 @@
         {{- parent() -}}
     {%- endif -%}
 {%- endblock %}
-
-{# prepend and append icons, if applicable #}
+{# add input group if applicable #}
 {% block form_widget_simple -%}
     {% set prepend_icon = (prepend_icon|default('') ~ ' ' ~ prepend_class|default(''))|trim %}
-    {% set prepend_title = prepend_title|default(false) %}
     {% set append_icon = (append_icon|default('') ~ ' ' ~ append_class|default(''))|trim %}
-    {% set append_title = append_title|default(false) %}
     {% if prepend_icon or append_icon %}
         <div class="input-group">
-            {% if prepend_icon %}
-                <div class="input-group-text"{% if prepend_title %} title="{{ prepend_title|trans }}"{% endif %}>
-                    <i class="fa-fw {{ prepend_icon }}"></i>
-                </div>
-            {% endif %}
-            {{- parent() -}}
-            {% if append_icon %}
-                <div class="input-group-text"{% if append_title %} title="{{ append_title|trans }}"{% endif %}>
-                    <i class="fa-fw {{ append_icon }}"></i>
-                </div>
-            {% endif %}
+        {{ _self.input_group_text(prepend_icon, prepend_title|default(false)) }}
+    {% endif %}
+    {{- parent() -}}
+    {% if prepend_icon or append_icon %}
+        {{ _self.input_group_text(append_icon, append_title|default(false)) }}
         </div>
-    {% else %}
-        {{- parent() -}}
     {% endif %}
 {%- endblock form_widget_simple %}
-
+{# add input group if applicable #}
 {%- block choice_widget_collapsed -%}
     {% set prepend_icon = (prepend_icon|default('') ~ ' ' ~ prepend_class|default(''))|trim %}
-    {% set prepend_title = prepend_title|default(false) %}
     {% set append_icon = (append_icon|default('') ~ ' ' ~ append_class|default(''))|trim %}
-    {% set append_title = append_title|default(false) %}
     {% if prepend_icon or append_icon %}
         <div class="input-group">
-            {% if prepend_icon %}
-                <div class="input-group-text"{% if prepend_title %} title="{{ prepend_title|trans }}"{% endif %}>
-                    <i class="fa-fw {{ prepend_icon }}"></i>
-                </div>
-            {% endif %}
-            {{- parent() -}}
-            {% if append_icon %}
-                <div class="input-group-text"{% if append_title %} title="{{ append_title|trans }}"{% endif %}>
-                    <i class="fa-fw {{ append_icon }}"></i>
-                </div>
-            {% endif %}
+        {{ _self.input_group_text(prepend_icon, prepend_title|default(false)) }}
+    {% endif %}
+    {{- parent() -}}
+    {% if prepend_icon or append_icon %}
+        {{ _self.input_group_text(append_icon, append_title|default(false)) }}
         </div>
-    {% else %}
-        {{- parent() -}}
     {% endif %}
 {%- endblock -%}
-
 {# use image-input style #}
 {% block file_widget -%}
     {%- if thumbnail|default(false) -%}
@@ -133,23 +122,26 @@
                 {% endif %}
             </div>
             <div class="d-flex-wrap">
-                <button type="button" class="btn image-input-browse btn-sm btn-outline-secondary flex-fill">{{ 'common.button_browse'|trans }}</button>
-                <button type="button" class="btn image-input-edit btn-sm btn-outline-secondary flex-fill">{{ 'common.button_edit'|trans }}</button>
-                <button type="button" class="btn image-input-delete btn-sm btn-outline-danger flex-fill">{{ 'common.button_delete'|trans }}</button>
+                <button type="button"
+                        class="btn image-input-browse btn-sm btn-outline-secondary flex-fill">{{ 'common.button_browse'|trans }}</button>
+                <button type="button"
+                        class="btn image-input-edit btn-sm btn-outline-secondary flex-fill">{{ 'common.button_edit'|trans }}</button>
+                <button type="button"
+                        class="btn image-input-delete btn-sm btn-outline-danger flex-fill">{{ 'common.button_delete'|trans }}</button>
             </div>
             {{- block('form_widget_simple') -}}
         </div>
     {%- else -%}
         <div class="input-group">
             {{- block('form_widget_simple') }}
-            <button class="btn btn-file-delete btn-outline-secondary{% if not value %} d-none{% endif %}" type="button" title="{{ 'common.button_delete'|trans }}">
+            <button class="btn btn-file-delete btn-outline-secondary{% if not value %} d-none{% endif %}" type="button"
+                    title="{{ 'common.button_delete'|trans }}">
                 <i class="fa-solid fa-times"></i>
             </button>
         </div>
     {%- endif -%}
 {%- endblock -%}
-
-{# vich_image #}
+{# vich image widget #}
 {% block vich_image_widget -%}
     {# file #}
     {%- set alt = 'user.image.title' -%}
@@ -160,8 +152,7 @@
         <div class="d-none">{{- form_widget(form.delete) -}}</div>
     {%- endif %}
 {%- endblock %}
-
-{# captcha_image #}
+{# captcha image widget #}
 {% block captcha_image_widget -%}
     {%- set type = type|default('text') -%}
     {%- set image_title = 'captcha.title'|trans -%}
@@ -174,27 +165,28 @@
     {%- set attr = attr|merge({class: (attr.class|default('') ~ ' text-lowercase')|trim}) -%}
     <div class="input-group">
         <span class="input-group-text py-0 px-1 bg-white">
-            <img id="{{ id }}_image" class="captcha-image" alt="{{ image_title }}" title="{{ image_title }}" src="{{ image }}" width="150" height="30">
+            <img id="{{ id }}_image" class="captcha-image" alt="{{ image_title }}" title="{{ image_title }}"
+                 src="{{ image }}" width="150" height="30">
         </span>
         {{- block('form_widget_simple') -}}
         {% if refresh|default(false) %}
-            <button id="{{ id }}_refresh" name="{{ id }}_refresh" class="btn btn-outline-secondary captcha-refresh" type="button" title="{{ 'captcha.refresh'|trans }}">
+            <button id="{{ id }}_refresh" name="{{ id }}_refresh" class="btn btn-outline-secondary captcha-refresh"
+                    type="button" title="{{ 'captcha.refresh'|trans }}">
                 <i class="fa-solid fa-sync"></i>
             </button>
         {% endif %}
     </div>
 {%- endblock %}
-
-{# simple editor #}
+{# simple editor row #}
 {% block simple_editor_row -%}
     {{- block('form_row') -}}
 {%- endblock %}
-
+{# simple editor label #}
 {% block simple_editor_label -%}
     {%- set element = 'span' -%}
     {{ block('form_label') }}
 {%- endblock %}
-
+{# simple editor button #}
 {% macro simple_editor_button(action) %}
     {%- set translation_domain = 'messages' -%}
     {%- set attr_translation_parameters = [] -%}
@@ -206,7 +198,7 @@
         {%- endif -%}
     </button>
 {% endmacro %}
-
+{# simple editor groups #}
 {% macro simple_editor_groups(groups) %}
     {% for group, actions in groups %}
         <div class="btn-group btn-group-sm" role="group" aria-label="{{ ('simple_editor.groups.' ~ group)|trans }}">
@@ -230,7 +222,7 @@
         </div>
     {% endfor %}
 {% endmacro %}
-
+{# simple editor widget #}
 {% block simple_editor_widget -%}
     {%- set type = type|default('hidden') -%}
     <div class="simple-editor form-control p-0" id="{{ field_id(form) }}_editor">
@@ -241,23 +233,24 @@
         {{- block('form_widget_simple') -}}
     </div>
 {%- endblock %}
-
+{# alpha captcha label #}
 {%- block alpha_captcha_label -%}
     {{ form_label(form, null, {required: false, label_attr: {class: 'horizontal-line'}}) }}
 {%- endblock -%}
-
+{# alpha captcha widget #}
 {%- block alpha_captcha_widget -%}
     <div class="row align-items-center">
-        <label for="{{ id }}" class="col-sm-10 col-form-label{% if required %} required{% endif %}">{{- question -}}</label>
+        <label for="{{ id }}"
+               class="col-sm-10 col-form-label{% if required %} required{% endif %}">{{- question -}}</label>
         <div class="col-sm-2 col-3">{{- block('form_widget_simple') -}}</div>
     </div>
 {%- endblock -%}
-
+{# recalpha widget #}
 {% block recaptcha_widget %}
     {{ block('hidden_widget') }}
     <script nonce="{{ csp_nonce() }}" src="{{ recaptcha_url }}" async defer></script>
 {%- endblock -%}
-
+{# form errors #}
 {%- block form_errors -%}
     {%- if errors|length > 0 -%}
         {%- if form is rootform -%}
@@ -275,3 +268,11 @@
         {%- endif %}
     {%- endif %}
 {%- endblock -%}
+{# output an input group text, if applicable #}
+{% macro input_group_text(icon, title) %}
+    {% if icon %}
+        <div class="input-group-text"{% if title %} title="{{ title|trans }}"{% endif %}>
+            <i class="fa-fw {{ icon }}"></i>
+        </div>
+    {% endif %}
+{% endmacro %}

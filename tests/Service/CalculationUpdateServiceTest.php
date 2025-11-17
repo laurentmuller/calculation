@@ -85,13 +85,11 @@ final class CalculationUpdateServiceTest extends AuthenticateWebTestCase
         self::assertSame($expected, $actual);
 
         $expected = $this->getDate();
-        /** @phpstan-var mixed $actual */
         $actual = $session->get('calculation.update.date');
         self::assertInstanceOf(DatePoint::class, $actual);
         self::assertTimestampEquals($expected, $actual);
 
         $expected = $this->getInterval();
-        /** @phpstan-var mixed $actual */
         $actual = $session->get('calculation.update.interval');
         self::assertIsString($actual);
         self::assertSame($expected, $actual);

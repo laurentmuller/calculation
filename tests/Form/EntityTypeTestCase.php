@@ -99,12 +99,10 @@ abstract class EntityTypeTestCase extends TypeTestCase
     {
         $entity = new $entityClass();
         $accessor = PropertyAccess::createPropertyAccessor();
-        /** @phpstan-var mixed $value */
         foreach ($data as $key => $value) {
             $accessor->setValue($entity, $key, $value);
         }
 
-        /** @phpstan-var TEntity */
         return $entity;
     }
 
@@ -131,9 +129,7 @@ abstract class EntityTypeTestCase extends TypeTestCase
         $keys = \array_keys($data);
         $accessor = PropertyAccess::createPropertyAccessor();
         foreach ($keys as $field) {
-            /** @phpstan-var mixed $expected */
             $expected = $accessor->getValue($entity, $field);
-            /** @phpstan-var mixed $actual */
             $actual = $accessor->getValue($model, $field);
             $this->validate($expected, $actual);
         }

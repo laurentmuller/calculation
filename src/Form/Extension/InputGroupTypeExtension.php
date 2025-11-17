@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Form\Extension;
 
+use App\Form\Type\PlainType;
 use Elao\Enum\Bridge\Symfony\Form\Type\EnumType as ElaoEnumType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -24,7 +25,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Type extension for Bootstrap input groups (prepend and append).
+ * Type extension for Bootstrap prepend and append input groups.
  */
 class InputGroupTypeExtension extends AbstractTypeExtension
 {
@@ -66,6 +67,7 @@ class InputGroupTypeExtension extends AbstractTypeExtension
             TextType::class,
             NumberType::class,
             ChoiceType::class,
+            PlainType::class,
             EnumType::class,
             ElaoEnumType::class,
         ];

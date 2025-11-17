@@ -103,17 +103,17 @@ abstract class AbstractParameters
     abstract public function save(): bool;
 
     /**
-     * @phpstan-return TProperty
+     * @return TProperty
      */
     abstract protected function createProperty(string $name): AbstractProperty;
 
     /**
-     * @phpstan-template T of ParameterInterface
+     * @template T of ParameterInterface
      *
-     * @phpstan-param class-string<T> $class
-     * @phpstan-param T|null $default
+     * @param class-string<T> $class
+     * @param T|null          $default
      *
-     * @phpstan-return T
+     * @return T
      */
     protected function getCachedParameter(string $class, ?ParameterInterface $default = null): ParameterInterface
     {
@@ -152,7 +152,7 @@ abstract class AbstractParameters
     abstract protected function getRepository(): AbstractRepository;
 
     /**
-     * @phpstan-return TProperty[]
+     * @return TProperty[]
      */
     abstract protected function loadProperties(): array;
 
@@ -179,6 +179,8 @@ abstract class AbstractParameters
      * @phpstan-param TParameter $parameter
      *
      * @return MetaData[]
+     *
+     * @throws \ReflectionException
      */
     private function createMetaDatas(ParameterInterface|string $parameter): array
     {
@@ -201,19 +203,19 @@ abstract class AbstractParameters
     }
 
     /**
-     * @phpstan-template T of ParameterInterface
+     * @template T of ParameterInterface
      *
-     * @phpstan-param class-string<T> $class
-     * @phpstan-param T|null $default
+     * @param class-string<T> $class
+     * @param T|null          $default
      *
-     * @phpstan-return T
+     * @return T
      */
     private function createParameter(string $class, ?ParameterInterface $default = null): ParameterInterface
     {
         $parameter = new $class();
         $accessor = $this->getAccessor();
-        $metaDatas = $this->getMetaDatas($parameter);
         $properties = $this->loadProperties();
+        $metaDatas = $this->getMetaDatas($parameter);
 
         foreach ($metaDatas as $metaData) {
             $property = $this->findProperty($properties, $metaData->name);
@@ -231,9 +233,9 @@ abstract class AbstractParameters
     }
 
     /**
-     * @phpstan-param TProperty[]  $properties
+     * @param TProperty[] $properties
      *
-     * @phpstan-return TProperty|null
+     * @return TProperty|null
      */
     private function findProperty(array $properties, string $name): ?AbstractProperty
     {
@@ -286,19 +288,11 @@ abstract class AbstractParameters
             return $this->getParameterPropertyValue($metaData, $parameter, $accessor);
         }
 
-        return $this->getMetaDataDefaultValue($metaData);
-    }
-
-    /**
-     * @phpstan-return TValue
-     */
-    private function getMetaDataDefaultValue(MetaData $metaData): mixed
-    {
         return $metaData->default;
     }
 
     /**
-     * @phpstan-param TParameter $parameter
+     * @param TParameter $parameter
      *
      * @return MetaData[]
      */
@@ -321,9 +315,11 @@ abstract class AbstractParameters
     }
 
     /**
-     * @phpstan-param TParameter $parameter
+     * @param TParameter $parameter
      *
      * @return \ReflectionProperty[]
+     *
+     * @throws \ReflectionException
      */
     private function getProperties(ParameterInterface|string $parameter): array
     {

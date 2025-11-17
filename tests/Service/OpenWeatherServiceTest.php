@@ -71,7 +71,6 @@ final class OpenWeatherServiceTest extends KernelServiceTestCase
         self::assertIsArray($result);
         self::assertSame($count, $result['cnt']);
 
-        /** @phpstan-var array $list */
         $list = $result['list'];
         self::assertCount($count, $list);
         self::assertArrayHasKey(0, $list);
@@ -85,7 +84,6 @@ final class OpenWeatherServiceTest extends KernelServiceTestCase
         self::assertIsArray($city['coord']);
         $this->validateCoord($city['coord']);
 
-        /** @phpstan-var array{sunrise: int|null, sunset: int|null}  $result */
         $result = $list[0];
         self::assertIsInt($result['sunrise']);
         self::assertIsInt($result['sunset']);

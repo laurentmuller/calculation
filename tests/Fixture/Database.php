@@ -88,7 +88,6 @@ class Database extends AbstractDatabase
             $fileName = Path::normalize(__DIR__ . '/db_test.sqlite');
         }
 
-        /** @phpstan-var string */
         return $fileName;
     }
 

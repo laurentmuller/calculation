@@ -35,8 +35,6 @@ final class CalculationArchiveControllerTest extends ControllerTestCase
     {
         $this->addNotEditState();
         $repository = $this->getService(CalculationStateRepository::class);
-
-        /** @phpstan-var CalculationState[] $entities */
         $entities = $repository->getEditableQueryBuilder()
             ->getQuery()
             ->getResult();
@@ -59,8 +57,6 @@ final class CalculationArchiveControllerTest extends ControllerTestCase
     {
         $this->addEditState();
         $repository = $this->getService(CalculationStateRepository::class);
-
-        /** @phpstan-var CalculationState[] $entities */
         $entities = $repository->getNotEditableQueryBuilder()
             ->getQuery()
             ->getResult();
@@ -93,14 +89,14 @@ final class CalculationArchiveControllerTest extends ControllerTestCase
 
         $repository = $this->getService(CalculationStateRepository::class);
 
-        /** @phpstan-var ?CalculationState $editState */
+        /** @var ?CalculationState $editState */
         $editState = $repository->getEditableQueryBuilder()
             ->setMaxResults(1)
             ->getQuery()
             ->getSingleResult();
         $data['form[sources][0]'] = $editState?->getId();
 
-        /** @phpstan-var ?CalculationState $noEditable */
+        /** @var ?CalculationState $noEditable */
         $noEditable = $repository->getNotEditableQueryBuilder()
             ->setMaxResults(1)
             ->getQuery()

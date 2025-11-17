@@ -25,7 +25,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Event\Event;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
-use Vich\UploaderBundle\Naming\NamerInterface;
 
 final class VichListenerTest extends TestCase
 {
@@ -92,7 +91,7 @@ final class VichListenerTest extends TestCase
 
     public function testPreUploadWithEmptyNamer(): void
     {
-        $namer = new class implements NamerInterface {
+        $namer = new class extends UserNamer {
             #[\Override]
             public function name(object $object, PropertyMapping $mapping): string
             {
@@ -107,12 +106,9 @@ final class VichListenerTest extends TestCase
         self::expectNotToPerformAssertions();
     }
 
-    /**
-     * @phpstan-param NamerInterface<object>|null $namer
-     */
     private function createEvent(
         ?UploadedFile $file = null,
-        ?NamerInterface $namer = null
+        ?UserNamer $namer = null
     ): Event {
         $user = $this->createUser($file);
         $mapping = $this->createPropertyMapping($namer);
@@ -138,10 +134,7 @@ final class VichListenerTest extends TestCase
         return $resizer;
     }
 
-    /**
-     * @phpstan-param NamerInterface<object>|null $namer
-     */
-    private function createPropertyMapping(?NamerInterface $namer = null): PropertyMapping
+    private function createPropertyMapping(?UserNamer $namer = null): PropertyMapping
     {
         $mapping = new PropertyMapping(
             'imageFile',
@@ -184,14 +177,8 @@ final class VichListenerTest extends TestCase
         return __DIR__ . '/../files/images/';
     }
 
-    /**
-     * @phpstan-param NamerInterface<object>|null $namer
-     *
-     * @phpstan-return NamerInterface<object>
-     */
-    private function getNamer(?NamerInterface $namer = null): NamerInterface
+    private function getNamer(?UserNamer $namer = null): UserNamer
     {
-        /** @phpstan-var NamerInterface<object> */
         return $namer ?? new UserNamer();
     }
 }

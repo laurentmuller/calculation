@@ -17,14 +17,15 @@ use App\Entity\User;
 use App\Listener\SwitchUserListener;
 use App\Security\SecurityAttributes;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
 
 final class SwitchUserListenerTest extends TestCase
@@ -35,8 +36,7 @@ final class SwitchUserListenerTest extends TestCase
     {
         $request = $this->createRequest();
         $token = $this->createUsernamePasswordToken();
-        /** @phpstan-var User $user */
-        $user = $token->getUser();
+        $user = $this->getUserToken($token);
         $event = new SwitchUserEvent($request, $user);
 
         $listener = $this->createListener();
@@ -49,8 +49,7 @@ final class SwitchUserListenerTest extends TestCase
     {
         $request = $this->createRequest('_exit');
         $token = $this->createSwitchUserToken();
-        /** @phpstan-var User $user */
-        $user = $token->getUser();
+        $user = $this->getUserToken($token);
         $event = new SwitchUserEvent($request, $user, $token);
 
         $listener = $this->createListener();
@@ -63,8 +62,7 @@ final class SwitchUserListenerTest extends TestCase
     {
         $request = $this->createRequest('fake');
         $token = $this->createSwitchUserToken();
-        /** @phpstan-var User $user */
-        $user = $token->getUser();
+        $user = $this->getUserToken($token);
         $event = new SwitchUserEvent($request, $user, $token);
 
         $listener = $this->createListener();
@@ -76,15 +74,15 @@ final class SwitchUserListenerTest extends TestCase
     private function createListener(): SwitchUserListener
     {
         $listener = new SwitchUserListener();
-        $listener->setTranslator($this->createMockTranslator());
-        $listener->setRequestStack($this->createRequestStack());
+        $listener->setTranslator($this->createMockTranslator())
+            ->setRequestStack($this->createRequestStack());
 
         return $listener;
     }
 
-    private function createRequest(string $action = ''): MockObject&Request
+    private function createRequest(string $action = ''): Request
     {
-        /** @phpstan-var InputBag<string> $query */
+        /** @var InputBag<string> $query */
         $query = new InputBag(['_switch_user' => $action]);
         $request = $this->createMock(Request::class);
         $request->query = $query;
@@ -92,7 +90,7 @@ final class SwitchUserListenerTest extends TestCase
         return $request;
     }
 
-    private function createRequestStack(): MockObject&RequestStack
+    private function createRequestStack(): RequestStack
     {
         $session = $this->createMock(SessionInterface::class);
         $requestStack = $this->createMock(RequestStack::class);
@@ -105,18 +103,32 @@ final class SwitchUserListenerTest extends TestCase
 
     private function createSwitchUserToken(): SwitchUserToken
     {
-        $user = new User();
-        $user->setUsername('target');
-        $token = $this->createUsernamePasswordToken();
+        $user = $this->createUser('target');
 
-        return new SwitchUserToken($user, SecurityAttributes::MAIN_FIREWALL, [], $token);
+        return new SwitchUserToken(
+            $user,
+            SecurityAttributes::MAIN_FIREWALL,
+            $user->getRoles(),
+            $this->createUsernamePasswordToken()
+        );
+    }
+
+    /**
+     * @param non-empty-string $name
+     */
+    private function createUser(string $name): User
+    {
+        return (new User())->setUsername($name);
     }
 
     private function createUsernamePasswordToken(): UsernamePasswordToken
     {
-        $user = new User();
-        $user->setUsername('source');
+        return new UsernamePasswordToken($this->createUser('source'), SecurityAttributes::MAIN_FIREWALL);
+    }
 
-        return new UsernamePasswordToken($user, SecurityAttributes::MAIN_FIREWALL);
+    private function getUserToken(TokenInterface $token): UserInterface
+    {
+        /** @var UserInterface */
+        return $token->getUser();
     }
 }

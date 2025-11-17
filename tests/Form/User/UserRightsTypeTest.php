@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Form\User;
 
 use App\Entity\User;
+use App\Form\Extension\InputGroupTypeExtension;
 use App\Form\Type\PlainType;
 use App\Form\User\RightsType;
 use App\Form\User\UserRightsType;
@@ -37,7 +38,7 @@ final class UserRightsTypeTest extends TypeTestCase
             ->setRole(RoleInterface::ROLE_ADMIN);
         $data = [
             'username' => 'username',
-            'role' => '<i class="me-1 fa-solid fa-user-shield"></i>user.roles.admin',
+            'role' => 'user.roles.admin',
             'enabled' => 'common.value_enabled',
             'overwrite' => '1',
         ];
@@ -85,5 +86,14 @@ final class UserRightsTypeTest extends TypeTestCase
             $userRightsType,
             new PlainType($translator),
         ];
+    }
+
+    /**
+     * @return InputGroupTypeExtension[]
+     */
+    #[\Override]
+    protected function getTypeExtensions(): array
+    {
+        return [new InputGroupTypeExtension()];
     }
 }

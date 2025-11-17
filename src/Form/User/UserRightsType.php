@@ -34,8 +34,10 @@ class UserRightsType extends AbstractRightsType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('username')
+            ->updateOption('prepend_icon', 'fa-regular fa-user')
             ->addPlainType();
         $helper->field('enabled')
+            ->updateOption('prepend_icon', 'fa-solid fa-user-check')
             ->updateOption('value_transformer', $this->translateEnabled(...))
             ->addPlainType();
         $helper->field('overwrite')

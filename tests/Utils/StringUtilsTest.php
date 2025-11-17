@@ -188,7 +188,6 @@ final class StringUtilsTest extends TestCase
     public function testEncodeJson(): void
     {
         $expected = '{"key":"value"}';
-        /** @phpstan-var mixed $decoded */
         $decoded = \json_decode($expected, true);
         $actual = StringUtils::encodeJson($decoded);
         self::assertSame($expected, $actual);
@@ -224,13 +223,9 @@ final class StringUtilsTest extends TestCase
 
     public function testGetShortNameInvalid(): void
     {
-        /**
-         * @phpstan-var class-string $objectOrClass
-         *
-         * @phpstan-ignore varTag.nativeType
-         */
         $objectOrClass = 'Fake Class';
         $this->expectException(\RuntimeException::class);
+        // @phpstan-ignore argument.type
         StringUtils::getShortName($objectOrClass);
     }
 

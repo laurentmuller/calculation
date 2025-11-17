@@ -25,7 +25,6 @@ final class GroupByTraitTest extends TestCase
 
     public function testGroupByArrays(): void
     {
-        /** @phpstan-var UtilsType[] $array */
         $array = [
             $this->createObject(1, '1'),
             $this->createObject(2, '2'),
@@ -41,7 +40,6 @@ final class GroupByTraitTest extends TestCase
 
     public function testGroupByCallable(): void
     {
-        /** @phpstan-var UtilsType[] $array */
         $array = [
             $this->createObject(1, '1'),
             $this->createObject(2, '2'),
@@ -58,7 +56,6 @@ final class GroupByTraitTest extends TestCase
 
     public function testGroupByEmpty(): void
     {
-        /** @phpstan-var array<array{key: string, ...}> $array */
         $array = [];
         $actual = $this->groupBy($array, 'key');
         self::assertSame([], $actual);
@@ -66,7 +63,6 @@ final class GroupByTraitTest extends TestCase
 
     public function testGroupByMultiple(): void
     {
-        /** @phpstan-var array<array{id0: int, id1: string, value: string}> $array */
         $array = [
             ['id0' => 1, 'id1' => '1', 'value' => '1'],
             ['id0' => 1, 'id1' => '1', 'value' => '2'],

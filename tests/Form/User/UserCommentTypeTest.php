@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Form\User;
 
 use App\Enums\Importance;
-use App\Form\DataTransformer\AddressTransformer;
 use App\Form\Extension\FileTypeExtension;
 use App\Form\Type\PlainType;
 use App\Form\Type\SimpleEditorType;
@@ -48,11 +47,9 @@ final class UserCommentTypeTest extends TypeTestCase
     #[\Override]
     protected function getPreloadedExtensions(): array
     {
-        $transformer = new AddressTransformer();
-
         return [
             new PlainType($this->createMockTranslator()),
-            new UserCommentType($transformer),
+            new UserCommentType(),
             new SimpleEditorType(''),
         ];
     }

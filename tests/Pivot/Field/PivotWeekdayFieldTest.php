@@ -33,17 +33,14 @@ final class PivotWeekdayFieldTest extends TestCase
         $actual = $field->getDisplayValue(null);
         self::assertNull($actual);
 
-        /** @phpstan-var string $actual */
         $actual = $field->getDisplayValue(2);
         self::assertSame('Mardi', $actual);
 
         $field = new PivotWeekdayField('name', short: true);
 
-        /** @phpstan-var string $actual */
         $actual = $field->getDisplayValue(2);
         self::assertSame('Mar.', $actual);
 
-        /** @phpstan-var int $actual */
         $actual = $field->getDisplayValue(-1);
         self::assertSame(-1, $actual);
     }

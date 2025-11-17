@@ -65,20 +65,17 @@ final class CacheTraitTest extends TestCase
 
     public function testGetCacheValue(): void
     {
-        /** @phpstan-var string|null $actual */
         $actual = $this->getCacheValue('key');
         self::assertNull($actual);
 
         $key = 'key';
         $value = 'value';
         $this->setCacheValue($key, $value);
-        /** @phpstan-var string|null $actual */
         $actual = $this->getCacheValue($key);
         self::assertSame($value, $actual);
 
         $default = 'new_value';
         $this->deleteCacheItem($key);
-        /** @phpstan-var string $actual */
         $actual = $this->getCacheValue($key, $default);
         self::assertSame($default, $actual);
     }

@@ -11,27 +11,27 @@
     'data-equal_to': 'password.mismatch'|trans([], 'validators')}) -%}
 {# body #}
 {% block card_body %}
-{{ form_row(form.username) }}
-{{ form_row(form.email) }}
+    {{ form_row(form.username) }}
+    {{ form_row(form.email) }}
 {% if new %}
     {{ form_row(form.plainPassword) }}
     <div class="row">
-        <div class="col-md-9">
-            {{ form_row(form.role) }}
-        </div>
-        <div class="col-md-3">
-            {{ form_row(form.enabled) }}
-        </div>
-    </div>
-{% else %}
-    <div class="row">
-        <div class="col-md-5">
+        <div class="col-md-8">
             {{ form_row(form.role) }}
         </div>
         <div class="col-md-4">
             {{ form_row(form.enabled) }}
         </div>
-        <div class="col-md-3">
+    </div>
+{% else %}
+    <div class="row">
+        <div class="col-md-4">
+            {{ form_row(form.role) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.enabled) }}
+        </div>
+        <div class="col-md-4">
             {{ form_row(form.lastLogin) }}
         </div>
     </div>

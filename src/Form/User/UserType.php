@@ -56,6 +56,7 @@ class UserType extends AbstractEntityType
             ->addTrueFalseType('common.value_enabled', 'common.value_disabled');
 
         $helper->field('lastLogin')
+            ->updateOption('prepend_icon', 'fa-solid fa-user-clock')
             ->updateOption('value_transformer', $this->formatLastLogin(...))
             ->updateOption('empty_value', 'common.value_none')
             ->widgetClass('text-center')

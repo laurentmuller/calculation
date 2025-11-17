@@ -52,6 +52,7 @@ class ProductType extends AbstractEntityType
 
         $helper->field('supplier')
             ->autocomplete('off')
+            ->updateOption('prepend_icon', 'fa-solid fa-dolly')
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->notRequired()
             ->addTextType();

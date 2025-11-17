@@ -26,7 +26,6 @@ final class ImageExtensionTest extends TestCase
 {
     public static function getCreateImages(): \Generator
     {
-        /** @phpstan-var non-empty-string $dir */
         $dir = \realpath(__DIR__ . '/../files/images');
         yield [ImageExtension::BMP, $dir . '/example.bmp'];
         yield [ImageExtension::GIF, $dir . '/example.gif'];
@@ -66,11 +65,6 @@ final class ImageExtensionTest extends TestCase
 
     public static function getInvalidOptions(): \Generator
     {
-        /**
-         * @phpstan-var SaveOptionsType $options
-         *
-         * @phpstan-ignore varTag.nativeType
-         */
         $options = ['fake' => 100];
         $values = ImageExtension::cases();
         foreach ($values as $value) {

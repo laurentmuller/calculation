@@ -21,6 +21,7 @@ use App\Entity\GroupMargin;
 use App\Entity\Product;
 use App\Interfaces\EntityInterface;
 use App\Model\CalculationAdjustQuery;
+use App\Repository\AbstractRepository;
 use App\Repository\GlobalMarginRepository;
 use App\Repository\GroupMarginRepository;
 use App\Repository\GroupRepository;
@@ -342,7 +343,7 @@ final class CalculationGroupServiceTest extends KernelServiceTestCase
      */
     private function initRepository(ObjectManager $manager, string $entityName): EntityRepository
     {
-        /** @phpstan-var \App\Repository\AbstractRepository<TEntity> $repository */
+        /** @phpstan-var AbstractRepository<TEntity> $repository */
         $repository = $manager->getRepository($entityName);
 
         $items = $repository->findAll();

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Form\User;
 
+use App\Form\Extension\InputGroupTypeExtension;
 use App\Form\Type\PlainType;
 use App\Form\User\RightsType;
 use App\Form\User\RoleRightsType;
@@ -67,5 +68,14 @@ final class RoleRightsTypeTest extends TypeTestCase
             $roleRightsType,
             new PlainType($this->createMockTranslator()),
         ];
+    }
+
+    /**
+     * @return InputGroupTypeExtension[]
+     */
+    #[\Override]
+    protected function getTypeExtensions(): array
+    {
+        return [new InputGroupTypeExtension()];
     }
 }

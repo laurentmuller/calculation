@@ -1,3 +1,4 @@
+{# vendor/symfony/twig-bridge/Resources/views/Email/zurb_2/notification/body.html.twig #}
 {% extends '@email/default/notification/body.html.twig' %}
 {% set footer_text = 'notification.footer'|trans({'%app_name%': app_name_version}) %}
 {# style #}
@@ -23,22 +24,12 @@
         </row>
     </container>
 {% endblock %}
-{# content #}
-{% block content %}
-    {% block content_title %}{% endblock %}
-    {% block content_body %}
-        {{ parent() }}
-    {% endblock %}
-    {% block content_footer %}
-        <container>
-            <row>
-                <columns>
-                    Cordialement,<br>
-                    L'équipe de {{ app_name }}
-                </columns>
-            </row>
-        </container>
-    {% endblock %}
+{# action #}
+{% block action %}
+    <spacer size="8"></spacer>
+    Cordialement,<br>
+    L'équipe de {{ app_name }}
+    {{ parent() }}
 {% endblock %}
 {# exception #}
 {% block exception %}

@@ -145,14 +145,18 @@ class ProductController extends AbstractEntityController
     #[\Override]
     protected function deleteFromDatabase(EntityInterface $item): void
     {
-        $this->getApplicationService()->updateDeletedProduct($item);
+        $application = $this->getApplicationParameters();
+        if ($application->getProduct()->getProductId() === $item->getId()) {
+            $application->getProduct()->setProductId(null);
+            $application->save();
+        }
         parent::deleteFromDatabase($item);
     }
 
     private function createProduct(): Product
     {
         $product = new Product();
-        $category = $this->getApplicationService()->getDefaultCategory();
+        $category = $this->getApplicationParameters()->getDefaultCategory();
         if ($category instanceof Category) {
             $product->setCategory($category);
         }

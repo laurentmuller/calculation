@@ -47,6 +47,31 @@ class MessageParameter implements ParameterInterface
     #[Parameter('message_title', true)]
     private bool $title = true;
 
+    /**
+     * Gets these values as attributes.
+     *
+     * @return array{
+     *     icon: bool,
+     *     title: bool,
+     *     display-close: bool,
+     *     display-subtitle: bool,
+     *     timeout: int,
+     *     progress: int,
+     *     position: string}
+     */
+    public function getAttributes(): array
+    {
+        return [
+            'icon' => $this->icon,
+            'title' => $this->title,
+            'display-close' => $this->close,
+            'display-subtitle' => $this->subTitle,
+            'timeout' => $this->timeout,
+            'progress' => $this->progress,
+            'position' => $this->position->value,
+        ];
+    }
+
     #[\Override]
     public static function getCacheKey(): string
     {

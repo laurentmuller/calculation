@@ -20,12 +20,12 @@ use App\Entity\User;
 use App\Enums\StrengthLevel;
 use App\Form\Type\PlainType;
 use App\Form\User\UserChangePasswordType;
-use App\Service\ApplicationService;
+use App\Parameter\ApplicationParameters;
+use App\Parameter\SecurityParameter;
 use App\Tests\Form\CustomConstraintValidatorFactory;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\TranslatorMockTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Validator\Validation;
@@ -40,13 +40,13 @@ final class UserChangePasswordTypeTest extends EntityTypeTestCase
     use PasswordHasherExtensionTrait;
     use TranslatorMockTrait;
     use ValidatorExtensionTrait;
-    private MockObject&ApplicationService $application;
 
     private bool $compromisedPassword = false;
+    private ApplicationParameters $parameters;
     private Password $password;
     private StrengthLevel $score;
     private Strength $strength;
-    private MockObject&TranslatorInterface $translator;
+    private TranslatorInterface $translator;
 
     #[\Override]
     protected function setUp(): void
@@ -56,13 +56,17 @@ final class UserChangePasswordTypeTest extends EntityTypeTestCase
         $this->strength = new Strength(StrengthLevel::WEAK);
         $this->translator = $this->createMockTranslator();
 
-        $this->application = $this->createMock(ApplicationService::class);
-        $this->application->method('getPasswordConstraint')
-            ->willReturnCallback(fn (): Password => $this->password);
-        $this->application->method('getStrengthConstraint')
-            ->willReturnCallback(fn (): Strength => $this->strength);
-        $this->application->method('isCompromisedPassword')
-            ->willReturnCallback(fn (): bool => $this->compromisedPassword);
+        $security = $this->createMock(SecurityParameter::class);
+        $security->method('getPasswordConstraint')
+            ->willReturn(fn (): Password => $this->password);
+        $security->method('getStrengthConstraint')
+            ->willReturn(fn (): Strength => $this->strength);
+        $security->method('isCompromised')
+            ->willReturn(fn (): bool => $this->compromisedPassword);
+
+        $this->parameters = $this->createMock(ApplicationParameters::class);
+        $this->parameters->method('getSecurity')
+            ->willReturn($security);
 
         parent::setUp();
     }
@@ -187,7 +191,7 @@ final class UserChangePasswordTypeTest extends EntityTypeTestCase
     {
         return [
             new PlainType($this->translator),
-            new UserChangePasswordType($this->application),
+            new UserChangePasswordType($this->parameters),
         ];
     }
 

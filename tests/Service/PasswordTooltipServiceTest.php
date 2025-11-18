@@ -15,22 +15,22 @@ namespace App\Tests\Service;
 
 use App\Constraint\Password;
 use App\Enums\StrengthLevel;
-use App\Service\ApplicationService;
+use App\Parameter\ApplicationParameters;
+use App\Parameter\SecurityParameter;
 use App\Service\PasswordTooltipService;
 use App\Tests\TranslatorMockTrait;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class PasswordTooltipServiceTest extends TestCase
 {
     use TranslatorMockTrait;
-
-    private MockObject&ApplicationService $application;
     private bool $compromisedPassword = false;
     private StrengthLevel $level;
+
+    private ApplicationParameters $parameters;
     private Password $password;
-    private MockObject&TranslatorInterface $translator;
+    private TranslatorInterface $translator;
 
     #[\Override]
     protected function setUp(): void
@@ -38,19 +38,25 @@ final class PasswordTooltipServiceTest extends TestCase
         $this->password = new Password(letters: false);
         $this->level = StrengthLevel::NONE;
         $this->translator = $this->createMockTranslator();
-        $this->application = $this->createMock(ApplicationService::class);
-        $this->application->method('getStrengthLevel')
-            ->willReturnCallback(fn (): StrengthLevel => $this->level);
-        $this->application->method('getPasswordConstraint')
-            ->willReturnCallback(fn (): Password => $this->password);
-        $this->application->method('isCompromisedPassword')
+
+        $security = $this->createMock(SecurityParameter::class);
+        $security->method('getLevel')->willReturn(
+            fn (): StrengthLevel => $this->level
+        );
+        $security->method('getPasswordConstraint')
+            ->willReturn(fn (): Password => $this->password);
+        $security->method('isCompromised')
             ->willReturnCallback(fn (): bool => $this->compromisedPassword);
+
+        $this->parameters = $this->createMock(ApplicationParameters::class);
+        $this->parameters->method('getSecurity')
+            ->willReturn($security);
     }
 
     public function testWithCompromisedPassword(): void
     {
         $this->compromisedPassword = true;
-        $service = new PasswordTooltipService($this->application, $this->translator);
+        $service = new PasswordTooltipService($this->parameters, $this->translator);
         $actual = $service->getTooltips();
         self::assertCount(1, $actual);
         self::assertSame('password.security_compromised_password', $actual[0]);
@@ -58,7 +64,7 @@ final class PasswordTooltipServiceTest extends TestCase
 
     public function testWithDefaultValues(): void
     {
-        $service = new PasswordTooltipService($this->application, $this->translator);
+        $service = new PasswordTooltipService($this->parameters, $this->translator);
         $actual = $service->getTooltips();
         self::assertEmpty($actual);
     }
@@ -66,7 +72,7 @@ final class PasswordTooltipServiceTest extends TestCase
     public function testWithPasswordLetter(): void
     {
         $this->password = new Password(letters: true);
-        $service = new PasswordTooltipService($this->application, $this->translator);
+        $service = new PasswordTooltipService($this->parameters, $this->translator);
         $actual = $service->getTooltips();
         self::assertCount(1, $actual);
         self::assertSame('password.security_letters', $actual[0]);
@@ -75,7 +81,7 @@ final class PasswordTooltipServiceTest extends TestCase
     public function testWithStrengthLevel(): void
     {
         $this->level = StrengthLevel::MEDIUM;
-        $service = new PasswordTooltipService($this->application, $this->translator);
+        $service = new PasswordTooltipService($this->parameters, $this->translator);
         $actual = $service->getTooltips();
         self::assertCount(1, $actual);
         self::assertStringStartsWith('password.security_strength_level', $actual[0]);

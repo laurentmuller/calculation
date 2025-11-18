@@ -138,12 +138,14 @@ abstract class AbstractParameters
             $key = $parameter::getCacheKey();
             $metaDatas = $this->getMetaDatas($parameter);
             foreach ($metaDatas as $metaData) {
-                $values[$key][$metaData->property] = $this->getDefaultPropertyValue($metaData, $parameter, $accessor);
+                $value = $this->getDefaultPropertyValue($metaData, $parameter, $accessor);
+                if (null !== $value) {
+                    $values[$key][$metaData->property] = $value;
+                }
             }
-            $values[$key] = \array_filter($values[$key], static fn (mixed $value): bool => null !== $value);
         }
 
-        return \array_filter($values);
+        return $values;
     }
 
     /**
@@ -188,7 +190,7 @@ abstract class AbstractParameters
         $properties = $this->getProperties($parameter);
         foreach ($properties as $property) {
             $attribute = $this->getAttribute($property);
-            if (false === $attribute) {
+            if (!$attribute instanceof Parameter) {
                 continue;
             }
             $metaDatas[] = new MetaData(
@@ -252,12 +254,12 @@ abstract class AbstractParameters
         return $this->accessor ??= PropertyAccess::createPropertyAccessor();
     }
 
-    private function getAttribute(\ReflectionProperty $property): Parameter|false
+    private function getAttribute(\ReflectionProperty $property): ?Parameter
     {
         /** @var \ReflectionAttribute<Parameter>[] $attributes */
         $attributes = $property->getAttributes(Parameter::class);
 
-        return [] === $attributes ? false : $attributes[0]->newInstance();
+        return [] === $attributes ? null : $attributes[0]->newInstance();
     }
 
     /**
@@ -345,19 +347,6 @@ abstract class AbstractParameters
         };
     }
 
-    private function isDefaultValue(ParameterInterface $parameter, string $name, mixed $value): bool
-    {
-        $class = new \ReflectionClass($parameter);
-        if (!$class->hasProperty($name)) {
-            return false;
-        }
-
-        $property = $class->getProperty($name);
-        $attribute = $this->getAttribute($property);
-
-        return $attribute instanceof Parameter && $attribute->default === $value;
-    }
-
     private function saveParameter(ParameterInterface $parameter, ?ParameterInterface $default = null): bool
     {
         $changed = false;
@@ -370,7 +359,7 @@ abstract class AbstractParameters
             $property = $this->findProperty($properties, $metaData->name);
             $value = $this->getParameterPropertyValue($metaData, $parameter, $accessor);
             $defaultValue = $this->getDefaultPropertyValue($metaData, $default, $accessor);
-            if ($value === $defaultValue || $this->isDefaultValue($parameter, $metaData->property, $value)) {
+            if (null === $value || $value === $defaultValue) {
                 if ($property instanceof AbstractProperty) {
                     $repository->remove($property, false);
                     $changed = true;

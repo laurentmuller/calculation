@@ -44,6 +44,21 @@ class DisplayParameter implements ParameterInterface
         return $this->editAction;
     }
 
+    public function isActionEdit(): bool
+    {
+        return EntityAction::EDIT === $this->editAction;
+    }
+
+    public function isActionNone(): bool
+    {
+        return EntityAction::NONE === $this->editAction;
+    }
+
+    public function isActionShow(): bool
+    {
+        return EntityAction::SHOW === $this->editAction;
+    }
+
     public function setDisplayMode(TableView $displayMode): self
     {
         $this->displayMode = $displayMode;

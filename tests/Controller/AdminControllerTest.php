@@ -15,7 +15,7 @@ namespace App\Tests\Controller;
 
 use App\Enums\EntityPermission;
 use App\Interfaces\PropertyServiceInterface;
-use App\Service\ApplicationService;
+use App\Parameter\ApplicationParameters;
 use App\Service\CacheService;
 use App\Service\DictionaryService;
 use Symfony\Component\HttpFoundation\Response;
@@ -136,8 +136,9 @@ final class AdminControllerTest extends ControllerTestCase
 
     public function testRightUserNoChange(): void
     {
-        $service = self::getService(ApplicationService::class);
-        $service->removeProperty(PropertyServiceInterface::P_USER_RIGHTS);
+        $service = self::getService(ApplicationParameters::class);
+        $service->getRights()->setUserRights(null);
+        $service->save();
 
         $values = $this->getPermissionValues();
         $values[0] = $values[1] = $values[5] = true;

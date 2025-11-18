@@ -16,7 +16,6 @@ namespace App\Controller;
 use App\Attribute\GetRoute;
 use App\Attribute\PostRoute;
 use App\Enums\TableView;
-use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
 use App\Model\PasswordQuery;
@@ -27,7 +26,6 @@ use App\Resolver\TaskComputeQueryValueResolver;
 use App\Service\FakerService;
 use App\Service\PasswordService;
 use App\Service\TaskService;
-use App\Service\UserService;
 use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -119,14 +117,16 @@ class AjaxController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[PostRoute(path: '/save', name: 'save_table')]
-    public function saveTable(
-        Request $request,
-        UserService $service
-    ): JsonResponse {
+    public function saveTable(Request $request): JsonResponse
+    {
         $response = $this->json(true);
         $view = $this->getRequestEnum($request, TableInterface::PARAM_VIEW, TableView::TABLE);
         $this->updateCookie($response, TableInterface::PARAM_VIEW, $view);
-        $service->setProperty(PropertyServiceInterface::P_DISPLAY_MODE, $view);
+
+        $params = $this->getUserParameters();
+        $params->getDisplay()
+            ->setDisplayMode($view);
+        $params->save();
 
         return $response;
     }

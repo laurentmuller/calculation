@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace App\Tests\Chart;
 
 use App\Chart\AbstractHighchart;
-use App\Service\ApplicationService;
+use App\Parameter\ApplicationParameters;
+use App\Parameter\DefaultParameter;
 use HighchartsBundle\Highcharts\ChartExpression;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -25,12 +26,12 @@ final class AbstractChartTest extends TestCase
 {
     public function testCreateInvalidTemplateExpression(): void
     {
-        $application = $this->createMock(ApplicationService::class);
+        $parameters = $this->createMock(ApplicationParameters::class);
         $generator = $this->createMock(UrlGeneratorInterface::class);
         $twig = $this->createMock(Environment::class);
         $twig->expects(self::once())->method('render')
             ->willThrowException(new Error('Test Message'));
-        $chart = new class($application, $generator, $twig)extends AbstractHighchart {
+        $chart = new class($parameters, $generator, $twig)extends AbstractHighchart {
             public function updateExpression(): ?ChartExpression
             {
                 return $this->createTemplateExpression('fake');
@@ -43,12 +44,12 @@ final class AbstractChartTest extends TestCase
 
     public function testCreateTemplateExpression(): void
     {
-        $application = $this->createMock(ApplicationService::class);
+        $parameters = $this->createMock(ApplicationParameters::class);
         $generator = $this->createMock(UrlGeneratorInterface::class);
         $twig = $this->createMock(Environment::class);
         $twig->expects(self::once())->method('render')
             ->willReturn('fake');
-        $chart = new class($application, $generator, $twig)extends AbstractHighchart {
+        $chart = new class($parameters, $generator, $twig)extends AbstractHighchart {
             #[\Override]
             public function createTemplateExpression(string $template, array $context = []): ?ChartExpression
             {
@@ -64,10 +65,10 @@ final class AbstractChartTest extends TestCase
 
     public function testGetClickExpression(): void
     {
-        $application = $this->createMock(ApplicationService::class);
+        $parameters = $this->createMock(ApplicationParameters::class);
         $generator = $this->createMock(UrlGeneratorInterface::class);
         $twig = $this->createMock(Environment::class);
-        $chart = new class($application, $generator, $twig) extends AbstractHighchart {
+        $chart = new class($parameters, $generator, $twig) extends AbstractHighchart {
             #[\Override]
             public function getClickExpression(): ChartExpression
             {
@@ -81,13 +82,16 @@ final class AbstractChartTest extends TestCase
 
     public function testGetMarginClass(): void
     {
-        $application = $this->createMock(ApplicationService::class);
-        $application->method('getMinMargin')
+        $default = $this->createMock(DefaultParameter::class);
+        $default->method('getMinMargin')
             ->willReturn(1.0);
+        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters->method('getDefault')
+            ->willReturn($default);
 
         $generator = $this->createMock(UrlGeneratorInterface::class);
         $twig = $this->createMock(Environment::class);
-        $chart = new class($application, $generator, $twig) extends AbstractHighchart {
+        $chart = new class($parameters, $generator, $twig) extends AbstractHighchart {
             #[\Override]
             public function getMarginClass(float $value): string
             {
@@ -107,12 +111,15 @@ final class AbstractChartTest extends TestCase
     public function testGetMinMargin(): void
     {
         $expected = 1.1;
-        $application = $this->createMock(ApplicationService::class);
-        $application->expects(self::once())->method('getMinMargin')
+        $default = $this->createMock(DefaultParameter::class);
+        $default->method('getMinMargin')
+            ->willReturn(1.0);
+        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters->method('getDefault')
             ->willReturn($expected);
         $generator = $this->createMock(UrlGeneratorInterface::class);
         $twig = $this->createMock(Environment::class);
-        $chart = new class($application, $generator, $twig) extends AbstractHighchart {
+        $chart = new class($parameters, $generator, $twig) extends AbstractHighchart {
             #[\Override]
             public function getMinMargin(): float
             {
@@ -126,10 +133,10 @@ final class AbstractChartTest extends TestCase
 
     public function testHideTitle(): void
     {
-        $application = $this->createMock(ApplicationService::class);
+        $parameters = $this->createMock(ApplicationParameters::class);
         $generator = $this->createMock(UrlGeneratorInterface::class);
         $twig = $this->createMock(Environment::class);
-        $chart = new class($application, $generator, $twig) extends AbstractHighchart {};
+        $chart = new class($parameters, $generator, $twig) extends AbstractHighchart {};
 
         $chart->hideTitle();
         self::assertNull($chart->title['text']);
@@ -137,10 +144,10 @@ final class AbstractChartTest extends TestCase
 
     public function testInitializeOptions(): void
     {
-        $application = $this->createMock(ApplicationService::class);
+        $parameters = $this->createMock(ApplicationParameters::class);
         $generator = $this->createMock(UrlGeneratorInterface::class);
         $twig = $this->createMock(Environment::class);
-        $chart = new class($application, $generator, $twig) extends AbstractHighchart {};
+        $chart = new class($parameters, $generator, $twig) extends AbstractHighchart {};
 
         self::assertSame('var(--bs-body-bg)', $chart->chart['backgroundColor']);
         self::assertSame([
@@ -167,10 +174,10 @@ final class AbstractChartTest extends TestCase
 
     public function testTooltipOptions(): void
     {
-        $application = $this->createMock(ApplicationService::class);
+        $parameters = $this->createMock(ApplicationParameters::class);
         $generator = $this->createMock(UrlGeneratorInterface::class);
         $twig = $this->createMock(Environment::class);
-        $chart = new class($application, $generator, $twig)extends AbstractHighchart {
+        $chart = new class($parameters, $generator, $twig)extends AbstractHighchart {
             public function updateTooltipOptions(): void
             {
                 parent::setTooltipOptions();
@@ -189,10 +196,10 @@ final class AbstractChartTest extends TestCase
 
     public function testType(): void
     {
-        $application = $this->createMock(ApplicationService::class);
+        $parameters = $this->createMock(ApplicationParameters::class);
         $generator = $this->createMock(UrlGeneratorInterface::class);
         $twig = $this->createMock(Environment::class);
-        $chart = new class($application, $generator, $twig) extends AbstractHighchart {
+        $chart = new class($parameters, $generator, $twig) extends AbstractHighchart {
         };
 
         self::assertNull($chart->chart['type']);

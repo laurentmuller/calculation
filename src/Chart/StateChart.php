@@ -15,8 +15,8 @@ namespace App\Chart;
 
 use App\Model\CalculationsStateItem;
 use App\Model\CalculationsTotal;
+use App\Parameter\ApplicationParameters;
 use App\Repository\CalculationStateRepository;
-use App\Service\ApplicationService;
 use App\Table\CalculationTable;
 use App\Utils\FormatUtils;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -30,12 +30,12 @@ class StateChart extends AbstractHighchart
     private const TEMPLATE_NAME = 'chart/_state_tooltip.js.twig';
 
     public function __construct(
-        ApplicationService $application,
+        ApplicationParameters $parameters,
         UrlGeneratorInterface $generator,
         Environment $twig,
         private readonly CalculationStateRepository $repository,
     ) {
-        parent::__construct($application, $generator, $twig);
+        parent::__construct($parameters, $generator, $twig);
     }
 
     /**

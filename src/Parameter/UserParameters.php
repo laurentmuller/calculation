@@ -15,6 +15,7 @@ namespace App\Parameter;
 
 use App\Entity\User;
 use App\Entity\UserProperty;
+use App\Model\CustomerInformation;
 use App\Repository\UserPropertyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -36,6 +37,21 @@ class UserParameters extends AbstractParameters
         private readonly ApplicationParameters $application,
     ) {
         parent::__construct($cache, $manager);
+    }
+
+    public function getApplication(): ApplicationParameters
+    {
+        return $this->application;
+    }
+
+    /**
+     * Gets the customer information.
+     */
+    public function getCustomerInformation(): CustomerInformation
+    {
+        $printAddress = $this->getOptions()->isPrintAddress();
+
+        return $this->application->getCustomerInformation($printAddress);
     }
 
     #[\Override]

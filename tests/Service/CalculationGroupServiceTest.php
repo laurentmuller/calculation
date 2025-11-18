@@ -21,11 +21,11 @@ use App\Entity\GroupMargin;
 use App\Entity\Product;
 use App\Interfaces\EntityInterface;
 use App\Model\CalculationAdjustQuery;
+use App\Parameter\ApplicationParameters;
 use App\Repository\AbstractRepository;
 use App\Repository\GlobalMarginRepository;
 use App\Repository\GroupMarginRepository;
 use App\Repository\GroupRepository;
-use App\Service\ApplicationService;
 use App\Service\CalculationGroupService;
 use App\Tests\DatabaseTrait;
 use App\Tests\Entity\IdTrait;
@@ -212,14 +212,14 @@ final class CalculationGroupServiceTest extends KernelServiceTestCase
         $globalMarginRepository = $this->createGlobalMarginRepository($globalMargin);
         $groupMarginRepository = $this->createGroupMarginRepository($groupMargin);
         $groupRepository = $this->createGroupRepository($group);
-        $application = $this->getService(ApplicationService::class);
+        $parameters = $this->getService(ApplicationParameters::class);
         $translator = $this->createMockTranslator();
 
         return new CalculationGroupService(
             $globalMarginRepository,
             $groupMarginRepository,
             $groupRepository,
-            $application,
+            $parameters,
             $translator
         );
     }

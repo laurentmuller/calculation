@@ -17,7 +17,6 @@ use App\Controller\AbstractController;
 use App\Enums\EntityPermission;
 use App\Enums\FlashType;
 use App\Enums\TableView;
-use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\TableInterface;
 use App\Table\AbstractTable;
 use App\Table\DataQuery;
@@ -63,7 +62,10 @@ trait TableTrait
             $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize(), $prefix);
             $this->saveCookie($response, $results, TableInterface::PARAM_SORT, $query->sort, $prefix);
             $this->saveCookie($response, $results, TableInterface::PARAM_ORDER, $query->order, $prefix);
-            $this->getUserService()->setProperty(PropertyServiceInterface::P_DISPLAY_MODE, $query->view);
+
+            $userParameters = $this->getUserParameters();
+            $userParameters->getDisplay()->setDisplayMode($query->view);
+            $userParameters->save();
 
             return $response;
         } catch (\Throwable $e) {

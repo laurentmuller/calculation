@@ -19,13 +19,13 @@ use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
+use App\Parameter\ApplicationParameters;
 use App\Pdf\Events\PdfGroupEvent;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
-use App\Service\ApplicationService;
 use App\Service\FontAwesomeService;
 use App\Service\RoleBuilderService;
 use App\Service\RoleService;
@@ -44,15 +44,12 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 {
     use ArrayTrait;
 
-    private readonly ApplicationService $applicationService;
     private ?PdfStyle $bulletStyle = null;
     private ?PdfStyle $entityStyle = null;
     private ?PdfStyle $italicStyle = null;
+    private readonly ApplicationParameters $parameters;
     private readonly bool $superAdmin;
 
-    /**
-     * @param User[] $entities
-     */
     public function __construct(
         AbstractController $controller,
         array $entities,
@@ -63,7 +60,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         parent::__construct($controller, $entities);
         $this->setTranslatedTitle(id: 'user.rights.title', isUTF8: true)
             ->setTranslatedDescription('user.rights.description');
-        $this->applicationService = $controller->getApplicationService();
+        $this->parameters = $controller->getApplicationParameters();
         $this->superAdmin = $this->anyMatch($entities, static fn (User $user): bool => $user->isSuperAdmin());
     }
 
@@ -174,7 +171,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         if (!$role->isAdmin()) {
             $names = $this->removeValue($names, EntityName::USER);
         }
-        if (!$this->applicationService->isDebug()) {
+        if (!$this->parameters->isDebug()) {
             $names = $this->removeValue($names, EntityName::CUSTOMER);
         }
 
@@ -261,8 +258,9 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         if ($this->superAdmin) {
             $this->outputRole($table, $this->roleBuilderService->getRoleSuperAdmin());
         }
-        $this->outputRole($table, $this->applicationService->getAdminRole());
-        $this->outputRole($table, $this->applicationService->getUserRole());
+        $rights = $this->parameters->getRights();
+        $this->outputRole($table, $rights->getAdminRole());
+        $this->outputRole($table, $rights->getUserRole());
     }
 
     private function outputTotal(PdfTable $table, array $entities): void

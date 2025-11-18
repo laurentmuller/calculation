@@ -36,6 +36,13 @@ final class DisplayParameterTest extends ParameterTestCase
         yield ['editAction', EntityAction::EDIT];
     }
 
+    public function testActions(): void
+    {
+        self::assertTrue($this->parameter->isActionEdit());
+        self::assertFalse($this->parameter->isActionShow());
+        self::assertFalse($this->parameter->isActionNone());
+    }
+
     public function testDefaultValue(): void
     {
         self::assertSame(TableView::TABLE, $this->parameter->getDisplayMode());

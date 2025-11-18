@@ -15,7 +15,7 @@ namespace App\Tests\Traits;
 
 use App\Entity\CalculationState;
 use App\Enums\FlashType;
-use App\Service\UserService;
+use App\Parameter\UserParameters;
 use App\Table\AbstractTable;
 use App\Table\DataQuery;
 use App\Tests\TranslatorMockTrait;
@@ -70,13 +70,13 @@ final class TableTraitTest extends TestCase
         return $this->translator;
     }
 
-    public function getUserService(): UserService
+    public function getUserParameters(): UserParameters
     {
         if ($this->throwException) {
             throw new \LogicException();
         }
 
-        return $this->createMock(UserService::class);
+        return $this->createMock(UserParameters::class);
     }
 
     public function json(mixed $data, int $status = 200): JsonResponse

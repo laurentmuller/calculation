@@ -51,7 +51,7 @@ class ImportAddressController extends AbstractController
         }
 
         return $this->render('admin/import_query.html.twig', [
-            'last_import' => $this->getApplicationService()->getLastImport(),
+            'last_import' => $this->getApplicationParameters()->getDate()->getImport(),
             'data_url' => self::DATA_URL,
             'form' => $form,
         ]);

@@ -19,6 +19,7 @@ use App\Entity\Group;
 use App\Interfaces\ConstantsInterface;
 use App\Interfaces\EntityInterface;
 use App\Model\CalculationAdjustQuery;
+use App\Parameter\ApplicationParameters;
 use App\Repository\GlobalMarginRepository;
 use App\Repository\GroupMarginRepository;
 use App\Repository\GroupRepository;
@@ -89,7 +90,7 @@ class CalculationGroupService implements ConstantsInterface
         private readonly GlobalMarginRepository $globalMarginRepository,
         private readonly GroupMarginRepository $groupMarginRepository,
         private readonly GroupRepository $groupRepository,
-        private readonly ApplicationService $service,
+        private readonly ApplicationParameters $parameters,
         private readonly TranslatorInterface $translator,
     ) {
     }
@@ -159,7 +160,8 @@ class CalculationGroupService implements ConstantsInterface
         $overall_group = $groups[self::ROW_OVERALL_TOTAL];
         $overall_total = $overall_group['total'];
         $overall_margin = $overall_group['margin_percent'];
-        $overall_below = !$this->isFloatZero($overall_total) && $this->service->isMarginBelow($overall_margin);
+        $overall_below = !$this->isFloatZero($overall_total) && $this->parameters->getDefault()
+            ->isMarginBelow($overall_margin);
 
         if ($query->adjust && $overall_below) {
             $groups = $this->adjustUserMargin($groups);
@@ -420,6 +422,6 @@ class CalculationGroupService implements ConstantsInterface
      */
     private function getMinMargin(): float
     {
-        return $this->service->getMinMargin();
+        return $this->parameters->getDefault()->getMinMargin();
     }
 }

@@ -403,11 +403,13 @@ class UserController extends AbstractEntityController
             return $builder->getRole($user);
         }
         if ($user->isAdmin()) {
-            return $this->getApplicationService()
+            return $this->getApplicationParameters()
+                ->getRights()
                 ->getAdminRole();
         }
         if ($user->isEnabled()) {
-            return $this->getApplicationService()
+            return $this->getApplicationParameters()
+                ->getRights()
                 ->getUserRole();
         }
 

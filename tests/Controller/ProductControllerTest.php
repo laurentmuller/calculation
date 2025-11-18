@@ -14,8 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Entity\Product;
-use App\Interfaces\PropertyServiceInterface;
-use App\Service\ApplicationService;
+use App\Parameter\ApplicationParameters;
 use App\Tests\EntityTrait\ProductTrait;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -62,10 +61,10 @@ final class ProductControllerTest extends EntityControllerTestCase
     public function testAdd(): void
     {
         $category = $this->getCategory();
-        $service = $this->getService(ApplicationService::class);
-        $service->setProperties([
-            PropertyServiceInterface::P_DEFAULT_CATEGORY => $category,
-        ]);
+        $service = self::getService(ApplicationParameters::class);
+        $service->getDefault()->setCategoryId($category->getId());
+        $service->save();
+
         $data = [
             'product[description]' => 'Description',
             'product[category]' => $category->getId(),

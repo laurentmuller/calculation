@@ -20,7 +20,6 @@ use App\Attribute\WordRoute;
 use App\Constraint\Captcha;
 use App\Constraint\Password;
 use App\Constraint\Strength;
-use App\Entity\AbstractProperty;
 use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Product;
@@ -28,8 +27,6 @@ use App\Entity\User;
 use App\Enums\Importance;
 use App\Enums\MessagePosition;
 use App\Enums\StrengthLevel;
-use App\Form\Parameters\ApplicationParametersType;
-use App\Form\Parameters\UserParametersType;
 use App\Form\Type\AlphaCaptchaType;
 use App\Form\Type\CaptchaImageType;
 use App\Form\Type\ReCaptchaType;
@@ -37,12 +34,8 @@ use App\Form\Type\SimpleEditorType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\SortModeInterface;
-use App\Interfaces\TableInterface;
 use App\Interfaces\UserInterface;
 use App\Model\HttpClientError;
-use App\Parameter\AbstractParameters;
-use App\Parameter\ApplicationParameters;
-use App\Parameter\UserParameters;
 use App\Pdf\Events\PdfLabelTextEvent;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\PdfLabelDocument;
@@ -78,7 +71,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -498,42 +490,6 @@ class TestController extends AbstractController
         return $this->json($data);
     }
 
-    #[GetPostRoute(path: '/application/parameters', name: 'application_parameter')]
-    public function testApplicationParameters(Request $request, ApplicationParameters $parameters): Response
-    {
-        $templateParameters = [
-            'title_icon' => 'cogs',
-            'title' => 'parameters.title',
-            'title_description' => 'parameters.description',
-        ];
-
-        return $this->renderParameters(
-            $request,
-            $parameters,
-            ApplicationParametersType::class,
-            'parameters.success',
-            $templateParameters
-        );
-    }
-
-    #[GetPostRoute(path: '/user/parameters', name: 'user_parameter')]
-    public function testUserParameters(Request $request, UserParameters $parameters): Response
-    {
-        $templateParameters = [
-            'title_icon' => 'user-gear',
-            'title' => 'user.parameters.title',
-            'title_description' => 'user.parameters.description',
-        ];
-
-        return $this->renderParameters(
-            $request,
-            $parameters,
-            UserParametersType::class,
-            'user.parameters.success',
-            $templateParameters
-        );
-    }
-
     /**
      * Show the translation page.
      *
@@ -677,37 +633,6 @@ class TestController extends AbstractController
             : 'calculationstate.list.editable_0';
 
         return $this->groupBy($states, $fn);
-    }
-
-    /**
-     * @template T of AbstractProperty
-     *
-     * @phpstan-param AbstractParameters<T> $parameters
-     * @phpstan-param class-string<FormTypeInterface<array>> $type
-     */
-    private function renderParameters(
-        Request $request,
-        AbstractParameters $parameters,
-        string $type,
-        string $success,
-        array $templateParameters,
-    ): Response {
-        $options = ['default_values' => $parameters->getDefaultValues()];
-        $form = $this->createForm($type, $parameters, $options);
-        if ($this->handleRequestForm($request, $form)) {
-            if (!$parameters->save()) {
-                return $this->redirectToHomePage();
-            }
-            $response = $this->redirectToHomePage($success);
-            $view = $parameters->getDisplay()->getDisplayMode();
-            $this->updateCookie($response, TableInterface::PARAM_VIEW, $view);
-
-            return $response;
-        }
-
-        $templateParameters['form'] = $form;
-
-        return $this->render('test/parameter.html.twig', $templateParameters);
     }
 
     /**

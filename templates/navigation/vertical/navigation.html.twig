@@ -11,7 +11,7 @@
     or is_granted(PERMISSION_LIST, ENTITY_CALCULATION_STATE)
     or is_granted(PERMISSION_LIST, ENTITY_GLOBAL_MARGIN)
 %}
-{% set is_dark_navigation = app.user and user_service.darkNavigation %}
+{% set is_dark_navigation = app.user and user_params.homePage.darkNavigation %}
 {# vertical navigation #}
 <div class="navbar navbar-vertical bg-body-tertiary d-print-none"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
     <div class="d-flex align-items-center w-100 mb-2">

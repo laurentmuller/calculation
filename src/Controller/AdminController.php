@@ -17,15 +17,16 @@ use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Enums\EntityPermission;
 use App\Enums\FlashType;
-use App\Form\Admin\ApplicationParametersType;
+use App\Form\Parameters\ApplicationParametersType;
 use App\Form\User\RoleRightsType;
-use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
-use App\Service\ApplicationService;
+use App\Parameter\ApplicationParameters;
 use App\Service\CacheService;
 use App\Service\CommandService;
 use App\Service\RoleBuilderService;
+use App\Service\RoleService;
+use App\Traits\EditParametersTrait;
 use App\Utils\FileUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -42,6 +43,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class AdminController extends AbstractController
 {
+    use EditParametersTrait;
+
     /**
      * Clear the application cache.
      */
@@ -112,22 +115,19 @@ class AdminController extends AbstractController
     #[GetPostRoute(path: '/parameters', name: 'parameters')]
     public function parameters(Request $request): Response
     {
-        $application = $this->getApplicationService();
-        $form = $this->createForm(ApplicationParametersType::class, $application->getProperties());
-        if ($this->handleRequestForm($request, $form)) {
-            /** @phpstan-var array<string, mixed> $data */
-            $data = $form->getData();
-            if ($application->setProperties($data)) {
-                return $this->redirectToHomePage('parameters.success', request: $request);
-            }
+        $templateParameters = [
+            'title' => 'parameters.title',
+            'title_icon' => 'cogs',
+            'title_description' => 'parameters.description',
+        ];
 
-            return $this->redirectToHomePage();
-        }
-
-        return $this->render('admin/parameters.html.twig', [
-            'options' => \array_keys(PropertyServiceInterface::PASSWORD_OPTIONS),
-            'form' => $form,
-        ]);
+        return $this->renderParameters(
+            $request,
+            $this->getApplicationParameters(),
+            ApplicationParametersType::class,
+            'parameters.success',
+            $templateParameters
+        );
     }
 
     /**
@@ -135,38 +135,27 @@ class AdminController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[GetPostRoute(path: '/rights/admin', name: 'rights_admin')]
-    public function rightsAdmin(Request $request, RoleBuilderService $service): Response
+    public function rightsAdmin(Request $request, RoleBuilderService $service, RoleService $roleService): Response
     {
-        $application = $this->getApplicationService();
-        $role = $application->getAdminRole();
+        $parameters = $this->getApplicationParameters();
+        $role = $parameters->getRights()->getAdminRole();
+        $role->setName($roleService->translateRole($role));
         $default = $service->getRoleAdmin();
 
-        return $this->editRights(
-            $request,
-            $role,
-            $default,
-            $application,
-            PropertyServiceInterface::P_ADMIN_RIGHTS
-        );
+        return $this->editRights($request, $parameters, $roleService, $role, $default);
     }
 
     /**
      * Edit rights for the user role.
      */
     #[GetPostRoute(path: '/rights/user', name: 'rights_user')]
-    public function rightsUser(Request $request, RoleBuilderService $service): Response
+    public function rightsUser(Request $request, RoleBuilderService $service, RoleService $roleService): Response
     {
-        $application = $this->getApplicationService();
-        $role = $application->getUserRole();
+        $parameters = $this->getApplicationParameters();
+        $role = $parameters->getRights()->getUserRole();
         $default = $service->getRoleUser();
 
-        return $this->editRights(
-            $request,
-            $role,
-            $default,
-            $application,
-            PropertyServiceInterface::P_USER_RIGHTS
-        );
+        return $this->editRights($request, $parameters, $roleService, $role, $default);
     }
 
     /**
@@ -174,24 +163,24 @@ class AdminController extends AbstractController
      */
     private function editRights(
         Request $request,
+        ApplicationParameters $parameters,
+        RoleService $roleService,
         Role $role,
-        Role $default,
-        ApplicationService $application,
-        string $property
+        Role $default
     ): Response {
         $form = $this->createForm(RoleRightsType::class, $role);
         if ($this->handleRequestForm($request, $form)) {
             $rights = $role->getRights();
-            if ($rights === $default->getRights()) {
-                $result = $application->removeProperty($property);
+            if ($role->isAdmin()) {
+                $parameters->getRights()->setAdminRights($rights);
             } else {
-                $result = $application->setProperty($property, $rights);
+                $parameters->getRights()->setUserRights($rights);
             }
 
-            if ($result) {
+            if ($parameters->save()) {
                 return $this->redirectToHomePage(
                     id: 'admin.rights.success',
-                    parameters: ['%name%' => $role->getName()],
+                    parameters: ['%name%' => $roleService->translateRole($role)],
                     request: $request
                 );
             }

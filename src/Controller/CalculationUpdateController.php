@@ -41,13 +41,14 @@ class CalculationUpdateController extends AbstractController
     public function update(Request $request, CalculationUpdateService $service): Response
     {
         $query = $service->createQuery();
-        $application = $this->getApplicationService();
+        $application = $this->getApplicationParameters();
         $form = $this->createQueryForm($query);
         if ($this->handleRequestForm($request, $form)) {
             $service->saveQuery($query);
             $result = $service->update($query);
             if (!$query->isSimulate() && $result->isValid()) {
-                $application->setLastUpdateCalculations();
+                $application->getDate()->setUpdateCalculations();
+                $application->save();
             }
 
             return $this->render('admin/update_result.html.twig', [
@@ -57,7 +58,7 @@ class CalculationUpdateController extends AbstractController
         }
 
         return $this->render('admin/update_query.html.twig', [
-            'last_update' => $application->getLastUpdateCalculations(),
+            'last_update' => $application->getDate()->getUpdateCalculations(),
             'form' => $form,
         ]);
     }

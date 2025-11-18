@@ -17,7 +17,8 @@ use App\Form\Extension\InputGroupTypeExtension;
 use App\Form\Type\CaptchaImageType;
 use App\Form\Type\CurrentPasswordType;
 use App\Form\User\RequestChangePasswordType;
-use App\Service\ApplicationService;
+use App\Parameter\ApplicationParameters;
+use App\Parameter\SecurityParameter;
 use App\Service\CaptchaImageService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
@@ -65,14 +66,17 @@ final class RequestChangePasswordTypeTest extends TypeTestCase
         $service = $this->createMock(CaptchaImageService::class);
         $service->method('generateImage')
             ->willReturn('fake_content');
-        $application = $this->createMock(ApplicationService::class);
-        $application->method('isDisplayCaptcha')
+        $security = $this->createMock(SecurityParameter::class);
+        $security->method('isCaptcha')
             ->willReturn(true);
+        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters->method('getSecurity')
+            ->willReturn($security);
 
         return [
             new CurrentPasswordType(),
             new CaptchaImageType($generator),
-            new RequestChangePasswordType($service, $application),
+            new RequestChangePasswordType($service, $parameters),
         ];
     }
 

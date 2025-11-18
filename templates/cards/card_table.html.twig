@@ -118,9 +118,9 @@
 {%- set allow_delete = allow_delete is defined ? allow_delete : is_granted(PERMISSION_DELETE, object_type) -%}
 {%- set allow_export = allow_export is defined ? allow_export : is_granted(PERMISSION_EXPORT, object_type) -%}
 {# default action #}
-{%- set row_none = user_service.actionNone -%}
-{%- set row_show = allow_show and user_service.actionShow -%}
-{%- set row_edit = allow_edit and user_service.actionEdit -%}
+{%- set row_none = user_params.display.actionNone -%}
+{%- set row_show = allow_show and user_params.display.actionShow -%}
+{%- set row_edit = allow_edit and user_params.display.actionEdit -%}
 {%- set show_class = 'btn-show' ~ (row_show ? ' btn-default' : '') -%}
 {%- set edit_class = 'btn-edit' ~ (row_edit ? ' btn-default' : '') -%}
 {% if not row_edit and not row_none and allow_show %}
@@ -165,7 +165,7 @@
     'loading-template': 'loadingTemplate',
     'error-message': 'error_page.description'|trans,
     'no-action-title': 'datatable.no_action'|trans,
-    'default-action': user_service.editAction.value,
+    'default-action': user_params.display.editAction.value,
     'defer-url': url(app.current_route),
     'save-url': url('ajax_save_table'),
     'search-time-out': 750,

@@ -17,7 +17,8 @@ use App\Entity\User;
 use App\Form\Extension\InputGroupTypeExtension;
 use App\Form\Type\CaptchaImageType;
 use App\Form\User\UserRegistrationType;
-use App\Service\ApplicationService;
+use App\Parameter\ApplicationParameters;
+use App\Parameter\SecurityParameter;
 use App\Service\CaptchaImageService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
@@ -87,15 +88,16 @@ final class UserRegistrationTypeTest extends TypeTestCase
         $service = $this->createMock(CaptchaImageService::class);
         $service->method('generateImage')
             ->willReturn('fake_content');
-        $application = $this->createMock(ApplicationService::class);
-        $application->method('isDisplayCaptcha')
+        $security = $this->createMock(SecurityParameter::class);
+        $security->method('isCaptcha')
             ->willReturn(false);
-
+        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters->method('getSecurity')
+            ->willReturn($security);
         $translator = $this->createMockTranslator();
-        $type = new UserRegistrationType($service, $application, $translator);
 
         return [
-            $type,
+            new UserRegistrationType($service, $parameters, $translator),
             new CaptchaImageType($generator),
         ];
     }

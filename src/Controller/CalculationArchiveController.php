@@ -44,13 +44,16 @@ class CalculationArchiveController extends AbstractController
         }
 
         $query = $service->createQuery();
-        $application = $this->getApplicationService();
+        $application = $this->getApplicationParameters();
+        $dateParameter = $application->getDate();
+
         $form = $this->createQueryForm($service, $query);
         if ($this->handleRequestForm($request, $form)) {
             $service->saveQuery($query);
             $result = $service->update($query);
             if (!$query->isSimulate() && $result->isValid()) {
-                $application->setLastArchiveCalculations();
+                $dateParameter->setArchive();
+                $application->save();
             }
 
             return $this->render('admin/archive_result.html.twig', [
@@ -60,7 +63,7 @@ class CalculationArchiveController extends AbstractController
         }
 
         return $this->render('admin/archive_query.html.twig', [
-            'last_update' => $application->getLastArchiveCalculations(),
+            'last_update' => $dateParameter->getArchive(),
             'form' => $form,
         ]);
     }

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Security;
 
+use App\Parameter\ApplicationParameters;
 use App\Repository\UserRepository;
-use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,7 +34,7 @@ use Symfony\Component\Security\Http\SecurityRequestAttributes;
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
     public function __construct(
-        private readonly ApplicationService $applicationService,
+        private readonly ApplicationParameters $parameters,
         private readonly CaptchaImageService $captchaImageService,
         private readonly UserRepository $repository,
         private readonly HttpUtils $httpUtils,
@@ -131,7 +131,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     private function validateCaptcha(Request $request): void
     {
-        if (!$this->applicationService->isDisplayCaptcha()) {
+        if (!$this->parameters->getSecurity()->isCaptcha()) {
             return;
         }
         $captcha = $this->getRequestField($request, SecurityAttributes::CAPTCHA_FIELD, 'captcha.empty');

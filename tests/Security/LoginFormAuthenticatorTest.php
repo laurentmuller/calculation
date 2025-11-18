@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Security;
 
+use App\Parameter\ApplicationParameters;
+use App\Parameter\SecurityParameter;
 use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
-use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -128,11 +129,14 @@ final class LoginFormAuthenticatorTest extends TestCase
 
     public function testCaptchaEmpty(): void
     {
-        $applicationService = $this->createMock(ApplicationService::class);
-        $applicationService->method('isDisplayCaptcha')
+        $security = $this->createMock(SecurityParameter::class);
+        $security->method('isCaptcha')
             ->willReturn(true);
+        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters->method('getSecurity')
+            ->willReturn($security);
 
-        $authenticator = $this->createAuthenticator(applicationService: $applicationService);
+        $authenticator = $this->createAuthenticator(parameters: $parameters);
         $values = [
             'username' => 'username',
             'password' => 'password',
@@ -145,11 +149,14 @@ final class LoginFormAuthenticatorTest extends TestCase
 
     public function testCaptchaHidden(): void
     {
-        $applicationService = $this->createMock(ApplicationService::class);
-        $applicationService->method('isDisplayCaptcha')
+        $security = $this->createMock(SecurityParameter::class);
+        $security->method('isCaptcha')
             ->willReturn(false);
+        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters->method('getSecurity')
+            ->willReturn($security);
 
-        $authenticator = $this->createAuthenticator(applicationService: $applicationService);
+        $authenticator = $this->createAuthenticator(parameters: $parameters);
         $values = [
             'username' => 'username',
             'password' => 'password',
@@ -163,15 +170,18 @@ final class LoginFormAuthenticatorTest extends TestCase
 
     public function testCaptchaInvalid(): void
     {
-        $applicationService = $this->createMock(ApplicationService::class);
-        $applicationService->method('isDisplayCaptcha')
+        $security = $this->createMock(SecurityParameter::class);
+        $security->method('isCaptcha')
             ->willReturn(true);
+        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters->method('getSecurity')
+            ->willReturn($security);
         $captchaImageService = $this->createMock(CaptchaImageService::class);
         $captchaImageService->method('validateToken')
             ->willReturn(false);
 
         $authenticator = $this->createAuthenticator(
-            applicationService: $applicationService,
+            parameters: $parameters,
             captchaImageService: $captchaImageService
         );
         $values = [
@@ -186,9 +196,12 @@ final class LoginFormAuthenticatorTest extends TestCase
 
     public function testCaptchaTimeout(): void
     {
-        $applicationService = $this->createMock(ApplicationService::class);
-        $applicationService->method('isDisplayCaptcha')
+        $security = $this->createMock(SecurityParameter::class);
+        $security->method('isCaptcha')
             ->willReturn(true);
+        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters->method('getSecurity')
+            ->willReturn($security);
         $captchaImageService = $this->createMock(CaptchaImageService::class);
         $captchaImageService->method('validateToken')
             ->willReturn(true);
@@ -196,7 +209,7 @@ final class LoginFormAuthenticatorTest extends TestCase
             ->willReturn(false);
 
         $authenticator = $this->createAuthenticator(
-            applicationService: $applicationService,
+            parameters: $parameters,
             captchaImageService: $captchaImageService
         );
         $values = [
@@ -251,18 +264,18 @@ final class LoginFormAuthenticatorTest extends TestCase
     }
 
     private function createAuthenticator(
-        ?ApplicationService $applicationService = null,
+        ?ApplicationParameters $parameters = null,
         ?CaptchaImageService $captchaImageService = null,
         ?UserRepository $repository = null,
         ?HttpUtils $httpUtils = null
     ): LoginFormAuthenticator {
-        $applicationService ??= $this->createMock(ApplicationService::class);
+        $parameters ??= $this->createMock(ApplicationParameters::class);
         $captchaImageService ??= $this->createMock(CaptchaImageService::class);
         $repository ??= $this->createMock(UserRepository::class);
         $httpUtils ??= $this->createMock(HttpUtils::class);
 
         return new LoginFormAuthenticator(
-            $applicationService,
+            $parameters,
             $captchaImageService,
             $repository,
             $httpUtils,

@@ -19,9 +19,10 @@ use App\Form\Calculation\CalculationEditStateType;
 use App\Form\Calculation\CalculationGroupType;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Form\Type\PlainType;
+use App\Parameter\ApplicationParameters;
+use App\Parameter\DefaultParameter;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
-use App\Service\ApplicationService;
 use App\Tests\Form\CalculationState\CalculationStateTrait;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\TranslatorMockTrait;
@@ -36,14 +37,14 @@ final class CalculationEditStateTypeTest extends EntityTypeTestCase
 {
     use CalculationStateTrait;
     use TranslatorMockTrait;
-
-    private MockObject&ApplicationService $application;
     private bool $marginBelow = false;
+
+    private MockObject&ApplicationParameters $parameters;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->application = $this->createMock(ApplicationService::class);
+        $this->parameters = $this->createMock(ApplicationParameters::class);
         parent::setUp();
     }
 
@@ -81,8 +82,12 @@ final class CalculationEditStateTypeTest extends EntityTypeTestCase
     protected function getPreloadedExtensions(): array
     {
         $translator = $this->createMockTranslator();
-        $this->application->method('isMarginBelow')
-            ->willReturnCallback(fn (): bool => $this->marginBelow);
+
+        $default = $this->createMock(DefaultParameter::class);
+        $default->method('getMinMargin')
+            ->willReturn(fn (): bool => $this->marginBelow);
+        $this->parameters->method('getDefault')
+            ->willReturn($default);
 
         return [
             new PlainType($translator),
@@ -90,7 +95,7 @@ final class CalculationEditStateTypeTest extends EntityTypeTestCase
             new CalculationStateListType($translator),
             new CalculationGroupType($this->createMock(GroupRepository::class)),
             new CalculationCategoryType($this->createMock(CategoryRepository::class)),
-            new CalculationEditStateType($this->application, $translator),
+            new CalculationEditStateType($this->parameters, $translator),
         ];
     }
 }

@@ -15,9 +15,9 @@ namespace App\Chart;
 
 use App\Model\CalculationsMonthItem;
 use App\Model\CalculationsTotal;
+use App\Parameter\ApplicationParameters;
 use App\Pdf\Html\HtmlColorName;
 use App\Repository\CalculationRepository;
-use App\Service\ApplicationService;
 use App\Utils\FormatUtils;
 use HighchartsBundle\Highcharts\ChartExpression;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -41,12 +41,12 @@ class MonthChart extends AbstractHighchart
     private const TEMPLATE_NAME = 'chart/_month_tooltip.js.twig';
 
     public function __construct(
-        ApplicationService $application,
+        ApplicationParameters $parameters,
         UrlGeneratorInterface $generator,
         Environment $twig,
         private readonly CalculationRepository $repository
     ) {
-        parent::__construct($application, $generator, $twig);
+        parent::__construct($parameters, $generator, $twig);
     }
 
     /**

@@ -74,7 +74,7 @@ class CalculationController extends AbstractEntityController
     public function clone(Request $request, Calculation $item): Response
     {
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
-        $state = $this->getApplicationService()->getDefaultState();
+        $state = $this->getApplicationParameters()->getDefaultState();
         $clone = $item->clone($state, $description);
         $parameters = [
             'title' => 'calculation.clone.title',
@@ -241,14 +241,14 @@ class CalculationController extends AbstractEntityController
     private function createCalculation(): Calculation
     {
         $calculation = new Calculation();
-        $application = $this->getApplicationService();
+        $application = $this->getApplicationParameters();
         $state = $application->getDefaultState();
         if ($state instanceof CalculationState) {
             $calculation->setState($state);
         }
         $product = $application->getDefaultProduct();
         if ($product instanceof Product) {
-            $calculation->addProduct($product, $application->getDefaultQuantity());
+            $calculation->addProduct($product, $application->getProduct()->getQuantity());
             $this->updateService->updateCalculation($calculation);
         }
 
@@ -260,7 +260,7 @@ class CalculationController extends AbstractEntityController
      */
     private function getQrCode(Calculation $calculation): string
     {
-        if (!$this->getUserService()->isQrCode()) {
+        if (!$this->getUserParameters()->getOptions()->isQrCode()) {
             return '';
         }
 
@@ -273,6 +273,6 @@ class CalculationController extends AbstractEntityController
 
     private function isMarginBelow(Calculation $calculation): bool
     {
-        return $this->getApplicationService()->isMarginBelow($calculation);
+        return $calculation->isMarginBelow($this->getMinMargin());
     }
 }

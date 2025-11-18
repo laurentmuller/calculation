@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Chart;
 
-use App\Service\ApplicationService;
+use App\Parameter\ApplicationParameters;
 use App\Traits\MathTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
@@ -63,7 +63,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     private const COMMENT_REGEX = '/\/\*(.|[\r\n])*?\*\//m';
 
     public function __construct(
-        protected readonly ApplicationService $application,
+        protected readonly ApplicationParameters $parameters,
         protected readonly UrlGeneratorInterface $generator,
         protected readonly Environment $twig
     ) {
@@ -199,7 +199,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
      */
     protected function getMinMargin(): float
     {
-        return $this->application->getMinMargin();
+        return $this->parameters->getDefault()->getMinMargin();
     }
 
     /**

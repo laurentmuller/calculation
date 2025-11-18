@@ -18,12 +18,10 @@ use App\Attribute\IndexRoute;
 use App\Attribute\PostRoute;
 use App\Enums\TableView;
 use App\Form\Parameters\AbstractParametersType;
-use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
 use App\Model\IndexQuery;
 use App\Service\IndexService;
-use App\Service\UserService;
 use App\Traits\ParameterTrait;
 use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -64,13 +62,12 @@ class IndexController extends AbstractController
     #[GetRoute(path: '/content', name: '_content')]
     public function getCalculations(
         IndexService $indexService,
-        UserService $userService,
         Request $request,
         #[MapQueryString]
         IndexQuery $query
     ): JsonResponse {
         $this->checkAjaxRequest($request);
-        $parameters = $this->getParameters($indexService, $userService, $request, $query);
+        $parameters = $this->getParameters($indexService, $request, $query);
         $content = $this->renderContent($parameters);
         $response = $this->json($content);
         $this->saveParameters($response, $parameters);
@@ -84,7 +81,13 @@ class IndexController extends AbstractController
     #[PostRoute(path: '/hide/catalog', name: '_hide_catalog')]
     public function hideCatalog(Request $request): JsonResponse
     {
-        return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_CATALOG, 'index.panel_catalog_hide_success');
+        $this->checkAjaxRequest($request);
+        $parameters = $this->getUserParameters();
+        $parameters->getHomePage()
+            ->setPanelCatalog(false);
+        $parameters->save();
+
+        return $this->json($this->trans('index.panel_catalog_hide_success'));
     }
 
     /**
@@ -93,7 +96,13 @@ class IndexController extends AbstractController
     #[PostRoute(path: '/hide/month', name: '_hide_month')]
     public function hideMonth(Request $request): JsonResponse
     {
-        return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_MONTH, 'index.panel_month_hide_success');
+        $this->checkAjaxRequest($request);
+        $parameters = $this->getUserParameters();
+        $parameters->getHomePage()
+            ->setPanelMonth(false);
+        $parameters->save();
+
+        return $this->json($this->trans('index.panel_month_hide_success'));
     }
 
     /**
@@ -102,28 +111,31 @@ class IndexController extends AbstractController
     #[PostRoute(path: '/hide/state', name: '_hide_state')]
     public function hideState(Request $request): JsonResponse
     {
-        return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_STATE, 'index.panel_state_hide_success');
+        $this->checkAjaxRequest($request);
+        $parameters = $this->getUserParameters();
+        $parameters->getHomePage()
+            ->setPanelState(false);
+        $parameters->save();
+
+        return $this->json($this->trans('index.panel_state_hide_success'));
     }
 
     /**
      * Display the home page.
      */
     #[GetRoute(path: IndexRoute::PATH, name: '')]
-    public function index(
-        IndexService $indexService,
-        UserService $userService,
-        Request $request,
-        #[MapQueryString]
-        IndexQuery $query
-    ): Response {
-        $parameters = $this->getParameters($indexService, $userService, $request, $query);
-        if ($userService->isPanelMonth()) {
+    public function index(IndexService $indexService, Request $request, #[MapQueryString] IndexQuery $query): Response
+    {
+        $homePage = $this->getUserParameters()
+            ->getHomePage();
+        $parameters = $this->getParameters($indexService, $request, $query);
+        if ($homePage->isPanelMonth()) {
             $parameters['months'] = $indexService->getCalculationByMonths();
         }
-        if ($userService->isPanelState()) {
+        if ($homePage->isPanelState()) {
             $parameters['states'] = $indexService->getCalculationByStates();
         }
-        if ($userService->isPanelCatalog()) {
+        if ($homePage->isPanelCatalog()) {
             $parameters['catalog'] = $indexService->getCatalog();
         }
         $response = $this->render('index/index.html.twig', $parameters);
@@ -149,13 +161,16 @@ class IndexController extends AbstractController
         }
     }
 
-    private function getCount(UserService $userService, ?int $count): int
+    private function getCount(?int $count): int
     {
+        $params = $this->getUserParameters();
+        $homePage = $params->getHomePage();
         if (null === $count || !\in_array($count, AbstractParametersType::CALCULATIONS_RANGE, true)) {
-            return $userService->getCalculations();
+            return $homePage->getCalculations();
         }
 
-        $userService->setProperty(PropertyServiceInterface::P_CALCULATIONS, $count);
+        $homePage->setCalculations($count);
+        $params->save();
 
         return $count;
     }
@@ -170,15 +185,11 @@ class IndexController extends AbstractController
     /**
      * @phpstan-return array{restrict: bool, view: TableView,  ...}
      */
-    private function getParameters(
-        IndexService $indexService,
-        UserService $userService,
-        Request $request,
-        IndexQuery $query
-    ): array {
-        $view = $this->getTableView($request, $userService, $query->custom);
+    private function getParameters(IndexService $indexService, Request $request, IndexQuery $query): array
+    {
+        $view = $this->getTableView($request, $query->custom);
         $restrict = $query->restrict ?? $this->getCookieBoolean($request, self::PARAM_RESTRICT);
-        $count = $this->getCount($userService, $query->count);
+        $count = $this->getCount($query->count);
         $calculations = $this->getLastCalculations($indexService, $count, $restrict);
 
         return [
@@ -192,24 +203,19 @@ class IndexController extends AbstractController
         ];
     }
 
-    private function getTableView(Request $request, UserService $userService, ?bool $custom): TableView
+    private function getTableView(Request $request, ?bool $custom): TableView
     {
+        $params = $this->getUserParameters();
+        $display = $params->getDisplay();
         if (null === $custom) {
-            return $this->getCookieEnum($request, self::PARAM_VIEW, $userService->getDisplayMode());
+            return $this->getCookieEnum($request, self::PARAM_VIEW, $display->getDisplayMode());
         }
 
         $view = $custom ? TableView::CUSTOM : TableView::TABLE;
-        $userService->setProperty(PropertyServiceInterface::P_DISPLAY_MODE, $view);
+        $display->setDisplayMode($view);
+        $params->save();
 
         return $view;
-    }
-
-    private function hidePanel(Request $request, string $key, string $id): JsonResponse
-    {
-        $this->checkAjaxRequest($request);
-        $this->getUserService()->setProperty($key, false);
-
-        return $this->json($this->trans($id));
     }
 
     private function renderContent(array $parameters): string

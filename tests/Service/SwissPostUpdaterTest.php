@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
-use App\Service\ApplicationService;
+use App\Parameter\ApplicationParameters;
+use App\Parameter\DateParameter;
 use App\Service\SwissPostService;
 use App\Service\SwissPostUpdater;
 use App\Tests\TranslatorMockTrait;
@@ -27,9 +28,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 final class SwissPostUpdaterTest extends TestCase
 {
     use TranslatorMockTrait;
-
-    private MockObject&ApplicationService $application;
     private string $databaseName;
+
+    private MockObject&ApplicationParameters $parameters;
     private SwissPostUpdater $service;
 
     #[\Override]
@@ -39,14 +40,14 @@ final class SwissPostUpdaterTest extends TestCase
         $this->databaseName = __DIR__ . '/../files/csv/swiss_test_model.sqlite';
         \copy($source, $this->databaseName);
 
-        $this->application = $this->createMock(ApplicationService::class);
+        $this->parameters = $this->createMock(ApplicationParameters::class);
         $factory = $this->createMock(FormFactoryInterface::class);
         $service = new SwissPostService($this->databaseName);
 
         $logger = $this->createMock(LoggerInterface::class);
         $translator = $this->createMockTranslator();
 
-        $this->service = new SwissPostUpdater($this->application, $factory, $service);
+        $this->service = new SwissPostUpdater($this->parameters, $factory, $service);
         $this->service->setTranslator($translator)
             ->setLogger($logger);
     }
@@ -133,13 +134,13 @@ final class SwissPostUpdaterTest extends TestCase
     public function testImportStateNoFound(): void
     {
         $this->databaseName = __DIR__ . '/../files/sqlite/not_exist.sqlite';
-        $this->application = $this->createMock(ApplicationService::class);
+        $this->parameters = $this->createMock(ApplicationParameters::class);
         $factory = $this->createMock(FormFactoryInterface::class);
         $service = new SwissPostService($this->databaseName);
         $logger = $this->createMock(LoggerInterface::class);
         $translator = $this->createMockTranslator();
 
-        $this->service = new SwissPostUpdater($this->application, $factory, $service);
+        $this->service = new SwissPostUpdater($this->parameters, $factory, $service);
         $this->service->setTranslator($translator)
             ->setLogger($logger);
 
@@ -151,8 +152,12 @@ final class SwissPostUpdaterTest extends TestCase
     public function testImportSuccess(): void
     {
         $date = new DatePoint('2024-01-17');
-        $this->application->method('getLastImport')
+        $dateParameter = $this->createMock(DateParameter::class);
+        $dateParameter->method('getImport')
             ->willReturn($date);
+        $this->parameters->method('getDate')
+            ->willReturn($dateParameter);
+
         $sourceFile = __DIR__ . '/../files/zip/small_post_address.zip';
         $actual = $this->service->import($sourceFile, false);
         self::assertTrue($actual->isValid());
@@ -201,8 +206,12 @@ final class SwissPostUpdaterTest extends TestCase
     public function testImportValidityOlder(): void
     {
         $date = new DatePoint('2024-07-17');
-        $this->application->method('getLastImport')
+        $dateParameter = $this->createMock(DateParameter::class);
+        $dateParameter->method('getImport')
             ->willReturn($date);
+        $this->parameters->method('getDate')
+            ->willReturn($dateParameter);
+
         $sourceFile = __DIR__ . '/../files/zip/small_post_address.zip';
         $actual = $this->service->import($sourceFile, false);
         self::assertFalse($actual->isValid());

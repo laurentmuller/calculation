@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Parameter\ApplicationParameters;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
-use App\Service\ApplicationService;
 use Doctrine\ORM\QueryBuilder;
 use Twig\Environment;
 
@@ -29,7 +29,7 @@ class CalculationBelowTable extends CalculationTable implements \Countable
         CalculationRepository $repository,
         CalculationStateRepository $stateRepository,
         Environment $twig,
-        private readonly ApplicationService $service
+        private readonly ApplicationParameters $parameters
     ) {
         parent::__construct($repository, $stateRepository, $twig);
     }
@@ -79,6 +79,6 @@ class CalculationBelowTable extends CalculationTable implements \Countable
      */
     private function getMinMargin(): float
     {
-        return $this->service->getMinMargin();
+        return $this->parameters->getDefault()->getMinMargin();
     }
 }

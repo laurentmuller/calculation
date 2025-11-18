@@ -17,7 +17,8 @@ use App\Form\Extension\InputGroupTypeExtension;
 use App\Form\Type\CaptchaImageType;
 use App\Form\Type\CurrentPasswordType;
 use App\Form\User\UserLoginType;
-use App\Service\ApplicationService;
+use App\Parameter\ApplicationParameters;
+use App\Parameter\SecurityParameter;
 use App\Service\CaptchaImageService;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
@@ -50,14 +51,17 @@ final class UserLoginTypeTest extends TypeTestCase
         $service = $this->createMock(CaptchaImageService::class);
         $service->method('generateImage')
             ->willReturn('fake_content');
-        $application = $this->createMock(ApplicationService::class);
-        $application->method('isDisplayCaptcha')
+        $security = $this->createMock(SecurityParameter::class);
+        $security->method('isCaptcha')
             ->willReturn(false);
+        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters->method('getSecurity')
+            ->willReturn($security);
 
         return [
             new CurrentPasswordType(),
             new CaptchaImageType($generator),
-            new UserLoginType($service, $application),
+            new UserLoginType($service, $parameters),
         ];
     }
 

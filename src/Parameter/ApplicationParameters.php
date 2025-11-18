@@ -18,6 +18,7 @@ use App\Entity\Category;
 use App\Entity\GlobalProperty;
 use App\Entity\Product;
 use App\Interfaces\EntityInterface;
+use App\Model\CustomerInformation;
 use App\Repository\GlobalPropertyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -63,6 +64,19 @@ class ApplicationParameters extends AbstractParameters
     public function getCustomer(): CustomerParameter
     {
         return $this->customer ??= $this->getCachedParameter(CustomerParameter::class);
+    }
+
+    /**
+     * Gets the customer information.
+     *
+     * @param ?bool $printAddress an optional value indicating if the address is printed
+     */
+    public function getCustomerInformation(?bool $printAddress = null): CustomerInformation
+    {
+        $printAddress ??= $this->getOptions()->isPrintAddress();
+
+        return $this->getCustomer()
+            ->getCustomerInformation($printAddress);
     }
 
     public function getDate(): DateParameter

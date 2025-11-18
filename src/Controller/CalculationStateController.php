@@ -153,7 +153,11 @@ class CalculationStateController extends AbstractEntityController
     #[\Override]
     protected function deleteFromDatabase(EntityInterface $item): void
     {
-        $this->getApplicationService()->updateDeletedState($item);
+        $application = $this->getApplicationParameters();
+        if ($application->getDefault()->getStateId() === $item->getId()) {
+            $application->getDefault()->setStateId(null);
+            $application->save();
+        }
         parent::deleteFromDatabase($item);
     }
 

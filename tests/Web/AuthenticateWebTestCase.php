@@ -14,10 +14,9 @@ declare(strict_types=1);
 namespace App\Tests\Web;
 
 use App\Entity\User;
-use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
+use App\Parameter\ApplicationParameters;
 use App\Repository\UserRepository;
-use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
 use App\Tests\ContainerServiceTrait;
 use App\Tests\DatabaseTrait;
@@ -57,12 +56,13 @@ abstract class AuthenticateWebTestCase extends WebTestCase
         $userRight = $builder->getRoleUser()->getRights();
         $adminRight = $builder->getRoleAdmin()->getRights();
 
-        $application = $this->getService(ApplicationService::class);
-        $application->setProperties([
-            PropertyServiceInterface::P_USER_RIGHTS => $userRight,
-            PropertyServiceInterface::P_ADMIN_RIGHTS => $adminRight,
-            PropertyServiceInterface::P_DISPLAY_CAPTCHA => false,
-        ]);
+        $parameters = $this->getService(ApplicationParameters::class);
+        $parameters->getRights()
+            ->setAdminRights($adminRight)
+            ->setUserRights($userRight);
+        $parameters->getSecurity()
+            ->setCaptcha(false);
+        $parameters->save();
     }
 
     /**

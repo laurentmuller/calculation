@@ -39,13 +39,15 @@ class ProductUpdateController extends AbstractController
     public function invoke(Request $request, ProductUpdateService $service): Response
     {
         $query = $service->createQuery();
-        $application = $this->getApplicationService();
+        $application = $this->getApplicationParameters();
+
         $form = $this->createQueryForm($service, $query);
         if ($this->handleRequestForm($request, $form)) {
             $service->saveQuery($query);
             $result = $service->update($query);
             if (!$query->isSimulate() && $result->isValid()) {
-                $application->setLastUpdateProducts();
+                $application->getDate()->setUpdateProducts();
+                $application->save();
             }
 
             return $this->render('admin/product_result.html.twig', [
@@ -55,7 +57,7 @@ class ProductUpdateController extends AbstractController
         }
 
         return $this->render('admin/product_query.html.twig', [
-            'last_update' => $application->getLastUpdateProducts(),
+            'last_update' => $application->getDate()->getUpdateProducts(),
             'form' => $form,
         ]);
     }

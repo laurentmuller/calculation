@@ -41,7 +41,7 @@ final class ApplicationParametersTest extends TestCase
         $date = new DatePoint();
         $property = GlobalProperty::instance('last_import')
             ->setValue($date);
-        $parameters = $this->createApplication([$property]);
+        $parameters = $this->createApplicationParameters([$property]);
         $parameters->getDate()
             ->setArchive($date);
         $actual = $parameters->save();
@@ -52,7 +52,7 @@ final class ApplicationParametersTest extends TestCase
     {
         $property = GlobalProperty::instance('security_level')
             ->setValue(StrengthLevel::NONE);
-        $parameters = $this->createApplication([$property]);
+        $parameters = $this->createApplicationParameters([$property]);
         $parameters->getSecurity()
             ->setLevel(StrengthLevel::MEDIUM);
         $actual = $parameters->save();
@@ -63,11 +63,18 @@ final class ApplicationParametersTest extends TestCase
     {
         $property = GlobalProperty::instance('edit_action')
             ->setValue(EntityAction::EDIT);
-        $parameters = $this->createApplication([$property]);
+        $parameters = $this->createApplicationParameters([$property]);
         $parameters->getDisplay()
             ->setEditAction(EntityAction::NONE);
         $actual = $parameters->save();
         self::assertTrue($actual);
+    }
+
+    public function testGetCustomerInformation(): void
+    {
+        $parameters = $this->createApplicationParameters();
+        $info = $parameters->getCustomerInformation();
+        self::assertFalse($info->isPrintAddress());
     }
 
     /**
@@ -83,14 +90,14 @@ final class ApplicationParametersTest extends TestCase
         $property = GlobalProperty::instance('default_category')
             ->setValue($id);
 
-        $parameters = $this->createApplication([$property], $category);
+        $parameters = $this->createApplicationParameters([$property], $category);
         $actual = $parameters->getDefaultCategory();
         self::assertSame($category, $actual);
     }
 
     public function testGetDefaultCategoryNull(): void
     {
-        $parameters = $this->createApplication();
+        $parameters = $this->createApplicationParameters();
         $actual = $parameters->getDefaultCategory();
         self::assertNull($actual);
     }
@@ -108,14 +115,14 @@ final class ApplicationParametersTest extends TestCase
         $property = GlobalProperty::instance('default_product')
             ->setValue($id);
 
-        $parameters = $this->createApplication([$property], product: $product);
+        $parameters = $this->createApplicationParameters([$property], product: $product);
         $actual = $parameters->getDefaultProduct();
         self::assertSame($product, $actual);
     }
 
     public function testGetDefaultProductNull(): void
     {
-        $parameters = $this->createApplication();
+        $parameters = $this->createApplicationParameters();
         $actual = $parameters->getDefaultProduct();
         self::assertNull($actual);
     }
@@ -133,35 +140,35 @@ final class ApplicationParametersTest extends TestCase
         $property = GlobalProperty::instance('default_state')
             ->setValue($id);
 
-        $parameters = $this->createApplication([$property], state: $state);
+        $parameters = $this->createApplicationParameters([$property], state: $state);
         $actual = $parameters->getDefaultState();
         self::assertSame($state, $actual);
     }
 
     public function testGetDefaultStateNull(): void
     {
-        $parameters = $this->createApplication();
+        $parameters = $this->createApplicationParameters();
         $actual = $parameters->getDefaultState();
         self::assertNull($actual);
     }
 
     public function testGetDefaultValues(): void
     {
-        $parameters = $this->createApplication();
+        $parameters = $this->createApplicationParameters();
         $actual = $parameters->getDefaultValues();
         self::assertNotEmpty($actual);
     }
 
     public function testIsDebug(): void
     {
-        $parameters = $this->createApplication();
+        $parameters = $this->createApplicationParameters();
         $actual = $parameters->isDebug();
         self::assertFalse($actual);
     }
 
     public function testRights(): void
     {
-        $parameters = $this->createApplication();
+        $parameters = $this->createApplicationParameters();
         $actual = $parameters->getRights();
         self::assertNull($actual->getAdminRights());
         self::assertNull($actual->getUserRights());
@@ -169,7 +176,7 @@ final class ApplicationParametersTest extends TestCase
 
     public function testSaveSuccess(): void
     {
-        $parameters = $this->createApplication();
+        $parameters = $this->createApplicationParameters();
         $parameters->getCustomer()
             ->setAddress('fake');
         $parameters->getDate()
@@ -196,7 +203,7 @@ final class ApplicationParametersTest extends TestCase
 
     public function testSecurity(): void
     {
-        $parameters = $this->createApplication();
+        $parameters = $this->createApplicationParameters();
         $actual = $parameters->getSecurity();
         self::assertFalse($actual->isCaptcha());
     }
@@ -205,7 +212,7 @@ final class ApplicationParametersTest extends TestCase
     {
         $property = GlobalProperty::instance('security_captcha')
             ->setValue(false);
-        $parameters = $this->createApplication([$property]);
+        $parameters = $this->createApplicationParameters([$property]);
         $parameters->getSecurity()
             ->setCaptcha(true);
         $actual = $parameters->save();
@@ -222,7 +229,7 @@ final class ApplicationParametersTest extends TestCase
         self::setId($category);
         $property = GlobalProperty::instance('default_category')
             ->setValue(10);
-        $parameters = $this->createApplication([$property]);
+        $parameters = $this->createApplicationParameters([$property]);
         $parameters->getDefault()
             ->setCategoryId(1);
         $actual = $parameters->save();
@@ -233,14 +240,14 @@ final class ApplicationParametersTest extends TestCase
     {
         $property = GlobalProperty::instance('security_captcha');
         $property->setValue(true);
-        $parameters = $this->createApplication([$property]);
+        $parameters = $this->createApplicationParameters([$property]);
         $parameters->getSecurity()
             ->setCaptcha(false);
         $actual = $parameters->save();
         self::assertTrue($actual);
     }
 
-    private function createApplication(
+    private function createApplicationParameters(
         array $properties = [],
         ?Category $category = null,
         ?CalculationState $state = null,

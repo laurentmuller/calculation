@@ -19,7 +19,7 @@ use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
-use App\Service\ApplicationService;
+use App\Parameter\ApplicationParameters;
 use App\Service\RoleBuilderService;
 use App\Service\RoleService;
 use App\Traits\ArrayTrait;
@@ -35,12 +35,9 @@ class UserRightsDocument extends AbstractArrayDocument
 {
     use ArrayTrait;
 
-    private readonly ApplicationService $applicationService;
+    private readonly ApplicationParameters $parameters;
     private readonly bool $superAdmin;
 
-    /**
-     * @param User[] $entities
-     */
     public function __construct(
         AbstractController $controller,
         array $entities,
@@ -48,7 +45,7 @@ class UserRightsDocument extends AbstractArrayDocument
         private readonly RoleBuilderService $roleBuilderService
     ) {
         parent::__construct($controller, $entities);
-        $this->applicationService = $controller->getApplicationService();
+        $this->parameters = $controller->getApplicationParameters();
         $this->superAdmin = $this->anyMatch($entities, static fn (User $user): bool => $user->isSuperAdmin());
     }
 
@@ -90,7 +87,7 @@ class UserRightsDocument extends AbstractArrayDocument
         if (!$role->isAdmin()) {
             $names = $this->removeValue($names, EntityName::USER);
         }
-        if (!$this->applicationService->isDebug()) {
+        if (!$this->parameters->isDebug()) {
             $names = $this->removeValue($names, EntityName::CUSTOMER);
         }
 
@@ -151,9 +148,9 @@ class UserRightsDocument extends AbstractArrayDocument
         if ($this->superAdmin) {
             $this->outputRole($sheet, $this->roleBuilderService->getRoleSuperAdmin(), $row);
         }
-        $service = $this->controller->getApplicationService();
-        $this->outputRole($sheet, $service->getAdminRole(), $row);
-        $this->outputRole($sheet, $service->getUserRole(), $row);
+        $rights = $this->parameters->getRights();
+        $this->outputRole($sheet, $rights->getAdminRole(), $row);
+        $this->outputRole($sheet, $rights->getUserRole(), $row);
     }
 
     private function outputUser(WorksheetDocument $sheet, User $user, int &$row): void

@@ -16,7 +16,7 @@ namespace App\Security;
 use App\Entity\User;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
-use App\Service\ApplicationService;
+use App\Parameter\ApplicationParameters;
 use App\Traits\MathTrait;
 use App\Utils\StringUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -32,7 +32,7 @@ class EntityVoter extends Voter
 {
     use MathTrait;
 
-    public function __construct(private readonly ApplicationService $service)
+    public function __construct(private readonly ApplicationParameters $parameters)
     {
     }
 
@@ -132,11 +132,13 @@ class EntityVoter extends Voter
         if ($user->isOverwrite()) {
             return $user->getRights();
         }
+
+        $rights = $this->parameters->getRights();
         if ($user->isAdmin()) {
-            return $this->service->getAdminRights();
+            return $rights->getAdminRole()->getRights();
         }
 
-        return $this->service->getUserRights();
+        return $rights->getUserRole()->getRights();
     }
 
     private function getUser(TokenInterface $token, ?Vote $vote): ?User

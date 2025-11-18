@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace App\Parameter;
 
 use App\Attribute\Parameter;
+use App\Constraint\Password;
+use App\Constraint\Strength;
 use App\Enums\StrengthLevel;
 
 /**
@@ -54,6 +56,28 @@ class SecurityParameter implements ParameterInterface
     public function getLevel(): StrengthLevel
     {
         return $this->level;
+    }
+
+    /**
+     * Gets the password constraint.
+     */
+    public function getPasswordConstraint(): Password
+    {
+        return new Password(
+            letters: $this->letter,
+            case_diff: $this->caseDiff,
+            numbers: $this->number,
+            special_char: $this->specialChar,
+            email: $this->email,
+        );
+    }
+
+    /**
+     * Gets the strength constraint.
+     */
+    public function getStrengthConstraint(): Strength
+    {
+        return new Strength($this->level);
     }
 
     public function isCaptcha(): bool

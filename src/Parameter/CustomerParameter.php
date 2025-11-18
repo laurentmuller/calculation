@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Parameter;
 
 use App\Attribute\Parameter;
+use App\Model\CustomerInformation;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -63,6 +64,25 @@ class CustomerParameter implements ParameterInterface
     public static function getCacheKey(): string
     {
         return 'parameter_customer';
+    }
+
+    /**
+     * Convert these values to a customer information.
+     *
+     * @param bool $printAddress a value indicating if the address is printed
+     */
+    public function getCustomerInformation(bool $printAddress = false): CustomerInformation
+    {
+        $info = new CustomerInformation();
+        $info->setName($this->name)
+            ->setAddress($this->address)
+            ->setZipCity($this->zipCity)
+            ->setPhone($this->phone)
+            ->setEmail($this->email)
+            ->setUrl($this->url)
+            ->setPrintAddress($printAddress);
+
+        return $info;
     }
 
     public function getEmail(): ?string

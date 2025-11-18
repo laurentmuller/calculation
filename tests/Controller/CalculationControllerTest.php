@@ -14,8 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Entity\Calculation;
-use App\Interfaces\PropertyServiceInterface;
-use App\Service\ApplicationService;
+use App\Parameter\ApplicationParameters;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
 
@@ -78,12 +77,10 @@ final class CalculationControllerTest extends EntityControllerTestCase
 
     public function testAdd(): void
     {
-        $state = $this->getCalculationState();
-        $service = $this->getService(ApplicationService::class);
-        $service->setProperties([
-            PropertyServiceInterface::P_DEFAULT_STATE => $state,
-            PropertyServiceInterface::P_PRODUCT_DEFAULT => $this->getProduct(),
-        ]);
+        $service = self::getService(ApplicationParameters::class);
+        $service->getDefault()->setStateId($this->getCalculationState()->getId());
+        $service->getProduct()->setProductId($this->getProduct()->getId());
+        $service->save();
 
         $data = [
             'calculation[customer]' => 'Customer',
@@ -114,10 +111,9 @@ final class CalculationControllerTest extends EntityControllerTestCase
 
     public function testWithQrCode(): void
     {
-        $service = $this->getService(ApplicationService::class);
-        $service->setProperties([
-            PropertyServiceInterface::P_QR_CODE => true,
-        ]);
+        $service = self::getService(ApplicationParameters::class);
+        $service->getOptions()->setQrCode(true);
+        $service->save();
 
         $this->addEntities();
 
@@ -126,9 +122,9 @@ final class CalculationControllerTest extends EntityControllerTestCase
             $uri = \sprintf('/calculation/pdf/%d', (int) $calculation->getId());
             $this->checkRoute($uri, self::ROLE_USER);
         } finally {
-            $service->setProperties([
-                PropertyServiceInterface::P_QR_CODE => false,
-            ]);
+            $service = self::getService(ApplicationParameters::class);
+            $service->getOptions()->setQrCode(false);
+            $service->save();
         }
     }
 

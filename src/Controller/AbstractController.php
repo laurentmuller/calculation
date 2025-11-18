@@ -17,13 +17,13 @@ use App\Enums\EntityPermission;
 use App\Enums\FlashType;
 use App\Form\FormHelper;
 use App\Model\CustomerInformation;
+use App\Parameter\ApplicationParameters;
+use App\Parameter\UserParameters;
 use App\Report\AbstractReport;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Response\WordResponse;
-use App\Service\ApplicationService;
 use App\Service\UrlGeneratorService;
-use App\Service\UserService;
 use App\Spreadsheet\AbstractDocument;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\ExceptionContextTrait;
@@ -71,7 +71,7 @@ abstract class AbstractController extends BaseController
 
     // services
     private ?UrlGeneratorService $generatorService = null;
-    private ?UserService $userService = null;
+    private ?UserParameters $userParameters = null;
 
     /**
      * Gets the address from (email and name) used to send email.
@@ -114,23 +114,24 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Gets the application service.
+     * Gets the application parameters.
      *
      * @throws \LogicException if the service cannot be found
      */
-    public function getApplicationService(): ApplicationService
+    public function getApplicationParameters(): ApplicationParameters
     {
-        return $this->getUserService()->getApplication();
+        return $this->getUserParameters()->getApplication();
     }
 
     /**
      * Gets the customer information.
      *
-     * This is a shortcut to get customer information from the user service.
+     * This is a shortcut to get customer information from the user parameters.
      */
     public function getCustomer(): CustomerInformation
     {
-        return $this->getUserService()->getCustomer();
+        return $this->getUserParameters()
+            ->getCustomerInformation();
     }
 
     /**
@@ -138,7 +139,7 @@ abstract class AbstractController extends BaseController
      */
     public function getMinMargin(): float
     {
-        return $this->getApplicationService()->getMinMargin();
+        return $this->getApplicationParameters()->getDefault()->getMinMargin();
     }
 
     /**
@@ -185,7 +186,7 @@ abstract class AbstractController extends BaseController
     {
         return [
             ...parent::getSubscribedServices(),
-            UserService::class,
+            UserParameters::class,
             TranslatorInterface::class,
             UrlGeneratorService::class,
         ];
@@ -231,16 +232,16 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Gets the user service.
+     * Gets the user parameters.
      *
      * @throws \LogicException if the service cannot be found
      */
-    public function getUserService(): UserService
+    public function getUserParameters(): UserParameters
     {
         try {
-            return $this->userService ??= $this->container->get(UserService::class);
+            return $this->userParameters ??= $this->container->get(UserParameters::class);
         } catch (ContainerExceptionInterface $e) {
-            throw new \LogicException(\sprintf('Unable to get the "%s" service,', UserService::class), $e->getCode(), $e);
+            throw new \LogicException(\sprintf('Unable to get the "%s" service,', UserParameters::class), $e->getCode(), $e);
         }
     }
 

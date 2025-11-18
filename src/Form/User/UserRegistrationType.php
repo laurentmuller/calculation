@@ -15,7 +15,7 @@ namespace App\Form\User;
 
 use App\Entity\User;
 use App\Form\FormHelper;
-use App\Service\ApplicationService;
+use App\Parameter\ApplicationParameters;
 use App\Service\CaptchaImageService;
 use App\Utils\StringUtils;
 use Symfony\Component\Form\Event\PreSetDataEvent;
@@ -29,10 +29,10 @@ class UserRegistrationType extends AbstractUserCaptchaType
 {
     public function __construct(
         CaptchaImageService $service,
-        ApplicationService $application,
+        ApplicationParameters $parameters,
         private readonly TranslatorInterface $translator,
     ) {
-        parent::__construct($service, $application);
+        parent::__construct($service, $parameters);
     }
 
     #[\Override]

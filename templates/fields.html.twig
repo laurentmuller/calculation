@@ -4,7 +4,7 @@
 {% block password_widget -%}
     {% set is_strength = 'password-strength' in attr.class|default('') %}
     {% if (is_strength) %}
-        {% set attr = attr|default({})|merge({'data-url': url('ajax_password'), 'data-strength': user_service.application.strengthLevel.value}) %}
+        {% set attr = attr|default({})|merge({'data-url': url('ajax_password'), 'data-strength': app_params.security.level.value}) %}
     {% endif %}
     <div class="input-group">
         <div class="input-group-text">

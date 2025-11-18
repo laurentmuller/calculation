@@ -1,5 +1,5 @@
 {% from 'macros/_icons.html.twig' import copyright_link %}
-{%- set is_dark_navigation = app.user and user_service.darkNavigation -%}
+{%- set is_dark_navigation = app.user and user_params.homePage.darkNavigation -%}
 <footer class="navbar navbar-footer bg-body-tertiary border-top py-1 justify-content-md-end fixed-bottom small d-print-none"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
     <div class="navbar-nav flex-row">
         <span class="navbar-text text-truncate text-danger border-end border-secondary d-none" id="footer-message">

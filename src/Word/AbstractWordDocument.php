@@ -126,7 +126,10 @@ abstract class AbstractWordDocument extends WordDocument
         if (null !== $user) {
             $properties->setCreator($user);
         }
-        $customer = $this->controller->getApplicationService()->getCustomerName();
+        $customer = $this->controller
+            ->getApplicationParameters()
+            ->getCustomer()
+            ->getName();
         if (null !== $customer) {
             $properties->setCompany($customer);
         }

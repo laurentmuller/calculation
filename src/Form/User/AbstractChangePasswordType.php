@@ -16,7 +16,7 @@ namespace App\Form\User;
 use App\Entity\User;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
-use App\Service\ApplicationService;
+use App\Parameter\ApplicationParameters;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -31,7 +31,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 abstract class AbstractChangePasswordType extends AbstractEntityType
 {
-    public function __construct(private readonly ApplicationService $service)
+    public function __construct(private readonly ApplicationParameters $parameters)
     {
         parent::__construct(User::class);
     }
@@ -77,15 +77,15 @@ abstract class AbstractChangePasswordType extends AbstractEntityType
         $password = (string) $form->getData();
         $target = $form->get('first');
 
-        $constraint = $this->service->getStrengthConstraint();
+        $constraint = $this->parameters->getSecurity()->getStrengthConstraint();
         if (!$this->validateConstraint($context, $constraint, $password, $target)) {
             return;
         }
-        $constraint = $this->service->getPasswordConstraint();
+        $constraint = $this->parameters->getSecurity()->getPasswordConstraint();
         if (!$this->validateConstraint($context, $constraint, $password, $target)) {
             return;
         }
-        if ($this->service->isCompromisedPassword()) {
+        if ($this->parameters->getSecurity()->isCompromised()) {
             $constraint = new NotCompromisedPassword();
             $this->validateConstraint($context, $constraint, $password, $target);
         }

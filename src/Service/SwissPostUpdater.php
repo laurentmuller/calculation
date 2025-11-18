@@ -15,8 +15,8 @@ namespace App\Service;
 
 use App\Database\SwissDatabase;
 use App\Form\FormHelper;
-use App\Interfaces\PropertyServiceInterface;
 use App\Model\SwissPostUpdateResult;
+use App\Parameter\ApplicationParameters;
 use App\Reader\CSVReader;
 use App\Traits\LoggerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
@@ -86,7 +86,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     private const STATE_FILE = 'swiss_state.csv';
 
     public function __construct(
-        private readonly ApplicationService $application,
+        private readonly ApplicationParameters $parameters,
         private readonly FormFactoryInterface $factory,
         private readonly SwissPostService $service
     ) {
@@ -195,7 +195,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             return null;
         }
 
-        return $this->application->getLastImport();
+        return $this->parameters->getDate()->getImport();
     }
 
     /**
@@ -397,7 +397,8 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     private function updateValidity(SwissPostUpdateResult $result): SwissPostUpdateResult
     {
         if ($result->isValid() && $result->getValidity() instanceof DatePoint) {
-            $this->application->setProperty(PropertyServiceInterface::P_DATE_IMPORT, $result->getValidity());
+            $this->parameters->getDate()->setImport($result->getValidity());
+            $this->parameters->save();
         }
 
         return $result;

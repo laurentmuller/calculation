@@ -15,9 +15,9 @@ namespace App\Tests\Controller;
 
 use App\Controller\AbstractController;
 use App\Interfaces\PropertyServiceInterface;
+use App\Parameter\UserParameters;
 use App\Report\AbstractReport;
 use App\Service\UrlGeneratorService;
-use App\Service\UserService;
 use App\Spreadsheet\AbstractDocument;
 use App\Tests\Fixture\TestController;
 use App\Word\AbstractWordDocument;
@@ -53,11 +53,12 @@ final class AbstractControllerTest extends KernelTestCase
         self::assertNotEmpty($actual);
     }
 
-    public function testGetApplicationService(): void
+    public function testGetApplicationParameters(): void
     {
         $controller = $this->createController();
-        $actual = $controller->getApplicationService();
-        self::assertSame(PropertyServiceInterface::class::DEFAULT_MIN_MARGIN, $actual->getMinMargin());
+        $parameters = $controller->getApplicationParameters();
+        $actual = $parameters->getDefault()->getMinMargin();
+        self::assertSame(1.1, $actual);
     }
 
     public function testGetMinMargin(): void
@@ -112,7 +113,7 @@ final class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $actual = $controller::getSubscribedServices();
-        self::assertContains(UserService::class, $actual);
+        self::assertContains(UserParameters::class, $actual);
         self::assertContains(TranslatorInterface::class, $actual);
         self::assertContains(UrlGeneratorService::class, $actual);
     }
@@ -174,22 +175,22 @@ final class AbstractControllerTest extends KernelTestCase
         self::assertNull($actual);
     }
 
-    public function testGetUserService(): void
+    public function testGetUserParameters(): void
     {
         $controller = $this->createController();
-        $actual = $controller->getUserService();
-        $this->assertSameClass(UserService::class, $actual);
+        $actual = $controller->getUserParameters();
+        $this->assertSameClass(UserParameters::class, $actual);
 
         // second time for test caching
-        $actual = $controller->getUserService();
-        $this->assertSameClass(UserService::class, $actual);
+        $actual = $controller->getUserParameters();
+        $this->assertSameClass(UserParameters::class, $actual);
     }
 
-    public function testGetUserServiceWithException(): void
+    public function testGetUserParametersWithException(): void
     {
         self::expectException(\LogicException::class);
         $controller = $this->createMockController();
-        $controller->getUserService();
+        $controller->getUserParameters();
     }
 
     public function testPdfDocumentWithException(): void

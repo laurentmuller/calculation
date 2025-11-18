@@ -21,9 +21,6 @@ use App\Model\CustomerInformation;
 
 /**
  * Interface for application and user properties.
- *
- * @see \App\Service\ApplicationService
- * @see \App\Service\UserService
  */
 interface PropertyServiceInterface
 {

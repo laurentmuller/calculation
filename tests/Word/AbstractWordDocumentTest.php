@@ -15,12 +15,12 @@ namespace App\Tests\Word;
 
 use App\Controller\AbstractController;
 use App\Model\CustomerInformation;
-use App\Service\ApplicationService;
-use App\Service\UserService;
+use App\Parameter\ApplicationParameters;
+use App\Parameter\OptionsParameter;
+use App\Parameter\UserParameters;
 use App\Tests\TranslatorMockTrait;
 use App\Word\AbstractWordDocument;
 use App\Word\HtmlDocument;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 final class AbstractWordDocumentTest extends TestCase
@@ -44,8 +44,8 @@ final class AbstractWordDocumentTest extends TestCase
 
     public function testWithCustomer(): void
     {
-        $cs = $this->createCustomerInformation();
-        $controller = $this->createMockController($cs);
+        $customerInformation = $this->createCustomerInformation();
+        $controller = $this->createMockController($customerInformation);
         $doc = new class($controller) extends AbstractWordDocument {
             #[\Override]
             public function render(): bool
@@ -59,46 +59,46 @@ final class AbstractWordDocumentTest extends TestCase
 
     public function testWithEmptyValues(): void
     {
-        $cs = new CustomerInformation();
-        $controller = $this->createMockController($cs);
+        $customerInformation = new CustomerInformation();
+        $controller = $this->createMockController($customerInformation);
         $this->render($controller);
     }
 
     public function testWithoutEmail(): void
     {
-        $cs = $this->createCustomerInformation();
-        $cs->setEmail(null);
-        $controller = $this->createMockController($cs);
+        $customerInformation = $this->createCustomerInformation();
+        $customerInformation->setEmail(null);
+        $controller = $this->createMockController($customerInformation);
         $this->render($controller);
     }
 
     public function testWithoutNameAndTitle(): void
     {
-        $cs = $this->createCustomerInformation();
-        $cs->setName(null);
-        $controller = $this->createMockController($cs);
+        $customerInformation = $this->createCustomerInformation();
+        $customerInformation->setName(null);
+        $controller = $this->createMockController($customerInformation);
         $this->render($controller, '');
     }
 
     public function testWithoutURL(): void
     {
-        $cs = $this->createCustomerInformation();
-        $cs->setUrl(null);
-        $controller = $this->createMockController($cs);
+        $customerInformation = $this->createCustomerInformation();
+        $customerInformation->setUrl(null);
+        $controller = $this->createMockController($customerInformation);
         $this->render($controller);
     }
 
     public function testWithPrintAddress(): void
     {
-        $cs = $this->createCustomerInformation();
-        $controller = $this->createMockController($cs);
+        $customerInformation = $this->createCustomerInformation();
+        $controller = $this->createMockController($customerInformation);
         $this->render($controller);
     }
 
     private function createCustomerInformation(): CustomerInformation
     {
-        $cs = new CustomerInformation();
-        $cs->setPrintAddress(true)
+        $customerInformation = new CustomerInformation();
+        $customerInformation->setPrintAddress(true)
             ->setAddress('Address')
             ->setEmail('email@example.com')
             ->setName('Name')
@@ -106,41 +106,42 @@ final class AbstractWordDocumentTest extends TestCase
             ->setUrl('https://www.example.com')
             ->setZipCity('ZipCity');
 
-        return $cs;
+        return $customerInformation;
     }
 
-    private function createMockController(CustomerInformation $cs): MockObject&AbstractController
+    private function createMockController(CustomerInformation $customerInformation): AbstractController
     {
-        $application = $this->createMock(ApplicationService::class);
-        $application->method('getCustomerName')
-            ->willReturn('Customer');
-        $application->method('getCustomer')
-            ->willReturn($cs);
+        $application = $this->createMock(ApplicationParameters::class);
+        $application->method('getCustomerInformation')
+            ->willReturn($customerInformation);
 
-        $service = $this->createMock(UserService::class);
-        $service->method('isPrintAddress')
+        $options = $this->createMock(OptionsParameter::class);
+        $options->method('isPrintAddress')
             ->willReturn(true);
-        $service->method('getCustomer')
-            ->willReturn($cs);
+        $service = $this->createMock(UserParameters::class);
+        $service->method('getOptions')
+            ->willReturn($options);
+        $service->method('getCustomerInformation')
+            ->willReturn($customerInformation);
 
         $controller = $this->createMock(AbstractController::class);
         $controller->method('getUserIdentifier')
             ->willReturn('User');
         $controller->method('getApplicationOwnerUrl')
-            ->willReturnCallback(static fn (): string => $cs->getUrl() ?? '');
+            ->willReturnCallback(static fn (): string => $customerInformation->getUrl() ?? '');
         $controller->method('getApplicationName')
             ->willReturn('Calculation');
-        $controller->method('getApplicationService')
+        $controller->method('getApplicationParameters')
             ->willReturn($application);
-        $controller->method('getUserService')
+        $controller->method('getUserParameters')
             ->willReturn($service);
         $controller->method('getCustomer')
-            ->willReturn($cs);
+            ->willReturn($customerInformation);
 
         return $controller;
     }
 
-    private function render(MockObject&AbstractController $controller, string $title = 'Title'): void
+    private function render(AbstractController $controller, string $title = 'Title'): void
     {
         $content = <<<XML
             <i>Test</i>

@@ -11,7 +11,8 @@
 
 declare(strict_types=1);
 
-use App\Service\UserService;
+use App\Parameter\ApplicationParameters;
+use App\Parameter\UserParameters;
 use App\Utils\FormatUtils;
 use Symfony\Config\TwigConfig;
 
@@ -48,7 +49,8 @@ return static function (TwigConfig $config): void {
         'mailer_user_email' => '%mailer_user_email%',
         'link_dev' => '%link_dev%',
         'link_prod' => '%link_prod%',
-        'user_service' => service(UserService::class),
+        'user_params' => service(UserParameters::class),
+        'app_params' => service(ApplicationParameters::class),
     ];
     foreach ($globals as $key => $value) {
         $config->global($key, $value);

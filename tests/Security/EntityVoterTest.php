@@ -19,9 +19,10 @@ use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
+use App\Parameter\ApplicationParameters;
+use App\Parameter\RightsParameter;
 use App\Security\EntityVoter;
 use App\Security\SecurityAttributes;
-use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -33,8 +34,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 final class EntityVoterTest extends TestCase
 {
-    private MockObject&ApplicationService $application;
     private RoleBuilderService $builder;
+    private MockObject&ApplicationParameters $parameters;
     private EntityVoter $voter;
 
     #[\Override]
@@ -43,14 +44,16 @@ final class EntityVoterTest extends TestCase
         $this->builder = new RoleBuilderService();
         $adminRights = $this->builder->getRoleAdmin()->getRights();
         $userRights = $this->builder->getRoleUser()->getRights();
-
-        $this->application = $this->createMock(ApplicationService::class);
-        $this->application->method('getAdminRights')
+        $rights = $this->createMock(RightsParameter::class);
+        $rights->method('getAdminRights')
             ->willReturn($adminRights);
-        $this->application->method('getUserRights')
+        $rights->method('getUserRights')
             ->willReturn($userRights);
+        $this->parameters = $this->createMock(ApplicationParameters::class);
+        $this->parameters->method('getRights')
+            ->willReturn($rights);
 
-        $this->voter = new EntityVoter($this->application);
+        $this->voter = new EntityVoter($this->parameters);
     }
 
     public static function getSupportsAttribute(): \Generator
@@ -174,7 +177,7 @@ final class EntityVoterTest extends TestCase
 
     public function testVoteOnAttribute(): void
     {
-        $voter = new class($this->application) extends EntityVoter {
+        $voter = new class($this->parameters) extends EntityVoter {
             #[\Override]
             public function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
             {

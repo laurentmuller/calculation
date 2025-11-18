@@ -184,7 +184,7 @@ class TaskController extends AbstractEntityController
     private function createTask(): Task
     {
         $task = new Task();
-        $category = $this->getApplicationService()->getDefaultCategory();
+        $category = $this->getApplicationParameters()->getDefaultCategory();
         if ($category instanceof Category) {
             $task->setCategory($category);
         }

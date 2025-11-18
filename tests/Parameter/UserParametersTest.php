@@ -28,6 +28,22 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 final class UserParametersTest extends TestCase
 {
+    public function testGetApplication(): void
+    {
+        $parameters = $this->createUserParameters();
+        $application = $parameters->getApplication();
+        $actual = $application->getDisplay()->isActionNone();
+        $expected = $parameters->getDisplay()->isActionNone();
+        self::assertSame($expected, $actual);
+    }
+
+    public function testGetCustomerInformation(): void
+    {
+        $parameters = $this->createUserParameters();
+        $info = $parameters->getCustomerInformation();
+        self::assertFalse($info->isPrintAddress());
+    }
+
     public function testGetDefaultValues(): void
     {
         $user = $this->createUser();

@@ -18,7 +18,7 @@ use App\Form\AbstractEntityType;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Form\FormHelper;
 use App\Form\Type\PlainType;
-use App\Service\ApplicationService;
+use App\Parameter\ApplicationParameters;
 use App\Utils\FormatUtils;
 use Symfony\Component\Form\Event\PreSetDataEvent;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -30,8 +30,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CalculationEditStateType extends AbstractEntityType
 {
-    public function __construct(private readonly ApplicationService $service, private readonly TranslatorInterface $translator)
-    {
+    public function __construct(
+        private readonly ApplicationParameters $parameters,
+        private readonly TranslatorInterface $translator
+    ) {
         parent::__construct(Calculation::class);
     }
 
@@ -88,7 +90,7 @@ class CalculationEditStateType extends AbstractEntityType
 
     private function isMarginBelow(Calculation $data): bool
     {
-        return $this->service->isMarginBelow($data);
+        return $this->parameters->getDefault()->isMarginBelow($data);
     }
 
     private function onPreSetData(PreSetDataEvent $event): void
@@ -108,7 +110,7 @@ class CalculationEditStateType extends AbstractEntityType
 
     private function translateMarginBelow(Calculation $data): string
     {
-        $minimum = $this->service->getMinMargin();
+        $minimum = $this->parameters->getDefault()->getMinMargin();
         $margin = $data->getOverallMargin();
 
         return $this->translator

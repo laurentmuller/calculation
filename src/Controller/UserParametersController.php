@@ -14,13 +14,9 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\GetPostRoute;
-use App\Enums\TableView;
-use App\Form\User\UserParametersType;
-use App\Interfaces\PropertyServiceInterface;
+use App\Form\Parameters\UserParametersType;
 use App\Interfaces\RoleInterface;
-use App\Interfaces\TableInterface;
-use App\Service\UserService;
-use App\Traits\CookieTrait;
+use App\Traits\EditParametersTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -33,31 +29,23 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class UserParametersController extends AbstractController
 {
-    use CookieTrait;
+    use EditParametersTrait;
 
     #[GetPostRoute(path: '/parameters', name: 'parameters')]
-    public function invoke(Request $request, UserService $userService): Response
+    public function invoke(Request $request): Response
     {
-        $data = $userService->getProperties();
-        $form = $this->createForm(UserParametersType::class, $data);
-        if ($this->handleRequestForm($request, $form)) {
-            /** @phpstan-var array<string, mixed> $data */
-            $data = $form->getData();
-            if ($userService->setProperties($data)) {
-                $this->successTrans('user.parameters.success');
-            }
-            $response = $this->getUrlGenerator()->redirect($request);
-            if (isset($data[PropertyServiceInterface::P_DISPLAY_MODE])) {
-                /** @var TableView $display */
-                $display = $data[PropertyServiceInterface::P_DISPLAY_MODE];
-                $this->updateCookie($response, TableInterface::PARAM_VIEW, $display);
-            }
+        $templateParameters = [
+            'title' => 'user.parameters.title',
+            'title_icon' => 'user-gear',
+            'title_description' => 'user.parameters.description',
+        ];
 
-            return $response;
-        }
-
-        return $this->render('user/user_parameters.html.twig', [
-            'form' => $form,
-        ]);
+        return $this->renderParameters(
+            $request,
+            $this->getUserParameters(),
+            UserParametersType::class,
+            'user.parameters.success',
+            $templateParameters
+        );
     }
 }

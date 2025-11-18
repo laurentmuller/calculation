@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace App\Tests\Table;
 
 use App\Entity\Calculation;
+use App\Parameter\ApplicationParameters;
+use App\Parameter\DefaultParameter;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
-use App\Service\ApplicationService;
 use App\Table\CalculationBelowTable;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -110,11 +111,15 @@ final class CalculationBelowTableTest extends EntityTableTestCase
     {
         $stateRepository = $this->createMock(CalculationStateRepository::class);
         $twig = $this->createMock(Environment::class);
-        $service = $this->createMock(ApplicationService::class);
-        $service->method('getMinMargin')
-            ->willReturn(1.1);
 
-        return new CalculationBelowTable($repository, $stateRepository, $twig, $service);
+        $default = $this->createMock(DefaultParameter::class);
+        $default->method('getMinMargin')
+            ->willReturn(1.1);
+        $parameters = $this->createMock(ApplicationParameters::class);
+        $parameters->method('getDefault')
+            ->willReturn($default);
+
+        return new CalculationBelowTable($repository, $stateRepository, $twig, $parameters);
     }
 
     /**

@@ -26,7 +26,7 @@
 {%- set title = 'index.menu_info' -%}
 {%- set title_icon = 'info-circle' -%}
 {%- set title_parameters = {'%app_name%': app_name} -%}
-{% set customer = user_service.customer %}
+{% set customer = app_params.customerInformation %}
 {# class #}
 {% block card_class ' mb-2' %}
 {% block card_container_class '' %}

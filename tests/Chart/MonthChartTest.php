@@ -16,8 +16,8 @@ namespace App\Tests\Chart;
 use App\Chart\MonthChart;
 use App\Model\CalculationsMonth;
 use App\Model\CalculationsMonthItem;
+use App\Parameter\ApplicationParameters;
 use App\Repository\CalculationRepository;
-use App\Service\ApplicationService;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -28,17 +28,17 @@ use Twig\Environment;
 final class MonthChartTest extends TestCase
 {
     use TranslatorMockTrait;
+    private UrlGeneratorInterface $generator;
 
-    private MockObject&ApplicationService $application;
-    private MockObject&UrlGeneratorInterface $generator;
+    private ApplicationParameters $parameters;
     private MockObject&CalculationRepository $repository;
-    private MockObject&TranslatorInterface $translator;
-    private MockObject&Environment $twig;
+    private TranslatorInterface $translator;
+    private Environment $twig;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->application = $this->createMock(ApplicationService::class);
+        $this->parameters = $this->createMock(ApplicationParameters::class);
         $this->repository = $this->createMock(CalculationRepository::class);
         $this->generator = $this->createMock(UrlGeneratorInterface::class);
         $this->twig = $this->createMock(Environment::class);
@@ -104,7 +104,7 @@ final class MonthChartTest extends TestCase
 
     private function createChart(): MonthChart
     {
-        $chart = new MonthChart($this->application, $this->generator, $this->twig, $this->repository);
+        $chart = new MonthChart($this->parameters, $this->generator, $this->twig, $this->repository);
         $chart->setTranslator($this->translator);
 
         return $chart;

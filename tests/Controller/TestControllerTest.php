@@ -29,8 +29,6 @@ final class TestControllerTest extends ControllerTestCase
         'recaptcha',
         'search',
         'swiss',
-        'application/parameters',
-        'user/parameters',
         'translate',
         'tree',
     ];

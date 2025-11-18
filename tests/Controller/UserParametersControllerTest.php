@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Enums\MessagePosition;
-use App\Interfaces\PropertyServiceInterface;
 
 final class UserParametersControllerTest extends ControllerTestCase
 {
@@ -35,7 +34,7 @@ final class UserParametersControllerTest extends ControllerTestCase
 
     public function testParametersWithChanges(): void
     {
-        $data = [PropertyServiceInterface::P_MESSAGE_POSITION => MessagePosition::TOP_LEFT->value];
+        $data = ['message[position]' => MessagePosition::TOP_LEFT->value];
         $this->checkForm(
             'user/parameters',
             data: $data

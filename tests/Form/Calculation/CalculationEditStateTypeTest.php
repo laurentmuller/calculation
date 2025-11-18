@@ -37,8 +37,8 @@ final class CalculationEditStateTypeTest extends EntityTypeTestCase
 {
     use CalculationStateTrait;
     use TranslatorMockTrait;
-    private bool $marginBelow = false;
 
+    private bool $marginBelow = false;
     private MockObject&ApplicationParameters $parameters;
 
     #[\Override]
@@ -84,8 +84,8 @@ final class CalculationEditStateTypeTest extends EntityTypeTestCase
         $translator = $this->createMockTranslator();
 
         $default = $this->createMock(DefaultParameter::class);
-        $default->method('getMinMargin')
-            ->willReturn(fn (): bool => $this->marginBelow);
+        $default->method('isMarginBelow')
+            ->willReturnCallback(fn (): bool => $this->marginBelow);
         $this->parameters->method('getDefault')
             ->willReturn($default);
 

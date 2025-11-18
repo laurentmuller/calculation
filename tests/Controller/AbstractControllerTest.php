@@ -19,6 +19,7 @@ use App\Parameter\UserParameters;
 use App\Report\AbstractReport;
 use App\Service\UrlGeneratorService;
 use App\Spreadsheet\AbstractDocument;
+use App\Tests\DatabaseTrait;
 use App\Tests\Fixture\TestController;
 use App\Word\AbstractWordDocument;
 use Faker\Container\ContainerException;
@@ -31,6 +32,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class AbstractControllerTest extends KernelTestCase
 {
+    use DatabaseTrait;
+
     public function testGetAddressFrom(): void
     {
         $controller = $this->createController();

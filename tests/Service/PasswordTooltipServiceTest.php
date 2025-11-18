@@ -40,11 +40,10 @@ final class PasswordTooltipServiceTest extends TestCase
         $this->translator = $this->createMockTranslator();
 
         $security = $this->createMock(SecurityParameter::class);
-        $security->method('getLevel')->willReturn(
-            fn (): StrengthLevel => $this->level
-        );
+        $security->method('getLevel')
+            ->willReturnCallback(fn (): StrengthLevel => $this->level);
         $security->method('getPasswordConstraint')
-            ->willReturn(fn (): Password => $this->password);
+            ->willReturnCallback(fn (): Password => $this->password);
         $security->method('isCompromised')
             ->willReturnCallback(fn (): bool => $this->compromisedPassword);
 

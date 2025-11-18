@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Enums\EntityPermission;
-use App\Interfaces\PropertyServiceInterface;
 use App\Parameter\ApplicationParameters;
 use App\Service\CacheService;
 use App\Service\DictionaryService;
@@ -113,7 +112,7 @@ final class AdminControllerTest extends ControllerTestCase
     {
         $name = $this->getService(DictionaryService::class)
             ->getRandomWord();
-        $data = [PropertyServiceInterface::P_CUSTOMER_NAME => $name];
+        $data = ['customer[name]' => $name];
         $this->checkForm(
             uri: 'admin/parameters',
             data: $data,

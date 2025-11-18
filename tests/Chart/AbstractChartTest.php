@@ -113,10 +113,10 @@ final class AbstractChartTest extends TestCase
         $expected = 1.1;
         $default = $this->createMock(DefaultParameter::class);
         $default->method('getMinMargin')
-            ->willReturn(1.0);
+            ->willReturn($expected);
         $parameters = $this->createMock(ApplicationParameters::class);
         $parameters->method('getDefault')
-            ->willReturn($expected);
+            ->willReturn($default);
         $generator = $this->createMock(UrlGeneratorInterface::class);
         $twig = $this->createMock(Environment::class);
         $chart = new class($parameters, $generator, $twig) extends AbstractHighchart {

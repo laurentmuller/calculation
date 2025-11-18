@@ -42,13 +42,13 @@ final class EntityVoterTest extends TestCase
     protected function setUp(): void
     {
         $this->builder = new RoleBuilderService();
-        $adminRights = $this->builder->getRoleAdmin()->getRights();
-        $userRights = $this->builder->getRoleUser()->getRights();
+        $adminRole = $this->builder->getRoleAdmin();
+        $userRole = $this->builder->getRoleUser();
         $rights = $this->createMock(RightsParameter::class);
-        $rights->method('getAdminRights')
-            ->willReturn($adminRights);
-        $rights->method('getUserRights')
-            ->willReturn($userRights);
+        $rights->method('getAdminRole')
+            ->willReturn($adminRole);
+        $rights->method('getUserRole')
+            ->willReturn($userRole);
         $this->parameters = $this->createMock(ApplicationParameters::class);
         $this->parameters->method('getRights')
             ->willReturn($rights);

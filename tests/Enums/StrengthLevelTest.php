@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\StrengthLevel;
-use App\Interfaces\PropertyServiceInterface;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -26,7 +25,6 @@ final class StrengthLevelTest extends TestCase
     public static function getDefault(): \Generator
     {
         yield [StrengthLevel::getDefault(), StrengthLevel::NONE];
-        yield [PropertyServiceInterface::DEFAULT_STRENGTH_LEVEL, StrengthLevel::NONE];
     }
 
     public static function getLabels(): \Generator

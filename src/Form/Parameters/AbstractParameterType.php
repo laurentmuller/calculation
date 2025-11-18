@@ -110,7 +110,7 @@ abstract class AbstractParameterType extends AbstractHelperType
         $config = $form->getRoot()->getConfig();
         $key = $this->getParameterClass()::getCacheKey();
         /** @phpstan-var array<string, array<string, TValue>> $values */
-        $values = $config->getOption(AbstractHelperParametersType::DEFAULT_VALUES, []);
+        $values = $config->getOption(AbstractParametersType::DEFAULT_VALUES, []);
 
         return $values[$key] ?? [];
     }

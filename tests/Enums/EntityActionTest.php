@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\EntityAction;
-use App\Interfaces\PropertyServiceInterface;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -26,7 +25,6 @@ final class EntityActionTest extends TestCase
     public static function getDefault(): \Generator
     {
         yield [EntityAction::getDefault(), EntityAction::EDIT];
-        yield [PropertyServiceInterface::DEFAULT_ACTION, EntityAction::EDIT];
     }
 
     public static function getLabel(): \Generator

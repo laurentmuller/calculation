@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Fixture;
 
-use App\Form\Parameters\AbstractHelperParametersType;
+use App\Form\Parameters\AbstractParametersType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -32,7 +32,7 @@ class FixtureParametersType extends AbstractType
     #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefault(AbstractHelperParametersType::DEFAULT_VALUES, [])
-            ->setAllowedTypes(AbstractHelperParametersType::DEFAULT_VALUES, 'array');
+        $resolver->setDefault(AbstractParametersType::DEFAULT_VALUES, [])
+            ->setAllowedTypes(AbstractParametersType::DEFAULT_VALUES, 'array');
     }
 }

@@ -31,6 +31,17 @@ class Password extends Constraint
 
     final public const NUMBERS_ERROR = '902a620e-8cf9-42bd-9219-3938c3fea0c5';
 
+    /**
+     * The password options where the key is the property name and the value is the password option name.
+     */
+    final public const OPTIONS = [
+        'security_letters' => 'letters',
+        'security_case_diff' => 'case_diff',
+        'security_numbers' => 'numbers',
+        'security_special_char' => 'special_char',
+        'security_email' => 'email',
+    ];
+
     final public const SPECIAL_CHAR_ERROR = '5c5998ca-d67b-45ed-b210-dda950c8ea09';
 
     protected const ERROR_NAMES = [

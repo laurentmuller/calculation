@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\TableView;
-use App\Interfaces\PropertyServiceInterface;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -26,7 +25,6 @@ final class TableViewTest extends TestCase
     public static function getDefault(): \Generator
     {
         yield [TableView::getDefault(), TableView::TABLE];
-        yield [PropertyServiceInterface::DEFAULT_DISPLAY_MODE, TableView::TABLE];
     }
 
     public static function getValues(): \Generator

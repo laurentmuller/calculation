@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\AbstractController;
-use App\Interfaces\PropertyServiceInterface;
 use App\Parameter\UserParameters;
 use App\Report\AbstractReport;
 use App\Service\UrlGeneratorService;
@@ -68,7 +67,7 @@ final class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $actual = $controller->getMinMargin();
-        self::assertSame(PropertyServiceInterface::class::DEFAULT_MIN_MARGIN, $actual);
+        self::assertSame(1.1, $actual);
     }
 
     public function testGetRelativePathFound(): void

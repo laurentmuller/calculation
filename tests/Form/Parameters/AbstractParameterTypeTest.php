@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Form\Parameters;
 
 use App\Enums\EntityAction;
-use App\Form\Parameters\AbstractHelperParametersType;
+use App\Form\Parameters\AbstractParametersType;
 use App\Tests\Fixture\FixtureParameter;
 use App\Tests\Fixture\FixtureParametersType;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -49,11 +49,11 @@ final class AbstractParameterTypeTest extends TypeTestCase
     {
         $options = [];
         if ([] !== $values) {
-            $options = [AbstractHelperParametersType::DEFAULT_VALUES => [
+            $options = [AbstractParametersType::DEFAULT_VALUES => [
                 FixtureParameter::getCacheKey() => $values,
             ]];
         }
-        $view = $this->factory->create(FixtureParametersType::class, null, $options)
+        $view = $this->factory->create(type: FixtureParametersType::class, options: $options)
             ->createView();
         $children = $view->children;
         self::assertArrayHasKey('parameter', $children);

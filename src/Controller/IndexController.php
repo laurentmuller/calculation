@@ -17,10 +17,10 @@ use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PostRoute;
 use App\Enums\TableView;
-use App\Form\Parameters\AbstractParametersType;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
 use App\Model\IndexQuery;
+use App\Parameter\HomePageParameter;
 use App\Service\IndexService;
 use App\Traits\ParameterTrait;
 use App\Utils\StringUtils;
@@ -165,7 +165,7 @@ class IndexController extends AbstractController
     {
         $params = $this->getUserParameters();
         $homePage = $params->getHomePage();
-        if (null === $count || !\in_array($count, AbstractParametersType::CALCULATIONS_RANGE, true)) {
+        if (null === $count || !\in_array($count, HomePageParameter::CALCULATIONS_RANGE, true)) {
             return $homePage->getCalculations();
         }
 
@@ -196,7 +196,7 @@ class IndexController extends AbstractController
             'count' => $count,
             'calculations' => $calculations,
             'min_margin' => $this->getMinMargin(),
-            'calculations_range' => AbstractParametersType::CALCULATIONS_RANGE,
+            'calculations_range' => HomePageParameter::CALCULATIONS_RANGE,
             self::PARAM_VIEW => $view,
             self::PARAM_RESTRICT => $restrict,
             self::PARAM_CUSTOM => TableView::CUSTOM === $view,

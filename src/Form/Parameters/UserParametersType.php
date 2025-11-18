@@ -16,9 +16,9 @@ namespace App\Form\Parameters;
 use App\Parameter\UserParameters;
 
 /**
- * @extends AbstractHelperParametersType<UserParameters>
+ * @extends AbstractParametersType<UserParameters>
  */
-class UserParametersType extends AbstractHelperParametersType
+class UserParametersType extends AbstractParametersType
 {
     #[\Override]
     protected function getParametersClass(): string

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\MessagePosition;
-use App\Interfaces\PropertyServiceInterface;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -39,7 +38,6 @@ final class MessagePositionTest extends TestCase
     public static function getDefault(): \Generator
     {
         yield [MessagePosition::getDefault(), MessagePosition::BOTTOM_RIGHT];
-        yield [PropertyServiceInterface::DEFAULT_MESSAGE_POSITION, MessagePosition::BOTTOM_RIGHT];
     }
 
     public static function getIcon(): \Generator

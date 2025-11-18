@@ -31,7 +31,6 @@ use App\Form\Type\AlphaCaptchaType;
 use App\Form\Type\CaptchaImageType;
 use App\Form\Type\ReCaptchaType;
 use App\Form\Type\SimpleEditorType;
-use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\UserInterface;
@@ -302,7 +301,7 @@ class TestController extends AbstractController
     public function password(Request $request, CaptchaImageService $service): Response
     {
         $password = new Password(all: true);
-        $options = PropertyServiceInterface::PASSWORD_OPTIONS;
+        $options = Password::OPTIONS;
         $strength = new Strength(StrengthLevel::MEDIUM);
         $listener = static function (PreSubmitEvent $event) use ($options, $password, $strength): void {
             /** @phpstan-var array $data */

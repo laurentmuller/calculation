@@ -16,7 +16,7 @@ symfony.lock
 ###< resources ###
 
 ###> tests ###
-/tests/Data/db_test.sqlite
+/tests/Fixture/db_test.sqlite
 ###< phpunit ###
 
 ###> databases ###

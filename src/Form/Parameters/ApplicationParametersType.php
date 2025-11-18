@@ -19,9 +19,9 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * @extends AbstractHelperParametersType<ApplicationParameters>
+ * @extends AbstractParametersType<ApplicationParameters>
  */
-class ApplicationParametersType extends AbstractHelperParametersType
+class ApplicationParametersType extends AbstractParametersType
 {
     public function __construct(private readonly Security $security)
     {

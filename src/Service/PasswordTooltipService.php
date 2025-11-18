@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constraint\Password;
 use App\Enums\StrengthLevel;
-use App\Interfaces\PropertyServiceInterface;
 use App\Parameter\ApplicationParameters;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -35,21 +35,22 @@ readonly class PasswordTooltipService
     public function getTooltips(): array
     {
         $results = [];
-        $level = $this->parameters->getSecurity()->getLevel();
+        $security = $this->parameters->getSecurity();
+        $level = $security->getLevel();
         if (StrengthLevel::NONE !== $level) {
             $prefix = $this->trans('security_strength_level');
             $suffix = $level->trans($this->translator);
             $results[] = \sprintf('%s : %s', $prefix, $suffix);
         }
 
-        $constraint = $this->parameters->getSecurity()->getPasswordConstraint();
-        foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $property => $option) {
+        $constraint = $security->getPasswordConstraint();
+        foreach (Password::OPTIONS as $property => $option) {
             if ($constraint->isOption($option)) {
                 $results[] = $this->trans($property);
             }
         }
 
-        if ($this->parameters->getSecurity()->isCompromised()) {
+        if ($security->isCompromised()) {
             $results[] = $this->trans('security_compromised_password');
         }
 

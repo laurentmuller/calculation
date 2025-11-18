@@ -15,7 +15,6 @@ namespace App\Tests\Constraint;
 
 use App\Constraint\Password;
 use App\Constraint\PasswordValidator;
-use App\Interfaces\PropertyServiceInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Validator\Exception\InvalidOptionsException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
@@ -37,7 +36,7 @@ final class PasswordValidatorTest extends ConstraintValidatorTestCase
 
     public static function getOptions(): \Generator
     {
-        foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $option) {
+        foreach (Password::OPTIONS as $option) {
             yield [$option];
         }
         yield ['all'];

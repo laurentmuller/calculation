@@ -15,9 +15,9 @@ namespace App\Traits;
 
 use App\Controller\AbstractController;
 use App\Entity\AbstractProperty;
+use App\Form\Parameters\AbstractParametersType;
 use App\Interfaces\TableInterface;
 use App\Parameter\AbstractParameters;
-use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,9 +32,11 @@ trait EditParametersTrait
 
     /**
      * @template TProperty of AbstractProperty
+     * @template TParameters of AbstractParameters<TProperty>
+     * @template TFormType of AbstractParametersType
      *
-     * @phpstan-param AbstractParameters<TProperty> $parameters
-     * @phpstan-param class-string<FormTypeInterface<array>> $type
+     * @phpstan-param TParameters             $parameters
+     * @phpstan-param class-string<TFormType> $type
      */
     protected function renderParameters(
         Request $request,
@@ -58,6 +60,6 @@ trait EditParametersTrait
 
         $templateParameters['form'] = $form;
 
-        return $this->render('test/parameter.html.twig', $templateParameters);
+        return $this->render('parameters/parameters.html.twig', $templateParameters);
     }
 }

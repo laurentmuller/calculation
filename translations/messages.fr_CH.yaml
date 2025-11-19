@@ -919,13 +919,13 @@ password:
     title: Mot de passe
     constraint: 'Contraintes du mot de passe :'
     success: 'Le mot de passe est valide. Les options suivantes ont été sélectionnées :'
-    security_letters: Une lettre est obligatoire
-    security_special_char: Un caractère spécial est obligatoire
-    security_case_diff: Une majuscule et une minuscule sont obligatoires
-    security_numbers: Un chiffre est obligatoire
-    security_email: Le mot de passe ne doit pas être une adresse e-mail
-    security_compromised_password: Le mot de passe ne doit pas être compromis
-    security_strength_level: Force du mot de passe
+    letter: Une lettre est obligatoire
+    number: Un chiffre est obligatoire
+    specialChar: Un caractère spécial est obligatoire
+    caseDiff: Une majuscule et une minuscule sont obligatoires
+    email: Le mot de passe ne doit pas être une adresse e-mail
+    compromisedPassword: Le mot de passe ne doit pas être compromis
+    strengthLevel: Force du mot de passe
 pivot:
     column: Colonne
     fields:

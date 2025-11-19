@@ -33,12 +33,12 @@ new_password:
     short: Le nouveau mot de passe est trop court.
 password:
     empty: Le mot de passe est vide.
-    case_diff: Le mot de passe doit contenir au moins une majuscule et une minuscule.
-    email: Le mot de passe ne peut être une adresse e-mail.
-    letters: Le mot de passe doit contenir au moins une lettre.
+    letter: Le mot de passe doit contenir au moins une lettre.
+    number: Le mot de passe doit contenir au moins un chiffre.
+    specialChar: Le mot de passe doit contenir au moins un caractère spécial.
+    caseDiff: Le mot de passe doit contenir au moins une majuscule et une minuscule.
+    email: Le mot de passe ne peut pas être une adresse e-mail.
     mismatch: Les deux mots de passe ne sont pas identiques.
-    numbers: Le mot de passe doit contenir au moins un chiffre.
-    special_char: Le mot de passe doit contenir au moins un caractère spécial.
     strength_level: Le mot de passe doit avoir une force "%minimum%", la force actuelle est "%score%".
     strength_disabled: La force minimum du mot de passe est désactivée.
     strength_invalid: La force "%value%" est invalide. Les valeurs autorisée sont "%allowed%".

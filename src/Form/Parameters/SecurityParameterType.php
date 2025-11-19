@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Form\Parameters;
 
+use App\Constraint\Password;
 use App\Enums\StrengthLevel;
 use App\Form\FormHelper;
 use App\Parameter\SecurityParameter;
@@ -30,15 +31,13 @@ class SecurityParameterType extends AbstractParameterType
             ->addTrueFalseType('parameters.display.show', 'parameters.display.hide');
 
         $helper->field('level')
-            ->label('password.security_strength_level')
+            ->label('password.strengthLevel')
             ->addEnumType(StrengthLevel::class);
 
-        $this->addCheckboxType($helper, 'letter', 'password.security_letters');
-        $this->addCheckboxType($helper, 'caseDiff', 'password.security_case_diff');
-        $this->addCheckboxType($helper, 'number', 'password.security_numbers');
-        $this->addCheckboxType($helper, 'specialChar', 'password.security_special_char');
-        $this->addCheckboxType($helper, 'email', 'password.security_email');
-        $this->addCheckboxType($helper, 'compromised', 'password.security_compromised_password');
+        foreach (Password::ALLOWED_OPTIONS as $option) {
+            $this->addCheckboxType($helper, $option, 'password.' . $option);
+        }
+        $this->addCheckboxType($helper, 'compromised', 'password.compromisedPassword');
     }
 
     #[\Override]

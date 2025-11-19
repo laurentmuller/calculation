@@ -77,15 +77,16 @@ abstract class AbstractChangePasswordType extends AbstractEntityType
         $password = (string) $form->getData();
         $target = $form->get('first');
 
-        $constraint = $this->parameters->getSecurity()->getStrengthConstraint();
+        $security = $this->parameters->getSecurity();
+        $constraint = $security->getStrengthConstraint();
         if (!$this->validateConstraint($context, $constraint, $password, $target)) {
             return;
         }
-        $constraint = $this->parameters->getSecurity()->getPasswordConstraint();
+        $constraint = $security->getPasswordConstraint();
         if (!$this->validateConstraint($context, $constraint, $password, $target)) {
             return;
         }
-        if ($this->parameters->getSecurity()->isCompromised()) {
+        if ($security->isCompromised()) {
             $constraint = new NotCompromisedPassword();
             $this->validateConstraint($context, $constraint, $password, $target);
         }

@@ -68,12 +68,8 @@ abstract class AbstractParameterType extends AbstractHelperType
         return '';
     }
 
-    protected function addCheckboxType(
-        FormHelper $helper,
-        string $field,
-        string $label,
-        ?string $help = null
-    ): void {
+    protected function addCheckboxType(FormHelper $helper, string $field, string $label, ?string $help = null): void
+    {
         $helper->field($field)
             ->label($label)
             ->help($help)

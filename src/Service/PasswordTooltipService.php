@@ -38,20 +38,20 @@ readonly class PasswordTooltipService
         $security = $this->parameters->getSecurity();
         $level = $security->getLevel();
         if (StrengthLevel::NONE !== $level) {
-            $prefix = $this->trans('security_strength_level');
+            $prefix = $this->trans('strengthLevel');
             $suffix = $level->trans($this->translator);
             $results[] = \sprintf('%s : %s', $prefix, $suffix);
         }
 
         $constraint = $security->getPasswordConstraint();
-        foreach (Password::OPTIONS as $property => $option) {
+        foreach (Password::ALLOWED_OPTIONS as $option) {
             if ($constraint->isOption($option)) {
-                $results[] = $this->trans($property);
+                $results[] = $this->trans($option);
             }
         }
 
         if ($security->isCompromised()) {
-            $results[] = $this->trans('security_compromised_password');
+            $results[] = $this->trans('compromisedPassword');
         }
 
         return $results;

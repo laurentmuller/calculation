@@ -64,10 +64,10 @@ class SecurityParameter implements ParameterInterface
     public function getPasswordConstraint(): Password
     {
         return new Password(
-            letters: $this->letter,
-            case_diff: $this->caseDiff,
-            numbers: $this->number,
-            special_char: $this->specialChar,
+            letter: $this->letter,
+            caseDiff: $this->caseDiff,
+            number: $this->number,
+            specialChar: $this->specialChar,
             email: $this->email,
         );
     }

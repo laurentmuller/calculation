@@ -301,13 +301,13 @@ class TestController extends AbstractController
     public function password(Request $request, CaptchaImageService $service): Response
     {
         $password = new Password(all: true);
-        $options = Password::OPTIONS;
+        $options = Password::ALLOWED_OPTIONS;
         $strength = new Strength(StrengthLevel::MEDIUM);
         $listener = static function (PreSubmitEvent $event) use ($options, $password, $strength): void {
             /** @phpstan-var array $data */
             $data = $event->getData();
-            foreach ($options as $property => $option) {
-                $password->setOption($option, (bool) ($data[$property] ?? false));
+            foreach ($options as $option) {
+                $password->setOption($option, (bool) ($data[$option] ?? false));
             }
             $level = (int) $data['level'];
             $strength->minimum = StrengthLevel::tryFrom($level) ?? StrengthLevel::NONE;
@@ -316,8 +316,8 @@ class TestController extends AbstractController
             'input' => 'aB123456#*/82568A',
             'level' => StrengthLevel::MEDIUM,
         ];
-        foreach (\array_keys($options) as $property) {
-            $data[$property] = true;
+        foreach ($options as $option) {
+            $data[$option] = true;
         }
         $helper = $this->createFormHelper('password.', $data);
         $helper->listenerPreSubmit($listener);
@@ -335,14 +335,14 @@ class TestController extends AbstractController
                 $password,
                 $strength
             )->addTextType();
-        foreach ($options as $key => $value) {
-            $helper->field($key)
-                ->updateAttribute('data-validation', $value)
+        foreach ($options as $option) {
+            $helper->field($option)
+                ->updateAttribute('data-validation', $option)
                 ->widgetClass('password-option')
                 ->addCheckboxType();
         }
         $helper->field('level')
-            ->label('password.security_strength_level')
+            ->label('password.strengthLevel')
             ->addEnumType(StrengthLevel::class);
         $helper->field('captcha')
             ->label('captcha.label')
@@ -359,16 +359,16 @@ class TestController extends AbstractController
             $data = $form->getData();
             $message = $this->trans('password.success');
             $message .= '<ul>';
-            foreach (\array_keys($options) as $property) {
-                if (true === $data[$property]) {
-                    $message .= '<li>' . $this->trans("password.$property") . '</li>';
+            foreach ($options as $option) {
+                if (true === $data[$option]) {
+                    $message .= '<li>' . $this->trans('password.' . $option) . '</li>';
                 }
             }
             /** @phpstan-var StrengthLevel $level */
             $level = $data['level'];
             if (StrengthLevel::NONE !== $level) {
                 $message .= '<li>';
-                $message .= $this->trans('password.security_strength_level');
+                $message .= $this->trans('password.strengthLevel');
                 $message .= ' : ';
                 $message .= $this->translateLevel($level);
                 $message .= '</li>';

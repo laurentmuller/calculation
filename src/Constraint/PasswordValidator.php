@@ -91,10 +91,10 @@ class PasswordValidator extends AbstractConstraintValidator
     private function checkCaseDiff(Password $constraint, string $value): bool
     {
         return $this->validateRegex(
-            $constraint->case_diff,
+            $constraint->caseDiff,
             '/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/u',
             $value,
-            $constraint->case_diff_message,
+            $constraint->caseDiffMessage,
             Password::CASE_DIFF_ERROR
         );
     }
@@ -105,7 +105,7 @@ class PasswordValidator extends AbstractConstraintValidator
     private function checkEmail(Password $constraint, string $value): void
     {
         if ($constraint->email && false !== \filter_var($value, \FILTER_VALIDATE_EMAIL)) {
-            $this->addViolation($constraint->email_message, $value, Password::EMAIL_ERROR);
+            $this->addViolation($constraint->emailMessage, $value, Password::EMAIL_ERROR);
         }
     }
 
@@ -115,11 +115,11 @@ class PasswordValidator extends AbstractConstraintValidator
     private function checkLetters(Password $constraint, string $value): bool
     {
         return $this->validateRegex(
-            $constraint->letters,
+            $constraint->letter,
             '/\pL/u',
             $value,
-            $constraint->letters_message,
-            Password::LETTERS_ERROR
+            $constraint->letterMessage,
+            Password::LETTER_ERROR
         );
     }
 
@@ -129,11 +129,11 @@ class PasswordValidator extends AbstractConstraintValidator
     private function checkNumber(Password $constraint, string $value): bool
     {
         return $this->validateRegex(
-            $constraint->numbers,
+            $constraint->number,
             '/\pN/u',
             $value,
-            $constraint->numbers_message,
-            Password::NUMBERS_ERROR
+            $constraint->numberMessage,
+            Password::NUMBER_ERROR
         );
     }
 
@@ -143,10 +143,10 @@ class PasswordValidator extends AbstractConstraintValidator
     private function checkSpecialChar(Password $constraint, string $value): bool
     {
         return $this->validateRegex(
-            $constraint->special_char,
+            $constraint->specialChar,
             '/[^p{Ll}\p{Lu}\pL\pN]/u',
             $value,
-            $constraint->special_char_message,
+            $constraint->specialCharMessage,
             Password::SPECIAL_CHAR_ERROR
         );
     }

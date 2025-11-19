@@ -25,9 +25,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final class PasswordTooltipServiceTest extends TestCase
 {
     use TranslatorMockTrait;
+
     private bool $compromisedPassword = false;
     private StrengthLevel $level;
-
     private ApplicationParameters $parameters;
     private Password $password;
     private TranslatorInterface $translator;
@@ -35,7 +35,7 @@ final class PasswordTooltipServiceTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->password = new Password(letters: false);
+        $this->password = new Password();
         $this->level = StrengthLevel::NONE;
         $this->translator = $this->createMockTranslator();
 
@@ -58,7 +58,7 @@ final class PasswordTooltipServiceTest extends TestCase
         $service = new PasswordTooltipService($this->parameters, $this->translator);
         $actual = $service->getTooltips();
         self::assertCount(1, $actual);
-        self::assertSame('password.security_compromised_password', $actual[0]);
+        self::assertSame('password.compromisedPassword', $actual[0]);
     }
 
     public function testWithDefaultValues(): void
@@ -70,11 +70,11 @@ final class PasswordTooltipServiceTest extends TestCase
 
     public function testWithPasswordLetter(): void
     {
-        $this->password = new Password(letters: true);
+        $this->password = new Password(letter: true);
         $service = new PasswordTooltipService($this->parameters, $this->translator);
         $actual = $service->getTooltips();
         self::assertCount(1, $actual);
-        self::assertSame('password.security_letters', $actual[0]);
+        self::assertSame('password.letter', $actual[0]);
     }
 
     public function testWithStrengthLevel(): void
@@ -83,6 +83,6 @@ final class PasswordTooltipServiceTest extends TestCase
         $service = new PasswordTooltipService($this->parameters, $this->translator);
         $actual = $service->getTooltips();
         self::assertCount(1, $actual);
-        self::assertStringStartsWith('password.security_strength_level', $actual[0]);
+        self::assertStringStartsWith('password.strengthLevel', $actual[0]);
     }
 }

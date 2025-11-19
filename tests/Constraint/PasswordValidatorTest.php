@@ -26,17 +26,17 @@ final class PasswordValidatorTest extends ConstraintValidatorTestCase
 {
     public static function getInvalidValues(): \Generator
     {
-        yield ['abc', ['case_diff' => true], 'password.case_diff', Password::CASE_DIFF_ERROR];
+        yield ['abc', ['caseDiff' => true], 'password.caseDiff', Password::CASE_DIFF_ERROR];
         yield ['myemail@website.com', ['email' => true], 'password.email', Password::EMAIL_ERROR];
-        yield ['123', ['letters' => true], 'password.letters', Password::LETTERS_ERROR];
-        yield ['@@@', ['letters' => true, 'numbers' => true], 'password.letters', Password::LETTERS_ERROR];
-        yield ['abc', ['numbers' => true], 'password.numbers', Password::NUMBERS_ERROR];
-        yield ['123', ['special_char' => true], 'password.special_char', Password::SPECIAL_CHAR_ERROR];
+        yield ['123', ['letter' => true], 'password.letter', Password::LETTER_ERROR];
+        yield ['@@@', ['letter' => true, 'numbers' => true], 'password.letter', Password::LETTER_ERROR];
+        yield ['abc', ['number' => true], 'password.number', Password::NUMBER_ERROR];
+        yield ['123', ['specialChar' => true], 'password.specialChar', Password::SPECIAL_CHAR_ERROR];
     }
 
     public static function getOptions(): \Generator
     {
-        foreach (Password::OPTIONS as $option) {
+        foreach (Password::ALLOWED_OPTIONS as $option) {
             yield [$option];
         }
         yield ['all'];
@@ -44,11 +44,11 @@ final class PasswordValidatorTest extends ConstraintValidatorTestCase
 
     public static function getValidValues(): \Generator
     {
-        yield ['ABC abc', 'case_diff'];
+        yield ['ABC abc', 'caseDiff'];
         yield ['test', 'email'];
         yield ['abc', 'letters'];
         yield ['123', 'numbers'];
-        yield ['123@', 'special_char'];
+        yield ['123@', 'specialChar'];
         yield ['aB123456#*/82568A', 'all'];
     }
 
@@ -56,11 +56,11 @@ final class PasswordValidatorTest extends ConstraintValidatorTestCase
     {
         $options = [
             'all' => true,
-            'case_diff' => true,
+            'caseDiff' => true,
             'email' => true,
-            'letters' => true,
-            'numbers' => true,
-            'special_char' => true,
+            'letter' => true,
+            'number' => true,
+            'specialChar' => true,
         ];
         $constraint = $this->createConstraint($options);
         $this->validator->validate('zTp9F??TvRcG?+Z', $constraint);
@@ -79,11 +79,11 @@ final class PasswordValidatorTest extends ConstraintValidatorTestCase
     {
         $options = [
             'all' => false,
-            'case_diff' => true,
+            'caseDiff' => true,
             'email' => true,
-            'letters' => true,
-            'numbers' => true,
-            'special_char' => true,
+            'letter' => true,
+            'number' => true,
+            'specialChar' => true,
         ];
         $constraint = $this->createConstraint($options);
         $this->validator->validate('zTp9F??TvRcG?+Z', $constraint);
@@ -172,10 +172,10 @@ final class PasswordValidatorTest extends ConstraintValidatorTestCase
     {
         return new Password(
             all: $options['all'] ?? false,
-            letters: $options['letters'] ?? false,
-            case_diff: $options['case_diff'] ?? false,
-            numbers: $options['numbers'] ?? false,
-            special_char: $options['special_char'] ?? false,
+            letter: $options['letter'] ?? false,
+            caseDiff: $options['caseDiff'] ?? false,
+            number: $options['number'] ?? false,
+            specialChar: $options['specialChar'] ?? false,
             email: $options['email'] ?? false,
         );
     }

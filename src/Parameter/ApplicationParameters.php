@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Parameter;
 
+use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\GlobalProperty;
@@ -37,7 +38,7 @@ class ApplicationParameters extends AbstractParameters
     private ?CustomerParameter $customer = null;
 
     #[Assert\Valid]
-    private ?DateParameter $date = null;
+    private ?DatesParameter $dates = null;
 
     #[Assert\Valid]
     private ?DefaultParameter $default = null;
@@ -61,6 +62,9 @@ class ApplicationParameters extends AbstractParameters
         parent::__construct($cache, $manager);
     }
 
+    /**
+     * Gets the customer parameter.
+     */
     public function getCustomer(): CustomerParameter
     {
         return $this->customer ??= $this->getCachedParameter(CustomerParameter::class);
@@ -79,11 +83,17 @@ class ApplicationParameters extends AbstractParameters
             ->getCustomerInformation($printAddress);
     }
 
-    public function getDate(): DateParameter
+    /**
+     * Gets the dates parameter.
+     */
+    public function getDates(): DatesParameter
     {
-        return $this->date ??= $this->getCachedParameter(DateParameter::class);
+        return $this->dates ??= $this->getCachedParameter(DatesParameter::class);
     }
 
+    /**
+     * Gets the default parameter.
+     */
     public function getDefault(): DefaultParameter
     {
         return $this->default ??= $this->getCachedParameter(DefaultParameter::class);
@@ -117,7 +127,7 @@ class ApplicationParameters extends AbstractParameters
     public function getDefaultValues(): array
     {
         // the customer and date parameters are omitted because all default values are null
-        $values = $this->getParametersDefaultValues(
+        $values = $this->getParametersDefaultValues([
             DefaultParameter::class,
             DisplayParameter::class,
             HomePageParameter::class,
@@ -125,13 +135,21 @@ class ApplicationParameters extends AbstractParameters
             OptionsParameter::class,
             ProductParameter::class,
             SecurityParameter::class,
-        );
+        ]);
 
         // special case for minimum margin
         /** @phpstan-var array<string, array{minMargin: float, ...}> $values */
         $values[DefaultParameter::getCacheKey()]['minMargin'] *= 100.0;
 
         return $values;
+    }
+
+    /**
+     * This is a shortcut to get default parameter minimum margin.
+     */
+    public function getMinMargin(): float
+    {
+        return $this->getDefault()->getMinMargin();
     }
 
     /**
@@ -142,6 +160,9 @@ class ApplicationParameters extends AbstractParameters
         return $this->product ??= $this->getCachedParameter(ProductParameter::class);
     }
 
+    /**
+     * Gets the rights parameter.
+     */
     public function getRights(): RightsParameter
     {
         return $this->rights ??= $this->getCachedParameter(RightsParameter::class);
@@ -155,33 +176,39 @@ class ApplicationParameters extends AbstractParameters
         return $this->security ??= $this->getCachedParameter(SecurityParameter::class);
     }
 
+    /**
+     * Gets the debug state.
+     */
     public function isDebug(): bool
     {
         return $this->debug;
     }
 
-    #[\Override]
-    public function save(): bool
+    /**
+     * This is a shortcut to get default parameter margin below.
+     */
+    public function isMarginBelow(Calculation|float $value): bool
     {
-        return $this->saveParameters([
-            DisplayParameter::class => $this->display,
-            HomePageParameter::class => $this->homePage,
-            MessageParameter::class => $this->message,
-            OptionsParameter::class => $this->options,
-
-            CustomerParameter::class => $this->customer,
-            DateParameter::class => $this->date,
-            DefaultParameter::class => $this->default,
-            ProductParameter::class => $this->product,
-            RightsParameter::class => $this->rights,
-            SecurityParameter::class => $this->security,
-        ]);
+        return $this->getDefault()->isMarginBelow($value);
     }
 
     #[\Override]
     protected function createProperty(string $name): GlobalProperty
     {
         return GlobalProperty::instance($name);
+    }
+
+    #[\Override]
+    protected function getParameters(): array
+    {
+        return parent::getParameters() + [
+            CustomerParameter::class => $this->customer,
+            DatesParameter::class => $this->dates,
+            DefaultParameter::class => $this->default,
+            ProductParameter::class => $this->product,
+            RightsParameter::class => $this->rights,
+            SecurityParameter::class => $this->security,
+        ];
     }
 
     #[\Override]

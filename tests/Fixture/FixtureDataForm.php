@@ -16,7 +16,7 @@ namespace App\Tests\Fixture;
 /**
  * Class for form type tests.
  */
-class DataForm
+class FixtureDataForm
 {
     private mixed $value = null;
 

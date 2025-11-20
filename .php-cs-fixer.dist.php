@@ -67,17 +67,22 @@ $rules = [
     ],
 ];
 
+$paths = [
+    __DIR__ . '/config',
+    __DIR__ . '/src',
+    __DIR__ . '/tests',
+];
+
+$files = [
+    __FILE__,
+    __DIR__ . '/.twig-cs-fixer.php',
+    __DIR__ . '/rector.php',
+    __DIR__ . '/public/index.php',
+];
+
 $finder = Finder::create()
-    ->in([
-        __DIR__ . '/config',
-        __DIR__ . '/src',
-        __DIR__ . '/tests',
-    ])->append([
-        __FILE__,
-        __DIR__ . '/public/index.php',
-        __DIR__ . '/.twig-cs-fixer.php',
-        __DIR__ . '/rector.php',
-    ]);
+    ->in($paths)
+    ->append($files);
 
 $config = new Config();
 

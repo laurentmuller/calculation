@@ -35,8 +35,8 @@ class UserParametersController extends AbstractController
     public function invoke(Request $request): Response
     {
         $templateParameters = [
-            'title' => 'user.parameters.title',
             'title_icon' => 'user-gear',
+            'title' => 'user.parameters.title',
             'title_description' => 'user.parameters.description',
         ];
 

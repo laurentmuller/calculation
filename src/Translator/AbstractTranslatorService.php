@@ -116,7 +116,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     {
         $value = $this->getPropertyAccessor()->getValue($values, $path);
         if (null === $value && $error) {
-            return $this->setLastError(self::ERROR_NOT_FOUND, "Unable to find the value at '$path'.");
+            return $this->setLastError(self::ERROR_NOT_FOUND, \sprintf("Unable to find the value at '%s'.", $path));
         }
 
         return $value;

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests;
 
 use App\Interfaces\EntityInterface;
-use App\Tests\Fixture\Database;
+use App\Tests\Fixture\FixtureDatabase;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 
@@ -26,18 +26,18 @@ trait DatabaseTrait
     /**
      * The database.
      */
-    protected static ?Database $database = null;
+    protected static ?FixtureDatabase $database = null;
 
     public static function setUpBeforeClass(): void
     {
-        self::$database = Database::createDatabase();
+        self::$database = FixtureDatabase::createDatabase();
     }
 
     public static function tearDownAfterClass(): void
     {
-        if (self::$database instanceof Database) {
+        if (self::$database instanceof FixtureDatabase) {
             self::$database->close();
-            self::$database = Database::deleteDatabase();
+            self::$database = FixtureDatabase::deleteDatabase();
         }
     }
 

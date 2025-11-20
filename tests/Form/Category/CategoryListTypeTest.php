@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Form\Category;
 
 use App\Form\Category\CategoryListType;
-use App\Tests\Fixture\DataForm;
+use App\Tests\Fixture\FixtureDataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -30,7 +30,7 @@ final class CategoryListTypeTest extends TypeTestCase
     public function testFormView(): void
     {
         $category = $this->getCategory();
-        $formData = DataForm::instance($category);
+        $formData = FixtureDataForm::instance($category);
 
         $view = $this->factory->createBuilder(FormType::class, $formData)
             ->add('value', CategoryListType::class)
@@ -50,11 +50,11 @@ final class CategoryListTypeTest extends TypeTestCase
         $formData = [
             'value' => $category->getId(),
         ];
-        $model = DataForm::instance($category);
+        $model = FixtureDataForm::instance($category);
         $form = $this->factory->createBuilder(FormType::class, $model)
             ->add('value', CategoryListType::class)
             ->getForm();
-        $expected = DataForm::instance($category);
+        $expected = FixtureDataForm::instance($category);
         $form->submit($formData);
         self::assertTrue($form->isSynchronized());
         self::assertEqualsCanonicalizing($expected, $model);

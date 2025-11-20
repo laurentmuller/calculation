@@ -87,7 +87,7 @@ class CommandDataService
                 continue;
             }
 
-            throw new \LogicException("Unable to find the argument '$key'.");
+            throw new \LogicException(\sprintf("Unable to find the argument '%s'.", $key));
         }
 
         return $parameters;
@@ -130,7 +130,7 @@ class CommandDataService
         $key = $this->trimArgumentPrefix($key);
         $arguments = $command['arguments'];
         if (!\array_key_exists($key, $arguments)) {
-            throw new \LogicException("Unable to find the argument '$key'.");
+            throw new \LogicException(\sprintf("Unable to find the argument '%s'.", $key));
         }
 
         return $arguments[$key]['name'];
@@ -170,7 +170,7 @@ class CommandDataService
         $key = $this->trimOptionPrefix($key);
         $options = $command['options'];
         if (!\array_key_exists($key, $options)) {
-            throw new \LogicException("Unable to find the option '$key'.");
+            throw new \LogicException(\sprintf("Unable to find the option '%s'.", $key));
         }
 
         return $options[$key]['name'];

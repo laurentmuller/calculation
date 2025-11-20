@@ -160,8 +160,7 @@ class CalculationGroupService implements ConstantsInterface
         $overall_group = $groups[self::ROW_OVERALL_TOTAL];
         $overall_total = $overall_group['total'];
         $overall_margin = $overall_group['margin_percent'];
-        $overall_below = !$this->isFloatZero($overall_total) && $this->parameters->getDefault()
-            ->isMarginBelow($overall_margin);
+        $overall_below = $this->parameters->isMarginBelow($overall_margin);
 
         if ($query->adjust && $overall_below) {
             $groups = $this->adjustUserMargin($groups);
@@ -422,6 +421,6 @@ class CalculationGroupService implements ConstantsInterface
      */
     private function getMinMargin(): float
     {
-        return $this->parameters->getDefault()->getMinMargin();
+        return $this->parameters->getMinMargin();
     }
 }

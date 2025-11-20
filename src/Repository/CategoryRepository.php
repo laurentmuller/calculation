@@ -88,7 +88,7 @@ class CategoryRepository extends AbstractRepository
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return parent::createDefaultQueryBuilder($alias)
-            ->innerJoin("$alias.group", self::GROUP_ALIAS)
+            ->innerJoin($alias . '.group', self::GROUP_ALIAS)
             ->addSelect(self::GROUP_ALIAS);
     }
 
@@ -137,13 +137,13 @@ class CategoryRepository extends AbstractRepository
         $groupField = $this->getSortField('group.code', $alias);
         $codeField = $this->getSortField('code', $alias);
         $builder = $this->createQueryBuilder($alias)
-            ->innerJoin("$alias.group", self::GROUP_ALIAS)
+            ->innerJoin($alias . '.group', self::GROUP_ALIAS)
             ->orderBy($groupField, self::SORT_ASC)
             ->addOrderBy($codeField, self::SORT_ASC);
 
         return match ($filterType) {
-            self::FILTER_PRODUCTS => $builder->innerJoin("$alias.products", 'p'),
-            self::FILTER_TASKS => $builder->innerJoin("$alias.tasks", 't'),
+            self::FILTER_PRODUCTS => $builder->innerJoin($alias . '.products', 'p'),
+            self::FILTER_TASKS => $builder->innerJoin($alias . '.tasks', 't'),
             default => $builder
         };
     }
@@ -178,16 +178,16 @@ class CategoryRepository extends AbstractRepository
     public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->createQueryBuilder($alias)
-            ->select("$alias.id")
-            ->addSelect("$alias.code")
-            ->addSelect("$alias.description")
+            ->select($alias . '.id')
+            ->addSelect($alias . '.code')
+            ->addSelect($alias . '.description')
             ->addSelect(self::GROUP_ALIAS . '.code as groupCode')
             ->addSelect($this->getCountDistinct(self::PRODUCT_ALIAS, 'products'))
             ->addSelect($this->getCountDistinct(self::TASK_ALIAS, 'tasks'))
-            ->innerJoin("$alias.group", self::GROUP_ALIAS)
-            ->leftJoin("$alias.products", self::PRODUCT_ALIAS)
-            ->leftJoin("$alias.tasks", self::TASK_ALIAS)
-            ->groupBy("$alias.id");
+            ->innerJoin($alias . '.group', self::GROUP_ALIAS)
+            ->leftJoin($alias . '.products', self::PRODUCT_ALIAS)
+            ->leftJoin($alias . '.tasks', self::TASK_ALIAS)
+            ->groupBy($alias . '.id');
     }
 
     private function getDropDownQuery(): QueryBuilder
@@ -198,8 +198,8 @@ class CategoryRepository extends AbstractRepository
         return $this->createQueryBuilder('c')
             ->select('c.id')
             ->addSelect('c.code')
-            ->addSelect("$group AS group")
-            ->addSelect("$groupId AS groupId")
+            ->addSelect($group . ' AS group')
+            ->addSelect($groupId . ' AS groupId')
             ->innerJoin('c.group', self::GROUP_ALIAS)
             ->groupBy('c.id')
             ->orderBy($group, self::SORT_ASC)

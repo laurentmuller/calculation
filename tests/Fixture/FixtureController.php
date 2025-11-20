@@ -25,7 +25,7 @@ use Psr\Container\ContainerInterface;
 /**
  * Controller for tests with public methods.
  */
-class TestController extends AbstractController
+class FixtureController extends AbstractController
 {
     public function __construct(ContainerInterface $container)
     {

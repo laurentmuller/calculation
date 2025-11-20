@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Parameter;
 
+use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\GlobalProperty;
@@ -42,8 +43,8 @@ final class ApplicationParametersTest extends TestCase
         $property = GlobalProperty::instance('last_import')
             ->setValue($date);
         $parameters = $this->createApplicationParameters([$property]);
-        $parameters->getDate()
-            ->setArchive($date);
+        $parameters->getDates()
+            ->setArchiveCalculations($date);
         $actual = $parameters->save();
         self::assertTrue($actual);
     }
@@ -159,11 +160,27 @@ final class ApplicationParametersTest extends TestCase
         self::assertNotEmpty($actual);
     }
 
+    public function testGetMinMargin(): void
+    {
+        $parameters = $this->createApplicationParameters();
+        $actual = $parameters->getMinMargin();
+        self::assertSame(1.1, $actual);
+    }
+
     public function testIsDebug(): void
     {
         $parameters = $this->createApplicationParameters();
         $actual = $parameters->isDebug();
         self::assertFalse($actual);
+    }
+
+    public function testIsMarginBelow(): void
+    {
+        $parameters = $this->createApplicationParameters();
+        self::assertFalse($parameters->isMarginBelow(0.0));
+        self::assertFalse($parameters->isMarginBelow(2.0));
+        self::assertTrue($parameters->isMarginBelow(0.1));
+        self::assertFalse($parameters->isMarginBelow(new Calculation()));
     }
 
     public function testRights(): void
@@ -179,8 +196,8 @@ final class ApplicationParametersTest extends TestCase
         $parameters = $this->createApplicationParameters();
         $parameters->getCustomer()
             ->setAddress('fake');
-        $parameters->getDate()
-            ->setArchive();
+        $parameters->getDates()
+            ->setArchiveCalculations();
         $parameters->getDefault()
             ->setMinMargin(1.0);
         $parameters->getDisplay()

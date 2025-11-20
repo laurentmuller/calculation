@@ -139,8 +139,8 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return match ($field) {
-            'enabled' => "IFELSE($alias.$field = 1, 0, 1)", // reverse
-            'role' => "SUBSTRING(IFNULL($alias.$field, 'ROLE_USER'), 5)",
+            'enabled' => \sprintf('IFELSE(%s.%s = 1, 0, 1)', $alias, $field), // reverse
+            'role' => \sprintf("SUBSTRING(IFNULL(%s.%s, 'ROLE_USER'), 5)", $alias, $field),
             default => parent::getSortField($field, $alias),
         };
     }
@@ -166,15 +166,15 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->createQueryBuilder($alias)
-            ->select("$alias.id")
-            ->addSelect("$alias.imageName")
-            ->addSelect("$alias.username")
-            ->addSelect("$alias.email")
-            ->addSelect("$alias.role")
-            ->addSelect("$alias.enabled")
-            ->addSelect("$alias.lastLogin")
-            ->addSelect("$alias.hashedToken")
-            ->addSelect("UPPER(SUBSTRING($alias.username, 1, 2)) as initials");
+            ->select($alias . '.id')
+            ->addSelect($alias . '.imageName')
+            ->addSelect($alias . '.username')
+            ->addSelect($alias . '.email')
+            ->addSelect($alias . '.role')
+            ->addSelect($alias . '.enabled')
+            ->addSelect($alias . '.lastLogin')
+            ->addSelect($alias . '.hashedToken')
+            ->addSelect(\sprintf('UPPER(SUBSTRING(%s.username, 1, 2)) as initials', $alias));
     }
 
     /**

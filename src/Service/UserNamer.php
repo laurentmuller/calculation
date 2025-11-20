@@ -38,7 +38,7 @@ class UserNamer implements NamerInterface
                 $ext = $ext->value;
             }
 
-            return "$name.$ext";
+            return \sprintf('%s.%s', $name, $ext);
         }
 
         return $name;

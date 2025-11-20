@@ -71,8 +71,10 @@ class PdfImageCell extends AbstractPdfImageCell
         }
         parent::__construct($text, $cols, $style, $alignment, $link);
         $size = $this->getImageSize($path);
-        $this->width = $this->originalWidth = $size[0];
-        $this->height = $this->originalHeight = $size[1];
+        $this->width = $size[0];
+        $this->originalWidth = $size[0];
+        $this->height = $size[1];
+        $this->originalHeight = $size[1];
     }
 
     #[\Override]

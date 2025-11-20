@@ -57,7 +57,7 @@ final class DateUtilsTest extends TestCase
         yield [$date, $day];
 
         foreach (\range(1, 31) as $index) {
-            yield [new DatePoint("2022-01-$index"), $index];
+            yield [new DatePoint('2022-01-' . $index), $index];
         }
     }
 
@@ -112,7 +112,7 @@ final class DateUtilsTest extends TestCase
         yield [$date, $month];
 
         foreach (\range(1, 12) as $index) {
-            yield [new DatePoint("2015-$index-01"), $index];
+            yield [new DatePoint(\sprintf('2015-%s-01', $index)), $index];
         }
     }
 
@@ -211,7 +211,7 @@ final class DateUtilsTest extends TestCase
         yield [$date, $year];
 
         foreach (\range(2000, 2012) as $index) {
-            yield [new DatePoint("$index-01-01"), $index];
+            yield [new DatePoint($index . '-01-01'), $index];
         }
     }
 

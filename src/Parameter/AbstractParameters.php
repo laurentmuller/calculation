@@ -98,9 +98,21 @@ abstract class AbstractParameters
     /**
      * Save parameters.
      *
-     * @return bool true if one of the parameters has changed
+     * @return bool true if one or more parameters have changed
      */
-    abstract public function save(): bool;
+    public function save(): bool
+    {
+        $saved = false;
+        $defaultParameters = $this->getDefaultParameters();
+        $parameters = \array_filter($this->getParameters());
+        foreach ($parameters as $key => $parameter) {
+            if ($this->saveParameter($parameter, $defaultParameters[$key] ?? null)) {
+                $saved = true;
+            }
+        }
+
+        return $saved;
+    }
 
     /**
      * @return TProperty
@@ -111,26 +123,51 @@ abstract class AbstractParameters
      * @template T of ParameterInterface
      *
      * @param class-string<T> $class
-     * @param T|null          $default
+     * @param T|null          $defaultParameter
      *
      * @return T
      */
-    protected function getCachedParameter(string $class, ?ParameterInterface $default = null): ParameterInterface
+    protected function getCachedParameter(string $class, ?ParameterInterface $defaultParameter = null): ParameterInterface
     {
         return $this->cache->get(
             $class::getCacheKey(),
-            fn (): ParameterInterface => $this->createParameter($class, $default)
+            fn (): ParameterInterface => $this->createParameter($class, $defaultParameter)
         );
     }
 
     /**
-     * @phpstan-param TParameter ...$parameters
+     * Gets the default parameters used to save parameters.
+     *
+     * @return array<string, ParameterInterface>
+     */
+    protected function getDefaultParameters(): array
+    {
+        return [];
+    }
+
+    /**
+     * Gets the parameters to save.
+     *
+     * @return array<string, ?ParameterInterface>
+     */
+    protected function getParameters(): array
+    {
+        return [
+            DisplayParameter::class => $this->display,
+            HomePageParameter::class => $this->homePage,
+            MessageParameter::class => $this->message,
+            OptionsParameter::class => $this->options,
+        ];
+    }
+
+    /**
+     * @phpstan-param TParameter[] $parameters
      *
      * @return array<string, array<string, mixed>>
      *
      * @phpstan-return array<string, array<string, TValue>>
      */
-    protected function getParametersDefaultValues(ParameterInterface|string ...$parameters): array
+    protected function getParametersDefaultValues(array $parameters): array
     {
         $values = [];
         $accessor = $this->getAccessor();
@@ -157,25 +194,6 @@ abstract class AbstractParameters
      * @return TProperty[]
      */
     abstract protected function loadProperties(): array;
-
-    /**
-     * @param array<string, ?ParameterInterface> $parameters
-     * @param array<string, ?ParameterInterface> $defaults
-     */
-    protected function saveParameters(array $parameters, array $defaults = []): bool
-    {
-        $saved = false;
-        foreach ($parameters as $key => $parameter) {
-            if (!$parameter instanceof ParameterInterface) {
-                continue;
-            }
-            if ($this->saveParameter($parameter, $defaults[$key] ?? null)) {
-                $saved = true;
-            }
-        }
-
-        return $saved;
-    }
 
     /**
      * @phpstan-param TParameter $parameter
@@ -208,11 +226,11 @@ abstract class AbstractParameters
      * @template T of ParameterInterface
      *
      * @param class-string<T> $class
-     * @param T|null          $default
+     * @param T|null          $defaultParameter
      *
      * @return T
      */
-    private function createParameter(string $class, ?ParameterInterface $default = null): ParameterInterface
+    private function createParameter(string $class, ?ParameterInterface $defaultParameter = null): ParameterInterface
     {
         $parameter = new $class();
         $accessor = $this->getAccessor();
@@ -224,7 +242,7 @@ abstract class AbstractParameters
             if ($property instanceof AbstractProperty) {
                 $value = $this->getPropertyValue($metaData, $property);
             } else {
-                $value = $this->getDefaultPropertyValue($metaData, $default, $accessor);
+                $value = $this->getDefaultPropertyValue($metaData, $defaultParameter, $accessor);
             }
             if (null !== $value) {
                 $accessor->setValue($parameter, $metaData->property, $value);
@@ -241,12 +259,7 @@ abstract class AbstractParameters
      */
     private function findProperty(array $properties, string $name): ?AbstractProperty
     {
-        $filtered = \array_filter(
-            $properties,
-            static fn (AbstractProperty $property): bool => $name === $property->getName()
-        );
-
-        return [] !== $filtered ? \reset($filtered) : null;
+        return \array_find($properties, static fn (AbstractProperty $property): bool => $name === $property->getName());
     }
 
     private function getAccessor(): PropertyAccessor
@@ -283,11 +296,11 @@ abstract class AbstractParameters
      */
     private function getDefaultPropertyValue(
         MetaData $metaData,
-        ParameterInterface|string|null $parameter,
+        ParameterInterface|string|null $defaultParameter,
         PropertyAccessor $accessor
     ): mixed {
-        if ($parameter instanceof ParameterInterface) {
-            return $this->getParameterPropertyValue($metaData, $parameter, $accessor);
+        if ($defaultParameter instanceof ParameterInterface) {
+            return $this->getParameterPropertyValue($metaData, $defaultParameter, $accessor);
         }
 
         return $metaData->default;
@@ -310,14 +323,14 @@ abstract class AbstractParameters
      */
     private function getParameterPropertyValue(
         MetaData $metaData,
-        ParameterInterface $parameter,
+        ParameterInterface $defaultParameter,
         PropertyAccessor $accessor
     ): mixed {
-        return $accessor->getValue($parameter, $metaData->property);
+        return $accessor->getValue($defaultParameter, $metaData->property);
     }
 
     /**
-     * @param TParameter $parameter
+     * @phpstan-param TParameter $parameter
      *
      * @return \ReflectionProperty[]
      *
@@ -325,8 +338,9 @@ abstract class AbstractParameters
      */
     private function getProperties(ParameterInterface|string $parameter): array
     {
-        return (new \ReflectionClass($parameter))
-            ->getProperties(\ReflectionProperty::IS_PRIVATE | \ReflectionProperty::IS_PROTECTED);
+        return (new \ReflectionClass($parameter))->getProperties(
+            \ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED | \ReflectionProperty::IS_PRIVATE
+        );
     }
 
     /**
@@ -347,7 +361,7 @@ abstract class AbstractParameters
         };
     }
 
-    private function saveParameter(ParameterInterface $parameter, ?ParameterInterface $default = null): bool
+    private function saveParameter(ParameterInterface $parameter, ?ParameterInterface $defaultParameter = null): bool
     {
         $changed = false;
         $accessor = $this->getAccessor();
@@ -358,7 +372,7 @@ abstract class AbstractParameters
         foreach ($metaDatas as $metaData) {
             $property = $this->findProperty($properties, $metaData->name);
             $value = $this->getParameterPropertyValue($metaData, $parameter, $accessor);
-            $defaultValue = $this->getDefaultPropertyValue($metaData, $default, $accessor);
+            $defaultValue = $this->getDefaultPropertyValue($metaData, $defaultParameter, $accessor);
             if (null === $value || $value === $defaultValue) {
                 if ($property instanceof AbstractProperty) {
                     $repository->remove($property, false);

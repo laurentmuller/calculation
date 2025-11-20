@@ -15,7 +15,7 @@ namespace App\Tests\Form\Type;
 
 use App\Entity\User;
 use App\Form\Type\PlainType;
-use App\Tests\Fixture\DataForm;
+use App\Tests\Fixture\FixtureDataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
 use Symfony\Component\Clock\DatePoint;
@@ -31,7 +31,7 @@ final class PlainTypeTest extends TypeTestCase
     public function testExceptException(): void
     {
         self::expectException(TransformationFailedException::class);
-        $data = new DataForm();
+        $data = new FixtureDataForm();
         $this->factory->create(PlainType::class, $data)
             ->createView();
     }
@@ -144,7 +144,7 @@ final class PlainTypeTest extends TypeTestCase
     public function testWithNumberInteger(): void
     {
         $data = 123456;
-        $expected = '123\'456';
+        $expected = "123'456";
         $options = ['number_pattern' => PlainType::NUMBER_INTEGER];
         $this->validateViewValue($data, $expected, $options);
     }

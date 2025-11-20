@@ -125,7 +125,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     {
         parent::__clone();
         $this->date = DateUtils::createDatePoint();
-        $this->createdAt = $this->updatedAt = DateUtils::createDatePoint();
+        $this->createdAt = DateUtils::createDatePoint();
+        $this->updatedAt = $this->createdAt;
         $this->groups = $this->groups->map(
             fn (CalculationGroup $group): CalculationGroup => (clone $group)->setCalculation($this)
         );

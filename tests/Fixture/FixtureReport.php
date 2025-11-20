@@ -19,7 +19,7 @@ use App\Report\AbstractReport;
 /**
  * Report for test purpose.
  */
-class TestReport extends AbstractReport
+class FixtureReport extends AbstractReport
 {
     public function __construct(AbstractController $controller, private readonly bool $render = true)
     {

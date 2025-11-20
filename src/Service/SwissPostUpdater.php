@@ -195,7 +195,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             return null;
         }
 
-        return $this->parameters->getDate()->getImport();
+        return $this->parameters->getDates()->getLastImport();
     }
 
     /**
@@ -371,7 +371,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
 
     private function setError(SwissPostUpdateResult $result, string $id, array $parameters = []): false
     {
-        $result->setError($this->trans("swisspost.error.$id", $parameters));
+        $result->setError($this->trans('swisspost.error.' . $id, $parameters));
 
         return false;
     }
@@ -397,7 +397,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     private function updateValidity(SwissPostUpdateResult $result): SwissPostUpdateResult
     {
         if ($result->isValid() && $result->getValidity() instanceof DatePoint) {
-            $this->parameters->getDate()->setImport($result->getValidity());
+            $this->parameters->getDates()->setLastImport($result->getValidity());
             $this->parameters->save();
         }
 

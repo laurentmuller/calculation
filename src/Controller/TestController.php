@@ -432,9 +432,9 @@ class TestController extends AbstractController
             $type = $row[SearchService::COLUMN_TYPE];
             $field = $row[SearchService::COLUMN_FIELD];
             $lowerType = \strtolower($type);
-            $row[SearchService::COLUMN_ENTITY_NAME] = $this->trans("$lowerType.name");
-            $row[SearchService::COLUMN_FIELD_NAME] = $this->trans("$lowerType.fields.$field");
-            $row[SearchService::COLUMN_CONTENT] = $service->formatContent("$type.$field", $row[SearchService::COLUMN_CONTENT]);
+            $row[SearchService::COLUMN_ENTITY_NAME] = $this->trans($lowerType . '.name');
+            $row[SearchService::COLUMN_FIELD_NAME] = $this->trans(\sprintf('%s.fields.%s', $lowerType, $field));
+            $row[SearchService::COLUMN_CONTENT] = $service->formatContent(\sprintf('%s.%s', $type, $field), $row[SearchService::COLUMN_CONTENT]);
         }
         $data = [
             'query' => $query,
@@ -597,7 +597,7 @@ class TestController extends AbstractController
 
             return [
                 'code' => $code,
-                'name' => "$name - $symbol",
+                'name' => \sprintf('%s - %s', $name, $symbol),
             ];
         }, Currencies::getCurrencyCodes());
 

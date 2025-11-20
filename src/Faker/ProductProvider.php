@@ -113,7 +113,7 @@ class ProductProvider extends EntityProvider
         $product = (string) static::randomElement(self::PRODUCT);
         $material = (string) static::randomElement(self::MATERIAL);
 
-        return "$adjective $product en $material";
+        return \sprintf('%s %s en %s', $adjective, $product, $material);
     }
 
     /**

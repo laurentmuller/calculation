@@ -37,9 +37,9 @@ final class TestControllerTest extends ControllerTestCase
     public static function getRoutes(): \Generator
     {
         foreach (self::ROUTES as $route) {
-            yield ["/test/$route", self::ROLE_USER, Response::HTTP_FORBIDDEN];
-            yield ["/test/$route", self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
-            yield ["/test/$route", self::ROLE_SUPER_ADMIN];
+            yield ['/test/' . $route, self::ROLE_USER, Response::HTTP_FORBIDDEN];
+            yield ['/test/' . $route, self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
+            yield ['/test/' . $route, self::ROLE_SUPER_ADMIN];
         }
     }
 }

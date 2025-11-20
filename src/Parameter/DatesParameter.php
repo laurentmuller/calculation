@@ -16,31 +16,31 @@ namespace App\Parameter;
 use App\Attribute\Parameter;
 use Symfony\Component\Clock\DatePoint;
 
-class DateParameter implements ParameterInterface
+class DatesParameter implements ParameterInterface
 {
     #[Parameter('archive_calculation')]
-    private ?DatePoint $archive = null;
+    private ?DatePoint $archiveCalculations = null;
     #[Parameter('last_import')]
-    private ?DatePoint $import = null;
+    private ?DatePoint $lastImport = null;
     #[Parameter('update_calculation')]
     private ?DatePoint $updateCalculations = null;
     #[Parameter('update_product')]
     private ?DatePoint $updateProducts = null;
 
-    public function getArchive(): ?DatePoint
+    public function getArchiveCalculations(): ?DatePoint
     {
-        return $this->archive;
+        return $this->archiveCalculations;
     }
 
     #[\Override]
     public static function getCacheKey(): string
     {
-        return 'parameter_date';
+        return 'parameter_dates';
     }
 
-    public function getImport(): ?DatePoint
+    public function getLastImport(): ?DatePoint
     {
-        return $this->import;
+        return $this->lastImport;
     }
 
     public function getUpdateCalculations(): ?DatePoint
@@ -53,16 +53,16 @@ class DateParameter implements ParameterInterface
         return $this->updateProducts;
     }
 
-    public function setArchive(?DatePoint $archive = new DatePoint()): self
+    public function setArchiveCalculations(?DatePoint $archiveCalculations = new DatePoint()): self
     {
-        $this->archive = $archive;
+        $this->archiveCalculations = $archiveCalculations;
 
         return $this;
     }
 
-    public function setImport(?DatePoint $import = new DatePoint()): self
+    public function setLastImport(?DatePoint $lastImport = new DatePoint()): self
     {
-        $this->import = $import;
+        $this->lastImport = $lastImport;
 
         return $this;
     }

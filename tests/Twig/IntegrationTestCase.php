@@ -158,7 +158,7 @@ abstract class IntegrationTestCase extends TestCase
             if ($expected !== $output) {
                 \printf("Compiled templates that failed on case %d:\n", $index + 1);
                 foreach (\array_keys($templates) as $name) {
-                    echo "Template: $name\n";
+                    echo \sprintf('Template: %s%s', $name, \PHP_EOL);
                     echo $this->compile($twig, $name);
                 }
             }

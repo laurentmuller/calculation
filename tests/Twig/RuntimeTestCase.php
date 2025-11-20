@@ -17,6 +17,8 @@ use Twig\Extension\AttributeExtension;
 use Twig\RuntimeLoader\RuntimeLoaderInterface;
 
 /**
+ * Extends the integration test case with a service.
+ *
  * @template TService of object
  */
 abstract class RuntimeTestCase extends IntegrationTestCase implements RuntimeLoaderInterface

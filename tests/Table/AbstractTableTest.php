@@ -15,7 +15,7 @@ namespace App\Tests\Table;
 
 use App\Interfaces\TableInterface;
 use App\Table\DataQuery;
-use App\Tests\Fixture\FakeTable;
+use App\Tests\Fixture\FixtureTable;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
@@ -24,7 +24,7 @@ final class AbstractTableTest extends TestCase
 {
     public function testAllowedPageListAll(): void
     {
-        $table = new FakeTable();
+        $table = new FixtureTable();
         $expected = TableInterface::PAGE_LIST;
         $actual = $table->getAllowedPageList(\PHP_INT_MAX);
         self::assertSame($expected, $actual);
@@ -36,7 +36,7 @@ final class AbstractTableTest extends TestCase
 
     public function testFormats(): void
     {
-        $table = new FakeTable();
+        $table = new FixtureTable();
         $expected = FormatUtils::formatAmount(1.0);
         $actual = $table->formatAmount(1.0);
         self::assertSame($expected, $actual);
@@ -61,7 +61,7 @@ final class AbstractTableTest extends TestCase
 
     public function testUpdateDataQueryWithColumNull(): void
     {
-        $table = new FakeTable();
+        $table = new FixtureTable();
         $query = new DataQuery();
         $table->updateDataQuery($query);
         self::expectNotToPerformAssertions();

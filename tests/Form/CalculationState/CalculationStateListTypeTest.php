@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Form\CalculationState;
 
 use App\Form\CalculationState\CalculationStateListType;
-use App\Tests\Fixture\DataForm;
+use App\Tests\Fixture\FixtureDataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -32,7 +32,7 @@ final class CalculationStateListTypeTest extends TypeTestCase
     public function testFormView(): void
     {
         $state = $this->getNotEditableState();
-        $formData = DataForm::instance($state);
+        $formData = FixtureDataForm::instance($state);
 
         $view = $this->factory->createBuilder(FormType::class, $formData)
             ->add('value', CalculationStateListType::class)
@@ -52,11 +52,11 @@ final class CalculationStateListTypeTest extends TypeTestCase
         $formData = [
             'value' => $state->getId(),
         ];
-        $model = DataForm::instance($state);
+        $model = FixtureDataForm::instance($state);
         $form = $this->factory->createBuilder(FormType::class, $model)
             ->add('value', CalculationStateListType::class)
             ->getForm();
-        $expected = DataForm::instance($state);
+        $expected = FixtureDataForm::instance($state);
         $form->submit($formData);
         self::assertTrue($form->isSynchronized());
         self::assertEqualsCanonicalizing($expected, $model);

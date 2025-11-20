@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
-use App\Enums\TableView;
-use App\Pdf\Html\HtmlTag;
-use fpdf\Enums\PdfFontName;
+use App\Tests\Fixture\FixtureEnumExtra;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -23,81 +21,79 @@ final class EnumExtrasTraitTest extends TestCase
 {
     public static function getExtraBool(): \Generator
     {
-        yield [HtmlTag::H1, 'font-bold', true];
-        yield [HtmlTag::H1, 'fake-key', true, true];
+        yield [FixtureEnumExtra::DEFAULT, 'bool'];
+        yield [FixtureEnumExtra::DEFAULT, 'bool_on'];
+        yield [FixtureEnumExtra::DEFAULT, 'bool_yes'];
+        yield [FixtureEnumExtra::DEFAULT, 'bool_true'];
+        yield [FixtureEnumExtra::DEFAULT, 'int'];
+        yield [FixtureEnumExtra::DEFAULT, 'float'];
+        yield [FixtureEnumExtra::DEFAULT, 'enum', false];
+        yield [FixtureEnumExtra::DEFAULT, 'string', false];
+        yield [FixtureEnumExtra::DEFAULT, 'fake-key', false];
     }
 
     public static function getExtraEnum(): \Generator
     {
-        yield [HtmlTag::KEYBOARD, 'font-name', PdfFontName::COURIER];
-        yield [HtmlTag::H1, 'fake-key', PdfFontName::COURIER, true];
+        yield [FixtureEnumExtra::DEFAULT, 'enum', FixtureEnumExtra::DEFAULT];
+        yield [FixtureEnumExtra::DEFAULT, 'fake-key', FixtureEnumExtra::DEFAULT];
     }
 
     public static function getExtraFloat(): \Generator
     {
-        yield [HtmlTag::H1, 'font-size', 2.5];
-        yield [HtmlTag::H1, 'fake-key', 2.5, true];
+        yield [FixtureEnumExtra::DEFAULT, 'float'];
+        yield [FixtureEnumExtra::DEFAULT, 'float_numeric'];
+        yield [FixtureEnumExtra::DEFAULT, 'int'];
+        yield [FixtureEnumExtra::DEFAULT, 'int_numeric'];
+        yield [FixtureEnumExtra::DEFAULT, 'fake-key', 0.0];
     }
 
     public static function getExtraInt(): \Generator
     {
-        yield [TableView::TABLE, 'page-size', 20];
-        yield [TableView::TABLE, 'fake-key', 20, true];
+        yield [FixtureEnumExtra::DEFAULT, 'int'];
+        yield [FixtureEnumExtra::DEFAULT, 'int_numeric'];
+        yield [FixtureEnumExtra::DEFAULT, 'float'];
+        yield [FixtureEnumExtra::DEFAULT, 'float_numeric'];
+        yield [FixtureEnumExtra::DEFAULT, 'fake-key', 0];
     }
 
     public static function getExtraString(): \Generator
     {
-        yield [HtmlTag::CODE, 'text-color', '#FF0000'];
-        yield [HtmlTag::KEYBOARD, 'fake-key', 'courier', true];
+        yield [FixtureEnumExtra::DEFAULT, 'string', 'string'];
+        yield [FixtureEnumExtra::DEFAULT, 'fake-key', ''];
     }
 
     #[DataProvider('getExtraBool')]
-    public function testExtraBool(HtmlTag $tag, string $key, bool $expected, bool $exception = false): void
+    public function testExtraBool(FixtureEnumExtra $fixture, string $key, bool $expected = true): void
     {
-        if ($exception) {
-            $this->expectException(\InvalidArgumentException::class);
-        }
-        $actual = $tag->getExtraBool($key, throwOnMissingExtra: true);
+        $actual = $fixture->getExtraBool($key);
         self::assertSame($expected, $actual);
     }
 
     #[DataProvider('getExtraEnum')]
-    public function testExtraEnum(HtmlTag $tag, string $key, PdfFontName $expected, bool $exception = false): void
+    public function testExtraEnum(FixtureEnumExtra $fixture, string $key, FixtureEnumExtra $expected): void
     {
-        if ($exception) {
-            $this->expectException(\InvalidArgumentException::class);
-        }
-        $actual = $tag->getExtraEnum($key, $expected, true);
+        $actual = $fixture->getExtraEnum($key, $expected);
         self::assertSame($expected, $actual);
     }
 
     #[DataProvider('getExtraFloat')]
-    public function testExtraFloat(HtmlTag $tag, string $key, float $expected, bool $exception = false): void
+    public function testExtraFloat(FixtureEnumExtra $fixture, string $key, float $expected = 1.0): void
     {
-        if ($exception) {
-            $this->expectException(\InvalidArgumentException::class);
-        }
-        $actual = $tag->getExtraFloat($key, throwOnMissingExtra: true);
+        $actual = $fixture->getExtraFloat($key);
         self::assertSame($expected, $actual);
     }
 
     #[DataProvider('getExtraInt')]
-    public function testExtraInt(TableView $view, string $key, int $expected, bool $exception = false): void
+    public function testExtraInt(FixtureEnumExtra $fixture, string $key, int $expected = 1): void
     {
-        if ($exception) {
-            $this->expectException(\InvalidArgumentException::class);
-        }
-        $actual = $view->getExtraInt($key, throwOnMissingExtra: true);
+        $actual = $fixture->getExtraInt($key);
         self::assertSame($expected, $actual);
     }
 
     #[DataProvider('getExtraString')]
-    public function testExtraString(HtmlTag $tag, string $key, string $expected, bool $exception = false): void
+    public function testExtraString(FixtureEnumExtra $fixture, string $key, string $expected): void
     {
-        if ($exception) {
-            $this->expectException(\InvalidArgumentException::class);
-        }
-        $actual = $tag->getExtraString($key, throwOnMissingExtra: true);
+        $actual = $fixture->getExtraString($key);
         self::assertSame($expected, $actual);
     }
 }

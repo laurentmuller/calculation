@@ -88,10 +88,10 @@ class HtmlWordParser
                 $value = $color->value;
 
                 return $carry + [
-                    "text-$name" => "color:$value;",
-                    "border-$name" => "border-color:$value;",
-                    "bg-$name" => "background-color:$value;",
-                    "text-bg-$name" => "background-color:$value;",
+                    'text-' . $name => \sprintf('color:%s;', $value),
+                    'border-' . $name => \sprintf('border-color:%s;', $value),
+                    'bg-' . $name => \sprintf('background-color:%s;', $value),
+                    'text-bg-' . $name => \sprintf('background-color:%s;', $value),
                 ];
             },
             []
@@ -135,36 +135,36 @@ class HtmlWordParser
         $borderNone = '0 #000000 none;';
         $borderSolid = '1px #808080 solid;';
         $border = match ($class) {
-            'border' => ["border:$borderSolid"],
-            'border-top' => ["border-top:$borderSolid"],
-            'border-bottom' => ["border-bottom:$borderSolid"],
-            'border-start' => ["border-left:$borderSolid"],
-            'border-end' => ["border-right:$borderSolid"],
+            'border' => ['border:' . $borderSolid],
+            'border-top' => ['border-top:' . $borderSolid],
+            'border-bottom' => ['border-bottom:' . $borderSolid],
+            'border-start' => ['border-left:' . $borderSolid],
+            'border-end' => ['border-right:' . $borderSolid],
 
-            'border-0' => ["border:$borderNone"],
+            'border-0' => ['border:' . $borderNone],
             'border-top-0' => [
-                "border-top:$borderNone",
-                "border-bottom:$borderSolid",
-                "border-start:$borderSolid",
-                "border-end:$borderSolid",
+                'border-top:' . $borderNone,
+                'border-bottom:' . $borderSolid,
+                'border-start:' . $borderSolid,
+                'border-end:' . $borderSolid,
             ],
             'border-start-0' => [
-                "border-top:$borderSolid",
-                "border-bottom:$borderSolid",
-                "border-left:$borderNone",
-                "border-right:$borderSolid",
+                'border-top:' . $borderSolid,
+                'border-bottom:' . $borderSolid,
+                'border-left:' . $borderNone,
+                'border-right:' . $borderSolid,
             ],
             'border-end-0' => [
-                "border-top:$borderSolid",
-                "border-bottom:$borderSolid",
-                "border-left:$borderSolid",
-                "border-right:$borderNone",
+                'border-top:' . $borderSolid,
+                'border-bottom:' . $borderSolid,
+                'border-left:' . $borderSolid,
+                'border-right:' . $borderNone,
             ],
             'border-bottom-0' => [
-                "border-top:$borderSolid",
-                "border-bottom:$borderNone",
-                "border-left:$borderSolid",
-                "border-right:$borderSolid",
+                'border-top:' . $borderSolid,
+                'border-bottom:' . $borderNone,
+                'border-left:' . $borderSolid,
+                'border-right:' . $borderSolid,
             ],
             default => []
         };

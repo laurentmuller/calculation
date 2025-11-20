@@ -27,7 +27,7 @@ final class DatabaseReportTest extends TestCase
     ];
 
     public const DATABASE = [
-        'Name' => 'Database',
+        'Name' => 'FixtureDatabase',
         'Version' => '5.7.32',
     ];
 

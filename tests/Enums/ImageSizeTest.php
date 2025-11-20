@@ -33,9 +33,7 @@ final class ImageSizeTest extends TestCase
 
     public function testDefault(): void
     {
-        $expected = ImageSize::DEFAULT;
-        $actual = ImageSize::getDefault();
-        self::assertSame($expected, $actual);
+        self::assertSame(ImageSize::DEFAULT, ImageSize::getDefault());
     }
 
     #[DataProvider('getValues')]

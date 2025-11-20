@@ -89,14 +89,9 @@ class MonthChart extends AbstractHighchart
     #[\Override]
     protected function setTooltipOptions(): static
     {
-        parent::setTooltipOptions();
-        $this->tooltip->merge([
-            'formatter' => $this->createTemplateExpression(self::TEMPLATE_NAME),
-            'useHTML' => true,
-            'shared' => true,
-        ]);
+        $this->tooltip->merge(['formatter' => $this->createTemplateExpression(self::TEMPLATE_NAME)]);
 
-        return $this;
+        return parent::setTooltipOptions();
     }
 
     /**
@@ -221,9 +216,7 @@ class MonthChart extends AbstractHighchart
 
     private function setPlotOptions(): self
     {
-        $this->plotOptions->merge([
-            'series' => $this->getSeriesOptions(),
-        ]);
+        $this->plotOptions->merge(['series' => $this->getSeriesOptions()]);
 
         return $this;
     }
@@ -258,9 +251,7 @@ class MonthChart extends AbstractHighchart
         $this->xAxis->merge([
             'type' => 'datetime',
             'categories' => $categories,
-            'labels' => [
-                'format' => '{value:%b %Y}',
-            ],
+            'labels' => ['format' => '{value:%b %Y}'],
         ]);
 
         return $this;

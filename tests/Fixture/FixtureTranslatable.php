@@ -13,17 +13,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Fixture;
 
-use App\Pdf\Interfaces\PdfChartInterface;
-use App\Pdf\Traits\PdfChartLegendTrait;
-use App\Report\AbstractReport;
+use Symfony\Contracts\Translation\TranslatableInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class PdfChartLegendReport extends AbstractReport implements PdfChartInterface
+class FixtureTranslatable implements TranslatableInterface
 {
-    use PdfChartLegendTrait;
+    public string $id = 'id';
 
     #[\Override]
-    public function render(): bool
+    public function trans(TranslatorInterface $translator, ?string $locale = null): string
     {
-        return true;
+        return $this->id;
     }
 }

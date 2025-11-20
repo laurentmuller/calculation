@@ -13,19 +13,19 @@ declare(strict_types=1);
 
 namespace App\Tests\Parameter;
 
-use App\Parameter\DateParameter;
+use App\Parameter\DatesParameter;
 use Symfony\Component\Clock\DatePoint;
 
 /**
- * @extends ParameterTestCase<DateParameter>
+ * @extends ParameterTestCase<DatesParameter>
  */
-final class DateParameterTest extends ParameterTestCase
+final class DatesParameterTest extends ParameterTestCase
 {
     #[\Override]
     public static function getParameterNames(): \Generator
     {
-        yield ['archive', 'archive_calculation'];
-        yield ['import', 'last_import'];
+        yield ['archiveCalculations', 'archive_calculation'];
+        yield ['lastImport', 'last_import'];
         yield ['updateCalculations', 'update_calculation'];
         yield ['updateProducts', 'update_product'];
     }
@@ -33,29 +33,29 @@ final class DateParameterTest extends ParameterTestCase
     #[\Override]
     public static function getParameterValues(): \Generator
     {
-        yield ['archive', null];
-        yield ['import', null];
+        yield ['archiveCalculations', null];
+        yield ['lastImport', null];
         yield ['updateCalculations', null];
         yield ['updateProducts', null];
     }
 
     public function testDefaultValue(): void
     {
-        self::assertNull($this->parameter->getArchive());
-        self::assertNull($this->parameter->getImport());
+        self::assertNull($this->parameter->getArchiveCalculations());
+        self::assertNull($this->parameter->getLastImport());
         self::assertNull($this->parameter->getUpdateCalculations());
         self::assertNull($this->parameter->getUpdateProducts());
 
-        self::assertSame('parameter_date', $this->parameter::getCacheKey());
+        self::assertSame('parameter_dates', $this->parameter::getCacheKey());
     }
 
     public function testSetValue(): void
     {
         $date = new DatePoint();
-        $this->parameter->setArchive($date);
-        self::assertSame($date, $this->parameter->getArchive());
-        $this->parameter->setImport($date);
-        self::assertSame($date, $this->parameter->getImport());
+        $this->parameter->setArchiveCalculations($date);
+        self::assertSame($date, $this->parameter->getArchiveCalculations());
+        $this->parameter->setLastImport($date);
+        self::assertSame($date, $this->parameter->getLastImport());
         $this->parameter->setUpdateCalculations($date);
         self::assertSame($date, $this->parameter->getUpdateCalculations());
         $this->parameter->setUpdateProducts($date);
@@ -63,8 +63,8 @@ final class DateParameterTest extends ParameterTestCase
     }
 
     #[\Override]
-    protected function createParameter(): DateParameter
+    protected function createParameter(): DatesParameter
     {
-        return new DateParameter();
+        return new DatesParameter();
     }
 }

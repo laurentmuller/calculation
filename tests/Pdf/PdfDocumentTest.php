@@ -16,7 +16,7 @@ namespace App\Tests\Pdf;
 use App\Controller\AbstractController;
 use App\Model\CustomerInformation;
 use App\Pdf\PdfFont;
-use App\Tests\Fixture\TestReport;
+use App\Tests\Fixture\FixtureReport;
 use App\Tests\TranslatorMockTrait;
 use fpdf\Enums\PdfDestination;
 use fpdf\Enums\PdfPageSize;
@@ -113,12 +113,12 @@ final class PdfDocumentTest extends TestCase
         self::assertSame(1, $doc->getPage());
     }
 
-    private function createReport(): TestReport
+    private function createReport(): FixtureReport
     {
         $controller = $this->createMock(AbstractController::class);
         $controller->method('getTranslator')
             ->willReturn($this->translator);
 
-        return new TestReport($controller);
+        return new FixtureReport($controller);
     }
 }

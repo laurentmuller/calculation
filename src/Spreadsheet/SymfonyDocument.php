@@ -104,7 +104,7 @@ class SymfonyDocument extends AbstractDocument
     {
         $sheet->setRowValues($row, [$group]);
         $sheet->mergeContent(1, 2, $row);
-        $sheet->getStyle("A$row")->getFont()->setBold(true);
+        $sheet->getStyle('A' . $row)->getFont()->setBold(true);
 
         return $this;
     }

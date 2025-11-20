@@ -71,7 +71,8 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
         $results = parent::handleQuery($query);
         if (\strlen($search) > 1) {
             $items = $this->service->search($search, $entity, SearchService::NO_LIMIT);
-            $results->totalNotFiltered = $results->filtered = \count($items);
+            $results->totalNotFiltered = \count($items);
+            $results->filtered = $results->totalNotFiltered;
             if (0 !== $results->totalNotFiltered) {
                 $this->processItems($items);
                 $this->sortItems($items, $query->sort, $query->order);
@@ -107,7 +108,7 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
         return match ($field) {
             'createdBy' => 'calculation.fields.createdBy',
             'updatedBy' => 'calculation.fields.updatedBy',
-            default => "$lowerType.fields.$field",
+            default => \sprintf('%s.fields.%s', $lowerType, $field),
         };
     }
 
@@ -146,9 +147,9 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
             $lowerType = \strtolower($type);
 
             $item[SearchService::COLUMN_ACTION] = $item['id'];
-            $item[SearchService::COLUMN_ENTITY_NAME] = $this->trans("$lowerType.name");
+            $item[SearchService::COLUMN_ENTITY_NAME] = $this->trans($lowerType . '.name');
             $item[SearchService::COLUMN_FIELD_NAME] = $this->trans($this->getFieldNameId($field, $lowerType));
-            $item[SearchService::COLUMN_CONTENT] = $this->service->formatContent("$type.$field", $item[SearchService::COLUMN_CONTENT]);
+            $item[SearchService::COLUMN_CONTENT] = $this->service->formatContent(\sprintf('%s.%s', $type, $field), $item[SearchService::COLUMN_CONTENT]);
 
             $item[SearchService::COLUMN_GRANTED_SHOW] = $this->isGrantedShow($type);
             $item[SearchService::COLUMN_GRANTED_EDIT] = $this->isGrantedEdit($type);

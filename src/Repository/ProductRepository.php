@@ -97,8 +97,8 @@ class ProductRepository extends AbstractCategoryItemRepository
     public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->createTableQueryBuilder($alias)
-            ->addSelect("$alias.description")
-            ->addSelect("$alias.price");
+            ->addSelect($alias . '.description')
+            ->addSelect($alias . '.price');
     }
 
     /**
@@ -130,7 +130,7 @@ class ProductRepository extends AbstractCategoryItemRepository
             $expr->like('g.code', $param),
         );
         $builder->where($or)
-            ->setParameter($param, "%$value%", Types::STRING);
+            ->setParameter($param, \sprintf('%%%s%%', $value), Types::STRING);
 
         return $builder->getQuery()->getArrayResult();
     }

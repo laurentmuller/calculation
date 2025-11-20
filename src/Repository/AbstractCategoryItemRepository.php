@@ -70,7 +70,7 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return parent::createDefaultQueryBuilder($alias)
-            ->innerJoin("$alias.category", self::CATEGORY_ALIAS)
+            ->innerJoin($alias . '.category', self::CATEGORY_ALIAS)
             ->innerJoin(self::CATEGORY_ALIAS . '.group', self::GROUP_ALIAS)
             ->addSelect(self::CATEGORY_ALIAS)
             ->addSelect(self::GROUP_ALIAS);
@@ -112,12 +112,12 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
     protected function createTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->createQueryBuilder($alias)
-            ->select("$alias.id")
-            ->addSelect("$alias.unit")
-            ->addSelect("$alias.supplier")
+            ->select($alias . '.id')
+            ->addSelect($alias . '.unit')
+            ->addSelect($alias . '.supplier')
             ->addSelect(self::CATEGORY_ALIAS . '.code as categoryCode')
             ->addSelect(self::GROUP_ALIAS . '.code as groupCode')
-            ->innerJoin("$alias.category", self::CATEGORY_ALIAS)
+            ->innerJoin($alias . '.category', self::CATEGORY_ALIAS)
             ->innerJoin(self::CATEGORY_ALIAS . '.group', self::GROUP_ALIAS);
     }
 }

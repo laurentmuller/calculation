@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
-use App\Tests\Fixture\Translatable;
+use App\Tests\Fixture\FixtureTranslatable;
 use App\Tests\TranslatorMockTrait;
 use App\Traits\TranslatorTrait;
 use PHPUnit\Framework\TestCase;
@@ -88,7 +88,7 @@ final class TranslatorTraitTest extends TestCase
         $actual = $this->trans('id');
         self::assertSame('id', $actual);
 
-        $translatable = new Translatable();
+        $translatable = new FixtureTranslatable();
         $actual = $this->trans($translatable);
         self::assertSame('id', $actual);
     }

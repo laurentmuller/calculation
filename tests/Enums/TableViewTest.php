@@ -22,11 +22,6 @@ final class TableViewTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    public static function getDefault(): \Generator
-    {
-        yield [TableView::getDefault(), TableView::TABLE];
-    }
-
     public static function getValues(): \Generator
     {
         yield [TableView::TABLE, 'table'];
@@ -40,10 +35,9 @@ final class TableViewTest extends TestCase
         self::assertCount($expected, TableView::sorted());
     }
 
-    #[DataProvider('getDefault')]
-    public function testDefault(TableView $value, TableView $expected): void
+    public function testDefault(): void
     {
-        self::assertSame($expected, $value);
+        self::assertSame(TableView::TABLE, TableView::getDefault());
     }
 
     public function testLabel(): void

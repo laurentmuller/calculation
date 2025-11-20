@@ -13,16 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Fixture;
 
-use Symfony\Contracts\Translation\TranslatableInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
-
-class Translatable implements TranslatableInterface
+class FixtureStringable implements \Stringable
 {
-    public string $id = 'id';
-
     #[\Override]
-    public function trans(TranslatorInterface $translator, ?string $locale = null): string
+    public function __toString(): string
     {
-        return $this->id;
+        return '';
     }
 }

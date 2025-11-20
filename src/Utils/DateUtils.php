@@ -289,7 +289,7 @@ final class DateUtils
         $result = [];
         $formatter = self::getFormatter($pattern);
         for ($i = 0; $i <= 6; ++$i) {
-            $time = (int) \strtotime("last $firstDay + $i day");
+            $time = (int) \strtotime(\sprintf('last %s + %d day', $firstDay, $i));
             $result[$i + 1] = \ucfirst((string) $formatter->format($time));
         }
 

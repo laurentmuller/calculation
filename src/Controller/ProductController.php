@@ -146,8 +146,9 @@ class ProductController extends AbstractEntityController
     protected function deleteFromDatabase(EntityInterface $item): void
     {
         $application = $this->getApplicationParameters();
-        if ($application->getProduct()->getProductId() === $item->getId()) {
-            $application->getProduct()->setProductId(null);
+        $productParameter = $application->getProduct();
+        if ($productParameter->getProductId() === $item->getId()) {
+            $productParameter->setProductId(null);
             $application->save();
         }
         parent::deleteFromDatabase($item);

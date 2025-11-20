@@ -13,11 +13,17 @@ declare(strict_types=1);
 
 namespace App\Tests\Fixture;
 
-class EmptyStringable implements \Stringable
+use App\Pdf\Interfaces\PdfChartInterface;
+use App\Pdf\Traits\PdfChartLegendTrait;
+use App\Report\AbstractReport;
+
+class FixturePdfChartLegendReport extends AbstractReport implements PdfChartInterface
 {
+    use PdfChartLegendTrait;
+
     #[\Override]
-    public function __toString(): string
+    public function render(): bool
     {
-        return '';
+        return true;
     }
 }

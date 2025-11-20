@@ -55,7 +55,10 @@ readonly class HtmlSpacing
 
         $match = $matches[0];
         $size = (int) $match[3];
-        $top = $bottom = $left = $right = false;
+        $top = false;
+        $bottom = false;
+        $left = false;
+        $right = false;
         switch ($match[1]) {
             case 't':
                 $top = true;
@@ -70,13 +73,18 @@ readonly class HtmlSpacing
                 $right = true;
                 break;
             case 'x':
-                $left = $right = true;
+                $left = true;
+                $right = true;
                 break;
             case 'y':
-                $top = $bottom = true;
+                $top = true;
+                $bottom = true;
                 break;
             default: // all
-                $left = $right = $top = $bottom = true;
+                $left = true;
+                $right = true;
+                $top = true;
+                $bottom = true;
                 break;
         }
 

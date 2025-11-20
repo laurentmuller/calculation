@@ -365,6 +365,7 @@ class WorksheetDocument extends Worksheet
         $format = NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1;
         if ($zeroInRed) {
             return $this->setFormat($columnIndex, "[Red][<=0]$format;$format");
+            //return $this->setFormat($columnIndex, \sprintf('[Red][<=0]%1$s;%1$s', $format));
         }
 
         return $this->setFormat($columnIndex, $format);

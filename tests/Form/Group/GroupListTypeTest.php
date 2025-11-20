@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Form\Group;
 
 use App\Form\Group\GroupListType;
-use App\Tests\Fixture\DataForm;
+use App\Tests\Fixture\FixtureDataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -30,7 +30,7 @@ final class GroupListTypeTest extends TypeTestCase
     public function testFormView(): void
     {
         $group = $this->getGroup();
-        $formData = DataForm::instance($group);
+        $formData = FixtureDataForm::instance($group);
 
         $view = $this->factory->createBuilder(FormType::class, $formData)
             ->add('value', GroupListType::class)
@@ -50,11 +50,11 @@ final class GroupListTypeTest extends TypeTestCase
         $formData = [
             'value' => $group->getId(),
         ];
-        $model = DataForm::instance($group);
+        $model = FixtureDataForm::instance($group);
         $form = $this->factory->createBuilder(FormType::class, $model)
             ->add('value', GroupListType::class)
             ->getForm();
-        $expected = DataForm::instance($group);
+        $expected = FixtureDataForm::instance($group);
         $form->submit($formData);
         self::assertTrue($form->isSynchronized());
         self::assertEqualsCanonicalizing($expected, $model);

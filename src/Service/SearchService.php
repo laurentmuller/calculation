@@ -240,7 +240,7 @@ class SearchService implements ServiceSubscriberInterface
         }
         $fields = ['date', 'createdAt', 'updatedAt'];
         foreach ($fields as $field) {
-            $content = "date_format(e.$field, '%d.%m.%Y')";
+            $content = \sprintf("date_format(e.%s, '%%d.%%m.%%Y')", $field);
             $key = $this->getKey($class, $field);
             $builder = $this->createQueryBuilder($class, $field, $content);
             $this->addQuery($queries, $key, $builder);
@@ -350,13 +350,13 @@ class SearchService implements ServiceSubscriberInterface
     {
         $alias = 'e';
         $name = StringUtils::getShortName($class);
-        $content ??= "$alias.$field";
+        $content ??= \sprintf('%s.%s', $alias, $field);
         $where = \sprintf('%s LIKE :%s', $content, self::SEARCH_PARAM);
 
         return $this->manager->createQueryBuilder()
-            ->select("$alias.id")
-            ->addSelect("'$name'")
-            ->addSelect("'$field'")
+            ->select($alias . '.id')
+            ->addSelect(\sprintf("'%s'", $name))
+            ->addSelect(\sprintf("'%s'", $field))
             ->addSelect($content)
             ->from($class, $alias)
             ->where($where);
@@ -387,7 +387,7 @@ class SearchService implements ServiceSubscriberInterface
 
         $sql = \implode(' UNION ', $queries) . $extra;
         $query = $this->createNativeQuery($sql);
-        $query->setParameter(self::SEARCH_PARAM, "%$search%", Types::STRING);
+        $query->setParameter(self::SEARCH_PARAM, \sprintf('%%%s%%', $search), Types::STRING);
 
         /** @phpstan-var SearchType[] */
         return $query->getArrayResult();
@@ -497,7 +497,7 @@ class SearchService implements ServiceSubscriberInterface
         $values = [];
         $columns = \array_keys(self::COLUMNS);
         foreach ($columns as $index => $name) {
-            $values["/AS \\w+[$index]/i"] = "AS $name";
+            $values[\sprintf('/AS \w+[%s]/i', $index)] = 'AS ' . $name;
         }
         $param = ':' . self::SEARCH_PARAM;
         foreach ($queries as &$query) {

@@ -19,7 +19,7 @@ use fpdf\PdfDocument;
 /**
  * Image document for tests purposes.
  */
-class PdfImageDocument extends PdfDocument
+class FixturePdfImageDocument extends PdfDocument
 {
     use PdfMemoryImageTrait;
 }

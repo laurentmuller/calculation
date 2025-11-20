@@ -198,7 +198,7 @@ final class WorksheetDocumentTest extends TestCase
             ->getFormatCode();
         self::assertSame($format, $actual);
 
-        $expected = "[Red][<=0]$format;$format";
+        $expected = \sprintf('[Red][<=0]%1$s;%1$s', $format);
         $sheet->setFormatAmount(1, true);
         $actual = $sheet->getStyle('A')
             ->getNumberFormat()

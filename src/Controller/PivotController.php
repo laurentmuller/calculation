@@ -106,8 +106,8 @@ class PivotController extends AbstractController
      */
     private function createTable(): ?PivotTable
     {
-        $semesterFormatter = fn (int $semestre): string => $this->trans("pivot.semester.$semestre");
-        $quarterFormatter = fn (int $quarter): string => $this->trans("pivot.quarter.$quarter");
+        $semesterFormatter = fn (int $semestre): string => $this->trans('pivot.semester.' . $semestre);
+        $quarterFormatter = fn (int $quarter): string => $this->trans('pivot.quarter.' . $quarter);
         $data = PivotFieldFactory::float('item_overall', $this->trans('calculation.fields.overallTotal'));
         $rows = [
             PivotFieldFactory::default('calculation_state', $this->trans('calculationstate.name')),

@@ -118,6 +118,6 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
             return (int) $matches[1] * $factors[\strtolower($matches[2])];
         }
 
-        throw new InvalidOptionsException("\"$size\" is not a valid size.");
+        throw new InvalidOptionsException(\sprintf('"%s" is not a valid size.', $size));
     }
 }

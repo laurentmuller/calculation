@@ -16,7 +16,7 @@ namespace App\Tests\Report;
 use App\Controller\AbstractController;
 use App\Pdf\PdfColumn;
 use App\Report\Table\ReportTable;
-use App\Tests\Fixture\TestReport;
+use App\Tests\Fixture\FixtureReport;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -64,12 +64,12 @@ final class ReportTableTest extends TestCase
         self::assertInstanceOf(TranslatorInterface::class, $table->getTranslator());
     }
 
-    private function createReport(): TestReport
+    private function createReport(): FixtureReport
     {
         $controller = $this->createMock(AbstractController::class);
         $controller->method('getTranslator')
             ->willReturn($this->translator);
 
-        return new TestReport($controller);
+        return new FixtureReport($controller);
     }
 }

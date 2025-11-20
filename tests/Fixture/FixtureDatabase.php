@@ -20,9 +20,9 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
 
 /**
- * The database used for tests.
+ * The database for tests with public methods.
  */
-class Database extends AbstractDatabase
+class FixtureDatabase extends AbstractDatabase
 {
     /**
      * Creates the database.
@@ -39,9 +39,6 @@ class Database extends AbstractDatabase
         return new self($filename);
     }
 
-    /**
-     * Make public for tests.
-     */
     #[\Override]
     public function createIndex(string $table, string ...$columns): bool
     {
@@ -91,18 +88,12 @@ class Database extends AbstractDatabase
         return $fileName;
     }
 
-    /**
-     * Make public for tests.
-     */
     #[\Override]
     public function getStatement(string $query): ?\SQLite3Stmt
     {
         return parent::getStatement($query);
     }
 
-    /**
-     * Make public for tests.
-     */
     #[\Override]
     public function likeValue(string $value): string
     {
@@ -110,8 +101,6 @@ class Database extends AbstractDatabase
     }
 
     /**
-     * Make public for tests.
-     *
      * @return array<array<string, mixed>>
      */
     #[\Override]
@@ -123,14 +112,12 @@ class Database extends AbstractDatabase
     #[\Override]
     protected function createSchema(): void
     {
-        // load script
         $file = __DIR__ . '/../files/sql/db_test.sql';
         $sql = FileUtils::readFile($file);
         if ('' === $sql) {
             throw new \LogicException('Unable to find the schema.');
         }
 
-        // execute
         if (!$this->exec($sql)) {
             throw new \LogicException('Unable to create the schema.');
         }

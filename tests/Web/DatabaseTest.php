@@ -115,7 +115,7 @@ final class DatabaseTest extends KernelServiceTestCase
     {
         $database = self::$database;
         self::assertNotNull($database);
-        $query = "SELECT COUNT(id) FROM $tableName";
+        $query = 'SELECT COUNT(id) FROM ' . $tableName;
         $result = $database->querySingle($query);
         self::assertSame($expected, $result);
     }

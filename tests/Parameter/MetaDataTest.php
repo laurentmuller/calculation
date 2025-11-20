@@ -24,31 +24,31 @@ final class MetaDataTest extends TestCase
 {
     public function testDefault(): void
     {
-        $actual = new MetaData('name', 'property', 'array', null);
+        $actual = $this->createMetaData('array');
         $this->assertSameMetaData($actual);
     }
 
     public function testIsEntity(): void
     {
-        $actual = new MetaData('name', 'property', User::class, null);
+        $actual = $this->createMetaData(User::class);
         $this->assertSameMetaData($actual);
     }
 
     public function testIsEnumTypeInt(): void
     {
-        $actual = new MetaData('name', 'property', StrengthLevel::class, null);
+        $actual = $this->createMetaData(StrengthLevel::class);
         $this->assertSameMetaData($actual, true);
     }
 
     public function testIsEnumTypeString(): void
     {
-        $actual = new MetaData('name', 'property', MessagePosition::class, null);
+        $actual = $this->createMetaData(MessagePosition::class);
         $this->assertSameMetaData($actual, false, true);
     }
 
     public function testIsNotBackedEnum(): void
     {
-        $actual = new MetaData('name', 'property', PdfTextAlignment::class, null);
+        $actual = $this->createMetaData(PdfTextAlignment::class);
         $this->assertSameMetaData($actual);
     }
 
@@ -59,5 +59,10 @@ final class MetaDataTest extends TestCase
     ): void {
         self::assertSame($expectedEnumInt, $actual->isEnumTypeInt());
         self::assertSame($expectedEnumString, $actual->isEnumTypeString());
+    }
+
+    private function createMetaData(string $type): MetaData
+    {
+        return new MetaData('name', 'property', $type, null);
     }
 }

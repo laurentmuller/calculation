@@ -66,7 +66,7 @@ final class GeneratorControllerTest extends ControllerTestCase
         if (null === self::$products) {
             for ($i = 0; $i < 15; ++$i) {
                 $product = new Product();
-                $product->setDescription("Test Product $i")
+                $product->setDescription('Test Product ' . $i)
                     ->setCategory(self::$category);
                 $this->addEntity($product);
                 self::$products[] = $product;

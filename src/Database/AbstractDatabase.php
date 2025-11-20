@@ -171,7 +171,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      */
     public function getRecordsCount(string $table): int
     {
-        $query = "SELECT COUNT(1) FROM $table";
+        $query = 'SELECT COUNT(1) FROM ' . $table;
         $result = $this->querySingle($query);
 
         /** @phpstan-var int<0, max> */
@@ -199,10 +199,10 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     public function pragma(string $name, mixed $value = null): bool
     {
         if (null !== $value) {
-            return $this->exec("PRAGMA $name = $value");
+            return $this->exec(\sprintf('PRAGMA %s = %s', $name, $value));
         }
 
-        return $this->exec("PRAGMA $name");
+        return $this->exec('PRAGMA ' . $name);
     }
 
     /**
@@ -236,7 +236,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     {
         $name = \sprintf('idx_%s_%s', $table, \implode('_', $columns));
         $indexed_columns = \implode(',', $columns);
-        $query = "CREATE INDEX IF NOT EXISTS $name ON $table($indexed_columns)";
+        $query = \sprintf('CREATE INDEX IF NOT EXISTS %s ON %s(%s)', $name, $table, $indexed_columns);
 
         return $this->exec($query);
     }

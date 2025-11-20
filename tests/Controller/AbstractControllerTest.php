@@ -19,7 +19,7 @@ use App\Report\AbstractReport;
 use App\Service\UrlGeneratorService;
 use App\Spreadsheet\AbstractDocument;
 use App\Tests\DatabaseTrait;
-use App\Tests\Fixture\TestController;
+use App\Tests\Fixture\FixtureController;
 use App\Word\AbstractWordDocument;
 use Faker\Container\ContainerException;
 use Psr\Container\ContainerInterface;
@@ -59,7 +59,7 @@ final class AbstractControllerTest extends KernelTestCase
     {
         $controller = $this->createController();
         $parameters = $controller->getApplicationParameters();
-        $actual = $parameters->getDefault()->getMinMargin();
+        $actual = $parameters->getMinMargin();
         self::assertSame(1.1, $actual);
     }
 
@@ -327,9 +327,9 @@ final class AbstractControllerTest extends KernelTestCase
         self::assertInstanceOf($expected, $actual);
     }
 
-    private function createController(): TestController
+    private function createController(): FixtureController
     {
-        return new TestController(self::getContainer());
+        return new FixtureController(self::getContainer());
     }
 
     private function createMockController(): AbstractController

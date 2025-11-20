@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Parameter\ApplicationParameters;
-use App\Parameter\DateParameter;
+use App\Parameter\DatesParameter;
 use App\Service\SwissPostService;
 use App\Service\SwissPostUpdater;
 use App\Tests\TranslatorMockTrait;
@@ -152,10 +152,10 @@ final class SwissPostUpdaterTest extends TestCase
     public function testImportSuccess(): void
     {
         $date = new DatePoint('2024-01-17');
-        $dateParameter = $this->createMock(DateParameter::class);
-        $dateParameter->method('getImport')
+        $dateParameter = $this->createMock(DatesParameter::class);
+        $dateParameter->method('getLastImport')
             ->willReturn($date);
-        $this->parameters->method('getDate')
+        $this->parameters->method('getDates')
             ->willReturn($dateParameter);
 
         $sourceFile = __DIR__ . '/../files/zip/small_post_address.zip';
@@ -206,10 +206,10 @@ final class SwissPostUpdaterTest extends TestCase
     public function testImportValidityOlder(): void
     {
         $date = new DatePoint('2024-07-17');
-        $dateParameter = $this->createMock(DateParameter::class);
-        $dateParameter->method('getImport')
+        $dateParameter = $this->createMock(DatesParameter::class);
+        $dateParameter->method('getLastImport')
             ->willReturn($date);
-        $this->parameters->method('getDate')
+        $this->parameters->method('getDates')
             ->willReturn($dateParameter);
 
         $sourceFile = __DIR__ . '/../files/zip/small_post_address.zip';

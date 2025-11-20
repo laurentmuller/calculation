@@ -35,11 +35,6 @@ final class MessagePositionTest extends TestCase
         yield [MessagePosition::BOTTOM_RIGHT, 135];
     }
 
-    public static function getDefault(): \Generator
-    {
-        yield [MessagePosition::getDefault(), MessagePosition::BOTTOM_RIGHT];
-    }
-
     public static function getIcon(): \Generator
     {
         yield [MessagePosition::TOP_LEFT, 'fa-solid fa-arrow-up fa-rotate-by'];
@@ -93,10 +88,9 @@ final class MessagePositionTest extends TestCase
         self::assertCount($expected, MessagePosition::sorted());
     }
 
-    #[DataProvider('getDefault')]
-    public function testDefault(MessagePosition $value, MessagePosition $expected): void
+    public function testDefault(): void
     {
-        self::assertSame($expected, $value);
+        self::assertSame(MessagePosition::BOTTOM_RIGHT, MessagePosition::getDefault());
     }
 
     #[DataProvider('getIcon')]

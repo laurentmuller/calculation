@@ -60,8 +60,6 @@ readonly class MetaData
             return null;
         }
 
-        $class = new \ReflectionEnum($this->type);
-
-        return (string) $class->getBackingType();
+        return (string) (new \ReflectionEnum($this->type))->getBackingType();
     }
 }

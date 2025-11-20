@@ -144,7 +144,7 @@ class HelpReport extends AbstractReport
         $id = $entity['id'];
         $name = $field['name'];
 
-        return $this->trans("$id.fields.$name");
+        return $this->trans(\sprintf('%s.fields.%s', $id, $name));
     }
 
     /**
@@ -153,7 +153,7 @@ class HelpReport extends AbstractReport
     private function formatFieldType(array $field): string
     {
         $default = $field['type'] ?? 'text';
-        $type = $this->trans("help.types.$default");
+        $type = $this->trans('help.types.' . $default);
         if (isset($field['length'])) {
             return \sprintf('%s (%s)', $type, $field['length']);
         }
@@ -541,7 +541,7 @@ class HelpReport extends AbstractReport
         $margin = $this->getLeftMargin();
         $this->setLeftMargin($margin + 4.0);
         foreach ($constraints as $constraint) {
-            $this->multiCell(text: \strip_tags("- $constraint"), align: PdfTextAlignment::LEFT);
+            $this->multiCell(text: \strip_tags('- ' . $constraint), align: PdfTextAlignment::LEFT);
         }
         $this->setLeftMargin($margin);
     }

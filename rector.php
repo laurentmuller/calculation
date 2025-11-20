@@ -12,11 +12,14 @@
 declare(strict_types=1);
 
 use Rector\CodingStyle\Rector\ArrowFunction\StaticArrowFunctionRector;
+use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
+use Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector;
+use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\CodingStyle\Rector\Closure\StaticClosureRector;
+use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
-use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\SingleMockPropertyTypeRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
@@ -24,54 +27,74 @@ use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\TwigSetList;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector;
 
+$paths = [
+    __DIR__ . '/config',
+    __DIR__ . '/src',
+    __DIR__ . '/tests',
+    __DIR__ . '/public',
+];
+
+$skips = [
+    // allow self::functions for PHP unit
+    PreferPHPUnitThisCallRector::class,
+    SingleMockPropertyTypeRector::class,
+    TypedPropertyFromCreateMockAssignRector::class,
+    // not convert class-string to class
+    StringClassNameToClassConstantRector::class => [
+        __DIR__ . '/tests/Traits/CheckSubClassTraitTest.php',
+    ],
+    // not update method visibilities
+    MakeInheritedMethodVisibilitySameAsParentRector::class => [
+        __DIR__ . '/tests/Fixture/*.php',
+    ],
+    // coding style set
+    NewlineAfterStatementRector::class,
+    NewlineBeforeNewAssignSetRector::class,
+    CatchExceptionNameMatchingTypeRector::class,
+];
+
+$sets = [
+    // global
+    SetList::PHP_82,
+    SetList::CODE_QUALITY,
+    SetList::CODING_STYLE,
+    SetList::DEAD_CODE,
+    SetList::INSTANCEOF,
+    SetList::PRIVATIZATION,
+    SetList::TYPE_DECLARATION,
+    // Doctrine
+    DoctrineSetList::DOCTRINE_CODE_QUALITY,
+    DoctrineSetList::TYPED_COLLECTIONS,
+    // PHP-Unit
+    PHPUnitSetList::PHPUNIT_110,
+    PHPUnitSetList::PHPUNIT_CODE_QUALITY,
+    // twig
+    TwigSetList::TWIG_24,
+    TwigSetList::TWIG_UNDERSCORE_TO_NAMESPACE,
+];
+
+$rules = [
+    // static closure and arrow functions
+    StaticClosureRector::class,
+    StaticArrowFunctionRector::class,
+];
+
 return RectorConfig::configure()
     ->withCache(__DIR__ . '/var/cache/rector')
     ->withRootFiles()
-    ->withPaths([
-        __DIR__ . '/config',
-        __DIR__ . '/src',
-        __DIR__ . '/tests',
-        __DIR__ . '/public',
-    ])->withSkip([
-        PreferPHPUnitThisCallRector::class,
-        SingleMockPropertyTypeRector::class,
-        TypedPropertyFromCreateMockAssignRector::class,
-        StringClassNameToClassConstantRector::class => [
-            __DIR__ . '/tests/Traits/CheckSubClassTraitTest.php',
-        ],
-    ])->withComposerBased(
+    ->withPaths($paths)
+    ->withSkip($skips)
+    ->withSets($sets)
+    ->withRules($rules)
+    ->withComposerBased(
         twig: true,
         doctrine: true,
         phpunit: true,
         symfony: true,
     )->withPhpSets(
         php82: true
-    )->withSets([
-        // global
-        SetList::PHP_82,
-        SetList::CODE_QUALITY,
-        SetList::DEAD_CODE,
-        SetList::INSTANCEOF,
-        SetList::PRIVATIZATION,
-        SetList::STRICT_BOOLEANS,
-        SetList::TYPE_DECLARATION,
-        // Doctrine
-        DoctrineSetList::DOCTRINE_CODE_QUALITY,
-        DoctrineSetList::TYPED_COLLECTIONS,
-        // PHP-Unit
-        PHPUnitSetList::PHPUNIT_110,
-        PHPUnitSetList::PHPUNIT_CODE_QUALITY,
-        // twig
-        TwigSetList::TWIG_24,
-        TwigSetList::TWIG_UNDERSCORE_TO_NAMESPACE,
-    ])->withAttributesSets(
+    )->withAttributesSets(
         symfony: true,
         doctrine: true,
         phpunit: true,
-    )->withRules([
-        // static closure and arrow functions
-        StaticClosureRector::class,
-        StaticArrowFunctionRector::class,
-        // must be removed when using SetList::PHP_83
-        AddOverrideAttributeToOverriddenMethodsRector::class,
-    ]);
+    );

@@ -170,7 +170,7 @@ class CalculationDocument extends AbstractDocument
 
     private function fillBackground(WorksheetDocument $sheet, int $row): self
     {
-        $sheet->getStyle("A$row:E$row")
+        $sheet->getStyle(\sprintf('A%1$d:E%1$d', $row))
             ->getFill()
             ->setFillType(Fill::FILL_SOLID)
             ->getStartColor()
@@ -319,7 +319,7 @@ class CalculationDocument extends AbstractDocument
             alignment: Alignment::HORIZONTAL_RIGHT
         );
 
-        $sheet->getStyle("A$row:E$row")
+        $sheet->getStyle(\sprintf('A%1$d:E%1$d', $row))
             ->getFont()
             ->setSize(8);
     }
@@ -400,7 +400,7 @@ class CalculationDocument extends AbstractDocument
 
     private function setAllBorders(WorksheetDocument $sheet, int $row): self
     {
-        $borders = $sheet->getStyle("A$row:E$row")
+        $borders = $sheet->getStyle(\sprintf('A%1$d:E%1$d', $row))
             ->getBorders()
             ->getAllBorders();
 

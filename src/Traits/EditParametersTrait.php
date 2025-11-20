@@ -43,7 +43,7 @@ trait EditParametersTrait
         AbstractParameters $parameters,
         string $type,
         string $success,
-        array $templateParameters,
+        array $templateParameters
     ): Response {
         $options = ['default_values' => $parameters->getDefaultValues()];
         $form = $this->createForm($type, $parameters, $options);

@@ -21,7 +21,7 @@ use App\Table\DataResults;
 /**
  * @phpstan-ignore missingType.generics
  */
-class FakeEntityTable extends AbstractEntityTable
+class FixtureEntityTable extends AbstractEntityTable
 {
     #[\Override]
     public function getColumns(): array

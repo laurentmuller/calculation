@@ -54,9 +54,7 @@ final class ImportanceTest extends TestCase
 
     public function testDefault(): void
     {
-        $expected = Importance::LOW;
-        $actual = Importance::getDefault();
-        self::assertSame($expected, $actual);
+        self::assertSame(Importance::LOW, Importance::getDefault());
     }
 
     #[DataProvider('getLabels')]

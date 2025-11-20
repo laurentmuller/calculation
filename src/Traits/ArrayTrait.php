@@ -39,13 +39,7 @@ trait ArrayTrait
      */
     public function anyMatch(array $array, \Closure $callback): bool
     {
-        foreach ($array as $key => $value) {
-            if ($callback($value, $key)) {
-                return true;
-            }
-        }
-
-        return false;
+        return \array_any($array, $callback);
     }
 
     /**
@@ -66,13 +60,7 @@ trait ArrayTrait
      */
     public function findFirst(array $array, \Closure $callback): mixed
     {
-        foreach ($array as $key => $value) {
-            if ($callback($value, $key)) {
-                return $value;
-            }
-        }
-
-        return null;
+        return \array_find($array, $callback);
     }
 
     /**
@@ -260,10 +248,6 @@ trait ArrayTrait
     {
         return \array_reduce(
             $array,
-            /**
-             * @phpstan-param array<TKey, TResult> $carry
-             * @phpstan-param TValue $value
-             */
             static fn (array $carry, $value): array => $carry + $callable($value),
             []
         );

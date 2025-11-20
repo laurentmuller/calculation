@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Form\User;
 
 use App\Form\User\UserListType;
-use App\Tests\Fixture\DataForm;
+use App\Tests\Fixture\FixtureDataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -30,7 +30,7 @@ final class UserListTypeTest extends TypeTestCase
     public function testFormView(): void
     {
         $user = $this->getUser();
-        $formData = DataForm::instance($user);
+        $formData = FixtureDataForm::instance($user);
 
         $view = $this->factory->createBuilder(FormType::class, $formData)
             ->add('value', UserListType::class)
@@ -50,11 +50,11 @@ final class UserListTypeTest extends TypeTestCase
         $formData = [
             'value' => $user->getId(),
         ];
-        $model = DataForm::instance($user);
+        $model = FixtureDataForm::instance($user);
         $form = $this->factory->createBuilder(FormType::class, $model)
             ->add('value', UserListType::class)
             ->getForm();
-        $expected = DataForm::instance($user);
+        $expected = FixtureDataForm::instance($user);
         $form->submit($formData);
         self::assertTrue($form->isSynchronized());
         self::assertEqualsCanonicalizing($expected, $model);

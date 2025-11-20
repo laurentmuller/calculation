@@ -17,7 +17,7 @@ use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Enums\PdfPointStyle;
 use App\Pdf\Interfaces\PdfChartInterface;
-use App\Tests\Fixture\PdfChartLegendReport;
+use App\Tests\Fixture\FixturePdfChartLegendReport;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -123,10 +123,10 @@ final class PdfChartLegendTraitTest extends TestCase
         return [$legend1, $legend2];
     }
 
-    private function createReport(): PdfChartLegendReport
+    private function createReport(): FixturePdfChartLegendReport
     {
         $controller = $this->createMock(AbstractController::class);
-        $report = new PdfChartLegendReport($controller);
+        $report = new FixturePdfChartLegendReport($controller);
         $report->resetStyle()
             ->addPage();
 

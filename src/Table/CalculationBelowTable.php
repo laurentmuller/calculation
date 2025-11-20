@@ -79,6 +79,6 @@ class CalculationBelowTable extends CalculationTable implements \Countable
      */
     private function getMinMargin(): float
     {
-        return $this->parameters->getDefault()->getMinMargin();
+        return $this->parameters->getMinMargin();
     }
 }

@@ -22,11 +22,6 @@ final class StrengthLevelTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    public static function getDefault(): \Generator
-    {
-        yield [StrengthLevel::getDefault(), StrengthLevel::NONE];
-    }
-
     public static function getLabels(): \Generator
     {
         yield ['strength_level.medium', StrengthLevel::MEDIUM];
@@ -76,10 +71,9 @@ final class StrengthLevelTest extends TestCase
         self::assertCount($expected, StrengthLevel::sorted());
     }
 
-    #[DataProvider('getDefault')]
-    public function testDefault(StrengthLevel $value, StrengthLevel $expected): void
+    public function testDefault(): void
     {
-        self::assertSame($expected, $value);
+        self::assertSame(StrengthLevel::NONE, StrengthLevel::getDefault());
     }
 
     #[DataProvider('getLabels')]

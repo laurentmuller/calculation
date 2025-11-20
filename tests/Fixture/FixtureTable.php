@@ -17,7 +17,7 @@ use App\Table\AbstractTable;
 use App\Table\Column;
 use App\Table\DataQuery;
 
-class FakeTable extends AbstractTable
+class FixtureTable extends AbstractTable
 {
     #[\Override]
     public function getAllowedPageList(int $totalNotFiltered): array

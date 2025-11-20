@@ -54,7 +54,7 @@ final class FormatUtils
     /**
      * The thousand-separator character.
      */
-    public const THOUSANDS_SEP = '\'';
+    public const THOUSANDS_SEP = "'";
 
     /**
      * The default time type format.

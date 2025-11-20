@@ -16,7 +16,7 @@ namespace App\Tests\Constraint;
 use App\Constraint\AbstractConstraintValidator;
 use App\Constraint\Password;
 use App\Constraint\Strength;
-use App\Tests\Fixture\EmptyStringable;
+use App\Tests\Fixture\FixtureStringable;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
@@ -36,7 +36,7 @@ final class AbstractConstraintValidatorTest extends ConstraintValidatorTestCase
     public function testEmptyStringable(): void
     {
         $constraint = new Password();
-        $this->validator->validate(new EmptyStringable(), $constraint);
+        $this->validator->validate(new FixtureStringable(), $constraint);
         self::assertNoViolation();
     }
 

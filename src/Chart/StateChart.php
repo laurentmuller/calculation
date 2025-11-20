@@ -71,14 +71,9 @@ class StateChart extends AbstractHighchart
     #[\Override]
     protected function setTooltipOptions(): static
     {
-        parent::setTooltipOptions();
-        $this->tooltip->merge([
-            'formatter' => $this->createTemplateExpression(self::TEMPLATE_NAME),
-            'useHTML' => true,
-            'shared' => true,
-        ]);
+        $this->tooltip->merge(['formatter' => $this->createTemplateExpression(self::TEMPLATE_NAME)]);
 
-        return $this;
+        return parent::setTooltipOptions();
     }
 
     private function formatPercent(float $value): string
@@ -96,9 +91,7 @@ class StateChart extends AbstractHighchart
             'borderRadius' => ['radius' => 0],
             'borderColor' => $this->getBorderColor(),
             'point' => [
-                'events' => [
-                    'click' => $this->getClickExpression(),
-                ],
+                'events' => ['click' => $this->getClickExpression()],
             ],
         ];
     }
@@ -125,7 +118,9 @@ class StateChart extends AbstractHighchart
 
     private function getURL(int $id): string
     {
-        return $this->generator->generate('calculation_index', [CalculationTable::PARAM_STATE => $id]);
+        return $this->generator->generate('calculation_index', [
+            CalculationTable::PARAM_STATE => $id,
+        ]);
     }
 
     /**

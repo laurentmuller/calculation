@@ -84,7 +84,7 @@ final class StrengthLevelTranslatorTraitTest extends TestCase
     #[DataProvider('getTranslateLevels')]
     public function testTranslateLevel(int $value, string $message): void
     {
-        $expected = "strength_level.$message";
+        $expected = 'strength_level.' . $message;
         $this->translator = $this->createMockTranslator($expected);
         $level = StrengthLevel::tryFrom($value) ?? StrengthLevel::NONE;
         $actual = $this->translateLevel($level);

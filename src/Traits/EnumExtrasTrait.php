@@ -22,9 +22,12 @@ trait EnumExtrasTrait
 {
     use ExtrasTrait;
 
-    public function getExtraBool(string $key, bool $default = false, bool $throwOnMissingExtra = false): bool
+    public function getExtraBool(string $key, bool $default = false): bool
     {
-        $value = $this->getExtra($key, $throwOnMissingExtra);
+        $value = $this->getExtra($key);
+        if (null !== $value && !\is_bool($value)) {
+            $value = \filter_var($value, \FILTER_VALIDATE_BOOLEAN, \FILTER_NULL_ON_FAILURE);
+        }
 
         return \is_bool($value) ? $value : $default;
     }
@@ -32,35 +35,34 @@ trait EnumExtrasTrait
     /**
      * @template TEnum of \UnitEnum
      *
-     * @phpstan-param TEnum $default
+     * @param TEnum $default
      *
-     * @phpstan-return TEnum
+     * @return TEnum
      */
-    public function getExtraEnum(string $key, \UnitEnum $default, bool $throwOnMissingExtra = false): \UnitEnum
+    public function getExtraEnum(string $key, \UnitEnum $default): \UnitEnum
     {
-        $value = $this->getExtra($key, $throwOnMissingExtra);
+        $value = $this->getExtra($key);
 
         return $value instanceof $default ? $value : $default;
     }
 
-    public function getExtraFloat(string $key, float $default = 0.0, bool $throwOnMissingExtra = false): float
+    public function getExtraFloat(string $key, float $default = 0.0): float
     {
-        $value = $this->getExtra($key, $throwOnMissingExtra);
+        $value = $this->getExtra($key);
 
-        return \is_float($value) ? $value : $default;
+        return \is_numeric($value) ? (float) $value : $default;
     }
 
-    public function getExtraInt(string $key, int $default = 0, bool $throwOnMissingExtra = false): int
+    public function getExtraInt(string $key, int $default = 0): int
     {
-        /** @phpstan-var int|null $value */
-        $value = $this->getExtra($key, $throwOnMissingExtra);
+        $value = $this->getExtra($key);
 
-        return \is_int($value) ? $value : $default;
+        return \is_numeric($value) ? (int) $value : $default;
     }
 
-    public function getExtraString(string $key, string $default = '', bool $throwOnMissingExtra = false): string
+    public function getExtraString(string $key, string $default = ''): string
     {
-        $value = $this->getExtra($key, $throwOnMissingExtra);
+        $value = $this->getExtra($key);
 
         return \is_string($value) ? $value : $default;
     }

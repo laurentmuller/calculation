@@ -22,11 +22,6 @@ final class EntityActionTest extends TestCase
 {
     use TranslatorMockTrait;
 
-    public static function getDefault(): \Generator
-    {
-        yield [EntityAction::getDefault(), EntityAction::EDIT];
-    }
-
     public static function getLabel(): \Generator
     {
         yield ['entity_action.edit', EntityAction::EDIT];
@@ -48,10 +43,9 @@ final class EntityActionTest extends TestCase
         self::assertCount($expected, EntityAction::sorted());
     }
 
-    #[DataProvider('getDefault')]
-    public function testDefault(EntityAction $value, EntityAction $expected): void
+    public function testDefault(): void
     {
-        self::assertSame($expected, $value);
+        self::assertSame(EntityAction::EDIT, EntityAction::getDefault());
     }
 
     #[DataProvider('getLabel')]

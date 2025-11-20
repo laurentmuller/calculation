@@ -81,11 +81,11 @@ class CalculationRepository extends AbstractRepository
     {
         $param = 'minMargin';
         $alias ??= $builder->getRootAliases()[0];
-        $itemsField = "$alias.itemsTotal";
-        $overallField = "$alias.overallTotal";
+        $itemsField = $alias . '.itemsTotal';
+        $overallField = $alias . '.overallTotal';
 
-        return $builder->andWhere("$itemsField != 0")
-            ->andWhere("($overallField / $itemsField) < :$param")
+        return $builder->andWhere($itemsField . ' != 0')
+            ->andWhere(\sprintf('(%s / %s) < :%s', $overallField, $itemsField, $param))
             ->setParameter($param, $minMargin, Types::FLOAT);
     }
 
@@ -135,7 +135,7 @@ class CalculationRepository extends AbstractRepository
             ->groupBy('e.id', 'i.description')
             ->having('COUNT(i.id) > 1')
             ->getDQL();
-        $where = "r.id in($dql)";
+        $where = \sprintf('r.id in(%s)', $dql);
 
         /** @phpstan-var int<0, max> */
         return (int) $this->createQueryBuilder('r')
@@ -162,7 +162,7 @@ class CalculationRepository extends AbstractRepository
             ->where('i.price = 0')
             ->orWhere('i.quantity = 0')
             ->getDQL();
-        $where = "r.id in($dql)";
+        $where = \sprintf('r.id in(%s)', $dql);
 
         /** @phpstan-var int<0, max> */
         return (int) $this->createQueryBuilder('r')
@@ -193,7 +193,7 @@ class CalculationRepository extends AbstractRepository
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return parent::createDefaultQueryBuilder($alias)
-            ->innerJoin("$alias.state", self::STATE_ALIAS)
+            ->innerJoin($alias . '.state', self::STATE_ALIAS)
             ->addSelect(self::STATE_ALIAS);
     }
 
@@ -278,11 +278,11 @@ class CalculationRepository extends AbstractRepository
     {
         $year = 'year(e.date)';
         $month = 'month(e.date)';
-        $year_month = "$year * 1000 + $month";
+        $year_month = \sprintf('%s * 1000 + %s', $year, $month);
         $builder = $this->createQueryBuilder('e')
-            ->select("$year AS year")
-            ->addSelect("$month AS month")
-            ->addSelect("$year_month AS year_month")
+            ->select($year . ' AS year')
+            ->addSelect($month . ' AS month')
+            ->addSelect($year_month . ' AS year_month')
             ->distinct()
             ->orderBy($year)
             ->addOrderBy($month);
@@ -304,11 +304,11 @@ class CalculationRepository extends AbstractRepository
     {
         $year = 'year(e.date)';
         $week = 'week(e.date, 3)';
-        $year_week = "$year * 1000 + $week";
+        $year_week = \sprintf('%s * 1000 + %s', $year, $week);
         $builder = $this->createQueryBuilder('e')
-            ->select("$year AS year")
-            ->addSelect("$week AS week")
-            ->addSelect("$year_week AS year_week")
+            ->select($year . ' AS year')
+            ->addSelect($week . ' AS week')
+            ->addSelect($year_week . ' AS year_week')
             ->distinct()
             ->orderBy($year)
             ->addOrderBy($week);
@@ -610,7 +610,7 @@ class CalculationRepository extends AbstractRepository
     public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS): array|string
     {
         return match ($field) {
-            'date' => "DATE_FORMAT($alias.$field, '%d.%m.%Y')",
+            'date' => \sprintf("DATE_FORMAT(%s.%s, '%%d.%%m.%%Y')", $alias, $field),
             'overallMargin' => $this->getOverallMargin($alias),
             'state.id' => parent::getSearchFields('id', self::STATE_ALIAS),
             'stateCode',
@@ -655,18 +655,18 @@ class CalculationRepository extends AbstractRepository
     public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->createQueryBuilder($alias)
-            ->select("$alias.id")
-            ->addSelect("$alias.date")
-            ->addSelect("$alias.customer")
-            ->addSelect("$alias.description")
-            ->addSelect("$alias.overallTotal")
+            ->select($alias . '.id')
+            ->addSelect($alias . '.date')
+            ->addSelect($alias . '.customer')
+            ->addSelect($alias . '.description')
+            ->addSelect($alias . '.overallTotal')
             ->addSelect($this->getOverallMargin($alias, 100) . ' as overallMargin')
             ->addSelect(self::STATE_ALIAS . '.id as stateId')
             ->addSelect(self::STATE_ALIAS . '.code as stateCode')
             ->addSelect(self::STATE_ALIAS . '.color as stateColor')
             ->addSelect(self::STATE_ALIAS . '.editable as stateEditable')
-            ->innerJoin("$alias.state", self::STATE_ALIAS)
-            ->groupBy("$alias.id");
+            ->innerJoin($alias . '.state', self::STATE_ALIAS)
+            ->groupBy($alias . '.id');
     }
 
     /**
@@ -698,7 +698,7 @@ class CalculationRepository extends AbstractRepository
             'id',
             'date',
             'customer',
-            'description' => "e.$column",
+            'description' => 'e.' . $column,
             'stateCode' => 's.code',
             default => 'e.id',
         };
@@ -706,7 +706,11 @@ class CalculationRepository extends AbstractRepository
 
     private function getOverallMargin(string $alias, float $divide = 1.0): string
     {
-        return "IFELSE($alias.itemsTotal != 0, ROUND((100 * $alias.overallTotal / $alias.itemsTotal) - 0.5, 0) / $divide, 0)";
+        return \sprintf(
+            'IFELSE(%1$s.itemsTotal != 0, ROUND((100 * %1$s.overallTotal / %1$s.itemsTotal) - 0.5, 0) / %2$s, 0)',
+            $alias,
+            $divide
+        );
     }
 
     /**

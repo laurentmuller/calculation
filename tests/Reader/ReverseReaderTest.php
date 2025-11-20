@@ -32,7 +32,7 @@ final class ReverseReaderTest extends TestCase
         $index = 3;
         $reader = $this->getReader();
         foreach ($reader as $line) {
-            self::assertSame("Line $index", $line);
+            self::assertSame('Line ' . $index, $line);
             --$index;
         }
         $reader->close();

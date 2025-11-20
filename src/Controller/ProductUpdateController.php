@@ -46,7 +46,7 @@ class ProductUpdateController extends AbstractController
             $service->saveQuery($query);
             $result = $service->update($query);
             if (!$query->isSimulate() && $result->isValid()) {
-                $application->getDate()->setUpdateProducts();
+                $application->getDates()->setUpdateProducts();
                 $application->save();
             }
 
@@ -57,7 +57,7 @@ class ProductUpdateController extends AbstractController
         }
 
         return $this->render('admin/product_query.html.twig', [
-            'last_update' => $application->getDate()->getUpdateProducts(),
+            'last_update' => $application->getDates()->getUpdateProducts(),
             'form' => $form,
         ]);
     }

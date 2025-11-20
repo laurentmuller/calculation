@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Form\Product;
 
 use App\Form\Product\ProductListType;
-use App\Tests\Fixture\DataForm;
+use App\Tests\Fixture\FixtureDataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -30,7 +30,7 @@ final class ProductListTypeTest extends TypeTestCase
     public function testFormView(): void
     {
         $product = $this->getProduct();
-        $formData = DataForm::instance($product);
+        $formData = FixtureDataForm::instance($product);
 
         $view = $this->factory->createBuilder(FormType::class, $formData)
             ->add('value', ProductListType::class)
@@ -50,11 +50,11 @@ final class ProductListTypeTest extends TypeTestCase
         $formData = [
             'value' => $product->getId(),
         ];
-        $model = DataForm::instance($product);
+        $model = FixtureDataForm::instance($product);
         $form = $this->factory->createBuilder(FormType::class, $model)
             ->add('value', ProductListType::class)
             ->getForm();
-        $expected = DataForm::instance($product);
+        $expected = FixtureDataForm::instance($product);
         $form->submit($formData);
         self::assertTrue($form->isSynchronized());
         self::assertEqualsCanonicalizing($expected, $model);

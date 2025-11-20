@@ -345,7 +345,7 @@ class Customer extends AbstractEntity
     {
         $webSite = StringUtils::trim($webSite);
         if (StringUtils::isString($webSite) && !\str_starts_with($webSite, 'http')) {
-            $webSite = "https://$webSite";
+            $webSite = 'https://' . $webSite;
         }
         $this->webSite = $webSite;
 

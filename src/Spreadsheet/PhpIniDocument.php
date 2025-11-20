@@ -130,7 +130,7 @@ class PhpIniDocument extends AbstractDocument
     {
         $sheet->setRowValues($row, [$group]);
         $sheet->mergeContent(1, 3, $row);
-        $style = $sheet->getStyle("A$row");
+        $style = $sheet->getStyle('A' . $row);
         $style->getFill()->setFillType(Fill::FILL_SOLID)
             ->getStartColor()->setARGB('F5F5F5');
         $style->getFont()->setBold(true);

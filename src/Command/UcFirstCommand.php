@@ -104,9 +104,9 @@ class UcFirstCommand
         $entry = $this->getEntities()[$class];
         $name = $entry['name'];
         $choices = $entry['fields'];
-        $question = new ChoiceQuestion("Select a field name for the '$name' entity:", $choices, 0);
+        $question = new ChoiceQuestion(\sprintf("Select a field name for the '%s' entity:", $name), $choices, 0);
         $question->setMaxAttempts(1)
-            ->setErrorMessage("No field selected for the '$name' entity.");
+            ->setErrorMessage(\sprintf("No field selected for the '%s' entity.", $name));
 
         /** @phpstan-var ?string $field */
         $field = $io->askQuestion($question);
@@ -262,7 +262,7 @@ class UcFirstCommand
                 return $key;
             }
         }
-        $io->error("Unable to find the '$class' entity.");
+        $io->error(\sprintf("Unable to find the '%s' entity.", $class));
 
         return null;
     }
@@ -276,7 +276,7 @@ class UcFirstCommand
             $field = $this->askFieldName($io, $class);
         }
         if (!StringUtils::isString($field)) {
-            $io->error("No field selected for the entity '$class'.");
+            $io->error(\sprintf("No field selected for the entity '%s'.", $class));
 
             return null;
         }
@@ -286,7 +286,7 @@ class UcFirstCommand
                 return $value;
             }
         }
-        $io->error("Unable to find the field '$field' for the entity '$class'.");
+        $io->error(\sprintf("Unable to find the field '%s' for the entity '%s'.", $field, $class));
 
         return null;
     }

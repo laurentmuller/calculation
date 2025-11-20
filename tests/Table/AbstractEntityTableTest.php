@@ -15,7 +15,7 @@ namespace App\Tests\Table;
 
 use App\Repository\AbstractRepository;
 use App\Table\DataQuery;
-use App\Tests\Fixture\FakeEntityTable;
+use App\Tests\Fixture\FixtureEntityTable;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\TestCase;
@@ -40,7 +40,7 @@ final class AbstractEntityTableTest extends TestCase
         $repository->method('createDefaultQueryBuilder')
             ->willReturn($builder);
 
-        $table = new FakeEntityTable($repository);
+        $table = new FixtureEntityTable($repository);
         $table->handleQuery(new DataQuery());
         self::expectNotToPerformAssertions();
     }

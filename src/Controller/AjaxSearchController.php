@@ -144,21 +144,21 @@ class AjaxSearchController extends AbstractController
     {
         return <<<SQL
                 SELECT DISTINCT
-                    p.$field
+                    p.{$field}
                 FROM
                     sy_Product as p
                 WHERE
-                    p.$field LIKE '%$query%'
+                    p.{$field} LIKE '%{$query}%'
                 UNION
                 SELECT DISTINCT
-                    t.$field
+                    t.{$field}
                 FROM
                     sy_Task as t
                 WHERE
-                    t.$field LIKE '%$query%'
+                    t.{$field} LIKE '%{$query}%'
                 ORDER BY
-                    $field
-                LIMIT $limit
+                    {$field}
+                LIMIT {$limit}
             SQL;
     }
 

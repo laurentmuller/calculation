@@ -28,6 +28,6 @@ trait CalculationDocumentMarginTrait
         $minMargin = $this->controller->getMinMargin();
         $format = $this->getActiveSheet()->getPercentFormat();
 
-        return "[Black][=0]$format;[Red][<$minMargin]$format;$format";
+        return \sprintf('[Black][=0]%1$s;[Red][<%2$s]%1$s;%1$s', $format, $minMargin);
     }
 }

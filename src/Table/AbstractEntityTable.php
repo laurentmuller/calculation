@@ -84,7 +84,7 @@ abstract class AbstractEntityTable extends AbstractTable
         }
 
         $builder->andWhere($whereExpr)
-            ->setParameter(TableInterface::PARAM_SEARCH, "%$search%", Types::STRING);
+            ->setParameter(TableInterface::PARAM_SEARCH, \sprintf('%%%s%%', $search), Types::STRING);
 
         return true;
     }
@@ -135,8 +135,8 @@ abstract class AbstractEntityTable extends AbstractTable
         $builder = $this->createQueryBuilder();
         /** @phpstan-var string $alias */
         $alias = $builder->getRootAliases()[0];
-
-        $results->totalNotFiltered = $results->filtered = $this->count();
+        $results->totalNotFiltered = $this->count();
+        $results->filtered = $results->totalNotFiltered;
         if ($this->addSearch($query, $builder, $alias)) {
             $results->filtered = $this->countFiltered($builder, $alias);
         }
@@ -241,7 +241,7 @@ abstract class AbstractEntityTable extends AbstractTable
     {
         $field = $this->repository->getSingleIdentifierFieldName();
         $builder = $this->updateParts(clone $builder, $alias)
-            ->select("COUNT($alias.$field)");
+            ->select(\sprintf('COUNT(%s.%s)', $alias, $field));
 
         return (int) $builder->getQuery()->getSingleScalarResult();
     }

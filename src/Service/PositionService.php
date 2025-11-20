@@ -168,7 +168,7 @@ class PositionService
     private function formatValue(float $value, string $positiveSuffix, string $negativeSuffix): string
     {
         $suffix = $value >= 0 ? $positiveSuffix : $negativeSuffix;
-        $suffix = $this->trans("openweather.direction.$suffix");
+        $suffix = $this->trans('openweather.direction.' . $suffix);
         $value = \abs($value);
         $degrees = \floor($value);
         $value = ($value - $degrees) * 60.0;
@@ -184,7 +184,7 @@ class PositionService
     private function getReplace(): array
     {
         if ([] === $this->replace) {
-            $this->replace = \array_map(fn (string $s): string => $this->trans("openweather.direction.$s"), self::SEARCH);
+            $this->replace = \array_map(fn (string $s): string => $this->trans('openweather.direction.' . $s), self::SEARCH);
         }
 
         return $this->replace;

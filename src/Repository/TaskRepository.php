@@ -59,7 +59,7 @@ class TaskRepository extends AbstractCategoryItemRepository
         $builder = $this->createQueryBuilder($alias)
             ->orderBy($field, self::SORT_ASC);
         if (!$all) {
-            $builder->innerJoin("$alias.items", 'item')
+            $builder->innerJoin($alias . '.items', 'item')
                 ->innerJoin('item.margins', 'margin')
                 ->groupBy($field);
         }
@@ -91,9 +91,9 @@ class TaskRepository extends AbstractCategoryItemRepository
     public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->createTableQueryBuilder($alias)
-            ->addSelect("$alias.name")
+            ->addSelect($alias . '.name')
             ->addSelect($this->getCountDistinct(self::ITEM_ALIAS, 'items'))
-            ->leftJoin("$alias.items", self::ITEM_ALIAS)
-            ->groupBy("$alias.id");
+            ->leftJoin($alias . '.items', self::ITEM_ALIAS)
+            ->groupBy($alias . '.id');
     }
 }

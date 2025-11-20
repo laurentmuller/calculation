@@ -139,7 +139,7 @@ abstract class AbstractController extends BaseController
      */
     public function getMinMargin(): float
     {
-        return $this->getApplicationParameters()->getDefault()->getMinMargin();
+        return $this->getApplicationParameters()->getMinMargin();
     }
 
     /**

@@ -161,7 +161,7 @@ class WebpCommand
     {
         $filtered = \array_filter(ImageExtension::cases(), static fn (ImageExtension $e): bool => ImageExtension::WEBP !== $e);
         $extensions = \array_map(static fn (ImageExtension $e): string => $e->getFilter(), $filtered);
-        $depth = "<= $level";
+        $depth = '<= ' . $level;
 
         return Finder::create()
             ->ignoreUnreadableDirs()
@@ -269,7 +269,7 @@ class WebpCommand
 
     private function writeln(SymfonyStyle $io, string $message, string $style = 'info'): void
     {
-        $io->writeln("<$style>$message</>");
+        $io->writeln(\sprintf('<%s>%s</>', $style, $message));
     }
 
     private function writeVerbose(SymfonyStyle $io, string $message, string $style = 'info'): void

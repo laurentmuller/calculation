@@ -106,7 +106,8 @@ class CalculationsReport extends AbstractArrayReport
     {
         $editable = null;
         $stateCode = null;
-        $this->items = $this->overall = 0.0;
+        $this->items = 0.0;
+        $this->overall = 0.0;
         foreach ($entities as $entity) {
             if ($editable !== $entity->isEditable()) {
                 $editable = $entity->isEditable();

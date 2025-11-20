@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Form\Task;
 
 use App\Form\Task\TaskListType;
-use App\Tests\Fixture\DataForm;
+use App\Tests\Fixture\FixtureDataForm;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -30,7 +30,7 @@ final class TaskListTypeTest extends TypeTestCase
     public function testFormView(): void
     {
         $task = $this->getTask();
-        $formData = DataForm::instance($task);
+        $formData = FixtureDataForm::instance($task);
 
         $view = $this->factory->createBuilder(FormType::class, $formData)
             ->add('value', TaskListType::class)
@@ -50,11 +50,11 @@ final class TaskListTypeTest extends TypeTestCase
         $formData = [
             'value' => $task->getId(),
         ];
-        $model = DataForm::instance($task);
+        $model = FixtureDataForm::instance($task);
         $form = $this->factory->createBuilder(FormType::class, $model)
             ->add('value', TaskListType::class)
             ->getForm();
-        $expected = DataForm::instance($task);
+        $expected = FixtureDataForm::instance($task);
         $form->submit($formData);
         self::assertTrue($form->isSynchronized());
         self::assertEqualsCanonicalizing($expected, $model);

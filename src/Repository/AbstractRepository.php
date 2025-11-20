@@ -90,10 +90,10 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
             ->orderBy($name);
         if (StringUtils::isString($value)) {
             $param = 'search';
-            $builder->where("$name LIKE :$param")
-                ->setParameter($param, "%$value%");
+            $builder->where(\sprintf('%s LIKE :%s', $name, $param))
+                ->setParameter($param, \sprintf('%%%s%%', $value));
         } else {
-            $builder->where("$name IS NOT NULL");
+            $builder->where($name . ' IS NOT NULL');
         }
         if ($limit > 0) {
             $builder->setMaxResults($limit);
@@ -115,7 +115,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
      */
     public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS): array|string
     {
-        return "$alias.$field";
+        return \sprintf('%s.%s', $alias, $field);
     }
 
     /**
@@ -176,7 +176,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
      */
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
-        return "$alias.$field";
+        return \sprintf('%s.%s', $alias, $field);
     }
 
     /**
@@ -219,7 +219,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
      */
     protected function addPrefixes(string $alias, array $names): array
     {
-        return \array_map(static fn (string $name): string => "$alias.$name", $names);
+        return \array_map(static fn (string $name): string => \sprintf('%s.%s', $alias, $name), $names);
     }
 
     /**
@@ -233,7 +233,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
      */
     protected function concat(string $alias, array $fields, string $default = ''): string
     {
-        $values = \array_map(static fn (string $field): string => "COALESCE($alias.$field, '$default')", $fields);
+        $values = \array_map(static fn (string $field): string => \sprintf("COALESCE(%s.%s, '%s')", $alias, $field, $default), $fields);
 
         return \sprintf('CONCAT(%s)', \implode(',', $values));
     }
@@ -246,6 +246,6 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
      */
     protected function getCountDistinct(string $alias, string $field): string
     {
-        return "COUNT(DISTINCT $alias.id) AS $field";
+        return \sprintf('COUNT(DISTINCT %s.id) AS %s', $alias, $field);
     }
 }

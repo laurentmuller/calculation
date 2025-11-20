@@ -49,13 +49,13 @@
     </div>
     {# messages #}
     {% block flashbag -%}{{ include('flash_bag.html.twig') }}{%- endblock %}
-    {# cookie_banner #}
-    {% block cookie_banner -%}{{ include('cookie_banner.html.twig') }}{%- endblock %}
     {# back to top #}
     {% block back_to_top -%}{{ include('back_to_top.html.twig') }}{%- endblock %}
 </div>
 {# footer #}
 {% block footer -%}{% if statusbar_show %}{{ include('footer.html.twig') }}{% endif %}{%- endblock %}
+{# cookie_banner #}
+{% block cookie_banner -%}{{ include('cookie_banner.html.twig') }}{%- endblock %}
 {# java scripts #}
 <noscript>{{ 'common.no_script_support'|trans }}</noscript>
 {% block javascripts %}

@@ -344,7 +344,8 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             $this->link($x, $y, $width, $this->getY() - $y, $link);
             $this->lastItem = $entity;
         }
-        $this->currentItem = $this->lastItem = null;
+        $this->currentItem = null;
+        $this->lastItem = null;
         $table->setBackgroundListener(null)
             ->setHeadersListener(null)
             ->setTextListener(null);

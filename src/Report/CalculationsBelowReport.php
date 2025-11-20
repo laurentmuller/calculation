@@ -81,7 +81,8 @@ class CalculationsBelowReport extends AbstractArrayReport
      */
     private function outputEntities(ReportTable $table, array $entities): void
     {
-        $this->items = $this->overall = 0.0;
+        $this->items = 0.0;
+        $this->overall = 0.0;
         $style = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::red());
         foreach ($entities as $entity) {
             $this->outputEntity($table, $entity, $style);

@@ -85,7 +85,8 @@ class MockPhpStream
     {
         if ('' !== $this->path && '' !== $this->content) {
             self::$data[$this->path] = $this->content;
-            $this->path = $this->content = '';
+            $this->path = '';
+            $this->content = '';
             $this->index = 0;
         }
     }

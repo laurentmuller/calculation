@@ -14,17 +14,17 @@ declare(strict_types=1);
 namespace App\Tests\Database;
 
 use App\Database\AbstractDatabase;
-use App\Tests\Fixture\Database;
+use App\Tests\Fixture\FixtureDatabase;
 use PHPUnit\Framework\TestCase;
 
 final class AbstractDatabaseTest extends TestCase
 {
-    private Database $database;
+    private FixtureDatabase $database;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->database = new Database(AbstractDatabase::IN_MEMORY);
+        $this->database = new FixtureDatabase(AbstractDatabase::IN_MEMORY);
     }
 
     #[\Override]
@@ -35,7 +35,7 @@ final class AbstractDatabaseTest extends TestCase
 
     public function testCloseRollback(): void
     {
-        $database = new Database(AbstractDatabase::IN_MEMORY);
+        $database = new FixtureDatabase(AbstractDatabase::IN_MEMORY);
         $database->beginTransaction();
         $database->close();
         self::assertFalse($database->isTransaction());
@@ -52,15 +52,15 @@ final class AbstractDatabaseTest extends TestCase
         $filename = __DIR__ . '/test.db';
 
         try {
-            $database = new Database($filename);
+            $database = new FixtureDatabase($filename);
             self::assertFalse($database->isTransaction());
             $database->close();
 
-            $database = new Database($filename);
+            $database = new FixtureDatabase($filename);
             self::assertFalse($database->isTransaction());
             $database->close();
 
-            $database = new Database($filename, true);
+            $database = new FixtureDatabase($filename, true);
             self::assertFalse($database->isTransaction());
             $database->close();
         } finally {

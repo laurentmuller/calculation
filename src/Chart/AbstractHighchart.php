@@ -25,6 +25,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Twig\Environment;
+use Twig\Error\Error;
 
 /**
  * Extends the Highchart with method shortcuts.
@@ -105,7 +106,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
             $content = StringUtils::pregReplace(self::COMMENT_REGEX, '', $content);
 
             return ChartExpression::instance($content);
-        } catch (\Twig\Error\Error) {
+        } catch (Error) {
             return null;
         }
     }
@@ -187,11 +188,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
      */
     protected function getMarginClass(float $value): string
     {
-        if (!$this->isFloatZero($value) && $value < $this->getMinMargin()) {
-            return 'text-danger';
-        }
-
-        return '';
+        return $this->parameters->isMarginBelow($value) ? 'text-danger' : '';
     }
 
     /**
@@ -199,7 +196,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
      */
     protected function getMinMargin(): float
     {
-        return $this->parameters->getDefault()->getMinMargin();
+        return $this->parameters->getMinMargin();
     }
 
     /**
@@ -245,6 +242,8 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
             'style' => $this->getFontStyle('0.75rem'),
             'borderColor' => $this->getBorderColor(),
             'borderRadius' => 0,
+            'useHTML' => true,
+            'shared' => true,
         ]);
 
         return $this;

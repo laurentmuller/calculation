@@ -116,8 +116,8 @@ class AdminController extends AbstractController
     public function parameters(Request $request): Response
     {
         $templateParameters = [
-            'title' => 'parameters.title',
             'title_icon' => 'cogs',
+            'title' => 'parameters.title',
             'title_description' => 'parameters.description',
         ];
 

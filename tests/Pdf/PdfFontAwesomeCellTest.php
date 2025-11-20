@@ -16,7 +16,7 @@ namespace App\Tests\Pdf;
 use App\Model\FontAwesomeImage;
 use App\Pdf\PdfFontAwesomeCell;
 use App\Pdf\PdfStyle;
-use App\Tests\Fixture\PdfImageDocument;
+use App\Tests\Fixture\FixturePdfImageDocument;
 use fpdf\Enums\PdfMove;
 use fpdf\PdfRectangle;
 use PHPUnit\Framework\TestCase;
@@ -71,9 +71,9 @@ final class PdfFontAwesomeCellTest extends TestCase
         self::assertSame(0.0, $position->y);
     }
 
-    private function getDocument(): PdfImageDocument
+    private function getDocument(): FixturePdfImageDocument
     {
-        $doc = new PdfImageDocument();
+        $doc = new FixturePdfImageDocument();
         PdfStyle::default()->apply($doc);
 
         return $doc->addPage();

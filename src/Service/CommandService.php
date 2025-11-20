@@ -388,7 +388,7 @@ class CommandService implements \Countable
         $command['arguments'] = $this->updateArguments($command['definition']['arguments']);
         $command['options'] = $this->updateOptions($command['definition']['options']);
         $command['help'] = $command['help'] === $command['description'] ? '' : $this->updateHelp($command['help']);
-        if (0 === \count($command['arguments'])) {
+        if ([] === $command['arguments']) {
             $command['usage'] = [\sprintf('%s [options]', $command['name'])];
         } else {
             $command['usage'] = StringUtils::pregReplaceAll(self::USAGE_REPLACE, $command['usage']);

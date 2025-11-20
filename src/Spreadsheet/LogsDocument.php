@@ -97,7 +97,7 @@ class LogsDocument extends AbstractDocument
     private function setBorderStyle(WorksheetDocument $sheet, int $row, ?string $level): void
     {
         if (StringUtils::isString($level)) {
-            $sheet->getStyle("A$row")
+            $sheet->getStyle('A' . $row)
                 ->getBorders()
                 ->getLeft()
                 ->setBorderStyle(Border::BORDER_THICK)

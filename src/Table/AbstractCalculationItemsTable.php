@@ -85,7 +85,8 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
     {
         $results = parent::handleQuery($query);
         $entities = $this->getEntities($query->sort, $query->order);
-        $results->totalNotFiltered = $results->filtered = \count($entities);
+        $results->totalNotFiltered = \count($entities);
+        $results->filtered = $results->totalNotFiltered;
         $entities = \array_slice($entities, $query->offset, $query->limit);
         $results->rows = $this->mapEntities($entities);
         if (!$query->callback) {

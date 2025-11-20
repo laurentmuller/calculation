@@ -187,7 +187,7 @@ class CalculationStateRepository extends AbstractRepository
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return match ($field) {
-            'editable' => "IFELSE($alias.$field = 1, 0, 1)", // reverse
+            'editable' => \sprintf('IFELSE(%s.%s = 1, 0, 1)', $alias, $field), // reverse
             default => parent::getSortField($field, $alias),
         };
     }
@@ -200,14 +200,14 @@ class CalculationStateRepository extends AbstractRepository
     public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->createQueryBuilder($alias)
-            ->select("$alias.id")
-            ->addSelect("$alias.code")
-            ->addSelect("$alias.description")
-            ->addSelect("$alias.editable")
-            ->addSelect("$alias.color")
+            ->select($alias . '.id')
+            ->addSelect($alias . '.code')
+            ->addSelect($alias . '.description')
+            ->addSelect($alias . '.editable')
+            ->addSelect($alias . '.color')
             ->addSelect($this->getCountDistinct(self::CALCULATION_ALIAS, 'calculations'))
-            ->leftJoin("$alias.calculations", self::CALCULATION_ALIAS)
-            ->groupBy("$alias.id");
+            ->leftJoin($alias . '.calculations', self::CALCULATION_ALIAS)
+            ->groupBy($alias . '.id');
     }
 
     /**

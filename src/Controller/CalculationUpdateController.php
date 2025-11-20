@@ -47,7 +47,7 @@ class CalculationUpdateController extends AbstractController
             $service->saveQuery($query);
             $result = $service->update($query);
             if (!$query->isSimulate() && $result->isValid()) {
-                $application->getDate()->setUpdateCalculations();
+                $application->getDates()->setUpdateCalculations();
                 $application->save();
             }
 
@@ -58,7 +58,7 @@ class CalculationUpdateController extends AbstractController
         }
 
         return $this->render('admin/update_query.html.twig', [
-            'last_update' => $application->getDate()->getUpdateCalculations(),
+            'last_update' => $application->getDates()->getUpdateCalculations(),
             'form' => $form,
         ]);
     }

@@ -90,7 +90,7 @@ class CalculationEditStateType extends AbstractEntityType
 
     private function isMarginBelow(Calculation $data): bool
     {
-        return $this->parameters->getDefault()->isMarginBelow($data);
+        return $this->parameters->isMarginBelow($data);
     }
 
     private function onPreSetData(PreSetDataEvent $event): void
@@ -110,7 +110,7 @@ class CalculationEditStateType extends AbstractEntityType
 
     private function translateMarginBelow(Calculation $data): string
     {
-        $minimum = $this->parameters->getDefault()->getMinMargin();
+        $minimum = $this->parameters->getMinMargin();
         $margin = $data->getOverallMargin();
 
         return $this->translator

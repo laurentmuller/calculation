@@ -39,6 +39,9 @@ class UserParameters extends AbstractParameters
         parent::__construct($cache, $manager);
     }
 
+    /**
+     * Gets the application parameters.
+     */
     public function getApplication(): ApplicationParameters
     {
         return $this->application;
@@ -57,9 +60,7 @@ class UserParameters extends AbstractParameters
     #[\Override]
     public function getDefaultValues(): array
     {
-        return $this->getParametersDefaultValues(
-            ...$this->getApplicationParameters()
-        );
+        return $this->getParametersDefaultValues($this->getDefaultParameters());
     }
 
     /**
@@ -111,20 +112,6 @@ class UserParameters extends AbstractParameters
     }
 
     #[\Override]
-    public function save(): bool
-    {
-        return $this->saveParameters(
-            [
-                DisplayParameter::class => $this->display,
-                HomePageParameter::class => $this->homePage,
-                MessageParameter::class => $this->message,
-                OptionsParameter::class => $this->options,
-            ],
-            $this->getApplicationParameters()
-        );
-    }
-
-    #[\Override]
     protected function createProperty(string $name): UserProperty
     {
         $user = $this->security->getUser();
@@ -133,6 +120,17 @@ class UserParameters extends AbstractParameters
         }
 
         return UserProperty::instance($name, $user);
+    }
+
+    #[\Override]
+    protected function getDefaultParameters(): array
+    {
+        return [
+            DisplayParameter::class => $this->application->getDisplay(),
+            HomePageParameter::class => $this->application->getHomePage(),
+            MessageParameter::class => $this->application->getMessage(),
+            OptionsParameter::class => $this->application->getOptions(),
+        ];
     }
 
     #[\Override]
@@ -151,18 +149,5 @@ class UserParameters extends AbstractParameters
 
         return $this->getRepository()
             ->findByUser($user);
-    }
-
-    /**
-     * @return array<string, ParameterInterface>
-     */
-    private function getApplicationParameters(): array
-    {
-        return [
-            DisplayParameter::class => $this->application->getDisplay(),
-            HomePageParameter::class => $this->application->getHomePage(),
-            MessageParameter::class => $this->application->getMessage(),
-            OptionsParameter::class => $this->application->getOptions(),
-        ];
     }
 }

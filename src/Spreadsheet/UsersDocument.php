@@ -80,7 +80,7 @@ class UsersDocument extends AbstractArrayDocument
             $path = $this->getImagePath($entity);
             if (StringUtils::isString($path) && FileUtils::isFile($path)) {
                 [$width, $height] = $this->getImageSize($path);
-                $sheet->setCellImage($path, "A$row", $width, $height);
+                $sheet->setCellImage($path, 'A' . $row, $width, $height);
             }
             ++$row;
         }

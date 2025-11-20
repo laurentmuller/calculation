@@ -100,17 +100,17 @@ class GroupRepository extends AbstractRepository
     public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->createQueryBuilder($alias)
-            ->select("$alias.id")
-            ->addSelect("$alias.code")
-            ->addSelect("$alias.description")
+            ->select($alias . '.id')
+            ->addSelect($alias . '.code')
+            ->addSelect($alias . '.description')
             ->addSelect($this->getCountDistinct(self::MARGIN_ALIAS, 'margins'))
             ->addSelect($this->getCountDistinct(self::CATEGORY_ALIAS, 'categories'))
             ->addSelect($this->getCountDistinct(self::PRODUCT_ALIAS, 'products'))
             ->addSelect($this->getCountDistinct(self::TASK_ALIAS, 'tasks'))
-            ->leftJoin("$alias.margins", self::MARGIN_ALIAS)
-            ->leftJoin("$alias.categories", self::CATEGORY_ALIAS)
+            ->leftJoin($alias . '.margins', self::MARGIN_ALIAS)
+            ->leftJoin($alias . '.categories', self::CATEGORY_ALIAS)
             ->leftJoin(self::CATEGORY_ALIAS . '.products', self::PRODUCT_ALIAS)
             ->leftJoin(self::CATEGORY_ALIAS . '.tasks', self::TASK_ALIAS)
-            ->groupBy("$alias.id");
+            ->groupBy($alias . '.id');
     }
 }

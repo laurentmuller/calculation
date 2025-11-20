@@ -76,7 +76,7 @@ abstract class AuthenticateWebTestCase extends WebTestCase
     {
         $response = $this->client->getResponse();
         $statusCode = $response->getStatusCode();
-        self::assertSame($expected, $statusCode, "Invalid status code for '$url' and '$username'.");
+        self::assertSame($expected, $statusCode, \sprintf("Invalid status code for '%s' and '%s'.", $url, $username));
 
         return $response->getContent();
     }

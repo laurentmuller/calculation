@@ -54,6 +54,22 @@ final class DefaultParameterTest extends ParameterTestCase
         self::assertFalse($this->parameter->isMarginBelow(new Calculation()));
     }
 
+    public function testResetCategoryId(): void
+    {
+        $this->parameter->setCategoryId(24);
+        self::assertSame(24, $this->parameter->getCategoryId());
+        $this->parameter->resetCategoryId();
+        self::assertNull($this->parameter->getCategoryId());
+    }
+
+    public function testResetStateId(): void
+    {
+        $this->parameter->setStateId(24);
+        self::assertSame(24, $this->parameter->getStateId());
+        $this->parameter->resetStateId();
+        self::assertNull($this->parameter->getStateId());
+    }
+
     public function testSetValue(): void
     {
         $categoryId = 12;

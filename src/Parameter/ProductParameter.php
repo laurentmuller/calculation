@@ -52,6 +52,11 @@ class ProductParameter implements ParameterInterface
         return $this->edit;
     }
 
+    public function resetProductId(): self
+    {
+        return $this->setProductId(null);
+    }
+
     public function setEdit(bool $edit): self
     {
         $this->edit = $edit;

@@ -45,6 +45,14 @@ final class ProductParameterTest extends ParameterTestCase
         self::assertSame('parameter_product', $this->parameter::getCacheKey());
     }
 
+    public function testResetProductId(): void
+    {
+        $this->parameter->setProductId(24);
+        self::assertSame(24, $this->parameter->getProductId());
+        $this->parameter->resetProductId();
+        self::assertNull($this->parameter->getProductId());
+    }
+
     public function testSetValue(): void
     {
         $this->parameter->setEdit(true);

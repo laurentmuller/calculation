@@ -61,6 +61,17 @@ final class SecurityParameterTest extends ParameterTestCase
         self::assertSame('parameter_security', $this->parameter::getCacheKey());
     }
 
+    public function testPasswordConstraint(): void
+    {
+        $constraint = $this->parameter->getPasswordConstraint();
+        self::assertFalse($constraint->all);
+        self::assertFalse($constraint->letter);
+        self::assertFalse($constraint->caseDiff);
+        self::assertFalse($constraint->number);
+        self::assertFalse($constraint->specialChar);
+        self::assertFalse($constraint->email);
+    }
+
     public function testSetValue(): void
     {
         $this->parameter->setCaptcha(true);
@@ -79,6 +90,12 @@ final class SecurityParameterTest extends ParameterTestCase
         self::assertTrue($this->parameter->isNumber());
         $this->parameter->setSpecialChar(true);
         self::assertTrue($this->parameter->isSpecialChar());
+    }
+
+    public function testStrengthConstraint(): void
+    {
+        $constraint = $this->parameter->getStrengthConstraint();
+        self::assertSame(StrengthLevel::NONE, $constraint->minimum);
     }
 
     #[\Override]

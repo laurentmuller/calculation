@@ -163,7 +163,7 @@ class CategoryController extends AbstractEntityController
         $application = $this->getApplicationParameters();
         $defaultParameter = $application->getDefault();
         if ($defaultParameter->getCategoryId() === $item->getId()) {
-            $defaultParameter->setCategoryId(null);
+            $defaultParameter->resetCategoryId();
             $application->save();
         }
         parent::deleteFromDatabase($item);

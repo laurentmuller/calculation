@@ -156,7 +156,7 @@ class CalculationStateController extends AbstractEntityController
         $application = $this->getApplicationParameters();
         $defaultParameter = $application->getDefault();
         if ($defaultParameter->getStateId() === $item->getId()) {
-            $defaultParameter->setStateId(null);
+            $defaultParameter->resetStateId();
             $application->save();
         }
         parent::deleteFromDatabase($item);

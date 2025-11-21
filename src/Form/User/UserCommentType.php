@@ -52,6 +52,7 @@ class UserCommentType extends AbstractType
 
         $helper->field('importance')
             ->label('importance.name')
+            ->updateOption('prepend_icon', 'fa-solid fa-exclamation')
             ->addEnumType(Importance::class);
 
         $helper->field('attachments')

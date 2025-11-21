@@ -36,11 +36,9 @@ readonly class SortableEntity implements SortModeInterface
      *
      * @template T of object
      *
-     * @param object|string $objectOrClass either a string containing the name of
-     *                                     the class to reflect, or an object
-     * @param bool          $validate      true to validate that the property name exists
-     *
-     * @phpstan-param T|class-string<T> $objectOrClass
+     * @param T|class-string<T> $objectOrClass either a string containing the name of
+     *                                         the class to reflect, or an object
+     * @param bool              $validate      true to validate that the property name exists
      *
      * @return array<string, string> an array with the field as a key and the order as the value.
      *                               An empty array is returned if no attribute is found.

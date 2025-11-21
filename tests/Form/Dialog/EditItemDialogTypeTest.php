@@ -29,7 +29,7 @@ final class EditItemDialogTypeTest extends TypeTestCase
             'description' => 'Description',
             'unit' => 'Unit',
             'category' => null,
-            'price' => 1.0,
+            'price' => '1.00',
             'quantity' => 1.0,
         ];
         $children = $this->factory
@@ -53,8 +53,8 @@ final class EditItemDialogTypeTest extends TypeTestCase
             'description' => 'Description',
             'unit' => 'Unit',
             'category' => $category->getId(),
-            'price' => 1.0,
-            'quantity' => 1.0,
+            'price' => 1.00,
+            'quantity' => 1.00,
         ];
         $model = [
             'description' => null,

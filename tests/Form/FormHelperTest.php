@@ -27,14 +27,17 @@ use App\Pdf\Html\HtmlAttribute;
 use App\Tests\Form\User\PasswordHasherExtensionTrait;
 use App\Tests\Form\User\VichImageTypeTrait;
 use App\Tests\TranslatorMockTrait;
+use Elao\Enum\Bridge\Symfony\Form\Type\EnumType as ElaoEnumType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\PercentType;
@@ -69,8 +72,10 @@ final class FormHelperTest extends TypeTestCase
             ->autocomplete('')
             ->addTextType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameAttribute($actual, 'autocomplete', null);
+        $this->validateForm(
+            form: $actual,
+            attributes: ['autocomplete' => null]
+        );
     }
 
     public function testCheckboxTypeBoth(): void
@@ -79,9 +84,11 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addCheckboxType(inline: true)
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, CheckboxType::class);
-        $this->assertSameLabelAttribute($actual, 'class', 'checkbox-switch checkbox-inline');
+        $this->validateForm(
+            form: $actual,
+            class: CheckboxType::class,
+            options: ['label_attr' => ['class' => 'checkbox-switch checkbox-inline']]
+        );
     }
 
     public function testCheckboxTypeDefault(): void
@@ -90,9 +97,11 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addCheckboxType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, CheckboxType::class);
-        $this->assertSameLabelAttribute($actual, 'class', 'checkbox-switch');
+        $this->validateForm(
+            form: $actual,
+            class: CheckboxType::class,
+            options: ['label_attr' => ['class' => 'checkbox-switch']]
+        );
     }
 
     public function testCheckboxTypeInline(): void
@@ -101,9 +110,11 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addCheckboxType(switch: false, inline: true)
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, CheckboxType::class);
-        $this->assertSameLabelAttribute($actual, 'class', 'checkbox-inline');
+        $this->validateForm(
+            form: $actual,
+            class: CheckboxType::class,
+            options: ['label_attr' => ['class' => 'checkbox-inline']]
+        );
     }
 
     public function testCheckboxTypeNone(): void
@@ -112,9 +123,11 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addCheckboxType(switch: false)
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, CheckboxType::class);
-        $this->assertSameLabelAttribute($actual, 'class', null);
+        $this->validateForm(
+            form: $actual,
+            class: CheckboxType::class,
+            options: ['label_attr' => []]
+        );
     }
 
     public function testChoiceType(): void
@@ -124,9 +137,11 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addChoiceType($choices)
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, ChoiceType::class);
-        $this->assertSameOption($actual, 'choices', $choices);
+        $this->validateForm(
+            form: $actual,
+            class: ChoiceType::class,
+            options: ['choices' => $choices]
+        );
     }
 
     public function testCollectionType(): void
@@ -135,8 +150,10 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addCollectionType(TextType::class)
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, CollectionType::class);
+        $this->validateForm(
+            form: $actual,
+            class: CollectionType::class,
+        );
     }
 
     public function testCollectionTypeException(): void
@@ -153,9 +170,11 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addColorType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, ColorType::class);
-        $this->assertSameAttribute($actual, 'class', 'color-picker');
+        $this->validateForm(
+            form: $actual,
+            class: ColorType::class,
+            attributes: ['class' => 'color-picker']
+        );
     }
 
     public function testColorTypeNoPicker(): void
@@ -164,9 +183,11 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addColorType(false)
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, ColorType::class);
-        $this->assertSameAttribute($actual, 'class', null);
+        $this->validateForm(
+            form: $actual,
+            class: ColorType::class,
+            attributes: ['class' => null]
+        );
     }
 
     public function testCurrentPasswordType(): void
@@ -175,9 +196,11 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addCurrentPasswordType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, CurrentPasswordType::class);
-        $this->assertSameOption($actual, 'mapped', false);
+        $this->validateForm(
+            form: $actual,
+            class: CurrentPasswordType::class,
+            options: ['mapped' => false]
+        );
     }
 
     public function testDatePointType(): void
@@ -186,9 +209,11 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addDatePointType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, DateType::class);
-        $this->assertSameOption($actual, 'widget', 'single_text');
+        $this->validateForm(
+            form: $actual,
+            class: DateType::class,
+            options: ['widget' => 'single_text']
+        );
     }
 
     public function testDisabled(): void
@@ -198,8 +223,10 @@ final class FormHelperTest extends TypeTestCase
             ->disabled()
             ->addTextType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameOption($actual, 'disabled', true);
+        $this->validateForm(
+            form: $actual,
+            options: ['disabled' => true]
+        );
     }
 
     public function testDomain(): void
@@ -209,8 +236,10 @@ final class FormHelperTest extends TypeTestCase
             ->domain('domain.test')
             ->addTextType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameOption($actual, 'translation_domain', 'domain.test');
+        $this->validateForm(
+            form: $actual,
+            options: ['translation_domain' => 'domain.test']
+        );
     }
 
     public function testEmailType(): void
@@ -219,9 +248,11 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addEmailType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, EmailType::class);
-        $this->assertSameAttribute($actual, 'inputmode', 'email');
+        $this->validateForm(
+            form: $actual,
+            class: EmailType::class,
+            attributes: ['inputmode' => 'email']
+        );
     }
 
     public function testEnumTypeNoReadable(): void
@@ -230,7 +261,10 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addEnumType(HtmlAttribute::class)
             ->createForm();
-        self::assertCount(1, $actual);
+        $this->validateForm(
+            form: $actual,
+            class: EnumType::class,
+        );
     }
 
     public function testEnumTypeSortableAndReadable(): void
@@ -239,7 +273,10 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addEnumType(MessagePosition::class)
             ->createForm();
-        self::assertCount(1, $actual);
+        $this->validateForm(
+            form: $actual,
+            class: ElaoEnumType::class,
+        );
     }
 
     public function testFieldPrefix(): void
@@ -248,8 +285,10 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addTextType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameOption($actual, 'label', 'prefix.name');
+        $this->validateForm(
+            form: $actual,
+            options: ['label' => 'prefix.name']
+        );
     }
 
     public function testFileTypeWithExtension(): void
@@ -258,8 +297,10 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addFileType('png')
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, FileType::class);
+        $this->validateForm(
+            form: $actual,
+            class: FileType::class,
+        );
     }
 
     public function testFileTypeWithoutExtension(): void
@@ -268,8 +309,10 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addFileType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, FileType::class);
+        $this->validateForm(
+            form: $actual,
+            class: FileType::class,
+        );
     }
 
     public function testHelpHtml(): void
@@ -279,8 +322,10 @@ final class FormHelperTest extends TypeTestCase
             ->helpHtml()
             ->addTextType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameOption($actual, 'help_html', true);
+        $this->validateForm(
+            form: $actual,
+            options: ['help_html' => true]
+        );
     }
 
     public function testHiddenType(): void
@@ -289,8 +334,10 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addHiddenType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, HiddenType::class);
+        $this->validateForm(
+            form: $actual,
+            class: HiddenType::class,
+        );
     }
 
     public function testLabelEmpty(): void
@@ -300,8 +347,10 @@ final class FormHelperTest extends TypeTestCase
             ->label('')
             ->addTextType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameAttribute($actual, 'label', null);
+        $this->validateForm(
+            form: $actual,
+            attributes: ['label' => null]
+        );
     }
 
     public function testListenerPreSetData(): void
@@ -312,7 +361,9 @@ final class FormHelperTest extends TypeTestCase
             ->listenerPreSetData($listener)
             ->addTextType()
             ->createForm();
-        self::assertCount(1, $actual);
+        $this->validateForm(
+            form: $actual,
+        );
         $listeners = $helper->getBuilder()->getEventDispatcher()
             ->getListeners(FormEvents::PRE_SET_DATA);
         self::assertContains($listener, $listeners);
@@ -326,7 +377,9 @@ final class FormHelperTest extends TypeTestCase
             ->listenerPreSubmit($listener)
             ->addTextType()
             ->createForm();
-        self::assertCount(1, $actual);
+        $this->validateForm(
+            form: $actual,
+        );
         $listeners = $helper->getBuilder()->getEventDispatcher()
             ->getListeners(FormEvents::PRE_SUBMIT);
         self::assertContains($listener, $listeners);
@@ -339,8 +392,10 @@ final class FormHelperTest extends TypeTestCase
             ->maxLength(20)
             ->addTextType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameAttribute($actual, 'maxLength', 20);
+        $this->validateForm(
+            form: $actual,
+            attributes: ['maxLength' => 20]
+        );
     }
 
     public function testMinLength(): void
@@ -350,8 +405,48 @@ final class FormHelperTest extends TypeTestCase
             ->minLength(20)
             ->addTextType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameAttribute($actual, 'minLength', 20);
+        $this->validateForm(
+            form: $actual,
+            attributes: ['minLength' => 20]
+        );
+    }
+
+    public function testMoneyType(): void
+    {
+        $helper = $this->getFormHelper();
+        $actual = $helper->field(self::FIELD)
+            ->addMoneyType()
+            ->createForm();
+        $this->validateForm(
+            form: $actual,
+            class: MoneyType::class,
+            options: [
+                'html5' => true,
+                'scale' => 2,
+                'currency' => 'CHF',
+                'input' => 'float',
+            ],
+            attributes: ['class' => 'text-end']
+        );
+    }
+
+    public function testMoneyTypeNoCurrency(): void
+    {
+        $helper = $this->getFormHelper();
+        $actual = $helper->field(self::FIELD)
+            ->addMoneyType('')
+            ->createForm();
+        $this->validateForm(
+            form: $actual,
+            class: MoneyType::class,
+            options: [
+                'html5' => true,
+                'scale' => 2,
+                'currency' => '',
+                'input' => 'float',
+            ],
+            attributes: ['class' => 'text-end']
+        );
     }
 
     public function testNumberType(): void
@@ -360,12 +455,16 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addNumberType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, NumberType::class);
-        $this->assertSameOption($actual, 'html5', true);
-        $this->assertSameAttribute($actual, 'scale', 2);
-        $this->assertSameAttribute($actual, 'inputmode', 'decimal');
-        $this->assertSameAttribute($actual, 'class', 'text-end');
+        $this->validateForm(
+            form: $actual,
+            class: NumberType::class,
+            options: ['html5' => true],
+            attributes: [
+                'scale' => 2,
+                'inputmode' => 'decimal',
+                'class' => 'text-end',
+            ]
+        );
     }
 
     public function testNumberTypeNoDecimal(): void
@@ -374,12 +473,16 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addNumberType(0)
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, NumberType::class);
-        $this->assertSameOption($actual, 'html5', true);
-        $this->assertSameAttribute($actual, 'scale', 0);
-        $this->assertSameAttribute($actual, 'inputmode', 'numeric');
-        $this->assertSameAttribute($actual, 'class', 'text-end');
+        $this->validateForm(
+            form: $actual,
+            class: NumberType::class,
+            options: ['html5' => true],
+            attributes: [
+                'scale' => 0,
+                'inputmode' => 'numeric',
+                'class' => 'text-end',
+            ]
+        );
     }
 
     public function testPasswordType(): void
@@ -388,9 +491,11 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addPasswordType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, PasswordType::class);
-        $this->assertSameAttribute($actual, 'autocomplete', 'current-password');
+        $this->validateForm(
+            form: $actual,
+            class: PasswordType::class,
+            attributes: ['autocomplete' => 'current-password']
+        );
     }
 
     public function testPercentHidden(): void
@@ -400,18 +505,29 @@ final class FormHelperTest extends TypeTestCase
             ->percent(false)
             ->addPercentType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameOption($actual, 'symbol', false);
+        $this->validateForm(
+            form: $actual,
+            class: PercentType::class,
+            options: ['symbol' => false]
+        );
     }
 
     public function testPercentType(): void
     {
         $helper = $this->getFormHelper();
         $actual = $helper->field(self::FIELD)
-            ->addPercentType(0, 100)
+            ->addPercentType(0, 100, 2.0)
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, PercentType::class);
+        $this->validateForm(
+            form: $actual,
+            class: PercentType::class,
+            options: ['symbol' => '%'],
+            attributes: [
+                'min' => 0,
+                'max' => 100,
+                'step' => 2.0,
+            ]
+        );
     }
 
     public function testPercentVisible(): void
@@ -421,8 +537,11 @@ final class FormHelperTest extends TypeTestCase
             ->percent(true)
             ->addPercentType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameOption($actual, 'symbol', '%');
+        $this->validateForm(
+            form: $actual,
+            class: PercentType::class,
+            options: ['symbol' => '%']
+        );
     }
 
     public function testPlainType(): void
@@ -431,8 +550,10 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addPlainType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, PlainType::class);
+        $this->validateForm(
+            form: $actual,
+            class: PlainType::class
+        );
     }
 
     public function testPriority(): void
@@ -442,8 +563,10 @@ final class FormHelperTest extends TypeTestCase
             ->priority(100)
             ->addTextType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameOption($actual, 'priority', 100);
+        $this->validateForm(
+            form: $actual,
+            options: ['priority' => 100]
+        );
     }
 
     public function testReadonly(): void
@@ -453,8 +576,10 @@ final class FormHelperTest extends TypeTestCase
             ->readonly()
             ->addTextType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameAttribute($actual, 'readonly', true);
+        $this->validateForm(
+            form: $actual,
+            attributes: ['readonly' => true]
+        );
     }
 
     public function testRepeatPasswordTypeWithOptions(): void
@@ -463,8 +588,29 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addRepeatPasswordType('password.option', 'confirm.option')
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, RepeatPasswordType::class);
+        $this->validateForm(
+            form: $actual,
+            class: RepeatPasswordType::class,
+            options: [
+                'first_options' => [
+                    'label' => 'password.option',
+                    'hash_property_path' => 'password',
+                    'attr' => [
+                        'minlength' => 6,
+                        'maxlength' => 255,
+                        'class' => 'password-strength',
+                        'autocomplete' => 'new-password',
+                    ],
+                ],
+                'second_options' => [
+                    'label' => 'confirm.option',
+                    'attr' => [
+                        'autocomplete' => 'new-password',
+                        'maxlength' => 255,
+                    ],
+                ],
+            ]
+        );
     }
 
     public function testRepeatPasswordTypeWithoutOptions(): void
@@ -473,7 +619,29 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addRepeatPasswordType()
             ->createForm();
-        self::assertCount(1, $actual);
+        $this->validateForm(
+            form: $actual,
+            class: RepeatPasswordType::class,
+            options: [
+                'first_options' => [
+                    'label' => 'user.password.label',
+                    'hash_property_path' => 'password',
+                    'attr' => [
+                        'minlength' => 6,
+                        'maxlength' => 255,
+                        'class' => 'password-strength',
+                        'autocomplete' => 'new-password',
+                    ],
+                ],
+                'second_options' => [
+                    'label' => 'user.password.confirmation',
+                    'attr' => [
+                        'autocomplete' => 'new-password',
+                        'maxlength' => 255,
+                    ],
+                ],
+            ]
+        );
     }
 
     public function testRowClass(): void
@@ -483,7 +651,12 @@ final class FormHelperTest extends TypeTestCase
             ->rowClass('row-class')
             ->addTextType()
             ->createForm();
-        $this->assertSameRowAttribute($actual, 'class', 'mb-3 form-group row-class');
+        $this->validateForm(
+            form: $actual,
+            options: [
+                'row_attr' => ['class' => 'mb-3 form-group row-class'],
+            ]
+        );
     }
 
     public function testSimulateAndConfirmType(): void
@@ -492,7 +665,37 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addSimulateAndConfirmType($this->createMockTranslator(), false)
             ->createForm();
-        self::assertCount(2, $actual);
+
+        self::assertTrue($actual->has('simulate'));
+        $this->validateForm(
+            form: $actual,
+            class: CheckboxType::class,
+            count: 2,
+            options: [
+                'label' => 'simulate.label',
+                'help' => 'simulate.help',
+                'help_attr' => [
+                    'class' => 'ms-4',
+                ],
+            ],
+            fieldName: 'simulate',
+        );
+
+        self::assertTrue($actual->has('confirm'));
+        $this->validateForm(
+            form: $actual,
+            class: CheckboxType::class,
+            count: 2,
+            options: [
+                'label' => 'simulate.confirm',
+                'mapped' => false,
+            ],
+            attributes: [
+                'data-error' => 'simulate.error',
+                'disabled' => null,
+            ],
+            fieldName: 'confirm',
+        );
     }
 
     public function testTelType(): void
@@ -501,8 +704,11 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addTelType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, TelType::class);
+        $this->validateForm(
+            form: $actual,
+            class: TelType::class,
+            attributes: ['inputmode' => 'tel']
+        );
     }
 
     public function testTextareaType(): void
@@ -511,10 +717,14 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addTextareaType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, TextareaType::class);
-        $this->assertSameAttribute($actual, 'rows', 2);
-        $this->assertSameAttribute($actual, 'class', 'resizable');
+        $this->validateForm(
+            form: $actual,
+            class: TextareaType::class,
+            attributes: [
+                'rows' => 2,
+                'class' => 'resizable',
+            ]
+        );
     }
 
     public function testTextType(): void
@@ -523,9 +733,12 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addTextType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, TextType::class);
-        $this->assertSameRowAttribute($actual, 'class', 'mb-3 form-group');
+        $this->validateForm(
+            form: $actual,
+            options: [
+                'row_attr' => ['class' => 'mb-3 form-group'],
+            ]
+        );
     }
 
     public function testTrueFalseType(): void
@@ -534,8 +747,16 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addTrueFalseType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, ChoiceType::class);
+        $this->validateForm(
+            form: $actual,
+            class: ChoiceType::class,
+            options: [
+                'choices' => [
+                    'common.value_true' => true,
+                    'common.value_false' => false,
+                ],
+            ]
+        );
     }
 
     public function testUpdateRowAttributes(): void
@@ -549,7 +770,15 @@ final class FormHelperTest extends TypeTestCase
             ->updateRowAttributes($attributes)
             ->addTextType()
             ->createForm();
-        self::assertCount(1, $actual);
+        $this->validateForm(
+            form: $actual,
+            options: [
+                'row_attr' => [
+                    'class' => 'mb-3 form-group',
+                    'present' => true,
+                ],
+            ]
+        );
     }
 
     public function testUrlType(): void
@@ -558,8 +787,10 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addUrlType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, UrlType::class);
+        $this->validateForm(
+            form: $actual,
+            class: UrlType::class
+        );
     }
 
     public function testUserNameType(): void
@@ -568,8 +799,14 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addUserNameType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, TextType::class);
+        $this->validateForm(
+            form: $actual,
+            attributes: [
+                'autocomplete' => 'username',
+                'minLength' => 2,
+                'maxLength' => 180,
+            ]
+        );
     }
 
     public function testVichImageType(): void
@@ -578,8 +815,15 @@ final class FormHelperTest extends TypeTestCase
         $actual = $helper->field(self::FIELD)
             ->addVichImageType()
             ->createForm();
-        self::assertCount(1, $actual);
-        $this->assertSameType($actual, VichImageType::class);
+        $this->validateForm(
+            form: $actual,
+            class: VichImageType::class,
+            options: [
+                'translation_domain' => 'messages',
+                'download_uri' => false,
+            ],
+            attributes: ['accept' => 'image/gif,image/jpeg,image/png,image/bmp']
+        );
     }
 
     public function testWidgetClassDuplicate(): void
@@ -589,7 +833,10 @@ final class FormHelperTest extends TypeTestCase
             ->widgetClass('form-check form-check')
             ->addTextType()
             ->createForm();
-        $this->assertSameAttribute($actual, 'class', 'form-check');
+        $this->validateForm(
+            form: $actual,
+            attributes: ['class' => 'form-check']
+        );
     }
 
     public function testWidgetClassEmpty(): void
@@ -599,17 +846,24 @@ final class FormHelperTest extends TypeTestCase
             ->widgetClass('')
             ->addTextType()
             ->createForm();
-        $this->assertSameAttribute($actual, 'class', null);
+        $this->validateForm(
+            form: $actual,
+            attributes: ['class' => null]
+        );
     }
 
     public function testWithModelTransformer(): void
     {
         $helper = $this->getFormHelper();
-        $actual = $helper->field(self::FIELD)
-            ->modelTransformer(new AddressTransformer())
+        $transformer = new AddressTransformer();
+        $form = $helper->field(self::FIELD)
+            ->modelTransformer($transformer)
             ->addTextType()
             ->createForm();
-        self::assertCount(1, $actual);
+        $field = $form->get(self::FIELD);
+        $configuration = $field->getConfig();
+        $transformers = $configuration->getModelTransformers();
+        self::assertContains($transformer, $transformers);
     }
 
     /**
@@ -653,63 +907,48 @@ final class FormHelperTest extends TypeTestCase
     }
 
     /**
-     * @phpstan-param FormInterface<mixed> $form
+     * @phpstan-param FormConfigInterface<mixed> $configuration
      */
-    private function assertSameAttribute(FormInterface $form, string $name, mixed $expected): void
+    private function assertSameAttribute(FormConfigInterface $configuration, string $name, mixed $expected): void
     {
-        self::assertTrue($form->has(self::FIELD));
-        $field = $form->get(self::FIELD);
-        $this->validateAttribute($field->getConfig(), 'attr', $name, $expected);
-    }
-
-    /**
-     * @phpstan-param FormInterface<mixed> $form
-     */
-    private function assertSameLabelAttribute(FormInterface $form, string $name, mixed $expected): void
-    {
-        self::assertTrue($form->has(self::FIELD));
-        $field = $form->get(self::FIELD);
-        $this->validateAttribute($field->getConfig(), 'label_attr', $name, $expected);
-    }
-
-    /**
-     * @phpstan-param FormInterface<mixed> $form
-     */
-    private function assertSameOption(FormInterface $form, string $name, mixed $expected): void
-    {
-        self::assertTrue($form->has(self::FIELD));
-        $field = $form->get(self::FIELD);
-        $config = $field->getConfig();
+        $actual = $configuration->getOption('attr');
+        self::assertIsArray($actual);
         if (null === $expected) {
-            self::assertFalse($config->hasOption($name));
+            self::assertArrayNotHasKey($name, $actual);
         } else {
-            self::assertTrue($config->hasOption($name));
-            self::assertSame($expected, $config->getOption($name));
+            self::assertArrayHasKey($name, $actual);
+            self::assertSame($expected, $actual[$name]);
         }
     }
 
     /**
      * @phpstan-param FormInterface<mixed> $form
      */
-    private function assertSameRowAttribute(FormInterface $form, string $name, mixed $expected): void
+    private function assertSameCount(FormInterface $form, int $expected = 1): void
     {
-        self::assertTrue($form->has(self::FIELD));
-        $field = $form->get(self::FIELD);
-        $this->validateAttribute($field->getConfig(), 'row_attr', $name, $expected);
+        self::assertCount($expected, $form);
     }
 
     /**
-     * @phpstan-param FormInterface<mixed> $form
-     * @phpstan-param class-string $expected
+     * @phpstan-param FormConfigInterface<mixed> $configuration
      */
-    private function assertSameType(FormInterface $form, string $expected): void
+    private function assertSameOption(FormConfigInterface $configuration, string $name, mixed $expected): void
     {
-        self::assertTrue($form->has(self::FIELD));
-        $field = $form->get(self::FIELD);
-        $innerType = $field->getConfig()
-            ->getType()
-            ->getInnerType();
-        $actual = $innerType::class;
+        if (null === $expected) {
+            self::assertFalse($configuration->hasOption($name));
+        } else {
+            self::assertTrue($configuration->hasOption($name));
+            self::assertSame($expected, $configuration->getOption($name));
+        }
+    }
+
+    /**
+     * @phpstan-param FormConfigInterface<mixed> $configuration
+     */
+    private function assertSameType(FormConfigInterface $configuration, string $expected): void
+    {
+        $actual = $configuration->getType()
+            ->getInnerType()::class;
         self::assertSame($expected, $actual);
     }
 
@@ -721,18 +960,26 @@ final class FormHelperTest extends TypeTestCase
     }
 
     /**
-     * @phpstan-param FormConfigInterface<mixed> $config
+     * @phpstan-param FormInterface<mixed> $form
+     * @phpstan-param class-string $class
      */
-    private function validateAttribute(FormConfigInterface $config, string $option, string $name, mixed $expected): void
-    {
-        self::assertTrue($config->hasOption($option));
-        $actual = $config->getOption($option);
-        self::assertIsArray($actual);
-        if (null === $expected) {
-            self::assertArrayNotHasKey($name, $actual);
-        } else {
-            self::assertArrayHasKey($name, $actual);
-            self::assertSame($expected, $actual[$name]);
+    private function validateForm(
+        FormInterface $form,
+        string $class = TextType::class,
+        int $count = 1,
+        array $options = [],
+        array $attributes = [],
+        string $fieldName = self::FIELD
+    ): void {
+        $field = $form->get($fieldName);
+        $configuration = $field->getConfig();
+        $this->assertSameCount($form, $count);
+        $this->assertSameType($configuration, $class);
+        foreach ($options as $name => $value) {
+            $this->assertSameOption($configuration, $name, $value);
+        }
+        foreach ($attributes as $name => $value) {
+            $this->assertSameAttribute($configuration, $name, $value);
         }
     }
 }

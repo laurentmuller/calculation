@@ -15,12 +15,14 @@ namespace App\Tests\Form\User;
 
 use App\Enums\Importance;
 use App\Form\Extension\FileTypeExtension;
+use App\Form\Extension\InputGroupTypeExtension;
 use App\Form\Type\PlainType;
 use App\Form\Type\SimpleEditorType;
 use App\Form\User\UserCommentType;
 use App\Model\Comment;
 use App\Tests\Form\PreloadedExtensionsTrait;
 use App\Tests\TranslatorMockTrait;
+use Symfony\Component\Form\FormTypeExtensionInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 final class UserCommentTypeTest extends TypeTestCase
@@ -55,13 +57,14 @@ final class UserCommentTypeTest extends TypeTestCase
     }
 
     /**
-     * @return FileTypeExtension[]
+     * @phpstan-return FormTypeExtensionInterface<mixed>[]
      */
     #[\Override]
     protected function getTypeExtensions(): array
     {
         return [
             new FileTypeExtension(),
+            new InputGroupTypeExtension(),
         ];
     }
 }

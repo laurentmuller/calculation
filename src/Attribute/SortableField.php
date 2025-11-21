@@ -35,11 +35,9 @@ readonly class SortableField implements SortModeInterface
      *
      * @template T of object
      *
-     * @param object|string $objectOrClass either a string containing the name of
-     *                                     the class to reflect, or an object
-     * @param string        $name          the property name to get order for
-     *
-     * @phpstan-param T|class-string<T> $objectOrClass
+     * @param T|class-string<T> $objectOrClass either a string containing the name of
+     *                                         the class to reflect, or an object
+     * @param string            $name          the property name to get order for
      *
      * @return ?string the default order or null if no attribute is found
      *
@@ -52,13 +50,12 @@ readonly class SortableField implements SortModeInterface
             return null;
         }
         $property = $class->getProperty($name);
+        /** @var \ReflectionAttribute<SortableField>[] $attributes */
         $attributes = $property->getAttributes(self::class);
         if ([] === $attributes) {
             return null;
         }
-        $attribute = $attributes[0];
-        $instance = $attribute->newInstance();
 
-        return $instance->order;
+        return $attributes[0]->newInstance()->order;
     }
 }

@@ -207,7 +207,7 @@ abstract class AbstractParameters
         $metaDatas = [];
         $properties = $this->getProperties($parameter);
         foreach ($properties as $property) {
-            $attribute = $this->getAttribute($property);
+            $attribute = Parameter::getAttributeFromProperty($property);
             if (!$attribute instanceof Parameter) {
                 continue;
             }
@@ -265,14 +265,6 @@ abstract class AbstractParameters
     private function getAccessor(): PropertyAccessor
     {
         return $this->accessor ??= PropertyAccess::createPropertyAccessor();
-    }
-
-    private function getAttribute(\ReflectionProperty $property): ?Parameter
-    {
-        /** @var \ReflectionAttribute<Parameter>[] $attributes */
-        $attributes = $property->getAttributes(Parameter::class);
-
-        return [] === $attributes ? null : $attributes[0]->newInstance();
     }
 
     /**

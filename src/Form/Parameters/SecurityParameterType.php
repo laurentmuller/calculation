@@ -28,10 +28,12 @@ class SecurityParameterType extends AbstractParameterType
     {
         $helper->field('captcha')
             ->label('parameters.fields.security_display_captcha')
+            ->updateOption('prepend_icon', 'fa-solid fa-key')
             ->addTrueFalseType('parameters.display.show', 'parameters.display.hide');
 
         $helper->field('level')
             ->label('password.strengthLevel')
+            ->updateOption('prepend_icon', 'fa-solid fa-hand-fist')
             ->addEnumType(StrengthLevel::class);
 
         foreach (Password::ALLOWED_OPTIONS as $option) {

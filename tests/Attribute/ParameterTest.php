@@ -21,6 +21,63 @@ final class ParameterTest extends TestCase
     /**
      * @throws \ReflectionException
      */
+    public function testAttributeFromProperty(): void
+    {
+        $testedClass = new class {
+            #[Parameter('parameter_name', 12346)]
+            public string $field = '';
+        };
+        $class = new \ReflectionClass($testedClass);
+        $property = $class->getProperty('field');
+        $actual = Parameter::getAttributeFromProperty($property);
+        self::assertNotNull($actual);
+        self::assertSame(12346, $actual->default);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testGetAttributInstance(): void
+    {
+        $testedClass = new class {
+            #[Parameter('parameter_name', 12346)]
+            public string $field = '';
+        };
+
+        $actual = Parameter::getAttributInstance($testedClass, 'field');
+        self::assertInstanceOf(Parameter::class, $actual);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testGetAttributInstanceNoAttribute(): void
+    {
+        $testedClass = new class {
+            public string $field = '';
+        };
+
+        $actual = Parameter::getAttributInstance($testedClass, 'field');
+        self::assertNull($actual);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testGetAttributInstancePropertyNoFound(): void
+    {
+        $testedClass = new class {
+            #[Parameter('parameter_name')]
+            public string $field = '';
+        };
+
+        $actual = Parameter::getAttributInstance($testedClass, 'fake');
+        self::assertNull($actual);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
     public function testGetDefaultValueNotNull(): void
     {
         $testedClass = new class {
@@ -43,47 +100,6 @@ final class ParameterTest extends TestCase
         };
 
         $actual = Parameter::getDefaultValue($testedClass, 'field');
-        self::assertNull($actual);
-    }
-
-    /**
-     * @throws \ReflectionException
-     */
-    public function testGetInstance(): void
-    {
-        $testedClass = new class {
-            #[Parameter('parameter_name', 12346)]
-            public string $field = '';
-        };
-
-        $actual = Parameter::getAttributInstance($testedClass, 'field');
-        self::assertInstanceOf(Parameter::class, $actual);
-    }
-
-    /**
-     * @throws \ReflectionException
-     */
-    public function testGetInstanceNoAttribute(): void
-    {
-        $testedClass = new class {
-            public string $field = '';
-        };
-
-        $actual = Parameter::getAttributInstance($testedClass, 'field');
-        self::assertNull($actual);
-    }
-
-    /**
-     * @throws \ReflectionException
-     */
-    public function testGetInstancePropertyNoFound(): void
-    {
-        $testedClass = new class {
-            #[Parameter('parameter_name')]
-            public string $field = '';
-        };
-
-        $actual = Parameter::getAttributInstance($testedClass, 'fake');
         self::assertNull($actual);
     }
 

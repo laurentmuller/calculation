@@ -32,7 +32,7 @@ class DisplayParameterType extends AbstractParameterType
             ->addEnumType(TableView::class);
 
         $helper->field('editAction')
-            ->updateOption('prepend_icon', 'fa-solid fa-terminal')
+            ->updateOption('prepend_icon', 'fa-solid fa-code')
             ->label('parameters.fields.edit_action')
             ->addEnumType(EntityAction::class);
     }

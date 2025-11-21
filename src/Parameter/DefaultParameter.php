@@ -65,6 +65,16 @@ class DefaultParameter implements ParameterInterface
         return !$this->isFloatZero($value) && $value < $this->minMargin;
     }
 
+    public function resetCategoryId(): self
+    {
+        return $this->setCategoryId(null);
+    }
+
+    public function resetStateId(): self
+    {
+        return $this->setStateId(null);
+    }
+
     public function setCategoryId(?int $categoryId): self
     {
         $this->categoryId = $categoryId;

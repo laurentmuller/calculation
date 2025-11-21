@@ -34,33 +34,41 @@ class Parameter
     }
 
     /**
-     * Gets the attribute instance.
+     * Gets an attribute instance from the given reflection property.
      *
-     * @param object|string $objectOrClass either a string containing the name of
-     *                                     the class to reflect, or an object
-     * @param string        $name          the property name to get an instance for
+     * @param \ReflectionProperty $property the property the get attribute for
      *
-     * @phpstan-template T of object
+     * @return ?Parameter the attribute instance, if found; null otherwise
+     */
+    public static function getAttributeFromProperty(\ReflectionProperty $property): ?self
+    {
+        /** @var \ReflectionAttribute<Parameter>[] $attributes */
+        $attributes = $property->getAttributes(self::class);
+
+        return [] === $attributes ? null : $attributes[0]->newInstance();
+    }
+
+    /**
+     * Gets an attribute instance for the given object and property name.
      *
-     * @phpstan-param T|class-string<T> $objectOrClass
+     * @template T of object
      *
-     * @return self|null the attribute instance, if found; null otherwise
+     * @param T|class-string<T> $objectOrClass either a string containing the name of
+     *                                         the class to reflect, or an object
+     * @param string            $name          the property name to get an instance for
+     *
+     * @return ?Parameter the attribute instance, if found; null otherwise
      *
      * @throws \ReflectionException if the class does not exist
      */
-    public static function getAttributInstance(object|string $objectOrClass, string $name): ?object
+    public static function getAttributInstance(object|string $objectOrClass, string $name): ?self
     {
         $class = new \ReflectionClass($objectOrClass);
         if (!$class->hasProperty($name)) {
             return null;
         }
-        $property = $class->getProperty($name);
-        $attributes = $property->getAttributes(self::class);
-        if ([] === $attributes) {
-            return null;
-        }
 
-        return $attributes[0]->newInstance();
+        return self::getAttributeFromProperty($class->getProperty($name));
     }
 
     /**

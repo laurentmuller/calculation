@@ -145,7 +145,7 @@ class ApplicationParameters extends AbstractParameters
     }
 
     /**
-     * This is a shortcut to get default parameter minimum margin.
+     * This is a shortcut to get the minimum margin from the default parameter.
      */
     public function getMinMargin(): float
     {
@@ -185,7 +185,7 @@ class ApplicationParameters extends AbstractParameters
     }
 
     /**
-     * This is a shortcut to get default parameter margin below.
+     * This is a shortcut to get the margin below from the default parameter.
      */
     public function isMarginBelow(Calculation|float $value): bool
     {

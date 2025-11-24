@@ -13,6 +13,7 @@ $(function () {
          */
         togglePassword: function () {
             return this.each(function () {
+                /** @var {jQuery|any} */
                 const $element = $(this);
                 const $button = $element.parents('.input-group').find('.btn-password');
                 if ($button.length) {
@@ -42,7 +43,7 @@ $(function () {
          */
         initPasswordStrength: function (options) {
             return this.each(function () {
-                // get parent
+                /** @type {jQuery|any} */
                 const $element = $(this);
                 const $parent = $element.parents('.form-group');
                 const id = $element.attr('id') + '_passwordStrength';

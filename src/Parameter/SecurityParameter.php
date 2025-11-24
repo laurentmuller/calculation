@@ -17,6 +17,7 @@ use App\Attribute\Parameter;
 use App\Constraint\Password;
 use App\Constraint\Strength;
 use App\Enums\StrengthLevel;
+use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
 
 /**
  * Security parameter.
@@ -59,11 +60,20 @@ class SecurityParameter implements ParameterInterface
     }
 
     /**
+     * Gets the not compromised constraint.
+     */
+    public function getNotCompromisedConstraint(): NotCompromisedPassword
+    {
+        return new NotCompromisedPassword();
+    }
+
+    /**
      * Gets the password constraint.
      */
-    public function getPasswordConstraint(): Password
+    public function getPasswordConstraint(?bool $all = null): Password
     {
         return new Password(
+            all: $all,
             letter: $this->letter,
             caseDiff: $this->caseDiff,
             number: $this->number,
@@ -110,9 +120,19 @@ class SecurityParameter implements ParameterInterface
         return $this->number;
     }
 
+    public function isPasswordConstraint(): bool
+    {
+        return $this->letter || $this->caseDiff || $this->number || $this->specialChar || $this->email;
+    }
+
     public function isSpecialChar(): bool
     {
         return $this->specialChar;
+    }
+
+    public function isStrengthConstraint(): bool
+    {
+        return StrengthLevel::NONE !== $this->level;
     }
 
     public function setCaptcha(bool $captcha): self

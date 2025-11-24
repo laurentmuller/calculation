@@ -86,25 +86,21 @@ class StrengthValidator extends AbstractConstraintValidator
 
     private function getUserInputs(Strength $constraint): array
     {
-        $userInputs = [];
         $object = $this->context->getObject();
         if (null === $object) {
-            return $userInputs;
-        }
-        if (null !== $constraint->userNamePath) {
-            $userInputs[] = $this->getValue($object, $constraint->userNamePath);
-        }
-        if (null !== $constraint->emailPath) {
-            $userInputs[] = $this->getValue($object, $constraint->emailPath);
+            return [];
         }
 
-        return \array_filter($userInputs);
+        return \array_filter([
+            $this->getValue($object, $constraint->userNamePath),
+            $this->getValue($object, $constraint->emailPath),
+        ]);
     }
 
-    private function getValue(object $object, string $path): string
+    private function getValue(object $object, ?string $path): string
     {
         try {
-            return (string) $this->propertyAccessor->getValue($object, $path);
+            return null === $path ? '' : (string) $this->propertyAccessor->getValue($object, $path);
         } catch (NoSuchPropertyException $e) {
             throw new ConstraintDefinitionException(\sprintf('Invalid property path "%s" for "%s".', $path, StringUtils::getDebugType($object)), $e->getCode(), $e);
         }

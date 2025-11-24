@@ -28,6 +28,7 @@ use App\Tests\TranslatorMockTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
+use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
 use Symfony\Component\Validator\Validation;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use ZxcvbnPhp\Zxcvbn;
@@ -57,12 +58,20 @@ final class UserChangePasswordTypeTest extends EntityTypeTestCase
         $this->translator = $this->createMockTranslator();
 
         $security = $this->createMock(SecurityParameter::class);
+        $security->method('isPasswordConstraint')
+            ->willReturnCallback(fn (): bool => $this->isPasswordConstraint());
         $security->method('getPasswordConstraint')
             ->willReturnCallback(fn (): Password => $this->password);
+
+        $security->method('isStrengthConstraint')
+            ->willReturnCallback(fn (): bool => $this->isStrengthConstraint());
         $security->method('getStrengthConstraint')
             ->willReturnCallback(fn (): Strength => $this->strength);
+
         $security->method('isCompromised')
             ->willReturnCallback(fn (): bool => $this->compromisedPassword);
+        $security->method('getNotCompromisedConstraint')
+            ->willReturn(new NotCompromisedPassword());
 
         $this->parameters = $this->createMock(ApplicationParameters::class);
         $this->parameters->method('getSecurity')
@@ -226,5 +235,19 @@ final class UserChangePasswordTypeTest extends EntityTypeTestCase
             ->willReturn($service);
 
         return new StrengthValidator($this->translator, $factory);
+    }
+
+    private function isPasswordConstraint(): bool
+    {
+        return $this->password->letter
+            || $this->password->caseDiff
+            || $this->password->number
+            || $this->password->specialChar
+            || $this->password->email;
+    }
+
+    private function isStrengthConstraint(): bool
+    {
+        return StrengthLevel::NONE !== $this->score;
     }
 }

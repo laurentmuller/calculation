@@ -61,6 +61,24 @@ final class SecurityParameterTest extends ParameterTestCase
         self::assertSame('parameter_security', $this->parameter::getCacheKey());
     }
 
+    public function testIsPasswordConstraint(): void
+    {
+        $actual = $this->parameter->isPasswordConstraint();
+        self::assertFalse($actual);
+        $this->parameter->setLetter(true);
+        $actual = $this->parameter->isPasswordConstraint();
+        self::assertTrue($actual);
+    }
+
+    public function testIsStrengthConstraint(): void
+    {
+        $actual = $this->parameter->isStrengthConstraint();
+        self::assertFalse($actual);
+        $this->parameter->setLevel(StrengthLevel::MEDIUM);
+        $actual = $this->parameter->isStrengthConstraint();
+        self::assertTrue($actual);
+    }
+
     public function testPasswordConstraint(): void
     {
         $constraint = $this->parameter->getPasswordConstraint();

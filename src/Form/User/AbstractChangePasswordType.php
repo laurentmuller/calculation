@@ -22,8 +22,6 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Callback;
-use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
@@ -60,56 +58,38 @@ abstract class AbstractChangePasswordType extends AbstractEntityType
             ->addRepeatPasswordType('user.password.new', 'user.password.new_confirmation');
     }
 
-    private function mapViolations(ConstraintViolationListInterface $list): string
-    {
-        $str = '';
-        foreach ($list as $violation) {
-            $str .= \sprintf("%s\n", $violation->getMessage());
-        }
-
-        return \trim($str);
-    }
-
     private function validate(ExecutionContextInterface $context): void
     {
-        $root = $context->getRoot();
-        $form = $root->get('plainPassword');
+        /** @phpstan-var FormInterface<mixed> $form */
+        $form = $context->getRoot()->get('plainPassword');
         $password = (string) $form->getData();
         $target = $form->get('first');
 
         $security = $this->parameters->getSecurity();
-        $constraint = $security->getStrengthConstraint();
-        if (!$this->validateConstraint($context, $constraint, $password, $target)) {
-            return;
+        if ($security->isStrengthConstraint()) {
+            $this->validateConstraint($context, $password, $security->getStrengthConstraint(), $target);
         }
-        $constraint = $security->getPasswordConstraint();
-        if (!$this->validateConstraint($context, $constraint, $password, $target)) {
-            return;
+        if ($security->isPasswordConstraint()) {
+            $this->validateConstraint($context, $password, $security->getPasswordConstraint(true), $target);
         }
         if ($security->isCompromised()) {
-            $constraint = new NotCompromisedPassword();
-            $this->validateConstraint($context, $constraint, $password, $target);
+            $this->validateConstraint($context, $password, $security->getNotCompromisedConstraint(), $target);
         }
     }
 
     /**
-     * @phpstan-param FormInterface<array> $target
+     * @phpstan-param FormInterface<mixed> $target
      */
     private function validateConstraint(
         ExecutionContextInterface $context,
-        Constraint $constraint,
         string $password,
+        Constraint $constraint,
         FormInterface $target
-    ): bool {
+    ): void {
         $violations = $context->getValidator()
             ->validate($password, $constraint);
-        if (0 === $violations->count()) {
-            return true;
+        foreach ($violations as $violation) {
+            $target->addError(new FormError((string) $violation->getMessage()));
         }
-
-        $error = $this->mapViolations($violations);
-        $target->addError(new FormError($error));
-
-        return false;
     }
 }

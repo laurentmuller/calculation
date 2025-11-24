@@ -88,7 +88,7 @@ An empty file is not allowed.: Un fichier vide n'est pas autorisé.
 # Symfony\Component\Validator\Constraints\PasswordStrength
 The password strength is too low. Please use a stronger password.: La force du mot de passe est trop faible.
 # Symfony\Component\Validator\Constraints\NotCompromisedPassword
-This password has been leaked in a data breach, it must not be used. Please use another password.: Ce mot de passe a été divulgué lors d'une fuite de données. Veuillez utiliser un autre mot de passe.
+This password has been leaked in a data breach, it must not be used. Please use another password.: Le mot de passe est compromis.
 # Symfony\Component\Validator\Constraints\NoSuspiciousCharacters
 This value contains characters that are not allowed by the current restriction-level.: Des caractères ne sont pas autorisés par le niveau de restriction actuel.
 Using invisible characters is not allowed.: L'utilisation de caractères invisibles n’est pas autorisée.

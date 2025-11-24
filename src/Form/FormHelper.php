@@ -397,18 +397,18 @@ class FormHelper
         string $confirmLabel = RepeatPasswordType::CONFIRM_LABEL
     ): self {
         if (RepeatPasswordType::PASSWORD_LABEL !== $passwordLabel) {
-            $first_options = \array_replace_recursive(
+            $options = \array_replace_recursive(
                 RepeatPasswordType::getPasswordOptions(),
                 ['label' => $passwordLabel]
             );
-            $this->updateOption('first_options', $first_options);
+            $this->updateOption('first_options', $options);
         }
         if (RepeatPasswordType::CONFIRM_LABEL !== $confirmLabel) {
-            $second_options = \array_replace_recursive(
+            $options = \array_replace_recursive(
                 RepeatPasswordType::getConfirmOptions(),
                 ['label' => $confirmLabel]
             );
-            $this->updateOption('second_options', $second_options);
+            $this->updateOption('second_options', $options);
         }
 
         return $this->add(RepeatPasswordType::class);

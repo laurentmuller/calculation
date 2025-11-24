@@ -33,15 +33,15 @@ class HtmlOlChunk extends AbstractHtmlListChunk
     }
 
     #[\Override]
-    public function getBulletLast(): string
-    {
-        return $this->getText($this->start + $this->count() - 1);
-    }
-
-    #[\Override]
     public function getBulletText(HtmlLiChunk $chunk): string
     {
         return $this->getText($this->start + $this->indexOf($chunk));
+    }
+
+    #[\Override]
+    public function getLastBulletText(): string
+    {
+        return $this->getText($this->start + $this->count() - 1);
     }
 
     private function getText(int $number): string

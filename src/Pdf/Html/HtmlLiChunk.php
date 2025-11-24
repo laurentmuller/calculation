@@ -86,7 +86,7 @@ class HtmlLiChunk extends HtmlParentChunk
         $text = null;
         $parent = $this->getParent();
         if ($parent instanceof AbstractHtmlListChunk) {
-            $text = $parent->getBulletLast();
+            $text = $parent->getLastBulletText();
         }
 
         if (StringUtils::isString($text)) {

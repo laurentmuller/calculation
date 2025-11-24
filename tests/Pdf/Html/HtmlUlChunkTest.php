@@ -33,7 +33,7 @@ final class HtmlUlChunkTest extends TestCase
     public function testBulletLast(): void
     {
         $chunk = new HtmlUlChunk();
-        $actual = $chunk->getBulletLast();
+        $actual = $chunk->getLastBulletText();
         self::assertSame(\chr(149), $actual);
     }
 

@@ -138,7 +138,6 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
             HtmlTag::DESCRIPTION_TERM,
             HtmlTag::DESCRIPTION_DETAIL,
             HtmlTag::PARAGRAPH => true,
-
             HtmlTag::LIST_ITEM => !self::isLastNewLine($this),
             default => parent::isNewLine(),
         };

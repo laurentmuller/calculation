@@ -24,14 +24,14 @@ class HtmlUlChunk extends AbstractHtmlListChunk
     }
 
     #[\Override]
-    public function getBulletLast(): string
+    public function getBulletText(HtmlLiChunk $chunk): string
     {
-        return \chr(149);
+        return $this->getLastBulletText();
     }
 
     #[\Override]
-    public function getBulletText(HtmlLiChunk $chunk): string
+    public function getLastBulletText(): string
     {
-        return $this->getBulletLast();
+        return \chr(149);
     }
 }

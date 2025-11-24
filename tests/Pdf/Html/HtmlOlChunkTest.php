@@ -22,12 +22,12 @@ final class HtmlOlChunkTest extends TestCase
     public function testGetBulletLast(): void
     {
         $olChunk = new HtmlOlChunk();
-        $actual = $olChunk->getBulletLast();
+        $actual = $olChunk->getLastBulletText();
         self::assertSame('1.', $actual);
 
         $olChunk->add(new HtmlLiChunk());
         $olChunk->add(new HtmlLiChunk());
-        $actual = $olChunk->getBulletLast();
+        $actual = $olChunk->getLastBulletText();
         self::assertSame('2.', $actual);
     }
 

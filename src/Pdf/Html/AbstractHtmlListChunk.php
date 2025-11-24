@@ -21,14 +21,14 @@ namespace App\Pdf\Html;
 abstract class AbstractHtmlListChunk extends HtmlParentChunk
 {
     /**
-     * Gets the bullet text for the last child (if any).
-     */
-    abstract public function getBulletLast(): string;
-
-    /**
      * Gets the bullet text for the given child.
      */
     abstract public function getBulletText(HtmlLiChunk $chunk): string;
+
+    /**
+     * Gets the bullet text for the last child (if any).
+     */
+    abstract public function getLastBulletText(): string;
 
     #[\Override]
     protected function isValidChild(AbstractHtmlChunk $child): bool

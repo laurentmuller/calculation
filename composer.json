@@ -51,7 +51,7 @@
         "laurentmuller/fpdf2": "^3.0",
         "laurentmuller/highcharts-bundle": "^3.0",
         "phpoffice/phpspreadsheet": "^5.0",
-        "phpoffice/phpword": "^1.0",
+        "phpoffice/phpword": "1.3.0",
         "robquistnl/simplehtmltotext": "^1.0",
         "symfony/asset": "7.3.*",
         "symfony/console": "7.3.*",

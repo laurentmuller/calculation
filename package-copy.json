@@ -42,10 +42,6 @@
             "to": "public/build/highcharts/"
         },
         {
-            "from": "node_modules/html-to-image/dist/html-to-image.js",
-            "to": "public/build/html-to-image/"
-        },
-        {
             "from": "node_modules/html5sortable/dist/html5sortable.js",
             "to": "public/build/html5sortable/"
         },

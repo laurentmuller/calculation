@@ -18,9 +18,9 @@
 {# title #}
 {% block help_title -%}
 {{- output_icon(entity.icon|default(false), entity_name) -}}
-{%- endblock %}
+{%- endblock help_title %}
 {# search #}
-{% block help_search %}{% endblock %}
+{% block help_search %}{% endblock help_search %}
 {# actions #}
 {% block help_actions -%}
     {{ parent() }}
@@ -32,7 +32,7 @@
         icon: ICON_PDF,
         title: 'common.button_export_pdf')
     }}
-{% endblock %}
+{% endblock help_actions %}
 {# body #}
 {% block help_body -%}
 {# description #}
@@ -88,4 +88,4 @@
 {% endif %}
 {# links #}
 {{ output_links(entity.links|default([]), service) }}
-{%- endblock %}
+{%- endblock help_body %}

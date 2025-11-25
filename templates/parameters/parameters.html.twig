@@ -26,7 +26,7 @@
             {% endfor %}
         </ul>
     </div>
-{%- endblock %}
+{%- endblock _message_progress_widget %}
 {# macros #}
 {% macro renderHeader(href, icon, expanded = false) %}
     {%- set show = 'common.expand'|trans -%}
@@ -40,15 +40,15 @@
             <i class="fa-solid fa-{{ icon }} fa-fw me-1"></i>{{ name }}
         </a>
     </div>
-{% endmacro %}
+{% endmacro renderHeader %}
 {% macro renderDescription(key) %}
     <p class="mb-2 form-text text-body-secondary">{{ ('parameters.group_' ~ key ~ '_help')|trans }}</p>
-{% endmacro %}
+{% endmacro renderDescription %}
 {% macro renderLine(icon, text) %}
     <div class="horizontal-line pb-2">
         <i class="{{ icon }} fa-fw align-self-center me-1"></i>{{ text|trans }}
     </div>
-{% endmacro %}
+{% endmacro renderLine %}
 {% macro renderCustomer(form) %}
     {{ _self.renderHeader('customer', 'user-tie', true) }}
     <div id="customer" class="card-body pt-0 collapse show" data-bs-parent=".card-parameter">
@@ -75,7 +75,7 @@
             <div class="col-lg-6">{{ form_row(form.linkedin) }}</div>
         </div>
     </div>
-{% endmacro %}
+{% endmacro renderCustomer %}
 {% macro renderDefault(form) %}
     {{ _self.renderHeader('default', 'file-code') }}
     <div id="default" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
@@ -92,7 +92,7 @@
             </div>
         </div>
     </div>
-{% endmacro %}
+{% endmacro renderDefault %}
 {% macro renderProduct(form) %}
     {{ _self.renderHeader('product', 'file-alt') }}
     <div id="product" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
@@ -107,7 +107,7 @@
         </div>
         {{ form_row(form.edit) }}
     </div>
-{% endmacro %}
+{% endmacro renderProduct %}
 {% macro renderDisplay(form, expanded = false) %}
     {{ _self.renderHeader('display', 'display', expanded) }}
     <div id="display" class="card-body pt-0 collapse{% if expanded %} show{% endif %}" data-bs-parent=".card-parameter">
@@ -121,7 +121,7 @@
             </div>
         </div>
     </div>
-{% endmacro %}
+{% endmacro renderDisplay %}
 {% macro renderMessage(form) %}
     {{ _self.renderHeader('message', 'bell') }}
     <div id="message" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
@@ -144,7 +144,7 @@
             {{ form_row(form.close) }}
         </div>
     </div>
-{% endmacro %}
+{% endmacro renderMessage %}
 {% macro renderHomePage(form) %}
     {{ _self.renderHeader('home', 'house-user') }}
     <div id="home" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
@@ -156,7 +156,7 @@
         {{ form_row(form.statusBar) }}
         {{ form_row(form.darkNavigation) }}
     </div>
-{% endmacro %}
+{% endmacro renderHomePage %}
 {% macro renderOptions(form) %}
     {{ _self.renderHeader('options', 'list-check') }}
     <div id="options" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
@@ -164,7 +164,7 @@
         {{ form_row(form.printAddress) }}
         {{ form_row(form.qrCode) }}
     </div>
-{% endmacro %}
+{% endmacro renderOptions %}
 {% macro renderSecurity(form) %}
     {{ _self.renderHeader('security', 'lock') }}
     <div id="security" class="card-body pt-0 collapse" data-bs-parent=".card-parameter">
@@ -185,7 +185,7 @@
         {{ form_row(form.email) }}
         {{ form_row(form.compromised) }}
     </div>
-{% endmacro %}
+{% endmacro renderSecurity %}
 {# body #}
 {% block card_body -%}
     <div class="card card-parameter card-collapse border-0">
@@ -209,7 +209,7 @@
         {% endif %}
     </div>
     {{ parent() }}
-{% endblock %}
+{% endblock card_body %}
 {# form #}
 {% block actions_form -%}
     {{ parent() }}
@@ -231,7 +231,7 @@
             </li>
         </ul>
     </div>
-{%- endblock %}
+{%- endblock actions_form %}
 {# javascripts #}
 {% block javascripts %}
     {% if is_js_debug %}
@@ -241,4 +241,4 @@
     {% else %}
         {{ asset_js('js/compiled/parameters_edit.js') }}
     {% endif %}
-{% endblock %}
+{% endblock javascripts %}

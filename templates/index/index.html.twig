@@ -10,14 +10,14 @@
 {# navigation #}
 {%- block navigation_vertical -%}
     {%- if enabled -%}{{ parent() }}{% endif %}
-{%- endblock %}
+{%- endblock navigation_vertical %}
 {% block navigation_horizontal -%}
     {%- if enabled -%}{{ parent() }}{%- endif -%}
-{%- endblock %}
+{%- endblock navigation_horizontal %}
 {# footer #}
 {% block footer -%}
     {%- if enabled -%}{{- parent() -}}{%- endif -%}
-{%- endblock %}
+{%- endblock footer %}
 {# body #}
 {% block body -%}
     {% if enabled %}
@@ -40,7 +40,7 @@
             </div>
         </div>
     {% endif %}
-{%- endblock %}
+{%- endblock body %}
 {# stylesheets #}
 {% block stylesheets -%}
     {{ preload_css(enabled ? 'css/calculation.css' : 'css/center.css') }}
@@ -48,7 +48,7 @@
     <style nonce="{{ csp_nonce() }}">
         {{- css_border() }}
     </style>
-{%- endblock %}
+{%- endblock stylesheets %}
 {# javascripts #}
 {% block javascripts -%}
 {% if enabled %}
@@ -64,4 +64,4 @@
         {{ asset_js('js/compiled/index.js') }}
     {% endif %}
 {% endif %}
-{% endblock %}
+{% endblock javascripts %}

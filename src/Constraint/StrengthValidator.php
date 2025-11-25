@@ -71,7 +71,7 @@ class StrengthValidator extends AbstractConstraintValidator
 
         $service = $this->getService();
         $userInputs = $this->getUserInputs($constraint);
-        /** @phpstan-var array{score: int<0, 4>} $result */
+        /** @phpstan-var array{score: int} $result */
         $result = $service->passwordStrength($value, $userInputs);
         $score = StrengthLevel::tryFrom($result['score']) ?? StrengthLevel::NONE;
         if ($score->isSmaller($minimum)) {

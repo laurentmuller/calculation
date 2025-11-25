@@ -16,7 +16,7 @@
         {{ form_row(form.margin) }}
     </div>
 </div>
-{% endblock %}
+{% endblock card_body %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -26,4 +26,4 @@
 {% else %}
     {{- asset_js('js/compiled/margins_edit.js') }}
 {% endif %}
-{% endblock %}
+{% endblock javascripts %}

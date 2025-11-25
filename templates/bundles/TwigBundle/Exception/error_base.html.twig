@@ -22,7 +22,7 @@
 <p id="error-message">
 {% block error_message -%}
     {{- description|default('')|raw }} {{ suggestion|default('')|raw -}}
-{%- endblock %}
+{%- endblock error_message %}
 </p>
 <div class="d-flex-wrap-center d-print-none">
     <p class="mb-0 me-auto">{{ 'error_page.link'|trans({'%mailto%': mailer_user_email, '%subject%': app_name_version|url_encode})|raw }}</p>
@@ -98,7 +98,7 @@
     </table>
 </div>
 {% endif %}
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer %}
 {% if page_list is defined and page_list %}
@@ -108,11 +108,11 @@
     {{ homepage() }}
 {% endif %}
     {{ button_copy(false) }}
-{% endblock %}
+{% endblock card_footer %}
 {# javascripts #}
 {% block javascripts %}
     {{ parent() }}
     {{ asset_js('build/clipboard/clipboard.js') }}
     {{ asset_js('js/plugins/plugin-copy.js') }}
     {{ asset_js('js/application/error_base.js') }}
-{% endblock %}
+{% endblock javascripts %}

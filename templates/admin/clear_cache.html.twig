@@ -57,7 +57,7 @@
             </div>
         </div>
     {% endif %}
-{% endblock %}
+{% endblock body %}
 {# actions #}
 {% block actions_form -%}
     {{ parent() }}
@@ -66,4 +66,4 @@
             {{- 'clear_cache.list'|trans -}}
         </button>
     {% endif %}
-{% endblock %}
+{% endblock actions_form %}

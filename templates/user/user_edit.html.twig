@@ -40,16 +40,16 @@
 {% if tooltips is defined and tooltips|length %}
     {{ password_tooltips(tooltips) }}
 {% endif %}
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer -%}
 {{ parent() }}
 {{ timestampable_footer(item) }}
-{% endblock %}
+{% endblock card_footer %}
 {# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/imageinput.css') }}
-{% endblock %}
+{% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -63,4 +63,4 @@
 {% else %}
     {{ asset_js('js/compiled/user_edit.js') }}
 {% endif %}
-{% endblock %}
+{% endblock javascripts %}

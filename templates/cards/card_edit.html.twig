@@ -15,17 +15,17 @@
     {{ parent() -}}
     {% block start_form %}
         {{ form_start(form, {attr: form_attr}) }}
-    {% endblock %}
-{% endblock %}
+    {% endblock start_form %}
+{% endblock start_card_container %}
 {# header #}
 {% block card_header %}
     {{ parent() -}}
     {{ form_errors(form) }}
-{%- endblock %}
+{%- endblock card_header %}
 {# body #}
 {% block card_body %}
     {{ form_rest(form) }}
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer -%}
 {%- set show_required = show_required is defined ? show_required : true -%}
@@ -35,17 +35,17 @@
         {% if cancel_path|default(false) -%}
             {{ button_cancel(cancel_path, cancel_text) }}
         {%- endif %}
-    {%- endblock %}
+    {%- endblock actions_form %}
     {% if show_required -%}
         <small class="ms-sm-auto">{{ 'common.required'|trans|raw }}</small>
     {%- endif %}
 </div>
-{%- endblock %}
+{%- endblock card_footer %}
 {# end container #}
 {% block end_card_container -%}
-{% block end_form -%}{{ form_end(form) }}{%- endblock %}
+{% block end_form -%}{{ form_end(form) }}{%- endblock end_form %}
 {{ parent() }}
-{%- endblock %}
+{%- endblock end_card_container %}
 {# javascript #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -58,4 +58,4 @@
 {% else %}
     {{- asset_js('js/compiled/core_edit.js') }}
 {% endif %}
-{%- endblock %}
+{%- endblock javascripts %}

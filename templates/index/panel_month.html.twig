@@ -22,7 +22,7 @@
         {{- 'counters.calculations'|trans({count: item.count}) -}}
     </p>
 </div>
-{%- endmacro %}
+{%- endmacro cardEntry %}
 {# parameters #}
 {%- set panel_key = 'DISPLAY_MONTH' -%}
 {%- set panel_show = app.request.cookies.boolean(panel_key, true) -%}

@@ -127,6 +127,7 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
     public function testStrengthInvalid(int $strength): void
     {
         $this->expectException(ConstraintDefinitionException::class);
+        $this->expectExceptionMessage('Unable to find a strength level for the value ' . $strength . '.');
         new Strength($strength);
     }
 

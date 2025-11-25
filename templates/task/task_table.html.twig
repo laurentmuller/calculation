@@ -9,7 +9,7 @@
 {% if allow_add %}
     {{ link(path('task_add', params), 'task.add.title', 'add-link p-0') }}
 {% endif %}
-{%- endblock %}
+{%- endblock header_actions %}
 {# actions #}
 {% block toolbar_actions -%}
 {% if customData.dropdown is defined and customData.dropdown|length %}
@@ -30,36 +30,36 @@
         {% endfor %}
     </ul>
 {% endif %}
-{%- endblock %}
+{%- endblock toolbar_actions %}
 {# global actions #}
 {% block global_actions -%}
 {{- _self.item_external(path('task_pdf'), 'task.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('task_excel'), 'task.list.excel_title', ICON_EXCEL) }}
-{%- endblock %}
+{%- endblock global_actions %}
 {# edit actions #}
 {% block edit_actions -%}
 {{- _self.item_path(path('task_edit', params), 'task.edit.title', ICON_EDIT, edit_class) }}
-{%- endblock %}
+{%- endblock edit_actions %}
 {# delete actions #}
 {% block delete_actions -%}
 {{- _self.item_path(path('task_delete', params), 'task.delete.title', ICON_DELETE, 'btn-delete') }}
-{%- endblock %}
+{%- endblock delete_actions %}
 {# add actions #}
 {% block add_actions -%}
 {{- _self.item_path(path('task_add', params), 'task.add.title', ICON_ADD, 'btn-add') }}
 {{- _self.item_path(path('task_clone', params), 'common.button_clone', ICON_COPY, 'btn-task-clone') }}
-{%- endblock %}
+{%- endblock add_actions %}
 {# show actions #}
 {% block show_actions -%}
 {{- _self.item_path(path('task_show', params), 'task.show.title', ICON_SHOW, show_class) }}
-{%- endblock %}
+{%- endblock show_actions %}
 {# other actions #}
 {% block other_actions -%}
 {% if allow_show %}
     {{- _self.item_separator('task-compute-divider') }}
     {{- _self.item_path(path('task_compute', params), 'task_compute.title', 'keyboard', 'btn-task-compute') }}
 {% endif %}
-{%- endblock %}
+{%- endblock other_actions %}
 {# custom view header #}
 {% block custom_view_header -%}
 {%- if row_edit -%}
@@ -69,7 +69,7 @@
 {%- else -%}
     <span>%name%</span>
 {%- endif -%}
-{%- endblock %}
+{%- endblock custom_view_header %}
 {# custom view body #}
 {% block custom_view_body -%}
 {{ _self.property_row('task.fields.category', '%groupCode% / %categoryCode%') }}
@@ -77,4 +77,4 @@
 {{ _self.property_row('task.fields.unit', '%unit%') }}
 {{ _self.property_line() }}
 {{ _self.property_row('task.fields.items', '%items%') }}
-{%- endblock %}
+{%- endblock custom_view_body %}

@@ -9,28 +9,28 @@
 {% if allow_add %}
     {{ link(path('customer_add', params), 'customer.add.title', 'add-link p-0') }}
 {% endif %}
-{%- endblock %}
+{%- endblock header_actions %}
 
 {% block global_actions -%}
 {{- _self.item_external(path('customer_pdf'), 'customer.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('customer_excel'), 'customer.list.excel_title', ICON_EXCEL) }}
-{%- endblock %}
+{%- endblock global_actions %}
 
 {% block edit_actions -%}
 {{- _self.item_path(path('customer_edit', params), 'customer.edit.title', ICON_EDIT, edit_class) }}
-{%- endblock %}
+{%- endblock edit_actions %}
 
 {% block delete_actions -%}
 {{- _self.item_path(path('customer_delete', params), 'customer.delete.title', ICON_DELETE, 'btn-delete') }}
-{%- endblock %}
+{%- endblock delete_actions %}
 
 {% block add_actions -%}
 {{- _self.item_path(path('customer_add', params), 'customer.add.title', ICON_ADD, 'btn-add') }}
-{%- endblock %}
+{%- endblock add_actions %}
 
 {% block show_actions -%}
 {{- _self.item_path(path('customer_show', params), 'customer.show.title', ICON_SHOW, show_class) }}
-{%- endblock %}
+{%- endblock show_actions %}
 
 {% block custom_view_header -%}
 {%- if row_edit -%}
@@ -40,9 +40,9 @@
 {%- else -%}
     <span>%nameAndCompany%</span>
 {%- endif -%}
-{%- endblock %}
+{%- endblock custom_view_header %}
 
 {% block custom_view_body -%}
 {{ _self.property_value('%address%') }}
 {{ _self.property_value('%zipCity%') }}
-{%- endblock %}
+{%- endblock custom_view_body %}

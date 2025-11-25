@@ -38,7 +38,7 @@
 </div>
 {{ form_row(form.email) }}
 {{ form_row(form.webSite) }}
-{% endblock %}
+{% endblock card_body %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -49,4 +49,4 @@
 {% else %}
     {{ asset_js('js/compiled/customer_edit.js') }}
 {% endif %}
-{% endblock %}
+{% endblock javascripts %}

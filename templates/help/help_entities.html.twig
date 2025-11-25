@@ -15,7 +15,7 @@
         </div>
     </div>
 </div>
-{%- endmacro %}
+{%- endmacro output_entity %}
 {# parameters #}
 {%- set title = 'help.entity_menu' -%}
 {# class #}
@@ -23,11 +23,11 @@
 {# title #}
 {% block help_title -%}
 <i class="fa-solid fa-database me-1"></i>{{- 'help.entity_menu'|trans -}}
-{% endblock %}
+{% endblock help_title %}
 {# actions #}
 {% block help_actions -%}
     {{ dialogs_button() }}
-{% endblock %}
+{% endblock help_actions %}
 {# body #}
 {% block help_body -%}
 <hr class="mt-1">
@@ -36,4 +36,4 @@
         {{ _self.output_entity(entity) }}
     {% endfor %}
 </div>
-{% endblock %}
+{% endblock help_body %}

@@ -3,14 +3,14 @@
 {# macros #}
 {% macro output_checkbox(value) -%}
     {%- if value -%}<i class="fa-solid fa-check"></i>{%- else -%}&nbsp;{%- endif -%}
-{%- endmacro %}
+{%- endmacro output_checkbox %}
 {% macro output_association(inverse) -%}
     {%- if inverse -%}
         {{- icon('arrow-right-to-bracket', 'schema.table.one_to_many') -}}
     {%- else -%}
         {{- icon('arrow-right-from-bracket', 'schema.table.many_to_one') -}}
     {%- endif -%}
-{%- endmacro %}
+{%- endmacro output_association %}
 {# parameters #}
 {%- set title = 'schema.table.title' -%}
 {%- set title_description = 'schema.table.description' -%}
@@ -112,14 +112,14 @@
             </table>
         </div>
     {% endif %}
-{%- endblock %}
+{%- endblock card_body %}
 {# footer #}
 {% block card_footer -%}
     {{ homepage() }}
     {{ link(path('schema_index'), 'schema.index.title', 'btn btn-form btn-success', title: 'schema.index.description') }}
-{%- endblock %}
+{%- endblock card_footer %}
 {# javascripts #}
 {% block javascripts %}
     {{ parent() }}
     {{ asset_js('js/plugins/plugin-rowlink.js') }}
-{% endblock %}
+{% endblock javascripts %}

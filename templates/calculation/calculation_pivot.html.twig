@@ -3,15 +3,15 @@
 {# macros #}
 {% macro format(value) -%}
 {{ value matches '/^\\d+$/' ? value|integer : value|amount }}
-{%- endmacro %}
+{%- endmacro format %}
 
 {% macro colspan(value) -%}
 {% if value > 1 %} colspan="{{ value }}"{% endif %}
-{%- endmacro %}
+{%- endmacro colspan %}
 
 {% macro rowspan(value) -%}
 {% if value > 1 %} rowspan="{{ value }}"{% endif %}
-{%- endmacro %}
+{%- endmacro rowspan %}
 
 {% macro outputPopover(cell, value, separator) -%}
 <table class="table table-borderless table-sm mb-0">
@@ -32,12 +32,12 @@
         </tr>
     </tbody>
 </table>
-{%- endmacro %}
+{%- endmacro outputPopover %}
 
 {% macro outputPopoverTitle(cell, separator) -%}
 {%- set titles = cell.titles|default(cell.title)|default('') -%}
 <p class="mb-0">{{ titles|join(separator)|raw }}{{ separator|raw }}<span class="fw-bold">{{ _self.format(cell.value) }}</span></p>
-{%- endmacro %}
+{%- endmacro outputPopoverTitle %}
 
 {% macro outputHeaders(nodes, separator) -%}
 {%- for node in nodes %}
@@ -47,13 +47,13 @@
         <td class="text-nowrap not-hover" data-bs-toggle="popover" data-bs-html="{{ _self.outputPopoverTitle(node, separator)|e }}"{{ _self.colspan(node.lastChildren|length) }}>{{ node.title|raw }}</td>
     {%- endif -%}
 {%- endfor -%}
-{%- endmacro %}
+{%- endmacro outputHeaders %}
 
 {% macro outputPopoverTotal(cell, separator) -%}
 <td class="text-bg-success text-currency" data-bs-toggle="popover" data-bs-html="{{ _self.outputPopoverTitle(cell, separator)|e }}">
     {{- _self.format(cell.value) -}}
 </td>
-{%- endmacro %}
+{%- endmacro outputPopoverTotal %}
 
 {% macro outputValue(cell, class, separator) -%}
 {%- set class = ('text-currency ' ~ class|default(''))|trim -%}
@@ -64,19 +64,19 @@
 {% else %}
     <td class="{{ class }} not-hover">&nbsp;</td>
 {% endif %}
-{%- endmacro %}
+{%- endmacro outputValue %}
 
 {% macro outputCell(table, column, row, class, separator) -%}
 {%- set cell = table.findCellByNode(column, row) -%}
 {{ _self.outputValue(cell, class, separator) }}
-{%- endmacro %}
+{%- endmacro outputCell %}
 
 {% macro outputCells(table, columns, row, separator) -%}
 {%- for column in columns %}
     {{ _self.outputCell(table, column, row, 'hover', separator) }}
 {%- endfor -%}
 {{ _self.outputPopoverTotal(row, separator) }}
-{%- endmacro %}
+{%- endmacro outputCells %}
 
 {% macro outputRow(table, columns, row, separator) %}
 {% if row.index >= row.level - 1 -%}
@@ -91,7 +91,7 @@
         {{- _self.outputRow(table, columns, child, separator) -}}
     {%- endfor -%}
 {%- endif -%}
-{% endmacro %}
+{% endmacro outputRow %}
 
 {% macro outputTitle(table, col_level) -%}
 <table class="table table-borderless m-0">
@@ -110,7 +110,7 @@
         </tr>
     </tbody>
 </table>
-{%- endmacro %}
+{%- endmacro outputTitle %}
 {# parameters #}
 {%- set title = 'pivot.title' -%}
 {%- set title_icon = 'table' -%}
@@ -161,7 +161,7 @@
         </tfoot>
     </table>
 </div>
-{% endblock %}
+{% endblock body %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -171,4 +171,4 @@
 {% else %}
     {{ asset_js('js/compiled/calculation_pivot.js') }}
 {%- endif %}
-{%- endblock %}
+{%- endblock javascripts %}

@@ -38,9 +38,6 @@ class Captcha extends Constraint
 
     public string $timeout_message = 'captcha.timeout';
 
-    /**
-     * @param string[] $groups
-     */
     #[HasNamedArguments]
     public function __construct(
         ?int $timeout = null,

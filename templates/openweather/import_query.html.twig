@@ -13,7 +13,7 @@
     '%site_url%': 'https://openweathermap.org',
 } %}
 <p class="mb-0">{{ 'openweather.import.link'|trans(arguments)|raw }}</p>
-{% endblock %}
+{% endblock card_body %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -22,4 +22,4 @@
 {% else %}
     {{ asset_js('js/compiled/import_file.js') }}
 {% endif %}
-{% endblock %}
+{% endblock javascripts %}

@@ -25,12 +25,12 @@
     </div>
 </div>
 {{ form_row(form.supplier) }}
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer -%}
 {{ parent() }}
 {{ timestampable_footer(item) }}
-{% endblock %}
+{% endblock card_footer %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -42,4 +42,4 @@
 {% else %}
     {{ asset_js('js/compiled/product_edit.js') }}
 {% endif %}
-{% endblock %}
+{% endblock javascripts %}

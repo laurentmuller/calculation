@@ -10,11 +10,11 @@
             <span class="me-auto">{{- created -}}</span><span>{{- updated -}}</span>
         </div>
     {% endif %}
-{% endmacro %}
+{% endmacro timestampable_footer %}
 
 {# create timestampable properties #}
 {% macro timestampable_properties(item) -%}
     {% from 'macros/_properties.html.twig' import property %}
     {{ property('calculation.fields.created', item.createdMessage(true)|trans) }}
     {{ property('calculation.fields.updated', item.updatedMessage(true)|trans) }}
-{%- endmacro %}
+{%- endmacro timestampable_properties %}

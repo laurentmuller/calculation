@@ -10,10 +10,10 @@
     <div class="form-group text-end mb-0">
         <a href="https://developers.google.com/recaptcha/intro" target="_blank" rel="noopener noreferrer">reCAPTCHA API</a>
     </div>
-{% endblock %}
+{% endblock card_body %}
 {# javascripts #}
 {% block javascripts %}
     {{ parent() }}
     {{ asset_js('js/plugins/plugin-recaptcha.js') }}
     {{ asset_js('js/application/validation_edit.js') }}
-{%- endblock %}
+{%- endblock javascripts %}

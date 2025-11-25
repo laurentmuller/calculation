@@ -5,8 +5,8 @@
 {%- set title_icon = 'eraser' -%}
 {%- set statusbar_show = false -%}
 {# hide navigation and footer #}
-{% block navigation_horizontal %}{% endblock %}
-{% block navigation_vertical -%}{% endblock %}
+{% block navigation_horizontal %}{% endblock navigation_horizontal %}
+{% block navigation_vertical -%}{% endblock navigation_vertical %}
 {# class styles #}
 {% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-75' %}
 {# body #}
@@ -24,13 +24,13 @@
     <li>La demande de changement du nouveau mot de passe expire dans {{ expires_life_time }} (à {{ expires_date|locale_time('short') }}).</li>
     <li>Vous ne pouvez demander un nouveau mot de passe que dans {{ throttle_life_time }} (à {{ throttle_date|locale_time('short') }}).</li>
 </ul>
-{%- endblock %}
+{%- endblock card_body %}
 {# footer #}
 {% block card_footer -%}
 {{ link(path('app_login'), 'security.login.submit', 'btn btn-form btn-primary', title: 'security.login.description') }}
 {{ footer_center() }}
-{%- endblock %}
+{%- endblock card_footer %}
 {# stylesheets #}
 {% block stylesheets -%}
 {{ asset_css('css/center.css') }}
-{% endblock %}
+{% endblock stylesheets %}

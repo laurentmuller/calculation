@@ -3,7 +3,7 @@
 <tr class="h">
     <th class="fw-bold" colspan="2">{{ name }}</th>
 </tr>
-{%- endmacro %}
+{%- endmacro headerInfo %}
 
 {% macro rowInfo(name, value, name_class = '', value_class = '') -%}
 {%- set name_class = ('e ' ~ name_class|default(''))|trim -%}
@@ -14,7 +14,7 @@
         {{- value -}}
     </td>
 </tr>
-{%- endmacro %}
+{%- endmacro rowInfo %}
 
 {% macro rowInfoLink(name, value, href, name_class = '', value_class = '') -%}
 {%- set name_class = ('e ' ~ name_class|default(''))|trim -%}
@@ -27,7 +27,7 @@
         </a>
     </td>
 </tr>
-{%- endmacro %}
+{%- endmacro rowInfoLink %}
 
 {% macro rowInfoBoolean(name, value, enabled) -%}
 {%- set class = enabled ? 'enabled' : 'disabled' -%}
@@ -35,11 +35,11 @@
     <td class="e">{{ name }}</td>
     <td class="v {{ class }}">{{ value }}</td>
 </tr>
-{%- endmacro %}
+{%- endmacro rowInfoBoolean %}
 
 {% macro content_header_link(url, version, icon, margin_negative = false) -%}
 <i class="icon-about icon-{{ icon }}"></i>
 <a href="{{ url }}" target="_blank" rel="noopener noreferrer" class="stretched-link text-reset{% if margin_negative %} ms-n3{% endif %}" title="{{ 'about.extern_link'|trans }}">
     <span class="h1">{{ 'about.version'|trans({'%version%': version}) }}</span>
 </a>
-{%- endmacro %}
+{%- endmacro content_header_link %}

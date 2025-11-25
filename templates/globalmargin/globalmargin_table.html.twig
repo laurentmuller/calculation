@@ -12,27 +12,27 @@
     {{- _self.item_separator() }}
 {% endif %}
 {{ parent() }}
-{%- endblock %}
+{%- endblock display_mode %}
 {# global actions #}
 {% block global_actions -%}
 {{- _self.item_external(path('globalmargin_pdf'), 'globalmargin.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('globalmargin_excel'), 'globalmargin.list.excel_title', ICON_EXCEL) }}
-{%- endblock %}
+{%- endblock global_actions %}
 {# edit actions #}
 {% block edit_actions -%}
 {{- _self.item_path(path('globalmargin_edit', params), 'globalmargin.edit.title', ICON_EDIT) }}
-{%- endblock %}
+{%- endblock edit_actions %}
 {# show actions #}
 {% block show_actions -%}
 {{- _self.item_path(path('globalmargin_show', params), 'globalmargin.show.title', ICON_SHOW, show_class ~ ' btn-default') }}
-{%- endblock %}
+{%- endblock show_actions %}
 {# page list #}
 {% block page_list %}
 {{ parent() }}
 {% if allow_edit -%}
     {{ link(path('globalmargin_edit'), 'common.button_edit', 'btn btn-outline-secondary', ICON_EDIT, 'globalmargin.edit.title') }}
 {% endif %}
-{%- endblock %}
+{%- endblock page_list %}
 
 {# custom view header #}
 {% block custom_view_header -%}
@@ -41,10 +41,10 @@
 {%- else -%}
     <span>%minimum% - %maximum%</span>
 {%- endif -%}
-{%- endblock %}
+{%- endblock custom_view_header %}
 {# custom view body #}
 {% block custom_view_body -%}
 {{ _self.property_line() }}
 {{ _self.property_row('globalmargin.fields.delta', '%delta%', 'text-end') }}
 {{ _self.property_row('globalmargin.fields.margin', '%margin%', 'text-end') }}
-{%- endblock %}
+{%- endblock custom_view_body %}

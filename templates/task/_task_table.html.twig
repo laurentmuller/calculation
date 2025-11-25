@@ -2,7 +2,7 @@
 {% macro plain_text_input(id, class = '') %}
 {%- set class = ('form-control-read-only text-end ' ~ class)|trim -%}
 <span id="{{ id }}" class="{{ class }}">{{ 0|amount }}</span>
-{% endmacro %}
+{% endmacro plain_text_input %}
 {# add a task item #}
 {% macro task_item_input(task, item, visible = false, disabled = false) %}
 {% set task_item_id = item.id %}
@@ -20,7 +20,7 @@
         {{ _self.plain_text_input('task_total_' ~ task_item_id, 'task_total') }}
     </div>
 </div>
-{% endmacro %}
+{% endmacro task_item_input %}
 <div id="table-task-edit">
     {# header row #}
     <div class="row mb-2">

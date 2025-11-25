@@ -12,10 +12,10 @@
 {{ property('globalmargin.fields.delta', item.delta|amount) }}
 {{ property('globalmargin.fields.margin', item.margin|percent) }}
 {{ timestampable_properties(item) }}
-{% endblock %}
+{% endblock property_body %}
 {% block actions_form %}
 {% if is_granted(PERMISSION_EDIT, ENTITY_GLOBAL_MARGIN) %}
     {% set edit_path = path('globalmargin_edit', {id: item.id}) %}
 {% endif %}
 {{ parent() }}
-{% endblock %}
+{% endblock actions_form %}

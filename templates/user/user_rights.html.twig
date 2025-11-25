@@ -14,7 +14,7 @@
     <div class="me-auto">{{ parent() }}</div>
     <div>{{ rights.actions(overwrite) }}</div>
 </div>
-{%- endblock %}
+{%- endblock card_header %}
 {# body #}
 {% block card_body %}
 <div class="row">
@@ -30,7 +30,7 @@
 </div>
 {{ rights.table(form.rights, default.permissions, entities, overwrite) }}
 {{ form_row(form.overwrite, {attr: {'data-default': default.overwrite|json_encode}}) }}
-{% endblock %}
+{% endblock card_body %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -39,4 +39,4 @@
 {% else %}
     {{ asset_js('js/compiled/user_rights.js') }}
 {% endif %}
-{%- endblock %}
+{%- endblock javascripts %}

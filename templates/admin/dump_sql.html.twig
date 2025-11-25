@@ -10,21 +10,21 @@
 <div class="border pre-scrollable pre-scrollable-highlight-sql scrollbar-thin">
     {{ content|var_export_sql|raw }}
 </div>
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer %}
     {{ homepage() }}
     {{ button_copy('.highlight.highlight-sql') }}
-{% endblock %}
+{% endblock card_footer %}
 {# stylesheets #}
 {% block stylesheets %}
     {{ parent() }}
     {{- asset_css('css/highlight.css') }}
-{% endblock %}
+{% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}
     {{ parent() }}
     {{ asset_js('build/clipboard/clipboard.js') }}
     {{ asset_js('js/plugins/plugin-copy.js') }}
     {{ asset_js('js/application/dump_sql.js') }}
-{%- endblock %}
+{%- endblock javascripts %}

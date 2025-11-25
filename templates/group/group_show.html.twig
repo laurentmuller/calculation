@@ -18,7 +18,7 @@
 {{ property('category.fields.products', 'counters.products'|trans({count: item.countProducts})) }}
 {{ property('category.fields.tasks', 'counters.tasks'|trans({count: item.countTasks})) }}
 {{ timestampable_properties(item) }}
-{% endblock %}
+{% endblock property_body %}
 {# body #}
 {% block card_body %}
 {{ parent() }}
@@ -47,4 +47,4 @@
         </table>
     </div>
 {%- endif -%}
-{% endblock %}
+{% endblock card_body %}

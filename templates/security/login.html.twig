@@ -10,12 +10,12 @@
 {% block card_body -%}
 {{ parent() }}
 <input type="hidden" name="{{ constant('App\\Security\\SecurityAttributes::LOGIN_TOKEN') }}" value="{{ csrf_token(constant('App\\Security\\SecurityAttributes::AUTHENTICATE_TOKEN')) }}">
-{% endblock %}
+{% endblock card_body %}
 {# actions #}
 {% block actions_form %}
 {{ parent() }}
 <a href="{{ path('app_forgot_password_request') }}" class="align-self-center" title="{{ 'resetting.request.description'|trans }}">{{ 'resetting.link'|trans }}</a>
-{% endblock %}
+{% endblock actions_form %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -26,4 +26,4 @@
 {% else %}
     {{ asset_js('js/compiled/user_login.js') }}
 {%- endif %}
-{% endblock %}
+{% endblock javascripts %}

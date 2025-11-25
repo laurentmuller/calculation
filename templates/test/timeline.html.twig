@@ -5,12 +5,12 @@
 {% macro addInterval(value, count, message, selection) -%}
     {%- set text = message|trans({count: count}) -%}
     <option value="{{ value }}"{% if value == selection %} selected{% endif %}>{{ text }}</option>
-{%- endmacro %}
+{%- endmacro addInterval %}
 {% macro addButton(class, disabled, path, title, icon, date = null) -%}
     <button type="button" class="btn btn-secondary {{ class }}"{% if disabled %} disabled{% endif %} data-url="{{ url(path) }}" title="{{ title|trans }}"{% if date %} data-date="{{ date }}"{% endif %}>
         {{- icon(icon) -}}
     </button>
-{%- endmacro %}
+{%- endmacro addButton %}
 {# parameters #}
 {%- set title = 'timeline.title' -%}
 {%- set title_icon = 'stream' -%}
@@ -56,13 +56,13 @@
 <div id="content" data-url="{{ url('timeline_content') }}" data-min="{{ max_date_locale }}" data-max="{{ min_date_locale }}">
     {{ include('test/_timeline_content.html.twig', {from: from, to: to, count: count, data: data}, with_context: false) }}
 </div>
-{%- endblock %}
+{%- endblock body %}
 {# stylesheets #}
 {% block stylesheets -%}
 {{ asset_css('css/timeline.css') }}
-{% endblock %}
+{% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}
 {{ parent() }}
 {{ asset_js('js/test/timeline.js') }}
-{% endblock %}
+{% endblock javascripts %}

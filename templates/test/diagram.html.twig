@@ -33,17 +33,17 @@
             </div>
         </div>
     </div>
-{% endblock %}
+{% endblock card_header %}
 {# body #}
 {% block card_body -%}
 <div id="diagram" class="diagram" data-url="{{ path('diagram_load') }}" data-error="{{ 'diagram.error_not_found'|trans }}">
     {{- file.content -}}
 </div>
-{% endblock %}
+{% endblock card_body %}
 {# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/diagram.css') }}
-{%- endblock -%}
+{%- endblock stylesheets -%}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -54,4 +54,4 @@
 {% else %}
     {{ asset_js('js/compiled/diagram.js') }}
 {% endif %}
-{% endblock %}
+{% endblock javascripts %}

@@ -12,7 +12,7 @@
 {# header actions #}
 {% block header_actions %}
 <small>{{ 'log.list.file'|trans({'%file%': customData.file|relative_path}) }}</small>
-{% endblock %}
+{% endblock header_actions %}
 {# toolbar actions #}
 {% block toolbar_actions -%}
 {% if customData.levels|length > 1 %}
@@ -40,7 +40,7 @@
         {% endfor %}
     </ul>
 {% endif %}
-{%- endblock %}
+{%- endblock toolbar_actions %}
 {# global actions #}
 {% block global_actions -%}
 {%- set route = app.current_route -%}
@@ -50,26 +50,26 @@
 {{- _self.item_external(path('log_pdf'), 'log.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('log_excel'), 'log.list.excel_title', ICON_EXCEL) }}
 {{- _self.item_external(path('log_download'), 'log.list.download_title', 'file-arrow-down') }}
-{%- endblock %}
+{%- endblock global_actions %}
 {# show_actions #}
 {% block show_actions -%}
 {{- _self.item_path(path('log_show', params), 'log.show.title', ICON_SHOW, 'btn-show btn-default') }}
-{%- endblock %}
+{%- endblock show_actions %}
 {% block custom_view_header -%}
 {%- if allow_show -%}
     <a href="{{ path('log_show', params) }}" class="item-link text-body" title="{{ 'log.show.title'|trans }}">%createdAt%</a>
 {%- else -%}
     <span>%createdAt%</span>
 {%- endif -%}
-{%- endblock %}
+{%- endblock custom_view_header %}
 {# custom view #}
 {% block custom_view_body -%}
 {{ _self.property_value('%message%') }}
 {{ _self.property_row('log.fields.level', '%level%') }}
 {{ _self.property_row('log.fields.channel', '%channel%') }}
 {{ _self.property_row('log.fields.user', '%user%') }}
-{%- endblock %}
+{%- endblock custom_view_body %}
 {# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/table_log.css') }}
-{% endblock %}
+{% endblock stylesheets %}

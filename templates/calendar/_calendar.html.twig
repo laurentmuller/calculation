@@ -3,7 +3,7 @@
 {% from 'macros/_icons.html.twig' import icon %}
 {%- set title = title_message|trans({date: date, count: count}) -%}
 <a class="{{ class }}" href="{{ path('calculation_index', {search: query}) }}" title="{{ title }}">{{ icon(ICON_CALCULATION) }}</a>
-{%- endmacro %}
+{%- endmacro linkCalculations %}
 
 {% macro dataContent(calculations) -%}
 <table class="table table-popover table-sm mb-0">
@@ -13,7 +13,7 @@
     {%- endfor %}
     </tbody>
 </table>
-{%- endmacro %}
+{%- endmacro dataContent %}
 
 {% macro dataRow(calculation, extra_class = '') %}
 {% set extra_class = ('text-nowrap ' ~ (extra_class|default('')))|trim %}
@@ -26,7 +26,7 @@
     <td class="{{ margin_class }}">{{ calculation.overallMargin|percent }}</td>
     <td class="text-currency">{{ calculation.overallTotal|amount }}</td>
 </tr>
-{%- endmacro %}
+{%- endmacro dataRow %}
 
 {% macro dayCell(month, day, small) %}
 {%- set text = day.number -%}
@@ -63,4 +63,4 @@
 {% else %}
 <td class="{{ class }}"{% if title %} title="{{ title }}"{% endif %}>{{ text|raw }}</td>
 {% endif %}
-{% endmacro %}
+{% endmacro dayCell %}

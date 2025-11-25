@@ -6,7 +6,7 @@
 <th{{ output_attributes(column.attributes, 'data-') }}>
     {{- column.title ? column.title|trans : '&nbsp;'|raw -}}
 </th>
-{%- endmacro %}
+{%- endmacro output_column %}
 {# output a drop-down menu #}
 {% macro output_dropdown_menu(id, icon, text, title, value, default) -%}
 {% set icon = icon(icon) %}
@@ -24,7 +24,7 @@
     <span class="dropdown-icon">{{- icon -}}</span>
     <span class="dropdown-label ms-1 d-none d-sm-inline">{{- text -}}</span>
 </button>
-{% endmacro %}
+{% endmacro output_dropdown_menu %}
 {# output a drop-down item #}
 {% macro output_dropdown_item(suffix, value, selection, text, icon, attributes = []) -%}
     {% set active = value == selection ? ' active' : '' %}
@@ -39,43 +39,43 @@
             <span class="dropdown-label ms-1">{{- text|default(value) -}}</span>
         </button>
     </li>
-{%- endmacro %}
+{%- endmacro output_dropdown_item %}
 {# output a drop-down header #}
 {% macro output_dropdown_header(text, translate = false, icon = null) -%}
     {{ _self.item_separator() }}
     <h6 class="dropdown-header">
         {%- if icon -%}{{- icon(icon ~ ' me-1') -}}{% endif %}{{- (translate ? text|trans : text)|upper -}}
     </h6>
-{%- endmacro %}
+{%- endmacro output_dropdown_header %}
 {# output a drop-down item path #}
 {% macro item_path(path, text, icon, class = '') %}
 {%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class)|trim -%}
 <li>
     {{- link(path, text, class, icon ~ ' fa-fw') -}}
 </li>
-{%- endmacro %}
+{%- endmacro item_path %}
 {# output an external drop-down item path #}
 {% macro item_path_external(path, text, icon, class = '') %}
 {%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class)|trim -%}
 <li>
     {{- linkExternal(path, text, class, icon ~ ' fa-fw') -}}
 </li>
-{%- endmacro %}
+{%- endmacro item_path_external %}
 {# output a global drop-down item #}
 {% macro item_global(path, text, icon) %}
 {{ dropdownItem(path, text, icon) }}
-{%- endmacro %}
+{%- endmacro item_global %}
 {# output an external drop-down item #}
 {% macro item_external(path, text, icon, class = '') %}
 {%- set class = ('dropdown-item rowlink-skip ' ~ class)|trim -%}
 <li>
     {{- linkExternal(path, text, class, icon ~ ' fa-fw') -}}
 </li>
-{%- endmacro %}
+{%- endmacro item_external %}
 {# output a drop-down separator #}
 {% macro item_separator(class = '') %}
 {{ dropdownSeparator(false, class) }}
-{%- endmacro %}
+{%- endmacro item_separator %}
 {# output a property row #}
 {% macro property_row(field, value, class = '') -%}
 {% set class = ('col-8 text-truncate ' ~ class)|trim %}
@@ -83,12 +83,12 @@
     <div class="col-4">{{ field|trans }}</div>
     <div class="{{ class }}">{{ value|raw }}</div>
 </div>
-{%- endmacro %}
+{%- endmacro property_row %}
 {# output a property value #}
 {% macro property_value(value, class = '') -%}
 {% set class = ('text-truncate ' ~ class)|trim %}
 <div class="{{ class }}">{{ value|raw }}</div>
-{%- endmacro %}
+{%- endmacro property_value %}
 {# output a property entry #}
 {% macro property_both(left_value, right_value, left_class = '', right_class = '') -%}
 {% set left_class = ('col-4 ' ~ left_class)|trim %}
@@ -97,11 +97,11 @@
     <div class="{{ left_class }}">{{ left_value|raw }}</div>
     <div class="{{ right_class }}">{{ right_value|raw }}</div>
 </div>
-{%- endmacro %}
+{%- endmacro property_both %}
 {# output a property line #}
 {% macro property_line() -%}
 <hr class="my-1">
-{%- endmacro %}
+{%- endmacro property_line %}
 {# output a drop-down view item #}
 {% macro button_view(icon, view, selection) %}
 <li>
@@ -109,7 +109,7 @@
         {{- icon(icon ~ ' fa-fw', 'table_view.' ~ view) -}}
     </button>
 </li>
-{%- endmacro %}
+{%- endmacro button_view %}
 {# granted actions #}
 {%- set object_type = object_type|default('none') -%}
 {%- set allow_show = allow_show is defined ? allow_show : is_granted(PERMISSION_SHOW, object_type) -%}
@@ -179,9 +179,9 @@
 {% block card_header %}
 <div class="d-flex-wrap-center">
     <div class="me-auto">{{ parent() }}</div>
-    <div class="d-print-none">{% block header_actions -%}{%- endblock %}</div>
+    <div class="d-print-none">{% block header_actions -%}{%- endblock header_actions %}</div>
 </div>
-{% endblock %}
+{% endblock card_header %}
 {# body #}
 {% block card_body -%}
 {# toolbar #}
@@ -191,7 +191,7 @@
     {% if allow_search %}
         <div class="input-group input-group-sm input-group-search search">
             <input class="form-control form-control-search" id="control-search" placeholder="{{ 'datatable.search'|trans }}" aria-label="{{ 'datatable.search'|trans }}" autocomplete="off" type="text">
-            {% block toolbar_actions -%}{%- endblock %}
+            {% block toolbar_actions -%}{%- endblock toolbar_actions %}
             <button id="clear_search" name="clear_search" type="button" class="btn btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
                 <i class="fa-solid fa-eraser"></i>
             </button>
@@ -211,7 +211,7 @@
                     <ul class="dropdown-menu dropdown-menu-page" aria-labelledby="button_page"></ul>
                 </div>
             {% endif %}
-        {% endblock %}
+        {% endblock page_list %}
         <div class="btn-group btn-group-sm" role="group">
             <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_other_actions" data-bs-toggle="dropdown" title="{{ 'common.global_actions'|trans }}" aria-expanded="false">
                 <i class="fa-solid fa-bars"></i><span class="ms-1 d-none d-sm-inline">{{- 'common.actions'|trans -}}</span>
@@ -221,7 +221,7 @@
                 {% block display_mode %}
                     {{ _self.button_view(ICON_VIEW_TABLE, 'table', params.view) }}
                     {{ _self.button_view(ICON_VIEW_CUSTOM, 'custom', params.view) }}
-                {%- endblock %}
+                {%- endblock display_mode %}
                 {% if sortable %}
                     {{ _self.item_separator() }}
                     <li>
@@ -237,7 +237,7 @@
                 </li>
                 {% if allow_global %}
                     {{ _self.item_separator() }}
-                    {% block global_actions -%}{%- endblock %}
+                    {% block global_actions -%}{%- endblock global_actions %}
                 {% endif %}
             </ul>
         </div>
@@ -268,34 +268,34 @@
     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-actions">
         {% if allow_edit %}
             {{- _self.item_separator('edit-divider') }}
-            {% block edit_actions -%}{%- endblock %}
+            {% block edit_actions -%}{%- endblock edit_actions %}
         {% endif %}
         {% if allow_delete %}
             {{- _self.item_separator('delete-divider') }}
-            {% block delete_actions -%}{%- endblock %}
+            {% block delete_actions -%}{%- endblock delete_actions %}
         {% endif %}
         {% if allow_add %}
             {{- _self.item_separator('add-divider') }}
-            {% block add_actions -%}{%- endblock %}
+            {% block add_actions -%}{%- endblock add_actions %}
         {% endif %}
         {% if allow_show %}
             {{- _self.item_separator('show-divider') }}
-            {% block show_actions -%}{%- endblock %}
+            {% block show_actions -%}{%- endblock show_actions %}
         {% endif %}
-        {% block other_actions -%}{%- endblock %}
+        {% block other_actions -%}{%- endblock other_actions %}
     </ul>
 </template>
 {# custom view template #}
 <template id="custom-view-template">
     <div class="col col-custom-view mb-2 px-1">
-        <div class="custom-item item-hover cursor-default border h-100 p-2{% block custom_view_card_class %}{%- endblock %}">
+        <div class="custom-item item-hover cursor-default border h-100 p-2{% block custom_view_card_class %}{%- endblock custom_view_card_class %}">
             <div class="d-flex-no-wrap-center">
                 <div class="custom-view-header d-flex-no-wrap-center">
-                    {% block custom_view_header -%}{%- endblock %}
+                    {% block custom_view_header -%}{%- endblock custom_view_header %}
                 </div>
                 <div class="d-print-none custom-view-actions"></div>
             </div>
-            {% block custom_view_body -%}{%- endblock %}
+            {% block custom_view_body -%}{%- endblock custom_view_body %}
         </div>
     </div>
 </template>
@@ -305,12 +305,12 @@
         <i class="fa-solid fa-spinner fa-spin me-2"></i><span>%message%</span>
     </div>
 </template>
-{%- endblock -%}
+{%- endblock card_body -%}
 {# stylesheets #}
 {% block stylesheets -%}
     {{ preload_css('css/table.css') }}
     {{ asset_css('css/table.css') }}
-{%- endblock -%}
+{%- endblock stylesheets -%}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -331,4 +331,4 @@
 {% else %}
     {{ asset_js('js/compiled/bootstrap_table.js') }}
 {% endif %}
-{%- endblock -%}
+{%- endblock javascripts -%}

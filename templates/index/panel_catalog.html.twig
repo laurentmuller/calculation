@@ -23,7 +23,7 @@
         <span title="{{ counter_title|trans }}">{{- count|integer -}}</span>
     </h4>
 </div>
-{%- endmacro %}
+{%- endmacro cardEntry %}
 {# parameters #}
 {%- set panel_key = 'DISPLAY_CATALOG' -%}
 {%- set panel_show = app.request.cookies.boolean(panel_key, true) -%}

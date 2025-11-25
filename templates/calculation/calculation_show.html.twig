@@ -16,7 +16,7 @@
 {% block card_container_class '' %}
 {% block card_body_class '' %}
 {# no header #}
-{% block property_header %}{% endblock %}
+{% block property_header %}{% endblock property_header %}
 {# body #}
 {% block card_body %}
 {{ parent() }}
@@ -120,7 +120,7 @@
     </table>
 </div>
 {% endif %}
-{% endblock %}
+{% endblock card_body %}
 {# properties #}
 {% block property_body %}
 {{ property('calculation.fields.id', item.id|identifier, 'fw-bold') }}
@@ -135,7 +135,7 @@
 {% if item.empty %}
     {{ property('calculation.edit.panel_items', 'calculation.edit.empty'|trans) }}
 {% endif %}
-{% endblock %}
+{% endblock property_body %}
 {# actions #}
 {% block actions_form %}
 {{ parent() }}
@@ -146,7 +146,7 @@
     <span id="error-duplicate" class="d-none"><span class="duplicate-cell"></span>{{ 'duplicate.title'|trans }}</span>
     <span id="error-empty" class="d-none ms-1"><span class="empty-cell"></span>{{ 'empty.title'|trans }}</span>
 </p>
-{% endblock %}
+{% endblock actions_form %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -155,11 +155,11 @@
 {% else %}
     {{ asset_js('js/compiled/calculation_error.js') }}
 {% endif %}
-{% endblock %}
+{% endblock javascripts %}
 {# stylesheets #}
 {% block stylesheets -%}
     {{ parent() }}
     <style nonce="{{ csp_nonce() }}">
         {{- css_border() }}
     </style>
-{%- endblock %}
+{%- endblock stylesheets %}

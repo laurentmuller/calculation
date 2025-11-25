@@ -21,7 +21,7 @@
             </div>
         </div>
     </div>
-{%- endmacro %}
+{%- endmacro card %}
 {# parameters #}
 {%- set title = 'index.menu_info' -%}
 {%- set title_icon = 'info-circle' -%}
@@ -57,7 +57,7 @@
         </tbody>
     </table>
 </div>
-{% endblock %}
+{% endblock card_body %}
 {# body #}
 {% block body %}
 {{ parent() }}
@@ -77,11 +77,11 @@
     {{ button_pdf('about_pdf') }}
     {{ button_word('about_word') }}
 </div>
-{% endblock %}
+{% endblock body %}
 {# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/phpinfo.css') }}
-{% endblock %}
+{% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -92,4 +92,4 @@
 {%- else -%}
     {{ asset_js('js/compiled/about.js') }}
 {%- endif -%}
-{% endblock %}
+{% endblock javascripts %}

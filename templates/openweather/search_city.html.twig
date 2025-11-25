@@ -47,21 +47,21 @@
     </table>
     {% endif %}
 {% endif %}
-{% endblock %}
+{% endblock card_body %}
 {# actions #}
 {% block actions_form -%}
 {{ parent() }}
 {% if is_granted(ROLE_ADMIN) %}
     {{ link(path('openweather_import'), 'common.button_import', 'btn btn-form btn-outline-secondary') }}
 {% endif %}
-{% endblock %}
+{% endblock actions_form %}
 {# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/open_weather.css') }}
-{% endblock %}
+{% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}
 {{ parent() }}
 {{ asset_js('js/plugins/plugin-rowlink.js') }}
 {{ asset_js('js/application/search_city.js') }}
-{% endblock %}
+{% endblock javascripts %}

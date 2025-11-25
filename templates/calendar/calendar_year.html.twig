@@ -24,7 +24,7 @@
         {{ dayCell(month, day, true) }}
     {%- endfor %}
 </tr>
-{% endmacro %}
+{% endmacro weekRow %}
 
 {% macro monthTable(month) %}
 {%- set class = 'fw-normal ' ~ (month.current ? 'text-bg-primary' : 'text-bg-secondary') -%}
@@ -64,7 +64,7 @@
         </tbody>
     </table>
 </div>
-{% endmacro %}
+{% endmacro monthTable %}
 {# parameters #}
 {%- set title = 'calendar.year_title' -%}
 {%- set title_parameters = {'%year%': calendar.year} -%}
@@ -106,7 +106,7 @@
     {{ _self.monthTable(month) }}
 {% endfor %}
 </div>
-{% endblock %}
+{% endblock body %}
 {# stylesheets #}
 {% block stylesheets -%}
 {{ parent() }}
@@ -114,9 +114,9 @@
     {{- css_border() }}
 </style>
 {{ asset_css('css/calendar.css') }}
-{% endblock %}
+{% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}
 {{ parent() }}
 {{ asset_js('js/test/calendar.js') }}
-{% endblock %}
+{% endblock javascripts %}

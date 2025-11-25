@@ -7,10 +7,10 @@
 {# class #}
 {% block card_class -%}
 {% if result.valid %}{{ parent() }}{% else %} border-danger{% endif %}
-{%- endblock %}
+{%- endblock card_class %}
 {% block card_header_class -%}
 {% if result.valid %}{{ parent() }}{% else %} text-bg-danger{% endif %}
-{%- endblock %}
+{%- endblock card_header_class %}
 {# body #}
 {% block card_body %}
 {%- if result.valid %}
@@ -60,11 +60,11 @@
 <p>{{ 'swisspost.result.failure'|trans }}</p>
 {% if result.error -%}<p class="mb-0">{{ result.error }}</p>{%- endif %}
 {%- endif %}
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer %}
 {{- homepage() -}}
 {% if not result.valid %}
     {{ link(path('admin_import'), 'swisspost.result.new_import', 'btn btn-outline-secondary') -}}
 {%- endif %}
-{% endblock %}
+{% endblock card_footer %}

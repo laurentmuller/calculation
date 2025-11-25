@@ -7,13 +7,13 @@
 {%- set is_remembered = is_granted(IS_AUTHENTICATED_REMEMBERED) -%}
 {# navigation #}
 {% block card_container_class is_remembered ? '' : ' mt-3' %}
-{% block navigation_horizontal -%}{% if is_remembered %}{{ parent() }}{% endif %}{%- endblock %}
-{% block navigation_vertical -%}{% if is_remembered %}{{ parent() }}{% endif %}{%- endblock %}
-{% block cookie_banner -%}{% endblock %}
+{% block navigation_horizontal -%}{% if is_remembered %}{{ parent() }}{% endif %}{%- endblock navigation_horizontal %}
+{% block navigation_vertical -%}{% if is_remembered %}{{ parent() }}{% endif %}{%- endblock navigation_vertical %}
+{% block cookie_banner -%}{% endblock cookie_banner %}
 {# body #}
 {% block card_body %}
     {{ content|raw }}
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer %}
 <div class="d-flex-wrap">
@@ -32,4 +32,4 @@
     {{ button_pdf('about_licence_pdf') }}
     {{ button_word('about_licence_word') }}
 </div>
-{% endblock %}
+{% endblock card_footer %}

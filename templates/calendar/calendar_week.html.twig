@@ -71,7 +71,7 @@
         </tbody>
     </table>
 {%- endfor %}
-{% endblock %}
+{% endblock body %}
 
 {% block stylesheets -%}
 {{ parent() }}
@@ -79,4 +79,4 @@
     {{- css_border() }}
 </style>
 {{ asset_css('css/calendar.css') }}
-{% endblock %}
+{% endblock stylesheets %}

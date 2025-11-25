@@ -10,7 +10,7 @@
     <td class="text-currency">{{ product_price }}</td>
     <td class="text-currency">{{ 0|amount }}</td>
 </tr>
-{%- endmacro %}
+{%- endmacro add_product %}
 {# percent widget #}
 {% block _form_percent_widget -%}
 <div class="form-group">
@@ -24,7 +24,7 @@
     {{ block('form_help') }}
     {{ block('form_errors') }}
 </div>
-{%- endblock %}
+{%- endblock _form_percent_widget %}
 {# amount widget #}
 {% block _form_fixed_widget -%}
 <div class="form-group">
@@ -38,7 +38,7 @@
     {{ block('form_help') }}
     {{ block('form_errors') }}
 </div>
-{%- endblock %}
+{%- endblock _form_fixed_widget %}
 {# parameters #}
 {%- set title = 'product.update.title' -%}
 {%- set title_icon = ICON_PRODUCT -%}
@@ -107,7 +107,7 @@
     <hr class="my-2">
     <p class="mb-0 text-end text-body-secondary small">{{ 'product.update.last_update'|trans({'%date%': date}) }}</p>
 {% endif %}
-{% endblock %}
+{% endblock card_body %}
 {# javascripts #}
 {% block javascripts %}
     {% if is_js_debug %}
@@ -118,4 +118,4 @@
     {% else %}
         {{ asset_js('js/compiled/product_update.js') }}
     {% endif %}
-{% endblock %}
+{% endblock javascripts %}

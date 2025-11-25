@@ -5,7 +5,7 @@
 {% block style %}
     {{ parent() }}
     {{ source('@css/email.css') }}
-{% endblock %}
+{% endblock style %}
 {# lead #}
 {% block lead %}
     <container>
@@ -23,18 +23,18 @@
             </columns>
         </row>
     </container>
-{% endblock %}
+{% endblock lead %}
 {# action #}
 {% block action %}
     <spacer size="8"></spacer>
     Cordialement,<br>
     L'équipe de {{ app_name }}
     {{ parent() }}
-{% endblock %}
+{% endblock action %}
 {# exception #}
 {% block exception %}
     {% if exception %}
         <spacer size="16"></spacer>
         <p><em>{{ 'notification.exception'|trans }}</em></p>
     {% endif %}
-{% endblock %}
+{% endblock exception %}

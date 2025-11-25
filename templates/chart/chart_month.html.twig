@@ -6,7 +6,7 @@
         {{- 'counters.months'|trans({count: value}) -}}
     </a>
 </li>
-{%- endmacro %}
+{%- endmacro month %}
 {# format the value with arrow #}
 {% macro cell_value(value, previous, user_percent = false) -%}
 {% if not previous %}
@@ -25,7 +25,7 @@
     <i class="fa-fw fa-solid fa-caret-{{ icon }} position-absolute top-50 start-0 translate-middle-y {{ color }}"></i>
 {% endif %}
 {{- user_percent ? value|percent : value|integer -}}
-{%- endmacro %}
+{%- endmacro cell_value %}
 {# parameters #}
 {%- set title = 'chart.month.title' -%}
 {%- set title_icon = 'calendar-alt far' -%}
@@ -51,7 +51,7 @@
         </div>
     {% endif %}
 </div>
-{%- endblock %}
+{%- endblock card_header %}
 {# data #}
 {% block data %}
 <thead>
@@ -117,9 +117,9 @@
         <td class="text-currency">{{ totals.total|integer }}</td>
     </tr>
 </tbody>
-{% endblock %}
+{% endblock data %}
 {# body #}
 {% block card_body %}
     {{ parent() }}
     <p class="small mb-0">{{ 'chart.month.tooltip'|trans|raw }}</p>
-{%- endblock %}
+{%- endblock card_body %}

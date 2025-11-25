@@ -21,7 +21,7 @@
     {{ asset_css('build/font-awesome/css/all.css') }}
     {% block stylesheets %}
         {{ asset_css('css/style.css') }}
-    {% endblock %}
+    {% endblock stylesheets %}
 </head>
 <body class="{{ body_class }}"
       data-cookie-path="{{ cookie_path }}"
@@ -34,28 +34,28 @@
     {% if sidebar_show %}
         {{ include('navigation/vertical/navigation.html.twig') }}
     {% endif %}
-{% endblock %}
+{% endblock navigation_vertical %}
 {# horizontal navigation #}
 {% block navigation_horizontal %}
     {% if not sidebar_show %}
         {{ include('navigation/horizontal/navigation.html.twig') }}
     {% endif %}
-{% endblock %}
+{% endblock navigation_horizontal %}
 {# main content #}
 <div class="page-content">
     {# container #}
     <div role="main" class="{% block container_class 'container' %}">
-        {% block body -%}{%- endblock %}
+        {% block body -%}{%- endblock body %}
     </div>
     {# messages #}
-    {% block flashbag -%}{{ include('flash_bag.html.twig') }}{%- endblock %}
+    {% block flashbag -%}{{ include('flash_bag.html.twig') }}{%- endblock flashbag %}
     {# back to top #}
-    {% block back_to_top -%}{{ include('back_to_top.html.twig') }}{%- endblock %}
+    {% block back_to_top -%}{{ include('back_to_top.html.twig') }}{%- endblock back_to_top %}
 </div>
 {# footer #}
-{% block footer -%}{% if statusbar_show %}{{ include('footer.html.twig') }}{% endif %}{%- endblock %}
+{% block footer -%}{% if statusbar_show %}{{ include('footer.html.twig') }}{% endif %}{%- endblock footer %}
 {# cookie_banner #}
-{% block cookie_banner -%}{{ include('cookie_banner.html.twig') }}{%- endblock %}
+{% block cookie_banner -%}{{ include('cookie_banner.html.twig') }}{%- endblock cookie_banner %}
 {# java scripts #}
 <noscript>{{ 'common.no_script_support'|trans }}</noscript>
 {% block javascripts %}
@@ -73,6 +73,6 @@
     {% else %}
         {{ asset_js('js/compiled/core_common.js') }}
     {% endif %}
-{% endblock %}
+{% endblock javascripts %}
 </body>
 </html>

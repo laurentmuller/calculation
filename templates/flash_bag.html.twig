@@ -2,7 +2,7 @@
 {# add a single flash message #}
 {% macro addFlashbag(key, message) -%}
     <p class="flash" data-type="{{ key }}" data-title="{{ ('flash_bag.' ~ key)|trans }}">{{ message }}</p>
-{%- endmacro %}
+{%- endmacro addFlashbag %}
 {# add all flash messages #}
 {%- set flash_attributes = user_params.message.attributes|merge({
     dataset: '#flashes',

@@ -23,7 +23,7 @@
         {%- endfor %}
     </ul>
 {%- endif -%}
-{%- endblock %}
+{%- endblock card_body %}
 {# footer #}
 {% block card_footer %}
 {% if back_page and item %}
@@ -32,4 +32,4 @@
 {% else %}
     {{ homepage() }}
 {% endif %}
-{% endblock %}
+{% endblock card_footer %}

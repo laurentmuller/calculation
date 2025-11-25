@@ -32,7 +32,7 @@
 {% if is_error %}
     <p class="mb-1 text-danger">{{ 'command.result.error'|trans }}</p>
 {% endif %}
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer %}
 <div class="d-flex-wrap">
@@ -42,16 +42,16 @@
         {{ button_copy('#result') }}
     {% endif %}
 </div>
-{% endblock %}
+{% endblock card_footer %}
 {# stylesheets #}
 {% block stylesheets %}
     {{ parent() }}
     {{ asset_css('css/highlight.css') }}
-{% endblock %}
+{% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}
     {{ parent() }}
     {{ asset_js('build/clipboard/clipboard.js') }}
     {{ asset_js('js/plugins/plugin-copy.js') }}
     {{ asset_js('js/application/command_result.js') }}
-{%- endblock %}
+{%- endblock javascripts %}

@@ -41,8 +41,6 @@ class Strength extends Constraint
     public string $strength_message = 'password.strength_level';
 
     /**
-     * @param string[] $groups
-     *
      * @throws ConstraintDefinitionException if the minimum parameter is an integer and cannot be parsed to a strength level
      */
     #[HasNamedArguments]
@@ -57,14 +55,14 @@ class Strength extends Constraint
         parent::__construct($options, $groups, $payload);
 
         if (\is_int($minimum)) {
-            $level = StrengthLevel::tryFrom($minimum);
-            if (!$level instanceof StrengthLevel) {
-                throw new ConstraintDefinitionException(\sprintf('Unable to find a strength level for the value %d.', $minimum));
+            try {
+                $minimum = StrengthLevel::from($minimum);
+            } catch (\ValueError $e) {
+                throw new ConstraintDefinitionException(\sprintf('Unable to find a strength level for the value %d.', $minimum), previous: $e);
             }
-            $this->minimum = $level;
-        } else {
-            $this->minimum = $minimum;
         }
+
+        $this->minimum = $minimum;
     }
 
     #[\Override]

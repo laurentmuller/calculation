@@ -35,14 +35,14 @@
             </tbody>
         </table>
     </div>
-{%- endblock %}
+{%- endblock card_body %}
 {# footer #}
 {% block card_footer -%}
     {{ homepage() }}
     {{ button_pdf('schema_pdf') }}
-{%- endblock %}
+{%- endblock card_footer %}
 {# javascripts #}
 {% block javascripts %}
     {{ parent() }}
     {{ asset_js('js/plugins/plugin-rowlink.js') }}
-{%- endblock %}
+{%- endblock javascripts %}

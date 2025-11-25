@@ -17,7 +17,7 @@
 {%- set date = last_import|locale_date('long') -%}
 <p class="mb-0 text-end text-body-secondary small">{{ 'swisspost.import.last_import'|trans({'%date%': date}) }}</p>
 {%- endif %}
-{% endblock %}
+{% endblock card_body %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -26,4 +26,4 @@
 {% else %}
     {{ asset_js('js/compiled/import_file.js') }}
 {% endif %}
-{% endblock %}
+{% endblock javascripts %}

@@ -31,8 +31,8 @@
         "stylelint-config-standard": "^39.0"
     },
     "scripts": {
-        "outdated": "npm outdated",
-        "update": "npm update",
+        "outdated": "npm outdated verbose",
+        "update": "npm update verbose",
         "stylelint": "npx stylelint -f verbose public/css/*.css",
         "clean": "del-cli public/build -f",
         "generate": "sass scss:public/build/bootstrap -q --no-source-map",

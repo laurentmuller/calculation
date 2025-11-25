@@ -34,13 +34,13 @@
         </table>
     </div>
 {% endif %}
-{%- endmacro %}
+{%- endmacro output_entity_columns %}
 {% macro output_entity_fields(entity) -%}
 {% set fields = entity.fields|default(false) %}
 {% if fields %}
     {{ _self.output_fields(fields) }}
 {% endif %}
-{%- endmacro %}
+{%- endmacro output_entity_fields %}
 
 {% macro output_fields(fields, id = null, text = null) -%}
 {% set text = text|default('help.labels.edit_fields') %}
@@ -75,7 +75,7 @@
         </tbody>
     </table>
 </div>
-{%- endmacro %}
+{%- endmacro output_fields %}
 
 {% macro output_entity_actions(entity, service) -%}
 {% set actions = entity.actions|default(false) %}
@@ -83,7 +83,7 @@
     <p class="mt-2 mb-0">{{ 'help.labels.entity_actions'|trans }}</p>
     {{ output_table_actions(actions, service) }}
 {% endif %}
-{%- endmacro %}
+{%- endmacro output_entity_actions %}
 {# parameters #}
 {%- set dialog_name = dialog.id -%}
 {%- set title = 'help.title_name' -%}
@@ -91,9 +91,9 @@
 {# title #}
 {% block help_title -%}
 {{- output_icon(dialog.icon|default(entity ? entity.icon|default(false) : false)|default(false), dialog_name) -}}
-{%- endblock %}
+{%- endblock help_title %}
 {# search #}
-{% block help_search %}{% endblock %}
+{% block help_search %}{% endblock help_search %}
 {# actions #}
 {% block help_actions -%}
     {{ dialogs_button() }}
@@ -105,7 +105,7 @@
         icon: ICON_PDF,
         title: 'common.button_export_pdf')
     }}
-{% endblock %}
+{% endblock help_actions %}
 {# body #}
 {% block help_body -%}
 <p class="mb-0">{{ dialog.description }}</p>
@@ -172,4 +172,4 @@
     {% set links = links|merge({entity: {id: dialog.entity, type: 'entity'}}) %}
 {%- endif %}
 {{ output_links(links, service) }}
-{%- endblock %}
+{%- endblock help_body %}

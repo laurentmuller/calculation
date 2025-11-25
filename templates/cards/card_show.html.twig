@@ -4,7 +4,7 @@
 {% set title_icon = ICON_SHOW %}
 {# body #}
 {% block card_body %}
-<div class="{% block table_responsive_class %}table-responsive{% endblock %}">
+<div class="{% block table_responsive_class %}table-responsive{% endblock table_responsive_class %}">
     <table class="table table-hover table-sm table-list mb-0">
         {% block property_header %}
         <thead>
@@ -13,13 +13,13 @@
                 <th class="w-75">{{ 'show.value'|trans }}</th>
             </tr>
         </thead>
-        {% endblock %}
+        {% endblock property_header %}
         <tbody>
-            {% block property_body %}{% endblock %}
+            {% block property_body %}{% endblock property_body %}
         </tbody>
     </table>
 </div>
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer -%}
 <div class="d-flex-wrap-center">
@@ -33,6 +33,6 @@
         {% if delete_path|default(false) %}
             {{ link(delete_path, 'common.button_delete', 'btn btn-form btn-outline-danger') }}
         {% endif %}
-    {% endblock %}
+    {% endblock actions_form %}
 </div>
-{%- endblock %}
+{%- endblock card_footer %}

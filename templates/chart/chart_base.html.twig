@@ -3,22 +3,22 @@
 {# macros #}
 {% macro margin_below_class(margin, min_margin) -%}
 {% if margin < min_margin %} text-danger has-tooltip{% endif %}
-{%- endmacro %}
+{%- endmacro margin_below_class %}
 {% macro margin_below_tooltip(margin, min_margin) -%}
 {% if margin < min_margin %} title="{{ 'calculation.list.margin_below'|trans({'%margin%': margin|percent, '%minimum%': min_margin|percent}) }}"{% endif %}
-{%- endmacro %}
+{%- endmacro margin_below_tooltip %}
 {# parameters #}
 {%- set title_icon = title_icon|default('area-chart') -%}
 {%- set list_path = 'calculation_index' -%}
 {# body #}
 {% block card_body %}
-<div id="{{ constant('App\\Chart\\AbstractHighchart::CONTAINER') }}" class="chart{% block chart_class %}{% endblock %}"></div>
+<div id="{{ constant('App\\Chart\\AbstractHighchart::CONTAINER') }}" class="chart{% block chart_class %}{% endblock chart_class %}"></div>
 <div id="data" class="table-responsive my-2">
     <table class="table table-bordered table-hover table-list table-sm">
-        {% block data %}{% endblock %}
+        {% block data %}{% endblock data %}
     </table>
 </div>
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer -%}
 <div class="d-flex-wrap">
@@ -28,7 +28,7 @@
     {% endif %}
     {{ sitemap() }}
 </div>
-{%- endblock %}
+{%- endblock card_footer %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -42,4 +42,4 @@
 <script nonce="{{ csp_nonce() }}">
     {{- chart(chart) -}}
 </script>
-{% endblock %}
+{% endblock javascripts %}

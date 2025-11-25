@@ -17,4 +17,4 @@
 {{ property('product.fields.price', item.price|amount, item.price ? '' : 'text-danger') }}
 {{ property('product.fields.unit', item.unit) }}
 {{ timestampable_properties(item) }}
-{% endblock %}
+{% endblock property_body %}

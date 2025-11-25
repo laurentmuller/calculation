@@ -1,7 +1,7 @@
 {# macros #}
 {% macro outputTitleLine(title) -%}
     <div class="horizontal-line mb-1">{{ title|trans }}</div>
-{% endmacro %}
+{% endmacro outputTitleLine %}
 {% macro outputPopoverRow(name, description, arguments, popover) -%}
     <div class="row">
         <div class="col-md-4 col-lg-3 text-success text-nowrap" data-bs-title="{{ name|trim }}" data-content="{{ popover|e }}">
@@ -11,14 +11,14 @@
             {{- description|raw }} {{ arguments|raw -}}
         </div>
     </div>
-{% endmacro %}
+{% endmacro outputPopoverRow %}
 {% macro outputEntryRow(name, value, class = null) -%}
     <tr>
         <td>{{ name }}</td>
         <td>:</td>
         <td{% if class %} class="{{ class }}"{% endif %}>{{ value }}</td>
     </tr>
-{% endmacro %}
+{% endmacro outputEntryRow %}
 {% macro tooltipArgument(argument) -%}
     <div class="mx-2 mt-1">
         <table class="table table-sm">
@@ -29,7 +29,7 @@
             {% endif %}
         </table>
     </div>
-{% endmacro %}
+{% endmacro tooltipArgument %}
 {% macro tooltipOption(option) -%}
     <div class="mx-2 mt-1">
         <table class="table table-sm">
@@ -41,7 +41,7 @@
             {% endif %}
         </table>
     </div>
-{% endmacro %}
+{% endmacro tooltipOption %}
 {# content #}
 <div id="content">
     {# description #}

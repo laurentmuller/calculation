@@ -49,7 +49,7 @@ class Password extends Constraint
     ];
 
     /**
-     * Test all violations (true) or stop when the first violation is found (false).
+     * Test all violations (true) or stop after the first violation found (false).
      */
     public bool $all = false;
 
@@ -103,9 +103,6 @@ class Password extends Constraint
      */
     public string $specialCharMessage = 'password.specialChar';
 
-    /**
-     * @param string[] $groups
-     */
     #[HasNamedArguments]
     public function __construct(
         ?bool $all = null,

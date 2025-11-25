@@ -7,10 +7,10 @@
 {# class #}
 {% block card_class -%}
 {% if result %}{{ parent() }}{% else %} border-danger{% endif %}
-{%- endblock %}
+{%- endblock card_class %}
 {% block card_header_class -%}
 {% if result %}{{ parent() }}{% else %} text-bg-danger{% endif %}
-{%- endblock %}
+{%- endblock card_header_class %}
 {# body #}
 {% block card_body %}
 {%- if result %}
@@ -41,9 +41,9 @@
     {{- 'openweather.result.failure'|trans }}{% if message is defined %} {{ message }}{% endif -%}
 </p>
 {%- endif %}
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer %}
 {{ homepage() }}
 {{ link(path('openweather_search'), 'common.button_search', 'btn btn-form btn-secondary') }}
-{% endblock %}
+{% endblock card_footer %}

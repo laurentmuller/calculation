@@ -29,7 +29,7 @@
 <div class="row-empty{% if tasks_count != 0 %} d-none{% endif %}">
     <p class="small text-body-secondary">{{ 'task.edit.empty_items'|trans }}</p>
 </div>
-{% endblock %}
+{% endblock card_body %}
 {# actions #}
 {% block actions_form -%}
 {% if form.vars['simple_widget'] %}
@@ -38,7 +38,7 @@
     {{ homepage() }}
     {{ sitemap() }}
 {% endif %}
-{% endblock %}
+{% endblock actions_form %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -48,4 +48,4 @@
 {% else %}
     {{ asset_js('js/compiled/task_compute.js') }}
 {% endif %}
-{% endblock %}
+{% endblock javascripts %}

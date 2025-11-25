@@ -11,7 +11,7 @@
 {% else %}
     <span title="{{ title }}">{{ text }}</span>
 {% endif %}
-{%- endmacro %}
+{%- endmacro system %}
 {# parameters #}
 {%- set title = 'openweather.current.title' -%}
 {%- set title_icon = 'cloud-sun' -%}
@@ -51,7 +51,7 @@
 {% else %}
     {{ parent() }}
 {% endif %}
-{% endblock %}
+{% endblock card_header %}
 {# body #}
 {% block card_body %}
 {% if id %}
@@ -81,11 +81,11 @@
 {% else %}
     <p class="mb-0 text-center">{{ 'openweather.current.empty'|trans|replace({'#': path('openweather_search')})|raw }}</p>
 {% endif %}
-{% endblock %}
+{% endblock card_body %}
 {# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/open_weather.css') }}
-{% endblock %}
+{% endblock stylesheets %}
 {# javascript #}
 {% block javascripts %}
 {{ parent() }}
@@ -93,4 +93,4 @@
 {{ asset_js('js/plugins/plugin-copy.js') }}
 {{ asset_js('js/application/dialog_raw_data.js') }}
 {{ asset_js('js/test/weather.js') }}
-{% endblock %}
+{% endblock javascripts %}

@@ -10,7 +10,7 @@
 {% block actions_form %}
 {{ parent() }}
 <a href="{{ path('app_login') }}" class="align-self-center">{{ 'security.link'|trans }}</a>
-{% endblock %}
+{% endblock actions_form %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -23,4 +23,4 @@
 {% else %}
     {{ asset_js('js/compiled/user_reset.js') }}
 {% endif %}
-{%- endblock %}
+{%- endblock javascripts %}

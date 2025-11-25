@@ -27,7 +27,7 @@
         {{- block('form_widget_simple') -}}
         <span class="input-group-text">%</span>
     </div>
-{%- endblock %}
+{%- endblock _calculation_userMargin_widget %}
 {# parameters #}
 {%- set title = title|default(new ? 'calculation.add.title' : 'calculation.edit.title') -%}
 {%- set title_parameters = new ? {} : {'%id%': item.id|identifier} -%}
@@ -68,12 +68,12 @@
     </div>
 </div>
 {{ form_end(form) }}
-{%- endblock %}
+{%- endblock body %}
 {# stylesheets #}
 {% block stylesheets -%}
     {{ preload_css('css/calculation.css') }}
     {{ asset_css('css/calculation.css') }}
-{% endblock %}
+{% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts -%}
     {% if is_js_debug %}
@@ -107,4 +107,4 @@
             {{ asset_js('js/compiled/calculation_error.js') }}
         {% endif %}
     {% endif %}
-{% endblock %}
+{% endblock javascripts %}

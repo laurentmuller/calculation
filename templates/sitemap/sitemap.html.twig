@@ -24,7 +24,7 @@
         {% endif %}
     </li>
 {% endif %}
-{%- endmacro %}
+{%- endmacro entry %}
 {# output entry content #}
 {% macro entry_content(entry, route) %}
 {% set icon = entry.icon is defined ? entry.icon ~ ' fa-fw' : false %}
@@ -37,7 +37,7 @@
 {% else %}
     <span>{{ icon(icon, entry.text) }}</span>
 {% endif %}
-{%- endmacro %}
+{%- endmacro entry_content %}
 {# parameters #}
 {%- set title = 'index.menu_site_map' -%}
 {%- set title_icon = 'sitemap' -%}
@@ -68,8 +68,8 @@
     </nav>
 {% endif %}
 </div>
-{%- endblock %}
+{%- endblock body %}
 {# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/sitemap.css') }}
-{% endblock %}
+{% endblock stylesheets %}

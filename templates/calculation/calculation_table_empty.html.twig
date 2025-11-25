@@ -8,33 +8,33 @@
 {% block card_header -%}
 {{ parent() }}
 <small>{{ 'empty.description'|trans }}</small>
-{%- endblock %}
+{%- endblock card_header %}
 {# header actions #}
 {% block header_actions -%}
 {% if customData.itemsCount and rows|length -%}<small>{{ 'empty.count'|trans({'%calculations%': rows|length, '%items%': customData.itemsCount}) }}</small>{%- endif %}
-{%- endblock %}
+{%- endblock header_actions %}
 {# gloval actions #}
 {% block global_actions -%}
 {{- _self.item_external(path('calculation_empty_pdf'), 'calculation.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('calculation_empty_excel'), 'calculation.list.excel_title', ICON_EXCEL) }}
-{%- endblock %}
+{%- endblock global_actions %}
 {# actions #}
 {% block edit_actions -%}
 {{ _self.item_path(path('calculation_edit', params), 'calculation.edit.title_short', ICON_EDIT, edit_class) }}
-{%- endblock %}
+{%- endblock edit_actions %}
 {% block delete_actions -%}
 {{- _self.item_path(path('calculation_delete', params), 'calculation.delete.title', ICON_DELETE, 'btn-delete') }}
-{%- endblock %}
+{%- endblock delete_actions %}
 {% block show_actions -%}
 {{- _self.item_path(path('calculation_show', params), 'calculation.show.title', ICON_SHOW, show_class) }}
-{%- endblock %}
+{%- endblock show_actions %}
 {% block other_actions -%}
 {% if allow_export %}
     {{- _self.item_separator() }}
     {{- _self.item_path_external(path('calculation_pdf_id', params), 'calculation.list.pdf_single_title', ICON_PDF, 'btn-calculation-pdf') }}
     {{- _self.item_path_external(path('calculation_excel_id', params), 'calculation.list.excel_single_title', ICON_EXCEL, 'btn-calculation-excel') }}
 {% endif %}
-{%- endblock %}
+{%- endblock other_actions %}
 {# cusomt view #}
 {% block custom_view_card_class ' text-border' %}
 {% block custom_view_header -%}
@@ -45,7 +45,7 @@
 {%- else -%}
     <span>%id%</span>
 {%- endif -%}
-{%- endblock %}
+{%- endblock custom_view_header %}
 {# custom view body #}
 {% block custom_view_body -%}
 {{ _self.property_value('%date% / %stateCode%') }}
@@ -53,11 +53,11 @@
 {{ _self.property_value('%description%') }}
 {{ _self.property_line() }}
 {{ _self.property_value('%items%', 'text-danger') }}
-{%- endblock %}
+{%- endblock custom_view_body %}
 
 {% block stylesheets -%}
     {{ parent() }}
     <style nonce="{{ csp_nonce() }}">
         {{- css_border() }}
     </style>
-{%- endblock %}
+{%- endblock stylesheets %}

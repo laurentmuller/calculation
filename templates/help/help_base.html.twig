@@ -6,25 +6,25 @@
     <div class="col col-md-8 offset-md-2 mb-2">
         <div class="d-flex-wrap-center">
             <div class="me-auto">
-                <h4>{% block help_title -%}{%- endblock %}</h4>
+                <h4>{% block help_title -%}{%- endblock help_title %}</h4>
             </div>
             <div class="d-print-none">
                 <div class="input-group input-group-sm">
-                    {% block help_home -%}{{ home_button() }}{%- endblock %}
+                    {% block help_home -%}{{ home_button() }}{%- endblock help_home %}
                     {% block help_search %}
                         <input id="help-search" class="form-control" type="text" placeholder="{{ 'datatable.search'|trans }}" aria-label="{{ 'datatable.search'|trans }}">
                         <button class="btn btn-outline-secondary btn-help-search" type="button" disabled title="{{ 'datatable.clear'|trans }}">
                             <i class="fa-solid fa-eraser"></i>
                         </button>
-                    {% endblock %}
-                    {% block help_actions -%}{%- endblock %}
+                    {% endblock help_search %}
+                    {% block help_actions -%}{%- endblock help_actions %}
                 </div>
             </div>
         </div>
-        <div class="help-body">{% block help_body -%}{%- endblock %}</div>
+        <div class="help-body">{% block help_body -%}{%- endblock help_body %}</div>
     </div>
 </div>
-{%- endblock %}
+{%- endblock body %}
 {% block javascripts %}
     {% if is_js_debug %}
         {{ parent() }}
@@ -33,4 +33,4 @@
     {% else %}
         {{- asset_js('js/compiled/help.js') }}
     {% endif %}
-{% endblock %}
+{% endblock javascripts %}

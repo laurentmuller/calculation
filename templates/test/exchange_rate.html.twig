@@ -5,12 +5,12 @@
 {% for key, code in codes -%}
     <option value="{{ key }}" data-name="{{ code.symbol }}" data-digits="{{ code.fractionDigits }}"{% if key == selection %} selected{% endif %}>{{ code.name ~ ' - ' ~ code.symbol }}</option>
 {% endfor -%}
-{% endmacro %}
+{% endmacro fillCodes %}
 {% macro fillEntries(codes, selection = '') %}
 {% for key, code in codes -%}
     <button class="dropdown-item{% if key == selection %} active{% endif %}" type="button" data-value="{{ key }}" data-name="{{ code.symbol }}" data-digits="{{ code.fractionDigits }}">{{ code.name ~ ' - ' ~ code.symbol }}</button>
 {% endfor -%}
-{% endmacro %}
+{% endmacro fillEntries %}
 {# parameters #}
 {%- set title = 'exchange_rate.title' -%}
 {%- set title_icon = 'comments-dollar' -%}
@@ -71,7 +71,7 @@
         {{- 'exchange_rate.next_update'|trans({'%date%': 'common.entity_empty_date'|trans}) -}}
     </div>
 </div>
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer -%}
 {{ parent() }}
@@ -86,16 +86,16 @@
     </span>
     </div>
 {% endif %}
-{% endblock %}
+{% endblock card_footer %}
 {# actions #}
 {% block actions_form -%}
 {{ homepage() }}
-{%- endblock %}
+{%- endblock actions_form %}
 {# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('build/currency-flags/currency-flags.css') }}
 {{ asset_css('css/select2.css') }}
-{%- endblock -%}
+{%- endblock stylesheets -%}
 {# javascripts #}
 {% block javascripts %}
 {{ parent() }}
@@ -103,4 +103,4 @@
 {{ asset_js('build/select2/js/i18n/fr.js') }}
 {{ asset_js('js/extensions/select2-extensions.js') }}
 {{ asset_js('js/test/exchange-rate.js') }}
-{%- endblock %}
+{%- endblock javascripts %}

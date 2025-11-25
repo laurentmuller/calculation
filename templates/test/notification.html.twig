@@ -15,30 +15,30 @@
         class="btn btn-notify btn-{{ type }} flex-fill">
     {{- text -}}
 </button>
-{%- endmacro %}
+{%- endmacro button %}
 
 {% macro position(position, selection) -%}
 {%- set value = position.value -%}
 <option value="{{ value }}"{% if position == selection %} selected{% endif %}>{{ position|trans }}</option>
-{%- endmacro %}
+{%- endmacro position %}
 
 {% macro timeout(seconds, selection) -%}
 {%- set milliseconds = seconds * 1000 -%}
 {%- set text = 'counters.seconds'|trans({'%count%': seconds}) -%}
 <option value="{{ milliseconds }}"{% if milliseconds == selection %} selected{% endif %}>{{ text }}</option>
-{%- endmacro %}
+{%- endmacro timeout %}
 
 {% macro progress(pixels, selection) -%}
 {%- set text = 'counters.pixels'|trans({'%count%': pixels}) -%}
 <option value="{{ pixels }}"{% if pixels == selection %} selected{% endif %}>{{ text }}</option>
-{%- endmacro %}
+{%- endmacro progress %}
 
 {% macro checkbox(id, text, checked = true) -%}
 <div class="form-check form-check-inline form-switch form-check-option">
   <input type="checkbox" class="form-check-input form-check-input-option" name="{{ id }}" id="{{ id }}" data-default="{{ checked|json_encode }}"{% if checked %} checked{% endif %}>
   <label class="form-check-label" for="{{ id }}">{{ text|trans }}</label>
 </div>
-{%- endmacro %}
+{%- endmacro checkbox %}
 {# parameters #}
 {%- set title = 'test.notification' -%}
 {%- set title_icon = 'bell far' -%}
@@ -100,14 +100,14 @@
     {{ _self.checkbox('close', 'parameters.fields.message_close', user_params.message.close) }}
     {{ _self.checkbox('autohide', 'parameters.fields.message_auto_close') }}
 </div>
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer %}
 {{ homepage() }}
 <button type="button" class="btn btn-default btn-outline-success">{{ 'parameters.default'|trans }}</button>
-{% endblock %}
+{% endblock card_footer %}
 {# javascripts #}
 {% block javascripts %}
 {{ parent() }}
 {{ asset_js('js/test/notification.js') }}
-{%- endblock %}
+{%- endblock javascripts %}

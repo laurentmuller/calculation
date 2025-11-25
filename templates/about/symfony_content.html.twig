@@ -10,14 +10,14 @@
         {% endif %}
     </a>
 </div>
-{%- endmacro %}
+{%- endmacro headerLinkInfo %}
 {% macro rowBundle(bundle) -%}
 <tr>
     <td class="e">{{ bundle.name }}</td>
     <td class="v">{{ bundle.path }}</td>
     <td class="v text-percent">{{ bundle.size }}</td>
 </tr>
-{%- endmacro %}
+{%- endmacro rowBundle %}
 {% macro headerPackage() %}
 <thead>
     <tr>
@@ -26,7 +26,7 @@
         <th colspan="2">Description</th>
     </tr>
 </thead>
-{% endmacro %}
+{% endmacro headerPackage %}
 {% macro rowPackage(package) -%}
 <tr>
     <td class="e">{{ package.name }}</td>
@@ -73,7 +73,7 @@
         {% endif %}
     </td>
 </tr>
-{%- endmacro %}
+{%- endmacro rowPackage %}
 {% macro headerRoute() -%}
 <thead>
     <tr>
@@ -82,14 +82,14 @@
         <th class="v text-state">Method</th>
     </tr>
 </thead>
-{%- endmacro %}
+{%- endmacro headerRoute %}
 {% macro rowRoute(route) -%}
 <tr>
     <td class="e">{{ route.name }}</td>
     <td class="v">{{ route.path }}</td>
     <td class="v text-state">{{ route.methods }}</td>
 </tr>
-{%- endmacro %}
+{%- endmacro rowRoute %}
 {% macro headerNameValue() %}
     <thead>
     <tr>
@@ -97,14 +97,14 @@
         <th>Value</th>
     </tr>
     </thead>
-{% endmacro %}
+{% endmacro headerNameValue %}
 {% macro rowDirectory(directory) -%}
     <tr>
         <td class="e">{{ directory.name }}</td>
         <td class="v">{{ directory.relative }}</td>
         <td class="v text-percent">{{ directory.size }}</td>
     </tr>
-{%- endmacro %}
+{%- endmacro rowDirectory %}
 {# content #}
 <div class="phpversion">
     <table id="data-table-symfony" class="table table-sm table-hover mb-0">

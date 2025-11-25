@@ -15,6 +15,6 @@
         {% if message is defined %}
             <p class="my-2">{{ message|trans(message_parameters|default({}))|raw|nl2br }}</p>
         {% endif %}
-    {% endblock %}
+    {% endblock message %}
 {{ parent() }}
-{%- endblock %}
+{%- endblock card_body %}

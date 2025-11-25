@@ -10,7 +10,7 @@
 <sup title="{{ overall_title }}"{% if class_name %} class="{{ class_name }}"{% endif %}>
     <small>{{ margin|percent }}</small>
 </sup>
-{%- endmacro %}
+{%- endmacro margin %}
 
 {% macro empty_content() %}
 <div class="card-body p-2">
@@ -18,4 +18,4 @@
         {{- 'calculation.list.empty'|trans -}}
     </div>
 </div>
-{% endmacro %}
+{% endmacro empty_content %}

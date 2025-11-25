@@ -8,12 +8,12 @@
         <td>{{ value|raw }}</td>
     </tr>
 {% endif %}
-{%- endmacro %}
+{%- endmacro output_row %}
 {% macro output_header(name) -%}
     <tr>
         <th colspan="2">{{ name }}</th>
     </tr>
-{%- endmacro %}
+{%- endmacro output_header %}
 {% macro output_position(text, href) -%}
 {% if text and href %}
     <tr>
@@ -25,7 +25,7 @@
         </td>
     </tr>
 {% endif %}
-{%- endmacro %}
+{%- endmacro output_position %}
 {% macro output_country(country, emoji) -%}
 {% if country %}
     <tr>
@@ -34,7 +34,7 @@
     </tr>
 {% endif %}
 
-{%- endmacro %}
+{%- endmacro output_country %}
 {# parameters #}
 {%- set title = 'test.ip_stack' -%}
 {%- set title_icon = 'location-dot' -%}
@@ -48,7 +48,7 @@
         <i class="fa-solid fa-code"></i>
     </a>
 </div>
-{% endblock %}
+{% endblock card_header %}
 {# body #}
 {% block card_body %}
 <table class="table table-sm table-hover">
@@ -66,23 +66,23 @@
     </tbody>
 </table>
 {{ include('dialog/dialog_raw_data.html.twig', {raw_data: results, description: 'test.ip_stack'|trans, allow_copy: true}) }}
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer -%}
 <div class="d-flex-wrap-center">
     {{- homepage() }}
     {{- apiLink('https://ipstack.com', 'flex-grow-1 text-sm-end') -}}
 </div>
-{%- endblock %}
+{%- endblock card_footer %}
 {# stylesheets #}
 {% block stylesheets %}
     {{ parent() }}
     {{- asset_css('css/highlight.css') }}
-{% endblock %}
+{% endblock stylesheets %}
 {# javascript #}
 {% block javascripts %}
 {{ parent() }}
 {{ asset_js('build/clipboard/clipboard.js') }}
 {{ asset_js('js/plugins/plugin-copy.js') }}
 {{ asset_js('js/application/dialog_raw_data.js') }}
-{% endblock %}
+{% endblock javascripts %}

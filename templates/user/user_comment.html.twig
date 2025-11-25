@@ -22,11 +22,11 @@
 </div>
 {{ form_row(form.message) }}
 {{ form_row(form.attachments) }}
-{% endblock %}
+{% endblock card_body %}
 {# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/simple_editor.css') }}
-{% endblock %}
+{% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -36,4 +36,4 @@
 {% else %}
     {{ asset_js('js/compiled/user_comment.js') }}
 {% endif %}
-{% endblock %}
+{% endblock javascripts %}

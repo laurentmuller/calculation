@@ -27,7 +27,7 @@
             </button>
         </div>
     </div>
-{% endblock %}
+{% endblock _task_items_entry_name_label %}
 {# item #}
 {% macro outputTaskItem(item, show = false) %}
 {%- set id = field_id(item)|default(0) -%}
@@ -74,7 +74,7 @@
         </div>
     </div>
 </div>
-{% endmacro -%}
+{% endmacro outputTaskItem -%}
 {# parameters #}
 {%- set title = title|default(new ? 'task.add.title' : 'task.edit.title') -%}
 {%- set title_icon = ICON_TASK -%}
@@ -102,7 +102,7 @@
         <button type="button" class="btn btn-link btn-add-item p-0" role="button">{{ 'task.edit.add_item'|trans }}</button>
     </div>
 </div>
-{% endblock %}
+{% endblock card_header %}
 {# body #}
 {% block card_body %}
 {{ form_row(form.name) }}
@@ -123,12 +123,12 @@
     {% endfor -%}
 </div>
 <small class="text-body-secondary empty-items{% if form.vars.value.count > 0 %} d-none{% endif %}">{{- 'task.edit.empty_items'|trans -}}</small>
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer -%}
 {{ parent() }}
 {{ timestampable_footer(item) }}
-{% endblock %}
+{% endblock card_footer %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -142,4 +142,4 @@
 {% else %}
     {{ asset_js('js/compiled/task_edit.js') }}
 {% endif %}
-{% endblock %}
+{% endblock javascripts %}

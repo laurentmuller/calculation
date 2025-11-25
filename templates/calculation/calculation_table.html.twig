@@ -10,7 +10,7 @@
 {# header actions #}
 {% block header_actions -%}
 {% if allow_add %}<a class="add-link p-0" href="{{ path('calculation_add', params) }}">{{ 'calculation.add.title'|trans }}</a>{% endif %}
-{%- endblock %}
+{%- endblock header_actions %}
 {# toolbar actions #}
 {% block toolbar_actions -%}
 {% if customData.dropdown is defined and customData.dropdown|length %}
@@ -36,7 +36,7 @@
         {% endfor %}
     </ul>
 {% endif %}
-{%- endblock %}
+{%- endblock toolbar_actions %}
 {# global actions #}
 {% block global_actions -%}
 {{- _self.item_external(path('calculation_pdf'), 'calculation.list.pdf_title', ICON_PDF) }}
@@ -46,25 +46,25 @@
     {{- _self.item_path(path('admin_archive', {caller: path('calculation_index')}), 'archive.title', 'calendar-xmark far') }}
     {{- _self.item_path(path('admin_update', {caller: path('calculation_index')}), 'calculation.update.title', 'pencil') }}
 {% endif %}
-{%- endblock %}
+{%- endblock global_actions %}
 {# edit actions #}
 {% block edit_actions -%}
 {{- _self.item_path(path('calculation_edit', params), 'calculation.edit.title_short', ICON_EDIT, edit_class ~ ' btn-calculation-edit') }}
 {{- _self.item_path(path('calculation_state', params), 'calculation.list.state_title', ICON_CALCULATION_STATE, 'btn-state') }}
-{%- endblock %}
+{%- endblock edit_actions %}
 {# delete actions #}
 {% block delete_actions -%}
 {{- _self.item_path(path('calculation_delete', params), 'calculation.delete.title', ICON_DELETE, 'btn-delete') }}
-{%- endblock %}
+{%- endblock delete_actions %}
 {# add actions #}
 {% block add_actions -%}
 {{- _self.item_path(path('calculation_add', params), 'calculation.add.title', ICON_ADD, 'btn-add') }}
 {{- _self.item_path(path('calculation_clone', params), 'common.button_clone', ICON_COPY, 'btn-clone') }}
-{%- endblock %}
+{%- endblock add_actions %}
 {# show actions #}
 {% block show_actions -%}
 {{- _self.item_path(path('calculation_show', params), 'calculation.show.title', ICON_SHOW, show_class) }}
-{%- endblock %}
+{%- endblock show_actions %}
 {# other actions #}
 {% block other_actions -%}
 {% if allow_export %}
@@ -72,7 +72,7 @@
     {{- _self.item_path_external(path('calculation_pdf_id', params), 'calculation.list.pdf_single_title', ICON_PDF, 'btn-calculation-pdf') }}
     {{- _self.item_path_external(path('calculation_excel_id', params), 'calculation.list.excel_single_title', ICON_EXCEL, 'btn-calculation-excel') }}
 {% endif %}
-{%- endblock %}
+{%- endblock other_actions %}
 {# custom view header #}
 {% block custom_view_card_class ' text-border' %}
 {% block custom_view_header -%}
@@ -83,7 +83,7 @@
 {%- else -%}
     <span>%id%</span>
 {%- endif -%}
-{%- endblock %}
+{%- endblock custom_view_header %}
 {# custom view body #}
 {% block custom_view_body -%}
 {{ _self.property_value('%date% / %stateCode%') }}
@@ -91,11 +91,11 @@
 {{ _self.property_value('%description%') }}
 {{ _self.property_line() }}
 {{ _self.property_both('%overallMargin%', '%overallTotal%', '', 'text-end') }}
-{%- endblock %}
+{%- endblock custom_view_body %}
 
 {% block stylesheets -%}
     {{ parent() }}
     <style nonce="{{ csp_nonce() }}">
         {{- css_border() }}
     </style>
-{%- endblock %}
+{%- endblock stylesheets %}

@@ -5,7 +5,7 @@
 {% for key, value in languages -%}
     <option value="{{ value }}"{% if value == language %} selected{% endif %}>{{ key }}</option>
 {% endfor -%}
-{% endmacro %}
+{% endmacro fillLanguages %}
 {# parameters #}
 {%- set title = 'translator.title' -%}
 {%- set title_icon = 'globe' -%}
@@ -79,16 +79,16 @@
         {{ apiLink(service.apiUrl, 'api-url') }}
     </div>
 </div>
-{% endblock %}
+{% endblock card_body %}
 {# action form #}
 {% block actions_form -%}
     {{ parent() }}
     {{ button_copy('#result') }}
-{%- endblock %}
+{%- endblock actions_form %}
 {# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/select2.css') }}
-{%- endblock -%}
+{%- endblock stylesheets -%}
 {# javascripts #}
 {% block javascripts %}
 {{ parent() }}
@@ -98,4 +98,4 @@
 {{ asset_js('js/extensions/select2-extensions.js') }}
 {{ asset_js('js/plugins/plugin-copy.js') }}
 {{ asset_js('js/test/translate.js') }}
-{%- endblock %}
+{%- endblock javascripts %}

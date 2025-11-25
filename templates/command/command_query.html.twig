@@ -8,7 +8,7 @@
         {% endfor %}
     </div>
 {% endif %}
-{% endmacro %}
+{% endmacro outputChildren %}
 {# parameters #}
 {%- set title = 'command.execute.title' -%}
 {%- set title_icon = 'code' -%}
@@ -33,9 +33,9 @@
     {{ _self.outputChildren(options.checkboxes) }}
 {% endif %}
 {{ parent() }}
-{% endblock %}
+{% endblock card_body %}
 {# javascript #}
 {% block javascripts %}
     {{- parent() -}}
     {{- asset_js('js/application/command_query.js') -}}
-{% endblock %}
+{% endblock javascripts %}

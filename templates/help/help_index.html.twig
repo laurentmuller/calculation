@@ -11,7 +11,7 @@
         </a>
         <p class="mb-2">{{ dialog.description }}</p>
     </div>
-{%- endmacro %}
+{%- endmacro output_dialog %}
 
 {% macro output_entity(entity) -%}
     {% set href = path('help_entity', {id: entity.id}) %}
@@ -21,7 +21,7 @@
         </a>
         <p class="mb-2">{{ entity.description }}</p>
     </div>
-{%- endmacro %}
+{%- endmacro output_entity %}
 
 {% macro output_menus(menus, service, indent = false) -%}
     <div class="help-item{% if indent %} ms-3{% endif %}">
@@ -29,7 +29,7 @@
             {{- _self.output_menu(menu, service, indent) -}}
         {%- endfor -%}
     </div>
-{%- endmacro %}
+{%- endmacro output_menus %}
 
 {% macro output_menu(menu, service, indent = false) -%}
     {% if menu.action|default(false) %}
@@ -79,19 +79,19 @@
             {% endif %}
         {% endif %}
     </div>
-{%- endmacro %}
+{%- endmacro output_menu %}
 
 {% macro expand_button() %}
 <a href="#" class="expand-items link-items" title="{{ 'common.expand'|trans }}">
     <i class="fa-solid fa-plus"></i>
 </a>
-{% endmacro %}
+{% endmacro expand_button %}
 
 {% macro collapse_button() %}
 <a href="#" class="collapse-items link-items" title="{{ 'common.collapse'|trans }}">
     <i class="fa-solid fa-minus"></i>
 </a>
-{% endmacro %}
+{% endmacro collapse_button %}
 
 {% macro output_header(icon, text) %}
 <div class="d-flex-wrap-center">
@@ -102,7 +102,7 @@
     {{ _self.collapse_button() }}
 </div>
 <hr class="my-1">
-{% endmacro %}
+{% endmacro output_header %}
 
 {# parameters #}
 {%- set title = 'help.title' -%}
@@ -111,7 +111,7 @@
 {# title #}
 {% block help_title -%}
     {{- output_icon('question-circle', 'help.title') -}}
-{%- endblock %}
+{%- endblock help_title %}
 {# body #}
 {% block help_body -%}
     <p class="mb-1">{{ 'help.description'|trans({'%app_name%': app_name_version})|raw }}</p>
@@ -157,9 +157,9 @@
             </div>
         </div>
     </div>
-{%- endblock %}
+{%- endblock help_body %}
 {# home #}
-{% block help_home -%}{% endblock %}
+{% block help_home -%}{% endblock help_home %}
 {# actions #}
 {% block help_actions -%}
     <button type="button" class="btn btn-outline-secondary btn-expand-all link-items" title="{{ 'common.expand'|trans }}">
@@ -174,4 +174,4 @@
     {{ dialogs_button() }}
     {{ entities_button() }}
     {{ export_button() }}
-{%- endblock %}
+{%- endblock help_actions %}

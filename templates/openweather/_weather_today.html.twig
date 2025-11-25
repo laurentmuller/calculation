@@ -4,25 +4,25 @@
 <tr>
     <td colspan="2">{{ name|trans }}</td>
 </tr>
-{% endmacro %}
+{% endmacro row_title %}
 {% macro row_text(name, value) %}
 <tr>
     <td class="ps-4 w-35">{{ name|trans }}</td>
     <td>{{ value|raw }}</td>
 </tr>
-{% endmacro %}
+{% endmacro row_text %}
 {% macro row_unit(name, value, unit = '', separator = ' ') %}
     {{ _self.row_text(name, value_unit(value, unit, separator)) }}
-{% endmacro %}
+{% endmacro row_unit %}
 {% macro row_temp(name, value, unit = '') %}
     {{ _self.row_text(name, value_temp(value, unit, '')) }}
-{% endmacro %}
+{% endmacro row_temp %}
 {% macro row_volume(name, value, unit = '') %}
     {{ _self.row_unit(name, value|number_format(1), unit, ' ') }}
-{% endmacro %}
+{% endmacro row_volume %}
 {% macro row_no_sep(name, value, unit = '') %}
     {{ _self.row_unit(name, value|number_format(1), unit, '') }}
-{% endmacro %}
+{% endmacro row_no_sep %}
 {# parameters #}
 {% set main = current.main %}
 {% set wind = current.wind %}

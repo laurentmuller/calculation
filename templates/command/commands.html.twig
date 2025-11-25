@@ -20,7 +20,7 @@
     </select>
 </div>
 {{ include('command/_command.htm.twig', {command: command}, with_context: false) }}
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer %}
 <div class="d-flex-wrap">
@@ -30,9 +30,9 @@
     {{ button_pdf('command_pdf') }}
     <small class="ms-sm-auto">{{ 'command.list.counter'|trans({'%count%': count|integer}) }}</small>
 </div>
-{% endblock %}
+{% endblock card_footer %}
 {# javascripts #}
 {% block javascripts %}
     {{ parent() }}
     {{ asset_js('js/application/command_list.js') }}
-{%- endblock %}
+{%- endblock javascripts %}

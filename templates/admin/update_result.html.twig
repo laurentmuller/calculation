@@ -6,7 +6,7 @@
         <td class="w-30 text-nowrap">{{ name|trans }}</td>
         <td>{{ value|raw }}</td>
     </tr>
-{%- endmacro %}
+{%- endmacro add_line_info %}
 {# parameters #}
 {%- set title = 'calculation.update.title' -%}
 {%- set title_icon = 'pencil' -%}
@@ -85,7 +85,7 @@
             {{- 'calculation.result.empty'|trans -}}
         </div>
     {% endif %}
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer %}
     <div class="d-flex-wrap-center">
@@ -93,11 +93,11 @@
         {{ link(path('admin_update'), 'calculation.result.update', 'btn btn-form btn-secondary') -}}
         {{ sitemap() }}
     </div>
-{% endblock %}
+{% endblock card_footer %}
 {# stylesheets #}
 {% block stylesheets -%}
     {{ parent() }}
     <style nonce="{{ csp_nonce() }}">
         {{- css_border() }}
     </style>
-{%- endblock %}
+{%- endblock stylesheets %}

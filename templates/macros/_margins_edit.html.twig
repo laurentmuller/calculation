@@ -31,7 +31,7 @@
         </button>
     </td>
 </tr>
-{% endmacro %}
+{% endmacro outputMarginRow %}
 {# output all margins #}
 {% macro outputMargins(margins) %}
 {%- set margins_length = margins|length %}
@@ -69,4 +69,4 @@
 <small id="empty_margins" class="text-body-secondary{% if margins_length %} d-none{% endif %}">
     {{- 'group.edit.empty_margins'|trans -}}
 </small>
-{% endmacro %}
+{% endmacro outputMargins %}

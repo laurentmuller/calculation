@@ -53,16 +53,16 @@
         <td class="text-percent">{{ 1.0|percent(true, 2, 5) }}</td>
     </tr>
 </tbody>
-{% endblock %}
+{% endblock data %}
 {# body #}
 {% block card_body %}
     {{ parent() }}
     <p class="small mb-0">{{ 'chart.state.tooltip'|trans|raw }}</p>
-{%- endblock %}
+{%- endblock card_body %}
 {# stylesheets #}
 {% block stylesheets -%}
     {{ parent() }}
     <style nonce="{{ csp_nonce() }}">
         {{- css_border() }}
     </style>
-{%- endblock %}
+{%- endblock stylesheets %}

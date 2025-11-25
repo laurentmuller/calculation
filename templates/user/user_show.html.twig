@@ -28,11 +28,11 @@
     {{ property('user.fields.initials', item.initials) }}
 {%- endif -%}
 {{ timestampable_properties(item) }}
-{% endblock %}
+{% endblock property_body %}
 {# actions #}
 {% block actions_form %}
 {{ parent() -}}
 {% if rights_path %}
     {{ link(rights_path, 'user.rights.title', 'btn btn-form btn-outline-secondary') }}
 {% endif %}
-{% endblock %}
+{% endblock actions_form %}

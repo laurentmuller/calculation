@@ -19,7 +19,7 @@
         {{ dayCell(month, day, false) }}
     {%- endfor %}
 </tr>
-{% endmacro %}
+{% endmacro weekRow %}
 
 {# parameters #}
 {%- set title = 'calendar.month_title' -%}
@@ -70,7 +70,7 @@
         {{ _self.weekRow(month, week) }}
     {%- endfor %}
 </table>
-{% endblock %}
+{% endblock body %}
 {# stylesheets #}
 {% block stylesheets -%}
 {{ parent() }}
@@ -78,9 +78,9 @@
     {{- css_border() }}
 </style>
 {{ asset_css('css/calendar.css') }}
-{% endblock %}
+{% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}
 {{ parent() }}
 {{ asset_js('js/test/calendar.js') }}
-{% endblock %}
+{% endblock javascripts %}

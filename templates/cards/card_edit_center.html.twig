@@ -3,8 +3,8 @@
 {# parameters #}
 {%- set statusbar_show = false -%}
 {# hide navigation and footer #}
-{% block navigation_horizontal %}{% endblock %}
-{% block navigation_vertical -%}{% endblock %}
+{% block navigation_horizontal %}{% endblock navigation_horizontal %}
+{% block navigation_vertical -%}{% endblock navigation_vertical %}
 {# class styles #}
 {% block card_container_class ' col-md-8 offset-md-2 col-xl-6 offset-xl-3 my-auto h-75' %}
 {# header #}
@@ -15,13 +15,13 @@
     {{- error.messageKey|trans(error.messageData, 'security') -}}
 </p>
 {%- endif -%}
-{%- endblock %}
+{%- endblock card_header %}
 {# footer #}
 {% block card_footer -%}
 {{ parent() }}
 {{ footer_center() }}
-{% endblock %}
+{% endblock card_footer %}
 {# stylesheets #}
 {% block stylesheets -%}
 {{- asset_css('css/center.css') }}
-{% endblock %}
+{% endblock stylesheets %}

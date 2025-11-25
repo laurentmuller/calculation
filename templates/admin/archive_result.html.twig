@@ -6,7 +6,7 @@
         <td class="w-30 text-nowrap">{{ name|trans }}</td>
         <td>{{ value|raw }}</td>
     </tr>
-{%- endmacro %}
+{%- endmacro add_line_info %}
 {# parameters #}
 {%- set title = 'archive.title' -%}
 {%- set title_icon = 'calendar-xmark far' -%}
@@ -99,7 +99,7 @@
             {{- 'archive.result.empty'|trans -}}
         </div>
     {% endif %}
-{% endblock %}
+{% endblock card_body %}
 {# footer #}
 {% block card_footer %}
     <div class="d-flex-wrap-center">
@@ -107,11 +107,11 @@
         {{ link(path('admin_archive'), 'archive.result.new_archive', 'btn btn-form btn-secondary') -}}
         {{ sitemap() }}
     </div>
-{% endblock %}
+{% endblock card_footer %}
 {# stylesheets #}
 {% block stylesheets -%}
     {{ parent() }}
     <style nonce="{{ csp_nonce() }}">
         {{- css_border() }}
     </style>
-{%- endblock %}
+{%- endblock stylesheets %}

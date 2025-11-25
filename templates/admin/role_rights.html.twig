@@ -13,12 +13,12 @@
     <div class="me-auto">{{ parent() }}</div>
     <div>{{ rights.actions() }}</div>
 </div>
-{%- endblock %}
+{%- endblock card_header %}
 {# body #}
 {% block card_body %}
 {{ form_row(form.name) }}
 {{ rights.table(form.rights, default.permissions, entities) }}
-{% endblock %}
+{% endblock card_body %}
 {# javascripts #}
 {% block javascripts %}
 {% if is_js_debug %}
@@ -27,4 +27,4 @@
 {% else %}
     {{ asset_js('js/compiled/user_rights.js') }}
 {% endif %}
-{%- endblock %}
+{%- endblock javascripts %}

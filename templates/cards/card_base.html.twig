@@ -4,12 +4,12 @@
 {% block body -%}
 <div class="row g-0">
     {% block start_card_container -%}
-    <div class="col{% block card_container_class %} col-xl-8 offset-xl-2{% endblock -%}">
-    {% endblock %}
+    <div class="col{% block card_container_class %} col-xl-8 offset-xl-2{% endblock card_container_class -%}">
+    {% endblock start_card_container %}
         {# card #}
         <div class="card mb-3{% block card_class %}{% endblock card_class %}">
             {# card header #}
-            <div class="card-header{% block card_header_class %}{% endblock %}">
+            <div class="card-header{% block card_header_class %}{% endblock card_header_class %}">
                 {% block card_header %}
                 <h1 class="card-title py-1">
                     {{- icon(title_icon, title, title_parameters|default({})) -}}
@@ -17,19 +17,19 @@
                 {% if title_description is defined and title_description %}
                     <small>{{ title_description|trans }}</small>
                 {% endif %}
-                {%- endblock %}
+                {%- endblock card_header %}
             </div>
             {# card body #}
-            <div class="card-body{% block card_body_class %}{% endblock %}">
-                {% block card_body -%}{%- endblock %}
+            <div class="card-body{% block card_body_class %}{% endblock card_body_class %}">
+                {% block card_body -%}{%- endblock card_body %}
             </div>
             {# card footer #}
-            <div class="card-footer d-print-none{% block card_footer_class %}{% endblock %}">
-                {% block card_footer -%}{%- endblock %}
+            <div class="card-footer d-print-none{% block card_footer_class %}{% endblock card_footer_class %}">
+                {% block card_footer -%}{%- endblock card_footer %}
             </div>
         </div>
         {%- block end_card_container %}
     </div>
-    {%- endblock %}
+    {%- endblock end_card_container %}
 </div>
-{%- endblock %}
+{%- endblock body %}

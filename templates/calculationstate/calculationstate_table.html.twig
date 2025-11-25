@@ -9,7 +9,7 @@
 {% if allow_add %}
     {{ link(path('calculationstate_add', params), 'calculationstate.add.title', 'add-link p-0') }}
 {% endif %}
-{%- endblock %}
+{%- endblock header_actions %}
 
 {% block global_actions -%}
 {{- _self.item_external(path('calculationstate_pdf'), 'calculationstate.list.pdf_title', ICON_PDF) }}
@@ -18,31 +18,31 @@
     {{- _self.item_separator() }}
     {{- _self.item_path(path('chart_state_index'), 'chart.state.title', 'chart-pie') }}
 {% endif %}
-{%- endblock %}
+{%- endblock global_actions %}
 
 {% block show_actions -%}
 {{- _self.item_path(path('calculationstate_show', params), 'calculationstate.show.title', ICON_SHOW, show_class) }}
-{%- endblock %}
+{%- endblock show_actions %}
 
 {% block edit_actions -%}
 {{- _self.item_path(path('calculationstate_edit', params), 'calculationstate.edit.title', ICON_EDIT, edit_class) }}
-{%- endblock %}
+{%- endblock edit_actions %}
 
 {% block delete_actions -%}
 {{- _self.item_path(path('calculationstate_delete', params), 'calculationstate.delete.title', ICON_DELETE, 'btn-delete') }}
-{%- endblock %}
+{%- endblock delete_actions %}
 
 {% block add_actions -%}
 {{- _self.item_path(path('calculationstate_add', params), 'calculationstate.add.title', ICON_ADD, 'btn-add') }}
 {{- _self.item_path(path('calculationstate_clone', params), 'common.button_clone', ICON_COPY, 'btn-clone') }}
-{%- endblock %}
+{%- endblock add_actions %}
 
 {% block other_actions -%}
 {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION) %}
     {{- _self.item_separator() }}
     {{- _self.item_path(path('calculation_index'), 'calculationstate.list.calculation_title', ICON_CALCULATION, 'btn-show-calculation') }}
 {% endif %}
-{%- endblock %}
+{%- endblock other_actions %}
 
 {% block custom_view_card_class ' text-border' %}
 {% block custom_view_header -%}
@@ -53,18 +53,18 @@
 {%- else -%}
     <span>%code%</span>
 {%- endif -%}
-{%- endblock %}
+{%- endblock custom_view_header %}
 
 {% block custom_view_body -%}
 {{ _self.property_value('%description%') }}
 {{ _self.property_line() }}
 {{ _self.property_row('calculationstate.fields.editable', '%editable%') }}
 {{ _self.property_row('calculationstate.fields.calculations', '%calculations%') }}
-{%- endblock %}
+{%- endblock custom_view_body %}
 
 {% block stylesheets -%}
     {{ parent() }}
     <style nonce="{{ csp_nonce() }}">
         {{- css_border() }}
     </style>
-{%- endblock %}
+{%- endblock stylesheets %}

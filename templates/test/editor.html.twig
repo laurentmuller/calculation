@@ -16,15 +16,15 @@
 </div>
 {{ form_row(form.message) }}
 {{ form_row(form.attachments) }}
-{% endblock %}
+{% endblock card_body %}
 {# stylesheets #}
 {% block stylesheets %}
 {{ parent() }}
 {{ asset_css('css/simple_editor.css') }}
-{%- endblock -%}
+{%- endblock stylesheets -%}
 {# javascripts #}
 {% block javascripts %}
 {{ parent() }}
 {{ asset_js('js/extensions/simple-editor-extension.js') }}
 {{ asset_js('js/test/simple-editor.js') }}
-{% endblock %}
+{% endblock javascripts %}

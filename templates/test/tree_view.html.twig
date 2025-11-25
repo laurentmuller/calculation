@@ -5,13 +5,13 @@
 <button class="btn btn-toggle border-0" data-bs-toggle="collapse" data-bs-target="{{ target }}" aria-expanded="{{ expanded|json_encode }}">
     {%- if icon -%}{{- icon(icon ~ ' me-1') -}}{%- endif %}{{- text -}}
 </button>
-{% endmacro %}
+{% endmacro side_bar_collapse %}
 {% macro side_bar_link(text, icon = null, href = '#') %}
 <li><a href="{{ href }}" class="d-block">{{ icon(icon, text) }}</a></li>
-{% endmacro %}
+{% endmacro side_bar_link %}
 {% macro side_bar_divider() %}
 <li><hr class="dropdown-divider border-top my-1"></li>
-{% endmacro %}
+{% endmacro side_bar_divider %}
 {# parameters #}
 {% set title = 'test.tree_view' %}
 {% set title_icon = 'folder-tree' %}
@@ -257,12 +257,12 @@
         </div>
     </div>
 </div>
-{%- endblock %}
+{%- endblock body %}
 {# stylesheets #}
 {% block stylesheets -%}
     {{ asset_css('build/currency-flags/currency-flags.css') }}
     {{ asset_css('css/select2.css') }}
-{% endblock %}
+{% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}
     {{ parent() }}
@@ -272,4 +272,4 @@
     {{ asset_js('js/plugins/plugin-treeview.js') }}
     {{ asset_js('js/plugins/plugin-drag-modal.js') }}
     {{ asset_js('js/test/treeview.js') }}
-{% endblock %}
+{% endblock javascripts %}

@@ -27,8 +27,8 @@
 {% if item.extra|length %}
     {{ property('log.fields.extra', item.extra|var_export_php) }}
 {% endif %}
-{% endblock %}
+{% endblock property_body %}
 {# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/table_log.css') }}
-{% endblock %}
+{% endblock stylesheets %}

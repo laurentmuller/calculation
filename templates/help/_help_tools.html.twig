@@ -3,14 +3,14 @@
     {%- set type = ('help.types.' ~ field.type|default('text'))|trans -%}
     {%- set length = field.length|default(false) -%}
     {{ type }}{% if length %} ({{ length }}){% endif %}
-{%- endmacro %}
+{%- endmacro output_type %}
 
 {% macro output_required(field) -%}
     {%- set required = field.required is defined ? field.required : true -%}
     {% if required %}
         <i class="text-success fa-solid fa-check"></i>
     {% endif %}
-{%- endmacro %}
+{%- endmacro output_required %}
 
 {% macro output_image(path, screenshot = true) -%}
     {%- set full_path = 'help/images/' ~ path ~ constant('App\\Service\\HelpService::IMAGES_EXT') -%}
@@ -18,7 +18,7 @@
         {% if screenshot %}<p class="mb-2">{{ 'help.labels.screenshot'|trans }}</p>{% endif %}
         {{ asset_image(full_path, {class: 'img-fluid rounded-3', alt: 'help.labels.screenshot'|trans}) }}
     {% endif %}
-{%- endmacro %}
+{%- endmacro output_image %}
 
 {% macro output_table_actions(actions, service) -%}
     <div class="table-responsive">
@@ -36,7 +36,7 @@
             </tbody>
         </table>
     </div>
-{%- endmacro %}
+{%- endmacro output_table_actions %}
 
 {% macro output_row_action(action, service) -%}
     {% if action.action|default(false) %}
@@ -56,32 +56,32 @@
         </td>
         <td class="w-100">{{ action.description }}</td>
     </tr>
-{%- endmacro %}
+{%- endmacro output_row_action %}
 
 {% macro output_icon(icon, text) -%}
     {% from 'macros/_icons.html.twig' import icon %}
     {{- icon(icon, text) -}}
-{%- endmacro %}
+{%- endmacro output_icon %}
 
 {% macro home_button() -%}
     {% from 'macros/_icons.html.twig' import link %}
     {{ link(path('help_index'), null, 'btn btn-outline-secondary', 'home', 'help.home_menu') }}
-{%- endmacro %}
+{%- endmacro home_button %}
 
 {% macro export_button() %}
     {% from 'macros/_icons.html.twig' import link_pdf %}
     {{ link_pdf('help_pdf', 'btn btn-outline-secondary') }}
-{% endmacro %}
+{% endmacro export_button %}
 
 {% macro dialogs_button() %}
     {% from 'macros/_icons.html.twig' import link %}
     {{ link(path('help_dialogs'), '', 'btn btn-outline-secondary', 'file-code', 'help.dialog_menu') }}
-{% endmacro %}
+{% endmacro dialogs_button %}
 
 {% macro entities_button() %}
     {% from 'macros/_icons.html.twig' import link %}
     {{ link(path('help_entities'), '', 'btn btn-outline-secondary', 'database', 'help.entity_menu') }}
-{% endmacro %}
+{% endmacro entities_button %}
 
 {% macro output_links(links, service) -%}
     {% if links|length -%}
@@ -113,4 +113,4 @@
             {% endfor %}
         </ul>
     {%- endif %}
-{%- endmacro %}
+{%- endmacro output_links %}

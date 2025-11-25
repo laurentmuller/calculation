@@ -54,10 +54,9 @@ final class SecurityParameterTest extends ParameterTestCase
         self::assertFalse($this->parameter->isCompromised());
         self::assertFalse($this->parameter->isEmail());
         self::assertFalse($this->parameter->isLetter());
-        self::assertSame(StrengthLevel::NONE, $this->parameter->getLevel());
         self::assertFalse($this->parameter->isNumber());
         self::assertFalse($this->parameter->isSpecialChar());
-
+        self::assertSame(StrengthLevel::NONE, $this->parameter->getLevel());
         self::assertSame('parameter_security', $this->parameter::getCacheKey());
     }
 
@@ -77,6 +76,12 @@ final class SecurityParameterTest extends ParameterTestCase
         $this->parameter->setLevel(StrengthLevel::MEDIUM);
         $actual = $this->parameter->isStrengthConstraint();
         self::assertTrue($actual);
+    }
+
+    public function testNotCompromisedConstraint(): void
+    {
+        $actual = $this->parameter->getNotCompromisedConstraint();
+        self::assertSame(1, $actual->threshold);
     }
 
     public function testPasswordConstraint(): void

@@ -15,273 +15,42 @@ namespace App\Controller;
 
 use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
-use App\Attribute\PdfRoute;
-use App\Attribute\WordRoute;
-use App\Constraint\Captcha;
-use App\Constraint\Password;
-use App\Constraint\Strength;
 use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Product;
-use App\Entity\User;
-use App\Enums\Importance;
 use App\Enums\MessagePosition;
-use App\Enums\StrengthLevel;
-use App\Form\Type\AlphaCaptchaType;
-use App\Form\Type\CaptchaImageType;
 use App\Form\Type\ReCaptchaType;
-use App\Form\Type\SimpleEditorType;
 use App\Interfaces\RoleInterface;
-use App\Interfaces\SortModeInterface;
-use App\Interfaces\UserInterface;
-use App\Model\HttpClientError;
-use App\Pdf\Events\PdfLabelTextEvent;
-use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
-use App\Pdf\PdfLabelDocument;
-use App\Report\FontAwesomeReport;
-use App\Report\HtmlColorsReport;
-use App\Report\HtmlReport;
-use App\Report\MemoryImageReport;
-use App\Repository\CustomerRepository;
 use App\Repository\GroupRepository;
-use App\Response\PdfResponse;
-use App\Response\WordResponse;
-use App\Service\AbstractHttpClientService;
-use App\Service\CaptchaImageService;
-use App\Service\FontAwesomeImageService;
-use App\Service\FontAwesomeService;
-use App\Service\MailerService;
-use App\Service\PdfLabelService;
 use App\Service\RecaptchaResponseService;
 use App\Service\RecaptchaService;
 use App\Service\SearchService;
 use App\Service\SwissPostService;
-use App\Traits\CookieTrait;
 use App\Traits\GroupByTrait;
-use App\Traits\StrengthLevelTranslatorTrait;
-use App\Translator\TranslatorFactory;
 use App\Utils\StringUtils;
-use App\Word\HtmlDocument;
 use Doctrine\ORM\EntityManagerInterface;
-use fpdf\Enums\PdfFontStyle;
-use Psr\Log\LoggerInterface;
 use ReCaptcha\Response as ReCaptchaResponse;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
-use Symfony\Component\Form\Event\PreSubmitEvent;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Currencies;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Controller for tests.
  *
  * @phpstan-import-type SearchType from SearchService
+ *
+ * @phpstan-type CurrencyType = array{code: string, name: string}
  */
 #[Route(path: '/test', name: 'test_')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class TestController extends AbstractController
 {
-    use CookieTrait;
     use GroupByTrait;
-    use StrengthLevelTranslatorTrait;
-
-    /**
-     * Output a report with HTML and Boostrap colors.
-     */
-    #[GetRoute(path: '/colors', name: 'colors')]
-    public function colors(): PdfResponse
-    {
-        return $this->renderPdfDocument(new HtmlColorsReport($this));
-    }
-
-    /**
-     * Test sending notification mail.
-     */
-    #[GetPostRoute(path: '/editor', name: 'editor')]
-    public function editor(
-        Request $request,
-        #[CurrentUser]
-        User $user,
-        MailerService $service,
-        LoggerInterface $logger
-    ): Response {
-        $data = [
-            'email' => $user->getEmail(),
-            'importance' => Importance::MEDIUM,
-        ];
-        $helper = $this->createFormHelper('user.fields.', $data);
-        $helper->field('email')
-            ->addEmailType();
-        $helper->field('importance')
-            ->label('importance.name')
-            ->addEnumType(Importance::class);
-        $helper->field('message')
-            ->updateAttribute('minlength', 10)
-            ->add(SimpleEditorType::class);
-        $helper->field('attachments')
-            ->updateOptions([
-                'multiple' => true,
-                'maxfiles' => 3,
-                'maxsize' => '10mi',
-                'maxsizetotal' => '30mi'])
-            ->notRequired()
-            ->addFileType();
-        $form = $helper->createForm();
-
-        if ($this->handleRequestForm($request, $form)) {
-            /**
-             * @var array{email: string, message: string, importance: Importance, attachments: UploadedFile[]} $data
-             */
-            $data = $form->getData();
-
-            try {
-                $service->sendNotification(
-                    $data['email'],
-                    $user,
-                    $data['message'],
-                    $data['importance'],
-                    $data['attachments']
-                );
-
-                return $this->redirectToHomePage('user.comment.success');
-            } catch (TransportExceptionInterface $e) {
-                return $this->renderFormException('user.comment.error', $e, $logger);
-            }
-        }
-
-        return $this->render('test/editor.html.twig', [
-            'form' => $form,
-        ]);
-    }
-
-    /**
-     * Export a report label.
-     */
-    #[GetRoute(path: '/label', name: 'label')]
-    public function exportLabel(CustomerRepository $repository, PdfLabelService $service): PdfResponse
-    {
-        $listener = new class implements PdfLabelTextListenerInterface {
-            #[\Override]
-            public function drawLabelText(PdfLabelTextEvent $event): bool
-            {
-                if ($event->index !== $event->lines - 1 && $event->index > 2) {
-                    return false;
-                }
-
-                if ('' === $event->text) {
-                    return true;
-                }
-
-                $parent = $event->parent;
-                $font = $parent->getCurrentFont();
-                $parent->setFont(style: PdfFontStyle::BOLD);
-                $parent->cell($event->width, $event->height, $event->text);
-                $font->apply($parent);
-
-                return true;
-            }
-        };
-
-        $label = $service->get('5161');
-        $report = new PdfLabelDocument($label);
-        $report->setLabelBorder(true)
-            ->setLabelTextListener($listener)
-            ->setTitle(\sprintf('Etiquette - Avery %s', $label->name));
-
-        $sortField = $repository->getSortField(CustomerRepository::NAME_COMPANY_FIELD);
-        /** @phpstan-var \App\Entity\Customer[] $customers */
-        $customers = $repository->createDefaultQueryBuilder()
-            ->orderBy($sortField, SortModeInterface::SORT_ASC)
-            ->setMaxResults(29)
-            ->getQuery()
-            ->getResult();
-
-        foreach ($customers as $customer) {
-            $values = \array_filter([
-                $customer->getCompany(),
-                $customer->getFullName(),
-                StringUtils::NEW_LINE,
-                $customer->getAddress(),
-                $customer->getZipCity(),
-            ]);
-            $text = \implode(StringUtils::NEW_LINE, $values);
-            $report->addLabel($text);
-        }
-
-        return $this->renderPdfDocument($report);
-    }
-
-    /**
-     * Export an HTML page to PDF.
-     */
-    #[PdfRoute]
-    public function exportPdf(): PdfResponse
-    {
-        $content = $this->renderView('test/html_report.html.twig');
-        $report = new HtmlReport($this, $content);
-        $report->setTitle($this->trans('test.html'));
-
-        return $this->renderPdfDocument($report);
-    }
-
-    /**
-     * Export an HTML page to Word.
-     */
-    #[WordRoute]
-    public function exportWord(): WordResponse
-    {
-        $content = $this->renderView('test/html_report.html.twig');
-        $doc = new HtmlDocument($this, $content);
-        $doc->setTranslatedTitle('test.html');
-
-        return $this->renderWordDocument($doc);
-    }
-
-    /**
-     * Output a report with Fontawesome images.
-     */
-    #[GetRoute(path: '/fontawesome', name: 'fontawesome')]
-    public function fontAwesome(FontAwesomeImageService $service): Response
-    {
-        return $this->renderPdfDocument(new FontAwesomeReport($this, $service));
-    }
-
-    /**
-     * Output a report with memory images.
-     */
-    #[GetRoute(path: '/memory', name: 'memory')]
-    public function memoryImage(
-        #[Autowire('%kernel.project_dir%/public/images/logo/logo-customer-148x148.png')]
-        string $logoFile,
-        #[Autowire('%kernel.project_dir%/public/images/icons/favicon-144x144.png')]
-        string $iconFile,
-        #[Autowire('%kernel.project_dir%/public/images/screenshots/home_light.png')]
-        string $screenshotFile,
-        FontAwesomeService $service
-    ): PdfResponse {
-        $report = new MemoryImageReport(
-            $this,
-            $logoFile,
-            $iconFile,
-            $screenshotFile,
-            $service
-        );
-
-        return $this->renderPdfDocument($report);
-    }
 
     /**
      * Test notifications.
@@ -290,95 +59,6 @@ class TestController extends AbstractController
     public function notifications(): Response
     {
         return $this->render('test/notification.html.twig', ['positions' => MessagePosition::sorted()]);
-    }
-
-    /**
-     * Test password validation.
-     *
-     * @throws \Exception
-     */
-    #[GetPostRoute(path: '/password', name: 'password')]
-    public function password(Request $request, CaptchaImageService $service): Response
-    {
-        $password = new Password(all: true);
-        $options = Password::ALLOWED_OPTIONS;
-        $strength = new Strength(StrengthLevel::MEDIUM);
-        $listener = static function (PreSubmitEvent $event) use ($options, $password, $strength): void {
-            /** @phpstan-var array $data */
-            $data = $event->getData();
-            foreach ($options as $option) {
-                $password->setOption($option, (bool) ($data[$option] ?? false));
-            }
-            $level = (int) $data['level'];
-            $strength->minimum = StrengthLevel::tryFrom($level) ?? StrengthLevel::NONE;
-        };
-        $data = [
-            'input' => 'aB123456#*/82568A',
-            'level' => StrengthLevel::MEDIUM,
-        ];
-        foreach ($options as $option) {
-            $data[$option] = true;
-        }
-        $helper = $this->createFormHelper('password.', $data);
-        $helper->listenerPreSubmit($listener);
-        $helper->field('input')
-            ->widgetClass('password-strength')
-            ->updateAttribute('data-strength', StrengthLevel::MEDIUM->value)
-            ->updateAttribute(
-                'data-url',
-                $this->generateUrl(route: 'ajax_password', referenceType: UrlGeneratorInterface::ABSOLUTE_URL)
-            )
-            ->minLength(UserInterface::MIN_PASSWORD_LENGTH)
-            ->maxLength(UserInterface::MAX_USERNAME_LENGTH)
-            ->constraints(
-                new Length(min: UserInterface::MIN_PASSWORD_LENGTH, max: UserInterface::MAX_USERNAME_LENGTH),
-                $password,
-                $strength
-            )->addTextType();
-        foreach ($options as $option) {
-            $helper->field($option)
-                ->updateAttribute('data-validation', $option)
-                ->widgetClass('password-option')
-                ->addCheckboxType();
-        }
-        $helper->field('level')
-            ->label('password.strengthLevel')
-            ->addEnumType(StrengthLevel::class);
-        $helper->field('captcha')
-            ->label('captcha.label')
-            ->constraints(new NotBlank(), new Captcha())
-            ->updateOption('image', $service->generateImage())
-            ->add(CaptchaImageType::class);
-        $helper->field('alpha')
-            ->label('captcha.label')
-            ->add(AlphaCaptchaType::class);
-
-        $form = $helper->createForm();
-        if ($this->handleRequestForm($request, $form)) {
-            /** @phpstan-var array<string, mixed> $data */
-            $data = $form->getData();
-            $message = $this->trans('password.success');
-            $message .= '<ul>';
-            foreach ($options as $option) {
-                if (true === $data[$option]) {
-                    $message .= '<li>' . $this->trans('password.' . $option) . '</li>';
-                }
-            }
-            /** @phpstan-var StrengthLevel $level */
-            $level = $data['level'];
-            if (StrengthLevel::NONE !== $level) {
-                $message .= '<li>';
-                $message .= $this->trans('password.strengthLevel');
-                $message .= ' : ';
-                $message .= $this->translateLevel($level);
-                $message .= '</li>';
-            }
-            $message .= '</ul>';
-
-            return $this->redirectToHomePage($message);
-        }
-
-        return $this->render('test/password.html.twig', ['form' => $form]);
     }
 
     /**
@@ -398,9 +78,7 @@ class TestController extends AbstractController
         $helper = $this->createFormHelper('user.fields.', $data);
         $helper->field('subject')->addTextType()
             ->field('message')->addTextType()
-            ->field('captcha')
-            ->updateOption('expectedAction', $expectedAction)
-            ->add(ReCaptchaType::class)
+            ->field('captcha')->updateOption('expectedAction', $expectedAction)->add(ReCaptchaType::class)
             ->getBuilder()->setAttribute('block_name', '');
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
@@ -489,43 +167,6 @@ class TestController extends AbstractController
         return $this->json($data);
     }
 
-    /**
-     * Show the translation page.
-     *
-     * @throws ServiceNotFoundException if the service is not found
-     */
-    #[GetRoute(path: '/translate', name: 'translate')]
-    public function translate(TranslatorFactory $factory): Response
-    {
-        $service = $factory->getSessionService();
-        $languages = $service->getLanguages();
-        $error = $service->getLastError();
-        if ($error instanceof HttpClientError) {
-            $id = \sprintf('%s.%s', $service->getName(), $error->getCode());
-            if ($this->isTransDefined($id, 'translator')) {
-                $error->setMessage($this->trans($id, [], 'translator'));
-            }
-            $message = $this->trans('translator.title') . '|';
-            $message .= $this->trans('translator.languages_error');
-            $message .= $this->trans('translator.last_error', [
-                '%code%' => $error->getCode(),
-                '%message%' => $error->getMessage(),
-            ]);
-            $this->error($message);
-            $error = true;
-        }
-        $parameters = [
-            'service' => $service,
-            'form' => $this->createForm(FormType::class),
-            'translators' => $factory->getTranslators(),
-            'language' => AbstractHttpClientService::getAcceptLanguage(),
-            'languages' => $languages,
-            'error' => $error,
-        ];
-
-        return $this->render('test/translate.html.twig', $parameters);
-    }
-
     #[GetRoute(path: '/tree', name: 'tree')]
     public function tree(Request $request, GroupRepository $repository, EntityManagerInterface $manager): Response
     {
@@ -542,7 +183,6 @@ class TestController extends AbstractController
                 ];
                 foreach ($group->getCategories() as $category) {
                     $count += $category->countItems();
-
                     $node['nodes'][] = [
                         'id' => \sprintf('category-%d', (int) $category->getId()),
                         'text' => $category->getCode(),
@@ -573,39 +213,28 @@ class TestController extends AbstractController
         ]);
     }
 
+    /**
+     * @phpstan-param CurrencyType $currency
+     */
+    private function filterCurrency(array $currency): bool
+    {
+        return !StringUtils::pregMatch('/\d|\(/', $currency['name']);
+    }
+
     private function getCategories(EntityManagerInterface $manager): array
     {
-        /** @phpstan-var array<int, Category> $categories */
         $categories = $manager->getRepository(Category::class)
             ->getQueryBuilderByGroup()
             ->getQuery()
             ->getResult();
-        $fn = static fn (Category $c): string => (string) $c->getGroupCode();
 
-        return $this->groupBy($categories, $fn);
+        return $this->groupBy($categories, $this->mapCategory(...));
     }
 
-    /**
-     * @return array<array{code: string, name: string}>
-     */
     private function getCurrencies(): array
     {
-        /** @phpstan-var array<array{code: string, name: string}> $currencies */
-        $currencies = \array_map(static function (string $code): array {
-            $name = \ucfirst(Currencies::getName($code));
-            $symbol = Currencies::getSymbol($code);
-
-            return [
-                'code' => $code,
-                'name' => \sprintf('%s - %s', $name, $symbol),
-            ];
-        }, Currencies::getCurrencyCodes());
-
-        $currencies = \array_filter(
-            $currencies,
-            static fn (array $currency): bool => !StringUtils::pregMatch('/\d|\(/', $currency['name'])
-        );
-
+        $currencies = \array_map($this->mapCurrency(...), Currencies::getCurrencyCodes());
+        $currencies = \array_filter($currencies, $this->filterCurrency(...));
         \usort($currencies, $this->sortCurrencies(...));
 
         return $currencies;
@@ -615,28 +244,49 @@ class TestController extends AbstractController
     {
         $products = $manager->getRepository(Product::class)
             ->findByGroup();
-        $fn = static fn (Product $p): string => \sprintf('%s - %s', $p->getGroupCode(), $p->getCategoryCode());
 
-        return $this->groupBy($products, $fn);
+        return $this->groupBy($products, $this->mapProduct(...));
     }
 
     private function getStates(EntityManagerInterface $manager): array
     {
-        /** @phpstan-var CalculationState[] $states */
         $states = $manager->getRepository(CalculationState::class)
             ->getQueryBuilderByEditable()
             ->getQuery()
             ->getResult();
-        $fn = static fn (CalculationState $state): string => $state->isEditable()
-            ? 'calculationstate.list.editable_1'
-            : 'calculationstate.list.editable_0';
 
-        return $this->groupBy($states, $fn);
+        return $this->groupBy($states, $this->mapCalculationState(...));
+    }
+
+    private function mapCalculationState(CalculationState $state): string
+    {
+        return \sprintf('calculationstate.list.editable_%d', (int) $state->isEditable());
+    }
+
+    private function mapCategory(Category $category): string
+    {
+        return (string) $category->getGroupCode();
     }
 
     /**
-     * @phpstan-param array{code: string, name: string} $a
-     * @phpstan-param array{code: string, name: string} $b
+     * @phpstan-return CurrencyType
+     */
+    private function mapCurrency(string $code): array
+    {
+        return [
+            'code' => $code,
+            'name' => \sprintf('%s - %s', \ucfirst(Currencies::getName($code)), Currencies::getSymbol($code)),
+        ];
+    }
+
+    private function mapProduct(Product $product): string
+    {
+        return \sprintf('%s - %s', $product->getGroupCode(), $product->getCategoryCode());
+    }
+
+    /**
+     * @phpstan-param CurrencyType $a
+     * @phpstan-param CurrencyType $b
      */
     private function sortCurrencies(array $a, array $b): int
     {

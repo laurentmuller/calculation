@@ -47,6 +47,10 @@ $code-color: #dc3545;
     max-width: #{$modal-md};
 }
 
+.tooltip.tooltip-align-left .tooltip-inner {
+    text-align: left;
+}
+
 /* themed popovers */
 @each $key, $value in $theme-colors {
     .popover.popover-#{$key} {

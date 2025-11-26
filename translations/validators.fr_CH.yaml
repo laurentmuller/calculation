@@ -16,9 +16,12 @@ task_item:
 property:
     unique_name: Ce nom est déjà utilisé par une autre propriété.
 customer:
-    empty: Veuillez fournir au moins un nom ou un prénom ou une société.
     unique_email: Cette adresse e-mail est déjà utilisée.
+    empty: Un nom, un prénom ou une société est requis.
     zip_code: Le code postal doit contenir 4 chiffres.
+user:
+    unique_email: Cette adresse e-mail est déjà utilisée.
+    unique_username: Ce nom d'utilisateur est déjà utilisé.
 margin:
     minimum_smaller_maximum: La valeur minimale doit être inférieure à la valeur maximale.
     maximum_greater_minimum: La valeur maximale doit être supérieure à la valeur minimale.
@@ -27,22 +30,16 @@ margin:
     minimum_discontinued: La valeur minimale n'est pas égale à la valeur maximale précédente.
     maximum_discontinued: La valeur maximale n'est pas égale à la valeur minimale suivante.
 # constraint
-captcha:
-    generate: Impossible de générer une nouvelle image.
-    empty: Le code de contrôle est requis.
-    invalid: Le code de contrôle est invalide.
-    timeout: Le délai d'attente est atteint. Essayez de recharger la page ou de générer une nouvelle image.
-current_password:
-    invalid: Le mot de passe est invalide.
+username:
+    blank: Le nom d'utilisateur est requis.
+    short: Le nom d'utilisateur est trop court.
+    long: Le nom d'utilisateur est trop long.
+    not_found: Le nom de l'utilisateur ou l'adresse e-mail est introuvable.
 email:
-    already_used: L'adresse e-mail est déjà utilisée.
     blank: Une adresse e-mail est requise.
     invalid: L'adresse e-mail est invalide.
     long: L'adresse e-mail est trop longue.
     short: L'adresse e-mail est trop courte.
-new_password:
-    blank: Un nouveau mot de passe est requis.
-    short: Le nouveau mot de passe est trop court.
 password:
     empty: Le mot de passe est vide.
     letter: Le mot de passe doit contenir au moins une lettre.
@@ -54,6 +51,16 @@ password:
     strength_level: Le mot de passe doit avoir une force "%minimum%", la force actuelle est "%score%".
     strength_disabled: La force minimum du mot de passe est désactivée.
     strength_invalid: La force "%value%" est invalide. Les valeurs autorisée sont "%allowed%".
+new_password:
+    blank: Un nouveau mot de passe est requis.
+    short: Le nouveau mot de passe est trop court.
+current_password:
+    invalid: Le mot de passe est invalide.
+captcha:
+    generate: Impossible de générer une nouvelle image.
+    empty: Le code de contrôle est requis.
+    invalid: Le code de contrôle est invalide.
+    timeout: Le délai d'attente est atteint. Essayez de recharger la page ou de générer une nouvelle image.
 recaptcha:
     action-mismatch: L'action ne correspond pas.
     bad-request: La demande est invalide ou malformée.
@@ -72,12 +79,6 @@ recaptcha:
     timeout-or-duplicate: Le délai d'attente est atteint ou la validation a été appelée deux fois.
     unknown-error: Une erreur inconnue s'est produite durant de la validation.
     browser-error: Une erreur s’est produite sur le navigateur.
-username:
-    already_used: Le nom d'utilisateur est déjà utilisé.
-    blank: Le nom d'utilisateur est requis.
-    long: Le nom d'utilisateur est trop long.
-    not_found: Le nom de l'utilisateur ou l'adresse e-mail est introuvable.
-    short: Le nom d'utilisateur est trop court.
 # security
 The CSRF token is invalid. Please try to resubmit the form.: Le jeton de falsification de requête inter-sites (CSRF) est invalide. Veuillez essayer de renvoyer le formulaire.
 # Symfony\Component\Validator\Constraints\File

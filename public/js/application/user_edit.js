@@ -75,6 +75,4 @@ $(function () {
 
     // initialize validator
     $form.initValidator(options);
-
-
 });

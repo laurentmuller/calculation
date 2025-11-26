@@ -1383,6 +1383,7 @@ user:
         subject: Objet
         to: Destinataire
         username: Nom
+        username_full: Nom de l'utilisateur
         password: Mot de passe
         initials: Initiales
     image:

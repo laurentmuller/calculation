@@ -44,8 +44,8 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_user_email', columns: ['email'])]
 #[ORM\UniqueConstraint(name: 'unique_user_username', columns: ['username'])]
-#[UniqueEntity(fields: ['email'], message: 'email.already_used')]
-#[UniqueEntity(fields: ['username'], message: 'username.already_used')]
+#[UniqueEntity(fields: 'email', message: 'user.unique_email')]
+#[UniqueEntity(fields: 'username', message: 'user.unique_username')]
 #[Vich\Uploadable]
 class User extends AbstractEntity implements ComparableInterface, TimestampableInterface, UserInterface
 {

@@ -35,6 +35,7 @@ class UserRightsType extends AbstractRightsType
     {
         $helper->field('username')
             ->updateOption('prepend_icon', 'fa-regular fa-user')
+            ->label('user.fields.username_full')
             ->addPlainType();
         $helper->field('enabled')
             ->updateOption('prepend_icon', 'fa-solid fa-user-check')

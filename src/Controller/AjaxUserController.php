@@ -74,7 +74,7 @@ class AjaxUserController extends AbstractController
         } else {
             $user = $this->findByEmail($email);
             if ($user instanceof User && $id !== $user->getId()) {
-                $message = 'email.already_used';
+                $message = 'user.unique_email';
             }
         }
 
@@ -102,7 +102,7 @@ class AjaxUserController extends AbstractController
         } else {
             $user = $this->findByUsername($username);
             if ($user instanceof User && $id !== $user->getId()) {
-                $message = 'username.already_used';
+                $message = 'user.unique_username';
             }
         }
 

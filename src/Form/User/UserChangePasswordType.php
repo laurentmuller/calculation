@@ -26,6 +26,7 @@ class UserChangePasswordType extends AbstractChangePasswordType
         $helper->field('username')
             ->updateOption('prepend_icon', 'fa-regular fa-user')
             ->updateOption('hidden_input', true)
+            ->label('user.fields.username_full')
             ->addPlainType();
         parent::addFormFields($helper);
     }

@@ -75,18 +75,18 @@ $(function () {
                         let left = 0;
                         let right = 0;
                         switch (verdict.percent) {
-                        case 0:
-                            // both
-                            left = leftRadius;
-                            right = rightRadius;
-                            break;
-                        case 100:
-                            // none
-                            break;
-                        default: // 1-99
-                            // right
-                            right = rightRadius;
-                            break;
+                            case 0:
+                                // both
+                                left = leftRadius;
+                                right = rightRadius;
+                                break;
+                            case 100:
+                                // none
+                                break;
+                            default: // 1-99
+                                // right
+                                right = rightRadius;
+                                break;
                         }
                         $left.css('border-bottom-left-radius', left);
                         $right.css('border-bottom-right-radius', right);
@@ -101,7 +101,5 @@ $(function () {
     });
 
     // update password types
-    // $('[data-bs-toggle='password']').password();
     $('input:password').togglePassword();
-
 });

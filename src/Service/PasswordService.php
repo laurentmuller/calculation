@@ -24,11 +24,6 @@ use ZxcvbnPhp\Zxcvbn;
 
 /**
  * Service to validate a password with Zxcvbn.
- *
- * @phpstan-type ScoreResultType = array{
- *     score: int,
- *     warning?: string,
- *     suggestions?: string[]}
  */
 class PasswordService
 {

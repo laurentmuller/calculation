@@ -24,10 +24,10 @@ use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 #[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class Strength extends Constraint
 {
-    final public const IS_STRENGTH_ERROR = '6218da5e-12d8-481e-b0fc-9bc4cbaad2ef';
+    final public const STRENGTH_ERROR = '6218da5e-12d8-481e-b0fc-9bc4cbaad2ef';
 
     protected const ERROR_NAMES = [
-        self::IS_STRENGTH_ERROR => 'IS_STRENGTH_ERROR',
+        self::STRENGTH_ERROR => 'STRENGTH_ERROR',
     ];
 
     /**

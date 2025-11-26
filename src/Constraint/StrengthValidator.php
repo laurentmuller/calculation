@@ -14,16 +14,14 @@ declare(strict_types=1);
 namespace App\Constraint;
 
 use App\Enums\StrengthLevel;
-use App\Traits\StrengthLevelTranslatorTrait;
+use App\Model\PasswordQuery;
+use App\Service\PasswordService;
 use App\Utils\StringUtils;
-use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use ZxcvbnPhp\Zxcvbn;
 
 /**
  * Strength constraint validator.
@@ -32,24 +30,14 @@ use ZxcvbnPhp\Zxcvbn;
  */
 class StrengthValidator extends AbstractConstraintValidator
 {
-    use StrengthLevelTranslatorTrait;
-
     private readonly PropertyAccessorInterface $propertyAccessor;
-    private ?Zxcvbn $service = null;
 
     public function __construct(
-        private readonly TranslatorInterface $translator,
-        private readonly ZxcvbnFactoryInterface $factory,
+        private readonly PasswordService $service,
         ?PropertyAccessorInterface $propertyAccessor = null
     ) {
         parent::__construct(Strength::class);
         $this->propertyAccessor = $propertyAccessor ?? PropertyAccess::createPropertyAccessor();
-    }
-
-    #[\Override]
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
     }
 
     #[\Override]
@@ -69,38 +57,46 @@ class StrengthValidator extends AbstractConstraintValidator
             return;
         }
 
-        $service = $this->getService();
-        $userInputs = $this->getUserInputs($constraint);
-        /** @phpstan-var array{score: int} $result */
-        $result = $service->passwordStrength($value, $userInputs);
-        $score = StrengthLevel::tryFrom($result['score']) ?? StrengthLevel::NONE;
+        $query = $this->getQuery($value, $constraint);
+        $score = $this->service->getScore($query);
         if ($score->isSmaller($minimum)) {
-            $this->addStrengthLevelViolation($this->context, $constraint, $minimum, $score);
+            $this->addViolation($constraint, $score);
         }
     }
 
-    private function getService(): Zxcvbn
+    private function addViolation(Strength $constraint, StrengthLevel $score): void
     {
-        return $this->service ??= $this->factory->createZxcvbn();
+        $parameters = [
+            '%minimum%' => $this->service->translateLevel($constraint->minimum),
+            '%score%' => $this->service->translateLevel($score),
+        ];
+        $this->context->buildViolation($constraint->strength_message)
+            ->setCode(Strength::STRENGTH_ERROR)
+            ->setParameters($parameters)
+            ->addViolation();
     }
 
-    private function getUserInputs(Strength $constraint): array
+    private function getQuery(string $password, Strength $constraint): PasswordQuery
     {
+        return new PasswordQuery(
+            $password,
+            $constraint->minimum,
+            $this->getValue($constraint->userNamePath),
+            $this->getValue($constraint->emailPath),
+        );
+    }
+
+    private function getValue(?string $path): ?string
+    {
+        if (null === $path) {
+            return null;
+        }
+
+        /** @phpstan-var object $object */
         $object = $this->context->getObject();
-        if (null === $object) {
-            return [];
-        }
 
-        return \array_filter([
-            $this->getValue($object, $constraint->userNamePath),
-            $this->getValue($object, $constraint->emailPath),
-        ]);
-    }
-
-    private function getValue(object $object, ?string $path): string
-    {
         try {
-            return null === $path ? '' : (string) $this->propertyAccessor->getValue($object, $path);
+            return (string) $this->propertyAccessor->getValue($object, $path);
         } catch (NoSuchPropertyException $e) {
             throw new ConstraintDefinitionException(\sprintf('Invalid property path "%s" for "%s".', $path, StringUtils::getDebugType($object)), $e->getCode(), $e);
         }

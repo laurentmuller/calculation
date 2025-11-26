@@ -21,15 +21,16 @@ use App\Enums\StrengthLevel;
 class PasswordQuery
 {
     public function __construct(
+        #[\SensitiveParameter]
         public string $password = '',
         public StrengthLevel $strength = StrengthLevel::NONE,
-        public ?string $email = null,
-        public ?string $user = null
+        public ?string $user = null,
+        public ?string $email = null
     ) {
     }
 
     public function getInputs(): array
     {
-        return \array_values(\array_filter([$this->email, $this->user]));
+        return \array_values(\array_filter([$this->user, $this->email]));
     }
 }

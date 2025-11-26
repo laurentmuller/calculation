@@ -1866,16 +1866,16 @@
         },
         {
             "name": "laurentmuller/highcharts-bundle",
-            "version": "3.0.2",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/HighchartsBundle.git",
-                "reference": "75c5973d83a51209ae7544dd2317cf9e112b7378"
+                "reference": "79629d4c0d345334601d4e79112a2fa9624eb152"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/75c5973d83a51209ae7544dd2317cf9e112b7378",
-                "reference": "75c5973d83a51209ae7544dd2317cf9e112b7378",
+                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/79629d4c0d345334601d4e79112a2fa9624eb152",
+                "reference": "79629d4c0d345334601d4e79112a2fa9624eb152",
                 "shasum": ""
             },
             "require": {
@@ -1932,7 +1932,7 @@
                 "issues": "https://github.com/laurentmuller/HighchartsBundle/issues",
                 "source": "https://github.com/laurentmuller/HighchartsBundle"
             },
-            "time": "2025-11-01T12:10:00+00:00"
+            "time": "2025-11-25T18:51:08+00:00"
         },
         {
             "name": "lorenzo/pinky",

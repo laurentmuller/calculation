@@ -364,10 +364,6 @@ final class StringUtils
      */
     public static function unicode(string $string, bool $ignoreCase = false): UnicodeString
     {
-        if ($ignoreCase) {
-            return (new UnicodeString($string))->ignoreCase();
-        }
-
-        return new UnicodeString($string);
+        return $ignoreCase ? (new UnicodeString($string))->ignoreCase() : new UnicodeString($string);
     }
 }

@@ -15,7 +15,6 @@ namespace App\Traits;
 
 use App\Constraint\Strength;
 use App\Enums\StrengthLevel;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Trait to translate {@see StrengthLevel}.
@@ -23,25 +22,6 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 trait StrengthLevelTranslatorTrait
 {
     use TranslatorTrait;
-
-    /**
-     * Add a violation.
-     */
-    public function addStrengthLevelViolation(
-        ExecutionContextInterface $context,
-        Strength $constraint,
-        StrengthLevel $minimum,
-        StrengthLevel $score
-    ): void {
-        $parameters = [
-            '%minimum%' => $this->translateLevel($minimum),
-            '%score%' => $this->translateLevel($score),
-        ];
-        $context->buildViolation($constraint->strength_message)
-            ->setCode(Strength::IS_STRENGTH_ERROR)
-            ->setParameters($parameters)
-            ->addViolation();
-    }
 
     /**
      * Translate an invalid strength value.

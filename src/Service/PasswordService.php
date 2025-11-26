@@ -15,6 +15,7 @@ namespace App\Service;
 
 use App\Enums\StrengthLevel;
 use App\Model\PasswordQuery;
+use App\Model\PasswordResult;
 use App\Traits\StrengthLevelTranslatorTrait;
 use App\Utils\StringUtils;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
@@ -41,6 +42,16 @@ class PasswordService
     ) {
     }
 
+    /**
+     * Gets the score (strength level) for the given query.
+     */
+    public function getScore(PasswordQuery $query): StrengthLevel
+    {
+        $result = $this->getPasswordStrength($query);
+
+        return $result->getStrengthLevel() ?? StrengthLevel::NONE;
+    }
+
     #[\Override]
     public function getTranslator(): TranslatorInterface
     {
@@ -54,59 +65,52 @@ class PasswordService
      */
     public function validate(PasswordQuery $query): array
     {
-        $response = $this->validatePassword($query);
+        $response = $this->validateQuery($query);
         if (null !== $response) {
             return $response;
         }
 
-        $results = $this->getPasswordStrength($query);
-        $response = $this->validateScoreResults($results);
+        $result = $this->getPasswordStrength($query);
+        $response = $this->validateResult($query, $result);
         if (null !== $response) {
             return $response;
         }
 
-        $minimumLevel = $query->strength;
-        $scoreLevel = StrengthLevel::from($results['score']);
-        $results = \array_merge($results, [
+        $queryLevel = $query->strength;
+        $resultLevel = $result->getStrengthLevel();
+
+        return \array_merge($result->toArray(), [
+            'result' => true,
             'minimum' => [
-                'value' => $minimumLevel->value,
-                'percent' => $minimumLevel->percent(),
-                'text' => $this->translateLevel($minimumLevel),
+                'value' => $queryLevel->value,
+                'percent' => $queryLevel->percent(),
+                'text' => $this->translateLevel($queryLevel),
             ],
             'score' => [
-                'value' => $scoreLevel->value,
-                'percent' => $scoreLevel->percent(),
-                'text' => $this->translateLevel($scoreLevel),
+                'value' => $resultLevel->value,
+                'percent' => $resultLevel->percent(),
+                'text' => $this->translateLevel($resultLevel),
             ],
         ]);
-
-        $response = $this->validateScoreLevel($minimumLevel, $scoreLevel, $results);
-        if (null !== $response) {
-            return $response;
-        }
-
-        return \array_merge(['result' => true], $results);
     }
 
-    private function getFalseResult(string $message, array $values = []): array
+    private function getFalseResult(string $message, ?PasswordResult $result = null): array
     {
-        return \array_merge(['result' => false, 'message' => $message], $values);
+        return [
+            'result' => false,
+            'message' => $message,
+        ] + ($result?->toArray() ?? []);
     }
 
-    /**
-     * @phpstan-return ScoreResultType
-     */
-    private function getPasswordStrength(PasswordQuery $query): array
+    private function getPasswordStrength(PasswordQuery $query): PasswordResult
     {
         /** @phpstan-var array{score: int, feedback: array{warning: string, suggestions: string[]}} $result */
         $result = $this->getService()->passwordStrength($query->password, $query->getInputs());
 
-        return \array_merge(
-            ['score' => $result['score']],
-            \array_filter([
-                'warning' => $result['feedback']['warning'],
-                'suggestions' => $result['feedback']['suggestions'],
-            ]),
+        return new PasswordResult(
+            $result['score'],
+            StringUtils::trim($result['feedback']['warning']),
+            $this->trimArray($result['feedback']['suggestions'])
         );
     }
 
@@ -115,42 +119,34 @@ class PasswordService
         return $this->service ??= $this->factory->createZxcvbn();
     }
 
-    private function validatePassword(PasswordQuery $query): ?array
+    private function trimArray(array $array): ?array
     {
-        if (null === StringUtils::trim($query->password)) {
-            return $this->getFalseResult($this->trans('password.empty', [], 'validators'));
-        }
-
-        return null;
+        return [] === $array ? null : $array;
     }
 
-    private function validateScoreLevel(StrengthLevel $minimumLevel, StrengthLevel $scoreLevel, array $results): ?array
+    private function validateQuery(PasswordQuery $query): ?array
     {
-        if (StrengthLevel::NONE === $minimumLevel) {
-            $message = $this->trans('password.strength_disabled', [], 'validators');
-
-            return $this->getFalseResult($message, $results);
+        if (null === StringUtils::trim($query->password)) {
+            return $this->getFalseResult($this->trans('password.empty', domain: 'validators'));
         }
-
-        if ($scoreLevel->isSmaller($minimumLevel)) {
-            $message = $this->translateScore($minimumLevel, $scoreLevel);
-
-            return $this->getFalseResult($message, $results);
+        if (StrengthLevel::NONE === $query->strength) {
+            return $this->getFalseResult($this->trans('password.strength_disabled', domain: 'validators'));
         }
 
         return null;
     }
 
     /**
-     * @phpstan-param ScoreResultType $results
+     * @phpstan-assert StrengthLevel $result->getStrengthLevel()
      */
-    private function validateScoreResults(array $results): ?array
+    private function validateResult(PasswordQuery $query, PasswordResult $result): ?array
     {
-        $score = $results['score'];
-        if (!StrengthLevel::tryFrom($score) instanceof StrengthLevel) {
-            $message = $this->translateInvalidLevel($score);
-
-            return $this->getFalseResult($message, $results);
+        $score = $result->getStrengthLevel();
+        if (!$score instanceof StrengthLevel) {
+            return $this->getFalseResult($this->translateInvalidLevel($result->score), $result);
+        }
+        if ($score->isSmaller($query->strength)) {
+            return $this->getFalseResult($this->translateScore($query->strength, $score), $result);
         }
 
         return null;

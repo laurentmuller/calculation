@@ -137,7 +137,7 @@ final class AbstractChartTest extends TestCase
     public function testType(): void
     {
         $chart = $this->createChart();
-        self::assertNull($chart->chart['type']);
+        self::assertNull(@$chart->chart['type']);
         $expected = AbstractHighchart::TYPE_COLUMN;
         $chart->setType($expected);
         self::assertSame($expected, $chart->chart['type']);

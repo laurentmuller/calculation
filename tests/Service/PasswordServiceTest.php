@@ -27,6 +27,13 @@ final class PasswordServiceTest extends TestCase
 {
     use TranslatorMockTrait;
 
+    public static function getScores(): \Generator
+    {
+        yield ['', StrengthLevel::VERY_WEAK];
+        yield ['123456', StrengthLevel::VERY_WEAK];
+        yield ['49898*962ZService', StrengthLevel::VERY_STRONG];
+    }
+
     public static function getValidations(): \Generator
     {
         yield ['', StrengthLevel::NONE, false];
@@ -41,24 +48,32 @@ final class PasswordServiceTest extends TestCase
         yield ['49898*962ZService', StrengthLevel::VERY_STRONG, true];
     }
 
-    public function testCustom(): void
+    #[DataProvider('getScores')]
+    public function testGetScore(string $password, StrengthLevel $expected): void
+    {
+        $service = $this->createService();
+        $query = new PasswordQuery($password, $expected);
+        $actual = $service->getScore($query);
+        self::assertSame($expected, $actual);
+    }
+
+    public function testInvalidScore(): void
     {
         $zxcvbn = $this->createMock(Zxcvbn::class);
         $zxcvbn->method('passwordStrength')
             ->willReturn([
                 'score' => -10,
                 'feedback' => [
-                    'warning' => [],
+                    'warning' => '',
                     'suggestions' => [],
                 ],
             ]);
         $factory = $this->createMock(ZxcvbnFactoryInterface::class);
         $factory->method('createZxcvbn')
             ->willReturn($zxcvbn);
-        $translator = $this->createMockTranslator();
-        $service = new PasswordService($factory, $translator);
+        $service = $this->createService($factory);
 
-        $query = new PasswordQuery('49898*962ZService');
+        $query = new PasswordQuery('123456', StrengthLevel::STRONG);
         $actual = $service->validate($query);
         self::assertArrayHasKey('result', $actual);
         self::assertFalse($actual['result']);
@@ -67,13 +82,18 @@ final class PasswordServiceTest extends TestCase
     #[DataProvider('getValidations')]
     public function testValidate(string $password, StrengthLevel $level, bool $expected): void
     {
-        $translator = $this->createMockTranslator();
-        $factory = new ZxcvbnFactory([], $translator);
-        $service = new PasswordService($factory, $translator);
-
+        $service = $this->createService();
         $query = new PasswordQuery($password, $level);
         $actual = $service->validate($query);
         self::assertArrayHasKey('result', $actual);
         self::assertSame($expected, $actual['result']);
+    }
+
+    private function createService(?ZxcvbnFactoryInterface $factory = null): PasswordService
+    {
+        $translator = $this->createMockTranslator();
+        $factory ??= new ZxcvbnFactory([], $translator);
+
+        return new PasswordService($factory, $translator);
     }
 }

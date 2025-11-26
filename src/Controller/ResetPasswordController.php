@@ -28,7 +28,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
@@ -98,17 +97,8 @@ class ResetPasswordController extends AbstractController
      * Validates and process the reset URL that the user clicked in their email.
      */
     #[GetPostRoute(path: '/reset/{token}', name: self::ROUTE_RESET)]
-    public function reset(
-        #[CurrentUser]
-        ?User $user,
-        Request $request,
-        Security $security,
-        ?string $token = null
-    ): Response {
-        if ($user instanceof User) {
-            return $this->redirectToHomePage();
-        }
-
+    public function reset(Request $request, Security $security, ?string $token = null): Response
+    {
         if (null !== $token) {
             $this->storeTokenInSession($token);
 

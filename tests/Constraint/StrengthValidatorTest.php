@@ -16,6 +16,7 @@ namespace App\Tests\Constraint;
 use App\Constraint\Strength;
 use App\Constraint\StrengthValidator;
 use App\Enums\StrengthLevel;
+use App\Service\PasswordService;
 use App\Tests\TranslatorMockTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -115,7 +116,7 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
                 '%score%' => self::EMPTY_MESSAGE,
             ];
             $this->buildViolation('password.strength_level')
-                ->setCode(Strength::IS_STRENGTH_ERROR)
+                ->setCode(Strength::STRENGTH_ERROR)
                 ->setParameters($parameters)
                 ->assertRaised();
         } else {
@@ -134,11 +135,12 @@ final class StrengthValidatorTest extends ConstraintValidatorTestCase
     #[\Override]
     protected function createValidator(): StrengthValidator
     {
+        $translator = $this->createMockTranslator(self::EMPTY_MESSAGE);
         $factory = $this->createMock(ZxcvbnFactoryInterface::class);
         $factory->method('createZxcvbn')
             ->willReturn(new Zxcvbn());
-        $translator = $this->createMockTranslator(self::EMPTY_MESSAGE);
+        $service = new PasswordService($factory, $translator);
 
-        return new StrengthValidator($translator, $factory);
+        return new StrengthValidator($service);
     }
 }

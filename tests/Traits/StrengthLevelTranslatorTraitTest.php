@@ -13,14 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
-use App\Constraint\Strength;
 use App\Enums\StrengthLevel;
 use App\Tests\TranslatorMockTrait;
 use App\Traits\StrengthLevelTranslatorTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Context\ExecutionContext;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class StrengthLevelTranslatorTraitTest extends TestCase
@@ -54,31 +51,13 @@ final class StrengthLevelTranslatorTraitTest extends TestCase
         return $this->translator;
     }
 
-    public function testAddStrengthLevelViolation(): void
-    {
-        $validator = $this->createMock(ValidatorInterface::class);
-        $root = new \stdClass();
-        $translator = $this->translator;
-        $context = new ExecutionContext($validator, $root, $translator);
-        $constraint = new Strength();
-        $minimum = StrengthLevel::MEDIUM;
-        $score = StrengthLevel::VERY_WEAK;
-        $this->addStrengthLevelViolation(
-            $context,
-            $constraint,
-            $minimum,
-            $score
-        );
-        self::assertCount(1, $context->getViolations());
-    }
-
     public function testTranslateInvalidLevel(): void
     {
         $actual = $this->translateInvalidLevel(-10);
-        self::assertStringContainsString('password.strength_invalid', $actual);
+        self::assertSame('password.strength_invalid', $actual);
 
         $actual = $this->translateInvalidLevel(StrengthLevel::NONE);
-        self::assertStringContainsString('password.strength_invalid', $actual);
+        self::assertSame('password.strength_invalid', $actual);
     }
 
     #[DataProvider('getTranslateLevels')]
@@ -94,6 +73,6 @@ final class StrengthLevelTranslatorTraitTest extends TestCase
     public function testTranslateScore(): void
     {
         $actual = $this->translateScore(StrengthLevel::VERY_STRONG, StrengthLevel::VERY_WEAK);
-        self::assertStringContainsString('password.strength_level', $actual);
+        self::assertSame('password.strength_level', $actual);
     }
 }

@@ -1,26 +1,24 @@
-captcha:
-    generate: Impossible de générer une nouvelle image.
-    empty: Le code de contrôle est requis.
-    invalid: Le code de contrôle est invalide.
-    timeout: Le délai d'attente est atteint. Essayez de recharger la page ou de générer une nouvelle image.
+# entity
+state:
+    unique_code: Ce nom est déjà utilisé par un autre statut.
+group:
+    id_not_found: Le groupe avec l'identifiant "%id%" n'existe pas.
+    unique_code: Ce nom est déjà utilisé par un autre groupe.
 category:
     id_not_found: La catégorie avec l'identifiant "%id%" n'existe pas.
     unique_code: Ce nom est déjà utilisé par une autre catégorie.
-current_password:
-    invalid: Le mot de passe est invalide.
+product:
+    unique_description: Cette description est déjà utilisée par autre article.
+task:
+    unique_name: Ce nom est déjà utilisé par une autre tâche.
+task_item:
+    unique_name: Ce nom est déjà utilisé par une autre opération.
+property:
+    unique_name: Ce nom est déjà utilisé par une autre propriété.
 customer:
     empty: Veuillez fournir au moins un nom ou un prénom ou une société.
     unique_email: Cette adresse e-mail est déjà utilisée.
     zip_code: Le code postal doit contenir 4 chiffres.
-email:
-    already_used: L'adresse e-mail est déjà utilisée.
-    blank: Une adresse e-mail est requise.
-    invalid: L'adresse e-mail est invalide.
-    long: L'adresse e-mail est trop longue.
-    short: L'adresse e-mail est trop courte.
-group:
-    id_not_found: Le groupe avec l'identifiant "%id%" n'existe pas.
-    unique_code: Ce nom est déjà utilisé par un autre groupe.
 margin:
     minimum_smaller_maximum: La valeur minimale doit être inférieure à la valeur maximale.
     maximum_greater_minimum: La valeur maximale doit être supérieure à la valeur minimale.
@@ -28,6 +26,20 @@ margin:
     maximum_overlap: La valeur minimale chevauche la valeur maximale suivante.
     minimum_discontinued: La valeur minimale n'est pas égale à la valeur maximale précédente.
     maximum_discontinued: La valeur maximale n'est pas égale à la valeur minimale suivante.
+# constraint
+captcha:
+    generate: Impossible de générer une nouvelle image.
+    empty: Le code de contrôle est requis.
+    invalid: Le code de contrôle est invalide.
+    timeout: Le délai d'attente est atteint. Essayez de recharger la page ou de générer une nouvelle image.
+current_password:
+    invalid: Le mot de passe est invalide.
+email:
+    already_used: L'adresse e-mail est déjà utilisée.
+    blank: Une adresse e-mail est requise.
+    invalid: L'adresse e-mail est invalide.
+    long: L'adresse e-mail est trop longue.
+    short: L'adresse e-mail est trop courte.
 new_password:
     blank: Un nouveau mot de passe est requis.
     short: Le nouveau mot de passe est trop court.
@@ -42,10 +54,6 @@ password:
     strength_level: Le mot de passe doit avoir une force "%minimum%", la force actuelle est "%score%".
     strength_disabled: La force minimum du mot de passe est désactivée.
     strength_invalid: La force "%value%" est invalide. Les valeurs autorisée sont "%allowed%".
-product:
-    unique_description: Cette description est déjà utilisée par autre article.
-property:
-    unique_name: Ce nom est déjà utilisé par une autre propriété.
 recaptcha:
     action-mismatch: L'action ne correspond pas.
     bad-request: La demande est invalide ou malformée.
@@ -64,12 +72,6 @@ recaptcha:
     timeout-or-duplicate: Le délai d'attente est atteint ou la validation a été appelée deux fois.
     unknown-error: Une erreur inconnue s'est produite durant de la validation.
     browser-error: Une erreur s’est produite sur le navigateur.
-state:
-    unique_code: Ce nom est déjà utilisé par un autre statut.
-task:
-    unique_name: Ce nom est déjà utilisé par une autre tâche.
-task_item:
-    unique_name: Ce nom est déjà utilisé par une autre opération.
 username:
     already_used: Le nom d'utilisateur est déjà utilisé.
     blank: Le nom d'utilisateur est requis.

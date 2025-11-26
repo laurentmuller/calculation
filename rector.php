@@ -34,7 +34,7 @@ $paths = [
     __DIR__ . '/public',
 ];
 
-$skips = [
+$skip = [
     // allow self::functions for PHP unit
     PreferPHPUnitThisCallRector::class,
     SingleMockPropertyTypeRector::class,
@@ -83,7 +83,7 @@ return RectorConfig::configure()
     ->withCache(__DIR__ . '/var/cache/rector')
     ->withRootFiles()
     ->withPaths($paths)
-    ->withSkip($skips)
+    ->withSkip($skip)
     ->withSets($sets)
     ->withRules($rules)
     ->withComposerBased(

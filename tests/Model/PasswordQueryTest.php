@@ -30,8 +30,8 @@ final class PasswordQueryTest extends TestCase
         $query = new PasswordQuery(
             'password',
             StrengthLevel::MEDIUM,
-            'email',
-            'user'
+            'user',
+            'email'
         );
         self::assertSame('password', $query->password);
         self::assertSame(StrengthLevel::MEDIUM, $query->strength);
@@ -53,8 +53,8 @@ final class PasswordQueryTest extends TestCase
         $actual = $query->getInputs();
         self::assertSame(['user'], $actual);
 
-        $query = new PasswordQuery(email: 'email', user: 'user');
+        $query = new PasswordQuery(user: 'user', email: 'email');
         $actual = $query->getInputs();
-        self::assertSame(['email', 'user'], $actual);
+        self::assertSame(['user', 'email'], $actual);
     }
 }

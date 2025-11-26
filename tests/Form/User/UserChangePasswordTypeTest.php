@@ -22,6 +22,7 @@ use App\Form\Type\PlainType;
 use App\Form\User\UserChangePasswordType;
 use App\Parameter\ApplicationParameters;
 use App\Parameter\SecurityParameter;
+use App\Service\PasswordService;
 use App\Tests\Form\CustomConstraintValidatorFactory;
 use App\Tests\Form\EntityTypeTestCase;
 use App\Tests\TranslatorMockTrait;
@@ -217,24 +218,15 @@ final class UserChangePasswordTypeTest extends EntityTypeTestCase
         return new ValidatorExtension($validator);
     }
 
-    private function getScore(): array
-    {
-        return [
-            'score' => $this->score->value,
-        ];
-    }
-
     private function getStrengthValidator(): StrengthValidator
     {
-        $service = $this->createMock(Zxcvbn::class);
-        $service->method('passwordStrength')
-            ->willReturnCallback($this->getScore(...));
-
+        $translator = $this->createMockTranslator();
         $factory = $this->createMock(ZxcvbnFactoryInterface::class);
         $factory->method('createZxcvbn')
-            ->willReturn($service);
+            ->willReturn(new Zxcvbn());
+        $service = new PasswordService($factory, $translator);
 
-        return new StrengthValidator($this->translator, $factory);
+        return new StrengthValidator($service);
     }
 
     private function isPasswordConstraint(): bool

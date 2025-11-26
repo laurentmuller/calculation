@@ -30,7 +30,7 @@ final class AjaxUserControllerTest extends AuthenticateWebTestCase
         yield ['email.blank'];
         yield ['email.short', 'A'];
         yield ['email.long', \str_repeat('A', 200)];
-        yield ['email.already_used', 'ROLE_SUPER_ADMIN@TEST.COM'];
+        yield ['user.unique_email', 'ROLE_SUPER_ADMIN@TEST.COM'];
     }
 
     public static function getNames(): \Generator
@@ -40,7 +40,7 @@ final class AjaxUserControllerTest extends AuthenticateWebTestCase
         yield ['username.blank'];
         yield ['username.short', 'A'];
         yield ['username.long', \str_repeat('A', 200)];
-        yield ['username.already_used', 'ROLE_SUPER_ADMIN'];
+        yield ['user.unique_username', 'ROLE_SUPER_ADMIN'];
     }
 
     public static function getUsers(): \Generator

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Form\DataTransformer\DatePointToDateTimeTransformer;
 use App\Form\Type\CurrentPasswordType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
@@ -240,7 +239,7 @@ class FormHelper
      */
     public function addDatePointType(): self
     {
-        return $this->modelTransformer(new DatePointToDateTimeTransformer())
+        return $this->updateOption('input', 'date_point')
             ->add(DateType::class);
     }
 
@@ -373,7 +372,7 @@ class FormHelper
      * Add a plain type to the builder and reset all values to the default.
      *
      * This type just renders the field as a span tag. This is useful for
-     * forms where certain field needs to be shown but not editable.
+     * forms where certain fields need to be shown but not editable.
      *
      * @param bool $expanded true to render the plain type within the label
      */

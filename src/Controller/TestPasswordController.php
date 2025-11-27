@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetPostRoute;
 use App\Constraint\Captcha;
 use App\Constraint\Password;
@@ -21,7 +22,6 @@ use App\Entity\User;
 use App\Enums\StrengthLevel;
 use App\Form\Type\AlphaCaptchaType;
 use App\Form\Type\CaptchaImageType;
-use App\Interfaces\RoleInterface;
 use App\Interfaces\UserInterface;
 use App\Service\CaptchaImageService;
 use App\Traits\StrengthLevelTranslatorTrait;
@@ -31,12 +31,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+#[ForSuperAdmin]
 #[Route(path: '/test', name: 'test_')]
-#[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class TestPasswordController extends AbstractController
 {
     use StrengthLevelTranslatorTrait;

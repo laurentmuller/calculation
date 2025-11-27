@@ -13,11 +13,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForSuperAdmin;
+use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Attribute\PostRoute;
-use App\Interfaces\RoleInterface;
 use App\Model\HelpDownloadQuery;
 use App\Report\HelpReport;
 use App\Response\PdfResponse;
@@ -29,7 +30,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display help.
@@ -37,8 +37,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @phpstan-import-type HelpDialogType from HelpService
  * @phpstan-import-type HelpEntityType from HelpService
  */
+#[ForUser]
 #[Route(path: '/help', name: 'help_')]
-#[IsGranted(RoleInterface::ROLE_USER)]
 class HelpController extends AbstractController
 {
     public function __construct(private readonly HelpService $service)
@@ -86,7 +86,7 @@ class HelpController extends AbstractController
     /**
      * Save the screenshot image.
      */
-    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
+    #[ForSuperAdmin]
     #[PostRoute(path: '/download', name: 'download')]
     public function download(
         #[MapRequestPayload]

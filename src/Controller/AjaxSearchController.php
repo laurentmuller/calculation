@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Interfaces\EntityInterface;
-use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CustomerRepository;
@@ -27,7 +27,6 @@ use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for search XMLHttpRequest (Ajax) calls.
@@ -38,7 +37,7 @@ class AjaxSearchController extends AbstractController
     /**
      * Search address.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[GetRoute(path: '/address', name: 'address')]
     public function searchAddress(
         SwissPostService $service,
@@ -68,7 +67,7 @@ class AjaxSearchController extends AbstractController
     /**
      * Search distinct calculation's customers in existing calculations.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[GetRoute(path: '/customer', name: 'customer')]
     public function searchCustomer(
         CalculationRepository $repository,
@@ -83,7 +82,7 @@ class AjaxSearchController extends AbstractController
     /**
      * Search products.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[GetRoute(path: '/product', name: 'product')]
     public function searchProduct(
         ProductRepository $repository,
@@ -98,7 +97,7 @@ class AjaxSearchController extends AbstractController
     /**
      * Searches distinct products and task suppliers.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[GetRoute(path: '/supplier', name: 'supplier')]
     public function searchSupplier(
         EntityManagerInterface $manager,
@@ -113,7 +112,7 @@ class AjaxSearchController extends AbstractController
     /**
      * Search the distinct customer's titles.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[GetRoute(path: '/title', name: 'title')]
     public function searchTitle(
         CustomerRepository $repository,
@@ -128,7 +127,7 @@ class AjaxSearchController extends AbstractController
     /**
      * Search distinct units from products and tasks.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[GetRoute(path: '/unit', name: 'unit')]
     public function searchUnit(
         EntityManagerInterface $manager,

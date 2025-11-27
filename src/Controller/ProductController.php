@@ -18,13 +18,13 @@ use App\Attribute\CloneEntityRoute;
 use App\Attribute\DeleteEntityRoute;
 use App\Attribute\EditEntityRoute;
 use App\Attribute\ExcelRoute;
+use App\Attribute\ForUser;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Interfaces\EntityInterface;
-use App\Interfaces\RoleInterface;
 use App\Report\ProductsReport;
 use App\Repository\ProductRepository;
 use App\Resolver\DataQueryValueResolver;
@@ -38,15 +38,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * The controller for product entities.
  *
  * @extends AbstractEntityController<Product, ProductRepository>
  */
+#[ForUser]
 #[Route(path: '/product', name: 'product_')]
-#[IsGranted(RoleInterface::ROLE_USER)]
 class ProductController extends AbstractEntityController
 {
     public function __construct(ProductRepository $repository)

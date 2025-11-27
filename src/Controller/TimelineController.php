@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
-use App\Interfaces\RoleInterface;
 use App\Service\TimelineService;
 use App\Utils\DateUtils;
 use Symfony\Component\Clock\DatePoint;
@@ -23,15 +23,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display calculations timeline.
  *
  * @phpstan-import-type ParametersType from TimelineService
  */
+#[ForSuperAdmin]
 #[Route(path: '/timeline', name: 'timeline_')]
-#[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class TimelineController extends AbstractController
 {
     private const KEY_DATE = 'timeline_date';

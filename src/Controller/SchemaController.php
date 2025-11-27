@@ -13,23 +13,22 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
-use App\Interfaces\RoleInterface;
 use App\Report\SchemaReport;
 use App\Response\PdfResponse;
 use App\Service\FontAwesomeImageService;
 use App\Service\SchemaService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display the database schema.
  */
+#[ForSuperAdmin]
 #[Route(path: '/schema', name: 'schema_')]
-#[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class SchemaController extends AbstractController
 {
     /**

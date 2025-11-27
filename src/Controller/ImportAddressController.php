@@ -13,20 +13,19 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForAdmin;
 use App\Attribute\GetPostRoute;
-use App\Interfaces\RoleInterface;
 use App\Service\SwissPostUpdater;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to import Switzerland address.
  */
+#[ForAdmin]
 #[Route(path: '/admin', name: 'admin_')]
-#[IsGranted(RoleInterface::ROLE_ADMIN)]
 class ImportAddressController extends AbstractController
 {
     /**

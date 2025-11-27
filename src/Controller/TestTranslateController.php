@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetRoute;
-use App\Interfaces\RoleInterface;
 use App\Model\HttpClientError;
 use App\Service\AbstractHttpClientService;
 use App\Translator\TranslatorFactory;
@@ -22,10 +22,9 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[ForSuperAdmin]
 #[Route(path: '/test', name: 'test_')]
-#[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class TestTranslateController extends AbstractController
 {
     /**

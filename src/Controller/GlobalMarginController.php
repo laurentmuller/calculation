@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\ExcelRoute;
+use App\Attribute\ForUser;
 use App\Attribute\GetPostRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
@@ -21,7 +22,6 @@ use App\Attribute\ShowEntityRoute;
 use App\Entity\GlobalMargin;
 use App\Enums\EntityPermission;
 use App\Form\GlobalMargin\GlobalMarginsType;
-use App\Interfaces\RoleInterface;
 use App\Model\GlobalMargins;
 use App\Report\GlobalMarginsReport;
 use App\Repository\GlobalMarginRepository;
@@ -36,15 +36,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * The controller for global margins entities.
  *
  * @extends AbstractEntityController<GlobalMargin, GlobalMarginRepository>
  */
+#[ForUser]
 #[Route(path: '/globalmargin', name: 'globalmargin_')]
-#[IsGranted(RoleInterface::ROLE_USER)]
 class GlobalMarginController extends AbstractEntityController
 {
     public function __construct(GlobalMarginRepository $repository)

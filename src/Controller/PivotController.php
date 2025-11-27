@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
-use App\Interfaces\RoleInterface;
 use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotFieldFactory;
 use App\Pivot\PivotTable;
@@ -26,15 +26,14 @@ use App\Utils\FormatUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display the pivot table.
  *
  * @phpstan-import-type PivotType from CalculationRepository
  */
+#[ForUser]
 #[Route(path: '/pivot', name: 'calculation_pivot_')]
-#[IsGranted(RoleInterface::ROLE_USER)]
 class PivotController extends AbstractController
 {
     public function __construct(private readonly CalculationRepository $repository)

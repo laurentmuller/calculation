@@ -17,6 +17,7 @@ use App\Attribute\AddEntityRoute;
 use App\Attribute\DeleteEntityRoute;
 use App\Attribute\EditEntityRoute;
 use App\Attribute\ExcelRoute;
+use App\Attribute\ForAdmin;
 use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
@@ -60,7 +61,6 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
@@ -69,8 +69,8 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  *
  * @extends AbstractEntityController<User, UserRepository>
  */
+#[ForAdmin]
 #[Route(path: '/user', name: 'user_')]
-#[IsGranted(RoleInterface::ROLE_ADMIN)]
 class UserController extends AbstractEntityController
 {
     public function __construct(UserRepository $repository, private readonly PasswordTooltipService $service)

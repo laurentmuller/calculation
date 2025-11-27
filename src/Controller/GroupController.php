@@ -18,6 +18,7 @@ use App\Attribute\CloneEntityRoute;
 use App\Attribute\DeleteEntityRoute;
 use App\Attribute\EditEntityRoute;
 use App\Attribute\ExcelRoute;
+use App\Attribute\ForUser;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
@@ -26,7 +27,6 @@ use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
-use App\Interfaces\RoleInterface;
 use App\Report\GroupsReport;
 use App\Repository\GroupRepository;
 use App\Resolver\DataQueryValueResolver;
@@ -42,15 +42,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * The controller for group entities.
  *
  * @extends AbstractEntityController<Group, GroupRepository>
  */
+#[ForUser]
 #[Route(path: '/group', name: 'group_')]
-#[IsGranted(RoleInterface::ROLE_USER)]
 class GroupController extends AbstractEntityController
 {
     use ArrayTrait;

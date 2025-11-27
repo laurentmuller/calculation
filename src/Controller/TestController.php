@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Entity\CalculationState;
@@ -20,7 +21,6 @@ use App\Entity\Category;
 use App\Entity\Product;
 use App\Enums\MessagePosition;
 use App\Form\Type\ReCaptchaType;
-use App\Interfaces\RoleInterface;
 use App\Repository\GroupRepository;
 use App\Service\RecaptchaResponseService;
 use App\Service\RecaptchaService;
@@ -37,7 +37,6 @@ use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Currencies;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for tests.
@@ -46,8 +45,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  *
  * @phpstan-type CurrencyType = array{code: string, name: string}
  */
+#[ForSuperAdmin]
 #[Route(path: '/test', name: 'test_')]
-#[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class TestController extends AbstractController
 {
     use GroupByTrait;

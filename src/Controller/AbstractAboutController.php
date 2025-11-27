@@ -13,11 +13,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForPublicAccess;
+use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Attribute\WordRoute;
-use App\Interfaces\RoleInterface;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
 use App\Response\WordResponse;
@@ -27,8 +28,6 @@ use App\Word\HtmlDocument;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -49,7 +48,7 @@ abstract class AbstractAboutController extends AbstractController
     /**
      * Gets the HTML content as a JSON response.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[GetRoute(path: '/content', name: 'content')]
     public function content(): JsonResponse
     {
@@ -61,7 +60,7 @@ abstract class AbstractAboutController extends AbstractController
     /**
      * Render a view with the HTML content.
      */
-    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
+    #[ForPublicAccess]
     #[IndexRoute]
     public function index(): Response
     {
@@ -75,7 +74,7 @@ abstract class AbstractAboutController extends AbstractController
     /**
      * Export the HTML content to a Portable Document Format (*.pdf) file.
      */
-    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
+    #[ForPublicAccess]
     #[PdfRoute]
     public function pdf(): PdfResponse
     {
@@ -90,7 +89,7 @@ abstract class AbstractAboutController extends AbstractController
     /**
      * Export the HTML content to a Word 2007 (.docx) document file.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForPublicAccess]
     #[WordRoute]
     public function word(): WordResponse
     {

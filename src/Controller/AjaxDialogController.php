@@ -13,16 +13,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Attribute\PostRoute;
 use App\Form\Dialog\EditItemDialogType;
 use App\Form\Dialog\EditTaskDialogType;
-use App\Interfaces\RoleInterface;
 use App\Repository\TaskRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to render dialog views within an XMLHttpRequest (Ajax) call.
@@ -46,7 +45,7 @@ class AjaxDialogController extends AbstractController
     /**
      * Render the page selection dialog for the data table.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[GetRoute(path: '/dialog/page', name: 'dialog_page')]
     public function dialogPage(): JsonResponse
     {
@@ -56,7 +55,7 @@ class AjaxDialogController extends AbstractController
     /**
      * Render the sort dialog for data table.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[PostRoute(path: '/dialog/sort', name: 'dialog_sort')]
     public function dialogSort(Request $request): JsonResponse
     {

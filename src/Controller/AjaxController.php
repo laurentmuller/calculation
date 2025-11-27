@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Attribute\PostRoute;
 use App\Enums\TableView;
-use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
 use App\Model\PasswordQuery;
 use App\Model\SessionQuery;
@@ -34,7 +34,6 @@ use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for all XMLHttpRequest (Ajax) calls.
@@ -48,7 +47,7 @@ class AjaxController extends AbstractController
     /**
      * Compute a task.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[PostRoute(path: '/task', name: 'task')]
     public function computeTask(
         #[ValueResolver(TaskComputeQueryValueResolver::class)]
@@ -72,7 +71,7 @@ class AjaxController extends AbstractController
     /**
      * Validate a strength password.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[PostRoute(path: '/password', name: 'password')]
     public function password(#[MapRequestPayload] PasswordQuery $query, PasswordService $service): JsonResponse
     {
@@ -84,7 +83,7 @@ class AjaxController extends AbstractController
     /**
      * Gets random text used to display notifications.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[GetRoute(path: '/random/text', name: 'random_text')]
     public function randomText(FakerService $service, #[MapQueryParameter] int $maxNbChars = 150): JsonResponse
     {
@@ -99,7 +98,7 @@ class AjaxController extends AbstractController
     /**
      * Sets a session attribute.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[PostRoute(path: '/session/set', name: 'session_set')]
     public function saveSession(#[MapRequestPayload] SessionQuery $query): JsonResponse
     {
@@ -115,7 +114,7 @@ class AjaxController extends AbstractController
     /**
      * Save table view parameter.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[PostRoute(path: '/save', name: 'save_table')]
     public function saveTable(Request $request): JsonResponse
     {

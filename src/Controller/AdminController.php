@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForAdmin;
+use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Enums\EntityPermission;
 use App\Enums\FlashType;
 use App\Form\Parameters\ApplicationParametersType;
 use App\Form\User\RoleRightsType;
-use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Parameter\ApplicationParameters;
 use App\Service\CacheService;
@@ -34,13 +35,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for administration tasks.
  */
+#[ForAdmin]
 #[Route(path: '/admin', name: 'admin_')]
-#[IsGranted(RoleInterface::ROLE_ADMIN)]
 class AdminController extends AbstractController
 {
     use EditParametersTrait;
@@ -90,7 +90,7 @@ class AdminController extends AbstractController
      *
      * @throws \Exception
      */
-    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
+    #[ForSuperAdmin]
     #[GetRoute(path: '/dump-sql', name: 'dump_sql')]
     public function dumpSql(CommandService $service): Response
     {
@@ -133,7 +133,7 @@ class AdminController extends AbstractController
     /**
      * Edit rights for the administrator role.
      */
-    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
+    #[ForSuperAdmin]
     #[GetPostRoute(path: '/rights/admin', name: 'rights_admin')]
     public function rightsAdmin(
         Request $request,

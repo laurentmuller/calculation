@@ -13,18 +13,17 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
-use App\Interfaces\RoleInterface;
 use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display the site map.
  */
-#[IsGranted(RoleInterface::ROLE_USER)]
+#[ForUser]
 class SiteMapController extends AbstractController
 {
     private readonly array $content;

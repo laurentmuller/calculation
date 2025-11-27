@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetRoute;
 use App\Attribute\PdfRoute;
 use App\Attribute\WordRoute;
-use App\Interfaces\RoleInterface;
 use App\Interfaces\SortModeInterface;
 use App\Pdf\Events\PdfLabelTextEvent;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
@@ -37,10 +37,9 @@ use fpdf\Enums\PdfFontStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[ForSuperAdmin]
 #[Route(path: '/test', name: 'test_')]
-#[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class TestExportController extends AbstractController
 {
     /**

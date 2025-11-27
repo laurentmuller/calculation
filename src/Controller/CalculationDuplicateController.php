@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\ExcelRoute;
+use App\Attribute\ForAdmin;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Enums\FlashType;
-use App\Interfaces\RoleInterface;
 use App\Report\CalculationsDuplicateReport;
 use App\Repository\CalculationRepository;
 use App\Resolver\DataQueryValueResolver;
@@ -30,15 +30,14 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display and export duplicate items in the calculations.
  *
  * @phpstan-import-type CalculationItemType from CalculationRepository
  */
+#[ForAdmin]
 #[Route(path: '/calculation/duplicate', name: 'calculation_duplicate_')]
-#[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationDuplicateController extends AbstractController
 {
     use TableTrait;

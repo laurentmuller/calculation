@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Calendar\CalculationsDay;
 use App\Calendar\CalculationsMonth;
@@ -22,20 +23,18 @@ use App\Calendar\CalendarService;
 use App\Calendar\Month;
 use App\Calendar\Week;
 use App\Entity\Calculation;
-use App\Interfaces\RoleInterface;
 use App\Repository\CalculationRepository;
 use App\Utils\DateUtils;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display calendar.
  */
+#[ForUser]
 #[Route(path: '/calendar', name: 'calendar_')]
-#[IsGranted(RoleInterface::ROLE_USER)]
 class CalendarController extends AbstractController
 {
     public function __construct(private readonly CalculationRepository $repository)

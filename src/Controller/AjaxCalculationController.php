@@ -13,21 +13,20 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForUser;
 use App\Attribute\PostRoute;
-use App\Interfaces\RoleInterface;
 use App\Model\CalculationAdjustQuery;
 use App\Service\CalculationGroupService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to update calculation's total or the user margin within XMLHttpRequest (Ajax) calls.
  */
+#[ForUser]
 #[Route(path: '/calculation', name: 'calculation_')]
-#[IsGranted(RoleInterface::ROLE_USER)]
 class AjaxCalculationController extends AbstractController
 {
     #[PostRoute(path: '/update', name: 'update')]

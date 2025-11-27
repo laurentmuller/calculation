@@ -13,22 +13,21 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForPublicAccess;
 use App\Attribute\GetRoute;
 use App\Form\Type\CaptchaImageType;
 use App\Service\CaptchaImageService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for captcha image validation.
  *
  * @see CaptchaImageType
  */
+#[ForPublicAccess]
 #[Route(path: '/captcha', name: 'captcha_')]
-#[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
 class CaptchaController extends AbstractController
 {
     /**

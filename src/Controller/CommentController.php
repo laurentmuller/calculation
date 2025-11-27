@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForUser;
 use App\Attribute\GetPostRoute;
 use App\Entity\User;
 use App\Form\User\UserCommentType;
-use App\Interfaces\RoleInterface;
 use App\Model\Comment;
 use App\Service\MailerService;
 use Psr\Log\LoggerInterface;
@@ -25,7 +25,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to send comments to the webmaster.
@@ -36,7 +35,7 @@ class CommentController extends AbstractController
     /**
      * Send a comment to the webmaster.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[GetPostRoute(path: '/comment', name: 'comment')]
     public function invoke(Request $request, MailerService $service, LoggerInterface $logger): Response
     {

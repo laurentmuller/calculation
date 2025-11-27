@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
-use App\Interfaces\RoleInterface;
 use App\Report\CommandsReport;
 use App\Service\CommandDataService;
 use App\Service\CommandFormService;
@@ -30,15 +30,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for the console commands.
  *
  * @phpstan-import-type CommandType from CommandService
  */
+#[ForSuperAdmin]
 #[Route(path: '/command', name: 'command_')]
-#[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class CommandController extends AbstractController
 {
     use CacheKeyTrait;

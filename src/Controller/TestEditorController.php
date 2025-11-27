@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetPostRoute;
 use App\Entity\User;
 use App\Enums\Importance;
 use App\Form\Type\SimpleEditorType;
-use App\Interfaces\RoleInterface;
 use App\Service\MailerService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -26,10 +26,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[ForSuperAdmin]
 #[Route(path: '/test', name: 'test_')]
-#[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class TestEditorController extends AbstractController
 {
     /**

@@ -17,11 +17,11 @@ use App\Attribute\AddEntityRoute;
 use App\Attribute\DeleteEntityRoute;
 use App\Attribute\EditEntityRoute;
 use App\Attribute\ExcelRoute;
+use App\Attribute\ForUser;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
 use App\Entity\Customer;
-use App\Interfaces\RoleInterface;
 use App\Report\CustomersReport;
 use App\Repository\CustomerRepository;
 use App\Resolver\DataQueryValueResolver;
@@ -35,7 +35,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * The controller for customer entities.
@@ -44,8 +43,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  *
  * @extends AbstractEntityController<Customer, CustomerRepository>
  */
+#[ForUser]
 #[Route(path: '/customer', name: 'customer_')]
-#[IsGranted(RoleInterface::ROLE_USER)]
 class CustomerController extends AbstractEntityController
 {
     public function __construct(CustomerRepository $repository)

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
@@ -20,20 +21,18 @@ use App\Generator\CalculationGenerator;
 use App\Generator\CustomerGenerator;
 use App\Generator\ProductGenerator;
 use App\Interfaces\GeneratorInterface;
-use App\Interfaces\RoleInterface;
 use App\Service\SuspendEventListenerService;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to generate entities.
  */
+#[ForSuperAdmin]
 #[Route(path: '/generate', name: self::PREFIX)]
-#[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class GeneratorController extends AbstractController
 {
     private const KEY_COUNT = 'generate.count';

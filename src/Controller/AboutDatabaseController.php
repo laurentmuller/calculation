@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\ExcelRoute;
+use App\Attribute\ForAdmin;
 use App\Attribute\GetRoute;
 use App\Attribute\PdfRoute;
-use App\Interfaces\RoleInterface;
 use App\Report\DatabaseReport;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
@@ -24,12 +24,11 @@ use App\Service\DatabaseInfoService;
 use App\Spreadsheet\DatabaseDocument;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to output database information.
  */
-#[IsGranted(RoleInterface::ROLE_ADMIN)]
+#[ForAdmin]
 #[Route(path: '/about/database', name: 'about_database_')]
 class AboutDatabaseController extends AbstractController
 {

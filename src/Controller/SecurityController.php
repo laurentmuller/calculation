@@ -13,17 +13,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForPublicAccess;
+use App\Attribute\ForUser;
 use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Entity\User;
 use App\Form\User\UserLoginType;
-use App\Interfaces\RoleInterface;
 use App\Security\SecurityAttributes;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
@@ -31,7 +30,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
  */
 class SecurityController extends AbstractController
 {
-    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
+    #[ForPublicAccess]
     #[GetPostRoute(path: '/login', name: SecurityAttributes::LOGIN_ROUTE)]
     public function login(#[CurrentUser] ?User $user, AuthenticationUtils $utils): Response
     {
@@ -49,14 +48,14 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[GetRoute(path: '/logout', name: SecurityAttributes::LOGOUT_ROUTE)]
     public function logout(): never
     {
         throw new \LogicException('This method should never be reached.');
     }
 
-    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
+    #[ForPublicAccess]
     #[GetRoute(path: '/logout/success', name: SecurityAttributes::LOGOUT_SUCCESS_ROUTE)]
     public function logoutSuccess(): RedirectResponse
     {

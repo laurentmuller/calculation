@@ -18,12 +18,12 @@ use App\Attribute\CloneEntityRoute;
 use App\Attribute\DeleteEntityRoute;
 use App\Attribute\EditEntityRoute;
 use App\Attribute\ExcelRoute;
+use App\Attribute\ForUser;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
 use App\Entity\CalculationState;
 use App\Interfaces\EntityInterface;
-use App\Interfaces\RoleInterface;
 use App\Report\CalculationStatesReport;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
@@ -38,15 +38,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for calculation state entities.
  *
  * @extends AbstractEntityController<CalculationState, CalculationStateRepository>
  */
+#[ForUser]
 #[Route(path: '/calculationstate', name: 'calculationstate_')]
-#[IsGranted(RoleInterface::ROLE_USER)]
 class CalculationStateController extends AbstractEntityController
 {
     public function __construct(CalculationStateRepository $repository)

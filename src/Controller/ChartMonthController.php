@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForUser;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Chart\MonthChart;
 use App\Entity\Calculation;
 use App\Enums\EntityPermission;
-use App\Interfaces\RoleInterface;
 use App\Report\CalculationByMonthReport;
 use App\Repository\CalculationRepository;
 use App\Response\PdfResponse;
@@ -27,13 +27,12 @@ use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * The controller for calculations by month chart.
  */
+#[ForUser]
 #[Route(path: '/chart/month', name: 'chart_month_')]
-#[IsGranted(RoleInterface::ROLE_USER)]
 class ChartMonthController extends AbstractController
 {
     private const KEY_MONTHS = 'chart_months';

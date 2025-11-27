@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForAdmin;
 use App\Attribute\GetPostRoute;
 use App\Entity\Product;
 use App\Form\Category\CategoryListType;
-use App\Interfaces\RoleInterface;
 use App\Model\ProductUpdateQuery;
 use App\Repository\CategoryRepository;
 use App\Service\ProductUpdateService;
@@ -26,13 +26,12 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to update product prices.
  */
+#[ForAdmin]
 #[Route(path: '/admin', name: 'admin_')]
-#[IsGranted(RoleInterface::ROLE_ADMIN)]
 class ProductUpdateController extends AbstractController
 {
     #[GetPostRoute(path: '/product', name: 'product')]

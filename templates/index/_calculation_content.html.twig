@@ -1,7 +1,7 @@
 {% from 'index/_macros.html.twig' import empty_content %}
 {# parameters #}
 {%- set caller = path('homepage') -%}
-{%- set selection = app.request.get('id', 0) -%}
+{%- set selection = app.request.query.get('id', 0) -%}
 {# actions #}
 {%- set object_type = ENTITY_CALCULATION -%}
 {%- set add_page = is_granted(PERMISSION_ADD, object_type) ? 'calculation_add' : null -%}

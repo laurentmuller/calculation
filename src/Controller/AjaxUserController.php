@@ -13,18 +13,17 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForPublicAccess;
+use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Entity\User;
-use App\Interfaces\RoleInterface;
 use App\Interfaces\UserInterface;
 use App\Repository\UserRepository;
 use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for user XMLHttpRequest (Ajax) calls.
@@ -39,7 +38,7 @@ class AjaxUserController extends AbstractController
     /**
      * Check if a username or user e-mail exist.
      */
-    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
+    #[ForPublicAccess]
     #[GetRoute(path: IndexRoute::PATH, name: 'both')]
     public function checkBoth(#[MapQueryParameter] ?string $user = null): JsonResponse
     {
@@ -56,7 +55,7 @@ class AjaxUserController extends AbstractController
     /**
      * Check if a user e-mail already exists.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[GetRoute(path: '/email', name: 'email')]
     public function checkEmail(
         #[MapQueryParameter]
@@ -84,7 +83,7 @@ class AjaxUserController extends AbstractController
     /**
      * Check if a username already exists.
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[ForUser]
     #[GetRoute(path: '/name', name: 'name')]
     public function checkUsername(
         #[MapQueryParameter]

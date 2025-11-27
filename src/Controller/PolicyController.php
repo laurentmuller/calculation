@@ -13,18 +13,17 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
-use App\Interfaces\RoleInterface;
 use App\Traits\CookieTrait;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to handle the license agreement.
  */
+#[ForUser]
 #[Route(path: '/policy', name: 'policy_')]
-#[IsGranted(RoleInterface::ROLE_USER)]
 class PolicyController extends AbstractController
 {
     use CookieTrait;

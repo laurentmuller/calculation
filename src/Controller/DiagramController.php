@@ -13,23 +13,22 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
-use App\Interfaces\RoleInterface;
 use App\Service\DiagramService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display Mermaid diagrams.
  *
  * @see https://mermaid.js.org/
  */
+#[ForSuperAdmin]
 #[Route(path: '/diagram', name: 'diagram_')]
-#[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class DiagramController extends AbstractController
 {
     private const DEFAULT_DIAGRAM = 'entity_interface';

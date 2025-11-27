@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\ExcelRoute;
+use App\Attribute\ForAdmin;
 use App\Attribute\GetRoute;
 use App\Attribute\PdfRoute;
 use App\Enums\Environment;
-use App\Interfaces\RoleInterface;
 use App\Report\SymfonyReport;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
@@ -32,7 +32,6 @@ use App\Utils\FileUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Twig\Extra\Markdown\MarkdownInterface;
 
 /**
@@ -40,13 +39,12 @@ use Twig\Extra\Markdown\MarkdownInterface;
  *
  * @phpstan-import-type PackageType from PackageInfoService
  */
-#[IsGranted(RoleInterface::ROLE_ADMIN)]
+#[ForAdmin]
 #[Route(path: '/about/symfony', name: 'about_symfony_')]
 class AboutSymfonyController extends AbstractController
 {
     use ArrayTrait;
 
-    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[GetRoute(path: '/content', name: 'content')]
     public function content(
         BundleInfoService $bundleService,

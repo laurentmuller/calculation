@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForAdmin;
 use App\Attribute\GetPostRoute;
 use App\Form\CalculationState\CalculationStateListType;
-use App\Interfaces\RoleInterface;
 use App\Model\CalculationArchiveQuery;
 use App\Repository\CalculationStateRepository;
 use App\Service\CalculationArchiveService;
@@ -24,13 +24,12 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to archive calculations.
  */
+#[ForAdmin]
 #[Route(path: '/admin', name: 'admin_')]
-#[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationArchiveController extends AbstractController
 {
     #[GetPostRoute(path: '/archive', name: 'archive')]

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\ExcelRoute;
+use App\Attribute\ForAdmin;
 use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
@@ -21,7 +22,6 @@ use App\Attribute\PdfRoute;
 use App\Attribute\ShowEntityRoute;
 use App\Entity\Log;
 use App\Enums\FlashType;
-use App\Interfaces\RoleInterface;
 use App\Model\LogFile;
 use App\Report\LogsReport;
 use App\Resolver\DataQueryValueResolver;
@@ -39,13 +39,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * The log controller.
  */
+#[ForAdmin]
 #[Route(path: '/log', name: 'log_')]
-#[IsGranted(RoleInterface::ROLE_ADMIN)]
 class LogController extends AbstractController
 {
     use TableTrait;

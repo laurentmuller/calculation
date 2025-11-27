@@ -13,22 +13,21 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetRoute;
-use App\Interfaces\RoleInterface;
 use App\Service\AkismetService;
 use App\Service\FakerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 /**
  * Controller for the Askimet service.
  */
+#[ForSuperAdmin]
 #[Route(path: '/akismet', name: 'akismet_')]
-#[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class AkismetController extends AbstractController
 {
     /**

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
-use App\Interfaces\RoleInterface;
 use App\Resolver\DataQueryValueResolver;
 use App\Table\DataQuery;
 use App\Table\SearchTable;
@@ -22,12 +22,11 @@ use App\Traits\TableTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display the search page.
  */
-#[IsGranted(RoleInterface::ROLE_USER)]
+#[ForUser]
 class SearchController extends AbstractController
 {
     use TableTrait;

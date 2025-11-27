@@ -13,25 +13,24 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForUser;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Chart\StateChart;
 use App\Entity\Calculation;
 use App\Enums\EntityPermission;
-use App\Interfaces\RoleInterface;
 use App\Report\CalculationByStateReport;
 use App\Repository\CalculationStateRepository;
 use App\Response\PdfResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * The controller for calculations by state chart.
  */
+#[ForUser]
 #[Route(path: '/chart/state', name: 'chart_state_')]
-#[IsGranted(RoleInterface::ROLE_USER)]
 class ChartStateController extends AbstractController
 {
     #[IndexRoute]

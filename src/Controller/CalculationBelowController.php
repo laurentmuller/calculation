@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\ExcelRoute;
+use App\Attribute\ForAdmin;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Entity\Calculation;
 use App\Enums\FlashType;
-use App\Interfaces\RoleInterface;
 use App\Report\CalculationsBelowReport;
 use App\Repository\CalculationRepository;
 use App\Resolver\DataQueryValueResolver;
@@ -32,13 +32,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for calculations where margins are below the minimum.
  */
+#[ForAdmin]
 #[Route(path: '/calculation/below', name: 'calculation_below_')]
-#[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationBelowController extends AbstractController
 {
     use TableTrait;

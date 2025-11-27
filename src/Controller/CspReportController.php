@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Enums\Importance;
-use App\Interfaces\RoleInterface;
 use App\Mime\NotificationEmail;
 use App\Utils\StringUtils;
 use Psr\Log\LoggerInterface;
@@ -23,13 +23,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Translation\TranslatableMessage;
 
 /**
  * Controller to send CSP violations by e-mail.
  */
-#[IsGranted(RoleInterface::ROLE_USER)]
+#[ForUser]
 class CspReportController extends AbstractController
 {
     /**

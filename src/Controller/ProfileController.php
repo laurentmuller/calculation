@@ -13,25 +13,24 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForUser;
 use App\Attribute\GetPostRoute;
 use App\Entity\User;
 use App\Form\AbstractEntityType;
 use App\Form\User\ProfileEditType;
 use App\Form\User\ProfilePasswordType;
-use App\Interfaces\RoleInterface;
 use App\Service\PasswordTooltipService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for the user profile.
  */
+#[ForUser]
 #[Route(path: '/user/profile', name: 'user_profile_')]
-#[IsGranted(RoleInterface::ROLE_USER)]
 class ProfileController extends AbstractController
 {
     public function __construct(private readonly EntityManagerInterface $manager)

@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PostRoute;
 use App\Enums\TableView;
-use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
 use App\Model\IndexQuery;
 use App\Parameter\HomePageParameter;
@@ -30,13 +30,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display the home page.
  */
+#[ForUser]
 #[Route(path: '/', name: self::HOME_PAGE)]
-#[IsGranted(RoleInterface::ROLE_USER)]
 class IndexController extends AbstractController
 {
     use ParameterTrait;

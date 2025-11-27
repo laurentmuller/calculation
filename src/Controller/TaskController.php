@@ -18,6 +18,7 @@ use App\Attribute\CloneEntityRoute;
 use App\Attribute\DeleteEntityRoute;
 use App\Attribute\EditEntityRoute;
 use App\Attribute\ExcelRoute;
+use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
@@ -26,7 +27,6 @@ use App\Entity\Category;
 use App\Entity\Task;
 use App\Form\Task\TaskServiceType;
 use App\Interfaces\EntityInterface;
-use App\Interfaces\RoleInterface;
 use App\Model\TaskComputeQuery;
 use App\Report\TasksReport;
 use App\Repository\TaskRepository;
@@ -42,15 +42,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * The controller for task entities.
  *
  * @extends AbstractEntityController<Task, TaskRepository>
  */
+#[ForUser]
 #[Route(path: '/task', name: 'task_')]
-#[IsGranted(RoleInterface::ROLE_USER)]
 class TaskController extends AbstractEntityController
 {
     public function __construct(TaskRepository $repository)

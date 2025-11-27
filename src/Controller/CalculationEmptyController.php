@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\ExcelRoute;
+use App\Attribute\ForAdmin;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
 use App\Enums\FlashType;
-use App\Interfaces\RoleInterface;
 use App\Report\CalculationsEmptyReport;
 use App\Repository\CalculationRepository;
 use App\Resolver\DataQueryValueResolver;
@@ -30,15 +30,14 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for calculations where items have the price or the quantity is equal to 0.
  *
  * @phpstan-import-type CalculationItemType from CalculationRepository
  */
+#[ForAdmin]
 #[Route(path: '/calculation/empty', name: 'calculation_empty_')]
-#[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationEmptyController extends AbstractController
 {
     use TableTrait;

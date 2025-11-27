@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForAdmin;
+use App\Attribute\ForUser;
 use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Enums\OpenWeatherUnits;
 use App\Form\Type\CountryFlagType;
-use App\Interfaces\RoleInterface;
 use App\Service\OpenWeatherCityUpdater;
 use App\Service\OpenWeatherSearchService;
 use App\Service\OpenWeatherService;
@@ -35,7 +36,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Constraints\Length;
 
 /**
@@ -50,8 +50,8 @@ use Symfony\Component\Validator\Constraints\Length;
  *     limit: int,
  *     cnt: int}
  */
+#[ForUser]
 #[Route(path: '/openweather', name: 'openweather_')]
-#[IsGranted(RoleInterface::ROLE_USER)]
 class OpenWeatherController extends AbstractController
 {
     use CookieTrait;
@@ -238,7 +238,7 @@ class OpenWeatherController extends AbstractController
      *
      * Data can be downloaded from <a href="https://bulk.openweathermap.org/sample/">sample directory</a>.
      */
-    #[IsGranted(RoleInterface::ROLE_ADMIN)]
+    #[ForAdmin]
     #[GetPostRoute(path: '/import', name: 'import')]
     public function import(Request $request, OpenWeatherCityUpdater $updater): Response
     {

@@ -13,17 +13,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForUser;
 use App\Attribute\GetRoute;
-use App\Interfaces\RoleInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to load sidebar and navigation bar.
  */
+#[ForUser]
 #[Route(path: '/navigation', name: 'navigation_')]
-#[IsGranted(RoleInterface::ROLE_USER)]
 class NavigationController extends AbstractController
 {
     /**

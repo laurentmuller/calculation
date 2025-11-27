@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\ForSuperAdmin;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
-use App\Interfaces\RoleInterface;
 use App\Service\ExchangeRateService;
 use App\Utils\FormatUtils;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -23,13 +23,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for the exchange rate service.
  */
+#[ForSuperAdmin]
 #[Route(path: '/exchange', name: 'exchange_')]
-#[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class ExchangeRateController extends AbstractController
 {
     public function __construct(private readonly ExchangeRateService $service)

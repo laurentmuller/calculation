@@ -198,9 +198,9 @@ final class RouteTest extends TestCase
         if (\is_string($methods)) {
             $methods = (array) $methods;
         }
-        self::assertSame($path, $actual->getPath());
-        self::assertSame($name, $actual->getName());
-        self::assertSame($methods, $actual->getMethods());
-        self::assertSame($requirements, $actual->getRequirements());
+        self::assertSame($path, $actual->path);
+        self::assertSame($name, $actual->name);
+        self::assertSame($methods, $actual->methods);
+        self::assertSame($requirements, $actual->requirements);
     }
 }

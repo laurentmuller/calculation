@@ -62,6 +62,7 @@ $(function () {
                     container: $container,
                     progressContainer: $container,
                     verdictKeys: $.validator.messages.passwordLevels,
+
                 };
 
                 // merge and initialize

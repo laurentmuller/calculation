@@ -33,7 +33,7 @@ trait RoleTrait
      * @phpstan-var RoleInterface::ROLE_*|null
      */
     #[Assert\Length(max: 25)]
-    #[Assert\Choice([RoleInterface::ROLE_USER, RoleInterface::ROLE_ADMIN, RoleInterface::ROLE_SUPER_ADMIN])]
+    #[Assert\Choice(choices: [RoleInterface::ROLE_USER, RoleInterface::ROLE_ADMIN, RoleInterface::ROLE_SUPER_ADMIN])]
     #[ORM\Column(length: 25, nullable: true)]
     private ?string $role = null; // @phpstan-ignore doctrine.columnType
 

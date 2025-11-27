@@ -26,7 +26,7 @@ class HomePageParameter implements ParameterInterface
      */
     final public const CALCULATIONS_RANGE = [4, 8, 12, 16, 20];
 
-    #[Assert\Choice(self::CALCULATIONS_RANGE)]
+    #[Assert\Choice(choices: self::CALCULATIONS_RANGE)]
     #[Parameter('calculations', 12)]
     private int $calculations = 12;
 

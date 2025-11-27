@@ -51,7 +51,7 @@ class DataQuery implements SortModeInterface
      *
      * @phpstan-var self::SORT_*
      */
-    #[Assert\Choice([self::SORT_ASC, self::SORT_DESC])]
+    #[Assert\Choice(choices: [self::SORT_ASC, self::SORT_DESC])]
     public string $order = self::SORT_ASC;
 
     /**

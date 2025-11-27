@@ -80,9 +80,12 @@ $files = [
     __DIR__ . '/public/index.php',
 ];
 
+$notName = 'reference.php';
+
 $finder = Finder::create()
     ->in($paths)
-    ->append($files);
+    ->append($files)
+    ->notName($notName);
 
 $config = new Config();
 

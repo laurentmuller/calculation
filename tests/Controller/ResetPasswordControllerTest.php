@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Tests\SessionHelperTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use SymfonyCasts\Bundle\ResetPassword\Exception\FakeRepositoryException;
@@ -21,8 +20,6 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
 final class ResetPasswordControllerTest extends ControllerTestCase
 {
-    use SessionHelperTrait;
-
     #[\Override]
     public static function getRoutes(): \Generator
     {
@@ -61,9 +58,9 @@ final class ResetPasswordControllerTest extends ControllerTestCase
             ->willThrowException(new FakeRepositoryException());
         $this->setService(ResetPasswordHelperInterface::class, $helper);
 
-        $session = $this->getSession($this->client);
-        $session->set('ResetPasswordPublicToken', 'fake');
-        $session->save();
+        $session = $this->client->getSession();
+        $session?->set('ResetPasswordPublicToken', 'fake');
+        $session?->save();
 
         $url = '/reset-password/reset';
         $this->client->request(Request::METHOD_GET, $url);
@@ -78,9 +75,9 @@ final class ResetPasswordControllerTest extends ControllerTestCase
             ->willReturn($user);
         $this->setService(ResetPasswordHelperInterface::class, $helper);
 
-        $session = $this->getSession($this->client);
-        $session->set('ResetPasswordPublicToken', 'fake');
-        $session->save();
+        $session = $this->client->getSession();
+        $session?->set('ResetPasswordPublicToken', 'fake');
+        $session?->save();
 
         $data = [
             'plainPassword[first]' => '$A722-32012d313e5c',

@@ -65,80 +65,62 @@ $(function () {
          * @private
          */
         _onKeyup() {
-            let result;
             const that = this;
             /** @type {string} */
             const text = that.$element.val();
             const options = that.options;
             if (text.length) {
-                // add inputs
-                const inputs = [];
-                const user = that._getInputValue(options.userField);
-                if (user) {
-                    inputs.push(user);
+                const url = that.$element.data('url');
+                if (url) {
+                    const strength = that.$element.data('strength') || 0;
+                    // request values
+                    const request = {
+                        password: text,
+                        strength: Math.max(strength, 0),
+                        user: that._getInputValue(options.userField),
+                        email: that._getInputValue(options.emailField)
+                    };
+                    $.ajaxSetup({global: false});
+                    $.post(url, request, function (data) {
+                        if (options.debug) {
+                            window.console.log(data);
+                        }
+                        that._handleResult(data);
+                    }).always(function () {
+                        $.ajaxSetup({global: true});
+                    });
                 }
-                const email = that._getInputValue(options.emailField);
-                if (email) {
-                    inputs.push(email);
-                }
-                // const url = that.$element.data('url');
-                // if (url) {
-                //     let strength = that.$element.data('strength') || 0;
-                //     // request values
-                //     const request = {
-                //         password: text,
-                //         strength: Math.max(strength, 0)
-                //     };
-                //     if (user) {
-                //         request.user = user;
-                //     }
-                //     if (email) {
-                //         request.email = email;
-                //     }
-                //     /**
-                //      * @param {{result: boolean, score: number, scoreText: string, percent: number}} data
-                //      */
-                //     $.ajaxSetup({global: false});
-                //     $.post(url, request, function (data) {
-                //         window.console.log(data);
-                //         // data.text = data.scoreText;
-                //         // if (options.debug && window.console) {
-                //         //
-                //         // }
-                //     }).always(function () {
-                //         $.ajaxSetup({global: true});
-                //     });
-                // }
-
-                // compute
-                result = zxcvbn(text, inputs);
-
-                // output
-                if (options.debug && window.console) {
-                    window.console.log(result);
-                }
+            } else {
+                that._handleResult(null);
             }
+        }
 
+        /**
+         * @param {Object} data
+         * @private
+         */
+        _handleResult(data) {
             // get verdict
-            const verdict = that._getVerdict(result, options);
+            const options = this.options;
+            const verdict = this._getVerdict(data, options);
 
             // update UI
             let updateUI = false;
-            const $progress = that._getProgress(options);
+            const $progress = this._getProgress(options);
             if ($progress) {
                 updateUI = true;
                 $progress.find('.progress').each(function (index, element) {
                     $(element).toggleClass('d-none', index > verdict.score);
                 });
             }
-            const $label = that._getLabel(options);
+            const $label = this._getLabel(options);
             if ($label) {
                 updateUI = true;
                 $label.text(verdict.text);
             }
             if (options.hideOnEmpty && $progress) {
                 updateUI = true;
-                if (result) {
+                if (data) {
                     $progress.show();
                 } else {
                     $progress.hide();
@@ -146,7 +128,7 @@ $(function () {
             }
 
             // copy
-            that.verdict = verdict;
+            this.verdict = verdict;
 
             // raise events
             if (updateUI && typeof options.onUpdateUI === 'function') {
@@ -160,28 +142,29 @@ $(function () {
         /**
          * Convert the result to a verdict.
          *
-         * @param {ZXCVBNResult} result - the score.
+         * @param {Object} data - the result.
          * @param {Object} options - the plugin options.
          * @return {{score: number, text: string, percent: number}} the verdict
          * @private
          */
-        _getVerdict(result, options) {
-            // value?
-            if (!result) {
+        _getVerdict(data, options) {
+            // result?
+            if (!data || !data.result) {
                 return {
-                    score: 0,
+                    score: -1,
                     percent: 0,
                     text: ''
                 };
             }
 
-            // get text
-            const score = result.score;
-            const key = options.verdictKeys[score];
-            const text = typeof options.translate === 'function' ? options.translate(key) : key;
+            // get values
+            const score = data.score;
+            const value = score.value;
+            const key = options.verdictKeys[value];
+            const text = typeof options.translate === 'function' ? options.translate(key) : score.text;
             return {
-                score: score,
-                percent: (score + 1) * 20,
+                score: value,
+                percent: (value + 1) * 20,
                 text: text
             };
         }
@@ -258,13 +241,12 @@ $(function () {
          */
         _getLabel(options) {
             // already created?
-            const that = this;
-            if (that.$label) {
-                return that.$label;
+            if (this.$label) {
+                return this.$label;
             }
 
             // get the container
-            const $container = that._getContainer(options);
+            const $container = this._getContainer(options);
             if (!$container) {
                 return null;
             }
@@ -276,9 +258,9 @@ $(function () {
             }
 
             // create
-            that.$label = that._createControl('span').appendTo($labelContainer);
+            this.$label = this._createControl('span').appendTo($labelContainer);
 
-            return that.$label;
+            return this.$label;
         }
 
         /**
@@ -305,14 +287,14 @@ $(function () {
          * Gets the content of the given named input.
          *
          * @param {string} name
-         * @return {string|boolean}
+         * @return {string|null}
          * @private
          */
         _getInputValue(name) {
             if (name) {
-                return $(name).val() || false;
+                return $(name).val() || null;
             }
-            return false;
+            return null;
         }
     };
 

@@ -40,10 +40,12 @@ class UserCommentType extends AbstractType
         $data = $options['data'];
         $address = $data->isMail() ? 'to' : 'from';
         $helper->field($address)
+            ->updateOption('prepend_icon', 'fa-solid fa-user')
             ->modelTransformer(new AddressTransformer())
             ->addPlainType();
 
         $helper->field('subject')
+            ->updateOption('prepend_icon', 'fa-regular fa-message')
             ->addTextType();
 
         $helper->field('message')

@@ -52,6 +52,7 @@ class TestEditorController extends AbstractController
             ->addEmailType();
         $helper->field('importance')
             ->label('importance.name')
+            ->updateOption('prepend_icon', 'fa-solid fa-exclamation')
             ->addEnumType(Importance::class);
         $helper->field('message')
             ->updateAttribute('minlength', 10)

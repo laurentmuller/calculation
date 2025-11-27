@@ -57,40 +57,11 @@ $(function () {
                     }).appendTo($parent);
                 }
 
-                // get groups or element
-                const $left = $parent.findExists('.input-group-prepend :first-child') || $element;
-                const $right = $parent.findExists('.input-group-append :last-child') || $element;
-
-                // radius
-                const leftRadius = $left.css('border-bottom-left-radius');
-                const rightRadius = $right.css('border-bottom-right-radius');
-
                 // default options
                 const defaults = {
                     container: $container,
                     progressContainer: $container,
                     verdictKeys: $.validator.messages.passwordLevels,
-                    onUpdateUI: function (verdict) {
-                        // update style
-                        let left = 0;
-                        let right = 0;
-                        switch (verdict.percent) {
-                            case 0:
-                                // both
-                                left = leftRadius;
-                                right = rightRadius;
-                                break;
-                            case 100:
-                                // none
-                                break;
-                            default: // 1-99
-                                // right
-                                right = rightRadius;
-                                break;
-                        }
-                        $left.css('border-bottom-left-radius', left);
-                        $right.css('border-bottom-right-radius', right);
-                    }
                 };
 
                 // merge and initialize

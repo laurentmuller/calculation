@@ -90,10 +90,6 @@
         {
             "from": "node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css",
             "to": "public/build/select2/css/"
-        },
-        {
-            "from": "node_modules/zxcvbn/dist/zxcvbn.js",
-            "to": "public/build/zxcvbn/"
         }
     ],
     "copyFilesSettings": {

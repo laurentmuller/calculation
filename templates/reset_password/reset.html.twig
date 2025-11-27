@@ -8,19 +8,18 @@
 {%- set form_attr = form_attr|default({})|merge({'data-equal_to': 'password.mismatch'|trans([], 'validators')}) -%}
 {# actions #}
 {% block actions_form %}
-{{ parent() }}
-<a href="{{ path('app_login') }}" class="align-self-center">{{ 'security.link'|trans }}</a>
+    {{ parent() }}
+    <a href="{{ path('app_login') }}" class="align-self-center">{{ 'security.link'|trans }}</a>
 {% endblock actions_form %}
 {# javascripts #}
 {% block javascripts %}
-{% if is_js_debug %}
-    {{ parent() }}
-    {{ asset_js('build/zxcvbn/zxcvbn.js') }}
-    {{ asset_js('js/plugins/plugin-password-strength.js') }}
-    {{ asset_js('js/extensions/password-extensions.js') }}
-    {{ asset_js('js/application/user_recaptcha.js') }}
-    {{ asset_js('js/application/user_reset.js') }}
-{% else %}
-    {{ asset_js('js/compiled/user_reset.js') }}
-{% endif %}
+    {% if is_js_debug %}
+        {{ parent() }}
+        {{ asset_js('js/plugins/plugin-password-strength.js') }}
+        {{ asset_js('js/extensions/password-extensions.js') }}
+        {{ asset_js('js/application/user_recaptcha.js') }}
+        {{ asset_js('js/application/user_reset.js') }}
+    {% else %}
+        {{ asset_js('js/compiled/user_reset.js') }}
+    {% endif %}
 {%- endblock javascripts %}

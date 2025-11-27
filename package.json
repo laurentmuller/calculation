@@ -21,8 +21,7 @@
         "mark.js": "^8.0",
         "mermaid": "^11.0",
         "select2": "^4.1.0-rc.0",
-        "select2-bootstrap-5-theme": "^1.0",
-        "zxcvbn": "^4.0"
+        "select2-bootstrap-5-theme": "^1.0"
     },
     "devDependencies": {
         "copy-files-from-to": "^3.0",
@@ -31,8 +30,8 @@
         "stylelint-config-standard": "^39.0"
     },
     "scripts": {
-        "outdated": "npm outdated verbose",
-        "update": "npm update verbose",
+        "outdated": "npm outdated --loglevel info",
+        "update": "npm update --loglevel info",
         "stylelint": "npx stylelint -f verbose public/css/*.css",
         "clean": "del-cli public/build -f",
         "generate": "sass scss:public/build/bootstrap -q --no-source-map",

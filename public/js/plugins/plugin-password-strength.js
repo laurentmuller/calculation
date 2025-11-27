@@ -1,9 +1,5 @@
-/* globals zxcvbn */
-
 /**
  * Ready function
- * @typedef {Object} ZXCVBNResult - the ZXCVBN result
- * @property {number} score
  */
 $(function () {
     'use strict';
@@ -19,7 +15,7 @@ $(function () {
         /**
          * Constructor
          *
-         * @param {HTMLElement} element - the element to handle.
+         * @param {HTMLInputElement} element - the element to handle.
          * @param {Object|string} [options] - the plugin options.
          */
         constructor(element, options) {
@@ -53,89 +49,93 @@ $(function () {
          * @private
          */
         _init() {
-            this.keyupProxy = () => this._onKeyup();
-            this.$element.on('keyup', this.keyupProxy);
-            if (this.$element.val()) {
-                this._onKeyup();
+            const that = this;
+            that.keyupProxy = () => that._onKeyup();
+            that.$element.on('keyup', function () {
+                $(this).updateTimer(that.keyupProxy, 250);
+            });
+            if (that.$element.val()) {
+                that._onKeyup();
             }
         }
 
         /**
-         * Handles the password key up event.
+         * Handles the key up event.
          * @private
          */
         _onKeyup() {
             const that = this;
-            /** @type {string} */
             const text = that.$element.val();
-            const options = that.options;
-            if (text.length) {
-                const url = that.$element.data('url');
-                if (url) {
-                    const strength = that.$element.data('strength') || 0;
-                    // request values
-                    const request = {
-                        password: text,
-                        strength: Math.max(strength, 0),
-                        user: that._getInputValue(options.userField),
-                        email: that._getInputValue(options.emailField)
-                    };
-                    $.ajaxSetup({global: false});
-                    $.post(url, request, function (data) {
-                        if (options.debug) {
-                            window.console.log(data);
-                        }
-                        that._handleResult(data);
-                    }).always(function () {
-                        $.ajaxSetup({global: true});
-                    });
-                }
-            } else {
+            if (!text.length) {
                 that._handleResult(null);
+                return;
             }
+            const url = that.$element.data('url');
+            if (!url) {
+                that._handleResult(null);
+                return;
+            }
+            const options = that.options;
+            const strength = that.$element.data('strength') || 0;
+            // request values
+            const request = {
+                password: text,
+                strength: Math.max(strength, 0),
+                user: that._getInputValue(options.userField),
+                email: that._getInputValue(options.emailField)
+            };
+            $.ajaxSetup({global: false});
+            $.post(url, request, function (data) {
+                if (options.debug) {
+                    window.console.log(data);
+                }
+                that._handleResult(data);
+            }).always(function () {
+                $.ajaxSetup({global: true});
+            });
         }
 
         /**
+         * Handle post call.
          * @param {Object} data
          * @private
          */
         _handleResult(data) {
             // get verdict
             const options = this.options;
-            const verdict = this._getVerdict(data, options);
+            const verdict = this._getVerdict(data);
 
             // update UI
-            let updateUI = false;
             const $progress = this._getProgress(options);
             if ($progress) {
-                updateUI = true;
                 $progress.find('.progress').each(function (index, element) {
-                    $(element).toggleClass('d-none', index > verdict.score);
+                    $(element).toggleClass('d-none', verdict.score < index);
                 });
             }
             const $label = this._getLabel(options);
             if ($label) {
-                updateUI = true;
                 $label.text(verdict.text);
             }
-            if (options.hideOnEmpty && $progress) {
-                updateUI = true;
-                if (data) {
-                    $progress.show();
-                } else {
-                    $progress.hide();
-                }
+            if (options.hideOnEmpty) {
+                this._toggleControl(verdict.result, $progress);
+                this._toggleControl(verdict.result, $label);
             }
+        }
 
-            // copy
-            this.verdict = verdict;
-
-            // raise events
-            if (updateUI && typeof options.onUpdateUI === 'function') {
-                options.onUpdateUI(verdict);
+        /**
+         * Toggle the control visibility
+         * @param {boolean} show
+         * @param {jQuery|any|null} $control
+         * @private
+         */
+        _toggleControl(show, $control) {
+            if (!$control) {
+                return;
             }
-            if (typeof options.onScore === 'function') {
-                options.onScore(verdict);
+            if (show) {
+                $control.show();
+            } else {
+                $control.hide();
             }
         }
 
@@ -143,29 +143,25 @@ $(function () {
          * Convert the result to a verdict.
          *
          * @param {Object} data - the result.
-         * @param {Object} options - the plugin options.
-         * @return {{score: number, text: string, percent: number}} the verdict
+         * @return {{result: boolean, score: number, text: string}}
          * @private
          */
-        _getVerdict(data, options) {
-            // result?
-            if (!data || !data.result) {
+        _getVerdict(data) {
+            // data?
+            if (!data) {
                 return {
+                    result: false,
                     score: -1,
-                    percent: 0,
                     text: ''
                 };
             }
 
             // get values
             const score = data.score;
-            const value = score.value;
-            const key = options.verdictKeys[value];
-            const text = typeof options.translate === 'function' ? options.translate(key) : score.text;
             return {
-                score: value,
-                percent: (value + 1) * 20,
-                text: text
+                result: true,
+                text: score.text,
+                score: score.value
             };
         }
 
@@ -173,7 +169,7 @@ $(function () {
          * Gets the UI container.
          *
          * @param {Object} options - the plugin options.
-         * @return {jQuery} the UI container.
+         * @return {jQuery|any} the UI container.
          * @private
          */
         _getContainer(options) {
@@ -185,7 +181,7 @@ $(function () {
             // find
             this.$container = $(options.container);
             if (!this.$container || this.$container.length === 0) {
-                this.$container = this.$element.parents('.mb-3:first');
+                this.$container = this.$element.parents('.input-group');
             }
 
             return this.$container;
@@ -195,7 +191,7 @@ $(function () {
          * Gets or create the progress bars container.
          *
          * @param {Object} options - the plugin options.
-         * @return {jQuery|null} the progress bar container or null if none found.
+         * @return {jQuery|any|null} the progress bar container or null if none found.
          * @private
          */
         _getProgress(options) {
@@ -206,6 +202,7 @@ $(function () {
             }
 
             // get the container
+            /** @type {jQuery<HTMLElement>|any|null} */
             const $container = that._getContainer(options);
             if (!$container) {
                 return null;
@@ -218,7 +215,7 @@ $(function () {
             }
 
             // create progress
-            that.$progress = that._createControl('div', 'progress-stacked gap-1 bg-transparent', {'height': options.height})
+            that.$progress = that._createControl('div', 'progress-stacked gap-1 flex-grow-1 bg-transparent', {'height': options.height})
                 .appendTo($progressContainer);
 
             // create progress bars
@@ -236,10 +233,15 @@ $(function () {
          * Gets or create the verdict label
          *
          * @param {Object} options - the plugin options.
-         * @return {jQuery|null} the verdict label or null if none.
+         * @return {jQuery|any|null} the verdict label or null if none.
          * @private
          */
         _getLabel(options) {
+            // option?
+            if (!options.labelContainer) {
+                return null;
+            }
+
             // already created?
             if (this.$label) {
                 return this.$label;
@@ -252,13 +254,20 @@ $(function () {
             }
 
             // get the label container
-            const $labelContainer = $container.findExists(options.labelContainer) || options.labelContainer;
-            if (!($labelContainer && $labelContainer.length === 1)) {
+            /** @type {jQuery<HTMLElement>|any|null} */
+            let $labelContainer = null;
+            if ($container.is(options.labelContainer)) {
+                $labelContainer = $container;
+            } else {
+                $labelContainer = $container.findExists(options.labelContainer) || options.labelContainer;
+            }
+            if (!$labelContainer || $labelContainer.length === 0) {
                 return null;
             }
 
             // create
-            this.$label = this._createControl('span').appendTo($labelContainer);
+            this.$label = this._createControl('span', 'small text-body-secondary')
+                .appendTo($labelContainer);
 
             return this.$label;
         }
@@ -269,7 +278,7 @@ $(function () {
          * @param {string} type - the tag type.
          * @param {string} [className] - the class name.
          * @param {Object} [css] - the CSS style.
-         * @return {jQuery} the newly created element.
+         * @return {jQuery|any} the newly created element.
          * @private
          */
         _createControl(type, className, css = {}) {
@@ -284,7 +293,7 @@ $(function () {
         }
 
         /**
-         * Gets the content of the given named input.
+         * Gets the content (value or text) of the given named element.
          *
          * @param {string} name
          * @return {string|null}
@@ -292,7 +301,7 @@ $(function () {
          */
         _getInputValue(name) {
             if (name) {
-                return $(name).val() || null;
+                return $(name).val() || $(name).text().trim() || null;
             }
             return null;
         }
@@ -320,23 +329,11 @@ $(function () {
         // the label container
         labelContainer: null,
 
-        // score change callback function
-        onScore: null,
-
-        // update UI callback function
-        onUpdateUI: null,
-
-        // translation function
-        translate: null,
-
         // hide container on empty password
         hideOnEmpty: true,
 
         // progress height in pixels
         height: 4,
-
-        // verdict keys
-        verdictKeys: ['veryWeak', 'weak', 'normal', 'strong', 'veryStrong'],
 
         // progress bar classes
         progressClasses: ['bg-danger', 'bg-danger', 'bg-warning', 'bg-success', 'bg-primary'],

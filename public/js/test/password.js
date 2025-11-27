@@ -42,7 +42,8 @@ $(function () {
     // password strength
     const $input = $('#form_input');
     $input.initPasswordStrength({
-        labelContainer: $('#form_input_passwordStrength'),
+        emailField: '#form_user_name',
+        userField: '#form_user_email',
         debug: true
     });
 

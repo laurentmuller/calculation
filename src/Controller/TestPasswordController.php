@@ -17,6 +17,7 @@ use App\Attribute\GetPostRoute;
 use App\Constraint\Captcha;
 use App\Constraint\Password;
 use App\Constraint\Strength;
+use App\Entity\User;
 use App\Enums\StrengthLevel;
 use App\Form\Type\AlphaCaptchaType;
 use App\Form\Type\CaptchaImageType;
@@ -29,6 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -45,11 +47,16 @@ class TestPasswordController extends AbstractController
      * @throws \Exception
      */
     #[GetPostRoute(path: '/password', name: 'password')]
-    public function password(Request $request, CaptchaImageService $service): Response
-    {
+    public function password(
+        #[CurrentUser]
+        User $user,
+        Request $request,
+        CaptchaImageService $service
+    ): Response {
         $password = new Password(all: true);
         $options = Password::ALLOWED_OPTIONS;
-        $strength = new Strength(StrengthLevel::MEDIUM);
+        $strengthLevel = StrengthLevel::MEDIUM;
+        $strength = new Strength($strengthLevel);
         $listener = static function (PreSubmitEvent $event) use ($options, $password, $strength): void {
             /** @phpstan-var array $data */
             $data = $event->getData();
@@ -60,8 +67,10 @@ class TestPasswordController extends AbstractController
             $strength->minimum = StrengthLevel::tryFrom($level) ?? StrengthLevel::NONE;
         };
         $data = [
+            'user_name' => $user->getDisplay(),
+            'user_email' => $user->getEmail(),
             'input' => 'aB123456#*/82568A',
-            'level' => StrengthLevel::MEDIUM,
+            'level' => $strengthLevel,
         ];
         foreach ($options as $option) {
             $data[$option] = true;
@@ -71,11 +80,10 @@ class TestPasswordController extends AbstractController
         $helper->field('input')
             ->widgetClass('password-strength')
             ->updateOption('prepend_icon', 'fa-solid fa-lock')
-            ->updateAttribute('data-strength', StrengthLevel::MEDIUM->value)
-            ->updateAttribute(
-                'data-url',
-                $this->generateUrl(route: 'ajax_password', referenceType: UrlGeneratorInterface::ABSOLUTE_URL)
-            )
+            ->updateAttributes([
+                'data-url' => $this->generateUrl(route: 'ajax_password', referenceType: UrlGeneratorInterface::ABSOLUTE_URL),
+                'data-strength' => $strengthLevel->value,
+            ])
             ->minLength(UserInterface::MIN_PASSWORD_LENGTH)
             ->maxLength(UserInterface::MAX_USERNAME_LENGTH)
             ->constraints(
@@ -89,6 +97,13 @@ class TestPasswordController extends AbstractController
                 ->widgetClass('password-option')
                 ->addCheckboxType();
         }
+
+        $helper->field('user_name')
+            ->updateOption('prepend_icon', 'fa-regular fa-user')
+            ->label('user.fields.username_full')
+            ->addPlainType();
+        $helper->field('user_email')
+            ->addHiddenType();
         $helper->field('level')
             ->label('password.strengthLevel')
             ->updateOption('prepend_icon', 'fa-solid fa-hand-fist')

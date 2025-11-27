@@ -13,54 +13,53 @@
 {% block card_body %}
     {{ form_row(form.username) }}
     {{ form_row(form.email) }}
-{% if new %}
-    {{ form_row(form.plainPassword) }}
-    <div class="row">
-        <div class="col-md-8">
-            {{ form_row(form.role) }}
+    {% if new %}
+        {{ form_row(form.plainPassword) }}
+        <div class="row">
+            <div class="col-md-8">
+                {{ form_row(form.role) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_row(form.enabled) }}
+            </div>
         </div>
-        <div class="col-md-4">
-            {{ form_row(form.enabled) }}
+    {% else %}
+        <div class="row">
+            <div class="col-md-4">
+                {{ form_row(form.role) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_row(form.enabled) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_row(form.lastLogin) }}
+            </div>
         </div>
-    </div>
-{% else %}
-    <div class="row">
-        <div class="col-md-4">
-            {{ form_row(form.role) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_row(form.enabled) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_row(form.lastLogin) }}
-        </div>
-    </div>
-{% endif %}
-{{ form_row(form.imageFile) }}
-{% if tooltips is defined and tooltips|length %}
-    {{ password_constraints(tooltips) }}
-{% endif %}
+    {% endif %}
+    {{ form_row(form.imageFile) }}
+    {% if tooltips is defined and tooltips|length %}
+        {{ password_constraints(tooltips) }}
+    {% endif %}
 {% endblock card_body %}
 {# footer #}
 {% block card_footer -%}
-{{ parent() }}
-{{ timestampable_footer(item) }}
+    {{ parent() }}
+    {{ timestampable_footer(item) }}
 {% endblock card_footer %}
 {# stylesheets #}
 {% block stylesheets %}
-{{ asset_css('css/imageinput.css') }}
+    {{ asset_css('css/imageinput.css') }}
 {% endblock stylesheets %}
 {# javascripts #}
 {% block javascripts %}
-{% if is_js_debug %}
-    {{ parent() }}
-    {{ asset_js('build/zxcvbn/zxcvbn.js') }}
-    {{ asset_js('js/plugins/plugin-password-strength.js') }}
-    {{ asset_js('js/plugins/plugin-input-image.js') }}
-    {{ asset_js('js/extensions/image-input-extensions.js') }}
-    {{ asset_js('js/extensions/password-extensions.js') }}
-    {{ asset_js('js/application/user_edit.js') }}
-{% else %}
-    {{ asset_js('js/compiled/user_edit.js') }}
-{% endif %}
+    {% if is_js_debug %}
+        {{ parent() }}
+        {{ asset_js('js/plugins/plugin-password-strength.js') }}
+        {{ asset_js('js/plugins/plugin-input-image.js') }}
+        {{ asset_js('js/extensions/image-input-extensions.js') }}
+        {{ asset_js('js/extensions/password-extensions.js') }}
+        {{ asset_js('js/application/user_edit.js') }}
+    {% else %}
+        {{ asset_js('js/compiled/user_edit.js') }}
+    {% endif %}
 {% endblock javascripts %}

@@ -66,7 +66,7 @@ class PasswordService
         }
 
         $result = $this->getPasswordStrength($query);
-        $response = $this->validateResult($query, $result);
+        $response = $this->validateResult($result);
         if (null !== $response) {
             return $response;
         }
@@ -75,7 +75,7 @@ class PasswordService
         $resultLevel = $result->getStrengthLevel();
 
         return \array_merge($result->toArray(), [
-            'result' => true,
+            'result' => !$resultLevel->isSmaller($queryLevel),
             'minimum' => [
                 'value' => $queryLevel->value,
                 'percent' => $queryLevel->percent(),
@@ -134,14 +134,11 @@ class PasswordService
     /**
      * @phpstan-assert StrengthLevel $result->getStrengthLevel()
      */
-    private function validateResult(PasswordQuery $query, PasswordResult $result): ?array
+    private function validateResult(PasswordResult $result): ?array
     {
         $score = $result->getStrengthLevel();
         if (!$score instanceof StrengthLevel) {
             return $this->getFalseResult($this->translateInvalidLevel($result->score), $result);
-        }
-        if ($score->isSmaller($query->strength)) {
-            return $this->getFalseResult($this->translateScore($query->strength, $score), $result);
         }
 
         return null;

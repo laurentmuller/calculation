@@ -45,7 +45,7 @@ $(function () {
             return this.each(function () {
                 /** @type {jQuery|any} */
                 const $element = $(this);
-                const $parent = $element.parents('.form-group');
+                const $parent = $element.parents('.input-group');
                 const id = $element.attr('id') + '_passwordStrength';
 
                 // find or create a UI container
@@ -53,7 +53,7 @@ $(function () {
                 if ($container.length === 0) {
                     $container = $('<div/>', {
                         'id': id,
-                        'class': 'd-print-none password-strength'
+                        'class': 'd-print-none d-flex gap-1 align-items-start w-100 password-strength'
                     }).appendTo($parent);
                 }
 

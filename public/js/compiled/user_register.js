@@ -4,11 +4,6 @@
 <!--#include file="core_edit.js" -->
 
 /**
- * Vendor Files
- */
-<!--#include file="../../build/zxcvbn/zxcvbn.js" -->
-
-/**
  * Plugin and Common Files
  */
 <!--#include file="../plugins/plugin-password-strength.js" -->

@@ -64,8 +64,11 @@ trait TableTrait
             $this->saveCookie($response, $results, TableInterface::PARAM_ORDER, $query->order, $prefix);
 
             $userParameters = $this->getUserParameters();
-            $userParameters->getDisplay()->setDisplayMode($query->view);
-            $userParameters->save();
+            $display = $userParameters->getDisplay();
+            if ($display->getDisplayMode() !== $query->view) {
+                $display->setDisplayMode($query->view);
+                $userParameters->save();
+            }
 
             return $response;
         } catch (\Throwable $e) {

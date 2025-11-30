@@ -11,14 +11,26 @@
 
 declare(strict_types=1);
 
-use App\Enums\Importance;
-use Symfony\Config\FrameworkConfig;
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-return static function (FrameworkConfig $config): void {
-    $notifier = $config->notifier();
-    foreach (Importance::cases() as $importance) {
-        $notifier->channelPolicy($importance->value, 'email');
-    }
-    $notifier->adminRecipient()
-        ->email('%mailer_user_email%');
-};
+use App\Enums\Importance;
+
+/** @var array<string, string> $channel_policy */
+$channel_policy = \array_reduce(
+    Importance::cases(),
+    static fn (array $carry, Importance $importance): array => $carry + [$importance->value => 'email'],
+    []
+);
+
+return App::config([
+    'framework' => [
+        'notifier' => [
+            'channel_policy' => $channel_policy,
+            'admin_recipients' => [
+                [
+                    'email' => '%mailer_user_email%',
+                ],
+            ],
+        ],
+    ],
+]);

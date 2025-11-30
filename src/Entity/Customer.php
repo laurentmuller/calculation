@@ -17,7 +17,7 @@ use App\Repository\CustomerRepository;
 use App\Utils\DateUtils;
 use App\Utils\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Types\DatePointType;
+use Symfony\Bridge\Doctrine\Types\DayPointType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Intl\Countries;
@@ -37,7 +37,7 @@ class Customer extends AbstractEntity
     #[ORM\Column(nullable: true)]
     private ?string $address = null;
 
-    #[ORM\Column(type: DatePointType::NAME, nullable: true)]
+    #[ORM\Column(type: DayPointType::NAME, nullable: true)]
     private ?DatePoint $birthday = null;
 
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]

@@ -11,12 +11,18 @@
 
 declare(strict_types=1);
 
-use App\Service\UserNamer;
-use Symfony\Config\VichUploaderConfig;
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-return static function (VichUploaderConfig $config): void {
-    $config->dbDriver('orm')
-        ->mappings('user_image')
-        ->namer(UserNamer::class)
-        ->uriPrefix('/images/users');
-};
+use App\Service\UserNamer;
+
+return App::config([
+    'vich_uploader' => [
+        'db_driver' => 'orm',
+        'mappings' => [
+            'user_image' => [
+                'namer' => UserNamer::class,
+                'uri_prefix' => '/images/users',
+            ],
+        ],
+    ],
+]);

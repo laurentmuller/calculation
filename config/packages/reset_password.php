@@ -11,10 +11,13 @@
 
 declare(strict_types=1);
 
-use App\Repository\UserRepository;
-use Symfony\Config\SymfonycastsResetPasswordConfig;
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-return static function (SymfonycastsResetPasswordConfig $config): void {
-    $config->requestPasswordRepository(UserRepository::class)
-        ->throttleLimit(300);
-};
+use App\Repository\UserRepository;
+
+return App::config([
+    'symfonycasts_reset_password' => [
+        'request_password_repository' => UserRepository::class,
+        'throttle_limit' => 300,
+    ],
+]);

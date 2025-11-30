@@ -270,7 +270,7 @@ final class SchemaServiceTest extends TestCase
     {
         $tables = \is_array($tables) ? $tables : [$tables];
         $schemaManager = $this->createMock(MySQLSchemaManager::class);
-        $schemaManager->method('listTables')
+        $schemaManager->method('introspectTables')
             ->willReturn($tables);
 
         return $schemaManager;

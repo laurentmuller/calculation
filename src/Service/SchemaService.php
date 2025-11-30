@@ -25,6 +25,7 @@ use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Index\IndexedColumn;
 use Doctrine\DBAL\Schema\Index\IndexType;
 use Doctrine\DBAL\Schema\Name;
+use Doctrine\DBAL\Schema\NamedObject;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\FloatType;
@@ -265,7 +266,7 @@ class SchemaService
         $primaryKeys = $this->getPrimaryKeys($table);
 
         return \array_map(function (Column $column) use ($primaryKeys, $indexes, $foreignKeys): array {
-            $name = \strtolower($column->getName());
+            $name = \strtolower($this->getName($column));
             $primary = \in_array($name, $primaryKeys, true);
             $unique = $this->isIndexUnique($name, $indexes);
             $foreignTable = $this->findForeignTableName($name, $foreignKeys);
@@ -329,7 +330,7 @@ class SchemaService
             $unique = IndexType::UNIQUE === $index->getType();
 
             return [
-                'name' => $index->getName(),
+                'name' => $this->getName($index),
                 'primary' => $primary,
                 'unique' => $unique,
                 'columns' => $columns,
@@ -360,6 +361,16 @@ class SchemaService
     }
 
     /**
+     * @template N of Name
+     *
+     * @param NamedObject<N> $object
+     */
+    private function getName(NamedObject $object): string
+    {
+        return \trim($object->getObjectName()->toString(), '"');
+    }
+
+    /**
      * @return string[]
      */
     private function getPrimaryKeys(Table $table): array
@@ -384,8 +395,8 @@ class SchemaService
 
     private function getSqlCounter(Table $table): string
     {
-        $tableName = $table->getName();
-        $columnName = $table->getColumns()[0]->getName();
+        $tableName = $this->getName($table);
+        $columnName = $this->getName($table->getColumns()[0]);
 
         return \sprintf('SELECT COUNT(%s) AS TOTAL FROM %s', $columnName, $tableName);
     }
@@ -448,7 +459,7 @@ class SchemaService
     private function loadTables(): array
     {
         $tables = $this->mapToKeyValue(
-            $this->getSchemaManager()->listTables(),
+            $this->getSchemaManager()->introspectTables(),
             fn (Table $table): array => [$this->mapTableName($table) => $this->createSchemaTable($table)]
         );
         \ksort($tables);
@@ -488,7 +499,7 @@ class SchemaService
     private function mapTableName(Table|Name|ClassMetadata|string $name): string
     {
         if ($name instanceof Table) {
-            $name = $name->getName();
+            $name = $this->getName($name);
         } elseif ($name instanceof ClassMetadata) {
             $name = $name->table['name'];
         }

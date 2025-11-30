@@ -18,7 +18,7 @@ use App\Traits\TimestampableTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\DatePoint;
 
-final class TimestampableTraitTest extends TestCase implements TimestampableInterface
+final class TimestampableTraitTest extends TestCase implements \Stringable, TimestampableInterface
 {
     use TimestampableTrait;
 

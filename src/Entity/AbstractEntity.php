@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Base entity.
  */
 #[ORM\MappedSuperclass]
-abstract class AbstractEntity implements EntityInterface
+abstract class AbstractEntity implements \Stringable, EntityInterface
 {
     use MathTrait;
 

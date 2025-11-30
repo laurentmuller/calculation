@@ -11,15 +11,16 @@
 
 declare(strict_types=1);
 
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+
 use App\Service\LogService;
 use Monolog\Formatter\LineFormatter;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Twig\Extra\Markdown\MarkdownInterface;
 
-use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+$path = __DIR__ . '/../src/';
 
-return static function (ContainerConfigurator $config): void {
-    // parameters
-    $values = [
+return App::config([
+    'parameters' => [
         // fixed
         'app_name' => 'Calculation',
         'app_version' => '3.0.0',
@@ -51,44 +52,44 @@ return static function (ContainerConfigurator $config): void {
         // optimize
         '.container.dumper.inline_factories' => true,
         'debug.container.dump' => false,
-    ];
-    $parameters = $config->parameters();
-    foreach ($values as $key => $value) {
-        $parameters->set($key, $value);
-    }
-
-    // default configuration for services
-    $services = $config->services();
-    $services->defaults()
-        ->autowire()
-        ->autoconfigure()
-        ->bind('Twig\Extra\Markdown\MarkdownInterface $markdown', service('twig.markdown.default'));
-
-    // make classes in src available to be used as services
-    $path = __DIR__ . '/../src/';
-    $services->load('App\\', $path . '*')
-        ->exclude([
-            $path . 'Kernel.php',
-            $path . 'Calendar',
-            $path . 'Entity',
-            $path . 'Enums',
-            $path . 'Faker',
-            $path . 'Migrations',
-            $path . 'Model',
-            $path . 'Pdf',
-            $path . 'Report',
-            $path . 'Response',
-            $path . 'Spreadsheet',
-            $path . 'Traits',
-            $path . 'Util',
-            $path . 'Word',
-        ]);
-
-    // custom line formatter
-    $fields = ['datetime', 'channel', 'level_name', 'message', 'context', 'extra'];
-    $fields = \array_map(static fn (string $field): string => '%%' . $field . '%%', $fields);
-    $format = \implode(LogService::SEPARATOR, $fields) . "\n";
-    $services->set(LogService::FORMATTER_NAME, LineFormatter::class)
-        ->args([$format, LogService::DATE_FORMAT])
-        ->call('setBasePath', ['%kernel.project_dir%']);
-};
+    ],
+    'services' => [
+        '_defaults' => [
+            'autowire' => true,
+            'autoconfigure' => true,
+            'bind' => [
+                // Twig\Extra\Markdown\MarkdownInterface
+                MarkdownInterface::class . ' $markdown' => '@twig.markdown.default',
+            ],
+        ],
+        'App\\' => [
+            'resource' => $path . '*/*',
+            'exclude' => [
+                $path . 'Kernel.php',
+                $path . 'Calendar',
+                $path . 'Entity',
+                $path . 'Enums',
+                $path . 'Faker',
+                $path . 'Migrations',
+                $path . 'Model',
+                $path . 'Pdf',
+                $path . 'Report',
+                $path . 'Response',
+                $path . 'Spreadsheet',
+                $path . 'Traits',
+                $path . 'Util',
+                $path . 'Word',
+            ],
+        ],
+        LogService::FORMATTER_NAME => [
+            'class' => LineFormatter::class,
+            'arguments' => [
+                '$format' => "%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n",
+                '$dateFormat' => LogService::DATE_FORMAT,
+            ],
+            'calls' => [
+                ['setBasePath' => ['%kernel.project_dir%']],
+            ],
+        ],
+    ],
+]);

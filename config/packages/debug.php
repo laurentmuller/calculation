@@ -13,17 +13,18 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use ReCaptcha\ReCaptcha;
-use ReCaptcha\RequestMethod\Post;
-
 return App::config([
-    'services' => [
-        'recaptcha_request_method' => [
-            'class' => Post::class,
+    'when@dev' => [
+        'debug' => [
+            'dump_destination' => 'tcp://%env(VAR_DUMPER_SERVER)%',
         ],
-        ReCaptcha::class => [
-            '$secret' => '%google_recaptcha_secret_key%',
-            '$requestMethod' => '@recaptcha_request_method',
+        'web_profiler' => [
+            'toolbar' => true,
+        ],
+    ],
+    'when@test' => [
+        'web_profiler' => [
+            'toolbar' => false,
         ],
     ],
 ]);

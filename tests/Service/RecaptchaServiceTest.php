@@ -16,6 +16,7 @@ namespace App\Tests\Service;
 use App\Service\RecaptchaService;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\TestCase;
+use ReCaptcha\ReCaptcha;
 use ReCaptcha\Response;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -86,7 +87,8 @@ final class RecaptchaServiceTest extends TestCase
     private function createService(): RecaptchaService
     {
         $translator = $this->createMockTranslator();
+        $reCaptcha = new ReCaptcha('secretKey');
 
-        return new RecaptchaService(self::SITE_KEY, 'secretKey', $translator);
+        return new RecaptchaService(self::SITE_KEY, $reCaptcha, $translator);
     }
 }

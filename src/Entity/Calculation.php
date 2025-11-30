@@ -26,7 +26,7 @@ use App\Utils\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Types\DatePointType;
+use Symfony\Bridge\Doctrine\Types\DayPointType;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -53,7 +53,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * The date.
      */
     #[Assert\NotNull]
-    #[ORM\Column(type: DatePointType::NAME)]
+    #[ORM\Column(type: DayPointType::NAME)]
     private DatePoint $date;
 
     /**

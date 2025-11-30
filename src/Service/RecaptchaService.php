@@ -34,19 +34,12 @@ class RecaptchaService
     private ?Response $lastResponse = null;
     private float $scoreThreshold = 0.5;
 
-    /**
-     * @param string              $siteKey    the site key (public key)
-     * @param string              $secretKey  the secret key (the key between the site and reCAPTCHA)
-     * @param TranslatorInterface $translator the translator used for errors
-     */
     public function __construct(
         #[\SensitiveParameter]
         #[Autowire('%google_recaptcha_site_key%')]
         private readonly string $siteKey,
-        #[\SensitiveParameter]
-        #[Autowire('%google_recaptcha_secret_key%')]
-        private readonly string $secretKey,
-        private readonly TranslatorInterface $translator
+        private readonly ReCaptcha $reCaptcha,
+        private readonly TranslatorInterface $translator,
     ) {
     }
 
@@ -163,12 +156,11 @@ class RecaptchaService
     public function verify(string $response, Request $request): Response
     {
         $this->lastResponse = null;
-        $recaptcha = new ReCaptcha($this->secretKey);
-        $recaptcha->setChallengeTimeout($this->challengeTimeout)
+        $this->reCaptcha->setChallengeTimeout($this->challengeTimeout)
             ->setScoreThreshold($this->scoreThreshold)
             ->setExpectedAction($this->expectedAction)
             ->setExpectedHostname($request->getHost());
 
-        return $this->lastResponse = $recaptcha->verify($response, $request->getClientIp());
+        return $this->lastResponse = $this->reCaptcha->verify($response, $request->getClientIp());
     }
 }

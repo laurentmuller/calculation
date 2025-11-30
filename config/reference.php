@@ -1547,7 +1547,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     monolog?: MonologConfig,
  *     security?: SecurityConfig,
  *     twig?: TwigConfig,
- *     web_profiler?: WebProfilerConfig,
  *     twig_extra?: TwigExtraConfig,
  *     vich_uploader?: VichUploaderConfig,
  *     "when@dev"?: array{
@@ -1566,6 +1565,22 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         security?: SecurityConfig,
  *         twig?: TwigConfig,
  *         web_profiler?: WebProfilerConfig,
+ *         twig_extra?: TwigExtraConfig,
+ *         vich_uploader?: VichUploaderConfig,
+ *     },
+ *     "when@prod"?: array{
+ *         imports?: ImportsConfig,
+ *         parameters?: ParametersConfig,
+ *         services?: ServicesConfig,
+ *         doctrine?: DoctrineConfig,
+ *         elao_enum?: ElaoEnumConfig,
+ *         highcharts?: HighchartsConfig,
+ *         symfonycasts_reset_password?: SymfonycastsResetPasswordConfig,
+ *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
+ *         framework?: FrameworkConfig,
+ *         monolog?: MonologConfig,
+ *         security?: SecurityConfig,
+ *         twig?: TwigConfig,
  *         twig_extra?: TwigExtraConfig,
  *         vich_uploader?: VichUploaderConfig,
  *     },
@@ -1666,6 +1681,7 @@ namespace Symfony\Component\Routing\Loader\Configurator;
  * }
  * @psalm-type RoutesConfig = array{
  *     "when@dev"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
+ *     "when@prod"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
  *     "when@test"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
  *     ...<string, RouteConfig|ImportConfig|AliasConfig>
  * }

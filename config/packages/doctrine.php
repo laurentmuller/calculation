@@ -11,28 +11,74 @@
 
 declare(strict_types=1);
 
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+
 use App\Types\FixedFloatType;
-use Symfony\Config\DoctrineConfig;
 
-return static function (DoctrineConfig $config): void {
-    $dbal = $config->dbal();
-    $dbal->connection('default')
-        ->url('%env(resolve:DATABASE_URL)%')
-        ->profilingCollectBacktrace('%kernel.debug%');
-    $dbal->type(FixedFloatType::NAME)
-        ->class(FixedFloatType::class);
-
-    $orm = $config->orm();
-    $orm->autoGenerateProxyClasses(true)
-        ->proxyDir('%kernel.cache_dir%/doctrine/orm/Proxies');
-    $orm->controllerResolver()
-        ->autoMapping(false);
-
-    $manager = $orm->entityManager('default');
-    $manager->namingStrategy('doctrine.orm.naming_strategy.underscore_number_aware');
-    $manager->mapping('App')
-        ->type('attribute')
-        ->dir('%kernel.project_dir%/src/Entity')
-        ->prefix('App\Entity')
-        ->alias('App');
-};
+return App::config([
+    'doctrine' => [
+        'dbal' => [
+            'connections' => [
+                'default' => [
+                    'url' => '%env(resolve:DATABASE_URL)%',
+                    'profiling_collect_backtrace' => '%kernel.debug%',
+                ],
+            ],
+            'types' => [FixedFloatType::NAME => FixedFloatType::class],
+        ],
+        'orm' => [
+            'auto_generate_proxy_classes' => true,
+            'proxy_dir' => '%kernel.cache_dir%/doctrine/orm/Proxies',
+            'controller_resolver' => [
+                'auto_mapping' => false,
+            ],
+            'entity_managers' => [
+                'default' => [
+                    'naming_strategy' => 'doctrine.orm.naming_strategy.underscore_number_aware',
+                    'mappings' => [
+                        'App' => [
+                            'type' => 'attribute',
+                            'dir' => '%kernel.project_dir%/src/Entity',
+                            'prefix' => 'App\Entity',
+                            'alias' => 'App',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'when@prod' => [
+        'doctrine' => [
+            'orm' => [
+                'auto_generate_proxy_classes' => false,
+                'entity_managers' => [
+                    'default' => [
+                        'metadata_cache_driver' => [
+                            'type' => 'pool',
+                            'pool' => 'doctrine.metadata',
+                        ],
+                        'query_cache_driver' => [
+                            'type' => 'pool',
+                            'pool' => 'doctrine.query',
+                        ],
+                        'result_cache_driver' => [
+                            'type' => 'pool',
+                            'pool' => 'doctrine.result',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'when@test' => [
+        'doctrine' => [
+            'dbal' => [
+                'connections' => [
+                    'default' => [
+                        'logging' => false,
+                    ],
+                ],
+            ],
+        ],
+    ],
+]);

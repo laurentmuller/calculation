@@ -11,48 +11,48 @@
 
 declare(strict_types=1);
 
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+
 use App\Parameter\ApplicationParameters;
 use App\Parameter\UserParameters;
 use App\Utils\FormatUtils;
-use Symfony\Config\TwigConfig;
 
-use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
-
-return static function (TwigConfig $config): void {
-    // theme and paths
-    $config->formThemes(['fields.html.twig'])
-        ->path('%kernel.project_dir%/public/css', 'css')
-        ->path('%kernel.project_dir%/public/images', 'images');
-
-    // date format
-    $config->date()
-        ->format('d.m.Y H:i:s')
-        ->intervalFormat('%%d jours');
-
-    // number format
-    $config->numberFormat()
-        ->decimals(FormatUtils::FRACTION_DIGITS)
-        ->decimalPoint(FormatUtils::DECIMAL_SEP)
-        ->thousandsSeparator(FormatUtils::THOUSANDS_SEP);
-
-    // global parameters
-    $globals = [
-        'app_name' => '%app_name%',
-        'app_version' => '%app_version%',
-        'app_name_version' => '%app_name_version%',
-        'app_owner_name' => '%app_owner_name%',
-        'app_owner_url' => '%app_owner_url%',
-        'app_owner_city' => '%app_owner_city%',
-        'app_description' => '%app_description%',
-        'app_mode' => '%app_mode%',
-        'cookie_path' => '%cookie_path%',
-        'mailer_user_email' => '%mailer_user_email%',
-        'link_dev' => '%link_dev%',
-        'link_prod' => '%link_prod%',
-        'user_params' => service(UserParameters::class),
-        'app_params' => service(ApplicationParameters::class),
-    ];
-    foreach ($globals as $key => $value) {
-        $config->global($key, $value);
-    }
-};
+return App::config([
+    'twig' => [
+        'form_themes' => ['fields.html.twig'],
+        'paths' => [
+            '%kernel.project_dir%/public/css' => 'css',
+            '%kernel.project_dir%/public/images' => 'images',
+        ],
+        'date' => [
+            'format' => 'd.m.Y H:i:s',
+            'interval_format' => '%%d jours',
+        ],
+        'number_format' => [
+            'decimals' => FormatUtils::FRACTION_DIGITS,
+            'decimal_point' => FormatUtils::DECIMAL_SEP,
+            'thousands_separator' => FormatUtils::THOUSANDS_SEP,
+        ],
+        'globals' => [
+            'app_name' => '%app_name%',
+            'app_version' => '%app_version%',
+            'app_name_version' => '%app_name_version%',
+            'app_owner_name' => '%app_owner_name%',
+            'app_owner_url' => '%app_owner_url%',
+            'app_owner_city' => '%app_owner_city%',
+            'app_description' => '%app_description%',
+            'app_mode' => '%app_mode%',
+            'cookie_path' => '%cookie_path%',
+            'mailer_user_email' => '%mailer_user_email%',
+            'link_dev' => '%link_dev%',
+            'link_prod' => '%link_prod%',
+            'user_params' => '@' . UserParameters::class,
+            'app_params' => '@' . ApplicationParameters::class,
+        ],
+    ],
+    'when@test' => [
+        'twig' => [
+            'strict_variables' => true,
+        ],
+    ],
+]);

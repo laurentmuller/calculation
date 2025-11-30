@@ -11,78 +11,86 @@
 
 declare(strict_types=1);
 
-use Symfony\Config\FrameworkConfig;
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-return static function (FrameworkConfig $config): void {
-    $fifteen_minutes = 900;
-    $one_hour = 3_600;
-    $one_day = 86_400;
-    $one_month = 2_592_000;
+$oneHour = 3_600;
+$oneDay = 86_400;
+$oneMonth = 2_592_000;
+$fifteenMinutes = 900;
 
-    $cache = $config->cache();
+$prefix = 'calculation.';
+$adapter = 'cache.adapter.filesystem';
 
-    // ApplicationService
-    $cache->pool('calculation.application')
-        ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime($one_hour);
-
-    // UserService
-    $config->cache()->pool('calculation.user')
-        ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime($one_hour);
-
-    // SymfonyInfoService
-    $config->cache()->pool('calculation.symfony')
-        ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime($one_day);
-
-    // ConstantExtension
-    $config->cache()->pool('calculation.constant')
-        ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime($one_day);
-
-    // HelpService
-    $config->cache()->pool('calculation.help')
-        ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime($one_day);
-
-    // CommandService
-    $config->cache()->pool('calculation.command')
-        ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime($one_day);
-
-    // CacheService
-    $config->cache()->pool('calculation.cache')
-        ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime($one_day);
-
-    // AssetVersionService
-    $config->cache()->pool('calculation.asset')
-        ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime($one_day);
-
-    // ResponseListener
-    $config->cache()->pool('calculation.response')
-        ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime($one_day);
-
-    // SearchService
-    $config->cache()->pool('calculation.search')
-        ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime($one_day);
-
-    // LogService
-    $config->cache()->pool('calculation.log')
-        ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime($fifteen_minutes);
-
-    // SchemaService
-    $config->cache()->pool('calculation.schema')
-        ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime($one_day);
-
-    // FontAwesomeImageService
-    $config->cache()->pool('calculation.fontawesome')
-        ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime($one_month);
-};
+return App::config([
+    'framework' => [
+        'cache' => [
+            'pools' => [
+                // ApplicationService
+                $prefix . 'application' => [
+                    'adapter' => $adapter,
+                    'default_lifetime' => $oneHour,
+                ],
+                // UserService
+                $prefix . 'user' => [
+                    'adapter' => $adapter,
+                    'default_lifetime' => $oneHour,
+                ],
+                // SymfonyInfoService
+                $prefix . 'symfony' => [
+                    'adapter' => $adapter,
+                    'default_lifetime' => $oneDay,
+                ],
+                // ConstantExtension
+                $prefix . 'constant' => [
+                    'adapter' => $adapter,
+                    'default_lifetime' => $oneDay,
+                ],
+                // HelpService
+                $prefix . 'help' => [
+                    'adapter' => $adapter,
+                    'default_lifetime' => $oneDay,
+                ],
+                // CommandService
+                $prefix . 'command' => [
+                    'adapter' => $adapter,
+                    'default_lifetime' => $oneDay,
+                ],
+                // CacheService
+                $prefix . 'cache' => [
+                    'adapter' => $adapter,
+                    'default_lifetime' => $oneDay,
+                ],
+                // AssetVersionService
+                $prefix . 'asset' => [
+                    'adapter' => $adapter,
+                    'default_lifetime' => $oneDay,
+                ],
+                // ResponseListener
+                $prefix . 'response' => [
+                    'adapter' => $adapter,
+                    'default_lifetime' => $oneDay,
+                ],
+                // SearchService
+                $prefix . 'search' => [
+                    'adapter' => $adapter,
+                    'default_lifetime' => $oneDay,
+                ],
+                // LogService
+                $prefix . 'log' => [
+                    'adapter' => $adapter,
+                    'default_lifetime' => $fifteenMinutes,
+                ],
+                // SchemaService
+                $prefix . 'schema' => [
+                    'adapter' => $adapter,
+                    'default_lifetime' => $oneDay,
+                ],
+                // FontAwesomeImageService
+                $prefix . 'fontawesome' => [
+                    'adapter' => $adapter,
+                    'default_lifetime' => $oneMonth,
+                ],
+            ],
+        ],
+    ],
+]);

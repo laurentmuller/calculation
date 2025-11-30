@@ -40,6 +40,7 @@ enum OpenWeatherUnits: string implements EnumSortableInterface, PdfEnumDefaultIn
      */
     #[EnumCase(extras: ['degree' => '°F', 'speed' => 'mph'])]
     case IMPERIAL = 'imperial';
+
     /**
      * Metric unit.
      */
@@ -47,7 +48,7 @@ enum OpenWeatherUnits: string implements EnumSortableInterface, PdfEnumDefaultIn
     case METRIC = 'metric';
 
     /**
-     * Gets this attributes.
+     * Gets these attributes.
      *
      * @return array<string, string>
      */

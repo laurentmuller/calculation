@@ -122,10 +122,12 @@ class AjaxController extends AbstractController
         $view = $this->getRequestEnum($request, TableInterface::PARAM_VIEW, TableView::TABLE);
         $this->updateCookie($response, TableInterface::PARAM_VIEW, $view);
 
-        $params = $this->getUserParameters();
-        $params->getDisplay()
-            ->setDisplayMode($view);
-        $params->save();
+        $userParameters = $this->getUserParameters();
+        $display = $userParameters->getDisplay();
+        if ($display->getDisplayMode() !== $view) {
+            $display->setDisplayMode($view);
+            $userParameters->save();
+        }
 
         return $response;
     }

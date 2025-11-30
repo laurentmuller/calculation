@@ -17,7 +17,6 @@ use App\Entity\Customer;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use Symfony\Component\Validator\Constraints\IsNullValidator;
-use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 /**
@@ -176,7 +175,7 @@ final class CustomerTest extends ConstraintValidatorTestCase
     }
 
     #[\Override]
-    protected function createValidator(): ConstraintValidatorInterface
+    protected function createValidator(): IsNullValidator
     {
         return new IsNullValidator();
     }

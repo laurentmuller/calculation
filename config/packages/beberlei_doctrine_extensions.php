@@ -11,22 +11,60 @@
 
 declare(strict_types=1);
 
-use DoctrineExtensions\Query\Mysql as DbFunction;
-use Symfony\Config\DoctrineConfig;
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-return static function (DoctrineConfig $config): void {
-    $dql = $config->orm()
-        ->entityManager('default')
-        ->dql();
+use DoctrineExtensions\Query\Mysql as MySqlFunction;
+use DoctrineExtensions\Query\Sqlite as SqliteFunction;
 
-    $dql->datetimeFunction('date_format', DbFunction\DateFormat::class)
-        ->datetimeFunction('day', DbFunction\Day::class)
-        ->datetimeFunction('month', DbFunction\Month::class)
-        ->datetimeFunction('week', DbFunction\Week::class)
-        ->datetimeFunction('year', DbFunction\Year::class);
-
-    $dql->numericFunction('round', DbFunction\Round::class);
-
-    $dql->stringFunction('ifelse', DbFunction\IfElse::class)
-        ->stringFunction('ifnull', DbFunction\IfNull::class);
-};
+return App::config([
+    'doctrine' => [
+        'orm' => [
+            'entity_managers' => [
+                'default' => [
+                    'dql' => [
+                        'datetime_functions' => [
+                            'date_format' => MySqlFunction\DateFormat::class,
+                            'day' => MySqlFunction\Day::class,
+                            'month' => MySqlFunction\Month::class,
+                            'week' => MySqlFunction\Week::class,
+                            'year' => MySqlFunction\Year::class,
+                        ],
+                        'numeric_functions' => [
+                            'round' => MySqlFunction\Round::class,
+                        ],
+                        'string_functions' => [
+                            'ifelse' => MySqlFunction\IfElse::class,
+                            'ifnull' => MySqlFunction\IfNull::class,
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'when@test' => [
+        'doctrine' => [
+            'orm' => [
+                'entity_managers' => [
+                    'default' => [
+                        'dql' => [
+                            'datetime_functions' => [
+                                'date_format' => SqliteFunction\DateFormat::class,
+                                'day' => SqliteFunction\Day::class,
+                                'month' => SqliteFunction\Month::class,
+                                'week' => SqliteFunction\Week::class,
+                                'year' => SqliteFunction\Year::class,
+                            ],
+                            'numeric_functions' => [
+                                'round' => SqliteFunction\Round::class,
+                            ],
+                            'string_functions' => [
+                                'ifelse' => SqliteFunction\IfElse::class,
+                                'ifnull' => SqliteFunction\IfNull::class,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+]);

@@ -171,7 +171,7 @@ final class AjaxControllerTest extends ControllerTestCase
     public function testSaveTable(): void
     {
         $parameters = [
-            'view' => 'table',
+            'view' => 'custom',
         ];
 
         $content = $this->checkRoute(

@@ -116,9 +116,8 @@ class SymfonyReport extends AbstractReport
 
     private function outputInfo(): void
     {
-        $symfonyService = $this->symfonyService;
-        $kernelService = $this->kernelService;
-
+        $symfony = $this->symfonyService;
+        $kernel = $this->kernelService;
         $this->addBookmark('Kernel');
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
@@ -127,33 +126,33 @@ class SymfonyReport extends AbstractReport
                 PdfColumn::left('Value', 85)
             );
         $table->setGroupKey('Kernel')->outputHeaders();
-        $this->outputRow($table, 'Environment', $this->trans($kernelService->getEnvironment()))
-            ->outputRow($table, 'Running Mode', $this->trans($kernelService->getMode()))
-            ->outputRow($table, 'Version status', $symfonyService->getMaintenanceStatus())
-            ->outputRowEnabled($table, 'Long-Term support', $symfonyService->isLongTermSupport())
-            ->outputRow($table, 'End of maintenance', $symfonyService->getEndOfMaintenance())
-            ->outputRow($table, 'End of product life', $symfonyService->getEndOfLife());
+        $this->outputRow($table, 'Environment', $this->trans($kernel->getEnvironment()))
+            ->outputRow($table, 'Running Mode', $this->trans($kernel->getMode()))
+            ->outputRow($table, 'Version status', $symfony->getMaintenanceStatus())
+            ->outputRowEnabled($table, 'Long-Term support', $symfony->isLongTermSupport())
+            ->outputRow($table, 'End of maintenance', $symfony->getEndOfMaintenance())
+            ->outputRow($table, 'End of product life', $symfony->getEndOfLife());
 
         $this->addBookmark('Parameters', false, 1);
         $table->setGroupKey('Parameters');
-        $this->outputRow($table, 'Architecture', $symfonyService->getArchitecture())
-            ->outputRow($table, 'Charset', $kernelService->getCharset())
-            ->outputRow($table, 'Intl Locale', $symfonyService->getLocaleName())
-            ->outputRow($table, 'Timezone', $symfonyService->getTimeZone());
+        $this->outputRow($table, 'Architecture', $symfony->getArchitecture())
+            ->outputRow($table, 'Charset', $kernel->getCharset())
+            ->outputRow($table, 'Intl Locale', $symfony->getLocaleName())
+            ->outputRow($table, 'Timezone', $symfony->getTimeZone())
+            ->outputRowEnabled($table, 'Debug', $kernel->isDebug());
 
         $this->addBookmark('Extensions', false, 1);
         $table->setGroupKey('Extensions');
-        $this->outputRowEnabled($table, 'APCu', $symfonyService->isApcuEnabled(), $symfonyService->getApcuStatus())
-            ->outputRowEnabled($table, 'Debug', $kernelService->isDebug())
-            ->outputRowEnabled($table, 'OPCache', $symfonyService->isOpCacheEnabled(), $symfonyService->getOpCacheStatus())
-            ->outputRowEnabled($table, 'Xdebug', $symfonyService->isXdebugEnabled(), $symfonyService->getXdebugStatus());
+        $this->outputRowEnabled($table, 'APCu', $symfony->isApcuEnabled(), $symfony->getApcuStatus())
+            ->outputRowEnabled($table, 'OPCache', $symfony->isOpCacheEnabled(), $symfony->getOpCacheStatus())
+            ->outputRowEnabled($table, 'Xdebug', $symfony->isXdebugEnabled(), $symfony->getXdebugStatus());
 
         $this->addBookmark('Directories', false, 1);
         $table->setGroupKey('Directories');
-        $this->outputRow($table, 'Project', $kernelService->getProjectDir())
-            ->outputDirectoryRow($table, $kernelService->getCacheInfo())
-            ->outputDirectoryRow($table, $kernelService->getBuildInfo())
-            ->outputDirectoryRow($table, $kernelService->getLogInfo());
+        $this->outputRow($table, 'Project', $kernel->getProjectDir())
+            ->outputDirectoryRow($table, $kernel->getCacheInfo())
+            ->outputDirectoryRow($table, $kernel->getBuildInfo())
+            ->outputDirectoryRow($table, $kernel->getLogInfo());
     }
 
     /**

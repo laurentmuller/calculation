@@ -25,8 +25,7 @@ use fpdf\Enums\PdfTextAlignment;
  * Report for application commands.
  *
  * @phpstan-import-type CommandType from CommandService
- * @phpstan-import-type ArgumentType from CommandService
- * @phpstan-import-type OptionType from CommandService
+ * @phpstan-import-type InputType from CommandService
  *
  * @extends AbstractArrayReport<CommandType[]>
  */
@@ -84,14 +83,14 @@ class CommandsReport extends AbstractArrayReport
         $this->applyFixedStyle();
         $width = \array_reduce(
             $command['arguments'],
-            /** @phpstan-param ArgumentType $argument */
+            /** @phpstan-param InputType $argument */
             fn (float $carry, array $argument): float => \max($carry, $this->getStringWidth($argument['name'])),
             $width
         );
         $width = \array_reduce(
             $command['options'],
-            /** @phpstan-param OptionType $option */
-            fn (float $carry, array $option): float => \max($carry, $this->getStringWidth($option['name_shortcut'])),
+            /** @phpstan-param InputType $option */
+            fn (float $carry, array $option): float => \max($carry, $this->getStringWidth($option['shortcutName'])),
             $width
         );
         $this->resetStyle();
@@ -136,7 +135,7 @@ class CommandsReport extends AbstractArrayReport
     }
 
     /**
-     * @phpstan-param array<string, ArgumentType> $arguments
+     * @phpstan-param array<string, InputType> $arguments
      */
     private function renderArguments(array $arguments, float $width): void
     {
@@ -218,7 +217,7 @@ class CommandsReport extends AbstractArrayReport
     }
 
     /**
-     * @phpstan-param array<string, OptionType> $options
+     * @phpstan-param array<string, InputType> $options
      */
     private function renderOptions(array $options, float $width): void
     {
@@ -230,7 +229,7 @@ class CommandsReport extends AbstractArrayReport
         foreach ($options as $option) {
             $help = $this->getDescriptionHelp($option['description'], $option['arguments']);
             $this->indent();
-            $this->renderFixedCell($option['name_shortcut'], $width);
+            $this->renderFixedCell($option['shortcutName'], $width);
             $this->renderStyledHelp($help);
         }
         $this->lineBreak(1.0);

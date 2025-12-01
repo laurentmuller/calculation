@@ -26,13 +26,16 @@ final class CommandFormServiceTest extends KernelServiceTestCase
     public function testBoolArgument(): void
     {
         $argument = [
-            'name' => 'fake',
-            'is_required' => false,
-            'is_array' => false,
-            'description' => 'fake',
-            'default' => true,
-            'display' => 'fake',
-            'arguments' => 'fake',
+            'name' => 'Argument',
+            'shortcut' => '',
+            'shortcutName' => '',
+            'description' => 'Description',
+            'isRequired' => false,
+            'isArray' => false,
+            'isAcceptValue' => false,
+            'default' => 'Default',
+            'display' => 'Display',
+            'arguments' => 'Arguments',
         ];
         $command = [
             'name' => 'fake',

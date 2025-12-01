@@ -17,8 +17,7 @@ namespace App\Service;
  * Service to generate and validate command parameters.
  *
  * @phpstan-import-type CommandType from CommandService
- * @phpstan-import-type ArgumentType from CommandService
- * @phpstan-import-type OptionType from CommandService
+ * @phpstan-import-type InputType from CommandService
  */
 class CommandDataService
 {

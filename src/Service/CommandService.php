@@ -25,22 +25,14 @@ use Symfony\Contracts\Cache\CacheInterface;
 /**
  * Service to get or run commands.
  *
- * @phpstan-type ArgumentType = array{
- *     name: string,
- *     is_required: bool,
- *     is_array: bool,
- *     description: string,
- *     default: array|scalar|null,
- *     display: string,
- *     arguments: string}
- * @phpstan-type OptionType = array{
+ * @phpstan-type InputType= array{
  *     name: string,
  *     shortcut: string,
- *     name_shortcut: string,
- *     accept_value: bool,
- *     is_value_required: bool,
- *     is_multiple: bool,
+ *     shortcutName: string,
  *     description: string,
+ *     isRequired: bool,
+ *     isArray: bool,
+ *     isAcceptValue: bool,
  *     default: array|scalar|null,
  *     display: string,
  *     arguments: string}
@@ -50,8 +42,26 @@ use Symfony\Contracts\Cache\CacheInterface;
  *      usage: string[],
  *      help: string,
  *      hidden: bool,
- *      arguments: array<string, ArgumentType>,
- *      options: array<string, OptionType>}
+ *      arguments: array<string, InputType>,
+ *      options: array<string, InputType>}
+ * @phpstan-type ArgumentSourceType = array{
+ *      name: string,
+ *      is_required: bool,
+ *      is_array: bool,
+ *      description: string,
+ *      default: array|scalar|null,
+ *      display: string,
+ *      arguments: string}
+ * @phpstan-type OptionSourceType = array{
+ *      name: string,
+ *      shortcut: string,
+ *      accept_value: bool,
+ *      is_value_required: bool,
+ *      is_multiple: bool,
+ *      description: string,
+ *      default: array|scalar|null,
+ *      display: string,
+ *      arguments: string}
  * @phpstan-type CommandSourceType = array{
  *      name: string,
  *      description: string,
@@ -59,8 +69,8 @@ use Symfony\Contracts\Cache\CacheInterface;
  *      help: string,
  *      hidden: bool,
  *      definition: array{
- *          arguments: array<string, ArgumentType>,
- *          options: array<string, OptionType>}
+ *          arguments: array<string, ArgumentSourceType>,
+ *          options: array<string, OptionSourceType>}
  *     }
  */
 class CommandService implements \Countable
@@ -235,28 +245,6 @@ class CommandService implements \Countable
     }
 
     /**
-     * @phpstan-param ArgumentType $argument
-     */
-    private function getArgumentHelp(array $argument): string
-    {
-        $values = [];
-        if ($argument['is_required']) {
-            $values[] = '<span class="text-danger">required</span>';
-        }
-        $display = $argument['display'];
-        if ('[]' === $display || $argument['is_array']) {
-            $values[] = '<span class="text-secondary">multiple values allowed</span>';
-        } elseif ('' !== $display) {
-            $values[] = \sprintf('default: <span class="text-secondary">%s</span>', $display);
-        }
-        if ([] === $values) {
-            return '';
-        }
-
-        return \sprintf('(%s)', \implode(', ', $values));
-    }
-
-    /**
      * @template TValue
      *
      * @param callable(CommandType):TValue $callback
@@ -293,35 +281,6 @@ class CommandService implements \Countable
     }
 
     /**
-     * @phpstan-param OptionType $option
-     */
-    private function getOptionHelp(array $option): string
-    {
-        $values = [];
-        if ($option['is_value_required']) {
-            $values[] = '<span class="text-danger">required</span>';
-        }
-        $display = $option['display'];
-        if ('[]' === $display || $option['is_multiple']) {
-            $values[] = '<span class="text-secondary">multiple values allowed</span>';
-        } elseif ('' !== $display) {
-            $values[] = \sprintf('default: <span class="text-secondary">%s</span>', $display);
-        }
-        if ([] === $values) {
-            return '';
-        }
-
-        return \sprintf('(%s)', \implode(', ', $values));
-    }
-
-    private function getOptionNameAndShortcut(string $name, string $shortcut): string
-    {
-        $format = '' === $shortcut ? '%4s%s' : '%s, %s';
-
-        return \sprintf($format, $shortcut, $name);
-    }
-
-    /**
      * @phpstan-return array<string, CommandType>
      *
      * @throws \Exception
@@ -352,53 +311,35 @@ class CommandService implements \Countable
         return $commands;
     }
 
-    private function replaceCarriageReturn(string $subject): string
-    {
-        return \str_replace("\r", '', $subject);
-    }
-
-    private function replaceConsole(string $subject): string
-    {
-        return \str_replace(self::CONSOLE_REPLACE, 'bin/console', $subject);
-    }
-
     /**
-     * @phpstan-param array<string, ArgumentType> $arguments
+     * @phpstan-param array<string, ArgumentSourceType> $arguments
      *
-     * @phpstan-return array<string, ArgumentType>
+     * @phpstan-return array<string, InputType>
      */
-    private function updateArguments(array $arguments): array
+    private function parseArguments(array $arguments): array
     {
-        foreach ($arguments as &$argument) {
-            $argument['description'] = $this->updateHelp($argument['description']);
-            $argument['display'] = $this->encodeDefaultValue($argument['default']);
-            $argument['arguments'] = $this->getArgumentHelp($argument);
+        $result = [];
+        foreach ($arguments as $key => $argument) {
+            $display = $this->encodeDefaultValue($argument['default']);
+            $required = $this->parseRequiredArgument($argument);
+            $result[$key] = [
+                'name' => $argument['name'],
+                'shortcut' => '',
+                'shortcutName' => '',
+                'description' => $this->parseDescription($argument['description']),
+                'isRequired' => $required,
+                'isAcceptValue' => false,
+                'isArray' => $argument['is_array'],
+                'default' => $argument['default'],
+                'display' => $display,
+                'arguments' => $this->parseHelpArgument($argument, $display, $required),
+            ];
         }
 
-        return $arguments;
+        return $result;
     }
 
-    /**
-     * @phpstan-param CommandSourceType $command
-     *
-     * @phpstan-return CommandType
-     */
-    private function updateCommand(array $command): array
-    {
-        $command['arguments'] = $this->updateArguments($command['definition']['arguments']);
-        $command['options'] = $this->updateOptions($command['definition']['options']);
-        $command['help'] = $command['help'] === $command['description'] ? '' : $this->updateHelp($command['help']);
-        if ([] === $command['arguments']) {
-            $command['usage'] = [\sprintf('%s [options]', $command['name'])];
-        } else {
-            $command['usage'] = StringUtils::pregReplaceAll(self::USAGE_REPLACE, $command['usage']);
-        }
-        unset($command['definition']);
-
-        return $command;
-    }
-
-    private function updateHelp(string $help): string
+    private function parseDescription(string $help): string
     {
         if (!StringUtils::isString($help)) {
             return $help;
@@ -411,20 +352,144 @@ class CommandService implements \Countable
     }
 
     /**
-     * @phpstan-param array<string, OptionType> $options
-     *
-     * @phpstan-return array<string, OptionType>
+     * @phpstan-param ArgumentSourceType $argument
      */
-    private function updateOptions(array $options): array
+    private function parseHelpArgument(array $argument, string $display, bool $required): string
     {
-        foreach ($options as &$option) {
-            $option['description'] = $this->updateHelp($option['description']);
-            $option['display'] = $this->encodeDefaultValue($option['default']);
-            $option['arguments'] = $this->getOptionHelp($option);
-            $option['name_shortcut'] = $this->getOptionNameAndShortcut($option['name'], $option['shortcut']);
+        $values = [];
+        if ($required) {
+            $values[] = '<span class="text-danger">required</span>';
+        }
+        if ('[]' === $display || $argument['is_array']) {
+            $values[] = '<span class="text-secondary">multiple values allowed</span>';
+        } elseif ('' !== $display) {
+            $values[] = \sprintf('default: <span class="text-secondary">%s</span>', $display);
+        }
+        if ([] === $values) {
+            return '';
         }
 
-        return $options;
+        return \sprintf('(%s)', \implode(', ', $values));
+    }
+
+    /**
+     * @phpstan-param OptionSourceType $option
+     */
+    private function parseHelpOption(array $option, string $display, bool $required): string
+    {
+        $values = [];
+        if ($required) {
+            $values[] = '<span class="text-danger">required</span>';
+        }
+        if ('[]' === $display || $option['is_multiple']) {
+            $values[] = '<span class="text-secondary">multiple values allowed</span>';
+        } elseif ('' !== $display) {
+            $values[] = \sprintf('default: <span class="text-secondary">%s</span>', $display);
+        }
+        if ([] === $values) {
+            return '';
+        }
+
+        return \sprintf('(%s)', \implode(', ', $values));
+    }
+
+    /**
+     * @phpstan-param array<string, OptionSourceType> $options
+     *
+     * @phpstan-return array<string, InputType>
+     */
+    private function parseOptions(array $options): array
+    {
+        $result = [];
+        foreach ($options as $key => $option) {
+            $name = $option['name'];
+            $display = $this->encodeDefaultValue($option['default']);
+            $required = $this->parseRequiredOption($option);
+            $shortcut = $option['shortcut'];
+            $result[$key] = [
+                'name' => $name,
+                'shortcut' => $shortcut,
+                'shortcutName' => $this->parseShortcut($name, $shortcut),
+                'description' => $this->parseDescription($option['description']),
+                'isRequired' => $required,
+                'isAcceptValue' => $option['accept_value'],
+                'isArray' => $option['is_multiple'],
+                'default' => $option['default'],
+                'display' => $display,
+                'arguments' => $this->parseHelpOption($option, $display, $required),
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @phpstan-param ArgumentSourceType $argument
+     */
+    private function parseRequiredArgument(array $argument): bool
+    {
+        if (!$argument['is_required']) {
+            return false;
+        }
+
+        if (null === $argument['default']) {
+            return false;
+        }
+
+        return !($argument['is_array'] && \is_array($argument['default']));
+    }
+
+    /**
+     * @phpstan-param OptionSourceType $option
+     */
+    private function parseRequiredOption(array $option): bool
+    {
+        if (!$option['is_value_required']) {
+            return false;
+        }
+
+        if (null === $option['default']) {
+            return false;
+        }
+
+        return !($option['is_multiple'] && \is_array($option['default']));
+    }
+
+    private function parseShortcut(string $name, string $shortcut): string
+    {
+        $format = '' === $shortcut ? '%4s%s' : '%s, %s';
+
+        return \sprintf($format, $shortcut, $name);
+    }
+
+    private function replaceCarriageReturn(string $subject): string
+    {
+        return \str_replace("\r", '', $subject);
+    }
+
+    private function replaceConsole(string $subject): string
+    {
+        return \str_replace(self::CONSOLE_REPLACE, 'bin/console', $subject);
+    }
+
+    /**
+     * @phpstan-param CommandSourceType $command
+     *
+     * @phpstan-return CommandType
+     */
+    private function updateCommand(array $command): array
+    {
+        $command['arguments'] = $this->parseArguments($command['definition']['arguments']);
+        $command['options'] = $this->parseOptions($command['definition']['options']);
+        $command['help'] = $command['help'] === $command['description'] ? '' : $this->parseDescription($command['help']);
+        if ([] === $command['arguments']) {
+            $command['usage'] = [\sprintf('%s [options]', $command['name'])];
+        } else {
+            $command['usage'] = StringUtils::pregReplaceAll(self::USAGE_REPLACE, $command['usage']);
+        }
+        unset($command['definition']);
+
+        return $command;
     }
 
     private function updateOutput(string $output): string

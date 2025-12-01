@@ -24,8 +24,7 @@ use Symfony\Component\Form\FormView;
  * Service to build form for a command.
  *
  * @phpstan-import-type CommandType from CommandService
- * @phpstan-import-type ArgumentType from CommandService
- * @phpstan-import-type OptionType from CommandService
+ * @phpstan-import-type InputType from CommandService
  */
 readonly class CommandFormService
 {
@@ -66,8 +65,8 @@ readonly class CommandFormService
         $helper = new FormHelper($builder);
 
         $transformer = $this->createDataTransformer();
-        $this->addArguments($helper, $command, $transformer);
-        $this->addOptions($helper, $command, $transformer);
+        $this->addArguments($helper, $command['arguments'], $transformer);
+        $this->addOptions($helper, $command['options'], $transformer);
 
         return $helper->createForm();
     }
@@ -88,43 +87,36 @@ readonly class CommandFormService
     }
 
     /**
-     * @phpstan-param CommandType $command
+     * @phpstan-param array<string, InputType> $inputs
      */
-    private function addArguments(FormHelper $helper, array $command, CallbackTransformer $transformer): void
+    private function addArguments(FormHelper $helper, array $inputs, CallbackTransformer $transformer): void
     {
-        foreach ($command['arguments'] as $key => $argument) {
-            if ($this->isArgumentText($argument)) {
-                if ($argument['is_array']) {
-                    $this->addTextArgument($helper, $key, $argument, $transformer);
-                } else {
-                    $this->addTextArgument($helper, $key, $argument);
-                }
+        foreach ($inputs as $key => $input) {
+            $field = CommandDataService::getArgumentKey($key);
+            if ($this->isArgumentText($input)) {
+                $this->addTextField(
+                    helper: $helper,
+                    priority: self::ARGUMENT_TEXT,
+                    field: $field,
+                    name: $input['name'],
+                    description: $input['description'],
+                    required: $input['isRequired'],
+                    transformer: $input['isArray'] ? $transformer : null
+                );
                 continue;
             }
 
-            if (\is_bool($argument['default'])) {
-                $this->addBoolArgument($helper, $key, $argument);
+            if (\is_bool($input['default'])) {
+                $this->addBoolField(
+                    helper: $helper,
+                    priority: self::ARGUMENT_BOOL,
+                    field: $field,
+                    name: $input['name'],
+                    description: $input['description'],
+                    required: $input['isRequired']
+                );
             }
         }
-    }
-
-    /**
-     * @phpstan-param ArgumentType $argument
-     */
-    private function addBoolArgument(
-        FormHelper $helper,
-        string $key,
-        array $argument
-    ): void {
-        $field = CommandDataService::getArgumentKey($key);
-        $this->addBoolField(
-            $helper,
-            self::ARGUMENT_BOOL,
-            $field,
-            $argument['name'],
-            $argument['description'],
-            $argument['is_required']
-        );
     }
 
     private function addBoolField(
@@ -147,64 +139,36 @@ readonly class CommandFormService
     }
 
     /**
-     * @phpstan-param OptionType $option
+     * @phpstan-param array<string, InputType> $inputs
      */
-    private function addBoolOption(
-        FormHelper $helper,
-        string $key,
-        array $option
-    ): void {
-        $field = CommandDataService::getOptionKey($key);
-        $this->addBoolField(
-            $helper,
-            self::OPTION_BOOL,
-            $field,
-            $option['name'],
-            $option['description'],
-            $option['is_value_required']
-        );
-    }
-
-    /**
-     * @phpstan-param CommandType $command
-     */
-    private function addOptions(FormHelper $helper, array $command, CallbackTransformer $transformer): void
+    private function addOptions(FormHelper $helper, array $inputs, CallbackTransformer $transformer): void
     {
-        foreach ($command['options'] as $key => $option) {
-            if ($this->isOptionText($option)) {
-                if ($option['is_multiple']) {
-                    $this->addTextOption($helper, $key, $option, $transformer);
-                } else {
-                    $this->addTextOption($helper, $key, $option);
-                }
+        foreach ($inputs as $key => $input) {
+            $field = CommandDataService::getOptionKey($key);
+            if ($this->isOptionText($input)) {
+                $this->addTextField(
+                    helper: $helper,
+                    priority: self::OPTION_TEXT,
+                    field: $field,
+                    name: $input['name'],
+                    description: $input['description'],
+                    required: $input['isRequired'],
+                    transformer: $input['isArray'] ? $transformer : null
+                );
                 continue;
             }
 
-            if (!$option['accept_value'] || \is_bool($option['default'])) {
-                $this->addBoolOption($helper, $key, $option);
+            if (!$input['isAcceptValue'] || \is_bool($input['default'])) {
+                $this->addBoolField(
+                    helper: $helper,
+                    priority: self::OPTION_BOOL,
+                    field: $field,
+                    name: $input['name'],
+                    description: $input['description'],
+                    required: $input['isRequired']
+                );
             }
         }
-    }
-
-    /**
-     * @phpstan-param ArgumentType $argument
-     */
-    private function addTextArgument(
-        FormHelper $helper,
-        string $key,
-        array $argument,
-        ?CallbackTransformer $transformer = null
-    ): void {
-        $field = CommandDataService::getArgumentKey($key);
-        $this->addTextField(
-            $helper,
-            self::ARGUMENT_TEXT,
-            $field,
-            $argument['name'],
-            $argument['description'],
-            $argument['is_required'],
-            $transformer
-        );
     }
 
     private function addTextField(
@@ -217,7 +181,9 @@ readonly class CommandFormService
         ?CallbackTransformer $transformer = null,
     ): void {
         $attributes = $this->getTooltipAttributes($name, $description);
-        $required = $transformer instanceof CallbackTransformer ? false : $required;
+        if ($transformer instanceof CallbackTransformer) {
+            $required = false;
+        }
         $helper->field($field)
             ->label($name)
             ->rowClass('col-6 col-md-3')
@@ -227,27 +193,6 @@ readonly class CommandFormService
             ->required($required)
             ->domain(false)
             ->addTextType();
-    }
-
-    /**
-     * @phpstan-param OptionType $option
-     */
-    private function addTextOption(
-        FormHelper $helper,
-        string $key,
-        array $option,
-        ?CallbackTransformer $transformer = null
-    ): void {
-        $field = CommandDataService::getOptionKey($key);
-        $this->addTextField(
-            $helper,
-            self::OPTION_TEXT,
-            $field,
-            $option['name'],
-            $option['description'],
-            $option['is_value_required'],
-            $transformer
-        );
     }
 
     private function createDataTransformer(): CallbackTransformer
@@ -280,15 +225,15 @@ readonly class CommandFormService
     }
 
     /**
-     * @phpstan-param ArgumentType $argument
+     * @phpstan-param InputType $input
      */
-    private function isArgumentText(array $argument): bool
+    private function isArgumentText(array $input): bool
     {
-        if ($argument['is_array']) {
+        if ($input['isArray']) {
             return true;
         }
 
-        $default = $argument['default'];
+        $default = $input['default'];
         if (\is_bool($default)) {
             return false;
         }
@@ -297,14 +242,14 @@ readonly class CommandFormService
     }
 
     /**
-     * @phpstan-param OptionType $option
+     * @phpstan-param InputType $input
      */
-    private function isOptionText(array $option): bool
+    private function isOptionText(array $input): bool
     {
-        if ($option['is_multiple']) {
+        if ($input['isArray']) {
             return true;
         }
 
-        return $option['accept_value'] && !\is_bool($option['default']);
+        return $input['isAcceptValue'] && !\is_bool($input['default']);
     }
 }

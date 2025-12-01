@@ -114,8 +114,8 @@ class SymfonyDocument extends AbstractDocument
      */
     private function outputInfo(): void
     {
-        $symfonyService = $this->symfonyService;
-        $kernelService = $this->kernelService;
+        $symfony = $this->symfonyService;
+        $kernel = $this->kernelService;
         $this->setActiveTitle('Symfony', $this->controller);
         $sheet = $this->getActiveSheet();
         $row = $sheet->setHeaders([
@@ -123,30 +123,30 @@ class SymfonyDocument extends AbstractDocument
             'Value' => HeaderFormat::instance(),
         ]);
         $this->outputGroup($sheet, $row++, 'Kernel')
-            ->outputRow($sheet, $row++, 'Environment', $this->trans($kernelService->getEnvironment()))
-            ->outputRow($sheet, $row++, 'Running Mode', $this->trans($kernelService->getMode()))
-            ->outputRow($sheet, $row++, 'Version status', $symfonyService->getMaintenanceStatus())
-            ->outputRowEnabled($sheet, $row++, 'Long-Term support', $symfonyService->isLongTermSupport())
-            ->outputRow($sheet, $row++, 'End of maintenance', $symfonyService->getEndOfMaintenance())
-            ->outputRow($sheet, $row++, 'End of product life', $symfonyService->getEndOfLife());
+            ->outputRow($sheet, $row++, 'Environment', $this->trans($kernel->getEnvironment()))
+            ->outputRow($sheet, $row++, 'Running Mode', $this->trans($kernel->getMode()))
+            ->outputRow($sheet, $row++, 'Version status', $symfony->getMaintenanceStatus())
+            ->outputRowEnabled($sheet, $row++, 'Long-Term support', $symfony->isLongTermSupport())
+            ->outputRow($sheet, $row++, 'End of maintenance', $symfony->getEndOfMaintenance())
+            ->outputRow($sheet, $row++, 'End of product life', $symfony->getEndOfLife());
 
         $this->outputGroup($sheet, $row++, 'Parameters')
-            ->outputRow($sheet, $row++, 'Architecture', $symfonyService->getArchitecture())
-            ->outputRow($sheet, $row++, 'Charset', $kernelService->getCharset())
-            ->outputRow($sheet, $row++, 'Intl Locale', $symfonyService->getLocaleName())
-            ->outputRow($sheet, $row++, 'Timezone', $symfonyService->getTimeZone());
+            ->outputRow($sheet, $row++, 'Architecture', $symfony->getArchitecture())
+            ->outputRow($sheet, $row++, 'Charset', $kernel->getCharset())
+            ->outputRow($sheet, $row++, 'Intl Locale', $symfony->getLocaleName())
+            ->outputRow($sheet, $row++, 'Timezone', $symfony->getTimeZone())
+            ->outputRowEnabled($sheet, $row++, 'Xdebug', $symfony->isXdebugEnabled(), $symfony->getXdebugStatus());
 
         $this->outputGroup($sheet, $row++, 'Extensions')
-            ->outputRowEnabled($sheet, $row++, 'APCu', $symfonyService->isApcuEnabled(), $symfonyService->getApcuStatus())
-            ->outputRowEnabled($sheet, $row++, 'Debug', $kernelService->isDebug())
-            ->outputRowEnabled($sheet, $row++, 'OPCache', $symfonyService->isOpCacheEnabled(), $symfonyService->getOpCacheStatus())
-            ->outputRowEnabled($sheet, $row++, 'Xdebug', $symfonyService->isXdebugEnabled(), $symfonyService->getXdebugStatus());
+            ->outputRowEnabled($sheet, $row++, 'APCu', $symfony->isApcuEnabled(), $symfony->getApcuStatus())
+            ->outputRowEnabled($sheet, $row++, 'Debug', $kernel->isDebug())
+            ->outputRowEnabled($sheet, $row++, 'OPCache', $symfony->isOpCacheEnabled(), $symfony->getOpCacheStatus());
 
         $this->outputGroup($sheet, $row++, 'Directories')
-            ->outputRow($sheet, $row++, 'Project', $kernelService->getProjectDir())
-            ->outputDirectoryRow($sheet, $row++, $kernelService->getCacheInfo())
-            ->outputDirectoryRow($sheet, $row++, $kernelService->getBuildInfo())
-            ->outputDirectoryRow($sheet, $row, $kernelService->getLogInfo());
+            ->outputRow($sheet, $row++, 'Project', $kernel->getProjectDir())
+            ->outputDirectoryRow($sheet, $row++, $kernel->getCacheInfo())
+            ->outputDirectoryRow($sheet, $row++, $kernel->getBuildInfo())
+            ->outputDirectoryRow($sheet, $row, $kernel->getLogInfo());
 
         $sheet->setAutoSize(1, 2)
             ->finish();

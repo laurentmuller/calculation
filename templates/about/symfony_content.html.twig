@@ -119,7 +119,7 @@
             {{ tools.rowInfo('Running Mode', kernelService.mode|trans) }}
             {{ tools.rowInfo('Status', symfonyService.maintenanceStatus) }}
             {{ tools.rowInfo('Release', symfonyService.releaseDate) }}
-            {{ tools.rowInfoBoolean('Long-Term support', symfonyService.longTermSupport|boolean) }}
+            {{ tools.rowInfoBoolean('Long-Term support', symfonyService.longTermSupport) }}
             {{ tools.rowInfo('End of maintenance', symfonyService.endOfMaintenance) }}
             {{ tools.rowInfo('End of product life', symfonyService.endOfLife) }}
         </tbody>
@@ -137,6 +137,7 @@
                 {{ tools.rowInfo('Charset', kernelService.charset) }}
                 {{ tools.rowInfo('Intl Locale', symfonyService.localeName) }}
                 {{ tools.rowInfo('Timezone', symfonyService.timezone) }}
+                {{ tools.rowInfoBoolean('Debug', kernelService.debugStatus, kernelService.debug) }}
                 </tbody>
             </table>
         </div>
@@ -147,7 +148,6 @@
                 {{ _self.headerNameValue() }}
                 <tbody>
                 {{ tools.rowInfoBoolean('APCu', symfonyService.apcuStatus, symfonyService.apcuEnabled) }}
-                {{ tools.rowInfoBoolean('Debug', kernelService.debugStatus, kernelService.debug) }}
                 {{ tools.rowInfoBoolean('OPcache', symfonyService.opCacheStatus, symfonyService.opCacheEnabled) }}
                 {{ tools.rowInfoBoolean('Xdebug', symfonyService.xDebugStatus, symfonyService.xdebugEnabled) }}
                 </tbody>

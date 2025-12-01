@@ -22,8 +22,8 @@
 {% macro tooltipArgument(argument) -%}
     <div class="mx-2 mt-1">
         <table class="table table-sm">
-            {{ _self.outputEntryRow('Required', argument.is_required|json_encode) }}
-            {{ _self.outputEntryRow('Array', argument.is_array|json_encode) }}
+            {{ _self.outputEntryRow('Required', argument.isRequired|json_encode) }}
+            {{ _self.outputEntryRow('Array', argument.isArray|json_encode) }}
             {%- if argument.display -%}
                 {{ _self.outputEntryRow('Default', argument.display, 'text-secondary') }}
             {% endif %}
@@ -33,10 +33,10 @@
 {% macro tooltipOption(option) -%}
     <div class="mx-2 mt-1">
         <table class="table table-sm">
-            {{ _self.outputEntryRow('Value Required', option.is_value_required|json_encode) }}
-            {{ _self.outputEntryRow('Accept Value', option.accept_value|json_encode) }}
-            {{ _self.outputEntryRow('Multiple', option.is_multiple|json_encode) }}
-            {% if option.accept_value and option.display %}
+            {{ _self.outputEntryRow('Value Required', option.isRequired|json_encode) }}
+            {{ _self.outputEntryRow('Accept Value', option.isAcceptValue|json_encode) }}
+            {{ _self.outputEntryRow('Multiple', option.isArray|json_encode) }}
+            {% if option.isAcceptValue and option.display %}
                 {{ _self.outputEntryRow('Default', option.display, 'text-secondary') }}
             {% endif %}
         </table>
@@ -70,7 +70,7 @@
         {{ _self.outputTitleLine('command.list.fields.options') }}
         <div class="ms-3 mt-2 mb-3">
             {% for option in command.options %}
-                {{ _self.outputPopoverRow(option.name_shortcut, option.description, option.arguments, _self.tooltipOption(option)) }}
+                {{ _self.outputPopoverRow(option.shortcutName, option.description, option.arguments, _self.tooltipOption(option)) }}
             {% endfor %}
         </div>
     {% endif %}

@@ -57,14 +57,11 @@ class CommandController extends AbstractController
         SessionInterface $session,
     ): JsonResponse {
         if (!$service->hasCommand($name)) {
-            return $this->jsonFalse([
-                'message' => $this->trans('command.list.error', ['%name%' => $name]),
-            ]);
+            return $this->jsonFalse(['message' => $this->trans('command.list.error', ['%name%' => $name])]);
         }
 
         $command = $service->getCommand($name);
         $session->set(self::LAST_COMMAND, $name);
-
         $view = $this->renderView('command/_command.htm.twig', ['command' => $command]);
         $lines = \array_map(\trim(...), \explode(StringUtils::NEW_LINE, \trim($view)));
         $view = \implode('', \array_filter($lines));

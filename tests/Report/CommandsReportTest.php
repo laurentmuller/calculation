@@ -29,18 +29,24 @@ final class CommandsReportTest extends TestCase
 
         $argument1 = [
             'name' => 'Argument',
-            'is_required' => false,
-            'is_array' => false,
+            'shortcut' => '',
+            'shortcutName' => '',
             'description' => 'Description',
+            'isRequired' => false,
+            'isArray' => false,
+            'isAcceptValue' => false,
             'default' => 'Default',
             'display' => 'Display',
             'arguments' => 'Arguments',
         ];
         $argument2 = [
             'name' => 'Argument',
-            'is_required' => false,
-            'is_array' => false,
+            'shortcut' => '',
+            'shortcutName' => '',
             'description' => '',
+            'isRequired' => false,
+            'isArray' => false,
+            'isAcceptValue' => false,
             'default' => 'Default',
             'display' => '',
             'arguments' => '',
@@ -48,11 +54,11 @@ final class CommandsReportTest extends TestCase
         $option = [
             'name' => 'Option',
             'shortcut' => 'Shortcut',
-            'name_shortcut' => 'Name Shortcut',
-            'accept_value' => true,
-            'is_value_required' => true,
-            'is_multiple' => true,
+            'shortcutName' => 'Name Shortcut',
             'description' => 'Description',
+            'isRequired' => true,
+            'isArray' => true,
+            'isAcceptValue' => true,
             'default' => 'Default',
             'display' => 'Display',
             'arguments' => 'Arguments',
@@ -67,7 +73,9 @@ final class CommandsReportTest extends TestCase
                 'Argument1' => $argument1,
                 'Argument2' => $argument2,
             ],
-            'options' => ['Option' => $option],
+            'options' => [
+                'Option' => $option,
+            ],
         ];
         $command2 = [
             'name' => 'Command2',

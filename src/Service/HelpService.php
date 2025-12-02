@@ -192,12 +192,6 @@ class HelpService
 
         return \array_reduce(
             $dialogs,
-            /**
-             * @phpstan-param array<string, HelpDialogType[]> $carry
-             * @phpstan-param HelpDialogType $dialog
-             *
-             * @phpstan-return array<string, HelpDialogType[]>
-             */
             static function (array $carry, array $dialog): array {
                 $key = $dialog['group'];
                 $carry[$key][] = $dialog;

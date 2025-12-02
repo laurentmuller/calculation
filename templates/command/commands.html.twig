@@ -9,17 +9,20 @@
 {% block card_body %}
 <div class="mb-3">
     <label for="command" class="form-label">{{ 'command.list.fields.command'|trans }}</label>
-    <select id="command" name="command" class="form-select" data-url="{{ path('command_content', {name: 'query'}) }}">
-    {% for key, names in commands %}
-        <optgroup label="{{ key }}">
-        {% for name in names %}
-            <option{% if name == command.name %} selected{% endif %}>{{ name }}</option>
-        {% endfor %}
-        </optgroup>
-    {% endfor %}
-    </select>
+    <div class="input-group">
+        <span class="input-group-text" id="basic-addon1"><i class="fa-fw fa-solid fa-terminal"></i></span>
+        <select id="command" name="command" class="form-select" data-url="{{ path('command_content') }}">
+            {% for key, names in commands %}
+                <optgroup label="{{ key }}">
+                    {% for name in names %}
+                        <option{% if name == command.name %} selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </optgroup>
+            {% endfor %}
+        </select>
+    </div>
 </div>
-{{ include('command/_command.htm.twig', {command: command}, with_context: false) }}
+{{ include('command/_command.htm.twig', {command: command, query: query}, with_context: false) }}
 {% endblock card_body %}
 {# footer #}
 {% block card_footer %}

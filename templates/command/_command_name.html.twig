@@ -1,7 +1,12 @@
 <div class="mb-3">
     <span class="form-label">{{ 'command.list.fields.command'|trans }}</span>
-    <div class="form-control-read-only">
-        <span>{{ command.name }}</span>
+    <div class="input-group">
+        <div class="input-group-text">
+            <i class="fa-fw fa-solid fa-terminal"></i>
+        </div>
+        <div class="form-control-read-only">
+            <span>{{ command.name }}</span>
+        </div>
     </div>
     {% if command.description %}
         <div class="form-text mb-0 help-text">{{ command.description|raw }}</div>

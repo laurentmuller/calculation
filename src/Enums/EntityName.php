@@ -108,7 +108,6 @@ enum EntityName: string implements ConstantsInterface, EnumSortableInterface, Tr
     {
         return \array_reduce(
             self::cases(),
-            /** @phpstan-param array<string, string> $carry */
             static fn (array $carry, self $type): array => $carry + ['ENTITY_' . $type->name => $type->value],
             [],
         );

@@ -293,10 +293,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         // merge duplicated items
         return \array_reduce(
             $array,
-            /**
-             * @param CalculationItem[] $carry
-             * @param CalculationItem[] $items
-             */
             static function (array $carry, array $items): array {
                 if (\count($items) > 1) {
                     return \array_merge($carry, \array_values($items));

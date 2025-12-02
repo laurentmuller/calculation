@@ -18,6 +18,7 @@ use App\Attribute\GetPostRoute;
 use App\Attribute\GetRoute;
 use App\Attribute\IndexRoute;
 use App\Attribute\PdfRoute;
+use App\Model\CommandQuery;
 use App\Report\CommandsReport;
 use App\Service\CommandDataService;
 use App\Service\CommandFormService;
@@ -29,6 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -45,61 +47,32 @@ class CommandController extends AbstractController
     private const LAST_COMMAND = 'last_command';
 
     /**
-     * Render a single command.
-     *
-     * MapQueryString
+     * Render a single command content.
      */
     #[GetRoute(path: '/content', name: 'content')]
-    public function command(
-        #[MapQueryParameter]
-        string $name,
+    public function content(
+        #[MapQueryString]
+        CommandQuery $query,
         CommandService $service,
         SessionInterface $session,
     ): JsonResponse {
+        $name = $query->name ?? '';
         if (!$service->hasCommand($name)) {
             return $this->jsonFalse(['message' => $this->trans('command.list.error', ['%name%' => $name])]);
         }
-
         $command = $service->getCommand($name);
         $session->set(self::LAST_COMMAND, $name);
-        $view = $this->renderView('command/_command.htm.twig', ['command' => $command]);
+        $view = $this->renderView('command/_command.htm.twig', [
+            'command' => $command,
+            'query' => $query,
+        ]);
         $lines = \array_map(\trim(...), \explode(StringUtils::NEW_LINE, \trim($view)));
         $view = \implode('', \array_filter($lines));
 
-        return $this->jsonTrue(['content' => $view]);
-    }
-
-    /**
-     * Show all commands.
-     */
-    #[GetRoute(path: IndexRoute::PATH, name: 'all')]
-    public function commands(
-        CommandService $service,
-        SessionInterface $session,
-        #[MapQueryParameter]
-        ?string $name = null,
-    ): Response {
-        $count = $service->count();
-        if (0 === $count) {
-            return $this->redirectToHomePage('command.list.empty');
-        }
-
-        $name ??= (string) $session->get(self::LAST_COMMAND);
-        if (StringUtils::isString($name) && $service->hasCommand($name)) {
-            $command = $service->getCommand($name);
-        } else {
-            $command = $service->first();
-        }
-        $session->set(self::LAST_COMMAND, $name);
-        $root = $this->trans('command.list.available');
-        $commands = $service->getGroupedNames($root);
-        $parameters = [
-            'commands' => $commands,
-            'command' => $command,
-            'count' => $count,
-        ];
-
-        return $this->render('command/commands.html.twig', $parameters);
+        return $this->jsonTrue([
+            'content' => $view,
+            'query' => $query,
+        ]);
     }
 
     /**
@@ -159,6 +132,42 @@ class CommandController extends AbstractController
         ];
 
         return $this->render('command/command_query.html.twig', $parameters);
+    }
+
+    /**
+     * Show commands.
+     */
+    #[IndexRoute]
+    public function index(
+        CommandService $service,
+        SessionInterface $session,
+        #[MapQueryString]
+        CommandQuery $query = new CommandQuery(),
+    ): Response {
+        $count = $service->count();
+        if (0 === $count) {
+            return $this->redirectToHomePage('command.list.empty');
+        }
+        $name = $query->name ?? (string) $session->get(self::LAST_COMMAND);
+        if (StringUtils::isString($name) && $service->hasCommand($name)) {
+            $command = $service->getCommand($name);
+        } else {
+            /** @phpstan-var CommandType $command */
+            $command = $service->first();
+            $name = $command['name'];
+        }
+        $query->name = $name;
+        $session->set(self::LAST_COMMAND, $name);
+        $root = $this->trans('command.list.available');
+        $commands = $service->getGroupedNames($root);
+        $parameters = [
+            'commands' => $commands,
+            'command' => $command,
+            'count' => $count,
+            'query' => $query,
+        ];
+
+        return $this->render('command/commands.html.twig', $parameters);
     }
 
     /**

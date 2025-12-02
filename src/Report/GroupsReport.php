@@ -92,7 +92,6 @@ class GroupsReport extends AbstractArrayReport
     {
         return \array_reduce(
             $entities,
-            /** @phpstan-param int[] $carry */
             static function (array $carry, Group $group): array {
                 ++$carry[0];
                 $carry[1] += $group->countCategories();

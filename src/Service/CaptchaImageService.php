@@ -195,7 +195,6 @@ class CaptchaImageService implements ServiceSubscriberInterface
      */
     private function computeText(ImageService $image, float $size, string $font, string $text): array
     {
-        /** @phpstan-var non-empty-list<ComputeTextType> */
         return \array_map(static function (string $char) use ($image, $size, $font): array {
             $angle = \random_int(-8, 8);
             [$width, $height] = $image->ttfSize($size, $angle, $font, $char);

@@ -64,7 +64,6 @@ trait RightsTrait
     {
         return \array_reduce(
             EntityName::sorted(),
-            /** @param array<string, FlagBag<EntityPermission>> $carry */
             fn (array $carry, EntityName $name): array => $carry + [$name->getFormField() => $this->getPermission($name)],
             []
         );

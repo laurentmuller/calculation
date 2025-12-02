@@ -78,7 +78,6 @@ enum EntityPermission: int implements ConstantsInterface, EnumSortableInterface,
     {
         return \array_reduce(
             self::cases(),
-            /** @phpstan-param array<string, string> $carry */
             static fn (array $carry, self $type): array => $carry + ['PERMISSION_' . $type->name => $type->name],
             [],
         );

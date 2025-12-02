@@ -89,7 +89,6 @@ class CacheService
 
         $results = [];
         foreach ($lines as $line) {
-            /** @phpstan-var array{0: string, 1: string} $values */
             $values = \explode('.', $line, 2);
             $results[$values[0]][] = $values[1];
         }

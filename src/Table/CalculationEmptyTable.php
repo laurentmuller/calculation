@@ -74,7 +74,6 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
     {
         return \array_reduce(
             $items,
-            /** @phpstan-param CalculationItemType $item */
             static fn (int $carry, array $item): int => $carry + \count($item['items']),
             0
         );

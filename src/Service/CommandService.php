@@ -49,9 +49,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *      is_required: bool,
  *      is_array: bool,
  *      description: string,
- *      default: array|scalar|null,
- *      display: string,
- *      arguments: string}
+ *      default: array|scalar|null}
  * @phpstan-type OptionSourceType = array{
  *      name: string,
  *      shortcut: string,
@@ -59,9 +57,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *      is_value_required: bool,
  *      is_multiple: bool,
  *      description: string,
- *      default: array|scalar|null,
- *      display: string,
- *      arguments: string}
+ *      default: array|scalar|null}
  * @phpstan-type CommandSourceType = array{
  *      name: string,
  *      description: string,
@@ -255,10 +251,6 @@ class CommandService implements \Countable
     {
         return \array_reduce(
             $this->getCommands(),
-            /**
-             * @phpstan-param array<string, TValue[]> $carry
-             * @phpstan-param CommandType $command
-             */
             function (array $carry, array $command) use ($default, $callback): array {
                 $group = $this->getGroupName($command, $default);
                 $carry[$group][] = \call_user_func($callback, $command);
@@ -299,11 +291,9 @@ class CommandService implements \Countable
         $decoded = StringUtils::decodeJson($content);
         $commands = \array_reduce(
             $decoded['commands'],
-            /**
-             * @phpstan-param array<string, CommandType> $carry
-             * @phpstan-param CommandSourceType $command
-             */
-            fn (array $carry, array $command): array => $command['hidden'] ? $carry : $carry + [$command['name'] => $this->updateCommand($command)],
+            fn (array $carry, array $command): array => $command['hidden']
+                ? $carry
+                : $carry + [$command['name'] => $this->parseCommand($command)],
             []
         );
         \ksort($commands);
@@ -322,6 +312,7 @@ class CommandService implements \Countable
         foreach ($arguments as $key => $argument) {
             $display = $this->encodeDefaultValue($argument['default']);
             $required = $this->parseRequiredArgument($argument);
+            $isArray = $argument['is_array'];
             $result[$key] = [
                 'name' => $argument['name'],
                 'shortcut' => '',
@@ -329,14 +320,34 @@ class CommandService implements \Countable
                 'description' => $this->parseDescription($argument['description']),
                 'isRequired' => $required,
                 'isAcceptValue' => false,
-                'isArray' => $argument['is_array'],
+                'isArray' => $isArray,
                 'default' => $argument['default'],
                 'display' => $display,
-                'arguments' => $this->parseHelpArgument($argument, $display, $required),
+                'arguments' => $this->parseHelp($required, $isArray, $display),
             ];
         }
 
         return $result;
+    }
+
+    /**
+     * @phpstan-param CommandSourceType $command
+     *
+     * @phpstan-return CommandType
+     */
+    private function parseCommand(array $command): array
+    {
+        $command['arguments'] = $this->parseArguments($command['definition']['arguments']);
+        $command['options'] = $this->parseOptions($command['definition']['options']);
+        $command['help'] = $command['help'] === $command['description'] ? '' : $this->parseDescription($command['help']);
+        if ([] === $command['arguments']) {
+            $command['usage'] = [\sprintf('%s [options]', $command['name'])];
+        } else {
+            $command['usage'] = StringUtils::pregReplaceAll(self::USAGE_REPLACE, $command['usage']);
+        }
+        unset($command['definition']);
+
+        return $command;
     }
 
     private function parseDescription(string $help): string
@@ -351,40 +362,16 @@ class CommandService implements \Countable
         return $this->replaceConsole($help);
     }
 
-    /**
-     * @phpstan-param ArgumentSourceType $argument
-     */
-    private function parseHelpArgument(array $argument, string $display, bool $required): string
+    private function parseHelp(bool $required, bool $array, string $display): string
     {
         $values = [];
         if ($required) {
-            $values[] = '<span class="text-danger">required</span>';
+            $values[] = '<span class="text-danger">Required</span>';
         }
-        if ('[]' === $display || $argument['is_array']) {
-            $values[] = '<span class="text-secondary">multiple values allowed</span>';
+        if ('[]' === $display || $array) {
+            $values[] = '<span class="text-secondary">Multiple values allowed</span>';
         } elseif ('' !== $display) {
-            $values[] = \sprintf('default: <span class="text-secondary">%s</span>', $display);
-        }
-        if ([] === $values) {
-            return '';
-        }
-
-        return \sprintf('(%s)', \implode(', ', $values));
-    }
-
-    /**
-     * @phpstan-param OptionSourceType $option
-     */
-    private function parseHelpOption(array $option, string $display, bool $required): string
-    {
-        $values = [];
-        if ($required) {
-            $values[] = '<span class="text-danger">required</span>';
-        }
-        if ('[]' === $display || $option['is_multiple']) {
-            $values[] = '<span class="text-secondary">multiple values allowed</span>';
-        } elseif ('' !== $display) {
-            $values[] = \sprintf('default: <span class="text-secondary">%s</span>', $display);
+            $values[] = \sprintf('<span class="text-warning-emphasis">Default: %s</span>', $display);
         }
         if ([] === $values) {
             return '';
@@ -406,6 +393,7 @@ class CommandService implements \Countable
             $display = $this->encodeDefaultValue($option['default']);
             $required = $this->parseRequiredOption($option);
             $shortcut = $option['shortcut'];
+            $isArray = $option['is_multiple'];
             $result[$key] = [
                 'name' => $name,
                 'shortcut' => $shortcut,
@@ -413,10 +401,10 @@ class CommandService implements \Countable
                 'description' => $this->parseDescription($option['description']),
                 'isRequired' => $required,
                 'isAcceptValue' => $option['accept_value'],
-                'isArray' => $option['is_multiple'],
+                'isArray' => $isArray,
                 'default' => $option['default'],
                 'display' => $display,
-                'arguments' => $this->parseHelpOption($option, $display, $required),
+                'arguments' => $this->parseHelp($required, $isArray, $display),
             ];
         }
 
@@ -470,26 +458,6 @@ class CommandService implements \Countable
     private function replaceConsole(string $subject): string
     {
         return \str_replace(self::CONSOLE_REPLACE, 'bin/console', $subject);
-    }
-
-    /**
-     * @phpstan-param CommandSourceType $command
-     *
-     * @phpstan-return CommandType
-     */
-    private function updateCommand(array $command): array
-    {
-        $command['arguments'] = $this->parseArguments($command['definition']['arguments']);
-        $command['options'] = $this->parseOptions($command['definition']['options']);
-        $command['help'] = $command['help'] === $command['description'] ? '' : $this->parseDescription($command['help']);
-        if ([] === $command['arguments']) {
-            $command['usage'] = [\sprintf('%s [options]', $command['name'])];
-        } else {
-            $command['usage'] = StringUtils::pregReplaceAll(self::USAGE_REPLACE, $command['usage']);
-        }
-        unset($command['definition']);
-
-        return $command;
     }
 
     private function updateOutput(string $output): string

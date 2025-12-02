@@ -161,7 +161,6 @@ class DeeplTranslatorService extends AbstractTranslatorService
      */
     private function cleanLanguages(array $values): array
     {
-        /** @phpstan-var string[] $languages */
         $languages = \array_column($values, 'language');
         $languages = \array_map(strtolower(...), $languages);
 

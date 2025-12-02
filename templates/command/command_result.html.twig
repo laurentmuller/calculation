@@ -36,7 +36,7 @@
 {# footer #}
 {% block card_footer %}
 <div class="d-flex-wrap">
-    {{ link(path('command_all', {name: command.name}), 'command.list.title', 'btn btn-form btn-primary') }}
+    {{ link(path('command_index', {name: command.name}), 'command.list.title', 'btn btn-form btn-primary') }}
     {{ link(path('command_execute', {name: command.name}), 'command.result.re_run', 'btn btn-form btn-warning') }}
     {% if result.content %}
         {{ button_copy('#result') }}

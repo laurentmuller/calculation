@@ -61,10 +61,8 @@ readonly class CommandFormService
      */
     public function createForm(array $command, array $data, array $options = []): FormInterface
     {
-        $builder = $this->factory->createBuilder(data: $data, options: $options);
-        $helper = new FormHelper($builder);
-
         $transformer = $this->createDataTransformer();
+        $helper = $this->createFormHelper($data, $options);
         $this->addArguments($helper, $command['arguments'], $transformer);
         $this->addOptions($helper, $command['options'], $transformer);
 
@@ -198,10 +196,16 @@ readonly class CommandFormService
     private function createDataTransformer(): CallbackTransformer
     {
         return new CallbackTransformer(
-            /** @phpstan-param string[] $data */
             static fn (array $data): string => \implode(',', \array_filter($data)),
             static fn (?string $data): array => StringUtils::isString($data) ? \array_map(trim(...), \explode(',', $data)) : []
         );
+    }
+
+    private function createFormHelper(array $data, array $options = []): FormHelper
+    {
+        $builder = $this->factory->createBuilder(data: $data, options: $options);
+
+        return new FormHelper($builder);
     }
 
     private function getPriority(FormView $view): int

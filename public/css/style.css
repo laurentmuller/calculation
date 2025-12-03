@@ -649,9 +649,9 @@ a.disabled {
     color: var(--bs-tertiary-color);
 }
 
-/* dropdown menu with checked item on the right */
-.dropdown-menu:has(.dropdown-item-checked-right) {
-    min-width: 14rem;
+/* dropdown menu with badge or checked item on the right */
+.dropdown-menu:has(.badge, .dropdown-item-checked-right) {
+    min-width: 15rem;
 }
 
 .dropdown-item-checked-right::after {

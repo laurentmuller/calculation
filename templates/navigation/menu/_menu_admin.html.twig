@@ -3,12 +3,13 @@
 {%- set is_super_admin = is_granted(ROLE_SUPER_ADMIN) -%}
 {%- set is_log = is_granted(PERMISSION_LIST, ENTITY_LOG) -%}
 {% from 'macros/_icons.html.twig' import dropdownItem, dropdownSeparator %}
+{% from 'navigation/menu/_menu_data.html.twig' import dropdownItemCount %}
 <ul class="dropdown-menu">
     {{ dropdownItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}
     {{ dropdownItem(path('admin_update'), 'calculation.update.title', 'pencil') }}
     {{ dropdownItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}
     {{ dropdownSeparator() }}
-    {{ dropdownItem(path('user_index'), 'user.list.title', ICON_USER) }}
+    {{ dropdownItemCount('user_index', ICON_USER, 'user.list.title', index_service.catalog.user) }}
     {{ dropdownItem(path('admin_rights_user'), 'index.menu_rights_user', 'user-check') }}
     {% if is_super_admin -%}
         {{ dropdownItem(path('admin_rights_admin'), 'index.menu_rights_admin', 'user-shield') }}

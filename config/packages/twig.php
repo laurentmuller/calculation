@@ -15,6 +15,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use App\Parameter\ApplicationParameters;
 use App\Parameter\UserParameters;
+use App\Service\IndexService;
 use App\Utils\FormatUtils;
 
 return App::config([
@@ -48,6 +49,7 @@ return App::config([
             'link_prod' => '%link_prod%',
             'user_params' => '@' . UserParameters::class,
             'app_params' => '@' . ApplicationParameters::class,
+            'index_service' => '@' . IndexService::class,
         ],
     ],
     'when@test' => [

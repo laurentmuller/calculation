@@ -20,6 +20,7 @@ use App\Entity\GlobalMargin;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
+use App\Entity\User;
 use App\Model\CalculationsMonth;
 use App\Model\CalculationsState;
 use App\Traits\CacheKeyTrait;
@@ -42,10 +43,12 @@ class IndexService
     use CacheKeyTrait;
 
     private const CATALOG = [
+        'user' => User::class,
         'task' => Task::class,
         'group' => Group::class,
         'product' => Product::class,
         'category' => Category::class,
+        'calculation' => Calculation::class,
         'globalMargin' => GlobalMargin::class,
         'calculationState' => CalculationState::class,
     ];

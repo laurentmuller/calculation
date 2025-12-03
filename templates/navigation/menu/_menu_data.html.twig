@@ -1,22 +1,30 @@
+{# dropdown item with a badge #}
+{% macro dropdownItemCount(route, icon, text, count) %}
+    {% from 'macros/_icons.html.twig' import icon %}
+    <li>
+        <a href="{{ path(route) }}" class="dropdown-item rowlink-skip d-flex align-items-center">
+            {{ icon(icon, text) }}<span class="ms-auto badge rounded-pill text-bg-secondary">{{ count|integer }}</span>
+        </a>
+    </li>
+{% endmacro dropdownItemCount %}
 {# common data menu #}
-{% from 'macros/_icons.html.twig' import dropdownItem %}
 <ul class="dropdown-menu">
     {% if is_granted(PERMISSION_LIST, ENTITY_PRODUCT) %}
-        {{ dropdownItem(path('product_index'), 'product.list.title', ICON_PRODUCT) }}
+        {{ _self.dropdownItemCount('product_index', ICON_PRODUCT, 'product.list.title', index_service.catalog.product) }}
     {% endif %}
-    {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION) %}
-        {{ dropdownItem(path('task_index'), 'task.list.title', ICON_TASK) }}
+    {% if is_granted(PERMISSION_LIST, ENTITY_TASK) %}
+        {{ _self.dropdownItemCount('task_index', ICON_TASK, 'task.list.title', index_service.catalog.task) }}
     {% endif %}
     {% if is_granted(PERMISSION_LIST, ENTITY_CATEGORY) %}
-        {{ dropdownItem(path('category_index'), 'category.list.title', ICON_CATEGORY) }}
+        {{ _self.dropdownItemCount('category_index', ICON_CATEGORY, 'category.list.title', index_service.catalog.category) }}
     {% endif %}
     {% if is_granted(PERMISSION_LIST, ENTITY_GROUP) %}
-        {{ dropdownItem(path('group_index'), 'group.list.title', ICON_GROUP) }}
+        {{ _self.dropdownItemCount('group_index', ICON_GROUP, 'group.list.title', index_service.catalog.group) }}
     {% endif %}
     {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION_STATE) %}
-        {{ dropdownItem(path('calculationstate_index'), 'calculationstate.list.title', ICON_CALCULATION_STATE) }}
+        {{ _self.dropdownItemCount('calculationstate_index', ICON_CALCULATION_STATE, 'calculationstate.list.title', index_service.catalog.calculationState) }}
     {% endif %}
     {% if is_granted(PERMISSION_LIST, ENTITY_GLOBAL_MARGIN) %}
-        {{ dropdownItem(path('globalmargin_index'), 'globalmargin.list.title', ICON_GLOBAL_MARGIN) }}
+        {{ _self.dropdownItemCount('globalmargin_index', ICON_GLOBAL_MARGIN, 'globalmargin.list.title', index_service.catalog.globalMargin) }}
     {% endif %}
 </ul>

@@ -73,10 +73,12 @@ final class IndexServiceTest extends TestCase
     public function testGetCatalog(): void
     {
         $keys = [
+            'user',
             'task',
             'group',
             'product',
             'category',
+            'calculation',
             'globalMargin',
             'calculationState',
         ];

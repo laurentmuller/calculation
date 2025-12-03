@@ -1,6 +1,6 @@
 {# imports #}
 {% from 'macros/_icons.html.twig' import icon, dropdownItem, dropdownSeparator %}
-{% from 'macros/_attributes.html.twig' import attributes %}
+{% from 'navigation/menu/_menu_data.html.twig' import dropdownItemCount %}
 {# parameters #}
 {% set is_admin = is_granted(ROLE_ADMIN) %}
 {% set is_granted_data = is_granted(PERMISSION_LIST, ENTITY_CALCULATION)
@@ -27,7 +27,7 @@
     {# menus #}
     <ul class="navbar-nav mb-auto pt-1 border-top w-100">
         {% if is_granted(PERMISSION_LIST, ENTITY_CALCULATION) -%}
-            {{ dropdownItem(path('calculation_index'), 'calculation.list.title', ICON_CALCULATION) }}
+            {{ dropdownItemCount('calculation_index', ICON_CALCULATION, 'calculation.list.title', index_service.catalog.calculation) }}
             {{ dropdownSeparator() }}
         {% endif %}
         {% if is_granted_data %}

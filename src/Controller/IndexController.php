@@ -82,9 +82,11 @@ class IndexController extends AbstractController
     {
         $this->checkAjaxRequest($request);
         $parameters = $this->getUserParameters();
-        $parameters->getHomePage()
-            ->setPanelCatalog(false);
-        $parameters->save();
+        $homePage = $parameters->getHomePage();
+        if ($homePage->isPanelCatalog()) {
+            $homePage->setPanelCatalog(false);
+            $parameters->save();
+        }
 
         return $this->json($this->trans('index.panel_catalog_hide_success'));
     }
@@ -97,9 +99,11 @@ class IndexController extends AbstractController
     {
         $this->checkAjaxRequest($request);
         $parameters = $this->getUserParameters();
-        $parameters->getHomePage()
-            ->setPanelMonth(false);
-        $parameters->save();
+        $homePage = $parameters->getHomePage();
+        if ($homePage->isPanelMonth()) {
+            $homePage->setPanelMonth(false);
+            $parameters->save();
+        }
 
         return $this->json($this->trans('index.panel_month_hide_success'));
     }
@@ -112,9 +116,11 @@ class IndexController extends AbstractController
     {
         $this->checkAjaxRequest($request);
         $parameters = $this->getUserParameters();
-        $parameters->getHomePage()
-            ->setPanelState(false);
-        $parameters->save();
+        $homePage = $parameters->getHomePage();
+        if ($homePage->isPanelState()) {
+            $homePage->setPanelState(false);
+            $parameters->save();
+        }
 
         return $this->json($this->trans('index.panel_state_hide_success'));
     }
@@ -162,14 +168,16 @@ class IndexController extends AbstractController
 
     private function getCount(?int $count): int
     {
-        $params = $this->getUserParameters();
-        $homePage = $params->getHomePage();
+        $parameters = $this->getUserParameters();
+        $homePage = $parameters->getHomePage();
+        $defaultCount = $homePage->getCalculations();
         if (null === $count || !\in_array($count, HomePageParameter::CALCULATIONS_RANGE, true)) {
-            return $homePage->getCalculations();
+            return $defaultCount;
         }
-
-        $homePage->setCalculations($count);
-        $params->save();
+        if ($count !== $defaultCount) {
+            $homePage->setCalculations($count);
+            $parameters->save();
+        }
 
         return $count;
     }
@@ -204,17 +212,20 @@ class IndexController extends AbstractController
 
     private function getTableView(Request $request, ?bool $custom): TableView
     {
-        $params = $this->getUserParameters();
-        $display = $params->getDisplay();
+        $parameters = $this->getUserParameters();
+        $display = $parameters->getDisplay();
+        $defaultMode = $display->getDisplayMode();
         if (null === $custom) {
-            return $this->getCookieEnum($request, self::PARAM_VIEW, $display->getDisplayMode());
+            return $this->getCookieEnum($request, self::PARAM_VIEW, $defaultMode);
         }
 
-        $view = $custom ? TableView::CUSTOM : TableView::TABLE;
-        $display->setDisplayMode($view);
-        $params->save();
+        $newMode = $custom ? TableView::CUSTOM : TableView::TABLE;
+        if ($newMode !== $defaultMode) {
+            $display->setDisplayMode($newMode);
+            $parameters->save();
+        }
 
-        return $view;
+        return $newMode;
     }
 
     private function renderContent(array $parameters): string

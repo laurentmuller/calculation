@@ -31,6 +31,17 @@ final class CommandServiceTest extends KernelServiceTestCase
     /**
      * @throws \Exception
      */
+    public function testExecuteFailure(): void
+    {
+        $service = $this->getCommandService();
+        $actual = $service->execute('fake_command_name');
+        self::assertFalse($actual->isSuccess());
+        self::assertSame(Command::FAILURE, $actual->status);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testExecuteSuccess(): void
     {
         $service = $this->getCommandService();
@@ -43,30 +54,19 @@ final class CommandServiceTest extends KernelServiceTestCase
         self::assertStringContainsString(Kernel::END_OF_MAINTENANCE, $actual->content);
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function testExecuteSuccessFail(): void
-    {
-        $service = $this->getCommandService();
-        $actual = $service->execute('fake_command_name');
-        self::assertFalse($actual->isSuccess());
-        self::assertSame(Command::FAILURE, $actual->status);
-    }
-
     public function testFirst(): void
     {
         $service = $this->getCommandService();
         $command = $service->first();
-        self::assertIsArray($command);
         self::assertSame('about', $command['name']);
     }
 
-    public function testGetCommand(): void
+    public function testGetCommandInvalid(): void
     {
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Unable to find the command "_fake_command_test".');
         $service = $this->getCommandService();
-        self::assertIsArray($service->getCommand('about'));
-        self::assertIsNotArray($service->getCommand('_fake_command_test'));
+        $service->getCommand('_fake_command_test');
     }
 
     public function testGetCommands(): void
@@ -76,6 +76,13 @@ final class CommandServiceTest extends KernelServiceTestCase
         self::assertNotEmpty($commands);
         self::assertArrayHasKey('about', $commands);
         self::assertArrayNotHasKey('_fake_command_test', $commands);
+    }
+
+    public function testGetCommandValid(): void
+    {
+        $service = $this->getCommandService();
+        $actual = $service->getCommand('about');
+        self::assertSame('about', $actual['name']);
     }
 
     public function testGetGroupeCommands(): void

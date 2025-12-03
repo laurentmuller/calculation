@@ -29,24 +29,19 @@ use Symfony\Component\Form\FormView;
 readonly class CommandFormService
 {
     /**
-     * The argument's boolean field priority.
+     * The priority for an argument text field.
      */
-    public const ARGUMENT_BOOL = 2;
+    public const PRIORITY_ARGUMENT = 0;
 
     /**
-     * The argument's text field priority.
+     * The priority for an option boolean field.
      */
-    public const ARGUMENT_TEXT = 1;
+    public const PRIORITY_BOOL = 2;
 
     /**
-     * The option's boolean field priority.
+     * The priority for an option text field.
      */
-    public const OPTION_BOOL = 4;
-
-    /**
-     * The option's text field priority.
-     */
-    public const OPTION_TEXT = 3;
+    public const PRIORITY_TEXT = 1;
 
     public function __construct(private FormFactoryInterface $factory)
     {
@@ -75,7 +70,7 @@ readonly class CommandFormService
      * @param FormView $view     the view to get filtered children
      * @param int      $priority the priority
      *
-     * @phpstan-param self::* $priority
+     * @phpstan-param self::PRIORITY_* $priority
      *
      * @return FormView[]
      */
@@ -91,35 +86,20 @@ readonly class CommandFormService
     {
         foreach ($inputs as $key => $input) {
             $field = CommandDataService::getArgumentKey($key);
-            if ($this->isArgumentText($input)) {
-                $this->addTextField(
-                    helper: $helper,
-                    priority: self::ARGUMENT_TEXT,
-                    field: $field,
-                    name: $input['name'],
-                    description: $input['description'],
-                    required: $input['isRequired'],
-                    transformer: $input['isArray'] ? $transformer : null
-                );
-                continue;
-            }
-
-            if (\is_bool($input['default'])) {
-                $this->addBoolField(
-                    helper: $helper,
-                    priority: self::ARGUMENT_BOOL,
-                    field: $field,
-                    name: $input['name'],
-                    description: $input['description'],
-                    required: $input['isRequired']
-                );
-            }
+            $this->addTextField(
+                helper: $helper,
+                priority: self::PRIORITY_ARGUMENT,
+                field: $field,
+                name: $input['name'],
+                description: $input['description'],
+                required: $input['isRequired'],
+                transformer: $input['isArray'] ? $transformer : null
+            );
         }
     }
 
     private function addBoolField(
         FormHelper $helper,
-        int $priority,
         string $field,
         string $name,
         string $description,
@@ -130,7 +110,7 @@ readonly class CommandFormService
             ->label($name)
             ->rowClass('col-6 col-md-3')
             ->updateRowAttributes($attributes)
-            ->updateOption('priority', $priority)
+            ->updateOption('priority', self::PRIORITY_BOOL)
             ->required($required)
             ->domain(false)
             ->addCheckboxType(switch: false);
@@ -146,7 +126,7 @@ readonly class CommandFormService
             if ($this->isOptionText($input)) {
                 $this->addTextField(
                     helper: $helper,
-                    priority: self::OPTION_TEXT,
+                    priority: self::PRIORITY_TEXT,
                     field: $field,
                     name: $input['name'],
                     description: $input['description'],
@@ -159,7 +139,6 @@ readonly class CommandFormService
             if (!$input['isAcceptValue'] || \is_bool($input['default'])) {
                 $this->addBoolField(
                     helper: $helper,
-                    priority: self::OPTION_BOOL,
                     field: $field,
                     name: $input['name'],
                     description: $input['description'],
@@ -226,23 +205,6 @@ readonly class CommandFormService
             'data-bs-toggle' => 'popover',
             'data-bs-placement' => 'top',
         ];
-    }
-
-    /**
-     * @phpstan-param InputType $input
-     */
-    private function isArgumentText(array $input): bool
-    {
-        if ($input['isArray']) {
-            return true;
-        }
-
-        $default = $input['default'];
-        if (\is_bool($default)) {
-            return false;
-        }
-
-        return null === $default || \is_string($default);
     }
 
     /**

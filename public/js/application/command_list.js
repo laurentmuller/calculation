@@ -1,19 +1,20 @@
 /* globals Toaster */
 
 /**
+ * @typedef QueryParams
+ * @type {object}
+ * @property {string} name - the command name.
+ * @property {boolean} arguments - the expanded arguments state.
+ * @property {boolean} options - the expanded options state.
+ * @property {boolean} help - the expanded help state.
+ */
+
+/**
  * @return {jQuery|any}
  */
 function getDataContent() {
     'use strict';
     return $('#content [data-content');
-}
-
-/**
- * @return {string}
- */
-function getCommandName() {
-    'use strict';
-    return $('#command').val();
 }
 
 function disposePopover() {
@@ -48,24 +49,16 @@ function isShow(id) {
 }
 
 /**
- * @return {{name: string, help: boolean, options: boolean, arguments: boolean}}
+ * @return {QueryParams}
  */
 function getParams() {
     'use strict';
     return {
-        name: getCommandName(),
-        help: isShow('help'),
-        options: isShow('options'),
+        name: $('#command').val(),
         arguments: isShow('arguments'),
+        options: isShow('options'),
+        help: isShow('help')
     };
-}
-
-function updateExecute() {
-    'use strict';
-    const name = getCommandName();
-    const $execute = $('.btn-execute');
-    const href = $execute.data('url').replace('query', name);
-    $execute.attr('href', href);
 }
 
 /**
@@ -78,22 +71,64 @@ function toString(value) {
 }
 
 /**
+ * @param {URL} url
+ * @param {QueryParams} [params]
+ * @return {URL}
+ */
+function updateParams(url, params) {
+    'use strict';
+    params = params || getParams();
+    const searchParams = url.searchParams;
+    for (const key of searchParams.keys()) {
+        searchParams.delete(key);
+    }
+    searchParams.set('name', params.name);
+    searchParams.set('arguments', toString(params.arguments));
+    searchParams.set('options', toString(params.options));
+    searchParams.set('help', toString(params.help));
+    return url;
+}
+
+function updateExecute() {
+    'use strict';
+    const $execute = $('#execute');
+    const href = $execute.attr('href');
+    const url = updateParams(new URL(href, location.origin));
+    $execute.attr('href', url.pathname + url.search);
+}
+
+/**
  * @param {boolean} replace
  */
 function updateHistory(replace) {
     'use strict';
     const params = getParams();
-    const url = new URL(location);
-    const searchParams = url.searchParams;
-    searchParams.set('name', params.name);
-    searchParams.set('arguments', toString(params.arguments));
-    searchParams.set('options', toString(params.options));
-    searchParams.set('help', toString(params.help));
+    const url = updateParams(new URL(location), params);
     if (replace) {
-        window.history.replaceState({'name': params.name}, '', url);
+        window.history.replaceState({'command': params.name}, '', url);
     } else {
-        window.history.pushState({'name': params.name}, '', url);
+        window.history.pushState({'command': params.name}, '', url);
     }
+    updateExecute();
+}
+
+/**
+ * @param {jQuery|any} $element
+ */
+function saveCollapse($element) {
+    'use strict';
+    const id = $element.attr('id');
+    const value = $element.hasClass('show');
+    $('#content').data(id, value);
+    updateHistory(true);
+}
+
+function notifyError(message) {
+    'use strict';
+    const title = $('.card-title').text();
+    Toaster.notify(Toaster.NotificationTypes.DANGER, message, title);
+    $('#execute').fadeOut();
+    $('#content').fadeOut();
 }
 
 /**
@@ -102,26 +137,21 @@ function updateHistory(replace) {
 function loadContent() {
     'use strict';
     disposePopover();
-    const $content = $('#content');
-    const $execute = $('.btn-execute');
+    const url = $('#command').data('url');
     const params = getParams();
-    const url = $('#command').data('url') + '?' + $.param(params);
-    $.get(url, function (response) {
-        if (response.result) {
-            // update
-            $execute.fadeIn();
-            $content.replaceWith(response.content).fadeIn()
-                .data(params);
-            updateHistory(false);
-            updateExecute();
-            createPopover();
+    $.getJSON(url, params, function (response) {
+        if (!response.result) {
+            notifyError(response.message || $('#command').data('error'));
             return;
         }
-        // show error
-        $content.fadeOut();
-        $execute.fadeOut();
-        const title = $('.card-title').text();
-        Toaster.notify(Toaster.NotificationTypes.DANGER, response.message, title);
+        $('#execute').fadeIn();
+        $('#content').replaceWith(response.content)
+            .data(params).fadeIn();
+        updateHistory(false);
+        updateExecute();
+        createPopover();
+    }).fail(function () {
+        notifyError($('#command').data('error'));
     });
 }
 
@@ -134,18 +164,18 @@ $(function () {
     $command.on('input', function () {
         $command.updateTimer(loadContent, 350);
     }).trigger('focus');
-    updateExecute();
     createPopover();
 
-    // save collapse state
-    const $content = $('#content');
-    $content.on('shown.bs.collapse', '.collapse', function () {
-        const id = $(this).attr('id');
-        $content.data(id, true);
-        updateHistory(true);
-    }).on('hidden.bs.collapse', '.collapse', function () {
-        const id = $(this).attr('id');
-        $content.data(id, false);
-        updateHistory(true);
+    // handle collapse change
+    $('#content').parent().on('shown.bs.collapse hidden.bs.collapse', '.collapse', function () {
+        saveCollapse($(this));
+    });
+
+    // handle pop state change
+    window.addEventListener('popstate', (e) => {
+        // console.log(`location: ${document.location}, state: ${JSON.stringify(e.state)}`);
+        if (e.state && e.state.command) {
+            document.location.reload();
+        }
     });
 });

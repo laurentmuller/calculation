@@ -1,0 +1,169 @@
+{
+    "name": "completion",
+    "description": "Dump the shell completion script.",
+    "usage": [
+        "completion [options] [--] [<shell>]"
+    ],
+    "help": "The <span class=\"text-success\">completion</span> command dumps the shell completion script required\nto use shell autocompletion (currently, bash, fish, zsh completion are supported).\n\n<span class=\"text-secondary\">Static installation\n-------------------</span>\n\nDump the script to a global completion file and restart your shell:\n\n    <span class=\"text-success\">bin/console completion  | sudo tee /etc/bash_completion.d/command</span>\n\nOr dump the script to a local file and source it:\n\n    <span class=\"text-success\">bin/console completion  > completion.sh</span>\n\n    <span class=\"text-secondary\"># source the file whenever you use the project</span>\n    <span class=\"text-success\">source completion.sh</span>\n\n    <span class=\"text-secondary\"># or add this line at the end of your \"~/.bashrc\" file:</span>\n    <span class=\"text-success\">source /path/to/completion.sh</span>\n\n<span class=\"text-secondary\">Dynamic installation\n--------------------</span>\n\nAdd this to the end of your shell configuration file (e.g. <span class=\"text-success\">\"~/.bashrc\"</span>):\n\n    <span class=\"text-success\">eval \"$(bin/console completion )\"</span>",
+    "hidden": false,
+    "arguments": {
+        "shell": {
+            "name": "shell",
+            "shortcut": "",
+            "shortcutName": "",
+            "description": "The shell type (e.g. \"bash\"), the value of the \"$SHELL\" env var will be used if this is not given",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": null,
+            "display": "",
+            "extra": ""
+        }
+    },
+    "options": {
+        "debug": {
+            "name": "--debug",
+            "shortcut": "",
+            "shortcutName": "    --debug",
+            "description": "Tail the completion debug log",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": false,
+            "display": "",
+            "extra": ""
+        },
+        "help": {
+            "name": "--help",
+            "shortcut": "-h",
+            "shortcutName": "-h, --help",
+            "description": "Display help for the given command. When no command is given display help for the <span class=\"text-success\">list</span> command",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": false,
+            "display": "",
+            "extra": ""
+        },
+        "silent": {
+            "name": "--silent",
+            "shortcut": "",
+            "shortcutName": "    --silent",
+            "description": "Do not output any message",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": false,
+            "display": "",
+            "extra": ""
+        },
+        "quiet": {
+            "name": "--quiet",
+            "shortcut": "-q",
+            "shortcutName": "-q, --quiet",
+            "description": "Only errors are displayed. All other output is suppressed",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": false,
+            "display": "",
+            "extra": ""
+        },
+        "verbose": {
+            "name": "--verbose",
+            "shortcut": "-v|-vv|-vvv",
+            "shortcutName": "-v|-vv|-vvv, --verbose",
+            "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": false,
+            "display": "",
+            "extra": ""
+        },
+        "version": {
+            "name": "--version",
+            "shortcut": "-V",
+            "shortcutName": "-V, --version",
+            "description": "Display this application version",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": false,
+            "display": "",
+            "extra": ""
+        },
+        "ansi": {
+            "name": "--ansi",
+            "shortcut": "",
+            "shortcutName": "    --ansi",
+            "description": "Force (or disable --no-ansi) ANSI output",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": null,
+            "display": "",
+            "extra": ""
+        },
+        "no-ansi": {
+            "name": "--no-ansi",
+            "shortcut": "",
+            "shortcutName": "    --no-ansi",
+            "description": "Negate the \"--ansi\" option",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": null,
+            "display": "",
+            "extra": ""
+        },
+        "no-interaction": {
+            "name": "--no-interaction",
+            "shortcut": "-n",
+            "shortcutName": "-n, --no-interaction",
+            "description": "Do not ask any interactive question",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": false,
+            "display": "",
+            "extra": ""
+        },
+        "env": {
+            "name": "--env",
+            "shortcut": "-e",
+            "shortcutName": "-e, --env",
+            "description": "The Environment name.",
+            "isRequired": true,
+            "isAcceptValue": true,
+            "isArray": false,
+            "default": "dev",
+            "display": "\"dev\"",
+            "extra": "(<span class=\"text-danger\">Required</span>, <span class=\"text-warning-emphasis\">Default: \"dev\"</span>)"
+        },
+        "no-debug": {
+            "name": "--no-debug",
+            "shortcut": "",
+            "shortcutName": "    --no-debug",
+            "description": "Switch off debug mode.",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": false,
+            "display": "",
+            "extra": ""
+        },
+        "profile": {
+            "name": "--profile",
+            "shortcut": "",
+            "shortcutName": "    --profile",
+            "description": "Enables profiling (requires debug).",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": false,
+            "display": "",
+            "extra": ""
+        }
+    }
+}

@@ -1,0 +1,169 @@
+{
+    "name": "cache:pool:invalidate-tags",
+    "description": "Invalidate cache tags for all or a specific pool.",
+    "usage": [
+        "cache:pool:invalidate-tags [options] [--] <tags>..."
+    ],
+    "help": "The <span class=\"text-success\">cache:pool:invalidate-tags</span> command invalidates tags from taggable pools. By default, all pools\nhave the passed tags invalidated. Pass <span class=\"text-success\">--pool=my_pool</span> to invalidate tags on a specific pool.\n\n  php bin/console cache:pool:invalidate-tags tag1 tag2\n  php bin/console cache:pool:invalidate-tags tag1 tag2 --pool=cache2 --pool=cache1",
+    "hidden": false,
+    "arguments": {
+        "tags": {
+            "name": "tags",
+            "shortcut": "",
+            "shortcutName": "",
+            "description": "The tags to invalidate",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": true,
+            "default": [],
+            "display": "[]",
+            "extra": "(<span class=\"text-secondary\">Multiple values allowed</span>)"
+        }
+    },
+    "options": {
+        "pool": {
+            "name": "--pool",
+            "shortcut": "-p",
+            "shortcutName": "-p, --pool",
+            "description": "The pools to invalidate on",
+            "isRequired": false,
+            "isAcceptValue": true,
+            "isArray": true,
+            "default": [],
+            "display": "[]",
+            "extra": "(<span class=\"text-secondary\">Multiple values allowed</span>)"
+        },
+        "help": {
+            "name": "--help",
+            "shortcut": "-h",
+            "shortcutName": "-h, --help",
+            "description": "Display help for the given command. When no command is given display help for the <span class=\"text-success\">list</span> command",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": false,
+            "display": "",
+            "extra": ""
+        },
+        "silent": {
+            "name": "--silent",
+            "shortcut": "",
+            "shortcutName": "    --silent",
+            "description": "Do not output any message",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": false,
+            "display": "",
+            "extra": ""
+        },
+        "quiet": {
+            "name": "--quiet",
+            "shortcut": "-q",
+            "shortcutName": "-q, --quiet",
+            "description": "Only errors are displayed. All other output is suppressed",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": false,
+            "display": "",
+            "extra": ""
+        },
+        "verbose": {
+            "name": "--verbose",
+            "shortcut": "-v|-vv|-vvv",
+            "shortcutName": "-v|-vv|-vvv, --verbose",
+            "description": "Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": false,
+            "display": "",
+            "extra": ""
+        },
+        "version": {
+            "name": "--version",
+            "shortcut": "-V",
+            "shortcutName": "-V, --version",
+            "description": "Display this application version",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": false,
+            "display": "",
+            "extra": ""
+        },
+        "ansi": {
+            "name": "--ansi",
+            "shortcut": "",
+            "shortcutName": "    --ansi",
+            "description": "Force (or disable --no-ansi) ANSI output",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": null,
+            "display": "",
+            "extra": ""
+        },
+        "no-ansi": {
+            "name": "--no-ansi",
+            "shortcut": "",
+            "shortcutName": "    --no-ansi",
+            "description": "Negate the \"--ansi\" option",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": null,
+            "display": "",
+            "extra": ""
+        },
+        "no-interaction": {
+            "name": "--no-interaction",
+            "shortcut": "-n",
+            "shortcutName": "-n, --no-interaction",
+            "description": "Do not ask any interactive question",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": false,
+            "display": "",
+            "extra": ""
+        },
+        "env": {
+            "name": "--env",
+            "shortcut": "-e",
+            "shortcutName": "-e, --env",
+            "description": "The Environment name.",
+            "isRequired": true,
+            "isAcceptValue": true,
+            "isArray": false,
+            "default": "dev",
+            "display": "\"dev\"",
+            "extra": "(<span class=\"text-danger\">Required</span>, <span class=\"text-warning-emphasis\">Default: \"dev\"</span>)"
+        },
+        "no-debug": {
+            "name": "--no-debug",
+            "shortcut": "",
+            "shortcutName": "    --no-debug",
+            "description": "Switch off debug mode.",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": false,
+            "display": "",
+            "extra": ""
+        },
+        "profile": {
+            "name": "--profile",
+            "shortcut": "",
+            "shortcutName": "    --profile",
+            "description": "Enables profiling (requires debug).",
+            "isRequired": false,
+            "isAcceptValue": false,
+            "isArray": false,
+            "default": false,
+            "display": "",
+            "extra": ""
+        }
+    }
+}

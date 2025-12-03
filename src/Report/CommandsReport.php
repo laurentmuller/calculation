@@ -143,7 +143,7 @@ class CommandsReport extends AbstractArrayReport
 
         $this->renderHeader('command.list.fields.arguments');
         foreach ($arguments as $argument) {
-            $help = $this->getDescriptionHelp($argument['description'], $argument['arguments']);
+            $help = $this->getDescriptionHelp($argument['description'], $argument['extra']);
             $this->indent();
             $this->renderFixedCell($argument['name'], $width);
             $this->renderStyledHelp($help);
@@ -225,7 +225,7 @@ class CommandsReport extends AbstractArrayReport
 
         $this->renderHeader('command.list.fields.options');
         foreach ($options as $option) {
-            $help = $this->getDescriptionHelp($option['description'], $option['arguments']);
+            $help = $this->getDescriptionHelp($option['description'], $option['extra']);
             $this->indent();
             $this->renderFixedCell($option['shortcutName'], $width);
             $this->renderStyledHelp($help);

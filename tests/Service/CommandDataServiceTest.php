@@ -15,16 +15,17 @@ namespace App\Tests\Service;
 
 use App\Service\CommandDataService;
 use App\Service\CommandService;
-use App\Tests\KernelServiceTestCase;
+use App\Utils\FileUtils;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @phpstan-import-type CommandType from CommandService
  */
-final class CommandDataServiceTest extends KernelServiceTestCase
+final class CommandDataServiceTest extends TestCase
 {
     public function testCreateData(): void
     {
-        $command = $this->getCommand('completion');
+        $command = $this->getCommand();
         $dataService = $this->getCommandDataService();
         $actual = $dataService->createData($command);
 
@@ -36,7 +37,7 @@ final class CommandDataServiceTest extends KernelServiceTestCase
     public function testCreateParameters(): void
     {
         $value = 'my-shell';
-        $command = $this->getCommand('completion');
+        $command = $this->getCommand();
         $dataService = $this->getCommandDataService();
         $actual = $dataService->createParameters($command, [
             'argument-shell' => $value,
@@ -84,7 +85,7 @@ final class CommandDataServiceTest extends KernelServiceTestCase
             'isAcceptValue' => false,
             'default' => true,
             'display' => 'fake',
-            'arguments' => 'fake',
+            'extra' => 'fake',
         ];
         $command = [
             'name' => 'fake',
@@ -114,7 +115,7 @@ final class CommandDataServiceTest extends KernelServiceTestCase
             'isAcceptValue' => false,
             'default' => true,
             'display' => 'fake',
-            'arguments' => 'fake',
+            'extra' => 'fake',
         ];
         $command = [
             'name' => 'fake',
@@ -134,7 +135,7 @@ final class CommandDataServiceTest extends KernelServiceTestCase
 
     public function testValidateData(): void
     {
-        $command = $this->getCommand('completion');
+        $command = $this->getCommand();
         $dataService = $this->getCommandDataService();
 
         $actual = $dataService->validateData($command, []);
@@ -179,22 +180,16 @@ final class CommandDataServiceTest extends KernelServiceTestCase
     /**
      * @phpstan-return CommandType
      */
-    private function getCommand(string $name = 'about'): array
+    private function getCommand(): array
     {
-        $commandService = $this->getCommandService();
-        $command = $commandService->getCommand($name);
-        self::assertIsArray($command);
+        $path = __DIR__ . '/../files/json/command_completion.json';
 
-        return $command;
+        /** @phpstan-var CommandType */
+        return FileUtils::decodeJson($path);
     }
 
     private function getCommandDataService(): CommandDataService
     {
-        return $this->getService(CommandDataService::class);
-    }
-
-    private function getCommandService(): CommandService
-    {
-        return $this->getService(CommandService::class);
+        return new CommandDataService();
     }
 }

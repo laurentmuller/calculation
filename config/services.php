@@ -21,7 +21,7 @@ $path = __DIR__ . '/../src/';
 
 return App::config([
     'parameters' => [
-        // fixed
+        // application
         'app_name' => 'Calculation',
         'app_version' => '3.0.0',
         'app_owner_name' => 'bibi.nu',

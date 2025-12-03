@@ -29,7 +29,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -44,7 +43,7 @@ class CommandController extends AbstractController
 {
     use CacheKeyTrait;
 
-    private const LAST_COMMAND = 'last_command';
+    private const KEY_QUERY_COMMAND = 'last_command';
 
     /**
      * Render a single command content.
@@ -54,14 +53,15 @@ class CommandController extends AbstractController
         #[MapQueryString]
         CommandQuery $query,
         CommandService $service,
-        SessionInterface $session,
+        SessionInterface $session
     ): JsonResponse {
         $name = $query->name ?? '';
         if (!$service->hasCommand($name)) {
             return $this->jsonFalse(['message' => $this->trans('command.list.error', ['%name%' => $name])]);
         }
+
         $command = $service->getCommand($name);
-        $session->set(self::LAST_COMMAND, $name);
+        $this->saveQuery($session, $query, $command);
         $view = $this->renderView('command/_command.htm.twig', [
             'command' => $command,
             'query' => $query,
@@ -80,20 +80,22 @@ class CommandController extends AbstractController
      */
     #[GetPostRoute(path: '/execute', name: 'execute')]
     public function execute(
-        #[MapQueryParameter]
-        string $name,
+        #[MapQueryString]
+        CommandQuery $query,
         Request $request,
         CommandService $service,
         CommandFormService $formService,
-        CommandDataService $dataService,
+        CommandDataService $dataService
     ): Response {
+        $name = $query->name ?? '';
         if (!$service->hasCommand($name)) {
             throw $this->createTranslatedNotFoundException('command.list.error', ['%name%' => $name]);
         }
 
-        /** @phpstan-var CommandType $command */
         $command = $service->getCommand($name);
         $session = $request->getSession();
+        $this->saveQuery($session, $query, $command);
+
         $key = $this->cleanKey('command.execute.' . $name);
         $data = $this->getCommandData($session, $dataService, $key, $command);
 
@@ -111,6 +113,7 @@ class CommandController extends AbstractController
                     'parameters' => $parameters,
                     'command' => $command,
                     'result' => $result,
+                    'query' => $query,
                 ]);
             } catch (\Exception $e) {
                 return $this->renderFormException('command.result.error', $e);
@@ -119,15 +122,13 @@ class CommandController extends AbstractController
 
         $view = $form->createView();
         $parameters = [
-            'arguments' => [
-                'texts' => $formService->filter($view, CommandFormService::ARGUMENT_TEXT),
-                'checkboxes' => $formService->filter($view, CommandFormService::ARGUMENT_BOOL),
-            ],
+            'arguments' => $formService->filter($view, CommandFormService::PRIORITY_ARGUMENT),
             'options' => [
-                'texts' => $formService->filter($view, CommandFormService::OPTION_TEXT),
-                'checkboxes' => $formService->filter($view, CommandFormService::OPTION_BOOL),
+                'texts' => $formService->filter($view, CommandFormService::PRIORITY_TEXT),
+                'checkboxes' => $formService->filter($view, CommandFormService::PRIORITY_BOOL),
             ],
             'command' => $command,
+            'query' => $query,
             'form' => $view,
         ];
 
@@ -139,25 +140,21 @@ class CommandController extends AbstractController
      */
     #[IndexRoute]
     public function index(
+        Request $request,
         CommandService $service,
-        SessionInterface $session,
         #[MapQueryString]
-        CommandQuery $query = new CommandQuery(),
+        ?CommandQuery $query = null
     ): Response {
         $count = $service->count();
         if (0 === $count) {
             return $this->redirectToHomePage('command.list.empty');
         }
-        $name = $query->name ?? (string) $session->get(self::LAST_COMMAND);
-        if (StringUtils::isString($name) && $service->hasCommand($name)) {
-            $command = $service->getCommand($name);
-        } else {
-            /** @phpstan-var CommandType $command */
-            $command = $service->first();
-            $name = $command['name'];
-        }
-        $query->name = $name;
-        $session->set(self::LAST_COMMAND, $name);
+
+        $session = $request->getSession();
+        $query ??= $session->get(self::KEY_QUERY_COMMAND, new CommandQuery());
+        $command = $this->getCommand($service, $query->name);
+        $this->saveQuery($session, $query, $command);
+
         $root = $this->trans('command.list.available');
         $commands = $service->getGroupedNames($root);
         $parameters = [
@@ -187,6 +184,18 @@ class CommandController extends AbstractController
     }
 
     /**
+     * @phpstan-return CommandType
+     */
+    private function getCommand(CommandService $service, ?string $name): array
+    {
+        if (StringUtils::isString($name) && $service->hasCommand($name)) {
+            return $service->getCommand($name);
+        }
+
+        return $service->first();
+    }
+
+    /**
      * @phpstan-param CommandType $command
      */
     private function getCommandData(
@@ -203,5 +212,14 @@ class CommandController extends AbstractController
         }
 
         return $dataService->validateData($command, \array_merge($data, $existing));
+    }
+
+    /**
+     * @phpstan-param CommandType $command
+     */
+    private function saveQuery(SessionInterface $session, CommandQuery $query, array $command): void
+    {
+        $query->name = $command['name'];
+        $session->set(self::KEY_QUERY_COMMAND, $query);
     }
 }

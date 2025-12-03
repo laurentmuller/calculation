@@ -35,7 +35,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     isAcceptValue: bool,
  *     default: array|scalar|null,
  *     display: string,
- *     arguments: string}
+ *     extra: string}
  * @phpstan-type CommandType = array{
  *      name: string,
  *      description: string,
@@ -156,23 +156,28 @@ class CommandService implements \Countable
     /**
      * Gets the first command.
      *
-     * @phpstan-return CommandType|false
+     * @phpstan-return CommandType
+     *
+     * @throws \LogicException if no command is found
      */
-    public function first(): array|false
+    public function first(): array
     {
         $commands = $this->getCommands();
+        $command = \reset($commands);
 
-        return \reset($commands);
+        return \is_array($command) ? $command : throw new \LogicException('No command found.');
     }
 
     /**
      * Gets the command for the given name.
      *
-     * @phpstan-return CommandType|null
+     * @phpstan-return CommandType
+     *
+     * @throws \InvalidArgumentException if the given command name is not found
      */
-    public function getCommand(string $name): ?array
+    public function getCommand(string $name): array
     {
-        return $this->getCommands()[$name] ?? null;
+        return $this->getCommands()[$name] ?? throw new \InvalidArgumentException(\sprintf('Unable to find the command "%s".', $name));
     }
 
     /**
@@ -323,7 +328,7 @@ class CommandService implements \Countable
                 'isArray' => $isArray,
                 'default' => $argument['default'],
                 'display' => $display,
-                'arguments' => $this->parseHelp($required, $isArray, $display),
+                'extra' => $this->parseExtra($required, $isArray, $display),
             ];
         }
 
@@ -340,6 +345,7 @@ class CommandService implements \Countable
         $command['arguments'] = $this->parseArguments($command['definition']['arguments']);
         $command['options'] = $this->parseOptions($command['definition']['options']);
         $command['help'] = $command['help'] === $command['description'] ? '' : $this->parseDescription($command['help']);
+        $command['description'] = \rtrim($command['description'], '.') . '.';
         if ([] === $command['arguments']) {
             $command['usage'] = [\sprintf('%s [options]', $command['name'])];
         } else {
@@ -362,7 +368,7 @@ class CommandService implements \Countable
         return $this->replaceConsole($help);
     }
 
-    private function parseHelp(bool $required, bool $array, string $display): string
+    private function parseExtra(bool $required, bool $array, string $display): string
     {
         $values = [];
         if ($required) {
@@ -404,7 +410,7 @@ class CommandService implements \Countable
                 'isArray' => $isArray,
                 'default' => $option['default'],
                 'display' => $display,
-                'arguments' => $this->parseHelp($required, $isArray, $display),
+                'extra' => $this->parseExtra($required, $isArray, $display),
             ];
         }
 

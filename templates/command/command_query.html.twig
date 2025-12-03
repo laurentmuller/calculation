@@ -1,4 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
+{% from 'command/_command.htm.twig' import encode_query %}
 {# macros #}
 {% macro outputChildren(children) -%}
 {% if children|length %}
@@ -13,7 +14,7 @@
 {%- set title = 'command.execute.title' -%}
 {%- set title_icon = 'code' -%}
 {%- set title_description = 'command.execute.description' -%}
-{%- set cancel_path = path('command_index', {name: command.name}) -%}
+{%- set cancel_path = encode_query('command_index', query) -%}
 {%- set submit_text = 'command.execute.title' -%}
 {%- set submit_title = 'command.execute.submit_title' -%}
 {# body #}
@@ -21,10 +22,9 @@
 {# name #}
 {{ include('command/_command_name.html.twig', {command: command}, with_context: false) }}
 {# arguments #}
-{% if arguments.texts|length or arguments.checkboxes|length %}
+{% if arguments|length %}
     <p class="horizontal-line">{{ 'command.list.fields.arguments'|trans }}</p>
-    {{ _self.outputChildren(arguments.texts) }}
-    {{ _self.outputChildren(arguments.checkboxes) }}
+    {{ _self.outputChildren(arguments) }}
 {% endif %}
 {# options #}
 {% if options.texts|length or options.checkboxes|length %}

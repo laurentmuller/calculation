@@ -1,5 +1,6 @@
 {% extends 'cards/card_base.html.twig' %}
 {% from 'macros/_icons.html.twig' import button_pdf %}
+{% from 'command/_command.htm.twig' import encode_query %}
 {# parameters #}
 {%- set title = 'command.list.title' -%}
 {%- set title_icon = 'code' -%}
@@ -11,7 +12,8 @@
     <label for="command" class="form-label">{{ 'command.list.fields.command'|trans }}</label>
     <div class="input-group">
         <span class="input-group-text" id="basic-addon1"><i class="fa-fw fa-solid fa-terminal"></i></span>
-        <select id="command" name="command" class="form-select" data-url="{{ path('command_content') }}">
+        <select id="command" name="command" class="form-select" data-url="{{ path('command_content') }}"
+                data-error="{{ 'command.result.error'|trans }}">
             {% for key, names in commands %}
                 <optgroup label="{{ key }}">
                     {% for name in names %}
@@ -27,7 +29,7 @@
 {# footer #}
 {% block card_footer %}
 <div class="d-flex-wrap">
-    <a href="#" class="btn btn-form btn-warning btn-execute" data-url="{{ path('command_execute', {name: 'query'}) }}">
+    <a id="execute" href="{{ encode_query('command_execute', query) }}" class="btn btn-form btn-warning btn-execute">
         {{- 'command.execute.title'|trans -}}
     </a>
     {{ button_pdf('command_pdf') }}

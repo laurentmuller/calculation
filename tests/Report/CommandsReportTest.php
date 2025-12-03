@@ -37,7 +37,7 @@ final class CommandsReportTest extends TestCase
             'isAcceptValue' => false,
             'default' => 'Default',
             'display' => 'Display',
-            'arguments' => 'Arguments',
+            'extra' => 'Arguments',
         ];
         $argument2 = [
             'name' => 'Argument',
@@ -49,7 +49,7 @@ final class CommandsReportTest extends TestCase
             'isAcceptValue' => false,
             'default' => 'Default',
             'display' => '',
-            'arguments' => '',
+            'extra' => '',
         ];
         $option = [
             'name' => 'Option',
@@ -61,7 +61,7 @@ final class CommandsReportTest extends TestCase
             'isAcceptValue' => true,
             'default' => 'Default',
             'display' => 'Display',
-            'arguments' => 'Arguments',
+            'extra' => 'extra',
         ];
         $command1 = [
             'name' => 'Command1',

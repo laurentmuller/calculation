@@ -1,34 +1,35 @@
 {# macros #}
-{% macro outputTitleLine(title) -%}
-    <div class="pb-2 mb-1 border-bottom">{{ title|trans }}</div>
-{% endmacro outputTitleLine %}
-
-{% macro outputTitleCollapse(id, title, expanded = false) -%}
+{% macro encode_query(name, query) -%}
+    {{- path(name, {name: query.name, arguments: query.arguments, options: query.options, help: query.help}) -}}
+{%- endmacro encode_query %}
+{% macro outputTitleLine(id) -%}
+    <div class="pb-2 mb-1 border-bottom">{{ ('command.list.fields.' ~ id)|trans }}</div>
+{%- endmacro outputTitleLine %}
+{% macro outputTitleCollapse(id, expanded = false) -%}
     <div class="d-flex-wrap-center pb-2 mb-1 border-bottom">
         <a href="#{{ id }}" class="drop-down-icon-right text-body" role="button"
            data-bs-toggle="collapse" aria-controls="{{ id }}" aria-expanded="{{ expanded|json_encode }}">
-            {{ title|trans }}
+            {{- ('command.list.fields.' ~ id)|trans -}}
         </a>
     </div>
-{% endmacro outputTitleCollapse %}
-
-{% macro outputPopoverRow(name, description, arguments, popover) -%}
+{%- endmacro outputTitleCollapse %}
+{% macro outputPopoverRow(name, description, extra, popover) -%}
     <div class="row">
         <div class="col-md-4 col-lg-3 text-success text-nowrap" data-bs-title="{{ name|trim }}" data-content="{{ popover|e }}">
             <pre class="fs-6 mb-0">{{ name }}</pre>
         </div>
         <div class="col-md-8 col-lg-9">
-            {{- description|raw }} {{ arguments|raw -}}
+            {{- description|raw }} {{ extra|raw -}}
         </div>
     </div>
-{% endmacro outputPopoverRow %}
+{%- endmacro outputPopoverRow %}
 {% macro outputEntryRow(name, value, class = null) -%}
     <tr>
         <td>{{ name }}</td>
         <td>:</td>
         <td{% if class %} class="{{ class }}"{% endif %}>{{ value }}</td>
     </tr>
-{% endmacro outputEntryRow %}
+{%- endmacro outputEntryRow %}
 {% macro tooltipArgument(argument) -%}
     <div class="mx-2 mt-1">
         <table class="table table-sm">
@@ -39,7 +40,7 @@
             {% endif %}
         </table>
     </div>
-{% endmacro tooltipArgument %}
+{%- endmacro tooltipArgument %}
 {% macro tooltipOption(option) -%}
     <div class="mx-2 mt-1">
         <table class="table table-sm">
@@ -51,42 +52,42 @@
             {% endif %}
         </table>
     </div>
-{% endmacro tooltipOption %}
+{%- endmacro tooltipOption %}
 {# content #}
 <div id="content">
     {# description #}
     {% if command.description %}
-        {{ _self.outputTitleLine('command.list.fields.description') }}
+        {{ _self.outputTitleLine('description') }}
         <p class="ms-2">{{ command.description }}</p>
     {% endif %}
     {# usage #}
     {% if command.usage|length %}
-        {{ _self.outputTitleLine('command.list.fields.usage') }}
+        {{ _self.outputTitleLine('usage') }}
         {% for usage in command.usage %}
             <pre class="ms-2 fs-6">{{ usage }}</pre>
         {% endfor %}
     {% endif %}
     {# arguments #}
     {% if command.arguments|length %}
-        {{ _self.outputTitleCollapse('arguments', 'command.list.fields.arguments', query.arguments) }}
+        {{ _self.outputTitleCollapse('arguments', query.arguments) }}
         <div id="arguments" class="ms-2 mt-2 collapse{% if query.arguments %} show{% endif %}">
             {% for argument in command.arguments %}
-                {{ _self.outputPopoverRow(argument.name, argument.description, argument.arguments, _self.tooltipArgument(argument)) }}
+                {{ _self.outputPopoverRow(argument.name, argument.description, argument.extra, _self.tooltipArgument(argument)) }}
             {% endfor %}
         </div>
     {% endif %}
     {# options #}
     {% if command.options|length %}
-        {{ _self.outputTitleCollapse('options', 'command.list.fields.options', query.options) }}
+        {{ _self.outputTitleCollapse('options', query.options) }}
         <div id="options" class="ms-2 mt-2 collapse{% if query.options %} show{% endif %}">
             {% for option in command.options %}
-                {{ _self.outputPopoverRow(option.shortcutName, option.description, option.arguments, _self.tooltipOption(option)) }}
+                {{ _self.outputPopoverRow(option.shortcutName, option.description, option.extra, _self.tooltipOption(option)) }}
             {% endfor %}
         </div>
     {% endif %}
     {# help #}
     {% if command.help %}
-        {{ _self.outputTitleCollapse('help', 'command.list.fields.help', query.help) }}
+        {{ _self.outputTitleCollapse('help', query.help) }}
         <div id="help" class="ms-2 mt-2 collapse{% if query.help %}  show{% endif %}">
             <pre class="fs-6 mb-0 text-wrap">{{ command.help|raw|nl2br }}</pre>
         </div>

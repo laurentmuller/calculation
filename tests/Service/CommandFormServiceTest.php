@@ -15,13 +15,14 @@ namespace App\Tests\Service;
 
 use App\Service\CommandFormService;
 use App\Service\CommandService;
-use App\Tests\KernelServiceTestCase;
+use App\Utils\FileUtils;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\Test\FormIntegrationTestCase;
 
 /**
  * @phpstan-import-type CommandType from CommandService
  */
-final class CommandFormServiceTest extends KernelServiceTestCase
+final class CommandFormServiceTest extends FormIntegrationTestCase
 {
     public function testBoolArgument(): void
     {
@@ -35,7 +36,7 @@ final class CommandFormServiceTest extends KernelServiceTestCase
             'isAcceptValue' => false,
             'default' => 'Default',
             'display' => 'Display',
-            'arguments' => 'Arguments',
+            'extra' => 'extra',
         ];
         $command = [
             'name' => 'fake',
@@ -54,14 +55,14 @@ final class CommandFormServiceTest extends KernelServiceTestCase
 
     public function testCreateForm(): void
     {
-        $form = $this->createForm('completion');
+        $form = $this->createForm();
         self::assertTrue($form->has('argument-shell'));
         self::assertTrue($form->has('option-help'));
     }
 
     public function testCreateFormMultiple(): void
     {
-        $form = $this->createForm('cache:pool:invalidate-tags', [
+        $form = $this->createForm('cache_pool_invalidate_tags', [
             'argument-tags' => [],
             'option-pool' => [],
         ]);
@@ -71,22 +72,20 @@ final class CommandFormServiceTest extends KernelServiceTestCase
         $view = $form->createView();
         $commandFormService = $this->getCommandFormService();
 
-        $filtered = $commandFormService->filter($view, CommandFormService::ARGUMENT_TEXT);
+        $filtered = $commandFormService->filter($view, CommandFormService::PRIORITY_ARGUMENT);
         self::assertCount(1, $filtered);
-        $filtered = $commandFormService->filter($view, CommandFormService::OPTION_TEXT);
+        $filtered = $commandFormService->filter($view, CommandFormService::PRIORITY_TEXT);
         self::assertCount(2, $filtered);
     }
 
     public function testFilter(): void
     {
-        $form = $this->createForm('completion');
+        $form = $this->createForm();
         $view = $form->createView();
         $commandFormService = $this->getCommandFormService();
 
-        $filtered = $commandFormService->filter($view, CommandFormService::ARGUMENT_TEXT);
+        $filtered = $commandFormService->filter($view, CommandFormService::PRIORITY_ARGUMENT);
         self::assertCount(1, $filtered);
-        $filtered = $commandFormService->filter($view, CommandFormService::ARGUMENT_BOOL);
-        self::assertEmpty($filtered);
     }
 
     /**
@@ -94,33 +93,27 @@ final class CommandFormServiceTest extends KernelServiceTestCase
      *
      * @phpstan-return FormInterface<mixed>
      */
-    private function createForm(string $name = 'about', array $data = []): FormInterface
+    private function createForm(string $name = 'completion', array $data = []): FormInterface
     {
         $command = $this->getCommand($name);
         $service = $this->getCommandFormService();
 
-        return $service->createForm($command, $data, ['csrf_protection' => false]);
+        return $service->createForm($command, $data);
     }
 
     /**
      * @phpstan-return CommandType
      */
-    private function getCommand(string $name): array
+    private function getCommand(string $name = 'completion'): array
     {
-        $service = $this->getCommandService();
-        $command = $service->getCommand($name);
-        self::assertIsArray($command);
+        $path = \sprintf('%s/../files/json/command_%s.json', __DIR__, $name);
 
-        return $command;
+        /** @phpstan-var CommandType */
+        return FileUtils::decodeJson($path);
     }
 
     private function getCommandFormService(): CommandFormService
     {
-        return $this->getService(CommandFormService::class);
-    }
-
-    private function getCommandService(): CommandService
-    {
-        return $this->getService(CommandService::class);
+        return new CommandFormService($this->factory);
     }
 }

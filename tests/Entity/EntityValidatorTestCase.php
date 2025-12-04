@@ -26,7 +26,7 @@ abstract class EntityValidatorTestCase extends KernelServiceTestCase
 {
     use DatabaseTrait;
 
-    protected ?ValidatorInterface $validator = null;
+    protected ValidatorInterface $validator;
 
     #[\Override]
     protected function setUp(): void
@@ -51,7 +51,6 @@ abstract class EntityValidatorTestCase extends KernelServiceTestCase
 
     protected function validate(mixed $object, int $expected = 0): ConstraintViolationListInterface
     {
-        self::assertNotNull($this->validator);
         $result = $this->validator->validate($object);
         self::assertCount($expected, $result);
 

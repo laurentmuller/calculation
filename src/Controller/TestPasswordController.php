@@ -118,7 +118,6 @@ class TestPasswordController extends AbstractController
 
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
-            /** @phpstan-var array<string, mixed> $data */
             $data = $form->getData();
             $message = $this->trans('password.success');
             $message .= '<ul>';

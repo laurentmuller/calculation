@@ -20,6 +20,7 @@ use App\Attribute\WordRoute;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
 use App\Response\WordResponse;
+use App\Service\EnvironmentService;
 use App\Service\MarkdownService;
 use App\Utils\FileUtils;
 use App\Word\HtmlDocument;
@@ -35,10 +36,19 @@ use Symfony\Contracts\Cache\CacheInterface;
 #[Route(path: '/about', name: 'about_')]
 class AboutController extends AbstractController
 {
+    private const TAGS = [
+        ['h4', 'h6', 'bookmark bookmark-3'],
+        ['h3', 'h5', 'bookmark bookmark-2'],
+        ['h2', 'h4', 'bookmark bookmark-1'],
+        ['h1', 'h3', 'bookmark'],
+        ['p', 'p', 'text-justify'],
+    ];
+
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
         private readonly MarkdownService $service,
+        private readonly EnvironmentService $environment,
         private readonly CacheInterface $cache
     ) {
     }
@@ -55,8 +65,8 @@ class AboutController extends AbstractController
     public function pdf(): PdfResponse
     {
         $content = $this->loadContent();
-        $parameters = ['%app_name%' => $this->getApplication()];
         $report = new HtmlReport($this, $content);
+        $parameters = ['%app_name%' => $this->getApplication()];
         $report->setTranslatedTitle('index.menu_info', $parameters, true);
 
         return $this->renderPdfDocument($report);
@@ -66,41 +76,35 @@ class AboutController extends AbstractController
     public function word(): WordResponse
     {
         $content = $this->loadContent();
-        $parameters = ['%app_name%' => $this->getApplication()];
         $doc = new HtmlDocument($this, $content);
+        $parameters = ['%app_name%' => $this->getApplication()];
         $doc->setTranslatedTitle('index.menu_info', $parameters);
 
         return $this->renderWordDocument($doc);
     }
 
-    private function convertFile(string $name): string
-    {
-        $tags = [
-            ['h4', 'h6', 'bookmark bookmark-3'],
-            ['h3', 'h5', 'bookmark bookmark-2'],
-            ['h2', 'h4', 'bookmark bookmark-1'],
-            ['h1', 'h3', 'bookmark'],
-        ];
-        $path = FileUtils::buildPath($this->projectDir, $name);
-        $content = $this->service->convertFile($path);
-        $content = $this->service->updateTags($tags, $content);
-
-        return $this->service->addTagClass('p', 'text-justify', $content);
-    }
-
     private function getDeploy(): int
     {
-        return (int) \filemtime(FileUtils::buildPath($this->projectDir, 'composer.lock'));
+        return $this->cache->get('about-controller-deploy', function (): int {
+            $file = $this->environment->isProduction() ? '.htdeployment' : 'composer.lock';
+
+            return (int) \filemtime(FileUtils::buildPath($this->projectDir, $file));
+        });
     }
 
     private function loadContent(): string
     {
-        return $this->cache->get('about-content', function (): string {
-            $license = $this->convertFile(AboutLicenceController::LICENCE_FILE);
+        return $this->cache->get('about-controller-content', function (): string {
+            $license = $this->processFile(AboutLicenceController::LICENCE_FILE);
             $license = \substr($license, 0, (int) \strrpos($license, '<h4'));
-            $policy = $this->convertFile(AboutPolicyController::POLICY_FILE);
+            $policy = $this->processFile(AboutPolicyController::POLICY_FILE);
 
             return $license . $policy;
         });
+    }
+
+    private function processFile(string $name): string
+    {
+        return $this->service->processFile(FileUtils::buildPath($this->projectDir, $name), self::TAGS, false);
     }
 }

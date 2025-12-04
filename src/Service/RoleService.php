@@ -23,10 +23,8 @@ use Twig\Attribute\AsTwigFilter;
  */
 readonly class RoleService
 {
-    public function __construct(
-        private RoleHierarchyInterface $service,
-        private TranslatorInterface $translator
-    ) {
+    public function __construct(private RoleHierarchyInterface $service, private TranslatorInterface $translator)
+    {
     }
 
     /**
@@ -48,6 +46,8 @@ readonly class RoleService
 
     /**
      * Gets the role's icon.
+     *
+     * @phpstan-param RoleInterface|RoleInterface::ROLE_* $role
      */
     public function getRoleIcon(RoleInterface|string $role): string
     {
@@ -64,15 +64,13 @@ readonly class RoleService
 
     /**
      * Gets the icon and the translated role.
+     *
+     * @phpstan-param RoleInterface|RoleInterface::ROLE_* $role
      */
     #[AsTwigFilter('role_icon_name')]
     public function getRoleIconAndName(RoleInterface|string $role): string
     {
-        return \sprintf(
-            '<i class="me-1 %s"></i>%s',
-            $this->getRoleIcon($role),
-            $this->translateRole($role)
-        );
+        return \sprintf('<i class="me-1 %s"></i>%s', $this->getRoleIcon($role), $this->translateRole($role));
     }
 
     /**
@@ -84,11 +82,7 @@ readonly class RoleService
      */
     public function getRoleNames(?RoleInterface $role): array
     {
-        if ($role instanceof RoleInterface) {
-            return $role->getRoles();
-        }
-
-        return [];
+        return $role instanceof RoleInterface ? $role->getRoles() : [];
     }
 
     /**
@@ -118,6 +112,8 @@ readonly class RoleService
 
     /**
      * Gets the translated role.
+     *
+     * @phpstan-param RoleInterface|RoleInterface::ROLE_* $role
      */
     public function translateRole(RoleInterface|string $role): string
     {

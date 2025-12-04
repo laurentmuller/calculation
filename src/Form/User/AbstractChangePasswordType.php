@@ -60,7 +60,6 @@ abstract class AbstractChangePasswordType extends AbstractEntityType
 
     private function validate(ExecutionContextInterface $context): void
     {
-        /** @phpstan-var FormInterface<mixed> $form */
         $form = $context->getRoot()->get('plainPassword');
         $password = (string) $form->getData();
         $target = $form->get('first');

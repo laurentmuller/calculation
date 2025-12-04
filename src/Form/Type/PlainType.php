@@ -307,7 +307,6 @@ class PlainType extends AbstractType
      */
     private function getDataValue(mixed $value, array $options): string
     {
-        /** @phpstan-var mixed $value */
         $value = $this->transformValue($value, $options);
 
         if (\is_bool($value)) {

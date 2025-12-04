@@ -142,7 +142,6 @@ class AdminController extends AbstractController
     ): Response {
         $parameters = $this->getApplicationParameters();
         $role = $parameters->getRights()->getAdminRole();
-        $role->setName($roleService->translateRole($role));
         $default = $roleBuilderService->getRoleAdmin();
 
         return $this->editRights($request, $parameters, $roleService, $role, $default);

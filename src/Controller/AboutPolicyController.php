@@ -26,6 +26,13 @@ class AboutPolicyController extends AbstractAboutController
      */
     public const POLICY_FILE = 'POLICY.md';
 
+    private const TAGS = [
+        ['h4', 'h6', 'bookmark bookmark-2'],
+        ['h3', 'h5', 'bookmark bookmark-1'],
+        ['h2', 'h4', 'bookmark'],
+        ['p', 'p', 'text-justify'],
+    ];
+
     #[\Override]
     protected function getFileName(): string
     {
@@ -35,11 +42,7 @@ class AboutPolicyController extends AbstractAboutController
     #[\Override]
     protected function getTags(): array
     {
-        return [
-            ['h4', 'h6', 'bookmark bookmark-2'],
-            ['h3', 'h5', 'bookmark bookmark-1'],
-            ['h2', 'h4', 'bookmark'],
-        ];
+        return self::TAGS;
     }
 
     #[\Override]

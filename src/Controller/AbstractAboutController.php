@@ -52,9 +52,7 @@ abstract class AbstractAboutController extends AbstractController
     #[GetRoute(path: '/content', name: 'content')]
     public function content(): JsonResponse
     {
-        $content = $this->loadContent();
-
-        return $this->jsonTrue(['content' => $content]);
+        return $this->jsonTrue(['content' => $this->loadContent()]);
     }
 
     /**
@@ -64,11 +62,7 @@ abstract class AbstractAboutController extends AbstractController
     #[IndexRoute]
     public function index(): Response
     {
-        $view = $this->getView();
-        $content = $this->loadContent();
-        $parameters = ['content' => $content];
-
-        return $this->render($view, $parameters);
+        return $this->render($this->getView(), ['content' => $this->loadContent()]);
     }
 
     /**
@@ -130,14 +124,12 @@ abstract class AbstractAboutController extends AbstractController
     {
         $fileName = $this->getFileName();
 
-        return $this->cache->get($fileName, function () use ($fileName): string {
-            $tags = $this->getTags();
-            $path = FileUtils::buildPath($this->projectDir, $fileName);
-            $content = $this->service->convertFile($path);
-            $content = $this->service->removeTitle($content);
-            $content = $this->service->updateTags($tags, $content);
-
-            return $this->service->addTagClass('p', 'text-justify', $content);
-        });
+        return $this->cache->get(
+            $fileName,
+            fn (): string => $this->service->processFile(
+                FileUtils::buildPath($this->projectDir, $fileName),
+                $this->getTags()
+            )
+        );
     }
 }

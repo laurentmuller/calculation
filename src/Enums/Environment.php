@@ -51,8 +51,6 @@ enum Environment: string implements TranslatableEnumInterface
 
     /**
      * Returns if this enumeration is the development environment.
-     *
-     * @return bool true if development environment
      */
     public function isDevelopment(): bool
     {
@@ -61,8 +59,6 @@ enum Environment: string implements TranslatableEnumInterface
 
     /**
      * Returns if this enumeration is the production environment.
-     *
-     * @return bool true if production environment
      */
     public function isProduction(): bool
     {
@@ -71,8 +67,6 @@ enum Environment: string implements TranslatableEnumInterface
 
     /**
      * Returns if this enumeration is the test environment.
-     *
-     * @return bool true if test environment
      */
     public function isTest(): bool
     {

@@ -148,7 +148,6 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
             $builder->addOrderBy($field, $order);
         }
 
-        /** @phpstan-var Query<null, mixed> */
         return $builder->getQuery();
     }
 

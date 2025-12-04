@@ -20,7 +20,7 @@ use Twig\Extra\Markdown\MarkdownInterface;
 /**
  * Service to convert Markdown to HTML and to update tags.
  *
- * @phpstan-type TagType = array{0: non-empty-string, 1: non-empty-string, 2?: non-empty-string}
+ * @phpstan-type TagType = array{0: string, 1: string, 2?: string}
  */
 readonly class MarkdownService
 {
@@ -29,15 +29,41 @@ readonly class MarkdownService
     }
 
     /**
+     * Process the given file.
+     *
+     * @param string $path        the file to process
+     * @param array  $tags        the tags to update
+     * @param bool   $removeTitle true to remove the title (H1 tags)
+     *
+     * @phpstan-param TagType[] $tags
+     */
+    public function processFile(string $path, array $tags = [], bool $removeTitle = true): string
+    {
+        $content = FileUtils::readFile($path);
+        if ('' === $content) {
+            return $content;
+        }
+        $content = $this->convertContent($content);
+        if ($removeTitle) {
+            $content = $this->removeTitle($content);
+        }
+        if ([] !== $tags) {
+            return $this->updateTags($tags, $content);
+        }
+
+        return $content;
+    }
+
+    /**
      * Add the given class to the given tag.
      *
-     * @param non-empty-string $tag     the tag name to add class to
-     * @param non-empty-string $class   the class name to add
-     * @param string           $content the HTML content to update
+     * @param string $tag     the tag name to add class to
+     * @param string $class   the class name to add
+     * @param string $content the HTML content to update
      *
      * @return string the updated content
      */
-    public function addTagClass(string $tag, string $class, string $content): string
+    private function addTagClass(string $tag, string $class, string $content): string
     {
         $search = \sprintf('<%s>', $tag);
         $replace = \sprintf('<%s class="%s">', $tag, $class);
@@ -52,24 +78,12 @@ readonly class MarkdownService
      *
      * @return string the content converted to HTML
      */
-    public function convertContent(string $content): string
+    private function convertContent(string $content): string
     {
         $content = $this->markdown->convert($content);
 
         // remove line breaks of continuous texts
         return StringUtils::pregReplace('/[^>]$/m', '$0 ', $content);
-    }
-
-    /**
-     * Convert the Markdown content of the given file to HTML.
-     *
-     * @param string $path the file to load and to convert
-     *
-     * @return string the Markdown file content converted to HTML
-     */
-    public function convertFile(string $path): string
-    {
-        return $this->convertContent(FileUtils::readFile($path));
     }
 
     /**
@@ -80,7 +94,7 @@ readonly class MarkdownService
      *
      * @return string the updated content
      */
-    public function removeTitle(string $content, int $limit = -1): string
+    private function removeTitle(string $content, int $limit = -1): string
     {
         return \trim(StringUtils::pregReplace('/<h1[^>]*>.*?<\/h1>/', '', $content, $limit));
     }
@@ -88,37 +102,18 @@ readonly class MarkdownService
     /**
      * Replace the given old tag with the given new tag.
      *
-     * @param non-empty-string $oldTag  the tag name to search for
-     * @param non-empty-string $newTag  the tag name to replace by
-     * @param string           $content the HTML content to update
+     * @param string $oldTag  the tag name to search for
+     * @param string $newTag  the tag name to replace by
+     * @param string $content the HTML content to update
      *
      * @return string the updated content
      */
-    public function replaceTag(string $oldTag, string $newTag, string $content): string
+    private function replaceTag(string $oldTag, string $newTag, string $content): string
     {
         $pattern = \sprintf('/<(\/?)%s>/m', $oldTag);
         $replacement = \sprintf('<$1%s>', $newTag);
 
         return StringUtils::pregReplace($pattern, $replacement, $content);
-    }
-
-    /**
-     * Update the given tag by replacing the given old tag with the given new tag and adding the given class.
-     *
-     * This is a combination of the <code>replaceTag()</code> and <code>addTagClass()</code> functions.
-     *
-     * @param non-empty-string $oldTag  the tag name to search for
-     * @param non-empty-string $newTag  the tag name to replace by
-     * @param non-empty-string $class   the class name to add
-     * @param string           $content the HTML content to update
-     *
-     * @return string the updated content
-     */
-    public function updateTag(string $oldTag, string $newTag, string $class, string $content): string
-    {
-        $content = $this->replaceTag($oldTag, $newTag, $content);
-
-        return $this->addTagClass($newTag, $class, $content);
     }
 
     /**
@@ -133,10 +128,12 @@ readonly class MarkdownService
      *
      * @return string the updated content
      */
-    public function updateTags(array $tags, string $content): string
+    private function updateTags(array $tags, string $content): string
     {
         foreach ($tags as $tag) {
-            $content = $this->replaceTag($tag[0], $tag[1], $content);
+            if ($tag[0] !== $tag[1]) {
+                $content = $this->replaceTag($tag[0], $tag[1], $content);
+            }
             if (isset($tag[2])) {
                 $content = $this->addTagClass($tag[1], $tag[2], $content);
             }

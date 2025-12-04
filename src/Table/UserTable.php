@@ -76,6 +76,8 @@ class UserTable extends AbstractEntityTable
 
     /**
      * Format the user's role.
+     *
+     * @phpstan-param RoleInterface::ROLE_*|null $role
      */
     public function formatRole(?string $role): string
     {

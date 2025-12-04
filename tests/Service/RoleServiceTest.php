@@ -103,6 +103,9 @@ final class RoleServiceTest extends TestCase
         self::assertFalse($actual);
     }
 
+    /**
+     * @phpstan-param RoleInterface|RoleInterface::ROLE_* $role
+     */
     #[DataProvider('getRoleIcons')]
     public function testRoleIcon(RoleInterface|string $role, string $expected): void
     {
@@ -129,6 +132,9 @@ final class RoleServiceTest extends TestCase
         self::assertSame('common.value_disabled', $actual);
     }
 
+    /**
+     * @phpstan-param RoleInterface|RoleInterface::ROLE_* $role
+     */
     #[DataProvider('getTranslateRoles')]
     public function testTranslateRole(RoleInterface|string $role, string $expected): void
     {

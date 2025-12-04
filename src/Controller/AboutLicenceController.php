@@ -26,6 +26,11 @@ class AboutLicenceController extends AbstractAboutController
      */
     public const LICENCE_FILE = 'LICENSE.md';
 
+    private const TAGS = [
+        ['h2', 'h4', 'bookmark'],
+        ['p', 'p', 'text-justify'],
+    ];
+
     #[\Override]
     protected function getFileName(): string
     {
@@ -35,9 +40,7 @@ class AboutLicenceController extends AbstractAboutController
     #[\Override]
     protected function getTags(): array
     {
-        return [
-            ['h2', 'h4', 'bookmark'],
-        ];
+        return self::TAGS;
     }
 
     #[\Override]

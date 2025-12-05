@@ -302,9 +302,9 @@ class FormHelper
     /**
      * Add a money type to the builder and reset all values to the default.
      *
-     * @param string $currency the currency symbol or an empty string if none
+     * @param ?string $currency the currency symbol or null if none
      */
-    public function addMoneyType(string $currency = 'CHF'): self
+    public function addMoneyType(?string $currency = 'CHF'): self
     {
         return $this->widgetClass('text-end')
             ->updateOption('currency', $currency)

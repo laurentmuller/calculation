@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Traits\ArrayTrait;
 use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -22,14 +21,12 @@ use Symfony\Contracts\Cache\ItemInterface;
 /**
  * Service for cache commands.
  */
-class CacheService
+readonly class CacheService
 {
-    use ArrayTrait;
-
     public function __construct(
-        private readonly CommandService $service,
+        private CommandService $service,
         #[Target('calculation.cache')]
-        private readonly CacheInterface $cache
+        private CacheInterface $cache
     ) {
     }
 
@@ -54,7 +51,7 @@ class CacheService
     public function list(): array
     {
         return $this->cache->get(
-            'cache.pools',
+            'cache.pools.list',
             fn (ItemInterface $item, bool &$save): array => $this->loadContent($save)
         );
     }
@@ -72,7 +69,7 @@ class CacheService
             return [];
         }
         $content = $this->parseContent($result->content);
-        $save = true;
+        $save = [] !== $content;
 
         return $content;
     }
@@ -83,12 +80,14 @@ class CacheService
     private function parseContent(string $content): array
     {
         $lines = StringUtils::splitLines(\trim($content), true);
-        $callback = static fn (string $line): bool => !\str_starts_with($line, '-')
-            && !\str_starts_with($line, 'Pool name');
-        $lines = $this->getSorted($this->getFiltered(\array_map(trim(...), $lines), $callback));
+        $lines = \array_filter(\array_map(\trim(...), $lines));
+        \sort($lines, \SORT_NATURAL);
 
         $results = [];
         foreach ($lines as $line) {
+            if (\str_starts_with($line, '-') || \str_starts_with($line, 'Pool name')) {
+                continue;
+            }
             $values = \explode('.', $line, 2);
             $results[$values[0]][] = $values[1];
         }

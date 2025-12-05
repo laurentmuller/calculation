@@ -311,7 +311,7 @@ final class DateUtils
     private static function getMonthNames(string $pattern): array
     {
         $result = [];
-        $date = self::createDatePoint('2000-01-01');
+        $date = self::createDate('2000-01-01');
         $interval = self::createDateInterval('P1M');
         $formatter = self::getFormatter($pattern);
         for ($i = 1; $i <= 12; ++$i) {

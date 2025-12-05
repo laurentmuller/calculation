@@ -251,8 +251,6 @@ final class StringUtils
      * @param string $replacement the string to replace
      * @param string $subject     the string being searched and replaced on
      * @param int    $limit       the maximum possible replacements for the pattern. Defaults to -1 (no limit).
-     *
-     * @phpstan-param non-empty-string $pattern
      */
     public static function pregReplace(string $pattern, string $replacement, string $subject, int $limit = -1): string
     {
@@ -265,8 +263,6 @@ final class StringUtils
      * @param array<string, string> $values  an array where key is the pattern, and value is the replacement term
      * @param string|string[]       $subject the string or array being searched and replaced on
      *                                       Defaults to -1 (no limit)
-     *
-     * @phpstan-param non-empty-array<non-empty-string, string> $values
      *
      * @return string|string[] returns a string or an array with the replaced values
      *

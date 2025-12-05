@@ -59,11 +59,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
         string $selector,
         string $hashedToken
     ): ResetPasswordRequestInterface {
-        return $user->setResetPasswordRequest(
-            DateUtils::toDatePoint($expiresAt),
-            $selector,
-            $hashedToken
-        );
+        return $user->setResetPasswordRequest(DateUtils::toDatePoint($expiresAt), $selector, $hashedToken);
     }
 
     /**
@@ -79,11 +75,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
      */
     public function findByUsername(string $username): ?User
     {
-        try {
-            return $this->findOneBy(['username' => $username]);
-        } catch (\Throwable) {
-            return null;
-        }
+        return $this->findOneBy(['username' => $username]);
     }
 
     /**

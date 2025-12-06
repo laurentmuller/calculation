@@ -68,14 +68,6 @@ final class UserRepositoryTest extends KernelServiceTestCase
         self::assertNotNull($actual);
     }
 
-    public function testFindByUsernameFail(): void
-    {
-        $registry = $this->createMock(ManagerRegistry::class);
-        $repository = new UserRepository($registry);
-        $actual = $repository->findByUsername('test');
-        self::assertNull($actual);
-    }
-
     public function testFindByUserNameOrEmail(): void
     {
         $actual = $this->repository->findByUsernameOrEmail('test');

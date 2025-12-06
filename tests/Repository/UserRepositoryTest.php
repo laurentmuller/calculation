@@ -18,7 +18,6 @@ use App\Repository\UserRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;

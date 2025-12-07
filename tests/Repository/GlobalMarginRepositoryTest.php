@@ -15,25 +15,16 @@ namespace App\Tests\Repository;
 
 use App\Entity\GlobalMargin;
 use App\Repository\GlobalMarginRepository;
-use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\GlobalMarginTrait;
-use App\Tests\KernelServiceTestCase;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping\MappingException;
 
-final class GlobalMarginRepositoryTest extends KernelServiceTestCase
+/**
+ * @extends AbstractRepositoryTestCase<GlobalMargin, GlobalMarginRepository>
+ */
+final class GlobalMarginRepositoryTest extends AbstractRepositoryTestCase
 {
-    use DatabaseTrait;
     use GlobalMarginTrait;
-
-    private GlobalMarginRepository $repository;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->repository = $this->getService(GlobalMarginRepository::class);
-    }
 
     public function testCreateDefaultQueryBuilder(): void
     {
@@ -97,11 +88,8 @@ final class GlobalMarginRepositoryTest extends KernelServiceTestCase
 
     public function testGetSearchFields(): void
     {
-        $actual = $this->repository->getSearchFields('field');
-        self::assertSame('e.field', $actual);
-
-        $actual = $this->repository->getSearchFields('field', 'source');
-        self::assertSame('source.field', $actual);
+        $this->assertSameSearchField('field', 'e.field');
+        $this->assertSameSearchField('field', 'source.field', 'source');
     }
 
     public function testGetSearchQuery(): void
@@ -128,11 +116,8 @@ final class GlobalMarginRepositoryTest extends KernelServiceTestCase
 
     public function testGetSortFields(): void
     {
-        $actual = $this->repository->getSortField('field');
-        self::assertSame('e.field', $actual);
-
-        $actual = $this->repository->getSortField('field', 'source');
-        self::assertSame('source.field', $actual);
+        $this->assertSameSortField('field', 'e.field');
+        $this->assertSameSortField('field', 'source.field', 'source');
     }
 
     public function testPersist(): void
@@ -149,5 +134,11 @@ final class GlobalMarginRepositoryTest extends KernelServiceTestCase
         } finally {
             $this->repository->remove($margin);
         }
+    }
+
+    #[\Override]
+    protected function getRepositoryClass(): string
+    {
+        return GlobalMarginRepository::class;
     }
 }

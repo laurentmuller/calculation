@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Shortcut route attribute to add an entity.
  */
-#[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
 class AddEntityRoute extends GetPostRoute
 {
     public function __construct()

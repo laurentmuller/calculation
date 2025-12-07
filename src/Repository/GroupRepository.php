@@ -20,7 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for group entity.
  *
- * @extends AbstractRepository<Group>
+ * @phpstan-extends AbstractRepository<Group>
  */
 class GroupRepository extends AbstractRepository
 {

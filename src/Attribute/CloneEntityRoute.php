@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 /**
  * Shortcut route attribute to clone an entity.
  */
-#[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
 class CloneEntityRoute extends GetPostRoute
 {
     public function __construct()

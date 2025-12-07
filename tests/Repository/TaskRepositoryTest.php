@@ -13,25 +13,17 @@ declare(strict_types=1);
 
 namespace App\Tests\Repository;
 
+use App\Entity\Task;
 use App\Repository\TaskRepository;
-use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\TaskTrait;
-use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\QueryBuilder;
 
-final class TaskRepositoryTest extends KernelServiceTestCase
+/**
+ * @extends AbstractRepositoryTestCase<Task, TaskRepository>
+ */
+final class TaskRepositoryTest extends AbstractRepositoryTestCase
 {
-    use DatabaseTrait;
     use TaskTrait;
-
-    private TaskRepository $repository;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->repository = $this->getService(TaskRepository::class);
-    }
 
     #[\Override]
     protected function tearDown(): void
@@ -49,15 +41,13 @@ final class TaskRepositoryTest extends KernelServiceTestCase
 
     public function testGetSearchFields(): void
     {
-        $actual = $this->repository->getSearchFields('categoryCode');
-        self::assertSame('c.code', $actual);
-        $actual = $this->repository->getSearchFields('category.code');
-        self::assertSame('c.code', $actual);
+        $this->assertSameSearchField('group.id', 'g.id');
+        $this->assertSameSearchField('groupCode', 'g.code');
+        $this->assertSameSearchField('group.code', 'g.code');
 
-        $actual = $this->repository->getSearchFields('groupCode');
-        self::assertSame('g.code', $actual);
-        $actual = $this->repository->getSearchFields('group.code');
-        self::assertSame('g.code', $actual);
+        $this->assertSameSearchField('category.id', 'c.id');
+        $this->assertSameSearchField('categoryCode', 'c.code');
+        $this->assertSameSearchField('category.code', 'c.code');
     }
 
     public function testGetSortedBuilder(): void
@@ -84,24 +74,24 @@ final class TaskRepositoryTest extends KernelServiceTestCase
 
     public function testGetSortFields(): void
     {
-        $actual = $this->repository->getSortField('group.id');
-        self::assertSame('g.code', $actual);
-        $actual = $this->repository->getSortField('groupCode');
-        self::assertSame('g.code', $actual);
-        $actual = $this->repository->getSortField('group.code');
-        self::assertSame('g.code', $actual);
+        $this->assertSameSortField('group.id', 'g.code');
+        $this->assertSameSortField('groupCode', 'g.code');
+        $this->assertSameSortField('group.code', 'g.code');
 
-        $actual = $this->repository->getSortField('category.id');
-        self::assertSame('c.code', $actual);
-        $actual = $this->repository->getSortField('categoryCode');
-        self::assertSame('c.code', $actual);
-        $actual = $this->repository->getSortField('category.code');
-        self::assertSame('c.code', $actual);
+        $this->assertSameSortField('category.id', 'c.code');
+        $this->assertSameSortField('categoryCode', 'c.code');
+        $this->assertSameSortField('category.code', 'c.code');
     }
 
     public function testGetTableQueryBuilder(): void
     {
         $actual = $this->repository->getTableQueryBuilder();
         self::assertInstanceOf(QueryBuilder::class, $actual);
+    }
+
+    #[\Override]
+    protected function getRepositoryClass(): string
+    {
+        return TaskRepository::class;
     }
 }

@@ -16,23 +16,14 @@ namespace App\Tests\Repository;
 use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Repository\UserPropertyRepository;
-use App\Tests\DatabaseTrait;
 use App\Tests\Entity\IdTrait;
-use App\Tests\KernelServiceTestCase;
 
-final class UserPropertyRepositoryTest extends KernelServiceTestCase
+/**
+ * @extends AbstractRepositoryTestCase<UserProperty, UserPropertyRepository>
+ */
+final class UserPropertyRepositoryTest extends AbstractRepositoryTestCase
 {
-    use DatabaseTrait;
     use IdTrait;
-
-    private UserPropertyRepository $repository;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->repository = $this->getService(UserPropertyRepository::class);
-    }
 
     public function testFindByUser(): void
     {
@@ -73,5 +64,11 @@ final class UserPropertyRepositoryTest extends KernelServiceTestCase
         $this->addEntity($property);
         $actual = $this->repository->findOneByUserAndName($user, 'name');
         self::assertNotNull($actual);
+    }
+
+    #[\Override]
+    protected function getRepositoryClass(): string
+    {
+        return UserPropertyRepository::class;
     }
 }

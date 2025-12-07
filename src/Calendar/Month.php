@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Calendar;
 
 use App\Utils\FormatUtils;
-use App\Utils\StringUtils;
 
 /**
  * Represents a month with a calendar and an array of days.
@@ -46,7 +45,7 @@ class Month extends AbstractCalendarItem implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        $name = StringUtils::getShortName($this);
+        $name = $this->getShortName();
         $first = (string) FormatUtils::formatDate($this->getFirstDate());
         $last = (string) FormatUtils::formatDate($this->getLastDate());
 
@@ -86,6 +85,7 @@ class Month extends AbstractCalendarItem implements \Stringable
     /**
      * Gets this short name.
      */
+    #[\Override]
     public function getShortName(): string
     {
         $names = $this->calendar->getMonthShortNames();

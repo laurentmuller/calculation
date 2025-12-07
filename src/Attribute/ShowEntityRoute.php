@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 /**
  * Shortcut route attribute to show an entity.
  */
-#[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
 class ShowEntityRoute extends GetRoute
 {
     public function __construct()

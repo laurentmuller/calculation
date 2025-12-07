@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Calendar;
 
+use App\Utils\StringUtils;
+
 /**
  * Base class for calendar objects.
  */
@@ -50,6 +52,14 @@ abstract class AbstractCalendarItem implements \JsonSerializable, \Stringable
      * Gets the item number.
      */
     abstract public function getNumber(): int;
+
+    /**
+     * Gets this short class name.
+     */
+    public function getShortName(): string
+    {
+        return StringUtils::getShortName($this);
+    }
 
     /**
      * Gets the today day.

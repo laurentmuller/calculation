@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Exception\MappingNotFoundException;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Vich\UploaderBundle\Mapping\Attribute as Vich;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 /**

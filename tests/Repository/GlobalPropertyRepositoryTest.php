@@ -15,22 +15,12 @@ namespace App\Tests\Repository;
 
 use App\Entity\GlobalProperty;
 use App\Repository\GlobalPropertyRepository;
-use App\Tests\DatabaseTrait;
-use App\Tests\KernelServiceTestCase;
 
-final class GlobalPropertyRepositoryTest extends KernelServiceTestCase
+/**
+ * @extends AbstractRepositoryTestCase<GlobalProperty, GlobalPropertyRepository>
+ */
+final class GlobalPropertyRepositoryTest extends AbstractRepositoryTestCase
 {
-    use DatabaseTrait;
-
-    private GlobalPropertyRepository $repository;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->repository = $this->getService(GlobalPropertyRepository::class);
-    }
-
     public function testFindOneByName(): void
     {
         $actual = $this->repository->findOneByName('name');
@@ -46,5 +36,11 @@ final class GlobalPropertyRepositoryTest extends KernelServiceTestCase
 
         $actual = $this->repository->findOneByName('name');
         self::assertNotNull($actual);
+    }
+
+    #[\Override]
+    protected function getRepositoryClass(): string
+    {
+        return GlobalPropertyRepository::class;
     }
 }

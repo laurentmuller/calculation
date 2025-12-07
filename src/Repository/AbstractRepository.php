@@ -232,7 +232,10 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
      */
     protected function concat(string $alias, array $fields, string $default = ''): string
     {
-        $values = \array_map(static fn (string $field): string => \sprintf("COALESCE(%s.%s, '%s')", $alias, $field, $default), $fields);
+        $values = \array_map(
+            static fn (string $field): string => \sprintf("COALESCE(%s.%s, '%s')", $alias, $field, $default),
+            $fields
+        );
 
         return \sprintf('CONCAT(%s)', \implode(',', $values));
     }

@@ -15,7 +15,6 @@ namespace App\Calendar;
 
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
-use App\Utils\StringUtils;
 use Symfony\Component\Clock\DatePoint;
 
 /**
@@ -41,7 +40,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     #[\Override]
     public function __toString(): string
     {
-        $name = StringUtils::getShortName($this);
+        $name = $this->getShortName();
         $date = FormatUtils::formatDate($this->date);
 
         return \sprintf('%s(%s)', $name, $date);
@@ -101,6 +100,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     /**
      * Gets this short name.
      */
+    #[\Override]
     public function getShortName(): string
     {
         $names = $this->calendar->getWeekShortNames();

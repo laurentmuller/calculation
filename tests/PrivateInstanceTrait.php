@@ -32,6 +32,7 @@ trait PrivateInstanceTrait
         $reflectionClass = new \ReflectionClass($class);
         $constructor = $reflectionClass->getConstructor();
         self::assertNotNull($constructor);
+        self::assertTrue($constructor->isPrivate());
         $object = $reflectionClass->newInstanceWithoutConstructor();
         $constructor->invoke($object);
         self::assertInstanceOf($class, $object);

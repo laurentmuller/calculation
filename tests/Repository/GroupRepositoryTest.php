@@ -16,24 +16,15 @@ namespace App\Tests\Repository;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Repository\GroupRepository;
-use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\CategoryTrait;
-use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\QueryBuilder;
 
-final class GroupRepositoryTest extends KernelServiceTestCase
+/**
+ * @extends AbstractRepositoryTestCase<Group, GroupRepository>
+ */
+final class GroupRepositoryTest extends AbstractRepositoryTestCase
 {
     use CategoryTrait;
-    use DatabaseTrait;
-
-    private GroupRepository $repository;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->repository = $this->getService(GroupRepository::class);
-    }
 
     #[\Override]
     protected function tearDown(): void
@@ -89,5 +80,11 @@ final class GroupRepositoryTest extends KernelServiceTestCase
     {
         $actual = $this->repository->getTableQueryBuilder();
         self::assertInstanceOf(QueryBuilder::class, $actual);
+    }
+
+    #[\Override]
+    protected function getRepositoryClass(): string
+    {
+        return GroupRepository::class;
     }
 }

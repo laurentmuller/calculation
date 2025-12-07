@@ -15,7 +15,6 @@ namespace App\Calendar;
 
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
-use App\Utils\StringUtils;
 use Symfony\Component\Clock\DatePoint;
 
 /**
@@ -112,9 +111,9 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     public function __toString(): string
     {
         $year = (int) $this->year;
-        $name = StringUtils::getShortName($this);
-        $firstDate = DateUtils::createDatePoint(\sprintf('%d-01-01', $year));
-        $lastDate = DateUtils::createDatePoint(\sprintf('%d-12-31', $year));
+        $name = $this->getShortName();
+        $firstDate = DateUtils::createDate(\sprintf('%d-01-01', $year));
+        $lastDate = DateUtils::createDate(\sprintf('%d-12-31', $year));
         $first = FormatUtils::formatDate($firstDate);
         $last = FormatUtils::formatDate($lastDate);
 
@@ -133,13 +132,13 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         $this->year = DateUtils::completYear($year);
         $this->key = (string) $this->year;
         $this->reset();
-        $firstYearDate = DateUtils::createDatePoint(\sprintf('1 January %d', $this->year));
-        $lastYearDate = DateUtils::createDatePoint(\sprintf('31 December %d', $this->year));
-        $firstDate = DateUtils::createDatePoint(\sprintf('first monday of January %s', $this->year));
+        $firstYearDate = DateUtils::createDate(\sprintf('1 January %d', $this->year));
+        $lastYearDate = DateUtils::createDate(\sprintf('31 December %d', $this->year));
+        $firstDate = DateUtils::createDate(\sprintf('first monday of January %s', $this->year));
         if ($firstDate > $firstYearDate) {
             $firstDate = DateUtils::sub($firstDate, 'P1W');
         }
-        $lastDate = DateUtils::createDatePoint(\sprintf('last sunday of December %d', $this->year));
+        $lastDate = DateUtils::createDate(\sprintf('last sunday of December %d', $this->year));
         if ($lastDate < $lastYearDate) {
             $lastDate = DateUtils::add($lastDate, 'P1W');
         }
@@ -201,11 +200,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      */
     public function getMonthNames(): array
     {
-        if (null === $this->monthNames) {
-            $this->monthNames = DateUtils::getMonths();
-        }
-
-        return $this->monthNames;
+        return $this->monthNames ??= DateUtils::getMonths();
     }
 
     /**
@@ -225,11 +220,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      */
     public function getMonthShortNames(): array
     {
-        if (null === $this->monthShortNames) {
-            $this->monthShortNames = DateUtils::getShortMonths();
-        }
-
-        return $this->monthShortNames;
+        return $this->monthShortNames ??= DateUtils::getShortMonths();
     }
 
     /**
@@ -244,12 +235,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     #[\Override]
     public function getToday(): Day
     {
-        if (!$this->today instanceof Day) {
-            $date = DateUtils::createDatePoint('today');
-            $this->today = new Day($this, $date);
-        }
-
-        return $this->today;
+        return $this->today ??= new Day($this, DateUtils::createDate('today'));
     }
 
     /**
@@ -283,11 +269,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      */
     public function getWeekNames(): array
     {
-        if (null === $this->weekNames) {
-            $this->weekNames = DateUtils::getWeekdays();
-        }
-
-        return $this->weekNames;
+        return $this->weekNames ??= DateUtils::getWeekdays();
     }
 
     /**
@@ -307,11 +289,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      */
     public function getWeekShortNames(): array
     {
-        if (null === $this->weekShortNames) {
-            $this->weekShortNames = DateUtils::getShortWeekdays();
-        }
-
-        return $this->weekShortNames;
+        return $this->weekShortNames ??= DateUtils::getShortWeekdays();
     }
 
     #[\Override]

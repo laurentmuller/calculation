@@ -16,7 +16,7 @@ namespace App\Attribute;
 /**
  * Shortcut route attribute to get a Word document.
  */
-#[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
 class WordRoute extends GetRoute
 {
     public function __construct()

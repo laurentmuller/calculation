@@ -13,29 +13,27 @@ declare(strict_types=1);
 
 namespace App\Tests\Repository;
 
+use App\Entity\GroupMargin;
 use App\Repository\GroupMarginRepository;
-use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\GroupTrait;
-use App\Tests\KernelServiceTestCase;
 
-final class GroupMarginRepositoryTest extends KernelServiceTestCase
+/**
+ * @extends AbstractRepositoryTestCase<GroupMargin, GroupMarginRepository>
+ */
+final class GroupMarginRepositoryTest extends AbstractRepositoryTestCase
 {
-    use DatabaseTrait;
     use GroupTrait;
-
-    private GroupMarginRepository $repository;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->repository = $this->getService(GroupMarginRepository::class);
-    }
 
     public function testGetMargin(): void
     {
         $group = $this->getGroup();
         $actual = $this->repository->getMargin($group, 0.0);
         self::assertSame(1.1, $actual);
+    }
+
+    #[\Override]
+    protected function getRepositoryClass(): string
+    {
+        return GroupMarginRepository::class;
     }
 }

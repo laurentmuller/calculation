@@ -13,23 +13,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Repository;
 
+use App\Entity\Customer;
 use App\Repository\CustomerRepository;
-use App\Tests\DatabaseTrait;
-use App\Tests\KernelServiceTestCase;
 
-final class CustomerRepositoryTest extends KernelServiceTestCase
+/**
+ * @extends AbstractRepositoryTestCase<Customer, CustomerRepository>
+ */
+final class CustomerRepositoryTest extends AbstractRepositoryTestCase
 {
-    use DatabaseTrait;
-
-    private CustomerRepository $repository;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->repository = $this->getService(CustomerRepository::class);
-    }
-
     public function testFindByNameAndCompany(): void
     {
         $actual = $this->repository->findByNameAndCompany();
@@ -54,10 +45,19 @@ final class CustomerRepositoryTest extends KernelServiceTestCase
 
     public function testGetSortFields(): void
     {
-        $actual = $this->repository->getSortField(CustomerRepository::NAME_COMPANY_FIELD);
-        self::assertSame("CONCAT(COALESCE(e.lastName, ''),COALESCE(e.firstName, ''),COALESCE(e.company, ''))", $actual);
+        $this->assertSameSortField(
+            CustomerRepository::NAME_COMPANY_FIELD,
+            "CONCAT(COALESCE(e.lastName, ''),COALESCE(e.firstName, ''),COALESCE(e.company, ''))"
+        );
+        $this->assertSameSortField(
+            CustomerRepository::ZIP_CITY_FIELD,
+            "CONCAT(COALESCE(e.zipCode, ''),COALESCE(e.city, ''))"
+        );
+    }
 
-        $actual = $this->repository->getSortField(CustomerRepository::ZIP_CITY_FIELD);
-        self::assertSame("CONCAT(COALESCE(e.zipCode, ''),COALESCE(e.city, ''))", $actual);
+    #[\Override]
+    protected function getRepositoryClass(): string
+    {
+        return CustomerRepository::class;
     }
 }

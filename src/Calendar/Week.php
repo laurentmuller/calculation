@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Calendar;
 
 use App\Utils\FormatUtils;
-use App\Utils\StringUtils;
 
 /**
  * Represents a week with a calendar and an array of days.
@@ -46,7 +45,7 @@ class Week extends AbstractCalendarItem implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        $name = StringUtils::getShortName($this);
+        $name = $this->getShortName();
         $first = (string) FormatUtils::formatDate($this->getFirstDate());
         $last = (string) FormatUtils::formatDate($this->getLastDate());
 

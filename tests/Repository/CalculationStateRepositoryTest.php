@@ -16,26 +16,17 @@ namespace App\Tests\Repository;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
-use App\Tests\DatabaseTrait;
 use App\Tests\EntityTrait\CalculationStateTrait;
 use App\Tests\EntityTrait\CalculationTrait;
-use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\QueryBuilder;
 
-final class CalculationStateRepositoryTest extends KernelServiceTestCase
+/**
+ * @extends AbstractRepositoryTestCase<CalculationState, CalculationStateRepository>
+ */
+final class CalculationStateRepositoryTest extends AbstractRepositoryTestCase
 {
     use CalculationStateTrait;
     use CalculationTrait;
-    use DatabaseTrait;
-
-    private CalculationStateRepository $repository;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->repository = $this->getService(CalculationStateRepository::class);
-    }
 
     #[\Override]
     protected function tearDown(): void
@@ -132,5 +123,11 @@ final class CalculationStateRepositoryTest extends KernelServiceTestCase
     {
         $actual = $this->repository->getTableQueryBuilder();
         self::assertInstanceOf(QueryBuilder::class, $actual);
+    }
+
+    #[\Override]
+    protected function getRepositoryClass(): string
+    {
+        return CalculationStateRepository::class;
     }
 }

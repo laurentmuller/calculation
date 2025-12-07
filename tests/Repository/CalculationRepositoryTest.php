@@ -13,35 +13,27 @@ declare(strict_types=1);
 
 namespace App\Tests\Repository;
 
+use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\User;
 use App\Interfaces\SortModeInterface;
 use App\Repository\CalculationRepository;
-use App\Tests\DatabaseTrait;
 use App\Tests\DateAssertTrait;
 use App\Tests\Entity\IdTrait;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
-use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Clock\DatePoint;
 
-final class CalculationRepositoryTest extends KernelServiceTestCase
+/**
+ * @extends AbstractRepositoryTestCase<Calculation, CalculationRepository>
+ */
+final class CalculationRepositoryTest extends AbstractRepositoryTestCase
 {
     use CalculationTrait;
-    use DatabaseTrait;
     use DateAssertTrait;
     use IdTrait;
     use ProductTrait;
-
-    private CalculationRepository $repository;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->repository = $this->getService(CalculationRepository::class);
-    }
 
     #[\Override]
     protected function tearDown(): void
@@ -244,66 +236,52 @@ final class CalculationRepositoryTest extends KernelServiceTestCase
 
     public function testGetSearchFields(): void
     {
-        $actual = $this->repository->getSearchFields('date');
-        self::assertSame("DATE_FORMAT(e.date, '%d.%m.%Y')", $actual);
+        $this->assertSameSearchField(
+            'overallMargin',
+            'IFELSE(e.itemsTotal != 0, ROUND((100 * e.overallTotal / e.itemsTotal) - 0.5, 0) / 1, 0)'
+        );
+        $this->assertSameSearchField('date', "DATE_FORMAT(e.date, '%d.%m.%Y')");
 
-        $actual = $this->repository->getSearchFields('overallMargin');
-        self::assertSame('IFELSE(e.itemsTotal != 0, ROUND((100 * e.overallTotal / e.itemsTotal) - 0.5, 0) / 1, 0)', $actual);
+        $this->assertSameSearchField('state.id', 's.id');
+        $this->assertSameSearchField('stateCode', 's.code');
+        $this->assertSameSearchField('state.code', 's.code');
 
-        $actual = $this->repository->getSearchFields('state.id');
-        self::assertSame('s.id', $actual);
-        $actual = $this->repository->getSearchFields('stateCode');
-        self::assertSame('s.code', $actual);
-        $actual = $this->repository->getSearchFields('state.code');
-        self::assertSame('s.code', $actual);
+        $this->assertSameSearchField('stateColor', 's.color');
+        $this->assertSameSearchField('state.color', 's.color');
 
-        $actual = $this->repository->getSearchFields('stateColor');
-        self::assertSame('s.color', $actual);
-        $actual = $this->repository->getSearchFields('state.color');
-        self::assertSame('s.color', $actual);
-
-        $actual = $this->repository->getSearchFields('stateEditable');
-        self::assertSame('s.editable', $actual);
-        $actual = $this->repository->getSearchFields('state.editable');
-        self::assertSame('s.editable', $actual);
+        $this->assertSameSearchField('stateEditable', 's.editable');
+        $this->assertSameSearchField('state.editable', 's.editable');
     }
 
     public function testGetSortFields(): void
     {
-        $actual = $this->repository->getSortField('overallMargin');
-        self::assertSame('IFELSE(e.itemsTotal != 0, ROUND((100 * e.overallTotal / e.itemsTotal) - 0.5, 0) / 1, 0)', $actual);
+        $this->assertSameSortField(
+            'overallMargin',
+            'IFELSE(e.itemsTotal != 0, ROUND((100 * e.overallTotal / e.itemsTotal) - 0.5, 0) / 1, 0)'
+        );
+        $this->assertSameSortField('stateId', 's.code');
+        $this->assertSameSortField('state_id', 's.code');
+        $this->assertSameSortField('state.id', 's.code');
 
-        $actual = $this->repository->getSortField('stateId');
-        self::assertSame('s.code', $actual);
-        $actual = $this->repository->getSortField('state_id');
-        self::assertSame('s.code', $actual);
-        $actual = $this->repository->getSortField('state.id');
-        self::assertSame('s.code', $actual);
-        $actual = $this->repository->getSortField('code');
-        self::assertSame('s.code', $actual);
-        $actual = $this->repository->getSortField('stateCode');
-        self::assertSame('s.code', $actual);
-        $actual = $this->repository->getSortField('state_code');
-        self::assertSame('s.code', $actual);
-        $actual = $this->repository->getSortField('state.code');
-        self::assertSame('s.code', $actual);
+        $this->assertSameSortField('code', 's.code');
+        $this->assertSameSortField('stateCode', 's.code');
+        $this->assertSameSortField('state_code', 's.code');
+        $this->assertSameSortField('state.code', 's.code');
 
-        $actual = $this->repository->getSortField('color');
-        self::assertSame('s.color', $actual);
-        $actual = $this->repository->getSortField('stateColor');
-        self::assertSame('s.color', $actual);
-        $actual = $this->repository->getSortField('state_color');
-        self::assertSame('s.color', $actual);
-        $actual = $this->repository->getSortField('state.color');
-        self::assertSame('s.color', $actual);
+        $this->assertSameSortField('color', 's.color');
+        $this->assertSameSortField('stateColor', 's.color');
+        $this->assertSameSortField('state_color', 's.color');
+        $this->assertSameSortField('state.color', 's.color');
 
-        $actual = $this->repository->getSortField('editable');
-        self::assertSame('s.editable', $actual);
-        $actual = $this->repository->getSortField('stateEditable');
-        self::assertSame('s.editable', $actual);
-        $actual = $this->repository->getSortField('state_editable');
-        self::assertSame('s.editable', $actual);
-        $actual = $this->repository->getSortField('state.editable');
-        self::assertSame('s.editable', $actual);
+        $this->assertSameSortField('editable', 's.editable');
+        $this->assertSameSortField('stateEditable', 's.editable');
+        $this->assertSameSortField('state_editable', 's.editable');
+        $this->assertSameSortField('state.editable', 's.editable');
+    }
+
+    #[\Override]
+    protected function getRepositoryClass(): string
+    {
+        return CalculationRepository::class;
     }
 }

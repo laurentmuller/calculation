@@ -16,7 +16,7 @@ namespace App\Attribute;
 /**
  * Shortcut route attribute to get an index page.
  */
-#[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
 class IndexRoute extends GetRoute
 {
     /**

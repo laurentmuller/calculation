@@ -15,8 +15,6 @@ namespace App\Tests\Repository;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Tests\DatabaseTrait;
-use App\Tests\KernelServiceTestCase;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -24,19 +22,11 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\InMemoryUser;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 
-final class UserRepositoryTest extends KernelServiceTestCase
+/**
+ * @extends AbstractRepositoryTestCase<User, UserRepository>
+ */
+final class UserRepositoryTest extends AbstractRepositoryTestCase
 {
-    use DatabaseTrait;
-
-    private UserRepository $repository;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->repository = $this->getService(UserRepository::class);
-    }
-
     public function testCreateResetPasswordRequest(): void
     {
         $user = $this->getUser();
@@ -101,11 +91,8 @@ final class UserRepositoryTest extends KernelServiceTestCase
 
     public function testGetSortFields(): void
     {
-        $actual = $this->repository->getSortField('enabled');
-        self::assertSame('IFELSE(e.enabled = 1, 0, 1)', $actual);
-
-        $actual = $this->repository->getSortField('role');
-        self::assertSame("SUBSTRING(IFNULL(e.role, 'ROLE_USER'), 5)", $actual);
+        $this->assertSameSortField('enabled', 'IFELSE(e.enabled = 1, 0, 1)');
+        $this->assertSameSortField('role', "SUBSTRING(IFNULL(e.role, 'ROLE_USER'), 5)");
     }
 
     public function testGetSuperAdminFilter(): void
@@ -178,6 +165,12 @@ final class UserRepositoryTest extends KernelServiceTestCase
         $this->repository->upgradePassword($user, (string) $oldPassword);
         $newPassword = $user->getPassword();
         self::assertSame($oldPassword, $newPassword);
+    }
+
+    #[\Override]
+    protected function getRepositoryClass(): string
+    {
+        return UserRepository::class;
     }
 
     private function getUser(): User

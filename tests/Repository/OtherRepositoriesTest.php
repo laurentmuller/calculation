@@ -57,12 +57,12 @@ final class OtherRepositoriesTest extends KernelServiceTestCase
 
     public function testFindAll(): void
     {
-        $this->findAll(CalculationGroupRepository::class);
-        $this->findAll(CalculationCategoryRepository::class);
-        $this->findAll(CalculationItemRepository::class);
+        $this->assertFindAllIsEmpty(CalculationGroupRepository::class);
+        $this->assertFindAllIsEmpty(CalculationCategoryRepository::class);
+        $this->assertFindAllIsEmpty(CalculationItemRepository::class);
 
-        $this->findAll(TaskItemRepository::class);
-        $this->findAll(TaskItemMarginRepository::class);
+        $this->assertFindAllIsEmpty(TaskItemRepository::class);
+        $this->assertFindAllIsEmpty(TaskItemMarginRepository::class);
     }
 
     /**
@@ -70,7 +70,7 @@ final class OtherRepositoriesTest extends KernelServiceTestCase
      *
      * @param class-string<AbstractRepository<TEntity>> $class
      */
-    private function findAll(string $class): void
+    private function assertFindAllIsEmpty(string $class): void
     {
         $repository = $this->getService($class);
         $actual = $repository->findAll();
